@@ -1,0 +1,36 @@
+import { SCREENING_CONFIG } from "@/lib/screening/config";
+
+export default function SettingsPage() {
+  return (
+    <div className="mx-auto max-w-2xl space-y-6 p-4 sm:p-6">
+      <div>
+        <h1 className="text-lg font-semibold text-foreground">Settings</h1>
+        <p className="mt-1 text-sm text-muted">
+          v1 is single-user and locally runnable — these values are edited in code (<code className="font-mono text-xs">lib/screening/config.ts</code>,{" "}
+          <code className="font-mono text-xs">lib/scoring/rubric.ts</code>) rather than through a settings UI yet. Shown here read-only so
+          it&apos;s clear what&apos;s currently active and why.
+        </p>
+      </div>
+
+      <section className="space-y-2">
+        <h2 className="text-sm font-semibold text-foreground">Screening configuration</h2>
+        {Object.values(SCREENING_CONFIG).map((entry) => (
+          <div key={entry.key} className="rounded-md border border-border-c bg-surface p-3 text-sm">
+            <p className="font-medium text-foreground">{entry.key.replace(/_/g, " ")}</p>
+            <p className="text-muted">{JSON.stringify(entry.value)} — {entry.provenance.replace(/_/g, " ")}</p>
+          </div>
+        ))}
+      </section>
+
+      <section>
+        <h2 className="text-sm font-semibold text-foreground">Environment / providers</h2>
+        <p className="mt-1 text-sm text-muted">
+          No search or LLM provider is configured in this build. The app runs entirely on the manual/public-source ingestion path — no paid
+          API keys required for the current workflow. A Claude Code subscription does not supply application API credits; if you want
+          LLM-assisted assessment proposals later, that requires its own API key wired through an env var, with the manual path staying
+          fully usable if it&apos;s absent.
+        </p>
+      </section>
+    </div>
+  );
+}

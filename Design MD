@@ -1,0 +1,379 @@
+Campus Universe — UI/UX upgrade for Claude Code
+
+Date: 18 September 2026. Apply to the existing application.
+
+1. Outcome
+
+Make Campus Universe feel like a university-focused discovery product: an explorable map, a readable founder network, and a fast company list, all backed by the same evidence. A user should understand what a company builds, why its founder is interesting and what to investigate next within 30 seconds.
+
+Use UNIVERSITY_SOURCES_SHORTLIST.md for sourcing implementation. This file defines the interface upgrade. Preserve existing records, notes, assessments, source provenance, working adapters and routes wherever practical. These instructions are a build specification, not a claim that the application has already been changed.
+
+2. References and limits
+
+YCGlobe: accessible page content includes search, filters, university discovery, founder/company modes, and a database view alongside its globe concept. Borrow the interconnected exploration model. Do not import displayed counts, sample records or marketing claims into Campus Universe.
+
+BuildList: accessible homepage content exposes clear discovery categories, search, filters, saved items and structured records. Borrow concise labels and readable company information.
+
+BuildList Founder Networks: this route could not be inspected during this review. The network design below is a proposed adaptation of the user's requested concept, not a verified description or pixel reproduction of that page.
+
+The supplied Campus Universe screenshots are the baseline for the issues below. Network and Globe implementation were not shown; inspect the actual repository before changing them.
+
+Do not block the upgrade on accessing the references. Implement this explicit design and verify it in the running application.
+
+3. What to change first
+
+Make the product description and reason to investigate visible in every company row and drawer.
+
+Replace the wide, repetitive sidebar and status-heavy table with a compact exploration layout.
+
+Give Penn and Berkeley first-class navigation and honest source-coverage states.
+
+Make Table, Network and Globe interchangeable views with persistent filters and selected entities.
+
+Replace long technical explanations with short labels, useful empty states and next actions.
+
+Enrich the actual records. A polished empty interface does not fulfill the sourcing workflow.
+
+Do not add fake companies, synthetic relationships, random scores, inferred funding totals or fabricated metrics to make the screens look complete.
+
+4. Navigation and page structure
+
+Top bar: Campus Universe · Explore · Shortlist · Signals · Pipeline · Sources. Put Methodology and Settings inside a compact utility menu. Keep current URLs compatible through aliases or redirects where needed.
+
+Explore is the default destination. Its persistent toolbar contains:
+
+Search: “Search founders, companies, projects…”
+
+View switch: Globe | Network | Table.
+
+Entity switch: Companies | Builders. Builders includes people and projects with explicit type labels.
+
+University, sector, eligibility and research-status filters; advanced filters in a popover.
+
+Active-filter chips, result count, clear filters and a modest “Scan sources” action.
+
+First visit on desktop: Globe with the selected Penn and Berkeley campuses visible, plus a compact result tray. Remember the user's last view afterward. On small screens, default to Table. If the globe cannot render, use a usable 2D map or Table with the same selection; explain briefly.
+
+Represent filter/view/entity selection in the URL where practical. Browser Back restores the previous selection. Do not put private notes or private contact information in the URL.
+
+5. Layout and visual specification
+
+Desktop
+
+App header: 56px high; exploration toolbar approximately 52px.
+
+Left rail: 232px, collapsible to an icon rail. Use Penn and Berkeley as short labels with full names in accessible descriptions/tooltips.
+
+Center: flexes to available width. Globe and Network fill the canvas; Table uses the full center width.
+
+Right drawer: 400–440px, closed until an entity is selected. Below approximately 1280px, use an overlay drawer rather than compressing the table into unreadable columns.
+
+In canvas views, show a collapsible bottom result tray with compact cards. Selecting a card selects the same entity on the canvas and in the drawer.
+
+On mobile: filter sheet, list-first navigation, full-screen detail sheet. No three-column squeeze.
+
+Visual language
+
+Use a restrained neutral palette instead of the current brown-black surfaces and repeated outlined pills. Suggested design tokens, not sampled reference-site values:
+
+Token
+
+Value
+
+Background
+
+#0B0D12
+
+Panel
+
+#121620
+
+Raised surface
+
+#19202C
+
+Divider
+
+#2B3443
+
+Primary text
+
+#F3F5F7
+
+Secondary text
+
+#AAB4C4
+
+Interactive accent
+
+#9C91FF
+
+Positive
+
+#65D3A0
+
+Needs review
+
+#F2C66D
+
+Use the existing font if suitable; otherwise a readable sans-serif with restrained weights. Body 14–15px; page titles 24–28px. Tabular numerals for counts. Spacing on a 4/8px scale; 8–12px corner radii; subtle shadows only for overlays. Maintain accessible contrast and visible keyboard focus. Never communicate status with color alone.
+
+No giant hero block, decorative KPI cards, persistent animation, default globe spin, glowing edges or unnecessary gradients. Real company logos may be used when available; otherwise use plain initials. Do not synthesize founder portraits or fake brands.
+
+6. University rail
+
+Show:
+
+All campuses
+
+Penn
+
+Berkeley
+
+More universities…
+
+A university row shows its short name, unique matching company count and coverage indicator. Source-coverage states are Not scanned / Partial / Up to date / Needs attention. Define “Up to date” against that campus's configured sources, never against all startups at the university.
+
+Clicking a university filters every view and focuses its map/network context. University detail exposes programs, builders, companies and source coverage. Counts must be query-derived and typed; do not claim “8 candidates across 5 campuses” when four campuses have no collection coverage.
+
+Below universities, show compact saved views such as All discovered, Ready to review and Needs research. Use one consistent mapping to existing queues. Source implementation logs belong on Sources, not in the main navigation rail.
+
+7. Globe view
+
+Provide two explicit geographic modes:
+
+University geography (default): markers represent campuses and their associated records.
+
+Company HQ: markers represent independently sourced headquarters locations.
+
+Never place a company at Penn or Berkeley and imply that the university is its HQ. Do not locate people at private residences. Unknown HQ stays in the result list under “Location unknown.”
+
+Interactions:
+
+Click Penn or Berkeley to open a campus summary with company, builder and source counts plus preview results.
+
+Click a preview company to open its drawer; the selected campus remains in view.
+
+Hover reveals a short campus label and typed counts, not a paragraph.
+
+Cluster nearby markers when necessary; use campus markers while the dataset is small.
+
+“Fit results,” zoom controls, reset view and pause motion are available.
+
+Two campuses must not create hundreds of decorative or duplicate dots. Multi-campus companies count once globally and can appear under each supported affiliation.
+
+University locations require sourced coordinates. Do not generate random coordinates or silently substitute unrelated geocodes.
+
+Lazy-load the map/globe implementation. Reuse installed visualization dependencies when suitable. A 2D fallback and Table remain fully usable without WebGL. Never fetch/enrich every company merely because a user pans the globe.
+
+8. Network view
+
+The graph answers: “Which university communities produced these builders, projects and companies?” It does not imply who personally knows whom.
+
+Node types: university, program/lab/community, person, project, venture. Shapes or icons and a legend distinguish them; color is secondary. Extend the existing entity model additively if projects are not yet modeled.
+
+Allowed sourced relationships include:
+
+Person → university: studied at / studies at / researched at, with dates when known.
+
+Person → lab/community: member of / contributed to, with specific evidence.
+
+Person → project: built / coauthored / contributed to, preserving the actual attribution.
+
+Person → venture: founded, when evidenced.
+
+Venture → program: participated in / won award at, with date and source.
+
+Do not create person-to-person friendship edges because people attended the same university or event. Shared affiliation is a path through the institution node. Do not create a “warm introduction” feature without an explicitly supplied real relationship.
+
+Default to a selected campus with programs grouped spatially. Expand a selected node by one hop; additional expansion is explicit. Show labels for selected and nearby nodes, not every node simultaneously. Limit the visible subgraph, for example to 150 nodes, with a truthful “Showing X of Y” indicator and search/filter controls.
+
+Clicking an edge opens its relationship label, source and date. Clicking a person opens their work and any evidenced company links. Graph position, node degree and institution prestige never change the company score. Provide an accessible relationship list alternative.
+
+9. Table and result cards
+
+Default company columns:
+
+Column
+
+Display
+
+Company
+
+Name and a one-line factual product description; official website action
+
+Founder / campus
+
+Primary visible founder plus “+N”; short campus name and affiliation status
+
+Why investigate
+
+One concise evidence-backed reason; source available on click
+
+Eligibility
+
+Fits brief / Needs research / Outside brief; details in drawer
+
+Priority
+
+Existing supported assessment, or separate Research first / Later with a stated rationale
+
+Latest activity
+
+Event type, concise description and event date
+
+Use approximately 64–76px rows and stable column widths. Let useful product text wrap to two lines. Avoid repeating Exploration and Needs verification in multiple columns. Add column customization only if it can reuse existing components cheaply.
+
+Research priority is an explicit research-work ordering, not an investment score. Use qualitative labels and a cited reason; allow user override. Keep the existing investment/research assessment formula and evidence-coverage gate unchanged unless explicitly instructed otherwise. Insufficient evidence displays “Unassessed,” never an invented numerical score.
+
+Sort controls: research priority, supported assessment, latest substantive activity, recently discovered. “Latest activity” uses the event date; “Recently discovered” uses the discovery date. An old award imported today is not a new award.
+
+Builder mode uses different columns: Person/project, attributed work, campus affiliation, latest artifact, venture link if evidenced, next research step. It must not turn every builder into an investable company.
+
+10. Shared detail drawer
+
+The drawer must answer the investment questions before displaying administrative metadata.
+
+Header: company name, one-sentence product, website and public founder links; compact eligibility/research status.
+
+Above the fold:
+
+Why look: strongest supported reason to investigate.
+
+Founder edge: concrete technical work, domain access or execution evidence.
+
+Open question: the material uncertainty that could change the decision.
+
+Primary action: Research company. Secondary actions: Save, Add to pipeline.
+
+Below: Overview | Founders | Evidence | Activity | Notes.
+
+Overview contains product/customer, differentiation, stage/funding, eligibility and assessment details. Clearly distinguish known facts, sourced founder claims and analyst judgment. Founders exposes actual artifacts and affiliation dates. Evidence shows short excerpts and direct source links with publication/retrieval dates. Notes remain user-editable and survive enrichment.
+
+Distinguish negative evidence from absent evidence. Change “Strongest reason to pass: No stage evidence yet” to “Open question: Confirm stage and financing.” Do not translate “no funding events on record” into zero funding.
+
+Where the user’s policy differs from verified public DRF criteria, label “Your scouting brief.” Do not imply official DRF endorsement of this tool, rubric or shortlist.
+
+11. Shortlist, Signals, Pipeline and Sources
+
+Shortlist
+
+Use tabs: Ready to review | Needs research | Watching | Outside brief, mapping to existing queue IDs without destroying history. Keep manual saved state independent of qualification. A user saving a company does not make it eligible or assessed.
+
+Ready to review records show the meeting rationale, key uncertainty and supporting evidence. Do not demand a fixed number of recommendations.
+
+Empty state: “No companies ready for review yet.” Show the actual number needing research and a button to investigate them. If no candidates exist, offer source selection instead. Show suggested next research tasks rather than a large blank bordered box.
+
+Signals
+
+Compact chronological feed with university, company and event-type filters. Each item has company, substantive change, event date, source and short significance. Types include Product launch, Technical release, Award, Funding, Customer evidence and Team change.
+
+Competition prizes should be labeled Award unless the source specifically calls them grants. Do not repeat the same methodological sentence below every item. Distinguish “Newly discovered” from “New event”; an initial scan is a baseline.
+
+Pipeline
+
+Suggested stages: New → Researching → Contact planned → Contacted → Meeting scheduled → Diligence → Passed. Watching can remain a saved queue. Migrate existing Meet/Meeting statuses only after inspecting their stored meaning; retain originals in history if ambiguous.
+
+Enable add-to-pipeline directly from cards and drawers, then status changes and notes. A status change records the user's workflow; it does not send a message. Do not leave eight discovered candidates as inert chips beneath eight empty boxes.
+
+Sources
+
+Use a searchable compact table: Source, Campus, Family, Status, Last successful run, People, Projects, Ventures, Review yield, Action.
+
+Status labels: Not configured / Ready to scan / Running / Complete / Partial / Blocked / Error. Display attempt and success timestamps separately. “Complete” means the configured run scope completed, not exhaustive ecosystem coverage. Keep full error details in a collapsible log.
+
+Portfolio references have their own count and never inflate candidate totals. Replace implementation descriptions with concise useful status messages. Add Scan selected, Retry and Import public records where supported; clicking a source opens coverage and evidence details.
+
+12. Research actions and cost control
+
+Research company runs the existing bounded enrichment flow: identity → product → founder → stage/funding → evidence → assessment. Show actual progress, cancellation and partial results. Return useful findings incrementally; preserve the result if a later source fails.
+
+Scan sources opens a small scope selector: Penn/Berkeley, source families and the existing page/enrichment budget. Show estimated cost only if calculable; otherwise show limits. No open-ended crawl, no background loop triggered by page navigation, no automatic outreach and no paid-service activation.
+
+Cache by source/entity and use last successful results immediately. Reuse primary pages already fetched. Manual research should still work without optional API keys. Do not require an LLM for search, filtering, layout, deduplication keys or every render.
+
+13. Copy replacements
+
+Current screenshot copy
+
+Replacement
+
+“Bounded, transparent ingestion only…”
+
+“Manage sources and scan coverage.”
+
+“Full source catalogue (brief §6)”
+
+“Available sources”
+
+“Overall gate”
+
+“Eligibility”
+
+“No stage evidence yet” under reason to pass
+
+“Confirm stage and financing” under Open question
+
+“319 leads discovered” for DRF portfolio
+
+“319 portfolio references” only if the actual stored count is still 319
+
+“189 leads” from a people directory
+
+Actual typed count, such as “People found”; do not assume the old number is correct
+
+“No candidates match the current filters” for an unassessed shortlist
+
+“No companies ready for review yet” with a research action
+
+Long Signals methodology paragraph
+
+“Recent company and founder activity.”
+
+Move methodology to the methodology page. Do not delete provenance; reveal it when a user opens a claim, relationship, assessment or source.
+
+14. Build order
+
+Inspect repository, routes, components, database and existing scan/ranking behavior. Preserve instructions in AGENTS.md/CLAUDE.md and avoid a framework rewrite.
+
+Implement the shared shell, typography, toolbar, query/filter state, responsive drawer and useful company rows.
+
+Complete one venture and one builder sourcing path for each of Penn and Berkeley using the companion source file. Enrich existing candidates.
+
+Connect the real university geography and result tray. Implement or repair Globe without blocking usable Table access.
+
+Build the evidence-backed network with typed nodes/edges, explicit expansion and relationship evidence.
+
+Apply the new Shortlist, Signals, Pipeline and Sources presentation, preserving stored IDs and history.
+
+Verify the critical flows with real available records and report exact remaining blockers. Do not claim live collection works from a unit test alone.
+
+15. Acceptance checks
+
+Penn/Berkeley selections, search, filters and selected company persist across Globe, Network and Table. Back restores navigation state.
+
+A multi-campus venture counts once in All campuses and appears appropriately in each supported campus view.
+
+Campus markers cannot be mistaken for company HQ; unknown locations remain discoverable.
+
+Source counts distinguish people, projects, ventures and portfolio references. Unscanned campus is not displayed as a verified zero.
+
+Every visible graph edge can reveal evidence. Missing relationships are not manufactured to make the graph attractive.
+
+A record with only an award can appear in Needs research without a fabricated product description or numerical assessment.
+
+Researching a company adds supported evidence, preserves notes, and updates relevant views without duplicate entities or false completed states.
+
+An empty shortlist offers the appropriate next action. Failed scans retain last successful results and show a real error state.
+
+Opening a company, saving it, adding it to pipeline and returning to results works by mouse and keyboard.
+
+At 1440px, 1024px and 390px widths: readable company information, no page-level horizontal overflow, accessible controls and no clipped drawer actions. Intentional table scrolling is contained.
+
+Reduced motion and WebGL failure still allow the full research workflow.
+
+Capture before/after screenshots of Explore, selected-company drawer, Network, Globe and Sources. Report checks actually performed and any unavailable modes.
+
+16. Paste into Claude Code
+
+Read UNIVERSITY_SOURCES_SHORTLIST.md and this UIUX_UPGRADE_CLAUDE.md alongside the existing project instructions. Improve the existing app in place. Prioritize Penn and Berkeley sourcing, clear company/founder research, and synchronized Globe/Network/Table exploration. Use the explicit layout and behavior above, preserve existing records and scoring rules, and complete the critical workflows. Do not stop at a visual mockup or populate screens with fake data. Return the implemented changes, actual source-run results, verification performed and specific unresolved blockers.

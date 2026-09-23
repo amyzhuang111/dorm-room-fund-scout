@@ -1,0 +1,64 @@
+"use client";
+
+import { useState } from "react";
+import { buildHref } from "@/lib/domain/url";
+import type { CandidateSummary } from "@/lib/domain/queries";
+
+// Design MD §5: "In canvas views, show a collapsible bottom result tray
+// with compact cards. Selecting a card selects the same entity on the
+// canvas and in the drawer." Companies aren't individually plotted on the
+// globe (only campus dots are), and CandidateSummary only carries a
+// university NAME (see listCandidateProjects), not an id it could fly the
+// globe to — so the canvas half of "select the same entity" isn't
+// something this can do without guessing an id from a name. Scoped
+// honestly to what's real: selecting a card opens it in the drawer (the
+// same navigation every other company link in this app already uses) and
+// leaves the current campus selection alone.
+export function ResultTray({
+  candidates,
+  basePath,
+  current,
+}: {
+  candidates: CandidateSummary[];
+  basePath: string;
+  current: Record<string, string | undefined>;
+}) {
+  const [collapsed, setCollapsed] = useState(false);
+
+  if (candidates.length === 0) return null;
+
+  return (
+    <div className="glass-panel absolute bottom-3 left-3 right-14 overflow-hidden">
+      {/* right-14 (not inset-x-3) leaves room for GlobeView's zoom/reset
+          controls, which float independently at bottom-3 right-3. */}
+      <button
+        type="button"
+        onClick={() => setCollapsed((c) => !c)}
+        className="glass-panel-head w-full text-left"
+        aria-expanded={!collapsed}
+      >
+        <span className="text-sm font-medium text-foreground">
+          {candidates.length} {candidates.length === 1 ? "result" : "results"}
+        </span>
+        <span className="ml-auto text-[11px] text-muted">{collapsed ? "Show ▲" : "Hide ▼"}</span>
+      </button>
+      {!collapsed && (
+        <ul className="flex gap-2 overflow-x-auto px-3 pb-3 pt-1">
+          {candidates.map((c) => (
+            <li key={c.id} className="shrink-0">
+              <a
+                href={buildHref(basePath, current, { project: c.id })}
+                className={`block w-48 rounded-md border px-2.5 py-2 text-xs hover:bg-surface-2 ${
+                  current.project === c.id ? "border-accent bg-accent/10" : "border-border-c"
+                }`}
+              >
+                <p className="truncate font-medium text-foreground">{c.name}</p>
+                <p className="truncate text-muted">{c.universities[0] ?? "University unknown"}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}

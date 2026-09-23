@@ -6,21 +6,30 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "ingest:all": "tsx scripts/ingest/seed-universities.ts && tsx scripts/ingest/fetch-drf-portfolio.ts && tsx scripts/ingest/fetch-penn-labs.ts && tsx scripts/ingest/fetch-penn-startup-challenge.ts && tsx scripts/ingest/enrich-penn-labs-github.ts && tsx scripts/ingest/fetch-pennapps-devpost.ts && tsx scripts/ingest/fetch-treehacks-devpost.ts && tsx scripts/ingest/fetch-calhacks-devpost.ts && tsx scripts/ingest/fetch-velocity.ts && tsx scripts/ingest/fetch-mit-deltav.ts && tsx scripts/ingest/fetch-hack4impact.ts && tsx scripts/ingest/seed-source-tiers.ts && tsx scripts/screen/match-portfolio.ts && tsx scripts/screen/run-gates.ts"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
+    "better-sqlite3": "^13.0.3",
+    "cheerio": "^1.2.0",
+    "d3-force": "^3.0.0",
+    "maplibre-gl": "^6.10.0",
     "next": "16.3.5",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/d3-force": "^3.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "tailwindcss": "^4",
+    "tsx": "^4.23.13",
     "typescript": "^5"
   }
 }

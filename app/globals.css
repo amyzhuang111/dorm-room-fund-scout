@@ -1,26 +1,140 @@
 @import "tailwindcss";
 
+/* Design tokens sampled directly from dormroomfund.com's real stylesheet
+   (cdn.prod.website-files.com/.../dormroomfund.webflow.shared.css), per an
+   explicit request to mimic that site's colors/type closely — supersedes
+   the earlier "not sampled reference-site values" instruction for this
+   round. Source values, for reference:
+     --neutral--ink: #1c1525        (their body text)
+     --neutral--lavender-lightest: #f1eff4  (their page background)
+     --neutral--lavender: #d9d5df   (their borders/dividers)
+     --neutral--lavender-muted: #b8b0c4
+     --brand--purple: #9378ee       (their primary accent)
+     --brand--orange: #ff6a33       (their secondary accent)
+     status: green-dark #114e0b / light #cef5ca, yellow-dark #5e5515 / light
+       #fcf8d8, red-dark #3b0b0b / light #f8e4e4
+     font: Satoshi (var(--font-family--heading/body): Satoshi, Arial, sans-serif)
+     type scale: h1 clamp(3.25rem,5.8vw,5.125rem) weight 500, body 1rem,
+       line-height 1.5, letter-spacing 0 — headings scaled down here for a
+       dense app UI rather than a marketing page, keeping the same weight/
+       letter-spacing/line-height ratios. */
+/* Palette rebalanced per explicit feedback: the DRF-sampled lavender was
+   washing across every surface and reading as a consumer productivity app.
+   Purple is now reserved for interaction/selection only — primary surfaces
+   are neutral gray/white, text is near-black/neutral gray, not ink-purple. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafafa;
+  --surface: #ffffff;
+  --surface-2: #f2f2f3;
+  --border-c: #e3e3e5;
+  --foreground: #171417;
+  --muted: #6b6b70;
+  --accent: #9378ee;
+  --accent-foreground: #ffffff;
+  --accent-2: #ff6a33;
+  --accent-subtle: #efeaff; /* restrained lavender, selected-state fill only */
+  --ok: #114e0b;
+  --ok-bg: #d9f2d4;
+  --warn: #6b4f0a;
+  --warn-bg: #f7ecd2;
+  --danger: #6b1414;
+  --danger-bg: #f6dede;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border-c: var(--border-c);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-2: var(--accent-2);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-ok: var(--ok);
+  --color-ok-bg: var(--ok-bg);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --font-sans: "Satoshi", var(--font-geist-sans), Arial, sans-serif;
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  font-size: 16px; /* matches DRF's own 1rem body size exactly */
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+h1, h2, h3 {
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.15;
+}
+
+/* Dense-dashboard utilities, pattern borrowed from dashboard.vclense.ch/ycglobe
+   (studied directly): tiny uppercase accent-colored group labels and compact
+   pill toggles for control-heavy panels (filters, chips) — while page body
+   text stays at DRF's actual 16px above. Colors still come from the
+   DRF-sampled tokens, not vclense's palette. */
+.ui-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.pill-toggle {
+  font-size: 11px;
+  padding: 5px 9px;
+  border: 1px solid var(--border-c);
+  background: var(--surface);
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.glass-panel {
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(10px) saturate(1.15);
+  -webkit-backdrop-filter: blur(10px) saturate(1.15);
+  border: 1px solid var(--border-c);
+  border-radius: 14px;
+  box-shadow: 0 10px 24px -12px rgba(28, 21, 37, 0.35);
+}
+
+.glass-panel-head {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border-c);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

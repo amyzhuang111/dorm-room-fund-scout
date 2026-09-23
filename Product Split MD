@@ -1,0 +1,1197 @@
+ 57. SOURCE QUALITY IS NOT EQUAL
+
+This is a critical product principle.
+
+Do NOT treat every university-affiliated source as equally useful.
+
+A prestigious organization is not necessarily a strong sourcing source.
+
+The question is:
+
+> How likely is this source to surface an exceptional student founder or startup BEFORE they are obvious to the broader venture market?
+
+Source quality must therefore be evaluated specifically for:
+
+1. Founder Scout
+2. Startup Scout
+
+The same source can have different value for each.
+
+Example:
+
+```text
+Berkeley SkyDeck
+
+Founder Scout:
+LOW / MEDIUM signal
+
+Startup Scout:
+MEDIUM signal
+
+Reason:
+Useful collection of startups, but relatively downstream,
+broader than Berkeley students, and many companies are already
+formalized / accelerated / fundraising.
+
+Do not treat SkyDeck participation as strong founder evidence by itself.
+
+Versus:
+
+Web Development at Berkeley
+
+Founder Scout:
+HIGH signal
+
+Startup Scout:
+LOW / MEDIUM signal
+
+Reason:
+Direct access to Berkeley students who repeatedly design,
+build, and ship real products.
+
+Useful for identifying builders before they necessarily
+describe themselves as founders.
+58. SOURCE TIERS
+
+Every Source should receive TWO independent sourcing tiers:
+
+founderScoutTier
+startupScoutTier
+
+Possible values:
+
+S
+A
+B
+C
+D
+
+Meaning:
+
+S — Exceptional sourcing source
+
+Extremely high signal for this Scout product.
+
+Use aggressively.
+
+Likely to surface exceptional people/projects before they become obvious.
+
+A — Strong
+
+Consistently useful.
+
+Should be part of default ingestion and monitoring.
+
+B — Useful
+
+Has real signal but requires filtering.
+
+Good corroborating/discovery source.
+
+C — Weak
+
+Occasionally useful but noisy, downstream, broad, or poorly matched
+to DRF's sourcing objective.
+
+Do not allow candidates to become interesting merely because of this source.
+
+D — Reference only
+
+Very weak for novel sourcing.
+
+May still be useful for:
+
+validation
+context
+entity resolution
+historical analysis
+funding verification
+
+but should generally not generate high-priority candidates.
+
+59. SOURCE TIER ≠ PRESTIGE
+
+Do not infer source quality from institutional prestige.
+
+For example:
+
+Major university accelerator
+≠ automatically high-signal
+
+Selective engineering club
+≠ automatically low-signal
+
+A student engineering organization may be significantly more useful
+for Founder Scout than a famous accelerator.
+
+Why?
+
+Because Founder Scout wants to detect:
+
+who is building
+who repeatedly ships
+who other strong builders choose to work with
+who is unusually technically capable
+who is starting projects before incorporation
+
+A downstream accelerator may only reveal someone after:
+
+company formed
+team formed
+funding raised
+accelerator accepted company
+demo day occurred
+
+At that point much of the sourcing advantage is gone.
+
+60. SOURCE QUALITY DIMENSIONS
+
+Do not assign tiers arbitrarily.
+
+Evaluate each source across these dimensions.
+
+1. Campus purity
+
+Question:
+
+How likely are people surfaced here to actually be
+students / recent graduates from the target university?
+
+High:
+
+student club membership
+campus hackathon team
+university lab students
+class project showcase
+
+Lower:
+
+global accelerator
+general startup directory
+public startup database
+2. Earliness
+
+Question:
+
+How early does this source reveal someone?
+
+Highest signal:
+
+person building project
+hackathon
+GitHub
+research prototype
+student organization project
+
+Later:
+
+incubator
+accelerator
+startup competition
+fundraise announcement
+VC portfolio
+
+Earlier is generally more valuable for Founder Scout.
+
+3. Evidence of building
+
+Question:
+
+Does the source provide evidence that the person actually creates things?
+
+Strong:
+
+GitHub commits
+working projects
+technical demos
+hackathon submissions
+research prototypes
+products shipped
+
+Weak:
+
+club attendance
+newsletter mentions
+pitch-event attendance
+entrepreneurship interest
+generic membership
+4. Selectivity / density
+
+Question:
+
+How concentrated are unusually strong builders?
+
+High selectivity alone is not sufficient.
+
+A source should contain:
+
+high density of builders
++
+actual evidence of building
+5. Novelty
+
+Question:
+
+Would a normal VC database already reveal this person/company?
+
+If yes, sourcing advantage is lower.
+
+Examples of lower novelty:
+
+Crunchbase
+PitchBook
+accelerator portfolio
+funding press releases
+
+Higher novelty:
+
+hackathon project page
+student developer team
+GitHub organization
+lab project
+personal website
+course demo
+6. Identity quality
+
+Question:
+
+Can Scout reliably determine who actually built the project?
+
+High:
+
+named team
+GitHub profiles
+student directory
+project contributors
+lab personnel
+
+Low:
+
+logo-only portfolios
+anonymous project listings
+generic demo pages
+7. Extractability
+
+Question:
+
+Can this source be ingested reliably and transparently?
+
+High:
+
+structured HTML
+GitHub API
+public project pages
+RSS
+static team pages
+
+Low:
+
+login-only
+opaque SPA
+logo-only page
+unstable DOM
+no public identities
+
+Do not confuse:
+
+high conceptual value
+
+with:
+
+easy to scrape
+
+Store both separately.
+
+61. SOURCE QUALITY DATA MODEL
+
+Extend Source:
+
+Source {
+  ...
+
+  founderScoutTier
+  startupScoutTier
+
+  campusPurity
+  earliness
+  buildEvidence
+  selectivity
+  novelty
+  identityQuality
+  extractability
+
+  sourceRole
+  // discovery
+  // corroboration
+  // verification
+  // reference
+
+  tierRationale
+
+  ...
+}
+
+Do not need to expose numeric scores for every dimension in the UI.
+
+The dimensions primarily make classification reproducible.
+
+62. SOURCE UI
+
+Sources should visually differentiate high-signal from weak sources.
+
+Example:
+
+TREEHACKS
+
+Stanford
+Hackathon
+
+Founder Scout     S
+Startup Scout     A
+
+DISCOVERY SOURCE
+
+Why it matters
+One of Stanford's densest concentrations of students actively
+shipping new technical projects.
+
+Best use
+• discover founders
+• discover teams
+• discover projects
+• identify repeat builders
+
+Watch for
+Winning is not required. Strong builders may be on non-winning teams.
+
+Another:
+
+BERKELEY SKYDECK
+
+Berkeley / external
+Accelerator
+
+Founder Scout     C
+Startup Scout     B
+
+CORROBORATION / STARTUP DISCOVERY
+
+Why not higher
+• relatively downstream
+• not limited to Berkeley students
+• includes global founders
+• companies are already formalized
+• many are already fundraising
+
+Best use
+• confirm startup existence
+• startup discovery
+• company metadata
+• alumni/network relationships
+
+Do not use
+SkyDeck participation alone as evidence that someone is an exceptional
+Berkeley student founder.
+63. INITIAL CAMPUS SOURCE MAP
+
+These tiers are specifically for DRF-style sourcing.
+
+They are NOT judgments about the quality of the organizations themselves.
+
+STANFORD
+S TIER — Founder Scout
+TreeHacks
+Founder Scout: S
+Startup Scout: A
+Role: Discovery
+
+Why:
+
+Students actually build during the event.
+Teams are visible.
+Projects are visible.
+Technical execution is observable.
+New founder combinations form here.
+Very early.
+
+Ingest:
+
+participants where public
+teams
+projects
+winners
+finalists
+project descriptions
+Devpost/project URLs
+GitHub
+personal sites
+repeat participation
+
+Important:
+
+Do NOT only ingest winners.
+
+Potentially more interesting:
+
+strong technical project
++
+interesting founder
++
+little/no startup visibility
+
+than:
+
+winner already running funded company
+S / A TIER
+Stanford engineering / CS project ecosystems
+
+Examples conceptually:
+
+research project pages
+student technical projects
+AI / systems / robotics labs
+open-source projects
+
+Founder Scout:
+
+S/A depending on lab/project
+
+Startup Scout:
+
+B
+
+Look for:
+
+students shipping
+students leading repositories
+students turning research into products
+repeat collaborators
+A TIER
+Student builder organizations
+
+Use individually.
+
+Do not assign A automatically to every Stanford club.
+
+Require demonstrated:
+
+projects
+technical output
+selectivity
+builder density
+B TIER
+Stanford entrepreneurship programs / demo environments
+
+Useful for:
+
+startup discovery
+team formation
+validation
+
+But often later than project/hackathon sources.
+
+C / D TIER
+Generic entrepreneurship events
+
+Examples:
+
+speaker events
+networking mixers
+entrepreneurship newsletters
+conference attendee lists
+
+Weak founder signal.
+
+Attendance ≠ building.
+
+BERKELEY
+S TIER — Founder Scout
+Web Development at Berkeley
+Founder Scout: S
+Startup Scout: B
+Role: Founder discovery
+
+Why:
+
+Students repeatedly ship real technical work.
+Team contributions can often be inspected.
+Strong signal of ability to build.
+Useful before people identify as founders.
+
+Look for:
+
+project leads
+engineering leads
+repeat contributors
+people shipping across multiple semesters
+people who launch independent projects
+teams that repeatedly work together
+
+Do NOT automatically promote all members.
+
+The signal comes from:
+
+actual output
++
+ownership
++
+repeat execution
+
+not club membership.
+
+S / A TIER
+Cal Hacks
+Founder Scout: S
+Startup Scout: A
+Role: Discovery
+
+Use for:
+
+projects
+teams
+repeat hackers
+technical ambition
+early startup formation
+
+Again:
+
+winner ≠ automatically best founder
+
+Inspect the team and the actual build.
+
+A TIER
+Strong Berkeley technical organizations
+
+Examples should be evaluated individually.
+
+Potential high-signal categories:
+
+AI / ML builder groups
+technical consulting/building organizations
+open-source groups
+engineering project teams
+research groups
+
+Do not automatically make all Berkeley clubs A-tier.
+
+A / B TIER
+Berkeley research labs
+
+Useful when students have:
+
+ownership
+real technical contribution
+projects
+public repositories
+research prototypes
+
+Being listed in a lab is weaker than:
+
+leading a meaningful project
+C TIER — Founder Scout
+Berkeley SkyDeck
+Founder Scout: C
+Startup Scout: B
+Role: Startup discovery / corroboration
+
+IMPORTANT:
+
+SkyDeck is NOT "bad."
+
+It is simply relatively weak for the specific problem:
+
+finding non-obvious Berkeley student founders before everyone else.
+
+Reasons:
+
+not restricted to Berkeley students
+includes alumni/faculty/global founders
+accelerator companies are already formalized
+many companies are already fundraising
+source is relatively downstream
+
+Use SkyDeck for:
+
+company discovery
+company verification
+founder-company relationships
+funding/status validation
+historical pattern research
+
+Do NOT heavily increase Founder Signal because someone appears in SkyDeck.
+
+C / D TIER
+Generic Berkeley entrepreneurship directories
+
+Use mainly for:
+
+cross-checking
+entity resolution
+finding links
+
+not ranking.
+
+PENN
+S TIER — Founder Scout
+PennApps
+Founder Scout: S
+Startup Scout: A
+Role: Discovery
+
+Why:
+
+students build
+teams are formed
+projects are visible
+very early
+technical execution is inspectable
+
+Ingest:
+
+teams
+projects
+GitHub
+participants where public
+winners
+finalists
+repeat hackers
+project continuation after event
+
+Do not only watch prize winners.
+
+A project that continues receiving commits 3 months later can be a
+stronger founder signal than winning a sponsor prize.
+
+S / A TIER
+GRASP ecosystem
+Founder Scout: S/A
+Startup Scout: B
+Role: Deep-tech founder discovery
+
+Particularly useful for:
+
+robotics
+autonomy
+computer vision
+controls
+hardware
+embodied AI
+
+But distinguish:
+
+student listed in lab
+
+from:
+
+student clearly leading/building project
+
+The second is much stronger.
+
+A TIER
+Penn Labs
+Founder Scout: A
+Startup Scout: B/C
+Role: Builder discovery
+
+Good for discovering:
+
+students who repeatedly ship
+technical leads
+project leaders
+strong collaborators
+
+Do NOT turn Penn Labs projects directly into startups.
+
+Correct:
+
+Penn Mobile
+    ↓
+Project
+    ↓
+contributors
+    ↓
+Founders / builder candidates
+
+Incorrect:
+
+Penn Mobile
+    ↓
+Startup candidate
+
+unless company evidence independently exists.
+
+B TIER
+Venture Lab startup competitions
+Founder Scout: B
+Startup Scout: A/B
+Role: Startup discovery
+
+Useful for formed startups.
+
+Less differentiated for Founder Scout because candidates have
+already self-selected into entrepreneurship and entered a competition.
+
+Still useful.
+
+Do not assume:
+
+winner = best DRF startup
+
+Treat the competition result as one Evidence record.
+
+C TIER
+Generic Penn entrepreneurship organizations / mixers
+
+Useful occasionally for names.
+
+Weak evidence.
+
+Membership / attendance should carry little or no Founder Signal.
+
+MIT
+S / A TIER — Founder Scout
+Technical project / research ecosystems
+
+Prioritize:
+
+projects
+labs
+GitHub
+student technical teams
+hackathons
+research prototypes
+
+over generic entrepreneurship programs.
+
+A TIER — Startup Scout
+MIT delta v
+Founder Scout: B/A
+Startup Scout: A
+Role: Startup discovery
+
+Why strong for Startup Scout:
+
+founders are actively building companies
+prototype / early product expected
+teams work full-time
+go-to-market orientation
+
+Why not automatically S for Founder Scout:
+
+company already exists
+founder already self-identifies as founder
+relatively downstream versus project discovery
+
+Use it heavily for startup sourcing, less as unique early founder discovery.
+
+C TIER
+Generic MIT entrepreneurship event attendance
+
+Again:
+
+interest ≠ execution
+WATERLOO
+S / A TIER — Founder Scout
+Technical student projects
+
+Prioritize:
+
+engineering projects
+GitHub
+technical teams
+hackathons
+builders emerging from co-op
+
+especially when a person repeatedly ships across environments.
+
+B TIER — Founder Scout
+A/B TIER — Startup Scout
+Velocity
+Founder Scout: B
+Startup Scout: A/B
+Role: Startup discovery
+
+Useful for real pre-seed companies.
+
+But don't assume every Velocity founder is a current Waterloo student.
+
+Verify university relationship independently.
+
+64. DEFAULT SOURCE PRIORITY BY PRODUCT
+Founder Scout
+
+General priority:
+
+1. Hackathons with inspectable projects
+2. Selective builder organizations
+3. GitHub / open source
+4. Technical project teams
+5. Research labs with identifiable student ownership
+6. Personal websites / portfolios
+7. Technical demo showcases
+8. Student accelerators
+9. Startup competitions
+10. University accelerators
+11. Generic entrepreneurship organizations
+12. Networking events / mixers
+13. Startup databases
+
+This is NOT absolute.
+
+A specific exceptional source may override the category.
+
+Startup Scout
+
+General priority:
+
+1. Student startup programs with actual companies
+2. Strong campus hackathon projects that continued after event
+3. Student accelerators
+4. University startup competitions
+5. Founder websites / company launches
+6. Campus incubators
+7. GitHub + company evidence
+8. University accelerators
+9. Public startup databases
+10. Generic entrepreneurship directories
+65. DISCOVERY SOURCE VS VALIDATION SOURCE
+
+This distinction must be explicit.
+
+Example:
+
+TreeHacks
+Discovery value: VERY HIGH
+Validation value: MEDIUM
+
+Crunchbase
+Discovery value: LOW
+Validation value: HIGH
+
+SkyDeck
+Discovery value: MEDIUM/LOW for Founder Scout
+Validation value: HIGH
+
+GitHub
+Discovery value: VERY HIGH
+Validation value: HIGH for technical claims
+
+Do not rank sources only on one axis.
+
+66. SOURCE CONTRIBUTION TO CANDIDATE SIGNAL
+
+Source tier should affect how Scout interprets evidence.
+
+But:
+
+source prestige alone
+
+must NEVER directly produce a high Founder Signal.
+
+Correct:
+
+S-tier source
++
+strong individual evidence
+=
+high-value signal
+
+Incorrect:
+
+person appears in S-tier source
+=
+high Founder Signal
+
+Example:
+
+TreeHacks attendee:
+
+weak evidence
+
+TreeHacks participant who:
+
+built technically ambitious project
+wrote core code
+continued developing it afterward
+works repeatedly with strong builders
+
+is much stronger.
+
+67. SIGNAL STRENGTH WITHIN SOURCES
+
+Even within the same source, events have different value.
+
+Example TreeHacks:
+
+HIGH
+• technically ambitious project
+• clear ownership
+• continued development
+• repeat builder
+• strong collaborator graph
+
+MEDIUM
+• finalist
+• meaningful working project
+• project with clear technical role
+
+LOW
+• participant only
+• sponsor-prize participation
+• team member with unclear contribution
+
+Example Web Development at Berkeley:
+
+HIGH
+• technical/project lead
+• repeated project ownership
+• independently shipped product
+• strong open-source work
+
+MEDIUM
+• substantial engineer contribution
+
+LOW
+• member only
+• bootcamp completion only
+
+Example research lab:
+
+HIGH
+• leads project
+• owns meaningful technical system
+• research turns into deployed product
+
+MEDIUM
+• substantial contributor
+
+LOW
+• directory listing only
+68. BAD SOURCE BEHAVIOR
+
+Scout must NOT do this:
+
+SkyDeck = prestigious Berkeley organization
+therefore all SkyDeck founders rank highly
+
+or:
+
+TreeHacks winner
+therefore elite founder
+
+or:
+
+Penn Venture Lab winner
+therefore Top Prospect
+
+or:
+
+research lab member
+therefore strong technical founder
+
+All of these are shortcuts.
+
+Instead:
+
+source
+→ evidence
+→ person/project/company
+→ context
+→ Scout interpretation
+69. SOURCE CARDS SHOULD EXPLAIN WHY
+
+Each source card should include:
+
+NAME
+
+Campus
+Source type
+
+Founder Scout: S
+Startup Scout: A
+
+Role:
+Discovery
+
+WHY THIS SOURCE MATTERS
+...
+
+WHAT TO EXTRACT
+...
+
+WHAT NOT TO INFER
+...
+
+STATUS
+Available
+
+LAST SUCCESS
+Sep 18
+
+RAW ENTITIES
+378
+
+RESOLVED FOUNDERS
+...
+
+PROMOTED CANDIDATES
+...
+
+This makes Sources an actual sourcing strategy page rather than
+an engineering diagnostics page.
+
+70. SOURCE SORT
+
+Default Source page sorting:
+
+Founder Scout:
+Founder tier → status → freshness
+
+Startup Scout:
+Startup tier → status → freshness
+
+Allow:
+
+Campus
+Tier
+Source type
+Role
+Status
+
+filters.
+
+71. TIER OVERRIDES
+
+Allow manual tier override.
+
+Example:
+
+SkyDeck
+
+System suggestion:
+Founder C
+Startup B
+
+Manual:
+Founder C
+Startup B
+
+Rationale:
+Broad/global and relatively downstream for student founder discovery.
+
+Store:
+
+who changed it
+when
+why
+
+Do not silently allow ingestion code to change manually assigned tiers.
+
+72. DO NOT OPTIMIZE FOR NUMBER OF SOURCES
+
+The goal is NOT:
+
+100 sources connected
+
+The goal is:
+
+small number of sources
+with high founder/startup discovery yield
+
+Prefer:
+
+10 excellent campus sources
+
+over:
+
+100 generic entrepreneurship directories
+
+Measure:
+
+candidates promoted / useful entities reviewed
+
+and eventually:
+
+shortlisted founders / source
+meetings / source
+qualified startups / source
+
+Do NOT optimize on:
+
+raw entities scraped
+
+alone.
+
+73. CAMPUS-SPECIFIC SOURCE STRATEGY
+
+Do not impose the same source strategy on every university.
+
+Each campus has its own high-signal communities.
+
+Examples:
+
+Stanford
+→ TreeHacks + technical labs/projects
+
+Berkeley
+→ Web Development at Berkeley + Cal Hacks + technical builder communities
+
+Penn
+→ PennApps + GRASP + Penn Labs
+
+MIT
+→ technical labs/projects + student builders + delta v for formed companies
+
+Waterloo
+→ technical builder ecosystem + project teams + Velocity for companies
+
+The source registry should therefore support:
+
+Campus
+↓
+Best founder sources
+Best startup sources
+Secondary sources
+Weak/reference sources
+74. CAMPUS SOURCE PLAYBOOK UI
+
+Add a view inside Sources:
+
+Sources
+[Registry] [Campus Playbooks]
+
+Example:
+
+BERKELEY
+
+BEST FOUNDER SOURCES
+
+S  Web Development at Berkeley
+S  Cal Hacks
+A  selected technical labs
+A  selected builder organizations
+
+STARTUP SOURCES
+
+A/B student startup programs
+B   SkyDeck
+
+LOW PRIORITY
+
+C   generic entrepreneurship directories
+C/D networking events
+
+This page should make it immediately obvious:
+
+Where should I actually spend my sourcing time at this campus?
+
+That is much more useful than a flat source list.
+
+
+I would specifically encode **TreeHacks = S for Founder Scout**, **WDB = S for Berkeley Founder Scout**, and **SkyDeck = C Founder / B Startup**. TreeHacks explicitly centers students building projects during a hackathon, while WDB describes hands-on engineering work for real clients; SkyDeck, by contrast, is open beyond Berkeley and its accelerator targets companies near their first institutional round, so it is more useful for company discovery/verification than proprietary student-founder discovery. :contentReference[oaicite:2]{index=2}
+
+For Penn, I'd put **PennApps at S for Founder Scout**, while GRASP is **S/A depending on whether you can identify actual student project ownership** rather than merely lab membership. PennApps is explicitly a large collegiate hackathon, while GRASP's public materials expose technical demos, projects, students, and spinouts, making it strong but requiring more entity-resolution work. :contentReference[oaicite:3]{index=3}
+
+For MIT, **delta v should be stronger for Startup Scout than Founder Scout** because the program expects founders already building a company, with a prototype and full-time commitment; that makes it excellent for formed-company discovery but later than GitHub/project/hackathon sourcing if the goal is to catch a person before they become obvious. :contentReference[oaicite:4]{index=4}
+
+And for Waterloo, **Velocity is useful for Startup Scout but should not be treated as a pure Waterloo-student 

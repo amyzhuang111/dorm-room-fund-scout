@@ -1,0 +1,2714 @@
+# Founder Scout — Sourcing Engine
+## Find exceptional student builders before the company is obvious
+
+Date: 18 September 2026
+
+This document defines the sourcing system for Founder Scout.
+
+Founder Scout is NOT a directory of everyone at a university.
+
+It is a sourcing engine designed to discover unusually strong student and recent-graduate builders through observable evidence:
+
+- things they built
+- code they shipped
+- hackathon projects
+- research
+- technical teams
+- repeated collaboration
+- product launches
+- open-source work
+- early startup formation
+- momentum over time
+
+The goal is:
+
+> Find the person before the company is obvious.
+
+---
+
+# 1. CORE PRINCIPLE
+
+Founder Scout should source broadly but promote selectively.
+
+The pipeline is:
+
+```text
+Sources
+↓
+Raw people / projects
+↓
+Identity resolution
+↓
+Founder profiles
+↓
+Evidence aggregation
+↓
+Candidate promotion
+↓
+Founder Scout
+↓
+Shortlist
+
+Do NOT deeply research every person discovered.
+
+Most records should remain cheap, lightweight records.
+
+Only increasingly interesting founders receive increasingly expensive enrichment.
+
+2. IMPORTANT ENTITY DISTINCTIONS
+
+These are non-negotiable:
+
+Person ≠ Founder Candidate
+Project ≠ Startup
+Club Member ≠ Strong Founder
+Hackathon Participant ≠ Strong Founder
+Research Lab Member ≠ Strong Founder
+Accelerator Founder ≠ Automatically Strong Founder
+
+Founder Scout should look for evidence of:
+
+ownership
+building
+technical depth
+repeat execution
+ambition
+momentum
+strong collaborators
+3. DATA MODEL
+
+Founder Scout needs these core entities:
+
+Person
+Founder
+Project
+Company
+Organization
+University
+Source
+Evidence
+Signal
+Relationship
+4. PERSON VS FOUNDER
+
+A Person is anyone resolved from a source.
+
+Example:
+
+Cal Hacks team member
+Penn Labs contributor
+GRASP student
+TreeHacks participant
+
+Do not automatically promote every Person into Founder Scout.
+
+A Founder record represents someone who has enough evidence to be worth tracking as a potential exceptional builder/founder.
+
+Pipeline:
+
+Raw Person
+↓
+Resolved Person
+↓
+Founder Candidate
+↓
+Tracked Founder
+↓
+Shortlisted Founder
+5. PERSON SCHEMA
+Person {
+  id
+  canonicalName
+
+  universityId?
+  program?
+  degree?
+  graduationYear?
+
+  githubUrl?
+  linkedinUrl?
+  twitterUrl?
+  personalWebsite?
+
+  currentCompanyId?
+
+  firstObservedAt
+  lastObservedAt
+
+  resolutionConfidence
+
+  createdAt
+  updatedAt
+}
+6. FOUNDER SCHEMA
+Founder {
+  id
+  personId
+
+  status
+  // discovered
+  // investigating
+  // watching
+  // shortlisted
+  // reached_out
+  // met
+  // passed
+
+  primaryArea?
+  currentBuildingSummary?
+
+  founderSignalScore?
+  evidenceCoverage?
+
+  companyStatus
+  // none_detected
+  // possible_company
+  // confirmed_company
+
+  createdAt
+  updatedAt
+}
+7. PROJECT SCHEMA
+
+Projects are central to Founder Scout.
+
+Project {
+  id
+
+  name
+  description?
+
+  type
+  // github
+  // hackathon
+  // research
+  // open_source
+  // student_project
+  // app
+  // hardware
+  // startup_project
+  // other
+
+  githubUrl?
+  websiteUrl?
+  demoUrl?
+
+  universityId?
+
+  firstObservedAt?
+  lastObservedAt?
+
+  activityStatus?
+}
+8. FOUNDER ↔ PROJECT
+FounderProject {
+  founderId
+  projectId
+
+  role?
+  // creator
+  // technical_lead
+  // contributor
+  // researcher
+  // team_member
+  // unknown
+
+  contributionStrength?
+  confidence
+
+  evidenceId
+}
+
+Do not assume equal contribution from team membership.
+
+9. FOUNDER ↔ FOUNDER
+
+Use only evidence-backed relationships.
+
+FounderRelationship {
+  founderAId
+  founderBId
+
+  type
+  // cofounder
+  // collaborator
+  // project_teammate
+  // hackathon_teammate
+  // research_collaborator
+
+  projectId?
+  evidenceId
+
+  confidence
+}
+
+Never infer:
+
+friends
+close relationship
+warm introduction
+
+merely from shared university/program.
+
+10. FOUNDER ↔ COMPANY
+FounderCompany {
+  founderId
+  companyId
+
+  role
+  // founder
+  // cofounder
+  // founding_engineer
+  // other
+
+  confidence
+  evidenceId
+}
+11. SOURCING PHILOSOPHY
+
+The best Founder Scout source is NOT necessarily the most prestigious institution.
+
+Source quality means:
+
+How likely is this source to reveal an exceptional builder before they are obvious to the broader venture market?
+
+Therefore:
+
+TreeHacks
+can be higher signal than
+a major university accelerator
+
+Web Development at Berkeley
+can be higher signal than
+SkyDeck
+
+PennApps
+can be higher signal than
+a generic entrepreneurship mixer
+
+This is not a judgment about organizational quality.
+
+It is specifically about sourcing alpha.
+
+12. SOURCE TIERS
+
+Each source receives:
+
+Founder Scout Tier
+
+Allowed:
+
+S
+A
+B
+C
+D
+S — Exceptional
+
+Very high density of meaningful founder signals.
+
+Use aggressively.
+
+A — Strong
+
+Consistently useful founder discovery.
+
+B — Useful
+
+Useful, but more filtering required.
+
+C — Secondary
+
+Weak / downstream / noisy.
+
+Mainly corroboration.
+
+D — Reference
+
+Little proprietary discovery value.
+
+Useful for verification/context.
+
+13. SOURCE ROLES
+
+Every source also receives a role:
+
+DISCOVERY
+CORROBORATION
+VERIFICATION
+REFERENCE
+
+Examples:
+
+TreeHacks
+S
+DISCOVERY
+
+GitHub
+S
+DISCOVERY + VERIFICATION
+
+SkyDeck
+C
+CORROBORATION
+
+Crunchbase
+D
+VERIFICATION
+14. SOURCE QUALITY DIMENSIONS
+
+For every source evaluate:
+
+Campus purity
+Earliness
+Build evidence
+Founder attribution
+Selectivity / density
+Novelty
+Extractability
+Refreshability
+
+Do not need to expose every metric publicly.
+
+Use them to justify source tier.
+
+15. CAMPUS PURITY
+
+Question:
+
+Are the people actually students/recent graduates from the target campus?
+
+High:
+
+PennApps
+Cal Hacks Berkeley participants
+WDB members
+university lab students
+
+Lower:
+
+global accelerator
+global startup competition
+general startup directory
+16. EARLINESS
+
+Highest Founder Scout value:
+
+personal project
+GitHub repo
+hackathon
+research prototype
+student product
+technical club project
+
+Later:
+
+startup accelerator
+fundraise
+demo day
+VC portfolio
+
+Founder Scout should bias earlier.
+
+17. BUILD EVIDENCE
+
+Strong:
+
+actual code
+working demo
+technical project
+research prototype
+open-source repository
+shipped product
+hardware system
+
+Weak:
+
+club membership
+event attendance
+newsletter mention
+entrepreneurship interest
+18. FOUNDER ATTRIBUTION
+
+Strong source:
+
+project + named team + GitHub profiles
+
+Weak source:
+
+logo only
+anonymous company listing
+generic organization page
+
+Founder Scout cares about WHO built something.
+
+19. NOVELTY
+
+High novelty:
+
+GitHub
+hackathon page
+lab project
+personal website
+student project
+technical organization
+
+Lower novelty:
+
+Crunchbase
+TechCrunch funding article
+VC portfolio
+accelerator demo day
+20. EXTRACTABILITY
+
+Preferred:
+
+public JSON API
+public GitHub API
+structured HTML
+static page
+embedded JSON
+
+Avoid spending excessive engineering time on:
+
+login walls
+opaque SPAs
+logo-only portfolios
+unstable pages
+anti-bot pages
+
+If source cannot be reliably extracted:
+
+status = blocked
+
+or:
+
+status = unsupported
+
+Do not invent data.
+
+21. INITIAL CAMPUS STRATEGY
+
+Initial campuses:
+
+Penn
+Berkeley
+Stanford
+MIT
+Waterloo
+
+Do not expand to 30 universities until these five work well.
+
+Depth > breadth.
+
+22. PENN — SOURCE PLAYBOOK
+S — PennApps
+Tier: S
+Role: Discovery
+
+Extract:
+
+projects
+team members
+project descriptions
+GitHub links
+demo links
+personal URLs
+winners
+finalists
+repeat participants
+
+Important:
+
+Do not source only winners.
+
+Interesting patterns include:
+
+strong technical project
++
+continued development after PennApps
+
+and:
+
+same founder appears across multiple years/projects
+S/A — GRASP
+Tier: S/A
+Role: Technical founder discovery
+
+Best for:
+
+robotics
+autonomy
+vision
+embodied AI
+controls
+hardware
+
+Extract:
+
+student researchers
+project leaders
+projects
+repositories
+publications
+spinouts
+research demos
+
+Signal hierarchy:
+
+project lead                  HIGH
+core technical contributor    HIGH
+repeat contributor            MEDIUM/HIGH
+student directory listing     LOW
+A — Penn Labs
+Tier: A
+Role: Builder discovery
+
+Extract:
+
+members
+project ownership
+repositories
+technical leadership
+projects
+contribution history
+
+Do NOT convert Penn Labs projects to startups automatically.
+
+Correct:
+
+Penn Mobile
+↓
+Project
+↓
+contributors
+↓
+Founder candidates
+A/B — Venture Lab competitions
+Tier: A/B
+Role: Startup-oriented founder discovery
+
+Extract:
+
+founders
+startup/project
+award
+year
+team
+website
+
+Competition winner alone is not enough to produce high Founder Signal.
+
+B — Penn VIP / VIP-X
+
+Use for:
+
+formed companies
+founder identity
+startup transition
+
+More downstream than PennApps.
+
+B — M&T / technical builder ecosystems
+
+Prioritize public evidence of:
+
+projects
+technical work
+startup formation
+repeat building
+
+Program membership alone = weak evidence.
+
+C — generic entrepreneurship clubs / mixers
+
+Use mainly for:
+
+names
+possible leads
+cross-reference
+
+Do not increase Founder Signal based on attendance.
+
+23. BERKELEY — SOURCE PLAYBOOK
+S — Web Development at Berkeley
+Tier: S
+Role: Founder discovery
+
+One of the highest-priority Berkeley sources.
+
+Extract:
+
+members
+project teams
+project leads
+engineering leads
+projects
+GitHub accounts
+personal sites
+repeat contributors
+
+Look especially for:
+
+people leading projects
+people shipping repeatedly
+people appearing across multiple project cycles
+people building independently outside WDB
+recurring collaborator groups
+
+Membership alone is weak.
+
+S — Cal Hacks
+Tier: S
+Role: Discovery
+
+Extract:
+
+projects
+team members
+GitHub
+Devpost
+personal URLs
+winners
+finalists
+repeat participants
+
+Do not only track winning teams.
+
+Strong:
+
+technical ambition
++
+working project
++
+clear ownership
++
+continued activity
+A — high-signal technical student orgs
+
+Add individually.
+
+Do NOT mark every Berkeley organization A.
+
+Require evidence of:
+
+building
+projects
+technical ownership
+repeat execution
+
+Examples categories:
+
+AI/ML builder organizations
+engineering build teams
+developer groups
+open-source communities
+technical consulting organizations
+A — research labs
+
+Only high signal when attribution exists.
+
+Strong:
+
+student owns project
+student leads repo
+student repeatedly ships system
+
+Weak:
+
+name appears in lab directory
+C — SkyDeck
+Founder Scout Tier: C
+Role: Corroboration / startup discovery
+
+SkyDeck is not bad.
+
+It is weaker for:
+
+discovering non-obvious Berkeley student builders.
+
+Reasons:
+
+relatively downstream
+formal companies
+broader founder population
+many teams already fundraising
+not pure student discovery
+
+Use it for:
+
+company confirmation
+founder-company relationship
+company metadata
+startup status
+
+Do not increase Founder Signal materially merely because someone was in SkyDeck.
+
+24. STANFORD — SOURCE PLAYBOOK
+S — TreeHacks
+Tier: S
+Role: Discovery
+
+Highest-priority Stanford Founder Scout source.
+
+Extract:
+
+projects
+founders/team members
+GitHub
+demo links
+personal websites
+repeat participants
+winners
+finalists
+
+Do not only source winners.
+
+Look for:
+
+technical difficulty
+originality
+working demo
+clear ownership
+continued development
+repeat building
+strong collaborators
+S/A — technical labs / project ecosystems
+
+Especially:
+
+AI
+systems
+robotics
+HCI
+hardware
+developer tools
+
+Focus on actual artifacts.
+
+A — strong builder communities
+
+Evaluate individually.
+
+Require:
+
+project output
+technical ownership
+builder density
+B/C — entrepreneurship clubs / demo events
+
+Useful, but often later and noisier.
+
+25. MIT — SOURCE PLAYBOOK
+S/A — technical project ecosystems
+
+Prioritize:
+
+labs
+technical student teams
+GitHub
+research prototypes
+hackathons
+course/demo projects where public
+A — HackMIT / similar builder events
+
+Extract:
+
+teams
+projects
+GitHub
+repeat builders
+A — formed startup ecosystems
+
+Examples:
+
+delta v
+startup accelerators
+
+More valuable for detecting:
+
+Founder → Company
+
+than for discovering a completely unknown builder.
+
+B/C — generic entrepreneurship events
+
+Low founder-signal unless accompanied by concrete work.
+
+26. WATERLOO — SOURCE PLAYBOOK
+S/A — technical builder ecosystem
+
+Prioritize:
+
+software projects
+engineering teams
+GitHub
+hackathons
+co-op side projects
+developer communities
+
+Waterloo Founder Scout should emphasize repeated shipping.
+
+A/B — Velocity
+
+Useful for:
+
+formed startup discovery
+founder-company relationships
+early company validation
+
+Not necessarily pure current-student sourcing.
+
+Verify university affiliation separately.
+
+27. CROSS-CAMPUS SOURCES
+
+Some sources apply everywhere.
+
+28. GITHUB
+Tier: S
+Role: Discovery + Verification
+
+Required API:
+
+GITHUB_TOKEN=
+
+Use GitHub API rather than scraping GitHub pages.
+
+Collect:
+
+username
+profile name
+bio
+organizations
+repos
+repo descriptions
+repo creation date
+repo last push
+stars
+forks
+languages
+contributors
+owner status
+personal website
+29. GITHUB — WHAT MATTERS
+
+Do NOT rank primarily by stars.
+
+More useful founder signals:
+
+repo ownership
+repeat building
+continued development
+technical complexity
+project progression
+multiple serious projects
+strong recurring contributors
+independent launches
+
+Example:
+
+Founder A
+3 repos
+20 stars total
+actively shipping difficult infrastructure
+
+may be more interesting than:
+
+Founder B
+1 inherited repo
+2,000 stars
+little contribution
+30. GITHUB ACTIVITY
+
+Track meaningful changes:
+
+new repository
+major release
+continued development
+new collaborator
+project restarted
+rapid contribution increase
+
+Avoid raw commit spam.
+
+Do not create one Signal per commit.
+
+Aggregate:
+
+41 commits over 14 days
+
+where useful.
+
+31. PERSONAL WEBSITES
+Tier: A/B
+Role: Discovery + Corroboration
+
+Useful for:
+
+projects
+personal research
+startup announcements
+technical writing
+GitHub
+contact/public profile links
+32. X / TWITTER
+
+Optional later.
+
+Useful for:
+
+"building X"
+startup formation
+product launch
+demo
+team formation
+early customer announcement
+
+Do not make X required for MVP.
+
+Do not attempt fragile unauthorized scraping.
+
+33. LINKEDIN
+
+Founder Scout must NOT depend on LinkedIn scraping.
+
+Use LinkedIn only when:
+
+publicly linked
+manually entered
+accessible through approved integration
+
+Store public LinkedIn URL where found.
+
+Do not make the product fail without LinkedIn.
+
+34. DEVPOST / HACKATHON GALLERIES
+
+High-value cross-campus source family.
+
+Extract:
+
+project
+description
+team
+event
+date
+links
+GitHub
+demo
+award
+
+Important:
+
+Hackathon project = Project.
+
+NOT automatically Company.
+
+35. COMPANY WEBSITES
+
+Once possible company detected:
+
+use company website for:
+
+founder confirmation
+company description
+launch
+customers
+team
+
+This is downstream enrichment.
+
+36. RAW INGESTION
+
+Every source adapter returns normalized raw records.
+
+Example:
+
+type RawEntity = {
+  sourceId: string
+  externalId?: string
+
+  type:
+    | "person"
+    | "project"
+    | "company"
+    | "organization"
+
+  name: string
+  url?: string
+
+  description?: string
+
+  people?: {
+    name: string
+    url?: string
+    githubUrl?: string
+  }[]
+
+  githubUrls?: string[]
+
+  universityHint?: string
+
+  observedAt: Date
+
+  rawPayload?: unknown
+}
+37. SOURCE ADAPTERS
+
+Use source-specific adapters.
+
+Example:
+
+/src/sources/adapters/
+
+penn/
+  pennapps.ts
+  pennlabs.ts
+  grasp.ts
+  ventureLab.ts
+
+berkeley/
+  calHacks.ts
+  wdb.ts
+
+stanford/
+  treeHacks.ts
+
+mit/
+  hackmit.ts
+
+waterloo/
+  velocity.ts
+
+global/
+  github.ts
+  devpost.ts
+
+Do not create one generic AI scraper for everything.
+
+38. FETCH PRIORITY
+
+Preferred source retrieval:
+
+1. documented public API
+2. public JSON
+3. embedded structured data
+4. static HTML
+5. normal HTML parser
+6. browser automation
+7. manual ingestion
+
+Browser automation is a last resort.
+
+39. DO NOT USE LLM FOR BASIC INGESTION
+
+Do NOT call an LLM for:
+
+fetching pages
+extracting obvious HTML fields
+sorting
+filtering
+GitHub statistics
+URL normalization
+exact-domain deduplication
+date comparison
+source tier
+Founder Signal math
+
+LLM enrichment may later be used selectively.
+
+40. ENTITY RESOLUTION
+
+Same person may appear as:
+
+Margaret Zhu
+Margaret Y. Zhu
+margaretz
+M. Zhu
+
+Resolve through evidence such as:
+
+same GitHub
+same personal URL
+same university
+same project
+same listed team
+same email domain if publicly provided
+
+Do not merge solely because names match.
+
+41. RESOLUTION CONFIDENCE
+confirmed
+probable
+possible
+conflict
+unresolved
+
+Low-confidence matches should require review.
+
+42. DEDUPLICATION — FOUNDERS
+
+Strong keys:
+
+GitHub username
+personal domain
+exact verified URL
+public university identity
+
+Weaker:
+
+name + university
+name + project
+
+Never auto-merge based only on common name.
+
+43. DEDUPLICATION — PROJECTS
+
+Possible keys:
+
+GitHub repo
+project website
+Devpost URL
+exact event + project name
+44. EVIDENCE
+
+Every meaningful claim should retain provenance.
+
+Evidence {
+  id
+
+  entityType
+  entityId
+
+  claimType
+  value?
+
+  sourceId
+  sourceUrl
+
+  publishedAt?
+  observedAt
+
+  confidence
+
+  snippet?
+}
+
+Examples:
+
+"studies at Penn"
+"created project X"
+"technical lead"
+"won TreeHacks"
+"repo still active"
+"founded company Y"
+45. DO NOT TURN ABSENCE INTO NEGATIVE EVIDENCE
+
+Example:
+
+No public GitHub found.
+
+Correct:
+
+GitHub: unknown
+
+Wrong:
+
+Technical ability: 0
+
+No company detected.
+
+Correct:
+
+Company: none detected
+
+Wrong:
+
+Founder quality reduced
+46. FOUNDER CANDIDATE PROMOTION
+
+Do not put every discovered person into the main Founder Scout.
+
+Use a deterministic candidate promotion layer.
+
+A person can be promoted when at least one high-quality signal exists.
+
+Example promotion conditions:
+
+owns meaningful technical project
+
+OR
+
+repeat contributor across multiple meaningful projects
+
+OR
+
+strong hackathon project + clear technical ownership
+
+OR
+
+research project with clear technical leadership
+
+OR
+
+open-source project with meaningful usage/activity
+
+OR
+
+repeat builder across multiple environments
+
+OR
+
+possible startup formation + prior building evidence
+47. DO NOT PROMOTE BASED ONLY ON
+club membership
+hackathon attendance
+award attendance
+entrepreneurship club
+accelerator application
+university prestige
+lab directory listing
+LinkedIn title
+48. PROMOTION LEVELS
+
+Use:
+
+L0 Raw
+L1 Resolved
+L2 Candidate
+L3 Enriched
+L4 Shortlist Research
+49. L0 — RAW
+
+Store:
+
+name
+source
+URL
+raw project/team relationship
+
+Cheap.
+
+No research.
+
+50. L1 — RESOLVED
+
+Resolve:
+
+canonical identity
+campus
+GitHub
+projects
+duplicate records
+
+Still cheap.
+
+51. L2 — CANDIDATE
+
+Candidate has meaningful evidence.
+
+Add:
+
+basic founder profile
+primary area
+projects
+strongest signal
+latest signal
+evidence coverage
+
+This is what Founder Scout Discover primarily shows.
+
+52. L3 — ENRICHED
+
+Only for interesting candidates.
+
+Research:
+
+personal website
+additional GitHub history
+project continuation
+possible startup
+collaborators
+research artifacts
+company links
+53. L4 — SHORTLIST RESEARCH
+
+Only for highly interesting people.
+
+Research deeply:
+
+full project history
+technical ownership
+team formation
+company status
+public traction
+founder background
+open questions
+
+Human review expected.
+
+54. COST PRINCIPLE
+
+Example:
+
+20,000 raw people/projects
+↓
+5,000 resolved people
+↓
+1,000 founder candidates
+↓
+200 enriched
+↓
+30 shortlisted
+
+Do not deep-research 20,000 people.
+
+55. FOUNDER SIGNAL
+
+Founder Signal is separate from source tier.
+
+Source tier determines:
+
+how useful the source is
+
+Founder Signal measures:
+
+how strong the individual evidence is
+
+Do NOT write:
+
+TreeHacks = S
+therefore founder score = high
+56. FOUNDER SIGNAL DIMENSIONS
+
+Suggested dimensions:
+
+1. Ability to build
+2. Technical / domain depth
+3. Repeat building
+4. Shipping velocity
+5. Project ambition
+6. External validation
+7. Collaborator quality
+8. Momentum
+
+Keep dimensions evidence-backed.
+
+Unknown remains unknown.
+
+57. SIGNAL EXAMPLE — TREEHACKS
+
+Weak:
+
+attended TreeHacks
+
+Medium:
+
+built functional project
+
+Strong:
+
+built technically ambitious functional project
++
+clear ownership
+
+Very strong:
+
+built ambitious project
++
+continued building for months
++
+same strong team
++
+project evolved into company
+58. SIGNAL EXAMPLE — WDB
+
+Weak:
+
+member
+
+Medium:
+
+contributed to client project
+
+Strong:
+
+technical lead
++
+repeat project ownership
+
+Very strong:
+
+technical lead
++
+multiple shipped products
++
+independent project/company formation
+59. SIGNAL EXAMPLE — RESEARCH LAB
+
+Weak:
+
+listed on lab website
+
+Medium:
+
+coauthor/contributor
+
+Strong:
+
+project lead
++
+significant technical artifact
+
+Very strong:
+
+research system
++
+public repo/demo
++
+spinout / independent continuation
+60. SIGNAL TYPES
+
+Use structured types:
+
+New Project
+Major Release
+Continued Development
+Research Project
+Publication
+Hackathon Project
+Award
+New Collaborator
+Team Formation
+Open Source Traction
+Product Launch
+Possible Startup
+Company Formation
+Customer Evidence
+61. SIGNAL PROMOTION
+
+Raw events should not automatically appear in Founder Signals.
+
+Human-facing Signal must have:
+
+Founder
+Event
+Date
+Evidence
+Why it matters
+Confidence
+
+If no decision-useful significance:
+
+keep as raw activity.
+
+62. CONTINUED DEVELOPMENT
+
+Important Founder Scout signal.
+
+Example:
+
+PennApps project
+↓
+hackathon ends
+↓
+repo receives meaningful commits for 90 days
+
+This can be stronger than winning the event.
+
+Track project continuation.
+
+63. REPEAT BUILDING
+
+High-value founder pattern.
+
+Example:
+
+2024
+Cal Hacks project
+
+2025
+WDB technical lead
+
+2026
+open-source project
+
+2026
+possible startup
+
+Founder Scout should surface:
+
+Repeat Builder
+
+as a meaningful signal.
+
+64. COLLABORATOR SIGNAL
+
+Track repeated teams.
+
+Example:
+
+Margaret
++
+Alice
+
+appear together on:
+
+PennApps
+GRASP project
+Serpent Robotics
+
+This is useful.
+
+Do NOT conclude:
+
+best friends
+strong personal relationship
+
+Just record repeated collaboration.
+
+65. COMPANY DETECTION
+
+Founder Scout should attempt to detect:
+
+No company detected
+Possible company
+Confirmed company
+
+Possible signals:
+
+personal bio changed to "building X"
+new domain
+GitHub organization
+company launch page
+team site
+startup competition
+founder title
+66. POSSIBLE COMPANY WORKFLOW
+
+Example:
+
+John Smith
+
+Possible company detected
+
+Latency Labs
+
+Evidence:
+• personal website mentions Latency Labs
+• GitHub org exists
+• collaborator profile references same name
+
+[Review match]
+
+Human confirms before Startup Scout creation.
+
+67. DO NOT AUTO-CREATE STARTUP
+
+Hackathon project does NOT automatically become startup.
+
+Research project does NOT automatically become startup.
+
+GitHub project does NOT automatically become startup.
+
+Require independent company evidence.
+
+68. SOURCE REGISTRY
+
+Schema:
+
+Source {
+  id
+
+  name
+  campusId?
+
+  family
+
+  founderScoutTier
+  sourceRole
+
+  url?
+
+  extractionMethod
+
+  status
+
+  lastAttemptAt?
+  lastSuccessAt?
+
+  rawEntityCount
+  resolvedPersonCount
+  resolvedProjectCount
+  promotedFounderCount
+
+  rationale
+  notes?
+}
+69. SOURCE STATUS
+
+Use:
+
+Not configured
+Ready to scan
+Running
+Complete
+Partial
+Blocked
+Error
+Manual
+
+Complete means:
+
+configured scan completed successfully
+
+NOT:
+
+whole campus ecosystem exhaustively covered.
+
+70. SOURCE COUNTS
+
+Do NOT show:
+
+189 leads
+
+Show:
+
+189 people found
+42 resolved
+11 founder candidates
+
+or:
+
+84 projects
+31 teams
+17 candidate founders
+
+Use correct entity types.
+
+71. SOURCE PERFORMANCE
+
+Eventually track:
+
+Raw entities
+Resolved people
+Candidate founders
+Shortlisted founders
+Meetings
+
+Useful metric:
+
+candidate founders / resolved people
+
+More useful than:
+
+pages scraped
+72. SOURCE PRIORITY
+
+Initial priority:
+
+P0
+must build now
+
+P1
+build after P0
+
+P2
+useful later
+
+P3
+reference only
+73. P0 SOURCES
+Penn
+PennApps
+Penn Labs
+GRASP where extractable
+GitHub
+Berkeley
+Web Development at Berkeley
+Cal Hacks
+GitHub
+Stanford
+TreeHacks
+GitHub
+MIT
+Hackathon/project ecosystem
+GitHub
+Waterloo
+technical project ecosystem
+GitHub
+74. P1 SOURCES
+research labs
+technical student organizations
+personal sites
+startup competitions
+student accelerators
+75. P2 SOURCES
+university incubators
+general startup programs
+startup directories
+76. P3 SOURCES
+generic networking events
+general entrepreneurship newsletters
+broad startup databases
+
+Useful mostly for corroboration.
+
+77. API REQUIREMENTS
+
+Founder Scout should work without paid APIs.
+
+Required initial integration:
+
+GitHub API
+
+Environment:
+
+GITHUB_TOKEN=
+78. OPTIONAL LLM
+
+Possible:
+
+ANTHROPIC_API_KEY=
+
+or equivalent.
+
+Application must still work without it.
+
+Use only for:
+
+messy page classification
+structured extraction from prose
+candidate summary
+evidence-grounded Why Look
+possible entity match review
+79. OPTIONAL SEARCH API
+
+Later:
+
+pick ONE:
+
+Exa
+Brave Search
+Tavily
+SerpAPI
+
+Use only for promoted candidates.
+
+Example:
+
+Founder candidate
+↓
+possible company unknown
+↓
+search selectively
+
+Do not web-search every raw person.
+
+80. NO PAID DATA DEPENDENCY
+
+Do NOT require:
+
+PitchBook
+Crunchbase
+Apollo
+People Data Labs
+Clearbit
+LinkedIn scraping
+X API
+
+for Founder Scout MVP.
+
+81. QUEUES
+
+Implement job queues conceptually:
+
+source_scan_queue
+entity_resolution_queue
+founder_promotion_queue
+github_enrichment_queue
+candidate_enrichment_queue
+82. SOURCE SCAN QUEUE
+
+Job:
+
+sourceId
+cursor?
+scanMode
+requestedAt
+
+Source adapter returns batches.
+
+83. ENTITY RESOLUTION QUEUE
+
+Resolve:
+
+people
+projects
+GitHub profiles
+duplicates
+
+Use deterministic matching first.
+
+84. FOUNDER PROMOTION QUEUE
+
+Evaluate whether resolved person has sufficient evidence to become:
+
+Founder Candidate
+
+No LLM required.
+
+85. GITHUB ENRICHMENT QUEUE
+
+Only run when:
+
+GitHub profile known
+AND
+person promoted or likely candidate
+
+Do not exhaust API rate limits enriching everyone.
+
+86. INCREMENTAL SCANS
+
+Store:
+
+externalId
+contentHash
+firstSeenAt
+lastSeenAt
+lastChangedAt
+
+On future scan:
+
+unchanged record
+→ no expensive processing
+
+Changed/new:
+
+→ resolution / signal processing
+87. CACHE
+
+Cache fetched public pages.
+
+Conceptually:
+
+URL
+response hash
+retrievedAt
+status
+content
+
+Avoid refetching same page across multiple workflows.
+
+88. SOURCE REFRESH FREQUENCY
+
+Examples:
+
+GitHub
+daily / selective
+
+hackathon galleries
+weekly during active periods
+monthly otherwise
+
+lab pages
+monthly
+
+student org pages
+monthly
+
+startup competitions
+after events / monthly
+
+Do not repeatedly crawl static pages every hour.
+
+89. RATE LIMITS
+
+Respect:
+
+GitHub API rate limits
+robots/public access constraints
+source-specific request limits
+
+Use:
+
+delay
+backoff
+retry
+cache
+
+Do not bypass access restrictions.
+
+90. CAMPUS COVERAGE
+
+Do not claim:
+
+Berkeley covered
+
+simply because 2 sources ran.
+
+Use:
+
+Berkeley
+
+Configured sources: 12
+Successfully scanned: 5
+
+Coverage: Partial
+91. COVERAGE STATES
+Not scanned
+Partial
+Up to date
+Needs attention
+
+Up to date means configured sources were recently scanned.
+
+Not:
+
+we know every founder at Berkeley
+92. FOUNDER DISCOVER TABLE
+
+Only promoted founder candidates appear by default.
+
+Columns:
+
+FOUNDER
+CAMPUS
+BUILDING
+STRONGEST SIGNAL
+FOUNDER SIGNAL
+COMPANY
+LATEST
+93. "WHY LOOK"
+
+Every tracked Founder should eventually have:
+
+Why look
+
+Example:
+
+Repeatedly ships technically difficult robotics projects
+and continues building with the same team outside coursework.
+
+Must be based on evidence.
+
+Do not invent founder personality traits.
+
+94. "OPEN QUESTION"
+
+Every enriched Founder should have:
+
+Open question
+
+Example:
+
+Is the project becoming a company?
+
+or:
+
+How much of the core technical system did she personally own?
+
+This should guide the next research action.
+
+95. FOUNDER SHORTLIST
+
+Founder shortlist should remain small.
+
+Do NOT force:
+
+Top 10
+Top 20
+
+Only founders with justified reasons should appear.
+
+Allow:
+
+Shortlisted
+Watching
+Needs Evidence
+96. SOURCE-BASED SAVED VIEWS
+
+Useful Founder Scout saved views:
+
+TreeHacks builders
+WDB project leads
+PennApps repeat builders
+GRASP project leads
+No company yet
+Possible company detected
+Recent GitHub activity
+Repeat builders
+97. CAMPUS PLAYBOOK PAGE
+
+For every campus show:
+
+BEST SOURCES
+SECONDARY SOURCES
+WEAK / DOWNSTREAM SOURCES
+NOT CONFIGURED
+
+Example:
+
+BERKELEY
+
+BEST FOUNDER SOURCES
+
+S   Web Development at Berkeley
+S   Cal Hacks
+A   Selected technical groups
+A   High-signal labs
+
+SECONDARY
+
+B   startup programs
+
+DOWNSTREAM / CORROBORATION
+
+C   SkyDeck
+C   generic entrepreneurship directories
+98. SOURCE TIER MUST NOT DIRECTLY BECOME FOUNDER SCORE
+
+Wrong:
+
+TreeHacks S
++
+participant
+=
+90 Founder Signal
+
+Correct:
+
+TreeHacks S
++
+meaningful project
++
+clear contribution
++
+continued development
+=
+strong evidence
+99. RESEARCH SOURCE CHAIN
+
+Ideal Founder Scout discovery:
+
+TreeHacks
+↓
+project
+↓
+founder names
+↓
+GitHub
+↓
+continued activity
+↓
+personal site
+↓
+repeat project
+↓
+possible company
+
+Another:
+
+WDB
+↓
+technical lead
+↓
+project history
+↓
+GitHub
+↓
+independent project
+↓
+Founder Candidate
+100. FOUNDER SIGNAL HISTORY
+
+Do not overwrite founder state.
+
+Store chronological evidence.
+
+Example:
+
+2025-09
+Cal Hacks project
+
+2026-01
+GitHub repo created
+
+2026-04
+WDB project lead
+
+2026-08
+new collaborator joined
+
+2026-09
+company domain detected
+
+This trajectory is valuable.
+
+101. SIGNAL DECAY
+
+Do not automatically delete old evidence.
+
+But distinguish:
+
+historical evidence
+
+from:
+
+current momentum
+
+Example:
+
+TreeHacks winner 3 years ago with no subsequent activity:
+
+still historical evidence.
+
+Not a current momentum signal.
+
+102. RECENCY
+
+Latest Activity should represent:
+
+actual event date
+
+not:
+
+date page was scraped
+
+If event date unknown:
+
+show:
+
+Discovered Sep 18
+
+rather than pretending the event happened Sep 18.
+
+103. HUMAN REVIEW
+
+Human review is required for:
+
+uncertain entity merges
+possible company formation
+high-impact founder attribution
+conflicting graduation information
+unclear project ownership
+104. MANUAL REFERRALS
+
+Manual referral form:
+
+Founder name
+University
+Graduation year
+What they're building
+Why interesting
+Source / referral
+GitHub
+Website
+Possible company
+Notes
+
+Manual referrals enter:
+
+Founder Candidate
+
+but should still preserve:
+
+source = manual_referral
+105. MANUAL OVERRIDES
+
+Allow user to override:
+
+Founder status
+Primary area
+Company link
+Source tier
+Project ownership
+
+Store:
+
+who
+when
+previous value
+new value
+reason
+106. DO NOT OVER-AUTOMATE
+
+Founder Scout should NOT autonomously decide:
+
+this person will become successful
+this founder is exceptional because of university
+this founder is more intelligent
+this founder has strong charisma
+
+Only surface observable evidence.
+
+107. DO NOT INFER PERSONAL ATTRIBUTES
+
+Do not infer:
+
+race
+religion
+politics
+sexual orientation
+health
+personality
+wealth
+family background
+
+from sourced data.
+
+They are irrelevant to Founder Scout.
+
+108. FOUNDER SIGNAL MUST BE EXPLAINABLE
+
+Click score:
+
+Founder Signal 84
+
+Build ability        strong evidence
+Technical depth      strong evidence
+Repeat building      medium evidence
+Shipping velocity    strong evidence
+Project ambition     medium evidence
+Validation           limited evidence
+Collaborators        medium evidence
+Momentum             strong evidence
+
+Coverage
+71%
+
+Do not expose fake decimals.
+
+109. UNKNOWN ≠ ZERO
+
+Always.
+
+Example:
+
+External validation
+Unknown
+
+not:
+
+0/5
+
+unless explicitly assessed zero.
+
+110. NO "TOP FOUNDER" WITHOUT EVIDENCE
+
+Founder ranking is a research prioritization tool.
+
+Do not portray it as objective founder quality.
+
+Prefer:
+
+High Signal
+
+over:
+
+Best Founder
+111. TESTS — PROJECT CLASSIFICATION
+
+Given:
+
+Cal Hacks submission
+
+Then:
+
+Project created
+team members created/resolved
+
+NOT:
+
+Company created
+
+unless company evidence exists.
+
+112. TESTS — CLUB MEMBERSHIP
+
+Given:
+
+person appears on WDB member directory
+
+Then:
+
+Person record
+organization relationship
+
+NOT automatically:
+
+Founder Candidate
+
+without meaningful project evidence.
+
+113. TESTS — REPEAT BUILDER
+
+Given:
+
+same resolved person
+appears on 3 meaningful projects
+with strong ownership
+
+Then:
+
+repeat_building evidence generated
+114. TESTS — GITHUB
+
+GitHub enrichment:
+
+does not create one signal per commit
+
+Instead aggregate meaningful periods.
+
+115. TESTS — POSSIBLE COMPANY
+
+Given:
+
+founder bio says "building X"
+
+Then:
+
+possible_company
+
+NOT:
+
+confirmed company
+
+without corroboration/human confirmation.
+
+116. TESTS — SOURCE FAILURE
+
+Given:
+
+source previously succeeded
+new fetch fails
+
+Then:
+
+retain previous records
+mark latest run error
+
+Do NOT:
+
+delete founders
+set candidate count to zero
+mark founders inactive
+117. TESTS — UNSCANNED CAMPUS
+
+If MIT source adapters have not run:
+
+show:
+
+MIT
+Not scanned
+
+NOT:
+
+MIT
+0 founders
+118. TESTS — DUPLICATES
+
+Given:
+
+Margaret Zhu
+GitHub: margaretz
+
+Margaret Y. Zhu
+GitHub: margaretz
+
+Then likely same person.
+
+Given:
+
+Alex Chen
+Penn
+
+Alex Chen
+Berkeley
+
+do NOT merge based only on name.
+
+119. IMPLEMENTATION ORDER
+Phase 1
+
+Build core models:
+
+Person
+Founder
+Project
+FounderProject
+FounderRelationship
+Evidence
+Source
+SourceRun
+Phase 2
+
+Implement P0 adapters:
+
+PennApps
+Penn Labs
+Cal Hacks
+WDB
+TreeHacks
+GitHub
+Phase 3
+
+Entity resolution.
+
+Resolve:
+
+people
+projects
+GitHub identities
+duplicates
+Phase 4
+
+Candidate promotion logic.
+
+Populate:
+
+Founder Scout Discover
+
+with only promoted candidates.
+
+Phase 5
+
+GitHub enrichment.
+
+Prioritize candidates only.
+
+Phase 6
+
+Founder Signals.
+
+Implement:
+
+New Project
+Continued Development
+Repeat Builder
+New Collaborator
+Possible Startup
+Phase 7
+
+Founder Network.
+
+Use only evidence-backed relationships.
+
+Phase 8
+
+Add:
+
+GRASP
+research labs
+MIT sources
+Waterloo sources
+technical organizations
+Phase 9
+
+Optional selective search / LLM enrichment.
+
+Only after sourcing works.
+
+120. FIRST TARGET
+
+Do NOT initially optimize for:
+
+100,000 founders
+
+Initial target:
+
+Penn
+Berkeley
+Stanford
+
+~10 high-signal sources
+
+hundreds/thousands of raw people/projects
+
+100–300 genuine Founder Candidates
+
+20–50 strong profiles worth reviewing
+
+Quality first.
+
+121. SUCCESS METRICS
+
+Do NOT optimize primarily for:
+
+pages scraped
+raw entities
+database rows
+
+Track:
+
+Resolved people
+Founder Candidates
+High-Signal Founders
+Possible companies detected
+Shortlisted founders
+Founders contacted
+Founders met
+
+Per source:
+
+candidate yield
+shortlist yield
+meeting yield
+122. SOURCE SUCCESS EXAMPLE
+
+Weak result:
+
+SkyDeck
+
+4,000 pages scraped
+0 useful student founder candidates
+
+Strong result:
+
+WDB
+
+180 people resolved
+27 Founder Candidates
+6 shortlisted
+
+The latter is far more valuable.
+
+123. FOUNDER SCOUT UX OUTPUT
+
+The sourcing engine should eventually populate rows like:
+
+Margaret Zhu
+Penn · 2027
+Robotics
+
+Strongest signal
+Led an autonomous robotics project and continued
+shipping after the original program ended.
+
+Founder Signal
+86
+
+Coverage
+72%
+
+Company
+Serpent Robotics
+
+Latest
+Continued development · 2d
+
+And:
+
+Alex Chen
+Berkeley · 2027
+Developer infrastructure
+
+Strongest signal
+Technical lead across multiple WDB projects;
+independent open-source repo active this month.
+
+Founder Signal
+81
+
+Coverage
+66%
+
+Company
+None detected
+
+Latest
+New release · 3d
+
+The second record is just as valid.
+
+Founder Scout exists specifically to find that person BEFORE
+they have an obvious startup.
+
+124. FINAL PRINCIPLES
+Source people through what they build.
+Project ≠ Startup.
+Person ≠ Founder Candidate.
+Membership ≠ execution.
+Prestige ≠ source quality.
+Winner ≠ automatically strongest founder.
+Earlier signals are generally more proprietary.
+GitHub is evidence, not a popularity contest.
+Repeat building matters.
+Continued development after an event matters.
+Strong recurring collaborators matter.
+Company formation is a transition, not a prerequisite.
+Unknown ≠ zero.
+Missing evidence ≠ negative evidence.
+Every meaningful claim retains provenance.
+Low-confidence identities are not silently merged.
+Failed fetches do not erase prior evidence.
+Not scanned ≠ zero founders.
+Broad collection should be cheap.
+Deep research should be selective.
+Source quality should determine where engineering effort goes.
+Founder Signal must come from individual evidence, not source prestige.
+Do not build a giant web crawler.
+Do not depend on paid APIs for MVP.
+Find the person before the company is obvious.
+125. CLAUDE CODE EXECUTION INSTRUCTION
+
+Read this file together with:
+
+UIUX_UPGRADE_CLAUDE.md
+FOUNDER_STARTUP_PRODUCT_SPLIT.md
+
+and inspect the existing repository before changing anything.
+
+Implement Founder Scout sourcing in place.
+
+First inspect:
+
+database schema
+existing source adapters
+existing company/project records
+existing evidence model
+existing source runs
+GitHub integration
+current candidate classification
+
+Do not delete or overwrite valid existing data.
+
+Then:
+
+introduce explicit Person / Founder / Project separation;
+preserve provenance from all existing sources;
+prevent hackathon projects from automatically becoming startup companies;
+implement the P0 Founder Scout source adapters;
+resolve people and projects;
+promote only evidence-supported Founder Candidates;
+enrich candidates selectively through GitHub;
+populate Founder Scout with real discovered founders;
+report source-by-source actual results;
+clearly state unsupported / blocked sources.
+
+Do not stop after creating tables or UI.
+
+Run the actual available adapters.
+
+Return:
+
+Sources attempted
+Sources succeeded
+Sources partial/blocked
+
+Raw people found
+Projects found
+People resolved
+Founder Candidates promoted
+GitHub profiles resolved
+Possible companies detected
+
+Exact remaining blockers
+
+Never fabricate records to make Founder Scout appear populated.
+
+
+The most important change versus what Claude currently seems to be doing is this:
+
+**PennApps / Cal Hacks / TreeHacks should primarily produce `Projects + People`, not 80 “companies.”** Th
