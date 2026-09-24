@@ -1008,3 +1008,49 @@ earlier Globe debugging session concluded (documented above). Verified by
 code review and a real filtered-candidate count (54, so the tray's
 `candidates.length === 0` early-return won't hide it) instead. Flagging
 this rather than claiming a visual check that didn't happen.
+
+## Penn Electric Racing P0 adapter (2026-09-23)
+
+Closes `cat_penn_electric_racing` (was `unconfigured` in
+`lib/domain/source-quality.ts`) — one of the remaining P0 gaps from
+CLAUDE.md's community-signal-backed priority list (Penn Electric Racing,
+Penn Aerial Robotics, and M&T all still open on the Penn side; Entrepreneurs
+@ Berkeley, Free Ventures, SkyDeck on Berkeley; BASES, Cardinal Ventures,
+StartX on Stanford; Harvard has zero adapters at all).
+
+`scripts/ingest/fetch-penn-electric-racing.ts` scrapes
+pennelectricracing.com's public "Team Members 2025-2026" roster (a
+Squarespace gallery block, no API) — real self-written bios for real team
+members. 67 roster slides found, 62 unique people after de-duping
+Squarespace's own repeated mobile/desktop markup, 55 of them brand-new
+(7 already existed in the DB from other Penn sources). Bounded to the
+single current season; the site's own 2020-21 through 2024-25 archive
+pages exist but aren't pulled this pass, so this source's own
+`whatToExtract` item "repeat builders across seasons" is honestly not
+attempted.
+
+No bio anywhere in the 67 uses a leadership title ("Lead"/"Captain"/etc —
+checked by regex across all of them, zero matches), so — per this source's
+own `whatNotToInfer` ("Team membership alone isn't the signal — individual
+technical ownership is") — every person is seeded `role='team_member'`,
+never elevated; subteam (Mechanical/Electrical Hardware/Software/
+Operations) is kept only as descriptive text pulled from each bio's own
+"member of the X team" phrasing, not as a leadership signal. People are
+keyed by name only — this page exposes no stronger identifier (no pennkey,
+email, or student ID) — same accepted limitation already disclosed for
+Hack4Impact's team page.
+
+8 of the 67 bios self-link the member's own personal LinkedIn profile —
+captured as a real, self-disclosed alias on that person. Unlike WDB's
+GitHub-bio route, this does **not** feed `lib/domain/company-detection.ts`:
+LinkedIn's profile content itself is never fetched (no API access here,
+and a logged-out scrape of a LinkedIn profile page reliably returns a
+login wall rather than real content) — disclosed as a real gap, not
+silently skipped.
+
+Verified idempotent (a second run inserted 0 new people/roles). `npx tsc
+--noEmit` and `npm run build` both clean. Verified against a real `next
+start` server: `/sources`' Registry table now shows Penn Electric Racing
+as tier A/C with status "Complete" (previously "unconfigured"), and
+`/founder/discover` renders real ingested names (e.g. Alex Zhao, Kunwoo
+Kim, Sidharth Roy) — not just a passing build.

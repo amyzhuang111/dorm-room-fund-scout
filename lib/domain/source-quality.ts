@@ -316,7 +316,9 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whyItMatters: "Community discussion (unverified — see community signal) surfaces it as a place where software engineers do real build work, not just automotive specialists.",
     whatToExtract: ["technical leads", "subsystem owners (embedded/hardware/controls/software)", "repeat builders across seasons"],
     whatNotToInfer: ["Team membership alone isn't the signal — individual technical ownership is."],
-    status: "unconfigured",
+    status: "implemented",
+    statusNote:
+      "Ingested (2026-09-23): pennelectricracing.com/team-members-2526's Squarespace gallery lists 67 real 2025-26 roster slides (62 unique people after de-duping repeated slide markup), each with a real self-written bio. Bounded to this single current season — the site's separate 2020-21 through 2024-25 archive pages exist but aren't pulled, so 'repeat builders across seasons' is honestly not attempted. No bio ever uses a leadership title ('Lead'/'Captain'/etc, checked across all 67) — every person seeded role='team_member' with subteam noted as text only (Mechanical/Electrical Hardware/Software/Operations), never elevated, per this source's own whatNotToInfer. 8 of 67 bios self-link the member's own personal LinkedIn profile, captured as a real alias — but LinkedIn profile content itself isn't fetched (no reliable logged-out access), so unlike WDB this does not feed company-detection. People keyed by name only, same accepted limitation as Hack4Impact.",
   },
   {
     id: "cat_penn_aerial_robotics",
