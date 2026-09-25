@@ -939,6 +939,34 @@ async function live() {
     await sleep(400);
   }
 
+  // `available` plus last_success_at is what the registry renders as Complete.
+  // discovered_lead_count is distinct projects, except Contrary, which stores people only.
+  const finishedAt = nowIso();
+  const mark = ctx.db.prepare(
+    `UPDATE sources SET last_success_at = ?,
+       discovered_lead_count = CASE
+         WHEN id = 'src_contrary_venture_partners' THEN (
+           SELECT COUNT(DISTINCT entity_id) FROM claims WHERE source_id = sources.id AND entity_type = 'person'
+         )
+         ELSE (
+           SELECT COUNT(DISTINCT entity_id) FROM claims WHERE source_id = sources.id AND entity_type = 'project'
+         )
+       END
+     WHERE id = ?`
+  );
+  for (const id of [
+    "src_penn_vip",
+    "src_penn_startup_challenge_archive",
+    "src_penn_seas_senior_design",
+    "src_penn_health_tech",
+    "src_a16z_speedrun",
+    "src_daily_pennsylvanian",
+    "src_penn_personal_sites",
+    "src_contrary_venture_partners",
+  ]) {
+    mark.run(finishedAt, id);
+  }
+
   console.log(JSON.stringify(stats, null, 2));
 }
 
