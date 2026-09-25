@@ -5,17 +5,15 @@ import { buildHref } from "@/lib/domain/url";
 import type { NetworkEdge, NetworkGraph, NetworkNode } from "@/lib/domain/network";
 
 const COLOR: Record<NetworkNode["type"], string> = {
-  university: "#5b4bdb",
-  community: "#0f766e",
-  person: "#3f3f46",
-  project: "#b45309",
+  university: "#ff7a3c",
+  community: "#7eb6ff",
+  person: "#d5d0c6",
+  project: "#f0c14a",
 };
 
-function nodeRadius(type: NetworkNode["type"]): number {
-  if (type === "university") return 16;
-  if (type === "community") return 11;
-  if (type === "project") return 8;
-  return 5.5;
+function nodeRadius(type: NetworkNode["type"], degree: number): number {
+  const base = type === "university" ? 14 : type === "community" ? 10 : type === "project" ? 7 : 4.5;
+  return base + Math.min(7, Math.sqrt(degree) * 1.1);
 }
 
 export function NetworkCanvas({
@@ -91,7 +89,7 @@ export function NetworkCanvas({
           viewBox="0 0 960 640"
           role="img"
           aria-label={`Network for ${campusName}`}
-          className="h-auto w-full rounded-xl border border-border-c bg-[radial-gradient(circle_at_50%_45%,#ffffff,#f3f1ec_70%)]"
+          className="h-auto w-full rounded-xl border border-border-c bg-[radial-gradient(circle_at_50%_42%,#1a1e28,#07080c_72%)]"
         >
           {graph.edges.map((e, i) => {
             const s = nodeById.get(e.source);
@@ -120,7 +118,7 @@ export function NetworkCanvas({
                 <path
                   d={d}
                   fill="none"
-                  stroke={highlighted ? "#5b4bdb" : edgeDimmed(e) ? "#e4e4e7" : "#a1a1aa"}
+                  stroke={highlighted ? "#ff7a3c" : edgeDimmed(e) ? "#2a2e38" : "#5c6370"}
                   strokeWidth={e.relationshipType === "founded" ? 1.6 : 1}
                   opacity={edgeDimmed(e) && !highlighted ? 0.35 : 0.9}
                   pointerEvents="none"
@@ -129,10 +127,11 @@ export function NetworkCanvas({
             );
           })}
           {graph.nodes.map((n) => {
-            const r = nodeRadius(n.type);
+            const degree = neighbors.get(n.id)?.size ?? 0;
+            const r = nodeRadius(n.type, degree);
             const faded = dimmed(n.id);
             const shape = (
-              <g opacity={faded ? 0.18 : 1}>
+              <g opacity={faded ? 0.15 : 1} style={{ transition: "opacity 160ms ease" }}>
                 {n.type === "university" ? (
                   <rect x={n.x - r} y={n.y - r} width={r * 2} height={r * 2} rx={4} fill={COLOR.university} />
                 ) : n.type === "community" ? (
@@ -146,7 +145,7 @@ export function NetworkCanvas({
                   <circle cx={n.x} cy={n.y} r={r} fill={COLOR.person} />
                 )}
                 {(n.type !== "person" || active === n.id || matchIds?.has(n.id)) && (
-                  <text x={n.x} y={n.y + r + 12} textAnchor="middle" fontSize="11" fill="#27272a">
+                  <text x={n.x} y={n.y + r + 12} textAnchor="middle" fontSize="11" fill="#e7e2d8">
                     {n.label.length > 22 ? n.label.slice(0, 21) + "…" : n.label}
                   </text>
                 )}
@@ -193,16 +192,17 @@ export function NetworkCanvas({
           <EdgeCard edge={graph.edges[selectedEdge]} nodeById={nodeById} onClose={() => setSelectedEdge(null)} />
         ) : focus ? (
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-muted">{focus.type}</p>
+            <p className="ui-label">{focus.type}</p>
             <h2 className="text-base font-medium text-foreground">{focus.label}</h2>
+            <p className="stat-num mt-2 text-3xl">{focusEdges.length}</p>
+            <p className="ui-label">connections</p>
             {focus.sublabel && <p className="text-xs text-muted">{focus.sublabel}</p>}
             {focus.linkUrl && (
-              <a href={focus.linkUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-xs text-accent underline">
+              <a href={focus.linkUrl} target="_blank" rel="noopener noreferrer" className="link-chip mt-2">
                 {focus.linkLabel ?? "Link"}
               </a>
             )}
-            <p className="mt-3 text-[10px] font-semibold uppercase tracking-wide text-muted">Connections ({focusEdges.length})</p>
-            <ul className="mt-1 max-h-[420px] space-y-2 overflow-y-auto">
+            <ul className="mt-3 max-h-[420px] space-y-2 overflow-y-auto">
               {focusEdges.map((e, i) => {
                 const otherId = e.source === focus.id ? e.target : e.source;
                 const other = nodeById.get(otherId);
@@ -223,9 +223,13 @@ export function NetworkCanvas({
           </div>
         ) : (
           <div>
-            <p className="text-sm font-medium text-foreground">Evidence-backed links</p>
+            <p className="ui-label">Network</p>
+            <p className="mt-1 text-sm font-medium text-foreground">{campusName}</p>
             <p className="mt-1 text-xs text-muted">
-              Hover a node to see who it connects to. Click a line to read the relationship and its source. A line is a sourced role or affiliation. Click a company to open it.
+              Hover a node to highlight its neighbours. Click a line to read the sourced relationship. Node size follows how many links that record has. Click a company to open it.
+            </p>
+            <p className="mt-3 text-xs text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
+              {graph.edges.length} links · {graph.nodes.length} nodes
             </p>
             <ul className="mt-3 max-h-[480px] space-y-0.5 overflow-y-auto">
               {graph.nodes

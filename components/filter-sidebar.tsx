@@ -3,6 +3,7 @@ import { buildHref } from "@/lib/domain/url";
 import { CAMPUSES, shortCampusLabel } from "@/lib/domain/campuses";
 import { listSectorCounts, type CoverageState, type UniversitySummary } from "@/lib/domain/queries";
 import { FeedbackSync } from "./feedback-sync";
+import { CollapsibleSidebar } from "./collapsible-sidebar";
 
 const COVERAGE_LABEL: Record<CoverageState, { label: string; cls: string }> = {
   not_scanned: { label: "Not scanned", cls: "text-muted" },
@@ -35,7 +36,7 @@ function UniversityRow({
       href={buildHref(basePath, current, switchingCampus ? { university: u.id, project: null } : { university: u.id })}
       title={u.name}
       aria-label={`${u.name} — ${coverage.label}`}
-      className={`flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm ${current.university === u.id ? "bg-accent/10 font-medium text-accent" : "text-foreground hover:bg-surface-2"}`}
+      className={`flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm ${current.university === u.id ? "bg-accent-subtle font-medium text-accent" : "text-foreground hover:bg-surface-2"}`}
     >
       <span className="truncate">{label}</span>
       <span className="flex shrink-0 items-center gap-1.5">
@@ -79,6 +80,7 @@ export function FilterSidebar({
   const sectors = mode === "startup" ? listSectorCounts(current.university) : [];
 
   return (
+    <CollapsibleSidebar>
     <aside className="w-full shrink-0 border-b border-border-c p-3 sm:w-[232px] sm:border-b-0 sm:border-r sm:p-4">
       <div className="mb-3 flex items-baseline justify-between">
         <span className="ui-label">Universities</span>
@@ -184,7 +186,7 @@ export function FilterSidebar({
               <li key={s.tag}>
                 <Link
                   href={buildHref(basePath, current, { sector: current.sector === s.tag ? null : s.tag })}
-                  className={`inline-block rounded-full border px-2 py-0.5 text-xs ${current.sector === s.tag ? "border-accent bg-accent/10 text-accent" : "border-border-c text-muted hover:bg-surface-2"}`}
+                  className={`inline-block rounded-full border px-2 py-0.5 text-xs ${current.sector === s.tag ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted hover:bg-surface-2 hover:text-foreground"}`}
                 >
                   {s.label} <span className="tabular-nums">{s.count}</span>
                 </Link>
@@ -211,5 +213,6 @@ export function FilterSidebar({
       )}
       <FeedbackSync />
     </aside>
+    </CollapsibleSidebar>
   );
 }

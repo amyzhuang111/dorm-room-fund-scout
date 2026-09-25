@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { buildHref } from "@/lib/domain/url";
-import type { CandidateSummary, UniversitySummary } from "@/lib/domain/queries";
+import type { CampusArc, CandidateSummary, UniversitySummary } from "@/lib/domain/queries";
 import { ResultTray } from "./result-tray";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -22,21 +22,23 @@ const STYLE_URL = "https://tiles.openfreemap.org/styles/positron";
 // another pale tint layered on top, or it reads as a blank white circle
 // (exactly what happened here the first time).
 const MAP_THEME = {
-  land: "#efe6d6",
-  landAlt: "#e2d3bc",
-  ocean: "#d5e2ea",
-  boundary: "#c4b8a8",
-  labelText: "#1c1917",
-  labelHalo: "#f7f4ee",
-  sky: "#e7eef3",
-  horizon: "#f3efe6",
-  fog: "#e7eef3",
+  land: "#1a1d26",
+  landAlt: "#242833",
+  ocean: "#0b0e14",
+  boundary: "#3a4150",
+  labelText: "#d9d4cb",
+  labelHalo: "#0b0e14",
+  sky: "#05060a",
+  horizon: "#1d4e86",
+  fog: "#070b14",
+  dot: "#ff7a3c",
+  arc: "#ffb088",
 };
 
 interface MapEvent {
   error?: unknown;
   point?: { x: number; y: number };
-  features?: { properties?: { id?: string } }[];
+  features?: { properties?: { id?: string; cluster_id?: number }; geometry?: { coordinates?: [number, number] } }[];
 }
 
 interface CampusMap {
@@ -44,7 +46,9 @@ interface CampusMap {
   remove?: () => void;
   getCanvas: () => { style: { cursor: string } };
   getStyle: () => { layers: { id: string; type: string }[] };
-  getSource: (id: string) => unknown;
+  getCenter: () => { lng: number; lat: number };
+  setCenter: (center: { lng: number; lat: number }) => void;
+  getSource: (id: string) => { getClusterExpansionZoom?: (clusterId: number) => Promise<number> } | undefined;
   getLayer: (id: string) => unknown;
   setProjection: (projection: { type: string }) => void;
   setSky: (sky: object) => void;
@@ -72,6 +76,7 @@ export function GlobeView({
   current,
   previewCandidates = [],
   trayCandidates = [],
+  campusArcs = [],
 }: {
   universities: UniversitySummary[];
   basePath: string;
@@ -81,6 +86,7 @@ export function GlobeView({
   // shown regardless of whether a campus is selected (unlike
   // previewCandidates, which is per-campus and only passed once one is).
   trayCandidates?: CandidateSummary[];
+  campusArcs?: CampusArc[];
 }) {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -100,9 +106,11 @@ export function GlobeView({
   // write during render can be dropped by React and isn't guaranteed to be
   // visible to effects/handlers that read it later.
   const liveRef = useRef({ basePath, current });
+  const spinPaused = useRef(false);
   useEffect(() => {
     liveRef.current = { basePath, current };
-  }, [basePath, current]);
+    spinPaused.current = Boolean(current.university) || geoMode === "hq";
+  }, [basePath, current, geoMode]);
 
   const points = universities.filter((u) => u.lat != null && u.lon != null);
 
@@ -169,6 +177,7 @@ export function GlobeView({
       });
 
       map.on("style.load", () => {
+        if (cancelled) return;
         styleLoaded = true;
         // Each recolor attempt is independently guarded — one bad layer id/type must
         // never silently take the rest of the theming down with it (that's exactly how
@@ -188,10 +197,10 @@ export function GlobeView({
               "sky-color": MAP_THEME.sky,
               "horizon-color": MAP_THEME.horizon,
               "fog-color": MAP_THEME.fog,
-              "sky-horizon-blend": 0.6,
-              "horizon-fog-blend": 0.5,
-              "fog-ground-blend": 0.5,
-              "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 0.7, 6, 0],
+              "sky-horizon-blend": 0.45,
+              "horizon-fog-blend": 0.72,
+              "fog-ground-blend": 0.35,
+              "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 1, 4, 0.55, 8, 0],
             }),
           "sky/atmosphere"
         );
@@ -224,6 +233,9 @@ export function GlobeView({
           if (!map.getSource("campuses")) {
             map.addSource("campuses", {
               type: "geojson",
+              cluster: true,
+              clusterRadius: 48,
+              clusterMaxZoom: 4,
               data: {
                 type: "FeatureCollection",
                 features: points.map((u) => ({
@@ -240,18 +252,65 @@ export function GlobeView({
             });
           }
 
+          const unclustered = ["!", ["has", "point_count"]];
+          if (!map.getLayer("campus-glow")) {
+            map.addLayer({
+              id: "campus-glow",
+              type: "circle",
+              source: "campuses",
+              filter: unclustered,
+              paint: {
+                "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 16, 20, 28, 200, 42],
+                "circle-color": MAP_THEME.dot,
+                "circle-opacity": 0.38,
+                "circle-blur": 1,
+              },
+            });
+          }
+
           if (!map.getLayer("campus-dots")) {
             map.addLayer({
               id: "campus-dots",
               type: "circle",
               source: "campuses",
+              filter: unclustered,
               paint: {
-                "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 9, 8, 16, 40, 26],
-                "circle-color": "#5b4bdb",
-                "circle-stroke-width": 2,
-                "circle-stroke-color": "#ffffff",
-                "circle-opacity": 0.9,
+                "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 6, 20, 9, 200, 14],
+                "circle-color": MAP_THEME.dot,
+                "circle-stroke-width": 1.5,
+                "circle-stroke-color": "#1a0d06",
+                "circle-opacity": 0.95,
               },
+            });
+          }
+
+          if (!map.getLayer("campus-clusters")) {
+            map.addLayer({
+              id: "campus-clusters",
+              type: "circle",
+              source: "campuses",
+              filter: ["has", "point_count"],
+              paint: {
+                "circle-radius": ["interpolate", ["linear"], ["get", "point_count"], 2, 14, 6, 22],
+                "circle-color": MAP_THEME.dot,
+                "circle-opacity": 0.85,
+                "circle-stroke-width": 1.5,
+                "circle-stroke-color": "#1a0d06",
+              },
+            });
+          }
+
+          if (!map.getLayer("campus-cluster-count")) {
+            map.addLayer({
+              id: "campus-cluster-count",
+              type: "symbol",
+              source: "campuses",
+              filter: ["has", "point_count"],
+              layout: {
+                "text-field": ["get", "point_count_abbreviated"],
+                "text-size": 11,
+              },
+              paint: { "text-color": "#1a0d06" },
             });
           }
 
@@ -260,12 +319,12 @@ export function GlobeView({
               id: "campus-selected",
               type: "circle",
               source: "campuses",
-              filter: ["==", ["get", "id"], current.university ?? "__none__"],
+              filter: ["all", unclustered, ["==", ["get", "id"], current.university ?? "__none__"]],
               paint: {
-                "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 14, 8, 22, 40, 32],
-                "circle-color": "#ff6a33",
+                "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 10, 20, 14, 200, 18],
+                "circle-color": "#ffe1cf",
                 "circle-stroke-width": 2,
-                "circle-stroke-color": "#ffffff",
+                "circle-stroke-color": MAP_THEME.dot,
               },
             });
           }
@@ -275,13 +334,35 @@ export function GlobeView({
               id: "campus-labels",
               type: "symbol",
               source: "campuses",
+              filter: unclustered,
               layout: {
                 "text-field": ["concat", ["get", "name"], "  ", ["to-string", ["get", "count"]]],
                 "text-size": 11,
-                "text-offset": [0, 1.4],
+                "text-offset": [0, 1.35],
                 "text-anchor": "top",
               },
-              paint: { "text-color": MAP_THEME.labelText, "text-halo-color": "#ffffff", "text-halo-width": 1.2 },
+              paint: { "text-color": MAP_THEME.labelText, "text-halo-color": MAP_THEME.labelHalo, "text-halo-width": 1.2 },
+            });
+          }
+
+          if (!map.getSource("campus-arcs") && campusArcs.length > 0) {
+            const byId = new Map(points.map((u) => [u.id, u]));
+            const features = campusArcs.flatMap((arc) => {
+              const a = byId.get(arc.fromId);
+              const b = byId.get(arc.toId);
+              if (!a || a.lon == null || a.lat == null || !b || b.lon == null || b.lat == null) return [];
+              return [{
+                type: "Feature",
+                geometry: { type: "LineString", coordinates: greatCircle([a.lon, a.lat], [b.lon, b.lat]) },
+                properties: { count: arc.count },
+              }];
+            });
+            map.addSource("campus-arcs", { type: "geojson", data: { type: "FeatureCollection", features } });
+            map.addLayer({
+              id: "campus-arcs",
+              type: "line",
+              source: "campus-arcs",
+              paint: { "line-color": MAP_THEME.arc, "line-width": 1.4, "line-opacity": 0.55 },
             });
           }
 
@@ -302,16 +383,68 @@ export function GlobeView({
             map.getCanvas().style.cursor = "";
             setHoverTip(null);
           });
+          map.on("click", "campus-clusters", (e: MapEvent) => {
+            const feature = e.features?.[0];
+            const clusterId = feature?.properties?.cluster_id;
+            const coords = feature?.geometry?.coordinates;
+            const source = map.getSource("campuses");
+            if (clusterId == null || !coords || !source?.getClusterExpansionZoom) return;
+            source.getClusterExpansionZoom(clusterId).then((zoom) => {
+              map.flyTo({ center: coords, zoom, duration: prefersReducedMotion() ? 0 : 700 });
+            });
+          });
+          map.on("mouseenter", "campus-clusters", () => (map.getCanvas().style.cursor = "pointer"));
+          map.on("mouseleave", "campus-clusters", () => (map.getCanvas().style.cursor = ""));
         } catch (e) {
           console.error("[globe-view] FAILED adding campus source/layers:", e);
         }
         setStatus("ok");
+
+        let interacting = false;
+        let resumeTimer = 0;
+        const pauseSpin = () => {
+          interacting = true;
+          window.clearTimeout(resumeTimer);
+        };
+        const resumeSpin = () => {
+          window.clearTimeout(resumeTimer);
+          resumeTimer = window.setTimeout(() => {
+            interacting = false;
+          }, 1200);
+        };
+        map.on("dragstart", pauseSpin);
+        map.on("wheel", pauseSpin);
+        map.on("dragend", resumeSpin);
+        let last = performance.now();
+        let raf = 0;
+        const tick = (now: number) => {
+          if (cancelled) return;
+          raf = requestAnimationFrame(tick);
+          if (interacting || spinPaused.current || prefersReducedMotion()) {
+            last = now;
+            return;
+          }
+          const dt = Math.min(0.05, (now - last) / 1000);
+          last = now;
+          const center = map.getCenter();
+          center.lng -= 2.4 * dt;
+          map.setCenter(center);
+        };
+        raf = requestAnimationFrame(tick);
+        const stopSpin = () => {
+          cancelled = true;
+          cancelAnimationFrame(raf);
+          window.clearTimeout(resumeTimer);
+        };
+        mapRef.current = Object.assign(map, { __stopSpin: stopSpin });
       });
     })();
 
     return () => {
       cancelled = true;
       resizeObserver?.disconnect();
+      const extra = mapRef.current as (CampusMap & { __stopSpin?: () => void }) | null;
+      extra?.__stopSpin?.();
       map?.remove?.();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -322,12 +455,12 @@ export function GlobeView({
     const map = mapRef.current;
     if (!map || status !== "ok") return;
     if (map.getLayer("campus-selected")) {
-      map.setFilter("campus-selected", ["==", ["get", "id"], current.university ?? "__none__"]);
+      map.setFilter("campus-selected", ["all", ["!", ["has", "point_count"]], ["==", ["get", "id"], current.university ?? "__none__"]]);
     }
     if (current.university) {
       const u = universities.find((x) => x.id === current.university);
       if (u?.lat != null && u?.lon != null) {
-        map.flyTo({ center: [u.lon, u.lat], zoom: 4, duration: prefersReducedMotion() ? 0 : 900 });
+        map.flyTo({ center: [u.lon, u.lat], zoom: 4.4, duration: prefersReducedMotion() ? 0 : 1100, essential: true });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -339,16 +472,39 @@ export function GlobeView({
     const map = mapRef.current;
     if (!map || status !== "ok") return;
     const visibility = geoMode === "campus" ? "visible" : "none";
-    for (const layer of ["campus-dots", "campus-selected", "campus-labels"]) {
+    for (const layer of ["campus-glow", "campus-dots", "campus-selected", "campus-labels", "campus-clusters", "campus-cluster-count", "campus-arcs"]) {
       if (!map.getLayer(layer)) continue;
       map.setLayoutProperty(layer, "visibility", visibility);
     }
   }, [geoMode, status]);
 
+  const monitored = universities.filter((u) => u.sourcesConfigured > 0).length;
+  const statItems = selectedUniversity
+    ? [
+        { n: selectedUniversity.companyCount, label: "companies" },
+        { n: selectedUniversity.founderCount, label: "founders" },
+        { n: selectedUniversity.sourcesConfigured, label: "sources" },
+      ]
+    : [
+        { n: trayCandidates.length, label: "in view" },
+        { n: points.length, label: "campuses" },
+        { n: monitored, label: "monitored" },
+      ];
+
   return (
     <div className="p-2">
-      <div className="relative h-[min(72vh,760px)] min-h-[480px] w-full overflow-hidden rounded-xl border border-border-c" style={{ background: MAP_THEME.ocean }}>
+      <div className="relative h-[min(68dvh,820px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-border-c sm:min-h-[520px]" style={{ background: MAP_THEME.sky }}>
         <div ref={containerRef} className="h-full w-full" />
+        {status === "ok" && (
+          <div className="pointer-events-none absolute left-1/2 top-3 z-10 flex -translate-x-1/2 gap-3 sm:gap-6">
+            {statItems.map((s) => (
+              <div key={s.label} className="text-center">
+                <div className="stat-num text-lg sm:text-2xl">{s.n.toLocaleString("en-US")}</div>
+                <div className="ui-label mt-0.5">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        )}
         {status === "ok" && (
           <div className="glass-panel absolute right-3 top-3 flex p-0.5">
             <button
@@ -371,7 +527,10 @@ export function GlobeView({
           <CampusHover universities={universities} tip={hoverTip} />
         )}
         {status === "loading" && (
-          <div className="absolute inset-0 flex items-center justify-center text-sm text-muted">Loading globe…</div>
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
+            <div className="globe-skeleton" />
+            <p className="ui-label">Loading globe</p>
+          </div>
         )}
         {status === "unsupported" && (
           <div className="absolute inset-0 flex flex-col items-start justify-start gap-2 overflow-y-auto p-4">
@@ -385,7 +544,7 @@ export function GlobeView({
         {/* Floating campus-summary panel — pattern studied from dashboard.vclense.ch/ycglobe's
             frosted floating panels; colors/type still from the DRF-sampled tokens. */}
         {geoMode === "hq" && status === "ok" && (
-          <div className="glass-panel absolute left-3 top-3 w-72 max-h-[520px] overflow-y-auto">
+          <div className="glass-panel absolute left-3 top-16 w-72 max-h-[420px] overflow-y-auto">
             <div className="glass-panel-head">
               <span className="text-sm font-medium text-foreground">Headquarters</span>
             </div>
@@ -422,7 +581,7 @@ export function GlobeView({
         )}
 
         {geoMode === "campus" && selectedUniversity && status === "ok" && (
-          <div className="glass-panel absolute left-3 top-3 w-64 max-h-[520px] overflow-y-auto">
+          <div className="glass-panel absolute left-3 top-16 hidden w-64 max-h-[420px] overflow-y-auto sm:block">
             <div className="glass-panel-head">
               <span className="text-sm font-medium text-foreground">{selectedUniversity.name}</span>
               <a
@@ -504,11 +663,31 @@ export function GlobeView({
         Marker size is the number of companies tied to that campus by sourced affiliation. It is not an estimate of every startup at the school.
         Drag to look around. Click a campus to open it. Headquarters mode lists recorded place names and leaves unknown locations unplotted.
       </p>
-      <div className="mt-3">
+      <div className="mt-3 sm:hidden">
         <UniversityListFallback universities={universities} basePath={basePath} current={current} compact />
       </div>
     </div>
   );
+}
+
+function greatCircle(a: [number, number], b: [number, number], steps = 48): [number, number][] {
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const toDeg = (r: number) => (r * 180) / Math.PI;
+  const [lon1, lat1] = [toRad(a[0]), toRad(a[1])];
+  const [lon2, lat2] = [toRad(b[0]), toRad(b[1])];
+  const d = 2 * Math.asin(Math.sqrt(Math.sin((lat2 - lat1) / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin((lon2 - lon1) / 2) ** 2));
+  if (d === 0) return [a, b];
+  const coords: [number, number][] = [];
+  for (let i = 0; i <= steps; i++) {
+    const t = i / steps;
+    const A = Math.sin((1 - t) * d) / Math.sin(d);
+    const B = Math.sin(t * d) / Math.sin(d);
+    const x = A * Math.cos(lat1) * Math.cos(lon1) + B * Math.cos(lat2) * Math.cos(lon2);
+    const y = A * Math.cos(lat1) * Math.sin(lon1) + B * Math.cos(lat2) * Math.sin(lon2);
+    const z = A * Math.sin(lat1) + B * Math.sin(lat2);
+    coords.push([toDeg(Math.atan2(y, x)), toDeg(Math.atan2(z, Math.sqrt(x * x + y * y)))]);
+  }
+  return coords;
 }
 
 function CampusHover({
@@ -527,7 +706,7 @@ function CampusHover({
     >
       <p className="font-medium text-foreground">{shortCampusLabel(u.id, u.name)}</p>
       <p className="text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
-        {u.companyCount} companies · {u.founderCount} founders
+        {u.companyCount} companies · {u.founderCount} founders · {u.sourcesConfigured} sources
       </p>
     </div>
   );

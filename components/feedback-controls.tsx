@@ -34,7 +34,13 @@ export function FeedbackControls({
           type="button"
           onClick={() => setAction({ ...base, action, note: current?.note })}
           className={`rounded-full border px-2 py-0.5 text-[11px] ${
-            current?.action === action ? "border-accent bg-accent/10 text-accent" : "border-border-c text-muted hover:bg-surface-2"
+            current?.action === action
+              ? action === "hide"
+                ? "border-danger/40 bg-danger-bg text-danger"
+                : action === "pass"
+                  ? "border-border-c bg-surface-2 text-foreground"
+                  : "border-accent/50 bg-accent-subtle text-accent"
+              : "border-border-c text-muted hover:border-foreground/20 hover:bg-surface-2 hover:text-foreground"
           }`}
         >
           {action === "like" ? "Like" : action === "pass" ? "Pass" : "Never show again"}

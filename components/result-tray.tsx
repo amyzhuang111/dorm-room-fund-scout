@@ -25,7 +25,7 @@ export function ResultTray({
   basePath: string;
   current: Record<string, string | undefined>;
 }) {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   if (candidates.length === 0) return null;
 
@@ -62,7 +62,7 @@ export function ResultTray({
                   const link = publicLink(c.websiteUrl, c.primaryLink, c.primaryLinkKind);
                   if (!link) return null;
                   return (
-                    <a href={link.url} target="_blank" rel="noopener noreferrer" className="mt-1 block truncate text-accent underline">
+                    <a href={link.url} target="_blank" rel="noopener noreferrer" className="link-chip mt-1 max-w-full truncate">
                       {link.kind === "official" ? link.url.replace(/^https?:\/\//, "") : link.label}
                     </a>
                   );

@@ -73,7 +73,7 @@ export function TopNav() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`shrink-0 rounded-md px-3 py-1.5 text-sm ${active ? "bg-accent/10 text-accent" : "text-muted hover:bg-surface-2 hover:text-foreground"}`}
+                  className={`shrink-0 rounded-full px-3 py-1 text-sm ${active ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2 hover:text-foreground"}`}
                 >
                   {item.label}
                 </Link>

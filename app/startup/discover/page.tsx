@@ -1,4 +1,4 @@
-import { getProjectDetail, listCandidateProjects, listUniversities } from "@/lib/domain/queries";
+import { getProjectDetail, listCampusArcs, listCandidateProjects, listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
 import { reviewCompanies, reviewMode } from "@/lib/domain/review-view";
 import type { Queue } from "@/lib/domain/queue";
@@ -68,6 +68,7 @@ export default async function StartupDiscoverPage({
             current={sp}
             previewCandidates={sp.university ? sorted : []}
             trayCandidates={sorted}
+            campusArcs={listCampusArcs()}
           />
         )}
       </div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { buildHref } from "@/lib/domain/url";
+import { sectorLabel } from "@/lib/domain/sectors";
 
 const VIEWS = ["globe", "network", "table"] as const;
 
@@ -23,7 +24,7 @@ export function ExploreToolbar({
   const activeFilters: { key: string; label: string }[] = [];
   if (current.university) activeFilters.push({ key: "university", label: `Campus` });
   if (current.queue) activeFilters.push({ key: "queue", label: `View: ${current.queue.replace(/_/g, " ")}` });
-  if (current.sector) activeFilters.push({ key: "sector", label: `Sector: ${current.sector}` });
+  if (current.sector) activeFilters.push({ key: "sector", label: sectorLabel(current.sector) });
   if (current.q) activeFilters.push({ key: "q", label: `Search: "${current.q}"` });
   if (current.feedback) activeFilters.push({ key: "feedback", label: current.feedback === "hidden" ? "Hidden" : current.feedback === "liked" ? "Liked" : "Passed" });
 
@@ -66,7 +67,7 @@ export function ExploreToolbar({
               <Link
                 key={v}
                 href={buildHref(basePath, current, { view: v })}
-                className={`rounded-md px-2.5 py-1 text-xs font-medium capitalize ${view === v ? "bg-accent/10 text-accent" : "text-muted hover:bg-surface-2"}`}
+                className={`rounded-full px-2.5 py-1 text-xs font-medium capitalize ${view === v ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
               >
                 {v}
               </Link>

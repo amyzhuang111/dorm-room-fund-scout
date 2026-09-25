@@ -248,6 +248,38 @@ export function listSectorCounts(universityId?: string): SectorCount[] {
   return [...byTag.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 }
 
+export interface CampusArc {
+  fromId: string;
+  toId: string;
+  count: number;
+}
+
+// Campuses joined by at least one investable company that is sourced to both.
+// Used only to draw those real links on the globe — never a decorative arc.
+export function listCampusArcs(): CampusArc[] {
+  const db = getDb();
+  const link = `
+    SELECT ppr.project_id as project_id, a.university_id as university_id
+    FROM person_project_roles ppr
+    JOIN affiliations a ON a.person_id = ppr.person_id AND ppr.role LIKE '%founder%'
+    UNION
+    SELECT r.source_entity_id, r.target_entity_id
+    FROM relationships r
+    WHERE r.source_entity_type = 'project' AND r.target_entity_type = 'university' AND r.relationship_type = 'affiliated_with'`;
+  return (
+    db
+      .prepare(
+        `SELECT a.university_id as fromId, b.university_id as toId, COUNT(DISTINCT p.id) as count
+         FROM projects p
+         JOIN (${link}) a ON a.project_id = p.id
+         JOIN (${link}) b ON b.project_id = p.id AND a.university_id < b.university_id
+         WHERE p.kind = 'company' AND p.is_investable_candidate = 1
+         GROUP BY 1, 2`
+      )
+      .all() as CampusArc[]
+  );
+}
+
 export function listCandidateProjects(filters: { universityId?: string; queue?: Queue; sector?: string; search?: string } = {}): CandidateSummary[] {
   const db = getDb();
   const projects = db

@@ -52,12 +52,18 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
           const link = publicLink(project.websiteUrl, project.primaryLink, project.primaryLinkKind);
           if (!link) return <p className="mt-1 text-xs text-muted">No public page on record</p>;
           return (
-            <a href={link.url} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-xs text-accent underline">
-              {link.kind === "official" ? link.url : `${link.label}: ${link.url}`}
+            <a href={link.url} target="_blank" rel="noopener noreferrer" className="link-chip mt-2 max-w-full truncate">
+              {link.kind === "official" ? link.url.replace(/^https?:\/\//, "") : `${link.label} · ${link.url.replace(/^https?:\/\//, "")}`}
             </a>
           );
         })()}
-        {project.sectorTags.length > 0 && <p className="mt-1 text-xs text-muted">{project.sectorTags.join(" · ")}</p>}
+        {project.sectorTags.length > 0 && (
+          <p className="mt-2 flex flex-wrap gap-1">
+            {project.sectorTags.map((tag) => (
+              <span key={tag} className="sector-chip">{tag}</span>
+            ))}
+          </p>
+        )}
         <FeedbackControls entityType="project" entityId={project.id} name={project.name} url={project.websiteUrl || project.primaryLink} />
       </div>
 

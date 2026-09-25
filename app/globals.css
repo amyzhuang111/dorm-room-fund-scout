@@ -22,23 +22,27 @@
    washing across every surface and reading as a consumer productivity app.
    Purple is now reserved for interaction/selection only — primary surfaces
    are neutral gray/white, text is near-black/neutral gray, not ink-purple. */
+/* Dark workspace, studied from YCGlobe (vclense.ch/ycglobe) and BuildList
+   Networks (buildlist.xyz/networks): near-black canvas, warm off-white type,
+   one orange accent, dense tabular stats. DRF purple stays available as
+   --accent-2 for secondary marks. Status chips use light text on dark fills. */
 :root {
-  --background: #fafafa;
-  --surface: #ffffff;
-  --surface-2: #f2f2f3;
-  --border-c: #e3e3e5;
-  --foreground: #171417;
-  --muted: #6b6b70;
-  --accent: #9378ee;
-  --accent-foreground: #ffffff;
-  --accent-2: #ff6a33;
-  --accent-subtle: #efeaff; /* restrained lavender, selected-state fill only */
-  --ok: #114e0b;
-  --ok-bg: #d9f2d4;
-  --warn: #6b4f0a;
-  --warn-bg: #f7ecd2;
-  --danger: #6b1414;
-  --danger-bg: #f6dede;
+  --background: #07080c;
+  --surface: #101218;
+  --surface-2: #181b22;
+  --border-c: #2a2e38;
+  --foreground: #f4f1ea;
+  --muted: #9a958c;
+  --accent: #ff7a3c;
+  --accent-foreground: #1a0d06;
+  --accent-2: #a78bfa;
+  --accent-subtle: rgba(255, 122, 60, 0.16);
+  --ok: #b7e4c0;
+  --ok-bg: #14301c;
+  --warn: #f0d48a;
+  --warn-bg: #3a2e12;
+  --danger: #f3b4b4;
+  --danger-bg: #3a1616;
 }
 
 @theme inline {
@@ -86,8 +90,56 @@ h1, h2, h3 {
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.stat-num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--foreground);
+}
+
+.link-chip,
+.sector-chip {
+  display: inline-flex;
+  max-width: 240px;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--border-c);
+  background: var(--surface-2);
+  padding: 1px 8px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.link-chip:hover {
+  border-color: var(--accent);
   color: var(--accent);
+}
+
+.sector-chip {
+  color: var(--muted);
+  max-width: none;
+}
+
+.globe-skeleton {
+  width: min(68vw, 420px);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 38% 32%, rgba(80, 140, 210, 0.35), transparent 42%),
+    radial-gradient(circle at 50% 50%, #141820, #05060a 72%);
+  box-shadow: 0 0 80px 12px rgba(40, 90, 160, 0.25);
+  animation: globe-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes globe-pulse {
+  50% { opacity: 0.72; }
 }
 
 .pill-toggle {
@@ -110,12 +162,16 @@ h1, h2, h3 {
 }
 
 .glass-panel {
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  backdrop-filter: blur(10px) saturate(1.15);
-  -webkit-backdrop-filter: blur(10px) saturate(1.15);
-  border: 1px solid var(--border-c);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
   border-radius: 14px;
-  box-shadow: 0 10px 24px -12px rgba(28, 21, 37, 0.35);
+  box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.7);
+}
+
+a, button {
+  transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease, opacity 160ms ease;
 }
 
 .glass-panel-head {

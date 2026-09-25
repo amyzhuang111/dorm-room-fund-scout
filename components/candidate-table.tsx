@@ -55,8 +55,8 @@ function CompanyLink({ c }: { c: CandidateSummary }) {
   if (!link) return <p className="mt-0.5 text-[11px] text-muted">No public page on record</p>;
   const host = link.url.replace(/^https?:\/\//, "");
   return (
-    <a href={link.url} target="_blank" rel="noopener noreferrer" className="mt-0.5 inline-block max-w-[220px] truncate text-[11px] text-accent underline">
-      {link.kind === "official" ? host : `${link.label}: ${host}`}
+    <a href={link.url} target="_blank" rel="noopener noreferrer" className="link-chip mt-1 truncate">
+      {link.kind === "official" ? host : `${link.label}`}
     </a>
   );
 }
@@ -126,7 +126,13 @@ export function CandidateTable({
                   </Link>
                   <p className="mt-0.5 max-w-[280px] text-xs leading-snug text-muted line-clamp-2">{c.description || "What it builds is not on record yet."}</p>
                   <CompanyLink c={c} />
-                  {c.sectorTags.length > 0 && <p className="mt-0.5 text-[11px] text-muted">{c.sectorTags.join(" · ")}</p>}
+                  {c.sectorTags.length > 0 && (
+                    <p className="mt-1 flex flex-wrap gap-1">
+                      {c.sectorTags.slice(0, 3).map((tag) => (
+                        <span key={tag} className="sector-chip">{tag}</span>
+                      ))}
+                    </p>
+                  )}
                   {c.boostNote && <p className="mt-0.5 text-[11px] text-accent">{c.boostNote}</p>}
                   {feedbackView === "hidden" ? (
                     <FeedbackUndo entityType="project" entityId={c.id} name={c.name} url={c.websiteUrl || c.primaryLink} />
