@@ -52,6 +52,7 @@ interface CampusMap {
   addSource: (id: string, source: object) => void;
   addLayer: (layer: object) => void;
   setFilter: (layer: string, filter: unknown) => void;
+  setLayoutProperty: (layer: string, prop: string, value: unknown) => void;
   flyTo: (options: object) => void;
   zoomIn: () => void;
   zoomOut: () => void;
@@ -331,6 +332,18 @@ export function GlobeView({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current.university, status]);
+
+  // Headquarters mode must not keep campus markers on the map. Those dots are
+  // affiliation counts, and leaving them up reads as if the campus were an HQ.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || status !== "ok") return;
+    const visibility = geoMode === "campus" ? "visible" : "none";
+    for (const layer of ["campus-dots", "campus-selected", "campus-labels"]) {
+      if (!map.getLayer(layer)) continue;
+      map.setLayoutProperty(layer, "visibility", visibility);
+    }
+  }, [geoMode, status]);
 
   return (
     <div className="p-2">
