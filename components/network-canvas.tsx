@@ -14,10 +14,10 @@ function personTarget(node: NetworkNode | undefined): PersonLinkTarget | null {
 }
 
 const COLOR: Record<NetworkNode["type"], string> = {
-  university: "#ff6a33",
-  community: "#9378ee",
+  university: "#9378ee",
+  community: "#6f5ab2",
   person: "#5c516e",
-  project: "#6f5ab2",
+  project: "#5840a0",
 };
 
 function nodeRadius(type: NetworkNode["type"], degree: number): number {

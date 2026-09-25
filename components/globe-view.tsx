@@ -30,10 +30,10 @@ const MAP_THEME = {
   labelText: "#1c1525",
   labelHalo: "#ffffff",
   sky: "#f7f6f8",
-  horizon: "#a892f2",
+  horizon: "#b9a8f5",
   fog: "#ffffff",
-  dot: "#ff6a33",
-  arc: "#6f5ab2",
+  dot: "#9378ee",
+  arc: "#5840a0",
 };
 
 interface MapEvent {

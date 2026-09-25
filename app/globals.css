@@ -1,17 +1,19 @@
 @import "tailwindcss";
 
-/* Light reorder of the dormroomfund.com palette (sampled 2026-09-25).
-   Same hues, white page. Satoshi and the DRF type scale stay.
+/* Light page, DRF purple accent (sampled 2026-09-25 from the live site).
+   Full-page pixel counts: ink and lavender are the field; #9378ee is the
+   brand color that actually shows up (about 4% of the homepage, 15% of
+   portfolio). Orange #ff6a33 is the Apply button only (~0.1% of pixels)
+   and is not used here — this app has no Apply CTA.
      page #ffffff
-     secondary surfaces #f1eff4 (--neutral--lavender-lightest) and #d9d5df
-     body/headings #1c1525 (--neutral--ink)
-     muted #5c516e — grey-purple between ink and #b8b0c4; 7.35:1 on white,
-       6.44:1 on #f1eff4, 5.09:1 on #d9d5df (WCAG AA is 4.5:1).
-       #b8b0c4 itself is 2.09:1 on white, so it is a border only.
-     orange #ff6a33 on buttons/pills, ink text on it (6.22:1)
-     purple highlight #9378ee / #a892f2
-     links #6f5ab2 — #9378ee mixed toward ink until 5.55:1 on white
-       (#9378ee alone is 3.41:1)
+     secondary surfaces #f1eff4 and #d9d5df
+     body/headings #1c1525
+     muted #5c516e — 7.35:1 on white, 6.44:1 on #f1eff4, 5.09:1 on #d9d5df
+       #b8b0c4 is 2.09:1 on white, so it is a border only.
+     primary accent #9378ee with ink text (5.21:1). White on #9378ee is 3.41:1.
+     secondary highlight #a892f2 / #b9a8f5
+     links #5840a0 — #9378ee darkened toward ink until 7.91:1 on white,
+       6.93:1 on #f1eff4, 5.47:1 on #d9d5df. #9378ee as text fails AA.
      status pairs: #114e0b/#cef5ca, #5e5515/#fcf8d8, #3b0b0b/#f8e4e4 */
 :root {
   --background: #ffffff;
@@ -20,11 +22,11 @@
   --border-c: #b8b0c4;
   --foreground: #1c1525;
   --muted: #5c516e;
-  --accent: #ff6a33;
+  --accent: #9378ee;
   --accent-foreground: #1c1525;
-  --accent-2: #9378ee;
-  --accent-subtle: rgba(255, 106, 51, 0.14);
-  --link: #6f5ab2;
+  --accent-2: #a892f2;
+  --accent-subtle: rgba(147, 120, 238, 0.16);
+  --link: #5840a0;
   --ok: #114e0b;
   --ok-bg: #cef5ca;
   --warn: #5e5515;
@@ -138,7 +140,7 @@ h2, h3 {
   aspect-ratio: 1;
   border-radius: 999px;
   background:
-    radial-gradient(circle at 38% 32%, rgba(255, 106, 51, 0.28), transparent 42%),
+    radial-gradient(circle at 38% 32%, rgba(147, 120, 238, 0.45), transparent 42%),
     radial-gradient(circle at 50% 50%, #ffffff, #f1eff4 72%);
   box-shadow: 0 0 48px 8px rgba(147, 120, 238, 0.25);
   border: 1px solid #d9d5df;
