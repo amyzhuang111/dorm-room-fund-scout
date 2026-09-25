@@ -79,9 +79,11 @@ function pushYear(hits: YearHit[], year: number | null, label: string, snippet: 
 // School-code tokens printed on Penn pages: W'26, C'27, ENG'29, SEAS'24,
 // G'EE27, M&T'18, and the spaced form SEAS '25.
 function classTokenHits(snippet: EvidenceSnippet, hits: YearHit[]) {
-  const text = snippet.excerpt;
+  // Sources print both ASCII and curly apostrophes. Treat them as the same token.
+  const text = snippet.excerpt.replace(/[’‘ʼ]/g, "'");
   // Quote is required. G'EE27 keeps school letters between the quote and the year.
-  const tight = /\b((?:M&T|SEAS|[A-Z]{1,5})'(?:[A-Z]{1,4})?'?(\d{2}))\b/g;
+  // SP2'25 keeps a digit in the school code. GEng'27 is mixed case.
+  const tight = /\b((?:M&T|SEAS|Nu|GEng|[A-Z]{1,5}\d?)'(?:[A-Z]{1,4})?'?(\d{2}))\b/g;
   for (const match of text.matchAll(tight)) {
     const token = match[1];
     if (token.length > 14) continue;
@@ -90,6 +92,17 @@ function classTokenHits(snippet: EvidenceSnippet, hits: YearHit[]) {
   const spaced = /\b((?:M&T|SEAS|[A-Z]{1,5})\s+'(\d{2}))\b/g;
   for (const match of text.matchAll(spaced)) {
     pushYear(hits, fullYear(parseInt(match[2], 10)), match[1].replace(/\s+/, ""), snippet);
+  }
+  // Columbia prints the year first: '27CBS, '26SIPA, '26CBS/SEAS.
+  const yearFirst = /(?:^|[\s(—–-])'((?:\d{2}))([A-Z]{2,8}(?:\/[A-Z]{2,8})?)\b/g;
+  for (const match of text.matchAll(yearFirst)) {
+    const token = `'${match[1]}${match[2]}`;
+    pushYear(hits, fullYear(parseInt(match[1], 10)), token, snippet);
+  }
+  // Multi-word or mixed-case school labels the single-token pattern misses.
+  const named = /\b(MBAxMS|MS ChemE|MS CS|S\.B\.|Extension School)\s+'(\d{2})\b/g;
+  for (const match of text.matchAll(named)) {
+    pushYear(hits, fullYear(parseInt(match[2], 10)), `${match[1]} '${match[2]}`, snippet);
   }
 }
 
