@@ -1,8 +1,9 @@
-import { getDb } from "../db/client";
+import fs from "node:fs";
+import { databasePath, getDb } from "../db/client";
 import { sectorLabel } from "./sectors";
 import { domainKey, type FeedbackRecord, type FeedbackTarget } from "./feedback";
 import { computeRubric, type Ratings } from "../scoring/rubric";
-import { computeFounderSignal, type FounderSignalResult } from "../scoring/founder-signal";
+import { computeFounderSignal, type FounderSignalFacts, type FounderSignalResult } from "../scoring/founder-signal";
 import { overallGateStatus, primaryBlocker, type GateOutcome } from "../screening/gates";
 import { assignQueue, type Queue } from "./queue";
 import { evaluatePromotion } from "./promotion";
@@ -10,8 +11,22 @@ import { parseCommunitySignalCategories, type CommunityConfidence, type Communit
 import { catalogueForCampus } from "./source-quality";
 import { ENROLLMENT_STATUSES, enrollmentBoost, type EnrollmentStatus } from "./founder-status";
 import { bestPersonLink, confirmedLinkedIn, type PersonLinkTarget } from "./person-link";
+import { matchCandidate } from "./candidate-filter";
 
 export type CoverageState = "not_scanned" | "partial" | "up_to_date" | "needs_attention";
+
+function cacheStamp(): string {
+  try {
+    const st = fs.statSync(databasePath());
+    return `${st.mtimeMs}:${st.size}`;
+  } catch {
+    return "missing";
+  }
+}
+
+let universityMemo: { stamp: string; rows: UniversitySummary[] } | null = null;
+let candidateMemo: { stamp: string; rows: CandidateSummary[] } | null = null;
+let founderMemo: { stamp: string; promoted: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } | null = null;
 
 export interface UniversitySummary {
   id: string;
@@ -31,48 +46,51 @@ export interface UniversitySummary {
 }
 
 export function listUniversities(): UniversitySummary[] {
+  const stamp = cacheStamp();
+  if (universityMemo?.stamp === stamp) return universityMemo.rows;
+  const rows = buildUniversities();
+  universityMemo = { stamp, rows };
+  return rows;
+}
+
+function buildUniversities(): UniversitySummary[] {
   const db = getDb();
   const universities = db.prepare(`SELECT id, name, country, lat, lon, coord_source FROM universities ORDER BY name`).all() as {
     id: string; name: string; country: string | null; lat: number | null; lon: number | null; coord_source: string | null;
   }[];
 
-  return universities.map((u) => {
-    // A company's campus is normally read off its founders' affiliations —
-    // but a real source can evidence a company's campus (e.g. Velocity,
-    // Waterloo's accelerator) before any of its founders are individually
-    // researched. The `relationships` project→university 'affiliated_with'
-    // row (same pattern already used for community/program nodes like Penn
-    // Labs) covers that case so a real, sourced company isn't invisible
-    // under its own campus filter just because founders aren't named yet.
-    const companyCount = (
-      db
-        .prepare(
-          `SELECT COUNT(DISTINCT p.id) c
-           FROM projects p
-           WHERE p.kind = 'company' AND p.is_investable_candidate = 1
-             AND (
-               EXISTS (
-                 SELECT 1 FROM affiliations a
-                 JOIN person_project_roles ppr ON ppr.person_id = a.person_id AND ppr.role LIKE '%founder%'
-                 WHERE ppr.project_id = p.id AND a.university_id = ?
-               )
-               OR EXISTS (
-                 SELECT 1 FROM relationships r
-                 WHERE r.source_entity_type = 'project' AND r.source_entity_id = p.id
-                   AND r.target_entity_type = 'university' AND r.target_entity_id = ?
-                   AND r.relationship_type = 'affiliated_with'
-               )
-             )`
-        )
-        .get(u.id, u.id) as { c: number }
-    ).c;
+  const companyCounts = new Map<string, number>();
+  for (const row of db
+    .prepare(
+      `WITH link AS (
+         SELECT ppr.project_id as project_id, a.university_id as university_id
+         FROM person_project_roles ppr
+         JOIN affiliations a ON a.person_id = ppr.person_id AND ppr.role LIKE '%founder%'
+         UNION
+         SELECT r.source_entity_id, r.target_entity_id
+         FROM relationships r
+         WHERE r.source_entity_type = 'project' AND r.target_entity_type = 'university' AND r.relationship_type = 'affiliated_with'
+       )
+       SELECT link.university_id as id, COUNT(DISTINCT p.id) as c
+       FROM projects p
+       JOIN link ON link.project_id = p.id
+       WHERE p.kind = 'company' AND p.is_investable_candidate = 1
+       GROUP BY link.university_id`
+    )
+    .all() as { id: string; c: number }[]) {
+    companyCounts.set(row.id, row.c);
+  }
+  const personCounts = new Map<string, number>();
+  for (const row of db.prepare(`SELECT university_id as id, COUNT(DISTINCT person_id) as c FROM affiliations GROUP BY university_id`).all() as { id: string; c: number }[]) {
+    personCounts.set(row.id, row.c);
+  }
+  const founderCounts = new Map<string, number>();
+  for (const u of universities) founderCounts.set(u.id, listFounders({ universityId: u.id }).length);
 
-    const resolvedPersonCount = (
-      db.prepare(`SELECT COUNT(DISTINCT person_id) c FROM affiliations WHERE university_id = ?`).get(u.id) as { c: number }
-    ).c;
-    // Promoted candidates only — see lib/domain/promotion.ts. Cheap at this
-    // data scale (hundreds of people, not tens of thousands); revisit if that changes.
-    const founderCount = listFounders({ universityId: u.id }).length;
+  return universities.map((u) => {
+    const companyCount = companyCounts.get(u.id) ?? 0;
+    const resolvedPersonCount = personCounts.get(u.id) ?? 0;
+    const founderCount = founderCounts.get(u.id) ?? 0;
 
     const sourceRow = db
       .prepare(`SELECT COUNT(*) c, MAX(last_success_at) last FROM sources WHERE campuses_json LIKE ?`)
@@ -315,30 +333,55 @@ export function listEnrollmentCounts(universityId?: string): { totals: Record<En
 }
 
 /** Promoted Founder Scout candidates in each enrollment bucket. */
+function emptyStatusCounts(): Record<EnrollmentStatus, number> {
+  return Object.fromEntries(ENROLLMENT_STATUSES.map((status) => [status, 0])) as Record<EnrollmentStatus, number>;
+}
+
+let statusMemo: { stamp: string; all: Record<EnrollmentStatus, number>; byUniversity: Map<string, Record<EnrollmentStatus, number>> } | null = null;
+
 export function listFounderStatusCounts(universityId?: string): Record<EnrollmentStatus, number> {
-  const db = getDb();
-  const totals = Object.fromEntries(ENROLLMENT_STATUSES.map((status) => [status, 0])) as Record<EnrollmentStatus, number>;
-  const rows = db
-    .prepare(
-      `SELECT pe.id as id, COALESCE(pe.enrollment_status, 'unknown') as status, p.kind as kind, ppr.role as role
-       FROM people pe
-       JOIN person_project_roles ppr ON ppr.person_id = pe.id
-       JOIN projects p ON p.id = ppr.project_id
-       WHERE ${universityId ? "EXISTS (SELECT 1 FROM affiliations a WHERE a.person_id = pe.id AND a.university_id = ?)" : "1=1"}`
-    )
-    .all(...(universityId ? [universityId] : [])) as { id: string; status: string; kind: string; role: string }[];
-  const grouped = new Map<string, { status: string; projects: { kind: string; role: string }[] }>();
-  for (const row of rows) {
-    const existing = grouped.get(row.id);
-    if (existing) existing.projects.push({ kind: row.kind, role: row.role });
-    else grouped.set(row.id, { status: row.status, projects: [{ kind: row.kind, role: row.role }] });
+  const stamp = cacheStamp();
+  if (!statusMemo || statusMemo.stamp !== stamp) {
+    const db = getDb();
+    const rows = db
+      .prepare(
+        `SELECT pe.id as id, COALESCE(pe.enrollment_status, 'unknown') as status, p.kind as kind, ppr.role as role
+         FROM people pe
+         JOIN person_project_roles ppr ON ppr.person_id = pe.id
+         JOIN projects p ON p.id = ppr.project_id`
+      )
+      .all() as { id: string; status: string; kind: string; role: string }[];
+    const grouped = new Map<string, { status: string; projects: { kind: string; role: string }[] }>();
+    for (const row of rows) {
+      const existing = grouped.get(row.id);
+      if (existing) existing.projects.push({ kind: row.kind, role: row.role });
+      else grouped.set(row.id, { status: row.status, projects: [{ kind: row.kind, role: row.role }] });
+    }
+    const campuses = new Map<string, Set<string>>();
+    for (const row of db.prepare(`SELECT person_id, university_id FROM affiliations WHERE university_id IS NOT NULL`).all() as {
+      person_id: string;
+      university_id: string;
+    }[]) {
+      const set = campuses.get(row.person_id) ?? new Set<string>();
+      set.add(row.university_id);
+      campuses.set(row.person_id, set);
+    }
+    const all = emptyStatusCounts();
+    const byUniversity = new Map<string, Record<EnrollmentStatus, number>>();
+    for (const [id, person] of grouped) {
+      if (!evaluatePromotion(person.projects).promoted) continue;
+      const status = (ENROLLMENT_STATUSES as readonly string[]).includes(person.status) ? (person.status as EnrollmentStatus) : "unknown";
+      all[status] += 1;
+      for (const campus of campuses.get(id) ?? []) {
+        const bucket = byUniversity.get(campus) ?? emptyStatusCounts();
+        bucket[status] += 1;
+        byUniversity.set(campus, bucket);
+      }
+    }
+    statusMemo = { stamp, all, byUniversity };
   }
-  for (const person of grouped.values()) {
-    if (!evaluatePromotion(person.projects).promoted) continue;
-    const status = (ENROLLMENT_STATUSES as readonly string[]).includes(person.status) ? (person.status as EnrollmentStatus) : "unknown";
-    totals[status] += 1;
-  }
-  return totals;
+  if (!universityId) return statusMemo.all;
+  return statusMemo.byUniversity.get(universityId) ?? emptyStatusCounts();
 }
 
 export interface CampusArc {
@@ -373,94 +416,179 @@ export function listCampusArcs(): CampusArc[] {
   );
 }
 
+function allCandidates(): CandidateSummary[] {
+  const stamp = cacheStamp();
+  if (candidateMemo?.stamp === stamp) return candidateMemo.rows;
+  const rows = buildAllCandidates();
+  candidateMemo = { stamp, rows };
+  return rows;
+}
+
 export function listCandidateProjects(filters: { universityId?: string; queue?: Queue; sector?: string; search?: string } = {}): CandidateSummary[] {
+  return allCandidates().filter((candidate) => matchCandidate(candidate, filters));
+}
+
+function buildAllCandidates(): CandidateSummary[] {
   const db = getDb();
   const unverified = unverifiedLinkedInByPerson(db);
   const projects = db
     .prepare(`SELECT id, name, sector, description, website_url, primary_link, primary_link_kind, is_portfolio_reference FROM projects WHERE kind='company' AND is_investable_candidate=1 ORDER BY name`)
     .all() as { id: string; name: string; sector: string | null; description: string | null; website_url: string | null; primary_link: string | null; primary_link_kind: string | null; is_portfolio_reference: number }[];
 
+  const schoolByPerson = new Map<string, string>();
+  for (const row of db
+    .prepare(
+      `SELECT person_id, school FROM (
+         SELECT a.person_id as person_id, u.name as school,
+                ROW_NUMBER() OVER (PARTITION BY a.person_id ORDER BY a.rowid) as rn
+         FROM affiliations a JOIN universities u ON u.id = a.university_id
+       ) WHERE rn = 1`
+    )
+    .all() as { person_id: string; school: string }[]) {
+    schoolByPerson.set(row.person_id, row.school);
+  }
+
+  const programByPerson = new Map<string, string>();
+  for (const row of db
+    .prepare(
+      `SELECT entity_id, name FROM (
+         SELECT c.entity_id as entity_id, s.name as name,
+                ROW_NUMBER() OVER (PARTITION BY c.entity_id ORDER BY c.retrieved_at DESC) as rn
+         FROM claims c JOIN sources s ON s.id = c.source_id
+         WHERE c.entity_type = 'person' AND c.source_id IS NOT NULL
+           AND c.claim_type NOT IN ('linkedin_alias_discovered', 'linkedin_candidate', 'linkedin_search_attempt')
+       ) WHERE rn = 1`
+    )
+    .all() as { entity_id: string; name: string }[]) {
+    programByPerson.set(row.entity_id, row.name);
+  }
+
+  const foundersByProject = new Map<string, NamedFounder[]>();
+  const seenFounder = new Set<string>();
+  for (const r of db
+    .prepare(
+      `SELECT ppr.project_id as project_id, pe.id as id, pe.name as name, pe.aliases_json as aliases_json,
+              pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label
+       FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id
+       WHERE ppr.role LIKE '%founder%'
+       ORDER BY ppr.rowid`
+    )
+    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null }[]) {
+    const key = `${r.project_id}:${r.id}`;
+    if (seenFounder.has(key)) continue;
+    seenFounder.add(key);
+    const linkedinUrl = linkedinFromAliases(r.aliases_json);
+    const linkedinCandidates = linkedinUrl ? [] : (unverified.get(r.id) ?? []);
+    const list = foundersByProject.get(r.project_id) ?? [];
+    list.push({
+      name: r.name,
+      personId: r.id,
+      linkedinUrl,
+      linkedinCandidates,
+      link: bestPersonLink({ aliasesJson: r.aliases_json, linkedinCandidates }),
+      enrollmentStatus: r.enrollment_status,
+      enrollmentLabel: r.enrollment_label,
+      school: schoolByPerson.get(r.id) ?? null,
+      program: programByPerson.get(r.id) ?? null,
+    });
+    foundersByProject.set(r.project_id, list);
+  }
+
+  const universitiesByProject = new Map<string, { name: string; id: string }[]>();
+  const seenUni = new Set<string>();
+  for (const row of db
+    .prepare(
+      `SELECT ppr.project_id as project_id, u.name as name, u.id as id
+       FROM affiliations a
+       JOIN person_project_roles ppr ON ppr.person_id = a.person_id AND ppr.role LIKE '%founder%'
+       JOIN universities u ON u.id = a.university_id
+       UNION
+       SELECT r.source_entity_id, u.name, u.id
+       FROM relationships r
+       JOIN universities u ON u.id = r.target_entity_id
+       WHERE r.source_entity_type = 'project' AND r.target_entity_type = 'university' AND r.relationship_type = 'affiliated_with'`
+    )
+    .all() as { project_id: string; name: string; id: string }[]) {
+    const key = `${row.project_id}:${row.id}`;
+    if (seenUni.has(key)) continue;
+    seenUni.add(key);
+    const list = universitiesByProject.get(row.project_id) ?? [];
+    list.push({ name: row.name, id: row.id });
+    universitiesByProject.set(row.project_id, list);
+  }
+
+  const tagsByProject = new Map<string, string[]>();
+  for (const row of db.prepare(`SELECT project_id, tag FROM project_sector_tags ORDER BY is_primary DESC, tag`).all() as { project_id: string; tag: string }[]) {
+    const list = tagsByProject.get(row.project_id) ?? [];
+    list.push(row.tag);
+    tagsByProject.set(row.project_id, list);
+  }
+
+  const sourcesByEntity = new Map<string, string[]>();
+  const seenSource = new Set<string>();
+  for (const row of db.prepare(`SELECT entity_id, source_id FROM claims WHERE source_id IS NOT NULL`).all() as { entity_id: string; source_id: string }[]) {
+    const key = `${row.entity_id}:${row.source_id}`;
+    if (seenSource.has(key)) continue;
+    seenSource.add(key);
+    const list = sourcesByEntity.get(row.entity_id) ?? [];
+    list.push(row.source_id);
+    sourcesByEntity.set(row.entity_id, list);
+  }
+
+  const gatesByProject = new Map<string, GateOutcome[]>();
+  for (const row of db.prepare(`SELECT project_id, gate_name, result, rationale FROM gate_results`).all() as { project_id: string; gate_name: string; result: GateOutcome["result"]; rationale: string }[]) {
+    const list = gatesByProject.get(row.project_id) ?? [];
+    list.push({ gate: row.gate_name, result: row.result, rationale: row.rationale });
+    gatesByProject.set(row.project_id, list);
+  }
+
+  const assessmentByProject = new Map<string, { ratings_json: string }>();
+  for (const row of db
+    .prepare(
+      `SELECT project_id, ratings_json FROM (
+         SELECT project_id, ratings_json, ROW_NUMBER() OVER (PARTITION BY project_id ORDER BY created_at DESC) as rn
+         FROM assessments
+       ) WHERE rn = 1`
+    )
+    .all() as { project_id: string; ratings_json: string }[]) {
+    assessmentByProject.set(row.project_id, row);
+  }
+
+  const watchIds = new Set(
+    (db.prepare(`SELECT DISTINCT project_id FROM pipeline_entries WHERE due_date IS NOT NULL`).all() as { project_id: string }[]).map((r) => r.project_id)
+  );
+
+  const signalByProject = new Map<string, string>();
+  for (const row of db
+    .prepare(
+      `SELECT project_id, current_observation FROM (
+         SELECT project_id, current_observation, ROW_NUMBER() OVER (PARTITION BY project_id ORDER BY created_at DESC) as rn
+         FROM signals
+       ) WHERE rn = 1`
+    )
+    .all() as { project_id: string; current_observation: string }[]) {
+    signalByProject.set(row.project_id, row.current_observation);
+  }
+
+  const placeByProject = new Map<string, string>();
+  for (const row of db
+    .prepare(
+      `SELECT entity_id, json_extract(value_json, '$.location') AS loc FROM claims
+       WHERE entity_type = 'project' AND json_extract(value_json, '$.location') IS NOT NULL
+         AND trim(json_extract(value_json, '$.location')) != ''`
+    )
+    .all() as { entity_id: string; loc: string }[]) {
+    if (!placeByProject.has(row.entity_id)) placeByProject.set(row.entity_id, row.loc);
+  }
+
   const out: CandidateSummary[] = [];
   for (const p of projects) {
-    const founderLinks = (
-      db
-        .prepare(
-          `SELECT DISTINCT pe.id as id, pe.name as name, pe.aliases_json as aliases_json,
-                  pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label,
-                  (SELECT u.name FROM affiliations a JOIN universities u ON u.id = a.university_id WHERE a.person_id = pe.id LIMIT 1) as school,
-                  (SELECT s.name FROM claims c JOIN sources s ON s.id = c.source_id
-                    WHERE c.entity_type = 'person' AND c.entity_id = pe.id AND c.source_id IS NOT NULL
-                      AND c.claim_type NOT IN ('linkedin_alias_discovered', 'linkedin_candidate', 'linkedin_search_attempt')
-                    ORDER BY c.retrieved_at DESC LIMIT 1) as program
-           FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id
-           WHERE ppr.project_id = ? AND ppr.role LIKE '%founder%'`
-        )
-        .all(p.id) as {
-          id: string;
-          name: string;
-          aliases_json: string;
-          enrollment_status: string | null;
-          enrollment_label: string | null;
-          school: string | null;
-          program: string | null;
-        }[]
-    ).map((r) => {
-      const linkedinUrl = linkedinFromAliases(r.aliases_json);
-      const linkedinCandidates = linkedinUrl ? [] : (unverified.get(r.id) ?? []);
-      return {
-        name: r.name,
-        personId: r.id,
-        linkedinUrl,
-        linkedinCandidates,
-        link: bestPersonLink({ aliasesJson: r.aliases_json, linkedinCandidates }),
-        enrollmentStatus: r.enrollment_status,
-        enrollmentLabel: r.enrollment_label,
-        school: r.school,
-        program: r.program,
-      };
-    });
-    const founders = founderLinks.map((r) => r.name);
-
-    // Same founder-affiliation-or-direct-relationship fallback as
-    // listUniversities()'s companyCount above.
-    const universities = (
-      db
-        .prepare(
-          `SELECT DISTINCT u.name as name, u.id as id FROM affiliations a
-           JOIN person_project_roles ppr ON ppr.person_id = a.person_id AND ppr.role LIKE '%founder%'
-           JOIN universities u ON u.id = a.university_id
-           WHERE ppr.project_id = ?
-           UNION
-           SELECT DISTINCT u.name as name, u.id as id FROM relationships r
-           JOIN universities u ON u.id = r.target_entity_id
-           WHERE r.source_entity_type = 'project' AND r.source_entity_id = ?
-             AND r.target_entity_type = 'university' AND r.relationship_type = 'affiliated_with'`
-        )
-        .all(p.id, p.id) as { name: string; id: string }[]
-    );
-
-    const sectorTags = (
-      db.prepare(`SELECT tag FROM project_sector_tags WHERE project_id = ? ORDER BY is_primary DESC, tag`).all(p.id) as { tag: string }[]
-    ).map((r) => r.tag);
-    const sourceIds = (
-      db.prepare(`SELECT DISTINCT source_id as id FROM claims WHERE entity_id = ? AND source_id IS NOT NULL`).all(p.id) as { id: string }[]
-    ).map((r) => r.id);
-
-    if (filters.universityId && !universities.some((u) => u.id === filters.universityId)) continue;
-    if (filters.sector && p.sector !== filters.sector && !sectorTags.includes(filters.sector) && !sectorTags.some((t) => sectorLabel(t) === filters.sector)) continue;
-    if (filters.search) {
-      const q = filters.search.toLowerCase();
-      const haystack = `${p.name} ${p.description ?? ""} ${founders.join(" ")}`.toLowerCase();
-      if (!haystack.includes(q)) continue;
-    }
-
-    const gateOutcomes = getGateOutcomesFor(db, p.id);
+    const founderLinks = foundersByProject.get(p.id) ?? [];
+    const universities = universitiesByProject.get(p.id) ?? [];
+    const sectorTags = (tagsByProject.get(p.id) ?? []).map(sectorLabel);
+    const gateOutcomes = gatesByProject.get(p.id) ?? [];
     const overallGate = gateOutcomes.length ? overallGateStatus(gateOutcomes) : null;
-
-    const latestAssessment = db
-      .prepare(`SELECT ratings_json, coverage, quality_score FROM assessments WHERE project_id = ? ORDER BY created_at DESC LIMIT 1`)
-      .get(p.id) as { ratings_json: string; coverage: number; quality_score: number | null } | undefined;
-
+    const latestAssessment = assessmentByProject.get(p.id);
     let coverage: number | null = null;
     let qualityScore: number | null = null;
     let strongestSignalKey: string | null = null;
@@ -473,34 +601,12 @@ export function listCandidateProjects(filters: { universityId?: string; queue?: 
       strongestSignalKey = rubric.strongestSignal?.key ?? null;
       openQuestion = rubric.openQuestion;
     }
-
-    // "An explicit milestone or revisit date is on record" — any pipeline entry with a
-    // due date qualifies, independent of its current stage (decoupled from the pipeline
-    // status enum on purpose, since "Watching" as a status was consolidated away).
-    const watchRow = db.prepare(`SELECT due_date FROM pipeline_entries WHERE project_id = ? AND due_date IS NOT NULL`).get(p.id);
-
     const queue = assignQueue({
       isPortfolioReference: !!p.is_portfolio_reference,
       overallGate,
       hasHeadlineScore: qualityScore != null,
-      hasWatchMilestone: !!watchRow,
+      hasWatchMilestone: watchIds.has(p.id),
     });
-
-    if (filters.queue && queue !== filters.queue) continue;
-
-    const latestSignal = db
-      .prepare(`SELECT current_observation FROM signals WHERE project_id = ? ORDER BY created_at DESC LIMIT 1`)
-      .get(p.id) as { current_observation: string } | undefined;
-
-    const placeRow = db
-      .prepare(
-        `SELECT json_extract(value_json, '$.location') AS loc FROM claims
-         WHERE entity_type = 'project' AND entity_id = ? AND json_extract(value_json, '$.location') IS NOT NULL
-           AND trim(json_extract(value_json, '$.location')) != ''
-         LIMIT 1`
-      )
-      .get(p.id) as { loc: string } | undefined;
-
     out.push({
       id: p.id,
       name: p.name,
@@ -509,13 +615,13 @@ export function listCandidateProjects(filters: { universityId?: string; queue?: 
       websiteUrl: p.website_url,
       primaryLink: p.primary_link,
       primaryLinkKind: p.primary_link_kind,
-      founders,
+      founders: founderLinks.map((r) => r.name),
       founderLinks,
       founderIds: founderLinks.map((f) => f.personId),
       universities: universities.map((u) => u.name),
       universityIds: universities.map((u) => u.id),
-      sectorTags: sectorTags.map(sectorLabel),
-      sourceIds,
+      sectorTags,
+      sourceIds: sourcesByEntity.get(p.id) ?? [],
       overallGate,
       gateOutcomes,
       queue,
@@ -523,8 +629,8 @@ export function listCandidateProjects(filters: { universityId?: string; queue?: 
       coverage,
       strongestSignalKey,
       openQuestion,
-      latestSignalNote: latestSignal?.current_observation ?? null,
-      recordedPlace: placeRow?.loc ?? null,
+      latestSignalNote: signalByProject.get(p.id) ?? null,
+      recordedPlace: placeByProject.get(p.id) ?? null,
       enrollmentBoost: founderLinks.reduce((best, founder) => Math.max(best, enrollmentBoost(founder.enrollmentStatus)), 0),
     });
   }
@@ -553,7 +659,7 @@ export interface ProjectDetail extends CandidateSummary {
 
 export function getProjectDetail(id: string): ProjectDetail | null {
   const db = getDb();
-  const summary = listCandidateProjects().find((c) => c.id === id);
+  const summary = allCandidates().find((c) => c.id === id);
   if (!summary) return null;
 
   const claims = (
@@ -789,34 +895,55 @@ export function listSources(): SourceRow[] {
   }));
 }
 
-export function listBuildersForUniversity(universityId: string) {
-  const db = getDb();
-  const unverified = unverifiedLinkedInByPerson(db);
-  const rows = db
-    .prepare(
-      `SELECT DISTINCT pe.id as id, pe.name as name, a.status as status, pe.aliases_json as aliases_json
-       FROM affiliations a JOIN people pe ON pe.id = a.person_id
-       WHERE a.university_id = ?
-       ORDER BY pe.name`
-    )
-    .all(universityId) as { id: string; name: string; status: string; aliases_json: string }[];
+export interface CampusBuilder {
+  id: string;
+  name: string;
+  status: string;
+  projects: string[];
+  link: PersonLinkTarget | null;
+}
 
-  return rows.map((r) => {
-    const projects = (
-      db
-        .prepare(`SELECT DISTINCT p.name as name FROM person_project_roles ppr JOIN projects p ON p.id = ppr.project_id WHERE ppr.person_id = ?`)
-        .all(r.id) as { name: string }[]
-    ).map((x) => x.name);
-    const linkedinUrl = linkedinFromAliases(r.aliases_json);
-    const linkedinCandidates = linkedinUrl ? [] : (unverified.get(r.id) ?? []);
-    return {
-      id: r.id,
-      name: r.name,
-      status: r.status,
-      projects,
-      link: bestPersonLink({ aliasesJson: r.aliases_json, linkedinCandidates }),
-    };
-  });
+let builderMemo: { stamp: string; byCampus: Map<string, CampusBuilder[]> } | null = null;
+
+export function listBuildersForUniversity(universityId: string): CampusBuilder[] {
+  const stamp = cacheStamp();
+  if (!builderMemo || builderMemo.stamp !== stamp) {
+    const db = getDb();
+    const unverified = unverifiedLinkedInByPerson(db);
+    const projectsByPerson = new Map<string, string[]>();
+    for (const row of db
+      .prepare(`SELECT DISTINCT ppr.person_id as person_id, p.name as name FROM person_project_roles ppr JOIN projects p ON p.id = ppr.project_id ORDER BY p.name`)
+      .all() as { person_id: string; name: string }[]) {
+      const list = projectsByPerson.get(row.person_id) ?? [];
+      if (!list.includes(row.name)) list.push(row.name);
+      projectsByPerson.set(row.person_id, list);
+    }
+    const byCampus = new Map<string, CampusBuilder[]>();
+    const seen = new Set<string>();
+    for (const row of db
+      .prepare(
+        `SELECT a.university_id as university_id, pe.id as id, pe.name as name, a.status as status, pe.aliases_json as aliases_json
+         FROM affiliations a JOIN people pe ON pe.id = a.person_id
+         ORDER BY pe.name`
+      )
+      .all() as { university_id: string; id: string; name: string; status: string; aliases_json: string }[]) {
+      const key = `${row.university_id}:${row.id}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const linkedinUrl = linkedinFromAliases(row.aliases_json);
+      const list = byCampus.get(row.university_id) ?? [];
+      list.push({
+        id: row.id,
+        name: row.name,
+        status: row.status,
+        projects: projectsByPerson.get(row.id) ?? [],
+        link: bestPersonLink({ aliasesJson: row.aliases_json, linkedinCandidates: linkedinUrl ? [] : (unverified.get(row.id) ?? []) }),
+      });
+      byCampus.set(row.university_id, list);
+    }
+    builderMemo = { stamp, byCampus };
+  }
+  return builderMemo.byCampus.get(universityId) ?? [];
 }
 
 export interface FounderRow {
@@ -841,6 +968,8 @@ export interface FounderRow {
   sourceIds: string[];
   personIds: string[];
   strongestEvidence: string | null; // the most recent claim excerpt attributed to them
+  /** Every campus affiliation on record, so a campus filter can include multi-campus people. */
+  campuses: { universityId: string | null; universityName: string | null; status: string | null }[];
   promoted: boolean;
   promotionReasonLabel: string | null;
   founderSignal: FounderSignalResult;
@@ -854,7 +983,52 @@ export interface FounderRow {
 // By default only PROMOTED candidates are returned (FOUNDER_SCOUT_SOURCING.md
 // §46/§92: "only promoted founder candidates appear by default") — pass
 // includeUnpromoted to see every resolved person, e.g. for a raw/debug count.
+// The founder card only reads the signal number and coverage. Dimension
+// write-ups, id lists, and unused link duplicates stay on the server so the
+// page payload is not carrying them into the browser.
+export function listFoundersForPage(filters: { universityId?: string; search?: string } = {}): FounderRow[] {
+  return listFounders(filters).map((founder) => ({
+    ...founder,
+    founderSignal: {
+      founderSignal: founder.founderSignal.founderSignal,
+      coverage: founder.founderSignal.coverage,
+      dimensions: [],
+    },
+    personIds: [],
+    sourceIds: [],
+    sectorTags: [],
+    linkedinCandidates: [],
+  }));
+}
+
 export function listFounders(filters: { universityId?: string; search?: string; includeUnpromoted?: boolean } = {}): FounderRow[] {
+  const built = cachedFounders();
+  let rows = filters.includeUnpromoted ? built.all : built.promoted;
+  if (filters.universityId) {
+    const universityId = filters.universityId;
+    rows = rows.flatMap((founder) => {
+      const match = built.affs.get(founder.id)?.find((a) => a.universityId === universityId);
+      if (!match) return [];
+      if (match.universityId === founder.universityId && match.status === founder.status) return [founder];
+      return [{ ...founder, status: match.status ?? founder.status, universityId: match.universityId, universityName: match.universityName }];
+    });
+  }
+  if (filters.search) {
+    const q = filters.search.toLowerCase();
+    rows = rows.filter((founder) => founder.name.toLowerCase().includes(q));
+  }
+  return rows;
+}
+
+function cachedFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } {
+  const stamp = cacheStamp();
+  if (founderMemo?.stamp === stamp) return founderMemo;
+  const built = buildFounders();
+  founderMemo = { stamp, ...built };
+  return founderMemo;
+}
+
+function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } {
   const db = getDb();
   const rows = db
     .prepare(
@@ -880,12 +1054,13 @@ export function listFounders(filters: { universityId?: string; search?: string; 
     }[];
 
   const unverified = unverifiedLinkedInByPerson(db);
+  const affs = new Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]>();
   const byId = new Map<string, Omit<FounderRow, "promoted" | "promotionReasonLabel" | "founderSignal">>();
   for (const r of rows) {
-    if (filters.universityId && r.university_id !== filters.universityId) continue;
-    const existing = byId.get(r.id);
-    if (existing) continue; // keep first affiliation row if a person somehow has several
-    if (filters.search && !r.name.toLowerCase().includes(filters.search.toLowerCase())) continue;
+    const affiliations = affs.get(r.id) ?? [];
+    affiliations.push({ status: r.status, universityId: r.university_id, universityName: r.university_name });
+    affs.set(r.id, affiliations);
+    if (byId.has(r.id)) continue;
     const linkedinUrl = linkedinFromAliases(r.aliases_json);
     const linkedinCandidates = linkedinUrl ? [] : (unverified.get(r.id) ?? []);
     let websiteUrl: string | null = null;
@@ -918,67 +1093,165 @@ export function listFounders(filters: { universityId?: string; search?: string; 
       sourceIds: [],
       personIds: [r.id],
       strongestEvidence: null,
+      campuses: [],
     });
   }
 
-  const projectStmt = db.prepare(
-    `SELECT DISTINCT p.id as id, p.name as name, p.kind as kind, ppr.role as role, p.website_url as website_url, p.primary_link as primary_link, p.primary_link_kind as primary_link_kind
-     FROM person_project_roles ppr JOIN projects p ON p.id = ppr.project_id WHERE ppr.person_id = ?`
-  );
-  const educationStmt = db.prepare(
-    `SELECT excerpt, source_url FROM claims
-     WHERE entity_id = ? AND claim_type IN ('affiliation', 'program_membership', 'program', 'bio_membership')
-       AND excerpt IS NOT NULL AND trim(excerpt) != ''
-     ORDER BY retrieved_at DESC LIMIT 3`
-  );
-  const claimStmt = db.prepare(`SELECT excerpt FROM claims WHERE entity_id = ? ORDER BY retrieved_at DESC LIMIT 1`);
-  // §65-67: only surfaced when there's no confirmed linkedCompany already —
-  // a bio-derived hint adds nothing once the real relationship is known.
-  const possibleCompanyStmt = db.prepare(
-    `SELECT company_name_guess, match_status FROM possible_companies WHERE person_id = ? AND match_status != 'rejected' ORDER BY detected_at DESC LIMIT 1`
-  );
-  const sourceStmt = db.prepare(`SELECT DISTINCT source_id as id FROM claims WHERE entity_id = ? AND source_id IS NOT NULL`);
-  const sectorStmt = db.prepare(
-    `SELECT DISTINCT t.tag as tag FROM project_sector_tags t
-     JOIN person_project_roles ppr ON ppr.project_id = t.project_id
-     WHERE ppr.person_id = ?`
-  );
-  const neighborStmt = db.prepare(
-    `SELECT DISTINCT other.person_id as id FROM person_project_roles mine
-     JOIN person_project_roles other ON other.project_id = mine.project_id AND other.person_id != mine.person_id
-     WHERE mine.person_id = ? LIMIT 12`
-  );
+  type RoleRow = { person_id: string; id: string; name: string; kind: string; role: string; website_url: string | null; primary_link: string | null; primary_link_kind: string | null };
+  const rolesByPerson = new Map<string, RoleRow[]>();
+  const peopleByProject = new Map<string, string[]>();
+  const seenRole = new Set<string>();
+  for (const row of db
+    .prepare(
+      `SELECT ppr.person_id as person_id, p.id as id, p.name as name, p.kind as kind, ppr.role as role, p.website_url as website_url, p.primary_link as primary_link, p.primary_link_kind as primary_link_kind
+       FROM person_project_roles ppr JOIN projects p ON p.id = ppr.project_id
+       ORDER BY ppr.rowid`
+    )
+    .all() as RoleRow[]) {
+    const key = `${row.person_id}|${row.id}|${row.role}|${row.kind}|${row.website_url}|${row.primary_link}|${row.primary_link_kind}`;
+    if (seenRole.has(key)) continue;
+    seenRole.add(key);
+    const list = rolesByPerson.get(row.person_id) ?? [];
+    list.push(row);
+    rolesByPerson.set(row.person_id, list);
+    const people = peopleByProject.get(row.id) ?? [];
+    if (!people.includes(row.person_id)) people.push(row.person_id);
+    peopleByProject.set(row.id, people);
+  }
 
-  const out: FounderRow[] = [];
+  const educationByPerson = new Map<string, { excerpt: string; source_url: string | null }[]>();
+  for (const row of db
+    .prepare(
+      `SELECT entity_id, excerpt, source_url FROM claims
+       WHERE claim_type IN ('affiliation', 'program_membership', 'program', 'bio_membership')
+         AND excerpt IS NOT NULL AND trim(excerpt) != ''
+       ORDER BY retrieved_at DESC`
+    )
+    .all() as { entity_id: string; excerpt: string; source_url: string | null }[]) {
+    const list = educationByPerson.get(row.entity_id) ?? [];
+    if (list.length >= 3) continue;
+    list.push({ excerpt: row.excerpt, source_url: row.source_url });
+    educationByPerson.set(row.entity_id, list);
+  }
+
+  const latestExcerpt = new Map<string, string | null>();
+  for (const row of db.prepare(`SELECT entity_id, excerpt FROM claims ORDER BY retrieved_at DESC`).all() as { entity_id: string; excerpt: string | null }[]) {
+    if (!latestExcerpt.has(row.entity_id)) latestExcerpt.set(row.entity_id, row.excerpt);
+  }
+
+  const possibleByPerson = new Map<string, { company_name_guess: string; match_status: string }>();
+  for (const row of db
+    .prepare(`SELECT person_id, company_name_guess, match_status FROM possible_companies WHERE match_status != 'rejected' ORDER BY detected_at DESC`)
+    .all() as { person_id: string; company_name_guess: string; match_status: string }[]) {
+    if (!possibleByPerson.has(row.person_id)) possibleByPerson.set(row.person_id, row);
+  }
+
+  const sourcesByPerson = new Map<string, string[]>();
+  const seenSource = new Set<string>();
+  for (const row of db.prepare(`SELECT entity_id, source_id FROM claims WHERE source_id IS NOT NULL`).all() as { entity_id: string; source_id: string }[]) {
+    const key = `${row.entity_id}:${row.source_id}`;
+    if (seenSource.has(key)) continue;
+    seenSource.add(key);
+    const list = sourcesByPerson.get(row.entity_id) ?? [];
+    list.push(row.source_id);
+    sourcesByPerson.set(row.entity_id, list);
+  }
+
+  const tagsByPerson = new Map<string, string[]>();
+  const seenTag = new Set<string>();
+  for (const row of db
+    .prepare(
+      `SELECT ppr.person_id as person_id, t.tag as tag FROM project_sector_tags t
+       JOIN person_project_roles ppr ON ppr.project_id = t.project_id`
+    )
+    .all() as { person_id: string; tag: string }[]) {
+    const key = `${row.person_id}:${row.tag}`;
+    if (seenTag.has(key)) continue;
+    seenTag.add(key);
+    const list = tagsByPerson.get(row.person_id) ?? [];
+    list.push(sectorLabel(row.tag));
+    tagsByPerson.set(row.person_id, list);
+  }
+
+  const continuedByProject = new Map<string, { current_observation: string; source_date: string | null }>();
+  for (const row of db
+    .prepare(`SELECT project_id, current_observation, source_date FROM signals WHERE signal_type = 'continued_dev' ORDER BY source_date DESC`)
+    .all() as { project_id: string; current_observation: string; source_date: string | null }[]) {
+    const existing = continuedByProject.get(row.project_id);
+    if (!existing || (row.source_date ?? "") > (existing.source_date ?? "")) continuedByProject.set(row.project_id, row);
+  }
+  const awardProjects = new Set<string>();
+  for (const row of db
+    .prepare(`SELECT project_id, current_observation FROM signals WHERE current_observation LIKE '%won a prize%' OR current_observation LIKE '%winner%'`)
+    .all() as { project_id: string; current_observation: string }[]) {
+    awardProjects.add(row.project_id);
+  }
+
+  const sharedCounts = new Map<string, Map<string, number>>();
+  for (const [, people] of peopleByProject) {
+    for (const personId of people) {
+      let counts = sharedCounts.get(personId);
+      if (!counts) {
+        counts = new Map();
+        sharedCounts.set(personId, counts);
+      }
+      for (const other of people) {
+        if (other === personId) continue;
+        counts.set(other, (counts.get(other) ?? 0) + 1);
+      }
+    }
+  }
+  const repeatCollaborators = new Set<string>();
+  for (const [personId, counts] of sharedCounts) {
+    for (const shared of counts.values()) {
+      if (shared >= 2) {
+        repeatCollaborators.add(personId);
+        break;
+      }
+    }
+  }
+
+  const all: FounderRow[] = [];
+  const promoted: FounderRow[] = [];
   for (const founder of byId.values()) {
-    const projects = projectStmt.all(founder.id) as {
-      id: string;
-      name: string;
-      kind: string;
-      role: string;
-      website_url: string | null;
-      primary_link: string | null;
-      primary_link_kind: string | null;
-    }[];
+    const projects = rolesByPerson.get(founder.id) ?? [];
     const company = projects.find((p) => p.kind === "company");
-    const claim = claimStmt.get(founder.id) as { excerpt: string } | undefined;
     const education: { excerpt: string; sourceUrl: string | null }[] = [];
     if (founder.enrollmentEvidence) education.push({ excerpt: founder.enrollmentEvidence, sourceUrl: founder.enrollmentSourceUrl });
-    for (const row of educationStmt.all(founder.id) as { excerpt: string; source_url: string | null }[]) {
+    for (const row of educationByPerson.get(founder.id) ?? []) {
       if (education.length >= 4) break;
       if (education.some((item) => item.excerpt === row.excerpt)) continue;
       education.push({ excerpt: row.excerpt, sourceUrl: row.source_url });
     }
     const promotion = evaluatePromotion(projects);
-    if (!filters.includeUnpromoted && !promotion.promoted) continue;
-
-    const possible = company ? undefined : (possibleCompanyStmt.get(founder.id) as { company_name_guess: string; match_status: string } | undefined);
-
-    const neighbors = (neighborStmt.all(founder.id) as { id: string }[]).map((r) => r.id);
-    out.push({
+    const neighbors: string[] = [];
+    const seenNeighbor = new Set<string>();
+    for (const project of projects) {
+      for (const other of peopleByProject.get(project.id) ?? []) {
+        if (other === founder.id || seenNeighbor.has(other)) continue;
+        seenNeighbor.add(other);
+        neighbors.push(other);
+        if (neighbors.length >= 12) break;
+      }
+      if (neighbors.length >= 12) break;
+    }
+    const projectIds = projects.map((p) => p.id);
+    let continued: { current_observation: string; source_date: string | null } | null = null;
+    for (const id of projectIds) {
+      const hit = continuedByProject.get(id);
+      if (!hit) continue;
+      if (!continued || (hit.source_date ?? "") > (continued.source_date ?? "")) continued = hit;
+    }
+    const facts: FounderSignalFacts = {
+      continuedDev: continued,
+      award: projectIds.some((id) => awardProjects.has(id)),
+      repeatCollaborator: repeatCollaborators.has(founder.id),
+    };
+    const possible = company ? undefined : possibleByPerson.get(founder.id);
+    const row: FounderRow = {
       ...founder,
-      sectorTags: (sectorStmt.all(founder.id) as { tag: string }[]).map((r) => sectorLabel(r.tag)),
-      sourceIds: (sourceStmt.all(founder.id) as { id: string }[]).map((r) => r.id),
+      sectorTags: tagsByPerson.get(founder.id) ?? [],
+      sourceIds: sourcesByPerson.get(founder.id) ?? [],
       personIds: [founder.id, ...neighbors],
       projects: projects.map((p) => ({
         id: p.id,
@@ -992,14 +1265,16 @@ export function listFounders(filters: { universityId?: string; search?: string; 
       education,
       linkedCompany: company ? { id: company.id, name: company.name } : null,
       possibleCompany: possible ? { name: possible.company_name_guess, status: possible.match_status as "unreviewed" | "confirmed" } : null,
-      strongestEvidence: claim?.excerpt ?? null,
+      strongestEvidence: latestExcerpt.get(founder.id) ?? null,
+      campuses: affs.get(founder.id) ?? [],
       promoted: promotion.promoted,
       promotionReasonLabel: promotion.reasonLabel,
-      founderSignal: computeFounderSignal(db, founder.id, projects),
-    });
+      founderSignal: computeFounderSignal(db, founder.id, projects, facts),
+    };
+    all.push(row);
+    if (row.promoted) promoted.push(row);
   }
-
-  return out;
+  return { promoted, all, affs };
 }
 
 export function loadLikeTargets(records: FeedbackRecord[]): FeedbackTarget[] {

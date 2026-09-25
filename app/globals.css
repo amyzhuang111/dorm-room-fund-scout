@@ -192,6 +192,11 @@ a, button {
   gap: 8px;
 }
 
+.row-cv {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 88px;
+}
+
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;

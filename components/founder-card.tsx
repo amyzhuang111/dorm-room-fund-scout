@@ -1,12 +1,14 @@
 import Link from "next/link";
+import { memo } from "react";
 import type { FounderRow } from "@/lib/domain/queries";
 import { publicLink } from "@/lib/domain/company-link";
 import { buildHref } from "@/lib/domain/url";
+import { ScoutLink } from "./scout-nav";
 import { EnrollmentBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton } from "./person-link";
 
-export function FounderCard({
+export const FounderCard = memo(function FounderCard({
   founder,
   feedbackView,
   open = false,
@@ -23,7 +25,7 @@ export function FounderCard({
   const projects = founder.projects.filter((p) => p.kind !== "company");
   const { founderSignal, coverage } = founder.founderSignal;
   return (
-    <div className="rounded-md border border-border-c bg-surface p-3">
+    <div className="row-cv rounded-md border border-border-c bg-surface p-3">
       <div className="flex items-start justify-between gap-2">
         <div>
           <p className="font-medium text-foreground">{founder.name}</p>
@@ -41,13 +43,13 @@ export function FounderCard({
         <span className="text-xs text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
           {founderSignal != null ? `Founder Signal ${founderSignal} · ${Math.round(coverage * 100)}% coverage` : "unassessed"}
         </span>
-        <Link
+        <ScoutLink
           href={buildHref(basePath, current, { founder: open ? null : founder.id })}
           className="text-xs font-medium text-link"
           aria-expanded={open}
         >
           {open ? "Hide record" : "Companies and evidence"}
-        </Link>
+        </ScoutLink>
       </div>
       {founder.promotionReasonLabel && <p className="mt-1 text-[11px] text-muted">{founder.promotionReasonLabel}</p>}
       {founder.boostNote && <p className="mt-1 text-[11px] text-link">{founder.boostNote}</p>}
@@ -128,4 +130,4 @@ export function FounderCard({
       )}
     </div>
   );
-}
+});

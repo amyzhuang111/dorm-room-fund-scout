@@ -1,9 +1,9 @@
-import Link from "next/link";
 import { buildHref } from "@/lib/domain/url";
 import { CAMPUSES, shortCampusLabel } from "@/lib/domain/campuses";
-import { listSectorCounts, type CoverageState, type UniversitySummary } from "@/lib/domain/queries";
+import type { CoverageState, SectorCount, UniversitySummary } from "@/lib/domain/queries";
 import { FeedbackSync } from "./feedback-sync";
 import { CollapsibleSidebar } from "./collapsible-sidebar";
+import { ScoutLink } from "./scout-nav";
 
 const COVERAGE_LABEL: Record<CoverageState, { label: string; cls: string }> = {
   not_scanned: { label: "Not scanned", cls: "text-muted" },
@@ -28,7 +28,7 @@ function UniversityRow({
   const count = mode === "founder" ? u.founderCount : u.companyCount;
   const switchingCampus = current.university !== u.id;
   return (
-    <Link
+    <ScoutLink
       // Switching to a different campus clears any open detail panel — its
       // company/founder almost certainly isn't from the newly selected campus,
       // and leaving it open silently would show a candidate that looks like it
@@ -45,7 +45,7 @@ function UniversityRow({
             unscanned is not the same claim as "zero found here." */}
         {u.sourcesConfigured > 0 && <span className="rounded-full bg-surface-2 px-1.5 py-0.5 text-[11px] text-muted">{count}</span>}
       </span>
-    </Link>
+    </ScoutLink>
   );
 }
 
@@ -62,11 +62,13 @@ export function FilterSidebar({
   basePath,
   current,
   mode = "startup",
+  sectors = [],
 }: {
   universities: UniversitySummary[];
   basePath: string;
   current: Record<string, string | undefined>;
   mode?: "founder" | "startup";
+  sectors?: SectorCount[];
 }) {
   const total = universities.reduce((sum, u) => sum + (mode === "founder" ? u.founderCount : u.companyCount), 0);
   const firstClassIds = new Set(CAMPUSES.filter((c) => c.firstClass).map((c) => c.id));
@@ -77,17 +79,15 @@ export function FilterSidebar({
   // Founder Scout pages. Only real, researched sector values ever appear
   // here (never a static/guessed list — most candidates are still
   // unresearched, per brief section 1, so there's nothing to list for them).
-  const sectors = mode === "startup" ? listSectorCounts(current.university) : [];
-
   return (
     <CollapsibleSidebar>
     <aside className="w-full shrink-0 border-b border-border-c bg-surface p-3 sm:w-[232px] sm:border-b-0 sm:border-r sm:p-4">
       <div className="mb-3 flex items-baseline justify-between">
         <span className="ui-label">Universities</span>
         {current.university && (
-          <Link href={buildHref(basePath, current, { university: null })} className="text-[11px] text-link underline">
+          <ScoutLink href={buildHref(basePath, current, { university: null })} className="text-[11px] text-link underline">
             reset
-          </Link>
+          </ScoutLink>
         )}
       </div>
       <p className="-mt-2 mb-2 text-xs text-muted">
@@ -95,12 +95,12 @@ export function FilterSidebar({
       </p>
       <ul className="space-y-0.5">
         <li>
-          <Link
+          <ScoutLink
             href={buildHref(basePath, current, { university: null })}
             className={`block rounded-md px-2 py-1.5 text-sm ${!current.university ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
           >
             All campuses
-          </Link>
+          </ScoutLink>
         </li>
         {firstClass.map((u) => (
           <li key={u.id}>
@@ -128,21 +128,21 @@ export function FilterSidebar({
           <div className="mb-1.5 flex items-baseline justify-between">
             <span className="ui-label">Saved views</span>
             {current.queue && (
-              <Link href={buildHref(basePath, current, { queue: null })} className="text-[11px] text-link underline">
+              <ScoutLink href={buildHref(basePath, current, { queue: null })} className="text-[11px] text-link underline">
                 reset
-              </Link>
+              </ScoutLink>
             )}
           </div>
           <ul className="space-y-0.5">
             {STARTUP_SAVED_VIEWS.map(({ val, label, dot }) => (
               <li key={label}>
-                <Link
+                <ScoutLink
                   href={buildHref(basePath, current, { queue: current.queue === val ? null : val })}
                   className={`flex items-center gap-2 rounded-md px-2 py-1 text-sm ${current.queue === val ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
                 >
                   <span className="status-dot" style={{ background: dot }} />
                   {label}
-                </Link>
+                </ScoutLink>
               </li>
             ))}
           </ul>
@@ -160,12 +160,12 @@ export function FilterSidebar({
             ] as const
           ).map(([val, label]) => (
             <li key={val}>
-              <Link
+              <ScoutLink
                 href={buildHref(basePath, current, { feedback: current.feedback === val ? null : val })}
                 className={`block rounded-md px-2 py-1 text-sm ${current.feedback === val ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
               >
                 {label}
-              </Link>
+              </ScoutLink>
             </li>
           ))}
         </ul>
@@ -176,20 +176,20 @@ export function FilterSidebar({
           <div className="mb-1.5 flex items-baseline justify-between">
             <span className="ui-label">Sectors</span>
             {current.sector && (
-              <Link href={buildHref(basePath, current, { sector: null })} className="text-[11px] text-link underline">
+              <ScoutLink href={buildHref(basePath, current, { sector: null })} className="text-[11px] text-link underline">
                 reset
-              </Link>
+              </ScoutLink>
             )}
           </div>
           <ul className="flex flex-wrap gap-1.5">
             {sectors.map((s) => (
               <li key={s.tag}>
-                <Link
+                <ScoutLink
                   href={buildHref(basePath, current, { sector: current.sector === s.tag ? null : s.tag })}
                   className={`inline-block rounded-full border px-2 py-0.5 text-xs ${current.sector === s.tag ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted hover:bg-surface-2 hover:text-foreground"}`}
                 >
                   {s.label} <span className="tabular-nums">{s.count}</span>
-                </Link>
+                </ScoutLink>
               </li>
             ))}
           </ul>

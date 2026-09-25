@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { buildHref } from "@/lib/domain/url";
+import { ScoutLink } from "./scout-nav";
 import { publicLink } from "@/lib/domain/company-link";
 import type { CandidateSummary } from "@/lib/domain/queries";
 import { FeedbackControls } from "./feedback-controls";
@@ -55,9 +56,9 @@ export function ResultTray({
                   current.project === c.id ? "border-accent bg-accent/10" : "border-border-c"
                 }`}
               >
-                <a href={buildHref(basePath, current, { project: c.id })} className="block truncate font-medium text-foreground hover:text-link">
+                <ScoutLink href={buildHref(basePath, current, { project: c.id })} className="block truncate font-medium text-foreground hover:text-link">
                   {c.name}
-                </a>
+                </ScoutLink>
                 <p className="line-clamp-2 text-muted">{c.description || c.founders[0] || "No description yet"}</p>
                 <p className="truncate text-muted">{c.universities[0] ?? "Campus not confirmed"}</p>
                 {(() => {

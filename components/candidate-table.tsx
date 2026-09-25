@@ -1,6 +1,7 @@
-import { Fragment } from "react";
-import Link from "next/link";
+import { Fragment, memo } from "react";
+import { useWindowedItems } from "./windowed-list";
 import { buildHref } from "@/lib/domain/url";
+import { ScoutLink } from "./scout-nav";
 import { shortCampusName } from "@/lib/domain/campuses";
 import { publicLink } from "@/lib/domain/company-link";
 import type { CandidateSummary, ProjectDetail } from "@/lib/domain/queries";
@@ -48,7 +49,7 @@ function CompanyLink({ c }: { c: CandidateSummary }) {
   );
 }
 
-export function CandidateTable({
+export const CandidateTable = memo(function CandidateTable({
   candidates,
   basePath,
   current,
@@ -61,6 +62,9 @@ export function CandidateTable({
   feedbackView?: string;
   detail?: ProjectDetail | null;
 }) {
+  const { anchorRef, window: windowed } = useWindowedItems(candidates, 88);
+  const open = current.project ? candidates.find((c) => c.id === current.project) : undefined;
+  const rows = open && !windowed.slice.some((c) => c.id === open.id) ? [...windowed.slice, open] : windowed.slice;
   if (candidates.length === 0) {
     return (
       <div className="p-6 text-sm text-muted">
@@ -70,13 +74,14 @@ export function CandidateTable({
     );
   }
   return (
-    <div>
+    <div ref={anchorRef}>
       <ul className="space-y-2 p-3 sm:hidden">
-        {candidates.map((c) => (
+        {windowed.padTop > 0 && <li aria-hidden="true" style={{ height: windowed.padTop }} />}
+        {rows.map((c) => (
           <li key={c.id} className="rounded-lg border border-border-c bg-surface p-3">
-            <Link href={buildHref(basePath, current, { project: current.project === c.id ? null : c.id })} className="font-medium text-foreground" aria-expanded={current.project === c.id}>
+            <ScoutLink href={buildHref(basePath, current, { project: current.project === c.id ? null : c.id })} className="font-medium text-foreground" aria-expanded={current.project === c.id}>
               {c.name}
-            </Link>
+            </ScoutLink>
             <p className="mt-1 text-sm text-muted line-clamp-3">{c.description || "What it builds is not on record yet."}</p>
             <CompanyLink c={c} />
             {c.boostNote && <p className="mt-0.5 text-[11px] text-link">{c.boostNote}</p>}
@@ -102,6 +107,7 @@ export function CandidateTable({
             )}
           </li>
         ))}
+        {windowed.padBottom > 0 && <li aria-hidden="true" style={{ height: windowed.padBottom }} />}
       </ul>
       <div className="hidden overflow-x-auto sm:block">
       <table className="w-full text-sm" style={{ fontVariantNumeric: "tabular-nums" }}>
@@ -116,14 +122,19 @@ export function CandidateTable({
           </tr>
         </thead>
         <tbody>
-          {candidates.map((c) => {
+          {windowed.padTop > 0 && (
+            <tr aria-hidden="true">
+              <td colSpan={6} style={{ height: windowed.padTop, padding: 0, border: 0 }} />
+            </tr>
+          )}
+          {rows.map((c) => {
             return (
               <Fragment key={c.id}>
-              <tr className={`border-b border-border-c align-top hover:bg-surface ${current.project === c.id ? "bg-accent-subtle" : ""}`}>
+              <tr className={`row-cv border-b border-border-c align-top hover:bg-surface ${current.project === c.id ? "bg-accent-subtle" : ""}`}>
                 <td className="px-3 py-2.5">
-                  <Link href={buildHref(basePath, current, { project: current.project === c.id ? null : c.id })} className="font-medium text-foreground hover:text-link" aria-expanded={current.project === c.id}>
+                  <ScoutLink href={buildHref(basePath, current, { project: current.project === c.id ? null : c.id })} className="font-medium text-foreground hover:text-link" aria-expanded={current.project === c.id}>
                     {c.name}
-                  </Link>
+                  </ScoutLink>
                   <p className="mt-0.5 max-w-[280px] text-xs leading-snug text-muted line-clamp-2">{c.description || "What it builds is not on record yet."}</p>
                   <CompanyLink c={c} />
                   {c.sectorTags.length > 0 && (
@@ -163,9 +174,9 @@ export function CandidateTable({
                   <td colSpan={6} className="px-2 py-2">
                     <div className="rounded-md border border-border-c">
                       <div className="flex justify-end border-b border-border-c px-3 py-1.5">
-                        <Link href={buildHref(basePath, current, { project: null })} className="text-xs text-muted hover:text-foreground">
+                        <ScoutLink href={buildHref(basePath, current, { project: null })} className="text-xs text-muted hover:text-foreground">
                           Close
-                        </Link>
+                        </ScoutLink>
                       </div>
                       <CompanyDetail project={detail} />
                     </div>
@@ -175,9 +186,14 @@ export function CandidateTable({
               </Fragment>
             );
           })}
+          {windowed.padBottom > 0 && (
+            <tr aria-hidden="true">
+              <td colSpan={6} style={{ height: windowed.padBottom, padding: 0, border: 0 }} />
+            </tr>
+          )}
         </tbody>
       </table>
       </div>
     </div>
   );
-}
+});

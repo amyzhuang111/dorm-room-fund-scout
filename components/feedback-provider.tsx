@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import {
   FEEDBACK_COOKIE,
@@ -97,7 +97,7 @@ export function FeedbackProvider({ children }: { children: React.ReactNode }) {
         setRemote("on");
         if (Array.isArray(data.records) && data.records.length > 0) {
           saveRecords(data.records);
-          router.refresh();
+          if (!document.querySelector("[data-scout-live]")) router.refresh();
         }
       })
       .catch(() => {
@@ -120,7 +120,7 @@ export function FeedbackProvider({ children }: { children: React.ReactNode }) {
           .then((res) => setRemote(res.status === 401 ? "rejected" : res.ok ? "on" : "off"))
           .catch(() => setRemote("off"));
       }
-      router.refresh();
+      if (!document.querySelector("[data-scout-live]")) router.refresh();
     },
     [router]
   );
@@ -165,6 +165,11 @@ export function FeedbackProvider({ children }: { children: React.ReactNode }) {
   );
 
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
+}
+
+export function useFeedbackRecords(initial: FeedbackRecord[]): FeedbackRecord[] {
+  const initialRef = useRef(initial);
+  return useSyncExternalStore(subscribe, readRecords, () => initialRef.current);
 }
 
 export function useFeedback(): FeedbackApi {

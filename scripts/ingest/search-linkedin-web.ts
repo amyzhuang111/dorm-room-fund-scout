@@ -3,6 +3,16 @@
 //   npx tsx scripts/ingest/search-linkedin-web.ts --dry-run
 //   npx tsx scripts/ingest/search-linkedin-web.ts --tier 1
 //   npx tsx scripts/ingest/search-linkedin-web.ts --tier 1 --max-tier 2
+//   npx tsx scripts/ingest/search-linkedin-web.ts --import data/exports/linkedin-tier1-web-results.json
+//
+// --import reads a JSON array of already-judged web results:
+//   { person_id, full_name, linkedin_url, status, evidence, query }
+// status is "confirmed" | "unverified" | "not_found". Confirmed rows become
+// a linkedin: alias. Unverified rows become linkedin_candidate claims with
+// verification_state unverified. not_found rows are left untouched.
+// The file's status is stored as given — this path does not re-score the
+// snippet. Two records that share one profile URL and one company are
+// merged first when both ids are in the file.
 //
 // For each person still missing a confirmed linkedin.com/in URL, this asks
 // DuckDuckGo's HTML endpoint, then Marginalia, and also reads the person's
@@ -18,6 +28,8 @@
 // --tier N (default 1) and --max-tier M (default: same as --tier) bound which
 // priority band to walk. Priority matches data/exports/linkedin-queue.csv.
 
+import fs from "node:fs";
+import path from "node:path";
 import { getDb, newId, nowIso } from "../../lib/db/client";
 import { recomputePersonEnrollment } from "../../lib/domain/enrollment-store";
 
@@ -359,7 +371,240 @@ function teamLink(html: string, pageUrl: string): string | null {
   return null;
 }
 
+interface JudgedResult {
+  person_id?: string;
+  full_name?: string;
+  linkedin_url?: string | null;
+  status?: string;
+  evidence?: string;
+  query?: string;
+}
+
+// Pairs that share one linkedin.com/in URL, one Penn company, and one class
+// year. The first id is the record that remains.
+const SAME_PERSON: [string, string][] = [
+  ["person_K1mJuLbriTt2", "person___czcyEr8ihe"],
+  ["person_WbEgN14pXbiO", "person_wjjhym508M5N"],
+  ["person_UJYeyoAQrOJ0", "person_7LMQuXReN63c"],
+];
+
+function profileUrl(value: string | null | undefined): string | null {
+  if (!value) return null;
+  const url = value.trim().replace(/\/+$/, "");
+  if (!url.includes("linkedin.com/in/")) return null;
+  return url;
+}
+
+function sharesCompany(db: ReturnType<typeof getDb>, keepId: string, dropId: string): boolean {
+  const row = db
+    .prepare(
+      `SELECT 1 as ok FROM person_project_roles a
+       JOIN person_project_roles b ON b.project_id = a.project_id
+       WHERE a.person_id = ? AND b.person_id = ?
+       LIMIT 1`
+    )
+    .get(keepId, dropId) as { ok: number } | undefined;
+  return Boolean(row);
+}
+
+function dedupePerson(db: ReturnType<typeof getDb>, personId: string) {
+  const roles = db
+    .prepare(`SELECT id, project_id, role FROM person_project_roles WHERE person_id = ? ORDER BY rowid`)
+    .all(personId) as { id: string; project_id: string; role: string }[];
+  const seenRoles = new Set<string>();
+  for (const role of roles) {
+    const key = `${role.project_id}:${role.role}`;
+    if (seenRoles.has(key)) db.prepare(`DELETE FROM person_project_roles WHERE id = ?`).run(role.id);
+    else seenRoles.add(key);
+  }
+  const affs = db
+    .prepare(`SELECT id, university_id, role, status FROM affiliations WHERE person_id = ? ORDER BY rowid`)
+    .all(personId) as { id: string; university_id: string; role: string; status: string | null }[];
+  const seenAff = new Set<string>();
+  for (const aff of affs) {
+    const key = `${aff.university_id}:${aff.role}:${aff.status ?? ""}`;
+    if (seenAff.has(key)) db.prepare(`DELETE FROM affiliations WHERE id = ?`).run(aff.id);
+    else seenAff.add(key);
+  }
+}
+
+function mergeSamePerson(db: ReturnType<typeof getDb>, keepId: string, dropId: string) {
+  const keep = db.prepare(`SELECT id, name FROM people WHERE id = ?`).get(keepId) as { id: string; name: string } | undefined;
+  const drop = db.prepare(`SELECT id, name FROM people WHERE id = ?`).get(dropId) as { id: string; name: string } | undefined;
+  if (!keep || !drop) {
+    console.log(`Merge skipped: ${keepId} / ${dropId} is already one record.`);
+    return;
+  }
+  if (!sharesCompany(db, keepId, dropId)) {
+    throw new Error(`Refusing to merge ${keep.name} and ${drop.name}: they do not share a company.`);
+  }
+  db.prepare(`UPDATE claims SET entity_id = ? WHERE entity_type = 'person' AND entity_id = ?`).run(keepId, dropId);
+  db.prepare(`UPDATE notes SET entity_id = ? WHERE entity_type = 'person' AND entity_id = ?`).run(keepId, dropId);
+  db.prepare(`UPDATE possible_companies SET person_id = ? WHERE person_id = ?`).run(keepId, dropId);
+  db.prepare(`UPDATE relationships SET source_entity_id = ? WHERE source_entity_type = 'person' AND source_entity_id = ?`).run(keepId, dropId);
+  db.prepare(`UPDATE relationships SET target_entity_id = ? WHERE target_entity_type = 'person' AND target_entity_id = ?`).run(keepId, dropId);
+
+  const affs = db.prepare(`SELECT id, university_id, role, status FROM affiliations WHERE person_id = ?`).all(dropId) as {
+    id: string;
+    university_id: string;
+    role: string;
+    status: string | null;
+  }[];
+  for (const aff of affs) {
+    const exists = db
+      .prepare(`SELECT id FROM affiliations WHERE person_id = ? AND university_id = ? AND role = ? AND status IS ?`)
+      .get(keepId, aff.university_id, aff.role, aff.status) as { id: string } | undefined;
+    if (exists) db.prepare(`DELETE FROM affiliations WHERE id = ?`).run(aff.id);
+    else db.prepare(`UPDATE affiliations SET person_id = ? WHERE id = ?`).run(keepId, aff.id);
+  }
+  const roles = db.prepare(`SELECT id, project_id, role FROM person_project_roles WHERE person_id = ?`).all(dropId) as {
+    id: string;
+    project_id: string;
+    role: string;
+  }[];
+  for (const role of roles) {
+    const exists = db
+      .prepare(`SELECT id FROM person_project_roles WHERE person_id = ? AND project_id = ? AND role = ?`)
+      .get(keepId, role.project_id, role.role) as { id: string } | undefined;
+    if (exists) db.prepare(`DELETE FROM person_project_roles WHERE id = ?`).run(role.id);
+    else db.prepare(`UPDATE person_project_roles SET person_id = ? WHERE id = ?`).run(keepId, role.id);
+  }
+  db.prepare(`DELETE FROM people WHERE id = ?`).run(dropId);
+  dedupePerson(db, keepId);
+  console.log(`Merged ${drop.name} (${dropId}) into ${keep.name} (${keepId}).`);
+}
+
+function importJudgedResults(filePath: string) {
+  const db = getDb();
+  const abs = path.resolve(filePath);
+  const parsed = JSON.parse(fs.readFileSync(abs, "utf8")) as unknown;
+  if (!Array.isArray(parsed)) throw new Error(`Import file must be a JSON array: ${abs}`);
+  const rows = parsed as JudgedResult[];
+  const ids = new Set(rows.map((row) => row.person_id).filter((id): id is string => Boolean(id)));
+  const absorbed = new Map<string, string>();
+
+  const tx = db.transaction(() => {
+    for (const [keepId, dropId] of SAME_PERSON) {
+      if (!ids.has(keepId) || !ids.has(dropId)) continue;
+      mergeSamePerson(db, keepId, dropId);
+      absorbed.set(dropId, keepId);
+    }
+
+    const now = nowIso();
+    db.prepare(
+      `INSERT INTO sources (id, name, family, url, campuses_json, priority, ingestion_mode, status, last_attempt_at)
+       VALUES (?, 'LinkedIn people search (public web)', 'code_host', 'https://html.duckduckgo.com/html/', '[]', 2, 'html_scrape', 'available', ?)
+       ON CONFLICT(id) DO UPDATE SET last_attempt_at = excluded.last_attempt_at`
+    ).run(SOURCE_ID, now);
+    const insertClaim = db.prepare(
+      `INSERT INTO claims (id, entity_type, entity_id, claim_type, value_json, excerpt, source_id, source_url, retrieved_at, label, verification_state)
+       VALUES (?, 'person', ?, ?, ?, ?, ?, ?, ?, 'observed_fact', ?)`
+    );
+    const writeAliases = db.prepare(`UPDATE people SET aliases_json = ? WHERE id = ?`);
+    const seen = new Set<string>();
+    let confirmed = 0;
+    let unverified = 0;
+    let untouched = 0;
+    let skipped = 0;
+
+    for (const row of rows) {
+      const rawId = row.person_id?.trim();
+      if (!rawId) {
+        skipped++;
+        continue;
+      }
+      const personId = absorbed.get(rawId) ?? rawId;
+      if (absorbed.has(rawId)) {
+        console.log(`Skipping ${row.full_name ?? rawId}: merged into ${personId}.`);
+        skipped++;
+        continue;
+      }
+      if (seen.has(personId)) {
+        skipped++;
+        continue;
+      }
+      seen.add(personId);
+      const person = db.prepare(`SELECT id, name, aliases_json FROM people WHERE id = ?`).get(personId) as
+        | { id: string; name: string; aliases_json: string }
+        | undefined;
+      if (!person) {
+        console.log(`Skipping ${rawId}: no person with that id.`);
+        skipped++;
+        continue;
+      }
+      if (row.status === "not_found") {
+        console.log(`Left ${person.name} untouched (not found).`);
+        untouched++;
+        continue;
+      }
+      const url = profileUrl(row.linkedin_url);
+      if ((row.status !== "confirmed" && row.status !== "unverified") || !url) {
+        console.log(`Skipping ${person.name}: status ${row.status ?? "missing"} without a linkedin.com/in URL.`);
+        skipped++;
+        continue;
+      }
+      const evidence = (row.evidence ?? "").trim();
+      const query = (row.query ?? "").trim();
+      if (person.aliases_json.includes("linkedin.com/in/")) {
+        console.log(`Skipping ${person.name}: confirmed linkedin.com/in URL already stored.`);
+        skipped++;
+        continue;
+      }
+      if (row.status === "confirmed") {
+        const aliases = JSON.parse(person.aliases_json || "[]") as string[];
+        if (!aliases.some((alias) => alias.includes("linkedin.com/in/"))) {
+          aliases.push(`linkedin:${url}`);
+          writeAliases.run(JSON.stringify(aliases), person.id);
+        }
+        insertClaim.run(
+          newId("claim"),
+          person.id,
+          "linkedin_alias_discovered",
+          JSON.stringify({ linkedin: url, why: evidence, query }),
+          `${person.name}: confirmed LinkedIn ${url} because the search result names them with their school or company. Evidence: ${evidence.slice(0, 500)} Query: ${query}.`,
+          SOURCE_ID,
+          url,
+          now,
+          "corroborated"
+        );
+        confirmed++;
+        console.log(`  confirmed ${person.name} ${url}`);
+        continue;
+      }
+      const already = db
+        .prepare(`SELECT 1 as ok FROM claims WHERE entity_id = ? AND claim_type = 'linkedin_candidate' AND source_url = ? LIMIT 1`)
+        .get(person.id, url) as { ok: number } | undefined;
+      if (already) {
+        console.log(`Skipping ${person.name}: unverified candidate ${url} already stored.`);
+        skipped++;
+        continue;
+      }
+      insertClaim.run(
+        newId("claim"),
+        person.id,
+        "linkedin_candidate",
+        JSON.stringify({ linkedin: url, reason: "name matched; school and company did not", query }),
+        `Unverified LinkedIn candidate for ${person.name}: ${url}. name matched; school and company did not. Evidence: ${evidence.slice(0, 300)}`,
+        SOURCE_ID,
+        url,
+        now,
+        "unverified"
+      );
+      unverified++;
+      console.log(`  unverified ${person.name} ${url}`);
+    }
+    console.log(`Import done. Confirmed ${confirmed}. Unverified ${unverified}. Not found left untouched ${untouched}. Skipped ${skipped}.`);
+  });
+  tx();
+  db.pragma("wal_checkpoint(TRUNCATE)");
+}
+
 async function main() {
+  const importPath = argValue("--import");
+  if (importPath) {
+    importJudgedResults(importPath);
+    return;
+  }
   const dry = process.argv.includes("--dry-run");
   const tierStart = Math.max(1, parseInt(argValue("--tier") || "1", 10) || 1);
   const tierEnd = Math.max(tierStart, parseInt(argValue("--max-tier") || String(tierStart), 10) || tierStart);
@@ -519,7 +764,7 @@ async function main() {
     }
 
     const named = [...evidence.entries()].filter(([, ev]) => textHasName(ev.text, first, last) || textHasName(ev.where, first, last));
-    const confirmed = named.filter(([url, ev]) => {
+    const confirmed = named.filter(([, ev]) => {
       const owned = ownSites.some((site) => hostOf(ev.where) && hostOf(ev.where) === hostOf(site));
       if (owned && textHasName(ev.text, first, last)) return true;
       return confirms(`${ev.text} ${ev.where}`, person.campus_id, companies);

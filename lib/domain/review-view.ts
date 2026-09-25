@@ -62,6 +62,29 @@ export function reviewCompanies(items: CandidateSummary[], records: FeedbackReco
     .sort((a, b) => b.enrollmentBoost - a.enrollmentBoost || b.boostScore - a.boostScore || a.name.localeCompare(b.name));
 }
 
+export function likeTargetsFrom(records: FeedbackRecord[], candidates: CandidateSummary[], founders: FounderRow[], previous: FeedbackTarget[] = []): FeedbackTarget[] {
+  const out: FeedbackTarget[] = [];
+  for (const record of records) {
+    if (record.action !== "like") continue;
+    if (record.entityType === "project") {
+      const company = candidates.find((item) => item.id === record.entityId);
+      if (company) {
+        out.push(companyTarget(company));
+        continue;
+      }
+    } else {
+      const founder = founders.find((item) => item.id === record.entityId);
+      if (founder) {
+        out.push(founderTarget(founder));
+        continue;
+      }
+    }
+    const prior = previous.find((item) => item.entityType === record.entityType && item.entityId === record.entityId);
+    if (prior) out.push(prior);
+  }
+  return out;
+}
+
 export function reviewFounders(items: FounderRow[], records: FeedbackRecord[], likes: FeedbackTarget[], mode: ReviewMode) {
   return items
     .map((item) => {

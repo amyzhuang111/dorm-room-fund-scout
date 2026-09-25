@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { buildHref } from "@/lib/domain/url";
 import type { CampusArc, CandidateSummary, UniversitySummary } from "@/lib/domain/queries";
@@ -71,13 +71,15 @@ function prefersReducedMotion(): boolean {
   return typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 }
 
-export function GlobeView({
+export const GlobeView = memo(function GlobeView({
   universities,
   basePath,
   current,
   previewCandidates = [],
   trayCandidates = [],
   campusArcs = [],
+  onNavigate,
+  active = true,
 }: {
   universities: UniversitySummary[];
   basePath: string;
@@ -88,6 +90,8 @@ export function GlobeView({
   // previewCandidates, which is per-campus and only passed once one is).
   trayCandidates?: CandidateSummary[];
   campusArcs?: CampusArc[];
+  onNavigate?: (overrides: Record<string, string | null>) => void;
+  active?: boolean;
 }) {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -106,12 +110,12 @@ export function GlobeView({
   // Updated in an effect (not during render) per the rules-of-hooks: a ref
   // write during render can be dropped by React and isn't guaranteed to be
   // visible to effects/handlers that read it later.
-  const liveRef = useRef({ basePath, current });
+  const liveRef = useRef({ basePath, current, onNavigate });
   const spinPaused = useRef(false);
   useEffect(() => {
-    liveRef.current = { basePath, current };
+    liveRef.current = { basePath, current, onNavigate };
     spinPaused.current = Boolean(current.university) || geoMode === "hq";
-  }, [basePath, current, geoMode]);
+  }, [basePath, current, geoMode, onNavigate]);
 
   const points = universities.filter((u) => u.lat != null && u.lon != null);
 
@@ -377,9 +381,13 @@ export function GlobeView({
           map.on("click", "campus-dots", (e: MapEvent) => {
             const id = e.features?.[0]?.properties?.id;
             if (!id) return;
-            const { basePath: livePath, current: liveCurrent } = liveRef.current;
+            const { basePath: livePath, current: liveCurrent, onNavigate: go } = liveRef.current;
             const switchingCampus = liveCurrent.university !== id;
-            router.push(buildHref(livePath, liveCurrent, switchingCampus ? { university: id, project: null } : { university: id }));
+            const overrides: Record<string, string | null> = switchingCampus
+              ? { university: id, project: null }
+              : { university: id };
+            if (go) go(overrides);
+            else router.push(buildHref(livePath, liveCurrent, overrides));
           });
           map.on("mouseenter", "campus-dots", () => (map.getCanvas().style.cursor = "pointer"));
           map.on("mousemove", "campus-dots", (e: MapEvent) => {
@@ -473,6 +481,11 @@ export function GlobeView({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current.university, status]);
+
+  useEffect(() => {
+    if (!active || status !== "ok") return;
+    mapRef.current?.resize();
+  }, [active, status]);
 
   // Headquarters mode must not keep campus markers on the map. Those dots are
   // affiliation counts, and leaving them up reads as if the campus were an HQ.
@@ -681,7 +694,7 @@ export function GlobeView({
       </div>
     </div>
   );
-}
+});
 
 function greatCircle(a: [number, number], b: [number, number], steps = 48): [number, number][] {
   const toRad = (d: number) => (d * Math.PI) / 180;

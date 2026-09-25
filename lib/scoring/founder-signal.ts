@@ -34,10 +34,17 @@ const LEVEL_POINTS: Record<SignalLevel, number> = { strong: 100, medium: 60, non
 // deterministic source (no stack-level data, no per-founder recency signal
 // beyond same-day ingestion, and ambition is inherently a judgment call) —
 // so they always report unknown rather than being guessed at.
+export interface FounderSignalFacts {
+  continuedDev: { current_observation: string } | null;
+  award: boolean;
+  repeatCollaborator: boolean;
+}
+
 export function computeFounderSignal(
   db: Database.Database,
   personId: string,
-  projects: { id: string; kind: string; role: string }[]
+  projects: { id: string; kind: string; role: string }[],
+  facts?: FounderSignalFacts
 ): FounderSignalResult {
   const dims: DimensionResult[] = [];
 
@@ -72,8 +79,9 @@ export function computeFounderSignal(
 
   // 4. Shipping velocity — real continued-development evidence on any of their projects.
   const projectIds = projects.map((p) => p.id);
-  const continuedDev =
-    projectIds.length > 0
+  const continuedDev = facts
+    ? (facts.continuedDev ?? undefined)
+    : projectIds.length > 0
       ? (db
           .prepare(
             `SELECT current_observation, source_date FROM signals WHERE project_id IN (${projectIds.map(() => "?").join(",")}) AND signal_type='continued_dev' ORDER BY source_date DESC LIMIT 1`
@@ -90,14 +98,13 @@ export function computeFounderSignal(
   dims.push({ key: "project_ambition", label: "Project ambition", level: null, evidence: null });
 
   // 6. External validation — a real prize/award recorded against one of their projects.
-  const awardHit =
-    projectIds.length > 0
-      ? (db
-          .prepare(
-            `SELECT current_observation FROM signals WHERE project_id IN (${projectIds.map(() => "?").join(",")}) AND (current_observation LIKE '%won a prize%' OR current_observation LIKE '%winner%') LIMIT 1`
-          )
-          .get(...projectIds) as { current_observation: string } | undefined)
-      : undefined;
+  const awardHit = facts ? facts.award : projectIds.length > 0
+    ? (db
+        .prepare(
+          `SELECT current_observation FROM signals WHERE project_id IN (${projectIds.map(() => "?").join(",")}) AND (current_observation LIKE '%won a prize%' OR current_observation LIKE '%winner%') LIMIT 1`
+        )
+        .get(...projectIds) as { current_observation: string } | undefined)
+    : undefined;
   if (awardHit) {
     dims.push({ key: "external_validation", label: "External validation", level: "medium", evidence: "Team-level prize/award on record — not individually attributed." });
   } else {
@@ -105,8 +112,9 @@ export function computeFounderSignal(
   }
 
   // 7. Collaborator quality — a real second person co-appearing on 2+ shared projects.
-  const repeatCollaborator =
-    projectIds.length > 0
+  const repeatCollaborator = facts
+    ? facts.repeatCollaborator
+    : projectIds.length > 0
       ? (db
           .prepare(
             `SELECT other.person_id as id, COUNT(DISTINCT other.project_id) as shared
