@@ -335,7 +335,9 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whyItMatters: "Community discussion (unverified — see community signal) names it alongside Electric Racing as real build-work engineering orgs.",
     whatToExtract: ["autonomy/codebase leads", "subsystem owners", "competition results"],
     whatNotToInfer: ["Team membership alone isn't the signal — individual technical ownership is."],
-    status: "unconfigured",
+    status: "implemented",
+    statusNote:
+      "Ingested (2026-09-24): pennaerial.com/team/ is a server-rendered WordPress block-editor page carrying 9 real named leaders, each with an explicit site-authored title (President, VP Operations, VP Finance, Mechanical Lead x2, Software Lead x2, Electrical Lead x2 — 2 of the 9 raw titles had a literal typo, 'LEad', normalized for grouping with the raw text kept in the claim excerpt). No separate full-roster page exists on the site (checked the nav) — this is genuinely leadership-only, which is actually a better fit for this source's own 'technical leads/subsystem owners' whatToExtract than a flat roster would be. No bios, majors, class years, or personal links on this page at all, so affiliation status stays 'unverified' for all nine. 7 of 9 people were new to the DB (2 already existed from other Penn sources).",
   },
   {
     id: "cat_mt_penn",
@@ -353,7 +355,9 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whyItMatters: "Community discussion (unverified — see community signal) characterizes it as small, close-knit, extremely career-driven, with meaningful AI/startup participation — useful for identity-graph search, not scoring.",
     whatToExtract: ["members who separately show up building something real elsewhere — cross-reference only"],
     whatNotToInfer: ["M&T membership is not Founder Signal by itself, under any circumstance — it's an admissions cohort, not a build community."],
-    status: "unconfigured",
+    status: "implemented",
+    statusNote:
+      "Ingested (2026-09-24): fisher.wharton.upenn.edu/alumni-profiles/ (10 real profiles server-rendered, no pagination found — bounded to exactly those 10) is deliberately NOT a full student directory (which would be a real privacy concern for a university program) — it's alumni the program itself chose to publicly feature. All 10 recorded as identity-graph affiliation only ('alumnus' role, no founder signal), per this source's own whatNotToInfer. Each profile's actual text was read (not just the list) for explicit self-disclosed founder claims — 8 of 10 had zero founder language (genuine career updates: SpaceX, etc.); 2 did: Arjun Srinivas (M&T'07) explicitly named forming Innova Dynamics with 3 co-founders (later acquired by TPK Holdings — disclosed as an exit, not a live candidate), and Bret Pearlman (M&T'89)'s author bio discloses Co-Founder/Managing Director of Elevation Partners (a PE firm, not a startup — recorded honestly regardless of fitting the pre-seed thesis). The 3 co-founders named only in Arjun's own text (not their own profiles) are flagged in their claim's excerpt as corroborated by his account alone. 13 new people, 2 new companies, 5 founder roles total.",
   },
   {
     id: "cat_pennovation",
@@ -371,7 +375,9 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whyItMatters: "A real, formal Penn innovation hub with resident companies — useful for Startup Scout discovery, not Founder Scout.",
     whatToExtract: ["resident/member company names", "showcase announcements"],
     whatNotToInfer: ["Formal infrastructure visibility ≠ where the strongest current-student founders actually are — that's a separate, community-sourced question."],
-    status: "unconfigured",
+    status: "checked_and_skipped",
+    statusNote:
+      "Checked (2026-09-24): pennovation.upenn.edu has no consolidated resident-company directory anywhere in its nav (About the Works, News, Pennovation Center, The Community/'Available Spaces', site search all checked directly) — individual companies (Axonova Medical, Avisi Technologies, IQ Motion Control, Opertech Bio, etc.) only appear scattered across individual News/'Year in Review' articles, not a structured list. Extracting a real roster would mean crawling and hand-parsing an unbounded number of news posts for company mentions — a fundamentally different (much larger, fuzzier) task than this codebase's other adapters, not attempted this pass.",
   },
 
   // ---------- BERKELEY ----------
@@ -462,7 +468,8 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatToExtract: ["company discovery", "company verification", "founder-company relationships", "funding/status validation", "historical pattern research"],
     whatNotToInfer: ["Do not heavily increase founder signal just because someone appears in SkyDeck."],
     status: "checked_and_skipped",
-    statusNote: "Checked (2026-09-18): the public portfolio page is logo-only with no extractable names/founders in the HTML — not currently ingestible even at its correctly-weak tier.",
+    statusNote:
+      "Checked (2026-09-18): the public portfolio page is logo-only with no extractable names/founders in the HTML — not currently ingestible even at its correctly-weak tier. CORRECTION (2026-09-24): that was checked against the wrong page — skydeck.berkeley.edu/companies/ (not the homepage logo carousel) is a real paginated WordPress archive with 9 real company names + external URLs per page and real pagination behind it (16+ pages seen). Still genuinely no founder names anywhere on it (every entry's 'BY <author>' field is the same single SkyDeck staff account across all 9 checked, not a founder — the same author-field trap this codebase already avoided for GRASP's faculty attributions) — so this remains correctly skipped at its C/corroboration tier (no dbSourceId assigned), just for a narrower, now-accurate reason: real companies, zero founders, not zero data.",
   },
   {
     id: "cat_eb_berkeley",
@@ -470,7 +477,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     name: "Entrepreneurs @ Berkeley (E@B)",
     campus: "univ_berkeley",
     sourceType: "student_club",
-    url: "https://entrepreneurs.berkeley.edu/",
+    url: "https://www.entrepreneursatberkeley.com/",
     founderScoutTier: "S",
     startupScoutTier: "B",
     role: "discovery",
@@ -482,7 +489,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatNotToInfer: ["A Reddit recommendation is not itself Founder Signal for any individual member — see lib/domain/community-signal.ts.", "An officer's own description of the club is operational detail, not an independent endorsement."],
     status: "unconfigured",
     statusNote:
-      "Registered 2026-09-21 from Reddit discovery, not yet ingested. entrepreneurs.berkeley.edu redirects to entrepreneurs.studentorg.berkeley.edu, which returned HTTP 400 on a direct fetch check (2026-09-21) — live status/structure not yet confirmed, so no adapter built. URL kept because it's the real, named official site (not guessed), pending a working check.",
+      "Registered 2026-09-21 from Reddit discovery, not yet ingested. entrepreneurs.berkeley.edu redirects to entrepreneurs.studentorg.berkeley.edu, which returns HTTP 400 (re-checked 2026-09-24, still broken) — not the org's real current site. FOUND THE REAL ONE (2026-09-24): entrepreneursatberkeley.com (note: .com, not .edu) is E@B's actual self-hosted site — confirmed same org via matching description ('UC Berkeley's undergraduate founder community. Seven YC companies in 12 months, $45M+ raised'). URL field updated to it. But it's a dead end for ingestion regardless: a Next.js app whose real landing content (`LandingPageContent`) is a client-only dynamic import with zero data in the server-rendered flight payload — same access class as Free Ventures above. No headless browser available in this environment to render it.",
   },
   {
     id: "cat_free_ventures",
@@ -620,24 +627,28 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatToExtract: ["150K Challenge participants/finalists", "E-Bootcamp cohorts", "leadership/officer roles", "alumni company formation"],
     whatNotToInfer: ["Membership alone is not Founder Signal — BASES is large and broad; look for named participation/leadership."],
     status: "unconfigured",
+    statusNote:
+      "Investigated, not built (2026-09-24): bases.stanford.edu is a Next.js site (real server-rendered RSC content, not a dead client-only SPA like Free Ventures/E@B below). /challenge is real but pure marketing/stats ('250+ competing companies', '$150K+ prize pool') with zero finalist/winner/team names in its flight payload. /writing (blog) and the /leadership URL a web search surfaced (404 — stale) were also checked; no page found this pass with an actual finalists/leadership roster. Not ruled out entirely — a roster may exist behind a URL not yet found (e.g. a specific past-cohort page) — but the obvious candidates are exhausted for now.",
   },
   {
     id: "cat_cardinal_ventures",
     dbSourceId: "src_cardinal_ventures",
-    name: "Cardinal Ventures",
+    name: "Cardinal Ventures (now rebranded \"Stanford Ventures\")",
     campus: "univ_stanford",
     sourceType: "accelerator",
-    url: "(unverified — see tierRationale)",
+    url: "https://svfund.stanford.edu/",
     founderScoutTier: "A",
     startupScoutTier: "A",
     role: "discovery",
     dimensions: { campusPurity: "high", selectivity: "high" },
     tierRationale:
-      "The only equity-free, student-run accelerator at Stanford (150+ graduated companies, $1B+ raised) — a real selection layer over Stanford founders, not just a discovery source. Community discussion (unverified — see community signal) points students toward it specifically. SECURITY NOTE (2026-09-21): the domain cardinalventures.org, which appeared as the official site in search results, was checked directly and is domain-squatted — it 302-redirects to an unrelated Indonesian online-gambling site (slotplaydemo.link), not Cardinal Ventures. URL deliberately left unset rather than guessed; do not link to cardinalventures.org anywhere. A real official URL still needs to be found (try sen.stanford.edu/opportunities/cardinal-ventures or a direct Stanford-hosted page first).",
+      "The only equity-free, student-run accelerator at Stanford (150+ graduated companies, $1B+ raised) — a real selection layer over Stanford founders, not just a discovery source. Community discussion (unverified — see community signal) points students toward it specifically. SECURITY NOTE (2026-09-21, RESOLVED 2026-09-24): the domain cardinalventures.org, which appeared as the official site in search results, was checked directly and is domain-squatted — it 302-redirects to an unrelated Indonesian online-gambling site (slotplaydemo.link), not Cardinal Ventures. Never link to cardinalventures.org anywhere, including www.cardinalventures.org (unverified, not checked — the risk of a squat wasn't worth probing further once a real official URL was found). REAL URL FOUND (2026-09-24): Stanford's own official directory, sen.stanford.edu/cardinal-ventures, 301-redirects to sen.stanford.edu/stanford-ventures — the org now lists under the name \"Stanford Ventures\" there, with a 'Visit Website' link to https://svfund.stanford.edu/ (a verified .stanford.edu subdomain, safe).",
     whyItMatters: "Treat as a selection/corroboration layer — companies here already cleared a real student-run bar.",
     whatToExtract: ["cohort company names", "founder names", "sector focus (DeepTech/BioTech per their own positioning)"],
     whatNotToInfer: ["Cohort acceptance corroborates, but the underlying company/founder evidence still needs to be checked directly."],
     status: "unconfigured",
+    statusNote:
+      "Investigated, not built (2026-09-24): svfund.stanford.edu itself is a client-only SPA shell — every route (including plausible data endpoints like /data.json, /content.json, /api/content) returns the exact same empty index.html (Content-Type: text/html, not JSON), confirmed by inspecting response headers/bodies directly, not guessed. No server-rendered content, no discoverable JSON API. Same access class as Free Ventures/Entrepreneurs @ Berkeley above — real org, real (now-verified) URL, but nothing scrapable without a headless browser this environment doesn't have.",
   },
   {
     id: "cat_startx",

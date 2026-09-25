@@ -1054,3 +1054,136 @@ start` server: `/sources`' Registry table now shows Penn Electric Racing
 as tier A/C with status "Complete" (previously "unconfigured"), and
 `/founder/discover` renders real ingested names (e.g. Alex Zhao, Kunwoo
 Kim, Sidharth Roy) — not just a passing build.
+
+## Penn Aerial Robotics P0 adapter (2026-09-24)
+
+Closes `cat_penn_aerial_robotics` (was `unconfigured`). Third of the six
+Penn/Berkeley/Stanford P0 gaps on CLAUDE.md's list to be closed; still open:
+M&T (Penn); Entrepreneurs @ Berkeley, Free Ventures, SkyDeck (Berkeley);
+BASES, Cardinal Ventures, StartX (Stanford — already dead-ended once, see
+below); Harvard i-lab (also already dead-ended, see below).
+
+`scripts/ingest/fetch-penn-aerial-robotics.ts` scrapes pennaerial.com/team/
+— a server-rendered WordPress block-editor page, no API. Unlike PER, this
+page has no full roster at all: it's the club's leadership page only, 9
+real people, each with an explicit site-authored title (President, VP
+Operations, VP Finance, Mechanical Lead ×2, Software Lead ×2, Electrical
+Lead ×2) directly in the markup — actually a better fit for this source's
+own "technical leads/subsystem owners" `whatToExtract` than a flat roster,
+since nothing has to be inferred. Checked the site's own nav for a separate
+full-member page first (contact-us, current-upcoming-projects, join-us,
+penn-air-through-the-years, sponsors, team) — none exists, so 9 is what the
+source actually offers, not a deliberate narrowing. Two of the nine raw
+titles have a literal site typo ("Software LEad", "Electrical LEad"),
+normalized to "Lead" for grouping with the raw text kept verbatim in each
+claim's excerpt. No bios/majors/class-years/personal links exist on this
+page at all (checked directly) — affiliation status stays the schema
+default `unverified` for all nine, unlike PER where bio text sometimes gave
+a real class year. 7 of 9 people were new to the DB.
+
+Verified idempotent (second run: 0 new). `npx tsc --noEmit` and `npm run
+build` both clean. Verified against a real `next start` server: `/sources`
+shows Penn Aerial Robotics as tier A/C, status "Complete", and
+`/founder/discover` renders the real names (Aidan Kuo, Tina Lee, Jerry
+Zhang).
+
+**Two other P0 targets were investigated this pass and dead-ended, not
+silently skipped:**
+- **Harvard i-lab** (`innovationlabs.harvard.edu`) — every fetch attempt,
+  including a direct `curl` with a real browser user-agent, returns HTTP
+  403. Same class of access-blocked state already disclosed for this
+  project's Reddit research (CLAUDE.md's community-signal section) — no
+  adapter possible from this environment right now, not a guess at one.
+- **StartX** (`startx.com/pages/companies`) — fetches fine (HTTP 200,
+  217KB), but it's a pure logo wall: ~993 external company links with zero
+  name text anywhere (checked `<img alt>` specifically — none set) and no
+  cohort/year data. Extracting a "name" would mean guessing one from a
+  domain or filename, which this codebase's own §7 forbids — dead end, not
+  attempted. Free Ventures (`freeventures.org`) is a pure client-side React
+  SPA with no server-rendered content at all — same access class as the
+  Globe's earlier Turbopack/worker issue, but no browser automation is
+  available in this environment to render it (Playwright was already
+  removed after the Globe debugging pass, see above).
+
+## More P0 investigation, no new adapter this round (2026-09-24)
+
+Three more targets checked; none panned out, documented in
+`lib/domain/source-quality.ts` rather than silently retried next time:
+
+- **Entrepreneurs @ Berkeley** (`entrepreneursatberkeley.com`) — same dead
+  end as Free Ventures: a Next.js site whose actual landing content
+  (`LandingPageContent`) is a client-only dynamic import with zero data in
+  the server-rendered flight payload.
+- **Berkeley SkyDeck** — this source was already marked
+  `checked_and_skipped` (2026-09-18, "logo-only, no extractable names"),
+  but that note turned out to be checked against the wrong page. The real
+  `/companies/` archive **does** have extractable text: 9 real company
+  names + external URLs per page, with real pagination (16+ pages) behind
+  it. Still correctly skipped, though, for the reason that actually
+  matters — every single entry's "BY \<author\>" field is the same one
+  SkyDeck staff account across all 9 checked, not a founder, so there are
+  real companies here but zero real founders — the exact same author-field
+  trap this codebase already caught once for GRASP's faculty attributions.
+  `statusNote` corrected in place rather than left wrong.
+- **BASES** (`bases.stanford.edu`) — unlike the two above, this one IS a
+  real server-rendered Next.js site (not a dead client shell) — but
+  `/challenge` is pure marketing/stats ("250+ competing companies," no
+  names), and neither `/writing` nor the `/leadership` URL a web search
+  surfaced (404, stale) has an actual roster. Left `unconfigured` with a
+  disclosed investigation note rather than `checked_and_skipped`, since a
+  real finalists/leadership page may exist at a URL not yet found.
+
+`npx tsc --noEmit` and `npm run build` both clean after these
+`source-quality.ts` edits (no schema/ingestion code touched this round).
+
+## Cardinal Ventures security fix + M&T P0 adapter (2026-09-24)
+
+**Cardinal Ventures' domain-squat flag resolved.** The prior pass
+(2026-09-21) had correctly refused to guess a URL after finding
+`cardinalventures.org` 302-redirecting to an unrelated Indonesian
+gambling site. This pass found the real one the safe way — through
+Stanford's own directory, never by probing the squatted domain further:
+`sen.stanford.edu/cardinal-ventures` 301s to `sen.stanford.edu/stanford-
+ventures` (the org has been renamed "Stanford Ventures" there), which
+links out to `https://svfund.stanford.edu/` — a verified `.stanford.edu`
+subdomain. That site itself turned out to be a client-only SPA shell
+(every route, including plausible data endpoints like `/data.json`,
+returns the identical empty `index.html` — checked via response headers,
+not guessed) — same dead-end class as Free Ventures/E@B, so still no
+adapter, but the URL and security note in `lib/domain/source-quality.ts`
+are now correct and won't need re-investigating.
+
+**M&T (`cat_mt_penn`) closed** — the last of the six original P0 gaps.
+`scripts/ingest/fetch-mt-alumni.ts` ingests
+fisher.wharton.upenn.edu/alumni-profiles/, which deliberately is NOT a
+full student directory (a real privacy line for a university program) —
+it's 10 alumni the program itself chose to publicly feature, no pagination
+found. Per this source's own `whatNotToInfer` ("M&T membership is not
+Founder Signal by itself, under any circumstance"), all 10 are recorded as
+identity-graph affiliation only — but each profile's actual text (not just
+the list) was read for explicit self-disclosed founder claims, and 2 of
+10 had one: Arjun Srinivas (M&T'07) named forming Innova Dynamics with 3
+co-founders (later acquired by TPK Holdings — disclosed as an exit, not a
+live candidate), and Bret Pearlman (M&T'89)'s author bio discloses
+Co-Founder/Managing Director of Elevation Partners (a PE firm, not a
+startup — recorded honestly regardless of not fitting the pre-seed
+thesis). The 3 co-founders named only in Arjun's own account (not their
+own profiles on this site) are flagged in their claim's excerpt as
+corroborated by his account alone, not independently. 13 new people, 2 new
+companies, 5 founder roles, all from hand-read profile text — no generic
+regex over free-form bios, matching the GRASP adapter's own precedent for
+small-N hand extraction.
+
+Verified idempotent (second run: 0 new). `npx tsc --noEmit` and `npm run
+build` both clean. Verified against a real `next start` server: `/sources`
+shows M&T at tier S/D, and `/founder/discover` renders Arjun Srinivas,
+Bret Pearlman, Alex Mittal, Innova Dynamics, and Elevation Partners.
+
+**All six of CLAUDE.md's original Penn/Berkeley/Stanford P0 gaps are now
+either closed or honestly disclosed as investigated dead ends**: Penn
+Electric Racing, Penn Aerial Robotics, M&T (closed, real adapters);
+Entrepreneurs @ Berkeley, Free Ventures, Cardinal Ventures/Stanford
+Ventures (client-only SPAs, no server data); StartX (a 993-entry logo wall
+with zero name text); BASES (real site, no roster page found yet); SkyDeck
+(real companies, zero founders — corrected note). Harvard i-lab remains
+blocked by a hard 403 on every access attempt.
