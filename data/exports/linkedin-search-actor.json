@@ -1,0 +1,22 @@
+{
+  "actorId": "harvestapi~linkedin-profile-search",
+  "runEndpoint": "https://api.apify.com/v2/acts/harvestapi~linkedin-profile-search/runs",
+  "script": "scripts/ingest/search-linkedin-apify.ts",
+  "input": {
+    "searchQuery": "\"Full Name\" \"School Name\" \"First company\"",
+    "profileScraperMode": "Full",
+    "takePages": 1,
+    "maxItems": 3
+  },
+  "searchQueryShape": "The live script sends searchQuery = `\"${name}\" \"${schoolName}\"` plus ` \"${companies[0]}\"` when the person has a company. School names are University of Pennsylvania, UC Berkeley, University of Waterloo, Stanford University, MIT, Harvard University.",
+  "cost": {
+    "plan": "Free/Starter",
+    "searchPageUsd": 0.1,
+    "fullProfileUsd": 0.004,
+    "maxFullProfiles": 3,
+    "upperBoundPerPersonUsd": 0.112,
+    "formula": "people * (0.10 + 3 * 0.004)",
+    "pricePage": "https://apify.com/harvestapi/linkedin-profile-search",
+    "note": "A search page is charged even when nobody is returned. Scale plan search pages are $0.08; Business and above are $0.05."
+  }
+}
