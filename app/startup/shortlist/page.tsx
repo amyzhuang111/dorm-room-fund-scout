@@ -24,7 +24,7 @@ function EmptyQueue({ queue, needsResearchCount }: { queue: Queue; needsResearch
         {needsResearchCount > 0 ? (
           <p className="mt-1">
             {needsResearchCount} candidate{needsResearchCount === 1 ? "" : "s"} in Needs research could get there with more evidence.{" "}
-            <Link href="/startup/discover?queue=exploration" className="text-accent underline">
+            <Link href="/startup/discover?queue=exploration" className="text-link underline">
               Investigate them
             </Link>
             .
@@ -32,7 +32,7 @@ function EmptyQueue({ queue, needsResearchCount }: { queue: Queue; needsResearch
         ) : (
           <p className="mt-1">
             No candidates on record at all yet.{" "}
-            <Link href="/sources?from=startup" className="text-accent underline">
+            <Link href="/sources?from=startup" className="text-link underline">
               Pick a source to scan
             </Link>
             .

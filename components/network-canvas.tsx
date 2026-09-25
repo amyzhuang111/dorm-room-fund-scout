@@ -6,9 +6,9 @@ import type { NetworkEdge, NetworkGraph, NetworkNode } from "@/lib/domain/networ
 
 const COLOR: Record<NetworkNode["type"], string> = {
   university: "#ff6a33",
-  community: "#a892f2",
-  person: "#d9d5df",
-  project: "#b9a8f5",
+  community: "#9378ee",
+  person: "#5c516e",
+  project: "#6f5ab2",
 };
 
 function nodeRadius(type: NetworkNode["type"], degree: number): number {
@@ -89,7 +89,7 @@ export function NetworkCanvas({
           viewBox="0 0 960 640"
           role="img"
           aria-label={`Network for ${campusName}`}
-          className="h-auto w-full rounded-xl border border-border-c bg-[radial-gradient(circle_at_50%_42%,#3e344c,#080331_72%)]"
+          className="h-auto w-full rounded-xl border border-border-c bg-white"
         >
           {graph.edges.map((e, i) => {
             const s = nodeById.get(e.source);
@@ -118,7 +118,7 @@ export function NetworkCanvas({
                 <path
                   d={d}
                   fill="none"
-                  stroke={highlighted ? "#ff6a33" : edgeDimmed(e) ? "#3e344c" : "#b8b0c4"}
+                  stroke={highlighted ? "#1c1525" : edgeDimmed(e) ? "#d9d5df" : "#b8b0c4"}
                   strokeWidth={e.relationshipType === "founded" ? 1.6 : 1}
                   opacity={edgeDimmed(e) && !highlighted ? 0.35 : 0.9}
                   pointerEvents="none"
@@ -145,7 +145,7 @@ export function NetworkCanvas({
                   <circle cx={n.x} cy={n.y} r={r} fill={COLOR.person} />
                 )}
                 {(n.type !== "person" || active === n.id || matchIds?.has(n.id)) && (
-                  <text x={n.x} y={n.y + r + 12} textAnchor="middle" fontSize="11" fill="#d9d5df" style={{ fontFamily: "Satoshi, Arial, sans-serif" }}>
+                  <text x={n.x} y={n.y + r + 12} textAnchor="middle" fontSize="11" fill="#1c1525" style={{ fontFamily: "Satoshi, Arial, sans-serif" }}>
                     {n.label.length > 22 ? n.label.slice(0, 21) + "…" : n.label}
                   </text>
                 )}
@@ -212,7 +212,7 @@ export function NetworkCanvas({
                     <p className="text-muted">{e.relationshipType.replaceAll("_", " ")}</p>
                     {e.excerpt && <p className="mt-1 text-foreground">{e.excerpt.slice(0, 220)}</p>}
                     {e.sourceUrl && (
-                      <a href={e.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-accent underline">
+                      <a href={e.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-link underline">
                         source
                       </a>
                     )}
@@ -281,7 +281,7 @@ function EdgeCard({
         <p className="mt-3 text-xs text-muted">No excerpt is stored on this link.</p>
       )}
       {edge.sourceUrl && (
-        <a href={edge.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-xs text-accent underline">
+        <a href={edge.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-xs text-link underline">
           Open source
         </a>
       )}

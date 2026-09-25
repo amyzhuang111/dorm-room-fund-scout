@@ -36,7 +36,7 @@ export function UniversityDrawer({
           <Link
             key={t}
             href={buildHref(basePath, current, { tab: t })}
-            className={`rounded-t-md px-3 py-1.5 text-xs font-medium capitalize ${activeTab === t ? "border-b-2 border-accent text-accent" : "text-muted hover:text-foreground"}`}
+            className={`rounded-t-md px-3 py-1.5 text-xs font-medium capitalize ${activeTab === t ? "border-b-2 border-accent text-foreground" : "text-muted hover:text-foreground"}`}
           >
             {t === "prospects" ? "Top prospects" : t}
           </Link>
@@ -65,7 +65,7 @@ async function ProspectsTab({ universityId, basePath, current }: { universityId:
       {top.length === 0 && (
         <p className="text-sm text-muted">
           No candidates currently pass every gate with enough evidence for a headline score.{" "}
-          <Link href={buildHref(basePath, current, { queue: "exploration" })} className="text-accent underline">
+          <Link href={buildHref(basePath, current, { queue: "exploration" })} className="text-link underline">
             See {exploration.length} in Exploration
           </Link>
           .
@@ -76,7 +76,7 @@ async function ProspectsTab({ universityId, basePath, current }: { universityId:
           <li key={c.id}>
             <div className="rounded-md border border-border-c p-2.5 hover:bg-surface-2">
               <div className="flex items-start justify-between gap-2">
-                <Link href={buildHref(basePath, current, { project: c.id })} className="text-sm font-medium text-foreground hover:text-accent">
+                <Link href={buildHref(basePath, current, { project: c.id })} className="text-sm font-medium text-foreground hover:text-link">
                   {c.name}
                 </Link>
                 <QueueBadge queue={c.queue} />
@@ -91,7 +91,7 @@ async function ProspectsTab({ universityId, basePath, current }: { universityId:
                         {f.linkedinUrl && (
                           <>
                             {" "}
-                            <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-accent underline">
+                            <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-link underline">
                               LinkedIn
                             </a>
                           </>
@@ -100,7 +100,7 @@ async function ProspectsTab({ universityId, basePath, current }: { universityId:
                     ))}
               </p>
               {c.websiteUrl && (
-                <a href={c.websiteUrl} target="_blank" rel="noopener noreferrer" className="mt-0.5 block truncate text-xs text-accent underline">
+                <a href={c.websiteUrl} target="_blank" rel="noopener noreferrer" className="mt-0.5 block truncate text-xs text-link underline">
                   {c.websiteUrl.replace(/^https?:\/\//, "")}
                 </a>
               )}
@@ -160,7 +160,7 @@ function SourcesTab({ universityId }: { universityId: string }) {
           <p className="text-xs text-muted">
             {s.discoveredLeadCount} lead(s) found · last success {s.lastSuccessAt?.slice(0, 10) ?? "never"}
           </p>
-          <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-xs text-accent underline">
+          <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-xs text-link underline">
             {s.url}
           </a>
         </li>

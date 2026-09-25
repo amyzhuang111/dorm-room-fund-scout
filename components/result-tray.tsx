@@ -53,7 +53,7 @@ export function ResultTray({
                   current.project === c.id ? "border-accent bg-accent/10" : "border-border-c"
                 }`}
               >
-                <a href={buildHref(basePath, current, { project: c.id })} className="block truncate font-medium text-foreground hover:text-accent">
+                <a href={buildHref(basePath, current, { project: c.id })} className="block truncate font-medium text-foreground hover:text-link">
                   {c.name}
                 </a>
                 <p className="line-clamp-2 text-muted">{c.description || c.founders[0] || "No description yet"}</p>
@@ -68,7 +68,7 @@ export function ResultTray({
                   );
                 })()}
                 {"boostNote" in c && (c as CandidateSummary & { boostNote?: string | null }).boostNote && (
-                  <p className="mt-0.5 line-clamp-2 text-accent">{(c as CandidateSummary & { boostNote?: string }).boostNote}</p>
+                  <p className="mt-0.5 line-clamp-2 text-link">{(c as CandidateSummary & { boostNote?: string }).boostNote}</p>
                 )}
                 <FeedbackControls entityType="project" entityId={c.id} name={c.name} url={c.websiteUrl || c.primaryLink} />
                 {c.founderLinks.find((f) => f.linkedinUrl) && (
@@ -76,7 +76,7 @@ export function ResultTray({
                     href={c.founderLinks.find((f) => f.linkedinUrl)!.linkedinUrl!}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-0.5 block truncate text-accent underline"
+                    className="mt-0.5 block truncate text-link underline"
                   >
                     {c.founderLinks.find((f) => f.linkedinUrl)!.name} · LinkedIn
                   </a>

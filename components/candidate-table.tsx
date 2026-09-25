@@ -25,7 +25,7 @@ function FounderLinks({ founders }: { founders: CandidateSummary["founderLinks"]
           {f.linkedinUrl && (
             <>
               {" "}
-              <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-accent underline">
+              <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-link underline">
                 LinkedIn
               </a>
             </>
@@ -90,7 +90,7 @@ export function CandidateTable({
             </Link>
             <p className="mt-1 text-sm text-muted line-clamp-3">{c.description || "What it builds is not on record yet."}</p>
             <CompanyLink c={c} />
-            {c.boostNote && <p className="mt-0.5 text-[11px] text-accent">{c.boostNote}</p>}
+            {c.boostNote && <p className="mt-0.5 text-[11px] text-link">{c.boostNote}</p>}
             {feedbackView === "hidden" ? (
               <FeedbackUndo entityType="project" entityId={c.id} name={c.name} url={c.websiteUrl || c.primaryLink} />
             ) : (
@@ -111,8 +111,8 @@ export function CandidateTable({
       </ul>
       <div className="hidden overflow-x-auto sm:block">
       <table className="w-full text-sm" style={{ fontVariantNumeric: "tabular-nums" }}>
-        <thead className="sticky top-0 z-10 bg-background">
-          <tr className="border-b border-border-c text-left text-xs uppercase tracking-wide text-muted">
+        <thead className="sticky top-0 z-10 bg-surface-2">
+          <tr className="border-b border-border-c text-left text-xs uppercase tracking-wide text-foreground">
             <th className="px-3 py-2 font-medium">Company</th>
             <th className="px-3 py-2 font-medium">Founder / campus</th>
             <th className="px-3 py-2 font-medium">Why investigate</th>
@@ -124,9 +124,9 @@ export function CandidateTable({
         <tbody>
           {candidates.map((c) => {
             return (
-              <tr key={c.id} className={`border-b border-border-c align-top hover:bg-surface-2 ${current.project === c.id ? "bg-accent/5" : ""}`} style={{ height: "68px" }}>
+              <tr key={c.id} className={`border-b border-border-c align-top hover:bg-surface ${current.project === c.id ? "bg-accent-subtle" : ""}`} style={{ height: "68px" }}>
                 <td className="px-3 py-2.5">
-                  <Link href={buildHref(basePath, current, { project: c.id })} className="font-medium text-foreground hover:text-accent">
+                  <Link href={buildHref(basePath, current, { project: c.id })} className="font-medium text-foreground hover:text-link">
                     {c.name}
                   </Link>
                   <p className="mt-0.5 max-w-[280px] text-xs leading-snug text-muted line-clamp-2">{c.description || "What it builds is not on record yet."}</p>
@@ -138,7 +138,7 @@ export function CandidateTable({
                       ))}
                     </p>
                   )}
-                  {c.boostNote && <p className="mt-0.5 text-[11px] text-accent">{c.boostNote}</p>}
+                  {c.boostNote && <p className="mt-0.5 text-[11px] text-link">{c.boostNote}</p>}
                   {feedbackView === "hidden" ? (
                     <FeedbackUndo entityType="project" entityId={c.id} name={c.name} url={c.websiteUrl || c.primaryLink} />
                   ) : (

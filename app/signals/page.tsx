@@ -88,7 +88,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
             <Link
               key={u.id}
               href={buildHref(basePath, sp, { university: sp.university === u.id ? null : u.id })}
-              className={`rounded-full border px-2 py-0.5 ${sp.university === u.id ? "border-accent bg-accent/10 text-accent" : "border-border-c text-muted"}`}
+              className={`rounded-full border px-2 py-0.5 ${sp.university === u.id ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}
             >
               {u.name}
             </Link>
@@ -97,13 +97,13 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
           <Link
             key={t}
             href={buildHref(basePath, sp, { type: sp.type === t ? null : t })}
-            className={`rounded-full border px-2 py-0.5 ${sp.type === t ? "border-accent bg-accent/10 text-accent" : "border-border-c text-muted"}`}
+            className={`rounded-full border px-2 py-0.5 ${sp.type === t ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}
           >
             {TYPE_LABEL[t] ?? t}
           </Link>
         ))}
         {(sp.university || sp.type) && (
-          <Link href={basePath} className="rounded-full border border-border-c px-2 py-0.5 text-accent underline">
+          <Link href={basePath} className="rounded-full border border-border-c px-2 py-0.5 text-link underline">
             Clear
           </Link>
         )}
@@ -120,11 +120,11 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
           const footerDate = s.source_date ? formatMonthYear(s.source_date) : `Discovered ${formatMonthDay(s.created_at)}`;
           return (
             <li key={s.id} className="rounded-md border border-border-c bg-surface p-3">
-              <Link href={detailHref} className="text-sm font-medium text-foreground hover:text-accent">
+              <Link href={detailHref} className="text-sm font-medium text-foreground hover:text-link">
                 {s.founder_name ?? s.project_name}
                 {s.university_name ? ` · ${s.university_name}` : ""}
               </Link>
-              <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-accent">{TYPE_LABEL[s.signal_type] ?? s.signal_type}</p>
+              <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-link">{TYPE_LABEL[s.signal_type] ?? s.signal_type}</p>
               <p className="mt-1 text-sm text-foreground">{s.current_observation}</p>
               {s.significance_note && <p className="mt-1 text-sm text-muted">Why it matters: {s.significance_note}</p>}
               <p className="mt-1.5 text-xs text-muted">

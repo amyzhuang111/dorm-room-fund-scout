@@ -104,7 +104,7 @@ export default async function SourcesPage({ searchParams }: { searchParams: Prom
           <Link
             key={v}
             href={buildHref("/sources", sp, { view: v })}
-            className={`rounded-t-md px-3 py-1.5 text-xs font-medium capitalize ${view === v ? "border-b-2 border-accent text-accent" : "text-muted hover:text-foreground"}`}
+            className={`rounded-t-md px-3 py-1.5 text-xs font-medium capitalize ${view === v ? "border-b-2 border-accent text-foreground" : "text-muted hover:text-foreground"}`}
           >
             {v === "registry" ? "Registry" : "Campus Playbooks"}
           </Link>
@@ -246,10 +246,10 @@ function RegistryView({
       <RegistryTable cards={cards} sp={sp} typedCountsById={typedCountsById} />
       <div className="flex flex-wrap items-center gap-2 text-xs">
         <span className="text-muted">Sort by:</span>
-        <Link href={buildHref("/sources", sp, { sortBy: "founder" })} className={sortBy === "founder" ? "font-semibold text-accent" : "text-muted underline"}>
+        <Link href={buildHref("/sources", sp, { sortBy: "founder" })} className={sortBy === "founder" ? "font-semibold text-link" : "text-muted underline"}>
           Founder tier
         </Link>
-        <Link href={buildHref("/sources", sp, { sortBy: "startup" })} className={sortBy === "startup" ? "font-semibold text-accent" : "text-muted underline"}>
+        <Link href={buildHref("/sources", sp, { sortBy: "startup" })} className={sortBy === "startup" ? "font-semibold text-link" : "text-muted underline"}>
           Startup tier
         </Link>
         <span className="mx-1 text-border-c">|</span>
@@ -259,17 +259,17 @@ function RegistryView({
       </div>
       <div className="mt-2 flex flex-wrap gap-2 text-xs">
         {campuses.map((c) => (
-          <Link key={c} href={buildHref("/sources", sp, { campus: sp.campus === c ? null : c })} className={`rounded-full border px-2 py-0.5 ${sp.campus === c ? "border-accent bg-accent/10 text-accent" : "border-border-c text-muted"}`}>
+          <Link key={c} href={buildHref("/sources", sp, { campus: sp.campus === c ? null : c })} className={`rounded-full border px-2 py-0.5 ${sp.campus === c ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}>
             {CAMPUS_LABEL[c] ?? c}
           </Link>
         ))}
         {(["S", "A", "B", "C", "D"] as Tier[]).map((t) => (
-          <Link key={t} href={buildHref("/sources", sp, { tier: sp.tier === t ? null : t })} className={`rounded-full border px-2 py-0.5 ${sp.tier === t ? "border-accent bg-accent/10 text-accent" : "border-border-c text-muted"}`}>
+          <Link key={t} href={buildHref("/sources", sp, { tier: sp.tier === t ? null : t })} className={`rounded-full border px-2 py-0.5 ${sp.tier === t ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}>
             Tier {t}
           </Link>
         ))}
         {types.map((t) => (
-          <Link key={t} href={buildHref("/sources", sp, { type: sp.type === t ? null : t })} className={`rounded-full border px-2 py-0.5 ${sp.type === t ? "border-accent bg-accent/10 text-accent" : "border-border-c text-muted"}`}>
+          <Link key={t} href={buildHref("/sources", sp, { type: sp.type === t ? null : t })} className={`rounded-full border px-2 py-0.5 ${sp.type === t ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}>
             {t.replace(/_/g, " ")}
           </Link>
         ))}

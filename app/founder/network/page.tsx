@@ -16,7 +16,7 @@ function NodeDetail({ node }: { node: NonNullable<ReturnType<typeof getNetworkNo
         </p>
       </div>
       {node.linkedCompanyId && (
-        <Link href={`/startup/discover?project=${node.linkedCompanyId}`} className="inline-block text-xs font-medium text-accent hover:underline">
+        <Link href={`/startup/discover?project=${node.linkedCompanyId}`} className="inline-block text-xs font-medium text-link hover:underline">
           Open in Startup Scout →
         </Link>
       )}

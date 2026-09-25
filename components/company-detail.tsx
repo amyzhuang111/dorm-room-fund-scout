@@ -30,7 +30,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
                   {f.linkedinUrl && (
                     <>
                       {" "}
-                      <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-accent underline">
+                      <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-link underline">
                         LinkedIn
                       </a>
                     </>
@@ -68,7 +68,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
       </div>
 
       {/* Above the fold: why look / founder edge / open question */}
-      <section className="space-y-3 rounded-md border border-border-c bg-surface-2 p-3">
+      <section className="space-y-3 rounded-md border border-border-c bg-surface p-3">
         <div>
           <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Why look</h3>
           <p className="mt-0.5 text-sm text-foreground">{project.latestSignalNote ?? "No supporting evidence recorded yet."}</p>
@@ -134,7 +134,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
               <span>{f.name}</span>
               <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
               {f.linkedinUrl ? (
-                <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="ml-2 text-xs text-accent underline">
+                <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="ml-2 text-xs text-link underline">
                   LinkedIn
                 </a>
               ) : (
@@ -149,7 +149,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
       <section id="evidence">
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Evidence ({project.claims.length})</h3>
         {strongestEvidence && (
-          <div className="mt-1 rounded-md border border-border-c bg-surface-2 p-2.5 text-sm">
+          <div className="mt-1 rounded-md border border-border-c bg-surface p-2.5 text-sm">
             <p className="text-foreground">{strongestEvidence.excerpt}</p>
             <p className="mt-1 text-xs text-muted">
               {strongestEvidence.label.replace("_", " ")} · retrieved {strongestEvidence.retrievedAt.slice(0, 10)}

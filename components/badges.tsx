@@ -7,7 +7,7 @@ import { primaryBlocker, type GateOutcome } from "@/lib/screening/gates";
 // pairs (e.g. their green-dark/green-light) rather than an opacity trick.
 const QUEUE_CLASS: Record<Queue, string> = {
   top_prospects: "bg-ok-bg text-ok border-ok/20",
-  exploration: "bg-accent/10 text-accent border-accent/25",
+  exploration: "bg-accent-2/20 text-link border-accent-2/40",
   watch: "bg-warn-bg text-warn border-warn/20",
   reference_outside_brief: "bg-surface-2 text-muted border-border-c",
 };
@@ -78,10 +78,10 @@ export function CommunityConfidenceBadge({ confidence }: { confidence: string })
 }
 
 const ENROLLMENT_CLASS: Record<string, string> = {
-  current_student: "bg-accent text-accent-foreground border-accent",
-  recent_grad: "bg-accent-2/20 text-foreground border-accent-2/40",
-  older_alumni: "bg-surface-2 text-muted border-border-c",
-  unknown: "bg-surface-2 text-muted border-border-c",
+  current_student: "bg-ok-bg text-ok border-ok/30",
+  recent_grad: "bg-warn-bg text-warn border-warn/30",
+  older_alumni: "bg-danger-bg text-danger border-danger/20",
+  unknown: "bg-surface text-muted border-border-c",
 };
 
 export function EnrollmentBadge({

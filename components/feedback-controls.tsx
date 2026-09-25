@@ -36,17 +36,17 @@ export function FeedbackControls({
           className={`rounded-full border px-2 py-0.5 text-[11px] ${
             current?.action === action
               ? action === "hide"
-                ? "border-danger/40 bg-danger-bg text-danger"
+                ? "border-danger/30 bg-danger-bg text-danger"
                 : action === "pass"
-                  ? "border-border-c bg-surface-2 text-foreground"
-                  : "border-accent/50 bg-accent-subtle text-accent"
-              : "border-border-c text-muted hover:border-foreground/20 hover:bg-surface-2 hover:text-foreground"
+                  ? "border-warn/30 bg-warn-bg text-warn"
+                  : "border-ok/30 bg-ok-bg text-ok"
+              : "border-border-c text-muted hover:border-foreground/20 hover:bg-surface hover:text-foreground"
           }`}
         >
           {action === "like" ? "Like" : action === "pass" ? "Pass" : "Never show again"}
         </button>
       ))}
-      <button type="button" onClick={() => setNoteOpen((v) => !v)} className="text-[11px] text-accent underline">
+      <button type="button" onClick={() => setNoteOpen((v) => !v)} className="text-[11px] text-link underline">
         Note
       </button>
       {current?.note && <p className="w-full text-[11px] text-muted">{current.note}</p>}
@@ -80,7 +80,7 @@ export function FeedbackUndo({
   return (
     <button
       type="button"
-      className="text-[11px] text-accent underline"
+      className="text-[11px] text-link underline"
       onClick={() => undo({ entityType, entityId, name, domain: domainKey(url) })}
     >
       Undo

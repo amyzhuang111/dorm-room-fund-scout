@@ -1,46 +1,36 @@
 @import "tailwindcss";
 
-/* Live dormroomfund.com (Webflow, sampled 2026-09-25) is a dark ink page,
-   not a light marketing site. Tokens taken from
-   dormroomfund.webflow.shared.css :root:
-     --neutral--ink: #1c1525
-     --neutral--lavender: #d9d5df
-     --neutral--lavender-muted: #b8b0c4
-     --neutral--lavender-lightest: #f1eff4
-     --neutral--elevated: #3e344c
-     --brand--orange: #ff6a33
-     --brand--purple: #9378ee
-     --brand--purple-light: #a892f2
-     --brand--pruple-dark: #b9a8f5
-     --brand--blue-darker: #080331
-     --others--green-light/dark: #cef5ca / #114e0b
-     --others--yellow-light/dark: #fcf8d8 / #5e5515
-     --others--red-light/dark: #f8e4e4 / #3b0b0b
-     --font-family--body/heading: Satoshi, Arial, sans-serif
-     body 1rem / weight 500 / line-height 1.5 / letter-spacing 0
-     h1 clamp(3.25rem, 5.8vw, 5.125rem) (computed 82px at 1440),
-       weight 500, line-height 1, letter-spacing 0
-     h2 letter-spacing --letter-spacing--tightest (-0.04em)
-     button primary background orange, text ink
-   The globe and network stay dark inside that same ink family. A light
-   canvas would fight the orange points; DRF's own page background is ink. */
+/* Light reorder of the dormroomfund.com palette (sampled 2026-09-25).
+   Same hues, white page. Satoshi and the DRF type scale stay.
+     page #ffffff
+     secondary surfaces #f1eff4 (--neutral--lavender-lightest) and #d9d5df
+     body/headings #1c1525 (--neutral--ink)
+     muted #5c516e — grey-purple between ink and #b8b0c4; 7.35:1 on white,
+       6.44:1 on #f1eff4, 5.09:1 on #d9d5df (WCAG AA is 4.5:1).
+       #b8b0c4 itself is 2.09:1 on white, so it is a border only.
+     orange #ff6a33 on buttons/pills, ink text on it (6.22:1)
+     purple highlight #9378ee / #a892f2
+     links #6f5ab2 — #9378ee mixed toward ink until 5.55:1 on white
+       (#9378ee alone is 3.41:1)
+     status pairs: #114e0b/#cef5ca, #5e5515/#fcf8d8, #3b0b0b/#f8e4e4 */
 :root {
-  --background: #1c1525;
-  --surface: #3e344c;
-  --surface-2: #2a2436;
-  --border-c: #5c516e;
-  --foreground: #d9d5df;
-  --muted: #b8b0c4;
+  --background: #ffffff;
+  --surface: #f1eff4;
+  --surface-2: #d9d5df;
+  --border-c: #b8b0c4;
+  --foreground: #1c1525;
+  --muted: #5c516e;
   --accent: #ff6a33;
   --accent-foreground: #1c1525;
   --accent-2: #9378ee;
-  --accent-subtle: rgba(255, 106, 51, 0.18);
-  --ok: #cef5ca;
-  --ok-bg: #114e0b;
-  --warn: #fcf8d8;
-  --warn-bg: #5e5515;
-  --danger: #f8e4e4;
-  --danger-bg: #3b0b0b;
+  --accent-subtle: rgba(255, 106, 51, 0.14);
+  --link: #6f5ab2;
+  --ok: #114e0b;
+  --ok-bg: #cef5ca;
+  --warn: #5e5515;
+  --warn-bg: #fcf8d8;
+  --danger: #3b0b0b;
+  --danger-bg: #f8e4e4;
 }
 
 @theme inline {
@@ -54,6 +44,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-2: var(--accent-2);
   --color-accent-subtle: var(--accent-subtle);
+  --color-link: var(--link);
   --color-ok: var(--ok);
   --color-ok-bg: var(--ok-bg);
   --color-warn: var(--warn);
@@ -88,7 +79,7 @@ h2, h3 {
 
 ::selection {
   background: #9378ee;
-  color: #f1eff4;
+  color: #1c1525;
 }
 
 /* Dense-dashboard utilities, pattern borrowed from dashboard.vclense.ch/ycglobe
@@ -118,22 +109,27 @@ h2, h3 {
   max-width: 240px;
   align-items: center;
   border-radius: 999px;
-  border: 1px solid var(--border-c);
-  background: var(--surface-2);
+  border: 1px solid #e4d98a;
+  background: var(--warn-bg);
   padding: 1px 8px;
   font-size: 11px;
   line-height: 1.4;
-  color: var(--foreground);
+  color: var(--warn);
   text-decoration: none;
+}
+
+.link-chip {
+  border-color: var(--border-c);
+  background: var(--surface);
+  color: var(--link);
 }
 
 .link-chip:hover {
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--foreground);
 }
 
 .sector-chip {
-  color: var(--muted);
   max-width: none;
 }
 
@@ -142,9 +138,10 @@ h2, h3 {
   aspect-ratio: 1;
   border-radius: 999px;
   background:
-    radial-gradient(circle at 38% 32%, rgba(147, 120, 238, 0.35), transparent 42%),
-    radial-gradient(circle at 50% 50%, #3e344c, #080331 72%);
-  box-shadow: 0 0 80px 12px rgba(147, 120, 238, 0.28);
+    radial-gradient(circle at 38% 32%, rgba(255, 106, 51, 0.28), transparent 42%),
+    radial-gradient(circle at 50% 50%, #ffffff, #f1eff4 72%);
+  box-shadow: 0 0 48px 8px rgba(147, 120, 238, 0.25);
+  border: 1px solid #d9d5df;
   animation: globe-pulse 1.8s ease-in-out infinite;
 }
 
@@ -172,12 +169,13 @@ h2, h3 {
 }
 
 .glass-panel {
-  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  background: color-mix(in srgb, #ffffff 92%, #f1eff4);
   backdrop-filter: blur(16px) saturate(1.2);
   -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+  border: 1px solid #d9d5df;
   border-radius: 14px;
-  box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 16px 40px -22px rgba(28, 21, 37, 0.28);
+  color: #1c1525;
 }
 
 a, button {

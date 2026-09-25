@@ -53,7 +53,7 @@ export function ExploreToolbar({
         <div className="flex shrink-0 items-center gap-1 rounded-md border border-border-c p-0.5">
           <Link
             href={buildHref("/startup/discover", current, {})}
-            className={`rounded-md px-2.5 py-1 text-xs font-medium ${basePath.startsWith("/startup") ? "bg-accent/10 text-accent" : "text-muted hover:bg-surface-2"}`}
+            className={`rounded-md px-2.5 py-1 text-xs font-medium ${basePath.startsWith("/startup") ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
           >
             Companies
           </Link>
@@ -91,10 +91,10 @@ export function ExploreToolbar({
         {showViewSwitch && (
           <span className="flex items-center gap-1 text-[11px] text-muted">
             Sort
-            <Link href={buildHref(basePath, current, { sort: null })} className={!current.sort || current.sort === "name" ? "text-accent" : "hover:text-foreground"}>
+            <Link href={buildHref(basePath, current, { sort: null })} className={!current.sort || current.sort === "name" ? "text-link" : "hover:text-foreground"}>
               name
             </Link>
-            <Link href={buildHref(basePath, current, { sort: "priority" })} className={current.sort === "priority" ? "text-accent" : "hover:text-foreground"}>
+            <Link href={buildHref(basePath, current, { sort: "priority" })} className={current.sort === "priority" ? "text-link" : "hover:text-foreground"}>
               research priority
             </Link>
           </span>
@@ -109,7 +109,7 @@ export function ExploreToolbar({
           </Link>
         ))}
         {activeFilters.length > 0 && (
-          <Link href={basePath} className="text-[11px] text-accent underline">
+          <Link href={basePath} className="text-[11px] text-link underline">
             Clear filters
           </Link>
         )}

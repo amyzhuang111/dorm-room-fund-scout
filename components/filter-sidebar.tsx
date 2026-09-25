@@ -36,7 +36,7 @@ function UniversityRow({
       href={buildHref(basePath, current, switchingCampus ? { university: u.id, project: null } : { university: u.id })}
       title={u.name}
       aria-label={`${u.name} — ${coverage.label}`}
-      className={`flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm ${current.university === u.id ? "bg-accent-subtle font-medium text-accent" : "text-foreground hover:bg-surface-2"}`}
+      className={`flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm ${current.university === u.id ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
     >
       <span className="truncate">{label}</span>
       <span className="flex shrink-0 items-center gap-1.5">
@@ -81,11 +81,11 @@ export function FilterSidebar({
 
   return (
     <CollapsibleSidebar>
-    <aside className="w-full shrink-0 border-b border-border-c p-3 sm:w-[232px] sm:border-b-0 sm:border-r sm:p-4">
+    <aside className="w-full shrink-0 border-b border-border-c bg-surface p-3 sm:w-[232px] sm:border-b-0 sm:border-r sm:p-4">
       <div className="mb-3 flex items-baseline justify-between">
         <span className="ui-label">Universities</span>
         {current.university && (
-          <Link href={buildHref(basePath, current, { university: null })} className="text-[11px] text-accent underline">
+          <Link href={buildHref(basePath, current, { university: null })} className="text-[11px] text-link underline">
             reset
           </Link>
         )}
@@ -97,7 +97,7 @@ export function FilterSidebar({
         <li>
           <Link
             href={buildHref(basePath, current, { university: null })}
-            className={`block rounded-md px-2 py-1.5 text-sm ${!current.university ? "bg-accent/10 font-medium text-accent" : "text-foreground hover:bg-surface-2"}`}
+            className={`block rounded-md px-2 py-1.5 text-sm ${!current.university ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
           >
             All campuses
           </Link>
@@ -128,7 +128,7 @@ export function FilterSidebar({
           <div className="mb-1.5 flex items-baseline justify-between">
             <span className="ui-label">Saved views</span>
             {current.queue && (
-              <Link href={buildHref(basePath, current, { queue: null })} className="text-[11px] text-accent underline">
+              <Link href={buildHref(basePath, current, { queue: null })} className="text-[11px] text-link underline">
                 reset
               </Link>
             )}
@@ -138,7 +138,7 @@ export function FilterSidebar({
               <li key={label}>
                 <Link
                   href={buildHref(basePath, current, { queue: current.queue === val ? null : val })}
-                  className={`flex items-center gap-2 rounded-md px-2 py-1 text-sm ${current.queue === val ? "bg-accent/10 font-medium text-accent" : "text-foreground hover:bg-surface-2"}`}
+                  className={`flex items-center gap-2 rounded-md px-2 py-1 text-sm ${current.queue === val ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
                 >
                   <span className="status-dot" style={{ background: dot }} />
                   {label}
@@ -162,7 +162,7 @@ export function FilterSidebar({
             <li key={val}>
               <Link
                 href={buildHref(basePath, current, { feedback: current.feedback === val ? null : val })}
-                className={`block rounded-md px-2 py-1 text-sm ${current.feedback === val ? "bg-accent/10 font-medium text-accent" : "text-foreground hover:bg-surface-2"}`}
+                className={`block rounded-md px-2 py-1 text-sm ${current.feedback === val ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
               >
                 {label}
               </Link>
@@ -176,7 +176,7 @@ export function FilterSidebar({
           <div className="mb-1.5 flex items-baseline justify-between">
             <span className="ui-label">Sectors</span>
             {current.sector && (
-              <Link href={buildHref(basePath, current, { sector: null })} className="text-[11px] text-accent underline">
+              <Link href={buildHref(basePath, current, { sector: null })} className="text-[11px] text-link underline">
                 reset
               </Link>
             )}

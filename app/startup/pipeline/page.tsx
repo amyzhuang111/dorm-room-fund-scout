@@ -62,7 +62,7 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
               key={v}
               href={`/startup/pipeline?view=${v}`}
               className={`rounded px-2.5 py-1 text-xs font-medium capitalize ${
-                view === v ? "bg-accent-subtle text-accent" : "text-muted hover:text-foreground"
+                view === v ? "bg-accent text-accent-foreground" : "text-muted hover:text-foreground"
               }`}
             >
               {v}
@@ -156,7 +156,7 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
                     <form action={updatePipelineEntry}>
                       <input type="hidden" name="projectId" value={p.id} />
                       <input type="hidden" name="status" value="New" />
-                      <button type="submit" className="text-xs font-medium text-accent hover:underline">
+                      <button type="submit" className="text-xs font-medium text-link hover:underline">
                         Add to pipeline
                       </button>
                     </form>

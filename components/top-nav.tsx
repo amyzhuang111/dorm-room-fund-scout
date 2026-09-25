@@ -53,13 +53,13 @@ export function TopNav() {
             <div className="absolute left-0 z-10 mt-1 w-44 rounded-md border border-border-c bg-surface p-1 shadow-lg">
               <Link
                 href="/founder/discover"
-                className={`block rounded-md px-2.5 py-1.5 text-sm ${product === "founder" ? "font-medium text-accent" : "text-foreground hover:bg-surface-2"}`}
+                className={`block rounded-md px-2.5 py-1.5 text-sm ${product === "founder" ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
               >
                 Founder Scout
               </Link>
               <Link
                 href="/startup/discover"
-                className={`block rounded-md px-2.5 py-1.5 text-sm ${product === "startup" ? "font-medium text-accent" : "text-foreground hover:bg-surface-2"}`}
+                className={`block rounded-md px-2.5 py-1.5 text-sm ${product === "startup" ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
               >
                 Startup Scout
               </Link>

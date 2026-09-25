@@ -22,7 +22,7 @@ export function FounderCard({ founder, feedbackView }: { founder: FounderRow & {
               href={founder.linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-medium text-accent hover:underline"
+              className="text-xs font-medium text-link hover:underline"
               title="LinkedIn URL found on a source page"
             >
               LinkedIn ↗
@@ -40,7 +40,7 @@ export function FounderCard({ founder, feedbackView }: { founder: FounderRow & {
             </a>
           )}
           {founder.websiteUrl && (
-            <a href={founder.websiteUrl} target="_blank" rel="noopener noreferrer" className="max-w-[140px] truncate text-xs text-accent hover:underline">
+            <a href={founder.websiteUrl} target="_blank" rel="noopener noreferrer" className="max-w-[140px] truncate text-xs text-link hover:underline">
               {founder.websiteUrl.replace(/^https?:\/\//, "")}
             </a>
           )}
@@ -60,7 +60,7 @@ export function FounderCard({ founder, feedbackView }: { founder: FounderRow & {
           {founderSignal != null ? `Founder Signal ${founderSignal} · ${Math.round(coverage * 100)}% coverage` : "unassessed"}
         </span>
         {founder.linkedCompany ? (
-          <Link href={`/startup/discover?project=${founder.linkedCompany.id}`} className="text-xs font-medium text-accent hover:underline">
+          <Link href={`/startup/discover?project=${founder.linkedCompany.id}`} className="text-xs font-medium text-link hover:underline">
             {founder.linkedCompany.name} →
           </Link>
         ) : founder.possibleCompany ? (
@@ -72,7 +72,7 @@ export function FounderCard({ founder, feedbackView }: { founder: FounderRow & {
         )}
       </div>
       {founder.promotionReasonLabel && <p className="mt-1 text-[11px] text-muted">{founder.promotionReasonLabel}</p>}
-      {founder.boostNote && <p className="mt-1 text-[11px] text-accent">{founder.boostNote}</p>}
+      {founder.boostNote && <p className="mt-1 text-[11px] text-link">{founder.boostNote}</p>}
       {feedbackView === "hidden" ? (
         <FeedbackUndo entityType="person" entityId={founder.id} name={founder.name} />
       ) : (

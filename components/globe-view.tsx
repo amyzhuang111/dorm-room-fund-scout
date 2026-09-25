@@ -22,17 +22,17 @@ const STYLE_URL = "https://tiles.openfreemap.org/styles/positron";
 // another pale tint layered on top, or it reads as a blank white circle
 // (exactly what happened here the first time).
 const MAP_THEME = {
-  land: "#1c1525",
-  landAlt: "#3e344c",
-  ocean: "#080331",
+  land: "#f1eff4",
+  landAlt: "#d9d5df",
+  ocean: "#ffffff",
   boundary: "#5c516e",
-  labelText: "#d9d5df",
-  labelHalo: "#080331",
-  sky: "#080331",
-  horizon: "#9378ee",
-  fog: "#1c1525",
+  labelText: "#1c1525",
+  labelHalo: "#ffffff",
+  sky: "#f7f6f8",
+  horizon: "#a892f2",
+  fog: "#ffffff",
   dot: "#ff6a33",
-  arc: "#a892f2",
+  arc: "#6f5ab2",
 };
 
 interface MapEvent {
@@ -285,7 +285,7 @@ export function GlobeView({
                 "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 6, 20, 9, 200, 14],
                 "circle-color": MAP_THEME.dot,
                 "circle-stroke-width": 1.5,
-                "circle-stroke-color": "#1a0d06",
+                "circle-stroke-color": "#ffffff",
                 "circle-opacity": 0.95,
               },
             });
@@ -302,7 +302,7 @@ export function GlobeView({
                 "circle-color": MAP_THEME.dot,
                 "circle-opacity": 0.85,
                 "circle-stroke-width": 1.5,
-                "circle-stroke-color": "#1a0d06",
+                "circle-stroke-color": "#ffffff",
               },
             });
           }
@@ -317,7 +317,7 @@ export function GlobeView({
                 "text-field": ["get", "point_count_abbreviated"],
                 "text-size": 11,
               },
-              paint: { "text-color": "#1a0d06" },
+              paint: { "text-color": "#1c1525" },
             });
           }
 
@@ -329,7 +329,7 @@ export function GlobeView({
               filter: ["all", unclustered, ["==", ["get", "id"], current.university ?? "__none__"]],
               paint: {
                 "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 10, 20, 14, 200, 18],
-                "circle-color": "#ffe1cf",
+                "circle-color": "#ffffff",
                 "circle-stroke-width": 2,
                 "circle-stroke-color": MAP_THEME.dot,
               },
@@ -517,14 +517,14 @@ export function GlobeView({
             <button
               type="button"
               onClick={() => setGeoMode("campus")}
-              className={`rounded-md px-2.5 py-1 text-[11px] font-medium ${geoMode === "campus" ? "bg-accent/10 text-accent" : "text-muted"}`}
+              className={`rounded-md px-2.5 py-1 text-[11px] font-medium ${geoMode === "campus" ? "bg-accent text-accent-foreground" : "text-muted"}`}
             >
               Campuses
             </button>
             <button
               type="button"
               onClick={() => setGeoMode("hq")}
-              className={`rounded-md px-2.5 py-1 text-[11px] font-medium ${geoMode === "hq" ? "bg-accent/10 text-accent" : "text-muted"}`}
+              className={`rounded-md px-2.5 py-1 text-[11px] font-medium ${geoMode === "hq" ? "bg-accent text-accent-foreground" : "text-muted"}`}
             >
               Headquarters
             </button>
@@ -626,7 +626,7 @@ export function GlobeView({
                 {previewCandidates.length === 0 && <li className="text-xs text-muted">No candidates found here yet.</li>}
               </ul>
               {previewCandidates.length > 5 && (
-                <a href={buildHref(basePath, current, { view: "table" })} className="mt-1.5 block text-[11px] text-accent underline">
+                <a href={buildHref(basePath, current, { view: "table" })} className="mt-1.5 block text-[11px] text-link underline">
                   See all {previewCandidates.length} in Table
                 </a>
               )}
@@ -736,7 +736,7 @@ function UniversityListFallback({
         <li key={u.id}>
           <a
             href={buildHref(basePath, current, current.university !== u.id ? { university: u.id, project: null } : { university: u.id })}
-            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs ${current.university === u.id ? "border-accent bg-accent/10 text-accent" : "border-border-c hover:bg-surface-2"}`}
+            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs ${current.university === u.id ? "border-accent bg-accent text-accent-foreground" : "border-border-c hover:bg-surface-2"}`}
           >
             {u.name}
             <span className="text-muted">({u.candidateProjectCount})</span>
