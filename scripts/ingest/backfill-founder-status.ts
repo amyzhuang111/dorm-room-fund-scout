@@ -97,6 +97,42 @@ function checkParser() {
     "unknown",
     null
   );
+  assertCase(
+    "Columbia year-first token",
+    [{ excerpt: "Open Track 1st: Robert Schulte '27CBS — Founder of PollenPal", ...src }],
+    "current_student",
+    "'27CBS"
+  );
+  assertCase(
+    "Columbia MBAxMS token",
+    [{ excerpt: "Technology Track 2nd: Yuta Morimoto MBAxMS '27 — Founder of MariStarboard", ...src }],
+    "current_student",
+    "MBAxMS '27"
+  );
+  assertCase(
+    "curly apostrophe is the same token",
+    [{ excerpt: "Listed as Corina Chen, ENG’28, W’28.", ...src }],
+    "current_student",
+    "ENG'28"
+  );
+  assertCase(
+    "hackathon edition year is not a class year",
+    [{ excerpt: "HackPrinceton Spring '26 Winner. No class year is printed.", ...src }],
+    "unknown",
+    null
+  );
+  assertCase(
+    "SP2 school code",
+    [{ excerpt: "Musmo HealthTech: Mohammed Soumaoro, SP2'25", ...src }],
+    "recent_grad",
+    "SP2'25"
+  );
+  assertCase(
+    "mixed-case GEng token",
+    [{ excerpt: "The team included Dhairya Ameria (GEng’27).", ...src }],
+    "current_student",
+    "GEng'27"
+  );
   console.log(
     `Parser checks passed. Window is ${RECENT_GRAD_WINDOW_YEARS} years through ${ENROLLMENT_AS_OF_YEAR} (${ENROLLMENT_AS_OF_YEAR - RECENT_GRAD_WINDOW_YEARS}–${ENROLLMENT_AS_OF_YEAR}).`
   );
