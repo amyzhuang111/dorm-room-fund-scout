@@ -35,7 +35,7 @@ export default async function FounderShortlistPage({ searchParams }: { searchPar
           </h2>
           <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {withEvidence.map((f) => (
-              <FounderCard key={f.id} founder={f} />
+              <FounderCard key={f.id} founder={f} open={sp.founder === f.id} basePath="/founder/shortlist" current={sp} />
             ))}
             {withEvidence.length === 0 && <p className="text-sm text-muted">None yet.</p>}
           </div>
@@ -47,7 +47,7 @@ export default async function FounderShortlistPage({ searchParams }: { searchPar
           </h2>
           <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {withoutEvidence.map((f) => (
-              <FounderCard key={f.id} founder={f} />
+              <FounderCard key={f.id} founder={f} open={sp.founder === f.id} basePath="/founder/shortlist" current={sp} />
             ))}
             {withoutEvidence.length === 0 && <p className="text-sm text-muted">None.</p>}
           </div>

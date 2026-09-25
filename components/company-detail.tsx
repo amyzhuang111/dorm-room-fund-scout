@@ -5,6 +5,7 @@ import { PipelineForm } from "./pipeline-form";
 import { NotesSection } from "./notes-section";
 import { AssessmentForm } from "./assessment-form";
 import { FeedbackControls } from "./feedback-controls";
+import { PersonLinkButton } from "./person-link";
 
 export function CompanyDetail({ project }: { project: ProjectDetail }) {
   const concernReasons = project.gateOutcomes.filter((g) => g.result !== "pass");
@@ -20,40 +21,27 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
           <GateBadge result={project.overallGate} gateOutcomes={project.gateOutcomes} />
         </div>
         <p className="mt-1 text-sm text-foreground">{project.description || "Product description not yet researched."}</p>
-        <p className="mt-1 text-xs text-muted">
-          {project.founderLinks.length === 0
-            ? "Founders not yet identified"
-            : project.founderLinks.map((f, i) => (
-                <span key={f.name}>
-                  {i > 0 ? ", " : ""}
-                  {f.name}
-                  {f.linkedinUrl && (
-                    <>
-                      {" "}
-                      <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-link underline">
-                        LinkedIn
-                      </a>
-                    </>
-                  )}
-                  {!f.linkedinUrl && f.linkedinCandidates[0] && (
-                    <>
-                      {" "}
-                      <a href={f.linkedinCandidates[0].url} target="_blank" rel="noopener noreferrer" className="text-warn underline" title={f.linkedinCandidates[0].reason}>
-                        LinkedIn unverified
-                      </a>
-                    </>
-                  )}
-                </span>
-              ))}
-          {" · "}
-          {project.universities.join(", ") || "University unknown"}
-        </p>
+        <p className="mt-1 text-xs text-muted">{project.universities.join(", ") || "University unknown"}</p>
+        <ul className="mt-2 space-y-1.5">
+          {project.founderLinks.length === 0 && <li className="text-xs text-muted">Founders not yet identified</li>}
+          {project.founderLinks.map((f) => (
+            <li key={f.personId} className="flex flex-wrap items-center gap-1.5 text-sm text-foreground">
+              <span className="font-medium">{f.name}</span>
+              <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+              <PersonLinkButton link={f.link} name={f.name} />
+              <span className="text-xs text-muted">
+                {[f.school, f.program].filter(Boolean).join(" · ") || "School not on record"}
+              </span>
+            </li>
+          ))}
+        </ul>
         {(() => {
           const link = publicLink(project.websiteUrl, project.primaryLink, project.primaryLinkKind);
-          if (!link) return <p className="mt-1 text-xs text-muted">No public page on record</p>;
+          if (!link) return <p className="mt-2 text-xs text-muted">No public page on record</p>;
+          const label = link.kind === "official" ? "Visit website" : `Open ${link.label}`;
           return (
-            <a href={link.url} target="_blank" rel="noopener noreferrer" className="link-chip mt-2 max-w-full truncate">
-              {link.kind === "official" ? link.url.replace(/^https?:\/\//, "") : `${link.label} · ${link.url.replace(/^https?:\/\//, "")}`}
+            <a href={link.url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground">
+              {label}
             </a>
           );
         })()}
@@ -133,15 +121,24 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
             <li key={f.personId} className="flex flex-wrap items-center gap-2">
               <span>{f.name}</span>
               <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
-              {f.linkedinUrl ? (
-                <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="ml-2 text-xs text-link underline">
-                  LinkedIn
-                </a>
-              ) : (
-                <span className="ml-2 text-xs text-muted">No LinkedIn on record</span>
-              )}
+              <PersonLinkButton link={f.link} name={f.name} />
+              <span className="text-xs text-muted">{[f.school, f.program].filter(Boolean).join(" · ")}</span>
             </li>
           ))}
+        </ul>
+      </section>
+
+      <section>
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Sources</h3>
+        <ul className="mt-1 space-y-1 text-sm">
+          {Array.from(new Map(project.claims.filter((c) => c.sourceUrl).map((c) => [c.sourceUrl, c])).values()).map((c) => (
+            <li key={c.sourceUrl}>
+              <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-link underline">
+                {c.sourceName || c.label.replaceAll("_", " ")}
+              </a>
+            </li>
+          ))}
+          {project.claims.length === 0 && <li className="text-muted">No source pages on record yet.</li>}
         </ul>
       </section>
 

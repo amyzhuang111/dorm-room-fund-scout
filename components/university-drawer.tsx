@@ -4,7 +4,9 @@ import { listBuildersForUniversity, listCandidateProjects, listSignalsForUnivers
 import { readReviewState } from "@/lib/domain/review-server";
 import { reviewCompanies } from "@/lib/domain/review-view";
 import { companyMatchesEnrollment, selectedEnrollment } from "@/lib/domain/founder-status";
-import { QueueBadge } from "./badges";
+import { EnrollmentBadge, QueueBadge } from "./badges";
+import { PersonLinkButton } from "./person-link";
+import { publicLink } from "@/lib/domain/company-link";
 
 const TABS = ["prospects", "builders", "signals", "sources"] as const;
 type Tab = (typeof TABS)[number];
@@ -81,29 +83,25 @@ async function ProspectsTab({ universityId, basePath, current }: { universityId:
                 </Link>
                 <QueueBadge queue={c.queue} />
               </div>
-              <p className="text-xs text-muted">
-                {c.founderLinks.length === 0
-                  ? "Founders unknown"
-                  : c.founderLinks.map((f, i) => (
-                      <span key={f.name}>
-                        {i > 0 ? ", " : ""}
-                        {f.name}
-                        {f.linkedinUrl && (
-                          <>
-                            {" "}
-                            <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-link underline">
-                              LinkedIn
-                            </a>
-                          </>
-                        )}
-                      </span>
-                    ))}
-              </p>
-              {c.websiteUrl && (
-                <a href={c.websiteUrl} target="_blank" rel="noopener noreferrer" className="mt-0.5 block truncate text-xs text-link underline">
-                  {c.websiteUrl.replace(/^https?:\/\//, "")}
-                </a>
-              )}
+              <ul className="mt-1 space-y-1">
+                {c.founderLinks.length === 0 && <li className="text-xs text-muted">Founders unknown</li>}
+                {c.founderLinks.slice(0, 3).map((f) => (
+                  <li key={f.personId} className="flex flex-wrap items-center gap-1 text-xs">
+                    <span className="text-foreground">{f.name}</span>
+                    <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+                    <PersonLinkButton link={f.link} name={f.name} />
+                  </li>
+                ))}
+              </ul>
+              {(() => {
+                const link = publicLink(c.websiteUrl, c.primaryLink, c.primaryLinkKind);
+                if (!link) return null;
+                return (
+                  <a href={link.url} target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex rounded-md bg-accent px-2 py-0.5 text-[11px] font-medium text-accent-foreground">
+                    {link.kind === "official" ? "Visit website" : `Open ${link.label}`}
+                  </a>
+                );
+              })()}
             </div>
           </li>
         ))}
@@ -118,7 +116,10 @@ function BuildersTab({ universityId }: { universityId: string }) {
     <ul className="space-y-1.5">
       {builders.map((b) => (
         <li key={b.id} className="rounded-md border border-border-c p-2 text-sm">
-          <span className="font-medium text-foreground">{b.name}</span>
+          <span className="inline-flex flex-wrap items-center gap-1.5">
+            <span className="font-medium text-foreground">{b.name}</span>
+            <PersonLinkButton link={b.link} name={b.name} />
+          </span>
           <span className="ml-2 text-xs text-muted">{b.status.replace("_", " ")}</span>
           {b.projects.length > 0 && <p className="mt-0.5 text-xs text-muted">Built: {b.projects.join(", ")}</p>}
         </li>

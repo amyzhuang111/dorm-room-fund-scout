@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { listCandidateProjects, listUniversities } from "@/lib/domain/queries";
+import { getProjectDetail, listCandidateProjects, listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
 import { reviewCompanies, reviewMode } from "@/lib/domain/review-view";
 import { QUEUE_LABELS, type Queue } from "@/lib/domain/queue";
@@ -55,6 +55,7 @@ export default async function StartupShortlistPage({ searchParams }: { searchPar
     review.likes,
     reviewMode(sp.feedback)
   ).filter((company) => companyMatchesEnrollment(company.founderLinks, focus));
+  const detail = sp.project ? getProjectDetail(sp.project) : null;
 
   return (
     <div className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
@@ -81,7 +82,7 @@ export default async function StartupShortlistPage({ searchParams }: { searchPar
                 {list.length === 0 ? (
                   <EmptyQueue queue={q} needsResearchCount={candidates.filter((c) => c.queue === "exploration").length} />
                 ) : (
-                  <CandidateTable candidates={list} basePath="/startup/shortlist" current={sp} />
+                  <CandidateTable candidates={list} basePath="/startup/shortlist" current={sp} detail={detail} />
                 )}
               </div>
             </section>

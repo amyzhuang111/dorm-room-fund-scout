@@ -62,7 +62,7 @@ export default async function StartupDiscoverPage({
           searchPlaceholder="Search founders, companies, projects…"
         />
 
-        {view === "table" && <CandidateTable candidates={sorted} basePath={basePath} current={sp} feedbackView={sp.feedback} />}
+        {view === "table" && <CandidateTable candidates={sorted} basePath={basePath} current={sp} feedbackView={sp.feedback} detail={selectedProject} />}
         {view === "network" && (
           <NetworkView universityId={sp.university} basePath={basePath} current={sp} universities={universities} feedback={review.records} />
         )}
@@ -78,7 +78,7 @@ export default async function StartupDiscoverPage({
         )}
       </div>
 
-      {(selectedProject || showUniversityDrawer) && (
+      {view !== "table" && (selectedProject || showUniversityDrawer) && (
         <div className="w-full border-t border-border-c sm:w-96 sm:shrink-0 sm:border-l sm:border-t-0 xl:w-[420px]">
           {selectedProject ? (
             <CompanyDetail project={selectedProject} />

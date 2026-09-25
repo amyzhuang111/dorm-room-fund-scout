@@ -3,6 +3,15 @@
 import { useMemo, useState } from "react";
 import { buildHref } from "@/lib/domain/url";
 import type { NetworkEdge, NetworkGraph, NetworkNode } from "@/lib/domain/network";
+import type { PersonLinkTarget } from "@/lib/domain/person-link";
+import { PersonLinkButton } from "./person-link";
+
+const PERSON_LINK_KINDS = new Set(["linkedin", "unverified", "website", "github", "devpost"]);
+
+function personTarget(node: NetworkNode | undefined): PersonLinkTarget | null {
+  if (!node?.linkUrl || !node.linkKind || !PERSON_LINK_KINDS.has(node.linkKind)) return null;
+  return { url: node.linkUrl, label: node.linkLabel ?? "Link", kind: node.linkKind as PersonLinkTarget["kind"] };
+}
 
 const COLOR: Record<NetworkNode["type"], string> = {
   university: "#ff6a33",
@@ -197,18 +206,25 @@ export function NetworkCanvas({
             <p className="stat-num mt-2 text-3xl">{focusEdges.length}</p>
             <p className="ui-label">connections</p>
             {focus.sublabel && <p className="text-xs text-muted">{focus.sublabel}</p>}
-            {focus.linkUrl && (
-              <a href={focus.linkUrl} target="_blank" rel="noopener noreferrer" className="link-chip mt-2">
-                {focus.linkLabel ?? "Link"}
+            {focus.type === "person" && personTarget(focus) ? (
+              <div className="mt-2">
+                <PersonLinkButton name={focus.label} link={personTarget(focus)} />
+              </div>
+            ) : focus.linkUrl ? (
+              <a href={focus.linkUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex rounded-md bg-accent px-2.5 py-1 text-[11px] font-medium text-accent-foreground">
+                {focus.linkKind === "official" || focus.linkLabel === "Website" ? "Visit website" : `Open ${focus.linkLabel ?? "link"}`}
               </a>
-            )}
+            ) : null}
             <ul className="mt-3 max-h-[420px] space-y-2 overflow-y-auto">
               {focusEdges.map((e, i) => {
                 const otherId = e.source === focus.id ? e.target : e.source;
                 const other = nodeById.get(otherId);
                 return (
                   <li key={i} className="rounded-md border border-border-c p-2 text-xs">
-                    <p className="font-medium text-foreground">{other?.label ?? otherId}</p>
+                    <p className="flex flex-wrap items-center gap-1 font-medium text-foreground">
+                      {other?.label ?? otherId}
+                      {other?.type === "person" && personTarget(other) && <PersonLinkButton link={personTarget(other)} name={other.label} />}
+                    </p>
                     <p className="text-muted">{e.relationshipType.replaceAll("_", " ")}</p>
                     {e.excerpt && <p className="mt-1 text-foreground">{e.excerpt.slice(0, 220)}</p>}
                     {e.sourceUrl && (
@@ -236,10 +252,16 @@ export function NetworkCanvas({
                 .filter((n) => n.type === "project" || n.type === "person")
                 .slice(0, 40)
                 .map((n) => (
-                  <li key={n.id}>
-                    <button type="button" onClick={() => setSelected(n.id)} className="block w-full truncate rounded-md px-2 py-1 text-left text-xs text-foreground hover:bg-surface-2">
+                  <li key={n.id} className="flex items-center gap-1">
+                    <button type="button" onClick={() => setSelected(n.id)} className="min-w-0 flex-1 truncate rounded-md px-2 py-1 text-left text-xs text-foreground hover:bg-surface-2">
                       {n.label}
                     </button>
+                    {n.type === "person" && personTarget(n) && <PersonLinkButton name={n.label} link={personTarget(n)} />}
+                    {n.type === "project" && n.linkUrl && (
+                      <a href={n.linkUrl} target="_blank" rel="noopener noreferrer" className="shrink-0 text-[11px] text-link underline">
+                        {n.linkLabel === "Website" ? "Visit website" : n.linkLabel ?? "Open"}
+                      </a>
+                    )}
                   </li>
                 ))}
             </ul>

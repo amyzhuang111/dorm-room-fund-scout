@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { buildHref } from "@/lib/domain/url";
 import type { CampusArc, CandidateSummary, UniversitySummary } from "@/lib/domain/queries";
 import { ResultTray } from "./result-tray";
+import { PersonLinkButton } from "./person-link";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import "maplibre-gl/dist/maplibre-gl.css";
 
@@ -621,6 +622,11 @@ export function GlobeView({
                     >
                       {c.name}
                     </a>
+                    {c.founderLinks[0]?.link && (
+                      <span className="mt-0.5 flex items-center gap-1 px-1.5">
+                        <PersonLinkButton link={c.founderLinks[0].link} name={c.founderLinks[0].name} />
+                      </span>
+                    )}
                   </li>
                 ))}
                 {previewCandidates.length === 0 && <li className="text-xs text-muted">No candidates found here yet.</li>}

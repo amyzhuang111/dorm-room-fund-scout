@@ -4,6 +4,8 @@ import { CAMPUSES } from "./campuses";
 import { publicLink } from "./company-link";
 import { sectorLabel } from "./sectors";
 import { enrollmentBadge } from "./founder-status";
+import { bestPersonLink } from "./person-link";
+import { unverifiedLinkedInByPerson } from "./queries";
 
 export type NodeType = "university" | "community" | "person" | "project";
 
@@ -17,6 +19,7 @@ export interface NetworkNode {
   /** A URL found on a source page: LinkedIn for a person, website for a company. */
   linkUrl?: string;
   linkLabel?: string;
+  linkKind?: string;
 }
 
 export interface NetworkEdge {
@@ -46,16 +49,7 @@ interface RawNode {
   priority: number;
   linkUrl?: string;
   linkLabel?: string;
-}
-
-function linkedinAlias(aliasesJson: string | null | undefined): string | undefined {
-  try {
-    const aliases = JSON.parse(aliasesJson || "[]") as string[];
-    const li = aliases.find((a) => a.startsWith("linkedin:"));
-    return li ? li.slice("linkedin:".length) : undefined;
-  } catch {
-    return undefined;
-  }
+  linkKind?: string;
 }
 
 // Evidence-backed neighborhood. Edges come from `relationships`, affiliations,
@@ -90,6 +84,7 @@ export function buildScoutNetwork(universityId?: string, opts?: { sector?: strin
 
   const rawNodes = new Map<string, RawNode>();
   const rawEdges: NetworkEdge[] = [];
+  const unverified = unverifiedLinkedInByPerson(db);
   let totalPeople = 0;
 
   const perCampusPeople = Math.max(24, Math.floor(90 / ids.length));
@@ -123,6 +118,7 @@ export function buildScoutNetwork(universityId?: string, opts?: { sector?: strin
           priority: type === "project" ? 45 : 70,
           linkUrl: site?.linkUrl,
           linkLabel: site?.linkLabel,
+          linkKind: link?.kind,
         });
       }
       rawEdges.push({
@@ -166,15 +162,19 @@ export function buildScoutNetwork(universityId?: string, opts?: { sector?: strin
     for (const person of chosen) {
       if (exclude.has(person.id)) continue;
       if (!rawNodes.has(person.id)) {
-        const linkedin = linkedinAlias(person.aliases_json);
+        const personLink = bestPersonLink({
+          aliasesJson: person.aliases_json,
+          linkedinCandidates: unverified.get(person.id) ?? [],
+        });
         rawNodes.set(person.id, {
           id: person.id,
           type: "person",
           label: person.name,
           sublabel: enrollmentBadge(person.enrollment_status, person.enrollment_label),
           priority: person.pri,
-          linkUrl: linkedin,
-          linkLabel: linkedin ? "LinkedIn" : undefined,
+          linkUrl: personLink?.url,
+          linkLabel: personLink?.label,
+          linkKind: personLink?.kind,
         });
       }
       const affEvidence = db
@@ -225,6 +225,7 @@ export function buildScoutNetwork(universityId?: string, opts?: { sector?: strin
             priority: linkPriority,
             linkUrl: site?.linkUrl,
             linkLabel: site?.linkLabel,
+            linkKind: link?.kind,
           });
         } else if (linkPriority > existing.priority) {
           existing.priority = linkPriority;
@@ -327,6 +328,7 @@ export function buildScoutNetwork(universityId?: string, opts?: { sector?: strin
     y: Math.max(28, Math.min(height - 28, n.y)),
     linkUrl: n.linkUrl,
     linkLabel: n.linkLabel,
+    linkKind: n.linkKind,
   }));
 
   const peopleShown = nodes.filter((n) => n.type === "person").length;

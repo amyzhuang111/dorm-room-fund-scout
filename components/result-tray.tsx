@@ -5,6 +5,8 @@ import { buildHref } from "@/lib/domain/url";
 import { publicLink } from "@/lib/domain/company-link";
 import type { CandidateSummary } from "@/lib/domain/queries";
 import { FeedbackControls } from "./feedback-controls";
+import { PersonLinkButton } from "./person-link";
+import { EnrollmentBadge } from "./badges";
 
 // Design MD §5: "In canvas views, show a collapsible bottom result tray
 // with compact cards. Selecting a card selects the same entity on the
@@ -71,16 +73,15 @@ export function ResultTray({
                   <p className="mt-0.5 line-clamp-2 text-link">{(c as CandidateSummary & { boostNote?: string }).boostNote}</p>
                 )}
                 <FeedbackControls entityType="project" entityId={c.id} name={c.name} url={c.websiteUrl || c.primaryLink} />
-                {c.founderLinks.find((f) => f.linkedinUrl) && (
-                  <a
-                    href={c.founderLinks.find((f) => f.linkedinUrl)!.linkedinUrl!}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-0.5 block truncate text-link underline"
-                  >
-                    {c.founderLinks.find((f) => f.linkedinUrl)!.name} · LinkedIn
-                  </a>
-                )}
+                <ul className="mt-1 space-y-1">
+                  {c.founderLinks.slice(0, 2).map((f) => (
+                    <li key={f.personId} className="flex flex-wrap items-center gap-1">
+                      <span className="text-foreground">{f.name}</span>
+                      <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+                      <PersonLinkButton link={f.link} name={f.name} />
+                    </li>
+                  ))}
+                </ul>
               </div>
             </li>
           ))}

@@ -1,10 +1,13 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import { buildHref } from "@/lib/domain/url";
 import { shortCampusName } from "@/lib/domain/campuses";
 import { publicLink } from "@/lib/domain/company-link";
-import type { CandidateSummary } from "@/lib/domain/queries";
+import type { CandidateSummary, ProjectDetail } from "@/lib/domain/queries";
 import { EnrollmentBadge, GateBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
+import { PersonLinkButton } from "./person-link";
+import { CompanyDetail } from "./company-detail";
 
 function whyInvestigate(c: CandidateSummary): string {
   if (c.latestSignalNote) return c.latestSignalNote;
@@ -17,30 +20,14 @@ function FounderLinks({ founders }: { founders: CandidateSummary["founderLinks"]
   const shown = founders.slice(0, 2);
   const extra = founders.length - shown.length;
   return (
-    <span>
-      {shown.map((f, i) => (
-        <span key={f.name}>
-          {i > 0 ? ", " : ""}
+    <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
+      {shown.map((f) => (
+        <span key={f.personId} className="inline-flex items-center gap-1">
           {f.name}
-          {f.linkedinUrl && (
-            <>
-              {" "}
-              <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-link underline">
-                LinkedIn
-              </a>
-            </>
-          )}
-          {!f.linkedinUrl && f.linkedinCandidates[0] && (
-            <>
-              {" "}
-              <a href={f.linkedinCandidates[0].url} target="_blank" rel="noopener noreferrer" className="text-warn underline" title={f.linkedinCandidates[0].reason}>
-                LinkedIn unverified
-              </a>
-            </>
-          )}
+          {f.link && <PersonLinkButton link={f.link} name={f.name} />}
         </span>
       ))}
-      {extra > 0 ? ` +${extra}` : ""}
+      {extra > 0 ? <span>+{extra}</span> : null}
     </span>
   );
 }
@@ -66,11 +53,13 @@ export function CandidateTable({
   basePath,
   current,
   feedbackView,
+  detail,
 }: {
   candidates: (CandidateSummary & { boostNote?: string | null })[];
   basePath: string;
   current: Record<string, string | undefined>;
   feedbackView?: string;
+  detail?: ProjectDetail | null;
 }) {
   if (candidates.length === 0) {
     return (
@@ -85,7 +74,7 @@ export function CandidateTable({
       <ul className="space-y-2 p-3 sm:hidden">
         {candidates.map((c) => (
           <li key={c.id} className="rounded-lg border border-border-c bg-surface p-3">
-            <Link href={buildHref(basePath, current, { project: c.id })} className="font-medium text-foreground">
+            <Link href={buildHref(basePath, current, { project: current.project === c.id ? null : c.id })} className="font-medium text-foreground" aria-expanded={current.project === c.id}>
               {c.name}
             </Link>
             <p className="mt-1 text-sm text-muted line-clamp-3">{c.description || "What it builds is not on record yet."}</p>
@@ -106,6 +95,11 @@ export function CandidateTable({
               ))}
             </p>
             <p className="mt-1 text-xs text-muted line-clamp-2">{whyInvestigate(c)}</p>
+            {detail && detail.id === c.id && (
+              <div className="mt-3 rounded-md border border-border-c bg-white">
+                <CompanyDetail project={detail} />
+              </div>
+            )}
           </li>
         ))}
       </ul>
@@ -124,9 +118,10 @@ export function CandidateTable({
         <tbody>
           {candidates.map((c) => {
             return (
-              <tr key={c.id} className={`border-b border-border-c align-top hover:bg-surface ${current.project === c.id ? "bg-accent-subtle" : ""}`} style={{ height: "68px" }}>
+              <Fragment key={c.id}>
+              <tr className={`border-b border-border-c align-top hover:bg-surface ${current.project === c.id ? "bg-accent-subtle" : ""}`}>
                 <td className="px-3 py-2.5">
-                  <Link href={buildHref(basePath, current, { project: c.id })} className="font-medium text-foreground hover:text-link">
+                  <Link href={buildHref(basePath, current, { project: current.project === c.id ? null : c.id })} className="font-medium text-foreground hover:text-link" aria-expanded={current.project === c.id}>
                     {c.name}
                   </Link>
                   <p className="mt-0.5 max-w-[280px] text-xs leading-snug text-muted line-clamp-2">{c.description || "What it builds is not on record yet."}</p>
@@ -163,6 +158,21 @@ export function CandidateTable({
                   {c.latestSignalNote ?? "—"}
                 </td>
               </tr>
+              {detail && detail.id === c.id && (
+                <tr className="border-b border-border-c bg-white">
+                  <td colSpan={6} className="px-2 py-2">
+                    <div className="rounded-md border border-border-c">
+                      <div className="flex justify-end border-b border-border-c px-3 py-1.5">
+                        <Link href={buildHref(basePath, current, { project: null })} className="text-xs text-muted hover:text-foreground">
+                          Close
+                        </Link>
+                      </div>
+                      <CompanyDetail project={detail} />
+                    </div>
+                  </td>
+                </tr>
+              )}
+              </Fragment>
             );
           })}
         </tbody>

@@ -58,7 +58,7 @@ export default async function FounderDiscoverPage({ searchParams }: { searchPara
 
         <div className="grid gap-2 p-4 sm:grid-cols-2 lg:grid-cols-3">
           {founders.map((f) => (
-            <FounderCard key={f.id} founder={f} feedbackView={sp.feedback} />
+            <FounderCard key={f.id} founder={f} feedbackView={sp.feedback} open={sp.founder === f.id} basePath={basePath} current={sp} />
           ))}
           {founders.length === 0 && (
             <p className="text-sm text-muted">No founders match. Student and New grad are on — turn on Alumni or Unknown to widen the list.</p>
