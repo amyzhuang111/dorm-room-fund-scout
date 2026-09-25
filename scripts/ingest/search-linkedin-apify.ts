@@ -21,10 +21,32 @@
 // Resumable: each attempted person gets a linkedin_search_attempt claim,
 // written before the next person, so a stopped run continues later.
 // --limit bounds a single invocation (default 20).
+//
+// Import mode applies a file of raw actor results with the same matching,
+// education update, and linkedin_search_attempt bookkeeping as a live run.
+// People who already have that attempt claim are skipped, so a partial
+// import can be re-run.
+//
+//   npx tsx scripts/ingest/search-linkedin-apify.ts --import results.json
+//
+// results.json is an array of:
+//   {
+//     "person_id": "person_...",
+//     "query": "\"Full Name\" \"University of Pennsylvania\" \"Company\"",
+//     "items": [ { ...raw harvestapi dataset item... } ]
+//   }
+// `items` is the actor dataset for that person (the same objects a live
+// run would read back). Fields the matcher reads: linkedinUrl, firstName,
+// lastName, headline, about, education[], profileTopEducation[],
+// currentPosition[], experience[]. Education entries use schoolName,
+// startDate, endDate, and period. `query` is stored on the attempt claim;
+// when it is omitted the script rebuilds the live-mode query from the
+// person's school and first company.
 
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import type Database from "better-sqlite3";
 import { getDb, newId, nowIso } from "../../lib/db/client";
 import { linkedInEducationFact, type LinkedInEducationEntry } from "../../lib/domain/founder-status";
 import { recomputePersonEnrollment } from "../../lib/domain/enrollment-store";
@@ -165,12 +187,210 @@ function upperBoundUsd(people: number): number {
   return people * (SEARCH_PAGE_USD + MAX_FULL_PROFILES * FULL_PROFILE_USD);
 }
 
+interface PersonRow {
+  id: string;
+  name: string;
+  university_id: string;
+  companies: string | null;
+}
+
+interface ImportRecord {
+  person_id?: string;
+  query?: string;
+  items?: SearchProfile[];
+}
+
+function ensureSource(db: Database.Database) {
+  db.prepare(
+    `INSERT INTO sources (id, name, family, url, campuses_json, priority, ingestion_mode, status, last_attempt_at)
+     VALUES (?, 'LinkedIn people search (Apify harvestapi)', 'code_host', 'https://apify.com/harvestapi/linkedin-profile-search', '[]', 2, 'api', 'available', ?)
+     ON CONFLICT(id) DO UPDATE SET last_attempt_at = excluded.last_attempt_at`
+  ).run(SOURCE_ID, nowIso());
+}
+
+function applyProfiles(
+  db: Database.Database,
+  insertClaim: Database.Statement,
+  readAliases: Database.Statement,
+  writeAliases: Database.Statement,
+  person: PersonRow,
+  query: string,
+  profiles: SearchProfile[]
+): { confirmed: number; candidates: number } {
+  const companies = (person.companies ?? "").split(" | ").map((s) => s.trim()).filter(Boolean);
+  const schoolRe = SCHOOL_PATTERNS[person.university_id] ?? null;
+  const named = profiles.filter((p) => p.linkedinUrl && p.linkedinUrl.includes("linkedin.com/in/") && nameMatches(person.name, p));
+  const confirmedProfiles = named.filter((p) => confirms(p, schoolRe, companies).ok);
+  insertClaim.run(
+    newId("claim"),
+    person.id,
+    "linkedin_search_attempt",
+    JSON.stringify({ query, returned: profiles.length, nameMatches: named.length, confirmed: confirmedProfiles.length }),
+    `Apify LinkedIn search for ${person.name}: ${query}. ${profiles.length} profile(s) returned, ${named.length} name match(es), ${confirmedProfiles.length} confirmed.`,
+    SOURCE_ID,
+    "https://apify.com/harvestapi/linkedin-profile-search",
+    nowIso(),
+    "corroborated"
+  );
+
+  if (confirmedProfiles.length === 1) {
+    const profile = confirmedProfiles[0];
+    const url = profile.linkedinUrl!.replace(/\/$/, "");
+    const why = confirms(profile, schoolRe, companies).why;
+    const aliases = JSON.parse((readAliases.get(person.id) as { aliases_json: string }).aliases_json || "[]") as string[];
+    if (!aliases.some((a) => a.includes("linkedin.com/in/"))) {
+      aliases.push(`linkedin:${url}`);
+      writeAliases.run(JSON.stringify(aliases), person.id);
+    }
+    insertClaim.run(
+      newId("claim"),
+      person.id,
+      "linkedin_alias_discovered",
+      JSON.stringify({ linkedin: url, why }),
+      `${person.name}: confirmed LinkedIn ${url} because ${why}. Query: ${query}.`,
+      SOURCE_ID,
+      url,
+      nowIso(),
+      "corroborated"
+    );
+    const education = linkedInEducationFact([...(profile.education ?? []), ...(profile.profileTopEducation ?? [])], (school) =>
+      schoolRe ? schoolRe.test(school) : false
+    );
+    if (education) {
+      const when = education.endYear
+        ? `ended ${education.endYear}`
+        : `started ${education.startYear ?? "an unstated year"}, no end date on the profile`;
+      insertClaim.run(
+        newId("claim"),
+        person.id,
+        "linkedin_education",
+        JSON.stringify(education),
+        `Confirmed LinkedIn education for ${person.name} at ${education.school}: ${when}.`,
+        SOURCE_ID,
+        url,
+        nowIso(),
+        "corroborated"
+      );
+      console.log(`  education ${education.school} ${when}`);
+    }
+    recomputePersonEnrollment(db, person.id);
+    console.log(`  confirmed ${url} (${why})`);
+    return { confirmed: 1, candidates: 0 };
+  }
+
+  const pool = confirmedProfiles.length > 1 ? confirmedProfiles : named;
+  const reason = confirmedProfiles.length > 1 ? "more than one profile matched the school or company" : "name matched; school and company did not";
+  let candidates = 0;
+  for (const profile of pool.slice(0, MAX_FULL_PROFILES)) {
+    const url = profile.linkedinUrl!.replace(/\/$/, "");
+    insertClaim.run(
+      newId("claim"),
+      person.id,
+      "linkedin_candidate",
+      JSON.stringify({ linkedin: url, reason, headline: profile.headline ?? null }),
+      `Unverified LinkedIn candidate for ${person.name}: ${url}. ${reason}. Not stored as a confirmed link.`,
+      SOURCE_ID,
+      url,
+      nowIso(),
+      "unverified"
+    );
+    candidates++;
+  }
+  console.log(`  ${pool.length} unverified candidate(s): ${reason}`);
+  return { confirmed: 0, candidates };
+}
+
+function loadPerson(db: Database.Database, personId: string): PersonRow | null {
+  return (
+    (db
+      .prepare(
+        `SELECT pe.id as id, pe.name as name,
+                COALESCE((
+                  SELECT a.university_id FROM affiliations a
+                  WHERE a.person_id = pe.id
+                  ORDER BY CASE a.university_id
+                    WHEN 'univ_penn' THEN 0 WHEN 'univ_berkeley' THEN 1
+                    WHEN 'univ_stanford' THEN 2 WHEN 'univ_mit' THEN 3
+                    WHEN 'univ_harvard' THEN 4 WHEN 'univ_waterloo' THEN 5 ELSE 9 END
+                  LIMIT 1
+                ), '') as university_id,
+                (SELECT group_concat(p.name, ' | ')
+                   FROM person_project_roles ppr
+                   JOIN projects p ON p.id = ppr.project_id AND p.kind = 'company'
+                  WHERE ppr.person_id = pe.id) as companies
+         FROM people pe
+         WHERE pe.id = ?`
+      )
+      .get(personId) as PersonRow | undefined) ?? null
+  );
+}
+
+function importResults(db: Database.Database, filePath: string) {
+  const abs = path.resolve(filePath);
+  const parsed = JSON.parse(fs.readFileSync(abs, "utf8")) as unknown;
+  if (!Array.isArray(parsed)) throw new Error(`Import file must be a JSON array: ${abs}`);
+  ensureSource(db);
+  const insertClaim = db.prepare(
+    `INSERT INTO claims (id, entity_type, entity_id, claim_type, value_json, excerpt, source_id, source_url, retrieved_at, label, verification_state)
+     VALUES (?, 'person', ?, ?, ?, ?, ?, ?, ?, 'observed_fact', ?)`
+  );
+  const readAliases = db.prepare(`SELECT aliases_json FROM people WHERE id = ?`);
+  const writeAliases = db.prepare(`UPDATE people SET aliases_json = ? WHERE id = ?`);
+  const alreadyAttempted = db.prepare(
+    `SELECT 1 as ok FROM claims WHERE entity_id = ? AND claim_type = 'linkedin_search_attempt' LIMIT 1`
+  );
+  let confirmed = 0;
+  let candidates = 0;
+  let skipped = 0;
+  for (const row of parsed as ImportRecord[]) {
+    const personId = row.person_id?.trim();
+    if (!personId) {
+      console.log("Skipping a record with no person_id.");
+      skipped++;
+      continue;
+    }
+    const person = loadPerson(db, personId);
+    if (!person) {
+      console.log(`Skipping ${personId}: no person with that id.`);
+      skipped++;
+      continue;
+    }
+    const aliases = (readAliases.get(person.id) as { aliases_json: string } | undefined)?.aliases_json ?? "[]";
+    if (aliases.includes("linkedin.com/in/")) {
+      console.log(`Skipping ${person.name}: confirmed linkedin.com/in URL already stored.`);
+      skipped++;
+      continue;
+    }
+    if (alreadyAttempted.get(person.id)) {
+      console.log(`Skipping ${person.name}: linkedin_search_attempt already recorded.`);
+      skipped++;
+      continue;
+    }
+    const companies = (person.companies ?? "").split(" | ").map((s) => s.trim()).filter(Boolean);
+    const schoolName = SCHOOL_QUERY[person.university_id] ?? person.university_id;
+    const companyBit = companies[0] ? ` "${companies[0]}"` : "";
+    const query = row.query?.trim() || (schoolName ? `"${person.name}" "${schoolName}"${companyBit}` : `"${person.name}"${companyBit}`);
+    const profiles = Array.isArray(row.items) ? row.items : [];
+    console.log(`Importing ${person.name} — ${query} (${profiles.length} item(s))`);
+    const result = applyProfiles(db, insertClaim, readAliases, writeAliases, person, query, profiles);
+    confirmed += result.confirmed;
+    candidates += result.candidates;
+  }
+  db.pragma("wal_checkpoint(TRUNCATE)");
+  console.log(`Import done. Confirmed ${confirmed}. Unverified candidate rows ${candidates}. Skipped ${skipped}.`);
+}
+
 async function main() {
   loadEnvLocal();
+  const importPath = argValue("--import");
+  const db = getDb();
+  if (importPath) {
+    importResults(db, importPath);
+    return;
+  }
   const dry = process.argv.includes("--dry-run");
   const campus = argValue("--campus");
   const limit = Math.max(1, parseInt(argValue("--limit") || "20", 10) || 20);
-  const db = getDb();
 
   const campusClause = campus ? "AND a.university_id = ?" : "";
   const params: string[] = campus ? [campus] : [];
@@ -209,13 +429,7 @@ async function main() {
     return;
   }
 
-  const now = nowIso();
-  db.prepare(
-    `INSERT INTO sources (id, name, family, url, campuses_json, priority, ingestion_mode, status, last_attempt_at)
-     VALUES (?, 'LinkedIn people search (Apify harvestapi)', 'code_host', 'https://apify.com/harvestapi/linkedin-profile-search', '[]', 2, 'api', 'available', ?)
-     ON CONFLICT(id) DO UPDATE SET last_attempt_at = excluded.last_attempt_at`
-  ).run(SOURCE_ID, now);
-
+  ensureSource(db);
   const insertClaim = db.prepare(
     `INSERT INTO claims (id, entity_type, entity_id, claim_type, value_json, excerpt, source_id, source_url, retrieved_at, label, verification_state)
      VALUES (?, 'person', ?, ?, ?, ?, ?, ?, ?, 'observed_fact', ?)`
@@ -239,85 +453,9 @@ async function main() {
       console.log(`  stopped: ${(e as Error).message}`);
       break;
     }
-    const schoolRe = SCHOOL_PATTERNS[person.university_id] ?? null;
-    const named = profiles.filter((p) => p.linkedinUrl && p.linkedinUrl.includes("linkedin.com/in/") && nameMatches(person.name, p));
-    const confirmedProfiles = named.filter((p) => confirms(p, schoolRe, companies).ok);
-    const attemptId = newId("claim");
-    insertClaim.run(
-      attemptId,
-      person.id,
-      "linkedin_search_attempt",
-      JSON.stringify({ query, returned: profiles.length, nameMatches: named.length, confirmed: confirmedProfiles.length }),
-      `Apify LinkedIn search for ${person.name}: ${query}. ${profiles.length} profile(s) returned, ${named.length} name match(es), ${confirmedProfiles.length} confirmed.`,
-      SOURCE_ID,
-      "https://apify.com/harvestapi/linkedin-profile-search",
-      nowIso(),
-      "corroborated"
-    );
-
-    if (confirmedProfiles.length === 1) {
-      const profile = confirmedProfiles[0];
-      const url = profile.linkedinUrl!.replace(/\/$/, "");
-      const why = confirms(profile, schoolRe, companies).why;
-      const aliases = JSON.parse((readAliases.get(person.id) as { aliases_json: string }).aliases_json || "[]") as string[];
-      if (!aliases.some((a) => a.includes("linkedin.com/in/"))) {
-        aliases.push(`linkedin:${url}`);
-        writeAliases.run(JSON.stringify(aliases), person.id);
-      }
-      insertClaim.run(
-        newId("claim"),
-        person.id,
-        "linkedin_alias_discovered",
-        JSON.stringify({ linkedin: url, why }),
-        `${person.name}: confirmed LinkedIn ${url} because ${why}. Query: ${query}.`,
-        SOURCE_ID,
-        url,
-        nowIso(),
-        "corroborated"
-      );
-      const education = linkedInEducationFact([...(profile.education ?? []), ...(profile.profileTopEducation ?? [])], (school) =>
-        schoolRe ? schoolRe.test(school) : false
-      );
-      if (education) {
-        const when = education.endYear
-          ? `ended ${education.endYear}`
-          : `started ${education.startYear ?? "an unstated year"}, no end date on the profile`;
-        insertClaim.run(
-          newId("claim"),
-          person.id,
-          "linkedin_education",
-          JSON.stringify(education),
-          `Confirmed LinkedIn education for ${person.name} at ${education.school}: ${when}.`,
-          SOURCE_ID,
-          url,
-          nowIso(),
-          "corroborated"
-        );
-        console.log(`  education ${education.school} ${when}`);
-      }
-      recomputePersonEnrollment(db, person.id);
-      confirmed++;
-      console.log(`  confirmed ${url} (${why})`);
-    } else {
-      const pool = confirmedProfiles.length > 1 ? confirmedProfiles : named;
-      const reason = confirmedProfiles.length > 1 ? "more than one profile matched the school or company" : "name matched; school and company did not";
-      for (const profile of pool.slice(0, MAX_FULL_PROFILES)) {
-        const url = profile.linkedinUrl!.replace(/\/$/, "");
-        insertClaim.run(
-          newId("claim"),
-          person.id,
-          "linkedin_candidate",
-          JSON.stringify({ linkedin: url, reason, headline: profile.headline ?? null }),
-          `Unverified LinkedIn candidate for ${person.name}: ${url}. ${reason}. Not stored as a confirmed link.`,
-          SOURCE_ID,
-          url,
-          nowIso(),
-          "unverified"
-        );
-        candidates++;
-      }
-      console.log(`  ${pool.length} unverified candidate(s): ${reason}`);
-    }
+    const result = applyProfiles(db, insertClaim, readAliases, writeAliases, person, query, profiles);
+    confirmed += result.confirmed;
+    candidates += result.candidates;
     await sleep(DELAY_MS);
   }
   console.log(`Done this invocation. Confirmed ${confirmed}. Unverified candidate rows ${candidates}. Re-run the same command to continue.`);

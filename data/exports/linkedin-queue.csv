@@ -1,0 +1,1665 @@
+person_id,full_name,first_name,last_name,campus_id,school_name,company_names,enrollment_status,class_year,is_founder_role,priority
+person_0eosFfBrVtXi,Aarush Sahni,Aarush,Sahni,univ_penn,University of Pennsylvania,ToxiSense,recent_grad,GEN'26,true,1
+person_1G6A0-qbSVQI,Aayush Garg,Aayush,Garg,univ_penn,University of Pennsylvania,SecureFlow,recent_grad,WG'24,true,1
+person_e2YinLeUPxVn,Abigail McCulloch,Abigail,McCulloch,univ_penn,University of Pennsylvania,Padel Blue,recent_grad,WG'25,true,1
+person_D_Bohkiy_mDR,Agustin Garcinuno,Agustin,Garcinuno,univ_penn,University of Pennsylvania,Flipkit,recent_grad,W'23,true,1
+person_IfjzuHxVZHxz,Ahmed Abdellah,Ahmed,Abdellah,univ_penn,University of Pennsylvania,Quok.it,recent_grad,GEE'26,true,1
+person_2vWIAxrDjZ2V,Akhil Peddikuppa,Akhil,Peddikuppa,univ_penn,University of Pennsylvania,Horus Health,current_student,C'27,true,1
+person_H35WAs_WdRlq,Albert Katz,Albert,Katz,univ_penn,University of Pennsylvania,Flagler Health,recent_grad,WG'23,true,1
+person_rhillXjGoZ4I,Alexander Bardwell,Alexander,Bardwell,univ_penn,University of Pennsylvania,Fleeted,recent_grad,ENG'24,true,1
+person_9cq5Ms07NQdX,Alexander Cho,Alexander,Cho,univ_penn,University of Pennsylvania,Quok.it,recent_grad,ENG'25,true,1
+person_gKTN-erBqHuE,Alexis Barber,Alexis,Barber,univ_penn,University of Pennsylvania,Too Collective,recent_grad,WG'25,true,1
+person_78pjgtS8bL9J,Aliza Berger,Aliza,Berger,univ_penn,University of Pennsylvania,LCKR,recent_grad,WG'24,true,1
+person_yEY8K82lVnMq,Amelia Cohen,Amelia,Cohen,univ_penn,University of Pennsylvania,EmployAI,recent_grad,WG'23,true,1
+person_XAbwQK7AS2Vg,Ananya Dewan,Ananya,Dewan,univ_penn,University of Pennsylvania,FullFlock | Ossum Technologies,recent_grad,LSM'23,true,1
+person_AR3irX663d8u,Andrew Diep-Tran,Andrew,Diep-Tran,univ_penn,University of Pennsylvania,ToxiSense,recent_grad,W'25,true,1
+person_wip_mu8xqVTH,Andrew Mao,Andrew,Mao,univ_penn,University of Pennsylvania,Lucy,current_student,G'EE27,true,1
+person_Os3dvr8mtmPg,Annie Xu,Annie,Xu,univ_penn,University of Pennsylvania,Pairfect | Spring,recent_grad,SPP'24,true,1
+person_GqTelir5rXoO,Aravind Krishnan,Aravind,Krishnan,univ_penn,University of Pennsylvania,ToxiSense,recent_grad,C'25,true,1
+person_OOMf44VWvdQj,Archana Somasegar,Archana,Somasegar,univ_penn,University of Pennsylvania,MineMe,recent_grad,WG'24,true,1
+person_AI-14GDuGofo,Ava Ramesh,Ava,Ramesh,univ_penn,University of Pennsylvania,MediMint,recent_grad,WG'25,true,1
+person_we-Dcafp9CiN,Avanthika Ramesh,Avanthika,Ramesh,univ_penn,University of Pennsylvania,MediMint,recent_grad,WG'25,true,1
+person_irNDLFQF_wTN,Bach Tran,Bach,Tran,univ_penn,University of Pennsylvania,Robin,recent_grad,SEAS'26,true,1
+person_PXDEXYrlwn4s,Benjamin Abt,Benjamin,Abt,univ_penn,University of Pennsylvania,PopEye,recent_grad,ENG'23,true,1
+person_tmQAuKJt1NXZ,Brandon Huang,Brandon,Huang,univ_penn,University of Pennsylvania,GoodRun,recent_grad,WG'25,true,1
+person_YTQxTNN-iWPh,Charlie Hirschhorn,Charlie,Hirschhorn,univ_penn,University of Pennsylvania,Storiara,current_student,C'27,true,1
+person_l7KMBcZ9HfIL,Chris Stolte,Chris,Stolte,univ_penn,University of Pennsylvania,Capivara,recent_grad,WEMBA'25,true,1
+person_yfhOsK9OmsAY,Claire Utomi,Claire,Utomi,univ_penn,University of Pennsylvania,BUILD Nigeria,recent_grad,W'23,true,1
+person_1gr7oaCNZF5j,Corina Chen,Corina,Chen,univ_penn,University of Pennsylvania,Orble,current_student,ENG'28,true,1
+person___czcyEr8ihe,Dan Cataldi,Dan,Cataldi,univ_penn,University of Pennsylvania,Groov,recent_grad,WG'23,true,1
+person_K1mJuLbriTt2,Daniel Cataldi,Daniel,Cataldi,univ_penn,University of Pennsylvania,Groov,recent_grad,WG'23,true,1
+person_5pDEU2OabZsr,Daniel Zhang,Daniel,Zhang,univ_penn,University of Pennsylvania,Sanguis,recent_grad,GR'23,true,1
+person_pBcDLOv0q2Pr,David Levine,David,Levine,univ_penn,University of Pennsylvania,bia,recent_grad,GR'23,true,1
+person_s_IJ3dLC8oKK,David Navarro,David,Navarro,univ_penn,University of Pennsylvania,Zmiles Same Day Aligners,recent_grad,W'23,true,1
+person_NT7a7Yb82u3K,Devi Kasih,Devi,Kasih,univ_penn,University of Pennsylvania,ALL-in Eduspace,recent_grad,GED'23,true,1
+person_x3v4s7uDmjej,Divyansh Agarwal,Divyansh,Agarwal,univ_penn,University of Pennsylvania,Sanguis,recent_grad,GR'23,true,1
+person_MyCxAddirXJw,Dustin Bainbridge,Dustin,Bainbridge,univ_penn,University of Pennsylvania,Unified Track,current_student,GRD'27,true,1
+person_4eZj7YikFcpr,Elizabeth Chou,Elizabeth,Chou,univ_penn,University of Pennsylvania,Clarifi,recent_grad,ENG'24,true,1
+person_XwD4svYBmUZ5,Evan Adamo,Evan,Adamo,univ_penn,University of Pennsylvania,SecureFlow,recent_grad,WG'23,true,1
+person_UJYeyoAQrOJ0,George Eliadis,George,Eliadis,univ_penn,University of Pennsylvania,Probook,recent_grad,ENG'24,true,1
+person_qJ4La12ebqoe,Gerardo Ballestros,Gerardo,Ballestros,univ_penn,University of Pennsylvania,Lumify Care,recent_grad,W'23,true,1
+person_MeLljICJ-ns1,Gokulanand Iyer,Gokulanand,Iyer,univ_penn,University of Pennsylvania,bia,recent_grad,GR'24,true,1
+person_TmzDC52qMZ3G,Haichuan Yang,Haichuan,Yang,univ_penn,University of Pennsylvania,FullFlock,recent_grad,SAS'23,true,1
+person_-6VsLqgRwC8k,Haley Kang,Haley,Kang,univ_penn,University of Pennsylvania,Flipkit,recent_grad,ENG'24,true,1
+person_MNTfPQbsnYIE,Harrison Chong,Harrison,Chong,univ_penn,University of Pennsylvania,Jalan Journey Global,current_student,SEAS'27,true,1
+person_Bg-5oi0RTJZu,Harsha Ravindran,Harsha,Ravindran,univ_penn,University of Pennsylvania,Jalan Journey Global,recent_grad,CAS'26,true,1
+person_ElHMkzQy5Uva,Himza Jivani,Himza,Jivani,univ_penn,University of Pennsylvania,Paytus,recent_grad,WG'23,true,1
+person_p7Tso2BT-t5I,Hoang Le,Hoang,Le,univ_penn,University of Pennsylvania,Ossum Technologies,recent_grad,C'23,true,1
+person_gd0DtVSBorVF,Jade Peterson,Jade,Peterson,univ_penn,University of Pennsylvania,Jolt Education,recent_grad,GED'24,true,1
+person_ytYkBc-XIkFf,Jason Li,Jason,Li,univ_penn,University of Pennsylvania,Serpent Robotics,recent_grad,GEN'26,true,1
+person_ErDgcEEWM1bP,Jeanine Mojum,Jeanine,Mojum,univ_penn,University of Pennsylvania,Amoureux Beauty,recent_grad,WG'24,true,1
+person_8Ep3uHs4Hw3N,Jessica Ramses,Jessica,Ramses,univ_penn,University of Pennsylvania,NEPRI Pasta,recent_grad,GEN'23,true,1
+person_c7Vmx6gUeQJM,John Hopcroft,John,Hopcroft,univ_penn,University of Pennsylvania,Lucy,current_student,ENG'28,true,1
+person_vhTlm6-cl8bQ,Jonathan Muruako,Jonathan,Muruako,univ_penn,University of Pennsylvania,Fitalyst,recent_grad,SPP'24,true,1
+person_j5hOwVteVnkQ,Joseph Han,Joseph,Han,univ_penn,University of Pennsylvania,Clédo,recent_grad,WG'23,true,1
+person_38lvPUTBfTDJ,Joshua Baek,Joshua,Baek,univ_penn,University of Pennsylvania,Lumify Care,recent_grad,C'23,true,1
+person_BaXmS6tUio3t,Joshua Folarin,Joshua,Folarin,univ_penn,University of Pennsylvania,Cengine,recent_grad,WG'26,true,1
+person_YDJhXu-OEWbL,Joshua Weiner,Joshua,Weiner,univ_penn,University of Pennsylvania,Aimless,recent_grad,SEAS'23,true,1
+person_GRKXGrvlKnDg,Julie Liu,Julie,Liu,univ_penn,University of Pennsylvania,Motherly Notes,recent_grad,GED'25,true,1
+person_GuVmpF6M09X-,Justin Zhang,Justin,Zhang,univ_penn,University of Pennsylvania,Altrui Foundation,recent_grad,ENG'24,true,1
+person_niMsli6PWaXe,Karan Shah,Karan,Shah,univ_penn,University of Pennsylvania,Ossum Technologies,recent_grad,ENG'24,true,1
+person_gn69CCl4P48p,Kevin Lu,Kevin,Lu,univ_penn,University of Pennsylvania,Robin,recent_grad,SEAS'26,true,1
+person_4dJZkg6iy-3i,Kevin Russell,Kevin,Russell,univ_penn,University of Pennsylvania,The Zillennial Advisors,current_student,WG'27,true,1
+person_WbEgN14pXbiO,Kevin Xuan (Yiran Xuan),Kevin,Xuan),univ_penn,University of Pennsylvania,Serpent Robotics,recent_grad,GEN'26,true,1
+person_nYEFsqnMWaxx,Kyle Zhang,Kyle,Zhang,univ_penn,University of Pennsylvania,Robin,recent_grad,SEAS'26,true,1
+person_F06UdSwGRwNB,Kylie Chang,Kylie,Chang,univ_penn,University of Pennsylvania,LilyLoop,current_student,SEAS'27,true,1
+person_k5l0uSYGRoZL,Lada Korotaeva,Lada,Korotaeva,univ_penn,University of Pennsylvania,Munch Industries,recent_grad,SEAS'23,true,1
+person_y0OACH0nS0CX,Leon Zhang,Leon,Zhang,univ_penn,University of Pennsylvania,BetterBasket,recent_grad,WG'24,true,1
+person_bnNnteP6Uqpq,Lindsay Smith,Lindsay,Smith,univ_penn,University of Pennsylvania,Alopex Golf,recent_grad,SEAS'23,true,1
+person_dgyz2Gq7pW15,Lisa Sun,Lisa,Sun,univ_penn,University of Pennsylvania,Chloropept,current_student,C'27,true,1
+person_utkuyeuWBqnO,Louis Chung,Louis,Chung,univ_penn,University of Pennsylvania,Kfans,recent_grad,C'24,true,1
+person_MkSb0KZ8XnII,Louisa Qiu,Louisa,Qiu,univ_penn,University of Pennsylvania,Lumify Care,recent_grad,N'23,true,1
+person_GTXWC_YyibEr,Malavika Reddy,Malavika,Reddy,univ_penn,University of Pennsylvania,Flock,recent_grad,WG'23,true,1
+person_FtSZmtrXSjoP,Mandy Chen,Mandy,Chen,univ_penn,University of Pennsylvania,Capivara,recent_grad,WEMBA'25,true,1
+person_s6iQgeTGCwJn,Manvitha Mallela,Manvitha,Mallela,univ_penn,University of Pennsylvania,Flock,recent_grad,WG'23,true,1
+person_epQtxO2duf7s,Margaret Zhu,Margaret,Zhu,univ_penn,University of Pennsylvania,Serpent Robotics,recent_grad,W'26,true,1
+person_aoqNV7xoSztF,Mario Ferre,Mario,Ferre,univ_penn,University of Pennsylvania,PopEye,recent_grad,ENG'23,true,1
+person_imijJnMLkRiX,Matt Liebers,Matt,Liebers,univ_penn,University of Pennsylvania,Guide Genetics,recent_grad,WG'26,true,1
+person_zCj3cgdzFeck,Matthew Lowe,Matthew,Lowe,univ_penn,University of Pennsylvania,Jalan Journey Global,current_student,SEAS'27,true,1
+person_1owZVWPHzl3j,Megan Burke,Megan,Burke,univ_penn,University of Pennsylvania,Caboodle,recent_grad,WG'24,true,1
+person_dk9p7S8tMzeQ,Megan Burton,Megan,Burton,univ_penn,University of Pennsylvania,BrainFood,recent_grad,G'24,true,1
+person_FPqSlQhfPsgy,Melanie Herbert,Melanie,Herbert,univ_penn,University of Pennsylvania,Sync Labs,recent_grad,ENG'25,true,1
+person_NRWoopy9HJEP,Michael Ansusinha,Michael,Ansusinha,univ_penn,University of Pennsylvania,Snowlake,recent_grad,WG'25,true,1
+person_P49QJyimTBvZ,Mustafo Mustafokulov,Mustafo,Mustafokulov,univ_penn,University of Pennsylvania,Chloropept,current_student,C'27,true,1
+person_D4Dr7c8hPUQN,Nastassja Kuznetsova,Nastassja,Kuznetsova,univ_penn,University of Pennsylvania,Munch Industries | Orble,recent_grad,GEN'24,true,1
+person_aDVuAcAgaayL,Neha Chelamkuri,Neha,Chelamkuri,univ_penn,University of Pennsylvania,LilyLoop,current_student,SAS'27,true,1
+person_qP7O8BOzvM2A,Nicholas Anderson,Nicholas,Anderson,univ_penn,University of Pennsylvania,PopEye,recent_grad,ENG'23,true,1
+person_jsMgwaVWHA-R,Nicholas Szabo,Nicholas,Szabo,univ_penn,University of Pennsylvania,IvyTech Design LLC,current_student,M'27,true,1
+person_Xvvn4mPVgzyY,Nick Harty,Nick,Harty,univ_penn,University of Pennsylvania,Storiara,current_student,EE'27,true,1
+person_w2fUJAbTwSZn,Niha Gottiparthy,Niha,Gottiparthy,univ_penn,University of Pennsylvania,Keye,recent_grad,WG'23,true,1
+person_Cr4PiNjAmroD,Nitin Agarwal,Nitin,Agarwal,univ_penn,University of Pennsylvania,Spine Bionics,recent_grad,WG'26,true,1
+person_NWjNarwVtJB_,Octavius Kim,Octavius,Kim,univ_penn,University of Pennsylvania,Flipkit,recent_grad,C'23,true,1
+person_qWaWm1DTWzAa,Orestis Skoutellas,Orestis,Skoutellas,univ_penn,University of Pennsylvania,PopEye,recent_grad,ENG'23,true,1
+person_b7TRz6tr5hXY,Paolo Fornasini,Paolo,Fornasini,univ_penn,University of Pennsylvania,Keye,recent_grad,G'23,true,1
+person_JrddaMZCqR6B,Pedram Bayat,Pedram,Bayat,univ_penn,University of Pennsylvania,Chloropept,current_student,GEN'28,true,1
+person_h7ZDb0X9QNxw,Piotr Lazarek,Piotr,Lazarek,univ_penn,University of Pennsylvania,Nirby,recent_grad,ENG'25,true,1
+person_27lar_44UEkq,Rachel League,Rachel,League,univ_penn,University of Pennsylvania,CFO 4 ALL,recent_grad,WG'25,true,1
+person_F_bUbhCiReiv,Rachel Snyder,Rachel,Snyder,univ_penn,University of Pennsylvania,Caboodle,recent_grad,WG'24,true,1
+person_MtVZf8gFPXmX,Raghu Arghal,Raghu,Arghal,univ_penn,University of Pennsylvania,MedVision,recent_grad,GR'26,true,1
+person_ALJsUd42TOb4,Rahul Nambiar,Rahul,Nambiar,univ_penn,University of Pennsylvania,Jochi,recent_grad,SEAS'24,true,1
+person_SvT2ZbN5J1Zl,Rainbow Yeung,Rainbow,Yeung,univ_penn,University of Pennsylvania,Odyssey Notebooks | Odyssey Notebooks LLC,recent_grad,WG'24,true,1
+person_fSXUBQXy1tKI,Riddhima Kapoor,Riddhima,Kapoor,univ_penn,University of Pennsylvania,Veggie Vice,recent_grad,WG'24,true,1
+person_6Vz5CsN4QH_L,Rima Chavali,Rima,Chavali,univ_penn,University of Pennsylvania,LilyLoop,current_student,SAS'27,true,1
+person_T6Jub9hOnIf8,Rishi Ambavanekar,Rishi,Ambavanekar,univ_penn,University of Pennsylvania,Cloak,current_student,ENG'29,true,1
+person_EEliAJuIQQPt,Rupesh Jeyaram,Rupesh,Jeyaram,univ_penn,University of Pennsylvania,Revise Robotics,recent_grad,WG'24,true,1
+person_-Hd0y83QlDnt,Ruthwick Patthireddy,Ruthwick,Patthireddy,univ_penn,University of Pennsylvania,Keye,recent_grad,WG'23,true,1
+person_X8dAnmXZR9R9,Saif Khawaja,Saif,Khawaja,univ_penn,University of Pennsylvania,Shinkei Systems | Shinkei Systems Corp.,recent_grad,G'23,true,1
+person_JXOxOxRafkX0,Sarah Powers,Sarah,Powers,univ_penn,University of Pennsylvania,Nemu,recent_grad,WG'23,true,1
+person_F_ACm5P4pL-g,Savan Patel,Savan,Patel,univ_penn,University of Pennsylvania,Ossum Technologies,recent_grad,ENG'23,true,1
+person_m7jjOdqTzsF_,Scott Ogden,Scott,Ogden,univ_penn,University of Pennsylvania,Capivara,recent_grad,WEMBA'25,true,1
+person_oybQbqRkXq7B,Shiva Teerdhala,Shiva,Teerdhala,univ_penn,University of Pennsylvania,Ossum Technologies,recent_grad,W'23,true,1
+person_1T03_MpX6I5_,Sophie Takahashi,Sophie,Takahashi,univ_penn,University of Pennsylvania,Munch Industries,recent_grad,MT'23,true,1
+person_yQ7Qla8-d_5p,Sourish Jasti,Sourish,Jasti,univ_penn,University of Pennsylvania,Altrui Foundation,recent_grad,W'24,true,1
+person_Of5-j7FN-20z,Spencer Kaufman,Spencer,Kaufman,univ_penn,University of Pennsylvania,Storiara,recent_grad,C'26,true,1
+person_9-pyO_ehNllI,Steyn Knollema,Steyn,Knollema,univ_penn,University of Pennsylvania,Serpent Robotics,recent_grad,GEN'26,true,1
+person_0Vp-ZcCealE9,Sunny Wang,Sunny,Wang,univ_penn,University of Pennsylvania,Robin,recent_grad,SEAS'26,true,1
+person_MDNswjc3YnzL,Tara Balakrishnan,Tara,Balakrishnan,univ_penn,University of Pennsylvania,EmployAI,recent_grad,WG'23,true,1
+person_gcTc4iMFoJ1w,Tarunyaa Sivakumar,Tarunyaa,Sivakumar,univ_penn,University of Pennsylvania,Quok.it,recent_grad,EE'25,true,1
+person_eXBdEENr4srd,Toby Hirsch,Toby,Hirsch,univ_penn,University of Pennsylvania,Probook,recent_grad,ENG'24,true,1
+person_9OHapJ-hGWVr,Tommy Glenn,Tommy,Glenn,univ_penn,University of Pennsylvania,Capivara,recent_grad,WEMBA'25,true,1
+person_WbJ3o80W0acu,Trevor Chan,Trevor,Chan,univ_penn,University of Pennsylvania,IvyTech Design LLC,recent_grad,GR'26,true,1
+person_TF5SBusqPOh4,Tyler Sacharow,Tyler,Sacharow,univ_penn,University of Pennsylvania,Cloak,current_student,C'29,true,1
+person_R0cX3tv8zrVP,Udit Garg,Udit,Garg,univ_penn,University of Pennsylvania,ToxiSense,recent_grad,GEN'26,true,1
+person_empCMjZLPDrc,Vasundhara Macherla,Vasundhara,Macherla,univ_penn,University of Pennsylvania,FullFlock,recent_grad,W'23,true,1
+person_7LMQuXReN63c,X.George Eliadis,X.George,Eliadis,univ_penn,University of Pennsylvania,Probook,recent_grad,ENG'24,true,1
+person_KxD0xsfEIOIE,Yash Dhir,Yash,Dhir,univ_penn,University of Pennsylvania,Jochi,recent_grad,SEAS'24,true,1
+person_wjjhym508M5N,Yiran Xuan,Yiran,Xuan,univ_penn,University of Pennsylvania,Serpent Robotics,recent_grad,GEN'26,true,1
+person_GAyD4ZvbrOTR,Yiting Shen,Yiting,Shen,univ_penn,University of Pennsylvania,Quok.it,recent_grad,GEN'26,true,1
+person_PZnmRDwUJSeV,Yuwei Guo,Yuwei,Guo,univ_penn,University of Pennsylvania,FullFlock,recent_grad,LSM'23,true,1
+person_CsBivREhGbyo,A.J. Steigman,A.J.,Steigman,univ_penn,University of Pennsylvania,Steignet,older_alumni,WG'18,true,2
+person_7p_AhYmRCAwe,Abi Szabo,Abi,Szabo,univ_penn,University of Pennsylvania,roura,older_alumni,ENG'20,true,2
+person_iubG2njAX_wp,Ace Kim,Ace,Kim,univ_penn,University of Pennsylvania,SphereUs,unknown,,true,2
+person_q_53blfmbrHs,Adam Pardes,Adam,Pardes,univ_penn,University of Pennsylvania,Neuroflow,older_alumni,GR'19,true,2
+person_vPSun_7R_J9p,Adam Rawot,Adam,Rawot,univ_penn,University of Pennsylvania,Woveon,older_alumni,ENG'17,true,2
+person_VvALf9mTgIUH,Adarsh Battu,Adarsh,Battu,univ_penn,University of Pennsylvania,Avisi,older_alumni,W'18,true,2
+person_4qK-eDKqFN8I,Ajia Maximillian Minnis,Ajia,Minnis,univ_penn,University of Pennsylvania,Thrive Hair Bar,older_alumni,GED'22,true,2
+person_gNX0OlY3MqOs,Alex Kushleyev,Alex,Kushleyev,univ_penn,University of Pennsylvania,KMel (Qualcomm),unknown,,true,2
+person_4VYcq7sGg6JJ,Amreeta Gill,Amreeta,Gill,univ_penn,University of Pennsylvania,Polyview,older_alumni,WG'19,true,2
+person_pVJXaJqLhW4-,Andie Kaplan,Andie,Kaplan,univ_penn,University of Pennsylvania,ConnectED Mobile,older_alumni,WG'20,true,2
+person_rukPZ-Wi_Gwr,Andrew Barnell,Andrew,Barnell,univ_penn,University of Pennsylvania,Geneoscopy,older_alumni,WG'17,true,2
+person_7AL6ry545GJn,Andrew Hotsko,Andrew,Hotsko,univ_penn,University of Pennsylvania,Recovery Box,older_alumni,WG'21,true,2
+person_itwOwUDnpnEW,Angela Jiang,Angela,Jiang,univ_penn,University of Pennsylvania,FLOAT/THERE,older_alumni,WG'20,true,2
+person_FYXeXyGU578_,Anna Li,Anna,Li,univ_penn,University of Pennsylvania,Candr,older_alumni,WG'20,true,2
+person_aqQ8uE53fp5W,Anne Woepse,Anne,Woepse,univ_penn,University of Pennsylvania,Spring,older_alumni,GEN'14,true,2
+person_4mpsx5-roH2C,Anthony Scarpone-Lambert,Anthony,Scarpone-Lambert,univ_penn,University of Pennsylvania,Lumify Care,older_alumni,N'21,true,2
+person_LBva7GVtXZIl,Antonio Munoz,Antonio,Munoz,univ_penn,University of Pennsylvania,Advans Health,older_alumni,WG'17,true,2
+person_OUKtz2CVO5x5,Anvith Ekkati,Anvith,Ekkati,univ_penn,University of Pennsylvania,Acention,older_alumni,GEN'18,true,2
+person_9apGmN6F5LMO,Arjun Srinivas,Arjun,Srinivas,univ_penn,University of Pennsylvania,Innova Dynamics,older_alumni,M&T'07,true,2
+person_5cZIA_baTEZ6,Aswin Mannepalli,Aswin,Mannepalli,univ_penn,University of Pennsylvania,Mira Insight,older_alumni,G'18,true,2
+person_tK9a3XObaQCv,Austin Kipp,Austin,Kipp,univ_penn,University of Pennsylvania,Prophet Models,older_alumni,WG'21,true,2
+person_MratLRYcejSV,Austin Simon,Austin,Simon,univ_penn,University of Pennsylvania,ChefMark,older_alumni,WG'20,true,2
+person_wF1JL3Hldzkx,Avik De,Avik,De,univ_penn,University of Pennsylvania,Ghost Robotics,unknown,,true,2
+person_4RKVW-Me3mww,Ben Knepler,Ben,Knepler,univ_penn,University of Pennsylvania,True Places,older_alumni,WG'10,true,2
+person_-X3k-poVDoj2,Berkay Deniz Ilhan,Berkay,Ilhan,univ_penn,University of Pennsylvania,"Augean Robotics, Inc.",unknown,,true,2
+person_Sfg9jKhMvT3i,Bernardo Garcia,Bernardo,Garcia,univ_penn,University of Pennsylvania,Felix,older_alumni,G'21,true,2
+person_lgNHnH72vxts,Blank New Venture Collaboration,Blank,Collaboration,univ_penn,University of Pennsylvania,ToxiSense,unknown,,true,2
+person_4Jq7-n9nJuvy,Braden Fineberg,Braden,Fineberg,univ_penn,University of Pennsylvania,Roundup App,unknown,,true,2
+person_czjShkB1nzxc,Brandon Kao,Brandon,Kao,univ_penn,University of Pennsylvania,Avisi,older_alumni,ENG'18,true,2
+person_FcOOhDelSZH7,Brandon Ray,Brandon,Ray,univ_penn,University of Pennsylvania,High Performance Aviation,older_alumni,WG'22,true,2
+person_Ncj92R1TU1lq,Brendan Duebner,Brendan,Duebner,univ_penn,University of Pennsylvania,Life Skills For Soldiers,older_alumni,WG'22,true,2
+person_nCoROJt9UwNj,Bret Pearlman,Bret,Pearlman,univ_penn,University of Pennsylvania,Elevation Partners,unknown,,true,2
+person_xG0FyUQINAWd,Brianna Wronko,Brianna,Wronko,univ_penn,University of Pennsylvania,Group K Diagnostic,older_alumni,ENG'17,true,2
+person__8fnt6K8K8jo,Bryan Cai,Bryan,Cai,univ_penn,University of Pennsylvania,Lyvely,older_alumni,WG'22,true,2
+person_wa_cMdGH3YSj,Bryan Dinner,Bryan,Dinner,univ_penn,University of Pennsylvania,Clarifi,older_alumni,L'22,true,2
+person_ZuZvI4028M2M,Chase Hobby,Chase,Hobby,univ_penn,University of Pennsylvania,VRB Labs,older_alumni,WG'20,true,2
+person_wc9QDMzDio-H,Chris Hanson,Chris,Hanson,univ_penn,University of Pennsylvania,Eager Academy,older_alumni,C'17,true,2
+person_Jfm_kXtAv5t6,Chris Molaro,Chris,Molaro,univ_penn,University of Pennsylvania,Neuroflow,older_alumni,WG'17,true,2
+person_0fCf2KRzQcuC,Colin Robinson,Colin,Robinson,univ_penn,University of Pennsylvania,Acention,older_alumni,WG'18,true,2
+person_1X1iV0DGWCkW,Connie Jao,Connie,Jao,univ_penn,University of Pennsylvania,NuMarra,older_alumni,WG'22,true,2
+person_NJo257rZ8479,Craig Thompson,Craig,Thompson,univ_penn,University of Pennsylvania,Prophet Models,older_alumni,WG'21,true,2
+person_d43hTCYIZqnA,Cyrus Karai,Cyrus,Karai,univ_penn,University of Pennsylvania,CoverForce,older_alumni,WG'21,true,2
+person_8B99becty7lb,Dana Kim,Dana,Kim,univ_penn,University of Pennsylvania,Highlight,older_alumni,WG'20,true,2
+person_gI919WQ8EmYw,Daniel Hanover,Daniel,Hanover,univ_penn,University of Pennsylvania,Dandy,unknown,,true,2
+person_AUkEdL-W3-i_,Daniel Mellinger,Daniel,Mellinger,univ_penn,University of Pennsylvania,KMel (Qualcomm),unknown,,true,2
+person_09D4NdbCtUsj,Daniel Nelson,Daniel,Nelson,univ_penn,University of Pennsylvania,Fulton,older_alumni,WG'21,true,2
+person_nOzmm6cEwxSR,David Klippel,David,Klippel,univ_penn,University of Pennsylvania,coBlossom,older_alumni,WG'22,true,2
+person_YuGJbHyKWqwP,David Teichman,David,Teichman,univ_penn,University of Pennsylvania,AITI,unknown,,true,2
+person_okXEtKVc4nG1,Dayo Adewole,Dayo,Adewole,univ_penn,University of Pennsylvania,InstaHub,unknown,,true,2
+person_npg_JzRyvh4K,Dhananjay Goel,Dhananjay,Goel,univ_penn,University of Pennsylvania,DetoXyFi,older_alumni,WG'22,true,2
+person_XH546qsJ-wTj,Divinity Matovu,Divinity,Matovu,univ_penn,University of Pennsylvania,Watotoly,older_alumni,WG'17,true,2
+person_4864zHWfcEGZ,Douglas Williams,Douglas,Williams,univ_penn,University of Pennsylvania,Calicosol,older_alumni,WG'22,true,2
+person_G5gh7MZ8Ca_2,Eddie Kong,Eddie,Kong,univ_penn,University of Pennsylvania,ZEV,older_alumni,GEN'18,true,2
+person_qHwy5JI8pQ3R,Elston He,Elston,He,univ_penn,University of Pennsylvania,Synovium,older_alumni,L'20,true,2
+person_dLOgemCEyZnd,Emily Tung,Emily,Tung,univ_penn,University of Pennsylvania,Jubilee,older_alumni,WG'17,true,2
+person_r2-9vFDK-PJ-,Erica Sokol,Erica,Sokol,univ_penn,University of Pennsylvania,Students Care,older_alumni,SPP'16,true,2
+person_riSMAWjGwicj,Ethan Kellough,Ethan,Kellough,univ_penn,University of Pennsylvania,Highlight,older_alumni,GEN'21,true,2
+person_f5fv_s_mbF-i,Evan Seale,Evan,Seale,univ_penn,University of Pennsylvania,VRB Labs,older_alumni,WG'20,true,2
+person_u1JViH0yrFjv,Evan Zou,Evan,Zou,univ_penn,University of Pennsylvania,Synovium,older_alumni,C'19,true,2
+person_h5vlQJpJxmrQ,Federika Longinotti-Buitoni,Federika,Longinotti-Buitoni,univ_penn,University of Pennsylvania,Collecto,older_alumni,WG'18,true,2
+person_j6Esb4l6-bHb,Felicity Johnson,Felicity,Johnson,univ_penn,University of Pennsylvania,Hello Ralphie,older_alumni,WG'20,true,2
+person_msMvr5yecMKU,Gabriel Elsner,Gabriel,Elsner,univ_penn,University of Pennsylvania,ZEV,older_alumni,WG'18,true,2
+person__Rb4Ic0WVvvb,Gabriela Ariana Campoverde,Gabriela,Campoverde,univ_penn,University of Pennsylvania,Miren,older_alumni,GEN'22,true,2
+person_VMFBYtuSQzW2,Garrison Haning,Garrison,Haning,univ_penn,University of Pennsylvania,TallGrass Tailor,older_alumni,WG'21,true,2
+person_q_Fvob05XlIZ,Gary Agora,Gary,Agora,univ_penn,University of Pennsylvania,Recuperet Health,older_alumni,WG'22,true,2
+person_4tWjN9I5Ugzk,Gautam Narasimhan,Gautam,Narasimhan,univ_penn,University of Pennsylvania,Straia,unknown,,true,2
+person_H_7Sg79JDLiD,Gautam Pasari,Gautam,Pasari,univ_penn,University of Pennsylvania,TrueValuaHub,older_alumni,WG'20,true,2
+person_aJ8rbaC2jCkB,Gavin Kenneally,Gavin,Kenneally,univ_penn,University of Pennsylvania,Ghost Robotics,unknown,,true,2
+person_YSVBZ-7fEfxm,Gregory Nesmith,Gregory,Nesmith,univ_penn,University of Pennsylvania,Underdogstuff,older_alumni,W'20,true,2
+person_M7xOq6cOjIk-,Irene Liu,Irene,Liu,univ_penn,University of Pennsylvania,Chiyo,older_alumni,WG'22,true,2
+person_ANH0oRr4bH7x,Isoken Igbinedion,Isoken,Igbinedion,univ_penn,University of Pennsylvania,Parfait,older_alumni,WG'21,true,2
+person_U58rPaYDGQuY,Jacob Wallenberg,Jacob,Wallenberg,univ_penn,University of Pennsylvania,SolutionLoft,older_alumni,W'16,true,2
+person_dWw4K94Wxw2L,Jane Fisher,Jane,Fisher,univ_penn,University of Pennsylvania,Harper Wilde,older_alumni,WG'17,true,2
+person_FRQM9n__meHw,Jason Yu,Jason,Yu,univ_penn,University of Pennsylvania,Levo,older_alumni,WG'22,true,2
+person_rjRx_NyJHyir,Jeffrey Yu,Jeffrey,Yu,univ_penn,University of Pennsylvania,TeenHacksLI,unknown,,true,2
+person_ZqlSkN8EQep_,Jelece Morris,Jelece,Morris,univ_penn,University of Pennsylvania,Cobare,older_alumni,WG'19,true,2
+person_J2o4gWMcZcdz,Jenna Kerner,Jenna,Kerner,univ_penn,University of Pennsylvania,Harper Wilde,older_alumni,WG'17,true,2
+person_bb9dnyh6B0TH,Jeremy Gartner,Jeremy,Gartner,univ_penn,University of Pennsylvania,Career Propulsion,older_alumni,WG'22,true,2
+person_YmDMImmFX8pU,Joe Ammon,Joe,Ammon,univ_penn,University of Pennsylvania,Clove,older_alumni,WG'19,true,2
+person_ljxbzYMQ1s3w,Joe Kakkis,Joe,Kakkis,univ_penn,University of Pennsylvania,Altrui Foundation,older_alumni,C'21,true,2
+person_L1oHJp8tZuK_,John Garner,John,Garner,univ_penn,University of Pennsylvania,Card Curator,older_alumni,WG'22,true,2
+person_ivGSL9ll-9Sp,Joseph Quan,Joseph,Quan,univ_penn,University of Pennsylvania,Knoetic,older_alumni,WG'17,true,2
+person_Dc-AJmdvU9Bp,Josh Phifer,Josh,Phifer,univ_penn,University of Pennsylvania,Barn Owl,older_alumni,WG'17,true,2
+person_-p-KnU0U2pce,Joshua Evans,Joshua,Evans,univ_penn,University of Pennsylvania,Jove,older_alumni,C'14,true,2
+person_josxFmE5EZxG,Joshua Freedman,Joshua,Freedman,univ_penn,University of Pennsylvania,Airalux Medical,unknown,,true,2
+person_5lnJ2MPp6jG5,Julio Erdos,Julio,Erdos,univ_penn,University of Pennsylvania,Sigo,unknown,,true,2
+person_bSi12RhfExCc,Justin Silver,Justin,Silver,univ_penn,University of Pennsylvania,aavrani,older_alumni,WG'19,true,2
+person_rU-LQpmvZPVL,Katherine Sizov,Katherine,Sizov,univ_penn,University of Pennsylvania,Strella,older_alumni,C'19,true,2
+person_r4v5IkfzqFzy,Kausalya Raman,Kausalya,Raman,univ_penn,University of Pennsylvania,InvenTABLE,unknown,,true,2
+person_ZwY-NqzLXPmP,Kelly Xu,Kelly,Xu,univ_penn,University of Pennsylvania,E-Health Now,older_alumni,WG'17,true,2
+person_hy96wPcBKAhM,Kevin Anthony,Kevin,Anthony,univ_penn,University of Pennsylvania,Lyvely,older_alumni,WG'22,true,2
+person_rSLuzPFeog-p,Kevin Weschler,Kevin,Weschler,univ_penn,University of Pennsylvania,Fuego,older_alumni,WG'20,true,2
+person_eiQyRwCjXEkr,Libie Motchan,Libie,Motchan,univ_penn,University of Pennsylvania,Fulton,older_alumni,WG'21,true,2
+person_kEmPY_2MM7Cr,Linda Ye,Linda,Ye,univ_penn,University of Pennsylvania,FLOAT/THERE,older_alumni,WG'20,true,2
+person_fW4GhJEbwAxC,Liz Nunez,Liz,Nunez,univ_penn,University of Pennsylvania,Everdura,older_alumni,C'17,true,2
+person_VbUk-F41U-3V,Luke Fraker,Luke,Fraker,univ_penn,University of Pennsylvania,coBlossom,older_alumni,WG'22,true,2
+person_3IM_UuiA1ndS,Lulu Ge,Lulu,Ge,univ_penn,University of Pennsylvania,Elix,older_alumni,WG'20,true,2
+person_MiVU64wSSepa,Manuel Godoy,Manuel,Godoy,univ_penn,University of Pennsylvania,Felix,older_alumni,WG'21,true,2
+person_kXa7BHKQgeM1,Marc Rosenberg,Marc,Rosenberg,univ_penn,University of Pennsylvania,BioAlert Technologies,older_alumni,GEN'19,true,2
+person__kogs55nt3wf,Matthew Hanna,Matthew,Hanna,univ_penn,University of Pennsylvania,InstaHub,older_alumni,ENG'18,true,2
+person_qc6DO1qjZEGw,Matthew Piccoli,Matthew,Piccoli,univ_penn,University of Pennsylvania,IQ Motion Control,unknown,,true,2
+person_7hMkipetfBzT,Max Liechty,Max,Liechty,univ_penn,University of Pennsylvania,InvenTABLE,older_alumni,SEAS'22,true,2
+person_Zgimuk8_Qtfe,Melina Flabiano,Melina,Flabiano,univ_penn,University of Pennsylvania,Keaton,older_alumni,WG'19,true,2
+person_Uvq30KDSo8m5,Michael Contreras,Michael,Contreras,univ_penn,University of Pennsylvania,ensemble,older_alumni,WG'22,true,2
+person_X-UlYOOiplOQ,Michael Wong,Michael,Wong,univ_penn,University of Pennsylvania,InstaHub,older_alumni,W'18,true,2
+person_grCm5V8EWjlF,Michelle Xiong,Michelle,Xiong,univ_penn,University of Pennsylvania,Lex Analytics,older_alumni,W'22,true,2
+person_e46oQyL9SM03,Mike Weber,Mike,Weber,univ_penn,University of Pennsylvania,Frutero Ice Cream,older_alumni,WG'20,true,2
+person_4gen6GBxBYAU,Mike Zeidlhack,Mike,Zeidlhack,univ_penn,University of Pennsylvania,Phrase Health,older_alumni,WG'19,true,2
+person_1f3sS-EdcOvK,Montgomery Ngan,Montgomery,Ngan,univ_penn,University of Pennsylvania,Ascend,older_alumni,C'20,true,2
+person_WLmOi8538a6b,Nathan Frey,Nathan,Frey,univ_penn,University of Pennsylvania,Anthropic,unknown,,true,2
+person_GHxTW185SN2b,Nestor Solari,Nestor,Solari,univ_penn,University of Pennsylvania,Sigo,older_alumni,G'19,true,2
+person_XFQU7zK9K9te,Nick Silvero,Nick,Silvero,univ_penn,University of Pennsylvania,ArtsWrk,older_alumni,W'18,true,2
+person_sf1J-PaaIOjQ,Parker Barnett,Parker,Barnett,univ_penn,University of Pennsylvania,Fellow Hunter,older_alumni,GEN'18,true,2
+person_CnphRsPDFfCJ,Patrick Faga,Patrick,Faga,univ_penn,University of Pennsylvania,FirstWork,older_alumni,LPS'22,true,2
+person_D83OLQ8qeNRC,Peter Chung,Peter,Chung,univ_penn,University of Pennsylvania,Bobaface,older_alumni,GFA'16,true,2
+person_Q3kq5G18m_HO,Peter Zhu,Peter,Zhu,univ_penn,University of Pennsylvania,Acention,older_alumni,WG'18,true,2
+person__VwlDJc8S50o,Pranav Pillai,Pranav,Pillai,univ_penn,University of Pennsylvania,Lex Analytics,older_alumni,ENG'20,true,2
+person_zT_Yja8jN63i,Prateek Agarwal,Prateek,Agarwal,univ_penn,University of Pennsylvania,Sanguis,older_alumni,M'19,true,2
+person_hqfIP5oQHI2r,Rajiv Patel-O'Connor,Rajiv,Patel-O'Connor,univ_penn,University of Pennsylvania,Synovium,older_alumni,C'19,true,2
+person_L4HawZxgPEAK,Ramita Ravi,Ramita,Ravi,univ_penn,University of Pennsylvania,ArtsWrk,older_alumni,C'17,true,2
+person_UU_y7HEOtjqy,Robert Dowling,Robert,Dowling,univ_penn,University of Pennsylvania,Alphagora,older_alumni,EE'21,true,2
+person_uja8_A2gK2d6,Rohan Shah,Rohan,Shah,univ_penn,University of Pennsylvania,Slice Capital,older_alumni,ENG'19,true,2
+person_-qkNzCbYQMJc,Ron Kerbs,Ron,Kerbs,univ_penn,University of Pennsylvania,Kidas,older_alumni,G'20,true,2
+person_XJ9xK-8sUWYy,Rooshy Roychoudhury,Rooshy,Roychoudhury,univ_penn,University of Pennsylvania,aavrani,older_alumni,WG'19,true,2
+person_jdiazfAhrr65,Rui Jing Jiang,Rui,Jiang,univ_penn,University of Pennsylvania,Avisi,older_alumni,W'18,true,2
+person_BkQq64kX4qv0,Ryan Davidson,Ryan,Davidson,univ_penn,University of Pennsylvania,Impact Local,older_alumni,WG'22,true,2
+person_4uYwMdXwZoGq,Ryan Hosler,Ryan,Hosler,univ_penn,University of Pennsylvania,Alopex Golf,older_alumni,SEAS'22,true,2
+person_yLOGQeXIUGNm,Ryan Wosick,Ryan,Wosick,univ_penn,University of Pennsylvania,Avior Analytics,older_alumni,ENG'19,true,2
+person_ynLPVHBb4DIe,Saahil Madge,Saahil,Madge,univ_penn,University of Pennsylvania,Felicity,unknown,,true,2
+person_kOre0_VALGCS,Sagar Chopra,Sagar,Chopra,univ_penn,University of Pennsylvania,Tiffin,older_alumni,G'22,true,2
+person_-ymh5IJgkIt6,Sanjeev Suratwala,Sanjeev,Suratwala,univ_penn,University of Pennsylvania,Recuperet Health,older_alumni,WG'22,true,2
+person_YaBHPIDhkQDW,Scott Elfenbein,Scott,Elfenbein,univ_penn,University of Pennsylvania,brEDcrumb,older_alumni,WG'17,true,2
+person_XePLMFP5aiPQ,Seher Taneja,Seher,Taneja,univ_penn,University of Pennsylvania,Spoodle,unknown,,true,2
+person_TuVOx6kucx3h,Sehgal Dhawal,Sehgal,Dhawal,univ_penn,University of Pennsylvania,MyQs,older_alumni,GEN'08,true,2
+person_l08gnsB8dYqD,Serena Advani,Serena,Advani,univ_penn,University of Pennsylvania,Seadrop Skincare,older_alumni,WG'22,true,2
+person_st-9yy-SdKMS,Shanel Fields,Shanel,Fields,univ_penn,University of Pennsylvania,MDAlly,older_alumni,WG'19,true,2
+person_0ndNE1-3oSnH,Sieva Kozinsky,Sieva,Kozinsky,univ_penn,University of Pennsylvania,Air23,older_alumni,WG'20,true,2
+person_pGtrzBC1cUTD,Simone Kendle,Simone,Kendle,univ_penn,University of Pennsylvania,Parfait,older_alumni,WG'21,true,2
+person_Xea1A9riWO4f,Soleil Carrero,Soleil,Carrero,univ_penn,University of Pennsylvania,BioAlert Technologies,older_alumni,GEN'19,true,2
+person_ad1TJK70d3B5,Steven Peng,Steven,Peng,univ_penn,University of Pennsylvania,Horizon Robotics,unknown,,true,2
+person_yza_WHHFX_R2,Tejas Agarwal,Tejas,Agarwal,univ_penn,University of Pennsylvania,Scout Robotics,unknown,,true,2
+person_KrJYn6QoN6kR,Tim Marsh,Tim,Marsh,univ_penn,University of Pennsylvania,OPEN Laboratories,older_alumni,W'21,true,2
+person_u24r6QFAFCcU,Toni Oloko,Toni,Oloko,univ_penn,University of Pennsylvania,Dandy,older_alumni,W'20,true,2
+person_Sq07ao0Y7aM5,Trey Steidle,Trey,Steidle,univ_penn,University of Pennsylvania,Breed Science,older_alumni,WG'21,true,2
+person_ULtWFXIlvsfq,Tyler MacBroom,Tyler,MacBroom,univ_penn,University of Pennsylvania,Polyview,older_alumni,WG'18,true,2
+person_KIOTdpUXR9s9,Vedant Saboo,Vedant,Saboo,univ_penn,University of Pennsylvania,Frutero Ice Cream,older_alumni,WG'20,true,2
+person_lFb3rEUgfL7n,Vikram Krishnamoorthy,Vikram,Krishnamoorthy,univ_penn,University of Pennsylvania,Etcetera Bio,older_alumni,C'20,true,2
+person_J1Jhwc27r-OX,Vinayak Kumar,Vinayak,Kumar,univ_penn,University of Pennsylvania,E-Health Now,unknown,,true,2
+person_kqCVpurIwob8,Vince Kuchar,Vince,Kuchar,univ_penn,University of Pennsylvania,Barn Owl,older_alumni,WG'17,true,2
+person_C-4PAQaBLLdn,Vishnu Rachakonda,Vishnu,Rachakonda,univ_penn,University of Pennsylvania,Air23,older_alumni,GEN'19,true,2
+person_i9tU3fCJdr4f,Vlasta Schutzenhofer,Vlasta,Schutzenhofer,univ_penn,University of Pennsylvania,roura,older_alumni,ENG'20,true,2
+person_fz7ziy0TVl_X,Wenxuan Chen,Wenxuan,Chen,univ_penn,University of Pennsylvania,Kfans,older_alumni,C'22,true,2
+person_8G3Z0kBv9Cfj,Will Fry,Will,Fry,univ_penn,University of Pennsylvania,SolutionLoft,older_alumni,W'17,true,2
+person_eLe4oG66sKzu,Will Hu,Will,Hu,univ_penn,University of Pennsylvania,Flagler Health,older_alumni,GEN'19,true,2
+person_C1gbZJqWYfoO,Yoojin Jang,Yoojin,Jang,univ_penn,University of Pennsylvania,OnHouse,older_alumni,WG'21,true,2
+person_LPoXBSBPYJQB,Yue Li,Yue,Li,univ_penn,University of Pennsylvania,Jubilee,older_alumni,WG'17,true,2
+person_mpdQw7jB_WJW,Yunhan Gao,Yunhan,Gao,univ_penn,University of Pennsylvania,Aureum,older_alumni,WG'20,true,2
+person_mhcWrSIoIbU-,Zachary Johnson,Zachary,Johnson,univ_penn,University of Pennsylvania,Slate,older_alumni,WG'22,true,2
+person_EeF1OhgQZZRI,Caleb Chan,Caleb,Chan,univ_berkeley,"University of California, Berkeley",Lance,unknown,,true,2
+person_8lFw_N8vo6nR,Deepak Pathak,Deepak,Pathak,univ_berkeley,"University of California, Berkeley","Skild AI, CMU",unknown,,true,2
+person_ZNY6mkepOgRl,Dennis Zax,Dennis,Zax,univ_berkeley,"University of California, Berkeley",Naïve,unknown,,true,2
+person_n51GiGNxvQSg,Emir Karabeg,Emir,Karabeg,univ_berkeley,"University of California, Berkeley",Sim,unknown,,true,2
+person_eF52MTu4ViSJ,Gatik Trivedi,Gatik,Trivedi,univ_berkeley,"University of California, Berkeley",Lance,unknown,,true,2
+person_VV5If2UmmYdY,Gavin Brennen,Gavin,Brennen,univ_berkeley,"University of California, Berkeley",Lance,unknown,,true,2
+person_CoFqX4DzbcSi,John Dagdelen,John,Dagdelen,univ_berkeley,"University of California, Berkeley",Fluid,unknown,,true,2
+person_dM9NB1k0PI_I,Rohil Agarwal,Rohil,Agarwal,univ_berkeley,"University of California, Berkeley",The Context Company,unknown,,true,2
+person_MOlhWQMp1gdq,Skyler Ji,Skyler,Ji,univ_berkeley,"University of California, Berkeley",Human Behavior,unknown,,true,2
+person_GQSniDXn3Qgp,Tony Yang,Tony,Yang,univ_berkeley,"University of California, Berkeley",SyntheticFi. Ex-Stripe,unknown,,true,2
+person_BFycvYqoAAwD,李婷婷 Lee Ting Ting,李婷婷,Ting,univ_berkeley,"University of California, Berkeley",z-institute,unknown,,true,2
+person_3OzyMMHxeJTx,Aidan Dizaji,Aidan,Dizaji,univ_waterloo,University of Waterloo,appfi,unknown,,true,2
+person_gmd0m5vVzXSy,David Bahrami,David,Bahrami,univ_waterloo,University of Waterloo,Belaris Biotech,unknown,,true,2
+person_cm7XogV2Hn5g,David Linardi,David,Linardi,univ_waterloo,University of Waterloo,airfairness,unknown,,true,2
+person__kbUpyzK6JU9,Francois le Roux,Francois,Roux,univ_waterloo,University of Waterloo,Applied Intelligence,unknown,,true,2
+person_oIP5Wr92thGK,Hadi Alsibassi,Hadi,Alsibassi,univ_waterloo,University of Waterloo,Argos Research,unknown,,true,2
+person_phF-xPuOPNWw,Hassan Ismail,Hassan,Ismail,univ_waterloo,University of Waterloo,Argos Research,unknown,,true,2
+person_H1yE07hTM94L,Huagang Tan,Huagang,Tan,univ_waterloo,University of Waterloo,02AI,unknown,,true,2
+person_JoQ8WePCiIx-,John Marzo,John,Marzo,univ_waterloo,University of Waterloo,airfairness,unknown,,true,2
+person_6Qq2ITvP69da,Joseph Weinerman,Joseph,Weinerman,univ_waterloo,University of Waterloo,Anthum AI,unknown,,true,2
+person_DkRE9Q64L6u4,Josh Zucker,Josh,Zucker,univ_waterloo,University of Waterloo,1/1,unknown,,true,2
+person_laE2z4NTBYhl,Manjot Singh Hunjan,Manjot,Hunjan,univ_waterloo,University of Waterloo,02AI,unknown,,true,2
+person_bQRS0vsgyZ1y,Meghan Brar,Meghan,Brar,univ_waterloo,University of Waterloo,Belaris Biotech,unknown,,true,2
+person_aV1tn-uQct5v,Orri Bogdan,Orri,Bogdan,univ_waterloo,University of Waterloo,Anthum AI,unknown,,true,2
+person_s_9KnzdMDoKO,Ridham Goyal,Ridham,Goyal,univ_waterloo,University of Waterloo,Belaris Biotech,unknown,,true,2
+person_-_AAFzzyknD7,Shahdad Kompanizare,Shahdad,Kompanizare,univ_waterloo,University of Waterloo,appfi,unknown,,true,2
+person__ddIP88beqCv,Zaais van Zyl,Zaais,Zyl,univ_waterloo,University of Waterloo,Applied Intelligence,unknown,,true,2
+person_x0LdXFQuWKuL,Zijing Wu,Zijing,Wu,univ_waterloo,University of Waterloo,02AI,unknown,,true,2
+person_SdOjCyZIOqcp,Zohair Khan,Zohair,Khan,univ_waterloo,University of Waterloo,airfairness,unknown,,true,2
+person_c75QQBwzHk9p,Alex Mittal,Alex,Mittal,,,Innova Dynamics,older_alumni,M&T'07,true,2
+person_RRDE8iXqEywW,Cal Peng,Cal,Peng,,,Innova Dynamics,older_alumni,M&T'07,true,2
+person_iUavULmGxabu,Priyanka Agarwal,Priyanka,Agarwal,,,Innova Dynamics,older_alumni,M&T'07,true,2
+person_FUuay_Ib_c9o,Aditya Gowd,Aditya,Gowd,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_6ZfRMkR6N3sF,Advit Ranawade,Advit,Ranawade,univ_penn,University of Pennsylvania,,current_student,,false,3
+person__MB9LlDLDgt_,Ahmed Altunkaya,Ahmed,Altunkaya,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_gZi9vUmEilVU,AJ Boyle,AJ,Boyle,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_6rYPJSDXJ-RD,Alan Li,Alan,Li,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_sYyO4taYf2us,Alex Yang,Alex,Yang,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_4YRWNvvrpF-9,Alex Zhao,Alex,Zhao,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_mV5auzfdWvAl,Alexander Kyimpopkin,Alexander,Kyimpopkin,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_Is4D6iu4c-88,Alexander Robertson,Alexander,Robertson,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_LPMcZdnsdRcC,Alexander Tong,Alexander,Tong,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_fHzht5pp_3kg,Alistair King,Alistair,King,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_aq6Ek5UmN_wm,Amelia Pilot,Amelia,Pilot,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_SwQ_OrPwFYq7,Andrew Chelimo,Andrew,Chelimo,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_kpoPez1td6SG,Angelina Hu,Angelina,Hu,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_wAfNS6GRwuNW,Angelina Li,Angelina,Li,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_CSqWSNzAnyvu,Anna Hallac,Anna,Hallac,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_4lNVAMKv2xcn,Anthony Li,Anthony,Li,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_V_rtxC-q5g54,Anvi Tuteja,Anvi,Tuteja,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_wn18X5t1g0hZ,Arjun Nargolwala,Arjun,Nargolwala,univ_penn,University of Pennsylvania,,recent_grad,'26,false,3
+person_mWXVaxRKLskE,Arjun Sharma,Arjun,Sharma,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_kzZNA1CGeZ2f,Arjun Suryawanshi,Arjun,Suryawanshi,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_TDMpVWIy-Epr,Ashley Zhang,Ashley,Zhang,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_8yHwlKSKqT11,Baron Ping-Yeh Hsieh,Baron,Hsieh,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_cRHG8kJaom4w,Benjamin Liu,Benjamin,Liu,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_tfTkwNsgTxt8,Caiden Hibbert,Caiden,Hibbert,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_UXrkPMOlK4Mg,Cassie Mai,Cassie,Mai,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_VQfiXGASpHqu,Chiara Bruzzi,Chiara,Bruzzi,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_buuublUEDcKF,Chinmay Govind,Chinmay,Govind,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_J0VHKl2Qj-Jx,Christopher Liu,Christopher,Liu,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_WHc3uLYbnRpY,Christopher Wun,Christopher,Wun,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_HZ4U4xRP6vVh,Chun Kuen Bryan Chiu,Chun,Chiu,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_0ScbVHmDZzdI,Cindy Liu,Cindy,Liu,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_EV_YJu2v4b2B,Connor Mundheim,Connor,Mundheim,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_wOG9P1DbxYIj,Cynthia Yang,Cynthia,Yang,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_3PVwfU1D-uK_,Daichi Hiraoka,Daichi,Hiraoka,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_X-xS6y9CIw4y,Daniel Botros,Daniel,Botros,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_SOs7PN7vjlIv,Daniel Jacobsohn Serebrinic,Daniel,Serebrinic,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_C4SwumQWj_yW,Daniel Li,Daniel,Li,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_IOavdwA6TNas,Daniel Zhao,Daniel,Zhao,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_U-G2ex1gysdd,Danish Mahmood,Danish,Mahmood,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_EpgfCyUhxqyT,Darren Weng,Darren,Weng,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_kYCMK89gO-5v,David Fu,David,Fu,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_IsiMIUEsz3yv,David Vexler,David,Vexler,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_XLtXCYKgx0eg,Derek Cho,Derek,Cho,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_2A6PWsSMvEVS,Derek Kong,Derek,Kong,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_Ay7YhEoEf57t,Dimitris Deliakidis,Dimitris,Deliakidis,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_joLWv1GEs3lr,Eecho Yuan,Eecho,Yuan,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_58x0MtOPPquD,Elijah Jeoung,Elijah,Jeoung,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_MDXTghvdxGJ9,Emil Schaumburg,Emil,Schaumburg,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_Pf378Oz8T4zt,Ethan Ho,Ethan,Ho,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_M92V4y6v2qFK,Ethan Liu,Ethan,Liu,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_MxqAya6pTLNY,Eugene Veksler,Eugene,Veksler,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_dvskTY-S7dR9,Eunsoo Shin,Eunsoo,Shin,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_0ubbgIPJw1WV,Evelyn Li,Evelyn,Li,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_0nuPXvHYR3JI,Fady Fahmy,Fady,Fahmy,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_dbCYofhcw6gj,Gabriel Weng,Gabriel,Weng,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_BjIp2NKRvl1-,Grace Chi,Grace,Chi,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_yz7eibEFWx5K,Grace Li,Grace,Li,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_B_INS5GOB4Dn,Helen Luo,Helen,Luo,univ_penn,University of Pennsylvania,,current_student,,false,3
+person__AKdMxg_h3Lq,Henry Zhao,Henry,Zhao,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_1D8VSOH07K_a,Isabela Delgado,Isabela,Delgado,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_Hlt1hIGUPyvB,Jake Jameson,Jake,Jameson,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_neWREoAPOsM-,James Doh,James,Doh,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_wk_HiIaoNnTt,Jason Mathew,Jason,Mathew,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_JfjShg-YFfE3,Jeet Bhatnagar,Jeet,Bhatnagar,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_mW_hF0698msc,Jenny Li,Jenny,Li,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_dFxPQPTtfQ7k,Jerry Zhang,Jerry,Zhang,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_JnrZGMsft6bk,Jesse Zong,Jesse,Zong,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_pYgRMrF8DPZF,Joe MacDougall,Joe,MacDougall,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_3GoDxONHEkmA,Jon Melitski,Jon,Melitski,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_MXtCIR6TcZup,Jonathan Kachappilly,Jonathan,Kachappilly,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_aUgYACELey6O,Jonathan Xu,Jonathan,Xu,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_fpy9rYCgHYyd,Josh Chen,Josh,Chen,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_yR7lGhzn3ItU,Josh Leshinskie,Josh,Leshinskie,univ_penn,University of Pennsylvania,,recent_grad,'26,false,3
+person_d_o6F6Qs_h6w,Julia Dase,Julia,Dase,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_6p2ELmfBpFG5,Julian Weng,Julian,Weng,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_m9foWvWY5a7Z,Justin Yu,Justin,Yu,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_QHACr4V2jYpx,Kaitlyn Kwan,Kaitlyn,Kwan,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_u-QGWVahZYQC,Kate Li,Kate,Li,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_AQQqOy_zjhP3,Katherine Ke,Katherine,Ke,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_A9-mngKTRLvX,Keira Goggin,Keira,Goggin,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_KcMsa-wnw25C,Kevin Yao,Kevin,Yao,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_Es0LOpsObR6m,Kurtis Zhang,Kurtis,Zhang,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_awnJKJeh3PTQ,Liangyu (Layton) Cai,Liangyu,Cai,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_DwusgSPg2TBn,Luke Tong,Luke,Tong,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_ZGcJa1PQfnvL,Maggie Du,Maggie,Du,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_SPHiEGxg6xyK,Martin Pan,Martin,Pan,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_Jb41EgY52zE-,Mati Okutsu,Mati,Okutsu,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_h5GFwComDWB6,Max de Castro,Max,Castro,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_M4eobeOKYVTe,Maxim Veksler,Maxim,Veksler,univ_penn,University of Pennsylvania,,current_student,,false,3
+person__JqJonVJph_U,Mike Song,Mike,Song,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_0TYh9lqnl2Zd,Minghan Sun,Minghan,Sun,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_x5ingY63SbKh,Morgan Wang,Morgan,Wang,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_HRs7njIEOkRt,Natassja Kuznetsova,Natassja,Kuznetsova,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_ir1temAD0YxS,Nathan Aronson,Nathan,Aronson,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_Me4poRKzUAb0,Ngaatendwe Manyika,Ngaatendwe,Manyika,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_kQW0aRbcFhsT,Nikhil Ruia,Nikhil,Ruia,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_SmOHn_P8bZho,Olivia Hu,Olivia,Hu,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_Rzlr5Tb2mmaS,Omar Staniczai,Omar,Staniczai,univ_penn,University of Pennsylvania,,current_student,'29,false,3
+person_isd6XyrDuHDk,Oscar Qu,Oscar,Qu,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_8f9zfFWPPkW7,Owen Lester,Owen,Lester,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_MYbp1PRoyGI1,Owen Shaffer,Owen,Shaffer,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_H9sTPN3c-2uD,Peter Shen,Peter,Shen,univ_penn,University of Pennsylvania,,recent_grad,'26,false,3
+person_BLzW6rrcLYdn,Preetam Jain,Preetam,Jain,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_GP2LR75Z3SOc,Rachel Doman,Rachel,Doman,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_PwXCY8GAut0T,Raghav Garimella,Raghav,Garimella,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_Jk37AiZHbOnP,Rhea Malik,Rhea,Malik,univ_penn,University of Pennsylvania,,recent_grad,'26,false,3
+person_QeoCoFddJDoJ,Rishabh Mallela,Rishabh,Mallela,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_TH82yPGMkbDM,Rohan Panday,Rohan,Panday,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_TbnSs7EJyjv0,Ronit Kapoor,Ronit,Kapoor,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_BaAxCnmPaoX2,Ronnie Wang,Ronnie,Wang,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_zmCZSdM55tCZ,Rose Wang,Rose,Wang,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_w03NSX0VTXqN,Ruth Zhao,Ruth,Zhao,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_xu4XyuSL7B0J,Ryan He,Ryan,He,univ_penn,University of Pennsylvania,,recent_grad,'26,false,3
+person_7TV0snWZJKHV,Ryan Tanenholz,Ryan,Tanenholz,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_euemWCzWq3xk,Ryann Joseph,Ryann,Joseph,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_KRwTTx5_9WAb,Samuel Lao,Samuel,Lao,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_t90ia3dVqW5n,Satya Maddirala,Satya,Maddirala,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_qIaVpw54NW8N,Sidharth Roy,Sidharth,Roy,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_ksgSBRf4I4rm,Sophia Wang,Sophia,Wang,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_pQ__NB5-7NYz,Spencer Ware,Spencer,Ware,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_JsxbGIYS9Gn3,Sritan Motati,Sritan,Motati,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_yluOqcxqCWLn,Stan Chen,Stan,Chen,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_3oLNuQwpxJso,Sylvia Yu,Sylvia,Yu,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_muybEQk1GMHQ,Theodor Bulacovschi,Theodor,Bulacovschi,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_uL9I5nB_y934,Thomas Ngulube,Thomas,Ngulube,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_tTJ987ukstq_,Trini Feng,Trini,Feng,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_LMBtmrpl3SDY,Victor Dang,Victor,Dang,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_wkaLrD44Aa-_,William Qi,William,Qi,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_eMrwmfhf7hu0,William Zhang,William,Zhang,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_npVXffmSpA8q,Winston Shen,Winston,Shen,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_7C2oCvTGVnXC,Xavier Allen,Xavier,Allen,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_1OwC3okKOMhl,Ximing Luo,Ximing,Luo,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_Dof2umcHC2s7,Yoonjung Choi,Yoonjung,Choi,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_PzXJoBqpCdHk,Yuvraj Lakhotia,Yuvraj,Lakhotia,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_FfDd9PjyYtwj,Zachary Harpaz,Zachary,Harpaz,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_aWG1NT--FTaM,Zhiyao Tang,Zhiyao,Tang,univ_penn,University of Pennsylvania,,current_student,,false,3
+person_MyfPwRhlTDBK,Zirun Han,Zirun,Han,univ_penn,University of Pennsylvania,,recent_grad,GEN'26,false,3
+person_Gl8SpIKGXS9S,AaDalal Dalal,AaDalal,Dalal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_1ULLKfAKUsPu,Aadi Biswas,Aadi,Biswas,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_dh7yghom5SoT,Aadil Ahmed,Aadil,Ahmed,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_JJtqeJOTFw-E,Aagam Dalal,Aagam,Dalal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_VWfFBGoeHH_e,Aaliya Jakir,Aaliya,Jakir,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Ma-fq2_ddgdL,Aanya Bhandari,Aanya,Bhandari,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2zRHo6SZEFj5,Aarav Raina,Aarav,Raina,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_LMdkOl8g78uW,AaravAgarwal Agarwal,AaravAgarwal,Agarwal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_xVsH-65GXUz7,Aaron Mei,Aaron,Mei,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_JUeoytwzESLu,aartipb,aartipb,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_7GNzDAm9mnCt,Aarush Gunjal,Aarush,Gunjal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_kzwM76DXch7d,Aarushi Singh,Aarushi,Singh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_LeEXxR2tAH-g,aashvi22 Manakiwala,aashvi22,Manakiwala,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_d0_0leKB33nD,Abdinajib Mohamed,Abdinajib,Mohamed,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_JArso-V19NAw,Abdulaziz Bakker,Abdulaziz,Bakker,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_D5rbtb1_n8hG,Abhilash K.,Abhilash,K.,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_PoD9rgYMMZuH,Abhinav Khanna,Abhinav,Khanna,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_4Z_Ott9ku21j,Abhinav Rao,Abhinav,Rao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_hKOSDJdKgWTx,abhinav-chinta Chinta,abhinav-chinta,Chinta,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_BWjn7T_N7vC4,Abhisheik Sharma,Abhisheik,Sharma,univ_penn,University of Pennsylvania,,unknown,,false,4
+person__kBwbLUBcLjv,Abir Hossain,Abir,Hossain,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ExCEaLm8Umo4,Abishek Satish,Abishek,Satish,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_0HDZ_fDWMKwv,Abum Okemgbo,Abum,Okemgbo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_hjgOUHzWG6um,ACE Emeribe,ACE,Emeribe,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2Ihz1HptT2s1,achandra22,achandra22,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_kjStdo5wRSIa,Ada Yetis,Ada,Yetis,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_30e8o4453c0f,Adam Ababon,Adam,Ababon,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_QNvoX1tdFr9N,Adam Gorka,Adam,Gorka,univ_penn,University of Pennsylvania,,unknown,,false,4
+person__GFIlWrJZCVW,Adam Richter,Adam,Richter,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Jr5LBuqQgqOU,Adam Strike,Adam,Strike,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_MPwYZ-byAPMk,Adhiraj Chhoda,Adhiraj,Chhoda,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GUJnFS6ZZ-_y,Adil Shahid,Adil,Shahid,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_wUg7gLaqH3_5,Adishree Das,Adishree,Das,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_-xaf9Wigux8s,adit-g Gupta,adit-g,Gupta,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_X3RX2a9G4WDp,Aditi Ghosh,Aditi,Ghosh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_q3zjByZLnoSR,Aditya  Choudhary,Aditya,Choudhary,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_TOMjCGyJHjg5,Aditya Agarwal,Aditya,Agarwal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_gbyGLNHZ7WXk,Aditya Anand,Aditya,Anand,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Gnfd1lsSytik,Aditya Dutt,Aditya,Dutt,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_d2xCQ79j6Tsh,Aditya Gupta,Aditya,Gupta,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_fPaKjaQrLy2j,Aditya Jain,Aditya,Jain,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_qNYnwxxW7ILK,Aditya Kulkarni,Aditya,Kulkarni,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_27GaO95VYQ3G,Advait Alluri,Advait,Alluri,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_w5bByXF7rrA9,Advita Shrivastava,Advita,Shrivastava,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_4YLg2u-R_6eI,Ahmed Haj Ahmed,Ahmed,Ahmed,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_b1PYNmZB6z9x,Aidan Barg,Aidan,Barg,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_bPENJ01u1NtO,Aidan Good,Aidan,Good,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_T9aOZLiLVMSX,Aidan Knerr,Aidan,Knerr,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_KbhTYxcqZqux,Aidan Kuo,Aidan,Kuo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_4PBzKEvwEmKs,AjayAvasi Avasi,AjayAvasi,Avasi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_eiINCU20uYfo,Akakdabeast 2324,Akakdabeast,2324,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_XTv3GaxqJHkT,Akash Anickode,Akash,Anickode,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_fRBX5f0b0kuu,Akshaj Yerragudi,Akshaj,Yerragudi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yKAmYFWZ8f3r,akshattewari2 Tewari,akshattewari2,Tewari,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AO3Ef3_pJRDj,Akshitha Vijay,Akshitha,Vijay,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_UJNyCW7cpfZm,Alan Shi,Alan,Shi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ptaM0sWEcvAV,Alan Z.,Alan,Z.,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_b94_gcVShVRY,Alaric Qin,Alaric,Qin,univ_penn,University of Pennsylvania,,older_alumni,M&T'16,false,4
+person_m5ORJVQlcjNc,alee279 Lee,alee279,Lee,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_vwXwGzV-4kfw,Alex (Yu) Yan,Alex,Yan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_gQAJ7uEQZbW0,Alex Luo,Alex,Luo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rRNEQ8n1vHvQ,Alex Zavalny,Alex,Zavalny,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_exvTu2aG9WHs,Alexa Rybicki,Alexa,Rybicki,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_5DIDYmFzWO-O,Alexander Budko,Alexander,Budko,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_XmuTj5HWJ5gY,Alexander Budko,Alexander,Budko,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_3bIDP9uW1DTu,Alexander Marcozzi,Alexander,Marcozzi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_3_dpmlMYbDmu,Alexander Mehta,Alexander,Mehta,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_iLpb2UoXOV9r,Alexander Nanda,Alexander,Nanda,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_LZDmYeNQeMzm,Alexander Witkowski,Alexander,Witkowski,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Yoo4someJ7xn,Alexis Duong,Alexis,Duong,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_XioGB9L0xN9b,alfredoni saintclair,alfredoni,saintclair,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_VGaetiKk2Ah8,Ali Krema,Ali,Krema,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_RuP6wFZjc5zU,Ali Krema,Ali,Krema,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_PqEtmVda0z_2,Alice,Alice,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_5ak6NIobxQ0n,Alice He,Alice,He,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AUSeA-bVJvdg,Alisha Agarwal,Alisha,Agarwal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_j79MdlVoeRbF,Aliza Berger,Aliza,Berger,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SFIUNAreOTwG,Allen Gan,Allen,Gan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_jc8eZzsS3h8Y,Alvin Shao,Alvin,Shao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Rdvg4Tw2JJjF,Amar Dhillon,Amar,Dhillon,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_dKIdNK6YovtV,Ameya Patel,Ameya,Patel,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_RLueuGAYR45Q,AmmaarsCode Anjum,AmmaarsCode,Anjum,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_XWyHAhoe5OtV,Amy Azaria,Amy,Azaria,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_S-8tI-LPUxg7,Amy Liu,Amy,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_on1rUNj2SwoN,Ananyaa Kumar,Ananyaa,Kumar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_aQxo8jejv_UG,Anay Seth,Anay,Seth,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_5PewpQ1wk_zW,ANDREA KIM,ANDREA,KIM,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_6gOuXxv65LGR,Andrew Antenberg,Andrew,Antenberg,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_S7h1ERyB3y2e,Andrew Bukowski,Andrew,Bukowski,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_fKn3baG-F8H7,Andrew Heuer,Andrew,Heuer,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SizrrgGcUqMd,Andrew Wang,Andrew,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_iA5H1zZ49azy,Andrew Xu,Andrew,Xu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Atgok9L0F5q9,andrew-li1 Li,andrew-li1,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_keo9G0IgAC-u,Andy Cruz,Andy,Cruz,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_sCjEMxKImKqY,Andy Liu,Andy,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_z2qRsFKgsIcS,Anh Pham,Anh,Pham,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ZAjVK-DKd8rK,Anika Koul,Anika,Koul,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_FWnl3ZJcGDPL,Animish Jain,Animish,Jain,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tnAe2X7fo8um,Anirudh Sathiya Narayanan,Anirudh,Narayanan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_cwnW3-7nLKL6,Anjalee Narenthiren,Anjalee,Narenthiren,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Y53PkwQ8nRfa,Anjali Kalanidhi,Anjali,Kalanidhi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_3uN0_4pD3bc2,Anjana Begur,Anjana,Begur,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_VAL-DphldUxT,ankit06ch Chandra,ankit06ch,Chandra,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_l1pWYejsqEy4,Anmol Sandhu,Anmol,Sandhu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_x6BgeQP1rpfJ,Anna Jiang,Anna,Jiang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_BsnVP5Adjypo,Anna Sims,Anna,Sims,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SAXEQ7OcmYN_,Anna Wang,Anna,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Vkgm4WZXXEVe,Anna Zhang,Anna,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_OwfF1TOi_l7_,annabellatian,annabellatian,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_oRtMTukwgcno,Anni Pan,Anni,Pan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_DVqLAvPPNh0K,Ansh Nagwekar,Ansh,Nagwekar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yekimxPdl8ZP,Anthony Clifton,Anthony,Clifton,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_nQ07anvpo9Tk,Anurag Kapila,Anurag,Kapila,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_JeSCNmzWdmYG,Anusha Keshireddy,Anusha,Keshireddy,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_j3sxHfXfE12S,Apurva Parasher,Apurva,Parasher,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AuFg7uyfWjzt,Areeba Zameer,Areeba,Zameer,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ohZWUFop7BIk,Arjun Arasappan,Arjun,Arasappan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rBs16sLCih2I,Arjun Verma,Arjun,Verma,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Sd2iKVydc2g9,Armaan Tobaccowalla,Armaan,Tobaccowalla,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_3bR-eA091YGn,Armando Cabrera,Armando,Cabrera,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_pZ-RrHmEtp9j,Arnav Chauhan,Arnav,Chauhan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ZM0vbg1W4FHO,Arnav Chopra,Arnav,Chopra,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_dMwWs-JIj07T,Arnav Gattani,Arnav,Gattani,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_FmahvzcW69B_,Arnav Marchareddy,Arnav,Marchareddy,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_OJ8Qu1-i1qCN,Arnav Mummineni,Arnav,Mummineni,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_IpuG-vPZ70md,Arogya Dahal,Arogya,Dahal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_pAMlocfhtKB7,Arthur Deng,Arthur,Deng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_U7CrlrAJfr2U,Arun Kirubarajan,Arun,Kirubarajan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_UXOOT2dS0ttm,Arya Bansal,Arya,Bansal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_pxZodOr4gV6F,Arya Sapkal,Arya,Sapkal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mZIABPuUznvL,Aryah Rao,Aryah,Rao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_iJWBZ_hraUSz,Aryan Daga,Aryan,Daga,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_RPa6vI0e2xJy,Aryan Kashyap,Aryan,Kashyap,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_kauTsm0RdsQE,Aryan Neb,Aryan,Neb,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2j3vEknU1igv,Aryan Sharma,Aryan,Sharma,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_XzqvA0jV0MJG,Aryan Sharma,Aryan,Sharma,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_DquXS-573Pbk,Ashley F Chang,Ashley,Chang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_dm2j52wpNGBg,Ashley Yan,Ashley,Yan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person__eLfQJAUk-3a,Ashok Saravanan,Ashok,Saravanan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Lv0zzGOwIP4B,Ashwath Muppa,Ashwath,Muppa,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_nQxBGqUpt2kt,Audrey Keener,Audrey,Keener,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_MTG6n300Tj8A,aum,aum,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_YTY7g7Z7FHvW,Aurora Cenaj,Aurora,Cenaj,univ_penn,University of Pennsylvania,,unknown,,false,4
+person__EB_mJuBfRIG,Aurumish Anfilofyev,Aurumish,Anfilofyev,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_VIktX5yevkuN,Avanish Kulkarni,Avanish,Kulkarni,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_HUcw6SRMwrgY,Avi Upadhyayula,Avi,Upadhyayula,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_VQDY4lVNHWoj,Avinash Veluchamy,Avinash,Veluchamy,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_O6PEv4SMnJUZ,Avni Ahuja,Avni,Ahuja,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_OF36t6yuJY2D,Ayush Dewan,Ayush,Dewan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_HjWITz1PmRxA,Baile Chen,Baile,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_iV9cM0yezX0c,BasharEskandar eskandar,BasharEskandar,eskandar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_JA53oq8D_Pzb,Belle Pan,Belle,Pan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_VVgTMXOtmvEg,Bemnet Merkebu,Bemnet,Merkebu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_iuZozBmYIFxN,Benjamin Le,Benjamin,Le,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_FlAT02MVTmqo,Benjamin Liu,Benjamin,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_04GjlPXB5cO4,Benjamin Pinheiro,Benjamin,Pinheiro,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_6BXCVXm-6Rck,Benjamin Xu,Benjamin,Xu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_LrWxbSXhSRNU,Benjamin Xu,Benjamin,Xu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_UkuiAX9BfT6K,Bharat Katyal,Bharat,Katyal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_B05L1FMaLFiN,Bharathi Sridhar,Bharathi,Sridhar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_sNsDzn3QFTml,Bhargav Maturi,Bhargav,Maturi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_DaDUE8hZRPM5,Bhavik Thati,Bhavik,Thati,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_fWyFTz2V7NLJ,bhavikak20005,bhavikak20005,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AARyxc0pHZb4,Bhavith Manapoty,Bhavith,Manapoty,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_CGx0GNiQqFma,Binh Nguyen,Binh,Nguyen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_QS-AJqqP2hrD,Blake Grimes,Blake,Grimes,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_EpyKnV1uOEF6,Boosung Kim,Boosung,Kim,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_OFsytBhEj3qv,Bowen Valery,Bowen,Valery,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_nPRNzdZ9Toak,Brandon Adiele,Brandon,Adiele,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2fQe_DG8rjEO,Brandon Wang,Brandon,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SRRmhgqOijBZ,Brandon Wang,Brandon,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GAtEr2UFB6Y3,Brandy Pineda,Brandy,Pineda,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_1HWRmy6-fdrP,Brenner Maull,Brenner,Maull,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_q58TLkLBMvKj,Brian Mason,Brian,Mason,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Ou0eDnW4H2Tn,Brian Travis,Brian,Travis,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_L4G3W_bvSpSm,Brian Wei,Brian,Wei,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_gZb61hq8H02v,Brian Williams,Brian,Williams,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_xuc46qoIH2q4,Brian Xiang,Brian,Xiang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_vuZYNQoXNX9_,Bryan Wu,Bryan,Wu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Tml_chDwDR-9,Burak Ayyorgun,Burak,Ayyorgun,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_xyQMjpAQWVH4,Caitlin Frazee,Caitlin,Frazee,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_gkokqb76DymH,cajacobus,cajacobus,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_638xqlPFz2GA,Caleb Rogers,Caleb,Rogers,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_WcJ_5T27xEzt,Calvin Lieu,Calvin,Lieu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_C1z14g_kUpk3,Calvin Tian,Calvin,Tian,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_RxhboXZm2YVb,Cameron Cabo,Cameron,Cabo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_pib9r-kYNvhZ,Cameron Shaw,Cameron,Shaw,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Y2nuXXKHTZsW,Campbell Parker,Campbell,Parker,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_P9Cha2PPOxw7,Campbell Phalen,Campbell,Phalen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_aEp6vXPgt0Gv,Carisa Shah,Carisa,Shah,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_vfBkaQNTT7pt,Carol Tu,Carol,Tu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_4jI3wDkGXqw6,Caroline Chen,Caroline,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_p2TkUoVU_q7G,Caroline Cummings,Caroline,Cummings,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_PtFWZ9sOl-Di,Caroline Kavanagh,Caroline,Kavanagh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person__A3vVkTawCDU,Caroline Magro,Caroline,Magro,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_xGMGCc9U6E98,Caroline Smith,Caroline,Smith,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Nko8bpGdC--Q,Carolyn Zhang,Carolyn,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_KK8uoLAQcNv0,Catherine Hsu,Catherine,Hsu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_vebo2y5o5Z1K,Catherine Michelutti,Catherine,Michelutti,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_taIebITAuK9w,Cathy Hou,Cathy,Hou,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_xlBRLPmOTMzT,Charis Gao,Charis,Gao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_5Na3JP1GmwUz,Charles Cunningham,Charles,Cunningham,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_kUiVO09i1vsA,Charles Jin,Charles,Jin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rvc3IDqQ5TbZ,charlesjin123 Jin,charlesjin123,Jin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_TG9iNYnZfXNs,Charlie T,Charlie,T,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_00vBxYBdv7TF,Chelsea Cheng,Chelsea,Cheng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_DvcHnutPwheK,Chenjia Ni,Chenjia,Ni,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_9fYpjMu36GQ-,Cherilynn Chow,Cherilynn,Chow,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_WX2COr7Gvy71,Cherry Pham,Cherry,Pham,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_CByS3e2OSE65,Chetan Boddeti,Chetan,Boddeti,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_8sARsUA1vJ6Y,Chidunbo Liu,Chidunbo,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_PIKTRWRofJ8N,Chiemeka Chukwu,Chiemeka,Chukwu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_4jcUFN2HVXyG,Chien-Mu Yang,Chien-Mu,Yang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_KCKIuH8AqZRG,Chikaosolu Nnadozie,Chikaosolu,Nnadozie,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_DXiiXzfLCKJ3,Chinghao Sun,Chinghao,Sun,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_fDz0ViegfD_3,Chisa Fukutome,Chisa,Fukutome,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_G3FsXionIfJG,Chloe Cho,Chloe,Cho,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_65_lKm5nx6IJ,Chris Wang,Chris,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_geJ719PS5wu4,Christian Okokhere,Christian,Okokhere,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_BHlmyAZu-f-d,Christian S.,Christian,S.,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_kYGU76uP8TC9,Christina Lu,Christina,Lu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_IWlsBLTsY977,Christina Qiu,Christina,Qiu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Mxi0wOd_OAGR,Christina Qiu,Christina,Qiu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_t0lG6qt0P4lZ,Christine Cheng,Christine,Cheng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ZvDok0N636-E,Christopher Ajayi,Christopher,Ajayi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_lxEnRwFd4pG6,Christy Xia,Christy,Xia,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zSSYyb3RSLuy,Cindy Hao,Cindy,Hao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_fq9pLvoRxBa9,Clara Jeon,Clara,Jeon,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_OwWPQc3JzAs5,Claren Clarkson Ogira,Claren,Ogira,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_jS3d8GXfH2LC,Clayton Hickey,Clayton,Hickey,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SknVNLU-q-Uy,Cole Fairchild,Cole,Fairchild,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SVrNSro0Zcpl,Cole Hausman,Cole,Hausman,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_9ZmFVV83DpjK,Cole Zimmerman,Cole,Zimmerman,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AMQDQf4fa5lV,Constance Wang,Constance,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_okZeLac1RXjt,Constantine Constantinidis,Constantine,Constantinidis,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_4FaIwDpXaYzu,cosmic perott,cosmic,perott,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_vHXC0NQV_6xt,craig,craig,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_soBvlTKYu2aj,Cymberly Tsai,Cymberly,Tsai,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_kgpJ3cDq9A2x,Dale Kim,Dale,Kim,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_cNRu6tLsNXZx,Daniel Achacon,Daniel,Achacon,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_nzsCq2S5A91K,Daniel Barra,Daniel,Barra,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rtsbbhK2pwoE,Daniel Li,Daniel,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ritpVUk4goUg,Daniel Like,Daniel,Like,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_0rVo_aR0RrVs,Daniel Martin,Daniel,Martin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Du-4luBZA1kn,Daniel Ng,Daniel,Ng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_E3jF2HgM2oGo,Daniel Salib,Daniel,Salib,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_c0d-FkRct9Vm,Daniel Tao,Daniel,Tao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_21UVste-5R5B,Daniel Wang,Daniel,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_veYMRyxp0Bb0,Daniel Xue,Daniel,Xue,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tgr2cPBXR3aL,Daniel Zhu,Daniel,Zhu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_vbLWevqA3Dz7,Danny Disman,Danny,Disman,univ_penn,University of Pennsylvania,,unknown,,false,4
+person__qyUl2IPmNUD,dannygardner26 Gardner,dannygardner26,Gardner,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_QCE8nmSnB-oK,Daphne Kontogiorgos-Heintz,Daphne,Kontogiorgos-Heintz,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_MQ56m0O3Z4Yy,Darren Wang,Darren,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_atjIv53ZIos1,Darryl Previlor,Darryl,Previlor,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_kF_55p5O74C7,David Alanis Garza,David,Garza,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_k98ssP8ujlTi,David Bartolome,David,Bartolome,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zdco4yZvoZRI,David Feng,David,Feng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_B7eLAt1NC0Jp,David Fu,David,Fu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_1bfVlFIAP-Wg,David Greig,David,Greig,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_89H_QhoSV9Rf,David Li,David,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_5J3GhYxmrJFV,David Majomi,David,Majomi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ovaavoZVrB_4,David Man,David,Man,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_NoAhDNCX2GT3,David Ramirez,David,Ramirez,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_hBZ9iVzigo8C,David Wu,David,Wu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_y9TAw8FQp_aa,David Zhan,David,Zhan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_wyTeuoG_aNOm,David Zhang,David,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_343qxmXljgIo,David Zhang,David,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_eTcJEsJPRJFE,Davis Clark,Davis,Clark,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_W2LcccvZP4hP,Davis Haupt,Davis,Haupt,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_xowHCFsPTp0V,Debrina Angelica,Debrina,Angelica,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ckyU_siwMyUP,Derek Chen,Derek,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_YCo0ekTcIA3F,Derek Cho,Derek,Cho,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_FyI3_Rama4iC,Derek Xu,Derek,Xu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_jEDCeJPHhuD4,DerrickYLJ Yang,DerrickYLJ,Yang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tKjheYX4RmOm,Devdutt Nadkarni,Devdutt,Nadkarni,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_7D6xcbfKceWl,Dhruv Darbha,Dhruv,Darbha,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GiP2T4COBNBZ,Dhruv Gupta,Dhruv,Gupta,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Bw1g__AvekLx,Dhruv Lalwani,Dhruv,Lalwani,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_o4ZwMHaxizlZ,Diego E,Diego,E,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_3sgv4GUlOzRE,Dinesh Vasireddy,Dinesh,Vasireddy,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_wIrZvBUe7dje,Dione Cheung,Dione,Cheung,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_A-4AZwu0SiPJ,Divesh Anchaliya,Divesh,Anchaliya,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GJ_5JR-9X27n,Diyar Yasin,Diyar,Yasin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mGysUA7RFpXe,Dominic Holmes,Dominic,Holmes,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_RmlHocWBs4c2,Donovan Liu,Donovan,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_QJNMZu2xxcNJ,Dontr Lokityakul,Dontr,Lokityakul,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_krMKTPyEbSWW,Dylan Hurok,Dylan,Hurok,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_TSbU3rM-JKfw,Dylan Martin,Dylan,Martin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_-3aDgs3DRWZR,dylandrozario D&#39;Rozario,dylandrozario,D&#39;Rozario,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_70p9SPFtrfnY,E-chou Chou,E-chou,Chou,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_LHw2hKNR8Aun,Eashan Iyer,Eashan,Iyer,univ_penn,University of Pennsylvania,,unknown,,false,4
+person__jdptyDhtpVN,Ebtihal Jasim,Ebtihal,Jasim,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_JTBVYD60Mek-,Edward Liu,Edward,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_kor4-_IBxVgl,Eli Campos,Eli,Campos,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_J4GaHgOPUGLB,Elijah Umana,Elijah,Umana,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ktDqqqg0ODKC,Elisa Zhang,Elisa,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rImYqrbcNsEU,Ellie Popoca,Ellie,Popoca,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_n34YVfa9627q,Emerson Ni,Emerson,Ni,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zwE7G0nCkt1c,Emily New,Emily,New,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_hK8Ssa2CN7VY,Emily Shen,Emily,Shen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_3Q2Tf8QDiozT,Emma Wong,Emma,Wong,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rlTU18YJ-6cg,emmachu924 Chu,emmachu924,Chu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_535inF9KnRsI,Era Dewan,Era,Dewan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_TjD1D-MysI0p,Eray Aktokluk,Eray,Aktokluk,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tFtCiBqE-7IL,Eric Chen,Eric,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_BN-bJotGS8-x,Eric Cheung,Eric,Cheung,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_lIVbjbnyIl1T,Eric Ford,Eric,Ford,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ScrNjfe8n4k9,Eric Hashimoto,Eric,Hashimoto,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_VCb2r5iUH703,Eric Lee,Eric,Lee,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_-pExaOJOUPCg,Eric Myzelev,Eric,Myzelev,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_YD4FcOVv8LQE,Eric Nguyen,Eric,Nguyen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_VLXofL1sb4Z7,Eric Wang,Eric,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_lqMiEHQo6uCj,Eric Zheng,Eric,Zheng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_MgyJTaRSq6Ov,Eric Zou,Eric,Zou,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_lCI5yQwnfbWH,Erica Zhang,Erica,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_pxbW6yL52W3K,Eshaan Kaipa,Eshaan,Kaipa,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_gWMfwtFRxhfE,Eshaan Kaipa,Eshaan,Kaipa,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_XtqcrP3vNhhP,Esteban Gonzalez,Esteban,Gonzalez,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_z5gPu_NB_lsb,Estelle Burkhardt,Estelle,Burkhardt,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_LNmlgerwYI_P,Ethan Boyer,Ethan,Boyer,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_8WLHzY8NBFiS,Ethan Broadus,Ethan,Broadus,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_i71X2vZKYFnv,Ethan Chaffee,Ethan,Chaffee,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2OU0Y_eOibgu,Ethan Frick,Ethan,Frick,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_oa9Y3BB_Ir3U,Ethan Vedaraj,Ethan,Vedaraj,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mrl5CY6eQRkR,Ethan Wei,Ethan,Wei,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_aF1G84iN6uok,Ethan Yu,Ethan,Yu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_10eIqgM7mQN5,Eugene Halim,Eugene,Halim,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_f792yStni1mM,Eunsoo Shin,Eunsoo,Shin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_OeLv6WVw7FsG,Eva Killenberg,Eva,Killenberg,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_NbxS7u9C8QOV,Evan Boyle,Evan,Boyle,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uWMXVTzZ1Nod,Evan Ji,Evan,Ji,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_DbpRktOsJTC-,Evan Ping,Evan,Ping,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_RZikXCbxNKGs,ewang1027 Wang,ewang1027,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_bh9umG0N2y5I,Farjan Halim,Farjan,Halim,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_S7PIZFqsF_zl,Farzad Hasan,Farzad,Hasan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AJbWO4tRp7K0,Faye Zhang,Faye,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GK8bZmFrgVJB,Ferdinand Simmons Zhang,Ferdinand,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person__qa8tzR3XESZ,Finn McMillan,Finn,McMillan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_l6rhQ1QIPyHS,Finneus Dyer,Finneus,Dyer,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Gbg6-ibSWR0-,Fiona Do,Fiona,Do,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_naDSfB3LBGv4,Fowwaz Moeen,Fowwaz,Moeen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_dXx8BS8XHxy4,Francesca Cimino,Francesca,Cimino,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mqHMIo41FmpO,Frankie Lin,Frankie,Lin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_fFeCjgXsJeGR,Freeman (Shadowblade),Freeman,(Shadowblade),univ_penn,University of Pennsylvania,,unknown,,false,4
+person_kgcE7-L9pbBG,Gabriel Huang,Gabriel,Huang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_LT8xw00jzIXv,Gabriel Lee,Gabriel,Lee,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SKHdJw-aq571,Gabriel Magwood,Gabriel,Magwood,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ktM8AREEDyD8,Gabriela Cano,Gabriela,Cano,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_a3ALkHeVM2wv,Gabriella Daltoso,Gabriella,Daltoso,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_PQIPmsYfwmdC,Garrett Kirsch,Garrett,Kirsch,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_1AGf8zYS4FIO,Garv Narang,Garv,Narang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_iTEz_ZZZpyQg,Gary Lin,Gary,Lin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_RS-QB6cXxGLg,Gautam Ramesh,Gautam,Ramesh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_DhsAegbb6Mpt,Gavin Tantleff,Gavin,Tantleff,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Djt1L4gdrb9n,gchait3 C,gchait3,C,univ_penn,University of Pennsylvania,,unknown,,false,4
+person__Cxw3bvAp87f,Genevieve Jean-Pierre,Genevieve,Jean-Pierre,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ZObIbfvCpFeq,George Botros,George,Botros,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_J5SBwF0sya5D,George Oyang,George,Oyang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_pBGcbl9eoy8O,Giancarlo Zaniolo,Giancarlo,Zaniolo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_NL8MFcprmqt7,Gillian Teitelbaum,Gillian,Teitelbaum,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_OnlPSAF-_TVU,Gloria Lee,Gloria,Lee,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_g_NBuDqUHZYu,goli-mehar Goli,goli-mehar,Goli,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_dMPtT8oxRjoD,Govind Velamoor,Govind,Velamoor,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_jLu0rVXUbQSq,Grace Qian,Grace,Qian,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_5D84hGPhqeJG,graceyhz,graceyhz,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_4uP_BDeDao62,Gregory Glova,Gregory,Glova,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_thF2rxt4idgX,Guru Bazawada,Guru,Bazawada,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SmYNY75dDGIT,Gus Ruben,Gus,Ruben,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_OqPt63jOyy9U,gxgao Gao,gxgao,Gao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ioUFCwRRWBkA,Haashini Balasubramanian,Haashini,Balasubramanian,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_D7rMTehmSWFD,HaithamTalouli Talouli,HaithamTalouli,Talouli,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_D7x0W33s8iSt,Hamshika Rajkumar,Hamshika,Rajkumar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_dvJHIYX3pSU7,Hannah Lord,Hannah,Lord,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_gsT89OT0Z5PB,Hari Om Sah,Hari,Sah,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_vhNM2T0rze0U,Harris Song,Harris,Song,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Q0WpCksxzFKZ,Harry Chen,Harry,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2mm8DAeVNoEF,Hashim Gondal,Hashim,Gondal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_5doyX3TJuA10,Hassan Hammoud,Hassan,Hammoud,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_FHt6TDoL4Rgg,Hassan Rizwan,Hassan,Rizwan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_DwRACx6_l8g1,Helen Hu,Helen,Hu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GdM6yFOE25Au,Helena Zhou,Helena,Zhou,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mU4y5tJAAAXD,hendry xu,hendry,xu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_icIPJOkrdkDd,Henry Nguyen,Henry,Nguyen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_FhnLsl6PQSGS,Henry ​Tian,Henry,​Tian,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_UAFl_tr41Wkw,Henry Xu,Henry,Xu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_I_JpCIrxaZYo,Henry Zhang,Henry,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_OoKS3osWbs9r,Hetarth Mahida,Hetarth,Mahida,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_HHzvIQ5-tkkY,Homer Wang,Homer,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_3PdmOI6glcj4,Horace Liu,Horace,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zVY415rkTcsw,Hubery Pai,Hubery,Pai,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_IWz73VNYXwKC,Humza Rabbani,Humza,Rabbani,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_otPCD_YPir98,Hunter DeMeyer,Hunter,DeMeyer,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_t9wAtggCf_Mk,Ian Ong,Ian,Ong,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zP9WbYlzjcPo,Ian Pedroza,Ian,Pedroza,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_6X7owj_6qFjD,Ibrakhim Ustelbay,Ibrakhim,Ustelbay,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uKJglU2ZWQnr,Ifeoluwa Popoola,Ifeoluwa,Popoola,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_QzMiAYq0rfz0,Igancio Villasmil,Igancio,Villasmil,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ptpWD6d9G5XW,Iman Hossain,Iman,Hossain,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2_HcyXu84pM1,intelc Chen,intelc,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_G8jyxppCzh_d,Ipeknaz Icten,Ipeknaz,Icten,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ePaBnJ--gsmu,Ira Pathak,Ira,Pathak,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_qLnNITvR5l-_,Isabella Mirro,Isabella,Mirro,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_U-PpGY-OlW8s,Isha Singh,Isha,Singh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uPxvnyJrAsNP,Ishaan Buddharaju,Ishaan,Buddharaju,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_7fL9at3tZdKR,Ishaan Joshi,Ishaan,Joshi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_0G-n8lLw1yWr,Ishaan Verma,Ishaan,Verma,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_vtwL5ZlSZ_EP,Ishan Sandhu,Ishan,Sandhu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mgLBiTDqAJoA,Iskander Shangareev,Iskander,Shangareev,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_wbupPiWGp29T,iVonte Smith,iVonte,Smith,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mYKYup7P8_Dw,ixxan Yierpan,ixxan,Yierpan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_d-lF7rulg5_v,jaansiparsa Parsa,jaansiparsa,Parsa,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_i_3QP_QBuqTj,JackieLee23 Lee,JackieLee23,Lee,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_MyP1QWHjHyKL,Jackson Dooley,Jackson,Dooley,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_N1WN5JlR6Mhi,Jacky Fang,Jacky,Fang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_O8MHzVniZYZc,Jacob Choi,Jacob,Choi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_lISY2L4-xI4u,Jahnavi Mahajan,Jahnavi,Mahajan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Zasynn_YMh2Y,Jai Misquith,Jai,Misquith,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_VOBezdm0InQr,Jake Cover,Jake,Cover,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_-ky1_xyMmheo,Jake Donnini,Jake,Donnini,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_-qfymhgN1IZA,Jake Haussman,Jake,Haussman,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_IWCGar8BpOKZ,Jamie Rollison,Jamie,Rollison,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_sa7keRAaAQeT,Jana Kurrek,Jana,Kurrek,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_U_f7oICopUED,Jane Chong,Jane,Chong,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_-48iElhFtODW,Janssen Qu,Janssen,Qu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_PPf0VIn27Za8,Jared Asch,Jared,Asch,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_NyxnrvkFqqqN,Jared Hoefner,Jared,Hoefner,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_P68vJIN9CF-Z,Jared Mitovich,Jared,Mitovich,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_WL93Ecy8C7cj,Jaskaran Gill,Jaskaran,Gill,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SlBNj6EZJgo9,Jasmine Cao,Jasmine,Cao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_c8ID7Zmfcu4S,Jasmine Wang,Jasmine,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_sNycQ81KpsIZ,Jason Gao,Jason,Gao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yLKk79L0e-5q,Jason Yang,Jason,Yang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Den8gWWKmB5V,Jathan Yao,Jathan,Yao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_EZQvWyD7xAwy,Jathin Singaraju,Jathin,Singaraju,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_9ty4vdM-FQKK,Jatin Punjabi,Jatin,Punjabi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_sHm4OU5KaqMW,Jaurice Barber,Jaurice,Barber,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_oFf_G_vpxHp1,Jay Chenh,Jay,Chenh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_X7OQIQaZOwe8,Jay Katyan,Jay,Katyan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_7Z3IooaUYTvd,Jay Vishwarupe,Jay,Vishwarupe,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_VptI2S7I09dE,Jayden Hooper,Jayden,Hooper,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ivfH7sOMFlyt,Jaymin Jhaveri,Jaymin,Jhaveri,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_qGTH_I0NhUJ6,Jee Won Choi,Jee,Choi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_36MDV5h2Ej4w,Jeff Kessler,Jeff,Kessler,univ_penn,University of Pennsylvania,,older_alumni,M&T'16,false,4
+person_sjokn7kdqDD9,Jefferson Ding,Jefferson,Ding,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_bhnJmqL2Jwo-,Jeffrey Gao,Jeffrey,Gao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_HEjerWpe-3u8,Jeffrey Xiao,Jeffrey,Xiao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yoN0cudX6anx,jeffy85 Tan,jeffy85,Tan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ML9CbthkGKjx,Jennifer Luo,Jennifer,Luo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ElTrOJoSCu5J,Jenny Li,Jenny,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_sanJy5ItzABs,Jenny Nguyen,Jenny,Nguyen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_iW6aQOxhBK2s,Jeong Inn Park,Jeong,Park,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_DsIXs6mYynxA,jeremy G,jeremy,G,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_pkh8TP30BC1m,Jeremy Su,Jeremy,Su,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_faV1PCWABf51,Jerry Gao,Jerry,Gao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GUWXKylJpohe,Jerry Lu,Jerry,Lu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GebqZWeZ7Ore,Jeshua Starghill-Shaka,Jeshua,Starghill-Shaka,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rA1b6O0pQeTh,Jesse Choe,Jesse,Choe,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_3i9NPiFXpQQD,Jessi Jha,Jessi,Jha,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mTIkP1Y4W0QS,Jessi Shin,Jessi,Shin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_vX85chNExXmP,Jessica Ling,Jessica,Ling,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AP90YFNiuhwS,Jessica Tan,Jessica,Tan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yCDtniDxU2Ve,Jessica Ye,Jessica,Ye,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rbqEcUv4mDjK,Jessie Liu,Jessie,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_MvUcIxiQCubz,jewc,jewc,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_PFwqFehFWQ7K,Jgar157 Garciga,Jgar157,Garciga,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_9E9ncfEncveT,Jibraan Ghani,Jibraan,Ghani,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AS0lnTjjplCG,Jimmy Kang,Jimmy,Kang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Cc099KAl1LJz,Jimmy Zhou,Jimmy,Zhou,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_y5Nr3ixRLGiY,Jingyu (Marcel) Lee,Jingyu,Lee,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_qcbNbLbwhQgd,Jishnuu Senthil Kumar,Jishnuu,Kumar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_H2AyVMImVXoy,Joel Rego,Joel,Rego,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SKdUd7IyHkfU,John F Aradan,John,Aradan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tWiZtpGD8tpA,John Khachian,John,Khachian,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_hDdwl9tYpPXg,John Murphy,John,Murphy,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_JF_WYu8_CqvI,Johnny Martone,Johnny,Martone,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_B0zFSgsnsu1O,Jonah Ryan Singer,Jonah,Singer,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_UaWLl2GypPPa,Jonas Ho,Jonas,Ho,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_F4q3rGvcVpJy,Jonathan Kao,Jonathan,Kao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_msvmUO0s1CDR,Jonathan Kao,Jonathan,Kao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rLy6wejoyjS7,Jonathan Liu,Jonathan,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_s1CDKWS8xjPj,Jonathan Ma,Jonathan,Ma,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_sThVv41ov75W,Jonathan Mairena,Jonathan,Mairena,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_e5UoYAuHVPCY,Jong Min Choi,Jong,Choi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_af4qKF29eehJ,Jordan Hochman,Jordan,Hochman,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uqtcT2tb4xq4,Joseph Li,Joseph,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_B5ggnhyV12r2,Joseph Sorkin,Joseph,Sorkin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_qcZPQGfkZRPV,Joseph Zhang,Joseph,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_p5oWLKL098vO,Joseph Zhang,Joseph,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_oCZipjy2gzfV,Josh Doman,Josh,Doman,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uKLUTJWeBB3q,Josh Massey,Josh,Massey,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ltUxZvoJmB9K,Josh Tagle,Josh,Tagle,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_l_rYDZnZ1e7x,Josh Weiner,Josh,Weiner,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Va52-P6_A5Lz,Joshua Wang,Joshua,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zTWGWlVUlP-O,Joshua Yoo,Joshua,Yoo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_jxWe9ne7m-Js,Joy Liu,Joy,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_pecWzxAWwL_u,Joyce Chen,Joyce,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_7XhOLJsL4hX2,jren2 Ren,jren2,Ren,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_7zKi1TZSUZH2,Jules Ward,Jules,Ward,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GJeiTP0Qtzrf,Julia Dunn,Julia,Dunn,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Pg-sn3dSIPUb,Julia Lasater,Julia,Lasater,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rwfNWJpGzW0t,Juliet Yang,Juliet,Yang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_0lM3ob_XZiZd,Juliette Hooper,Juliette,Hooper,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_e9B6Evjlpi-T,Julius Broomfield,Julius,Broomfield,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_sKrGaPRS0Zzs,Julius Snipes,Julius,Snipes,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_PCbJbxLc0in_,Justice Francis,Justice,Francis,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Kj4AUwxPu8T8,Justin Blum,Justin,Blum,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uEJG9tpZke6f,Justin Lieb,Justin,Lieb,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_9-v7GHa3zFeF,Justin Rui,Justin,Rui,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mC0PffQYAadP,Justin Sun,Justin,Sun,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rir0vNDIRtv2,jw048,jw048,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_HGIZSMF6zsG4,K P,K,P,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_FmR4rZ_VyCLe,Kai Grigsby,Kai,Grigsby,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Eb9J6mDXPKNk,Kaiser Okyan,Kaiser,Okyan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_0dTBWlwVUMYu,Kaitlyn Liu,Kaitlyn,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ROw32mWZ8e-e,Kaitlyn Lu,Kaitlyn,Lu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_BmIDg6QRpb19,Karan Rai,Karan,Rai,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zKofRiE6OV0r,Karen Dong,Karen,Dong,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_FM0KymtQxAfF,Karen Li,Karen,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ZDf1N7AYO29n,Karen Yen,Karen,Yen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_F7-xBCZ82tDV,Kartavya Suhagiya,Kartavya,Suhagiya,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_4eZbBl0KZ3vO,Karthik Sai Padmanabhan,Karthik,Padmanabhan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_XiWku5l6djwN,Kashvi Chandwani,Kashvi,Chandwani,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_b9QpSXNe7WN-,Kashvi Gupta,Kashvi,Gupta,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_UxudWhTUhFn9,Katherine H.,Katherine,H.,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_KAccPmgfcEgT,Katherine Lu,Katherine,Lu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yjl_n-jtIABc,Katherine Wang,Katherine,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_FrB0_ZXL-WDk,Kattly Li,Kattly,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ZRNr86PBTI0c,Kaushik Akula,Kaushik,Akula,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_FkXoc4JoThcX,Kayla Simpson,Kayla,Simpson,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_F-wdKt7gMEti,Keagan Eng,Keagan,Eng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_XR0zJ2RGAeog,Keith Khadar,Keith,Khadar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mZ4X5gNezv4L,Kelly Feng,Kelly,Feng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_E3z-ve9OGrSx,Kelly Liu,Kelly,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zZDf3na_OYES,Kelly Lopez,Kelly,Lopez,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_eSaCLDuedAn4,Kelvin Hui,Kelvin,Hui,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2MoDwxpImK0k,Kelvin Hui,Kelvin,Hui,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_YsxpDizAKFWp,Kenneth Wang,Kenneth,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_hvF8pQ76i2Wa,Kenneth Xiao,Kenneth,Xiao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SkuIcMu1Lb09,Kepler Boonstra,Kepler,Boonstra,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_i6W0KyXgoniI,Kerry Blatney,Kerry,Blatney,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zDHV7DIGk-5P,Keshav Khandelwal,Keshav,Khandelwal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_sRiO5lEROMn1,Kevin Chen,Kevin,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AXrrR7JQ6kTN,Kevin Gao,Kevin,Gao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_YoButiLAJ-Xy,Kevin L,Kevin,L,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_frSKQo5TKgc4,Kevin Li,Kevin,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_G1L80NzJbehU,Kevin Lu,Kevin,Lu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_BuXU57arXQx1,Kevin Song,Kevin,Song,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_-q1rsxQkfjaG,Kevin Tian,Kevin,Tian,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_IvmqYYW_okQM,Kevin Zhao,Kevin,Zhao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Lpw_t90UxTDM,kgarrison133 Garrison,kgarrison133,Garrison,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AfQkpKU0SrB6,khoa pham,khoa,pham,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ucfGvEXQCfYW,Khush Dakwala,Khush,Dakwala,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_dg3UFOPtFMIk,Kim Hoang,Kim,Hoang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mN1raY7c4_b9,Kimberly Gallant,Kimberly,Gallant,univ_penn,University of Pennsylvania,,older_alumni,M&T'08,false,4
+person_huRWCF0PG5Pg,Kingsley Zhong,Kingsley,Zhong,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_QMlfQS8ZJzws,Kishen Sivabalan,Kishen,Sivabalan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Mr4C3dQrjeiG,Klára Churá,Klára,Churá,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SylRKESQCsf1,Kobe Zheng,Kobe,Zheng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_QR7yWPOrs4U3,Krish Iyengar,Krish,Iyengar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Hc71Mdu6rIYz,Krish Patel,Krish,Patel,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_6NBt1Ql8DEAA,Krishna Suresh,Krishna,Suresh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zWXdmgsBGRUK,KrishnaMansinghka Mansinghka,KrishnaMansinghka,Mansinghka,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uaoadVl17yJY,Kristina Khaw,Kristina,Khaw,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_p9PNKoI_6z3i,Krzyker Brachowski,Krzyker,Brachowski,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Q_Wi45HVshWN,Kushal Kapoor,Kushal,Kapoor,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yAKr-bg6eBfC,Kusum Gandham,Kusum,Gandham,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_BWgv5LlrNJrh,Kvolts1 Truong,Kvolts1,Truong,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_lnwFg4BCmq4F,Kyle Xiong,Kyle,Xiong,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2aybBsBG7XYZ,Kyndall Payton,Kyndall,Payton,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_WMVZAsMH1Ypz,Laasya Chevendra,Laasya,Chevendra,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_EAaMeBbYZwkQ,Laasya Kanumuri,Laasya,Kanumuri,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Iiwc7Jqc9VUv,Laila Norford,Laila,Norford,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2g67kyGTpmEN,Lailah Nabegu,Lailah,Nabegu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_L3WiabCYHNy7,Lakshitha Vengadeswaran,Lakshitha,Vengadeswaran,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_s4a8uqx5Ewju,Lane Alfstad,Lane,Alfstad,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_C-NFaGe8vHsN,Lanting Chiang,Lanting,Chiang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SXsqWZHaMBWZ,Lara De,Lara,De,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_9HXCVVOE_YDY,Larry Huang,Larry,Huang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_y-U3lU12KIih,Laurel Lee,Laurel,Lee,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ZXSvcaVtX4sg,Lauren Foster,Lauren,Foster,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_0nREJ7GRZJDp,Le He,Le,He,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_LaNsErFjowIm,Le-Qi Tang,Le-Qi,Tang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SbAMlX92f0YY,Leo Li,Leo,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_CJ9MYtcddfiq,Leonardo Nerone,Leonardo,Nerone,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_HuwQKJE3alPs,Liangyu Cai,Liangyu,Cai,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_WXvWgIAnKgto,Lily Li,Lily,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GLdO6KUxXm6x,Lin-Gene Lin,Lin-Gene,Lin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ARIiIRFFgb4g,Linda Ting,Linda,Ting,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_s0pgJ9j8odni,lingan233 Zheng,lingan233,Zheng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_kID8g6sd9_34,Lingzi(Susan) Zhang,Lingzi(Susan),Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ogXcH2g0Kbqt,lliiia,lliiia,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_R1AKEET_Ofiw,Logan Brassington,Logan,Brassington,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_n7ZkiQqlaTPl,lucasz-hu Zhu,lucasz-hu,Zhu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_llAE5SkAh_O5,Lucia Xie,Lucia,Xie,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_EXAOpQDFcWum,Lucy Xia,Lucy,Xia,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_aTCvr8dCKK1F,Luká Yancopoulos,Luká,Yancopoulos,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_p1p-ugW5ijrh,Lukas Frotton,Lukas,Frotton,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Go-ejRSUn3An,Madeline Mandell,Madeline,Mandell,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_IUyRwVpNqF8J,Madhav Murikipudi,Madhav,Murikipudi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Xxj_fQriW5B5,Mahendra Kumar,Mahendra,Kumar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person__Uvz0kdypg2D,Majd Alkawaas,Majd,Alkawaas,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_gacTfDj4SEn0,Malu Braga,Malu,Braga,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_BqbOe2QfEwi8,Manali Mahajan,Manali,Mahajan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_MM_U9HRIHmm7,Mann Patel,Mann,Patel,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mjcVG06-qiHQ,Manuj Marwaha,Manuj,Marwaha,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_0Ky85ofcKi9F,Marco Chan,Marco,Chan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_m0F4m1XWd2Xl,Marcus Liu,Marcus,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AT58t8RUbscf,María José Suárez,María,Suárez,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_r_9Uds_OdYrA,Mariami Lomtadze,Mariami,Lomtadze,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tJ-rt1t9oKpE,Marko Tanevski,Marko,Tanevski,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Zx520I4durmL,Marta García Ferreiro,Marta,Ferreiro,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_74ZCxfj4I6-X,Mason Stark,Mason,Stark,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Jc2Qj-kv3Dxp,Mateo Taylor,Mateo,Taylor,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_0yqOn9y8_0Pz,Matilda Dingemans,Matilda,Dingemans,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Edr1tBgym54F,Matthew Chi,Matthew,Chi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_K3NOsSW621wS,Matthew Dong,Matthew,Dong,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_q23cYfwtZtDP,Matthew Kuo,Matthew,Kuo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Qy8eqFJ_9EDS,Matthew Romage,Matthew,Romage,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_1AZTt3GsZVnZ,Matthew Rosca-Halmagean,Matthew,Rosca-Halmagean,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_OA2zusZ5vZIt,Max Tsaturyan,Max,Tsaturyan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AbCpR0xtOYV1,Max Tsiang,Max,Tsiang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_YFBVhzmKmBCU,Maxwell S.,Maxwell,S.,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Qk-zidp7Z6Om,Mayank Yadav,Mayank,Yadav,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_WMeOorDSQNwq,Megan Kulshekar,Megan,Kulshekar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2KEBQEP_dgXg,Melanie Chen,Melanie,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mTpGdvy85Rhy,Michael Chen,Michael,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_w7GPT8ucrqf3,Michael Khalfin,Michael,Khalfin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Q5-REyV8StAe,Michael Kistler,Michael,Kistler,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_evO3siJqxnye,Michael Li,Michael,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_sxWJ6U-t6J9o,Michael Licamele,Michael,Licamele,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_izQNwp3SAM1e,Michael onaadepo,Michael,onaadepo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_XDvd2o3vdsJa,Michael Pignatelli,Michael,Pignatelli,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yPggL1vNwYRD,Michael Zhou,Michael,Zhou,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_xNJI4zhMs-X6,Michelle Kwon,Michelle,Kwon,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_7n_MAqJtvVdy,Michelle White,Michelle,White,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GZeIOIRs_znz,mikhailsal123 Saleev,mikhailsal123,Saleev,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_jQ22gkl75BoN,Miles Hall,Miles,Hall,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_HpBQx27sdYHG,Milo Shan,Milo,Shan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_qJiQgSUbjm0u,Ming Yang,Ming,Yang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_F5_mQrirG2eJ,Mingcheng Zhu,Mingcheng,Zhu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_CJNlIhrRXfks,Minghan Sun,Minghan,Sun,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yTMcTrrQo1Jg,Minh Nguyen,Minh,Nguyen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_0gw1iPjbtonN,Minh Phan,Minh,Phan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_6T67xbrhOke2,Miriam Glickman,Miriam,Glickman,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_xYUqnf6CDqkC,Misha Gupta,Misha,Gupta,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tPvvpMSkXYLm,Misty Liao,Misty,Liao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ARP7W7VFKN2s,Mitchell Daneker,Mitchell,Daneker,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ZN96vH_XvKvR,Moaz Elgeziry,Moaz,Elgeziry,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_m_knwi6twFN1,Mohamed Abaker,Mohamed,Abaker,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_TMLTZ_-S2HuG,Mohamed Abead,Mohamed,Abead,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_HAPN7gKd6sic,Mohamed Elnasir Eltigani Osman Abaker,Mohamed,Abaker,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mMFLOGs7OTf8,Mohammed Khabaza,Mohammed,Khabaza,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tDGDWDv1Ucrz,Mohit Shah,Mohit,Shah,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_dIn1SdNst95m,Molly Sunray,Molly,Sunray,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_m6IKN3Tg05_o,Moses Zeidan,Moses,Zeidan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_TvlZyCeuJien,Mostafa Afr,Mostafa,Afr,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Sv20u2KrzOld,Mridul Purkayastha,Mridul,Purkayastha,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_kT-uiAbm-lAw,MShahnazz,MShahnazz,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_bNosnNzgwyfJ,Nabo Yu,Nabo,Yu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_dR7MOduwIMp1,NachuT Thenappan,NachuT,Thenappan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Zl6NCZVFvk3y,Naman Jain,Naman,Jain,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rDnaHPueRyrm,Naman Mansukhani,Naman,Mansukhani,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_wlH3g2knlmtE,Nandini Swami,Nandini,Swami,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_MwTh_Ew261fE,Nathan Donagi,Nathan,Donagi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_BzK9NOsIU94I,Nathan Goller-Deitsch,Nathan,Goller-Deitsch,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ZDPqFC_xkvkM,Nathan Mehaffy,Nathan,Mehaffy,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_bkg9dJ4uPsEd,Navya Janga,Navya,Janga,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_-jXV7OasGH36,Neeraj R,Neeraj,R,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_KApIdb65-v8X,Neha Krishnaswamy,Neha,Krishnaswamy,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_IiqKacA9tGiL,Neha Mathur,Neha,Mathur,univ_penn,University of Pennsylvania,,older_alumni,M&T'14,false,4
+person_OPwS1ZtMCLFZ,Nghia Vu,Nghia,Vu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Ui-xiHDhPslf,ni,ni,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_91qWGGzJ04Gw,Nicholas Kuo,Nicholas,Kuo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_RjrpT7x0OA5Y,Nick Chen,Nick,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2gkSrOkwD17M,Nick James Martin,Nick,Martin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_sHnePy87K-VC,Nicolas Corona,Nicolas,Corona,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_EdMFPF_17TVP,Nicole Bedanova,Nicole,Bedanova,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_pl7ONow6UrVF,Nicole Feng,Nicole,Feng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_qRtyiHyabwZD,Nicole Wojnowski,Nicole,Wojnowski,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mMlMg0_dS0bj,Nicoleta Mahu,Nicoleta,Mahu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_TOYjuP2xuLan,Nikhil Iyer,Nikhil,Iyer,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_POoHGEfqfpV4,Nikhil Maheshwari,Nikhil,Maheshwari,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2ZuC0QziYBZI,Nikhilrk17 Krishna,Nikhilrk17,Krishna,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_JqHYeE0bWiKG,nikkimalyan Saini,nikkimalyan,Saini,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ttTpEYAyqO_M,Nikolai Peram,Nikolai,Peram,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_XR4XkXM48vUR,Niranjan Reji,Niranjan,Reji,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_DE7-ucLoElL3,Nirav Rohra,Nirav,Rohra,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_b5iyT5MmlHBq,Nishant Wangneo,Nishant,Wangneo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Fs-zVofNwQUD,Noah Bridgeman,Noah,Bridgeman,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_-OAeHIo9m0qw,noahgersich0009,noahgersich0009,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_oTb3X9PCk0m1,noel-abeje Abeje,noel-abeje,Abeje,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_jBtZplqX3xrc,Nora,Nora,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_r5tEha-adRHe,not tom,not,tom,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_dDGGqlYey_QQ,Nour Gajial,Nour,Gajial,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GpJKL3_TnPWs,Nyle Masood,Nyle,Masood,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_KwHwRY7rA2o1,Ojani Chung,Ojani,Chung,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_WP5o3AQyuyaS,Oliver Li,Oliver,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_H2LP50AjCmv0,Olivia Long,Olivia,Long,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uwk5nxwIkzL9,Om Joshi,Om,Joshi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_VpFN6_M5keGz,Om Rajpal,Om,Rajpal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_S7t33HjPjt4w,Omar Elfernani,Omar,Elfernani,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_qlc7isBdsjuC,Oscar Chen,Oscar,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_6p7m6OUFGcUb,OSEP Muthambi,OSEP,Muthambi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_K3RQMno9eSlS,Osman Warsi,Osman,Warsi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_oAtywzc-0_kk,Owen Guo,Owen,Guo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_5-k9Qw_YSi1e,Owen Truong,Owen,Truong,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ujDEfTlzUW_1,Pablo Diaz,Pablo,Diaz,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_sK2qKD9ae1UN,PALASH DOSHI,PALASH,DOSHI,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_THlx4gXYD4Ky,Pallavi Jonnalagadda,Pallavi,Jonnalagadda,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_3l5j7o_B0LjQ,Parth Mody,Parth,Mody,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Np8FVQoWmJY-,Parth Patel,Parth,Patel,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_F_WREMOeArR3,patel-esha Patel,patel-esha,Patel,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_DdLsKFcT8rLQ,Patrick McNaughton,Patrick,McNaughton,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_pxGWBJYXbQ-V,Patrick Paglia,Patrick,Paglia,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_C59CE2tb57Kr,Patrick Zhang,Patrick,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_T8CEbFV2upbJ,Patrisia de Anda,Patrisia,Anda,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_gcmlDD3Pr4VV,Pedro S,Pedro,S,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_h_4egaKSbrBH,Peyton Walters,Peyton,Walters,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ZX8g86nBM09J,Phuong Vu,Phuong,Vu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_PIOw18o7TdgL,Poetry Of Code,Poetry,Code,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_NuL94fYaXs4I,Praj Chirathivat,Praj,Chirathivat,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_8-5TB2DotIcw,Prajit Viswanadha,Prajit,Viswanadha,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_1nC1gIyi2Vd1,Pramana Saldin,Pramana,Saldin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tx-G6OgAS15P,Pranav Ponnusamy,Pranav,Ponnusamy,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_0BJavadL9Gmn,Pranav Ramesh,Pranav,Ramesh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_IPLdl9cnkfNg,Pranav Vyas,Pranav,Vyas,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_lul76uZkzS_s,Pranavi Rohit,Pranavi,Rohit,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_MkokY5vdXZP0,pranavr11,pranavr11,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_7rxJ4iWkHru-,Pranay Gundam,Pranay,Gundam,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tzXx0s-RlWKr,Praneeth Chinmay Bhandaru,Praneeth,Bhandaru,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_nP0d9ofp2ViG,Pranit Agrawal,Pranit,Agrawal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_p99cIQ7Ibt1a,Pranshu Suri,Pranshu,Suri,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zidp4mSpKQzl,Prashant Vaid,Prashant,Vaid,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_dL1bktrnYGRZ,Prasheel Vellanki,Prasheel,Vellanki,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Sbg9ZHiPCvAI,Pratham Ashar,Pratham,Ashar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Rx0U3eNNUaZw,Pratyush Chakraborty,Pratyush,Chakraborty,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_cQs_32F2ojRn,PrishaSar,PrishaSar,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rSDue5FJ9KNG,Pulkith Paruchuri,Pulkith,Paruchuri,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_F4vCSflYz1CK,Punit Arani,Punit,Arani,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_G5TKoTmg1vq_,Purba Karmaker,Purba,Karmaker,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_owKj6JMOht9W,Qareeb Alam,Qareeb,Alam,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_PC02niGmpGP_,"Qijia ""Joy"" Liu",Qijia,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_gIirXHpUvO9R,Quincy Hendricks,Quincy,Hendricks,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_q6otZfiyGhZl,Quinn Solberg,Quinn,Solberg,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_TzI-KY8Wl7Zv,r lim,r,lim,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_4t_-CvkwNe7X,Rachel Gu,Rachel,Gu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_oKnoNAKVkXB-,Rachel Lee,Rachel,Lee,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mKcvbmLMtimL,Rachel Madhogarhia,Rachel,Madhogarhia,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_xJL36UoYM3T5,Rachel Zoneraich,Rachel,Zoneraich,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_n8auYPPq1AnK,Rafael Marques,Rafael,Marques,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_V2qyo0deDUE4,Raghav Samavedam,Raghav,Samavedam,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_cI_h62SX5iCt,Raina Mittal,Raina,Mittal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_jfGC52lKG5lh,Raiya Haque,Raiya,Haque,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_TU1Nke4y85TG,Raiyan Siddique,Raiyan,Siddique,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_haVQ0Zomx6pZ,Rajashekar Vennavelli,Rajashekar,Vennavelli,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2CUoWx92kvhp,Ranvith Adulla,Ranvith,Adulla,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zYpprN8wfvWf,Rashmi Iyer,Rashmi,Iyer,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_jIRmSTt7TTLy,Raunaq Singh,Raunaq,Singh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_djpIJfAY_F5a,Raunaq Singh,Raunaq,Singh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_w6SFUxeZjZI8,Raveen Kariyawasam,Raveen,Kariyawasam,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2nl10MJN1C1s,Raymond Lin,Raymond,Lin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yUd09zHmIq3f,Reed Ginsberg,Reed,Ginsberg,univ_penn,University of Pennsylvania,,older_alumni,M&T'18,false,4
+person_x3hg2GnDSPAN,Reva Amritkar,Reva,Amritkar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_jQkesr1G8MKI,Ria Dawar,Ria,Dawar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zcdLxNvak8wZ,Ria Sharma,Ria,Sharma,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_hRdDFPnja0Ig,Ria Sharma,Ria,Sharma,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_wma0fKLnO8HM,Ria Sharma,Ria,Sharma,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tZatluGjsJg_,Ricky Raup,Ricky,Raup,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_BsFL5FAzFS1m,Riju Dey,Riju,Dey,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_YvbdawOeWf30,Rishabh Prabhu,Rishabh,Prabhu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_oMFJhoJ7J_kO,Rishi Yedavalli,Rishi,Yedavalli,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_BY3Xzbg471Ai,Rithika Beerelli,Rithika,Beerelli,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_U_GQgcw1CEkp,Ritvik Gupta,Ritvik,Gupta,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_jvcdCfNFgPaO,Robert Paslaski,Robert,Paslaski,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_HrAJhGph_oOd,rogerburtonpatel Burtonpatel,rogerburtonpatel,Burtonpatel,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Ez-jge8mkW5b,Rohan Chhaya,Rohan,Chhaya,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2fPYcKYE29tT,Rohan Gupta,Rohan,Gupta,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_wfhuex2_rdvH,Rohan Jain,Rohan,Jain,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_xBJ7iGBfjfIW,Rohan Kaushikan,Rohan,Kaushikan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uobpv8hZpE9z,Rohan Matta,Rohan,Matta,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_dZdv3LZO2Qt4,Rohan Moniz,Rohan,Moniz,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_MQx-txUDap54,Rohan Shah,Rohan,Shah,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_iA07isxBpYo1,Rohan Vemu,Rohan,Vemu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_m3_Ky13p-BEo,Rohith ND,Rohith,ND,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_4nlo5Pet4GY-,Romanus Angina,Romanus,Angina,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_hQuMlP-ZE06J,Romir Mohan,Romir,Mohan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_quk0O1__pgup,ron Lin,ron,Lin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yb6VLXH31I-d,Ronak Bhagia,Ronak,Bhagia,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_HG5hv3ryc4kc,Rosalie Liu,Rosalie,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_vkv25BfgjZGy,Roshan Bellary,Roshan,Bellary,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_D2zbEkcOlTEv,Roshan Ram,Roshan,Ram,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_dApaW1EpED8r,Rowan Bortz,Rowan,Bortz,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_r0VbOwLW2Ppf,Ruadhan KM,Ruadhan,KM,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_u7t_h9sz8fat,Ruby Washington,Ruby,Washington,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_KdPqI0amk0al,Ruchir B,Ruchir,B,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_bITO3cn6uotf,Rushi Athavale,Rushi,Athavale,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ug9G1dOIZyh7,Rushil Vislawath,Rushil,Vislawath,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_nC_K_H-sWjgh,Ruslan Akmyradov,Ruslan,Akmyradov,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_HZ_f475-vmIZ,Ruxandra Icleanu,Ruxandra,Icleanu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_umxFl0XKK-YK,Ryan Ma,Ryan,Ma,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_J1m04aC6WNCn,Ryan Marschang,Ryan,Marschang,univ_penn,University of Pennsylvania,,older_alumni,M&T'14,false,4
+person_eBit_GGPRRhJ,Ryan Ziegler,Ryan,Ziegler,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_VW4rRcjl9ZHX,Ryder Sitcawich,Ryder,Sitcawich,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AKnI-Ybe5mhx,Ryder Sitcawich,Ryder,Sitcawich,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AlHEPuTM_53j,S K,S,K,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_3-VdnqPYBNbl,Saanvi Agarwal,Saanvi,Agarwal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_pNx2y85dD3Ag,Saaz Mahadkar,Saaz,Mahadkar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SqeH49Zi9Wgb,Sahas Maduri,Sahas,Maduri,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Ubd-IrLSm6NG,Sahit Penmatcha,Sahit,Penmatcha,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_-Tcc7AOt1ifG,Sahitya Senapathy,Sahitya,Senapathy,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_8cL8FDZavFSY,Saketh Satti,Saketh,Satti,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_7m0e-a6xnifs,Sam Mathew,Sam,Mathew,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_bejEHFXG5Wtz,Sam Ngiam,Sam,Ngiam,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_cqlHLBk9XVj7,Samantha Brosler,Samantha,Brosler,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SuGBZNM-NBMM,Samantha Lee,Samantha,Lee,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_x8MMWwWwNk9d,Samaria Mulligan,Samaria,Mulligan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_WKFWTcdlknVn,Sameer Shalim,Sameer,Shalim,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_wUtRrG171vXL,Samuel Lao,Samuel,Lao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_gNz-F9dLc19f,Samuel Lihn,Samuel,Lihn,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_BRveADgFRs-E,Sandeep Vinay Senthil Kumar,Sandeep,Kumar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_aT1atU4oaJ00,Sandhya Senthilkumar,Sandhya,Senthilkumar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ef0mJfKJ1h73,Sang Hyun Chun,Sang,Chun,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_gwCr_ZXewLhi,SanskaarS,SanskaarS,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rvHK-Bi4vA16,santacalculus,santacalculus,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_L37PbPrE0Wq1,Sasha Murray,Sasha,Murray,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yLw-E-3YFgAp,Sashank Balusu,Sashank,Balusu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_AOkr6Xy-PECV,sayurihadge Hadge,sayurihadge,Hadge,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GSPwu-FFT-OH,scentedsoap Zhang,scentedsoap,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_V8-Kv8exYXC5,Selena Liu,Selena,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_XGbfNCCTFUqX,Selina Nie,Selina,Nie,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Wnf1KzQ55nvD,Serena Zeng,Serena,Zeng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_0M9jJht5sTNu,seth shoneman,seth,shoneman,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_S221ADMUOhUJ,Shand Seiffert,Shand,Seiffert,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_xRSz-KJSEDBh,shanil pathak,shanil,pathak,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mKi6hVSWK1z7,Sharon Dong,Sharon,Dong,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_N0MCKXajIOmg,Sharon Kuo,Sharon,Kuo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Xs0pdVYQsa5h,ShauryaJ1 Jain,ShauryaJ1,Jain,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_aY9bIYpgZTcl,Shawn Kang,Shawn,Kang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_eu5lu9uwLscS,Shaya Zarkesh,Shaya,Zarkesh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_-330U3ybDQn_,shaziwnl Goel,shaziwnl,Goel,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uX6olWVnZEBH,Sherie Pan,Sherie,Pan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_MmGJs8R6KNVL,Shishir Vargheese,Shishir,Vargheese,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_puC2nsUuqmtw,Shiv Vinodshankar,Shiv,Vinodshankar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_5pz3j5FZIzSl,Shiva Menta,Shiva,Menta,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_BEI8fLfGsOEU,Shivani Guha,Shivani,Guha,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_cCeBFG2S-L87,Shivank Joshi,Shivank,Joshi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_H8ushuQIBWz9,Shiven Taneja,Shiven,Taneja,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_DHXWDYflH_e8,Shoubhit Jamadhiar,Shoubhit,Jamadhiar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tA7MaLVcd6-y,Shouqiao0530,Shouqiao0530,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_1yqjMXZzBzrE,Shourya Ghosh,Shourya,Ghosh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Qy7sME72FLJ_,Shreeya Chugh,Shreeya,Chugh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_V68LX-0zFJht,Shreya Parchure,Shreya,Parchure,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_aw1avhRghUPe,Shreya Viswanathan,Shreya,Viswanathan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_0HjrPcj_Z2ne,Shreyas Sreenivas,Shreyas,Sreenivas,univ_penn,University of Pennsylvania,,unknown,,false,4
+person__xAlIwO3Fc8e,SHREYASH NAHAR,SHREYASH,NAHAR,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_c9IU9IZQ0NU4,Shreyasvi Natraj,Shreyasvi,Natraj,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_QxLrR2ecF9As,Shuman Yuan,Shuman,Yuan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_EkouauX5ZQQE,shuo0314,shuo0314,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_OmHhXZBiNW9F,Siddhant Sood,Siddhant,Sood,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_hJhzHYSHyy8k,Siddhartha Reddy Pullannagari,Siddhartha,Pullannagari,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yh5RM37S0Woz,Sidharth Ponram,Sidharth,Ponram,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_3PzFGxuhDgUi,Sidharth Subbarao,Sidharth,Subbarao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_h2mI7aSWmLKH,sike25 Ogieva,sike25,Ogieva,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GN2-x1xed-ht,Simba SHI,Simba,SHI,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_iqFnZ6TS0Ywb,Simeon Paek,Simeon,Paek,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zbJiaiW_Eeu1,Simi Serfati,Simi,Serfati,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_lHtuUi0MGDuv,Simon Oh,Simon,Oh,univ_penn,University of Pennsylvania,,older_alumni,M&T'18,false,4
+person_1tTnXfS7Lxye,Simon Schueller,Simon,Schueller,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2I-RgRGmgkmK,Sindhu Mohan,Sindhu,Mohan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_qpuCtnIZjVhB,Skyler Hall,Skyler,Hall,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_wKEWJGoXdOXw,Smaran Manchala,Smaran,Manchala,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yNq-XupgH1XP,Sofia Mouchtaris,Sofia,Mouchtaris,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_6Y7qCC8YGohO,Sohan Madishetty,Sohan,Madishetty,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_TqO7kltded9a,Sohil Athare,Sohil,Athare,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ZSg39kCMi7R0,Sonali Chandy,Sonali,Chandy,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Gjl-U6nPt33y,Sonali K. Shah,Sonali,Shah,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_4dn4UvGHxlyI,Sophia Mark,Sophia,Mark,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_01GRVgi8d1Mk,Sophia Ye,Sophia,Ye,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_BJ9YRMVcpMzr,Sophie Chen,Sophie,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_pRlJnpYCDcz9,Sophie Ishiwari,Sophie,Ishiwari,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_T9bC4G8vAuRC,Soumyadeep Das,Soumyadeep,Das,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_LFFuT25DUwtS,Sourish-07 Venugopal,Sourish-07,Venugopal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_H9qlN334j3wU,sovit nayak,sovit,nayak,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_l71SPOJ9vxfh,Sri M,Sri,M,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Tbtb3S_AXn0D,Sri SriniHacks,Sri,SriniHacks,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_HOHzC9_uSPeS,Stan Chen,Stan,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_G2zTCGyzO7Sz,Stanley Yu,Stanley,Yu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_DnZB3_mHKgfy,Stefan Yu,Stefan,Yu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_izUv4gURqmzs,Steven Wang,Steven,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uQ4zpqver_cn,Steven Wu,Steven,Wu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_oj9LKBc9y_BZ,Steven Zeng,Steven,Zeng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_w3sv5cbWmNwP,Su-Yeon Lee,Su-Yeon,Lee,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rIQIkOdH6KPs,Suchita Hadimani,Suchita,Hadimani,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_KtjMHLdH1y0z,Sujal Shah,Sujal,Shah,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_jjsz1dgJ_2ir,Sumant R Shringari,Sumant,Shringari,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zdshEnARmFIP,Sumedh Garimella,Sumedh,Garimella,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_9tOu3hP2Iqyh,SummerIce12 Chen,SummerIce12,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uy19VmTbP2N9,"sun-jay Jayara,",sun-jay,"Jayara,",univ_penn,University of Pennsylvania,,unknown,,false,4
+person_WBxBcpExI8m8,Sunjung Kim,Sunjung,Kim,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_IJjvsJqChGzA,Surya Patil,Surya,Patil,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zT9qeMOWJ8cp,Suryavardhan Reddy Chappidi,Suryavardhan,Chappidi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_TGz3XbLOjF3e,Susan Zhang,Susan,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_hWQqugrEuPxR,Susan Zhang,Susan,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_O9eOVC86V0WM,Susan Zhang,Susan,Zhang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Sh_9FOZEa8PE,Swati Anshu,Swati,Anshu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_YDXlMLaIMPm9,Sydney Garcia,Sydney,Garcia,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_nehxdUYlcMyT,Taha Boty,Taha,Boty,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_eqkwuKDGhRd_,Talha Gondal,Talha,Gondal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ttNgrk5Blj7w,Tamir Saif,Tamir,Saif,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_4YIOLzX3Frki,Tara Kapoor,Tara,Kapoor,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_2yQTYWshu72l,Tarunyaa Sivakumar,Tarunyaa,Sivakumar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_y6UnrejvC03A,Tean Lai,Tean,Lai,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_JGpxJx6ir3DY,Tejas Raghuram,Tejas,Raghuram,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_M8xOmv_JtMOD,Teo Liang,Teo,Liang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_1OjHJRUNAcSF,Tessa Fan,Tessa,Fan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Py9qcpO5tcOC,Thanh T,Thanh,T,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_c8DMDZoGPKjf,Thao Duong,Thao,Duong,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_lXrACvEFF5zE,Thomas Borgese,Thomas,Borgese,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_edFkw_16iFqy,Thomas Fan,Thomas,Fan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_pkxtEZeue00S,Thomas Kanz,Thomas,Kanz,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_exz-H9OTRh0R,Thomas Li,Thomas,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ylqg_SF1Aigg,Thomas Lu,Thomas,Lu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_TcrA1oeOVVaB,Thomas Shaw,Thomas,Shaw,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_jRB50wJheTf_,Thomas Statchen,Thomas,Statchen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_7kgwPEVBAqFT,Tianwei Ding,Tianwei,Ding,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_wnvU6MKIzJME,Tianyi Gu,Tianyi,Gu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_iTQkYpPA2q8C,Tianyi Wang,Tianyi,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ZE4yzRe_Md4V,Tifara Boyce,Tifara,Boyce,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_-7wf6k2MAa9B,Tiffany Chang,Tiffany,Chang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_MzhgGRwBvWvX,Tiffany Tsang,Tiffany,Tsang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_kJcQX6Z7BmJx,Timothy Li,Timothy,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zQj-1KXITo7m,Tina Lee,Tina,Lee,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_PsF7-BQ3BvZP,Tomas Nepala,Tomas,Nepala,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_mOKoT7at7lSy,Tony Tian,Tony,Tian,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_EFM5K7_UTW_8,trangiabach,trangiabach,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_rILtyGf5XMpv,Trevor Guo,Trevor,Guo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zhzkKxeMdFk4,Trevor Leong,Trevor,Leong,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_e_k1gyyPXZyl,Tristan Stevens,Tristan,Stevens,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_CLXusdxH50PW,Tshepo Yane,Tshepo,Yane,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_PyEQxVAzqNVr,Tue Do,Tue,Do,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_TMv1ov2zfxtf,Tuneer Roy,Tuneer,Roy,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tMRhbn0EQtY8,Tushar Bansal,Tushar,Bansal,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ndBu-vBkXRXe,Tushar Tyagi,Tushar,Tyagi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_w_fsxzYVYT_J,Tyler Pizzico,Tyler,Pizzico,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_vUFYXFNZJ_S3,Uday Tripathi,Uday,Tripathi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Pko6uIIjFQmX,Umangj123,Umangj123,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ris2rJ8i5ecD,Vaani Bhatnagar,Vaani,Bhatnagar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_1AdaE4vjEybZ,Vahe Zaprosyan,Vahe,Zaprosyan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person__V9z2q4LLSng,Valencia Fu,Valencia,Fu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_cCiHHXSqLNAV,Vardnan Sivarajah,Vardnan,Sivarajah,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_bjkA1-mpBWpk,Varsha Etigunta,Varsha,Etigunta,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_h492alLaF3yn,Varshith Kotagiri,Varshith,Kotagiri,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_VcDM9vnucv8l,Varun Chopra,Varun,Chopra,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_9dvzUlirrNcz,Varun Ramakrishnan,Varun,Ramakrishnan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_JVVdHysh4F9p,Ved Borade,Ved,Borade,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_K1a4eKMDNkHP,Vedha Avali,Vedha,Avali,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_UaYUcMBPMUB0,Vibha Makam,Vibha,Makam,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_e980SGc3Un99,Victoria Zammit,Victoria,Zammit,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_DM8wwkSQET3q,Vignesh Saravanakumar,Vignesh,Saravanakumar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ukgwUDewE_-i,Vijay Shanmugam,Vijay,Shanmugam,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_qM25HAaOP-7J,Vijayesh Vasanthakumar,Vijayesh,Vasanthakumar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_T9a4IPjFqQyz,Vijeta Garg,Vijeta,Garg,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Br1O7akErzId,Vikram Bala,Vikram,Bala,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_iVjx8CtNy39U,Vikram Singh,Vikram,Singh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uN449QlNTd2l,Vikrame Vasudev Krishnan,Vikrame,Krishnan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_T_BsAmo5r6Eq,Vilhjalmur Vilhjalmsson,Vilhjalmur,Vilhjalmsson,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_vhTQM_LSRosr,Vincent Anthony Tiu,Vincent,Tiu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Hw1445ruMAMt,Vincent Cai,Vincent,Cai,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_7UQmUKHPwvAc,Vincent Tiu,Vincent,Tiu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_XcjNpD0oqu0T,Vincent Zheng,Vincent,Zheng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tzanoxF7Y6S2,Vineeth Vajipey,Vineeth,Vajipey,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_NK-2jffWhS9R,ving net,ving,net,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_FmmJX_nIHHMn,Viraj Mishra,Viraj,Mishra,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_wDjATpWf5SsP,vishalbidari2002 Bidari,vishalbidari2002,Bidari,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_sjjdDsXYTnJ4,Vishesh Patel,Vishesh,Patel,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_QZrzlAn38j9b,Vishnu Sundaresan,Vishnu,Sundaresan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SN74m3MvZ4A1,Vishruth Bharath,Vishruth,Bharath,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_yStkxfXKQaPv,Vishwa Murugappan,Vishwa,Murugappan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_8Frsacd8uDht,Vivek Raghavan,Vivek,Raghavan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_FKIni_GDWCeZ,Vivek Voleti,Vivek,Voleti,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Xf0WdG4oS-k7,Vivian Xiao,Vivian,Xiao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_xLOXNN6N2zSQ,Vrishab Krishna,Vrishab,Krishna,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_nINceQODEpuc,Vu Pham,Vu,Pham,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_FcTWTt5xtZfq,Weijie(Alex) Pan,Weijie(Alex),Pan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_E6_BhWtdZQ96,Wen Hui Leng,Wen,Leng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_97gEFIcMe0th,Will Hunt,Will,Hunt,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_OlMB7H66m7Zr,Will Liang,Will,Liang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Ic2FjH49Ft0g,William Goeller,William,Goeller,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_i0CD5vl3RS46,William Pan,William,Pan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ME2Tf-6Ae5gu,William San,William,San,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SXiId942FYiV,Wilson Hu,Wilson,Hu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_GTSmK_rpf0NE,Winston Cai,Winston,Cai,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uoEWtMsOqT9_,WithNorth Wang,WithNorth,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_UKlmrFUXq89z,Xiang Chen,Xiang,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_L3y5nk5QIUE2,Xinda Yang,Xinda,Yang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Jq-1PB5ljnYy,Yanka Sikder,Yanka,Sikder,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_0rIk2MUZoKOw,Yanni Kouloumbis,Yanni,Kouloumbis,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SvlrX_92CXj_,Yash Goudar,Yash,Goudar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_houf4oipyooA,Yash Lahoti,Yash,Lahoti,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_7yeZTuVrXfwN,Yash ㅤ,Yash,ㅤ,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_Sp-kZX25T0Pv,Yasmina Al Ghadban,Yasmina,Ghadban,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_20W0KKL5AbGk,YatinG10 Gupta,YatinG10,Gupta,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_uJiXuf9Eav_e,yeefever,yeefever,,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_OKfWocTNK_Xs,Yeongheon Lee,Yeongheon,Lee,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_qXpdxvSsE6T2,Yi-An Hsieh,Yi-An,Hsieh,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_EQF1Z_d2Xug4,Yihsiu Chen,Yihsiu,Chen,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_3mL_oKH5UCDt,Ying Xuan Eng,Ying,Eng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_nMcImr1z6VDy,Yinjie Wang,Yinjie,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_xA_77bD35Nbb,Yinka Ojolayo,Yinka,Ojolayo,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_KXarzJUSQ0d-,Yinying Li,Yinying,Li,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_UmMil78BZ70Q,Yoseph Getachew,Yoseph,Getachew,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_RANv1CxfJ60Y,Yu-Hsin Lin,Yu-Hsin,Lin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_SU1Pwn70qYQF,Yuewei Yuan,Yuewei,Yuan,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_A1Pi4gP7uL3F,Yujin Cho,Yujin,Cho,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_EAbcOL1diB0W,Yuki Yao,Yuki,Yao,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_jYdiFM-SnmTr,yummydumplings Sun,yummydumplings,Sun,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_N45Tmt2rC3Kv,Yuna Shin,Yuna,Shin,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_A8QEOMkzP8Av,Yuntong Fu,Yuntong,Fu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ZO_yZ76lMoRX,Yunyi Cai,Yunyi,Cai,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_JqIvV0Q95OZW,yuranl Liu,yuranl,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_tAkvnuSQF8Jg,Yurii Hriaziev,Yurii,Hriaziev,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_pwoEIxqizMOg,YusefMoustafa Moustafa,YusefMoustafa,Moustafa,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_i01IFySULEX8,Yuvraj Chaudhary,Yuvraj,Chaudhary,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_wP_ZyYYsEVtq,Yuzheng Feng,Yuzheng,Feng,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_LQPJcNNii_gg,Yuzhi Liu,Yuzhi,Liu,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_x2qeey0AxaEp,Zachary Lane,Zachary,Lane,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_nqoPg_zT1236,Zachary Spalding,Zachary,Spalding,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_zyKlm7mdd7a9,Zacky Albandar,Zacky,Albandar,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_ULPwIufiM66t,Zaid Al Nouman,Zaid,Nouman,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_kFF7JsxEZyED,Zayn-Rekhi Rekhi,Zayn-Rekhi,Rekhi,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_YFdHCpACclDl,Zelia Mardjoko,Zelia,Mardjoko,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_nFF9D4-2h1fo,zheng aiden,zheng,aiden,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_A3x8E-oF1aw-,Ziji Wang,Ziji,Wang,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_fSQwWAEBKoR9,Ziping Ye,Ziping,Ye,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_cIcPkrSMS7I7,Zoe Goldman,Zoe,Goldman,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_bk3HM3Yw6ndy,Zwe Tun,Zwe,Tun,univ_penn,University of Pennsylvania,,unknown,,false,4
+person_PDX838of1uPO,@ishanthewizard (GitHub),@ishanthewizard,(GitHub),univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_8k-dyjEfss6g,Aadhav Sundar Prabu,Aadhav,Prabu,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_QiHDRTt-gIgG,Aadith Venumuddala,Aadith,Venumuddala,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_AGK9gD5nIT-B,Aaditya Shah,Aaditya,Shah,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_1woubY3baxrZ,Aarush Agarwal,Aarush,Agarwal,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_eGIQmS1hm156,abby,abby,,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_knmSyYZKfqpF,Aditya Nandyal,Aditya,Nandyal,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_wXbbynWwXTlb,Aditya Pericherla,Aditya,Pericherla,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_pEgELSBkCaMi,Adrian Mittal,Adrian,Mittal,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_dSZXPLyfSTea,Akash Mishra,Akash,Mishra,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_8kQeCZP7Trte,Akshay Rao,Akshay,Rao,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_2cWxPQmuI42F,Alex Luu,Alex,Luu,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_qIljDoLw565O,Alisha Phuong Nhu Luc,Alisha,Luc,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_l4BDdg7IyU-4,Alvin Tran,Alvin,Tran,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_sX86HKyQSzS5,Aman Shah,Aman,Shah,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_pDgBBirHX4bd,Anay Joshi,Anay,Joshi,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_mNR9J6hcyYYg,Andrew McMorrow,Andrew,McMorrow,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_Pk1zZySaHvzO,Angelina Shen,Angelina,Shen,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_fBvypqdEmOM2,Anish Narang,Anish,Narang,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_qOhT4J63ifc5,Anish Shanbhag,Anish,Shanbhag,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_16E8YiGvZFX1,Anjan Bharadwaj,Anjan,Bharadwaj,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_G2-CKdWEnSN4,Anson Lam,Anson,Lam,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_SPcNOhrZn-KF,Anthony Paul Kobzar,Anthony,Kobzar,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_JjOqQmX49ct0,Arihant Swain,Arihant,Swain,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_Fo3gIyyMK6nv,Artem Tkachuk,Artem,Tkachuk,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_pHbgZiUouzOq,Aryan Gupta,Aryan,Gupta,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_v8k-gPBl6Jxx,Atharva Lade,Atharva,Lade,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_QQvtHWcqInl9,Avinash Rao,Avinash,Rao,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_culIfZk6k7N4,Ayush Paul,Ayush,Paul,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_1ivHOZRNxup0,Ayush Sridhar,Ayush,Sridhar,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_y7f_XK46fQZn,Bradley Tsou,Bradley,Tsou,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_gcBZ3jVo1nvQ,Bryan Chen,Bryan,Chen,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_wyYXeUvFGZAt,Caellum Yip Hoi - Lee,Caellum,Lee,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_4HSTJt62SsO7,Cai Scheidler,Cai,Scheidler,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_Cimq4zMuy5E6,Connor Harrington,Connor,Harrington,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_Y57_O9eoWxt1,CPG,CPG,,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_yv71MhHDTtgU,Darin Vu,Darin,Vu,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_5AACyz2mXTXS,David Chung,David,Chung,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_N4m9L06SxC5-,Davyn Paringkoan,Davyn,Paringkoan,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_X5tq9fHKgUkc,Deepak Karani,Deepak,Karani,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_vDcFL7htWOhe,Devam Sheth,Devam,Sheth,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_LSk33UbjVDww,Dhruv Bhargava,Dhruv,Bhargava,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_lJs2j4huSiNr,Diyan Chokshi,Diyan,Chokshi,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_yHbXBaXTv0gy,Donggyu Yoon,Donggyu,Yoon,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person__5de7w32mZv4,Edward Lu,Edward,Lu,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_71k_Rdw36j7l,Ethan Wang,Ethan,Wang,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_cUdBfjPKgVwf,Genna Gams,Genna,Gams,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_Vn-0selaFF_C,George Settleman,George,Settleman,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_Tepjet4S9qVA,Haotian Li,Haotian,Li,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_rkcKmEClDW7r,Haroon Mardanzai,Haroon,Mardanzai,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_LXJVW4P59K31,Het Sheth,Het,Sheth,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_96bHiXbvy4aM,Isara Chankhunthod,Isara,Chankhunthod,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_ez155nhS5yaL,Ishita Gupta,Ishita,Gupta,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_Y5HTQyUFIkdq,ishneet Chadha,ishneet,Chadha,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_ru3dfw7bmTec,Jeremy Liu,Jeremy,Liu,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_VVc-MQWV485n,Jeremy Yoo,Jeremy,Yoo,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_WhAgxnf_UpUw,Jerry Wang,Jerry,Wang,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person__-MujR-1nr4D,Jing Ye,Jing,Ye,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_wzhMIBIpK4z4,Joon Choi,Joon,Choi,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_tqROJNY4L1w_,Julian Ng-Thow-Hing,Julian,Ng-Thow-Hing,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_3D7mZJl4P1cF,kanika gupta,kanika,gupta,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_1OJMlKy1CQLA,Karthik Valluri,Karthik,Valluri,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_KtrTrqfELD0d,Kartik Aggarwal,Kartik,Aggarwal,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_Os-POUr0xFo1,Kartikey Pandey,Kartikey,Pandey,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_X_WLcXXK0CaF,Kestrel,Kestrel,,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_Tq78dYdtF8YY,Kevin Hao,Kevin,Hao,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_pNW6-CN-tbqL,Kevin Liu,Kevin,Liu,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_nJS-AjuVyXmS,Krish Arora,Krish,Arora,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_s9IIBQYLnUxR,Madhav Donthula,Madhav,Donthula,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_zQSH5wT6ctB3,Manasva Katyal,Manasva,Katyal,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_KLefjGD3tWIS,Matthew Martono,Matthew,Martono,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_UvZGObJDMdJ4,Medhavee Upadhyaya,Medhavee,Upadhyaya,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_fusSmbmTYvRL,Melody Jiamin Cui,Melody,Cui,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_y1mXVagGNc-t,micah872 Gao,micah872,Gao,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_0MiwBRBz-x3C,Mohan kancherla,Mohan,kancherla,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_0Y4O1ozQHo0E,Moksh Aggarwal,Moksh,Aggarwal,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_8KGJpcJN8qcY,Nico Galin,Nico,Galin,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_b4jTGL70Z6-7,Niranjan Baskaran,Niranjan,Baskaran,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_eWYamvZ4TOn2,parsanhd Parsana,parsanhd,Parsana,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_Zis6yIP44dM7,Patrick Feng,Patrick,Feng,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_2ekczNJQb5G-,Praneeth Otthi,Praneeth,Otthi,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_LaGIyuUSjavo,Prithvi S  Krishnan,Prithvi,Krishnan,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_LzBKWEUdKxJp,Pruthvik Sheth,Pruthvik,Sheth,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_zGYwDcKNn_t1,Raami Abichou,Raami,Abichou,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_RncItErdM9fC,Rabib001 Husain,Rabib001,Husain,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_WFDB8MjB966l,Raghav Raj Sah,Raghav,Sah,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_EkmveK9FlUS2,Rishabh Bhargava,Rishabh,Bhargava,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_-FdDCXAWI-gJ,Rohan Chintakindi,Rohan,Chintakindi,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person__fl8tQgEdYqn,Rohit Naras,Rohit,Naras,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_nteCA82INiRA,Roni Kant,Roni,Kant,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_lVMGARn8D14v,Rutuja Nitin Kadam,Rutuja,Kadam,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_gM7YUgpoN-tj,Sahasra Akula,Sahasra,Akula,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_LUogkydCeGts,Sahil Kale,Sahil,Kale,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_jnhfmIAqmodd,Sai Pisupati,Sai,Pisupati,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_aagKf_LmoXjO,Saketh Panchumarthy,Saketh,Panchumarthy,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_P5Y38p5npasR,Sakshi Sanskruti Tripathy,Sakshi,Tripathy,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_LB9vQFK1cqJK,Sam Avramov,Sam,Avramov,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_OalP_CXb3bKO,Samarth Goel,Samarth,Goel,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_qcgCdupYalg4,Sandeep Shandilya,Sandeep,Shandilya,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_-SY_x88xOIgU,Sanjeev Thurgam,Sanjeev,Thurgam,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_csOFtcyxyNOh,Sarvagya Somvanshi,Sarvagya,Somvanshi,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_cEN5S6j_0W4p,Saurabh Suman,Saurabh,Suman,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_inOKCa9Doqk1,Saurav Kashyap,Saurav,Kashyap,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_mnWE626glsI_,Scott Martin Bihag,Scott,Bihag,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_ujceSMqmMWaA,Sebastian Arellano-Rubach,Sebastian,Arellano-Rubach,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_E_CRKrMogrAY,Shreyas Bhoyar,Shreyas,Bhoyar,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_52P8yJTw2yUq,Shubham Jaysukhbhai Kothiya,Shubham,Kothiya,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_0d4qRT04OaJs,Shubham Kumar,Shubham,Kumar,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_AJoLLJdHWgJN,Shubham Patil,Shubham,Patil,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_zrc8yU2t6PeW,Shubhay Choubey,Shubhay,Choubey,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_vwV_8saSLVEr,Shweta Shinde,Shweta,Shinde,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_PZG_TyN4a--8,Siddhant Sanghi,Siddhant,Sanghi,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_xf-ALvSmqxEp,Sierra Meisel,Sierra,Meisel,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_XCuYWdJFq6xC,Siwen Long,Siwen,Long,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_9wT5aZd5DfW8,Sophia Sharif,Sophia,Sharif,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_okoqVf0p3I0u,Sophia Sharif,Sophia,Sharif,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_vGdoEJc03elY,Subhan Shaikh,Subhan,Shaikh,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_vIPjINJRE-Dm,Sudarshan Krishnan,Sudarshan,Krishnan,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_ZOLbGKZBW37L,Sukriti Sehgal,Sukriti,Sehgal,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_BIgMpZYc0LYp,Supratik Panuganti,Supratik,Panuganti,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_xM2fJvxaTGBP,Thilak Shekhar Shriyan,Thilak,Shriyan,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_KVo_Y3tX0arm,THOMAS LIEN,THOMAS,LIEN,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_ZNWR9sFqLRa7,Tom Binford,Tom,Binford,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_6U0GEb8zVFHR,Tony Xin,Tony,Xin,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_0_xJE22ded3i,UDITANSHU TOMAR,UDITANSHU,TOMAR,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_2ayFFvt6b1El,Vardhan Shorewala,Vardhan,Shorewala,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_ZYFvRWNiklf7,Wenqing Li,Wenqing,Li,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_sdi_0kIVWD04,William Henderson,William,Henderson,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_dEocG5y7plxx,wl .,wl,.,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_LPXl-4ctfHl2,Yugm Maneshkumar Patel,Yugm,Patel,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_iflbC2snihpv,Yuktaa Addanki,Yuktaa,Addanki,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_2wtVdtMHCK5w,Zek Yang,Zek,Yang,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_i-OvgFO7Na1t,Zeyi Austin Li,Zeyi,Li,univ_berkeley,"University of California, Berkeley",,unknown,,false,4
+person_iR4tNGUXHnLR,Aarav Wattal,Aarav,Wattal,univ_stanford,Stanford University,,unknown,,false,4
+person_9AmdGSZY364w,Ananth Venkatesh,Ananth,Venkatesh,univ_stanford,Stanford University,,unknown,,false,4
+person_uj8haW1dM_r7,Andrea Giuri,Andrea,Giuri,univ_stanford,Stanford University,,unknown,,false,4
+person_szewCgXA-12A,Anthony Chukhlov,Anthony,Chukhlov,univ_stanford,Stanford University,,unknown,,false,4
+person_RSiNDh9quVhq,Antonio Alonso-Stepanov,Antonio,Alonso-Stepanov,univ_stanford,Stanford University,,unknown,,false,4
+person_nDu7vPLwNqnq,Chiling Han,Chiling,Han,univ_stanford,Stanford University,,unknown,,false,4
+person_dG_JPVezagna,J4Joshua Tan,J4Joshua,Tan,univ_stanford,Stanford University,,unknown,,false,4
+person_80Xnjb2yZWIU,James Yu-tang Chen,James,Chen,univ_stanford,Stanford University,,unknown,,false,4
+person_wDRDEdyKNmNa,Jason Zhao,Jason,Zhao,univ_stanford,Stanford University,,unknown,,false,4
+person_jdSVKSaLs3_8,Joe Liang,Joe,Liang,univ_stanford,Stanford University,,unknown,,false,4
+person_XqrqFMrKV5_c,Justin Peng,Justin,Peng,univ_stanford,Stanford University,,unknown,,false,4
+person_eO1SFMj7i6bf,Lainey Leslie,Lainey,Leslie,univ_stanford,Stanford University,,unknown,,false,4
+person_ablZf8erlbdd,Madhuhaas Gottimukkala,Madhuhaas,Gottimukkala,univ_stanford,Stanford University,,unknown,,false,4
+person_ghn8PFLmk862,Maha Nawaz,Maha,Nawaz,univ_stanford,Stanford University,,unknown,,false,4
+person_Eu6i19QbKR25,Pranav Tadepalli,Pranav,Tadepalli,univ_stanford,Stanford University,,unknown,,false,4
+person_wpbOFURufnNS,rogeru13 Roger You,rogeru13,You,univ_stanford,Stanford University,,unknown,,false,4
+person_QE1aYMa5mp7d,Sai Konkimalla,Sai,Konkimalla,univ_stanford,Stanford University,,unknown,,false,4
+person_SMQgdWDfmD6o,Thomas Breydo,Thomas,Breydo,univ_stanford,Stanford University,,unknown,,false,4
+person_c3QaTbSHyV1A,Abdur-Rahman Rana,Abdur-Rahman,Rana,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_gT6rmLPjH1HV,Akshay Gupta,Akshay,Gupta,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_wBBAqHvyESYQ,Alexander Zhang,Alexander,Zhang,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_poLO2fK-ETR3,Amit Weis,Amit,Weis,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_y6akghkQB1ZD,Amr Alomari,Amr,Alomari,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_wrvu8ygq2j60,Catherine Yang,Catherine,Yang,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_ie6Lnx8DzW1n,Cheng Han Lee,Cheng,Lee,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_xs8Z6X82NzNh,Jacob John,Jacob,John,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_ZGjvlE-j_HWI,Jerry Li,Jerry,Li,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_Kd9fG_K4YckI,Leo Li,Leo,Li,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_OAhupFdSOM2B,Marco Anthony Ayuste,Marco,Ayuste,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_nky5B5SG7XR1,Matthew Chan,Matthew,Chan,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_t32DwSCVd7oc,Michael M,Michael,M,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_Ddv5rskglNM9,Michael Zhang,Michael,Zhang,univ_waterloo,University of Waterloo,,unknown,,false,4
+person__qnzSLTL1u0-,Qiyuan Cai,Qiyuan,Cai,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_FeOgRtVJKPJp,Quinn Wang,Quinn,Wang,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_TZepsd57pMdQ,Robert Lu,Robert,Lu,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_DbrR4RNwVhtn,Roshan iruku,Roshan,iruku,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_8VHcnwvZnJXU,Sharon Basovich,Sharon,Basovich,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_tBliEkYLUmz6,Shawn Wei,Shawn,Wei,univ_waterloo,University of Waterloo,,unknown,,false,4
+person_zoIMlaED5KOi,William Yang,William,Yang,univ_waterloo,University of Waterloo,,unknown,,false,4
