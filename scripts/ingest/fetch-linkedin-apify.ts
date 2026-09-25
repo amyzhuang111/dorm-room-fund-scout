@@ -104,21 +104,29 @@ function stableFingerprint(headline: string | undefined, about: string | null | 
 //    13.6s, so CHUNK_SIZE is set there — found empirically, not guessed.
 // 3. Chunk size 5 alone STILL wasn't enough for a SUSTAINED run: a real
 //    597-profile run stayed 5-for-5 for its first ~15 chunks (~75
-//    profiles), then started degrading to 1-of-5 from chunk 16 onward —
-//    a cumulative throttle, not just a burst-concurrency one. Worse. this
-//    script originally scraped ALL chunks into memory and only wrote to
-//    the database at the very end — killing the run mid-flight (the right
-//    call once degradation was noticed) lost every already-scraped,
-//    already-CHARGED profile's data with it. Fixed by writing each
-//    chunk's results to the database immediately after that chunk
-//    completes (see the per-chunk loop in main() below, not a separate
-//    scrapeProfiles() that batches results), and by bounding each script
-//    invocation to MAX_PROFILES_PER_RUN so a single run can't blindly
-//    power through hundreds of profiles into guaranteed throttling — re-
-//    invoke the script to continue, same resumable-run convention as
-//    every other bounded adapter in this codebase.
-const CHUNK_SIZE = 5;
-const INTER_CHUNK_DELAY_MS = 8000;
+//    profiles), then started degrading to 1-of-5 from chunk 16 onward.
+//    This script originally scraped ALL chunks into memory and only wrote
+//    to the database at the very end — killing the run mid-flight (the
+//    right call once degradation was noticed) lost every already-
+//    scraped, already-CHARGED profile's data with it. Fixed by writing
+//    each chunk's results to the database immediately after that chunk
+//    completes, and by bounding each script invocation to
+//    MAX_PROFILES_PER_RUN so a single run can't blindly power through
+//    hundreds of profiles — re-invoke the script to continue.
+// 4. Root cause isolated directly (2026-09-25, later same day): even
+//    30-45 minutes after stopping the degraded run — plenty for a simple
+//    time-based cooldown — a fresh 5-URL batch STILL came back 1-of-5,
+//    while a single-URL run succeeded every time, including 3 separate
+//    single-URL runs fired back-to-back with no delay between them. So
+//    this was never about sustained volume over time or needing a
+//    cooldown — it's specifically the actor's OWN internal concurrency
+//    for a multi-query request in one run that trips LinkedIn's anti-bot
+//    system, not anything about calling the API repeatedly. Verified
+//    directly against the API outside this script before changing it.
+//    Fix: CHUNK_SIZE = 1, always — one profile per Apify run, run
+//    sequentially. Slower (~13-15s per profile) but reliable.
+const CHUNK_SIZE = 1;
+const INTER_CHUNK_DELAY_MS = 2000;
 const MAX_PROFILES_PER_RUN = 60;
 const POLL_INTERVAL_MS = 3000;
 const MAX_POLL_MS = 5 * 60 * 1000;
@@ -337,7 +345,11 @@ async function main() {
     // ever consider stopping — a kill/interrupt/degradation-triggered
     // break past this point cannot lose already-scraped-and-charged data
     // the way the old collect-then-write-at-the-end version could.
-    if (consecutiveDegradedChunks >= 2) {
+    // Threshold raised to 4 now that CHUNK_SIZE=1: a single genuinely-
+    // private/deleted profile is real, expected noise (not throttling)
+    // and shouldn't stop the whole run — only a real run of several in a
+    // row is worth treating as a signal something's actually wrong again.
+    if (consecutiveDegradedChunks >= 4) {
       console.log(
         `  Throttling detected (${consecutiveDegradedChunks} consecutive chunks returned far fewer profiles than requested) — stopping this run early rather than burning more Apify spend on likely-empty chunks. ${targets.length - processedCount} of this run's ${targets.length} targets remain; re-run later (after a cooldown) to continue.`
       );
