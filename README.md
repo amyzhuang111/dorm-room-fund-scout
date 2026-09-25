@@ -1442,3 +1442,50 @@ claims, same as every profile before it. Running in the background given
 complete.
 
 `npx tsc --noEmit` clean on the backfill script.
+
+## Three more real hackathon sources + the actual LinkedIn throttling root cause (2026-09-25)
+
+The 597-profile Apify run above hit real, worsening throttling partway
+through (chunks of 5 degrading to 1-of-5 repeatedly) — killed it rather
+than let it burn budget on empty chunks, which surfaced a second real bug:
+`fetch-linkedin-apify.ts` scraped everything into memory and only wrote to
+the database at the very end, so killing it lost every already-scraped,
+already-CHARGED profile (confirmed: `linkedin_profile` claim count was
+identical before and after the aborted run). Rewrote it to write each
+chunk to the database immediately, bound each invocation to 60 profiles,
+and detect sustained degradation to stop early.
+
+That still didn't fix the throttling itself — even fresh 5-URL batches
+kept failing 30-45 minutes later, well past any reasonable time-based
+cooldown. **Isolated the actual cause directly against the API, not
+guessed**: 3 separate single-URL Apify runs fired back-to-back with zero
+delay between them all succeeded, while a 5-URL batch in one run kept
+failing. This was never about sustained volume over time — it's the
+actor's own internal concurrency for a multi-query request in a single
+run that trips LinkedIn's anti-bot system. Fixed by setting `CHUNK_SIZE =
+1` (one profile per Apify run, run sequentially): the first real test
+after the fix was 60/60 successful, zero failures, and every batch since
+has been clean. Slower (~15s/profile) but actually reliable, which a
+faster-but-broken version wasn't.
+
+**Three more real hackathon sources added**, found the same way as
+everything else this session — searched for them, verified the gallery is
+real and populated before writing an adapter, never assumed one exists:
+- **UC Berkeley AI Hackathon 2026** — "the world's largest AI Hackathon,"
+  hosted by the Cal Hacks/SkyDeck team. A second real Berkeley source
+  since Cal Hacks itself is maxed out (696/699).
+- **Berkeley Blockchain Hackathon** — co-hosted by Node and Blockchain at
+  Berkeley. Small (18 projects), fully walked in a few runs. A third
+  Berkeley source.
+- **PennApps XXV** — the prior PennApps cohort, since PennApps XXVI is
+  maxed out (83/85) and the old separate PennHacks hardware hackathon
+  merged into PennApps itself years ago with no standalone gallery
+  (checked via search, not assumed).
+
+Net result this session, Penn + Berkeley focus as asked: **Berkeley
+1,930 → 2,224 people, Penn 585 → 745 people**, LinkedIn aliases captured
+51 → 687 (via the full 3,240-profile Devpost backfill, now genuinely
+complete — 0 people left unchecked), and LinkedIn profile resolution
+climbing reliably in the background (321+ resolved and counting at time
+of writing, 0 failures since the `CHUNK_SIZE=1` fix, ~250+ people still
+queued). `npx tsc --noEmit` and `npm run build` both clean throughout.
