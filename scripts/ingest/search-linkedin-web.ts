@@ -8,11 +8,12 @@
 // --import reads a JSON array of already-judged web results:
 //   { person_id, full_name, linkedin_url, status, evidence, query }
 // status is "confirmed" | "unverified" | "not_found". Confirmed rows become
-// a linkedin: alias. Unverified rows become linkedin_candidate claims with
-// verification_state unverified. not_found rows are left untouched.
-// The file's status is stored as given — this path does not re-score the
-// snippet. Two records that share one profile URL and one company are
-// merged first when both ids are in the file.
+// a linkedin: alias, then enrollment is recomputed from stored excerpts
+// (class-year tokens and current-student wording). Unverified rows become
+// linkedin_candidate claims with verification_state unverified. not_found
+// rows are left untouched. The file's status is stored as given — this path
+// does not re-score the snippet. Two records that share one profile URL and
+// one company are merged first when both ids are in the file.
 //
 // For each person still missing a confirmed linkedin.com/in URL, this asks
 // DuckDuckGo's HTML endpoint, then Marginalia, and also reads the person's
@@ -567,6 +568,10 @@ function importJudgedResults(filePath: string) {
           now,
           "corroborated"
         );
+        // Same rules as the live search: class-year tokens and "current student"
+        // wording in the stored excerpt can update enrollment. Bare "Penn student"
+        // does not. Unverified candidates are ignored by decideEnrollment.
+        recomputePersonEnrollment(db, person.id);
         confirmed++;
         console.log(`  confirmed ${person.name} ${url}`);
         continue;
