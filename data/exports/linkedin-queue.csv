@@ -1,8 +1,4 @@
 person_id,full_name,first_name,last_name,campus_id,school_name,company_names,enrollment_status,class_year,is_founder_role,priority
-person_0eosFfBrVtXi,Aarush Sahni,Aarush,Sahni,univ_penn,University of Pennsylvania,ToxiSense,recent_grad,GEN'26,true,1
-person_1G6A0-qbSVQI,Aayush Garg,Aayush,Garg,univ_penn,University of Pennsylvania,SecureFlow,recent_grad,WG'24,true,1
-person_e2YinLeUPxVn,Abigail McCulloch,Abigail,McCulloch,univ_penn,University of Pennsylvania,Padel Blue,recent_grad,WG'25,true,1
-person_D_Bohkiy_mDR,Agustin Garcinuno,Agustin,Garcinuno,univ_penn,University of Pennsylvania,Flipkit,recent_grad,W'23,true,1
 person_IfjzuHxVZHxz,Ahmed Abdellah,Ahmed,Abdellah,univ_penn,University of Pennsylvania,Quok.it,recent_grad,GEE'26,true,1
 person_2vWIAxrDjZ2V,Akhil Peddikuppa,Akhil,Peddikuppa,univ_penn,University of Pennsylvania,Horus Health,current_student,C'27,true,1
 person_H35WAs_WdRlq,Albert Katz,Albert,Katz,univ_penn,University of Pennsylvania,Flagler Health,recent_grad,WG'23,true,1
@@ -11,119 +7,57 @@ person_9cq5Ms07NQdX,Alexander Cho,Alexander,Cho,univ_penn,University of Pennsylv
 person_gKTN-erBqHuE,Alexis Barber,Alexis,Barber,univ_penn,University of Pennsylvania,Too Collective,recent_grad,WG'25,true,1
 person_78pjgtS8bL9J,Aliza Berger,Aliza,Berger,univ_penn,University of Pennsylvania,LCKR,recent_grad,WG'24,true,1
 person_yEY8K82lVnMq,Amelia Cohen,Amelia,Cohen,univ_penn,University of Pennsylvania,EmployAI,recent_grad,WG'23,true,1
-person_XAbwQK7AS2Vg,Ananya Dewan,Ananya,Dewan,univ_penn,University of Pennsylvania,FullFlock | Ossum Technologies,recent_grad,LSM'23,true,1
-person_AR3irX663d8u,Andrew Diep-Tran,Andrew,Diep-Tran,univ_penn,University of Pennsylvania,ToxiSense,recent_grad,W'25,true,1
-person_wip_mu8xqVTH,Andrew Mao,Andrew,Mao,univ_penn,University of Pennsylvania,Lucy,current_student,G'EE27,true,1
 person_Os3dvr8mtmPg,Annie Xu,Annie,Xu,univ_penn,University of Pennsylvania,Pairfect | Spring,recent_grad,SPP'24,true,1
-person_GqTelir5rXoO,Aravind Krishnan,Aravind,Krishnan,univ_penn,University of Pennsylvania,ToxiSense,recent_grad,C'25,true,1
-person_OOMf44VWvdQj,Archana Somasegar,Archana,Somasegar,univ_penn,University of Pennsylvania,MineMe,recent_grad,WG'24,true,1
 person_AI-14GDuGofo,Ava Ramesh,Ava,Ramesh,univ_penn,University of Pennsylvania,MediMint,recent_grad,WG'25,true,1
 person_we-Dcafp9CiN,Avanthika Ramesh,Avanthika,Ramesh,univ_penn,University of Pennsylvania,MediMint,recent_grad,WG'25,true,1
 person_irNDLFQF_wTN,Bach Tran,Bach,Tran,univ_penn,University of Pennsylvania,Robin,recent_grad,SEAS'26,true,1
 person_PXDEXYrlwn4s,Benjamin Abt,Benjamin,Abt,univ_penn,University of Pennsylvania,PopEye,recent_grad,ENG'23,true,1
 person_tmQAuKJt1NXZ,Brandon Huang,Brandon,Huang,univ_penn,University of Pennsylvania,GoodRun,recent_grad,WG'25,true,1
 person_YTQxTNN-iWPh,Charlie Hirschhorn,Charlie,Hirschhorn,univ_penn,University of Pennsylvania,Storiara,current_student,C'27,true,1
-person_l7KMBcZ9HfIL,Chris Stolte,Chris,Stolte,univ_penn,University of Pennsylvania,Capivara,recent_grad,WEMBA'25,true,1
 person_yfhOsK9OmsAY,Claire Utomi,Claire,Utomi,univ_penn,University of Pennsylvania,BUILD Nigeria,recent_grad,W'23,true,1
 person_1gr7oaCNZF5j,Corina Chen,Corina,Chen,univ_penn,University of Pennsylvania,Orble,current_student,ENG'28,true,1
-person___czcyEr8ihe,Dan Cataldi,Dan,Cataldi,univ_penn,University of Pennsylvania,Groov,recent_grad,WG'23,true,1
-person_K1mJuLbriTt2,Daniel Cataldi,Daniel,Cataldi,univ_penn,University of Pennsylvania,Groov,recent_grad,WG'23,true,1
 person_5pDEU2OabZsr,Daniel Zhang,Daniel,Zhang,univ_penn,University of Pennsylvania,Sanguis,recent_grad,GR'23,true,1
-person_pBcDLOv0q2Pr,David Levine,David,Levine,univ_penn,University of Pennsylvania,bia,recent_grad,GR'23,true,1
-person_s_IJ3dLC8oKK,David Navarro,David,Navarro,univ_penn,University of Pennsylvania,Zmiles Same Day Aligners,recent_grad,W'23,true,1
-person_NT7a7Yb82u3K,Devi Kasih,Devi,Kasih,univ_penn,University of Pennsylvania,ALL-in Eduspace,recent_grad,GED'23,true,1
 person_x3v4s7uDmjej,Divyansh Agarwal,Divyansh,Agarwal,univ_penn,University of Pennsylvania,Sanguis,recent_grad,GR'23,true,1
-person_MyCxAddirXJw,Dustin Bainbridge,Dustin,Bainbridge,univ_penn,University of Pennsylvania,Unified Track,current_student,GRD'27,true,1
 person_4eZj7YikFcpr,Elizabeth Chou,Elizabeth,Chou,univ_penn,University of Pennsylvania,Clarifi,recent_grad,ENG'24,true,1
 person_XwD4svYBmUZ5,Evan Adamo,Evan,Adamo,univ_penn,University of Pennsylvania,SecureFlow,recent_grad,WG'23,true,1
 person_UJYeyoAQrOJ0,George Eliadis,George,Eliadis,univ_penn,University of Pennsylvania,Probook,recent_grad,ENG'24,true,1
 person_qJ4La12ebqoe,Gerardo Ballestros,Gerardo,Ballestros,univ_penn,University of Pennsylvania,Lumify Care,recent_grad,W'23,true,1
-person_MeLljICJ-ns1,Gokulanand Iyer,Gokulanand,Iyer,univ_penn,University of Pennsylvania,bia,recent_grad,GR'24,true,1
 person_TmzDC52qMZ3G,Haichuan Yang,Haichuan,Yang,univ_penn,University of Pennsylvania,FullFlock,recent_grad,SAS'23,true,1
 person_-6VsLqgRwC8k,Haley Kang,Haley,Kang,univ_penn,University of Pennsylvania,Flipkit,recent_grad,ENG'24,true,1
 person_MNTfPQbsnYIE,Harrison Chong,Harrison,Chong,univ_penn,University of Pennsylvania,Jalan Journey Global,current_student,SEAS'27,true,1
-person_Bg-5oi0RTJZu,Harsha Ravindran,Harsha,Ravindran,univ_penn,University of Pennsylvania,Jalan Journey Global,recent_grad,CAS'26,true,1
 person_ElHMkzQy5Uva,Himza Jivani,Himza,Jivani,univ_penn,University of Pennsylvania,Paytus,recent_grad,WG'23,true,1
-person_p7Tso2BT-t5I,Hoang Le,Hoang,Le,univ_penn,University of Pennsylvania,Ossum Technologies,recent_grad,C'23,true,1
 person_gd0DtVSBorVF,Jade Peterson,Jade,Peterson,univ_penn,University of Pennsylvania,Jolt Education,recent_grad,GED'24,true,1
 person_ytYkBc-XIkFf,Jason Li,Jason,Li,univ_penn,University of Pennsylvania,Serpent Robotics,recent_grad,GEN'26,true,1
-person_ErDgcEEWM1bP,Jeanine Mojum,Jeanine,Mojum,univ_penn,University of Pennsylvania,Amoureux Beauty,recent_grad,WG'24,true,1
 person_8Ep3uHs4Hw3N,Jessica Ramses,Jessica,Ramses,univ_penn,University of Pennsylvania,NEPRI Pasta,recent_grad,GEN'23,true,1
 person_c7Vmx6gUeQJM,John Hopcroft,John,Hopcroft,univ_penn,University of Pennsylvania,Lucy,current_student,ENG'28,true,1
-person_vhTlm6-cl8bQ,Jonathan Muruako,Jonathan,Muruako,univ_penn,University of Pennsylvania,Fitalyst,recent_grad,SPP'24,true,1
 person_j5hOwVteVnkQ,Joseph Han,Joseph,Han,univ_penn,University of Pennsylvania,Clédo,recent_grad,WG'23,true,1
 person_38lvPUTBfTDJ,Joshua Baek,Joshua,Baek,univ_penn,University of Pennsylvania,Lumify Care,recent_grad,C'23,true,1
 person_BaXmS6tUio3t,Joshua Folarin,Joshua,Folarin,univ_penn,University of Pennsylvania,Cengine,recent_grad,WG'26,true,1
 person_YDJhXu-OEWbL,Joshua Weiner,Joshua,Weiner,univ_penn,University of Pennsylvania,Aimless,recent_grad,SEAS'23,true,1
-person_GRKXGrvlKnDg,Julie Liu,Julie,Liu,univ_penn,University of Pennsylvania,Motherly Notes,recent_grad,GED'25,true,1
 person_GuVmpF6M09X-,Justin Zhang,Justin,Zhang,univ_penn,University of Pennsylvania,Altrui Foundation,recent_grad,ENG'24,true,1
 person_niMsli6PWaXe,Karan Shah,Karan,Shah,univ_penn,University of Pennsylvania,Ossum Technologies,recent_grad,ENG'24,true,1
 person_gn69CCl4P48p,Kevin Lu,Kevin,Lu,univ_penn,University of Pennsylvania,Robin,recent_grad,SEAS'26,true,1
-person_4dJZkg6iy-3i,Kevin Russell,Kevin,Russell,univ_penn,University of Pennsylvania,The Zillennial Advisors,current_student,WG'27,true,1
-person_WbEgN14pXbiO,Kevin Xuan (Yiran Xuan),Kevin,Xuan),univ_penn,University of Pennsylvania,Serpent Robotics,recent_grad,GEN'26,true,1
 person_nYEFsqnMWaxx,Kyle Zhang,Kyle,Zhang,univ_penn,University of Pennsylvania,Robin,recent_grad,SEAS'26,true,1
-person_F06UdSwGRwNB,Kylie Chang,Kylie,Chang,univ_penn,University of Pennsylvania,LilyLoop,current_student,SEAS'27,true,1
 person_k5l0uSYGRoZL,Lada Korotaeva,Lada,Korotaeva,univ_penn,University of Pennsylvania,Munch Industries,recent_grad,SEAS'23,true,1
-person_y0OACH0nS0CX,Leon Zhang,Leon,Zhang,univ_penn,University of Pennsylvania,BetterBasket,recent_grad,WG'24,true,1
 person_bnNnteP6Uqpq,Lindsay Smith,Lindsay,Smith,univ_penn,University of Pennsylvania,Alopex Golf,recent_grad,SEAS'23,true,1
-person_dgyz2Gq7pW15,Lisa Sun,Lisa,Sun,univ_penn,University of Pennsylvania,Chloropept,current_student,C'27,true,1
-person_utkuyeuWBqnO,Louis Chung,Louis,Chung,univ_penn,University of Pennsylvania,Kfans,recent_grad,C'24,true,1
 person_MkSb0KZ8XnII,Louisa Qiu,Louisa,Qiu,univ_penn,University of Pennsylvania,Lumify Care,recent_grad,N'23,true,1
-person_GTXWC_YyibEr,Malavika Reddy,Malavika,Reddy,univ_penn,University of Pennsylvania,Flock,recent_grad,WG'23,true,1
-person_FtSZmtrXSjoP,Mandy Chen,Mandy,Chen,univ_penn,University of Pennsylvania,Capivara,recent_grad,WEMBA'25,true,1
-person_s6iQgeTGCwJn,Manvitha Mallela,Manvitha,Mallela,univ_penn,University of Pennsylvania,Flock,recent_grad,WG'23,true,1
-person_epQtxO2duf7s,Margaret Zhu,Margaret,Zhu,univ_penn,University of Pennsylvania,Serpent Robotics,recent_grad,W'26,true,1
-person_aoqNV7xoSztF,Mario Ferre,Mario,Ferre,univ_penn,University of Pennsylvania,PopEye,recent_grad,ENG'23,true,1
 person_imijJnMLkRiX,Matt Liebers,Matt,Liebers,univ_penn,University of Pennsylvania,Guide Genetics,recent_grad,WG'26,true,1
 person_zCj3cgdzFeck,Matthew Lowe,Matthew,Lowe,univ_penn,University of Pennsylvania,Jalan Journey Global,current_student,SEAS'27,true,1
 person_1owZVWPHzl3j,Megan Burke,Megan,Burke,univ_penn,University of Pennsylvania,Caboodle,recent_grad,WG'24,true,1
-person_dk9p7S8tMzeQ,Megan Burton,Megan,Burton,univ_penn,University of Pennsylvania,BrainFood,recent_grad,G'24,true,1
-person_FPqSlQhfPsgy,Melanie Herbert,Melanie,Herbert,univ_penn,University of Pennsylvania,Sync Labs,recent_grad,ENG'25,true,1
-person_NRWoopy9HJEP,Michael Ansusinha,Michael,Ansusinha,univ_penn,University of Pennsylvania,Snowlake,recent_grad,WG'25,true,1
-person_P49QJyimTBvZ,Mustafo Mustafokulov,Mustafo,Mustafokulov,univ_penn,University of Pennsylvania,Chloropept,current_student,C'27,true,1
-person_D4Dr7c8hPUQN,Nastassja Kuznetsova,Nastassja,Kuznetsova,univ_penn,University of Pennsylvania,Munch Industries | Orble,recent_grad,GEN'24,true,1
-person_aDVuAcAgaayL,Neha Chelamkuri,Neha,Chelamkuri,univ_penn,University of Pennsylvania,LilyLoop,current_student,SAS'27,true,1
-person_qP7O8BOzvM2A,Nicholas Anderson,Nicholas,Anderson,univ_penn,University of Pennsylvania,PopEye,recent_grad,ENG'23,true,1
-person_jsMgwaVWHA-R,Nicholas Szabo,Nicholas,Szabo,univ_penn,University of Pennsylvania,IvyTech Design LLC,current_student,M'27,true,1
-person_Xvvn4mPVgzyY,Nick Harty,Nick,Harty,univ_penn,University of Pennsylvania,Storiara,current_student,EE'27,true,1
-person_w2fUJAbTwSZn,Niha Gottiparthy,Niha,Gottiparthy,univ_penn,University of Pennsylvania,Keye,recent_grad,WG'23,true,1
-person_Cr4PiNjAmroD,Nitin Agarwal,Nitin,Agarwal,univ_penn,University of Pennsylvania,Spine Bionics,recent_grad,WG'26,true,1
-person_NWjNarwVtJB_,Octavius Kim,Octavius,Kim,univ_penn,University of Pennsylvania,Flipkit,recent_grad,C'23,true,1
-person_qWaWm1DTWzAa,Orestis Skoutellas,Orestis,Skoutellas,univ_penn,University of Pennsylvania,PopEye,recent_grad,ENG'23,true,1
 person_b7TRz6tr5hXY,Paolo Fornasini,Paolo,Fornasini,univ_penn,University of Pennsylvania,Keye,recent_grad,G'23,true,1
-person_JrddaMZCqR6B,Pedram Bayat,Pedram,Bayat,univ_penn,University of Pennsylvania,Chloropept,current_student,GEN'28,true,1
-person_h7ZDb0X9QNxw,Piotr Lazarek,Piotr,Lazarek,univ_penn,University of Pennsylvania,Nirby,recent_grad,ENG'25,true,1
-person_27lar_44UEkq,Rachel League,Rachel,League,univ_penn,University of Pennsylvania,CFO 4 ALL,recent_grad,WG'25,true,1
 person_F_bUbhCiReiv,Rachel Snyder,Rachel,Snyder,univ_penn,University of Pennsylvania,Caboodle,recent_grad,WG'24,true,1
-person_MtVZf8gFPXmX,Raghu Arghal,Raghu,Arghal,univ_penn,University of Pennsylvania,MedVision,recent_grad,GR'26,true,1
 person_ALJsUd42TOb4,Rahul Nambiar,Rahul,Nambiar,univ_penn,University of Pennsylvania,Jochi,recent_grad,SEAS'24,true,1
 person_SvT2ZbN5J1Zl,Rainbow Yeung,Rainbow,Yeung,univ_penn,University of Pennsylvania,Odyssey Notebooks | Odyssey Notebooks LLC,recent_grad,WG'24,true,1
 person_fSXUBQXy1tKI,Riddhima Kapoor,Riddhima,Kapoor,univ_penn,University of Pennsylvania,Veggie Vice,recent_grad,WG'24,true,1
-person_6Vz5CsN4QH_L,Rima Chavali,Rima,Chavali,univ_penn,University of Pennsylvania,LilyLoop,current_student,SAS'27,true,1
 person_T6Jub9hOnIf8,Rishi Ambavanekar,Rishi,Ambavanekar,univ_penn,University of Pennsylvania,Cloak,current_student,ENG'29,true,1
-person_EEliAJuIQQPt,Rupesh Jeyaram,Rupesh,Jeyaram,univ_penn,University of Pennsylvania,Revise Robotics,recent_grad,WG'24,true,1
 person_-Hd0y83QlDnt,Ruthwick Patthireddy,Ruthwick,Patthireddy,univ_penn,University of Pennsylvania,Keye,recent_grad,WG'23,true,1
-person_X8dAnmXZR9R9,Saif Khawaja,Saif,Khawaja,univ_penn,University of Pennsylvania,Shinkei Systems | Shinkei Systems Corp.,recent_grad,G'23,true,1
 person_JXOxOxRafkX0,Sarah Powers,Sarah,Powers,univ_penn,University of Pennsylvania,Nemu,recent_grad,WG'23,true,1
 person_F_ACm5P4pL-g,Savan Patel,Savan,Patel,univ_penn,University of Pennsylvania,Ossum Technologies,recent_grad,ENG'23,true,1
-person_m7jjOdqTzsF_,Scott Ogden,Scott,Ogden,univ_penn,University of Pennsylvania,Capivara,recent_grad,WEMBA'25,true,1
-person_oybQbqRkXq7B,Shiva Teerdhala,Shiva,Teerdhala,univ_penn,University of Pennsylvania,Ossum Technologies,recent_grad,W'23,true,1
 person_1T03_MpX6I5_,Sophie Takahashi,Sophie,Takahashi,univ_penn,University of Pennsylvania,Munch Industries,recent_grad,MT'23,true,1
 person_yQ7Qla8-d_5p,Sourish Jasti,Sourish,Jasti,univ_penn,University of Pennsylvania,Altrui Foundation,recent_grad,W'24,true,1
-person_Of5-j7FN-20z,Spencer Kaufman,Spencer,Kaufman,univ_penn,University of Pennsylvania,Storiara,recent_grad,C'26,true,1
-person_9-pyO_ehNllI,Steyn Knollema,Steyn,Knollema,univ_penn,University of Pennsylvania,Serpent Robotics,recent_grad,GEN'26,true,1
 person_0Vp-ZcCealE9,Sunny Wang,Sunny,Wang,univ_penn,University of Pennsylvania,Robin,recent_grad,SEAS'26,true,1
-person_MDNswjc3YnzL,Tara Balakrishnan,Tara,Balakrishnan,univ_penn,University of Pennsylvania,EmployAI,recent_grad,WG'23,true,1
-person_gcTc4iMFoJ1w,Tarunyaa Sivakumar,Tarunyaa,Sivakumar,univ_penn,University of Pennsylvania,Quok.it,recent_grad,EE'25,true,1
-person_eXBdEENr4srd,Toby Hirsch,Toby,Hirsch,univ_penn,University of Pennsylvania,Probook,recent_grad,ENG'24,true,1
-person_9OHapJ-hGWVr,Tommy Glenn,Tommy,Glenn,univ_penn,University of Pennsylvania,Capivara,recent_grad,WEMBA'25,true,1
 person_WbJ3o80W0acu,Trevor Chan,Trevor,Chan,univ_penn,University of Pennsylvania,IvyTech Design LLC,recent_grad,GR'26,true,1
-person_TF5SBusqPOh4,Tyler Sacharow,Tyler,Sacharow,univ_penn,University of Pennsylvania,Cloak,current_student,C'29,true,1
-person_R0cX3tv8zrVP,Udit Garg,Udit,Garg,univ_penn,University of Pennsylvania,ToxiSense,recent_grad,GEN'26,true,1
 person_empCMjZLPDrc,Vasundhara Macherla,Vasundhara,Macherla,univ_penn,University of Pennsylvania,FullFlock,recent_grad,W'23,true,1
-person_7LMQuXReN63c,X.George Eliadis,X.George,Eliadis,univ_penn,University of Pennsylvania,Probook,recent_grad,ENG'24,true,1
-person_KxD0xsfEIOIE,Yash Dhir,Yash,Dhir,univ_penn,University of Pennsylvania,Jochi,recent_grad,SEAS'24,true,1
-person_wjjhym508M5N,Yiran Xuan,Yiran,Xuan,univ_penn,University of Pennsylvania,Serpent Robotics,recent_grad,GEN'26,true,1
 person_GAyD4ZvbrOTR,Yiting Shen,Yiting,Shen,univ_penn,University of Pennsylvania,Quok.it,recent_grad,GEN'26,true,1
 person_PZnmRDwUJSeV,Yuwei Guo,Yuwei,Guo,univ_penn,University of Pennsylvania,FullFlock,recent_grad,LSM'23,true,1
 person_CsBivREhGbyo,A.J. Steigman,A.J.,Steigman,univ_penn,University of Pennsylvania,Steignet,older_alumni,WG'18,true,2

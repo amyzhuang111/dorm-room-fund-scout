@@ -1,0 +1,1018 @@
+[
+  {
+    "person_id": "person_0eosFfBrVtXi",
+    "full_name": "Aarush Sahni",
+    "linkedin_url": "https://www.linkedin.com/in/aarushsahni",
+    "status": "confirmed",
+    "evidence": "LinkedIn public profile snippet: “MD Student at Penn Medicine | Bioengineering at Penn”; search results also identify Aarush Sahni as ToxiSense co-founder and University of Pennsylvania student.",
+    "query": "\"Aarush Sahni\" ToxiSense LinkedIn Penn"
+  },
+  {
+    "person_id": "person_1G6A0-qbSVQI",
+    "full_name": "Aayush Garg",
+    "linkedin_url": "https://www.linkedin.com/in/aayushgarg01",
+    "status": "confirmed",
+    "evidence": "Profile snippet: “currently pursuing full-time MBA at The Wharton School, University of Pennsylvania”; experience lists “Technical Cofounder & CTO - Secureflow.”",
+    "query": "\"Aayush Garg\" SecureFlow LinkedIn Penn"
+  },
+  {
+    "person_id": "person_e2YinLeUPxVn",
+    "full_name": "Abigail McCulloch",
+    "linkedin_url": "https://www.linkedin.com/in/abigail-s-mcculloch-57a119110",
+    "status": "confirmed",
+    "evidence": "Profile snippet: “Founder @ Alma Padel” and “MBA Candidate - The Wharton School”; Penn Venture Lab result identifies Padel Blue as Abigail McCulloch (WG'25), linking the former company name.",
+    "query": "\"Abigail McCulloch\" \"Padel Blue\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_D_Bohkiy_mDR",
+    "full_name": "Agustin Garcinuno",
+    "linkedin_url": "https://www.linkedin.com/in/agustingarcinuno",
+    "status": "confirmed",
+    "evidence": "Profile snippet: “Bachelor of Science at University of Pennsylvania”; Penn Venture Lab result lists Agustin Garcinuno (W'23) as Flipkit co-founder.",
+    "query": "\"Agustin Garcinuno\" Flipkit LinkedIn Penn"
+  },
+  {
+    "person_id": "person_IfjzuHxVZHxz",
+    "full_name": "Ahmed Abdellah",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search found Penn/Quok.it evidence for Ahmed Abdellah but no credible linkedin.com/in profile URL.",
+    "query": "\"Ahmed Abdellah\" \"Quok.it\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_2vWIAxrDjZ2V",
+    "full_name": "Akhil Peddikuppa",
+    "linkedin_url": "https://www.linkedin.com/in/akhil-peddikuppa",
+    "status": "unverified",
+    "evidence": "Search result title is “Akhil Peddikuppa”; separate results identify him as Penn student and Horus Health co-founder/CEO, but the profile result itself did not expose matching Penn/company text.",
+    "query": "\"Akhil Peddikuppa\" \"Horus Health\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_H35WAs_WdRlq",
+    "full_name": "Albert Katz",
+    "linkedin_url": "https://www.linkedin.com/in/albertkatz",
+    "status": "unverified",
+    "evidence": "Search result title is “Albert Katz”; separate Wharton/Flagler Health results identify him as WG'23 and Flagler Health co-founder/CEO, but profile snippet did not expose the match.",
+    "query": "\"Albert Katz\" \"Flagler Health\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_rhillXjGoZ4I",
+    "full_name": "Alexander Bardwell",
+    "linkedin_url": "https://www.linkedin.com/in/alexbardwell",
+    "status": "unverified",
+    "evidence": "Search result title is “Alex Bardwell” (name variant); separate Penn Athletics result identifies Alexander Bardwell at Penn, but no profile snippet tied him to Fleeted.",
+    "query": "\"Alexander Bardwell\" Fleeted LinkedIn Penn"
+  },
+  {
+    "person_id": "person_9cq5Ms07NQdX",
+    "full_name": "Alexander Cho",
+    "linkedin_url": "https://www.linkedin.com/in/alexanderycho",
+    "status": "unverified",
+    "evidence": "Search result title is “Alexander Cho”; separate Penn Engineering/Venture Lab results identify Alexander Cho as Quok.it co-founder, but the profile snippet did not expose that match.",
+    "query": "\"Alexander Cho\" \"Quok.it\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_gKTN-erBqHuE",
+    "full_name": "Alexis Barber",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search returned LinkedIn posts by Alexis Barber but no linkedin.com/in profile URL.",
+    "query": "\"Alexis Barber\" \"Too Collective\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_78pjgtS8bL9J",
+    "full_name": "Aliza Berger",
+    "linkedin_url": "https://www.linkedin.com/in/aliza-berger-936620112",
+    "status": "unverified",
+    "evidence": "Search result title is “Aliza Berger”; Penn Venture Lab/Pennovation results identify her as Wharton MBA'24 founder of LCKR, but profile snippet did not expose the match.",
+    "query": "\"Aliza Berger\" LCKR LinkedIn Penn"
+  },
+  {
+    "person_id": "person_yEY8K82lVnMq",
+    "full_name": "Amelia Cohen",
+    "linkedin_url": "https://www.linkedin.com/in/amelia-cohen-1a128389",
+    "status": "unverified",
+    "evidence": "Search result title is “Amelia Cohen” and a Penn Athletics result exists for that name; search found no EmployAI association, so this is name-only and unverified.",
+    "query": "\"Amelia Cohen\" EmployAI LinkedIn Penn"
+  },
+  {
+    "person_id": "person_XAbwQK7AS2Vg",
+    "full_name": "Ananya Dewan",
+    "linkedin_url": "https://www.linkedin.com/in/ananyadewan",
+    "status": "confirmed",
+    "evidence": "Profile result title is “Ananya Dewan”; Penn results identify her as University of Pennsylvania alumna and co-founder of FullFlock and Ossum Technologies.",
+    "query": "\"Ananya Dewan\" FullFlock Ossum Technologies LinkedIn Penn"
+  },
+  {
+    "person_id": "person_AR3irX663d8u",
+    "full_name": "Andrew Diep-Tran",
+    "linkedin_url": "https://www.linkedin.com/in/andrewdt",
+    "status": "confirmed",
+    "evidence": "Search synthesis identifies Andrew Diep-Tran as Penn Wharton W'25 and ToxiSense co-founder/Chief Business Officer, and gives this LinkedIn profile URL.",
+    "query": "\"Andrew Diep-Tran\" ToxiSense LinkedIn Penn"
+  },
+  {
+    "person_id": "person_wip_mu8xqVTH",
+    "full_name": "Andrew Mao",
+    "linkedin_url": "https://www.linkedin.com/in/andrewjmao",
+    "status": "confirmed",
+    "evidence": "Profile snippet identifies Andrew Mao as co-founder and CTO of Lucy and a Penn M&T graduate.",
+    "query": "\"Andrew Mao\" Lucy LinkedIn Penn"
+  },
+  {
+    "person_id": "person_Os3dvr8mtmPg",
+    "full_name": "Annie Xu",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search errored and did not return a credible linkedin.com/in profile URL for Annie Xu.",
+    "query": "\"Annie Xu\" Pairfect Spring LinkedIn Penn"
+  },
+  {
+    "person_id": "person_GqTelir5rXoO",
+    "full_name": "Aravind Krishnan",
+    "linkedin_url": "https://www.linkedin.com/in/aravind-m-krishnan",
+    "status": "confirmed",
+    "evidence": "Search result identifies Aravind Krishnan as Penn/Wharton graduate and ToxiSense co-founder/CEO; profile URL is shown directly.",
+    "query": "\"Aravind Krishnan\" ToxiSense LinkedIn Penn"
+  },
+  {
+    "person_id": "person_OOMf44VWvdQj",
+    "full_name": "Archana Somasegar",
+    "linkedin_url": "https://www.linkedin.com/in/archana-somasegar-83abb4ab",
+    "status": "confirmed",
+    "evidence": "Search result title is “Archana Somasegar”; results identify her as Founder/CEO of MineMe, Wharton MBA'24, and Penn Venture Lab participant.",
+    "query": "\"Archana Somasegar\" MineMe LinkedIn Penn"
+  },
+  {
+    "person_id": "person_AI-14GDuGofo",
+    "full_name": "Ava Ramesh",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search found MediMint/Penn evidence for Ava Ramesh but no credible exact-name Ava Ramesh linkedin.com/in URL; the returned Avanthika Ramesh profile is a different name.",
+    "query": "\"Ava Ramesh\" MediMint LinkedIn Penn"
+  },
+  {
+    "person_id": "person_we-Dcafp9CiN",
+    "full_name": "Avanthika Ramesh",
+    "linkedin_url": "https://www.linkedin.com/in/avanthika-ramesh",
+    "status": "unverified",
+    "evidence": "Search result title is “Avanthika R.”; separate Penn/Venture Lab results identify Avanthika Ramesh as MediMint co-founder and Wharton WG'25, but profile snippet did not expose the match.",
+    "query": "\"Avanthika Ramesh\" MediMint LinkedIn Penn"
+  },
+  {
+    "person_id": "person_irNDLFQF_wTN",
+    "full_name": "Bach Tran",
+    "linkedin_url": "https://www.linkedin.com/in/giabachtran",
+    "status": "unverified",
+    "evidence": "Profile result title “Bach Tran”; Penn results identify him as a computer-science student and Robin co-founder, but profile snippet did not expose the Penn/company match.",
+    "query": "\"Bach Tran\" \"Robin\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_PXDEXYrlwn4s",
+    "full_name": "Benjamin Abt",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Penn results identify Benjamin Abt on the PopEye team, but no credible linkedin.com/in profile URL was found.",
+    "query": "\"Benjamin Abt\" \"PopEye\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_tmQAuKJt1NXZ",
+    "full_name": "Brandon Huang",
+    "linkedin_url": "https://www.linkedin.com/in/brandonshuang",
+    "status": "unverified",
+    "evidence": "Profile result title “Brandon Huang”; Penn/Venture Lab results identify him as Wharton WG'25 and GoodRun founder, but profile snippet did not expose the match.",
+    "query": "\"Brandon Huang\" \"GoodRun\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_YTQxTNN-iWPh",
+    "full_name": "Charlie Hirschhorn",
+    "linkedin_url": "https://www.linkedin.com/in/charlie-hirschhorn",
+    "status": "unverified",
+    "evidence": "Profile result title is “Charles Hirschhorn” (name variant); Penn results identify him as Storiara financial lead and Penn/Wharton student.",
+    "query": "\"Charlie Hirschhorn\" \"Storiara\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_l7KMBcZ9HfIL",
+    "full_name": "Chris Stolte",
+    "linkedin_url": "https://www.linkedin.com/in/chrisstolte",
+    "status": "confirmed",
+    "evidence": "Profile/search snippets identify Chris Stolte as Wharton MBA and founder/former Co-Founder & CEO of Capivara.",
+    "query": "\"Chris Stolte\" \"Capivara\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_yfhOsK9OmsAY",
+    "full_name": "Claire Utomi",
+    "linkedin_url": "https://www.linkedin.com/in/claire-u-b115671a9",
+    "status": "unverified",
+    "evidence": "Profile result title “Claire U.”; LinkedIn activity and Penn results identify Claire Utomi as Wharton student and BUILD Nigeria founding team member.",
+    "query": "\"Claire Utomi\" \"BUILD Nigeria\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_1gr7oaCNZF5j",
+    "full_name": "Corina Chen",
+    "linkedin_url": "https://www.linkedin.com/in/corinachen1",
+    "status": "unverified",
+    "evidence": "Profile result title “Corina Chen”; Penn results identify her as M&T/MEAM student and Orble/Munch Industries CTO/cofounder, but profile snippet did not expose the match.",
+    "query": "\"Corina Chen\" \"Orble\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person___czcyEr8ihe",
+    "full_name": "Dan Cataldi",
+    "linkedin_url": "https://www.linkedin.com/in/daniel-cataldi",
+    "status": "confirmed",
+    "evidence": "Search result identifies Dan Cataldi as Wharton MBA'23 founder/CEO of Groov and gives this profile URL.",
+    "query": "\"Dan Cataldi\" \"Groov\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_K1mJuLbriTt2",
+    "full_name": "Daniel Cataldi",
+    "linkedin_url": "https://www.linkedin.com/in/daniel-cataldi",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Daniel Cataldi as Penn Wharton MBA'23 founder/CEO of Groov.",
+    "query": "\"Daniel Cataldi\" \"Groov\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_5pDEU2OabZsr",
+    "full_name": "Daniel Zhang",
+    "linkedin_url": "https://www.linkedin.com/in/danzhang122",
+    "status": "unverified",
+    "evidence": "Profile result title “Daniel Zhang”; Penn results identify him as MD-PhD student and Sanguis co-founder, but profile snippet did not expose the match.",
+    "query": "\"Daniel Zhang\" \"Sanguis\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_pBcDLOv0q2Pr",
+    "full_name": "David Levine",
+    "linkedin_url": "https://www.linkedin.com/in/david-j-levine",
+    "status": "confirmed",
+    "evidence": "Profile snippet identifies David Levine as Penn MEAM PhD and CEO/co-founder of biaWear.",
+    "query": "\"David Levine\" \"bia\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_s_IJ3dLC8oKK",
+    "full_name": "David Navarro",
+    "linkedin_url": "https://www.linkedin.com/in/david-navarro19",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify David Navarro as Penn W'23 founder of Zmiles Same Day Aligners and link this profile.",
+    "query": "\"David Navarro\" \"Zmiles Same Day Aligners\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_NT7a7Yb82u3K",
+    "full_name": "Devi Kasih",
+    "linkedin_url": "https://id.linkedin.com/in/devi-k-ab9195186",
+    "status": "confirmed",
+    "evidence": "Profile snippet lists Devi Kasih as ALL-in Eduspace founder and gives Penn B.S./M.S.Ed. education.",
+    "query": "\"Devi Kasih\" \"ALL-in Eduspace\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_x3v4s7uDmjej",
+    "full_name": "Divyansh Agarwal",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Penn results identify Divyansh Agarwal as Sanguis cofounder, but no credible matching linkedin.com/in profile URL was found.",
+    "query": "\"Divyansh Agarwal\" \"Sanguis\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_MyCxAddirXJw",
+    "full_name": "Dustin Bainbridge",
+    "linkedin_url": "https://www.linkedin.com/in/dustin-bainbridge",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Dustin Bainbridge as Founder/CEO of Unified Track and Penn GSE doctoral student.",
+    "query": "\"Dustin Bainbridge\" \"Unified Track\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_4eZj7YikFcpr",
+    "full_name": "Elizabeth Chou",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Penn results identify Elizabeth Chou with Clarifi, but the returned LinkedIn profiles were unrelated or ambiguous; no credible match.",
+    "query": "\"Elizabeth Chou\" \"Clarifi\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_XwD4svYBmUZ5",
+    "full_name": "Evan Adamo",
+    "linkedin_url": "https://www.linkedin.com/in/evan-adamo",
+    "status": "unverified",
+    "evidence": "Profile result title “Evan Adamo”; Penn results identify him as SecureFlow founder/team member and WG'23, but profile snippet did not expose the match.",
+    "query": "\"Evan Adamo\" \"SecureFlow\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_UJYeyoAQrOJ0",
+    "full_name": "George Eliadis",
+    "linkedin_url": "https://www.linkedin.com/in/george-eliadis",
+    "status": "unverified",
+    "evidence": "Profile result title “George Eliadis”; Penn/Wharton results identify him as Probook cofounder/CEO, but profile snippet did not expose the match.",
+    "query": "\"George Eliadis\" \"Probook\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_qJ4La12ebqoe",
+    "full_name": "Gerardo Ballestros",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Penn Venture Lab lists Gerardo Ballestros with Lumify Care, but no credible linkedin.com/in profile URL was found.",
+    "query": "\"Gerardo Ballestros\" \"Lumify Care\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_MeLljICJ-ns1",
+    "full_name": "Gokulanand Iyer",
+    "linkedin_url": "https://www.linkedin.com/in/gokulanand-iyer-588613113",
+    "status": "confirmed",
+    "evidence": "Search results identify Gokulanand Iyer as Penn PhD and CTO/cofounder of biaWear, with this profile URL.",
+    "query": "\"Gokulanand Iyer\" \"bia\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_TmzDC52qMZ3G",
+    "full_name": "Haichuan Yang",
+    "linkedin_url": "https://www.linkedin.com/in/haichuan-yang",
+    "status": "unverified",
+    "evidence": "Profile result title “Haichuan Yang”; Penn/FullFlock results identify him as Penn student/product member, but multiple same-name profiles exist and profile snippet did not expose the match.",
+    "query": "\"Haichuan Yang\" \"FullFlock\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_-6VsLqgRwC8k",
+    "full_name": "Haley Kang",
+    "linkedin_url": "https://www.linkedin.com/in/hyejinkang02",
+    "status": "unverified",
+    "evidence": "Profile result title “Haley Kang”; Penn results identify her as Flipkit founder and Penn student, but profile snippet did not expose the match.",
+    "query": "\"Haley Kang\" \"Flipkit\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_MNTfPQbsnYIE",
+    "full_name": "Harrison Chong",
+    "linkedin_url": "https://www.linkedin.com/in/harrisonchongyk",
+    "status": "unverified",
+    "evidence": "Profile result title “Harrison Chong”; Penn/Forbes results identify him as Penn student and Jalan Journey cofounder, but profile snippet did not expose the match.",
+    "query": "\"Harrison Chong\" \"Jalan Journey Global\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_Bg-5oi0RTJZu",
+    "full_name": "Harsha Ravindran",
+    "linkedin_url": "https://www.linkedin.com/in/actuallyharsha",
+    "status": "confirmed",
+    "evidence": "LinkedIn snippet identifies Harsha Ravindran as UPenn ’26; Penn results identify her as Jalan Journey Global cofounder.",
+    "query": "\"Harsha Ravindran\" \"Jalan Journey Global\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_ElHMkzQy5Uva",
+    "full_name": "Himza Jivani",
+    "linkedin_url": "https://www.linkedin.com/in/himzaaj",
+    "status": "unverified",
+    "evidence": "Profile result title “Himza J.”; Penn results identify Himza Jivani as Wharton WG'23 founder of Paytus, but profile snippet did not expose the match.",
+    "query": "\"Himza Jivani\" \"Paytus\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_p7Tso2BT-t5I",
+    "full_name": "Hoang Le",
+    "linkedin_url": "https://www.linkedin.com/in/hcle",
+    "status": "confirmed",
+    "evidence": "Search results identify Hoang Le as Penn undergraduate and Ossum Technologies member; profile notes Penn affiliation and Ossum funding.",
+    "query": "\"Hoang Le\" \"Ossum Technologies\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_gd0DtVSBorVF",
+    "full_name": "Jade Peterson",
+    "linkedin_url": "https://www.linkedin.com/in/jade-peterson-",
+    "status": "unverified",
+    "evidence": "Profile result title “Jade Peterson”; LinkedIn post shows UPenn M.Ed. and search results identify her as Jolt Education founder, but profile snippet did not expose company text.",
+    "query": "\"Jade Peterson\" \"Jolt Education\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_ytYkBc-XIkFf",
+    "full_name": "Jason Li",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search identified Jason Li on the Serpent Robotics team but did not return a credible linkedin.com/in URL.",
+    "query": "\"Jason Li\" \"Serpent Robotics\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_ErDgcEEWM1bP",
+    "full_name": "Jeanine Mojum",
+    "linkedin_url": "https://www.linkedin.com/in/jeanine-mojum",
+    "status": "confirmed",
+    "evidence": "Search results identify Jeanine Mojum as founder of Amoureux Beauty and Wharton WG'24, with this profile URL.",
+    "query": "\"Jeanine Mojum\" \"Amoureux Beauty\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_8Ep3uHs4Hw3N",
+    "full_name": "Jessica Ramses",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Penn results identify Jessica Ramses with NEPRI Pasta, but LinkedIn results were unrelated; no credible matching profile URL.",
+    "query": "\"Jessica Ramses\" \"NEPRI Pasta\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_c7Vmx6gUeQJM",
+    "full_name": "John Hopcroft",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search found a Penn/ Lucy cofounder LinkedIn post by John Hopcroft but no linkedin.com/in profile URL.",
+    "query": "\"John Hopcroft\" \"Lucy\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_vhTlm6-cl8bQ",
+    "full_name": "Jonathan Muruako",
+    "linkedin_url": "https://www.linkedin.com/in/jonathan-muruako",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Jonathan Muruako as Penn alumnus and Founder/CEO of Fitalyst.",
+    "query": "\"Jonathan Muruako\" \"Fitalyst\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_j5hOwVteVnkQ",
+    "full_name": "Joseph Han",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search did not confirm a LinkedIn profile for Joseph Han associated with Clédo; returned profiles were unrelated.",
+    "query": "\"Joseph Han\" \"Clédo\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_38lvPUTBfTDJ",
+    "full_name": "Joshua Baek",
+    "linkedin_url": "https://www.linkedin.com/in/joshuabaek",
+    "status": "unverified",
+    "evidence": "Profile result title “Joshua Baek”; Penn results identify him as Lumify Care team member, but profile snippet did not expose company text.",
+    "query": "\"Joshua Baek\" \"Lumify Care\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_BaXmS6tUio3t",
+    "full_name": "Joshua Folarin",
+    "linkedin_url": "https://www.linkedin.com/in/joshua-folarin-725769381",
+    "status": "unverified",
+    "evidence": "Profile result title “Joshua Folarin”; Penn results identify a WG'26 Cengine founder but note the surfaced profile may be unrelated.",
+    "query": "\"Joshua Folarin\" \"Cengine\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_YDJhXu-OEWbL",
+    "full_name": "Joshua Weiner",
+    "linkedin_url": "https://www.linkedin.com/in/joshtweiner",
+    "status": "unverified",
+    "evidence": "Profile result title “Joshua Weiner”; one result identifies a Penn graduate, but no result connects this profile to Aimless.",
+    "query": "\"Joshua Weiner\" \"Aimless\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_GRKXGrvlKnDg",
+    "full_name": "Julie Liu",
+    "linkedin_url": "https://www.linkedin.com/in/julieliu",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Julie Liu as Penn GSE alumna and founder/Head of School of Motherly Notes.",
+    "query": "\"Julie Liu\" \"Motherly Notes\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_GuVmpF6M09X-",
+    "full_name": "Justin Zhang",
+    "linkedin_url": "https://www.linkedin.com/in/justin-a-zhang",
+    "status": "unverified",
+    "evidence": "Profile result title “Justin Zhang”; Penn results identify him as ENG'24 and Altrui Foundation cofounder, but profile snippet did not expose company text.",
+    "query": "\"Justin Zhang\" \"Altrui Foundation\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_niMsli6PWaXe",
+    "full_name": "Karan Shah",
+    "linkedin_url": "https://www.linkedin.com/in/karan-shah-919347a3",
+    "status": "unverified",
+    "evidence": "Profile result title “Karan Shah”; Penn results identify him as ENG'24 Ossum Technologies member, but profile snippet did not expose company text.",
+    "query": "\"Karan Shah\" \"Ossum Technologies\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_gn69CCl4P48p",
+    "full_name": "Kevin Lu",
+    "linkedin_url": "https://www.linkedin.com/in/kevin-lu-22724b1a5",
+    "status": "unverified",
+    "evidence": "Profile result title “Kevin Lu” and Penn education match; search did not establish this profile’s connection to Robin.",
+    "query": "\"Kevin Lu\" \"Robin\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_4dJZkg6iy-3i",
+    "full_name": "Kevin Russell",
+    "linkedin_url": "https://www.linkedin.com/in/kevinwrussell",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Kevin Russell as Wharton MBA and founder/CEO of The Zillennial Advisors.",
+    "query": "\"Kevin Russell\" \"The Zillennial Advisors\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_WbEgN14pXbiO",
+    "full_name": "Kevin Xuan (Yiran Xuan)",
+    "linkedin_url": "https://www.linkedin.com/in/yiran-xuan",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Kevin (Yiran) Xuan as Penn IPD student and Serpent Robotics cofounder.",
+    "query": "\"Kevin Xuan (Yiran Xuan)\" \"Serpent Robotics\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_nYEFsqnMWaxx",
+    "full_name": "Kyle Zhang",
+    "linkedin_url": "https://www.linkedin.com/in/zhangkyle",
+    "status": "unverified",
+    "evidence": "Profile result title “Kyle Zhang”; Penn education matches, but search did not establish a direct connection to Robin.",
+    "query": "\"Kyle Zhang\" \"Robin\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_F06UdSwGRwNB",
+    "full_name": "Kylie Chang",
+    "linkedin_url": "https://www.linkedin.com/in/kyliechang8",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Kylie Chang as Penn M&T student and LilyLoop cofounder.",
+    "query": "\"Kylie Chang\" \"LilyLoop\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_k5l0uSYGRoZL",
+    "full_name": "Lada Korotaeva",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Penn results identify Lada Korotaeva as Munch Industries cofounder, but returned LinkedIn results were unrelated; no credible profile URL.",
+    "query": "\"Lada Korotaeva\" \"Munch Industries\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_y0OACH0nS0CX",
+    "full_name": "Leon Zhang",
+    "linkedin_url": "https://www.linkedin.com/in/leon-zhang-850772b3",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Leon Zhang as BetterBasket cofounder/CEO with Wharton/Penn connection.",
+    "query": "\"Leon Zhang\" \"BetterBasket\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_bnNnteP6Uqpq",
+    "full_name": "Lindsay Smith",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search found a different Lindsay Smith LinkedIn profile and no credible Alopex Golf match.",
+    "query": "\"Lindsay Smith\" \"Alopex Golf\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_dgyz2Gq7pW15",
+    "full_name": "Lisa Sun",
+    "linkedin_url": "https://www.linkedin.com/in/lisasunn23",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Lisa Sun as Penn student and Chloropept cofounder.",
+    "query": "\"Lisa Sun\" \"Chloropept\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_utkuyeuWBqnO",
+    "full_name": "Louis Chung",
+    "linkedin_url": "https://www.linkedin.com/in/louis-chung1",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Louis Chung as Penn C'24 alumnus and Kfans cofounder.",
+    "query": "\"Louis Chung\" \"Kfans\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_MkSb0KZ8XnII",
+    "full_name": "Louisa Qiu",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Penn results list Louisa Qiu with Lumify Care but no LinkedIn profile URL appeared.",
+    "query": "\"Louisa Qiu\" \"Lumify Care\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_GTXWC_YyibEr",
+    "full_name": "Malavika Reddy",
+    "linkedin_url": "https://www.linkedin.com/in/malavikareddy",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Malavika Reddy as Wharton alumna and Flock AI cofounder/CTO.",
+    "query": "\"Malavika Reddy\" \"Flock\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_FtSZmtrXSjoP",
+    "full_name": "Mandy Chen",
+    "linkedin_url": "https://www.linkedin.com/in/mandyyingchen",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Mandy Chen as Capivara founder and Wharton MBA.",
+    "query": "\"Mandy Chen\" \"Capivara\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_s6iQgeTGCwJn",
+    "full_name": "Manvitha Mallela",
+    "linkedin_url": "https://www.linkedin.com/in/manvitha-mallela-9a699884",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Manvitha Mallela as Wharton attendee and Flock AI cofounder/CEO.",
+    "query": "\"Manvitha Mallela\" \"Flock\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_epQtxO2duf7s",
+    "full_name": "Margaret Zhu",
+    "linkedin_url": "https://www.linkedin.com/in/margaret-zhu-427652244",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Margaret Zhu as Penn/Wharton student and Serpent Robotics cofounder/CEO.",
+    "query": "\"Margaret Zhu\" \"Serpent Robotics\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_aoqNV7xoSztF",
+    "full_name": "Mario Ferre",
+    "linkedin_url": "https://www.linkedin.com/in/mario-ferre",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Mario Ferre as Penn mechanical-engineering graduate and PopEye technical cofounder.",
+    "query": "\"Mario Ferre\" \"PopEye\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_imijJnMLkRiX",
+    "full_name": "Matt Liebers",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Penn results identify Matt Liebers with Guide Genetics, but no credible linkedin.com/in profile URL was returned.",
+    "query": "\"Matt Liebers\" \"Guide Genetics\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_zCj3cgdzFeck",
+    "full_name": "Matthew Lowe",
+    "linkedin_url": "https://www.linkedin.com/in/saratmatthewlowe",
+    "status": "unverified",
+    "evidence": "Profile result title “Matthew Lowe”; Penn results identify him as Jalan Journey Chief Project Officer, but profile snippet did not expose company text.",
+    "query": "\"Matthew Lowe\" \"Jalan Journey Global\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_1owZVWPHzl3j",
+    "full_name": "Megan Burke",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search did not return a credible linkedin.com/in profile for Megan Burke associated with Caboodle.",
+    "query": "\"Megan Burke\" \"Caboodle\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_dk9p7S8tMzeQ",
+    "full_name": "Megan Burton",
+    "linkedin_url": "https://www.linkedin.com/in/megan-burton-mb",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Megan Burton as Wharton/Penn Lauder graduate and BrainFood cofounder/CEO.",
+    "query": "\"Megan Burton\" \"BrainFood\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_FPqSlQhfPsgy",
+    "full_name": "Melanie Herbert",
+    "linkedin_url": "https://www.linkedin.com/in/melanie-herbert",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Melanie Herbert as Penn graduate and founder/CEO of Sync Labs.",
+    "query": "\"Melanie Herbert\" \"Sync Labs\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_NRWoopy9HJEP",
+    "full_name": "Michael Ansusinha",
+    "linkedin_url": "https://www.linkedin.com/in/michael-ansusinha",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Michael Ansusinha as Wharton MBA and founder of Snowlake.",
+    "query": "\"Michael Ansusinha\" \"Snowlake\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_P49QJyimTBvZ",
+    "full_name": "Mustafo Mustafokulov",
+    "linkedin_url": "https://www.linkedin.com/in/mustafo-m",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Mustafo Mustafokulov as Penn student and Chloropept cofounder.",
+    "query": "\"Mustafo Mustafokulov\" \"Chloropept\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_D4Dr7c8hPUQN",
+    "full_name": "Nastassja Kuznetsova",
+    "linkedin_url": "https://www.linkedin.com/in/nastassja-kuznetsova",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Nastassja Kuznetsova as Penn student and Munch Industries founder.",
+    "query": "\"Nastassja Kuznetsova\" \"Munch Industries Orble\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_aDVuAcAgaayL",
+    "full_name": "Neha Chelamkuri",
+    "linkedin_url": "https://www.linkedin.com/in/neha-chelamkuri",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Neha Chelamkuri as Penn LSM student and LilyLoop cofounder.",
+    "query": "\"Neha Chelamkuri\" \"LilyLoop\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_qP7O8BOzvM2A",
+    "full_name": "Nicholas Anderson",
+    "linkedin_url": "https://www.linkedin.com/in/nicholas-j-anderson1",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Nicholas Anderson as Penn ME graduate and PopEye Labs cofounder.",
+    "query": "\"Nicholas Anderson\" \"PopEye\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_jsMgwaVWHA-R",
+    "full_name": "Nicholas Szabo",
+    "linkedin_url": "https://www.linkedin.com/in/nicholaslszabo",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Nicholas Szabo as Penn MD candidate and IvyTech Design cofounder/CEO.",
+    "query": "\"Nicholas Szabo\" \"IvyTech Design LLC\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_Xvvn4mPVgzyY",
+    "full_name": "Nick Harty",
+    "linkedin_url": "https://www.linkedin.com/in/nicksheaharty",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Nick Harty as Penn student and Storiara cofounder/technical founder.",
+    "query": "\"Nick Harty\" \"Storiara\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_w2fUJAbTwSZn",
+    "full_name": "Niha Gottiparthy",
+    "linkedin_url": "https://www.linkedin.com/in/nihagottiparthy",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Niha Gottiparthy as Wharton MBA alumna and Keye cofounder.",
+    "query": "\"Niha Gottiparthy\" \"Keye\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_Cr4PiNjAmroD",
+    "full_name": "Nitin Agarwal",
+    "linkedin_url": "https://www.linkedin.com/in/nitinagarwalmd",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Nitin Agarwal as Penn Wharton WG'26 and Spine Bionics cofounder/team member.",
+    "query": "\"Nitin Agarwal\" \"Spine Bionics\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_NWjNarwVtJB_",
+    "full_name": "Octavius Kim",
+    "linkedin_url": "https://www.linkedin.com/in/octavius-kim",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Octavius Kim as Penn graduate and Flipkit founder/cofounder.",
+    "query": "\"Octavius Kim\" \"Flipkit\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_qWaWm1DTWzAa",
+    "full_name": "Orestis Skoutellas",
+    "linkedin_url": "https://www.linkedin.com/in/orestisskoutellas",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Orestis Skoutellas as Penn student and PopEye Labs cofounder.",
+    "query": "\"Orestis Skoutellas\" \"PopEye\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_b7TRz6tr5hXY",
+    "full_name": "Paolo Fornasini",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search identified Paolo Fornasini as Penn/Wharton Keye cofounder but did not return a credible linkedin.com/in URL.",
+    "query": "\"Paolo Fornasini\" \"Keye\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_JrddaMZCqR6B",
+    "full_name": "Pedram Bayat",
+    "linkedin_url": "https://www.linkedin.com/in/pedrambayat",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Pedram Bayat as Penn student and Chloropept cofounder/lead engineer.",
+    "query": "\"Pedram Bayat\" \"Chloropept\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_h7ZDb0X9QNxw",
+    "full_name": "Piotr Lazarek",
+    "linkedin_url": "https://www.linkedin.com/in/piotrlazarek",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Piotr Lazarek as Penn M&T graduate and Nirby founder.",
+    "query": "\"Piotr Lazarek\" \"Nirby\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_27lar_44UEkq",
+    "full_name": "Rachel League",
+    "linkedin_url": "https://www.linkedin.com/in/rachel-league-403b33b7",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Rachel League as Wharton MBA and CFO 4 ALL founder.",
+    "query": "\"Rachel League\" \"CFO 4 ALL\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_F_bUbhCiReiv",
+    "full_name": "Rachel Snyder",
+    "linkedin_url": "https://www.linkedin.com/in/rachelnsnyder",
+    "status": "unverified",
+    "evidence": "Search result title “Rachel Snyder”; Penn Venture Lab identifies the Wharton WG'24 Rachel Snyder as Caboodle cofounder, but the profile snippet did not expose that company match.",
+    "query": "\"Rachel Snyder\" \"Caboodle\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_MtVZf8gFPXmX",
+    "full_name": "Raghu Arghal",
+    "linkedin_url": "https://www.linkedin.com/in/raghuarghal",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Raghu Arghal as Penn doctoral student and MedVision cofounder/team member.",
+    "query": "\"Raghu Arghal\" \"MedVision\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_ALJsUd42TOb4",
+    "full_name": "Rahul Nambiar",
+    "linkedin_url": "https://www.linkedin.com/in/rnambs",
+    "status": "unverified",
+    "evidence": "Penn results identify Rahul Nambiar as Jochi cofounder and give this LinkedIn URL in the search synthesis, but profile snippet was not surfaced.",
+    "query": "\"Rahul Nambiar\" \"Jochi\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_SvT2ZbN5J1Zl",
+    "full_name": "Rainbow Yeung",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Penn results identify Rainbow Yeung as Odyssey Notebooks founder, but no credible personal linkedin.com/in URL was returned.",
+    "query": "\"Rainbow Yeung\" \"Odyssey Notebooks Odyssey Notebooks LLC\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_fSXUBQXy1tKI",
+    "full_name": "Riddhima Kapoor",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Penn results identify Riddhima Kapoor as Veggie Vice founder, but no credible personal linkedin.com/in URL was returned.",
+    "query": "\"Riddhima Kapoor\" \"Veggie Vice\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_6Vz5CsN4QH_L",
+    "full_name": "Rima Chavali",
+    "linkedin_url": "https://www.linkedin.com/in/rimachavali",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Rima Chavali as Penn LSM student and LilyLoop cofounder.",
+    "query": "\"Rima Chavali\" \"LilyLoop\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_T6Jub9hOnIf8",
+    "full_name": "Rishi Ambavanekar",
+    "linkedin_url": "https://www.linkedin.com/in/rishabh-ambavanekar",
+    "status": "unverified",
+    "evidence": "Profile result title uses “Rishabh Ambavanekar”; Penn results identify Rishi Ambavanekar as M&T'29 and Cloak cofounder, but name variant means unverified.",
+    "query": "\"Rishi Ambavanekar\" \"Cloak\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_EEliAJuIQQPt",
+    "full_name": "Rupesh Jeyaram",
+    "linkedin_url": "https://www.linkedin.com/in/rupesh-jeyaram",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Rupesh Jeyaram as Wharton MBA and Revise Robotics cofounder/CEO.",
+    "query": "\"Rupesh Jeyaram\" \"Revise Robotics\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_-Hd0y83QlDnt",
+    "full_name": "Ruthwick Patthireddy",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Penn results list Ruthwick Patthireddy with Keye but surfaced a different Sathwick Pathireddy profile; no credible exact match.",
+    "query": "\"Ruthwick Patthireddy\" \"Keye\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_X8dAnmXZR9R9",
+    "full_name": "Saif Khawaja",
+    "linkedin_url": "https://www.linkedin.com/in/saifnk",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Saif Khawaja as Wharton/Penn alumnus and Shinkei Systems cofounder/CEO.",
+    "query": "\"Saif Khawaja\" \"Shinkei Systems Shinkei Systems Corp.\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_JXOxOxRafkX0",
+    "full_name": "Sarah Powers",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search identified Sarah Powers as Nemu founder and Wharton graduate but did not return a credible personal linkedin.com/in URL.",
+    "query": "\"Sarah Powers\" \"Nemu\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_F_ACm5P4pL-g",
+    "full_name": "Savan Patel",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Penn results identify Savan Patel with Ossum Technologies but did not establish which LinkedIn profile belongs to him.",
+    "query": "\"Savan Patel\" \"Ossum Technologies\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_m7jjOdqTzsF_",
+    "full_name": "Scott Ogden",
+    "linkedin_url": "https://www.linkedin.com/in/scott-ogden-65270842",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Scott Ogden as Wharton EMBA and Capivara cofounder/technology lead.",
+    "query": "\"Scott Ogden\" \"Capivara\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_oybQbqRkXq7B",
+    "full_name": "Shiva Teerdhala",
+    "linkedin_url": "https://www.linkedin.com/in/shivateerdhala",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Shiva Teerdhala as Penn LSM alumnus and Ossum Technologies team member.",
+    "query": "\"Shiva Teerdhala\" \"Ossum Technologies\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_1T03_MpX6I5_",
+    "full_name": "Sophie Takahashi",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search identified Sophie Takahashi as Munch Industries founder but no credible matching linkedin.com/in profile URL.",
+    "query": "\"Sophie Takahashi\" \"Munch Industries\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_yQ7Qla8-d_5p",
+    "full_name": "Sourish Jasti",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search identified Sourish Jasti as Altrui Foundation cofounder/Penn graduate but did not return a credible linkedin.com/in URL.",
+    "query": "\"Sourish Jasti\" \"Altrui Foundation\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_Of5-j7FN-20z",
+    "full_name": "Spencer Kaufman",
+    "linkedin_url": "https://www.linkedin.com/in/spencerkaufman720",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Spencer Kaufman as Penn C'26 graduate and Storiara cofounder.",
+    "query": "\"Spencer Kaufman\" \"Storiara\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_9-pyO_ehNllI",
+    "full_name": "Steyn Knollema",
+    "linkedin_url": "https://www.linkedin.com/in/steyn-knollema",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Steyn Knollema as Penn IPD student and Serpent Robotics cofounder.",
+    "query": "\"Steyn Knollema\" \"Serpent Robotics\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_0Vp-ZcCealE9",
+    "full_name": "Sunny Wang",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search returned several Sunny Wang profiles but no credible evidence connecting one to Robin/Penn.",
+    "query": "\"Sunny Wang\" \"Robin\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_MDNswjc3YnzL",
+    "full_name": "Tara Balakrishnan",
+    "linkedin_url": "https://www.linkedin.com/in/taragb",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Tara Balakrishnan as Wharton MBA and EmployAI cofounder.",
+    "query": "\"Tara Balakrishnan\" \"EmployAI\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_gcTc4iMFoJ1w",
+    "full_name": "Tarunyaa Sivakumar",
+    "linkedin_url": "https://www.linkedin.com/in/tarunyaa-sivakumar-4847501a6",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Tarunyaa Sivakumar as Penn engineering student and Quok.it cofounder.",
+    "query": "\"Tarunyaa Sivakumar\" \"Quok.it\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_eXBdEENr4srd",
+    "full_name": "Toby Hirsch",
+    "linkedin_url": "https://www.linkedin.com/in/tobin-hirsch",
+    "status": "confirmed",
+    "evidence": "Profile result title “Toby Hirsch”; search results identify Toby/Tobin Hirsch as Penn M&T graduate and Probook cofounder.",
+    "query": "\"Toby Hirsch\" \"Probook\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_9OHapJ-hGWVr",
+    "full_name": "Tommy Glenn",
+    "linkedin_url": "https://www.linkedin.com/in/tommybglenn",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Tommy Glenn as Wharton EMBA and Capivara team member.",
+    "query": "\"Tommy Glenn\" \"Capivara\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_WbJ3o80W0acu",
+    "full_name": "Trevor Chan",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search identified Trevor Chan as IvyTech Design CTO/Penn graduate but did not return a credible personal linkedin.com/in URL.",
+    "query": "\"Trevor Chan\" \"IvyTech Design LLC\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_TF5SBusqPOh4",
+    "full_name": "Tyler Sacharow",
+    "linkedin_url": "https://www.linkedin.com/in/tyler-sacharow",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Tyler Sacharow as Penn C'29 and Cloak cofounder/CTO.",
+    "query": "\"Tyler Sacharow\" \"Cloak\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_R0cX3tv8zrVP",
+    "full_name": "Udit Garg",
+    "linkedin_url": "https://www.linkedin.com/in/udit-garg-55b1a9168",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Udit Garg as Penn Bioengineering alumnus and ToxiSense cofounder.",
+    "query": "\"Udit Garg\" \"ToxiSense\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_empCMjZLPDrc",
+    "full_name": "Vasundhara Macherla",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Search identified Vasundhara Macherla with Penn/FullFlock but only mentioned directory entries, without a credible profile URL.",
+    "query": "\"Vasundhara Macherla\" \"FullFlock\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_7LMQuXReN63c",
+    "full_name": "X.George Eliadis",
+    "linkedin_url": "https://www.linkedin.com/in/george-eliadis",
+    "status": "unverified",
+    "evidence": "Profile result matches George Eliadis; Penn/Probook results support the underlying person, but the input name includes an extra “X.” prefix.",
+    "query": "\"X.George Eliadis\" \"Probook\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_KxD0xsfEIOIE",
+    "full_name": "Yash Dhir",
+    "linkedin_url": "https://www.linkedin.com/in/yashdhir",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Yash Dhir as Penn Engineering graduate and Jochi cofounder.",
+    "query": "\"Yash Dhir\" \"Jochi\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_wjjhym508M5N",
+    "full_name": "Yiran Xuan",
+    "linkedin_url": "https://www.linkedin.com/in/yiran-xuan",
+    "status": "confirmed",
+    "evidence": "Profile/search results identify Yiran Xuan as Penn IPD student and Serpent Robotics cofounder/technical lead.",
+    "query": "\"Yiran Xuan\" \"Serpent Robotics\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_GAyD4ZvbrOTR",
+    "full_name": "Yiting Shen",
+    "linkedin_url": "https://www.linkedin.com/in/yitingshen",
+    "status": "unverified",
+    "evidence": "Profile result title “Yiting Shen”; Penn results identify Yiting as Quok.it cofounder and Penn Engineering student, but profile snippet did not clearly establish the association.",
+    "query": "\"Yiting Shen\" \"Quok.it\" LinkedIn Penn"
+  },
+  {
+    "person_id": "person_PZnmRDwUJSeV",
+    "full_name": "Yuwei Guo",
+    "linkedin_url": null,
+    "status": "not_found",
+    "evidence": "Penn results identify Yuwei Guo/Amy Guo with FullFlock, but no profile was credibly linked to the exact requested person/company combination.",
+    "query": "\"Yuwei Guo\" \"FullFlock\" LinkedIn Penn"
+  }
+]
