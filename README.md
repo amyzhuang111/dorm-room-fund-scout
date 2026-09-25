@@ -1402,3 +1402,43 @@ founders above.
 `npx tsc --noEmit` and `npm run build` both clean throughout. Final
 counts: 61 Hack the North projects, 51 people with a captured LinkedIn
 alias, 63 total founder roles in the database.
+
+## LinkedIn backfill across the full Devpost corpus (2026-09-25)
+
+Asked explicitly to keep expanding, prioritizing Penn and Berkeley. The
+biggest lever available: 3,240 people already ingested from PennApps/
+TreeHacks/Cal Hacks/Hack the North (before the 2026-09-25 shared-library
+LinkedIn enhancement existed) already carry a real, self-verified
+`devpost:<url>` profile alias but had never had that profile page checked
+for a personal LinkedIn link. Rather than a risky name-based LinkedIn
+search across ~2,500 Penn/Berkeley people already in the DB (considered
+and rejected — too much misidentification risk at that volume, and a
+materially different, riskier kind of request than the URL-resolution work
+already agreed on), this reuses each person's own already-verified profile
+link — same safety property as everything else in this codebase.
+
+`scripts/ingest/backfill-devpost-linkedin.ts`: bounded per run, resumable
+via a `linkedin_checked` marker alias (reused the existing `aliases_json`
+field rather than a schema migration, same convention as `devpost-
+hackathon.ts`'s `refresh_suggestion` reuse) so nobody gets re-fetched
+twice. Run repeatedly (batch sizes 60→80→150→300 as confidence in the
+pattern grew) until the entire 3,240-person backlog was cleared. Found and
+fixed one small bug along the way: 2 people's Devpost accounts return HTTP
+410 (permanently gone) and were being retried every single run forever —
+fixed by marking 404/410 as checked too (a permanent state), while
+genuine transient failures (5xx, network errors) still remain retryable.
+
+**Result: 51 → 597 people with a captured LinkedIn alias** (Berkeley 328,
+Stanford 200, Penn 61, Waterloo 47 — Berkeley/Stanford benefit most since
+Cal Hacks/TreeHacks are the largest galleries). Each discovery is recorded
+as its own `linkedin_alias_discovered` claim, sourced to the person's real
+Devpost profile URL, not just a bare alias with no evidence trail.
+
+Then kicked off `fetch-linkedin-apify.ts` against all 597 (~$2.40 at
+$0.004/profile, chunk size 5 — see that script's own header for why) to
+actually resolve headline/about/experience and check for real founder
+claims, same as every profile before it. Running in the background given
+597×~4s/profile ≈ 40 minutes; results to be tallied and documented once
+complete.
+
+`npx tsc --noEmit` clean on the backfill script.
