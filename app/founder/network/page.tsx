@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getNetworkNodeDetail, listUniversities } from "@/lib/domain/queries";
+import { readReviewState } from "@/lib/domain/review-server";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { NetworkView } from "@/components/network-view";
 
@@ -43,13 +44,14 @@ export default async function FounderNetworkPage({ searchParams }: { searchParam
   const sp = await searchParams;
   const basePath = "/founder/network";
   const universities = listUniversities();
+  const review = await readReviewState();
   const node = sp.project ? getNetworkNodeDetail(sp.project) : null;
 
   return (
     <div className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
       <FilterSidebar universities={universities} basePath={basePath} current={sp} mode="founder" />
       <div className="flex-1 border-r border-border-c">
-        <NetworkView universityId={sp.university} basePath={basePath} current={sp} universities={universities} />
+        <NetworkView universityId={sp.university} basePath={basePath} current={sp} universities={universities} feedback={review.records} />
       </div>
       <div className="w-full sm:w-96 sm:shrink-0">
         {node ? <NodeDetail node={node} /> : <div className="p-4 text-sm text-muted">Select a founder or project node to see its evidence here.</div>}

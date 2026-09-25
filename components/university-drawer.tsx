@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { buildHref } from "@/lib/domain/url";
 import { listBuildersForUniversity, listCandidateProjects, listSignalsForUniversity, listSources, type UniversitySummary } from "@/lib/domain/queries";
+import { readReviewState } from "@/lib/domain/review-server";
+import { reviewCompanies } from "@/lib/domain/review-view";
 import { QueueBadge } from "./badges";
 
 const TABS = ["prospects", "builders", "signals", "sources"] as const;
@@ -50,8 +52,9 @@ export function UniversityDrawer({
   );
 }
 
-function ProspectsTab({ universityId, basePath, current }: { universityId: string; basePath: string; current: Record<string, string | undefined> }) {
-  const candidates = listCandidateProjects({ universityId });
+async function ProspectsTab({ universityId, basePath, current }: { universityId: string; basePath: string; current: Record<string, string | undefined> }) {
+  const review = await readReviewState();
+  const candidates = reviewCompanies(listCandidateProjects({ universityId }), review.records, review.likes, "default");
   const top = candidates.filter((c) => c.queue === "top_prospects");
   const exploration = candidates.filter((c) => c.queue === "exploration");
   return (

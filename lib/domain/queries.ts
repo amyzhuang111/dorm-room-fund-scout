@@ -1,4 +1,6 @@
 import { getDb } from "../db/client";
+import { sectorLabel } from "./sectors";
+import { domainKey, type FeedbackRecord, type FeedbackTarget } from "./feedback";
 import { computeRubric, type Ratings } from "../scoring/rubric";
 import { computeFounderSignal, type FounderSignalResult } from "../scoring/founder-signal";
 import { overallGateStatus, primaryBlocker, type GateOutcome } from "../screening/gates";
@@ -98,9 +100,16 @@ export function listUniversities(): UniversitySummary[] {
   });
 }
 
+export interface LinkedInCandidate {
+  url: string;
+  reason: string;
+}
+
 export interface NamedFounder {
   name: string;
+  personId: string;
   linkedinUrl: string | null;
+  linkedinCandidates: LinkedInCandidate[];
 }
 
 export interface CandidateSummary {
@@ -109,9 +118,15 @@ export interface CandidateSummary {
   sector: string | null;
   description: string | null;
   websiteUrl: string | null;
+  primaryLink: string | null;
+  primaryLinkKind: string | null;
   founders: string[];
   founderLinks: NamedFounder[];
+  founderIds: string[];
   universities: string[]; // names
+  universityIds: string[];
+  sectorTags: string[];
+  sourceIds: string[];
   overallGate: string | null;
   gateOutcomes: GateOutcome[];
   queue: Queue;
@@ -152,6 +167,27 @@ export function listCandidateSectors(): string[] {
 // evidenced as a formed (or plausibly forming) company. Only kind='company'
 // enters here; kind='project' surfaces exclusively through Founder Scout
 // (listFounders below) as evidence attached to a person.
+export function linkedinCandidatesFor(db: ReturnType<typeof getDb>, personId: string): LinkedInCandidate[] {
+  const rows = db
+    .prepare(
+      `SELECT value_json FROM claims
+       WHERE entity_type = 'person' AND entity_id = ? AND claim_type = 'linkedin_candidate' AND verification_state = 'unverified'`
+    )
+    .all(personId) as { value_json: string }[];
+  const out: LinkedInCandidate[] = [];
+  for (const row of rows) {
+    try {
+      const value = JSON.parse(row.value_json) as { linkedin?: string; reason?: string };
+      if (value.linkedin && value.linkedin.includes("linkedin.com/in/")) {
+        out.push({ url: value.linkedin, reason: value.reason ?? "Unverified candidate" });
+      }
+    } catch {
+      // skip a malformed claim
+    }
+  }
+  return out;
+}
+
 export function linkedinFromAliases(aliasesJson: string | null | undefined): string | null {
   try {
     const aliases = JSON.parse(aliasesJson || "[]") as string[];
@@ -162,23 +198,78 @@ export function linkedinFromAliases(aliasesJson: string | null | undefined): str
   }
 }
 
+export interface SectorCount {
+  tag: string;
+  label: string;
+  count: number;
+  byCampus: { universityId: string; name: string; count: number }[];
+}
+
+export function listSectorCounts(universityId?: string): SectorCount[] {
+  const db = getDb();
+  const campusSql = universityId ? "AND link.university_id = ?" : "";
+  const params = universityId ? [universityId] : [];
+  const linkSql = `
+       FROM project_sector_tags t
+       JOIN projects p ON p.id = t.project_id AND p.kind = 'company' AND p.is_investable_candidate = 1
+       JOIN (
+         SELECT ppr.project_id as project_id, a.university_id as university_id
+         FROM person_project_roles ppr
+         JOIN affiliations a ON a.person_id = ppr.person_id AND ppr.role LIKE '%founder%'
+         UNION
+         SELECT r.source_entity_id, r.target_entity_id
+         FROM relationships r
+         WHERE r.source_entity_type = 'project' AND r.target_entity_type = 'university' AND r.relationship_type = 'affiliated_with'
+       ) link ON link.project_id = p.id`;
+  const totals = db
+    .prepare(`SELECT t.tag as tag, COUNT(DISTINCT p.id) as c ${linkSql} WHERE 1=1 ${campusSql} GROUP BY t.tag`)
+    .all(...params) as { tag: string; c: number }[];
+  const campuses = db
+    .prepare(
+      `SELECT t.tag as tag, u.id as university_id, u.name as university_name, COUNT(DISTINCT p.id) as c
+       ${linkSql}
+       JOIN universities u ON u.id = link.university_id
+       WHERE 1=1 ${campusSql}
+       GROUP BY t.tag, u.id`
+    )
+    .all(...params) as { tag: string; university_id: string; university_name: string; c: number }[];
+  const byTag = new Map<string, SectorCount>();
+  for (const row of totals) {
+    byTag.set(row.tag, { tag: row.tag, label: sectorLabel(row.tag), count: row.c, byCampus: [] });
+  }
+  for (const row of campuses) {
+    const existing = byTag.get(row.tag);
+    if (!existing) continue;
+    existing.byCampus.push({ universityId: row.university_id, name: row.university_name, count: row.c });
+  }
+  for (const row of byTag.values()) {
+    row.byCampus.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+  }
+  return [...byTag.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+}
+
 export function listCandidateProjects(filters: { universityId?: string; queue?: Queue; sector?: string; search?: string } = {}): CandidateSummary[] {
   const db = getDb();
   const projects = db
-    .prepare(`SELECT id, name, sector, description, website_url, is_portfolio_reference FROM projects WHERE kind='company' AND is_investable_candidate=1 ORDER BY name`)
-    .all() as { id: string; name: string; sector: string | null; description: string | null; website_url: string | null; is_portfolio_reference: number }[];
+    .prepare(`SELECT id, name, sector, description, website_url, primary_link, primary_link_kind, is_portfolio_reference FROM projects WHERE kind='company' AND is_investable_candidate=1 ORDER BY name`)
+    .all() as { id: string; name: string; sector: string | null; description: string | null; website_url: string | null; primary_link: string | null; primary_link_kind: string | null; is_portfolio_reference: number }[];
 
   const out: CandidateSummary[] = [];
   for (const p of projects) {
     const founderLinks = (
       db
         .prepare(
-          `SELECT DISTINCT pe.name as name, pe.aliases_json as aliases_json
+          `SELECT DISTINCT pe.id as id, pe.name as name, pe.aliases_json as aliases_json
            FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id
            WHERE ppr.project_id = ? AND ppr.role LIKE '%founder%'`
         )
-        .all(p.id) as { name: string; aliases_json: string }[]
-    ).map((r) => ({ name: r.name, linkedinUrl: linkedinFromAliases(r.aliases_json) }));
+        .all(p.id) as { id: string; name: string; aliases_json: string }[]
+    ).map((r) => ({
+      name: r.name,
+      personId: r.id,
+      linkedinUrl: linkedinFromAliases(r.aliases_json),
+      linkedinCandidates: linkedinFromAliases(r.aliases_json) ? [] : linkedinCandidatesFor(db, r.id),
+    }));
     const founders = founderLinks.map((r) => r.name);
 
     // Same founder-affiliation-or-direct-relationship fallback as
@@ -199,8 +290,15 @@ export function listCandidateProjects(filters: { universityId?: string; queue?: 
         .all(p.id, p.id) as { name: string; id: string }[]
     );
 
+    const sectorTags = (
+      db.prepare(`SELECT tag FROM project_sector_tags WHERE project_id = ? ORDER BY is_primary DESC, tag`).all(p.id) as { tag: string }[]
+    ).map((r) => r.tag);
+    const sourceIds = (
+      db.prepare(`SELECT DISTINCT source_id as id FROM claims WHERE entity_id = ? AND source_id IS NOT NULL`).all(p.id) as { id: string }[]
+    ).map((r) => r.id);
+
     if (filters.universityId && !universities.some((u) => u.id === filters.universityId)) continue;
-    if (filters.sector && p.sector !== filters.sector) continue;
+    if (filters.sector && p.sector !== filters.sector && !sectorTags.includes(filters.sector) && !sectorTags.some((t) => sectorLabel(t) === filters.sector)) continue;
     if (filters.search) {
       const q = filters.search.toLowerCase();
       const haystack = `${p.name} ${p.description ?? ""} ${founders.join(" ")}`.toLowerCase();
@@ -260,9 +358,15 @@ export function listCandidateProjects(filters: { universityId?: string; queue?: 
       sector: p.sector,
       description: p.description,
       websiteUrl: p.website_url,
+      primaryLink: p.primary_link,
+      primaryLinkKind: p.primary_link_kind,
       founders,
       founderLinks,
+      founderIds: founderLinks.map((f) => f.personId),
       universities: universities.map((u) => u.name),
+      universityIds: universities.map((u) => u.id),
+      sectorTags: sectorTags.map(sectorLabel),
+      sourceIds,
       overallGate,
       gateOutcomes,
       queue,
@@ -561,7 +665,11 @@ export interface FounderRow {
   linkedCompany: { id: string; name: string } | null; // a real kind='company' project they're linked to, if any
   possibleCompany: { name: string; status: "unreviewed" | "confirmed" } | null; // §65-67: a bio-derived hint, never auto-promoted — null once linkedCompany is set
   linkedinUrl: string | null; // from a captured `linkedin:<url>` alias — a URL found on a source page, not built from a name
+  linkedinCandidates: LinkedInCandidate[];
   websiteUrl: string | null; // a personal site found on a source page, stored as a `site:` alias
+  sectorTags: string[];
+  sourceIds: string[];
+  personIds: string[];
   strongestEvidence: string | null; // the most recent claim excerpt attributed to them
   promoted: boolean;
   promotionReasonLabel: string | null;
@@ -613,7 +721,11 @@ export function listFounders(filters: { universityId?: string; search?: string; 
       linkedCompany: null,
       possibleCompany: null,
       linkedinUrl,
+      linkedinCandidates: linkedinUrl ? [] : linkedinCandidatesFor(db, r.id),
       websiteUrl,
+      sectorTags: [],
+      sourceIds: [],
+      personIds: [r.id],
       strongestEvidence: null,
     });
   }
@@ -627,6 +739,17 @@ export function listFounders(filters: { universityId?: string; search?: string; 
   const possibleCompanyStmt = db.prepare(
     `SELECT company_name_guess, match_status FROM possible_companies WHERE person_id = ? AND match_status != 'rejected' ORDER BY detected_at DESC LIMIT 1`
   );
+  const sourceStmt = db.prepare(`SELECT DISTINCT source_id as id FROM claims WHERE entity_id = ? AND source_id IS NOT NULL`);
+  const sectorStmt = db.prepare(
+    `SELECT DISTINCT t.tag as tag FROM project_sector_tags t
+     JOIN person_project_roles ppr ON ppr.project_id = t.project_id
+     WHERE ppr.person_id = ?`
+  );
+  const neighborStmt = db.prepare(
+    `SELECT DISTINCT other.person_id as id FROM person_project_roles mine
+     JOIN person_project_roles other ON other.project_id = mine.project_id AND other.person_id != mine.person_id
+     WHERE mine.person_id = ? LIMIT 12`
+  );
 
   const out: FounderRow[] = [];
   for (const founder of byId.values()) {
@@ -638,8 +761,12 @@ export function listFounders(filters: { universityId?: string; search?: string; 
 
     const possible = company ? undefined : (possibleCompanyStmt.get(founder.id) as { company_name_guess: string; match_status: string } | undefined);
 
+    const neighbors = (neighborStmt.all(founder.id) as { id: string }[]).map((r) => r.id);
     out.push({
       ...founder,
+      sectorTags: (sectorStmt.all(founder.id) as { tag: string }[]).map((r) => sectorLabel(r.tag)),
+      sourceIds: (sourceStmt.all(founder.id) as { id: string }[]).map((r) => r.id),
+      personIds: [founder.id, ...neighbors],
       projects,
       linkedCompany: company ? { id: company.id, name: company.name } : null,
       possibleCompany: possible ? { name: possible.company_name_guess, status: possible.match_status as "unreviewed" | "confirmed" } : null,
@@ -650,6 +777,67 @@ export function listFounders(filters: { universityId?: string; search?: string; 
     });
   }
 
+  return out;
+}
+
+export function loadLikeTargets(records: FeedbackRecord[]): FeedbackTarget[] {
+  const db = getDb();
+  const out: FeedbackTarget[] = [];
+  for (const record of records) {
+    if (record.action !== "like") continue;
+    if (record.entityType === "project") {
+      const project = db.prepare(`SELECT id, name, website_url, primary_link FROM projects WHERE id = ?`).get(record.entityId) as
+        | { id: string; name: string; website_url: string | null; primary_link: string | null }
+        | undefined;
+      if (!project) continue;
+      const sectors = (db.prepare(`SELECT tag FROM project_sector_tags WHERE project_id = ?`).all(project.id) as { tag: string }[]).map((r) => sectorLabel(r.tag));
+      const universityIds = (
+        db
+          .prepare(
+            `SELECT DISTINCT a.university_id as id FROM person_project_roles ppr JOIN affiliations a ON a.person_id = ppr.person_id WHERE ppr.project_id = ?
+             UNION SELECT target_entity_id FROM relationships WHERE source_entity_type = 'project' AND source_entity_id = ? AND target_entity_type = 'university' AND relationship_type = 'affiliated_with'`
+          )
+          .all(project.id, project.id) as { id: string }[]
+      ).map((r) => r.id);
+      const sourceIds = (db.prepare(`SELECT DISTINCT source_id as id FROM claims WHERE entity_id = ? AND source_id IS NOT NULL`).all(project.id) as { id: string }[]).map((r) => r.id);
+      const personIds = (
+        db.prepare(`SELECT DISTINCT person_id as id FROM person_project_roles WHERE project_id = ? AND role LIKE '%founder%'`).all(project.id) as { id: string }[]
+      ).map((r) => r.id);
+      out.push({
+        entityType: "project",
+        entityId: project.id,
+        name: project.name,
+        domain: domainKey(project.website_url || project.primary_link),
+        sectors,
+        universityIds,
+        sourceIds,
+        personIds,
+      });
+    } else {
+      const person = db.prepare(`SELECT id, name FROM people WHERE id = ?`).get(record.entityId) as { id: string; name: string } | undefined;
+      if (!person) continue;
+      const sectors = (
+        db
+          .prepare(
+            `SELECT DISTINCT t.tag as tag FROM project_sector_tags t JOIN person_project_roles ppr ON ppr.project_id = t.project_id WHERE ppr.person_id = ?`
+          )
+          .all(person.id) as { tag: string }[]
+      ).map((r) => sectorLabel(r.tag));
+      const universityIds = (db.prepare(`SELECT university_id as id FROM affiliations WHERE person_id = ?`).all(person.id) as { id: string }[]).map((r) => r.id);
+      const sourceIds = (db.prepare(`SELECT DISTINCT source_id as id FROM claims WHERE entity_id = ? AND source_id IS NOT NULL`).all(person.id) as { id: string }[]).map((r) => r.id);
+      const personIds = [
+        person.id,
+        ...(
+          db
+            .prepare(
+              `SELECT DISTINCT other.person_id as id FROM person_project_roles mine JOIN person_project_roles other ON other.project_id = mine.project_id AND other.person_id != mine.person_id WHERE mine.person_id = ? LIMIT 12`
+            )
+            .all(person.id) as { id: string }[]
+        ).map((r) => r.id),
+      ];
+      out.push({ entityType: "person", entityId: person.id, name: person.name, domain: record.domainKey, sectors, universityIds, sourceIds, personIds });
+    }
+  }
   return out;
 }
 

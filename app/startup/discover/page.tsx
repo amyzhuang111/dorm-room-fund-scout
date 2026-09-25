@@ -1,4 +1,6 @@
 import { getProjectDetail, listCandidateProjects, listUniversities } from "@/lib/domain/queries";
+import { readReviewState } from "@/lib/domain/review-server";
+import { reviewCompanies, reviewMode } from "@/lib/domain/review-view";
 import type { Queue } from "@/lib/domain/queue";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { CandidateTable } from "@/components/candidate-table";
@@ -25,15 +27,19 @@ export default async function StartupDiscoverPage({
   const selectedProject = sp.project ? getProjectDetail(sp.project) : null;
 
   const candidates = listCandidateProjects({ universityId: sp.university, queue: sp.queue as Queue | undefined, sector: sp.sector, search: sp.q });
+  const review = await readReviewState();
+  const mode = reviewMode(sp.feedback);
+  const reviewed = reviewCompanies(candidates, review.records, review.likes, mode);
   const sorted =
     sp.sort === "priority"
-      ? [...candidates].sort((a, b) => {
+      ? [...reviewed].sort((a, b) => {
+          if (b.boostScore !== a.boostScore) return b.boostScore - a.boostScore;
           if (a.qualityScore == null && b.qualityScore == null) return a.name.localeCompare(b.name);
           if (a.qualityScore == null) return 1;
           if (b.qualityScore == null) return -1;
           return b.qualityScore - a.qualityScore || a.name.localeCompare(b.name);
         })
-      : [...candidates].sort((a, b) => a.name.localeCompare(b.name));
+      : reviewed;
 
   const showUniversityDrawer = !selectedProject && selectedUniversity && view !== "globe";
 
@@ -51,8 +57,10 @@ export default async function StartupDiscoverPage({
           searchPlaceholder="Search founders, companies, projects…"
         />
 
-        {view === "table" && <CandidateTable candidates={sorted} basePath={basePath} current={sp} />}
-        {view === "network" && <NetworkView universityId={sp.university} basePath={basePath} current={sp} universities={universities} />}
+        {view === "table" && <CandidateTable candidates={sorted} basePath={basePath} current={sp} feedbackView={sp.feedback} />}
+        {view === "network" && (
+          <NetworkView universityId={sp.university} basePath={basePath} current={sp} universities={universities} feedback={review.records} />
+        )}
         {view === "globe" && (
           <GlobeView
             universities={universities}

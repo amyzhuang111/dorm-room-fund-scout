@@ -1,6 +1,8 @@
 import { forceSimulation, forceLink, forceManyBody, forceCenter, forceCollide } from "d3-force";
 import { getDb } from "../db/client";
 import { CAMPUSES } from "./campuses";
+import { publicLink } from "./company-link";
+import { sectorLabel } from "./sectors";
 
 export type NodeType = "university" | "community" | "person" | "project";
 
@@ -55,12 +57,6 @@ function linkedinAlias(aliasesJson: string | null | undefined): string | undefin
   }
 }
 
-function websiteLabel(url: string): { linkUrl: string; linkLabel: string } | undefined {
-  if (!url.startsWith("http")) return undefined;
-  if (url.includes("ycombinator.com/companies/")) return { linkUrl: url, linkLabel: "YC page" };
-  return { linkUrl: url, linkLabel: "Website" };
-}
-
 // Evidence-backed neighborhood. Edges come from `relationships`, affiliations,
 // and person_project_roles — co-attendance alone never creates a person-to-person
 // edge. "Who built with whom" is a path through a shared project node.
@@ -68,8 +64,18 @@ export function buildUniversityNetwork(universityId: string): NetworkGraph {
   return buildScoutNetwork(universityId);
 }
 
-export function buildScoutNetwork(universityId?: string): NetworkGraph {
+export function buildScoutNetwork(universityId?: string, opts?: { sector?: string; excludeIds?: string[] }): NetworkGraph {
   const db = getDb();
+  const exclude = new Set(opts?.excludeIds ?? []);
+  const sector = opts?.sector;
+  const tagged = new Set<string>();
+  if (sector) {
+    const tagRows = db.prepare(`SELECT project_id, tag FROM project_sector_tags`).all() as { project_id: string; tag: string }[];
+    for (const row of tagRows) {
+      if (row.tag === sector || sectorLabel(row.tag) === sector) tagged.add(row.project_id);
+    }
+  }
+  const sectorOk = (id: string, kind: string) => !sector || (kind === "company" && tagged.has(id));
   const ids = universityId
     ? [universityId]
     : CAMPUSES.filter((c) => c.firstClass).map((c) => c.id);
@@ -88,18 +94,20 @@ export function buildScoutNetwork(universityId?: string): NetworkGraph {
 
     const programs = db
       .prepare(
-        `SELECT p.id, p.name, p.kind, p.website_url FROM relationships r
+        `SELECT p.id, p.name, p.kind, p.website_url, p.primary_link, p.primary_link_kind FROM relationships r
          JOIN projects p ON p.id = r.source_entity_id AND r.source_entity_type = 'project'
          WHERE r.target_entity_type = 'university' AND r.target_entity_id = ? AND r.relationship_type = 'affiliated_with'`
       )
-      .all(id) as { id: string; name: string; kind: string; website_url: string | null }[];
+      .all(id) as { id: string; name: string; kind: string; website_url: string | null; primary_link: string | null; primary_link_kind: string | null }[];
 
     for (const prog of programs) {
+      if (exclude.has(prog.id) || !sectorOk(prog.id, prog.kind)) continue;
       const type: NodeType = prog.kind === "company" ? "project" : "community";
       // Directory-only companies sit below named people so a long accelerator
       // list cannot push founders out of the capped graph.
       if (!rawNodes.has(prog.id)) {
-        const site = prog.website_url ? websiteLabel(prog.website_url) : undefined;
+        const link = publicLink(prog.website_url, prog.primary_link, prog.primary_link_kind);
+        const site = link ? { linkUrl: link.url, linkLabel: link.kind === "official" ? "Website" : link.label } : undefined;
         rawNodes.set(prog.id, {
           id: prog.id,
           type,
@@ -141,6 +149,7 @@ export function buildScoutNetwork(universityId?: string): NetworkGraph {
     const chosen = people.filter((p) => p.pri > 0).slice(0, perCampusPeople);
 
     for (const person of chosen) {
+      if (exclude.has(person.id)) continue;
       if (!rawNodes.has(person.id)) {
         const linkedin = linkedinAlias(person.aliases_json);
         rawNodes.set(person.id, {
@@ -181,13 +190,19 @@ export function buildScoutNetwork(universityId?: string): NetworkGraph {
         .all(person.id) as { id: string; name: string; kind: string; role: string; excerpt: string | null; source_url: string | null }[];
 
       for (const role of roles) {
+        if (exclude.has(role.id) || !sectorOk(role.id, role.kind)) continue;
         if (rawNodes.size >= MAX_NODES && !rawNodes.has(role.id)) continue;
         const isOrg = role.kind !== "company" && programs.some((p) => p.id === role.id && p.kind !== "company");
         const linkPriority = role.role.toLowerCase().includes("founder") && role.kind === "company" ? 85 : role.kind === "company" ? 60 : 40;
         const existing = rawNodes.get(role.id);
         if (!existing) {
-          const siteRow = db.prepare(`SELECT website_url FROM projects WHERE id = ?`).get(role.id) as { website_url: string | null } | undefined;
-          const site = siteRow?.website_url ? websiteLabel(siteRow.website_url) : undefined;
+          const siteRow = db.prepare(`SELECT website_url, primary_link, primary_link_kind FROM projects WHERE id = ?`).get(role.id) as {
+            website_url: string | null;
+            primary_link: string | null;
+            primary_link_kind: string | null;
+          } | undefined;
+          const link = siteRow ? publicLink(siteRow.website_url, siteRow.primary_link, siteRow.primary_link_kind) : null;
+          const site = link ? { linkUrl: link.url, linkLabel: link.kind === "official" ? "Website" : link.label } : undefined;
           rawNodes.set(role.id, {
             id: role.id,
             type: isOrg ? "community" : "project",
@@ -209,6 +224,20 @@ export function buildScoutNetwork(universityId?: string): NetworkGraph {
           sourceUrl: role.source_url ?? undefined,
         });
       }
+    }
+  }
+
+  if (sector) {
+    const companyIds = new Set(
+      [...rawNodes.values()].filter((n) => n.type === "project" && tagged.has(n.id)).map((n) => n.id)
+    );
+    const peopleOnSector = new Set<string>();
+    for (const edge of rawEdges) {
+      if (companyIds.has(edge.target) && rawNodes.get(edge.source)?.type === "person") peopleOnSector.add(edge.source);
+      if (companyIds.has(edge.source) && rawNodes.get(edge.target)?.type === "person") peopleOnSector.add(edge.target);
+    }
+    for (const [id, node] of rawNodes) {
+      if (node.type === "person" && !peopleOnSector.has(id)) rawNodes.delete(id);
     }
   }
 

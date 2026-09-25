@@ -1,8 +1,10 @@
 import type { ProjectDetail } from "@/lib/domain/queries";
+import { publicLink } from "@/lib/domain/company-link";
 import { GateBadge } from "./badges";
 import { PipelineForm } from "./pipeline-form";
 import { NotesSection } from "./notes-section";
 import { AssessmentForm } from "./assessment-form";
+import { FeedbackControls } from "./feedback-controls";
 
 export function CompanyDetail({ project }: { project: ProjectDetail }) {
   const concernReasons = project.gateOutcomes.filter((g) => g.result !== "pass");
@@ -33,16 +35,30 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
                       </a>
                     </>
                   )}
+                  {!f.linkedinUrl && f.linkedinCandidates[0] && (
+                    <>
+                      {" "}
+                      <a href={f.linkedinCandidates[0].url} target="_blank" rel="noopener noreferrer" className="text-warn underline" title={f.linkedinCandidates[0].reason}>
+                        LinkedIn unverified
+                      </a>
+                    </>
+                  )}
                 </span>
               ))}
           {" · "}
           {project.universities.join(", ") || "University unknown"}
         </p>
-        {project.websiteUrl && (
-          <a href={project.websiteUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-xs text-accent underline">
-            {project.websiteUrl}
-          </a>
-        )}
+        {(() => {
+          const link = publicLink(project.websiteUrl, project.primaryLink, project.primaryLinkKind);
+          if (!link) return <p className="mt-1 text-xs text-muted">No public page on record</p>;
+          return (
+            <a href={link.url} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-xs text-accent underline">
+              {link.kind === "official" ? link.url : `${link.label}: ${link.url}`}
+            </a>
+          );
+        })()}
+        {project.sectorTags.length > 0 && <p className="mt-1 text-xs text-muted">{project.sectorTags.join(" · ")}</p>}
+        <FeedbackControls entityType="project" entityId={project.id} name={project.name} url={project.websiteUrl || project.primaryLink} />
       </div>
 
       {/* Above the fold: why look / founder edge / open question */}

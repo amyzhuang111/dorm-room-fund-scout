@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getDb } from "@/lib/db/client";
 import { listUniversities } from "@/lib/domain/queries";
+import { readReviewState } from "@/lib/domain/review-server";
+import { domainKey, isHidden } from "@/lib/domain/feedback";
 import { buildHref } from "@/lib/domain/url";
 
 interface SignalRow {
@@ -8,6 +10,8 @@ interface SignalRow {
   project_id: string;
   project_kind: string;
   project_name: string;
+  website_url: string | null;
+  primary_link: string | null;
   founder_name: string | null;
   university_name: string | null;
   signal_type: string;
@@ -39,7 +43,7 @@ function listAllSignals(): SignalRow[] {
   const db = getDb();
   return db
     .prepare(
-      `SELECT s.id, s.project_id, p.kind as project_kind, p.name as project_name,
+      `SELECT s.id, s.project_id, p.kind as project_kind, p.name as project_name, p.website_url, p.primary_link,
               (SELECT pe.name FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id WHERE ppr.project_id = p.id AND ppr.role LIKE '%founder%' LIMIT 1) as founder_name,
               (SELECT u.name FROM affiliations a JOIN person_project_roles ppr ON ppr.person_id = a.person_id JOIN universities u ON u.id = a.university_id WHERE ppr.project_id = p.id LIMIT 1) as university_name,
               s.signal_type, s.current_observation, s.significance_note, s.source_date, s.created_at,
@@ -53,7 +57,16 @@ function listAllSignals(): SignalRow[] {
 export default async function SignalsPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
   const universities = listUniversities();
-  const allSignals = listAllSignals();
+  const review = await readReviewState();
+  const allSignals = listAllSignals().filter(
+    (s) =>
+      !isHidden(review.records, {
+        entityType: "project",
+        entityId: s.project_id,
+        name: s.project_name,
+        domain: domainKey(s.website_url || s.primary_link),
+      })
+  );
   const types = [...new Set(allSignals.map((s) => s.signal_type))];
 
   const signals = allSignals.filter((s) => {

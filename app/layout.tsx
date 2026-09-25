@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { TopNav } from "@/components/top-nav";
+import { FeedbackProvider } from "@/components/feedback-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -37,7 +38,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <TopNav />
           </Suspense>
         </header>
-        <main className="flex-1">{children}</main>
+        <FeedbackProvider>
+          <main className="flex-1">{children}</main>
+        </FeedbackProvider>
         <footer className="border-t border-border-c px-4 py-3 text-center text-xs text-muted sm:px-6">
           Independent scouting workspace — not an official Dorm Room Fund product. No automatic outreach; nothing here implies Amy represents DRF.
         </footer>

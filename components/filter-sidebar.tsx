@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { buildHref } from "@/lib/domain/url";
 import { CAMPUSES, shortCampusLabel } from "@/lib/domain/campuses";
-import { listCandidateSectors, type CoverageState, type UniversitySummary } from "@/lib/domain/queries";
+import { listSectorCounts, type CoverageState, type UniversitySummary } from "@/lib/domain/queries";
+import { FeedbackSync } from "./feedback-sync";
 
 const COVERAGE_LABEL: Record<CoverageState, { label: string; cls: string }> = {
   not_scanned: { label: "Not scanned", cls: "text-muted" },
@@ -75,7 +76,7 @@ export function FilterSidebar({
   // Founder Scout pages. Only real, researched sector values ever appear
   // here (never a static/guessed list — most candidates are still
   // unresearched, per brief section 1, so there's nothing to list for them).
-  const sectors = mode === "startup" ? listCandidateSectors() : [];
+  const sectors = mode === "startup" ? listSectorCounts(current.university) : [];
 
   return (
     <aside className="w-full shrink-0 border-b border-border-c p-3 sm:w-[232px] sm:border-b-0 sm:border-r sm:p-4">
@@ -146,6 +147,28 @@ export function FilterSidebar({
         </div>
       )}
 
+      <div className="mt-5">
+        <span className="ui-label">Review</span>
+        <ul className="mt-1 space-y-0.5">
+          {(
+            [
+              ["liked", "Liked"],
+              ["hidden", "Hidden"],
+              ["passed", "Passed"],
+            ] as const
+          ).map(([val, label]) => (
+            <li key={val}>
+              <Link
+                href={buildHref(basePath, current, { feedback: current.feedback === val ? null : val })}
+                className={`block rounded-md px-2 py-1 text-sm ${current.feedback === val ? "bg-accent/10 font-medium text-accent" : "text-foreground hover:bg-surface-2"}`}
+              >
+                {label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {mode === "startup" && sectors.length > 0 && (
         <div className="mt-5">
           <div className="mb-1.5 flex items-baseline justify-between">
@@ -158,18 +181,35 @@ export function FilterSidebar({
           </div>
           <ul className="flex flex-wrap gap-1.5">
             {sectors.map((s) => (
-              <li key={s}>
+              <li key={s.tag}>
                 <Link
-                  href={buildHref(basePath, current, { sector: current.sector === s ? null : s })}
-                  className={`inline-block rounded-full border px-2 py-0.5 text-xs capitalize ${current.sector === s ? "border-accent bg-accent/10 text-accent" : "border-border-c text-muted hover:bg-surface-2"}`}
+                  href={buildHref(basePath, current, { sector: current.sector === s.tag ? null : s.tag })}
+                  className={`inline-block rounded-full border px-2 py-0.5 text-xs ${current.sector === s.tag ? "border-accent bg-accent/10 text-accent" : "border-border-c text-muted hover:bg-surface-2"}`}
                 >
-                  {s.replace(/_/g, " ")}
+                  {s.label} <span className="tabular-nums">{s.count}</span>
                 </Link>
               </li>
             ))}
           </ul>
+          <details className="mt-2">
+            <summary className="cursor-pointer text-[11px] text-muted">By campus</summary>
+            <ul className="mt-1 space-y-1">
+              {sectors.map((s) => (
+                <li key={`${s.tag}-campus`} className="text-[11px] text-muted">
+                  <span className="text-foreground">{s.label}</span>
+                  {s.byCampus.map((c) => (
+                    <span key={c.universityId}>
+                      {" "}
+                      · {shortCampusLabel(c.universityId, c.name)} {c.count}
+                    </span>
+                  ))}
+                </li>
+              ))}
+            </ul>
+          </details>
         </div>
       )}
+      <FeedbackSync />
     </aside>
   );
 }

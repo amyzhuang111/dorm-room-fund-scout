@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { listFounders, listUniversities } from "@/lib/domain/queries";
+import { readReviewState } from "@/lib/domain/review-server";
+import { reviewFounders, reviewMode } from "@/lib/domain/review-view";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { FounderCard } from "@/components/founder-card";
 import { buildHref } from "@/lib/domain/url";
@@ -8,7 +10,8 @@ export default async function FounderDiscoverPage({ searchParams }: { searchPara
   const sp = await searchParams;
   const basePath = "/founder/discover";
   const universities = listUniversities();
-  const founders = listFounders({ universityId: sp.university, search: sp.q });
+  const review = await readReviewState();
+  const founders = reviewFounders(listFounders({ universityId: sp.university, search: sp.q }), review.records, review.likes, reviewMode(sp.feedback));
   const totalFounders = universities.reduce((sum, u) => sum + u.founderCount, 0);
   const totalResolved = universities.reduce((sum, u) => sum + u.resolvedPersonCount, 0);
 
@@ -49,7 +52,7 @@ export default async function FounderDiscoverPage({ searchParams }: { searchPara
 
         <div className="grid gap-2 p-4 sm:grid-cols-2 lg:grid-cols-3">
           {founders.map((f) => (
-            <FounderCard key={f.id} founder={f} />
+            <FounderCard key={f.id} founder={f} feedbackView={sp.feedback} />
           ))}
           {founders.length === 0 && <p className="text-sm text-muted">No founders match yet.</p>}
         </div>

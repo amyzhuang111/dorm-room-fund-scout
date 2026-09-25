@@ -1,11 +1,14 @@
 import { listFounders, listUniversities } from "@/lib/domain/queries";
+import { readReviewState } from "@/lib/domain/review-server";
+import { reviewFounders, reviewMode } from "@/lib/domain/review-view";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { FounderCard } from "@/components/founder-card";
 
 export default async function FounderShortlistPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
   const universities = listUniversities();
-  const founders = listFounders({ universityId: sp.university, search: sp.q });
+  const review = await readReviewState();
+  const founders = reviewFounders(listFounders({ universityId: sp.university, search: sp.q }), review.records, review.likes, reviewMode(sp.feedback));
 
   const withEvidence = founders.filter((f) => f.strongestEvidence);
   const withoutEvidence = founders.filter((f) => !f.strongestEvidence);

@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { buildHref } from "@/lib/domain/url";
+import { publicLink } from "@/lib/domain/company-link";
 import type { CandidateSummary } from "@/lib/domain/queries";
+import { FeedbackControls } from "./feedback-controls";
 
 // Design MD §5: "In canvas views, show a collapsible bottom result tray
 // with compact cards. Selecting a card selects the same entity on the
@@ -56,11 +58,19 @@ export function ResultTray({
                 </a>
                 <p className="line-clamp-2 text-muted">{c.description || c.founders[0] || "No description yet"}</p>
                 <p className="truncate text-muted">{c.universities[0] ?? "Campus not confirmed"}</p>
-                {c.websiteUrl && (
-                  <a href={c.websiteUrl} target="_blank" rel="noopener noreferrer" className="mt-1 block truncate text-accent underline">
-                    {c.websiteUrl.replace(/^https?:\/\//, "")}
-                  </a>
+                {(() => {
+                  const link = publicLink(c.websiteUrl, c.primaryLink, c.primaryLinkKind);
+                  if (!link) return null;
+                  return (
+                    <a href={link.url} target="_blank" rel="noopener noreferrer" className="mt-1 block truncate text-accent underline">
+                      {link.kind === "official" ? link.url.replace(/^https?:\/\//, "") : link.label}
+                    </a>
+                  );
+                })()}
+                {"boostNote" in c && (c as CandidateSummary & { boostNote?: string | null }).boostNote && (
+                  <p className="mt-0.5 line-clamp-2 text-accent">{(c as CandidateSummary & { boostNote?: string }).boostNote}</p>
                 )}
+                <FeedbackControls entityType="project" entityId={c.id} name={c.name} url={c.websiteUrl || c.primaryLink} />
                 {c.founderLinks.find((f) => f.linkedinUrl) && (
                   <a
                     href={c.founderLinks.find((f) => f.linkedinUrl)!.linkedinUrl!}

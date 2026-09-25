@@ -1,8 +1,9 @@
 import Link from "next/link";
 import type { FounderRow } from "@/lib/domain/queries";
 import { AffiliationStatusBadge } from "./badges";
+import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 
-export function FounderCard({ founder }: { founder: FounderRow }) {
+export function FounderCard({ founder, feedbackView }: { founder: FounderRow & { boostNote?: string | null }; feedbackView?: string }) {
   const evidenceProjects = founder.projects.filter((p) => p.kind === "project");
   const { founderSignal, coverage } = founder.founderSignal;
   return (
@@ -24,6 +25,17 @@ export function FounderCard({ founder }: { founder: FounderRow }) {
               title="LinkedIn URL found on a source page"
             >
               LinkedIn ↗
+            </a>
+          )}
+          {!founder.linkedinUrl && founder.linkedinCandidates[0] && (
+            <a
+              href={founder.linkedinCandidates[0].url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-warn hover:underline"
+              title={founder.linkedinCandidates[0].reason}
+            >
+              LinkedIn unverified
             </a>
           )}
           {founder.websiteUrl && (
@@ -59,6 +71,12 @@ export function FounderCard({ founder }: { founder: FounderRow }) {
         )}
       </div>
       {founder.promotionReasonLabel && <p className="mt-1 text-[11px] text-muted">{founder.promotionReasonLabel}</p>}
+      {founder.boostNote && <p className="mt-1 text-[11px] text-accent">{founder.boostNote}</p>}
+      {feedbackView === "hidden" ? (
+        <FeedbackUndo entityType="person" entityId={founder.id} name={founder.name} />
+      ) : (
+        <FeedbackControls entityType="person" entityId={founder.id} name={founder.name} />
+      )}
     </div>
   );
 }

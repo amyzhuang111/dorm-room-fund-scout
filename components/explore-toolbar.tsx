@@ -25,6 +25,7 @@ export function ExploreToolbar({
   if (current.queue) activeFilters.push({ key: "queue", label: `View: ${current.queue.replace(/_/g, " ")}` });
   if (current.sector) activeFilters.push({ key: "sector", label: `Sector: ${current.sector}` });
   if (current.q) activeFilters.push({ key: "q", label: `Search: "${current.q}"` });
+  if (current.feedback) activeFilters.push({ key: "feedback", label: current.feedback === "hidden" ? "Hidden" : current.feedback === "liked" ? "Liked" : "Passed" });
 
   return (
     <div className="border-b border-border-c px-3 py-2">

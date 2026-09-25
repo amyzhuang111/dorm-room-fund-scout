@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { buildHref } from "@/lib/domain/url";
 import { shortCampusName } from "@/lib/domain/campuses";
+import { publicLink } from "@/lib/domain/company-link";
 import type { CandidateSummary } from "@/lib/domain/queries";
 import { GateBadge } from "./badges";
+import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 
 function whyInvestigate(c: CandidateSummary): string {
   if (c.latestSignalNote) return c.latestSignalNote;
@@ -28,6 +30,14 @@ function FounderLinks({ founders }: { founders: CandidateSummary["founderLinks"]
               </a>
             </>
           )}
+          {!f.linkedinUrl && f.linkedinCandidates[0] && (
+            <>
+              {" "}
+              <a href={f.linkedinCandidates[0].url} target="_blank" rel="noopener noreferrer" className="text-warn underline" title={f.linkedinCandidates[0].reason}>
+                LinkedIn unverified
+              </a>
+            </>
+          )}
         </span>
       ))}
       {extra > 0 ? ` +${extra}` : ""}
@@ -40,14 +50,27 @@ function priorityLabel(c: CandidateSummary): string {
   return "Unassessed";
 }
 
+function CompanyLink({ c }: { c: CandidateSummary }) {
+  const link = publicLink(c.websiteUrl, c.primaryLink, c.primaryLinkKind);
+  if (!link) return <p className="mt-0.5 text-[11px] text-muted">No public page on record</p>;
+  const host = link.url.replace(/^https?:\/\//, "");
+  return (
+    <a href={link.url} target="_blank" rel="noopener noreferrer" className="mt-0.5 inline-block max-w-[220px] truncate text-[11px] text-accent underline">
+      {link.kind === "official" ? host : `${link.label}: ${host}`}
+    </a>
+  );
+}
+
 export function CandidateTable({
   candidates,
   basePath,
   current,
+  feedbackView,
 }: {
-  candidates: CandidateSummary[];
+  candidates: (CandidateSummary & { boostNote?: string | null })[];
   basePath: string;
   current: Record<string, string | undefined>;
+  feedbackView?: string;
 }) {
   if (candidates.length === 0) {
     return (
@@ -66,6 +89,13 @@ export function CandidateTable({
               {c.name}
             </Link>
             <p className="mt-1 text-sm text-muted line-clamp-3">{c.description || "What it builds is not on record yet."}</p>
+            <CompanyLink c={c} />
+            {c.boostNote && <p className="mt-0.5 text-[11px] text-accent">{c.boostNote}</p>}
+            {feedbackView === "hidden" ? (
+              <FeedbackUndo entityType="project" entityId={c.id} name={c.name} url={c.websiteUrl || c.primaryLink} />
+            ) : (
+              <FeedbackControls entityType="project" entityId={c.id} name={c.name} url={c.websiteUrl || c.primaryLink} />
+            )}
             <p className="mt-2 text-xs text-foreground">
               <FounderLinks founders={c.founderLinks} />
               {c.universities.length ? ` · ${c.universities.map(shortCampusName).join(", ")}` : ""}
@@ -95,10 +125,13 @@ export function CandidateTable({
                     {c.name}
                   </Link>
                   <p className="mt-0.5 max-w-[280px] text-xs leading-snug text-muted line-clamp-2">{c.description || "What it builds is not on record yet."}</p>
-                  {c.websiteUrl && (
-                    <a href={c.websiteUrl} target="_blank" rel="noopener noreferrer" className="mt-0.5 inline-block max-w-[220px] truncate text-[11px] text-accent underline">
-                      {c.websiteUrl.replace(/^https?:\/\//, "")}
-                    </a>
+                  <CompanyLink c={c} />
+                  {c.sectorTags.length > 0 && <p className="mt-0.5 text-[11px] text-muted">{c.sectorTags.join(" · ")}</p>}
+                  {c.boostNote && <p className="mt-0.5 text-[11px] text-accent">{c.boostNote}</p>}
+                  {feedbackView === "hidden" ? (
+                    <FeedbackUndo entityType="project" entityId={c.id} name={c.name} url={c.websiteUrl || c.primaryLink} />
+                  ) : (
+                    <FeedbackControls entityType="project" entityId={c.id} name={c.name} url={c.websiteUrl || c.primaryLink} />
                   )}
                 </td>
                 <td className="px-3 py-2.5 text-muted">

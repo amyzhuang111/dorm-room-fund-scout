@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { listCandidateProjects, listUniversities } from "@/lib/domain/queries";
+import { readReviewState } from "@/lib/domain/review-server";
+import { reviewCompanies, reviewMode } from "@/lib/domain/review-view";
 import { QUEUE_LABELS, type Queue } from "@/lib/domain/queue";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { CandidateTable } from "@/components/candidate-table";
@@ -44,7 +46,13 @@ function EmptyQueue({ queue, needsResearchCount }: { queue: Queue; needsResearch
 export default async function StartupShortlistPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
   const universities = listUniversities();
-  const candidates = listCandidateProjects({ universityId: sp.university, sector: sp.sector });
+  const review = await readReviewState();
+  const candidates = reviewCompanies(
+    listCandidateProjects({ universityId: sp.university, sector: sp.sector }),
+    review.records,
+    review.likes,
+    reviewMode(sp.feedback)
+  );
 
   return (
     <div className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">

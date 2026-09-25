@@ -95,10 +95,23 @@ CREATE TABLE IF NOT EXISTS projects (
   sector TEXT,
   description TEXT,
   website_url TEXT,
+  primary_link TEXT,             -- best public page when no official website was found
+  primary_link_kind TEXT,        -- devpost | press | accelerator | github | crunchbase | directory | other
   is_portfolio_reference INTEGER NOT NULL DEFAULT 0, -- existing DRF investment: reference only, never a new target
   is_investable_candidate INTEGER NOT NULL DEFAULT 1, -- 0 for e.g. a builder org's own internal tools (still valuable as ability-to-build evidence, but not itself something to screen/score as an investment)
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS project_sector_tags (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES projects(id),
+  tag TEXT NOT NULL,             -- taxonomy id, e.g. ai_agents
+  is_primary INTEGER NOT NULL DEFAULT 0,
+  excerpt TEXT NOT NULL,         -- the description text the tag was read from
+  source_url TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(project_id, tag)
 );
 
 CREATE TABLE IF NOT EXISTS person_project_roles (

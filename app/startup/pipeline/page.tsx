@@ -2,6 +2,8 @@ import Link from "next/link";
 import { listPipelineEntries } from "@/lib/domain/queries";
 import { updatePipelineEntry } from "@/lib/actions/pipeline";
 import { getDb } from "@/lib/db/client";
+import { readReviewState } from "@/lib/domain/review-server";
+import { domainKey, isHidden } from "@/lib/domain/feedback";
 
 const STAGES = ["New", "Researching", "Contact planned", "Contacted", "Meeting", "Diligence", "Passed"];
 
@@ -23,16 +25,21 @@ function PipelineCard({ e }: { e: ReturnType<typeof listPipelineEntries>[number]
 export default async function PipelinePage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
   const view = sp.view === "table" ? "table" : "board";
-  const entries = listPipelineEntries();
+  const review = await readReviewState();
+  const hiddenCompany = (id: string, name: string, url: string | null) =>
+    isHidden(review.records, { entityType: "project", entityId: id, name, domain: domainKey(url) });
+  const entries = listPipelineEntries().filter((e) => !hiddenCompany(e.project_id, e.project_name, null));
   const withEntries = new Set(entries.map((e) => e.project_id));
 
   const db = getDb();
   let noEntry = (
-    db.prepare(`SELECT id, name FROM projects WHERE kind='company' AND is_investable_candidate=1 ORDER BY name`).all() as {
+    db.prepare(`SELECT id, name, website_url, primary_link FROM projects WHERE kind='company' AND is_investable_candidate=1 ORDER BY name`).all() as {
       id: string;
       name: string;
+      website_url: string | null;
+      primary_link: string | null;
     }[]
-  ).filter((p) => !withEntries.has(p.id));
+  ).filter((p) => !withEntries.has(p.id) && !hiddenCompany(p.id, p.name, p.website_url || p.primary_link));
 
   if (sp.q) {
     const q = sp.q.toLowerCase();
