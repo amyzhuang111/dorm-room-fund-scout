@@ -1,15 +1,16 @@
 import Link from "next/link";
 import { buildHref } from "@/lib/domain/url";
-import { listCandidateSectors, type UniversitySummary } from "@/lib/domain/queries";
+import { CAMPUSES, shortCampusLabel } from "@/lib/domain/campuses";
+import { listSectorCounts, type CoverageState, type UniversitySummary } from "@/lib/domain/queries";
+import { FeedbackSync } from "./feedback-sync";
+import { CollapsibleSidebar } from "./collapsible-sidebar";
 
-const FIRST_CLASS = ["univ_penn", "univ_berkeley"];
-const SHORT_LABEL: Record<string, string> = { univ_penn: "Penn", univ_berkeley: "Berkeley" };
-
-function coverageState(u: UniversitySummary): { label: string; cls: string } {
-  if (u.sourcesConfigured === 0) return { label: "Not scanned", cls: "text-muted" };
-  if (u.companyCount === 0) return { label: "Partial", cls: "text-warn" };
-  return { label: "Up to date", cls: "text-ok" };
-}
+const COVERAGE_LABEL: Record<CoverageState, { label: string; cls: string }> = {
+  not_scanned: { label: "Not scanned", cls: "text-muted" },
+  partial: { label: "Partial", cls: "text-warn" },
+  up_to_date: { label: "Up to date", cls: "text-ok" },
+  needs_attention: { label: "Needs attention", cls: "text-warn" },
+};
 
 function UniversityRow({
   u,
@@ -22,8 +23,8 @@ function UniversityRow({
   current: Record<string, string | undefined>;
   mode: "founder" | "startup";
 }) {
-  const coverage = coverageState(u);
-  const label = SHORT_LABEL[u.id] ?? u.name;
+  const coverage = COVERAGE_LABEL[u.coverage];
+  const label = shortCampusLabel(u.id, u.name);
   const count = mode === "founder" ? u.founderCount : u.companyCount;
   const switchingCampus = current.university !== u.id;
   return (
@@ -35,7 +36,7 @@ function UniversityRow({
       href={buildHref(basePath, current, switchingCampus ? { university: u.id, project: null } : { university: u.id })}
       title={u.name}
       aria-label={`${u.name} — ${coverage.label}`}
-      className={`flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm ${current.university === u.id ? "bg-accent/10 font-medium text-accent" : "text-foreground hover:bg-surface-2"}`}
+      className={`flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm ${current.university === u.id ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
     >
       <span className="truncate">{label}</span>
       <span className="flex shrink-0 items-center gap-1.5">
@@ -68,21 +69,23 @@ export function FilterSidebar({
   mode?: "founder" | "startup";
 }) {
   const total = universities.reduce((sum, u) => sum + (mode === "founder" ? u.founderCount : u.companyCount), 0);
-  const firstClass = universities.filter((u) => FIRST_CLASS.includes(u.id));
-  const rest = universities.filter((u) => !FIRST_CLASS.includes(u.id));
+  const firstClassIds = new Set(CAMPUSES.filter((c) => c.firstClass).map((c) => c.id));
+  const firstClass = universities.filter((u) => firstClassIds.has(u.id));
+  const rest = universities.filter((u) => !firstClassIds.has(u.id));
   const scannedCount = universities.filter((u) => u.sourcesConfigured > 0).length;
   // Sector is a Startup Scout (kind='company') concept — skip the query on
   // Founder Scout pages. Only real, researched sector values ever appear
   // here (never a static/guessed list — most candidates are still
   // unresearched, per brief section 1, so there's nothing to list for them).
-  const sectors = mode === "startup" ? listCandidateSectors() : [];
+  const sectors = mode === "startup" ? listSectorCounts(current.university) : [];
 
   return (
-    <aside className="w-full shrink-0 border-b border-border-c p-3 sm:w-64 sm:border-b-0 sm:border-r sm:p-4">
+    <CollapsibleSidebar>
+    <aside className="w-full shrink-0 border-b border-border-c bg-surface p-3 sm:w-[232px] sm:border-b-0 sm:border-r sm:p-4">
       <div className="mb-3 flex items-baseline justify-between">
         <span className="ui-label">Universities</span>
         {current.university && (
-          <Link href={buildHref(basePath, current, { university: null })} className="text-[11px] text-accent underline">
+          <Link href={buildHref(basePath, current, { university: null })} className="text-[11px] text-link underline">
             reset
           </Link>
         )}
@@ -94,7 +97,7 @@ export function FilterSidebar({
         <li>
           <Link
             href={buildHref(basePath, current, { university: null })}
-            className={`block rounded-md px-2 py-1.5 text-sm ${!current.university ? "bg-accent/10 font-medium text-accent" : "text-foreground hover:bg-surface-2"}`}
+            className={`block rounded-md px-2 py-1.5 text-sm ${!current.university ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
           >
             All campuses
           </Link>
@@ -125,7 +128,7 @@ export function FilterSidebar({
           <div className="mb-1.5 flex items-baseline justify-between">
             <span className="ui-label">Saved views</span>
             {current.queue && (
-              <Link href={buildHref(basePath, current, { queue: null })} className="text-[11px] text-accent underline">
+              <Link href={buildHref(basePath, current, { queue: null })} className="text-[11px] text-link underline">
                 reset
               </Link>
             )}
@@ -135,7 +138,7 @@ export function FilterSidebar({
               <li key={label}>
                 <Link
                   href={buildHref(basePath, current, { queue: current.queue === val ? null : val })}
-                  className={`flex items-center gap-2 rounded-md px-2 py-1 text-sm ${current.queue === val ? "bg-accent/10 font-medium text-accent" : "text-foreground hover:bg-surface-2"}`}
+                  className={`flex items-center gap-2 rounded-md px-2 py-1 text-sm ${current.queue === val ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
                 >
                   <span className="status-dot" style={{ background: dot }} />
                   {label}
@@ -146,30 +149,70 @@ export function FilterSidebar({
         </div>
       )}
 
+      <div className="mt-5">
+        <span className="ui-label">Review</span>
+        <ul className="mt-1 space-y-0.5">
+          {(
+            [
+              ["liked", "Liked"],
+              ["hidden", "Hidden"],
+              ["passed", "Passed"],
+            ] as const
+          ).map(([val, label]) => (
+            <li key={val}>
+              <Link
+                href={buildHref(basePath, current, { feedback: current.feedback === val ? null : val })}
+                className={`block rounded-md px-2 py-1 text-sm ${current.feedback === val ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
+              >
+                {label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {mode === "startup" && sectors.length > 0 && (
         <div className="mt-5">
           <div className="mb-1.5 flex items-baseline justify-between">
             <span className="ui-label">Sectors</span>
             {current.sector && (
-              <Link href={buildHref(basePath, current, { sector: null })} className="text-[11px] text-accent underline">
+              <Link href={buildHref(basePath, current, { sector: null })} className="text-[11px] text-link underline">
                 reset
               </Link>
             )}
           </div>
           <ul className="flex flex-wrap gap-1.5">
             {sectors.map((s) => (
-              <li key={s}>
+              <li key={s.tag}>
                 <Link
-                  href={buildHref(basePath, current, { sector: current.sector === s ? null : s })}
-                  className={`inline-block rounded-full border px-2 py-0.5 text-xs capitalize ${current.sector === s ? "border-accent bg-accent/10 text-accent" : "border-border-c text-muted hover:bg-surface-2"}`}
+                  href={buildHref(basePath, current, { sector: current.sector === s.tag ? null : s.tag })}
+                  className={`inline-block rounded-full border px-2 py-0.5 text-xs ${current.sector === s.tag ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted hover:bg-surface-2 hover:text-foreground"}`}
                 >
-                  {s.replace(/_/g, " ")}
+                  {s.label} <span className="tabular-nums">{s.count}</span>
                 </Link>
               </li>
             ))}
           </ul>
+          <details className="mt-2">
+            <summary className="cursor-pointer text-[11px] text-muted">By campus</summary>
+            <ul className="mt-1 space-y-1">
+              {sectors.map((s) => (
+                <li key={`${s.tag}-campus`} className="text-[11px] text-muted">
+                  <span className="text-foreground">{s.label}</span>
+                  {s.byCampus.map((c) => (
+                    <span key={c.universityId}>
+                      {" "}
+                      · {shortCampusLabel(c.universityId, c.name)} {c.count}
+                    </span>
+                  ))}
+                </li>
+              ))}
+            </ul>
+          </details>
         </div>
       )}
+      <FeedbackSync />
     </aside>
+    </CollapsibleSidebar>
   );
 }

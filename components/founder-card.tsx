@@ -1,57 +1,131 @@
 import Link from "next/link";
 import type { FounderRow } from "@/lib/domain/queries";
-import { AffiliationStatusBadge } from "./badges";
+import { publicLink } from "@/lib/domain/company-link";
+import { buildHref } from "@/lib/domain/url";
+import { EnrollmentBadge } from "./badges";
+import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
+import { PersonLinkButton } from "./person-link";
 
-export function FounderCard({ founder }: { founder: FounderRow }) {
-  const evidenceProjects = founder.projects.filter((p) => p.kind === "project");
+export function FounderCard({
+  founder,
+  feedbackView,
+  open = false,
+  basePath = "/founder/discover",
+  current = {},
+}: {
+  founder: FounderRow & { boostNote?: string | null };
+  feedbackView?: string;
+  open?: boolean;
+  basePath?: string;
+  current?: Record<string, string | undefined>;
+}) {
+  const companies = founder.projects.filter((p) => p.kind === "company");
+  const projects = founder.projects.filter((p) => p.kind !== "company");
   const { founderSignal, coverage } = founder.founderSignal;
   return (
     <div className="rounded-md border border-border-c bg-surface p-3">
       <div className="flex items-start justify-between gap-2">
         <div>
           <p className="font-medium text-foreground">{founder.name}</p>
-          <p className="text-xs text-muted">
-            {founder.universityName ?? "University unknown"} · <AffiliationStatusBadge status={founder.status} />
+          <p className="mt-1 text-xs text-muted">{founder.universityName ?? "University unknown"}</p>
+          <p className="mt-1">
+            <EnrollmentBadge status={founder.enrollmentStatus} label={founder.enrollmentLabel} evidence={founder.enrollmentEvidence} />
           </p>
         </div>
-        {founder.linkedinUrl && (
-          <a
-            href={founder.linkedinUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="shrink-0 text-xs font-medium text-accent hover:underline"
-            title="Personal LinkedIn — self-linked by them, not a search result"
-          >
-            LinkedIn ↗
-          </a>
-        )}
+        <PersonLinkButton link={founder.link} name={founder.name} />
       </div>
 
-      {founder.strongestEvidence && <p className="mt-2 text-sm text-foreground line-clamp-2">{founder.strongestEvidence}</p>}
+      {founder.strongestEvidence && <p className="mt-2 line-clamp-2 text-sm text-foreground">{founder.strongestEvidence}</p>}
 
-      {evidenceProjects.length > 0 && (
-        <p className="mt-1.5 text-xs text-muted">
-          Built: {evidenceProjects.map((p) => p.name).join(", ")}
-        </p>
-      )}
-
-      <div className="mt-2 flex items-center justify-between">
+      <div className="mt-2 flex items-center justify-between gap-2">
         <span className="text-xs text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
           {founderSignal != null ? `Founder Signal ${founderSignal} · ${Math.round(coverage * 100)}% coverage` : "unassessed"}
         </span>
-        {founder.linkedCompany ? (
-          <Link href={`/startup/discover?project=${founder.linkedCompany.id}`} className="text-xs font-medium text-accent hover:underline">
-            {founder.linkedCompany.name} →
-          </Link>
-        ) : founder.possibleCompany ? (
-          <span className="text-xs text-muted" title="Self-reported in their own bio — not yet independently confirmed">
-            Possible company: {founder.possibleCompany.name} (unconfirmed)
-          </span>
-        ) : (
-          <span className="text-xs text-muted">No company detected</span>
-        )}
+        <Link
+          href={buildHref(basePath, current, { founder: open ? null : founder.id })}
+          className="text-xs font-medium text-link"
+          aria-expanded={open}
+        >
+          {open ? "Hide record" : "Companies and evidence"}
+        </Link>
       </div>
       {founder.promotionReasonLabel && <p className="mt-1 text-[11px] text-muted">{founder.promotionReasonLabel}</p>}
+      {founder.boostNote && <p className="mt-1 text-[11px] text-link">{founder.boostNote}</p>}
+
+      {open && (
+        <div className="mt-3 space-y-3 border-t border-border-c pt-3 text-sm">
+          <section>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Companies</h3>
+            {companies.length === 0 && !founder.possibleCompany && <p className="mt-1 text-xs text-muted">No company on record.</p>}
+            <ul className="mt-1 space-y-1.5">
+              {companies.map((p) => {
+                const link = publicLink(p.websiteUrl, p.primaryLink, p.primaryLinkKind);
+                return (
+                  <li key={p.id} className="flex flex-wrap items-center gap-2">
+                    <Link href={`/startup/discover?project=${p.id}`} className="font-medium text-link hover:underline">
+                      {p.name}
+                    </Link>
+                    <span className="text-xs text-muted">{p.role.replaceAll("_", " ")}</span>
+                    {link && (
+                      <a href={link.url} target="_blank" rel="noopener noreferrer" className="rounded-md bg-accent px-2 py-0.5 text-[11px] font-medium text-accent-foreground">
+                        {link.kind === "official" ? "Visit website" : `Open ${link.label}`}
+                      </a>
+                    )}
+                  </li>
+                );
+              })}
+              {founder.possibleCompany && (
+                <li className="text-xs text-muted">Possible company: {founder.possibleCompany.name} (unconfirmed)</li>
+              )}
+            </ul>
+          </section>
+          <section>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Projects</h3>
+            {projects.length === 0 && <p className="mt-1 text-xs text-muted">No project on record.</p>}
+            <ul className="mt-1 space-y-1">
+              {projects.map((p) => {
+                const link = publicLink(p.websiteUrl, p.primaryLink, p.primaryLinkKind);
+                return (
+                  <li key={p.id} className="flex flex-wrap items-center gap-2 text-xs">
+                    <span className="text-foreground">{p.name}</span>
+                    <span className="text-muted">{p.role.replaceAll("_", " ")}</span>
+                    {link && (
+                      <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-link underline">
+                        {link.label}
+                      </a>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+          <section>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Education</h3>
+            {founder.education.length === 0 && <p className="mt-1 text-xs text-muted">No education evidence on record.</p>}
+            <ul className="mt-1 space-y-1.5">
+              {founder.education.map((item) => (
+                <li key={item.excerpt} className="text-xs text-foreground">
+                  {item.excerpt}
+                  {item.sourceUrl && (
+                    <>
+                      {" "}
+                      <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-link underline">
+                        source
+                      </a>
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+      )}
+
+      {feedbackView === "hidden" ? (
+        <FeedbackUndo entityType="person" entityId={founder.id} name={founder.name} />
+      ) : (
+        <FeedbackControls entityType="person" entityId={founder.id} name={founder.name} />
+      )}
     </div>
   );
 }

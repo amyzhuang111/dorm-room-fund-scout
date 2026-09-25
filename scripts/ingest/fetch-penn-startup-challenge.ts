@@ -239,7 +239,7 @@ async function main() {
     }
 
     for (const founder of entry.founders) {
-      let person = findPerson.get(founder.name) as { id: string } | undefined;
+      const person = findPerson.get(founder.name) as { id: string } | undefined;
       let personId: string;
       if (!person) {
         personId = newId("person");

@@ -1,14 +1,24 @@
 import Link from "next/link";
 import { listCandidateProjects, listUniversities } from "@/lib/domain/queries";
+import { readReviewState } from "@/lib/domain/review-server";
+import { reviewCompanies, reviewMode } from "@/lib/domain/review-view";
 import { primaryBlocker } from "@/lib/screening/gates";
 import { FilterSidebar } from "@/components/filter-sidebar";
+import { companyMatchesEnrollment, selectedEnrollment } from "@/lib/domain/founder-status";
 
 const BLOCKER_ORDER = ["Confirm student status", "Confirm stage", "Confirm funding", "Confirm company", "Confirm portfolio status"];
 
 export default async function VerificationPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
   const universities = listUniversities();
-  const candidates = listCandidateProjects({ universityId: sp.university, sector: sp.sector, search: sp.q });
+  const review = await readReviewState();
+  const focus = selectedEnrollment(sp.enroll);
+  const candidates = reviewCompanies(
+    listCandidateProjects({ universityId: sp.university, sector: sp.sector, search: sp.q }),
+    review.records,
+    review.likes,
+    reviewMode(sp.feedback)
+  ).filter((company) => companyMatchesEnrollment(company.founderLinks, focus));
 
   const grouped = new Map<string, typeof candidates>();
   for (const c of candidates) {

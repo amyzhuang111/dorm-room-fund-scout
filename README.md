@@ -329,8 +329,12 @@ free at apify.com, ~$0.004/profile with the harvestapi actor it uses) in
 `.env.local` (gitignored, never committed — see "LinkedIn via Apify"
 below for why this one adapter needs a paid key when nothing else does).
 A `CAMPUS_UNIVERSE_DB_PATH` env var can override where the SQLite file
-lives (default: `data/campus-universe.db`, gitignored, created
-automatically on first run).
+lives (default: `data/campus-universe.db`, committed so Vercel can bundle
+it, created automatically on first run if it is missing).
+
+The hosted app does not read `APIFY_API_TOKEN`. Leave it unset in Vercel
+unless you later run the LinkedIn adapter in an environment that has the
+key. `VERCEL` is set by Vercel itself and should not be added by hand.
 
 ## Loading real data
 
@@ -1500,8 +1504,10 @@ Ari Khan/RHHacks) — no new ones surfaced in the later batches, an honest
 result, not evidence anything's broken (most hackathon participants are
 students, not founders, and this codebase records that plainly rather
 than padding the count). Continued devpost-adapter runs in parallel
-pushed final Penn/Berkeley people counts to **Berkeley 2,305, Penn 888**
-(up from the session-start 1,930/585).
+pushed final Penn/Berkeley people counts on the laptop database to
+**Berkeley 2,305, Penn 888** (up from the session-start 1,930/585). That
+laptop file is gitignored on main and is not the `data/campus-universe.db`
+committed on this branch for the Vercel git deploy.
 
 **Badge wording softened, data honesty unchanged.** Asked to "make
 everything verified" — flagged directly that blindly flipping
@@ -1515,15 +1521,12 @@ as a neutral pill with a real explanatory tooltip, instead of unstyled
 gray text — the underlying `unverified` data value and its meaning are
 completely unchanged.
 
-**Live deploy was stale and has been refreshed.** `.vercelignore` doesn't
-exclude `data/*.db`, so a direct `vercel --prod` deploy DOES bundle the
-real database — but the database is `.gitignore`d and Vercel's own git-
-based auto-deploy never sees it, so the live site only updates on an
-explicit manual `vercel --prod` run. It hadn't been redeployed since
-before this session's massive growth. Redeployed via
-`npx vercel --prod` (authenticated as the user's own `amy-5078` Vercel
-account, confirmed via `vercel whoami` before deploying) — verified live
-afterward: the new "Unconfirmed" badge and real LinkedIn links both
-render correctly at **https://dorm-room-fund-scout.vercel.app**.
+**Live deploy was stale and has been refreshed.** On main the database
+stays gitignored, so Vercel's git auto-deploy never saw the laptop file
+and the production site only updated after a manual `npx vercel --prod`
+(authenticated as `amy-5078`). This branch commits `data/campus-universe.db`
+so a git deploy can bundle that coverage database. The manual production
+refresh above shipped the laptop database, including the "Unconfirmed"
+badge, to **https://dorm-room-fund-scout.vercel.app**.
 
 `npx tsc --noEmit` and `npm run build` both clean throughout.

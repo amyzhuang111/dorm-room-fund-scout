@@ -12,6 +12,12 @@ ingestDevpostHackathon({
   universityId: "univ_berkeley",
   eventLabel: "Cal Hacks 12.0",
   roleLabel: "Cal Hacks 12.0 team member",
+  // Cal Hacks 12.0 is ~700 projects. Prize winners are the bounded,
+  // higher-signal slice; non-winners stay out of this run on purpose.
+  winnersOnly: true,
+  maxProjectFetches: 40,
+  maxFetches: 90,
+  captureLinkedIn: false,
 }).catch((e) => {
   console.error(e);
   process.exit(1);

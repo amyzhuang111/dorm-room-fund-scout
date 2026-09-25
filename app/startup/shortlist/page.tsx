@@ -1,8 +1,11 @@
 import Link from "next/link";
-import { listCandidateProjects, listUniversities } from "@/lib/domain/queries";
+import { getProjectDetail, listCandidateProjects, listUniversities } from "@/lib/domain/queries";
+import { readReviewState } from "@/lib/domain/review-server";
+import { reviewCompanies, reviewMode } from "@/lib/domain/review-view";
 import { QUEUE_LABELS, type Queue } from "@/lib/domain/queue";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { CandidateTable } from "@/components/candidate-table";
+import { companyMatchesEnrollment, selectedEnrollment } from "@/lib/domain/founder-status";
 
 const QUEUE_ORDER: Queue[] = ["top_prospects", "exploration", "watch", "reference_outside_brief"];
 
@@ -21,7 +24,7 @@ function EmptyQueue({ queue, needsResearchCount }: { queue: Queue; needsResearch
         {needsResearchCount > 0 ? (
           <p className="mt-1">
             {needsResearchCount} candidate{needsResearchCount === 1 ? "" : "s"} in Needs research could get there with more evidence.{" "}
-            <Link href="/startup/discover?queue=exploration" className="text-accent underline">
+            <Link href="/startup/discover?queue=exploration" className="text-link underline">
               Investigate them
             </Link>
             .
@@ -29,7 +32,7 @@ function EmptyQueue({ queue, needsResearchCount }: { queue: Queue; needsResearch
         ) : (
           <p className="mt-1">
             No candidates on record at all yet.{" "}
-            <Link href="/sources?from=startup" className="text-accent underline">
+            <Link href="/sources?from=startup" className="text-link underline">
               Pick a source to scan
             </Link>
             .
@@ -44,7 +47,15 @@ function EmptyQueue({ queue, needsResearchCount }: { queue: Queue; needsResearch
 export default async function StartupShortlistPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
   const universities = listUniversities();
-  const candidates = listCandidateProjects({ universityId: sp.university, sector: sp.sector });
+  const review = await readReviewState();
+  const focus = selectedEnrollment(sp.enroll);
+  const candidates = reviewCompanies(
+    listCandidateProjects({ universityId: sp.university, sector: sp.sector }),
+    review.records,
+    review.likes,
+    reviewMode(sp.feedback)
+  ).filter((company) => companyMatchesEnrollment(company.founderLinks, focus));
+  const detail = sp.project ? getProjectDetail(sp.project) : null;
 
   return (
     <div className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
@@ -71,7 +82,7 @@ export default async function StartupShortlistPage({ searchParams }: { searchPar
                 {list.length === 0 ? (
                   <EmptyQueue queue={q} needsResearchCount={candidates.filter((c) => c.queue === "exploration").length} />
                 ) : (
-                  <CandidateTable candidates={list} basePath="/startup/shortlist" current={sp} />
+                  <CandidateTable candidates={list} basePath="/startup/shortlist" current={sp} detail={detail} />
                 )}
               </div>
             </section>

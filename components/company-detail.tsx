@@ -1,8 +1,11 @@
 import type { ProjectDetail } from "@/lib/domain/queries";
-import { GateBadge } from "./badges";
+import { publicLink } from "@/lib/domain/company-link";
+import { EnrollmentBadge, GateBadge } from "./badges";
 import { PipelineForm } from "./pipeline-form";
 import { NotesSection } from "./notes-section";
 import { AssessmentForm } from "./assessment-form";
+import { FeedbackControls } from "./feedback-controls";
+import { PersonLinkButton } from "./person-link";
 
 export function CompanyDetail({ project }: { project: ProjectDetail }) {
   const concernReasons = project.gateOutcomes.filter((g) => g.result !== "pass");
@@ -18,18 +21,42 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
           <GateBadge result={project.overallGate} gateOutcomes={project.gateOutcomes} />
         </div>
         <p className="mt-1 text-sm text-foreground">{project.description || "Product description not yet researched."}</p>
-        <p className="mt-1 text-xs text-muted">
-          {project.founders.join(", ") || "Founders not yet identified"} · {project.universities.join(", ") || "University unknown"}
-        </p>
-        {project.websiteUrl && (
-          <a href={project.websiteUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-xs text-accent underline">
-            {project.websiteUrl}
-          </a>
+        <p className="mt-1 text-xs text-muted">{project.universities.join(", ") || "University unknown"}</p>
+        <ul className="mt-2 space-y-1.5">
+          {project.founderLinks.length === 0 && <li className="text-xs text-muted">Founders not yet identified</li>}
+          {project.founderLinks.map((f) => (
+            <li key={f.personId} className="flex flex-wrap items-center gap-1.5 text-sm text-foreground">
+              <span className="font-medium">{f.name}</span>
+              <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+              <PersonLinkButton link={f.link} name={f.name} />
+              <span className="text-xs text-muted">
+                {[f.school, f.program].filter(Boolean).join(" · ") || "School not on record"}
+              </span>
+            </li>
+          ))}
+        </ul>
+        {(() => {
+          const link = publicLink(project.websiteUrl, project.primaryLink, project.primaryLinkKind);
+          if (!link) return <p className="mt-2 text-xs text-muted">No public page on record</p>;
+          const label = link.kind === "official" ? "Visit website" : `Open ${link.label}`;
+          return (
+            <a href={link.url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground">
+              {label}
+            </a>
+          );
+        })()}
+        {project.sectorTags.length > 0 && (
+          <p className="mt-2 flex flex-wrap gap-1">
+            {project.sectorTags.map((tag) => (
+              <span key={tag} className="sector-chip">{tag}</span>
+            ))}
+          </p>
         )}
+        <FeedbackControls entityType="project" entityId={project.id} name={project.name} url={project.websiteUrl || project.primaryLink} />
       </div>
 
       {/* Above the fold: why look / founder edge / open question */}
-      <section className="space-y-3 rounded-md border border-border-c bg-surface-2 p-3">
+      <section className="space-y-3 rounded-md border border-border-c bg-surface p-3">
         <div>
           <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Why look</h3>
           <p className="mt-0.5 text-sm text-foreground">{project.latestSignalNote ?? "No supporting evidence recorded yet."}</p>
@@ -88,14 +115,38 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
       {/* Founders */}
       <section>
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Founders</h3>
-        <p className="mt-1 text-sm text-foreground">{project.founders.join(", ") || "None identified yet."}</p>
+        <ul className="mt-1 space-y-1 text-sm text-foreground">
+          {project.founderLinks.length === 0 && <li>None identified yet.</li>}
+          {project.founderLinks.map((f) => (
+            <li key={f.personId} className="flex flex-wrap items-center gap-2">
+              <span>{f.name}</span>
+              <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+              <PersonLinkButton link={f.link} name={f.name} />
+              <span className="text-xs text-muted">{[f.school, f.program].filter(Boolean).join(" · ")}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Sources</h3>
+        <ul className="mt-1 space-y-1 text-sm">
+          {Array.from(new Map(project.claims.filter((c) => c.sourceUrl).map((c) => [c.sourceUrl, c])).values()).map((c) => (
+            <li key={c.sourceUrl}>
+              <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-link underline">
+                {c.sourceName || c.label.replaceAll("_", " ")}
+              </a>
+            </li>
+          ))}
+          {project.claims.length === 0 && <li className="text-muted">No source pages on record yet.</li>}
+        </ul>
       </section>
 
       {/* Evidence */}
       <section id="evidence">
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Evidence ({project.claims.length})</h3>
         {strongestEvidence && (
-          <div className="mt-1 rounded-md border border-border-c bg-surface-2 p-2.5 text-sm">
+          <div className="mt-1 rounded-md border border-border-c bg-surface p-2.5 text-sm">
             <p className="text-foreground">{strongestEvidence.excerpt}</p>
             <p className="mt-1 text-xs text-muted">
               {strongestEvidence.label.replace("_", " ")} · retrieved {strongestEvidence.retrievedAt.slice(0, 10)}

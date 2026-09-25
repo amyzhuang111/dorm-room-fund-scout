@@ -1,14 +1,22 @@
 import Link from "next/link";
 import { listFounders, listUniversities } from "@/lib/domain/queries";
+import { readReviewState } from "@/lib/domain/review-server";
+import { reviewFounders, reviewMode } from "@/lib/domain/review-view";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { FounderCard } from "@/components/founder-card";
 import { buildHref } from "@/lib/domain/url";
+import { matchesEnrollment, selectedEnrollment } from "@/lib/domain/founder-status";
+import { EnrollmentChips } from "@/components/enrollment-chips";
 
 export default async function FounderDiscoverPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
   const basePath = "/founder/discover";
   const universities = listUniversities();
-  const founders = listFounders({ universityId: sp.university, search: sp.q });
+  const review = await readReviewState();
+  const focus = selectedEnrollment(sp.enroll);
+  const founders = reviewFounders(listFounders({ universityId: sp.university, search: sp.q }), review.records, review.likes, reviewMode(sp.feedback)).filter((founder) =>
+    matchesEnrollment(founder.enrollmentStatus, focus)
+  );
   const totalFounders = universities.reduce((sum, u) => sum + u.founderCount, 0);
   const totalResolved = universities.reduce((sum, u) => sum + u.resolvedPersonCount, 0);
 
@@ -17,6 +25,13 @@ export default async function FounderDiscoverPage({ searchParams }: { searchPara
       <FilterSidebar universities={universities} basePath={basePath} current={sp} mode="founder" />
       <div className="flex-1">
         <div className="border-b border-border-c px-4 py-3">
+          <EnrollmentChips basePath={basePath} current={sp} />
+          <div className="mb-2 mt-3 flex items-center gap-1">
+            <Link href={buildHref("/startup/discover", { university: sp.university, q: sp.q, view: "globe", enroll: sp.enroll }, {})} className="rounded-md px-2.5 py-1 text-xs font-medium text-muted hover:bg-surface-2">
+              Companies
+            </Link>
+            <span className="rounded-md bg-accent px-2.5 py-1 text-xs font-medium text-accent-foreground">Founders</span>
+          </div>
           <h1 className="text-lg font-semibold text-foreground">Founder Scout</h1>
           <p className="text-sm text-muted">
             {totalFounders} founder candidates · {universities.filter((u) => u.sourcesConfigured > 0).length} campuses monitored
@@ -43,14 +58,16 @@ export default async function FounderDiscoverPage({ searchParams }: { searchPara
 
         <div className="grid gap-2 p-4 sm:grid-cols-2 lg:grid-cols-3">
           {founders.map((f) => (
-            <FounderCard key={f.id} founder={f} />
+            <FounderCard key={f.id} founder={f} feedbackView={sp.feedback} open={sp.founder === f.id} basePath={basePath} current={sp} />
           ))}
-          {founders.length === 0 && <p className="text-sm text-muted">No founders match yet.</p>}
+          {founders.length === 0 && (
+            <p className="text-sm text-muted">No founders match. Student and New grad are on — turn on Alumni or Unknown to widen the list.</p>
+          )}
         </div>
 
         {sp.university && (
           <p className="px-4 pb-4 text-xs text-muted">
-            <Link href={buildHref(basePath, sp, { university: null })} className="text-accent underline">
+            <Link href={buildHref(basePath, sp, { university: null })} className="text-link underline">
               Clear campus filter
             </Link>
           </p>

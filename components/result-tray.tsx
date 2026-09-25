@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { buildHref } from "@/lib/domain/url";
+import { publicLink } from "@/lib/domain/company-link";
 import type { CandidateSummary } from "@/lib/domain/queries";
+import { FeedbackControls } from "./feedback-controls";
+import { PersonLinkButton } from "./person-link";
+import { EnrollmentBadge } from "./badges";
 
 // Design MD §5: "In canvas views, show a collapsible bottom result tray
 // with compact cards. Selecting a card selects the same entity on the
@@ -23,7 +27,7 @@ export function ResultTray({
   basePath: string;
   current: Record<string, string | undefined>;
 }) {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   if (candidates.length === 0) return null;
 
@@ -46,15 +50,39 @@ export function ResultTray({
         <ul className="flex gap-2 overflow-x-auto px-3 pb-3 pt-1">
           {candidates.map((c) => (
             <li key={c.id} className="shrink-0">
-              <a
-                href={buildHref(basePath, current, { project: c.id })}
-                className={`block w-48 rounded-md border px-2.5 py-2 text-xs hover:bg-surface-2 ${
+              <div
+                className={`block w-52 rounded-md border px-2.5 py-2 text-xs ${
                   current.project === c.id ? "border-accent bg-accent/10" : "border-border-c"
                 }`}
               >
-                <p className="truncate font-medium text-foreground">{c.name}</p>
-                <p className="truncate text-muted">{c.universities[0] ?? "University unknown"}</p>
-              </a>
+                <a href={buildHref(basePath, current, { project: c.id })} className="block truncate font-medium text-foreground hover:text-link">
+                  {c.name}
+                </a>
+                <p className="line-clamp-2 text-muted">{c.description || c.founders[0] || "No description yet"}</p>
+                <p className="truncate text-muted">{c.universities[0] ?? "Campus not confirmed"}</p>
+                {(() => {
+                  const link = publicLink(c.websiteUrl, c.primaryLink, c.primaryLinkKind);
+                  if (!link) return null;
+                  return (
+                    <a href={link.url} target="_blank" rel="noopener noreferrer" className="link-chip mt-1 max-w-full truncate">
+                      {link.kind === "official" ? link.url.replace(/^https?:\/\//, "") : link.label}
+                    </a>
+                  );
+                })()}
+                {"boostNote" in c && (c as CandidateSummary & { boostNote?: string | null }).boostNote && (
+                  <p className="mt-0.5 line-clamp-2 text-link">{(c as CandidateSummary & { boostNote?: string }).boostNote}</p>
+                )}
+                <FeedbackControls entityType="project" entityId={c.id} name={c.name} url={c.websiteUrl || c.primaryLink} />
+                <ul className="mt-1 space-y-1">
+                  {c.founderLinks.slice(0, 2).map((f) => (
+                    <li key={f.personId} className="flex flex-wrap items-center gap-1">
+                      <span className="text-foreground">{f.name}</span>
+                      <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+                      <PersonLinkButton link={f.link} name={f.name} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </li>
           ))}
         </ul>

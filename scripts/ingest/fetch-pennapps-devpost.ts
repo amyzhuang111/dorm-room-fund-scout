@@ -10,6 +10,12 @@ ingestDevpostHackathon({
   universityId: "univ_penn",
   eventLabel: "PennApps XXVI",
   roleLabel: "PennApps XXVI team member",
+  // The whole XXVI gallery is about 85 projects. LinkedIn profile fetches
+  // are skipped here so one run can cover the gallery; a later run with
+  // captureLinkedIn left on can backfill links for people still missing them.
+  maxProjectFetches: 90,
+  maxFetches: 100,
+  captureLinkedIn: false,
 }).catch((e) => {
   console.error(e);
   process.exit(1);

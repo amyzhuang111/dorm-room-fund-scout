@@ -23,13 +23,20 @@ export function getDb(): Database.Database {
 
   fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 
-  if (DB_PATH !== BUNDLED_DB_PATH && !fs.existsSync(DB_PATH) && fs.existsSync(BUNDLED_DB_PATH)) {
-    fs.copyFileSync(BUNDLED_DB_PATH, DB_PATH);
+  if (DB_PATH !== BUNDLED_DB_PATH && !fs.existsSync(DB_PATH)) {
+    if (fs.existsSync(BUNDLED_DB_PATH)) {
+      fs.copyFileSync(BUNDLED_DB_PATH, DB_PATH);
+    } else {
+      console.error(
+        "campus-universe.db was not found in this deployment. Serving an empty database until the bundled file is included."
+      );
+    }
   }
 
   const db = new Database(DB_PATH);
   db.pragma("journal_mode = WAL");
   db.pragma("foreign_keys = ON");
+  db.pragma("busy_timeout = 8000");
   const schema = fs.readFileSync(path.join(process.cwd(), "lib", "db", "schema.sql"), "utf8");
   db.exec(schema);
   migrate(db);
@@ -69,6 +76,26 @@ function migrate(db: Database.Database) {
   addColumnIfMissing("sources", "reddit_negative_mentions", "reddit_negative_mentions INTEGER");
   addColumnIfMissing("sources", "community_rationale", "community_rationale TEXT");
   addColumnIfMissing("sources", "reddit_last_checked_at", "reddit_last_checked_at TEXT");
+
+  addColumnIfMissing("people", "enrollment_status", "enrollment_status TEXT");
+  addColumnIfMissing("people", "enrollment_label", "enrollment_label TEXT");
+  addColumnIfMissing("people", "enrollment_evidence", "enrollment_evidence TEXT");
+  addColumnIfMissing("people", "enrollment_source_url", "enrollment_source_url TEXT");
+  addColumnIfMissing("people", "enrollment_source_id", "enrollment_source_id TEXT");
+  addColumnIfMissing("people", "enrollment_grad_year", "enrollment_grad_year INTEGER");
+
+  addColumnIfMissing("projects", "primary_link", "primary_link TEXT");
+  addColumnIfMissing("projects", "primary_link_kind", "primary_link_kind TEXT");
+  db.exec(`CREATE TABLE IF NOT EXISTS project_sector_tags (
+    id TEXT PRIMARY KEY,
+    project_id TEXT NOT NULL REFERENCES projects(id),
+    tag TEXT NOT NULL,
+    is_primary INTEGER NOT NULL DEFAULT 0,
+    excerpt TEXT NOT NULL,
+    source_url TEXT,
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    UNIQUE(project_id, tag)
+  )`);
 
   // Pipeline stages consolidated: "Meet" renamed to "Contact planned" (same
   // meaning, clearer label), and "Watching" dropped as a distinct status —

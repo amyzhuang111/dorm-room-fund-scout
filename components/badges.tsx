@@ -1,3 +1,4 @@
+import { enrollmentBadge } from "@/lib/domain/founder-status";
 import type { Queue } from "@/lib/domain/queue";
 import { QUEUE_LABELS } from "@/lib/domain/queue";
 import { primaryBlocker, type GateOutcome } from "@/lib/screening/gates";
@@ -6,7 +7,7 @@ import { primaryBlocker, type GateOutcome } from "@/lib/screening/gates";
 // pairs (e.g. their green-dark/green-light) rather than an opacity trick.
 const QUEUE_CLASS: Record<Queue, string> = {
   top_prospects: "bg-ok-bg text-ok border-ok/20",
-  exploration: "bg-accent/10 text-accent border-accent/25",
+  exploration: "bg-accent-2/20 text-link border-accent-2/40",
   watch: "bg-warn-bg text-warn border-warn/20",
   reference_outside_brief: "bg-surface-2 text-muted border-border-c",
 };
@@ -76,13 +77,36 @@ export function CommunityConfidenceBadge({ confidence }: { confidence: string })
   );
 }
 
-// Softer wording + a real explanation on hover, never a status this data
-// hasn't earned — "unverified" here means exactly what it always has
-// (e.g. a hackathon roster or Devpost submission has no school field, so
-// it can't by itself confirm current enrollment). Styling it as a plain
-// neutral pill with a tooltip replaces the bare, slightly alarming-looking
-// gray "Unverified" text with something calmer, without ever claiming a
-// confidence level the underlying data doesn't actually have.
+const ENROLLMENT_CLASS: Record<string, string> = {
+  current_student: "bg-ok-bg text-ok border-ok/30",
+  recent_grad: "bg-warn-bg text-warn border-warn/30",
+  older_alumni: "bg-danger-bg text-danger border-danger/20",
+  unknown: "bg-surface text-muted border-border-c",
+};
+
+export function EnrollmentBadge({
+  status,
+  label,
+  evidence,
+}: {
+  status: string | null | undefined;
+  label?: string | null;
+  evidence?: string | null;
+}) {
+  const key = status && status in ENROLLMENT_CLASS ? status : "unknown";
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${ENROLLMENT_CLASS[key]}`}
+      title={evidence ?? undefined}
+    >
+      {enrollmentBadge(status, label)}
+    </span>
+  );
+}
+
+// Softer wording + a real explanation on hover. "unverified" still means
+// the source ties the person to the university without confirming current
+// enrollment. The label is "Unconfirmed"; the stored value is unchanged.
 const AFFILIATION_STATUS_CLASS: Record<string, string> = {
   current_student: "bg-ok-bg text-ok border-ok/20",
   recent_grad: "bg-ok-bg text-ok border-ok/20",

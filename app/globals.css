@@ -1,44 +1,38 @@
 @import "tailwindcss";
 
-/* Design tokens sampled directly from dormroomfund.com's real stylesheet
-   (cdn.prod.website-files.com/.../dormroomfund.webflow.shared.css), per an
-   explicit request to mimic that site's colors/type closely — supersedes
-   the earlier "not sampled reference-site values" instruction for this
-   round. Source values, for reference:
-     --neutral--ink: #1c1525        (their body text)
-     --neutral--lavender-lightest: #f1eff4  (their page background)
-     --neutral--lavender: #d9d5df   (their borders/dividers)
-     --neutral--lavender-muted: #b8b0c4
-     --brand--purple: #9378ee       (their primary accent)
-     --brand--orange: #ff6a33       (their secondary accent)
-     status: green-dark #114e0b / light #cef5ca, yellow-dark #5e5515 / light
-       #fcf8d8, red-dark #3b0b0b / light #f8e4e4
-     font: Satoshi (var(--font-family--heading/body): Satoshi, Arial, sans-serif)
-     type scale: h1 clamp(3.25rem,5.8vw,5.125rem) weight 500, body 1rem,
-       line-height 1.5, letter-spacing 0 — headings scaled down here for a
-       dense app UI rather than a marketing page, keeping the same weight/
-       letter-spacing/line-height ratios. */
-/* Palette rebalanced per explicit feedback: the DRF-sampled lavender was
-   washing across every surface and reading as a consumer productivity app.
-   Purple is now reserved for interaction/selection only — primary surfaces
-   are neutral gray/white, text is near-black/neutral gray, not ink-purple. */
+/* Light page, DRF purple accent (sampled 2026-09-25 from the live site).
+   Full-page pixel counts: ink and lavender are the field; #9378ee is the
+   brand color that actually shows up (about 4% of the homepage, 15% of
+   portfolio). Orange #ff6a33 is the Apply button only (~0.1% of pixels)
+   and is not used here — this app has no Apply CTA.
+     page #ffffff
+     secondary surfaces #f1eff4 and #d9d5df
+     body/headings #1c1525
+     muted #5c516e — 7.35:1 on white, 6.44:1 on #f1eff4, 5.09:1 on #d9d5df
+       #b8b0c4 is 2.09:1 on white, so it is a border only.
+     primary accent #9378ee with ink text (5.21:1). White on #9378ee is 3.41:1.
+     secondary highlight #a892f2 / #b9a8f5
+     links #5840a0 — #9378ee darkened toward ink until 7.91:1 on white,
+       6.93:1 on #f1eff4, 5.47:1 on #d9d5df. #9378ee as text fails AA.
+     status pairs: #114e0b/#cef5ca, #5e5515/#fcf8d8, #3b0b0b/#f8e4e4 */
 :root {
-  --background: #fafafa;
-  --surface: #ffffff;
-  --surface-2: #f2f2f3;
-  --border-c: #e3e3e5;
-  --foreground: #171417;
-  --muted: #6b6b70;
+  --background: #ffffff;
+  --surface: #f1eff4;
+  --surface-2: #d9d5df;
+  --border-c: #b8b0c4;
+  --foreground: #1c1525;
+  --muted: #5c516e;
   --accent: #9378ee;
-  --accent-foreground: #ffffff;
-  --accent-2: #ff6a33;
-  --accent-subtle: #efeaff; /* restrained lavender, selected-state fill only */
+  --accent-foreground: #1c1525;
+  --accent-2: #a892f2;
+  --accent-subtle: rgba(147, 120, 238, 0.16);
+  --link: #5840a0;
   --ok: #114e0b;
-  --ok-bg: #d9f2d4;
-  --warn: #6b4f0a;
-  --warn-bg: #f7ecd2;
-  --danger: #6b1414;
-  --danger-bg: #f6dede;
+  --ok-bg: #cef5ca;
+  --warn: #5e5515;
+  --warn-bg: #fcf8d8;
+  --danger: #3b0b0b;
+  --danger-bg: #f8e4e4;
 }
 
 @theme inline {
@@ -52,6 +46,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-2: var(--accent-2);
   --color-accent-subtle: var(--accent-subtle);
+  --color-link: var(--link);
   --color-ok: var(--ok);
   --color-ok-bg: var(--ok-bg);
   --color-warn: var(--warn);
@@ -66,15 +61,27 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  font-size: 16px; /* matches DRF's own 1rem body size exactly */
+  font-size: 16px;
+  font-weight: 500;
   line-height: 1.5;
   letter-spacing: 0;
 }
 
 h1, h2, h3 {
   font-weight: 500;
+  line-height: 1.1;
+}
+/* DRF's live h1 uses letter-spacing 0; h2/h3 use --letter-spacing--tightest. */
+h1 {
   letter-spacing: 0;
-  line-height: 1.15;
+}
+h2, h3 {
+  letter-spacing: -0.04em;
+}
+
+::selection {
+  background: #9378ee;
+  color: #1c1525;
 }
 
 /* Dense-dashboard utilities, pattern borrowed from dashboard.vclense.ch/ycglobe
@@ -83,11 +90,65 @@ h1, h2, h3 {
    text stays at DRF's actual 16px above. Colors still come from the
    DRF-sampled tokens, not vclense's palette. */
 .ui-label {
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 0.75rem;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--accent);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.stat-num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--foreground);
+}
+
+.link-chip,
+.sector-chip {
+  display: inline-flex;
+  max-width: 240px;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid #e4d98a;
+  background: var(--warn-bg);
+  padding: 1px 8px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--warn);
+  text-decoration: none;
+}
+
+.link-chip {
+  border-color: var(--border-c);
+  background: var(--surface);
+  color: var(--link);
+}
+
+.link-chip:hover {
+  border-color: var(--accent);
+  color: var(--foreground);
+}
+
+.sector-chip {
+  max-width: none;
+}
+
+.globe-skeleton {
+  width: min(68vw, 420px);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 38% 32%, rgba(147, 120, 238, 0.45), transparent 42%),
+    radial-gradient(circle at 50% 50%, #ffffff, #f1eff4 72%);
+  box-shadow: 0 0 48px 8px rgba(147, 120, 238, 0.25);
+  border: 1px solid #d9d5df;
+  animation: globe-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes globe-pulse {
+  50% { opacity: 0.72; }
 }
 
 .pill-toggle {
@@ -110,12 +171,17 @@ h1, h2, h3 {
 }
 
 .glass-panel {
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  backdrop-filter: blur(10px) saturate(1.15);
-  -webkit-backdrop-filter: blur(10px) saturate(1.15);
-  border: 1px solid var(--border-c);
+  background: color-mix(in srgb, #ffffff 92%, #f1eff4);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  border: 1px solid #d9d5df;
   border-radius: 14px;
-  box-shadow: 0 10px 24px -12px rgba(28, 21, 37, 0.35);
+  box-shadow: 0 16px 40px -22px rgba(28, 21, 37, 0.28);
+  color: #1c1525;
+}
+
+a, button {
+  transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease, opacity 160ms ease;
 }
 
 .glass-panel-head {

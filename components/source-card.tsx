@@ -122,7 +122,7 @@ export function SourceCardView({ card, compact, typedCounts }: { card: SourceCar
           </>
         )}
         {!card.live && card.url.startsWith("http") && (
-          <a href={card.url} target="_blank" rel="noopener noreferrer" className="text-accent underline">
+          <a href={card.url} target="_blank" rel="noopener noreferrer" className="text-link underline">
             {card.url}
           </a>
         )}

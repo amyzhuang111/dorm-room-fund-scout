@@ -200,7 +200,7 @@ async function main() {
     for (const teamName of teamNames(m)) {
       const slugPath = PRODUCT_SLUGS[teamName];
       if (!slugPath) continue; // "Directors"/"Platform" aren't products
-      let proj = findProject.get(teamName) as { id: string } | undefined;
+      const proj = findProject.get(teamName) as { id: string } | undefined;
       let projId: string;
       if (!proj) {
         projId = newId("proj");

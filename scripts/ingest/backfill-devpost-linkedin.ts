@@ -20,6 +20,7 @@ import { getDb, newId, nowIso } from "../../lib/db/client";
 
 const SOURCE_ID = "src_devpost_linkedin_backfill";
 const DEFAULT_BATCH = 60;
+const DELAY_MS = 700;
 
 function extractPersonalLinkedin(profileHtml: string): string | null {
   const m = profileHtml.match(/https?:\/\/(?:www\.)?linkedin\.com\/in\/[A-Za-z0-9_-]+/);
@@ -70,6 +71,10 @@ async function main() {
     let html: string;
     try {
       const res = await fetch(profileUrl, { headers: { "user-agent": "campus-universe-research-bot/0.1 (manual, bounded)" } });
+      if (res.status === 429) {
+        console.log("Devpost returned 429. Stopping so this run can be resumed.");
+        break;
+      }
       if (!res.ok) {
         // 404/410 = the account is really gone, a permanent state, not a
         // transient failure — mark checked so it doesn't get re-fetched
@@ -107,6 +112,7 @@ async function main() {
       );
     }
     updateAliases.run(JSON.stringify(newAliases), person.id);
+    await new Promise((r) => setTimeout(r, DELAY_MS));
   }
 
   const remaining = (

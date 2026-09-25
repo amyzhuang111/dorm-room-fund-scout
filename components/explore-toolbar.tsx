@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { buildHref } from "@/lib/domain/url";
+import { sectorLabel } from "@/lib/domain/sectors";
+import { EnrollmentChips } from "./enrollment-chips";
 
-const VIEWS = ["globe", "table"] as const;
+const VIEWS = ["globe", "network", "table"] as const;
 
 export function ExploreToolbar({
   basePath,
@@ -18,16 +20,20 @@ export function ExploreToolbar({
   searchPlaceholder?: string;
   showViewSwitch?: boolean;
 }) {
-  const view = VIEWS.includes(current.view as any) ? (current.view as (typeof VIEWS)[number]) : "globe";
+  const view = VIEWS.find((v) => v === current.view) ?? "globe";
 
   const activeFilters: { key: string; label: string }[] = [];
   if (current.university) activeFilters.push({ key: "university", label: `Campus` });
   if (current.queue) activeFilters.push({ key: "queue", label: `View: ${current.queue.replace(/_/g, " ")}` });
-  if (current.sector) activeFilters.push({ key: "sector", label: `Sector: ${current.sector}` });
+  if (current.sector) activeFilters.push({ key: "sector", label: sectorLabel(current.sector) });
   if (current.q) activeFilters.push({ key: "q", label: `Search: "${current.q}"` });
+  if (current.feedback) activeFilters.push({ key: "feedback", label: current.feedback === "hidden" ? "Hidden" : current.feedback === "liked" ? "Liked" : "Passed" });
 
   return (
     <div className="border-b border-border-c px-3 py-2">
+      <div className="mb-3">
+        <EnrollmentChips basePath={basePath} current={current} />
+      </div>
       <div className="flex flex-wrap items-center gap-2">
         <form action={basePath} method="get" className="flex-1 min-w-[200px]">
           {Object.entries(current)
@@ -44,13 +50,28 @@ export function ExploreToolbar({
           />
         </form>
 
+        <div className="flex shrink-0 items-center gap-1 rounded-md border border-border-c p-0.5">
+          <Link
+            href={buildHref("/startup/discover", current, {})}
+            className={`rounded-md px-2.5 py-1 text-xs font-medium ${basePath.startsWith("/startup") ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
+          >
+            Companies
+          </Link>
+          <Link
+            href={buildHref("/founder/discover", { university: current.university, q: current.q, enroll: current.enroll }, {})}
+            className="rounded-md px-2.5 py-1 text-xs font-medium text-muted hover:bg-surface-2"
+          >
+            Founders
+          </Link>
+        </div>
+
         {showViewSwitch && (
           <div className="flex shrink-0 items-center gap-1 rounded-md border border-border-c p-0.5">
             {VIEWS.map((v) => (
               <Link
                 key={v}
                 href={buildHref(basePath, current, { view: v })}
-                className={`rounded-md px-2.5 py-1 text-xs font-medium capitalize ${view === v ? "bg-accent/10 text-accent" : "text-muted hover:bg-surface-2"}`}
+                className={`rounded-full px-2.5 py-1 text-xs font-medium capitalize ${view === v ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
               >
                 {v}
               </Link>
@@ -67,6 +88,17 @@ export function ExploreToolbar({
         <span className="text-xs text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
           {resultCount} {resultLabel}
         </span>
+        {showViewSwitch && (
+          <span className="flex items-center gap-1 text-[11px] text-muted">
+            Sort
+            <Link href={buildHref(basePath, current, { sort: null })} className={!current.sort || current.sort === "name" ? "text-link" : "hover:text-foreground"}>
+              name
+            </Link>
+            <Link href={buildHref(basePath, current, { sort: "priority" })} className={current.sort === "priority" ? "text-link" : "hover:text-foreground"}>
+              research priority
+            </Link>
+          </span>
+        )}
         {activeFilters.map((f) => (
           <Link
             key={f.key}
@@ -77,7 +109,7 @@ export function ExploreToolbar({
           </Link>
         ))}
         {activeFilters.length > 0 && (
-          <Link href={basePath} className="text-[11px] text-accent underline">
+          <Link href={basePath} className="text-[11px] text-link underline">
             Clear filters
           </Link>
         )}
