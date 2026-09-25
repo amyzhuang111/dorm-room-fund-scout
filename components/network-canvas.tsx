@@ -5,10 +5,10 @@ import { buildHref } from "@/lib/domain/url";
 import type { NetworkEdge, NetworkGraph, NetworkNode } from "@/lib/domain/network";
 
 const COLOR: Record<NetworkNode["type"], string> = {
-  university: "#ff7a3c",
-  community: "#7eb6ff",
-  person: "#d5d0c6",
-  project: "#f0c14a",
+  university: "#ff6a33",
+  community: "#a892f2",
+  person: "#d9d5df",
+  project: "#b9a8f5",
 };
 
 function nodeRadius(type: NetworkNode["type"], degree: number): number {
@@ -89,7 +89,7 @@ export function NetworkCanvas({
           viewBox="0 0 960 640"
           role="img"
           aria-label={`Network for ${campusName}`}
-          className="h-auto w-full rounded-xl border border-border-c bg-[radial-gradient(circle_at_50%_42%,#1a1e28,#07080c_72%)]"
+          className="h-auto w-full rounded-xl border border-border-c bg-[radial-gradient(circle_at_50%_42%,#3e344c,#080331_72%)]"
         >
           {graph.edges.map((e, i) => {
             const s = nodeById.get(e.source);
@@ -118,7 +118,7 @@ export function NetworkCanvas({
                 <path
                   d={d}
                   fill="none"
-                  stroke={highlighted ? "#ff7a3c" : edgeDimmed(e) ? "#2a2e38" : "#5c6370"}
+                  stroke={highlighted ? "#ff6a33" : edgeDimmed(e) ? "#3e344c" : "#b8b0c4"}
                   strokeWidth={e.relationshipType === "founded" ? 1.6 : 1}
                   opacity={edgeDimmed(e) && !highlighted ? 0.35 : 0.9}
                   pointerEvents="none"
@@ -145,7 +145,7 @@ export function NetworkCanvas({
                   <circle cx={n.x} cy={n.y} r={r} fill={COLOR.person} />
                 )}
                 {(n.type !== "person" || active === n.id || matchIds?.has(n.id)) && (
-                  <text x={n.x} y={n.y + r + 12} textAnchor="middle" fontSize="11" fill="#e7e2d8">
+                  <text x={n.x} y={n.y + r + 12} textAnchor="middle" fontSize="11" fill="#d9d5df" style={{ fontFamily: "Satoshi, Arial, sans-serif" }}>
                     {n.label.length > 22 ? n.label.slice(0, 21) + "…" : n.label}
                   </text>
                 )}

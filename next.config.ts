@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Dev HMR and the RSC debug channel are blocked for 127.0.0.1 unless it is
+  // listed. Without this, `next dev` serves HTML at that host but never
+  // hydrates, so the globe stays on "Loading globe".
+  allowedDevOrigins: ["127.0.0.1"],
   // The SQLite file isn't reachable by Next's static import tracing (it's opened
   // via a runtime fs path in lib/db/client.ts), so it has to be listed explicitly
   // or Vercel's serverless functions won't have it bundled.

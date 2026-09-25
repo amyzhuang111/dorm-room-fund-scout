@@ -5,6 +5,7 @@ import { reviewCompanies, reviewMode } from "@/lib/domain/review-view";
 import { QUEUE_LABELS, type Queue } from "@/lib/domain/queue";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { CandidateTable } from "@/components/candidate-table";
+import { companyMatchesEnrollment, selectedEnrollment } from "@/lib/domain/founder-status";
 
 const QUEUE_ORDER: Queue[] = ["top_prospects", "exploration", "watch", "reference_outside_brief"];
 
@@ -47,12 +48,13 @@ export default async function StartupShortlistPage({ searchParams }: { searchPar
   const sp = await searchParams;
   const universities = listUniversities();
   const review = await readReviewState();
+  const focus = selectedEnrollment(sp.enroll);
   const candidates = reviewCompanies(
     listCandidateProjects({ universityId: sp.university, sector: sp.sector }),
     review.records,
     review.likes,
     reviewMode(sp.feedback)
-  );
+  ).filter((company) => companyMatchesEnrollment(company.founderLinks, focus));
 
   return (
     <div className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">

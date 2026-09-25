@@ -1,3 +1,4 @@
+import { enrollmentBadge } from "@/lib/domain/founder-status";
 import type { Queue } from "@/lib/domain/queue";
 import { QUEUE_LABELS } from "@/lib/domain/queue";
 import { primaryBlocker, type GateOutcome } from "@/lib/screening/gates";
@@ -72,6 +73,33 @@ export function CommunityConfidenceBadge({ confidence }: { confidence: string })
   return (
     <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium uppercase ${COMMUNITY_CONFIDENCE_CLASS[confidence] ?? ""}`}>
       {confidence}
+    </span>
+  );
+}
+
+const ENROLLMENT_CLASS: Record<string, string> = {
+  current_student: "bg-accent text-accent-foreground border-accent",
+  recent_grad: "bg-accent-2/20 text-foreground border-accent-2/40",
+  older_alumni: "bg-surface-2 text-muted border-border-c",
+  unknown: "bg-surface-2 text-muted border-border-c",
+};
+
+export function EnrollmentBadge({
+  status,
+  label,
+  evidence,
+}: {
+  status: string | null | undefined;
+  label?: string | null;
+  evidence?: string | null;
+}) {
+  const key = status && status in ENROLLMENT_CLASS ? status : "unknown";
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[11px] font-medium ${ENROLLMENT_CLASS[key]}`}
+      title={evidence ?? undefined}
+    >
+      {enrollmentBadge(status, label)}
     </span>
   );
 }

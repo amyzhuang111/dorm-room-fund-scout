@@ -3,6 +3,7 @@ import { getDb } from "../db/client";
 import { CAMPUSES } from "./campuses";
 import { publicLink } from "./company-link";
 import { sectorLabel } from "./sectors";
+import { enrollmentBadge } from "./founder-status";
 
 export type NodeType = "university" | "community" | "person" | "project";
 
@@ -64,10 +65,17 @@ export function buildUniversityNetwork(universityId: string): NetworkGraph {
   return buildScoutNetwork(universityId);
 }
 
-export function buildScoutNetwork(universityId?: string, opts?: { sector?: string; excludeIds?: string[] }): NetworkGraph {
+export function buildScoutNetwork(universityId?: string, opts?: { sector?: string; excludeIds?: string[]; enrollment?: string[] }): NetworkGraph {
   const db = getDb();
   const exclude = new Set(opts?.excludeIds ?? []);
   const sector = opts?.sector;
+  const enrollment = opts?.enrollment;
+  const enrollmentClause =
+    enrollment && enrollment.length > 0 && enrollment.length < 4
+      ? `AND COALESCE(pe.enrollment_status, 'unknown') IN (${enrollment.map(() => "?").join(",")})`
+      : enrollment && enrollment.length === 0
+        ? "AND 1=0"
+        : "";
   const tagged = new Set<string>();
   if (sector) {
     const tagRows = db.prepare(`SELECT project_id, tag FROM project_sector_tags`).all() as { project_id: string; tag: string }[];
@@ -128,22 +136,29 @@ export function buildScoutNetwork(universityId?: string, opts?: { sector?: strin
 
     const people = db
       .prepare(
-        `SELECT pe.id, pe.name, pe.aliases_json, a.status,
+        `SELECT pe.id, pe.name, pe.aliases_json, pe.enrollment_status, pe.enrollment_label,
             MAX(CASE
               WHEN ppr.role LIKE '%founder%' AND pr.kind = 'company' THEN 90
               WHEN lower(ppr.role) LIKE '%lead%' OR lower(ppr.role) LIKE '%president%' OR lower(ppr.role) LIKE '%director%' THEN 72
               WHEN ppr.role IS NOT NULL AND lower(ppr.role) NOT IN ('team_member','member','contributor','unknown','alumnus') THEN 58
               ELSE 0
-            END) AS pri
+            END) + CASE pe.enrollment_status WHEN 'current_student' THEN 8 WHEN 'recent_grad' THEN 4 ELSE 0 END AS pri
          FROM affiliations a
          JOIN people pe ON pe.id = a.person_id
          LEFT JOIN person_project_roles ppr ON ppr.person_id = pe.id
          LEFT JOIN projects pr ON pr.id = ppr.project_id
-         WHERE a.university_id = ?
+         WHERE a.university_id = ? ${enrollmentClause}
          GROUP BY pe.id
          ORDER BY pri DESC, pe.name`
       )
-      .all(id) as { id: string; name: string; aliases_json: string; status: string; pri: number }[];
+      .all(id, ...(enrollmentClause.startsWith("AND COALESCE") ? enrollment! : [])) as {
+      id: string;
+      name: string;
+      aliases_json: string;
+      enrollment_status: string | null;
+      enrollment_label: string | null;
+      pri: number;
+    }[];
 
     totalPeople += people.length;
     const chosen = people.filter((p) => p.pri > 0).slice(0, perCampusPeople);
@@ -156,7 +171,7 @@ export function buildScoutNetwork(universityId?: string, opts?: { sector?: strin
           id: person.id,
           type: "person",
           label: person.name,
-          sublabel: person.status.replaceAll("_", " "),
+          sublabel: enrollmentBadge(person.enrollment_status, person.enrollment_label),
           priority: person.pri,
           linkUrl: linkedin,
           linkLabel: linkedin ? "LinkedIn" : undefined,
@@ -224,6 +239,19 @@ export function buildScoutNetwork(universityId?: string, opts?: { sector?: strin
           sourceUrl: role.source_url ?? undefined,
         });
       }
+    }
+  }
+
+  if (enrollment && enrollment.length < 4) {
+    const peopleIds = new Set([...rawNodes.values()].filter((node) => node.type === "person").map((node) => node.id));
+    const linkedToPerson = new Set<string>();
+    for (const edge of rawEdges) {
+      if (peopleIds.has(edge.source)) linkedToPerson.add(edge.target);
+      if (peopleIds.has(edge.target)) linkedToPerson.add(edge.source);
+    }
+    for (const [id, node] of rawNodes) {
+      if (node.type === "university" || node.type === "person") continue;
+      if (!linkedToPerson.has(id)) rawNodes.delete(id);
     }
   }
 

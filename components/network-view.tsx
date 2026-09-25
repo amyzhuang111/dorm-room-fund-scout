@@ -2,6 +2,7 @@ import { buildScoutNetwork } from "@/lib/domain/network";
 import { domainKey, isHidden, type FeedbackRecord } from "@/lib/domain/feedback";
 import { NetworkCanvas } from "./network-canvas";
 import type { UniversitySummary } from "@/lib/domain/queries";
+import { selectedEnrollment } from "@/lib/domain/founder-status";
 
 export function NetworkView({
   universityId,
@@ -16,7 +17,7 @@ export function NetworkView({
   universities: UniversitySummary[];
   feedback?: FeedbackRecord[];
 }) {
-  const graph = buildScoutNetwork(universityId, { sector: current.sector });
+  const graph = buildScoutNetwork(universityId, { sector: current.sector, enrollment: selectedEnrollment(current.enroll) });
   const hiddenMode = current.feedback === "hidden";
   const nodes = graph.nodes.filter((n) => {
     if (n.type === "university") return true;

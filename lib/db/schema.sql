@@ -72,6 +72,12 @@ CREATE TABLE IF NOT EXISTS people (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   aliases_json TEXT NOT NULL DEFAULT '[]',
+  enrollment_status TEXT,       -- current_student | recent_grad | older_alumni | unknown
+  enrollment_label TEXT,        -- source token, e.g. W'27
+  enrollment_evidence TEXT,     -- the excerpt the status was read from
+  enrollment_source_url TEXT,
+  enrollment_source_id TEXT,
+  enrollment_grad_year INTEGER,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

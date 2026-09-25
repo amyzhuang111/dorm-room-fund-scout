@@ -5,13 +5,18 @@ import { reviewFounders, reviewMode } from "@/lib/domain/review-view";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { FounderCard } from "@/components/founder-card";
 import { buildHref } from "@/lib/domain/url";
+import { matchesEnrollment, selectedEnrollment } from "@/lib/domain/founder-status";
+import { EnrollmentChips } from "@/components/enrollment-chips";
 
 export default async function FounderDiscoverPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
   const basePath = "/founder/discover";
   const universities = listUniversities();
   const review = await readReviewState();
-  const founders = reviewFounders(listFounders({ universityId: sp.university, search: sp.q }), review.records, review.likes, reviewMode(sp.feedback));
+  const focus = selectedEnrollment(sp.enroll);
+  const founders = reviewFounders(listFounders({ universityId: sp.university, search: sp.q }), review.records, review.likes, reviewMode(sp.feedback)).filter((founder) =>
+    matchesEnrollment(founder.enrollmentStatus, focus)
+  );
   const totalFounders = universities.reduce((sum, u) => sum + u.founderCount, 0);
   const totalResolved = universities.reduce((sum, u) => sum + u.resolvedPersonCount, 0);
 
@@ -48,13 +53,18 @@ export default async function FounderDiscoverPage({ searchParams }: { searchPara
               className="w-full max-w-sm rounded-md border border-border-c bg-surface px-3 py-1.5 text-sm placeholder:text-muted"
             />
           </form>
+          <div className="mt-3">
+            <EnrollmentChips basePath={basePath} current={sp} showCounts={false} />
+          </div>
         </div>
 
         <div className="grid gap-2 p-4 sm:grid-cols-2 lg:grid-cols-3">
           {founders.map((f) => (
             <FounderCard key={f.id} founder={f} feedbackView={sp.feedback} />
           ))}
-          {founders.length === 0 && <p className="text-sm text-muted">No founders match yet.</p>}
+          {founders.length === 0 && (
+            <p className="text-sm text-muted">No founders match. Current students and recent grads are the default — turn on Alumni or Unknown to widen it.</p>
+          )}
         </div>
 
         {sp.university && (

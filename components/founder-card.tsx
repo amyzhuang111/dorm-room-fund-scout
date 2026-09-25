@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { FounderRow } from "@/lib/domain/queries";
-import { AffiliationStatusBadge } from "./badges";
+import { EnrollmentBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 
 export function FounderCard({ founder, feedbackView }: { founder: FounderRow & { boostNote?: string | null }; feedbackView?: string }) {
@@ -11,8 +11,9 @@ export function FounderCard({ founder, feedbackView }: { founder: FounderRow & {
       <div className="flex items-start justify-between gap-2">
         <div>
           <p className="font-medium text-foreground">{founder.name}</p>
-          <p className="text-xs text-muted">
-            {founder.universityName ?? "University unknown"} · <AffiliationStatusBadge status={founder.status} />
+          <p className="mt-1 text-xs text-muted">{founder.universityName ?? "University unknown"}</p>
+          <p className="mt-1">
+            <EnrollmentBadge status={founder.enrollmentStatus} label={founder.enrollmentLabel} evidence={founder.enrollmentEvidence} />
           </p>
         </div>
         <span className="flex shrink-0 flex-col items-end gap-0.5">

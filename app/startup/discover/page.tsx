@@ -10,6 +10,7 @@ import { GlobeView } from "@/components/globe-view";
 import { NetworkView } from "@/components/network-view";
 import { ExploreToolbar } from "@/components/explore-toolbar";
 import { ViewMemory } from "@/components/view-memory";
+import { companyMatchesEnrollment, selectedEnrollment } from "@/lib/domain/founder-status";
 
 const VIEWS = ["globe", "network", "table"] as const;
 
@@ -29,10 +30,14 @@ export default async function StartupDiscoverPage({
   const candidates = listCandidateProjects({ universityId: sp.university, queue: sp.queue as Queue | undefined, sector: sp.sector, search: sp.q });
   const review = await readReviewState();
   const mode = reviewMode(sp.feedback);
-  const reviewed = reviewCompanies(candidates, review.records, review.likes, mode);
+  const focus = selectedEnrollment(sp.enroll);
+  const reviewed = reviewCompanies(candidates, review.records, review.likes, mode).filter((company) =>
+    companyMatchesEnrollment(company.founderLinks, focus)
+  );
   const sorted =
     sp.sort === "priority"
       ? [...reviewed].sort((a, b) => {
+          if (b.enrollmentBoost !== a.enrollmentBoost) return b.enrollmentBoost - a.enrollmentBoost;
           if (b.boostScore !== a.boostScore) return b.boostScore - a.boostScore;
           if (a.qualityScore == null && b.qualityScore == null) return a.name.localeCompare(b.name);
           if (a.qualityScore == null) return 1;

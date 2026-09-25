@@ -3,7 +3,7 @@ import { buildHref } from "@/lib/domain/url";
 import { shortCampusName } from "@/lib/domain/campuses";
 import { publicLink } from "@/lib/domain/company-link";
 import type { CandidateSummary } from "@/lib/domain/queries";
-import { GateBadge } from "./badges";
+import { EnrollmentBadge, GateBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 
 function whyInvestigate(c: CandidateSummary): string {
@@ -76,7 +76,7 @@ export function CandidateTable({
     return (
       <div className="p-6 text-sm text-muted">
         <p className="font-medium text-foreground">No companies match yet.</p>
-        <p className="mt-1">Adjust filters, or scan a source from the Sources page to bring in more records.</p>
+        <p className="mt-1">Current students and recent grads are the default. Turn on Alumni or Unknown, or scan a source, to widen the list.</p>
       </div>
     );
   }
@@ -99,6 +99,11 @@ export function CandidateTable({
             <p className="mt-2 text-xs text-foreground">
               <FounderLinks founders={c.founderLinks} />
               {c.universities.length ? ` · ${c.universities.map(shortCampusName).join(", ")}` : ""}
+            </p>
+            <p className="mt-1 flex flex-wrap gap-1">
+              {c.founderLinks.slice(0, 2).map((f) => (
+                <EnrollmentBadge key={f.personId} status={f.enrollmentStatus} label={f.enrollmentLabel} />
+              ))}
             </p>
             <p className="mt-1 text-xs text-muted line-clamp-2">{whyInvestigate(c)}</p>
           </li>
@@ -143,6 +148,11 @@ export function CandidateTable({
                 <td className="px-3 py-2.5 text-muted">
                   <FounderLinks founders={c.founderLinks} />
                   <p className="text-xs">{c.universities.map(shortCampusName).join(", ") || "Campus not confirmed"}</p>
+                  <p className="mt-1 flex flex-wrap gap-1">
+                    {c.founderLinks.slice(0, 2).map((f) => (
+                      <EnrollmentBadge key={f.personId} status={f.enrollmentStatus} label={f.enrollmentLabel} />
+                    ))}
+                  </p>
                 </td>
                 <td className="px-3 py-2.5 max-w-[260px] text-muted line-clamp-2">{whyInvestigate(c)}</td>
                 <td className="px-3 py-2.5">

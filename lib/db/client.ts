@@ -77,6 +77,13 @@ function migrate(db: Database.Database) {
   addColumnIfMissing("sources", "community_rationale", "community_rationale TEXT");
   addColumnIfMissing("sources", "reddit_last_checked_at", "reddit_last_checked_at TEXT");
 
+  addColumnIfMissing("people", "enrollment_status", "enrollment_status TEXT");
+  addColumnIfMissing("people", "enrollment_label", "enrollment_label TEXT");
+  addColumnIfMissing("people", "enrollment_evidence", "enrollment_evidence TEXT");
+  addColumnIfMissing("people", "enrollment_source_url", "enrollment_source_url TEXT");
+  addColumnIfMissing("people", "enrollment_source_id", "enrollment_source_id TEXT");
+  addColumnIfMissing("people", "enrollment_grad_year", "enrollment_grad_year INTEGER");
+
   addColumnIfMissing("projects", "primary_link", "primary_link TEXT");
   addColumnIfMissing("projects", "primary_link_kind", "primary_link_kind TEXT");
   db.exec(`CREATE TABLE IF NOT EXISTS project_sector_tags (

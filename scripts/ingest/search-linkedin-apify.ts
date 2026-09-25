@@ -26,6 +26,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getDb, newId, nowIso } from "../../lib/db/client";
+import { linkedInEducationFact, type LinkedInEducationEntry } from "../../lib/domain/founder-status";
+import { recomputePersonEnrollment } from "../../lib/domain/enrollment-store";
 
 const ACTOR = "harvestapi~linkedin-profile-search";
 const SOURCE_ID = "src_linkedin_search_apify";
@@ -91,8 +93,8 @@ interface SearchProfile {
   lastName?: string;
   headline?: string;
   about?: string | null;
-  profileTopEducation?: { schoolName?: string }[];
-  education?: { schoolName?: string }[];
+  profileTopEducation?: LinkedInEducationEntry[];
+  education?: LinkedInEducationEntry[];
   currentPosition?: { companyName?: string; position?: string }[];
   experience?: { companyName?: string; position?: string }[];
 }
@@ -273,6 +275,27 @@ async function main() {
         nowIso(),
         "corroborated"
       );
+      const education = linkedInEducationFact([...(profile.education ?? []), ...(profile.profileTopEducation ?? [])], (school) =>
+        schoolRe ? schoolRe.test(school) : false
+      );
+      if (education) {
+        const when = education.endYear
+          ? `ended ${education.endYear}`
+          : `started ${education.startYear ?? "an unstated year"}, no end date on the profile`;
+        insertClaim.run(
+          newId("claim"),
+          person.id,
+          "linkedin_education",
+          JSON.stringify(education),
+          `Confirmed LinkedIn education for ${person.name} at ${education.school}: ${when}.`,
+          SOURCE_ID,
+          url,
+          nowIso(),
+          "corroborated"
+        );
+        console.log(`  education ${education.school} ${when}`);
+      }
+      recomputePersonEnrollment(db, person.id);
       confirmed++;
       console.log(`  confirmed ${url} (${why})`);
     } else {

@@ -22,17 +22,17 @@ const STYLE_URL = "https://tiles.openfreemap.org/styles/positron";
 // another pale tint layered on top, or it reads as a blank white circle
 // (exactly what happened here the first time).
 const MAP_THEME = {
-  land: "#1a1d26",
-  landAlt: "#242833",
-  ocean: "#0b0e14",
-  boundary: "#3a4150",
-  labelText: "#d9d4cb",
-  labelHalo: "#0b0e14",
-  sky: "#05060a",
-  horizon: "#1d4e86",
-  fog: "#070b14",
-  dot: "#ff7a3c",
-  arc: "#ffb088",
+  land: "#1c1525",
+  landAlt: "#3e344c",
+  ocean: "#080331",
+  boundary: "#5c516e",
+  labelText: "#d9d5df",
+  labelHalo: "#080331",
+  sky: "#080331",
+  horizon: "#9378ee",
+  fog: "#1c1525",
+  dot: "#ff6a33",
+  arc: "#a892f2",
 };
 
 interface MapEvent {
@@ -142,15 +142,22 @@ export function GlobeView({
       }
       if (cancelled || !containerRef.current) return;
 
-      map = new maplibregl.Map({
-        container: containerRef.current,
-        style: STYLE_URL,
-        center: [-95, 40], // North America — where all 5 current campuses are
-        zoom: 2.6,
-        minZoom: 1.5,
-        maxZoom: 8,
-        attributionControl: { compact: true },
-      });
+      try {
+        map = new maplibregl.Map({
+          container: containerRef.current,
+          style: STYLE_URL,
+          center: [-95, 40], // North America — where all 5 current campuses are
+          zoom: 2.6,
+          minZoom: 1.5,
+          maxZoom: 8,
+          attributionControl: { compact: true },
+        });
+      } catch {
+        // Headless or blocked-GPU browsers throw before any canvas exists.
+        // Leave the campus list in place instead of an endless loading state.
+        if (!cancelled) setStatus("unsupported");
+        return;
+      }
       mapRef.current = map;
       let styleLoaded = false;
 

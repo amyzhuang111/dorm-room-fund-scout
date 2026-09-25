@@ -1,6 +1,6 @@
 import type { ProjectDetail } from "@/lib/domain/queries";
 import { publicLink } from "@/lib/domain/company-link";
-import { GateBadge } from "./badges";
+import { EnrollmentBadge, GateBadge } from "./badges";
 import { PipelineForm } from "./pipeline-form";
 import { NotesSection } from "./notes-section";
 import { AssessmentForm } from "./assessment-form";
@@ -130,8 +130,9 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
         <ul className="mt-1 space-y-1 text-sm text-foreground">
           {project.founderLinks.length === 0 && <li>None identified yet.</li>}
           {project.founderLinks.map((f) => (
-            <li key={f.name}>
-              {f.name}
+            <li key={f.personId} className="flex flex-wrap items-center gap-2">
+              <span>{f.name}</span>
+              <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
               {f.linkedinUrl ? (
                 <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="ml-2 text-xs text-accent underline">
                   LinkedIn

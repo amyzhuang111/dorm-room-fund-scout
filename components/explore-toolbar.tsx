@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { buildHref } from "@/lib/domain/url";
 import { sectorLabel } from "@/lib/domain/sectors";
+import { EnrollmentChips } from "./enrollment-chips";
 
 const VIEWS = ["globe", "network", "table"] as const;
 
@@ -54,7 +55,7 @@ export function ExploreToolbar({
             Companies
           </Link>
           <Link
-            href={buildHref("/founder/discover", { university: current.university, q: current.q }, {})}
+            href={buildHref("/founder/discover", { university: current.university, q: current.q, enroll: current.enroll }, {})}
             className="rounded-md px-2.5 py-1 text-xs font-medium text-muted hover:bg-surface-2"
           >
             Founders
@@ -78,6 +79,10 @@ export function ExploreToolbar({
         <Link href="/sources?from=startup" className="shrink-0 rounded-md border border-border-c px-2.5 py-1 text-xs text-muted hover:bg-surface-2 hover:text-foreground">
           Scan sources
         </Link>
+      </div>
+
+      <div className="mt-2">
+        <EnrollmentChips basePath={basePath} current={current} showCounts={false} />
       </div>
 
       <div className="mt-2 flex flex-wrap items-center gap-1.5">

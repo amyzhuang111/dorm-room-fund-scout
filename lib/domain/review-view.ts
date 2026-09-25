@@ -1,3 +1,4 @@
+import { bestEnrollmentBoost, enrollmentBoost } from "./founder-status";
 import { boostFor, isHidden, matchesFeedback, type FeedbackRecord, type FeedbackTarget } from "./feedback";
 import type { CandidateSummary, FounderRow } from "./queries";
 import { domainKey } from "./feedback";
@@ -50,10 +51,15 @@ export function reviewCompanies(items: CandidateSummary[], records: FeedbackReco
     .map((item) => {
       const target = companyTarget(item);
       const boost = boostFor(target, likes);
-      return { ...item, boostNote: boost?.note ?? null, boostScore: boost?.score ?? 0 };
+      return {
+        ...item,
+        boostNote: boost?.note ?? null,
+        boostScore: boost?.score ?? 0,
+        enrollmentBoost: item.enrollmentBoost || bestEnrollmentBoost(item.founderLinks.map((founder) => founder.enrollmentStatus)),
+      };
     })
     .filter((item) => keep(mode, records, companyTarget(item)))
-    .sort((a, b) => b.boostScore - a.boostScore || a.name.localeCompare(b.name));
+    .sort((a, b) => b.enrollmentBoost - a.enrollmentBoost || b.boostScore - a.boostScore || a.name.localeCompare(b.name));
 }
 
 export function reviewFounders(items: FounderRow[], records: FeedbackRecord[], likes: FeedbackTarget[], mode: ReviewMode) {
@@ -61,8 +67,8 @@ export function reviewFounders(items: FounderRow[], records: FeedbackRecord[], l
     .map((item) => {
       const target = founderTarget(item);
       const boost = boostFor(target, likes);
-      return { ...item, boostNote: boost?.note ?? null, boostScore: boost?.score ?? 0 };
+      return { ...item, boostNote: boost?.note ?? null, boostScore: boost?.score ?? 0, enrollmentBoost: enrollmentBoost(item.enrollmentStatus) };
     })
     .filter((item) => keep(mode, records, founderTarget(item)))
-    .sort((a, b) => b.boostScore - a.boostScore || a.name.localeCompare(b.name));
+    .sort((a, b) => b.enrollmentBoost - a.enrollmentBoost || b.boostScore - a.boostScore || a.name.localeCompare(b.name));
 }
