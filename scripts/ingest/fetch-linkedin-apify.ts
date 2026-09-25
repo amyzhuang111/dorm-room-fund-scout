@@ -155,6 +155,13 @@ async function scrapeProfiles(urls: string[]): Promise<ApifyProfile[]> {
 }
 
 async function main() {
+  if (!process.env.APIFY_API_TOKEN) {
+    console.log(
+      "APIFY_API_TOKEN is not set. Skipping LinkedIn ingest. Campus Scout runs without it; add the key to .env.local or the Vercel project only if you want this adapter."
+    );
+    return;
+  }
+
   const db = getDb();
   const retrievedAt = nowIso();
 

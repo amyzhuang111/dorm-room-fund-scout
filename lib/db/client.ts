@@ -23,8 +23,14 @@ export function getDb(): Database.Database {
 
   fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 
-  if (DB_PATH !== BUNDLED_DB_PATH && !fs.existsSync(DB_PATH) && fs.existsSync(BUNDLED_DB_PATH)) {
-    fs.copyFileSync(BUNDLED_DB_PATH, DB_PATH);
+  if (DB_PATH !== BUNDLED_DB_PATH && !fs.existsSync(DB_PATH)) {
+    if (fs.existsSync(BUNDLED_DB_PATH)) {
+      fs.copyFileSync(BUNDLED_DB_PATH, DB_PATH);
+    } else {
+      console.error(
+        "campus-universe.db was not found in this deployment. Serving an empty database until the bundled file is included."
+      );
+    }
   }
 
   const db = new Database(DB_PATH);

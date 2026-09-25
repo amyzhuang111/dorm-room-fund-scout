@@ -329,8 +329,12 @@ free at apify.com, ~$0.004/profile with the harvestapi actor it uses) in
 `.env.local` (gitignored, never committed — see "LinkedIn via Apify"
 below for why this one adapter needs a paid key when nothing else does).
 A `CAMPUS_UNIVERSE_DB_PATH` env var can override where the SQLite file
-lives (default: `data/campus-universe.db`, gitignored, created
-automatically on first run).
+lives (default: `data/campus-universe.db`, committed so Vercel can bundle
+it, created automatically on first run if it is missing).
+
+The hosted app does not read `APIFY_API_TOKEN`. Leave it unset in Vercel
+unless you later run the LinkedIn adapter in an environment that has the
+key. `VERCEL` is set by Vercel itself and should not be added by hand.
 
 ## Loading real data
 
