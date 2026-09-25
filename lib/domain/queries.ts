@@ -98,6 +98,11 @@ export function listUniversities(): UniversitySummary[] {
   });
 }
 
+export interface NamedFounder {
+  name: string;
+  linkedinUrl: string | null;
+}
+
 export interface CandidateSummary {
   id: string;
   name: string;
@@ -105,6 +110,7 @@ export interface CandidateSummary {
   description: string | null;
   websiteUrl: string | null;
   founders: string[];
+  founderLinks: NamedFounder[];
   universities: string[]; // names
   overallGate: string | null;
   gateOutcomes: GateOutcome[];
@@ -146,6 +152,16 @@ export function listCandidateSectors(): string[] {
 // evidenced as a formed (or plausibly forming) company. Only kind='company'
 // enters here; kind='project' surfaces exclusively through Founder Scout
 // (listFounders below) as evidence attached to a person.
+export function linkedinFromAliases(aliasesJson: string | null | undefined): string | null {
+  try {
+    const aliases = JSON.parse(aliasesJson || "[]") as string[];
+    const li = aliases.find((a) => a.startsWith("linkedin:") && a.includes("linkedin.com/in/"));
+    return li ? li.slice("linkedin:".length) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function listCandidateProjects(filters: { universityId?: string; queue?: Queue; sector?: string; search?: string } = {}): CandidateSummary[] {
   const db = getDb();
   const projects = db
@@ -154,13 +170,16 @@ export function listCandidateProjects(filters: { universityId?: string; queue?: 
 
   const out: CandidateSummary[] = [];
   for (const p of projects) {
-    const founders = (
+    const founderLinks = (
       db
         .prepare(
-          `SELECT DISTINCT pe.name as name FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id WHERE ppr.project_id = ? AND ppr.role LIKE '%founder%'`
+          `SELECT DISTINCT pe.name as name, pe.aliases_json as aliases_json
+           FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id
+           WHERE ppr.project_id = ? AND ppr.role LIKE '%founder%'`
         )
-        .all(p.id) as { name: string }[]
-    ).map((r) => r.name);
+        .all(p.id) as { name: string; aliases_json: string }[]
+    ).map((r) => ({ name: r.name, linkedinUrl: linkedinFromAliases(r.aliases_json) }));
+    const founders = founderLinks.map((r) => r.name);
 
     // Same founder-affiliation-or-direct-relationship fallback as
     // listUniversities()'s companyCount above.
@@ -242,6 +261,7 @@ export function listCandidateProjects(filters: { universityId?: string; queue?: 
       description: p.description,
       websiteUrl: p.website_url,
       founders,
+      founderLinks,
       universities: universities.map((u) => u.name),
       overallGate,
       gateOutcomes,
@@ -540,7 +560,8 @@ export interface FounderRow {
   projects: { id: string; name: string; kind: string; role: string }[];
   linkedCompany: { id: string; name: string } | null; // a real kind='company' project they're linked to, if any
   possibleCompany: { name: string; status: "unreviewed" | "confirmed" } | null; // §65-67: a bio-derived hint, never auto-promoted — null once linkedCompany is set
-  linkedinUrl: string | null; // from a captured `linkedin:<url>` alias (see fetch-penn-electric-racing.ts / fetch-linkedin-apify.ts) — a real self-disclosed link, not a search result
+  linkedinUrl: string | null; // from a captured `linkedin:<url>` alias — a URL found on a source page, not built from a name
+  websiteUrl: string | null; // a personal site found on a source page, stored as a `site:` alias
   strongestEvidence: string | null; // the most recent claim excerpt attributed to them
   promoted: boolean;
   promotionReasonLabel: string | null;
@@ -573,13 +594,14 @@ export function listFounders(filters: { universityId?: string; search?: string; 
     const existing = byId.get(r.id);
     if (existing) continue; // keep first affiliation row if a person somehow has several
     if (filters.search && !r.name.toLowerCase().includes(filters.search.toLowerCase())) continue;
-    let linkedinUrl: string | null = null;
+    const linkedinUrl = linkedinFromAliases(r.aliases_json);
+    let websiteUrl: string | null = null;
     try {
-      const aliases: string[] = JSON.parse(r.aliases_json || "[]");
-      const li = aliases.find((a) => a.startsWith("linkedin:"));
-      if (li) linkedinUrl = li.replace("linkedin:", "");
+      const aliases = JSON.parse(r.aliases_json || "[]") as string[];
+      const site = aliases.find((a) => a.startsWith("site:https://") || a.startsWith("site:http://"));
+      if (site) websiteUrl = site.slice("site:".length);
     } catch {
-      // malformed aliases_json — leave linkedinUrl null rather than throw
+      websiteUrl = null;
     }
     byId.set(r.id, {
       id: r.id,
@@ -591,6 +613,7 @@ export function listFounders(filters: { universityId?: string; search?: string; 
       linkedCompany: null,
       possibleCompany: null,
       linkedinUrl,
+      websiteUrl,
       strongestEvidence: null,
     });
   }

@@ -196,6 +196,11 @@ export function NetworkCanvas({
             <p className="text-[10px] font-semibold uppercase tracking-wide text-muted">{focus.type}</p>
             <h2 className="text-base font-medium text-foreground">{focus.label}</h2>
             {focus.sublabel && <p className="text-xs text-muted">{focus.sublabel}</p>}
+            {focus.linkUrl && (
+              <a href={focus.linkUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-xs text-accent underline">
+                {focus.linkLabel ?? "Link"}
+              </a>
+            )}
             <p className="mt-3 text-[10px] font-semibold uppercase tracking-wide text-muted">Connections ({focusEdges.length})</p>
             <ul className="mt-1 max-h-[420px] space-y-2 overflow-y-auto">
               {focusEdges.map((e, i) => {

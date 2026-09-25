@@ -14,17 +14,24 @@ export function FounderCard({ founder }: { founder: FounderRow }) {
             {founder.universityName ?? "University unknown"} · <AffiliationStatusBadge status={founder.status} />
           </p>
         </div>
-        {founder.linkedinUrl && (
-          <a
-            href={founder.linkedinUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="shrink-0 text-xs font-medium text-accent hover:underline"
-            title="Personal LinkedIn — self-linked by them, not a search result"
-          >
-            LinkedIn ↗
-          </a>
-        )}
+        <span className="flex shrink-0 flex-col items-end gap-0.5">
+          {founder.linkedinUrl && (
+            <a
+              href={founder.linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-medium text-accent hover:underline"
+              title="LinkedIn URL found on a source page"
+            >
+              LinkedIn ↗
+            </a>
+          )}
+          {founder.websiteUrl && (
+            <a href={founder.websiteUrl} target="_blank" rel="noopener noreferrer" className="max-w-[140px] truncate text-xs text-accent hover:underline">
+              {founder.websiteUrl.replace(/^https?:\/\//, "")}
+            </a>
+          )}
+        </span>
       </div>
 
       {founder.strongestEvidence && <p className="mt-2 text-sm text-foreground line-clamp-2">{founder.strongestEvidence}</p>}

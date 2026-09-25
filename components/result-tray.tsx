@@ -46,16 +46,32 @@ export function ResultTray({
         <ul className="flex gap-2 overflow-x-auto px-3 pb-3 pt-1">
           {candidates.map((c) => (
             <li key={c.id} className="shrink-0">
-              <a
-                href={buildHref(basePath, current, { project: c.id })}
-                className={`block w-48 rounded-md border px-2.5 py-2 text-xs hover:bg-surface-2 ${
+              <div
+                className={`block w-52 rounded-md border px-2.5 py-2 text-xs ${
                   current.project === c.id ? "border-accent bg-accent/10" : "border-border-c"
                 }`}
               >
-                <p className="truncate font-medium text-foreground">{c.name}</p>
+                <a href={buildHref(basePath, current, { project: c.id })} className="block truncate font-medium text-foreground hover:text-accent">
+                  {c.name}
+                </a>
                 <p className="line-clamp-2 text-muted">{c.description || c.founders[0] || "No description yet"}</p>
                 <p className="truncate text-muted">{c.universities[0] ?? "Campus not confirmed"}</p>
-              </a>
+                {c.websiteUrl && (
+                  <a href={c.websiteUrl} target="_blank" rel="noopener noreferrer" className="mt-1 block truncate text-accent underline">
+                    {c.websiteUrl.replace(/^https?:\/\//, "")}
+                  </a>
+                )}
+                {c.founderLinks.find((f) => f.linkedinUrl) && (
+                  <a
+                    href={c.founderLinks.find((f) => f.linkedinUrl)!.linkedinUrl!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-0.5 block truncate text-accent underline"
+                  >
+                    {c.founderLinks.find((f) => f.linkedinUrl)!.name} · LinkedIn
+                  </a>
+                )}
+              </div>
             </li>
           ))}
         </ul>

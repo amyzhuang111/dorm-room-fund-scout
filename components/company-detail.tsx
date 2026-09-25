@@ -19,7 +19,24 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
         </div>
         <p className="mt-1 text-sm text-foreground">{project.description || "Product description not yet researched."}</p>
         <p className="mt-1 text-xs text-muted">
-          {project.founders.join(", ") || "Founders not yet identified"} · {project.universities.join(", ") || "University unknown"}
+          {project.founderLinks.length === 0
+            ? "Founders not yet identified"
+            : project.founderLinks.map((f, i) => (
+                <span key={f.name}>
+                  {i > 0 ? ", " : ""}
+                  {f.name}
+                  {f.linkedinUrl && (
+                    <>
+                      {" "}
+                      <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-accent underline">
+                        LinkedIn
+                      </a>
+                    </>
+                  )}
+                </span>
+              ))}
+          {" · "}
+          {project.universities.join(", ") || "University unknown"}
         </p>
         {project.websiteUrl && (
           <a href={project.websiteUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-xs text-accent underline">
@@ -88,7 +105,21 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
       {/* Founders */}
       <section>
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Founders</h3>
-        <p className="mt-1 text-sm text-foreground">{project.founders.join(", ") || "None identified yet."}</p>
+        <ul className="mt-1 space-y-1 text-sm text-foreground">
+          {project.founderLinks.length === 0 && <li>None identified yet.</li>}
+          {project.founderLinks.map((f) => (
+            <li key={f.name}>
+              {f.name}
+              {f.linkedinUrl ? (
+                <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="ml-2 text-xs text-accent underline">
+                  LinkedIn
+                </a>
+              ) : (
+                <span className="ml-2 text-xs text-muted">No LinkedIn on record</span>
+              )}
+            </li>
+          ))}
+        </ul>
       </section>
 
       {/* Evidence */}

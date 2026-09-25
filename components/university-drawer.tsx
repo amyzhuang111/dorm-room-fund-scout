@@ -68,16 +68,37 @@ function ProspectsTab({ universityId, basePath, current }: { universityId: strin
       <ul className="space-y-2">
         {[...top, ...exploration].map((c) => (
           <li key={c.id}>
-            <Link
-              href={buildHref(basePath, current, { project: c.id })}
-              className="flex items-start justify-between gap-2 rounded-md border border-border-c p-2.5 hover:bg-surface-2"
-            >
-              <div>
-                <p className="text-sm font-medium text-foreground">{c.name}</p>
-                <p className="text-xs text-muted">{c.founders.join(", ") || "Founders unknown"}</p>
+            <div className="rounded-md border border-border-c p-2.5 hover:bg-surface-2">
+              <div className="flex items-start justify-between gap-2">
+                <Link href={buildHref(basePath, current, { project: c.id })} className="text-sm font-medium text-foreground hover:text-accent">
+                  {c.name}
+                </Link>
+                <QueueBadge queue={c.queue} />
               </div>
-              <QueueBadge queue={c.queue} />
-            </Link>
+              <p className="text-xs text-muted">
+                {c.founderLinks.length === 0
+                  ? "Founders unknown"
+                  : c.founderLinks.map((f, i) => (
+                      <span key={f.name}>
+                        {i > 0 ? ", " : ""}
+                        {f.name}
+                        {f.linkedinUrl && (
+                          <>
+                            {" "}
+                            <a href={f.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-accent underline">
+                              LinkedIn
+                            </a>
+                          </>
+                        )}
+                      </span>
+                    ))}
+              </p>
+              {c.websiteUrl && (
+                <a href={c.websiteUrl} target="_blank" rel="noopener noreferrer" className="mt-0.5 block truncate text-xs text-accent underline">
+                  {c.websiteUrl.replace(/^https?:\/\//, "")}
+                </a>
+              )}
+            </div>
           </li>
         ))}
       </ul>

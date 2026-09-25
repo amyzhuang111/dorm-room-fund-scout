@@ -11,6 +11,9 @@ export interface NetworkNode {
   sublabel?: string;
   x: number;
   y: number;
+  /** A URL found on a source page: LinkedIn for a person, website for a company. */
+  linkUrl?: string;
+  linkLabel?: string;
 }
 
 export interface NetworkEdge {
@@ -38,6 +41,24 @@ interface RawNode {
   label: string;
   sublabel?: string;
   priority: number;
+  linkUrl?: string;
+  linkLabel?: string;
+}
+
+function linkedinAlias(aliasesJson: string | null | undefined): string | undefined {
+  try {
+    const aliases = JSON.parse(aliasesJson || "[]") as string[];
+    const li = aliases.find((a) => a.startsWith("linkedin:"));
+    return li ? li.slice("linkedin:".length) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function websiteLabel(url: string): { linkUrl: string; linkLabel: string } | undefined {
+  if (!url.startsWith("http")) return undefined;
+  if (url.includes("ycombinator.com/companies/")) return { linkUrl: url, linkLabel: "YC page" };
+  return { linkUrl: url, linkLabel: "Website" };
 }
 
 // Evidence-backed neighborhood. Edges come from `relationships`, affiliations,
@@ -67,18 +88,26 @@ export function buildScoutNetwork(universityId?: string): NetworkGraph {
 
     const programs = db
       .prepare(
-        `SELECT p.id, p.name, p.kind FROM relationships r
+        `SELECT p.id, p.name, p.kind, p.website_url FROM relationships r
          JOIN projects p ON p.id = r.source_entity_id AND r.source_entity_type = 'project'
          WHERE r.target_entity_type = 'university' AND r.target_entity_id = ? AND r.relationship_type = 'affiliated_with'`
       )
-      .all(id) as { id: string; name: string; kind: string }[];
+      .all(id) as { id: string; name: string; kind: string; website_url: string | null }[];
 
     for (const prog of programs) {
       const type: NodeType = prog.kind === "company" ? "project" : "community";
       // Directory-only companies sit below named people so a long accelerator
       // list cannot push founders out of the capped graph.
       if (!rawNodes.has(prog.id)) {
-        rawNodes.set(prog.id, { id: prog.id, type, label: prog.name, priority: type === "project" ? 45 : 70 });
+        const site = prog.website_url ? websiteLabel(prog.website_url) : undefined;
+        rawNodes.set(prog.id, {
+          id: prog.id,
+          type,
+          label: prog.name,
+          priority: type === "project" ? 45 : 70,
+          linkUrl: site?.linkUrl,
+          linkLabel: site?.linkLabel,
+        });
       }
       rawEdges.push({
         source: prog.id,
@@ -91,7 +120,7 @@ export function buildScoutNetwork(universityId?: string): NetworkGraph {
 
     const people = db
       .prepare(
-        `SELECT pe.id, pe.name, a.status,
+        `SELECT pe.id, pe.name, pe.aliases_json, a.status,
             MAX(CASE
               WHEN ppr.role LIKE '%founder%' AND pr.kind = 'company' THEN 90
               WHEN lower(ppr.role) LIKE '%lead%' OR lower(ppr.role) LIKE '%president%' OR lower(ppr.role) LIKE '%director%' THEN 72
@@ -106,19 +135,22 @@ export function buildScoutNetwork(universityId?: string): NetworkGraph {
          GROUP BY pe.id
          ORDER BY pri DESC, pe.name`
       )
-      .all(id) as { id: string; name: string; status: string; pri: number }[];
+      .all(id) as { id: string; name: string; aliases_json: string; status: string; pri: number }[];
 
     totalPeople += people.length;
     const chosen = people.filter((p) => p.pri > 0).slice(0, perCampusPeople);
 
     for (const person of chosen) {
       if (!rawNodes.has(person.id)) {
+        const linkedin = linkedinAlias(person.aliases_json);
         rawNodes.set(person.id, {
           id: person.id,
           type: "person",
           label: person.name,
           sublabel: person.status.replaceAll("_", " "),
           priority: person.pri,
+          linkUrl: linkedin,
+          linkLabel: linkedin ? "LinkedIn" : undefined,
         });
       }
       const affEvidence = db
@@ -154,11 +186,15 @@ export function buildScoutNetwork(universityId?: string): NetworkGraph {
         const linkPriority = role.role.toLowerCase().includes("founder") && role.kind === "company" ? 85 : role.kind === "company" ? 60 : 40;
         const existing = rawNodes.get(role.id);
         if (!existing) {
+          const siteRow = db.prepare(`SELECT website_url FROM projects WHERE id = ?`).get(role.id) as { website_url: string | null } | undefined;
+          const site = siteRow?.website_url ? websiteLabel(siteRow.website_url) : undefined;
           rawNodes.set(role.id, {
             id: role.id,
             type: isOrg ? "community" : "project",
             label: role.name,
             priority: linkPriority,
+            linkUrl: site?.linkUrl,
+            linkLabel: site?.linkLabel,
           });
         } else if (linkPriority > existing.priority) {
           existing.priority = linkPriority;
@@ -232,6 +268,8 @@ export function buildScoutNetwork(universityId?: string): NetworkGraph {
     sublabel: n.sublabel,
     x: Math.max(28, Math.min(width - 28, n.x)),
     y: Math.max(28, Math.min(height - 28, n.y)),
+    linkUrl: n.linkUrl,
+    linkLabel: n.linkLabel,
   }));
 
   const peopleShown = nodes.filter((n) => n.type === "person").length;
