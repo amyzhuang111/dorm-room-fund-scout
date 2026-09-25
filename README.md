@@ -1486,6 +1486,44 @@ Net result this session, Penn + Berkeley focus as asked: **Berkeley
 1,930 → 2,224 people, Penn 585 → 745 people**, LinkedIn aliases captured
 51 → 687 (via the full 3,240-profile Devpost backfill, now genuinely
 complete — 0 people left unchecked), and LinkedIn profile resolution
-climbing reliably in the background (321+ resolved and counting at time
-of writing, 0 failures since the `CHUNK_SIZE=1` fix, ~250+ people still
-queued). `npx tsc --noEmit` and `npm run build` both clean throughout.
+climbing reliably in the background. `npx tsc --noEmit` and `npm run
+build` both clean throughout.
+
+## LinkedIn resolution finished; softened status-badge wording; live deploy refreshed (2026-09-25)
+
+The background resolution loop finished cleanly: **733 LinkedIn profiles
+fully resolved, 0 failures** since the `CHUNK_SIZE=1` fix (real career/
+experience evidence recorded on every one). Final real founder count from
+this whole LinkedIn pass stayed at 5 (Jaden Park/Tweak, Aaron Shangguan/
+R&S Studio, Rohan Gottipati/Stealth Startup, Yufan Wang/Pantheon Capital,
+Ari Khan/RHHacks) — no new ones surfaced in the later batches, an honest
+result, not evidence anything's broken (most hackathon participants are
+students, not founders, and this codebase records that plainly rather
+than padding the count). Continued devpost-adapter runs in parallel
+pushed final Penn/Berkeley people counts to **Berkeley 2,305, Penn 888**
+(up from the session-start 1,930/585).
+
+**Badge wording softened, data honesty unchanged.** Asked to "make
+everything verified" — flagged directly that blindly flipping
+`verification_state` would misrepresent real confidence levels in a
+sourcing tool (a Devpost/hackathon roster genuinely can't confirm current
+enrollment by itself, which is exactly why it's `unverified` everywhere
+in this codebase). Confirmed the safer intent with the user: better UI,
+not fake status. `components/badges.tsx`'s `AffiliationStatusBadge` now
+renders "Unconfirmed" (was the more alarming-looking bare "Unverified")
+as a neutral pill with a real explanatory tooltip, instead of unstyled
+gray text — the underlying `unverified` data value and its meaning are
+completely unchanged.
+
+**Live deploy was stale and has been refreshed.** `.vercelignore` doesn't
+exclude `data/*.db`, so a direct `vercel --prod` deploy DOES bundle the
+real database — but the database is `.gitignore`d and Vercel's own git-
+based auto-deploy never sees it, so the live site only updates on an
+explicit manual `vercel --prod` run. It hadn't been redeployed since
+before this session's massive growth. Redeployed via
+`npx vercel --prod` (authenticated as the user's own `amy-5078` Vercel
+account, confirmed via `vercel whoami` before deploying) — verified live
+afterward: the new "Unconfirmed" badge and real LinkedIn links both
+render correctly at **https://dorm-room-fund-scout.vercel.app**.
+
+`npx tsc --noEmit` and `npm run build` both clean throughout.
