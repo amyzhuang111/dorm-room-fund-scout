@@ -76,12 +76,41 @@ export function CommunityConfidenceBadge({ confidence }: { confidence: string })
   );
 }
 
+// Softer wording + a real explanation on hover, never a status this data
+// hasn't earned — "unverified" here means exactly what it always has
+// (e.g. a hackathon roster or Devpost submission has no school field, so
+// it can't by itself confirm current enrollment). Styling it as a plain
+// neutral pill with a tooltip replaces the bare, slightly alarming-looking
+// gray "Unverified" text with something calmer, without ever claiming a
+// confidence level the underlying data doesn't actually have.
+const AFFILIATION_STATUS_CLASS: Record<string, string> = {
+  current_student: "bg-ok-bg text-ok border-ok/20",
+  recent_grad: "bg-ok-bg text-ok border-ok/20",
+  older_alumni: "bg-surface-2 text-muted border-border-c",
+  unverified: "bg-surface-2 text-muted border-border-c",
+};
+
+const AFFILIATION_STATUS_LABEL: Record<string, string> = {
+  current_student: "Current student",
+  recent_grad: "Recent grad",
+  older_alumni: "Alumni",
+  unverified: "Unconfirmed",
+};
+
+const AFFILIATION_STATUS_TITLE: Record<string, string> = {
+  current_student: "Enrollment status confirmed by the source (e.g. a program directory or class-year mention).",
+  recent_grad: "Recently graduated, per the source.",
+  older_alumni: "Alumni, per the source — not necessarily a current student.",
+  unverified: "Real evidence ties this person to the university (e.g. a hackathon roster or campus-org listing), but that source alone can't confirm they're currently enrolled — not independently checked yet.",
+};
+
 export function AffiliationStatusBadge({ status }: { status: string }) {
-  const label: Record<string, string> = {
-    current_student: "Current student",
-    recent_grad: "Recent grad",
-    older_alumni: "Older alumni",
-    unverified: "Unverified",
-  };
-  return <span className="text-xs text-muted">{label[status] ?? status}</span>;
+  return (
+    <span
+      className={`inline-flex items-center rounded-full border px-1.5 py-0.5 text-[11px] font-medium ${AFFILIATION_STATUS_CLASS[status] ?? "bg-surface-2 text-muted border-border-c"}`}
+      title={AFFILIATION_STATUS_TITLE[status] ?? "Affiliation status as recorded by the source."}
+    >
+      {AFFILIATION_STATUS_LABEL[status] ?? status}
+    </span>
+  );
 }
