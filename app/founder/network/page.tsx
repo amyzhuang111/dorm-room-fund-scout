@@ -3,6 +3,7 @@ import { getNetworkNodeDetail, listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { NetworkView } from "@/components/network-view";
+import { EnrollmentChips } from "@/components/enrollment-chips";
 
 function NodeDetail({ node }: { node: NonNullable<ReturnType<typeof getNetworkNodeDetail>> }) {
   return (
@@ -51,6 +52,9 @@ export default async function FounderNetworkPage({ searchParams }: { searchParam
     <div className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
       <FilterSidebar universities={universities} basePath={basePath} current={sp} mode="founder" />
       <div className="flex-1 border-r border-border-c">
+        <div className="border-b border-border-c px-3 py-3">
+          <EnrollmentChips basePath={basePath} current={sp} />
+        </div>
         <NetworkView universityId={sp.university} basePath={basePath} current={sp} universities={universities} feedback={review.records} />
       </div>
       <div className="w-full sm:w-96 sm:shrink-0">

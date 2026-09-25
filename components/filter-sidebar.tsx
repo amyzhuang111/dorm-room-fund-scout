@@ -4,7 +4,6 @@ import { CAMPUSES, shortCampusLabel } from "@/lib/domain/campuses";
 import { listSectorCounts, type CoverageState, type UniversitySummary } from "@/lib/domain/queries";
 import { FeedbackSync } from "./feedback-sync";
 import { CollapsibleSidebar } from "./collapsible-sidebar";
-import { EnrollmentChips } from "./enrollment-chips";
 
 const COVERAGE_LABEL: Record<CoverageState, { label: string; cls: string }> = {
   not_scanned: { label: "Not scanned", cls: "text-muted" },
@@ -170,10 +169,6 @@ export function FilterSidebar({
             </li>
           ))}
         </ul>
-      </div>
-
-      <div className="mt-5">
-        <EnrollmentChips basePath={basePath} current={current} />
       </div>
 
       {mode === "startup" && sectors.length > 0 && (

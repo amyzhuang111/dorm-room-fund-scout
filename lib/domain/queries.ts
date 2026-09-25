@@ -293,6 +293,33 @@ export function listEnrollmentCounts(universityId?: string): { totals: Record<En
   return { totals, byCampus };
 }
 
+/** Promoted Founder Scout candidates in each enrollment bucket. */
+export function listFounderStatusCounts(universityId?: string): Record<EnrollmentStatus, number> {
+  const db = getDb();
+  const totals = Object.fromEntries(ENROLLMENT_STATUSES.map((status) => [status, 0])) as Record<EnrollmentStatus, number>;
+  const rows = db
+    .prepare(
+      `SELECT pe.id as id, COALESCE(pe.enrollment_status, 'unknown') as status, p.kind as kind, ppr.role as role
+       FROM people pe
+       JOIN person_project_roles ppr ON ppr.person_id = pe.id
+       JOIN projects p ON p.id = ppr.project_id
+       WHERE ${universityId ? "EXISTS (SELECT 1 FROM affiliations a WHERE a.person_id = pe.id AND a.university_id = ?)" : "1=1"}`
+    )
+    .all(...(universityId ? [universityId] : [])) as { id: string; status: string; kind: string; role: string }[];
+  const grouped = new Map<string, { status: string; projects: { kind: string; role: string }[] }>();
+  for (const row of rows) {
+    const existing = grouped.get(row.id);
+    if (existing) existing.projects.push({ kind: row.kind, role: row.role });
+    else grouped.set(row.id, { status: row.status, projects: [{ kind: row.kind, role: row.role }] });
+  }
+  for (const person of grouped.values()) {
+    if (!evaluatePromotion(person.projects).promoted) continue;
+    const status = (ENROLLMENT_STATUSES as readonly string[]).includes(person.status) ? (person.status as EnrollmentStatus) : "unknown";
+    totals[status] += 1;
+  }
+  return totals;
+}
+
 export interface CampusArc {
   fromId: string;
   toId: string;

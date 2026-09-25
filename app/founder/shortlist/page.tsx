@@ -4,6 +4,7 @@ import { reviewFounders, reviewMode } from "@/lib/domain/review-view";
 import { FilterSidebar } from "@/components/filter-sidebar";
 import { FounderCard } from "@/components/founder-card";
 import { matchesEnrollment, selectedEnrollment } from "@/lib/domain/founder-status";
+import { EnrollmentChips } from "@/components/enrollment-chips";
 
 export default async function FounderShortlistPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
@@ -21,7 +22,8 @@ export default async function FounderShortlistPage({ searchParams }: { searchPar
     <div className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
       <FilterSidebar universities={universities} basePath="/founder/shortlist" current={sp} mode="founder" />
       <div className="flex-1 p-4">
-        <h1 className="text-lg font-semibold text-foreground">Founder shortlist</h1>
+        <EnrollmentChips basePath="/founder/shortlist" current={sp} />
+        <h1 className="mt-3 text-lg font-semibold text-foreground">Founder shortlist</h1>
         <p className="mt-1 text-sm text-muted">
           Sorted by whether there&apos;s an attached claim, not a score — there&apos;s no per-founder scoring model yet. Read the evidence
           directly rather than trusting a rank.

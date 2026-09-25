@@ -31,6 +31,9 @@ export function ExploreToolbar({
 
   return (
     <div className="border-b border-border-c px-3 py-2">
+      <div className="mb-3">
+        <EnrollmentChips basePath={basePath} current={current} />
+      </div>
       <div className="flex flex-wrap items-center gap-2">
         <form action={basePath} method="get" className="flex-1 min-w-[200px]">
           {Object.entries(current)
@@ -79,10 +82,6 @@ export function ExploreToolbar({
         <Link href="/sources?from=startup" className="shrink-0 rounded-md border border-border-c px-2.5 py-1 text-xs text-muted hover:bg-surface-2 hover:text-foreground">
           Scan sources
         </Link>
-      </div>
-
-      <div className="mt-2">
-        <EnrollmentChips basePath={basePath} current={current} showCounts={false} />
       </div>
 
       <div className="mt-2 flex flex-wrap items-center gap-1.5">

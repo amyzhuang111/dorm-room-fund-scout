@@ -200,7 +200,7 @@ export function decideEnrollment(snippets: EvidenceSnippet[]): EnrollmentDecisio
 
 export function enrollmentBadge(status: string | null | undefined, label: string | null | undefined): string {
   if (status === "current_student") return label ? `Student · ${label}` : "Student";
-  if (status === "recent_grad") return label ? `Recent grad · ${label}` : "Recent grad";
+  if (status === "recent_grad") return label ? `New grad · ${label}` : "New grad";
   if (status === "older_alumni") return label ? `Alumni · ${label}` : "Alumni";
   return "Unknown";
 }
