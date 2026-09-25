@@ -1490,6 +1490,43 @@ Net result this session, Penn + Berkeley focus as asked: **Berkeley
 1,930 → 2,224 people, Penn 585 → 745 people**, LinkedIn aliases captured
 51 → 687 (via the full 3,240-profile Devpost backfill, now genuinely
 complete — 0 people left unchecked), and LinkedIn profile resolution
-climbing reliably in the background (321+ resolved and counting at time
-of writing, 0 failures since the `CHUNK_SIZE=1` fix, ~250+ people still
-queued). `npx tsc --noEmit` and `npm run build` both clean throughout.
+climbing reliably in the background. `npx tsc --noEmit` and `npm run
+build` both clean throughout.
+
+## LinkedIn resolution finished; softened status-badge wording; live deploy refreshed (2026-09-25)
+
+The background resolution loop finished cleanly: **733 LinkedIn profiles
+fully resolved, 0 failures** since the `CHUNK_SIZE=1` fix (real career/
+experience evidence recorded on every one). Final real founder count from
+this whole LinkedIn pass stayed at 5 (Jaden Park/Tweak, Aaron Shangguan/
+R&S Studio, Rohan Gottipati/Stealth Startup, Yufan Wang/Pantheon Capital,
+Ari Khan/RHHacks) — no new ones surfaced in the later batches, an honest
+result, not evidence anything's broken (most hackathon participants are
+students, not founders, and this codebase records that plainly rather
+than padding the count). Continued devpost-adapter runs in parallel
+pushed final Penn/Berkeley people counts on the laptop database to
+**Berkeley 2,305, Penn 888** (up from the session-start 1,930/585). That
+laptop file is gitignored on main and is not the `data/campus-universe.db`
+committed on this branch for the Vercel git deploy.
+
+**Badge wording softened, data honesty unchanged.** Asked to "make
+everything verified" — flagged directly that blindly flipping
+`verification_state` would misrepresent real confidence levels in a
+sourcing tool (a Devpost/hackathon roster genuinely can't confirm current
+enrollment by itself, which is exactly why it's `unverified` everywhere
+in this codebase). Confirmed the safer intent with the user: better UI,
+not fake status. `components/badges.tsx`'s `AffiliationStatusBadge` now
+renders "Unconfirmed" (was the more alarming-looking bare "Unverified")
+as a neutral pill with a real explanatory tooltip, instead of unstyled
+gray text — the underlying `unverified` data value and its meaning are
+completely unchanged.
+
+**Live deploy was stale and has been refreshed.** On main the database
+stays gitignored, so Vercel's git auto-deploy never saw the laptop file
+and the production site only updated after a manual `npx vercel --prod`
+(authenticated as `amy-5078`). This branch commits `data/campus-universe.db`
+so a git deploy can bundle that coverage database. The manual production
+refresh above shipped the laptop database, including the "Unconfirmed"
+badge, to **https://dorm-room-fund-scout.vercel.app**.
+
+`npx tsc --noEmit` and `npm run build` both clean throughout.
