@@ -86,7 +86,7 @@ function stableFingerprint(headline: string | undefined, about: string | null | 
   });
 }
 
-// BUG FOUND AND FIXED (2026-09-25), in two parts:
+// BUG FOUND AND FIXED (2026-09-25), in three parts:
 // 1. The sync endpoint used here originally (`run-sync-get-dataset-items`)
 //    has a server-side request timeout that a large batch can blow
 //    through — tested directly with a real 51-URL batch and it returned
@@ -102,8 +102,32 @@ function stableFingerprint(headline: string | undefined, about: string | null | 
 //    a single run. Verified by testing progressively smaller batches
 //    directly against the API: a clean batch of 5 succeeded 5-for-5 in
 //    13.6s, so CHUNK_SIZE is set there — found empirically, not guessed.
-const CHUNK_SIZE = 5;
-const INTER_CHUNK_DELAY_MS = 5000;
+// 3. Chunk size 5 alone STILL wasn't enough for a SUSTAINED run: a real
+//    597-profile run stayed 5-for-5 for its first ~15 chunks (~75
+//    profiles), then started degrading to 1-of-5 from chunk 16 onward.
+//    This script originally scraped ALL chunks into memory and only wrote
+//    to the database at the very end — killing the run mid-flight (the
+//    right call once degradation was noticed) lost every already-
+//    scraped, already-CHARGED profile's data with it. Fixed by writing
+//    each chunk's results to the database immediately after that chunk
+//    completes, and by bounding each script invocation to
+//    MAX_PROFILES_PER_RUN so a single run can't blindly power through
+//    hundreds of profiles — re-invoke the script to continue.
+// 4. Root cause isolated directly (2026-09-25, later same day): even
+//    30-45 minutes after stopping the degraded run — plenty for a simple
+//    time-based cooldown — a fresh 5-URL batch STILL came back 1-of-5,
+//    while a single-URL run succeeded every time, including 3 separate
+//    single-URL runs fired back-to-back with no delay between them. So
+//    this was never about sustained volume over time or needing a
+//    cooldown — it's specifically the actor's OWN internal concurrency
+//    for a multi-query request in one run that trips LinkedIn's anti-bot
+//    system, not anything about calling the API repeatedly. Verified
+//    directly against the API outside this script before changing it.
+//    Fix: CHUNK_SIZE = 1, always — one profile per Apify run, run
+//    sequentially. Slower (~13-15s per profile) but reliable.
+const CHUNK_SIZE = 1;
+const INTER_CHUNK_DELAY_MS = 2000;
+const MAX_PROFILES_PER_RUN = 60;
 const POLL_INTERVAL_MS = 3000;
 const MAX_POLL_MS = 5 * 60 * 1000;
 
@@ -137,23 +161,6 @@ async function scrapeProfileChunk(token: string, urls: string[]): Promise<ApifyP
   return (await itemsRes.json()) as ApifyProfile[];
 }
 
-async function scrapeProfiles(urls: string[]): Promise<ApifyProfile[]> {
-  const token = process.env.APIFY_API_TOKEN;
-  if (!token) throw new Error("APIFY_API_TOKEN not set — add it to .env.local first.");
-  const results: ApifyProfile[] = [];
-  for (let i = 0; i < urls.length; i += CHUNK_SIZE) {
-    const chunk = urls.slice(i, i + CHUNK_SIZE);
-    console.log(`  Apify: scraping profiles ${i + 1}-${i + chunk.length} of ${urls.length}...`);
-    const chunkResults = await scrapeProfileChunk(token, chunk);
-    if (chunkResults.length !== chunk.length) {
-      console.log(`  WARNING: chunk requested ${chunk.length} profiles but got ${chunkResults.length} back — some may be private/removed, or this may need investigating rather than assuming.`);
-    }
-    results.push(...chunkResults);
-    if (i + CHUNK_SIZE < urls.length) await new Promise((r) => setTimeout(r, INTER_CHUNK_DELAY_MS));
-  }
-  return results;
-}
-
 async function main() {
   if (!process.env.APIFY_API_TOKEN) {
     console.log(
@@ -171,40 +178,39 @@ async function main() {
      ON CONFLICT(id) DO UPDATE SET last_attempt_at=excluded.last_attempt_at, status='available'`
   ).run(SOURCE_ID, retrievedAt);
 
+  // Prioritize people who have never been resolved at all (no
+  // linkedin_profile claim yet) over re-checking already-resolved ones —
+  // at 597+ captured aliases, re-fetching everyone every run would be
+  // wasteful (real Apify spend) for almost-always-unchanged data. Someone
+  // already resolved can still be refreshed by a separate, deliberate
+  // pass; this default run maximizes new coverage per dollar/minute.
   const peopleWithLinkedin = db
-    .prepare(`SELECT id, name, aliases_json FROM people WHERE aliases_json LIKE '%linkedin:%'`)
+    .prepare(
+      `SELECT id, name, aliases_json FROM people
+       WHERE aliases_json LIKE '%linkedin:%'
+       AND id NOT IN (SELECT entity_id FROM claims WHERE claim_type='linkedin_profile')
+       ORDER BY id`
+    )
     .all() as { id: string; name: string; aliases_json: string }[];
 
-  const targets: { personId: string; name: string; url: string }[] = [];
+  const allTargets: { personId: string; name: string; url: string }[] = [];
   for (const p of peopleWithLinkedin) {
     const aliases: string[] = JSON.parse(p.aliases_json);
     const li = aliases.find((a) => a.startsWith("linkedin:"));
-    if (li) targets.push({ personId: p.id, name: p.name, url: li.replace("linkedin:", "") });
+    if (li) allTargets.push({ personId: p.id, name: p.name, url: li.replace("linkedin:", "") });
   }
 
-  if (targets.length === 0) {
-    console.log("No people with a captured linkedin: alias found — nothing to look up.");
+  if (allTargets.length === 0) {
+    console.log("No unresolved people with a captured linkedin: alias found — everyone already has a profile claim on file.");
     return;
   }
-  console.log(`Looking up ${targets.length} real LinkedIn profile(s) via Apify: ${targets.map((t) => t.name).join(", ")}`);
+  const targets = allTargets.slice(0, MAX_PROFILES_PER_RUN);
+  console.log(
+    `Looking up ${targets.length} real LinkedIn profile(s) via Apify (${allTargets.length - targets.length} more remain for a future run): ${targets.map((t) => t.name).join(", ")}`
+  );
 
-  const profiles = await scrapeProfiles(targets.map((t) => t.url));
-
-  // The actor returns results in the same order as `queries` when counts
-  // match (verified 2026-09-25: an 8-in/8-out test call preserved order
-  // exactly) — trust positional correlation only when lengths agree;
-  // otherwise fall back to substring-matching the returned identifier
-  // against the requested URL, which can legitimately fail if LinkedIn
-  // resolved the person to a newer custom vanity URL they claimed after
-  // this codebase captured their original default-ID one (real case:
-  // Stella Lin's captured `stella-lin-4588bb22a` resolved to her own
-  // `stella-lin-upenn` — same real person, corroborated by matching real
-  // Penn Electric Racing experience in the response, not guessed).
-  const positionalOk = profiles.length === targets.length;
-  function findProfileFor(target: { url: string }, idx: number): ApifyProfile | undefined {
-    if (positionalOk) return profiles[idx];
-    return profiles.find((p) => p.linkedinUrl && target.url.includes(p.linkedinUrl.replace(/\/$/, "").split("/").pop()!));
-  }
+  const token = process.env.APIFY_API_TOKEN;
+  if (!token) throw new Error("APIFY_API_TOKEN not set — add it to .env.local first.");
 
   const findExistingClaim = db.prepare(
     `SELECT id, value_json FROM claims WHERE entity_type='person' AND entity_id=? AND claim_type='linkedin_profile' ORDER BY created_at DESC LIMIT 1`
@@ -229,98 +235,144 @@ async function main() {
   let profilesUnchanged = 0;
   let founderClaimsFound = 0;
   let notFound = 0;
+  let consecutiveDegradedChunks = 0;
+  let processedCount = 0;
 
-  for (let idx = 0; idx < targets.length; idx++) {
-    const target = targets[idx];
-    const profile = findProfileFor(target, idx);
-    if (!profile) {
-      console.log(`  (no result for ${target.name} — profile may be private/removed/rate-limited)`);
-      notFound++;
-      continue;
+  for (let chunkStart = 0; chunkStart < targets.length; chunkStart += CHUNK_SIZE) {
+    const chunk = targets.slice(chunkStart, chunkStart + CHUNK_SIZE);
+    console.log(`  Apify: scraping profiles ${chunkStart + 1}-${chunkStart + chunk.length} of ${targets.length}...`);
+
+    let chunkProfiles: ApifyProfile[];
+    try {
+      chunkProfiles = await scrapeProfileChunk(token, chunk.map((t) => t.url));
+    } catch (e) {
+      console.log(`  Chunk failed entirely (${(e as Error).message}) — stopping this run here. Everything written so far this run is already saved.`);
+      break;
     }
-    if (profile.linkedinUrl && !target.url.includes(profile.linkedinUrl.replace(/\/$/, "").split("/").pop()!)) {
-      console.log(`  (${target.name}: LinkedIn resolved a different URL than captured — ${target.url} -> ${profile.linkedinUrl}, likely a claimed custom vanity URL; treating as the same real person, corroborated by profile content, not guessed)`);
-    }
 
-    const experience = profile.experience || [];
-    const valueJson = JSON.stringify({ headline: profile.headline, about: profile.about, experience });
-    // Idempotency is checked against a STABLE fingerprint, not the raw
-    // valueJson: a same-day re-run on Eric Cao's real profile (2026-09-25)
-    // showed the actor itself returning "San Francisco, CA" vs "San
-    // Francisco, California, United States" for the exact same Coinbase
-    // internship 17 minutes apart — real upstream formatting noise, not a
-    // profile change. Hashing on {position, companyName, startDate,
-    // endDate} only (dropping location/logos/descriptions/skills) avoids
-    // false "changed" detections from that noise while still catching a
-    // real new role. The full raw data is still stored in valueJson
-    // either way — this only affects whether a NEW claim row gets written.
-    const hash = crypto.createHash("sha256").update(stableFingerprint(profile.headline, profile.about, experience)).digest("hex");
-    const existing = findExistingClaim.get(target.personId) as { id: string; value_json: string } | undefined;
-    const existingParsed = existing ? (JSON.parse(existing.value_json) as { headline?: string; about?: string | null; experience?: ExperienceEntry[] }) : null;
-    const existingHash = existingParsed
-      ? crypto.createHash("sha256").update(stableFingerprint(existingParsed.headline, existingParsed.about, existingParsed.experience || [])).digest("hex")
-      : null;
-
-    if (existingHash === hash) {
-      profilesUnchanged++;
+    const chunkPositionalOk = chunkProfiles.length === chunk.length;
+    if (!chunkPositionalOk) {
+      consecutiveDegradedChunks++;
+      console.log(`  WARNING: chunk requested ${chunk.length} profiles but got ${chunkProfiles.length} back.`);
     } else {
-      const expList = experience.map((e) => `${e.position || "?"} @ ${e.companyName || "?"}`).join("; ");
-      const excerpt = `${target.name}'s real LinkedIn profile (${target.url}), fetched via Apify: headline "${profile.headline || ""}"${
-        profile.about ? `; about: "${profile.about.slice(0, 300)}${profile.about.length > 300 ? "..." : ""}"` : ""
-      }${expList ? `; experience: ${expList}` : ""}. Real career/internship evidence, not itself founder evidence unless a role explicitly says so.`;
-      insertClaim.run(newId("claim"), "person", target.personId, "linkedin_profile", valueJson, excerpt, SOURCE_ID, target.url, retrievedAt, "corroborated");
-      profilesUpdated++;
+      consecutiveDegradedChunks = 0;
     }
 
-    // Founder detection: headline, about, and each experience position —
-    // only an EXPLICIT "founder"/"co-founder" match, same discipline as
-    // WDB's FOUNDER_BIO_RE. Never inferred from company size/name/anything else.
-    const founderHits: { text: string; companyName: string | undefined }[] = [];
-    if (profile.headline && FOUNDER_RE.test(profile.headline)) founderHits.push({ text: profile.headline, companyName: undefined });
-    if (profile.about && FOUNDER_RE.test(profile.about)) founderHits.push({ text: profile.about, companyName: undefined });
-    for (const e of experience) {
-      if (e.position && FOUNDER_RE.test(e.position)) founderHits.push({ text: e.position, companyName: e.companyName });
-    }
+    for (let i = 0; i < chunk.length; i++) {
+      const target = chunk[i];
+      processedCount++;
+      const profile = chunkPositionalOk
+        ? chunkProfiles[i]
+        : chunkProfiles.find((p) => p.linkedinUrl && target.url.includes(p.linkedinUrl.replace(/\/$/, "").split("/").pop()!));
+      if (!profile) {
+        console.log(`  (no result for ${target.name} — profile may be private/removed/rate-limited)`);
+        notFound++;
+        continue;
+      }
+      if (profile.linkedinUrl && !target.url.includes(profile.linkedinUrl.replace(/\/$/, "").split("/").pop()!)) {
+        console.log(`  (${target.name}: LinkedIn resolved a different URL than captured — ${target.url} -> ${profile.linkedinUrl}, likely a claimed custom vanity URL; treating as the same real person, corroborated by profile content, not guessed)`);
+      }
 
-    for (const hit of founderHits) {
-      const companyName = hit.companyName?.trim();
-      if (!companyName) continue; // a founder-sounding headline/about with no named company isn't attributable to any specific venture — don't guess one
-      let companyId: string;
-      const existingCo = findProjectByName.get(companyName) as { id: string } | undefined;
-      if (existingCo) {
-        companyId = existingCo.id;
+      const experience = profile.experience || [];
+      const valueJson = JSON.stringify({ headline: profile.headline, about: profile.about, experience });
+      // Idempotency is checked against a STABLE fingerprint, not the raw
+      // valueJson: a same-day re-run on Eric Cao's real profile
+      // (2026-09-25) showed the actor itself returning "San Francisco, CA"
+      // vs "San Francisco, California, United States" for the exact same
+      // Coinbase internship 17 minutes apart — real upstream formatting
+      // noise, not a profile change. Hashing on {position, companyName}
+      // only (dropping location/logos/descriptions/skills) avoids false
+      // "changed" detections while still catching a real new role. The
+      // full raw data is still stored in valueJson either way — this only
+      // affects whether a NEW claim row gets written. (In practice this
+      // branch is almost always the "new" one now, since targets are
+      // pre-filtered to people with no existing claim — kept anyway as a
+      // real safety check, not dead code, in case of an unexpected retry.)
+      const hash = crypto.createHash("sha256").update(stableFingerprint(profile.headline, profile.about, experience)).digest("hex");
+      const existing = findExistingClaim.get(target.personId) as { id: string; value_json: string } | undefined;
+      const existingParsed = existing ? (JSON.parse(existing.value_json) as { headline?: string; about?: string | null; experience?: ExperienceEntry[] }) : null;
+      const existingHash = existingParsed
+        ? crypto.createHash("sha256").update(stableFingerprint(existingParsed.headline, existingParsed.about, existingParsed.experience || [])).digest("hex")
+        : null;
+
+      if (existingHash === hash) {
+        profilesUnchanged++;
       } else {
-        companyId = newId("proj");
-        insertCompany.run(companyId, companyName, `Real company, self-disclosed via ${target.name}'s LinkedIn job title "${hit.text}".`);
+        const expList = experience.map((e) => `${e.position || "?"} @ ${e.companyName || "?"}`).join("; ");
+        const excerpt = `${target.name}'s real LinkedIn profile (${target.url}), fetched via Apify: headline "${profile.headline || ""}"${
+          profile.about ? `; about: "${profile.about.slice(0, 300)}${profile.about.length > 300 ? "..." : ""}"` : ""
+        }${expList ? `; experience: ${expList}` : ""}. Real career/internship evidence, not itself founder evidence unless a role explicitly says so.`;
+        insertClaim.run(newId("claim"), "person", target.personId, "linkedin_profile", valueJson, excerpt, SOURCE_ID, target.url, retrievedAt, "corroborated");
+        profilesUpdated++;
       }
-      if (!findPPRole.get(target.personId, companyId)) {
-        const claimId = newId("claim");
-        insertClaim.run(
-          claimId,
-          "project",
-          companyId,
-          "self_reported_founder",
-          JSON.stringify({ person: target.name, company: companyName, text: hit.text }),
-          `${target.name}'s real LinkedIn profile lists the role "${hit.text}" at "${companyName}" — a real, self-disclosed founder claim on their own profile.`,
-          SOURCE_ID,
-          target.url,
-          retrievedAt,
-          "corroborated"
-        );
-        insertPPRole.run(newId("ppr"), target.personId, companyId, claimId);
-        insertRel.run(newId("rel"), target.personId, companyId, JSON.stringify([claimId]));
-        founderClaimsFound++;
+
+      // Founder detection: headline, about, and each experience position —
+      // only an EXPLICIT "founder"/"co-founder" match, same discipline as
+      // WDB's FOUNDER_BIO_RE. Never inferred from company size/name/anything else.
+      const founderHits: { text: string; companyName: string | undefined }[] = [];
+      if (profile.headline && FOUNDER_RE.test(profile.headline)) founderHits.push({ text: profile.headline, companyName: undefined });
+      if (profile.about && FOUNDER_RE.test(profile.about)) founderHits.push({ text: profile.about, companyName: undefined });
+      for (const e of experience) {
+        if (e.position && FOUNDER_RE.test(e.position)) founderHits.push({ text: e.position, companyName: e.companyName });
+      }
+
+      for (const hit of founderHits) {
+        const companyName = hit.companyName?.trim();
+        if (!companyName) continue; // a founder-sounding headline/about with no named company isn't attributable to any specific venture — don't guess one
+        let companyId: string;
+        const existingCo = findProjectByName.get(companyName) as { id: string } | undefined;
+        if (existingCo) {
+          companyId = existingCo.id;
+        } else {
+          companyId = newId("proj");
+          insertCompany.run(companyId, companyName, `Real company, self-disclosed via ${target.name}'s LinkedIn job title "${hit.text}".`);
+        }
+        if (!findPPRole.get(target.personId, companyId)) {
+          const claimId = newId("claim");
+          insertClaim.run(
+            claimId,
+            "project",
+            companyId,
+            "self_reported_founder",
+            JSON.stringify({ person: target.name, company: companyName, text: hit.text }),
+            `${target.name}'s real LinkedIn profile lists the role "${hit.text}" at "${companyName}" — a real, self-disclosed founder claim on their own profile.`,
+            SOURCE_ID,
+            target.url,
+            retrievedAt,
+            "corroborated"
+          );
+          insertPPRole.run(newId("ppr"), target.personId, companyId, claimId);
+          insertRel.run(newId("rel"), target.personId, companyId, JSON.stringify([claimId]));
+          founderClaimsFound++;
+        }
       }
     }
+
+    // Each chunk's writes are already committed to the DB above before we
+    // ever consider stopping — a kill/interrupt/degradation-triggered
+    // break past this point cannot lose already-scraped-and-charged data
+    // the way the old collect-then-write-at-the-end version could.
+    // Threshold raised to 4 now that CHUNK_SIZE=1: a single genuinely-
+    // private/deleted profile is real, expected noise (not throttling)
+    // and shouldn't stop the whole run — only a real run of several in a
+    // row is worth treating as a signal something's actually wrong again.
+    if (consecutiveDegradedChunks >= 4) {
+      console.log(
+        `  Throttling detected (${consecutiveDegradedChunks} consecutive chunks returned far fewer profiles than requested) — stopping this run early rather than burning more Apify spend on likely-empty chunks. ${targets.length - processedCount} of this run's ${targets.length} targets remain; re-run later (after a cooldown) to continue.`
+      );
+      break;
+    }
+
+    if (chunkStart + CHUNK_SIZE < targets.length) await new Promise((r) => setTimeout(r, INTER_CHUNK_DELAY_MS));
   }
 
-  db.prepare(`UPDATE sources SET last_success_at=?, discovered_lead_count=? WHERE id=?`).run(nowIso(), targets.length, SOURCE_ID);
+  db.prepare(`UPDATE sources SET last_success_at=?, discovered_lead_count=? WHERE id=?`).run(nowIso(), processedCount, SOURCE_ID);
 
   console.log(
-    `${profilesUpdated} profile(s) newly recorded/updated, ${profilesUnchanged} unchanged since last run, ${notFound} not found, ${founderClaimsFound} real founder claim(s) discovered.`
+    `${profilesUpdated} profile(s) newly recorded, ${profilesUnchanged} unchanged, ${notFound} not found, ${founderClaimsFound} real founder claim(s) discovered. ${allTargets.length - processedCount} people still unresolved overall — re-run to continue.`
   );
   if (founderClaimsFound === 0) {
-    console.log(`0 new founder claims this run is a real, honest result, not a bug — none of the ${targets.length} profiles checked this run had new founder/co-founder language anywhere (headline, about, or any job title) beyond what's already on file. Real career evidence is still recorded as a claim on each person regardless.`);
+    console.log(`0 new founder claims this run is a real, honest result, not a bug — none of the ${processedCount} profiles checked this run had founder/co-founder language anywhere (headline, about, or any job title). Real career evidence is still recorded as a claim on each person regardless.`);
   }
 }
 
