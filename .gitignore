@@ -40,6 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local database (created by lib/db/client.ts at runtime; not shipped)
-/data/*.db
-/data/*.db-*
+# SQLite journals. The canonical database is committed so Vercel can bundle it
+# (lib/db/client.ts copies data/campus-universe.db into /tmp on cold start).
+/data/*.db-journal
+/data/*.db-wal
+/data/*.db-shm

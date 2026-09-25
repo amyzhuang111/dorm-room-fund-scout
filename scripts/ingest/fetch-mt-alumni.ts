@@ -75,6 +75,8 @@ interface FounderClaim {
   excerpt: string;
   sourceUrl: string;
   corroboration: "own_profile" | "named_by_cofounder_only";
+  /** Acquired companies and non-startups stay in the identity graph and stay out of Startup Scout. */
+  investable: boolean;
 }
 
 const FOUNDER_CLAIMS: FounderClaim[] = [
@@ -87,6 +89,7 @@ const FOUNDER_CLAIMS: FounderClaim[] = [
       "Arjun Srinivas's own M&T alumni profile: \"Prior to graduation, I spun my senior design work out and formed a Company, Innova Dynamics, with my co-founders Alex Mittal, Cal Peng, and Priyanka Agarwal (who were all also M&T '07). In nine years, we grew the company to 35+ people... raised over $30M... completed an acquisition with the Taiwan-based TPK Holdings.\"",
     sourceUrl: "https://fisher.wharton.upenn.edu/alumni/arjun-srinivas-mt-07/",
     corroboration: "own_profile",
+    investable: false,
   },
   {
     personName: "Alex Mittal",
@@ -96,6 +99,7 @@ const FOUNDER_CLAIMS: FounderClaim[] = [
       "Named by Arjun Srinivas in his own M&T alumni profile as one of his 3 co-founders on Innova Dynamics (\"my co-founders Alex Mittal, Cal Peng, and Priyanka Agarwal, who were all also M&T '07\") — corroborated only by Arjun's own account, not by a profile of Alex Mittal's own on this site.",
     sourceUrl: "https://fisher.wharton.upenn.edu/alumni/arjun-srinivas-mt-07/",
     corroboration: "named_by_cofounder_only",
+    investable: false,
   },
   {
     personName: "Cal Peng",
@@ -105,6 +109,7 @@ const FOUNDER_CLAIMS: FounderClaim[] = [
       "Named by Arjun Srinivas in his own M&T alumni profile as one of his 3 co-founders on Innova Dynamics (\"my co-founders Alex Mittal, Cal Peng, and Priyanka Agarwal, who were all also M&T '07\") — corroborated only by Arjun's own account, not by a profile of Cal Peng's own on this site.",
     sourceUrl: "https://fisher.wharton.upenn.edu/alumni/arjun-srinivas-mt-07/",
     corroboration: "named_by_cofounder_only",
+    investable: false,
   },
   {
     personName: "Priyanka Agarwal",
@@ -114,6 +119,7 @@ const FOUNDER_CLAIMS: FounderClaim[] = [
       "Named by Arjun Srinivas in his own M&T alumni profile as one of his 3 co-founders on Innova Dynamics (\"my co-founders Alex Mittal, Cal Peng, and Priyanka Agarwal, who were all also M&T '07\") — corroborated only by Arjun's own account, not by a profile of Priyanka Agarwal's own on this site.",
     sourceUrl: "https://fisher.wharton.upenn.edu/alumni/arjun-srinivas-mt-07/",
     corroboration: "named_by_cofounder_only",
+    investable: false,
   },
   {
     personName: "Bret Pearlman",
@@ -124,6 +130,7 @@ const FOUNDER_CLAIMS: FounderClaim[] = [
       "Author bio at the end of Bret Pearlman's own M&T alumni profile: \"Bret Pearlman (M&T'89) is the Co-Founder and Managing Director of Elevation Partners.\"",
     sourceUrl: "https://fisher.wharton.upenn.edu/mt-for-life/where-are-they-now-bret-pearlman-mt-89/",
     corroboration: "own_profile",
+    investable: false,
   },
 ];
 
@@ -186,7 +193,7 @@ async function main() {
   const findProjectByName = db.prepare(`SELECT id FROM projects WHERE name = ? AND kind = 'company'`);
   const insertCompany = db.prepare(
     `INSERT INTO projects (id, name, aliases_json, kind, sector, description, is_portfolio_reference, is_investable_candidate)
-     VALUES (?, ?, '[]', 'company', NULL, ?, 0, 1)`
+     VALUES (?, ?, '[]', 'company', NULL, ?, 0, ?)`
   );
 
   function getOrCreatePerson(name: string): { id: string; isNew: boolean } {
@@ -243,7 +250,7 @@ async function main() {
       companyId = existingCo.id;
     } else {
       companyId = newId("proj");
-      insertCompany.run(companyId, fc.companyName, fc.companyDescription);
+      insertCompany.run(companyId, fc.companyName, fc.companyDescription, fc.investable ? 1 : 0);
       newCompanies++;
     }
 

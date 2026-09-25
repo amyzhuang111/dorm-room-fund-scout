@@ -1,15 +1,14 @@
 import Link from "next/link";
 import { buildHref } from "@/lib/domain/url";
-import { listCandidateSectors, type UniversitySummary } from "@/lib/domain/queries";
+import { CAMPUSES, shortCampusLabel } from "@/lib/domain/campuses";
+import { listCandidateSectors, type CoverageState, type UniversitySummary } from "@/lib/domain/queries";
 
-const FIRST_CLASS = ["univ_penn", "univ_berkeley"];
-const SHORT_LABEL: Record<string, string> = { univ_penn: "Penn", univ_berkeley: "Berkeley" };
-
-function coverageState(u: UniversitySummary): { label: string; cls: string } {
-  if (u.sourcesConfigured === 0) return { label: "Not scanned", cls: "text-muted" };
-  if (u.companyCount === 0) return { label: "Partial", cls: "text-warn" };
-  return { label: "Up to date", cls: "text-ok" };
-}
+const COVERAGE_LABEL: Record<CoverageState, { label: string; cls: string }> = {
+  not_scanned: { label: "Not scanned", cls: "text-muted" },
+  partial: { label: "Partial", cls: "text-warn" },
+  up_to_date: { label: "Up to date", cls: "text-ok" },
+  needs_attention: { label: "Needs attention", cls: "text-warn" },
+};
 
 function UniversityRow({
   u,
@@ -22,8 +21,8 @@ function UniversityRow({
   current: Record<string, string | undefined>;
   mode: "founder" | "startup";
 }) {
-  const coverage = coverageState(u);
-  const label = SHORT_LABEL[u.id] ?? u.name;
+  const coverage = COVERAGE_LABEL[u.coverage];
+  const label = shortCampusLabel(u.id, u.name);
   const count = mode === "founder" ? u.founderCount : u.companyCount;
   const switchingCampus = current.university !== u.id;
   return (
@@ -68,8 +67,9 @@ export function FilterSidebar({
   mode?: "founder" | "startup";
 }) {
   const total = universities.reduce((sum, u) => sum + (mode === "founder" ? u.founderCount : u.companyCount), 0);
-  const firstClass = universities.filter((u) => FIRST_CLASS.includes(u.id));
-  const rest = universities.filter((u) => !FIRST_CLASS.includes(u.id));
+  const firstClassIds = new Set(CAMPUSES.filter((c) => c.firstClass).map((c) => c.id));
+  const firstClass = universities.filter((u) => firstClassIds.has(u.id));
+  const rest = universities.filter((u) => !firstClassIds.has(u.id));
   const scannedCount = universities.filter((u) => u.sourcesConfigured > 0).length;
   // Sector is a Startup Scout (kind='company') concept — skip the query on
   // Founder Scout pages. Only real, researched sector values ever appear
@@ -78,7 +78,7 @@ export function FilterSidebar({
   const sectors = mode === "startup" ? listCandidateSectors() : [];
 
   return (
-    <aside className="w-full shrink-0 border-b border-border-c p-3 sm:w-64 sm:border-b-0 sm:border-r sm:p-4">
+    <aside className="w-full shrink-0 border-b border-border-c p-3 sm:w-[232px] sm:border-b-0 sm:border-r sm:p-4">
       <div className="mb-3 flex items-baseline justify-between">
         <span className="ui-label">Universities</span>
         {current.university && (

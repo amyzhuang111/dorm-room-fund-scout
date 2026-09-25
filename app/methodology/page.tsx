@@ -109,7 +109,7 @@ export default function MethodologyPage() {
         <h2 className="text-sm font-semibold text-foreground">Source quality tiering</h2>
         <p className="mt-1 text-sm text-muted">
           Every source has two independent tiers — Founder Scout and Startup Scout (S/A/B/C/D) — because a source can be excellent for
-          finding builders early and mediocre for finding formed startups, or the reverse. Prestige is never the tier; each source's
+          finding builders early and mediocre for finding formed startups, or the reverse. Prestige is never the tier. The
           rationale is written against 7 dimensions (campus purity, earliness, evidence of building, selectivity, novelty, identity
           quality, extractability) on the <a href="/sources" className="text-accent underline">Sources</a> page. Manual overrides are
           sticky and always attributed (who/when/why) — re-ingesting never silently reverts one.

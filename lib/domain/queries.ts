@@ -5,6 +5,9 @@ import { overallGateStatus, primaryBlocker, type GateOutcome } from "../screenin
 import { assignQueue, type Queue } from "./queue";
 import { evaluatePromotion } from "./promotion";
 import { parseCommunitySignalCategories, type CommunityConfidence, type CommunitySignal } from "./community-signal";
+import { catalogueForCampus } from "./source-quality";
+
+export type CoverageState = "not_scanned" | "partial" | "up_to_date" | "needs_attention";
 
 export interface UniversitySummary {
   id: string;
@@ -20,6 +23,7 @@ export interface UniversitySummary {
   resolvedPersonCount: number; // total distinct people resolved with any affiliation to this campus, promoted or not
   sourcesConfigured: number;
   lastCheckedAt: string | null;
+  coverage: CoverageState;
 }
 
 export function listUniversities(): UniversitySummary[] {
@@ -69,6 +73,12 @@ export function listUniversities(): UniversitySummary[] {
     const sourceRow = db
       .prepare(`SELECT COUNT(*) c, MAX(last_success_at) last FROM sources WHERE campuses_json LIKE ?`)
       .get(`%${u.id}%`) as { c: number; last: string | null };
+    const failed = db
+      .prepare(`SELECT COUNT(*) c FROM sources WHERE campuses_json LIKE ? AND status = 'failed'`)
+      .get(`%${u.id}%`) as { c: number };
+    const catalogueOpen = catalogueForCampus(u.id).filter((s) => s.status === "unconfigured").length;
+    const coverage: CoverageState =
+      sourceRow.c === 0 ? "not_scanned" : failed.c > 0 ? "needs_attention" : catalogueOpen > 0 ? "partial" : "up_to_date";
 
     return {
       id: u.id,
@@ -83,6 +93,7 @@ export function listUniversities(): UniversitySummary[] {
       resolvedPersonCount,
       sourcesConfigured: sourceRow.c,
       lastCheckedAt: sourceRow.last,
+      coverage,
     };
   });
 }
@@ -103,6 +114,8 @@ export interface CandidateSummary {
   strongestSignalKey: string | null;
   openQuestion: string | null;
   latestSignalNote: string | null;
+  /** Place name recorded by a source. Not a coordinate, and not plotted on the globe. */
+  recordedPlace: string | null;
 }
 
 function getGateOutcomesFor(db: ReturnType<typeof getDb>, projectId: string): GateOutcome[] {
@@ -135,7 +148,7 @@ export function listCandidateSectors(): string[] {
 // (listFounders below) as evidence attached to a person.
 export function listCandidateProjects(filters: { universityId?: string; queue?: Queue; sector?: string; search?: string } = {}): CandidateSummary[] {
   const db = getDb();
-  let projects = db
+  const projects = db
     .prepare(`SELECT id, name, sector, description, website_url, is_portfolio_reference FROM projects WHERE kind='company' AND is_investable_candidate=1 ORDER BY name`)
     .all() as { id: string; name: string; sector: string | null; description: string | null; website_url: string | null; is_portfolio_reference: number }[];
 
@@ -213,6 +226,15 @@ export function listCandidateProjects(filters: { universityId?: string; queue?: 
       .prepare(`SELECT current_observation FROM signals WHERE project_id = ? ORDER BY created_at DESC LIMIT 1`)
       .get(p.id) as { current_observation: string } | undefined;
 
+    const placeRow = db
+      .prepare(
+        `SELECT json_extract(value_json, '$.location') AS loc FROM claims
+         WHERE entity_type = 'project' AND entity_id = ? AND json_extract(value_json, '$.location') IS NOT NULL
+           AND trim(json_extract(value_json, '$.location')) != ''
+         LIMIT 1`
+      )
+      .get(p.id) as { loc: string } | undefined;
+
     out.push({
       id: p.id,
       name: p.name,
@@ -229,6 +251,7 @@ export function listCandidateProjects(filters: { universityId?: string; queue?: 
       strongestSignalKey,
       openQuestion,
       latestSignalNote: latestSignal?.current_observation ?? null,
+      recordedPlace: placeRow?.loc ?? null,
     });
   }
   return out;
@@ -269,7 +292,16 @@ export function getProjectDetail(id: string): ProjectDetail | null {
          )
          ORDER BY c.retrieved_at DESC`
       )
-      .all(id, id) as any[]
+      .all(id, id) as {
+        id: string;
+        claim_type: string;
+        excerpt: string;
+        source_url: string;
+        published_date: string | null;
+        retrieved_at: string;
+        label: string;
+        verification_state: string;
+      }[]
   ).map((r) => ({
     id: r.id,
     claimType: r.claim_type,
@@ -284,7 +316,7 @@ export function getProjectDetail(id: string): ProjectDetail | null {
   const signals = (
     db
       .prepare(`SELECT id, signal_type, current_observation, source_date, significance_note FROM signals WHERE project_id = ? ORDER BY created_at DESC`)
-      .all(id) as any[]
+      .all(id) as { id: string; signal_type: string; current_observation: string; source_date: string | null; significance_note: string | null }[]
   ).map((r) => ({ id: r.id, signalType: r.signal_type, currentObservation: r.current_observation, sourceDate: r.source_date, significanceNote: r.significance_note }));
 
   const pipeline = db
@@ -320,7 +352,15 @@ export function listAssessmentHistory(projectId: string): AssessmentHistoryRow[]
       .prepare(
         `SELECT id, evaluator, created_at, coverage, quality_score, ratings_json, rationale_json FROM assessments WHERE project_id = ? ORDER BY created_at DESC`
       )
-      .all(projectId) as any[]
+      .all(projectId) as {
+        id: string;
+        evaluator: string;
+        created_at: string;
+        coverage: number;
+        quality_score: number | null;
+        ratings_json: string;
+        rationale_json: string;
+      }[]
   ).map((r) => ({
     id: r.id,
     evaluator: r.evaluator,
@@ -344,7 +384,7 @@ export function listNotesFor(entityType: string, entityId: string): ManualNote[]
   return (
     db
       .prepare(`SELECT id, body, author, created_at FROM notes WHERE entity_type = ? AND entity_id = ? ORDER BY created_at DESC`)
-      .all(entityType, entityId) as any[]
+      .all(entityType, entityId) as { id: string; body: string; author: string; created_at: string }[]
   ).map((r) => ({ id: r.id, body: r.body, author: r.author, createdAt: r.created_at }));
 }
 
@@ -412,6 +452,25 @@ export function sourceTypedCounts(sourceId: string): SourceTypedCounts {
 // confidence: "insufficient" (which means research WAS done and came up
 // empty; see community-signal.ts's COMMUNITY_CONFIDENCE_MEANING).
 interface SourceRawRow {
+  id: string;
+  name: string;
+  family: string;
+  url: string;
+  status: string;
+  priority: number;
+  last_attempt_at: string | null;
+  last_success_at: string | null;
+  error: string | null;
+  discovered_lead_count: number;
+  reviewed_relevant_count: number;
+  campuses_json: string | null;
+  founder_scout_tier: string | null;
+  startup_scout_tier: string | null;
+  source_role: string | null;
+  tier_rationale: string | null;
+  tier_override_by: string | null;
+  tier_override_at: string | null;
+  tier_override_reason: string | null;
   community_confidence: string | null;
   community_signal_json: string | null;
   reddit_mention_count: number | null;
@@ -438,7 +497,7 @@ function communitySignalFromRow(r: SourceRawRow): CommunitySignal | null {
 
 export function listSources(): SourceRow[] {
   const db = getDb();
-  const rows = db.prepare(`SELECT * FROM sources ORDER BY priority, name`).all() as any[];
+  const rows = db.prepare(`SELECT * FROM sources ORDER BY priority, name`).all() as SourceRawRow[];
   return rows.map((r) => ({
     id: r.id, name: r.name, family: r.family, url: r.url, status: r.status, priority: r.priority,
     lastAttemptAt: r.last_attempt_at, lastSuccessAt: r.last_success_at, error: r.error,

@@ -46,9 +46,7 @@
 //
 // Run: npx tsx scripts/ingest/fetch-wdb-github.ts
 
-import crypto from "node:crypto";
 import { getDb, newId, nowIso } from "../../lib/db/client";
-import { previousSnapshotHash } from "../../lib/ingest/dedup";
 import { assembleProjectFacts } from "../../lib/domain/facts";
 import { evaluateAllGates } from "../../lib/screening/gates";
 

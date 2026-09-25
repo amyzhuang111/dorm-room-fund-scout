@@ -5,10 +5,11 @@ import { CandidateTable } from "@/components/candidate-table";
 import { CompanyDetail } from "@/components/company-detail";
 import { UniversityDrawer } from "@/components/university-drawer";
 import { GlobeView } from "@/components/globe-view";
+import { NetworkView } from "@/components/network-view";
 import { ExploreToolbar } from "@/components/explore-toolbar";
 import { ViewMemory } from "@/components/view-memory";
 
-const VIEWS = ["globe", "table"] as const;
+const VIEWS = ["globe", "network", "table"] as const;
 
 export default async function StartupDiscoverPage({
   searchParams,
@@ -17,49 +18,61 @@ export default async function StartupDiscoverPage({
 }) {
   const sp = await searchParams;
   const basePath = "/startup/discover";
-  const view = VIEWS.includes(sp.view as any) ? (sp.view as (typeof VIEWS)[number]) : "globe";
+  const view = VIEWS.find((v) => v === sp.view) ?? "globe";
 
   const universities = listUniversities();
   const selectedUniversity = sp.university ? universities.find((u) => u.id === sp.university) : undefined;
   const selectedProject = sp.project ? getProjectDetail(sp.project) : null;
 
   const candidates = listCandidateProjects({ universityId: sp.university, queue: sp.queue as Queue | undefined, sector: sp.sector, search: sp.q });
+  const sorted =
+    sp.sort === "priority"
+      ? [...candidates].sort((a, b) => {
+          if (a.qualityScore == null && b.qualityScore == null) return a.name.localeCompare(b.name);
+          if (a.qualityScore == null) return 1;
+          if (b.qualityScore == null) return -1;
+          return b.qualityScore - a.qualityScore || a.name.localeCompare(b.name);
+        })
+      : [...candidates].sort((a, b) => a.name.localeCompare(b.name));
+
+  const showUniversityDrawer = !selectedProject && selectedUniversity && view !== "globe";
 
   return (
     <div className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
       <FilterSidebar universities={universities} basePath={basePath} current={sp} mode="startup" />
 
-      <div className="flex-1 border-r border-border-c">
+      <div className="min-w-0 flex-1">
         <ViewMemory basePath={basePath} current={sp} storageKey="campus-universe:startup-discover-view" />
         <ExploreToolbar
           basePath={basePath}
           current={sp}
-          resultCount={candidates.length}
-          resultLabel={candidates.length === 1 ? "startup candidate" : "startup candidates"}
-          searchPlaceholder="Search companies, founders…"
+          resultCount={sorted.length}
+          resultLabel={sorted.length === 1 ? "startup candidate" : "startup candidates"}
+          searchPlaceholder="Search founders, companies, projects…"
         />
 
-        {view === "table" && <CandidateTable candidates={candidates} basePath={basePath} current={sp} />}
+        {view === "table" && <CandidateTable candidates={sorted} basePath={basePath} current={sp} />}
+        {view === "network" && <NetworkView universityId={sp.university} basePath={basePath} current={sp} universities={universities} />}
         {view === "globe" && (
           <GlobeView
             universities={universities}
             basePath={basePath}
             current={sp}
-            previewCandidates={sp.university ? candidates : []}
-            trayCandidates={candidates}
+            previewCandidates={sp.university ? sorted : []}
+            trayCandidates={sorted}
           />
         )}
       </div>
 
-      <div className="w-full sm:w-96 sm:shrink-0">
-        {selectedProject ? (
-          <CompanyDetail project={selectedProject} />
-        ) : selectedUniversity ? (
-          <UniversityDrawer university={selectedUniversity} tab={(sp.tab as any) ?? "prospects"} basePath={basePath} current={sp} />
-        ) : (
-          <div className="p-4 text-sm text-muted">Select a university from the left, or a company from the table, to see details here.</div>
-        )}
-      </div>
+      {(selectedProject || showUniversityDrawer) && (
+        <div className="w-full border-t border-border-c sm:w-96 sm:shrink-0 sm:border-l sm:border-t-0 xl:w-[420px]">
+          {selectedProject ? (
+            <CompanyDetail project={selectedProject} />
+          ) : selectedUniversity ? (
+            <UniversityDrawer university={selectedUniversity} tab={(sp.tab as "prospects") ?? "prospects"} basePath={basePath} current={sp} />
+          ) : null}
+        </div>
+      )}
     </div>
   );
 }

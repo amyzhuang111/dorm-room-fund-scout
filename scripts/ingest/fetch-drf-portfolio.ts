@@ -125,13 +125,10 @@ async function main() {
     console.log(
       `Note: DRF's directory headline claims 340 "first checks" — this import captured ${totalEntries} named, linkable entries from the public list, not DRF's full historical count.`
     );
-  } catch (err: any) {
-    db.prepare(`UPDATE ingestion_runs SET finished_at = ?, status = 'failed', error = ? WHERE id = ?`).run(
-      nowIso(),
-      String(err?.message || err),
-      runId
-    );
-    db.prepare(`UPDATE sources SET error = ?, status = 'failed' WHERE id = ?`).run(String(err?.message || err), sourceId);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    db.prepare(`UPDATE ingestion_runs SET finished_at = ?, status = 'failed', error = ? WHERE id = ?`).run(nowIso(), message, runId);
+    db.prepare(`UPDATE sources SET error = ?, status = 'failed' WHERE id = ?`).run(message, sourceId);
     throw err;
   }
 }

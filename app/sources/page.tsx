@@ -38,7 +38,7 @@ function sortCards(cards: SourceCard[], by: "founder" | "startup"): SourceCard[]
 
 export default async function SourcesPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
-  const view = VIEWS.includes(sp.view as any) ? (sp.view as (typeof VIEWS)[number]) : "registry";
+  const view = VIEWS.find((v) => v === sp.view) ?? "registry";
   const sortBy = sp.sortBy === "startup" ? "startup" : "founder";
 
   const liveSources = listSources().map((s) => ({
@@ -82,7 +82,7 @@ export default async function SourcesPage({ searchParams }: { searchParams: Prom
           <h1 className="text-lg font-semibold text-foreground">Sources</h1>
           <p className="mt-1 text-sm text-muted">
             Source quality is not equal. Each source has two independent tiers — <strong>Founder Scout</strong> (how early/reliably it
-            surfaces a builder before they're obvious) and <strong>Startup Scout</strong> (how well it surfaces formed, pitchable
+            surfaces a builder before they are obvious) and <strong>Startup Scout</strong> (how well it surfaces formed, pitchable
             companies). Tier is never inferred from prestige — see the rationale on each card.
           </p>
         </div>

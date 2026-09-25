@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { buildHref } from "@/lib/domain/url";
 import type { CandidateSummary, UniversitySummary } from "@/lib/domain/queries";
 import { ResultTray } from "./result-tray";
+import { shortCampusLabel } from "@/lib/domain/campuses";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 // Real MapLibre GL JS globe projection + the free OpenFreeMap "positron"
@@ -21,16 +22,44 @@ const STYLE_URL = "https://tiles.openfreemap.org/styles/positron";
 // another pale tint layered on top, or it reads as a blank white circle
 // (exactly what happened here the first time).
 const MAP_THEME = {
-  land: "#a892f2", // DRF's --brand--purple-light — clearly visible, not another near-white tint
-  landAlt: "#9378ee", // DRF's --brand--purple, for parks/landuse texture
-  ocean: "#e4dcf5", // light lavender, but distinctly lighter than land (~25pt lightness gap)
-  boundary: "#2f2540", // dark, so country borders are actually visible on the purple land
-  labelText: "#1c1525",
-  labelHalo: "#f1eff4",
-  sky: "#d9cdf2",
-  horizon: "#eee7f7",
-  fog: "#f1eff4",
+  land: "#efe6d6",
+  landAlt: "#e2d3bc",
+  ocean: "#d5e2ea",
+  boundary: "#c4b8a8",
+  labelText: "#1c1917",
+  labelHalo: "#f7f4ee",
+  sky: "#e7eef3",
+  horizon: "#f3efe6",
+  fog: "#e7eef3",
 };
+
+interface MapEvent {
+  error?: unknown;
+  point?: { x: number; y: number };
+  features?: { properties?: { id?: string } }[];
+}
+
+interface CampusMap {
+  resize: () => void;
+  remove?: () => void;
+  getCanvas: () => { style: { cursor: string } };
+  getStyle: () => { layers: { id: string; type: string }[] };
+  getSource: (id: string) => unknown;
+  getLayer: (id: string) => unknown;
+  setProjection: (projection: { type: string }) => void;
+  setSky: (sky: object) => void;
+  setPaintProperty: (layer: string, prop: string, value: unknown) => void;
+  addSource: (id: string, source: object) => void;
+  addLayer: (layer: object) => void;
+  setFilter: (layer: string, filter: unknown) => void;
+  flyTo: (options: object) => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
+  on: {
+    (type: string, handler: (event: MapEvent) => void): void;
+    (type: string, layer: string, handler: (event: MapEvent) => void): void;
+  };
+}
 
 function prefersReducedMotion(): boolean {
   return typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
@@ -54,9 +83,13 @@ export function GlobeView({
 }) {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<any>(null);
+  const mapRef = useRef<CampusMap | null>(null);
   const [status, setStatus] = useState<"loading" | "ok" | "unsupported">("loading");
+  const [geoMode, setGeoMode] = useState<"campus" | "hq">("campus");
+  const [hoverTip, setHoverTip] = useState<{ id: string; x: number; y: number } | null>(null);
   const selectedUniversity = current.university ? universities.find((u) => u.id === current.university) : undefined;
+  const placed = trayCandidates.filter((c) => c.recordedPlace);
+  const unplaced = trayCandidates.filter((c) => !c.recordedPlace);
 
   // The map (and its "click campus-dots" handler) is constructed once, in a
   // mount-only effect below — without this ref, that handler's closure would
@@ -74,12 +107,12 @@ export function GlobeView({
 
   useEffect(() => {
     if (!containerRef.current) return;
-    let map: any;
+    let map: CampusMap;
     let cancelled = false;
     let resizeObserver: ResizeObserver | undefined;
 
     (async () => {
-      let maplibregl: any;
+      let maplibregl: { Map: new (options: object) => CampusMap };
       try {
         // Loaded from the CDN at runtime rather than through our own bundle on
         // purpose: MapLibre creates its own tile-parsing Web Worker internally via
@@ -129,7 +162,7 @@ export function GlobeView({
       // MapLibre fires "error" for lots of non-fatal things too (a single tile 404,
       // a missing glyph) — only treat it as fatal (fall back to the list view) if the
       // style never loaded at all; otherwise just log it and keep going.
-      map.on("error", (e: any) => {
+      map.on("error", (e: MapEvent) => {
         console.warn("[globe-view] map error:", e?.error ?? e);
         if (!cancelled && !styleLoaded) setStatus("unsupported");
       });
@@ -195,7 +228,12 @@ export function GlobeView({
                 features: points.map((u) => ({
                   type: "Feature",
                   geometry: { type: "Point", coordinates: [u.lon, u.lat] },
-                  properties: { id: u.id, name: u.name, count: u.candidateProjectCount },
+                  properties: {
+                    id: u.id,
+                    name: shortCampusLabel(u.id, u.name),
+                    count: u.companyCount,
+                    founders: u.founderCount,
+                  },
                 })),
               },
             });
@@ -207,8 +245,8 @@ export function GlobeView({
               type: "circle",
               source: "campuses",
               paint: {
-                "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 6, 30, 16],
-                "circle-color": "#1c1525",
+                "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 9, 8, 16, 40, 26],
+                "circle-color": "#5b4bdb",
                 "circle-stroke-width": 2,
                 "circle-stroke-color": "#ffffff",
                 "circle-opacity": 0.9,
@@ -223,7 +261,7 @@ export function GlobeView({
               source: "campuses",
               filter: ["==", ["get", "id"], current.university ?? "__none__"],
               paint: {
-                "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 9, 30, 20],
+                "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 14, 8, 22, 40, 32],
                 "circle-color": "#ff6a33",
                 "circle-stroke-width": 2,
                 "circle-stroke-color": "#ffffff",
@@ -237,7 +275,7 @@ export function GlobeView({
               type: "symbol",
               source: "campuses",
               layout: {
-                "text-field": ["get", "name"],
+                "text-field": ["concat", ["get", "name"], "  ", ["to-string", ["get", "count"]]],
                 "text-size": 11,
                 "text-offset": [0, 1.4],
                 "text-anchor": "top",
@@ -246,7 +284,7 @@ export function GlobeView({
             });
           }
 
-          map.on("click", "campus-dots", (e: any) => {
+          map.on("click", "campus-dots", (e: MapEvent) => {
             const id = e.features?.[0]?.properties?.id;
             if (!id) return;
             const { basePath: livePath, current: liveCurrent } = liveRef.current;
@@ -254,7 +292,15 @@ export function GlobeView({
             router.push(buildHref(livePath, liveCurrent, switchingCampus ? { university: id, project: null } : { university: id }));
           });
           map.on("mouseenter", "campus-dots", () => (map.getCanvas().style.cursor = "pointer"));
-          map.on("mouseleave", "campus-dots", () => (map.getCanvas().style.cursor = ""));
+          map.on("mousemove", "campus-dots", (e: MapEvent) => {
+            const id = e.features?.[0]?.properties?.id;
+            if (!id || !e.point) return;
+            setHoverTip({ id, x: e.point.x, y: e.point.y });
+          });
+          map.on("mouseleave", "campus-dots", () => {
+            map.getCanvas().style.cursor = "";
+            setHoverTip(null);
+          });
         } catch (e) {
           console.error("[globe-view] FAILED adding campus source/layers:", e);
         }
@@ -288,8 +334,29 @@ export function GlobeView({
 
   return (
     <div className="p-2">
-      <div className="relative h-[560px] w-full overflow-hidden rounded-md border border-border-c" style={{ background: MAP_THEME.ocean }}>
+      <div className="relative h-[min(72vh,760px)] min-h-[480px] w-full overflow-hidden rounded-xl border border-border-c" style={{ background: MAP_THEME.ocean }}>
         <div ref={containerRef} className="h-full w-full" />
+        {status === "ok" && (
+          <div className="glass-panel absolute right-3 top-3 flex p-0.5">
+            <button
+              type="button"
+              onClick={() => setGeoMode("campus")}
+              className={`rounded-md px-2.5 py-1 text-[11px] font-medium ${geoMode === "campus" ? "bg-accent/10 text-accent" : "text-muted"}`}
+            >
+              Campuses
+            </button>
+            <button
+              type="button"
+              onClick={() => setGeoMode("hq")}
+              className={`rounded-md px-2.5 py-1 text-[11px] font-medium ${geoMode === "hq" ? "bg-accent/10 text-accent" : "text-muted"}`}
+            >
+              Headquarters
+            </button>
+          </div>
+        )}
+        {status === "ok" && hoverTip && geoMode === "campus" && (
+          <CampusHover universities={universities} tip={hoverTip} />
+        )}
         {status === "loading" && (
           <div className="absolute inset-0 flex items-center justify-center text-sm text-muted">Loading globe…</div>
         )}
@@ -304,7 +371,44 @@ export function GlobeView({
 
         {/* Floating campus-summary panel — pattern studied from dashboard.vclense.ch/ycglobe's
             frosted floating panels; colors/type still from the DRF-sampled tokens. */}
-        {selectedUniversity && status === "ok" && (
+        {geoMode === "hq" && status === "ok" && (
+          <div className="glass-panel absolute left-3 top-3 w-72 max-h-[520px] overflow-y-auto">
+            <div className="glass-panel-head">
+              <span className="text-sm font-medium text-foreground">Headquarters</span>
+            </div>
+            <p className="px-3 pt-2 text-[11px] leading-snug text-muted">
+              A company is plotted only when a source gives coordinates. A place name is not geocoded, and a campus is never used as a headquarters.
+            </p>
+            <div className="px-3 py-2">
+              <span className="ui-label">Place name on record · not plotted ({placed.length})</span>
+              <ul className="mt-1.5 space-y-1">
+                {placed.slice(0, 8).map((c) => (
+                  <li key={c.id}>
+                    <a href={buildHref(basePath, current, { project: c.id })} className="block rounded-md px-1.5 py-1 text-xs hover:bg-surface-2">
+                      <span className="font-medium text-foreground">{c.name}</span>
+                      <span className="block truncate text-muted">{c.recordedPlace}</span>
+                    </a>
+                  </li>
+                ))}
+                {placed.length === 0 && <li className="text-xs text-muted">No sourced place names in this result set.</li>}
+              </ul>
+            </div>
+            <div className="px-3 pb-3">
+              <span className="ui-label">Location unknown ({unplaced.length})</span>
+              <ul className="mt-1.5 space-y-1">
+                {unplaced.slice(0, 6).map((c) => (
+                  <li key={c.id}>
+                    <a href={buildHref(basePath, current, { project: c.id })} className="block truncate rounded-md px-1.5 py-1 text-xs text-foreground hover:bg-surface-2">
+                      {c.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+
+        {geoMode === "campus" && selectedUniversity && status === "ok" && (
           <div className="glass-panel absolute left-3 top-3 w-64 max-h-[520px] overflow-y-auto">
             <div className="glass-panel-head">
               <span className="text-sm font-medium text-foreground">{selectedUniversity.name}</span>
@@ -318,7 +422,10 @@ export function GlobeView({
             </div>
             <div className="flex items-center gap-3 px-3 py-2 text-[11px] text-muted">
               <span>
-                <span className="font-medium text-foreground">{selectedUniversity.candidateProjectCount}</span> companies
+                <span className="font-medium text-foreground">{selectedUniversity.companyCount}</span> companies
+              </span>
+              <span>
+                <span className="font-medium text-foreground">{selectedUniversity.founderCount}</span> founders
               </span>
               <span>
                 <span className="font-medium text-foreground">{selectedUniversity.sourcesConfigured}</span> sources
@@ -381,12 +488,34 @@ export function GlobeView({
         )}
       </div>
       <p className="mt-2 text-[11px] text-muted">
-        Marker size reflects unique tracked candidate projects matching current filters — not an estimate of total startups at that campus.
-        No auto-rotation; drag to explore, click a marker to select that campus (same as picking it from the list).
+        Marker size is the number of companies tied to that campus by sourced affiliation. It is not an estimate of every startup at the school.
+        Drag to look around. Click a campus to open it. Headquarters mode lists recorded place names and leaves unknown locations unplotted.
       </p>
       <div className="mt-3">
         <UniversityListFallback universities={universities} basePath={basePath} current={current} compact />
       </div>
+    </div>
+  );
+}
+
+function CampusHover({
+  universities,
+  tip,
+}: {
+  universities: UniversitySummary[];
+  tip: { id: string; x: number; y: number };
+}) {
+  const u = universities.find((x) => x.id === tip.id);
+  if (!u) return null;
+  return (
+    <div
+      className="glass-panel pointer-events-none absolute z-10 px-2.5 py-1.5 text-xs"
+      style={{ left: tip.x + 12, top: tip.y - 8 }}
+    >
+      <p className="font-medium text-foreground">{shortCampusLabel(u.id, u.name)}</p>
+      <p className="text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
+        {u.companyCount} companies · {u.founderCount} founders
+      </p>
     </div>
   );
 }

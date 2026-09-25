@@ -53,7 +53,8 @@ export function ResultTray({
                 }`}
               >
                 <p className="truncate font-medium text-foreground">{c.name}</p>
-                <p className="truncate text-muted">{c.universities[0] ?? "University unknown"}</p>
+                <p className="line-clamp-2 text-muted">{c.description || c.founders[0] || "No description yet"}</p>
+                <p className="truncate text-muted">{c.universities[0] ?? "Campus not confirmed"}</p>
               </a>
             </li>
           ))}

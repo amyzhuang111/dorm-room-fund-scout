@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { buildHref } from "@/lib/domain/url";
 
-const VIEWS = ["globe", "table"] as const;
+const VIEWS = ["globe", "network", "table"] as const;
 
 export function ExploreToolbar({
   basePath,
@@ -18,7 +18,7 @@ export function ExploreToolbar({
   searchPlaceholder?: string;
   showViewSwitch?: boolean;
 }) {
-  const view = VIEWS.includes(current.view as any) ? (current.view as (typeof VIEWS)[number]) : "globe";
+  const view = VIEWS.find((v) => v === current.view) ?? "globe";
 
   const activeFilters: { key: string; label: string }[] = [];
   if (current.university) activeFilters.push({ key: "university", label: `Campus` });
@@ -44,6 +44,21 @@ export function ExploreToolbar({
           />
         </form>
 
+        <div className="flex shrink-0 items-center gap-1 rounded-md border border-border-c p-0.5">
+          <Link
+            href={buildHref("/startup/discover", current, {})}
+            className={`rounded-md px-2.5 py-1 text-xs font-medium ${basePath.startsWith("/startup") ? "bg-accent/10 text-accent" : "text-muted hover:bg-surface-2"}`}
+          >
+            Companies
+          </Link>
+          <Link
+            href={buildHref("/founder/discover", { university: current.university, q: current.q }, {})}
+            className="rounded-md px-2.5 py-1 text-xs font-medium text-muted hover:bg-surface-2"
+          >
+            Founders
+          </Link>
+        </div>
+
         {showViewSwitch && (
           <div className="flex shrink-0 items-center gap-1 rounded-md border border-border-c p-0.5">
             {VIEWS.map((v) => (
@@ -67,6 +82,17 @@ export function ExploreToolbar({
         <span className="text-xs text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
           {resultCount} {resultLabel}
         </span>
+        {showViewSwitch && (
+          <span className="flex items-center gap-1 text-[11px] text-muted">
+            Sort
+            <Link href={buildHref(basePath, current, { sort: null })} className={!current.sort || current.sort === "name" ? "text-accent" : "hover:text-foreground"}>
+              name
+            </Link>
+            <Link href={buildHref(basePath, current, { sort: "priority" })} className={current.sort === "priority" ? "text-accent" : "hover:text-foreground"}>
+              research priority
+            </Link>
+          </span>
+        )}
         {activeFilters.map((f) => (
           <Link
             key={f.key}

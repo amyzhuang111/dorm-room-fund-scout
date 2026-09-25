@@ -45,6 +45,10 @@ export interface DevpostHackathonConfig {
   roleLabel: string; // e.g. "PennApps XXVI team member"
   maxProjectFetches?: number;
   maxFetches?: number;
+  /** When set, only gallery cards marked as prize winners are fetched. */
+  winnersOnly?: boolean;
+  /** Fetch each new person's Devpost profile for a LinkedIn link. Default true. */
+  captureLinkedIn?: boolean;
 }
 
 interface GalleryEntry {
@@ -114,6 +118,7 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
   // fewer projects per run in exchange for real LinkedIn coverage.
   const maxProjectFetches = cfg.maxProjectFetches ?? 12;
   const maxFetches = cfg.maxFetches ?? 40;
+  const captureLinkedIn = cfg.captureLinkedIn !== false;
   const db = getDb();
   const retrievedAt = nowIso();
 
@@ -173,7 +178,13 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
       break;
     }
 
-    const newOnThisPage = pageEntries.filter((e) => !findProjectByUrl.get(e.url));
+    const pool = cfg.winnersOnly ? pageEntries.filter((e) => e.isWinner) : pageEntries;
+    const newOnThisPage = pool.filter((e) => !findProjectByUrl.get(e.url));
+    if (cfg.winnersOnly && newOnThisPage.length === 0) {
+      resumePage = page + 1;
+      page++;
+      continue;
+    }
     const remainingBudget = maxProjectFetches - entriesToProcess.length;
     if (newOnThisPage.length <= remainingBudget) {
       entriesToProcess.push(...newOnThisPage);
@@ -214,7 +225,7 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
   const insertRole = db.prepare(`INSERT INTO person_project_roles (id, person_id, project_id, role, claim_id) VALUES (?, ?, ?, 'team_member', ?)`);
   const insertRel = db.prepare(
     `INSERT INTO relationships (id, source_entity_type, source_entity_id, target_entity_type, target_entity_id, relationship_type, evidence_claim_ids_json, verification_state)
-     VALUES (?, 'person', ?, 'project', ?, 'founded', ?, 'affiliation_only')`
+     VALUES (?, 'person', ?, 'project', ?, 'contributed_to_project', ?, 'affiliation_only')`
   );
   const insertClaim = db.prepare(
     `INSERT INTO claims (id, entity_type, entity_id, claim_type, value_json, excerpt, source_id, snapshot_id, source_url, retrieved_at, label, verification_state)
@@ -280,7 +291,7 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
         // header note: verified against real Hack the North profiles
         // before this was written, not assumed to exist).
         const aliases = [`devpost:${member.profileUrl}`];
-        if (fetches < maxFetches) {
+        if (captureLinkedIn && fetches < maxFetches) {
           try {
             const profileHtml = await fetchText(member.profileUrl);
             fetches++;

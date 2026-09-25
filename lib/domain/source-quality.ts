@@ -454,6 +454,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
   },
   {
     id: "cat_skydeck",
+    dbSourceId: "src_skydeck",
     name: "Berkeley SkyDeck",
     campus: "univ_berkeley",
     sourceType: "accelerator",
@@ -467,9 +468,9 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whyItMatters: "Confirms company existence, founder-company relationships, and funding/status history.",
     whatToExtract: ["company discovery", "company verification", "founder-company relationships", "funding/status validation", "historical pattern research"],
     whatNotToInfer: ["Do not heavily increase founder signal just because someone appears in SkyDeck."],
-    status: "checked_and_skipped",
+    status: "implemented",
     statusNote:
-      "Checked (2026-09-18): the public portfolio page is logo-only with no extractable names/founders in the HTML — not currently ingestible even at its correctly-weak tier. CORRECTION (2026-09-24): that was checked against the wrong page — skydeck.berkeley.edu/companies/ (not the homepage logo carousel) is a real paginated WordPress archive with 9 real company names + external URLs per page and real pagination behind it (16+ pages seen). Still genuinely no founder names anywhere on it (every entry's 'BY <author>' field is the same single SkyDeck staff account across all 9 checked, not a founder — the same author-field trap this codebase already avoided for GRASP's faculty attributions) — so this remains correctly skipped at its C/corroboration tier (no dbSourceId assigned), just for a narrower, now-accurate reason: real companies, zero founders, not zero data.",
+      "Ingested (2026-09-25) from skydeck.berkeley.edu/companies/, pages 1–40 (246 companies). Page 41 returns 404, so this is the public archive as of that fetch, not a sample. Each card is a company name and external URL. The byline is SkyDeck staff, so no founder rows are created. Every company description states that SkyDeck is not limited to current Berkeley students.",
   },
   {
     id: "cat_eb_berkeley",
@@ -483,13 +484,13 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { campusPurity: "high", selectivity: "high" },
     tierRationale:
-      "Not previously in the catalogue at all — surfaced by real student-community discussion (see community signal), not an official-page sweep. Startup Scout kept at B rather than raised on Reddit alone: no public cohort/portfolio roster has been checked yet, only that current-undergrad members describe it as a selective, active founder community.",
+      "Startup Scout stays at B: the public roster is small and current, and a club page is not the same thing as a formed company. Founder Scout stays at S because the roster is a selective current-student founder cohort, not because of an unverified community ranking.",
     whyItMatters: "Community discussion repeatedly names it as where Berkeley's active current-student founders actually are, ahead of larger official-looking entrepreneurship infrastructure.",
     whatToExtract: ["cohort/member rosters if public", "project/company outcomes", "officer-disclosed selectivity numbers (label as insider, not independent)"],
     whatNotToInfer: ["A Reddit recommendation is not itself Founder Signal for any individual member — see lib/domain/community-signal.ts.", "An officer's own description of the club is operational detail, not an independent endorsement."],
-    status: "unconfigured",
+    status: "implemented",
     statusNote:
-      "Registered 2026-09-21 from Reddit discovery, not yet ingested. entrepreneurs.berkeley.edu redirects to entrepreneurs.studentorg.berkeley.edu, which returns HTTP 400 (re-checked 2026-09-24, still broken) — not the org's real current site. FOUND THE REAL ONE (2026-09-24): entrepreneursatberkeley.com (note: .com, not .edu) is E@B's actual self-hosted site — confirmed same org via matching description ('UC Berkeley's undergraduate founder community. Seven YC companies in 12 months, $45M+ raised'). URL field updated to it. But it's a dead end for ingestion regardless: a Next.js app whose real landing content (`LandingPageContent`) is a client-only dynamic import with zero data in the server-rendered flight payload — same access class as Free Ventures above. No headless browser available in this environment to render it.",
+      "Ingested (2026-09-25) from the server-rendered /companies and /founders pages on entrepreneursatberkeley.com. An earlier note called the homepage a client-only dead end; those two routes now include the roster in the HTML. Founder bios are stored as quoted claims. Several bios name UC Berkeley; affiliation status stays unverified because the page does not give a dated current-enrollment record. The public roster at fetch time was the whole page (Showing 6 of 6 companies, Showing 8 of 8 founders), not a sample.",
   },
   {
     id: "cat_free_ventures",
@@ -507,7 +508,8 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatToExtract: ["cohort company names", "founder names"],
     whatNotToInfer: ["Program acceptance ≠ investment-ready."],
     status: "checked_and_skipped",
-    statusNote: "Checked (2026-09-18): the site is a client-side React SPA with no discovered public data API — nothing to ingest without one.",
+    statusNote:
+      "Re-checked 2026-09-25: freeventures.org still returns a small client-rendered shell (about 2.6KB) with no roster, portfolio JSON, or company names in the HTML. Adapter not written. Needs either a public data endpoint or a manual export from Amy.",
   },
   {
     id: "cat_berkeley_directories",
@@ -800,6 +802,46 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
   },
 
   // ---------- GLOBAL / NOT CAMPUS-SPECIFIC ----------
+  {
+    id: "cat_yc_directory",
+    dbSourceId: "src_yc_directory",
+    name: "Y Combinator company directory",
+    campus: null,
+    sourceType: "portfolio_directory",
+    url: "https://www.ycombinator.com/companies",
+    founderScoutTier: "C",
+    startupScoutTier: "B",
+    role: "corroboration",
+    dimensions: { campusPurity: "low", earliness: "low", novelty: "medium", identityQuality: "high", extractability: "medium" },
+    tierRationale:
+      "Downstream of company formation — a YC batch is not early founder signal. Useful once the company's own public page names Penn or Berkeley. Campus is attached only from that text, never from the batch itself.",
+    whyItMatters: "Finds formed companies whose public YC page actually names a Penn or Berkeley founder or team background.",
+    whatToExtract: ["company name", "one-line product", "founder names", "school mentions quoted from the page"],
+    whatNotToInfer: ["Do not treat YC acceptance as Founder Signal.", "Do not copy YC's standard deal in as a funding total.", "A team-level school mention does not identify which founder attended."],
+    status: "implemented",
+    statusNote:
+      "Scans active companies in 2024–2026 batches via the public directory, then reads each company page. Older batches are not scanned. Companies are kept only when the page text ties Penn or Berkeley to a person or the team in an affiliation context, not as a customer.",
+  },
+  {
+    id: "cat_github_founder_bios",
+    dbSourceId: "src_github_founder_bios",
+    name: "GitHub founder bios (Penn / Berkeley)",
+    campus: null,
+    sourceType: "code_host",
+    url: "https://github.com",
+    founderScoutTier: "B",
+    startupScoutTier: "C",
+    role: "discovery",
+    dimensions: { campusPurity: "medium", earliness: "high", buildEvidence: "low", identityQuality: "medium", extractability: "medium" },
+    tierRationale:
+      "A self-written GitHub bio that names a school and a company is early and campus-specific, but it is self-reported and undated. Stored as company_reported, affiliation unverified.",
+    whyItMatters: "Surfaces people who publicly say they are founders and name Penn or Berkeley, before a program roster does.",
+    whatToExtract: ["bio text", "named company", "GitHub profile URL"],
+    whatNotToInfer: ["A bio is not proof of enrollment or of a formed company.", "Do not invent a company name the bio does not contain."],
+    status: "implemented",
+    statusNote:
+      "Unauthenticated GitHub user search, 15 results per query, four queries (Penn and Berkeley founder bios). No token required. Rate limit is 10 searches/minute.",
+  },
   {
     id: "cat_show_hn",
     name: "Show HN",

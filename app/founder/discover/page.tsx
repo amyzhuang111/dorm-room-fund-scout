@@ -17,6 +17,12 @@ export default async function FounderDiscoverPage({ searchParams }: { searchPara
       <FilterSidebar universities={universities} basePath={basePath} current={sp} mode="founder" />
       <div className="flex-1">
         <div className="border-b border-border-c px-4 py-3">
+          <div className="mb-2 flex items-center gap-1">
+            <Link href={buildHref("/startup/discover", { university: sp.university, q: sp.q, view: "globe" }, {})} className="rounded-md px-2.5 py-1 text-xs font-medium text-muted hover:bg-surface-2">
+              Companies
+            </Link>
+            <span className="rounded-md bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent">Founders</span>
+          </div>
           <h1 className="text-lg font-semibold text-foreground">Founder Scout</h1>
           <p className="text-sm text-muted">
             {totalFounders} founder candidates · {universities.filter((u) => u.sourcesConfigured > 0).length} campuses monitored

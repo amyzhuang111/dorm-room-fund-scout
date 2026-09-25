@@ -62,7 +62,7 @@ export function createManualCandidate(input: ManualReferralInput): { projectId: 
   );
 
   for (const name of input.founderNames) {
-    let person = findPerson.get(name) as { id: string } | undefined;
+    const person = findPerson.get(name) as { id: string } | undefined;
     const personId = person?.id ?? newId("person");
     if (!person) insertPerson.run(personId, name);
     insertAffiliation.run(newId("aff"), personId, input.universityId, input.founderStatus, claimId);
