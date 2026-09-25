@@ -1,9 +1,69 @@
-import Link from "next/link";
+"use client";
+
+import { useEffect, useState } from "react";
 import { buildHref } from "@/lib/domain/url";
 import { sectorLabel } from "@/lib/domain/sectors";
+import type { EnrollmentStatus } from "@/lib/domain/founder-status";
 import { EnrollmentChips } from "./enrollment-chips";
+import { ScoutLink, useScoutNav } from "./scout-nav";
 
 const VIEWS = ["globe", "network", "table"] as const;
+
+function SearchField({
+  basePath,
+  current,
+  placeholder,
+}: {
+  basePath: string;
+  current: Record<string, string | undefined>;
+  placeholder: string;
+}) {
+  const nav = useScoutNav();
+  const [value, setValue] = useState(current.q ?? "");
+  const [syncedQ, setSyncedQ] = useState(current.q);
+  if (current.q !== syncedQ) {
+    setSyncedQ(current.q);
+    setValue(current.q ?? "");
+  }
+  useEffect(() => {
+    if (!nav) return;
+    const handle = window.setTimeout(() => {
+      const next = value.trim();
+      if ((current.q ?? "") === next) return;
+      nav.navigate({ q: next || null });
+    }, 100);
+    return () => window.clearTimeout(handle);
+  }, [value, nav, current.q]);
+
+  if (!nav) {
+    return (
+      <form action={basePath} method="get" className="min-w-[200px] flex-1">
+        {Object.entries(current)
+          .filter(([key, item]) => key !== "q" && item)
+          .map(([key, item]) => (
+            <input key={key} type="hidden" name={key} value={item} />
+          ))}
+        <input
+          type="search"
+          name="q"
+          defaultValue={current.q ?? ""}
+          placeholder={placeholder}
+          className="w-full rounded-md border border-border-c bg-surface px-3 py-1.5 text-sm placeholder:text-muted"
+        />
+      </form>
+    );
+  }
+
+  return (
+    <input
+      type="search"
+      value={value}
+      onChange={(event) => setValue(event.target.value)}
+      placeholder={placeholder}
+      className="min-w-[200px] flex-1 rounded-md border border-border-c bg-surface px-3 py-1.5 text-sm placeholder:text-muted"
+    />
+  );
+}
 
 export function ExploreToolbar({
   basePath,
@@ -12,6 +72,7 @@ export function ExploreToolbar({
   resultLabel,
   searchPlaceholder = "Search companies, founders…",
   showViewSwitch = true,
+  counts,
 }: {
   basePath: string;
   current: Record<string, string | undefined>;
@@ -19,6 +80,7 @@ export function ExploreToolbar({
   resultLabel: string;
   searchPlaceholder?: string;
   showViewSwitch?: boolean;
+  counts: Record<EnrollmentStatus, number>;
 }) {
   const view = VIEWS.find((v) => v === current.view) ?? "globe";
 
@@ -32,56 +94,43 @@ export function ExploreToolbar({
   return (
     <div className="border-b border-border-c px-3 py-2">
       <div className="mb-3">
-        <EnrollmentChips basePath={basePath} current={current} />
+        <EnrollmentChips basePath={basePath} current={current} counts={counts} />
       </div>
       <div className="flex flex-wrap items-center gap-2">
-        <form action={basePath} method="get" className="flex-1 min-w-[200px]">
-          {Object.entries(current)
-            .filter(([k, v]) => k !== "q" && v)
-            .map(([k, v]) => (
-              <input key={k} type="hidden" name={k} value={v} />
-            ))}
-          <input
-            type="search"
-            name="q"
-            defaultValue={current.q ?? ""}
-            placeholder={searchPlaceholder}
-            className="w-full rounded-md border border-border-c bg-surface px-3 py-1.5 text-sm placeholder:text-muted"
-          />
-        </form>
+        <SearchField basePath={basePath} current={current} placeholder={searchPlaceholder} />
 
         <div className="flex shrink-0 items-center gap-1 rounded-md border border-border-c p-0.5">
-          <Link
+          <ScoutLink
             href={buildHref("/startup/discover", current, {})}
             className={`rounded-md px-2.5 py-1 text-xs font-medium ${basePath.startsWith("/startup") ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
           >
             Companies
-          </Link>
-          <Link
+          </ScoutLink>
+          <ScoutLink
             href={buildHref("/founder/discover", { university: current.university, q: current.q, enroll: current.enroll }, {})}
-            className="rounded-md px-2.5 py-1 text-xs font-medium text-muted hover:bg-surface-2"
+            className={`rounded-md px-2.5 py-1 text-xs font-medium ${basePath.startsWith("/founder") ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
           >
             Founders
-          </Link>
+          </ScoutLink>
         </div>
 
         {showViewSwitch && (
           <div className="flex shrink-0 items-center gap-1 rounded-md border border-border-c p-0.5">
             {VIEWS.map((v) => (
-              <Link
+              <ScoutLink
                 key={v}
                 href={buildHref(basePath, current, { view: v })}
                 className={`rounded-full px-2.5 py-1 text-xs font-medium capitalize ${view === v ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
               >
                 {v}
-              </Link>
+              </ScoutLink>
             ))}
           </div>
         )}
 
-        <Link href="/sources?from=startup" className="shrink-0 rounded-md border border-border-c px-2.5 py-1 text-xs text-muted hover:bg-surface-2 hover:text-foreground">
+        <ScoutLink href="/sources?from=startup" className="shrink-0 rounded-md border border-border-c px-2.5 py-1 text-xs text-muted hover:bg-surface-2 hover:text-foreground">
           Scan sources
-        </Link>
+        </ScoutLink>
       </div>
 
       <div className="mt-2 flex flex-wrap items-center gap-1.5">
@@ -91,27 +140,27 @@ export function ExploreToolbar({
         {showViewSwitch && (
           <span className="flex items-center gap-1 text-[11px] text-muted">
             Sort
-            <Link href={buildHref(basePath, current, { sort: null })} className={!current.sort || current.sort === "name" ? "text-link" : "hover:text-foreground"}>
+            <ScoutLink href={buildHref(basePath, current, { sort: null })} className={!current.sort || current.sort === "name" ? "text-link" : "hover:text-foreground"}>
               name
-            </Link>
-            <Link href={buildHref(basePath, current, { sort: "priority" })} className={current.sort === "priority" ? "text-link" : "hover:text-foreground"}>
+            </ScoutLink>
+            <ScoutLink href={buildHref(basePath, current, { sort: "priority" })} className={current.sort === "priority" ? "text-link" : "hover:text-foreground"}>
               research priority
-            </Link>
+            </ScoutLink>
           </span>
         )}
         {activeFilters.map((f) => (
-          <Link
+          <ScoutLink
             key={f.key}
             href={buildHref(basePath, current, { [f.key]: null })}
             className="inline-flex items-center gap-1 rounded-full border border-border-c bg-surface-2 px-2 py-0.5 text-[11px] text-muted hover:text-foreground"
           >
             {f.label} ✕
-          </Link>
+          </ScoutLink>
         ))}
         {activeFilters.length > 0 && (
-          <Link href={basePath} className="text-[11px] text-link underline">
+          <ScoutLink href={basePath} className="text-[11px] text-link underline">
             Clear filters
-          </Link>
+          </ScoutLink>
         )}
       </div>
     </div>

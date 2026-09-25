@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { buildHref } from "@/lib/domain/url";
+import { ScoutLink } from "./scout-nav";
 import type { NetworkEdge, NetworkGraph, NetworkNode } from "@/lib/domain/network";
 import type { PersonLinkTarget } from "@/lib/domain/person-link";
 import { PersonLinkButton } from "./person-link";
@@ -162,11 +163,11 @@ export function NetworkCanvas({
             );
             if (n.type === "project") {
               return (
-                <a key={n.id} href={buildHref(basePath, current, { project: n.id })} aria-label={n.label}>
+                <ScoutLink key={n.id} href={buildHref(basePath, current, { project: n.id })} aria-label={n.label}>
                   <g onMouseEnter={() => setHover(n.id)} onMouseLeave={() => setHover(null)}>
                     {shape}
                   </g>
-                </a>
+                </ScoutLink>
               );
             }
             return (

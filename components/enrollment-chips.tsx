@@ -1,11 +1,10 @@
-import Link from "next/link";
 import { buildHref } from "@/lib/domain/url";
 import {
   enrollmentQuery,
   selectedEnrollment,
   type EnrollmentStatus,
 } from "@/lib/domain/founder-status";
-import { listFounderStatusCounts } from "@/lib/domain/queries";
+import { ScoutLink } from "./scout-nav";
 
 const LABEL: Record<EnrollmentStatus, string> = {
   current_student: "Student",
@@ -19,12 +18,13 @@ const PRIMARY: EnrollmentStatus[] = ["current_student", "recent_grad", "older_al
 export function EnrollmentChips({
   basePath,
   current,
+  counts,
 }: {
   basePath: string;
   current: Record<string, string | undefined>;
+  counts: Record<EnrollmentStatus, number>;
 }) {
   const selected = selectedEnrollment(current.enroll);
-  const counts = listFounderStatusCounts(current.university);
 
   function hrefFor(status: EnrollmentStatus) {
     const on = selected.includes(status);
@@ -43,13 +43,13 @@ export function EnrollmentChips({
         {PRIMARY.map((status) => {
           const on = selected.includes(status);
           return (
-            <Link key={status} href={hrefFor(status)} className={primaryClass(on)} aria-pressed={on}>
+            <ScoutLink key={status} href={hrefFor(status)} className={primaryClass(on)} aria-pressed={on}>
               {LABEL[status]}
               <span className="tabular-nums">{counts[status]}</span>
-            </Link>
+            </ScoutLink>
           );
         })}
-        <Link
+        <ScoutLink
           href={hrefFor("unknown")}
           className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium ${
             selected.includes("unknown")
@@ -60,7 +60,7 @@ export function EnrollmentChips({
         >
           Unknown
           <span className="tabular-nums">{counts.unknown}</span>
-        </Link>
+        </ScoutLink>
       </div>
       <p className="mt-1.5 text-[11px] leading-snug text-muted">Student and New grad are on. New grad means graduated in 2023–2026.</p>
     </div>

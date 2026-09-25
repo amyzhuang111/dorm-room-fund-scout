@@ -16,6 +16,10 @@ const DB_PATH =
   process.env.CAMPUS_UNIVERSE_DB_PATH ||
   (process.env.VERCEL ? path.join("/tmp", "campus-universe.db") : BUNDLED_DB_PATH);
 
+export function databasePath(): string {
+  return DB_PATH;
+}
+
 let _db: Database.Database | null = null;
 
 export function getDb(): Database.Database {

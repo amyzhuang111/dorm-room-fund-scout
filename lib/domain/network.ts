@@ -1,5 +1,6 @@
+import fs from "node:fs";
 import { forceSimulation, forceLink, forceManyBody, forceCenter, forceCollide } from "d3-force";
-import { getDb } from "../db/client";
+import { databasePath, getDb } from "../db/client";
 import { CAMPUSES } from "./campuses";
 import { publicLink } from "./company-link";
 import { sectorLabel } from "./sectors";
@@ -59,7 +60,25 @@ export function buildUniversityNetwork(universityId: string): NetworkGraph {
   return buildScoutNetwork(universityId);
 }
 
+const networkMemo = new Map<string, { stamp: string; graph: NetworkGraph }>();
+
 export function buildScoutNetwork(universityId?: string, opts?: { sector?: string; excludeIds?: string[]; enrollment?: string[] }): NetworkGraph {
+  let stamp = "missing";
+  try {
+    const st = fs.statSync(databasePath());
+    stamp = `${st.mtimeMs}:${st.size}`;
+  } catch {
+    stamp = "missing";
+  }
+  const key = `${universityId ?? ""}|${opts?.sector ?? ""}|${(opts?.enrollment ?? []).join(",")}|${(opts?.excludeIds ?? []).join(",")}`;
+  const hit = networkMemo.get(key);
+  if (hit?.stamp === stamp) return hit.graph;
+  const graph = assembleScoutNetwork(universityId, opts);
+  networkMemo.set(key, { stamp, graph });
+  return graph;
+}
+
+function assembleScoutNetwork(universityId?: string, opts?: { sector?: string; excludeIds?: string[]; enrollment?: string[] }): NetworkGraph {
   const db = getDb();
   const exclude = new Set(opts?.excludeIds ?? []);
   const sector = opts?.sector;

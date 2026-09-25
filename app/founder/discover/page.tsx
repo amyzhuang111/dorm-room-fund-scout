@@ -1,78 +1,32 @@
-import Link from "next/link";
-import { listFounders, listUniversities } from "@/lib/domain/queries";
+import { FounderDiscoverApp } from "@/components/founder-discover-app";
+import type { EnrollmentStatus } from "@/lib/domain/founder-status";
+import { listFounderStatusCounts, listFoundersForPage, listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
-import { reviewFounders, reviewMode } from "@/lib/domain/review-view";
-import { FilterSidebar } from "@/components/filter-sidebar";
-import { FounderCard } from "@/components/founder-card";
-import { buildHref } from "@/lib/domain/url";
-import { matchesEnrollment, selectedEnrollment } from "@/lib/domain/founder-status";
-import { EnrollmentChips } from "@/components/enrollment-chips";
 
 export default async function FounderDiscoverPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
-  const basePath = "/founder/discover";
   const universities = listUniversities();
   const review = await readReviewState();
-  const focus = selectedEnrollment(sp.enroll);
-  const founders = reviewFounders(listFounders({ universityId: sp.university, search: sp.q }), review.records, review.likes, reviewMode(sp.feedback)).filter((founder) =>
-    matchesEnrollment(founder.enrollmentStatus, focus)
-  );
-  const totalFounders = universities.reduce((sum, u) => sum + u.founderCount, 0);
-  const totalResolved = universities.reduce((sum, u) => sum + u.resolvedPersonCount, 0);
-
+  const founders = listFoundersForPage();
+  const enrollment = {
+    all: listFounderStatusCounts(),
+    byUniversity: Object.fromEntries(universities.map((university) => [university.id, listFounderStatusCounts(university.id)])) as Record<
+      string,
+      Record<EnrollmentStatus, number>
+    >,
+  };
+  const totalFounders = universities.reduce((sum, university) => sum + university.founderCount, 0);
+  const totalResolved = universities.reduce((sum, university) => sum + university.resolvedPersonCount, 0);
   return (
-    <div className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
-      <FilterSidebar universities={universities} basePath={basePath} current={sp} mode="founder" />
-      <div className="flex-1">
-        <div className="border-b border-border-c px-4 py-3">
-          <EnrollmentChips basePath={basePath} current={sp} />
-          <div className="mb-2 mt-3 flex items-center gap-1">
-            <Link href={buildHref("/startup/discover", { university: sp.university, q: sp.q, view: "globe", enroll: sp.enroll }, {})} className="rounded-md px-2.5 py-1 text-xs font-medium text-muted hover:bg-surface-2">
-              Companies
-            </Link>
-            <span className="rounded-md bg-accent px-2.5 py-1 text-xs font-medium text-accent-foreground">Founders</span>
-          </div>
-          <h1 className="text-lg font-semibold text-foreground">Founder Scout</h1>
-          <p className="text-sm text-muted">
-            {totalFounders} founder candidates · {universities.filter((u) => u.sourcesConfigured > 0).length} campuses monitored
-          </p>
-          <p className="mt-0.5 text-xs text-muted">
-            Promoted from {totalResolved} resolved people — most resolved people stay raw records until they show real building
-            evidence (see Methodology).
-          </p>
-          <form action={basePath} method="get" className="mt-2">
-            {Object.entries(sp)
-              .filter(([k, v]) => k !== "q" && v)
-              .map(([k, v]) => (
-                <input key={k} type="hidden" name={k} value={v} />
-              ))}
-            <input
-              type="search"
-              name="q"
-              defaultValue={sp.q ?? ""}
-              placeholder="Search founders…"
-              className="w-full max-w-sm rounded-md border border-border-c bg-surface px-3 py-1.5 text-sm placeholder:text-muted"
-            />
-          </form>
-        </div>
-
-        <div className="grid gap-2 p-4 sm:grid-cols-2 lg:grid-cols-3">
-          {founders.map((f) => (
-            <FounderCard key={f.id} founder={f} feedbackView={sp.feedback} open={sp.founder === f.id} basePath={basePath} current={sp} />
-          ))}
-          {founders.length === 0 && (
-            <p className="text-sm text-muted">No founders match. Student and New grad are on — turn on Alumni or Unknown to widen the list.</p>
-          )}
-        </div>
-
-        {sp.university && (
-          <p className="px-4 pb-4 text-xs text-muted">
-            <Link href={buildHref(basePath, sp, { university: null })} className="text-link underline">
-              Clear campus filter
-            </Link>
-          </p>
-        )}
-      </div>
-    </div>
+    <FounderDiscoverApp
+      initial={sp}
+      universities={universities}
+      founders={founders}
+      enrollment={enrollment}
+      records={review.records}
+      likes={review.likes}
+      totalFounders={totalFounders}
+      totalResolved={totalResolved}
+    />
   );
 }

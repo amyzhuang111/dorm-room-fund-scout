@@ -30,7 +30,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         {/* Satoshi is dormroomfund.com's actual brand font (var(--font-family--heading/body) in
             their stylesheet); loaded from Fontshare, the font's own free CDN. */}
-        <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" />
+        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="" />
+        <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" media="print" />
+        <script dangerouslySetInnerHTML={{ __html: `document.querySelector('link[href*="fontshare"]')?.setAttribute('media','all')` }} />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <header className="border-b border-border-c bg-background">

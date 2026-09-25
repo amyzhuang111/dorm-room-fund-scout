@@ -519,7 +519,7 @@ async function main() {
     }
 
     const named = [...evidence.entries()].filter(([, ev]) => textHasName(ev.text, first, last) || textHasName(ev.where, first, last));
-    const confirmed = named.filter(([url, ev]) => {
+    const confirmed = named.filter(([, ev]) => {
       const owned = ownSites.some((site) => hostOf(ev.where) && hostOf(ev.where) === hostOf(site));
       if (owned && textHasName(ev.text, first, last)) return true;
       return confirms(`${ev.text} ${ev.where}`, person.campus_id, companies);
