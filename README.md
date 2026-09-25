@@ -321,12 +321,16 @@ npm install
 npm run dev       # http://localhost:3000, redirects to /startup/discover
 ```
 
-No environment variables are required. No paid API key, search provider,
-or LLM key is needed for anything currently implemented — the whole
-pipeline runs on public-page fetches you can inspect yourself. A
-`CAMPUS_UNIVERSE_DB_PATH` env var can override where the SQLite file lives
-(default: `data/campus-universe.db`, gitignored, created automatically on
-first run).
+No environment variables are required for the app itself or for any
+public-page-fetch adapter — those still run on plain public-page fetches
+you can inspect yourself. One adapter is the exception:
+`scripts/ingest/fetch-linkedin-apify.ts` needs `APIFY_API_TOKEN` (get one
+free at apify.com, ~$0.004/profile with the harvestapi actor it uses) in
+`.env.local` (gitignored, never committed — see "LinkedIn via Apify"
+below for why this one adapter needs a paid key when nothing else does).
+A `CAMPUS_UNIVERSE_DB_PATH` env var can override where the SQLite file
+lives (default: `data/campus-universe.db`, gitignored, created
+automatically on first run).
 
 ## Loading real data
 
@@ -1187,3 +1191,214 @@ Ventures (client-only SPAs, no server data); StartX (a 993-entry logo wall
 with zero name text); BASES (real site, no roster page found yet); SkyDeck
 (real companies, zero founders — corrected note). Harvard i-lab remains
 blocked by a hard 403 on every access attempt.
+
+## Record cleanup: E@B URL fixed, Pennovation checked and skipped (2026-09-24)
+
+Two more `source-quality.ts` corrections, no new adapter:
+
+- **Entrepreneurs @ Berkeley**: its entry still pointed at
+  `entrepreneurs.berkeley.edu` (dead, HTTP 400, re-checked and still
+  broken) even after the E@B dead-end investigated two sections above
+  used the real `entrepreneursatberkeley.com` site. URL field corrected;
+  both findings consolidated into one statusNote instead of living in two
+  places.
+- **Pennovation Works** (Penn's 100+-company innovation park, tier C):
+  checked directly — no consolidated resident-company directory exists
+  anywhere in its nav (About, News, Pennovation Center, "The
+  Community"/leasing page, site search). Individual companies (Axonova
+  Medical, Avisi Technologies, etc.) only surface scattered across
+  individual news articles — extracting a roster would mean crawling and
+  hand-parsing an unbounded set of blog posts, a fundamentally different
+  and much fuzzier task than this codebase's other adapters. Marked
+  `checked_and_skipped`.
+
+## LinkedIn via Apify — Penn Electric Racing's 8 personal profiles (2026-09-25)
+
+Closes a gap disclosed twice before (WDB's adapter comment, and Penn
+Electric Racing's own header note): a person's self-linked personal
+LinkedIn URL was captured as an alias but never fetched, since a
+logged-out scrape of a LinkedIn profile reliably returns a login wall, not
+real content. The user provided an Apify API token (stored in
+`.env.local`, confirmed git-ignored via `git check-ignore` before writing
+it — this repo has a daily auto-commit hook, so that check mattered) and
+asked specifically to resolve the 8 already-captured URLs, not to search
+LinkedIn more broadly.
+
+Used the `harvestapi/linkedin-profile-scraper` Apify actor ("No cookies or
+account required", $4/1000 profiles — 8 profiles cost about 3 cents).
+Picked it by searching Apify's public store API for real candidates
+(73K+ users, 4.77★, 30M+ runs) rather than guessing an actor name, then
+test-called it on one real profile (Kunwoo Kim) BEFORE writing any parsing
+code, to see the actual output schema rather than assume one from
+documentation — same evidence-first discipline as every other adapter
+here. Real fields: `headline`, `about`, and a structured `experience[]` of
+`{position, companyName}` per role — a stronger signal than GitHub's free-
+text bio, since job titles are structured.
+
+`scripts/ingest/fetch-linkedin-apify.ts` looks up every person with a
+captured `linkedin:` alias (currently just PER's 8), stores their real
+headline/about/experience as one evidence claim per person (visible to a
+reviewer, not modeled as graph entities), and creates a real `founder` +
+company row ONLY where a headline, about, or job title explicitly contains
+"founder"/"co-founder" (`FOUNDER_RE`, same discipline as WDB's
+`FOUNDER_BIO_RE`) — a job title's associated company name is required too,
+so a founder-sounding headline with no named company doesn't get a guessed
+company attached.
+
+**Real result this pass: 0 founder claims.** All 8 profiles have zero
+founder/co-founder language anywhere — genuine, strong career evidence
+instead (SpaceX, Tesla, Coinbase, AWS, Lockheed Martin, General Atomics
+internships), which is real "ability to build" signal but not founder
+evidence, and is recorded as such rather than forced into a company row
+that isn't there. This is disclosed as a real, honest result, not framed
+as if something went wrong.
+
+**One real bug found and fixed during this pass**: Stella Lin's captured
+URL (`stella-lin-4588bb22a`, a LinkedIn default ID-style slug) resolved to
+a *different* URL in Apify's response (`stella-lin-upenn`) — she likely
+claimed a custom vanity URL after her roster page was originally scraped.
+The first matching attempt (substring-matching the returned identifier
+against the requested URL) silently mismatched and reported her as "not
+found," which would have been a real, quiet data-loss bug. Caught it by
+noticing the batch response had 8 names for 8 queries in the same order,
+switched to positional correlation (verified safe: only trusted when
+returned-count equals requested-count, with the old substring match kept
+as a fallback), and it resolved correctly — now logged explicitly rather
+than silently accepted, since a mismatched identity would be exactly the
+kind of thing this codebase's own "never guess" discipline exists to
+catch.
+
+Verified idempotent (second run: 0 profiles newly recorded, 8 unchanged —
+note idempotency here is about DB writes, not Apify cost; the actor is
+still re-called and re-charged every run, ~3 cents each time). `npx tsc
+--noEmit` and `npm run build` both clean. Verified against a real `next
+start` server: `/founder/discover` still renders correctly with no
+regressions post-ingest.
+
+## Penn Aerial Robotics: a real gap in the earlier adapter, found by accident (2026-09-25)
+
+While pulling LinkedIn URLs to look up more people via Apify, found that
+`pennaerial.com/team/` actually has a second, much larger section the
+original adapter (2026-09-24, see above) never looked for: a ~85-entry
+photo-caption bio gallery below the 9-officer title list, with real
+major/year/hometown/subteam bios — the same richness as Penn Electric
+Racing's, not the "leadership-only, no bios at all" page the original
+pass concluded. That original conclusion is now marked CORRECTION in
+`source-quality.ts` rather than silently overwritten, since it was a real,
+confidently-stated claim that turned out to be wrong — worth being honest
+about, not just quietly fixing.
+
+`fetch-penn-aerial-robotics.ts` now also extracts this gallery, but
+deliberately incompletely: only entries with a full "Firstname Lastname"
+caption (9 found) or a personal LinkedIn link attached even without a full
+name (2 found: "Xiangyu", "Mingni") are ingested. ~25 entries are a bare
+first name with zero bio text, and several first names repeat with
+different — sometimes conflicting — bios (three separate "Tina" captions;
+one gives a VP title that doesn't match the officer list's own "Tina Lee:
+VP Operations"). Ingesting those would risk silently merging two different
+real people under one name, which this codebase's §40/§42 discipline
+exists to prevent — left out on purpose, not missed. "Xiangyu"'s own bio
+("oversees all projects on the team... specializes in structural design")
+reads as president-level, conflicting with the officer list's "Aidan Kuo"
+— disclosed directly in the claim excerpt as an unresolved discrepancy,
+not guessed either way. Result: 11 new bio-gallery entries (10 new people;
+"Jerry Zhang" already existed as an officer, so his entry added a richer
+claim rather than a duplicate person), 2 new personal LinkedIn links.
+Verified idempotent (second run: 0 new).
+
+Then re-ran `fetch-linkedin-apify.ts` to look up the 2 new LinkedIn URLs
+(Xiangyu, Mingni) alongside the existing 8 — 10 total. **Found and fixed a
+real idempotency bug in the process**: 4 of the original 8 people came
+back as "changed" and got a second `linkedin_profile` claim inserted, even
+though nothing meaningful had changed. Diffed the two claims directly and
+found the actual cause: the Apify actor itself returned "San Francisco,
+CA" for the same Eric Cao/Coinbase internship in one call and "San
+Francisco, California, United States" 17 minutes later in the next — real
+upstream formatting noise, not a profile edit. The idempotency hash was
+being computed over the full raw JSON (including that noisy `location`
+field, plus logos/descriptions/skills), so it correctly detected "the
+bytes changed" but incorrectly meant "the profile changed." Fixed by
+hashing a stable fingerprint (`headline`, `about`, and only
+`{position, companyName}` per experience entry) while still storing the
+full rich data in the claim itself — the noisy fields remain in the
+evidence, just excluded from the change-detection comparison. Deleted the
+4 duplicate claim rows this bug had already created (kept the newest of
+each pair) and re-verified: exactly 10 `linkedin_profile` claims for 10
+people, 0 duplicates, and two more re-runs both showed 0 new.
+
+`npx tsc --noEmit` and `npm run build` both clean. Verified against a real
+`next start` server: `/sources` still shows Penn Aerial Robotics correctly
+(tier A/C), and `/founder/discover` renders at least one of the newly
+added bio-gallery people (Jerry Zhang) — not all 19 PAR members necessarily
+surface on that page's default ranked/filtered view, which is expected
+behavior, not a sign the data is missing (confirmed present via direct
+query: 19 people on file, up from 9).
+
+## Hack the North + shared LinkedIn capture + two real Apify bugs found and fixed (2026-09-25)
+
+Closed `cat_hackthenorth`, the last remaining P0-adjacent target with a
+concrete single URL and its own `dbSourceId`. `hackthenorth2026.devpost.com`
+is the same real Devpost gallery shape as PennApps/TreeHacks/Cal Hacks
+(most recent completed event, 2026 not 2025 — same "most recent cohort"
+precedent as MIT delta v/Velocity), so `scripts/ingest/fetch-
+hackthenorth-devpost.ts` is ~15 lines calling the existing shared
+`lib/ingest/devpost-hackathon.ts`. Ran it several bounded times: 61
+projects ingested so far (more remain — the gallery isn't fully walked
+yet, same as Cal Hacks' 699 wasn't for a while).
+
+**Extended the shared Devpost library itself**, not just this one adapter:
+every genuinely new team member's own Devpost profile page is now fetched
+once and checked for a personal LinkedIn link in its optional "Links"
+section (verified present on 2 of 5 real Hack the North profiles before
+writing the extractor, not assumed). This is a shared-library change, so
+it applies to PennApps/TreeHacks/Cal Hacks too on their next run — checked
+directly: all three were already fully walked to the end of their
+galleries in prior sessions, so this pass had nothing new to backfill
+there, but any future new submission will get this automatically. Fetch
+budget raised 30→40 per run to afford the extra per-person fetch.
+
+This pushed captured LinkedIn aliases from 10 (Penn Electric Racing +
+Penn Aerial Robotics only) to 51 across sources. Re-running
+`fetch-linkedin-apify.ts` against all 51 **surfaced two real bugs in the
+Apify integration itself**, both found by noticing results that didn't
+add up, not assumed to be legitimate:
+
+1. The original sync endpoint (`run-sync-get-dataset-items`) has a
+   server-side timeout a 51-profile request can blow through — it
+   returned HTTP 201 (success) with only 1 of 51 profiles in the body, no
+   error at all. Verified by replaying the exact same request directly via
+   `curl`. Fixed by switching to Apify's async run→poll→fetch-dataset
+   pattern.
+2. That alone wasn't enough — chunks of 15 through the CORRECT async
+   pattern still mostly failed (1-of-15 real results, 3 times in a row,
+   even though the run itself reported `SUCCEEDED`). Isolated by testing
+   progressively smaller batches directly against the API outside the
+   script: 2 real URLs succeeded in 16s, 5 succeeded 5-for-5 in 13.6s —
+   this actor has no per-user LinkedIn session of its own, so a burst of
+   ~15 concurrent scrapes from its shared proxy pool apparently trips
+   LinkedIn's own anti-bot throttling within a single run. `CHUNK_SIZE`
+   set to 5 (found empirically, not guessed), with a 5s delay between
+   chunks.
+
+Both fixes are documented in `fetch-linkedin-apify.ts`'s own header
+comments so a future pass doesn't have to re-discover them. After the
+fix: all 51 profiles resolved (0 not found), fully idempotent on repeat
+runs, and **5 new real self-disclosed founder claims** surfaced: Jaden
+Park (Co-Founder, Tweak), Aaron Shangguan (co-founder, R&S Studio), Rohan
+Gottipati (Co-Founder/CTO, "Stealth Startup" — recorded exactly as their
+profile names it, not renamed to something more specific), Yufan Wang
+(Founder, Pantheon Capital), Ari Khan (Founder/President, RHHacks).
+
+**LinkedIn links are now also rendered in the UI**, not just stored as
+inert data — the user explicitly asked for this after the backend work.
+Added `linkedinUrl` to `FounderRow` (`lib/domain/queries.ts`, parsed from
+the person's `linkedin:` alias, same convention as everywhere else) and a
+small "LinkedIn ↗" link on `components/founder-card.tsx`, next to the
+name, only rendered when a real captured URL exists. Verified against a
+real `next start` server: 8 real LinkedIn links render on
+`/founder/discover`, including profiles for all 5 of the newly-discovered
+founders above.
+
+`npx tsc --noEmit` and `npm run build` both clean throughout. Final
+counts: 61 Hack the North projects, 51 people with a captured LinkedIn
+alias, 63 total founder roles in the database.

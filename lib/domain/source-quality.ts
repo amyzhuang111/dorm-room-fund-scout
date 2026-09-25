@@ -337,7 +337,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatNotToInfer: ["Team membership alone isn't the signal — individual technical ownership is."],
     status: "implemented",
     statusNote:
-      "Ingested (2026-09-24): pennaerial.com/team/ is a server-rendered WordPress block-editor page carrying 9 real named leaders, each with an explicit site-authored title (President, VP Operations, VP Finance, Mechanical Lead x2, Software Lead x2, Electrical Lead x2 — 2 of the 9 raw titles had a literal typo, 'LEad', normalized for grouping with the raw text kept in the claim excerpt). No separate full-roster page exists on the site (checked the nav) — this is genuinely leadership-only, which is actually a better fit for this source's own 'technical leads/subsystem owners' whatToExtract than a flat roster would be. No bios, majors, class years, or personal links on this page at all, so affiliation status stays 'unverified' for all nine. 7 of 9 people were new to the DB (2 already existed from other Penn sources).",
+      "Ingested (2026-09-24): pennaerial.com/team/ is a server-rendered WordPress block-editor page carrying 9 real named leaders, each with an explicit site-authored title (President, VP Operations, VP Finance, Mechanical Lead x2, Software Lead x2, Electrical Lead x2 — 2 of the 9 raw titles had a literal typo, 'LEad', normalized for grouping with the raw text kept in the claim excerpt). 7 of 9 people were new to the DB (2 already existed from other Penn sources). CORRECTION (2026-09-25): the original claim that this page has 'no bios, majors, class years, or personal links at all' was wrong — found by accident while chasing captured LinkedIn URLs for a separate Apify pass. The page has a second, ~85-entry photo-caption bio gallery below the officer list, same richness as PER's, that the original h6/p-only extraction never looked for. Now also ingested: 11 more entries (10 new people), bounded to only full-'Firstname Lastname' captions or ones with a personal LinkedIn link attached — ~25 bare-first-name-only entries with no LinkedIn to disambiguate were deliberately excluded (several first names repeat with conflicting bios on the site's own page, not safely mergeable without guessing). One flagged, unresolved discrepancy: 'Xiangyu's bio reads as a President-level description, conflicting with the officer list's 'Aidan Kuo' — left for a human to check.",
   },
   {
     id: "cat_mt_penn",
@@ -762,10 +762,11 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
   },
   {
     id: "cat_hackthenorth",
+    dbSourceId: "src_hackthenorth_devpost",
     name: "Hack the North",
     campus: "univ_waterloo",
     sourceType: "hackathon",
-    url: "https://hackthenorth.com/",
+    url: "https://hackthenorth2026.devpost.com/project-gallery",
     founderScoutTier: "S",
     startupScoutTier: "A",
     role: "discovery",
@@ -774,7 +775,9 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whyItMatters: "Canada's largest hackathon, hosted at Waterloo — dense builder discovery.",
     whatToExtract: ["teams", "projects", "winners", "finalists", "repeat hackers"],
     whatNotToInfer: ["Winning ≠ elite founder."],
-    status: "unconfigured",
+    status: "implemented",
+    statusNote:
+      "Ingested (2026-09-25): scripts/ingest/fetch-hackthenorth-devpost.ts, using the shared lib/ingest/devpost-hackathon.ts (same real markup as PennApps/TreeHacks/Cal Hacks, verified, not assumed) against Hack the North 2026 (the most recent completed event, not 2025 — same 'most recent cohort' precedent as MIT delta v/Velocity). 61 projects ingested across several bounded runs (fetch budget increased 30->40 to afford one extra fetch per new person, described below). This event also motivated a real enhancement to the SHARED library: every new team member's own Devpost profile page is now fetched once for a personal LinkedIn link (verified present on 2 of 5 real sample profiles before writing the extractor) — applies to PennApps/TreeHacks/Cal Hacks too on their next run, though those 3 were already fully walked in prior sessions so had nothing new to backfill this pass. 51 people total now carry a captured LinkedIn alias across all sources, resolved via scripts/ingest/fetch-linkedin-apify.ts (Apify) — see that script's own header comment for two real bugs found and fixed in the same pass: a sync-endpoint timeout silently returning 1-of-51 results as if legitimate 'not found', and a batch size that triggered LinkedIn-side throttling even through the correct async pattern (empirically fixed at chunk size 5). Found 5 new real self-disclosed founder claims this way (Jaden Park/Tweak, Aaron Shangguan/R&S Studio, Rohan Gottipati/Stealth Startup, Yufan Wang/Pantheon Capital, Ari Khan/RHHacks). LinkedIn links are now also rendered directly on founder cards in the UI (components/founder-card.tsx), not just stored — see README for the full account.",
   },
   {
     id: "cat_velocity",

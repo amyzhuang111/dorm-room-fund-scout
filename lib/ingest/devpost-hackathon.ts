@@ -1,7 +1,7 @@
 // Shared ingestion logic for any Devpost-hosted hackathon gallery (PennApps,
 // TreeHacks, Cal Hacks, Hack the North, ... — Devpost's markup is identical
 // across events, verified directly against both PennApps XXVI and TreeHacks
-// 2026). Bounded to a ~30-fetch scan budget PER RUN, but walks the gallery's
+// 2026). Bounded to a ~40-fetch scan budget PER RUN, but walks the gallery's
 // real pagination (`?page=N`, verified against the live PennApps/TreeHacks/
 // Cal Hacks galleries — e.g. PennApps XXVI is 85 projects across 4 pages,
 // TreeHacks 2026 is 378, Cal Hacks 12.0 is 699) instead of only ever
@@ -14,6 +14,20 @@
 // submitting to a campus-hosted hackathon can't by itself confirm enrollment
 // there; the affiliation gate is exactly the right place to hold that
 // uncertainty, not a reason to skip ingestion.
+//
+// LINKEDIN CAPTURE (added 2026-09-25): every genuinely NEW person's own
+// Devpost profile page is fetched once (not re-fetched for people already
+// on file) and checked for a real personal LinkedIn link in its optional
+// user-filled "Links" section — verified against 5 real Hack the North
+// 2026 profiles before writing extractPersonalLinkedin (2 of 5 had one)
+// rather than assumed. This is a shared-library change, so it applies
+// retroactively to every event using this function (PennApps/TreeHacks/
+// Cal Hacks too) on their NEXT run — already-ingested people from a
+// previous run are not backfilled by this change alone, only newly-
+// encountered ones. Captured as a `linkedin:<url>` alias, same convention
+// as fetch-penn-electric-racing.ts / fetch-penn-aerial-robotics.ts, so
+// scripts/ingest/fetch-linkedin-apify.ts picks it up automatically without
+// any changes of its own.
 
 import * as cheerio from "cheerio";
 import crypto from "node:crypto";
@@ -30,6 +44,7 @@ export interface DevpostHackathonConfig {
   eventLabel: string; // e.g. "PennApps XXVI", used in claim/signal text
   roleLabel: string; // e.g. "PennApps XXVI team member"
   maxProjectFetches?: number;
+  maxFetches?: number;
 }
 
 interface GalleryEntry {
@@ -59,6 +74,17 @@ interface TeamMember {
   contributionNote: string | null;
 }
 
+// A Devpost profile page optionally has a user-filled "Links" section —
+// checked directly against 5 real Hack the North 2026 team members
+// (2026-09-25): 2 of 5 had a real personal LinkedIn URL there, 0 had one
+// elsewhere on the page (the page also links Devpost's own newrelic/GitHub
+// widgets, which this regex must not pick up — scoped to linkedin.com only,
+// no ambiguity risk).
+function extractPersonalLinkedin(profileHtml: string): string | null {
+  const m = profileHtml.match(/https?:\/\/(?:www\.)?linkedin\.com\/in\/[A-Za-z0-9_-]+/);
+  return m ? m[0].replace(/\/$/, "") : null;
+}
+
 function extractProjectDetail(html: string): { title: string; tagline: string; members: TeamMember[] } {
   const $ = cheerio.load(html);
   const title = $("#app-title").first().text().trim();
@@ -82,7 +108,12 @@ async function fetchText(url: string): Promise<string> {
 }
 
 export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
-  const maxProjectFetches = cfg.maxProjectFetches ?? 24;
+  // Lowered from 24: each new person now costs one extra fetch (their own
+  // Devpost profile page, checked for a personal LinkedIn link) on top of
+  // the project detail page, so the same ~30-fetch/run budget now covers
+  // fewer projects per run in exchange for real LinkedIn coverage.
+  const maxProjectFetches = cfg.maxProjectFetches ?? 12;
+  const maxFetches = cfg.maxFetches ?? 40;
   const db = getDb();
   const retrievedAt = nowIso();
 
@@ -114,7 +145,7 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
   const entriesToProcess: GalleryEntry[] = [];
   let reachedEnd = false;
 
-  while (entriesToProcess.length < maxProjectFetches && fetches < 30) {
+  while (entriesToProcess.length < maxProjectFetches && fetches < maxFetches) {
     const pageUrl = page === 1 ? cfg.galleryUrl : `${cfg.galleryUrl}?page=${page}`;
     let html: string;
     try {
@@ -201,10 +232,11 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
 
   let newProjects = 0;
   let newPeople = 0;
+  let linkedinFound = 0;
 
   for (const entry of entriesToProcess) {
-    if (fetches >= 30) {
-      console.log("Hit the 30-fetch scan budget — stopping early (this is intentional, not a bug).");
+    if (fetches >= maxFetches) {
+      console.log(`Hit the ${maxFetches}-fetch scan budget — stopping early (this is intentional, not a bug).`);
       break;
     }
     if (findProjectByUrl.get(entry.url)) continue; // already ingested this exact submission (found again on a re-walked page)
@@ -242,7 +274,26 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
       const person = findPersonByDevpostProfile(member.profileUrl);
       const personId = person?.id ?? newId("person");
       if (!person) {
-        insertPerson.run(personId, member.name, JSON.stringify([`devpost:${member.profileUrl}`]));
+        // Only spend a fetch on a genuinely new person's own Devpost
+        // profile page (not on someone already on file) — checks for a
+        // real personal LinkedIn link there (see extractPersonalLinkedin's
+        // header note: verified against real Hack the North profiles
+        // before this was written, not assumed to exist).
+        const aliases = [`devpost:${member.profileUrl}`];
+        if (fetches < maxFetches) {
+          try {
+            const profileHtml = await fetchText(member.profileUrl);
+            fetches++;
+            const li = extractPersonalLinkedin(profileHtml);
+            if (li) {
+              aliases.push(`linkedin:${li}`);
+              linkedinFound++;
+            }
+          } catch {
+            // Profile page fetch failed — not fatal, just no LinkedIn captured this time.
+          }
+        }
+        insertPerson.run(personId, member.name, JSON.stringify(aliases));
         newPeople++;
       }
 
@@ -278,7 +329,9 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
     String(resumePage),
     cfg.sourceId
   );
-  console.log(`${newProjects} new project(s), ${newPeople} new person(s), ${fetches} total fetches used, ${totalIngested} total ingested from this source so far.`);
+  console.log(
+    `${newProjects} new project(s), ${newPeople} new person(s), ${linkedinFound} personal LinkedIn link(s) captured, ${fetches} total fetches used, ${totalIngested} total ingested from this source so far.`
+  );
   console.log(`Next run resumes at gallery page ${resumePage}${reachedEnd ? " (wrapped back to the start — the last walk reached the end of the gallery)" : "."}`);
   console.log("All affiliations seeded as 'unverified' — confirming enrollment for any of these people is a research task, not assumed.");
 }

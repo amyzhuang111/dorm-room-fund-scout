@@ -481,6 +481,7 @@ export interface FounderRow {
   projects: { id: string; name: string; kind: string; role: string }[];
   linkedCompany: { id: string; name: string } | null; // a real kind='company' project they're linked to, if any
   possibleCompany: { name: string; status: "unreviewed" | "confirmed" } | null; // §65-67: a bio-derived hint, never auto-promoted — null once linkedCompany is set
+  linkedinUrl: string | null; // from a captured `linkedin:<url>` alias (see fetch-penn-electric-racing.ts / fetch-linkedin-apify.ts) — a real self-disclosed link, not a search result
   strongestEvidence: string | null; // the most recent claim excerpt attributed to them
   promoted: boolean;
   promotionReasonLabel: string | null;
@@ -499,13 +500,13 @@ export function listFounders(filters: { universityId?: string; search?: string; 
   const db = getDb();
   const rows = db
     .prepare(
-      `SELECT DISTINCT pe.id as id, pe.name as name, a.status as status, a.university_id as university_id, u.name as university_name
+      `SELECT DISTINCT pe.id as id, pe.name as name, pe.aliases_json as aliases_json, a.status as status, a.university_id as university_id, u.name as university_name
        FROM people pe
        LEFT JOIN affiliations a ON a.person_id = pe.id
        LEFT JOIN universities u ON u.id = a.university_id
        ORDER BY pe.name`
     )
-    .all() as { id: string; name: string; status: string | null; university_id: string | null; university_name: string | null }[];
+    .all() as { id: string; name: string; aliases_json: string; status: string | null; university_id: string | null; university_name: string | null }[];
 
   const byId = new Map<string, Omit<FounderRow, "promoted" | "promotionReasonLabel" | "founderSignal">>();
   for (const r of rows) {
@@ -513,6 +514,14 @@ export function listFounders(filters: { universityId?: string; search?: string; 
     const existing = byId.get(r.id);
     if (existing) continue; // keep first affiliation row if a person somehow has several
     if (filters.search && !r.name.toLowerCase().includes(filters.search.toLowerCase())) continue;
+    let linkedinUrl: string | null = null;
+    try {
+      const aliases: string[] = JSON.parse(r.aliases_json || "[]");
+      const li = aliases.find((a) => a.startsWith("linkedin:"));
+      if (li) linkedinUrl = li.replace("linkedin:", "");
+    } catch {
+      // malformed aliases_json — leave linkedinUrl null rather than throw
+    }
     byId.set(r.id, {
       id: r.id,
       name: r.name,
@@ -522,6 +531,7 @@ export function listFounders(filters: { universityId?: string; search?: string; 
       projects: [],
       linkedCompany: null,
       possibleCompany: null,
+      linkedinUrl,
       strongestEvidence: null,
     });
   }
