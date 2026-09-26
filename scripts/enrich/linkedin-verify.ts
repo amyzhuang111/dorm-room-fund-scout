@@ -10,8 +10,11 @@
 // For a current student, a recent grad, or a potential founder, a profile
 // whose matching education ended in 2023 or later (or is still in progress)
 // is preferred when several candidates pass. Several that still pass are
-// left unverified. None passing marks the candidates rejected and keeps
-// the rows.
+// left unverified. A profile the actor actually returned, whose name or
+// campus education did not match, is rejected and the rows are kept. A URL
+// the actor explicitly reports as not found is not_found. An empty run, or
+// a run whose status message or log mentions a limit, upgrade, or paid
+// plan, is a failed batch and is not written.
 
 import fs from "node:fs";
 import type Database from "better-sqlite3";
@@ -32,17 +35,28 @@ import {
   type LookupPerson,
   type SchoolRef,
 } from "./linkedin-match";
+import { DEFAULT_ACTOR_ID, HARVESTAPI_ACTOR_ID, resolveActor } from "./linkedin-actors";
 
-export const ACTOR_ID = "harvestapi/linkedin-profile-scraper";
-export const ACTOR_PAGE = "https://apify.com/harvestapi/linkedin-profile-scraper";
+export {
+  DEFAULT_ACTOR_ID,
+  HARVESTAPI_ACTOR_ID,
+  LINKEDIN_ACTORS,
+  PROFILE_MODE,
+  resolveActor,
+  actorInput,
+  mentionsPlanLimit,
+  explainUnusableRun,
+  normalizeActorItems,
+  ActorBatchError,
+} from "./linkedin-actors";
+export type { ActorDataset, LinkedInActor } from "./linkedin-actors";
+
+export const ACTOR_ID = DEFAULT_ACTOR_ID;
+export const ACTOR_PAGE = `https://apify.com/${DEFAULT_ACTOR_ID}`;
 export const OUTPUT_RELATIVE = "data/imports/apify_linkedin_verify_results.jsonl";
-export const PROFILE_MODE = "Profile details no email ($4 per 1k)";
 export const BATCH_SIZE = 40;
 
-// Public actor pricingInfos, pay-per-event card startedAt 2025-07-04,
-// read 2026-09-26. The primary event is "profile" at $0.004. Email search
-// is a separate $0.01 event and is left off. There is no actor-start event,
-// and the card says platform usage is not charged.
+// Kept for callers that still read the harvestapi card directly.
 export const PROFILE_USD = 0.004;
 
 // Same window as recent-grad enrollment (ENROLLMENT_AS_OF_YEAR 2026 minus 3).
@@ -83,6 +97,7 @@ export interface VerifyPerson {
 export interface JudgedUrl {
   url: string;
   returned: boolean;
+  notFound: boolean;
   profileName: string | null;
   headline: string | null;
   matchedSchool: string | null;
@@ -96,7 +111,7 @@ export interface JudgedUrl {
 export interface VerifyJudgment {
   urls: JudgedUrl[];
   selected: JudgedUrl | null;
-  outcome: "confirmed" | "unverified" | "rejected";
+  outcome: "confirmed" | "unverified" | "rejected" | "not_found";
   reason: string;
   headline: string | null;
   graduationYear: number | null;
@@ -129,26 +144,22 @@ export interface VerifyImportStats {
   confirmed: number;
   demoted: number;
   rejected: number;
+  notFound: number;
   leftUnverified: number;
   skipped: number;
   dryRun: boolean;
 }
 
-export function estimateVerify(profileCount: number, batchSize = BATCH_SIZE, runs?: number) {
-  const packed = runs ?? (profileCount === 0 ? 0 : Math.ceil(profileCount / batchSize));
+export function estimateVerify(profileCount: number, actorId: string = DEFAULT_ACTOR_ID, runs?: number) {
+  const actor = resolveActor(actorId);
+  const packed = runs ?? (profileCount === 0 ? 0 : Math.ceil(profileCount / actor.batchSize));
   return {
     profiles: profileCount,
     runs: packed,
-    batchSize,
-    usd: profileCount * PROFILE_USD,
-    perThousand: 1000 * PROFILE_USD,
-  };
-}
-
-export function actorInput(urls: string[]) {
-  return {
-    profileScraperMode: PROFILE_MODE,
-    queries: urls,
+    batchSize: actor.batchSize,
+    usd: profileCount * actor.usdPerProfile,
+    perThousand: 1000 * actor.usdPerProfile,
+    actorId: actor.id,
   };
 }
 
@@ -224,7 +235,9 @@ function profileSlugs(raw: unknown, slim: ScrapedProfile | null): string[] {
 
 // Map each requested profile URL to the dataset item that echoes it.
 // harvestapi puts the requested slug on query.publicIdentifier, which still
-// matches when LinkedIn rewrites a vanity URL. A non-200 item is a miss.
+// matches when LinkedIn rewrites a vanity URL. A non-200 item is an explicit
+// miss (null). A URL the actor never mentioned is left out of the map so the
+// caller can retry it instead of treating silence as not_found.
 export function assignProfiles(urls: string[], items: unknown[]): Map<string, ScrapedProfile | null> {
   const bySlug = new Map<string, ScrapedProfile | null>();
   for (const item of items) {
@@ -238,7 +251,8 @@ export function assignProfiles(urls: string[], items: unknown[]): Map<string, Sc
     const normalized = normalizeLinkedIn(url);
     if (!normalized) continue;
     const slug = slugOf(normalized);
-    out.set(normalized, slug ? (bySlug.get(slug) ?? null) : null);
+    if (!slug || !bySlug.has(slug)) continue;
+    out.set(normalized, bySlug.get(slug) ?? null);
   }
   return out;
 }
@@ -281,6 +295,7 @@ function judgeOne(
     return {
       url,
       returned: false,
+      notFound: true,
       profileName: null,
       headline: null,
       matchedSchool: null,
@@ -309,6 +324,7 @@ function judgeOne(
   return {
     url,
     returned: true,
+    notFound: false,
     profileName: profileName || null,
     headline: profile.headline?.trim() || null,
     matchedSchool: matched[0]?.schoolName?.trim() || null,
@@ -340,10 +356,16 @@ export function judgeProfiles(
   let outcome: VerifyJudgment["outcome"];
   let reason: string;
   if (passing.length === 0) {
-    outcome = "rejected";
-    reason = judged.some((item) => item.returned)
-      ? "no scraped profile matched the name and the campus"
-      : "the actor returned no profile";
+    if (judged.some((item) => item.returned)) {
+      outcome = "rejected";
+      reason = "no scraped profile matched the name and the campus";
+    } else {
+      outcome = "not_found";
+      reason =
+        judged.length === 1
+          ? "the actor reported the profile URL as not found"
+          : "the actor reported the profile URLs as not found";
+    }
   } else if (prefer && recent.length === 1) {
     selected = recent[0];
     outcome = "confirmed";
@@ -423,7 +445,8 @@ function toVerifyPerson(person: LookupPerson): VerifyPerson {
 export function buildResultLine(
   person: VerifyPerson,
   profiles: Map<string, ScrapedProfile | null>,
-  verifiedAt: string
+  verifiedAt: string,
+  actorId: string = ACTOR_ID
 ): VerifyResultLine {
   const judgment = judgeProfiles(person, person.urls, profiles);
   return {
@@ -439,7 +462,7 @@ export function buildResultLine(
     headline: judgment.headline,
     graduation_year: judgment.graduationYear,
     profiles: person.urls.map((url) => ({ url, profile: profiles.get(url) ?? null })),
-    actor: ACTOR_ID,
+    actor: actorId,
     verified_at: verifiedAt,
   };
 }
@@ -482,7 +505,13 @@ export function readVerifyLines(text: string): VerifyResultLine[] {
       school: typeof parsed.school === "string" ? parsed.school : "",
       enrollment_status: typeof parsed.enrollment_status === "string" ? parsed.enrollment_status : null,
       founder_status: typeof parsed.founder_status === "string" ? parsed.founder_status : null,
-      outcome: parsed.outcome ?? "rejected",
+      outcome:
+        parsed.outcome === "confirmed" ||
+        parsed.outcome === "unverified" ||
+        parsed.outcome === "rejected" ||
+        parsed.outcome === "not_found"
+          ? parsed.outcome
+          : "rejected",
       outcome_reason: typeof parsed.outcome_reason === "string" ? parsed.outcome_reason : "",
       confirmed_url: typeof parsed.confirmed_url === "string" ? parsed.confirmed_url : null,
       headline: typeof parsed.headline === "string" ? parsed.headline : null,
@@ -520,8 +549,12 @@ function claimUrl(row: CandidateClaim): string | null {
 function ensureSource(db: Database.Database) {
   db.prepare(
     `INSERT INTO sources (id, name, family, url, campuses_json, priority, ingestion_mode, status, last_attempt_at)
-     VALUES (?, 'LinkedIn profile verify (Apify harvestapi)', 'code_host', ?, '[]', 2, 'api', 'available', ?)
-     ON CONFLICT(id) DO UPDATE SET last_attempt_at = excluded.last_attempt_at, status = 'available'`
+     VALUES (?, 'LinkedIn profile verify (Apify)', 'code_host', ?, '[]', 2, 'api', 'available', ?)
+     ON CONFLICT(id) DO UPDATE SET
+       name = excluded.name,
+       url = excluded.url,
+       last_attempt_at = excluded.last_attempt_at,
+       status = 'available'`
   ).run(SOURCE_ID, ACTOR_PAGE, nowIso());
 }
 
@@ -556,6 +589,7 @@ export function importVerifiedLinkedIn(db: Database.Database, filePath: string, 
   let confirmed = 0;
   let demoted = 0;
   let rejected = 0;
+  let notFound = 0;
   let leftUnverified = 0;
   let skipped = 0;
   const seen = new Set<string>();
@@ -630,7 +664,7 @@ export function importVerifiedLinkedIn(db: Database.Database, filePath: string, 
         matched_school: item.matchedSchool,
         name_match: item.nameMatch,
         campus_match: item.campusMatch,
-        actor: ACTOR_ID,
+        actor: line.actor || ACTOR_ID,
       };
       const excerpt = `${row.name}: ${decision} LinkedIn candidate ${item.url}. ${reason}.${
         item.headline ? ` Headline: ${item.headline}.` : ""
@@ -708,6 +742,13 @@ export function importVerifiedLinkedIn(db: Database.Database, filePath: string, 
       return;
     }
 
+    if (judgment.outcome === "not_found") {
+      console.log(`${dryRun ? "Would record" : "Recorded"} ${row.name} as not found (${judgment.reason}). The candidate rows stay unverified.`);
+      for (const item of judgment.urls) writeCandidate(item, "unverified", "not_found", judgment.reason);
+      notFound++;
+      return;
+    }
+
     console.log(`${dryRun ? "Would reject" : "Rejected"} ${row.name} (${judgment.reason}). The candidate rows are kept.`);
     for (const item of judgment.urls) writeCandidate(item, "rejected", "rejected", judgment.reason);
     rejected++;
@@ -716,20 +757,24 @@ export function importVerifiedLinkedIn(db: Database.Database, filePath: string, 
   for (const line of lines) apply(line);
   if (!dryRun) db.pragma("wal_checkpoint(TRUNCATE)");
   console.log(
-    `${dryRun ? "Dry run. " : ""}Confirmed ${confirmed}. Demoted ${demoted}. Rejected ${rejected}. Left unverified ${leftUnverified}. Skipped ${skipped}.`
+    `${dryRun ? "Dry run. " : ""}Confirmed ${confirmed}. Demoted ${demoted}. Rejected ${rejected}. Not found ${notFound}. Left unverified ${leftUnverified}. Skipped ${skipped}.`
   );
-  return { confirmed, demoted, rejected, leftUnverified, skipped, dryRun };
+  return { confirmed, demoted, rejected, notFound, leftUnverified, skipped, dryRun };
 }
 
-export function formatEstimate(profileCount: number, runs?: number): string {
-  const estimate = estimateVerify(profileCount, BATCH_SIZE, runs);
+export function formatEstimate(profileCount: number, runs?: number, actorId: string = ACTOR_ID): string {
+  const actor = resolveActor(actorId);
+  const estimate = estimateVerify(profileCount, actor.id, runs);
   return [
-    `Actor: ${ACTOR_ID}`,
+    `Actor: ${actor.id}`,
     "No LinkedIn cookies or login. Profile details only; email search is off.",
     `Up to ${estimate.batchSize} profile URLs per actor run (${estimate.runs} run(s) for this invocation).`,
-    "Price checked 2026-09-26 (pay-per-event card started 2025-07-04):",
-    `  ${formatUsd(estimate.perThousand)} / 1,000 profiles. No actor-start fee. Platform usage is not charged.`,
+    actor.priceNote,
+    `  ${actor.pricePerThousandLabel}.`,
     `This run: ${estimate.profiles} profile URL(s), estimate ${formatUsd(estimate.usd)}.`,
-    `Confirm ${ACTOR_PAGE} before a large run.`,
+    `Confirm ${actor.page} before a large run.`,
+    actor.id === HARVESTAPI_ACTOR_ID
+      ? "This actor is the paid-plan fallback. Free plans can finish SUCCEEDED with zero items after 50 runs."
+      : `Paid plans can pass --actor ${HARVESTAPI_ACTOR_ID} ($4.00 / 1,000).`,
   ].join("\n");
 }

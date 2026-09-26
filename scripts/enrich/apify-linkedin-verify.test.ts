@@ -32,14 +32,83 @@ async function main() {
   const verify = await import("./linkedin-verify");
   const { runVerify } = await import("./apify-linkedin-verify");
 
+  const adaProfile = "https://www.linkedin.com/in/ada";
   const thousand = verify.estimateVerify(1000);
+  assert.equal(thousand.actorId, verify.DEFAULT_ACTOR_ID);
   assert.equal(thousand.runs, 25);
-  assert.equal(thousand.usd.toFixed(2), "4.00");
-  assert.equal(thousand.perThousand.toFixed(2), "4.00");
+  assert.equal(thousand.usd.toFixed(2), "5.00");
+  assert.equal(thousand.perThousand.toFixed(2), "5.00");
+  const paidThousand = verify.estimateVerify(1000, verify.HARVESTAPI_ACTOR_ID);
+  assert.equal(paidThousand.usd.toFixed(2), "4.00");
+  assert.equal(paidThousand.runs, 25);
+  assert.equal(verify.estimateVerify(3, "apimaestro/linkedin-profile-detail").runs, 3);
   assert.equal(verify.estimateVerify(0).usd, 0);
   assert.deepEqual(verify.packBatches([["a"], ["b"], ["c"]], 2), [["a", "b"], ["c"]]);
-  assert.equal(verify.actorInput(["https://www.linkedin.com/in/ada"]).profileScraperMode, verify.PROFILE_MODE);
-  assert.deepEqual(verify.actorInput(["https://www.linkedin.com/in/ada"]).queries, ["https://www.linkedin.com/in/ada"]);
+  assert.deepEqual(verify.actorInput([adaProfile]).usernames, [adaProfile]);
+  assert.equal(verify.actorInput([adaProfile]).includeEmail, false);
+  assert.equal(verify.actorInput([adaProfile], verify.HARVESTAPI_ACTOR_ID).profileScraperMode, verify.PROFILE_MODE);
+  assert.deepEqual(verify.actorInput([adaProfile], "harvestapi~linkedin-profile-scraper").queries, [adaProfile]);
+  assert.equal(verify.actorInput([adaProfile], "apimaestro/linkedin-profile-detail").username, adaProfile);
+  assert.equal(verify.mentionsPlanLimit("free user run limit exceeded"), true);
+  assert.equal(
+    verify.mentionsPlanLimit("[WARNING] Free users are limited to 50 runs. Please upgrade to a paid plan to run more."),
+    true
+  );
+  assert.equal(verify.mentionsPlanLimit("scraped 20 profiles"), false);
+  const limitExplanation = verify.explainUnusableRun({
+    items: [],
+    statusMessage: "free user run limit exceeded",
+    log: "[WARNING] Free users are limited to 50 runs. Please upgrade to a paid plan to run more.",
+  });
+  assert.equal(limitExplanation?.planLimit, true);
+  assert.match(limitExplanation?.message ?? "", /Status message: free user run limit exceeded/);
+  assert.match(limitExplanation?.message ?? "", /Free users are limited to 50 runs/);
+  assert.equal(verify.explainUnusableRun({ items: [{ status: 200 }] }), null);
+
+  const mappedAda = "https://www.linkedin.com/in/ada-lovelace";
+  const mappedOther = "https://www.linkedin.com/in/ada-other";
+  const mapped = verify.assignProfiles(
+    [mappedAda, mappedOther, "https://www.linkedin.com/in/never-mentioned"],
+    verify.normalizeActorItems(
+      [
+        {
+          results: {
+            "ada-lovelace": {
+              basic_info: {
+                fullname: "Ada Lovelace",
+                headline: "Founder, Analytical Engines",
+                public_identifier: "ada-lovelace",
+              },
+              education: [{ school: "The Wharton School", end_date: { year: 2024 }, duration: "2020 - 2024" }],
+            },
+          },
+          failedUsernames: [mappedOther],
+        },
+      ],
+      [mappedAda, mappedOther]
+    )
+  );
+  assert.equal(mapped.get(mappedAda)?.firstName, "Ada");
+  assert.equal(mapped.get(mappedAda)?.lastName, "Lovelace");
+  assert.equal(mapped.get(mappedAda)?.headline, "Founder, Analytical Engines");
+  assert.equal(mapped.get(mappedAda)?.education?.[0]?.schoolName, "The Wharton School");
+  assert.equal((mapped.get(mappedAda)?.education?.[0]?.endDate as { year?: number } | undefined)?.year, 2024);
+  assert.equal(mapped.get(mappedOther), null);
+  assert.equal(mapped.has("https://www.linkedin.com/in/never-mentioned"), false);
+  const durationOnly = verify.normalizeActorItems(
+    [
+      {
+        basic_info: { fullname: "Zoe Member", headline: "Penn student" },
+        education: [{ school: "University of Pennsylvania", duration: "2023 - Present" }],
+      },
+    ],
+    ["https://www.linkedin.com/in/zoe-member"]
+  );
+  const durationProfile = verify.assignProfiles(["https://www.linkedin.com/in/zoe-member"], durationOnly);
+  assert.equal(
+    (durationProfile.get("https://www.linkedin.com/in/zoe-member")?.education?.[0]?.endDate as { text?: string } | undefined)?.text,
+    "Present"
+  );
 
   const vanity = verify.assignProfiles(
     ["https://www.linkedin.com/in/stella-lin-4588bb22a"],
@@ -264,8 +333,21 @@ async function main() {
   assert.equal(singleOldStudent.graduationYear, 2015);
 
   const absent = verify.judgeProfiles(ada, [adaA], new Map([[adaA, null]]));
-  assert.equal(absent.outcome, "rejected");
-  assert.match(absent.reason, /returned no profile/);
+  assert.equal(absent.outcome, "not_found");
+  assert.equal(absent.urls[0]?.notFound, true);
+  assert.equal(absent.urls[0]?.returned, false);
+  assert.match(absent.reason, /not found/);
+
+  const returnedButWrongSchool = verify.judgeProfiles(
+    ada,
+    [adaA, adaB],
+    new Map([
+      [adaA, profile("Ada", "Lovelace", "California Institute of Technology", 2024)],
+      [adaB, null],
+    ])
+  );
+  assert.equal(returnedButWrongSchool.outcome, "rejected");
+  assert.match(returnedButWrongSchool.reason, /name and the campus/);
 
   const outPath = path.join(os.tmpdir(), `apify-linkedin-verify-out-${process.pid}.jsonl`);
   fs.rmSync(outPath, { force: true });
@@ -346,7 +428,7 @@ async function main() {
     firstLines.map((line) => JSON.parse(line).person_id),
     ["person_ada", "person_pot"]
   );
-  assert.equal(JSON.parse(firstLines[0]).actor, "harvestapi/linkedin-profile-scraper");
+  assert.equal(JSON.parse(firstLines[0]).actor, verify.DEFAULT_ACTOR_ID);
   assert.equal(JSON.parse(firstLines[0]).outcome, "rejected");
 
   const second = await runVerify({
@@ -366,6 +448,168 @@ async function main() {
     secondLines.map((line) => JSON.parse(line).person_id),
     ["person_ada", "person_pot", "person_mem", "person_alan"]
   );
+
+  const grace = queue.find((person) => person.id === "person_grace");
+  assert.ok(grace);
+  const actorOut = path.join(os.tmpdir(), `apify-linkedin-verify-actor-${process.pid}.jsonl`);
+  fs.rmSync(actorOut, { force: true });
+  const actorRun = await runVerify({
+    db,
+    campusId: "univ_mit",
+    limit: 1,
+    dryRun: false,
+    yes: true,
+    mock: false,
+    outPath: actorOut,
+    hasToken: false,
+    scrape: async () => ({
+      items: [
+        {
+          results: {
+            "grace-hopper": {
+              basic_info: {
+                fullname: "Grace Hopper",
+                headline: "Builder",
+                profile_url: graceA,
+              },
+              education: [{ school: "Massachusetts Institute of Technology", end_date: { year: 2024 } }],
+            },
+          },
+          failedUsernames: [],
+        },
+      ],
+      statusMessage: "Succeeded",
+      log: "scraped 1 profile",
+    }),
+  });
+  assert.equal(actorRun, 0);
+  const actorLine = JSON.parse(fs.readFileSync(actorOut, "utf8").trim()) as {
+    person_id: string;
+    outcome: string;
+    actor: string;
+    headline: string;
+    graduation_year: number;
+  };
+  assert.equal(actorLine.person_id, "person_grace");
+  assert.equal(actorLine.outcome, "confirmed");
+  assert.equal(actorLine.actor, verify.DEFAULT_ACTOR_ID);
+  assert.equal(actorLine.headline, "Builder");
+  assert.equal(actorLine.graduation_year, 2024);
+
+  const limitOut = path.join(os.tmpdir(), `apify-linkedin-verify-limit-${process.pid}.jsonl`);
+  fs.rmSync(limitOut, { force: true });
+  let limitCalls = 0;
+  const logs: string[] = [];
+  const originalLog = console.log;
+  console.log = (...args: unknown[]) => {
+    logs.push(args.map((part) => String(part)).join(" "));
+  };
+  let limitCode = 0;
+  try {
+    limitCode = await runVerify({
+      db,
+      campusId: "univ_mit",
+      limit: 1,
+      dryRun: false,
+      yes: true,
+      mock: false,
+      outPath: limitOut,
+      hasToken: false,
+      scrape: async () => {
+        limitCalls++;
+        return {
+          items: [],
+          statusMessage: "free user run limit exceeded",
+          log: "[WARNING] Free users are limited to 50 runs. Please upgrade to a paid plan to run more.\n[Status message]: free user run limit exceeded",
+        };
+      },
+    });
+  } finally {
+    console.log = originalLog;
+  }
+  assert.equal(limitCode, 1);
+  assert.equal(limitCalls, 1);
+  assert.equal(fs.existsSync(limitOut), false);
+  assert.equal(logs.some((line) => line.includes("Status message: free user run limit exceeded")), true);
+  assert.equal(logs.some((line) => line.includes("Free users are limited to 50 runs")), true);
+  assert.equal(logs.some((line) => line.includes("Please upgrade to a paid plan")), true);
+
+  let partialCalls = 0;
+  const partial = await runVerify({
+    db,
+    campusId: "univ_mit",
+    limit: 1,
+    dryRun: false,
+    yes: true,
+    mock: false,
+    outPath: limitOut,
+    hasToken: false,
+    scrape: async () => {
+      partialCalls++;
+      return {
+        items: [
+          {
+            results: {
+              "grace-hopper": {
+                basic_info: { fullname: "Grace Hopper", headline: "Should not be saved" },
+                education: [{ school: "Massachusetts Institute of Technology", end_date: { year: 2024 } }],
+              },
+            },
+            failedUsernames: [],
+          },
+        ],
+        statusMessage: "Succeeded",
+        log: "Free users are limited to 5 profiles. Please upgrade.",
+      };
+    },
+  });
+  assert.equal(partial, 1);
+  assert.equal(partialCalls, 1);
+  assert.equal(fs.existsSync(limitOut), false);
+
+  const retry = await runVerify({
+    db,
+    campusId: "univ_mit",
+    limit: 1,
+    dryRun: false,
+    yes: true,
+    mock: false,
+    outPath: limitOut,
+    hasToken: false,
+    scrape: async () => ({
+      items: [
+        {
+          basic_info: { fullname: "Grace Hopper", headline: "Not on file" },
+          education: [{ school: "Other University", end_date: { year: 2024 } }],
+        },
+      ],
+    }),
+  });
+  assert.equal(retry, 0);
+  const retryLine = JSON.parse(fs.readFileSync(limitOut, "utf8").trim()) as { outcome: string; person_id: string };
+  assert.equal(retryLine.person_id, "person_grace");
+  assert.equal(retryLine.outcome, "rejected");
+
+  const missingOnly = path.join(os.tmpdir(), `apify-linkedin-verify-missing-${process.pid}.jsonl`);
+  fs.rmSync(missingOnly, { force: true });
+  const notFoundRun = await runVerify({
+    db,
+    campusId: "univ_berkeley",
+    limit: 1,
+    dryRun: false,
+    yes: true,
+    mock: false,
+    outPath: missingOnly,
+    hasToken: false,
+    actorId: verify.DEFAULT_ACTOR_ID,
+    scrape: async () => ({
+      items: [{ results: {}, failedUsernames: ["alan-turing"] }],
+    }),
+  });
+  assert.equal(notFoundRun, 0);
+  const notFoundLine = JSON.parse(fs.readFileSync(missingOnly, "utf8").trim()) as { outcome: string; outcome_reason: string };
+  assert.equal(notFoundLine.outcome, "not_found");
+  assert.match(notFoundLine.outcome_reason, /not found/);
 
   const fixture = path.join(os.tmpdir(), `apify-linkedin-verify-fixture-${process.pid}.jsonl`);
   const adaLine = verify.buildResultLine(
@@ -487,7 +731,25 @@ async function main() {
   assert.equal(again.confirmed, 0);
   assert.equal(again.skipped >= 1, true);
 
+  const notFoundFile = path.join(os.tmpdir(), `apify-linkedin-verify-not-found-${process.pid}.jsonl`);
+  assert.ok(mem);
+  fs.writeFileSync(
+    notFoundFile,
+    JSON.stringify(verify.buildResultLine(mem, new Map([[memA, null]]), "2026-09-26T00:00:00.000Z")) + "\n"
+  );
+  assert.equal(verify.buildResultLine(mem, new Map([[memA, null]]), "2026-09-26T00:00:00.000Z").outcome, "not_found");
+  const notFoundImport = verify.importVerifiedLinkedIn(db, notFoundFile, false);
+  assert.equal(notFoundImport.notFound, 1);
+  assert.equal(notFoundImport.rejected, 0);
+  const memClaims = claimsOf("person_mem");
+  assert.equal(memClaims[0]?.verification_state, "unverified");
+  assert.equal(JSON.parse(memClaims[0]?.value_json ?? "{}").decision, "not_found");
+
   fs.rmSync(outPath, { force: true });
+  fs.rmSync(actorOut, { force: true });
+  fs.rmSync(limitOut, { force: true });
+  fs.rmSync(missingOnly, { force: true });
+  fs.rmSync(notFoundFile, { force: true });
   fs.rmSync(fixture, { force: true });
   db.close();
   for (const suffix of ["", "-shm", "-wal"]) fs.rmSync(dbPath + suffix, { force: true });
