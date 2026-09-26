@@ -60,6 +60,7 @@ interface CampusMap {
   setFilter: (layer: string, filter: unknown) => void;
   setLayoutProperty: (layer: string, prop: string, value: unknown) => void;
   flyTo: (options: object) => void;
+  fitBounds: (bounds: [[number, number], [number, number]], options?: object) => void;
   zoomIn: () => void;
   zoomOut: () => void;
   on: {
@@ -113,6 +114,7 @@ export const GlobeView = memo(function GlobeView({
   // visible to effects/handlers that read it later.
   const liveRef = useRef({ basePath, current, onNavigate });
   const spinPaused = useRef(false);
+  const framedRef = useRef(false);
   useEffect(() => {
     liveRef.current = { basePath, current, onNavigate };
     spinPaused.current = Boolean(current.university) || geoMode === "hq";
@@ -152,8 +154,8 @@ export const GlobeView = memo(function GlobeView({
         map = new maplibregl.Map({
           container: containerRef.current,
           style: STYLE_URL,
-          center: [-95, 40], // North America — where all 5 current campuses are
-          zoom: 2.6,
+          center: [-98, 39],
+          zoom: 3.35,
           minZoom: 1.5,
           maxZoom: 8,
           attributionControl: { compact: true },
@@ -501,7 +503,11 @@ export const GlobeView = memo(function GlobeView({
         });
       }
     }
-  }, [universities, campusArcs, status]);
+    if (!current.university && !framedRef.current && placedPoints.length > 0) {
+      framedRef.current = true;
+      frameCampuses(map, placedPoints);
+    }
+  }, [universities, campusArcs, status, current.university]);
 
   // Fly to / re-filter the selected campus without re-creating the map.
   useEffect(() => {
@@ -551,20 +557,22 @@ export const GlobeView = memo(function GlobeView({
 
   return (
     <div className="p-2">
-      <div className="relative h-[min(68dvh,820px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-border-c sm:min-h-[520px]" style={{ background: MAP_THEME.sky }}>
-        <div ref={containerRef} className="h-full w-full" />
-        {status === "ok" && (
-          <div className="pointer-events-none absolute left-1/2 top-3 z-10 flex -translate-x-1/2 gap-3 sm:gap-6">
+      {status === "ok" && (
+        <div className="mb-2 flex justify-center">
+          <div className="flex divide-x divide-black/10 rounded-lg border border-black/15 bg-white shadow-sm">
             {statItems.map((s) => (
-              <div key={s.label} className="text-center">
-                <div className="stat-num text-lg sm:text-2xl">{s.n.toLocaleString("en-US")}</div>
+              <div key={s.label} className="min-w-[5.5rem] px-4 py-2 text-center">
+                <div className="stat-num text-lg text-black sm:text-xl">{s.n.toLocaleString("en-US")}</div>
                 <div className="ui-label mt-0.5">{s.label}</div>
               </div>
             ))}
           </div>
-        )}
+        </div>
+      )}
+      <div className="relative h-[min(68dvh,820px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-border-c sm:min-h-[520px]" style={{ background: MAP_THEME.sky }}>
+        <div ref={containerRef} className="h-full w-full" />
         {status === "ok" && (
-          <div className="glass-panel absolute right-3 top-3 flex p-0.5">
+          <div className="absolute right-3 top-3 z-10 flex rounded-lg border border-black/15 bg-white p-0.5 shadow-sm">
             <button
               type="button"
               onClick={() => setGeoMode("campus")}
@@ -687,15 +695,13 @@ export const GlobeView = memo(function GlobeView({
           </div>
         )}
 
-        {status === "ok" && <ResultTray candidates={trayCandidates} basePath={basePath} current={current} />}
-
         {status === "ok" && (
-          <div className="absolute bottom-3 right-3 flex flex-col gap-1">
+          <div className="absolute bottom-3 right-3 z-10 flex flex-col gap-1">
             <button
               type="button"
               onClick={() => mapRef.current?.zoomIn()}
               aria-label="Zoom in"
-              className="glass-panel flex h-7 w-7 items-center justify-center text-sm text-foreground"
+              className="flex h-7 w-7 items-center justify-center rounded-md border border-black/15 bg-white text-sm text-black shadow-sm"
             >
               +
             </button>
@@ -703,23 +709,28 @@ export const GlobeView = memo(function GlobeView({
               type="button"
               onClick={() => mapRef.current?.zoomOut()}
               aria-label="Zoom out"
-              className="glass-panel flex h-7 w-7 items-center justify-center text-sm text-foreground"
+              className="flex h-7 w-7 items-center justify-center rounded-md border border-black/15 bg-white text-sm text-black shadow-sm"
             >
               −
             </button>
             <button
               type="button"
-              onClick={() => mapRef.current?.flyTo({ center: [-95, 40], zoom: 2.6, duration: prefersReducedMotion() ? 0 : 900 })}
+              onClick={() => {
+                const map = mapRef.current;
+                if (!map) return;
+                frameCampuses(map, points);
+              }}
               aria-label="Reset view"
-              className="glass-panel flex h-7 w-7 items-center justify-center text-[10px] text-foreground"
-              title="Fit results"
+              className="flex h-7 w-7 items-center justify-center rounded-md border border-black/15 bg-white text-[10px] text-black shadow-sm"
+              title="Fit campuses"
             >
               ⤢
             </button>
           </div>
         )}
       </div>
-      <p className="mt-2 text-[11px] text-muted">
+      {status === "ok" && <ResultTray docked candidates={trayCandidates} basePath={basePath} current={current} />}
+      <p className="mt-2 text-[11px] text-black/70">
         Marker size is the number of companies tied to that campus by sourced affiliation. It is not an estimate of every startup at the school.
         Drag to look around. Click a campus to open it. Headquarters mode lists recorded place names and leaves unknown locations unplotted.
       </p>
@@ -729,6 +740,22 @@ export const GlobeView = memo(function GlobeView({
     </div>
   );
 });
+
+function frameCampuses(map: CampusMap, points: UniversitySummary[]) {
+  const placed = points.filter((u) => u.lon != null && u.lat != null);
+  if (!placed.length) return;
+  const west = Math.min(...placed.map((u) => u.lon as number));
+  const east = Math.max(...placed.map((u) => u.lon as number));
+  const south = Math.min(...placed.map((u) => u.lat as number));
+  const north = Math.max(...placed.map((u) => u.lat as number));
+  map.fitBounds(
+    [
+      [west - 2, south - 1.5],
+      [east + 2, north + 1.5],
+    ],
+    { padding: { top: 36, bottom: 28, left: 48, right: 56 }, maxZoom: 4.2, duration: 0 },
+  );
+}
 
 function arcFeaturesFor(points: UniversitySummary[], campusArcs: CampusArc[]) {
   const byId = new Map(points.map((u) => [u.id, u]));
