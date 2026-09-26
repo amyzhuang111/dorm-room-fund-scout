@@ -27,6 +27,12 @@ export interface MapNode {
   tier: string | null;
   stage: string | null;
   enroll: string | null;
+  /** Graduation year when a sourced class year exists. Null stays unknown. */
+  year: number | null;
+  /** True when this person has a sourced founder role on a startup in the map. */
+  founder: boolean;
+  /** Incident edges. Drives node size together with funding. */
+  degree: number;
   potential: boolean;
   /** Stored linkedin.com/in path. Omitted when the person has neither a confirmed alias nor an unverified candidate. */
   linkedinUrl?: string;
@@ -88,6 +94,22 @@ function investorId(name: string): string {
   return `inv_${name.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "")}`;
 }
 
+/** Sourced graduation year. A missing year stays null — it is not guessed from age. */
+export function classYear(gradYear: number | null, label: string | null): number | null {
+  if (typeof gradYear === "number" && gradYear >= 1980 && gradYear <= 2040) return gradYear;
+  if (!label) return null;
+  const full = label.match(/\b((?:19|20)\d{2})\b/);
+  if (full) {
+    const year = Number(full[1]);
+    if (year >= 1980 && year <= 2040) return year;
+  }
+  const tick = label.match(/'(\d{2})\b/);
+  if (!tick) return null;
+  const yy = Number(tick[1]);
+  const year = yy >= 70 ? 1900 + yy : 2000 + yy;
+  return year >= 1980 && year <= 2040 ? year : null;
+}
+
 function tierBoost(tier: string | null): number {
   if (tier === "S") return 3;
   if (tier === "A") return 2;
@@ -113,7 +135,7 @@ function assembleNetworkMap(): MapGraph {
 
   const people = db
     .prepare(
-      `SELECT id, name, aliases_json, founder_status, enrollment_status, signal_tier FROM people
+      `SELECT id, name, aliases_json, founder_status, enrollment_status, enrollment_label, enrollment_grad_year, signal_tier FROM people
        WHERE id IN (SELECT person_id FROM affiliations)
           OR id IN (
             SELECT ppr.person_id FROM person_project_roles ppr
@@ -121,7 +143,16 @@ function assembleNetworkMap(): MapGraph {
             WHERE p.kind = 'company' AND p.is_investable_candidate = 1 AND ppr.role LIKE '%founder%'
           )`
     )
-    .all() as { id: string; name: string; aliases_json: string; founder_status: string | null; enrollment_status: string | null; signal_tier: string | null }[];
+    .all() as {
+    id: string;
+    name: string;
+    aliases_json: string;
+    founder_status: string | null;
+    enrollment_status: string | null;
+    enrollment_label: string | null;
+    enrollment_grad_year: number | null;
+    signal_tier: string | null;
+  }[];
   const personIds = new Set(people.map((person) => person.id));
   const linkedinByPerson = new Map<string, { url: string; status: "confirmed" | "unverified" }>();
   for (const person of people) {
@@ -433,14 +464,21 @@ function assembleNetworkMap(): MapGraph {
 
   const pos = new Map(simNodes.map((node) => [node.id, node]));
   const nodes: MapNode[] = [];
+  const founderIds = new Set<string>();
+  for (const ids of foundersByCompany.values()) for (const id of ids) founderIds.add(id);
 
-  const emit = (node: MapNode) => {
+  const emit = (node: Omit<MapNode, "year" | "founder" | "degree"> & { year?: number | null; founder?: boolean }) => {
     const at = pos.get(node.id);
     if (!at) return;
     node.x = Math.round(at.x);
     node.y = Math.round(at.y);
     node.r = Math.round(at.r * 10) / 10;
-    nodes.push(node);
+    nodes.push({
+      ...node,
+      year: node.year ?? null,
+      founder: node.founder ?? false,
+      degree: degree.get(node.id) ?? 0,
+    });
   };
 
   for (const uni of universities) {
@@ -476,6 +514,8 @@ function assembleNetworkMap(): MapGraph {
       tier: person.signal_tier,
       stage: null,
       enroll: person.enrollment_status ?? "unknown",
+      year: classYear(person.enrollment_grad_year, person.enrollment_label),
+      founder: founderIds.has(person.id),
       potential: person.founder_status === "potential",
       ...(linkedin ? { linkedinUrl: linkedin.url, linkedinStatus: linkedin.status } : {}),
     });

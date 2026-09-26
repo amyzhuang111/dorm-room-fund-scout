@@ -1,18 +1,25 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { MapEdgeType, MapGraph, MapNode, MapNodeType } from "@/lib/domain/network-map";
 import type { NetworkFocus } from "@/lib/domain/network-focus";
 import { buildPersonLinkedInLookup } from "@/lib/domain/map-linkedin";
-import { NetworkMapCanvas } from "./network-map-canvas";
+import type { NetworkSigmaHandle } from "./network-sigma";
+import { NODE_FILL } from "./network-style";
 import { LinkedInIconButton, LinkedInOpenButton, PersonLinkButton, ProfileIconLinks } from "./person-link";
+
+const NetworkSigma = dynamic(() => import("./network-sigma").then((mod) => mod.NetworkSigma), {
+  ssr: false,
+  loading: () => <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-black">Drawing the network…</p>,
+});
 
 const NODE_TYPES: { id: MapNodeType; label: string }[] = [
   { id: "person", label: "People" },
   { id: "startup", label: "Startups" },
-  { id: "campus", label: "Campuses" },
   { id: "investor", label: "Investors" },
+  { id: "campus", label: "Campuses" },
   { id: "program", label: "Clubs and labs" },
 ];
 
@@ -32,6 +39,8 @@ const ENROLL: { id: string; label: string }[] = [
   { id: "unknown", label: "Unknown" },
 ];
 
+type PeopleMode = "all" | "founder" | "potential";
+
 interface Filters {
   campuses: string[];
   sectors: string[];
@@ -40,7 +49,9 @@ interface Filters {
   enroll: string[];
   nodeTypes: MapNodeType[];
   edgeTypes: MapEdgeType[];
-  potentialOnly: boolean;
+  peopleMode: PeopleMode;
+  yearFrom: number | null;
+  yearTo: number | null;
 }
 
 function campusesOf(node: MapNode): string[] {
@@ -55,12 +66,14 @@ function toggle<T>(list: T[], value: T): T[] {
 export function NetworkMapApp() {
   const [graph, setGraph] = useState<MapGraph | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [filtersOpen, setFiltersOpen] = useState(true);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [filters, setFilters] = useState<Filters | null>(null);
+  const defaultsRef = useRef<Filters | null>(null);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<string | null>(null);
   const [fly, setFly] = useState<{ id: string; token: number }>({ id: "", token: 0 });
   const [focus, setFocus] = useState<NetworkFocus | null>(null);
+  const graphApi = useRef<NetworkSigmaHandle | null>(null);
 
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -68,6 +81,14 @@ export function NetworkMapApp() {
     return () => {
       document.body.style.overflow = prev;
     };
+  }, []);
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelected(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   useEffect(() => {
@@ -84,7 +105,7 @@ export function NetworkMapApp() {
         const sectors = [...new Set(data.nodes.map((node) => node.sector).filter((item): item is string => !!item))].sort();
         const tiers = [...new Set(data.nodes.map((node) => node.tier ?? "Untiered"))].sort();
         const stages = [...new Set(data.nodes.map((node) => node.stage ?? "Unknown"))].sort();
-        setFilters({
+        const initial: Filters = {
           campuses,
           sectors,
           tiers,
@@ -92,8 +113,12 @@ export function NetworkMapApp() {
           enroll: ENROLL.map((item) => item.id),
           nodeTypes: NODE_TYPES.map((item) => item.id),
           edgeTypes: EDGE_TYPES.map((item) => item.id),
-          potentialOnly: false,
-        });
+          peopleMode: "all",
+          yearFrom: null,
+          yearTo: null,
+        };
+        defaultsRef.current = initial;
+        setFilters(initial);
       })
       .catch(() => {
         if (!cancel) setError("The map could not be loaded.");
@@ -104,10 +129,7 @@ export function NetworkMapApp() {
   }, []);
 
   useEffect(() => {
-    if (!selected) {
-      setFocus(null);
-      return;
-    }
+    if (!selected) return;
     let cancel = false;
     fetch(`/api/network/focus?id=${encodeURIComponent(selected)}`)
       .then((res) => (res.ok ? res.json() : null))
@@ -122,6 +144,7 @@ export function NetworkMapApp() {
 
   const hidden = useMemo(() => hiddenIds(graph, filters), [graph, filters]);
   const edgeTypes = useMemo(() => new Set(filters?.edgeTypes ?? []), [filters]);
+  const activeId = selected && !hidden.has(selected) ? selected : null;
 
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -138,6 +161,16 @@ export function NetworkMapApp() {
     return counts;
   }, [graph, hidden]);
 
+  const yearChoices = useMemo(() => {
+    const counts = new Map<number, number>();
+    if (!graph) return [];
+    for (const node of graph.nodes) {
+      if (node.type !== "person" || node.year == null) continue;
+      counts.set(node.year, (counts.get(node.year) ?? 0) + 1);
+    }
+    return [...counts.entries()].sort((a, b) => b[0] - a[0]).slice(0, 8);
+  }, [graph]);
+
   function choose(id: string) {
     setSelected(id);
     setFly((prev) => ({ id, token: prev.token + 1 }));
@@ -145,109 +178,208 @@ export function NetworkMapApp() {
   }
 
   const linkedinFor = useMemo(() => (graph ? buildPersonLinkedInLookup(graph) : null), [graph]);
-  const selectedNode = graph?.nodes.find((node) => node.id === selected) ?? null;
+  const selectedNode = graph?.nodes.find((node) => node.id === activeId) ?? null;
   const personLinkedIn =
     selectedNode?.type === "person"
       ? focus?.id === selected && focus.linkedin
         ? focus.linkedin
         : linkedinFor?.(selectedNode) ?? null
       : null;
+  const detailOpen = activeId != null && selectedNode != null;
+
+  const campusNodes = graph?.nodes.filter((node) => node.type === "campus") ?? [];
 
   return (
-    <div className="fixed inset-x-0 top-14 bottom-0 z-20 bg-white">
+    <div className="fixed inset-x-0 top-14 bottom-0 z-20 bg-white text-black">
       {graph && filters ? (
-        <NetworkMapCanvas
+        <NetworkSigma
           graph={graph}
           hidden={hidden}
           edgeTypes={edgeTypes}
-          selected={selected}
+          selected={activeId}
           flyToken={fly.token}
           flyId={fly.id || null}
-          onSelect={(id) => {
-            setSelected(id);
-            if (id) setFly((prev) => ({ id, token: prev.token }));
+          onSelect={(id) => setSelected(id)}
+          onReady={(api) => {
+            graphApi.current = api;
           }}
         />
       ) : (
-        <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-muted">{error ?? "Laying out the map…"}</p>
+        <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-black">{error ?? "Laying out the map…"}</p>
       )}
 
-      <div className="pointer-events-none absolute inset-y-3 left-3 z-30 flex items-start gap-2">
+      <div className="absolute left-3 top-3 z-30 flex max-w-[16rem] flex-col items-start gap-1">
         <button
           type="button"
-          className="pointer-events-auto rounded-md border border-border-c bg-white px-2.5 py-1.5 text-xs font-medium text-foreground shadow-sm"
+          className="rounded-md border border-black/20 bg-white px-2.5 py-1.5 text-xs font-semibold text-black shadow-sm"
           aria-expanded={filtersOpen}
           onClick={() => setFiltersOpen((open) => !open)}
         >
           {filtersOpen ? "Hide filters" : "Filters"}
         </button>
-        {filtersOpen && filters && graph && (
-          <aside className="pointer-events-auto max-h-[calc(100%-0.5rem)] w-64 overflow-y-auto rounded-xl border border-border-c bg-white/95 p-3 shadow-sm">
-            <p className="text-[11px] text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
-              {visibleCounts.person.toLocaleString()} people · {visibleCounts.startup.toLocaleString()} startups · {visibleCounts.investor} investors · {visibleCounts.program} programs
-            </p>
+        <p className="text-[11px] leading-snug text-neutral-700" style={{ fontVariantNumeric: "tabular-nums" }}>
+          {visibleCounts.person.toLocaleString()} people · {visibleCounts.startup.toLocaleString()} startups · {visibleCounts.investor} investors
+        </p>
+      </div>
+
+      {filtersOpen && filters && graph && (
+        <aside className="absolute bottom-14 left-3 top-16 z-30 flex w-[17.5rem] flex-col overflow-hidden rounded-lg border border-black/15 bg-white text-black shadow-lg">
+          <div className="flex items-center justify-between border-b border-black/10 px-3 py-2">
+            <p className="text-sm font-semibold">Filters</p>
+            <button
+              type="button"
+              className="text-xs font-medium underline"
+              onClick={() => {
+                if (defaultsRef.current) setFilters(defaultsRef.current);
+              }}
+            >
+              Reset
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto px-3 pb-3">
+            <FilterGroup title="People">
+              <div className="grid grid-cols-3 gap-1">
+                {(
+                  [
+                    ["all", "All"],
+                    ["founder", "Founders"],
+                    ["potential", "Potential"],
+                  ] as const
+                ).map(([id, label]) => (
+                  <button
+                    key={id}
+                    type="button"
+                    className={`rounded border px-1 py-1 text-[11px] font-medium ${filters.peopleMode === id ? "border-black bg-black text-white" : "border-black/20 bg-white text-black"}`}
+                    onClick={() => setFilters({ ...filters, peopleMode: id })}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </FilterGroup>
+            <FilterGroup title="Class year">
+              <div className="flex gap-2">
+                <YearField
+                  label="From"
+                  value={filters.yearFrom}
+                  onChange={(yearFrom) => setFilters({ ...filters, yearFrom })}
+                />
+                <YearField label="To" value={filters.yearTo} onChange={(yearTo) => setFilters({ ...filters, yearTo })} />
+              </div>
+              {yearChoices.length > 0 && (
+                <div className="mt-1.5 flex flex-wrap gap-1">
+                  <button
+                    type="button"
+                    className={`rounded border px-1.5 py-0.5 text-[11px] ${filters.yearFrom == null && filters.yearTo == null ? "border-black bg-black text-white" : "border-black/20"}`}
+                    onClick={() => setFilters({ ...filters, yearFrom: null, yearTo: null })}
+                  >
+                    Any
+                  </button>
+                  {yearChoices.map(([year, count]) => {
+                    const on = filters.yearFrom === year && filters.yearTo === year;
+                    return (
+                      <button
+                        key={year}
+                        type="button"
+                        className={`rounded border px-1.5 py-0.5 text-[11px] ${on ? "border-black bg-black text-white" : "border-black/20"}`}
+                        onClick={() => setFilters({ ...filters, yearFrom: on ? null : year, yearTo: on ? null : year })}
+                      >
+                        {year}
+                        <span className="ml-1 opacity-70">{count}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+              <p className="mt-1 text-[10px] leading-snug text-neutral-600">Sourced graduation years only. A range hides people with no class year.</p>
+            </FilterGroup>
             <FilterGroup title="Node type">
               {NODE_TYPES.map((item) => (
-                <Check key={item.id} label={item.label} checked={filters.nodeTypes.includes(item.id)} onChange={() => setFilters({ ...filters, nodeTypes: toggle(filters.nodeTypes, item.id) })} />
-              ))}
-            </FilterGroup>
-            <FilterGroup title="Edges">
-              {EDGE_TYPES.map((item) => (
-                <Check key={item.id} label={item.label} checked={filters.edgeTypes.includes(item.id)} onChange={() => setFilters({ ...filters, edgeTypes: toggle(filters.edgeTypes, item.id) })} />
+                <Check
+                  key={item.id}
+                  label={item.label}
+                  color={NODE_FILL[item.id]}
+                  shape={item.id === "startup" ? "square" : item.id === "investor" ? "diamond" : item.id === "program" ? "hex" : "circle"}
+                  checked={filters.nodeTypes.includes(item.id)}
+                  onChange={() => setFilters({ ...filters, nodeTypes: toggle(filters.nodeTypes, item.id) })}
+                />
               ))}
             </FilterGroup>
             <FilterGroup title="Campus">
-              {graph.nodes
-                .filter((node) => node.type === "campus")
-                .map((node) => (
-                  <Check
-                    key={node.id}
-                    label={node.label}
-                    checked={filters.campuses.includes(node.campus ?? "")}
-                    onChange={() => setFilters({ ...filters, campuses: toggle(filters.campuses, node.campus ?? "") })}
-                  />
-                ))}
+              {campusNodes.map((node) => (
+                <Check
+                  key={node.id}
+                  label={node.label}
+                  checked={filters.campuses.includes(node.campus ?? "")}
+                  onChange={() => setFilters({ ...filters, campuses: toggle(filters.campuses, node.campus ?? "") })}
+                />
+              ))}
             </FilterGroup>
             <FilterGroup title="Sector">
               {[...new Set(graph.nodes.map((node) => node.sector).filter((item): item is string => !!item))].sort().map((sector) => (
                 <Check key={sector} label={sector} checked={filters.sectors.includes(sector)} onChange={() => setFilters({ ...filters, sectors: toggle(filters.sectors, sector) })} />
               ))}
             </FilterGroup>
-            <FilterGroup title="Signal tier">
-              {[...new Set(graph.nodes.map((node) => node.tier ?? "Untiered"))].sort().map((tier) => (
-                <Check key={tier} label={tier} checked={filters.tiers.includes(tier)} onChange={() => setFilters({ ...filters, tiers: toggle(filters.tiers, tier) })} />
-              ))}
-            </FilterGroup>
-            <FilterGroup title="Stage">
-              {[...new Set(graph.nodes.map((node) => node.stage ?? "Unknown"))].sort().map((stage) => (
-                <Check key={stage} label={stage} checked={filters.stages.includes(stage)} onChange={() => setFilters({ ...filters, stages: toggle(filters.stages, stage) })} />
-              ))}
-            </FilterGroup>
-            <FilterGroup title="Enrollment">
-              {ENROLL.map((item) => (
-                <Check key={item.id} label={item.label} checked={filters.enroll.includes(item.id)} onChange={() => setFilters({ ...filters, enroll: toggle(filters.enroll, item.id) })} />
-              ))}
-              <Check label="Potential founders only" checked={filters.potentialOnly} onChange={() => setFilters({ ...filters, potentialOnly: !filters.potentialOnly })} />
-            </FilterGroup>
-          </aside>
-        )}
-      </div>
+            <details className="mt-3">
+              <summary className="cursor-pointer text-[10px] font-semibold uppercase tracking-wide text-neutral-600">More</summary>
+              <FilterGroup title="Enrollment">
+                {ENROLL.map((item) => (
+                  <Check
+                    key={item.id}
+                    label={item.label}
+                    checked={filters.enroll.includes(item.id)}
+                    onChange={() => setFilters({ ...filters, enroll: toggle(filters.enroll, item.id) })}
+                  />
+                ))}
+              </FilterGroup>
+              <FilterGroup title="Signal tier">
+                {[...new Set(graph.nodes.map((node) => node.tier ?? "Untiered"))].sort().map((tier) => (
+                  <Check key={tier} label={tier} checked={filters.tiers.includes(tier)} onChange={() => setFilters({ ...filters, tiers: toggle(filters.tiers, tier) })} />
+                ))}
+              </FilterGroup>
+              <FilterGroup title="Stage">
+                {[...new Set(graph.nodes.map((node) => node.stage ?? "Unknown"))].sort().map((stage) => (
+                  <Check key={stage} label={stage} checked={filters.stages.includes(stage)} onChange={() => setFilters({ ...filters, stages: toggle(filters.stages, stage) })} />
+                ))}
+              </FilterGroup>
+              <FilterGroup title="Relationships">
+                {EDGE_TYPES.map((item) => (
+                  <Check
+                    key={item.id}
+                    label={item.label}
+                    checked={filters.edgeTypes.includes(item.id)}
+                    onChange={() => setFilters({ ...filters, edgeTypes: toggle(filters.edgeTypes, item.id) })}
+                  />
+                ))}
+                <p className="pt-1 text-[10px] leading-snug text-neutral-600">Studied-at links stay hidden until you hover a node, so campus clusters stay readable.</p>
+              </FilterGroup>
+            </details>
+          </div>
+        </aside>
+      )}
 
-      <div className="absolute left-1/2 top-3 z-30 w-72 -translate-x-1/2">
+      <div className="absolute left-1/2 top-3 z-30 w-[min(22rem,calc(100%-18rem))] -translate-x-1/2">
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" && matches[0]) {
+              event.preventDefault();
+              choose(matches[0].id);
+            }
+            if (event.key === "Escape") setQuery("");
+          }}
           placeholder="Search people, startups, investors…"
           aria-label="Search the network"
-          className="w-full rounded-md border border-border-c bg-white px-3 py-1.5 text-sm shadow-sm"
+          className="w-full rounded-md border border-black/20 bg-white px-3 py-2 text-sm text-black shadow-sm outline-none placeholder:text-neutral-500 focus:border-black"
         />
         {matches.length > 0 && (
-          <ul className="mt-1 max-h-64 overflow-y-auto rounded-md border border-border-c bg-white shadow-sm">
+          <ul className="mt-1 max-h-64 overflow-y-auto rounded-md border border-black/15 bg-white shadow-md">
             {matches.map((node) => (
               <li key={node.id}>
-                <button type="button" className="flex w-full items-baseline justify-between gap-2 px-3 py-1.5 text-left text-sm hover:bg-surface" onClick={() => choose(node.id)}>
-                  <span className="truncate text-foreground">{node.label}</span>
-                  <span className="shrink-0 text-[10px] uppercase tracking-wide text-muted">{node.type}</span>
+                <button type="button" className="flex w-full items-baseline justify-between gap-2 px-3 py-1.5 text-left text-sm hover:bg-neutral-100" onClick={() => choose(node.id)}>
+                  <span className="truncate text-black">{node.label}</span>
+                  <span className="shrink-0 text-[10px] uppercase tracking-wide text-neutral-600">{node.type}</span>
                 </button>
               </li>
             ))}
@@ -255,37 +387,82 @@ export function NetworkMapApp() {
         )}
       </div>
 
-      <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 flex-wrap gap-2 rounded-md border border-border-c bg-white/95 px-2.5 py-1.5 text-[10px] text-muted shadow-sm">
-        <Legend swatch="circle" color="#5c516e" label="Person" />
-        <Legend swatch="square" color="#5840a0" label="Startup" />
-        <Legend swatch="campus" color="#9378ee" label="Campus" />
-        <Legend swatch="diamond" color="#2a2148" label="Investor" />
-        <Legend swatch="hex" color="#7d68c9" label="Club / lab" />
+      <div
+        className="absolute bottom-3 z-30 flex flex-col overflow-hidden rounded-md border border-black/15 bg-white shadow-sm"
+        style={{ right: detailOpen ? "calc(min(22rem, 100% - 1.5rem) + 0.85rem)" : "0.75rem" }}
+      >
+        <ZoomButton label="Zoom in" onClick={() => graphApi.current?.zoomIn()}>
+          +
+        </ZoomButton>
+        <ZoomButton label="Zoom out" onClick={() => graphApi.current?.zoomOut()}>
+          −
+        </ZoomButton>
+        <ZoomButton label="Fit the network" onClick={() => graphApi.current?.fit()}>
+          Fit
+        </ZoomButton>
       </div>
 
-      {selectedNode && (
-        <aside className="absolute bottom-3 right-3 top-16 z-30 flex w-80 flex-col overflow-hidden rounded-xl border border-border-c bg-white shadow-sm">
-          <div className="flex items-start justify-between gap-2 border-b border-border-c px-3 py-2">
+      <div className="pointer-events-none absolute bottom-3 left-3 z-20 max-w-[min(36rem,calc(100%-8rem))] rounded-md border border-black/10 bg-white/95 px-2.5 py-1.5 text-[11px] text-black shadow-sm">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <LegendItem shape="circle" color={NODE_FILL.person} label="Person" />
+          <LegendItem shape="square" color={NODE_FILL.startup} label="Startup" />
+          <LegendItem shape="diamond" color={NODE_FILL.investor} label="Investor" />
+          <LegendItem shape="circle" color={NODE_FILL.campus} label="Campus" />
+          <LegendItem shape="hex" color={NODE_FILL.program} label="Club / lab" />
+          <span className="text-neutral-600">Size = connections and funding</span>
+        </div>
+      </div>
+
+      {detailOpen && selectedNode && (
+        <aside
+          className="absolute bottom-3 right-3 top-16 z-30 flex w-[min(22rem,calc(100%-1.5rem))] flex-col overflow-hidden rounded-lg border border-black/15 bg-white text-black shadow-lg"
+          style={{ ["--link" as string]: "#111111", ["--foreground" as string]: "#111111", ["--muted" as string]: "#404040" }}
+        >
+          <div className="flex items-start justify-between gap-2 border-b border-black/10 px-3 py-2">
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted">{selectedNode.type}</p>
-              <h2 className="text-base font-semibold text-foreground">{focus?.name ?? selectedNode.label}</h2>
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-neutral-600">{selectedNode.type}</p>
+              <h2 className="text-base font-semibold text-black">{focus?.name ?? selectedNode.label}</h2>
+              <p className="mt-0.5 text-xs text-neutral-700">
+                {[
+                  selectedNode.year ? `Class of ${selectedNode.year}` : null,
+                  selectedNode.sector,
+                  selectedNode.stage,
+                  selectedNode.degree ? `${selectedNode.degree} links` : null,
+                ]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </p>
               {personLinkedIn && (
                 <div className="mt-2">
                   <LinkedInOpenButton action={personLinkedIn} name={focus?.name ?? selectedNode.label} />
                 </div>
               )}
             </div>
-            <button type="button" className="text-xs text-muted hover:text-foreground" onClick={() => setSelected(null)} aria-label="Close details">
+            <button type="button" className="text-xs font-medium text-black underline" onClick={() => setSelected(null)} aria-label="Close details">
               Close
             </button>
           </div>
           <div className="flex-1 overflow-y-auto px-3 py-2">
-            {focus && focus.id === selected ? <FocusBody focus={focus} onJump={choose} /> : <p className="text-sm text-muted">Loading…</p>}
+            {focus && focus.id === activeId ? <FocusBody focus={focus} onJump={choose} /> : <p className="text-sm text-neutral-600">Loading…</p>}
           </div>
         </aside>
       )}
     </div>
   );
+}
+
+function personRoleOk(node: MapNode, mode: PeopleMode): boolean {
+  if (mode === "founder") return node.founder;
+  if (mode === "potential") return node.potential && !node.founder;
+  return true;
+}
+
+function personYearOk(node: MapNode, filters: Filters): boolean {
+  if (filters.yearFrom == null && filters.yearTo == null) return true;
+  if (node.year == null) return false;
+  if (filters.yearFrom != null && node.year < filters.yearFrom) return false;
+  if (filters.yearTo != null && node.year > filters.yearTo) return false;
+  return true;
 }
 
 function hiddenIds(graph: MapGraph | null, filters: Filters | null): Set<string> {
@@ -300,6 +477,8 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null): Set<string>
   const tierAll = filters.tiers.length === allTiers.length;
   const stageAll = filters.stages.length === allStages.length;
   const enrollAll = filters.enroll.length === ENROLL.length;
+  const yearActive = filters.yearFrom != null || filters.yearTo != null;
+  const narrowed = filters.peopleMode !== "all" || yearActive || !sectorAll;
   const startupOk = new Set<string>();
   for (const node of graph.nodes) {
     if (node.type !== "startup") continue;
@@ -325,12 +504,21 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null): Set<string>
     const campusHit = campusAll || campusesOf(node).some((id) => filters.campuses.includes(id));
     const tierHit = tierAll || filters.tiers.includes(node.tier ?? "Untiered");
     const enrollHit = enrollAll || filters.enroll.includes(node.enroll ?? "unknown");
-    const potentialHit = !filters.potentialOnly || node.potential;
     const sectorHit = sectorAll || sectorPeople.has(node.id);
-    if (filters.nodeTypes.includes("person") && campusHit && tierHit && enrollHit && potentialHit && sectorHit) peopleOk.add(node.id);
+    if (
+      filters.nodeTypes.includes("person") &&
+      campusHit &&
+      tierHit &&
+      enrollHit &&
+      personRoleOk(node, filters.peopleMode) &&
+      personYearOk(node, filters) &&
+      sectorHit
+    ) {
+      peopleOk.add(node.id);
+    }
   }
 
-  if (filters.potentialOnly || !sectorAll) {
+  if (narrowed) {
     const linked = new Set<string>();
     for (const edge of graph.edges) {
       if (peopleOk.has(edge.source)) linked.add(edge.target);
@@ -356,17 +544,14 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null): Set<string>
     if (node.type === "program") {
       const campusHit = campusAll || campusesOf(node).some((id) => filters.campuses.includes(id));
       let show = filters.nodeTypes.includes("program") && campusHit;
-      if (show && (filters.potentialOnly || !sectorAll)) {
+      if (show && narrowed) {
         show = graph.edges.some((edge) => edge.type === "member_of" && (peopleOk.has(edge.source) || peopleOk.has(edge.target)) && (edge.source === node.id || edge.target === node.id));
       }
       if (!show) hidden.add(node.id);
       continue;
     }
     let show = filters.nodeTypes.includes("investor");
-    if (show && !campusAll) {
-      show = graph.edges.some((edge) => edge.type === "invested_in" && edge.source === node.id && startupOk.has(edge.target));
-    }
-    if (show && filters.potentialOnly) {
+    if (show && (!campusAll || narrowed)) {
       show = graph.edges.some((edge) => edge.type === "invested_in" && edge.source === node.id && startupOk.has(edge.target));
     }
     if (!show) hidden.add(node.id);
@@ -376,60 +561,118 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null): Set<string>
 
 function FilterGroup({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <details open className="mt-3">
-      <summary className="cursor-pointer text-[10px] font-semibold uppercase tracking-wide text-muted">{title}</summary>
+    <div className="mt-3">
+      <p className="text-[10px] font-semibold uppercase tracking-wide text-neutral-600">{title}</p>
       <div className="mt-1 space-y-0.5">{children}</div>
-    </details>
+    </div>
   );
 }
 
-function Check({ label, checked, onChange }: { label: string; checked: boolean; onChange: () => void }) {
+function Check({
+  label,
+  checked,
+  onChange,
+  color,
+  shape,
+}: {
+  label: string;
+  checked: boolean;
+  onChange: () => void;
+  color?: string;
+  shape?: "circle" | "square" | "diamond" | "hex";
+}) {
   return (
-    <label className="flex items-center gap-2 text-xs text-foreground">
-      <input type="checkbox" checked={checked} onChange={onChange} className="accent-[#9378ee]" />
+    <label className="flex items-center gap-2 text-xs text-black">
+      <input type="checkbox" checked={checked} onChange={onChange} className="accent-black" />
+      {color && shape && <LegendItem shape={shape} color={color} label="" />}
       <span className="truncate">{label}</span>
     </label>
   );
 }
 
-function Legend({ swatch, color, label }: { swatch: "circle" | "square" | "campus" | "diamond" | "hex"; color: string; label: string }) {
-  const shape =
-    swatch === "circle" ? "rounded-full" : swatch === "diamond" ? "rotate-45 rounded-[1px]" : swatch === "hex" ? "rounded-sm" : "rounded-[2px]";
+function YearField({ label, value, onChange }: { label: string; value: number | null; onChange: (year: number | null) => void }) {
+  return (
+    <label className="block flex-1 text-[10px] font-medium text-neutral-600">
+      {label}
+      <input
+        type="number"
+        inputMode="numeric"
+        min={1980}
+        max={2040}
+        value={value ?? ""}
+        placeholder="Any"
+        aria-label={`Class year ${label.toLowerCase()}`}
+        onChange={(event) => {
+          const raw = event.target.value.trim();
+          if (!raw) {
+            onChange(null);
+            return;
+          }
+          const year = Number(raw);
+          onChange(Number.isFinite(year) ? year : null);
+        }}
+        className="mt-0.5 w-full rounded border border-black/20 bg-white px-2 py-1 text-xs text-black"
+      />
+    </label>
+  );
+}
+
+function ZoomButton({ label, onClick, children }: { label: string; onClick: () => void; children: ReactNode }) {
+  return (
+    <button type="button" aria-label={label} onClick={onClick} className="h-8 min-w-8 border-b border-black/10 px-2 text-xs font-semibold text-black last:border-b-0 hover:bg-neutral-100">
+      {children}
+    </button>
+  );
+}
+
+function LegendItem({ shape, color, label }: { shape: "circle" | "square" | "diamond" | "hex"; color: string; label: string }) {
   return (
     <span className="inline-flex items-center gap-1">
-      <span className={`inline-block h-2.5 w-2.5 ${shape}`} style={{ background: color }} />
+      <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+        {shape === "circle" && <circle cx="6" cy="6" r="4.5" fill={color} />}
+        {shape === "square" && <rect x="1.5" y="1.5" width="9" height="9" rx="1" fill={color} />}
+        {shape === "diamond" && <polygon points="6,1 11,6 6,11 1,6" fill={color} />}
+        {shape === "hex" && <polygon points="6,1 10.2,3.5 10.2,8.5 6,11 1.8,8.5 1.8,3.5" fill={color} />}
+      </svg>
       {label}
     </span>
   );
 }
 
+function uniqueLinks(items: NetworkFocus["links"][number]["items"]) {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const key = `${item.id}|${item.name}|${item.role ?? ""}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 function FocusBody({ focus, onJump }: { focus: NetworkFocus; onJump: (id: string) => void }) {
   return (
-    <div className="space-y-3 text-sm">
-      {focus.subtitle && <p className="text-foreground">{focus.subtitle}</p>}
+    <div className="space-y-3 text-sm text-black">
+      {focus.subtitle && <p>{focus.subtitle}</p>}
       <div className="flex flex-wrap items-center gap-1.5">
-        {focus.link && focus.link.kind !== "linkedin" && focus.link.kind !== "unverified" && (
-          <PersonLinkButton link={focus.link} name={focus.name} />
-        )}
+        {focus.link && focus.link.kind !== "linkedin" && focus.link.kind !== "unverified" && <PersonLinkButton link={focus.link} name={focus.name} />}
         <ProfileIconLinks links={focus.profileLinks} name={focus.name} />
         {focus.website && (
-          <a href={focus.website.url} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md bg-accent px-2.5 py-1 text-xs font-medium text-accent-foreground">
+          <a href={focus.website.url} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md border border-black px-2.5 py-1 text-xs font-medium text-black">
             {focus.website.label}
           </a>
         )}
-        {focus.href && focus.hrefLabel && (
-          focus.href.startsWith("/") ? (
-            <Link href={focus.href} className="text-xs font-medium text-link hover:underline">
+        {focus.href && focus.hrefLabel &&
+          (focus.href.startsWith("/") ? (
+            <Link href={focus.href} className="text-xs font-medium text-black underline">
               {focus.hrefLabel}
             </Link>
           ) : (
-            <a href={focus.href} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-link hover:underline">
+            <a href={focus.href} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-black underline">
               {focus.hrefLabel}
             </a>
-          )
-        )}
+          ))}
         {focus.hotspotHref && focus.hotspotLabel && focus.hotspotHref !== focus.href && (
-          <Link href={focus.hotspotHref} className="text-xs font-medium text-link hover:underline">
+          <Link href={focus.hotspotHref} className="text-xs font-medium text-black underline">
             {focus.hotspotLabel}
           </Link>
         )}
@@ -438,11 +681,11 @@ function FocusBody({ focus, onJump }: { focus: NetworkFocus; onJump: (id: string
         <dl className="grid grid-cols-1 gap-1.5 text-xs">
           {focus.facts.map((fact) => (
             <div key={fact.label}>
-              <dt className="font-semibold uppercase tracking-wide text-muted">{fact.label}</dt>
-              <dd className="text-foreground">
+              <dt className="font-semibold uppercase tracking-wide text-neutral-600">{fact.label}</dt>
+              <dd className="text-black">
                 {fact.value}
                 {fact.sourceUrl && (
-                  <a href={fact.sourceUrl} target="_blank" rel="noopener noreferrer" title={fact.excerpt ?? undefined} className="ml-1 text-[10px] text-link hover:underline">
+                  <a href={fact.sourceUrl} target="_blank" rel="noopener noreferrer" title={fact.excerpt ?? undefined} className="ml-1 text-[10px] underline">
                     source
                   </a>
                 )}
@@ -453,22 +696,22 @@ function FocusBody({ focus, onJump }: { focus: NetworkFocus; onJump: (id: string
       )}
       {focus.links.map((group) => (
         <div key={group.heading}>
-          <h3 className="text-[10px] font-semibold uppercase tracking-wide text-muted">{group.heading}</h3>
+          <h3 className="text-[10px] font-semibold uppercase tracking-wide text-neutral-600">{group.heading}</h3>
           <ul className="mt-1 space-y-1">
-            {group.items.map((item) => (
-              <li key={`${group.heading}-${item.id}-${item.name}`} className="flex flex-wrap items-center gap-1.5 text-xs">
-                <button type="button" className="text-left font-medium text-link hover:underline" onClick={() => onJump(item.id)}>
+            {uniqueLinks(group.items).map((item) => (
+              <li key={`${group.heading}-${item.id}-${item.role ?? ""}-${item.name}`} className="flex flex-wrap items-center gap-1.5 text-xs">
+                <button type="button" className="text-left font-medium text-black underline" onClick={() => onJump(item.id)}>
                   {item.name}
                 </button>
                 {item.linkedin && <LinkedInIconButton action={item.linkedin} name={item.name} />}
-                {item.role && <span className="text-muted">{item.role}</span>}
+                {item.role && <span className="text-neutral-600">{item.role}</span>}
                 {item.pageHref && (
-                  <Link href={item.pageHref} className="text-[10px] text-link hover:underline">
+                  <Link href={item.pageHref} className="text-[10px] underline">
                     card
                   </Link>
                 )}
                 {item.sourceUrl && (
-                  <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-[10px] text-link hover:underline">
+                  <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-[10px] underline">
                     {item.sourceUrl.includes("linkedin.com") ? "LinkedIn" : "source"}
                   </a>
                 )}

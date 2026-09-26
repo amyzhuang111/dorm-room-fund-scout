@@ -46,12 +46,17 @@ export function TopNav() {
     <div className="mx-auto max-w-[1400px] px-4 sm:px-6">
       <div className="flex h-14 items-center justify-between gap-4">
         <div className="flex items-center gap-6 overflow-x-auto">
-          <details className="relative shrink-0">
+          <div className="flex shrink-0 items-center gap-1">
+            <Link href="/" className="text-sm font-semibold tracking-tight text-foreground">
+              Campus Scout
+            </Link>
+            <details className="relative">
             <summary
               onClick={() => track("campus_scout_click")}
-              className="list-none cursor-pointer select-none text-sm font-semibold tracking-tight text-foreground"
+              className="list-none cursor-pointer select-none px-1 text-sm text-muted"
+              aria-label="Switch scout"
             >
-              Campus Scout <span className="text-muted">▾</span>
+              ▾
             </summary>
             <div className="absolute left-0 z-10 mt-1 w-44 rounded-md border border-border-c bg-surface p-1 shadow-lg">
               <Link
@@ -67,7 +72,8 @@ export function TopNav() {
                 Startup Scout
               </Link>
             </div>
-          </details>
+            </details>
+          </div>
           <nav className="flex items-center gap-1">
             {nav.map((item) => {
               const itemPath = item.href.split("?")[0];
