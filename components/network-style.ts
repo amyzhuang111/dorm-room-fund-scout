@@ -38,18 +38,21 @@ export const NODE_SHAPE: Record<MapNodeType, "circle" | "square" | "diamond" | "
 };
 
 export const DIM_NODE = "#e4e4e4";
-export const EDGE_GREY = "rgba(82, 82, 82, 0.22)";
-export const EDGE_CROSS = "rgba(180, 83, 9, 0.38)";
+/** ~1px grey that still reads on white. Alpha stays in the 0.3–0.4 band. */
+export const EDGE_GREY = "rgba(64, 64, 64, 0.38)";
+export const EDGE_CAMPUS = "rgba(64, 64, 64, 0.32)";
+/** Amber, opaque enough to see bridges between campus clusters. */
+export const EDGE_CROSS = "rgba(180, 83, 9, 0.75)";
 export const EDGE_HOVER = "#171717";
 export const EDGE_HOVER_CROSS = "#9a3412";
 
 export const EDGE_COLOR: Record<MapEdgeType, string> = {
   founded: EDGE_GREY,
   co_founder: EDGE_GREY,
-  studied_at: "rgba(82, 82, 82, 0.14)",
+  studied_at: EDGE_CAMPUS,
   invested_in: EDGE_GREY,
   member_of: EDGE_GREY,
-  at_campus: "rgba(82, 82, 82, 0.16)",
+  at_campus: EDGE_CAMPUS,
 };
 
 /** Screen pixels at the fitted camera. Hubs are only a little larger than leaves. */

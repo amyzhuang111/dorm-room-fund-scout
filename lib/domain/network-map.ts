@@ -7,6 +7,7 @@
 import fs from "node:fs";
 import Graph from "graphology";
 import forceAtlas2 from "graphology-layout-forceatlas2";
+import noverlap from "graphology-layout-noverlap";
 import { databasePath, getDb } from "../db/client";
 import { CAMPUSES } from "./campuses";
 import { hotspotGraphPatch } from "./hotspots";
@@ -74,14 +75,17 @@ interface SimNode {
   anchorY: number;
 }
 
-const EDGE_WEIGHT: Record<MapEdgeType, number> = {
-  founded: 2,
-  co_founder: 1.4,
-  member_of: 1,
-  invested_in: 2.4,
-  studied_at: 0.2,
-  at_campus: 0.3,
+/** Springs for ForceAtlas2. Campus affiliation is drawn, but it is not a spring — otherwise every student collapses onto a campus disc. */
+const LAYOUT_WEIGHT: Record<MapEdgeType, number> = {
+  founded: 3.2,
+  co_founder: 2.6,
+  member_of: 1.8,
+  invested_in: 3,
+  studied_at: 0,
+  at_campus: 0,
 };
+
+const LAYOUT_VERSION = "4";
 
 let cache: { stamp: string; graph: MapGraph } | null = null;
 
@@ -89,7 +93,7 @@ export function buildNetworkMap(): MapGraph {
   let stamp = "missing";
   try {
     const st = fs.statSync(databasePath());
-    stamp = `${st.mtimeMs}:${st.size}`;
+    stamp = `${LAYOUT_VERSION}:${st.mtimeMs}:${st.size}`;
   } catch {
     stamp = "missing";
   }
@@ -358,34 +362,36 @@ function assembleNetworkMap(): MapGraph {
     .map((row) => ({ id: row.id, n: counts.get(row.id) ?? 0 }))
     .sort((a, b) => b.n - a.n || a.id.localeCompare(b.id));
 
-  const anchor = new Map<string, { x: number; y: number; spread: number }>();
+  const anchor = new Map<string, { x: number; y: number }>();
+  const ring = 2400;
   placed.forEach((row, index) => {
-    const spread = 36 + Math.sqrt(Math.max(row.n, 1)) * 8.5;
-    if (index === 0) anchor.set(row.id, { x: 1500, y: 1700, spread });
-    else if (index === 1) anchor.set(row.id, { x: 3600, y: 1500, spread });
-    else anchor.set(row.id, { x: 4900, y: 280 + (index - 2) * 340, spread });
+    const angle = (index / Math.max(placed.length, 1)) * Math.PI * 2 - Math.PI / 2;
+    anchor.set(row.id, { x: Math.cos(angle) * ring, y: Math.sin(angle) * ring });
   });
 
-  function primaryAnchor(ids: string[]): { x: number; y: number; spread: number } {
-    const known = ids.map((id) => anchor.get(id)).filter((item): item is { x: number; y: number; spread: number } => !!item);
-    if (!known.length) return { x: 2800, y: 1700, spread: 80 };
-    const x = known.reduce((sum, item) => sum + item.x, 0) / known.length;
-    const y = known.reduce((sum, item) => sum + item.y, 0) / known.length;
-    return { x, y, spread: known[0].spread };
+  function primaryAnchor(ids: string[]): { x: number; y: number } {
+    const known = ids.map((id) => anchor.get(id)).filter((item): item is { x: number; y: number } => !!item);
+    if (!known.length) return { x: 0, y: 0 };
+    return {
+      x: known.reduce((sum, item) => sum + item.x, 0) / known.length,
+      y: known.reduce((sum, item) => sum + item.y, 0) / known.length,
+    };
   }
 
-  function jitter(id: string, spread: number): { x: number; y: number } {
-    let hash = 0;
-    for (let i = 0; i < id.length; i++) hash = (hash * 33 + id.charCodeAt(i)) >>> 0;
-    const angle = ((hash % 360) * Math.PI) / 180;
-    const dist = (0.15 + ((hash >>> 8) % 1000) / 1000) * spread;
+  const seat = new Map<string, number>();
+  function spiral(key: string): { x: number; y: number } {
+    const n = seat.get(key) ?? 0;
+    seat.set(key, n + 1);
+    const angle = n * 2.399963229728653;
+    const dist = 18 * Math.sqrt(n + 0.5);
     return { x: Math.cos(angle) * dist, y: Math.sin(angle) * dist };
   }
 
   const simNodes: SimNode[] = [];
   const pushNode = (id: string, type: MapNodeType, campusIds: string[], tier: string | null, amount: number | null) => {
     const spot = primaryAnchor(campusIds);
-    const j = type === "campus" ? { x: 0, y: 0 } : jitter(id, type === "investor" ? 40 : spot.spread);
+    const key = campusIds.length ? [...campusIds].sort().join(",") : "none";
+    const j = type === "campus" ? { x: 0, y: 0 } : spiral(key);
     const node: SimNode = {
       id,
       type,
@@ -419,7 +425,7 @@ function assembleNetworkMap(): MapGraph {
 
   const startupAnchor = new Map<string, { x: number; y: number }>();
   for (const node of simNodes) {
-    if (node.type === "startup") startupAnchor.set(node.id, { x: node.anchorX, y: node.anchorY });
+    if (node.type === "startup") startupAnchor.set(node.id, { x: node.x, y: node.y });
   }
   const investorAnchor = new Map<string, { x: number; y: number; n: number }>();
   for (const edge of edges) {
@@ -593,34 +599,76 @@ function assembleNetworkMap(): MapGraph {
   return graph;
 }
 
-/** Run ForceAtlas2 to a stop. Positions stay fixed after this returns. */
+/** Run ForceAtlas2 to a stop, then a noverlap pass so stacked nodes separate. Positions stay fixed after this returns. */
 function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[]) {
   const g = new Graph({ type: "undirected", multi: true });
   for (const node of simNodes) g.addNode(node.id, { x: node.x, y: node.y });
   for (const edge of edges) {
-    if (edge.source === edge.target || !g.hasNode(edge.source) || !g.hasNode(edge.target)) continue;
-    g.addEdge(edge.source, edge.target, { weight: EDGE_WEIGHT[edge.type] });
+    const weight = LAYOUT_WEIGHT[edge.type];
+    if (!weight || edge.source === edge.target || !g.hasNode(edge.source) || !g.hasNode(edge.target)) continue;
+    g.addEdge(edge.source, edge.target, { weight });
   }
   const inferred = forceAtlas2.inferSettings(g);
   forceAtlas2.assign(g, {
-    iterations: 180,
+    iterations: 220,
     settings: {
       ...inferred,
       barnesHutOptimize: true,
-      barnesHutTheta: 0.6,
-      gravity: 0.45,
+      barnesHutTheta: 0.5,
+      gravity: 0.14,
+      scalingRatio: 16,
       linLogMode: true,
       outboundAttractionDistribution: true,
       edgeWeightInfluence: 1,
-      slowDown: 3,
+      slowDown: 8,
       strongGravityMode: false,
       adjustSizes: false,
     },
     getEdgeWeight: "weight",
   });
+  separateOverlaps(g, simNodes);
   for (const node of simNodes) {
     const at = g.getNodeAttributes(node.id);
     node.x = at.x;
     node.y = at.y;
   }
+}
+
+const OVERLAP_PX: Record<MapNodeType, number> = {
+  person: 2.6,
+  startup: 3.4,
+  investor: 3.8,
+  program: 3.6,
+  campus: 7,
+};
+
+/** Push colliding nodes apart in graph units that survive the camera fit (a few screen pixels). */
+function separateOverlaps(g: Graph, simNodes: SimNode[]) {
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  g.forEachNode((_, at) => {
+    if (!Number.isFinite(at.x) || !Number.isFinite(at.y)) return;
+    minX = Math.min(minX, at.x);
+    minY = Math.min(minY, at.y);
+    maxX = Math.max(maxX, at.x);
+    maxY = Math.max(maxY, at.y);
+  });
+  const span = Math.max(maxX - minX, maxY - minY, 1);
+  const unit = span / 980;
+  const byId = new Map(simNodes.map((node) => [node.id, node.type]));
+  g.forEachNode((id) => {
+    g.setNodeAttribute(id, "size", (OVERLAP_PX[byId.get(id) ?? "person"] ?? 2.6) * unit);
+  });
+  noverlap.assign(g, {
+    maxIterations: 120,
+    settings: {
+      margin: 1.2 * unit,
+      ratio: 1,
+      expansion: 1.2,
+      gridSize: 56,
+      speed: 3,
+    },
+  });
 }

@@ -6,7 +6,7 @@ import Sigma from "sigma";
 import { NodeCircleProgram } from "sigma/rendering";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
-import { DIM_NODE, EDGE_CROSS, EDGE_GREY, EDGE_HOVER, EDGE_HOVER_CROSS, NODE_SHAPE, campusKey, crossesCampus, nodeColor, screenSize } from "./network-style";
+import { DIM_NODE, EDGE_COLOR, EDGE_CROSS, EDGE_HOVER, EDGE_HOVER_CROSS, NODE_SHAPE, campusKey, crossesCampus, nodeColor, screenSize } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -119,8 +119,8 @@ export function NetworkSigma({
       const cross = crossesCampus(g.getNodeAttribute(edge.source, "campusKey"), g.getNodeAttribute(edge.target, "campusKey"));
       g.addEdgeWithKey(key, edge.source, edge.target, {
         kind: edge.type,
-        color: cross ? EDGE_CROSS : edge.type === "studied_at" || edge.type === "at_campus" ? "rgba(82, 82, 82, 0.14)" : EDGE_GREY,
-        size: 0.45,
+        color: cross ? EDGE_CROSS : EDGE_COLOR[edge.type],
+        size: 1,
       });
       link(edge.source, edge.target);
       link(edge.target, edge.source);
@@ -129,6 +129,7 @@ export function NetworkSigma({
     const renderer = new Sigma<NodeAttr, EdgeAttr>(g, container, {
       allowInvalidContainer: true,
       enableCameraRotation: false,
+      defaultEdgeType: "line",
       hideEdgesOnMove: false,
       hideLabelsOnMove: true,
       itemSizesReference: "screen",
@@ -141,12 +142,15 @@ export function NetworkSigma({
       labelDensity: 0.18,
       labelGridCellSize: 150,
       labelRenderedSizeThreshold: 7,
-      minEdgeThickness: 0.4,
+      // The line program draws max(size, minEdgeThickness) screen pixels.
+      // 0.4px at low alpha disappeared into the white background.
+      minEdgeThickness: 0.85,
+      antiAliasingFeather: 0.4,
       stagePadding: 56,
       minCameraRatio: 0.02,
       maxCameraRatio: 1.4,
-      defaultDrawNodeLabel: drawHaloLabel,
-      defaultDrawNodeHover: drawLightHover,
+      defaultDrawNodeLabel: drawHaloLabel as never,
+      defaultDrawNodeHover: drawLightHover as never,
       nodeProgramClasses: {
         circle: NodeCircleProgram,
         square: NodeSquareLightProgram,
@@ -172,7 +176,7 @@ export function NetworkSigma({
         if (!active) return data;
         if (source !== active && target !== active) return { ...data, hidden: true };
         const cross = data.color === EDGE_CROSS;
-        return { ...data, color: cross ? EDGE_HOVER_CROSS : EDGE_HOVER, size: 1, hidden: false };
+        return { ...data, color: cross ? EDGE_HOVER_CROSS : EDGE_HOVER, size: 1.6, hidden: false };
       },
     });
 
