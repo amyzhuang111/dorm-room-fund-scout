@@ -639,6 +639,16 @@ function LegendItem({ shape, color, label }: { shape: "circle" | "square" | "dia
   );
 }
 
+function uniqueLinks(items: NetworkFocus["links"][number]["items"]) {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const key = `${item.id}|${item.name}|${item.role ?? ""}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 function FocusBody({ focus, onJump }: { focus: NetworkFocus; onJump: (id: string) => void }) {
   return (
     <div className="space-y-3 text-sm text-black">
@@ -688,8 +698,8 @@ function FocusBody({ focus, onJump }: { focus: NetworkFocus; onJump: (id: string
         <div key={group.heading}>
           <h3 className="text-[10px] font-semibold uppercase tracking-wide text-neutral-600">{group.heading}</h3>
           <ul className="mt-1 space-y-1">
-            {group.items.map((item) => (
-              <li key={`${group.heading}-${item.id}-${item.name}`} className="flex flex-wrap items-center gap-1.5 text-xs">
+            {uniqueLinks(group.items).map((item) => (
+              <li key={`${group.heading}-${item.id}-${item.role ?? ""}-${item.name}`} className="flex flex-wrap items-center gap-1.5 text-xs">
                 <button type="button" className="text-left font-medium text-black underline" onClick={() => onJump(item.id)}>
                   {item.name}
                 </button>
