@@ -45,3 +45,6 @@ next-env.d.ts
 /data/*.db-journal
 /data/*.db-wal
 /data/*.db-shm
+
+# Local Apify LinkedIn lookup output. Produced on the owner's laptop.
+/data/imports/apify_linkedin_results.jsonl

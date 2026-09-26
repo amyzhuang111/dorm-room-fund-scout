@@ -10,6 +10,40 @@ what's still missing. It's written to match what the code actually does,
 not the full brief — see `app/methodology/page.tsx` (also live at
 `/methodology` once running) for the same breakdown inside the app.
 
+## LinkedIn lookup on your Windows laptop
+
+This runs locally. It does not run in the deployed app. The lookup searches
+public Google results for `linkedin.com/in` profiles and writes candidates
+to `data/imports/apify_linkedin_results.jsonl` (gitignored). It does not
+write to the database. The importer applies the file: a profile is
+confirmed only when the name matches and the school, company, or role
+appears in the title or snippet. A name-only match stays unverified.
+Anything else is left blank.
+
+From PowerShell, in the repo root (`.env.local` holds `APIFY_API_TOKEN`):
+
+```powershell
+npm install
+npm run enrich:apify-linkedin -- --dry-run --campus penn --limit 20
+npm run enrich:apify-linkedin -- --campus penn --limit 20 --yes
+npm run import:apify-linkedin -- --dry-run
+npm run import:apify-linkedin
+```
+
+`--dry-run` prints the queue and the Apify estimate and spends nothing.
+A live lookup stops after that estimate until you pass `--yes`. Run the
+same lookup command again to resume: people already in the JSONL file are
+skipped. Omit `--limit` to take the rest of the queue. `--campus` accepts
+`penn`, `berkeley`, `stanford`, `mit`, `harvard`, `waterloo`, and the
+other schools in the database. Order is Penn, then Berkeley, then the rest.
+
+The actor is `apify/google-search-scraper` (official, no LinkedIn login).
+One search page per person, add-ons off, 10 searches per run. Checked
+2026-09-26 against the rate card that started 2026-08-20: about **$4.60 per
+1,000 lookups** on the Free plan and **$1.90 per 1,000** on the Gold plan.
+The page price alone is $4.50 or $1.80 per 1,000. Confirm the live price
+at https://apify.com/apify/google-search-scraper before a large run.
+
 ## The Globe was actually broken — root-caused and fixed for real
 
 You reported "the globe is so bad I cannot even see anything but a white
