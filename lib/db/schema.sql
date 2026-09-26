@@ -78,8 +78,11 @@ CREATE TABLE IF NOT EXISTS people (
   enrollment_source_url TEXT,
   enrollment_source_id TEXT,
   enrollment_grad_year INTEGER,
-  signal_tier TEXT,             -- S | A | B | C | D from the founder-signal tier list; null when no rule applies
+  signal_tier TEXT,             -- S | A | B | C | D | talent; talent sorts after D; null when no rule applies
   signal_tier_basis TEXT,
+  left_school INTEGER NOT NULL DEFAULT 0, -- bio says dropout or leave; enrollment_status stays evidence-only
+  founder_status TEXT,          -- founder | potential; null when the person has not been classified
+  potential_signal TEXT,        -- why a potential founder is on the list; empty for founders
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

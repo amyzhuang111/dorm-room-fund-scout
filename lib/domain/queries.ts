@@ -11,6 +11,7 @@ import { parseCommunitySignalCategories, type CommunityConfidence, type Communit
 import { catalogueForCampus } from "./source-quality";
 import { ENROLLMENT_STATUSES, enrollmentBoost, type EnrollmentStatus } from "./founder-status";
 import { bestPersonLink, confirmedLinkedIn, type PersonLinkTarget } from "./person-link";
+import { assembleProfileLinks, type OtherSourceLink, type ProfileIconLink } from "./profile-links";
 import { matchCandidate } from "./candidate-filter";
 
 export type CoverageState = "not_scanned" | "partial" | "up_to_date" | "needs_attention";
@@ -26,7 +27,7 @@ function cacheStamp(): string {
 
 let universityMemo: { stamp: string; rows: UniversitySummary[] } | null = null;
 let candidateMemo: { stamp: string; rows: CandidateSummary[] } | null = null;
-let founderMemo: { stamp: string; promoted: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } | null = null;
+let founderMemo: { stamp: string; promoted: FounderRow[]; potential: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } | null = null;
 
 export interface UniversitySummary {
   id: string;
@@ -132,8 +133,11 @@ export interface NamedFounder {
   linkedinCandidates: LinkedInCandidate[];
   /** Confirmed LinkedIn, an unverified candidate, or the best other public profile. */
   link: PersonLinkTarget | null;
+  profileLinks: ProfileIconLink[];
+  otherLinks: OtherSourceLink[];
   enrollmentStatus: string | null;
   enrollmentLabel: string | null;
+  leftSchool: boolean;
   school: string | null;
   program: string | null;
 }
@@ -241,6 +245,21 @@ export function unverifiedLinkedInByPerson(db: ReturnType<typeof getDb>): Map<st
     } catch {
       // skip a malformed claim
     }
+  }
+  return out;
+}
+
+function profileClaimsByPerson(db: ReturnType<typeof getDb>): Map<string, { valueJson: string; excerpt: string; sourceUrl: string | null }[]> {
+  const out = new Map<string, { valueJson: string; excerpt: string; sourceUrl: string | null }[]>();
+  for (const row of db
+    .prepare(
+      `SELECT entity_id, value_json, excerpt, source_url FROM claims
+       WHERE entity_type = 'person' AND claim_type = 'profile_link'`
+    )
+    .all() as { entity_id: string; value_json: string; excerpt: string; source_url: string | null }[]) {
+    const list = out.get(row.entity_id) ?? [];
+    list.push({ valueJson: row.value_json, excerpt: row.excerpt, sourceUrl: row.source_url });
+    out.set(row.entity_id, list);
   }
   return out;
 }
@@ -434,6 +453,7 @@ export function listCandidateProjects(filters: { universityId?: string; queue?: 
 function buildAllCandidates(): CandidateSummary[] {
   const db = getDb();
   const unverified = unverifiedLinkedInByPerson(db);
+  const profileClaims = profileClaimsByPerson(db);
   const projects = db
     .prepare(`SELECT id, name, sector, description, website_url, primary_link, primary_link_kind, is_portfolio_reference, signal_tier, signal_tier_basis FROM projects WHERE kind='company' AND is_investable_candidate=1 ORDER BY name`)
     .all() as { id: string; name: string; sector: string | null; description: string | null; website_url: string | null; primary_link: string | null; primary_link_kind: string | null; is_portfolio_reference: number; signal_tier: string | null; signal_tier_basis: string | null }[];
@@ -459,7 +479,7 @@ function buildAllCandidates(): CandidateSummary[] {
                 ROW_NUMBER() OVER (PARTITION BY c.entity_id ORDER BY c.retrieved_at DESC) as rn
          FROM claims c JOIN sources s ON s.id = c.source_id
          WHERE c.entity_type = 'person' AND c.source_id IS NOT NULL
-           AND c.claim_type NOT IN ('linkedin_alias_discovered', 'linkedin_candidate', 'linkedin_search_attempt')
+           AND c.claim_type NOT IN ('linkedin_alias_discovered', 'linkedin_candidate', 'linkedin_search_attempt', 'profile_link')
        ) WHERE rn = 1`
     )
     .all() as { entity_id: string; name: string }[]) {
@@ -471,17 +491,19 @@ function buildAllCandidates(): CandidateSummary[] {
   for (const r of db
     .prepare(
       `SELECT ppr.project_id as project_id, pe.id as id, pe.name as name, pe.aliases_json as aliases_json,
-              pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label
+              pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label,
+              pe.left_school as left_school
        FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id
        WHERE ppr.role LIKE '%founder%'
        ORDER BY ppr.rowid`
     )
-    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null }[]) {
+    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null; left_school: number | null }[]) {
     const key = `${r.project_id}:${r.id}`;
     if (seenFounder.has(key)) continue;
     seenFounder.add(key);
     const linkedinUrl = linkedinFromAliases(r.aliases_json);
     const linkedinCandidates = linkedinUrl ? [] : (unverified.get(r.id) ?? []);
+    const profiles = assembleProfileLinks(r.aliases_json, profileClaims.get(r.id) ?? []);
     const list = foundersByProject.get(r.project_id) ?? [];
     list.push({
       name: r.name,
@@ -489,8 +511,11 @@ function buildAllCandidates(): CandidateSummary[] {
       linkedinUrl,
       linkedinCandidates,
       link: bestPersonLink({ aliasesJson: r.aliases_json, linkedinCandidates }),
+      profileLinks: profiles.profileLinks,
+      otherLinks: profiles.otherLinks,
       enrollmentStatus: r.enrollment_status,
       enrollmentLabel: r.enrollment_label,
+      leftSchool: r.left_school === 1,
       school: schoolByPerson.get(r.id) ?? null,
       program: programByPerson.get(r.id) ?? null,
     });
@@ -678,7 +703,7 @@ export function getProjectDetail(id: string): ProjectDetail | null {
            SELECT ppr.person_id FROM person_project_roles ppr WHERE ppr.project_id = ?
            UNION SELECT ?
          )
-         ORDER BY c.retrieved_at DESC`
+         ORDER BY CASE WHEN c.claim_type = 'profile_link' THEN 1 ELSE 0 END, c.retrieved_at DESC`
       )
       .all(id, id) as {
         id: string;
@@ -960,14 +985,20 @@ export interface FounderRow {
   projects: { id: string; name: string; kind: string; role: string; websiteUrl: string | null; primaryLink: string | null; primaryLinkKind: string | null; signalTier: string | null }[];
   signalTier: string | null;
   signalTierBasis: string | null;
+  founderStatus: string | null;
+  potentialSignal: string | null;
+  signalEvidence: { excerpt: string; sourceUrl: string | null; sourceName: string | null; unverified: boolean } | null;
   linkedCompany: { id: string; name: string } | null; // a real kind='company' project they're linked to, if any
   possibleCompany: { name: string; status: "unreviewed" | "confirmed" } | null; // §65-67: a bio-derived hint, never auto-promoted — null once linkedCompany is set
   linkedinUrl: string | null; // from a captured `linkedin:<url>` alias — a URL found on a source page, not built from a name
   linkedinCandidates: LinkedInCandidate[];
   link: PersonLinkTarget | null;
+  profileLinks: ProfileIconLink[];
+  otherLinks: OtherSourceLink[];
   education: { excerpt: string; sourceUrl: string | null }[];
   enrollmentStatus: string;
   enrollmentLabel: string | null;
+  leftSchool: boolean;
   enrollmentEvidence: string | null;
   enrollmentSourceUrl: string | null;
   websiteUrl: string | null; // a personal site found on a source page, stored as a `site:` alias
@@ -975,6 +1006,7 @@ export interface FounderRow {
   sourceIds: string[];
   personIds: string[];
   strongestEvidence: string | null; // the most recent claim excerpt attributed to them
+  reviewNotes: string[]; // hand-check caveats stored on the person; empty for everyone else
   /** Every campus affiliation on record, so a campus filter can include multi-campus people. */
   campuses: { universityId: string | null; universityName: string | null; status: string | null }[];
   promoted: boolean;
@@ -993,8 +1025,8 @@ export interface FounderRow {
 // The founder card only reads the signal number and coverage. Dimension
 // write-ups, id lists, and unused link duplicates stay on the server so the
 // page payload is not carrying them into the browser.
-export function listFoundersForPage(filters: { universityId?: string; search?: string } = {}): FounderRow[] {
-  return listFounders(filters).map((founder) => ({
+function slimFounder(founder: FounderRow): FounderRow {
+  return {
     ...founder,
     founderSignal: {
       founderSignal: founder.founderSignal.founderSignal,
@@ -1005,7 +1037,15 @@ export function listFoundersForPage(filters: { universityId?: string; search?: s
     sourceIds: [],
     sectorTags: [],
     linkedinCandidates: [],
-  }));
+  };
+}
+
+export function listFoundersForPage(filters: { universityId?: string; search?: string } = {}): FounderRow[] {
+  return listFounders(filters).map(slimFounder);
+}
+
+export function listPotentialFoundersForPage(): FounderRow[] {
+  return cachedFounders().potential.map(slimFounder);
 }
 
 export function listFounders(filters: { universityId?: string; search?: string; includeUnpromoted?: boolean } = {}): FounderRow[] {
@@ -1027,7 +1067,7 @@ export function listFounders(filters: { universityId?: string; search?: string; 
   return rows;
 }
 
-function cachedFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } {
+function cachedFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } {
   const stamp = cacheStamp();
   if (founderMemo?.stamp === stamp) return founderMemo;
   const built = buildFounders();
@@ -1035,13 +1075,23 @@ function cachedFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Ma
   return founderMemo;
 }
 
-function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } {
+function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } {
   const db = getDb();
+  const notesByPerson = new Map<string, string[]>();
+  for (const row of db
+    .prepare(`SELECT entity_id, body FROM notes WHERE entity_type = 'person' AND trim(body) != '' ORDER BY created_at`)
+    .all() as { entity_id: string; body: string }[]) {
+    const list = notesByPerson.get(row.entity_id) ?? [];
+    list.push(row.body);
+    notesByPerson.set(row.entity_id, list);
+  }
   const rows = db
     .prepare(
       `SELECT DISTINCT pe.id as id, pe.name as name, pe.aliases_json as aliases_json, a.status as status, a.university_id as university_id, u.name as university_name,
               pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label,
               pe.enrollment_evidence as enrollment_evidence, pe.enrollment_source_url as enrollment_source_url,
+              pe.left_school as left_school,
+              pe.founder_status as founder_status, pe.potential_signal as potential_signal,
               pe.signal_tier as signal_tier, pe.signal_tier_basis as signal_tier_basis
        FROM people pe
        LEFT JOIN affiliations a ON a.person_id = pe.id
@@ -1059,11 +1109,15 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
       enrollment_label: string | null;
       enrollment_evidence: string | null;
       enrollment_source_url: string | null;
+      left_school: number | null;
+      founder_status: string | null;
+      potential_signal: string | null;
       signal_tier: string | null;
       signal_tier_basis: string | null;
     }[];
 
   const unverified = unverifiedLinkedInByPerson(db);
+  const profileClaims = profileClaimsByPerson(db);
   const affs = new Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]>();
   const byId = new Map<string, Omit<FounderRow, "promoted" | "promotionReasonLabel" | "founderSignal">>();
   for (const r of rows) {
@@ -1073,6 +1127,7 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
     if (byId.has(r.id)) continue;
     const linkedinUrl = linkedinFromAliases(r.aliases_json);
     const linkedinCandidates = linkedinUrl ? [] : (unverified.get(r.id) ?? []);
+    const profiles = assembleProfileLinks(r.aliases_json, profileClaims.get(r.id) ?? []);
     let websiteUrl: string | null = null;
     try {
       const aliases = JSON.parse(r.aliases_json || "[]") as string[];
@@ -1093,18 +1148,25 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
       linkedinUrl,
       linkedinCandidates,
       link: bestPersonLink({ aliasesJson: r.aliases_json, linkedinCandidates, websiteUrl }),
+      profileLinks: profiles.profileLinks,
+      otherLinks: profiles.otherLinks,
       education: [],
       enrollmentStatus: r.enrollment_status ?? "unknown",
       enrollmentLabel: r.enrollment_label,
+      leftSchool: r.left_school === 1,
       enrollmentEvidence: r.enrollment_evidence,
       enrollmentSourceUrl: r.enrollment_source_url,
       signalTier: r.signal_tier,
       signalTierBasis: r.signal_tier_basis,
+      founderStatus: r.founder_status,
+      potentialSignal: r.potential_signal,
+      signalEvidence: null,
       websiteUrl,
       sectorTags: [],
       sourceIds: [],
       personIds: [r.id],
       strongestEvidence: null,
+      reviewNotes: notesByPerson.get(r.id) ?? [],
       campuses: [],
     });
   }
@@ -1147,7 +1209,14 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
   }
 
   const latestExcerpt = new Map<string, string | null>();
-  for (const row of db.prepare(`SELECT entity_id, excerpt FROM claims ORDER BY retrieved_at DESC`).all() as { entity_id: string; excerpt: string | null }[]) {
+  for (const row of db
+    .prepare(
+      `SELECT entity_id, excerpt FROM claims
+       WHERE entity_type = 'person'
+       ORDER BY CASE WHEN claim_type IN ('linkedin_alias_discovered', 'linkedin_candidate', 'linkedin_search_attempt', 'profile_link') THEN 1 ELSE 0 END,
+                retrieved_at DESC`
+    )
+    .all() as { entity_id: string; excerpt: string | null }[]) {
     if (!latestExcerpt.has(row.entity_id)) latestExcerpt.set(row.entity_id, row.excerpt);
   }
 
@@ -1223,8 +1292,28 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
     }
   }
 
+  const signalByPerson = new Map<string, { excerpt: string; sourceUrl: string | null; sourceName: string | null; unverified: boolean }>();
+  for (const row of db
+    .prepare(
+      `SELECT c.entity_id as entity_id, c.excerpt as excerpt, c.source_url as source_url, c.verification_state as verification_state, s.name as source_name
+       FROM claims c LEFT JOIN sources s ON s.id = c.source_id
+       WHERE c.entity_type = 'person' AND c.claim_type = 'potential_founder_signal' AND trim(c.excerpt) != ''
+       ORDER BY CASE WHEN s.name = 'Additional source' THEN 1 ELSE 0 END, c.retrieved_at DESC`
+    )
+    .all() as { entity_id: string; excerpt: string; source_url: string | null; verification_state: string | null; source_name: string | null }[]) {
+    if (signalByPerson.has(row.entity_id)) continue;
+    const blob = `${row.source_name ?? ""} ${row.excerpt}`;
+    signalByPerson.set(row.entity_id, {
+      excerpt: row.excerpt,
+      sourceUrl: row.source_url,
+      sourceName: row.source_name,
+      unverified: row.verification_state === "unverified" && /search[- ]index|search summary|via search/i.test(blob),
+    });
+  }
+
   const all: FounderRow[] = [];
   const promoted: FounderRow[] = [];
+  const potential: FounderRow[] = [];
   for (const founder of byId.values()) {
     const projects = rolesByPerson.get(founder.id) ?? [];
     const company = projects.find((p) => p.kind === "company");
@@ -1279,15 +1368,17 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
       linkedCompany: company ? { id: company.id, name: company.name } : null,
       possibleCompany: possible ? { name: possible.company_name_guess, status: possible.match_status as "unreviewed" | "confirmed" } : null,
       strongestEvidence: latestExcerpt.get(founder.id) ?? null,
+      signalEvidence: signalByPerson.get(founder.id) ?? null,
       campuses: affs.get(founder.id) ?? [],
       promoted: promotion.promoted,
       promotionReasonLabel: promotion.reasonLabel,
       founderSignal: computeFounderSignal(db, founder.id, projects, facts),
     };
     all.push(row);
-    if (row.promoted) promoted.push(row);
+    if (row.founderStatus === "potential") potential.push(row);
+    else if (row.promoted) promoted.push(row);
   }
-  return { promoted, all, affs };
+  return { promoted, potential, all, affs };
 }
 
 export function loadLikeTargets(records: FeedbackRecord[]): FeedbackTarget[] {
@@ -1431,6 +1522,7 @@ export interface NetworkNodeDetail {
     link: PersonLinkTarget | null;
     enrollmentStatus: string | null;
     enrollmentLabel: string | null;
+    leftSchool: boolean;
     school: string | null;
   }[]; // every person with a role on this project, role shown as-is — not all team members are founders (§8/§18)
   claims: { excerpt: string; sourceUrl: string; retrievedAt: string }[];
@@ -1454,6 +1546,7 @@ export function getNetworkNodeDetail(id: string): NetworkNodeDetail | null {
       .prepare(
         `SELECT DISTINCT pe.id as id, pe.name as name, pe.aliases_json as aliases_json, ppr.role as role,
                 pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label,
+                pe.left_school as left_school,
                 (SELECT u.name FROM affiliations a JOIN universities u ON u.id = a.university_id WHERE a.person_id = pe.id LIMIT 1) as school
          FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id WHERE ppr.project_id = ?`
       )
@@ -1464,6 +1557,7 @@ export function getNetworkNodeDetail(id: string): NetworkNodeDetail | null {
         role: string;
         enrollment_status: string | null;
         enrollment_label: string | null;
+        left_school: number | null;
         school: string | null;
       }[]
   ).map((r) => {
@@ -1475,6 +1569,7 @@ export function getNetworkNodeDetail(id: string): NetworkNodeDetail | null {
       link: bestPersonLink({ aliasesJson: r.aliases_json, linkedinCandidates: linkedinUrl ? [] : (unverified.get(r.id) ?? []) }),
       enrollmentStatus: r.enrollment_status,
       enrollmentLabel: r.enrollment_label,
+      leftSchool: r.left_school === 1,
       school: r.school,
     };
   });

@@ -7,7 +7,7 @@ import { publicLink } from "@/lib/domain/company-link";
 import type { CandidateSummary } from "@/lib/domain/queries";
 import { FeedbackControls } from "./feedback-controls";
 import { PersonLinkButton } from "./person-link";
-import { EnrollmentBadge, SignalTierBadge } from "./badges";
+import { EnrollmentBadge, LeftSchoolBadge, SignalTierBadge } from "./badges";
 
 // Design MD §5: "In canvas views, show a collapsible bottom result tray
 // with compact cards. Selecting a card selects the same entity on the
@@ -82,6 +82,7 @@ export function ResultTray({
                     <li key={f.personId} className="flex flex-wrap items-center gap-1">
                       <span className="text-foreground">{f.name}</span>
                       <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+                      <LeftSchoolBadge leftSchool={f.leftSchool} />
                       <PersonLinkButton link={f.link} name={f.name} />
                     </li>
                   ))}

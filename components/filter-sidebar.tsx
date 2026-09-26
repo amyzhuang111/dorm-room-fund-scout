@@ -160,7 +160,7 @@ export function FilterSidebar({
           )}
         </div>
         <ul className="flex flex-wrap gap-1">
-          {SIGNAL_TIERS.map((tier) => (
+          {(mode === "founder" ? SIGNAL_TIERS : SIGNAL_TIERS.filter((tier) => tier !== "talent")).map((tier) => (
             <li key={tier}>
               <ScoutLink
                 href={buildHref(basePath, current, { tier: current.tier === tier ? null : tier })}

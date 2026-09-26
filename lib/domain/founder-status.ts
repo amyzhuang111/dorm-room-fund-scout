@@ -173,7 +173,12 @@ export function decideEnrollment(snippets: EvidenceSnippet[]): EnrollmentDecisio
   const phrases: PhraseHit[] = [];
   for (const snippet of snippets) {
     if (!snippet.excerpt && snippet.claimType !== "linkedin_education") continue;
-    if (snippet.claimType === "linkedin_candidate" || snippet.claimType === "linkedin_search_attempt") continue;
+    if (
+      snippet.claimType === "linkedin_candidate" ||
+      snippet.claimType === "linkedin_search_attempt" ||
+      snippet.claimType === "profile_link"
+    )
+      continue;
     classTokenHits(snippet, years);
     classOfHits(snippet, years);
     graduatedHits(snippet, years);
@@ -220,6 +225,14 @@ export function enrollmentBadge(status: string | null | undefined, label: string
 
 export function enrollmentBoost(status: string | null | undefined): number {
   if (status === "current_student") return 2;
+  if (status === "recent_grad") return 1;
+  return 0;
+}
+
+/** Founder list order: current students, then people who left school, then recent grads. */
+export function founderListRank(status: string | null | undefined, leftSchool: boolean | number | null | undefined): number {
+  if (status === "current_student") return 3;
+  if (leftSchool) return 2;
   if (status === "recent_grad") return 1;
   return 0;
 }
