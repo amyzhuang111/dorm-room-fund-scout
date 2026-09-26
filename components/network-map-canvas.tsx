@@ -20,6 +20,7 @@ const EDGE_STYLE: Record<MapEdgeType, { color: string; width: number; dash: numb
   studied_at: { color: "#cfc9da", width: 0.7, dash: [] },
   invested_in: { color: "#1c1525", width: 1.2, dash: [6, 3] },
   member_of: { color: "#b8a4f0", width: 1, dash: [] },
+  at_campus: { color: "#d9d5df", width: 0.8, dash: [2, 3] },
 };
 
 interface Camera {

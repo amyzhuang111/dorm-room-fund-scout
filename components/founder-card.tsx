@@ -1,4 +1,5 @@
 import { memo } from "react";
+import Link from "next/link";
 import type { FounderRow } from "@/lib/domain/queries";
 import { publicLink } from "@/lib/domain/company-link";
 import { buildHref } from "@/lib/domain/url";
@@ -52,6 +53,19 @@ export const FounderCard = memo(function FounderCard({
       )}
       {founder.reviewNotes.length > 0 && (
         <p className={`mt-2 text-xs text-muted ${open ? "" : "line-clamp-2"}`}>{founder.reviewNotes.join(" ")}</p>
+      )}
+      {founder.hotspots.length > 0 && (
+        <p className="mt-2 text-xs text-muted">
+          <span className="font-semibold uppercase tracking-wide">Hotspots </span>
+          {founder.hotspots.map((hotspot, index) => (
+            <span key={hotspot.id}>
+              {index > 0 ? ", " : ""}
+              <Link href={hotspot.href} className="text-link hover:underline">
+                {hotspot.place}
+              </Link>
+            </span>
+          ))}
+        </p>
       )}
 
       <div className="mt-2 flex items-center justify-between gap-2">

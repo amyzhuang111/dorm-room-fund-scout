@@ -151,6 +151,23 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
         </div>
       </section>
 
+      {project.hotspots.length > 0 && (
+        <section>
+          <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Hotspots</h3>
+          <ul className="mt-1 space-y-1 text-sm">
+            {project.hotspots.map((hotspot) => (
+              <li key={hotspot.id} className="flex flex-wrap items-center gap-2">
+                <Link href={hotspot.href} className="text-link hover:underline">
+                  {hotspot.place}
+                </Link>
+                <SignalTierBadge tier={hotspot.tier} />
+                <span className="text-xs text-muted">{[hotspot.campus, hotspot.type].filter(Boolean).join(" · ")}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {/* Founders */}
       <section>
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Founders</h3>

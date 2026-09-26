@@ -6,6 +6,7 @@ import { track } from "@vercel/analytics";
 
 const FOUNDER_NAV = [
   { href: "/founder/discover", label: "Discover" },
+  { href: "/hotspots?from=founder", label: "Hotspots" },
   { href: "/founder/shortlist", label: "Shortlist" },
   { href: "/signals?from=founder", label: "Signals" },
   { href: "/founder/network", label: "Network" },
@@ -14,6 +15,7 @@ const FOUNDER_NAV = [
 
 const STARTUP_NAV = [
   { href: "/startup/discover", label: "Discover" },
+  { href: "/hotspots?from=startup", label: "Hotspots" },
   { href: "/startup/shortlist", label: "Shortlist" },
   { href: "/startup/verification", label: "Verification" },
   { href: "/signals?from=startup", label: "Signals" },
@@ -30,6 +32,7 @@ function currentProduct(pathname: string, fromParam: string | null): "founder" |
   if (pathname.startsWith("/founder")) return "founder";
   if (pathname.startsWith("/startup")) return "startup";
   if (fromParam === "founder" || fromParam === "startup") return fromParam;
+  if (pathname.startsWith("/hotspots")) return "founder";
   return "startup";
 }
 

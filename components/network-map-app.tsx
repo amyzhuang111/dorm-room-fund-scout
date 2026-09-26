@@ -22,6 +22,7 @@ const EDGE_TYPES: { id: MapEdgeType; label: string }[] = [
   { id: "studied_at", label: "Studied at" },
   { id: "invested_in", label: "Invested in" },
   { id: "member_of", label: "Member of" },
+  { id: "at_campus", label: "At campus" },
 ];
 
 const ENROLL: { id: string; label: string }[] = [
@@ -427,6 +428,11 @@ function FocusBody({ focus, onJump }: { focus: NetworkFocus; onJump: (id: string
             </a>
           )
         )}
+        {focus.hotspotHref && focus.hotspotLabel && focus.hotspotHref !== focus.href && (
+          <Link href={focus.hotspotHref} className="text-xs font-medium text-link hover:underline">
+            {focus.hotspotLabel}
+          </Link>
+        )}
       </div>
       {focus.facts.length > 0 && (
         <dl className="grid grid-cols-1 gap-1.5 text-xs">
@@ -456,6 +462,11 @@ function FocusBody({ focus, onJump }: { focus: NetworkFocus; onJump: (id: string
                 </button>
                 {item.linkedin && <LinkedInIconButton action={item.linkedin} name={item.name} />}
                 {item.role && <span className="text-muted">{item.role}</span>}
+                {item.pageHref && (
+                  <Link href={item.pageHref} className="text-[10px] text-link hover:underline">
+                    card
+                  </Link>
+                )}
                 {item.sourceUrl && (
                   <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-[10px] text-link hover:underline">
                     {item.sourceUrl.includes("linkedin.com") ? "LinkedIn" : "source"}
