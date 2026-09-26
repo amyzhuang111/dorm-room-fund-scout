@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { buildHref } from "@/lib/domain/url";
 import { publicLink } from "@/lib/domain/company-link";
 import type { CampusBuilder, CandidateSummary, UniversitySummary } from "@/lib/domain/queries";
-import { EnrollmentBadge, QueueBadge, SignalTierBadge } from "./badges";
+import { EnrollmentBadge, LeftSchoolBadge, QueueBadge, SignalTierBadge } from "./badges";
 import { PersonLinkButton } from "./person-link";
 import { ScoutLink } from "./scout-nav";
 
@@ -112,6 +112,7 @@ export function UniversityPanel({
                           <li key={f.personId} className="flex flex-wrap items-center gap-1 text-xs">
                             <span className="text-foreground">{f.name}</span>
                             <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+                            <LeftSchoolBadge leftSchool={f.leftSchool} />
                             <PersonLinkButton link={f.link} name={f.name} />
                           </li>
                         ))}

@@ -1,4 +1,4 @@
-import { bestEnrollmentBoost, enrollmentBoost } from "./founder-status";
+import { bestEnrollmentBoost, enrollmentBoost, founderListRank } from "./founder-status";
 import { boostFor, isHidden, matchesFeedback, type FeedbackRecord, type FeedbackTarget } from "./feedback";
 import type { CandidateSummary, FounderRow } from "./queries";
 import { domainKey } from "./feedback";
@@ -93,5 +93,5 @@ export function reviewFounders(items: FounderRow[], records: FeedbackRecord[], l
       return { ...item, boostNote: boost?.note ?? null, boostScore: boost?.score ?? 0, enrollmentBoost: enrollmentBoost(item.enrollmentStatus) };
     })
     .filter((item) => keep(mode, records, founderTarget(item)))
-    .sort((a, b) => b.enrollmentBoost - a.enrollmentBoost || b.boostScore - a.boostScore || a.name.localeCompare(b.name));
+    .sort((a, b) => founderListRank(b.enrollmentStatus, b.leftSchool) - founderListRank(a.enrollmentStatus, a.leftSchool) || b.boostScore - a.boostScore || a.name.localeCompare(b.name));
 }

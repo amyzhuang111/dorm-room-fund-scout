@@ -96,6 +96,18 @@ const ENROLLMENT_CLASS: Record<string, string> = {
   unknown: "bg-surface text-muted border-border-c",
 };
 
+export function LeftSchoolBadge({ leftSchool }: { leftSchool?: boolean | number | null }) {
+  if (!leftSchool) return null;
+  return (
+    <span
+      className="inline-flex shrink-0 items-center rounded-full border border-border-c bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-muted"
+      title="The bio says this person left school or is on leave. Enrollment stays based on class-year evidence."
+    >
+      Left school
+    </span>
+  );
+}
+
 export function EnrollmentBadge({
   status,
   label,

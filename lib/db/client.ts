@@ -94,6 +94,7 @@ function migrate(db: Database.Database) {
   addColumnIfMissing("projects", "signal_tier_basis", "signal_tier_basis TEXT");
   addColumnIfMissing("people", "signal_tier", "signal_tier TEXT");
   addColumnIfMissing("people", "signal_tier_basis", "signal_tier_basis TEXT");
+  addColumnIfMissing("people", "left_school", "left_school INTEGER NOT NULL DEFAULT 0");
   db.exec(`CREATE TABLE IF NOT EXISTS project_sector_tags (
     id TEXT PRIMARY KEY,
     project_id TEXT NOT NULL REFERENCES projects(id),

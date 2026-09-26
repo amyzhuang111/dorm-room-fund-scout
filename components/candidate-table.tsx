@@ -5,7 +5,7 @@ import { ScoutLink } from "./scout-nav";
 import { shortCampusName } from "@/lib/domain/campuses";
 import { publicLink } from "@/lib/domain/company-link";
 import type { CandidateSummary, ProjectDetail } from "@/lib/domain/queries";
-import { EnrollmentBadge, GateBadge, SignalTierBadge } from "./badges";
+import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SignalTierBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton } from "./person-link";
 import { CompanyDetail } from "./company-detail";
@@ -99,7 +99,10 @@ export const CandidateTable = memo(function CandidateTable({
             </p>
             <p className="mt-1 flex flex-wrap gap-1">
               {c.founderLinks.slice(0, 2).map((f) => (
-                <EnrollmentBadge key={f.personId} status={f.enrollmentStatus} label={f.enrollmentLabel} />
+                <span key={f.personId} className="inline-flex flex-wrap gap-1">
+                  <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+                  <LeftSchoolBadge leftSchool={f.leftSchool} />
+                </span>
               ))}
             </p>
             <p className="mt-1 text-xs text-muted line-clamp-2">{whyInvestigate(c)}</p>
@@ -162,7 +165,10 @@ export const CandidateTable = memo(function CandidateTable({
                   <p className="text-xs">{c.universities.map(shortCampusName).join(", ") || "Campus not confirmed"}</p>
                   <p className="mt-1 flex flex-wrap gap-1">
                     {c.founderLinks.slice(0, 2).map((f) => (
-                      <EnrollmentBadge key={f.personId} status={f.enrollmentStatus} label={f.enrollmentLabel} />
+                      <span key={f.personId} className="inline-flex flex-wrap gap-1">
+                  <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+                  <LeftSchoolBadge leftSchool={f.leftSchool} />
+                </span>
                     ))}
                   </p>
                 </td>

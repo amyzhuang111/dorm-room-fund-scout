@@ -8,7 +8,7 @@ import { domainKey, isHidden, type FeedbackRecord } from "@/lib/domain/feedback"
 import type { EnrollmentStatus } from "@/lib/domain/founder-status";
 import type { NetworkGraph } from "@/lib/domain/network";
 import type { NetworkNodeDetail, ProjectDetail, UniversitySummary } from "@/lib/domain/queries";
-import { EnrollmentBadge } from "./badges";
+import { EnrollmentBadge, LeftSchoolBadge } from "./badges";
 import { CompanyDetail } from "./company-detail";
 import { EnrollmentChips } from "./enrollment-chips";
 import { useFeedbackRecords } from "./feedback-provider";
@@ -39,6 +39,7 @@ function NodeDetail({ node }: { node: NetworkNodeDetail }) {
               <span className="text-foreground">{member.name}</span>
               <span className="text-xs text-muted">{member.role.replaceAll("_", " ")}</span>
               <EnrollmentBadge status={member.enrollmentStatus} label={member.enrollmentLabel} />
+              <LeftSchoolBadge leftSchool={member.leftSchool} />
               <PersonLinkButton link={member.link} name={member.name} />
               {member.school && <span className="text-xs text-muted">{member.school}</span>}
             </li>

@@ -1,6 +1,6 @@
 import type { ProjectDetail } from "@/lib/domain/queries";
 import { publicLink } from "@/lib/domain/company-link";
-import { EnrollmentBadge, GateBadge, SignalTierBadge } from "./badges";
+import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SignalTierBadge } from "./badges";
 import { PipelineForm } from "./pipeline-form";
 import { NotesSection } from "./notes-section";
 import { AssessmentForm } from "./assessment-form";
@@ -31,6 +31,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
             <li key={f.personId} className="flex flex-wrap items-center gap-1.5 text-sm text-foreground">
               <span className="font-medium">{f.name}</span>
               <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+              <LeftSchoolBadge leftSchool={f.leftSchool} />
               <PersonLinkButton link={f.link} name={f.name} />
               <span className="text-xs text-muted">
                 {[f.school, f.program].filter(Boolean).join(" · ") || "School not on record"}
@@ -124,6 +125,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
             <li key={f.personId} className="flex flex-wrap items-center gap-2">
               <span>{f.name}</span>
               <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+              <LeftSchoolBadge leftSchool={f.leftSchool} />
               <PersonLinkButton link={f.link} name={f.name} />
               <span className="text-xs text-muted">{[f.school, f.program].filter(Boolean).join(" · ")}</span>
             </li>

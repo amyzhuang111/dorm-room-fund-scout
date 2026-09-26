@@ -224,6 +224,14 @@ export function enrollmentBoost(status: string | null | undefined): number {
   return 0;
 }
 
+/** Founder list order: current students, then people who left school, then recent grads. */
+export function founderListRank(status: string | null | undefined, leftSchool: boolean | number | null | undefined): number {
+  if (status === "current_student") return 3;
+  if (leftSchool) return 2;
+  if (status === "recent_grad") return 1;
+  return 0;
+}
+
 export function bestEnrollmentBoost(statuses: (string | null | undefined)[]): number {
   return statuses.reduce((best, status) => Math.max(best, enrollmentBoost(status)), 0);
 }

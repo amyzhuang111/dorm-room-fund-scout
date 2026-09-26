@@ -69,6 +69,7 @@ interface ScoutPerson {
   claims?: ScoutClaim[];
   signal_tier?: string | null;
   signal_tier_basis?: string | null;
+  left_school?: boolean | null;
 }
 
 interface ScoutProjectLink {
@@ -93,6 +94,7 @@ interface ScoutUpdate {
   signal_tier?: string | null;
   signal_tier_basis?: string | null;
   notes?: string[] | null;
+  left_school?: boolean | null;
 }
 
 function normName(name: string): string {
@@ -651,8 +653,12 @@ function main() {
     }
 
     const insertPerson = db.prepare(
-      `INSERT INTO people (id, name, aliases_json, signal_tier, signal_tier_basis, created_at) VALUES (?, ?, ?, ?, ?, ?)`
+      `INSERT INTO people (id, name, aliases_json, signal_tier, signal_tier_basis, left_school, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)`
     );
+    function markLeftSchool(personId: string, left: boolean | null | undefined) {
+      if (left !== true) return;
+      db.prepare(`UPDATE people SET left_school = 1 WHERE id = ?`).run(personId);
+    }
     const insertAff = db.prepare(
       `INSERT INTO affiliations (id, person_id, university_id, role, status, claim_id) VALUES (?, ?, ?, ?, 'unverified', ?)`
     );
@@ -760,6 +766,7 @@ function main() {
         personId = match.id;
         mergedPeople.push(`${person.name} -> ${personId} (${match.reason})`);
         applyTier("people", personId, person.signal_tier, person.signal_tier_basis);
+        markLeftSchool(personId, person.left_school);
       } else {
         personId = newId("person");
         const aliases = (person.aliases_json ?? []).filter((alias) => person.linkedin_status === "confirmed" || !alias.startsWith("linkedin:"));
@@ -769,6 +776,7 @@ function main() {
           JSON.stringify(aliases),
           isSignalTier(person.signal_tier) ? person.signal_tier : null,
           person.signal_tier_basis ?? null,
+          person.left_school ? 1 : 0,
           now
         );
         rememberPerson(personId, person.name, JSON.stringify(aliases));
@@ -940,6 +948,7 @@ function main() {
       const extra = (update.new_aliases ?? []).filter((alias) => !alias.startsWith("linkedin:"));
       if (extra.length) writeAliases(personId, [...aliases, ...extra]);
       applyTier("people", personId, update.signal_tier, update.signal_tier_basis);
+      markLeftSchool(personId, update.left_school);
       for (const proj of update.new_projects ?? []) {
         const projectId = projectIdForName(proj.project_name);
         if (!projectId) {
@@ -962,7 +971,7 @@ function main() {
       const detach = update.entity_type === "person" ? personUpdateDetachReason(update) : null;
       if (detach) {
         const personId = newId("person");
-        insertPerson.run(personId, update.name, "[]", isSignalTier(update.signal_tier) ? update.signal_tier : null, update.signal_tier_basis ?? null, now);
+        insertPerson.run(personId, update.name, "[]", isSignalTier(update.signal_tier) ? update.signal_tier : null, update.signal_tier_basis ?? null, update.left_school ? 1 : 0, now);
         rememberPerson(personId, update.name, "[]");
         createdThisRun.add(personId);
         createdFromUpdates += 1;

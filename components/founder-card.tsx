@@ -4,7 +4,7 @@ import type { FounderRow } from "@/lib/domain/queries";
 import { publicLink } from "@/lib/domain/company-link";
 import { buildHref } from "@/lib/domain/url";
 import { ScoutLink } from "./scout-nav";
-import { EnrollmentBadge, SignalTierBadge } from "./badges";
+import { EnrollmentBadge, LeftSchoolBadge, SignalTierBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton } from "./person-link";
 
@@ -32,13 +32,16 @@ export const FounderCard = memo(function FounderCard({
           <p className="mt-1 text-xs text-muted">{founder.universityName ?? "University unknown"}</p>
           <p className="mt-1 flex flex-wrap items-center gap-1">
             <EnrollmentBadge status={founder.enrollmentStatus} label={founder.enrollmentLabel} evidence={founder.enrollmentEvidence} />
+            <LeftSchoolBadge leftSchool={founder.leftSchool} />
             <SignalTierBadge tier={founder.signalTier} basis={founder.signalTierBasis} />
           </p>
         </div>
         <PersonLinkButton link={founder.link} name={founder.name} />
       </div>
 
-      {founder.strongestEvidence && <p className="mt-2 line-clamp-2 text-sm text-foreground">{founder.strongestEvidence}</p>}
+      {founder.strongestEvidence && (
+        <p className={`mt-2 text-sm text-foreground ${open ? "" : "line-clamp-3"}`}>{founder.strongestEvidence}</p>
+      )}
 
       <div className="mt-2 flex items-center justify-between gap-2">
         <span className="text-xs text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
