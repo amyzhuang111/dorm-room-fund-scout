@@ -1260,7 +1260,7 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       `SELECT c.entity_id as entity_id, c.excerpt as excerpt, c.source_url as source_url, c.verification_state as verification_state, s.name as source_name
        FROM claims c LEFT JOIN sources s ON s.id = c.source_id
        WHERE c.entity_type = 'person' AND c.claim_type = 'potential_founder_signal' AND trim(c.excerpt) != ''
-       ORDER BY c.retrieved_at DESC`
+       ORDER BY CASE WHEN s.name = 'Additional source' THEN 1 ELSE 0 END, c.retrieved_at DESC`
     )
     .all() as { entity_id: string; excerpt: string; source_url: string | null; verification_state: string | null; source_name: string | null }[]) {
     if (signalByPerson.has(row.entity_id)) continue;

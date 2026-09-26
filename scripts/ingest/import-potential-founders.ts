@@ -172,7 +172,7 @@ function main() {
   const upsertSource = db.prepare(
     `INSERT INTO sources (id, name, family, url, campuses_json, priority, ingestion_mode, status, last_attempt_at, last_success_at, discovered_lead_count)
      VALUES (?, ?, 'program', ?, ?, 2, 'manual', 'available', ?, ?, 1)
-     ON CONFLICT(id) DO UPDATE SET name=excluded.name, url=excluded.url, last_attempt_at=excluded.last_attempt_at, last_success_at=excluded.last_success_at`
+     ON CONFLICT(id) DO UPDATE SET last_attempt_at=excluded.last_attempt_at, last_success_at=excluded.last_success_at`
   );
   const insertPerson = db.prepare(
     `INSERT INTO people (id, name, aliases_json, signal_tier, signal_tier_basis, founder_status, potential_signal, left_school, created_at)
