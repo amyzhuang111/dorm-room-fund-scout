@@ -64,8 +64,8 @@ already on file. It does not search Google and it does not write the
 database until `import`.
 
 ```powershell
-npm run enrich:apify-linkedin-verify -- --dry-run --campus penn --limit 20
-npm run enrich:apify-linkedin-verify -- --campus penn --limit 20 --yes
+npm run enrich:apify-linkedin-verify -- --dry-run --campus penn,berkeley --max-profiles 10
+npm run enrich:apify-linkedin-verify -- --campus penn,berkeley --max-profiles 10 --yes
 npm run enrich:apify-linkedin-verify -- import --dry-run
 npm run enrich:apify-linkedin-verify -- import
 ```
@@ -75,11 +75,22 @@ The default actor is `apimaestro/linkedin-profile-batch-scraper-no-cookies-requi
 limitations are a 1,000-profile batch cap. It does not publish the free-plan
 API block that `dev_fusion` documents, or the free-plan run cap that
 `harvestapi` hit (a SUCCEEDED run with zero items and "free user run limit
-exceeded"). A paid plan can pass `--actor harvestapi/linkedin-profile-scraper`
-($4.00 / 1,000). A batch that returns zero items, or whose status message or
-log mentions a limit, upgrade, or paid plan, is not written, so the same
-command retries it. `rejected` is only a profile the actor returned whose
-education did not match.
+exceeded"). On the owner's free Apify plan this actor still stops after about
+**10 profiles a day**. `--max-profiles 10` sends only that many unresolved
+URLs, and the same command the next day continues where the file left off.
+
+A batch that returns zero items writes nothing, including a limit message
+with an empty dataset, so the same command retries those URLs. When some
+profiles come back and the run then hits a limit, upgrade, or paid-plan
+message, those profiles are written (`confirmed`, `rejected`, or `not_found`)
+and every URL that did not come back stays unattempted. Unreturned URLs are
+never marked rejected. A confirmed person skips their remaining candidate
+URLs. Re-runs merge into `data/imports/apify_linkedin_verify_results.jsonl`
+without duplicating a person or replacing an earlier confirmed result.
+`rejected` is only a profile the actor returned whose education did not match.
+A paid plan can pass `--actor harvestapi/linkedin-profile-scraper`
+($4.00 / 1,000). `--campus` takes one school, a comma list
+(`penn,berkeley`), or repeated flags. Omit `--max-profiles` for no cap.
 
 ## The Globe was actually broken — root-caused and fixed for real
 

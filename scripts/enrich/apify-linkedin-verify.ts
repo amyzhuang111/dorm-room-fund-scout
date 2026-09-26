@@ -6,25 +6,32 @@
 // block). harvestapi/linkedin-profile-scraper ($4.00 / 1,000) stays available
 // with --actor for paid plans. See linkedin-actors.ts for the comparison.
 //
-// A batch that returns zero items, or whose status message or log mentions
-// a limit, an upgrade, or a paid plan, is failed. Those people are not
-// written, so a re-run retries them. rejected is only a profile the actor
-// returned whose education did not match. An explicit not-found URL is
-// not_found.
+// A free Apify account returns about 10 profiles a day from the default
+// actor, then stops with a limit / upgrade / paid-plan message. When that
+// happens after some profiles came back, those profiles are written
+// (confirmed, rejected, or not_found) and every URL that did not come back
+// stays unattempted so the next run retries it. Unreturned URLs are never
+// marked rejected. A batch that returns zero items, including a limit
+// message with an empty dataset, writes nothing.
+//
+// --max-profiles N caps how many unresolved profile URLs are sent. The
+// daily free-plan run uses 10. URLs already in the output file are skipped.
+// Once a person is confirmed, their remaining candidate URLs are skipped.
+// Lines for the same person are merged in place: a re-run does not
+// duplicate them or replace an earlier confirmed result.
 //
 // URLs are sent in batches (40 for the default actor). The actor bills per
 // profile; batching still keeps that check on one run.
 //
 // PowerShell, from the repo root:
-//   npm run enrich:apify-linkedin-verify -- --dry-run --campus penn --limit 20
-//   npm run enrich:apify-linkedin-verify -- --campus penn --limit 20 --yes
+//   npm run enrich:apify-linkedin-verify -- --dry-run --campus penn,berkeley --max-profiles 10
+//   npm run enrich:apify-linkedin-verify -- --campus penn,berkeley --max-profiles 10 --yes
 //   npm run enrich:apify-linkedin-verify -- import --dry-run
 //   npm run enrich:apify-linkedin-verify -- import
 //
 // --dry-run prints the queue and the estimate and does not call Apify.
-// A live run stops after the estimate until --yes. People already present
-// in data/imports/apify_linkedin_verify_results.jsonl are skipped, so
-// re-running the same command resumes. --mock writes synthetic profiles
+// A live run stops after the estimate until --yes. Re-running the same
+// command resumes from the output file. --mock writes synthetic profiles
 // and does not call Apify.
 
 import fs from "node:fs";
@@ -33,10 +40,17 @@ import { fileURLToPath } from "node:url";
 import { ApifyApiError, ApifyClient } from "apify-client";
 import type Database from "better-sqlite3";
 import { getDb, nowIso } from "../../lib/db/client";
-import { campusFlagHelp, cleanSearchName, isOrganizationName, resolveCampusFlag } from "./linkedin-match";
+import {
+  campusFlagHelp,
+  cleanSearchName,
+  isOrganizationName,
+  normalizeLinkedIn,
+  resolveCampusFlag,
+} from "./linkedin-match";
 import {
   ActorBatchError,
   type ActorDataset,
+  explainPartialLimit,
   explainUnusableRun,
   mentionsPlanLimit,
   normalizeActorItems,
@@ -47,13 +61,18 @@ import {
   OUTPUT_RELATIVE,
   type ScrapedProfile,
   type VerifyPerson,
+  type VerifyProgress,
+  type VerifyResultLine,
   assignProfiles,
   buildResultLine,
   formatEstimate,
+  formatRunSummary,
   importVerifiedLinkedIn,
   loadVerifyQueue,
+  mergeVerifyResult,
   packBatches,
-  readDonePersonIds,
+  readVerifyProgress,
+  selectProfileUrls,
 } from "./linkedin-verify";
 
 export type ScrapeFn = (urls: string[]) => Promise<unknown[] | ActorDataset>;
@@ -99,8 +118,14 @@ function usage(): string {
     "       npm run enrich:apify-linkedin-verify -- import [options]",
     "  --dry-run       Print the queue and Apify estimate. Do not call Apify.",
     "  --yes           Required to spend Apify credit after the estimate.",
-    "  --limit N       Only take the first N people still missing from the output file.",
-    "  --campus penn   Restrict to one school (penn, berkeley, stanford, mit, ...).",
+    "  --limit N       Only take the first N people who still have an unresolved profile URL.",
+    "  --max-profiles N",
+    "                  Send at most N profile URLs this run. Default: no cap.",
+    "                  Skips URLs already resolved in the output file. Once a person is",
+    "                  confirmed, their remaining candidate URLs are skipped.",
+    "                  Free-plan daily drip: --max-profiles 10.",
+    "  --campus LIST   One school, a comma list, or repeat the flag.",
+    "                  penn, berkeley, stanford, mit, ... Example: --campus penn,berkeley",
     "  --out PATH      Output JSONL. Default: data/imports/apify_linkedin_verify_results.jsonl",
     "  --actor ID      Profile actor. Default: apimaestro/linkedin-profile-batch-scraper-no-cookies-required.",
     "                  Paid plans: --actor harvestapi/linkedin-profile-scraper",
@@ -111,16 +136,43 @@ function usage(): string {
   ].join("\n");
 }
 
-function parseVerifyArgs(argv: string[]): {
+function argValues(argv: string[], flag: string): string[] {
+  const values: string[] = [];
+  for (let index = 0; index < argv.length; index++) {
+    if (argv[index] !== flag) continue;
+    const next = argv[index + 1];
+    if (!next || next.startsWith("--")) {
+      values.push("");
+      continue;
+    }
+    values.push(next);
+    index++;
+  }
+  return values;
+}
+
+export function parseVerifyArgs(argv: string[]): {
   dryRun: boolean;
   yes: boolean;
   mock: boolean;
   limit: number | null;
-  campusId: string | null;
+  maxProfiles: number | null;
+  campusId: string | string[] | null;
   outPath: string;
   actorId: string;
 } {
-  const known = new Set(["--dry-run", "--yes", "--mock", "--limit", "--campus", "--out", "--actor", "--help", "-h"]);
+  const known = new Set([
+    "--dry-run",
+    "--yes",
+    "--mock",
+    "--limit",
+    "--max-profiles",
+    "--campus",
+    "--out",
+    "--actor",
+    "--help",
+    "-h",
+  ]);
   for (const arg of argv) {
     if (arg.startsWith("--") && !known.has(arg)) throw new Error(`Unknown flag ${arg}\n${usage()}`);
   }
@@ -136,12 +188,25 @@ function parseVerifyArgs(argv: string[]): {
     }
     limit = Number(limitRaw);
   }
-  const campusRaw = argValue(argv, "--campus");
-  let campusId: string | null = null;
-  if (argv.includes("--campus")) {
-    if (!campusRaw) throw new Error(`--campus needs a school. Choices: ${campusFlagHelp()}.`);
-    campusId = resolveCampusFlag(campusRaw);
-    if (!campusId) throw new Error(`Unknown campus "${campusRaw}". Choices: ${campusFlagHelp()}.`);
+  const maxRaw = argValue(argv, "--max-profiles");
+  let maxProfiles: number | null = null;
+  if (argv.includes("--max-profiles")) {
+    if (!maxRaw || !/^\d+$/.test(maxRaw) || Number(maxRaw) < 1) {
+      throw new Error("--max-profiles needs a positive integer.");
+    }
+    maxProfiles = Number(maxRaw);
+  }
+  const campusTokens = argValues(argv, "--campus").flatMap((value) =>
+    value.split(",").map((part) => part.trim())
+  );
+  if (argv.includes("--campus") && (campusTokens.length === 0 || campusTokens.some((token) => token === ""))) {
+    throw new Error(`--campus needs a school. Choices: ${campusFlagHelp()}.`);
+  }
+  const campusIds: string[] = [];
+  for (const token of campusTokens) {
+    const resolved = resolveCampusFlag(token);
+    if (!resolved) throw new Error(`Unknown campus "${token}". Choices: ${campusFlagHelp()}.`);
+    if (!campusIds.includes(resolved)) campusIds.push(resolved);
   }
   const outRaw = argValue(argv, "--out");
   const actorRaw = argValue(argv, "--actor");
@@ -152,7 +217,8 @@ function parseVerifyArgs(argv: string[]): {
     yes: argv.includes("--yes"),
     mock: argv.includes("--mock"),
     limit,
-    campusId,
+    maxProfiles,
+    campusId: campusIds.length === 0 ? null : campusIds.length === 1 ? campusIds[0] : campusIds,
     outPath: path.resolve(process.cwd(), outRaw || OUTPUT_RELATIVE),
     actorId: actor.id,
   };
@@ -230,15 +296,23 @@ async function callActor(token: string, urls: string[], actor: LinkedInActor): P
   });
   const log = await readRunLog(client, run.id);
   const statusMessage = run.statusMessage ?? "";
+  let items: unknown[] = [];
+  if (run.defaultDatasetId) {
+    try {
+      items = await listDatasetItems(client, run.defaultDatasetId);
+    } catch (error) {
+      if (run.status === "SUCCEEDED") throw error;
+      console.log(`  Could not read the Apify dataset (${errorMessage(error)}).`);
+    }
+  }
   if (run.status !== "SUCCEEDED") {
     const ended = `Apify run ${run.id} ended ${run.status}${statusMessage ? `: ${statusMessage}` : ""}`;
     if (mentionsPlanLimit(`${ended}\n${statusMessage}\n${log}`)) {
-      return { items: [], statusMessage: statusMessage || ended, log };
+      return { items, statusMessage: statusMessage || ended, log };
     }
     throw new Error(ended);
   }
   if (!run.defaultDatasetId) throw new Error(`Apify run ${run.id} succeeded without a dataset.`);
-  const items = await listDatasetItems(client, run.defaultDatasetId);
   return { items, statusMessage, log };
 }
 
@@ -287,19 +361,74 @@ function mockScrape(people: VerifyPerson[]): ScrapeFn {
     });
 }
 
-let writeTail: Promise<void> = Promise.resolve();
+function urlKey(url: string): string | null {
+  const normalized = normalizeLinkedIn(url);
+  return normalized ? normalized.toLowerCase() : null;
+}
 
-function appendLine(filePath: string, line: string): Promise<void> {
-  writeTail = writeTail.then(() => {
-    fs.appendFileSync(filePath, `${line}\n`, "utf8");
-  });
-  return writeTail;
+function scopeCounts(people: VerifyPerson[], progress: VerifyProgress) {
+  let totalUrls = 0;
+  let resolvedUrls = 0;
+  let urlsRemaining = 0;
+  let confirmedLeftoverUrls = 0;
+  let peopleConfirmed = 0;
+  for (const person of people) {
+    const confirmed = progress.confirmedPersonIds.has(person.id);
+    if (confirmed) peopleConfirmed++;
+    for (const url of person.urls) {
+      totalUrls++;
+      const key = urlKey(url);
+      if (key && progress.resolvedUrls.has(key)) resolvedUrls++;
+      else if (confirmed) confirmedLeftoverUrls++;
+      else urlsRemaining++;
+    }
+  }
+  return { totalUrls, resolvedUrls, urlsRemaining, confirmedLeftoverUrls, peopleConfirmed };
+}
+
+function upsertResultLine(filePath: string, line: VerifyResultLine) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  const text = fs.existsSync(filePath) ? fs.readFileSync(filePath, "utf8") : "";
+  const kept: string[] = [];
+  let placed = false;
+  const serialized = JSON.stringify(line);
+  for (const raw of text.split(/\r?\n/)) {
+    const trimmed = raw.trim();
+    if (!trimmed) continue;
+    let samePerson = false;
+    try {
+      const parsed = JSON.parse(trimmed) as { person_id?: unknown };
+      samePerson = parsed.person_id === line.person_id;
+    } catch {
+      samePerson = false;
+    }
+    if (samePerson) {
+      if (!placed) {
+        kept.push(serialized);
+        placed = true;
+      }
+      continue;
+    }
+    kept.push(trimmed);
+  }
+  if (!placed) kept.push(serialized);
+  const tmp = `${filePath}.${process.pid}.tmp`;
+  fs.writeFileSync(tmp, `${kept.join("\n")}\n`, "utf8");
+  try {
+    fs.renameSync(tmp, filePath);
+  } catch (error) {
+    const code = error && typeof error === "object" && "code" in error ? String(error.code) : "";
+    if (code !== "EEXIST" && code !== "EPERM") throw error;
+    fs.rmSync(filePath, { force: true });
+    fs.renameSync(tmp, filePath);
+  }
 }
 
 export async function runVerify(options: {
   db: Database.Database;
-  campusId: string | null;
+  campusId: string | string[] | null;
   limit: number | null;
+  maxProfiles?: number | null;
   dryRun: boolean;
   yes: boolean;
   mock: boolean;
@@ -308,25 +437,42 @@ export async function runVerify(options: {
   actorId?: string;
   scrape?: ScrapeFn;
 }): Promise<number> {
+  const maxProfiles = options.maxProfiles ?? null;
   const queue = loadVerifyQueue(options.db, options.campusId);
-  const done = readDonePersonIds(options.outPath);
+  const progress = readVerifyProgress(options.outPath);
+  const resolvedAtStart = new Set(progress.resolvedUrls);
+  const outcomesThisRun = new Map<string, VerifyResultLine["outcome"]>();
+  let scrapedThisRun = 0;
+  let stoppedForDailyLimit = false;
+  let batchFailed = false;
+  let authFailed = false;
+
   console.log("LinkedIn verify. People with no confirmed linkedin.com/in URL and at least one unverified candidate.");
   console.log("Order: founders, then potential founders, within Penn, then Berkeley, then everyone else.");
-  if (options.campusId) console.log(`Campus filter: ${options.campusId}`);
+  if (Array.isArray(options.campusId)) console.log(`Campus filter: ${options.campusId.join(", ")}`);
+  else if (options.campusId) console.log(`Campus filter: ${options.campusId}`);
   console.log(`With an unverified candidate: ${queue.length}`);
-  const pending = queue.filter((person) => !done.has(person.id));
-  console.log(`Already in ${options.outPath}: ${queue.length - pending.length}`);
-  const handleSkipped = pending.filter((person) => cleanSearchName(person.name) === null);
-  const orgSkipped = pending.filter((person) => cleanSearchName(person.name) !== null && isOrganizationName(person.name));
-  const searchable = pending.filter((person) => cleanSearchName(person.name) !== null && !isOrganizationName(person.name));
+  const handleSkipped = queue.filter((person) => cleanSearchName(person.name) === null);
+  const orgSkipped = queue.filter((person) => cleanSearchName(person.name) !== null && isOrganizationName(person.name));
+  const named = queue.filter((person) => cleanSearchName(person.name) !== null && !isOrganizationName(person.name));
+  const already = scopeCounts(named, progress);
+  const confirmedLabel = already.peopleConfirmed === 1 ? "person" : "people";
+  console.log(
+    `Already resolved in ${options.outPath}: ${already.resolvedUrls} URL(s), ${already.peopleConfirmed} ${confirmedLabel} confirmed.`
+  );
   console.log(
     `Skipped ${handleSkipped.length} ${handleSkipped.length === 1 ? "person" : "people"} whose name is only a handle (no first and last name).`
   );
   console.log(
     `Skipped ${orgSkipped.length} non-person ${orgSkipped.length === 1 ? "name" : "names"} (Venture, Collaboration, Lab, Team, Inc, Club, and similar).`
   );
-  const selected = options.limit == null ? searchable : searchable.slice(0, options.limit);
-  console.log(`This run: ${selected.length} people, ${selected.reduce((sum, person) => sum + person.urls.length, 0)} profile URL(s).`);
+  const selected = selectProfileUrls(named, progress.resolvedUrls, progress.confirmedPersonIds, options.limit, maxProfiles);
+  const urlCount = selected.reduce((sum, person) => sum + person.urls.length, 0);
+  console.log(
+    `This run: ${selected.length} people, ${urlCount} profile URL(s).${
+      maxProfiles == null ? "" : ` Cap: ${maxProfiles} profile URL(s).`
+    }`
+  );
   const byCampus = new Map<string, number>();
   for (const person of selected) {
     const key = person.campusId || "(no campus)";
@@ -337,36 +483,68 @@ export async function runVerify(options: {
     console.log(`  ${person.name} — ${person.urls.length} candidate URL(s)`);
   }
   if (selected.length > 10) console.log(`  … ${selected.length - 10} more`);
+
+  const printSummary = () => {
+    const scope = scopeCounts(named, progress);
+    let confirmed = 0;
+    let rejected = 0;
+    let notFound = 0;
+    let unverified = 0;
+    for (const outcome of outcomesThisRun.values()) {
+      if (outcome === "confirmed") confirmed++;
+      else if (outcome === "rejected") rejected++;
+      else if (outcome === "not_found") notFound++;
+      else if (outcome === "unverified") unverified++;
+    }
+    console.log(
+      formatRunSummary({
+        scraped: scrapedThisRun,
+        confirmed,
+        rejected,
+        notFound,
+        unverified,
+        resolvedUrls: scope.resolvedUrls,
+        totalUrls: scope.totalUrls,
+        peopleConfirmed: scope.peopleConfirmed,
+        urlsRemaining: scope.urlsRemaining,
+        confirmedLeftoverUrls: scope.confirmedLeftoverUrls,
+        stoppedForDailyLimit,
+      })
+    );
+  };
+
   if (selected.length === 0) {
     console.log("Nothing to verify.");
+    printSummary();
     return 0;
   }
   const actor = resolveActor(options.actorId);
-  const urlCount = selected.reduce((sum, person) => sum + person.urls.length, 0);
-  const batches = packBatches(selected.map((person) => person.urls), actor.batchSize);
+  const batches = packBatches(
+    selected.map((person) => person.urls),
+    actor.batchSize
+  );
   console.log(formatEstimate(urlCount, batches.length, actor.id));
   if (options.dryRun) {
     console.log("Dry run. Nothing was sent to Apify and the output file was not changed.");
+    printSummary();
     return 0;
   }
   if (options.mock) {
     console.log("Mock mode. No Apify call. Synthetic profiles will be written.");
   } else if (!options.yes) {
     console.log("Pass --yes to start. Nothing was sent to Apify.");
+    printSummary();
     return 0;
   } else if (!options.scrape && !options.hasToken) {
     console.log("APIFY_API_TOKEN is not set. Put it in .env.local at the repo root and re-run. Nothing was sent to Apify.");
+    printSummary();
     return 1;
   }
 
-  fs.mkdirSync(path.dirname(options.outPath), { recursive: true });
   const scrape =
     options.scrape ??
     (options.mock ? mockScrape(selected) : (urls: string[]) => scrapeLive(process.env.APIFY_API_TOKEN ?? "", urls, actor));
   const profiles = new Map<string, ScrapedProfile | null>();
-  const failed = new Set<string>();
-  let fatal: unknown = null;
-  let batchFailed = false;
 
   function readPayload(raw: unknown[] | ActorDataset): ActorDataset {
     if (Array.isArray(raw)) return { items: raw };
@@ -377,6 +555,21 @@ export async function runVerify(options: {
     };
   }
 
+  function stillOpen(urls: string[]): string[] {
+    const open: string[] = [];
+    const seen = new Set<string>();
+    for (const url of urls) {
+      if (seen.has(url)) continue;
+      seen.add(url);
+      const key = urlKey(url);
+      if (key && resolvedAtStart.has(key)) continue;
+      const owner = selected.find((person) => person.urls.includes(url));
+      if (owner && progress.confirmedPersonIds.has(owner.id)) continue;
+      open.push(url);
+    }
+    return open;
+  }
+
   async function scrapeResilient(urls: string[]) {
     try {
       const payload = readPayload(await scrape(urls));
@@ -384,18 +577,27 @@ export async function runVerify(options: {
       if (failure) throw new ActorBatchError(failure.message, failure.planLimit);
       const items = normalizeActorItems(payload.items, urls);
       const assigned = assignProfiles(urls, items);
-      for (const [url, profile] of assigned) profiles.set(url, profile);
+      for (const [url, profile] of assigned) {
+        if (!profiles.has(url)) scrapedThisRun++;
+        profiles.set(url, profile);
+      }
+      if (mentionsPlanLimit(`${payload.statusMessage ?? ""}\n${payload.log ?? ""}`)) {
+        stoppedForDailyLimit = true;
+        throw new ActorBatchError(explainPartialLimit(payload), true);
+      }
     } catch (error) {
       if (isAuthError(error)) throw error;
       if (error instanceof ActorBatchError) {
+        if (error.planLimit) {
+          stoppedForDailyLimit = true;
+          throw error;
+        }
         batchFailed = true;
-        for (const url of urls) failed.add(url);
-        if (error.planLimit) throw error;
         console.log(error.message);
         return;
       }
       if (urls.length === 1) {
-        failed.add(urls[0]);
+        batchFailed = true;
         console.log(`  failed ${urls[0]}: ${errorMessage(error)}. Not written, so a re-run will retry.`);
         return;
       }
@@ -406,50 +608,67 @@ export async function runVerify(options: {
     }
   }
 
-  let written = 0;
-  let skippedPeople = 0;
+  function writeReturned(batchUrls: string[]) {
+    const inBatch = new Set(batchUrls);
+    for (const person of selected) {
+      if (progress.confirmedPersonIds.has(person.id)) continue;
+      if (!person.urls.some((url) => inBatch.has(url))) continue;
+      const fresh = person.urls.filter((url) => {
+        const normalized = normalizeLinkedIn(url);
+        const key = urlKey(url);
+        return Boolean(normalized && key && profiles.has(normalized) && !resolvedAtStart.has(key));
+      });
+      if (fresh.length === 0) continue;
+      const incoming = buildResultLine(person, profiles, nowIso(), actor.id, fresh);
+      if (options.mock) incoming.mock = true;
+      const existing = progress.linesByPerson.get(person.id) ?? null;
+      const merged = mergeVerifyResult(person, existing, incoming);
+      if (merged === existing) continue;
+      upsertResultLine(options.outPath, merged);
+      progress.linesByPerson.set(person.id, merged);
+      if (merged.outcome === "confirmed") progress.confirmedPersonIds.add(person.id);
+      for (const item of merged.profiles) {
+        const key = urlKey(item.url);
+        if (!key) continue;
+        progress.resolvedUrls.add(key);
+        resolvedAtStart.add(key);
+      }
+      outcomesThisRun.set(person.id, merged.outcome);
+      console.log(
+        `[${outcomesThisRun.size}/${selected.length}] ${person.name} — ${merged.outcome}. ${merged.outcome_reason}${
+          merged.headline ? ` Headline: ${merged.headline}.` : ""
+        }${merged.graduation_year ? ` Graduation year: ${merged.graduation_year}.` : ""}`
+      );
+    }
+  }
+
   for (const urls of batches) {
-    if (fatal) break;
-    const unique = [...new Set(urls)];
+    const unique = stillOpen(urls);
+    if (unique.length === 0) continue;
+    let stop = false;
     try {
       await scrapeResilient(unique);
     } catch (error) {
-      fatal = error;
-      if (error instanceof ActorBatchError) {
+      stop = true;
+      if (error instanceof ActorBatchError && error.planLimit) {
         console.log(error.message);
         console.log("Stopped. Later batches were not started.");
-        skippedPeople += selected.filter((person) => person.urls.some((url) => unique.includes(url))).length;
-      } else {
+      } else if (isAuthError(error)) {
+        authFailed = true;
         console.log(`Stopped: Apify rejected the token (${errorMessage(error)}).`);
+      } else {
+        authFailed = true;
+        console.log(`Stopped: ${errorMessage(error)}`);
       }
-      break;
     }
-    const ready = selected.filter(
-      (person) =>
-        person.urls.some((url) => unique.includes(url)) &&
-        person.urls.every((url) => profiles.has(url) || failed.has(url)) &&
-        person.urls.every((url) => !failed.has(url))
-    );
-    for (const person of ready) {
-      if (done.has(person.id)) continue;
-      const line = buildResultLine(person, profiles, nowIso(), actor.id);
-      if (options.mock) line.mock = true;
-      await appendLine(options.outPath, JSON.stringify(line));
-      done.add(person.id);
-      written++;
-      console.log(
-        `[${written}/${selected.length}] ${person.name} — ${line.outcome}. ${line.outcome_reason}${
-          line.headline ? ` Headline: ${line.headline}.` : ""
-        }${line.graduation_year ? ` Graduation year: ${line.graduation_year}.` : ""}`
-      );
-    }
-    const blocked = selected.filter((person) => person.urls.some((url) => unique.includes(url)) && person.urls.some((url) => failed.has(url)));
-    skippedPeople += blocked.length;
+    writeReturned(unique);
+    if (stop || stoppedForDailyLimit) break;
     if (!options.scrape && !options.mock) await sleep(1000);
   }
-  await writeTail;
-  console.log(`Wrote ${written} line(s) to ${options.outPath}. Failed ${skippedPeople}. Re-run the same command to continue.`);
-  return fatal || batchFailed ? 1 : 0;
+  printSummary();
+  if (authFailed) return 1;
+  if (outcomesThisRun.size === 0 && (stoppedForDailyLimit || batchFailed)) return 1;
+  return 0;
 }
 
 async function main() {
@@ -465,6 +684,7 @@ async function main() {
     db: getDb(),
     campusId: args.campusId,
     limit: args.limit,
+    maxProfiles: args.maxProfiles,
     dryRun: args.dryRun,
     yes: args.yes,
     mock: args.mock,

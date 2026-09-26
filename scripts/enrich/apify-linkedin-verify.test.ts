@@ -30,7 +30,7 @@ function profile(
 async function main() {
   const { getDb, nowIso } = await import("../../lib/db/client");
   const verify = await import("./linkedin-verify");
-  const { runVerify } = await import("./apify-linkedin-verify");
+  const { runVerify, parseVerifyArgs } = await import("./apify-linkedin-verify");
 
   const adaProfile = "https://www.linkedin.com/in/ada";
   const thousand = verify.estimateVerify(1000);
@@ -64,6 +64,21 @@ async function main() {
   assert.match(limitExplanation?.message ?? "", /Status message: free user run limit exceeded/);
   assert.match(limitExplanation?.message ?? "", /Free users are limited to 50 runs/);
   assert.equal(verify.explainUnusableRun({ items: [{ status: 200 }] }), null);
+  assert.equal(
+    verify.explainUnusableRun({
+      items: [{ status: 200 }],
+      statusMessage: "free user run limit exceeded",
+      log: "Please upgrade to a paid plan",
+    }),
+    null
+  );
+  const dailyArgs = parseVerifyArgs(["--campus", "penn,berkeley", "--max-profiles", "10", "--yes"]);
+  assert.deepEqual(dailyArgs.campusId, ["univ_penn", "univ_berkeley"]);
+  assert.equal(dailyArgs.maxProfiles, 10);
+  assert.equal(dailyArgs.yes, true);
+  assert.equal(parseVerifyArgs(["--campus", "penn"]).maxProfiles, null);
+  assert.equal(parseVerifyArgs(["--campus", "penn"]).campusId, "univ_penn");
+  assert.throws(() => parseVerifyArgs(["--max-profiles", "0"]), /--max-profiles/);
 
   const mappedAda = "https://www.linkedin.com/in/ada-lovelace";
   const mappedOther = "https://www.linkedin.com/in/ada-other";
@@ -533,6 +548,9 @@ async function main() {
   assert.equal(logs.some((line) => line.includes("Status message: free user run limit exceeded")), true);
   assert.equal(logs.some((line) => line.includes("Free users are limited to 50 runs")), true);
   assert.equal(logs.some((line) => line.includes("Please upgrade to a paid plan")), true);
+  assert.equal(logs.some((line) => line.includes("Profiles scraped this run: 0")), true);
+  assert.equal(logs.some((line) => line.includes("Stopped because of the free daily limit: yes")), true);
+  assert.equal(logs.some((line) => line.includes("URLs remaining: 1")), true);
 
   let partialCalls = 0;
   const partial = await runVerify({
@@ -550,10 +568,10 @@ async function main() {
         items: [
           {
             results: {
-              "grace-hopper": {
-                basic_info: { fullname: "Grace Hopper", headline: "Should not be saved" },
-                education: [{ school: "Massachusetts Institute of Technology", end_date: { year: 2024 } }],
-              },
+            "grace-hopper": {
+              basic_info: { fullname: "Grace Hopper", headline: "Saved from a partial batch" },
+              education: [{ school: "Massachusetts Institute of Technology", end_date: { year: 2024 } }],
+            },
             },
             failedUsernames: [],
           },
@@ -563,10 +581,19 @@ async function main() {
       };
     },
   });
-  assert.equal(partial, 1);
+  assert.equal(partial, 0);
   assert.equal(partialCalls, 1);
-  assert.equal(fs.existsSync(limitOut), false);
+  const partialLine = JSON.parse(fs.readFileSync(limitOut, "utf8").trim()) as {
+    person_id: string;
+    outcome: string;
+    headline: string;
+  };
+  assert.equal(partialLine.person_id, "person_grace");
+  assert.equal(partialLine.outcome, "confirmed");
+  assert.equal(partialLine.headline, "Saved from a partial batch");
 
+  let retryCalls = 0;
+  const beforeRetry = fs.readFileSync(limitOut, "utf8");
   const retry = await runVerify({
     db,
     campusId: "univ_mit",
@@ -576,19 +603,21 @@ async function main() {
     mock: false,
     outPath: limitOut,
     hasToken: false,
-    scrape: async () => ({
-      items: [
-        {
-          basic_info: { fullname: "Grace Hopper", headline: "Not on file" },
-          education: [{ school: "Other University", end_date: { year: 2024 } }],
-        },
-      ],
-    }),
+    scrape: async () => {
+      retryCalls++;
+      return {
+        items: [
+          {
+            basic_info: { fullname: "Grace Hopper", headline: "Not on file" },
+            education: [{ school: "Other University", end_date: { year: 2024 } }],
+          },
+        ],
+      };
+    },
   });
   assert.equal(retry, 0);
-  const retryLine = JSON.parse(fs.readFileSync(limitOut, "utf8").trim()) as { outcome: string; person_id: string };
-  assert.equal(retryLine.person_id, "person_grace");
-  assert.equal(retryLine.outcome, "rejected");
+  assert.equal(retryCalls, 0);
+  assert.equal(fs.readFileSync(limitOut, "utf8"), beforeRetry);
 
   const missingOnly = path.join(os.tmpdir(), `apify-linkedin-verify-missing-${process.pid}.jsonl`);
   fs.rmSync(missingOnly, { force: true });
@@ -610,6 +639,339 @@ async function main() {
   const notFoundLine = JSON.parse(fs.readFileSync(missingOnly, "utf8").trim()) as { outcome: string; outcome_reason: string };
   assert.equal(notFoundLine.outcome, "not_found");
   assert.match(notFoundLine.outcome_reason, /not found/);
+
+  function readJsonl(file: string): Record<string, unknown>[] {
+    return fs
+      .readFileSync(file, "utf8")
+      .trim()
+      .split(/\n/)
+      .filter(Boolean)
+      .map((line) => JSON.parse(line) as Record<string, unknown>);
+  }
+  function rejectedProfile(url: string, first: string, last: string) {
+    return {
+      status: 200,
+      query: { publicIdentifier: url.split("/in/")[1] },
+      linkedinUrl: url,
+      firstName: first,
+      lastName: last,
+      headline: "Unrelated",
+      education: [{ schoolName: "Other University", endDate: { year: 2024, text: "2024" } }],
+    };
+  }
+
+  const resumeOut = path.join(os.tmpdir(), `apify-linkedin-verify-resume-${process.pid}.jsonl`);
+  fs.rmSync(resumeOut, { force: true });
+  const resumeSent: string[][] = [];
+  const resumeLogs: string[] = [];
+  const resumeLog = console.log;
+  console.log = (...args: unknown[]) => {
+    resumeLogs.push(args.map((part) => String(part)).join(" "));
+  };
+  let resumeCode = 0;
+  try {
+    resumeCode = await runVerify({
+      db,
+      campusId: "univ_penn",
+      limit: null,
+      maxProfiles: 1,
+      dryRun: false,
+      yes: true,
+      mock: false,
+      outPath: resumeOut,
+      hasToken: false,
+      scrape: async (urls) => {
+        resumeSent.push([...urls]);
+        return urls.map((url) => rejectedProfile(url, "Ada", "Lovelace"));
+      },
+    });
+  } finally {
+    console.log = resumeLog;
+  }
+  assert.equal(resumeCode, 0);
+  assert.deepEqual(resumeSent, [[adaA]]);
+  const resumeLines = readJsonl(resumeOut);
+  assert.equal(resumeLines.length, 1);
+  assert.equal(resumeLines[0]?.person_id, "person_ada");
+  assert.equal(resumeLines[0]?.outcome, "rejected");
+  assert.deepEqual(
+    (resumeLines[0]?.profiles as { url: string }[]).map((item) => item.url),
+    [adaA]
+  );
+  assert.equal(resumeLogs.some((line) => line.includes("Profiles scraped this run: 1")), true);
+  assert.equal(resumeLogs.some((line) => line.includes("Rejected this run: 1")), true);
+  assert.equal(resumeLogs.some((line) => line.includes("Confirmed this run: 0")), true);
+  assert.equal(resumeLogs.some((line) => line.includes("Not found this run: 0")), true);
+  assert.equal(resumeLogs.some((line) => line.includes("Stopped because of the free daily limit: no")), true);
+  assert.equal(resumeLogs.some((line) => line.includes("Cap: 1 profile URL(s).")), true);
+
+  resumeSent.length = 0;
+  const resumeSecond = await runVerify({
+    db,
+    campusId: "univ_penn",
+    limit: null,
+    maxProfiles: 1,
+    dryRun: false,
+    yes: true,
+    mock: false,
+    outPath: resumeOut,
+    hasToken: false,
+    scrape: async (urls) => {
+      resumeSent.push([...urls]);
+      return urls.map((url) => rejectedProfile(url, "Ada", "Lovelace"));
+    },
+  });
+  assert.equal(resumeSecond, 0);
+  assert.deepEqual(resumeSent, [[adaB]]);
+  const resumeMerged = readJsonl(resumeOut);
+  assert.equal(resumeMerged.length, 1);
+  assert.equal(resumeMerged[0]?.person_id, "person_ada");
+  assert.equal(resumeMerged[0]?.outcome, "rejected");
+  assert.deepEqual(
+    (resumeMerged[0]?.profiles as { url: string; profile: { education?: { schoolName?: string }[] } }[]).map(
+      (item) => item.url
+    ),
+    [adaA, adaB]
+  );
+  assert.equal(
+    (resumeMerged[0]?.profiles as { profile: { education?: { schoolName?: string }[] } }[])[0]?.profile.education?.[0]
+      ?.schoolName,
+    "Other University"
+  );
+
+  const confirmOut = path.join(os.tmpdir(), `apify-linkedin-verify-confirm-${process.pid}.jsonl`);
+  fs.rmSync(confirmOut, { force: true });
+  const confirmSent: string[][] = [];
+  const confirmed = await runVerify({
+    db,
+    campusId: "univ_penn",
+    limit: null,
+    maxProfiles: 1,
+    dryRun: false,
+    yes: true,
+    mock: false,
+    outPath: confirmOut,
+    hasToken: false,
+    scrape: async (urls) => {
+      confirmSent.push([...urls]);
+      return urls.map((url) => ({
+        status: 200,
+        query: { publicIdentifier: url.split("/in/")[1] },
+        linkedinUrl: url,
+        firstName: "Ada",
+        lastName: "Lovelace",
+        headline: "Founder, Analytical Engines",
+        education: [{ schoolName: "The Wharton School", endDate: { year: 2024, text: "2024" } }],
+      }));
+    },
+  });
+  assert.equal(confirmed, 0);
+  assert.deepEqual(confirmSent, [[adaA]]);
+  const confirmedLines = readJsonl(confirmOut);
+  assert.equal(confirmedLines[0]?.outcome, "confirmed");
+  assert.equal((confirmedLines[0]?.profiles as unknown[]).length, 1);
+  const confirmedAda = fs.readFileSync(confirmOut, "utf8").trim();
+  confirmSent.length = 0;
+  const confirmLogs: string[] = [];
+  const confirmLog = console.log;
+  console.log = (...args: unknown[]) => {
+    confirmLogs.push(args.map((part) => String(part)).join(" "));
+  };
+  let confirmNext = 0;
+  try {
+    confirmNext = await runVerify({
+      db,
+      campusId: "univ_penn",
+      limit: null,
+      maxProfiles: 1,
+      dryRun: false,
+      yes: true,
+      mock: false,
+      outPath: confirmOut,
+      hasToken: false,
+      scrape: async (urls) => {
+        confirmSent.push([...urls]);
+        return urls.map((url) => rejectedProfile(url, "Quinn", "Potential"));
+      },
+    });
+  } finally {
+    console.log = confirmLog;
+  }
+  assert.equal(confirmNext, 0);
+  assert.deepEqual(confirmSent, [[potA]]);
+  const afterConfirm = readJsonl(confirmOut);
+  assert.equal(afterConfirm.filter((line) => line.person_id === "person_ada").length, 1);
+  assert.equal(JSON.stringify(afterConfirm[0]), confirmedAda);
+  assert.equal(afterConfirm[0]?.outcome, "confirmed");
+  assert.equal(afterConfirm[0]?.headline, "Founder, Analytical Engines");
+  assert.equal(confirmLogs.some((line) => line.includes("1 more belongs to a person already confirmed")), true);
+
+  const dripOut = path.join(os.tmpdir(), `apify-linkedin-verify-drip-${process.pid}.jsonl`);
+  fs.rmSync(dripOut, { force: true });
+  const dripSent: string[][] = [];
+  const dripLogs: string[] = [];
+  const dripLog = console.log;
+  console.log = (...args: unknown[]) => {
+    dripLogs.push(args.map((part) => String(part)).join(" "));
+  };
+  let dripCode = 0;
+  try {
+    dripCode = await runVerify({
+      db,
+      campusId: "univ_waterloo",
+      limit: null,
+      maxProfiles: null,
+      dryRun: false,
+      yes: true,
+      mock: false,
+      outPath: dripOut,
+      hasToken: false,
+      scrape: async (urls) => {
+        dripSent.push([...urls]);
+        return {
+          items: [
+            {
+              status: 200,
+              query: { publicIdentifier: "ken-thompson" },
+              linkedinUrl: kenA,
+              firstName: "Ken",
+              lastName: "Thompson",
+              headline: "Plan 9",
+              education: [{ schoolName: "Other University", endDate: { year: 2024, text: "2024" } }],
+            },
+          ],
+          statusMessage: "free user run limit exceeded",
+          log: "Free users are limited to 10 profiles. Please upgrade to a paid plan.",
+        };
+      },
+    });
+  } finally {
+    console.log = dripLog;
+  }
+  assert.equal(dripCode, 0);
+  assert.equal(dripSent.length, 1);
+  assert.deepEqual([...dripSent[0]].sort(), [kenA, kenB].sort());
+  const dripLines = readJsonl(dripOut);
+  assert.equal(dripLines.length, 1);
+  assert.equal(dripLines[0]?.person_id, "person_ken");
+  assert.equal(dripLines[0]?.outcome, "rejected");
+  assert.deepEqual(
+    (dripLines[0]?.profiles as { url: string }[]).map((item) => item.url),
+    [kenA]
+  );
+  assert.equal(dripLogs.some((line) => line.includes("Profiles scraped this run: 1")), true);
+  assert.equal(dripLogs.some((line) => line.includes("Confirmed this run: 0")), true);
+  assert.equal(dripLogs.some((line) => line.includes("Rejected this run: 1")), true);
+  assert.equal(dripLogs.some((line) => line.includes("Not found this run: 0")), true);
+  assert.equal(dripLogs.some((line) => line.includes("Cumulative: 1 URL resolved out of 2, 0 people confirmed")), true);
+  assert.equal(dripLogs.some((line) => line.includes("URLs remaining: 1")), true);
+  assert.equal(dripLogs.some((line) => line.includes("Stopped because of the free daily limit: yes")), true);
+  assert.equal(dripLogs.some((line) => line.includes("Unreturned URLs were not marked rejected.")), true);
+
+  dripSent.length = 0;
+  const dripLogs2: string[] = [];
+  console.log = (...args: unknown[]) => {
+    dripLogs2.push(args.map((part) => String(part)).join(" "));
+  };
+  let dripNext = 0;
+  try {
+    dripNext = await runVerify({
+      db,
+      campusId: "univ_waterloo",
+      limit: null,
+      maxProfiles: 1,
+      dryRun: false,
+      yes: true,
+      mock: false,
+      outPath: dripOut,
+      hasToken: false,
+      scrape: async (urls) => {
+        dripSent.push([...urls]);
+        return [
+          {
+            status: 200,
+            query: { publicIdentifier: "ken-thompson-2" },
+            linkedinUrl: kenB,
+            firstName: "Ken",
+            lastName: "Thompson",
+            headline: "Bell Labs",
+            education: [{ schoolName: "University of Waterloo", endDate: { year: 2024, text: "2024" } }],
+          },
+        ];
+      },
+    });
+  } finally {
+    console.log = dripLog;
+  }
+  assert.equal(dripNext, 0);
+  assert.deepEqual(dripSent, [[kenB]]);
+  const dripMerged = readJsonl(dripOut);
+  assert.equal(dripMerged.length, 1);
+  assert.equal(dripMerged[0]?.outcome, "confirmed");
+  assert.equal(dripMerged[0]?.confirmed_url, kenB);
+  const dripProfiles = dripMerged[0]?.profiles as {
+    url: string;
+    profile: { headline?: string; education?: { schoolName?: string }[] };
+  }[];
+  assert.deepEqual(
+    dripProfiles.map((item) => item.url),
+    [kenA, kenB]
+  );
+  assert.equal(dripProfiles[0]?.profile.headline, "Plan 9");
+  assert.equal(dripProfiles[0]?.profile.education?.[0]?.schoolName, "Other University");
+  assert.equal(dripProfiles[1]?.profile.headline, "Bell Labs");
+  assert.equal(dripLogs2.some((line) => line.includes("Confirmed this run: 1")), true);
+  assert.equal(dripLogs2.some((line) => line.includes("Cumulative: 2 URLs resolved out of 2, 1 person confirmed")), true);
+  assert.equal(dripLogs2.some((line) => line.includes("URLs remaining: 0")), true);
+  assert.equal(dripLogs2.some((line) => line.includes("Stopped because of the free daily limit: no")), true);
+
+  const beforeThird = fs.readFileSync(dripOut, "utf8");
+  let thirdCalls = 0;
+  const third = await runVerify({
+    db,
+    campusId: "univ_waterloo",
+    limit: null,
+    maxProfiles: 10,
+    dryRun: false,
+    yes: true,
+    mock: false,
+    outPath: dripOut,
+    hasToken: false,
+    scrape: async () => {
+      thirdCalls++;
+      return [];
+    },
+  });
+  assert.equal(third, 0);
+  assert.equal(thirdCalls, 0);
+  assert.equal(fs.readFileSync(dripOut, "utf8"), beforeThird);
+
+  const bothSent: string[][] = [];
+  const bothOut = path.join(os.tmpdir(), `apify-linkedin-verify-both-${process.pid}.jsonl`);
+  fs.rmSync(bothOut, { force: true });
+  const both = await runVerify({
+    db,
+    campusId: ["univ_berkeley", "univ_penn"],
+    limit: null,
+    maxProfiles: 10,
+    dryRun: false,
+    yes: true,
+    mock: false,
+    outPath: bothOut,
+    hasToken: false,
+    scrape: async (urls) => {
+      bothSent.push([...urls]);
+      return urls.map((url) => rejectedProfile(url, "Nobody", "Else"));
+    },
+  });
+  assert.equal(both, 0);
+  const bothFlat = bothSent.flat();
+  assert.equal(bothFlat[0], adaA);
+  assert.equal(bothFlat.includes(graceA), false);
+  assert.equal(bothFlat.includes(kenA), false);
+  assert.equal(bothFlat.includes(alanA), true);
+  assert.equal(bothFlat.indexOf(memA) < bothFlat.indexOf(alanA), true);
+  assert.equal(bothFlat.length, 6);
 
   const fixture = path.join(os.tmpdir(), `apify-linkedin-verify-fixture-${process.pid}.jsonl`);
   const adaLine = verify.buildResultLine(
@@ -751,6 +1113,10 @@ async function main() {
   fs.rmSync(missingOnly, { force: true });
   fs.rmSync(notFoundFile, { force: true });
   fs.rmSync(fixture, { force: true });
+  fs.rmSync(resumeOut, { force: true });
+  fs.rmSync(confirmOut, { force: true });
+  fs.rmSync(dripOut, { force: true });
+  fs.rmSync(bothOut, { force: true });
   db.close();
   for (const suffix of ["", "-shm", "-wal"]) fs.rmSync(dbPath + suffix, { force: true });
   console.log("apify linkedin verify fixture test passed");

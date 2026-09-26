@@ -12,9 +12,13 @@
 // is preferred when several candidates pass. Several that still pass are
 // left unverified. A profile the actor actually returned, whose name or
 // campus education did not match, is rejected and the rows are kept. A URL
-// the actor explicitly reports as not found is not_found. An empty run, or
-// a run whose status message or log mentions a limit, upgrade, or paid
-// plan, is a failed batch and is not written.
+// the actor explicitly reports as not found is not_found. A URL the actor
+// did not return is left unattempted: it is not written and it is not
+// rejected. A limit, upgrade, or paid-plan message with zero items writes
+// nothing. The same message after some profiles came back keeps those
+// profiles. Once a person is confirmed, their remaining candidate URLs are
+// not scraped. Result lines for one person are merged in place so a re-run
+// does not duplicate them or replace an earlier confirmed result.
 
 import fs from "node:fs";
 import type Database from "better-sqlite3";
@@ -46,6 +50,7 @@ export {
   actorInput,
   mentionsPlanLimit,
   explainUnusableRun,
+  explainPartialLimit,
   normalizeActorItems,
   ActorBatchError,
 } from "./linkedin-actors";
@@ -415,10 +420,44 @@ export function packBatches(groups: string[][], batchSize = BATCH_SIZE): string[
   return batches;
 }
 
-export function loadVerifyQueue(db: Database.Database, campusId: string | null): VerifyPerson[] {
+const CAMPUS_LOAD_ORDER = [
+  "univ_penn",
+  "univ_berkeley",
+  "univ_stanford",
+  "univ_mit",
+  "univ_harvard",
+  "univ_waterloo",
+  "univ_cmu",
+  "univ_columbia",
+  "univ_gatech",
+  "univ_michigan",
+  "univ_princeton",
+];
+
+function campusLoadRank(id: string): number {
+  const index = CAMPUS_LOAD_ORDER.indexOf(id);
+  return index === -1 ? CAMPUS_LOAD_ORDER.length : index;
+}
+
+function loadVerifyQueueOne(db: Database.Database, campusId: string | null): VerifyPerson[] {
   return loadQueue(db, campusId)
     .filter((person) => person.existingUnverified.some((url) => normalizeLinkedIn(url)))
     .map((person) => toVerifyPerson(person));
+}
+
+export function loadVerifyQueue(db: Database.Database, campusId: string | string[] | null): VerifyPerson[] {
+  if (!Array.isArray(campusId)) return loadVerifyQueueOne(db, campusId);
+  const ids = [...new Set(campusId)].sort((a, b) => campusLoadRank(a) - campusLoadRank(b) || a.localeCompare(b));
+  const seen = new Set<string>();
+  const people: VerifyPerson[] = [];
+  for (const id of ids) {
+    for (const person of loadVerifyQueueOne(db, id)) {
+      if (seen.has(person.id)) continue;
+      seen.add(person.id);
+      people.push(person);
+    }
+  }
+  return people;
 }
 
 function toVerifyPerson(person: LookupPerson): VerifyPerson {
@@ -446,9 +485,11 @@ export function buildResultLine(
   person: VerifyPerson,
   profiles: Map<string, ScrapedProfile | null>,
   verifiedAt: string,
-  actorId: string = ACTOR_ID
+  actorId: string = ACTOR_ID,
+  urls: string[] = person.urls
 ): VerifyResultLine {
-  const judgment = judgeProfiles(person, person.urls, profiles);
+  const considered = urls.map((url) => normalizeLinkedIn(url) ?? url);
+  const judgment = judgeProfiles(person, considered, profiles);
   return {
     person_id: person.id,
     name: person.name,
@@ -461,10 +502,200 @@ export function buildResultLine(
     confirmed_url: judgment.selected?.url ?? null,
     headline: judgment.headline,
     graduation_year: judgment.graduationYear,
-    profiles: person.urls.map((url) => ({ url, profile: profiles.get(url) ?? null })),
+    profiles: considered.map((url) => ({ url, profile: profiles.get(url) ?? null })),
     actor: actorId,
     verified_at: verifiedAt,
   };
+}
+
+function urlKey(url: string): string | null {
+  const normalized = normalizeLinkedIn(url);
+  return normalized ? normalized.toLowerCase() : null;
+}
+
+export interface VerifyProgress {
+  resolvedUrls: Set<string>;
+  confirmedPersonIds: Set<string>;
+  linesByPerson: Map<string, VerifyResultLine>;
+}
+
+function collapseStoredLines(lines: VerifyResultLine[]): VerifyResultLine {
+  const confirmed = lines.find((line) => line.outcome === "confirmed") ?? null;
+  const base = confirmed ?? lines[lines.length - 1];
+  const profiles: StoredProfile[] = [];
+  const seen = new Set<string>();
+  const ordered = confirmed ? [confirmed, ...lines.filter((line) => line !== confirmed)] : lines;
+  for (const line of ordered) {
+    for (const item of line.profiles) {
+      const normalized = normalizeLinkedIn(item.url);
+      const key = normalized ? normalized.toLowerCase() : null;
+      if (!normalized || !key || seen.has(key)) continue;
+      seen.add(key);
+      profiles.push({ url: normalized, profile: item.profile ?? null });
+    }
+  }
+  return {
+    ...base,
+    outcome: confirmed ? "confirmed" : base.outcome,
+    confirmed_url: confirmed ? (confirmed.confirmed_url ?? base.confirmed_url) : base.confirmed_url,
+    profiles,
+  };
+}
+
+export function readVerifyProgress(filePath: string): VerifyProgress {
+  const progress: VerifyProgress = {
+    resolvedUrls: new Set(),
+    confirmedPersonIds: new Set(),
+    linesByPerson: new Map(),
+  };
+  if (!fs.existsSync(filePath)) return progress;
+  const grouped = new Map<string, VerifyResultLine[]>();
+  const rawLines = fs.readFileSync(filePath, "utf8").replace(/^\uFEFF/, "").split(/\r?\n/);
+  for (const raw of rawLines) {
+    const trimmed = raw.trim();
+    if (!trimmed) continue;
+    let parsed: VerifyResultLine[];
+    try {
+      parsed = readVerifyLines(trimmed);
+    } catch {
+      continue;
+    }
+    const row = parsed[0];
+    if (!row) continue;
+    const list = grouped.get(row.person_id) ?? [];
+    list.push(row);
+    grouped.set(row.person_id, list);
+  }
+  for (const [personId, lines] of grouped) {
+    const collapsed = collapseStoredLines(lines);
+    progress.linesByPerson.set(personId, collapsed);
+    if (collapsed.outcome === "confirmed") progress.confirmedPersonIds.add(personId);
+    for (const item of collapsed.profiles) {
+      const key = urlKey(item.url);
+      if (key) progress.resolvedUrls.add(key);
+    }
+  }
+  return progress;
+}
+
+/**
+ * Union profile URLs onto one line. An earlier profile for a URL is kept.
+ * A confirmed line is returned unchanged so a later run cannot replace it.
+ */
+export function mergeVerifyResult(
+  person: VerifyPerson,
+  existing: VerifyResultLine | null,
+  incoming: VerifyResultLine
+): VerifyResultLine {
+  if (existing?.outcome === "confirmed") return existing;
+  const ordered: StoredProfile[] = [];
+  const seen = new Set<string>();
+  const add = (item: StoredProfile) => {
+    const normalized = normalizeLinkedIn(item.url);
+    if (!normalized) return;
+    const key = normalized.toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    ordered.push({ url: normalized, profile: item.profile ?? null });
+  };
+  for (const item of existing?.profiles ?? []) add(item);
+  for (const item of incoming.profiles) add(item);
+  const map = new Map<string, ScrapedProfile | null>();
+  const urls: string[] = [];
+  for (const item of ordered) {
+    urls.push(item.url);
+    map.set(item.url, item.profile);
+  }
+  const judgment = judgeProfiles(person, urls, map);
+  const mock = existing ? existing.mock === true && incoming.mock === true : incoming.mock === true;
+  const line: VerifyResultLine = {
+    person_id: person.id,
+    name: person.name,
+    campus_id: person.campusId,
+    school: person.school,
+    enrollment_status: person.enrollmentStatus,
+    founder_status: person.founderStatus,
+    outcome: judgment.outcome,
+    outcome_reason: judgment.reason,
+    confirmed_url: judgment.selected?.url ?? null,
+    headline: judgment.headline,
+    graduation_year: judgment.graduationYear,
+    profiles: ordered,
+    actor: incoming.actor || existing?.actor || ACTOR_ID,
+    verified_at: incoming.verified_at || existing?.verified_at || "",
+  };
+  if (mock) line.mock = true;
+  return line;
+}
+
+/**
+ * People stay in queue order. Confirmed people are skipped entirely.
+ * Resolved URLs are skipped. `limit` caps people; `maxProfiles` caps URLs
+ * and may take only the first unresolved URLs of the last person.
+ */
+export function selectProfileUrls(
+  people: VerifyPerson[],
+  resolvedUrls: ReadonlySet<string>,
+  confirmedPersonIds: ReadonlySet<string>,
+  limit: number | null,
+  maxProfiles: number | null
+): VerifyPerson[] {
+  const selected: VerifyPerson[] = [];
+  let urlCount = 0;
+  for (const person of people) {
+    if (confirmedPersonIds.has(person.id)) continue;
+    const pending: string[] = [];
+    for (const url of person.urls) {
+      const key = urlKey(url);
+      if (!key || resolvedUrls.has(key)) continue;
+      pending.push(url);
+    }
+    if (pending.length === 0) continue;
+    if (limit != null && selected.length >= limit) break;
+    const room = maxProfiles == null ? pending.length : maxProfiles - urlCount;
+    if (room <= 0) break;
+    const take = pending.slice(0, room);
+    selected.push({ ...person, urls: take });
+    urlCount += take.length;
+    if (maxProfiles != null && urlCount >= maxProfiles) break;
+  }
+  return selected;
+}
+
+export interface VerifyRunSummary {
+  scraped: number;
+  confirmed: number;
+  rejected: number;
+  notFound: number;
+  unverified: number;
+  resolvedUrls: number;
+  totalUrls: number;
+  peopleConfirmed: number;
+  urlsRemaining: number;
+  confirmedLeftoverUrls: number;
+  stoppedForDailyLimit: boolean;
+}
+
+export function formatRunSummary(summary: VerifyRunSummary): string {
+  const lines = [
+    `Profiles scraped this run: ${summary.scraped}`,
+    `Confirmed this run: ${summary.confirmed}`,
+    `Rejected this run: ${summary.rejected}`,
+    `Not found this run: ${summary.notFound}`,
+  ];
+  if (summary.unverified > 0) lines.push(`Unverified this run: ${summary.unverified}`);
+  const peopleLabel = summary.peopleConfirmed === 1 ? "person" : "people";
+  const urlLabel = summary.resolvedUrls === 1 ? "URL" : "URLs";
+  const leftover =
+    summary.confirmedLeftoverUrls === 1
+      ? `URLs remaining: ${summary.urlsRemaining} (1 more belongs to a person already confirmed and will not be scraped)`
+      : `URLs remaining: ${summary.urlsRemaining} (${summary.confirmedLeftoverUrls} more belong to people already confirmed and will not be scraped)`;
+  lines.push(
+    `Cumulative: ${summary.resolvedUrls} ${urlLabel} resolved out of ${summary.totalUrls}, ${summary.peopleConfirmed} ${peopleLabel} confirmed`,
+    summary.confirmedLeftoverUrls > 0 ? leftover : `URLs remaining: ${summary.urlsRemaining}`,
+    `Stopped because of the free daily limit: ${summary.stoppedForDailyLimit ? "yes" : "no"}`
+  );
+  return lines.join("\n");
 }
 
 export function readDonePersonIds(filePath: string): Set<string> {
