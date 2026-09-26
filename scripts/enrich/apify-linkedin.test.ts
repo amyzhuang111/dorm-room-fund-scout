@@ -19,7 +19,7 @@ async function main() {
   const { getDb, newId, nowIso } = await import("../../lib/db/client");
   const match = await import("./linkedin-match");
   const { importApifyLinkedIn } = await import("./import-apify-linkedin");
-  const { runLookup } = await import("./apify-linkedin-lookup");
+  const { runLookup, assignOrganicResults, normQuery } = await import("./apify-linkedin-lookup");
 
   const thousand = match.estimateRun(1000);
   assert.equal(thousand.runs, 100);
@@ -73,6 +73,10 @@ async function main() {
   add("person_role", "Frances Allen", "univ_cmu", "Widgets Inc", "Frontend Engineer");
   add("person_generic", "Barbara Liskov", "univ_princeton", "Club Notes", "team_member");
   add("person_short", "Edsger Dijkstra", "univ_mit", "AI", "founder");
+  add("person_pot", "Quinn Potential", "univ_penn", "Side Project", "team_member");
+  add("person_mem", "Zoe Member", "univ_penn", "Campus Notes", "team_member");
+  add("person_handle", "aartipb", "univ_penn", "Nope Labs", "team_member");
+  db.prepare(`UPDATE people SET founder_status = 'potential' WHERE id = 'person_pot'`).run();
 
   db.prepare(
     `INSERT INTO claims (id, entity_type, entity_id, claim_type, value_json, excerpt, source_url, retrieved_at, label, verification_state)
@@ -84,6 +88,9 @@ async function main() {
     queue.map((person) => person.id),
     [
       "person_ada",
+      "person_pot",
+      "person_handle",
+      "person_mem",
       "person_alan",
       "person_role",
       "person_radia",
@@ -95,15 +102,93 @@ async function main() {
   );
   assert.equal(queue.find((person) => person.id === "person_existing"), undefined);
   assert.deepEqual(queue.find((person) => person.id === "person_alan")?.existingUnverified, ["https://www.linkedin.com/in/old-alan"]);
-  assert.deepEqual(match.loadQueue(db, "univ_penn").map((person) => person.id), ["person_ada"]);
+  assert.deepEqual(match.loadQueue(db, "univ_penn").map((person) => person.id), [
+    "person_ada",
+    "person_pot",
+    "person_handle",
+    "person_mem",
+  ]);
+
+  assert.equal(match.cleanSearchName("AaDalal Dalal"), "Aa Dalal");
+  assert.equal(match.cleanSearchName("aartipb"), null);
+  assert.equal(match.cleanSearchName("aashvi22 Manakiwala"), "Aashvi Manakiwala");
+  assert.equal(match.cleanSearchName("abhinav-chinta Chinta"), "Abhinav Chinta");
+  assert.equal(match.cleanSearchName("AaravAgarwal Agarwal"), "Aarav Agarwal");
 
   const ada = queue.find((person) => person.id === "person_ada");
   assert.ok(ada);
   const query = match.buildSearchQuery(ada, null);
   assert.match(query, /site:linkedin.com\/in/);
   assert.match(query, /"Ada Lovelace"/);
-  assert.match(query, /"University of Pennsylvania"/);
-  assert.match(query, /"Analytical Engines"/);
+  assert.match(query, /\("Analytical Engines" OR Penn OR UPenn OR Wharton OR "University of Pennsylvania" OR SEAS OR M&T\)/);
+  const alan = queue.find((person) => person.id === "person_alan");
+  assert.ok(alan);
+  assert.match(
+    match.buildSearchQuery(alan, null),
+    /\("Enigma Works" OR Berkeley OR "UC Berkeley" OR Haas OR Cal\)/
+  );
+
+  const slugPick = match.judgePerson(ada, [
+    candidate("https://www.linkedin.com/in/ada-lovelace", "Ada Lovelace - Harvey Mudd", "No school here"),
+    candidate("https://www.linkedin.com/in/ada-lovelace-penn", "Ada Lovelace", "Student"),
+  ]);
+  assert.equal(slugPick.outcome, "confirmed");
+  assert.equal(slugPick.confirmed.length, 1);
+  assert.match(slugPick.confirmed[0].url, /ada-lovelace-penn$/);
+
+  const wharton = match.judgePerson(ada, [
+    candidate("https://www.linkedin.com/in/ada-lovelace", "Ada Lovelace", "The Wharton School"),
+  ]);
+  assert.equal(wharton.outcome, "confirmed");
+  assert.equal(wharton.confirmed[0].signals.school_match, true);
+
+  const twoSchools = match.judgePerson(ada, [
+    candidate("https://www.linkedin.com/in/ada-one", "Ada Lovelace - University of Pennsylvania", ""),
+    candidate("https://www.linkedin.com/in/ada-two", "Ada Lovelace - Wharton", ""),
+  ]);
+  assert.equal(twoSchools.outcome, "unverified");
+
+  const sent = 'site:linkedin.com/in "Ada Lovelace" (Penn OR UPenn OR Wharton OR "University of Pennsylvania" OR SEAS OR M&T)';
+  const realistic = {
+    searchQuery: {
+      term: "site:linkedin.com/in Ada Lovelace (Penn OR UPenn OR Wharton OR University of Pennsylvania OR SEAS OR M&T)",
+      url: "http://www.google.com/search?q=site%3Alinkedin.com%2Fin+Ada+Lovelace",
+      device: "DESKTOP",
+      page: 1,
+      type: "SEARCH",
+      domain: "google.com",
+      countryCode: "US",
+      languageCode: "en",
+    },
+    resultsTotal: null,
+    organicResults: [
+      {
+        title: "Ada Lovelace - University of Pennsylvania | LinkedIn",
+        url: "https://www.linkedin.com/in/ada-lovelace",
+        displayedUrl: "https://www.linkedin.com/in/ada-lovelace",
+        description: "Founder at Analytical Engines.",
+        emphasizedKeywords: ["Analytical Engines"],
+        siteLinks: [],
+        type: "organic",
+        position: 1,
+      },
+    ],
+  };
+  const assigned = assignOrganicResults([sent], [realistic]);
+  assert.equal(assigned.get(normQuery(sent))?.[0]?.url, "https://www.linkedin.com/in/ada-lovelace");
+  assert.equal(assigned.get(normQuery(sent))?.[0]?.snippet, "Founder at Analytical Engines.");
+
+  const firstQuery = 'site:linkedin.com/in "Ada Lovelace" (Penn OR UPenn)';
+  const secondQuery = 'site:linkedin.com/in "Alan Turing" (Berkeley OR Cal)';
+  const byIndex = assignOrganicResults(
+    [firstQuery, secondQuery],
+    [
+      { organicResults: [{ title: "Ada", url: "https://www.linkedin.com/in/ada", description: "one", type: "organic", position: 1 }] },
+      { organicResults: [{ title: "Alan", url: "https://www.linkedin.com/in/alan", description: "two", type: "organic", position: 1 }] },
+    ]
+  );
+  assert.equal(byIndex.get(normQuery(firstQuery))?.[0]?.url, "https://www.linkedin.com/in/ada");
+  assert.equal(byIndex.get(normQuery(secondQuery))?.[0]?.url, "https://www.linkedin.com/in/alan");
 
   const outPath = path.join(os.tmpdir(), `apify-linkedin-out-${process.pid}.jsonl`);
   fs.rmSync(outPath, { force: true });
@@ -179,7 +264,7 @@ async function main() {
   const firstLines = fs.readFileSync(outPath, "utf8").trim().split(/\n/);
   assert.equal(firstLines.length, 2);
   assert.equal(JSON.parse(firstLines[0]).person_id, "person_ada");
-  assert.equal(JSON.parse(firstLines[1]).person_id, "person_alan");
+  assert.equal(JSON.parse(firstLines[1]).person_id, "person_pot");
   assert.equal(JSON.parse(firstLines[0]).actor, "apify/google-search-scraper");
   assert.ok(JSON.parse(firstLines[0]).candidates[0].signals);
 
@@ -196,7 +281,7 @@ async function main() {
   });
   assert.equal(second, 0);
   const secondLines = fs.readFileSync(outPath, "utf8").trim().split(/\n/);
-  assert.deepEqual(secondLines.map((line) => JSON.parse(line).person_id), ["person_ada", "person_alan", "person_role", "person_radia"]);
+  assert.deepEqual(secondLines.map((line) => JSON.parse(line).person_id), ["person_ada", "person_pot", "person_mem", "person_alan"]);
 
   const fixture = path.join(os.tmpdir(), `apify-linkedin-fixture-${process.pid}.jsonl`);
   const falseSignals = {

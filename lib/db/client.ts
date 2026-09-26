@@ -1,5 +1,6 @@
 import Database from "better-sqlite3";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import crypto from "node:crypto";
 
@@ -37,7 +38,7 @@ export function getDb(): Database.Database {
     }
   }
 
-  const db = new Database(DB_PATH);
+  const db = openDatabase(DB_PATH);
   db.pragma("journal_mode = WAL");
   db.pragma("foreign_keys = ON");
   db.pragma("busy_timeout = 8000");
@@ -46,6 +47,88 @@ export function getDb(): Database.Database {
   migrate(db);
   _db = db;
   return db;
+}
+
+function isMalformedSchema(err: unknown): boolean {
+  return err instanceof Error && err.message.includes("malformed database schema");
+}
+
+function sidecarPaths(dbPath: string): string[] {
+  return [`${dbPath}-wal`, `${dbPath}-shm`];
+}
+
+// sqlite3_close() checkpoints the WAL. If the WAL is what made the schema
+// unreadable, that checkpoint writes the bad pages into the main file.
+// Move the sidecars out of the way first, and tolerate a Windows lock by
+// copying then deleting.
+function discardSidecars(dbPath: string): string[] {
+  const parked: string[] = [];
+  for (const file of sidecarPaths(dbPath)) {
+    if (!fs.existsSync(/*turbopackIgnore: true*/ file)) continue;
+    const dest = path.join(
+      os.tmpdir(),
+      `${path.basename(file)}.stale-${process.pid}-${Date.now()}`
+    );
+    try {
+      fs.renameSync(/*turbopackIgnore: true*/ file, dest);
+    } catch {
+      fs.copyFileSync(/*turbopackIgnore: true*/ file, dest);
+      fs.rmSync(/*turbopackIgnore: true*/ file, { force: true });
+    }
+    parked.push(dest);
+  }
+  return parked;
+}
+
+// The committed database's schema is a multi-page btree (page 1 points at
+// leaf pages, including page 46 in the current file). SQLite does not tie a
+// -wal/-shm to a database generation: after git replaces campus-universe.db,
+// a leftover sidecar pair from the previous file is replayed on open. A frame
+// that lands on a schema leaf makes SQLite parse ordinary rows as schema
+// objects. The reported name is then a person id such as
+// "person_JnrZGMsft6bk", and init fails with "orphan index" while the main
+// file bytes are still the committed blob — until close() checkpoints.
+//
+// When sidecars are present, probe sqlite_master before using the connection.
+// If that probe fails, put the pre-open bytes back and reopen without the
+// sidecars. A WAL that still describes this file probes clean and is kept.
+export function openDatabase(dbPath: string): Database.Database {
+  const hasSidecar = sidecarPaths(dbPath).some((file) => fs.existsSync(/*turbopackIgnore: true*/ file));
+  if (!hasSidecar || !fs.existsSync(/*turbopackIgnore: true*/ dbPath)) return new Database(dbPath);
+
+  const backup = path.join(os.tmpdir(), `campus-universe-open-${process.pid}-${Date.now()}.db`);
+  fs.copyFileSync(/*turbopackIgnore: true*/ dbPath, backup);
+  let db: Database.Database | null = null;
+  try {
+    db = new Database(dbPath);
+    db.prepare("SELECT name FROM sqlite_master LIMIT 1").get();
+    fs.rmSync(/*turbopackIgnore: true*/ backup, { force: true });
+    return db;
+  } catch (err) {
+    if (!isMalformedSchema(err)) {
+      fs.rmSync(/*turbopackIgnore: true*/ backup, { force: true });
+      throw err;
+    }
+    const parked: string[] = [];
+    if (db) {
+      parked.push(...discardSidecars(dbPath));
+      try {
+        db.close();
+      } catch {
+        // close can still checkpoint; the backup restore below undoes it
+      }
+    }
+    fs.copyFileSync(/*turbopackIgnore: true*/ backup, dbPath);
+    fs.rmSync(/*turbopackIgnore: true*/ backup, { force: true });
+    parked.push(...discardSidecars(dbPath));
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn(
+      `SQLite could not read ${dbPath}: ${message}. A stale -wal/-shm was replaying onto this file. Moved it aside${
+        parked.length ? ` (${parked.join(", ")})` : ""
+      } and reopened the main database.`
+    );
+    return new Database(dbPath);
+  }
 }
 
 // getDb() re-runs schema.sql on every process start, but CREATE TABLE IF NOT

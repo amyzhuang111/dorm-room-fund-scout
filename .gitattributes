@@ -1,0 +1,2 @@
+# Windows checkouts must not rewrite SQLite page images with CRLF.
+*.db binary

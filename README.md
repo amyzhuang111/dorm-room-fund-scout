@@ -17,8 +17,10 @@ public Google results for `linkedin.com/in` profiles and writes candidates
 to `data/imports/apify_linkedin_results.jsonl` (gitignored). It does not
 write to the database. The importer applies the file: a profile is
 confirmed only when the name matches and the school, company, or role
-appears in the title or snippet. A name-only match stays unverified.
-Anything else is left blank.
+appears in the title, snippet, or LinkedIn URL. Campus aliases count
+(Penn, UPenn, Wharton, SEAS, M&T, and the same kind of list for other
+schools). A name-only match stays unverified. Anything else is left blank.
+Handles with no first and last name are skipped. Founders are searched first.
 
 From PowerShell, in the repo root (`.env.local` holds `APIFY_API_TOKEN`):
 
@@ -29,6 +31,8 @@ npm run enrich:apify-linkedin -- --campus penn --limit 20 --yes
 npm run import:apify-linkedin -- --dry-run
 npm run import:apify-linkedin
 ```
+
+If the dry-run instead dies immediately with `malformed database schema (…) - orphan index`, the committed `data/campus-universe.db` is not the broken part. A leftover `data/campus-universe.db-wal` or `-shm` from an older copy of the file is being replayed on top of it. Git ignores those sidecars, so a pull that replaces the `.db` leaves them behind, and the name in the error is whatever row landed on the schema page (often a person id). Opening the database moves a sidecar pair that fails schema load aside and reopens the main file. Deleting the two sidecar files yourself does the same thing. Do not delete `data/campus-universe.db`. `.gitattributes` marks `*.db` binary so a Windows checkout does not rewrite it.
 
 `--dry-run` prints the queue and the Apify estimate and spends nothing.
 A live lookup stops after that estimate until you pass `--yes`. Run the
