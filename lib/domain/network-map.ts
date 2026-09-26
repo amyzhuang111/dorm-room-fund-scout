@@ -8,6 +8,7 @@ import { forceCollide, forceLink, forceManyBody, forceSimulation, forceX, forceY
 import { databasePath, getDb } from "../db/client";
 import { CAMPUSES } from "./campuses";
 import { hotspotGraphPatch } from "./hotspots";
+import { confirmedLinkedIn } from "./person-link";
 import { sectorLabel } from "./sectors";
 
 export type MapNodeType = "person" | "startup" | "campus" | "investor" | "program";
@@ -27,6 +28,9 @@ export interface MapNode {
   stage: string | null;
   enroll: string | null;
   potential: boolean;
+  /** Stored linkedin.com/in path. Omitted when the person has neither a confirmed alias nor an unverified candidate. */
+  linkedinUrl?: string;
+  linkedinStatus?: "confirmed" | "unverified";
 }
 
 export interface MapEdge {
@@ -109,7 +113,7 @@ function assembleNetworkMap(): MapGraph {
 
   const people = db
     .prepare(
-      `SELECT id, name, founder_status, enrollment_status, signal_tier FROM people
+      `SELECT id, name, aliases_json, founder_status, enrollment_status, signal_tier FROM people
        WHERE id IN (SELECT person_id FROM affiliations)
           OR id IN (
             SELECT ppr.person_id FROM person_project_roles ppr
@@ -117,8 +121,30 @@ function assembleNetworkMap(): MapGraph {
             WHERE p.kind = 'company' AND p.is_investable_candidate = 1 AND ppr.role LIKE '%founder%'
           )`
     )
-    .all() as { id: string; name: string; founder_status: string | null; enrollment_status: string | null; signal_tier: string | null }[];
+    .all() as { id: string; name: string; aliases_json: string; founder_status: string | null; enrollment_status: string | null; signal_tier: string | null }[];
   const personIds = new Set(people.map((person) => person.id));
+  const linkedinByPerson = new Map<string, { url: string; status: "confirmed" | "unverified" }>();
+  for (const person of people) {
+    const confirmed = confirmedLinkedIn(person.aliases_json);
+    if (confirmed) linkedinByPerson.set(person.id, { url: confirmed, status: "confirmed" });
+  }
+  const candidateRows = db
+    .prepare(
+      `SELECT entity_id, value_json FROM claims
+       WHERE entity_type = 'person' AND claim_type = 'linkedin_candidate' AND verification_state = 'unverified'`
+    )
+    .all() as { entity_id: string; value_json: string }[];
+  for (const row of candidateRows) {
+    if (!personIds.has(row.entity_id) || linkedinByPerson.has(row.entity_id)) continue;
+    try {
+      const value = JSON.parse(row.value_json) as { linkedin?: unknown };
+      if (typeof value.linkedin === "string" && value.linkedin.includes("linkedin.com/in/")) {
+        linkedinByPerson.set(row.entity_id, { url: value.linkedin, status: "unverified" });
+      }
+    } catch {
+      // skip a malformed candidate
+    }
+  }
 
   const affiliations = db.prepare(`SELECT person_id, university_id FROM affiliations`).all() as { person_id: string; university_id: string }[];
   const campusesByPerson = new Map<string, string[]>();
@@ -436,6 +462,7 @@ function assembleNetworkMap(): MapGraph {
   }
   for (const person of people) {
     const campuses = campusesByPerson.get(person.id) ?? [];
+    const linkedin = linkedinByPerson.get(person.id);
     emit({
       id: person.id,
       type: "person",
@@ -450,6 +477,7 @@ function assembleNetworkMap(): MapGraph {
       stage: null,
       enroll: person.enrollment_status ?? "unknown",
       potential: person.founder_status === "potential",
+      ...(linkedin ? { linkedinUrl: linkedin.url, linkedinStatus: linkedin.status } : {}),
     });
   }
   for (const startup of startups) {

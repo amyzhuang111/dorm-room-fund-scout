@@ -1,7 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { MapEdge, MapEdgeType, MapGraph, MapNode, MapNodeType } from "@/lib/domain/network-map";
+import { buildPersonLinkedInLookup } from "@/lib/domain/map-linkedin";
+import type { LinkedInAction } from "@/lib/domain/person-link";
+import { LinkedInMark } from "./person-link";
 
 const FILL: Record<MapNodeType, string> = {
   person: "#5c516e",
@@ -61,6 +64,10 @@ export function NetworkMapCanvas({
   const alpha = useRef(new Map<string, number>());
   const fitted = useRef(false);
   const kick = useRef<() => void>(() => {});
+  const linkedinFor = useMemo(() => buildPersonLinkedInLookup(graph), [graph]);
+  const linkedinRef = useRef(linkedinFor);
+  linkedinRef.current = linkedinFor;
+  const [tip, setTip] = useState<{ x: number; y: number; name: string; school: string | null; status: LinkedInAction["status"] } | null>(null);
 
   useEffect(() => {
     const next = new Map<string, { x: number; y: number }>();
@@ -99,7 +106,8 @@ export function NetworkMapCanvas({
 
     let running = true;
     let raf = 0;
-    const drag = { mode: "none" as "none" | "pan" | "node", id: null as string | null, sx: 0, sy: 0, ox: 0, oy: 0, moved: false };
+    const drag = { mode: "none" as "none" | "pan" | "node" | "link", id: null as string | null, sx: 0, sy: 0, ox: 0, oy: 0, moved: false };
+    let openedAt = 0;
 
     const neighbors = new Map<string, Set<string>>();
     for (const edge of graph.edges) {
@@ -287,6 +295,14 @@ export function NetworkMapCanvas({
       drag.sx = sx;
       drag.sy = sy;
       drag.moved = false;
+      setTip(null);
+      if (node?.type === "person" && (event.metaKey || event.ctrlKey)) {
+        drag.mode = "link";
+        drag.id = node.id;
+        event.preventDefault();
+        canvas.setPointerCapture(event.pointerId);
+        return;
+      }
       if (node) {
         const at = positions.current.get(node.id)!;
         drag.mode = "node";
@@ -307,6 +323,7 @@ export function NetworkMapCanvas({
       const sx = event.clientX - rect.left;
       const sy = event.clientY - rect.top;
       if (drag.mode === "pan") {
+        if (Math.hypot(sx - drag.sx, sy - drag.sy) <= 4) return;
         drag.moved = true;
         camera.current = {
           ...camera.current,
@@ -316,8 +333,14 @@ export function NetworkMapCanvas({
         ensure();
         return;
       }
+      if (drag.mode === "link") {
+        drag.moved = Math.hypot(sx - drag.sx, sy - drag.sy) > 4;
+        return;
+      }
       if (drag.mode === "node" && drag.id) {
-        drag.moved = Math.hypot(sx - drag.sx, sy - drag.sy) > 3;
+        const dist = Math.hypot(sx - drag.sx, sy - drag.sy);
+        if (dist <= 4) return;
+        drag.moved = true;
         const at = positions.current.get(drag.id);
         if (at) {
           at.x = drag.ox + (sx - drag.sx) / camera.current.k;
@@ -331,21 +354,60 @@ export function NetworkMapCanvas({
       if (next !== hover.current) {
         hover.current = next;
         canvas.style.cursor = next ? "pointer" : "grab";
+        if (node?.type === "person") {
+          const ids = node.campuses?.length ? node.campuses : node.campus ? [node.campus] : [];
+          const labels = new Map(graphRef.current.nodes.map((item) => [item.id, item.label]));
+          const school = ids.map((id) => labels.get(id)).filter((item): item is string => !!item).join(" · ");
+          setTip({ x: sx, y: sy, name: node.label, school: school || null, status: linkedinRef.current(node).status });
+        } else {
+          setTip(null);
+        }
         ensure();
       }
     };
+    const openLinkedIn = (node: MapNode) => {
+      if (node.type !== "person") return;
+      const now = performance.now();
+      if (now - openedAt < 500) return;
+      openedAt = now;
+      const action = linkedinRef.current(node);
+      window.open(action.url, "_blank", "noopener,noreferrer");
+    };
     const onUp = () => {
-      if (drag.mode === "node" && drag.id && !drag.moved) onSelectRef.current(drag.id);
-      else if (drag.mode === "pan" && !drag.moved) onSelectRef.current(null);
+      if (drag.id && !drag.moved && (drag.mode === "node" || drag.mode === "link")) {
+        if (drag.mode === "link") {
+          const node = graphRef.current.nodes.find((item) => item.id === drag.id);
+          if (node) openLinkedIn(node);
+        }
+        onSelectRef.current(drag.id);
+      } else if (drag.mode === "pan" && !drag.moved) onSelectRef.current(null);
       drag.mode = "none";
       drag.id = null;
       ensure();
+    };
+    const onDblClick = (event: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const node = hit(event.clientX - rect.left, event.clientY - rect.top);
+      if (!node || node.type !== "person") return;
+      event.preventDefault();
+      openLinkedIn(node);
+      onSelectRef.current(node.id);
+    };
+    const onContext = (event: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const node = hit(event.clientX - rect.left, event.clientY - rect.top);
+      if (!node || node.type !== "person") return;
+      event.preventDefault();
+      openLinkedIn(node);
+      onSelectRef.current(node.id);
     };
 
     canvas.addEventListener("wheel", onWheel, { passive: false });
     canvas.addEventListener("pointerdown", onDown);
     canvas.addEventListener("pointermove", onMove);
     canvas.addEventListener("pointerup", onUp);
+    canvas.addEventListener("dblclick", onDblClick);
+    canvas.addEventListener("contextmenu", onContext);
     const observer = new ResizeObserver(() => ensure());
     observer.observe(canvas);
     return () => {
@@ -356,6 +418,8 @@ export function NetworkMapCanvas({
       canvas.removeEventListener("pointerdown", onDown);
       canvas.removeEventListener("pointermove", onMove);
       canvas.removeEventListener("pointerup", onUp);
+      canvas.removeEventListener("dblclick", onDblClick);
+      canvas.removeEventListener("contextmenu", onContext);
       observer.disconnect();
     };
   }, [graph]);
@@ -364,7 +428,23 @@ export function NetworkMapCanvas({
     kick.current();
   }, [hidden, edgeTypes, selected, flyToken]);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full touch-none" aria-label="Founder and startup network map" />;
+  return (
+    <div className="absolute inset-0">
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full touch-none" aria-label="Founder and startup network map" />
+      {tip && (
+        <div
+          className="pointer-events-none absolute z-10 max-w-56 rounded-md border border-border-c bg-white px-2 py-1.5 text-xs shadow-sm"
+          style={{ left: Math.min(tip.x + 14, (canvasRef.current?.clientWidth ?? 320) - 180), top: tip.y + 16 }}
+        >
+          <div className="flex items-center gap-1.5">
+            <span className="font-semibold text-foreground">{tip.name}</span>
+            <LinkedInMark status={tip.status} />
+          </div>
+          {tip.school && <div className="mt-0.5 text-muted">{tip.school}</div>}
+        </div>
+      )}
+    </div>
+  );
 }
 
 function fitCamera(nodes: MapNode[], width: number, height: number): Camera {

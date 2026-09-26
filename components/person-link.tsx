@@ -1,14 +1,78 @@
-import type { PersonLinkTarget } from "@/lib/domain/person-link";
+import type { LinkedInAction, PersonLinkTarget } from "@/lib/domain/person-link";
 import { profileLabel, type ProfileIconLink } from "@/lib/domain/profile-links";
 
-function LinkedInIcon() {
+function LinkedInIcon({ size = 12 }: { size?: number }) {
   return (
-    <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
       <path
         fill="currentColor"
         d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V24h-4V8.5zM8.5 8.5h3.8v2.1h.1c.5-1 1.8-2.2 3.8-2.2 4.1 0 4.8 2.7 4.8 6.2V24h-4v-7.7c0-1.8 0-4.1-2.5-4.1s-2.9 2-2.9 4V24h-4V8.5z"
       />
     </svg>
+  );
+}
+
+export function LinkedInOpenButton({ action, name }: { action: LinkedInAction; name: string }) {
+  const unverified = action.status === "unverified";
+  const search = action.status === "search";
+  const tip = search
+    ? "Opens a LinkedIn people search for this name, school, and company. This is a search, not a saved profile."
+    : unverified
+      ? "A name match that was not confirmed against this person's school or company."
+      : "Open this person's LinkedIn profile";
+  return (
+    <a
+      href={action.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      title={tip}
+      aria-label={`${action.label} for ${name}`}
+      className={`flex w-full items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-semibold ${
+        unverified
+          ? "border border-dashed border-muted bg-white text-foreground"
+          : search
+            ? "border border-border-c bg-white text-foreground hover:border-accent"
+            : "bg-accent text-accent-foreground"
+      }`}
+    >
+      <LinkedInIcon size={14} />
+      {action.label}
+    </a>
+  );
+}
+
+export function LinkedInIconButton({ action, name }: { action: LinkedInAction; name: string }) {
+  const dashed = action.status !== "confirmed";
+  const tip = action.status === "search" ? "Search LinkedIn. This opens a people search, not a saved profile." : action.label;
+  return (
+    <a
+      href={action.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      title={tip}
+      aria-label={`${action.label} for ${name}`}
+      className={`inline-flex h-6 w-6 items-center justify-center rounded-full border bg-white hover:border-accent ${
+        dashed ? "border-dashed border-muted text-muted" : "border-border-c text-link"
+      }`}
+    >
+      <LinkedInIcon />
+    </a>
+  );
+}
+
+export function LinkedInMark({ status }: { status: LinkedInAction["status"] }) {
+  const dashed = status !== "confirmed";
+  const label = status === "confirmed" ? "LinkedIn saved" : status === "unverified" ? "LinkedIn unverified" : "LinkedIn search";
+  return (
+    <span
+      title={label}
+      aria-label={label}
+      className={`inline-flex h-4 w-4 items-center justify-center rounded-full border ${
+        dashed ? "border-dashed border-muted text-muted" : "border-link text-link"
+      }`}
+    >
+      <LinkedInIcon size={9} />
+    </span>
   );
 }
 

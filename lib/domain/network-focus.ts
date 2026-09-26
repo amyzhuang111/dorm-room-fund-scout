@@ -7,9 +7,9 @@ import { CAMPUSES } from "./campuses";
 import { ownWebsite, publicLink } from "./company-link";
 import { assembleCompanyProfile, type CompanyFactRecord } from "./company-profile";
 import { enrollmentBadge } from "./founder-status";
-import { bestPersonLink, type PersonLinkTarget } from "./person-link";
 import { hotspotGroupByMapId, hotspotGroups, personIdsForPlace, projectIdsForPlace, relatedHotspotsForPerson, relatedHotspotsForProject } from "./hotspots";
 import { bestCard, hotspotHref, samePlace } from "./hotspot-model";
+import { bestPersonLink, linkedinAction, type LinkedInAction, type PersonLinkTarget } from "./person-link";
 import { assembleProfileLinks, type ProfileIconLink } from "./profile-links";
 
 export interface FocusLink {
@@ -19,6 +19,7 @@ export interface FocusLink {
   round: string | null;
   sourceUrl: string | null;
   pageHref?: string | null;
+  linkedin?: LinkedInAction | null;
 }
 
 export interface NetworkFocus {
@@ -30,6 +31,7 @@ export interface NetworkFocus {
   hrefLabel: string | null;
   website: { url: string; label: string } | null;
   link: PersonLinkTarget | null;
+  linkedin: LinkedInAction | null;
   profileLinks: ProfileIconLink[];
   facts: { label: string; value: string; sourceUrl: string | null; excerpt: string | null }[];
   links: { heading: string; items: FocusLink[] }[];
@@ -51,6 +53,56 @@ function personHref(id: string, potential: boolean): string {
   });
   if (potential) params.set("pool", "potential");
   return `/founder/discover?${params.toString()}`;
+}
+
+function linkedinByPerson(
+  db: ReturnType<typeof getDb>,
+  people: { id: string; name: string; aliases_json: string }[],
+  company: string
+): Map<string, LinkedInAction> {
+  const out = new Map<string, LinkedInAction>();
+  if (!people.length) return out;
+  const ids = people.map((person) => person.id);
+  const marks = ids.map(() => "?").join(",");
+  const schools = db
+    .prepare(
+      `SELECT a.person_id, u.name FROM affiliations a
+       JOIN universities u ON u.id = a.university_id
+       WHERE a.person_id IN (${marks})`
+    )
+    .all(...ids) as { person_id: string; name: string }[];
+  const schoolBy = new Map<string, string>();
+  for (const row of schools) if (!schoolBy.has(row.person_id)) schoolBy.set(row.person_id, row.name);
+  const claims = db
+    .prepare(
+      `SELECT entity_id, value_json FROM claims
+       WHERE entity_type = 'person' AND claim_type = 'linkedin_candidate' AND verification_state = 'unverified'
+         AND entity_id IN (${marks})`
+    )
+    .all(...ids) as { entity_id: string; value_json: string }[];
+  const candidateBy = new Map<string, string>();
+  for (const row of claims) {
+    if (candidateBy.has(row.entity_id)) continue;
+    try {
+      const value = JSON.parse(row.value_json) as { linkedin?: unknown };
+      if (typeof value.linkedin === "string" && value.linkedin.includes("linkedin.com/in/")) candidateBy.set(row.entity_id, value.linkedin);
+    } catch {
+      // skip
+    }
+  }
+  for (const person of people) {
+    out.set(
+      person.id,
+      linkedinAction({
+        name: person.name,
+        aliasesJson: person.aliases_json,
+        candidateUrl: candidateBy.get(person.id) ?? null,
+        school: schoolBy.get(person.id) ?? null,
+        company,
+      })
+    );
+  }
+  return out;
 }
 
 function investorId(name: string): string {
@@ -166,6 +218,13 @@ function personFocus(
     hrefLabel: "Open person",
     website: null,
     link: bestPersonLink({ aliasesJson: person.aliases_json, linkedinCandidates }),
+    linkedin: linkedinAction({
+      name: person.name,
+      aliasesJson: person.aliases_json,
+      candidateUrl: linkedinCandidates[0]?.url ?? null,
+      school: school?.name ?? null,
+      company: companies[0]?.name ?? null,
+    }),
     profileLinks: assembleProfileLinks(person.aliases_json, profileClaims).profileLinks,
     facts: [],
     links: [
@@ -227,7 +286,8 @@ function startupFocus(
          ORDER BY pe.name`
       )
       .all(project.id) as { id: string; name: string; aliases_json: string; role: string }[]
-  ).map((row) => ({ id: row.id, name: row.name, role: roleLabel(row.role), round: null, sourceUrl: bestPersonLink({ aliasesJson: row.aliases_json })?.url ?? null }));
+  ).map((row) => ({ id: row.id, name: row.name, aliases_json: row.aliases_json, role: roleLabel(row.role) }));
+  const founderLinkedIn = linkedinByPerson(db, founders, project.name);
   const investors: FocusLink[] = profile.investors.map((investor) => ({
     id: investorId(investor.name),
     name: investor.round ? `${investor.name} · ${investor.round}${investor.kind === "lead" ? " · led the round" : ""}` : investor.name,
@@ -254,10 +314,21 @@ function startupFocus(
     hrefLabel: "Open company",
     website: site ? { url: site.url, label: official ? "Visit website" : site.label } : null,
     link: null,
+    linkedin: null,
     profileLinks: [],
     facts: shown,
     links: [
-      { heading: "Founders", items: founders },
+      {
+        heading: "Founders",
+        items: founders.map((row) => ({
+          id: row.id,
+          name: row.name,
+          role: row.role,
+          round: null,
+          sourceUrl: null,
+          linkedin: founderLinkedIn.get(row.id) ?? null,
+        })),
+      },
       { heading: "Investors", items: investors },
       { heading: "Hotspots", items: hotspots },
     ].filter((group) => group.items.length > 0),
@@ -296,6 +367,7 @@ function campusFocus(db: ReturnType<typeof getDb>, id: string): NetworkFocus | n
     hrefLabel: `Open ${short} founders`,
     website: null,
     link: null,
+    linkedin: null,
     profileLinks: [],
     facts: [],
     links: [
@@ -330,6 +402,7 @@ function programFocus(db: ReturnType<typeof getDb>, project: { id: string; name:
     hrefLabel: campus ? "Open campus founders" : null,
     website: null,
     link: null,
+    linkedin: null,
     profileLinks: [],
     facts: [],
     hotspotHref: directory?.href ?? null,
@@ -355,6 +428,7 @@ function hotspotFocus(id: string): NetworkFocus | null {
     hrefLabel: "Open hotspot",
     website: card.url ? { url: card.url, label: "Directory link" } : null,
     link: null,
+    linkedin: null,
     profileLinks: [],
     hotspotHref: hotspotHref(card),
     hotspotLabel: "Open hotspot",
@@ -413,6 +487,7 @@ function investorFocus(db: ReturnType<typeof getDb>, id: string): NetworkFocus |
       hrefLabel: "Portfolio directory",
       website: null,
       link: null,
+      linkedin: null,
       profileLinks: [],
       facts: [],
       hotspotHref: directory?.href ?? null,
@@ -452,6 +527,7 @@ function investorFocus(db: ReturnType<typeof getDb>, id: string): NetworkFocus |
     hrefLabel: directory ? "Open hotspot" : null,
     website: null,
     link: null,
+    linkedin: null,
     profileLinks: [],
     facts: [],
     hotspotHref: directory?.href ?? null,
