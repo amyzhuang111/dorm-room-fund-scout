@@ -52,6 +52,13 @@ const HAND_CHECK: { name: string; note: string }[] = [
   { name: "Jennifer Lin", note: "Hand-check: common name tied only through a search summary or post. Glance before outreach." },
   { name: "Pulak Mittal", note: "Hand-check: Emerald Exam signal is from 2013-14, so it is old." },
   { name: "Potluck Mittal", note: "Hand-check: Emerald Exam signal is from 2013-14, so it is old." },
+  { name: "Jingxiao Lu", note: "Jingxiao Lu attended MIT and Heriot-Watt. His Michigan tie is only the Desai Accelerator." },
+  { name: "Lance Song", note: "Hand-check: unverified. The candidate is an Altria data-science manager in Richmond, and the PortaDash tie is inferred." },
+  { name: "Yash Iyer", note: "Hand-check: this profile is the Zorbe founder. Penn and CarboWells are not on it." },
+  { name: "Brandon McGuckin", note: "Asclepius teammates came from Ohio State, ASU, Villanova, and Queens College. Princeton is the hackathon." },
+  { name: "Shashwat Raj", note: "Asclepius teammates came from Ohio State, ASU, Villanova, and Queens College. Princeton is the hackathon." },
+  { name: "Mukund Gaur", note: "Mayhem Monkey teammates are Cornell students." },
+  { name: "Skai Nzeuton", note: "Mayhem Monkey teammates are Cornell students." },
 ];
 
 interface BackfillRow {
@@ -773,6 +780,7 @@ function main() {
             now,
             "corroborated"
           );
+          if (normName(person.name) === "jingxiao lu") recordJingxiaoSchools(person.id, evidence);
           const decision = recomputePersonEnrollment(db, person.id);
           if ((beforeEnroll.enrollment_status ?? "unknown") !== decision.status || (beforeEnroll.enrollment_label ?? "") !== (decision.label ?? "")) {
             enrollmentChanges.push(
@@ -804,6 +812,34 @@ function main() {
         if (caveat) notes += storeNote(person.id, caveat, evidence);
       }
       unverified++;
+    }
+
+    function recordJingxiaoSchools(personId: string, evidence: string) {
+      const michigan = db.prepare(`SELECT id, role FROM affiliations WHERE person_id = ? AND university_id = 'univ_michigan'`).get(personId) as
+        | { id: string; role: string | null }
+        | undefined;
+      if (michigan && !michigan.role) {
+        db.prepare(`UPDATE affiliations SET role = 'Desai Accelerator' WHERE id = ?`).run(michigan.id);
+      }
+      const mit = db.prepare(`SELECT id FROM affiliations WHERE person_id = ? AND university_id = 'univ_mit'`).get(personId) as { id: string } | undefined;
+      if (mit) return;
+      const claimId = newId("claim");
+      insertClaim.run(
+        claimId,
+        personId,
+        "affiliation",
+        JSON.stringify({ university_id: "univ_mit", role: "Math and Economics" }),
+        `Jingxiao Lu studied Math and Economics at MIT. The Michigan affiliation is the Desai Accelerator, not a Michigan degree. Evidence: ${evidence.slice(0, 300)}`,
+        SOURCE_ID,
+        "https://www.linkedin.com/in/jingxiao-lu-07925019",
+        now,
+        "corroborated"
+      );
+      db.prepare(`INSERT INTO affiliations (id, person_id, university_id, role, status, claim_id) VALUES (?, ?, 'univ_mit', 'Math and Economics', 'unverified', ?)`).run(
+        newId("aff"),
+        personId,
+        claimId
+      );
     }
 
     function storeNote(personId: string, caveat: string, evidence: string | null | undefined): number {
