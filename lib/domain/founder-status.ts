@@ -359,6 +359,33 @@ function expectedDegreeHits(snippet: EvidenceSnippet, hits: YearHit[]) {
   }
 }
 
+// Degree lines that print the year after the field, or as an education date range.
+// "Bachelors in Computer Science, 2026", "Major: CIS, May 2026",
+// "BS, Electrical Engineering and Computer Science MAY 2028 (EXPECTED)",
+// "Bachelor's degree ... 2018 - 2027". A program season such as
+// "2025-2026 Student Ventures Committee" does not match: the degree word
+// has to come before the years.
+function degreeYearHits(snippet: EvidenceSnippet, hits: YearHit[]) {
+  const text = snippet.excerpt.replace(/[’‘ʼ]/g, "'");
+  const titled = /\b(?:bachelors?|masters?|ph\.?d\.?)\s+in\s+[^,\n]{2,80},\s*((?:19|20)\d{2})\b/gi;
+  for (const match of text.matchAll(titled)) {
+    const year = fullYear(parseInt(match[1], 10));
+    pushYear(hits, year, year ? labelFromYear(year) : "", snippet);
+  }
+  const month =
+    /\b(?:major|bachelors?|masters?|ph\.?d\.?|bs|bse|ba|ms|mse)\b[^.\n]{0,90}?\b(?:january|february|march|april|may|june|july|august|september|october|november|december)\s+((?:19|20)\d{2})\b/gi;
+  for (const match of text.matchAll(month)) {
+    const year = fullYear(parseInt(match[1], 10));
+    pushYear(hits, year, year ? labelFromYear(year) : "", snippet);
+  }
+  const range =
+    /\b(?:bachelor(?:'s|s)?|master(?:'s|s)?|degree|bs|bse|ba|ms|mse)\b[^.\n]{0,140}?\b((?:19|20)\d{2})\s*[–—-]\s*((?:19|20)\d{2})\b/gi;
+  for (const match of text.matchAll(range)) {
+    const year = fullYear(parseInt(match[2], 10));
+    pushYear(hits, year, year ? labelFromYear(year) : "", snippet);
+  }
+}
+
 function bucketForYear(year: number): EnrollmentStatus {
   if (year > ENROLLMENT_AS_OF_YEAR) return "current_student";
   if (year >= RECENT_MIN_YEAR && year <= ENROLLMENT_AS_OF_YEAR) return "recent_grad";
@@ -382,6 +409,7 @@ export function decideEnrollment(snippets: EvidenceSnippet[], options?: { person
     classOfHits(snippet, years);
     graduatedHits(snippet, years);
     expectedDegreeHits(snippet, years);
+    degreeYearHits(snippet, years);
     if (personName) namedProseYearHits(snippet, years, personName);
     linkedInHits(snippet, years, phrases);
     if (currentStudentPhrase(snippet)) {

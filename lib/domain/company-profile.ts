@@ -146,6 +146,17 @@ export function latestRound(profile: CompanyProfile): FundingRound | null {
   return profile.rounds[0] ?? null;
 }
 
+// The Funding line uses a stated total when one exists. Otherwise it shows the
+// latest announced round amount. Undisclosed rounds stay Unknown.
+export function displayedFunding(profile: CompanyProfile): SourcedValue | null {
+  if (profile.funding) return profile.funding;
+  const round = latestRound(profile);
+  if (!round || round.amountStatus === "undisclosed" || !round.amountText || round.amountText === "Undisclosed") return null;
+  const text = [round.stage, round.amountText].filter((part): part is string => !!part).join(" · ");
+  if (!text) return null;
+  return { text, sourceUrl: round.sourceUrl, excerpt: round.excerpt, origin: round.origin };
+}
+
 export function formatRound(round: FundingRound): string {
   const parts = [round.stage, round.amountText, round.date].filter((part): part is string => !!part);
   if (round.leads.length) parts.push(`led by ${round.leads.join(", ")}`);

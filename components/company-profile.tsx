@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import type { CompanyProfile, FundingRound, InvestorFact, SourcedValue } from "@/lib/domain/company-profile";
-import { formatRound, latestRound } from "@/lib/domain/company-profile";
+import { displayedFunding, formatRound, latestRound } from "@/lib/domain/company-profile";
 import type { NamedFounder } from "@/lib/domain/queries";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 
@@ -87,7 +87,7 @@ export function CompanyProfileCard({ profile, founders }: { profile: CompanyProf
   const round = latestRound(profile);
   const cells: { label: string; value: ReactNode }[] = [
     { label: "Founded", value: <FactValue fact={profile.foundedYear} /> },
-    { label: "Funding", value: <FactValue fact={profile.funding} /> },
+    { label: "Funding", value: <FactValue fact={displayedFunding(profile)} /> },
     { label: "Latest round", value: <RoundValue round={round} /> },
     { label: "HQ", value: <FactValue fact={profile.hq} /> },
     { label: "Team size", value: <FactValue fact={profile.teamSize} /> },
