@@ -50,7 +50,7 @@ interface CampusMap {
   getStyle: () => { layers: { id: string; type: string }[] };
   getCenter: () => { lng: number; lat: number };
   setCenter: (center: { lng: number; lat: number }) => void;
-  getSource: (id: string) => { getClusterExpansionZoom?: (clusterId: number) => Promise<number> } | undefined;
+  getSource: (id: string) => { getClusterExpansionZoom?: (clusterId: number) => Promise<number>; setData?: (data: object) => void } | undefined;
   getLayer: (id: string) => unknown;
   setProjection: (projection: { type: string }) => void;
   setSky: (sky: object) => void;
@@ -467,6 +467,42 @@ export const GlobeView = memo(function GlobeView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Campus dots are captured when the map is created. The homepage fetches them
+  // after the shell paints, so replace the GeoJSON once they arrive.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || status !== "ok" || !map.getSource("campuses")) return;
+    const placedPoints = universities.filter((u) => u.lat != null && u.lon != null);
+    map.getSource("campuses")?.setData?.({
+      type: "FeatureCollection",
+      features: placedPoints.map((u) => ({
+        type: "Feature",
+        geometry: { type: "Point", coordinates: [u.lon, u.lat] },
+        properties: {
+          id: u.id,
+          name: shortCampusLabel(u.id, u.name),
+          count: u.companyCount,
+          founders: u.founderCount,
+        },
+      })),
+    });
+    const arcFeatures = arcFeaturesFor(placedPoints, campusArcs);
+    const arcSource = map.getSource("campus-arcs");
+    if (arcSource?.setData) {
+      arcSource.setData({ type: "FeatureCollection", features: arcFeatures });
+    } else if (arcFeatures.length > 0) {
+      map.addSource("campus-arcs", { type: "geojson", data: { type: "FeatureCollection", features: arcFeatures } });
+      if (!map.getLayer("campus-arcs")) {
+        map.addLayer({
+          id: "campus-arcs",
+          type: "line",
+          source: "campus-arcs",
+          paint: { "line-color": MAP_THEME.arc, "line-width": 1.4, "line-opacity": 0.55 },
+        });
+      }
+    }
+  }, [universities, campusArcs, status]);
+
   // Fly to / re-filter the selected campus without re-creating the map.
   useEffect(() => {
     const map = mapRef.current;
@@ -693,6 +729,20 @@ export const GlobeView = memo(function GlobeView({
     </div>
   );
 });
+
+function arcFeaturesFor(points: UniversitySummary[], campusArcs: CampusArc[]) {
+  const byId = new Map(points.map((u) => [u.id, u]));
+  return campusArcs.flatMap((arc) => {
+    const a = byId.get(arc.fromId);
+    const b = byId.get(arc.toId);
+    if (!a || a.lon == null || a.lat == null || !b || b.lon == null || b.lat == null) return [];
+    return [{
+      type: "Feature",
+      geometry: { type: "LineString", coordinates: greatCircle([a.lon, a.lat], [b.lon, b.lat]) },
+      properties: { count: arc.count },
+    }];
+  });
+}
 
 function greatCircle(a: [number, number], b: [number, number], steps = 48): [number, number][] {
   const toRad = (d: number) => (d * Math.PI) / 180;
