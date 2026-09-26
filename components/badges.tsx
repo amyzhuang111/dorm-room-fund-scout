@@ -51,7 +51,20 @@ const TIER_CLASS: Record<string, string> = {
   B: "bg-warn-bg text-warn border-warn/20",
   C: "bg-surface-2 text-muted border-border-c",
   D: "bg-surface-2 text-muted border-border-c",
+  talent: "bg-surface-2 text-muted border-border-c",
 };
+
+export function SignalTierBadge({ tier, basis }: { tier: string | null | undefined; basis?: string | null }) {
+  if (!tier) return null;
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center rounded-full border px-1.5 py-0.5 text-[10px] font-semibold leading-none ${TIER_CLASS[tier] ?? "bg-surface-2 text-muted border-border-c"}`}
+      title={basis ? `Signal tier ${tier}. ${basis}` : `Signal tier ${tier}`}
+    >
+      {tier}
+    </span>
+  );
+}
 
 export function TierBadge({ tier, label }: { tier: string | null; label: string }) {
   if (!tier) return <span className="text-xs text-muted">{label}: —</span>;
@@ -83,6 +96,37 @@ const ENROLLMENT_CLASS: Record<string, string> = {
   older_alumni: "bg-danger-bg text-danger border-danger/20",
   unknown: "bg-surface text-muted border-border-c",
 };
+
+export function PotentialFounderBadge() {
+  return (
+    <span className="inline-flex shrink-0 items-center rounded-full border border-border-c bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-muted">
+      Potential founder
+    </span>
+  );
+}
+
+export function UnverifiedBadge() {
+  return (
+    <span
+      className="inline-flex shrink-0 items-center rounded-full border border-border-c bg-surface-2 px-1.5 py-0.5 text-[10px] font-medium text-muted"
+      title="This evidence is an unverified search-index summary, not a page we fetched directly."
+    >
+      unverified
+    </span>
+  );
+}
+
+export function LeftSchoolBadge({ leftSchool }: { leftSchool?: boolean | number | null }) {
+  if (!leftSchool) return null;
+  return (
+    <span
+      className="inline-flex shrink-0 items-center rounded-full border border-border-c bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-muted"
+      title="The bio says this person left school or is on leave. Enrollment stays based on class-year evidence."
+    >
+      Left school
+    </span>
+  );
+}
 
 export function EnrollmentBadge({
   status,

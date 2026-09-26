@@ -1,11 +1,11 @@
 import type { ProjectDetail } from "@/lib/domain/queries";
 import { publicLink } from "@/lib/domain/company-link";
-import { EnrollmentBadge, GateBadge } from "./badges";
+import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SignalTierBadge } from "./badges";
 import { PipelineForm } from "./pipeline-form";
 import { NotesSection } from "./notes-section";
 import { AssessmentForm } from "./assessment-form";
 import { FeedbackControls } from "./feedback-controls";
-import { PersonLinkButton } from "./person-link";
+import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 
 export function CompanyDetail({ project }: { project: ProjectDetail }) {
   const concernReasons = project.gateOutcomes.filter((g) => g.result !== "pass");
@@ -17,7 +17,10 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
       {/* Header */}
       <div>
         <div className="flex items-start justify-between gap-2">
-          <h2 className="text-lg font-semibold text-foreground">{project.name}</h2>
+          <h2 className="flex flex-wrap items-center gap-2 text-lg font-semibold text-foreground">
+            {project.name}
+            <SignalTierBadge tier={project.signalTier} basis={project.signalTierBasis} />
+          </h2>
           <GateBadge result={project.overallGate} gateOutcomes={project.gateOutcomes} />
         </div>
         <p className="mt-1 text-sm text-foreground">{project.description || "Product description not yet researched."}</p>
@@ -28,7 +31,9 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
             <li key={f.personId} className="flex flex-wrap items-center gap-1.5 text-sm text-foreground">
               <span className="font-medium">{f.name}</span>
               <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+              <LeftSchoolBadge leftSchool={f.leftSchool} />
               <PersonLinkButton link={f.link} name={f.name} />
+              <ProfileIconLinks links={f.profileLinks} name={f.name} />
               <span className="text-xs text-muted">
                 {[f.school, f.program].filter(Boolean).join(" · ") || "School not on record"}
               </span>
@@ -121,8 +126,31 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
             <li key={f.personId} className="flex flex-wrap items-center gap-2">
               <span>{f.name}</span>
               <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+              <LeftSchoolBadge leftSchool={f.leftSchool} />
               <PersonLinkButton link={f.link} name={f.name} />
+              <ProfileIconLinks links={f.profileLinks} name={f.name} />
               <span className="text-xs text-muted">{[f.school, f.program].filter(Boolean).join(" · ")}</span>
+              {f.otherLinks.length > 0 && (
+                <ul className="basis-full space-y-0.5">
+                  {f.otherLinks.map((item) => {
+                    let host = item.url;
+                    try {
+                      host = new URL(item.url).hostname.replace(/^www\./, "");
+                    } catch {
+                      host = item.url;
+                    }
+                    return (
+                      <li key={item.url} className="text-xs text-muted">
+                        <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-link underline">
+                          {host}
+                        </a>
+                        {item.status === "unverified" ? " · unverified" : ""}
+                        {item.excerpt ? ` — ${item.excerpt}` : ""}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
             </li>
           ))}
         </ul>

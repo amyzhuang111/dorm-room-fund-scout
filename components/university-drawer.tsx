@@ -4,7 +4,7 @@ import { listBuildersForUniversity, listCandidateProjects, listSignalsForUnivers
 import { readReviewState } from "@/lib/domain/review-server";
 import { reviewCompanies } from "@/lib/domain/review-view";
 import { companyMatchesEnrollment, selectedEnrollment } from "@/lib/domain/founder-status";
-import { EnrollmentBadge, QueueBadge } from "./badges";
+import { EnrollmentBadge, LeftSchoolBadge, QueueBadge, SignalTierBadge } from "./badges";
 import { PersonLinkButton } from "./person-link";
 import { publicLink } from "@/lib/domain/company-link";
 
@@ -78,9 +78,12 @@ async function ProspectsTab({ universityId, basePath, current }: { universityId:
           <li key={c.id}>
             <div className="rounded-md border border-border-c p-2.5 hover:bg-surface-2">
               <div className="flex items-start justify-between gap-2">
-                <Link href={buildHref(basePath, current, { project: c.id })} className="text-sm font-medium text-foreground hover:text-link">
-                  {c.name}
-                </Link>
+                <span className="flex flex-wrap items-center gap-1.5">
+                  <Link href={buildHref(basePath, current, { project: c.id })} className="text-sm font-medium text-foreground hover:text-link">
+                    {c.name}
+                  </Link>
+                  <SignalTierBadge tier={c.signalTier} basis={c.signalTierBasis} />
+                </span>
                 <QueueBadge queue={c.queue} />
               </div>
               <ul className="mt-1 space-y-1">
@@ -89,6 +92,7 @@ async function ProspectsTab({ universityId, basePath, current }: { universityId:
                   <li key={f.personId} className="flex flex-wrap items-center gap-1 text-xs">
                     <span className="text-foreground">{f.name}</span>
                     <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+                    <LeftSchoolBadge leftSchool={f.leftSchool} />
                     <PersonLinkButton link={f.link} name={f.name} />
                   </li>
                 ))}

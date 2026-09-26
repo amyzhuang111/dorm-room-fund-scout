@@ -5,6 +5,7 @@ import { buildHref } from "@/lib/domain/url";
 import { foundersInView } from "@/lib/domain/candidate-filter";
 import type { EnrollmentStatus } from "@/lib/domain/founder-status";
 import { matchesEnrollment, selectedEnrollment } from "@/lib/domain/founder-status";
+import { isSignalTier, signalTierRank } from "@/lib/domain/signal-tier";
 import type { FeedbackRecord, FeedbackTarget } from "@/lib/domain/feedback";
 import { likeTargetsFrom, reviewFounders, reviewMode } from "@/lib/domain/review-view";
 import type { FounderRow, UniversitySummary } from "@/lib/domain/queries";
@@ -18,6 +19,7 @@ export function FounderDiscoverApp({
   initial,
   universities,
   founders,
+  potentialFounders,
   enrollment,
   records,
   likes,
@@ -27,6 +29,7 @@ export function FounderDiscoverApp({
   initial: Record<string, string | undefined>;
   universities: UniversitySummary[];
   founders: FounderRow[];
+  potentialFounders: FounderRow[];
   enrollment: { all: Record<EnrollmentStatus, number>; byUniversity: Record<string, Record<EnrollmentStatus, number>> };
   records: FeedbackRecord[];
   likes: FeedbackTarget[];
@@ -38,6 +41,7 @@ export function FounderDiscoverApp({
       <FounderBody
         universities={universities}
         founders={founders}
+        potentialFounders={potentialFounders}
         enrollment={enrollment}
         initialRecords={records}
         initialLikes={likes}
@@ -51,6 +55,7 @@ export function FounderDiscoverApp({
 function FounderBody({
   universities,
   founders,
+  potentialFounders,
   enrollment,
   initialRecords,
   initialLikes,
@@ -59,6 +64,7 @@ function FounderBody({
 }: {
   universities: UniversitySummary[];
   founders: FounderRow[];
+  potentialFounders: FounderRow[];
   enrollment: { all: Record<EnrollmentStatus, number>; byUniversity: Record<string, Record<EnrollmentStatus, number>> };
   initialRecords: FeedbackRecord[];
   initialLikes: FeedbackTarget[];
@@ -68,13 +74,20 @@ function FounderBody({
   const { current } = useScoutNav()!;
   const filters = useDeferredValue(current);
   const records = useFeedbackRecords(initialRecords);
-  const liveLikes = useMemo(() => likeTargetsFrom(records, [], founders, initialLikes), [records, founders, initialLikes]);
+  const showingPotential = filters.pool === "potential";
+  const pool = showingPotential ? potentialFounders : founders;
+  const liveLikes = useMemo(() => likeTargetsFrom(records, [], pool, initialLikes), [records, pool, initialLikes]);
   const visible = useMemo(() => {
-    const matched = foundersInView(founders, { universityId: filters.university, search: filters.q });
-    return reviewFounders(matched, records, liveLikes, reviewMode(filters.feedback)).filter((founder) =>
+    const matched = foundersInView(pool, { universityId: filters.university, search: filters.q });
+    const reviewed = reviewFounders(matched, records, liveLikes, reviewMode(filters.feedback)).filter((founder) =>
       matchesEnrollment(founder.enrollmentStatus, selectedEnrollment(filters.enroll))
     );
-  }, [founders, filters, records, liveLikes]);
+    const tiered = isSignalTier(filters.tier) ? reviewed.filter((founder) => founder.signalTier === filters.tier) : reviewed;
+    if (showingPotential || filters.sort === "tier") {
+      return [...tiered].sort((a, b) => signalTierRank(a.signalTier) - signalTierRank(b.signalTier) || a.name.localeCompare(b.name));
+    }
+    return tiered;
+  }, [pool, filters, records, liveLikes, showingPotential]);
   const counts = (current.university && enrollment.byUniversity[current.university]) || enrollment.all;
   const [query, setQuery] = useState(current.q ?? "");
   const [syncedQ, setSyncedQ] = useState(current.q);
@@ -100,10 +113,18 @@ function FounderBody({
         <div className="border-b border-border-c px-4 py-3">
           <EnrollmentChips basePath="/founder/discover" current={current} counts={counts} />
           <div className="mb-2 mt-3 flex items-center gap-1">
-            <ScoutLink href={buildHref("/startup/discover", { university: current.university, q: current.q, view: "globe", enroll: current.enroll }, {})} className="rounded-md px-2.5 py-1 text-xs font-medium text-muted hover:bg-surface-2">
+            <ScoutLink href={buildHref("/startup/discover", { university: current.university, q: current.q, view: "globe", enroll: current.enroll, tier: current.tier, sort: current.sort }, {})} className="rounded-md px-2.5 py-1 text-xs font-medium text-muted hover:bg-surface-2">
               Companies
             </ScoutLink>
-            <span className="rounded-md bg-accent px-2.5 py-1 text-xs font-medium text-accent-foreground">Founders</span>
+            <ScoutLink href={buildHref("/founder/discover", current, { pool: null, founder: null })} className={`rounded-md px-2.5 py-1 text-xs font-medium ${showingPotential ? "text-muted hover:bg-surface-2" : "bg-accent text-accent-foreground"}`}>
+              Founders
+            </ScoutLink>
+            <ScoutLink
+              href={buildHref("/founder/discover", current, { pool: "potential", founder: null, sort: "tier", enroll: "current_student,recent_grad,older_alumni,unknown" })}
+              className={`rounded-md px-2.5 py-1 text-xs font-medium ${showingPotential ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
+            >
+              Potential founders
+            </ScoutLink>
           </div>
           <h1 className="text-lg font-semibold text-foreground">Founder Scout</h1>
           <p className="text-sm text-muted">
@@ -112,6 +133,16 @@ function FounderBody({
           <p className="mt-0.5 text-xs text-muted">
             Promoted from {totalResolved} resolved people — most resolved people stay raw records until they show real building
             evidence (see Methodology).
+          </p>
+          <p className="mt-2 flex items-center gap-1 text-[11px] text-muted">
+            Sort
+            <ScoutLink href={buildHref("/founder/discover", current, { sort: null })} className={!current.sort || current.sort === "name" ? "text-link" : "hover:text-foreground"}>
+              name
+            </ScoutLink>
+            <ScoutLink href={buildHref("/founder/discover", current, { sort: "tier" })} className={showingPotential || current.sort === "tier" ? "text-link" : "hover:text-foreground"}>
+              signal tier
+            </ScoutLink>
+            <span className="text-muted">· {visible.length} shown</span>
           </p>
           <input
             type="search"

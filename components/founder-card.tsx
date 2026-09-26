@@ -4,9 +4,9 @@ import type { FounderRow } from "@/lib/domain/queries";
 import { publicLink } from "@/lib/domain/company-link";
 import { buildHref } from "@/lib/domain/url";
 import { ScoutLink } from "./scout-nav";
-import { EnrollmentBadge } from "./badges";
+import { EnrollmentBadge, LeftSchoolBadge, PotentialFounderBadge, SignalTierBadge, UnverifiedBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
-import { PersonLinkButton } from "./person-link";
+import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 
 export const FounderCard = memo(function FounderCard({
   founder,
@@ -30,14 +30,29 @@ export const FounderCard = memo(function FounderCard({
         <div>
           <p className="font-medium text-foreground">{founder.name}</p>
           <p className="mt-1 text-xs text-muted">{founder.universityName ?? "University unknown"}</p>
-          <p className="mt-1">
+          <p className="mt-1 flex flex-wrap items-center gap-1">
+            {founder.founderStatus === "potential" && <PotentialFounderBadge />}
             <EnrollmentBadge status={founder.enrollmentStatus} label={founder.enrollmentLabel} evidence={founder.enrollmentEvidence} />
+            <LeftSchoolBadge leftSchool={founder.leftSchool} />
+            <SignalTierBadge tier={founder.signalTier} basis={founder.signalTierBasis} />
+            {founder.signalEvidence?.unverified && <UnverifiedBadge />}
           </p>
         </div>
-        <PersonLinkButton link={founder.link} name={founder.name} />
+        <div className="flex shrink-0 flex-col items-end gap-1">
+          <PersonLinkButton link={founder.link} name={founder.name} />
+          <ProfileIconLinks links={founder.profileLinks} name={founder.name} />
+        </div>
       </div>
 
-      {founder.strongestEvidence && <p className="mt-2 line-clamp-2 text-sm text-foreground">{founder.strongestEvidence}</p>}
+      {founder.founderStatus === "potential" && founder.potentialSignal && (
+        <p className="mt-2 text-sm text-foreground">{founder.potentialSignal}</p>
+      )}
+      {founder.founderStatus !== "potential" && founder.strongestEvidence && (
+        <p className={`mt-2 text-sm text-foreground ${open ? "" : "line-clamp-3"}`}>{founder.strongestEvidence}</p>
+      )}
+      {founder.reviewNotes.length > 0 && (
+        <p className={`mt-2 text-xs text-muted ${open ? "" : "line-clamp-2"}`}>{founder.reviewNotes.join(" ")}</p>
+      )}
 
       <div className="mt-2 flex items-center justify-between gap-2">
         <span className="text-xs text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
@@ -56,6 +71,19 @@ export const FounderCard = memo(function FounderCard({
 
       {open && (
         <div className="mt-3 space-y-3 border-t border-border-c pt-3 text-sm">
+          {founder.founderStatus === "potential" && founder.signalEvidence && (
+            <section>
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Signal evidence</h3>
+              <p className="mt-1 text-xs text-foreground">
+                {founder.signalEvidence.excerpt} {founder.signalEvidence.unverified && <UnverifiedBadge />}
+              </p>
+              {founder.signalEvidence.sourceUrl && (
+                <a href={founder.signalEvidence.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-xs text-link underline">
+                  {founder.signalEvidence.sourceName || "source"}
+                </a>
+              )}
+            </section>
+          )}
           <section>
             <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Companies</h3>
             {companies.length === 0 && !founder.possibleCompany && <p className="mt-1 text-xs text-muted">No company on record.</p>}
@@ -67,6 +95,7 @@ export const FounderCard = memo(function FounderCard({
                     <Link href={`/startup/discover?project=${p.id}`} className="font-medium text-link hover:underline">
                       {p.name}
                     </Link>
+                    <SignalTierBadge tier={p.signalTier} />
                     <span className="text-xs text-muted">{p.role.replaceAll("_", " ")}</span>
                     {link && (
                       <a href={link.url} target="_blank" rel="noopener noreferrer" className="rounded-md bg-accent px-2 py-0.5 text-[11px] font-medium text-accent-foreground">
@@ -101,6 +130,30 @@ export const FounderCard = memo(function FounderCard({
               })}
             </ul>
           </section>
+          {founder.otherLinks.length > 0 && (
+            <section>
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Other sources</h3>
+              <ul className="mt-1 space-y-1.5">
+                {founder.otherLinks.map((item) => {
+                  let host = item.url;
+                  try {
+                    host = new URL(item.url).hostname.replace(/^www\./, "");
+                  } catch {
+                    host = item.url;
+                  }
+                  return (
+                    <li key={item.url} className="text-xs">
+                      <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-link underline">
+                        {host}
+                      </a>
+                      {item.status === "unverified" && <span className="ml-1 text-muted">unverified</span>}
+                      {item.excerpt && <p className="mt-0.5 text-muted">{item.excerpt}</p>}
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          )}
           <section>
             <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Education</h3>
             {founder.education.length === 0 && <p className="mt-1 text-xs text-muted">No education evidence on record.</p>}

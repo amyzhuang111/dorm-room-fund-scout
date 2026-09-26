@@ -127,6 +127,17 @@ export const CAMPUSES: CampusConfig[] = [
     coordSource: "en.wikipedia.org/wiki/Princeton_University (MediaWiki coordinates API, retrieved 2026-09-25)",
     firstClass: false,
   },
+  {
+    id: "univ_cmu",
+    name: "Carnegie Mellon University",
+    shortLabel: "CMU",
+    aliases: ["Carnegie Mellon", "CMU"],
+    country: "United States",
+    lat: 40.4425,
+    lon: -79.94333333,
+    coordSource: "en.wikipedia.org/wiki/Carnegie_Mellon_University (MediaWiki coordinates API, retrieved 2026-09-26)",
+    firstClass: false,
+  },
 ];
 
 export function campusById(id: string): CampusConfig | undefined {
