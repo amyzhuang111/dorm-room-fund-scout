@@ -1,6 +1,6 @@
 import { FounderDiscoverApp } from "@/components/founder-discover-app";
 import type { EnrollmentStatus } from "@/lib/domain/founder-status";
-import { listFounderStatusCounts, listFoundersForPage, listUniversities } from "@/lib/domain/queries";
+import { listFounderStatusCounts, listFoundersForPage, listPotentialFoundersForPage, listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
 
 export default async function FounderDiscoverPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
@@ -22,6 +22,7 @@ export default async function FounderDiscoverPage({ searchParams }: { searchPara
       initial={sp}
       universities={universities}
       founders={founders}
+      potentialFounders={listPotentialFoundersForPage()}
       enrollment={enrollment}
       records={review.records}
       likes={review.likes}

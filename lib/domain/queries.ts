@@ -26,7 +26,7 @@ function cacheStamp(): string {
 
 let universityMemo: { stamp: string; rows: UniversitySummary[] } | null = null;
 let candidateMemo: { stamp: string; rows: CandidateSummary[] } | null = null;
-let founderMemo: { stamp: string; promoted: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } | null = null;
+let founderMemo: { stamp: string; promoted: FounderRow[]; potential: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } | null = null;
 
 export interface UniversitySummary {
   id: string;
@@ -963,6 +963,9 @@ export interface FounderRow {
   projects: { id: string; name: string; kind: string; role: string; websiteUrl: string | null; primaryLink: string | null; primaryLinkKind: string | null; signalTier: string | null }[];
   signalTier: string | null;
   signalTierBasis: string | null;
+  founderStatus: string | null;
+  potentialSignal: string | null;
+  signalEvidence: { excerpt: string; sourceUrl: string | null; sourceName: string | null; unverified: boolean } | null;
   linkedCompany: { id: string; name: string } | null; // a real kind='company' project they're linked to, if any
   possibleCompany: { name: string; status: "unreviewed" | "confirmed" } | null; // §65-67: a bio-derived hint, never auto-promoted — null once linkedCompany is set
   linkedinUrl: string | null; // from a captured `linkedin:<url>` alias — a URL found on a source page, not built from a name
@@ -997,8 +1000,8 @@ export interface FounderRow {
 // The founder card only reads the signal number and coverage. Dimension
 // write-ups, id lists, and unused link duplicates stay on the server so the
 // page payload is not carrying them into the browser.
-export function listFoundersForPage(filters: { universityId?: string; search?: string } = {}): FounderRow[] {
-  return listFounders(filters).map((founder) => ({
+function slimFounder(founder: FounderRow): FounderRow {
+  return {
     ...founder,
     founderSignal: {
       founderSignal: founder.founderSignal.founderSignal,
@@ -1009,7 +1012,15 @@ export function listFoundersForPage(filters: { universityId?: string; search?: s
     sourceIds: [],
     sectorTags: [],
     linkedinCandidates: [],
-  }));
+  };
+}
+
+export function listFoundersForPage(filters: { universityId?: string; search?: string } = {}): FounderRow[] {
+  return listFounders(filters).map(slimFounder);
+}
+
+export function listPotentialFoundersForPage(): FounderRow[] {
+  return cachedFounders().potential.map(slimFounder);
 }
 
 export function listFounders(filters: { universityId?: string; search?: string; includeUnpromoted?: boolean } = {}): FounderRow[] {
@@ -1031,7 +1042,7 @@ export function listFounders(filters: { universityId?: string; search?: string; 
   return rows;
 }
 
-function cachedFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } {
+function cachedFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } {
   const stamp = cacheStamp();
   if (founderMemo?.stamp === stamp) return founderMemo;
   const built = buildFounders();
@@ -1039,7 +1050,7 @@ function cachedFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Ma
   return founderMemo;
 }
 
-function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } {
+function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } {
   const db = getDb();
   const rows = db
     .prepare(
@@ -1047,6 +1058,7 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
               pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label,
               pe.enrollment_evidence as enrollment_evidence, pe.enrollment_source_url as enrollment_source_url,
               pe.left_school as left_school,
+              pe.founder_status as founder_status, pe.potential_signal as potential_signal,
               pe.signal_tier as signal_tier, pe.signal_tier_basis as signal_tier_basis
        FROM people pe
        LEFT JOIN affiliations a ON a.person_id = pe.id
@@ -1065,6 +1077,8 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
       enrollment_evidence: string | null;
       enrollment_source_url: string | null;
       left_school: number | null;
+      founder_status: string | null;
+      potential_signal: string | null;
       signal_tier: string | null;
       signal_tier_basis: string | null;
     }[];
@@ -1107,6 +1121,9 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
       enrollmentSourceUrl: r.enrollment_source_url,
       signalTier: r.signal_tier,
       signalTierBasis: r.signal_tier_basis,
+      founderStatus: r.founder_status,
+      potentialSignal: r.potential_signal,
+      signalEvidence: null,
       websiteUrl,
       sectorTags: [],
       sourceIds: [],
@@ -1237,8 +1254,28 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
     }
   }
 
+  const signalByPerson = new Map<string, { excerpt: string; sourceUrl: string | null; sourceName: string | null; unverified: boolean }>();
+  for (const row of db
+    .prepare(
+      `SELECT c.entity_id as entity_id, c.excerpt as excerpt, c.source_url as source_url, c.verification_state as verification_state, s.name as source_name
+       FROM claims c LEFT JOIN sources s ON s.id = c.source_id
+       WHERE c.entity_type = 'person' AND c.claim_type = 'potential_founder_signal' AND trim(c.excerpt) != ''
+       ORDER BY c.retrieved_at DESC`
+    )
+    .all() as { entity_id: string; excerpt: string; source_url: string | null; verification_state: string | null; source_name: string | null }[]) {
+    if (signalByPerson.has(row.entity_id)) continue;
+    const blob = `${row.source_name ?? ""} ${row.excerpt}`;
+    signalByPerson.set(row.entity_id, {
+      excerpt: row.excerpt,
+      sourceUrl: row.source_url,
+      sourceName: row.source_name,
+      unverified: row.verification_state === "unverified" && /search[- ]index|search summary|via search/i.test(blob),
+    });
+  }
+
   const all: FounderRow[] = [];
   const promoted: FounderRow[] = [];
+  const potential: FounderRow[] = [];
   for (const founder of byId.values()) {
     const projects = rolesByPerson.get(founder.id) ?? [];
     const company = projects.find((p) => p.kind === "company");
@@ -1293,15 +1330,17 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
       linkedCompany: company ? { id: company.id, name: company.name } : null,
       possibleCompany: possible ? { name: possible.company_name_guess, status: possible.match_status as "unreviewed" | "confirmed" } : null,
       strongestEvidence: latestExcerpt.get(founder.id) ?? null,
+      signalEvidence: signalByPerson.get(founder.id) ?? null,
       campuses: affs.get(founder.id) ?? [],
       promoted: promotion.promoted,
       promotionReasonLabel: promotion.reasonLabel,
       founderSignal: computeFounderSignal(db, founder.id, projects, facts),
     };
     all.push(row);
-    if (row.promoted) promoted.push(row);
+    if (row.founderStatus === "potential") potential.push(row);
+    else if (row.promoted) promoted.push(row);
   }
-  return { promoted, all, affs };
+  return { promoted, potential, all, affs };
 }
 
 export function loadLikeTargets(records: FeedbackRecord[]): FeedbackTarget[] {

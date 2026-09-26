@@ -4,7 +4,7 @@ import type { FounderRow } from "@/lib/domain/queries";
 import { publicLink } from "@/lib/domain/company-link";
 import { buildHref } from "@/lib/domain/url";
 import { ScoutLink } from "./scout-nav";
-import { EnrollmentBadge, LeftSchoolBadge, SignalTierBadge } from "./badges";
+import { EnrollmentBadge, LeftSchoolBadge, PotentialFounderBadge, SignalTierBadge, UnverifiedBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton } from "./person-link";
 
@@ -31,15 +31,20 @@ export const FounderCard = memo(function FounderCard({
           <p className="font-medium text-foreground">{founder.name}</p>
           <p className="mt-1 text-xs text-muted">{founder.universityName ?? "University unknown"}</p>
           <p className="mt-1 flex flex-wrap items-center gap-1">
+            {founder.founderStatus === "potential" && <PotentialFounderBadge />}
             <EnrollmentBadge status={founder.enrollmentStatus} label={founder.enrollmentLabel} evidence={founder.enrollmentEvidence} />
             <LeftSchoolBadge leftSchool={founder.leftSchool} />
             <SignalTierBadge tier={founder.signalTier} basis={founder.signalTierBasis} />
+            {founder.signalEvidence?.unverified && <UnverifiedBadge />}
           </p>
         </div>
         <PersonLinkButton link={founder.link} name={founder.name} />
       </div>
 
-      {founder.strongestEvidence && (
+      {founder.founderStatus === "potential" && founder.potentialSignal && (
+        <p className="mt-2 text-sm text-foreground">{founder.potentialSignal}</p>
+      )}
+      {founder.founderStatus !== "potential" && founder.strongestEvidence && (
         <p className={`mt-2 text-sm text-foreground ${open ? "" : "line-clamp-3"}`}>{founder.strongestEvidence}</p>
       )}
 
@@ -60,6 +65,19 @@ export const FounderCard = memo(function FounderCard({
 
       {open && (
         <div className="mt-3 space-y-3 border-t border-border-c pt-3 text-sm">
+          {founder.founderStatus === "potential" && founder.signalEvidence && (
+            <section>
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Signal evidence</h3>
+              <p className="mt-1 text-xs text-foreground">
+                {founder.signalEvidence.excerpt} {founder.signalEvidence.unverified && <UnverifiedBadge />}
+              </p>
+              {founder.signalEvidence.sourceUrl && (
+                <a href={founder.signalEvidence.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block text-xs text-link underline">
+                  {founder.signalEvidence.sourceName || "source"}
+                </a>
+              )}
+            </section>
+          )}
           <section>
             <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Companies</h3>
             {companies.length === 0 && !founder.possibleCompany && <p className="mt-1 text-xs text-muted">No company on record.</p>}
