@@ -1,6 +1,6 @@
 import type { ProjectDetail } from "@/lib/domain/queries";
 import { publicLink } from "@/lib/domain/company-link";
-import { EnrollmentBadge, GateBadge } from "./badges";
+import { EnrollmentBadge, GateBadge, SignalTierBadge } from "./badges";
 import { PipelineForm } from "./pipeline-form";
 import { NotesSection } from "./notes-section";
 import { AssessmentForm } from "./assessment-form";
@@ -17,7 +17,10 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
       {/* Header */}
       <div>
         <div className="flex items-start justify-between gap-2">
-          <h2 className="text-lg font-semibold text-foreground">{project.name}</h2>
+          <h2 className="flex flex-wrap items-center gap-2 text-lg font-semibold text-foreground">
+            {project.name}
+            <SignalTierBadge tier={project.signalTier} basis={project.signalTierBasis} />
+          </h2>
           <GateBadge result={project.overallGate} gateOutcomes={project.gateOutcomes} />
         </div>
         <p className="mt-1 text-sm text-foreground">{project.description || "Product description not yet researched."}</p>

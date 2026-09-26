@@ -78,6 +78,8 @@ CREATE TABLE IF NOT EXISTS people (
   enrollment_source_url TEXT,
   enrollment_source_id TEXT,
   enrollment_grad_year INTEGER,
+  signal_tier TEXT,             -- S | A | B | C | D from the founder-signal tier list; null when no rule applies
+  signal_tier_basis TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -105,6 +107,8 @@ CREATE TABLE IF NOT EXISTS projects (
   primary_link_kind TEXT,        -- devpost | press | accelerator | github | crunchbase | directory | other
   is_portfolio_reference INTEGER NOT NULL DEFAULT 0, -- existing DRF investment: reference only, never a new target
   is_investable_candidate INTEGER NOT NULL DEFAULT 1, -- 0 for e.g. a builder org's own internal tools (still valuable as ability-to-build evidence, but not itself something to screen/score as an investment)
+  signal_tier TEXT,             -- S | A | B | C | D from the founder-signal tier list; null when no rule applies
+  signal_tier_basis TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 );

@@ -53,6 +53,18 @@ const TIER_CLASS: Record<string, string> = {
   D: "bg-surface-2 text-muted border-border-c",
 };
 
+export function SignalTierBadge({ tier, basis }: { tier: string | null | undefined; basis?: string | null }) {
+  if (!tier) return null;
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center rounded-full border px-1.5 py-0.5 text-[10px] font-semibold leading-none ${TIER_CLASS[tier] ?? "bg-surface-2 text-muted border-border-c"}`}
+      title={basis ? `Signal tier ${tier}. ${basis}` : `Signal tier ${tier}`}
+    >
+      {tier}
+    </span>
+  );
+}
+
 export function TierBadge({ tier, label }: { tier: string | null; label: string }) {
   if (!tier) return <span className="text-xs text-muted">{label}: —</span>;
   return (

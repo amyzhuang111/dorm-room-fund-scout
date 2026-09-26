@@ -15,6 +15,7 @@ import { CAMPUSES } from "../../lib/domain/campuses";
 import { linkKind } from "../../lib/domain/company-link";
 import { recomputePersonEnrollment } from "../../lib/domain/enrollment-store";
 import { SECTORS } from "../../lib/domain/sectors";
+import { isSignalTier, preferSignalTier } from "../../lib/domain/signal-tier";
 
 const SECTOR_IDS = new Set(SECTORS.map((s) => s.id));
 const SEARCH_URL = "https://html.duckduckgo.com/html/";
@@ -49,6 +50,8 @@ interface ScoutCompany {
   programs?: string[];
   is_investable_candidate?: boolean;
   claims?: ScoutClaim[];
+  signal_tier?: string | null;
+  signal_tier_basis?: string | null;
 }
 
 interface ScoutPerson {
@@ -64,6 +67,13 @@ interface ScoutPerson {
   linkedin_status?: string | null;
   linkedin_evidence?: string | null;
   claims?: ScoutClaim[];
+  signal_tier?: string | null;
+  signal_tier_basis?: string | null;
+}
+
+interface ScoutProjectLink {
+  project_name: string;
+  role?: string;
 }
 
 interface ScoutUpdate {
@@ -75,6 +85,14 @@ interface ScoutUpdate {
   new_aliases?: string[] | null;
   founders?: string[] | null;
   programs?: string[] | null;
+  new_projects?: ScoutProjectLink[] | null;
+  linkedin?: string | null;
+  linkedin_status?: string | null;
+  linkedin_evidence?: string | null;
+  enrollment_status?: string | null;
+  signal_tier?: string | null;
+  signal_tier_basis?: string | null;
+  notes?: string[] | null;
 }
 
 function normName(name: string): string {
@@ -423,9 +441,16 @@ function main() {
       return null;
     }
 
+    function applyTier(table: "people" | "projects", id: string, tier: string | null | undefined, basis: string | null | undefined) {
+      if (!isSignalTier(tier)) return;
+      const row = db.prepare(`SELECT signal_tier FROM ${table} WHERE id = ?`).get(id) as { signal_tier: string | null };
+      if (preferSignalTier(row.signal_tier, tier) !== tier || row.signal_tier === tier) return;
+      db.prepare(`UPDATE ${table} SET signal_tier = ?, signal_tier_basis = ? WHERE id = ?`).run(tier, basis ?? null, id);
+    }
+
     const insertProject = db.prepare(
-      `INSERT INTO projects (id, name, aliases_json, kind, sector, description, website_url, primary_link, primary_link_kind, is_portfolio_reference, is_investable_candidate, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?)`
+      `INSERT INTO projects (id, name, aliases_json, kind, sector, description, website_url, primary_link, primary_link_kind, is_portfolio_reference, is_investable_candidate, signal_tier, signal_tier_basis, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?)`
     );
     const insertRel = db.prepare(
       `INSERT INTO relationships (id, source_entity_type, source_entity_id, target_entity_type, target_entity_id, relationship_type, evidence_claim_ids_json, verification_state)
@@ -518,6 +543,7 @@ function main() {
         db.prepare(
           `UPDATE projects SET name = ?, aliases_json = ?, kind = ?, sector = COALESCE(sector, ?), description = ?, website_url = COALESCE(website_url, ?), primary_link = COALESCE(primary_link, ?), primary_link_kind = COALESCE(primary_link_kind, ?), is_investable_candidate = ?, updated_at = ? WHERE id = ?`
         ).run(nextName, JSON.stringify(aliases), nextKind, sector, nextDescription, website, primary, primaryKind, nextInvestable, now, projectId);
+        applyTier("projects", projectId, company.signal_tier, company.signal_tier_basis);
         rememberProject(projectId, company.name, website);
         if (upgrade) rememberProject(projectId, nextName, website);
       } else {
@@ -533,6 +559,8 @@ function main() {
           primary,
           primaryKind,
           investable,
+          isSignalTier(company.signal_tier) ? company.signal_tier : null,
+          company.signal_tier_basis ?? null,
           now,
           now
         );
@@ -622,7 +650,9 @@ function main() {
       return null;
     }
 
-    const insertPerson = db.prepare(`INSERT INTO people (id, name, aliases_json, created_at) VALUES (?, ?, ?, ?)`);
+    const insertPerson = db.prepare(
+      `INSERT INTO people (id, name, aliases_json, signal_tier, signal_tier_basis, created_at) VALUES (?, ?, ?, ?, ?, ?)`
+    );
     const insertAff = db.prepare(
       `INSERT INTO affiliations (id, person_id, university_id, role, status, claim_id) VALUES (?, ?, ?, ?, 'unverified', ?)`
     );
@@ -729,10 +759,18 @@ function main() {
       if (match) {
         personId = match.id;
         mergedPeople.push(`${person.name} -> ${personId} (${match.reason})`);
+        applyTier("people", personId, person.signal_tier, person.signal_tier_basis);
       } else {
         personId = newId("person");
         const aliases = (person.aliases_json ?? []).filter((alias) => person.linkedin_status === "confirmed" || !alias.startsWith("linkedin:"));
-        insertPerson.run(personId, person.name, JSON.stringify(aliases), now);
+        insertPerson.run(
+          personId,
+          person.name,
+          JSON.stringify(aliases),
+          isSignalTier(person.signal_tier) ? person.signal_tier : null,
+          person.signal_tier_basis ?? null,
+          now
+        );
         rememberPerson(personId, person.name, JSON.stringify(aliases));
         createdThisRun.add(personId);
         insertedPeople += 1;
@@ -800,6 +838,14 @@ function main() {
       const projectId = scoutProjectId.get(company.id);
       if (!projectId) continue;
       for (const founder of company.founders ?? []) {
+        if (normName(founder) === "yash iyer" && normName(company.name) === "zorbe") {
+          skipped.push("did not attach Yash Iyer to Zorbe: the existing record is W'29 on CarboWells, and the Zorbe post does not mention that team or class year");
+          continue;
+        }
+        if (normName(founder) === "brian williams" && normName(company.name) === "tidy") {
+          skipped.push("did not attach Brian Williams to Tidy: the excerpt only names him as a cofounder, which does not match the Hack4Impact Brian Williams");
+          continue;
+        }
         const personId = personIdForName(founder);
         if (!personId) continue;
         linkRole(personId, projectId, "founder", null);
@@ -807,61 +853,172 @@ function main() {
       }
     }
 
+    function resolveByName(table: "people" | "projects", name: string): { id: string; name: string } | null {
+      const rows = db.prepare(`SELECT id, name FROM ${table}`).all() as { id: string; name: string }[];
+      const hits = rows.filter((row) => normName(row.name) === normName(name));
+      return hits.length === 1 ? hits[0] : null;
+    }
+
+    function mergePersonInto(keepId: string, dropId: string) {
+      if (keepId === dropId) return;
+      const affs = db.prepare(`SELECT id, university_id FROM affiliations WHERE person_id = ?`).all(dropId) as { id: string; university_id: string }[];
+      for (const aff of affs) {
+        const exists = db.prepare(`SELECT id FROM affiliations WHERE person_id = ? AND university_id = ?`).get(keepId, aff.university_id);
+        if (exists) db.prepare(`DELETE FROM affiliations WHERE id = ?`).run(aff.id);
+        else db.prepare(`UPDATE affiliations SET person_id = ? WHERE id = ?`).run(keepId, aff.id);
+      }
+      const roles = db.prepare(`SELECT id, project_id, role FROM person_project_roles WHERE person_id = ?`).all(dropId) as {
+        id: string;
+        project_id: string;
+        role: string;
+      }[];
+      for (const role of roles) {
+        const exists = db.prepare(`SELECT id FROM person_project_roles WHERE person_id = ? AND project_id = ? AND role = ?`).get(keepId, role.project_id, role.role);
+        if (exists) db.prepare(`DELETE FROM person_project_roles WHERE id = ?`).run(role.id);
+        else db.prepare(`UPDATE person_project_roles SET person_id = ? WHERE id = ?`).run(keepId, role.id);
+      }
+      db.prepare(`UPDATE claims SET entity_id = ? WHERE entity_type = 'person' AND entity_id = ?`).run(keepId, dropId);
+      db.prepare(`UPDATE possible_companies SET person_id = ? WHERE person_id = ?`).run(keepId, dropId);
+      db.prepare(`UPDATE notes SET entity_id = ? WHERE entity_type = 'person' AND entity_id = ?`).run(keepId, dropId);
+      db.prepare(`UPDATE relationships SET source_entity_id = ? WHERE source_entity_type = 'person' AND source_entity_id = ?`).run(keepId, dropId);
+      db.prepare(`UPDATE relationships SET target_entity_id = ? WHERE target_entity_type = 'person' AND target_entity_id = ?`).run(keepId, dropId);
+      const kept = readAliases(keepId);
+      const dropped = readAliases(dropId);
+      writeAliases(keepId, [...kept, ...dropped]);
+      db.prepare(`DELETE FROM people WHERE id = ?`).run(dropId);
+      for (const [key, ids] of peopleByNorm) peopleByNorm.set(key, ids.filter((id) => id !== dropId));
+      for (const [key, ids] of peopleBySlug) peopleBySlug.set(key, ids.filter((id) => id !== dropId));
+      peopleTokens.delete(dropId);
+    }
+
+    // Name-only matches the scout flagged. Attach only when the new excerpt
+    // shares a school or company with the existing record.
+    function personUpdateDetachReason(update: ScoutUpdate): string | null {
+      const excerpt = (update.new_claims ?? []).map((claim) => claim.excerpt || "").join(" ");
+      if (normName(update.name) === "yash iyer" && !/carbowells|w'29|w’29/i.test(excerpt)) {
+        return "Zorbe post is an 18-year-old UPenn dropout and does not mention CarboWells or W'29";
+      }
+      if (normName(update.name) === "brian williams" && !/hack4impact|beat the streets|exposurepedia|penn labs/i.test(excerpt)) {
+        return "excerpt names a cofounder and does not mention Hack4Impact or Penn Labs";
+      }
+      return null;
+    }
+
+    function applyPersonUpdate(personId: string, update: ScoutUpdate) {
+      touchedPeople.add(personId);
+      scoutEnrollment.set(personId, update.enrollment_status || "unknown");
+      let firstClaim: string | null = null;
+      for (const claim of update.new_claims ?? []) {
+        const id = addClaim(
+          "person",
+          personId,
+          { ...claim, excerpt: claim.excerpt ? excerptForPerson(update.name, claim.excerpt) : claim.excerpt },
+          "src_scout_web_search"
+        );
+        if (!firstClaim && id) firstClaim = id;
+      }
+      const slug = linkedInSlug(update.linkedin);
+      if (update.linkedin_status === "confirmed" && slug) {
+        const other = (peopleBySlug.get(slug) ?? []).filter((id) => id !== personId);
+        if (other.length === 1) {
+          const otherName = db.prepare(`SELECT name FROM people WHERE id = ?`).get(other[0]) as { name: string } | undefined;
+          if (otherName && normName(otherName.name) === normName(update.name)) {
+            mergePersonInto(personId, other[0]);
+            mergedPeople.push(`${update.name} ${other[0]} -> ${personId} (linkedin ${slug})`);
+          }
+        }
+      }
+      storeLinkedIn(personId, {
+        id: update.repo_entity_id,
+        name: update.name,
+        linkedin: update.linkedin,
+        linkedin_status: update.linkedin_status,
+        linkedin_evidence: update.linkedin_evidence || update.new_claims?.[0]?.excerpt || null,
+        claims: update.new_claims,
+      });
+      const aliases = readAliases(personId);
+      const extra = (update.new_aliases ?? []).filter((alias) => !alias.startsWith("linkedin:"));
+      if (extra.length) writeAliases(personId, [...aliases, ...extra]);
+      applyTier("people", personId, update.signal_tier, update.signal_tier_basis);
+      for (const proj of update.new_projects ?? []) {
+        const projectId = projectIdForName(proj.project_name);
+        if (!projectId) {
+          skipped.push(`no project named ${proj.project_name} for ${update.name}`);
+          continue;
+        }
+        linkRole(personId, projectId, proj.role || "contributor", firstClaim);
+      }
+      if (normName(update.name) === "yash iyer" && /upenn|university of pennsylvania/i.test((update.new_claims ?? []).map((c) => c.excerpt || "").join(" "))) {
+        if (!affExists.get(personId, "univ_penn")) insertAff.run(newId("aff"), personId, "univ_penn", null, firstClaim);
+      }
+    }
+
     let appliedUpdates = 0;
+    let createdFromUpdates = 0;
     for (const update of data.updates) {
       const table = update.entity_type === "person" ? "people" : "projects";
-      const row = db.prepare(`SELECT id, name FROM ${table} WHERE id = ?`).get(update.repo_entity_id) as { id: string; name: string } | undefined;
+      const byId = db.prepare(`SELECT id, name FROM ${table} WHERE id = ?`).get(update.repo_entity_id) as { id: string; name: string } | undefined;
+      const row = byId ?? resolveByName(table, update.name);
+      const detach = update.entity_type === "person" ? personUpdateDetachReason(update) : null;
+      if (detach) {
+        const personId = newId("person");
+        insertPerson.run(personId, update.name, "[]", isSignalTier(update.signal_tier) ? update.signal_tier : null, update.signal_tier_basis ?? null, now);
+        rememberPerson(personId, update.name, "[]");
+        createdThisRun.add(personId);
+        createdFromUpdates += 1;
+        separate.push(`${update.name} kept as a new person (${detach})`);
+        applyPersonUpdate(personId, update);
+        continue;
+      }
       if (!row) {
         skipped.push(`update ${update.name} missing ${update.repo_entity_id}`);
         continue;
       }
       if (normName(row.name) !== normName(update.name) && !normName(row.name).includes(normName(update.name)) && !normName(update.name).includes(normName(row.name))) {
-        skipped.push(`update name ${update.name} does not match ${row.name} (${update.repo_entity_id})`);
+        skipped.push(`update name ${update.name} does not match ${row.name} (${row.id})`);
         continue;
       }
+      if (!byId) separate.push(`${update.name} update resolved ${update.repo_entity_id} -> ${row.id} by normalized name`);
       appliedUpdates += 1;
-      for (const claim of update.new_claims ?? []) {
-        addClaim(update.entity_type === "person" ? "person" : "project", row.id, claim, "src_scout_web_search");
-      }
-      if (update.entity_type === "project") {
-        addPrograms(row.id, update.programs, update.new_claims?.[0]);
-        for (const link of update.new_links ?? []) {
-          const url = httpUrl(link);
-          if (!url) continue;
-          const current = db.prepare(`SELECT website_url, primary_link FROM projects WHERE id = ?`).get(row.id) as {
-            website_url: string | null;
-            primary_link: string | null;
-          };
-          const kind = linkKind(url).kind;
-          if (!current.website_url && kind === "other") {
-            db.prepare(`UPDATE projects SET website_url = ?, updated_at = ? WHERE id = ?`).run(url, now, row.id);
-          } else if (!current.primary_link) {
-            db.prepare(`UPDATE projects SET primary_link = ?, primary_link_kind = ?, updated_at = ? WHERE id = ?`).run(url, kind, now, row.id);
-          } else if (!current.website_url) {
-            db.prepare(`UPDATE projects SET primary_link = COALESCE(primary_link, ?), updated_at = ? WHERE id = ?`).run(url, now, row.id);
-          }
-        }
-        const project = db.prepare(`SELECT kind, is_investable_candidate FROM projects WHERE id = ?`).get(row.id) as {
-          kind: string;
-          is_investable_candidate: number;
-        };
-        if (project.kind === "company" && project.is_investable_candidate === 1) {
-          for (const founder of update.founders ?? []) {
-            const personId = personIdForName(founder);
-            if (!personId) continue;
-            linkRole(personId, row.id, "founder", null);
-            touchedPeople.add(personId);
-          }
-        }
-      }
       if (update.entity_type === "person") {
-        touchedPeople.add(row.id);
-        const aliases = readAliases(row.id);
-        const extra = (update.new_aliases ?? []).filter((alias) => !alias.startsWith("linkedin:"));
-        if (extra.length) writeAliases(row.id, [...aliases, ...extra]);
+        applyPersonUpdate(row.id, update);
+        continue;
+      }
+      for (const claim of update.new_claims ?? []) addClaim("project", row.id, claim, "src_scout_web_search");
+      addPrograms(row.id, update.programs, update.new_claims?.[0]);
+      applyTier("projects", row.id, update.signal_tier, update.signal_tier_basis);
+      for (const link of update.new_links ?? []) {
+        const url = httpUrl(link);
+        if (!url) continue;
+        const current = db.prepare(`SELECT website_url, primary_link FROM projects WHERE id = ?`).get(row.id) as {
+          website_url: string | null;
+          primary_link: string | null;
+        };
+        const kind = linkKind(url).kind;
+        if (!current.website_url && kind === "other") {
+          db.prepare(`UPDATE projects SET website_url = ?, updated_at = ? WHERE id = ?`).run(url, now, row.id);
+        } else if (!current.primary_link) {
+          db.prepare(`UPDATE projects SET primary_link = ?, primary_link_kind = ?, updated_at = ? WHERE id = ?`).run(url, kind, now, row.id);
+        } else if (!current.website_url) {
+          db.prepare(`UPDATE projects SET primary_link = COALESCE(primary_link, ?), updated_at = ? WHERE id = ?`).run(url, now, row.id);
+        }
+      }
+      const project = db.prepare(`SELECT kind, is_investable_candidate FROM projects WHERE id = ?`).get(row.id) as {
+        kind: string;
+        is_investable_candidate: number;
+      };
+      if (project.kind === "company" && project.is_investable_candidate === 1) {
+        for (const founder of update.founders ?? []) {
+          const personId = personIdForName(founder);
+          if (!personId) continue;
+          linkRole(personId, row.id, "founder", null);
+          touchedPeople.add(personId);
+        }
       }
     }
-    console.log(`Updates applied ${appliedUpdates} of ${data.updates.length}.`);
+    const hackathons = data.companies.filter((company) => company.kind === "hackathon_project").length;
+    console.log(`Hackathon projects stored as kind=project without team-member people: ${hackathons}.`);
+    console.log(`Updates applied ${appliedUpdates} of ${data.updates.length}. New people from detached updates: ${createdFromUpdates}.`);
 
     const enrollmentChanges: string[] = [];
     for (const personId of touchedPeople) {

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { buildHref } from "@/lib/domain/url";
 import { publicLink } from "@/lib/domain/company-link";
 import type { CampusBuilder, CandidateSummary, UniversitySummary } from "@/lib/domain/queries";
-import { EnrollmentBadge, QueueBadge } from "./badges";
+import { EnrollmentBadge, QueueBadge, SignalTierBadge } from "./badges";
 import { PersonLinkButton } from "./person-link";
 import { ScoutLink } from "./scout-nav";
 
@@ -98,9 +98,12 @@ export function UniversityPanel({
                   <li key={c.id}>
                     <div className="rounded-md border border-border-c p-2.5 hover:bg-surface-2">
                       <div className="flex items-start justify-between gap-2">
-                        <ScoutLink href={buildHref(basePath, current, { project: c.id })} className="text-sm font-medium text-foreground hover:text-link">
-                          {c.name}
-                        </ScoutLink>
+                        <span className="flex flex-wrap items-center gap-1.5">
+                          <ScoutLink href={buildHref(basePath, current, { project: c.id })} className="text-sm font-medium text-foreground hover:text-link">
+                            {c.name}
+                          </ScoutLink>
+                          <SignalTierBadge tier={c.signalTier} basis={c.signalTierBasis} />
+                        </span>
                         <QueueBadge queue={c.queue} />
                       </div>
                       <ul className="mt-1 space-y-1">

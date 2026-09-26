@@ -4,7 +4,7 @@ import type { FounderRow } from "@/lib/domain/queries";
 import { publicLink } from "@/lib/domain/company-link";
 import { buildHref } from "@/lib/domain/url";
 import { ScoutLink } from "./scout-nav";
-import { EnrollmentBadge } from "./badges";
+import { EnrollmentBadge, SignalTierBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton } from "./person-link";
 
@@ -30,8 +30,9 @@ export const FounderCard = memo(function FounderCard({
         <div>
           <p className="font-medium text-foreground">{founder.name}</p>
           <p className="mt-1 text-xs text-muted">{founder.universityName ?? "University unknown"}</p>
-          <p className="mt-1">
+          <p className="mt-1 flex flex-wrap items-center gap-1">
             <EnrollmentBadge status={founder.enrollmentStatus} label={founder.enrollmentLabel} evidence={founder.enrollmentEvidence} />
+            <SignalTierBadge tier={founder.signalTier} basis={founder.signalTierBasis} />
           </p>
         </div>
         <PersonLinkButton link={founder.link} name={founder.name} />
@@ -67,6 +68,7 @@ export const FounderCard = memo(function FounderCard({
                     <Link href={`/startup/discover?project=${p.id}`} className="font-medium text-link hover:underline">
                       {p.name}
                     </Link>
+                    <SignalTierBadge tier={p.signalTier} />
                     <span className="text-xs text-muted">{p.role.replaceAll("_", " ")}</span>
                     {link && (
                       <a href={link.url} target="_blank" rel="noopener noreferrer" className="rounded-md bg-accent px-2 py-0.5 text-[11px] font-medium text-accent-foreground">

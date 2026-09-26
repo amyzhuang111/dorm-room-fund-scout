@@ -89,6 +89,7 @@ export function ExploreToolbar({
   if (current.queue) activeFilters.push({ key: "queue", label: `View: ${current.queue.replace(/_/g, " ")}` });
   if (current.sector) activeFilters.push({ key: "sector", label: sectorLabel(current.sector) });
   if (current.q) activeFilters.push({ key: "q", label: `Search: "${current.q}"` });
+  if (current.tier) activeFilters.push({ key: "tier", label: `Tier ${current.tier}` });
   if (current.feedback) activeFilters.push({ key: "feedback", label: current.feedback === "hidden" ? "Hidden" : current.feedback === "liked" ? "Liked" : "Passed" });
 
   return (
@@ -107,7 +108,7 @@ export function ExploreToolbar({
             Companies
           </ScoutLink>
           <ScoutLink
-            href={buildHref("/founder/discover", { university: current.university, q: current.q, enroll: current.enroll }, {})}
+            href={buildHref("/founder/discover", { university: current.university, q: current.q, enroll: current.enroll, tier: current.tier, sort: current.sort }, {})}
             className={`rounded-md px-2.5 py-1 text-xs font-medium ${basePath.startsWith("/founder") ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
           >
             Founders
@@ -145,6 +146,9 @@ export function ExploreToolbar({
             </ScoutLink>
             <ScoutLink href={buildHref(basePath, current, { sort: "priority" })} className={current.sort === "priority" ? "text-link" : "hover:text-foreground"}>
               research priority
+            </ScoutLink>
+            <ScoutLink href={buildHref(basePath, current, { sort: "tier" })} className={current.sort === "tier" ? "text-link" : "hover:text-foreground"}>
+              signal tier
             </ScoutLink>
           </span>
         )}

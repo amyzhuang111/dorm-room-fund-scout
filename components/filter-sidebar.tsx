@@ -1,6 +1,7 @@
 import { buildHref } from "@/lib/domain/url";
 import { CAMPUSES, shortCampusLabel } from "@/lib/domain/campuses";
 import type { CoverageState, SectorCount, UniversitySummary } from "@/lib/domain/queries";
+import { SIGNAL_TIERS } from "@/lib/domain/signal-tier";
 import { FeedbackSync } from "./feedback-sync";
 import { CollapsibleSidebar } from "./collapsible-sidebar";
 import { ScoutLink } from "./scout-nav";
@@ -148,6 +149,29 @@ export function FilterSidebar({
           </ul>
         </div>
       )}
+
+      <div className="mt-5">
+        <div className="mb-1.5 flex items-baseline justify-between">
+          <span className="ui-label">Signal tier</span>
+          {current.tier && (
+            <ScoutLink href={buildHref(basePath, current, { tier: null })} className="text-[11px] text-link underline">
+              reset
+            </ScoutLink>
+          )}
+        </div>
+        <ul className="flex flex-wrap gap-1">
+          {SIGNAL_TIERS.map((tier) => (
+            <li key={tier}>
+              <ScoutLink
+                href={buildHref(basePath, current, { tier: current.tier === tier ? null : tier })}
+                className={`inline-flex min-w-6 items-center justify-center rounded-full border px-2 py-0.5 text-xs font-medium ${current.tier === tier ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted hover:bg-surface-2 hover:text-foreground"}`}
+              >
+                {tier}
+              </ScoutLink>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div className="mt-5">
         <span className="ui-label">Review</span>

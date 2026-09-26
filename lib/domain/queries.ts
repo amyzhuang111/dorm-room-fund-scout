@@ -165,6 +165,9 @@ export interface CandidateSummary {
   recordedPlace: string | null;
   /** Highest founder enrollment rank: current student 2, recent grad 1, otherwise 0. */
   enrollmentBoost: number;
+  /** Playbook founder-signal tier. Null when no rule applies. */
+  signalTier: string | null;
+  signalTierBasis: string | null;
 }
 
 function getGateOutcomesFor(db: ReturnType<typeof getDb>, projectId: string): GateOutcome[] {
@@ -432,8 +435,8 @@ function buildAllCandidates(): CandidateSummary[] {
   const db = getDb();
   const unverified = unverifiedLinkedInByPerson(db);
   const projects = db
-    .prepare(`SELECT id, name, sector, description, website_url, primary_link, primary_link_kind, is_portfolio_reference FROM projects WHERE kind='company' AND is_investable_candidate=1 ORDER BY name`)
-    .all() as { id: string; name: string; sector: string | null; description: string | null; website_url: string | null; primary_link: string | null; primary_link_kind: string | null; is_portfolio_reference: number }[];
+    .prepare(`SELECT id, name, sector, description, website_url, primary_link, primary_link_kind, is_portfolio_reference, signal_tier, signal_tier_basis FROM projects WHERE kind='company' AND is_investable_candidate=1 ORDER BY name`)
+    .all() as { id: string; name: string; sector: string | null; description: string | null; website_url: string | null; primary_link: string | null; primary_link_kind: string | null; is_portfolio_reference: number; signal_tier: string | null; signal_tier_basis: string | null }[];
 
   const schoolByPerson = new Map<string, string>();
   for (const row of db
@@ -632,6 +635,8 @@ function buildAllCandidates(): CandidateSummary[] {
       latestSignalNote: signalByProject.get(p.id) ?? null,
       recordedPlace: placeByProject.get(p.id) ?? null,
       enrollmentBoost: founderLinks.reduce((best, founder) => Math.max(best, enrollmentBoost(founder.enrollmentStatus)), 0),
+      signalTier: p.signal_tier,
+      signalTierBasis: p.signal_tier_basis,
     });
   }
   return out;
@@ -952,7 +957,9 @@ export interface FounderRow {
   status: string;
   universityId: string | null;
   universityName: string | null;
-  projects: { id: string; name: string; kind: string; role: string; websiteUrl: string | null; primaryLink: string | null; primaryLinkKind: string | null }[];
+  projects: { id: string; name: string; kind: string; role: string; websiteUrl: string | null; primaryLink: string | null; primaryLinkKind: string | null; signalTier: string | null }[];
+  signalTier: string | null;
+  signalTierBasis: string | null;
   linkedCompany: { id: string; name: string } | null; // a real kind='company' project they're linked to, if any
   possibleCompany: { name: string; status: "unreviewed" | "confirmed" } | null; // §65-67: a bio-derived hint, never auto-promoted — null once linkedCompany is set
   linkedinUrl: string | null; // from a captured `linkedin:<url>` alias — a URL found on a source page, not built from a name
@@ -1034,7 +1041,8 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
     .prepare(
       `SELECT DISTINCT pe.id as id, pe.name as name, pe.aliases_json as aliases_json, a.status as status, a.university_id as university_id, u.name as university_name,
               pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label,
-              pe.enrollment_evidence as enrollment_evidence, pe.enrollment_source_url as enrollment_source_url
+              pe.enrollment_evidence as enrollment_evidence, pe.enrollment_source_url as enrollment_source_url,
+              pe.signal_tier as signal_tier, pe.signal_tier_basis as signal_tier_basis
        FROM people pe
        LEFT JOIN affiliations a ON a.person_id = pe.id
        LEFT JOIN universities u ON u.id = a.university_id
@@ -1051,6 +1059,8 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
       enrollment_label: string | null;
       enrollment_evidence: string | null;
       enrollment_source_url: string | null;
+      signal_tier: string | null;
+      signal_tier_basis: string | null;
     }[];
 
   const unverified = unverifiedLinkedInByPerson(db);
@@ -1088,6 +1098,8 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
       enrollmentLabel: r.enrollment_label,
       enrollmentEvidence: r.enrollment_evidence,
       enrollmentSourceUrl: r.enrollment_source_url,
+      signalTier: r.signal_tier,
+      signalTierBasis: r.signal_tier_basis,
       websiteUrl,
       sectorTags: [],
       sourceIds: [],
@@ -1097,18 +1109,18 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
     });
   }
 
-  type RoleRow = { person_id: string; id: string; name: string; kind: string; role: string; website_url: string | null; primary_link: string | null; primary_link_kind: string | null };
+  type RoleRow = { person_id: string; id: string; name: string; kind: string; role: string; website_url: string | null; primary_link: string | null; primary_link_kind: string | null; signal_tier: string | null };
   const rolesByPerson = new Map<string, RoleRow[]>();
   const peopleByProject = new Map<string, string[]>();
   const seenRole = new Set<string>();
   for (const row of db
     .prepare(
-      `SELECT ppr.person_id as person_id, p.id as id, p.name as name, p.kind as kind, ppr.role as role, p.website_url as website_url, p.primary_link as primary_link, p.primary_link_kind as primary_link_kind
+      `SELECT ppr.person_id as person_id, p.id as id, p.name as name, p.kind as kind, ppr.role as role, p.website_url as website_url, p.primary_link as primary_link, p.primary_link_kind as primary_link_kind, p.signal_tier as signal_tier
        FROM person_project_roles ppr JOIN projects p ON p.id = ppr.project_id
        ORDER BY ppr.rowid`
     )
     .all() as RoleRow[]) {
-    const key = `${row.person_id}|${row.id}|${row.role}|${row.kind}|${row.website_url}|${row.primary_link}|${row.primary_link_kind}`;
+    const key = `${row.person_id}|${row.id}|${row.role}|${row.kind}|${row.website_url}|${row.primary_link}|${row.primary_link_kind}|${row.signal_tier}`;
     if (seenRole.has(key)) continue;
     seenRole.add(key);
     const list = rolesByPerson.get(row.person_id) ?? [];
@@ -1261,6 +1273,7 @@ function buildFounders(): { promoted: FounderRow[]; all: FounderRow[]; affs: Map
         websiteUrl: p.website_url,
         primaryLink: p.primary_link,
         primaryLinkKind: p.primary_link_kind,
+        signalTier: p.signal_tier,
       })),
       education,
       linkedCompany: company ? { id: company.id, name: company.name } : null,

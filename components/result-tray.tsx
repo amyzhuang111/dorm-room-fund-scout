@@ -7,7 +7,7 @@ import { publicLink } from "@/lib/domain/company-link";
 import type { CandidateSummary } from "@/lib/domain/queries";
 import { FeedbackControls } from "./feedback-controls";
 import { PersonLinkButton } from "./person-link";
-import { EnrollmentBadge } from "./badges";
+import { EnrollmentBadge, SignalTierBadge } from "./badges";
 
 // Design MD §5: "In canvas views, show a collapsible bottom result tray
 // with compact cards. Selecting a card selects the same entity on the
@@ -56,9 +56,12 @@ export function ResultTray({
                   current.project === c.id ? "border-accent bg-accent/10" : "border-border-c"
                 }`}
               >
-                <ScoutLink href={buildHref(basePath, current, { project: c.id })} className="block truncate font-medium text-foreground hover:text-link">
-                  {c.name}
-                </ScoutLink>
+                <span className="flex items-center gap-1">
+                  <ScoutLink href={buildHref(basePath, current, { project: c.id })} className="block truncate font-medium text-foreground hover:text-link">
+                    {c.name}
+                  </ScoutLink>
+                  <SignalTierBadge tier={c.signalTier} basis={c.signalTierBasis} />
+                </span>
                 <p className="line-clamp-2 text-muted">{c.description || c.founders[0] || "No description yet"}</p>
                 <p className="truncate text-muted">{c.universities[0] ?? "Campus not confirmed"}</p>
                 {(() => {
