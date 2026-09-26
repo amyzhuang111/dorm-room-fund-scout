@@ -62,6 +62,8 @@ const APIMAESTRO_PRICE_NOTE = [
   "Pay-per-event card started 2026-01-21: $5.00 / 1,000 profiles (eventPriceUsd 0.005).",
   "No actor-start fee. Platform usage is not charged. Email search is off.",
   "README limitations: 1,000 profiles per batch. No free-plan block is published.",
+  "A free Apify account was observed to stop this actor after about 10 profiles in a day.",
+  "The verify script writes the profiles that came back and retries the rest on the next run.",
 ].join(" ");
 
 export const LINKEDIN_ACTORS: LinkedInActor[] = [
@@ -142,24 +144,49 @@ export class ActorBatchError extends Error {
   }
 }
 
+function limitLines(log: string): string[] {
+  return log
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line && mentionsPlanLimit(line))
+    .slice(0, 6)
+    .map((line) => `Log: ${line}`);
+}
+
+/**
+ * A batch with dataset items is usable, even when the status message or log
+ * also mentions a limit. The caller keeps those items and treats the limit
+ * as a stop, not as a reason to discard them. Zero items is unusable: a
+ * limit message with an empty dataset writes nothing.
+ */
 export function explainUnusableRun(input: ActorDataset): { message: string; planLimit: boolean } | null {
   const statusMessage = (input.statusMessage ?? "").trim();
   const log = input.log ?? "";
   const planLimit = mentionsPlanLimit(`${statusMessage}\n${log}`);
-  if (!planLimit && input.items.length > 0) return null;
+  if (input.items.length > 0) return null;
   const lines = [
     planLimit
       ? "This batch failed because the actor status message or log mentions a limit, an upgrade, or a paid plan."
       : "This batch failed because the actor returned zero items.",
     "Nothing from this batch was written, so a re-run will retry these people.",
     `Status message: ${statusMessage || "(none)"}`,
+    ...limitLines(log),
   ];
-  const matched = log
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter((line) => line && mentionsPlanLimit(line));
-  for (const line of matched.slice(0, 6)) lines.push(`Log: ${line}`);
   return { message: lines.join("\n"), planLimit };
+}
+
+/** Some profiles came back, and the run also hit a limit / upgrade / paid plan. */
+export function explainPartialLimit(input: ActorDataset): string {
+  const statusMessage = (input.statusMessage ?? "").trim();
+  const log = input.log ?? "";
+  const lines = [
+    "This batch returned some profiles and then hit a limit, an upgrade, or a paid plan.",
+    "Results were written for the profiles that came back. Every URL that did not come back stays unattempted for the next run.",
+    "Unreturned URLs were not marked rejected.",
+    `Status message: ${statusMessage || "(none)"}`,
+    ...limitLines(log),
+  ];
+  return lines.join("\n");
 }
 
 function asRecord(value: unknown): Record<string, unknown> | null {
