@@ -21,19 +21,20 @@ import { EnrollmentBadge, LeftSchoolBadge, SignalTierBadge } from "./badges";
 export function ResultTray({
   candidates,
   current,
+  docked = false,
 }: {
   candidates: CandidateSummary[];
   basePath: string;
   current: Record<string, string | undefined>;
+  /** Sit below the map on a solid white bar instead of floating over labels. */
+  docked?: boolean;
 }) {
   const [collapsed, setCollapsed] = useState(true);
 
   if (candidates.length === 0) return null;
 
   return (
-    <div className="glass-panel absolute bottom-3 left-3 right-14 overflow-hidden">
-      {/* right-14 (not inset-x-3) leaves room for GlobeView's zoom/reset
-          controls, which float independently at bottom-3 right-3. */}
+    <div className={docked ? "mt-2 overflow-hidden rounded-lg border border-black/15 bg-white text-black shadow-sm" : "glass-panel absolute bottom-3 left-3 right-14 overflow-hidden"}>
       <button
         type="button"
         onClick={() => setCollapsed((c) => !c)}
