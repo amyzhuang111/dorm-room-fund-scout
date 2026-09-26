@@ -27,7 +27,8 @@ export function recomputePersonEnrollment(db: Database.Database, personId: strin
     valueJson: row.value_json,
     verificationState: row.verification_state,
   }));
-  const decision = decideEnrollment(snippets);
+  const person = db.prepare(`SELECT name FROM people WHERE id = ?`).get(personId) as { name: string } | undefined;
+  const decision = decideEnrollment(snippets, { personName: person?.name ?? null });
   db.prepare(
     `UPDATE people
      SET enrollment_status = ?, enrollment_label = ?, enrollment_evidence = ?,
