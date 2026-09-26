@@ -76,7 +76,7 @@ export function NetworkMapCanvas({
     const at = positions.current.get(flyId);
     if (!at) return;
     const from = { ...camera.current };
-    const to = { x: at.x, y: at.y, k: Math.max(camera.current.k, 1.8) };
+    const to = { x: at.x, y: at.y, k: Math.max(camera.current.k, 2.6) };
     const start = performance.now();
     let frame = 0;
     const step = (now: number) => {
