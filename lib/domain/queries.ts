@@ -12,6 +12,7 @@ import { catalogueForCampus } from "./source-quality";
 import { ENROLLMENT_STATUSES, enrollmentBoost, type EnrollmentStatus } from "./founder-status";
 import { bestPersonLink, confirmedLinkedIn, type PersonLinkTarget } from "./person-link";
 import { assembleProfileLinks, type OtherSourceLink, type ProfileIconLink } from "./profile-links";
+import { assembleCompanyProfile, type CompanyFactRecord, type CompanyProfile } from "./company-profile";
 import { matchCandidate } from "./candidate-filter";
 
 export type CoverageState = "not_scanned" | "partial" | "up_to_date" | "needs_attention";
@@ -136,6 +137,7 @@ export interface NamedFounder {
   profileLinks: ProfileIconLink[];
   otherLinks: OtherSourceLink[];
   founderStatus: string | null;
+  role: string | null;
   enrollmentStatus: string | null;
   enrollmentLabel: string | null;
   leftSchool: boolean;
@@ -493,12 +495,12 @@ function buildAllCandidates(): CandidateSummary[] {
     .prepare(
       `SELECT ppr.project_id as project_id, pe.id as id, pe.name as name, pe.aliases_json as aliases_json,
               pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label,
-              pe.left_school as left_school, pe.founder_status as founder_status
+              pe.left_school as left_school, pe.founder_status as founder_status, ppr.role as role
        FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id
        WHERE ppr.role LIKE '%founder%'
        ORDER BY ppr.rowid`
     )
-    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null; left_school: number | null; founder_status: string | null }[]) {
+    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null; left_school: number | null; founder_status: string | null; role: string | null }[]) {
     const key = `${r.project_id}:${r.id}`;
     if (seenFounder.has(key)) continue;
     seenFounder.add(key);
@@ -515,6 +517,7 @@ function buildAllCandidates(): CandidateSummary[] {
       profileLinks: profiles.profileLinks,
       otherLinks: profiles.otherLinks,
       founderStatus: r.founder_status,
+      role: r.role,
       enrollmentStatus: r.enrollment_status,
       enrollmentLabel: r.enrollment_label,
       leftSchool: r.left_school === 1,
@@ -682,6 +685,7 @@ export interface ClaimRow {
 }
 
 export interface ProjectDetail extends CandidateSummary {
+  profile: CompanyProfile;
   claims: ClaimRow[];
   signals: { id: string; signalType: string; currentObservation: string; sourceDate: string | null; significanceNote: string | null }[];
   pipeline: { status: string; nextAction: string | null; dueDate: string | null; notes: string | null; passReason: string | null } | null;
@@ -740,8 +744,39 @@ export function getProjectDetail(id: string): ProjectDetail | null {
     .prepare(`SELECT status, next_action, due_date, notes, pass_reason FROM pipeline_entries WHERE project_id = ?`)
     .get(id) as { status: string; next_action: string | null; due_date: string | null; notes: string | null; pass_reason: string | null } | undefined;
 
+  const factRows = db
+    .prepare(
+      `SELECT fact_key, value_text, amount_usd, amount_status, detail_json, source_url, excerpt, origin
+       FROM company_facts WHERE project_id = ?`
+    )
+    .all(id) as {
+      fact_key: string;
+      value_text: string;
+      amount_usd: number | null;
+      amount_status: string | null;
+      detail_json: string;
+      source_url: string;
+      excerpt: string;
+      origin: string;
+    }[];
+  const profile = assembleCompanyProfile(
+    factRows.map(
+      (row): CompanyFactRecord => ({
+        factKey: row.fact_key,
+        valueText: row.value_text,
+        amountUsd: row.amount_usd,
+        amountStatus: row.amount_status,
+        detailJson: row.detail_json,
+        sourceUrl: row.source_url,
+        excerpt: row.excerpt,
+        origin: row.origin,
+      })
+    )
+  );
+
   return {
     ...summary,
+    profile,
     claims,
     signals,
     pipeline: pipeline

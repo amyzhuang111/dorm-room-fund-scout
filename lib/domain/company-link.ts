@@ -8,6 +8,7 @@ const KIND_BY_HOST: { test: (host: string) => boolean; kind: string; label: stri
   { test: (h) => h.includes("github.com"), kind: "github", label: "GitHub" },
   { test: (h) => h.includes("crunchbase.com"), kind: "crunchbase", label: "Crunchbase" },
   { test: (h) => h.includes("ycombinator.com"), kind: "accelerator", label: "YC page" },
+  { test: (h) => h.includes("sequoiacap.com") || h.includes("a16z.com") || h.includes("andreessenhorowitz.com"), kind: "accelerator", label: "Investor page" },
   { test: (h) => h.includes("venturelab.upenn.edu") || h.includes("velocityincubator.com") || h.includes("skydeck.berkeley.edu") || h.includes("healthtech.upenn.edu") || h.includes("speedrun.a16z.com"), kind: "accelerator", label: "Accelerator page" },
   { test: (h) => h.endsWith(".edu"), kind: "directory", label: "University page" },
   { test: (h) => ["linkedin.com", "facebook.com", "instagram.com", "twitter.com", "x.com", "youtube.com", "google.com", "tiktok.com"].some((d) => h === d || h.endsWith(`.${d}`)), kind: "social", label: "Social profile" },

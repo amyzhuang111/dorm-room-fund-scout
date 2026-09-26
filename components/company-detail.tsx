@@ -7,6 +7,7 @@ import { NotesSection } from "./notes-section";
 import { AssessmentForm } from "./assessment-form";
 import { FeedbackControls } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
+import { CompanyProfileCard } from "./company-profile";
 
 function founderHref(founder: NamedFounder): string {
   const params = new URLSearchParams({
@@ -15,21 +16,6 @@ function founderHref(founder: NamedFounder): string {
   });
   if (founder.founderStatus === "potential") params.set("pool", "potential");
   return `/founder/discover?${params.toString()}`;
-}
-
-function FounderLine({ founder }: { founder: NamedFounder }) {
-  return (
-    <li className="flex flex-wrap items-center gap-1.5 text-sm text-foreground">
-      <Link href={founderHref(founder)} className="font-medium text-link hover:underline">
-        {founder.name}
-      </Link>
-      <EnrollmentBadge status={founder.enrollmentStatus} label={founder.enrollmentLabel} />
-      <LeftSchoolBadge leftSchool={founder.leftSchool} />
-      <PersonLinkButton link={founder.link} name={founder.name} />
-      <ProfileIconLinks links={founder.profileLinks} name={founder.name} />
-      <span className="text-xs text-muted">{[founder.school, founder.program].filter(Boolean).join(" · ") || "School not on record"}</span>
-    </li>
-  );
 }
 
 export function CompanyDetail({ project }: { project: ProjectDetail }) {
@@ -54,8 +40,6 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
             primaryLink: project.primaryLink,
             sourceUrls: project.claims.map((claim) => claim.sourceUrl),
           });
-          const stageGate = project.gateOutcomes.find((gate) => gate.gate === "stage");
-          const stage = stageGate?.result === "pass" ? stageGate.rationale : "Not on record";
           return (
             <>
               <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -82,7 +66,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
                   </a>
                 ))}
               </div>
-              <p className="mt-3 text-sm text-foreground">{project.description || "Product description not yet researched."}</p>
+              <CompanyProfileCard profile={project.profile} founders={project.founderLinks} />
               <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-muted sm:grid-cols-3">
                 <div>
                   <dt className="font-semibold uppercase tracking-wide">Sector</dt>
@@ -93,14 +77,6 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
                   <dd className="text-foreground">{project.universities.join(", ") || "Not on record"}</dd>
                 </div>
                 <div>
-                  <dt className="font-semibold uppercase tracking-wide">Stage</dt>
-                  <dd className="text-foreground">{stage}</dd>
-                </div>
-                <div>
-                  <dt className="font-semibold uppercase tracking-wide">Founded</dt>
-                  <dd className="text-foreground">Not on record</dd>
-                </div>
-                <div>
                   <dt className="font-semibold uppercase tracking-wide">Signal tier</dt>
                   <dd className="text-foreground">{project.signalTier || "Not on record"}</dd>
                 </div>
@@ -108,12 +84,6 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
             </>
           );
         })()}
-        <ul className="mt-3 space-y-1.5">
-          {project.founderLinks.length === 0 && <li className="text-xs text-muted">Founders not yet identified</li>}
-          {project.founderLinks.map((founder) => (
-            <FounderLine key={founder.personId} founder={founder} />
-          ))}
-        </ul>
         {project.sectorTags.length > 0 && (
           <p className="mt-2 flex flex-wrap gap-1">
             {project.sectorTags.map((tag) => (

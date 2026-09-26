@@ -97,6 +97,20 @@ function migrate(db: Database.Database) {
   addColumnIfMissing("people", "left_school", "left_school INTEGER NOT NULL DEFAULT 0");
   addColumnIfMissing("people", "founder_status", "founder_status TEXT");
   addColumnIfMissing("people", "potential_signal", "potential_signal TEXT");
+  db.exec(`CREATE TABLE IF NOT EXISTS company_facts (
+    id TEXT PRIMARY KEY,
+    project_id TEXT NOT NULL REFERENCES projects(id),
+    fact_key TEXT NOT NULL,
+    value_text TEXT NOT NULL,
+    amount_usd REAL,
+    amount_status TEXT,
+    detail_json TEXT NOT NULL DEFAULT '{}',
+    source_url TEXT NOT NULL,
+    excerpt TEXT NOT NULL,
+    origin TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  )`);
+
   db.exec(`CREATE TABLE IF NOT EXISTS project_sector_tags (
     id TEXT PRIMARY KEY,
     project_id TEXT NOT NULL REFERENCES projects(id),
