@@ -24,6 +24,59 @@ export function confirmedLinkedIn(aliasesJson?: string | null): string | null {
   return li ? li.slice("linkedin:".length) : null;
 }
 
+export interface LinkedInAction {
+  url: string;
+  status: "confirmed" | "unverified" | "search";
+  label: "Open LinkedIn" | "LinkedIn (unverified)" | "Search LinkedIn";
+}
+
+export function linkedinSearchUrl(parts: Array<string | null | undefined>): string {
+  const keywords = parts
+    .map((part) => (part ?? "").replace(/\s+/g, " ").trim())
+    .filter(Boolean)
+    .join(" ");
+  return `https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(keywords)}`;
+}
+
+export function linkedinAction(input: {
+  name: string;
+  aliasesJson?: string | null;
+  candidateUrl?: string | null;
+  school?: string | null;
+  company?: string | null;
+}): LinkedInAction {
+  const confirmed = confirmedLinkedIn(input.aliasesJson);
+  if (confirmed) return { url: confirmed, status: "confirmed", label: "Open LinkedIn" };
+  if (input.candidateUrl?.includes("linkedin.com/in/")) {
+    return { url: input.candidateUrl, status: "unverified", label: "LinkedIn (unverified)" };
+  }
+  return {
+    url: linkedinSearchUrl([input.name, input.school, input.company]),
+    status: "search",
+    label: "Search LinkedIn",
+  };
+}
+
+export function linkedinActionFromStored(input: {
+  name: string;
+  linkedinUrl?: string | null;
+  linkedinStatus?: "confirmed" | "unverified" | null;
+  school?: string | null;
+  company?: string | null;
+}): LinkedInAction {
+  if (input.linkedinUrl && input.linkedinStatus === "confirmed") {
+    return { url: input.linkedinUrl, status: "confirmed", label: "Open LinkedIn" };
+  }
+  if (input.linkedinUrl && input.linkedinStatus === "unverified") {
+    return { url: input.linkedinUrl, status: "unverified", label: "LinkedIn (unverified)" };
+  }
+  return {
+    url: linkedinSearchUrl([input.name, input.school, input.company]),
+    status: "search",
+    label: "Search LinkedIn",
+  };
+}
+
 export function bestPersonLink(input: {
   aliasesJson?: string | null;
   linkedinCandidates?: { url: string }[];

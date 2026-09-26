@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { MapEdgeType, MapGraph, MapNode, MapNodeType } from "@/lib/domain/network-map";
 import type { NetworkFocus } from "@/lib/domain/network-focus";
+import { buildPersonLinkedInLookup } from "@/lib/domain/map-linkedin";
 import { NetworkMapCanvas } from "./network-map-canvas";
-import { PersonLinkButton, ProfileIconLinks } from "./person-link";
+import { LinkedInIconButton, LinkedInOpenButton, PersonLinkButton, ProfileIconLinks } from "./person-link";
 
 const NODE_TYPES: { id: MapNodeType; label: string }[] = [
   { id: "person", label: "People" },
@@ -142,7 +143,14 @@ export function NetworkMapApp() {
     setQuery("");
   }
 
+  const linkedinFor = useMemo(() => (graph ? buildPersonLinkedInLookup(graph) : null), [graph]);
   const selectedNode = graph?.nodes.find((node) => node.id === selected) ?? null;
+  const personLinkedIn =
+    selectedNode?.type === "person"
+      ? focus?.id === selected && focus.linkedin
+        ? focus.linkedin
+        : linkedinFor?.(selectedNode) ?? null
+      : null;
 
   return (
     <div className="fixed inset-x-0 top-14 bottom-0 z-20 bg-white">
@@ -257,9 +265,14 @@ export function NetworkMapApp() {
       {selectedNode && (
         <aside className="absolute bottom-3 right-3 top-16 z-30 flex w-80 flex-col overflow-hidden rounded-xl border border-border-c bg-white shadow-sm">
           <div className="flex items-start justify-between gap-2 border-b border-border-c px-3 py-2">
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-[10px] font-semibold uppercase tracking-wide text-muted">{selectedNode.type}</p>
               <h2 className="text-base font-semibold text-foreground">{focus?.name ?? selectedNode.label}</h2>
+              {personLinkedIn && (
+                <div className="mt-2">
+                  <LinkedInOpenButton action={personLinkedIn} name={focus?.name ?? selectedNode.label} />
+                </div>
+              )}
             </div>
             <button type="button" className="text-xs text-muted hover:text-foreground" onClick={() => setSelected(null)} aria-label="Close details">
               Close
@@ -394,7 +407,9 @@ function FocusBody({ focus, onJump }: { focus: NetworkFocus; onJump: (id: string
     <div className="space-y-3 text-sm">
       {focus.subtitle && <p className="text-foreground">{focus.subtitle}</p>}
       <div className="flex flex-wrap items-center gap-1.5">
-        {focus.link && <PersonLinkButton link={focus.link} name={focus.name} />}
+        {focus.link && focus.link.kind !== "linkedin" && focus.link.kind !== "unverified" && (
+          <PersonLinkButton link={focus.link} name={focus.name} />
+        )}
         <ProfileIconLinks links={focus.profileLinks} name={focus.name} />
         {focus.website && (
           <a href={focus.website.url} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md bg-accent px-2.5 py-1 text-xs font-medium text-accent-foreground">
@@ -439,6 +454,7 @@ function FocusBody({ focus, onJump }: { focus: NetworkFocus; onJump: (id: string
                 <button type="button" className="text-left font-medium text-link hover:underline" onClick={() => onJump(item.id)}>
                   {item.name}
                 </button>
+                {item.linkedin && <LinkedInIconButton action={item.linkedin} name={item.name} />}
                 {item.role && <span className="text-muted">{item.role}</span>}
                 {item.sourceUrl && (
                   <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-[10px] text-link hover:underline">
