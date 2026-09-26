@@ -33,5 +33,5 @@ export async function addManualReferral(formData: FormData) {
     referrer,
   });
 
-  redirect(`/startup/discover?project=${projectId}`);
+  redirect(`/startup/${projectId}`);
 }

@@ -6,6 +6,7 @@ import { buildHref } from "@/lib/domain/url";
 import type { CampusArc, CandidateSummary, UniversitySummary } from "@/lib/domain/queries";
 import { ResultTray } from "./result-tray";
 import { PersonLinkButton } from "./person-link";
+import { CompanyNameLink } from "./company-website";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import "maplibre-gl/dist/maplibre-gl.css";
 
@@ -577,10 +578,10 @@ export const GlobeView = memo(function GlobeView({
               <ul className="mt-1.5 space-y-1">
                 {placed.slice(0, 8).map((c) => (
                   <li key={c.id}>
-                    <a href={buildHref(basePath, current, { project: c.id })} className="block rounded-md px-1.5 py-1 text-xs hover:bg-surface-2">
-                      <span className="font-medium text-foreground">{c.name}</span>
+                    <span className="block rounded-md px-1.5 py-1 text-xs hover:bg-surface-2">
+                      <CompanyNameLink id={c.id} name={c.name} websiteUrl={c.websiteUrl} className="font-medium text-foreground hover:text-link" />
                       <span className="block truncate text-muted">{c.recordedPlace}</span>
-                    </a>
+                    </span>
                   </li>
                 ))}
                 {placed.length === 0 && <li className="text-xs text-muted">No sourced place names in this result set.</li>}
@@ -591,9 +592,9 @@ export const GlobeView = memo(function GlobeView({
               <ul className="mt-1.5 space-y-1">
                 {unplaced.slice(0, 6).map((c) => (
                   <li key={c.id}>
-                    <a href={buildHref(basePath, current, { project: c.id })} className="block truncate rounded-md px-1.5 py-1 text-xs text-foreground hover:bg-surface-2">
-                      {c.name}
-                    </a>
+                    <span className="block truncate rounded-md px-1.5 py-1 text-xs">
+                      <CompanyNameLink id={c.id} name={c.name} websiteUrl={c.websiteUrl} className="text-foreground hover:text-link" />
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -629,12 +630,9 @@ export const GlobeView = memo(function GlobeView({
               <ul className="mt-1.5 space-y-1">
                 {previewCandidates.slice(0, 5).map((c) => (
                   <li key={c.id}>
-                    <a
-                      href={buildHref(basePath, current, { project: c.id })}
-                      className="block truncate rounded-md px-1.5 py-1 text-xs text-foreground hover:bg-surface-2"
-                    >
-                      {c.name}
-                    </a>
+                    <span className="block truncate rounded-md px-1.5 py-1 text-xs">
+                      <CompanyNameLink id={c.id} name={c.name} websiteUrl={c.websiteUrl} className="text-foreground hover:text-link" />
+                    </span>
                     {c.founderLinks[0]?.link && (
                       <span className="mt-0.5 flex items-center gap-1 px-1.5">
                         <PersonLinkButton link={c.founderLinks[0].link} name={c.founderLinks[0].name} />

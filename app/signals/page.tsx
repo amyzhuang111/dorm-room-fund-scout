@@ -4,6 +4,7 @@ import { listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
 import { domainKey, isHidden } from "@/lib/domain/feedback";
 import { buildHref } from "@/lib/domain/url";
+import { CompanyWebsiteIcon } from "@/components/company-website";
 
 interface SignalRow {
   id: string;
@@ -115,15 +116,17 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
           // submissions/evidence (Founder Scout, kind='project') — only kind='company'
           // rows resolve on /startup/discover (see queries.ts listCandidateProjects),
           // so route each signal to whichever product surface actually has it.
-          const detailHref =
-            s.project_kind === "company" ? `/startup/discover?project=${s.project_id}` : `/founder/network?project=${s.project_id}`;
+          const detailHref = s.project_kind === "company" ? `/startup/${s.project_id}` : `/founder/network?project=${s.project_id}`;
           const footerDate = s.source_date ? formatMonthYear(s.source_date) : `Discovered ${formatMonthDay(s.created_at)}`;
           return (
             <li key={s.id} className="rounded-md border border-border-c bg-surface p-3">
-              <Link href={detailHref} className="text-sm font-medium text-foreground hover:text-link">
-                {s.founder_name ?? s.project_name}
-                {s.university_name ? ` · ${s.university_name}` : ""}
-              </Link>
+              <span className="inline-flex items-center gap-1">
+                <Link href={detailHref} className="text-sm font-medium text-foreground hover:text-link">
+                  {s.founder_name ?? s.project_name}
+                  {s.university_name ? ` · ${s.university_name}` : ""}
+                </Link>
+                {s.project_kind === "company" && <CompanyWebsiteIcon url={s.website_url} name={s.project_name} />}
+              </span>
               <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-link">{TYPE_LABEL[s.signal_type] ?? s.signal_type}</p>
               <p className="mt-1 text-sm text-foreground">{s.current_observation}</p>
               {s.significance_note && <p className="mt-1 text-sm text-muted">Why it matters: {s.significance_note}</p>}

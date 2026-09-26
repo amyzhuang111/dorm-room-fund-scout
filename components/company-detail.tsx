@@ -1,11 +1,22 @@
-import type { ProjectDetail } from "@/lib/domain/queries";
-import { publicLink } from "@/lib/domain/company-link";
+import Link from "next/link";
+import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
+import { storedCompanyLinks } from "@/lib/domain/company-link";
 import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SignalTierBadge } from "./badges";
 import { PipelineForm } from "./pipeline-form";
 import { NotesSection } from "./notes-section";
 import { AssessmentForm } from "./assessment-form";
 import { FeedbackControls } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
+import { CompanyProfileCard } from "./company-profile";
+
+function founderHref(founder: NamedFounder): string {
+  const params = new URLSearchParams({
+    founder: founder.personId,
+    enroll: "current_student,recent_grad,older_alumni,unknown",
+  });
+  if (founder.founderStatus === "potential") params.set("pool", "potential");
+  return `/founder/discover?${params.toString()}`;
+}
 
 export function CompanyDetail({ project }: { project: ProjectDetail }) {
   const concernReasons = project.gateOutcomes.filter((g) => g.result !== "pass");
@@ -23,31 +34,54 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
           </h2>
           <GateBadge result={project.overallGate} gateOutcomes={project.gateOutcomes} />
         </div>
-        <p className="mt-1 text-sm text-foreground">{project.description || "Product description not yet researched."}</p>
-        <p className="mt-1 text-xs text-muted">{project.universities.join(", ") || "University unknown"}</p>
-        <ul className="mt-2 space-y-1.5">
-          {project.founderLinks.length === 0 && <li className="text-xs text-muted">Founders not yet identified</li>}
-          {project.founderLinks.map((f) => (
-            <li key={f.personId} className="flex flex-wrap items-center gap-1.5 text-sm text-foreground">
-              <span className="font-medium">{f.name}</span>
-              <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
-              <LeftSchoolBadge leftSchool={f.leftSchool} />
-              <PersonLinkButton link={f.link} name={f.name} />
-              <ProfileIconLinks links={f.profileLinks} name={f.name} />
-              <span className="text-xs text-muted">
-                {[f.school, f.program].filter(Boolean).join(" · ") || "School not on record"}
-              </span>
-            </li>
-          ))}
-        </ul>
         {(() => {
-          const link = publicLink(project.websiteUrl, project.primaryLink, project.primaryLinkKind);
-          if (!link) return <p className="mt-2 text-xs text-muted">No public page on record</p>;
-          const label = link.kind === "official" ? "Visit website" : `Open ${link.label}`;
+          const links = storedCompanyLinks({
+            websiteUrl: project.websiteUrl,
+            primaryLink: project.primaryLink,
+            sourceUrls: project.claims.map((claim) => claim.sourceUrl),
+          });
           return (
-            <a href={link.url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground">
-              {label}
-            </a>
+            <>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                {links.website ? (
+                  <a href={links.website} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-accent-foreground">
+                    Visit website
+                  </a>
+                ) : (
+                  <span className="text-sm text-muted">No website found</span>
+                )}
+                {links.fallback && (
+                  <a href={links.fallback.url} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md border border-border-c bg-white px-3 py-1.5 text-sm font-medium text-link hover:border-accent">
+                    {links.fallback.label} · source page
+                  </a>
+                )}
+                {links.linkedin && (
+                  <a href={links.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md border border-border-c bg-white px-3 py-1.5 text-sm font-medium text-link hover:border-accent">
+                    Company LinkedIn
+                  </a>
+                )}
+                {links.extras.map((link) => (
+                  <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md border border-border-c bg-white px-2.5 py-1 text-xs font-medium text-link hover:border-accent">
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+              <CompanyProfileCard profile={project.profile} founders={project.founderLinks} />
+              <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-muted sm:grid-cols-3">
+                <div>
+                  <dt className="font-semibold uppercase tracking-wide">Sector</dt>
+                  <dd className="text-foreground">{project.sectorTags[0] || project.sector || "Not on record"}</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold uppercase tracking-wide">Campus</dt>
+                  <dd className="text-foreground">{project.universities.join(", ") || "Not on record"}</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold uppercase tracking-wide">Signal tier</dt>
+                  <dd className="text-foreground">{project.signalTier || "Not on record"}</dd>
+                </div>
+              </dl>
+            </>
           );
         })()}
         {project.sectorTags.length > 0 && (
@@ -124,7 +158,9 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
           {project.founderLinks.length === 0 && <li>None identified yet.</li>}
           {project.founderLinks.map((f) => (
             <li key={f.personId} className="flex flex-wrap items-center gap-2">
-              <span>{f.name}</span>
+              <Link href={founderHref(f)} className="text-link hover:underline">
+                {f.name}
+              </Link>
               <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
               <LeftSchoolBadge leftSchool={f.leftSchool} />
               <PersonLinkButton link={f.link} name={f.name} />

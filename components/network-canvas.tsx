@@ -1,7 +1,7 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
-import { buildHref } from "@/lib/domain/url";
 import { ScoutLink } from "./scout-nav";
 import type { NetworkEdge, NetworkGraph, NetworkNode } from "@/lib/domain/network";
 import type { PersonLinkTarget } from "@/lib/domain/person-link";
@@ -28,8 +28,6 @@ function nodeRadius(type: NetworkNode["type"], degree: number): number {
 
 export function NetworkCanvas({
   graph,
-  basePath,
-  current,
   campusName,
 }: {
   graph: NetworkGraph;
@@ -163,7 +161,7 @@ export function NetworkCanvas({
             );
             if (n.type === "project") {
               return (
-                <ScoutLink key={n.id} href={buildHref(basePath, current, { project: n.id })} aria-label={n.label}>
+                <ScoutLink key={n.id} href={`/startup/${n.id}`} aria-label={n.label}>
                   <g onMouseEnter={() => setHover(n.id)} onMouseLeave={() => setHover(null)}>
                     {shape}
                   </g>
@@ -204,6 +202,11 @@ export function NetworkCanvas({
           <div>
             <p className="ui-label">{focus.type}</p>
             <h2 className="text-base font-medium text-foreground">{focus.label}</h2>
+            {focus.type === "project" && (
+              <Link href={`/startup/${focus.id}`} className="mt-1 inline-block text-xs font-medium text-link hover:underline">
+                Open company details
+              </Link>
+            )}
             <p className="stat-num mt-2 text-3xl">{focusEdges.length}</p>
             <p className="ui-label">connections</p>
             {focus.sublabel && <p className="text-xs text-muted">{focus.sublabel}</p>}
@@ -254,9 +257,15 @@ export function NetworkCanvas({
                 .slice(0, 40)
                 .map((n) => (
                   <li key={n.id} className="flex items-center gap-1">
-                    <button type="button" onClick={() => setSelected(n.id)} className="min-w-0 flex-1 truncate rounded-md px-2 py-1 text-left text-xs text-foreground hover:bg-surface-2">
-                      {n.label}
-                    </button>
+                    {n.type === "project" ? (
+                      <Link href={`/startup/${n.id}`} className="min-w-0 flex-1 truncate rounded-md px-2 py-1 text-left text-xs font-medium text-foreground hover:bg-surface-2 hover:text-link">
+                        {n.label}
+                      </Link>
+                    ) : (
+                      <button type="button" onClick={() => setSelected(n.id)} className="min-w-0 flex-1 truncate rounded-md px-2 py-1 text-left text-xs text-foreground hover:bg-surface-2">
+                        {n.label}
+                      </button>
+                    )}
                     {n.type === "person" && personTarget(n) && <PersonLinkButton name={n.label} link={personTarget(n)} />}
                     {n.type === "project" && n.linkUrl && (
                       <a href={n.linkUrl} target="_blank" rel="noopener noreferrer" className="shrink-0 text-[11px] text-link underline">

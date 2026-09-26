@@ -12,6 +12,7 @@ import { catalogueForCampus } from "./source-quality";
 import { ENROLLMENT_STATUSES, enrollmentBoost, type EnrollmentStatus } from "./founder-status";
 import { bestPersonLink, confirmedLinkedIn, type PersonLinkTarget } from "./person-link";
 import { assembleProfileLinks, type OtherSourceLink, type ProfileIconLink } from "./profile-links";
+import { assembleCompanyProfile, type CompanyFactRecord, type CompanyProfile } from "./company-profile";
 import { matchCandidate } from "./candidate-filter";
 
 export type CoverageState = "not_scanned" | "partial" | "up_to_date" | "needs_attention";
@@ -135,6 +136,8 @@ export interface NamedFounder {
   link: PersonLinkTarget | null;
   profileLinks: ProfileIconLink[];
   otherLinks: OtherSourceLink[];
+  founderStatus: string | null;
+  role: string | null;
   enrollmentStatus: string | null;
   enrollmentLabel: string | null;
   leftSchool: boolean;
@@ -492,12 +495,12 @@ function buildAllCandidates(): CandidateSummary[] {
     .prepare(
       `SELECT ppr.project_id as project_id, pe.id as id, pe.name as name, pe.aliases_json as aliases_json,
               pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label,
-              pe.left_school as left_school
+              pe.left_school as left_school, pe.founder_status as founder_status, ppr.role as role
        FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id
        WHERE ppr.role LIKE '%founder%'
        ORDER BY ppr.rowid`
     )
-    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null; left_school: number | null }[]) {
+    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null; left_school: number | null; founder_status: string | null; role: string | null }[]) {
     const key = `${r.project_id}:${r.id}`;
     if (seenFounder.has(key)) continue;
     seenFounder.add(key);
@@ -513,6 +516,8 @@ function buildAllCandidates(): CandidateSummary[] {
       link: bestPersonLink({ aliasesJson: r.aliases_json, linkedinCandidates }),
       profileLinks: profiles.profileLinks,
       otherLinks: profiles.otherLinks,
+      founderStatus: r.founder_status,
+      role: r.role,
       enrollmentStatus: r.enrollment_status,
       enrollmentLabel: r.enrollment_label,
       leftSchool: r.left_school === 1,
@@ -680,6 +685,7 @@ export interface ClaimRow {
 }
 
 export interface ProjectDetail extends CandidateSummary {
+  profile: CompanyProfile;
   claims: ClaimRow[];
   signals: { id: string; signalType: string; currentObservation: string; sourceDate: string | null; significanceNote: string | null }[];
   pipeline: { status: string; nextAction: string | null; dueDate: string | null; notes: string | null; passReason: string | null } | null;
@@ -738,8 +744,39 @@ export function getProjectDetail(id: string): ProjectDetail | null {
     .prepare(`SELECT status, next_action, due_date, notes, pass_reason FROM pipeline_entries WHERE project_id = ?`)
     .get(id) as { status: string; next_action: string | null; due_date: string | null; notes: string | null; pass_reason: string | null } | undefined;
 
+  const factRows = db
+    .prepare(
+      `SELECT fact_key, value_text, amount_usd, amount_status, detail_json, source_url, excerpt, origin
+       FROM company_facts WHERE project_id = ?`
+    )
+    .all(id) as {
+      fact_key: string;
+      value_text: string;
+      amount_usd: number | null;
+      amount_status: string | null;
+      detail_json: string;
+      source_url: string;
+      excerpt: string;
+      origin: string;
+    }[];
+  const profile = assembleCompanyProfile(
+    factRows.map(
+      (row): CompanyFactRecord => ({
+        factKey: row.fact_key,
+        valueText: row.value_text,
+        amountUsd: row.amount_usd,
+        amountStatus: row.amount_status,
+        detailJson: row.detail_json,
+        sourceUrl: row.source_url,
+        excerpt: row.excerpt,
+        origin: row.origin,
+      })
+    )
+  );
+
   return {
     ...summary,
+    profile,
     claims,
     signals,
     pipeline: pipeline
@@ -1479,6 +1516,7 @@ export interface PipelineEntryRow {
   pass_reason: string | null;
   project_id: string;
   project_name: string;
+  website_url: string | null;
   campus_name: string | null;
   blocker: string | null;
 }
@@ -1487,11 +1525,11 @@ export function listPipelineEntries(): PipelineEntryRow[] {
   const db = getDb();
   const rows = db
     .prepare(
-      `SELECT pe.status, pe.next_action, pe.due_date, pe.notes, pe.pass_reason, p.id as project_id, p.name as project_name
+      `SELECT pe.status, pe.next_action, pe.due_date, pe.notes, pe.pass_reason, p.id as project_id, p.name as project_name, p.website_url as website_url
        FROM pipeline_entries pe JOIN projects p ON p.id = pe.project_id
        ORDER BY pe.updated_at DESC`
     )
-    .all() as { status: string; next_action: string | null; due_date: string | null; notes: string | null; pass_reason: string | null; project_id: string; project_name: string }[];
+    .all() as { status: string; next_action: string | null; due_date: string | null; notes: string | null; pass_reason: string | null; project_id: string; project_name: string; website_url: string | null }[];
 
   const campusStmt = db.prepare(
     `SELECT DISTINCT u.name as name FROM affiliations a

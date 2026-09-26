@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { emptyCompanyProfile } from "@/lib/domain/company-profile";
 import type { CandidateSummary, ProjectDetail } from "@/lib/domain/queries";
 
 export function projectShell(candidate: CandidateSummary, detail: ProjectDetail | null): ProjectDetail {
   if (detail?.id === candidate.id) return detail;
-  return { ...candidate, claims: [], signals: [], pipeline: null, manualNotes: [], assessmentHistory: [] };
+  return { ...candidate, profile: emptyCompanyProfile(), claims: [], signals: [], pipeline: null, manualNotes: [], assessmentHistory: [] };
 }
 
 export function useProjectDetail(id: string | undefined, initial: ProjectDetail | null): ProjectDetail | null {

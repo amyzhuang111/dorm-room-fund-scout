@@ -7,6 +7,7 @@ import { companyMatchesEnrollment, selectedEnrollment } from "@/lib/domain/found
 import { EnrollmentBadge, LeftSchoolBadge, QueueBadge, SignalTierBadge } from "./badges";
 import { PersonLinkButton } from "./person-link";
 import { publicLink } from "@/lib/domain/company-link";
+import { CompanyNameLink } from "./company-website";
 
 const TABS = ["prospects", "builders", "signals", "sources"] as const;
 type Tab = (typeof TABS)[number];
@@ -79,9 +80,7 @@ async function ProspectsTab({ universityId, basePath, current }: { universityId:
             <div className="rounded-md border border-border-c p-2.5 hover:bg-surface-2">
               <div className="flex items-start justify-between gap-2">
                 <span className="flex flex-wrap items-center gap-1.5">
-                  <Link href={buildHref(basePath, current, { project: c.id })} className="text-sm font-medium text-foreground hover:text-link">
-                    {c.name}
-                  </Link>
+                  <CompanyNameLink id={c.id} name={c.name} websiteUrl={c.websiteUrl} className="text-sm font-medium text-foreground hover:text-link" />
                   <SignalTierBadge tier={c.signalTier} basis={c.signalTierBasis} />
                 </span>
                 <QueueBadge queue={c.queue} />

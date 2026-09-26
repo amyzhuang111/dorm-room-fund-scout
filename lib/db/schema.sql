@@ -291,6 +291,23 @@ CREATE TABLE IF NOT EXISTS gate_results (
   UNIQUE(project_id, gate_name)
 );
 
+-- Sourced company-profile facts (description, founded year, funding, investors,
+-- HQ, team size). Every row keeps the page it was read from and a short excerpt.
+-- amount_status is announced | undisclosed. Unknown facts are absent, not guessed.
+CREATE TABLE IF NOT EXISTS company_facts (
+  id TEXT PRIMARY KEY,
+  project_id TEXT NOT NULL REFERENCES projects(id),
+  fact_key TEXT NOT NULL,       -- description | founded_year | funding_total | funding_round | investor | hq | team_size | website | company_linkedin
+  value_text TEXT NOT NULL,
+  amount_usd REAL,
+  amount_status TEXT,           -- announced | undisclosed
+  detail_json TEXT NOT NULL DEFAULT '{}',
+  source_url TEXT NOT NULL,
+  excerpt TEXT NOT NULL,
+  origin TEXT NOT NULL,         -- existing_claim | stored_description | yc_page | speedrun_page | company_site
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 CREATE INDEX IF NOT EXISTS idx_claims_entity ON claims(entity_type, entity_id);
 CREATE INDEX IF NOT EXISTS idx_affiliations_person ON affiliations(person_id);
 CREATE INDEX IF NOT EXISTS idx_affiliations_university ON affiliations(university_id);
@@ -299,3 +316,4 @@ CREATE INDEX IF NOT EXISTS idx_ppr_person ON person_project_roles(person_id);
 CREATE INDEX IF NOT EXISTS idx_relationships_source ON relationships(source_entity_type, source_entity_id);
 CREATE INDEX IF NOT EXISTS idx_relationships_target ON relationships(target_entity_type, target_entity_id);
 CREATE INDEX IF NOT EXISTS idx_gate_results_project ON gate_results(project_id);
+CREATE INDEX IF NOT EXISTS idx_company_facts_project ON company_facts(project_id);
