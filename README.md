@@ -16,11 +16,22 @@ This runs locally. It does not run in the deployed app. The lookup searches
 public Google results for `linkedin.com/in` profiles and writes candidates
 to `data/imports/apify_linkedin_results.jsonl` (gitignored). It does not
 write to the database. The importer applies the file: a profile is
-confirmed only when the name matches and the school, company, or role
-appears in the title, snippet, or LinkedIn URL. Campus aliases count
-(Penn, UPenn, Wharton, SEAS, M&T, and the same kind of list for other
-schools). A name-only match stays unverified. Anything else is left blank.
-Handles with no first and last name are skipped. Founders are searched first.
+confirmed only when the name matches and a company, student signal, school,
+or role in the title, snippet, or LinkedIn URL outranks the other hits.
+Company or startup beats a student signal (Student, Class of 202x, M&T,
+SEAS, C'2x, W'2x), which beats a bare school mention. Campus aliases count
+(Penn, UPenn, Wharton, SEAS, and the same kind of list for other schools).
+The Google query stays short and does not send M&T, because an unencoded
+`&` can split the actor request. A bare school match on a senior-career
+profile (Director, VP, Partner, MBA alum, and similar) stays unverified
+for student founders, recent-grad founders, and potential founders. A
+name-only match stays unverified. Anything else is left blank. Handles
+with no first and last name are skipped, and so are organization-like
+names (Venture, Collaboration, Lab, Team, Inc, Club). A result page is
+kept only when its search term matches the query. Pages are assigned by
+position only when the counts match and every page is missing its term.
+Otherwise that person is left unwritten so a re-run retries them.
+Founders are searched first.
 
 From PowerShell, in the repo root (`.env.local` holds `APIFY_API_TOKEN`):
 
