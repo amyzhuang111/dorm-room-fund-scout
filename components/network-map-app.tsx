@@ -68,6 +68,7 @@ export function NetworkMapApp() {
   const [error, setError] = useState<string | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [filters, setFilters] = useState<Filters | null>(null);
+  const [showIsolates, setShowIsolates] = useState(false);
   const defaultsRef = useRef<Filters | null>(null);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<string | null>(null);
@@ -142,7 +143,7 @@ export function NetworkMapApp() {
     };
   }, [selected]);
 
-  const hidden = useMemo(() => hiddenIds(graph, filters), [graph, filters]);
+  const hidden = useMemo(() => hiddenIds(graph, filters, showIsolates), [graph, filters, showIsolates]);
   const edgeTypes = useMemo(() => new Set(filters?.edgeTypes ?? []), [filters]);
   const activeId = selected && !hidden.has(selected) ? selected : null;
 
@@ -220,6 +221,10 @@ export function NetworkMapApp() {
         <p className="text-[11px] leading-snug text-neutral-700" style={{ fontVariantNumeric: "tabular-nums" }}>
           {visibleCounts.person.toLocaleString()} people · {visibleCounts.startup.toLocaleString()} startups · {visibleCounts.investor} investors
         </p>
+        <label className="inline-flex items-center gap-1.5 rounded-md border border-black/15 bg-white px-2 py-1 text-[11px] text-black shadow-sm">
+          <input type="checkbox" className="accent-black" checked={showIsolates} onChange={(event) => setShowIsolates(event.target.checked)} />
+          Show unlinked
+        </label>
       </div>
 
       {filtersOpen && filters && graph && (
@@ -402,14 +407,14 @@ export function NetworkMapApp() {
         </ZoomButton>
       </div>
 
-      <div className="pointer-events-none absolute bottom-3 left-3 z-20 max-w-[min(36rem,calc(100%-8rem))] rounded-md border border-black/10 bg-white/95 px-2.5 py-1.5 text-[11px] text-black shadow-sm">
+      <div className="pointer-events-none absolute bottom-20 left-3 z-20 max-w-[min(36rem,calc(100%-8rem))] rounded-md border border-black/10 bg-white/95 px-2.5 py-1.5 text-[11px] text-black shadow-sm">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <LegendItem shape="circle" color={NODE_FILL.person} label="Person" />
-          <LegendItem shape="square" color={NODE_FILL.startup} label="Startup" />
-          <LegendItem shape="diamond" color={NODE_FILL.investor} label="Investor" />
-          <LegendItem shape="circle" color={NODE_FILL.campus} label="Campus" />
-          <LegendItem shape="hex" color={NODE_FILL.program} label="Club / lab" />
-          <span className="text-neutral-600">Size = connections and funding</span>
+          <LegendItem shape="circle" color="#171717" label="Person" />
+          <LegendItem shape="square" color="#171717" label="Startup" />
+          <LegendItem shape="diamond" color="#171717" label="Investor" />
+          <LegendItem shape="circle" color="#171717" label="Campus" />
+          <LegendItem shape="hex" color="#171717" label="Club / lab" />
+          <span className="text-neutral-600">Color = campus · line = link · amber = cross-campus</span>
         </div>
       </div>
 
@@ -465,7 +470,7 @@ function personYearOk(node: MapNode, filters: Filters): boolean {
   return true;
 }
 
-function hiddenIds(graph: MapGraph | null, filters: Filters | null): Set<string> {
+function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates: boolean): Set<string> {
   const hidden = new Set<string>();
   if (!graph || !filters) return hidden;
   const allCampuses = graph.nodes.filter((node) => node.type === "campus").map((node) => node.campus).filter((id): id is string => !!id);
@@ -528,6 +533,10 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null): Set<string>
   }
 
   for (const node of graph.nodes) {
+    if (!showIsolates && node.degree === 0) {
+      hidden.add(node.id);
+      continue;
+    }
     if (node.type === "person") {
       if (!peopleOk.has(node.id)) hidden.add(node.id);
       continue;
