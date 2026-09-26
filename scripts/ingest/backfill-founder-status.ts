@@ -164,6 +164,18 @@ function checkParser() {
     "MIT'23"
   );
   assertCase(
+    "harvard roster apostrophe",
+    [{ excerpt: "The Harvard Crimson lists Gavin J. Uberti '25, working on Etched.ai.", ...src }],
+    "recent_grad",
+    "'25"
+  );
+  assertCase(
+    "spring conference year is still not a class year",
+    [{ excerpt: "HackPrinceton Spring '26 Winner at the University of Pennsylvania.", ...src }],
+    "unknown",
+    null
+  );
+  assertCase(
     "currently a student",
     [{ excerpt: "Shannon Dooley is currently a student at the University of Pennsylvania.", ...src }],
     "current_student",
@@ -172,6 +184,12 @@ function checkParser() {
   assertCase(
     "engineering students",
     [{ excerpt: "founded by five CMU engineering students: Rohan Ganesh, Troy McBride.", ...src }],
+    "current_student",
+    null
+  );
+  assertCase(
+    "Ph.D. student",
+    [{ excerpt: "Andrew Reiter became a Ph.D. student in the Department of Biology at Stanford University.", ...src }],
     "current_student",
     null
   );
