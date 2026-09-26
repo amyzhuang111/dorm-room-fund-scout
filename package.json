@@ -13,7 +13,7 @@
     "enrich:apify-linkedin": "tsx scripts/enrich/apify-linkedin-lookup.ts",
     "import:apify-linkedin": "tsx scripts/enrich/import-apify-linkedin.ts",
     "test:apify-linkedin": "tsx scripts/enrich/apify-linkedin.test.ts",
-    "test:db-open": "node --experimental-sqlite --import tsx scripts/db/stale-wal.test.ts",
+    "test:db-open": "tsx scripts/db/stale-wal.test.ts",
     "ingest:all": "tsx scripts/ingest/seed-universities.ts && tsx scripts/ingest/fetch-drf-portfolio.ts && tsx scripts/ingest/fetch-penn-labs.ts && tsx scripts/ingest/fetch-penn-startup-challenge.ts && tsx scripts/ingest/enrich-penn-labs-github.ts && tsx scripts/ingest/fetch-pennapps-devpost.ts && tsx scripts/ingest/fetch-treehacks-devpost.ts && tsx scripts/ingest/fetch-calhacks-devpost.ts && tsx scripts/ingest/fetch-wdb-github.ts && tsx scripts/ingest/fetch-grasp-startups.ts && tsx scripts/ingest/fetch-hack4impact.ts && tsx scripts/ingest/fetch-penn-electric-racing.ts && tsx scripts/ingest/fetch-penn-aerial-robotics.ts && tsx scripts/ingest/fetch-eb-berkeley.ts && tsx scripts/ingest/fetch-skydeck.ts && tsx scripts/ingest/fetch-yc-directory.ts && tsx scripts/ingest/fetch-github-founder-bios.ts && tsx scripts/ingest/fetch-velocity.ts && tsx scripts/ingest/fetch-mit-deltav.ts && tsx scripts/ingest/fetch-hackthenorth-devpost.ts && tsx scripts/ingest/fetch-mt-alumni.ts && tsx scripts/ingest/fetch-penn-depth.ts && tsx scripts/ingest/fetch-pennapps-xxii-devpost.ts && tsx scripts/ingest/fetch-pennapps-xxiii-devpost.ts && tsx scripts/ingest/fetch-pennapps-xxiv-devpost.ts && tsx scripts/ingest/seed-source-tiers.ts && tsx scripts/ingest/backfill-founder-status.ts && tsx scripts/screen/match-portfolio.ts && tsx scripts/screen/run-gates.ts"
   },
   "dependencies": {

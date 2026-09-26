@@ -64,16 +64,16 @@ function sidecarPaths(dbPath: string): string[] {
 function discardSidecars(dbPath: string): string[] {
   const parked: string[] = [];
   for (const file of sidecarPaths(dbPath)) {
-    if (!fs.existsSync(file)) continue;
+    if (!fs.existsSync(/*turbopackIgnore: true*/ file)) continue;
     const dest = path.join(
       os.tmpdir(),
       `${path.basename(file)}.stale-${process.pid}-${Date.now()}`
     );
     try {
-      fs.renameSync(file, dest);
+      fs.renameSync(/*turbopackIgnore: true*/ file, dest);
     } catch {
-      fs.copyFileSync(file, dest);
-      fs.rmSync(file, { force: true });
+      fs.copyFileSync(/*turbopackIgnore: true*/ file, dest);
+      fs.rmSync(/*turbopackIgnore: true*/ file, { force: true });
     }
     parked.push(dest);
   }
@@ -93,20 +93,20 @@ function discardSidecars(dbPath: string): string[] {
 // If that probe fails, put the pre-open bytes back and reopen without the
 // sidecars. A WAL that still describes this file probes clean and is kept.
 export function openDatabase(dbPath: string): Database.Database {
-  const hasSidecar = sidecarPaths(dbPath).some((file) => fs.existsSync(file));
-  if (!hasSidecar || !fs.existsSync(dbPath)) return new Database(dbPath);
+  const hasSidecar = sidecarPaths(dbPath).some((file) => fs.existsSync(/*turbopackIgnore: true*/ file));
+  if (!hasSidecar || !fs.existsSync(/*turbopackIgnore: true*/ dbPath)) return new Database(dbPath);
 
   const backup = path.join(os.tmpdir(), `campus-universe-open-${process.pid}-${Date.now()}.db`);
-  fs.copyFileSync(dbPath, backup);
+  fs.copyFileSync(/*turbopackIgnore: true*/ dbPath, backup);
   let db: Database.Database | null = null;
   try {
     db = new Database(dbPath);
     db.prepare("SELECT name FROM sqlite_master LIMIT 1").get();
-    fs.rmSync(backup, { force: true });
+    fs.rmSync(/*turbopackIgnore: true*/ backup, { force: true });
     return db;
   } catch (err) {
     if (!isMalformedSchema(err)) {
-      fs.rmSync(backup, { force: true });
+      fs.rmSync(/*turbopackIgnore: true*/ backup, { force: true });
       throw err;
     }
     const parked: string[] = [];
@@ -118,8 +118,8 @@ export function openDatabase(dbPath: string): Database.Database {
         // close can still checkpoint; the backup restore below undoes it
       }
     }
-    fs.copyFileSync(backup, dbPath);
-    fs.rmSync(backup, { force: true });
+    fs.copyFileSync(/*turbopackIgnore: true*/ backup, dbPath);
+    fs.rmSync(/*turbopackIgnore: true*/ backup, { force: true });
     parked.push(...discardSidecars(dbPath));
     const message = err instanceof Error ? err.message : String(err);
     console.warn(

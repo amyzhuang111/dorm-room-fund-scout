@@ -9,7 +9,6 @@ import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { DatabaseSync } from "node:sqlite";
 import Database from "better-sqlite3";
 import { openDatabase } from "../../lib/db/client";
 
@@ -124,18 +123,29 @@ function main() {
   assert.equal(fs.existsSync(poisoned + "-wal"), false);
   assert.match(warnings.join("\n"), /malformed database schema \(person_JnrZGMsft6bk\) - orphan index/);
 
-  // A WAL that belongs to this file still has to replay.
+  // A WAL that belongs to this file still has to replay. Copy the pair while
+  // the writer is open so close()'s checkpoint does not land on the copy.
   const live = path.join(root, "live.db");
-  const liveDb = new DatabaseSync(live);
-  liveDb.exec("PRAGMA journal_mode = WAL");
-  liveDb.exec("PRAGMA wal_autocheckpoint = 0");
+  const liveDb = new Database(live);
+  liveDb.pragma("journal_mode = WAL");
+  liveDb.pragma("wal_autocheckpoint = 0");
   liveDb.exec("CREATE TABLE kept (id INTEGER PRIMARY KEY, note TEXT)");
-  liveDb.exec("INSERT INTO kept VALUES (1, 'checkpointed')");
-  liveDb.exec("PRAGMA wal_checkpoint(TRUNCATE)");
-  liveDb.exec("INSERT INTO kept VALUES (2, 'only-in-wal')");
+  liveDb.prepare("INSERT INTO kept VALUES (1, 'checkpointed')").run();
+  liveDb.pragma("wal_checkpoint(TRUNCATE)");
+  liveDb.prepare("INSERT INTO kept VALUES (2, 'only-in-wal')").run();
   const good = path.join(root, "good-wal.db");
   snapshotLiveWal(live, good);
   liveDb.close();
+  const walAside = good + "-wal.aside";
+  fs.renameSync(good + "-wal", walAside);
+  const withoutWal = new Database(good, { readonly: true, fileMustExist: true });
+  try {
+    const notes = withoutWal.prepare("SELECT note FROM kept ORDER BY id").pluck().all();
+    assert.deepEqual(notes, ["checkpointed"]);
+  } finally {
+    withoutWal.close();
+  }
+  fs.renameSync(walAside, good + "-wal");
   const kept = openDatabase(good);
   try {
     const notes = kept.prepare("SELECT note FROM kept ORDER BY id").pluck().all();
