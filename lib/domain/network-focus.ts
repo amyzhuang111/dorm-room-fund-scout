@@ -5,7 +5,7 @@
 import { getDb } from "../db/client";
 import { CAMPUSES } from "./campuses";
 import { ownWebsite, publicLink } from "./company-link";
-import { assembleCompanyProfile, type CompanyFactRecord } from "./company-profile";
+import { assembleCompanyProfile, displayedFunding, type CompanyFactRecord } from "./company-profile";
 import { enrollmentBadge } from "./founder-status";
 import { hotspotGroupByMapId, hotspotGroups, personIdsForPlace, projectIdsForPlace, relatedHotspotsForPerson, relatedHotspotsForProject } from "./hotspots";
 import { bestCard, hotspotHref, samePlace } from "./hotspot-model";
@@ -270,7 +270,8 @@ function startupFocus(
   );
   const shown: NetworkFocus["facts"] = [];
   if (profile.foundedYear) shown.push({ label: "Founded", value: profile.foundedYear.text, sourceUrl: profile.foundedYear.sourceUrl, excerpt: profile.foundedYear.excerpt });
-  if (profile.funding) shown.push({ label: "Funding", value: profile.funding.text, sourceUrl: profile.funding.sourceUrl, excerpt: profile.funding.excerpt });
+  const funding = displayedFunding(profile);
+  if (funding) shown.push({ label: "Funding", value: funding.text, sourceUrl: funding.sourceUrl, excerpt: funding.excerpt });
   const round = profile.rounds[0];
   if (round) {
     const text = [round.stage, round.amountText, round.date, round.leads.length ? `led by ${round.leads.join(", ")}` : null].filter(Boolean).join(" · ");
