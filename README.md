@@ -59,6 +59,28 @@ One search page per person, add-ons off, 10 searches per run. Checked
 The page price alone is $4.50 or $1.80 per 1,000. Confirm the live price
 at https://apify.com/apify/google-search-scraper before a large run.
 
+Profile verification checks the unverified `linkedin.com/in` candidates
+already on file. It does not search Google and it does not write the
+database until `import`.
+
+```powershell
+npm run enrich:apify-linkedin-verify -- --dry-run --campus penn --limit 20
+npm run enrich:apify-linkedin-verify -- --campus penn --limit 20 --yes
+npm run enrich:apify-linkedin-verify -- import --dry-run
+npm run enrich:apify-linkedin-verify -- import
+```
+
+The default actor is `apimaestro/linkedin-profile-batch-scraper-no-cookies-required`
+(no cookies, accepts profile URLs, **$5.00 / 1,000** profiles). Its published
+limitations are a 1,000-profile batch cap. It does not publish the free-plan
+API block that `dev_fusion` documents, or the free-plan run cap that
+`harvestapi` hit (a SUCCEEDED run with zero items and "free user run limit
+exceeded"). A paid plan can pass `--actor harvestapi/linkedin-profile-scraper`
+($4.00 / 1,000). A batch that returns zero items, or whose status message or
+log mentions a limit, upgrade, or paid plan, is not written, so the same
+command retries it. `rejected` is only a profile the actor returned whose
+education did not match.
+
 ## The Globe was actually broken — root-caused and fixed for real
 
 You reported "the globe is so bad I cannot even see anything but a white

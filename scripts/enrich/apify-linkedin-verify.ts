@@ -1,21 +1,19 @@
 // Verify unverified linkedin.com/in candidates by scraping those profile
 // URLs. Does not search Google. Does not write the database; `import` does.
 //
-// Actor: harvestapi/linkedin-profile-scraper (no cookies, no login).
-// Compared 2026-09-26:
-//   harvestapi/linkedin-profile-scraper  $4.00 / 1,000 profile details
-//     pay-per-event since 2025-07-04, no actor-start fee, no platform
-//     usage charge. Modified 2026-09-22. About 74k users, 4.8/5, ~31M runs.
-//   dev_fusion/Linkedin-Profile-Scraper  $10.00 / 1,000 results.
-//     Free plans cannot call it from the API (10 profiles per run, UI only).
-//   supreme_coder/linkedin-profile-scraper  $5.00 / 1,000 on the actor page
-//     the same day ($6.00 on its pricing tab). Far fewer users.
-// Email search is off, so the $10 / 1,000 email event is not used.
-// Confirm the live price before a large run:
-//   https://apify.com/harvestapi/linkedin-profile-scraper
+// Default actor: apimaestro/linkedin-profile-batch-scraper-no-cookies-required
+// ($5.00 / 1,000 profiles, no cookies, profile URLs, no published free-plan
+// block). harvestapi/linkedin-profile-scraper ($4.00 / 1,000) stays available
+// with --actor for paid plans. See linkedin-actors.ts for the comparison.
 //
-// URLs are sent 40 per actor run. This actor bills per profile, not per
-// run; batching still keeps a 40-URL check on one run instead of 40.
+// A batch that returns zero items, or whose status message or log mentions
+// a limit, an upgrade, or a paid plan, is failed. Those people are not
+// written, so a re-run retries them. rejected is only a profile the actor
+// returned whose education did not match. An explicit not-found URL is
+// not_found.
+//
+// URLs are sent in batches (40 for the default actor). The actor bills per
+// profile; batching still keeps that check on one run.
 //
 // PowerShell, from the repo root:
 //   npm run enrich:apify-linkedin-verify -- --dry-run --campus penn --limit 20
@@ -37,11 +35,18 @@ import type Database from "better-sqlite3";
 import { getDb, nowIso } from "../../lib/db/client";
 import { campusFlagHelp, cleanSearchName, isOrganizationName, resolveCampusFlag } from "./linkedin-match";
 import {
-  ACTOR_ID,
+  ActorBatchError,
+  type ActorDataset,
+  explainUnusableRun,
+  mentionsPlanLimit,
+  normalizeActorItems,
+  resolveActor,
+  type LinkedInActor,
+} from "./linkedin-actors";
+import {
   OUTPUT_RELATIVE,
   type ScrapedProfile,
   type VerifyPerson,
-  actorInput,
   assignProfiles,
   buildResultLine,
   formatEstimate,
@@ -51,7 +56,7 @@ import {
   readDonePersonIds,
 } from "./linkedin-verify";
 
-export type ScrapeFn = (urls: string[]) => Promise<unknown[]>;
+export type ScrapeFn = (urls: string[]) => Promise<unknown[] | ActorDataset>;
 
 function loadEnvLocal() {
   if (process.env.APIFY_API_TOKEN) return;
@@ -97,6 +102,8 @@ function usage(): string {
     "  --limit N       Only take the first N people still missing from the output file.",
     "  --campus penn   Restrict to one school (penn, berkeley, stanford, mit, ...).",
     "  --out PATH      Output JSONL. Default: data/imports/apify_linkedin_verify_results.jsonl",
+    "  --actor ID      Profile actor. Default: apimaestro/linkedin-profile-batch-scraper-no-cookies-required.",
+    "                  Paid plans: --actor harvestapi/linkedin-profile-scraper",
     "  --mock          Write synthetic profiles. Does not call Apify.",
     "  import          Apply a finished JSONL file to the database.",
     "  import --dry-run  Print the database changes and do not write.",
@@ -111,8 +118,9 @@ function parseVerifyArgs(argv: string[]): {
   limit: number | null;
   campusId: string | null;
   outPath: string;
+  actorId: string;
 } {
-  const known = new Set(["--dry-run", "--yes", "--mock", "--limit", "--campus", "--out", "--help", "-h"]);
+  const known = new Set(["--dry-run", "--yes", "--mock", "--limit", "--campus", "--out", "--actor", "--help", "-h"]);
   for (const arg of argv) {
     if (arg.startsWith("--") && !known.has(arg)) throw new Error(`Unknown flag ${arg}\n${usage()}`);
   }
@@ -136,6 +144,9 @@ function parseVerifyArgs(argv: string[]): {
     if (!campusId) throw new Error(`Unknown campus "${campusRaw}". Choices: ${campusFlagHelp()}.`);
   }
   const outRaw = argValue(argv, "--out");
+  const actorRaw = argValue(argv, "--actor");
+  if (argv.includes("--actor") && !actorRaw) throw new Error("--actor needs an actor id. See --help.");
+  const actor = resolveActor(actorRaw);
   return {
     dryRun: argv.includes("--dry-run"),
     yes: argv.includes("--yes"),
@@ -143,6 +154,7 @@ function parseVerifyArgs(argv: string[]): {
     limit,
     campusId,
     outPath: path.resolve(process.cwd(), outRaw || OUTPUT_RELATIVE),
+    actorId: actor.id,
   };
 }
 
@@ -198,28 +210,44 @@ function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
-async function callActor(token: string, urls: string[]): Promise<unknown[]> {
+async function readRunLog(client: ApifyClient, runId: string): Promise<string> {
+  try {
+    return (await client.run(runId).log().get()) ?? "";
+  } catch (error) {
+    console.log(`  Could not read the Apify run log (${errorMessage(error)}).`);
+    return "";
+  }
+}
+
+async function callActor(token: string, urls: string[], actor: LinkedInActor): Promise<ActorDataset> {
   const client = new ApifyClient({ token });
-  const cap = Math.max(0.05, urls.length * 0.004 * 2);
-  const run = await client.actor(ACTOR_ID).call(actorInput(urls), {
+  const cap = Math.max(0.05, urls.length * actor.usdPerProfile * 2);
+  const run = await client.actor(actor.id).call(actor.buildInput(urls), {
     waitSecs: 300,
     timeout: 600,
     maxTotalChargeUsd: cap,
     log: null,
   });
+  const log = await readRunLog(client, run.id);
+  const statusMessage = run.statusMessage ?? "";
   if (run.status !== "SUCCEEDED") {
-    throw new Error(`Apify run ${run.id} ended ${run.status}${run.statusMessage ? `: ${run.statusMessage}` : ""}`);
+    const ended = `Apify run ${run.id} ended ${run.status}${statusMessage ? `: ${statusMessage}` : ""}`;
+    if (mentionsPlanLimit(`${ended}\n${statusMessage}\n${log}`)) {
+      return { items: [], statusMessage: statusMessage || ended, log };
+    }
+    throw new Error(ended);
   }
   if (!run.defaultDatasetId) throw new Error(`Apify run ${run.id} succeeded without a dataset.`);
-  return listDatasetItems(client, run.defaultDatasetId);
+  const items = await listDatasetItems(client, run.defaultDatasetId);
+  return { items, statusMessage, log };
 }
 
-async function scrapeLive(token: string, urls: string[]): Promise<unknown[]> {
+async function scrapeLive(token: string, urls: string[], actor: LinkedInActor): Promise<ActorDataset> {
   const waits = [5000, 15000, 30000];
   let last: unknown;
   for (let attempt = 0; attempt <= waits.length; attempt++) {
     try {
-      return await callActor(token, urls);
+      return await callActor(token, urls, actor);
     } catch (error) {
       last = error;
       if (isAuthError(error) || attempt === waits.length || !isRetryable(error)) break;
@@ -277,6 +305,7 @@ export async function runVerify(options: {
   mock: boolean;
   outPath: string;
   hasToken: boolean;
+  actorId?: string;
   scrape?: ScrapeFn;
 }): Promise<number> {
   const queue = loadVerifyQueue(options.db, options.campusId);
@@ -312,9 +341,10 @@ export async function runVerify(options: {
     console.log("Nothing to verify.");
     return 0;
   }
+  const actor = resolveActor(options.actorId);
   const urlCount = selected.reduce((sum, person) => sum + person.urls.length, 0);
-  const batches = packBatches(selected.map((person) => person.urls));
-  console.log(formatEstimate(urlCount, batches.length));
+  const batches = packBatches(selected.map((person) => person.urls), actor.batchSize);
+  console.log(formatEstimate(urlCount, batches.length, actor.id));
   if (options.dryRun) {
     console.log("Dry run. Nothing was sent to Apify and the output file was not changed.");
     return 0;
@@ -331,18 +361,39 @@ export async function runVerify(options: {
 
   fs.mkdirSync(path.dirname(options.outPath), { recursive: true });
   const scrape =
-    options.scrape ?? (options.mock ? mockScrape(selected) : (urls: string[]) => scrapeLive(process.env.APIFY_API_TOKEN ?? "", urls));
+    options.scrape ??
+    (options.mock ? mockScrape(selected) : (urls: string[]) => scrapeLive(process.env.APIFY_API_TOKEN ?? "", urls, actor));
   const profiles = new Map<string, ScrapedProfile | null>();
   const failed = new Set<string>();
   let fatal: unknown = null;
+  let batchFailed = false;
+
+  function readPayload(raw: unknown[] | ActorDataset): ActorDataset {
+    if (Array.isArray(raw)) return { items: raw };
+    return {
+      items: Array.isArray(raw.items) ? raw.items : [],
+      statusMessage: raw.statusMessage,
+      log: raw.log,
+    };
+  }
 
   async function scrapeResilient(urls: string[]) {
     try {
-      const items = await scrape(urls);
+      const payload = readPayload(await scrape(urls));
+      const failure = explainUnusableRun(payload);
+      if (failure) throw new ActorBatchError(failure.message, failure.planLimit);
+      const items = normalizeActorItems(payload.items, urls);
       const assigned = assignProfiles(urls, items);
       for (const [url, profile] of assigned) profiles.set(url, profile);
     } catch (error) {
       if (isAuthError(error)) throw error;
+      if (error instanceof ActorBatchError) {
+        batchFailed = true;
+        for (const url of urls) failed.add(url);
+        if (error.planLimit) throw error;
+        console.log(error.message);
+        return;
+      }
       if (urls.length === 1) {
         failed.add(urls[0]);
         console.log(`  failed ${urls[0]}: ${errorMessage(error)}. Not written, so a re-run will retry.`);
@@ -364,7 +415,13 @@ export async function runVerify(options: {
       await scrapeResilient(unique);
     } catch (error) {
       fatal = error;
-      console.log(`Stopped: Apify rejected the token (${errorMessage(error)}).`);
+      if (error instanceof ActorBatchError) {
+        console.log(error.message);
+        console.log("Stopped. Later batches were not started.");
+        skippedPeople += selected.filter((person) => person.urls.some((url) => unique.includes(url))).length;
+      } else {
+        console.log(`Stopped: Apify rejected the token (${errorMessage(error)}).`);
+      }
       break;
     }
     const ready = selected.filter(
@@ -375,7 +432,7 @@ export async function runVerify(options: {
     );
     for (const person of ready) {
       if (done.has(person.id)) continue;
-      const line = buildResultLine(person, profiles, nowIso());
+      const line = buildResultLine(person, profiles, nowIso(), actor.id);
       if (options.mock) line.mock = true;
       await appendLine(options.outPath, JSON.stringify(line));
       done.add(person.id);
@@ -392,7 +449,7 @@ export async function runVerify(options: {
   }
   await writeTail;
   console.log(`Wrote ${written} line(s) to ${options.outPath}. Failed ${skippedPeople}. Re-run the same command to continue.`);
-  return fatal ? 1 : 0;
+  return fatal || batchFailed ? 1 : 0;
 }
 
 async function main() {
@@ -413,6 +470,7 @@ async function main() {
     mock: args.mock,
     outPath: args.outPath,
     hasToken: Boolean(process.env.APIFY_API_TOKEN),
+    actorId: args.actorId,
   });
   if (code !== 0) process.exit(code);
 }
