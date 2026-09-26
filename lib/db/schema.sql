@@ -308,6 +308,17 @@ CREATE TABLE IF NOT EXISTS company_facts (
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
+-- Old ids that were merged away. /startup/[old] redirects at the survivor.
+-- Likes, passes, and never-show records keyed by old_id follow the same map.
+CREATE TABLE IF NOT EXISTS entity_redirects (
+  old_id TEXT PRIMARY KEY,
+  entity_type TEXT NOT NULL, -- project | person
+  survivor_id TEXT NOT NULL,
+  reason TEXT NOT NULL,
+  merged_at TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_entity_redirects_survivor ON entity_redirects(survivor_id);
 CREATE INDEX IF NOT EXISTS idx_claims_entity ON claims(entity_type, entity_id);
 CREATE INDEX IF NOT EXISTS idx_affiliations_person ON affiliations(person_id);
 CREATE INDEX IF NOT EXISTS idx_affiliations_university ON affiliations(university_id);

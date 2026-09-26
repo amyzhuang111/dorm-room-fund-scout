@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import {
+  applyEntityRedirects,
   FEEDBACK_COOKIE,
   type FeedbackRecord,
   nameKey,
@@ -67,9 +68,10 @@ function saveRecords(records: FeedbackRecord[]) {
   emit();
 }
 
-export function FeedbackProvider({ children }: { children: React.ReactNode }) {
+export function FeedbackProvider({ children, redirects = {} }: { children: React.ReactNode; redirects?: Record<string, string> }) {
   const router = useRouter();
-  const records = useSyncExternalStore(subscribe, readRecords, () => EMPTY_RECORDS);
+  const rawRecords = useSyncExternalStore(subscribe, readRecords, () => EMPTY_RECORDS);
+  const records = useMemo(() => applyEntityRedirects(rawRecords, redirects), [rawRecords, redirects]);
   const token = useSyncExternalStore(
     subscribe,
     () => localStorage.getItem(TOKEN_KEY) ?? "",
@@ -96,7 +98,7 @@ export function FeedbackProvider({ children }: { children: React.ReactNode }) {
         }
         setRemote("on");
         if (Array.isArray(data.records) && data.records.length > 0) {
-          saveRecords(data.records);
+          saveRecords(applyEntityRedirects(data.records, redirects));
           if (!document.querySelector("[data-scout-live]")) router.refresh();
         }
       })
@@ -106,7 +108,7 @@ export function FeedbackProvider({ children }: { children: React.ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [router]);
+  }, [router, redirects]);
 
   const sync = useCallback(
     (next: FeedbackRecord[], syncToken: string) => {

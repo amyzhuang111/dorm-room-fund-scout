@@ -1,4 +1,6 @@
+import { permanentRedirect } from "next/navigation";
 import { StartupDiscoverApp } from "@/components/startup-discover-app";
+import { mergedParamHref } from "@/lib/domain/entity-redirects";
 import { selectedEnrollment, type EnrollmentStatus } from "@/lib/domain/founder-status";
 import { buildScoutNetwork } from "@/lib/domain/network";
 import {
@@ -17,6 +19,8 @@ export default async function StartupDiscoverPage({
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
   const sp = await searchParams;
+  const mergedProject = mergedParamHref("/startup/discover", sp, "project", "project");
+  if (mergedProject) permanentRedirect(mergedProject);
   const universities = listUniversities();
   const review = await readReviewState();
   const view = sp.view ?? "globe";

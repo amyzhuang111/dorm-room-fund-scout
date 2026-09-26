@@ -1,10 +1,13 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { CompanyDetail } from "@/components/company-detail";
+import { survivorId } from "@/lib/domain/entity-redirects";
 import { getProjectDetail } from "@/lib/domain/queries";
 
 export default async function StartupPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const merged = survivorId("project", id);
+  if (merged) permanentRedirect(`/startup/${merged}`);
   const project = getProjectDetail(id);
   if (!project) notFound();
   return (
