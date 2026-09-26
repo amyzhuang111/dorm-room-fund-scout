@@ -200,6 +200,47 @@ function classTokenHits(snippet: EvidenceSnippet, hits: YearHit[]) {
   }
 }
 
+// "Gavin J. Uberti '25" on a Harvard page, or "Stanford '24" in a bio.
+// Conference codes (CHI '26) and seasons (Spring '26) are not class years.
+const ROSTER_SKIP = new Set([
+  "SPRING",
+  "SUMMER",
+  "FALL",
+  "WINTER",
+  "BATCH",
+  "SINCE",
+  "SERIES",
+  "ROUND",
+  "COHORT",
+  "OF",
+  "CLASS",
+  "JANUARY",
+  "FEBRUARY",
+  "MARCH",
+  "APRIL",
+  "MAY",
+  "JUNE",
+  "JULY",
+  "AUGUST",
+  "SEPTEMBER",
+  "OCTOBER",
+  "NOVEMBER",
+  "DECEMBER",
+]);
+
+function rosterYearHits(snippet: EvidenceSnippet, hits: YearHit[]) {
+  const text = snippet.excerpt.replace(/[’‘ʼ]/g, "'");
+  if (!/\b(harvard|stanford|penn|wharton|berkeley|mit|carnegie mellon|cmu|princeton|columbia|georgia tech|michigan|waterloo|university)\b/i.test(text)) return;
+  const re = /\b([A-Za-z][A-Za-z.'-]{1,24})\s+'(\d{2})\b/g;
+  for (const match of text.matchAll(re)) {
+    const word = match[1].replace(/\./g, "").toUpperCase();
+    if (ROSTER_SKIP.has(word) || eventCode(match[1])) continue;
+    const year = fullYear(parseInt(match[2], 10));
+    if (!year || year < 2020 || year > 2032) continue;
+    pushYear(hits, year, `'${match[2]}`, snippet);
+  }
+}
+
 function classOfHits(snippet: EvidenceSnippet, hits: YearHit[]) {
   const re = /\bclass of\s+'?(\d{2,4})\b/gi;
   for (const match of snippet.excerpt.matchAll(re)) {
@@ -272,7 +313,7 @@ function currentStudentPhrase(snippet: EvidenceSnippet): boolean {
   if (livePhrase(text, /\b(wharton|college|engineering|university)\s+first[- ]year\b/i)) return true;
   if (livePhrase(text, /\buniversity\s+student\b/i)) return true;
   if (livePhrase(text, /\bstudent at the university\b/i)) return true;
-  if (livePhrase(text, /\b(master'?s|graduate|undergraduate|doctoral|phd)\s+student\b/i)) return true;
+  if (livePhrase(text, /\b(master'?s|graduate|undergraduate|doctoral|ph\.?d\.?)\s+student\b/i)) return true;
   if (livePhrase(text, /\bengineering students\b/i)) return true;
   if (livePhrase(text, /\b(?:math\s*\+\s*)?cs\s+student\b/i)) return true;
   // Field-of-study majors only. "a major step" and "across major media" do not count.
@@ -337,6 +378,7 @@ export function decideEnrollment(snippets: EvidenceSnippet[], options?: { person
     )
       continue;
     classTokenHits(snippet, years);
+    rosterYearHits(snippet, years);
     classOfHits(snippet, years);
     graduatedHits(snippet, years);
     expectedDegreeHits(snippet, years);
