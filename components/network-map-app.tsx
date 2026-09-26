@@ -404,12 +404,12 @@ export function NetworkMapApp() {
 
       <div className="pointer-events-none absolute bottom-3 left-3 z-20 max-w-[min(36rem,calc(100%-8rem))] rounded-md border border-black/10 bg-white/95 px-2.5 py-1.5 text-[11px] text-black shadow-sm">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <LegendItem shape="circle" color={NODE_FILL.person} label="Person" />
-          <LegendItem shape="square" color={NODE_FILL.startup} label="Startup" />
-          <LegendItem shape="diamond" color={NODE_FILL.investor} label="Investor" />
-          <LegendItem shape="circle" color={NODE_FILL.campus} label="Campus" />
-          <LegendItem shape="hex" color={NODE_FILL.program} label="Club / lab" />
-          <span className="text-neutral-600">Size = connections and funding</span>
+          <LegendItem shape="circle" color="#171717" label="Person" />
+          <LegendItem shape="square" color="#171717" label="Startup" />
+          <LegendItem shape="diamond" color="#171717" label="Investor" />
+          <LegendItem shape="circle" color="#171717" label="Campus" />
+          <LegendItem shape="hex" color="#171717" label="Club / lab" />
+          <span className="text-neutral-600">Color = campus · hairline = link · amber = cross-campus</span>
         </div>
       </div>
 

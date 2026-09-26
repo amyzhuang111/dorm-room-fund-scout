@@ -1,10 +1,12 @@
 // Full evidence graph for the Network map. Nodes and edges come from
 // affiliations, founder roles, program memberships, sourced investor facts,
-// and confirmed DRF portfolio matches. Layout is a cached force simulation
-// so the page can draw a few thousand nodes without recomputing on every click.
+// and confirmed DRF portfolio matches. Positions are a cached ForceAtlas2
+// layout (seeded near campuses, then settled and stopped) so the browser
+// only draws.
 
 import fs from "node:fs";
-import { forceCollide, forceLink, forceManyBody, forceSimulation, forceX, forceY } from "d3-force";
+import Graph from "graphology";
+import forceAtlas2 from "graphology-layout-forceatlas2";
 import { databasePath, getDb } from "../db/client";
 import { CAMPUSES } from "./campuses";
 import { hotspotGraphPatch } from "./hotspots";
@@ -70,9 +72,16 @@ interface SimNode {
   r: number;
   anchorX: number;
   anchorY: number;
-  fx?: number;
-  fy?: number;
 }
+
+const EDGE_WEIGHT: Record<MapEdgeType, number> = {
+  founded: 2,
+  co_founder: 1.4,
+  member_of: 1,
+  invested_in: 2.4,
+  studied_at: 0.2,
+  at_campus: 0.3,
+};
 
 let cache: { stamp: string; graph: MapGraph } | null = null;
 
@@ -387,12 +396,6 @@ function assembleNetworkMap(): MapGraph {
       anchorY: spot.y + (type === "program" ? j.y * 0.25 : 0),
     };
     node.r = radius(type, degree.get(id) ?? 0, tier, amount);
-    if (type === "campus") {
-      node.fx = spot.x;
-      node.fy = spot.y;
-      node.x = spot.x;
-      node.y = spot.y;
-    }
     simNodes.push(node);
   };
 
@@ -443,24 +446,7 @@ function assembleNetworkMap(): MapGraph {
     });
   }
 
-  const simLinks = edges.map((edge) => ({ source: edge.source, target: edge.target, type: edge.type }));
-  const distance: Record<MapEdgeType, number> = { studied_at: 78, founded: 34, co_founder: 26, member_of: 48, invested_in: 64, at_campus: 96 };
-  const strength: Record<MapEdgeType, number> = { studied_at: 0.04, founded: 0.35, co_founder: 0.15, member_of: 0.2, invested_in: 0.05, at_campus: 0.03 };
-
-  const sim = forceSimulation(simNodes)
-    .force(
-      "link",
-      forceLink(simLinks)
-        .id((d) => (d as SimNode).id)
-        .distance((d) => distance[(d as { type: MapEdgeType }).type] ?? 40)
-        .strength((d) => strength[(d as { type: MapEdgeType }).type] ?? 0.1)
-    )
-    .force("charge", forceManyBody().strength(-16).theta(1.1))
-    .force("x", forceX<SimNode>((d) => d.anchorX).strength((d) => (d.type === "investor" ? 0.05 : d.type === "startup" ? 0.12 : 0.28)))
-    .force("y", forceY<SimNode>((d) => d.anchorY).strength((d) => (d.type === "investor" ? 0.05 : d.type === "startup" ? 0.12 : 0.28)))
-    .force("collide", forceCollide<SimNode>((d) => d.r + 0.6).iterations(1))
-    .stop();
-  for (let i = 0; i < 90; i++) sim.tick();
+  settleForceAtlas(simNodes, edges);
 
   const pos = new Map(simNodes.map((node) => [node.id, node]));
   const nodes: MapNode[] = [];
@@ -605,4 +591,36 @@ function assembleNetworkMap(): MapGraph {
     },
   };
   return graph;
+}
+
+/** Run ForceAtlas2 to a stop. Positions stay fixed after this returns. */
+function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[]) {
+  const g = new Graph({ type: "undirected", multi: true });
+  for (const node of simNodes) g.addNode(node.id, { x: node.x, y: node.y });
+  for (const edge of edges) {
+    if (edge.source === edge.target || !g.hasNode(edge.source) || !g.hasNode(edge.target)) continue;
+    g.addEdge(edge.source, edge.target, { weight: EDGE_WEIGHT[edge.type] });
+  }
+  const inferred = forceAtlas2.inferSettings(g);
+  forceAtlas2.assign(g, {
+    iterations: 180,
+    settings: {
+      ...inferred,
+      barnesHutOptimize: true,
+      barnesHutTheta: 0.6,
+      gravity: 0.45,
+      linLogMode: true,
+      outboundAttractionDistribution: true,
+      edgeWeightInfluence: 1,
+      slowDown: 3,
+      strongGravityMode: false,
+      adjustSizes: false,
+    },
+    getEdgeWeight: "weight",
+  });
+  for (const node of simNodes) {
+    const at = g.getNodeAttributes(node.id);
+    node.x = at.x;
+    node.y = at.y;
+  }
 }

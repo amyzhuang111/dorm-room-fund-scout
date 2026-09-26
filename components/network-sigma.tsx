@@ -6,7 +6,7 @@ import Sigma from "sigma";
 import { NodeCircleProgram } from "sigma/rendering";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
-import { DIM_NODE, EDGE_COLOR, NODE_FILL, NODE_SHAPE, screenSize } from "./network-style";
+import { DIM_NODE, EDGE_CROSS, EDGE_GREY, EDGE_HOVER, EDGE_HOVER_CROSS, NODE_SHAPE, campusKey, crossesCampus, nodeColor, screenSize } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -22,6 +22,7 @@ type NodeAttr = {
   color: string;
   type: string;
   kind: MapNodeType;
+  campusKey: string;
   zIndex: number;
 };
 
@@ -104,9 +105,10 @@ export function NetworkSigma({
         y: node.y,
         size: screenSize(node),
         label: node.label,
-        color: NODE_FILL[node.type],
+        color: nodeColor(node),
         type: NODE_SHAPE[node.type],
         kind: node.type,
+        campusKey: campusKey(node),
         zIndex: Z[node.type],
       });
     }
@@ -114,10 +116,11 @@ export function NetworkSigma({
       if (edge.source === edge.target || !g.hasNode(edge.source) || !g.hasNode(edge.target)) continue;
       const key = `${edge.source}|${edge.target}|${edge.type}`;
       if (g.hasEdge(key)) continue;
+      const cross = crossesCampus(g.getNodeAttribute(edge.source, "campusKey"), g.getNodeAttribute(edge.target, "campusKey"));
       g.addEdgeWithKey(key, edge.source, edge.target, {
         kind: edge.type,
-        color: EDGE_COLOR[edge.type],
-        size: edge.type === "studied_at" ? 0.35 : 0.8,
+        color: cross ? EDGE_CROSS : edge.type === "studied_at" || edge.type === "at_campus" ? "rgba(82, 82, 82, 0.14)" : EDGE_GREY,
+        size: 0.45,
       });
       link(edge.source, edge.target);
       link(edge.target, edge.source);
@@ -126,17 +129,19 @@ export function NetworkSigma({
     const renderer = new Sigma<NodeAttr, EdgeAttr>(g, container, {
       allowInvalidContainer: true,
       enableCameraRotation: false,
-      hideEdgesOnMove: true,
-      hideLabelsOnMove: false,
+      hideEdgesOnMove: false,
+      hideLabelsOnMove: true,
+      itemSizesReference: "screen",
+      zoomToSizeRatioFunction: Math.sqrt,
       zIndex: true,
       labelFont: "Satoshi, Arial, sans-serif",
-      labelSize: 12,
-      labelWeight: "600",
+      labelSize: 11,
+      labelWeight: "500",
       labelColor: { color: "#111111" },
-      labelDensity: 0.4,
-      labelGridCellSize: 110,
-      labelRenderedSizeThreshold: 10,
-      minEdgeThickness: 0.5,
+      labelDensity: 0.18,
+      labelGridCellSize: 150,
+      labelRenderedSizeThreshold: 7,
+      minEdgeThickness: 0.4,
       stagePadding: 56,
       minCameraRatio: 0.02,
       maxCameraRatio: 1.4,
@@ -155,10 +160,7 @@ export function NetworkSigma({
         if (!active) return data;
         if (node === active) return { ...data, forceLabel: true, highlighted: true, zIndex: 5 };
         const near = neighbors.get(active);
-        if (near?.has(node)) {
-          const dense = near.size > 24;
-          return { ...data, forceLabel: !dense || data.kind !== "person", zIndex: 4 };
-        }
+        if (near?.has(node)) return { ...data, zIndex: 4 };
         return { ...data, color: DIM_NODE, label: "", zIndex: 0, forceLabel: false };
       },
       edgeReducer: (edge, data) => {
@@ -167,12 +169,10 @@ export function NetworkSigma({
         const target = g.target(edge);
         if (state.hidden.has(source) || state.hidden.has(target) || !state.edgeTypes.has(data.kind)) return { ...data, hidden: true };
         const active = state.hovered ?? state.selected;
-        if (!active) {
-          if (data.kind === "studied_at") return { ...data, hidden: true };
-          return data;
-        }
+        if (!active) return data;
         if (source !== active && target !== active) return { ...data, hidden: true };
-        return { ...data, color: "#111111", size: 1.5, hidden: false };
+        const cross = data.color === EDGE_CROSS;
+        return { ...data, color: cross ? EDGE_HOVER_CROSS : EDGE_HOVER, size: 1, hidden: false };
       },
     });
 
