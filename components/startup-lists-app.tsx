@@ -14,6 +14,7 @@ import { CandidateTable } from "./candidate-table";
 import { ScoutNav, useScoutNav } from "./scout-nav";
 import { useFeedbackRecords } from "./feedback-provider";
 import { projectShell, useProjectDetail } from "./use-project-detail";
+import { CompanyNameLink } from "./company-website";
 
 const QUEUE_ORDER: Queue[] = ["top_prospects", "exploration", "watch", "reference_outside_brief"];
 
@@ -207,13 +208,13 @@ function VerificationBody({
                   {list.map((company) => {
                     const blockerOutcome = company.gateOutcomes.find((gate) => gate.result !== "pass");
                     return (
-                      <Link key={company.id} href={`/startup/discover?project=${company.id}`} className="block px-3 py-2 text-sm hover:bg-surface-2">
-                        <p className="font-medium text-foreground">{company.name}</p>
+                      <div key={company.id} className="px-3 py-2 text-sm hover:bg-surface-2">
+                        <CompanyNameLink id={company.id} name={company.name} websiteUrl={company.websiteUrl} />
                         <p className="mt-0.5 text-xs text-muted">
                           {company.universities.join(", ") || "University unknown"}
                           {blockerOutcome ? ` · ${blockerOutcome.rationale}` : ""}
                         </p>
-                      </Link>
+                      </div>
                     );
                   })}
                 </div>
@@ -226,10 +227,10 @@ function VerificationBody({
             </h2>
             <div className="mt-1.5 divide-y divide-border-c rounded-md border border-border-c">
               {clear.map((company) => (
-                <Link key={company.id} href={`/startup/discover?project=${company.id}`} className="block px-3 py-2 text-sm hover:bg-surface-2">
-                  <p className="font-medium text-foreground">{company.name}</p>
+                <div key={company.id} className="px-3 py-2 text-sm hover:bg-surface-2">
+                  <CompanyNameLink id={company.id} name={company.name} websiteUrl={company.websiteUrl} />
                   <p className="mt-0.5 text-xs text-muted">{company.universities.join(", ") || "University unknown"}</p>
-                </Link>
+                </div>
               ))}
               {clear.length === 0 && <p className="px-3 py-3 text-sm text-muted">None yet.</p>}
             </div>

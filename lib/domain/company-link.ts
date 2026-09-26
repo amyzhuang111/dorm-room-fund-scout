@@ -41,12 +41,94 @@ export interface PublicLink {
 }
 
 export function publicLink(websiteUrl: string | null | undefined, primaryLink: string | null | undefined, primaryKind: string | null | undefined): PublicLink | null {
-  if (websiteUrl && websiteUrl.startsWith("http")) {
-    return { url: websiteUrl, kind: "official", label: "Website" };
+  const site = ownWebsite(websiteUrl);
+  if (site) return { url: site, kind: "official", label: "Website" };
+  const stored = [websiteUrl, primaryLink].find((url) => url && url.startsWith("http"));
+  if (!stored) return null;
+  const known = linkKind(stored);
+  const kind = stored === primaryLink && primaryKind ? primaryKind : known.kind;
+  return { url: stored, kind, label: known.label };
+}
+
+function urlKey(url: string): string {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase().replace(/^www\./, "");
+    const path = parsed.pathname.replace(/\/+$/, "").toLowerCase();
+    return `${host}${path}`;
+  } catch {
+    return url.trim().toLowerCase();
   }
-  if (primaryLink && primaryLink.startsWith("http")) {
-    const known = linkKind(primaryLink);
-    return { url: primaryLink, kind: primaryKind || known.kind, label: known.label };
+}
+
+export function isCompanyLinkedIn(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase().replace(/^www\./, "");
+    return (host === "linkedin.com" || host.endsWith(".linkedin.com")) && parsed.pathname.toLowerCase().includes("/company/");
+  } catch {
+    return false;
   }
-  return null;
+}
+
+function isPersonLinkedIn(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase().replace(/^www\./, "");
+    return (host === "linkedin.com" || host.endsWith(".linkedin.com")) && parsed.pathname.toLowerCase().includes("/in/");
+  } catch {
+    return false;
+  }
+}
+
+/** The company's own site, only when `website_url` is a product host we stored. */
+export function ownWebsite(url: string | null | undefined): string | null {
+  if (!url || !url.startsWith("http")) return null;
+  if (!isOfficialProductHost(url)) return null;
+  return url;
+}
+
+export interface LabeledLink {
+  url: string;
+  label: string;
+}
+
+export interface StoredCompanyLinks {
+  website: string | null;
+  linkedin: string | null;
+  /** Shown when there is no own-site URL. A source page we already stored. */
+  fallback: LabeledLink | null;
+  extras: LabeledLink[];
+}
+
+export function storedCompanyLinks(input: {
+  websiteUrl?: string | null;
+  primaryLink?: string | null;
+  sourceUrls?: (string | null | undefined)[];
+}): StoredCompanyLinks {
+  const website = ownWebsite(input.websiteUrl);
+  const seen = new Set<string>();
+  if (website) seen.add(urlKey(website));
+  let linkedin: string | null = null;
+  const pages: LabeledLink[] = [];
+
+  const ordered = [input.websiteUrl, input.primaryLink, ...(input.sourceUrls ?? [])];
+  for (const raw of ordered) {
+    if (!raw || !raw.startsWith("http")) continue;
+    if (isPersonLinkedIn(raw)) continue;
+    const key = urlKey(raw);
+    if (seen.has(key)) continue;
+    if (isCompanyLinkedIn(raw)) {
+      if (!linkedin) linkedin = raw;
+      seen.add(key);
+      continue;
+    }
+    if (website && key === urlKey(website)) continue;
+    seen.add(key);
+    pages.push({ url: raw, label: linkKind(raw).label });
+  }
+
+  const fallback = website ? null : (pages[0] ?? null);
+  const extras = (website ? pages : pages.slice(1)).slice(0, 6);
+  return { website, linkedin, fallback, extras };
 }

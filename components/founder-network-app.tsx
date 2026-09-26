@@ -14,6 +14,7 @@ import { EnrollmentChips } from "./enrollment-chips";
 import { useFeedbackRecords } from "./feedback-provider";
 import { FilterSidebar } from "./filter-sidebar";
 import { PersonLinkButton } from "./person-link";
+import { CompanyNameLink } from "./company-website";
 import { ScoutNav, useScoutNav } from "./scout-nav";
 import { useProjectDetail } from "./use-project-detail";
 
@@ -25,7 +26,13 @@ function NodeDetail({ node }: { node: NetworkNodeDetail }) {
     <div className="space-y-3 p-4">
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-muted">{node.kind === "company" ? "Company" : "Project"}</p>
-        <h2 className="text-lg font-semibold text-foreground">{node.name}</h2>
+        <h2 className="text-lg font-semibold text-foreground">
+          {node.kind === "company" ? (
+            <CompanyNameLink id={node.linkedCompanyId || node.id} name={node.name} websiteUrl={node.websiteUrl} className="text-foreground hover:text-link" />
+          ) : (
+            node.name
+          )}
+        </h2>
         {node.description && <p className="mt-1 text-sm text-foreground">{node.description}</p>}
         {link && (
           <a href={link.url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground">
@@ -47,8 +54,8 @@ function NodeDetail({ node }: { node: NetworkNodeDetail }) {
         </ul>
       </div>
       {node.linkedCompanyId && (
-        <Link href={`/startup/discover?project=${node.linkedCompanyId}`} className="inline-block text-xs font-medium text-link hover:underline">
-          Open in Startup Scout →
+        <Link href={`/startup/${node.linkedCompanyId}`} className="inline-block text-xs font-medium text-link hover:underline">
+          Open company details
         </Link>
       )}
       <div>

@@ -9,6 +9,7 @@ import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SignalTierBadge } from "./
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton } from "./person-link";
 import { CompanyDetail } from "./company-detail";
+import { CompanyNameLink } from "./company-website";
 
 function whyInvestigate(c: CandidateSummary): string {
   if (c.latestSignalNote) return c.latestSignalNote;
@@ -80,9 +81,7 @@ export const CandidateTable = memo(function CandidateTable({
         {rows.map((c) => (
           <li key={c.id} className="rounded-lg border border-border-c bg-surface p-3">
             <span className="flex flex-wrap items-center gap-1.5">
-              <ScoutLink href={buildHref(basePath, current, { project: current.project === c.id ? null : c.id })} className="font-medium text-foreground" aria-expanded={current.project === c.id}>
-                {c.name}
-              </ScoutLink>
+              <CompanyNameLink id={c.id} name={c.name} websiteUrl={c.websiteUrl} />
               <SignalTierBadge tier={c.signalTier} basis={c.signalTierBasis} />
             </span>
             <p className="mt-1 text-sm text-muted line-clamp-3">{c.description || "What it builds is not on record yet."}</p>
@@ -139,9 +138,7 @@ export const CandidateTable = memo(function CandidateTable({
               <tr className={`row-cv border-b border-border-c align-top hover:bg-surface ${current.project === c.id ? "bg-accent-subtle" : ""}`}>
                 <td className="px-3 py-2.5">
                   <span className="flex flex-wrap items-center gap-1.5">
-                    <ScoutLink href={buildHref(basePath, current, { project: current.project === c.id ? null : c.id })} className="font-medium text-foreground hover:text-link" aria-expanded={current.project === c.id}>
-                      {c.name}
-                    </ScoutLink>
+                    <CompanyNameLink id={c.id} name={c.name} websiteUrl={c.websiteUrl} className="font-medium text-foreground hover:text-link" />
                     <SignalTierBadge tier={c.signalTier} basis={c.signalTierBasis} />
                   </span>
                   <p className="mt-0.5 max-w-[280px] text-xs leading-snug text-muted line-clamp-2">{c.description || "What it builds is not on record yet."}</p>

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { memo } from "react";
 import type { FounderRow } from "@/lib/domain/queries";
 import { publicLink } from "@/lib/domain/company-link";
@@ -7,6 +6,7 @@ import { ScoutLink } from "./scout-nav";
 import { EnrollmentBadge, LeftSchoolBadge, PotentialFounderBadge, SignalTierBadge, UnverifiedBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
+import { CompanyNameLink } from "./company-website";
 
 export const FounderCard = memo(function FounderCard({
   founder,
@@ -92,9 +92,7 @@ export const FounderCard = memo(function FounderCard({
                 const link = publicLink(p.websiteUrl, p.primaryLink, p.primaryLinkKind);
                 return (
                   <li key={p.id} className="flex flex-wrap items-center gap-2">
-                    <Link href={`/startup/discover?project=${p.id}`} className="font-medium text-link hover:underline">
-                      {p.name}
-                    </Link>
+                    <CompanyNameLink id={p.id} name={p.name} websiteUrl={p.websiteUrl} className="font-medium text-link hover:underline" />
                     <SignalTierBadge tier={p.signalTier} />
                     <span className="text-xs text-muted">{p.role.replaceAll("_", " ")}</span>
                     {link && (

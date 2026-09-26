@@ -4,21 +4,19 @@ import { updatePipelineEntry } from "@/lib/actions/pipeline";
 import { getDb } from "@/lib/db/client";
 import { readReviewState } from "@/lib/domain/review-server";
 import { domainKey, isHidden } from "@/lib/domain/feedback";
+import { CompanyNameLink } from "@/components/company-website";
 
 const STAGES = ["New", "Researching", "Contact planned", "Contacted", "Meeting", "Diligence", "Passed"];
 
 function PipelineCard({ e }: { e: ReturnType<typeof listPipelineEntries>[number] }) {
   const step = e.next_action || (e.blocker ? `Blocker: ${e.blocker}` : null);
   return (
-    <Link
-      href={`/startup/discover?project=${e.project_id}`}
-      className="block rounded-md border border-border-c bg-surface p-2.5 text-xs hover:border-accent"
-    >
-      <p className="font-medium text-foreground">{e.project_name}</p>
+    <div className="rounded-md border border-border-c bg-surface p-2.5 text-xs hover:border-accent">
+      <CompanyNameLink id={e.project_id} name={e.project_name} websiteUrl={e.website_url} />
       <p className="mt-0.5 text-muted">{e.campus_name ?? "Campus unknown"}</p>
       {step && <p className="mt-1.5 text-foreground">{step}</p>}
       {e.due_date && <p className="mt-0.5 text-muted">Due {e.due_date}</p>}
-    </Link>
+    </div>
   );
 }
 
@@ -106,9 +104,7 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
               {entries.map((e) => (
                 <tr key={e.project_id} className="border-t border-border-c">
                   <td className="px-3 py-2">
-                    <Link href={`/startup/discover?project=${e.project_id}`} className="font-medium text-foreground hover:underline">
-                      {e.project_name}
-                    </Link>
+                    <CompanyNameLink id={e.project_id} name={e.project_name} websiteUrl={e.website_url} />
                   </td>
                   <td className="px-3 py-2 text-muted">{e.campus_name ?? "—"}</td>
                   <td className="px-3 py-2 text-foreground">{e.status}</td>
@@ -148,9 +144,7 @@ export default async function PipelinePage({ searchParams }: { searchParams: Pro
               {noEntry.slice(0, 100).map((p) => (
                 <tr key={p.id} className="border-t border-border-c first:border-t-0">
                   <td className="px-3 py-1.5">
-                    <Link href={`/startup/discover?project=${p.id}`} className="text-foreground hover:underline">
-                      {p.name}
-                    </Link>
+                    <CompanyNameLink id={p.id} name={p.name} websiteUrl={p.website_url} className="text-foreground hover:underline" />
                   </td>
                   <td className="px-3 py-1.5 text-right">
                     <form action={updatePipelineEntry}>

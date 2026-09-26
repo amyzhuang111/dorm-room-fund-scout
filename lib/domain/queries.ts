@@ -135,6 +135,7 @@ export interface NamedFounder {
   link: PersonLinkTarget | null;
   profileLinks: ProfileIconLink[];
   otherLinks: OtherSourceLink[];
+  founderStatus: string | null;
   enrollmentStatus: string | null;
   enrollmentLabel: string | null;
   leftSchool: boolean;
@@ -492,12 +493,12 @@ function buildAllCandidates(): CandidateSummary[] {
     .prepare(
       `SELECT ppr.project_id as project_id, pe.id as id, pe.name as name, pe.aliases_json as aliases_json,
               pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label,
-              pe.left_school as left_school
+              pe.left_school as left_school, pe.founder_status as founder_status
        FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id
        WHERE ppr.role LIKE '%founder%'
        ORDER BY ppr.rowid`
     )
-    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null; left_school: number | null }[]) {
+    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null; left_school: number | null; founder_status: string | null }[]) {
     const key = `${r.project_id}:${r.id}`;
     if (seenFounder.has(key)) continue;
     seenFounder.add(key);
@@ -513,6 +514,7 @@ function buildAllCandidates(): CandidateSummary[] {
       link: bestPersonLink({ aliasesJson: r.aliases_json, linkedinCandidates }),
       profileLinks: profiles.profileLinks,
       otherLinks: profiles.otherLinks,
+      founderStatus: r.founder_status,
       enrollmentStatus: r.enrollment_status,
       enrollmentLabel: r.enrollment_label,
       leftSchool: r.left_school === 1,
@@ -1479,6 +1481,7 @@ export interface PipelineEntryRow {
   pass_reason: string | null;
   project_id: string;
   project_name: string;
+  website_url: string | null;
   campus_name: string | null;
   blocker: string | null;
 }
@@ -1487,11 +1490,11 @@ export function listPipelineEntries(): PipelineEntryRow[] {
   const db = getDb();
   const rows = db
     .prepare(
-      `SELECT pe.status, pe.next_action, pe.due_date, pe.notes, pe.pass_reason, p.id as project_id, p.name as project_name
+      `SELECT pe.status, pe.next_action, pe.due_date, pe.notes, pe.pass_reason, p.id as project_id, p.name as project_name, p.website_url as website_url
        FROM pipeline_entries pe JOIN projects p ON p.id = pe.project_id
        ORDER BY pe.updated_at DESC`
     )
-    .all() as { status: string; next_action: string | null; due_date: string | null; notes: string | null; pass_reason: string | null; project_id: string; project_name: string }[];
+    .all() as { status: string; next_action: string | null; due_date: string | null; notes: string | null; pass_reason: string | null; project_id: string; project_name: string; website_url: string | null }[];
 
   const campusStmt = db.prepare(
     `SELECT DISTINCT u.name as name FROM affiliations a

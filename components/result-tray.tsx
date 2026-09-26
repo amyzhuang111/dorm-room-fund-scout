@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { buildHref } from "@/lib/domain/url";
-import { ScoutLink } from "./scout-nav";
 import { publicLink } from "@/lib/domain/company-link";
 import type { CandidateSummary } from "@/lib/domain/queries";
 import { FeedbackControls } from "./feedback-controls";
 import { PersonLinkButton } from "./person-link";
+import { CompanyNameLink } from "./company-website";
 import { EnrollmentBadge, LeftSchoolBadge, SignalTierBadge } from "./badges";
 
 // Design MD §5: "In canvas views, show a collapsible bottom result tray
@@ -21,7 +20,6 @@ import { EnrollmentBadge, LeftSchoolBadge, SignalTierBadge } from "./badges";
 // leaves the current campus selection alone.
 export function ResultTray({
   candidates,
-  basePath,
   current,
 }: {
   candidates: CandidateSummary[];
@@ -57,9 +55,7 @@ export function ResultTray({
                 }`}
               >
                 <span className="flex items-center gap-1">
-                  <ScoutLink href={buildHref(basePath, current, { project: c.id })} className="block truncate font-medium text-foreground hover:text-link">
-                    {c.name}
-                  </ScoutLink>
+                  <CompanyNameLink id={c.id} name={c.name} websiteUrl={c.websiteUrl} className="block truncate font-medium text-foreground hover:text-link" />
                   <SignalTierBadge tier={c.signalTier} basis={c.signalTierBasis} />
                 </span>
                 <p className="line-clamp-2 text-muted">{c.description || c.founders[0] || "No description yet"}</p>
