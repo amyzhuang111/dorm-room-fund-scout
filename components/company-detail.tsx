@@ -38,7 +38,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
           const links = storedCompanyLinks({
             websiteUrl: project.websiteUrl,
             primaryLink: project.primaryLink,
-            sourceUrls: project.claims.map((claim) => claim.sourceUrl),
+            sourceUrls: [project.profile.companyLinkedin?.text, ...project.claims.map((claim) => claim.sourceUrl)],
           });
           return (
             <>
