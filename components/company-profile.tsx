@@ -50,8 +50,37 @@ function RoundValue({ round }: { round: FundingRound | null }) {
 }
 
 function investorLabel(investor: InvestorFact): string {
-  const notes = [investor.round, investor.batch].filter(Boolean).join(" · ");
-  return notes ? `${investor.name} · ${notes}` : investor.name;
+  const notes = [investor.batch, investor.kind === "lead" ? "led the round" : null].filter(Boolean);
+  return notes.length ? `${investor.name} · ${notes.join(" · ")}` : investor.name;
+}
+
+const ROUND_ORDER = ["Pre-seed", "Seed", "Series A", "Series B", "Series C", "Series D"];
+
+function groupInvestors(investors: InvestorFact[]): { round: string; investors: InvestorFact[] }[] {
+  const byRound = new Map<string, InvestorFact[]>();
+  const accelerators: InvestorFact[] = [];
+  const unnamedRound: InvestorFact[] = [];
+  for (const investor of investors) {
+    if (investor.round) {
+      const list = byRound.get(investor.round) ?? [];
+      list.push(investor);
+      byRound.set(investor.round, list);
+    } else if (investor.kind === "accelerator") {
+      accelerators.push(investor);
+    } else {
+      unnamedRound.push(investor);
+    }
+  }
+  const groups = [...byRound.entries()]
+    .sort((a, b) => {
+      const ai = ROUND_ORDER.indexOf(a[0]);
+      const bi = ROUND_ORDER.indexOf(b[0]);
+      return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+    })
+    .map(([round, rows]) => ({ round, investors: rows }));
+  if (unnamedRound.length) groups.push({ round: "Investors", investors: unnamedRound });
+  if (accelerators.length) groups.push({ round: "Accelerators", investors: accelerators });
+  return groups;
 }
 
 export function CompanyProfileCard({ profile, founders }: { profile: CompanyProfile; founders: NamedFounder[] }) {
@@ -90,6 +119,47 @@ export function CompanyProfileCard({ profile, founders }: { profile: CompanyProf
           <span className="text-muted">Unknown</span>
         )}
       </p>
+      <div className="mt-3">
+        <h4 className="text-[10px] font-semibold uppercase tracking-wide text-muted">Founders</h4>
+        {founders.length === 0 ? (
+          <p className="mt-0.5 text-xs text-muted">Unknown</p>
+        ) : (
+          <ul className="mt-1 space-y-1">
+            {founders.map((founder) => (
+              <li key={founder.personId} className="flex flex-wrap items-center gap-1.5 text-xs text-foreground">
+                <Link href={founderHref(founder)} className="font-medium text-link hover:underline">
+                  {founder.name}
+                </Link>
+                <span className="text-muted">{roleLabel(founder.role)}</span>
+                <PersonLinkButton link={founder.link} name={founder.name} />
+                <ProfileIconLinks links={founder.profileLinks} name={founder.name} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <div className="mt-3">
+        <h4 className="text-[10px] font-semibold uppercase tracking-wide text-muted">Who funded</h4>
+        {profile.investors.length === 0 ? (
+          <p className="mt-0.5 text-xs text-muted">Unknown</p>
+        ) : (
+          <div className="mt-1 space-y-1.5">
+            {groupInvestors(profile.investors).map((group) => (
+              <div key={group.round}>
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-muted">{group.round}</p>
+                <ul className="space-y-0.5 text-xs text-foreground">
+                  {group.investors.map((investor) => (
+                    <li key={`${group.round}-${investor.name}-${investor.sourceUrl}`}>
+                      {investorLabel(investor)}
+                      <FactSource fact={investor} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
       <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-xs sm:grid-cols-3">
         {cells.map((cell) => (
           <div key={cell.label}>
@@ -111,21 +181,6 @@ export function CompanyProfileCard({ profile, founders }: { profile: CompanyProf
           </ul>
         </div>
       )}
-      <div className="mt-3">
-        <h4 className="text-[10px] font-semibold uppercase tracking-wide text-muted">Investors and accelerators</h4>
-        {profile.investors.length === 0 ? (
-          <p className="mt-0.5 text-xs text-muted">Unknown</p>
-        ) : (
-          <ul className="mt-1 space-y-0.5 text-xs text-foreground">
-            {profile.investors.map((investor) => (
-              <li key={`${investor.name}-${investor.sourceUrl}`}>
-                {investorLabel(investor)}
-                <FactSource fact={investor} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
       {profile.companyLinkedin && (
         <p className="mt-2 text-xs">
           <a href={profile.companyLinkedin.text} target="_blank" rel="noopener noreferrer" className="text-link hover:underline">
@@ -134,25 +189,6 @@ export function CompanyProfileCard({ profile, founders }: { profile: CompanyProf
           <FactSource fact={profile.companyLinkedin} />
         </p>
       )}
-      <div className="mt-3">
-        <h4 className="text-[10px] font-semibold uppercase tracking-wide text-muted">Founders</h4>
-        {founders.length === 0 ? (
-          <p className="mt-0.5 text-xs text-muted">Unknown</p>
-        ) : (
-          <ul className="mt-1 space-y-1">
-            {founders.map((founder) => (
-              <li key={founder.personId} className="flex flex-wrap items-center gap-1.5 text-xs text-foreground">
-                <Link href={founderHref(founder)} className="font-medium text-link hover:underline">
-                  {founder.name}
-                </Link>
-                <span className="text-muted">{roleLabel(founder.role)}</span>
-                <PersonLinkButton link={founder.link} name={founder.name} />
-                <ProfileIconLinks links={founder.profileLinks} name={founder.name} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
     </section>
   );
 }

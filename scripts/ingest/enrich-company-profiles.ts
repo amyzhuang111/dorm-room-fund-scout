@@ -166,6 +166,26 @@ function acceleratorFromSource(sourceName: string | null, sourceUrl: string): { 
   return null;
 }
 
+function explicitBackers(text: string): { name: string; kind: string }[] {
+  const found: { name: string; kind: string }[] = [];
+  const add = (name: string, kind: string) => {
+    const clean = name.replace(/\s+/g, " ").trim();
+    if (!clean || found.some((item) => item.name.toLowerCase() === clean.toLowerCase())) return;
+    found.push({ name: clean, kind });
+  };
+  if (/backed by Berkeley Skydeck Fund/i.test(text)) add("Berkeley SkyDeck Fund", "investor");
+  if (/backed by Cardinal Ventures/i.test(text) || /^Cardinal Ventures \(recent team\)/i.test(text.trim())) add("Cardinal Ventures", "accelerator");
+  const list = text.match(/backed by ([^.]+)/i);
+  if (list && !/\$/.test(list[1]) && !/speedrun|skydeck fund|cardinal ventures/i.test(list[1])) {
+    const blob = list[1].replace(/\s+and several other.*/i, "").replace(/\s+and\s+/gi, ", ");
+    const parts = blob.split(",").map((part) => part.trim()).filter(Boolean);
+    if (parts.length >= 2 && parts.every((part) => part.length >= 2 && part.length <= 40 && !/\b(the|company|startup|round|is|dedicated)\b/i.test(part))) {
+      for (const part of parts) add(part, "investor");
+    }
+  }
+  return found;
+}
+
 function isCompetitionSource(sourceName: string | null): boolean {
   return /hack|devpost|winners|showcase|semifinalist|raising capital|innovation challenge|startup challenge/i.test(sourceName ?? "");
 }
@@ -415,6 +435,23 @@ async function main() {
         origin: "existing_claim",
       });
       existingInvestors += 1;
+    }
+
+    if (!/\b(prev|previous|previously|formerly)\b/i.test(claim.excerpt)) {
+      for (const backer of explicitBackers(claim.excerpt)) {
+        put({
+          projectId: claim.entity_id,
+          factKey: "investor",
+          valueText: backer.name,
+          amountUsd: null,
+          amountStatus: null,
+          detail: { batch: null, round: null, kind: backer.kind },
+          sourceUrl: claim.source_url,
+          excerpt: claim.excerpt.slice(0, 400),
+          origin: "existing_claim",
+        });
+        existingInvestors += 1;
+      }
     }
 
     const description = usableDescription(claim.excerpt);
