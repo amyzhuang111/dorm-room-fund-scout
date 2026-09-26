@@ -8,11 +8,12 @@
 //                no alias
 //   otherwise  → no write
 //
-// A row is confirmed only when the candidate's name matches AND the school,
-// a company/startup, or a specific role appears in the title or snippet.
-// Name-only matches are unverified. Two corroborated profiles for one
-// person are stored as unverified instead of guessing. People who already
-// have a confirmed linkedin.com/in URL are skipped.
+// A row is confirmed only when the candidate's name matches AND corroboration
+// in the title or snippet outranks every other candidate. Company or startup
+// beats a student signal, which beats a bare school mention or role. A tie
+// stays unverified. A bare school match on a senior-career profile stays
+// unverified for student founders, recent-grad founders, and potential
+// founders. People who already have a confirmed linkedin.com/in URL are skipped.
 //
 // PowerShell, from the repo root:
 //   npm run import:apify-linkedin -- --dry-run

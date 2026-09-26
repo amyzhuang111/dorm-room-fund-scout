@@ -3,7 +3,8 @@
 //
 // Actor: apify/google-search-scraper (official Apify Store actor, no
 // LinkedIn cookies or login). Each person is one Google query:
-//   site:linkedin.com/in "Full Name" ("Company" OR Penn OR UPenn OR Wharton OR "University of Pennsylvania" OR SEAS OR M&T)
+//   site:linkedin.com/in "Full Name" ("Company" OR Penn OR UPenn OR Wharton OR SEAS)
+// M&T is omitted: an unencoded & can split or truncate the actor query.
 // maxPagesPerQuery is 1 and every paid add-on is off. Pricing checked
 // 2026-09-26 against the actor rate card that started 2026-08-20:
 //   Free   $0.0045 / page + $0.001 actor start
@@ -44,6 +45,7 @@ import {
   campusFlagHelp,
   cleanSearchName,
   estimateRun,
+  isOrganizationName,
   formatUsd,
   loadQueue,
   readDoneIds,
@@ -156,10 +158,11 @@ function readSerpPages(items: unknown[]): SerpPage[] {
   return pages;
 }
 
-// One dataset item is one Google page. Match it to the query we sent by
-// searchQuery.term (quotes and spacing ignored). When the actor omits the
-// term, or rewrites it, fall back to dataset order if there is one page per
-// query.
+// One dataset item is one Google page. Assign it only when searchQuery.term
+// matches the query we sent (quotes and spacing ignored). Index order is used
+// only when the page count equals the query count and every page is missing
+// its term. A present term that does not match is left unassigned so the
+// person is retried instead of stored as a blank or as someone else's page.
 export function assignOrganicResults(queries: string[], items: unknown[]): Map<string, CandidateInput[]> {
   const pages = readSerpPages(items);
   const pagesByKey = new Map<string, number[]>();
@@ -171,25 +174,19 @@ export function assignOrganicResults(queries: string[], items: unknown[]): Map<s
     pagesByKey.set(key, list);
   });
   const out = new Map<string, CandidateInput[]>();
-  const consumed = new Set<number>();
   queries.forEach((query) => {
     const hits = pagesByKey.get(looseQueryKey(query)) ?? [];
     if (hits.length === 0) return;
-    const organic = hits.flatMap((index) => {
-      consumed.add(index);
-      return pages[index].organic;
-    });
+    const organic = hits.flatMap((index) => pages[index].organic);
     out.set(normQuery(query), organic);
   });
-  if (pages.length === queries.length) {
+  const termsAbsent = pages.length > 0 && pages.every((page) => looseQueryKey(page.term) === "");
+  if (termsAbsent && pages.length === queries.length) {
     queries.forEach((query, index) => {
       const key = normQuery(query);
-      if (out.has(key) || consumed.has(index)) return;
-      consumed.add(index);
+      if (out.has(key)) return;
       out.set(key, pages[index].organic);
     });
-  } else if (queries.length === 1 && pages.length === 1 && !out.has(normQuery(queries[0]))) {
-    out.set(normQuery(queries[0]), pages[0].organic);
   }
   return out;
 }
@@ -378,10 +375,14 @@ export async function runLookup(options: {
   if (options.campusId) console.log(`Campus filter: ${options.campusId}`);
   console.log(`Missing confirmed LinkedIn: ${queue.length}`);
   const pending = queue.filter((person) => !done.has(person.id));
-  const skipped = pending.filter((person) => cleanSearchName(person.name) === null);
-  const searchable = pending.filter((person) => cleanSearchName(person.name) !== null);
+  const handleSkipped = pending.filter((person) => cleanSearchName(person.name) === null);
+  const orgSkipped = pending.filter((person) => cleanSearchName(person.name) !== null && isOrganizationName(person.name));
+  const searchable = pending.filter((person) => cleanSearchName(person.name) !== null && !isOrganizationName(person.name));
   console.log(
-    `Skipped ${skipped.length} ${skipped.length === 1 ? "person" : "people"} whose name is only a handle (no first and last name).`
+    `Skipped ${handleSkipped.length} ${handleSkipped.length === 1 ? "person" : "people"} whose name is only a handle (no first and last name).`
+  );
+  console.log(
+    `Skipped ${orgSkipped.length} non-person ${orgSkipped.length === 1 ? "name" : "names"} (Venture, Collaboration, Lab, Team, Inc, Club, and similar).`
   );
   console.log(`Already in ${options.outPath}: ${queue.filter((person) => done.has(person.id)).length}`);
   const selected = options.limit == null ? searchable : searchable.slice(0, options.limit);
@@ -459,10 +460,13 @@ export async function runLookup(options: {
         continue;
       }
       for (const item of batch) {
-        const organic = grouped.get(normQuery(item.query)) ?? [];
-        if (organic.length === 0 && !grouped.has(normQuery(item.query))) {
-          console.log(`  warning: Apify did not echo the query for ${item.person.name}. Stored as no results.`);
+        const key = normQuery(item.query);
+        if (!grouped.has(key)) {
+          failed++;
+          console.log(`  failed ${item.person.name}: results could not be matched to this query. Not written, so a re-run will retry.`);
+          continue;
         }
+        const organic = grouped.get(key) ?? [];
         const line = buildResultLine(item.person, item.query, organic, nowIso());
         if (options.mock) line.mock = true;
         await appendLine(options.outPath, JSON.stringify(line));

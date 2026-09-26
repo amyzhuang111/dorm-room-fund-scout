@@ -76,6 +76,7 @@ async function main() {
   add("person_pot", "Quinn Potential", "univ_penn", "Side Project", "team_member");
   add("person_mem", "Zoe Member", "univ_penn", "Campus Notes", "team_member");
   add("person_handle", "aartipb", "univ_penn", "Nope Labs", "team_member");
+  add("person_blank", "Blank New Venture Collaboration", "univ_penn", "ToxiSense", "founder");
   db.prepare(`UPDATE people SET founder_status = 'potential' WHERE id = 'person_pot'`).run();
 
   db.prepare(
@@ -88,6 +89,7 @@ async function main() {
     queue.map((person) => person.id),
     [
       "person_ada",
+      "person_blank",
       "person_pot",
       "person_handle",
       "person_mem",
@@ -104,6 +106,7 @@ async function main() {
   assert.deepEqual(queue.find((person) => person.id === "person_alan")?.existingUnverified, ["https://www.linkedin.com/in/old-alan"]);
   assert.deepEqual(match.loadQueue(db, "univ_penn").map((person) => person.id), [
     "person_ada",
+    "person_blank",
     "person_pot",
     "person_handle",
     "person_mem",
@@ -120,7 +123,17 @@ async function main() {
   const query = match.buildSearchQuery(ada, null);
   assert.match(query, /site:linkedin.com\/in/);
   assert.match(query, /"Ada Lovelace"/);
-  assert.match(query, /\("Analytical Engines" OR Penn OR UPenn OR Wharton OR "University of Pennsylvania" OR SEAS OR M&T\)/);
+  assert.match(query, /\("Analytical Engines" OR Penn OR UPenn OR Wharton OR SEAS\)/);
+  assert.doesNotMatch(query, /&/);
+  assert.doesNotMatch(query, /University of Pennsylvania/);
+  assert.ok(query.split(/\s+/).length <= 20);
+  const withAmp = match.buildSearchQuery({ ...ada, companies: ["AT&T Wireless"] }, null);
+  assert.doesNotMatch(withAmp, /&/);
+  assert.match(withAmp, /"AT and T Wireless"/);
+  assert.equal(match.isOrganizationName("Blank New Venture Collaboration"), true);
+  assert.equal(match.isOrganizationName("Vincent Cai"), false);
+  assert.equal(match.isOrganizationName("Ada Lovelace"), false);
+  assert.equal(match.buildSearchQuery({ ...ada, name: "Blank New Venture Collaboration" }, null), "");
   const alan = queue.find((person) => person.id === "person_alan");
   assert.ok(alan);
   assert.match(
@@ -189,6 +202,209 @@ async function main() {
   );
   assert.equal(byIndex.get(normQuery(firstQuery))?.[0]?.url, "https://www.linkedin.com/in/ada");
   assert.equal(byIndex.get(normQuery(secondQuery))?.[0]?.url, "https://www.linkedin.com/in/alan");
+
+  const swapped = assignOrganicResults(
+    [firstQuery, secondQuery],
+    [
+      {
+        searchQuery: { term: 'site:linkedin.com/in Alan Turing (Berkeley OR Cal)' },
+        organicResults: [{ title: "Alan", url: "https://www.linkedin.com/in/alan", description: "two", type: "organic" }],
+      },
+      {
+        searchQuery: { term: 'site:linkedin.com/in Ada Lovelace (Penn OR UPenn)' },
+        organicResults: [{ title: "Ada", url: "https://www.linkedin.com/in/ada", description: "one", type: "organic" }],
+      },
+    ]
+  );
+  assert.equal(swapped.get(normQuery(firstQuery))?.[0]?.url, "https://www.linkedin.com/in/ada");
+  assert.equal(swapped.get(normQuery(secondQuery))?.[0]?.url, "https://www.linkedin.com/in/alan");
+
+  const bryanQuery = 'site:linkedin.com/in "Bryan Dinner" (Clarifi OR Penn OR UPenn OR Wharton OR SEAS OR M&T)';
+  const annieQuery = 'site:linkedin.com/in "Annie Xu" (Pairfect OR Penn OR UPenn OR Wharton OR SEAS OR M&T)';
+  const mismatched = assignOrganicResults(
+    [bryanQuery, annieQuery],
+    [
+      {
+        searchQuery: { term: 'site:linkedin.com/in "Ozziel Diaz"' },
+        organicResults: [
+          { title: "Ozziel Diaz - Bridge Design @ HNTB", url: "https://www.linkedin.com/in/ozzieldiaz", description: "Junior at the University of California, Berkeley", type: "organic" },
+        ],
+      },
+      {
+        searchQuery: { term: 'site:linkedin.com/in "Zuzana Racikova"' },
+        organicResults: [
+          { title: "Zuzana Racikova", url: "https://www.linkedin.com/in/zuzana-racikova-003a15a5", description: "mining and metals", type: "organic" },
+        ],
+      },
+    ]
+  );
+  assert.equal(mismatched.has(normQuery(bryanQuery)), false);
+  assert.equal(mismatched.has(normQuery(annieQuery)), false);
+
+  const truncated = assignOrganicResults(
+    [bryanQuery, annieQuery],
+    [
+      {
+        searchQuery: { term: "site:linkedin.com/in Bryan Dinner (Clarifi OR Penn OR UPenn OR Wharton OR SEAS OR M" },
+        organicResults: [
+          { title: "Suzanne Spaner", url: "https://www.linkedin.com/in/suzanne-spaner-hotel-insider", description: "Business Programs", type: "organic" },
+        ],
+      },
+      {
+        searchQuery: { term: "site:linkedin.com/in Annie Xu (Pairfect OR Penn OR UPenn OR Wharton OR SEAS OR M" },
+        organicResults: [
+          { title: "Ozziel Diaz", url: "https://www.linkedin.com/in/ozzieldiaz", description: "Berkeley", type: "organic" },
+        ],
+      },
+    ]
+  );
+  assert.equal(truncated.size, 0);
+
+  const uneven = assignOrganicResults(
+    [firstQuery, secondQuery],
+    [{ organicResults: [{ title: "Ada", url: "https://www.linkedin.com/in/ada", description: "one", type: "organic" }] }]
+  );
+  assert.equal(uneven.size, 0);
+
+  const oneTerm = assignOrganicResults(
+    [firstQuery, secondQuery],
+    [
+      {
+        searchQuery: { term: "site:linkedin.com/in Ada Lovelace (Penn OR UPenn)" },
+        organicResults: [{ title: "Ada", url: "https://www.linkedin.com/in/ada", description: "one", type: "organic" }],
+      },
+      { organicResults: [{ title: "Not Alan", url: "https://www.linkedin.com/in/not-alan", description: "nope", type: "organic" }] },
+    ]
+  );
+  assert.equal(oneTerm.get(normQuery(firstQuery))?.[0]?.url, "https://www.linkedin.com/in/ada");
+  assert.equal(oneTerm.has(normQuery(secondQuery)), false);
+
+  const andrew = match.judgePerson(
+    {
+      name: "Andrew Luo",
+      schools: ada.schools,
+      companies: ["HAVEN (Y-Prize)"],
+      roles: ["contributor", "founder"],
+      founderStatus: "founder",
+      enrollmentStatus: "current_student",
+    },
+    [
+      candidate(
+        "https://www.linkedin.com/in/andrwluo",
+        "Andrew Luo - Wharton + Electrical Engineering @ UPenn ...",
+        "Wharton + Electrical Engineering @ UPenn M&T · Student at the University of Pennsylvania ... Andrew Luo's profile on LinkedIn, a professional community of ..."
+      ),
+      candidate(
+        "https://www.linkedin.com/in/andrew-luo-42848a183",
+        "Andrew Luo - MBA Candidate - The Wharton School",
+        "Andrew Luo. MBA Candidate - The Wharton School. The Wharton School University of California, Los Angeles. New York, New York, United States. 1K ...Read more"
+      ),
+      candidate(
+        "https://www.linkedin.com/in/andrewdluo",
+        "Andrew Luo, MD - Emergency Physician at Mass General ...",
+        "View Andrew Luo, MD's profile on LinkedIn, a professional community of 1 billion members ... Penn State University. MD. Duke University. BS.Read more"
+      ),
+      candidate(
+        "https://www.linkedin.com/in/andrewcluo",
+        "Andrew Luo - Solution Engineer @ Salesforce",
+        "... Andrew Luo's profile on LinkedIn, a professional community of 1 billion members ... Business Analytics: From Data to Insights · Wharton Online. Issued Feb 2023.Read more"
+      ),
+      candidate(
+        "https://www.linkedin.com/in/andrew-luo-814266253",
+        "Andrew Luo - Finance, Economics Grad with a ...",
+        "Andrew Luo. Finance, Economics Grad with a Mathematical Inclination. Allied Universal Penn State Smeal College of Business. Philadelphia ...Read more"
+      ),
+      candidate(
+        "https://www.linkedin.com/in/amypluo",
+        "Amy Luo - McKinsey & Company",
+        "Experience: McKinsey & Company · Education: University of Pennsylvania · Location: Fremont · 500+ connections on LinkedIn. View Amy Luo's profile on ..."
+      ),
+    ]
+  );
+  assert.equal(andrew.outcome, "confirmed");
+  assert.equal(andrew.confirmed.length, 1);
+  assert.equal(andrew.confirmed[0].url, "https://www.linkedin.com/in/andrwluo");
+
+  const avanthika = match.judgePerson(
+    {
+      name: "Avanthika Ramesh",
+      schools: ada.schools,
+      companies: ["MediMint"],
+      roles: ["founder"],
+      founderStatus: "founder",
+      enrollmentStatus: "recent_grad",
+    },
+    [
+      candidate(
+        "https://www.linkedin.com/in/avanthika-ramesh",
+        "Avanthika Ramesh - Senior Director of Product, Agentforce",
+        "Avanthika Ramesh · Senior Director of Product, Agentforce | Keynote Speaker | Wharton MBA | UC Berkeley MET | Kleiner Perkins Fellow · View mutual connections ...Read more"
+      ),
+      candidate(
+        "https://www.linkedin.com/in/avanthikaramesh",
+        "Avanthika Ramesh - Industrial Designer | illustrator",
+        "Avanthika Ramesh. Industrial Designer | illustrator. Saint-Gobain Research India DOT School of Design. Bengaluru, Karnataka, India. 1K ...Read more"
+      ),
+    ]
+  );
+  assert.equal(avanthika.outcome, "unverified");
+  assert.equal(avanthika.confirmed.length, 0);
+  assert.equal(
+    avanthika.candidates.some((item) => item.url.endsWith("/avanthika-ramesh") && item.signals.decision === "confirmed"),
+    false
+  );
+
+  const companyWins = match.judgePerson(ada, [
+    candidate("https://www.linkedin.com/in/ada-student", "Ada Lovelace - University of Pennsylvania", "Student, Class of 2027, M&T"),
+    candidate("https://www.linkedin.com/in/ada-company", "Ada Lovelace", "Founder at Analytical Engines"),
+  ]);
+  assert.equal(companyWins.outcome, "confirmed");
+  assert.equal(companyWins.confirmed[0].url, "https://www.linkedin.com/in/ada-company");
+
+  const skipLogs: string[] = [];
+  const originalLog = console.log;
+  console.log = (...args: unknown[]) => {
+    skipLogs.push(args.map((arg) => String(arg)).join(" "));
+  };
+  const skipPath = path.join(os.tmpdir(), `apify-linkedin-skip-${process.pid}.jsonl`);
+  fs.rmSync(skipPath, { force: true });
+  try {
+    const skippedRun = await runLookup({
+      db,
+      campusId: "univ_penn",
+      limit: 5,
+      dryRun: true,
+      yes: true,
+      mock: false,
+      outPath: skipPath,
+      hasToken: true,
+      search: async () => {
+        throw new Error("dry-run called Apify");
+      },
+    });
+    assert.equal(skippedRun, 0);
+  } finally {
+    console.log = originalLog;
+  }
+  assert.match(skipLogs.join("\n"), /Skipped 1 person whose name is only a handle/);
+  assert.match(skipLogs.join("\n"), /Skipped 1 non-person name/);
+  assert.equal(fs.existsSync(skipPath), false);
+
+  const failPath = path.join(os.tmpdir(), `apify-linkedin-fail-${process.pid}.jsonl`);
+  fs.rmSync(failPath, { force: true });
+  const failedRun = await runLookup({
+    db,
+    campusId: null,
+    limit: 2,
+    dryRun: false,
+    yes: true,
+    mock: false,
+    outPath: failPath,
+    hasToken: false,
+    search: async () => new Map(),
+  });
+  assert.equal(failedRun, 0);
+  assert.equal(fs.existsSync(failPath), false);
 
   const outPath = path.join(os.tmpdir(), `apify-linkedin-out-${process.pid}.jsonl`);
   fs.rmSync(outPath, { force: true });
