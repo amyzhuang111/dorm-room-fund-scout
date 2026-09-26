@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { TopNav } from "@/components/top-nav";
 import { FeedbackProvider } from "@/components/feedback-provider";
+import { feedbackRedirects } from "@/lib/domain/entity-redirects";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -40,7 +41,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <TopNav />
           </Suspense>
         </header>
-        <FeedbackProvider>
+        <FeedbackProvider redirects={feedbackRedirects()}>
           <main className="flex-1">{children}</main>
         </FeedbackProvider>
         <footer className="border-t border-border-c px-4 py-3 text-center text-xs text-muted sm:px-6">

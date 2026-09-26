@@ -180,6 +180,15 @@ function migrate(db: Database.Database) {
   addColumnIfMissing("people", "left_school", "left_school INTEGER NOT NULL DEFAULT 0");
   addColumnIfMissing("people", "founder_status", "founder_status TEXT");
   addColumnIfMissing("people", "potential_signal", "potential_signal TEXT");
+  db.exec(`CREATE TABLE IF NOT EXISTS entity_redirects (
+    old_id TEXT PRIMARY KEY,
+    entity_type TEXT NOT NULL,
+    survivor_id TEXT NOT NULL,
+    reason TEXT NOT NULL,
+    merged_at TEXT NOT NULL
+  )`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_entity_redirects_survivor ON entity_redirects(survivor_id)`);
+
   db.exec(`CREATE TABLE IF NOT EXISTS company_facts (
     id TEXT PRIMARY KEY,
     project_id TEXT NOT NULL REFERENCES projects(id),

@@ -1,10 +1,14 @@
+import { permanentRedirect } from "next/navigation";
 import { FounderDiscoverApp } from "@/components/founder-discover-app";
+import { mergedParamHref } from "@/lib/domain/entity-redirects";
 import type { EnrollmentStatus } from "@/lib/domain/founder-status";
 import { listFounderStatusCounts, listFoundersForPage, listPotentialFoundersForPage, listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
 
 export default async function FounderDiscoverPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
+  const mergedFounder = mergedParamHref("/founder/discover", sp, "founder", "person");
+  if (mergedFounder) permanentRedirect(mergedFounder);
   const universities = listUniversities();
   const review = await readReviewState();
   const founders = listFoundersForPage();

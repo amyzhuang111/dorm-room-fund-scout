@@ -124,3 +124,35 @@ export function upsertFeedback(records: FeedbackRecord[], next: FeedbackRecord):
 export function removeFeedback(records: FeedbackRecord[], target: { entityType: FeedbackEntityType; entityId: string; name: string; domain: string | null }): FeedbackRecord[] {
   return records.filter((r) => !matchesFeedback(r, target));
 }
+
+/** Follow old_id → survivor_id, including chains, without looping. */
+export function resolveRedirect(id: string, redirects: Record<string, string>): string {
+  let current = id;
+  const seen = new Set<string>();
+  while (redirects[current] && !seen.has(current)) {
+    seen.add(current);
+    current = redirects[current];
+  }
+  return current;
+}
+
+// Likes, passes, and never-show rows live in the browser and in Upstash, keyed
+// by entity id. After a merge, point those keys at the surviving id.
+export function applyEntityRedirects(records: FeedbackRecord[], redirects: Record<string, string>): FeedbackRecord[] {
+  if (!redirects || Object.keys(redirects).length === 0) return records;
+  let changed = false;
+  const rewritten = records.map((record) => {
+    const entityId = resolveRedirect(record.entityId, redirects);
+    if (entityId === record.entityId) return record;
+    changed = true;
+    return { ...record, entityId };
+  });
+  if (!changed) return records;
+  const byKey = new Map<string, FeedbackRecord>();
+  for (const record of rewritten) {
+    const key = `${record.entityType}:${record.entityId}`;
+    const prev = byKey.get(key);
+    if (!prev || (record.at || "") >= (prev.at || "")) byKey.set(key, record);
+  }
+  return [...byKey.values()];
+}
