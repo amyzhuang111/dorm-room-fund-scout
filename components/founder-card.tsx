@@ -6,7 +6,7 @@ import { buildHref } from "@/lib/domain/url";
 import { ScoutLink } from "./scout-nav";
 import { EnrollmentBadge, LeftSchoolBadge, PotentialFounderBadge, SignalTierBadge, UnverifiedBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
-import { PersonLinkButton } from "./person-link";
+import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 
 export const FounderCard = memo(function FounderCard({
   founder,
@@ -38,7 +38,10 @@ export const FounderCard = memo(function FounderCard({
             {founder.signalEvidence?.unverified && <UnverifiedBadge />}
           </p>
         </div>
-        <PersonLinkButton link={founder.link} name={founder.name} />
+        <div className="flex shrink-0 flex-col items-end gap-1">
+          <PersonLinkButton link={founder.link} name={founder.name} />
+          <ProfileIconLinks links={founder.profileLinks} name={founder.name} />
+        </div>
       </div>
 
       {founder.founderStatus === "potential" && founder.potentialSignal && (
@@ -127,6 +130,30 @@ export const FounderCard = memo(function FounderCard({
               })}
             </ul>
           </section>
+          {founder.otherLinks.length > 0 && (
+            <section>
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Other sources</h3>
+              <ul className="mt-1 space-y-1.5">
+                {founder.otherLinks.map((item) => {
+                  let host = item.url;
+                  try {
+                    host = new URL(item.url).hostname.replace(/^www\./, "");
+                  } catch {
+                    host = item.url;
+                  }
+                  return (
+                    <li key={item.url} className="text-xs">
+                      <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-link underline">
+                        {host}
+                      </a>
+                      {item.status === "unverified" && <span className="ml-1 text-muted">unverified</span>}
+                      {item.excerpt && <p className="mt-0.5 text-muted">{item.excerpt}</p>}
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          )}
           <section>
             <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Education</h3>
             {founder.education.length === 0 && <p className="mt-1 text-xs text-muted">No education evidence on record.</p>}
