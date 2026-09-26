@@ -55,6 +55,86 @@ const EMPTY: EnrollmentDecision = {
   sourceId: null,
 };
 
+// Venue and contest codes that print as CODE 'YY. They are not school class years.
+// CHI '26 is the CHI conference. WACV '23 is a vision conference. IMO '24 is an olympiad.
+const EVENT_CODES = new Set([
+  "CHI",
+  "NEURIPS",
+  "NIPS",
+  "ICML",
+  "ICLR",
+  "CVPR",
+  "ECCV",
+  "ICCV",
+  "WACV",
+  "BMVC",
+  "ACL",
+  "EMNLP",
+  "NAACL",
+  "EACL",
+  "AAAI",
+  "IJCAI",
+  "KDD",
+  "SIGGRAPH",
+  "UIST",
+  "CSCW",
+  "MICCAI",
+  "ICRA",
+  "IROS",
+  "RSS",
+  "ICASSP",
+  "INTERSPEECH",
+  "SIGIR",
+  "RECSYS",
+  "ICSE",
+  "FSE",
+  "PLDI",
+  "POPL",
+  "SOSP",
+  "OSDI",
+  "NSDI",
+  "SIGCOMM",
+  "CCS",
+  "NDSS",
+  "AISTATS",
+  "COLING",
+  "MLSYS",
+  "CORL",
+  "COGSCI",
+  "HRI",
+  "IUI",
+  "SIGMOD",
+  "VLDB",
+  "CIKM",
+  "WSDM",
+  "COLM",
+  "IMO",
+  "IOI",
+  "USAMO",
+]);
+
+function eventCode(token: string): boolean {
+  const code = token.split("'")[0].replace(/\s+/g, "").toUpperCase();
+  return EVENT_CODES.has(code);
+}
+
+function lastName(personName: string): string | null {
+  const parts = personName
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((part) => part.length > 1 && !["jr", "sr", "ii", "iii", "iv"].includes(part));
+  return parts.length ? parts[parts.length - 1] : null;
+}
+
+function mentionsPerson(text: string, personName: string): boolean {
+  const name = lastName(personName);
+  if (!name) return false;
+  const norm = text.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  return new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(norm);
+}
+
 function fullYear(raw: number): number | null {
   const year = raw < 100 ? 2000 + raw : raw;
   if (year < 1980 || year > 2040) return null;
@@ -87,11 +167,25 @@ function classTokenHits(snippet: EvidenceSnippet, hits: YearHit[]) {
   for (const match of text.matchAll(tight)) {
     const token = match[1];
     if (token.length > 14) continue;
+    if (eventCode(token)) continue;
     pushYear(hits, fullYear(parseInt(match[2], 10)), token, snippet);
   }
   const spaced = /\b((?:M&T|SEAS|[A-Z]{1,5})\s+'(\d{2}))\b/g;
   for (const match of text.matchAll(spaced)) {
+    if (eventCode(match[1])) continue;
     pushYear(hits, fullYear(parseInt(match[2], 10)), match[1].replace(/\s+/, ""), snippet);
+  }
+  // Bios print "mit '23" in lowercase. School codes stay case-sensitive above.
+  const mit = /\bmit\s+'(\d{2})\b/gi;
+  for (const match of text.matchAll(mit)) {
+    const year = fullYear(parseInt(match[1], 10));
+    pushYear(hits, year, year ? `MIT'${match[1]}` : "", snippet);
+  }
+  // Haas prints degree codes without an apostrophe: MBA 26, EWMBA 25, BS 27.
+  const degree = /\b(BS|BA|MBA|EWMBA|EMBA)\s+'?(\d{2})\b/g;
+  for (const match of text.matchAll(degree)) {
+    const year = fullYear(parseInt(match[2], 10));
+    pushYear(hits, year, year ? `${match[1]}'${match[2]}` : "", snippet);
   }
   // Columbia prints the year first: '27CBS, '26SIPA, '26CBS/SEAS.
   const yearFirst = /(?:^|[\s(—–-])'((?:\d{2}))([A-Z]{2,8}(?:\/[A-Z]{2,8})?)\b/g;
@@ -150,16 +244,78 @@ function linkedInHits(snippet: EvidenceSnippet, hits: YearHit[], phrases: Phrase
 
 // Wording that says the person is enrolled, with no year attached.
 // "senior design" is a course name, not a class standing.
+function precededByFormer(text: string, index: number): boolean {
+  const prior = text.slice(Math.max(0, index - 48), index);
+  return /\b(former|formerly|previously|ex-)\b/i.test(prior);
+}
+
+function livePhrase(text: string, re: RegExp): boolean {
+  const flags = re.flags.includes("g") ? re.flags : `${re.flags}g`;
+  const copy = new RegExp(re.source, flags);
+  for (const match of text.matchAll(copy)) {
+    if (!precededByFormer(text, match.index ?? 0)) return true;
+  }
+  return false;
+}
+
 function currentStudentPhrase(snippet: EvidenceSnippet): boolean {
-  const text = snippet.excerpt;
+  const text = snippet.excerpt.replace(/[’‘ʼ]/g, "'");
   if (/alumnus=false/i.test(text)) return true;
   if (/\bcurrent student\b/i.test(text)) return true;
+  if (/\bcurrently a student\b/i.test(text)) return true;
   // Freshman/sophomore are class standings. Junior/senior also name job titles
   // ("Senior Software Engineer"), so those count only next to enrollment wording.
   if (/\b(freshman|sophomore)\b/i.test(text)) return true;
   if (/\bis\s+an?\s+(junior|senior)\b(?!\s+(engineer|software|research|manager|director|designer|developer|associate|analyst|scientist|advisor|fellow|product|member|lead))/i.test(text)) return true;
   if (/\b(junior|senior)\s+(year|studying|majoring)\b/i.test(text)) return true;
+  if (livePhrase(text, /\b(engineering|wharton|college)\s+(senior|junior)\b/i)) return true;
+  if (livePhrase(text, /\b(wharton|college|engineering|university)\s+first[- ]year\b/i)) return true;
+  if (livePhrase(text, /\buniversity\s+student\b/i)) return true;
+  if (livePhrase(text, /\bstudent at the university\b/i)) return true;
+  if (livePhrase(text, /\b(master'?s|graduate|undergraduate|doctoral|phd)\s+student\b/i)) return true;
+  if (livePhrase(text, /\bengineering students\b/i)) return true;
+  if (livePhrase(text, /\b(?:math\s*\+\s*)?cs\s+student\b/i)) return true;
+  // Field-of-study majors only. "a major step" and "across major media" do not count.
+  if (
+    livePhrase(
+      text,
+      /\b(?:information systems|computer science|electrical engineering|mechanical engineering|operations research|data science|cognitive science|political science|environmental science|bioengineering|biophysics|biochemistry|communications|finance|economics|business|mathematics|statistics|psychology|neuroscience|biology|chemistry|physics|design|engineering|systems|research)\s+major\b/i
+    )
+  )
+    return true;
   return false;
+}
+
+// "2022 Wharton graduate Nick Fleisher and 2023 College graduate Liam Germain"
+// names two years. Keep a year only when this person's name is in that clause.
+function namedProseYearHits(snippet: EvidenceSnippet, hits: YearHit[], personName: string) {
+  const text = snippet.excerpt.replace(/[’‘ʼ]/g, "'");
+  if (!mentionsPerson(text, personName)) return;
+  const grad = /\b((?:19|20)\d{2})\s+(?:[A-Za-z.&']+\s+){0,16}graduates?\b((?:(?!(?:19|20)\d{2})[\s\S]){0,240})/gi;
+  for (const match of text.matchAll(grad)) {
+    const tail = match[2];
+    if (!mentionsPerson(tail, personName)) continue;
+    const year = fullYear(parseInt(match[1], 10));
+    pushYear(hits, year, year ? labelFromYear(year) : "", snippet);
+  }
+  const fellows = /\b((?:19|20)\d{2})\s+graduating fellows\b/gi;
+  for (const match of text.matchAll(fellows)) {
+    const year = fullYear(parseInt(match[1], 10));
+    pushYear(hits, year, year ? labelFromYear(year) : "", snippet);
+  }
+  const congrats = /\bcongratulations to the ((?:19|20)\d{2}) graduates\b/gi;
+  for (const match of text.matchAll(congrats)) {
+    const year = fullYear(parseInt(match[1], 10));
+    pushYear(hits, year, year ? labelFromYear(year) : "", snippet);
+  }
+}
+
+function expectedDegreeHits(snippet: EvidenceSnippet, hits: YearHit[]) {
+  const re = /\bexpected(?:\s+graduation)?\s+(?:in\s+)?(?:[A-Za-z.]+\s+){0,2}((?:19|20)\d{2})\b/gi;
+  for (const match of snippet.excerpt.matchAll(re)) {
+    const year = fullYear(parseInt(match[1], 10));
+    pushYear(hits, year, year ? labelFromYear(year) : "", snippet);
+  }
 }
 
 function bucketForYear(year: number): EnrollmentStatus {
@@ -168,9 +324,10 @@ function bucketForYear(year: number): EnrollmentStatus {
   return "older_alumni";
 }
 
-export function decideEnrollment(snippets: EvidenceSnippet[]): EnrollmentDecision {
+export function decideEnrollment(snippets: EvidenceSnippet[], options?: { personName?: string | null }): EnrollmentDecision {
   const years: YearHit[] = [];
   const phrases: PhraseHit[] = [];
+  const personName = options?.personName?.trim() || null;
   for (const snippet of snippets) {
     if (!snippet.excerpt && snippet.claimType !== "linkedin_education") continue;
     if (
@@ -182,8 +339,17 @@ export function decideEnrollment(snippets: EvidenceSnippet[]): EnrollmentDecisio
     classTokenHits(snippet, years);
     classOfHits(snippet, years);
     graduatedHits(snippet, years);
+    expectedDegreeHits(snippet, years);
+    if (personName) namedProseYearHits(snippet, years, personName);
     linkedInHits(snippet, years, phrases);
     if (currentStudentPhrase(snippet)) {
+      phrases.push({ excerpt: snippet.excerpt, sourceUrl: snippet.sourceUrl, sourceId: snippet.sourceId });
+    }
+    if (
+      personName &&
+      mentionsPerson(snippet.excerpt, personName) &&
+      (/organization composed of students/i.test(snippet.excerpt) || /team of UC Berkeley students/i.test(snippet.excerpt))
+    ) {
       phrases.push({ excerpt: snippet.excerpt, sourceUrl: snippet.sourceUrl, sourceId: snippet.sourceId });
     }
   }
