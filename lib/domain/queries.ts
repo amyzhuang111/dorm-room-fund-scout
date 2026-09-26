@@ -11,6 +11,8 @@ import { parseCommunitySignalCategories, type CommunityConfidence, type Communit
 import { catalogueForCampus } from "./source-quality";
 import { ENROLLMENT_STATUSES, enrollmentBoost, type EnrollmentStatus } from "./founder-status";
 import { bestPersonLink, confirmedLinkedIn, type PersonLinkTarget } from "./person-link";
+import type { RelatedHotspot } from "./hotspot-model";
+import { relatedHotspotsForPerson, relatedHotspotsForProject } from "./hotspots";
 import { assembleProfileLinks, type OtherSourceLink, type ProfileIconLink } from "./profile-links";
 import { assembleCompanyProfile, type CompanyFactRecord, type CompanyProfile } from "./company-profile";
 import { matchCandidate } from "./candidate-filter";
@@ -691,6 +693,7 @@ export interface ProjectDetail extends CandidateSummary {
   pipeline: { status: string; nextAction: string | null; dueDate: string | null; notes: string | null; passReason: string | null } | null;
   manualNotes: ManualNote[];
   assessmentHistory: AssessmentHistoryRow[];
+  hotspots: RelatedHotspot[];
 }
 
 export function getProjectDetail(id: string): ProjectDetail | null {
@@ -784,6 +787,7 @@ export function getProjectDetail(id: string): ProjectDetail | null {
       : null,
     manualNotes: listNotesFor("project", id),
     assessmentHistory: listAssessmentHistory(id),
+    hotspots: relatedHotspotsForProject(id),
   };
 }
 
@@ -1046,6 +1050,7 @@ export interface FounderRow {
   reviewNotes: string[]; // hand-check caveats stored on the person; empty for everyone else
   /** Every campus affiliation on record, so a campus filter can include multi-campus people. */
   campuses: { universityId: string | null; universityName: string | null; status: string | null }[];
+  hotspots: RelatedHotspot[];
   promoted: boolean;
   promotionReasonLabel: string | null;
   founderSignal: FounderSignalResult;
@@ -1205,6 +1210,7 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       strongestEvidence: null,
       reviewNotes: notesByPerson.get(r.id) ?? [],
       campuses: [],
+      hotspots: [],
     });
   }
 
@@ -1410,6 +1416,7 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       promoted: promotion.promoted,
       promotionReasonLabel: promotion.reasonLabel,
       founderSignal: computeFounderSignal(db, founder.id, projects, facts),
+      hotspots: relatedHotspotsForPerson(founder.id, founder.universityId),
     };
     all.push(row);
     if (row.founderStatus === "potential") potential.push(row);

@@ -7,10 +7,11 @@ import fs from "node:fs";
 import { forceCollide, forceLink, forceManyBody, forceSimulation, forceX, forceY } from "d3-force";
 import { databasePath, getDb } from "../db/client";
 import { CAMPUSES } from "./campuses";
+import { hotspotGraphPatch } from "./hotspots";
 import { sectorLabel } from "./sectors";
 
 export type MapNodeType = "person" | "startup" | "campus" | "investor" | "program";
-export type MapEdgeType = "founded" | "co_founder" | "studied_at" | "invested_in" | "member_of";
+export type MapEdgeType = "founded" | "co_founder" | "studied_at" | "invested_in" | "member_of" | "at_campus";
 
 export interface MapNode {
   id: string;
@@ -273,6 +274,14 @@ function assembleNetworkMap(): MapGraph {
     for (const row of drfTargets) addEdge(DRF_ID, row.project_id, "invested_in");
   }
 
+  const hotspots = hotspotGraphPatch({ personIds, startupIds, universityIds: uniIds });
+  for (const add of hotspots.campusAdds) {
+    const list = campusesByCompany.get(add.id) ?? [];
+    if (!list.includes(add.campusId)) list.push(add.campusId);
+    campusesByCompany.set(add.id, list);
+  }
+  for (const edge of hotspots.edges) addEdge(edge.source, edge.target, edge.type);
+
   const counts = new Map<string, number>();
   for (const campuses of campusesByPerson.values()) {
     const id = campuses[0];
@@ -344,6 +353,9 @@ function assembleNetworkMap(): MapGraph {
     const campuses = campusesByCompany.get(program.id) ?? [];
     pushNode(program.id, "program", campuses, null, null);
   }
+  for (const program of hotspots.programs) {
+    pushNode(program.id, "program", program.campuses, null, null);
+  }
 
   const startupAnchor = new Map<string, { x: number; y: number }>();
   for (const node of simNodes) {
@@ -375,8 +387,8 @@ function assembleNetworkMap(): MapGraph {
   }
 
   const simLinks = edges.map((edge) => ({ source: edge.source, target: edge.target, type: edge.type }));
-  const distance: Record<MapEdgeType, number> = { studied_at: 78, founded: 34, co_founder: 26, member_of: 48, invested_in: 64 };
-  const strength: Record<MapEdgeType, number> = { studied_at: 0.04, founded: 0.35, co_founder: 0.15, member_of: 0.2, invested_in: 0.05 };
+  const distance: Record<MapEdgeType, number> = { studied_at: 78, founded: 34, co_founder: 26, member_of: 48, invested_in: 64, at_campus: 96 };
+  const strength: Record<MapEdgeType, number> = { studied_at: 0.04, founded: 0.35, co_founder: 0.15, member_of: 0.2, invested_in: 0.05, at_campus: 0.03 };
 
   const sim = forceSimulation(simNodes)
     .force(
@@ -470,6 +482,23 @@ function assembleNetworkMap(): MapGraph {
       r: 9,
       campus: campuses[0] ?? null,
       campuses: campuses.length > 1 ? campuses : undefined,
+      sector: null,
+      tier: null,
+      stage: null,
+      enroll: null,
+      potential: false,
+    });
+  }
+  for (const program of hotspots.programs) {
+    emit({
+      id: program.id,
+      type: "program",
+      label: program.label,
+      x: 0,
+      y: 0,
+      r: 9,
+      campus: program.campuses[0] ?? null,
+      campuses: program.campuses.length > 1 ? program.campuses : undefined,
       sector: null,
       tier: null,
       stage: null,

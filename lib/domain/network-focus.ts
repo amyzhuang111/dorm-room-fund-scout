@@ -8,6 +8,8 @@ import { ownWebsite, publicLink } from "./company-link";
 import { assembleCompanyProfile, type CompanyFactRecord } from "./company-profile";
 import { enrollmentBadge } from "./founder-status";
 import { bestPersonLink, type PersonLinkTarget } from "./person-link";
+import { hotspotGroupByMapId, hotspotGroups, personIdsForPlace, projectIdsForPlace, relatedHotspotsForPerson, relatedHotspotsForProject } from "./hotspots";
+import { bestCard, hotspotHref, samePlace } from "./hotspot-model";
 import { assembleProfileLinks, type ProfileIconLink } from "./profile-links";
 
 export interface FocusLink {
@@ -16,6 +18,7 @@ export interface FocusLink {
   role: string | null;
   round: string | null;
   sourceUrl: string | null;
+  pageHref?: string | null;
 }
 
 export interface NetworkFocus {
@@ -30,6 +33,8 @@ export interface NetworkFocus {
   profileLinks: ProfileIconLink[];
   facts: { label: string; value: string; sourceUrl: string | null; excerpt: string | null }[];
   links: { heading: string; items: FocusLink[] }[];
+  hotspotHref?: string | null;
+  hotspotLabel?: string | null;
 }
 
 const DRF_ID = "inv_dorm_room_fund";
@@ -54,6 +59,7 @@ function investorId(name: string): string {
 
 export function getNetworkFocus(id: string): NetworkFocus | null {
   const db = getDb();
+  if (id.startsWith("hsn_")) return hotspotFocus(id);
   if (id.startsWith("univ_")) return campusFocus(db, id);
   if (id.startsWith("inv_")) return investorFocus(db, id);
   const person = db
@@ -141,6 +147,14 @@ function personFocus(
   const programs = roles
     .filter((role) => programIds.has(role.id))
     .map((role) => ({ id: role.id, name: role.name, role: roleLabel(role.role), round: null, sourceUrl: null }));
+  const hotspots = relatedHotspotsForPerson(person.id).map((item) => ({
+    id: item.mapNodeId,
+    name: item.place,
+    role: item.campus,
+    round: null,
+    sourceUrl: null,
+    pageHref: item.href,
+  }));
   return {
     id: person.id,
     kind: "person",
@@ -157,6 +171,7 @@ function personFocus(
     links: [
       { heading: "Companies", items: companies },
       { heading: "Programs", items: programs },
+      { heading: "Hotspots", items: hotspots },
     ].filter((group) => group.items.length > 0),
   };
 }
@@ -222,6 +237,14 @@ function startupFocus(
   }));
   const site = publicLink(project.website_url, project.primary_link, project.primary_link_kind);
   const official = ownWebsite(project.website_url);
+  const hotspots = relatedHotspotsForProject(project.id).map((item) => ({
+    id: item.mapNodeId,
+    name: item.place,
+    role: item.campus,
+    round: null,
+    sourceUrl: null,
+    pageHref: item.href,
+  }));
   return {
     id: project.id,
     kind: "startup",
@@ -236,6 +259,7 @@ function startupFocus(
     links: [
       { heading: "Founders", items: founders },
       { heading: "Investors", items: investors },
+      { heading: "Hotspots", items: hotspots },
     ].filter((group) => group.items.length > 0),
   };
 }
@@ -296,6 +320,7 @@ function programFocus(db: ReturnType<typeof getDb>, project: { id: string; name:
        ORDER BY pe.name LIMIT 40`
     )
     .all(project.id) as { id: string; name: string; role: string }[];
+  const directory = directoryLink(project.id, project.name);
   return {
     id: project.id,
     kind: "program",
@@ -307,10 +332,65 @@ function programFocus(db: ReturnType<typeof getDb>, project: { id: string; name:
     link: null,
     profileLinks: [],
     facts: [],
+    hotspotHref: directory?.href ?? null,
+    hotspotLabel: directory ? "Open hotspot" : null,
     links: [
       { heading: "Members", items: members.map((item) => ({ id: item.id, name: item.name, role: roleLabel(item.role), round: null, sourceUrl: null })) },
     ],
   };
+}
+
+function hotspotFocus(id: string): NetworkFocus | null {
+  const group = hotspotGroupByMapId(id);
+  if (!group) return null;
+  const card = bestCard(group.cards);
+  const people = relatedPeople(group.placeKey);
+  const startups = relatedStartups(group.placeKey);
+  return {
+    id,
+    kind: "program",
+    name: group.label,
+    subtitle: [...new Set(group.cards.map((item) => item.campus))].join(" · "),
+    href: hotspotHref(card),
+    hrefLabel: "Open hotspot",
+    website: card.url ? { url: card.url, label: "Directory link" } : null,
+    link: null,
+    profileLinks: [],
+    hotspotHref: hotspotHref(card),
+    hotspotLabel: "Open hotspot",
+    facts: [
+      { label: "Tier", value: card.tier, sourceUrl: card.url || null, excerpt: card.whatYoullFind },
+      { label: "What you'll find", value: card.whatYoullFind, sourceUrl: card.url || null, excerpt: null },
+      { label: "How to get in", value: card.howToGetIn, sourceUrl: null, excerpt: null },
+      { label: "When", value: card.when, sourceUrl: null, excerpt: null },
+    ].filter((fact) => fact.value),
+    links: [
+      { heading: "People", items: people },
+      { heading: "Startups", items: startups },
+    ].filter((item) => item.items.length > 0),
+  };
+}
+
+function directoryLink(id: string, name: string): { href: string } | null {
+  const group = hotspotGroupByMapId(id) ?? hotspotGroups().find((item) => samePlace(item.label, name) || item.cards.some((card) => samePlace(card.place, name)));
+  if (!group) return null;
+  return { href: hotspotHref(bestCard(group.cards)) };
+}
+
+function relatedPeople(placeKey: string): FocusLink[] {
+  const db = getDb();
+  const ids = personIdsForPlace(placeKey).slice(0, 24);
+  if (!ids.length) return [];
+  const rows = db.prepare(`SELECT id, name FROM people WHERE id IN (${ids.map(() => "?").join(",")}) ORDER BY name`).all(...ids) as { id: string; name: string }[];
+  return rows.map((row) => ({ id: row.id, name: row.name, role: null, round: null, sourceUrl: null }));
+}
+
+function relatedStartups(placeKey: string): FocusLink[] {
+  const db = getDb();
+  const ids = projectIdsForPlace(placeKey).slice(0, 24);
+  if (!ids.length) return [];
+  const rows = db.prepare(`SELECT id, name FROM projects WHERE id IN (${ids.map(() => "?").join(",")}) AND kind = 'company' ORDER BY name`).all(...ids) as { id: string; name: string }[];
+  return rows.map((row) => ({ id: row.id, name: row.name, role: null, round: null, sourceUrl: null }));
 }
 
 function investorFocus(db: ReturnType<typeof getDb>, id: string): NetworkFocus | null {
@@ -323,6 +403,7 @@ function investorFocus(db: ReturnType<typeof getDb>, id: string): NetworkFocus |
          ORDER BY p.name`
       )
       .all() as { id: string; name: string; matched_name: string; source_url: string }[];
+    const directory = directoryLink(id, "Dorm Room Fund");
     return {
       id,
       kind: "investor",
@@ -334,6 +415,8 @@ function investorFocus(db: ReturnType<typeof getDb>, id: string): NetworkFocus |
       link: null,
       profileLinks: [],
       facts: [],
+      hotspotHref: directory?.href ?? null,
+      hotspotLabel: directory ? "Open hotspot" : null,
       links: [
         {
           heading: "Startups",
@@ -359,17 +442,20 @@ function investorFocus(db: ReturnType<typeof getDb>, id: string): NetworkFocus |
        ORDER BY p.name`
     )
     .all(name) as { id: string; name: string; detail_json: string; source_url: string }[];
+  const directory = directoryLink(id, name);
   return {
     id,
     kind: "investor",
     name,
     subtitle: `${rows.length} sourced portfolio ${rows.length === 1 ? "company" : "companies"}`,
-    href: null,
-    hrefLabel: null,
+    href: directory?.href ?? null,
+    hrefLabel: directory ? "Open hotspot" : null,
     website: null,
     link: null,
     profileLinks: [],
     facts: [],
+    hotspotHref: directory?.href ?? null,
+    hotspotLabel: directory ? "Open hotspot" : null,
     links: [
       {
         heading: "Startups",
