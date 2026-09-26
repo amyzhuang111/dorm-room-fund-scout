@@ -5,7 +5,7 @@ import { PipelineForm } from "./pipeline-form";
 import { NotesSection } from "./notes-section";
 import { AssessmentForm } from "./assessment-form";
 import { FeedbackControls } from "./feedback-controls";
-import { PersonLinkButton } from "./person-link";
+import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 
 export function CompanyDetail({ project }: { project: ProjectDetail }) {
   const concernReasons = project.gateOutcomes.filter((g) => g.result !== "pass");
@@ -33,6 +33,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
               <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
               <LeftSchoolBadge leftSchool={f.leftSchool} />
               <PersonLinkButton link={f.link} name={f.name} />
+              <ProfileIconLinks links={f.profileLinks} name={f.name} />
               <span className="text-xs text-muted">
                 {[f.school, f.program].filter(Boolean).join(" · ") || "School not on record"}
               </span>
@@ -127,7 +128,29 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
               <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
               <LeftSchoolBadge leftSchool={f.leftSchool} />
               <PersonLinkButton link={f.link} name={f.name} />
+              <ProfileIconLinks links={f.profileLinks} name={f.name} />
               <span className="text-xs text-muted">{[f.school, f.program].filter(Boolean).join(" · ")}</span>
+              {f.otherLinks.length > 0 && (
+                <ul className="basis-full space-y-0.5">
+                  {f.otherLinks.map((item) => {
+                    let host = item.url;
+                    try {
+                      host = new URL(item.url).hostname.replace(/^www\./, "");
+                    } catch {
+                      host = item.url;
+                    }
+                    return (
+                      <li key={item.url} className="text-xs text-muted">
+                        <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-link underline">
+                          {host}
+                        </a>
+                        {item.status === "unverified" ? " · unverified" : ""}
+                        {item.excerpt ? ` — ${item.excerpt}` : ""}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
             </li>
           ))}
         </ul>

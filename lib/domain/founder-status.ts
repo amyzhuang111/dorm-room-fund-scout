@@ -173,7 +173,12 @@ export function decideEnrollment(snippets: EvidenceSnippet[]): EnrollmentDecisio
   const phrases: PhraseHit[] = [];
   for (const snippet of snippets) {
     if (!snippet.excerpt && snippet.claimType !== "linkedin_education") continue;
-    if (snippet.claimType === "linkedin_candidate" || snippet.claimType === "linkedin_search_attempt") continue;
+    if (
+      snippet.claimType === "linkedin_candidate" ||
+      snippet.claimType === "linkedin_search_attempt" ||
+      snippet.claimType === "profile_link"
+    )
+      continue;
     classTokenHits(snippet, years);
     classOfHits(snippet, years);
     graduatedHits(snippet, years);
