@@ -48,7 +48,7 @@ function norm(value: string): string {
 function nameTokens(value: string): string[] {
   return norm(value)
     .split(" ")
-    .filter((token) => token.length >= 2 && !["jr", "sr", "ii", "iii", "iv"].includes(token));
+    .filter((token) => token.length >= 2 && !["jr", "sr", "ii", "iii", "iv"].includes(token) && !/^\d+$/.test(token));
 }
 
 // First-name pairs accepted only when the company, role, or the person's own
@@ -58,6 +58,8 @@ const FIRST_NAME_EQUIV: string[][] = [
   ["andy", "andrew"],
   ["ben", "benjamin"],
   ["bill", "william"],
+  ["cal", "calvin"],
+  ["cathy", "catherine", "katherine"],
   ["bob", "robert"],
   ["charlie", "charles"],
   ["chris", "christopher"],
