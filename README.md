@@ -30,6 +30,8 @@ npm run import:apify-linkedin -- --dry-run
 npm run import:apify-linkedin
 ```
 
+If the dry-run instead dies immediately with `malformed database schema (…) - orphan index`, the committed `data/campus-universe.db` is not the broken part. A leftover `data/campus-universe.db-wal` or `-shm` from an older copy of the file is being replayed on top of it. Git ignores those sidecars, so a pull that replaces the `.db` leaves them behind, and the name in the error is whatever row landed on the schema page (often a person id). Opening the database moves a sidecar pair that fails schema load aside and reopens the main file. Deleting the two sidecar files yourself does the same thing. Do not delete `data/campus-universe.db`. `.gitattributes` marks `*.db` binary so a Windows checkout does not rewrite it.
+
 `--dry-run` prints the queue and the Apify estimate and spends nothing.
 A live lookup stops after that estimate until you pass `--yes`. Run the
 same lookup command again to resume: people already in the JSONL file are
