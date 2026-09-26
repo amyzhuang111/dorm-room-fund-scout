@@ -327,6 +327,10 @@ export function buildSearchQuery(person: LookupPerson, preferredCampusId: string
   return parts.join(" ");
 }
 
+export function personNameMatches(personName: string, text: string): boolean {
+  return nameIn(text, personName);
+}
+
 function nameIn(text: string, name: string): boolean {
   const cleaned = cleanSearchName(name) ?? "";
   const tokens = cleaned

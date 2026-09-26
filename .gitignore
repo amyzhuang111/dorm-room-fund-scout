@@ -48,3 +48,4 @@ next-env.d.ts
 
 # Local Apify LinkedIn lookup output. Produced on the owner's laptop.
 /data/imports/apify_linkedin_results.jsonl
+/data/imports/apify_linkedin_verify_results.jsonl
