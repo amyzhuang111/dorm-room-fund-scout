@@ -47,6 +47,9 @@ export const FounderCard = memo(function FounderCard({
       {founder.founderStatus !== "potential" && founder.strongestEvidence && (
         <p className={`mt-2 text-sm text-foreground ${open ? "" : "line-clamp-3"}`}>{founder.strongestEvidence}</p>
       )}
+      {founder.reviewNotes.length > 0 && (
+        <p className={`mt-2 text-xs text-muted ${open ? "" : "line-clamp-2"}`}>{founder.reviewNotes.join(" ")}</p>
+      )}
 
       <div className="mt-2 flex items-center justify-between gap-2">
         <span className="text-xs text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>

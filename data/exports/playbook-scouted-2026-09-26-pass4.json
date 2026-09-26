@@ -2432,39 +2432,6 @@
    "id": "scout_potential_rachel_owens_univ_stanford"
   },
   {
-   "name": "Rushil Mathur",
-   "display_name": "Rushil Mathur",
-   "founder_status": "potential",
-   "potential_signal": "IMO 2024 gold medallist",
-   "signal_category": "olympiad",
-   "signal_tier": "A",
-   "signal_tier_basis": "IOI/IMO gold (tier list: A)",
-   "campus_id": "univ_harvard",
-   "school": null,
-   "stage": "current_student",
-   "stage_evidence": "'currently pursuing Maths & Computing at Harvard' (third-party post, late 2025)",
-   "stage_basis": "direct",
-   "linkedin": null,
-   "linkedin_status": "not_found",
-   "linkedin_evidence": null,
-   "source_url": "https://www.linkedin.com/posts/mrityunjay-shukla-9a36a529_imogold-matholympiad-combinatorics-activity-7400794639986855936-ZmUz",
-   "excerpt": "mentor Rushil Mathur at Kohinoor Campus — an IMO 2024 Gold Medalist, currently pursuing Maths & Computing at Harvard",
-   "claims": [
-    {
-     "claim_type": "potential_founder_signal",
-     "source_name": "LinkedIn post (Mrityunjay Shukla)",
-     "source_url": "https://www.linkedin.com/posts/mrityunjay-shukla-9a36a529_imogold-matholympiad-combinatorics-activity-7400794639986855936-ZmUz",
-     "excerpt": "mentor Rushil Mathur at Kohinoor Campus — an IMO 2024 Gold Medalist, currently pursuing Maths & Computing at Harvard",
-     "published_date": "2024",
-     "retrieved_at": "2026-09-25T20:49:00-04:00",
-     "label": "observed_fact",
-     "verification_state": "unverified"
-    }
-   ],
-   "additional_sources": [],
-   "id": "scout_potential_rushil_mathur_univ_harvard"
-  },
-  {
    "name": "Sanjith Udupa",
    "display_name": "Sanjith Udupa",
    "founder_status": "potential",
@@ -2854,11 +2821,13 @@
   },
   {
    "entity_type": "person",
-   "repo_entity_id": "person_B7eLAt1NC0Jp",
+   "repo_entity_id": "person_kYCMK89gO-5v",
    "also_in": [],
    "name": "David Fu",
    "match_basis": "exact name match to repo person",
-   "existing_repo_roles": [],
+   "existing_repo_roles": [
+    "{\"project\":\"Penn Mobile\",\"roles\":[\"Android Mobile Engineer\",\"Team Lead\"]}"
+   ],
    "display_name": "David Fu",
    "founder_status": "potential",
    "potential_signal": "Penn Labs Team Lead (Penn Mobile)",
@@ -3008,11 +2977,13 @@
   },
   {
    "entity_type": "person",
-   "repo_entity_id": "person_53QbVHf8Saoo",
+   "repo_entity_id": "person_6p2ELmfBpFG5",
    "also_in": [],
    "name": "Julian Weng",
    "match_basis": "exact name match to repo person",
-   "existing_repo_roles": [],
+   "existing_repo_roles": [
+    "{\"project\":\"Penn Clubs\",\"roles\":[\"Frontend Engineer\",\"Team Lead\"]}"
+   ],
    "display_name": "Julian Weng",
    "founder_status": "potential",
    "potential_signal": "Penn Labs Team Lead (Penn Clubs)",

@@ -982,6 +982,7 @@ export interface FounderRow {
   sourceIds: string[];
   personIds: string[];
   strongestEvidence: string | null; // the most recent claim excerpt attributed to them
+  reviewNotes: string[]; // hand-check caveats stored on the person; empty for everyone else
   /** Every campus affiliation on record, so a campus filter can include multi-campus people. */
   campuses: { universityId: string | null; universityName: string | null; status: string | null }[];
   promoted: boolean;
@@ -1052,6 +1053,14 @@ function cachedFounders(): { promoted: FounderRow[]; potential: FounderRow[]; al
 
 function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } {
   const db = getDb();
+  const notesByPerson = new Map<string, string[]>();
+  for (const row of db
+    .prepare(`SELECT entity_id, body FROM notes WHERE entity_type = 'person' AND trim(body) != '' ORDER BY created_at`)
+    .all() as { entity_id: string; body: string }[]) {
+    const list = notesByPerson.get(row.entity_id) ?? [];
+    list.push(row.body);
+    notesByPerson.set(row.entity_id, list);
+  }
   const rows = db
     .prepare(
       `SELECT DISTINCT pe.id as id, pe.name as name, pe.aliases_json as aliases_json, a.status as status, a.university_id as university_id, u.name as university_name,
@@ -1129,6 +1138,7 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       sourceIds: [],
       personIds: [r.id],
       strongestEvidence: null,
+      reviewNotes: notesByPerson.get(r.id) ?? [],
       campuses: [],
     });
   }
