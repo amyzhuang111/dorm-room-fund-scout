@@ -3,7 +3,7 @@
 //
 // Actor: apify/google-search-scraper (official Apify Store actor, no
 // LinkedIn cookies or login). Each person is one Google query:
-//   site:linkedin.com/in "Full Name" "School" "Company"
+//   site:linkedin.com/in "Full Name" ("Company" OR Penn OR UPenn OR Wharton OR "University of Pennsylvania" OR SEAS OR M&T)
 // maxPagesPerQuery is 1 and every paid add-on is off. Pricing checked
 // 2026-09-26 against the actor rate card that started 2026-08-20:
 //   Free   $0.0045 / page + $0.001 actor start
@@ -42,6 +42,7 @@ import {
   buildResultLine,
   buildSearchQuery,
   campusFlagHelp,
+  cleanSearchName,
   estimateRun,
   formatUsd,
   loadQueue,
@@ -87,8 +88,110 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function normQuery(query: string): string {
+export function normQuery(query: string): string {
   return query.replace(/\s+/g, " ").trim().toLowerCase();
+}
+
+function looseQueryKey(query: string): string {
+  return normQuery(query).replace(/["']/g, "");
+}
+
+function googleQueryFromUrl(raw: string): string {
+  try {
+    const url = new URL(raw);
+    return url.searchParams.get("q") ?? "";
+  } catch {
+    return "";
+  }
+}
+
+function echoedTerm(rec: Record<string, unknown>): string {
+  const searchQuery = rec.searchQuery;
+  if (typeof searchQuery === "string") return searchQuery;
+  if (searchQuery && typeof searchQuery === "object") {
+    const query = searchQuery as { term?: unknown; url?: unknown };
+    if (typeof query.term === "string" && query.term.trim()) return query.term;
+    if (typeof query.url === "string") {
+      const fromUrl = googleQueryFromUrl(query.url);
+      if (fromUrl) return fromUrl;
+    }
+  }
+  if (typeof rec.term === "string") return rec.term;
+  if (typeof rec.query === "string") return rec.query;
+  return "";
+}
+
+function organicRows(rec: Record<string, unknown>): Record<string, unknown>[] {
+  if (Array.isArray(rec.organicResults)) {
+    return rec.organicResults.filter((row): row is Record<string, unknown> => Boolean(row) && typeof row === "object");
+  }
+  if (typeof rec.url === "string" && !/google\.[^/]+\/search/i.test(rec.url)) return [rec];
+  return [];
+}
+
+function toCandidate(row: Record<string, unknown>): CandidateInput | null {
+  if (row.type === "paid") return null;
+  const url = typeof row.url === "string" ? row.url : "";
+  if (!url) return null;
+  const title = typeof row.title === "string" ? row.title : "";
+  const snippet = typeof row.description === "string" ? row.description : typeof row.snippet === "string" ? row.snippet : "";
+  return { url, title, snippet };
+}
+
+interface SerpPage {
+  term: string;
+  organic: CandidateInput[];
+}
+
+function readSerpPages(items: unknown[]): SerpPage[] {
+  const pages: SerpPage[] = [];
+  for (const item of items) {
+    if (!item || typeof item !== "object") continue;
+    const rec = item as Record<string, unknown>;
+    const organic = organicRows(rec).map(toCandidate).filter((row): row is CandidateInput => row !== null);
+    const nested = Array.isArray(rec.organicResults);
+    if (!nested && organic.length === 0 && !echoedTerm(rec)) continue;
+    pages.push({ term: echoedTerm(rec), organic });
+  }
+  return pages;
+}
+
+// One dataset item is one Google page. Match it to the query we sent by
+// searchQuery.term (quotes and spacing ignored). When the actor omits the
+// term, or rewrites it, fall back to dataset order if there is one page per
+// query.
+export function assignOrganicResults(queries: string[], items: unknown[]): Map<string, CandidateInput[]> {
+  const pages = readSerpPages(items);
+  const pagesByKey = new Map<string, number[]>();
+  pages.forEach((page, index) => {
+    const key = looseQueryKey(page.term);
+    if (!key) return;
+    const list = pagesByKey.get(key) ?? [];
+    list.push(index);
+    pagesByKey.set(key, list);
+  });
+  const out = new Map<string, CandidateInput[]>();
+  const consumed = new Set<number>();
+  queries.forEach((query) => {
+    const hits = pagesByKey.get(looseQueryKey(query)) ?? [];
+    if (hits.length === 0) return;
+    const organic = hits.flatMap((index) => {
+      consumed.add(index);
+      return pages[index].organic;
+    });
+    out.set(normQuery(query), organic);
+  });
+  if (pages.length === queries.length) {
+    queries.forEach((query, index) => {
+      const key = normQuery(query);
+      if (out.has(key) || consumed.has(index)) return;
+      consumed.add(index);
+      out.set(key, pages[index].organic);
+    });
+  } else if (queries.length === 1 && pages.length === 1 && !out.has(normQuery(queries[0]))) {
+    out.set(normQuery(queries[0]), pages[0].organic);
+  }
+  return out;
 }
 
 function usage(): string {
@@ -160,44 +263,11 @@ function printEstimate(lookups: number) {
   console.log(`A page is still charged when Google returns nobody. Confirm ${ACTOR_PAGE} before a large run.`);
 }
 
-function collectOrganic(items: unknown[]): Map<string, CandidateInput[]> {
-  const grouped = new Map<string, CandidateInput[]>();
-  const add = (term: string, row: Record<string, unknown>) => {
-    if (row.type === "paid") return;
-    const url = typeof row.url === "string" ? row.url : "";
-    if (!url) return;
-    const title = typeof row.title === "string" ? row.title : "";
-    const snippet =
-      typeof row.description === "string" ? row.description : typeof row.snippet === "string" ? row.snippet : "";
-    const key = normQuery(term);
-    const list = grouped.get(key) ?? [];
-    list.push({ url, title, snippet });
-    grouped.set(key, list);
-  };
-  for (const item of items) {
-    if (!item || typeof item !== "object") continue;
-    const rec = item as Record<string, unknown>;
-    const searchQuery = rec.searchQuery;
-    const term =
-      searchQuery && typeof searchQuery === "object" && typeof (searchQuery as { term?: unknown }).term === "string"
-        ? (searchQuery as { term: string }).term
-        : "";
-    if (Array.isArray(rec.organicResults)) {
-      for (const row of rec.organicResults) {
-        if (row && typeof row === "object") add(term, row as Record<string, unknown>);
-      }
-      continue;
-    }
-    if (typeof rec.url === "string") add(term, rec);
-  }
-  return grouped;
-}
-
 async function listDatasetItems(client: ApifyClient, datasetId: string): Promise<unknown[]> {
   const items: unknown[] = [];
   let offset = 0;
   for (;;) {
-    const page = await client.dataset(datasetId).listItems({ limit: 1000, offset, clean: true });
+    const page = await client.dataset(datasetId).listItems({ limit: 1000, offset, clean: false });
     items.push(...page.items);
     if (page.items.length === 0 || offset + page.count >= page.total) break;
     offset += page.count;
@@ -242,12 +312,10 @@ async function callActor(token: string, batch: Queued[]): Promise<Map<string, Ca
   }
   if (!run.defaultDatasetId) throw new Error(`Apify run ${run.id} succeeded without a dataset.`);
   const items = await listDatasetItems(client, run.defaultDatasetId);
-  const grouped = collectOrganic(items);
-  if (batch.length === 1 && grouped.size === 1 && !grouped.has(normQuery(batch[0].query))) {
-    const only = [...grouped.values()][0];
-    grouped.set(normQuery(batch[0].query), only);
-  }
-  return grouped;
+  return assignOrganicResults(
+    batch.map((item) => item.query),
+    items
+  );
 }
 
 async function searchLive(token: string, batch: Queued[]): Promise<Map<string, CandidateInput[]>> {
@@ -304,21 +372,26 @@ export async function runLookup(options: {
 }): Promise<number> {
   const queue = loadQueue(options.db, options.campusId);
   const done = readDoneIds(options.outPath);
-  const pending = queue.filter((person) => !done.has(person.id));
-  const selected = options.limit == null ? pending : pending.slice(0, options.limit);
-  const work: Queued[] = selected.map((person) => ({ person, query: buildSearchQuery(person, options.campusId) }));
 
   console.log("LinkedIn lookup. People with no confirmed linkedin.com/in URL (unverified candidates are included).");
-  console.log("Order: Penn, then Berkeley, then everyone else.");
+  console.log("Order: founders, then potential founders, within Penn, then Berkeley, then everyone else.");
   if (options.campusId) console.log(`Campus filter: ${options.campusId}`);
   console.log(`Missing confirmed LinkedIn: ${queue.length}`);
+  const pending = queue.filter((person) => !done.has(person.id));
+  const skipped = pending.filter((person) => cleanSearchName(person.name) === null);
+  const searchable = pending.filter((person) => cleanSearchName(person.name) !== null);
+  console.log(
+    `Skipped ${skipped.length} ${skipped.length === 1 ? "person" : "people"} whose name is only a handle (no first and last name).`
+  );
   console.log(`Already in ${options.outPath}: ${queue.filter((person) => done.has(person.id)).length}`);
+  const selected = options.limit == null ? searchable : searchable.slice(0, options.limit);
+  const work: Queued[] = selected.map((person) => ({ person, query: buildSearchQuery(person, options.campusId) }));
   console.log(`This run: ${work.length}`);
   const byCampus = new Map<string, number>();
   for (const item of work) byCampus.set(item.person.campusId || "(no campus)", (byCampus.get(item.person.campusId || "(no campus)") ?? 0) + 1);
   for (const [campus, count] of [...byCampus.entries()].sort((a, b) => b[1] - a[1])) console.log(`  ${campus}: ${count}`);
-  for (const item of work.slice(0, 5)) console.log(`  query  ${item.person.name} — ${item.query}`);
-  if (work.length > 5) console.log(`  … ${work.length - 5} more`);
+  for (const item of work.slice(0, 10)) console.log(`  query  ${item.person.name} — ${item.query}`);
+  if (work.length > 10) console.log(`  … ${work.length - 10} more`);
   if (work.length === 0) {
     console.log("Nothing to search.");
     return 0;

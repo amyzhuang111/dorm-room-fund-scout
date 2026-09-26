@@ -22,27 +22,20 @@ export const MAX_UNVERIFIED = 3;
 export const PAGE_USD = { free: 0.0045, bronze: 0.0025, silver: 0.00195, gold: 0.0018 } as const;
 export const ACTOR_START_USD = 0.001;
 
-const SCHOOL_PATTERNS: Record<string, RegExp> = {
-  univ_penn: /university of pennsylvania|\bupenn\b|\bwharton\b|penn engineering/i,
-  univ_berkeley: /university of california,?\s*berkeley|uc berkeley|\bberkeley\b/i,
-  univ_waterloo: /university of waterloo|\bwaterloo\b/i,
-  univ_stanford: /\bstanford\b/i,
-  univ_mit: /massachusetts institute of technology|\bmit\b/i,
-  univ_harvard: /\bharvard\b/i,
-};
-
-const SCHOOL_QUERY: Record<string, string> = {
-  univ_penn: "University of Pennsylvania",
-  univ_berkeley: "UC Berkeley",
-  univ_waterloo: "University of Waterloo",
-  univ_stanford: "Stanford University",
-  univ_mit: "MIT",
-  univ_harvard: "Harvard University",
-  univ_cmu: "Carnegie Mellon University",
-  univ_columbia: "Columbia University",
-  univ_gatech: "Georgia Tech",
-  univ_michigan: "University of Michigan",
-  univ_princeton: "Princeton University",
+// Same phrases go into the Google OR-group and into title/snippet/slug checks.
+// Multi-word phrases are quoted in the query; short aliases stay bare.
+const CAMPUS_SEARCH_ALIASES: Record<string, string[]> = {
+  univ_penn: ["Penn", "UPenn", "Wharton", "University of Pennsylvania", "SEAS", "M&T"],
+  univ_berkeley: ["Berkeley", "UC Berkeley", "Haas", "Cal"],
+  univ_stanford: ["Stanford", "Stanford University"],
+  univ_mit: ["MIT", "Massachusetts Institute of Technology"],
+  univ_harvard: ["Harvard", "Harvard University"],
+  univ_waterloo: ["Waterloo", "University of Waterloo"],
+  univ_cmu: ["CMU", "Carnegie Mellon", "Carnegie Mellon University"],
+  univ_columbia: ["Columbia", "Columbia University"],
+  univ_gatech: ["Georgia Tech", "Georgia Institute of Technology"],
+  univ_michigan: ["Michigan", "UMich", "University of Michigan"],
+  univ_princeton: ["Princeton", "Princeton University"],
 };
 
 const CAMPUS_FLAGS: Record<string, string> = {
@@ -88,11 +81,10 @@ const GENERIC_ROLES = new Set([
   "undergrad",
 ]);
 
-const SKIP_SCHOOL_ALIAS = new Set(["cal", "penn"]);
-
 export interface SchoolRef {
   universityId: string;
   name: string;
+  aliases: string[];
   pattern: RegExp;
 }
 
@@ -107,6 +99,7 @@ export interface LookupPerson {
   evidence: string[];
   existingUnverified: string[];
   confirmedLinkedIn: boolean;
+  founderStatus: string | null;
 }
 
 export interface CandidateInput {
@@ -197,42 +190,79 @@ function escapeReg(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-function patternFor(universityId: string, name: string, aliases: string[]): RegExp {
-  const hardcoded = SCHOOL_PATTERNS[universityId];
-  if (hardcoded) return hardcoded;
-  const bits = [name, ...aliases]
-    .map((part) => part.trim())
-    .filter((part) => part.length >= 3 && !SKIP_SCHOOL_ALIAS.has(part.toLowerCase()));
-  const unique = [...new Set(bits)];
-  if (unique.length === 0) return /$^/;
-  return new RegExp(unique.map((part) => `\\b${escapeReg(part)}\\b`).join("|"), "i");
+export function campusSearchAliases(universityId: string, officialName: string, extra: string[] = []): string[] {
+  const listed = CAMPUS_SEARCH_ALIASES[universityId];
+  if (listed) return [...listed];
+  const bits = [officialName, ...extra].map((part) => part.trim()).filter((part) => part.length >= 3);
+  return [...new Set(bits)];
 }
 
-function schoolQueryName(universityId: string, officialName: string): string {
-  return SCHOOL_QUERY[universityId] ?? officialName;
+function patternFromAliases(aliases: string[]): RegExp {
+  const bits = aliases.map((alias) => alias.trim()).filter(Boolean);
+  if (bits.length === 0) return /$^/;
+  const body = bits
+    .map((alias) => {
+      const escaped = escapeReg(alias).replace(/\\&/g, "\\s*&\\s*");
+      return `\\b${escaped}\\b`;
+    })
+    .join("|");
+  return new RegExp(body, "i");
+}
+
+function splitNameTokens(raw: string): string[] {
+  const chunks = raw
+    .replace(/[_./]+/g, " ")
+    .split(/\s+/)
+    .flatMap((token) => token.split(/-+/))
+    .map((token) => token.replace(/\d+/g, ""))
+    .flatMap((token) => token.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2").split(/\s+/))
+    .map((token) => token.replace(/[^A-Za-z']/g, ""))
+    .filter((token) => token.replace(/'/g, "").length >= 2);
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const token of chunks) {
+    const key = token.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const letters = token.replace(/'/g, "");
+    const display = letters === letters.toLowerCase() ? letters.charAt(0).toUpperCase() + letters.slice(1) : token;
+    out.push(display);
+  }
+  return out;
+}
+
+// Display name used in the Google query. Null when the record is only a
+// GitHub-style handle (no separate first and last name).
+export function cleanSearchName(raw: string): string | null {
+  const tokens = splitNameTokens(raw);
+  if (tokens.length < 2) return null;
+  return tokens.slice(0, 6).join(" ");
+}
+
+function quoteTerm(value: string): string {
+  const clean = value.replace(/[\r\n"]/g, " ").replace(/\s+/g, " ").trim();
+  return /\s/.test(clean) ? `"${clean}"` : clean;
 }
 
 export function buildSearchQuery(person: LookupPerson, preferredCampusId: string | null): string {
+  const queryName = cleanSearchName(person.name);
+  if (!queryName) return "";
   const preferred = preferredCampusId ? person.schools.find((school) => school.universityId === preferredCampusId) : undefined;
   const school = preferred ?? person.schools[0];
-  const clean = (value: string, maxWords: number) =>
-    value
-      .replace(/[\r\n"]/g, " ")
-      .replace(/\s+/g, " ")
-      .trim()
-      .split(" ")
-      .filter(Boolean)
-      .slice(0, maxWords)
-      .join(" ");
-  const parts = ["site:linkedin.com/in", `"${clean(person.name, 8)}"`];
-  if (school) parts.push(`"${clean(schoolQueryName(school.universityId, school.name), 8)}"`);
+  const parts = ["site:linkedin.com/in", `"${queryName}"`];
   const company = person.companies.find((name) => name.trim().length >= 4);
-  if (company) parts.push(`"${clean(company, 8)}"`);
+  const aliases = school ? [...school.aliases] : [];
+  const orTerms = [
+    ...(company ? [quoteTerm(company.split(/\s+/).slice(0, 8).join(" "))] : []),
+    ...aliases.map((alias) => quoteTerm(alias)),
+  ];
+  if (orTerms.length > 0) parts.push(`(${orTerms.join(" OR ")})`);
   return parts.join(" ");
 }
 
 function nameIn(text: string, name: string): boolean {
-  const tokens = name
+  const cleaned = cleanSearchName(name) ?? "";
+  const tokens = cleaned
     .toLowerCase()
     .split(/\s+/)
     .map((token) => token.replace(/[^a-z'-]/g, ""))
@@ -287,7 +317,33 @@ export function confirmationWhy(signals: MatchSignals): string {
   if (signals.school_match) bits.push("the school");
   if (signals.matched_company) bits.push(signals.matched_company);
   if (signals.matched_role) bits.push(`the role ${signals.matched_role}`);
-  return `the title or snippet names the person and ${bits.join(" and ")}`;
+  return `the result names the person and ${bits.join(" and ")}`;
+}
+
+function linkedInSlug(url: string): string {
+  const normalized = normalizeLinkedIn(url);
+  if (!normalized) return "";
+  return (normalized.split("/in/")[1] ?? "").toLowerCase();
+}
+
+function aliasInSlug(aliases: string[], slug: string): boolean {
+  if (!slug) return false;
+  const segments = new Set(slug.split(/[-_]/).filter(Boolean));
+  const flat = slug.replace(/[-_]/g, "");
+  for (const alias of aliases) {
+    const compact = alias.toLowerCase().replace(/&/g, "").replace(/[^a-z0-9]/g, "");
+    if (compact.length < 3) continue;
+    if (segments.has(compact)) return true;
+    if (compact.length >= 4 && flat.includes(compact)) return true;
+    if (alias.toLowerCase() === "m&t" && /(?:^|[-_])m[-_]?t(?:$|[-_])/.test(slug)) return true;
+  }
+  return false;
+}
+
+function companyInSlug(company: string, slug: string): boolean {
+  const compact = company.toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (compact.length < 4 || !slug) return false;
+  return slug.replace(/[-_]/g, "").includes(compact);
 }
 
 export function judgePerson(
@@ -303,20 +359,23 @@ export function judgePerson(
     const title = candidate.title ?? "";
     const snippet = candidate.snippet ?? "";
     const text = `${title}\n${snippet}`;
-    const nameMatch = nameIn(text, person.name);
-    const schoolMatch = person.schools.some((school) => school.pattern.test(text));
+    const slug = linkedInSlug(url);
+    const nameMatch = nameIn(`${text}\n${slug.replace(/[-_]/g, " ")}`, person.name);
+    const schoolMatch = person.schools.some(
+      (school) => school.pattern.test(text) || aliasInSlug(school.aliases, slug)
+    );
     let matchedCompany: string | null = null;
     for (const company of person.companies) {
       const needle = company.replace(/\s+/g, " ").trim();
       if (needle.length < 4) continue;
-      if (text.toLowerCase().includes(needle.toLowerCase())) {
+      if (text.toLowerCase().includes(needle.toLowerCase()) || companyInSlug(needle, slug)) {
         matchedCompany = company;
         break;
       }
     }
     let matchedRole: string | null = null;
     for (const role of person.roles) {
-      const hit = rolePhrases(role).find((phrase) => phraseIn(text, phrase));
+      const hit = rolePhrases(role).find((phrase) => phraseIn(text, phrase) || companyInSlug(phrase, slug));
       if (hit) {
         matchedRole = hit;
         break;
@@ -451,6 +510,12 @@ function campusRank(universityId: string): number {
   return 2;
 }
 
+function founderRank(person: Pick<LookupPerson, "founderStatus" | "roles">): number {
+  if (person.founderStatus === "founder" || person.roles.some((role) => role.toLowerCase() === "founder")) return 0;
+  if (person.founderStatus === "potential") return 1;
+  return 2;
+}
+
 function parseAliases(raw: string | null): string[] {
   if (!raw) return [];
   try {
@@ -466,7 +531,7 @@ function clipEvidence(excerpt: string): string {
 }
 
 function assemble(
-  rows: { id: string; name: string; confirmed: boolean }[],
+  rows: { id: string; name: string; confirmed: boolean; founderStatus: string | null }[],
   affiliations: AffiliationRow[],
   roles: RoleRow[],
   evidence: EvidenceRow[],
@@ -480,10 +545,12 @@ function assemble(
       schoolsByPerson.set(row.person_id, list);
       continue;
     }
+    const aliases = campusSearchAliases(row.university_id, row.name, parseAliases(row.aliases_json));
     list.push({
       universityId: row.university_id,
       name: row.name,
-      pattern: patternFor(row.university_id, row.name, parseAliases(row.aliases_json)),
+      aliases,
+      pattern: patternFromAliases(aliases),
     });
     schoolsByPerson.set(row.person_id, list);
   }
@@ -503,7 +570,10 @@ function assemble(
     if (row.kind === "company" || role.toLowerCase() === "founder") {
       const list = companiesByPerson.get(row.person_id) ?? [];
       const name = row.name.trim();
-      if (name && !list.some((item) => item.toLowerCase() === name.toLowerCase())) list.push(name);
+      if (name && !list.some((item) => item.toLowerCase() === name.toLowerCase())) {
+        if (role.toLowerCase() === "founder") list.unshift(name);
+        else list.push(name);
+      }
       companiesByPerson.set(row.person_id, list);
     }
   }
@@ -547,15 +617,20 @@ function assemble(
       evidence: evidenceByPerson.get(row.id) ?? [],
       existingUnverified: unverifiedByPerson.get(row.id) ?? [],
       confirmedLinkedIn: row.confirmed,
+      founderStatus: row.founderStatus,
     });
   }
   people.sort(
-    (a, b) => campusRank(a.campusId) - campusRank(b.campusId) || a.campusId.localeCompare(b.campusId) || a.name.localeCompare(b.name)
+    (a, b) =>
+      campusRank(a.campusId) - campusRank(b.campusId) ||
+      a.campusId.localeCompare(b.campusId) ||
+      founderRank(a) - founderRank(b) ||
+      a.name.localeCompare(b.name)
   );
   return people;
 }
 
-const PEOPLE_SQL = `SELECT pe.id as id, pe.name as name,
+const PEOPLE_SQL = `SELECT pe.id as id, pe.name as name, pe.founder_status as founder_status,
             CASE WHEN pe.aliases_json LIKE '%linkedin.com/in/%' THEN 1 ELSE 0 END as confirmed
      FROM people pe`;
 
@@ -566,14 +641,20 @@ export function loadQueue(db: Database.Database, campusId: string | null): Looku
     sql += ` AND EXISTS (SELECT 1 FROM affiliations a WHERE a.person_id = pe.id AND a.university_id = ?)`;
     params.push(campusId);
   }
-  const rows = db.prepare(sql).all(...params) as { id: string; name: string; confirmed: number }[];
-  return hydrate(db, rows.map((row) => ({ id: row.id, name: row.name, confirmed: row.confirmed === 1 })), campusId);
+  const rows = db.prepare(sql).all(...params) as { id: string; name: string; confirmed: number; founder_status: string | null }[];
+  return hydrate(
+    db,
+    rows.map((row) => ({ id: row.id, name: row.name, confirmed: row.confirmed === 1, founderStatus: row.founder_status })),
+    campusId
+  );
 }
 
 export function loadPerson(db: Database.Database, personId: string): LookupPerson | null {
-  const row = db.prepare(`${PEOPLE_SQL} WHERE pe.id = ?`).get(personId) as { id: string; name: string; confirmed: number } | undefined;
+  const row = db.prepare(`${PEOPLE_SQL} WHERE pe.id = ?`).get(personId) as
+    | { id: string; name: string; confirmed: number; founder_status: string | null }
+    | undefined;
   if (!row) return null;
-  return hydrate(db, [{ id: row.id, name: row.name, confirmed: row.confirmed === 1 }], null)[0] ?? null;
+  return hydrate(db, [{ id: row.id, name: row.name, confirmed: row.confirmed === 1, founderStatus: row.founder_status }], null)[0] ?? null;
 }
 
 function queryChunks<T>(db: Database.Database, sql: (placeholders: string) => string, ids: string[]): T[] {
@@ -588,7 +669,7 @@ function queryChunks<T>(db: Database.Database, sql: (placeholders: string) => st
 
 function hydrate(
   db: Database.Database,
-  rows: { id: string; name: string; confirmed: boolean }[],
+  rows: { id: string; name: string; confirmed: boolean; founderStatus: string | null }[],
   preferredCampusId: string | null
 ): LookupPerson[] {
   if (rows.length === 0) return [];

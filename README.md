@@ -17,8 +17,10 @@ public Google results for `linkedin.com/in` profiles and writes candidates
 to `data/imports/apify_linkedin_results.jsonl` (gitignored). It does not
 write to the database. The importer applies the file: a profile is
 confirmed only when the name matches and the school, company, or role
-appears in the title or snippet. A name-only match stays unverified.
-Anything else is left blank.
+appears in the title, snippet, or LinkedIn URL. Campus aliases count
+(Penn, UPenn, Wharton, SEAS, M&T, and the same kind of list for other
+schools). A name-only match stays unverified. Anything else is left blank.
+Handles with no first and last name are skipped. Founders are searched first.
 
 From PowerShell, in the repo root (`.env.local` holds `APIFY_API_TOKEN`):
 
