@@ -10,7 +10,7 @@ import { evaluatePromotion } from "./promotion";
 import { parseCommunitySignalCategories, type CommunityConfidence, type CommunitySignal } from "./community-signal";
 import { catalogueForCampus } from "./source-quality";
 import { ENROLLMENT_STATUSES, enrollmentBoost, type EnrollmentStatus } from "./founder-status";
-import { bestPersonLink, confirmedLinkedIn, type PersonLinkTarget } from "./person-link";
+import { bestPersonLink, confirmedLinkedIn, readLinkedInCandidate, type PersonLinkTarget } from "./person-link";
 import type { RelatedHotspot } from "./hotspot-model";
 import { relatedHotspotsForPerson, relatedHotspotsForProject } from "./hotspots";
 import { assembleProfileLinks, type OtherSourceLink, type ProfileIconLink } from "./profile-links";
@@ -134,6 +134,7 @@ function buildUniversities(): UniversitySummary[] {
 export interface LinkedInCandidate {
   url: string;
   reason: string;
+  confidence?: "likely" | "unverified";
 }
 
 export interface NamedFounder {
@@ -221,20 +222,14 @@ export function listCandidateSectors(): string[] {
 export function linkedinCandidatesFor(db: ReturnType<typeof getDb>, personId: string): LinkedInCandidate[] {
   const rows = db
     .prepare(
-      `SELECT value_json FROM claims
-       WHERE entity_type = 'person' AND entity_id = ? AND claim_type = 'linkedin_candidate' AND verification_state = 'unverified'`
+      `SELECT value_json, verification_state FROM claims
+       WHERE entity_type = 'person' AND entity_id = ? AND claim_type = 'linkedin_candidate' AND verification_state IN ('unverified', 'likely')`
     )
-    .all(personId) as { value_json: string }[];
+    .all(personId) as { value_json: string; verification_state: string }[];
   const out: LinkedInCandidate[] = [];
   for (const row of rows) {
-    try {
-      const value = JSON.parse(row.value_json) as { linkedin?: string; reason?: string };
-      if (value.linkedin && value.linkedin.includes("linkedin.com/in/")) {
-        out.push({ url: value.linkedin, reason: value.reason ?? "Unverified candidate" });
-      }
-    } catch {
-      // skip a malformed claim
-    }
+    const candidate = readLinkedInCandidate(row.value_json, row.verification_state);
+    if (candidate) out.push(candidate);
   }
   return out;
 }
@@ -246,21 +241,17 @@ export function linkedinFromAliases(aliasesJson: string | null | undefined): str
 export function unverifiedLinkedInByPerson(db: ReturnType<typeof getDb>): Map<string, LinkedInCandidate[]> {
   const rows = db
     .prepare(
-      `SELECT entity_id, value_json FROM claims
-       WHERE entity_type = 'person' AND claim_type = 'linkedin_candidate' AND verification_state = 'unverified'`
+      `SELECT entity_id, value_json, verification_state FROM claims
+       WHERE entity_type = 'person' AND claim_type = 'linkedin_candidate' AND verification_state IN ('unverified', 'likely')`
     )
-    .all() as { entity_id: string; value_json: string }[];
+    .all() as { entity_id: string; value_json: string; verification_state: string }[];
   const out = new Map<string, LinkedInCandidate[]>();
   for (const row of rows) {
-    try {
-      const value = JSON.parse(row.value_json) as { linkedin?: string; reason?: string };
-      if (!value.linkedin || !value.linkedin.includes("linkedin.com/in/")) continue;
-      const list = out.get(row.entity_id) ?? [];
-      list.push({ url: value.linkedin, reason: value.reason ?? "Unverified candidate" });
-      out.set(row.entity_id, list);
-    } catch {
-      // skip a malformed claim
-    }
+    const candidate = readLinkedInCandidate(row.value_json, row.verification_state);
+    if (!candidate) continue;
+    const list = out.get(row.entity_id) ?? [];
+    list.push(candidate);
+    out.set(row.entity_id, list);
   }
   return out;
 }

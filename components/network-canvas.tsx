@@ -7,7 +7,7 @@ import type { NetworkEdge, NetworkGraph, NetworkNode } from "@/lib/domain/networ
 import type { PersonLinkTarget } from "@/lib/domain/person-link";
 import { PersonLinkButton } from "./person-link";
 
-const PERSON_LINK_KINDS = new Set(["linkedin", "unverified", "website", "github", "devpost"]);
+const PERSON_LINK_KINDS = new Set(["linkedin", "likely", "unverified", "website", "github", "devpost"]);
 
 function personTarget(node: NetworkNode | undefined): PersonLinkTarget | null {
   if (!node?.linkUrl || !node.linkKind || !PERSON_LINK_KINDS.has(node.linkKind)) return null;

@@ -14,12 +14,15 @@ function LinkedInIcon({ size = 12 }: { size?: number }) {
 
 export function LinkedInOpenButton({ action, name }: { action: LinkedInAction; name: string }) {
   const unverified = action.status === "unverified";
+  const likely = action.status === "likely";
   const search = action.status === "search";
   const tip = search
     ? "Opens a LinkedIn people search for this name, school, and company. This is a search, not a saved profile."
-    : unverified
-      ? "A name match that was not confirmed against this person's school or company."
-      : "Open this person's LinkedIn profile";
+    : likely
+      ? "Name matched with one of school, startup, or program."
+      : unverified
+        ? "A name match that was not confirmed against this person's school or company."
+        : "Open this person's LinkedIn profile";
   return (
     <a
       href={action.url}
@@ -37,13 +40,32 @@ export function LinkedInOpenButton({ action, name }: { action: LinkedInAction; n
     >
       <LinkedInIcon size={14} />
       {action.label}
+      {likely && <span className="rounded border border-dashed border-current px-1 text-[10px] font-medium uppercase tracking-wide">likely</span>}
     </a>
   );
 }
 
+export function LinkedInProfileLink({ action, name }: { action: LinkedInAction; name: string }) {
+  if (action.status !== "confirmed" && action.status !== "likely") return null;
+  const likely = action.status === "likely";
+  return (
+    <span className="inline-flex items-center gap-1">
+      <LinkedInIconButton action={action} name={name} />
+      {likely && (
+        <span className="rounded border border-dashed border-muted px-1 text-[10px] font-medium uppercase tracking-wide text-muted">likely</span>
+      )}
+    </span>
+  );
+}
+
 export function LinkedInIconButton({ action, name }: { action: LinkedInAction; name: string }) {
-  const dashed = action.status !== "confirmed";
-  const tip = action.status === "search" ? "Search LinkedIn. This opens a people search, not a saved profile." : action.label;
+  const dashed = action.status === "unverified" || action.status === "search";
+  const tip =
+    action.status === "search"
+      ? "Search LinkedIn. This opens a people search, not a saved profile."
+      : action.status === "likely"
+        ? "Likely LinkedIn profile. The name matched one of school, startup, or program."
+        : action.label;
   return (
     <a
       href={action.url}
@@ -61,8 +83,9 @@ export function LinkedInIconButton({ action, name }: { action: LinkedInAction; n
 }
 
 export function LinkedInMark({ status }: { status: LinkedInAction["status"] }) {
-  const dashed = status !== "confirmed";
-  const label = status === "confirmed" ? "LinkedIn saved" : status === "unverified" ? "LinkedIn unverified" : "LinkedIn search";
+  const dashed = status === "unverified" || status === "search";
+  const label =
+    status === "confirmed" ? "LinkedIn saved" : status === "likely" ? "LinkedIn likely" : status === "unverified" ? "LinkedIn unverified" : "LinkedIn search";
   return (
     <span
       title={label}
@@ -78,6 +101,14 @@ export function LinkedInMark({ status }: { status: LinkedInAction["status"] }) {
 
 export function PersonLinkButton({ link, name }: { link: PersonLinkTarget | null; name?: string }) {
   if (!link) return <span className="text-[11px] text-muted">No public profile</span>;
+  if ((link.kind === "linkedin" || link.kind === "likely") && name) {
+    return (
+      <LinkedInProfileLink
+        action={{ url: link.url, status: link.kind === "likely" ? "likely" : "confirmed", label: "Open LinkedIn" }}
+        name={name}
+      />
+    );
+  }
   const unverified = link.kind === "unverified";
   return (
     <a

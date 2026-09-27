@@ -15,7 +15,7 @@ import type { NetworkSigmaHandle } from "./network-sigma";
 import { NODE_FILL, campusSwatches, groupCampusSwatches } from "./network-style";
 import { useAskHighlight } from "./ask-highlight";
 import { NETWORK_FILTER_EVENT, type NetworkMapFilter } from "@/lib/domain/network-filter";
-import { LinkedInIconButton, LinkedInOpenButton, PersonLinkButton, ProfileIconLinks } from "./person-link";
+import { LinkedInIconButton, LinkedInOpenButton, LinkedInProfileLink, PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { DrfHopFilter } from "./drf-hop-filter";
 import { WarmIntroPaths } from "./warm-intro-paths";
 
@@ -621,7 +621,11 @@ export function NetworkMapApp() {
               </p>
               {personLinkedIn && (
                 <div className="mt-2">
-                  <LinkedInOpenButton action={personLinkedIn} name={focus?.name ?? selectedNode.label} />
+                  {personLinkedIn.status === "confirmed" || personLinkedIn.status === "likely" ? (
+                    <LinkedInProfileLink action={personLinkedIn} name={focus?.name ?? selectedNode.label} />
+                  ) : (
+                    <LinkedInOpenButton action={personLinkedIn} name={focus?.name ?? selectedNode.label} />
+                  )}
                 </div>
               )}
             </div>
@@ -972,7 +976,12 @@ function FocusBody({ focus, onJump }: { focus: NetworkFocus; onJump: (id: string
                 <button type="button" className="text-left font-medium text-black underline" onClick={() => onJump(item.id)}>
                   {item.name}
                 </button>
-                {item.linkedin && <LinkedInIconButton action={item.linkedin} name={item.name} />}
+                {item.linkedin &&
+                  (item.linkedin.status === "confirmed" || item.linkedin.status === "likely" ? (
+                    <LinkedInProfileLink action={item.linkedin} name={item.name} />
+                  ) : (
+                    <LinkedInIconButton action={item.linkedin} name={item.name} />
+                  ))}
                 {item.role && <span className="text-neutral-600">{item.role}</span>}
                 {item.pageHref && (
                   <Link href={item.pageHref} className="text-[10px] underline">
