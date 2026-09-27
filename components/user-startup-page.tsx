@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { PipelineStageEditor, UserAddedBadge, VerifiedByUserBadge } from "./entity-marks";
-import { WarmIntroPaths } from "./warm-intro-paths";
+import { WhoCanIntro } from "./who-can-intro";
 import { useUserPipeline } from "./user-pipeline-provider";
 
 export function UserStartupPage({ id }: { id: string }) {
@@ -78,7 +78,7 @@ export function UserStartupPage({ id }: { id: string }) {
           </ul>
         </section>
         <PipelineStageEditor entityType="project" entityId={startup.id} name={startup.name} campusName={startup.campusName} websiteUrl={startup.websiteUrl} />
-        <WarmIntroPaths entityId={startup.id} />
+        <WhoCanIntro entityId={startup.id} />
         <div className="flex gap-3 text-sm">
           <Link href={`/startup/pipeline?edit=${startup.id}`} className="font-medium underline">
             Edit

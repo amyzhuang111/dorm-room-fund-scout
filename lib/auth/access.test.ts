@@ -56,6 +56,7 @@ test("protected paths are pipeline, shortlist, and their APIs", () => {
   assert.equal(isProtectedPath("/pipeline"), true);
   assert.equal(isProtectedPath("/shortlist"), true);
   assert.equal(isProtectedPath("/startup/discover"), false);
+  assert.equal(isProtectedPath("/alumni"), false);
   assert.equal(isProtectedPath("/hotspots"), false);
   assert.equal(isProtectedPath("/news"), false);
   assert.equal(isProtectedPath("/api/ask"), false);
@@ -64,6 +65,10 @@ test("protected paths are pipeline, shortlist, and their APIs", () => {
 
 test("callback urls stay on this site", () => {
   assert.equal(safeCallbackUrl("/founder/shortlist?from=founder"), "/founder/shortlist?from=founder");
+  assert.equal(
+    safeCallbackUrl("/startup/pipeline?outreach=proj_1&referrer=person_drf_a"),
+    "/startup/pipeline?outreach=proj_1&referrer=person_drf_a"
+  );
   assert.equal(safeCallbackUrl("https://evil.example"), "/startup/pipeline");
   assert.equal(safeCallbackUrl("//evil.example"), "/startup/pipeline");
   assert.equal(safeCallbackUrl("/signin"), "/startup/pipeline");
