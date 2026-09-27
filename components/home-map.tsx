@@ -1,8 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { CampusArc, CandidateSummary, UniversitySummary } from "@/lib/domain/queries";
+import { useAskHighlight } from "./ask-highlight";
 import { ScoutNav, useScoutNav } from "./scout-nav";
 
 const GlobeView = dynamic(() => import("./globe-view").then((mod) => mod.GlobeView), {
@@ -50,18 +51,30 @@ function HomeMapBody() {
     };
   }, []);
 
-  const university = nav.current.university;
+  const ask = useAskHighlight();
+  const university = ask?.focusCampus ?? nav.current.university;
   const preview = university ? candidates.filter((candidate) => candidate.universityIds.includes(university)) : [];
+  const tray = useMemo(() => {
+    if (!ask) return candidates;
+    if (ask.startupIds.length === 0 && ask.personIds.length === 0) return candidates;
+    return candidates.filter((candidate) => ask.startupIds.includes(candidate.id) || candidate.founderIds.some((id) => ask.personIds.includes(id)));
+  }, [ask, candidates]);
+
+  useEffect(() => {
+    if (!ask?.focusCampus || nav.current.university === ask.focusCampus) return;
+    nav.navigate({ university: ask.focusCampus });
+  }, [ask?.token, ask?.focusCampus, nav]);
 
   return (
     <GlobeView
       universities={universities}
       campusArcs={arcs}
-      trayCandidates={candidates}
+      trayCandidates={tray}
       previewCandidates={preview}
       basePath="/"
       current={nav.current}
       onNavigate={nav.navigate}
+      emphasizeIds={ask?.campuses ?? []}
       active
     />
   );

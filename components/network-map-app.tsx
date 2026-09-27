@@ -9,6 +9,7 @@ import type { NetworkFocus } from "@/lib/domain/network-focus";
 import { buildPersonLinkedInLookup } from "@/lib/domain/map-linkedin";
 import type { NetworkSigmaHandle } from "./network-sigma";
 import { NODE_FILL } from "./network-style";
+import { useAskHighlight } from "./ask-highlight";
 import { LinkedInIconButton, LinkedInOpenButton, PersonLinkButton, ProfileIconLinks } from "./person-link";
 
 const NetworkSigma = dynamic(() => import("./network-sigma").then((mod) => mod.NetworkSigma), {
@@ -157,7 +158,18 @@ export function NetworkMapApp() {
     };
   }, [selected]);
 
-  const hidden = useMemo(() => hiddenIds(graph, filters, showIsolates), [graph, filters, showIsolates]);
+  const ask = useAskHighlight();
+  const hidden = useMemo(() => {
+    const base = hiddenIds(graph, filters, showIsolates);
+    if (!ask || !graph || ask.ids.length === 0) return base;
+    const keep = new Set(ask.ids);
+    if (!graph.nodes.some((node) => keep.has(node.id))) return base;
+    const next = new Set<string>();
+    for (const node of graph.nodes) {
+      if (!keep.has(node.id)) next.add(node.id);
+    }
+    return next;
+  }, [graph, filters, showIsolates, ask]);
   const edgeTypes = useMemo(() => new Set(filters?.edgeTypes ?? []), [filters]);
   const activeId = selected && !hidden.has(selected) ? selected : null;
 
@@ -205,6 +217,16 @@ export function NetworkMapApp() {
     setSelected(id);
     setFly((prev) => ({ id, token: prev.token + 1 }));
     setQuery("");
+  }
+
+  const askToken = ask?.token ?? 0;
+  const [seenAsk, setSeenAsk] = useState(0);
+  if (askToken !== seenAsk) {
+    setSeenAsk(askToken);
+    if (ask?.focusId && graph?.nodes.some((node) => node.id === ask.focusId)) {
+      setSelected(ask.focusId);
+      setFly((prev) => ({ id: ask.focusId ?? "", token: prev.token + 1 }));
+    }
   }
 
   const linkedinFor = useMemo(() => (graph ? buildPersonLinkedInLookup(graph) : null), [graph]);

@@ -82,6 +82,7 @@ export const GlobeView = memo(function GlobeView({
   campusArcs = [],
   onNavigate,
   active = true,
+  emphasizeIds = [],
 }: {
   universities: UniversitySummary[];
   basePath: string;
@@ -94,6 +95,8 @@ export const GlobeView = memo(function GlobeView({
   campusArcs?: CampusArc[];
   onNavigate?: (overrides: Record<string, string | null>) => void;
   active?: boolean;
+  /** Campus ids Ask AI matched. Others stay on the map, drawn lighter. */
+  emphasizeIds?: string[];
 }) {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -524,6 +527,25 @@ export const GlobeView = memo(function GlobeView({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current.university, status]);
+
+  const emphasizeKey = emphasizeIds.join(",");
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || status !== "ok" || !map.getLayer("campus-dots")) return;
+    const ids = emphasizeKey ? emphasizeKey.split(",") : [];
+    const marked = ids.length > 0;
+    const inSet: unknown[] = ["in", ["get", "id"], ["literal", ids]];
+    map.setPaintProperty("campus-dots", "circle-opacity", marked ? ["case", inSet, 1, 0.18] : 0.95);
+    map.setPaintProperty("campus-dots", "circle-stroke-color", marked ? ["case", inSet, "#000000", "#ffffff"] : "#ffffff");
+    map.setPaintProperty("campus-dots", "circle-stroke-width", marked ? ["case", inSet, 3, 1.5] : 1.5);
+    map.setPaintProperty("campus-glow", "circle-opacity", marked ? ["case", inSet, 0.55, 0.08] : 0.38);
+    if (marked) {
+      frameCampuses(
+        map,
+        universities.filter((university) => ids.includes(university.id))
+      );
+    }
+  }, [emphasizeKey, status, universities]);
 
   useEffect(() => {
     if (!active || status !== "ok") return;

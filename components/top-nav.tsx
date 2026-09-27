@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { track } from "@vercel/analytics";
+import { AskAiButton } from "./ask-ai";
 
 const FOUNDER_NAV = [
   { href: "/founder/discover", label: "Discover" },
@@ -121,6 +122,8 @@ export function TopNav() {
             })}
           </nav>
         </div>
+        <div className="flex shrink-0 items-center gap-2">
+          {(onHome || pathname === "/founder/network") && <AskAiButton />}
         <details className="relative shrink-0">
           <summary className="list-none rounded-md px-2.5 py-1.5 text-xs text-muted hover:bg-surface-2 hover:text-foreground cursor-pointer select-none">
             More ⋯
@@ -133,6 +136,7 @@ export function TopNav() {
             ))}
           </div>
         </details>
+        </div>
       </div>
     </div>
   );

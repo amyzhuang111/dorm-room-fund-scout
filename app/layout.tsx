@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/next";
+import { AskAiProvider } from "@/components/ask-ai";
 import { TopNav } from "@/components/top-nav";
 import { FeedbackProvider } from "@/components/feedback-provider";
 import { feedbackRedirects } from "@/lib/domain/entity-redirects";
@@ -36,18 +37,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: `document.querySelector('link[href*="fontshare"]')?.setAttribute('media','all')` }} />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <header className="border-b border-border-c bg-background">
-          <Suspense fallback={<div className="h-14" />}>
-            <TopNav />
-          </Suspense>
-        </header>
-        <FeedbackProvider redirects={feedbackRedirects()}>
-          <main className="flex-1">{children}</main>
-        </FeedbackProvider>
-        <footer className="border-t border-border-c px-4 py-3 text-center text-xs text-muted sm:px-6">
-          Independent scouting workspace — not an official Dorm Room Fund product. No automatic outreach; nothing here implies Amy represents DRF.
-        </footer>
-        <Analytics />
+        <AskAiProvider>
+          <header className="border-b border-border-c bg-background">
+            <Suspense fallback={<div className="h-14" />}>
+              <TopNav />
+            </Suspense>
+          </header>
+          <FeedbackProvider redirects={feedbackRedirects()}>
+            <main className="flex-1">{children}</main>
+          </FeedbackProvider>
+          <footer className="border-t border-border-c px-4 py-3 text-center text-xs text-muted sm:px-6">
+            Independent scouting workspace — not an official Dorm Room Fund product. No automatic outreach; nothing here implies Amy represents DRF.
+          </footer>
+          <Analytics />
+        </AskAiProvider>
       </body>
     </html>
   );
