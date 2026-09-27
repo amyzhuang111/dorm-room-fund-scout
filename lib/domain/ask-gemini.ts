@@ -6,7 +6,7 @@ import { ASK_SYSTEM_PROMPT, askUserPrompt, NOT_IN_THE_DATA } from "./ask-prompt"
 import { retrieveAsk } from "./ask-retrieve";
 import type { AskHit } from "./ask-types";
 
-export const GEMINI_MODEL = "gemini-2.5-flash";
+export const GEMINI_MODEL = "gemini-3.8-flash";
 export const GEMINI_API_ROOT = "https://generativelanguage.googleapis.com/v1beta";
 export const GEMINI_GENERATE_URL = `${GEMINI_API_ROOT}/models/${GEMINI_MODEL}:generateContent`;
 
@@ -116,8 +116,13 @@ export function parseGeminiResponse(raw: string): ParsedGemini {
   }
 }
 
-function safeDetail(message: string): string {
-  return message.replace(/AIza[0-9A-Za-z_-]{8,}/g, "[key]").replace(/\s+/g, " ").trim().slice(0, 300);
+export function redactGeminiMessage(message: string, limit = 200): string {
+  return message
+    .replace(/AIza[0-9A-Za-z_-]{8,}/g, "[key]")
+    .replace(/([?&]key=)[^&\s]+/gi, "$1[key]")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, limit);
 }
 
 function logGemini(event: Record<string, unknown>) {
@@ -134,7 +139,9 @@ export interface AskGeminiSuccess {
 export interface AskGeminiFailure {
   ok: false;
   reason: GeminiFailure;
-  detail?: string;
+  geminiStatus: number | null;
+  geminiMessage: string | null;
+  finishReason: string | null;
   matches: AskHit[];
 }
 
@@ -147,16 +154,19 @@ interface GeminiAttempt {
   thrown?: string;
 }
 
-function generationBody(question: string, matches: AskHit[], thinking: boolean, maxOutputTokens: number, plain: boolean) {
-  const reminder = plain ? "\n\nReply in plain sentences only. Do not call tools or functions." : "";
-  const generationConfig: Record<string, unknown> = {
+export function geminiGenerateBody(question: string, matches: AskHit[], options?: { thinking?: boolean; maxOutputTokens?: number }) {
+  const generationConfig: {
+    temperature: number;
+    maxOutputTokens: number;
+    thinkingConfig?: { thinkingLevel: "low" };
+  } = {
     temperature: 0.2,
-    maxOutputTokens,
+    maxOutputTokens: options?.maxOutputTokens ?? 4096,
   };
-  if (thinking) generationConfig.thinkingConfig = { thinkingBudget: 0 };
+  if (options?.thinking !== false) generationConfig.thinkingConfig = { thinkingLevel: "low" };
   return {
     systemInstruction: { parts: [{ text: ASK_SYSTEM_PROMPT }] },
-    contents: [{ role: "user", parts: [{ text: askUserPrompt(question, matches) + reminder }] }],
+    contents: [{ role: "user" as const, parts: [{ text: askUserPrompt(question, matches) }] }],
     generationConfig,
   };
 }
@@ -189,18 +199,22 @@ async function postGemini(url: string, key: string, body: unknown): Promise<Gemi
   }
 }
 
-function attemptDetail(attempt: GeminiAttempt): string {
-  if (attempt.thrown) return safeDetail(attempt.thrown);
-  const parsed = attempt.parsed;
-  const bits = [
-    `status ${attempt.status}`,
-    parsed.apiMessage,
-    parsed.finishReason ? `finish ${parsed.finishReason}` : "",
-    parsed.blockReason ? `block ${parsed.blockReason}` : "",
-    parsed.partKinds.length ? `parts ${parsed.partKinds.join(",")}` : "",
-    parsed.thoughtsTokenCount != null ? `thoughts ${parsed.thoughtsTokenCount}` : "",
-  ].filter(Boolean);
-  return safeDetail(bits.join(" · ") || "empty gemini response");
+function attemptMessage(attempt: GeminiAttempt): string | null {
+  const source = attempt.thrown || attempt.parsed.apiMessage || (attempt.ok ? "" : attempt.raw);
+  if (!source) return null;
+  const text = redactGeminiMessage(source, 200);
+  return text || null;
+}
+
+function failureFrom(attempt: GeminiAttempt, reason: GeminiFailure, matches: AskHit[]): AskGeminiFailure {
+  return {
+    ok: false,
+    reason,
+    geminiStatus: attempt.status || null,
+    geminiMessage: attemptMessage(attempt),
+    finishReason: attempt.parsed.finishReason,
+    matches,
+  };
 }
 
 function logAttempt(attempt: GeminiAttempt, extra: Record<string, unknown>) {
@@ -209,7 +223,7 @@ function logAttempt(attempt: GeminiAttempt, extra: Record<string, unknown>) {
     endpoint: GEMINI_GENERATE_URL,
     status: attempt.status,
     elapsedMs: attempt.elapsedMs,
-    message: attempt.thrown ? safeDetail(attempt.thrown) : attempt.parsed.apiMessage ? safeDetail(attempt.parsed.apiMessage) : null,
+    message: attemptMessage(attempt),
     finishReason: attempt.parsed.finishReason,
     blockReason: attempt.parsed.blockReason,
     partKinds: attempt.parsed.partKinds,
@@ -239,41 +253,33 @@ export async function answerWithGemini(question: string): Promise<AskGeminiSucce
     return { ok: true, engine: "search", answer: NOT_IN_THE_DATA, matches };
   }
   const key = geminiApiKey();
-  if (!key) return { ok: false, reason: "no_key", matches };
+  if (!key) return { ok: false, reason: "no_key", geminiStatus: null, geminiMessage: null, finishReason: null, matches };
 
   const keyShape = { length: key.length, aiStudioPrefix: key.startsWith("AIza") };
-  const first = await postGemini(GEMINI_GENERATE_URL, key, generationBody(question, matches, true, 2048, false));
+  const first = await postGemini(GEMINI_GENERATE_URL, key, geminiGenerateBody(question, matches));
   if (first.parsed.text) return { ok: true, engine: "gemini", answer: first.parsed.text, matches };
 
   const reason = first.status ? classifyGeminiFailure(first.status, first.raw) : "error";
-  if (reason === "quota") {
+  if (reason === "quota" || first.status === 404) {
     logAttempt(first, { keyShape, recovered: false });
-    return { ok: false, reason, detail: attemptDetail(first), matches };
+    return failureFrom(first, reason, matches);
   }
 
   const timedOut = first.elapsedMs >= CALL_TIMEOUT_MS - 500 || /TimeoutError|AbortError/i.test(first.thrown ?? "");
   const thinkingRejected = first.status === 400 && /thinking/i.test(first.raw);
-  const modelMissing = first.status === 404;
-  const retryUrl = modelMissing ? `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent` : GEMINI_GENERATE_URL;
-  const sawTool = first.parsed.partKinds.includes("functionCall") || first.parsed.partKinds.includes("functionResponse");
-  const shouldRetry = !timedOut && (Boolean(first.thrown) || thinkingRejected || modelMissing || needsTextRetry(first) || (first.status >= 500 && first.status !== 503));
+  const shouldRetry = !timedOut && first.elapsedMs < 8_000 && (Boolean(first.thrown) || thinkingRejected || needsTextRetry(first) || (first.status >= 500 && first.status !== 503));
   if (!shouldRetry) {
     logAttempt(first, { keyShape, recovered: false });
-    return { ok: false, reason, detail: attemptDetail(first), matches };
+    return failureFrom(first, reason, matches);
   }
 
-  const thinkingIgnored = (first.parsed.thoughtsTokenCount ?? 0) > 0 || first.parsed.partKinds.includes("thought");
-  const second = await postGemini(
-    retryUrl,
-    key,
-    generationBody(question, matches, !thinkingRejected, thinkingRejected || thinkingIgnored ? 16384 : 4096, sawTool)
-  );
+  const second = await postGemini(GEMINI_GENERATE_URL, key, geminiGenerateBody(question, matches, { thinking: false, maxOutputTokens: 8192 }));
   if (second.parsed.text) {
     logAttempt(first, { keyShape, recovered: true });
     return { ok: true, engine: "gemini", answer: second.parsed.text, matches };
   }
   logAttempt(first, { keyShape, recovered: false });
-  logAttempt(second, { keyShape, endpoint: retryUrl, recovered: false });
+  logAttempt(second, { keyShape, recovered: false });
   const secondReason = second.status ? classifyGeminiFailure(second.status, second.raw) : "error";
-  return { ok: false, reason: secondReason === "quota" ? "quota" : "error", detail: attemptDetail(second.status ? second : first), matches };
+  return failureFrom(second.status ? second : first, secondReason === "quota" ? "quota" : "error", matches);
 }
