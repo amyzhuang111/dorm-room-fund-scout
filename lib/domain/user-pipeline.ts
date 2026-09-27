@@ -11,6 +11,8 @@ import { isSignalTier } from "./signal-tier";
 import type { Queue } from "./queue";
 import type { CandidateSummary, FounderRow, NamedFounder, UniversitySummary } from "./queries";
 import type { NetworkEdge, NetworkGraph, NetworkNode } from "./network";
+import { undergradEnrollment } from "./campus-enrollment";
+import { connectionSignal, perCapitaSignal, signalFields } from "./network-signal-size";
 
 export const PIPELINE_STAGES = ["Sourced", "Contacted", "Meeting", "Diligence", "Passed", "Invested"] as const;
 export type PipelineStage = (typeof PIPELINE_STAGES)[number];
@@ -828,6 +830,11 @@ interface LooseMapNode {
   founder: boolean;
   degree: number;
   potential: boolean;
+  signalCount: number;
+  signalWeight: number;
+  signalDenominator: number;
+  signalRatio: number;
+  signalScore: number;
 }
 
 interface LooseMapGraph {
@@ -865,6 +872,7 @@ export function attachUserMapNodes<T extends LooseMapGraph>(graph: T, state: Use
         founder: false,
         degree: 1,
         potential: false,
+        ...signalFields(perCapitaSignal(0, 0, undergradEnrollment(startup.campusId), 0)),
       };
       nodes.push(campus);
       have.add(campus.id);
@@ -892,6 +900,7 @@ export function attachUserMapNodes<T extends LooseMapGraph>(graph: T, state: Use
         founder: false,
         degree: 1 + startup.founders.length,
         potential: false,
+        ...signalFields(connectionSignal(1 + startup.founders.length, 20)),
       });
       have.add(startup.id);
       addedStartups += 1;
@@ -917,6 +926,7 @@ export function attachUserMapNodes<T extends LooseMapGraph>(graph: T, state: Use
         founder: true,
         degree: 2,
         potential: false,
+        ...signalFields(connectionSignal(2, 12)),
       });
       have.add(founder.id);
       addedPeople += 1;

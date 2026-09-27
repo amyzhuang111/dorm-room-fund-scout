@@ -117,17 +117,18 @@ export const EDGE_COLOR: Record<MapEdgeType, string> = {
   at_campus: EDGE_GREY,
 };
 
-const ORG_PX: Record<string, number> = { S: 2.35, A: 2.05, B: 1.7, C: 1.45, D: 1.25 };
-
-/** Screen pixels at every zoom. Hubs are only a little larger than leaves. Organizations stay small triangles. */
+/**
+ * Screen pixels at every zoom. `signalScore` is already a 0–1 sqrt of the
+ * per-capita ratio (or of the node's own connection count). People and startups
+ * stay in a small band so a square still reads next to a circle. Campuses stay
+ * the large circles. Clubs, organizations, and investors share a wider band.
+ */
 export function screenSize(node: MapNode): number {
-  const hub = Math.sqrt(Math.max(node.degree, 1));
-  if (node.type === "organization") return clamp((ORG_PX[node.orgTier ?? ""] ?? 1.55) + Math.min(1.05, hub * 0.032), 1.25, 3.45);
-  if (node.type === "campus") return clamp(2.4 + hub * 0.012, 2.4, 3.2);
-  if (node.type === "investor") return clamp(1.35 + hub * 0.09, 1.35, 2.45);
-  if (node.type === "program") return clamp(1.4 + hub * 0.07, 1.4, 2.35);
-  if (node.type === "startup") return clamp(1.35 + hub * 0.09, 1.35, 2.4);
-  return clamp(1.28 + hub * 0.1, 1.28, 2.35);
+  const score = clamp(node.signalScore ?? 0, 0, 1);
+  if (node.type === "campus") return 9.2 + score * 6.8;
+  if (node.type === "organization" || node.type === "program" || node.type === "investor") return 5.6 + score * 5;
+  if (node.type === "startup") return 6 + score * 1.6;
+  return 4.6 + score * 1.4;
 }
 
 export interface RestingLabels {
@@ -283,10 +284,11 @@ function boxesOverlap(a: LabelBox, b: LabelBox): boolean {
   return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
 }
 
-/** 3 = region, 2 = campus, 1 = every other node (ordered by degree). */
+/** 4 = region, 3 = campus, 2 = rim hub, 1 = every other node (ordered by degree). */
 export function screenLabelTier(marker: boolean, anchor: boolean, type: string): number {
-  if (marker) return 3;
-  if (anchor && type === "campus") return 2;
+  if (marker) return 4;
+  if (anchor && type === "campus") return 3;
+  if (anchor) return 2;
   return 1;
 }
 
@@ -391,9 +393,9 @@ function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
 
-/** Long spokes from a far organization fade out. Local edges stay as they are. */
+/** Only the longest spokes fade, and not by much, so a hub's fan stays visible. */
 export function fadeLongEdge(color: string, spanFraction: number): string {
-  const factor = spanFraction > 0.42 ? 0.2 : spanFraction > 0.28 ? 0.42 : 1;
+  const factor = spanFraction > 0.62 ? 0.5 : spanFraction > 0.46 ? 0.72 : 1;
   if (factor === 1) return color;
   return scaleAlpha(color, factor);
 }
