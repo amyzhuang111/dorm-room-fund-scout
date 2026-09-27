@@ -10,6 +10,7 @@ import { FeedbackControls } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CompanyProfileCard } from "./company-profile";
 import { WarmIntroPaths } from "./warm-intro-paths";
+import { InTheNews } from "./in-the-news";
 
 function founderHref(founder: NamedFounder): string {
   const params = new URLSearchParams({
@@ -126,6 +127,8 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
           </a>
         </div>
       </section>
+
+      <InTheNews items={project.news} moreHref={`/news?q=${encodeURIComponent(project.name)}`} />
 
       {/* Overview */}
       <section>

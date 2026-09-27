@@ -457,3 +457,47 @@ CREATE TABLE IF NOT EXISTS accuracy_audit_runs (
   facts_checked INTEGER NOT NULL,
   summary_json TEXT NOT NULL
 );
+
+-- Public news mentions for startups and founders. A row is kept only when the
+-- startup name appears with a founder, school, or company domain. Display
+-- context only: never an input to Founder Signal, eligibility, or investment score.
+CREATE TABLE IF NOT EXISTS news_articles (
+  id TEXT PRIMARY KEY,
+  url_key TEXT NOT NULL UNIQUE,
+  url TEXT NOT NULL,
+  headline TEXT NOT NULL,
+  source_name TEXT NOT NULL,
+  published_at TEXT,
+  snippet TEXT,
+  category TEXT NOT NULL CHECK (category IN ('funding', 'launch', 'acquisition', 'award', 'profile', 'other')),
+  feed TEXT NOT NULL, -- google_news | hacker_news | techcrunch | campus_press | yc_launch | product_hunt | reddit | x | press_release | company_blog | outlet key
+  source_type TEXT NOT NULL DEFAULT 'press' CHECK (source_type IN ('press', 'social', 'launch', 'press_release', 'campus_paper')),
+  match_confidence TEXT NOT NULL CHECK (match_confidence IN ('high', 'medium', 'low')),
+  fetched_at TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS news_mentions (
+  id TEXT PRIMARY KEY,
+  article_id TEXT NOT NULL REFERENCES news_articles(id) ON DELETE CASCADE,
+  project_id TEXT NOT NULL DEFAULT '',
+  person_id TEXT NOT NULL DEFAULT '',
+  match_confidence TEXT NOT NULL CHECK (match_confidence IN ('high', 'medium', 'low')),
+  match_reason TEXT NOT NULL,
+  UNIQUE(article_id, project_id, person_id)
+);
+
+-- Idempotent resume cursor for npm run news:fetch. status is ok | empty | error.
+CREATE TABLE IF NOT EXISTS news_fetch_log (
+  target_key TEXT PRIMARY KEY,
+  fetched_at TEXT NOT NULL,
+  status TEXT NOT NULL,
+  article_count INTEGER NOT NULL DEFAULT 0,
+  error TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_news_articles_published ON news_articles(published_at);
+CREATE INDEX IF NOT EXISTS idx_news_articles_category ON news_articles(category);
+CREATE INDEX IF NOT EXISTS idx_news_articles_source_type ON news_articles(source_type);
+CREATE INDEX IF NOT EXISTS idx_news_mentions_project ON news_mentions(project_id);
+CREATE INDEX IF NOT EXISTS idx_news_mentions_person ON news_mentions(person_id);

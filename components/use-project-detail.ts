@@ -6,7 +6,7 @@ import type { CandidateSummary, ProjectDetail } from "@/lib/domain/queries";
 
 export function projectShell(candidate: CandidateSummary, detail: ProjectDetail | null): ProjectDetail {
   if (detail?.id === candidate.id) return detail;
-  return { ...candidate, profile: emptyCompanyProfile(), claims: [], signals: [], pipeline: null, manualNotes: [], assessmentHistory: [], hotspots: [] };
+  return { ...candidate, profile: emptyCompanyProfile(), claims: [], signals: [], pipeline: null, manualNotes: [], assessmentHistory: [], hotspots: [], news: [] };
 }
 
 export function useProjectDetail(id: string | undefined, initial: ProjectDetail | null): ProjectDetail | null {

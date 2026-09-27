@@ -318,6 +318,9 @@ function migrate(db: Database.Database) {
   // meaning, clearer label), and "Watching" dropped as a distinct status —
   // the watch queue now keys off due_date directly (see listCandidateProjects),
   // so existing "Watching" rows fold back into "Researching".
+  addColumnIfMissing("news_articles", "source_type", "source_type TEXT NOT NULL DEFAULT 'press'");
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_news_articles_source_type ON news_articles(source_type)`);
+
   db.prepare(`UPDATE pipeline_entries SET status = 'Contact planned' WHERE status = 'Meet'`).run();
   db.prepare(`UPDATE pipeline_entries SET status = 'Researching' WHERE status = 'Watching'`).run();
 
