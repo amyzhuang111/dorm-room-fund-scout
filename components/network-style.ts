@@ -6,6 +6,7 @@ export const NODE_FILL: Record<MapNodeType, string> = {
   investor: "#3f3f46",
   campus: "#0f766e",
   program: "#6d28d9",
+  organization: "#a21caf",
 };
 
 /** Soft campus tints. Clusters read by color; type stays in the shape. */
@@ -25,16 +26,18 @@ export const CAMPUS_COLOR: Record<string, string> = {
 
 export function nodeColor(node: { type: MapNodeType; campus: string | null }): string {
   if (node.type === "investor") return NODE_FILL.investor;
+  if (node.type === "organization") return NODE_FILL.organization;
   if (node.campus && CAMPUS_COLOR[node.campus]) return CAMPUS_COLOR[node.campus];
   return NODE_FILL[node.type];
 }
 
-export const NODE_SHAPE: Record<MapNodeType, "circle" | "square" | "diamond" | "hex"> = {
+export const NODE_SHAPE: Record<MapNodeType, "circle" | "square" | "diamond" | "hex" | "triangle"> = {
   person: "circle",
   startup: "square",
   investor: "diamond",
   campus: "circle",
   program: "hex",
+  organization: "triangle",
 };
 
 export const DIM_NODE = "#e4e4e4";
@@ -55,8 +58,11 @@ export const EDGE_COLOR: Record<MapEdgeType, string> = {
   at_campus: EDGE_CAMPUS,
 };
 
-/** Screen pixels at the fitted camera. Hubs are only a little larger than leaves. */
+const ORG_PX: Record<string, number> = { S: 7.4, A: 5.4, B: 3.8, C: 2.6, D: 1.9 };
+
+/** Screen pixels at the fitted camera. Hubs are only a little larger than leaves. Organizations scale by directory tier. */
 export function screenSize(node: MapNode): number {
+  if (node.type === "organization") return ORG_PX[node.orgTier ?? ""] ?? 2.6;
   const hub = Math.sqrt(Math.max(node.degree, 1));
   if (node.type === "campus") return clamp(3.1 + hub * 0.04, 3.1, 5.2);
   if (node.type === "investor") return clamp(1.45 + hub * 0.16, 1.45, 3.2);

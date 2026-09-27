@@ -14,14 +14,18 @@ import {
   hotspotHref,
   hotspotMapNodeId,
   investorNodeId,
+  matchPhrases,
   mentionPhrase,
   normHotspotName,
   normPlace,
+  ORG_ALIAS_PHRASES,
   parseCsv,
   placesMatch,
   samePlace,
   type AppendixEntry,
   type HotspotCard,
+  type HotspotSectionId,
+  type HotspotTier,
   type NormPlace,
   type RelatedHotspot,
 } from "./hotspot-model";
@@ -32,6 +36,7 @@ export interface HotspotPlaceGroup {
   placeKey: string;
   label: string;
   phrase: string | null;
+  phrases: string[];
   campusIds: string[];
   mapNodeId: string;
   merged: "program" | "investor" | null;
@@ -151,6 +156,7 @@ function buildLinks(cards: HotspotCard[]): Omit<Index, "stamp" | "cards" | "appe
       placeKey,
       label: program?.name ?? investor?.name ?? shortestCore(list),
       phrase: mentionPhrase(label),
+      phrases: [],
       campusIds,
       mapNodeId: program?.id ?? investor?.id ?? hotspotMapNodeId(placeKey),
       merged: program ? "program" : investor ? "investor" : null,
@@ -158,21 +164,57 @@ function buildLinks(cards: HotspotCard[]): Omit<Index, "stamp" | "cards" | "appe
     });
   }
 
-  const claims = db.prepare(`SELECT entity_type, entity_id, excerpt, source_id FROM claims`).all() as {
+  assignMatchPhrases(groups);
+
+  const claims = db.prepare(`SELECT entity_type, entity_id, excerpt, value_json, claim_type, source_id FROM claims`).all() as {
     entity_type: string;
     entity_id: string;
     excerpt: string;
+    value_json: string | null;
+    claim_type: string;
     source_id: string | null;
   }[];
   const sources = db.prepare(`SELECT id, name FROM sources`).all() as { id: string; name: string }[];
   const sourceNorm = new Map(sources.map((source) => [source.id, normHotspotName(source.name)]));
-  const sourceById = new Map(sources.map((source) => [source.id, source.name]));
-  const claimNorms = claims.map((claim) => ({
-    ...claim,
-    norm: normHotspotName(claim.excerpt || ""),
-    sourceNorm: claim.source_id ? (sourceNorm.get(claim.source_id) ?? "") : "",
-    sourceName: claim.source_id ? (sourceById.get(claim.source_id) ?? "") : "",
-  }));
+  const claimNorms: { entity_type: string; entity_id: string; source_id: string | null; norm: string; sourceNorm: string }[] = claims.map((claim) => {
+    const structured = claim.claim_type === "program_membership" || claim.claim_type === "accelerator_founder" ? claim.value_json ?? "" : "";
+    return {
+      entity_type: claim.entity_type,
+      entity_id: claim.entity_id,
+      source_id: claim.source_id,
+      norm: normHotspotName(`${claim.excerpt || ""} ${structured}`),
+      sourceNorm: claim.source_id ? (sourceNorm.get(claim.source_id) ?? "") : "",
+    };
+  });
+  for (const row of db.prepare(`SELECT id, potential_signal FROM people WHERE potential_signal IS NOT NULL AND length(trim(potential_signal)) >= 4`).all() as {
+    id: string;
+    potential_signal: string;
+  }[]) {
+    claimNorms.push({ entity_type: "person", entity_id: row.id, source_id: null, norm: normHotspotName(row.potential_signal), sourceNorm: "" });
+  }
+  for (const row of db.prepare(`SELECT person_id, role FROM affiliations WHERE role IS NOT NULL AND length(trim(role)) >= 4`).all() as {
+    person_id: string;
+    role: string;
+  }[]) {
+    claimNorms.push({ entity_type: "person", entity_id: row.person_id, source_id: null, norm: normHotspotName(row.role), sourceNorm: "" });
+  }
+  for (const row of db.prepare(`SELECT id, aliases_json, description FROM projects WHERE kind = 'company'`).all() as {
+    id: string;
+    aliases_json: string;
+    description: string | null;
+  }[]) {
+    const bits = [row.description ?? "", ...parseAliasList(row.aliases_json)];
+    const norm = normHotspotName(bits.join(" "));
+    if (norm.length >= 4) claimNorms.push({ entity_type: "project", entity_id: row.id, source_id: null, norm, sourceNorm: "" });
+  }
+  for (const row of db.prepare(`SELECT project_id, value_text, excerpt FROM company_facts WHERE fact_key IN ('description', 'investor', 'funding_round')`).all() as {
+    project_id: string;
+    value_text: string;
+    excerpt: string;
+  }[]) {
+    const norm = normHotspotName(`${row.value_text} ${row.excerpt}`);
+    if (norm.length >= 4) claimNorms.push({ entity_type: "project", entity_id: row.project_id, source_id: null, norm, sourceNorm: "" });
+  }
 
   const roles = db
     .prepare(
@@ -206,13 +248,20 @@ function buildLinks(cards: HotspotCard[]): Omit<Index, "stamp" | "cards" | "appe
 
   const groupNorm = new Map(groups.map((group) => [group.placeKey, normPlace(group.label)]));
   const groupsByToken = new Map<string, HotspotPlaceGroup[]>();
+  const shortPhrases: { phrase: string; group: HotspotPlaceGroup }[] = [];
   for (const group of groups) {
-    if (!group.phrase) continue;
-    const token = [...group.phrase.split(" ")].sort((a, b) => b.length - a.length || a.localeCompare(b))[0];
-    if (!token) continue;
-    const list = groupsByToken.get(token) ?? [];
-    list.push(group);
-    groupsByToken.set(token, list);
+    for (const phrase of group.phrases) {
+      const tokens = phrase.split(" ").filter((token) => token.length >= 4);
+      if (!tokens.length) {
+        shortPhrases.push({ phrase, group });
+        continue;
+      }
+      for (const token of tokens) {
+        const list = groupsByToken.get(token) ?? [];
+        if (!list.includes(group)) list.push(group);
+        groupsByToken.set(token, list);
+      }
+    }
   }
 
   const sourceGroups = new Map<string, HotspotPlaceGroup[]>();
@@ -244,25 +293,46 @@ function buildLinks(cards: HotspotCard[]): Omit<Index, "stamp" | "cards" | "appe
     }
   }
 
+  const programLinks = db
+    .prepare(
+      `SELECT r.source_entity_id AS company_id, p.name AS program_name
+       FROM relationships r
+       JOIN projects p ON p.id = r.target_entity_id AND p.kind = 'project'
+       WHERE r.relationship_type = 'part_of_program'
+         AND r.source_entity_type = 'project'
+         AND r.target_entity_type = 'project'`
+    )
+    .all() as { company_id: string; program_name: string }[];
+  for (const link of programLinks) {
+    const named = normPlace(link.program_name);
+    for (const group of groups) {
+      const norm = groupNorm.get(group.placeKey);
+      if (!norm || !placesMatch(named, norm)) continue;
+      addProject(link.company_id, group.placeKey);
+    }
+  }
+
   for (const claim of claimNorms) {
     const seen = new Set<string>();
-    const tokens = new Set(`${claim.norm} ${claim.sourceNorm}`.split(" ").filter((token) => token.length >= 4));
-    for (const token of tokens) {
-      for (const group of groupsByToken.get(token) ?? []) {
-        if (seen.has(group.placeKey) || !group.phrase) continue;
-        if (!hasPhrase(claim.norm, group.phrase) && !hasPhrase(claim.sourceNorm, group.phrase)) continue;
-        seen.add(group.placeKey);
-        if (claim.entity_type === "person") addPerson(claim.entity_id, group.placeKey);
-        else if (claim.entity_type === "project") addProject(claim.entity_id, group.placeKey);
-      }
-    }
-    if (!claim.source_id) continue;
-    for (const group of sourceGroups.get(claim.source_id) ?? []) {
-      if (seen.has(group.placeKey)) continue;
+    const link = (group: HotspotPlaceGroup) => {
+      if (seen.has(group.placeKey)) return;
       seen.add(group.placeKey);
       if (claim.entity_type === "person") addPerson(claim.entity_id, group.placeKey);
       else if (claim.entity_type === "project") addProject(claim.entity_id, group.placeKey);
+    };
+    const tokens = new Set(`${claim.norm} ${claim.sourceNorm}`.split(" ").filter((token) => token.length >= 4));
+    for (const token of tokens) {
+      for (const group of groupsByToken.get(token) ?? []) {
+        if (seen.has(group.placeKey)) continue;
+        if (!group.phrases.some((phrase) => hasPhrase(claim.norm, phrase) || hasPhrase(claim.sourceNorm, phrase))) continue;
+        link(group);
+      }
     }
+    for (const item of shortPhrases) {
+      if (hasPhrase(claim.norm, item.phrase) || hasPhrase(claim.sourceNorm, item.phrase)) link(item.group);
+    }
+    if (!claim.source_id) continue;
+    for (const group of sourceGroups.get(claim.source_id) ?? []) link(group);
   }
 
   return {
@@ -274,6 +344,39 @@ function buildLinks(cards: HotspotCard[]): Omit<Index, "stamp" | "cards" | "appe
   };
 }
 
+function assignMatchPhrases(groups: HotspotPlaceGroup[]) {
+  const owners = new Map<string, Set<string>>();
+  const candidates = new Map<string, string[]>();
+  for (const group of groups) {
+    const phrases = new Set<string>();
+    for (const card of group.cards) for (const phrase of matchPhrases(card.place)) phrases.add(phrase);
+    for (const alias of ORG_ALIAS_PHRASES[group.placeKey] ?? []) phrases.add(alias);
+    const list = [...phrases];
+    candidates.set(group.placeKey, list);
+    for (const phrase of list) {
+      const set = owners.get(phrase) ?? new Set<string>();
+      set.add(group.placeKey);
+      owners.set(phrase, set);
+    }
+  }
+  for (const group of groups) {
+    const aliases = new Set(ORG_ALIAS_PHRASES[group.placeKey] ?? []);
+    group.phrases = (candidates.get(group.placeKey) ?? []).filter((phrase) => aliases.has(phrase) || owners.get(phrase)?.size === 1);
+    group.phrase = mentionPhrase(group.label);
+  }
+}
+
+function parseAliasList(json: string | null): string[] {
+  if (!json) return [];
+  try {
+    const value = JSON.parse(json) as unknown;
+    if (!Array.isArray(value)) return [];
+    return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+  } catch {
+    return [];
+  }
+}
+
 function placeKeyOfSafe(name: string): string {
   return normHotspotName(name.replace(/\s*\([^)]*\)\s*/g, " "));
 }
@@ -282,8 +385,12 @@ function coreLength(place: string): number {
   return place.replace(/\s*\([^)]*\)\s*/g, " ").trim().length;
 }
 
-function shortestCore(cards: HotspotCard[]): string {
+export function directoryLabel(cards: HotspotCard[]): string {
   return [...cards].sort((a, b) => coreLength(a.place) - coreLength(b.place) || a.place.localeCompare(b.place))[0].place.replace(/\s*\([^)]*\)\s*/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function shortestCore(cards: HotspotCard[]): string {
+  return directoryLabel(cards);
 }
 
 function pickMatch(label: string, candidates: { id: string; name: string }[]): { id: string; name: string } | null {
@@ -331,7 +438,7 @@ export function relatedHotspotsForProject(projectId: string): RelatedHotspot[] {
 }
 
 export function hotspotGroupByMapId(id: string): HotspotPlaceGroup | null {
-  return getIndex().groups.find((group) => group.mapNodeId === id) ?? null;
+  return getIndex().groups.find((group) => group.mapNodeId === id || hotspotMapNodeId(group.placeKey) === id) ?? null;
 }
 
 export function personIdsForPlace(placeKey: string): string[] {
@@ -399,6 +506,66 @@ export function hotspotGraphPatch(input: {
     atCampusEdges,
     evidenceEdges,
   };
+}
+
+export interface OrganizationMapNode {
+  id: string;
+  label: string;
+  campuses: string[];
+  campusLabel: string;
+  tier: HotspotTier;
+  sections: HotspotSectionId[];
+  typeLabel: string;
+  url: string | null;
+  linkedPeople: number;
+  linkedFounders: number;
+  linkedStartups: number;
+}
+
+/** One node per directory place. Edges exist only where stored text or a role names that place. */
+export function organizationMap(input: {
+  personIds: Set<string>;
+  startupIds: Set<string>;
+  founderIds: Set<string>;
+  universityIds: Set<string>;
+}): { nodes: OrganizationMapNode[]; edges: { source: string; target: string; type: "member_of" | "at_campus" }[] } {
+  const index = getIndex();
+  const nodes: OrganizationMapNode[] = [];
+  const edges: { source: string; target: string; type: "member_of" | "at_campus" }[] = [];
+  const seen = new Set<string>();
+  const addEdge = (source: string, target: string, type: "member_of" | "at_campus") => {
+    if (!source || !target || source === target) return;
+    const key = `${source}|${target}|${type}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    edges.push({ source, target, type });
+  };
+
+  for (const group of index.groups) {
+    const id = hotspotMapNodeId(group.placeKey);
+    const card = bestCard(group.cards);
+    const campuses = [...new Set(group.campusIds.filter((campusId) => input.universityIds.has(campusId)))];
+    const people = (index.peopleByPlace.get(group.placeKey) ?? []).filter((personId) => input.personIds.has(personId));
+    const startups = (index.projectsByPlace.get(group.placeKey) ?? []).filter((projectId) => input.startupIds.has(projectId));
+    const sections = [...new Set(group.cards.map((item) => item.section))];
+    nodes.push({
+      id,
+      label: shortestCore(group.cards),
+      campuses,
+      campusLabel: [...new Set(group.cards.map((item) => item.campus))].join(" · "),
+      tier: card.tier,
+      sections,
+      typeLabel: card.type,
+      url: card.url || null,
+      linkedPeople: people.length,
+      linkedFounders: people.filter((personId) => input.founderIds.has(personId)).length,
+      linkedStartups: startups.length,
+    });
+    for (const campusId of campuses) addEdge(id, campusId, "at_campus");
+    for (const personId of people) addEdge(personId, id, "member_of");
+    for (const projectId of startups) addEdge(projectId, id, "member_of");
+  }
+  return { nodes, edges };
 }
 
 export function hotspotCountsByCampus(): { campus: string; cards: number; places: number; placeKind: string }[] {

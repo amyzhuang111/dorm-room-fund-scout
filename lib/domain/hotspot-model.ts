@@ -59,6 +59,42 @@ export const SECTION_LABEL: Record<HotspotSectionId, string> = {
   potential_founders: "Meet great potential founders",
 };
 
+export const SECTION_SHORT: Record<HotspotSectionId, string> = {
+  existing_founders: "Existing founders",
+  startups: "Startups",
+  potential_founders: "Potential founders",
+};
+
+/** Directory tier S is tier 1. These are scouting notes, not Founder Signal. */
+export function tierNumber(tier: HotspotTier): number {
+  if (tier === "S") return 1;
+  if (tier === "A") return 2;
+  if (tier === "B") return 3;
+  if (tier === "C") return 4;
+  return 5;
+}
+
+export function tierBandLabel(tier: HotspotTier): string {
+  return `Tier ${tierNumber(tier)} · ${tier}`;
+}
+
+/**
+ * Exact alternate names for one directory place. A text mention matches only
+ * these strings (or the place's own name), never a guessed abbreviation.
+ */
+export const ORG_ALIAS_PHRASES: Record<string, readonly string[]> = {
+  "jerome fisher m and t": ["jerome fisher management and technology", "management and technology", "m and t"],
+  // Stored affiliation role from the YC directory ingest: "YC founder; page names {campus}".
+  "y combinator": ["yc founder"],
+};
+
+const MT_CORES = new Set([
+  "m and t",
+  "jerome fisher m and t",
+  "jerome fisher management and technology",
+  "management and technology",
+]);
+
 export const SECTION_ORDER: HotspotSectionId[] = ["existing_founders", "startups", "potential_founders"];
 
 const TIERS = new Set<HotspotTier>(["S", "A", "B", "C", "D"]);
@@ -199,7 +235,8 @@ export function placesMatch(a: NormPlace, b: NormPlace): boolean {
   const sa = stripLeadingCampus(a.core);
   const sb = stripLeadingCampus(b.core);
   if (sa === sb && sa.length >= 6) return true;
-  if (a.full.includes("jerome fisher") && b.full.includes("jerome fisher") && a.full.includes("m and t") && b.full.includes("m and t")) return true;
+  if (MT_CORES.has(a.core) && MT_CORES.has(b.core)) return true;
+  if (MT_CORES.has(sa) && MT_CORES.has(sb)) return true;
   return false;
 }
 
@@ -214,6 +251,134 @@ export function mentionPhrase(place: string): string | null {
   if (tokens.length === 0) return null;
   if (tokens.length === 1 && tokens[0].length < 4) return null;
   return phrase;
+}
+
+const TRAILING_GENERIC = [
+  " organising team",
+  " organizing team",
+  " fellows program",
+  " fellowship",
+  " programme",
+  " program",
+  " accelerator",
+  " incubator",
+  " competition",
+  " challenge",
+  " club",
+];
+
+const COMMON_PHRASE = new Set([
+  "core",
+  "sail",
+  "house",
+  "fund",
+  "labs",
+  "lab",
+  "city",
+  "week",
+  "tech",
+  "club",
+  "cube",
+  "venture",
+  "ventures",
+  "studio",
+  "garage",
+  "launch",
+  "founders",
+  "founder",
+  "partners",
+  "partner",
+  "student",
+  "students",
+  "funded",
+  "cohort",
+  "track",
+  "campus",
+  "program",
+  "programme",
+  "laboratory",
+  "institute",
+  "center",
+  "centre",
+  "entrepreneurship",
+  "university",
+  "college",
+  "school",
+  "office",
+  "research",
+  "capital",
+  "foundation",
+  "network",
+  "community",
+  "summer",
+  "winter",
+  "prize",
+  "grant",
+  "awards",
+  "scholarship",
+  "organising",
+  "organizing",
+  "innovation",
+]);
+
+const CAMPUS_TOKEN = new Set([
+  "penn",
+  "berkeley",
+  "stanford",
+  "mit",
+  "harvard",
+  "waterloo",
+  "columbia",
+  "princeton",
+  "michigan",
+  "cmu",
+  "ucla",
+  "nyu",
+  "duke",
+  "emory",
+  "brown",
+  "yale",
+  "toronto",
+  "georgetown",
+  "dartmouth",
+  "cornell",
+  "usc",
+  "uiuc",
+  "caltech",
+  "northwestern",
+  "uchicago",
+  "upenn",
+  "wharton",
+  "gatech",
+]);
+
+/**
+ * Phrases that can identify this place in stored text. The caller drops any
+ * phrase shared by two organizations, except curated aliases.
+ */
+export function matchPhrases(place: string): string[] {
+  const phrases = new Set<string>();
+  const primary = mentionPhrase(place);
+  if (primary) phrases.add(primary);
+  let stripped = placeKeyOf(place);
+  for (let guard = 0; guard < 4; guard++) {
+    const next = TRAILING_GENERIC.reduce((name, suffix) => (name.endsWith(suffix) ? name.slice(0, -suffix.length).trim() : name), stripped);
+    if (next === stripped) break;
+    stripped = next;
+    const single = !stripped.includes(" ");
+    const generic = single && (BLOCKED_PHRASES.has(stripped) || COMMON_PHRASE.has(stripped) || CAMPUS_TOKEN.has(stripped));
+    if (stripped.length >= 6 && !generic) phrases.add(stripped);
+  }
+  for (const raw of place.matchAll(/\(([^)]+)\)/g)) {
+    const inner = raw[1].trim().replace(/^(and|formerly|run by|incl\.?|including|a|the)\s+/i, "").trim();
+    const norm = normHotspotName(inner);
+    if (norm.length < 4 || BLOCKED_PHRASES.has(norm) || COMMON_PHRASE.has(norm)) continue;
+    const useful = norm.split(" ").filter((token) => token.length > 1 && !FILLER_TOKENS.has(token) && !CAMPUS_TOKEN.has(token) && !BLOCKED_PHRASES.has(token) && !COMMON_PHRASE.has(token));
+    if (useful.some((token) => token.length >= 4)) phrases.add(norm);
+    const collapsed = inner.toLowerCase().replace(/[^a-z0-9]+/g, "");
+    if (/^[a-z0-9]{4,8}$/.test(collapsed) && !COMMON_PHRASE.has(collapsed) && !BLOCKED_PHRASES.has(collapsed)) phrases.add(collapsed);
+  }
+  return [...phrases];
 }
 
 export function hasPhrase(haystackNorm: string, phrase: string): boolean {

@@ -76,6 +76,15 @@ export class NodeDiamondProgram extends LightSquareProgram {
   }
 }
 
+const TRIANGLE = [[-Math.PI / 2], [Math.PI / 6], [(5 * Math.PI) / 6]];
+
+export class NodeTriangleProgram extends LightSquareProgram {
+  getDefinition() {
+    const base = super.getDefinition();
+    return { ...base, VERTICES: TRIANGLE.length, CONSTANT_DATA: TRIANGLE };
+  }
+}
+
 export class NodeHexProgram extends LightSquareProgram {
   getDefinition() {
     const base = super.getDefinition();
