@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { HomeMap } from "@/components/home-map";
+import { NetworkAnalysis } from "@/components/network-analysis";
+import { buildNetworkAnalysis } from "@/lib/domain/network-analysis";
 
 // `/` is the campus globe. `?view=network` shows the founder network on the
 // same URL. The table bookmark still belongs to Startup Discover. The globe
@@ -13,5 +15,11 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
     }
     redirect(`/startup/discover?${qs.toString()}`);
   }
-  return <HomeMap initial={sp} network={sp.view === "network"} />;
+  const network = sp.view === "network";
+  return (
+    <>
+      <HomeMap initial={sp} network={network} />
+      {network ? <NetworkAnalysis data={buildNetworkAnalysis()} /> : null}
+    </>
+  );
 }

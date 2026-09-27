@@ -12,6 +12,7 @@ import { buildPersonLinkedInLookup } from "@/lib/domain/map-linkedin";
 import type { NetworkSigmaHandle } from "./network-sigma";
 import { NODE_FILL, campusSwatches, groupCampusSwatches } from "./network-style";
 import { useAskHighlight } from "./ask-highlight";
+import { NETWORK_FILTER_EVENT, type NetworkMapFilter } from "@/lib/domain/network-filter";
 import { LinkedInIconButton, LinkedInOpenButton, PersonLinkButton, ProfileIconLinks } from "./person-link";
 
 const NetworkSigma = dynamic(() => import("./network-sigma").then((mod) => mod.NetworkSigma), {
@@ -95,17 +96,27 @@ export function NetworkMapApp() {
   const [focus, setFocus] = useState<NetworkFocus | null>(null);
   const graphApi = useRef<NetworkSigmaHandle | null>(null);
 
+  const [pinned, setPinned] = useState<{ label: string; ids: Set<string> } | null>(null);
+
   useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = prev;
+    const onFilter = (event: Event) => {
+      const detail = (event as CustomEvent<NetworkMapFilter | null>).detail;
+      if (!detail || detail.ids.length === 0) {
+        setPinned(null);
+        return;
+      }
+      setPinned({ label: detail.label, ids: new Set(detail.ids) });
     };
+    window.addEventListener(NETWORK_FILTER_EVENT, onFilter);
+    return () => window.removeEventListener(NETWORK_FILTER_EVENT, onFilter);
   }, []);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setSelected(null);
+      if (event.key === "Escape") {
+        setSelected(null);
+        setPinned(null);
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -176,15 +187,25 @@ export function NetworkMapApp() {
   const ask = useAskHighlight();
   const hidden = useMemo(() => {
     const base = hiddenIds(shown, filters, showIsolates);
-    if (!ask || !shown || ask.ids.length === 0) return base;
-    const keep = new Set(ask.ids);
-    if (!shown.nodes.some((node) => keep.has(node.id))) return base;
-    const next = new Set<string>();
-    for (const node of shown.nodes) {
-      if (!keep.has(node.id)) next.add(node.id);
+    let next = base;
+    if (ask && shown && ask.ids.length > 0) {
+      const keep = new Set(ask.ids);
+      if (shown.nodes.some((node) => keep.has(node.id))) {
+        next = new Set<string>();
+        for (const node of shown.nodes) {
+          if (!keep.has(node.id)) next.add(node.id);
+        }
+      }
+    }
+    if (pinned && shown) {
+      const narrowed = new Set(next);
+      for (const node of shown.nodes) {
+        if (!pinned.ids.has(node.id)) narrowed.add(node.id);
+      }
+      return narrowed;
     }
     return next;
-  }, [shown, filters, showIsolates, ask]);
+  }, [shown, filters, showIsolates, ask, pinned]);
   const edgeTypes = useMemo(() => new Set(filters?.edgeTypes ?? []), [filters]);
   const activeId = selected && !hidden.has(selected) ? selected : null;
 
@@ -265,7 +286,7 @@ export function NetworkMapApp() {
   };
 
   return (
-    <div className="fixed inset-x-0 top-14 bottom-0 z-20 bg-white text-black">
+    <div className="relative h-[calc(100dvh-3.5rem)] min-h-[520px] overflow-hidden bg-white text-black">
       {shown && filters ? (
         <NetworkSigma
           graph={shown}
@@ -505,6 +526,14 @@ export function NetworkMapApp() {
           aria-label="Search the network"
           className="h-8 w-full rounded border border-neutral-300 bg-white px-2.5 text-[13px] text-black outline-none placeholder:text-neutral-500 focus:border-black"
         />
+        {pinned && (
+          <p className="mt-1 flex items-center justify-between gap-2 rounded border border-neutral-300 bg-white px-2 py-1 text-[11px] text-black shadow-sm">
+            <span className="truncate">{pinned.label}</span>
+            <button type="button" className="shrink-0 font-medium underline" onClick={() => setPinned(null)}>
+              Clear
+            </button>
+          </p>
+        )}
         {matches.length > 0 && (
           <ul className="mt-1 max-h-64 overflow-y-auto rounded-md border border-black/15 bg-white shadow-md">
             {matches.map((node) => (
