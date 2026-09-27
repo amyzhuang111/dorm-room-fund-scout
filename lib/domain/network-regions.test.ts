@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { featuredNationalKey } from "./featured-national";
-import { CAMPUS_LABEL_MIN_MEMBERS, LABEL_CLUB, bundleWidth, campusHubDegreeFloor, nodeColor, programLineColor, readableInk, selectVisibleLabels } from "../../components/network-style";
+import { CAMPUS_LABEL_MIN_MEMBERS, LABEL_CLUB, bundleWidth, campusHubDegreeFloor, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, programLineColor, readableInk, selectVisibleLabels, zoomSizeFactor } from "../../components/network-style";
 import { REGIONS, campusShade, packRegionCenters, regionForCampus, regionSwatch } from "./network-regions";
 
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
@@ -119,6 +119,38 @@ assert.equal(campusHubDegreeFloor(1), 8);
 assert.equal(campusHubDegreeFloor(0.5), 8);
 assert.equal(campusHubDegreeFloor(0.3), 4);
 assert.equal(campusHubDegreeFloor(0.1), 1);
+
+assert.equal(openingCameraRatio(1), 0.78);
+assert.ok(openingCameraRatio(1) < 1);
+assert.equal(labelDegreeFloor(0.9), 1_000_000);
+assert.equal(labelDegreeFloor(0.4), 24);
+assert.equal(labelDegreeFloor(0.12), 3);
+assert.equal(labelDegreeFloor(0.05), 1);
+assert.ok(labelDegreeFloor(0.2) < labelDegreeFloor(0.4));
+
+assert.equal(zoomSizeFactor(0.8, 0.8), 1);
+assert.ok(Math.abs(zoomSizeFactor(0.4, 0.8) - 0.5) < 1e-9);
+assert.equal(zoomSizeFactor(0.02, 0.8), 0.1);
+
+assert.equal(labelScreenPx(12, 0.8, 0.8), 12);
+assert.equal(labelScreenPx(12, 0.2, 0.8), 12);
+assert.equal(labelScreenPx(13, 0.05, 0.9), 13);
+assert.ok(labelScreenPx(8, 0.2, 0.8) >= 11);
+assert.ok(labelScreenPx(40, 0.2, 0.8) <= 15);
+
+const neighborhood = neighborhoodView(
+  [
+    { x: 0.42, y: 0.4 },
+    { x: 0.5, y: 0.47 },
+  ],
+  0.9,
+);
+assert.ok(neighborhood.ratio < 0.9);
+assert.ok(neighborhood.ratio > 0.05);
+assert.ok(neighborhood.x > 0.42 && neighborhood.x < 0.5);
+const tightNeighborhood = neighborhoodView([{ x: 0.5, y: 0.5 }], 0.9);
+assert.ok(tightNeighborhood.ratio < 0.2);
+assert.ok(tightNeighborhood.ratio >= 0.05);
 
 const measure = (text: string, fontSize: number) => text.length * fontSize * 0.5;
 const placed = selectVisibleLabels(

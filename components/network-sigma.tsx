@@ -3,11 +3,12 @@
 import Graph from "graphology";
 import { useEffect, useRef } from "react";
 import Sigma from "sigma";
+import type { SigmaNodeEventPayload, SigmaStageEventPayload, WheelCoords } from "sigma/types";
 import { featuredNationalKey } from "@/lib/domain/featured-national";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
-import { CAMPUS_LABEL_MIN_MEMBERS, DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, MEGA_DEGREE, NODE_SHAPE, PROGRAM_LINE, PROGRAM_LINE_ACTIVE, PROGRAM_LINE_DIM, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type CampusDisc, type LabelOffset, type ScreenLabel } from "./network-style";
+import { CAMPUS_LABEL_MIN_MEMBERS, DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, MEGA_DEGREE, NODE_SHAPE, PROGRAM_LINE, PROGRAM_LINE_ACTIVE, PROGRAM_LINE_DIM, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, zoomSizeFactor, type CampusDisc, type FramePoint, type LabelOffset, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -36,6 +37,8 @@ type NodeAttr = {
   tint?: string;
   linkColor: string;
   labelPx?: number;
+  /** Designed screen size at the fitted view. Drawn size is the inverse of the zoom. */
+  labelBase?: number;
   labelColor?: string;
   labelDx?: number;
   labelDy?: number;
@@ -99,11 +102,13 @@ export function NetworkSigma({
     focusNode: null as string | null,
     focus: 0,
     focusFrame: 0,
+    fitRatio: 1,
   });
   const onSelectRef = useRef(onSelect);
   const onReadyRef = useRef(onReady);
   const hiddenRef = useRef(hidden);
   const recomputeLabelsRef = useRef<() => void>(() => {});
+  const focusNeighborhoodRef = useRef<(id: string) => void>(() => {});
 
   useEffect(() => {
     onSelectRef.current = onSelect;
@@ -127,7 +132,7 @@ export function NetworkSigma({
     if (!renderer) return;
     recomputeLabelsRef.current();
     renderer.refresh();
-    if (hiddenChanged) frameVisible(renderer, hidden);
+    if (hiddenChanged) stateRef.current.fitRatio = frameVisible(renderer, hidden);
   }, [hidden, edgeTypes, selected]);
 
   useEffect(() => {
@@ -203,7 +208,7 @@ export function NetworkSigma({
       const strong = !lead && (named || (hub && node.rimTier === "S"));
       const campusHub = Boolean(node.homeCampus) && !campus;
       const anchor = campus || hub;
-      const fontSize = campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong || campusHub || named ? LABEL_HUB : hub ? 10 : LABEL_NODE;
+      const fontSize = campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong || campusHub || named ? LABEL_HUB : hub ? 11 : LABEL_NODE;
       const campusId = node.campus || node.id;
       labelMeta.push({
         id: node.id,
@@ -245,7 +250,7 @@ export function NetworkSigma({
         zIndex: (lead ? 4 : strong ? 3 : Z[node.type]) + 1,
         signalTip: signalTooltip(node),
         linkColor: emphasizeColor(color),
-        labelPx: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong || campusHub || named ? LABEL_HUB : hub ? 10 : LABEL_NODE,
+        labelBase: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong || campusHub || named ? LABEL_HUB : hub ? 11 : LABEL_NODE,
         ...(campus ? { labelColor: "#111111" } : node.homeCampus ? { labelColor: readableInk(colors.get(node.homeCampus) ?? "#374151") } : {}),
       });
     }
@@ -354,13 +359,17 @@ export function NetworkSigma({
       defaultEdgeType: "line",
       hideEdgesOnMove: false,
       hideLabelsOnMove: false,
-      zoomingRatio: 1.12,
-      zoomDuration: 200,
-      inertiaDuration: 280,
-      inertiaRatio: 0.25,
+      enableCameraZooming: true,
+      enableCameraPanning: true,
+      zoomingRatio: 1.18,
+      zoomDuration: 160,
+      doubleClickZoomingRatio: 1.45,
+      doubleClickZoomingDuration: 280,
+      inertiaDuration: 320,
+      inertiaRatio: 0.22,
       itemSizesReference: "screen",
-      // Identity keeps hairlines at EDGE_PX while zooming. The default sqrt grows them.
-      zoomToSizeRatioFunction: () => 1,
+      // Nodes and lines share one scale, so a closer view magnifies both. Labels do not use this.
+      zoomToSizeRatioFunction: (ratio) => zoomSizeFactor(ratio, stateRef.current.fitRatio),
       zIndex: true,
       labelFont: "Satoshi, Arial, sans-serif",
       labelSize: LABEL_NODE,
@@ -371,7 +380,7 @@ export function NetworkSigma({
       labelRenderedSizeThreshold: 0,
       minEdgeThickness: EDGE_PX,
       antiAliasingFeather: 0.85,
-      stagePadding: 108,
+      stagePadding: 12,
       minCameraRatio: 0.02,
       maxCameraRatio: 1.4,
       defaultDrawNodeLabel: drawHaloLabel as never,
@@ -386,9 +395,10 @@ export function NetworkSigma({
       nodeReducer: (node, data) => {
         const state = stateRef.current;
         const nudge = placed.offsets.get(node);
+        const labelPx = labelScreenPx(data.labelBase ?? LABEL_NODE, renderer.getCamera().ratio, stateRef.current.fitRatio || 1);
         const showLabel = (extra: Partial<NodeAttr> = {}) => {
           const offset = nudge ?? { dx: 0, dy: 0 };
-          return { ...data, ...extra, forceLabel: true, labelDx: offset.dx, labelDy: offset.dy };
+          return { ...data, ...extra, labelPx, forceLabel: true, labelDx: offset.dx, labelDy: offset.dy };
         };
         if (data.marker) {
           const campuses = regionCampuses.get(node) ?? [];
@@ -447,7 +457,7 @@ export function NetworkSigma({
     });
 
     const recomputeLabels = () => {
-      const { hidden, hovered, selected } = stateRef.current;
+      const { hidden, hovered, selected, fitRatio } = stateRef.current;
       const active = hovered ?? selected;
       const ratio = renderer.getCamera().ratio;
       const floor = labelDegreeFloor(ratio);
@@ -488,7 +498,7 @@ export function NetworkSigma({
           nodeSize,
           marker: meta.marker,
           anchor: meta.anchor,
-          fontSize: meta.fontSize,
+          fontSize: labelScreenPx(meta.fontSize, ratio, fitRatio || ratio),
           tracking: meta.tracking,
           discId: meta.discId,
           strictDiscs: meta.strictDiscs,
@@ -573,18 +583,83 @@ export function NetworkSigma({
       if (stateRef.current.selected) stateRef.current.focusNode = stateRef.current.selected;
       glideFocus(stateRef.current.selected ? 1 : 0);
     });
+    const layoutSpan = span;
+    const focusNeighborhood = (id: string) => {
+      if (!g.hasNode(id) || g.getNodeAttribute(id, "marker")) return;
+      const kind = g.getNodeAttribute(id, "kind");
+      if (kind !== "campus" && kind !== "program" && kind !== "organization") return;
+      const origin = g.getNodeAttributes(id);
+      const frame = graphFrame(renderer);
+      const points: FramePoint[] = [frame.toFrame(origin.x, origin.y)];
+      const hiddenNow = stateRef.current.hidden;
+      if (kind === "campus") {
+        const radius = Math.max(12, (layoutRadius.get(id) ?? 12) * 1.4);
+        g.forEachNode((nid, attrs) => {
+          if (nid === id || hiddenNow.has(nid)) return;
+          if (Math.hypot(attrs.x - origin.x, attrs.y - origin.y) <= radius) points.push(frame.toFrame(attrs.x, attrs.y));
+        });
+      } else {
+        const reach = Math.max(18, layoutSpan * 0.14);
+        const ranked: { d: number; x: number; y: number }[] = [];
+        g.forEachNode((nid, attrs) => {
+          if (nid === id || hiddenNow.has(nid) || attrs.marker) return;
+          ranked.push({ d: Math.hypot(attrs.x - origin.x, attrs.y - origin.y), x: attrs.x, y: attrs.y });
+        });
+        ranked.sort((a, b) => a.d - b.d);
+        const limit = Math.max(reach, ranked[14]?.d ?? reach);
+        for (const node of ranked) {
+          if (node.d > limit * 1.15) break;
+          points.push(frame.toFrame(node.x, node.y));
+          if (points.length >= 40) break;
+        }
+      }
+      const view = neighborhoodView(points, stateRef.current.fitRatio || renderer.getCamera().ratio);
+      const dims = renderer.getDimensions();
+      const frameWidth = view.ratio * (dims.width / Math.max(Math.min(dims.width, dims.height), 1));
+      const shift = frameWidth * (Math.min(340, dims.width * 0.3) / Math.max(dims.width, 1)) * 0.5;
+      void renderer.getCamera().animate({ x: view.x + shift, y: view.y, ratio: view.ratio }, { duration: 520, easing: "quadraticInOut" });
+    };
+    focusNeighborhoodRef.current = focusNeighborhood;
+    const onWheel = (payload: SigmaStageEventPayload | SigmaNodeEventPayload) => {
+      payload.preventSigmaDefault();
+      const wheel = payload.event as WheelCoords;
+      const delta = Math.max(-2.2, Math.min(2.2, wheel.delta || 0));
+      if (!delta) return;
+      const camera = renderer.getCamera();
+      const factor = Math.exp(-delta * 0.42);
+      const ratio = camera.getBoundedRatio(camera.getState().ratio * factor);
+      const next = renderer.getViewportZoomedState({ x: wheel.x, y: wheel.y }, ratio);
+      void camera.animate(next, { duration: 150, easing: "quadraticOut" });
+    };
+    renderer.on("wheelStage", onWheel);
+    renderer.on("wheelNode", onWheel);
+    renderer.on("downStage", () => {
+      container.style.cursor = "grabbing";
+    });
+    renderer.on("downNode", () => {
+      container.style.cursor = "grabbing";
+    });
+    renderer.on("upStage", () => {
+      container.style.cursor = "grab";
+    });
+    renderer.on("upNode", () => {
+      container.style.cursor = "grab";
+    });
     renderer.on("clickNode", ({ node }) => {
       if (g.getNodeAttribute(node, "marker")) return;
       onSelectRef.current(node);
+      focusNeighborhood(node);
     });
     renderer.on("clickStage", () => onSelectRef.current(null));
 
     rendererRef.current = renderer;
     container.style.cursor = "grab";
     const api: NetworkSigmaHandle = {
-      zoomIn: () => void renderer.getCamera().animatedZoom({ duration: 180 }),
-      zoomOut: () => void renderer.getCamera().animatedUnzoom({ duration: 180 }),
-      fit: () => frameVisible(renderer, stateRef.current.hidden),
+      zoomIn: () => void renderer.getCamera().animatedZoom({ duration: 240, factor: 1.4 }),
+      zoomOut: () => void renderer.getCamera().animatedUnzoom({ duration: 240, factor: 1.4 }),
+      fit: () => {
+        stateRef.current.fitRatio = frameVisible(renderer, stateRef.current.hidden);
+      },
       pointOf(id: string) {
         if (!renderer.getGraph().hasNode(id)) return null;
         const attrs = renderer.getGraph().getNodeAttributes(id);
@@ -605,7 +680,7 @@ export function NetworkSigma({
     onReadyRef.current(api);
     const frame = requestAnimationFrame(() => {
       renderer.resize();
-      frameVisible(renderer, stateRef.current.hidden);
+      stateRef.current.fitRatio = frameVisible(renderer, stateRef.current.hidden);
     });
 
     const focusState = stateRef.current;
@@ -616,6 +691,9 @@ export function NetworkSigma({
       renderer.getCamera().removeListener("updated", scheduleLabels);
       renderer.getCamera().removeListener("updated", notifyView);
       viewListeners.clear();
+      renderer.off("wheelStage", onWheel);
+      renderer.off("wheelNode", onWheel);
+      focusNeighborhoodRef.current = () => {};
       recomputeLabelsRef.current = () => {};
       onReadyRef.current(null);
       renderer.kill();
@@ -626,16 +704,21 @@ export function NetworkSigma({
   useEffect(() => {
     const renderer = rendererRef.current;
     if (!renderer || !flyId || !renderer.getGraph().hasNode(flyId)) return;
+    const kind = renderer.getGraph().getNodeAttribute(flyId, "kind");
+    if (kind === "campus" || kind === "program" || kind === "organization") {
+      focusNeighborhoodRef.current(flyId);
+      return;
+    }
     const at = framedPosition(renderer, flyId);
     if (!at) return;
     const camera = renderer.getCamera();
-    void camera.animate({ x: at.x, y: at.y, ratio: Math.min(camera.ratio, 0.16) }, { duration: 520 });
+    void camera.animate({ x: at.x, y: at.y, ratio: Math.min(camera.ratio, 0.16) }, { duration: 520, easing: "quadraticInOut" });
   }, [flyToken, flyId]);
 
   return <div ref={containerRef} className="absolute inset-0 bg-white" role="application" aria-label="Founder and startup network graph" />;
 }
 
-function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>) {
+function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>): number {
   const frame = graphFrame(renderer);
   let minX = Infinity;
   let minY = Infinity;
@@ -653,19 +736,20 @@ function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>) 
   });
   if (!count) {
     void renderer.getCamera().animatedReset({ duration: 280 });
-    return;
+    return 1;
   }
   const width = maxX - minX;
   const height = maxY - minY;
-  // High layout Y is the top of the screen. Pad that side for the search box and filters, and the low side for the Ask bar and legend.
+  // High layout Y is the top of the screen. A short pad clears the search box; the low side clears the legend and Ask bar.
   const span0 = Math.max(width, height, 0.04);
-  const paddedMaxY = maxY + span0 * 0.09;
-  const paddedMinY = minY - span0 * 0.14;
-  const paddedMinX = minX - span0 * 0.03;
-  const paddedMaxX = maxX + span0 * 0.05;
+  const paddedMaxY = maxY + span0 * 0.035;
+  const paddedMinY = minY - span0 * 0.07;
+  const paddedMinX = minX - span0 * 0.018;
+  const paddedMaxX = maxX + span0 * 0.018;
   const span = Math.max(paddedMaxX - paddedMinX, paddedMaxY - paddedMinY, 0.04);
-  const ratio = Math.min(1.22, Math.max(0.04, span * 1.04));
-  void renderer.getCamera().animate({ x: (paddedMinX + paddedMaxX) / 2, y: (paddedMinY + paddedMaxY) / 2, ratio }, { duration: 360 });
+  const ratio = openingCameraRatio(span);
+  void renderer.getCamera().animate({ x: (paddedMinX + paddedMaxX) / 2, y: (paddedMinY + paddedMaxY) / 2, ratio }, { duration: 420, easing: "quadraticInOut" });
+  return ratio;
 }
 
 /** Blend two css colors. Used while focus eases in and out. */

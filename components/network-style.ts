@@ -140,7 +140,7 @@ export const NODE_SHAPE: Record<MapNodeType, "circle" | "square" | "diamond" | "
 };
 
 export const DIM_NODE = "#e5e7eb";
-/** Hairline at the fitted camera. Thickness is in screen pixels and does not grow with zoom. */
+/** Hairline at the fitted camera. Thickness then grows with zoom, in step with the nodes. */
 export const EDGE_PX = 0.5;
 export const EDGE_GREY = "rgba(120, 124, 130, 0.09)";
 export const EDGE_DIM = "rgba(170, 170, 170, 0.045)";
@@ -365,15 +365,78 @@ export function truncateMapLabel(text: string, marker: boolean, anchor: boolean)
 
 /**
  * How connected a non-campus node must be before its label may compete.
- * The fitted view (ratio near 1) stays sparse. Zooming in (smaller ratio)
- * lowers the bar, and the collision pass still drops anything that would overlap.
+ * The fitted view (ratio near 0.8 after the tight frame) stays sparse.
+ * Zooming in (smaller ratio) lowers the bar, and the collision pass still
+ * drops anything that would overlap.
  */
 export function labelDegreeFloor(cameraRatio: number): number {
-  if (cameraRatio >= 0.78) return 1_000_000;
-  if (cameraRatio >= 0.48) return 30;
-  if (cameraRatio >= 0.28) return 12;
-  if (cameraRatio >= 0.14) return 4;
+  if (cameraRatio >= 0.55) return 1_000_000;
+  if (cameraRatio >= 0.34) return 24;
+  if (cameraRatio >= 0.18) return 8;
+  if (cameraRatio >= 0.09) return 3;
   return 1;
+}
+
+/**
+ * Camera ratio for the opening frame. The span already includes a little
+ * padding; multiplying under 1 zooms in so the cloud fills the canvas.
+ */
+export function openingCameraRatio(span: number): number {
+  return Math.min(0.92, Math.max(0.18, span * 0.78));
+}
+
+/**
+ * Sigma divides node and edge sizes by this factor. `1` at the fitted view
+ * keeps the designed pixel sizes. Zooming in (smaller ratio) returns a
+ * smaller factor, so nodes and lines grow by the same amount.
+ * Growth stops at 10× so a deep zoom stays readable.
+ */
+export function zoomSizeFactor(cameraRatio: number, fitRatio: number): number {
+  const fit = Math.max(fitRatio, 0.04);
+  const linear = Math.max(cameraRatio, 0.02) / fit;
+  return Math.max(linear, 0.1);
+}
+
+/**
+ * On-screen label size. Geometry scales by `zoom = fitRatio / cameraRatio`.
+ * A font that followed the geometry would be `basePx * zoom`. Dividing by
+ * that same zoom puts the glyphs back at a readable screen size.
+ */
+export function labelScreenPx(basePx: number, cameraRatio: number, fitRatio: number): number {
+  const zoom = Math.max(fitRatio, 0.04) / Math.max(cameraRatio, 0.02);
+  const screen = (basePx * zoom) / zoom;
+  return Math.round(clamp(screen, 11, 15));
+}
+
+export interface FramePoint {
+  x: number;
+  y: number;
+}
+
+/** Camera state that frames a campus or program neighborhood, never wider than the fitted cloud. */
+export function neighborhoodView(points: FramePoint[], fitRatio: number): { x: number; y: number; ratio: number } {
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (const point of points) {
+    if (!Number.isFinite(point.x) || !Number.isFinite(point.y)) continue;
+    minX = Math.min(minX, point.x);
+    minY = Math.min(minY, point.y);
+    maxX = Math.max(maxX, point.x);
+    maxY = Math.max(maxY, point.y);
+  }
+  if (!Number.isFinite(minX)) return { x: 0.5, y: 0.5, ratio: fitRatio };
+  const width = Math.max(maxX - minX, 0.012);
+  const height = Math.max(maxY - minY, 0.012);
+  const pad = Math.max(width, height) * 0.32;
+  const left = minX - pad;
+  const right = maxX + pad;
+  const top = minY - pad;
+  const bottom = maxY + pad;
+  const span = Math.max(right - left, bottom - top, 0.02);
+  const ratio = Math.min(fitRatio, Math.max(0.05, span * 1.08));
+  return { x: (left + right) / 2, y: (top + bottom) / 2, ratio };
 }
 
 /**
@@ -623,7 +686,7 @@ export const PROGRAM_LINE = "rgba(12, 12, 12, 0.78)";
 export const PROGRAM_LINE_ACTIVE = "#111111";
 export const PROGRAM_LINE_DIM = "rgba(180, 180, 180, 0.1)";
 
-/** Screen pixels. A handful of members stays a readable stroke; a large cohort gets thicker. */
+/** Fitted-view pixels. A handful of members stays a readable stroke; a large cohort gets thicker. Zoom scales this with the nodes. */
 export function bundleWidth(count: number): number {
   return Math.min(6.5, 1.85 + Math.log2(Math.max(count, 1)) * 0.55);
 }

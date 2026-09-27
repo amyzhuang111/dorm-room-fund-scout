@@ -301,7 +301,10 @@ export function NetworkMapApp() {
   const swatchGroups = useMemo(() => (graph ? groupCampusSwatches(campusSwatches(graph.nodes)) : []), [graph]);
 
   return (
-    <div className={`relative min-h-[520px] overflow-hidden bg-white text-black ${pipeline.storage === "local" ? "h-[calc(100dvh-5.75rem)]" : "h-[calc(100dvh-3.5rem)]"}`}>
+    <div
+      className="relative w-full min-h-[80vh] overflow-hidden bg-white text-black"
+      style={{ height: pipeline.storage === "local" ? "max(80vh, calc(100dvh - 5.75rem))" : "max(80vh, calc(100dvh - 3.5rem))" }}
+    >
       {shown && filters ? (
         <NetworkSigma
           graph={shown}
@@ -571,8 +574,10 @@ export function NetworkMapApp() {
       </div>
 
       <div
-        className="absolute bottom-4 z-30 flex flex-col overflow-hidden rounded border border-neutral-200 bg-white/90"
-        style={{ right: detailOpen ? `calc(min(${selectedNode?.type === "startup" && !isUserAddedId(selectedNode.id) ? "440px" : "20rem"}, 100% - 1.5rem) + 0.85rem)` : "0.75rem" }}
+        className="absolute bottom-24 z-40 flex flex-col overflow-hidden rounded-md border border-neutral-900 bg-white shadow-md"
+        style={{ right: detailOpen ? "calc(min(20rem, 100% - 1.5rem) + 0.85rem)" : "1rem" }}
+        role="group"
+        aria-label="Map zoom"
       >
         <ZoomButton label="Zoom in" onClick={() => graphApi.current?.zoomIn()}>
           +
@@ -580,8 +585,8 @@ export function NetworkMapApp() {
         <ZoomButton label="Zoom out" onClick={() => graphApi.current?.zoomOut()}>
           −
         </ZoomButton>
-        <ZoomButton label="Fit the network" onClick={() => graphApi.current?.fit()}>
-          Fit
+        <ZoomButton label="Reset view" onClick={() => graphApi.current?.fit()}>
+          Reset
         </ZoomButton>
       </div>
 
@@ -910,7 +915,7 @@ function YearField({ label, value, onChange }: { label: string; value: number | 
 
 function ZoomButton({ label, onClick, children }: { label: string; onClick: () => void; children: ReactNode }) {
   return (
-    <button type="button" aria-label={label} onClick={onClick} className="h-7 min-w-7 border-b border-neutral-200 px-1.5 text-[11px] font-medium text-neutral-700 last:border-b-0 hover:bg-neutral-50">
+    <button type="button" aria-label={label} onClick={onClick} className="h-9 min-w-9 border-b border-neutral-200 px-2.5 text-sm font-semibold text-black last:border-b-0 hover:bg-neutral-100">
       {children}
     </button>
   );

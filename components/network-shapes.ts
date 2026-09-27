@@ -9,7 +9,7 @@ export const drawHaloLabel: NodeLabelDrawingFunction = (context, data, settings)
   const marker = Boolean((data as { marker?: boolean }).marker);
   const anchor = Boolean((data as { anchor?: boolean }).anchor);
   const preferred = (data as { labelPx?: number }).labelPx;
-  const size = preferred ?? (marker ? LABEL_REGION : anchor ? LABEL_CAMPUS : settings.labelSize);
+  const size = Math.round(preferred ?? (marker ? LABEL_REGION : anchor ? LABEL_CAMPUS : settings.labelSize));
   const limit = marker ? 32 : anchor ? 26 : 28;
   const raw = data.label.length > limit ? `${data.label.slice(0, limit - 1)}…` : data.label;
   const text = marker ? raw.toUpperCase() : raw;
@@ -26,8 +26,8 @@ export const drawHaloLabel: NodeLabelDrawingFunction = (context, data, settings)
     return;
   }
   const ink = (data as { labelColor?: string }).labelColor;
-  // A thin white stroke keeps colored club labels readable over dots without covering the letters.
-  context.lineWidth = ink ? 3 : 3.5;
+  // A light white stroke keeps colored labels readable over dots. Kept thin so the glyphs stay sharp.
+  context.lineWidth = Math.max(1.6, size * 0.14);
   context.strokeStyle = "#ffffff";
   context.strokeText(text, x, y);
   context.fillStyle = ink || "#111111";
