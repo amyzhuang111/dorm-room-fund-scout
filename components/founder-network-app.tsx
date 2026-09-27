@@ -197,7 +197,13 @@ function NetworkBody({
         {visible.nodes.length === 0 ? (
           <p className="p-6 text-sm text-muted">No evidence-backed connections on record for this campus yet.</p>
         ) : (
-          <NetworkCanvas graph={visible} basePath="/founder/network" current={current} campusName={campusName} />
+          <NetworkCanvas
+            graph={visible}
+            basePath="/founder/network"
+            current={current}
+            campusName={campusName}
+            presentation={current.university ? "campus" : "overview"}
+          />
         )}
       </div>
       <div className="w-full sm:w-96 sm:shrink-0">

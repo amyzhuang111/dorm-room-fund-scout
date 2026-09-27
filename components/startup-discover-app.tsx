@@ -5,8 +5,9 @@ import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import type { EnrollmentStatus } from "@/lib/domain/founder-status";
 import { sectorsForUniversity } from "@/lib/domain/candidate-filter";
 import { companiesInView } from "@/lib/domain/live-view";
-import type { FeedbackRecord, FeedbackTarget } from "@/lib/domain/feedback";
+import { domainKey, isHidden, type FeedbackRecord, type FeedbackTarget } from "@/lib/domain/feedback";
 import { likeTargetsFrom } from "@/lib/domain/review-view";
+import type { NetworkGraph } from "@/lib/domain/network";
 import type { CampusArc, CandidateSummary, ProjectDetail, SectorCount, UniversitySummary } from "@/lib/domain/queries";
 import { FilterSidebar } from "./filter-sidebar";
 import { CandidateTable } from "./candidate-table";
@@ -16,14 +17,19 @@ import { ScoutNav, useScoutNav } from "./scout-nav";
 import { projectShell, useProjectDetail } from "./use-project-detail";
 import { useFeedbackRecords } from "./feedback-provider";
 import { useMergedCatalog, useUserPipeline } from "./user-pipeline-provider";
-import { userCompanyMatches, userMapMarkers } from "@/lib/domain/user-pipeline";
+import { attachUserScoutNetwork, userCompanyMatches, userMapMarkers } from "@/lib/domain/user-pipeline";
 
 const GlobeView = dynamic(() => import("./globe-view").then((mod) => mod.GlobeView), {
   ssr: false,
   loading: () => <div className="grid min-h-[70vh] place-items-center text-sm text-muted">Loading map…</div>,
 });
 
-const VIEWS = ["globe", "table"] as const;
+const NetworkCanvas = dynamic(() => import("./network-canvas").then((mod) => mod.NetworkCanvas), {
+  ssr: false,
+  loading: () => <div className="grid min-h-[70vh] place-items-center text-sm text-muted">Loading network…</div>,
+});
+
+const VIEWS = ["globe", "network", "table"] as const;
 
 export function StartupDiscoverApp({
   initial,
@@ -35,6 +41,7 @@ export function StartupDiscoverApp({
   records,
   likes,
   initialDetail,
+  initialGraph,
 }: {
   initial: Record<string, string | undefined>;
   universities: UniversitySummary[];
@@ -45,6 +52,7 @@ export function StartupDiscoverApp({
   records: FeedbackRecord[];
   likes: FeedbackTarget[];
   initialDetail: ProjectDetail | null;
+  initialGraph: NetworkGraph | null;
 }) {
   return (
     <ScoutNav basePath="/startup/discover" initial={initial}>
@@ -57,6 +65,7 @@ export function StartupDiscoverApp({
         initialRecords={records}
         initialLikes={likes}
         initialDetail={initialDetail}
+        initialGraph={initialGraph}
       />
     </ScoutNav>
   );
@@ -71,6 +80,7 @@ function DiscoverBody({
   initialRecords,
   initialLikes,
   initialDetail,
+  initialGraph,
 }: {
   universities: UniversitySummary[];
   candidates: CandidateSummary[];
@@ -80,6 +90,7 @@ function DiscoverBody({
   initialRecords: FeedbackRecord[];
   initialLikes: FeedbackTarget[];
   initialDetail: ProjectDetail | null;
+  initialGraph: NetworkGraph | null;
 }) {
   const nav = useScoutNav()!;
   const { current, navigate } = nav;
@@ -99,8 +110,9 @@ function DiscoverBody({
   }, [catalog.candidates, records, likes, query]);
   const visibleSectors = useMemo(() => sectorsForUniversity(sectors, current.university), [sectors, current.university]);
   const counts = (current.university && enrollment.byUniversity[current.university]) || enrollment.all;
-  const view = VIEWS.find((item) => item === current.view) ?? "globe";
-  const [seen, setSeen] = useState({ globe: view === "globe", table: view === "table" });
+  const requested = VIEWS.find((item) => item === current.view) ?? "globe";
+  const view = requested === "network" && !current.university ? "globe" : requested;
+  const [seen, setSeen] = useState({ globe: view === "globe", network: view === "network", table: view === "table" });
   if (!seen[view]) setSeen((prev) => ({ ...prev, [view]: true }));
   const detail = useProjectDetail(current.project, initialDetail);
   const { state: pipelineState } = useUserPipeline();
@@ -110,22 +122,20 @@ function DiscoverBody({
     : undefined;
 
   useEffect(() => {
+    if (!current.university && current.view === "network") navigate({ view: null });
+  }, [current.university, current.view, navigate]);
+
+  useEffect(() => {
     try {
-      if (current.view === "network") {
-        localStorage.removeItem("campus-universe:startup-discover-view");
-        navigate({ view: null });
-        return;
-      }
+      if (current.view === "network" && !current.university) return;
       if (current.view) {
         localStorage.setItem("campus-universe:startup-discover-view", current.view);
         return;
       }
       const remembered = localStorage.getItem("campus-universe:startup-discover-view");
-      if (remembered === "network") {
-        localStorage.removeItem("campus-universe:startup-discover-view");
-        return;
-      }
-      if (remembered && remembered !== "globe") navigate({ view: remembered });
+      if (!remembered || remembered === "globe") return;
+      if (remembered === "network" && !current.university) return;
+      navigate({ view: remembered });
     } catch {
       // Private window — keep the default globe.
     }
@@ -148,6 +158,11 @@ function DiscoverBody({
         {seen.table && (
           <div className={view === "table" ? "" : "hidden"}>
             <CandidateTable candidates={sorted} basePath="/startup/discover" current={query} feedbackView={query.feedback} detail={detail && query.project === detail.id ? detail : null} />
+          </div>
+        )}
+        {seen.network && current.university && (
+          <div className={view === "network" ? "" : "hidden"}>
+            <NetworkSlot universities={catalog.universities} current={query} records={records} initialGraph={initialGraph} />
           </div>
         )}
         {seen.globe && (
@@ -173,4 +188,62 @@ function DiscoverBody({
       )}
     </div>
   );
+}
+
+function NetworkSlot({
+  universities,
+  current,
+  records,
+  initialGraph,
+}: {
+  universities: UniversitySummary[];
+  current: Record<string, string | undefined>;
+  records: FeedbackRecord[];
+  initialGraph: NetworkGraph | null;
+}) {
+  const key = `${current.university ?? ""}|${current.sector ?? ""}|${current.enroll ?? ""}`;
+  const [graph, setGraph] = useState<NetworkGraph | null>(initialGraph);
+  const [loadedKey, setLoadedKey] = useState(initialGraph ? key : "");
+
+  useEffect(() => {
+    if (loadedKey === key && graph) return;
+    const params = new URLSearchParams();
+    if (current.university) params.set("university", current.university);
+    if (current.sector) params.set("sector", current.sector);
+    if (current.enroll) params.set("enroll", current.enroll);
+    let cancel = false;
+    fetch(`/api/network?${params.toString()}`)
+      .then((res) => res.json())
+      .then((data: NetworkGraph) => {
+        if (cancel) return;
+        setGraph(data);
+        setLoadedKey(key);
+      })
+      .catch(() => {});
+    return () => {
+      cancel = true;
+    };
+  }, [key, loadedKey, graph, current.university, current.sector, current.enroll]);
+
+  const { state } = useUserPipeline();
+  const visible = useMemo(() => {
+    if (!graph) return null;
+    const withUsers = attachUserScoutNetwork(graph, state, current.university);
+    const hiddenMode = current.feedback === "hidden";
+    const nodes = withUsers.nodes.filter((node) => {
+      if (node.type === "university") return true;
+      const entityType = node.type === "person" ? "person" : "project";
+      const hidden = isHidden(records, { entityType, entityId: node.id, name: node.label, domain: domainKey(node.linkUrl) });
+      return hiddenMode ? hidden : !hidden;
+    });
+    const keep = new Set(nodes.map((node) => node.id));
+    return { ...withUsers, nodes, edges: withUsers.edges.filter((edge) => keep.has(edge.source) && keep.has(edge.target)) };
+  }, [graph, records, current.feedback, state, current.university]);
+
+  if (!current.university) return null;
+  if (!visible || visible.nodes.length === 0) {
+    return <p className="p-6 text-sm text-muted">{graph ? "No evidence-backed connections on record for this campus yet." : "Loading network…"}</p>;
+  }
+  const campusName = universities.find((university) => university.id === current.university)?.name ?? "campus";
+  return <NetworkCanvas graph={visible} basePath="/startup/discover" current={current} campusName={campusName} presentation="campus" />;
 }

@@ -7,7 +7,8 @@ import type { EnrollmentStatus } from "@/lib/domain/founder-status";
 import { EnrollmentChips } from "./enrollment-chips";
 import { ScoutLink, useScoutNav } from "./scout-nav";
 
-const VIEWS = ["globe", "table"] as const;
+const ALL_CAMPUS_VIEWS = ["globe", "table"] as const;
+const CAMPUS_VIEWS = ["globe", "network", "table"] as const;
 
 function SearchField({
   basePath,
@@ -82,7 +83,8 @@ export function ExploreToolbar({
   showViewSwitch?: boolean;
   counts: Record<EnrollmentStatus, number>;
 }) {
-  const view = VIEWS.find((v) => v === current.view) ?? "globe";
+  const views = current.university ? CAMPUS_VIEWS : ALL_CAMPUS_VIEWS;
+  const view = views.find((v) => v === current.view) ?? "globe";
 
   const activeFilters: { key: string; label: string }[] = [];
   if (current.university) activeFilters.push({ key: "university", label: `Campus` });
@@ -117,7 +119,7 @@ export function ExploreToolbar({
 
         {showViewSwitch && (
           <div className="flex shrink-0 items-center gap-1 rounded-md border border-border-c p-0.5">
-            {VIEWS.map((v) => (
+            {views.map((v) => (
               <ScoutLink
                 key={v}
                 href={buildHref(basePath, current, { view: v })}

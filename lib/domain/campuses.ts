@@ -431,6 +431,34 @@ export function campusById(id: string): CampusConfig | undefined {
   return CAMPUSES.find((c) => c.id === id);
 }
 
+/** URL slug for a campus label: "UC Berkeley" and "Queen's" become `uc-berkeley` and `queens`. */
+export function campusSlug(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/['’]/g, "")
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/**
+ * Resolve a Discover `campus` or `university` query value to a campus id.
+ * Accepts the id (`univ_penn`), the short label (`Penn`, `berkeley`), or an alias (`uc-berkeley`).
+ */
+export function resolveCampusSlug(raw: string | undefined | null): string | undefined {
+  if (!raw) return undefined;
+  const trimmed = raw.trim();
+  if (!trimmed) return undefined;
+  if (campusById(trimmed)) return trimmed;
+  const slug = campusSlug(trimmed);
+  if (!slug) return undefined;
+  const match = CAMPUSES.find((campus) => {
+    if (campusSlug(campus.id) === slug || campusSlug(campus.shortLabel) === slug || campusSlug(campus.name) === slug) return true;
+    return campus.aliases.some((alias) => campusSlug(alias) === slug);
+  });
+  return match?.id;
+}
+
 export function shortCampusLabel(id: string, fallback?: string): string {
   return campusById(id)?.shortLabel ?? fallback ?? id;
 }
