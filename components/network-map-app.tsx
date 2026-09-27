@@ -647,7 +647,7 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
       const sectionAll = filters.orgSections.length === ORG_SECTIONS.length;
       const sectionHit = sectionAll || sections.some((section) => filters.orgSections.includes(section));
       let show = filters.nodeTypes.includes("organization") && campusHit && tierHit && sectionHit;
-      if (show && !showIsolates && (node.linkedPeople ?? 0) === 0) show = false;
+      if (show && !showIsolates && (node.linkedPeople ?? 0) === 0 && (node.linkedStartups ?? 0) === 0) show = false;
       if (show && narrowed) {
         show = graph.edges.some((edge) => edge.type === "member_of" && (edge.source === node.id || edge.target === node.id) && (peopleOk.has(edge.source) || peopleOk.has(edge.target)));
       }

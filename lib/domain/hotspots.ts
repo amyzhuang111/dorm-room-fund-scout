@@ -519,6 +519,7 @@ export interface OrganizationMapNode {
   url: string | null;
   linkedPeople: number;
   linkedFounders: number;
+  linkedStartups: number;
 }
 
 /** One node per directory place. Edges exist only where stored text or a role names that place. */
@@ -558,6 +559,7 @@ export function organizationMap(input: {
       url: card.url || null,
       linkedPeople: people.length,
       linkedFounders: people.filter((personId) => input.founderIds.has(personId)).length,
+      linkedStartups: startups.length,
     });
     for (const campusId of campuses) addEdge(id, campusId, "at_campus");
     for (const personId of people) addEdge(personId, id, "member_of");

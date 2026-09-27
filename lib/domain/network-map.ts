@@ -51,6 +51,8 @@ export interface MapNode {
   linkedPeople?: number;
   /** Linked people who also have a founder role on a startup in the map. */
   linkedFounders?: number;
+  /** Investable startups with a stored link to this organization. */
+  linkedStartups?: number;
 }
 
 export interface MapEdge {
@@ -587,6 +589,7 @@ function assembleNetworkMap(): MapGraph {
       orgSections: org.sections,
       linkedPeople: org.linkedPeople,
       linkedFounders: org.linkedFounders,
+      linkedStartups: org.linkedStartups,
     });
   }
   for (const [id, name] of investorNames) {
