@@ -105,6 +105,41 @@ export function PotentialFounderBadge() {
   );
 }
 
+const VERIFICATION_CLASS: Record<string, string> = {
+  confirmed: "bg-ok-bg text-ok border-ok/20",
+  partial: "bg-warn-bg text-warn border-warn/20",
+  unverified: "bg-surface-2 text-muted border-border-c",
+};
+
+const VERIFICATION_LABEL: Record<string, string> = {
+  confirmed: "Verified",
+  partial: "Partly verified",
+  unverified: "Unverified",
+};
+
+export function VerificationBadge({
+  status,
+  verifiedAt,
+  note,
+}: {
+  status?: string | null;
+  verifiedAt?: string | null;
+  note?: string | null;
+}) {
+  if (!status) return null;
+  const when = verifiedAt ? verifiedAt.slice(0, 10) : "";
+  const label = VERIFICATION_LABEL[status] ?? status;
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center rounded-full border px-1.5 py-0.5 text-[10px] font-medium ${VERIFICATION_CLASS[status] ?? "bg-surface-2 text-muted border-border-c"}`}
+      title={[note, when ? `Checked ${when}` : ""].filter(Boolean).join(" ")}
+    >
+      {label}
+      {when ? ` ${when}` : ""}
+    </span>
+  );
+}
+
 export function UnverifiedBadge() {
   return (
     <span

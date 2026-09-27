@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
 import { storedCompanyLinks } from "@/lib/domain/company-link";
-import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SignalTierBadge } from "./badges";
+import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SignalTierBadge, VerificationBadge } from "./badges";
 import { PipelineForm } from "./pipeline-form";
 import { NotesSection } from "./notes-section";
 import { AssessmentForm } from "./assessment-form";
@@ -31,6 +31,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
           <h2 className="flex flex-wrap items-center gap-2 text-lg font-semibold text-foreground">
             {project.name}
             <SignalTierBadge tier={project.signalTier} basis={project.signalTierBasis} />
+            <VerificationBadge status={project.verificationStatus} verifiedAt={project.lastVerifiedAt} note={project.verificationNote} />
           </h2>
           <GateBadge result={project.overallGate} gateOutcomes={project.gateOutcomes} />
         </div>
