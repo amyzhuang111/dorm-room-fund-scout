@@ -132,10 +132,12 @@ export function EnrollmentBadge({
   status,
   label,
   evidence,
+  basis,
 }: {
   status: string | null | undefined;
   label?: string | null;
   evidence?: string | null;
+  basis?: string | null;
 }) {
   const key = status && status in ENROLLMENT_CLASS ? status : "unknown";
   return (
@@ -144,6 +146,7 @@ export function EnrollmentBadge({
       title={evidence ?? undefined}
     >
       {enrollmentBadge(status, label)}
+      {basis === "inferred" && <span className="ml-1 font-normal text-muted">est.</span>}
     </span>
   );
 }

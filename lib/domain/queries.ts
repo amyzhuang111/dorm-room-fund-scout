@@ -142,6 +142,7 @@ export interface NamedFounder {
   role: string | null;
   enrollmentStatus: string | null;
   enrollmentLabel: string | null;
+  enrollmentBasis: string | null;
   leftSchool: boolean;
   school: string | null;
   program: string | null;
@@ -497,12 +498,13 @@ function buildAllCandidates(): CandidateSummary[] {
     .prepare(
       `SELECT ppr.project_id as project_id, pe.id as id, pe.name as name, pe.aliases_json as aliases_json,
               pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label,
+              pe.enrollment_basis as enrollment_basis,
               pe.left_school as left_school, pe.founder_status as founder_status, ppr.role as role
        FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id
        WHERE ppr.role LIKE '%founder%'
        ORDER BY ppr.rowid`
     )
-    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null; left_school: number | null; founder_status: string | null; role: string | null }[]) {
+    .all() as { project_id: string; id: string; name: string; aliases_json: string; enrollment_status: string | null; enrollment_label: string | null; enrollment_basis: string | null; left_school: number | null; founder_status: string | null; role: string | null }[]) {
     const key = `${r.project_id}:${r.id}`;
     if (seenFounder.has(key)) continue;
     seenFounder.add(key);
@@ -522,6 +524,7 @@ function buildAllCandidates(): CandidateSummary[] {
       role: r.role,
       enrollmentStatus: r.enrollment_status,
       enrollmentLabel: r.enrollment_label,
+      enrollmentBasis: r.enrollment_basis,
       leftSchool: r.left_school === 1,
       school: schoolByPerson.get(r.id) ?? null,
       program: programByPerson.get(r.id) ?? null,
@@ -1039,6 +1042,7 @@ export interface FounderRow {
   education: { excerpt: string; sourceUrl: string | null }[];
   enrollmentStatus: string;
   enrollmentLabel: string | null;
+  enrollmentBasis: string | null;
   leftSchool: boolean;
   enrollmentEvidence: string | null;
   enrollmentSourceUrl: string | null;
@@ -1131,6 +1135,7 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
     .prepare(
       `SELECT DISTINCT pe.id as id, pe.name as name, pe.aliases_json as aliases_json, a.status as status, a.university_id as university_id, u.name as university_name,
               pe.enrollment_status as enrollment_status, pe.enrollment_label as enrollment_label,
+              pe.enrollment_basis as enrollment_basis,
               pe.enrollment_evidence as enrollment_evidence, pe.enrollment_source_url as enrollment_source_url,
               pe.left_school as left_school,
               pe.founder_status as founder_status, pe.potential_signal as potential_signal,
@@ -1149,6 +1154,7 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       university_name: string | null;
       enrollment_status: string | null;
       enrollment_label: string | null;
+      enrollment_basis: string | null;
       enrollment_evidence: string | null;
       enrollment_source_url: string | null;
       left_school: number | null;
@@ -1195,6 +1201,7 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       education: [],
       enrollmentStatus: r.enrollment_status ?? "unknown",
       enrollmentLabel: r.enrollment_label,
+      enrollmentBasis: r.enrollment_basis,
       leftSchool: r.left_school === 1,
       enrollmentEvidence: r.enrollment_evidence,
       enrollmentSourceUrl: r.enrollment_source_url,

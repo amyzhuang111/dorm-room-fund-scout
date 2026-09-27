@@ -8,7 +8,7 @@ import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 function founderHref(founder: NamedFounder): string {
   const params = new URLSearchParams({
     founder: founder.personId,
-    enroll: "current_student,recent_grad,older_alumni,unknown",
+    enroll: "current_student,recent_grad,older_alumni",
   });
   if (founder.founderStatus === "potential") params.set("pool", "potential");
   return `/founder/discover?${params.toString()}`;

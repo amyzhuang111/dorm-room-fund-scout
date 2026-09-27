@@ -49,20 +49,10 @@ export function EnrollmentChips({
             </ScoutLink>
           );
         })}
-        <ScoutLink
-          href={hrefFor("unknown")}
-          className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium ${
-            selected.includes("unknown")
-              ? "border-accent bg-accent text-accent-foreground"
-              : "border-border-c text-muted hover:bg-surface-2 hover:text-foreground"
-          }`}
-          aria-pressed={selected.includes("unknown")}
-        >
-          Unknown
-          <span className="tabular-nums">{counts.unknown}</span>
-        </ScoutLink>
       </div>
-      <p className="mt-1.5 text-[11px] leading-snug text-muted">Student and New grad are on. New grad means graduated in 2023–2026.</p>
+      <p className="mt-1.5 text-[11px] leading-snug text-muted">
+        Student and New grad are on. New grad means graduated in 2023–2026. est. means the bucket was inferred.
+      </p>
     </div>
   );
 }

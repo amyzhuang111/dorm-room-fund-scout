@@ -1,7 +1,7 @@
-// Enrollment status for Founder Scout. Computed only from text we already
-// stored (class-year tokens, "Class of", "graduated in", current-student
-// wording, Contrary/DRF labels, and confirmed LinkedIn education dates).
-// A missing year stays Unknown. Nothing here is inferred from age.
+// Enrollment status for Founder Scout. A stated class year, degree date, or
+// class standing is verified. When that evidence is missing, enrollment-infer.ts
+// places the person in Current student, Recent grad (2023–2026), or Alumni
+// and marks the basis inferred. The discover filters only offer those three.
 
 export const ENROLLMENT_AS_OF_YEAR = 2026;
 /** Graduated in AS_OF_YEAR, or in the three calendar years before it: 2023–2026. */
@@ -481,7 +481,7 @@ export function selectedEnrollment(param: string | undefined): EnrollmentStatus[
   if (!param) return [...DEFAULT_ENROLLMENT_FOCUS];
   if (param === "none") return [];
   const allowed = new Set<string>(ENROLLMENT_STATUSES);
-  const picked = param.split(",").filter((part): part is EnrollmentStatus => allowed.has(part));
+  const picked = param.split(",").filter((part): part is EnrollmentStatus => allowed.has(part) && part !== "unknown");
   return ENROLLMENT_STATUSES.filter((status) => picked.includes(status));
 }
 
@@ -502,7 +502,7 @@ export function companyMatchesEnrollment(
   founders: { enrollmentStatus?: string | null }[],
   selected: EnrollmentStatus[]
 ): boolean {
-  if (founders.length === 0) return selected.includes("unknown");
+  if (founders.length === 0) return false;
   return founders.some((founder) => matchesEnrollment(founder.enrollmentStatus, selected));
 }
 

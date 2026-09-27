@@ -120,7 +120,7 @@ function FounderBody({
               Founders
             </ScoutLink>
             <ScoutLink
-              href={buildHref("/founder/discover", current, { pool: "potential", founder: null, sort: "tier", enroll: "current_student,recent_grad,older_alumni,unknown" })}
+              href={buildHref("/founder/discover", current, { pool: "potential", founder: null, sort: "tier", enroll: "current_student,recent_grad,older_alumni" })}
               className={`rounded-md px-2.5 py-1 text-xs font-medium ${showingPotential ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
             >
               Potential founders
@@ -157,7 +157,7 @@ function FounderBody({
             <FounderCard key={founder.id} founder={founder} feedbackView={filters.feedback} open={filters.founder === founder.id} basePath="/founder/discover" current={filters} />
           ))}
           {visible.length === 0 && (
-            <p className="text-sm text-muted">No founders match. Student and New grad are on — turn on Alumni or Unknown to widen the list.</p>
+            <p className="text-sm text-muted">No founders match. Student and New grad are on — turn on Alumni to widen the list.</p>
           )}
         </div>
         {current.university && (

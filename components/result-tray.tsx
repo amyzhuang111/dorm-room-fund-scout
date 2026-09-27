@@ -78,7 +78,7 @@ export function ResultTray({
                   {c.founderLinks.slice(0, 2).map((f) => (
                     <li key={f.personId} className="flex flex-wrap items-center gap-1">
                       <span className="text-foreground">{f.name}</span>
-                      <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+                      <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} />
                       <LeftSchoolBadge leftSchool={f.leftSchool} />
                       <PersonLinkButton link={f.link} name={f.name} />
                     </li>

@@ -72,12 +72,13 @@ CREATE TABLE IF NOT EXISTS people (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL,
   aliases_json TEXT NOT NULL DEFAULT '[]',
-  enrollment_status TEXT,       -- current_student | recent_grad | older_alumni | unknown
+  enrollment_status TEXT,       -- current_student | recent_grad | older_alumni
   enrollment_label TEXT,        -- source token, e.g. W'27
-  enrollment_evidence TEXT,     -- the excerpt the status was read from
+  enrollment_evidence TEXT,     -- the excerpt or short reason the status was read from
   enrollment_source_url TEXT,
   enrollment_source_id TEXT,
   enrollment_grad_year INTEGER,
+  enrollment_basis TEXT,        -- verified | inferred
   signal_tier TEXT,             -- S | A | B | C | D | talent; talent sorts after D; null when no rule applies
   signal_tier_basis TEXT,
   left_school INTEGER NOT NULL DEFAULT 0, -- bio says dropout or leave; enrollment_status stays evidence-only
