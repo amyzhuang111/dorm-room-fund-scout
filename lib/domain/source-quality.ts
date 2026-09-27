@@ -1357,7 +1357,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "S",
     role: "discovery",
     dimensions: { campusPurity: "low", earliness: "high", buildEvidence: "high", selectivity: "high", identityQuality: "low", extractability: "low" },
-    tierRationale: "Owner override: ranked S so it sits above The Residency. San Francisco AI hacker house. The homepage names roommates and companies and does not publish an acceptance rate. Source: https://agihouse.ai/",
+    tierRationale: "Curated San Francisco AI hacker house. Hackathons and build days draw strong AI founders and researchers. The homepage names roommates and companies without an acceptance rate. Source: https://agihouse.ai/",
     whyItMatters: "A dense AI builder house. Membership is a search lead once a page names a school.",
     whatToExtract: ["a person only when a public page names them and a school"],
     whatNotToInfer: ["A photo caption that names a company is not a campus.", "Membership is a source-priority badge, not Founder Signal."],

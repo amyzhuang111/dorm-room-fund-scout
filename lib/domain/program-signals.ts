@@ -73,7 +73,7 @@ export interface ProgramDirectory {
  * published cohort, and large or archived programs, sit at B or C.
  * Kleiner Perkins stays S: it is already a small paid fellowship in the
  * directory. Afore stays A: a funded student residency in the Off Season band.
- * AGI House is S by owner override, so it ranks above The Residency.
+ * AGI House is S: a curated AI hacker house, above The Residency.
  */
 export const PROGRAM_DIRECTORY: Record<ProgramSignalType, ProgramDirectory> = {
   founders_inc: {
@@ -133,7 +133,7 @@ export const PROGRAM_DIRECTORY: Record<ProgramSignalType, ProgramDirectory> = {
   },
   agi_house: {
     tier: "S",
-    rationale: "Owner override: ranked S so it sits above The Residency. San Francisco AI hacker house. The homepage names roommates and companies and does not publish an acceptance rate.",
+    rationale: "Curated San Francisco AI hacker house. Hackathons and build days draw strong AI founders and researchers. The homepage names roommates and companies without an acceptance rate.",
     sourceUrl: "https://agihouse.ai/",
   },
   hf0: {

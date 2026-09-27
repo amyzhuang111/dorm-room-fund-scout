@@ -153,7 +153,8 @@ assert.equal(directory.find((card) => card.place.startsWith("The Residency (foun
 assert.equal(directory.find((card) => card.place.startsWith("The Residency (Arcadia"))?.tier, "A");
 assert.match(directory.find((card) => card.place.startsWith("The Residency (founder houses)"))?.url ?? "", /livetheresidency\.com\/residencies$/);
 assert.equal(directory.find((card) => card.place === "AGI House SF")?.tier, "S");
-assert.match(directory.find((card) => card.place === "AGI House SF")?.tierRationale ?? "", /Owner override/);
+assert.match(directory.find((card) => card.place === "AGI House SF")?.tierRationale ?? "", /Curated San Francisco AI hacker house/);
+assert.equal((directory.find((card) => card.place === "AGI House SF")?.tierRationale ?? "").toLowerCase().includes("owner override"), false);
 assert.equal(directory.find((card) => card.place === "HF0 residency" && card.campus === "San Francisco")?.tier, "S");
 assert.equal(directory.find((card) => card.place === "Frontier Tower" && card.campus === "San Francisco")?.tier, "C");
 assert.equal(directory.find((card) => card.place === "FoundHer House" && card.campus === "San Francisco")?.tier, "B");
