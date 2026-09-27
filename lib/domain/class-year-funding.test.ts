@@ -42,6 +42,10 @@ assert.equal(yearOf(jathin, "Jathin Singaraju").gradYear, 2027);
 assert.equal(yearOf(hannah, "Hannah Gao").gradYear, 2028);
 assert.equal(yearOf(aaryan, "Aaryan Shah").gradYear, 2026);
 assert.equal(yearOf(aaryan, "Aaryan Shah").status, "recent_grad");
+assert.equal(yearOf("Alejandra Soria Andrade. Class Year: 2025. The Huntsman Program.", "Alejandra Soria Andrade").gradYear, 2025);
+assert.equal(yearOf("Alejandra Soria Andrade. Class Year: 2025. The Huntsman Program.", "Alejandra Soria Andrade").status, "recent_grad");
+assert.equal(yearOf("Ignacio Hounie, GrE'26 is a third-year doctoral candidate at the University of Pennsylvania.", "Ignacio Hounie").gradYear, 2026);
+assert.equal(yearOf("Ignacio Hounie, GrE'26 is a third-year doctoral candidate at the University of Pennsylvania.", "Ignacio Hounie").status, "recent_grad");
 
 assert.equal(yearOf("Penn Engineering's 2025-2026 Student Ventures Committee.").gradYear, null);
 assert.equal(yearOf("Penn Engineering's 2025-2026 Student Ventures Committee.").status, "unknown");
