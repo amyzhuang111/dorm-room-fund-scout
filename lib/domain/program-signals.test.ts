@@ -85,4 +85,47 @@ assert.ok(matchPhrases("Z Fellows").includes("z fellows"));
 assert.equal(hasPhrase(normHotspotName("role Z Fellows"), "z fellows"), true);
 assert.equal(hasPhrase(normHotspotName("role Kleiner Perkins Fellows"), "kleiner perkins fellows"), true);
 
-console.log(`program-signals tests ok (${file.people.length} founders-inc/spc, ${residencies.people.length} residencies)`);
+const houses = JSON.parse(fs.readFileSync("data/imports/founder-houses.json", "utf8")) as {
+  people: (typeof residencies.people)[number][];
+};
+const houseKeys = new Set<string>();
+for (const person of houses.people) {
+  const key = `${person.program}\0${person.name}\0${person.sourceUrl}`;
+  assert.equal(houseKeys.has(key), false, person.name);
+  houseKeys.add(key);
+  assert.ok(isProgramSignalType(person.program), person.name);
+  assert.ok(isProgramMatchStatus(person.matchStatus), person.name);
+  assert.match(person.sourceUrl, /^https:\/\//, person.name);
+  assert.ok(person.excerpt.trim().length > 20, person.name);
+  assert.ok(person.label.trim().length > 0, person.name);
+  if (person.keepWithoutCampus) assert.equal(person.universityId, null, person.name);
+  else assert.ok(person.universityId && campusIds.has(person.universityId), `${person.name} ${person.universityId}`);
+  if (person.enrollmentStatus == null) assert.equal(person.enrollmentBasis, null, person.name);
+  else {
+    assert.ok(["current_student", "recent_grad", "older_alumni"].includes(person.enrollmentStatus), person.name);
+    assert.ok(person.enrollmentBasis === "verified" || person.enrollmentBasis === "inferred", person.name);
+  }
+  if (person.company?.website) assert.match(person.company.website, /^https?:\/\//, person.company.name);
+}
+assert.ok(matchPhrases("Yale Hacker House").includes("yale hacker house"));
+assert.ok(matchPhrases("Farmhouse").includes("farmhouse"));
+assert.ok(matchPhrases("Georgia Tech Hacker House").includes("georgia tech hacker house"));
+assert.ok(matchPhrases("Rice Residency").includes("rice residency"));
+assert.ok(matchPhrases("FoundHer House").includes("foundher house"));
+assert.ok(matchPhrases("Playa House").includes("playa house"));
+assert.ok(matchPhrases("Harvard St. Commons").includes("harvard st commons"));
+assert.ok(matchPhrases("Frontier Tower").includes("frontier tower"));
+assert.ok(matchPhrases("HF0 residency").includes("hf0 residency"));
+assert.ok(matchPhrases("AGI House SF").includes("agi house sf") || matchPhrases("AGI House").includes("agi house"));
+assert.equal(hasPhrase(normHotspotName("role Yale Hacker House"), "yale hacker house"), true);
+assert.equal(hasPhrase(normHotspotName("role Farmhouse"), "farmhouse"), true);
+assert.equal(hasPhrase(normHotspotName("role Georgia Tech Hacker House"), "georgia tech hacker house"), true);
+assert.equal(hasPhrase(normHotspotName("role Rice Residency"), "rice residency"), true);
+assert.equal(hasPhrase(normHotspotName("role FoundHer House"), "foundher house"), true);
+assert.equal(hasPhrase(normHotspotName("role Playa House"), "playa house"), true);
+assert.equal(hasPhrase(normHotspotName("role Harvard St. Commons"), "harvard st commons"), true);
+assert.equal(hasPhrase(normHotspotName("role Frontier Tower"), "frontier tower"), true);
+assert.equal(hasPhrase(normHotspotName("role HF0 residency"), "hf0 residency"), true);
+assert.equal(hasPhrase(normHotspotName("role AGI House"), "agi house"), true);
+
+console.log(`program-signals tests ok (${file.people.length} founders-inc/spc, ${residencies.people.length} residencies, ${houses.people.length} houses)`);

@@ -1,10 +1,13 @@
-// Idempotent import of public founder-residency and fellowship hubs.
-// Reads data/imports/founder-residencies.json. A person is in that file only
-// when a public page names them and names a school already in the campus list.
+// Idempotent import of public founder-residency, fellowship, and founder-house hubs.
+// Reads data/imports/founder-residencies.json and data/imports/founder-houses.json.
+// A person is in those files only when a public page names them. A campus is
+// set only when that page names a school already in the campus list. Current
+// students and recent graduates at a school outside that list are kept with
+// keepWithoutCampus.
 //
-// Hubs with no importable roster are still created: The Residency, 1517
-// Medici, Buildspace, Afore FIR U, and Pioneer. Their pages do not pair a
-// person with a school.
+// Hubs with no importable roster are still created. For residencies those are
+// The Residency, 1517 Medici, Buildspace, Afore FIR U, and Pioneer. For houses
+// those are AGI House, HF0, and Frontier Tower.
 //
 // Not written, on purpose:
 // - Team-level school lists ("they come from Stanford, Princeton, Berkeley").
@@ -37,6 +40,16 @@ const RESIDENCY_PROGRAMS = [
   "afore_fir_u",
   "pioneer",
   "kleiner_perkins_fellows",
+  "agi_house",
+  "hf0",
+  "frontier_tower",
+  "yale_hacker_house",
+  "farmhouse",
+  "gatech_hacker_house",
+  "rice_residency",
+  "foundher_house",
+  "playa_house",
+  "harvard_st_commons",
 ] as const;
 type ResidencyProgram = (typeof RESIDENCY_PROGRAMS)[number];
 
@@ -206,6 +219,126 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     rationale:
       "Small paid summer fellowship placed in Kleiner Perkins portfolio companies. The public jobs page does not name the current class. Founder and startup tiers are S, matching the existing hotspot. A badge is stored only when a public page names that person as a fellow and names a school.",
   },
+  agi_house: {
+    sourceId: "src_agi_house",
+    sourceName: "AGI House",
+    sourceUrl: "https://agihouse.ai/",
+    projectId: "proj_agi_house",
+    projectName: "AGI House",
+    founderTier: "A",
+    startupTier: "A",
+    updateExistingSource: true,
+    rationale:
+      "San Francisco AI hacker house. The homepage photo caption names roommates and companies and does not name schools. Founder and startup tiers are A, matching the existing hotspot. A badge is stored only when a public page names the person and a school.",
+  },
+  hf0: {
+    sourceId: "src_hf0",
+    sourceName: "HF0",
+    sourceUrl: "https://www.hf0.com/",
+    projectId: "proj_hf0",
+    projectName: "HF0",
+    founderTier: "A",
+    startupTier: "A",
+    updateExistingSource: true,
+    rationale:
+      "Residency for repeat founders. The site says it backs 10 teams at a time. The team page names staff and does not name resident founders or schools. Founder and startup tiers are A.",
+  },
+  frontier_tower: {
+    sourceId: "src_frontier_tower",
+    sourceName: "Frontier Tower",
+    sourceUrl: "https://frontiertower.io/",
+    projectId: "proj_frontier_tower",
+    projectName: "Frontier Tower",
+    founderTier: "B",
+    startupTier: "B",
+    updateExistingSource: true,
+    rationale:
+      "16-floor vertical village at 995 Market Street, San Francisco. Public quotes on the site use first initials only. Founder and startup tiers are B.",
+  },
+  yale_hacker_house: {
+    sourceId: "src_yale_hacker_house",
+    sourceName: "Yale Hacker House",
+    sourceUrl: "https://www.yalehackerhouse.com/",
+    projectId: "proj_yale_hacker_house",
+    projectName: "Yale Hacker House",
+    founderTier: "A",
+    startupTier: "A",
+    updateExistingSource: true,
+    rationale:
+      "Yale's founder residency in San Francisco. The site publishes a first cohort and says each person is a Yale student. Founder and startup tiers are A.",
+  },
+  farmhouse: {
+    sourceId: "src_farmhouse",
+    sourceName: "Farmhouse",
+    sourceUrl: "https://www.thefarm.haus/",
+    projectId: "proj_farmhouse",
+    projectName: "Farmhouse",
+    founderTier: "A",
+    startupTier: "B",
+    updateExistingSource: true,
+    rationale:
+      "Stanford hacker house. The site lists eight builders for summer 2026 and a Stanford major for each. It does not print a class year. Founder tier A, startup tier B.",
+  },
+  gatech_hacker_house: {
+    sourceId: "src_gatech_hacker_house",
+    sourceName: "Georgia Tech Hacker House",
+    sourceUrl: "https://news.gatech.edu/news/2025/04/11/computing-student-launches-first-ever-hacker-house-campus",
+    projectId: "proj_gatech_hacker_house",
+    projectName: "Georgia Tech Hacker House",
+    founderTier: "A",
+    startupTier: "B",
+    updateExistingSource: true,
+    rationale:
+      "Nine-month live-in program at 160 6th St NW, 10 rooms and 20 spots, August 10 2025 through May 10 2026. Georgia Tech's news center says nearly 180 students applied. The story names the founder and does not name the other residents. Founder tier A, startup tier B.",
+  },
+  rice_residency: {
+    sourceId: "src_rice_residency",
+    sourceName: "Rice Residency",
+    sourceUrl: "https://www.riceresidency.com/",
+    projectId: "proj_rice_residency",
+    projectName: "Rice Residency",
+    founderTier: "B",
+    startupTier: "B",
+    updateExistingSource: true,
+    rationale:
+      "Student hacker house at Rice. The Rice Thresher (19 Nov 2025) says applications for the first cohort were opening and names two Will Rice juniors. Founder and startup tiers are B.",
+  },
+  foundher_house: {
+    sourceId: "src_foundher_house",
+    sourceName: "FoundHer House",
+    sourceUrl: "https://www.foundherhouse.org/",
+    projectId: "proj_foundher_house",
+    projectName: "FoundHer House",
+    founderTier: "B",
+    startupTier: "B",
+    updateExistingSource: true,
+    rationale:
+      "All-women hacker house in San Francisco. KTVU (2 Sep 2025) names the two USC student founders. The article says other residents represented Cornell and Stanford and that one dropout was from Penn, and it does not say which person. Founder and startup tiers are B.",
+  },
+  playa_house: {
+    sourceId: "src_playa_house",
+    sourceName: "Playa House",
+    sourceUrl: "https://liveplayahouse.com/",
+    projectId: "proj_playa_house",
+    projectName: "Playa House",
+    founderTier: "A",
+    startupTier: "B",
+    updateExistingSource: true,
+    rationale:
+      "Student-run founder house in Isla Vista. UCSB Engineering (30 Jul 2026) says ten residents joined in fall 2025 and names four of them. UC Santa Barbara is not in the campus list, so those four are stored without a campus. Founder tier A, startup tier B.",
+  },
+  harvard_st_commons: {
+    sourceId: "src_harvard_st_commons",
+    sourceName: "Harvard St. Commons",
+    sourceUrl: "https://harvardst.co/",
+    projectId: "proj_harvard_st_commons",
+    projectName: "Harvard St. Commons",
+    founderTier: "A",
+    startupTier: "B",
+    updateExistingSource: true,
+    rationale:
+      "Founder house in Cambridge. The site names the house leads and a school for two of them. It does not publish the full resident roster. Founder tier A, startup tier B.",
+  },
 };
 
 const GENERIC_HOSTS = new Set(["linkedin.com", "twitter.com", "x.com", "github.com", "medium.com", "substack.com", "youtube.com", "google.com", "notion.so"]);
@@ -222,9 +355,11 @@ function hostOf(raw: string | null | undefined): string | null {
 }
 
 function loadPeople(): PersonRecord[] {
-  const file = path.join(process.cwd(), "data", "imports", "founder-residencies.json");
-  const parsed = JSON.parse(fs.readFileSync(file, "utf8")) as { people: PersonRecord[] };
-  return parsed.people;
+  const files = ["data/imports/founder-residencies.json", "data/imports/founder-houses.json"];
+  return files.flatMap((file) => {
+    const parsed = JSON.parse(fs.readFileSync(path.join(process.cwd(), file), "utf8")) as { people: PersonRecord[] };
+    return parsed.people;
+  });
 }
 
 function aliasesOf(json: string | null): string[] {

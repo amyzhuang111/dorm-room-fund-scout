@@ -16,6 +16,16 @@ export const PROGRAM_SIGNAL_TYPES = [
   "afore_fir_u",
   "pioneer",
   "kleiner_perkins_fellows",
+  "agi_house",
+  "hf0",
+  "frontier_tower",
+  "yale_hacker_house",
+  "farmhouse",
+  "gatech_hacker_house",
+  "rice_residency",
+  "foundher_house",
+  "playa_house",
+  "harvard_st_commons",
 ] as const;
 export type ProgramSignalType = (typeof PROGRAM_SIGNAL_TYPES)[number];
 export type ProgramMatchStatus = "confirmed" | "likely";
@@ -32,6 +42,16 @@ export const PROGRAM_SIGNAL_LABEL: Record<ProgramSignalType, string> = {
   afore_fir_u: "Afore FIR U",
   pioneer: "Pioneer",
   kleiner_perkins_fellows: "Kleiner Perkins Fellow",
+  agi_house: "AGI House",
+  hf0: "HF0",
+  frontier_tower: "Frontier Tower",
+  yale_hacker_house: "Yale Hacker House",
+  farmhouse: "Farmhouse",
+  gatech_hacker_house: "Georgia Tech Hacker House",
+  rice_residency: "Rice Residency",
+  foundher_house: "FoundHer House",
+  playa_house: "Playa House",
+  harvard_st_commons: "Harvard St. Commons",
 };
 
 export interface ProgramSignalView {
