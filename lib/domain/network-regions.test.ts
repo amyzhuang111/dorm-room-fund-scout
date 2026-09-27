@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { nodeColor } from "../../components/network-style";
+import { nodeColor, readableInk } from "../../components/network-style";
 import { REGIONS, campusShade, regionForCampus, regionSwatch } from "./network-regions";
 
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
@@ -81,6 +81,25 @@ const investor = nodeColor({ type: "investor", campus: null, id: "inv", rimBand:
 assert.match(investor, /75,\s*85,\s*99/);
 const second = nodeColor({ type: "organization", campus: null, id: "z", rimBand: "outer", rimTier: "A" }, campusColors);
 assert.match(second, /156,\s*163,\s*175/);
+
+const pennShade = campusShade("univ_penn", "Penn", siblings);
+const club = nodeColor({ type: "organization", campus: null, homeCampus: "univ_penn", id: "labs", rimBand: "inward" }, campusColors);
+assert.match(club, /^rgba\(/);
+assert.doesNotMatch(club, /196,\s*201,\s*209/);
+assert.ok(club.includes(String(Number.parseInt(pennShade.slice(1, 3), 16))));
+const ink = readableInk(pennShade);
+const inkValue = Number.parseInt(ink.slice(1), 16);
+const inkRed = (inkValue >> 16) & 255;
+const inkGreen = (inkValue >> 8) & 255;
+const inkBlue = inkValue & 255;
+const linear = (channel: number) => {
+  const value = channel / 255;
+  return value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+};
+const luminance = 0.2126 * linear(inkRed) + 0.7152 * linear(inkGreen) + 0.0722 * linear(inkBlue);
+assert.ok(1.05 / (luminance + 0.05) >= 4.5, ink);
+assert.notEqual(ink.toLowerCase(), "#000000");
+assert.notEqual(ink.toLowerCase(), "#111111");
 
 assert.equal(regionForCampus("univ_uva", "University of Virginia"), "philly");
 assert.equal(regionForCampus("univ_waterloo", "University of Waterloo"), "boston");

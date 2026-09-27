@@ -65,8 +65,10 @@ function regionIndex(id: string): number {
   return index < 0 ? REGIONS.length : index;
 }
 
-export function nodeColor(node: { type: MapNodeType; campus: string | null; id?: string; rimBand?: "outer" | "inward" | null; rimTier?: "S+" | "S" | "A" | "B" | "C" | "D" | null }, colors: Map<string, string>): string {
+export function nodeColor(node: { type: MapNodeType; campus: string | null; id?: string; homeCampus?: string | null; rimBand?: "outer" | "inward" | null; rimTier?: "S+" | "S" | "A" | "B" | "C" | "D" | null }, colors: Map<string, string>): string {
   if (node.id && (node.id.startsWith("user_") || node.id.startsWith("ufounder_") || node.id.startsWith("ucampus_"))) return withAlpha("#6b7280", 0.9);
+  const home = node.homeCampus && colors.get(node.homeCampus);
+  if (home && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha(home, FILL_ALPHA);
   if (node.rimBand === "inward" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "rgba(196, 201, 209, 0.42)";
   if (node.rimBand === "outer" && node.rimTier === "S+" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha("#374151", 0.96);
   if (node.rimBand === "outer" && node.rimTier === "S" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha("#4b5563", 0.96);
@@ -75,6 +77,21 @@ export function nodeColor(node: { type: MapNodeType; campus: string | null; id?:
   const id = node.campus ?? (node.type === "campus" ? node.id : null);
   if (id && colors.get(id)) return withAlpha(colors.get(id) as string, FILL_ALPHA);
   return withAlpha(NODE_FILL[node.type], FILL_ALPHA);
+}
+
+/** Label ink for a campus shade. Same hue, darkened until it clears 4.5:1 on white. */
+export function readableInk(hex: string): string {
+  const parsed = parseHex(hex);
+  if (!parsed) return "#374151";
+  let [red, green, blue] = parsed;
+  if (contrastOnWhite(red, green, blue) >= 4.5) return toHex(red, green, blue);
+  let { h, s, l } = rgbToHsl(red, green, blue);
+  for (let step = 0; step < 28 && contrastOnWhite(red, green, blue) < 4.5; step++) {
+    l = Math.max(12, l - 3);
+    [red, green, blue] = hslToRgb(h, s, l);
+    if (l <= 12) break;
+  }
+  return toHex(red, green, blue);
 }
 
 /** The hovered node's neighborhood. Same hue, darker and more opaque than the resting hairline. */
@@ -418,6 +435,65 @@ function screenLabelBox(label: ScreenLabel, measure: (text: string, fontSize: nu
 
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
+}
+
+function parseHex(hex: string): [number, number, number] | null {
+  const match = /^#([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!match) return null;
+  const value = Number.parseInt(match[1], 16);
+  return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
+}
+
+function toHex(red: number, green: number, blue: number): string {
+  const channel = (value: number) => Math.round(value).toString(16).padStart(2, "0");
+  return `#${channel(red)}${channel(green)}${channel(blue)}`;
+}
+
+function linearChannel(value: number): number {
+  const channel = value / 255;
+  return channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+}
+
+function contrastOnWhite(red: number, green: number, blue: number): number {
+  const luminance = 0.2126 * linearChannel(red) + 0.7152 * linearChannel(green) + 0.0722 * linearChannel(blue);
+  return 1.05 / (luminance + 0.05);
+}
+
+function rgbToHsl(red: number, green: number, blue: number): { h: number; s: number; l: number } {
+  const r = red / 255;
+  const g = green / 255;
+  const b = blue / 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  const delta = max - min;
+  if (delta === 0) return { h: 0, s: 0, l: l * 100 };
+  const s = delta / (1 - Math.abs(2 * l - 1));
+  let h = 0;
+  if (max === r) h = ((g - b) / delta) % 6;
+  else if (max === g) h = (b - r) / delta + 2;
+  else h = (r - g) / delta + 4;
+  return { h: (h * 60 + 360) % 360, s: s * 100, l: l * 100 };
+}
+
+function hslToRgb(hue: number, saturation: number, lightness: number): [number, number, number] {
+  const sat = saturation / 100;
+  const light = lightness / 100;
+  const chroma = (1 - Math.abs(2 * light - 1)) * sat;
+  const hp = hue / 60;
+  const x = chroma * (1 - Math.abs((hp % 2) - 1));
+  let red = 0;
+  let green = 0;
+  let blue = 0;
+  if (hp < 1) [red, green, blue] = [chroma, x, 0];
+  else if (hp < 2) [red, green, blue] = [x, chroma, 0];
+  else if (hp < 3) [red, green, blue] = [0, chroma, x];
+  else if (hp < 4) [red, green, blue] = [0, x, chroma];
+  else if (hp < 5) [red, green, blue] = [x, 0, chroma];
+  else [red, green, blue] = [chroma, 0, x];
+  const match = light - chroma / 2;
+  const channel = (value: number) => Math.round((value + match) * 255);
+  return [channel(red), channel(green), channel(blue)];
 }
 
 function withAlpha(hex: string, alpha: number): string {

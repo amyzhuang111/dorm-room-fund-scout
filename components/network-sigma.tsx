@@ -7,7 +7,7 @@ import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-ma
 import { regionTint } from "@/lib/domain/network-regions";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
-import { DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, REGION_TRACKING, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
+import { DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, REGION_TRACKING, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -32,6 +32,7 @@ type NodeAttr = {
   tint?: string;
   linkColor: string;
   labelPx?: number;
+  labelColor?: string;
 };
 
 type EdgeAttr = {
@@ -176,6 +177,7 @@ export function NetworkSigma({
         signalTip: signalTooltip(node),
         linkColor: emphasizeColor(color),
         labelPx: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong ? LABEL_HUB : hub ? 10 : LABEL_NODE,
+        ...(node.homeCampus ? { labelColor: readableInk(colors.get(node.homeCampus) ?? "#374151") } : {}),
       });
     }
     const regionCampuses = new Map<string, string[]>();

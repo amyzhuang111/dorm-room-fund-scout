@@ -567,7 +567,7 @@ export function NetworkMapApp() {
         </ZoomButton>
       </div>
 
-      <div className="absolute z-20 w-[13.25rem]" style={{ left: filtersOpen ? "18.5rem" : "1rem", bottom: "4.75rem" }}>
+      <div className="absolute z-20 w-[13.25rem]" style={{ left: filtersOpen ? "18.5rem" : "1rem", bottom: "6.15rem" }}>
         {legendOpen ? (
           <div className="rounded-md border border-neutral-200 bg-white/95 px-2 py-1.5 text-[11px] text-neutral-600 shadow-sm" role="region" aria-label="Network legend">
             <div className="flex flex-col gap-y-0.5">
@@ -582,6 +582,7 @@ export function NetworkMapApp() {
               <LegendItem shape="hex" color="#9ca3af" label="Club / lab" />
               <LegendItem shape="triangle" color="#9ca3af" label="Organization" />
             </div>
+            <p className="mt-1 text-[10px] leading-snug text-neutral-600">Campus club / hub: campus color</p>
             <div className="mt-1 flex items-start justify-between gap-2">
               <p className="text-[10px] leading-snug text-neutral-400">Size is per capita. People and startups take their campus shade.</p>
               <button

@@ -70,6 +70,8 @@ export interface MapNode {
   rimBand?: "outer" | "inward";
   /** S+ is the lead program. S is the tier-1 ring. A stays on the outer rim a step behind. */
   rimTier?: RimTier;
+  /** Campus this club or hub was tucked into. Node and label use that campus shade. */
+  homeCampus?: string;
   /** Hotspot sections this organization appears in. */
   orgSections?: HotspotSectionId[];
   /** People with a stored link to this organization. */
@@ -120,6 +122,8 @@ interface SimNode {
   label?: string;
   rimBand?: RimBand | null;
   rimTier?: RimTier | null;
+  /** Set when this hub was tucked into one campus. Its color follows that campus. */
+  homeCampus?: string;
 }
 
 const LAYOUT_VERSION = "27";
@@ -748,6 +752,7 @@ function assembleNetworkMap(): MapGraph {
       ...(at.anchor ? { anchor: true } : {}),
       ...(at.rimBand ? { rimBand: at.rimBand } : {}),
       ...(at.rimTier ? { rimTier: at.rimTier } : {}),
+      ...(at.homeCampus ? { homeCampus: at.homeCampus } : {}),
     });
   };
 
@@ -1211,6 +1216,7 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     const seat = seats.get(campusId);
     node.hub = false;
     node.anchor = false;
+    node.homeCampus = campusId;
     node.rimBand = "inward";
     node.pull = 0.42;
     node.collide = 2.2;

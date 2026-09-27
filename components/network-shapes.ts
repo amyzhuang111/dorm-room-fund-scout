@@ -26,7 +26,7 @@ export const drawHaloLabel: NodeLabelDrawingFunction = (context, data, settings)
   context.lineWidth = 3.5;
   context.strokeStyle = "#ffffff";
   context.strokeText(text, x, y);
-  context.fillStyle = "#111111";
+  context.fillStyle = (data as { labelColor?: string }).labelColor || "#111111";
   context.fillText(text, x, y);
 };
 
@@ -84,7 +84,7 @@ export const drawLightHover: NodeHoverDrawingFunction = (context, data, settings
   context.roundRect(x, y, boxW, boxH, 4);
   context.fill();
   context.stroke();
-  context.fillStyle = "#111111";
+  context.fillStyle = (data as { labelColor?: string }).labelColor || "#111111";
   context.font = LABEL_FONT;
   context.fillText(text, x + 6, data.y + size / 3);
   if (tip) {
