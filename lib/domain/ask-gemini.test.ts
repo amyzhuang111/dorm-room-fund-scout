@@ -1,9 +1,21 @@
 import assert from "node:assert/strict";
-import { answerWithGemini, classifyGeminiFailure, GEMINI_GENERATE_URL, GEMINI_MODEL, geminiApiKey, normalizeGeminiKey, parseGeminiResponse } from "./ask-gemini";
+import { answerWithGemini, classifyGeminiFailure, GEMINI_GENERATE_URL, GEMINI_MODEL, geminiApiKey, geminiGenerateBody, normalizeGeminiKey, parseGeminiResponse, redactGeminiMessage } from "./ask-gemini";
 import { onDeviceNote } from "./ask-prompt";
 
-assert.equal(GEMINI_MODEL, "gemini-2.5-flash");
-assert.equal(GEMINI_GENERATE_URL, "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent");
+assert.equal(GEMINI_MODEL, "gemini-3.8-flash");
+assert.equal(GEMINI_GENERATE_URL, "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent");
+const body = geminiGenerateBody("Who founded it?", [{ id: "p1", kind: "person", name: "Ada", href: "/founder/discover?founder=p1", detail: "Penn", campuses: ["univ_penn"], relatedIds: [], sources: [] }]);
+assert.deepEqual(body.systemInstruction, { parts: [{ text: body.systemInstruction.parts[0].text }] });
+assert.equal(typeof body.systemInstruction.parts[0].text, "string");
+assert.equal(body.contents[0].role, "user");
+assert.equal(body.generationConfig.thinkingConfig?.thinkingLevel, "low");
+assert.equal(body.generationConfig.thinkingConfig != null && "thinkingBudget" in body.generationConfig.thinkingConfig, false);
+assert.equal("tools" in body, false);
+assert.equal("responseMimeType" in body.generationConfig, false);
+const serialized = JSON.stringify(body);
+assert.equal(/additionalProperties|\$schema|anyOf/.test(serialized), false);
+assert.equal(redactGeminiMessage("key AIzaSyDUMMYKEY1234567890 failed", 200).includes("AIza"), false);
+assert.equal(redactGeminiMessage("x".repeat(500)).length, 200);
 assert.equal(normalizeGeminiKey('  "quoted-key"  '), "quoted-key");
 assert.equal(normalizeGeminiKey("Bearer secret-key"), "secret-key");
 assert.equal(normalizeGeminiKey("  gemini test key  "), "geminitestkey");
