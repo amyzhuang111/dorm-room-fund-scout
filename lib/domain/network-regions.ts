@@ -94,7 +94,7 @@ export function regionInk(regionId: string): string {
 
 /** Light tint for the map's region titles. Quiet next to black campus labels. */
 export function regionTint(regionId: string): string {
-  return hslToHex(regionDef(regionId).hue, 32, 52);
+  return hslToHex(regionDef(regionId).hue, 36, 46);
 }
 
 /** One muted shade per campus inside a region, same family, still distinct. */
@@ -107,8 +107,8 @@ export function campusShade(id: string, label: string, siblings: { id: string; l
   const count = Math.max(family.length, 1);
   const spread = Math.min(5, 18 / count);
   const hue = regionDef(regionId).hue + (index - (count - 1) / 2) * spread;
-  const light = 54 + (count === 1 ? 3 : (index / (count - 1)) * 10);
-  return hslToHex(((hue % 360) + 360) % 360, 40, light);
+  const light = 48 + (count === 1 ? 4 : (index / (count - 1)) * 10);
+  return hslToHex(((hue % 360) + 360) % 360, 44, light);
 }
 
 export interface WedgeSeat {

@@ -138,10 +138,10 @@ export const EDGE_COLOR: Record<MapEdgeType, string> = {
  */
 export function screenSize(node: MapNode): number {
   const score = clamp(node.signalScore ?? 0, 0, 1);
-  if (node.type === "campus") return Math.min(9.5, 6.2 + score * 3.3);
-  if (node.type === "organization" || node.type === "program" || node.type === "investor") return Math.min(4.1, 2.35 + score * 1.35);
-  if (node.type === "startup") return 2.2 + score * 0.5;
-  return 1.85 + score * 0.3;
+  if (node.type === "campus") return Math.min(9.5, 6.4 + score * 3.1);
+  if (node.type === "organization" || node.type === "program" || node.type === "investor") return Math.min(4.2, 2.7 + score * 1.25);
+  if (node.type === "startup") return 2.35 + score * 0.55;
+  return 1.15 + score * 0.25;
 }
 
 export interface RestingLabels {

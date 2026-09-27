@@ -49,7 +49,7 @@ function drawTracked(context: CanvasRenderingContext2D, text: string, x: number,
   }
   cursor = x - total / 2;
   context.fillStyle = fill;
-  context.globalAlpha = 0.78;
+  context.globalAlpha = 0.88;
   for (let i = 0; i < text.length; i++) {
     context.fillText(text[i], cursor, y);
     cursor += widths[i] + tracking;

@@ -115,13 +115,17 @@ export function NetworkSigma({
     };
 
     const suppressed = restingLabelIds(graph.nodes).suppress;
-    const featured = new Set(
-      graph.nodes
-        .filter((node) => node.type === "organization" || node.type === "investor" || node.type === "program")
-        .sort((a, b) => b.degree - a.degree || a.id.localeCompare(b.id))
-        .slice(0, TOP_HUB_LABELS)
-        .map((node) => node.id),
-    );
+    const featured = new Set<string>();
+    const featuredNames = new Set<string>();
+    for (const node of graph.nodes
+      .filter((node) => node.type === "organization" || node.type === "investor" || node.type === "program")
+      .sort((a, b) => b.degree - a.degree || a.id.localeCompare(b.id))) {
+      const name = node.label.trim().toLowerCase();
+      if (!name || featuredNames.has(name)) continue;
+      featuredNames.add(name);
+      featured.add(node.id);
+      if (featured.size >= TOP_HUB_LABELS) break;
+    }
     const measureCanvas = document.createElement("canvas");
     const measureCtx = measureCanvas.getContext("2d");
     const measure = (text: string, fontSize: number) => {
