@@ -130,7 +130,9 @@ assert.equal(hasPhrase(normHotspotName("role Frontier Tower"), "frontier tower")
 assert.equal(hasPhrase(normHotspotName("role HF0 residency"), "hf0 residency"), true);
 assert.equal(hasPhrase(normHotspotName("role AGI House"), "agi house"), true);
 
-assert.equal(PROGRAM_DIRECTORY.z_fellows.tier, "S");
+assert.equal(PROGRAM_DIRECTORY.z_fellows.tier, "A");
+assert.ok(signalTierRank("S") < signalTierRank("A"));
+assert.equal(PROGRAM_DIRECTORY.z_fellows.rationale.toLowerCase().includes("owner override"), false);
 assert.equal(PROGRAM_DIRECTORY.emergent_ventures.tier, "S");
 assert.equal(PROGRAM_DIRECTORY.hf0.tier, "S");
 assert.equal(PROGRAM_DIRECTORY.south_park_commons.tier, "S");

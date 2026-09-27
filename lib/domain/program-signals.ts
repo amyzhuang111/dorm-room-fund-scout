@@ -67,13 +67,14 @@ export interface ProgramDirectory {
 }
 
 /**
- * One hotspot-style tier per program. S is a published check, a tiny
- * cohort, or a named winner list: SPC Founder Fellowship, Z Fellows,
- * Emergent Ventures, HF0, and Kleiner Perkins. A is a selective program
- * without that published check: Founders Inc Off Season, AGI House,
- * Contrary, 1517, and Afore. The Residency is B: live-in houses in several
- * cities, and the page names no residents or acceptance rate. Houses with
- * a small published cohort sit at B. Large or archived programs sit at C.
+ * One hotspot-style tier per program. S anchors are the SPC Founder
+ * Fellowship, Thiel, Emergent Ventures, and HF0. Kleiner Perkins stays S:
+ * a small paid fellowship already in the directory. Z Fellows is A, just
+ * below that top tier: one week and $10,000. A also covers Founders Inc
+ * Off Season, AGI House, Contrary, 1517, and Afore. The Residency is B:
+ * live-in houses in several cities, and the page names no residents or
+ * acceptance rate. Houses with a small published cohort sit at B. Large
+ * or archived programs sit at C.
  */
 export const PROGRAM_DIRECTORY: Record<ProgramSignalType, ProgramDirectory> = {
   founders_inc: {
@@ -92,7 +93,7 @@ export const PROGRAM_DIRECTORY: Record<ProgramSignalType, ProgramDirectory> = {
     sourceUrl: "https://www.livetheresidency.com/residencies",
   },
   z_fellows: {
-    tier: "S",
+    tier: "A",
     rationale: "One week and $10,000 for technical builders. Named alumni on their own pages include YC companies.",
     sourceUrl: "https://www.zfellows.com/",
   },

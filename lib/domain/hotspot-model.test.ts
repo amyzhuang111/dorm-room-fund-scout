@@ -148,7 +148,8 @@ assert.equal(directory.find((card) => card.place === "1517 Medici Project")?.tie
 assert.equal(directory.find((card) => card.place === "Buildspace")?.tier, "C");
 assert.equal(directory.find((card) => card.place === "Afore FIR U")?.tier, "A");
 assert.equal(directory.find((card) => card.place === "Pioneer")?.tier, "B");
-assert.equal(directory.find((card) => card.place === "Z Fellows")?.tier, "S");
+assert.equal(directory.find((card) => card.place === "Z Fellows")?.tier, "A");
+assert.equal((directory.find((card) => card.place === "Z Fellows")?.tierRationale ?? "").toLowerCase().includes("owner override"), false);
 assert.equal(directory.find((card) => card.place.startsWith("The Residency (founder houses)"))?.tier, "B");
 assert.equal(directory.find((card) => card.place.startsWith("The Residency (Arcadia"))?.tier, "B");
 assert.match(directory.find((card) => card.place.startsWith("The Residency (founder houses)"))?.url ?? "", /livetheresidency\.com\/residencies$/);
