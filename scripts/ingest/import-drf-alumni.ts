@@ -10,6 +10,7 @@ import { getDb, nowIso } from "../../lib/db/client";
 import { DRF_ALUM_TAG, parseAlumniRecords, suggestedPersonId, type DrfAlumniRecord } from "../../lib/domain/drf-alumni";
 
 const JSON_PATH = path.join(process.cwd(), "data", "imports", "drf_alumni.json");
+const CSV_PATH = path.join(process.cwd(), "data", "drf-alumni.csv");
 
 function matchPerson(record: DrfAlumniRecord): string | null {
   if (!record.universityId) return null;
@@ -21,6 +22,42 @@ function matchPerson(record: DrfAlumniRecord): string | null {
   return null;
 }
 
+function csvCell(value: string | number | null | undefined): string {
+  const text = value == null ? "" : String(value);
+  if (/[",\n]/.test(text)) return `"${text.replace(/"/g, '""')}"`;
+  return text;
+}
+
+function writeCsv(records: DrfAlumniRecord[]) {
+  const header = ["name", "drf_team", "year_start", "year_end", "class_year", "school", "university_id", "current_role", "current_firm", "linkedin_url", "x_url", "confidence", "founder", "matched_startup_id", "evidence_urls", "source_url", "excerpt"];
+  const lines = [header.join(",")];
+  for (const record of records) {
+    const founder = record.currentRole && /\bfounder\b/i.test(record.currentRole) ? "yes" : "";
+    lines.push(
+      [
+        record.name,
+        record.drfTeam,
+        record.yearStart,
+        record.yearEnd,
+        record.classYear,
+        record.schoolLabel,
+        record.universityId,
+        record.currentRole,
+        record.currentFirm,
+        record.linkedinUrl,
+        record.xUrl,
+        record.confidence,
+        founder,
+        record.foundedProjectId,
+        record.sourceUrls.join(" "),
+        record.sourceUrl,
+        record.excerpt,
+      ].map(csvCell).join(",")
+    );
+  }
+  fs.writeFileSync(CSV_PATH, lines.join("\n") + "\n");
+}
+
 function enrollmentLabel(record: DrfAlumniRecord): string | null {
   if (!record.classYear) return null;
   const tick = `'${String(record.classYear).slice(2)}`;
@@ -30,6 +67,7 @@ function enrollmentLabel(record: DrfAlumniRecord): string | null {
 
 function main() {
   const records = parseAlumniRecords(JSON.parse(fs.readFileSync(JSON_PATH, "utf8")));
+  writeCsv(records);
   const db = getDb();
   const universities = new Set((db.prepare(`SELECT id FROM universities`).all() as { id: string }[]).map((row) => row.id));
   const projects = new Set((db.prepare(`SELECT id FROM projects`).all() as { id: string }[]).map((row) => row.id));
@@ -109,7 +147,7 @@ function main() {
           `aff_${record.id}`,
           personId,
           universityId,
-          record.schoolRole ?? "undergrad",
+          record.schoolRole ?? "student",
           record.affiliationStatus ?? "unverified",
           claimId
         );
@@ -125,6 +163,32 @@ function main() {
       }
 
       db.prepare(`DELETE FROM relationships WHERE id = ?`).run(`rel_${record.id}`);
+      db.prepare(`DELETE FROM person_project_roles WHERE id = ?`).run(`ppr_${record.id}_founded`);
+      db.prepare(`DELETE FROM relationships WHERE id = ?`).run(`rel_${record.id}_founded`);
+      if (record.foundedProjectId && projects.has(record.foundedProjectId)) {
+        db.prepare(
+          `INSERT INTO person_project_roles (id, person_id, project_id, role, claim_id)
+           VALUES (?, ?, ?, 'founder', ?)
+           ON CONFLICT(id) DO UPDATE SET person_id = excluded.person_id, project_id = excluded.project_id, role = excluded.role, claim_id = excluded.claim_id`
+        ).run(`ppr_${record.id}_founded`, personId, record.foundedProjectId, claimId);
+        db.prepare(
+          `INSERT INTO relationships (
+             id, source_entity_type, source_entity_id, target_entity_type, target_entity_id,
+             relationship_type, evidence_claim_ids_json, verification_state
+           ) VALUES (?, 'person', ?, 'project', ?, 'founded', ?, ?)
+           ON CONFLICT(id) DO UPDATE SET
+             source_entity_id = excluded.source_entity_id,
+             target_entity_id = excluded.target_entity_id,
+             evidence_claim_ids_json = excluded.evidence_claim_ids_json,
+             verification_state = excluded.verification_state`
+        ).run(
+          `rel_${record.id}_founded`,
+          personId,
+          record.foundedProjectId,
+          JSON.stringify([claimId]),
+          record.confidence === "confirmed" ? "affiliation_only" : "unverified"
+        );
+      }
       if (record.investorId && record.currentFirm) {
         db.prepare(
           `INSERT INTO relationships (
@@ -202,7 +266,9 @@ function main() {
       if (kept.includes(row.id)) continue;
       db.prepare(`DELETE FROM affiliations WHERE id = ?`).run(`aff_${row.id}`);
       db.prepare(`DELETE FROM person_project_roles WHERE id = ?`).run(`ppr_${row.id}`);
+      db.prepare(`DELETE FROM person_project_roles WHERE id = ?`).run(`ppr_${row.id}_founded`);
       db.prepare(`DELETE FROM relationships WHERE id = ?`).run(`rel_${row.id}`);
+      db.prepare(`DELETE FROM relationships WHERE id = ?`).run(`rel_${row.id}_founded`);
       db.prepare(`DELETE FROM claims WHERE id = ?`).run(`claim_${row.id}`);
       db.prepare(`DELETE FROM drf_alumni WHERE id = ?`).run(row.id);
       if (row.person_id.startsWith("person_drf_")) {
