@@ -184,7 +184,7 @@ function NetworkBody({
     return { ...graph, nodes, edges: graph.edges.filter((edge) => keep.has(edge.source) && keep.has(edge.target)) };
   }, [graph, records, current.feedback]);
 
-  const campusName = current.university ? (universities.find((u) => u.id === current.university)?.name ?? "campus") : "Penn and Berkeley";
+  const campusName = current.university ? (universities.find((u) => u.id === current.university)?.name ?? "campus") : "All campuses";
   const shell = company;
 
   return (

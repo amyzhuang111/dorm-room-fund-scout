@@ -99,7 +99,7 @@ function assembleScoutNetwork(universityId?: string, opts?: { sector?: string; e
   const sectorOk = (id: string, kind: string) => !sector || (kind === "company" && tagged.has(id));
   const ids = universityId
     ? [universityId]
-    : CAMPUSES.filter((c) => c.firstClass).map((c) => c.id);
+    : (db.prepare(`SELECT id FROM universities ORDER BY name`).all() as { id: string }[]).map((row) => row.id);
 
   const rawNodes = new Map<string, RawNode>();
   const rawEdges: NetworkEdge[] = [];

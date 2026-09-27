@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
 import { storedCompanyLinks } from "@/lib/domain/company-link";
+import { formatCampusList } from "@/lib/domain/campuses";
 import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SignalTierBadge, VerificationBadge } from "./badges";
 import { PipelineForm } from "./pipeline-form";
 import { NotesSection } from "./notes-section";
@@ -75,7 +76,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
                 </div>
                 <div>
                   <dt className="font-semibold uppercase tracking-wide">Campus</dt>
-                  <dd className="text-foreground">{project.universities.join(", ") || "Not on record"}</dd>
+                  <dd className="text-foreground">{formatCampusList(project.universities) || "Not on record"}</dd>
                 </div>
                 <div>
                   <dt className="font-semibold uppercase tracking-wide">Signal tier</dt>

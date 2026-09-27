@@ -578,6 +578,6 @@ export function hotspotCountsByCampus(): { campus: string; cards: number; places
     byCampus.set(card.campus, row);
   }
   return [...byCampus.entries()]
-    .sort((a, b) => a[1].sortGroup - b[1].sortGroup || a[0].localeCompare(b[0]))
+    .sort((a, b) => a[1].sortGroup - b[1].sortGroup || a[0].localeCompare(b[0], "en", { sensitivity: "base" }))
     .map(([campus, row]) => ({ campus, cards: row.cards, places: row.places.size, placeKind: row.placeKind }));
 }

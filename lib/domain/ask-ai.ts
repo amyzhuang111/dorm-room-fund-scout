@@ -8,15 +8,18 @@ import { z } from "zod";
 import { searchInvestors, searchOrganizations, searchPeople, searchStartups, isKnownAskId } from "./ask-query";
 import type { AskHit } from "./ask-types";
 import { askAiLanguageModel } from "./ask-model";
+import { CAMPUSES, compareCampusLabels } from "./campuses";
 
 const EMPTY_ANSWER = "Nothing in the Campus Scout database matched that question.";
+
+const CAMPUS_NAMES = [...CAMPUSES].map((campus) => campus.shortLabel).sort(compareCampusLabels).join(", ");
 
 const SYSTEM = `You are Ask AI for Campus Scout, a database of campus founders, startups, organizations, and investors.
 Answer only by calling the search tools. Never invent a person, startup, club, investor, campus, or count.
 The interface lists the tool results separately. Write 2-4 sentences about what those results show.
 If every tool returns count 0, say that nothing in the Campus Scout database matched. Do not guess names.
 As of September 2026, freshmen are class of 2030, sophomores 2029, juniors 2028, and seniors 2027.
-Campus names: Penn, Berkeley, Stanford, MIT, Harvard, Columbia, Princeton, CMU, Michigan, Georgia Tech, Waterloo.
+Campus names, alphabetical: ${CAMPUS_NAMES}.
 Sector words: AI, healthcare, fintech. "a16z speedrun" is an investor name. "M&T" is an organization name.
 "Top-tier clubs with the most founders" means search_organizations with typeIncludes "club". Results are already ordered by linked founders; mention each directory tier. Use topTier only when the question asks for tier S or tier 1 specifically.
 "Building in" a sector means search_people with building true and that sector.
