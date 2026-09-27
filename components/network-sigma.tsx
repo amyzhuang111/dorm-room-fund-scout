@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import Sigma from "sigma";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
+import { signalTooltip } from "@/lib/domain/network-signal-size";
 import { DIM_NODE, EDGE_CROSS, EDGE_DIM, EDGE_HOVER, EDGE_HOVER_PX, EDGE_PX, NODE_SHAPE, campusKey, campusSwatches, crossesCampus, edgeTint, fadeLongEdge, hoverLabelBox, labelDegreeFloor, nodeColor, restingLabelIds, screenLabelTier, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
@@ -26,6 +27,7 @@ type NodeAttr = {
   marker?: boolean;
   regionId?: string;
   zIndex: number;
+  signalTip?: string;
 };
 
 type EdgeAttr = {
@@ -144,6 +146,7 @@ export function NetworkSigma({
         kind: node.type,
         anchor: node.anchor === true,
         zIndex: Z[node.type],
+        signalTip: signalTooltip(node),
       });
     }
     const regionCampuses = new Map<string, string[]>();

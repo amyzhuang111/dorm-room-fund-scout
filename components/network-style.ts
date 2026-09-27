@@ -117,23 +117,18 @@ export const EDGE_COLOR: Record<MapEdgeType, string> = {
   at_campus: EDGE_GREY,
 };
 
-/** Circle-radius in screen pixels. Polygon programs use the same number, so a square’s width matches a circle’s diameter. */
-const ORG_PX: Record<string, number> = { S: 9.6, A: 8.1, B: 6.8, C: 5.7, D: 4.9 };
-
 /**
- * Screen pixels at every zoom. People stay the small circles. Startups, investors,
- * and clubs are large enough that a square, diamond, and hexagon read at the
- * fitted camera. Campuses are the large circles. Organization triangles grow
- * with tier (S largest). Degree only nudges size, and never past the next tier.
+ * Screen pixels at every zoom. `signalScore` is already a 0–1 sqrt of the
+ * per-capita ratio (or of the node's own connection count). People and startups
+ * stay in a small band so a square still reads next to a circle. Campuses stay
+ * the large circles. Clubs, organizations, and investors share a wider band.
  */
 export function screenSize(node: MapNode): number {
-  const hub = Math.sqrt(Math.max(node.degree, 1));
-  if (node.type === "organization") return clamp((ORG_PX[node.orgTier ?? ""] ?? 6.4) + Math.min(0.45, hub * 0.01), 4.9, 10.2);
-  if (node.type === "campus") return clamp(12 + hub * 0.01, 12, 14);
-  if (node.type === "investor") return clamp(6.6 + Math.min(1.15, hub * 0.028), 6.6, 8);
-  if (node.type === "program") return clamp(7.2 + Math.min(1.2, hub * 0.028), 7.2, 8.6);
-  if (node.type === "startup") return clamp(6.8 + Math.min(1, hub * 0.025), 6.8, 8);
-  return clamp(5 + Math.min(0.75, hub * 0.02), 5, 5.9);
+  const score = clamp(node.signalScore ?? 0, 0, 1);
+  if (node.type === "campus") return 9.2 + score * 6.8;
+  if (node.type === "organization" || node.type === "program" || node.type === "investor") return 5.6 + score * 5;
+  if (node.type === "startup") return 6 + score * 1.6;
+  return 4.6 + score * 1.4;
 }
 
 export interface RestingLabels {

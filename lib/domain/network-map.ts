@@ -8,7 +8,9 @@
 import fs from "node:fs";
 import { forceCollide, forceSimulation, forceX, forceY } from "d3-force";
 import { databasePath, getDb } from "../db/client";
+import { undergradEnrollment } from "./campus-enrollment";
 import { CAMPUSES } from "./campuses";
+import { connectionSignal, founderSignalWeight, mentionsAccelerator, perCapitaSignal, signalFields, sqrtScores, startupSignalWeight, type SignalParts } from "./network-signal-size";
 import { REGIONS, regionForCampus, regionInk, type RegionMarker } from "./network-regions";
 import type { HotspotSectionId, HotspotTier } from "./hotspot-model";
 import { hotspotGraphPatch, organizationMap } from "./hotspots";
@@ -37,8 +39,18 @@ export interface MapNode {
   year: number | null;
   /** True when this person has a sourced founder role on a startup in the map. */
   founder: boolean;
-  /** Incident edges. Drives node size together with funding. */
+  /** Incident edges. */
   degree: number;
+  /** Unweighted strong founders plus startups, or the node's own connection count. */
+  signalCount: number;
+  /** Weighted numerator. Funded, accelerator, and S/A or DRF signals count extra. */
+  signalWeight: number;
+  /** Undergraduate enrollment, member count, or 1 for a person or startup. */
+  signalDenominator: number;
+  /** signalWeight / signalDenominator. This is what the sqrt size scale uses. */
+  signalRatio: number;
+  /** 0–1 within the node's size group, after the sqrt. */
+  signalScore: number;
   /** Campus or hub organization. Its label is drawn at the cluster center on the fitted view. */
   anchor?: boolean;
   potential: boolean;
@@ -96,7 +108,7 @@ interface SimNode {
   campuses?: string[];
 }
 
-const LAYOUT_VERSION = "19";
+const LAYOUT_VERSION = "20";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -150,6 +162,173 @@ function tierBoost(tier: string | null): number {
   return 0;
 }
 
+function acceleratorBacked(rows: { project_id: string; value_text: string }[]): Set<string> {
+  const ids = new Set<string>();
+  for (const row of rows) {
+    if (mentionsAccelerator(row.value_text)) ids.add(row.project_id);
+  }
+  return ids;
+}
+
+function buildSignalSizes(input: {
+  people: { id: string; signal_tier: string | null; verification_status: string | null }[];
+  startups: { id: string; signal_tier: string | null; signal_tier_basis: string | null; verification_status: string | null }[];
+  founderIds: Set<string>;
+  foundersByCompany: Map<string, string[]>;
+  campusesByPerson: Map<string, string[]>;
+  campusesByCompany: Map<string, string[]>;
+  amountByProject: Map<string, number>;
+  stageByProject: Map<string, { stage: string; rank: number }>;
+  acceleratorStartups: Set<string>;
+  drfStartups: Set<string>;
+  universities: { id: string }[];
+  memberRows: { person_id: string; project_id: string }[];
+  programIds: Set<string>;
+  personIds: Set<string>;
+  organizationEdges: { source: string; target: string; type: string }[];
+  edges: MapEdge[];
+  degree: Map<string, number>;
+}): Map<string, SignalParts> {
+  const startupWeight = new Map<string, number>();
+  for (const startup of input.startups) {
+    startupWeight.set(
+      startup.id,
+      startupSignalWeight({
+        verification: startup.verification_status,
+        funded: (input.amountByProject.get(startup.id) ?? 0) > 0 || input.stageByProject.has(startup.id),
+        accelerator: mentionsAccelerator(startup.signal_tier_basis) || input.acceleratorStartups.has(startup.id),
+        strongTier: startup.signal_tier === "S" || startup.signal_tier === "A" || input.drfStartups.has(startup.id),
+      }),
+    );
+  }
+
+  const bestStartup = new Map<string, number>();
+  for (const [companyId, founders] of input.foundersByCompany) {
+    const weight = startupWeight.get(companyId) ?? 0;
+    for (const personId of founders) bestStartup.set(personId, Math.max(bestStartup.get(personId) ?? 0, weight));
+  }
+  const founderWeight = new Map<string, number>();
+  for (const person of input.people) {
+    if (!input.founderIds.has(person.id)) continue;
+    const weight = founderSignalWeight({
+      verification: person.verification_status,
+      tier: person.signal_tier,
+      startupWeight: bestStartup.get(person.id) ?? 0,
+    });
+    if (weight > 0) founderWeight.set(person.id, weight);
+  }
+
+  const campusCount = new Map<string, number>();
+  const campusWeight = new Map<string, number>();
+  const addCampus = (campusId: string, weight: number) => {
+    if (!campusId || weight <= 0) return;
+    campusCount.set(campusId, (campusCount.get(campusId) ?? 0) + 1);
+    campusWeight.set(campusId, (campusWeight.get(campusId) ?? 0) + weight);
+  };
+  for (const [personId, weight] of founderWeight) {
+    for (const campusId of input.campusesByPerson.get(personId) ?? []) addCampus(campusId, weight);
+  }
+  for (const startup of input.startups) {
+    const weight = startupWeight.get(startup.id) ?? 0;
+    if (weight <= 0) continue;
+    const listed = input.campusesByCompany.get(startup.id) ?? [];
+    const campuses = listed.length ? listed : [...new Set((input.foundersByCompany.get(startup.id) ?? []).flatMap((id) => input.campusesByPerson.get(id) ?? []))];
+    for (const campusId of campuses) addCampus(campusId, weight);
+  }
+
+  const out = new Map<string, SignalParts>();
+  const campusRatios = input.universities.map((uni) => (campusWeight.get(uni.id) ?? 0) / undergradEnrollment(uni.id));
+  const campusScores = sqrtScores(campusRatios);
+  input.universities.forEach((uni, index) => {
+    out.set(
+      uni.id,
+      perCapitaSignal(campusCount.get(uni.id) ?? 0, campusWeight.get(uni.id) ?? 0, undergradEnrollment(uni.id), campusScores[index] ?? 0),
+    );
+  });
+
+  const hubs: { id: string; count: number; weight: number; denominator: number }[] = [];
+  const programPeople = new Map<string, Set<string>>();
+  for (const row of input.memberRows) {
+    if (!input.programIds.has(row.project_id) || !input.personIds.has(row.person_id)) continue;
+    const people = programPeople.get(row.project_id) ?? new Set<string>();
+    people.add(row.person_id);
+    programPeople.set(row.project_id, people);
+  }
+  for (const [programId, people] of programPeople) {
+    let count = 0;
+    let weight = 0;
+    for (const personId of people) {
+      const personWeight = founderWeight.get(personId) ?? 0;
+      if (personWeight <= 0) continue;
+      count += 1;
+      weight += personWeight;
+    }
+    hubs.push({ id: programId, count, weight, denominator: people.size });
+  }
+
+  const orgPeople = new Map<string, Set<string>>();
+  const orgStartups = new Map<string, Set<string>>();
+  for (const edge of input.organizationEdges) {
+    if (edge.type !== "member_of") continue;
+    if (input.personIds.has(edge.source)) {
+      const people = orgPeople.get(edge.target) ?? new Set<string>();
+      people.add(edge.source);
+      orgPeople.set(edge.target, people);
+    } else if (startupWeight.has(edge.source)) {
+      const startups = orgStartups.get(edge.target) ?? new Set<string>();
+      startups.add(edge.source);
+      orgStartups.set(edge.target, startups);
+    }
+  }
+  const orgIds = new Set([...orgPeople.keys(), ...orgStartups.keys()]);
+  for (const orgId of orgIds) {
+    let count = 0;
+    let weight = 0;
+    for (const personId of orgPeople.get(orgId) ?? []) {
+      const personWeight = founderWeight.get(personId) ?? 0;
+      if (personWeight <= 0) continue;
+      count += 1;
+      weight += personWeight;
+    }
+    for (const startupId of orgStartups.get(orgId) ?? []) {
+      const companyWeight = startupWeight.get(startupId) ?? 0;
+      if (companyWeight <= 0) continue;
+      count += 1;
+      weight += companyWeight;
+    }
+    const members = (orgPeople.get(orgId)?.size ?? 0) + (orgStartups.get(orgId)?.size ?? 0);
+    hubs.push({ id: orgId, count, weight, denominator: Math.max(1, members) });
+  }
+
+  const portfolios = new Map<string, Set<string>>();
+  for (const edge of input.edges) {
+    if (edge.type !== "invested_in") continue;
+    const book = portfolios.get(edge.source) ?? new Set<string>();
+    book.add(edge.target);
+    portfolios.set(edge.source, book);
+  }
+  for (const [investorId, book] of portfolios) {
+    let count = 0;
+    let weight = 0;
+    for (const startupId of book) {
+      const companyWeight = startupWeight.get(startupId) ?? 0;
+      if (companyWeight <= 0) continue;
+      count += 1;
+      weight += companyWeight;
+    }
+    hubs.push({ id: investorId, count, weight, denominator: book.size });
+  }
+
+  const hubScores = sqrtScores(hubs.map((hub) => hub.weight / Math.max(1, hub.denominator)));
+  hubs.forEach((hub, index) => {
+    out.set(hub.id, perCapitaSignal(hub.count, hub.weight, hub.denominator, hubScores[index] ?? 0));
+  });
+
+  for (const person of input.people) out.set(person.id, connectionSignal(input.degree.get(person.id) ?? 0, 12));
+  for (const startup of input.startups) out.set(startup.id, connectionSignal(input.degree.get(startup.id) ?? 0, 20));
+  return out;
+}
+
 function radius(type: MapNodeType, degree: number, tier: string | null, amount: number | null): number {
   const money = amount && amount > 0 ? Math.min(3.5, Math.log10(amount) - 5.2) : 0;
   if (type === "campus") return 18;
@@ -168,9 +347,10 @@ function assembleNetworkMap(): MapGraph {
 
   const peopleColumns = new Set((db.prepare(`PRAGMA table_info(people)`).all() as { name: string }[]).map((column) => column.name));
   const basisSql = peopleColumns.has("enrollment_basis") ? "enrollment_basis" : "NULL AS enrollment_basis";
+  const personVerifySql = peopleColumns.has("verification_status") ? "verification_status" : "NULL AS verification_status";
   const people = db
     .prepare(
-      `SELECT id, name, aliases_json, founder_status, enrollment_status, enrollment_label, enrollment_grad_year, signal_tier, ${basisSql} FROM people
+      `SELECT id, name, aliases_json, founder_status, enrollment_status, enrollment_label, enrollment_grad_year, signal_tier, ${basisSql}, ${personVerifySql} FROM people
        WHERE id IN (SELECT person_id FROM affiliations)
           OR id IN (
             SELECT ppr.person_id FROM person_project_roles ppr
@@ -188,6 +368,7 @@ function assembleNetworkMap(): MapGraph {
     enrollment_grad_year: number | null;
     signal_tier: string | null;
     enrollment_basis: string | null;
+    verification_status: string | null;
   }[];
   const personIds = new Set(people.map((person) => person.id));
   const linkedinByPerson = new Map<string, { url: string; status: "confirmed" | "unverified" }>();
@@ -222,12 +403,15 @@ function assembleNetworkMap(): MapGraph {
     campusesByPerson.set(row.person_id, list);
   }
 
+  const projectColumns = new Set((db.prepare(`PRAGMA table_info(projects)`).all() as { name: string }[]).map((column) => column.name));
+  const startupVerifySql = projectColumns.has("verification_status") ? "verification_status" : "NULL AS verification_status";
+  const startupBasisSql = projectColumns.has("signal_tier_basis") ? "signal_tier_basis" : "NULL AS signal_tier_basis";
   const startups = db
     .prepare(
-      `SELECT id, name, signal_tier FROM projects
+      `SELECT id, name, signal_tier, ${startupBasisSql}, ${startupVerifySql} FROM projects
        WHERE kind = 'company' AND is_investable_candidate = 1`
     )
-    .all() as { id: string; name: string; signal_tier: string | null }[];
+    .all() as { id: string; name: string; signal_tier: string | null; signal_tier_basis: string | null; verification_status: string | null }[];
   const startupIds = new Set(startups.map((row) => row.id));
 
   const companyCampusRows = db
@@ -489,18 +673,39 @@ function assembleNetworkMap(): MapGraph {
 
   const pos = new Map(simNodes.map((node) => [node.id, node]));
   const nodes: MapNode[] = [];
+  const signalById = buildSignalSizes({
+    people,
+    startups,
+    founderIds,
+    foundersByCompany,
+    campusesByPerson,
+    campusesByCompany,
+    amountByProject,
+    stageByProject,
+    acceleratorStartups: acceleratorBacked(investorRows),
+    drfStartups: new Set(drfTargets.map((row) => row.project_id)),
+    universities,
+    memberRows,
+    programIds,
+    personIds,
+    organizationEdges: organizations.edges,
+    edges,
+    degree,
+  });
 
-  const emit = (node: Omit<MapNode, "year" | "founder" | "degree"> & { year?: number | null; founder?: boolean }) => {
+  const emit = (node: Omit<MapNode, "year" | "founder" | "degree" | "signalCount" | "signalWeight" | "signalDenominator" | "signalRatio" | "signalScore"> & { year?: number | null; founder?: boolean }) => {
     const at = pos.get(node.id);
     if (!at) return;
     node.x = Math.round(at.x * 10) / 10;
     node.y = Math.round(at.y * 10) / 10;
     node.r = Math.round(at.r * 10) / 10;
+    const signal = signalById.get(node.id) ?? connectionSignal(degree.get(node.id) ?? 0, node.type === "startup" ? 20 : 12);
     nodes.push({
       ...node,
       year: node.year ?? null,
       founder: node.founder ?? false,
       degree: degree.get(node.id) ?? 0,
+      ...signalFields(signal),
       ...(at.anchor ? { anchor: true } : {}),
     });
   };

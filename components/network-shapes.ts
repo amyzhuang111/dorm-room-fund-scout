@@ -31,13 +31,17 @@ export const drawLightHover: NodeHoverDrawingFunction = (context, data, settings
   context.stroke();
   const text = (data as { fullLabel?: string }).fullLabel || data.label;
   if (!text) return;
+  const tip = (data as { signalTip?: string }).signalTip;
   const size = settings.labelSize;
   context.font = `${settings.labelWeight} ${size}px ${settings.labelFont}`;
-  const width = context.measureText(text).width;
+  const titleWidth = context.measureText(text).width;
+  context.font = "11px Satoshi, Arial, sans-serif";
+  const tipWidth = tip ? context.measureText(tip).width : 0;
+  const width = Math.max(titleWidth, tipWidth);
   const x = data.x + data.size + 8;
   const y = data.y - size / 2 - 4;
   const boxW = width + 12;
-  const boxH = size + 8;
+  const boxH = tip ? size + 22 : size + 8;
   context.fillStyle = "#ffffff";
   context.strokeStyle = "#111111";
   context.lineWidth = 1;
@@ -48,6 +52,11 @@ export const drawLightHover: NodeHoverDrawingFunction = (context, data, settings
   context.fillStyle = "#111111";
   context.font = LABEL_FONT;
   context.fillText(text, x + 6, data.y + size / 3);
+  if (tip) {
+    context.font = "11px Satoshi, Arial, sans-serif";
+    context.fillStyle = "#404040";
+    context.fillText(tip, x + 6, data.y + size / 3 + 14);
+  }
 };
 
 type SquareArgs = ConstructorParameters<typeof NodeSquareProgram>;

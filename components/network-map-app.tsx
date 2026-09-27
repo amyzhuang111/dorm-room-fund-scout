@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { SECTION_SHORT, tierBandLabel, type HotspotSectionId } from "@/lib/domain/hotspot-model";
 import type { MapEdgeType, MapGraph, MapNode, MapNodeType } from "@/lib/domain/network-map";
+import { signalTooltip } from "@/lib/domain/network-signal-size";
 import { attachUserMapNodes, isUserAddedId } from "@/lib/domain/user-pipeline";
 import { useUserPipeline } from "./user-pipeline-provider";
 import type { NetworkFocus } from "@/lib/domain/network-focus";
@@ -547,7 +548,8 @@ export function NetworkMapApp() {
                 Hide
               </button>
             </div>
-            <p className="mt-0.5 text-[10px] leading-snug text-neutral-500">Color = campus · triangle sized by tier · line = link · amber = cross-campus · est. = inferred enrollment</p>
+            <p className="mt-0.5 text-[10px] leading-snug text-neutral-500">Size = connections to strong founders/startups, per capita</p>
+            <p className="text-[10px] leading-snug text-neutral-500">Color = campus · line = link · amber = cross-campus · est. = inferred enrollment</p>
           </div>
         ) : (
           <button
@@ -579,6 +581,7 @@ export function NetworkMapApp() {
                   selectedNode.stage,
                   selectedNode.type === "organization" && selectedNode.linkedFounders != null ? `${selectedNode.linkedFounders} founders` : null,
                   selectedNode.degree ? `${selectedNode.degree} links` : null,
+                  signalTooltip(selectedNode),
                 ]
                   .filter(Boolean)
                   .join(" · ")}
