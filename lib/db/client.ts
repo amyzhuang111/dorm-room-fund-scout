@@ -230,6 +230,7 @@ function migrate(db: Database.Database) {
     current_role TEXT,
     firm_type TEXT,
     firm_confidence TEXT,
+    linkedin_confidence TEXT,
     investor_id TEXT,
     source_url TEXT NOT NULL,
     firm_source_url TEXT,
@@ -243,6 +244,7 @@ function migrate(db: Database.Database) {
   db.exec(`CREATE INDEX IF NOT EXISTS idx_drf_alumni_investor ON drf_alumni(investor_id)`);
   addColumnIfMissing("drf_alumni", "firm_type", "firm_type TEXT");
   addColumnIfMissing("drf_alumni", "firm_confidence", "firm_confidence TEXT");
+  addColumnIfMissing("drf_alumni", "linkedin_confidence", "linkedin_confidence TEXT");
 
   db.exec(`CREATE TABLE IF NOT EXISTS program_signals (
     id TEXT PRIMARY KEY,
