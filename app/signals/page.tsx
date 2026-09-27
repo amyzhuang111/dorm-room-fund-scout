@@ -4,6 +4,8 @@ import { listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
 import { domainKey, isHidden } from "@/lib/domain/feedback";
 import { buildHref } from "@/lib/domain/url";
+import { topConnectors } from "@/lib/domain/connectors";
+import { TopConnectors } from "@/components/top-connectors";
 import { CompanyWebsiteIcon } from "@/components/company-website";
 import { PrecollegeBadges } from "@/components/badges";
 import type { PrecollegeSignalView } from "@/lib/domain/precollege";
@@ -119,13 +121,22 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
     return true;
   });
 
+  const connectorsOn = sp.connectors === "1";
   const basePath = "/signals";
   return (
     <div className="mx-auto max-w-3xl p-4 sm:p-6">
       <h1 className="text-lg font-semibold text-foreground">Signals</h1>
-      <p className="mt-1 text-sm text-muted">Recent company and founder activity, plus pre-college excellence on people.</p>
+      <p className="mt-1 text-sm text-muted">Recent company and founder activity, plus pre-college excellence on people. Top connectors ranks people and clubs by verified, tiered founders they are linked to.</p>
 
       <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
+        <Link
+          href={buildHref(basePath, sp, { connectors: connectorsOn ? null : "1", precollege: null, type: null })}
+          className={`rounded-full border px-2 py-0.5 ${connectorsOn ? "border-foreground bg-foreground text-white" : "border-border-c text-foreground"}`}
+        >
+          Top connectors
+        </Link>
+        {!connectorsOn && (
+          <>
         {(
           [
             ["any", "Pre-college excellence"],
@@ -161,13 +172,18 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
             {TYPE_LABEL[t] ?? t}
           </Link>
         ))}
-        {(sp.university || sp.type || sp.precollege) && (
+          </>
+        )}
+        {(sp.university || sp.type || sp.precollege || sp.connectors) && (
           <Link href={basePath} className="rounded-full border border-border-c px-2 py-0.5 text-link underline">
             Clear
           </Link>
         )}
       </div>
 
+      {connectorsOn ? (
+        <TopConnectors lists={topConnectors(sp.university)} activeCampus={sp.university ?? null} basePath={basePath} current={sp} />
+      ) : (
       <ul className="mt-4 space-y-2">
         {precollege.map((row) => {
           const view: PrecollegeSignalView = {
@@ -228,6 +244,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
         })}
         {signals.length === 0 && precollege.length === 0 && <p className="text-sm text-muted">No signals match these filters.</p>}
       </ul>
+      )}
     </div>
   );
 }

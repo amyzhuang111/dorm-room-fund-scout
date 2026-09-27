@@ -16,9 +16,10 @@ import type { HotspotSectionId, HotspotTier } from "./hotspot-model";
 import { hotspotGraphPatch, organizationMap } from "./hotspots";
 import { confirmedLinkedIn } from "./person-link";
 import { sectorLabel } from "./sectors";
+import { drfWorksAtEdges } from "./drf-alumni";
 
 export type MapNodeType = "person" | "startup" | "campus" | "investor" | "program" | "organization";
-export type MapEdgeType = "founded" | "co_founder" | "studied_at" | "invested_in" | "member_of" | "at_campus";
+export type MapEdgeType = "founded" | "co_founder" | "studied_at" | "invested_in" | "member_of" | "at_campus" | "works_at";
 
 export interface MapNode {
   id: string;
@@ -108,7 +109,7 @@ interface SimNode {
   campuses?: string[];
 }
 
-const LAYOUT_VERSION = "20";
+const LAYOUT_VERSION = "21";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -551,6 +552,12 @@ function assembleNetworkMap(): MapGraph {
     for (const row of drfTargets) addEdge(DRF_ID, row.project_id, "invested_in");
   }
 
+  for (const edge of drfWorksAtEdges()) {
+    if (!personIds.has(edge.personId)) continue;
+    investorNames.set(edge.investorId, edge.firm);
+    addEdge(edge.personId, edge.investorId, "works_at");
+  }
+
   const hotspots = hotspotGraphPatch({ personIds, startupIds, universityIds: uniIds });
   for (const add of hotspots.campusAdds) {
     const list = campusesByCompany.get(add.id) ?? [];
@@ -653,6 +660,21 @@ function assembleNetworkMap(): MapGraph {
     prev.y += spot.y;
     prev.n += 1;
     investorAnchor.set(edge.source, prev);
+  }
+  const investedAnchors = new Set(investorAnchor.keys());
+  const personSpot = new Map<string, { x: number; y: number }>();
+  for (const node of simNodes) {
+    if (node.type === "person") personSpot.set(node.id, { x: node.x, y: node.y });
+  }
+  for (const edge of edges) {
+    if (edge.type !== "works_at" || investedAnchors.has(edge.target)) continue;
+    const spot = personSpot.get(edge.source);
+    if (!spot) continue;
+    const prev = investorAnchor.get(edge.target) ?? { x: 0, y: 0, n: 0 };
+    prev.x += spot.x;
+    prev.y += spot.y;
+    prev.n += 1;
+    investorAnchor.set(edge.target, prev);
   }
   for (const [id] of investorNames) {
     const spot = investorAnchor.get(id);
@@ -1132,7 +1154,7 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     hubMembers.set(hubId, list);
   };
   for (const edge of edges) {
-    if (edge.type === "studied_at" || edge.type === "at_campus") continue;
+    if (edge.type === "studied_at" || edge.type === "at_campus" || edge.type === "works_at") continue;
     pushMember(edge.source, edge.target);
     pushMember(edge.target, edge.source);
   }

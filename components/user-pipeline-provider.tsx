@@ -11,7 +11,9 @@ import {
   parseState,
   recordsFromState,
   removeLink as dropLink,
+  setLinkSource as sourceLink,
   setLinkStage as moveLink,
+  setStartupSource as sourceStartup,
   setStartupStage as moveStartup,
   starEntity,
   unstarEntity,
@@ -19,6 +21,7 @@ import {
   validateDraft,
   type DuplicateHit,
   type PipelineStage,
+  type SourceChannel,
   type StartupDraft,
   type UserPipelineState,
   type ValidStartup,
@@ -49,6 +52,7 @@ interface PipelineApi {
   linkInstead: (hit: DuplicateHit, value: ValidStartup) => void;
   deleteStartup: (id: string) => void;
   setStartupStage: (id: string, stage: PipelineStage) => void;
+  setStartupSource: (id: string, sourcedVia: SourceChannel | null, referrer: string | null) => void;
   star: (input: {
     entityType: "project" | "person";
     entityId: string;
@@ -58,9 +62,12 @@ interface PipelineApi {
     verificationUrl?: string | null;
     verificationNotes?: string | null;
     stage?: PipelineStage;
+    sourcedVia?: SourceChannel | null;
+    referrer?: string | null;
   }) => void;
   unstar: (entityType: "project" | "person", entityId: string) => void;
   setLinkStage: (id: string, stage: PipelineStage) => void;
+  setLinkSource: (id: string, sourcedVia: SourceChannel | null, referrer: string | null) => void;
   removeLink: (id: string) => void;
 }
 
@@ -257,14 +264,18 @@ export function UserPipelineProvider({ children }: { children: React.ReactNode }
             verificationUrl: value.verificationUrl,
             verificationNotes: value.verificationNotes,
             stage: value.stage,
+            sourcedVia: value.sourcedVia,
+            referrer: value.referrer,
           })
         );
       },
       deleteStartup: (id) => commit(dropStartup(readState(), id)),
       setStartupStage: (id, stage) => commit(moveStartup(readState(), id, stage)),
+      setStartupSource: (id, sourcedVia, referrer) => commit(sourceStartup(readState(), id, sourcedVia, referrer)),
       star: (input) => commit(starEntity(readState(), input)),
       unstar: (entityType, entityId) => commit(unstarEntity(readState(), entityType, entityId)),
       setLinkStage: (id, stage) => commit(moveLink(readState(), id, stage)),
+      setLinkSource: (id, sourcedVia, referrer) => commit(sourceLink(readState(), id, sourcedVia, referrer)),
       removeLink: (id) => commit(dropLink(readState(), id)),
     }),
     [storage, backend, notice, state, commit]
@@ -285,9 +296,11 @@ export function useUserPipeline(): PipelineApi {
     linkInstead: () => {},
     deleteStartup: () => {},
     setStartupStage: () => {},
+    setStartupSource: () => {},
     star: () => {},
     unstar: () => {},
     setLinkStage: () => {},
+    setLinkSource: () => {},
     removeLink: () => {},
   };
 }

@@ -115,6 +115,7 @@ export const EDGE_COLOR: Record<MapEdgeType, string> = {
   invested_in: EDGE_GREY,
   member_of: EDGE_GREY,
   at_campus: EDGE_GREY,
+  works_at: EDGE_GREY,
 };
 
 /**

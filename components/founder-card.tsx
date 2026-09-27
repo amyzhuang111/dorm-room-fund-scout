@@ -9,6 +9,7 @@ import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CompanyNameLink } from "./company-website";
 import { EntityMarks } from "./entity-marks";
+import { WarmIntroPaths } from "./warm-intro-paths";
 
 export const FounderCard = memo(function FounderCard({
   founder,
@@ -91,6 +92,7 @@ export const FounderCard = memo(function FounderCard({
 
       {open && (
         <div className="mt-3 space-y-3 border-t border-border-c pt-3 text-sm">
+          <WarmIntroPaths entityId={founder.id} />
           {founder.precollegeSignals.length > 0 && (
             <section>
               <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Pre-college excellence</h3>
