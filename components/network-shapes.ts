@@ -23,10 +23,12 @@ export const drawHaloLabel: NodeLabelDrawingFunction = (context, data, settings)
     drawTracked(context, text, x, y, REGION_TRACKING, (data as { tint?: string }).tint || "#8d939c");
     return;
   }
-  context.lineWidth = 3.5;
+  const ink = (data as { labelColor?: string }).labelColor;
+  // A thin white stroke keeps colored club labels readable over dots without covering the letters.
+  context.lineWidth = ink ? 3 : 3.5;
   context.strokeStyle = "#ffffff";
   context.strokeText(text, x, y);
-  context.fillStyle = (data as { labelColor?: string }).labelColor || "#111111";
+  context.fillStyle = ink || "#111111";
   context.fillText(text, x, y);
 };
 

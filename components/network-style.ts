@@ -136,10 +136,14 @@ export const MEGA_DEGREE = 34;
 export const TOP_HUB_LABELS = 8;
 export const LABEL_CAMPUS = 12;
 export const LABEL_HUB = 11;
+/** Campus clubs and hubs. Medium weight, at least 11px, so the colored ink stays readable. */
+export const LABEL_CLUB = 11;
 /** Thiel Fellowship, the one program label that stays on at every zoom. */
 export const LABEL_LEAD = 13;
 export const LABEL_REGION = 10;
 export const LABEL_NODE = 11;
+/** A tucked hub at least this connected is a main campus hub and may be labeled on the fitted view. */
+export const MAIN_CAMPUS_HUB_DEGREE = 8;
 /** Extra pixels between uppercase region letters. */
 export const REGION_TRACKING = 1.55;
 
@@ -351,6 +355,16 @@ export function labelDegreeFloor(cameraRatio: number): number {
   if (cameraRatio >= 0.48) return 30;
   if (cameraRatio >= 0.28) return 12;
   if (cameraRatio >= 0.14) return 4;
+  return 1;
+}
+
+/**
+ * Main campus hubs stay eligible on the fitted view. Zooming in (smaller ratio)
+ * admits the smaller clubs. Collision still drops any label that would overlap.
+ */
+export function campusHubDegreeFloor(cameraRatio: number): number {
+  if (cameraRatio >= 0.48) return MAIN_CAMPUS_HUB_DEGREE;
+  if (cameraRatio >= 0.28) return 4;
   return 1;
 }
 

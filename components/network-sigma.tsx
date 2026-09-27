@@ -7,7 +7,7 @@ import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-ma
 import { regionTint } from "@/lib/domain/network-regions";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
-import { DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, REGION_TRACKING, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
+import { DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_CLUB, LABEL_HUB, LABEL_LEAD, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, REGION_TRACKING, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -137,23 +137,26 @@ export function NetworkSigma({
       return measureCtx.measureText(text).width;
     };
     const placed = { ids: new Set<string>() };
-    const labelMeta: { id: string; tier: number; degree: number; text: string; fullText: string; marker: boolean; anchor: boolean; fontSize: number; tracking: number }[] = [];
+    const labelMeta: { id: string; tier: number; degree: number; text: string; fullText: string; marker: boolean; anchor: boolean; fontSize: number; tracking: number; campusHub: boolean }[] = [];
     for (const node of graph.nodes) {
       const campus = node.type === "campus";
       const hub = featured.has(node.id);
       const lead = hub && node.rimTier === "S+";
       const strong = hub && node.rimTier === "S";
+      const campusHub = Boolean(node.homeCampus) && !campus;
       const anchor = campus || hub;
+      const fontSize = campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong ? LABEL_HUB : campusHub ? LABEL_CLUB : hub ? 10 : LABEL_NODE;
       labelMeta.push({
         id: node.id,
-        tier: campus ? 5 : lead ? 6 : strong ? 4 : hub ? 2 : 1,
+        tier: campus ? 5 : lead ? 6 : strong ? 4 : campusHub ? 3 : hub ? 2 : 1,
         degree: node.degree,
         text: truncateMapLabel(node.label, false, anchor),
         fullText: node.label,
         marker: false,
         anchor,
-        fontSize: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong ? LABEL_HUB : hub ? 10 : LABEL_NODE,
+        fontSize,
         tracking: 0,
+        campusHub,
       });
     }
     const colors = new Map(campusSwatches(graph.nodes).map((swatch) => [swatch.id, swatch.color]));
@@ -162,6 +165,7 @@ export function NetworkSigma({
       const hub = featured.has(node.id);
       const lead = hub && node.rimTier === "S+";
       const strong = hub && node.rimTier === "S";
+      const campusHub = Boolean(node.homeCampus) && !campus;
       const color = nodeColor(node, colors);
       g.addNode(node.id, {
         x: node.x,
@@ -176,7 +180,7 @@ export function NetworkSigma({
         zIndex: lead ? 4 : strong ? 3 : Z[node.type],
         signalTip: signalTooltip(node),
         linkColor: emphasizeColor(color),
-        labelPx: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong ? LABEL_HUB : hub ? 10 : LABEL_NODE,
+        labelPx: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong ? LABEL_HUB : campusHub ? LABEL_CLUB : hub ? 10 : LABEL_NODE,
         ...(node.homeCampus ? { labelColor: readableInk(colors.get(node.homeCampus) ?? "#374151") } : {}),
       });
     }
@@ -212,6 +216,7 @@ export function NetworkSigma({
         anchor: true,
         fontSize: LABEL_REGION,
         tracking: REGION_TRACKING,
+        campusHub: false,
       });
     }
     let minX = Infinity;
@@ -396,7 +401,9 @@ export function NetworkSigma({
           reserved.push(hoverLabelBox(at.x, at.y, nodeSize, measure(meta.fullText, 11), 11));
           continue;
         }
-        if (meta.tier === 1 && meta.degree < floor && meta.id !== active) continue;
+        if (meta.campusHub) {
+          if (meta.degree < campusHubDegreeFloor(ratio) && meta.id !== active) continue;
+        } else if (meta.tier === 1 && meta.degree < floor && meta.id !== active) continue;
         if (active && meta.tier === 1 && meta.id !== active && !near?.has(meta.id)) continue;
         if (at.x < -margin || at.y < -margin || at.x > dims.width + margin || at.y > dims.height + margin) continue;
         const selectedLabel = meta.id === active;

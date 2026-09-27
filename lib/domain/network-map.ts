@@ -1211,7 +1211,7 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     hub.collide = 3.4;
   }
 
-  // A hub tied to one school sits inside that campus. It stays small and unlabeled at the fitted view.
+  // A hub tied to one school sits inside that campus. Main ones are labeled at the fitted view when the label fits.
   const tuckIntoCampus = (node: LiveNode, campusId: string) => {
     const seat = seats.get(campusId);
     node.hub = false;

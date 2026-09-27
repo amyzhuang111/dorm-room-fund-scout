@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { nodeColor, readableInk } from "../../components/network-style";
+import { LABEL_CLUB, campusHubDegreeFloor, nodeColor, readableInk, selectVisibleLabels } from "../../components/network-style";
 import { REGIONS, campusShade, regionForCampus, regionSwatch } from "./network-regions";
 
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
@@ -112,5 +112,26 @@ const waterlooHue = hexToHsl(campusShade("univ_waterloo", "University of Waterlo
 assert.ok(waterlooHue >= 200 && waterlooHue <= 230, `waterloo ${waterlooHue}`);
 const torontoHue = hexToHsl(campusShade("univ_toronto", "University of Toronto", siblings)).h;
 assert.ok(torontoHue >= 200 && torontoHue <= 230, `toronto ${torontoHue}`);
+
+assert.ok(LABEL_CLUB >= 11);
+assert.equal(campusHubDegreeFloor(1), 8);
+assert.equal(campusHubDegreeFloor(0.5), 8);
+assert.equal(campusHubDegreeFloor(0.3), 4);
+assert.equal(campusHubDegreeFloor(0.1), 1);
+
+const measure = (text: string, fontSize: number) => text.length * fontSize * 0.5;
+const placed = selectVisibleLabels(
+  [
+    { id: "penn", tier: 5, degree: 400, text: "Penn", x: 100, y: 100, nodeSize: 9, marker: false, anchor: true, fontSize: 12 },
+    { id: "labs", tier: 3, degree: 198, text: "Penn Labs", x: 100, y: 140, nodeSize: 2, marker: false, anchor: false, fontSize: LABEL_CLUB },
+    { id: "clubs", tier: 3, degree: 33, text: "Penn Clubs", x: 108, y: 142, nodeSize: 2, marker: false, anchor: false, fontSize: LABEL_CLUB },
+    { id: "sky", tier: 3, degree: 259, text: "SkyDeck", x: 420, y: 360, nodeSize: 2, marker: false, anchor: false, fontSize: LABEL_CLUB },
+  ],
+  measure,
+);
+assert.ok(placed.has("penn"));
+assert.ok(placed.has("labs"));
+assert.ok(!placed.has("clubs"));
+assert.ok(placed.has("sky"));
 
 console.log("region color tests ok");
