@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { track } from "@vercel/analytics";
 const FOUNDER_NAV = [
   { href: "/founder/discover", label: "Discover" },
+  { href: "/alumni?from=founder", label: "Alumni" },
   { href: "/news", label: "News" },
   { href: "/hotspots?from=founder", label: "Hotspots" },
   { href: "/founder/shortlist", label: "Shortlist" },
@@ -16,6 +17,7 @@ const FOUNDER_NAV = [
 
 const STARTUP_NAV = [
   { href: "/startup/discover", label: "Discover" },
+  { href: "/alumni?from=startup", label: "Alumni" },
   { href: "/news", label: "News" },
   { href: "/hotspots?from=startup", label: "Hotspots" },
   { href: "/startup/shortlist", label: "Shortlist" },
@@ -127,7 +129,7 @@ export function TopNav({
           <nav className="flex items-center gap-1">
             {nav.map((item) => {
               const itemPath = item.href.split("?")[0];
-              const active = pathname === itemPath || (itemPath !== "/signals" && itemPath !== "/sources" && pathname.startsWith(itemPath));
+              const active = pathname === itemPath || (itemPath !== "/signals" && itemPath !== "/sources" && itemPath !== "/alumni" && pathname.startsWith(itemPath));
               const locked = !signedIn && (item.label === "Shortlist" || item.label === "Pipeline");
               return (
                 <Link

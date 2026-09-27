@@ -37,6 +37,7 @@
     "import:drf-linkedin-pass2": "tsx scripts/ingest/import-drf-linkedin-pass2.ts",
     "import:drf-linkedin-pass3": "tsx scripts/ingest/import-drf-linkedin-pass3.ts",
     "test:drf-intro": "tsx lib/domain/drf-intro.test.ts",
+    "test:who-can-intro": "tsx lib/domain/who-can-intro.test.ts",
     "fetch-hotspot-members": "tsx scripts/ingest/fetch-hotspot-members.ts",
     "import:pear-hc-prod": "tsx scripts/ingest/import-pear-hc-prod-members.ts",
     "import:founders-inc-spc": "tsx scripts/ingest/import-founders-inc-spc.ts",

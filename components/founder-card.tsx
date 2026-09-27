@@ -10,7 +10,7 @@ import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CompanyNameLink } from "./company-website";
 import { EntityMarks } from "./entity-marks";
-import { WarmIntroPaths } from "./warm-intro-paths";
+import { WhoCanIntro } from "./who-can-intro";
 import { InTheNews } from "./in-the-news";
 
 export const FounderCard = memo(function FounderCard({
@@ -96,7 +96,7 @@ export const FounderCard = memo(function FounderCard({
       {open && (
         <div className="mt-3 space-y-3 border-t border-border-c pt-3 text-sm">
           <InTheNews personId={founder.id} />
-          <WarmIntroPaths entityId={founder.id} />
+          <WhoCanIntro entityId={founder.id} />
           {founder.programSignals.length > 0 && (
             <section>
               <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Program membership</h3>
