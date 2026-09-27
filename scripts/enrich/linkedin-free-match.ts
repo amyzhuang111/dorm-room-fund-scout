@@ -167,8 +167,13 @@ export function mentionsFullName(text: string, name: string): boolean {
 
 export function isCommonName(tokens: string[], duplicateCount: number): boolean {
   if (duplicateCount > 1) return true;
-  if (tokens.length !== 2) return false;
-  return COMMON_FIRST.has(tokens[0].toLowerCase()) && COMMON_LAST.has(tokens[1].toLowerCase());
+  if (tokens.length < 2) return false;
+  const first = tokens[0].toLowerCase();
+  const last = tokens[tokens.length - 1].toLowerCase();
+  if (COMMON_FIRST.has(first) && COMMON_LAST.has(last)) return true;
+  // A short given name plus a very common surname (Nam Nguyen, Bo Li) is not
+  // distinctive enough for a one-signal match.
+  return COMMON_LAST.has(last) && first.length <= 4;
 }
 
 export function slugLooksLikeName(url: string, name: string): boolean {

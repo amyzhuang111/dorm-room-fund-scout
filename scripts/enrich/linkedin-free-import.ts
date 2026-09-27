@@ -44,8 +44,9 @@ const CHECKPOINT_PATH = path.join(process.cwd(), "data/imports/linkedin-free-che
 const RESULTS_PATH = path.join(process.cwd(), "data/imports/linkedin-free-results.jsonl");
 const FOCUS_CAMPUSES = new Set(["univ_penn", "univ_berkeley", "univ_stanford", "univ_mit", "univ_harvard"]);
 const UA = "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0";
-const CDP_PORT = 9444;
-const SEARCH_GAP_MS = 2200;
+const CDP_PORT = 9555;
+const SEARCH_DISPLAY = ":99";
+const SEARCH_GAP_MS = 6500;
 
 type Outcome = "confirmed" | "likely" | "ambiguous" | "not_found" | "existing" | "skipped_name";
 
@@ -448,6 +449,12 @@ function ownHit(html: string, person: Person, pageUrl: string): MatchHit | null 
   return { url: all[0], title: person.displayName, snippet: stripTags(html).slice(0, 320), query: pageUrl, fromSite: true };
 }
 
+function ensureSearchDisplay() {
+  if (fs.existsSync("/tmp/.X11-unix/X99")) return;
+  const display = spawn("Xvfb", [SEARCH_DISPLAY, "-screen", "0", "1280x900x24"], { detached: true, stdio: "ignore" });
+  display.unref();
+}
+
 class SearchBrowser {
   private ws: WebSocket | null = null;
   private nextId = 0;
@@ -462,7 +469,29 @@ class SearchBrowser {
     return ["google", "bing", "duckduckgo"].every((engine) => (this.disabledUntil.get(engine) ?? 0) > Date.now());
   }
 
+  async recycle() {
+    this.ws?.close();
+    this.ws = null;
+    this.pending.clear();
+    if (this.chrome?.pid) {
+      try {
+        process.kill(-this.chrome.pid, "SIGKILL");
+      } catch {
+        try {
+          process.kill(this.chrome.pid, "SIGKILL");
+        } catch {
+          // already exited
+        }
+      }
+    }
+    this.chrome = null;
+    for (let attempt = 0; attempt < 20 && (await this.cdpUp()); attempt += 1) await sleep(200);
+    await this.start();
+  }
+
   async start() {
+    ensureSearchDisplay();
+    for (let attempt = 0; attempt < 20 && !fs.existsSync("/tmp/.X11-unix/X99"); attempt += 1) await sleep(100);
     const ready = await this.cdpUp();
     if (!ready) {
       this.chrome = spawn(
@@ -471,12 +500,12 @@ class SearchBrowser {
           "--no-sandbox",
           "--disable-dev-shm-usage",
           "--disable-gpu",
-          "--user-data-dir=/tmp/linkedin-free-chrome-search",
+          `--user-data-dir=/tmp/linkedin-free-chrome-${Date.now()}`,
           `--remote-debugging-port=${CDP_PORT}`,
           "--window-size=1200,900",
           "about:blank",
         ],
-        { detached: true, stdio: "ignore", env: { ...process.env, DISPLAY: process.env.DISPLAY || ":1" } }
+        { detached: true, stdio: "ignore", env: { ...process.env, DISPLAY: SEARCH_DISPLAY } }
       );
       this.chrome.unref();
       for (let attempt = 0; attempt < 20; attempt += 1) {
@@ -949,11 +978,23 @@ async function main() {
       const hits: MatchHit[] = [];
       let ambiguousReason = "";
       let blockedQueries = 0;
+      let recycles = 0;
       const queries = queriesFor(person);
-      for (const query of queries) {
+      for (let qi = 0; qi < queries.length; qi += 1) {
+        const query = queries[qi];
         const found = await browser.search(query, person);
         if (found.blocked && found.hits.length === 0) {
           blockedQueries += 1;
+          const googleBlocked = (browser.disabledUntil.get("google") ?? 0) > Date.now();
+          if (googleBlocked && recycles < 1) {
+            recycles += 1;
+            blockedQueries -= 1;
+            qi -= 1;
+            console.log("  recycling search browser after Google block");
+            browser.disabledUntil.delete("google");
+            await browser.recycle();
+            continue;
+          }
           if (browser.enginesExhausted()) break;
           continue;
         }
@@ -977,7 +1018,7 @@ async function main() {
         commonName: person.commonName,
         hits,
       });
-      if (hits.length === 0 && queries.length > 0 && blockedQueries === queries.length) {
+      if (hits.length === 0 && blockedQueries > 0 && (blockedQueries === queries.length || browser.enginesExhausted())) {
         console.log("Search engines are blocked. Stopping so the remaining people can be retried.");
         break;
       }

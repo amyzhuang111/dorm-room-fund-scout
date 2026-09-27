@@ -24,6 +24,8 @@ assert.equal(slugLooksLikeName("https://www.linkedin.com/in/sachchitnis", "Eden 
 assert.equal(slugLooksLikeName("https://www.linkedin.com/in/jason-li", "Jason Li"), true);
 assert.equal(slugLooksLikeName("https://www.linkedin.com/in/skylerji", "Skyler Ji"), true);
 assert.equal(slugLooksLikeName("https://www.linkedin.com/in/zipingye", "Ziping Ye"), true);
+assert.equal(isCommonName(["Nam", "Nguyen"], 1), true);
+assert.equal(isCommonName(["Allan", "Guo"], 1), false);
 
 assert.equal(usableOrgName("Labs"), null);
 assert.equal(usableOrgName("Nematex"), "Nematex");
