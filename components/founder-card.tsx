@@ -33,7 +33,7 @@ export const FounderCard = memo(function FounderCard({
           <p className="mt-1 text-xs text-muted">{founder.universityName ?? "University unknown"}</p>
           <p className="mt-1 flex flex-wrap items-center gap-1">
             {founder.founderStatus === "potential" && <PotentialFounderBadge />}
-            <EnrollmentBadge status={founder.enrollmentStatus} label={founder.enrollmentLabel} evidence={founder.enrollmentEvidence} />
+            <EnrollmentBadge status={founder.enrollmentStatus} label={founder.enrollmentLabel} evidence={founder.enrollmentEvidence} basis={founder.enrollmentBasis} />
             <LeftSchoolBadge leftSchool={founder.leftSchool} />
             <SignalTierBadge tier={founder.signalTier} basis={founder.signalTierBasis} />
             {founder.signalEvidence?.unverified && <UnverifiedBadge />}

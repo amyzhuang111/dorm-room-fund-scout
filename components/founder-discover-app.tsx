@@ -120,7 +120,7 @@ function FounderBody({
               Founders
             </ScoutLink>
             <ScoutLink
-              href={buildHref("/founder/discover", current, { pool: "potential", founder: null, sort: "tier", enroll: "current_student,recent_grad,older_alumni,unknown" })}
+              href={buildHref("/founder/discover", current, { pool: "potential", founder: null, sort: "tier", enroll: "current_student,recent_grad,older_alumni" })}
               className={`rounded-md px-2.5 py-1 text-xs font-medium ${showingPotential ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2"}`}
             >
               Potential founders

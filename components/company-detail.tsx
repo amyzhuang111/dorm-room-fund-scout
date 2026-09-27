@@ -12,7 +12,7 @@ import { CompanyProfileCard } from "./company-profile";
 function founderHref(founder: NamedFounder): string {
   const params = new URLSearchParams({
     founder: founder.personId,
-    enroll: "current_student,recent_grad,older_alumni,unknown",
+    enroll: "current_student,recent_grad,older_alumni",
   });
   if (founder.founderStatus === "potential") params.set("pool", "potential");
   return `/founder/discover?${params.toString()}`;
@@ -178,7 +178,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
               <Link href={founderHref(f)} className="text-link hover:underline">
                 {f.name}
               </Link>
-              <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} />
+              <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} />
               <LeftSchoolBadge leftSchool={f.leftSchool} />
               <PersonLinkButton link={f.link} name={f.name} />
               <ProfileIconLinks links={f.profileLinks} name={f.name} />
