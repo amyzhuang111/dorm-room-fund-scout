@@ -14,7 +14,7 @@ import {
   type HotspotTier,
 } from "@/lib/domain/hotspot-model";
 
-const TIERS: HotspotTier[] = ["S", "A", "B", "C", "D"];
+const TIERS: HotspotTier[] = ["S+", "S", "A", "B", "C", "D"];
 
 export function HotspotsApp({
   cards,

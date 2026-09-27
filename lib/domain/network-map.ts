@@ -170,6 +170,7 @@ export function classYear(gradYear: number | null, label: string | null): number
 }
 
 function tierBoost(tier: string | null): number {
+  if (tier === "S+") return 4.4;
   if (tier === "S") return 3;
   if (tier === "A") return 2;
   if (tier === "B") return 1.2;
@@ -211,7 +212,7 @@ function buildSignalSizes(input: {
         verification: startup.verification_status,
         funded: (input.amountByProject.get(startup.id) ?? 0) > 0 || input.stageByProject.has(startup.id),
         accelerator: mentionsAccelerator(startup.signal_tier_basis) || input.acceleratorStartups.has(startup.id),
-        strongTier: startup.signal_tier === "S" || startup.signal_tier === "A" || input.drfStartups.has(startup.id),
+        strongTier: startup.signal_tier === "S+" || startup.signal_tier === "S" || startup.signal_tier === "A" || input.drfStartups.has(startup.id),
       }),
     );
   }
@@ -658,7 +659,7 @@ function assembleNetworkMap(): MapGraph {
   for (const org of organizations.nodes) {
     const node = pushNode(org.id, "organization", org.campuses, org.tier, null);
     node.label = org.label;
-    node.layoutPx = org.tier === "S" ? 7 : org.tier === "A" ? 6.2 : org.tier === "B" ? 5.4 : 4.8;
+    node.layoutPx = org.tier === "S+" ? 8.4 : org.tier === "S" ? 7 : org.tier === "A" ? 6.2 : org.tier === "B" ? 5.4 : 4.8;
   }
 
   const startupAnchor = new Map<string, { x: number; y: number }>();

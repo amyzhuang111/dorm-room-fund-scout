@@ -1191,7 +1191,7 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       tier_source_url: string | null;
     }[]) {
     if (!isProgramSignalType(row.signal_type) || !isProgramMatchStatus(row.match_status)) continue;
-    const tier = row.tier === "S" || row.tier === "A" || row.tier === "B" || row.tier === "C" ? row.tier : null;
+    const tier = row.tier === "S+" || row.tier === "S" || row.tier === "A" || row.tier === "B" || row.tier === "C" ? row.tier : null;
     const list = programByPerson.get(row.person_id) ?? [];
     list.push({
       signalType: row.signal_type,

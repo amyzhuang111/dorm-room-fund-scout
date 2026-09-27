@@ -13,7 +13,7 @@
 
 import type { CommunitySignal } from "./community-signal";
 
-export type Tier = "S" | "A" | "B" | "C" | "D";
+export type Tier = "S+" | "S" | "A" | "B" | "C" | "D";
 export type DimensionLevel = "high" | "medium" | "low";
 export type SourceRole = "discovery" | "corroboration" | "verification" | "reference";
 export type SourceType =
@@ -39,6 +39,7 @@ export interface QualityDimensions {
 }
 
 export const TIER_MEANING: Record<Tier, string> = {
+  "S+": "Highest directory tier, above S. Spend time here first. The letter is a sourcing label, not a Founder Signal input.",
   S: "Exceptional sourcing source — use aggressively, likely to surface exceptional people/projects before they're obvious.",
   A: "Strong — consistently useful, part of default ingestion and monitoring.",
   B: "Useful — real signal but requires filtering; good corroborating/discovery source.",
@@ -1544,7 +1545,7 @@ export function globalCatalogue(): SourceCatalogueEntry[] {
   return SOURCE_CATALOGUE.filter((e) => e.campus === null);
 }
 
-const TIER_RANK: Record<Tier, number> = { S: 0, A: 1, B: 2, C: 3, D: 4 };
+const TIER_RANK: Record<Tier, number> = { "S+": 0, S: 1, A: 2, B: 3, C: 4, D: 5 };
 export function compareTiers(a: Tier, b: Tier): number {
   return TIER_RANK[a] - TIER_RANK[b];
 }

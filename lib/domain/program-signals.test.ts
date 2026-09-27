@@ -131,6 +131,7 @@ assert.equal(hasPhrase(normHotspotName("role HF0 residency"), "hf0 residency"), 
 assert.equal(hasPhrase(normHotspotName("role AGI House"), "agi house"), true);
 
 assert.equal(PROGRAM_DIRECTORY.z_fellows.tier, "A");
+assert.ok(signalTierRank("S+") < signalTierRank("S"));
 assert.ok(signalTierRank("S") < signalTierRank("A"));
 assert.equal(PROGRAM_DIRECTORY.z_fellows.rationale.toLowerCase().includes("owner override"), false);
 assert.equal(PROGRAM_DIRECTORY.emergent_ventures.tier, "S");

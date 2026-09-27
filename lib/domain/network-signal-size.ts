@@ -30,13 +30,14 @@ export function startupSignalWeight(input: {
 export function founderSignalWeight(input: { verification: string | null; tier: string | null; startupWeight: number }): number {
   const verified = input.verification === "confirmed" ? 1 : input.verification === "partial" ? 0.5 : 0;
   if (verified === 0) return 0;
-  const strongTier = input.tier === "S" || input.tier === "A";
+  const strongTier = input.tier === "S+" || input.tier === "S" || input.tier === "A";
   if (!strongTier && input.startupWeight <= 0) return 0;
   return verified * (strongTier ? 1.5 : 1);
 }
 
-/** Extra screen pixels for an S/A/B directory or signal tier. C and unset add nothing. */
+/** Extra screen pixels for an S+/S/A/B directory or signal tier. C and unset add nothing. */
 export function tierSizeBoost(tier: string | null | undefined): number {
+  if (tier === "S+") return 4.6;
   if (tier === "S") return 3.2;
   if (tier === "A") return 2;
   if (tier === "B") return 0.9;

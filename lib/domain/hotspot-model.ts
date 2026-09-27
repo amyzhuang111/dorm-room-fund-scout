@@ -5,7 +5,7 @@
 import { compareCampusLabels, shortCampusLabel } from "./campuses";
 
 export type HotspotSectionId = "existing_founders" | "startups" | "potential_founders";
-export type HotspotTier = "S" | "A" | "B" | "C" | "D";
+export type HotspotTier = "S+" | "S" | "A" | "B" | "C" | "D";
 export type HotspotPlaceKind = "campus" | "city" | "other";
 
 export interface HotspotCard {
@@ -68,8 +68,9 @@ export const SECTION_SHORT: Record<HotspotSectionId, string> = {
   potential_founders: "Potential founders",
 };
 
-/** Directory tier S is tier 1. These are scouting notes, not Founder Signal. */
+/** S+ is above tier 1. S is tier 1. These are scouting notes, not Founder Signal. */
 export function tierNumber(tier: HotspotTier): number {
+  if (tier === "S+") return 0;
   if (tier === "S") return 1;
   if (tier === "A") return 2;
   if (tier === "B") return 3;
@@ -78,6 +79,7 @@ export function tierNumber(tier: HotspotTier): number {
 }
 
 export function tierBandLabel(tier: HotspotTier): string {
+  if (tier === "S+") return "S+";
   return `Tier ${tierNumber(tier)} · ${tier}`;
 }
 
@@ -113,7 +115,7 @@ const MT_CORES = new Set([
 
 export const SECTION_ORDER: HotspotSectionId[] = ["existing_founders", "startups", "potential_founders"];
 
-const TIERS = new Set<HotspotTier>(["S", "A", "B", "C", "D"]);
+const TIERS = new Set<HotspotTier>(["S+", "S", "A", "B", "C", "D"]);
 
 const CAMPUS_IDS: Record<string, string> = {
   Penn: "univ_penn",
@@ -625,7 +627,7 @@ export function compareCampuses(a: HotspotCard, b: HotspotCard): number {
   return (a.number ?? 999) - (b.number ?? 999) || a.place.localeCompare(b.place);
 }
 
-const TIER_RANK: Record<string, number> = { S: 0, A: 1, B: 2, C: 3, D: 4 };
+const TIER_RANK: Record<string, number> = { "S+": 0, S: 1, A: 2, B: 3, C: 4, D: 5 };
 
 export function bestCard(cards: HotspotCard[], campusId?: string | null): HotspotCard {
   const preferred = campusId ? cards.filter((card) => card.campusId === campusId) : [];

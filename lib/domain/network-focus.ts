@@ -364,7 +364,7 @@ function campusFocus(db: ReturnType<typeof getDb>, id: string): NetworkFocus | n
        JOIN projects p ON p.id = r.source_entity_id
        WHERE r.relationship_type = 'affiliated_with' AND r.target_entity_id = ?
          AND p.kind = 'company' AND p.is_investable_candidate = 1
-       ORDER BY CASE p.signal_tier WHEN 'S' THEN 0 WHEN 'A' THEN 1 WHEN 'B' THEN 2 ELSE 3 END, p.name
+       ORDER BY CASE p.signal_tier WHEN 'S+' THEN 0 WHEN 'S' THEN 1 WHEN 'A' THEN 2 WHEN 'B' THEN 3 ELSE 4 END, p.name
        LIMIT 24`
     )
     .all(id) as { id: string; name: string }[];

@@ -57,7 +57,7 @@ export const PROGRAM_SIGNAL_LABEL: Record<ProgramSignalType, string> = {
   harvard_st_commons: "Harvard St. Commons",
 };
 
-export type DirectoryTier = "S" | "A" | "B" | "C";
+export type DirectoryTier = "S+" | "S" | "A" | "B" | "C";
 
 export interface ProgramDirectory {
   tier: DirectoryTier;
@@ -67,10 +67,10 @@ export interface ProgramDirectory {
 }
 
 /**
- * One hotspot-style tier per program. S anchors are the SPC Founder
- * Fellowship, Thiel, Emergent Ventures, and HF0. Kleiner Perkins stays S:
- * a small paid fellowship already in the directory. Z Fellows is A, just
- * below that top tier: one week and $10,000. A also covers Founders Inc
+ * One hotspot-style tier per program. S+ is the Thiel Fellowship, above
+ * this list. S is the SPC Founder Fellowship, Emergent Ventures, and HF0.
+ * Kleiner Perkins stays S: a small paid fellowship already in the directory.
+ * Z Fellows is A, just below S: one week and $10,000. A also covers Founders Inc
  * Off Season, AGI House, Contrary, 1517, and Afore. The Residency is B:
  * live-in houses in several cities, and the page names no residents or
  * acceptance rate. Houses with a small published cohort sit at B. Large

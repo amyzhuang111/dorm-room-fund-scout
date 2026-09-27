@@ -50,6 +50,7 @@ export function GateBadge({ result, gateOutcomes }: { result: string | null; gat
 }
 
 const TIER_CLASS: Record<string, string> = {
+  "S+": "border-foreground bg-foreground text-white px-2 text-[12px] font-bold ring-2 ring-accent ring-offset-1",
   S: "bg-accent text-accent-foreground border-accent",
   A: "bg-ok-bg text-ok border-ok/20",
   B: "bg-warn-bg text-warn border-warn/20",
@@ -60,9 +61,10 @@ const TIER_CLASS: Record<string, string> = {
 
 export function SignalTierBadge({ tier, basis }: { tier: string | null | undefined; basis?: string | null }) {
   if (!tier) return null;
+  const superTier = tier === "S+";
   return (
     <span
-      className={`inline-flex shrink-0 items-center rounded-full border px-1.5 py-0.5 text-[10px] font-semibold leading-none ${TIER_CLASS[tier] ?? "bg-surface-2 text-muted border-border-c"}`}
+      className={`inline-flex shrink-0 items-center rounded-full border leading-none ${superTier ? "px-2 py-0.5" : "px-1.5 py-0.5 text-[10px] font-semibold"} ${TIER_CLASS[tier] ?? "bg-surface-2 text-muted border-border-c"}`}
       title={basis ? `Signal tier ${tier}. ${basis}` : `Signal tier ${tier}`}
     >
       {tier}
@@ -122,19 +124,26 @@ export function PrecollegeBadges({ signals }: { signals: PrecollegeSignalView[] 
       {shown.map((signal) => {
         const likely = signal.matchStatus === "likely";
         const tip = `${signal.label}. ${likely ? "Likely match: full name only, school and class year were not both confirmed." : "Confirmed: full name, school, and class year agree."} ${signal.sourceUrl}`;
+        const thiel = signal.signalType === "thiel_fellow";
+        const chip = thiel
+          ? likely
+            ? "border-dashed border-foreground bg-white text-foreground"
+            : "border-foreground bg-foreground text-white ring-2 ring-accent ring-offset-1"
+          : likely
+            ? "border-dashed border-foreground bg-white text-foreground"
+            : "border-foreground bg-foreground text-white";
         return (
           <a
             key={`${signal.signalType}-${signal.year ?? "na"}-${signal.sourceUrl}`}
             href={signal.sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            title={tip}
-            className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-semibold leading-none ${
-              likely ? "border-dashed border-foreground bg-white text-foreground" : "border-foreground bg-foreground text-white"
-            }`}
+            title={thiel ? `${tip} Tier S+.` : tip}
+            className={`inline-flex shrink-0 items-center gap-1 rounded-full border py-0.5 leading-none ${thiel ? "px-2 text-[11px] font-bold" : "px-1.5 text-[10px] font-semibold"} ${chip}`}
           >
             <TrophyIcon />
             {signal.label}
+            {thiel ? <span>S+</span> : null}
             {likely ? <span className="font-medium">likely</span> : null}
           </a>
         );
@@ -153,6 +162,7 @@ function ProgramIcon() {
 }
 
 const PROGRAM_TIER_CHIP: Record<string, string> = {
+  "S+": "border-foreground bg-foreground text-white text-[12px] font-bold px-2 ring-2 ring-accent ring-offset-1",
   S: "border-accent bg-accent text-accent-foreground text-[11px] font-bold px-2",
   A: "border-ok/30 bg-ok-bg text-ok text-[10px] font-semibold px-1.5",
   B: "border-warn/30 bg-warn-bg text-warn text-[10px] font-medium px-1.5",

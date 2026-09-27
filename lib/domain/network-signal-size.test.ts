@@ -44,7 +44,8 @@ test("tooltip shows the raw count, denominator, and ratio", () => {
   );
 });
 
-test("directory tiers add screen weight from S down to C", () => {
+test("directory tiers add screen weight from S+ down to C", () => {
+  assert.ok(tierSizeBoost("S+") > tierSizeBoost("S"));
   assert.ok(tierSizeBoost("S") > tierSizeBoost("A"));
   assert.ok(tierSizeBoost("A") > tierSizeBoost("B"));
   assert.ok(tierSizeBoost("B") > tierSizeBoost("C"));

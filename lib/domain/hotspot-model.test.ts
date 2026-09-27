@@ -148,6 +148,9 @@ assert.equal(directory.find((card) => card.place === "1517 Medici Project")?.tie
 assert.equal(directory.find((card) => card.place === "Buildspace")?.tier, "C");
 assert.equal(directory.find((card) => card.place === "Afore FIR U")?.tier, "A");
 assert.equal(directory.find((card) => card.place === "Pioneer")?.tier, "B");
+assert.equal(directory.find((card) => card.place === "Thiel Fellowship")?.tier, "S+");
+assert.match(directory.find((card) => card.place === "Thiel Fellowship")?.tierRationale ?? "", /Twelve fellows in 2026/);
+assert.equal((directory.find((card) => card.place === "Thiel Fellowship")?.tierRationale ?? "").toLowerCase().includes("owner override"), false);
 assert.equal(directory.find((card) => card.place === "Z Fellows")?.tier, "A");
 assert.equal((directory.find((card) => card.place === "Z Fellows")?.tierRationale ?? "").toLowerCase().includes("owner override"), false);
 assert.equal(directory.find((card) => card.place.startsWith("The Residency (founder houses)"))?.tier, "B");
