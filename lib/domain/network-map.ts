@@ -5,6 +5,9 @@
 // and International sits against the West Coast instead of floating apart.
 // Campus-specific hubs sit inside their school. National programs sit in the
 // seams between the regions they link, nearer the stronger link.
+// After that pack, cosine similarity on programs, sectors, investors, and
+// club types pulls similar campuses and hubs closer, even with no shared edge.
+// Explicit program lines are drawn on top of this layout.
 
 import fs from "node:fs";
 import { forceCollide, forceSimulation, forceX, forceY } from "d3-force";
@@ -19,6 +22,7 @@ import { demoteDuplicateOuter, rimPlacementFor, type RimBand, type RimTier } fro
 import { hotspotGraphPatch, organizationMap } from "./hotspots";
 import { confirmedLinkedIn, readLinkedInCandidate } from "./person-link";
 import { sectorLabel } from "./sectors";
+import { nearestSimilar, relaxSimilarity, similarityVectors, type SimilarityPoint } from "./similarity-layout";
 import { drfWorksAtEdges } from "./drf-alumni";
 
 export type MapNodeType = "person" | "startup" | "campus" | "investor" | "program" | "organization";
@@ -125,9 +129,11 @@ interface SimNode {
   rimTier?: RimTier | null;
   /** Set when this hub was tucked into one campus. Its color follows that campus. */
   homeCampus?: string;
+  /** Startup sector tag. Used to build campus and hub similarity. */
+  sector?: string | null;
 }
 
-const LAYOUT_VERSION = "32";
+const LAYOUT_VERSION = "33";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -654,7 +660,8 @@ function assembleNetworkMap(): MapGraph {
   for (const startup of startups) {
     const fromFounders = (foundersByCompany.get(startup.id) ?? []).flatMap((id) => campusesByPerson.get(id) ?? []);
     const campuses = campusesByCompany.get(startup.id) ?? [...new Set(fromFounders)];
-    pushNode(startup.id, "startup", campuses, startup.signal_tier, amountByProject.get(startup.id) ?? null);
+    const node = pushNode(startup.id, "startup", campuses, startup.signal_tier, amountByProject.get(startup.id) ?? null);
+    node.sector = sectorByProject.get(startup.id) ?? null;
   }
   for (const program of programs) {
     const campuses = campusesByCompany.get(program.id) ?? [];
@@ -1368,6 +1375,10 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
   seatWaterlooBesideToronto(live, primary);
   // Draw each region's campuses into one cluster, then separate the clusters.
   pullTowardRegionCentroids(live, primary);
+  // Similar campuses move together from here. People are packed onto the discs afterwards.
+  pullCampusesBySimilarity(live, edges, primary);
+  seatWaterlooBesideToronto(live, primary);
+  settleCampusGaps(live, primary);
   packCampusDiscs(live, primary);
   const campusOf = new Map(primary);
   for (const [id, weights] of bridgeWeight) {
@@ -1383,6 +1394,8 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     if (bestId) campusOf.set(id, bestId);
   }
   placeLinkedPrograms(live, hubMembers, primary, campusOf);
+  // Hubs slide toward campuses and hubs with a similar profile. Campus discs stay pinned.
+  pullHubsBySimilarity(live, edges, primary);
   const markers: RegionMarker[] = [];
   for (const region of REGIONS) {
     const members = campusesByRegion.get(region.id) ?? [];
@@ -1400,6 +1413,114 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
   placeRegionLabels(markers, simNodes);
   // Region names stay off the canvas. The legend carries the colors, and titles were clipping the fit.
   return [];
+}
+
+/** Move campuses toward the campuses they resemble. The region pack stays the seed. */
+function pullCampusesBySimilarity(live: LiveNode[], edges: MapEdge[], primary: Map<string, string>) {
+  const vectors = layoutVectors(live, edges, primary);
+  const counts = memberCounts(primary, live);
+  const campuses = live.filter((node) => node.type === "campus");
+  const points: SimilarityPoint[] = campuses.map((node) => ({ id: node.id, x: node.x, y: node.y, r: discRadius(counts.get(node.id) ?? 1) }));
+  const links = nearestSimilar(
+    campuses.map((node) => node.id),
+    vectors,
+    5,
+    0.22,
+  );
+  relaxSimilarity(points, links, { iterations: 40, anchor: 0.3, spring: 0.48, gap: 32 });
+  const at = new Map(points.map((point) => [point.id, point]));
+  for (const campus of campuses) {
+    const next = at.get(campus.id);
+    if (!next || !Number.isFinite(next.x) || !Number.isFinite(next.y)) continue;
+    campus.x = next.x;
+    campus.y = next.y;
+    campus.tx = next.x;
+    campus.ty = next.y;
+  }
+}
+
+/** Slide free hubs toward similar campuses and hubs. Campus positions stay fixed. */
+function pullHubsBySimilarity(live: LiveNode[], edges: MapEdge[], primary: Map<string, string>) {
+  const vectors = layoutVectors(live, edges, primary);
+  const counts = memberCounts(primary, live);
+  const campuses = live.filter((node) => node.type === "campus");
+  const hubs = live.filter((node) => isFreeHub(node));
+  if (!hubs.length) return;
+  const points: SimilarityPoint[] = [
+    ...campuses.map((node) => ({ id: node.id, x: node.x, y: node.y, r: discRadius(counts.get(node.id) ?? 1), pinned: true })),
+    ...hubs.map((node) => ({ id: node.id, x: node.x, y: node.y, r: 8 })),
+  ];
+  const links = nearestSimilar(
+    points.map((point) => point.id),
+    vectors,
+    4,
+    0.2,
+  ).filter((link) => hubs.some((hub) => hub.id === link.a || hub.id === link.b));
+  relaxSimilarity(points, links, { iterations: 32, anchor: 0.18, spring: 0.5, gap: 28 });
+  const at = new Map(points.map((point) => [point.id, point]));
+  for (const hub of hubs) {
+    const next = at.get(hub.id);
+    if (!next || !Number.isFinite(next.x) || !Number.isFinite(next.y)) continue;
+    hub.x = next.x;
+    hub.y = next.y;
+    hub.tx = next.x;
+    hub.ty = next.y;
+  }
+  const placed = new Map<string, { x: number; y: number }>();
+  for (const hub of hubs) {
+    const key = featuredNationalKey(hub.label ?? "");
+    if (key && !placed.has(key)) placed.set(key, { x: hub.x, y: hub.y });
+  }
+  for (const node of live) {
+    const key = featuredNationalKey(node.label ?? "");
+    const spot = key ? placed.get(key) : undefined;
+    if (!spot) continue;
+    node.x = spot.x;
+    node.y = spot.y;
+    node.tx = spot.x;
+    node.ty = spot.y;
+  }
+}
+
+function layoutVectors(live: LiveNode[], edges: MapEdge[], primary: Map<string, string>) {
+  return similarityVectors({
+    nodes: live.map((node) => ({
+      id: node.id,
+      type: node.type,
+      label: node.label,
+      sector: node.sector,
+      hub: isFreeHub(node),
+    })),
+    edges,
+    primaryCampus: primary,
+  });
+}
+
+function isFreeHub(node: LiveNode): boolean {
+  if (node.homeCampus) return false;
+  return Boolean(node.hub || featuredNationalKey(node.label ?? ""));
+}
+
+/** A few separation passes after similarity, so discs that were pulled together still do not cover each other. */
+function settleCampusGaps(live: LiveNode[], primary: Map<string, string>) {
+  const campuses = live.filter((node) => node.type === "campus");
+  const counts = memberCounts(primary, live);
+  const radiusOf = (id: string) => discRadius(counts.get(id) ?? 1);
+  for (let iter = 0; iter < 12; iter++) {
+    const vx = new Map<string, number>();
+    const vy = new Map<string, number>();
+    for (const campus of campuses) {
+      vx.set(campus.id, 0);
+      vy.set(campus.id, 0);
+    }
+    separateCampusDiscs(campuses, radiusOf, vx, vy);
+    for (const campus of campuses) {
+      campus.x += vx.get(campus.id) ?? 0;
+      campus.y += vy.get(campus.id) ?? 0;
+      campus.tx = campus.x;
+      campus.ty = campus.y;
+    }
+  }
 }
 
 function angleDelta(a: number, b: number): number {

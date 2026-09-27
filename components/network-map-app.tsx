@@ -352,10 +352,11 @@ export function NetworkMapApp() {
         <p className="pl-0.5 text-[11px] leading-none text-neutral-400 tabular-nums">
           {visibleCounts.person.toLocaleString()} people · {visibleCounts.startup.toLocaleString()} startups · {visibleCounts.investor} investors · {visibleCounts.organization} organizations
         </p>
+        <p className="max-w-[18rem] pl-0.5 text-[11px] leading-snug text-neutral-900">Closer = more similar (shared programs, sectors, investors)</p>
       </div>
 
       {filtersOpen && filters && graph && (
-        <aside className="absolute bottom-14 left-4 top-28 z-30 flex w-[16.5rem] flex-col overflow-hidden rounded-md border border-neutral-200 bg-white text-black shadow-sm">
+        <aside className="absolute bottom-14 left-4 top-40 z-30 flex w-[16.5rem] flex-col overflow-hidden rounded-md border border-neutral-200 bg-white text-black shadow-sm">
           <div className="flex items-center justify-between border-b border-black/10 px-3 py-2">
             <p className="text-sm font-semibold">Filters</p>
             <button
