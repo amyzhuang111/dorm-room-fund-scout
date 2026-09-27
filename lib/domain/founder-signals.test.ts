@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { loadFounderSignals } from "./founder-signals";
+import { founderSignalsForCampus, loadFounderSignals } from "./founder-signals";
 
 const rows = loadFounderSignals();
 assert.ok(rows.length >= 15, `expected at least 15 signals, got ${rows.length}`);
@@ -14,4 +14,8 @@ const penn = rows.filter((row) => row.campus === "Penn");
 const berkeley = rows.filter((row) => row.campus === "UC Berkeley");
 assert.ok(penn.length >= 8, `penn signals ${penn.length}`);
 assert.ok(berkeley.length >= 5, `berkeley signals ${berkeley.length}`);
+assert.equal(founderSignalsForCampus(rows, "Penn").length, penn.length);
+assert.equal(founderSignalsForCampus(rows, "UC Berkeley").length, berkeley.length);
+assert.equal(founderSignalsForCampus(rows, "Stanford").length, 0);
+assert.equal(founderSignalsForCampus(rows, "").length, 0);
 console.log(`founder-signals tests ok (${rows.length} rows)`);

@@ -1,17 +1,14 @@
-import { FounderSignalsTable } from "@/components/founder-signals-table";
+import { Suspense } from "react";
 import { HotspotsApp } from "@/components/hotspots-app";
 import { loadFounderSignals } from "@/lib/domain/founder-signals";
 import { loadHotspotEvents } from "@/lib/domain/hotspot-dates";
 import { hotspotCards } from "@/lib/domain/hotspots";
-import { listUniversities } from "@/lib/domain/queries";
 
 export default async function HotspotsPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const initial = await searchParams;
-  const universities = listUniversities().map((university) => ({ id: university.id, name: university.name }));
   return (
-    <>
-      <FounderSignalsTable rows={loadFounderSignals()} />
-      <HotspotsApp cards={hotspotCards()} events={loadHotspotEvents()} initial={initial} universities={universities} />
-    </>
+    <Suspense fallback={<div className="mx-auto max-w-[1100px] px-4 py-5 text-sm text-foreground">Loading hotspots…</div>}>
+      <HotspotsApp cards={hotspotCards()} events={loadHotspotEvents()} signals={loadFounderSignals()} initial={initial} />
+    </Suspense>
   );
 }

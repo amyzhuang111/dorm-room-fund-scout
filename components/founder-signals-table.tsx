@@ -1,9 +1,15 @@
 import type { FounderSignalRow } from "@/lib/domain/founder-signals";
 
 export function FounderSignalsTable({ rows }: { rows: FounderSignalRow[] }) {
+  if (rows.length === 0) return null;
   return (
-    <section id="founder-signals" className="mx-auto max-w-[1100px] px-4 pt-5 sm:px-6">
-      <h1 className="text-2xl text-foreground">Founder signals</h1>
+    <section id="founder-signals" className="mt-6">
+      <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">
+        Founder signals
+        <span className="ml-2 font-medium" style={{ fontVariantNumeric: "tabular-nums" }}>
+          {rows.length}
+        </span>
+      </h3>
       <p className="mt-1 max-w-3xl text-sm text-muted">
         Programs, clubs, and labs that public pages and campus discussions treat as places to find student founders. Each row cites a page that was read. These notes
         prioritize sources. They do not change Founder Signal, eligibility, or investment score.

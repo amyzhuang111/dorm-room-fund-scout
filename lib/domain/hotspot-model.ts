@@ -2,7 +2,7 @@
 // kept on the card, including the link. Tiers here are the directory's own
 // scouting notes. They are not Founder Signal.
 
-import { compareCampusLabels, shortCampusLabel } from "./campuses";
+import { campusById, compareCampusLabels, shortCampusLabel } from "./campuses";
 
 export type HotspotSectionId = "existing_founders" | "startups" | "potential_founders";
 export type HotspotTier = "S+" | "S" | "A" | "B" | "C" | "D";
@@ -625,6 +625,77 @@ export function compareCampuses(a: HotspotCard, b: HotspotCard): number {
   const section = SECTION_ORDER.indexOf(a.section) - SECTION_ORDER.indexOf(b.section);
   if (section !== 0) return section;
   return (a.number ?? 999) - (b.number ?? 999) || a.place.localeCompare(b.place);
+}
+
+export interface HotspotCampusPage {
+  campus: string;
+  placeKind: HotspotPlaceKind;
+  sortGroup: number;
+}
+
+/** URL slug for a campus label. `Penn` → `penn`, `UC Berkeley` → `uc-berkeley`. */
+export function hotspotCampusSlug(label: string): string {
+  return normHotspotName(label.replace(/['’]/g, "")).replace(/ /g, "-");
+}
+
+/** Penn, then Berkeley, then other universities A–Z, then cities, then programmes. */
+export function compareHotspotPages(a: HotspotCampusPage, b: HotspotCampusPage): number {
+  const band = hotspotPageBand(a) - hotspotPageBand(b);
+  if (band !== 0) return band;
+  return a.campus.localeCompare(b.campus, "en", { sensitivity: "base" });
+}
+
+export function hotspotPages(cards: Pick<HotspotCard, "campus" | "placeKind" | "sortGroup">[]): HotspotCampusPage[] {
+  const map = new Map<string, HotspotCampusPage>();
+  for (const card of cards) {
+    if (!card.campus || map.has(card.campus)) continue;
+    map.set(card.campus, { campus: card.campus, placeKind: card.placeKind, sortGroup: card.sortGroup });
+  }
+  return [...map.values()].sort(compareHotspotPages);
+}
+
+/**
+ * Match a `?campus=` value to a directory label. Accepts the label (`Penn`,
+ * `UC Berkeley`), the slug (`penn`, `uc-berkeley`), a university id, or a
+ * short name (`berkeley`).
+ */
+export function resolveCampusParam(param: string, labels: readonly string[]): string | null {
+  const raw = param.trim();
+  if (!raw) return null;
+  const lowered = raw.toLowerCase();
+  const direct = labels.find((label) => label.toLowerCase() === lowered);
+  if (direct) return direct;
+  const slug = hotspotCampusSlug(raw);
+  const bySlug = labels.find((label) => hotspotCampusSlug(label) === slug);
+  if (bySlug) return bySlug;
+  const byId = labels.find((label) => campusIdForLabel(label) === raw);
+  if (byId) return byId;
+  const wanted = normHotspotName(raw);
+  for (const label of labels) {
+    const config = campusById(campusIdForLabel(label) ?? "");
+    if (!config) continue;
+    const names = [config.shortLabel, config.name, ...config.aliases];
+    if (names.some((name) => normHotspotName(name) === wanted || hotspotCampusSlug(name) === slug)) return label;
+  }
+  return null;
+}
+
+function hotspotPageBand(page: HotspotCampusPage): number {
+  const pin = campusPin(page.campus);
+  if (pin < 2) return pin;
+  if (page.placeKind === "city") return 3;
+  if (page.placeKind === "other") return 4;
+  return 2;
+}
+
+function campusPin(campus: string): number {
+  const id = campusIdForLabel(campus);
+  if (id === "univ_penn") return 0;
+  if (id === "univ_berkeley") return 1;
+  const name = normHotspotName(campus);
+  if (name === "penn" || name === "upenn" || name === "university of pennsylvania") return 0;
+  if (name === "berkeley" || name === "uc berkeley" || name === "university of california berkeley") return 1;
+  return 2;
 }
 
 const TIER_RANK: Record<string, number> = { "S+": 0, S: 1, A: 2, B: 3, C: 4, D: 5 };

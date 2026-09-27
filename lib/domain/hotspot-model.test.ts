@@ -5,7 +5,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { CAMPUSES, compareCampusLabels } from "./campuses";
 import { loadHotspotEvents } from "./hotspot-dates";
-import { campusFilterLabels, cardsFromRows, hasPhrase, matchPhrases, normHotspotName, ORG_ALIAS_PHRASES, parseCsv, samePlace, sortGroupFor } from "./hotspot-model";
+import { campusFilterLabels, cardsFromRows, hasPhrase, hotspotCampusSlug, hotspotPages, matchPhrases, normHotspotName, ORG_ALIAS_PHRASES, parseCsv, resolveCampusParam, samePlace, sortGroupFor } from "./hotspot-model";
+import { loadFounderSignals } from "./founder-signals";
 
 assert.equal(samePlace("Jerome Fisher M&T", "Jerome Fisher Management & Technology"), true);
 assert.equal(samePlace("M&T", "Jerome Fisher M&T"), true);
@@ -171,6 +172,33 @@ assert.equal(directory.find((card) => card.place === "Playa House")?.tier, "B");
 assert.equal(directory.find((card) => card.place === "Harvard St. Commons" && card.campus === "Boston")?.tier, "B");
 assert.equal(directory.find((card) => card.place === "Contrary Venture Partners")?.tier, "A");
 assert.equal(directory.filter((card) => card.place === "AGI House SF").length, 2);
+const pages = hotspotPages(directory);
+assert.equal(pages[0]?.campus, "Penn");
+assert.equal(pages[1]?.campus, "UC Berkeley");
+const universityNames = pages.filter((page) => page.placeKind === "campus").map((page) => page.campus);
+assert.deepEqual(universityNames.slice(0, 2), ["Penn", "UC Berkeley"]);
+const afterPins = universityNames.slice(2);
+assert.deepEqual(afterPins, [...afterPins].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" })));
+const lastUniversity = pages.map((page) => page.placeKind).lastIndexOf("campus");
+const firstCity = pages.findIndex((page) => page.placeKind === "city");
+const firstProgramme = pages.findIndex((page) => page.placeKind === "other");
+assert.ok(lastUniversity < firstCity);
+assert.ok(firstCity < firstProgramme);
+assert.equal(hotspotCampusSlug("Penn"), "penn");
+assert.equal(hotspotCampusSlug("UC Berkeley"), "uc-berkeley");
+assert.equal(hotspotCampusSlug("Queen's"), "queens");
+const pageLabels = pages.map((page) => page.campus);
+assert.equal(resolveCampusParam("penn", pageLabels), "Penn");
+assert.equal(resolveCampusParam("Penn", pageLabels), "Penn");
+assert.equal(resolveCampusParam("berkeley", pageLabels), "UC Berkeley");
+assert.equal(resolveCampusParam("uc-berkeley", pageLabels), "UC Berkeley");
+assert.equal(resolveCampusParam("UC Berkeley", pageLabels), "UC Berkeley");
+assert.equal(resolveCampusParam("univ_penn", pageLabels), "Penn");
+assert.equal(resolveCampusParam("no-such-school", pageLabels), null);
+for (const row of loadFounderSignals()) {
+  assert.equal(resolveCampusParam(row.campus, pageLabels), row.campus, row.signal);
+}
+
 const events = loadHotspotEvents();
 assert.ok(events.length >= 30);
 assert.equal(events[0]?.where, "Penn");
