@@ -52,3 +52,6 @@ next-env.d.ts
 /data/imports/linkedin-free-checkpoint.json
 /data/imports/linkedin-free-results.jsonl
 /data/imports/linkedin-free.log
+/data/imports/linkedin-direct-checkpoint.json
+/data/imports/linkedin-direct-results.jsonl
+/data/imports/linkedin-direct.log
