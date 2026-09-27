@@ -2,7 +2,7 @@
 // paid provider. Missing key, quota, and other errors are returned so the
 // browser can answer with WebLLM instead.
 
-import { ASK_SYSTEM_PROMPT, askUserPrompt, NOT_IN_THE_DATA } from "./ask-prompt";
+import { answerFromRecords, ASK_SYSTEM_PROMPT, askUserPrompt, NOT_IN_THE_DATA, refusedForLackOfData } from "./ask-prompt";
 import { retrieveAsk } from "./ask-retrieve";
 import type { AskHit } from "./ask-types";
 
@@ -247,6 +247,11 @@ function needsTextRetry(attempt: GeminiAttempt): boolean {
   );
 }
 
+function answerOrRecords(answer: string, matches: AskHit[], question: string): string {
+  if (matches.length > 0 && refusedForLackOfData(answer)) return answerFromRecords(matches, question);
+  return answer;
+}
+
 export async function answerWithGemini(question: string): Promise<AskGeminiSuccess | AskGeminiFailure> {
   const matches = retrieveAsk(question);
   if (matches.length === 0) {
@@ -257,7 +262,7 @@ export async function answerWithGemini(question: string): Promise<AskGeminiSucce
 
   const keyShape = { length: key.length, aiStudioPrefix: key.startsWith("AIza") };
   const first = await postGemini(GEMINI_GENERATE_URL, key, geminiGenerateBody(question, matches));
-  if (first.parsed.text) return { ok: true, engine: "gemini", answer: first.parsed.text, matches };
+  if (first.parsed.text) return { ok: true, engine: "gemini", answer: answerOrRecords(first.parsed.text, matches, question), matches };
 
   const reason = first.status ? classifyGeminiFailure(first.status, first.raw) : "error";
   if (reason === "quota" || first.status === 404) {
@@ -276,7 +281,7 @@ export async function answerWithGemini(question: string): Promise<AskGeminiSucce
   const second = await postGemini(GEMINI_GENERATE_URL, key, geminiGenerateBody(question, matches, { thinking: false, maxOutputTokens: 8192 }));
   if (second.parsed.text) {
     logAttempt(first, { keyShape, recovered: true });
-    return { ok: true, engine: "gemini", answer: second.parsed.text, matches };
+    return { ok: true, engine: "gemini", answer: answerOrRecords(second.parsed.text, matches, question), matches };
   }
   logAttempt(first, { keyShape, recovered: false });
   logAttempt(second, { keyShape, recovered: false });

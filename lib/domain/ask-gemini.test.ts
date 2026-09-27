@@ -6,7 +6,8 @@ assert.equal(GEMINI_MODEL, "gemini-3.8-flash");
 assert.equal(GEMINI_GENERATE_URL, "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent");
 const body = geminiGenerateBody("Who founded it?", [{ id: "p1", kind: "person", name: "Ada", href: "/founder/discover?founder=p1", detail: "Penn", campuses: ["univ_penn"], relatedIds: [], sources: [] }]);
 assert.deepEqual(body.systemInstruction, { parts: [{ text: body.systemInstruction.parts[0].text }] });
-assert.equal(typeof body.systemInstruction.parts[0].text, "string");
+assert.match(body.systemInstruction.parts[0].text, /recorded raises/i);
+assert.match(body.systemInstruction.parts[0].text, /Not in the data/);
 assert.equal(body.contents[0].role, "user");
 assert.equal(body.generationConfig.thinkingConfig?.thinkingLevel, "low");
 assert.equal(body.generationConfig.thinkingConfig != null && "thinkingBudget" in body.generationConfig.thinkingConfig, false);
@@ -151,6 +152,14 @@ async function main() {
   assert.equal(retryConfig.maxOutputTokens, 8192);
   assert.equal(retried.ok, true);
   if (retried.ok) assert.equal(retried.answer, "Northwestern startups with recorded raises.");
+
+  mockFetch(() => ({ status: 200, json: { candidates: [{ finishReason: "STOP", content: { parts: [{ text: "Not in the data." }] } }] } }));
+  const refused = await answerWithGemini("Which Northwestern startups raised money?");
+  assert.equal(refused.ok, true);
+  if (refused.ok) {
+    assert.notEqual(refused.answer, "Not in the data.");
+    assert.match(refused.answer, /HaptE/);
+  }
 
   globalThis.fetch = originalFetch;
 

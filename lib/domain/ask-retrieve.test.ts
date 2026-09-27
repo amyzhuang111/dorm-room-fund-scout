@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { fallbackAnswer, NOT_IN_THE_DATA } from "./ask-prompt";
+import { answerFromRecords, fallbackAnswer, NOT_IN_THE_DATA } from "./ask-prompt";
 import { retrieveAsk } from "./ask-retrieve";
 
 const clubs = retrieveAsk("top-tier clubs with the most founders");
@@ -44,6 +44,37 @@ const program = retrieveAsk("Which startups are in Penn Health-Tech?");
 assert.ok(program.some((hit) => /Penn Health-Tech/i.test(hit.detail)));
 
 assert.equal(retrieveAsk("xqvzz mplkqq").length, 0);
+
+const northwestern = retrieveAsk("Which Northwestern startups raised money?");
+assert.ok(northwestern.length > 0);
+assert.ok(northwestern.every((hit) => hit.kind === "startup"));
+assert.ok(northwestern.some((hit) => hit.name === "HaptE" && hit.campuses.includes("univ_northwestern")));
+const northwesternAnswer = answerFromRecords(northwestern, "Which Northwestern startups raised money?");
+assert.notEqual(northwesternAnswer, NOT_IN_THE_DATA);
+assert.match(northwesternAnswer, /HaptE/);
+assert.match(northwesternAnswer, /No recorded raise is attached yet/);
+
+const seriesA = retrieveAsk("Stanford startups that raised a Series A");
+assert.ok(seriesA.length > 0);
+assert.ok(seriesA.every((hit) => hit.kind === "startup" || hit.kind === "investor"));
+const seriesNames = seriesA.map((hit) => hit.name);
+for (const name of ["SkyPilot", "Phia", "Cleva"]) {
+  assert.ok(seriesNames.includes(name), name);
+}
+assert.ok(/round:|funding news:|total:/i.test(seriesA[0]?.detail ?? ""));
+assert.match(seriesA.find((hit) => hit.name === "SkyPilot")?.detail ?? "", /Seed|\$20M|Lux/i);
+assert.match(answerFromRecords(seriesA, "Stanford startups that raised a Series A"), /These have recorded raises:/);
+assert.match(answerFromRecords(seriesA, "Stanford startups that raised a Series A"), /SkyPilot/);
+
+const pennYc = retrieveAsk("Which Penn startups are backed by YC?");
+assert.ok(pennYc.some((hit) => hit.kind === "startup" && hit.campuses.includes("univ_penn") && /Y Combinator/i.test(hit.detail)));
+assert.ok(pennYc.filter((hit) => hit.kind === "startup").length >= 8);
+
+const robotics = retrieveAsk("Top MIT founders in robotics");
+assert.ok(robotics.some((hit) => hit.kind === "person" && hit.campuses.includes("univ_mit")));
+assert.equal(robotics[0]?.name, "Anubhav Guha");
+assert.match(robotics[0]?.detail ?? "", /Sensei|Robotics/i);
+assert.ok(robotics.some((hit) => /Vision Lab|EverCurrent|Ember/i.test(`${hit.name} ${hit.detail}`)));
 
 console.log("ask-retrieve tests ok", {
   clubs: clubs.slice(0, 3).map((hit) => hit.name),

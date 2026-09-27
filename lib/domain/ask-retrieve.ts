@@ -54,6 +54,33 @@ function mentions(question: string, phrase: string): boolean {
   return new RegExp(`\\b${escapeReg(phrase)}\\b`, "i").test(question);
 }
 
+function sectorIn(question: string): string | undefined {
+  if (/\b(?:digital[\s-]?health|health[\s-]?tech|health[\s-]?care|med[\s-]?tech|bio[\s-]?tech)\b/i.test(question)) return "healthcare";
+  if (/\brobotics?\b/i.test(question)) return "robotics";
+  if (/\bartificial intelligence\b|\bai\b/i.test(question)) return "AI";
+  if (/\bfintech\b/i.test(question)) return "fintech";
+  if (/\bclimate\b/i.test(question)) return "climate";
+  if (/\bedtech\b/i.test(question)) return "edtech";
+  if (/\b(?:crypto|web3)\b/i.test(question)) return "crypto";
+  if (/\bcybersecurity\b/i.test(question)) return "cybersecurity";
+  if (/\bdevtools\b|\bdev tools\b/i.test(question)) return "dev tools";
+  return undefined;
+}
+
+function fundingIntent(question: string): { active: boolean; stage?: string } {
+  const series = question.match(/\bseries\s+([a-e])\b/i);
+  const stage = series
+    ? `series ${series[1].toLowerCase()}`
+    : /\bpre[-\s]?seed\b/i.test(question)
+      ? "pre-seed"
+      : /\bseed\b/i.test(question)
+        ? "seed"
+        : undefined;
+  const raised = /\b(raised|raises|raising|funding|funded|fundraise|investors?)\b/i.test(question);
+  const backed = /\bbacked by\b/i.test(question);
+  return { active: Boolean(stage) || raised || backed, stage };
+}
+
 function campusIn(question: string): string | undefined {
   const names = CAMPUSES.flatMap((campus) => [campus.shortLabel, campus.name, ...campus.aliases].map((name) => ({ name, label: campus.shortLabel })));
   names.sort((a, b) => b.name.length - a.name.length);
@@ -117,14 +144,9 @@ export function retrieveAsk(question: string): AskHit[] {
       : /\bcurrent students?\b/i.test(q)
         ? "current_student"
         : undefined;
-  const sector = /\b(?:digital[\s-]?health|health[\s-]?tech|health[\s-]?care|med[\s-]?tech|bio[\s-]?tech)\b/i.test(q)
-    ? "healthcare"
-    : /\bartificial intelligence\b|\bai\b/i.test(q)
-      ? "AI"
-      : /\bfintech\b/i.test(q)
-        ? "fintech"
-        : undefined;
+  const sector = sectorIn(q);
   const program = programInQuestion(q);
+  const funding = fundingIntent(q);
   const city = /\bnyc\b|\bnew york\b/i.test(q) ? "NYC" : /\bsan francisco\b|\bsf\b/i.test(q) ? "San Francisco" : undefined;
   const investor = /\ba16z speedrun\b/i.test(q)
     ? "a16z speedrun"
@@ -136,13 +158,33 @@ export function retrieveAsk(question: string): AskHit[] {
   const founderOnly = /\bfounders?\b/i.test(q);
   const building = /\bbuilding\b/i.test(q);
   const clubRank = /\bclubs?\b/i.test(q) && /\b(top|most|tier)\b/i.test(q);
+  const startupFocus = /\b(startups?|companies)\b/i.test(q) && !founderOnly;
+  const top = /\btop\b/i.test(q);
 
   if (clubRank) {
     addHits(hits, seen, searchOrganizations({ typeIncludes: "club", limit: 15, minFounders: 1 }).matches);
     return hits.slice(0, LIMIT);
   }
 
-  const personFiltered = Boolean(campus || standing || enrollment || sector || city || investor || organization || founderOnly || building);
+  const startupMatches = () =>
+    searchStartups({
+      campus,
+      sector,
+      city,
+      investor,
+      program,
+      stage: funding.stage,
+      funding: funding.active || undefined,
+      limit: startupFocus ? LIMIT : 20,
+    }).matches;
+
+  if (startupFocus) {
+    addHits(hits, seen, startupMatches());
+    if (investor) addHits(hits, seen, searchInvestors({ name: investor, limit: 3 }).matches);
+    return hits.slice(0, LIMIT);
+  }
+
+  const personFiltered = Boolean(campus || standing || enrollment || sector || city || investor || organization || founderOnly || building || funding.active);
   if (personFiltered) {
     addHits(
       hits,
@@ -157,18 +199,19 @@ export function retrieveAsk(question: string): AskHit[] {
         organization,
         founderOnly: founderOnly || undefined,
         building: building || undefined,
+        sort: top ? "tier" : undefined,
         limit: 20,
       }).matches
     );
   }
 
   const personOnly = Boolean(standing || enrollment || organization);
-  if (!personOnly && (sector || city || investor || campus || program)) {
-    addHits(hits, seen, searchStartups({ campus, sector, city, investor, program, limit: 20 }).matches);
+  if (!personOnly && (sector || city || investor || campus || program || funding.active)) {
+    addHits(hits, seen, startupMatches());
   }
   if (investor) addHits(hits, seen, searchInvestors({ name: investor, limit: 3 }).matches);
 
-  if (!personFiltered && !clubRank && !program) {
+  if (!personFiltered && !clubRank && !program && !funding.active) {
     const tokens = q
       .toLowerCase()
       .split(/[^a-z0-9]+/)
