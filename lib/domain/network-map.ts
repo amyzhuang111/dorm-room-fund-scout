@@ -1,12 +1,11 @@
 // Full evidence graph for the Network map. Nodes and edges come from
 // affiliations, founder roles, program memberships, sourced investor facts,
-// and confirmed DRF portfolio matches. The five DRF regions each form one
-// tight cluster. Region membership is the dominant force: a campus stays in
-// its color group, and a small gap separates the groups. Cosine similarity
-// on programs, sectors, investors, and club types may only nudge campuses
-// inside that group, and may shift whole regions relative to each other.
-// Campus-specific hubs sit inside their school. National programs sit in the
-// seams between the regions they link, nearer the stronger link.
+// and confirmed DRF portfolio matches. The five DRF regions are one connected
+// cloud. Region color is a soft affinity: campuses of the same color sit near
+// each other, and a campus does not sit deep inside another region's core,
+// but the borders overlap. Shared programs, investors, and cosine similarity
+// pull those borders together. Campus-specific hubs sit inside their school.
+// National programs sit in the connective space between the regions they link.
 // Explicit program lines are drawn on top of this layout.
 
 import fs from "node:fs";
@@ -133,7 +132,7 @@ interface SimNode {
   sector?: string | null;
 }
 
-const LAYOUT_VERSION = "35";
+const LAYOUT_VERSION = "36";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -1389,12 +1388,11 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
   pullCampusSatellites(live, primary);
   // The presence file puts Waterloo on Boston & Northeast, same as Toronto. Sit it beside Toronto, not in the Harvard/MIT knot.
   seatWaterlooBesideToronto(live, primary);
-  // Draw each region's campuses into one cluster, then leave a small gap between clusters.
+  // Draw each region's campuses into one cluster. Affinity circles touch, so the people clouds overlap.
   pullTowardRegionCentroids(live, primary);
-  // Similarity may rearrange campuses inside a region and slide whole regions. People are packed afterwards.
-  pullCampusesBySimilarity(live, edges, primary);
+  // Similarity rearranges campuses inside a region, leans shared-program borders together, and lets regions overlap slightly.
+  pullCampusesBySimilarity(live, edges, primary, hubMembers);
   packCampusDiscs(live, primary);
-  separateColoredClouds(live, primary);
   const campusOf = new Map(primary);
   for (const [id, weights] of bridgeWeight) {
     if (campusOf.has(id)) continue;
@@ -1408,9 +1406,9 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     }
     if (bestId) campusOf.set(id, bestId);
   }
-  placeLinkedPrograms(live, hubMembers, primary, campusOf);
-  // Hubs slide toward campuses and hubs with a similar profile. Campus discs stay pinned.
-  pullHubsBySimilarity(live, edges, primary);
+  const bridges = placeLinkedPrograms(live, hubMembers, primary, campusOf);
+  // Hubs slide toward similar campuses. Bridge programs stay pinned in the space between regions.
+  pullHubsBySimilarity(live, edges, primary, bridges);
   const markers: RegionMarker[] = [];
   for (const region of REGIONS) {
     const members = campusesByRegion.get(region.id) ?? [];
@@ -1439,10 +1437,11 @@ const CANVAS_REGION_LABEL: Record<string, string> = {
 };
 
 /**
- * Similarity never pulls a campus into another color. Springs run inside one
- * region, then whole regions slide, staying at least REGION_GAP apart.
+ * Same-color campuses stay a group. Springs inside a region tighten that
+ * group. Springs across regions, including shared programs and investors,
+ * lean the borders together. Whole regions may overlap slightly.
  */
-function pullCampusesBySimilarity(live: LiveNode[], edges: MapEdge[], primary: Map<string, string>) {
+function pullCampusesBySimilarity(live: LiveNode[], edges: MapEdge[], primary: Map<string, string>, hubMembers: Map<string, string[]>) {
   const vectors = layoutVectors(live, edges, primary);
   const counts = memberCounts(primary, live);
   const radiusOf = (id: string) => discRadius(counts.get(id) ?? 1);
@@ -1514,7 +1513,7 @@ function pullCampusesBySimilarity(live: LiveNode[], edges: MapEdge[], primary: M
   seatWaterlooBesideToronto(live, primary);
   settleCampusGaps(live, primary);
   const before = regionBodiesFrom(byRegion, radiusOf);
-  const bodies = [...before.entries()].map(([id, body]) => ({ id, x: body.x, y: body.y, r: body.r }));
+  const bodies = [...before.entries()].map(([id, body]) => ({ id, x: body.x, y: body.y, r: regionAffinityRadius(body.core) }));
   const regionLinks: { a: string; b: string; sim: number }[] = [];
   for (let i = 0; i < bodies.length; i++) {
     for (let j = i + 1; j < bodies.length; j++) {
@@ -1527,7 +1526,8 @@ function pullCampusesBySimilarity(live: LiveNode[], edges: MapEdge[], primary: M
       });
     }
   }
-  relaxRegionBodies(bodies, regionLinks, { iterations: 28, anchor: 0.55, spring: 0.34, gap: REGION_GAP, spread: 22 });
+  // Affinity circles may overlap a little. Dissimilar regions stay near a touch, not a gap of white.
+  relaxRegionBodies(bodies, regionLinks, { iterations: 32, anchor: 0.48, spring: 0.42, gap: -6, spread: 10 });
   const next = new Map(bodies.map((body) => [body.id, body]));
   for (const [regionId, group] of byRegion) {
     const from = before.get(regionId);
@@ -1542,10 +1542,256 @@ function pullCampusesBySimilarity(live: LiveNode[], edges: MapEdge[], primary: M
       campus.ty = campus.y;
     }
   }
+  const cores = regionCores(byRegion);
+  const cross = mergeSimilarityLinks([
+    ...topCrossRegionLinks([...groupOf.keys()], vectors, (id) => groupOf.get(id), 3, 0.18),
+    ...sharedBridgeLinks(live, hubMembers, primary, groupOf),
+  ]);
+  leanCampusesAcrossRegions(byRegion, cross);
+  settleCampusGaps(live, primary);
+  recenterRegions(byRegion, cores);
+  holdRegionCores(byRegion, cores);
+  seatWaterlooBesideToronto(live, primary);
 }
 
-/** Slide free hubs toward similar campuses and hubs. Campus positions stay fixed. */
-function pullHubsBySimilarity(live: LiveNode[], edges: MapEdge[], primary: Map<string, string>) {
+/** Cross-region leans may shift a border campus, but the color group's center stays put. */
+function recenterRegions(byRegion: Map<string, LiveNode[]>, cores: Map<string, { x: number; y: number; r: number }>) {
+  for (const [regionId, group] of byRegion) {
+    const own = cores.get(regionId);
+    if (!own || !group.length) continue;
+    let x = 0;
+    let y = 0;
+    for (const campus of group) {
+      x += campus.x;
+      y += campus.y;
+    }
+    x /= group.length;
+    y /= group.length;
+    const dx = own.x - x;
+    const dy = own.y - y;
+    if (Math.hypot(dx, dy) < 0.05) continue;
+    for (const campus of group) {
+      campus.x += dx;
+      campus.y += dy;
+      campus.tx = campus.x;
+      campus.ty = campus.y;
+    }
+  }
+}
+
+/** Keep the strongest spring when cosine and a shared program both link the same campuses. */
+function mergeSimilarityLinks(links: { a: string; b: string; sim: number }[]): { a: string; b: string; sim: number }[] {
+  const best = new Map<string, { a: string; b: string; sim: number }>();
+  for (const link of links) {
+    if (link.a === link.b) continue;
+    const a = link.a < link.b ? link.a : link.b;
+    const b = link.a < link.b ? link.b : link.a;
+    const key = `${a}|${b}`;
+    const prev = best.get(key);
+    if (!prev || link.sim > prev.sim) best.set(key, { a, b, sim: link.sim });
+  }
+  return [...best.values()];
+}
+
+/** Top campuses in other regions by cosine. Same-color neighbors are ignored. */
+function topCrossRegionLinks(
+  ids: string[],
+  vectors: Map<string, Map<string, number>>,
+  groupOf: (id: string) => string | undefined,
+  k: number,
+  minSim: number,
+): { a: string; b: string; sim: number }[] {
+  const ranked = new Map<string, { other: string; sim: number }[]>();
+  for (const id of ids) ranked.set(id, []);
+  for (let i = 0; i < ids.length; i++) {
+    const left = vectors.get(ids[i]);
+    if (!left?.size) continue;
+    for (let j = i + 1; j < ids.length; j++) {
+      if (groupOf(ids[i]) === groupOf(ids[j])) continue;
+      const right = vectors.get(ids[j]);
+      if (!right?.size) continue;
+      const sim = cosineSimilarity(left, right);
+      if (sim < minSim) continue;
+      ranked.get(ids[i])!.push({ other: ids[j], sim });
+      ranked.get(ids[j])!.push({ other: ids[i], sim });
+    }
+  }
+  const seen = new Set<string>();
+  const out: { a: string; b: string; sim: number }[] = [];
+  for (const [id, list] of ranked) {
+    list.sort((a, b) => b.sim - a.sim || a.other.localeCompare(b.other));
+    let kept = 0;
+    for (const row of list) {
+      if (kept >= k) break;
+      kept += 1;
+      const key = id < row.other ? `${id}|${row.other}` : `${row.other}|${id}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push({ a: id, b: row.other, sim: row.sim });
+    }
+  }
+  return out;
+}
+
+/**
+ * Campuses that share a national program or investor pull toward each other,
+ * so the schools on that program sit on the facing borders.
+ */
+function sharedBridgeLinks(
+  live: LiveNode[],
+  hubMembers: Map<string, string[]>,
+  primary: Map<string, string>,
+  groupOf: Map<string, string>,
+): { a: string; b: string; sim: number }[] {
+  const byId = new Map(live.map((node) => [node.id, node]));
+  const best = new Map<string, number>();
+  for (const [hubId, members] of hubMembers) {
+    const hub = byId.get(hubId);
+    if (!hub) continue;
+    const byRegion = new Map<string, { id: string; n: number }[]>();
+    const seen = new Set<string>();
+    for (const memberId of members) {
+      if (seen.has(memberId)) continue;
+      seen.add(memberId);
+      const campusId = primary.get(memberId);
+      const regionId = campusId ? groupOf.get(campusId) : undefined;
+      if (!campusId || !regionId) continue;
+      const list = byRegion.get(regionId) ?? [];
+      const row = list.find((item) => item.id === campusId);
+      if (row) row.n += 1;
+      else list.push({ id: campusId, n: 1 });
+      byRegion.set(regionId, list);
+    }
+    if (byRegion.size < 2) continue;
+    const weight = featuredNationalKey(hub.label ?? "") ? 0.92 : hub.type === "investor" ? 0.7 : 0.62;
+    const tops = [...byRegion.values()].map((list) => list.sort((a, b) => b.n - a.n || a.id.localeCompare(b.id)).slice(0, 2));
+    for (let i = 0; i < tops.length; i++) {
+      for (let j = i + 1; j < tops.length; j++) {
+        for (const a of tops[i]) {
+          for (const b of tops[j]) {
+            const key = a.id < b.id ? `${a.id}|${b.id}` : `${b.id}|${a.id}`;
+            best.set(key, Math.max(best.get(key) ?? 0, weight));
+          }
+        }
+      }
+    }
+  }
+  return [...best.entries()].map(([key, sim]) => {
+    const [a, b] = key.split("|");
+    return { a, b, sim };
+  });
+}
+
+/** Pull campuses toward similar schools in other regions without unstacking a color group. */
+function leanCampusesAcrossRegions(byRegion: Map<string, LiveNode[]>, links: { a: string; b: string; sim: number }[]) {
+  const points = new Map<string, LiveNode>();
+  for (const group of byRegion.values()) {
+    for (const campus of group) points.set(campus.id, campus);
+  }
+  const start = new Map([...points].map(([id, campus]) => [id, { x: campus.x, y: campus.y }]));
+  const live = links.filter((link) => points.has(link.a) && points.has(link.b) && link.sim > 0);
+  for (let iter = 0; iter < 18; iter++) {
+    const vx = new Map<string, number>();
+    const vy = new Map<string, number>();
+    const add = (id: string, x: number, y: number) => {
+      vx.set(id, (vx.get(id) ?? 0) + x);
+      vy.set(id, (vy.get(id) ?? 0) + y);
+    };
+    for (const [id, campus] of points) {
+      const origin = start.get(id);
+      if (!origin) continue;
+      add(id, (origin.x - campus.x) * 0.55, (origin.y - campus.y) * 0.55);
+    }
+    for (const link of live) {
+      const a = points.get(link.a)!;
+      const b = points.get(link.b)!;
+      let dx = b.x - a.x;
+      let dy = b.y - a.y;
+      let dist = Math.hypot(dx, dy);
+      if (dist < 1e-3) continue;
+      const ideal = 22 + (1 - Math.min(1, link.sim)) * 26;
+      if (dist <= ideal) continue;
+      const mag = (Math.min(link.sim, 1) * 0.4 * (dist - ideal)) / dist;
+      add(a.id, dx * mag, dy * mag);
+      add(b.id, -dx * mag, -dy * mag);
+    }
+    for (const [id, campus] of points) {
+      let x = vx.get(id) ?? 0;
+      let y = vy.get(id) ?? 0;
+      const step = Math.hypot(x, y);
+      if (step > 5) {
+        x = (x / step) * 5;
+        y = (y / step) * 5;
+      }
+      if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+      campus.x += x;
+      campus.y += y;
+      campus.tx = campus.x;
+      campus.ty = campus.y;
+    }
+  }
+}
+
+function regionCores(byRegion: Map<string, LiveNode[]>): Map<string, { x: number; y: number; r: number }> {
+  const cores = new Map<string, { x: number; y: number; r: number }>();
+  for (const [regionId, group] of byRegion) {
+    let x = 0;
+    let y = 0;
+    for (const campus of group) {
+      x += campus.x;
+      y += campus.y;
+    }
+    x /= group.length || 1;
+    y /= group.length || 1;
+    let r = 14;
+    for (const campus of group) r = Math.max(r, Math.hypot(campus.x - x, campus.y - y));
+    cores.set(regionId, { x, y, r });
+  }
+  return cores;
+}
+
+/**
+ * Color stays an affinity. A campus may sit on another region's border, but
+ * not in the inner part of that core, and it stays near its own group.
+ */
+function holdRegionCores(byRegion: Map<string, LiveNode[]>, cores: Map<string, { x: number; y: number; r: number }>) {
+  for (let pass = 0; pass < 8; pass++) {
+    for (const [regionId, group] of byRegion) {
+      const own = cores.get(regionId);
+      if (!own) continue;
+      const leash = Math.max(18, own.r * 1.2);
+      for (const campus of group) {
+        let dx = campus.x - own.x;
+        let dy = campus.y - own.y;
+        let dist = Math.hypot(dx, dy);
+        if (dist > leash && dist > 0) {
+          campus.x = own.x + (dx / dist) * leash;
+          campus.y = own.y + (dy / dist) * leash;
+        }
+        for (const [otherId, foreign] of cores) {
+          if (otherId === regionId) continue;
+          const fx = campus.x - foreign.x;
+          const fy = campus.y - foreign.y;
+          const fd = Math.hypot(fx, fy);
+          const inner = Math.max(16, foreign.r * 0.62);
+          if (fd >= inner) continue;
+          if (fd < 1e-3) {
+            campus.x = foreign.x + inner;
+            campus.y = foreign.y;
+          } else {
+            campus.x = foreign.x + (fx / fd) * inner;
+            campus.y = foreign.y + (fy / fd) * inner;
+          }
+        }
+        campus.tx = campus.x;
+        campus.ty = campus.y;
+      }
+    }
+  }
+}
+
+/** Slide free hubs toward similar campuses and hubs. Campus discs and bridge programs stay fixed. */
+function pullHubsBySimilarity(live: LiveNode[], edges: MapEdge[], primary: Map<string, string>, bridgeIds: Set<string>) {
   const vectors = layoutVectors(live, edges, primary);
   const counts = memberCounts(primary, live);
   const campuses = live.filter((node) => node.type === "campus");
@@ -1553,7 +1799,7 @@ function pullHubsBySimilarity(live: LiveNode[], edges: MapEdge[], primary: Map<s
   if (!hubs.length) return;
   const points: SimilarityPoint[] = [
     ...campuses.map((node) => ({ id: node.id, x: node.x, y: node.y, r: discRadius(counts.get(node.id) ?? 1), pinned: true })),
-    ...hubs.map((node) => ({ id: node.id, x: node.x, y: node.y, r: 8 })),
+    ...hubs.map((node) => ({ id: node.id, x: node.x, y: node.y, r: 8, pinned: bridgeIds.has(node.id) })),
   ];
   const links = nearestSimilar(
     points.map((point) => point.id),
@@ -1572,6 +1818,12 @@ function pullHubsBySimilarity(live: LiveNode[], edges: MapEdge[], primary: Map<s
     hub.ty = next.y;
   }
   const placed = new Map<string, { x: number; y: number }>();
+  for (const id of bridgeIds) {
+    const node = live.find((item) => item.id === id);
+    if (!node) continue;
+    const key = featuredNationalKey(node.label ?? "");
+    if (key && !placed.has(key)) placed.set(key, { x: node.x, y: node.y });
+  }
   for (const hub of hubs) {
     const key = featuredNationalKey(hub.label ?? "");
     if (key && !placed.has(key)) placed.set(key, { x: hub.x, y: hub.y });
@@ -1796,8 +2048,13 @@ function seatWaterlooBesideToronto(live: LiveNode[], primary: Map<string, string
   waterloo.y = toronto.y + (dy / len) * gap;
 }
 
-/** Clear space between region bounding circles, in layout units. Small once the cloud is fitted. */
-const REGION_GAP = 14;
+/**
+ * Radius used when seating whole regions. It is the campus-center core plus
+ * a small pad, so people discs (which are larger) overlap the next color.
+ */
+function regionAffinityRadius(core: number): number {
+  return Math.max(16, core * 0.92);
+}
 
 /** Where each regional team sits once its campuses have been pulled into one cluster. Same angles as the previous arrangement. */
 const CLUSTER_ANGLE: Record<string, number> = {
@@ -1810,9 +2067,9 @@ const CLUSTER_ANGLE: Record<string, number> = {
 
 /**
  * Pull every campus in a region toward that region's centroid, keeping discs
- * from covering each other, then translate each cluster so neighboring
- * regions keep a small gap. People and internal clubs are repacked onto
- * the campuses afterwards, so they come with the blob.
+ * from covering each other, then set the clusters so their affinity circles
+ * touch. People clouds extend past that circle and overlap. People and
+ * internal clubs are repacked onto the campuses afterwards.
  */
 function pullTowardRegionCentroids(live: LiveNode[], primary: Map<string, string>) {
   const counts = memberCounts(primary, live);
@@ -1964,8 +2221,8 @@ function pinWaterlooInGroup(group: LiveNode[], radiusOf: (id: string) => number)
   waterloo.y = toronto.y + (dy / len) * gap;
 }
 
-function regionBodiesFrom(byRegion: Map<string, LiveNode[]>, radiusOf: (id: string) => number): Map<string, { x: number; y: number; r: number }> {
-  const bodies = new Map<string, { x: number; y: number; r: number }>();
+function regionBodiesFrom(byRegion: Map<string, LiveNode[]>, radiusOf: (id: string) => number): Map<string, { x: number; y: number; r: number; core: number }> {
+  const bodies = new Map<string, { x: number; y: number; r: number; core: number }>();
   for (const [regionId, group] of byRegion) {
     let x = 0;
     let y = 0;
@@ -1976,18 +2233,23 @@ function regionBodiesFrom(byRegion: Map<string, LiveNode[]>, radiusOf: (id: stri
     x /= group.length || 1;
     y /= group.length || 1;
     let r = 12;
-    for (const campus of group) r = Math.max(r, Math.hypot(campus.x - x, campus.y - y) + radiusOf(campus.id));
-    bodies.set(regionId, { x, y, r });
+    let core = 14;
+    for (const campus of group) {
+      const dist = Math.hypot(campus.x - x, campus.y - y);
+      r = Math.max(r, dist + radiusOf(campus.id));
+      core = Math.max(core, dist);
+    }
+    bodies.set(regionId, { x, y, r, core });
   }
   return bodies;
 }
 
-function regionClusterCenters(bodies: Map<string, { x: number; y: number; r: number }>): Map<string, { x: number; y: number }> {
-  // Pack on the full bounding circle. A campus of one color cannot land inside another region.
+function regionClusterCenters(bodies: Map<string, { x: number; y: number; r: number; core: number }>): Map<string, { x: number; y: number }> {
+  // Pack on the campus-center core plus a pad. People clouds extend past it and overlap.
   return packRegionCenters(
-    [...bodies.entries()].map(([id, body]) => ({ id, r: Math.max(16, body.r) })),
+    [...bodies.entries()].map(([id, body]) => ({ id, r: regionAffinityRadius(body.core) })),
     (id) => CLUSTER_ANGLE[id] ?? 0,
-    REGION_GAP,
+    0,
   );
 }
 
@@ -2014,59 +2276,6 @@ function pullCampusSatellites(live: LiveNode[], primary: Map<string, string>) {
       if (dist <= want + 1) continue;
       campus.x = anchor.x + (dx / dist) * want;
       campus.y = anchor.y + (dy / dist) * want;
-    }
-  }
-}
-
-/**
- * People are already seated on their campus. If two colored clouds still
- * overlap, slide the whole regions apart and keep a small gap.
- */
-function separateColoredClouds(live: LiveNode[], primary: Map<string, string>) {
-  const campuses = live.filter((node) => node.type === "campus");
-  const regionOf = new Map(campuses.map((campus) => [campus.id, campus.regionId || "international"]));
-  const members = new Map<string, LiveNode[]>();
-  const claim = (regionId: string, node: LiveNode) => {
-    const list = members.get(regionId) ?? [];
-    list.push(node);
-    members.set(regionId, list);
-  };
-  for (const campus of campuses) claim(campus.regionId || "international", campus);
-  for (const node of live) {
-    if (node.type !== "person" && node.type !== "startup") continue;
-    const campusId = primary.get(node.id);
-    const regionId = campusId ? regionOf.get(campusId) : undefined;
-    if (regionId) claim(regionId, node);
-  }
-  const before = new Map<string, { x: number; y: number; r: number }>();
-  for (const [regionId, group] of members) {
-    let x = 0;
-    let y = 0;
-    for (const node of group) {
-      x += node.x;
-      y += node.y;
-    }
-    x /= group.length || 1;
-    y /= group.length || 1;
-    let r = 8;
-    for (const node of group) r = Math.max(r, Math.hypot(node.x - x, node.y - y));
-    before.set(regionId, { x, y, r });
-  }
-  const bodies = [...before.entries()].map(([id, body]) => ({ id, x: body.x, y: body.y, r: body.r }));
-  relaxRegionBodies(bodies, [], { iterations: 1, anchor: 0, spring: 0, gap: REGION_GAP, spread: 0 });
-  const next = new Map(bodies.map((body) => [body.id, body]));
-  for (const [regionId, group] of members) {
-    const from = before.get(regionId);
-    const to = next.get(regionId);
-    if (!from || !to) continue;
-    const dx = to.x - from.x;
-    const dy = to.y - from.y;
-    if (Math.hypot(dx, dy) < 0.05) continue;
-    for (const node of group) {
-      node.x += dx;
-      node.y += dy;
-      node.tx = node.x;
-      node.ty = node.y;
     }
   }
 }
@@ -2125,8 +2334,39 @@ function packCampusDiscs(live: LiveNode[], primary: Map<string, string>) {
   }
 }
 
-/** National programs that reach several regions sit in the gap between those clusters, closer to the stronger link. */
-function placeLinkedPrograms(live: LiveNode[], hubMembers: Map<string, string[]>, primary: Map<string, string>, campusOf: Map<string, string>) {
+/** Push a point out to just past each region's campus-center core, toward the other regions. */
+function outsideRegionCores(x: number, y: number, centers: { x: number; y: number; core: number }[]): { x: number; y: number } {
+  let px = x;
+  let py = y;
+  for (let iter = 0; iter < 8; iter++) {
+    let moved = false;
+    for (const center of centers) {
+      let dx = px - center.x;
+      let dy = py - center.y;
+      let dist = Math.hypot(dx, dy);
+      const edge = center.core + 6;
+      if (dist >= edge) continue;
+      if (dist < 1) {
+        const other = centers.find((item) => item !== center);
+        dx = (other?.x ?? center.x + 1) - center.x;
+        dy = (other?.y ?? center.y) - center.y;
+        dist = Math.hypot(dx, dy) || 1;
+      }
+      px = center.x + (dx / dist) * edge;
+      py = center.y + (dy / dist) * edge;
+      moved = true;
+    }
+    if (!moved) break;
+  }
+  return { x: px, y: py };
+}
+
+/**
+ * Programs that reach two or more regions sit at the weighted midpoint of
+ * those regions — the connective space, not a ring outside the clouds.
+ * Returns the hub ids that should stay pinned there.
+ */
+function placeLinkedPrograms(live: LiveNode[], hubMembers: Map<string, string[]>, primary: Map<string, string>, campusOf: Map<string, string>): Set<string> {
   const campuses = new Map(live.filter((node) => node.type === "campus").map((node) => [node.id, node]));
   const counts = memberCounts(primary, live);
   const ranked = live
@@ -2161,23 +2401,33 @@ function placeLinkedPrograms(live: LiveNode[], hubMembers: Map<string, string[]>
     byRegion.set(key, list);
   }
   const bodies = regionBodiesFrom(byRegion, radiusOf);
+  let cloudX = 0;
+  let cloudY = 0;
+  for (const body of bodies.values()) {
+    cloudX += body.x;
+    cloudY += body.y;
+  }
+  cloudX /= bodies.size || 1;
+  cloudY /= bodies.size || 1;
   const taken: { x: number; y: number }[] = [];
-  const clearOfClusters = (x: number, y: number) => {
+  const clearOfCampuses = (x: number, y: number, bridging: boolean) => {
     for (const campus of campuses.values()) {
-      if (Math.hypot(x - campus.x, y - campus.y) < radiusOf(campus.id) + 10) return false;
+      if (Math.hypot(x - campus.x, y - campus.y) < Math.max(12, radiusOf(campus.id) * 0.42)) return false;
     }
-    for (const body of bodies.values()) {
-      if (Math.hypot(x - body.x, y - body.y) < body.r + 8) return false;
+    if (bridging) {
+      for (const body of bodies.values()) {
+        if (Math.hypot(x - body.x, y - body.y) < body.core + 4) return false;
+      }
     }
-    return taken.every((prev) => Math.hypot(prev.x - x, prev.y - y) >= 15);
+    return taken.every((prev) => Math.hypot(prev.x - x, prev.y - y) >= 16);
   };
-  const nudgeClear = (aim: { x: number; y: number }) => {
-    if (clearOfClusters(aim.x, aim.y)) return aim;
-    for (let extra = 8; extra <= 56; extra += 8) {
+  const nudgeClear = (aim: { x: number; y: number }, bridging: boolean) => {
+    if (clearOfCampuses(aim.x, aim.y, bridging)) return aim;
+    for (let extra = 6; extra <= 48; extra += 6) {
       for (let step = 0; step < 18; step++) {
         const spin = (step / 18) * Math.PI * 2;
         const spot = { x: aim.x + Math.cos(spin) * extra, y: aim.y + Math.sin(spin) * extra };
-        if (clearOfClusters(spot.x, spot.y)) return spot;
+        if (clearOfCampuses(spot.x, spot.y, bridging)) return spot;
       }
     }
     return aim;
@@ -2214,15 +2464,25 @@ function placeLinkedPrograms(live: LiveNode[], hubMembers: Map<string, string[]>
     laneCount.set(key, n + 1);
     if (n === 0) return 0;
     const side = n % 2 === 0 ? 1 : -1;
-    return side * Math.ceil(n / 2) * 18;
+    return side * Math.ceil(n / 2) * 12;
   };
+  const bridges = new Set<string>();
+  const bridgeKeys = new Set<string>();
   for (const node of chosen) {
     const links = regionLinks(node);
     const strong = links[0];
     const body = strong ? bodies.get(strong.id) : undefined;
+    const featured = Boolean(featuredNationalKey(node.label ?? ""));
     let aim: { x: number; y: number } | null = null;
+    let bridging = false;
     if (body && strong) {
-      const linked = links.filter((row, index) => bodies.has(row.id) && (index === 0 || row.count >= Math.max(2, strong.count * 0.12)));
+      const linked = links.filter((row, index) => {
+        if (!bodies.has(row.id)) return false;
+        if (index === 0) return true;
+        if (featured) return row.count >= 1;
+        return row.count >= Math.max(2, strong.count * 0.12);
+      });
+      bridging = linked.length >= 2;
       const laneKey = linked.map((row) => row.id).join("|");
       const lane = programLane(laneKey);
       let wx = 0;
@@ -2237,35 +2497,52 @@ function placeLinkedPrograms(live: LiveNode[], hubMembers: Map<string, string[]>
       }
       wx /= ww || 1;
       wy /= ww || 1;
-      let dx = wx - body.x;
-      let dy = wy - body.y;
-      let dist = Math.hypot(dx, dy);
-      if (dist < 8) {
-        dx = -body.x;
-        dy = -body.y;
-        dist = Math.hypot(dx, dy) || 1;
+      if (bridging) {
+        const centers = linked.map((row) => bodies.get(row.id)).filter((center): center is NonNullable<typeof center> => !!center);
+        const seam = outsideRegionCores(wx, wy, centers);
+        const left = bodies.get(linked[0].id);
+        const right = bodies.get(linked[1].id);
+        let dx = (right?.x ?? seam.x) - (left?.x ?? seam.x);
+        let dy = (right?.y ?? seam.y) - (left?.y ?? seam.y);
+        let dist = Math.hypot(dx, dy);
+        if (dist < 1) {
+          dx = 1;
+          dy = 0;
+          dist = 1;
+        }
+        aim = { x: seam.x + (-dy / dist) * lane, y: seam.y + (dx / dist) * lane };
+      } else {
+        let dx = cloudX - body.x;
+        let dy = cloudY - body.y;
+        let dist = Math.hypot(dx, dy);
+        if (dist < 1) {
+          dx = 0;
+          dy = -1;
+          dist = 1;
+        }
+        const along = Math.min(dist, body.core + 4);
+        aim = {
+          x: body.x + (dx / dist) * along + (-dy / dist) * lane,
+          y: body.y + (dy / dist) * along + (dx / dist) * lane,
+        };
       }
-      const others = Math.max(0, ww - strong.count);
-      const share = ww ? others / ww : 0;
-      const edge = body.r + 16;
-      const along = linked.length < 2 ? edge : edge + Math.max(0, dist - edge) * Math.min(0.55, share * 1.25);
-      aim = {
-        x: body.x + (dx / dist) * along + (-dy / dist) * lane,
-        y: body.y + (dy / dist) * along + (dx / dist) * lane,
-      };
     }
     if (!aim) {
-      const anchor = [...bodies.values()][0];
-      aim = anchor ? { x: anchor.x, y: anchor.y - anchor.r - 20 } : { x: node.x, y: node.y };
+      aim = { x: cloudX, y: cloudY };
     }
-    const spot = nudgeClear(aim);
+    const spot = nudgeClear(aim, bridging);
     seatAt(node, spot.x, spot.y);
     const key = featuredNationalKey(node.label ?? "");
+    if (bridging) {
+      bridges.add(node.id);
+      if (key) bridgeKeys.add(key);
+    }
     if (key && !placedKey.has(key)) placedKey.set(key, spot);
   }
   for (const node of live) {
     const key = featuredNationalKey(node.label ?? "");
     if (!key) continue;
+    if (bridgeKeys.has(key)) bridges.add(node.id);
     const at = placedKey.get(key);
     if (!at || (node.x === at.x && node.y === at.y)) continue;
     node.x = at.x;
@@ -2273,6 +2550,7 @@ function placeLinkedPrograms(live: LiveNode[], hubMembers: Map<string, string[]>
     node.tx = at.x;
     node.ty = at.y;
   }
+  return bridges;
 }
 
 /** Move each campus label onto the people and startups who actually belong to it. */
