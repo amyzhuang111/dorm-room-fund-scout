@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
-import { nodeColor } from "../../components/network-style";
-import { REGIONS, campusShade, regionSwatch } from "./network-regions";
+import { featuredNationalKey } from "./featured-national";
+import { CAMPUS_LABEL_MIN_MEMBERS, LABEL_CLUB, bundleWidth, campusHubDegreeFloor, nodeColor, programLineColor, readableInk, selectVisibleLabels } from "../../components/network-style";
+import { REGIONS, campusShade, regionForCampus, regionSwatch } from "./network-regions";
 
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
   const value = Number.parseInt(hex.slice(1), 16);
@@ -81,5 +82,120 @@ const investor = nodeColor({ type: "investor", campus: null, id: "inv", rimBand:
 assert.match(investor, /75,\s*85,\s*99/);
 const second = nodeColor({ type: "organization", campus: null, id: "z", rimBand: "outer", rimTier: "A" }, campusColors);
 assert.match(second, /156,\s*163,\s*175/);
+
+const pennShade = campusShade("univ_penn", "Penn", siblings);
+const club = nodeColor({ type: "organization", campus: null, homeCampus: "univ_penn", id: "labs", rimBand: "inward" }, campusColors);
+assert.match(club, /^rgba\(/);
+assert.doesNotMatch(club, /196,\s*201,\s*209/);
+assert.ok(club.includes(String(Number.parseInt(pennShade.slice(1, 3), 16))));
+const ink = readableInk(pennShade);
+const inkValue = Number.parseInt(ink.slice(1), 16);
+const inkRed = (inkValue >> 16) & 255;
+const inkGreen = (inkValue >> 8) & 255;
+const inkBlue = inkValue & 255;
+const linear = (channel: number) => {
+  const value = channel / 255;
+  return value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+};
+const luminance = 0.2126 * linear(inkRed) + 0.7152 * linear(inkGreen) + 0.0722 * linear(inkBlue);
+assert.ok(1.05 / (luminance + 0.05) >= 4.5, ink);
+assert.notEqual(ink.toLowerCase(), "#000000");
+assert.notEqual(ink.toLowerCase(), "#111111");
+
+assert.equal(regionForCampus("univ_uva", "University of Virginia"), "philly");
+assert.equal(regionForCampus("univ_waterloo", "University of Waterloo"), "boston");
+assert.equal(regionForCampus("univ_toronto", "University of Toronto"), "boston");
+assert.equal(regionForCampus("univ_queens", "Queen's University"), "international");
+
+const uva = hexToHsl(campusShade("univ_uva", "University of Virginia", siblings));
+assert.ok(uva.h <= 18 || uva.h >= 345, `uva ${uva.h}`);
+const waterlooHue = hexToHsl(campusShade("univ_waterloo", "University of Waterloo", siblings)).h;
+assert.ok(waterlooHue >= 200 && waterlooHue <= 230, `waterloo ${waterlooHue}`);
+const torontoHue = hexToHsl(campusShade("univ_toronto", "University of Toronto", siblings)).h;
+assert.ok(torontoHue >= 200 && torontoHue <= 230, `toronto ${torontoHue}`);
+
+assert.ok(LABEL_CLUB >= 11);
+assert.equal(campusHubDegreeFloor(1), 8);
+assert.equal(campusHubDegreeFloor(0.5), 8);
+assert.equal(campusHubDegreeFloor(0.3), 4);
+assert.equal(campusHubDegreeFloor(0.1), 1);
+
+const measure = (text: string, fontSize: number) => text.length * fontSize * 0.5;
+const placed = selectVisibleLabels(
+  [
+    { id: "penn", tier: 5, degree: 400, text: "Penn", x: 100, y: 100, nodeSize: 9, marker: false, anchor: true, fontSize: 12 },
+    { id: "labs", tier: 3, degree: 198, text: "Penn Labs", x: 100, y: 140, nodeSize: 2, marker: false, anchor: false, fontSize: LABEL_CLUB },
+    { id: "clubs", tier: 3, degree: 33, text: "Penn Clubs", x: 108, y: 142, nodeSize: 2, marker: false, anchor: false, fontSize: LABEL_CLUB },
+    { id: "sky", tier: 3, degree: 259, text: "SkyDeck", x: 420, y: 360, nodeSize: 2, marker: false, anchor: false, fontSize: LABEL_CLUB },
+  ],
+  measure,
+);
+assert.ok(placed.has("penn"));
+assert.ok(placed.has("labs"));
+assert.ok(!placed.has("clubs"));
+assert.ok(placed.has("sky"));
+
+const crowded = selectVisibleLabels(
+  [
+    { id: "mit", tier: 5, degree: 400, text: "MIT", x: 200, y: 200, nodeSize: 8, marker: false, anchor: true, fontSize: 12, discId: "mit", strictDiscs: true },
+    { id: "harvard", tier: 5, degree: 200, text: "Harvard", x: 250, y: 200, nodeSize: 8, marker: false, anchor: true, fontSize: 12, discId: "harvard", strictDiscs: true },
+    { id: "queen", tier: 5, degree: 20, text: "Queen's", x: 206, y: 198, nodeSize: 8, marker: false, anchor: true, fontSize: 12, discId: "queen", strictDiscs: true },
+  ],
+  measure,
+  [],
+  [
+    { id: "mit", x: 200, y: 200, r: 18 },
+    { id: "harvard", x: 250, y: 200, r: 16 },
+    { id: "queen", x: 206, y: 198, r: 10 },
+  ],
+);
+assert.ok(crowded.has("mit"));
+assert.ok(crowded.has("harvard"));
+for (const offset of crowded.values()) assert.ok(Math.hypot(offset.dx, offset.dy) <= 22);
+const queen = crowded.get("queen");
+assert.ok(!queen || Math.hypot(queen.dx, queen.dy) <= 22);
+
+// A label whose upper slots are taken must not fall onto its own node.
+const covered = selectVisibleLabels(
+  [{ id: "pear", tier: 4, degree: 9, text: "Pear Fellows", x: 200, y: 200, nodeSize: 6, marker: false, anchor: true, fontSize: 12 }],
+  measure,
+  [{ left: 120, top: 150, right: 280, bottom: 176 }],
+);
+const pearOffset = covered.get("pear");
+assert.ok(!pearOffset || !(pearOffset.dx === 0 && pearOffset.dy >= 10));
+
+assert.equal(CAMPUS_LABEL_MIN_MEMBERS, 10);
+const campusWins = selectVisibleLabels(
+  [
+    { id: "stanford", tier: 5, degree: 700, text: "Stanford", x: 100, y: 100, nodeSize: 9, marker: false, anchor: true, fontSize: 12, required: true },
+    { id: "club", tier: 3, degree: 40, text: "Rice Business Plan Competition", x: 108, y: 108, nodeSize: 3, marker: false, anchor: true, fontSize: 11 },
+  ],
+  measure,
+);
+assert.ok(campusWins.has("stanford"));
+assert.ok(!campusWins.has("club"));
+const neighbors = selectVisibleLabels(
+  [
+    { id: "columbia", tier: 5, degree: 118, text: "Columbia", x: 200, y: 200, nodeSize: 8, marker: false, anchor: true, fontSize: 12, required: true },
+    { id: "nyu", tier: 5, degree: 55, text: "NYU", x: 236, y: 200, nodeSize: 8, marker: false, anchor: true, fontSize: 12, required: true },
+  ],
+  measure,
+);
+assert.ok(neighbors.has("columbia"));
+assert.ok(neighbors.has("nyu"));
+for (const offset of neighbors.values()) assert.ok(Math.hypot(offset.dx, offset.dy) <= 32);
+
+const ycLine = programLineColor("Y Combinator");
+assert.equal(ycLine.toLowerCase(), "#ea580c");
+assert.ok(bundleWidth(2) >= 0.6 && bundleWidth(2) < 1.2);
+assert.equal(bundleWidth(4000), 2.5);
+
+assert.equal(featuredNationalKey("HF0 residency"), "hf0");
+assert.equal(featuredNationalKey("a16z speedrun"), "speedrun");
+assert.equal(featuredNationalKey("Pear Fellows"), "pear");
+assert.equal(featuredNationalKey("Pear Garage"), null);
+assert.equal(featuredNationalKey("Pear Dorm"), null);
+assert.equal(featuredNationalKey("Neo Scholars"), "neo");
+assert.equal(featuredNationalKey("Kleiner Perkins Fellows"), "kp");
 
 console.log("region color tests ok");

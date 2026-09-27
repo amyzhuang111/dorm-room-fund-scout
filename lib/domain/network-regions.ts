@@ -1,6 +1,7 @@
-// Dorm Room Fund's four recruiting teams, from dormroomfund.com/join, plus
-// International for campuses outside the US. Schools not in the config yet
-// still land in the right team by name.
+// Dorm Room Fund's four recruiting teams, checked against
+// data/imports/drf_campus_presence.csv, plus International for campuses that
+// file does not put on a US team. Schools not in the config yet still land
+// in the right team by name.
 
 export interface RegionDef {
   id: string;
@@ -64,16 +65,16 @@ const CAMPUS_REGION: Record<string, string> = {
   univ_ucla: "west",
   univ_usc: "west",
   univ_uw: "west",
-  univ_waterloo: "international",
-  univ_toronto: "international",
+  univ_waterloo: "boston",
+  univ_toronto: "boston",
   univ_queens: "international",
   univ_laurentian: "international",
   univ_cambridge: "international",
 };
 
 const NAME_RULES: [RegExp, string][] = [
-  [/waterloo|toronto|queen'?s university|laurentian|mcgill|university of british columbia|\bubc\b|university of alberta|cambridge|oxford|imperial college|london school of economics/i, "international"],
-  [/massachusetts institute|\bmit\b|harvard|\bbrown\b|tufts|boston college|boston university|northeastern university|dartmouth|wellesley|amherst college|williams college|bowdoin|middlebury|brandeis|babson/i, "boston"],
+  [/queen'?s university|laurentian|mcgill|university of british columbia|\bubc\b|university of alberta|cambridge|oxford|imperial college|london school of economics/i, "international"],
+  [/massachusetts institute|\bmit\b|harvard|\bbrown\b|tufts|boston college|boston university|northeastern university|dartmouth|wellesley|amherst college|williams college|bowdoin|middlebury|brandeis|babson|university of waterloo|\bwaterloo\b|university of toronto/i, "boston"],
   [/yale|cornell|new york university|\bnyu\b|columbia university|fordham|cooper union|rensselaer|syracuse university|university of rochester|michigan|notre dame|northwestern|university of chicago|purdue|\buiuc\b|university of illinois|wisconsin|minnesota|ohio state|university of iowa|indiana university|case western/i, "ny"],
   [/pennsylvania|\bpenn\b|drexel|villanova|swarthmore|haverford|temple university|lehigh|lafayette|princeton|carnegie mellon|rutgers|duke|georgia tech|georgia institute|university of virginia|\buva\b|north carolina|emory|vanderbilt|university of florida|georgetown|george washington|johns hopkins|washington university|washu|tulane|clemson|university of maryland|university of miami|university of georgia/i, "philly"],
   [/stanford|berkeley|harvey mudd|\bucla\b|los angeles|southern california|\busc\b|caltech|california institute of technology|uc san diego|uc irvine|pomona college|university of washington|oregon state|university of oregon|university of texas|ut austin|rice university|arizona state|university of arizona|university of colorado|university of utah|university of hawaii/i, "west"],

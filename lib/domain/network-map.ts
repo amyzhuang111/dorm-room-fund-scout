@@ -3,8 +3,8 @@
 // and confirmed DRF portfolio matches. The five DRF regions share one
 // round universe: their centroids sit on a small ring and a single force
 // pass pulls members gently toward those seats, so the colours touch and
-// blend. S/A fellowships and cross-campus accelerators sit on the outer rim.
-// Low-tier programs, clubs, hackathon teams, and campus accelerators sit inward.
+// blend. Campus-specific hubs sit inside their school. National programs sit
+// just outside the cloud, on the side of the campuses they connect to.
 
 import fs from "node:fs";
 import { forceCollide, forceSimulation, forceX, forceY } from "d3-force";
@@ -14,6 +14,7 @@ import { CAMPUSES } from "./campuses";
 import { connectionSignal, founderSignalWeight, mentionsAccelerator, perCapitaSignal, signalFields, sqrtScores, startupSignalWeight, type SignalParts } from "./network-signal-size";
 import { REGIONS, regionForCampus, regionInk, type RegionMarker } from "./network-regions";
 import type { HotspotSectionId, HotspotTier } from "./hotspot-model";
+import { featuredNationalKey } from "./featured-national";
 import { demoteDuplicateOuter, rimPlacementFor, type RimBand, type RimTier } from "./rim-tier";
 import { hotspotGraphPatch, organizationMap } from "./hotspots";
 import { confirmedLinkedIn, readLinkedInCandidate } from "./person-link";
@@ -70,6 +71,8 @@ export interface MapNode {
   rimBand?: "outer" | "inward";
   /** S+ is the lead program. S is the tier-1 ring. A stays on the outer rim a step behind. */
   rimTier?: RimTier;
+  /** Campus this club or hub was tucked into. Node and label use that campus shade. */
+  homeCampus?: string;
   /** Hotspot sections this organization appears in. */
   orgSections?: HotspotSectionId[];
   /** People with a stored link to this organization. */
@@ -120,9 +123,11 @@ interface SimNode {
   label?: string;
   rimBand?: RimBand | null;
   rimTier?: RimTier | null;
+  /** Set when this hub was tucked into one campus. Its color follows that campus. */
+  homeCampus?: string;
 }
 
-const LAYOUT_VERSION = "25";
+const LAYOUT_VERSION = "30";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -748,6 +753,7 @@ function assembleNetworkMap(): MapGraph {
       ...(at.anchor ? { anchor: true } : {}),
       ...(at.rimBand ? { rimBand: at.rimBand } : {}),
       ...(at.rimTier ? { rimTier: at.rimTier } : {}),
+      ...(at.homeCampus ? { homeCampus: at.homeCampus } : {}),
     });
   };
 
@@ -1096,7 +1102,8 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
       node.x = node.tx;
       node.y = node.ty;
       node.pull = 0.5;
-      node.collide = 8;
+      // A wide campus radius excavates the middle of a small cloud (Waterloo). People fill that middle.
+      node.collide = 2;
       node.regionId = regionOfCampus(node.id);
       node.anchor = true;
       continue;
@@ -1157,15 +1164,10 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     } else if (node.rimBand === "inward") {
       node.pull = 0.22;
       node.collide = 2.2;
-    } else if (loose && (node.type === "person" || node.type === "startup")) {
-      node.pull = 0.1;
-      node.collide = 0;
-    } else if (node.type === "person") {
-      node.pull = 0.14;
-      node.collide = 2.05;
-    } else if (node.type === "startup") {
-      node.pull = 0.13;
-      node.collide = 2.5;
+    } else if (node.type === "person" || node.type === "startup") {
+      // A wide radius packed each campus into a shell. A small one only keeps the dots from stacking.
+      node.pull = node.type === "person" ? (loose ? 0.1 : 0.14) : loose ? 0.1 : 0.13;
+      node.collide = 1.15;
     } else {
       node.pull = 0.16;
       node.collide = 3.3;
@@ -1176,7 +1178,8 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
   const pushMember = (hubId: string, memberId: string) => {
     const hub = byId.get(hubId) as LiveNode | undefined;
     const member = byId.get(memberId) as LiveNode | undefined;
-    if (!hub?.hub || !member || member.hub) return;
+    if (!hub || !member || member.hub) return;
+    if (!hub.hub && !featuredNationalKey(hub.label ?? "")) return;
     const list = hubMembers.get(hubId) ?? [];
     list.push(memberId);
     hubMembers.set(hubId, list);
@@ -1210,75 +1213,97 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     hub.collide = 3.4;
   }
 
-  const hubsByRegion = new Map<string, LiveNode[]>();
+  // A hub tied to one school sits inside that campus. Main ones are labeled at the fitted view when the label fits.
+  const tuckIntoCampus = (node: LiveNode, campusId: string) => {
+    const seat = seats.get(campusId);
+    node.hub = false;
+    node.anchor = false;
+    node.homeCampus = campusId;
+    node.rimBand = "inward";
+    node.pull = 0.42;
+    node.collide = 2.2;
+    node.regionId = regionOfCampus(campusId);
+    if (!seat) return;
+    const jitter = organicOffset(node.id, Math.min(14, seat.spread * 0.35), false, hashUnit(campusId));
+    node.tx = seat.x + jitter.x;
+    node.ty = seat.y + jitter.y;
+    node.x = node.tx;
+    node.y = node.ty;
+  };
+  for (const hub of live) {
+    if (!hub.hub) continue;
+    const named = campusNamedInLabel(hub.label ?? "");
+    const home = named ? null : dominantCampus(hub.id, hubMembers, primary);
+    const campusId = named ?? home?.campus;
+    if (!campusId) continue;
+    tuckIntoCampus(hub, campusId);
+  }
   for (const node of live) {
-    if (!node.hub) continue;
-    const regionId = majorityRegion(node.id, hubMembers.get(node.id) ?? [], byId as Map<string, LiveNode>) ?? node.regionId ?? "none";
-    node.regionId = regionId === "none" ? null : regionId;
-    const list = hubsByRegion.get(regionId) ?? [];
-    list.push(node);
-    hubsByRegion.set(regionId, list);
+    if (node.hub || node.type === "person" || node.type === "startup" || node.type === "campus") continue;
+    const named = campusNamedInLabel(node.label ?? "");
+    if (!named) continue;
+    tuckIntoCampus(node, named);
   }
 
+  const cloudNodes = live.filter((node) => !node.hub && (node.type === "person" || node.type === "startup"));
+  let gx = 0;
+  let gy = 0;
+  for (const node of cloudNodes) {
+    gx += node.tx;
+    gy += node.ty;
+  }
+  const cloudCount = Math.max(cloudNodes.length, 1);
+  gx /= cloudCount;
+  gy /= cloudCount;
+  const cloudEdge = (angle: number) => {
+    const dists: number[] = [];
+    for (const node of cloudNodes) {
+      const dx = node.tx - gx;
+      const dy = node.ty - gy;
+      if (Math.abs(angleDelta(Math.atan2(dy, dx), angle)) > 0.7) continue;
+      dists.push(Math.hypot(dx, dy));
+    }
+    const pool = dists.length >= 12 ? dists : cloudNodes.map((node) => Math.hypot(node.tx - gx, node.ty - gy));
+    pool.sort((a, b) => a - b);
+    return pool[Math.min(pool.length - 1, Math.floor(pool.length * 0.92))] ?? 80;
+  };
   const hubTargets = new Map<string, { x: number; y: number }>();
-  for (const [regionId, group] of hubsByRegion) {
-    const center = regionCenter.get(regionId) ?? { x: 0, y: 0 };
-    const outward = Math.hypot(center.x, center.y) > 8 ? Math.atan2(center.y, center.x) : -Math.PI / 2;
-    const body = live.filter((node) => !node.hub && node.regionId === (regionId === "none" ? null : regionId) && (node.type === "person" || node.type === "startup"));
-    const radiiOfBody = body.map((node) => Math.hypot(node.tx - center.x, node.ty - center.y)).sort((a, b) => a - b);
-    const outer = radiiOfBody.length ? radiiOfBody[Math.min(radiiOfBody.length - 1, Math.floor(radiiOfBody.length * 0.9))] : 48;
-    const byDegree = (a: LiveNode, b: LiveNode) => (degree.get(b.id) ?? 0) - (degree.get(a.id) ?? 0) || a.id.localeCompare(b.id);
-    const place = (hubs: LiveNode[], rimBase: number, rimJitter: number, arcScale: number, clamp: number, spread: boolean, bias = 0) => {
-      const arc = Math.min(Math.PI * 1.75, Math.max(1.35, arcScale * Math.max(hubs.length, 1)));
-      hubs.forEach((hub, index) => {
-        const members = hubMembers.get(hub.id) ?? [];
-        let mx = 0;
-        let my = 0;
-        let count = 0;
-        const seen = new Set<string>();
-        for (const id of members) {
-          if (seen.has(id)) continue;
-          seen.add(id);
-          const member = byId.get(id) as LiveNode | undefined;
-          if (!member) continue;
-          mx += member.tx;
-          my += member.ty;
-          count += 1;
-        }
-        let preferred = outward;
-        if (!spread && count) {
-          const dx = mx / count - center.x;
-          const dy = my / count - center.y;
-          if (Math.hypot(dx, dy) > outer * 0.2) preferred = Math.atan2(dy, dx);
-        }
-        const spacing = arc / Math.max(hubs.length, 1);
-        const slot = index === 0 ? 0 : (index % 2 === 0 ? 1 : -1) * Math.ceil(index / 2) * spacing;
-        let angle = (spread ? outward + slot : preferred * 0.25 + (outward + slot) * 0.75) + bias;
-        let rel = angle - outward;
-        while (rel > Math.PI) rel -= Math.PI * 2;
-        while (rel < -Math.PI) rel += Math.PI * 2;
-        if (Math.abs(rel) > clamp) angle = outward + Math.sign(slot || rel || 1) * Math.min(clamp, Math.abs(slot) || clamp);
-        const rim = rimBase + hashUnit(hub.id) * rimJitter;
-        const tx = center.x + Math.cos(angle) * rim;
-        const ty = center.y + Math.sin(angle) * rim;
-        hub.tx = tx;
-        hub.ty = ty;
-        hub.x = tx;
-        hub.y = ty;
-        hubTargets.set(hub.id, { x: tx, y: ty });
-      });
-    };
-    const lead = group.filter((hub) => hub.rimBand === "outer" && hub.rimTier === "S+").sort(byDegree);
-    const tier1 = group.filter((hub) => hub.rimBand === "outer" && hub.rimTier === "S").sort(byDegree);
-    const tier2 = group.filter((hub) => hub.rimBand === "outer" && hub.rimTier !== "S" && hub.rimTier !== "S+").sort(byDegree);
-    const rest = group.filter((hub) => hub.rimBand !== "outer").sort(byDegree);
-    place(lead, outer + 128, 4, 0.5, Math.PI * 0.5, true);
-    place(tier1, outer + 100, 8, 0.9, Math.PI * 0.98, true);
-    place(tier2, outer + 62, 8, 0.75, Math.PI * 0.9, true, 0.62);
-    place(rest, outer + 36, 14, 0.55, Math.PI * 0.82, false);
+  const nationals = live
+    .filter((node) => node.hub)
+    .sort((a, b) => tierRank(a) - tierRank(b) || (degree.get(b.id) ?? 0) - (degree.get(a.id) ?? 0) || a.id.localeCompare(b.id));
+  const taken: number[] = [];
+  for (const hub of nationals) {
+    const spot = linkedCampusCenter(hub, hubMembers, primary, seats);
+    let dx = spot.x - gx;
+    let dy = spot.y - gy;
+    if (Math.hypot(dx, dy) < 28) {
+      const lean = dominantCampus(hub.id, hubMembers, primary);
+      const seat = lean ? seats.get(lean.campus) : undefined;
+      if (seat) {
+        dx = seat.x - gx;
+        dy = seat.y - gy;
+      }
+    }
+    const angle = Math.atan2(dy, dx);
+    const tierPad = hub.rimTier === "S+" ? 26 : hub.rimTier === "S" ? 18 : hub.rimBand === "outer" ? 14 : 10;
+    let slot = 0;
+    for (const prev of taken) if (Math.abs(angleDelta(prev, angle)) < 0.42) slot += 1;
+    taken.push(angle);
+    const along = (slot === 0 ? 0 : (slot % 2 === 0 ? 1 : -1) * Math.ceil(slot / 2)) * 16;
+    const rim = cloudEdge(angle) + tierPad;
+    const tx = gx + Math.cos(angle) * rim + Math.cos(angle + Math.PI / 2) * along;
+    const ty = gy + Math.sin(angle) * rim + Math.sin(angle + Math.PI / 2) * along;
+    hub.tx = tx;
+    hub.ty = ty;
+    hub.x = tx;
+    hub.y = ty;
+    hub.collide = hub.rimBand === "outer" ? 7 : 4;
+    hubTargets.set(hub.id, { x: tx, y: ty });
   }
 
   const hubs = live.filter((node) => node.hub);
+  // Hubs and organizations still separate from each other. People only separate from people, so a hub cannot carve a campus into an arc.
+  const colliders = live.filter((node) => node.type !== "person" && node.type !== "startup" && node.collide > 0);
   const sim = forceSimulation(live)
     .velocityDecay(0.4)
     .alphaDecay(0.07)
@@ -1291,12 +1316,40 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
       forceY<LiveNode>((node) => node.ty).strength((node) => (node.hub ? 0 : node.pull)),
     )
     .force(
-      "collide",
+      "members",
       forceCollide<LiveNode>()
-        .radius((node) => node.collide)
-        .strength(0.55)
+        .radius((node) => (node.type === "person" || node.type === "startup" ? node.collide : 0))
+        .strength(0.35)
         .iterations(1),
     )
+    .force("collide", (alpha) => {
+      const strength = 0.55 * alpha;
+      for (let i = 0; i < colliders.length; i++) {
+        const a = colliders[i];
+        for (let j = i + 1; j < colliders.length; j++) {
+          const b = colliders[j];
+          let dx = a.x - b.x;
+          let dy = a.y - b.y;
+          const min = a.collide + b.collide;
+          const dist2 = dx * dx + dy * dy;
+          if (dist2 >= min * min) continue;
+          let dist = Math.sqrt(dist2);
+          if (dist < 1e-4) {
+            dx = 1e-3;
+            dy = 0;
+            dist = 1e-3;
+          }
+          const push = ((min - dist) / dist) * strength;
+          const ra = a.collide * a.collide;
+          const rb = b.collide * b.collide;
+          const wa = rb / (ra + rb);
+          a.vx = (a.vx ?? 0) + dx * push * wa;
+          a.vy = (a.vy ?? 0) + dy * push * wa;
+          b.vx = (b.vx ?? 0) - dx * push * (1 - wa);
+          b.vy = (b.vy ?? 0) - dy * push * (1 - wa);
+        }
+      }
+    })
     .force("radial", (alpha) => {
       for (const hub of hubs) {
         const target = hubTargets.get(hub.id);
@@ -1309,6 +1362,25 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
   for (let tick = 0; tick < 28; tick++) sim.tick();
 
   snapCampusCentroids(simNodes, primary);
+  // Repack after the simulation. The collide pass was leaving large campuses as hollow arcs, and nodes with no campus sat in a ring at the origin.
+  pullCampusSatellites(live, primary);
+  // The presence file puts Waterloo on Boston & Northeast, same as Toronto. Sit it beside Toronto, not in the Harvard/MIT knot.
+  seatWaterlooBesideToronto(live, primary);
+  packCampusDiscs(live, primary);
+  const campusOf = new Map(primary);
+  for (const [id, weights] of bridgeWeight) {
+    if (campusOf.has(id)) continue;
+    let bestId = "";
+    let bestN = -1;
+    for (const [campus, n] of weights) {
+      if (n > bestN || (n === bestN && campus < bestId)) {
+        bestN = n;
+        bestId = campus;
+      }
+    }
+    if (bestId) campusOf.set(id, bestId);
+  }
+  placeLinkedPrograms(live, hubMembers, primary, campusOf);
   const markers: RegionMarker[] = [];
   for (const region of REGIONS) {
     const members = campusesByRegion.get(region.id) ?? [];
@@ -1324,7 +1396,95 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     });
   }
   placeRegionLabels(markers, simNodes);
-  return markers;
+  // Region names stay off the canvas. The legend carries the colors, and titles were clipping the fit.
+  return [];
+}
+
+function angleDelta(a: number, b: number): number {
+  let delta = a - b;
+  while (delta > Math.PI) delta -= Math.PI * 2;
+  while (delta < -Math.PI) delta += Math.PI * 2;
+  return delta;
+}
+
+function tierRank(node: LiveNode): number {
+  if (node.rimTier === "S+") return 0;
+  if (node.rimTier === "S") return 1;
+  if (node.rimBand === "outer") return 2;
+  return 3;
+}
+
+/** Campus named in the label, longest alias first. "HackMIT" counts as MIT. "Caltech" does not count as Cal. */
+function campusNamedInLabel(label: string): string | null {
+  if (/\bskydeck\b|\buc launch\b|\bcal\s*hacks\b/i.test(label)) return "univ_berkeley";
+  if (/treehacks/i.test(label)) return "univ_stanford";
+  if (/hack\s*the\s*north/i.test(label)) return "univ_waterloo";
+  if (/pennapps|weiss tech house/i.test(label)) return "univ_penn";
+  const spaced = ` ${label.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim()} `;
+  const words = spaced.trim().split(" ").filter(Boolean);
+  let best: { id: string; length: number } | null = null;
+  for (const campus of CAMPUSES) {
+    for (const token of [campus.shortLabel, campus.name, ...campus.aliases]) {
+      const key = token.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+      if (key.length < 3) continue;
+      const word = spaced.includes(` ${key} `);
+      const affix = words.some((part) => part !== key && (part.endsWith(key) || (key.length >= 5 && part.startsWith(key))));
+      if (!word && !affix) continue;
+      if (!best || key.length > best.length) best = { id: campus.id, length: key.length };
+    }
+  }
+  return best?.id ?? null;
+}
+
+/** Campus that accounts for most of a hub's linked people and startups. */
+function dominantCampus(hubId: string, hubMembers: Map<string, string[]>, primary: Map<string, string>): { campus: string; share: number } | null {
+  const counts = new Map<string, number>();
+  const seen = new Set<string>();
+  for (const id of hubMembers.get(hubId) ?? []) {
+    if (seen.has(id)) continue;
+    seen.add(id);
+    const campus = primary.get(id);
+    if (!campus) continue;
+    counts.set(campus, (counts.get(campus) ?? 0) + 1);
+  }
+  const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  const top = ranked[0];
+  if (!top) return null;
+  const total = ranked.reduce((sum, [, count]) => sum + count, 0);
+  if (total < 3) return null;
+  const second = ranked[1]?.[1] ?? 0;
+  const share = top[1] / total;
+  if (share >= 0.62 && top[1] >= second * 2) return { campus: top[0], share };
+  return null;
+}
+
+function linkedCampusCenter(
+  hub: LiveNode,
+  hubMembers: Map<string, string[]>,
+  primary: Map<string, string>,
+  seats: Map<string, { x: number; y: number }>,
+): { x: number; y: number } {
+  const counts = new Map<string, number>();
+  const seen = new Set<string>();
+  for (const id of hubMembers.get(hub.id) ?? []) {
+    if (seen.has(id)) continue;
+    seen.add(id);
+    const campus = primary.get(id);
+    if (!campus) continue;
+    counts.set(campus, (counts.get(campus) ?? 0) + 1);
+  }
+  let x = 0;
+  let y = 0;
+  let weight = 0;
+  for (const [id, count] of counts) {
+    const seat = seats.get(id);
+    if (!seat) continue;
+    x += seat.x * count;
+    y += seat.y * count;
+    weight += count;
+  }
+  if (weight) return { x: x / weight, y: y / weight };
+  return { x: hub.tx, y: hub.ty };
 }
 
 function isRimHub(node: SimNode, degree: Map<string, number>): boolean {
@@ -1336,51 +1496,277 @@ function isRimHub(node: SimNode, degree: Map<string, number>): boolean {
   return false;
 }
 
-function majorityRegion(hubId: string, members: string[], byId: Map<string, LiveNode>): string | null {
-  const votes = new Map<string, number>();
-  const seen = new Set<string>();
-  for (const id of members) {
-    if (seen.has(id)) continue;
-    seen.add(id);
-    const regionId = byId.get(id)?.regionId;
-    if (!regionId) continue;
-    votes.set(regionId, (votes.get(regionId) ?? 0) + 1);
-  }
-  let best: string | null = byId.get(hubId)?.regionId ?? null;
-  let score = 0;
-  for (const [regionId, count] of votes) {
-    if (count > score) {
-      score = count;
-      best = regionId;
-    }
-  }
-  return best;
-}
-
-/** A large campus is a dense middle plus a few uneven bulges, so it fades instead of packing into a disc. */
+/** Filled disc around the campus seat. Reach stays near the old spread so neighboring campuses still touch. */
 function organicOffset(id: string, spread: number, loose: boolean, phaseUnit: number): { x: number; y: number } {
   const unit = Math.max(1e-4, hashUnit(`${id}:u`));
-  const phase = phaseUnit * Math.PI * 2;
-  if (loose) {
-    const lobe = Math.floor(hashUnit(`${id}:lobe`) * 3);
-    const inCore = hashUnit(`${id}:core`) < 0.46;
-    const theta = inCore
-      ? hashUnit(`${id}:a`) * Math.PI * 2
-      : phase + lobe * ((Math.PI * 2) / 3) + (hashUnit(`${id}:a`) - 0.5) * 1.35;
-    const ray = Math.min(2.15, Math.sqrt(-2 * Math.log(unit)));
-    const dist = spread * (inCore ? ray * 0.42 : 0.48 + ray * 0.46);
-    return { x: Math.cos(theta) * dist, y: Math.sin(theta) * dist * 0.86 };
-  }
   const theta = hashUnit(`${id}:a`) * Math.PI * 2;
-  const wobble = 0.84 + 0.26 * Math.sin(theta * 3 + phase);
-  const dist = spread * (0.18 + 0.82 * Math.pow(unit, 0.62)) * wobble;
-  return { x: Math.cos(theta) * dist, y: Math.sin(theta) * dist };
+  const reach = spread * (loose ? 1 : 0.85);
+  const dist = reach * Math.sqrt(unit);
+  const squash = 0.92 + 0.06 * Math.sin(phaseUnit * Math.PI * 2);
+  return { x: Math.cos(theta) * dist, y: Math.sin(theta) * dist * squash };
 }
 
 function hashUnit(id: string): number {
   let hash = 0;
   for (let i = 0; i < id.length; i++) hash = (hash * 33 + id.charCodeAt(i)) >>> 0;
   return (hash % 10000) / 10000;
+}
+
+function discRadius(count: number): number {
+  const n = Math.max(count, 1);
+  const full = 0.78 * Math.sqrt(n);
+  if (n <= 400) return Math.max(7, full);
+  // Past a few hundred members, more people add less radius. Penn stays the largest disc, and CMU, Princeton, and Georgia Tech are not parked on the rim.
+  const pivot = 0.78 * Math.sqrt(400);
+  return pivot + (full - pivot) * 0.48;
+}
+
+/** Uniform disc. sqrt(unit) keeps the middle as full as the edge. */
+function discPoint(id: string, radius: number): { x: number; y: number } {
+  const unit = Math.max(1e-4, hashUnit(`${id}:disc`));
+  const theta = hashUnit(`${id}:ang`) * Math.PI * 2;
+  const dist = radius * Math.sqrt(unit);
+  return { x: Math.cos(theta) * dist, y: Math.sin(theta) * dist };
+}
+
+function memberCounts(primary: Map<string, string>, live: LiveNode[]): Map<string, number> {
+  const counts = new Map<string, number>();
+  for (const node of live) {
+    if (node.type !== "person" && node.type !== "startup") continue;
+    const campus = primary.get(node.id);
+    if (!campus) continue;
+    counts.set(campus, (counts.get(campus) ?? 0) + 1);
+  }
+  return counts;
+}
+
+/** Waterloo stays on the Boston & Northeast team. Park it against Toronto, away from MIT, so its label is not in the Harvard/Brown pocket. */
+function seatWaterlooBesideToronto(live: LiveNode[], primary: Map<string, string>) {
+  const waterloo = live.find((node) => node.id === "univ_waterloo");
+  const toronto = live.find((node) => node.id === "univ_toronto");
+  if (!waterloo || !toronto) return;
+  const mit = live.find((node) => node.id === "univ_mit");
+  const counts = memberCounts(primary, live);
+  const gap = discRadius(counts.get("univ_toronto") ?? 1) + discRadius(counts.get("univ_waterloo") ?? 1) + 8;
+  let dx = toronto.x - (mit?.x ?? toronto.x);
+  let dy = toronto.y - (mit?.y ?? toronto.y);
+  if (Math.hypot(dx, dy) < 8) {
+    dx = 16;
+    dy = 6;
+  }
+  const len = Math.hypot(dx, dy) || 1;
+  waterloo.x = toronto.x + (dx / len) * gap;
+  waterloo.y = toronto.y + (dy / len) * gap;
+}
+
+/** Draw every smaller campus in until its disc touches the largest campus in the same region. */
+function pullCampusSatellites(live: LiveNode[], primary: Map<string, string>) {
+  const campuses = live.filter((node) => node.type === "campus");
+  const counts = memberCounts(primary, live);
+  const radiusOf = (id: string) => discRadius(counts.get(id) ?? 1);
+  const byRegion = new Map<string, LiveNode[]>();
+  for (const campus of campuses) {
+    const key = campus.regionId ?? "";
+    const list = byRegion.get(key) ?? [];
+    list.push(campus);
+    byRegion.set(key, list);
+  }
+  for (const group of byRegion.values()) {
+    const anchor = group.reduce((best, campus) => (radiusOf(campus.id) > radiusOf(best.id) ? campus : best));
+    for (const campus of group) {
+      if (campus === anchor) continue;
+      const dx = campus.x - anchor.x;
+      const dy = campus.y - anchor.y;
+      const dist = Math.hypot(dx, dy) || 1;
+      const want = radiusOf(anchor.id) + radiusOf(campus.id) + 4;
+      if (dist <= want + 1) continue;
+      campus.x = anchor.x + (dx / dist) * want;
+      campus.y = anchor.y + (dy / dist) * want;
+    }
+  }
+}
+
+/**
+ * Each campus becomes one filled disc. People with no campus fold into the
+ * nearest disc instead of sitting in the middle or in a side clump.
+ */
+function packCampusDiscs(live: LiveNode[], primary: Map<string, string>) {
+  const campuses = live.filter((node) => node.type === "campus");
+  const byId = new Map(campuses.map((campus) => [campus.id, campus]));
+  const groups = new Map<string, LiveNode[]>();
+  const claim = (campusId: string, node: LiveNode) => {
+    const list = groups.get(campusId) ?? [];
+    list.push(node);
+    groups.set(campusId, list);
+  };
+  const nearestCampus = (node: LiveNode) => {
+    let best: LiveNode | null = null;
+    let bestDist = Infinity;
+    for (const campus of campuses) {
+      const dist = Math.hypot(node.x - campus.x, node.y - campus.y);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = campus;
+      }
+    }
+    return best;
+  };
+  for (const node of live) {
+    if (node.type !== "person" && node.type !== "startup") continue;
+    const campusId = primary.get(node.id);
+    const campus = (campusId && byId.get(campusId)) || nearestCampus(node);
+    if (campus) claim(campus.id, node);
+  }
+  for (const [campusId, members] of groups) {
+    const campus = byId.get(campusId);
+    if (!campus) continue;
+    const radius = discRadius(members.length);
+    for (const node of members) {
+      const at = discPoint(node.id, radius);
+      node.x = campus.x + at.x;
+      node.y = campus.y + at.y;
+    }
+  }
+  for (const node of live) {
+    if (node.type === "campus" || node.type === "person" || node.type === "startup" || node.hub) continue;
+    if (featuredNationalKey(node.label ?? "")) continue;
+    const named = node.homeCampus || campusNamedInLabel(node.label ?? "");
+    const campus = (named && byId.get(named)) || nearestCampus(node);
+    if (!campus) continue;
+    const radius = Math.min(10, discRadius(groups.get(campus.id)?.length ?? 1) * 0.4);
+    const at = discPoint(node.id, radius);
+    node.x = campus.x + at.x;
+    node.y = campus.y + at.y;
+  }
+}
+
+/** National programs sit just outside the campus they link to most, fanned so they do not stack. */
+function placeLinkedPrograms(live: LiveNode[], hubMembers: Map<string, string[]>, primary: Map<string, string>, campusOf: Map<string, string>) {
+  const campuses = new Map(live.filter((node) => node.type === "campus").map((node) => [node.id, node]));
+  const counts = memberCounts(primary, live);
+  const people = live.filter((node) => node.type === "person" || node.type === "startup");
+  let gx = 0;
+  let gy = 0;
+  for (const node of people) {
+    gx += node.x;
+    gy += node.y;
+  }
+  const count = Math.max(people.length, 1);
+  gx /= count;
+  gy /= count;
+  const ranked = live
+    .filter((node) => node.hub || featuredNationalKey(node.label ?? ""))
+    .sort((a, b) => tierRank(a) - tierRank(b) || (hubMembers.get(b.id)?.length ?? 0) - (hubMembers.get(a.id)?.length ?? 0) || a.id.localeCompare(b.id));
+  const seenKey = new Set<string>();
+  const chosen: LiveNode[] = [];
+  for (const node of ranked) {
+    const key = featuredNationalKey(node.label ?? "") ?? `id:${node.id}`;
+    if (seenKey.has(key)) continue;
+    seenKey.add(key);
+    chosen.push(node);
+  }
+  const radiusOf = (id: string) => discRadius(counts.get(id) ?? 1);
+  const weightsFor = (node: LiveNode) => {
+    const weights = new Map<string, number>();
+    const seen = new Set<string>();
+    for (const id of hubMembers.get(node.id) ?? []) {
+      if (seen.has(id)) continue;
+      seen.add(id);
+      const campus = campusOf.get(id);
+      if (!campus || !campuses.has(campus)) continue;
+      weights.set(campus, (weights.get(campus) ?? 0) + 1);
+    }
+    return weights;
+  };
+  const bestCampus = (weights: Map<string, number>) => {
+    let bestId = "";
+    let bestN = -1;
+    let bestCount = -1;
+    for (const [id, n] of weights) {
+      const members = counts.get(id) ?? 0;
+      if (n > bestN || (n === bestN && members > bestCount) || (n === bestN && members === bestCount && id < bestId)) {
+        bestN = n;
+        bestCount = members;
+        bestId = id;
+      }
+    }
+    return bestId;
+  };
+  const groups = new Map<string, LiveNode[]>();
+  for (const node of chosen) {
+    const campusId = bestCampus(weightsFor(node));
+    const list = groups.get(campusId) ?? [];
+    list.push(node);
+    groups.set(campusId, list);
+  }
+  const taken: { x: number; y: number }[] = [];
+  const minGap = (x: number, y: number, ignoreId: string) => {
+    let gap = Infinity;
+    for (const campus of campuses.values()) {
+      if (campus.id === ignoreId) continue;
+      gap = Math.min(gap, Math.hypot(x - campus.x, y - campus.y) - radiusOf(campus.id));
+    }
+    return gap;
+  };
+  const freeOfPrograms = (x: number, y: number) => taken.every((prev) => Math.hypot(prev.x - x, prev.y - y) >= 12);
+  const seatAt = (node: LiveNode, x: number, y: number) => {
+    node.x = x;
+    node.y = y;
+    node.tx = x;
+    node.ty = y;
+    taken.push({ x, y });
+  };
+  const nearestClear = (originX: number, originY: number, angle: number, reach: number, ignoreId: string, clearance: number) => {
+    for (let extra = 0; extra <= 30; extra += 6) {
+      for (let step = 0; step < 20; step++) {
+        const spin = step === 0 ? 0 : (step % 2 === 0 ? 1 : -1) * Math.ceil(step / 2) * 0.28;
+        const tx = originX + Math.cos(angle + spin) * (reach + extra);
+        const ty = originY + Math.sin(angle + spin) * (reach + extra);
+        if (minGap(tx, ty, ignoreId) < clearance) continue;
+        if (!freeOfPrograms(tx, ty)) continue;
+        return { x: tx, y: ty };
+      }
+    }
+    return null;
+  };
+  for (const [campusId, group] of groups) {
+    const anchor = campusId ? campuses.get(campusId) : undefined;
+    if (!anchor) {
+      for (const node of group) {
+        let spot = nearestClear(gx, gy, Math.atan2(node.y - gy, node.x - gx), 36, "", 8);
+        if (!spot) spot = nearestClear(gx, gy, 0, 36, "", 3);
+        if (!spot) continue;
+        seatAt(node, spot.x, spot.y);
+      }
+      continue;
+    }
+    const base = Math.atan2(anchor.y - gy, anchor.x - gx);
+    group.forEach((node, index) => {
+      const pad = node.rimTier === "S+" ? 14 : node.rimTier === "S" ? 9 : 8;
+      const fan = index === 0 ? 0 : (index % 2 === 0 ? 1 : -1) * Math.ceil(index / 2) * 0.42;
+      const reach = radiusOf(anchor.id) + pad;
+      // Thiel's outward ray runs through Brown and Harvard. Seat it on the open side of its campus instead.
+      let angle = base + fan;
+      let clearance = 8;
+      if (node.rimTier === "S+") {
+        clearance = 18;
+        let nearest: LiveNode | null = null;
+        let nearestDist = Infinity;
+        for (const campus of campuses.values()) {
+          if (campus.id === anchor.id) continue;
+          const dist = Math.hypot(campus.x - anchor.x, campus.y - anchor.y);
+          if (dist < nearestDist) {
+            nearestDist = dist;
+            nearest = campus;
+          }
+        }
+        if (nearest) angle = Math.atan2(anchor.y - nearest.y, anchor.x - nearest.x);
+      }
+      const spot = nearestClear(anchor.x, anchor.y, angle, reach, anchor.id, clearance) ?? nearestClear(anchor.x, anchor.y, angle, reach, anchor.id, 8);
+      if (!spot) return;
+      seatAt(node, spot.x, spot.y);
+    });
+  }
 }
 
 /** Move each campus label onto the people and startups who actually belong to it. */

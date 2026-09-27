@@ -1,4 +1,5 @@
 import { CAMPUSES } from "@/lib/domain/campuses";
+import { featuredNationalKey } from "@/lib/domain/featured-national";
 import type { MapEdgeType, MapNode, MapNodeType } from "@/lib/domain/network-map";
 import { REGIONS, campusShade, regionDef, regionForCampus, regionInk } from "@/lib/domain/network-regions";
 
@@ -65,16 +66,49 @@ function regionIndex(id: string): number {
   return index < 0 ? REGIONS.length : index;
 }
 
-export function nodeColor(node: { type: MapNodeType; campus: string | null; id?: string; rimBand?: "outer" | "inward" | null; rimTier?: "S+" | "S" | "A" | "B" | "C" | "D" | null }, colors: Map<string, string>): string {
-  if (node.id && (node.id.startsWith("user_") || node.id.startsWith("ufounder_") || node.id.startsWith("ucampus_"))) return withAlpha("#6b7280", 0.9);
-  if (node.rimBand === "inward" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "rgba(196, 201, 209, 0.42)";
-  if (node.rimBand === "outer" && node.rimTier === "S+" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha("#374151", 0.96);
-  if (node.rimBand === "outer" && node.rimTier === "S" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha("#4b5563", 0.96);
-  if (node.rimBand === "outer" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha("#9ca3af", 0.82);
-  if (node.type === "investor" || node.type === "organization" || node.type === "program") return withAlpha(NODE_FILL[node.type], 0.9);
+type InkNode = { type: MapNodeType; campus: string | null; id?: string; homeCampus?: string | null; rimBand?: "outer" | "inward" | null; rimTier?: "S+" | "S" | "A" | "B" | "C" | "D" | null };
+
+/** Solid color behind a node, before opacity. Program-to-campus lines use this. */
+export function nodeInk(node: InkNode, colors: Map<string, string>): string {
+  if (node.id && (node.id.startsWith("user_") || node.id.startsWith("ufounder_") || node.id.startsWith("ucampus_"))) return "#6b7280";
+  const home = node.homeCampus && colors.get(node.homeCampus);
+  if (home && (node.type === "investor" || node.type === "organization" || node.type === "program")) return home;
+  if (node.rimBand === "inward" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "#c4c9d1";
+  if (node.rimBand === "outer" && node.rimTier === "S+" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "#374151";
+  if (node.rimBand === "outer" && node.rimTier === "S" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "#4b5563";
+  if (node.rimBand === "outer" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "#9ca3af";
+  if (node.type === "investor" || node.type === "organization" || node.type === "program") return NODE_FILL[node.type];
   const id = node.campus ?? (node.type === "campus" ? node.id : null);
-  if (id && colors.get(id)) return withAlpha(colors.get(id) as string, FILL_ALPHA);
-  return withAlpha(NODE_FILL[node.type], FILL_ALPHA);
+  if (id && colors.get(id)) return colors.get(id) as string;
+  return NODE_FILL[node.type];
+}
+
+export function nodeColor(node: InkNode, colors: Map<string, string>): string {
+  const ink = nodeInk(node, colors);
+  if (node.id && (node.id.startsWith("user_") || node.id.startsWith("ufounder_") || node.id.startsWith("ucampus_"))) return withAlpha(ink, 0.9);
+  const home = node.homeCampus && colors.get(node.homeCampus);
+  if (home && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha(ink, FILL_ALPHA);
+  if (node.rimBand === "inward" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "rgba(196, 201, 209, 0.42)";
+  if (node.rimBand === "outer" && node.rimTier === "S+" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha(ink, 0.96);
+  if (node.rimBand === "outer" && node.rimTier === "S" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha(ink, 0.96);
+  if (node.rimBand === "outer" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha(ink, 0.82);
+  if (node.type === "investor" || node.type === "organization" || node.type === "program") return withAlpha(ink, 0.9);
+  return withAlpha(ink, FILL_ALPHA);
+}
+
+/** Label ink for a campus shade. Same hue, darkened until it clears 4.5:1 on white. */
+export function readableInk(hex: string): string {
+  const parsed = parseHex(hex);
+  if (!parsed) return "#374151";
+  let [red, green, blue] = parsed;
+  if (contrastOnWhite(red, green, blue) >= 4.5) return toHex(red, green, blue);
+  let { h, s, l } = rgbToHsl(red, green, blue);
+  for (let step = 0; step < 28 && contrastOnWhite(red, green, blue) < 4.5; step++) {
+    l = Math.max(12, l - 3);
+    [red, green, blue] = hslToRgb(h, s, l);
+    if (l <= 12) break;
+  }
+  return toHex(red, green, blue);
 }
 
 /** The hovered node's neighborhood. Same hue, darker and more opaque than the resting hairline. */
@@ -119,10 +153,14 @@ export const MEGA_DEGREE = 34;
 export const TOP_HUB_LABELS = 8;
 export const LABEL_CAMPUS = 12;
 export const LABEL_HUB = 11;
+/** Campus clubs and hubs. Medium weight, at least 11px, so the colored ink stays readable. */
+export const LABEL_CLUB = 11;
 /** Thiel Fellowship, the one program label that stays on at every zoom. */
 export const LABEL_LEAD = 13;
 export const LABEL_REGION = 10;
 export const LABEL_NODE = 11;
+/** A tucked hub at least this connected is a main campus hub and may be labeled on the fitted view. */
+export const MAIN_CAMPUS_HUB_DEGREE = 8;
 /** Extra pixels between uppercase region letters. */
 export const REGION_TRACKING = 1.55;
 
@@ -144,9 +182,10 @@ export const EDGE_COLOR: Record<MapEdgeType, string> = {
  */
 export function screenSize(node: MapNode): number {
   const score = clamp(node.signalScore ?? 0, 0, 1);
-  if (node.type === "campus") return Math.min(9.5, 6.4 + score * 3.1);
+  if (node.type === "campus") return Math.min(9.5, 8 + score * 1.5);
   if (node.type === "organization" || node.type === "program" || node.type === "investor") {
     if (node.rimBand === "outer" && node.rimTier === "S+") return 6.2;
+    if (featuredNationalKey(node.label)) return 6;
     if (node.rimBand === "outer" && node.rimTier === "S") return Math.min(5.4, 4.8 + score * 0.5);
     if (node.rimBand === "outer") return Math.min(3.65, 3.1 + score * 0.4);
     if (node.rimBand === "inward") return Math.min(2.15, 1.65 + score * 0.35);
@@ -337,6 +376,16 @@ export function labelDegreeFloor(cameraRatio: number): number {
   return 1;
 }
 
+/**
+ * Main campus hubs stay eligible on the fitted view. Zooming in (smaller ratio)
+ * admits the smaller clubs. Collision still drops any label that would overlap.
+ */
+export function campusHubDegreeFloor(cameraRatio: number): number {
+  if (cameraRatio >= 0.48) return MAIN_CAMPUS_HUB_DEGREE;
+  if (cameraRatio >= 0.28) return 4;
+  return 1;
+}
+
 export interface ScreenLabel {
   id: string;
   tier: number;
@@ -349,7 +398,56 @@ export interface ScreenLabel {
   anchor: boolean;
   fontSize: number;
   tracking?: number;
+  dx?: number;
+  dy?: number;
+  /** Campus disc this label may sit on. Other discs still block it when strictDiscs is set. */
+  discId?: string;
+  /** Drop the label rather than covering another campus. Used for Thiel. */
+  strictDiscs?: boolean;
+  /** A campus disc large enough that its name stays on the fitted view. */
+  required?: boolean;
 }
+
+export interface LabelOffset {
+  dx: number;
+  dy: number;
+}
+
+export interface CampusDisc {
+  id: string;
+  x: number;
+  y: number;
+  r: number;
+}
+
+/** Slots stay within a few pixels of the node. A label that cannot sit there is omitted. */
+const ANCHOR_OFFSETS: LabelOffset[] = [
+  { dx: 0, dy: 0 },
+  { dx: 16, dy: 0 },
+  { dx: -16, dy: 0 },
+  { dx: 0, dy: 14 },
+  { dx: 12, dy: 10 },
+  { dx: -12, dy: 10 },
+  { dx: 0, dy: -10 },
+  { dx: 14, dy: -8 },
+  { dx: -14, dy: -8 },
+];
+
+/** Extra room so two neighboring campus names can sit on opposite sides of their discs. */
+const REQUIRED_OFFSETS: LabelOffset[] = [
+  ...ANCHOR_OFFSETS,
+  { dx: 0, dy: -24 },
+  { dx: 0, dy: 22 },
+  { dx: 30, dy: 0 },
+  { dx: -30, dy: 0 },
+  { dx: 24, dy: -16 },
+  { dx: -24, dy: -16 },
+  { dx: 24, dy: 16 },
+  { dx: -24, dy: 16 },
+];
+
+/** Fitted-view guarantee. Dartmouth is the smallest of the major discs that must keep a name. */
+export const CAMPUS_LABEL_MIN_MEMBERS = 10;
 
 /** Hover card drawn to the right of the active node. Other labels must stay clear of it. */
 export function hoverLabelBox(x: number, y: number, nodeSize: number, textWidth: number, fontSize: number): LabelBox {
@@ -359,11 +457,19 @@ export function hoverLabelBox(x: number, y: number, nodeSize: number, textWidth:
 }
 
 /**
- * Greedy screen-space placement. Higher tiers win (regions, then campuses,
- * then high-degree nodes). A label that would touch one already kept is omitted.
+ * Greedy screen-space placement. Required campus names go first, then higher
+ * tiers (Thiel, other campuses, programs, clubs). A club or hub that would
+ * touch a campus name is omitted. A required campus name is kept on the
+ * nearest free side of its disc.
  */
-export function selectVisibleLabels(labels: ScreenLabel[], measure: (text: string, fontSize: number) => number, reserved: LabelBox[] = []): Set<string> {
-  const ranked = [...labels].sort((a, b) => b.tier - a.tier || b.degree - a.degree || a.id.localeCompare(b.id));
+export function selectVisibleLabels(
+  labels: ScreenLabel[],
+  measure: (text: string, fontSize: number) => number,
+  reserved: LabelBox[] = [],
+  discs: CampusDisc[] = [],
+): Map<string, LabelOffset> {
+  const rank = (label: ScreenLabel) => (label.required ? 8 : label.tier);
+  const ranked = [...labels].sort((a, b) => rank(b) - rank(a) || b.tier - a.tier || b.degree - a.degree || a.id.localeCompare(b.id));
   const cell = 72;
   const grid = new Map<string, LabelBox[]>();
   const index = (box: LabelBox) => {
@@ -394,30 +500,181 @@ export function selectVisibleLabels(labels: ScreenLabel[], measure: (text: strin
     }
     return false;
   };
+  const hitsDisc = (box: LabelBox, discId?: string) => discs.some((disc) => disc.id !== discId && boxHitsDisc(box, disc));
+  const overlapScore = (box: LabelBox): number => {
+    const seen = new Set<LabelBox>();
+    let score = 0;
+    const x0 = Math.floor(box.left / cell);
+    const x1 = Math.floor(box.right / cell);
+    const y0 = Math.floor(box.top / cell);
+    const y1 = Math.floor(box.bottom / cell);
+    for (let x = x0; x <= x1; x++) {
+      for (let y = y0; y <= y1; y++) {
+        const list = grid.get(`${x}:${y}`);
+        if (!list) continue;
+        for (const other of list) {
+          if (seen.has(other)) continue;
+          seen.add(other);
+          if (!boxesOverlap(other, box)) continue;
+          const width = Math.min(other.right, box.right) - Math.max(other.left, box.left);
+          const height = Math.min(other.bottom, box.bottom) - Math.max(other.top, box.top);
+          score += Math.max(0, width) * Math.max(0, height);
+        }
+      }
+    }
+    return score;
+  };
   for (const box of reserved) index(box);
-  const show = new Set<string>();
+  const show = new Map<string, LabelOffset>();
+  const campusAnchors: { x: number; y: number; r: number }[] = [];
   for (const label of ranked) {
-    const box = screenLabelBox(label, measure);
-    if (hits(box)) continue;
-    index(box);
-    show.add(label.id);
+    const slots = label.required ? REQUIRED_OFFSETS : label.anchor ? ANCHOR_OFFSETS : [{ dx: 0, dy: 0 }];
+    const limit = label.required ? 32 : 22;
+    let chosen: { offset: LabelOffset; box: LabelBox } | null = null;
+    let closest: { offset: LabelOffset; box: LabelBox; score: number } | null = null;
+    for (const offset of slots) {
+      if (Math.hypot(offset.dx, offset.dy) > limit) continue;
+      const box = screenLabelBox({ ...label, dx: offset.dx, dy: offset.dy }, measure);
+      const padded = { left: box.left - 4, top: box.top - 3, right: box.right + 4, bottom: box.bottom + 3 };
+      if (label.anchor && boxHitsCircle(box, label.x, label.y, label.nodeSize * 0.8)) continue;
+      if (!label.required && campusAnchors.some((campus) => boxHitsCircle(box, campus.x, campus.y, campus.r))) continue;
+      if (label.strictDiscs && hitsDisc(box, label.discId)) continue;
+      const score = overlapScore(padded);
+      if (score === 0) {
+        chosen = { offset, box: padded };
+        break;
+      }
+      if (label.required && (!closest || score < closest.score)) closest = { offset, box: padded, score };
+    }
+    if (!chosen && closest) chosen = { offset: closest.offset, box: closest.box };
+    if (!chosen) continue;
+    index(chosen.box);
+    if (label.required) campusAnchors.push({ x: label.x, y: label.y, r: Math.max(22, label.nodeSize * 2.4) });
+    show.set(label.id, chosen.offset);
   }
   return show;
+}
+
+function boxHitsCircle(box: LabelBox, x: number, y: number, radius: number): boolean {
+  const cx = Math.max(box.left, Math.min(x, box.right));
+  const cy = Math.max(box.top, Math.min(y, box.bottom));
+  const dx = cx - x;
+  const dy = cy - y;
+  return dx * dx + dy * dy < radius * radius;
+}
+
+function boxHitsDisc(box: LabelBox, disc: CampusDisc): boolean {
+  const x = Math.max(box.left, Math.min(disc.x, box.right));
+  const y = Math.max(box.top, Math.min(disc.y, box.bottom));
+  const dx = x - disc.x;
+  const dy = y - disc.y;
+  const reach = disc.r + 4;
+  return dx * dx + dy * dy < reach * reach;
 }
 
 function screenLabelBox(label: ScreenLabel, measure: (text: string, fontSize: number) => number): LabelBox {
   const tracking = label.tracking ?? 0;
   const width = Math.max(8, measure(label.text, label.fontSize) + Math.max(0, label.text.length - 1) * tracking) + (label.marker ? 16 : 12);
   const height = label.fontSize + 10;
-  const x = label.x;
-  const y = label.marker ? label.y : label.anchor ? label.y - label.nodeSize - 2 : label.y + label.nodeSize + 2;
+  const x = label.x + (label.dx ?? 0);
+  const y = (label.marker ? label.y : label.anchor ? label.y - label.nodeSize - 2 : label.y + label.nodeSize + 2) + (label.dy ?? 0);
   if (label.marker) return { left: x - width / 2, top: y - height / 2, right: x + width / 2, bottom: y + height / 2 };
   if (label.anchor) return { left: x - width / 2, top: y - height, right: x + width / 2, bottom: y + 2 };
   return { left: x - width / 2, top: y - 2, right: x + width / 2, bottom: y + height };
 }
 
+const PROGRAM_LINE_HEX: Record<string, string> = {
+  thiel: "#0f766e",
+  yc: "#ea580c",
+  founders_inc: "#7c3aed",
+  z_fellows: "#db2777",
+  emergent: "#ca8a04",
+  spc: "#0284c7",
+  neo: "#16a34a",
+  hf0: "#9333ea",
+  contrary: "#e11d48",
+  pear: "#65a30d",
+  speedrun: "#d97706",
+  human_capital: "#0891b2",
+  kp: "#4f46e5",
+};
+
+/** Distinct hue for a program's campus lines. Not the grey used for the node ink. */
+export function programLineColor(label: string, id = ""): string {
+  const key = featuredNationalKey(label);
+  if (key && PROGRAM_LINE_HEX[key]) return PROGRAM_LINE_HEX[key];
+  const seed = `${label}:${id}`;
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) hash = (hash * 33 + seed.charCodeAt(i)) >>> 0;
+  const [red, green, blue] = hslToRgb(hash % 360, 62, 46);
+  return toHex(red, green, blue);
+}
+
+export function bundleWidth(count: number): number {
+  return Math.min(2.5, 0.6 + Math.log2(Math.max(count, 1)) * 0.32);
+}
+
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
+}
+
+function parseHex(hex: string): [number, number, number] | null {
+  const match = /^#([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!match) return null;
+  const value = Number.parseInt(match[1], 16);
+  return [(value >> 16) & 255, (value >> 8) & 255, value & 255];
+}
+
+function toHex(red: number, green: number, blue: number): string {
+  const channel = (value: number) => Math.round(value).toString(16).padStart(2, "0");
+  return `#${channel(red)}${channel(green)}${channel(blue)}`;
+}
+
+function linearChannel(value: number): number {
+  const channel = value / 255;
+  return channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+}
+
+function contrastOnWhite(red: number, green: number, blue: number): number {
+  const luminance = 0.2126 * linearChannel(red) + 0.7152 * linearChannel(green) + 0.0722 * linearChannel(blue);
+  return 1.05 / (luminance + 0.05);
+}
+
+function rgbToHsl(red: number, green: number, blue: number): { h: number; s: number; l: number } {
+  const r = red / 255;
+  const g = green / 255;
+  const b = blue / 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  const delta = max - min;
+  if (delta === 0) return { h: 0, s: 0, l: l * 100 };
+  const s = delta / (1 - Math.abs(2 * l - 1));
+  let h = 0;
+  if (max === r) h = ((g - b) / delta) % 6;
+  else if (max === g) h = (b - r) / delta + 2;
+  else h = (r - g) / delta + 4;
+  return { h: (h * 60 + 360) % 360, s: s * 100, l: l * 100 };
+}
+
+function hslToRgb(hue: number, saturation: number, lightness: number): [number, number, number] {
+  const sat = saturation / 100;
+  const light = lightness / 100;
+  const chroma = (1 - Math.abs(2 * light - 1)) * sat;
+  const hp = hue / 60;
+  const x = chroma * (1 - Math.abs((hp % 2) - 1));
+  let red = 0;
+  let green = 0;
+  let blue = 0;
+  if (hp < 1) [red, green, blue] = [chroma, x, 0];
+  else if (hp < 2) [red, green, blue] = [x, chroma, 0];
+  else if (hp < 3) [red, green, blue] = [0, chroma, x];
+  else if (hp < 4) [red, green, blue] = [0, x, chroma];
+  else if (hp < 5) [red, green, blue] = [x, 0, chroma];
+  else [red, green, blue] = [chroma, 0, x];
+  const match = light - chroma / 2;
+  const channel = (value: number) => Math.round((value + match) * 255);
+  return [channel(red), channel(green), channel(blue)];
 }
 
 function withAlpha(hex: string, alpha: number): string {

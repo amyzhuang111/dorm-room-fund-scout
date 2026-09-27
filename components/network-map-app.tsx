@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { featuredNationalKey } from "@/lib/domain/featured-national";
 import { SECTION_SHORT, tierBandLabel, type HotspotSectionId } from "@/lib/domain/hotspot-model";
 import type { MapEdgeType, MapGraph, MapNode, MapNodeType } from "@/lib/domain/network-map";
 import { REGIONS, regionSwatch } from "@/lib/domain/network-regions";
@@ -18,6 +19,14 @@ import { NETWORK_FILTER_EVENT, type NetworkMapFilter } from "@/lib/domain/networ
 import { LinkedInIconButton, LinkedInOpenButton, LinkedInProfileLink, PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { DrfHopFilter } from "./drf-hop-filter";
 import { WarmIntroPaths } from "./warm-intro-paths";
+
+const LEGEND_REGION: Record<string, string> = {
+  boston: "Northeast",
+  ny: "Midwest",
+  philly: "Southeast",
+  west: "West Coast",
+  international: "International",
+};
 
 const NetworkSigma = dynamic(() => import("./network-sigma").then((mod) => mod.NetworkSigma), {
   ssr: false,
@@ -287,7 +296,7 @@ export function NetworkMapApp() {
   const swatchGroups = useMemo(() => (graph ? groupCampusSwatches(campusSwatches(graph.nodes)) : []), [graph]);
 
   return (
-    <div className="relative h-[calc(100dvh-3.5rem)] min-h-[520px] overflow-hidden bg-white text-black">
+    <div className={`relative min-h-[520px] overflow-hidden bg-white text-black ${pipeline.storage === "local" ? "h-[calc(100dvh-5.75rem)]" : "h-[calc(100dvh-3.5rem)]"}`}>
       {shown && filters ? (
         <NetworkSigma
           graph={shown}
@@ -559,30 +568,33 @@ export function NetworkMapApp() {
         </ZoomButton>
       </div>
 
-      <div className="absolute bottom-4 z-20 max-w-[min(42rem,calc(100%-5.5rem))]" style={{ left: filtersOpen ? "18.5rem" : "1rem" }}>
+      <div className="absolute z-20 w-[13.25rem]" style={{ left: filtersOpen ? "18.5rem" : "1rem", bottom: "6.15rem" }}>
         {legendOpen ? (
-          <div className="rounded-md bg-white/70 px-2 py-1 text-[11px] text-neutral-600 backdrop-blur-[2px]" role="region" aria-label="Network legend">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <div className="rounded-md border border-neutral-200 bg-white/95 px-2 py-1.5 text-[11px] text-neutral-600 shadow-sm" role="region" aria-label="Network legend">
+            <div className="flex flex-col gap-y-0.5">
               {REGIONS.map((region) => (
-                <LegendItem key={region.id} shape="circle" mark="campus" color={regionSwatch(region.id)} label={region.label} />
+                <LegendItem key={region.id} shape="circle" mark="campus" color={regionSwatch(region.id)} label={LEGEND_REGION[region.id] ?? region.label} title={region.fullLabel} />
               ))}
             </div>
-            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+            <div className="mt-1 grid grid-cols-2 gap-x-2 gap-y-0.5">
               <LegendItem shape="circle" mark="person" color="#6b7280" label="Person" />
               <LegendItem shape="square" color="#6b7280" label="Startup" />
               <LegendItem shape="diamond" color="#9ca3af" label="Investor" />
               <LegendItem shape="hex" color="#9ca3af" label="Club / lab" />
               <LegendItem shape="triangle" color="#9ca3af" label="Organization" />
+            </div>
+            <p className="mt-1 text-[10px] leading-snug text-neutral-600">Campus club / hub: campus color</p>
+            <div className="mt-1 flex items-start justify-between gap-2">
+              <p className="text-[10px] leading-snug text-neutral-400">Size is per capita. People and startups take their campus shade.</p>
               <button
                 type="button"
-                className="ml-auto text-[10px] font-medium text-neutral-400 underline"
+                className="shrink-0 text-[10px] font-medium text-neutral-400 underline"
                 aria-expanded={true}
                 onClick={() => setLegendOpen(false)}
               >
                 Hide
               </button>
             </div>
-            <p className="mt-0.5 text-[10px] leading-snug text-neutral-400">Size is per capita. People and startups take their campus shade. Investors and organizations stay grey.</p>
           </div>
         ) : (
           <button
@@ -759,7 +771,7 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
   }
 
   for (const node of graph.nodes) {
-    if (!showIsolates && node.degree === 0) {
+    if (!showIsolates && node.degree === 0 && !featuredNationalKey(node.label)) {
       hidden.add(node.id);
       continue;
     }
@@ -794,7 +806,7 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
       const sectionAll = filters.orgSections.length === ORG_SECTIONS.length;
       const sectionHit = sectionAll || sections.some((section) => filters.orgSections.includes(section));
       let show = filters.nodeTypes.includes("organization") && campusHit && tierHit && sectionHit;
-      if (show && !showIsolates && (node.linkedPeople ?? 0) === 0 && (node.linkedStartups ?? 0) === 0) show = false;
+      if (show && !showIsolates && (node.linkedPeople ?? 0) === 0 && (node.linkedStartups ?? 0) === 0 && !featuredNationalKey(node.label)) show = false;
       if (show && narrowed) {
         show = graph.edges.some((edge) => edge.type === "member_of" && (edge.source === node.id || edge.target === node.id) && (peopleOk.has(edge.source) || peopleOk.has(edge.target)));
       }

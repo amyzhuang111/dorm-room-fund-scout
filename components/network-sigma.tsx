@@ -3,11 +3,11 @@
 import Graph from "graphology";
 import { useEffect, useRef } from "react";
 import Sigma from "sigma";
+import { featuredNationalKey } from "@/lib/domain/featured-national";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
-import { regionTint } from "@/lib/domain/network-regions";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
-import { DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, REGION_TRACKING, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
+import { CAMPUS_LABEL_MIN_MEMBERS, DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_CLUB, LABEL_HUB, LABEL_LEAD, LABEL_NODE, MEGA_DEGREE, NODE_SHAPE, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, programLineColor, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type CampusDisc, type LabelOffset, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -32,14 +32,25 @@ type NodeAttr = {
   tint?: string;
   linkColor: string;
   labelPx?: number;
+  labelColor?: string;
+  labelDx?: number;
+  labelDy?: number;
+  highlighted?: boolean;
 };
 
 type EdgeAttr = {
   kind: MapEdgeType;
   color: string;
   size: number;
-  /** Spoke of a rim hub. Drawn only while that hub or its neighbor is active. */
+  /** Spoke of a rim hub. Drawn only while a person or startup on that spoke is active. */
   defer: boolean;
+  /** One line per program-campus pair. Width follows how many people sit on it. */
+  bundle?: boolean;
+  hoverColor?: string;
+  count?: number;
+  /** Count is under 2. Drawn only while its program is hovered or selected. */
+  sparse?: boolean;
+  zIndex?: number;
 };
 
 const QUIET_EDGE = new Set<MapEdgeType>(["studied_at", "at_campus"]);
@@ -125,6 +136,35 @@ export function NetworkSigma({
       featuredNames.add(name);
       featured.add(node.id);
     }
+    const namedIds = new Set<string>();
+    const namedBest = new Map<string, (typeof graph.nodes)[number]>();
+    const namedPool = graph.nodes.filter((node) => featuredNationalKey(node.label));
+    namedPool.sort(
+      (a, b) =>
+        (a.rimTier === "S+" ? 0 : a.rimTier === "S" ? 1 : a.rimBand === "outer" ? 2 : 3) - (b.rimTier === "S+" ? 0 : b.rimTier === "S" ? 1 : b.rimBand === "outer" ? 2 : 3) ||
+        b.degree - a.degree ||
+        a.id.localeCompare(b.id),
+    );
+    for (const node of namedPool) {
+      const key = featuredNationalKey(node.label);
+      if (!key || namedBest.has(key)) continue;
+      namedBest.set(key, node);
+    }
+    for (const node of namedBest.values()) namedIds.add(node.id);
+    const layoutRadius = new Map<string, number>();
+    for (const campus of graph.nodes) {
+      if (campus.type !== "campus") continue;
+      const campusId = campus.campus || campus.id;
+      const distances: number[] = [];
+      for (const node of graph.nodes) {
+        if ((node.type !== "person" && node.type !== "startup") || node.campus !== campusId) continue;
+        const dist = Math.hypot(node.x - campus.x, node.y - campus.y);
+        if (dist < 60) distances.push(dist);
+      }
+      distances.sort((a, b) => a - b);
+      const radius = distances.length ? distances[Math.min(distances.length - 1, Math.floor(distances.length * 0.94))] : 8;
+      layoutRadius.set(campus.id, Math.max(8, radius));
+    }
     const measureCanvas = document.createElement("canvas");
     const measureCtx = measureCanvas.getContext("2d");
     const measure = (text: string, fontSize: number) => {
@@ -132,32 +172,49 @@ export function NetworkSigma({
       measureCtx.font = `500 ${fontSize}px Satoshi, Arial, sans-serif`;
       return measureCtx.measureText(text).width;
     };
-    const placed = { ids: new Set<string>() };
-    const labelMeta: { id: string; tier: number; degree: number; text: string; fullText: string; marker: boolean; anchor: boolean; fontSize: number; tracking: number }[] = [];
+    const placed: { offsets: Map<string, LabelOffset> } = { offsets: new Map() };
+    const memberCount = new Map<string, number>();
+    for (const node of graph.nodes) {
+      if ((node.type !== "person" && node.type !== "startup") || !node.campus) continue;
+      memberCount.set(node.campus, (memberCount.get(node.campus) ?? 0) + 1);
+    }
+    const labelMeta: { id: string; tier: number; degree: number; text: string; fullText: string; marker: boolean; anchor: boolean; fontSize: number; tracking: number; campusHub: boolean; named: boolean; discId?: string; strictDiscs: boolean; required: boolean; grayHub: boolean }[] = [];
     for (const node of graph.nodes) {
       const campus = node.type === "campus";
-      const hub = featured.has(node.id);
-      const lead = hub && node.rimTier === "S+";
-      const strong = hub && node.rimTier === "S";
+      const named = namedIds.has(node.id);
+      const hub = featured.has(node.id) || named;
+      const lead = (named && featuredNationalKey(node.label) === "thiel") || (hub && node.rimTier === "S+");
+      const strong = !lead && (named || (hub && node.rimTier === "S"));
+      const campusHub = Boolean(node.homeCampus) && !campus;
       const anchor = campus || hub;
+      const fontSize = campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong || campusHub || named ? LABEL_HUB : hub ? 10 : LABEL_NODE;
+      const campusId = node.campus || node.id;
       labelMeta.push({
         id: node.id,
-        tier: campus ? 5 : lead ? 6 : strong ? 4 : hub ? 2 : 1,
+        tier: campus ? 5 : lead ? 6 : strong ? 4 : campusHub ? 3 : hub ? 2 : 1,
         degree: node.degree,
         text: truncateMapLabel(node.label, false, anchor),
         fullText: node.label,
         marker: false,
         anchor,
-        fontSize: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong ? LABEL_HUB : hub ? 10 : LABEL_NODE,
+        fontSize,
         tracking: 0,
+        campusHub,
+        named,
+        discId: campus ? campusId : node.homeCampus || undefined,
+        strictDiscs: !campus && named && featuredNationalKey(node.label) === "thiel",
+        required: campus && (memberCount.get(campusId) ?? 0) >= CAMPUS_LABEL_MIN_MEMBERS,
+        grayHub: !campus && !node.homeCampus && (node.type === "organization" || node.type === "program" || node.type === "investor"),
       });
     }
     const colors = new Map(campusSwatches(graph.nodes).map((swatch) => [swatch.id, swatch.color]));
     for (const node of graph.nodes) {
       const campus = node.type === "campus";
-      const hub = featured.has(node.id);
-      const lead = hub && node.rimTier === "S+";
-      const strong = hub && node.rimTier === "S";
+      const named = namedIds.has(node.id);
+      const hub = featured.has(node.id) || named;
+      const lead = (named && featuredNationalKey(node.label) === "thiel") || (hub && node.rimTier === "S+");
+      const strong = !lead && (named || (hub && node.rimTier === "S"));
+      const campusHub = Boolean(node.homeCampus) && !campus;
       const color = nodeColor(node, colors);
       g.addNode(node.id, {
         x: node.x,
@@ -169,46 +226,15 @@ export function NetworkSigma({
         type: NODE_SHAPE[node.type],
         kind: node.type,
         anchor: campus || hub,
-        zIndex: lead ? 4 : strong ? 3 : Z[node.type],
+        zIndex: (lead ? 4 : strong ? 3 : Z[node.type]) + 1,
         signalTip: signalTooltip(node),
         linkColor: emphasizeColor(color),
-        labelPx: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong ? LABEL_HUB : hub ? 10 : LABEL_NODE,
+        labelPx: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong || campusHub || named ? LABEL_HUB : hub ? 10 : LABEL_NODE,
+        ...(campus ? { labelColor: "#111111" } : node.homeCampus ? { labelColor: readableInk(colors.get(node.homeCampus) ?? "#374151") } : {}),
       });
     }
+    // Region titles stay off the canvas. The legend carries the colors.
     const regionCampuses = new Map<string, string[]>();
-    for (const region of graph.regions ?? []) {
-      const id = `region:${region.id}`;
-      regionCampuses.set(id, region.campusIds);
-      const tint = regionTint(region.id);
-      g.addNode(id, {
-        x: region.x,
-        y: region.y,
-        size: 0.6,
-        label: region.label,
-        fullLabel: region.fullLabel,
-        color: "rgba(0,0,0,0)",
-        tint,
-        type: "circle",
-        kind: "campus",
-        anchor: true,
-        marker: true,
-        regionId: region.id,
-        zIndex: 4,
-        linkColor: "rgba(107, 114, 128, 0.45)",
-        labelPx: LABEL_REGION,
-      });
-      labelMeta.push({
-        id,
-        tier: 3,
-        degree: 0,
-        text: truncateMapLabel(region.label, true, true).toUpperCase(),
-        fullText: region.fullLabel,
-        marker: true,
-        anchor: true,
-        fontSize: LABEL_REGION,
-        tracking: REGION_TRACKING,
-      });
-    }
     let minX = Infinity;
     let maxX = -Infinity;
     let minY = Infinity;
@@ -252,6 +278,56 @@ export function NetworkSigma({
       const fan = fanOf(source) || fanOf(target);
       attrs.defer = megaOf(source) || megaOf(target) || (fan && attrs.defer);
     });
+    const campusOf = new Map<string, string>();
+    for (const node of graph.nodes) {
+      if ((node.type === "person" || node.type === "startup") && node.campus) campusOf.set(node.id, node.campus);
+    }
+    for (const edge of graph.edges) {
+      if (edge.type !== "studied_at") continue;
+      const person = at.get(edge.source);
+      const campus = at.get(edge.target);
+      if (person?.type === "person" && campus?.type === "campus") campusOf.set(person.id, campus.id);
+    }
+    const bundles = new Map<string, { program: string; campus: string; count: number }>();
+    const addBundle = (programId: string, campusId: string, count: number) => {
+      if (!g.hasNode(programId) || !g.hasNode(campusId) || programId === campusId || count <= 0) return;
+      const program = at.get(programId);
+      const keyName = featuredNationalKey(program?.label ?? "") ?? programId;
+      const key = `${keyName}|${campusId}`;
+      const row = bundles.get(key) ?? { program: programId, campus: campusId, count: 0 };
+      row.count += count;
+      if (namedIds.has(programId) || program?.rimBand === "outer") row.program = programId;
+      bundles.set(key, row);
+    };
+    for (const edge of graph.edges) {
+      if (edge.type !== "member_of" && edge.type !== "invested_in") continue;
+      const source = at.get(edge.source);
+      const target = at.get(edge.target);
+      if (!source || !target) continue;
+      const program = structural.has(source.type) ? source : structural.has(target.type) ? target : null;
+      const other = program === source ? target : program === target ? source : null;
+      if (!program || !other || (other.type !== "person" && other.type !== "startup")) continue;
+      const campusId = campusOf.get(other.id);
+      if (campusId) addBundle(program.id, campusId, 1);
+    }
+    for (const bundle of bundles.values()) {
+      if (bundle.count < 1) continue;
+      const program = at.get(bundle.program);
+      const ink = programLineColor(program?.label ?? "", bundle.program);
+      const key = `bundle|${bundle.program}|${bundle.campus}`;
+      if (g.hasEdge(key)) continue;
+      g.addEdgeWithKey(key, bundle.program, bundle.campus, {
+        kind: "member_of",
+        color: edgeTint(ink, 0.22),
+        hoverColor: edgeTint(ink, 0.42),
+        size: bundleWidth(bundle.count),
+        defer: false,
+        bundle: true,
+        count: bundle.count,
+        sparse: bundle.count < 2,
+        zIndex: 0,
+      });
+    }
 
     const renderer = new Sigma<NodeAttr, EdgeAttr>(g, container, {
       allowInvalidContainer: true,
@@ -286,21 +362,28 @@ export function NetworkSigma({
       } as never,
       nodeReducer: (node, data) => {
         const state = stateRef.current;
+        const nudge = placed.offsets.get(node);
+        const showLabel = (extra: Partial<NodeAttr> = {}) => {
+          const offset = nudge ?? { dx: 0, dy: 0 };
+          return { ...data, ...extra, forceLabel: true, labelDx: offset.dx, labelDy: offset.dy };
+        };
         if (data.marker) {
           const campuses = regionCampuses.get(node) ?? [];
           if (campuses.length > 0 && campuses.every((id) => state.hidden.has(id))) return { ...data, hidden: true };
-          if (!placed.ids.has(node)) return { ...data, label: undefined, forceLabel: false, zIndex: 6 };
-          return { ...data, forceLabel: true, label: data.label, zIndex: 6 };
+          if (!nudge) return { ...data, label: undefined, forceLabel: false, zIndex: 6 };
+          return showLabel({ label: data.label, zIndex: 6 });
         }
         if (state.hidden.has(node)) return { ...data, hidden: true };
         const active = state.hovered ?? state.selected;
         if (node === active && state.hovered === node) return { ...data, label: undefined, forceLabel: false, highlighted: true, zIndex: 5 };
-        if (!placed.ids.has(node)) return { ...data, label: undefined, forceLabel: false };
-        if (node === active) return { ...data, label: data.fullLabel, forceLabel: true, highlighted: true, zIndex: 5 };
-        if (!active) return { ...data, forceLabel: true, label: data.label };
+        const grayHub = (data.kind === "organization" || data.kind === "program" || data.kind === "investor") && !data.labelColor;
+        if (!nudge && grayHub) return { ...data, hidden: true, label: undefined, forceLabel: false };
+        if (!nudge) return { ...data, label: undefined, forceLabel: false };
+        if (node === active) return showLabel({ label: data.fullLabel, highlighted: true, zIndex: 5 });
+        if (!active) return showLabel({ label: data.label });
         const near = neighbors.get(active);
-        if (data.kind === "campus" || near?.has(node)) return { ...data, forceLabel: true, label: data.label, zIndex: 4 };
-        return { ...data, color: DIM_NODE, label: undefined, forceLabel: false, zIndex: 0 };
+        if (data.kind === "campus" || near?.has(node)) return showLabel({ label: data.label, zIndex: 4 });
+        return { ...data, color: DIM_NODE, label: undefined, forceLabel: false, zIndex: 1 };
       },
       edgeReducer: (edge, data) => {
         const state = stateRef.current;
@@ -310,7 +393,19 @@ export function NetworkSigma({
         const active = state.hovered ?? state.selected;
         const quiet = QUIET_EDGE.has(data.kind) || data.defer;
         if (active && (source === active || target === active)) {
+          const activeKind = g.getNodeAttribute(active, "kind");
+          const structuralActive = activeKind === "organization" || activeKind === "program" || activeKind === "investor";
+          if (data.bundle) {
+            if (data.sparse && !structuralActive) return { ...data, hidden: true, zIndex: 0 };
+            return { ...data, color: data.hoverColor ?? data.color, size: Math.min(2.5, data.size + 0.15), hidden: false, zIndex: 0 };
+          }
+          // A program keeps its bundled campus lines. Individual spokes would cover the cloud.
+          if (structuralActive && (data.defer || QUIET_EDGE.has(data.kind))) return { ...data, hidden: true };
           return { ...data, color: g.getNodeAttribute(active, "linkColor"), size: EDGE_HOVER_PX, hidden: false };
+        }
+        if (data.bundle) {
+          if (data.sparse) return { ...data, hidden: true };
+          return { ...data, zIndex: 0 };
         }
         if (quiet) return { ...data, hidden: true };
         if (!active) return data;
@@ -333,16 +428,20 @@ export function NetworkSigma({
           const campuses = regionCampuses.get(meta.id) ?? [];
           if (campuses.length > 0 && campuses.every((id) => hidden.has(id))) continue;
         } else if (hidden.has(meta.id)) continue;
-        if (suppressed.has(meta.id) && meta.id !== active) continue;
+        if (suppressed.has(meta.id) && meta.id !== active && !meta.named) continue;
         const display = renderer.getNodeDisplayData(meta.id);
-        if (!display || display.hidden) continue;
+        if (!display) continue;
+        // Gray hubs are hidden only after they lose the label pass. Skipping them here would keep Thiel unlabeled.
+        if (display.hidden && !meta.grayHub) continue;
         const at = renderer.framedGraphToViewport(display);
         const nodeSize = renderer.scaleSize(display.size);
         if (meta.id === active && hovered) {
           reserved.push(hoverLabelBox(at.x, at.y, nodeSize, measure(meta.fullText, 11), 11));
           continue;
         }
-        if (meta.tier === 1 && meta.degree < floor && meta.id !== active) continue;
+        if (meta.campusHub) {
+          if (meta.degree < campusHubDegreeFloor(ratio) && meta.id !== active) continue;
+        } else if (meta.tier === 1 && meta.degree < floor && meta.id !== active) continue;
         if (active && meta.tier === 1 && meta.id !== active && !near?.has(meta.id)) continue;
         if (at.x < -margin || at.y < -margin || at.x > dims.width + margin || at.y > dims.height + margin) continue;
         const selectedLabel = meta.id === active;
@@ -358,11 +457,44 @@ export function NetworkSigma({
           anchor: meta.anchor,
           fontSize: meta.fontSize,
           tracking: meta.tracking,
+          discId: meta.discId,
+          strictDiscs: meta.strictDiscs,
+          required: meta.required,
         });
       }
-      const next = selectVisibleLabels(screen, measure, reserved);
-      if (next.size === placed.ids.size && [...next].every((id) => placed.ids.has(id))) return;
-      placed.ids = next;
+      const search = document.querySelector('input[aria-label="Search the network"]');
+      if (search) {
+        const box = search.getBoundingClientRect();
+        const stage = container.getBoundingClientRect();
+        reserved.push({
+          left: box.left - stage.left - 6,
+          top: box.top - stage.top - 6,
+          right: box.right - stage.left + 6,
+          bottom: box.bottom - stage.top + 6,
+        });
+      }
+      const discs: CampusDisc[] = [];
+      for (const campus of graph.nodes) {
+        if (campus.type !== "campus" || hidden.has(campus.id)) continue;
+        const radius = layoutRadius.get(campus.id);
+        if (!radius) continue;
+        const center = renderer.graphToViewport({ x: campus.x, y: campus.y });
+        const edge = renderer.graphToViewport({ x: campus.x + radius, y: campus.y });
+        discs.push({ id: campus.campus || campus.id, x: center.x, y: center.y, r: Math.hypot(edge.x - center.x, edge.y - center.y) });
+      }
+      const next = selectVisibleLabels(screen, measure, reserved, discs);
+      let same = next.size === placed.offsets.size;
+      if (same) {
+        for (const [id, offset] of next) {
+          const prev = placed.offsets.get(id);
+          if (!prev || prev.dx !== offset.dx || prev.dy !== offset.dy) {
+            same = false;
+            break;
+          }
+        }
+      }
+      if (same) return;
+      placed.offsets = next;
       renderer.refresh();
     };
     recomputeLabelsRef.current = recomputeLabels;
@@ -450,9 +582,24 @@ function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>) 
     void renderer.getCamera().animatedReset({ duration: 280 });
     return;
   }
-  const span = Math.max(maxX - minX, maxY - minY, 0.04);
-  const ratio = Math.min(1.18, Math.max(0.04, span * 1.06));
-  void renderer.getCamera().animate({ x: (minX + maxX) / 2, y: (minY + maxY) / 2, ratio }, { duration: 360 });
+  const width = maxX - minX;
+  const height = maxY - minY;
+  // High layout Y is the top of the screen. Pad that side for the search box and filters, and the low side for the Ask bar and legend.
+  const span0 = Math.max(width, height, 0.04);
+  const paddedMaxY = maxY + span0 * 0.07;
+  const paddedMinY = minY - span0 * 0.08;
+  const paddedMinX = minX - span0 * 0.03;
+  const paddedMaxX = maxX + span0 * 0.05;
+  const span = Math.max(paddedMaxX - paddedMinX, paddedMaxY - paddedMinY, 0.04);
+  const ratio = Math.min(1.22, Math.max(0.04, span * 1.04));
+  void renderer.getCamera().animate({ x: (paddedMinX + paddedMaxX) / 2, y: (paddedMinY + paddedMaxY) / 2, ratio }, { duration: 360 });
+}
+
+function edgeTint(color: string, alpha: number): string {
+  const match = /^#([0-9a-f]{6})$/i.exec(color.trim());
+  if (!match) return `rgba(107, 114, 128, ${alpha})`;
+  const value = Number.parseInt(match[1], 16);
+  return `rgba(${(value >> 16) & 255}, ${(value >> 8) & 255}, ${value & 255}, ${alpha})`;
 }
 
 /** Sigma's camera lives in the normalized frame (center 0.5), not raw layout coordinates. */

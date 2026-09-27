@@ -17,16 +17,20 @@ export const drawHaloLabel: NodeLabelDrawingFunction = (context, data, settings)
   context.textAlign = "center";
   context.textBaseline = marker ? "middle" : anchor ? "bottom" : "top";
   context.lineJoin = "round";
-  const x = data.x;
-  const y = marker ? data.y : anchor ? data.y - data.size - 3 : data.y + data.size + 3;
+  const dx = (data as { labelDx?: number }).labelDx ?? 0;
+  const dy = (data as { labelDy?: number }).labelDy ?? 0;
+  const x = data.x + dx;
+  const y = (marker ? data.y : anchor ? data.y - data.size - 3 : data.y + data.size + 3) + dy;
   if (marker) {
     drawTracked(context, text, x, y, REGION_TRACKING, (data as { tint?: string }).tint || "#8d939c");
     return;
   }
-  context.lineWidth = 3.5;
+  const ink = (data as { labelColor?: string }).labelColor;
+  // A thin white stroke keeps colored club labels readable over dots without covering the letters.
+  context.lineWidth = ink ? 3 : 3.5;
   context.strokeStyle = "#ffffff";
   context.strokeText(text, x, y);
-  context.fillStyle = "#111111";
+  context.fillStyle = ink || "#111111";
   context.fillText(text, x, y);
 };
 
@@ -84,7 +88,7 @@ export const drawLightHover: NodeHoverDrawingFunction = (context, data, settings
   context.roundRect(x, y, boxW, boxH, 4);
   context.fill();
   context.stroke();
-  context.fillStyle = "#111111";
+  context.fillStyle = (data as { labelColor?: string }).labelColor || "#111111";
   context.font = LABEL_FONT;
   context.fillText(text, x + 6, data.y + size / 3);
   if (tip) {
