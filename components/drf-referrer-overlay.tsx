@@ -328,36 +328,48 @@ export function DrfReferrerOverlay({
           ))}
           {scene.nodes.map((node) => {
             const active = node.id === hover;
+            const badge = scene.badges.find((item) => item.key === node.id);
+            const enter = () => {
+              window.clearTimeout(clearTimer.current);
+              setHover(node.id);
+            };
+            const leave = () => {
+              clearTimer.current = window.setTimeout(() => setHover((current) => (current === node.id ? null : current)), 160);
+            };
             return (
-              <circle
-                key={node.id}
-                cx={node.x}
-                cy={node.y}
-                r={active ? 6 : 4.5}
-                fill="#111111"
-                fillOpacity={active ? 1 : hot ? 0.28 : 0.62}
-                stroke="#ffffff"
-                strokeWidth={1.5}
-                className="pointer-events-auto cursor-pointer"
-                aria-label={`${node.name}, DRF alum referrer`}
-                onMouseEnter={() => {
-                  window.clearTimeout(clearTimer.current);
-                  setHover(node.id);
-                }}
-                onMouseLeave={() => {
-                  clearTimer.current = window.setTimeout(() => setHover((current) => (current === node.id ? null : current)), 160);
-                }}
-              />
+              <g key={node.id} pointerEvents="auto" className="cursor-pointer" onMouseEnter={enter} onMouseLeave={leave}>
+                <circle cx={node.x} cy={node.y} r={9} fill="transparent" pointerEvents="all" aria-label={`${node.name}, DRF alum referrer`} />
+                <circle
+                  cx={node.x}
+                  cy={node.y}
+                  r={active ? 6.5 : 5}
+                  fill="#111111"
+                  fillOpacity={active ? 1 : hot ? 0.28 : 0.62}
+                  stroke="#ffffff"
+                  strokeWidth={1.5}
+                  pointerEvents="none"
+                />
+                {badge && (
+                  <g transform={`translate(${badge.x} ${badge.y})`} pointerEvents="all">
+                    <rect width="22" height="11" rx="2" fill="#111111" />
+                    <text x="11" y="8.2" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="700" fontFamily="Satoshi, Arial, sans-serif">
+                      DRF
+                    </text>
+                  </g>
+                )}
+              </g>
             );
           })}
-          {scene.badges.map((badge) => (
-            <g key={badge.key} transform={`translate(${badge.x} ${badge.y})`} pointerEvents="none">
-              <rect width="22" height="11" rx="2" fill="#111111" fillOpacity={hot && badge.key !== hover && !badge.key.startsWith("group|") ? 0.35 : 0.92} />
-              <text x="11" y="8.2" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="700" fontFamily="Satoshi, Arial, sans-serif">
-                DRF
-              </text>
-            </g>
-          ))}
+          {scene.badges
+            .filter((badge) => badge.key.startsWith("group|"))
+            .map((badge) => (
+              <g key={badge.key} transform={`translate(${badge.x} ${badge.y})`} pointerEvents="none">
+                <rect width="22" height="11" rx="2" fill="#111111" fillOpacity={0.92} />
+                <text x="11" y="8.2" textAnchor="middle" fill="#ffffff" fontSize="7" fontWeight="700" fontFamily="Satoshi, Arial, sans-serif">
+                  DRF
+                </text>
+              </g>
+            ))}
         </svg>
       )}
       {hovered && (
