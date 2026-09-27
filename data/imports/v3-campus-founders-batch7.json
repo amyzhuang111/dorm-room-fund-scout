@@ -1,0 +1,969 @@
+{
+  "retrievedAt": "2026-09-27T22:30:00.000Z",
+  "companies": [
+    {
+      "name": "Sixtytwo",
+      "description": "Reliability software for GPU clusters, so jobs only run on hardware that will not fail.",
+      "website": "https://sixtytwo.ai/",
+      "sourceUrl": "https://www.linkedin.com/posts/notablecapital_congratulations-to-the-grand-prize-winners-activity-7483262855593488384-IDiJ",
+      "excerpt": "Jessie Dong and Sonnet Xu, co-founders of Sixtytwo. Sixtytwo is the reliability software for GPU clusters, so jobs only run on hardware that won't fail. You can check it out at https://sixtytwo.ai/.",
+      "orgPlace": "Notable Capital NextGen",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "founders": [
+        {
+          "name": "Jessie Dong",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Notable Capital NextGen, Sixtytwo co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Notable Capital names Jessie Dong as a co-founder of Sixtytwo and says she and Sonnet met before freshman year at Stanford. No class year is printed.",
+          "excerpt": "Congratulations to the Grand Prize winners of our NextGen Pitch Day, Jessie Dong and Sonnet Xu, co-founders of Sixtytwo. Jessie and Sonnet met before freshman year at Stanford."
+        },
+        {
+          "name": "Sonnet Xu",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Notable Capital NextGen, Sixtytwo co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Notable Capital names Sonnet Xu as a co-founder of Sixtytwo and says he and Jessie met before freshman year at Stanford. No class year is printed.",
+          "excerpt": "Congratulations to the Grand Prize winners of our NextGen Pitch Day, Jessie Dong and Sonnet Xu, co-founders of Sixtytwo. Jessie and Sonnet met before freshman year at Stanford."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "prize",
+          "amountUsd": null,
+          "amountText": "$5,000 cash and $15,000 in Anthropic credits",
+          "date": "2026-07-15",
+          "leads": [],
+          "investors": [],
+          "excerpt": "As our grand prize winners, Jessie Dong and Sonnet Xu took home $15K in Anthropic credits, $5K cash, a consultation with an Anthropic product leader and a mentoring session from an operator as they build Sixtytwo.",
+          "sourceUrl": "https://www.linkedin.com/posts/notablecapital_congratulations-to-the-grand-prize-winners-activity-7483262855593488384-IDiJ"
+        }
+      ]
+    },
+    {
+      "name": "Lyon",
+      "description": "Private foundation models for banks, insurance companies, and fintechs, trained on the company's own transaction data.",
+      "website": "https://lyon.so",
+      "sourceUrl": "https://www.ycombinator.com/companies/lyon",
+      "excerpt": "Y Combinator lists Lyon (Fall 2026). Foundation models on enterprise transaction data. Gabriel Noya, Founder/CEO. Stanford EE and CS 26'.",
+      "orgPlace": "Y Combinator Fall 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "founders": [
+        {
+          "name": "Gabriel Noya",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Y Combinator Fall 2026, Stanford",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Y Combinator lists Gabriel Noya as founder of Lyon. The bio prints Stanford EE and CS 26'.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "EE and CS '26",
+            "gradYear": 2026,
+            "evidence": "The Y Combinator bio for Gabriel Noya reads Stanford EE and CS 26'."
+          },
+          "excerpt": "Y Combinator's page for Lyon lists Gabriel Noya (Founder/CEO). Bio: Stanford EE and CS 26'."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Y Combinator",
+          "excerpt": "Y Combinator company page lists Lyon in the Fall 2026 batch. The page does not state a dollar amount.",
+          "sourceUrl": "https://www.ycombinator.com/companies/lyon",
+          "batch": "Fall 2026",
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "FlowManual",
+      "description": "AI estimating, bidding, and purchasing software for general and MEP construction contractors.",
+      "website": "https://flowmanual.com",
+      "sourceUrl": "https://www.ycombinator.com/companies/flowmanual",
+      "excerpt": "Y Combinator lists FlowManual (Summer 2026). Built by two engineers and Harvard dropouts, FlowManual automates the buying process during pre-construction.",
+      "orgPlace": "Y Combinator Summer 2026",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "founders": [
+        {
+          "name": "David Shijoon Bae",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Y Combinator Summer 2026, Harvard",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Y Combinator lists David Shijoon Bae as Founder/CEO. His bio says Previously MechE @ Harvard, and the page calls the founders Harvard dropouts. No class year is printed.",
+          "leftSchool": true,
+          "excerpt": "David Shijoon Bae, Founder/CEO. Co-founder and CEO at FlowManual. Previously MechE @ Harvard. Built by two engineers and Harvard dropouts. Michael and David were college roommates and engineers at Harvard."
+        },
+        {
+          "name": "Michael Lin",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Y Combinator Summer 2026, Harvard",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Y Combinator lists Michael Lin as Founder/CTO. The page says Michael and David were college roommates and engineers at Harvard, and calls the founders Harvard dropouts. No class year is printed.",
+          "leftSchool": true,
+          "excerpt": "Michael Lin, Founder/CTO. Co-Founder and CTO at FlowManual. Michael and David were college roommates and engineers at Harvard. Built by two engineers and Harvard dropouts."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Y Combinator",
+          "excerpt": "Y Combinator company page lists FlowManual in the Summer 2026 batch. The page does not state a dollar amount.",
+          "sourceUrl": "https://www.ycombinator.com/companies/flowmanual",
+          "batch": "Summer 2026",
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Poth Labs",
+      "description": "An agentic research platform that connects company data into a customer knowledge graph.",
+      "website": "https://pothlabs.com",
+      "sourceUrl": "https://www.ycombinator.com/companies/poth-labs",
+      "excerpt": "Y Combinator lists Poth Labs (Summer 2026). Matthew Wong, Founder/CEO. Cofounder and CEO of Poth Labs. Ex-Palantir, Stanford.",
+      "orgPlace": "Y Combinator Summer 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "founders": [
+        {
+          "name": "Matthew Wong",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Y Combinator Summer 2026, Stanford",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Y Combinator lists Matthew Wong as Founder/CEO of Poth Labs. The bio says Ex-Palantir, Stanford, and does not say student, alumni, or a class year.",
+          "excerpt": "Matthew Wong, Founder/CEO. Cofounder and CEO of Poth Labs. Ex-Palantir, Stanford."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Y Combinator",
+          "excerpt": "Y Combinator company page lists Poth Labs in the Summer 2026 batch. The page does not state a dollar amount.",
+          "sourceUrl": "https://www.ycombinator.com/companies/poth-labs",
+          "batch": "Summer 2026",
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Otis Labs",
+      "description": "The hardware you need to detect disease and autonomously treat inflammation 24/7 without pulling her from the herd.",
+      "website": "https://www.otislabs.us/",
+      "sourceUrl": "https://www.otislabs.us/",
+      "excerpt": "Otis Labs. Closed-loop mastitis defense for dairy. The hardware you need to detect disease and autonomously treat inflammation 24/7 without pulling her from the herd.",
+      "orgPlace": "Otis Labs",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "founders": []
+    },
+    {
+      "name": "Otis Labs",
+      "description": "Bovine neurotech.",
+      "website": "https://www.otislabs.us/",
+      "sourceUrl": "https://akashapai.com/",
+      "excerpt": "Akash Pai is studying EE at Stanford and is the co-founder of Otis Labs, working on bovine neurotech.",
+      "orgPlace": "Otis Labs",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "founders": [
+        {
+          "name": "Akash Pai",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford, Otis Labs co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Akash Pai's site says he is studying EE at Stanford and is the co-founder of Otis Labs. No class year is printed.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "studying EE",
+            "gradYear": null,
+            "evidence": "Akash Pai's site says: Hi, I'm Akash and I'm studying EE at Stanford."
+          },
+          "excerpt": "Akash Pai writes: Hi, I'm Akash and I'm studying EE at Stanford. I work on bovine neurotech as the co-founder of Otis Labs."
+        }
+      ]
+    },
+    {
+      "name": "Otis Labs",
+      "description": "Cattle neurotech to maximize milk quality and yield.",
+      "website": "https://www.otislabs.us/",
+      "sourceUrl": "https://www.linkedin.com/in/noahflee",
+      "excerpt": "Noah Lee, Founder at Otis Labs (YC S26), EE at Stanford University. Cattle neurotech to maximize milk quality and yield.",
+      "orgPlace": "Y Combinator Summer 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "founders": [
+        {
+          "name": "Noah Lee",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Y Combinator Summer 2026, Stanford",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Noah Lee's LinkedIn profile says Founder at Otis Labs (YC S26) and EE at Stanford University, and lists a Bachelor of Science in Electrical Engineering at Stanford. No class year is printed.",
+          "excerpt": "Noah Lee. Founder at Otis Labs (YC S26). EE at Stanford University. Bachelor of Science, Electrical Engineering at Stanford University. Cattle neurotech to maximize milk quality and yield. Backed by YC."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Y Combinator",
+          "excerpt": "Noah Lee's LinkedIn headline says Founder at Otis Labs (YC S26). The profile does not state a dollar amount.",
+          "sourceUrl": "https://www.linkedin.com/in/noahflee",
+          "batch": "Summer 2026",
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Finnie",
+      "description": "Turns a Common App or resume into personalized scholarship matches.",
+      "website": "https://www.findmescholarships.com/home",
+      "sourceUrl": "https://www.linkedin.com/posts/finniefunding_college-highschool-scholarships-activity-7499881062055956480-utIV",
+      "excerpt": "Built by our founders, Fatimah Hussain, a student at UC Berkeley, and Chloe Hughes, a student at Stanford, Finnie helps students turn their Common App or resume into personalized scholarship matches.",
+      "orgPlace": "Finnie",
+      "campusIds": [
+        "univ_berkeley",
+        "univ_stanford"
+      ],
+      "founders": [
+        {
+          "name": "Fatimah Hussain",
+          "aliases": [],
+          "campusId": "univ_berkeley",
+          "affiliationRole": "UC Berkeley, Finnie founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Finnie's introduction post names Fatimah Hussain as a founder and a student at UC Berkeley. No class year is printed.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "student",
+            "gradYear": null,
+            "evidence": "The Finnie post says Fatimah Hussain, a student at UC Berkeley."
+          },
+          "excerpt": "Built by our founders, Fatimah Hussain, a student at UC Berkeley, and Chloe Hughes, a student at Stanford, Finnie helps students turn their Common App or resume into personalized scholarship matches."
+        },
+        {
+          "name": "Chloe Hughes",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford, Finnie founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Finnie's introduction post names Chloe Hughes as a founder and a student at Stanford. No class year is printed.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "student",
+            "gradYear": null,
+            "evidence": "The Finnie post says Chloe Hughes, a student at Stanford."
+          },
+          "excerpt": "Built by our founders, Fatimah Hussain, a student at UC Berkeley, and Chloe Hughes, a student at Stanford, Finnie helps students turn their Common App or resume into personalized scholarship matches."
+        }
+      ]
+    },
+    {
+      "name": "Breakthrough Ventures",
+      "description": "A student-founder accelerator that funds companies started by college students and recent graduates.",
+      "website": null,
+      "sourceUrl": "https://techcrunch.com/2026/02/02/two-stanford-students-launch-2m-startup-accelerator-for-students-nationwide/",
+      "excerpt": "Roman Scott and Itbaan Nafi have raised $2 million for an accelerator program called Breakthrough Ventures, which aims to fund businesses founded by college students and recent graduates.",
+      "orgPlace": "Breakthrough Ventures",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "investable": false,
+      "founders": [
+        {
+          "name": "Roman Scott",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford, Breakthrough Ventures",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "TechCrunch says Roman Scott co-built Breakthrough Ventures. He received his Stanford undergraduate degree in 2024 and a master's there the following year.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Stanford master's, 2025",
+            "gradYear": 2025,
+            "evidence": "TechCrunch says Scott received his undergraduate degree from Stanford in 2024 and went on to earn a master's degree there the following year."
+          },
+          "excerpt": "Roman Scott and Itbaan Nafi began building Breakthrough Ventures. Scott received his undergraduate degree from Stanford in 2024 and went on to earn a master's degree there the following year."
+        },
+        {
+          "name": "Itbaan Nafi",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford, Breakthrough Ventures",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "TechCrunch quotes Itbaan Nafi on the Breakthrough Ventures fundraise and says he is still a master's candidate at Stanford. No class year is printed.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "master's candidate",
+            "gradYear": null,
+            "evidence": "TechCrunch says Nafi, who is still a master's candidate at Stanford, told TechCrunch about the Breakthrough Ventures fundraise."
+          },
+          "excerpt": "Roman Scott and Itbaan Nafi began building Breakthrough Ventures. Nafi, who is still a master's candidate at Stanford, told TechCrunch about the fundraise."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "debut fund",
+          "amountUsd": 2000000,
+          "amountText": "$2 million debut fund",
+          "date": "2026-02-02",
+          "leads": [],
+          "investors": [
+            "Mayfield",
+            "Collide Capital"
+          ],
+          "excerpt": "Two Stanford students announced that they have raised $2 million for Breakthrough Ventures, fundraising from the likes of Mayfield and Collide Capital.",
+          "sourceUrl": "https://techcrunch.com/2026/02/02/two-stanford-students-launch-2m-startup-accelerator-for-students-nationwide/"
+        }
+      ]
+    },
+    {
+      "name": "CryoFab",
+      "description": "A 3D ice printer used to create channels for tissue engineering.",
+      "website": null,
+      "sourceUrl": "https://seas.harvard.edu/news/refine-claims-presidents-innovation-challenge-grand-prize",
+      "excerpt": "CryoFab, co-founded by SEAS Master in Design Engineering (MDE) students Hana Khurshid, Morgan Doane and Siddhi Patil, took home a $2,500 Ingenuity Award. CryoFab is a 3D ice printer used to create channels for tissue engineering.",
+      "orgPlace": "Harvard President's Innovation Challenge 2026",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "founders": [
+        {
+          "name": "Hana Khurshid",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard SEAS MDE, CryoFab co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard SEAS names Hana Khurshid as a CryoFab co-founder and an MDE student. No class year is printed.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "MDE student",
+            "gradYear": null,
+            "evidence": "Harvard SEAS says CryoFab is co-founded by SEAS Master in Design Engineering (MDE) students Hana Khurshid, Morgan Doane and Siddhi Patil."
+          },
+          "excerpt": "CryoFab, co-founded by SEAS Master in Design Engineering (MDE) students Hana Khurshid, Morgan Doane and Siddhi Patil."
+        },
+        {
+          "name": "Morgan Doane",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard SEAS MDE, CryoFab co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard SEAS names Morgan Doane as a CryoFab co-founder and an MDE student. No class year is printed.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "MDE student",
+            "gradYear": null,
+            "evidence": "Harvard SEAS says CryoFab is co-founded by SEAS Master in Design Engineering (MDE) students Hana Khurshid, Morgan Doane and Siddhi Patil."
+          },
+          "excerpt": "CryoFab, co-founded by SEAS Master in Design Engineering (MDE) students Hana Khurshid, Morgan Doane and Siddhi Patil."
+        },
+        {
+          "name": "Siddhi Patil",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard SEAS MDE, CryoFab co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard SEAS names Siddhi Patil as a CryoFab co-founder and an MDE student. No class year is printed.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "MDE student",
+            "gradYear": null,
+            "evidence": "Harvard SEAS says CryoFab is co-founded by SEAS Master in Design Engineering (MDE) students Hana Khurshid, Morgan Doane and Siddhi Patil."
+          },
+          "excerpt": "CryoFab, co-founded by SEAS Master in Design Engineering (MDE) students Hana Khurshid, Morgan Doane and Siddhi Patil."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "prize",
+          "amountUsd": 2500,
+          "amountText": "$2,500 Ingenuity Award",
+          "date": "2026-05-12",
+          "leads": [],
+          "investors": [],
+          "excerpt": "CryoFab, co-founded by SEAS Master in Design Engineering (MDE) students Hana Khurshid, Morgan Doane and Siddhi Patil, took home a $2,500 Ingenuity Award.",
+          "sourceUrl": "https://seas.harvard.edu/news/refine-claims-presidents-innovation-challenge-grand-prize"
+        }
+      ]
+    },
+    {
+      "name": "Mohan",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://news.mit.edu/2026/startup-making-reusable-emergency-housing-wins-mit-100k-competition-0518",
+      "excerpt": "The second-place $50,000 prize was awarded to the startup Mohan. Co-founder and MIT research affiliate Chance Jiajie Li spoke for the company.",
+      "orgPlace": "MIT $100K 2026",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "founders": [
+        {
+          "name": "Chance Jiajie Li",
+          "aliases": [],
+          "campusId": "univ_mit",
+          "affiliationRole": "MIT research affiliate, Mohan co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "MIT News calls Chance Jiajie Li a co-founder of Mohan and an MIT research affiliate. The article does not call him a student or print a class year.",
+          "excerpt": "The second-place $50,000 David T. Morgenthaler Founder's Prize was awarded to the startup Mohan. Co-founder and MIT research affiliate Chance Jiajie Li said the company is targeting copper deposits."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "prize",
+          "amountUsd": 50000,
+          "amountText": "$50,000 David T. Morgenthaler Founder's Prize",
+          "date": "2026-05-12",
+          "leads": [],
+          "investors": [],
+          "excerpt": "The second-place $50,000 David T. Morgenthaler Founder's Prize was awarded to the startup Mohan.",
+          "sourceUrl": "https://news.mit.edu/2026/startup-making-reusable-emergency-housing-wins-mit-100k-competition-0518"
+        }
+      ]
+    },
+    {
+      "name": "Iceberg Systems",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://news.mit.edu/2026/startup-making-reusable-emergency-housing-wins-mit-100k-competition-0518",
+      "excerpt": "The third place $5,000 prize went to Iceberg Systems. Co-founder and MIT PhD student Ayush Chopra spoke for the company.",
+      "orgPlace": "MIT $100K 2026",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "founders": [
+        {
+          "name": "Ayush Chopra",
+          "aliases": [],
+          "campusId": "univ_mit",
+          "affiliationRole": "MIT PhD student, Iceberg Systems co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "MIT News calls Ayush Chopra a co-founder of Iceberg Systems and an MIT PhD student. No class year is printed.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "PhD student",
+            "gradYear": null,
+            "evidence": "MIT News says co-founder and MIT PhD student Ayush Chopra."
+          },
+          "excerpt": "The third place $5,000 prize went to Iceberg Systems. Co-founder and MIT PhD student Ayush Chopra says the company simulates how shocks cascade through the economy."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "prize",
+          "amountUsd": 5000,
+          "amountText": "$5,000 third prize",
+          "date": "2026-05-12",
+          "leads": [],
+          "investors": [],
+          "excerpt": "The third place $5,000 prize went to Iceberg Systems.",
+          "sourceUrl": "https://news.mit.edu/2026/startup-making-reusable-emergency-housing-wins-mit-100k-competition-0518"
+        }
+      ]
+    },
+    {
+      "name": "Risklytics",
+      "description": null,
+      "website": "https://www.risklytics.ai/",
+      "sourceUrl": "https://www.ycombinator.com/companies/risklytics",
+      "excerpt": "Y Combinator lists Risklytics (Summer 2026). Alexander Risio, Founder/CTO. We're Sam and Alex, on leave from Harvard.",
+      "orgPlace": "Y Combinator Summer 2026",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "founders": [
+        {
+          "name": "Alexander Risio",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Y Combinator Summer 2026, on leave from Harvard",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Y Combinator lists Alexander Risio as Founder/CTO of Risklytics. The team section says Sam and Alex are on leave from Harvard. His own bio line does not name the school.",
+          "leftSchool": true,
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "on leave",
+            "gradYear": null,
+            "evidence": "The Y Combinator page for Risklytics says: We're Sam and Alex, on leave from Harvard."
+          },
+          "excerpt": "Alexander Risio, Founder/CTO of Risklytics. We're Sam and Alex, on leave from Harvard."
+        }
+      ]
+    },
+    {
+      "name": "Argos",
+      "description": "An AI- and machine learning-based safety monitoring system that detects patient deterioration before it becomes critical.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists Argos among the student startups selected for the spring 2026 1789 Student Venture Fund. An AI- and machine learning-based safety monitoring system that detects patient deterioration before it becomes critical.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists Argos among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "Biryani Blitz",
+      "description": "An autonomous infrastructure for hot, culturally authentic Indian meals on college campuses.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists Biryani Blitz among the student startups selected for the spring 2026 1789 Student Venture Fund. An autonomous infrastructure for hot, culturally authentic Indian meals on college campuses.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists Biryani Blitz among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "Cadence",
+      "description": "A digital health platform that provides continuous, non-invasive monitoring of functional cognitive change for individuals diagnosed with Alzheimer's disease.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists Cadence among the student startups selected for the spring 2026 1789 Student Venture Fund. A digital health platform that provides continuous, non-invasive monitoring of functional cognitive change for individuals diagnosed with Alzheimer's disease.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists Cadence among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "Carolina Chip Fab",
+      "description": "A team building end-to-end pipelines for microdevices, covering design, fabrication and validation under one roof.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists Carolina Chip Fab among the student startups selected for the spring 2026 1789 Student Venture Fund. A team building end-to-end pipelines for microdevices, covering design, fabrication and validation under one roof.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists Carolina Chip Fab among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "Case Closed",
+      "description": "An AI-assisted legal research system designed to reduce the time it takes to move from a legal question to a defensible argument.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists Case Closed among the student startups selected for the spring 2026 1789 Student Venture Fund. An AI-assisted legal research system designed to reduce the time it takes to move from a legal question to a defensible argument.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists Case Closed among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "CharChai",
+      "description": "A consumer-packaged goods brand that produces Keurig-compatible chai pods made with real spices and a family-rooted recipe.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists CharChai among the student startups selected for the spring 2026 1789 Student Venture Fund. A consumer-packaged goods brand that produces Keurig-compatible chai pods made with real spices and a family-rooted recipe.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists CharChai among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "Clarus",
+      "description": "An end-to-end healthcare ordering, pricing and fulfillment platform that helps patients complete outpatient care without surprise bills or confusion.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists Clarus among the student startups selected for the spring 2026 1789 Student Venture Fund. An end-to-end healthcare ordering, pricing and fulfillment platform that helps patients complete outpatient care without surprise bills or confusion.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists Clarus among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "Cualli",
+      "description": "A programmable probiotic therapeutics platform that engineers beneficial microbes into highly specialized living medicines.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists Cualli among the student startups selected for the spring 2026 1789 Student Venture Fund. A programmable probiotic therapeutics platform that engineers beneficial microbes into highly specialized living medicines.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists Cualli among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "Gleam",
+      "description": "A platform that helps retail clothing businesses identify and act on emerging fashion trends early.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists Gleam among the student startups selected for the spring 2026 1789 Student Venture Fund. A platform that helps retail clothing businesses identify and act on emerging fashion trends early.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists Gleam among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "Gustbusters",
+      "description": "Uses building-specific data to analyze turbulent wind patterns around structures and optimize turbine placement in cities.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists Gustbusters among the student startups selected for the spring 2026 1789 Student Venture Fund. Uses building-specific data to analyze turbulent wind patterns around structures and optimize turbine placement in cities.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists Gustbusters among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "KAIRS",
+      "description": "A wearable rehabilitation sleeve designed to improve the way patients recover from orthopedic injuries and surgeries.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists KAIRS among the student startups selected for the spring 2026 1789 Student Venture Fund. A wearable rehabilitation sleeve designed to improve the way patients recover from orthopedic injuries and surgeries.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists KAIRS among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "KokoroMap",
+      "description": "A strengths-first parenting tool designed to help parents understand what their child is naturally good at and how to nurture those strengths early.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists KokoroMap among the student startups selected for the spring 2026 1789 Student Venture Fund. A strengths-first parenting tool designed to help parents understand what their child is naturally good at and how to nurture those strengths early.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists KokoroMap among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "Mist",
+      "description": "An AI-powered mobile platform that transforms how people discover and purchase cosmetics.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists Mist among the student startups selected for the spring 2026 1789 Student Venture Fund. An AI-powered mobile platform that transforms how people discover and purchase cosmetics.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists Mist among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "PlugVerse",
+      "description": "A professional marketplace built to remove the administrative friction from the local and college music scenes.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists PlugVerse among the student startups selected for the spring 2026 1789 Student Venture Fund. A professional marketplace built to remove the administrative friction from the local and college music scenes.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists PlugVerse among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "Safeli Shop",
+      "description": "A student marketplace where users with verified .edu logins can buy and sell items, message peers and complete transactions.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists Safeli Shop among the student startups selected for the spring 2026 1789 Student Venture Fund. A student marketplace where users with verified .edu logins can buy and sell items, message peers and complete transactions.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Naya Zimmerman",
+          "aliases": [],
+          "campusId": "univ_unc",
+          "affiliationRole": "UNC undergraduate, Safeli Shop",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Innovate Carolina calls Naya Zimmerman an undergraduate student building Safeli Shop LLC. The article does not use the title founder or print a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "undergraduate",
+            "gradYear": null,
+            "evidence": "Innovate Carolina says undergraduate student Naya Zimmerman is building Safeli Shop LLC."
+          },
+          "excerpt": "Undergraduate student Naya Zimmerman, who is a part of the UNC Shuford Program in Entrepreneurship, is building Safeli Shop LLC, a digital student marketplace."
+        }
+      ],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists Safeli Shop among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "Speak Out Sisterhood",
+      "description": "A global nonprofit equipping young women in STEM with leadership, advocacy, and professional skills.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists Speak Out Sisterhood among the student startups selected for the spring 2026 1789 Student Venture Fund. A global nonprofit equipping young women in STEM with leadership, advocacy, and professional skills.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": false,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists Speak Out Sisterhood among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    },
+    {
+      "name": "STEM PLUG",
+      "description": "Designs story-driven STEM learning experiences that combine children's books, hands-on robotics kits and guided programs for K-8 students.",
+      "website": null,
+      "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+      "excerpt": "Innovate Carolina lists STEM PLUG among the student startups selected for the spring 2026 1789 Student Venture Fund. Designs story-driven STEM learning experiences that combine children's books, hands-on robotics kits and guided programs for K-8 students.",
+      "orgPlace": "1789 Student Venture Fund, spring 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "investable": true,
+      "founders": [],
+      "investors": [
+        {
+          "name": "1789 Student Venture Fund",
+          "excerpt": "Innovate Carolina lists STEM PLUG among the student startups selected for the spring 2026 1789 Student Venture Fund.",
+          "sourceUrl": "https://innovate.unc.edu/spring-2026-1789-svf-awardees/",
+          "kind": "grant"
+        }
+      ]
+    }
+  ],
+  "potential": [
+    {
+      "name": "Akio Shirali",
+      "aliases": [],
+      "campusId": "univ_stanford",
+      "affiliationRole": "Stanford '26, stealth biotech co-founder",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "partial",
+      "verificationNote": "stealth or potential founder. Akio Shirali's LinkedIn headline says Co-founder at Stealth and Biomedical Computation at Stanford '26. The profile does not name the company or a public product. The LinkedIn stealth-company page is a placeholder, so no company row was created.",
+      "orgPlace": "Unnamed stealth company",
+      "sourceUrl": "https://www.linkedin.com/in/akio-shirali",
+      "excerpt": "Akio Shirali. Co-founder at Stealth. Biomedical Computation at Stanford '26. Computational Protein Design Lab.",
+      "enrollment": {
+        "status": "recent_grad",
+        "basis": "verified",
+        "label": "Stanford '26",
+        "gradYear": 2026,
+        "evidence": "Akio Shirali's LinkedIn headline says Biomedical Computation at Stanford '26, and the education entry spans 2022-2026."
+      }
+    },
+    {
+      "name": "Ethan Xia",
+      "aliases": [],
+      "campusId": "univ_penn",
+      "affiliationRole": "Penn junior, stealth AI co-founder",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "partial",
+      "verificationNote": "stealth or potential founder. Ethan Xia's LinkedIn profile says he is a junior at UPenn and a co-founder of an unnamed stealth AI startup. The profile does not name a product. The LinkedIn stealth-company page is a placeholder, so no company row was created.",
+      "orgPlace": "Unnamed stealth company",
+      "sourceUrl": "https://www.linkedin.com/in/ethan-xia-478034216",
+      "excerpt": "Ethan Xia. I'm a junior at UPenn studying CIS, DS, and Engineering Entrepreneurship. Co-Founder of a stealth AI startup.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "verified",
+        "label": "junior",
+        "gradYear": null,
+        "evidence": "Ethan Xia's LinkedIn profile says: I'm a junior at UPenn studying CIS, DS, and Engineering Entrepreneurship."
+      }
+    }
+  ],
+  "links": []
+}
