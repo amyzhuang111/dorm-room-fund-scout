@@ -2,7 +2,7 @@
 
 Repeatable free searches for student founders, stealth companies, and people who are building but do not have a public product yet. Run these about once a semester, or when a campus refresh is requested. Every row that lands in `data/campus-universe.db` still needs a page that states the person, the school, and the company or the "building" claim. Do not fill gaps from memory. Do not turn a missing page into a negative score.
 
-Voice transcripts garble names. Check the spoken words against a public page before import. Two confirmed decodes: "Fulvers" is Fulcrum (`withfulcrum.com`, Columbia), and "62 by Sonnet2" is Sixtytwo (`sixtytwo.ai`), co-founded by Jessie Dong and Sonnet Xu, who met before freshman year at Stanford.
+Voice transcripts garble names. Check the spoken words against a public page before import. Confirmed decodes: "Fulvers" is Fulcrum (`withfulcrum.com`, Columbia; Sambhav Anand and Arjun Mangla), not the YC debugger also named Fulcrum. "Nori Robotics" is Antonio Sitong Li's humanoid company (`norirobotics.com`, Columbia, YC S26), not the UIUC wearables company Nori (`nori.ai`). "62 by Sonnet2" is Sixtytwo (`sixtytwo.ai`), co-founded by Jessie Dong and Sonnet Xu, who met before freshman year at Stanford.
 
 People with no public product go in the import file's `potential` array. Set `potentialSignal` and the start of `verificationNote` to `stealth or potential founder`. That tier is not Founder Signal, eligibility, or an investment score. A named product, even a small one, is a company row with `founder` status.
 
@@ -37,6 +37,7 @@ site:news.ycombinator.com "Show HN" (student OR dropout) {campus} (built OR buil
 Y Combinator and a16z Speedrun, which are the highest-yield free rosters:
 
 - Public Algolia on `https://www.ycombinator.com/companies` (`window.AlgoliaOpts`). Search the campus name, `dropped out`, and `on leave`. Fetch `https://www.ycombinator.com/companies/{slug}` and read the founder bio.
+- Founder bios for a whole batch are also in the public mirror `https://devasheeshg.github.io/yc-api/meta.json` (2023–2026 batch files). Cite `https://www.ycombinator.com/companies/{slug}`, not the mirror. `yc-oss` company JSON has no bios. A job at a medical school is not enrollment. "Senior Consultant" is not a class year.
 - Speedrun list: `https://speedrun-api.a16z.com/api/companies/companies/?limit=100&offset=0`. Bios are on `https://speedrun.a16z.com/companies/{slug}`, not in the list JSON.
 - YC Work at a Startup: open the company's jobs page only to find the company slug, then cite the company page for the founder and the school.
 
@@ -61,6 +62,8 @@ Campus demo days and prize pages (open the official write-up, not a recap that d
 ```
 
 Pages that worked in this run: Penn Venture Lab Startup Challenge, MIT $100K (`news.mit.edu`), Harvard SEAS President's Innovation Challenge, Innovate Carolina 1789 Student Venture Fund, Columbia Startup Lab, and Startup Columbia winners.
+
+Cohort pages that named founders in the September 2026 breadth pass: Cornell eLab 2025-26 (`eship.cornell.edu`), Penn VIP-X Spring 2026 and Fall 2025 (Venture Lab LinkedIn posts), Michigan Zell Entrepreneurs 2025-26 (`zli.umich.edu`), MIT delta v 2025 and the Investor Day lookbook, and CMU VentureBridge '26. Georgia Tech CREATE-X Demo Day lists companies and descriptions and does not name founders. TreeHacks 2025 winner write-ups name teammates and do not state each person's school, so they were not affiliated. Neo Scholars, Z Fellows, the Thiel Fellowship site, and the Pear Fellows post did not publish a name-and-school roster in the fetched text.
 
 Substack, Medium, and community posts:
 
