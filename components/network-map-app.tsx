@@ -438,7 +438,7 @@ export function NetworkMapApp() {
               ))}
             </FilterGroup>
             <FilterGroup title="Sector">
-              {[...new Set(shown.nodes.map((node) => node.sector).filter((item): item is string => !!item))].sort().map((sector) => (
+              {[...new Set((shown ?? graph).nodes.map((node) => node.sector).filter((item): item is string => !!item))].sort().map((sector) => (
                 <Check key={sector} label={sector} checked={filters.sectors.includes(sector)} onChange={() => setFilters({ ...filters, sectors: toggle(filters.sectors, sector) })} />
               ))}
             </FilterGroup>
@@ -456,12 +456,12 @@ export function NetworkMapApp() {
                 <p className="pt-1 text-[10px] leading-snug text-neutral-600">est. means that bucket was inferred.</p>
               </FilterGroup>
               <FilterGroup title="Signal tier">
-                {[...new Set(shown.nodes.map((node) => node.tier ?? "Untiered"))].sort().map((tier) => (
+                {[...new Set((shown ?? graph).nodes.map((node) => node.tier ?? "Untiered"))].sort().map((tier) => (
                   <Check key={tier} label={tier} checked={filters.tiers.includes(tier)} onChange={() => setFilters({ ...filters, tiers: toggle(filters.tiers, tier) })} />
                 ))}
               </FilterGroup>
               <FilterGroup title="Stage">
-                {[...new Set(shown.nodes.map((node) => node.stage ?? "Unknown"))].sort().map((stage) => (
+                {[...new Set((shown ?? graph).nodes.map((node) => node.stage ?? "Unknown"))].sort().map((stage) => (
                   <Check key={stage} label={stage} checked={filters.stages.includes(stage)} onChange={() => setFilters({ ...filters, stages: toggle(filters.stages, stage) })} />
                 ))}
               </FilterGroup>

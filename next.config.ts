@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
   // listed. Without this, `next dev` serves HTML at that host but never
   // hydrates, so the globe stays on "Loading globe".
   allowedDevOrigins: ["127.0.0.1"],
+  // postgres.js publishes a workerd build. Leave it external so the Next
+  // bundler does not load that build while collecting the pipeline route,
+  // and so a deploy with no database URL never has to initialize the client.
+  serverExternalPackages: ["postgres"],
   // The SQLite file isn't reachable by Next's static import tracing (it's opened
   // via a runtime fs path in lib/db/client.ts), so it has to be listed explicitly
   // or Vercel's serverless functions won't have it bundled.

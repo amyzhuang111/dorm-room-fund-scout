@@ -1,6 +1,8 @@
 import { getDb } from "@/lib/db/client";
 import { findDuplicates, type CatalogRecord } from "@/lib/domain/user-pipeline";
 
+export const runtime = "nodejs";
+
 export async function POST(request: Request) {
   let body: { name?: string; websiteUrl?: string | null; founderNames?: string[]; ignoreIds?: string[] };
   try {

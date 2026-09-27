@@ -4,8 +4,9 @@
 // set, the API reports the store as unconfigured and the browser keeps entries
 // in localStorage.
 
-import postgres from "postgres";
 import { parseState, type UserPipelineState } from "../domain/user-pipeline";
+
+type Sql = (strings: TemplateStringsArray, ...values: unknown[]) => PromiseLike<unknown>;
 
 const REDIS_KEY = "scout-user-pipeline";
 const ROW_ID = "default";
@@ -35,23 +36,25 @@ export function pipelineBackend(): PipelineBackend | null {
   return null;
 }
 
-const globalStore = globalThis as unknown as { __scoutPipelineSql?: ReturnType<typeof postgres> };
+const globalStore = globalThis as unknown as { __scoutPipelineSql?: Sql };
 
-function sqlClient(url: string) {
-  if (!globalStore.__scoutPipelineSql) {
-    const local = /localhost|127\.0\.0\.1/.test(url);
-    globalStore.__scoutPipelineSql = postgres(url, {
-      ssl: local ? false : "require",
-      max: 1,
-      idle_timeout: 5,
-      connect_timeout: 15,
-      prepare: false,
-    });
-  }
-  return globalStore.__scoutPipelineSql;
+async function sqlClient(url: string): Promise<Sql> {
+  const existing = globalStore.__scoutPipelineSql;
+  if (existing) return existing;
+  const { default: connect } = await import("postgres");
+  const local = /localhost|127\.0\.0\.1/.test(url);
+  const sql = connect(url, {
+    ssl: local ? false : "require",
+    max: 1,
+    idle_timeout: 5,
+    connect_timeout: 15,
+    prepare: false,
+  }) as unknown as Sql;
+  globalStore.__scoutPipelineSql = sql;
+  return sql;
 }
 
-async function ensureTable(sql: ReturnType<typeof postgres>) {
+async function ensureTable(sql: Sql) {
   await sql`
     CREATE TABLE IF NOT EXISTS scout_user_pipeline (
       id text PRIMARY KEY,
@@ -64,9 +67,9 @@ async function ensureTable(sql: ReturnType<typeof postgres>) {
 async function readPostgres(): Promise<UserPipelineState | null> {
   const url = postgresUrl();
   if (!url) return null;
-  const sql = sqlClient(url);
+  const sql = await sqlClient(url);
   await ensureTable(sql);
-  const rows = await sql<{ payload: string }[]>`SELECT payload FROM scout_user_pipeline WHERE id = ${ROW_ID}`;
+  const rows = (await sql`SELECT payload FROM scout_user_pipeline WHERE id = ${ROW_ID}`) as { payload: string }[];
   if (!rows[0]?.payload) return null;
   return parseState(JSON.parse(rows[0].payload));
 }
@@ -74,7 +77,7 @@ async function readPostgres(): Promise<UserPipelineState | null> {
 async function writePostgres(state: UserPipelineState): Promise<void> {
   const url = postgresUrl();
   if (!url) throw new Error("Postgres is not configured");
-  const sql = sqlClient(url);
+  const sql = await sqlClient(url);
   await ensureTable(sql);
   const payload = JSON.stringify(state);
   await sql`

@@ -70,6 +70,7 @@ interface CampusMap {
   };
   hasImage?: (id: string) => boolean;
   addImage?: (id: string, image: ImageData, options?: object) => void;
+  getContainer?: () => { setAttribute: (name: string, value: string) => void };
 }
 
 function prefersReducedMotion(): boolean {
@@ -592,7 +593,7 @@ export const GlobeView = memo(function GlobeView({
       if (map.getLayer("user-added-icons")) {
         map.setLayoutProperty("user-added-icons", "visibility", geoMode === "campus" ? "visible" : "none");
       }
-      map.getContainer().setAttribute(
+      map.getContainer?.().setAttribute(
         "aria-label",
         userMarkers.length ? `User-added: ${userMarkers.map((marker) => marker.name).join(", ")}` : "Campus map"
       );

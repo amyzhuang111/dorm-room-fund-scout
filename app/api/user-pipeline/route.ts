@@ -1,6 +1,8 @@
 import { parseState } from "@/lib/domain/user-pipeline";
 import { pipelineBackend, readPipeline, writePipeline } from "@/lib/user-pipeline/store";
 
+export const runtime = "nodejs";
+
 export async function GET() {
   const backend = pipelineBackend();
   if (!backend) return Response.json({ configured: false, backend: null, state: null });
