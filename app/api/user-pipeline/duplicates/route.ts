@@ -1,9 +1,12 @@
+import { memberDeniedResponse } from "@/lib/auth/guard";
 import { getDb } from "@/lib/db/client";
 import { findDuplicates, type CatalogRecord } from "@/lib/domain/user-pipeline";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
+  const denied = await memberDeniedResponse();
+  if (denied) return denied;
   let body: { name?: string; websiteUrl?: string | null; founderNames?: string[]; ignoreIds?: string[] };
   try {
     body = (await request.json()) as typeof body;

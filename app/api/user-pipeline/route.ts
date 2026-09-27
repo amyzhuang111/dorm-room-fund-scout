@@ -1,9 +1,12 @@
+import { memberDeniedResponse } from "@/lib/auth/guard";
 import { parseState } from "@/lib/domain/user-pipeline";
 import { pipelineBackend, readPipeline, writePipeline } from "@/lib/user-pipeline/store";
 
 export const runtime = "nodejs";
 
 export async function GET() {
+  const denied = await memberDeniedResponse();
+  if (denied) return denied;
   const backend = pipelineBackend();
   if (!backend) return Response.json({ configured: false, backend: null, state: null });
   try {
@@ -16,6 +19,8 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
+  const denied = await memberDeniedResponse();
+  if (denied) return denied;
   const backend = pipelineBackend();
   if (!backend) return Response.json({ configured: false, backend: null });
   let body: unknown;

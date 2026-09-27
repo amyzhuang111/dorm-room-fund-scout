@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { AskAiProvider } from "@/components/ask-ai";
-import { TopNav } from "@/components/top-nav";
+import { TopNavGate } from "@/components/top-nav-gate";
 import { FeedbackProvider } from "@/components/feedback-provider";
 import { UserPipelineBanner, UserPipelineProvider } from "@/components/user-pipeline-provider";
 import { feedbackRedirects } from "@/lib/domain/entity-redirects";
@@ -42,7 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <UserPipelineProvider>
           <header className="border-b border-border-c bg-background">
             <Suspense fallback={<div className="h-14" />}>
-              <TopNav />
+              <TopNavGate />
             </Suspense>
           </header>
           <UserPipelineBanner />

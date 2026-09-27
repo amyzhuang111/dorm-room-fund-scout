@@ -1,11 +1,13 @@
 import { permanentRedirect } from "next/navigation";
 import { FounderShortlistApp } from "@/components/founder-shortlist-app";
+import { requireMemberPage } from "@/lib/auth/guard";
 import { mergedParamHref } from "@/lib/domain/entity-redirects";
 import type { EnrollmentStatus } from "@/lib/domain/founder-status";
 import { listFounderStatusCounts, listFoundersForPage, listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
 
 export default async function FounderShortlistPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
+  await requireMemberPage("/founder/shortlist");
   const sp = await searchParams;
   const mergedFounder = mergedParamHref("/founder/shortlist", sp, "founder", "person");
   if (mergedFounder) permanentRedirect(mergedFounder);
