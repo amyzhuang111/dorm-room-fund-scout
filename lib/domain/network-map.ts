@@ -1,8 +1,8 @@
 // Full evidence graph for the Network map. Nodes and edges come from
 // affiliations, founder roles, program memberships, sourced investor facts,
-// and confirmed DRF portfolio matches. Positions are a cached ForceAtlas2
-// layout (seeded near campuses, then settled and stopped) so the browser
-// only draws.
+// and confirmed DRF portfolio matches. Positions are one cached ForceAtlas2
+// pass: nodes start near their campus or hub organization, then linLog
+// attraction and moderate gravity let shared edges pull clusters into a web.
 
 import fs from "node:fs";
 import Graph from "graphology";
@@ -39,6 +39,8 @@ export interface MapNode {
   founder: boolean;
   /** Incident edges. Drives node size together with funding. */
   degree: number;
+  /** Campus or hub organization. Its label is drawn at the cluster center on the fitted view. */
+  anchor?: boolean;
   potential: boolean;
   /** Stored linkedin.com/in path. Omitted when the person has neither a confirmed alias nor an unverified candidate. */
   linkedinUrl?: string;
@@ -87,19 +89,26 @@ interface SimNode {
   anchorX: number;
   anchorY: number;
   layoutPx?: number;
+  /** Campus or hub organization. Its label sits on the cluster centroid. */
+  anchor?: boolean;
 }
 
-/** Springs for ForceAtlas2. Campus affiliation is drawn, but it is not a spring — otherwise every student collapses onto a campus disc. */
+/** Springs for one global ForceAtlas2 pass. Campus links are light so people stay near a campus without stacking on it. */
 const LAYOUT_WEIGHT: Record<MapEdgeType, number> = {
-  founded: 3.2,
-  co_founder: 2.6,
-  member_of: 1.8,
-  invested_in: 3,
-  studied_at: 0,
-  at_campus: 0,
+  founded: 2.2,
+  co_founder: 1.6,
+  member_of: 1.5,
+  invested_in: 1.4,
+  studied_at: 0.35,
+  at_campus: 0.4,
 };
 
-const LAYOUT_VERSION = "6";
+const LAYOUT_VERSION = "12";
+
+/** The owner is dropping this organization. It must not seed a cluster. */
+function droppedOrganization(label: string): boolean {
+  return /^pennapps organising team$/i.test(label.trim());
+}
 
 let cache: { stamp: string; graph: MapGraph } | null = null;
 
@@ -370,6 +379,9 @@ function assembleNetworkMap(): MapGraph {
   const founderIds = new Set<string>();
   for (const ids of foundersByCompany.values()) for (const id of ids) founderIds.add(id);
   const organizations = organizationMap({ personIds, startupIds, founderIds, universityIds: uniIds });
+  const droppedOrgs = new Set(organizations.nodes.filter((org) => droppedOrganization(org.label)).map((org) => org.id));
+  organizations.nodes = organizations.nodes.filter((org) => !droppedOrgs.has(org.id));
+  organizations.edges = organizations.edges.filter((edge) => !droppedOrgs.has(edge.source) && !droppedOrgs.has(edge.target));
   for (const edge of organizations.edges) addEdge(edge.source, edge.target, edge.type);
 
   const counts = new Map<string, number>();
@@ -442,7 +454,7 @@ function assembleNetworkMap(): MapGraph {
   }
   for (const org of organizations.nodes) {
     const node = pushNode(org.id, "organization", org.campuses, org.tier, null);
-    node.layoutPx = org.tier === "S" ? 8 : org.tier === "A" ? 6 : org.tier === "B" ? 4.2 : org.tier === "C" ? 3.2 : 2.4;
+    node.layoutPx = org.tier === "S" ? 7 : org.tier === "A" ? 6.2 : org.tier === "B" ? 5.4 : 4.8;
   }
 
   const startupAnchor = new Map<string, { x: number; y: number }>();
@@ -482,14 +494,15 @@ function assembleNetworkMap(): MapGraph {
   const emit = (node: Omit<MapNode, "year" | "founder" | "degree"> & { year?: number | null; founder?: boolean }) => {
     const at = pos.get(node.id);
     if (!at) return;
-    node.x = Math.round(at.x);
-    node.y = Math.round(at.y);
+    node.x = Math.round(at.x * 10) / 10;
+    node.y = Math.round(at.y * 10) / 10;
     node.r = Math.round(at.r * 10) / 10;
     nodes.push({
       ...node,
       year: node.year ?? null,
       founder: node.founder ?? false,
       degree: degree.get(node.id) ?? 0,
+      ...(at.anchor ? { anchor: true } : {}),
     });
   };
 
@@ -626,78 +639,394 @@ function assembleNetworkMap(): MapGraph {
   return graph;
 }
 
-/** Run ForceAtlas2 to a stop, then a noverlap pass so stacked nodes separate. Positions stay fixed after this returns. */
+/** Organizations this connected seed their own cluster (YC, Mayfield) instead of sitting inside a campus. */
+const HUB_DEGREE = 36;
+/** Fitted view is a wide viewport. The layout is stretched toward this aspect so both axes fill it. */
+const LAYOUT_ASPECT = 1.7;
+
+/**
+ * One global ForceAtlas2 pass. Nodes are seeded on their campus or hub so
+ * communities start apart, then shared membership, founding, and investment
+ * edges pull those communities toward each other. linLog and
+ * outboundAttractionDistribution keep a hub from swallowing the map.
+ */
 function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[]) {
-  const g = new Graph({ type: "undirected", multi: true });
+  const byId = new Map(simNodes.map((node) => [node.id, node]));
+  const degree = new Map<string, number>();
+  const memberships = new Map<string, string[]>();
+  const membersOf = new Map<string, string[]>();
+  const foundersOf = new Map<string, string[]>();
+  const campusesOf = new Map<string, string[]>();
+  const portfolio = new Map<string, string[]>();
+  for (const edge of edges) {
+    degree.set(edge.source, (degree.get(edge.source) ?? 0) + 1);
+    degree.set(edge.target, (degree.get(edge.target) ?? 0) + 1);
+    if (edge.type === "member_of") {
+      const orgs = memberships.get(edge.source) ?? [];
+      orgs.push(edge.target);
+      memberships.set(edge.source, orgs);
+      const people = membersOf.get(edge.target) ?? [];
+      people.push(edge.source);
+      membersOf.set(edge.target, people);
+    } else if (edge.type === "founded") {
+      const founders = foundersOf.get(edge.target) ?? [];
+      founders.push(edge.source);
+      foundersOf.set(edge.target, founders);
+    } else if (edge.type === "studied_at" || edge.type === "at_campus") {
+      const campuses = campusesOf.get(edge.source) ?? [];
+      campuses.push(edge.target);
+      campusesOf.set(edge.source, campuses);
+    } else if (edge.type === "invested_in") {
+      const startups = portfolio.get(edge.source) ?? [];
+      startups.push(edge.target);
+      portfolio.set(edge.source, startups);
+    }
+  }
+
+  const hubs = new Set<string>();
+  for (const node of simNodes) {
+    if (node.type === "organization" && (degree.get(node.id) ?? 0) >= HUB_DEGREE) hubs.add(node.id);
+  }
+
+  const home = new Map<string, string>();
+  for (const node of simNodes) {
+    if (node.type === "campus" || hubs.has(node.id)) home.set(node.id, node.id);
+  }
+
+  const bestHub = (ids: string[]): string | null => {
+    let best: string | null = null;
+    let score = -1;
+    for (const id of ids) {
+      if (!hubs.has(id)) continue;
+      const next = degree.get(id) ?? 0;
+      if (next > score) {
+        score = next;
+        best = id;
+      }
+    }
+    return best;
+  };
+  const campusHome = (id: string): string | null => (campusesOf.get(id) ?? []).find((campus) => byId.get(campus)?.type === "campus") ?? null;
+  const majority = (votes: Map<string, number>): string | null => {
+    let best: string | null = null;
+    let score = 0;
+    for (const [key, count] of votes) {
+      if (count > score) {
+        score = count;
+        best = key;
+      }
+    }
+    return best;
+  };
+
+  for (const node of simNodes) {
+    if (node.type !== "person" || home.has(node.id)) continue;
+    home.set(node.id, bestHub(memberships.get(node.id) ?? []) ?? campusHome(node.id) ?? "loose");
+  }
+  for (const node of simNodes) {
+    if (node.type !== "startup" || home.has(node.id)) continue;
+    const votes = new Map<string, number>();
+    for (const person of foundersOf.get(node.id) ?? []) {
+      const key = home.get(person);
+      if (key) votes.set(key, (votes.get(key) ?? 0) + 1);
+    }
+    home.set(node.id, majority(votes) ?? campusHome(node.id) ?? "loose");
+  }
+  for (const node of simNodes) {
+    if (home.has(node.id) || (node.type !== "program" && node.type !== "organization")) continue;
+    const votes = new Map<string, number>();
+    for (const person of membersOf.get(node.id) ?? []) {
+      const key = home.get(person);
+      if (key && key !== "loose") votes.set(key, (votes.get(key) ?? 0) + 1);
+    }
+    home.set(node.id, majority(votes) ?? campusHome(node.id) ?? "loose");
+  }
+  for (const node of simNodes) {
+    if (node.type !== "investor" || home.has(node.id)) continue;
+    const votes = new Map<string, number>();
+    let total = 0;
+    for (const startup of portfolio.get(node.id) ?? []) {
+      const key = home.get(startup);
+      if (!key || key === "loose") continue;
+      total += 1;
+      votes.set(key, (votes.get(key) ?? 0) + 1);
+    }
+    let best: string | null = null;
+    let score = 0;
+    for (const [key, count] of votes) {
+      if (count > score) {
+        score = count;
+        best = key;
+      }
+    }
+    if (best && score >= Math.max(3, total * 0.55)) home.set(node.id, best);
+  }
+  for (const node of simNodes) if (!home.has(node.id)) home.set(node.id, "loose");
+
+  const groups = new Map<string, SimNode[]>();
+  for (const node of simNodes) {
+    const key = home.get(node.id) ?? "loose";
+    const list = groups.get(key) ?? [];
+    list.push(node);
+    groups.set(key, list);
+  }
+
+  // An organization only seeds a cluster when enough people call it their home.
+  // Otherwise it sits with the campus or hub its members already share.
+  const folded = new Set<string>();
+  for (const [key, members] of groups) {
+    const anchor = members.find((node) => node.id === key);
+    if (!anchor || anchor.type !== "organization" || members.length >= 12) continue;
+    folded.add(key);
+  }
+  for (const key of folded) {
+    const members = groups.get(key) ?? [];
+    const votes = new Map<string, number>();
+    for (const personId of membersOf.get(key) ?? []) {
+      const dest = home.get(personId);
+      if (!dest || dest === key || folded.has(dest)) continue;
+      votes.set(dest, (votes.get(dest) ?? 0) + 1);
+    }
+    let dest = "loose";
+    let score = 0;
+    for (const [id, count] of votes) {
+      if (count > score) {
+        score = count;
+        dest = id;
+      }
+    }
+    groups.delete(key);
+    const list = groups.get(dest) ?? [];
+    for (const member of members) {
+      home.set(member.id, dest);
+      list.push(member);
+    }
+    groups.set(dest, list);
+  }
+
+  const homes = [...groups.keys()].filter((key) => key !== "loose");
+  homes.sort((a, b) => (groups.get(b)?.length ?? 0) - (groups.get(a)?.length ?? 0) || a.localeCompare(b));
+  const ordered: string[] = [];
+  const pending = [...homes];
+  while (pending.length) {
+    ordered.push(pending.shift()!);
+    if (pending.length) ordered.push(pending.pop()!);
+  }
+  const weight = ordered.map((key) => Math.sqrt(groups.get(key)?.length ?? 1));
+  const weightSum = weight.reduce((sum, value) => sum + value, 0) || 1;
+  const rx = 520;
+  const ry = rx / LAYOUT_ASPECT;
+  const center = new Map<string, { x: number; y: number }>();
+  let angle = -Math.PI / 2;
+  ordered.forEach((key, index) => {
+    const sweep = (weight[index] / weightSum) * Math.PI * 2;
+    angle += sweep / 2;
+    center.set(key, { x: Math.cos(angle) * rx, y: Math.sin(angle) * ry });
+    angle += sweep / 2;
+  });
+  center.set("loose", { x: 0, y: 0 });
+
+  for (const [key, nodes] of groups) {
+    const at = center.get(key) ?? { x: 0, y: 0 };
+    const anchor = nodes.find((node) => node.id === key);
+    let seat = 0;
+    for (const node of nodes) {
+      node.anchor = false;
+      if (anchor && node.id === anchor.id) {
+        node.anchor = true;
+        node.x = at.x;
+        node.y = at.y;
+        continue;
+      }
+      const theta = seat * 2.399963229728653;
+      const dist = 2.2 * Math.sqrt(seat + 1);
+      seat += 1;
+      node.x = at.x + Math.cos(theta) * dist;
+      node.y = at.y + Math.sin(theta) * dist;
+    }
+  }
+
+  const g = new Graph({ type: "undirected" });
   for (const node of simNodes) g.addNode(node.id, { x: node.x, y: node.y });
   for (const edge of edges) {
-    const weight = LAYOUT_WEIGHT[edge.type];
-    if (!weight || edge.source === edge.target || !g.hasNode(edge.source) || !g.hasNode(edge.target)) continue;
-    g.addEdge(edge.source, edge.target, { weight });
+    const weightValue = LAYOUT_WEIGHT[edge.type];
+    if (!weightValue || edge.source === edge.target || !g.hasNode(edge.source) || !g.hasNode(edge.target)) continue;
+    if (g.hasEdge(edge.source, edge.target)) {
+      const existing = g.edge(edge.source, edge.target);
+      if (weightValue > g.getEdgeAttribute(existing, "weight")) g.setEdgeAttribute(existing, "weight", weightValue);
+      continue;
+    }
+    g.addEdge(edge.source, edge.target, { weight: weightValue });
   }
-  const inferred = forceAtlas2.inferSettings(g);
-  forceAtlas2.assign(g, {
-    iterations: 220,
-    settings: {
-      ...inferred,
-      barnesHutOptimize: true,
-      barnesHutTheta: 0.5,
-      gravity: 0.14,
-      scalingRatio: 16,
-      linLogMode: true,
-      outboundAttractionDistribution: true,
-      edgeWeightInfluence: 1,
-      slowDown: 8,
-      strongGravityMode: false,
-      adjustSizes: false,
-    },
-    getEdgeWeight: "weight",
-  });
+  if (g.size > 0) {
+    forceAtlas2.assign(g, {
+      iterations: 220,
+      settings: {
+        barnesHutOptimize: true,
+        barnesHutTheta: 0.5,
+        gravity: 0.28,
+        scalingRatio: 8,
+        linLogMode: true,
+        outboundAttractionDistribution: true,
+        edgeWeightInfluence: 0.7,
+        slowDown: 6,
+        strongGravityMode: false,
+        adjustSizes: false,
+      },
+      getEdgeWeight: "weight",
+    });
+  }
+  for (const node of simNodes) {
+    const at = g.getNodeAttributes(node.id);
+    node.x = Number.isFinite(at.x) ? at.x : node.x;
+    node.y = Number.isFinite(at.y) ? at.y : node.y;
+  }
+
+  fitLayoutAspect(simNodes);
   separateOverlaps(g, simNodes);
   for (const node of simNodes) {
     const at = g.getNodeAttributes(node.id);
-    node.x = at.x;
-    node.y = at.y;
+    node.x = Number.isFinite(at.x) ? at.x : node.x;
+    node.y = Number.isFinite(at.y) ? at.y : node.y;
   }
+  snapAnchors(simNodes, groups);
+  const visible = simNodes.filter((node) => (degree.get(node.id) ?? 0) > 0);
+  stretchToAspect(simNodes, visible.length ? visible : simNodes);
 }
 
-const OVERLAP_PX: Record<MapNodeType, number> = {
-  person: 2.6,
-  startup: 3.4,
-  investor: 3.8,
-  program: 3.6,
-  organization: 4,
-  campus: 7,
-};
+/** Stretch the dense part of the cloud to the viewport aspect. Far outliers stay on the frame. */
+function stretchToAspect(simNodes: SimNode[], core: SimNode[]) {
+  const basis = core.length ? core : simNodes;
+  const xs = basis.map((node) => node.x).sort((a, b) => a - b);
+  const ys = basis.map((node) => node.y).sort((a, b) => a - b);
+  const pick = (values: number[], q: number) => values[Math.min(values.length - 1, Math.max(0, Math.floor(q * (values.length - 1))))];
+  const minX = pick(xs, 0.025);
+  const maxX = pick(xs, 0.975);
+  const minY = pick(ys, 0.025);
+  const maxY = pick(ys, 0.975);
+  const width = Math.max(maxX - minX, 1);
+  const height = Math.max(maxY - minY, 1);
+  const aspect = width / height;
+  const midX = (minX + maxX) / 2;
+  const midY = (minY + maxY) / 2;
+  const stretchX = aspect < LAYOUT_ASPECT ? LAYOUT_ASPECT / aspect : 1;
+  const stretchY = aspect > LAYOUT_ASPECT ? aspect / LAYOUT_ASPECT : 1;
+  for (const node of simNodes) {
+    node.x = midX + (node.x - midX) * stretchX;
+    node.y = midY + (node.y - midY) * stretchY;
+  }
+  const left = midX - (width * stretchX) / 2;
+  const right = midX + (width * stretchX) / 2;
+  const top = midY - (height * stretchY) / 2;
+  const bottom = midY + (height * stretchY) / 2;
+  for (const node of simNodes) clampInside(node, left, top, right, bottom);
+}
 
-/** Push colliding nodes apart in graph units that survive the camera fit (a few screen pixels). */
-function separateOverlaps(g: Graph, simNodes: SimNode[]) {
+function clampInside(node: SimNode, minX: number, minY: number, maxX: number, maxY: number) {
+  if (node.x >= minX && node.x <= maxX && node.y >= minY && node.y <= maxY) return;
+  const cx = (minX + maxX) / 2;
+  const cy = (minY + maxY) / 2;
+  const dx = node.x - cx;
+  const dy = node.y - cy;
+  const halfW = (maxX - minX) / 2;
+  const halfH = (maxY - minY) / 2;
+  const scaleX = dx === 0 ? Infinity : halfW / Math.abs(dx);
+  const scaleY = dy === 0 ? Infinity : halfH / Math.abs(dy);
+  const scale = Math.min(scaleX, scaleY);
+  node.x = cx + dx * scale;
+  node.y = cy + dy * scale;
+}
+/** Normalize the cloud, then stretch it toward the viewport aspect before overlap resolution. */
+function fitLayoutAspect(simNodes: SimNode[]) {
   let minX = Infinity;
   let minY = Infinity;
   let maxX = -Infinity;
   let maxY = -Infinity;
-  g.forEachNode((_, at) => {
-    if (!Number.isFinite(at.x) || !Number.isFinite(at.y)) return;
-    minX = Math.min(minX, at.x);
-    minY = Math.min(minY, at.y);
-    maxX = Math.max(maxX, at.x);
-    maxY = Math.max(maxY, at.y);
-  });
-  const span = Math.max(maxX - minX, maxY - minY, 1);
-  const unit = span / 980;
+  for (const node of simNodes) {
+    minX = Math.min(minX, node.x);
+    minY = Math.min(minY, node.y);
+    maxX = Math.max(maxX, node.x);
+    maxY = Math.max(maxY, node.y);
+  }
+  const width = Math.max(maxX - minX, 1);
+  const height = Math.max(maxY - minY, 1);
+  const midX = (minX + maxX) / 2;
+  const midY = (minY + maxY) / 2;
+  const scale = 1500 / Math.max(width, height);
+  for (const node of simNodes) {
+    node.x = (node.x - midX) * scale;
+    node.y = (node.y - midY) * scale;
+  }
+  const aspect = width / height;
+  if (aspect < LAYOUT_ASPECT) {
+    const stretch = LAYOUT_ASPECT / aspect;
+    for (const node of simNodes) node.x *= stretch;
+  } else if (aspect > LAYOUT_ASPECT) {
+    const stretch = aspect / LAYOUT_ASPECT;
+    for (const node of simNodes) node.y *= stretch;
+  }
+}
+
+/** Put each campus and hub label on the centroid of the cluster it seeded. */
+function snapAnchors(simNodes: SimNode[], groups: Map<string, SimNode[]>) {
+  for (const node of simNodes) {
+    if (!node.anchor) continue;
+    const members = groups.get(node.id);
+    if (!members || members.length < 2) continue;
+    let x = 0;
+    let y = 0;
+    let count = 0;
+    for (const member of members) {
+      if (member.id === node.id) continue;
+      x += member.x;
+      y += member.y;
+      count += 1;
+    }
+    if (!count) continue;
+    node.x = x / count;
+    node.y = y / count;
+    const clear = 7;
+    for (const member of members) {
+      if (member.id === node.id) continue;
+      const dx = member.x - node.x;
+      const dy = member.y - node.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist >= clear) continue;
+      const push = (clear - dist) / (dist || 1);
+      member.x += dx * push;
+      member.y += dy * push;
+    }
+  }
+}
+
+const OVERLAP_PX: Record<MapNodeType, number> = {
+  person: 4.4,
+  startup: 5.2,
+  investor: 6,
+  program: 5.6,
+  organization: 6.2,
+  campus: 8,
+};
+
+/** Push colliding nodes apart in graph units that survive the camera fit (a few screen pixels). */
+function separateOverlaps(g: Graph, simNodes: SimNode[]) {
   const byId = new Map(simNodes.map((node) => [node.id, node]));
   g.forEachNode((id) => {
     const sim = byId.get(id);
     const px = sim?.layoutPx ?? OVERLAP_PX[sim?.type ?? "person"] ?? 2.6;
-    g.setNodeAttribute(id, "size", px * unit);
+    g.setNodeAttribute(id, "size", Math.max(2.4, px));
+    if (sim) {
+      g.setNodeAttribute(id, "x", sim.x);
+      g.setNodeAttribute(id, "y", sim.y);
+    }
   });
   noverlap.assign(g, {
-    maxIterations: 120,
+    maxIterations: simNodes.length > 500 ? 50 : 40,
     settings: {
-      margin: 1.2 * unit,
+      margin: 0.4,
       ratio: 1,
-      expansion: 1.2,
-      gridSize: 56,
+      expansion: 1.08,
+      gridSize: 40,
       speed: 3,
     },
   });
