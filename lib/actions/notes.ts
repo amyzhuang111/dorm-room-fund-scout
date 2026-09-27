@@ -1,9 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { requireMemberAction } from "../auth/guard";
 import { getDb, newId } from "../db/client";
 
 export async function addNote(formData: FormData) {
+  await requireMemberAction();
   const entityType = String(formData.get("entityType") || "");
   const entityId = String(formData.get("entityId") || "");
   const body = String(formData.get("body") || "").trim();

@@ -1,11 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { requireMemberAction } from "../auth/guard";
 import { getDb, newId } from "../db/client";
 
 const VALID_STATUSES = ["New", "Researching", "Contact planned", "Contacted", "Meeting", "Diligence", "Passed"];
 
 export async function updatePipelineEntry(formData: FormData) {
+  await requireMemberAction();
   const projectId = String(formData.get("projectId") || "");
   const status = String(formData.get("status") || "New");
   const nextAction = String(formData.get("nextAction") || "").trim() || null;

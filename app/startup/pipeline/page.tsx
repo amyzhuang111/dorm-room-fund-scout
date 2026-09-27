@@ -1,8 +1,10 @@
 import { Suspense } from "react";
 import { PipelineApp } from "@/components/pipeline-app";
+import { requireMemberPage } from "@/lib/auth/guard";
 import { listUniversities } from "@/lib/domain/queries";
 
-export default function PipelinePage() {
+export default async function PipelinePage() {
+  await requireMemberPage("/startup/pipeline");
   const campuses = listUniversities()
     .map((university) => ({ id: university.id, name: university.name }))
     .sort((a, b) => a.name.localeCompare(b.name));

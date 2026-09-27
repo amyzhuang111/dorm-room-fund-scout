@@ -439,9 +439,12 @@ npm install
 npm run dev       # http://localhost:3000, redirects to /startup/discover
 ```
 
-No environment variables are required for the app itself or for any
-public-page-fetch adapter — those still run on plain public-page fetches
-you can inspect yourself. One adapter is the exception:
+Public pages need no environment variables: Discover, News, Hotspots,
+Verification, Signals, Sources, the globe, the network map, and Ask AI.
+Pipeline and Shortlist need the sign-in variables in the next section.
+Without them those two stay locked and the rest of the site still runs.
+Public-page-fetch adapters still run on plain public-page fetches you can
+inspect yourself. One adapter is the exception:
 `scripts/ingest/fetch-linkedin-apify.ts` needs `APIFY_API_TOKEN` (get one
 free at apify.com, ~$0.004/profile with the harvestapi actor it uses) in
 `.env.local` (gitignored, never committed — see "LinkedIn via Apify"
@@ -453,6 +456,59 @@ it, created automatically on first run if it is missing).
 The hosted app does not read `APIFY_API_TOKEN`. Leave it unset in Vercel
 unless you later run the LinkedIn adapter in an environment that has the
 key. `VERCEL` is set by Vercel itself and should not be added by hand.
+
+## Sign-in for Pipeline and Shortlist
+
+Discover, News, Hotspots, Verification, Signals, Sources, the globe, the
+network map, and Ask AI stay public. Pipeline and Shortlist, their API
+routes (`/api/user-pipeline`), and the note, assessment, and pipeline
+edit actions require a signed-in member. The gate is the Next.js 16
+`proxy.ts` file (the renamed middleware) plus a check inside each of
+those routes and actions. Hiding the nav link is not the lock.
+
+Auth.js (NextAuth v5) keeps the session in an encrypted JWT. No new
+database is required. If Upstash Redis is already configured for the
+pipeline store, a magic link is also single-use. Without Redis, the link
+expires after 15 minutes.
+
+Anyone with an `@dormroomfund.com` address can sign in. `ALLOWED_EMAILS`
+adds more addresses, comma-separated. When that variable is omitted, these
+two addresses are still allowed so the owner can get in:
+
+```
+zhuanga@engineering.upenn.edu
+amyzhuang880@gmail.com
+```
+
+Set the variable in Vercel to that same list. Anyone else sees: "Pipeline
+and Shortlist are for Dorm Room Fund members, sign in with your DRF email".
+
+If `AUTH_SECRET` or a mail sender is missing, the site still builds and
+the public pages still run. Pipeline and Shortlist stay locked.
+
+Add these in the Vercel project settings (Production, and Preview if you
+use it). None of them are paid.
+
+| Name | How to get it for free |
+| --- | --- |
+| `AUTH_SECRET` | Any long random string. On your machine: `openssl rand -base64 32`. This signs the session cookie. |
+| `ALLOWED_EMAILS` | `zhuanga@engineering.upenn.edu,amyzhuang880@gmail.com` |
+| `EMAIL_FROM` | The From address on the magic-link email. |
+| `RESEND_API_KEY` | Free Resend account at https://resend.com (3,000 emails/month, 100/day). Create an API key. Until you verify a domain (also free), Resend only delivers from `Campus Scout <onboarding@resend.dev>` to the email you used to sign up. |
+| `SMTP_HOST` | Use this instead of Resend if you want Gmail. `smtp.gmail.com` |
+| `SMTP_PORT` | `587` |
+| `SMTP_USER` | The Gmail address that sends the link. |
+| `SMTP_PASSWORD` | A Google App Password, free: turn on 2-Step Verification, then https://myaccount.google.com/apppasswords. Gmail can send to any address on the allowlist. |
+| `AUTH_GOOGLE_ID` | Optional, instead of or in addition to magic links. Free Google Cloud OAuth client: https://console.cloud.google.com/apis/credentials — create an OAuth client (Web), authorized redirect `https://<your-vercel-domain>/api/auth/callback/google`. |
+| `AUTH_GOOGLE_SECRET` | The client secret from that same OAuth client. |
+
+Pick one sender: `RESEND_API_KEY` or the four `SMTP_*` variables. You do
+not need both. `EMAIL_SERVER` (`smtp://user:pass@smtp.gmail.com:587`) is
+accepted in place of the separate SMTP variables. Google sign-in needs
+`AUTH_SECRET`, `AUTH_GOOGLE_ID`, and `AUTH_GOOGLE_SECRET`, and still only
+admits `@dormroomfund.com` plus `ALLOWED_EMAILS`.
+
+`.env.example` lists the same names. `.env.local` is gitignored.
 
 ## Loading real data
 

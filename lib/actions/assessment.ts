@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { requireMemberAction } from "../auth/guard";
 import { getDb, newId } from "../db/client";
 import { RUBRIC_DIMENSIONS, RUBRIC_VERSION, computeRubric, type Ratings } from "../scoring/rubric";
 
@@ -10,6 +11,7 @@ import { RUBRIC_DIMENSIONS, RUBRIC_VERSION, computeRubric, type Ratings } from "
 // through computeRubric() here, deterministically; whoever fills the form
 // only supplies 0–5-or-blank ratings, never a final score.
 export async function saveAssessment(formData: FormData) {
+  await requireMemberAction();
   const projectId = String(formData.get("projectId") || "");
   const evaluator = String(formData.get("evaluator") || "amy").trim() || "amy";
   const notes = String(formData.get("notes") || "").trim();
