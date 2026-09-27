@@ -18,6 +18,14 @@ for (const row of records) {
   if (founderOnly) assert.equal(row.investorId, null, row.id);
 }
 assert.equal(records.find((row) => row.id === "dra_lauren_reeder")?.investorId, "inv_sequoia_capital");
+assert.equal(records.find((row) => row.id === "dra_lauren_reeder")?.linkedinConfidence, "confirmed");
+assert.equal(records.filter((row) => row.linkedinConfidence === "confirmed").length, 23);
+assert.equal(records.filter((row) => row.linkedinUrl).length, 175);
+for (const row of records) {
+  if (row.linkedinUrl) assert.ok(row.linkedinConfidence === "confirmed" || row.linkedinConfidence === "likely", row.id);
+  else assert.equal(row.linkedinConfidence, null, row.id);
+  if (row.linkedinConfidence === "confirmed") assert.ok(row.linkedinSourceUrl && !row.linkedinSourceUrl.includes("linkedin.com/in/"), row.id);
+}
 assert.equal(records.find((row) => row.id === "dra_matthew_wachter")?.currentRole, null);
 assert.equal(records.find((row) => row.id === "dra_matthew_wachter")?.confidence, "likely");
 assert.equal(records.find((row) => row.id === "dra_michael_truell")?.foundedProjectId, "proj_GjrFxToPH-cI");
@@ -72,6 +80,8 @@ function alum(): DrfAlumRow {
     sourceUrl: "https://fortune.com/2022/09/06/exclusive-student-run-vc-dorm-room-fund-spins-out-from-first-round-capital-raises-12-5m-fund-from-marc-andreessen-underscore-vc-insight-partners-others/",
     firmSourceUrl: "https://fisher.wharton.upenn.edu/mt-for-life/lauren-reeder-mt16/",
     linkedinUrl: null,
+    linkedinConfidence: null,
+    linkedinSourceUrl: null,
     xUrl: null,
     foundedProjectId: null,
     sourceUrls: [],

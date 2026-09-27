@@ -12,7 +12,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/aaron-anandji",
-    "linkedin_url": "https://www.linkedin.com/in/aaron-anandji"
+    "linkedin_url": "https://www.linkedin.com/in/aaron-anandji",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_abhinav_karale",
@@ -27,7 +28,9 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/abhinavkarale",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_abigail_stone",
@@ -60,7 +63,8 @@
     "firm_type": "big_tech",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/adam-brudnick",
-    "linkedin_url": "https://www.linkedin.com/in/adam-brudnick"
+    "linkedin_url": "https://www.linkedin.com/in/adam-brudnick",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_adam_eldefrawy",
@@ -149,7 +153,8 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/adrianaochi",
-    "linkedin_url": "https://www.linkedin.com/in/adrianaochi"
+    "linkedin_url": "https://www.linkedin.com/in/adrianaochi",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_advika_jayanti",
@@ -168,7 +173,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/advika-jayanti",
-    "linkedin_url": "https://www.linkedin.com/in/advika-jayanti"
+    "linkedin_url": "https://www.linkedin.com/in/advika-jayanti",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_akanksha_midha",
@@ -204,7 +210,8 @@
     "firm_type": "big_tech",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/akshay-kirtikar",
-    "linkedin_url": "https://www.linkedin.com/in/akshay-kirtikar"
+    "linkedin_url": "https://www.linkedin.com/in/akshay-kirtikar",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_albert_dong",
@@ -223,7 +230,10 @@
     "current_firm": "Voyager Ventures",
     "firm_type": "other",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://www.voyagervc.com/team-members/albert-dong"
+    "firm_source_url": "https://www.voyagervc.com/team-members/albert-dong",
+    "linkedin_url": "https://www.linkedin.com/in/albertdong23",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.voyagervc.com/team-members/albert-dong"
   },
   {
     "id": "dra_albert_lam",
@@ -238,7 +248,9 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "linkedin_url": "https://www.linkedin.com/in/albert-klam",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_albert_shin",
@@ -268,7 +280,9 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/alex-z-chen",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_alex_ginsberg",
@@ -289,7 +303,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.onelinepartners.com/",
-    "linkedin_url": "https://www.linkedin.com/in/alexmginsberg"
+    "linkedin_url": "https://www.linkedin.com/in/alexmginsberg",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_alex_immerman",
@@ -308,7 +323,10 @@
     "firm_source_url": "https://www.linkedin.com/in/immerman",
     "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
     "firm_type": "vc",
-    "firm_confidence": "confirmed"
+    "firm_confidence": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/immerman",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://a16z.com/author/alex-immerman/"
   },
   {
     "id": "dra_alex_marley",
@@ -328,7 +346,9 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://alexgmarley.com/",
-    "linkedin_url": "https://www.linkedin.com/in/alex-marley"
+    "linkedin_url": "https://www.linkedin.com/in/alex-marley",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://alexgmarley.com/"
   },
   {
     "id": "dra_alex_torrey",
@@ -368,7 +388,9 @@
     "team_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/alexrwendland",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_alexa_davis",
@@ -402,7 +424,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/alexaspagnola",
-    "linkedin_url": "https://www.linkedin.com/in/alexaspagnola"
+    "linkedin_url": "https://www.linkedin.com/in/alexaspagnola",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_alexander_becker",
@@ -452,7 +475,10 @@
     "current_firm": "Treville",
     "firm_type": "vc",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://treville.com/team/ali-hamed"
+    "firm_source_url": "https://treville.com/team/ali-hamed",
+    "linkedin_url": "https://www.linkedin.com/in/alihamed",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://treville.com/team/ali-hamed"
   },
   {
     "id": "dra_alicia_tsai",
@@ -472,7 +498,8 @@
     "firm_type": "big_tech",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/aliciatsai",
-    "linkedin_url": "https://www.linkedin.com/in/aliciatsai"
+    "linkedin_url": "https://www.linkedin.com/in/aliciatsai",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_alina_balean",
@@ -506,7 +533,8 @@
     "firm_type": "vc",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/alpin-yukseloglu",
-    "linkedin_url": "https://www.linkedin.com/in/alpin-yukseloglu"
+    "linkedin_url": "https://www.linkedin.com/in/alpin-yukseloglu",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_amanda_bradford",
@@ -526,7 +554,9 @@
     "team_source_url": "https://web.archive.org/web/20130918015152/http://dormroomfund.com/bayarea",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/amandabradford",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_amber_yang",
@@ -546,7 +576,10 @@
     "firm_source_url": "https://lsvp.com/team-member/amber-yang/",
     "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
     "firm_type": "vc",
-    "firm_confidence": "confirmed"
+    "firm_confidence": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/amber-yang",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://lsvp.com/team-member/amber-yang/"
   },
   {
     "id": "dra_amol_punjabi",
@@ -610,7 +643,8 @@
     "firm_type": "other",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/anadiazhernandez",
-    "linkedin_url": "https://www.linkedin.com/in/anadiazhernandez"
+    "linkedin_url": "https://www.linkedin.com/in/anadiazhernandez",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_anand_lalwani",
@@ -629,7 +663,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.forbes.com/profile/anand-lalwani/",
-    "linkedin_url": "https://www.linkedin.com/in/anandlalwani"
+    "linkedin_url": "https://www.linkedin.com/in/anandlalwani",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_andre_mota",
@@ -648,7 +683,8 @@
     "firm_type": "other",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/andrejmota",
-    "linkedin_url": "https://www.linkedin.com/in/andrejmota"
+    "linkedin_url": "https://www.linkedin.com/in/andrejmota",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_andrew_briggs",
@@ -662,7 +698,9 @@
     "school_role": "mba",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/andrewtbriggs",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_andrew_ng",
@@ -696,7 +734,9 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.tidemarkcap.com/team/andrew-walsh",
-    "linkedin_url": "https://www.linkedin.com/in/awalsh14"
+    "linkedin_url": "https://www.linkedin.com/in/awalsh14",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.tidemarkcap.com/team/andrew-walsh"
   },
   {
     "id": "dra_andy_chen",
@@ -717,7 +757,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/andy-chen-md",
-    "linkedin_url": "https://www.linkedin.com/in/andy-chen-md"
+    "linkedin_url": "https://www.linkedin.com/in/andy-chen-md",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_andy_reed",
@@ -779,7 +820,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://yespress.io/angela-winegar",
-    "linkedin_url": "https://www.linkedin.com/in/angelagwinegar"
+    "linkedin_url": "https://www.linkedin.com/in/angelagwinegar",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_anjney_midha",
@@ -799,7 +841,9 @@
     "team_source_url": "https://web.archive.org/web/20130918015152/http://dormroomfund.com/bayarea",
     "firm_type": "vc",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/anjney",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_anna_kazlauskas",
@@ -875,7 +919,8 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.thealignedfund.com/",
-    "linkedin_url": "https://www.linkedin.com/in/arielwintonjones"
+    "linkedin_url": "https://www.linkedin.com/in/arielwintonjones",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_arshia_narula",
@@ -894,7 +939,9 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.arshianarula.com/about",
-    "linkedin_url": "https://www.linkedin.com/in/arshianarula05"
+    "linkedin_url": "https://www.linkedin.com/in/arshianarula05",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.arshianarula.com/about"
   },
   {
     "id": "dra_arun_kirubarajan",
@@ -915,7 +962,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.arun.ai/",
-    "linkedin_url": "https://www.linkedin.com/in/arunkirubarajan"
+    "linkedin_url": "https://www.linkedin.com/in/arunkirubarajan",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_ashley_aydin",
@@ -955,7 +1003,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/athenakan",
-    "linkedin_url": "https://www.linkedin.com/in/athenakan"
+    "linkedin_url": "https://www.linkedin.com/in/athenakan",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_austin_ho",
@@ -1001,7 +1050,9 @@
     "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
     "firm_type": "vc",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team"
+    "firm_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/avi-muller",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_bahram_tavakoli",
@@ -1057,14 +1108,16 @@
     "school_label": "Harvard Business School",
     "school_role": "mba",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/horwitzben",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_ben_okeefe",
-    "name": "Ben O\u2019Keefe",
+    "name": "Ben O’Keefe",
     "confidence": "confirmed",
     "source_url": "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
-    "excerpt": "DRF's 17 Jan 2025 Class of 2024 post introduces Ben O\u2019Keefe as a Bay Area investment partner (Stanford University).",
+    "excerpt": "DRF's 17 Jan 2025 Class of 2024 post introduces Ben O’Keefe as a Bay Area investment partner (Stanford University).",
     "drf_team": "Bay Area",
     "university_id": "univ_stanford",
     "school_label": "Stanford University",
@@ -1098,7 +1151,9 @@
     "school_label": "Stanford University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "linkedin_url": "https://www.linkedin.com/in/benpenchas",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_bradley_ericson",
@@ -1132,7 +1187,9 @@
     "team_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
     "firm_type": "other",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/brent-willess-42537223",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_breton_birkhofer",
@@ -1145,7 +1202,14 @@
     "school_label": "University of California, Berkeley",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "linkedin_url": "https://www.linkedin.com/in/breton-birkhofer-718013a",
+    "linkedin_confidence": "likely",
+    "current_role": "Managing Director, Venture Investments",
+    "current_firm": "DivcoWest",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/breton-birkhofer-718013a"
   },
   {
     "id": "dra_bridget_labe",
@@ -1179,7 +1243,8 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.bvp.com/team/brielee-lu",
-    "linkedin_url": "https://www.linkedin.com/in/brieleelu"
+    "linkedin_url": "https://www.linkedin.com/in/brieleelu",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_brittany_walker",
@@ -1200,7 +1265,9 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.crv.com/team/brittany-walker",
-    "linkedin_url": "https://www.linkedin.com/in/brittwalker1"
+    "linkedin_url": "https://www.linkedin.com/in/brittwalker1",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.crv.com/team/brittany-walker"
   },
   {
     "id": "dra_bruno_faviero",
@@ -1248,7 +1315,9 @@
     "school_label": "Cornell University",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/caroline-zhu-cu2026",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_casey_chow",
@@ -1276,7 +1345,14 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
+    "linkedin_url": "https://www.linkedin.com/in/caseyhogan",
+    "linkedin_confidence": "likely",
+    "current_role": "Director, Partner Experience",
+    "current_firm": "About Fresh",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/caseyhogan"
   },
   {
     "id": "dra_catherine_mekhael",
@@ -1304,7 +1380,14 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "linkedin_url": "https://www.linkedin.com/in/cegoddard",
+    "linkedin_confidence": "likely",
+    "current_role": "Early Stage R&D Networks",
+    "current_firm": "ICONIQ",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/cegoddard"
   },
   {
     "id": "dra_chirag_mahapatra",
@@ -1332,7 +1415,9 @@
     "school_label": "Cornell University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "linkedin_url": "https://www.linkedin.com/in/chloe-lopez-lee-20b9b0104",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_chris_alexander",
@@ -1414,7 +1499,14 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140403194126/http://www.dormroomfund.com/philly"
+    "team_source_url": "https://web.archive.org/web/20140403194126/http://www.dormroomfund.com/philly",
+    "linkedin_url": "https://www.linkedin.com/in/christopher-gray-5b335626",
+    "linkedin_confidence": "likely",
+    "current_role": "Chief Executive Officer and Founder",
+    "current_firm": "Path",
+    "firm_type": "founder",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/christopher-gray-5b335626"
   },
   {
     "id": "dra_christopher_yan",
@@ -1475,7 +1567,9 @@
     "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
     "firm_type": "vc",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/clairesmilow",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_clay_garner",
@@ -1503,7 +1597,9 @@
     "affiliation_status": "older_alumni",
     "year_start": 2014,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork",
+    "linkedin_url": "https://www.linkedin.com/in/claytonbryan",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_cole_diamond",
@@ -1518,7 +1614,14 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork",
+    "linkedin_url": "https://www.linkedin.com/in/colediamond",
+    "linkedin_confidence": "likely",
+    "current_role": "Machine Learning Engineer",
+    "current_firm": "Reddit",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/colediamond"
   },
   {
     "id": "dra_cole_fairchild",
@@ -1645,7 +1748,9 @@
     "school_label": "Santa Clara University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "linkedin_url": "https://www.linkedin.com/in/johnsondarius",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_darya_zakharova",
@@ -1679,7 +1784,8 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/davidbloom5",
-    "linkedin_url": "https://www.linkedin.com/in/davidbloom5"
+    "linkedin_url": "https://www.linkedin.com/in/davidbloom5",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_david_chi",
@@ -1709,7 +1815,14 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2022,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/daviddellal",
+    "linkedin_confidence": "likely",
+    "current_role": "Founder and CEO",
+    "current_firm": "Floe",
+    "firm_type": "founder",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/daviddellal"
   },
   {
     "id": "dra_david_dworsky",
@@ -1743,7 +1856,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://nocap.blog/founder/david-greenstein/",
-    "linkedin_url": "https://www.linkedin.com/in/davidgreenstein"
+    "linkedin_url": "https://www.linkedin.com/in/davidgreenstein",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_david_kaufman",
@@ -1764,7 +1878,8 @@
     "firm_type": "founder",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/davidwkaufman",
-    "linkedin_url": "https://www.linkedin.com/in/davidwkaufman"
+    "linkedin_url": "https://www.linkedin.com/in/davidwkaufman",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_david_mackanic",
@@ -1784,7 +1899,9 @@
     "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/david-mackanic",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_david_sagalov",
@@ -1805,7 +1922,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/dsagalov",
-    "linkedin_url": "https://www.linkedin.com/in/dsagalov"
+    "linkedin_url": "https://www.linkedin.com/in/dsagalov",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_deborah_li",
@@ -1826,7 +1944,8 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/debli",
-    "linkedin_url": "https://www.linkedin.com/in/debli"
+    "linkedin_url": "https://www.linkedin.com/in/debli",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_declan_kunkel",
@@ -1873,7 +1992,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/mynameisdesmond",
-    "linkedin_url": "https://www.linkedin.com/in/mynameisdesmond"
+    "linkedin_url": "https://www.linkedin.com/in/mynameisdesmond",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_divyahans_gupta",
@@ -1892,7 +2012,9 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://divyahansg.com/",
-    "linkedin_url": "https://www.linkedin.com/in/divyahansg"
+    "linkedin_url": "https://www.linkedin.com/in/divyahansg",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://divyahansg.com/"
   },
   {
     "id": "dra_edgar_sze",
@@ -1922,7 +2044,8 @@
     "firm_type": "vc",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/posts/2048vc_today-we-are-excited-to-welcome-edward-jin-activity-7403912169106448384-HroH",
-    "linkedin_url": "https://www.linkedin.com/in/eddieejin"
+    "linkedin_url": "https://www.linkedin.com/in/eddieejin",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_elijah_conniff",
@@ -1943,7 +2066,9 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://lsvp.com/team-member/elijah-conniff/",
-    "linkedin_url": "https://www.linkedin.com/in/elijahconniff"
+    "linkedin_url": "https://www.linkedin.com/in/elijahconniff",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://lsvp.com/team-member/elijah-conniff/"
   },
   {
     "id": "dra_elijah_kurien",
@@ -1972,7 +2097,8 @@
     "firm_type": "founder",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/ericforkosh",
-    "linkedin_url": "https://www.linkedin.com/in/ericforkosh"
+    "linkedin_url": "https://www.linkedin.com/in/ericforkosh",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_eric_liu",
@@ -2007,7 +2133,8 @@
     "firm_type": "other",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/esungo",
-    "linkedin_url": "https://www.linkedin.com/in/esungo"
+    "linkedin_url": "https://www.linkedin.com/in/esungo",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_garros_li",
@@ -2070,7 +2197,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.newrisingventures.org/",
-    "linkedin_url": "https://www.linkedin.com/in/haywoodperry"
+    "linkedin_url": "https://www.linkedin.com/in/haywoodperry",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_henry_tsai",
@@ -2139,7 +2267,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/shahhiral",
-    "linkedin_url": "https://www.linkedin.com/in/shahhiral"
+    "linkedin_url": "https://www.linkedin.com/in/shahhiral",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_ian_mccreadie",
@@ -2180,7 +2309,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/imrankk",
-    "linkedin_url": "https://www.linkedin.com/in/imrankk"
+    "linkedin_url": "https://www.linkedin.com/in/imrankk",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_irene_wu",
@@ -2229,7 +2359,9 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.isaacsukin.com/",
-    "linkedin_url": "https://www.linkedin.com/in/isaacsukin"
+    "linkedin_url": "https://www.linkedin.com/in/isaacsukin",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.isaacsukin.com/"
   },
   {
     "id": "dra_isabel_sheinman",
@@ -2256,7 +2388,10 @@
     "current_role": "Partner",
     "firm_source_url": "https://www.lererhippeau.com/team",
     "firm_type": "vc",
-    "firm_confidence": "confirmed"
+    "firm_confidence": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/isabellephelps",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.lererhippeau.com/team"
   },
   {
     "id": "dra_isabelle_zhou",
@@ -2277,7 +2412,9 @@
     "firm_type": "big_tech",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.isabellezhou.com/",
-    "linkedin_url": "https://www.linkedin.com/in/isabellezhou"
+    "linkedin_url": "https://www.linkedin.com/in/isabellezhou",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.isabellezhou.com/"
   },
   {
     "id": "dra_ivan_zhao",
@@ -2311,7 +2448,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/bitianyuan",
-    "linkedin_url": "https://www.linkedin.com/in/bitianyuan"
+    "linkedin_url": "https://www.linkedin.com/in/bitianyuan",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_jackie_larossi",
@@ -2333,7 +2471,9 @@
     "school_label": "University of Pennsylvania",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/jacobkopelman",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_james_ruben",
@@ -2348,7 +2488,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/jamesruben",
-    "linkedin_url": "https://www.linkedin.com/in/jamesruben"
+    "linkedin_url": "https://www.linkedin.com/in/jamesruben",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_james_wellemeyer",
@@ -2363,7 +2504,9 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "linkedin_url": "https://www.linkedin.com/in/james-wellemeyer",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_jarrod_barnes",
@@ -2382,7 +2525,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/jarrodbarnes",
-    "linkedin_url": "https://www.linkedin.com/in/jarrodbarnes"
+    "linkedin_url": "https://www.linkedin.com/in/jarrodbarnes",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_jasman_singh",
@@ -2401,7 +2545,8 @@
     "firm_type": "other",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/jasmansingh20",
-    "linkedin_url": "https://www.linkedin.com/in/jasmansingh20"
+    "linkedin_url": "https://www.linkedin.com/in/jasmansingh20",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_jasmine_kriston",
@@ -2435,7 +2580,8 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/jasonrbrooke",
-    "linkedin_url": "https://www.linkedin.com/in/jasonrbrooke"
+    "linkedin_url": "https://www.linkedin.com/in/jasonrbrooke",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_jason_krone",
@@ -2453,7 +2599,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/jasonkrone",
-    "linkedin_url": "https://www.linkedin.com/in/jasonkrone"
+    "linkedin_url": "https://www.linkedin.com/in/jasonkrone",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_jason_seibel",
@@ -2496,7 +2643,9 @@
     "school_label": "New York University",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/jeffkaminsky1",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_jennifer_sung",
@@ -2532,7 +2681,8 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/jfiance",
-    "linkedin_url": "https://www.linkedin.com/in/jfiance"
+    "linkedin_url": "https://www.linkedin.com/in/jfiance",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_jeremy_navarro",
@@ -2550,7 +2700,10 @@
     "current_role": "Investor",
     "firm_source_url": "https://www.jeremynavarro.com/",
     "firm_type": "vc",
-    "firm_confidence": "confirmed"
+    "firm_confidence": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/jeremy-navarro",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.jeremynavarro.com/"
   },
   {
     "id": "dra_jessica_gartenstein",
@@ -2584,7 +2737,9 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.ycombinator.com/companies/trycardinal-ai",
-    "linkedin_url": "https://www.linkedin.com/in/jianna-liu-90747413b"
+    "linkedin_url": "https://www.linkedin.com/in/jianna-liu-90747413b",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.ycombinator.com/companies/trycardinal-ai"
   },
   {
     "id": "dra_jiashan_wu",
@@ -2646,7 +2801,8 @@
     "firm_type": "other",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/jwkahn",
-    "linkedin_url": "https://www.linkedin.com/in/jwkahn"
+    "linkedin_url": "https://www.linkedin.com/in/jwkahn",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_john_forbes",
@@ -2685,7 +2841,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://f4.fund/firms/o-g-venture-partners",
-    "linkedin_url": "https://www.linkedin.com/in/joshephraim"
+    "linkedin_url": "https://www.linkedin.com/in/joshephraim",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_josh_lee",
@@ -2704,7 +2861,8 @@
     "firm_type": "other",
     "firm_confidence": "likely",
     "firm_source_url": "https://me.sh/profile/joshua-lee-adc17ea4",
-    "linkedin_url": "https://www.linkedin.com/in/lee94josh"
+    "linkedin_url": "https://www.linkedin.com/in/lee94josh",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_justine_humenansky",
@@ -2725,14 +2883,15 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/justine-humenansky-cfa-b1036058",
-    "linkedin_url": "https://www.linkedin.com/in/justine-humenansky-cfa-b1036058"
+    "linkedin_url": "https://www.linkedin.com/in/justine-humenansky-cfa-b1036058",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_jessica_leao",
-    "name": "J\u00e9ssica Le\u00e3o",
+    "name": "Jéssica Leão",
     "confidence": "confirmed",
     "source_url": "https://dormroomfund.com/our-team",
-    "excerpt": "Dorm Room Fund's team page lists J\u00e9ssica Le\u00e3o among alumni as Partner, a16z. Archived DRF team page (2020) lists Jessica Le\u00e3o on the Bay Area roster, Stanford Graduate School of Business. DRF's 20 Nov 2019 new-partner post introduces Jessica Le\u00e3o as a Bay Area partner (Yale University). Dorm Room Fund's team page lists J\u00e9ssica Le\u00e3o among alumni as Partner, a16z.",
+    "excerpt": "Dorm Room Fund's team page lists Jéssica Leão among alumni as Partner, a16z. Archived DRF team page (2020) lists Jessica Leão on the Bay Area roster, Stanford Graduate School of Business. DRF's 20 Nov 2019 new-partner post introduces Jessica Leão as a Bay Area partner (Yale University). Dorm Room Fund's team page lists Jéssica Leão among alumni as Partner, a16z.",
     "drf_team": "Bay Area",
     "university_id": "univ_stanford",
     "school_label": "Stanford Graduate School of Business",
@@ -2745,7 +2904,9 @@
     "team_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
     "firm_type": "vc",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/jessicamleao",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_kai_furbeck",
@@ -2764,7 +2925,8 @@
     "firm_type": "vc",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/kai-furbeck-15767b41",
-    "linkedin_url": "https://www.linkedin.com/in/kai-furbeck-15767b41"
+    "linkedin_url": "https://www.linkedin.com/in/kai-furbeck-15767b41",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_kanav_dhir",
@@ -2779,7 +2941,14 @@
     "affiliation_status": "older_alumni",
     "year_start": 2014,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20150509062156/http://www.dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20150509062156/http://www.dormroomfund.com/boston",
+    "linkedin_url": "https://www.linkedin.com/in/kdhir",
+    "linkedin_confidence": "likely",
+    "current_role": "VP of Product",
+    "current_firm": "VergeSense",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/kdhir"
   },
   {
     "id": "dra_kanwar_sahdra",
@@ -2799,7 +2968,8 @@
     "firm_type": "other",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/posts/kanwar-sahdra_join-dorm-room-fund-activity-7236738565164994562-m40V",
-    "linkedin_url": "https://www.linkedin.com/in/kanwar-sahdra"
+    "linkedin_url": "https://www.linkedin.com/in/kanwar-sahdra",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_karina_akib",
@@ -2833,7 +3003,9 @@
     "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/karinehsu",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_karthik_menta",
@@ -2859,7 +3031,9 @@
     "school_label": "Northeastern University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2015
+    "year_start": 2015,
+    "linkedin_url": "https://www.linkedin.com/in/kate-murdock-9975347b",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_katie_xu",
@@ -2878,7 +3052,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://wp.dormroomfund.com/the-new-instincts/",
-    "linkedin_url": "https://www.linkedin.com/in/katiexu1"
+    "linkedin_url": "https://www.linkedin.com/in/katiexu1",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_kc_simon",
@@ -2897,7 +3072,8 @@
     "firm_type": "other",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/posts/kcsimon_wealthfront-is-now-a-public-company-im-activity-7405254430067064832-GVDF",
-    "linkedin_url": "https://www.linkedin.com/in/kcsimon"
+    "linkedin_url": "https://www.linkedin.com/in/kcsimon",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_kelsey_bishop",
@@ -2915,7 +3091,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/bishopkelsey",
-    "linkedin_url": "https://www.linkedin.com/in/bishopkelsey"
+    "linkedin_url": "https://www.linkedin.com/in/bishopkelsey",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_kenta_yaegashi",
@@ -2936,7 +3113,8 @@
     "firm_type": "vc",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/kentayaegashi",
-    "linkedin_url": "https://www.linkedin.com/in/kentayaegashi"
+    "linkedin_url": "https://www.linkedin.com/in/kentayaegashi",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_kerry_omughelli",
@@ -2957,7 +3135,9 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.lightbay.com/team-member/kerry-omughelli/",
-    "linkedin_url": "https://www.linkedin.com/in/kerryomughelli"
+    "linkedin_url": "https://www.linkedin.com/in/kerryomughelli",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.lightbay.com/team-member/kerry-omughelli/"
   },
   {
     "id": "dra_kieran_velasquez",
@@ -2986,7 +3166,9 @@
     "current_firm": "Omsom",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://goldhouse.org/people/vanessa-pham-kim-pham/"
+    "firm_source_url": "https://goldhouse.org/people/vanessa-pham-kim-pham/",
+    "linkedin_url": "https://www.linkedin.com/in/kimpham617",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_kimiloluwa_fafowora",
@@ -3018,7 +3200,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/kyledolce",
-    "linkedin_url": "https://www.linkedin.com/in/kyledolce"
+    "linkedin_url": "https://www.linkedin.com/in/kyledolce",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_kylie_to",
@@ -3049,7 +3232,9 @@
     "team_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team",
     "firm_type": "vc",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/lanjiang9",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_lauren_reeder",
@@ -3072,7 +3257,10 @@
     "firm_source_url": "https://fisher.wharton.upenn.edu/mt-for-life/lauren-reeder-mt16/",
     "team_source_url": "https://web.archive.org/web/20150626075221/http://www.dormroomfund.com/philly",
     "firm_type": "vc",
-    "firm_confidence": "confirmed"
+    "firm_confidence": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/lauren-reeder",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.sequoiacap.com/people/lauren-reeder/"
   },
   {
     "id": "dra_leonardo_girlando",
@@ -3092,7 +3280,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/leonardogirlando",
-    "linkedin_url": "https://www.linkedin.com/in/leonardogirlando"
+    "linkedin_url": "https://www.linkedin.com/in/leonardogirlando",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_lily_peng",
@@ -3119,7 +3308,9 @@
     "school_label": "Yale University",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/lindawzhou",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_lindsay_ullman",
@@ -3140,7 +3331,8 @@
     "firm_type": "vc",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/lindsayu",
-    "linkedin_url": "https://www.linkedin.com/in/lindsayu"
+    "linkedin_url": "https://www.linkedin.com/in/lindsayu",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_linus_lee",
@@ -3179,7 +3371,8 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://startupintros.com/people/lisette-tellez",
-    "linkedin_url": "https://www.linkedin.com/in/lisettellez"
+    "linkedin_url": "https://www.linkedin.com/in/lisettellez",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_liu_jiang",
@@ -3219,7 +3412,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/loewen-cavill",
-    "linkedin_url": "https://www.linkedin.com/in/loewen-cavill"
+    "linkedin_url": "https://www.linkedin.com/in/loewen-cavill",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_lola_lafia",
@@ -3234,7 +3428,9 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/lola-lafia-602a20177",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_lucas_rocha",
@@ -3276,7 +3472,10 @@
     "current_firm": "Bloomberg Law",
     "firm_type": "other",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://news.bloomberglaw.com/author/mahira-dayal-23325234"
+    "firm_source_url": "https://news.bloomberglaw.com/author/mahira-dayal-23325234",
+    "linkedin_url": "https://www.linkedin.com/in/mahirad",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://news.bloomberglaw.com/author/mahira-dayal-23325234"
   },
   {
     "id": "dra_mariel_rosic",
@@ -3291,7 +3490,9 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/marielrosic",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_mario_ruiz",
@@ -3311,7 +3512,8 @@
     "firm_type": "vc",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/mariorruiz",
-    "linkedin_url": "https://www.linkedin.com/in/mariorruiz"
+    "linkedin_url": "https://www.linkedin.com/in/mariorruiz",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_marissa_hu",
@@ -3346,7 +3548,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/mattbilotti",
-    "linkedin_url": "https://www.linkedin.com/in/mattbilotti"
+    "linkedin_url": "https://www.linkedin.com/in/mattbilotti",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_matt_gibstein",
@@ -3359,7 +3562,9 @@
     "school_label": "University of Pennsylvania",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2015
+    "year_start": 2015,
+    "linkedin_url": "https://www.linkedin.com/in/mattgibstein",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_matt_windt",
@@ -3378,7 +3583,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/mewindt",
-    "linkedin_url": "https://www.linkedin.com/in/mewindt"
+    "linkedin_url": "https://www.linkedin.com/in/mewindt",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_matthew_mizbani",
@@ -3411,7 +3617,9 @@
     "team_source_url": "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90",
     "firm_type": "big_tech",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/mattpiccolella",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_matthew_wachter",
@@ -3422,7 +3630,9 @@
     "excerpt": "Fortune (6 Sep 2022) names Tiger Global's Matthew Wachter among DRF alums. The article does not state a title, campus, or years, and no later team page was found in this pass.",
     "firm_type": "other",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://fortune.com/2022/09/06/exclusive-student-run-vc-dorm-room-fund-spins-out-from-first-round-capital-raises-12-5m-fund-from-marc-andreessen-underscore-vc-insight-partners-others/"
+    "firm_source_url": "https://fortune.com/2022/09/06/exclusive-student-run-vc-dorm-room-fund-spins-out-from-first-round-capital-raises-12-5m-fund-from-marc-andreessen-underscore-vc-insight-partners-others/",
+    "linkedin_url": "https://www.linkedin.com/in/matthew-wachter-58a1a870",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_max_kanter",
@@ -3437,7 +3647,14 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
+    "linkedin_url": "https://www.linkedin.com/in/jmaxkanter",
+    "linkedin_confidence": "likely",
+    "current_role": "CEO",
+    "current_firm": "Grid Status",
+    "firm_type": "founder",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/jmaxkanter"
   },
   {
     "id": "dra_maxwell_ritz",
@@ -3458,7 +3675,8 @@
     "firm_type": "founder",
     "firm_confidence": "likely",
     "firm_source_url": "https://clay.earth/profile/maxwell-ritz",
-    "linkedin_url": "https://www.linkedin.com/in/maxwellritz"
+    "linkedin_url": "https://www.linkedin.com/in/maxwellritz",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_mea_lynn_wong",
@@ -3473,7 +3691,9 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "linkedin_url": "https://www.linkedin.com/in/mealynnwong",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_medha_kothari",
@@ -3494,7 +3714,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/medhakothari",
-    "linkedin_url": "https://www.linkedin.com/in/medhakothari"
+    "linkedin_url": "https://www.linkedin.com/in/medhakothari",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_mediha_abdulhay",
@@ -3515,7 +3736,8 @@
     "firm_type": "big_tech",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/mediha-abdulhay",
-    "linkedin_url": "https://www.linkedin.com/in/mediha-abdulhay"
+    "linkedin_url": "https://www.linkedin.com/in/mediha-abdulhay",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_meryl_breidbart",
@@ -3550,7 +3772,9 @@
     "current_firm": "CRV",
     "firm_type": "vc",
     "firm_confidence": "likely",
-    "firm_source_url": "https://theorg.com/org/crv/org-chart/mia-krishnamurthy"
+    "firm_source_url": "https://theorg.com/org/crv/org-chart/mia-krishnamurthy",
+    "linkedin_url": "https://www.linkedin.com/in/mia-krishnamurthy",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_michael_chiang",
@@ -3618,7 +3842,8 @@
     "firm_type": "big_tech",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/michaelyfzhang",
-    "linkedin_url": "https://www.linkedin.com/in/michaelyfzhang"
+    "linkedin_url": "https://www.linkedin.com/in/michaelyfzhang",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_michael_zhu",
@@ -3659,7 +3884,8 @@
     "firm_type": "other",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/mikelapointebc",
-    "linkedin_url": "https://www.linkedin.com/in/mikelapointebc"
+    "linkedin_url": "https://www.linkedin.com/in/mikelapointebc",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_mina_iskarous",
@@ -3672,7 +3898,9 @@
     "school_role": "student",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/minaiskarous",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_molly_wang",
@@ -3691,7 +3919,8 @@
     "firm_type": "big_tech",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/mollywwang",
-    "linkedin_url": "https://www.linkedin.com/in/mollywwang"
+    "linkedin_url": "https://www.linkedin.com/in/mollywwang",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_momoko_ishii",
@@ -3738,7 +3967,9 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://salesforceventures.com/people/nathan-ho/",
-    "linkedin_url": "https://www.linkedin.com/in/nathanho12"
+    "linkedin_url": "https://www.linkedin.com/in/nathanho12",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://salesforceventures.com/people/nathan-ho/"
   },
   {
     "id": "dra_nathaniel_hajian",
@@ -3773,7 +4004,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/nealkhosla",
-    "linkedin_url": "https://www.linkedin.com/in/nealkhosla"
+    "linkedin_url": "https://www.linkedin.com/in/nealkhosla",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_neil_bhammar",
@@ -3791,7 +4023,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.everydev.ai/developers/shortkit",
-    "linkedin_url": "https://www.linkedin.com/in/neilbhammar"
+    "linkedin_url": "https://www.linkedin.com/in/neilbhammar",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_nick_kim",
@@ -3803,7 +4036,9 @@
     "current_role": "Partner",
     "firm_source_url": "https://www.dormroomfund.com/",
     "firm_type": "vc",
-    "firm_confidence": "confirmed"
+    "firm_confidence": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/nickbkim",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_nicole_ripka",
@@ -3824,7 +4059,8 @@
     "firm_type": "other",
     "firm_confidence": "likely",
     "firm_source_url": "https://people.equilar.com/bio/person/nicole-ripka-dorm-room-fund/42274387",
-    "linkedin_url": "https://www.linkedin.com/in/nicole-ripka"
+    "linkedin_url": "https://www.linkedin.com/in/nicole-ripka",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_nigel_coelho",
@@ -3909,7 +4145,9 @@
     "school_label": "Columbia Business School",
     "school_role": "mba",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/omotseumah",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_parthiban_loganathan",
@@ -3939,7 +4177,8 @@
     "firm_type": "big_tech",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/petercrackthecode",
-    "linkedin_url": "https://www.linkedin.com/in/petercrackthecode"
+    "linkedin_url": "https://www.linkedin.com/in/petercrackthecode",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_philippe_griffiths",
@@ -3960,7 +4199,8 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://tlcomcapital.com/philippe-griffiths",
-    "linkedin_url": "https://www.linkedin.com/in/philippe-griffiths-49a0b1a5"
+    "linkedin_url": "https://www.linkedin.com/in/philippe-griffiths-49a0b1a5",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_phillip_hui_bon_hoa",
@@ -4021,7 +4261,9 @@
     "current_firm": "Onigiri Capital",
     "firm_type": "vc",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://sg.linkedin.com/in/looiqinen"
+    "firm_source_url": "https://sg.linkedin.com/in/looiqinen",
+    "linkedin_url": "https://www.linkedin.com/in/looiqinen",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_quenton_craddock",
@@ -4056,7 +4298,10 @@
     "current_firm": "Tomo",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://www.raymondchen.me/work"
+    "firm_source_url": "https://www.raymondchen.me/work",
+    "linkedin_url": "https://www.linkedin.com/in/raymondhechen",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.raymondchen.me/"
   },
   {
     "id": "dra_raymond_zhong",
@@ -4104,7 +4349,8 @@
     "firm_type": "founder",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/rickling",
-    "linkedin_url": "https://www.linkedin.com/in/rickling"
+    "linkedin_url": "https://www.linkedin.com/in/rickling",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_ricky_berrin",
@@ -4119,7 +4365,9 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork",
+    "linkedin_url": "https://www.linkedin.com/in/rickyberrin",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_rishi_narang",
@@ -4140,7 +4388,8 @@
     "firm_type": "other",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/narangrishi",
-    "linkedin_url": "https://www.linkedin.com/in/narangrishi"
+    "linkedin_url": "https://www.linkedin.com/in/narangrishi",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_rishi_sriram",
@@ -4172,7 +4421,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/robmcknight",
-    "linkedin_url": "https://www.linkedin.com/in/robmcknight"
+    "linkedin_url": "https://www.linkedin.com/in/robmcknight",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_rohan_kalahasty",
@@ -4206,7 +4456,9 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.generalatlantic.com/people/royce-tiger/",
-    "linkedin_url": "https://www.linkedin.com/in/roycetiger"
+    "linkedin_url": "https://www.linkedin.com/in/roycetiger",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.generalatlantic.com/people/royce-tiger/"
   },
   {
     "id": "dra_ruby_lee",
@@ -4226,7 +4478,9 @@
     "current_firm": "Juni Learning",
     "firm_type": "founder",
     "firm_confidence": "likely",
-    "firm_source_url": "https://signal.nfx.com/investors/ruby-lee"
+    "firm_source_url": "https://signal.nfx.com/investors/ruby-lee",
+    "linkedin_url": "https://www.linkedin.com/in/roobeelee",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_ryan_jung",
@@ -4246,7 +4500,9 @@
     "current_firm": "Earnin",
     "firm_type": "other",
     "firm_confidence": "likely",
-    "firm_source_url": "https://me.sh/profile/ryan-jung-fbad22e5"
+    "firm_source_url": "https://me.sh/profile/ryan-jung-fbad22e5",
+    "linkedin_url": "https://www.linkedin.com/in/ryan-jung-912281",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_ryan_marschang",
@@ -4297,7 +4553,8 @@
     "firm_type": "founder",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/choprasagar",
-    "linkedin_url": "https://www.linkedin.com/in/choprasagar"
+    "linkedin_url": "https://www.linkedin.com/in/choprasagar",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_sam_broner",
@@ -4317,7 +4574,9 @@
     "team_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/sambroner",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_sam_slover",
@@ -4380,7 +4639,9 @@
     "team_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team",
     "firm_type": "big_tech",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/tiagohernandez",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_sanya_ohri",
@@ -4415,7 +4676,9 @@
     "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/saradu",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_sarah_guzick",
@@ -4458,7 +4721,14 @@
     "school_label": "University of California, Berkeley",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/shasi-pinninti",
+    "linkedin_confidence": "likely",
+    "current_role": "Eng Ops",
+    "current_firm": "Etched",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/shasi-pinninti"
   },
   {
     "id": "dra_shawn_xu",
@@ -4477,7 +4747,9 @@
     "firm_source_url": "https://lowercarbon.com/team/shawn-xu/",
     "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
     "firm_type": "vc",
-    "firm_confidence": "confirmed"
+    "firm_confidence": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/shawnxxu",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_shiroy_aspandiar",
@@ -4498,7 +4770,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/shiroy-aspandiar",
-    "linkedin_url": "https://www.linkedin.com/in/shiroy-aspandiar"
+    "linkedin_url": "https://www.linkedin.com/in/shiroy-aspandiar",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_shohini_gupta",
@@ -4533,7 +4806,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/shreyg19",
-    "linkedin_url": "https://www.linkedin.com/in/shreyg19"
+    "linkedin_url": "https://www.linkedin.com/in/shreyg19",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_shreyas_parab",
@@ -4553,7 +4827,9 @@
     "current_firm": "DayDream",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://www.dentalnachos.com/watch-the-recording-of-dental-nachos-presents-collect-more-at-lower-costs-how-ai-is-transforming-dental-practices"
+    "firm_source_url": "https://www.dentalnachos.com/watch-the-recording-of-dental-nachos-presents-collect-more-at-lower-costs-how-ai-is-transforming-dental-practices",
+    "linkedin_url": "https://www.linkedin.com/in/sparab18",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_shruti_agarwal",
@@ -4574,7 +4850,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/shrutiagarwal17",
-    "linkedin_url": "https://www.linkedin.com/in/shrutiagarwal17"
+    "linkedin_url": "https://www.linkedin.com/in/shrutiagarwal17",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_shub_gaur",
@@ -4606,7 +4883,8 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/shubham-goel-7b723419",
-    "linkedin_url": "https://www.linkedin.com/in/shubham-goel-7b723419"
+    "linkedin_url": "https://www.linkedin.com/in/shubham-goel-7b723419",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_sofia_cagliero",
@@ -4625,7 +4903,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/sofia-cagliero-00128b205",
-    "linkedin_url": "https://www.linkedin.com/in/sofia-cagliero-00128b205"
+    "linkedin_url": "https://www.linkedin.com/in/sofia-cagliero-00128b205",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_sophia_popova",
@@ -4644,7 +4923,8 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.summitpartners.com/team/sophia-popova",
-    "linkedin_url": "https://www.linkedin.com/in/sophiapopova"
+    "linkedin_url": "https://www.linkedin.com/in/sophiapopova",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_spencer_yen",
@@ -4715,7 +4995,8 @@
     "firm_type": "founder",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/stephaniemccaffrey",
-    "linkedin_url": "https://www.linkedin.com/in/stephaniemccaffrey"
+    "linkedin_url": "https://www.linkedin.com/in/stephaniemccaffrey",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_stephanie_weiner",
@@ -4736,7 +5017,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/stephmweiner",
-    "linkedin_url": "https://www.linkedin.com/in/stephmweiner"
+    "linkedin_url": "https://www.linkedin.com/in/stephmweiner",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_sterling_witzke",
@@ -4757,7 +5039,8 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://cfc-stmoritz.com/profiles/sterling-witzke",
-    "linkedin_url": "https://www.linkedin.com/in/sterlingwitzke"
+    "linkedin_url": "https://www.linkedin.com/in/sterlingwitzke",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_steve_flanagan",
@@ -4805,7 +5088,8 @@
     "firm_type": "founder",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/stevekrouse",
-    "linkedin_url": "https://www.linkedin.com/in/stevekrouse"
+    "linkedin_url": "https://www.linkedin.com/in/stevekrouse",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_sweyn_venderbush",
@@ -4824,7 +5108,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/sweyn",
-    "linkedin_url": "https://www.linkedin.com/in/sweyn"
+    "linkedin_url": "https://www.linkedin.com/in/sweyn",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_tafarii_mckenie",
@@ -4837,7 +5122,14 @@
     "school_label": "MIT Sloan",
     "school_role": "mba",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/tafarii-mckenzie",
+    "linkedin_confidence": "likely",
+    "current_role": "Director of Product & Network Strategy",
+    "current_firm": "Lerer Hippeau",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/tafarii-mckenzie"
   },
   {
     "id": "dra_talal_alhammad",
@@ -4870,7 +5162,10 @@
     "firm_source_url": "https://www.bvp.com/team",
     "team_source_url": "https://web.archive.org/web/20130918035243/http://dormroomfund.com/philly",
     "firm_type": "vc",
-    "firm_confidence": "confirmed"
+    "firm_confidence": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/talia-goldberg-a3819431",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.bvp.com/team/talia-goldberg"
   },
   {
     "id": "dra_tanthai_pongstien",
@@ -4888,7 +5183,9 @@
     "current_firm": "Wonderstruck",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://tanth.ai/"
+    "firm_source_url": "https://tanth.ai/",
+    "linkedin_url": "https://www.linkedin.com/in/tanthai",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_taylor_francis",
@@ -4909,7 +5206,8 @@
     "firm_type": "founder",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/taylor-francis-4ba49640",
-    "linkedin_url": "https://www.linkedin.com/in/taylor-francis-4ba49640"
+    "linkedin_url": "https://www.linkedin.com/in/taylor-francis-4ba49640",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_tej_singh",
@@ -4930,7 +5228,8 @@
     "firm_type": "founder",
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/tejsingh99",
-    "linkedin_url": "https://www.linkedin.com/in/tejsingh99"
+    "linkedin_url": "https://www.linkedin.com/in/tejsingh99",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_tim_miller",
@@ -4963,7 +5262,9 @@
     "current_firm": "Impact Nation",
     "firm_type": "other",
     "firm_confidence": "likely",
-    "firm_source_url": "https://www.linkedin.com/posts/taguthrie_helping-a-founder-with-an-off-market-cos-activity-7439379835946205184-E_f-"
+    "firm_source_url": "https://www.linkedin.com/posts/taguthrie_helping-a-founder-with-an-off-market-cos-activity-7439379835946205184-E_f-",
+    "linkedin_url": "https://www.linkedin.com/in/taguthrie",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_toni_oloko",
@@ -4983,7 +5284,9 @@
     "founded_project_id": "proj_-useAjLwlsUE",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/tonioloko",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_tony_cuevo_bravo",
@@ -5003,7 +5306,9 @@
     "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
     "firm_type": "vc",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team"
+    "firm_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/tonycueva",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_tony_shi",
@@ -5022,7 +5327,8 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/t-shi",
-    "linkedin_url": "https://www.linkedin.com/in/t-shi"
+    "linkedin_url": "https://www.linkedin.com/in/t-shi",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_tori_orr",
@@ -5043,7 +5349,8 @@
     "firm_type": "big_tech",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/toriorr",
-    "linkedin_url": "https://www.linkedin.com/in/toriorr"
+    "linkedin_url": "https://www.linkedin.com/in/toriorr",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_trevor_sookraj",
@@ -5062,7 +5369,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/trevorsookraj",
-    "linkedin_url": "https://www.linkedin.com/in/trevorsookraj"
+    "linkedin_url": "https://www.linkedin.com/in/trevorsookraj",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_trinity_donohugh",
@@ -5081,7 +5389,8 @@
     "firm_type": "other",
     "firm_confidence": "likely",
     "firm_source_url": "https://fundraisingfox.com/people/trinity-d-dorm-room",
-    "linkedin_url": "https://www.linkedin.com/in/trinity-donohugh"
+    "linkedin_url": "https://www.linkedin.com/in/trinity-donohugh",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_vedant_agrawal",
@@ -5126,7 +5435,8 @@
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/vinai-rachakonda-a41927117",
-    "linkedin_url": "https://www.linkedin.com/in/vinai-rachakonda-a41927117"
+    "linkedin_url": "https://www.linkedin.com/in/vinai-rachakonda-a41927117",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_vishal_dubey",
@@ -5145,7 +5455,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/vishaldubey01",
-    "linkedin_url": "https://www.linkedin.com/in/vishaldubey01"
+    "linkedin_url": "https://www.linkedin.com/in/vishaldubey01",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_viveca_morris",
@@ -5164,7 +5475,8 @@
     "firm_type": "other",
     "firm_confidence": "likely",
     "firm_source_url": "https://law.yale.edu/viveca-morris",
-    "linkedin_url": "https://www.linkedin.com/in/viveca-morris"
+    "linkedin_url": "https://www.linkedin.com/in/viveca-morris",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_will_fry",
@@ -5198,7 +5510,8 @@
     "firm_type": "other",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/greenws4",
-    "linkedin_url": "https://www.linkedin.com/in/greenws4"
+    "linkedin_url": "https://www.linkedin.com/in/greenws4",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_will_manidis",
@@ -5236,7 +5549,8 @@
     "firm_type": "other",
     "firm_confidence": "likely",
     "firm_source_url": "https://fundraisingfox.com/people/will-nichols-fj-labs",
-    "linkedin_url": "https://www.linkedin.com/in/wsumnernichols"
+    "linkedin_url": "https://www.linkedin.com/in/wsumnernichols",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_yanika_magan",
@@ -5283,7 +5597,8 @@
     "current_firm": "Alama",
     "firm_type": "founder",
     "firm_confidence": "likely",
-    "firm_source_url": "https://www.linkedin.com/posts/yoni-dejene_weve-been-building-voice-agents-for-the-activity-7340792770715860993-lb2N"
+    "firm_source_url": "https://www.linkedin.com/posts/yoni-dejene_weve-been-building-voice-agents-for-the-activity-7340792770715860993-lb2N",
+    "linkedin_confidence": "likely"
   },
   {
     "id": "dra_yvette_rodriguez",
@@ -5357,7 +5672,9 @@
     "firm_type": "vc",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://2048.vc/team",
-    "linkedin_url": "https://www.linkedin.com/in/zannali"
+    "linkedin_url": "https://www.linkedin.com/in/zannali",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://2048.vc/team"
   },
   {
     "id": "dra_zoe_lu",

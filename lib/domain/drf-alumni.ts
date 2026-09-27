@@ -29,6 +29,8 @@ export interface DrfAlumniRecord {
   sourceUrl: string;
   firmSourceUrl: string | null;
   linkedinUrl: string | null;
+  linkedinConfidence: DrfConfidence | null;
+  linkedinSourceUrl: string | null;
   xUrl: string | null;
   foundedProjectId: string | null;
   sourceUrls: string[];
@@ -88,6 +90,16 @@ export function parseAlumniRecords(input: unknown): DrfAlumniRecord[] {
       throw new Error(`${id}: affiliation_status is not a known status`);
     }
     const linkedinUrl = httpUrl(row.linkedin_url, "linkedin_url", id);
+    const linkedinConfidenceRaw = clean(row.linkedin_confidence);
+    if (linkedinUrl && linkedinConfidenceRaw !== "confirmed" && linkedinConfidenceRaw !== "likely") {
+      throw new Error(`${id}: linkedin_confidence must be confirmed or likely`);
+    }
+    if (!linkedinUrl && linkedinConfidenceRaw) throw new Error(`${id}: linkedin_confidence needs a profile URL`);
+    const linkedinConfidence = linkedinUrl ? (linkedinConfidenceRaw as DrfConfidence) : null;
+    const linkedinSourceUrl = httpUrl(row.linkedin_source_url, "linkedin_source_url", id);
+    if (linkedinConfidence === "confirmed" && !linkedinSourceUrl) {
+      throw new Error(`${id}: a confirmed LinkedIn profile needs the page that links it`);
+    }
     const xUrl = httpUrl(row.x_url, "x_url", id);
     const foundedRaw = clean(row.founded_project_id);
     if (foundedRaw && !/^proj_[A-Za-z0-9_-]+$/.test(foundedRaw)) throw new Error(`${id}: founded_project_id is not a project id`);
@@ -97,7 +109,7 @@ export function parseAlumniRecords(input: unknown): DrfAlumniRecord[] {
       throw new Error(`${id}: firm_confidence must be confirmed or likely`);
     }
     const founderOnly = !!role && /\bfounder\b/i.test(role) && !/\b(partner|gp|investor|principal|vp)\b/i.test(role);
-    const urls = [sourceUrl, httpUrl(row.firm_source_url, "firm_source_url", id), httpUrl(row.team_source_url, "team_source_url", id), httpUrl(row.school_source_url, "school_source_url", id), linkedinUrl, xUrl].filter(
+    const urls = [sourceUrl, httpUrl(row.firm_source_url, "firm_source_url", id), httpUrl(row.team_source_url, "team_source_url", id), httpUrl(row.school_source_url, "school_source_url", id), linkedinUrl, linkedinSourceUrl, xUrl].filter(
       (url): url is string => !!url
     );
     return {
@@ -120,6 +132,8 @@ export function parseAlumniRecords(input: unknown): DrfAlumniRecord[] {
       sourceUrl,
       firmSourceUrl: httpUrl(row.firm_source_url, "firm_source_url", id),
       linkedinUrl,
+      linkedinConfidence,
+      linkedinSourceUrl,
       xUrl,
       foundedProjectId: foundedRaw,
       sourceUrls: [...new Set(urls)],
@@ -150,6 +164,7 @@ interface AlumniDbRow {
   current_role: string | null;
   firm_type: string | null;
   firm_confidence: string | null;
+  linkedin_confidence: string | null;
   investor_id: string | null;
   source_url: string;
   firm_source_url: string | null;
@@ -188,6 +203,13 @@ function fromDb(row: AlumniDbRow): DrfAlumRow {
     sourceUrl: row.source_url,
     firmSourceUrl: row.firm_source_url,
     linkedinUrl: sourceUrls.find((url) => /linkedin\.com\/in\//i.test(url)) ?? null,
+    linkedinConfidence:
+      row.linkedin_confidence === "confirmed" || row.linkedin_confidence === "likely"
+        ? row.linkedin_confidence
+        : sourceUrls.some((url) => /linkedin\.com\/in\//i.test(url))
+          ? "likely"
+          : null,
+    linkedinSourceUrl: null,
     xUrl: sourceUrls.find((url) => /(^https:\/\/(x|twitter)\.com\/)/i.test(url)) ?? null,
     foundedProjectId: null,
     sourceUrls,

@@ -29,7 +29,7 @@ function csvCell(value: string | number | null | undefined): string {
 }
 
 function writeCsv(records: DrfAlumniRecord[]) {
-  const header = ["name", "drf_team", "year_start", "year_end", "class_year", "school", "university_id", "current_role", "current_firm", "firm_type", "firm_confidence", "linkedin_url", "x_url", "confidence", "founder", "matched_startup_id", "evidence_urls", "source_url", "firm_source_url", "excerpt"];
+  const header = ["name", "drf_team", "year_start", "year_end", "class_year", "school", "university_id", "current_role", "current_firm", "firm_type", "firm_confidence", "linkedin_url", "linkedin_confidence", "x_url", "confidence", "founder", "matched_startup_id", "evidence_urls", "source_url", "firm_source_url", "excerpt"];
   const lines = [header.join(",")];
   for (const record of records) {
     const founder = record.currentRole && /\bfounder\b/i.test(record.currentRole) ? "yes" : "";
@@ -47,6 +47,7 @@ function writeCsv(records: DrfAlumniRecord[]) {
         record.firmType,
         record.firmConfidence,
         record.linkedinUrl,
+        record.linkedinConfidence,
         record.xUrl,
         record.confidence,
         founder,
@@ -215,11 +216,11 @@ function main() {
       db.prepare(
         `INSERT INTO drf_alumni (
            id, person_id, name, drf_team, university_id, school_label, program_id, program_label,
-           year_start, year_end, class_year, current_firm, current_role, firm_type, firm_confidence, investor_id,
+           year_start, year_end, class_year, current_firm, current_role, firm_type, firm_confidence, linkedin_confidence, investor_id,
            source_url, firm_source_url, sources_json, confidence, excerpt
          ) VALUES (
            @id, @person_id, @name, @drf_team, @university_id, @school_label, @program_id, @program_label,
-           @year_start, @year_end, @class_year, @current_firm, @current_role, @firm_type, @firm_confidence, @investor_id,
+           @year_start, @year_end, @class_year, @current_firm, @current_role, @firm_type, @firm_confidence, @linkedin_confidence, @investor_id,
            @source_url, @firm_source_url, @sources_json, @confidence, @excerpt
          )
          ON CONFLICT(id) DO UPDATE SET
@@ -237,6 +238,7 @@ function main() {
            current_role = excluded.current_role,
            firm_type = excluded.firm_type,
            firm_confidence = excluded.firm_confidence,
+           linkedin_confidence = excluded.linkedin_confidence,
            investor_id = excluded.investor_id,
            source_url = excluded.source_url,
            firm_source_url = excluded.firm_source_url,
@@ -259,6 +261,7 @@ function main() {
         current_role: record.currentRole,
         firm_type: record.firmType,
         firm_confidence: record.firmConfidence,
+        linkedin_confidence: record.linkedinConfidence,
         investor_id: record.investorId,
         source_url: record.sourceUrl,
         firm_source_url: record.firmSourceUrl,

@@ -1,7 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { LinkedInIconButton } from "@/components/person-link";
+import { linkedinActionFromStored } from "@/lib/domain/person-link";
 import type { WarmIntroView } from "@/lib/domain/warm-paths";
+
+function linkedInFor(name: string, url: string | null | undefined, confidence: "confirmed" | "likely" | null | undefined, school?: string | null, firm?: string | null) {
+  if (!url) return null;
+  return linkedinActionFromStored({
+    name,
+    linkedinUrl: url,
+    linkedinStatus: confidence === "confirmed" ? "confirmed" : "unverified",
+    school,
+    company: firm,
+  });
+}
 
 export function WarmIntroPaths({ entityId, initial }: { entityId?: string; initial?: WarmIntroView | null }) {
   const [data, setData] = useState<WarmIntroView | null>(initial ?? null);
@@ -37,9 +50,15 @@ export function WarmIntroPaths({ entityId, initial }: { entityId?: string; initi
           <p className="font-semibold">
             DRF alum · {data.alum.confidence}
           </p>
-          <p className="mt-0.5">
-            {data.alum.name}
-            {data.alum.role || data.alum.firm ? ` · ${[data.alum.role, data.alum.firm].filter(Boolean).join(", ")}` : ""}
+          <p className="mt-0.5 flex items-center gap-1.5">
+            <span>
+              {data.alum.name}
+              {data.alum.role || data.alum.firm ? ` · ${[data.alum.role, data.alum.firm].filter(Boolean).join(", ")}` : ""}
+            </span>
+            {(() => {
+              const action = linkedInFor(data.alum.name, data.alum.linkedinUrl, data.alum.linkedinConfidence, data.alum.school, data.alum.firm);
+              return action ? <LinkedInIconButton action={action} name={data.alum.name} /> : null;
+            })()}
           </p>
           <p className="mt-0.5 text-neutral-700">
             {[data.alum.school, data.alum.team ? `${data.alum.team} team` : null, data.alum.program, data.alum.years].filter(Boolean).join(" · ") || "Campus not stated on the source"}
@@ -63,7 +82,13 @@ export function WarmIntroPaths({ entityId, initial }: { entityId?: string; initi
         <ul className="space-y-2">
           {data.paths.map((path) => (
             <li key={`${path.alumId}|${path.founderId}|${path.via}`} className="text-xs text-black">
-              <p>{path.sentence}</p>
+              <p className="flex items-start gap-1.5">
+                {(() => {
+                  const action = linkedInFor(path.sentence, path.linkedinUrl, path.linkedinConfidence);
+                  return action ? <LinkedInIconButton action={action} name={path.sentence} /> : null;
+                })()}
+                <span>{path.sentence}</span>
+              </p>
               <p className="mt-0.5 text-neutral-600">
                 {path.strengthLabel} · {path.hops} {path.hops === 1 ? "hop" : "hops"}
                 {path.evidence.map((item) => (

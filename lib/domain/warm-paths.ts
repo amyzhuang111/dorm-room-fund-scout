@@ -23,6 +23,8 @@ export interface WarmPathView {
   via: string;
   sentence: string;
   evidence: PathEvidence[];
+  linkedinUrl: string | null;
+  linkedinConfidence: "confirmed" | "likely" | null;
 }
 
 export interface AlumCard {
@@ -38,6 +40,8 @@ export interface AlumCard {
   sourceUrl: string;
   firmSourceUrl: string | null;
   excerpt: string;
+  linkedinUrl: string | null;
+  linkedinConfidence: "confirmed" | "likely" | null;
 }
 
 export interface WarmIntroView {
@@ -287,6 +291,8 @@ export function rankWarmPaths(graph: IntroGraph, founderId: string, limit = 5, o
       via: candidate.via,
       sentence: sentence(candidate.alum, candidate.via, founder.name),
       evidence: evidenceFor(candidate.alum, candidate.evidence),
+      linkedinUrl: candidate.alum.linkedinUrl,
+      linkedinConfidence: candidate.alum.linkedinConfidence,
     }));
 }
 
@@ -304,6 +310,8 @@ function alumCard(alum: DrfAlumRow): AlumCard {
     sourceUrl: alum.sourceUrl,
     firmSourceUrl: alum.firmSourceUrl,
     excerpt: alum.excerpt,
+    linkedinUrl: alum.linkedinUrl,
+    linkedinConfidence: alum.linkedinConfidence,
   };
 }
 
