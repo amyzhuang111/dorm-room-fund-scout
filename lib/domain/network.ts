@@ -5,6 +5,7 @@ import { CAMPUSES } from "./campuses";
 import { publicLink } from "./company-link";
 import { sectorLabel } from "./sectors";
 import { enrollmentBadge } from "./founder-status";
+import { layoutCampusGraph } from "./network-layout";
 import { bestPersonLink } from "./person-link";
 import { unverifiedLinkedInByPerson } from "./queries";
 
@@ -51,6 +52,8 @@ interface RawNode {
   linkUrl?: string;
   linkLabel?: string;
   linkKind?: string;
+  /** Kept when a single-campus graph is capped, so clubs stay in the picture. */
+  pinned?: boolean;
 }
 
 // Evidence-backed neighborhood. Edges come from `relationships`, affiliations,
@@ -260,6 +263,10 @@ function assembleScoutNetwork(universityId?: string, opts?: { sector?: string; e
         });
       }
     }
+
+    if (ids.length === 1) {
+      seedCampusHubs(db, id, rawNodes, rawEdges, unverified, enrollment, exclude, sectorOk);
+    }
   }
 
   if (enrollment && enrollment.length < 4) {
@@ -290,8 +297,12 @@ function assembleScoutNetwork(universityId?: string, opts?: { sector?: string; e
   }
 
   // Drop lowest-priority nodes if we blew past the cap, but never drop universities.
+  // A single campus also keeps its clubs and programs, plus a few people around each.
   let nodesArr = Array.from(rawNodes.values());
-  if (nodesArr.length > MAX_NODES) {
+  const singleCampus = ids.length === 1 && nodesArr.some((node) => node.type === "university");
+  if (singleCampus) {
+    nodesArr = capSingleCampus(nodesArr, rawEdges);
+  } else if (nodesArr.length > MAX_NODES) {
     const protectedIds = new Set(nodesArr.filter((n) => n.type === "university").map((n) => n.id));
     const ranked = nodesArr
       .filter((n) => !protectedIds.has(n.id))
@@ -309,6 +320,40 @@ function assembleScoutNetwork(universityId?: string, opts?: { sector?: string; e
     edgeKey.add(k);
     return true;
   });
+
+  if (singleCampus) {
+    const placed = layoutCampusGraph(
+      nodesArr.map((node) => ({ id: node.id, type: node.type, label: node.label })),
+      uniqueEdges,
+    );
+    const nodes: NetworkNode[] = nodesArr.map((node) => {
+      const point = placed.get(node.id) ?? { x: 0, y: 0 };
+      return {
+        id: node.id,
+        type: node.type,
+        label: node.label,
+        sublabel: node.sublabel,
+        x: point.x,
+        y: point.y,
+        linkUrl: node.linkUrl,
+        linkLabel: node.linkLabel,
+        linkKind: node.linkKind,
+      };
+    });
+    const peopleShown = nodes.filter((node) => node.type === "person").length;
+    return {
+      nodes,
+      edges: uniqueEdges,
+      omittedCount: Math.max(0, totalPeople - peopleShown),
+      totalPeople,
+      legend: [
+        { type: "university", label: "University" },
+        { type: "community", label: "Program / community" },
+        { type: "person", label: "Person" },
+        { type: "project", label: "Project / company" },
+      ],
+    };
+  }
 
   const width = 960;
   const height = 640;
@@ -363,6 +408,195 @@ function assembleScoutNetwork(universityId?: string, opts?: { sector?: string; e
       { type: "project", label: "Project / company" },
     ],
   };
+}
+
+function capSingleCampus(nodes: RawNode[], edges: NetworkEdge[]): RawNode[] {
+  const byPriority = (a: RawNode, b: RawNode) => b.priority - a.priority || a.label.localeCompare(b.label);
+  let must = nodes.filter((node) => node.type === "university" || node.type === "community");
+  if (must.length > MAX_NODES) {
+    const universities = must.filter((node) => node.type === "university");
+    const communities = must.filter((node) => node.type === "community").sort(byPriority);
+    must = [...universities, ...communities.slice(0, Math.max(0, MAX_NODES - universities.length))];
+  }
+  const byId = new Map(nodes.map((node) => [node.id, node]));
+  const mustIds = new Set(must.map((node) => node.id));
+  const keep = new Set<string>(mustIds);
+  const pinned = nodes.filter((node) => node.pinned && !mustIds.has(node.id)).sort(byPriority);
+  for (const node of pinned) {
+    if (keep.size >= MAX_NODES) break;
+    keep.add(node.id);
+  }
+  const startupsOf = new Map<string, string[]>();
+  for (const edge of edges) {
+    if (edge.relationshipType !== "founded") continue;
+    const source = byId.get(edge.source);
+    const target = byId.get(edge.target);
+    const personId = source?.type === "person" ? edge.source : target?.type === "person" ? edge.target : null;
+    const projectId = source?.type === "project" ? edge.source : target?.type === "project" ? edge.target : null;
+    if (!personId || !projectId) continue;
+    const list = startupsOf.get(personId) ?? [];
+    if (!list.includes(projectId)) list.push(projectId);
+    startupsOf.set(personId, list);
+  }
+  const rankedPeople = nodes.filter((node) => node.type === "person" && !keep.has(node.id)).sort(byPriority);
+  for (const person of rankedPeople) {
+    if (keep.size >= MAX_NODES) break;
+    keep.add(person.id);
+    const startupId = (startupsOf.get(person.id) ?? []).find((id) => byId.has(id) && !keep.has(id));
+    if (startupId && keep.size < MAX_NODES) keep.add(startupId);
+  }
+  if (keep.size < MAX_NODES) {
+    for (const node of nodes.filter((item) => !keep.has(item.id)).sort(byPriority)) {
+      if (keep.size >= MAX_NODES) break;
+      keep.add(node.id);
+    }
+  }
+  return nodes.filter((node) => keep.has(node.id));
+}
+
+const HUB_REPS = 3;
+
+function seedCampusHubs(
+  db: ReturnType<typeof getDb>,
+  universityId: string,
+  rawNodes: Map<string, RawNode>,
+  rawEdges: NetworkEdge[],
+  unverified: ReturnType<typeof unverifiedLinkedInByPerson>,
+  enrollment: string[] | undefined,
+  exclude: Set<string>,
+  sectorOk: (id: string, kind: string) => boolean,
+) {
+  const university = rawNodes.get(universityId);
+  if (university) university.pinned = true;
+  const communities = [...rawNodes.values()].filter((node) => node.type === "community");
+  for (const community of communities) community.pinned = true;
+  if (communities.length === 0) return;
+
+  const enrollmentSql =
+    enrollment && enrollment.length > 0 && enrollment.length < 4
+      ? `AND COALESCE(pe.enrollment_status, 'unknown') IN (${enrollment.map(() => "?").join(",")})`
+      : enrollment && enrollment.length === 0
+        ? "AND 1=0"
+        : "";
+  const enrollmentParams = enrollmentSql.startsWith("AND COALESCE") ? enrollment! : [];
+  const edgeSeen = new Set(rawEdges.map((edge) => `${edge.source}|${edge.target}|${edge.relationshipType}`));
+  const pushEdge = (edge: NetworkEdge) => {
+    const key = `${edge.source}|${edge.target}|${edge.relationshipType}`;
+    if (edgeSeen.has(key)) return;
+    edgeSeen.add(key);
+    rawEdges.push(edge);
+  };
+
+  const repStmt = db.prepare(
+    `SELECT pe.id, pe.name, pe.aliases_json, pe.enrollment_status, pe.enrollment_label,
+        MAX(CASE WHEN lower(ppr.role) LIKE '%founder%' THEN 1 ELSE 0 END) AS is_founder,
+        MAX(CASE
+          WHEN lower(ppr.role) LIKE '%president%' OR lower(ppr.role) LIKE '%director%' OR lower(ppr.role) LIKE '%lead%' THEN 3
+          WHEN lower(ppr.role) LIKE '%founder%' THEN 2
+          WHEN lower(ppr.role) NOT IN ('team_member','member','contributor','unknown','alumnus') THEN 1
+          ELSE 0
+        END) AS rank
+     FROM person_project_roles ppr
+     JOIN people pe ON pe.id = ppr.person_id
+     JOIN affiliations a ON a.person_id = pe.id AND a.university_id = ?
+     WHERE ppr.project_id = ? ${enrollmentSql}
+     GROUP BY pe.id
+     ORDER BY rank DESC, pe.name
+     LIMIT ${HUB_REPS}`,
+  );
+  const startupStmt = db.prepare(
+    `SELECT pr.id, pr.name, pr.kind, pr.website_url, pr.primary_link, pr.primary_link_kind
+     FROM person_project_roles ppr
+     JOIN projects pr ON pr.id = ppr.project_id
+     WHERE ppr.person_id = ? AND pr.kind = 'company' AND lower(ppr.role) LIKE '%founder%'
+     ORDER BY pr.name
+     LIMIT 1`,
+  );
+  const affStmt = db.prepare(
+    `SELECT c.excerpt, c.source_url FROM affiliations a
+     JOIN claims c ON c.id = a.claim_id
+     WHERE a.person_id = ? AND a.university_id = ? AND c.excerpt IS NOT NULL
+     LIMIT 1`,
+  );
+
+  for (const community of communities) {
+    const reps = repStmt.all(universityId, community.id, ...enrollmentParams) as {
+      id: string;
+      name: string;
+      aliases_json: string;
+      enrollment_status: string | null;
+      enrollment_label: string | null;
+      is_founder: number;
+      rank: number;
+    }[];
+    for (const rep of reps) {
+      if (exclude.has(rep.id)) continue;
+      const personLink = bestPersonLink({
+        aliasesJson: rep.aliases_json,
+        linkedinCandidates: unverified.get(rep.id) ?? [],
+      });
+      const existing = rawNodes.get(rep.id);
+      if (existing) {
+        existing.pinned = true;
+        existing.priority = Math.max(existing.priority, 84 + (rep.rank ?? 0));
+      } else {
+        rawNodes.set(rep.id, {
+          id: rep.id,
+          type: "person",
+          label: rep.name,
+          sublabel: enrollmentBadge(rep.enrollment_status, rep.enrollment_label),
+          priority: 84 + (rep.rank ?? 0),
+          pinned: true,
+          linkUrl: personLink?.url,
+          linkLabel: personLink?.label,
+          linkKind: personLink?.kind,
+        });
+      }
+      pushEdge({
+        source: rep.id,
+        target: community.id,
+        relationshipType: rep.is_founder ? "founded" : "contributed_to",
+        verificationState: "affiliation_only",
+      });
+      const affEvidence = affStmt.get(rep.id, universityId) as { excerpt: string; source_url: string } | undefined;
+      pushEdge({
+        source: rep.id,
+        target: universityId,
+        relationshipType: "studied_at",
+        verificationState: "affiliation_only",
+        excerpt: affEvidence?.excerpt,
+        sourceUrl: affEvidence?.source_url,
+      });
+
+      const startup = startupStmt.get(rep.id) as
+        | { id: string; name: string; kind: string; website_url: string | null; primary_link: string | null; primary_link_kind: string | null }
+        | undefined;
+      if (!startup || exclude.has(startup.id) || !sectorOk(startup.id, startup.kind)) continue;
+      const site = publicLink(startup.website_url, startup.primary_link, startup.primary_link_kind);
+      const have = rawNodes.get(startup.id);
+      if (have) {
+        have.pinned = true;
+        have.priority = Math.max(have.priority, 82);
+      } else {
+        rawNodes.set(startup.id, {
+          id: startup.id,
+          type: "project",
+          label: startup.name,
+          priority: 82,
+          pinned: true,
+          linkUrl: site?.url,
+          linkLabel: site ? (site.kind === "official" ? "Website" : site.label) : undefined,
+          linkKind: site?.kind,
+        });
+      }
+      pushEdge({
+        source: rep.id,
+        target: startup.id,
+        relationshipType: "founded",
+        verificationState: "affiliation_only",
+      });
+    }
+  }
 }
 
 function edgeEvidence(
