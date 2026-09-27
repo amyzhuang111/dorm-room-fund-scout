@@ -1,5 +1,6 @@
 import { CAMPUSES } from "@/lib/domain/campuses";
 import type { MapEdgeType, MapNode, MapNodeType } from "@/lib/domain/network-map";
+import { REGIONS, campusShade, regionDef, regionForCampus, regionInk } from "@/lib/domain/network-regions";
 
 /** Neutral ink for shapes that are not colored by campus. */
 export const NODE_FILL: Record<MapNodeType, string> = {
@@ -11,124 +12,54 @@ export const NODE_FILL: Record<MapNodeType, string> = {
   organization: "#242424",
 };
 
-/**
- * Saturated categorical colors, spaced around the hue wheel (a Glasbey-style
- * set). Lightness stays low enough that a 2px dot still reads on white.
- * Hue is used to keep neighboring clusters far apart.
- */
-const CAMPUS_PALETTE: { hex: string; hue: number }[] = [
-  { hex: "#d70909", hue: 0 },
-  { hex: "#d74e09", hue: 20 },
-  { hex: "#d79909", hue: 42 },
-  { hex: "#aeba08", hue: 64 },
-  { hex: "#67ba08", hue: 88 },
-  { hex: "#25d709", hue: 112 },
-  { hex: "#09d740", hue: 136 },
-  { hex: "#09d793", hue: 160 },
-  { hex: "#08b4ba", hue: 182 },
-  { hex: "#0985d7", hue: 204 },
-  { hex: "#0939d7", hue: 226 },
-  { hex: "#2509d7", hue: 248 },
-  { hex: "#7009d7", hue: 270 },
-  { hex: "#bc09d7", hue: 292 },
-  { hex: "#d709a7", hue: 314 },
-  { hex: "#d7095c", hue: 336 },
-];
-
 export interface CampusSwatch {
   id: string;
   label: string;
   color: string;
+  regionId: string;
+  regionLabel: string;
 }
 
-/** One color per campus. Closer clusters receive hues that are farther apart. */
-export function assignCampusColors(campuses: { id: string; x: number; y: number }[]): Map<string, string> {
-  const unique = new Map<string, { id: string; x: number; y: number }>();
-  for (const campus of campuses) if (!unique.has(campus.id)) unique.set(campus.id, campus);
-  const list = [...unique.values()];
-  const assigned = new Map<string, number>();
-  const nearest = new Map<string, string[]>();
-  for (const campus of list) {
-    nearest.set(
-      campus.id,
-      list
-        .filter((other) => other.id !== campus.id)
-        .sort((a, b) => Math.hypot(a.x - campus.x, a.y - campus.y) - Math.hypot(b.x - campus.x, b.y - campus.y) || a.id.localeCompare(b.id))
-        .slice(0, 3)
-        .map((other) => other.id),
-    );
-  }
-  const gapOf = (id: string) => {
-    const hue = CAMPUS_PALETTE[assigned.get(id) ?? 0].hue;
-    const neighbors = nearest.get(id) ?? [];
-    if (!neighbors.length) return 180;
-    return Math.min(...neighbors.map((other) => hueGap(hue, CAMPUS_PALETTE[assigned.get(other) ?? 0].hue)));
-  };
-  const remaining = [...list].sort((a, b) => a.x - b.x || a.y - b.y || a.id.localeCompare(b.id));
-  for (const campus of remaining) {
-    const used = new Set(assigned.values());
-    let bestIndex = 0;
-    let bestScore = -1;
-    for (let i = 0; i < CAMPUS_PALETTE.length; i++) {
-      if (used.has(i)) continue;
-      assigned.set(campus.id, i);
-      const score = gapOf(campus.id) * 1000 + Math.min(...(nearest.get(campus.id) ?? []).map((other) => (assigned.has(other) ? gapOf(other) : 180)));
-      if (score > bestScore) {
-        bestScore = score;
-        bestIndex = i;
-      }
-    }
-    assigned.set(campus.id, bestIndex);
-  }
-  const worstGap = () => Math.min(...list.map((campus) => gapOf(campus.id)));
-  for (let pass = 0; pass < 24; pass++) {
-    let changed = false;
-    const ordered = [...list].sort((a, b) => gapOf(a.id) - gapOf(b.id) || a.id.localeCompare(b.id));
-    for (const campus of ordered) {
-      const owned = assigned.get(campus.id) ?? 0;
-      const before = worstGap();
-      const used = new Set(assigned.values());
-      let bestIndex = owned;
-      let bestScore = before;
-      for (let i = 0; i < CAMPUS_PALETTE.length; i++) {
-        if (i !== owned && used.has(i)) continue;
-        assigned.set(campus.id, i);
-        const score = worstGap();
-        if (score > bestScore) {
-          bestScore = score;
-          bestIndex = i;
-        }
-      }
-      assigned.set(campus.id, bestIndex);
-      if (bestIndex !== owned) changed = true;
-    }
-    for (let i = 0; i < list.length; i++) {
-      for (let j = i + 1; j < list.length; j++) {
-        const a = list[i].id;
-        const b = list[j].id;
-        const before = worstGap();
-        const ia = assigned.get(a) ?? 0;
-        const ib = assigned.get(b) ?? 0;
-        assigned.set(a, ib);
-        assigned.set(b, ia);
-        if (worstGap() > before) changed = true;
-        else {
-          assigned.set(a, ia);
-          assigned.set(b, ib);
-        }
-      }
-    }
-    if (!changed) break;
-  }
-  return new Map([...assigned].map(([id, index]) => [id, CAMPUS_PALETTE[index].hex]));
+/** Shades of one color family per region. Campuses in a wedge stay related and still distinct. */
+export function assignCampusColors(campuses: { id: string; label?: string }[]): Map<string, string> {
+  const list = campuses.map((campus) => ({ id: campus.id, label: campus.label ?? campus.id }));
+  return new Map(list.map((campus) => [campus.id, campusShade(campus.id, campus.label, list)]));
 }
 
 export function campusSwatches(nodes: { id: string; type: string; label: string; x: number; y: number; campus: string | null }[]): CampusSwatch[] {
   const campuses = nodes.filter((node) => node.type === "campus" && node.campus);
-  const colors = assignCampusColors(campuses.map((node) => ({ id: node.campus as string, x: node.x, y: node.y })));
+  const colors = assignCampusColors(campuses.map((node) => ({ id: node.campus as string, label: node.label })));
   return campuses
-    .map((node) => ({ id: node.campus as string, label: node.label, color: colors.get(node.campus as string) ?? NODE_FILL.campus }))
-    .sort((a, b) => a.label.localeCompare(b.label, "en", { sensitivity: "base" }) || a.id.localeCompare(b.id));
+    .map((node) => {
+      const region = regionDef(regionForCampus(node.campus as string, node.label));
+      return { id: node.campus as string, label: node.label, color: colors.get(node.campus as string) ?? NODE_FILL.campus, regionId: region.id, regionLabel: region.fullLabel };
+    })
+    .sort((a, b) => regionIndex(a.regionId) - regionIndex(b.regionId) || a.label.localeCompare(b.label, "en", { sensitivity: "base" }) || a.id.localeCompare(b.id));
+}
+
+export interface SwatchGroup {
+  id: string;
+  label: string;
+  color: string;
+  swatches: CampusSwatch[];
+}
+
+/** Legend sections, in region order. Empty regions are omitted. */
+export function groupCampusSwatches(swatches: CampusSwatch[]): SwatchGroup[] {
+  const groups: SwatchGroup[] = [];
+  for (const swatch of swatches) {
+    const last = groups[groups.length - 1];
+    if (!last || last.id !== swatch.regionId) {
+      const region = regionDef(swatch.regionId);
+      groups.push({ id: region.id, label: region.fullLabel, color: regionInk(region.id), swatches: [swatch] });
+    } else last.swatches.push(swatch);
+  }
+  return groups;
+}
+
+function regionIndex(id: string): number {
+  const index = REGIONS.findIndex((region) => region.id === id);
+  return index < 0 ? REGIONS.length : index;
 }
 
 export function nodeColor(node: { type: MapNodeType; campus: string | null; id?: string }, colors: Map<string, string>): string {
@@ -361,11 +292,6 @@ export function labelMinSize(cameraRatio: number): number {
 
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
-}
-
-function hueGap(a: number, b: number): number {
-  const diff = Math.abs(a - b) % 360;
-  return Math.min(diff, 360 - diff);
 }
 
 function hexToRgba(hex: string, alpha: number): string {

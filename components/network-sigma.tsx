@@ -24,6 +24,8 @@ type NodeAttr = {
   type: string;
   kind: MapNodeType;
   anchor: boolean;
+  marker?: boolean;
+  regionId?: string;
   zIndex: number;
 };
 
@@ -121,6 +123,25 @@ export function NetworkSigma({
         zIndex: Z[node.type],
       });
     }
+    const regionCampuses = new Map<string, string[]>();
+    for (const region of graph.regions ?? []) {
+      const id = `region:${region.id}`;
+      regionCampuses.set(id, region.campusIds);
+      g.addNode(id, {
+        x: region.x,
+        y: region.y,
+        size: 2.4,
+        label: region.label,
+        fullLabel: region.fullLabel,
+        color: region.color,
+        type: "circle",
+        kind: "campus",
+        anchor: true,
+        marker: true,
+        regionId: region.id,
+        zIndex: 4,
+      });
+    }
     for (const edge of graph.edges) {
       if (edge.source === edge.target || !g.hasNode(edge.source) || !g.hasNode(edge.target)) continue;
       const key = `${edge.source}|${edge.target}|${edge.type}`;
@@ -169,6 +190,11 @@ export function NetworkSigma({
       } as never,
       nodeReducer: (node, data) => {
         const state = stateRef.current;
+        if (data.marker) {
+          const campuses = regionCampuses.get(node) ?? [];
+          if (campuses.length > 0 && campuses.every((id) => state.hidden.has(id))) return { ...data, hidden: true };
+          return { ...data, forceLabel: true, label: data.label, zIndex: 6 };
+        }
         if (state.hidden.has(node)) return { ...data, hidden: true };
         const active = state.hovered ?? state.selected;
         const ratio = view.renderer?.getCamera().ratio ?? 1;
@@ -220,7 +246,10 @@ export function NetworkSigma({
       container.style.cursor = "grab";
       refresh();
     });
-    renderer.on("clickNode", ({ node }) => onSelectRef.current(node));
+    renderer.on("clickNode", ({ node }) => {
+      if (g.getNodeAttribute(node, "marker")) return;
+      onSelectRef.current(node);
+    });
     renderer.on("clickStage", () => onSelectRef.current(null));
 
     rendererRef.current = renderer;

@@ -10,7 +10,7 @@ import { useUserPipeline } from "./user-pipeline-provider";
 import type { NetworkFocus } from "@/lib/domain/network-focus";
 import { buildPersonLinkedInLookup } from "@/lib/domain/map-linkedin";
 import type { NetworkSigmaHandle } from "./network-sigma";
-import { NODE_FILL, campusSwatches } from "./network-style";
+import { NODE_FILL, campusSwatches, groupCampusSwatches } from "./network-style";
 import { useAskHighlight } from "./ask-highlight";
 import { LinkedInIconButton, LinkedInOpenButton, PersonLinkButton, ProfileIconLinks } from "./person-link";
 
@@ -254,6 +254,7 @@ export function NetworkMapApp() {
   const detailOpen = activeId != null && selectedNode != null;
 
   const swatches = useMemo(() => (graph ? campusSwatches(graph.nodes) : []), [graph]);
+  const swatchGroups = useMemo(() => groupCampusSwatches(swatches), [swatches]);
   const soloCampus = filters && swatches.length > 0 && filters.campuses.length === 1 ? filters.campuses[0] : null;
 
   const focusCampus = (id: string) => {
@@ -426,15 +427,22 @@ export function NetworkMapApp() {
               ))}
             </FilterGroup>
             <FilterGroup title="Campus">
-              {swatches.map((swatch) => (
-                <Check
-                  key={swatch.id}
-                  label={swatch.label}
-                  color={swatch.color}
-                  shape="circle"
-                  checked={filters.campuses.includes(swatch.id)}
-                  onChange={() => setFilters({ ...filters, campuses: toggle(filters.campuses, swatch.id) })}
-                />
+              {swatchGroups.map((group) => (
+                <div key={group.id} className="mt-1.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: group.color }}>
+                    {group.label}
+                  </p>
+                  {group.swatches.map((swatch) => (
+                    <Check
+                      key={swatch.id}
+                      label={swatch.label}
+                      color={swatch.color}
+                      shape="circle"
+                      checked={filters.campuses.includes(swatch.id)}
+                      onChange={() => setFilters({ ...filters, campuses: toggle(filters.campuses, swatch.id) })}
+                    />
+                  ))}
+                </div>
               ))}
             </FilterGroup>
             <FilterGroup title="Sector">
@@ -526,7 +534,7 @@ export function NetworkMapApp() {
       </div>
 
       <div
-        className="absolute bottom-3 z-20 w-36 rounded border border-neutral-200 bg-white/95 text-[11px] text-black shadow-sm"
+        className="absolute bottom-3 z-20 w-44 rounded border border-neutral-200 bg-white/95 text-[11px] text-black shadow-sm"
         style={{ left: filtersOpen ? "18.2rem" : "0.75rem" }}
       >
         <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 border-b border-neutral-200 px-1.5 py-1 text-neutral-700">
@@ -542,23 +550,32 @@ export function NetworkMapApp() {
             Cross-campus
           </span>
         </div>
-        <ul className="max-h-36 overflow-y-auto py-0.5" aria-label="Campuses">
-          {swatches.map((swatch) => {
-            const on = soloCampus === swatch.id;
-            return (
-              <li key={swatch.id}>
-                <button
-                  type="button"
-                  aria-pressed={on}
-                  className={`flex w-full items-center gap-1.5 px-1.5 py-0.5 text-left hover:bg-neutral-100 ${on ? "bg-neutral-100 font-semibold" : ""}`}
-                  onClick={() => focusCampus(swatch.id)}
-                >
-                  <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: swatch.color }} />
-                  <span className="truncate">{swatch.label}</span>
-                </button>
-              </li>
-            );
-          })}
+        <ul className="max-h-52 overflow-y-auto py-0.5" aria-label="Campuses">
+          {swatchGroups.map((group) => (
+            <li key={group.id}>
+              <p className="px-1.5 pt-1 text-[10px] font-semibold uppercase tracking-wide" style={{ color: group.color }}>
+                {group.label}
+              </p>
+              <ul>
+                {group.swatches.map((swatch) => {
+                  const on = soloCampus === swatch.id;
+                  return (
+                    <li key={swatch.id}>
+                      <button
+                        type="button"
+                        aria-pressed={on}
+                        className={`flex w-full items-center gap-1.5 px-1.5 py-0.5 text-left hover:bg-neutral-100 ${on ? "bg-neutral-100 font-semibold" : ""}`}
+                        onClick={() => focusCampus(swatch.id)}
+                      >
+                        <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: swatch.color }} />
+                        <span className="truncate">{swatch.label}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </li>
+          ))}
         </ul>
       </div>
 
