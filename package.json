@@ -24,11 +24,15 @@
     "classify-enrollment": "tsx scripts/ingest/classify-enrollment.ts",
     "fetch-hotspot-founders": "tsx scripts/ingest/fetch-hotspot-founders.ts",
     "test:class-years": "tsx lib/domain/class-year-funding.test.ts",
+    "test:ask-query": "tsx lib/domain/ask-query.test.ts",
     "ingest:all": "tsx scripts/ingest/seed-universities.ts && tsx scripts/ingest/fetch-drf-portfolio.ts && tsx scripts/ingest/fetch-penn-labs.ts && tsx scripts/ingest/fetch-penn-startup-challenge.ts && tsx scripts/ingest/enrich-penn-labs-github.ts && tsx scripts/ingest/fetch-pennapps-devpost.ts && tsx scripts/ingest/fetch-treehacks-devpost.ts && tsx scripts/ingest/fetch-calhacks-devpost.ts && tsx scripts/ingest/fetch-wdb-github.ts && tsx scripts/ingest/fetch-grasp-startups.ts && tsx scripts/ingest/fetch-hack4impact.ts && tsx scripts/ingest/fetch-penn-electric-racing.ts && tsx scripts/ingest/fetch-penn-aerial-robotics.ts && tsx scripts/ingest/fetch-eb-berkeley.ts && tsx scripts/ingest/fetch-skydeck.ts && tsx scripts/ingest/fetch-yc-directory.ts && tsx scripts/ingest/fetch-github-founder-bios.ts && tsx scripts/ingest/fetch-velocity.ts && tsx scripts/ingest/fetch-mit-deltav.ts && tsx scripts/ingest/fetch-hackthenorth-devpost.ts && tsx scripts/ingest/fetch-mt-alumni.ts && tsx scripts/ingest/fetch-penn-depth.ts && tsx scripts/ingest/fetch-pennapps-xxii-devpost.ts && tsx scripts/ingest/fetch-pennapps-xxiii-devpost.ts && tsx scripts/ingest/fetch-pennapps-xxiv-devpost.ts && tsx scripts/ingest/seed-source-tiers.ts && tsx scripts/ingest/backfill-founder-status.ts && tsx scripts/screen/match-portfolio.ts && tsx scripts/screen/run-gates.ts"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^4.0.65",
+    "@ai-sdk/openai": "^4.0.78",
     "@sigma/node-square": "^3.0.0",
     "@vercel/analytics": "^2.0.1",
+    "ai": "^7.0.117",
     "better-sqlite3": "^13.0.3",
     "cheerio": "^1.2.0",
     "d3-force": "^3.0.0",
@@ -39,7 +43,8 @@
     "next": "16.3.5",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "sigma": "^3.0.3"
+    "sigma": "^3.0.3",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
