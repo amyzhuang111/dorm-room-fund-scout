@@ -1351,7 +1351,7 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
     .prepare(
       `SELECT entity_id, excerpt FROM claims
        WHERE entity_type = 'person'
-       ORDER BY CASE WHEN claim_type IN ('linkedin_alias_discovered', 'linkedin_candidate', 'linkedin_search_attempt', 'profile_link') THEN 1 ELSE 0 END,
+       ORDER BY CASE WHEN claim_type IN ('linkedin_alias_discovered', 'linkedin_candidate', 'linkedin_search_attempt', 'linkedin_web_search_attempt', 'profile_link') THEN 1 ELSE 0 END,
                 retrieved_at DESC`
     )
     .all() as { entity_id: string; excerpt: string | null }[]) {
