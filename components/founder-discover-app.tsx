@@ -157,7 +157,7 @@ function FounderBody({
             <FounderCard key={founder.id} founder={founder} feedbackView={filters.feedback} open={filters.founder === founder.id} basePath="/founder/discover" current={filters} />
           ))}
           {visible.length === 0 && (
-            <p className="text-sm text-muted">No founders match. Student and New grad are on — turn on Alumni or Unknown to widen the list.</p>
+            <p className="text-sm text-muted">No founders match. Student and New grad are on — turn on Alumni to widen the list.</p>
           )}
         </div>
         {current.university && (

@@ -70,7 +70,7 @@ export const CandidateTable = memo(function CandidateTable({
     return (
       <div className="p-6 text-sm text-muted">
         <p className="font-medium text-foreground">No companies match yet.</p>
-        <p className="mt-1">Student and New grad are on. Turn on Alumni or Unknown, or scan a source, to widen the list.</p>
+        <p className="mt-1">Student and New grad are on. Turn on Alumni, or scan a source, to widen the list.</p>
       </div>
     );
   }
