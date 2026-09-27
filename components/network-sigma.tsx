@@ -105,6 +105,7 @@ export function NetworkSigma({
     focus: 0,
     focusFrame: 0,
     fitRatio: 1,
+    userFramed: false,
   });
   const onSelectRef = useRef(onSelect);
   const onReadyRef = useRef(onReady);
@@ -134,7 +135,7 @@ export function NetworkSigma({
     if (!renderer) return;
     recomputeLabelsRef.current();
     renderer.refresh();
-    if (hiddenChanged) stateRef.current.fitRatio = frameVisible(renderer, hidden);
+    if (hiddenChanged) stateRef.current.fitRatio = frameVisible(renderer, hidden, stateRef.current.userFramed ? "fit" : "open");
   }, [hidden, edgeTypes, selected]);
 
   useEffect(() => {
@@ -747,6 +748,7 @@ export function NetworkSigma({
       const wheel = payload.event as WheelCoords;
       const delta = Math.max(-2.2, Math.min(2.2, wheel.delta || 0));
       if (!delta) return;
+      stateRef.current.userFramed = true;
       const camera = renderer.getCamera();
       const factor = Math.exp(-delta * 0.42);
       const ratio = camera.getBoundedRatio(camera.getState().ratio * factor);
@@ -756,6 +758,7 @@ export function NetworkSigma({
     renderer.on("wheelStage", onWheel);
     renderer.on("wheelNode", onWheel);
     renderer.on("downStage", () => {
+      stateRef.current.userFramed = true;
       container.style.cursor = "grabbing";
     });
     renderer.on("downNode", () => {
@@ -777,10 +780,17 @@ export function NetworkSigma({
     rendererRef.current = renderer;
     container.style.cursor = "grab";
     const api: NetworkSigmaHandle = {
-      zoomIn: () => void renderer.getCamera().animatedZoom({ duration: 240, factor: 1.4 }),
-      zoomOut: () => void renderer.getCamera().animatedUnzoom({ duration: 240, factor: 1.4 }),
+      zoomIn: () => {
+        stateRef.current.userFramed = true;
+        void renderer.getCamera().animatedZoom({ duration: 240, factor: 1.4 });
+      },
+      zoomOut: () => {
+        stateRef.current.userFramed = true;
+        void renderer.getCamera().animatedUnzoom({ duration: 240, factor: 1.4 });
+      },
       fit: () => {
-        stateRef.current.fitRatio = frameVisible(renderer, stateRef.current.hidden);
+        stateRef.current.userFramed = true;
+        stateRef.current.fitRatio = frameVisible(renderer, stateRef.current.hidden, "fit");
       },
       pointOf(id: string) {
         if (!renderer.getGraph().hasNode(id)) return null;
