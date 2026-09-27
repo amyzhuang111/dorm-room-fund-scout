@@ -335,3 +335,20 @@ CREATE INDEX IF NOT EXISTS idx_relationships_source ON relationships(source_enti
 CREATE INDEX IF NOT EXISTS idx_relationships_target ON relationships(target_entity_type, target_entity_id);
 CREATE INDEX IF NOT EXISTS idx_gate_results_project ON gate_results(project_id);
 CREATE INDEX IF NOT EXISTS idx_company_facts_project ON company_facts(project_id);
+
+-- DRF student-partner presence by school, loaded from data/imports/drf_campus_presence.csv.
+-- Named partners are copied from that file. The importer does not add names.
+CREATE TABLE IF NOT EXISTS drf_campus_presence (
+  id TEXT PRIMARY KEY,
+  school TEXT NOT NULL UNIQUE,
+  university_id TEXT,
+  drf_region TEXT NOT NULL,
+  status TEXT NOT NULL,
+  partner_count INTEGER NOT NULL,
+  named_partners TEXT NOT NULL,
+  evidence_links TEXT NOT NULL,
+  change_vs_v1 TEXT NOT NULL,
+  date_checked TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_drf_campus_presence_university ON drf_campus_presence(university_id);

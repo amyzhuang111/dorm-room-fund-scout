@@ -16,6 +16,7 @@ import { relatedHotspotsForPerson, relatedHotspotsForProject } from "./hotspots"
 import { assembleProfileLinks, type OtherSourceLink, type ProfileIconLink } from "./profile-links";
 import { assembleCompanyProfile, type CompanyFactRecord, type CompanyProfile } from "./company-profile";
 import { matchCandidate } from "./candidate-filter";
+import { presenceByUniversity, type DrfCampusPresence } from "./drf-presence";
 
 export type CoverageState = "not_scanned" | "partial" | "up_to_date" | "needs_attention";
 
@@ -47,6 +48,8 @@ export interface UniversitySummary {
   sourcesConfigured: number;
   lastCheckedAt: string | null;
   coverage: CoverageState;
+  /** DRF partner presence for this campus, when the school maps to one row. */
+  drfPresence: DrfCampusPresence | null;
 }
 
 export function listUniversities(): UniversitySummary[] {
@@ -90,6 +93,7 @@ function buildUniversities(): UniversitySummary[] {
   }
   const founderCounts = new Map<string, number>();
   for (const u of universities) founderCounts.set(u.id, listFounders({ universityId: u.id }).length);
+  const presence = presenceByUniversity();
 
   return universities.map((u) => {
     const companyCount = companyCounts.get(u.id) ?? 0;
@@ -120,6 +124,7 @@ function buildUniversities(): UniversitySummary[] {
       sourcesConfigured: sourceRow.c,
       lastCheckedAt: sourceRow.last,
       coverage,
+      drfPresence: presence.get(u.id) ?? null,
     };
   });
 }

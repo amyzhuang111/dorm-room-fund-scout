@@ -23,6 +23,8 @@
     "test:enrollment-infer": "tsx lib/domain/enrollment-infer.test.ts",
     "classify-enrollment": "tsx scripts/ingest/classify-enrollment.ts",
     "fetch-hotspot-founders": "tsx scripts/ingest/fetch-hotspot-founders.ts",
+    "import:drf-presence": "tsx scripts/ingest/import-drf-campus-presence.ts",
+    "test:drf-presence": "tsx lib/domain/drf-presence.test.ts",
     "fetch-hotspot-members": "tsx scripts/ingest/fetch-hotspot-members.ts",
     "fetch-scholar-cohorts": "tsx scripts/ingest/fetch-scholar-cohorts.ts",
     "test:hotspot-members": "tsx lib/domain/hotspot-members.test.ts",

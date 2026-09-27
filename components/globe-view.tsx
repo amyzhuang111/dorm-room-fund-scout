@@ -7,6 +7,7 @@ import type { CampusArc, CandidateSummary, UniversitySummary } from "@/lib/domai
 import { ResultTray } from "./result-tray";
 import { PersonLinkButton } from "./person-link";
 import { CompanyNameLink } from "./company-website";
+import { DrfPresenceNote } from "./drf-presence-note";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import "maplibre-gl/dist/maplibre-gl.css";
 
@@ -691,6 +692,9 @@ export const GlobeView = memo(function GlobeView({
                 <span className="font-medium text-foreground">{selectedUniversity.sourcesConfigured}</span> sources
               </span>
             </div>
+            <div className="px-3">
+              <DrfPresenceNote presence={selectedUniversity.drfPresence} />
+            </div>
             <div className="px-3 pb-3">
               <span className="ui-label">Preview results</span>
               <ul className="mt-1.5 space-y-1">
@@ -758,6 +762,11 @@ export const GlobeView = memo(function GlobeView({
       </p>
       <div className="mt-3 sm:hidden">
         <UniversityListFallback universities={universities} basePath={basePath} current={current} compact />
+        {selectedUniversity?.drfPresence && (
+          <div className="mt-2">
+            <DrfPresenceNote presence={selectedUniversity.drfPresence} />
+          </div>
+        )}
       </div>
     </div>
   );
