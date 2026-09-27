@@ -159,6 +159,37 @@ export function FilterSidebar({
         </ul>
       </div>
 
+      {mode === "founder" && (
+        <div className="mt-5">
+          <div className="mb-1.5 flex items-baseline justify-between">
+            <span className="ui-label">Pre-college excellence</span>
+            {current.precollege && (
+              <ScoutLink href={buildHref(basePath, current, { precollege: null })} className="text-[11px] text-link underline">
+                reset
+              </ScoutLink>
+            )}
+          </div>
+          <ul className="flex flex-wrap gap-1">
+            {(
+              [
+                ["any", "Any"],
+                ["1", "Tier 1"],
+                ["2", "Tier 2"],
+              ] as const
+            ).map(([val, label]) => (
+              <li key={val}>
+                <ScoutLink
+                  href={buildHref(basePath, current, { precollege: current.precollege === val ? null : val })}
+                  className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${current.precollege === val ? "border-foreground bg-foreground text-white" : "border-border-c text-muted hover:bg-surface-2 hover:text-foreground"}`}
+                >
+                  {label}
+                </ScoutLink>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <div className="mt-5">
         <span className="ui-label">Review</span>
         <ul className="mt-1 space-y-0.5">

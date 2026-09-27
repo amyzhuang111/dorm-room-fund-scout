@@ -5,6 +5,8 @@ import { readReviewState } from "@/lib/domain/review-server";
 import { domainKey, isHidden } from "@/lib/domain/feedback";
 import { buildHref } from "@/lib/domain/url";
 import { CompanyWebsiteIcon } from "@/components/company-website";
+import { PrecollegeBadges } from "@/components/badges";
+import type { PrecollegeSignalView } from "@/lib/domain/precollege";
 
 interface SignalRow {
   id: string;
@@ -40,6 +42,37 @@ function formatMonthDay(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
+interface PrecollegeFeedRow {
+  id: string;
+  person_id: string;
+  person_name: string;
+  founder_status: string | null;
+  university_id: string | null;
+  university_name: string | null;
+  signal_type: string;
+  tier: number;
+  label: string;
+  year: number | null;
+  match_status: "confirmed" | "likely";
+  source_url: string;
+  excerpt: string;
+}
+
+function listPrecollegeFeed(): PrecollegeFeedRow[] {
+  const db = getDb();
+  return db
+    .prepare(
+      `SELECT s.id, s.person_id, pe.name as person_name, pe.founder_status,
+              (SELECT a.university_id FROM affiliations a WHERE a.person_id = pe.id LIMIT 1) as university_id,
+              (SELECT u.name FROM affiliations a JOIN universities u ON u.id = a.university_id WHERE a.person_id = pe.id LIMIT 1) as university_name,
+              s.signal_type, s.tier, s.label, s.year, s.match_status, s.source_url, s.excerpt
+       FROM precollege_signals s
+       JOIN people pe ON pe.id = s.person_id
+       ORDER BY s.tier ASC, s.match_status ASC, pe.name`
+    )
+    .all() as PrecollegeFeedRow[];
+}
+
 function listAllSignals(): SignalRow[] {
   const db = getDb();
   return db
@@ -69,10 +102,20 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
       })
   );
   const types = [...new Set(allSignals.map((s) => s.signal_type))];
+  const precollegeFeed = listPrecollegeFeed();
+  const precollegeOn = sp.precollege === "any" || sp.precollege === "1" || sp.precollege === "2";
 
   const signals = allSignals.filter((s) => {
+    if (precollegeOn) return false;
     if (sp.university && s.university_name !== universities.find((u) => u.id === sp.university)?.name) return false;
     if (sp.type && s.signal_type !== sp.type) return false;
+    return true;
+  });
+  const precollege = precollegeFeed.filter((row) => {
+    if (!precollegeOn) return false;
+    if (sp.university && row.university_id !== sp.university) return false;
+    if (sp.precollege === "1" && row.tier !== 1) return false;
+    if (sp.precollege === "2" && row.tier !== 2) return false;
     return true;
   });
 
@@ -80,9 +123,24 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
   return (
     <div className="mx-auto max-w-3xl p-4 sm:p-6">
       <h1 className="text-lg font-semibold text-foreground">Signals</h1>
-      <p className="mt-1 text-sm text-muted">Recent company and founder activity.</p>
+      <p className="mt-1 text-sm text-muted">Recent company and founder activity, plus pre-college excellence on people.</p>
 
       <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
+        {(
+          [
+            ["any", "Pre-college excellence"],
+            ["1", "Tier 1"],
+            ["2", "Tier 2"],
+          ] as const
+        ).map(([val, label]) => (
+          <Link
+            key={val}
+            href={buildHref(basePath, sp, { precollege: sp.precollege === val ? null : val, type: null })}
+            className={`rounded-full border px-2 py-0.5 ${sp.precollege === val ? "border-foreground bg-foreground text-white" : "border-border-c text-foreground"}`}
+          >
+            {label}
+          </Link>
+        ))}
         {universities
           .filter((u) => allSignals.some((s) => s.university_name === u.name))
           .map((u) => (
@@ -103,7 +161,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
             {TYPE_LABEL[t] ?? t}
           </Link>
         ))}
-        {(sp.university || sp.type) && (
+        {(sp.university || sp.type || sp.precollege) && (
           <Link href={basePath} className="rounded-full border border-border-c px-2 py-0.5 text-link underline">
             Clear
           </Link>
@@ -111,6 +169,38 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
       </div>
 
       <ul className="mt-4 space-y-2">
+        {precollege.map((row) => {
+          const view: PrecollegeSignalView = {
+            signalType: row.signal_type as PrecollegeSignalView["signalType"],
+            tier: row.tier === 1 ? 1 : 2,
+            label: row.label,
+            year: row.year,
+            matchStatus: row.match_status,
+            sourceUrl: row.source_url,
+          };
+          const pool = row.founder_status === "potential" ? "potential" : null;
+          return (
+            <li key={row.id} className="rounded-md border border-border-c bg-surface p-3">
+              <Link
+                href={buildHref("/founder/discover", {}, { founder: row.person_id, pool, university: row.university_id })}
+                className="text-sm font-medium text-foreground hover:text-link"
+              >
+                {row.person_name}
+                {row.university_name ? ` · ${row.university_name}` : ""}
+              </Link>
+              <p className="mt-1">
+                <PrecollegeBadges signals={[view]} />
+              </p>
+              <p className="mt-1 text-sm text-foreground">{row.excerpt}</p>
+              <p className="mt-1.5 text-xs text-muted">
+                Tier {row.tier} · {row.match_status === "confirmed" ? "confirmed" : "likely"} ·{" "}
+                <a href={row.source_url} target="_blank" rel="noopener noreferrer" className="text-link underline">
+                  source
+                </a>
+              </p>
+            </li>
+          );
+        })}
         {signals.map((s) => {
           // Signals span both formed companies (Startup Scout) and hackathon-style
           // submissions/evidence (Founder Scout, kind='project') — only kind='company'
@@ -136,7 +226,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
             </li>
           );
         })}
-        {signals.length === 0 && <p className="text-sm text-muted">No signals match these filters.</p>}
+        {signals.length === 0 && precollege.length === 0 && <p className="text-sm text-muted">No signals match these filters.</p>}
       </ul>
     </div>
   );

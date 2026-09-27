@@ -196,6 +196,24 @@ function migrate(db: Database.Database) {
   )`);
   db.exec(`CREATE INDEX IF NOT EXISTS idx_entity_redirects_survivor ON entity_redirects(survivor_id)`);
 
+  db.exec(`CREATE TABLE IF NOT EXISTS precollege_signals (
+    id TEXT PRIMARY KEY,
+    person_id TEXT NOT NULL REFERENCES people(id),
+    signal_type TEXT NOT NULL,
+    tier INTEGER NOT NULL,
+    label TEXT NOT NULL,
+    year INTEGER,
+    match_status TEXT NOT NULL,
+    school TEXT,
+    source_url TEXT NOT NULL,
+    excerpt TEXT NOT NULL,
+    claim_id TEXT REFERENCES claims(id),
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  )`);
+  db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_precollege_person_signal
+    ON precollege_signals(person_id, signal_type, IFNULL(year, 0), source_url)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_precollege_person ON precollege_signals(person_id)`);
+
   db.exec(`CREATE TABLE IF NOT EXISTS company_facts (
     id TEXT PRIMARY KEY,
     project_id TEXT NOT NULL REFERENCES projects(id),

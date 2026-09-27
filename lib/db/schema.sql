@@ -325,6 +325,28 @@ CREATE TABLE IF NOT EXISTS entity_redirects (
   merged_at TEXT NOT NULL
 );
 
+-- Person-level pre-college excellence. Tier 1 and tier 2 achievements only.
+-- match_status is confirmed (full name + school + plausible class year) or
+-- likely (full name, without that school and year). source_url is required.
+CREATE TABLE IF NOT EXISTS precollege_signals (
+  id TEXT PRIMARY KEY,
+  person_id TEXT NOT NULL REFERENCES people(id),
+  signal_type TEXT NOT NULL,
+  tier INTEGER NOT NULL,
+  label TEXT NOT NULL,
+  year INTEGER,
+  match_status TEXT NOT NULL,
+  school TEXT,
+  source_url TEXT NOT NULL,
+  excerpt TEXT NOT NULL,
+  claim_id TEXT REFERENCES claims(id),
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_precollege_person_signal
+  ON precollege_signals(person_id, signal_type, IFNULL(year, 0), source_url);
+CREATE INDEX IF NOT EXISTS idx_precollege_person ON precollege_signals(person_id);
+
 CREATE INDEX IF NOT EXISTS idx_entity_redirects_survivor ON entity_redirects(survivor_id);
 CREATE INDEX IF NOT EXISTS idx_claims_entity ON claims(entity_type, entity_id);
 CREATE INDEX IF NOT EXISTS idx_affiliations_person ON affiliations(person_id);

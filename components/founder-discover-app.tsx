@@ -5,6 +5,7 @@ import { buildHref } from "@/lib/domain/url";
 import { foundersInView } from "@/lib/domain/candidate-filter";
 import type { EnrollmentStatus } from "@/lib/domain/founder-status";
 import { selectedEnrollment } from "@/lib/domain/founder-status";
+import { matchesPrecollegeFilter, precollegeRankBoost } from "@/lib/domain/precollege";
 import { userFounderPassesEnrollment } from "@/lib/domain/user-pipeline";
 import { isSignalTier, signalTierRank } from "@/lib/domain/signal-tier";
 import type { FeedbackRecord, FeedbackTarget } from "@/lib/domain/feedback";
@@ -86,10 +87,19 @@ function FounderBody({
       userFounderPassesEnrollment(founder, selectedEnrollment(filters.enroll))
     );
     const tiered = isSignalTier(filters.tier) ? reviewed.filter((founder) => founder.signalTier === filters.tier) : reviewed;
-    if (showingPotential || filters.sort === "tier") {
-      return [...tiered].sort((a, b) => signalTierRank(a.signalTier) - signalTierRank(b.signalTier) || a.name.localeCompare(b.name));
+    const precollege = tiered.filter((founder) => matchesPrecollegeFilter(founder.precollegeSignals, filters.precollege));
+    if (showingPotential) {
+      return [...precollege].sort(
+        (a, b) =>
+          precollegeRankBoost(b.precollegeSignals) - precollegeRankBoost(a.precollegeSignals) ||
+          signalTierRank(a.signalTier) - signalTierRank(b.signalTier) ||
+          a.name.localeCompare(b.name)
+      );
     }
-    return tiered;
+    if (filters.sort === "tier") {
+      return [...precollege].sort((a, b) => signalTierRank(a.signalTier) - signalTierRank(b.signalTier) || a.name.localeCompare(b.name));
+    }
+    return precollege;
   }, [pool, filters, records, liveLikes, showingPotential]);
   const counts = (current.university && enrollment.byUniversity[current.university]) || enrollment.all;
   const [query, setQuery] = useState(current.q ?? "");
