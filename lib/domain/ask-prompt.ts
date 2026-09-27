@@ -2,6 +2,11 @@ import type { AskHit } from "./ask-types";
 
 export const NOT_IN_THE_DATA = "Not in the data.";
 
+export function onDeviceNote(quota: boolean, canRun: boolean): string | null {
+  if (!canRun) return quota ? "Free Gemini quota reached. Showing the matching records." : null;
+  return quota ? "Free Gemini quota reached, answering on your device" : "Answering on your device";
+}
+
 export const ASK_SYSTEM_PROMPT = `You answer questions about Campus Scout using only the records in the user message.
 If those records do not support an answer, reply with exactly: Not in the data.
 Do not invent people, startups, organizations, or numbers.
