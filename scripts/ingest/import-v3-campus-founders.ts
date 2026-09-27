@@ -190,6 +190,14 @@ const CAMPUS_MENTION: Record<string, RegExp> = {
   univ_penn: /\bpenn\b|pennsylvania/i,
   univ_harvard: /\bharvard\b/i,
   univ_berkeley: /\bberkeley\b/i,
+  univ_northwestern: /\bnorthwestern\b/i,
+  univ_uchicago: /university of chicago|\buchicago\b/i,
+  univ_uiuc: /urbana-champaign|\buiuc\b|university of illinois/i,
+  univ_michigan: /university of michigan|\bumich\b/i,
+  univ_utexas: /university of texas|\but austin\b/i,
+  univ_cmu: /carnegie mellon|\bcmu\b/i,
+  univ_gatech: /georgia tech/i,
+  univ_uva: /university of virginia|\buva\b/i,
 };
 
 function claimsMentionCampus(db: Database.Database, personId: string, campusId: string | null): boolean {
