@@ -13,7 +13,7 @@ export const NODE_FILL: Record<MapNodeType, string> = {
 };
 
 /** People and startups sit in this opacity so overlapping dots blend instead of stacking ink. */
-export const FILL_ALPHA = 0.82;
+export const FILL_ALPHA = 0.88;
 
 export interface CampusSwatch {
   id: string;

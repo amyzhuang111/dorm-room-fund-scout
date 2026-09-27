@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { SECTION_SHORT, tierBandLabel, type HotspotSectionId } from "@/lib/domain/hotspot-model";
 import type { MapEdgeType, MapGraph, MapNode, MapNodeType } from "@/lib/domain/network-map";
+import { REGIONS, regionSwatch } from "@/lib/domain/network-regions";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
 import { attachUserMapNodes, isUserAddedId } from "@/lib/domain/user-pipeline";
 import { useUserPipeline } from "./user-pipeline-provider";
@@ -562,10 +563,14 @@ export function NetworkMapApp() {
         {legendOpen ? (
           <div className="rounded-md bg-white/70 px-2 py-1 text-[11px] text-neutral-600 backdrop-blur-[2px]" role="region" aria-label="Network legend">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <LegendItem shape="circle" mark="person" color="#8b95a8" label="Person" />
-              <LegendItem shape="square" color="#8b95a8" label="Startup" />
+              {REGIONS.map((region) => (
+                <LegendItem key={region.id} shape="circle" mark="campus" color={regionSwatch(region.id)} label={region.label} />
+              ))}
+            </div>
+            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+              <LegendItem shape="circle" mark="person" color="#6b7280" label="Person" />
+              <LegendItem shape="square" color="#6b7280" label="Startup" />
               <LegendItem shape="diamond" color="#9ca3af" label="Investor" />
-              <LegendItem shape="circle" mark="campus" color="#7d8aa0" label="Campus" />
               <LegendItem shape="hex" color="#9ca3af" label="Club / lab" />
               <LegendItem shape="triangle" color="#9ca3af" label="Organization" />
               <button
@@ -577,7 +582,7 @@ export function NetworkMapApp() {
                 Hide
               </button>
             </div>
-            <p className="mt-0.5 text-[10px] leading-snug text-neutral-400">Size is per capita. Color is campus. Connections light up on hover.</p>
+            <p className="mt-0.5 text-[10px] leading-snug text-neutral-400">Size is per capita. People and startups take their campus shade. Investors and organizations stay grey.</p>
           </div>
         ) : (
           <button

@@ -8,16 +8,20 @@ export interface RegionDef {
   label: string;
   /** Same official name, shown in full on hover. */
   fullLabel: string;
-  /** Base hue for this region's color family. */
+  /** Hue family for this region. Campuses only vary lightness and a little saturation. */
   hue: number;
+  /** Saturation of the family. Kept below neon so the color stays clear on white. */
+  sat: number;
+  /** Lightest and darkest campus in the family. Neither end is white or black. */
+  light: [number, number];
 }
 
 export const REGIONS: RegionDef[] = [
-  { id: "boston", label: "Boston & Northeast", fullLabel: "Boston & Northeast", hue: 252 },
-  { id: "ny", label: "NY & Midwest", fullLabel: "NY & Midwest", hue: 38 },
-  { id: "philly", label: "Philadelphia & Southeast", fullLabel: "Philadelphia & Southeast", hue: 354 },
-  { id: "west", label: "SF & West Coast", fullLabel: "SF & West Coast", hue: 188 },
-  { id: "international", label: "International", fullLabel: "International", hue: 312 },
+  { id: "boston", label: "Boston & Northeast", fullLabel: "Boston & Northeast", hue: 214, sat: 56, light: [68, 38] },
+  { id: "ny", label: "NY & Midwest", fullLabel: "NY & Midwest", hue: 42, sat: 72, light: [58, 38] },
+  { id: "philly", label: "Philadelphia & Southeast", fullLabel: "Philadelphia & Southeast", hue: 4, sat: 62, light: [64, 40] },
+  { id: "west", label: "SF & West Coast", fullLabel: "SF & West Coast", hue: 146, sat: 46, light: [50, 34] },
+  { id: "international", label: "International", fullLabel: "International", hue: 274, sat: 46, light: [64, 40] },
 ];
 
 const REGION_BY_ID = new Map(REGIONS.map((region) => [region.id, region]));
@@ -89,26 +93,42 @@ export function regionDef(id: string): RegionDef {
 
 /** Dark, readable ink for a region name in the filter list. */
 export function regionInk(regionId: string): string {
-  return hslToHex(regionDef(regionId).hue, 42, 36);
+  const region = regionDef(regionId);
+  return hslToHex(region.hue, Math.min(68, region.sat), 32);
 }
 
-/** Light tint for the map's region titles. Quiet next to black campus labels. */
+/** Tint for the map's region titles. Same family as the nodes, quieter than the campuses. */
 export function regionTint(regionId: string): string {
-  return hslToHex(regionDef(regionId).hue, 36, 46);
+  const region = regionDef(regionId);
+  return hslToHex(region.hue, Math.max(36, region.sat - 8), 40);
 }
 
-/** One muted shade per campus inside a region, same family, still distinct. */
+/** Mid shade of the region hue, used as the legend swatch. */
+export function regionSwatch(regionId: string): string {
+  const region = regionDef(regionId);
+  const [lightest, darkest] = region.light;
+  return hslToHex(region.hue, region.sat, (lightest + darkest) / 2);
+}
+
+/**
+ * One shade per campus inside a region. The hue stays in that region's family.
+ * Lightness runs from light to dark in even steps. Neighbors alternate
+ * saturation so two campuses that land next to each other stay distinguishable.
+ * These colors are only for the map. They are not Founder Signal.
+ */
 export function campusShade(id: string, label: string, siblings: { id: string; label: string }[]): string {
   const regionId = regionForCampus(id, label);
+  const region = regionDef(regionId);
   const family = siblings
     .filter((campus) => regionForCampus(campus.id, campus.label) === regionId)
-    .sort((a, b) => a.label.localeCompare(b.label) || a.id.localeCompare(b.id));
+    .sort((a, b) => a.label.localeCompare(b.label, "en", { sensitivity: "base" }) || a.id.localeCompare(b.id));
   const index = Math.max(0, family.findIndex((campus) => campus.id === id));
   const count = Math.max(family.length, 1);
-  const spread = Math.min(5, 18 / count);
-  const hue = regionDef(regionId).hue + (index - (count - 1) / 2) * spread;
-  const light = 48 + (count === 1 ? 4 : (index / (count - 1)) * 10);
-  return hslToHex(((hue % 360) + 360) % 360, 44, light);
+  const [lightest, darkest] = region.light;
+  const t = count === 1 ? 0.45 : index / (count - 1);
+  const light = lightest + (darkest - lightest) * t;
+  const sat = Math.max(34, region.sat - (index % 2) * 12);
+  return hslToHex(region.hue, sat, light);
 }
 
 export interface WedgeSeat {
