@@ -1,0 +1,102 @@
+{
+  "retrievedAt": "2026-09-27T23:10:00.000Z",
+  "companies": [
+    {
+      "name": "Forus",
+      "description": "Forus (formerly Tandem; withtandem.com redirects to forus.com) is a New York AI-powered healthcare platform that automates prescription access, including prior authorization and financial assistance, connecting doctors, pharmacies, payers, and biopharma. Founded in 2023.",
+      "website": "https://forus.com/",
+      "sourceUrl": "https://forus.com/stories/building-the-ai-infrastructure-for-medication-access-with-sahir-jaggi",
+      "excerpt": "Sahir Jaggi, founder and CEO of Forus. The company recently went through a rebrand. Forus is a platform for automating access to medication. We started the company about three years ago. You're a Columbia University graduate and spent years developing strategy at Oscar Health. I joined Oscar Health in 2017. After spending five or six years at Oscar I made the leap to start Forus.",
+      "orgPlace": "Forus",
+      "campusIds": ["univ_columbia"],
+      "founders": [
+        {
+          "name": "Sahir Jaggi",
+          "aliases": ["linkedin:https://www.linkedin.com/in/sahirj"],
+          "campusId": "univ_columbia",
+          "affiliationRole": "Columbia University alumni, Forus founder; Venture Partner, GC Venture Fellows (formerly Rough Draft Ventures)",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Columbia alumnus, not a current student. The Forus Becker's transcript calls Sahir Jaggi a Columbia University graduate who joined Oscar Health in 2017. Forbes' 2025 30 Under 30 Healthcare profile lists a bachelor's degree at Columbia and names him founder of Tandem, the company's earlier name. LinkedIn lists a B.S. in Biomedical Engineering and Computer Science, Sia Lab research from 2013 to 2015, and a 2016-2017 venture partner role at GC Venture Fellows (formerly Rough Draft Ventures). No class year is printed.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "Sahir Jaggi is a Columbia alumnus who previously worked at Oscar Health. Forus was founded in 2023. The Becker's transcript calls him a Columbia University graduate and he says he joined Oscar in 2017. Forbes lists a bachelor's degree at Columbia. No class year is printed, so this is not a current-student record."
+          },
+          "excerpt": "Sahir Jaggi is a Columbia alumnus who previously worked at Oscar Health. Forus was founded in 2023. Scott Becker: You're a Columbia University graduate and spent years developing strategy at Oscar Health. Sahir Jaggi: I joined Oscar Health in 2017. After spending five or six years at Oscar I made the leap to start Forus."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Pear VC",
+          "excerpt": "We believed in his vision from day one and led Forus's seed round in 2023. Forus (formerly Tandem) is using AI to accelerate access to medicine. Leadership: Sahir Jaggi, CEO and Founder.",
+          "sourceUrl": "https://pear.vc/companies/forus/",
+          "kind": "lead"
+        }
+      ],
+      "funding": [
+        {
+          "stage": "seed",
+          "amountUsd": 7000000,
+          "amountText": "$7 million seed",
+          "date": "2023",
+          "leads": [],
+          "investors": ["General Catalyst", "Thrive Capital"],
+          "excerpt": "Jaggi founded Tandem, a prescription access service, to help patients get access to medicine. He's raised tens of millions of dollars from investors like General Catalyst and Thrive Capital, including a $7 million seed round, for AI-powered software that speeds up administrative tasks, including getting prior authorization and applying for drug affordability programs. Education: Bachelor of Arts/Science, Columbia University. Sahir Jaggi is on Forbes' 2025 30 Under 30 - Healthcare list.",
+          "sourceUrl": "https://www.forbes.com/profile/sahir-jaggi/"
+        },
+        {
+          "stage": "2024 round",
+          "amountUsd": 30000000,
+          "amountText": "$30M",
+          "date": "2024",
+          "leads": [],
+          "investors": [],
+          "excerpt": "Forus was founded in 2023 by Sahir Jaggi. The page lists $7M in 2023, $30M in 2024, and $123M in 2026.",
+          "sourceUrl": "https://research.crustdata.com/company/forus"
+        },
+        {
+          "stage": "series b",
+          "amountUsd": 125000000,
+          "amountText": "$125 million",
+          "date": "2026-05",
+          "leads": [],
+          "investors": [],
+          "excerpt": "He founded Tandem in early 2023. Forus adopted its current name in May, when Forus said it had raised more than $160 million across its seed, Series A and Series B financings. Jaggi later identified the Series B as a $125 million round. Adding the latest financing brings Forus's disclosed capital to at least $310 million.",
+          "sourceUrl": "https://runtimewire.com/article/forus-raises-150m-series-c-3b-valuation"
+        },
+        {
+          "stage": "series c",
+          "amountUsd": 150000000,
+          "amountText": "$150 million",
+          "date": "2026-09-09",
+          "leads": ["Bain Capital Ventures"],
+          "investors": ["Thrive Capital", "General Catalyst", "Accel", "Redpoint", "BoxGroup", "Pear VC", "Vast Ventures", "SV Angel"],
+          "excerpt": "Forus, a NYC-based AI network accelerating medicine, has raised $150 million in a Series C financing round led by Bain Capital Ventures at a $3 billion valuation. The round also saw participation from existing investors Thrive Capital, General Catalyst, Accel, Redpoint, BoxGroup, Pear VC, Vast Ventures, and SV Angel. Founded by Sahir Jaggi, Forus is building an AI network connecting doctors, pharmacies, payers, and biopharma companies.",
+          "sourceUrl": "https://startuprise.io/sahir-jaggi-co-founded-forus-raises-150m-in-series-c-financing-round/"
+        }
+      ]
+    }
+  ],
+  "potential": [],
+  "links": [
+    {
+      "personName": "Sahir Jaggi",
+      "campusId": "univ_columbia",
+      "affiliationRole": "Columbia University alumni; Venture Partner, GC Venture Fellows (formerly Rough Draft Ventures)",
+      "founderStatus": "founder",
+      "sourceUrl": "https://www.linkedin.com/in/sahirj",
+      "excerpt": "Sahir Jaggi, CEO and Founder at Forus since January 2023. Venture Partner at GC Venture Fellows from January 2016 to January 2017. Product at Blue Apron in 2016. Product at Oscar Health from January 2017 to January 2023. Bachelor of Science (B.S.), Biomedical Engineering, Computer Science at Columbia University. Biomedical Research in the Sia Lab of Molecular and Microscale Bioengineering at Columbia University, January 2013 to January 2015.",
+      "enrollment": {
+        "status": "older_alumni",
+        "basis": "inferred",
+        "label": null,
+        "gradYear": null,
+        "evidence": "Sahir Jaggi is a Columbia alumnus who previously worked at Oscar Health. Forus was founded in 2023. LinkedIn lists a B.S. in Biomedical Engineering and Computer Science at Columbia and Sia Lab research from 2013 to 2015, then Oscar Health from 2017 to 2023. No class year is printed, so this is not a current-student record."
+      }
+    }
+  ]
+}

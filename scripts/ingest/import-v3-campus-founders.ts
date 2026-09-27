@@ -496,6 +496,7 @@ function main() {
         continue;
       }
       let id = resolvedCompany.id;
+      let createdCompany = false;
       if (!id) {
         id = newId("proj");
         const website = company.website && linkKind(company.website).kind === "other" ? company.website : null;
@@ -517,13 +518,7 @@ function main() {
         list.push(id);
         byCompany.set(nameKey, list);
         newCompanies++;
-        const facts = assembleProjectFacts(db, id);
-        const upsert = db.prepare(
-          `INSERT INTO gate_results (id, project_id, gate_name, result, rationale, evaluated_at)
-           VALUES (?, ?, ?, ?, ?, datetime('now'))
-           ON CONFLICT(project_id, gate_name) DO UPDATE SET result=excluded.result, rationale=excluded.rationale, evaluated_at=excluded.evaluated_at`
-        );
-        for (const outcome of evaluateAllGates(facts)) upsert.run(newId("gate"), id, outcome.gate, outcome.result, outcome.rationale);
+        createdCompany = true;
       }
       const claimId = insertClaim(
         db,
@@ -643,6 +638,17 @@ function main() {
           insertTag.run(newId("tag"), id, tag.tag, index === 0 ? 1 : 0, company.description!.slice(0, 280), company.sourceUrl);
         });
         if (tags[0]) db.prepare(`UPDATE projects SET sector=? WHERE id=? AND sector IS NULL`).run(tags[0].tag, id);
+      }
+      // Score after founders, funding, and sector tags exist. A new company
+      // otherwise records "no funding" because the gates ran before those rows.
+      if (createdCompany) {
+        const facts = assembleProjectFacts(db, id);
+        const upsertGate = db.prepare(
+          `INSERT INTO gate_results (id, project_id, gate_name, result, rationale, evaluated_at)
+           VALUES (?, ?, ?, ?, ?, datetime('now'))
+           ON CONFLICT(project_id, gate_name) DO UPDATE SET result=excluded.result, rationale=excluded.rationale, evaluated_at=excluded.evaluated_at`
+        );
+        for (const outcome of evaluateAllGates(facts)) upsertGate.run(newId("gate"), id, outcome.gate, outcome.result, outcome.rationale);
       }
     }
 
