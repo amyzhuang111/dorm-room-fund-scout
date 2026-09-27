@@ -14,6 +14,7 @@ import { CandidateTable } from "./candidate-table";
 import { CompanyDetail } from "./company-detail";
 import { ExploreToolbar } from "./explore-toolbar";
 import { ScoutNav, useScoutNav } from "./scout-nav";
+import { CampusBenchmarks } from "./campus-benchmarks";
 import { projectShell, useProjectDetail } from "./use-project-detail";
 import { useFeedbackRecords } from "./feedback-provider";
 import { useMergedCatalog, useUserPipeline } from "./user-pipeline-provider";
@@ -120,6 +121,7 @@ function DiscoverBody({
   const selectedProject = current.project
     ? (sorted.find((company) => company.id === current.project) ?? candidates.find((company) => company.id === current.project))
     : undefined;
+  const selectedUniversity = current.university ? catalog.universities.find((university) => university.id === current.university) : undefined;
 
   useEffect(() => {
     if (!current.university && current.view === "network") navigate({ view: null });
@@ -155,6 +157,11 @@ function DiscoverBody({
           searchPlaceholder="Search founders, companies, projects…"
           counts={counts}
         />
+        {selectedUniversity && (
+          <div className={view === "globe" ? "border-b border-border-c px-3 sm:hidden" : "border-b border-border-c px-3"}>
+            <CampusBenchmarks pitchbook={selectedUniversity.pitchbook} hitRate={selectedUniversity.hitRate} />
+          </div>
+        )}
         {seen.table && (
           <div className={view === "table" ? "" : "hidden"}>
             <CandidateTable candidates={sorted} basePath="/startup/discover" current={query} feedbackView={query.feedback} detail={detail && query.project === detail.id ? detail : null} />
