@@ -1,6 +1,8 @@
 import { enrollmentBadge } from "@/lib/domain/founder-status";
 import type { PrecollegeSignalView } from "@/lib/domain/precollege";
 import { bestPrecollegeSignals } from "@/lib/domain/precollege";
+import type { ProgramSignalView } from "@/lib/domain/program-signals";
+import { bestProgramSignals } from "@/lib/domain/program-signals";
 import type { Queue } from "@/lib/domain/queue";
 import { QUEUE_LABELS } from "@/lib/domain/queue";
 import { primaryBlocker, type GateOutcome } from "@/lib/screening/gates";
@@ -132,6 +134,46 @@ export function PrecollegeBadges({ signals }: { signals: PrecollegeSignalView[] 
             }`}
           >
             <TrophyIcon />
+            {signal.label}
+            {likely ? <span className="font-medium">likely</span> : null}
+          </a>
+        );
+      })}
+      {extra > 0 && <span className="text-[10px] font-medium text-muted">+{extra}</span>}
+    </>
+  );
+}
+
+function ProgramIcon() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
+      <path fill="currentColor" d="M12 3 3 8.2V11h18V8.2L12 3zm-7 9.5V21h5v-5h4v5h5v-8.5H5z" />
+    </svg>
+  );
+}
+
+export function ProgramBadges({ signals }: { signals: ProgramSignalView[] | undefined }) {
+  const ranked = bestProgramSignals(signals ?? []);
+  if (!ranked.length) return null;
+  const shown = ranked.slice(0, 2);
+  const extra = ranked.length - shown.length;
+  return (
+    <>
+      {shown.map((signal) => {
+        const likely = signal.matchStatus === "likely";
+        const tip = `${signal.label}. ${likely ? "Likely: the page does not name this person in full." : "Confirmed: the official page names this person."} ${signal.sourceUrl}`;
+        return (
+          <a
+            key={`${signal.signalType}-${signal.year ?? "na"}-${signal.sourceUrl}`}
+            href={signal.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={tip}
+            className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-semibold leading-none ${
+              likely ? "border-dashed border-foreground bg-white text-foreground" : "border-foreground bg-foreground text-white"
+            }`}
+          >
+            <ProgramIcon />
             {signal.label}
             {likely ? <span className="font-medium">likely</span> : null}
           </a>

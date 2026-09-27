@@ -4,7 +4,7 @@ import type { FounderRow } from "@/lib/domain/queries";
 import { publicLink } from "@/lib/domain/company-link";
 import { buildHref } from "@/lib/domain/url";
 import { ScoutLink } from "./scout-nav";
-import { EnrollmentBadge, LeftSchoolBadge, PotentialFounderBadge, PrecollegeBadges, SignalTierBadge, UnverifiedBadge, VerificationBadge } from "./badges";
+import { EnrollmentBadge, LeftSchoolBadge, PotentialFounderBadge, PrecollegeBadges, ProgramBadges, SignalTierBadge, UnverifiedBadge, VerificationBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CompanyNameLink } from "./company-website";
@@ -39,6 +39,7 @@ export const FounderCard = memo(function FounderCard({
           <p className="mt-1 flex flex-wrap items-center gap-1">
             {founder.founderStatus === "potential" && <PotentialFounderBadge />}
             <PrecollegeBadges signals={founder.precollegeSignals} />
+            <ProgramBadges signals={founder.programSignals} />
             <EnrollmentBadge status={founder.enrollmentStatus} label={founder.enrollmentLabel} evidence={founder.enrollmentEvidence} basis={founder.enrollmentBasis} />
             <LeftSchoolBadge leftSchool={founder.leftSchool} />
             <SignalTierBadge tier={founder.signalTier} basis={founder.signalTierBasis} />
@@ -93,6 +94,21 @@ export const FounderCard = memo(function FounderCard({
       {open && (
         <div className="mt-3 space-y-3 border-t border-border-c pt-3 text-sm">
           <WarmIntroPaths entityId={founder.id} />
+          {founder.programSignals.length > 0 && (
+            <section>
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Program membership</h3>
+              <ul className="mt-1 space-y-1.5">
+                {founder.programSignals.map((signal) => (
+                  <li key={`${signal.signalType}-${signal.year ?? "na"}-${signal.sourceUrl}`} className="text-xs text-foreground">
+                    <a href={signal.sourceUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-link underline">
+                      {signal.label}
+                    </a>
+                    <span className="text-muted"> · {signal.matchStatus === "confirmed" ? "confirmed" : "likely"}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
           {founder.precollegeSignals.length > 0 && (
             <section>
               <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Pre-college excellence</h3>

@@ -18,6 +18,7 @@ import { assembleCompanyProfile, type CompanyFactRecord, type CompanyProfile } f
 import { matchCandidate } from "./candidate-filter";
 import { presenceByUniversity, type DrfCampusPresence } from "./drf-presence";
 import { bestPrecollegeSignals, isPrecollegeSignalType, type PrecollegeSignalView } from "./precollege";
+import { bestProgramSignals, isProgramMatchStatus, isProgramSignalType, type ProgramSignalView } from "./program-signals";
 
 export type CoverageState = "not_scanned" | "partial" | "up_to_date" | "needs_attention";
 
@@ -1044,6 +1045,7 @@ export interface FounderRow {
   founderStatus: string | null;
   potentialSignal: string | null;
   precollegeSignals: PrecollegeSignalView[];
+  programSignals: ProgramSignalView[];
   signalEvidence: { excerpt: string; sourceUrl: string | null; sourceName: string | null; unverified: boolean } | null;
   linkedCompany: { id: string; name: string } | null; // a real kind='company' project they're linked to, if any
   possibleCompany: { name: string; status: "unreviewed" | "confirmed" } | null; // §65-67: a bio-derived hint, never auto-promoted — null once linkedCompany is set
@@ -1170,6 +1172,33 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
     precollegeByPerson.set(row.person_id, list);
   }
 
+  const programByPerson = new Map<string, ProgramSignalView[]>();
+  for (const row of db
+    .prepare(
+      `SELECT person_id, signal_type, label, year, match_status, source_url
+       FROM program_signals
+       WHERE source_url != '' AND label != ''`
+    )
+    .all() as {
+      person_id: string;
+      signal_type: string;
+      label: string;
+      year: number | null;
+      match_status: string;
+      source_url: string;
+    }[]) {
+    if (!isProgramSignalType(row.signal_type) || !isProgramMatchStatus(row.match_status)) continue;
+    const list = programByPerson.get(row.person_id) ?? [];
+    list.push({
+      signalType: row.signal_type,
+      label: row.label,
+      year: row.year,
+      matchStatus: row.match_status,
+      sourceUrl: row.source_url,
+    });
+    programByPerson.set(row.person_id, list);
+  }
+
   const notesByPerson = new Map<string, string[]>();
   for (const row of db
     .prepare(`SELECT entity_id, body FROM notes WHERE entity_type = 'person' AND trim(body) != '' ORDER BY created_at`)
@@ -1262,6 +1291,7 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       founderStatus: r.founder_status,
       potentialSignal: r.potential_signal,
       precollegeSignals: bestPrecollegeSignals(precollegeByPerson.get(r.id) ?? []),
+      programSignals: bestProgramSignals(programByPerson.get(r.id) ?? []),
       verificationStatus: r.verification_status,
       lastVerifiedAt: r.last_verified_at,
       verificationNote: r.verification_note,

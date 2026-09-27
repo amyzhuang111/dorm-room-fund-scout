@@ -99,6 +99,9 @@ export const ORG_ALIAS_PHRASES: Record<string, readonly string[]> = {
   // The place name itself is not a safe phrase: a Cal Hacks project is named
   // "Human Capital", and TreeHacks prizes say "Human Capital Fellowship Prize".
   "human capital fellowship": ["delta fellowship", "hc fellowship"],
+  // "founders" is blocked on its own, and "inc" is too short to keep the
+  // full place name. Membership is stored as the role "Founders Inc".
+  "founders inc": ["founders inc"],
 };
 
 const MT_CORES = new Set([

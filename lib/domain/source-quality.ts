@@ -1137,6 +1137,54 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatNotToInfer: ["A popular Space is not founder or startup evidence by itself."],
     status: "unconfigured",
   },
+  {
+    id: "cat_founders_inc",
+    dbSourceId: "src_founders_inc",
+    name: "Founders Inc",
+    campus: null,
+    sourceType: "accelerator",
+    url: "https://f.inc/",
+    founderScoutTier: "A",
+    startupScoutTier: "A",
+    role: "discovery",
+    dimensions: { campusPurity: "low", earliness: "medium", buildEvidence: "medium", selectivity: "medium", novelty: "medium", identityQuality: "high", extractability: "medium" },
+    tierRationale:
+      "San Francisco residency and first-check fund. Off Season is six weeks for students, recent grads, and dropouts: 48 teams in summer 2025 and 100 teams in summer 2026. Portfolio first checks are typically $100k–$250k. Broad enough that the tier is A.",
+    whyItMatters: "A public portfolio and a student-heavy residency in San Francisco, with named founders on company pages.",
+    whatToExtract: ["portfolio founder names", "company name and site", "school only when the page names that person", "cohort or founded year when the page states it"],
+    whatNotToInfer: [
+      "Membership is a source-priority badge, not Founder Signal.",
+      "A team-level school mention does not say which founder attended.",
+      "Off Season team pages list companies and booths, not people.",
+    ],
+    status: "implemented",
+    statusNote:
+      "Imported from public f.inc portfolio pages and a University of Toronto Robotics Institute post. People are kept only when a page names a school already in the campus list, or they are a current student elsewhere.",
+  },
+  {
+    id: "cat_south_park_commons",
+    dbSourceId: "src_south_park_commons",
+    name: "South Park Commons",
+    campus: null,
+    sourceType: "accelerator",
+    url: "https://www.southparkcommons.com/",
+    founderScoutTier: "A",
+    startupScoutTier: "A",
+    role: "discovery",
+    dimensions: { campusPurity: "low", earliness: "medium", buildEvidence: "medium", selectivity: "medium", novelty: "medium", identityQuality: "high", extractability: "high" },
+    tierRationale:
+      "San Francisco founder community. The Founder Fellowship invests $400k for 7% and reserves $600k for the next external round. A separate residency runs six months at no cost and no equity. Founder and startup tiers are A.",
+    whyItMatters: "Member bios and portfolio pages name founders and often name a school.",
+    whatToExtract: ["member and founder names", "company name, site, and description", "school stated in that person's bio", "fellowship cohort when the bio states one"],
+    whatNotToInfer: [
+      "Membership is a source-priority badge, not Founder Signal.",
+      "A job at a campus (faculty, postdoc, researcher) is not enrollment.",
+      "Fellowship announcement posts that do not name fellows are not a roster.",
+    ],
+    status: "implemented",
+    statusNote:
+      "Imported from public southparkcommons.com company and member pages. People are kept only when a page names a school already in the campus list, or they are a current student elsewhere.",
+  },
 ];
 
 export function catalogueForCampus(campusId: string): SourceCatalogueEntry[] {

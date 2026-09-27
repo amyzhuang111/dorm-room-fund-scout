@@ -772,6 +772,7 @@ export function startupToFounders(startup: UserStartup): (FounderRow & { userAdd
       promotionReasonLabel: "User-added",
       founderSignal: { founderSignal: null, coverage: 0, dimensions: [] },
       precollegeSignals: [],
+      programSignals: [],
       userAdded: true,
       verificationUrl: startup.verificationUrl,
     };

@@ -135,6 +135,12 @@ assert.equal(directory.some((card) => /pennapps organ/i.test(card.place)), false
 const mayfieldCard = directory.find((card) => card.place.startsWith("Mayfield Fellows"));
 assert.equal(mayfieldCard?.tier, "S");
 assert.ok(mayfieldCard?.tierRationale);
+const foundersInc = directory.find((card) => card.place === "Founders Inc" && card.campus === "San Francisco");
+const southPark = directory.find((card) => card.place === "South Park Commons" && card.campus === "San Francisco");
+assert.equal(foundersInc?.tier, "A");
+assert.equal(southPark?.tier, "A");
+assert.match(foundersInc?.url ?? "", /^https:\/\/f\.inc\/?$/);
+assert.match(southPark?.url ?? "", /^https:\/\/www\.southparkcommons\.com\/?$/);
 const events = loadHotspotEvents();
 assert.ok(events.length >= 30);
 assert.equal(events[0]?.where, "Penn");
