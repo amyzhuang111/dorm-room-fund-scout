@@ -24,6 +24,26 @@ for (const id of ["univ_penn", "univ_berkeley"] as const) {
 
   const hub = graph.nodes.find((node) => node.type === "university")!;
   const communities = graph.nodes.filter((node) => node.type === "community");
+  const outside = communities.filter((node) => node.zone === "external");
+  const inside = communities.filter((node) => node.zone === "internal");
+  assert.ok(outside.length >= 5, `${id} outside zone`);
+  assert.ok(inside.length >= 5, `${id} on-campus zone`);
+  assert.ok(outside.every((node) => node.x < hub.x), `${id} outside nodes stay left of campus`);
+  assert.ok(inside.every((node) => node.x > hub.x), `${id} on-campus nodes stay right of campus`);
+  assert.ok((graph.guides ?? []).some((guide) => guide.text === "OUTSIDE"));
+  assert.ok((graph.guides ?? []).some((guide) => guide.text === "ON CAMPUS"));
+  if (id === "univ_berkeley") {
+    const tierOf = (pattern: RegExp) => communities.find((node) => pattern.test(node.label))?.tier;
+    assert.equal(tierOf(/free ventures/i), "A");
+    assert.equal(tierOf(/cal hacks/i), "B");
+    assert.equal(tierOf(/skydeck/i), "C");
+    const sBand = communities.filter((node) => node.zone === "internal" && node.tier === "S");
+    const aBand = communities.filter((node) => node.zone === "internal" && node.tier === "A");
+    if (sBand.length && aBand.length) {
+      const mean = (rows: typeof sBand) => rows.reduce((sum, node) => sum + Math.hypot(node.x - hub.x, node.y - hub.y), 0) / rows.length;
+      assert.ok(mean(sBand) < mean(aBand));
+    }
+  }
   const dist = (node: { x: number; y: number }) => Math.hypot(node.x - hub.x, node.y - hub.y);
   const communityDist = communities.reduce((sum, node) => sum + dist(node), 0) / communities.length;
   const outer = graph.nodes.filter((node) => node.type === "person" || node.type === "project");

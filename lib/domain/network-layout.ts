@@ -1,7 +1,8 @@
-// Radial layout for one campus. The campus sits in the middle, clubs and
-// programs sit on a ring around it, and people and startups sit further out
-// next to the hub they belong to. Coordinates are unitless; the canvas fits
-// its viewBox to the result.
+// Layout for one campus. Without zones, clubs sit on one ring. With zones,
+// outside programs occupy the left half and on-campus orgs the right half.
+// Each half is banded by tier, S+ and S closest to the hub. People and
+// startups sit further out, on the same side as their group. Coordinates
+// are unitless; the canvas fits its viewBox to the result.
 
 export type LayoutNodeType = "university" | "community" | "person" | "project";
 
@@ -9,6 +10,8 @@ export interface LayoutNode {
   id: string;
   type: LayoutNodeType | string;
   label: string;
+  zone?: "internal" | "external";
+  tier?: string;
 }
 
 export interface LayoutEdge {
@@ -229,6 +232,241 @@ function rounded(pos: Map<string, Point>): Map<string, { x: number; y: number }>
   const out = new Map<string, { x: number; y: number }>();
   for (const [id, point] of pos) out.set(id, { x: Math.round(point.x * 10) / 10, y: Math.round(point.y * 10) / 10 });
   return out;
+}
+
+export const TIER_RADIUS: Record<string, number> = {
+  "S+": 220,
+  S: 310,
+  A: 410,
+  B: 520,
+  C: 640,
+  D: 760,
+};
+
+/** Right half is on campus. Left half is outside. A gap at the top and bottom separates them. */
+export const ZONE_ARC: Record<"internal" | "external", { a0: number; a1: number }> = {
+  internal: { a0: -Math.PI / 3, a1: Math.PI / 3 },
+  external: { a0: (2 * Math.PI) / 3, a1: (4 * Math.PI) / 3 },
+};
+
+export interface LayoutGuide {
+  kind: "zone" | "tier" | "arc" | "rule";
+  text: string;
+  x: number;
+  y: number;
+  radius?: number;
+  a0?: number;
+  a1?: number;
+}
+
+export interface ZonedLayout {
+  positions: Map<string, { x: number; y: number }>;
+  guides: LayoutGuide[];
+}
+
+const TIER_SEQUENCE = ["S+", "S", "A", "B", "C", "D"];
+
+export function layoutZonedCampus(nodes: LayoutNode[], edges: LayoutEdge[]): ZonedLayout {
+  const byId = new Map(nodes.map((node) => [node.id, node]));
+  const pos = new Map<string, Point>();
+  const university = nodes.find((node) => node.type === "university");
+  if (!university) {
+    return { positions: layoutCampusGraph(nodes, edges), guides: [] };
+  }
+  pos.set(university.id, { id: university.id, x: 0, y: 0, lock: true });
+
+  const adj = new Map<string, { id: string; rel: string }[]>();
+  for (const edge of edges) {
+    if (!byId.has(edge.source) || !byId.has(edge.target)) continue;
+    const rel = edge.relationshipType ?? "";
+    const left = adj.get(edge.source) ?? [];
+    left.push({ id: edge.target, rel });
+    adj.set(edge.source, left);
+    const right = adj.get(edge.target) ?? [];
+    right.push({ id: edge.source, rel });
+    adj.set(edge.target, right);
+  }
+  const neighbors = (id: string) => adj.get(id) ?? [];
+  const byLabel = (a: LayoutNode, b: LayoutNode) => a.label.localeCompare(b.label) || a.id.localeCompare(b.id);
+
+  const communities = nodes.filter((node) => node.type === "community").sort(byLabel);
+  const people = nodes.filter((node) => node.type === "person").sort(byLabel);
+  const projects = nodes.filter((node) => node.type === "project").sort(byLabel);
+
+  const home = new Map<string, string>();
+  const load = new Map<string, number>();
+  for (const person of people) {
+    const homes = neighbors(person.id)
+      .map((link) => byId.get(link.id))
+      .filter((node): node is LayoutNode => node?.type === "community")
+      .sort((a, b) => (load.get(a.id) ?? 0) - (load.get(b.id) ?? 0) || byLabel(a, b));
+    const picked = homes[0];
+    if (!picked) continue;
+    home.set(person.id, picked.id);
+    load.set(picked.id, (load.get(picked.id) ?? 0) + 1);
+  }
+
+  const guides: LayoutGuide[] = [];
+  const orgAngle = new Map<string, number>();
+  const orgRadius = new Map<string, number>();
+  let maxRadius = 220;
+
+  for (const zone of ["external", "internal"] as const) {
+    const arc = ZONE_ARC[zone];
+    const members = communities.filter((node) => (node.zone ?? "internal") === zone);
+    const byTier = new Map<string, LayoutNode[]>();
+    for (const node of members) {
+      const tier = TIER_RADIUS[node.tier ?? ""] ? (node.tier as string) : "C";
+      const list = byTier.get(tier) ?? [];
+      list.push(node);
+      byTier.set(tier, list);
+    }
+    let zoneMax = 0;
+    for (const tier of TIER_SEQUENCE) {
+      const band = byTier.get(tier);
+      if (!band || band.length === 0) continue;
+      const radius = TIER_RADIUS[tier] ?? TIER_RADIUS.C;
+      zoneMax = Math.max(zoneMax, radius);
+      const sorted = [...band].sort(byLabel);
+      const pad = sorted.length === 1 ? 0 : 0.1;
+      sorted.forEach((node, index) => {
+        const t = sorted.length === 1 ? 0.5 : pad + (index / (sorted.length - 1)) * (1 - 2 * pad);
+        const angle = arc.a0 + t * (arc.a1 - arc.a0);
+        orgAngle.set(node.id, angle);
+        orgRadius.set(node.id, radius);
+        pos.set(node.id, { id: node.id, x: Math.cos(angle) * radius, y: Math.sin(angle) * radius });
+      });
+      const labelAngle = arc.a0 + (arc.a1 - arc.a0) * 0.02;
+      guides.push({
+        kind: "tier",
+        text: tier,
+        x: Math.cos(labelAngle) * (radius - 22),
+        y: Math.sin(labelAngle) * (radius - 22),
+      });
+      guides.push({ kind: "arc", text: "", x: 0, y: 0, radius, a0: arc.a0, a1: arc.a1 });
+    }
+    if (zoneMax > 0) {
+      maxRadius = Math.max(maxRadius, zoneMax);
+      const titleAngle = zone === "external" ? Math.PI : 0;
+      const titleRadius = 150;
+      guides.push({
+        kind: "zone",
+        text: zone === "external" ? "OUTSIDE" : "ON CAMPUS",
+        x: Math.cos(titleAngle) * titleRadius,
+        y: Math.sin(titleAngle) * titleRadius - 28,
+      });
+    }
+  }
+  guides.push({ kind: "rule", text: "", x: 0, y: 0, radius: maxRadius + 30 });
+
+  const outer = maxRadius + 170;
+  for (const [orgId, angle] of orgAngle) {
+    const members = people.filter((person) => home.get(person.id) === orgId);
+    const radius = Math.max(outer, (orgRadius.get(orgId) ?? outer) + 150);
+    members.forEach((member, index) => {
+      const shift = members.length === 1 ? 0 : (index - (members.length - 1) / 2) * 0.12;
+      const at = angle + shift;
+      pos.set(member.id, { id: member.id, x: Math.cos(at) * radius, y: Math.sin(at) * radius });
+    });
+  }
+
+  const anchored = new Map<string, LayoutNode[]>();
+  for (const project of projects) {
+    const near = neighbors(project.id)
+      .filter((link) => byId.get(link.id)?.type === "person" && pos.has(link.id))
+      .sort((a, b) => (a.rel === "founded" ? 0 : 1) - (b.rel === "founded" ? 0 : 1));
+    const anchor = near[0];
+    if (!anchor) continue;
+    const list = anchored.get(anchor.id) ?? [];
+    list.push(project);
+    anchored.set(anchor.id, list);
+  }
+  for (const [anchorId, list] of anchored) {
+    const anchor = pos.get(anchorId);
+    if (!anchor) continue;
+    const angle = Math.atan2(anchor.y, anchor.x);
+    const base = Math.hypot(anchor.x, anchor.y) + 78;
+    list.forEach((project, index) => {
+      const shift = list.length === 1 ? 0 : (index - (list.length - 1) / 2) * 0.16;
+      const at = angle + shift;
+      pos.set(project.id, { id: project.id, x: Math.cos(at) * base, y: Math.sin(at) * base });
+    });
+  }
+
+  const loose: string[] = [];
+  for (const person of people) if (!pos.has(person.id)) loose.push(person.id);
+  for (const project of projects) if (!pos.has(project.id)) loose.push(project.id);
+  const looseRadius = outer + 150;
+  loose.forEach((id, index) => {
+    const angle = -Math.PI / 2 + ((index + 0.5) / Math.max(loose.length, 1)) * Math.PI * 2;
+    const radial = byId.get(id)?.type === "project" ? 46 : 0;
+    pos.set(id, { id, x: Math.cos(angle) * (looseRadius + radial), y: Math.sin(angle) * (looseRadius + radial) });
+  });
+
+  for (const node of nodes) {
+    if (!pos.has(node.id)) {
+      pos.set(node.id, { id: node.id, x: looseRadius, y: 0 });
+    }
+  }
+
+  relax(pos, orgRadius, orgAngle);
+  return { positions: rounded(pos), guides };
+}
+
+function relax(pos: Map<string, Point>, orgRadius: Map<string, number>, orgAngle: Map<string, number>) {
+  const ids = [...pos.keys()];
+  for (let iter = 0; iter < 36; iter++) {
+    for (let i = 0; i < ids.length; i++) {
+      const a = pos.get(ids[i])!;
+      for (let j = i + 1; j < ids.length; j++) {
+        const b = pos.get(ids[j])!;
+        let dx = b.x - a.x;
+        let dy = b.y - a.y;
+        let dist = Math.hypot(dx, dy);
+        if (dist < 0.01) {
+          dx = 0.4 + (i % 5) * 0.1;
+          dy = 0.4 + (j % 5) * 0.1;
+          dist = Math.hypot(dx, dy);
+        }
+        if (dist >= MIN_SEP) continue;
+        const push = (MIN_SEP - dist) / 2;
+        const ux = dx / dist;
+        const uy = dy / dist;
+        if (!a.lock) {
+          a.x -= ux * push;
+          a.y -= uy * push;
+        }
+        if (!b.lock) {
+          b.x += ux * push;
+          b.y += uy * push;
+        }
+      }
+    }
+    for (const id of ids) {
+      const point = pos.get(id)!;
+      if (point.lock) {
+        point.x = 0;
+        point.y = 0;
+        continue;
+      }
+      const radius = orgRadius.get(id);
+      const angle = orgAngle.get(id);
+      if (radius != null && angle != null) {
+        const at = Math.atan2(point.y, point.x);
+        const clamped = clampAngle(at, angle);
+        point.x = Math.cos(clamped) * radius;
+        point.y = Math.sin(clamped) * radius;
+      }
+    }
+  }
+}
+
+function clampAngle(at: number, home: number): number {
+  let delta = at - home;
+  while (delta > Math.PI) delta -= Math.PI * 2;
+  while (delta < -Math.PI) delta += Math.PI * 2;
+  const limited = Math.max(-0.22, Math.min(0.22, delta));
+  return home + limited;
 }
 
 export interface LabelCandidate {

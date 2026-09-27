@@ -35,6 +35,15 @@ function nodeRadius(type: NetworkNode["type"], degree: number): number {
   return base + Math.min(7, Math.sqrt(degree) * 1.1);
 }
 
+function arcPath(radius: number, a0: number, a1: number): string {
+  const x0 = Math.cos(a0) * radius;
+  const y0 = Math.sin(a0) * radius;
+  const x1 = Math.cos(a1) * radius;
+  const y1 = Math.sin(a1) * radius;
+  const large = a1 - a0 > Math.PI ? 1 : 0;
+  return `M ${x0} ${y0} A ${radius} ${radius} 0 ${large} 1 ${x1} ${y1}`;
+}
+
 export function NetworkCanvas(props: {
   graph: NetworkGraph;
   basePath: string;
@@ -376,16 +385,26 @@ function CampusNetworkCanvas({
     let minY = Infinity;
     let maxX = -Infinity;
     let maxY = -Infinity;
-    for (const node of graph.nodes) {
-      minX = Math.min(minX, node.x);
-      minY = Math.min(minY, node.y);
-      maxX = Math.max(maxX, node.x);
-      maxY = Math.max(maxY, node.y);
+    const grow = (x: number, y: number) => {
+      minX = Math.min(minX, x);
+      minY = Math.min(minY, y);
+      maxX = Math.max(maxX, x);
+      maxY = Math.max(maxY, y);
+    };
+    for (const node of graph.nodes) grow(node.x, node.y);
+    for (const guide of graph.guides ?? []) {
+      if (guide.kind === "arc" && guide.radius) {
+        grow(-guide.radius, -guide.radius);
+        grow(guide.radius, guide.radius);
+      } else if (guide.kind === "rule" && guide.radius) {
+        grow(0, -guide.radius);
+        grow(0, guide.radius);
+      } else grow(guide.x, guide.y);
     }
     if (!Number.isFinite(minX)) return { x: 0, y: 0, w: 960, h: 640 };
     const pad = 96;
     return { x: minX - pad, y: minY - pad, w: Math.max(240, maxX - minX + pad * 2), h: Math.max(240, maxY - minY + pad * 2) };
-  }, [graph.nodes]);
+  }, [graph.nodes, graph.guides]);
 
   const matchIds = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -485,16 +504,9 @@ function CampusNetworkCanvas({
     return nodeById.get(edge.source)?.type === "university" || nodeById.get(edge.target)?.type === "university";
   }
 
-  const orbit = useMemo(() => {
-    const hub = graph.nodes.find((node) => node.type === "university");
-    const communities = graph.nodes.filter((node) => node.type === "community");
-    if (!hub || communities.length === 0) return null;
-    const radius = communities.reduce((sum, node) => sum + Math.hypot(node.x - hub.x, node.y - hub.y), 0) / communities.length;
-    return { cx: hub.x, cy: hub.y, r: radius };
-  }, [graph.nodes]);
-
   const sections = [
-    { title: "Clubs and programs", nodes: graph.nodes.filter((node) => node.type === "community") },
+    { title: "Outside", nodes: graph.nodes.filter((node) => node.type === "community" && node.zone === "external") },
+    { title: "On campus", nodes: graph.nodes.filter((node) => node.type === "community" && node.zone !== "external") },
     { title: "People", nodes: graph.nodes.filter((node) => node.type === "person") },
     { title: "Startups", nodes: graph.nodes.filter((node) => node.type === "project") },
   ];
@@ -547,7 +559,31 @@ function CampusNetworkCanvas({
           >
             <rect x={bounds.x} y={bounds.y} width={bounds.w} height={bounds.h} fill="#ffffff" />
             <g transform={`translate(${cx + pan.x} ${cy + pan.y}) scale(${zoom}) translate(${-cx} ${-cy})`}>
-              {orbit && <circle cx={orbit.cx} cy={orbit.cy} r={orbit.r} fill="none" stroke="#e4e0ee" strokeWidth={1.25} />}
+              {(graph.guides ?? []).map((guide, index) => {
+                if (guide.kind === "rule" && guide.radius) {
+                  return <line key={index} x1={0} y1={-guide.radius} x2={0} y2={guide.radius} stroke="#e4dfec" strokeWidth={1} />;
+                }
+                if (guide.kind === "arc" && guide.radius != null && guide.a0 != null && guide.a1 != null) {
+                  return <path key={index} d={arcPath(guide.radius, guide.a0, guide.a1)} fill="none" stroke="#e4dfec" strokeWidth={1.25} />;
+                }
+                if (!guide.text) return null;
+                const zone = guide.kind === "zone";
+                return (
+                  <text
+                    key={index}
+                    x={guide.x}
+                    y={guide.y}
+                    textAnchor="middle"
+                    fill={zone ? "#141018" : "#5c5470"}
+                    fontSize={zone ? 13 : 11}
+                    fontWeight={zone ? 700 : 600}
+                    letterSpacing={zone ? "0.08em" : "0.04em"}
+                    style={{ fontFamily: "Satoshi, Arial, sans-serif" }}
+                  >
+                    {guide.text}
+                  </text>
+                );
+              })}
               {graph.edges.map((edge, index) => {
                 const source = nodeById.get(edge.source);
                 const target = nodeById.get(edge.target);
@@ -693,13 +729,14 @@ function CampusNetworkCanvas({
             <StartupCardSheet id={selected} onClose={() => setSelected(null)} />
           )}
         </div>
-        <div className="mt-2 flex flex-wrap gap-3 text-[11px] text-[#3a3348]">
-          {graph.legend.map((item) => (
-            <span key={`${item.type}-${item.label}`} className="flex items-center gap-1.5">
-              <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: CAMPUS_COLOR[item.type] }} />
-              {item.label}
-            </span>
-          ))}
+        <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-[#3a3348]">
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: CAMPUS_COLOR.university }} />
+            Campus
+          </span>
+          <span>Left, OUTSIDE — accelerators, fellowships, and funds</span>
+          <span>Right, ON CAMPUS — clubs, hackathons, centers, and labs</span>
+          <span>Bands — S+ and S closest to campus, then A, B, C, D. A sourcing label, not a Founder Signal.</span>
         </div>
       </div>
 
@@ -754,7 +791,7 @@ function CampusNetworkCanvas({
             <p className="ui-label">Network</p>
             <p className="mt-1 text-sm font-medium text-[#141018]">{campusName}</p>
             <p className="mt-1 text-xs text-[#3a3348]">
-              Clubs and programs ring the campus. People and startups sit with the group they belong to. Zoom in to read every name.
+              Outside programs are on the left. On-campus orgs are on the right. Each side is banded by tier, closest to the campus first. People and startups sit further out with their group. Zoom in to read every name.
             </p>
             <div className="mt-3 max-h-[560px] space-y-3 overflow-y-auto">
               {sections.map((section) => (

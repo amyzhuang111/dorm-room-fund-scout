@@ -5,17 +5,22 @@ import { CAMPUSES } from "./campuses";
 import { publicLink } from "./company-link";
 import { sectorLabel } from "./sectors";
 import { enrollmentBadge } from "./founder-status";
-import { layoutCampusGraph } from "./network-layout";
+import { layoutZonedCampus, type LayoutGuide } from "./network-layout";
+import { campusOrgCards, campusOrgStamp, orgMatchesLabel, orgsForCampus, zoneWord, type CampusOrg, type OrgZone } from "./network-zones";
 import { bestPersonLink } from "./person-link";
 import { unverifiedLinkedInByPerson } from "./queries";
 
 export type NodeType = "university" | "community" | "person" | "project";
+
+export interface NetworkGuide extends LayoutGuide {}
 
 export interface NetworkNode {
   id: string;
   type: NodeType;
   label: string;
   sublabel?: string;
+  zone?: OrgZone;
+  tier?: string;
   x: number;
   y: number;
   /** A URL found on a source page: LinkedIn for a person, website for a company. */
@@ -39,6 +44,7 @@ export interface NetworkGraph {
   omittedCount: number;
   totalPeople: number;
   legend: { type: NodeType; label: string }[];
+  guides?: NetworkGuide[];
 }
 
 const MAX_NODES = 140;
@@ -52,6 +58,8 @@ interface RawNode {
   linkUrl?: string;
   linkLabel?: string;
   linkKind?: string;
+  zone?: OrgZone;
+  tier?: string;
   /** Kept when a single-campus graph is capped, so clubs stay in the picture. */
   pinned?: boolean;
 }
@@ -69,9 +77,9 @@ export function buildScoutNetwork(universityId?: string, opts?: { sector?: strin
   let stamp = "missing";
   try {
     const st = fs.statSync(databasePath());
-    stamp = `${st.mtimeMs}:${st.size}`;
+    stamp = `${st.mtimeMs}:${st.size}:${campusOrgStamp()}`;
   } catch {
-    stamp = "missing";
+    stamp = `missing:${campusOrgStamp()}`;
   }
   const key = `${universityId ?? ""}|${opts?.sector ?? ""}|${(opts?.enrollment ?? []).join(",")}|${(opts?.excludeIds ?? []).join(",")}`;
   const hit = networkMemo.get(key);
@@ -297,9 +305,10 @@ function assembleScoutNetwork(universityId?: string, opts?: { sector?: string; e
   }
 
   // Drop lowest-priority nodes if we blew past the cap, but never drop universities.
-  // A single campus also keeps its clubs and programs, plus a few people around each.
+  // A single campus keeps every club and program, in two tiered zones.
+  const singleCampus = ids.length === 1 && rawNodes.has(ids[0]);
+  if (singleCampus) applyDirectoryOrgs(db, ids[0], rawNodes, rawEdges);
   let nodesArr = Array.from(rawNodes.values());
-  const singleCampus = ids.length === 1 && nodesArr.some((node) => node.type === "university");
   if (singleCampus) {
     nodesArr = capSingleCampus(nodesArr, rawEdges);
   } else if (nodesArr.length > MAX_NODES) {
@@ -322,17 +331,19 @@ function assembleScoutNetwork(universityId?: string, opts?: { sector?: string; e
   });
 
   if (singleCampus) {
-    const placed = layoutCampusGraph(
-      nodesArr.map((node) => ({ id: node.id, type: node.type, label: node.label })),
+    const placed = layoutZonedCampus(
+      nodesArr.map((node) => ({ id: node.id, type: node.type, label: node.label, zone: node.zone, tier: node.tier })),
       uniqueEdges,
     );
     const nodes: NetworkNode[] = nodesArr.map((node) => {
-      const point = placed.get(node.id) ?? { x: 0, y: 0 };
+      const point = placed.positions.get(node.id) ?? { x: 0, y: 0 };
       return {
         id: node.id,
         type: node.type,
         label: node.label,
         sublabel: node.sublabel,
+        zone: node.zone,
+        tier: node.tier,
         x: point.x,
         y: point.y,
         linkUrl: node.linkUrl,
@@ -346,9 +357,10 @@ function assembleScoutNetwork(universityId?: string, opts?: { sector?: string; e
       edges: uniqueEdges,
       omittedCount: Math.max(0, totalPeople - peopleShown),
       totalPeople,
+      guides: placed.guides,
       legend: [
-        { type: "university", label: "University" },
-        { type: "community", label: "Program / community" },
+        { type: "university", label: "Campus" },
+        { type: "community", label: "Organization" },
         { type: "person", label: "Person" },
         { type: "project", label: "Project / company" },
       ],
@@ -408,6 +420,137 @@ function assembleScoutNetwork(universityId?: string, opts?: { sector?: string; e
       { type: "project", label: "Project / company" },
     ],
   };
+}
+
+const TIER_PRIORITY: Record<string, number> = { "S+": 96, S: 94, A: 90, B: 84, C: 78, D: 72 };
+
+function applyDirectoryOrgs(
+  db: ReturnType<typeof getDb>,
+  universityId: string,
+  rawNodes: Map<string, RawNode>,
+  rawEdges: NetworkEdge[],
+) {
+  const signals = db
+    .prepare(
+      `SELECT DISTINCT s.signal_type FROM program_signals s
+       JOIN affiliations a ON a.person_id = s.person_id
+       WHERE a.university_id = ?`,
+    )
+    .all(universityId) as { signal_type: string }[];
+  const orgs = orgsForCampus(
+    universityId,
+    campusOrgCards(),
+    signals.map((row) => row.signal_type),
+  );
+  const claimed = new Set<string>();
+  for (const org of orgs) {
+    let node = [...rawNodes.values()].find((item) => item.type === "community" && orgMatchesLabel(org, item.label) && !claimed.has(item.id));
+    if (!node) {
+      const id = `org_${universityId}_${org.key.replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "").slice(0, 72)}`;
+      node = {
+        id,
+        type: "community",
+        label: org.label,
+        priority: TIER_PRIORITY[org.tier] ?? 70,
+        linkUrl: org.url,
+        linkLabel: org.url ? "Website" : undefined,
+        linkKind: org.url ? "official" : undefined,
+      };
+      rawNodes.set(id, node);
+    } else {
+      node.priority = Math.max(node.priority, TIER_PRIORITY[org.tier] ?? 70);
+      if (!node.linkUrl && org.url) {
+        node.linkUrl = org.url;
+        node.linkLabel = "Website";
+        node.linkKind = "official";
+      }
+    }
+    claimed.add(node.id);
+    node.type = "community";
+    node.pinned = true;
+    node.zone = org.zone;
+    node.tier = org.tier;
+    node.sublabel = `${zoneWord(org.zone)} · ${org.tier}`;
+    const linked = rawEdges.some(
+      (edge) =>
+        (edge.source === node!.id && edge.target === universityId) || (edge.target === node!.id && edge.source === universityId),
+    );
+    if (!linked) {
+      rawEdges.push({
+        source: node.id,
+        target: universityId,
+        relationshipType: "affiliated_with",
+        verificationState: "directory",
+        sourceUrl: org.url,
+      });
+    }
+  }
+
+  for (const node of rawNodes.values()) {
+    if (node.type !== "community" || node.zone) continue;
+    node.type = "project";
+    node.pinned = false;
+  }
+
+  const orgById = new Map<string, CampusOrg>();
+  for (const org of orgs) {
+    const node = [...rawNodes.values()].find((item) => item.zone && orgMatchesLabel(org, item.label));
+    if (node) orgById.set(node.id, org);
+  }
+  if (signals.length === 0 || orgById.size === 0) return;
+  const people = db
+    .prepare(
+      `SELECT s.person_id, s.signal_type FROM program_signals s
+       JOIN affiliations a ON a.person_id = s.person_id
+       WHERE a.university_id = ?`,
+    )
+    .all(universityId) as { person_id: string; signal_type: string }[];
+  const needles: Record<string, string> = {
+    z_fellows: "z fellow",
+    south_park_commons: "south park commons",
+    emergent_ventures: "emergent ventures",
+    contrary_venture_partners: "contrary venture",
+    kleiner_perkins_fellows: "kleiner perkins",
+    founders_inc: "founders inc",
+    hf0: "hf0",
+    the_residency: "the residency",
+    agi_house: "agi house",
+    frontier_tower: "frontier tower",
+    yale_hacker_house: "yale hacker house",
+    farmhouse: "farmhouse",
+    gatech_hacker_house: "georgia tech hacker house",
+    rice_residency: "rice residency",
+    foundher_house: "foundher",
+    playa_house: "playa house",
+    harvard_st_commons: "harvard st",
+    medici_1517: "1517",
+    pioneer: "pioneer",
+    afore_fir_u: "afore",
+    buildspace: "buildspace",
+  };
+  const perOrg = new Map<string, number>();
+  const seen = new Set(rawEdges.map((edge) => `${edge.source}|${edge.target}|${edge.relationshipType}`));
+  for (const row of people) {
+    const needle = needles[row.signal_type];
+    if (!needle) continue;
+    const person = rawNodes.get(row.person_id);
+    if (!person || person.type !== "person") continue;
+    for (const [orgId, org] of orgById) {
+      if (!org.key.includes(needle) && !org.label.toLowerCase().includes(needle)) continue;
+      if ((perOrg.get(orgId) ?? 0) >= 3) continue;
+      const key = `${person.id}|${orgId}|contributed_to`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      perOrg.set(orgId, (perOrg.get(orgId) ?? 0) + 1);
+      person.pinned = true;
+      rawEdges.push({
+        source: person.id,
+        target: orgId,
+        relationshipType: "contributed_to",
+        verificationState: "program_signal",
+      });
+    }
+  }
 }
 
 function capSingleCampus(nodes: RawNode[], edges: NetworkEdge[]): RawNode[] {
