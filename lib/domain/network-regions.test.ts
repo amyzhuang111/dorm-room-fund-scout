@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { featuredNationalKey } from "./featured-national";
 import { CAMPUS_LABEL_MIN_MEMBERS, LABEL_CLUB, bundleWidth, campusHubDegreeFloor, nodeColor, programLineColor, readableInk, selectVisibleLabels } from "../../components/network-style";
-import { REGIONS, campusShade, regionForCampus, regionSwatch } from "./network-regions";
+import { REGIONS, campusShade, packRegionCenters, regionForCampus, regionSwatch } from "./network-regions";
 
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
   const value = Number.parseInt(hex.slice(1), 16);
@@ -187,8 +187,45 @@ for (const offset of neighbors.values()) assert.ok(Math.hypot(offset.dx, offset.
 
 const ycLine = programLineColor("Y Combinator");
 assert.equal(ycLine.toLowerCase(), "#ea580c");
-assert.ok(bundleWidth(2) >= 0.6 && bundleWidth(2) < 1.2);
-assert.equal(bundleWidth(4000), 2.5);
+assert.ok(bundleWidth(2) > bundleWidth(1));
+assert.ok(bundleWidth(2) >= 2.2 && bundleWidth(2) < 2.7);
+assert.ok(bundleWidth(64) > bundleWidth(8));
+assert.equal(bundleWidth(4000), 6.5);
+
+const packed = packRegionCenters(
+  [
+    { id: "philly", r: 80 },
+    { id: "west", r: 90 },
+    { id: "ny", r: 70 },
+    { id: "boston", r: 85 },
+    { id: "international", r: 28 },
+  ],
+  (id) =>
+    ({
+      philly: -Math.PI / 2,
+      west: Math.PI,
+      ny: 0.04,
+      boston: Math.PI / 2,
+      international: Math.PI * 0.75,
+    })[id] ?? 0,
+  4,
+);
+const at = (id: string) => packed.get(id)!;
+assert.ok(at("boston").y > at("philly").y);
+assert.ok(at("west").x < at("ny").x);
+for (const [a, b] of [
+  ["philly", "west"],
+  ["philly", "ny"],
+  ["boston", "west"],
+  ["boston", "ny"],
+  ["west", "international"],
+] as const) {
+  const dist = Math.hypot(at(a).x - at(b).x, at(a).y - at(b).y);
+  const radii = { philly: 80, west: 90, ny: 70, boston: 85, international: 28 };
+  assert.ok(dist + 1.5 >= radii[a] + radii[b] + 4, `${a}-${b} ${dist}`);
+}
+const intlGap = Math.hypot(at("international").x - at("west").x, at("international").y - at("west").y) - (90 + 28);
+assert.ok(intlGap < 36, `international float ${intlGap}`);
 
 assert.equal(featuredNationalKey("HF0 residency"), "hf0");
 assert.equal(featuredNationalKey("a16z speedrun"), "speedrun");

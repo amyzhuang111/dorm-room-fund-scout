@@ -207,6 +207,60 @@ export function placeCampuses(campuses: { id: string; label: string }[], discRad
   return { seats, markers };
 }
 
+/**
+ * Pack region blobs into one cloud. Each blob stays on its compass ray, and
+ * the rays are only as long as they need to be for neighboring edges to sit
+ * `gap` apart. Colors stay grouped and touch, instead of floating as islands.
+ */
+export function packRegionCenters(
+  bodies: { id: string; r: number }[],
+  angleOf: (id: string) => number,
+  gap: number,
+): Map<string, { x: number; y: number }> {
+  const unit = new Map<string, { x: number; y: number }>();
+  const radius = new Map<string, number>();
+  const reach = new Map<string, number>();
+  for (const body of bodies) {
+    const angle = angleOf(body.id);
+    unit.set(body.id, { x: Math.cos(angle), y: Math.sin(angle) });
+    radius.set(body.id, Math.max(body.r, 1));
+    reach.set(body.id, Math.max(4, body.r * 0.15));
+  }
+  const ids = bodies.map((body) => body.id);
+  const needBetween = (a: string, b: string) => (radius.get(a) ?? 1) + (radius.get(b) ?? 1) + gap;
+  const place = (id: string) => {
+    const along = reach.get(id) ?? 0;
+    const dir = unit.get(id) ?? { x: 1, y: 0 };
+    return { x: dir.x * along, y: dir.y * along };
+  };
+  for (let iter = 0; iter < 48; iter++) {
+    const next = new Map(reach);
+    for (let i = 0; i < ids.length; i++) {
+      for (let j = i + 1; j < ids.length; j++) {
+        const a = place(ids[i]);
+        const b = place(ids[j]);
+        const dist = Math.hypot(a.x - b.x, a.y - b.y);
+        const need = needBetween(ids[i], ids[j]);
+        if (dist >= need - 0.05) continue;
+        const scale = need / Math.max(dist, 0.5);
+        next.set(ids[i], Math.max(next.get(ids[i]) ?? 0, (reach.get(ids[i]) ?? 0) * scale));
+        next.set(ids[j], Math.max(next.get(ids[j]) ?? 0, (reach.get(ids[j]) ?? 0) * scale));
+      }
+    }
+    let moved = false;
+    for (const id of ids) {
+      const before = reach.get(id) ?? 0;
+      const after = next.get(id) ?? before;
+      if (after > before + 0.05) moved = true;
+      reach.set(id, after);
+    }
+    if (!moved) break;
+  }
+  const pos = new Map<string, { x: number; y: number }>();
+  for (const id of ids) pos.set(id, place(id));
+  return pos;
+}
+
 function hslToHex(hue: number, saturation: number, lightness: number): string {
   const sat = saturation / 100;
   const light = lightness / 100;

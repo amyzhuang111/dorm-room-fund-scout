@@ -618,8 +618,14 @@ export function programLineColor(label: string, id = ""): string {
   return toHex(red, green, blue);
 }
 
+/** Near-black accelerator links on the white map. Opacity stays moderate until hover. */
+export const PROGRAM_LINE = "rgba(12, 12, 12, 0.78)";
+export const PROGRAM_LINE_ACTIVE = "#111111";
+export const PROGRAM_LINE_DIM = "rgba(180, 180, 180, 0.1)";
+
+/** Screen pixels. A handful of members stays a readable stroke; a large cohort gets thicker. */
 export function bundleWidth(count: number): number {
-  return Math.min(2.5, 0.6 + Math.log2(Math.max(count, 1)) * 0.32);
+  return Math.min(6.5, 1.85 + Math.log2(Math.max(count, 1)) * 0.55);
 }
 
 function clamp(value: number, min: number, max: number): number {
