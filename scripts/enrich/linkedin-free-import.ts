@@ -44,7 +44,7 @@ const CHECKPOINT_PATH = path.join(process.cwd(), "data/imports/linkedin-free-che
 const RESULTS_PATH = path.join(process.cwd(), "data/imports/linkedin-free-results.jsonl");
 const FOCUS_CAMPUSES = new Set(["univ_penn", "univ_berkeley", "univ_stanford", "univ_mit", "univ_harvard"]);
 const UA = "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0";
-const CDP_PORT = 9333;
+const CDP_PORT = 9444;
 const SEARCH_GAP_MS = 2200;
 
 type Outcome = "confirmed" | "likely" | "ambiguous" | "not_found" | "existing" | "skipped_name";
@@ -471,7 +471,7 @@ class SearchBrowser {
           "--no-sandbox",
           "--disable-dev-shm-usage",
           "--disable-gpu",
-          `--user-data-dir=/tmp/linkedin-free-chrome`,
+          "--user-data-dir=/tmp/linkedin-free-chrome-search",
           `--remote-debugging-port=${CDP_PORT}`,
           "--window-size=1200,900",
           "about:blank",
@@ -609,6 +609,10 @@ class SearchBrowser {
       returnByValue: true,
     });
     const blocks = (evaluated.result?.result?.value ?? []) as { href: string; text: string }[];
+    if (this.searchCount <= 3) {
+      console.log(`  google preview: ${preview.replace(/\s+/g, " ").slice(0, 180)}`);
+      console.log(`  google blocks: ${blocks.length}`);
+    }
     const hits: MatchHit[] = [];
     let resolved = 0;
     for (const block of blocks) {
