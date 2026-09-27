@@ -8,6 +8,7 @@ import {
   nationalProgramTierRank,
   programsInText,
 } from "./national-programs";
+import { PROGRAM_DIRECTORY, type ProgramSignalType } from "./program-signals";
 
 assert.equal(metroOf("San Francisco, California")?.id, "sf");
 assert.equal(metroOf("San Fransisco, California")?.id, "sf");
@@ -64,6 +65,31 @@ assert.ok(programsInText("Contrary venture partner").some((program) => program.i
 assert.ok(programsInText("AGI House SF").some((program) => program.id === "agi_house"));
 assert.equal(programsInText("YC founder; page names Stanford University").some((program) => program.id === "yc"), true);
 assert.equal(programsInText("NYC").length, 0);
+assert.equal(programsInText("Rice Residency").some((program) => program.id === "the_residency"), false);
+assert.ok(programsInText("The Residency in San Francisco").some((program) => program.id === "the_residency"));
+assert.ok(programsInText("Afore FIR U").some((program) => program.id === "afore"));
+assert.equal(programsInText("Pioneer").some((program) => program.id === "pioneer"), false);
+
+const directoryRows: [string, ProgramSignalType][] = [
+  ["spc", "south_park_commons"],
+  ["hf0", "hf0"],
+  ["emergent", "emergent_ventures"],
+  ["kp_fellows", "kleiner_perkins_fellows"],
+  ["z_fellows", "z_fellows"],
+  ["founders_inc", "founders_inc"],
+  ["agi_house", "agi_house"],
+  ["contrary", "contrary_venture_partners"],
+  ["fund_1517", "medici_1517"],
+  ["afore", "afore_fir_u"],
+  ["the_residency", "the_residency"],
+  ["pioneer", "pioneer"],
+  ["buildspace", "buildspace"],
+  ["frontier_tower", "frontier_tower"],
+];
+for (const [id, signalType] of directoryRows) {
+  assert.equal(NATIONAL_PROGRAMS.find((program) => program.id === id)?.tier, PROGRAM_DIRECTORY[signalType].tier, id);
+  assert.equal(NATIONAL_PROGRAMS.find((program) => program.id === id)?.signalType, signalType, id);
+}
 
 assert.equal(investorFactIsTopVc("Andreessen Horowitz"), true);
 assert.equal(investorFactIsTopVc("Sequoia Capital"), true);

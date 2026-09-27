@@ -1,16 +1,20 @@
 // National programs for the "Programs to campuses" heatmap. Campus clubs
-// stay off this list: these programs recruit across schools.
+// and single-campus houses stay off this list: these programs recruit
+// across schools.
 //
 // Tiers are scouting labels for the row. They are not Founder Signal,
-// eligibility, or an investment score. Where data/imports/campus_hotspots.csv
-// already records a cross-campus or city tier, this file reuses that tier.
-// Thiel Fellowship is S+ on this table. South Park Commons, Emergent
-// Ventures, and HF0 are S. Z Fellows is A.
+// eligibility, or an investment score. A row that names a program in
+// PROGRAM_DIRECTORY uses that directory tier. Thiel Fellowship is S+ and
+// is not a directory program. Neo, Y Combinator, Accel Scholars, Pear,
+// a16z Speedrun, and Human Capital keep the hotspot letter already on
+// this table.
 //
 // A phrase matches only as whole words after punctuation is stripped, so
 // "Founders, Inc." counts and "Founders include" does not.
 
-export const NATIONAL_PROGRAM_TIERS = ["S+", "S", "A", "B"] as const;
+import { PROGRAM_DIRECTORY, type ProgramSignalType } from "./program-signals";
+
+export const NATIONAL_PROGRAM_TIERS = ["S+", "S", "A", "B", "C"] as const;
 export type NationalProgramTier = (typeof NATIONAL_PROGRAM_TIERS)[number];
 
 export interface NationalProgram {
@@ -19,6 +23,12 @@ export interface NationalProgram {
   tier: NationalProgramTier;
   /** Normalized phrases. Longer aliases are listed with the short ones. */
   aliases: readonly string[];
+  /** Membership badges of this type count on the row, and the tier comes from PROGRAM_DIRECTORY. */
+  signalType?: ProgramSignalType;
+}
+
+function directoryTier(program: ProgramSignalType): NationalProgramTier {
+  return PROGRAM_DIRECTORY[program].tier;
 }
 
 export const NATIONAL_PROGRAMS: readonly NationalProgram[] = [
@@ -31,26 +41,29 @@ export const NATIONAL_PROGRAMS: readonly NationalProgram[] = [
   {
     id: "spc",
     label: "South Park Commons",
-    tier: "S",
+    tier: directoryTier("south_park_commons"),
+    signalType: "south_park_commons",
     aliases: ["south park commons founder fellowship", "south park commons", "spc founder fellowship", "spc fellowship"],
   },
   {
     id: "hf0",
     label: "HF0",
-    tier: "S",
+    tier: directoryTier("hf0"),
+    signalType: "hf0",
     aliases: ["hacker fellowship 0", "hf0"],
   },
   {
     id: "emergent",
     label: "Emergent Ventures",
-    tier: "S",
+    tier: directoryTier("emergent_ventures"),
+    signalType: "emergent_ventures",
     aliases: ["emergent ventures"],
   },
   {
-    // Hotspot directory: Kleiner Perkins Fellows, S.
     id: "kp_fellows",
     label: "Kleiner Perkins Fellows",
-    tier: "S",
+    tier: directoryTier("kleiner_perkins_fellows"),
+    signalType: "kleiner_perkins_fellows",
     aliases: ["kleiner perkins engineering fellow", "kleiner perkins fellows", "kleiner perkins fellow", "kp fellows", "kp fellow"],
   },
   {
@@ -68,10 +81,10 @@ export const NATIONAL_PROGRAMS: readonly NationalProgram[] = [
     aliases: ["y combinator", "ycombinator", "yc founder", "yc"],
   },
   {
-    // Hotspot directory: Z Fellows, A.
     id: "z_fellows",
     label: "Z Fellows",
-    tier: "A",
+    tier: directoryTier("z_fellows"),
+    signalType: "z_fellows",
     aliases: ["z fellows", "z fellow"],
   },
   {
@@ -105,32 +118,67 @@ export const NATIONAL_PROGRAMS: readonly NationalProgram[] = [
     aliases: ["human capital fellowship", "hc fellowship", "delta fellowship"],
   },
   {
-    // No hotspot-directory row. A, with residencies such as AGI House.
     id: "founders_inc",
     label: "Founders Inc",
-    tier: "A",
+    tier: directoryTier("founders_inc"),
+    signalType: "founders_inc",
     aliases: ["founders inc off season", "founders inc"],
   },
   {
-    // Hotspot directory: AGI House SF, A.
     id: "agi_house",
     label: "AGI House",
-    tier: "A",
+    tier: directoryTier("agi_house"),
+    signalType: "agi_house",
     aliases: ["agi house"],
   },
   {
-    // Hotspot directory: Contrary Venture Partners, B.
     id: "contrary",
     label: "Contrary",
-    tier: "B",
+    tier: directoryTier("contrary_venture_partners"),
+    signalType: "contrary_venture_partners",
     aliases: ["contrary venture partners", "contrary venture partner", "contrary class of"],
   },
   {
-    // No hotspot-directory row. B, with Contrary's fund and scout band.
     id: "fund_1517",
     label: "1517 Fund",
-    tier: "B",
+    tier: directoryTier("medici_1517"),
+    signalType: "medici_1517",
     aliases: ["1517 medici", "1517 fund", "medici project"],
+  },
+  {
+    id: "afore",
+    label: "Afore FIR U",
+    tier: directoryTier("afore_fir_u"),
+    signalType: "afore_fir_u",
+    aliases: ["afore fir u", "afore fir"],
+  },
+  {
+    id: "the_residency",
+    label: "The Residency",
+    tier: directoryTier("the_residency"),
+    signalType: "the_residency",
+    aliases: ["the residency", "inventors residency"],
+  },
+  {
+    id: "pioneer",
+    label: "Pioneer",
+    tier: directoryTier("pioneer"),
+    signalType: "pioneer",
+    aliases: ["pioneer accelerator"],
+  },
+  {
+    id: "buildspace",
+    label: "Buildspace",
+    tier: directoryTier("buildspace"),
+    signalType: "buildspace",
+    aliases: ["buildspace"],
+  },
+  {
+    id: "frontier_tower",
+    label: "Frontier Tower",
+    tier: directoryTier("frontier_tower"),
+    signalType: "frontier_tower",
+    aliases: ["frontier tower"],
   },
 ];
 

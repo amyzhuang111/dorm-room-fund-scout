@@ -340,6 +340,14 @@ function buildPrograms(
     for (const program of programsInText(row.label.includes("thiel") ? row.label : "Thiel Fellowship")) addPerson(program, row.person_id);
   }
 
+  for (const row of db.prepare(`SELECT person_id, signal_type FROM program_signals WHERE label != ''`).all() as {
+    person_id: string;
+    signal_type: string;
+  }[]) {
+    const program = NATIONAL_PROGRAMS.find((item) => item.signalType === row.signal_type);
+    if (program) addPerson(program, row.person_id);
+  }
+
   const ranked = [...byProgram.entries()]
     .filter(([, row]) => row.all.size > 0)
     .sort((a, b) => {
@@ -377,7 +385,7 @@ function buildPrograms(
     rows,
     allLabel: "All",
     caption:
-      "National programs only. A row is kept when at least one founder matches. Cells count distinct founders matched from claim text, a source name, a program relationship, an affiliation role, or an investor fact on a company they founded. Aliases count, including Accel Leaders, Pear VC Garage, Founders, Inc., and SPC Founder Fellowship. Backed by top VC counts founders whose startup has an investor fact naming Sequoia, a16z, Benchmark, Accel, Founders Fund, Greylock, Lightspeed, General Catalyst, Index, Khosla, Thrive, Bessemer, GV, First Round, Pear, Floodgate, SV Angel, Lux, or NEA. The chip is a scouting tier, not Founder Signal. All counts each founder once, so two campuses share one All total. Columns are the eight campuses with the most founders on record.",
+      "National programs only. A row is kept when at least one founder matches. Cells count distinct founders matched from claim text, a source name, a program relationship, an affiliation role, a program membership badge, or an investor fact on a company they founded. Directory programs use the same tier as the hotspot letter. Aliases count, including Accel Leaders, Pear VC Garage, Founders, Inc., and SPC Founder Fellowship. Backed by top VC counts founders whose startup has an investor fact naming Sequoia, a16z, Benchmark, Accel, Founders Fund, Greylock, Lightspeed, General Catalyst, Index, Khosla, Thrive, Bessemer, GV, First Round, Pear, Floodgate, SV Angel, Lux, or NEA. The chip is a scouting tier, not Founder Signal. All counts each founder once, so two campuses share one All total. Columns are the eight campuses with the most founders on record.",
   };
 }
 
