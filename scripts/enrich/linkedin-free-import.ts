@@ -1020,6 +1020,10 @@ async function main() {
         commonName: person.commonName,
         hits,
       });
+      if (blockedQueries > 0 && judged.outcome !== "accept" && judged.outcome !== "ambiguous" && !ambiguousReason) {
+        console.log("Search engines are blocked. Stopping so the remaining people can be retried.");
+        break;
+      }
       if (hits.length === 0 && blockedQueries > 0 && (blockedQueries === queries.length || browser.enginesExhausted())) {
         console.log("Search engines are blocked. Stopping so the remaining people can be retried.");
         break;
