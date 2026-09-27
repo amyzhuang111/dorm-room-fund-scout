@@ -84,6 +84,37 @@ Delaware OR "certificate of incorporation" {campus} student founder
 
 TechCrunch articles in this run: Series (Yale; already stored), Breakthrough Ventures (Roman Scott and Itbaan Nafi, Stanford).
 
+## Per-campus network zones
+
+The Discover network for one campus (never All campuses) draws two zones. Outside is the left half. On campus is the right half. A tinted wedge and a vertical rule separate them. A tier band is a concentric arc: S+ and S sit closest to the campus hub, then A, B, C, and D, with a small letter on each band. People and startups stay further out, on the same side as the group they belong to. Campus people with no club edge stay on the on-campus side, outside the tier bands, instead of ringing the whole map. The letters are sourcing labels. They are not Founder Signal, eligibility, or an investment score.
+
+The org list is `data/imports/campus_hotspots.csv`, one node per organization after these collapses:
+
+- The same place in more than one hotspot section is one node. Mayfield Fellows Program is the single Stanford S-tier entry.
+- Pear Fellows, Pear Dorm, and Pear Garage are one outside node, Pear Fellows / Pear Garage, at A.
+- Berkeley SkyDeck's demo day and cohort track are one on-campus node at C.
+- A national program that also has a campus chapter (Dorm Room Fund partners, GC Venture Fellows) is one node. The campus chapter stays on campus when the people in the room are students at that school.
+
+Outside, even if a row was filed under the school: Y Combinator, a16z Speedrun, Neo, Z Fellows, Thiel, Contrary, Kleiner Perkins Fellows, Pear, Prod, Techstars, UC LAUNCH, and off-campus regional programs (NORCAT, Summer Company, Lab2Market). On campus: student clubs, campus accelerators and incubators, hackathons, entrepreneurship centers, and labs.
+
+Berkeley letters from the hotspot revision stay as they were: Free Ventures A, Cal Hacks founder-side B (the startup section of that row is still A and does not pull Cal Hacks inward), Entrepreneurs at Berkeley B, Web Development at Berkeley A, SkyDeck C, AI Entrepreneurs at Berkeley A. BAIR, SAIL, CSAIL, CMU Robotics Institute, CMU Machine Learning Department, and GRASP stay A.
+
+A row was added or retiered only after opening the organization's own page:
+
+- Penn Labs moved from B to A. pennlabs.org publishes a roster and ships campus products. That matches the source-quality note already in the repo. The club's own apps are not startups.
+- PennApps (pennapps.com, XXVII), Hack4Impact Penn (upenn.hack4impact.org), Penn Electric Racing (pennelectricracing.com), and Penn Aerial Robotics (pennaerial.com) were missing as organizations. Each is A.
+- Codebase (codebase.studentorg.berkeley.edu) is a Berkeley client-project club at B, under Web Development at Berkeley.
+- Accel Scholars (eecs.berkeley.edu/resources/undergrads/accel) is a Berkeley undergraduate program at A, on campus, because the page limits it to Berkeley. It is not drawn on other schools.
+- BostonHacks (bostonhacks.org, 2025 at the George Sherman Union) is C.
+- Vanderbilt Innovation and Entrepreneurship Society is C, from the Vanderbilt Anchor Link page for the organization.
+- Columbia's Application Development Initiative (adicu.com) is B. DevFest stays a separate hackathon row.
+- Freetail Hackers was not added beside HackTX. The HackTX organising-team row is that organization.
+- ArchHacks was not added. The public pages found are the 2016 and 2017 events.
+
+City houses (South Park Commons, HF0, and the others in the program-signal list) are outside, and they appear on a campus when a stored program signal ties a person at that school to the house. A directory row alone does not create a membership edge.
+
+Refresh this list about once a semester, the same cadence as the rest of this file. Run `npm run audit:data` after edits. Do not add a second project row for a national program under each campus; the audit treats one organization affiliated with two universities as a conflict.
+
 ## What not to store
 
 - A LinkedIn "Stealth AI Startup" or "Stealth Startup" page with thousands of employees is a placeholder bucket. Keep the person as `stealth or potential founder` and do not create a company with that name.
