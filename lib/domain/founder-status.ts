@@ -163,7 +163,8 @@ function classTokenHits(snippet: EvidenceSnippet, hits: YearHit[]) {
   const text = snippet.excerpt.replace(/[’‘ʼ]/g, "'");
   // Quote is required. G'EE27 keeps school letters between the quote and the year.
   // SP2'25 keeps a digit in the school code. GEng'27 is mixed case.
-  const tight = /\b((?:M&T|SEAS|Nu|GEng|[A-Z]{1,5}\d?)'(?:[A-Z]{1,4})?'?(\d{2}))\b/g;
+  // GrE is the mixed-case Penn Engineering graduate code printed as GrE'26.
+  const tight = /\b((?:M&T|SEAS|Nu|GEng|GrE|[A-Z]{1,5}\d?)'(?:[A-Z]{1,4})?'?(\d{2}))\b/g;
   for (const match of text.matchAll(tight)) {
     const token = match[1];
     if (token.length > 14) continue;
@@ -242,7 +243,7 @@ function rosterYearHits(snippet: EvidenceSnippet, hits: YearHit[]) {
 }
 
 function classOfHits(snippet: EvidenceSnippet, hits: YearHit[]) {
-  const re = /\bclass of\s+'?(\d{2,4})\b/gi;
+  const re = /\bclass (?:of|year:)\s*'?(\d{2,4})\b/gi;
   for (const match of snippet.excerpt.matchAll(re)) {
     const year = fullYear(parseInt(match[1], 10));
     pushYear(hits, year, year ? labelFromYear(year) : "", snippet);

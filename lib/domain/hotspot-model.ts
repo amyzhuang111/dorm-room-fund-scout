@@ -86,6 +86,8 @@ export const ORG_ALIAS_PHRASES: Record<string, readonly string[]> = {
   "jerome fisher m and t": ["jerome fisher management and technology", "management and technology", "m and t"],
   // Stored affiliation role from the YC directory ingest: "YC founder; page names {campus}".
   "y combinator": ["yc founder"],
+  // Berkeley prints the dual-degree abbreviation as M.E.T. '28.
+  "management entrepreneurship and technology": ["m e t"],
 };
 
 const MT_CORES = new Set([
