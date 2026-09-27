@@ -65,18 +65,34 @@ function regionIndex(id: string): number {
   return index < 0 ? REGIONS.length : index;
 }
 
-export function nodeColor(node: { type: MapNodeType; campus: string | null; id?: string; homeCampus?: string | null; rimBand?: "outer" | "inward" | null; rimTier?: "S+" | "S" | "A" | "B" | "C" | "D" | null }, colors: Map<string, string>): string {
-  if (node.id && (node.id.startsWith("user_") || node.id.startsWith("ufounder_") || node.id.startsWith("ucampus_"))) return withAlpha("#6b7280", 0.9);
+type InkNode = { type: MapNodeType; campus: string | null; id?: string; homeCampus?: string | null; rimBand?: "outer" | "inward" | null; rimTier?: "S+" | "S" | "A" | "B" | "C" | "D" | null };
+
+/** Solid color behind a node, before opacity. Program-to-campus lines use this. */
+export function nodeInk(node: InkNode, colors: Map<string, string>): string {
+  if (node.id && (node.id.startsWith("user_") || node.id.startsWith("ufounder_") || node.id.startsWith("ucampus_"))) return "#6b7280";
   const home = node.homeCampus && colors.get(node.homeCampus);
-  if (home && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha(home, FILL_ALPHA);
-  if (node.rimBand === "inward" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "rgba(196, 201, 209, 0.42)";
-  if (node.rimBand === "outer" && node.rimTier === "S+" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha("#374151", 0.96);
-  if (node.rimBand === "outer" && node.rimTier === "S" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha("#4b5563", 0.96);
-  if (node.rimBand === "outer" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha("#9ca3af", 0.82);
-  if (node.type === "investor" || node.type === "organization" || node.type === "program") return withAlpha(NODE_FILL[node.type], 0.9);
+  if (home && (node.type === "investor" || node.type === "organization" || node.type === "program")) return home;
+  if (node.rimBand === "inward" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "#c4c9d1";
+  if (node.rimBand === "outer" && node.rimTier === "S+" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "#374151";
+  if (node.rimBand === "outer" && node.rimTier === "S" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "#4b5563";
+  if (node.rimBand === "outer" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "#9ca3af";
+  if (node.type === "investor" || node.type === "organization" || node.type === "program") return NODE_FILL[node.type];
   const id = node.campus ?? (node.type === "campus" ? node.id : null);
-  if (id && colors.get(id)) return withAlpha(colors.get(id) as string, FILL_ALPHA);
-  return withAlpha(NODE_FILL[node.type], FILL_ALPHA);
+  if (id && colors.get(id)) return colors.get(id) as string;
+  return NODE_FILL[node.type];
+}
+
+export function nodeColor(node: InkNode, colors: Map<string, string>): string {
+  const ink = nodeInk(node, colors);
+  if (node.id && (node.id.startsWith("user_") || node.id.startsWith("ufounder_") || node.id.startsWith("ucampus_"))) return withAlpha(ink, 0.9);
+  const home = node.homeCampus && colors.get(node.homeCampus);
+  if (home && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha(ink, FILL_ALPHA);
+  if (node.rimBand === "inward" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "rgba(196, 201, 209, 0.42)";
+  if (node.rimBand === "outer" && node.rimTier === "S+" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha(ink, 0.96);
+  if (node.rimBand === "outer" && node.rimTier === "S" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha(ink, 0.96);
+  if (node.rimBand === "outer" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha(ink, 0.82);
+  if (node.type === "investor" || node.type === "organization" || node.type === "program") return withAlpha(ink, 0.9);
+  return withAlpha(ink, FILL_ALPHA);
 }
 
 /** Label ink for a campus shade. Same hue, darkened until it clears 4.5:1 on white. */

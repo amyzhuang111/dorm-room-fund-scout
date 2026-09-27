@@ -4,10 +4,9 @@ import Graph from "graphology";
 import { useEffect, useRef } from "react";
 import Sigma from "sigma";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
-import { regionTint } from "@/lib/domain/network-regions";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
-import { DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_CLUB, LABEL_HUB, LABEL_LEAD, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, REGION_TRACKING, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
+import { DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_CLUB, LABEL_HUB, LABEL_LEAD, LABEL_NODE, MEGA_DEGREE, NODE_SHAPE, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, nodeInk, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -184,41 +183,8 @@ export function NetworkSigma({
         ...(node.homeCampus ? { labelColor: readableInk(colors.get(node.homeCampus) ?? "#374151") } : {}),
       });
     }
+    // Region titles stay off the canvas. The legend carries the colors.
     const regionCampuses = new Map<string, string[]>();
-    for (const region of graph.regions ?? []) {
-      const id = `region:${region.id}`;
-      regionCampuses.set(id, region.campusIds);
-      const tint = regionTint(region.id);
-      g.addNode(id, {
-        x: region.x,
-        y: region.y,
-        size: 0.6,
-        label: region.label,
-        fullLabel: region.fullLabel,
-        color: "rgba(0,0,0,0)",
-        tint,
-        type: "circle",
-        kind: "campus",
-        anchor: true,
-        marker: true,
-        regionId: region.id,
-        zIndex: 4,
-        linkColor: "rgba(107, 114, 128, 0.45)",
-        labelPx: LABEL_REGION,
-      });
-      labelMeta.push({
-        id,
-        tier: 3,
-        degree: 0,
-        text: truncateMapLabel(region.label, true, true).toUpperCase(),
-        fullText: region.fullLabel,
-        marker: true,
-        anchor: true,
-        fontSize: LABEL_REGION,
-        tracking: REGION_TRACKING,
-        campusHub: false,
-      });
-    }
     let minX = Infinity;
     let maxX = -Infinity;
     let minY = Infinity;
@@ -293,14 +259,15 @@ export function NetworkSigma({
     }
     for (const bundle of bundles.values()) {
       if (bundle.count < 2) continue;
-      const tint = edgeTint(colors.get(bundle.campus) ?? "#6b7280", 0.22);
+      const program = at.get(bundle.program);
+      const tint = edgeTint(program ? nodeInk(program, colors) : "#4b5563", 0.38);
       const key = `bundle|${bundle.program}|${bundle.campus}`;
       if (g.hasEdge(key)) continue;
       g.addEdgeWithKey(key, bundle.program, bundle.campus, {
         kind: "member_of",
         color: tint,
-        hoverColor: edgeTint(colors.get(bundle.campus) ?? "#6b7280", 0.62),
-        size: Math.min(1.45, 0.42 + Math.log2(bundle.count + 1) * 0.24),
+        hoverColor: edgeTint(program ? nodeInk(program, colors) : "#4b5563", 0.72),
+        size: Math.min(2.4, 0.85 + Math.log2(bundle.count + 1) * 0.38),
         defer: false,
         bundle: true,
       });
@@ -513,12 +480,15 @@ function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>) 
   }
   const width = maxX - minX;
   const height = maxY - minY;
-  // Layout +y points down the screen, so the top edge is minY. Extra room there clears the search box.
-  const topPad = Math.max(width, height, 0.04) * 0.055;
-  const paddedMinY = minY - topPad;
-  const span = Math.max(width, maxY - paddedMinY, 0.04);
-  const ratio = Math.min(1.18, Math.max(0.04, span * 1.06));
-  void renderer.getCamera().animate({ x: (minX + maxX) / 2, y: (paddedMinY + maxY) / 2, ratio }, { duration: 360 });
+  // High layout Y is the top of the screen. Pad that side for the search box and filters, and the low side for the Ask bar and legend.
+  const span0 = Math.max(width, height, 0.04);
+  const paddedMaxY = maxY + span0 * 0.07;
+  const paddedMinY = minY - span0 * 0.08;
+  const paddedMinX = minX - span0 * 0.03;
+  const paddedMaxX = maxX + span0 * 0.05;
+  const span = Math.max(paddedMaxX - paddedMinX, paddedMaxY - paddedMinY, 0.04);
+  const ratio = Math.min(1.22, Math.max(0.04, span * 1.04));
+  void renderer.getCamera().animate({ x: (paddedMinX + paddedMaxX) / 2, y: (paddedMinY + paddedMaxY) / 2, ratio }, { duration: 360 });
 }
 
 function edgeTint(color: string, alpha: number): string {

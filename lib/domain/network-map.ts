@@ -126,7 +126,7 @@ interface SimNode {
   homeCampus?: string;
 }
 
-const LAYOUT_VERSION = "27";
+const LAYOUT_VERSION = "28";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -1360,6 +1360,10 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
   for (let tick = 0; tick < 28; tick++) sim.tick();
 
   snapCampusCentroids(simNodes, primary);
+  // Repack after the simulation. The collide pass was leaving large campuses as hollow arcs, and nodes with no campus sat in a ring at the origin.
+  pullCampusSatellites(live, primary);
+  packCampusDiscs(live, primary);
+  placeLinkedPrograms(live, hubMembers, primary);
   const markers: RegionMarker[] = [];
   for (const region of REGIONS) {
     const members = campusesByRegion.get(region.id) ?? [];
@@ -1489,6 +1493,187 @@ function hashUnit(id: string): number {
   let hash = 0;
   for (let i = 0; i < id.length; i++) hash = (hash * 33 + id.charCodeAt(i)) >>> 0;
   return (hash % 10000) / 10000;
+}
+
+function discRadius(count: number): number {
+  return Math.max(7, 0.78 * Math.sqrt(Math.max(count, 1)));
+}
+
+/** Uniform disc. sqrt(unit) keeps the middle as full as the edge. */
+function discPoint(id: string, radius: number): { x: number; y: number } {
+  const unit = Math.max(1e-4, hashUnit(`${id}:disc`));
+  const theta = hashUnit(`${id}:ang`) * Math.PI * 2;
+  const dist = radius * Math.sqrt(unit);
+  return { x: Math.cos(theta) * dist, y: Math.sin(theta) * dist };
+}
+
+function memberCounts(primary: Map<string, string>, live: LiveNode[]): Map<string, number> {
+  const counts = new Map<string, number>();
+  for (const node of live) {
+    if (node.type !== "person" && node.type !== "startup") continue;
+    const campus = primary.get(node.id);
+    if (!campus) continue;
+    counts.set(campus, (counts.get(campus) ?? 0) + 1);
+  }
+  return counts;
+}
+
+/** Draw every smaller campus in until its disc touches the largest campus in the same region. */
+function pullCampusSatellites(live: LiveNode[], primary: Map<string, string>) {
+  const campuses = live.filter((node) => node.type === "campus");
+  const counts = memberCounts(primary, live);
+  const radiusOf = (id: string) => discRadius(counts.get(id) ?? 1);
+  const byRegion = new Map<string, LiveNode[]>();
+  for (const campus of campuses) {
+    const key = campus.regionId ?? "";
+    const list = byRegion.get(key) ?? [];
+    list.push(campus);
+    byRegion.set(key, list);
+  }
+  for (const group of byRegion.values()) {
+    const anchor = group.reduce((best, campus) => (radiusOf(campus.id) > radiusOf(best.id) ? campus : best));
+    for (const campus of group) {
+      if (campus === anchor) continue;
+      const dx = campus.x - anchor.x;
+      const dy = campus.y - anchor.y;
+      const dist = Math.hypot(dx, dy) || 1;
+      const want = radiusOf(anchor.id) + radiusOf(campus.id) + 4;
+      if (dist <= want + 1) continue;
+      campus.x = anchor.x + (dx / dist) * want;
+      campus.y = anchor.y + (dy / dist) * want;
+    }
+  }
+}
+
+/**
+ * Each campus becomes one filled disc. People with no campus fold into the
+ * nearest disc instead of sitting in the middle or in a side clump.
+ */
+function packCampusDiscs(live: LiveNode[], primary: Map<string, string>) {
+  const campuses = live.filter((node) => node.type === "campus");
+  const byId = new Map(campuses.map((campus) => [campus.id, campus]));
+  const groups = new Map<string, LiveNode[]>();
+  const claim = (campusId: string, node: LiveNode) => {
+    const list = groups.get(campusId) ?? [];
+    list.push(node);
+    groups.set(campusId, list);
+  };
+  const nearestCampus = (node: LiveNode) => {
+    let best: LiveNode | null = null;
+    let bestDist = Infinity;
+    for (const campus of campuses) {
+      const dist = Math.hypot(node.x - campus.x, node.y - campus.y);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = campus;
+      }
+    }
+    return best;
+  };
+  for (const node of live) {
+    if (node.type !== "person" && node.type !== "startup") continue;
+    const campusId = primary.get(node.id);
+    const campus = (campusId && byId.get(campusId)) || nearestCampus(node);
+    if (campus) claim(campus.id, node);
+  }
+  for (const [campusId, members] of groups) {
+    const campus = byId.get(campusId);
+    if (!campus) continue;
+    const radius = discRadius(members.length);
+    for (const node of members) {
+      const at = discPoint(node.id, radius);
+      node.x = campus.x + at.x;
+      node.y = campus.y + at.y;
+    }
+  }
+  for (const node of live) {
+    if (node.type === "campus" || node.type === "person" || node.type === "startup" || node.hub) continue;
+    const named = node.homeCampus || campusNamedInLabel(node.label ?? "");
+    const campus = (named && byId.get(named)) || nearestCampus(node);
+    if (!campus) continue;
+    const radius = Math.min(10, discRadius(groups.get(campus.id)?.length ?? 1) * 0.4);
+    const at = discPoint(node.id, radius);
+    node.x = campus.x + at.x;
+    node.y = campus.y + at.y;
+  }
+}
+
+/** National programs sit just outside the weighted center of the campuses they actually link to. */
+function placeLinkedPrograms(live: LiveNode[], hubMembers: Map<string, string[]>, primary: Map<string, string>) {
+  const campuses = new Map(live.filter((node) => node.type === "campus").map((node) => [node.id, node]));
+  const people = live.filter((node) => node.type === "person" || node.type === "startup");
+  let gx = 0;
+  let gy = 0;
+  for (const node of people) {
+    gx += node.x;
+    gy += node.y;
+  }
+  const count = Math.max(people.length, 1);
+  gx /= count;
+  gy /= count;
+  const nationals = live
+    .filter((node) => node.hub)
+    .sort((a, b) => tierRank(a) - tierRank(b) || (hubMembers.get(b.id)?.length ?? 0) - (hubMembers.get(a.id)?.length ?? 0) || a.id.localeCompare(b.id));
+  const taken: { x: number; y: number }[] = [];
+  for (const hub of nationals) {
+    const weights = new Map<string, number>();
+    const seen = new Set<string>();
+    for (const id of hubMembers.get(hub.id) ?? []) {
+      if (seen.has(id)) continue;
+      seen.add(id);
+      const campus = primary.get(id);
+      if (!campus || !campuses.has(campus)) continue;
+      weights.set(campus, (weights.get(campus) ?? 0) + 1);
+    }
+    let sx = 0;
+    let sy = 0;
+    let weight = 0;
+    for (const [id, n] of weights) {
+      const campus = campuses.get(id);
+      if (!campus) continue;
+      sx += campus.x * n;
+      sy += campus.y * n;
+      weight += n;
+    }
+    let bestId = "";
+    let bestN = 0;
+    for (const [id, n] of weights) {
+      if (n > bestN) {
+        bestN = n;
+        bestId = id;
+      }
+    }
+    const seat = (bestId && campuses.get(bestId)) || null;
+    const anchor = seat ?? (weight ? { x: sx / weight, y: sy / weight } : { x: hub.x, y: hub.y });
+    let dx = anchor.x - gx;
+    let dy = anchor.y - gy;
+    if (Math.hypot(dx, dy) < 12) {
+      dx = anchor.x - gx + 12;
+      dy = anchor.y - gy;
+    }
+    const len = Math.hypot(dx, dy) || 1;
+    let atCampus = 0;
+    if (bestId) {
+      for (const node of people) if (primary.get(node.id) === bestId) atCampus += 1;
+    }
+    const pad = hub.rimTier === "S+" ? 12 : hub.rimTier === "S" ? 9 : 7;
+    const reach = (seat ? discRadius(atCampus) : 14) + pad;
+    let tx = anchor.x + (dx / len) * reach;
+    let ty = anchor.y + (dy / len) * reach;
+    for (const prev of taken) {
+      const ox = tx - prev.x;
+      const oy = ty - prev.y;
+      const dist = Math.hypot(ox, oy);
+      if (dist >= 15 || dist < 1e-3) continue;
+      tx += (ox / dist) * (15 - dist);
+      ty += (oy / dist) * (15 - dist);
+    }
+    taken.push({ x: tx, y: ty });
+    hub.x = tx;
+    hub.y = ty;
+    hub.tx = tx;
+    hub.ty = ty;
+  }
 }
 
 /** Move each campus label onto the people and startups who actually belong to it. */
