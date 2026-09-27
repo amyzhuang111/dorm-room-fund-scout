@@ -13,6 +13,10 @@ export interface NetworkSigmaHandle {
   zoomIn: () => void;
   zoomOut: () => void;
   fit: () => void;
+  /** Screen position of a laid-out node, relative to the graph container. */
+  pointOf: (id: string) => { x: number; y: number } | null;
+  /** Fires when the camera moves. The listener also runs once on subscribe. */
+  subscribe: (listener: () => void) => () => void;
 }
 
 type NodeAttr = {
@@ -535,7 +539,12 @@ export function NetworkSigma({
         recomputeLabels();
       });
     };
+    const viewListeners = new Set<() => void>();
+    const notifyView = () => {
+      for (const listener of viewListeners) listener();
+    };
     renderer.getCamera().on("updated", scheduleLabels);
+    renderer.getCamera().on("updated", notifyView);
     void document.fonts?.ready.then(() => {
       if (rendererRef.current === renderer) scheduleLabels();
     });
@@ -576,6 +585,22 @@ export function NetworkSigma({
       zoomIn: () => void renderer.getCamera().animatedZoom({ duration: 180 }),
       zoomOut: () => void renderer.getCamera().animatedUnzoom({ duration: 180 }),
       fit: () => frameVisible(renderer, stateRef.current.hidden),
+      pointOf(id: string) {
+        if (!renderer.getGraph().hasNode(id)) return null;
+        const attrs = renderer.getGraph().getNodeAttributes(id);
+        if (!Number.isFinite(attrs.x) || !Number.isFinite(attrs.y)) return null;
+        const at = renderer.graphToViewport({ x: attrs.x, y: attrs.y });
+        if (!Number.isFinite(at.x) || !Number.isFinite(at.y)) return null;
+        return { x: at.x, y: at.y };
+      },
+      subscribe(listener: () => void) {
+        viewListeners.add(listener);
+        const frame = requestAnimationFrame(() => listener());
+        return () => {
+          cancelAnimationFrame(frame);
+          viewListeners.delete(listener);
+        };
+      },
     };
     onReadyRef.current(api);
     const frame = requestAnimationFrame(() => {
@@ -589,6 +614,8 @@ export function NetworkSigma({
       if (labelFrame) cancelAnimationFrame(labelFrame);
       cancelAnimationFrame(focusState.focusFrame);
       renderer.getCamera().removeListener("updated", scheduleLabels);
+      renderer.getCamera().removeListener("updated", notifyView);
+      viewListeners.clear();
       recomputeLabelsRef.current = () => {};
       onReadyRef.current(null);
       renderer.kill();

@@ -18,6 +18,7 @@ import { useAskHighlight } from "./ask-highlight";
 import { NETWORK_FILTER_EVENT, type NetworkMapFilter } from "@/lib/domain/network-filter";
 import { LinkedInIconButton, LinkedInOpenButton, LinkedInProfileLink, PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { DrfHopFilter } from "./drf-hop-filter";
+import { DrfReferrerOverlay } from "./drf-referrer-overlay";
 import { WarmIntroPaths } from "./warm-intro-paths";
 
 const LEGEND_REGION: Record<string, string> = {
@@ -110,6 +111,9 @@ export function NetworkMapApp() {
   const [fly, setFly] = useState<{ id: string; token: number }>({ id: "", token: 0 });
   const [focus, setFocus] = useState<NetworkFocus | null>(null);
   const graphApi = useRef<NetworkSigmaHandle | null>(null);
+  const [mapReady, setMapReady] = useState(false);
+  const [referrersOn, setReferrersOn] = useState(false);
+  const [referrersWeak, setReferrersWeak] = useState(false);
 
   const [pinned, setPinned] = useState<{ label: string; ids: Set<string> } | null>(null);
   const [drfNear, setDrfNear] = useState<Set<string> | null>(null);
@@ -308,14 +312,16 @@ export function NetworkMapApp() {
           onSelect={(id) => setSelected(id)}
           onReady={(api) => {
             graphApi.current = api;
+            setMapReady(api != null);
           }}
         />
       ) : (
         <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-black">{error ?? "Laying out the map…"}</p>
       )}
+      <DrfReferrerOverlay apiRef={graphApi} hidden={hidden} mapReady={mapReady} enabled={referrersOn} includeWeak={referrersWeak} />
 
       <div className="absolute left-4 top-4 z-30 flex max-w-[22rem] flex-col items-start gap-1.5">
-        <div className="flex items-center gap-1">
+        <div className="flex flex-wrap items-center gap-1">
           <button
             type="button"
             className="h-7 rounded border border-neutral-200 bg-white/80 px-2 text-[11px] font-medium text-neutral-700"
@@ -328,6 +334,16 @@ export function NetworkMapApp() {
             <input type="checkbox" className="accent-black" checked={showIsolates} onChange={(event) => setShowIsolates(event.target.checked)} />
             Unlinked
           </label>
+          <label className="inline-flex h-7 items-center gap-1.5 rounded border border-neutral-200 bg-white/80 px-2 text-[11px] text-neutral-700">
+            <input type="checkbox" className="accent-black" checked={referrersOn} onChange={(event) => setReferrersOn(event.target.checked)} />
+            DRF alumni referrers
+          </label>
+          {referrersOn && (
+            <label className="inline-flex h-7 items-center gap-1.5 rounded border border-neutral-200 bg-white/80 px-2 text-[11px] text-neutral-700">
+              <input type="checkbox" className="accent-black" checked={referrersWeak} onChange={(event) => setReferrersWeak(event.target.checked)} />
+              Include weak (same-metro)
+            </label>
+          )}
         </div>
         <p className="pl-0.5 text-[11px] leading-none text-neutral-400 tabular-nums">
           {visibleCounts.person.toLocaleString()} people · {visibleCounts.startup.toLocaleString()} startups · {visibleCounts.investor} investors · {visibleCounts.organization} organizations
@@ -335,7 +351,7 @@ export function NetworkMapApp() {
       </div>
 
       {filtersOpen && filters && graph && (
-        <aside className="absolute bottom-14 left-4 top-16 z-30 flex w-[16.5rem] flex-col overflow-hidden rounded-md border border-neutral-200 bg-white text-black shadow-sm">
+        <aside className="absolute bottom-14 left-4 top-28 z-30 flex w-[16.5rem] flex-col overflow-hidden rounded-md border border-neutral-200 bg-white text-black shadow-sm">
           <div className="flex items-center justify-between border-b border-black/10 px-3 py-2">
             <p className="text-sm font-semibold">Filters</p>
             <button

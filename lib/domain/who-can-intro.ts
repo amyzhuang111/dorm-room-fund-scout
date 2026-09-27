@@ -113,6 +113,8 @@ interface ReferralIndex {
   backersByProject: Map<string, { alum: DrfAlumRow; url: string }[]>;
   personLinks: Map<string, Candidate[]>;
   projectPaths: Map<string, IntroPath[]>;
+  /** Best path from each alum to each startup they can refer. Includes weak metro paths. */
+  reachByAlum: Map<string, Map<string, Candidate>>;
   alumni: AlumReferral[];
   coverage: IntroCoverage;
 }
@@ -409,6 +411,7 @@ function assembleReferralIndex(): ReferralIndex {
     backersByProject: new Map(),
     personLinks: new Map(),
     projectPaths: new Map(),
+    reachByAlum: new Map(),
     alumni: [],
     coverage: {
       alumni: graph.alumni.length,
@@ -475,6 +478,7 @@ function assembleReferralIndex(): ReferralIndex {
     for (const candidate of ranked) remember(startupId, candidate);
   }
 
+  index.reachByAlum = byAlum;
   index.alumni = graph.alumni.map((alum) => alumReferral(index, alum, byAlum.get(alum.personId) ?? new Map(), rolesByPerson, companyByNorm));
   index.coverage.alumniWhoCanRefer = index.alumni.filter((alum) => alum.canRefer).length;
   return index;
@@ -813,6 +817,69 @@ export function alumniReferralDirectory(): AlumReferral[] {
 
 export function introCoverage(): IntroCoverage {
   return loadIndex().coverage;
+}
+
+export interface ReferrerMapLink {
+  startupId: string;
+  startupName: string;
+  founderIds: string[];
+  campusId: string | null;
+  strength: IntroStrength;
+  reason: string;
+}
+
+export interface ReferrerMapAlum {
+  id: string;
+  name: string;
+  role: string | null;
+  firm: string | null;
+  campusId: string | null;
+  links: ReferrerMapLink[];
+}
+
+const STRENGTH_RANK: Record<IntroStrength, number> = { strong: 3, medium: 2, weak: 1 };
+
+/** Map overlay: alumni and the startups, founders, and campuses they can refer. Weak metro paths stay out unless asked for. */
+export function referrerOverlay(includeWeak = false): { alumni: ReferrerMapAlum[] } {
+  const index = loadIndex();
+  const foundersOf = new Map<string, string[]>();
+  for (const [personId, startups] of index.foundedByPerson) {
+    for (const startupId of startups) {
+      const list = foundersOf.get(startupId) ?? [];
+      if (!list.includes(personId)) list.push(personId);
+      foundersOf.set(startupId, list);
+    }
+  }
+  const alumni: ReferrerMapAlum[] = [];
+  for (const [personId, startups] of index.reachByAlum) {
+    const alum = index.alumByPerson.get(personId);
+    if (!alum) continue;
+    const links: ReferrerMapLink[] = [];
+    for (const [startupId, candidate] of startups) {
+      if (!includeWeak && candidate.strength === "weak") continue;
+      const org = index.graph.orgs.get(startupId);
+      links.push({
+        startupId,
+        startupName: org?.name ?? startupId,
+        founderIds: foundersOf.get(startupId) ?? [],
+        campusId: org?.campusId ?? null,
+        strength: candidate.strength,
+        reason: candidate.reason,
+      });
+    }
+    if (!links.length) continue;
+    links.sort((a, b) => STRENGTH_RANK[b.strength] - STRENGTH_RANK[a.strength] || a.startupName.localeCompare(b.startupName) || a.startupId.localeCompare(b.startupId));
+    alumni.push({
+      id: personId,
+      name: alum.name,
+      role: alum.currentRole,
+      firm: alum.currentFirm,
+      campusId: alum.universityId,
+      links,
+    });
+  }
+  alumni.sort((a, b) => b.links.length - a.links.length || a.name.localeCompare(b.name));
+  return { alumni };
 }
 
 /** Referrer line stored on a pipeline card. Empty when this alum is not a real path. */

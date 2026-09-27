@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { batchKeysFromExcerpt, batchReason, introCoverage, introPanelFor, alumniReferralDirectory, samePlaceReason, yearOverlap } from "./who-can-intro";
+import { batchKeysFromExcerpt, batchReason, introCoverage, introPanelFor, alumniReferralDirectory, referrerOverlay, samePlaceReason, yearOverlap } from "./who-can-intro";
 
 assert.deepEqual(yearOverlap({ start: 2014, end: 2016 }, { start: 2016, end: 2019 }), { start: 2016, end: 2016 });
 assert.equal(yearOverlap({ start: 2010, end: 2012 }, { start: 2014, end: 2016 }), null);
@@ -86,6 +86,34 @@ for (const row of directory) {
 }
 assert.ok(coverage.startupsWithPath >= reachable.size);
 
+const warmMap = referrerOverlay(false);
+const fullMap = referrerOverlay(true);
+assert.equal(warmMap.alumni.length, coverage.alumniWhoCanRefer);
+assert.ok(fullMap.alumni.length >= warmMap.alumni.length);
+for (const alum of warmMap.alumni) {
+  assert.ok(alum.links.length > 0);
+  assert.ok(alum.links.every((link) => link.strength === "strong" || link.strength === "medium"));
+  for (const link of alum.links) {
+    assert.match(link.reason, /^(Same |Co-founder|Backed through )/);
+    assert.ok(!link.founderIds.includes(alum.id));
+  }
+}
+const laurenMap = warmMap.alumni.find((alum) => alum.id === lauren.personId);
+assert.ok(laurenMap);
+assert.equal(laurenMap.links.length, lauren.reach);
+assert.ok(laurenMap.links.some((link) => /Penn/.test(link.reason)));
+const shawnFull = fullMap.alumni.find((alum) => alum.id === shawn.personId);
+assert.ok(shawnFull);
+assert.ok(shawnFull.links.some((link) => link.strength === "weak" && /metro$/.test(link.reason)));
+const shawnWarm = warmMap.alumni.find((alum) => alum.id === shawn.personId);
+if (shawnWarm) assert.ok(shawnWarm.links.every((link) => link.strength !== "weak"));
+const truellMap = fullMap.alumni.find((alum) => alum.id === truell.personId);
+if (truellMap) assert.ok(truellMap.links.every((link) => link.startupId !== "proj_GjrFxToPH-cI"));
+const warmLinks = warmMap.alumni.reduce((sum, alum) => sum + alum.links.length, 0);
+const fullLinks = fullMap.alumni.reduce((sum, alum) => sum + alum.links.length, 0);
+assert.ok(warmLinks > 0);
+assert.ok(fullLinks >= warmLinks);
+
 console.log(
   JSON.stringify(
     {
@@ -97,6 +125,9 @@ console.log(
       alumniWhoCanRefer: coverage.alumniWhoCanRefer,
       laurenReach: lauren.reach,
       laurenWeak: lauren.weakReach,
+      overlayAlumni: warmMap.alumni.length,
+      overlayLinks: warmLinks,
+      overlayLinksWithWeak: fullLinks,
     },
     null,
     2
