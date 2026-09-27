@@ -67,13 +67,13 @@ export interface ProgramDirectory {
 }
 
 /**
- * One hotspot-style tier per program. S and A follow the owner's anchors
- * (SPC Founder Fellowship, Z Fellows, Emergent Ventures, HF0; Founders Inc
- * Off Season, The Residency, Contrary, 1517). Houses with a small
- * published cohort, and large or archived programs, sit at B or C.
- * Kleiner Perkins stays S: it is already a small paid fellowship in the
- * directory. Afore stays A: a funded student residency in the Off Season band.
- * AGI House is S: a curated AI hacker house, above The Residency.
+ * One hotspot-style tier per program. S is a published check, a tiny
+ * cohort, or a named winner list: SPC Founder Fellowship, Z Fellows,
+ * Emergent Ventures, HF0, and Kleiner Perkins. A is a selective program
+ * without that published check: Founders Inc Off Season, AGI House,
+ * Contrary, 1517, and Afore. The Residency is B: live-in houses in several
+ * cities, and the page names no residents or acceptance rate. Houses with
+ * a small published cohort sit at B. Large or archived programs sit at C.
  */
 export const PROGRAM_DIRECTORY: Record<ProgramSignalType, ProgramDirectory> = {
   founders_inc: {
@@ -87,8 +87,8 @@ export const PROGRAM_DIRECTORY: Record<ProgramSignalType, ProgramDirectory> = {
     sourceUrl: "https://www.southparkcommons.com/",
   },
   the_residency: {
-    tier: "A",
-    rationale: "Curated live-in houses, including a 12-week San Francisco residency and Arcadia in Berkeley (14 bedrooms, a former YC office).",
+    tier: "B",
+    rationale: "Live-in houses in several cities, including a 12-week San Francisco residency and Arcadia in Berkeley (14 bedrooms, a former YC office). The page does not name residents or an acceptance rate.",
     sourceUrl: "https://www.livetheresidency.com/residencies",
   },
   z_fellows: {
@@ -132,7 +132,7 @@ export const PROGRAM_DIRECTORY: Record<ProgramSignalType, ProgramDirectory> = {
     sourceUrl: "https://jobs.ashbyhq.com/kleinerperkinsfellows",
   },
   agi_house: {
-    tier: "S",
+    tier: "A",
     rationale: "Curated San Francisco AI hacker house. Hackathons and build days draw strong AI founders and researchers. The homepage names roommates and companies without an acceptance rate.",
     sourceUrl: "https://agihouse.ai/",
   },

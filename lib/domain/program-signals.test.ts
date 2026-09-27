@@ -4,6 +4,7 @@ import { CAMPUSES } from "./campuses";
 import { hasPhrase, matchPhrases, normHotspotName, ORG_ALIAS_PHRASES } from "./hotspot-model";
 import { SOURCE_CATALOGUE } from "./source-quality";
 import { membershipDirectory, PROGRAM_DIRECTORY, PROGRAM_SIGNAL_TYPES, PROGRAM_SOURCE_ID, programTierLine, isProgramMatchStatus, isProgramSignalType } from "./program-signals";
+import { signalTierRank } from "./signal-tier";
 
 const campusIds = new Set(CAMPUSES.map((campus) => campus.id));
 const file = JSON.parse(fs.readFileSync("data/imports/founders-inc-spc.json", "utf8")) as {
@@ -133,10 +134,13 @@ assert.equal(PROGRAM_DIRECTORY.z_fellows.tier, "S");
 assert.equal(PROGRAM_DIRECTORY.emergent_ventures.tier, "S");
 assert.equal(PROGRAM_DIRECTORY.hf0.tier, "S");
 assert.equal(PROGRAM_DIRECTORY.south_park_commons.tier, "S");
-assert.equal(PROGRAM_DIRECTORY.the_residency.tier, "A");
-assert.equal(PROGRAM_DIRECTORY.agi_house.tier, "S");
+assert.equal(PROGRAM_DIRECTORY.the_residency.tier, "B");
+assert.equal(PROGRAM_DIRECTORY.agi_house.tier, "A");
+assert.ok(signalTierRank("A") < signalTierRank("B"));
 assert.match(PROGRAM_DIRECTORY.agi_house.rationale, /Curated San Francisco AI hacker house/);
+assert.match(PROGRAM_DIRECTORY.the_residency.rationale, /does not name residents or an acceptance rate/);
 assert.equal(PROGRAM_DIRECTORY.agi_house.rationale.toLowerCase().includes("owner override"), false);
+assert.equal(PROGRAM_DIRECTORY.the_residency.rationale.toLowerCase().includes("owner override"), false);
 assert.equal(PROGRAM_DIRECTORY.contrary_venture_partners.tier, "A");
 assert.equal(PROGRAM_DIRECTORY.medici_1517.tier, "A");
 assert.equal(PROGRAM_DIRECTORY.frontier_tower.tier, "C");
