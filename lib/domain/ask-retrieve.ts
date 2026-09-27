@@ -4,7 +4,7 @@
 import { CAMPUSES } from "./campuses";
 import { normHotspotName } from "./hotspot-model";
 import { directoryLabel, hotspotGroups } from "./hotspots";
-import { searchInvestors, searchOrganizations, searchPeople, searchStartups, type PeopleQuery } from "./ask-query";
+import { programInQuestion, searchInvestors, searchOrganizations, searchPeople, searchStartups, type PeopleQuery } from "./ask-query";
 import type { AskHit } from "./ask-types";
 
 const LIMIT = 30;
@@ -72,6 +72,8 @@ function organizationIn(question: string): string | undefined {
     const phrases = [group.placeKey, ...group.phrases];
     for (const phrase of phrases) {
       if (phrase.length < 6 || campusPhrases.has(phrase)) continue;
+      const tokens = phrase.split(" ").filter(Boolean);
+      if (tokens.length > 0 && tokens.every((token) => STOP.has(token))) continue;
       if (!normQ.includes(` ${phrase} `)) continue;
       if (phrase.length > bestLen) {
         best = directoryLabel(group.cards);
@@ -115,13 +117,14 @@ export function retrieveAsk(question: string): AskHit[] {
       : /\bcurrent students?\b/i.test(q)
         ? "current_student"
         : undefined;
-  const sector = /\bhealthcare\b|\bhealthtech\b|\bbiotech\b|\bmedtech\b/i.test(q)
+  const sector = /\b(?:digital[\s-]?health|health[\s-]?tech|health[\s-]?care|med[\s-]?tech|bio[\s-]?tech)\b/i.test(q)
     ? "healthcare"
     : /\bartificial intelligence\b|\bai\b/i.test(q)
       ? "AI"
       : /\bfintech\b/i.test(q)
         ? "fintech"
         : undefined;
+  const program = programInQuestion(q);
   const city = /\bnyc\b|\bnew york\b/i.test(q) ? "NYC" : /\bsan francisco\b|\bsf\b/i.test(q) ? "San Francisco" : undefined;
   const investor = /\ba16z speedrun\b/i.test(q)
     ? "a16z speedrun"
@@ -160,12 +163,12 @@ export function retrieveAsk(question: string): AskHit[] {
   }
 
   const personOnly = Boolean(standing || enrollment || organization);
-  if (!personOnly && (sector || city || investor || campus)) {
-    addHits(hits, seen, searchStartups({ campus, sector, city, investor, limit: 15 }).matches);
+  if (!personOnly && (sector || city || investor || campus || program)) {
+    addHits(hits, seen, searchStartups({ campus, sector, city, investor, program, limit: 20 }).matches);
   }
   if (investor) addHits(hits, seen, searchInvestors({ name: investor, limit: 3 }).matches);
 
-  if (!personFiltered && !clubRank) {
+  if (!personFiltered && !clubRank && !program) {
     const tokens = q
       .toLowerCase()
       .split(/[^a-z0-9]+/)

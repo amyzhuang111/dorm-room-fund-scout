@@ -24,14 +24,22 @@ import type { AskHit, AskKind, AskSource, AskToolResult } from "./ask-types";
 const DEFAULT_LIMIT = 12;
 const MAX_LIMIT = 20;
 
+const HEALTH_FAMILY = ["healthtech", "biotech", "medtech"];
+
 const SECTOR_ALIASES: Record<string, string[]> = {
   ai: ["ai_agents", "ai_infra", "vertical_ai"],
   "artificial intelligence": ["ai_agents", "ai_infra", "vertical_ai"],
-  healthcare: ["healthtech", "biotech", "medtech"],
-  health: ["healthtech", "biotech", "medtech"],
-  healthtech: ["healthtech"],
-  biotech: ["biotech"],
-  medtech: ["medtech"],
+  healthcare: HEALTH_FAMILY,
+  "health care": HEALTH_FAMILY,
+  health: HEALTH_FAMILY,
+  healthtech: HEALTH_FAMILY,
+  "health tech": HEALTH_FAMILY,
+  "digital health": HEALTH_FAMILY,
+  biotech: HEALTH_FAMILY,
+  "bio tech": HEALTH_FAMILY,
+  medtech: HEALTH_FAMILY,
+  "med tech": HEALTH_FAMILY,
+  medical: HEALTH_FAMILY,
   fintech: ["fintech"],
   climate: ["climate_energy"],
   robotics: ["robotics_hardware"],
@@ -94,6 +102,7 @@ export interface StartupQuery {
   sector?: string | null;
   investor?: string | null;
   city?: string | null;
+  program?: string | null;
   verification?: "confirmed" | "partial" | "unverified" | null;
   name?: string | null;
   limit?: number | null;
@@ -139,6 +148,7 @@ interface StartupRec {
   hqs: { text: string; url: string }[];
   campuses: string[];
   founderIds: string[];
+  programs: string[];
   sourceUrl: string | null;
 }
 
@@ -147,6 +157,7 @@ interface Index {
   people: PersonRec[];
   startups: Map<string, StartupRec>;
   founderIds: Set<string>;
+  programNames: string[];
 }
 
 let cache: Index | null = null;
@@ -275,12 +286,93 @@ function loadIndex(): Index {
       hqs: [],
       campuses: [],
       founderIds: [],
+      programs: [],
       sourceUrl: website,
     });
   }
 
+  const programByCompany = new Map<string, string[]>();
+  const rememberProgram = (companyId: string, programName: string) => {
+    const name = programName.replace(/\s+/g, " ").trim();
+    if (!companyId || name.length < 3) return;
+    const list = programByCompany.get(companyId) ?? [];
+    if (!list.includes(name)) list.push(name);
+    programByCompany.set(companyId, list);
+  };
+  const memberships = db
+    .prepare(
+      `SELECT co.id AS company_id, prog.name AS program_name
+       FROM relationships r
+       JOIN projects prog ON prog.id = r.target_entity_id
+       JOIN projects co ON co.id = r.source_entity_id AND co.kind = 'company'
+       WHERE r.relationship_type = 'part_of_program'`
+    )
+    .all() as { company_id: string; program_name: string }[];
+  for (const row of memberships) rememberProgram(row.company_id, row.program_name);
+  const sourcedPrograms = db
+    .prepare(
+      `SELECT DISTINCT p.id AS company_id, s.name AS program_name
+       FROM claims c
+       JOIN sources s ON s.id = c.source_id
+       JOIN projects p ON p.id = c.entity_id AND p.kind = 'company'
+       WHERE c.entity_type IN ('project', 'company')
+         AND (
+           lower(s.name) LIKE '%portfolio%'
+           OR lower(s.name) LIKE '%accelerator%'
+           OR lower(s.name) LIKE '%incubator%'
+           OR lower(s.name) LIKE '%health-tech%'
+           OR lower(s.name) LIKE '%health tech%'
+         )`
+    )
+    .all() as { company_id: string; program_name: string }[];
+  for (const row of sourcedPrograms) rememberProgram(row.company_id, row.program_name);
+
+  const missingIds = [...programByCompany.keys()].filter((id) => !startups.has(id));
+  if (missingIds.length) {
+    const extra = db
+      .prepare(
+        `SELECT id, name, description, website_url, primary_link, ${projectVerify}
+         FROM projects
+         WHERE kind = 'company' AND id IN (${missingIds.map(() => "?").join(",")})`
+      )
+      .all(...missingIds) as {
+      id: string;
+      name: string;
+      description: string | null;
+      website_url: string | null;
+      primary_link: string | null;
+      verification_status: string | null;
+    }[];
+    for (const row of extra) {
+      const website = row.website_url?.startsWith("http") ? row.website_url : row.primary_link?.startsWith("http") ? row.primary_link : null;
+      startups.set(row.id, {
+        id: row.id,
+        name: row.name,
+        description: row.description,
+        website,
+        verification: row.verification_status,
+        sectors: [],
+        investors: [],
+        hqs: [],
+        campuses: [],
+        founderIds: [],
+        programs: [],
+        sourceUrl: website,
+      });
+    }
+  }
+  for (const [companyId, names] of programByCompany) {
+    const startup = startups.get(companyId);
+    if (startup) startup.programs = names;
+  }
+
   const tags = db.prepare(`SELECT project_id, tag FROM project_sector_tags`).all() as { project_id: string; tag: string }[];
   for (const row of tags) startups.get(row.project_id)?.sectors.push(row.tag);
+  for (const startup of startups.values()) {
+    if (startup.programs.some(programImpliesHealth) && !startup.sectors.some((tag) => HEALTH_FAMILY.includes(tag))) {
+      startup.sectors.push("healthtech");
+    }
+  }
 
   const facts = db
     .prepare(
@@ -328,8 +420,35 @@ function loadIndex(): Index {
     if (person.founderStatus === "founder") founderIds.add(person.id);
   }
 
-  cache = { stamp: current, people: [...personById.values()], startups, founderIds };
+  const programNames = [...new Set([...programByCompany.values()].flat())];
+  cache = { stamp: current, people: [...personById.values()], startups, founderIds, programNames };
   return cache;
+}
+
+function programImpliesHealth(name: string): boolean {
+  return /\b(?:digital[\s-]?health|health[\s-]?tech|health[\s-]?care|med[\s-]?tech|bio[\s-]?tech|medical)\b/i.test(name);
+}
+
+function programNeedles(name: string): string[] {
+  const norm = normHotspotName(name);
+  const stripped = norm.replace(/\b(?:accelerator|portfolio|program|programme|cohort|companies|company)\b/g, " ").replace(/\s+/g, " ").trim();
+  return [...new Set([norm, stripped].filter((phrase) => phrase.length >= 8))];
+}
+
+export function programInQuestion(question: string): string | undefined {
+  const normQ = ` ${normHotspotName(question)} `;
+  let best = "";
+  let bestLen = 0;
+  for (const name of loadIndex().programNames) {
+    for (const needle of programNeedles(name)) {
+      if (!normQ.includes(` ${needle} `)) continue;
+      if (needle.length > bestLen) {
+        best = name;
+        bestLen = needle.length;
+      }
+    }
+  }
+  return best || undefined;
 }
 
 function clampLimit(limit: number | null | undefined): number {
@@ -355,10 +474,9 @@ function resolveCampuses(input: string | null | undefined): string[] | null {
 function resolveSectors(input: string | null | undefined): string[] | null {
   const query = text(input)?.toLowerCase();
   if (!query) return null;
-  if (SECTOR_ALIASES[query]) return SECTOR_ALIASES[query];
-  const compact = query.replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
-  if (SECTOR_ALIASES[compact]) return SECTOR_ALIASES[compact];
-  return [];
+  const spaced = query.replace(/[_-]+/g, " ").replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim();
+  const compact = spaced.replace(/ /g, "");
+  return SECTOR_ALIASES[query] ?? SECTOR_ALIASES[spaced] ?? SECTOR_ALIASES[compact] ?? (compact === "digitalhealth" ? HEALTH_FAMILY : []);
 }
 
 function cityNeedles(input: string | null | undefined): string[] | null {
@@ -539,6 +657,29 @@ export function searchPeople(query: PeopleQuery): AskToolResult {
   return { count: matches.length, matches };
 }
 
+function startupMatchesProgram(startup: StartupRec, query: string): boolean {
+  const needle = normHotspotName(query);
+  if (needle.length < 4) return false;
+  return startup.programs.some((name) => {
+    const norm = normHotspotName(name);
+    if (norm.includes(needle) || needle.includes(norm)) return true;
+    return programNeedles(name).some((alias) => alias === needle || needle.includes(alias));
+  });
+}
+
+function mixHealthStartups(rows: StartupRec[], limit: number): StartupRec[] {
+  const programmed = rows.filter((startup) => startup.programs.some(programImpliesHealth)).sort((a, b) => a.name.localeCompare(b.name));
+  const rest = rows.filter((startup) => !startup.programs.some(programImpliesHealth)).sort((a, b) => a.name.localeCompare(b.name));
+  const mixed: StartupRec[] = [];
+  const count = Math.max(programmed.length, rest.length);
+  for (let index = 0; index < count && mixed.length < limit; index += 1) {
+    if (programmed[index]) mixed.push(programmed[index]);
+    if (mixed.length >= limit) break;
+    if (rest[index]) mixed.push(rest[index]);
+  }
+  return mixed;
+}
+
 export function searchStartups(query: StartupQuery): AskToolResult {
   const index = loadIndex();
   const campusIds = resolveCampuses(query.campus);
@@ -549,19 +690,31 @@ export function searchStartups(query: StartupQuery): AskToolResult {
   const needles = cityNeedles(query.city);
   const name = text(query.name)?.toLowerCase();
   const verification = text(query.verification);
-  const matches: AskHit[] = [];
+  const program = text(query.program);
+  const rows: StartupRec[] = [];
   for (const startup of index.startups.values()) {
     if (name && !startup.name.toLowerCase().includes(name)) continue;
     if (campusIds && !startup.campuses.some((id) => campusIds.includes(id))) continue;
     if (sectors && !startup.sectors.some((tag) => sectors.includes(tag))) continue;
+    if (program && !startupMatchesProgram(startup, program)) continue;
     if (investorQuery && !startup.investors.some((investor) => investorMatches(investor.name, investorQuery))) continue;
     if (needles && !startup.hqs.some((hq) => hqMatches(hq.text, needles))) continue;
     if (verification && startup.verification !== verification) continue;
-    matches.push(startupHit(startup, investorQuery));
+    rows.push(startup);
   }
-  matches.sort((a, b) => a.name.localeCompare(b.name));
-  const limited = matches.slice(0, clampLimit(query.limit));
-  return { count: limited.length, matches: limited };
+  const limit = clampLimit(query.limit);
+  const healthQuery = Boolean(sectors?.some((tag) => HEALTH_FAMILY.includes(tag)));
+  const ordered = healthQuery ? mixHealthStartups(rows, limit) : rows.sort((a, b) => a.name.localeCompare(b.name)).slice(0, limit);
+  const matches = ordered.map((startup) => startupHit(startup, investorQuery));
+  return { count: matches.length, matches };
+}
+
+function shortProgram(name: string): string {
+  return name
+    .replace(/\s*\([^)]*\)\s*/g, " ")
+    .replace(/\s+(?:accelerator|portfolio|program|programme)\b/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function startupHit(startup: StartupRec, investorQuery?: string): AskHit {
@@ -570,6 +723,7 @@ function startupHit(startup: StartupRec, investorQuery?: string): AskHit {
   const detail = [
     campusCaption(startup.campuses),
     startup.sectors.slice(0, 2).map((tag) => sectorLabel(tag)).join(", ") || null,
+    startup.programs.slice(0, 2).map(shortProgram).filter(Boolean).join(", ") || null,
     startup.hqs[0]?.text ?? null,
     investors.map((investor) => investor.name).join(", ") || null,
     startup.verification,

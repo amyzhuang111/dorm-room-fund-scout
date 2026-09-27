@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   const result = await answerWithGemini(question);
   if (!result.ok) {
     const status = result.reason === "quota" ? 429 : result.reason === "no_key" ? 503 : 502;
-    return Response.json({ error: result.reason, matches: result.matches }, { status });
+    return Response.json({ error: result.reason, detail: result.detail ?? null, matches: result.matches }, { status });
   }
   return Response.json({ engine: result.engine, answer: result.answer, matches: result.matches });
 }
