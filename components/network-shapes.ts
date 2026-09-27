@@ -5,16 +5,18 @@ const LABEL_FONT = "500 12px Satoshi, Arial, sans-serif";
 
 export const drawHaloLabel: NodeLabelDrawingFunction = (context, data, settings) => {
   if (!data.label) return;
-  const size = settings.labelSize;
-  const text = data.label.length > 28 ? `${data.label.slice(0, 26)}…` : data.label;
+  const anchor = Boolean((data as { anchor?: boolean }).anchor);
+  const size = anchor ? 12 : settings.labelSize;
+  const limit = anchor ? 22 : 28;
+  const text = data.label.length > limit ? `${data.label.slice(0, limit - 1)}…` : data.label;
   context.font = `${settings.labelWeight} ${size}px ${settings.labelFont}`;
   context.textAlign = "center";
-  context.textBaseline = "top";
+  context.textBaseline = anchor ? "bottom" : "top";
   context.lineWidth = 3;
   context.strokeStyle = "#ffffff";
   context.lineJoin = "round";
   const x = data.x;
-  const y = data.y + data.size + 2;
+  const y = anchor ? data.y - data.size - 2 : data.y + data.size + 2;
   context.strokeText(text, x, y);
   context.fillStyle = "#141414";
   context.fillText(text, x, y);

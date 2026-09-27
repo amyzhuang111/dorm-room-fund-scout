@@ -510,6 +510,11 @@ export function NetworkMapApp() {
           <LegendItem shape="circle" color={NODE_FILL.campus} label="Campus" />
           <LegendItem shape="hex" color={NODE_FILL.program} label="Club" />
           <LegendItem shape="triangle" color={NODE_FILL.organization} label="Organization" />
+          <span className="text-neutral-600">Color follows campus</span>
+          <span className="inline-flex items-center gap-1 text-neutral-600">
+            <span className="inline-block h-px w-3.5 bg-[#b06018]" />
+            Cross-campus
+          </span>
         </div>
       </div>
 
