@@ -3,12 +3,15 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
-import { cardsFromRows, hasPhrase, matchPhrases, normHotspotName, parseCsv, samePlace } from "./hotspot-model";
+import { cardsFromRows, hasPhrase, matchPhrases, normHotspotName, ORG_ALIAS_PHRASES, parseCsv, samePlace } from "./hotspot-model";
 
 assert.equal(samePlace("Jerome Fisher M&T", "Jerome Fisher Management & Technology"), true);
 assert.equal(samePlace("M&T", "Jerome Fisher M&T"), true);
 assert.equal(samePlace("Management & Technology", "Jerome Fisher M&T"), true);
 assert.equal(samePlace("Penn Labs", "Stanford Labs"), false);
+assert.equal(samePlace("Mayfield", "Mayfield Fellows Program"), true);
+assert.equal(samePlace("Human Capital", "Human Capital Fellowship"), false);
+assert.equal(samePlace("Prod", "Prod fellowship (prod.so)"), false);
 
 const mayfield = matchPhrases("Mayfield Fellows Program (STVP)");
 assert.ok(mayfield.includes("mayfield"));
@@ -36,5 +39,21 @@ assert.equal(cards.find((card) => card.place === "Jerome Fisher M&T")?.tier, "A"
 assert.equal(cards.find((card) => card.place.includes("SkyDeck"))?.tier, "C");
 assert.equal(cards.find((card) => card.place === "ACM at UCLA")?.tier, "D");
 assert.ok(cards.some((card) => card.tier === "D" && card.howToGetIn && card.url.startsWith("http")));
+assert.equal(cards.some((card) => /pennapps organising team/i.test(card.place)), false);
+assert.equal(cards.find((card) => card.place === "Pear Fellows")?.tier, "A");
+assert.equal(cards.find((card) => card.place === "Pear Garage")?.tier, "B");
+assert.ok(cards.find((card) => card.place === "Pear Garage")?.howToGetIn.includes("engineering students"));
+assert.equal(cards.find((card) => card.place === "Human Capital Fellowship")?.tier, "A");
+assert.equal(cards.find((card) => card.place.startsWith("Prod fellowship"))?.tier, "A");
+assert.ok(cards.find((card) => card.place.startsWith("Prod fellowship"))?.url.startsWith("https://prod.so"));
+
+const humanCapital = matchPhrases("Human Capital Fellowship");
+assert.equal(humanCapital.includes("human capital"), false);
+assert.equal(humanCapital.includes("human capital fellowship"), false);
+const prod = matchPhrases("Prod fellowship (prod.so)");
+assert.ok(prod.includes("prod fellowship"));
+assert.equal(prod.includes("prod"), false);
+assert.ok(ORG_ALIAS_PHRASES["human capital fellowship"]?.includes("delta fellowship"));
+assert.ok(ORG_ALIAS_PHRASES["human capital fellowship"]?.includes("hc fellowship"));
 
 console.log("hotspot-model tests ok");
