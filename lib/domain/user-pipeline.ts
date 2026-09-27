@@ -705,6 +705,7 @@ export function startupToFounders(startup: UserStartup): (FounderRow & { userAdd
       promoted: true,
       promotionReasonLabel: "User-added",
       founderSignal: { founderSignal: null, coverage: 0, dimensions: [] },
+      precollegeSignals: [],
       userAdded: true,
       verificationUrl: startup.verificationUrl,
     };

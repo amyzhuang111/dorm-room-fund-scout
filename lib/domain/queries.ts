@@ -16,6 +16,7 @@ import { relatedHotspotsForPerson, relatedHotspotsForProject } from "./hotspots"
 import { assembleProfileLinks, type OtherSourceLink, type ProfileIconLink } from "./profile-links";
 import { assembleCompanyProfile, type CompanyFactRecord, type CompanyProfile } from "./company-profile";
 import { matchCandidate } from "./candidate-filter";
+import { bestPrecollegeSignals, isPrecollegeSignalType, type PrecollegeSignalView } from "./precollege";
 
 export type CoverageState = "not_scanned" | "partial" | "up_to_date" | "needs_attention";
 
@@ -1037,6 +1038,7 @@ export interface FounderRow {
   signalTierBasis: string | null;
   founderStatus: string | null;
   potentialSignal: string | null;
+  precollegeSignals: PrecollegeSignalView[];
   signalEvidence: { excerpt: string; sourceUrl: string | null; sourceName: string | null; unverified: boolean } | null;
   linkedCompany: { id: string; name: string } | null; // a real kind='company' project they're linked to, if any
   possibleCompany: { name: string; status: "unreviewed" | "confirmed" } | null; // §65-67: a bio-derived hint, never auto-promoted — null once linkedCompany is set
@@ -1132,6 +1134,37 @@ function cachedFounders(): { promoted: FounderRow[]; potential: FounderRow[]; al
 
 function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } {
   const db = getDb();
+  const precollegeByPerson = new Map<string, PrecollegeSignalView[]>();
+  for (const row of db
+    .prepare(
+      `SELECT person_id, signal_type, tier, label, year, match_status, source_url
+       FROM precollege_signals
+       WHERE source_url != '' AND label != ''`
+    )
+    .all() as {
+      person_id: string;
+      signal_type: string;
+      tier: number;
+      label: string;
+      year: number | null;
+      match_status: string;
+      source_url: string;
+    }[]) {
+    if (!isPrecollegeSignalType(row.signal_type)) continue;
+    if (row.match_status !== "confirmed" && row.match_status !== "likely") continue;
+    if (row.tier !== 1 && row.tier !== 2) continue;
+    const list = precollegeByPerson.get(row.person_id) ?? [];
+    list.push({
+      signalType: row.signal_type,
+      tier: row.tier,
+      label: row.label,
+      year: row.year,
+      matchStatus: row.match_status,
+      sourceUrl: row.source_url,
+    });
+    precollegeByPerson.set(row.person_id, list);
+  }
+
   const notesByPerson = new Map<string, string[]>();
   for (const row of db
     .prepare(`SELECT entity_id, body FROM notes WHERE entity_type = 'person' AND trim(body) != '' ORDER BY created_at`)
@@ -1223,6 +1256,7 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       signalTierBasis: r.signal_tier_basis,
       founderStatus: r.founder_status,
       potentialSignal: r.potential_signal,
+      precollegeSignals: bestPrecollegeSignals(precollegeByPerson.get(r.id) ?? []),
       verificationStatus: r.verification_status,
       lastVerifiedAt: r.last_verified_at,
       verificationNote: r.verification_note,
