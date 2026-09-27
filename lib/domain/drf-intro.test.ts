@@ -19,8 +19,9 @@ for (const row of records) {
 }
 assert.equal(records.find((row) => row.id === "dra_lauren_reeder")?.investorId, "inv_sequoia_capital");
 assert.equal(records.find((row) => row.id === "dra_lauren_reeder")?.linkedinConfidence, "confirmed");
-assert.equal(records.filter((row) => row.linkedinConfidence === "confirmed").length, 78);
-assert.equal(records.filter((row) => row.linkedinUrl).length, 176);
+assert.equal(records.filter((row) => row.linkedinConfidence === "confirmed").length, 127);
+assert.equal(records.filter((row) => row.linkedinConfidence === "likely").length, 122);
+assert.equal(records.filter((row) => row.linkedinUrl).length, 249);
 for (const row of records) {
   if (row.linkedinUrl) assert.ok(row.linkedinConfidence === "confirmed" || row.linkedinConfidence === "likely", row.id);
   else assert.equal(row.linkedinConfidence, null, row.id);
