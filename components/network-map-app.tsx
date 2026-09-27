@@ -38,10 +38,9 @@ const EDGE_TYPES: { id: MapEdgeType; label: string }[] = [
 ];
 
 const ENROLL: { id: string; label: string }[] = [
-  { id: "current_student", label: "Current students" },
-  { id: "recent_grad", label: "Recent grads" },
+  { id: "current_student", label: "Current student" },
+  { id: "recent_grad", label: "Recent grad" },
   { id: "older_alumni", label: "Alumni" },
-  { id: "unknown", label: "Unknown" },
 ];
 
 type PeopleMode = "all" | "founder" | "potential";
@@ -59,6 +58,12 @@ interface Filters {
   yearTo: number | null;
   orgTier: OrgTierMode;
   orgSections: HotspotSectionId[];
+}
+
+function enrollCaption(status: string | null, basis: MapNode["enrollBasis"]): string | null {
+  const label = status === "current_student" ? "Current student" : status === "recent_grad" ? "Recent grad" : status === "older_alumni" ? "Alumni" : null;
+  if (!label) return null;
+  return basis === "inferred" ? `${label} est.` : label;
 }
 
 function campusesOf(node: MapNode): string[] {
@@ -406,6 +411,7 @@ export function NetworkMapApp() {
                     onChange={() => setFilters({ ...filters, enroll: toggle(filters.enroll, item.id) })}
                   />
                 ))}
+                <p className="pt-1 text-[10px] leading-snug text-neutral-600">est. means that bucket was inferred.</p>
               </FilterGroup>
               <FilterGroup title="Signal tier">
                 {[...new Set(graph.nodes.map((node) => node.tier ?? "Untiered"))].sort().map((tier) => (
@@ -485,7 +491,7 @@ export function NetworkMapApp() {
           <LegendItem shape="circle" color="#171717" label="Campus" />
           <LegendItem shape="hex" color="#171717" label="Club / lab" />
           <LegendItem shape="triangle" color={NODE_FILL.organization} label="Organization" />
-          <span className="text-neutral-600">Color = campus · triangle sized by tier · line = link · amber = cross-campus</span>
+          <span className="text-neutral-600">Color = campus · triangle sized by tier · line = link · amber = cross-campus · est. = inferred enrollment</span>
         </div>
       </div>
 
@@ -501,6 +507,7 @@ export function NetworkMapApp() {
               <p className="mt-0.5 text-xs text-neutral-700">
                 {[
                   selectedNode.year ? `Class of ${selectedNode.year}` : null,
+                  enrollCaption(selectedNode.enroll, selectedNode.enrollBasis),
                   selectedNode.orgTier ? tierBandLabel(selectedNode.orgTier) : null,
                   selectedNode.sector,
                   selectedNode.stage,
@@ -581,7 +588,7 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
     if (node.type !== "person") continue;
     const campusHit = campusAll || campusesOf(node).some((id) => filters.campuses.includes(id));
     const tierHit = tierAll || filters.tiers.includes(node.tier ?? "Untiered");
-    const enrollHit = enrollAll || filters.enroll.includes(node.enroll ?? "unknown");
+    const enrollHit = enrollAll || (node.enroll != null && filters.enroll.includes(node.enroll));
     const sectorHit = sectorAll || sectorPeople.has(node.id);
     if (
       filters.nodeTypes.includes("person") &&

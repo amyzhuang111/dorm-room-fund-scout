@@ -46,10 +46,16 @@ function roleLabel(role: string | null): string | null {
   return role.replaceAll("_", " ").replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
+function enrollmentLine(status: string | null, label: string | null, basis: string | null): string | null {
+  const badge = enrollmentBadge(status, label);
+  if (badge === "Unknown") return null;
+  return basis === "inferred" ? `${badge} est.` : badge;
+}
+
 function personHref(id: string, potential: boolean): string {
   const params = new URLSearchParams({
     founder: id,
-    enroll: "current_student,recent_grad,older_alumni,unknown",
+    enroll: "current_student,recent_grad,older_alumni",
   });
   if (potential) params.set("pool", "potential");
   return `/founder/discover?${params.toString()}`;
@@ -114,10 +120,13 @@ export function getNetworkFocus(id: string): NetworkFocus | null {
   if (id.startsWith("hsn_")) return hotspotFocus(id);
   if (id.startsWith("univ_")) return campusFocus(db, id);
   if (id.startsWith("inv_")) return investorFocus(db, id);
+  const basisSql = (db.prepare(`PRAGMA table_info(people)`).all() as { name: string }[]).some((column) => column.name === "enrollment_basis")
+    ? "enrollment_basis"
+    : "NULL AS enrollment_basis";
   const person = db
-    .prepare(`SELECT id, name, aliases_json, founder_status, enrollment_status, enrollment_label FROM people WHERE id = ?`)
+    .prepare(`SELECT id, name, aliases_json, founder_status, enrollment_status, enrollment_label, ${basisSql} FROM people WHERE id = ?`)
     .get(id) as
-    | { id: string; name: string; aliases_json: string; founder_status: string | null; enrollment_status: string | null; enrollment_label: string | null }
+    | { id: string; name: string; aliases_json: string; founder_status: string | null; enrollment_status: string | null; enrollment_label: string | null; enrollment_basis: string | null }
     | undefined;
   if (person) return personFocus(db, person);
   const project = db
@@ -141,7 +150,7 @@ export function getNetworkFocus(id: string): NetworkFocus | null {
 
 function personFocus(
   db: ReturnType<typeof getDb>,
-  person: { id: string; name: string; aliases_json: string; founder_status: string | null; enrollment_status: string | null; enrollment_label: string | null }
+  person: { id: string; name: string; aliases_json: string; founder_status: string | null; enrollment_status: string | null; enrollment_label: string | null; enrollment_basis: string | null }
 ): NetworkFocus {
   const school = db
     .prepare(
@@ -211,7 +220,7 @@ function personFocus(
     id: person.id,
     kind: "person",
     name: person.name,
-    subtitle: [roleLabel(founderRole?.role ?? roles[0]?.role ?? null), school?.name, enrollmentBadge(person.enrollment_status, person.enrollment_label)]
+    subtitle: [roleLabel(founderRole?.role ?? roles[0]?.role ?? null), school?.name, enrollmentLine(person.enrollment_status, person.enrollment_label, person.enrollment_basis)]
       .filter(Boolean)
       .join(" · "),
     href: personHref(person.id, person.founder_status === "potential"),

@@ -84,6 +84,8 @@ export function tierBandLabel(tier: HotspotTier): string {
  */
 export const ORG_ALIAS_PHRASES: Record<string, readonly string[]> = {
   "jerome fisher m and t": ["jerome fisher management and technology", "management and technology", "m and t"],
+  // Stored affiliation role from the YC directory ingest: "YC founder; page names {campus}".
+  "y combinator": ["yc founder"],
 };
 
 const MT_CORES = new Set([

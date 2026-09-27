@@ -166,21 +166,26 @@ function buildLinks(cards: HotspotCard[]): Omit<Index, "stamp" | "cards" | "appe
 
   assignMatchPhrases(groups);
 
-  const claims = db.prepare(`SELECT entity_type, entity_id, excerpt, source_id FROM claims`).all() as {
+  const claims = db.prepare(`SELECT entity_type, entity_id, excerpt, value_json, claim_type, source_id FROM claims`).all() as {
     entity_type: string;
     entity_id: string;
     excerpt: string;
+    value_json: string | null;
+    claim_type: string;
     source_id: string | null;
   }[];
   const sources = db.prepare(`SELECT id, name FROM sources`).all() as { id: string; name: string }[];
   const sourceNorm = new Map(sources.map((source) => [source.id, normHotspotName(source.name)]));
-  const claimNorms: { entity_type: string; entity_id: string; source_id: string | null; norm: string; sourceNorm: string }[] = claims.map((claim) => ({
-    entity_type: claim.entity_type,
-    entity_id: claim.entity_id,
-    source_id: claim.source_id,
-    norm: normHotspotName(claim.excerpt || ""),
-    sourceNorm: claim.source_id ? (sourceNorm.get(claim.source_id) ?? "") : "",
-  }));
+  const claimNorms: { entity_type: string; entity_id: string; source_id: string | null; norm: string; sourceNorm: string }[] = claims.map((claim) => {
+    const structured = claim.claim_type === "program_membership" || claim.claim_type === "accelerator_founder" ? claim.value_json ?? "" : "";
+    return {
+      entity_type: claim.entity_type,
+      entity_id: claim.entity_id,
+      source_id: claim.source_id,
+      norm: normHotspotName(`${claim.excerpt || ""} ${structured}`),
+      sourceNorm: claim.source_id ? (sourceNorm.get(claim.source_id) ?? "") : "",
+    };
+  });
   for (const row of db.prepare(`SELECT id, potential_signal FROM people WHERE potential_signal IS NOT NULL AND length(trim(potential_signal)) >= 4`).all() as {
     id: string;
     potential_signal: string;
@@ -285,6 +290,25 @@ function buildLinks(cards: HotspotCard[]): Omit<Index, "stamp" | "cards" | "appe
         addPerson(role.person_id, group.placeKey);
         if (role.kind === "company") addProject(role.id, group.placeKey);
       }
+    }
+  }
+
+  const programLinks = db
+    .prepare(
+      `SELECT r.source_entity_id AS company_id, p.name AS program_name
+       FROM relationships r
+       JOIN projects p ON p.id = r.target_entity_id AND p.kind = 'project'
+       WHERE r.relationship_type = 'part_of_program'
+         AND r.source_entity_type = 'project'
+         AND r.target_entity_type = 'project'`
+    )
+    .all() as { company_id: string; program_name: string }[];
+  for (const link of programLinks) {
+    const named = normPlace(link.program_name);
+    for (const group of groups) {
+      const norm = groupNorm.get(group.placeKey);
+      if (!norm || !placesMatch(named, norm)) continue;
+      addProject(link.company_id, group.placeKey);
     }
   }
 

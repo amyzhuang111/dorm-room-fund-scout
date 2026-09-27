@@ -31,7 +31,9 @@ export interface MapNode {
   tier: string | null;
   stage: string | null;
   enroll: string | null;
-  /** Graduation year when a sourced class year exists. Null stays unknown. */
+  /** verified | inferred. Inferred buckets show as est. on the map. */
+  enrollBasis?: "verified" | "inferred" | null;
+  /** Graduation year when a sourced class year exists. */
   year: number | null;
   /** True when this person has a sourced founder role on a startup in the map. */
   founder: boolean;
@@ -95,7 +97,7 @@ const LAYOUT_WEIGHT: Record<MapEdgeType, number> = {
   at_campus: 0,
 };
 
-const LAYOUT_VERSION = "5";
+const LAYOUT_VERSION = "6";
 
 let cache: { stamp: string; graph: MapGraph } | null = null;
 
@@ -156,9 +158,11 @@ function assembleNetworkMap(): MapGraph {
   const universities = db.prepare(`SELECT id, name FROM universities`).all() as { id: string; name: string }[];
   const uniIds = new Set(universities.map((row) => row.id));
 
+  const peopleColumns = new Set((db.prepare(`PRAGMA table_info(people)`).all() as { name: string }[]).map((column) => column.name));
+  const basisSql = peopleColumns.has("enrollment_basis") ? "enrollment_basis" : "NULL AS enrollment_basis";
   const people = db
     .prepare(
-      `SELECT id, name, aliases_json, founder_status, enrollment_status, enrollment_label, enrollment_grad_year, signal_tier FROM people
+      `SELECT id, name, aliases_json, founder_status, enrollment_status, enrollment_label, enrollment_grad_year, signal_tier, ${basisSql} FROM people
        WHERE id IN (SELECT person_id FROM affiliations)
           OR id IN (
             SELECT ppr.person_id FROM person_project_roles ppr
@@ -175,6 +179,7 @@ function assembleNetworkMap(): MapGraph {
     enrollment_label: string | null;
     enrollment_grad_year: number | null;
     signal_tier: string | null;
+    enrollment_basis: string | null;
   }[];
   const personIds = new Set(people.map((person) => person.id));
   const linkedinByPerson = new Map<string, { url: string; status: "confirmed" | "unverified" }>();
@@ -518,7 +523,8 @@ function assembleNetworkMap(): MapGraph {
       sector: null,
       tier: person.signal_tier,
       stage: null,
-      enroll: person.enrollment_status ?? "unknown",
+      enroll: person.enrollment_status === "current_student" || person.enrollment_status === "recent_grad" || person.enrollment_status === "older_alumni" ? person.enrollment_status : null,
+      enrollBasis: person.enrollment_basis === "inferred" || person.enrollment_basis === "verified" ? person.enrollment_basis : null,
       year: classYear(person.enrollment_grad_year, person.enrollment_label),
       founder: founderIds.has(person.id),
       potential: person.founder_status === "potential",
