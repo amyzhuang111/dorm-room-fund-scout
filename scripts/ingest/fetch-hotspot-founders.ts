@@ -1,7 +1,7 @@
 // Public rosters for campus hotspot organizations, plus YC and a16z Speedrun
 // pages that name a hotspot campus. Penn and Berkeley tier-A/B directories that
 // are already in the database (Venture Lab, E@B, SkyDeck, Penn Labs, GRASP)
-// are not re-scraped. New rows are Mayfield Fellows (Stanford, tier A),
+// are not re-scraped. New rows are Mayfield Fellows (Stanford STVP, directory tier S),
 // MIT delta v cohorts from 2023 onward plus the 2026 cohort (tier A),
 // the StartX community page (Stanford, tier B), YC company pages from
 // 2023–2026 whose text ties a founder to a hotspot campus, and Speedrun
@@ -442,7 +442,7 @@ async function ingestMayfield(db: Database.Database, indexes: Indexes, retrieved
         sourceId,
         url,
         `The Mayfield Fellows Program alumni page lists ${name} in the ${cohort.year} cohort. The program page says it admits active Stanford undergraduates.`,
-        { name, cohort: cohort.year, org: "Mayfield Fellows Program", tier: "A", campus: "Stanford" },
+        { name, cohort: cohort.year, org: "Mayfield Fellows Program", tier: "S", campus: "Stanford" },
         "proj_mayfield_fellows",
         "member",
         "potential",
@@ -450,7 +450,7 @@ async function ingestMayfield(db: Database.Database, indexes: Indexes, retrieved
         null,
         retrievedAt,
         "Mayfield Fellows Program",
-        "A"
+        "S"
       );
       if (result.created) created++;
     }

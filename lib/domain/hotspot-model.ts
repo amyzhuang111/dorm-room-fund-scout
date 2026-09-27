@@ -282,7 +282,8 @@ export function normPlace(name: string): NormPlace {
 
 // A shorter name that is a different organization. "Human Capital" is a Cal
 // Hacks project. "Prod" is too generic to absorb "Prod fellowship".
-const PREFIX_MATCH_BLOCKED = new Set(["human capital", "prod"]);
+// "Founders" is the UIUC club (foundersillinois.org), not Founders Inc (f.inc).
+const PREFIX_MATCH_BLOCKED = new Set(["human capital", "prod", "founders"]);
 
 export function placesMatch(a: NormPlace, b: NormPlace): boolean {
   if (!a.core || !b.core) return false;

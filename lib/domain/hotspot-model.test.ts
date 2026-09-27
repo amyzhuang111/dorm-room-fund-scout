@@ -13,6 +13,8 @@ assert.equal(samePlace("M&T", "Jerome Fisher M&T"), true);
 assert.equal(samePlace("Management & Technology", "Jerome Fisher M&T"), true);
 assert.equal(samePlace("Penn Labs", "Stanford Labs"), false);
 assert.equal(samePlace("Mayfield", "Mayfield Fellows Program"), true);
+assert.equal(samePlace("Founders (Illinois Entrepreneurs)", "Founders Inc"), false);
+assert.equal(samePlace("Founders", "Founders Inc"), false);
 assert.equal(samePlace("Human Capital", "Human Capital Fellowship"), false);
 assert.equal(samePlace("Prod", "Prod fellowship (prod.so)"), false);
 
