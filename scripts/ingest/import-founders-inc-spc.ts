@@ -20,7 +20,15 @@ import path from "node:path";
 import type Database from "better-sqlite3";
 import { getDb, newId, nowIso } from "../../lib/db/client";
 import { linkedinPersonSlug, normalizeCompanyName, normalizePersonName } from "../../lib/domain/dedupe";
-import { isProgramMatchStatus, isProgramSignalType, type ProgramSignalType } from "../../lib/domain/program-signals";
+import { isProgramMatchStatus } from "../../lib/domain/program-signals";
+
+// Kept local so new program badges do not have to be listed in this importer.
+const FOUNDERS_PROGRAMS = ["founders_inc", "south_park_commons"] as const;
+type FoundersProgram = (typeof FOUNDERS_PROGRAMS)[number];
+
+function isFoundersProgram(value: string): value is FoundersProgram {
+  return (FOUNDERS_PROGRAMS as readonly string[]).includes(value);
+}
 
 interface CompanyRecord {
   name: string;
@@ -32,7 +40,7 @@ interface CompanyRecord {
 
 interface PersonRecord {
   name: string;
-  program: ProgramSignalType;
+  program: FoundersProgram;
   matchStatus: "confirmed" | "likely";
   label: string;
   year: number | null;
@@ -63,7 +71,7 @@ interface CompanyRow {
 }
 
 const PROGRAMS: Record<
-  ProgramSignalType,
+  FoundersProgram,
   { sourceId: string; sourceName: string; sourceUrl: string; projectId: string; projectName: string; rationale: string }
 > = {
   founders_inc: {
@@ -119,7 +127,7 @@ function linkedinAlias(url: string | null): string | null {
   return `linkedin:${url}`;
 }
 
-function ensureSource(db: Database.Database, program: ProgramSignalType, retrievedAt: string) {
+function ensureSource(db: Database.Database, program: FoundersProgram, retrievedAt: string) {
   const spec = PROGRAMS[program];
   const dimensions = JSON.stringify({
     campusPurity: "low",
@@ -146,7 +154,7 @@ function ensureSource(db: Database.Database, program: ProgramSignalType, retriev
   ).run(dimensions, spec.rationale, spec.sourceId);
 }
 
-function ensureProgramProject(db: Database.Database, program: ProgramSignalType) {
+function ensureProgramProject(db: Database.Database, program: FoundersProgram) {
   const spec = PROGRAMS[program];
   const existing = db.prepare(`SELECT id FROM projects WHERE id=?`).get(spec.projectId) as { id: string } | undefined;
   if (existing) return;
@@ -493,7 +501,7 @@ function ensurePartOfProgram(db: Database.Database, companyId: string, programPr
   ).run(newId("rel"), companyId, programProjectId, JSON.stringify([claimId]));
 }
 
-function ensureCampusLink(db: Database.Database, program: ProgramSignalType, universityId: string, excerpt: string, sourceUrl: string, retrievedAt: string) {
+function ensureCampusLink(db: Database.Database, program: FoundersProgram, universityId: string, excerpt: string, sourceUrl: string, retrievedAt: string) {
   const spec = PROGRAMS[program];
   const existing = db
     .prepare(
@@ -528,7 +536,7 @@ function ensureCampusLink(db: Database.Database, program: ProgramSignalType, uni
 function main() {
   const people = loadPeople();
   for (const person of people) {
-    if (!isProgramSignalType(person.program)) throw new Error(`Bad program for ${person.name}`);
+    if (!isFoundersProgram(person.program)) throw new Error(`Bad program for ${person.name}`);
     if (!isProgramMatchStatus(person.matchStatus)) throw new Error(`Bad match status for ${person.name}`);
     if (!person.sourceUrl.startsWith("http") || person.excerpt.trim().length < 20) throw new Error(`Missing source for ${person.name}`);
     if (!person.keepWithoutCampus && !person.universityId) throw new Error(`No campus for ${person.name}`);
@@ -548,7 +556,7 @@ function main() {
     founders_inc: blank(),
     south_park_commons: blank(),
   };
-  const campusLinks = new Map<ProgramSignalType, Map<string, { excerpt: string; sourceUrl: string }>>();
+  const campusLinks = new Map<FoundersProgram, Map<string, { excerpt: string; sourceUrl: string }>>();
 
   const tx = db.transaction(() => {
     for (const program of ["founders_inc", "south_park_commons"] as const) {

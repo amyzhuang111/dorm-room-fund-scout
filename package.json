@@ -30,6 +30,7 @@
     "fetch-hotspot-members": "tsx scripts/ingest/fetch-hotspot-members.ts",
     "import:pear-hc-prod": "tsx scripts/ingest/import-pear-hc-prod-members.ts",
     "import:founders-inc-spc": "tsx scripts/ingest/import-founders-inc-spc.ts",
+    "import:founder-residencies": "tsx scripts/ingest/import-founder-residencies.ts",
     "test:program-signals": "tsx lib/domain/program-signals.test.ts",
     "fetch-scholar-cohorts": "tsx scripts/ingest/fetch-scholar-cohorts.ts",
     "test:hotspot-members": "tsx lib/domain/hotspot-members.test.ts",
