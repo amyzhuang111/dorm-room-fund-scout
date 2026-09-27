@@ -38,7 +38,24 @@ function currentProduct(pathname: string, fromParam: string | null): "founder" |
   return "startup";
 }
 
-export function TopNav() {
+function LockIcon() {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" className="ml-1 inline h-3 w-3 align-[-1px]">
+      <rect x="3.25" y="7" width="9.5" height="6.25" rx="1" fill="none" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M5.25 7V5.1a2.75 2.75 0 0 1 5.5 0V7" fill="none" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}
+
+export function TopNav({
+  signedIn = false,
+  email = null,
+  signOutAction,
+}: {
+  signedIn?: boolean;
+  email?: string | null;
+  signOutAction?: () => Promise<void>;
+}) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -111,19 +128,39 @@ export function TopNav() {
             {nav.map((item) => {
               const itemPath = item.href.split("?")[0];
               const active = pathname === itemPath || (itemPath !== "/signals" && itemPath !== "/sources" && pathname.startsWith(itemPath));
+              const locked = !signedIn && (item.label === "Shortlist" || item.label === "Pipeline");
               return (
                 <Link
                   key={item.href}
                   href={item.href}
+                  aria-label={locked ? `${item.label}, sign in required` : undefined}
+                  title={locked ? "Sign in with your DRF email" : undefined}
                   className={`shrink-0 rounded-full px-3 py-1 text-sm ${active ? "bg-accent text-accent-foreground" : "text-muted hover:bg-surface-2 hover:text-foreground"}`}
                 >
                   {item.label}
+                  {locked ? <LockIcon /> : null}
                 </Link>
               );
             })}
           </nav>
         </div>
         <div className="flex shrink-0 items-center gap-2">
+        {signedIn ? (
+          <>
+            {email ? <span className="hidden max-w-[10rem] truncate text-xs font-medium text-black sm:inline">{email}</span> : null}
+            {signOutAction ? (
+              <form action={signOutAction}>
+                <button type="submit" className="rounded-md border border-black bg-white px-2.5 py-1 text-xs font-semibold text-black">
+                  Sign out
+                </button>
+              </form>
+            ) : null}
+          </>
+        ) : (
+          <Link href="/signin" className="rounded-md border border-black bg-white px-2.5 py-1 text-xs font-semibold text-black">
+            Sign in
+          </Link>
+        )}
         <details className="relative shrink-0">
           <summary className="list-none rounded-md px-2.5 py-1.5 text-xs text-muted hover:bg-surface-2 hover:text-foreground cursor-pointer select-none">
             More ⋯
