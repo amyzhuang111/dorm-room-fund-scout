@@ -231,6 +231,10 @@ function migrate(db: Database.Database) {
     firm_type TEXT,
     firm_confidence TEXT,
     linkedin_confidence TEXT,
+    linkedin_url TEXT,
+    linkedin_source_url TEXT,
+    location TEXT,
+    verification_note TEXT,
     investor_id TEXT,
     source_url TEXT NOT NULL,
     firm_source_url TEXT,
@@ -245,6 +249,10 @@ function migrate(db: Database.Database) {
   addColumnIfMissing("drf_alumni", "firm_type", "firm_type TEXT");
   addColumnIfMissing("drf_alumni", "firm_confidence", "firm_confidence TEXT");
   addColumnIfMissing("drf_alumni", "linkedin_confidence", "linkedin_confidence TEXT");
+  addColumnIfMissing("drf_alumni", "linkedin_url", "linkedin_url TEXT");
+  addColumnIfMissing("drf_alumni", "linkedin_source_url", "linkedin_source_url TEXT");
+  addColumnIfMissing("drf_alumni", "location", "location TEXT");
+  addColumnIfMissing("drf_alumni", "verification_note", "verification_note TEXT");
 
   db.exec(`CREATE TABLE IF NOT EXISTS program_signals (
     id TEXT PRIMARY KEY,

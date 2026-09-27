@@ -36,7 +36,9 @@ export interface AlumCard {
   years: string | null;
   firm: string | null;
   role: string | null;
+  location: string | null;
   confidence: "confirmed" | "likely";
+  linkedinNote: string | null;
   sourceUrl: string;
   firmSourceUrl: string | null;
   excerpt: string;
@@ -306,7 +308,9 @@ function alumCard(alum: DrfAlumRow): AlumCard {
     years: yearsLabel(alum),
     firm: alum.currentFirm,
     role: alum.currentRole,
+    location: alum.location,
     confidence: alum.confidence,
+    linkedinNote: alum.verificationNote,
     sourceUrl: alum.sourceUrl,
     firmSourceUrl: alum.firmSourceUrl,
     excerpt: alum.excerpt,
