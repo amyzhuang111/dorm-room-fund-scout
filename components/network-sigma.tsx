@@ -247,6 +247,7 @@ export function NetworkSigma({
         tracking: REGION_TRACKING,
         campusHub: false,
         named: false,
+        strictDiscs: false,
         required: true,
         grayHub: false,
       });
