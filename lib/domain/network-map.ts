@@ -127,7 +127,7 @@ interface SimNode {
   homeCampus?: string;
 }
 
-const LAYOUT_VERSION = "29";
+const LAYOUT_VERSION = "30";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -1364,6 +1364,8 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
   snapCampusCentroids(simNodes, primary);
   // Repack after the simulation. The collide pass was leaving large campuses as hollow arcs, and nodes with no campus sat in a ring at the origin.
   pullCampusSatellites(live, primary);
+  // The presence file puts Waterloo on Boston & Northeast, same as Toronto. Sit it beside Toronto, not in the Harvard/MIT knot.
+  seatWaterlooBesideToronto(live, primary);
   packCampusDiscs(live, primary);
   const campusOf = new Map(primary);
   for (const [id, weights] of bridgeWeight) {
@@ -1536,6 +1538,25 @@ function memberCounts(primary: Map<string, string>, live: LiveNode[]): Map<strin
     counts.set(campus, (counts.get(campus) ?? 0) + 1);
   }
   return counts;
+}
+
+/** Waterloo stays on the Boston & Northeast team. Park it against Toronto, away from MIT, so its label is not in the Harvard/Brown pocket. */
+function seatWaterlooBesideToronto(live: LiveNode[], primary: Map<string, string>) {
+  const waterloo = live.find((node) => node.id === "univ_waterloo");
+  const toronto = live.find((node) => node.id === "univ_toronto");
+  if (!waterloo || !toronto) return;
+  const mit = live.find((node) => node.id === "univ_mit");
+  const counts = memberCounts(primary, live);
+  const gap = discRadius(counts.get("univ_toronto") ?? 1) + discRadius(counts.get("univ_waterloo") ?? 1) + 8;
+  let dx = toronto.x - (mit?.x ?? toronto.x);
+  let dy = toronto.y - (mit?.y ?? toronto.y);
+  if (Math.hypot(dx, dy) < 8) {
+    dx = 16;
+    dy = 6;
+  }
+  const len = Math.hypot(dx, dy) || 1;
+  waterloo.x = toronto.x + (dx / len) * gap;
+  waterloo.y = toronto.y + (dy / len) * gap;
 }
 
 /** Draw every smaller campus in until its disc touches the largest campus in the same region. */
@@ -1721,10 +1742,27 @@ function placeLinkedPrograms(live: LiveNode[], hubMembers: Map<string, string[]>
     }
     const base = Math.atan2(anchor.y - gy, anchor.x - gx);
     group.forEach((node, index) => {
-      const pad = node.rimTier === "S+" ? 12 : node.rimTier === "S" ? 9 : 8;
+      const pad = node.rimTier === "S+" ? 14 : node.rimTier === "S" ? 9 : 8;
       const fan = index === 0 ? 0 : (index % 2 === 0 ? 1 : -1) * Math.ceil(index / 2) * 0.42;
       const reach = radiusOf(anchor.id) + pad;
-      const spot = nearestClear(anchor.x, anchor.y, base + fan, reach, anchor.id, 8) ?? nearestClear(anchor.x, anchor.y, base + fan, reach, anchor.id, 3);
+      // Thiel's outward ray runs through Brown and Harvard. Seat it on the open side of its campus instead.
+      let angle = base + fan;
+      let clearance = 8;
+      if (node.rimTier === "S+") {
+        clearance = 18;
+        let nearest: LiveNode | null = null;
+        let nearestDist = Infinity;
+        for (const campus of campuses.values()) {
+          if (campus.id === anchor.id) continue;
+          const dist = Math.hypot(campus.x - anchor.x, campus.y - anchor.y);
+          if (dist < nearestDist) {
+            nearestDist = dist;
+            nearest = campus;
+          }
+        }
+        if (nearest) angle = Math.atan2(anchor.y - nearest.y, anchor.x - nearest.x);
+      }
+      const spot = nearestClear(anchor.x, anchor.y, angle, reach, anchor.id, clearance) ?? nearestClear(anchor.x, anchor.y, angle, reach, anchor.id, 8);
       if (!spot) return;
       seatAt(node, spot.x, spot.y);
     });

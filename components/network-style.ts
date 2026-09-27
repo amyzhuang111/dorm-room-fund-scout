@@ -1,4 +1,5 @@
 import { CAMPUSES } from "@/lib/domain/campuses";
+import { featuredNationalKey } from "@/lib/domain/featured-national";
 import type { MapEdgeType, MapNode, MapNodeType } from "@/lib/domain/network-map";
 import { REGIONS, campusShade, regionDef, regionForCampus, regionInk } from "@/lib/domain/network-regions";
 
@@ -181,9 +182,10 @@ export const EDGE_COLOR: Record<MapEdgeType, string> = {
  */
 export function screenSize(node: MapNode): number {
   const score = clamp(node.signalScore ?? 0, 0, 1);
-  if (node.type === "campus") return Math.min(9.5, 6.4 + score * 3.1);
+  if (node.type === "campus") return Math.min(9.5, 8 + score * 1.5);
   if (node.type === "organization" || node.type === "program" || node.type === "investor") {
     if (node.rimBand === "outer" && node.rimTier === "S+") return 6.2;
+    if (featuredNationalKey(node.label)) return 6;
     if (node.rimBand === "outer" && node.rimTier === "S") return Math.min(5.4, 4.8 + score * 0.5);
     if (node.rimBand === "outer") return Math.min(3.65, 3.1 + score * 0.4);
     if (node.rimBand === "inward") return Math.min(2.15, 1.65 + score * 0.35);
@@ -398,8 +400,10 @@ export interface ScreenLabel {
   tracking?: number;
   dx?: number;
   dy?: number;
-  /** Campus disc this label may sit on. Other discs still block it. */
+  /** Campus disc this label may sit on. Other discs still block it when strictDiscs is set. */
   discId?: string;
+  /** Drop the label rather than covering another campus. Used for campus names and Thiel. */
+  strictDiscs?: boolean;
 }
 
 export interface LabelOffset {
@@ -414,13 +418,18 @@ export interface CampusDisc {
   r: number;
 }
 
-const ANCHOR_OFFSETS: LabelOffset[] = [{ dx: 0, dy: 0 }];
-for (const radius of [28, 46, 66, 88]) {
-  for (let step = 0; step < 12; step++) {
-    const angle = (step / 12) * Math.PI * 2 - Math.PI / 2;
-    ANCHOR_OFFSETS.push({ dx: Math.round(Math.cos(angle) * radius), dy: Math.round(Math.sin(angle) * radius) });
-  }
-}
+/** Slots stay within a few pixels of the node. A label that cannot sit there is omitted. */
+const ANCHOR_OFFSETS: LabelOffset[] = [
+  { dx: 0, dy: 0 },
+  { dx: 16, dy: 0 },
+  { dx: -16, dy: 0 },
+  { dx: 0, dy: 14 },
+  { dx: 12, dy: 10 },
+  { dx: -12, dy: 10 },
+  { dx: 0, dy: -10 },
+  { dx: 14, dy: -8 },
+  { dx: -14, dy: -8 },
+];
 
 /** Hover card drawn to the right of the active node. Other labels must stay clear of it. */
 export function hoverLabelBox(x: number, y: number, nodeSize: number, textWidth: number, fontSize: number): LabelBox {
@@ -476,24 +485,30 @@ export function selectVisibleLabels(
   const show = new Map<string, LabelOffset>();
   for (const label of ranked) {
     const slots = label.anchor ? ANCHOR_OFFSETS : [{ dx: 0, dy: 0 }];
-    let fallback: { offset: LabelOffset; box: LabelBox } | null = null;
     let chosen: { offset: LabelOffset; box: LabelBox } | null = null;
     for (const offset of slots) {
+      if (Math.hypot(offset.dx, offset.dy) > 22) continue;
       const box = screenLabelBox({ ...label, dx: offset.dx, dy: offset.dy }, measure);
       const padded = { left: box.left - 4, top: box.top - 3, right: box.right + 4, bottom: box.bottom + 3 };
       if (hits(padded)) continue;
-      if (!hitsDisc(box, label.discId)) {
-        chosen = { offset, box: padded };
-        break;
-      }
-      if (!fallback) fallback = { offset, box: padded };
+      if (label.strictDiscs && hitsDisc(box, label.discId)) continue;
+      if (label.anchor && boxHitsCircle(box, label.x, label.y, label.nodeSize * 0.8)) continue;
+      chosen = { offset, box: padded };
+      break;
     }
-    const use = chosen ?? fallback;
-    if (!use) continue;
-    index(use.box);
-    show.set(label.id, use.offset);
+    if (!chosen) continue;
+    index(chosen.box);
+    show.set(label.id, chosen.offset);
   }
   return show;
+}
+
+function boxHitsCircle(box: LabelBox, x: number, y: number, radius: number): boolean {
+  const cx = Math.max(box.left, Math.min(x, box.right));
+  const cy = Math.max(box.top, Math.min(y, box.bottom));
+  const dx = cx - x;
+  const dy = cy - y;
+  return dx * dx + dy * dy < radius * radius;
 }
 
 function boxHitsDisc(box: LabelBox, disc: CampusDisc): boolean {
@@ -514,6 +529,37 @@ function screenLabelBox(label: ScreenLabel, measure: (text: string, fontSize: nu
   if (label.marker) return { left: x - width / 2, top: y - height / 2, right: x + width / 2, bottom: y + height / 2 };
   if (label.anchor) return { left: x - width / 2, top: y - height, right: x + width / 2, bottom: y + 2 };
   return { left: x - width / 2, top: y - 2, right: x + width / 2, bottom: y + height };
+}
+
+const PROGRAM_LINE_HEX: Record<string, string> = {
+  thiel: "#0f766e",
+  yc: "#ea580c",
+  founders_inc: "#7c3aed",
+  z_fellows: "#db2777",
+  emergent: "#ca8a04",
+  spc: "#0284c7",
+  neo: "#16a34a",
+  hf0: "#9333ea",
+  contrary: "#e11d48",
+  pear: "#65a30d",
+  speedrun: "#d97706",
+  human_capital: "#0891b2",
+  kp: "#4f46e5",
+};
+
+/** Distinct hue for a program's campus lines. Not the grey used for the node ink. */
+export function programLineColor(label: string, id = ""): string {
+  const key = featuredNationalKey(label);
+  if (key && PROGRAM_LINE_HEX[key]) return PROGRAM_LINE_HEX[key];
+  const seed = `${label}:${id}`;
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) hash = (hash * 33 + seed.charCodeAt(i)) >>> 0;
+  const [red, green, blue] = hslToRgb(hash % 360, 62, 46);
+  return toHex(red, green, blue);
+}
+
+export function bundleWidth(count: number): number {
+  return Math.min(2.5, 0.6 + Math.log2(Math.max(count, 1)) * 0.32);
 }
 
 function clamp(value: number, min: number, max: number): number {

@@ -7,7 +7,7 @@ import { featuredNationalKey } from "@/lib/domain/featured-national";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
-import { DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_CLUB, LABEL_HUB, LABEL_LEAD, LABEL_NODE, MEGA_DEGREE, NODE_SHAPE, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, nodeInk, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type CampusDisc, type LabelOffset, type ScreenLabel } from "./network-style";
+import { DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_CLUB, LABEL_HUB, LABEL_LEAD, LABEL_NODE, MEGA_DEGREE, NODE_SHAPE, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, programLineColor, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type CampusDisc, type LabelOffset, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -47,6 +47,10 @@ type EdgeAttr = {
   /** One line per program-campus pair. Width follows how many people sit on it. */
   bundle?: boolean;
   hoverColor?: string;
+  count?: number;
+  /** Count is under 2. Drawn only while its program is hovered or selected. */
+  sparse?: boolean;
+  zIndex?: number;
 };
 
 const QUIET_EDGE = new Set<MapEdgeType>(["studied_at", "at_campus"]);
@@ -169,7 +173,7 @@ export function NetworkSigma({
       return measureCtx.measureText(text).width;
     };
     const placed: { offsets: Map<string, LabelOffset> } = { offsets: new Map() };
-    const labelMeta: { id: string; tier: number; degree: number; text: string; fullText: string; marker: boolean; anchor: boolean; fontSize: number; tracking: number; campusHub: boolean; named: boolean; discId?: string }[] = [];
+    const labelMeta: { id: string; tier: number; degree: number; text: string; fullText: string; marker: boolean; anchor: boolean; fontSize: number; tracking: number; campusHub: boolean; named: boolean; discId?: string; strictDiscs: boolean }[] = [];
     for (const node of graph.nodes) {
       const campus = node.type === "campus";
       const named = namedIds.has(node.id);
@@ -192,6 +196,7 @@ export function NetworkSigma({
         campusHub,
         named,
         discId: campus ? node.campus || node.id : node.homeCampus || undefined,
+        strictDiscs: campus || (named && featuredNationalKey(node.label) === "thiel"),
       });
     }
     const colors = new Map(campusSwatches(graph.nodes).map((swatch) => [swatch.id, swatch.color]));
@@ -213,7 +218,7 @@ export function NetworkSigma({
         type: NODE_SHAPE[node.type],
         kind: node.type,
         anchor: campus || hub,
-        zIndex: lead ? 4 : strong ? 3 : Z[node.type],
+        zIndex: (lead ? 4 : strong ? 3 : Z[node.type]) + 1,
         signalTip: signalTooltip(node),
         linkColor: emphasizeColor(color),
         labelPx: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong || campusHub || named ? LABEL_HUB : hub ? 10 : LABEL_NODE,
@@ -278,9 +283,12 @@ export function NetworkSigma({
     const bundles = new Map<string, { program: string; campus: string; count: number }>();
     const addBundle = (programId: string, campusId: string, count: number) => {
       if (!g.hasNode(programId) || !g.hasNode(campusId) || programId === campusId || count <= 0) return;
-      const key = `${programId}|${campusId}`;
+      const program = at.get(programId);
+      const keyName = featuredNationalKey(program?.label ?? "") ?? programId;
+      const key = `${keyName}|${campusId}`;
       const row = bundles.get(key) ?? { program: programId, campus: campusId, count: 0 };
       row.count += count;
+      if (namedIds.has(programId) || program?.rimBand === "outer") row.program = programId;
       bundles.set(key, row);
     };
     for (const edge of graph.edges) {
@@ -295,19 +303,21 @@ export function NetworkSigma({
       if (campusId) addBundle(program.id, campusId, 1);
     }
     for (const bundle of bundles.values()) {
-      if (bundle.count < 2) continue;
+      if (bundle.count < 1) continue;
       const program = at.get(bundle.program);
-      const ink = lineInk(program ? nodeInk(program, colors) : "#4b5563");
-      const tint = edgeTint(ink, 0.72);
+      const ink = programLineColor(program?.label ?? "", bundle.program);
       const key = `bundle|${bundle.program}|${bundle.campus}`;
       if (g.hasEdge(key)) continue;
       g.addEdgeWithKey(key, bundle.program, bundle.campus, {
         kind: "member_of",
-        color: tint,
-        hoverColor: edgeTint(ink, 0.9),
-        size: Math.min(2.8, 1.75 + Math.log2(bundle.count + 1) * 0.2),
+        color: edgeTint(ink, 0.22),
+        hoverColor: edgeTint(ink, 0.42),
+        size: bundleWidth(bundle.count),
         defer: false,
         bundle: true,
+        count: bundle.count,
+        sparse: bundle.count < 2,
+        zIndex: 0,
       });
     }
 
@@ -363,7 +373,7 @@ export function NetworkSigma({
         if (!active) return showLabel({ label: data.label });
         const near = neighbors.get(active);
         if (data.kind === "campus" || near?.has(node)) return showLabel({ label: data.label, zIndex: 4 });
-        return { ...data, color: DIM_NODE, label: undefined, forceLabel: false, zIndex: 0 };
+        return { ...data, color: DIM_NODE, label: undefined, forceLabel: false, zIndex: 1 };
       },
       edgeReducer: (edge, data) => {
         const state = stateRef.current;
@@ -375,12 +385,18 @@ export function NetworkSigma({
         if (active && (source === active || target === active)) {
           const activeKind = g.getNodeAttribute(active, "kind");
           const structuralActive = activeKind === "organization" || activeKind === "program" || activeKind === "investor";
-          if (data.bundle) return { ...data, color: data.hoverColor ?? data.color, size: Math.min(3.2, data.size + 0.45), hidden: false };
+          if (data.bundle) {
+            if (data.sparse && !structuralActive) return { ...data, hidden: true, zIndex: 0 };
+            return { ...data, color: data.hoverColor ?? data.color, size: Math.min(2.5, data.size + 0.15), hidden: false, zIndex: 0 };
+          }
           // A program keeps its bundled campus lines. Individual spokes would cover the cloud.
           if (structuralActive && (data.defer || QUIET_EDGE.has(data.kind))) return { ...data, hidden: true };
           return { ...data, color: g.getNodeAttribute(active, "linkColor"), size: EDGE_HOVER_PX, hidden: false };
         }
-        if (data.bundle) return data;
+        if (data.bundle) {
+          if (data.sparse) return { ...data, hidden: true };
+          return { ...data, zIndex: 0 };
+        }
         if (quiet) return { ...data, hidden: true };
         if (!active) return data;
         return { ...data, color: EDGE_DIM, size: EDGE_PX };
@@ -430,6 +446,7 @@ export function NetworkSigma({
           fontSize: meta.fontSize,
           tracking: meta.tracking,
           discId: meta.discId,
+          strictDiscs: meta.strictDiscs,
         });
       }
       const search = document.querySelector('input[aria-label="Search the network"]');
@@ -563,20 +580,6 @@ function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>) 
   const span = Math.max(paddedMaxX - paddedMinX, paddedMaxY - paddedMinY, 0.04);
   const ratio = Math.min(1.22, Math.max(0.04, span * 1.04));
   void renderer.getCamera().animate({ x: (paddedMinX + paddedMaxX) / 2, y: (paddedMinY + paddedMaxY) / 2, ratio }, { duration: 360 });
-}
-
-/** Light program ink disappears on white. Pull it toward the same grey family until the line can be seen. */
-function lineInk(color: string): string {
-  const match = /^#([0-9a-f]{6})$/i.exec(color.trim());
-  if (!match) return "#4b5563";
-  const value = Number.parseInt(match[1], 16);
-  const red = (value >> 16) & 255;
-  const green = (value >> 8) & 255;
-  const blue = value & 255;
-  if (0.2126 * red + 0.7152 * green + 0.0722 * blue < 130) return color;
-  const mix = (channel: number, target: number) => Math.round(channel * 0.45 + target * 0.55);
-  const hex = (channel: number) => channel.toString(16).padStart(2, "0");
-  return `#${hex(mix(red, 75))}${hex(mix(green, 85))}${hex(mix(blue, 99))}`;
 }
 
 function edgeTint(color: string, alpha: number): string {

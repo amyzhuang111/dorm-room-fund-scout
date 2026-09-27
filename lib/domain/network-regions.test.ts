@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { featuredNationalKey } from "./featured-national";
-import { LABEL_CLUB, campusHubDegreeFloor, nodeColor, readableInk, selectVisibleLabels } from "../../components/network-style";
+import { LABEL_CLUB, bundleWidth, campusHubDegreeFloor, nodeColor, programLineColor, readableInk, selectVisibleLabels } from "../../components/network-style";
 import { REGIONS, campusShade, regionForCampus, regionSwatch } from "./network-regions";
 
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
@@ -137,22 +137,37 @@ assert.ok(placed.has("sky"));
 
 const crowded = selectVisibleLabels(
   [
-    { id: "mit", tier: 5, degree: 400, text: "MIT", x: 200, y: 200, nodeSize: 8, marker: false, anchor: true, fontSize: 12, discId: "mit" },
-    { id: "harvard", tier: 5, degree: 200, text: "Harvard", x: 228, y: 200, nodeSize: 8, marker: false, anchor: true, fontSize: 12, discId: "harvard" },
+    { id: "mit", tier: 5, degree: 400, text: "MIT", x: 200, y: 200, nodeSize: 8, marker: false, anchor: true, fontSize: 12, discId: "mit", strictDiscs: true },
+    { id: "harvard", tier: 5, degree: 200, text: "Harvard", x: 250, y: 200, nodeSize: 8, marker: false, anchor: true, fontSize: 12, discId: "harvard", strictDiscs: true },
+    { id: "queen", tier: 5, degree: 20, text: "Queen's", x: 206, y: 198, nodeSize: 8, marker: false, anchor: true, fontSize: 12, discId: "queen", strictDiscs: true },
   ],
   measure,
   [],
   [
-    { id: "mit", x: 200, y: 200, r: 36 },
-    { id: "harvard", x: 228, y: 200, r: 28 },
+    { id: "mit", x: 200, y: 200, r: 18 },
+    { id: "harvard", x: 250, y: 200, r: 16 },
+    { id: "queen", x: 206, y: 198, r: 10 },
   ],
 );
 assert.ok(crowded.has("mit"));
 assert.ok(crowded.has("harvard"));
-const mitOffset = crowded.get("mit");
-const harvardOffset = crowded.get("harvard");
-assert.ok(mitOffset && harvardOffset);
-assert.ok(mitOffset.dx !== harvardOffset.dx || mitOffset.dy !== harvardOffset.dy);
+for (const offset of crowded.values()) assert.ok(Math.hypot(offset.dx, offset.dy) <= 22);
+const queen = crowded.get("queen");
+assert.ok(!queen || Math.hypot(queen.dx, queen.dy) <= 22);
+
+// A label whose upper slots are taken must not fall onto its own node.
+const covered = selectVisibleLabels(
+  [{ id: "pear", tier: 4, degree: 9, text: "Pear Fellows", x: 200, y: 200, nodeSize: 6, marker: false, anchor: true, fontSize: 12 }],
+  measure,
+  [{ left: 120, top: 150, right: 280, bottom: 176 }],
+);
+const pearOffset = covered.get("pear");
+assert.ok(!pearOffset || !(pearOffset.dx === 0 && pearOffset.dy >= 10));
+
+const ycLine = programLineColor("Y Combinator");
+assert.equal(ycLine.toLowerCase(), "#ea580c");
+assert.ok(bundleWidth(2) >= 0.6 && bundleWidth(2) < 1.2);
+assert.equal(bundleWidth(4000), 2.5);
 
 assert.equal(featuredNationalKey("HF0 residency"), "hf0");
 assert.equal(featuredNationalKey("a16z speedrun"), "speedrun");
