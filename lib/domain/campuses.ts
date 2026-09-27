@@ -292,6 +292,17 @@ export const CAMPUSES: CampusConfig[] = [
     coordSource: "en.wikipedia.org/wiki/Queen's_University_at_Kingston (MediaWiki coordinates API, retrieved 2026-09-27)",
     firstClass: false,
   },
+  {
+    id: "univ_cornell_tech",
+    name: "Cornell Tech",
+    shortLabel: "Cornell Tech",
+    aliases: ["Cornell Tech"],
+    country: "United States",
+    lat: 40.755811,
+    lon: -73.956296,
+    coordSource: "en.wikipedia.org/wiki/Cornell_Tech (MediaWiki coordinates API, retrieved 2026-09-27)",
+    firstClass: false,
+  },
 ];
 
 export function campusById(id: string): CampusConfig | undefined {

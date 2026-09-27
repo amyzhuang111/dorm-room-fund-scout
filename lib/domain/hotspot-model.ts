@@ -118,6 +118,12 @@ const CAMPUS_IDS: Record<string, string> = {
   Princeton: "univ_princeton",
   CMU: "univ_cmu",
   Waterloo: "univ_waterloo",
+  Brown: "univ_brown",
+  "Cornell / Cornell Tech": "univ_cornell",
+  Duke: "univ_duke",
+  "Harvey Mudd": "univ_hmc",
+  NYU: "univ_nyu",
+  Yale: "univ_yale",
 };
 
 const CITIES = new Set(["Philadelphia", "San Francisco", "New York", "Boston"]);
