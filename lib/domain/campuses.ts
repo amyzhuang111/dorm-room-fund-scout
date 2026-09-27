@@ -419,7 +419,7 @@ export const CAMPUSES: CampusConfig[] = [
     id: "univ_washu",
     name: "Washington University in St. Louis",
     shortLabel: "WashU",
-    aliases: ["WashU", "WUSTL"],
+    aliases: ["WashU", "WUSTL", "Washington University"],
     country: "United States",
     lat: 38.648,
     lon: -90.305,

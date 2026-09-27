@@ -1,0 +1,1528 @@
+{
+  "retrievedAt": "2026-09-27T20:00:00.000Z",
+  "companies": [
+    {
+      "name": "AVAC",
+      "description": "Connects veterans and military family personnel to careers in the arts and cultural institutions.",
+      "website": null,
+      "sourceUrl": "https://eship.georgetown.edu/sli/",
+      "excerpt": "Fidel Gomez Torres (SCS'27) is in the Georgetown Summer Launch Incubator 2026 cohort with AVAC.",
+      "orgPlace": "Summer Launch Incubator",
+      "campusIds": [
+        "univ_georgetown"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Fidel Gomez Torres",
+          "aliases": [],
+          "campusId": "univ_georgetown",
+          "affiliationRole": "Summer Launch Incubator 2026, AVAC",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Georgetown Summer Launch Incubator 2026 names this person and a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "SCS'27",
+            "gradYear": 2027,
+            "evidence": "The SLI page lists Fidel Gomez Torres (SCS'27)."
+          },
+          "excerpt": "The Georgetown Summer Launch Incubator 2026 cohort lists Fidel Gomez Torres (SCS'27) on AVAC."
+        }
+      ]
+    },
+    {
+      "name": "MyStaq",
+      "description": "A personalized supplement platform with a recommendation engine and health dashboard.",
+      "website": null,
+      "sourceUrl": "https://eship.georgetown.edu/sli/",
+      "excerpt": "Tazeen Ajmal (MBA'27) is in the Georgetown Summer Launch Incubator 2026 cohort with MyStaq.",
+      "orgPlace": "Summer Launch Incubator",
+      "campusIds": [
+        "univ_georgetown"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Tazeen Ajmal",
+          "aliases": [],
+          "campusId": "univ_georgetown",
+          "affiliationRole": "Summer Launch Incubator 2026, MyStaq",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Georgetown Summer Launch Incubator 2026 names this person and a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "MBA'27",
+            "gradYear": 2027,
+            "evidence": "The SLI page lists Tazeen Ajmal (MBA'27)."
+          },
+          "excerpt": "The Georgetown Summer Launch Incubator 2026 cohort lists Tazeen Ajmal (MBA'27) on MyStaq."
+        }
+      ]
+    },
+    {
+      "name": "Waddl",
+      "description": "A verified storefront platform for identity-based organizations to sell custom apparel.",
+      "website": null,
+      "sourceUrl": "https://eship.georgetown.edu/sli/",
+      "excerpt": "Dylan Chiodo (MBA'27) is in the Georgetown Summer Launch Incubator 2026 cohort with Waddl.",
+      "orgPlace": "Summer Launch Incubator",
+      "campusIds": [
+        "univ_georgetown"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Dylan Chiodo",
+          "aliases": [],
+          "campusId": "univ_georgetown",
+          "affiliationRole": "Summer Launch Incubator 2026, Waddl",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Georgetown Summer Launch Incubator 2026 names this person and a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "MBA'27",
+            "gradYear": 2027,
+            "evidence": "The SLI page lists Dylan Chiodo (MBA'27)."
+          },
+          "excerpt": "The Georgetown Summer Launch Incubator 2026 cohort lists Dylan Chiodo (MBA'27) on Waddl."
+        }
+      ]
+    },
+    {
+      "name": "Threshold",
+      "description": "An AI-supported data cleaning and quality control platform for enterprises.",
+      "website": null,
+      "sourceUrl": "https://eship.georgetown.edu/sli/",
+      "excerpt": "Jenna Lebowitz (MBA'27) is in the Georgetown Summer Launch Incubator 2026 cohort with Threshold.",
+      "orgPlace": "Summer Launch Incubator",
+      "campusIds": [
+        "univ_georgetown"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Jenna Lebowitz",
+          "aliases": [],
+          "campusId": "univ_georgetown",
+          "affiliationRole": "Summer Launch Incubator 2026, Threshold",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Georgetown Summer Launch Incubator 2026 names this person and a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "MBA'27",
+            "gradYear": 2027,
+            "evidence": "The SLI page lists Jenna Lebowitz (MBA'27)."
+          },
+          "excerpt": "The Georgetown Summer Launch Incubator 2026 cohort lists Jenna Lebowitz (MBA'27) on Threshold."
+        }
+      ]
+    },
+    {
+      "name": "DogWater Studios",
+      "description": "An independent game studio. Its first title, Imprint, teaches computer science concepts.",
+      "website": null,
+      "sourceUrl": "https://eship.georgetown.edu/sli/",
+      "excerpt": "Jeremy Matsumoto (MBA'27) is in the Georgetown Summer Launch Incubator 2026 cohort with DogWater Studios.",
+      "orgPlace": "Summer Launch Incubator",
+      "campusIds": [
+        "univ_georgetown"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Jeremy Matsumoto",
+          "aliases": [],
+          "campusId": "univ_georgetown",
+          "affiliationRole": "Summer Launch Incubator 2026, DogWater Studios",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Georgetown Summer Launch Incubator 2026 names this person and a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "MBA'27",
+            "gradYear": 2027,
+            "evidence": "The SLI page lists Jeremy Matsumoto (MBA'27)."
+          },
+          "excerpt": "The Georgetown Summer Launch Incubator 2026 cohort lists Jeremy Matsumoto (MBA'27) on DogWater Studios."
+        }
+      ]
+    },
+    {
+      "name": "HomeTurfX",
+      "description": "An app that provides 360-degree course tours for the cross-country community.",
+      "website": null,
+      "sourceUrl": "https://eship.georgetown.edu/sli/",
+      "excerpt": "Ellie Anderson (C'29) is in the Georgetown Summer Launch Incubator 2026 cohort with HomeTurfX.",
+      "orgPlace": "Summer Launch Incubator",
+      "campusIds": [
+        "univ_georgetown"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Ellie Anderson",
+          "aliases": [],
+          "campusId": "univ_georgetown",
+          "affiliationRole": "Summer Launch Incubator 2026, HomeTurfX",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Georgetown Summer Launch Incubator 2026 names this person and a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "C'29",
+            "gradYear": 2029,
+            "evidence": "The SLI page lists Ellie Anderson (C'29)."
+          },
+          "excerpt": "The Georgetown Summer Launch Incubator 2026 cohort lists Ellie Anderson (C'29) on HomeTurfX."
+        }
+      ]
+    },
+    {
+      "name": "Kashmir Saffron House",
+      "description": "Sells grade-one Kashmir saffron and saffron teas in the U.S. market.",
+      "website": null,
+      "sourceUrl": "https://eship.georgetown.edu/sli/",
+      "excerpt": "Dipam Shah (MBA'27) is in the Georgetown Summer Launch Incubator 2026 cohort with Kashmir Saffron House.",
+      "orgPlace": "Summer Launch Incubator",
+      "campusIds": [
+        "univ_georgetown"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Dipam Shah",
+          "aliases": [],
+          "campusId": "univ_georgetown",
+          "affiliationRole": "Summer Launch Incubator 2026, Kashmir Saffron House",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Georgetown Summer Launch Incubator 2026 names this person and a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "MBA'27",
+            "gradYear": 2027,
+            "evidence": "The SLI page lists Dipam Shah (MBA'27)."
+          },
+          "excerpt": "The Georgetown Summer Launch Incubator 2026 cohort lists Dipam Shah (MBA'27) on Kashmir Saffron House."
+        }
+      ]
+    },
+    {
+      "name": "Ambees",
+      "description": "A B2B2C talent marketplace connecting students and recruiters.",
+      "website": null,
+      "sourceUrl": "https://eship.georgetown.edu/sli/",
+      "excerpt": "David Xie (B'29) is in the Georgetown Summer Launch Incubator 2026 cohort with Ambees.",
+      "orgPlace": "Summer Launch Incubator",
+      "campusIds": [
+        "univ_georgetown"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "David Xie",
+          "aliases": [],
+          "campusId": "univ_georgetown",
+          "affiliationRole": "Summer Launch Incubator 2026, Ambees",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Georgetown Summer Launch Incubator 2026 names this person and a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "B'29",
+            "gradYear": 2029,
+            "evidence": "The SLI page lists David Xie (B'29)."
+          },
+          "excerpt": "The Georgetown Summer Launch Incubator 2026 cohort lists David Xie (B'29) on Ambees."
+        }
+      ]
+    },
+    {
+      "name": "The Elephant Room",
+      "description": "An accelerator for independent artists using analytics and machine learning.",
+      "website": null,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "excerpt": "Pitch the Summit graduate first place: The Elephant Room \u2014 Varun Sheel 27MBA, Jake Shawler 27MBA, Federico Morales Barerra 27MBA, Dhwani Ghandi 27MBA, with teammates Dure Ali and Adam Spierer.",
+      "orgPlace": "Pitch the Summit",
+      "campusIds": [
+        "univ_emory"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Varun Sheel",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Pitch the Summit, The Elephant Room",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the Pitch the Summit team. The article does not use the title founder for this person.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "27MBA",
+            "gradYear": 2027,
+            "evidence": "The Pitch the Summit article lists Varun Sheel 27MBA."
+          },
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Varun Sheel (27MBA) on The Elephant Room."
+        },
+        {
+          "name": "Jake Shawler",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Pitch the Summit, The Elephant Room",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the Pitch the Summit team. The article does not use the title founder for this person.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "27MBA",
+            "gradYear": 2027,
+            "evidence": "The Pitch the Summit article lists Jake Shawler 27MBA."
+          },
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Jake Shawler (27MBA) on The Elephant Room."
+        },
+        {
+          "name": "Federico Morales Barerra",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Pitch the Summit, The Elephant Room",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the Pitch the Summit team. The article does not use the title founder for this person.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "27MBA",
+            "gradYear": 2027,
+            "evidence": "The Pitch the Summit article lists Federico Morales Barerra 27MBA."
+          },
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Federico Morales Barerra (27MBA) on The Elephant Room."
+        },
+        {
+          "name": "Dhwani Ghandi",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Pitch the Summit, The Elephant Room",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the Pitch the Summit team. The article does not use the title founder for this person.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "27MBA",
+            "gradYear": 2027,
+            "evidence": "The Pitch the Summit article lists Dhwani Ghandi 27MBA."
+          },
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Dhwani Ghandi (27MBA) on The Elephant Room."
+        },
+        {
+          "name": "Dure Ali",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Pitch the Summit teammate, The Elephant Room",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a teammate. The article does not print a school, so no campus affiliation was added.",
+          "enrollment": null,
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Dure Ali as a teammate on The Elephant Room."
+        },
+        {
+          "name": "Adam Spierer",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Pitch the Summit teammate, The Elephant Room",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a teammate. The article does not print a school, so no campus affiliation was added.",
+          "enrollment": null,
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Adam Spierer as a teammate on The Elephant Room."
+        }
+      ]
+    },
+    {
+      "name": "CFO Track",
+      "description": "Operational finance software connecting revenue, inventory, and marketing data.",
+      "website": null,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "excerpt": "Pitch the Summit graduate second place: CFO Track \u2014 Karimatou Diallo 28MBA, with teammates Mariah Qunsel, Saliou Bah, and Apha Barry.",
+      "orgPlace": "Pitch the Summit",
+      "campusIds": [
+        "univ_emory"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Karimatou Diallo",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Pitch the Summit, CFO Track",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the Pitch the Summit team. The article does not use the title founder for this person.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "28MBA",
+            "gradYear": 2028,
+            "evidence": "The Pitch the Summit article lists Karimatou Diallo 28MBA."
+          },
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Karimatou Diallo (28MBA) on CFO Track."
+        },
+        {
+          "name": "Mariah Qunsel",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Pitch the Summit teammate, CFO Track",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a teammate. The article does not print a school, so no campus affiliation was added.",
+          "enrollment": null,
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Mariah Qunsel as a teammate on CFO Track."
+        },
+        {
+          "name": "Saliou Bah",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Pitch the Summit teammate, CFO Track",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a teammate. The article does not print a school, so no campus affiliation was added.",
+          "enrollment": null,
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Saliou Bah as a teammate on CFO Track."
+        },
+        {
+          "name": "Apha Barry",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Pitch the Summit teammate, CFO Track",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a teammate. The article does not print a school, so no campus affiliation was added.",
+          "enrollment": null,
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Apha Barry as a teammate on CFO Track."
+        }
+      ]
+    },
+    {
+      "name": "GlamGuide",
+      "description": "A beauty social commerce platform for discovery and booking.",
+      "website": null,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "excerpt": "Ariana Sharafat 26MiM, founder of GlamGuide, took third place in the Pitch the Summit graduate division.",
+      "orgPlace": "Pitch the Summit",
+      "campusIds": [
+        "univ_emory"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Ariana Sharafat",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Pitch the Summit, GlamGuide",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Emory article names this person as the founder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "26MiM",
+            "gradYear": 2026,
+            "evidence": "The Pitch the Summit article lists Ariana Sharafat 26MiM."
+          },
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Ariana Sharafat (26MiM) on GlamGuide."
+        }
+      ]
+    },
+    {
+      "name": "Asoma",
+      "description": "An AI-powered platform that helps students with ADHD manage executive function and academic tasks.",
+      "website": null,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "excerpt": "Pitch the Summit undergraduate first place: Asoma \u2014 Malia Wakesho-Ajwang 26C.",
+      "orgPlace": "Pitch the Summit",
+      "campusIds": [
+        "univ_emory"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Malia Wakesho-Ajwang",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Pitch the Summit, Asoma",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the Pitch the Summit team. The article does not use the title founder for this person.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "26C",
+            "gradYear": 2026,
+            "evidence": "The Pitch the Summit article lists Malia Wakesho-Ajwang 26C."
+          },
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Malia Wakesho-Ajwang (26C) on Asoma."
+        }
+      ]
+    },
+    {
+      "name": "Boomi",
+      "description": "A protein-rich Indian masala powder.",
+      "website": null,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "excerpt": "Pitch the Summit undergraduate second place: Boomi \u2014 Shirin Deepak 26BBA, Sushmita Rajan 26C.",
+      "orgPlace": "Pitch the Summit",
+      "campusIds": [
+        "univ_emory"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Shirin Deepak",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Pitch the Summit, Boomi",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the Pitch the Summit team. The article does not use the title founder for this person.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "26BBA",
+            "gradYear": 2026,
+            "evidence": "The Pitch the Summit article lists Shirin Deepak 26BBA."
+          },
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Shirin Deepak (26BBA) on Boomi."
+        },
+        {
+          "name": "Sushmita Rajan",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Pitch the Summit, Boomi",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the Pitch the Summit team. The article does not use the title founder for this person.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "26C",
+            "gradYear": 2026,
+            "evidence": "The Pitch the Summit article lists Sushmita Rajan 26C."
+          },
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Sushmita Rajan (26C) on Boomi."
+        }
+      ]
+    },
+    {
+      "name": "Infervia",
+      "description": "An AI-powered regulatory intelligence platform for healthcare compliance.",
+      "website": null,
+      "sourceUrl": "https://www.emorybusiness.com/2026/05/05/goizuetas-10th-annual-entrepreneurship-summit/",
+      "excerpt": "Pitch the Summit undergraduate third place: Infervia \u2014 Luka Undilashvili 28C, Dharshini Kannan 28C, Rom Zuckerman 28C, Prem Galani 29C.",
+      "orgPlace": "Pitch the Summit",
+      "campusIds": [
+        "univ_emory"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Luka Undilashvili",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Pitch the Summit, Infervia",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the Pitch the Summit team. The article does not use the title founder for this person.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "28C",
+            "gradYear": 2028,
+            "evidence": "The Pitch the Summit article lists Luka Undilashvili 28C."
+          },
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Luka Undilashvili (28C) on Infervia."
+        },
+        {
+          "name": "Dharshini Kannan",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Pitch the Summit, Infervia",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the Pitch the Summit team. The article does not use the title founder for this person.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "28C",
+            "gradYear": 2028,
+            "evidence": "The Pitch the Summit article lists Dharshini Kannan 28C."
+          },
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Dharshini Kannan (28C) on Infervia."
+        },
+        {
+          "name": "Rom Zuckerman",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Pitch the Summit, Infervia",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the Pitch the Summit team. The article does not use the title founder for this person.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "28C",
+            "gradYear": 2028,
+            "evidence": "The Pitch the Summit article lists Rom Zuckerman 28C."
+          },
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Rom Zuckerman (28C) on Infervia."
+        },
+        {
+          "name": "Prem Galani",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Pitch the Summit, Infervia",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the Pitch the Summit team. The article does not use the title founder for this person.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "29C",
+            "gradYear": 2029,
+            "evidence": "The Pitch the Summit article lists Prem Galani 29C."
+          },
+          "excerpt": "Goizueta's 2026 Pitch the Summit lists Prem Galani (29C) on Infervia."
+        }
+      ]
+    },
+    {
+      "name": "Misfit Adventure",
+      "description": "An educational game publisher for school STEM programs.",
+      "website": null,
+      "sourceUrl": "https://www.emorybusiness.com/2026/04/15/meet-the-founders-of-techstars-emory-founders-catalyst-program/",
+      "excerpt": "Harman Lindsey 24MBA created Misfit Adventure and is in the 2026 Techstars Emory Founders Catalyst cohort.",
+      "orgPlace": "Techstars Emory Founders Catalyst",
+      "campusIds": [
+        "univ_emory"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Harman Lindsey",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Founder, Misfit Adventure",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Emory Business names Harman Lindsey's company as Misfit Adventure.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "24MBA",
+            "gradYear": 2024,
+            "evidence": "The Techstars Emory article lists Harman Lindsey 24MBA."
+          },
+          "excerpt": "Harman Lindsey 24MBA learned of the Techstars Emory Founders Catalyst program and created Misfit Adventure."
+        }
+      ]
+    },
+    {
+      "name": "Pi9eon",
+      "description": "A faster mailing product for people who send and receive physical mail.",
+      "website": null,
+      "sourceUrl": "https://www.emorybusiness.com/2026/04/15/meet-the-founders-of-techstars-emory-founders-catalyst-program/",
+      "excerpt": "Madalyn Tolbert 20Ox 22C and her co-founder created Pi9eon. She is in the 2026 Techstars Emory Founders Catalyst cohort.",
+      "orgPlace": "Techstars Emory Founders Catalyst",
+      "campusIds": [
+        "univ_emory"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Madalyn Tolbert",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Founder, Pi9eon",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Emory Business says Madalyn Tolbert and her co-founder created Pi9eon. The co-founder is not named.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": "20Ox 22C",
+            "gradYear": 2022,
+            "evidence": "The Techstars Emory article lists Madalyn Tolbert 20Ox 22C."
+          },
+          "excerpt": "Madalyn Tolbert 20Ox 22C and her co-founder created Pi9eon."
+        }
+      ]
+    },
+    {
+      "name": "Smush",
+      "description": "Fashionable compression wear for women.",
+      "website": null,
+      "sourceUrl": "https://www.emorybusiness.com/2026/04/15/meet-the-founders-of-techstars-emory-founders-catalyst-program/",
+      "excerpt": "Helen Khuri 26C is building Smush in the 2026 Techstars Emory Founders Catalyst program.",
+      "orgPlace": "Techstars Emory Founders Catalyst",
+      "campusIds": [
+        "univ_emory"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Helen Khuri",
+          "aliases": [],
+          "campusId": "univ_emory",
+          "affiliationRole": "Founder, Smush",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Emory Business presents Helen Khuri as the person building Smush.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "26C",
+            "gradYear": 2026,
+            "evidence": "The Techstars Emory article lists Helen Khuri 26C."
+          },
+          "excerpt": "Helen Khuri 26C learned of the Techstars Emory Founders Catalyst program for her business, Smush."
+        }
+      ]
+    },
+    {
+      "name": "RealPact",
+      "description": "AI tool that automates parts of the real estate contract process for brokers.",
+      "website": null,
+      "sourceUrl": "https://www.thedartmouth.com/article/2026/05/erik-peterson-27-and-ranvir-deshmukh-26-win-magnuson-competition-with-real-estate-startup",
+      "excerpt": "Erik Peterson '27 and Ranvir Deshmukh '26 won the 2026 Magnuson Startup Competition with their real-estate startup RealPact.",
+      "orgPlace": "Magnuson Startup Competition",
+      "campusIds": [
+        "univ_dartmouth"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Erik Peterson",
+          "aliases": [],
+          "campusId": "univ_dartmouth",
+          "affiliationRole": "Co-founder, RealPact",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Dartmouth says Erik Peterson won the Magnuson competition with RealPact.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "The Dartmouth lists Erik Peterson '27."
+          },
+          "excerpt": "Erik Peterson '27 and Ranvir Deshmukh '26 won the 2026 Magnuson Startup Competition with RealPact."
+        },
+        {
+          "name": "Ranvir Deshmukh",
+          "aliases": [],
+          "campusId": "univ_dartmouth",
+          "affiliationRole": "Co-founder, RealPact",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Dartmouth says Ranvir Deshmukh won the Magnuson competition with RealPact.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "The Dartmouth lists Ranvir Deshmukh '26."
+          },
+          "excerpt": "Erik Peterson '27 and Ranvir Deshmukh '26 won the 2026 Magnuson Startup Competition with RealPact."
+        }
+      ]
+    },
+    {
+      "name": "Armada Therapeutics",
+      "description": "Microfluidics platform for isolating and loading extracellular vesicles.",
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "The 2026 Rice Business Plan Competition company database lists Armada Therapeutics, Dartmouth College, and Urjeet Khanwalkar with a dartmouth.edu email. Siddhant Parwal is also listed.",
+      "orgPlace": "Rice Business Plan Competition",
+      "campusIds": [
+        "univ_dartmouth"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Urjeet Khanwalkar",
+          "aliases": [],
+          "campusId": "univ_dartmouth",
+          "affiliationRole": "Armada Therapeutics, Rice Business Plan Competition 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The RBPC company database lists Urjeet Khanwalkar with a dartmouth.edu email on Armada Therapeutics. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "dartmouth.edu email",
+            "gradYear": null,
+            "evidence": "The RBPC database lists a dartmouth.edu email for Urjeet Khanwalkar and does not print a class year."
+          },
+          "excerpt": "Armada Therapeutics, Dartmouth College. Urjeet Khanwalkar: urjeet.s.khanwalkar.th@dartmouth.edu."
+        },
+        {
+          "name": "Siddhant Parwal",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Armada Therapeutics, Rice Business Plan Competition 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Listed on Armada Therapeutics. The database does not give a school email, so no campus affiliation was added.",
+          "enrollment": null,
+          "excerpt": "Armada Therapeutics lists Siddhant Parwal: parwal.siddhant@gmail.com."
+        }
+      ]
+    },
+    {
+      "name": "Actile Technologies",
+      "description": "Wearable smart fabrics that communicate through touch.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.rice.edu/rice-startup-accelerator",
+      "excerpt": "Rice Summer Venture Studio 2026 lists Actile Technologies. Founders: Barclay Jumet.",
+      "orgPlace": "Summer Venture Studio",
+      "campusIds": [
+        "univ_rice"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Barclay Jumet",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, Actile Technologies",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Barclay Jumet in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Barclay Jumet as a founder of Actile Technologies."
+        }
+      ]
+    },
+    {
+      "name": "DHI Tech",
+      "description": "A plug-and-play edge AI layer for surveillance cameras.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.rice.edu/rice-startup-accelerator",
+      "excerpt": "Rice Summer Venture Studio 2026 lists DHI Tech. Founders: Dev Sanghvi, Madhuvani Thatiparti, Aneesh Thatiparti.",
+      "orgPlace": "Summer Venture Studio",
+      "campusIds": [
+        "univ_rice"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Dev Sanghvi",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, DHI Tech",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Dev Sanghvi in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Dev Sanghvi as a founder of DHI Tech."
+        },
+        {
+          "name": "Madhuvani Thatiparti",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, DHI Tech",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Madhuvani Thatiparti in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Madhuvani Thatiparti as a founder of DHI Tech."
+        },
+        {
+          "name": "Aneesh Thatiparti",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, DHI Tech",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Aneesh Thatiparti in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Aneesh Thatiparti as a founder of DHI Tech."
+        }
+      ]
+    },
+    {
+      "name": "Kairos Health",
+      "description": "An AI-powered patient intake platform for independent dental practices.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.rice.edu/rice-startup-accelerator",
+      "excerpt": "Rice Summer Venture Studio 2026 lists Kairos Health. Founders: Adhira Tippur, Sanjana Kavula, Tanush Chintala, Aditya Jain.",
+      "orgPlace": "Summer Venture Studio",
+      "campusIds": [
+        "univ_rice"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Adhira Tippur",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, Kairos Health",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Adhira Tippur in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Adhira Tippur as a founder of Kairos Health."
+        },
+        {
+          "name": "Sanjana Kavula",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, Kairos Health",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Sanjana Kavula in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Sanjana Kavula as a founder of Kairos Health."
+        },
+        {
+          "name": "Tanush Chintala",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, Kairos Health",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Tanush Chintala in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Tanush Chintala as a founder of Kairos Health."
+        },
+        {
+          "name": "Aditya Jain",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, Kairos Health",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Aditya Jain in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Aditya Jain as a founder of Kairos Health."
+        }
+      ]
+    },
+    {
+      "name": "Lucero Health",
+      "description": "A digital platform that connects patients to supplemental resources.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.rice.edu/rice-startup-accelerator",
+      "excerpt": "Rice Summer Venture Studio 2026 lists Lucero Health. Founders: Halbert Kim, Rohan Dharia.",
+      "orgPlace": "Summer Venture Studio",
+      "campusIds": [
+        "univ_rice"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Halbert Kim",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, Lucero Health",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Halbert Kim in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Halbert Kim as a founder of Lucero Health."
+        },
+        {
+          "name": "Rohan Dharia",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, Lucero Health",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Rohan Dharia in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Rohan Dharia as a founder of Lucero Health."
+        }
+      ]
+    },
+    {
+      "name": "MedIQ Health",
+      "description": "Hardware and software that help asthma patients and doctors manage the condition.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.rice.edu/rice-startup-accelerator",
+      "excerpt": "Rice Summer Venture Studio 2026 lists MedIQ Health. Founders: Suran Somawardana, Jacob Lei, Patrick Bednarz.",
+      "orgPlace": "Summer Venture Studio",
+      "campusIds": [
+        "univ_rice"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Suran Somawardana",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, MedIQ Health",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Suran Somawardana in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Suran Somawardana as a founder of MedIQ Health."
+        },
+        {
+          "name": "Jacob Lei",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, MedIQ Health",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Jacob Lei in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Jacob Lei as a founder of MedIQ Health."
+        },
+        {
+          "name": "Patrick Bednarz",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, MedIQ Health",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Patrick Bednarz in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Patrick Bednarz as a founder of MedIQ Health."
+        }
+      ]
+    },
+    {
+      "name": "Pangea",
+      "description": "An AI platform for go-to-market engineering.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.rice.edu/rice-startup-accelerator",
+      "excerpt": "Rice Summer Venture Studio 2026 lists Pangea. Founders: Adam Towner, Saul Brauns.",
+      "orgPlace": "Summer Venture Studio",
+      "campusIds": [
+        "univ_rice"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Adam Towner",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, Pangea",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Adam Towner in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Adam Towner as a founder of Pangea."
+        },
+        {
+          "name": "Saul Brauns",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, Pangea",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Saul Brauns in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Saul Brauns as a founder of Pangea."
+        }
+      ]
+    },
+    {
+      "name": "Vantage",
+      "description": "An AI motion coach that uses computer vision for exercise feedback.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.rice.edu/rice-startup-accelerator",
+      "excerpt": "Rice Summer Venture Studio 2026 lists Vantage. Founders: Gavin Firestone, Nolan Connolly.",
+      "orgPlace": "Summer Venture Studio",
+      "campusIds": [
+        "univ_rice"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Gavin Firestone",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, Vantage",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Gavin Firestone in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Gavin Firestone as a founder of Vantage."
+        },
+        {
+          "name": "Nolan Connolly",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, Vantage",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Nolan Connolly in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Nolan Connolly as a founder of Vantage."
+        }
+      ]
+    },
+    {
+      "name": "Magma Health",
+      "description": "Clones real companies into high-fidelity reinforcement-learning environments.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.rice.edu/rice-startup-accelerator",
+      "excerpt": "Rice Summer Venture Studio 2026 lists Magma Health. Founders: Ramtin Shahzanian.",
+      "orgPlace": "Summer Venture Studio",
+      "campusIds": [
+        "univ_rice"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Ramtin Shahzanian",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, Magma Health",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Ramtin Shahzanian in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Ramtin Shahzanian as a founder of Magma Health."
+        }
+      ]
+    },
+    {
+      "name": "Coop",
+      "description": "Early respiratory disease detection for poultry farms using audio and AI.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.rice.edu/rice-startup-accelerator",
+      "excerpt": "Rice Summer Venture Studio 2026 lists Coop. Founders: Adithiya Balaguru, Arnav Bhalla.",
+      "orgPlace": "Summer Venture Studio",
+      "campusIds": [
+        "univ_rice"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Adithiya Balaguru",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, Coop",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Adithiya Balaguru in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Adithiya Balaguru as a founder of Coop."
+        },
+        {
+          "name": "Arnav Bhalla",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "Summer Venture Studio 2026, Coop",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a founder of a 2026 Rice Summer Venture Studio team. The program requires the lead to be a Rice student and says additional teammates need not be Rice-affiliated. The page does not say which person is the lead.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "2026 Summer Venture Studio",
+            "gradYear": null,
+            "evidence": "The Liu Idea Lab page lists Arnav Bhalla in the 2026 Summer Venture Studio cohort and does not print a class year."
+          },
+          "excerpt": "Rice Summer Venture Studio 2026 lists Arnav Bhalla as a founder of Coop."
+        }
+      ]
+    },
+    {
+      "name": "DialySafe",
+      "description": "An AI-powered remote monitoring platform for peritonitis in home dialysis patients.",
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "DialySafe, Rice University, is in the 2026 Rice Business Plan Competition company database. Pavan Sastry: ps163@rice.edu. Jaehyun Nam: jn85@rice.edu. Ibrahim Al-Akash and Saif Ganni are also listed.",
+      "orgPlace": "Rice Business Plan Competition",
+      "campusIds": [
+        "univ_rice"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Pavan Sastry",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "DialySafe, Rice Business Plan Competition 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The RBPC database lists Pavan Sastry with a rice.edu email. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "rice.edu email",
+            "gradYear": null,
+            "evidence": "The RBPC database lists ps163@rice.edu for Pavan Sastry and does not print a class year."
+          },
+          "excerpt": "DialySafe, Rice University. Pavan Sastry: ps163@rice.edu."
+        },
+        {
+          "name": "Jaehyun Nam",
+          "aliases": [],
+          "campusId": "univ_rice",
+          "affiliationRole": "DialySafe, Rice Business Plan Competition 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The RBPC database lists Jaehyun Nam with a rice.edu email. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "rice.edu email",
+            "gradYear": null,
+            "evidence": "The RBPC database lists jn85@rice.edu for Jaehyun Nam and does not print a class year."
+          },
+          "excerpt": "DialySafe, Rice University. Jaehyun Nam: jn85@rice.edu."
+        },
+        {
+          "name": "Ibrahim Al-Akash",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "DialySafe, Rice Business Plan Competition 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Listed on DialySafe. The database gives a gmail address, so no Rice affiliation was added.",
+          "enrollment": null,
+          "excerpt": "DialySafe lists Ibrahim Al-Akash: alakashibrahim@gmail.com."
+        },
+        {
+          "name": "Saif Ganni",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "DialySafe, Rice Business Plan Competition 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Listed on DialySafe. The database gives a gmail address, so no Rice affiliation was added.",
+          "enrollment": null,
+          "excerpt": "DialySafe lists Saif Ganni: saifganni@gmail.com."
+        }
+      ]
+    },
+    {
+      "name": "Geddit",
+      "description": "Digital addressing infrastructure for buildings.",
+      "website": null,
+      "sourceUrl": "https://mccloskey.team/",
+      "excerpt": "McCloskey 2026 finalist Geddit, Akhente Borotho. Best Undergraduate Venture, awarded to the top venture whose core team originated with undergraduate students at the University of Notre Dame.",
+      "orgPlace": "McCloskey New Venture Competition",
+      "campusIds": [
+        "univ_notredame"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Akhente Borotho",
+          "aliases": [],
+          "campusId": "univ_notredame",
+          "affiliationRole": "McCloskey 2026 finalist, Geddit",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as the Geddit finalist. The undergraduate award says the core team originated with Notre Dame undergraduates. The page does not print a class year or the title founder.",
+          "enrollment": null,
+          "excerpt": "McCloskey 2026 finalist Geddit, Akhente Borotho. Best Undergraduate Venture for a team that originated with undergraduate students at the University of Notre Dame."
+        }
+      ]
+    },
+    {
+      "name": "Anaphero",
+      "description": "A wearable that alerts caregivers to the earliest signs of a life-threatening allergic reaction.",
+      "website": null,
+      "sourceUrl": "https://mccloskey.team/",
+      "excerpt": "McCloskey 2026 finalist Anaphero, Tiarnan O'Rourke. Best Graduate Venture, awarded to the top venture whose core team originated with graduate students at the University of Notre Dame.",
+      "orgPlace": "McCloskey New Venture Competition",
+      "campusIds": [
+        "univ_notredame"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Tiarnan O'Rourke",
+          "aliases": [],
+          "campusId": "univ_notredame",
+          "affiliationRole": "McCloskey 2026 finalist, Anaphero",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as the Anaphero finalist. The graduate award says the core team originated with Notre Dame graduate students. The page does not print a class year or the title founder.",
+          "enrollment": null,
+          "excerpt": "McCloskey 2026 finalist Anaphero, Tiarnan O'Rourke. Best Graduate Venture for a team that originated with graduate students at the University of Notre Dame."
+        }
+      ]
+    },
+    {
+      "name": "Irish Nostalgia",
+      "description": "Licensed Notre Dame memorabilia, described as veteran-owned and student-founded.",
+      "website": null,
+      "sourceUrl": "https://mccloskey.team/",
+      "excerpt": "McCloskey 2026 semifinalist Irish Nostalgia, David Chang. The page calls it a veteran-owned, student-founded retail enterprise.",
+      "orgPlace": "McCloskey New Venture Competition",
+      "campusIds": [
+        "univ_notredame"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "David Chang",
+          "aliases": [],
+          "campusId": "univ_notredame",
+          "affiliationRole": "McCloskey 2026 semifinalist, Irish Nostalgia",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on Irish Nostalgia, which the page calls student-founded. It does not print a class year.",
+          "enrollment": null,
+          "excerpt": "McCloskey 2026 semifinalist Irish Nostalgia, David Chang, a veteran-owned, student-founded retail enterprise."
+        }
+      ]
+    },
+    {
+      "name": "Routora",
+      "description": "AI scheduling and route optimization for inspection operations.",
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/2026/results",
+      "excerpt": "Routora, University of Notre Dame and University of Texas at Austin, won fifth place at the 2026 Rice Business Plan Competition. The company database lists Luke Blazek and Tom Vazhekatt.",
+      "orgPlace": "Rice Business Plan Competition",
+      "campusIds": [
+        "univ_notredame",
+        "univ_utexas"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Luke Blazek",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Routora, Rice Business Plan Competition 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Listed on Routora. The results page attributes the team to Notre Dame and UT Austin without assigning either person to one school, so no campus affiliation was added.",
+          "enrollment": null,
+          "excerpt": "Routora lists Luke Blazek: luke@routora.com. The results page says Routora, University of Notre Dame and University of Texas at Austin."
+        },
+        {
+          "name": "Tom Vazhekatt",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Routora, Rice Business Plan Competition 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Listed on Routora. The results page attributes the team to Notre Dame and UT Austin without assigning either person to one school, so no campus affiliation was added.",
+          "enrollment": null,
+          "excerpt": "Routora lists Tom Vazhekatt: tom@routora.com. The results page says Routora, University of Notre Dame and University of Texas at Austin."
+        }
+      ]
+    }
+  ],
+  "potential": [
+    {
+      "name": "Edley Regice",
+      "aliases": [],
+      "campusId": "univ_vanderbilt",
+      "affiliationRole": "IMPACT seminar student",
+      "potentialSignal": "IMPACT seminar, hopes to commercialize prosthetics",
+      "verificationStatus": "partial",
+      "verificationNote": "Named as a Vanderbilt freshman in the inaugural IMPACT seminar. The article does not say he has founded a company.",
+      "orgPlace": "IMPACT",
+      "sourceUrl": "https://engineering.vanderbilt.edu/2025/12/05/impact-program-offered-through-wondry-aims-to-help-students-obtain-commercialization-success/",
+      "excerpt": "Vanderbilt freshman Edley Regice, a mechanical engineering major, is enrolled in IMPACT's inaugural seminar and hopes to commercialize prosthetics.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "verified",
+        "label": "mechanical engineering; freshman in the fall 2025 IMPACT seminar",
+        "gradYear": null,
+        "evidence": "The December 5, 2025 Vanderbilt article calls Edley Regice a Vanderbilt freshman in the IMPACT seminar."
+      }
+    }
+  ],
+  "links": []
+}
