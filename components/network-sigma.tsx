@@ -6,7 +6,7 @@ import Sigma from "sigma";
 import { NodeCircleProgram } from "sigma/rendering";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
-import { DIM_NODE, EDGE_CROSS, EDGE_DIM, EDGE_HOVER, EDGE_HOVER_PX, EDGE_PX, NODE_SHAPE, campusKey, campusSwatches, crossesCampus, edgeTint, hoverLabelBox, labelDegreeFloor, nodeColor, restingLabelIds, screenLabelTier, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
+import { DIM_NODE, EDGE_CROSS, EDGE_DIM, EDGE_HOVER, EDGE_HOVER_PX, EDGE_PX, NODE_SHAPE, campusKey, campusSwatches, crossesCampus, edgeTint, fadeLongEdge, hoverLabelBox, labelDegreeFloor, nodeColor, restingLabelIds, screenLabelTier, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -176,14 +176,30 @@ export function NetworkSigma({
         fontSize: 13,
       });
     }
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
+    for (const node of graph.nodes) {
+      minX = Math.min(minX, node.x);
+      maxX = Math.max(maxX, node.x);
+      minY = Math.min(minY, node.y);
+      maxY = Math.max(maxY, node.y);
+    }
+    const span = Math.max(maxX - minX, maxY - minY, 1);
+    const at = new Map(graph.nodes.map((node) => [node.id, node]));
     for (const edge of graph.edges) {
       if (edge.source === edge.target || !g.hasNode(edge.source) || !g.hasNode(edge.target)) continue;
       const key = `${edge.source}|${edge.target}|${edge.type}`;
       if (g.hasEdge(key)) continue;
       const cross = crossesCampus(campusOf.get(edge.source) ?? "", campusOf.get(edge.target) ?? "");
+      const source = at.get(edge.source);
+      const target = at.get(edge.target);
+      const fraction = source && target ? Math.hypot(source.x - target.x, source.y - target.y) / span : 0;
+      const base = cross ? EDGE_CROSS : edgeTint(primaryCampus.get(edge.source) ?? null, colors);
       g.addEdgeWithKey(key, edge.source, edge.target, {
         kind: edge.type,
-        color: cross ? EDGE_CROSS : edgeTint(primaryCampus.get(edge.source) ?? null, colors),
+        color: fadeLongEdge(base, fraction),
         size: EDGE_PX,
       });
       link(edge.source, edge.target);
