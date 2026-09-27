@@ -4,6 +4,7 @@
 // next to the profile is confirmed. Name plus school alone is likely.
 //
 //   npx tsx scripts/enrich/linkedin-direct-sources.ts
+//   npx tsx scripts/enrich/linkedin-direct-sources.ts --founders-only
 //   npx tsx scripts/enrich/linkedin-direct-sources.ts --stats
 //   npx tsx scripts/enrich/linkedin-direct-sources.ts --apply
 //
@@ -29,7 +30,7 @@ import {
 const SOURCE_ID = "src_linkedin_direct";
 const CHECKPOINT_PATH = path.join(process.cwd(), "data/imports/linkedin-direct-checkpoint.json");
 const RESULTS_PATH = path.join(process.cwd(), "data/imports/linkedin-direct-results.jsonl");
-const CAMPUS_RANK: Record<string, number> = { univ_penn: 0, univ_brown: 1, univ_stanford: 2 };
+const CAMPUS_RANK: Record<string, number> = { univ_penn: 0, univ_berkeley: 1, univ_brown: 2, univ_stanford: 2 };
 const UA = "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0";
 const GITHUB_GAP_MS = 1200;
 
@@ -137,6 +138,15 @@ export function githubHandles(html: string, name: string): string[] {
   return list.length === 1 ? list : [];
 }
 
+function isCampusHost(url: string): boolean {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, "").toLowerCase();
+    return host.endsWith(".edu") || host.endsWith(".ac.uk") || host.endsWith(".edu.au") || host.endsWith(".ca");
+  } catch {
+    return true;
+  }
+}
+
 function extraPages(url: string): string[] {
   let origin = "";
   try {
@@ -144,7 +154,7 @@ function extraPages(url: string): string[] {
   } catch {
     return [];
   }
-  if (skipHost(origin)) return [];
+  if (skipHost(origin) || isCampusHost(url)) return [];
   return [`${origin}/about`, `${origin}/team`, `${origin}/about-us`, `${origin}/founders`];
 }
 
@@ -238,6 +248,7 @@ function storeMatch(
     linkedin: match.url,
     confidence: match.confidence,
     query: pageUrl,
+    proofUrl: pageUrl,
     snippet: match.snippet,
     title: match.title,
     signals: match.signals,
@@ -257,6 +268,10 @@ function storeMatch(
         `INSERT INTO claims (id, entity_type, entity_id, claim_type, value_json, excerpt, source_id, source_url, retrieved_at, label, verification_state)
          VALUES (?, 'person', ?, 'linkedin_alias_discovered', ?, ?, ?, ?, ?, 'observed_fact', 'corroborated')`
       ).run(newId("claim"), person.id, JSON.stringify(evidence), excerpt, SOURCE_ID, match.url, now);
+      db.prepare(
+        `UPDATE claims SET verification_state = 'demoted'
+         WHERE entity_type = 'person' AND entity_id = ? AND claim_type = 'linkedin_candidate' AND verification_state = 'likely'`
+      ).run(person.id);
       return "confirmed";
     }
     const existing = db
@@ -369,15 +384,15 @@ function loadPeople(db: ReturnType<typeof getDb>): Person[] {
   }
   const tokensById = new Map<string, string[]>();
   for (const row of rows) tokensById.set(row.id, nameTokens(row.name));
-  const startups = new Map<string, { name: string; url: string | null }[]>();
+  const startups = new Map<string, { name: string; kind: string; url: string | null; primary: string | null }[]>();
   for (const row of db
     .prepare(
-      `SELECT r.person_id AS person_id, p.name AS name, p.website_url AS website_url
+      `SELECT r.person_id AS person_id, p.name AS name, p.kind AS kind, p.website_url AS website_url, p.primary_link AS primary_link
        FROM person_project_roles r JOIN projects p ON p.id = r.project_id`
     )
-    .all() as { person_id: string; name: string; website_url: string | null }[]) {
+    .all() as { person_id: string; name: string; kind: string; website_url: string | null; primary_link: string | null }[]) {
     const list = startups.get(row.person_id) ?? [];
-    list.push({ name: row.name, url: row.website_url });
+    list.push({ name: row.name, kind: row.kind, url: row.website_url, primary: row.primary_link });
     startups.set(row.person_id, list);
   }
   const evidence = new Map<string, string[]>();
@@ -397,7 +412,12 @@ function loadPeople(db: ReturnType<typeof getDb>): Person[] {
     if (tokens.length < 2) continue;
     const schools = [...new Set(campus.flatMap((item) => schoolPhrases(item.id, item.name)))];
     const orgs = startups.get(row.id) ?? [];
-    const startupNames = [...new Set(orgs.map((item) => usableOrgName(item.name)).filter((item): item is string => Boolean(item)))];
+    const startupNames = [
+      ...new Set(orgs.filter((item) => item.kind === "company").map((item) => usableOrgName(item.name)).filter((item): item is string => Boolean(item))),
+    ];
+    const programNames = [
+      ...new Set(orgs.filter((item) => item.kind !== "company").map((item) => usableOrgName(item.name)).filter((item): item is string => Boolean(item))),
+    ];
     const pages = new Set<string>();
     let aliases: string[] = [];
     try {
@@ -419,7 +439,9 @@ function loadPeople(db: ReturnType<typeof getDb>): Person[] {
       if (!skipHost(url) && !url.includes("linkedin.com")) pages.add(url.split("#")[0]);
     }
     for (const org of orgs) {
-      if (org.url && org.url.startsWith("http") && !skipHost(org.url)) pages.add(org.url.split("#")[0]);
+      for (const raw of [org.url, org.primary]) {
+        if (raw && raw.startsWith("http") && !skipHost(raw)) pages.add(raw.split("#")[0]);
+      }
     }
     const key = `${tokens[0].toLowerCase()} ${tokens[tokens.length - 1].toLowerCase()}`;
     people.push({
@@ -430,7 +452,7 @@ function loadPeople(db: ReturnType<typeof getDb>): Person[] {
       rank,
       schools,
       startups: startupNames,
-      programs: [],
+      programs: programNames,
       commonName: isCommonName(tokens, dupes.get(key) ?? 1),
       pages: [...pages].filter((url) => !skipHost(url)).slice(0, 8),
       github,
@@ -566,6 +588,21 @@ function printCoverage(db: ReturnType<typeof getDb>, baseline?: Checkpoint["base
   console.log("\nLinkedIn coverage");
   if (baseline) console.log(`Before: confirmed ${baseline.confirmed}, likely ${baseline.likely}, missing ${baseline.missing}`);
   console.log(`After: confirmed ${now.totals.confirmed}, likely ${now.totals.likely}, missing ${now.totals.missing}`);
+  const founders = db
+    .prepare(
+      `SELECT
+         COUNT(*) AS founders,
+         SUM(CASE WHEN aliases_json LIKE '%linkedin.com/in%' THEN 1 ELSE 0 END) AS confirmed,
+         SUM(CASE WHEN aliases_json NOT LIKE '%linkedin.com/in%' AND EXISTS (
+           SELECT 1 FROM claims c WHERE c.entity_type = 'person' AND c.entity_id = people.id
+             AND c.claim_type = 'linkedin_candidate' AND c.verification_state = 'likely'
+         ) THEN 1 ELSE 0 END) AS likely
+       FROM people WHERE founder_status = 'founder'`
+    )
+    .get() as { founders: number; confirmed: number; likely: number };
+  console.log(
+    `Founders ${founders.founders}: confirmed ${founders.confirmed}, likely ${founders.likely}, missing ${founders.founders - founders.confirmed - founders.likely}`
+  );
   for (const row of now.campuses) {
     const covered = row.confirmed + row.likely;
     const pct = row.people ? Math.round((covered / row.people) * 1000) / 10 : 0;
@@ -595,7 +632,8 @@ async function main() {
     return;
   }
   ensureSource(db);
-  const people = loadPeople(db);
+  const foundersOnly = hasFlag("--founders-only");
+  const people = loadPeople(db).filter((person) => !foundersOnly || person.founder);
   const index = new Map<string, Person[]>();
   for (const person of people) {
     const key = nameKey(person.name);
@@ -621,16 +659,22 @@ async function main() {
     ownersByUrl.set(url, list);
   };
   for (const url of ycUrls) addPage(url, null);
-  for (const person of people) {
-    if (person.rank > 2) continue;
+  const orderedPeople = [...people].sort((a, b) => a.rank - b.rank || Number(b.founder) - Number(a.founder) || a.name.localeCompare(b.name));
+  for (const person of orderedPeople) {
+    if (!person.founder && person.rank > 2) continue;
     for (const url of person.pages) {
       addPage(url, person);
-      if (person.founder || person.rank <= 1) {
+      if (person.founder) {
         for (const extra of extraPages(url)) addPage(extra, person);
       }
     }
   }
-  const queue = [...ownersByUrl.keys()].filter((url) => !checkpoint.urls[url]);
+  const queue = [...ownersByUrl.keys()]
+    .filter((url) => !checkpoint.urls[url])
+    .sort((a, b) => {
+      const rankOf = (url: string) => Math.min(9, ...(ownersByUrl.get(url) ?? []).map((person) => person.rank));
+      return rankOf(a) - rankOf(b) || a.localeCompare(b);
+    });
   console.log(`Fetch ${queue.length} pages (${ycUrls.length} YC company pages)`);
   const hops: string[] = [];
   await pool(queue, 3, async (url) => {

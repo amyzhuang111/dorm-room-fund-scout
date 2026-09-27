@@ -169,6 +169,24 @@ const tied = judgeHits({
 });
 assert.equal(tied.outcome, "ambiguous");
 
+const schoolProgram = judgeHits({
+  name: "Milidu Jayaweera",
+  schools: ["Brown University", "Brown"],
+  startups: ["EndoSwim Solutions"],
+  programs: ["Brown Venture Prize"],
+  commonName: false,
+  hits: [
+    {
+      url: "https://www.linkedin.com/in/milidu-jayaweera",
+      title: "Milidu Jayaweera - Brown Venture Prize",
+      snippet: "Milidu Jayaweera. Brown University. Brown Venture Prize.",
+      query: '"Milidu Jayaweera" Brown linkedin',
+    },
+  ],
+});
+assert.equal(schoolProgram.outcome, "accept");
+if (schoolProgram.outcome === "accept") assert.equal(schoolProgram.confidence, "likely");
+
 const ownSite = judgeHits({
   name: "Skyler Ji",
   schools: ["UC Berkeley", "Berkeley"],

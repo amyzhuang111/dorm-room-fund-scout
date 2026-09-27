@@ -1,9 +1,9 @@
 // Free LinkedIn matching. A profile URL is accepted only when the title or
 // snippet contains the full name plus at least one of school, startup, or
-// program. Two of those signals, or a link from the founder's own page or
-// their startup's page, is confirmed. One signal is likely. Common names with
-// a single signal, and two profiles that match equally, are ambiguous and
-// are not stored. Nothing is invented from a name alone.
+// program. Confirmed means an independent page links that exact profile, or
+// the name, school, and startup all match. A strong match on fewer of those
+// is likely. Common names with a single signal, and two profiles that match
+// equally, are ambiguous and are not stored. Nothing is invented from a name.
 
 export type SignalKind = "school" | "startup" | "program";
 export type Confidence = "confirmed" | "likely";
@@ -319,7 +319,11 @@ export function judgeHits(input: {
   if (input.commonName && !top.fromSite && top.signals.length < 2) {
     return { outcome: "ambiguous", reason: "common name matched only one signal" };
   }
-  const confidence: Confidence = top.fromSite || top.signals.length >= 2 ? "confirmed" : "likely";
+  // Confirmed when an independent page links this exact profile, or the
+  // snippet names the person together with both their school and startup.
+  // One of those, or school plus a program, is a strong match: likely.
+  const schoolAndStartup = top.signals.includes("school") && top.signals.includes("startup");
+  const confidence: Confidence = top.fromSite || schoolAndStartup ? "confirmed" : "likely";
   return {
     outcome: "accept",
     confidence,

@@ -51,9 +51,13 @@ export function LinkedInProfileLink({ action, name }: { action: LinkedInAction; 
   return (
     <span className="inline-flex items-center gap-1">
       <LinkedInIconButton action={action} name={name} />
-      {likely && (
-        <span className="rounded border border-dashed border-muted px-1 text-[10px] font-medium uppercase tracking-wide text-muted">likely</span>
-      )}
+      <span
+        className={`rounded border px-1 text-[10px] font-medium uppercase tracking-wide ${
+          likely ? "border-dashed border-muted text-muted" : "border-link text-link"
+        }`}
+      >
+        {action.status}
+      </span>
     </span>
   );
 }
