@@ -9,7 +9,7 @@ import { assembleCompanyProfile, displayedFunding, type CompanyFactRecord } from
 import { enrollmentBadge } from "./founder-status";
 import { directoryLabel, hotspotGroupByMapId, hotspotGroups, personIdsForPlace, projectIdsForPlace, relatedHotspotsForPerson, relatedHotspotsForProject } from "./hotspots";
 import { bestCard, hotspotHref, samePlace, SECTION_SHORT, tierBandLabel } from "./hotspot-model";
-import { bestPersonLink, linkedinAction, type LinkedInAction, type PersonLinkTarget } from "./person-link";
+import { bestPersonLink, linkedinAction, readLinkedInCandidate, type LinkedInAction, type PersonLinkTarget } from "./person-link";
 import { assembleProfileLinks, type ProfileIconLink } from "./profile-links";
 import { presenceForUniversity } from "./drf-presence";
 
@@ -82,28 +82,28 @@ function linkedinByPerson(
   for (const row of schools) if (!schoolBy.has(row.person_id)) schoolBy.set(row.person_id, row.name);
   const claims = db
     .prepare(
-      `SELECT entity_id, value_json FROM claims
-       WHERE entity_type = 'person' AND claim_type = 'linkedin_candidate' AND verification_state = 'unverified'
+      `SELECT entity_id, value_json, verification_state FROM claims
+       WHERE entity_type = 'person' AND claim_type = 'linkedin_candidate' AND verification_state IN ('unverified', 'likely')
          AND entity_id IN (${marks})`
     )
-    .all(...ids) as { entity_id: string; value_json: string }[];
-  const candidateBy = new Map<string, string>();
+    .all(...ids) as { entity_id: string; value_json: string; verification_state: string }[];
+  const candidateBy = new Map<string, { url: string; confidence: "likely" | "unverified" }>();
   for (const row of claims) {
-    if (candidateBy.has(row.entity_id)) continue;
-    try {
-      const value = JSON.parse(row.value_json) as { linkedin?: unknown };
-      if (typeof value.linkedin === "string" && value.linkedin.includes("linkedin.com/in/")) candidateBy.set(row.entity_id, value.linkedin);
-    } catch {
-      // skip
-    }
+    const candidate = readLinkedInCandidate(row.value_json, row.verification_state);
+    if (!candidate) continue;
+    const prev = candidateBy.get(row.entity_id);
+    if (prev?.confidence === "likely") continue;
+    candidateBy.set(row.entity_id, { url: candidate.url, confidence: candidate.confidence });
   }
   for (const person of people) {
+    const candidate = candidateBy.get(person.id);
     out.set(
       person.id,
       linkedinAction({
         name: person.name,
         aliasesJson: person.aliases_json,
-        candidateUrl: candidateBy.get(person.id) ?? null,
+        candidateUrl: candidate?.url ?? null,
+        candidateConfidence: candidate?.confidence ?? null,
         school: schoolBy.get(person.id) ?? null,
         company,
       })
@@ -160,19 +160,16 @@ function personFocus(
     .get(person.id) as { name: string } | undefined;
   const candidates = db
     .prepare(
-      `SELECT value_json FROM claims
-       WHERE entity_type = 'person' AND entity_id = ? AND claim_type = 'linkedin_candidate' AND verification_state = 'unverified'`
+      `SELECT value_json, verification_state FROM claims
+       WHERE entity_type = 'person' AND entity_id = ? AND claim_type = 'linkedin_candidate' AND verification_state IN ('unverified', 'likely')`
     )
-    .all(person.id) as { value_json: string }[];
-  const linkedinCandidates: { url: string }[] = [];
+    .all(person.id) as { value_json: string; verification_state: string }[];
+  const linkedinCandidates: { url: string; confidence: "likely" | "unverified" }[] = [];
   for (const row of candidates) {
-    try {
-      const value = JSON.parse(row.value_json) as { linkedin?: string };
-      if (value.linkedin?.includes("linkedin.com/in/")) linkedinCandidates.push({ url: value.linkedin });
-    } catch {
-      // skip
-    }
+    const candidate = readLinkedInCandidate(row.value_json, row.verification_state);
+    if (candidate) linkedinCandidates.push({ url: candidate.url, confidence: candidate.confidence });
   }
+  const likely = linkedinCandidates.find((candidate) => candidate.confidence === "likely");
   const profileClaims = (
     db
       .prepare(`SELECT value_json, excerpt, source_url FROM claims WHERE entity_type = 'person' AND entity_id = ? AND claim_type = 'profile_link'`)
@@ -231,7 +228,8 @@ function personFocus(
     linkedin: linkedinAction({
       name: person.name,
       aliasesJson: person.aliases_json,
-      candidateUrl: linkedinCandidates[0]?.url ?? null,
+      candidateUrl: (likely ?? linkedinCandidates[0])?.url ?? null,
+      candidateConfidence: (likely ?? linkedinCandidates[0])?.confidence ?? null,
       school: school?.name ?? null,
       company: companies[0]?.name ?? null,
     }),

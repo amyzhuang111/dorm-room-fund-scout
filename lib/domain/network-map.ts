@@ -16,7 +16,7 @@ import { REGIONS, regionForCampus, regionInk, type RegionMarker } from "./networ
 import type { HotspotSectionId, HotspotTier } from "./hotspot-model";
 import { demoteDuplicateOuter, rimPlacementFor, type RimBand, type RimTier } from "./rim-tier";
 import { hotspotGraphPatch, organizationMap } from "./hotspots";
-import { confirmedLinkedIn } from "./person-link";
+import { confirmedLinkedIn, readLinkedInCandidate } from "./person-link";
 import { sectorLabel } from "./sectors";
 import { drfWorksAtEdges } from "./drf-alumni";
 
@@ -59,7 +59,7 @@ export interface MapNode {
   potential: boolean;
   /** Stored linkedin.com/in path. Omitted when the person has neither a confirmed alias nor an unverified candidate. */
   linkedinUrl?: string;
-  linkedinStatus?: "confirmed" | "unverified";
+  linkedinStatus?: "confirmed" | "likely" | "unverified";
   /** Directory tier for an organization node. Absent on every other type. */
   orgTier?: HotspotTier;
   /**
@@ -386,27 +386,27 @@ function assembleNetworkMap(): MapGraph {
     verification_status: string | null;
   }[];
   const personIds = new Set(people.map((person) => person.id));
-  const linkedinByPerson = new Map<string, { url: string; status: "confirmed" | "unverified" }>();
+  const linkedinByPerson = new Map<string, { url: string; status: "confirmed" | "likely" | "unverified" }>();
   for (const person of people) {
     const confirmed = confirmedLinkedIn(person.aliases_json);
     if (confirmed) linkedinByPerson.set(person.id, { url: confirmed, status: "confirmed" });
   }
   const candidateRows = db
     .prepare(
-      `SELECT entity_id, value_json FROM claims
-       WHERE entity_type = 'person' AND claim_type = 'linkedin_candidate' AND verification_state = 'unverified'`
+      `SELECT entity_id, value_json, verification_state FROM claims
+       WHERE entity_type = 'person' AND claim_type = 'linkedin_candidate' AND verification_state IN ('unverified', 'likely')`
     )
-    .all() as { entity_id: string; value_json: string }[];
+    .all() as { entity_id: string; value_json: string; verification_state: string }[];
   for (const row of candidateRows) {
-    if (!personIds.has(row.entity_id) || linkedinByPerson.has(row.entity_id)) continue;
-    try {
-      const value = JSON.parse(row.value_json) as { linkedin?: unknown };
-      if (typeof value.linkedin === "string" && value.linkedin.includes("linkedin.com/in/")) {
-        linkedinByPerson.set(row.entity_id, { url: value.linkedin, status: "unverified" });
-      }
-    } catch {
-      // skip a malformed candidate
-    }
+    if (!personIds.has(row.entity_id)) continue;
+    const existing = linkedinByPerson.get(row.entity_id);
+    if (existing?.status === "confirmed" || existing?.status === "likely") continue;
+    const candidate = readLinkedInCandidate(row.value_json, row.verification_state);
+    if (!candidate) continue;
+    linkedinByPerson.set(row.entity_id, {
+      url: candidate.url,
+      status: candidate.confidence === "likely" ? "likely" : "unverified",
+    });
   }
 
   const affiliations = db.prepare(`SELECT person_id, university_id FROM affiliations`).all() as { person_id: string; university_id: string }[];
