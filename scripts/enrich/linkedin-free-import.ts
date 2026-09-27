@@ -3,15 +3,18 @@
 // Does not call Apify, does not log in to LinkedIn, and does not read a
 // profile behind LinkedIn's login wall. Search uses Google, Bing, and
 // DuckDuckGo HTML. A URL is stored only when the result title or snippet
-// contains the full name plus school, startup, or program. Two signals, or a
-// link on the founder's own page or their startup's page, is confirmed. One
-// signal is likely. Common names with one signal, and ties, are skipped.
+// contains the full name plus school, startup, or program. Confirmed means an
+// independent page links that exact profile, or the name, school, and startup
+// all match. A strong match on fewer of those is likely. Common names with
+// one signal, and ties, are skipped.
 //
 //   npx tsx scripts/enrich/linkedin-free-import.ts
 //   npx tsx scripts/enrich/linkedin-free-import.ts --limit 25
 //   npx tsx scripts/enrich/linkedin-free-import.ts --harvest-only
 //   npx tsx scripts/enrich/linkedin-free-import.ts --search-only
 //   npx tsx scripts/enrich/linkedin-free-import.ts --apply
+//   npx tsx scripts/enrich/linkedin-free-import.ts --founders-only
+//   npx tsx scripts/enrich/linkedin-free-import.ts --import-hits data/imports/linkedin-search-raw.jsonl
 //   npx tsx scripts/enrich/linkedin-free-import.ts --stats
 //
 // Resumable: data/imports/linkedin-free-checkpoint.json records every person.
@@ -188,6 +191,15 @@ function allLinkedIns(html: string): string[] {
   return [...urls];
 }
 
+function searchProofUrl(query: string, engine: string): string {
+  const trimmed = query.trim();
+  if (!trimmed) return "";
+  const q = encodeURIComponent(trimmed);
+  if (engine === "bing") return `https://www.bing.com/search?q=${q}`;
+  if (engine === "duckduckgo") return `https://duckduckgo.com/html/?q=${q}`;
+  return `https://www.google.com/search?hl=en&q=${q}`;
+}
+
 function citeUrl(text: string): string | null {
   const direct = text.match(/https?:\/\/(?:[\w.-]+\.)?linkedin\.com\/in\/[A-Za-z0-9\-_%]{3,100}/i);
   if (direct) return normalizeLinkedInUrl(direct[0]);
@@ -227,12 +239,31 @@ function ensureSource(db: ReturnType<typeof getDb>) {
   ).run(SOURCE_ID, nowIso());
 }
 
+function linkedInOwnedByOther(db: ReturnType<typeof getDb>, personId: string, url: string): boolean {
+  const aliasHit = db
+    .prepare(`SELECT id FROM people WHERE id != ? AND aliases_json LIKE ? LIMIT 1`)
+    .get(personId, `%linkedin:${url}"%`) as { id: string } | undefined;
+  if (aliasHit) return true;
+  const claimHit = db
+    .prepare(
+      `SELECT entity_id FROM claims
+       WHERE entity_type = 'person' AND entity_id != ? AND source_url = ?
+         AND claim_type IN ('linkedin_alias_discovered', 'linkedin_candidate')
+         AND verification_state IN ('corroborated', 'likely')
+       LIMIT 1`
+    )
+    .get(personId, url) as { entity_id: string } | undefined;
+  return Boolean(claimHit);
+}
+
 function storeMatch(db: ReturnType<typeof getDb>, person: { id: string; name: string }, match: AcceptMatch, engine: string): Outcome {
   const now = nowIso();
+  const proofUrl = match.fromSite && /^https?:\/\//.test(match.query) ? match.query : searchProofUrl(match.query, engine);
   const evidence = {
     linkedin: match.url,
     confidence: match.confidence,
     query: match.query,
+    proofUrl,
     snippet: match.snippet,
     title: match.title,
     signals: match.signals,
@@ -244,6 +275,7 @@ function storeMatch(db: ReturnType<typeof getDb>, person: { id: string; name: st
     const row = db.prepare(`SELECT aliases_json FROM people WHERE id = ?`).get(person.id) as { aliases_json: string } | undefined;
     if (!row) return "not_found";
     if (hasLinkedInAlias(row.aliases_json)) return "existing";
+    if (linkedInOwnedByOther(db, person.id, match.url)) return "existing";
     if (match.confidence === "confirmed") {
       const aliases = JSON.parse(row.aliases_json || "[]") as string[];
       if (!aliases.some((alias) => alias.includes(match.url))) aliases.push(`linkedin:${match.url}`);
@@ -352,7 +384,8 @@ function loadPeople(db: ReturnType<typeof getDb>): Person[] {
     const key = tokens.length >= 2 ? `${tokens[0].toLowerCase()} ${tokens[tokens.length - 1].toLowerCase()}` : "";
     const focus = campus.some((item) => FOCUS_CAMPUSES.has(item.id));
     const verified = row.verification_status === "confirmed";
-    const priority = row.founder_status === "founder" && verified && focus ? 0 : row.founder_status === "founder" ? 1 : 2;
+    const campusRank = campus.some((item) => item.id === "univ_penn") ? 0 : campus.some((item) => item.id === "univ_berkeley") ? 1 : 2;
+    const priority = (campusRank * 10) + (row.founder_status === "founder" && verified && focus ? 0 : row.founder_status === "founder" ? 1 : 2);
     people.push({
       id: row.id,
       name: row.name,
@@ -870,6 +903,78 @@ async function applyResults(db: ReturnType<typeof getDb>) {
   console.log(`Applied ${wrote} rows, skipped ${skipped}.`);
 }
 
+function founderCoverage(db: ReturnType<typeof getDb>) {
+  return db
+    .prepare(
+      `SELECT
+         COUNT(*) AS founders,
+         SUM(CASE WHEN aliases_json LIKE '%linkedin.com/in%' THEN 1 ELSE 0 END) AS confirmed,
+         SUM(CASE WHEN aliases_json NOT LIKE '%linkedin.com/in%' AND EXISTS (
+           SELECT 1 FROM claims c WHERE c.entity_type = 'person' AND c.entity_id = people.id
+             AND c.claim_type = 'linkedin_candidate' AND c.verification_state = 'likely'
+         ) THEN 1 ELSE 0 END) AS likely
+       FROM people WHERE founder_status = 'founder'`
+    )
+    .get() as { founders: number; confirmed: number; likely: number };
+}
+
+function printFounders(db: ReturnType<typeof getDb>) {
+  const row = founderCoverage(db);
+  const missing = row.founders - row.confirmed - row.likely;
+  console.log(`Founders ${row.founders}: confirmed ${row.confirmed}, likely ${row.likely}, missing ${missing}`);
+}
+
+async function importHits(db: ReturnType<typeof getDb>, filePath: string) {
+  if (!fs.existsSync(filePath)) {
+    console.log(`No hits file at ${filePath}`);
+    return;
+  }
+  ensureSource(db);
+  const people = new Map(loadPeople(db).map((person) => [person.id, person]));
+  const lines = fs.readFileSync(filePath, "utf8").split("\n").filter(Boolean);
+  const merged = new Map<string, MatchHit[]>();
+  for (const line of lines) {
+    const row = JSON.parse(line) as { person_id?: string; query?: string; hits?: MatchHit[] };
+    if (!row.person_id || !row.hits?.length) continue;
+    const list = merged.get(row.person_id) ?? [];
+    // The search query lives on the jsonl row. Copy it onto each hit so the
+    // stored proof URL is the search that returned the profile, not an empty query.
+    const query = (row.query ?? "").trim();
+    for (const hit of row.hits) {
+      list.push({ ...hit, query: (hit.query ?? "").trim() || query });
+    }
+    merged.set(row.person_id, list);
+  }
+  let wrote = 0;
+  let skipped = 0;
+  for (const [personId, hits] of merged) {
+    const person = people.get(personId);
+    if (!person || hits.length === 0) {
+      skipped += 1;
+      continue;
+    }
+    const judged = judgeHits({
+      name: person.name,
+      schools: person.schools,
+      startups: person.startups,
+      programs: person.programs,
+      commonName: person.commonName,
+      hits,
+    });
+    if (judged.outcome !== "accept") {
+      skipped += 1;
+      continue;
+    }
+    const outcome = storeMatch(db, person, judged, "search");
+    if (outcome === "confirmed" || outcome === "likely") {
+      wrote += 1;
+      console.log(`${outcome} ${person.name} ${judged.url} [${judged.signals.join("+")}]`);
+    } else skipped += 1;
+  }
+  db.pragma("wal_checkpoint(TRUNCATE)");
+  console.log(`Imported ${wrote} rows, skipped ${skipped}.`);
+}
+
 console.log = (...args: unknown[]) => {
   fs.writeSync(1, `${args.map((item) => (typeof item === "string" ? item : JSON.stringify(item))).join(" ")}\n`);
 };
@@ -878,12 +983,20 @@ async function main() {
   const db = getDb();
   const checkpoint = loadCheckpoint();
   if (hasFlag("--stats")) {
+    printFounders(db);
     printStats(db, checkpoint);
     return;
   }
   if (hasFlag("--apply")) {
     await applyResults(db);
+    printFounders(db);
     printStats(db, checkpoint);
+    return;
+  }
+  const hitsFile = argValue("--import-hits");
+  if (hitsFile) {
+    await importHits(db, hitsFile);
+    printFounders(db);
     return;
   }
   if (!checkpoint.baseline) {
@@ -894,7 +1007,8 @@ async function main() {
   }
   ensureSource(db);
   const limit = Number(argValue("--limit") ?? "0");
-  let people = loadPeople(db).filter((person) => !checkpoint.people[person.id]);
+  const foundersOnly = hasFlag("--founders-only");
+  let people = loadPeople(db).filter((person) => !checkpoint.people[person.id] && (!foundersOnly || person.founderStatus === "founder"));
   if (limit > 0) people = people.slice(0, limit);
   console.log(`Queue ${people.length} people without a LinkedIn URL`);
 

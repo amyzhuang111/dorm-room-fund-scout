@@ -1,9 +1,9 @@
 // Free LinkedIn matching. A profile URL is accepted only when the title or
 // snippet contains the full name plus at least one of school, startup, or
-// program. Two of those signals, or a link from the founder's own page or
-// their startup's page, is confirmed. One signal is likely. Common names with
-// a single signal, and two profiles that match equally, are ambiguous and
-// are not stored. Nothing is invented from a name alone.
+// program. Confirmed means an independent page links that exact profile, or
+// the name, school, and startup all match. A strong match on fewer of those
+// is likely. Common names with a single signal, and two profiles that match
+// equally, are ambiguous and are not stored. Nothing is invented from a name.
 
 export type SignalKind = "school" | "startup" | "program";
 export type Confidence = "confirmed" | "likely";
@@ -105,6 +105,14 @@ const COMMON_FIRST = new Set(
   )
 );
 
+// A state or region name is not a school. "Philadelphia, Pennsylvania" and
+// "Penn State" must not count as the University of Pennsylvania.
+const BROAD_GEO = new Set(
+  "pennsylvania california york jersey virginia carolina washington michigan florida texas ohio georgia illinois indiana colorado arizona oregon nevada utah iowa kansas nebraska alabama louisiana mississippi arkansas oklahoma connecticut maryland massachusetts wisconsin minnesota missouri tennessee kentucky hampshire district america states united state".split(
+    /\s+/
+  )
+);
+
 const COMMON_LAST = new Set(
   `smith johnson williams brown jones garcia miller davis rodriguez martinez hernandez lopez gonzalez wilson anderson thomas taylor moore jackson martin lee white harris thompson robinson clark lewis walker young allen king wright scott green baker adams nelson hill ramirez campbell mitchell roberts carter phillips evans turner torres parker collins edwards stewart flores morris nguyen murphy rivera cook rogers morgan peterson cooper reed bailey bell gomez kelly howard ward cox diaz richardson wood watson brooks bennett gray james reyes cruz hughes price myers long foster sanders ross morales powell sullivan russell ortiz jenkins gutierrez perry butler barnes fisher li wang zhang chen liu singh patel kim wu xu zhao huang lin yang chang gupta shah kumar das gao guo he lu luo song sun tan xu zhou zhu`.split(
     /\s+/
@@ -135,8 +143,12 @@ export function schoolPhrases(campusId: string, universityName: string | null | 
   if (name.length >= 4) phrases.add(name);
   for (const alias of CAMPUS_ALIASES[campusId] ?? []) phrases.add(alias);
   const of = name.match(/^(?:University|College) of (.+)$/i);
-  if (of && of[1].length >= 5) phrases.add(of[1].replace(/,.*/, "").trim());
-  return [...phrases].filter((phrase) => phrase.length >= 3);
+  if (of && of[1].length >= 5) {
+    const tail = of[1].replace(/,.*/, "").trim();
+    const tailWords = tail.toLowerCase().split(/\s+/);
+    if (!tailWords.every((word) => BROAD_GEO.has(word))) phrases.add(tail);
+  }
+  return [...phrases].filter((phrase) => phrase.length >= 3 && !BROAD_GEO.has(phrase.toLowerCase()));
 }
 
 export function usableOrgName(name: string | null | undefined): string | null {
@@ -204,6 +216,7 @@ export function normalizeLinkedInUrl(raw: string | null | undefined): string | n
   }
   slug = slug.replace(/[^A-Za-z0-9\-_%]/g, "");
   if (slug.length < 3) return null;
+  if (/123456|654321|098765|987654|111111|000000|999999/.test(slug)) return null;
   if (/^(pub|dir|directory|company|school|in)$/i.test(slug)) return null;
   return `https://www.linkedin.com/in/${slug}`;
 }
@@ -214,7 +227,12 @@ function escapeReg(value: string): string {
 
 function hasPhrase(text: string, phrase: string): boolean {
   const cleaned = phrase.replace(/\s+/g, " ").trim();
-  if (cleaned.length < 3) return false;
+  if (cleaned.length < 3 || BROAD_GEO.has(cleaned.toLowerCase())) return false;
+  if (/^penn$/i.test(cleaned)) {
+    if (/\b(university of pennsylvania|upenn|wharton)\b/i.test(text)) return true;
+    // "Penn State" and "penn-state-university" are not Penn.
+    return /(?<![\w-])penn(?![\w-])(?![\s-]+state\b)/i.test(text);
+  }
   return new RegExp(`\\b${escapeReg(cleaned)}\\b`, "i").test(text);
 }
 
@@ -319,7 +337,21 @@ export function judgeHits(input: {
   if (input.commonName && !top.fromSite && top.signals.length < 2) {
     return { outcome: "ambiguous", reason: "common name matched only one signal" };
   }
-  const confidence: Confidence = top.fromSite || top.signals.length >= 2 ? "confirmed" : "likely";
+  // A school mention alone is a different person often enough when the given
+  // name or surname is common. The startup still has to be missing here;
+  // name + school + startup stays confirmed above.
+  if (!top.fromSite && top.signals.length === 1 && top.signals[0] === "school") {
+    const first = tokens[0].toLowerCase();
+    const last = tokens[tokens.length - 1].toLowerCase();
+    if (COMMON_FIRST.has(first) || COMMON_LAST.has(last)) {
+      return { outcome: "ambiguous", reason: "school-only match for a common name" };
+    }
+  }
+  // Confirmed when an independent page links this exact profile, or the
+  // snippet names the person together with both their school and startup.
+  // One of those, or school plus a program, is a strong match: likely.
+  const schoolAndStartup = top.signals.includes("school") && top.signals.includes("startup");
+  const confidence: Confidence = top.fromSite || schoolAndStartup ? "confirmed" : "likely";
   return {
     outcome: "accept",
     confidence,
@@ -337,7 +369,7 @@ export function nearbyLinkedIn(html: string, fullName: string): { url: string; e
   if (tokens.length < 2) return [];
   const found: { url: string; excerpt: string }[] = [];
   const seen = new Set<string>();
-  const re = /<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]{0,180}?)<\/a>/gi;
+  const re = /<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi;
   let match: RegExpExecArray | null;
   while ((match = re.exec(html))) {
     const href = match[1].replace(/&amp;/g, "&");
@@ -345,18 +377,21 @@ export function nearbyLinkedIn(html: string, fullName: string): { url: string; e
     const absolute = href.startsWith("http") ? href : `https://${href.replace(/^\/+/, "")}`;
     const url = normalizeLinkedInUrl(absolute);
     if (!url || seen.has(url) || !slugLooksLikeName(url, fullName)) continue;
-    const anchor = match[2]
+    const close = html.slice(match.index, match.index + 1500).match(/<\/a>/i);
+    const anchor = (close ? html.slice(match.index, match.index + (close.index ?? 0)) : "")
       .replace(/<[^>]+>/g, " ")
       .replace(/&amp;/g, "&")
       .replace(/\s+/g, " ")
       .trim();
+    // Icon-only LinkedIn buttons put the name in the card, not the anchor.
+    // Use the stripped text just above the link, not the raw markup.
     const before = html
-      .slice(Math.max(0, match.index - 160), match.index)
+      .slice(Math.max(0, match.index - 3500), match.index)
       .replace(/<[^>]+>/g, " ")
       .replace(/&amp;/g, "&")
       .replace(/\s+/g, " ")
       .trim()
-      .slice(-80);
+      .slice(-280);
     const excerpt = `${before} ${anchor}`.trim();
     if (!textHasTokens(excerpt, tokens)) continue;
     seen.add(url);

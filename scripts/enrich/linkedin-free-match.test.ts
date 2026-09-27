@@ -29,7 +29,26 @@ assert.equal(isCommonName(["Allan", "Guo"], 1), false);
 
 assert.equal(usableOrgName("Labs"), null);
 assert.equal(usableOrgName("Nematex"), "Nematex");
-assert.ok(schoolPhrases("univ_penn", "University of Pennsylvania").includes("Wharton"));
+const pennSchools = schoolPhrases("univ_penn", "University of Pennsylvania");
+assert.ok(pennSchools.includes("Wharton"));
+assert.equal(pennSchools.includes("Pennsylvania"), false);
+assert.equal(
+  judgeHits({
+    name: "Joshua Weiner",
+    schools: pennSchools,
+    startups: ["Infra"],
+    programs: [],
+    commonName: false,
+    hits: [
+      {
+        url: "https://www.linkedin.com/in/joshua-weiner-infra",
+        title: "Joshua Weiner",
+        snippet: "Joshua Weiner. Philadelphia, Pennsylvania. Cybersecurity at [Penn State University](https://www.linkedin.com/school/penn-state-university).",
+      },
+    ],
+  }).outcome,
+  "reject"
+);
 
 const schools = ["Brown University", "Brown"];
 const startups = ["Nematex"];
@@ -130,6 +149,22 @@ const combined = judgeHits({
 assert.equal(combined.outcome, "accept");
 if (combined.outcome === "accept") assert.equal(combined.confidence, "confirmed");
 
+const schoolOnlyCommon = judgeHits({
+  name: "Adam Towner",
+  schools: ["Rice University", "Rice"],
+  startups: ["Claude"],
+  programs: [],
+  commonName: false,
+  hits: [
+    {
+      url: "https://www.linkedin.com/in/adam-the-towner",
+      title: "Adam Towner",
+      snippet: "Adam Towner. First Year Representative at Rice University.",
+    },
+  ],
+});
+assert.equal(schoolOnlyCommon.outcome, "ambiguous");
+
 const likely = judgeHits({
   name: "Milidu Jayaweera",
   schools: ["Brown University", "Brown"],
@@ -169,6 +204,24 @@ const tied = judgeHits({
 });
 assert.equal(tied.outcome, "ambiguous");
 
+const schoolProgram = judgeHits({
+  name: "Milidu Jayaweera",
+  schools: ["Brown University", "Brown"],
+  startups: ["EndoSwim Solutions"],
+  programs: ["Brown Venture Prize"],
+  commonName: false,
+  hits: [
+    {
+      url: "https://www.linkedin.com/in/milidu-jayaweera",
+      title: "Milidu Jayaweera - Brown Venture Prize",
+      snippet: "Milidu Jayaweera. Brown University. Brown Venture Prize.",
+      query: '"Milidu Jayaweera" Brown linkedin',
+    },
+  ],
+});
+assert.equal(schoolProgram.outcome, "accept");
+if (schoolProgram.outcome === "accept") assert.equal(schoolProgram.confidence, "likely");
+
 const ownSite = judgeHits({
   name: "Skyler Ji",
   schools: ["UC Berkeley", "Berkeley"],
@@ -196,6 +249,14 @@ assert.equal(nearbyLinkedIn(page, "Someone Else").length, 0);
 
 const distant = `<p>Eden Growney, McCormick '26</p>${" word".repeat(80)}<a href="https://www.linkedin.com/in/sachchitnis">Sach Chitnis</a>`;
 assert.equal(nearbyLinkedIn(distant, "Eden Growney").length, 0);
+
+const icon = `<h2>Shana Wang</h2><p>Chief Executive Officer</p><a href="https://www.linkedin.com/in/shanahwang" aria-label="LinkedIn"><svg></svg></a>`;
+const iconHit = nearbyLinkedIn(icon, "Shana Wang");
+assert.equal(iconHit.length, 1);
+assert.equal(iconHit[0].url, "https://www.linkedin.com/in/shanahwang");
+
+const farName = `<p>Shana Wang</p>${" word".repeat(120)}<a href="https://www.linkedin.com/in/shanahwang">LinkedIn</a>`;
+assert.equal(nearbyLinkedIn(farName, "Shana Wang").length, 0);
 
 const wrongSlug = judgeHits({
   name: "Eden Growney",
