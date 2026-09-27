@@ -2,6 +2,8 @@
 // kept on the card, including the link. Tiers here are the directory's own
 // scouting notes. They are not Founder Signal.
 
+import { compareCampusLabels, shortCampusLabel } from "./campuses";
+
 export type HotspotSectionId = "existing_founders" | "startups" | "potential_founders";
 export type HotspotTier = "S" | "A" | "B" | "C" | "D";
 export type HotspotPlaceKind = "campus" | "city" | "other";
@@ -118,6 +120,36 @@ const CAMPUS_IDS: Record<string, string> = {
   Princeton: "univ_princeton",
   CMU: "univ_cmu",
   Waterloo: "univ_waterloo",
+  Brown: "univ_brown",
+  "Cornell / Cornell Tech": "univ_cornell",
+  "Cornell Tech": "univ_cornell_tech",
+  Duke: "univ_duke",
+  "Harvey Mudd": "univ_hmc",
+  NYU: "univ_nyu",
+  Yale: "univ_yale",
+  UCLA: "univ_ucla",
+  USC: "univ_usc",
+  "University of Washington": "univ_uw",
+  Caltech: "univ_caltech",
+  "UNC Chapel Hill": "univ_unc",
+  Georgetown: "univ_georgetown",
+  Emory: "univ_emory",
+  Vanderbilt: "univ_vanderbilt",
+  UVA: "univ_uva",
+  Lafayette: "univ_lafayette",
+  Northwestern: "univ_northwestern",
+  UChicago: "univ_uchicago",
+  UIUC: "univ_uiuc",
+  WashU: "univ_washu",
+  "Notre Dame": "univ_notredame",
+  "UT Austin": "univ_utexas",
+  Rice: "univ_rice",
+  Dartmouth: "univ_dartmouth",
+  "Boston University": "univ_bu",
+  "University of Toronto": "univ_toronto",
+  Laurentian: "univ_laurentian",
+  "Queen's": "univ_queens",
+  "Cambridge (UK)": "univ_cambridge",
 };
 
 const CITIES = new Set(["Philadelphia", "San Francisco", "New York", "Boston"]);
@@ -403,11 +435,44 @@ export function placeKindFor(campus: string, region: string): HotspotPlaceKind {
   return "campus";
 }
 
-export function sortGroupFor(campus: string, placeKind: HotspotPlaceKind): number {
-  if (campus === "Penn") return 0;
-  if (campus === "UC Berkeley") return 1;
-  if (placeKind === "city") return 3;
-  return 2;
+/** Universities first. Cities and cross-campus programmes share the group after them. */
+export function sortGroupFor(_campus: string, placeKind: HotspotPlaceKind): number {
+  if (placeKind === "city" || placeKind === "other") return 1;
+  return 0;
+}
+
+/**
+ * Campus dropdown labels: every university in the database, using the hotspot
+ * directory's own label when that school already has places. City places and
+ * cross-campus programmes stay in their own A–Z lists so the UI can place
+ * them after the universities.
+ */
+export function campusFilterLabels(
+  cards: Pick<HotspotCard, "campus" | "campusId" | "placeKind">[],
+  universities: { id: string; name: string }[],
+): { campuses: string[]; cities: string[]; programmes: string[] } {
+  const labelById = new Map<string, string>();
+  const campusLabels = new Set<string>();
+  const cityLabels = new Set<string>();
+  const programmeLabels = new Set<string>();
+  for (const card of cards) {
+    if (card.placeKind === "campus") {
+      campusLabels.add(card.campus);
+      if (card.campusId && !labelById.has(card.campusId)) labelById.set(card.campusId, card.campus);
+    } else if (card.placeKind === "city" && card.campus) {
+      cityLabels.add(card.campus);
+    } else if (card.campus) {
+      programmeLabels.add(card.campus);
+    }
+  }
+  for (const uni of universities) {
+    campusLabels.add(labelById.get(uni.id) ?? shortCampusLabel(uni.id, uni.name));
+  }
+  return {
+    campuses: [...campusLabels].sort(compareCampusLabels),
+    cities: [...cityLabels].sort(compareCampusLabels),
+    programmes: [...programmeLabels].sort(compareCampusLabels),
+  };
 }
 
 export function slugId(parts: string[]): string {
@@ -534,7 +599,7 @@ export function appendixFromRows(rows: Record<string, string>[]): AppendixEntry[
 
 export function compareCampuses(a: HotspotCard, b: HotspotCard): number {
   if (a.sortGroup !== b.sortGroup) return a.sortGroup - b.sortGroup;
-  const byName = a.campus.localeCompare(b.campus);
+  const byName = a.campus.localeCompare(b.campus, "en", { sensitivity: "base" });
   if (byName !== 0) return byName;
   const section = SECTION_ORDER.indexOf(a.section) - SECTION_ORDER.indexOf(b.section);
   if (section !== 0) return section;

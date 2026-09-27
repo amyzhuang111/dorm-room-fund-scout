@@ -127,7 +127,7 @@ export function campusSwatches(nodes: { id: string; type: string; label: string;
   const colors = assignCampusColors(campuses.map((node) => ({ id: node.campus as string, x: node.x, y: node.y })));
   return campuses
     .map((node) => ({ id: node.campus as string, label: node.label, color: colors.get(node.campus as string) ?? NODE_FILL.campus }))
-    .sort((a, b) => a.label.localeCompare(b.label) || a.id.localeCompare(b.id));
+    .sort((a, b) => a.label.localeCompare(b.label, "en", { sensitivity: "base" }) || a.id.localeCompare(b.id));
 }
 
 export function nodeColor(node: { type: MapNodeType; campus: string | null; id?: string }, colors: Map<string, string>): string {

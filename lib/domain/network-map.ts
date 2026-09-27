@@ -166,7 +166,7 @@ function assembleNetworkMap(): MapGraph {
   const db = getDb();
   const campusName = new Map(CAMPUSES.map((campus) => [campus.id, campus.shortLabel]));
 
-  const universities = db.prepare(`SELECT id, name FROM universities`).all() as { id: string; name: string }[];
+  const universities = db.prepare(`SELECT id, name FROM universities ORDER BY name`).all() as { id: string; name: string }[];
   const uniIds = new Set(universities.map((row) => row.id));
 
   const peopleColumns = new Set((db.prepare(`PRAGMA table_info(people)`).all() as { name: string }[]).map((column) => column.name));

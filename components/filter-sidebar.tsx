@@ -1,5 +1,5 @@
 import { buildHref } from "@/lib/domain/url";
-import { CAMPUSES, shortCampusLabel } from "@/lib/domain/campuses";
+import { alphabeticalByLabel, compareCampusLabels, shortCampusLabel } from "@/lib/domain/campuses";
 import type { CoverageState, SectorCount, UniversitySummary } from "@/lib/domain/queries";
 import { SIGNAL_TIERS } from "@/lib/domain/signal-tier";
 import { FeedbackSync } from "./feedback-sync";
@@ -72,9 +72,7 @@ export function FilterSidebar({
   sectors?: SectorCount[];
 }) {
   const total = universities.reduce((sum, u) => sum + (mode === "founder" ? u.founderCount : u.companyCount), 0);
-  const firstClassIds = new Set(CAMPUSES.filter((c) => c.firstClass).map((c) => c.id));
-  const firstClass = universities.filter((u) => firstClassIds.has(u.id));
-  const rest = universities.filter((u) => !firstClassIds.has(u.id));
+  const listed = alphabeticalByLabel(universities, (u) => shortCampusLabel(u.id, u.name));
   const scannedCount = universities.filter((u) => u.sourcesConfigured > 0).length;
   // Sector is a Startup Scout (kind='company') concept — skip the query on
   // Founder Scout pages. Only real, researched sector values ever appear
@@ -103,25 +101,11 @@ export function FilterSidebar({
             All campuses
           </ScoutLink>
         </li>
-        {firstClass.map((u) => (
+        {listed.map((u) => (
           <li key={u.id}>
             <UniversityRow u={u} basePath={basePath} current={current} mode={mode} />
           </li>
         ))}
-        {rest.length > 0 && (
-          <li>
-            <details>
-              <summary className="cursor-pointer list-none rounded-md px-2 py-1.5 text-sm text-muted hover:bg-surface-2">More universities…</summary>
-              <ul className="mt-0.5 space-y-0.5 pl-1">
-                {rest.map((u) => (
-                  <li key={u.id}>
-                    <UniversityRow u={u} basePath={basePath} current={current} mode={mode} />
-                  </li>
-                ))}
-              </ul>
-            </details>
-          </li>
-        )}
       </ul>
 
       {mode === "startup" && (
@@ -223,7 +207,9 @@ export function FilterSidebar({
               {sectors.map((s) => (
                 <li key={`${s.tag}-campus`} className="text-[11px] text-muted">
                   <span className="text-foreground">{s.label}</span>
-                  {s.byCampus.map((c) => (
+                  {[...s.byCampus]
+                    .sort((a, b) => compareCampusLabels(shortCampusLabel(a.universityId, a.name), shortCampusLabel(b.universityId, b.name)))
+                    .map((c) => (
                     <span key={c.universityId}>
                       {" "}
                       · {shortCampusLabel(c.universityId, c.name)} {c.count}

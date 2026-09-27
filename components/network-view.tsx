@@ -30,7 +30,7 @@ export function NetworkView({
   const view = { ...graph, nodes, edges };
   const campusName = universityId
     ? (universities.find((u) => u.id === universityId)?.name ?? "campus")
-    : "Penn and Berkeley";
+    : "All campuses";
 
   if (view.nodes.length === 0) {
     return <p className="p-6 text-sm text-muted">No evidence-backed connections on record for this campus yet.</p>;

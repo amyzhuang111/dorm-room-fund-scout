@@ -7,7 +7,7 @@ import type { CampusArc, CandidateSummary, UniversitySummary } from "@/lib/domai
 import { ResultTray } from "./result-tray";
 import { PersonLinkButton } from "./person-link";
 import { CompanyNameLink } from "./company-website";
-import { shortCampusLabel } from "@/lib/domain/campuses";
+import { alphabeticalByLabel, shortCampusLabel } from "@/lib/domain/campuses";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 // Real MapLibre GL JS globe projection + the free OpenFreeMap "positron"
@@ -846,9 +846,10 @@ function UniversityListFallback({
   current: Record<string, string | undefined>;
   compact?: boolean;
 }) {
+  const listed = alphabeticalByLabel(universities, (u) => u.name);
   return (
     <ul className={compact ? "flex flex-wrap gap-2" : "space-y-1.5"}>
-      {universities.map((u) => (
+      {listed.map((u) => (
         <li key={u.id}>
           <a
             href={buildHref(basePath, current, current.university !== u.id ? { university: u.id, project: null } : { university: u.id })}

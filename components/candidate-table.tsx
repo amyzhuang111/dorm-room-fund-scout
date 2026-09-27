@@ -2,7 +2,7 @@ import { Fragment, memo } from "react";
 import { useWindowedItems } from "./windowed-list";
 import { buildHref } from "@/lib/domain/url";
 import { ScoutLink } from "./scout-nav";
-import { shortCampusName } from "@/lib/domain/campuses";
+import { formatCampusList } from "@/lib/domain/campuses";
 import { publicLink } from "@/lib/domain/company-link";
 import type { CandidateSummary, ProjectDetail } from "@/lib/domain/queries";
 import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SignalTierBadge } from "./badges";
@@ -94,7 +94,7 @@ export const CandidateTable = memo(function CandidateTable({
             )}
             <p className="mt-2 text-xs text-foreground">
               <FounderLinks founders={c.founderLinks} />
-              {c.universities.length ? ` · ${c.universities.map(shortCampusName).join(", ")}` : ""}
+              {c.universities.length ? ` · ${formatCampusList(c.universities)}` : ""}
             </p>
             <p className="mt-1 flex flex-wrap gap-1">
               {c.founderLinks.slice(0, 2).map((f) => (
@@ -159,7 +159,7 @@ export const CandidateTable = memo(function CandidateTable({
                 </td>
                 <td className="px-3 py-2.5 text-muted">
                   <FounderLinks founders={c.founderLinks} />
-                  <p className="text-xs">{c.universities.map(shortCampusName).join(", ") || "Campus not confirmed"}</p>
+                  <p className="text-xs">{formatCampusList(c.universities) || "Campus not confirmed"}</p>
                   <p className="mt-1 flex flex-wrap gap-1">
                     {c.founderLinks.slice(0, 2).map((f) => (
                       <span key={f.personId} className="inline-flex flex-wrap gap-1">
