@@ -865,7 +865,7 @@ function curveBend(program: string, campus: string): number {
   let hash = 0;
   for (let i = 0; i < seed.length; i++) hash = (hash * 33 + seed.charCodeAt(i)) >>> 0;
   const sign = hash & 1 ? 1 : -1;
-  return sign * (0.1 + ((hash >>> 1) % 120) / 1000);
+  return sign * (0.18 + ((hash >>> 1) % 200) / 1000);
 }
 
 function paintCurve(context: CanvasRenderingContext2D, stroke: CurveStroke) {
