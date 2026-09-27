@@ -302,6 +302,17 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
   },
 };
 
+// The program's campus is the school the program itself belongs to.
+// A member's school stays on that person. Copying it onto the program made
+// Harvard St. Commons look like a BU/Michigan/Rice program and put The
+// Residency at Rice because one resident is a Rice student.
+const HOME_UNIVERSITY: Partial<Record<ResidencyProgram, readonly string[]>> = {
+  farmhouse: ["univ_stanford"],
+  yale_hacker_house: ["univ_yale"],
+  gatech_hacker_house: ["univ_gatech"],
+  rice_residency: ["univ_rice"],
+};
+
 const GENERIC_HOSTS = new Set(["linkedin.com", "twitter.com", "x.com", "github.com", "medium.com", "substack.com", "youtube.com", "google.com", "notion.so"]);
 
 function hostOf(raw: string | null | undefined): string | null {
@@ -821,8 +832,6 @@ function main() {
     ResidencyProgram,
     ReturnType<typeof blank>
   >;
-  const campusLinks = new Map<ResidencyProgram, Map<string, { excerpt: string; sourceUrl: string }>>();
-
   const tx = db.transaction(() => {
     for (const program of RESIDENCY_PROGRAMS) {
       ensureSource(db, program, retrievedAt);
@@ -872,9 +881,6 @@ function main() {
         const stored = db.prepare(`SELECT enrollment_status FROM people WHERE id=?`).get(personId) as { enrollment_status: string | null };
         const status = stored.enrollment_status && stored.enrollment_status !== "unknown" ? stored.enrollment_status : "unknown";
         ensureAffiliation(db, personId, campus, record.role, status, claimId);
-        const links = campusLinks.get(record.program) ?? new Map();
-        if (!links.has(campus)) links.set(campus, { excerpt: record.educationExcerpt || record.excerpt, sourceUrl: record.educationUrl || record.sourceUrl });
-        campusLinks.set(record.program, links);
       }
       ensureRole(db, personId, spec.projectId, "member", claimId);
       ensureSignal(db, personId, record, claimId);
@@ -908,8 +914,31 @@ function main() {
       if (record.companyRole) ensureRole(db, personId, company.id, record.companyRole, companyClaim);
       ensurePartOfProgram(db, company.id, spec.projectId, companyClaim);
     }
-    for (const [program, links] of campusLinks) {
-      for (const [universityId, evidence] of links) ensureCampusLink(db, program, universityId, evidence.excerpt, evidence.sourceUrl, retrievedAt);
+    for (const program of RESIDENCY_PROGRAMS) {
+      const spec = PROGRAMS[program];
+      const allowed = new Set(HOME_UNIVERSITY[program] ?? []);
+      const links = db
+        .prepare(
+          `SELECT id, target_entity_id FROM relationships
+           WHERE source_entity_type='project' AND source_entity_id=? AND target_entity_type='university' AND relationship_type='affiliated_with'`
+        )
+        .all(spec.projectId) as { id: string; target_entity_id: string }[];
+      for (const link of links) {
+        if (!allowed.has(link.target_entity_id)) db.prepare(`DELETE FROM relationships WHERE id=?`).run(link.id);
+      }
+      const campusClaims = db
+        .prepare(`SELECT id, value_json FROM claims WHERE entity_type='project' AND entity_id=? AND claim_type='campus_affiliation'`)
+        .all(spec.projectId) as { id: string; value_json: string }[];
+      for (const claim of campusClaims) {
+        let universityId = "";
+        try {
+          universityId = (JSON.parse(claim.value_json) as { universityId?: string }).universityId ?? "";
+        } catch {
+          universityId = "";
+        }
+        if (!allowed.has(universityId)) db.prepare(`DELETE FROM claims WHERE id=?`).run(claim.id);
+      }
+      for (const universityId of allowed) ensureCampusLink(db, program, universityId, spec.rationale, spec.sourceUrl, retrievedAt);
     }
   });
   tx();

@@ -542,6 +542,9 @@ export function organizationMap(input: {
   };
 
   for (const group of index.groups) {
+    // The place is already the program or investor node. A second organization
+    // id makes search list the same entity twice (program and organization).
+    if (group.merged === "program" || group.merged === "investor") continue;
     const id = hotspotMapNodeId(group.placeKey);
     const card = bestCard(group.cards);
     const campuses = [...new Set(group.campusIds.filter((campusId) => input.universityIds.has(campusId)))];
