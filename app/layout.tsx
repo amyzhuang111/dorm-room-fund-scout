@@ -50,9 +50,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <main className="flex-1">{children}</main>
           </FeedbackProvider>
           </UserPipelineProvider>
-          <footer className="border-t border-border-c px-4 py-3 text-center text-xs text-muted sm:px-6">
-            Independent scouting workspace — not an official Dorm Room Fund product. No automatic outreach; nothing here implies Amy represents DRF.
-          </footer>
           <Analytics />
         </AskAiProvider>
       </body>
