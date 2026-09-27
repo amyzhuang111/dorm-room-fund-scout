@@ -395,7 +395,8 @@ export function NetworkSigma({
       nodeReducer: (node, data) => {
         const state = stateRef.current;
         const nudge = placed.offsets.get(node);
-        const labelPx = labelScreenPx(data.labelBase ?? LABEL_NODE, renderer.getCamera().ratio, stateRef.current.fitRatio || 1);
+        const cameraRatio = rendererRef.current?.getCamera().ratio ?? 1;
+        const labelPx = labelScreenPx(data.labelBase ?? LABEL_NODE, cameraRatio, stateRef.current.fitRatio || 1);
         const showLabel = (extra: Partial<NodeAttr> = {}) => {
           const offset = nudge ?? { dx: 0, dy: 0 };
           return { ...data, ...extra, labelPx, forceLabel: true, labelDx: offset.dx, labelDy: offset.dy };
@@ -720,32 +721,41 @@ export function NetworkSigma({
 
 function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>): number {
   const frame = graphFrame(renderer);
-  let minX = Infinity;
-  let minY = Infinity;
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-  let count = 0;
-  renderer.getGraph().forEachNode((id, attrs) => {
-    if (hidden.has(id)) return;
-    const at = frame.toFrame(attrs.x, attrs.y);
-    minX = Math.min(minX, at.x);
-    minY = Math.min(minY, at.y);
-    maxX = Math.max(maxX, at.x);
-    maxY = Math.max(maxY, at.y);
-    count += 1;
-  });
-  if (!count) {
+  const xs: number[] = [];
+  const ys: number[] = [];
+  const push = (onlyMembers: boolean) => {
+    xs.length = 0;
+    ys.length = 0;
+    renderer.getGraph().forEachNode((id, attrs) => {
+      if (hidden.has(id) || attrs.marker) return;
+      if (onlyMembers && attrs.kind !== "campus" && attrs.kind !== "person" && attrs.kind !== "startup") return;
+      const at = frame.toFrame(attrs.x, attrs.y);
+      xs.push(at.x);
+      ys.push(at.y);
+    });
+  };
+  push(true);
+  if (xs.length < 8) push(false);
+  if (!xs.length) {
     void renderer.getCamera().animatedReset({ duration: 280 });
     return 1;
   }
+  xs.sort((a, b) => a - b);
+  ys.sort((a, b) => a - b);
+  const atQuantile = (sorted: number[], p: number) => sorted[Math.min(sorted.length - 1, Math.max(0, Math.round((sorted.length - 1) * p)))] ?? 0.5;
+  // Trim the sparse rim so a few outlying programs do not shrink the cloud.
+  const minX = atQuantile(xs, 0.012);
+  const maxX = atQuantile(xs, 0.988);
+  const minY = atQuantile(ys, 0.012);
+  const maxY = atQuantile(ys, 0.988);
   const width = maxX - minX;
   const height = maxY - minY;
   // High layout Y is the top of the screen. A short pad clears the search box; the low side clears the legend and Ask bar.
   const span0 = Math.max(width, height, 0.04);
   const paddedMaxY = maxY + span0 * 0.035;
   const paddedMinY = minY - span0 * 0.07;
-  const paddedMinX = minX - span0 * 0.018;
-  const paddedMaxX = maxX + span0 * 0.018;
+  const paddedMinX = minX - span0 * 0.04;
+  const paddedMaxX = maxX + span0 * 0.04;
   const span = Math.max(paddedMaxX - paddedMinX, paddedMaxY - paddedMinY, 0.04);
   const ratio = openingCameraRatio(span);
   void renderer.getCamera().animate({ x: (paddedMinX + paddedMaxX) / 2, y: (paddedMinY + paddedMaxY) / 2, ratio }, { duration: 420, easing: "quadraticInOut" });

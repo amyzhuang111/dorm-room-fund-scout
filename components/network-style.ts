@@ -382,7 +382,7 @@ export function labelDegreeFloor(cameraRatio: number): number {
  * padding; multiplying under 1 zooms in so the cloud fills the canvas.
  */
 export function openingCameraRatio(span: number): number {
-  return Math.min(0.92, Math.max(0.18, span * 0.78));
+  return Math.min(0.96, Math.max(0.18, span * 0.9));
 }
 
 /**

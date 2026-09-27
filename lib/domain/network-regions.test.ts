@@ -120,7 +120,7 @@ assert.equal(campusHubDegreeFloor(0.5), 8);
 assert.equal(campusHubDegreeFloor(0.3), 4);
 assert.equal(campusHubDegreeFloor(0.1), 1);
 
-assert.equal(openingCameraRatio(1), 0.78);
+assert.equal(openingCameraRatio(1), 0.9);
 assert.ok(openingCameraRatio(1) < 1);
 assert.equal(labelDegreeFloor(0.9), 1_000_000);
 assert.equal(labelDegreeFloor(0.4), 24);
