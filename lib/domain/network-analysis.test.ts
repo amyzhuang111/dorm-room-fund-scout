@@ -182,4 +182,27 @@ for (const row of analysis.density.rows) {
 
 const penn = analysis.metros.rows.find((row) => row.label === "Penn");
 assert.ok(penn && penn.all.count > 0, "Penn should have headquartered startups");
+
+assert.equal(analysis.pitchbook.title, "PitchBook VC-backed alumni founders (2015–2026)");
+assert.ok(analysis.pitchbook.rows.length >= 5);
+assert.equal(analysis.pitchbook.sourceUrl, "https://pitchbook.com/news/articles/pitchbook-university-rankings");
+let previousPitch = Number.POSITIVE_INFINITY;
+for (const row of analysis.pitchbook.rows) {
+  if (row.perThousand == null) continue;
+  assert.ok(row.perThousand <= previousPitch + 0.05, `${row.label} out of PitchBook rank order`);
+  previousPitch = row.perThousand;
+  assert.ok(row.founders > 0);
+  assert.ok(row.capitalRaisedUsd > 1_000_000);
+}
+assert.ok(analysis.hitRate.rows.length >= 3);
+assert.equal((analysis.hitRate.sentence.match(/[.!?](?=\s|$)/g) ?? []).length, 1);
+let previousHit = Number.POSITIVE_INFINITY;
+for (const row of analysis.hitRate.rows) {
+  assert.ok(row.founders >= 8, row.label);
+  assert.ok(row.low <= row.hitRate + 1e-9 && row.hitRate <= row.high + 1e-6, row.label);
+  assert.ok(row.hitRate <= previousHit + 0.001, `${row.label} out of hit-rate order`);
+  previousHit = row.hitRate;
+  assert.ok(row.ids.includes(row.id));
+}
+
 console.log(`network-analysis tests ok (${analysis.metros.rows.length} campuses, ${analysis.programs.rows.length} programs, ${analysis.density.rows.length} density rows)`);

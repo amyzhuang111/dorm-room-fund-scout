@@ -5,7 +5,7 @@ import { membershipDirectory } from "@/lib/domain/program-signals";
 import { publicLink } from "@/lib/domain/company-link";
 import { buildHref } from "@/lib/domain/url";
 import { ScoutLink } from "./scout-nav";
-import { EnrollmentBadge, LeftSchoolBadge, PotentialFounderBadge, PrecollegeBadges, ProgramBadges, SignalTierBadge, UnverifiedBadge, VerificationBadge } from "./badges";
+import { EnrollmentBadge, LeftSchoolBadge, PotentialFounderBadge, PrecollegeBadges, ProgramBadges, SameSchoolBadge, SignalTierBadge, UnverifiedBadge, VerificationBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CompanyNameLink } from "./company-website";
@@ -45,6 +45,7 @@ export const FounderCard = memo(function FounderCard({
             <EnrollmentBadge status={founder.enrollmentStatus} label={founder.enrollmentLabel} evidence={founder.enrollmentEvidence} basis={founder.enrollmentBasis} />
             <LeftSchoolBadge leftSchool={founder.leftSchool} />
             <SignalTierBadge tier={founder.signalTier} basis={founder.signalTierBasis} />
+            {founder.sameSchoolCofounders ? <SameSchoolBadge /> : null}
             <VerificationBadge status={founder.verificationStatus} verifiedAt={founder.lastVerifiedAt} note={founder.verificationNote} />
             {founder.signalEvidence?.unverified && <UnverifiedBadge />}
           </p>
@@ -81,6 +82,7 @@ export const FounderCard = memo(function FounderCard({
       <div className="mt-2 flex items-center justify-between gap-2">
         <span className="text-xs text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
           {founderSignal != null ? `Founder Signal ${founderSignal} · ${Math.round(coverage * 100)}% coverage` : "unassessed"}
+          {founder.sameSchoolBonus > 0 ? ` Includes +${founder.sameSchoolBonus} for a same-school co-founder.` : ""}
         </span>
         <ScoutLink
           href={buildHref(basePath, current, { founder: open ? null : founder.id })}

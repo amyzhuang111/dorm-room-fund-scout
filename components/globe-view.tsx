@@ -7,6 +7,7 @@ import type { CampusArc, CandidateSummary, UniversitySummary } from "@/lib/domai
 import { ResultTray } from "./result-tray";
 import { PersonLinkButton } from "./person-link";
 import { CompanyNameLink } from "./company-website";
+import { CampusBenchmarks } from "./campus-benchmarks";
 import { DrfPresenceNote } from "./drf-presence-note";
 import { alphabeticalByLabel, shortCampusLabel } from "@/lib/domain/campuses";
 import type { UserMapMarker } from "@/lib/domain/user-pipeline";
@@ -790,6 +791,7 @@ export const GlobeView = memo(function GlobeView({
             </div>
             <div className="px-3">
               <DrfPresenceNote presence={selectedUniversity.drfPresence} />
+              <CampusBenchmarks pitchbook={selectedUniversity.pitchbook} hitRate={selectedUniversity.hitRate} />
             </div>
             <div className="px-3 pb-3">
               <span className="ui-label">Preview results</span>
@@ -858,9 +860,10 @@ export const GlobeView = memo(function GlobeView({
       </p>
       <div className="mt-3 sm:hidden">
         <UniversityListFallback universities={universities} basePath={basePath} current={current} compact />
-        {selectedUniversity?.drfPresence && (
+        {selectedUniversity && (
           <div className="mt-2">
             <DrfPresenceNote presence={selectedUniversity.drfPresence} />
+            <CampusBenchmarks pitchbook={selectedUniversity.pitchbook} hitRate={selectedUniversity.hitRate} />
           </div>
         )}
       </div>

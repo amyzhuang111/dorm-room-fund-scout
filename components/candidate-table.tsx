@@ -5,7 +5,7 @@ import { ScoutLink } from "./scout-nav";
 import { formatCampusList } from "@/lib/domain/campuses";
 import { publicLink } from "@/lib/domain/company-link";
 import type { CandidateSummary, ProjectDetail } from "@/lib/domain/queries";
-import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SignalTierBadge } from "./badges";
+import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SameSchoolBadge, SignalTierBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton } from "./person-link";
 import { CompanyDetail } from "./company-detail";
@@ -84,6 +84,7 @@ export const CandidateTable = memo(function CandidateTable({
             <span className="flex flex-wrap items-center gap-1.5">
               <CompanyNameLink id={c.id} name={c.name} websiteUrl={c.websiteUrl} />
               <SignalTierBadge tier={c.signalTier} basis={c.signalTierBasis} />
+              {c.sameSchoolCofounders ? <SameSchoolBadge /> : null}
               <EntityMarks entityType="project" entityId={c.id} name={c.name} campusName={c.universities[0]} websiteUrl={c.websiteUrl} />
             </span>
             <p className="mt-1 text-sm text-muted line-clamp-3">{c.description || "What it builds is not on record yet."}</p>
@@ -142,6 +143,7 @@ export const CandidateTable = memo(function CandidateTable({
                   <span className="flex flex-wrap items-center gap-1.5">
                     <CompanyNameLink id={c.id} name={c.name} websiteUrl={c.websiteUrl} className="font-medium text-foreground hover:text-link" />
                     <SignalTierBadge tier={c.signalTier} basis={c.signalTierBasis} />
+                    {c.sameSchoolCofounders ? <SameSchoolBadge /> : null}
                     <EntityMarks entityType="project" entityId={c.id} name={c.name} campusName={c.universities[0]} websiteUrl={c.websiteUrl} />
                   </span>
                   <p className="mt-0.5 max-w-[280px] text-xs leading-snug text-muted line-clamp-2">{c.description || "What it builds is not on record yet."}</p>
