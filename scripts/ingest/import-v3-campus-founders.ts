@@ -8,12 +8,14 @@
 // with the same name are left alone and reported. Name-only rows stay
 // verification_status = unverified.
 
+import crypto from "node:crypto";
 import fs from "node:fs";
 import type Database from "better-sqlite3";
 import { getDb, newId, nowIso } from "../../lib/db/client";
 import { linkKind } from "../../lib/domain/company-link";
-import { normalizeCompanyName, normalizePersonName } from "../../lib/domain/dedupe";
+import { normalizeCompanyName, normalizePersonName, websiteIdentity } from "../../lib/domain/dedupe";
 import { assembleProjectFacts } from "../../lib/domain/facts";
+import { classifyDescription } from "../../lib/domain/sectors";
 import { evaluateAllGates } from "../../lib/screening/gates";
 
 interface Enrollment {
@@ -34,7 +36,27 @@ interface FounderRow {
   verificationStatus: "confirmed" | "partial" | "unverified";
   verificationNote: string;
   enrollment?: Enrollment | null;
+  leftSchool?: boolean;
   excerpt: string;
+}
+
+interface FundingRow {
+  stage: string;
+  amountUsd: number | null;
+  amountText: string;
+  date: string | null;
+  leads: string[];
+  investors: string[];
+  excerpt: string;
+  sourceUrl: string;
+}
+
+interface InvestorRow {
+  name: string;
+  excerpt: string;
+  sourceUrl: string;
+  batch?: string;
+  kind?: string;
 }
 
 interface CompanyRow {
@@ -47,6 +69,8 @@ interface CompanyRow {
   campusIds: string[];
   investable?: boolean;
   founders: FounderRow[];
+  funding?: FundingRow[];
+  investors?: InvestorRow[];
 }
 
 interface PotentialRow {
@@ -312,7 +336,24 @@ function companyIndex(db: Database.Database) {
   return byName;
 }
 
-function resolveCompany(db: Database.Database, byCompany: Map<string, string[]>, name: string, sourceUrl: string, campusIds: string[]): { id: string | null; ambiguous: boolean } {
+function resolveCompany(
+  db: Database.Database,
+  byCompany: Map<string, string[]>,
+  name: string,
+  sourceUrl: string,
+  campusIds: string[],
+  website: string | null
+): { id: string | null; ambiguous: boolean } {
+  const site = websiteIdentity(website);
+  if (site) {
+    const rows = db.prepare(`SELECT id, website_url FROM projects WHERE kind='company' AND website_url IS NOT NULL`).all() as {
+      id: string;
+      website_url: string;
+    }[];
+    const bySite = rows.filter((row) => websiteIdentity(row.website_url) === site);
+    if (bySite.length === 1) return { id: bySite[0].id, ambiguous: false };
+    if (bySite.length > 1) return { id: null, ambiguous: true };
+  }
   const hits = byCompany.get(normalizeCompanyName(name)) ?? [];
   if (hits.length === 0) return { id: null, ambiguous: false };
   const claimed = hits.filter((id) =>
@@ -338,6 +379,8 @@ function resolveCompany(db: Database.Database, byCompany: Map<string, string[]>,
     if (elsewhere.length === 0 || elsewhere.some((row) => campusIds.includes(row.target_entity_id))) return { id: hits[0], ambiguous: false };
     return { id: null, ambiguous: false };
   }
+  // Same display name as other companies, but this page gives a different product website.
+  if (site) return { id: null, ambiguous: false };
   return { id: null, ambiguous: true };
 }
 
@@ -385,6 +428,7 @@ function main() {
         row.verificationNote,
         retrievedAt.slice(0, 10)
       );
+      if (row.leftSchool) db.prepare(`UPDATE people SET left_school=1 WHERE id=?`).run(id);
       newPeople++;
       remember(byPerson, row.name, aliases, id);
     } else {
@@ -408,6 +452,7 @@ function main() {
       }
       applyVerification(db, id, row.verificationStatus, row.verificationNote, retrievedAt);
     }
+    if (row.leftSchool) db.prepare(`UPDATE people SET left_school=1 WHERE id=?`).run(id);
     const claimId = insertClaim(
       db,
       "person",
@@ -444,7 +489,7 @@ function main() {
         throw new Error(`Company excerpt does not mention ${company.name}`);
       }
       const sourceId = ensureSource(db, company.sourceUrl, company.campusIds, retrievedAt);
-      const resolvedCompany = resolveCompany(db, byCompany, company.name, company.sourceUrl, company.campusIds);
+      const resolvedCompany = resolveCompany(db, byCompany, company.name, company.sourceUrl, company.campusIds, company.website);
       if (resolvedCompany.ambiguous) {
         ambiguous.push(`company:${company.name}`);
         continue;
@@ -494,6 +539,109 @@ function main() {
       for (const founder of company.founders) {
         assertHttp(company.sourceUrl, founder.name);
         upsertPerson(founder, company.sourceUrl, sourceId, company.orgPlace, id);
+      }
+      if (company.description) {
+        const current = db.prepare(`SELECT description FROM projects WHERE id=?`).get(id) as { description: string | null };
+        if (!current.description) db.prepare(`UPDATE projects SET description=? WHERE id=?`).run(company.description, id);
+      }
+      const factExists = db.prepare(`SELECT id FROM company_facts WHERE project_id=? AND fact_key=? AND value_text=?`);
+      const insertFact = db.prepare(
+        `INSERT INTO company_facts (id, project_id, fact_key, value_text, amount_usd, amount_status, detail_json, source_url, excerpt, origin, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'campus_scan', ?)`
+      );
+      if (company.description && !factExists.get(id, "description", company.description)) {
+        insertFact.run(newId("cf"), id, "description", company.description, null, null, "{}", company.sourceUrl, company.excerpt, retrievedAt);
+      }
+      if (company.website && linkKind(company.website).kind === "other" && !factExists.get(id, "website", company.website)) {
+        insertFact.run(
+          newId("cf"),
+          id,
+          "website",
+          company.website,
+          null,
+          null,
+          "{}",
+          company.sourceUrl,
+          `Website recorded from ${company.sourceUrl}.`,
+          retrievedAt
+        );
+      }
+      for (const investor of company.investors ?? []) {
+        assertHttp(investor.sourceUrl, investor.name);
+        if (factExists.get(id, "investor", investor.name)) continue;
+        insertFact.run(
+          newId("cf"),
+          id,
+          "investor",
+          investor.name,
+          null,
+          null,
+          JSON.stringify({ batch: investor.batch ?? null, kind: investor.kind ?? null }),
+          investor.sourceUrl,
+          investor.excerpt,
+          retrievedAt
+        );
+      }
+      for (const round of company.funding ?? []) {
+        assertHttp(round.sourceUrl, company.name);
+        const fundingSourceId = round.sourceUrl === company.sourceUrl ? sourceId : ensureSource(db, round.sourceUrl, company.campusIds, retrievedAt);
+        const claimId = insertClaim(
+          db,
+          "project",
+          id,
+          "funding",
+          { stage: round.stage, amountUsd: round.amountUsd, leads: round.leads, investors: round.investors },
+          round.excerpt,
+          fundingSourceId,
+          round.sourceUrl,
+          retrievedAt
+        );
+        if (!factExists.get(id, "funding_round", round.amountText)) {
+          insertFact.run(
+            newId("cf"),
+            id,
+            "funding_round",
+            round.amountText,
+            round.amountUsd,
+            round.amountUsd ? "announced" : "undisclosed",
+            JSON.stringify({ stage: round.stage, amountText: round.amountText, date: round.date, leads: round.leads }),
+            round.sourceUrl,
+            round.excerpt,
+            retrievedAt
+          );
+        }
+        const dedupe = crypto.createHash("sha256").update(`${id}|${round.stage}|${round.amountUsd}|${round.date}`).digest("hex");
+        db.prepare(
+          `INSERT INTO funding_events (id, project_id, amount, currency, instrument, event_date, dedupe_key, claim_id)
+           VALUES (?, ?, ?, 'USD', ?, ?, ?, ?)
+           ON CONFLICT(dedupe_key) DO NOTHING`
+        ).run(newId("fund"), id, round.amountUsd, round.stage === "grant" || round.stage === "prize" ? "grant" : "equity", round.date, dedupe, claimId);
+        for (const name of [...round.leads, ...round.investors]) {
+          if (factExists.get(id, "investor", name)) continue;
+          insertFact.run(
+            newId("cf"),
+            id,
+            "investor",
+            name,
+            null,
+            null,
+            JSON.stringify({ round: round.stage, kind: round.leads.includes(name) ? "lead" : null }),
+            round.sourceUrl,
+            round.excerpt,
+            retrievedAt
+          );
+        }
+      }
+      if (company.description && !db.prepare(`SELECT 1 FROM project_sector_tags WHERE project_id=? LIMIT 1`).get(id)) {
+        const tags = classifyDescription(company.description, company.name);
+        const insertTag = db.prepare(
+          `INSERT INTO project_sector_tags (id, project_id, tag, is_primary, excerpt, source_url) VALUES (?, ?, ?, ?, ?, ?)
+           ON CONFLICT(project_id, tag) DO NOTHING`
+        );
+        tags.forEach((tag, index) => {
+          insertTag.run(newId("tag"), id, tag.tag, index === 0 ? 1 : 0, company.description!.slice(0, 280), company.sourceUrl);
+        });
+        if (tags[0]) db.prepare(`UPDATE projects SET sector=? WHERE id=? AND sector IS NULL`).run(tags[0].tag, id);
       }
     }
 
