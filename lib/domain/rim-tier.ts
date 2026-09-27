@@ -14,6 +14,8 @@ import { hotspotCards } from "./hotspots";
 import { bestCard, placeKeyOf, type HotspotCard, type HotspotPlaceKind, type HotspotTier } from "./hotspot-model";
 
 export type RimBand = "outer" | "inward";
+/** S+ is rim prominence only. It is not a directory tier and not Founder Signal. */
+export type RimTier = "S+" | HotspotTier;
 
 /**
  * Programs the hotspot directory does not list. Tiers match the directory
@@ -143,15 +145,25 @@ export interface RimInput {
 
 export interface RimPlacement {
   band: RimBand;
-  /** S is the far outer ring. A stays on the outer rim, smaller and a step closer in. */
-  tier: HotspotTier;
+  /**
+   * S+ is the single lead program on the far rim. S is the tier-1 ring.
+   * A stays on the outer rim, smaller and a step closer in.
+   */
+  tier: RimTier;
+}
+
+/** Directory tier S, promoted for rim placement. The hotspot card itself stays S. */
+function prominence(label: string, tier: HotspotTier): RimTier {
+  const key = placeKeyOf(label);
+  if (key === "thiel fellowship" || key.startsWith("thiel fellowship ")) return "S+";
+  return tier;
 }
 
 /**
  * `outer` — S/A fellowships and cross-campus S/A accelerators, plus the static
- * top programs. Labeled and on the outer rim. Tier S is larger and further out
- * than tier A. Z Fellows is directory A, so it stays outside the cloud and
- * behind Thiel, Y Combinator, South Park Commons, Emergent Ventures, and HF0.
+ * top programs. Labeled and on the outer rim. Thiel Fellowship is S+, the one
+ * program further out and larger than tier S. Z Fellows is directory A, so it
+ * stays outside the cloud and behind that tier-1 ring.
  * `inward` — B/C/D programs, hackathon organising teams, clubs, and campus
  * accelerators such as SkyDeck, UC LAUNCH, and delta v. Smaller, muted, unlabeled.
  * `null` — no rim treatment (people, startups, campuses, and small low-tier nodes).
@@ -161,7 +173,7 @@ export function rimPlacementFor(input: RimInput): RimPlacement | null {
   const listed = staticTier(input.label);
   const profile = lookup(input.label);
   if (input.nodeType === "investor" && profile && !investorUsesProfile(profile.type)) {
-    if ((listed === "S" || listed === "A") && input.degree >= OUTER_MIN_LINKS) return { band: "outer", tier: listed };
+    if ((listed === "S" || listed === "A") && input.degree >= OUTER_MIN_LINKS) return { band: "outer", tier: prominence(input.label, listed) };
     return null;
   }
   const tier = profile?.tier ?? listed;
@@ -179,7 +191,7 @@ export function rimPlacementFor(input: RimInput): RimPlacement | null {
     listed === "S" ||
     listed === "A" ||
     ((tier === "S" || tier === "A") && (isFellowship(type) || isNationalAccelerator(type, placeKind)));
-  if (top && tier && (tier === "S" || tier === "A") && input.degree >= OUTER_MIN_LINKS) return { band: "outer", tier };
+  if (top && tier && (tier === "S" || tier === "A") && input.degree >= OUTER_MIN_LINKS) return { band: "outer", tier: prominence(input.label, tier) };
   if ((tier === "B" || tier === "C" || tier === "D") && input.degree >= INWARD_MIN_LINKS) return { band: "inward", tier };
   return null;
 }
@@ -193,7 +205,7 @@ interface RimNode {
   type: string;
   label?: string;
   rimBand?: RimBand | null;
-  rimTier?: HotspotTier | null;
+  rimTier?: RimTier | null;
 }
 
 /** One outer node per program name. The copy with more links keeps the rim. */

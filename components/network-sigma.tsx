@@ -7,7 +7,7 @@ import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-ma
 import { regionTint } from "@/lib/domain/network-regions";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
-import { DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, REGION_TRACKING, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
+import { DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, REGION_TRACKING, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -119,7 +119,7 @@ export function NetworkSigma({
     const featuredNames = new Set<string>();
     for (const node of graph.nodes
       .filter((node) => node.rimBand === "outer")
-      .sort((a, b) => (a.rimTier === "S" ? 0 : 1) - (b.rimTier === "S" ? 0 : 1) || b.degree - a.degree || a.id.localeCompare(b.id))) {
+      .sort((a, b) => (a.rimTier === "S+" ? 0 : a.rimTier === "S" ? 1 : 2) - (b.rimTier === "S+" ? 0 : b.rimTier === "S" ? 1 : 2) || b.degree - a.degree || a.id.localeCompare(b.id))) {
       const name = node.label.trim().toLowerCase();
       if (!name || featuredNames.has(name)) continue;
       featuredNames.add(name);
@@ -137,17 +137,18 @@ export function NetworkSigma({
     for (const node of graph.nodes) {
       const campus = node.type === "campus";
       const hub = featured.has(node.id);
-      const lead = hub && node.rimTier === "S";
+      const lead = hub && node.rimTier === "S+";
+      const strong = hub && node.rimTier === "S";
       const anchor = campus || hub;
       labelMeta.push({
         id: node.id,
-        tier: campus ? 5 : lead ? 4 : hub ? 2 : 1,
+        tier: campus ? 5 : lead ? 6 : strong ? 4 : hub ? 2 : 1,
         degree: node.degree,
         text: truncateMapLabel(node.label, false, anchor),
         fullText: node.label,
         marker: false,
         anchor,
-        fontSize: campus ? LABEL_CAMPUS : lead ? LABEL_HUB : hub ? 10 : LABEL_NODE,
+        fontSize: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong ? LABEL_HUB : hub ? 10 : LABEL_NODE,
         tracking: 0,
       });
     }
@@ -155,7 +156,8 @@ export function NetworkSigma({
     for (const node of graph.nodes) {
       const campus = node.type === "campus";
       const hub = featured.has(node.id);
-      const lead = hub && node.rimTier === "S";
+      const lead = hub && node.rimTier === "S+";
+      const strong = hub && node.rimTier === "S";
       const color = nodeColor(node, colors);
       g.addNode(node.id, {
         x: node.x,
@@ -167,10 +169,10 @@ export function NetworkSigma({
         type: NODE_SHAPE[node.type],
         kind: node.type,
         anchor: campus || hub,
-        zIndex: lead ? 3 : Z[node.type],
+        zIndex: lead ? 4 : strong ? 3 : Z[node.type],
         signalTip: signalTooltip(node),
         linkColor: emphasizeColor(color),
-        labelPx: campus ? LABEL_CAMPUS : lead ? LABEL_HUB : hub ? 10 : LABEL_NODE,
+        labelPx: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong ? LABEL_HUB : hub ? 10 : LABEL_NODE,
       });
     }
     const regionCampuses = new Map<string, string[]>();

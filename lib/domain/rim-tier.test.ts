@@ -10,7 +10,7 @@ assert.equal(band("Y Combinator", "organization", 1490), "outer");
 assert.equal(band("Neo Scholars", "organization", 106), "outer");
 assert.equal(band("Z Fellows", "organization", 2), "outer");
 assert.equal(rimPlacementFor({ label: "Z Fellows", nodeType: "organization", degree: 2 })?.tier, "A");
-assert.equal(rimPlacementFor({ label: "Thiel Fellowship", nodeType: "organization", degree: 58 })?.tier, "S");
+assert.equal(rimPlacementFor({ label: "Thiel Fellowship", nodeType: "organization", degree: 58 })?.tier, "S+");
 assert.equal(rimPlacementFor({ label: "Y Combinator", nodeType: "organization", degree: 1490 })?.tier, "S");
 assert.equal(rimPlacementFor({ label: "South Park Commons", nodeType: "investor", degree: 6 })?.tier, "S");
 assert.equal(rimPlacementFor({ label: "Emergent Ventures", nodeType: "organization", degree: 4 })?.tier, "S");
@@ -54,8 +54,10 @@ demoteDuplicateOuter(nodes, new Map([["org", 1490], ["inv", 232]]));
 assert.equal(nodes[0].rimBand, "outer");
 assert.equal(nodes[1].rimBand, "inward");
 
-const sized = (rimTier: "S" | "A"): number =>
-  screenSize({ type: "organization", rimBand: "outer", rimTier, signalScore: 0.4 } as MapNode);
+const sized = (rimTier: "S+" | "S" | "A", signalScore = 0.4): number =>
+  screenSize({ type: "organization", rimBand: "outer", rimTier, signalScore } as MapNode);
 assert.ok(sized("S") > sized("A") + 0.8);
+assert.ok(sized("S+", 0) > sized("S", 1));
+assert.ok(sized("S+") < 6.4);
 
 console.log("rim-tier tests ok");
