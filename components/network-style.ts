@@ -283,10 +283,11 @@ function boxesOverlap(a: LabelBox, b: LabelBox): boolean {
   return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
 }
 
-/** 3 = region, 2 = campus, 1 = every other node (ordered by degree). */
+/** 4 = region, 3 = campus, 2 = rim hub, 1 = every other node (ordered by degree). */
 export function screenLabelTier(marker: boolean, anchor: boolean, type: string): number {
-  if (marker) return 3;
-  if (anchor && type === "campus") return 2;
+  if (marker) return 4;
+  if (anchor && type === "campus") return 3;
+  if (anchor) return 2;
   return 1;
 }
 
@@ -391,9 +392,9 @@ function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
 
-/** Long spokes from a far organization fade out. Local edges stay as they are. */
+/** Only the longest spokes fade, and not by much, so a hub's fan stays visible. */
 export function fadeLongEdge(color: string, spanFraction: number): string {
-  const factor = spanFraction > 0.42 ? 0.2 : spanFraction > 0.28 ? 0.42 : 1;
+  const factor = spanFraction > 0.62 ? 0.5 : spanFraction > 0.46 ? 0.72 : 1;
   if (factor === 1) return color;
   return scaleAlpha(color, factor);
 }

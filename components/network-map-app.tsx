@@ -85,7 +85,7 @@ export function NetworkMapApp() {
   const seededCampuses = useRef(new Set<string>());
   const [error, setError] = useState<string | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [legendOpen, setLegendOpen] = useState(false);
+  const [legendOpen, setLegendOpen] = useState(true);
   const [filters, setFilters] = useState<Filters | null>(null);
   const [showIsolates, setShowIsolates] = useState(false);
   const defaultsRef = useRef<Filters | null>(null);
@@ -254,15 +254,7 @@ export function NetworkMapApp() {
       : null;
   const detailOpen = activeId != null && selectedNode != null;
 
-  const swatches = useMemo(() => (graph ? campusSwatches(graph.nodes) : []), [graph]);
-  const swatchGroups = useMemo(() => groupCampusSwatches(swatches), [swatches]);
-  const soloCampus = filters && swatches.length > 0 && filters.campuses.length === 1 ? filters.campuses[0] : null;
-
-  const focusCampus = (id: string) => {
-    if (!filters || !graph) return;
-    const all = graph.nodes.filter((node) => node.type === "campus" && node.campus).map((node) => node.campus as string);
-    setFilters({ ...filters, campuses: soloCampus === id ? all : [id] });
-  };
+  const swatchGroups = useMemo(() => (graph ? groupCampusSwatches(campusSwatches(graph.nodes)) : []), [graph]);
 
   return (
     <div className="fixed inset-x-0 top-14 bottom-0 z-20 bg-white text-black">
@@ -534,58 +526,36 @@ export function NetworkMapApp() {
         </ZoomButton>
       </div>
 
-      <div className="absolute bottom-3 z-20 flex flex-col-reverse items-start" style={{ left: filtersOpen ? "18.2rem" : "0.75rem" }}>
-        <button
-          type="button"
-          className="h-7 rounded border border-neutral-300 bg-white px-2 text-[11px] font-medium text-black"
-          aria-expanded={legendOpen}
-          onClick={() => setLegendOpen((open) => !open)}
-        >
-          {legendOpen ? "Hide legend" : "Legend"}
-        </button>
-        {legendOpen && (
-      <div className="mb-1 w-[22rem] rounded border border-neutral-200 bg-white/95 text-[11px] text-black shadow-sm">
-        <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 border-b border-neutral-200 px-1.5 py-1 text-neutral-700">
-          <LegendItem shape="circle" color={NODE_FILL.person} label="" title="Person" />
-          <LegendItem shape="square" color={NODE_FILL.startup} label="" title="Startup" />
-          <LegendItem shape="diamond" color={NODE_FILL.investor} label="" title="Investor" />
-          <LegendItem shape="hex" color={NODE_FILL.program} label="" title="Club" />
-          <LegendItem shape="triangle" color={NODE_FILL.organization} label="" title="Organization" />
-          <LegendItem shape="square" color="#111111" label="" title="User-added" />
-          <span className="sr-only">Circle person, square startup, diamond investor, hex club, triangle organization, black square user-added. Color is campus.</span>
-          <span className="inline-flex items-center gap-1 text-neutral-600">
-            <span className="inline-block h-px w-3.5 bg-[#b06018]" />
-            Cross-campus
-          </span>
-        </div>
-        <div className="grid max-h-96 grid-cols-2 gap-x-1 overflow-y-auto py-0.5" role="list" aria-label="Campuses">
-          {swatchGroups.map((group) => (
-            <div key={group.id}>
-              <p className="px-1.5 pt-1 text-[10px] font-semibold leading-tight" style={{ color: group.color }}>
-                {group.label}
-              </p>
-              <ul>
-                {group.swatches.map((swatch) => {
-                  const on = soloCampus === swatch.id;
-                  return (
-                    <li key={swatch.id}>
-                      <button
-                        type="button"
-                        aria-pressed={on}
-                        className={`flex w-full items-center gap-1.5 px-1.5 py-0.5 text-left hover:bg-neutral-100 ${on ? "bg-neutral-100 font-semibold" : ""}`}
-                        onClick={() => focusCampus(swatch.id)}
-                      >
-                        <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: swatch.color }} />
-                        <span className="truncate">{swatch.label}</span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
+      <div className="absolute bottom-3 z-20 max-w-[min(40rem,calc(100%-5.5rem))]" style={{ left: filtersOpen ? "18.2rem" : "0.75rem" }}>
+        {legendOpen ? (
+          <div className="rounded-lg border border-neutral-200 bg-white/95 px-2.5 py-1.5 text-[11px] text-black shadow-sm" role="region" aria-label="Network legend">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              <LegendItem shape="circle" color="#111111" label="Person" />
+              <LegendItem shape="square" color="#111111" label="Startup" />
+              <LegendItem shape="diamond" color="#111111" label="Investor" />
+              <LegendItem shape="circle" color="#111111" label="Campus" />
+              <LegendItem shape="hex" color="#111111" label="Club / lab" />
+              <LegendItem shape="triangle" color="#6d28d9" label="Organization" />
+              <button
+                type="button"
+                className="ml-auto text-[10px] font-medium text-neutral-500 underline"
+                aria-expanded={true}
+                onClick={() => setLegendOpen(false)}
+              >
+                Hide
+              </button>
             </div>
-          ))}
-        </div>
-      </div>
+            <p className="mt-0.5 text-[10px] leading-snug text-neutral-500">Color = campus · triangle sized by tier · line = link · amber = cross-campus · est. = inferred enrollment</p>
+          </div>
+        ) : (
+          <button
+            type="button"
+            className="h-7 rounded border border-neutral-300 bg-white px-2 text-[11px] font-medium text-black shadow-sm"
+            aria-expanded={false}
+            onClick={() => setLegendOpen(true)}
+          >
+            Legend
+          </button>
         )}
       </div>
 

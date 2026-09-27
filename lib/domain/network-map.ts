@@ -1,17 +1,15 @@
 // Full evidence graph for the Network map. Nodes and edges come from
 // affiliations, founder roles, program memberships, sourced investor facts,
-// and confirmed DRF portfolio matches. Campuses in the same region start
-// near each other. One free ForceAtlas2 pass, with gentle gravity toward
-// the middle, lets that seed become an irregular galaxy: dense at the core,
-// thin at the edges, with no clipped boundary.
+// and confirmed DRF portfolio matches. The five DRF regions share one
+// round universe: their centroids sit on a small ring and a single force
+// pass pulls members gently toward those seats, so the colours touch and
+// blend. High-degree organizations are pushed out to the rim.
 
 import fs from "node:fs";
-import Graph from "graphology";
-import forceAtlas2 from "graphology-layout-forceatlas2";
-import noverlap from "graphology-layout-noverlap";
+import { forceCollide, forceSimulation, forceX, forceY } from "d3-force";
 import { databasePath, getDb } from "../db/client";
 import { CAMPUSES } from "./campuses";
-import { REGIONS, placeCampuses, regionForCampus, type RegionMarker } from "./network-regions";
+import { REGIONS, regionForCampus, regionInk, type RegionMarker } from "./network-regions";
 import type { HotspotSectionId, HotspotTier } from "./hotspot-model";
 import { hotspotGraphPatch, organizationMap } from "./hotspots";
 import { confirmedLinkedIn } from "./person-link";
@@ -98,19 +96,11 @@ interface SimNode {
   campuses?: string[];
 }
 
-/** Springs for one global ForceAtlas2 pass. Campus links hold people near their campus. Founding and investment links are shorter, so shared nodes sit between campuses. */
-const LAYOUT_WEIGHT: Record<MapEdgeType, number> = {
-  founded: 2.8,
-  co_founder: 2.2,
-  member_of: 1.6,
-  invested_in: 2,
-  studied_at: 0.32,
-  at_campus: 0.32,
-};
-
-const LAYOUT_VERSION = "18";
-/** How far apart region seeds start. ForceAtlas2 is free to move them. */
-const SEED_RADIUS = 340;
+const LAYOUT_VERSION = "19";
+/** Organizations and programs at least this connected are rim hubs. */
+const HUB_DEGREE = 22;
+/** Investors need a larger book before they leave the cloud for the rim. */
+const INVESTOR_HUB_DEGREE = 36;
 
 /** The owner is dropping this organization. It must not seed a cluster. */
 function droppedOrganization(label: string): boolean {
@@ -649,19 +639,40 @@ function assembleNetworkMap(): MapGraph {
   return graph;
 }
 
-/** Organizations this connected seed their own cluster (YC, Mayfield) instead of sitting inside a campus. */
-const HUB_DEGREE = 36;
+interface LiveNode extends SimNode {
+  vx?: number;
+  vy?: number;
+  tx: number;
+  ty: number;
+  pull: number;
+  collide: number;
+  hub: boolean;
+  regionId: string | null;
+}
 
 /**
- * One global ForceAtlas2 pass. Nodes are seeded on their campus or hub so
- * communities start apart, then shared membership, founding, and investment
- * edges pull those communities toward each other. linLog and
- * outboundAttractionDistribution keep a hub from swallowing the map.
+ * Where each DRF team sits in the shared universe. Angles are standard
+ * math angles with +y downward, matching the map: Philly on top, the West
+ * Coast on the left, Boston low and central, NY on the right. International
+ * is placed afterwards, tucked against the West Coast's lower edge.
+ */
+const REGION_POSE: Record<string, { angle: number; scale: number }> = {
+  philly: { angle: -Math.PI / 2, scale: 0.32 },
+  west: { angle: Math.PI, scale: 0.8 },
+  ny: { angle: -0.02, scale: 0.74 },
+  boston: { angle: Math.PI / 2.15, scale: 0.46 },
+  international: { angle: Math.PI * 0.78, scale: 1 },
+};
+
+/**
+ * One force simulation. Campus seats sit on a small ring so neighbouring
+ * regions touch. Members are pulled gently toward a jittered point in that
+ * seat — a large campus such as Penn therefore stays a dense core with a
+ * soft edge instead of a packed disc. Hubs take a radial shove to the rim.
  */
 function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: Map<string, string>): RegionMarker[] {
   const byId = new Map(simNodes.map((node) => [node.id, node]));
   const degree = new Map<string, number>();
-  const memberships = new Map<string, string[]>();
   const membersOf = new Map<string, string[]>();
   const foundersOf = new Map<string, string[]>();
   const campusesOf = new Map<string, string[]>();
@@ -670,9 +681,6 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     degree.set(edge.source, (degree.get(edge.source) ?? 0) + 1);
     degree.set(edge.target, (degree.get(edge.target) ?? 0) + 1);
     if (edge.type === "member_of") {
-      const orgs = memberships.get(edge.source) ?? [];
-      orgs.push(edge.target);
-      memberships.set(edge.source, orgs);
       const people = membersOf.get(edge.target) ?? [];
       people.push(edge.source);
       membersOf.set(edge.target, people);
@@ -691,133 +699,7 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     }
   }
 
-  const hubs = new Set<string>();
-  for (const node of simNodes) {
-    if (node.type === "organization" && (degree.get(node.id) ?? 0) >= HUB_DEGREE) hubs.add(node.id);
-  }
-
-  const home = new Map<string, string>();
-  for (const node of simNodes) {
-    if (node.type === "campus" || hubs.has(node.id)) home.set(node.id, node.id);
-  }
-
-  const bestHub = (ids: string[]): string | null => {
-    let best: string | null = null;
-    let score = -1;
-    for (const id of ids) {
-      if (!hubs.has(id)) continue;
-      const next = degree.get(id) ?? 0;
-      if (next > score) {
-        score = next;
-        best = id;
-      }
-    }
-    return best;
-  };
-  const campusHome = (id: string): string | null => (campusesOf.get(id) ?? []).find((campus) => byId.get(campus)?.type === "campus") ?? null;
-  const majority = (votes: Map<string, number>): string | null => {
-    let best: string | null = null;
-    let score = 0;
-    for (const [key, count] of votes) {
-      if (count > score) {
-        score = count;
-        best = key;
-      }
-    }
-    return best;
-  };
-
-  for (const node of simNodes) {
-    if (node.type !== "person" || home.has(node.id)) continue;
-    home.set(node.id, campusHome(node.id) ?? bestHub(memberships.get(node.id) ?? []) ?? "loose");
-  }
-  for (const node of simNodes) {
-    if (node.type !== "startup" || home.has(node.id)) continue;
-    const votes = new Map<string, number>();
-    for (const person of foundersOf.get(node.id) ?? []) {
-      const key = home.get(person);
-      if (key) votes.set(key, (votes.get(key) ?? 0) + 1);
-    }
-    home.set(node.id, majority(votes) ?? campusHome(node.id) ?? "loose");
-  }
-  for (const node of simNodes) {
-    if (home.has(node.id) || (node.type !== "program" && node.type !== "organization")) continue;
-    const votes = new Map<string, number>();
-    for (const person of membersOf.get(node.id) ?? []) {
-      const key = home.get(person);
-      if (key && key !== "loose") votes.set(key, (votes.get(key) ?? 0) + 1);
-    }
-    home.set(node.id, majority(votes) ?? campusHome(node.id) ?? "loose");
-  }
-  for (const node of simNodes) {
-    if (node.type !== "investor" || home.has(node.id)) continue;
-    const votes = new Map<string, number>();
-    let total = 0;
-    for (const startup of portfolio.get(node.id) ?? []) {
-      const key = home.get(startup);
-      if (!key || key === "loose") continue;
-      total += 1;
-      votes.set(key, (votes.get(key) ?? 0) + 1);
-    }
-    let best: string | null = null;
-    let score = 0;
-    for (const [key, count] of votes) {
-      if (count > score) {
-        score = count;
-        best = key;
-      }
-    }
-    if (best && score >= Math.max(3, total * 0.55)) home.set(node.id, best);
-  }
-  for (const node of simNodes) if (!home.has(node.id)) home.set(node.id, "loose");
-
-  const groups = new Map<string, SimNode[]>();
-  for (const node of simNodes) {
-    const key = home.get(node.id) ?? "loose";
-    const list = groups.get(key) ?? [];
-    list.push(node);
-    groups.set(key, list);
-  }
-
-  // An organization only seeds a cluster when enough people call it their home.
-  // Otherwise it sits with the campus or hub its members already share.
-  const folded = new Set<string>();
-  for (const [key, members] of groups) {
-    const anchor = members.find((node) => node.id === key);
-    if (!anchor || anchor.type !== "organization" || members.length >= 12) continue;
-    folded.add(key);
-  }
-  for (const key of folded) {
-    const members = groups.get(key) ?? [];
-    const votes = new Map<string, number>();
-    for (const personId of membersOf.get(key) ?? []) {
-      const dest = home.get(personId);
-      if (!dest || dest === key || folded.has(dest)) continue;
-      votes.set(dest, (votes.get(dest) ?? 0) + 1);
-    }
-    let dest = "loose";
-    let score = 0;
-    for (const [id, count] of votes) {
-      if (count > score) {
-        score = count;
-        dest = id;
-      }
-    }
-    groups.delete(key);
-    const list = groups.get(dest) ?? [];
-    for (const member of members) {
-      home.set(member.id, dest);
-      list.push(member);
-    }
-    groups.set(dest, list);
-  }
-
-  const campusNodes = simNodes.filter((node) => node.type === "campus");
-  const placed = placeCampuses(
-    campusNodes.map((node) => ({ id: node.id, label: campusLabels.get(node.id) ?? node.id })),
-    SEED_RADIUS,
-  );
-  const seats = placed.seats;
+  const campusIdSet = new Set(simNodes.filter((node) => node.type === "campus").map((node) => node.id));
   const linkedCampuses = (node: SimNode): string[] => {
     const ids: string[] = [];
     if (node.type === "person") ids.push(...(campusesOf.get(node.id) ?? []));
@@ -826,158 +708,406 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     else if (node.type === "investor") {
       for (const startup of portfolio.get(node.id) ?? []) for (const person of foundersOf.get(startup) ?? []) ids.push(...(campusesOf.get(person) ?? []));
     }
-    return ids.filter((id) => seats.has(id));
+    const seen = new Set<string>();
+    const out: string[] = [];
+    for (const id of ids) {
+      if (!campusIdSet.has(id) || seen.has(id)) continue;
+      seen.add(id);
+      out.push(id);
+    }
+    if (!out.length) for (const id of node.campuses ?? []) if (campusIdSet.has(id)) out.push(id);
+    return out;
   };
-  const bridgeTarget = new Map<string, { x: number; y: number }>();
+
   const primary = new Map<string, string>();
-  const spiralSeat = new Map<string, number>();
+  const bridgeWeight = new Map<string, Map<string, number>>();
   for (const node of simNodes) {
     node.anchor = false;
     if (node.type === "campus") {
-      const seat = seats.get(node.id);
-      if (seat) {
-        node.x = seat.x;
-        node.y = seat.y;
-        node.anchor = true;
-      }
+      primary.set(node.id, node.id);
       continue;
     }
     const counts = new Map<string, number>();
     for (const id of linkedCampuses(node)) counts.set(id, (counts.get(id) ?? 0) + 1);
-    if (counts.size === 0) for (const id of node.campuses ?? []) if (seats.has(id)) counts.set(id, (counts.get(id) ?? 0) + 1);
     const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
     const total = ranked.reduce((sum, [, count]) => sum + count, 0);
     const top = ranked[0];
-    const bridge = ranked.length >= 2 && !!top && top[1] / total < 0.62;
-    if (!top) {
-      let inherited: string | null = null;
-      if (node.type === "person") {
-        for (const org of memberships.get(node.id) ?? []) {
-          inherited = (campusesOf.get(org) ?? []).find((id) => seats.has(id)) ?? null;
-          if (inherited) break;
-        }
-      } else if (node.type === "organization" || node.type === "program") {
-        inherited = (campusesOf.get(node.id) ?? []).find((id) => seats.has(id)) ?? null;
-      }
-      const seat = inherited ? seats.get(inherited) : undefined;
-      if (inherited && seat) {
-        primary.set(node.id, inherited);
-        const n = spiralSeat.get(inherited) ?? 0;
-        spiralSeat.set(inherited, n + 1);
-        const theta = hashUnit(`${node.id}:a`) * Math.PI * 2;
-        const unit = hashUnit(`${node.id}:r`);
-        const dist = (4 + Math.pow(unit, 0.55) * (18 + 2.4 * Math.sqrt(n + 1))) * (0.72 + 0.56 * hashUnit(`${node.id}:s`));
-        node.x = seat.x + Math.cos(theta) * dist;
-        node.y = seat.y + Math.sin(theta) * dist;
-        continue;
-      }
-      const theta = hashUnit(node.id) * Math.PI * 2;
-      const dist = 20 + hashUnit(`${node.id}:r`) * 60;
-      node.x = Math.cos(theta) * dist;
-      node.y = Math.sin(theta) * dist;
-      continue;
-    }
-    if (!bridge) {
-      primary.set(node.id, top[0]);
-      const seat = seats.get(top[0]);
-      if (!seat) continue;
-      const n = spiralSeat.get(top[0]) ?? 0;
-      spiralSeat.set(top[0], n + 1);
-      const theta = hashUnit(`${node.id}:a`) * Math.PI * 2;
-      const unit = hashUnit(`${node.id}:r`);
-      const dist = (4 + Math.pow(unit, 0.55) * (18 + 2.4 * Math.sqrt(n + 1))) * (0.72 + 0.56 * hashUnit(`${node.id}:s`));
-      node.x = seat.x + Math.cos(theta) * dist;
-      node.y = seat.y + Math.sin(theta) * dist;
-      if (node.type === "organization" && (degree.get(node.id) ?? 0) >= HUB_DEGREE) node.anchor = true;
-      continue;
-    }
-    let x = 0;
-    let y = 0;
-    let weight = 0;
-    for (const [id, count] of ranked) {
-      const seat = seats.get(id);
-      if (!seat) continue;
-      x += seat.x * count;
-      y += seat.y * count;
-      weight += count;
-    }
-    if (!weight) continue;
-    const at = { x: (x / weight) * 0.55, y: (y / weight) * 0.55 };
-    node.x = at.x;
-    node.y = at.y;
-    bridgeTarget.set(node.id, at);
-    if ((node.type === "organization" || node.type === "investor") && (degree.get(node.id) ?? 0) >= HUB_DEGREE) node.anchor = true;
+    if (!top) continue;
+    if (ranked.length >= 2 && top[1] / total < 0.62) bridgeWeight.set(node.id, counts);
+    else primary.set(node.id, top[0]);
   }
 
-  const g = new Graph({ type: "undirected" });
-  for (const node of simNodes) g.addNode(node.id, { x: node.x, y: node.y });
-  for (const edge of edges) {
-    const weightValue = LAYOUT_WEIGHT[edge.type];
-    if (!weightValue || edge.source === edge.target || !g.hasNode(edge.source) || !g.hasNode(edge.target)) continue;
-    if (g.hasEdge(edge.source, edge.target)) {
-      const existing = g.edge(edge.source, edge.target);
-      if (weightValue > g.getEdgeAttribute(existing, "weight")) g.setEdgeAttribute(existing, "weight", weightValue);
-      continue;
-    }
-    g.addEdge(edge.source, edge.target, { weight: weightValue });
+  const campusCount = new Map<string, number>();
+  for (const node of simNodes) {
+    if (node.type !== "person" && node.type !== "startup") continue;
+    const campus = primary.get(node.id);
+    if (!campus) continue;
+    campusCount.set(campus, (campusCount.get(campus) ?? 0) + 1);
   }
-  // A light spring between campuses in the same region, so Philly stays next to Philly
-  // without pinning anyone to a wedge.
-  const campusIds = campusNodes.map((node) => node.id);
-  for (let i = 0; i < campusIds.length; i++) {
-    for (let j = i + 1; j < campusIds.length; j++) {
-      const a = campusIds[i];
-      const b = campusIds[j];
-      if (regionForCampus(a, campusLabels.get(a) ?? "") !== regionForCampus(b, campusLabels.get(b) ?? "")) continue;
-      if (g.hasEdge(a, b)) continue;
-      g.addEdge(a, b, { weight: 1.1 });
-    }
+
+  const campusesByRegion = new Map<string, { id: string; n: number }[]>();
+  for (const campus of simNodes) {
+    if (campus.type !== "campus") continue;
+    const regionId = regionForCampus(campus.id, campusLabels.get(campus.id) ?? "");
+    const list = campusesByRegion.get(regionId) ?? [];
+    list.push({ id: campus.id, n: campusCount.get(campus.id) ?? 0 });
+    campusesByRegion.set(regionId, list);
   }
-  if (g.size > 0) {
-    forceAtlas2.assign(g, {
-      iterations: 150,
-      settings: {
-        barnesHutOptimize: true,
-        barnesHutTheta: 0.5,
-        gravity: 0.08,
-        scalingRatio: 8,
-        linLogMode: true,
-        outboundAttractionDistribution: true,
-        edgeWeightInfluence: 0.85,
-        slowDown: 6,
-        strongGravityMode: false,
-        adjustSizes: false,
-      },
-      getEdgeWeight: "weight",
+
+  const regionCount = (regionId: string) => (campusesByRegion.get(regionId) ?? []).reduce((sum, campus) => sum + campus.n, 0);
+  const regionRadius = (regionId: string, n: number) => {
+    const fromCount = Math.sqrt(Math.max(n, 1)) * 2.2;
+    if (regionId === "international") return Math.max(22, fromCount * 0.8);
+    return Math.max(54, fromCount);
+  };
+  const radii = new Map(REGIONS.map((region) => [region.id, regionRadius(region.id, regionCount(region.id))]));
+  const unit = Math.max(84, (radii.get("philly") ?? 100) * 0.68);
+  const regionCenter = new Map<string, { x: number; y: number }>();
+  for (const region of REGIONS) {
+    if (!(campusesByRegion.get(region.id)?.length)) continue;
+    const pose = REGION_POSE[region.id] ?? { angle: 0, scale: 1 };
+    regionCenter.set(region.id, {
+      x: Math.cos(pose.angle) * unit * pose.scale,
+      y: Math.sin(pose.angle) * unit * pose.scale,
     });
   }
-  for (const node of simNodes) {
-    const at = g.getNodeAttributes(node.id);
-    node.x = Number.isFinite(at.x) ? at.x : node.x;
-    node.y = Number.isFinite(at.y) ? at.y : node.y;
+  const westCenter = regionCenter.get("west");
+  if (westCenter && regionCenter.has("international")) {
+    const lobe = Math.max(radii.get("west") ?? 70, 64);
+    regionCenter.set("international", { x: westCenter.x - lobe * 0.05, y: westCenter.y + lobe * 0.58 });
   }
-  for (const node of simNodes) {
-    const target = bridgeTarget.get(node.id);
-    if (!target) continue;
-    node.x = node.x * 0.82 + target.x * 0.18;
-    node.y = node.y * 0.82 + target.y * 0.18;
+
+  const seats = new Map<string, { x: number; y: number; spread: number; loose: boolean }>();
+  for (const [regionId, list] of campusesByRegion) {
+    const center = regionCenter.get(regionId);
+    if (!center) continue;
+    const outward = Math.atan2(center.y, center.x);
+    const regionR = radii.get(regionId) ?? 48;
+    const regionN = Math.max(regionCount(regionId), 1);
+    const sorted = [...list].sort((a, b) => b.n - a.n || a.id.localeCompare(b.id));
+    const campusSpread = (n: number) => {
+      const loose = n >= 350;
+      const share = Math.sqrt(n / regionN);
+      const spread = regionR * (loose ? 0.7 : 0.42) * Math.max(loose ? 0.85 : 0.55, share);
+      return { spread: Math.max(loose ? 42 : 11, spread), loose };
+    };
+    const biggest = sorted[0];
+    const second = sorted[1];
+    const used = new Set<string>();
+    if (biggest && second && second.n >= 80 && second.n > biggest.n * 0.45) {
+      const a = campusSpread(biggest.n);
+      const b = campusSpread(second.n);
+      const gap = (a.spread + b.spread) * 0.36;
+      const tangent = outward + Math.PI / 2;
+      const place = (campus: { id: string; n: number }, spec: { spread: number; loose: boolean }, along: number, out: number) => {
+        seats.set(campus.id, {
+          x: center.x + Math.cos(tangent) * along + Math.cos(outward) * out,
+          y: center.y + Math.sin(tangent) * along + Math.sin(outward) * out,
+          spread: spec.spread,
+          loose: spec.loose,
+        });
+        used.add(campus.id);
+      };
+      place(biggest, a, -gap * 0.5, gap * 0.08);
+      place(second, b, gap * 0.5, -gap * 0.06);
+    } else if (biggest) {
+      const spec = campusSpread(biggest.n);
+      seats.set(biggest.id, { x: center.x, y: center.y, spread: spec.spread, loose: spec.loose });
+      used.add(biggest.id);
+    }
+    const rest = sorted.filter((campus) => !used.has(campus.id));
+    const ring = (radii.get(regionId) ?? 48) * 0.62;
+    rest.forEach((campus, index) => {
+      const spec = campusSpread(campus.n);
+      const angle = outward + (index / Math.max(rest.length, 1)) * Math.PI * 2;
+      const dist = ring * (0.82 + (index % 3) * 0.1);
+      seats.set(campus.id, {
+        x: center.x + Math.cos(angle) * dist,
+        y: center.y + Math.sin(angle) * dist,
+        spread: spec.spread,
+        loose: spec.loose,
+      });
+    });
   }
+
+  const regionOfCampus = (id: string) => regionForCampus(id, campusLabels.get(id) ?? "");
+  const live = simNodes as LiveNode[];
+  for (const node of live) {
+    node.vx = 0;
+    node.vy = 0;
+    node.hub = false;
+    node.regionId = null;
+    if (node.type === "campus") {
+      const seat = seats.get(node.id);
+      node.tx = seat?.x ?? 0;
+      node.ty = seat?.y ?? 0;
+      node.x = node.tx;
+      node.y = node.ty;
+      node.pull = 0.5;
+      node.collide = 8;
+      node.regionId = regionOfCampus(node.id);
+      node.anchor = true;
+      continue;
+    }
+    const hub = isRimHub(node, degree);
+    const campus = primary.get(node.id);
+    const weights = bridgeWeight.get(node.id);
+    let tx = 0;
+    let ty = 0;
+    let loose = false;
+    let regionId: string | null = null;
+    if (campus && seats.has(campus)) {
+      const seat = seats.get(campus)!;
+      const jitter = organicOffset(node.id, seat.spread, seat.loose, hashUnit(campus));
+      tx = seat.x + jitter.x;
+      ty = seat.y + jitter.y;
+      loose = seat.loose;
+      regionId = regionOfCampus(campus);
+    } else if (weights && weights.size) {
+      let x = 0;
+      let y = 0;
+      let weight = 0;
+      let topId: string | null = null;
+      let topCount = 0;
+      for (const [id, count] of weights) {
+        const seat = seats.get(id);
+        if (!seat) continue;
+        x += seat.x * count;
+        y += seat.y * count;
+        weight += count;
+        if (count > topCount) {
+          topCount = count;
+          topId = id;
+        }
+      }
+      if (weight) {
+        const jitter = organicOffset(node.id, 16, false, 0);
+        tx = x / weight + jitter.x;
+        ty = y / weight + jitter.y;
+        regionId = topId ? regionOfCampus(topId) : null;
+      }
+    } else {
+      const theta = hashUnit(node.id) * Math.PI * 2;
+      const dist = 10 + hashUnit(`${node.id}:r`) * 28;
+      tx = Math.cos(theta) * dist;
+      ty = Math.sin(theta) * dist;
+    }
+    node.regionId = regionId;
+    node.hub = hub;
+    node.tx = tx;
+    node.ty = ty;
+    node.x = tx;
+    node.y = ty;
+    if (hub) {
+      node.pull = 0;
+      node.collide = 12;
+      node.anchor = (degree.get(node.id) ?? 0) >= 28;
+    } else if (loose && (node.type === "person" || node.type === "startup")) {
+      node.pull = 0.1;
+      node.collide = 0;
+    } else if (node.type === "person") {
+      node.pull = 0.14;
+      node.collide = 2.05;
+    } else if (node.type === "startup") {
+      node.pull = 0.13;
+      node.collide = 2.5;
+    } else {
+      node.pull = 0.16;
+      node.collide = 3.3;
+    }
+  }
+
+  const hubMembers = new Map<string, string[]>();
+  const pushMember = (hubId: string, memberId: string) => {
+    const hub = byId.get(hubId) as LiveNode | undefined;
+    const member = byId.get(memberId) as LiveNode | undefined;
+    if (!hub?.hub || !member || member.hub) return;
+    const list = hubMembers.get(hubId) ?? [];
+    list.push(memberId);
+    hubMembers.set(hubId, list);
+  };
+  for (const edge of edges) {
+    if (edge.type === "studied_at" || edge.type === "at_campus") continue;
+    pushMember(edge.source, edge.target);
+    pushMember(edge.target, edge.source);
+  }
+
+  const rankedHubs = live
+    .filter((node) => node.hub)
+    .sort((a, b) => (degree.get(b.id) ?? 0) - (degree.get(a.id) ?? 0) || a.id.localeCompare(b.id));
+  const keptMembers: Set<string>[] = [];
+  for (const hub of rankedHubs) {
+    const mine = new Set(hubMembers.get(hub.id) ?? []);
+    const covered =
+      mine.size >= 8 &&
+      keptMembers.some((other) => {
+        let shared = 0;
+        for (const id of mine) if (other.has(id)) shared += 1;
+        return shared / mine.size >= 0.72;
+      });
+    if (!covered) {
+      keptMembers.push(mine);
+      continue;
+    }
+    hub.hub = false;
+    hub.anchor = false;
+    hub.pull = 0.18;
+    hub.collide = 3.4;
+  }
+
+  const hubsByRegion = new Map<string, LiveNode[]>();
+  for (const node of live) {
+    if (!node.hub) continue;
+    const regionId = majorityRegion(node.id, hubMembers.get(node.id) ?? [], byId as Map<string, LiveNode>) ?? node.regionId ?? "none";
+    node.regionId = regionId === "none" ? null : regionId;
+    const list = hubsByRegion.get(regionId) ?? [];
+    list.push(node);
+    hubsByRegion.set(regionId, list);
+  }
+
+  const hubTargets = new Map<string, { x: number; y: number }>();
+  for (const [regionId, group] of hubsByRegion) {
+    const center = regionCenter.get(regionId) ?? { x: 0, y: 0 };
+    const outward = Math.hypot(center.x, center.y) > 8 ? Math.atan2(center.y, center.x) : -Math.PI / 2;
+    const body = live.filter((node) => !node.hub && node.regionId === (regionId === "none" ? null : regionId) && (node.type === "person" || node.type === "startup"));
+    const radiiOfBody = body.map((node) => Math.hypot(node.tx - center.x, node.ty - center.y)).sort((a, b) => a - b);
+    const outer = radiiOfBody.length ? radiiOfBody[Math.min(radiiOfBody.length - 1, Math.floor(radiiOfBody.length * 0.9))] : 48;
+    const sorted = [...group].sort((a, b) => (degree.get(b.id) ?? 0) - (degree.get(a.id) ?? 0) || a.id.localeCompare(b.id));
+    const arc = Math.min(Math.PI * 1.45, Math.max(1.15, 0.62 * sorted.length));
+    sorted.forEach((hub, index) => {
+      const members = hubMembers.get(hub.id) ?? [];
+      let mx = 0;
+      let my = 0;
+      let count = 0;
+      const seen = new Set<string>();
+      for (const id of members) {
+        if (seen.has(id)) continue;
+        seen.add(id);
+        const member = byId.get(id) as LiveNode | undefined;
+        if (!member) continue;
+        mx += member.tx;
+        my += member.ty;
+        count += 1;
+      }
+      let preferred = outward;
+      if (count) {
+        const dx = mx / count - center.x;
+        const dy = my / count - center.y;
+        if (Math.hypot(dx, dy) > outer * 0.2) preferred = Math.atan2(dy, dx);
+      }
+      const spacing = arc / Math.max(sorted.length, 1);
+      const slot = index === 0 ? 0 : (index % 2 === 0 ? 1 : -1) * Math.ceil(index / 2) * spacing;
+      let angle = preferred * 0.25 + (outward + slot) * 0.75;
+      let rel = angle - outward;
+      while (rel > Math.PI) rel -= Math.PI * 2;
+      while (rel < -Math.PI) rel += Math.PI * 2;
+      if (Math.abs(rel) > Math.PI * 0.82) angle = outward + Math.sign(rel || 1) * Math.PI * 0.82;
+      const rim = outer + 46 + hashUnit(hub.id) * 20;
+      const tx = center.x + Math.cos(angle) * rim;
+      const ty = center.y + Math.sin(angle) * rim;
+      hub.tx = tx;
+      hub.ty = ty;
+      hub.x = tx;
+      hub.y = ty;
+      hubTargets.set(hub.id, { x: tx, y: ty });
+    });
+  }
+
+  const hubs = live.filter((node) => node.hub);
+  const sim = forceSimulation(live)
+    .velocityDecay(0.4)
+    .alphaDecay(0.07)
+    .force(
+      "x",
+      forceX<LiveNode>((node) => node.tx).strength((node) => (node.hub ? 0 : node.pull)),
+    )
+    .force(
+      "y",
+      forceY<LiveNode>((node) => node.ty).strength((node) => (node.hub ? 0 : node.pull)),
+    )
+    .force(
+      "collide",
+      forceCollide<LiveNode>()
+        .radius((node) => node.collide)
+        .strength(0.55)
+        .iterations(1),
+    )
+    .force("radial", (alpha) => {
+      for (const hub of hubs) {
+        const target = hubTargets.get(hub.id);
+        if (!target) continue;
+        hub.vx = (hub.vx ?? 0) + (target.x - (hub.x ?? target.x)) * 0.7 * alpha;
+        hub.vy = (hub.vy ?? 0) + (target.y - (hub.y ?? target.y)) * 0.7 * alpha;
+      }
+    })
+    .stop();
+  for (let tick = 0; tick < 28; tick++) sim.tick();
+
   snapCampusCentroids(simNodes, primary);
-  separateOverlaps(g, simNodes);
-  for (const node of simNodes) {
-    const at = g.getNodeAttributes(node.id);
-    node.x = Number.isFinite(at.x) ? at.x : node.x;
-    node.y = Number.isFinite(at.y) ? at.y : node.y;
+  const markers: RegionMarker[] = [];
+  for (const region of REGIONS) {
+    const members = campusesByRegion.get(region.id) ?? [];
+    if (!members.length) continue;
+    markers.push({
+      id: region.id,
+      label: region.label,
+      fullLabel: region.fullLabel,
+      x: 0,
+      y: 0,
+      color: regionInk(region.id),
+      campusIds: members.map((member) => member.id),
+    });
   }
-  snapCampusCentroids(simNodes, primary);
-  gatherCampusOutliers(simNodes, primary);
-  loosenRoundClusters(simNodes, primary);
-  seatRegionLobes(simNodes, primary, campusLabels, linkedCampuses);
-  separateSameRegionCampuses(simNodes, primary, campusLabels);
-  fitLobes(simNodes, primary, campusLabels);
-  pullMemberHubs(simNodes, edges);
-  placeRegionLabels(placed.markers, simNodes);
-  return placed.markers;
+  placeRegionLabels(markers, simNodes);
+  return markers;
+}
+
+function isRimHub(node: SimNode, degree: Map<string, number>): boolean {
+  const links = degree.get(node.id) ?? 0;
+  if (node.type === "organization" || node.type === "program") return links >= HUB_DEGREE;
+  if (node.type === "investor") return links >= INVESTOR_HUB_DEGREE;
+  return false;
+}
+
+function majorityRegion(hubId: string, members: string[], byId: Map<string, LiveNode>): string | null {
+  const votes = new Map<string, number>();
+  const seen = new Set<string>();
+  for (const id of members) {
+    if (seen.has(id)) continue;
+    seen.add(id);
+    const regionId = byId.get(id)?.regionId;
+    if (!regionId) continue;
+    votes.set(regionId, (votes.get(regionId) ?? 0) + 1);
+  }
+  let best: string | null = byId.get(hubId)?.regionId ?? null;
+  let score = 0;
+  for (const [regionId, count] of votes) {
+    if (count > score) {
+      score = count;
+      best = regionId;
+    }
+  }
+  return best;
+}
+
+/** A large campus is a dense middle plus a few uneven bulges, so it fades instead of packing into a disc. */
+function organicOffset(id: string, spread: number, loose: boolean, phaseUnit: number): { x: number; y: number } {
+  const unit = Math.max(1e-4, hashUnit(`${id}:u`));
+  const phase = phaseUnit * Math.PI * 2;
+  if (loose) {
+    const lobe = Math.floor(hashUnit(`${id}:lobe`) * 3);
+    const inCore = hashUnit(`${id}:core`) < 0.46;
+    const theta = inCore
+      ? hashUnit(`${id}:a`) * Math.PI * 2
+      : phase + lobe * ((Math.PI * 2) / 3) + (hashUnit(`${id}:a`) - 0.5) * 1.35;
+    const ray = Math.min(2.15, Math.sqrt(-2 * Math.log(unit)));
+    const dist = spread * (inCore ? ray * 0.42 : 0.48 + ray * 0.46);
+    return { x: Math.cos(theta) * dist, y: Math.sin(theta) * dist * 0.86 };
+  }
+  const theta = hashUnit(`${id}:a`) * Math.PI * 2;
+  const wobble = 0.84 + 0.26 * Math.sin(theta * 3 + phase);
+  const dist = spread * (0.18 + 0.82 * Math.pow(unit, 0.62)) * wobble;
+  return { x: Math.cos(theta) * dist, y: Math.sin(theta) * dist };
 }
 
 function hashUnit(id: string): number {
@@ -986,10 +1116,11 @@ function hashUnit(id: string): number {
   return (hash % 10000) / 10000;
 }
 
-/** Move each campus label onto the people who actually belong to it. */
+/** Move each campus label onto the people and startups who actually belong to it. */
 function snapCampusCentroids(simNodes: SimNode[], primary: Map<string, string>) {
   const members = new Map<string, SimNode[]>();
   for (const node of simNodes) {
+    if (node.type !== "person" && node.type !== "startup") continue;
     const campus = primary.get(node.id);
     if (!campus) continue;
     const list = members.get(campus) ?? [];
@@ -1012,343 +1143,21 @@ function snapCampusCentroids(simNodes: SimNode[], primary: Map<string, string>) 
   }
 }
 
-/** Keep a campus cloud from throwing a few nodes across the map. The core stays put. */
-function gatherCampusOutliers(simNodes: SimNode[], primary: Map<string, string>) {
-  const members = new Map<string, SimNode[]>();
-  for (const node of simNodes) {
-    if (node.type !== "person" && node.type !== "startup") continue;
-    const campus = primary.get(node.id);
-    if (!campus) continue;
-    const list = members.get(campus) ?? [];
-    list.push(node);
-    members.set(campus, list);
-  }
-  for (const list of members.values()) {
-    if (list.length < 12) continue;
-    let cx = 0;
-    let cy = 0;
-    for (const node of list) {
-      cx += node.x;
-      cy += node.y;
-    }
-    cx /= list.length;
-    cy /= list.length;
-    const radii = list.map((node) => Math.hypot(node.x - cx, node.y - cy)).sort((a, b) => a - b);
-    const median = radii[Math.floor(radii.length / 2)] || 1;
-    const limit = Math.max(36, median * 2.5);
-    for (const node of list) {
-      const dx = node.x - cx;
-      const dy = node.y - cy;
-      const dist = Math.hypot(dx, dy);
-      if (dist <= limit) continue;
-      node.x = cx + (dx / dist) * limit;
-      node.y = cy + (dy / dist) * limit;
-    }
-  }
-}
-
-/** Break a packed disc into a lumpy cloud. Smaller campuses are already irregular. */
-function loosenRoundClusters(simNodes: SimNode[], primary: Map<string, string>) {
-  const members = new Map<string, SimNode[]>();
-  for (const node of simNodes) {
-    if (node.type !== "person" && node.type !== "startup") continue;
-    const campus = primary.get(node.id);
-    if (!campus) continue;
-    const list = members.get(campus) ?? [];
-    list.push(node);
-    members.set(campus, list);
-  }
-  for (const [campusId, list] of members) {
-    if (list.length < 80) continue;
-    let cx = 0;
-    let cy = 0;
-    for (const node of list) {
-      cx += node.x;
-      cy += node.y;
-    }
-    cx /= list.length;
-    cy /= list.length;
-    const bins = 12;
-    const samples: number[][] = Array.from({ length: bins }, () => []);
-    for (const node of list) {
-      const dx = node.x - cx;
-      const dy = node.y - cy;
-      const bin = Math.min(bins - 1, Math.floor((((Math.atan2(dy, dx) + Math.PI) / (Math.PI * 2)) * bins)));
-      samples[bin].push(Math.hypot(dx, dy));
-    }
-    const outer = samples.map((radii) => {
-      if (!radii.length) return 0;
-      const sorted = [...radii].sort((a, b) => a - b);
-      return sorted[Math.floor(sorted.length * 0.75)] ?? 0;
-    });
-    const occupied = outer.filter((radius) => radius > 0);
-    const hi = Math.max(...occupied);
-    const lo = Math.min(...occupied);
-    if (occupied.length < 8 || hi / Math.max(lo, 1) > 1.22) continue;
-    const phase = hashUnit(campusId) * Math.PI * 2;
-    for (const node of list) {
-      const dx = node.x - cx;
-      const dy = node.y - cy;
-      const angle = Math.atan2(dy, dx);
-      const wobble = 1.12 + 0.26 * Math.sin(angle * 3 + phase) + 0.14 * Math.sin(angle * 5 + phase * 2.1);
-      node.x = cx + dx * wobble * 1.08;
-      node.y = cy + dy * wobble * 0.9;
-    }
-  }
-}
-
-function regionOfNode(node: SimNode, primary: Map<string, string>, campusLabels: Map<string, string>): string | null {
-  if (node.type === "campus") return regionForCampus(node.id, campusLabels.get(node.id) ?? "");
-  const campus = primary.get(node.id);
-  if (!campus) return null;
-  return regionForCampus(campus, campusLabels.get(campus) ?? "");
-}
-
-/**
- * Park the five teams on an even ring. Each lobe keeps its internal shape.
- * International stays the small one. Oversized lobes shrink so none of them
- * covers half the map.
- */
-function seatRegionLobes(
-  simNodes: SimNode[],
-  primary: Map<string, string>,
-  campusLabels: Map<string, string>,
-  linkedCampuses: (node: SimNode) => string[],
-) {
-  const groups = new Map<string, SimNode[]>();
-  const strays: SimNode[] = [];
-  for (const node of simNodes) {
-    const region = regionOfNode(node, primary, campusLabels);
-    if (!region) {
-      strays.push(node);
-      continue;
-    }
-    const list = groups.get(region) ?? [];
-    list.push(node);
-    groups.set(region, list);
-  }
-  const active = REGIONS.map((region) => region.id).filter((id) => (groups.get(id) ?? []).some((node) => node.type === "campus"));
-  if (active.length < 2) return;
-  const measured = active.map((id) => {
-    const list = (groups.get(id) ?? []).filter((node) => node.type === "person" || node.type === "startup" || node.type === "campus");
-    let cx = 0;
-    let cy = 0;
-    for (const node of list) {
-      cx += node.x;
-      cy += node.y;
-    }
-    const count = list.length || 1;
-    cx /= count;
-    cy /= count;
-    const radii = list.map((node) => Math.hypot(node.x - cx, node.y - cy)).sort((a, b) => a - b);
-    const radius = radii[Math.min(radii.length - 1, Math.floor(radii.length * 0.9))] || 1;
-    return { id, cx, cy, radius, count: list.length };
-  });
-  const typical = [...measured.map((item) => item.radius)].sort((a, b) => a - b)[Math.floor(measured.length / 2)] ?? 80;
-  const cap = Math.max(70, typical * 0.92);
-  const ring = (cap * 3.05) / (2 * Math.sin(Math.PI / active.length));
-  const byId = new Map(simNodes.map((node) => [node.id, node]));
-  active.forEach((id, index) => {
-    const stat = measured.find((item) => item.id === id);
-    const list = groups.get(id) ?? [];
-    if (!stat || !list.length) return;
-    const angle = -Math.PI / 2 + (index * Math.PI * 2) / active.length;
-    const targetX = Math.cos(angle) * ring;
-    const targetY = Math.sin(angle) * ring;
-    const limit = id === "international" ? cap * 0.58 : cap;
-    const scale = Math.min(limit / stat.radius, id === "international" ? 1 : 1.08);
-    const maxOffset = limit * 1.22;
-    for (const node of list) {
-      let dx = (node.x - stat.cx) * scale;
-      let dy = (node.y - stat.cy) * scale;
-      const dist = Math.hypot(dx, dy);
-      if (dist > maxOffset) {
-        dx *= maxOffset / dist;
-        dy *= maxOffset / dist;
-      }
-      node.x = targetX + dx;
-      node.y = targetY + dy;
-    }
-  });
-  for (const node of strays) {
-    const ids = linkedCampuses(node).filter((id) => byId.get(id)?.type === "campus");
-    if (!ids.length) {
-      node.x *= 0.35;
-      node.y *= 0.35;
-      continue;
-    }
-    let x = 0;
-    let y = 0;
-    for (const id of ids) {
-      const campus = byId.get(id);
-      if (!campus) continue;
-      x += campus.x;
-      y += campus.y;
-    }
-    x /= ids.length;
-    y /= ids.length;
-    const jitter = 10 + hashUnit(node.id) * 16;
-    const theta = hashUnit(`${node.id}:j`) * Math.PI * 2;
-    node.x = x * 0.62 + Math.cos(theta) * jitter;
-    node.y = y * 0.62 + Math.sin(theta) * jitter;
-  }
-}
-
-/** Ease campuses in the same team apart so their names can both sit on the lobe. */
-function separateSameRegionCampuses(simNodes: SimNode[], primary: Map<string, string>, campusLabels: Map<string, string>) {
-  const campuses = simNodes.filter((node) => node.type === "campus");
-  const members = new Map<string, SimNode[]>();
-  for (const node of simNodes) {
-    const campus = primary.get(node.id);
-    if (!campus) continue;
-    const list = members.get(campus) ?? [];
-    list.push(node);
-    members.set(campus, list);
-  }
-  const shift = (campus: SimNode, dx: number, dy: number) => {
-    campus.x += dx;
-    campus.y += dy;
-    for (const member of members.get(campus.id) ?? []) {
-      member.x += dx;
-      member.y += dy;
-    }
-  };
-  let minX = Infinity;
-  let maxX = -Infinity;
-  let minY = Infinity;
-  let maxY = -Infinity;
-  for (const node of simNodes) {
-    minX = Math.min(minX, node.x);
-    maxX = Math.max(maxX, node.x);
-    minY = Math.min(minY, node.y);
-    maxY = Math.max(maxY, node.y);
-  }
-  const span = Math.max(maxX - minX, maxY - minY, 1);
-  const minDist = span * (16 / 740);
-  const regionOf = new Map(campuses.map((campus) => [campus.id, regionForCampus(campus.id, campusLabels.get(campus.id) ?? "")]));
-  for (let iter = 0; iter < 8; iter++) {
-    for (let i = 0; i < campuses.length; i++) {
-      for (let j = i + 1; j < campuses.length; j++) {
-        const a = campuses[i];
-        const b = campuses[j];
-        if (regionOf.get(a.id) !== regionOf.get(b.id)) continue;
-        let dx = b.x - a.x;
-        let dy = b.y - a.y;
-        let dist = Math.hypot(dx, dy);
-        if (dist >= minDist) continue;
-        if (dist < 1) {
-          const angle = hashUnit(`${a.id}:${b.id}`) * Math.PI * 2;
-          dx = Math.cos(angle);
-          dy = Math.sin(angle);
-          dist = 1;
-        }
-        const mid = Math.atan2((a.y + b.y) / 2, (a.x + b.x) / 2);
-        const tx = Math.cos(mid + Math.PI / 2);
-        const ty = Math.sin(mid + Math.PI / 2);
-        const along = dx * tx + dy * ty;
-        const dir = along >= 0 ? 1 : -1;
-        const push = (minDist - Math.abs(along)) / 2;
-        shift(a, -tx * dir * push, -ty * dir * push);
-        shift(b, tx * dir * push, ty * dir * push);
-      }
-    }
-  }
-}
-
-/** Shrink any team that still spills across the ring, so the five lobes stay similar and apart. */
-function fitLobes(simNodes: SimNode[], primary: Map<string, string>, campusLabels: Map<string, string>) {
-  const groups = new Map<string, SimNode[]>();
-  for (const node of simNodes) {
-    const region = regionOfNode(node, primary, campusLabels);
-    if (!region) continue;
-    const list = groups.get(region) ?? [];
-    list.push(node);
-    groups.set(region, list);
-  }
-  const stats = [...groups.entries()].map(([id, list]) => {
-    const body = list.filter((node) => node.type === "person" || node.type === "startup" || node.type === "campus");
-    const sample = body.length ? body : list;
-    let cx = 0;
-    let cy = 0;
-    for (const node of sample) {
-      cx += node.x;
-      cy += node.y;
-    }
-    cx /= sample.length;
-    cy /= sample.length;
-    const radii = sample.map((node) => Math.hypot(node.x - cx, node.y - cy)).sort((a, b) => a - b);
-    const radius = radii[Math.min(radii.length - 1, Math.floor(radii.length * 0.9))] || 1;
-    return { id, list, cx, cy, radius, ring: Math.hypot(cx, cy) };
-  });
-  if (stats.length < 2) return;
-  const meanRing = stats.reduce((sum, stat) => sum + stat.ring, 0) / stats.length;
-  for (const stat of stats) {
-    const fraction = stat.id === "international" ? 0.16 : 0.27;
-    const limit = Math.max(80, meanRing * fraction);
-    const scale = Math.min(1, limit / stat.radius);
-    if (scale > 0.98) continue;
-    for (const node of stat.list) {
-      node.x = stat.cx + (node.x - stat.cx) * scale;
-      node.y = stat.cy + (node.y - stat.cy) * scale;
-    }
-  }
-}
-
-/** Draw a high-degree organization into the people it actually connects, instead of leaving it out on a fan of long edges. */
-function pullMemberHubs(simNodes: SimNode[], edges: MapEdge[]) {
-  const byId = new Map(simNodes.map((node) => [node.id, node]));
-  const neighbors = new Map<string, SimNode[]>();
-  const add = (id: string, other: SimNode) => {
-    const list = neighbors.get(id);
-    if (list) list.push(other);
-    else neighbors.set(id, [other]);
-  };
-  for (const edge of edges) {
-    const source = byId.get(edge.source);
-    const target = byId.get(edge.target);
-    if (!source || !target) continue;
-    add(source.id, target);
-    add(target.id, source);
-  }
-  let mapX = 0;
-  let mapY = 0;
-  for (const node of simNodes) {
-    mapX += node.x;
-    mapY += node.y;
-  }
-  mapX /= simNodes.length || 1;
-  mapY /= simNodes.length || 1;
-  for (const node of simNodes) {
-    if (node.type !== "organization" && node.type !== "program" && node.type !== "investor") continue;
-    const list = neighbors.get(node.id) ?? [];
-    if (list.length < 6) continue;
-    let x = 0;
-    let y = 0;
-    for (const other of list) {
-      x += other.x;
-      y += other.y;
-    }
-    x /= list.length;
-    y /= list.length;
-    const dx = x - mapX;
-    const dy = y - mapY;
-    const dist = Math.hypot(dx, dy) || 1;
-    node.x = x + (dx / dist) * 18;
-    node.y = y + (dy / dist) * 18;
-  }
-}
-
-/** Park each region name just past its own cluster, outward from the cloud. Each label keeps its own radius. */
+/** Park each region name just past its own coloured cloud, outward from the middle. Hubs sit further out, so they are not part of the measurement. */
 function placeRegionLabels(markers: RegionMarker[], simNodes: SimNode[]) {
   if (!markers.length || !simNodes.length) return;
   let cx = 0;
   let cy = 0;
+  let counted = 0;
   for (const node of simNodes) {
+    if (node.type !== "person" && node.type !== "startup" && node.type !== "campus") continue;
     cx += node.x;
     cy += node.y;
+    counted += 1;
   }
-  cx /= simNodes.length;
-  cy /= simNodes.length;
+  if (!counted) return;
+  cx /= counted;
+  cy /= counted;
   const byId = new Map(simNodes.map((node) => [node.id, node]));
   const centroids = markers.map((marker) => {
     const campuses = marker.campusIds.map((id) => byId.get(id)).filter((node): node is SimNode => !!node);
@@ -1363,6 +1172,7 @@ function placeRegionLabels(markers: RegionMarker[], simNodes: SimNode[]) {
   });
   const extent = new Map<string, number>();
   for (const node of simNodes) {
+    if (node.type !== "person" && node.type !== "startup" && node.type !== "campus") continue;
     let nearest = centroids[0];
     let nearestDist = Infinity;
     for (const centroid of centroids) {
@@ -1379,8 +1189,9 @@ function placeRegionLabels(markers: RegionMarker[], simNodes: SimNode[]) {
     const dx = centroid.x - cx;
     const dy = centroid.y - cy;
     const dist = Math.hypot(dx, dy) || 1;
-    const halo = extent.get(centroid.marker.id) ?? 80;
-    const reach = dist + Math.min(halo * 0.62, dist * 0.7) + 36;
+    const halo = extent.get(centroid.marker.id) ?? 64;
+    const edge = dist + halo;
+    const reach = Math.min(edge * 0.92, dist + halo * 0.62 + 14);
     centroid.marker.x = cx + (dx / dist) * reach;
     centroid.marker.y = cy + (dy / dist) * reach;
   }
@@ -1395,8 +1206,8 @@ function placeRegionLabels(markers: RegionMarker[], simNodes: SimNode[]) {
     maxY = Math.max(maxY, node.y);
   }
   const span = Math.max(maxX - minX, maxY - minY, 1);
-  const gap = span * (88 / 740);
-  for (let iter = 0; iter < 16; iter++) {
+  const gap = span * (72 / 740);
+  for (let iter = 0; iter < 12; iter++) {
     for (let i = 0; i < markers.length; i++) {
       for (let j = i + 1; j < markers.length; j++) {
         const a = markers[i];
@@ -1418,37 +1229,4 @@ function placeRegionLabels(markers: RegionMarker[], simNodes: SimNode[]) {
       }
     }
   }
-}
-
-const OVERLAP_PX: Record<MapNodeType, number> = {
-  person: 2.1,
-  startup: 2.6,
-  investor: 4.2,
-  program: 3.4,
-  organization: 4,
-  campus: 7,
-};
-
-/** Push colliding nodes apart in graph units that survive the camera fit (a few screen pixels). */
-function separateOverlaps(g: Graph, simNodes: SimNode[]) {
-  const byId = new Map(simNodes.map((node) => [node.id, node]));
-  g.forEachNode((id) => {
-    const sim = byId.get(id);
-    const px = sim?.layoutPx ?? OVERLAP_PX[sim?.type ?? "person"] ?? 2.6;
-    g.setNodeAttribute(id, "size", Math.max(2.4, px));
-    if (sim) {
-      g.setNodeAttribute(id, "x", sim.x);
-      g.setNodeAttribute(id, "y", sim.y);
-    }
-  });
-  noverlap.assign(g, {
-    maxIterations: simNodes.length > 500 ? 18 : 28,
-    settings: {
-      margin: 0.05,
-      ratio: 1,
-      expansion: 1.008,
-      gridSize: 40,
-      speed: 3,
-    },
-  });
 }
