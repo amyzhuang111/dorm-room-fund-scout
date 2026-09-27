@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { nodeColor } from "../../components/network-style";
-import { REGIONS, campusShade, regionSwatch } from "./network-regions";
+import { REGIONS, campusShade, regionForCampus, regionSwatch } from "./network-regions";
 
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
   const value = Number.parseInt(hex.slice(1), 16);
@@ -81,5 +81,17 @@ const investor = nodeColor({ type: "investor", campus: null, id: "inv", rimBand:
 assert.match(investor, /75,\s*85,\s*99/);
 const second = nodeColor({ type: "organization", campus: null, id: "z", rimBand: "outer", rimTier: "A" }, campusColors);
 assert.match(second, /156,\s*163,\s*175/);
+
+assert.equal(regionForCampus("univ_uva", "University of Virginia"), "philly");
+assert.equal(regionForCampus("univ_waterloo", "University of Waterloo"), "boston");
+assert.equal(regionForCampus("univ_toronto", "University of Toronto"), "boston");
+assert.equal(regionForCampus("univ_queens", "Queen's University"), "international");
+
+const uva = hexToHsl(campusShade("univ_uva", "University of Virginia", siblings));
+assert.ok(uva.h <= 18 || uva.h >= 345, `uva ${uva.h}`);
+const waterlooHue = hexToHsl(campusShade("univ_waterloo", "University of Waterloo", siblings)).h;
+assert.ok(waterlooHue >= 200 && waterlooHue <= 230, `waterloo ${waterlooHue}`);
+const torontoHue = hexToHsl(campusShade("univ_toronto", "University of Toronto", siblings)).h;
+assert.ok(torontoHue >= 200 && torontoHue <= 230, `toronto ${torontoHue}`);
 
 console.log("region color tests ok");

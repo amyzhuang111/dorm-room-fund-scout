@@ -450,9 +450,14 @@ function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>) 
     void renderer.getCamera().animatedReset({ duration: 280 });
     return;
   }
-  const span = Math.max(maxX - minX, maxY - minY, 0.04);
+  const width = maxX - minX;
+  const height = maxY - minY;
+  // Layout +y points down the screen, so the top edge is minY. Extra room there clears the search box.
+  const topPad = Math.max(width, height, 0.04) * 0.055;
+  const paddedMinY = minY - topPad;
+  const span = Math.max(width, maxY - paddedMinY, 0.04);
   const ratio = Math.min(1.18, Math.max(0.04, span * 1.06));
-  void renderer.getCamera().animate({ x: (minX + maxX) / 2, y: (minY + maxY) / 2, ratio }, { duration: 360 });
+  void renderer.getCamera().animate({ x: (minX + maxX) / 2, y: (paddedMinY + maxY) / 2, ratio }, { duration: 360 });
 }
 
 /** Sigma's camera lives in the normalized frame (center 0.5), not raw layout coordinates. */

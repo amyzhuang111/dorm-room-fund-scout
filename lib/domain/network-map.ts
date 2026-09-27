@@ -122,7 +122,7 @@ interface SimNode {
   rimTier?: RimTier | null;
 }
 
-const LAYOUT_VERSION = "25";
+const LAYOUT_VERSION = "26";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -1096,7 +1096,8 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
       node.x = node.tx;
       node.y = node.ty;
       node.pull = 0.5;
-      node.collide = 8;
+      // A wide campus radius excavates the middle of a small cloud (Waterloo). People fill that middle.
+      node.collide = 2;
       node.regionId = regionOfCampus(node.id);
       node.anchor = true;
       continue;
@@ -1157,15 +1158,10 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     } else if (node.rimBand === "inward") {
       node.pull = 0.22;
       node.collide = 2.2;
-    } else if (loose && (node.type === "person" || node.type === "startup")) {
-      node.pull = 0.1;
-      node.collide = 0;
-    } else if (node.type === "person") {
-      node.pull = 0.14;
-      node.collide = 2.05;
-    } else if (node.type === "startup") {
-      node.pull = 0.13;
-      node.collide = 2.5;
+    } else if (node.type === "person" || node.type === "startup") {
+      // A wide radius packed each campus into a shell. A small one only keeps the dots from stacking.
+      node.pull = node.type === "person" ? (loose ? 0.1 : 0.14) : loose ? 0.1 : 0.13;
+      node.collide = 1.15;
     } else {
       node.pull = 0.16;
       node.collide = 3.3;
@@ -1279,6 +1275,8 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
   }
 
   const hubs = live.filter((node) => node.hub);
+  // Hubs and organizations still separate from each other. People only separate from people, so a hub cannot carve a campus into an arc.
+  const colliders = live.filter((node) => node.type !== "person" && node.type !== "startup" && node.collide > 0);
   const sim = forceSimulation(live)
     .velocityDecay(0.4)
     .alphaDecay(0.07)
@@ -1291,12 +1289,40 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
       forceY<LiveNode>((node) => node.ty).strength((node) => (node.hub ? 0 : node.pull)),
     )
     .force(
-      "collide",
+      "members",
       forceCollide<LiveNode>()
-        .radius((node) => node.collide)
-        .strength(0.55)
+        .radius((node) => (node.type === "person" || node.type === "startup" ? node.collide : 0))
+        .strength(0.35)
         .iterations(1),
     )
+    .force("collide", (alpha) => {
+      const strength = 0.55 * alpha;
+      for (let i = 0; i < colliders.length; i++) {
+        const a = colliders[i];
+        for (let j = i + 1; j < colliders.length; j++) {
+          const b = colliders[j];
+          let dx = a.x - b.x;
+          let dy = a.y - b.y;
+          const min = a.collide + b.collide;
+          const dist2 = dx * dx + dy * dy;
+          if (dist2 >= min * min) continue;
+          let dist = Math.sqrt(dist2);
+          if (dist < 1e-4) {
+            dx = 1e-3;
+            dy = 0;
+            dist = 1e-3;
+          }
+          const push = ((min - dist) / dist) * strength;
+          const ra = a.collide * a.collide;
+          const rb = b.collide * b.collide;
+          const wa = rb / (ra + rb);
+          a.vx = (a.vx ?? 0) + dx * push * wa;
+          a.vy = (a.vy ?? 0) + dy * push * wa;
+          b.vx = (b.vx ?? 0) - dx * push * (1 - wa);
+          b.vy = (b.vy ?? 0) - dy * push * (1 - wa);
+        }
+      }
+    })
     .force("radial", (alpha) => {
       for (const hub of hubs) {
         const target = hubTargets.get(hub.id);
@@ -1324,7 +1350,8 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     });
   }
   placeRegionLabels(markers, simNodes);
-  return markers;
+  // Region names stay off the canvas. The legend carries the colors, and titles were clipping the fit.
+  return [];
 }
 
 function isRimHub(node: SimNode, degree: Map<string, number>): boolean {
@@ -1357,24 +1384,14 @@ function majorityRegion(hubId: string, members: string[], byId: Map<string, Live
   return best;
 }
 
-/** A large campus is a dense middle plus a few uneven bulges, so it fades instead of packing into a disc. */
+/** Filled disc around the campus seat. Reach stays near the old spread so neighboring campuses still touch. */
 function organicOffset(id: string, spread: number, loose: boolean, phaseUnit: number): { x: number; y: number } {
   const unit = Math.max(1e-4, hashUnit(`${id}:u`));
-  const phase = phaseUnit * Math.PI * 2;
-  if (loose) {
-    const lobe = Math.floor(hashUnit(`${id}:lobe`) * 3);
-    const inCore = hashUnit(`${id}:core`) < 0.46;
-    const theta = inCore
-      ? hashUnit(`${id}:a`) * Math.PI * 2
-      : phase + lobe * ((Math.PI * 2) / 3) + (hashUnit(`${id}:a`) - 0.5) * 1.35;
-    const ray = Math.min(2.15, Math.sqrt(-2 * Math.log(unit)));
-    const dist = spread * (inCore ? ray * 0.42 : 0.48 + ray * 0.46);
-    return { x: Math.cos(theta) * dist, y: Math.sin(theta) * dist * 0.86 };
-  }
   const theta = hashUnit(`${id}:a`) * Math.PI * 2;
-  const wobble = 0.84 + 0.26 * Math.sin(theta * 3 + phase);
-  const dist = spread * (0.18 + 0.82 * Math.pow(unit, 0.62)) * wobble;
-  return { x: Math.cos(theta) * dist, y: Math.sin(theta) * dist };
+  const reach = spread * (loose ? 1 : 0.85);
+  const dist = reach * Math.sqrt(unit);
+  const squash = 0.92 + 0.06 * Math.sin(phaseUnit * Math.PI * 2);
+  return { x: Math.cos(theta) * dist, y: Math.sin(theta) * dist * squash };
 }
 
 function hashUnit(id: string): number {

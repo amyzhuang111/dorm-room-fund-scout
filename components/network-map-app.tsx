@@ -19,6 +19,14 @@ import { LinkedInIconButton, LinkedInOpenButton, PersonLinkButton, ProfileIconLi
 import { DrfHopFilter } from "./drf-hop-filter";
 import { WarmIntroPaths } from "./warm-intro-paths";
 
+const LEGEND_REGION: Record<string, string> = {
+  boston: "Northeast",
+  ny: "Midwest",
+  philly: "Southeast",
+  west: "West Coast",
+  international: "International",
+};
+
 const NetworkSigma = dynamic(() => import("./network-sigma").then((mod) => mod.NetworkSigma), {
   ssr: false,
   loading: () => <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-black">Drawing the network…</p>,
@@ -287,7 +295,7 @@ export function NetworkMapApp() {
   const swatchGroups = useMemo(() => (graph ? groupCampusSwatches(campusSwatches(graph.nodes)) : []), [graph]);
 
   return (
-    <div className="relative h-[calc(100dvh-3.5rem)] min-h-[520px] overflow-hidden bg-white text-black">
+    <div className={`relative min-h-[520px] overflow-hidden bg-white text-black ${pipeline.storage === "local" ? "h-[calc(100dvh-5.75rem)]" : "h-[calc(100dvh-3.5rem)]"}`}>
       {shown && filters ? (
         <NetworkSigma
           graph={shown}
@@ -559,30 +567,32 @@ export function NetworkMapApp() {
         </ZoomButton>
       </div>
 
-      <div className="absolute bottom-4 z-20 max-w-[min(42rem,calc(100%-5.5rem))]" style={{ left: filtersOpen ? "18.5rem" : "1rem" }}>
+      <div className="absolute z-20 w-[13.25rem]" style={{ left: filtersOpen ? "18.5rem" : "1rem", bottom: "4.75rem" }}>
         {legendOpen ? (
-          <div className="rounded-md bg-white/70 px-2 py-1 text-[11px] text-neutral-600 backdrop-blur-[2px]" role="region" aria-label="Network legend">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <div className="rounded-md border border-neutral-200 bg-white/95 px-2 py-1.5 text-[11px] text-neutral-600 shadow-sm" role="region" aria-label="Network legend">
+            <div className="flex flex-col gap-y-0.5">
               {REGIONS.map((region) => (
-                <LegendItem key={region.id} shape="circle" mark="campus" color={regionSwatch(region.id)} label={region.label} />
+                <LegendItem key={region.id} shape="circle" mark="campus" color={regionSwatch(region.id)} label={LEGEND_REGION[region.id] ?? region.label} title={region.fullLabel} />
               ))}
             </div>
-            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+            <div className="mt-1 grid grid-cols-2 gap-x-2 gap-y-0.5">
               <LegendItem shape="circle" mark="person" color="#6b7280" label="Person" />
               <LegendItem shape="square" color="#6b7280" label="Startup" />
               <LegendItem shape="diamond" color="#9ca3af" label="Investor" />
               <LegendItem shape="hex" color="#9ca3af" label="Club / lab" />
               <LegendItem shape="triangle" color="#9ca3af" label="Organization" />
+            </div>
+            <div className="mt-1 flex items-start justify-between gap-2">
+              <p className="text-[10px] leading-snug text-neutral-400">Size is per capita. People and startups take their campus shade.</p>
               <button
                 type="button"
-                className="ml-auto text-[10px] font-medium text-neutral-400 underline"
+                className="shrink-0 text-[10px] font-medium text-neutral-400 underline"
                 aria-expanded={true}
                 onClick={() => setLegendOpen(false)}
               >
                 Hide
               </button>
             </div>
-            <p className="mt-0.5 text-[10px] leading-snug text-neutral-400">Size is per capita. People and startups take their campus shade. Investors and organizations stay grey.</p>
           </div>
         ) : (
           <button
