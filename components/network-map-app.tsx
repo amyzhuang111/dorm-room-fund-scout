@@ -586,8 +586,8 @@ export function NetworkMapApp() {
         <ZoomButton label="Zoom out" onClick={() => graphApi.current?.zoomOut()}>
           −
         </ZoomButton>
-        <ZoomButton label="Reset view" onClick={() => graphApi.current?.fit()}>
-          Reset
+        <ZoomButton label="Fit view" onClick={() => graphApi.current?.fit()}>
+          Fit
         </ZoomButton>
       </div>
 

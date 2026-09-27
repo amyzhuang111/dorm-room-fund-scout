@@ -8,7 +8,7 @@ import { featuredNationalKey } from "@/lib/domain/featured-national";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
-import { CAMPUS_LABEL_MIN_MEMBERS, DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, PROGRAM_LINE_ACTIVE, PROGRAM_LINE_DIM, REGION_TRACKING, bundleInk, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, zoomSizeFactor, type CampusDisc, type FramePoint, type LabelOffset, type ScreenLabel } from "./network-style";
+import { CAMPUS_LABEL_MIN_MEMBERS, DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, PROGRAM_LINE_ACTIVE, PROGRAM_LINE_DIM, REGION_TRACKING, bundleInk, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, openingZoomRatio, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, zoomSizeFactor, type CampusDisc, type FramePoint, type LabelOffset, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -802,7 +802,7 @@ export function NetworkSigma({
     onReadyRef.current(api);
     const frame = requestAnimationFrame(() => {
       renderer.resize();
-      stateRef.current.fitRatio = frameVisible(renderer, stateRef.current.hidden);
+      stateRef.current.fitRatio = frameVisible(renderer, stateRef.current.hidden, "open");
     });
 
     const focusState = stateRef.current;
@@ -841,7 +841,7 @@ export function NetworkSigma({
   return <div ref={containerRef} className="absolute inset-0 bg-white" role="application" aria-label="Founder and startup network graph" />;
 }
 
-function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>): number {
+function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>, mode: "open" | "fit" = "fit"): number {
   const frame = graphFrame(renderer);
   const xs: number[] = [];
   const ys: number[] = [];
@@ -879,9 +879,10 @@ function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>):
   const paddedMinX = minX - span0 * 0.04;
   const paddedMaxX = maxX + span0 * 0.04;
   const span = Math.max(paddedMaxX - paddedMinX, paddedMaxY - paddedMinY, 0.04);
-  const ratio = openingCameraRatio(span);
+  const fitRatio = openingCameraRatio(span);
+  const ratio = mode === "open" ? openingZoomRatio(fitRatio) : fitRatio;
   void renderer.getCamera().animate({ x: (paddedMinX + paddedMaxX) / 2, y: (paddedMinY + paddedMaxY) / 2, ratio }, { duration: 420, easing: "quadraticInOut" });
-  return ratio;
+  return fitRatio;
 }
 
 type CurveEdge = {

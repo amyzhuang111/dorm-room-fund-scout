@@ -132,7 +132,7 @@ interface SimNode {
   sector?: string | null;
 }
 
-const LAYOUT_VERSION = "36";
+const LAYOUT_VERSION = "37";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -1527,7 +1527,7 @@ function pullCampusesBySimilarity(live: LiveNode[], edges: MapEdge[], primary: M
     }
   }
   // Affinity circles may overlap a little. Dissimilar regions stay near a touch, not a gap of white.
-  relaxRegionBodies(bodies, regionLinks, { iterations: 32, anchor: 0.48, spring: 0.42, gap: -6, spread: 10 });
+  relaxRegionBodies(bodies, regionLinks, { iterations: 32, anchor: 0.34, spring: 0.55, gap: -12, spread: 8 });
   const next = new Map(bodies.map((body) => [body.id, body]));
   for (const [regionId, group] of byRegion) {
     const from = before.get(regionId);
@@ -2049,11 +2049,11 @@ function seatWaterlooBesideToronto(live: LiveNode[], primary: Map<string, string
 }
 
 /**
- * Radius used when seating whole regions. It is the campus-center core plus
- * a small pad, so people discs (which are larger) overlap the next color.
+ * Radius used when seating whole regions. Smaller than the campus-center core,
+ * so neighboring colors overlap and the borders blend.
  */
 function regionAffinityRadius(core: number): number {
-  return Math.max(16, core * 0.92);
+  return Math.max(15, core * 0.78);
 }
 
 /** Where each regional team sits once its campuses have been pulled into one cluster. Same angles as the previous arrangement. */
