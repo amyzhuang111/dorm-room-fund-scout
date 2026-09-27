@@ -1,0 +1,452 @@
+{
+  "retrievedAt": "2026-09-27T23:30:00.000Z",
+  "companies": [
+    {
+      "name": "Alerta",
+      "description": "A real-time campus safety platform that connects a one-tap SOS to security teams and people nearby.",
+      "website": null,
+      "sourceUrl": "https://smith.queensu.ca/news_blog/2026/Campus-safety-platform-wins-Kinnear-competition.php",
+      "excerpt": "Students Siddharth Madhan and Rana Abdur Rehman, both Comm'28, pitched their real-time safety platform Alerta and won the 2026 Kinnear New Venture Competition.",
+      "orgPlace": "Kinnear New Venture Competition",
+      "campusIds": [
+        "univ_queens"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Siddharth Madhan",
+          "aliases": [],
+          "campusId": "univ_queens",
+          "affiliationRole": "Kinnear New Venture Competition 2026, Alerta",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Smith names Siddharth Madhan as a Comm'28 student who pitched Alerta. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Comm'28",
+            "gradYear": 2028,
+            "evidence": "The Smith article lists Siddharth Madhan, Comm'28."
+          },
+          "excerpt": "Siddharth Madhan, Comm'28, pitched Alerta at the Kinnear New Venture Competition."
+        },
+        {
+          "name": "Rana Abdur Rehman",
+          "aliases": [],
+          "campusId": "univ_queens",
+          "affiliationRole": "Kinnear New Venture Competition 2026, Alerta",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Smith names Rana Abdur Rehman as a Comm'28 student who pitched Alerta. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Comm'28",
+            "gradYear": 2028,
+            "evidence": "The Smith article lists Rana Abdur Rehman, Comm'28."
+          },
+          "excerpt": "Rana Abdur Rehman, Comm'28, pitched Alerta at the Kinnear New Venture Competition."
+        }
+      ]
+    },
+    {
+      "name": "KPARK",
+      "description": "A smart parking platform that uses cameras and computer vision to show open spaces.",
+      "website": null,
+      "sourceUrl": "https://www.queensjournal.ca/two-queens-student-teams-win-ninth-mayors-innovation-challenge/",
+      "excerpt": "KPARK, a smart parking platform developed by Nathaniel Cheung, Darcy Cheung, and Rowan Horner, all Sci '28, won the Dunin-Deshpande prize at the Mayor's Innovation Challenge.",
+      "orgPlace": "Mayor's Innovation Challenge",
+      "campusIds": [
+        "univ_queens"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Nathaniel Cheung",
+          "aliases": [],
+          "campusId": "univ_queens",
+          "affiliationRole": "Mayor's Innovation Challenge 2026, KPARK",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Queen's Journal says this Sci '28 student developed KPARK. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Sci '28",
+            "gradYear": 2028,
+            "evidence": "The Queen's Journal lists Nathaniel Cheung, Sci '28."
+          },
+          "excerpt": "Nathaniel Cheung, Sci '28, developed KPARK."
+        },
+        {
+          "name": "Darcy Cheung",
+          "aliases": [],
+          "campusId": "univ_queens",
+          "affiliationRole": "Mayor's Innovation Challenge 2026, KPARK",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Queen's Journal says this Sci '28 student developed KPARK. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Sci '28",
+            "gradYear": 2028,
+            "evidence": "The Queen's Journal lists Darcy Cheung, Sci '28."
+          },
+          "excerpt": "Darcy Cheung, Sci '28, developed KPARK."
+        },
+        {
+          "name": "Rowan Horner",
+          "aliases": [],
+          "campusId": "univ_queens",
+          "affiliationRole": "Mayor's Innovation Challenge 2026, KPARK",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Queen's Journal says this Sci '28 student developed KPARK. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Sci '28",
+            "gradYear": 2028,
+            "evidence": "The Queen's Journal lists Rowan Horner, Sci '28."
+          },
+          "excerpt": "Rowan Horner, Sci '28, developed KPARK."
+        }
+      ]
+    },
+    {
+      "name": "BrightSight",
+      "description": "A nonprofit that connects underserved youth with optometry clinics and covers prescription glasses.",
+      "website": null,
+      "sourceUrl": "https://www.queensjournal.ca/two-queens-student-teams-win-ninth-mayors-innovation-challenge/",
+      "excerpt": "BrightSight, developed by Hussain Al Moman, Kamran Asim, and Alex Afrouz, all HealthSci '28, won the Public Sector Innovation Prize.",
+      "orgPlace": "Mayor's Innovation Challenge",
+      "campusIds": [
+        "univ_queens"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Hussain Al Moman",
+          "aliases": [],
+          "campusId": "univ_queens",
+          "affiliationRole": "Mayor's Innovation Challenge 2026, BrightSight",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Queen's Journal says this HealthSci '28 student developed BrightSight. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "HealthSci '28",
+            "gradYear": 2028,
+            "evidence": "The Queen's Journal lists Hussain Al Moman, HealthSci '28."
+          },
+          "excerpt": "Hussain Al Moman, HealthSci '28, developed BrightSight."
+        },
+        {
+          "name": "Kamran Asim",
+          "aliases": [],
+          "campusId": "univ_queens",
+          "affiliationRole": "Mayor's Innovation Challenge 2026, BrightSight",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Queen's Journal says this HealthSci '28 student developed BrightSight. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "HealthSci '28",
+            "gradYear": 2028,
+            "evidence": "The Queen's Journal lists Kamran Asim, HealthSci '28."
+          },
+          "excerpt": "Kamran Asim, HealthSci '28, developed BrightSight."
+        },
+        {
+          "name": "Alex Afrouz",
+          "aliases": [],
+          "campusId": "univ_queens",
+          "affiliationRole": "Mayor's Innovation Challenge 2026, BrightSight",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Queen's Journal says this HealthSci '28 student developed BrightSight. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "HealthSci '28",
+            "gradYear": 2028,
+            "evidence": "The Queen's Journal lists Alex Afrouz, HealthSci '28."
+          },
+          "excerpt": "Alex Afrouz, HealthSci '28, developed BrightSight."
+        }
+      ]
+    },
+    {
+      "name": "Green Subsidiaries",
+      "description": "AI-optimized biodigesters that turn organic waste into electricity.",
+      "website": null,
+      "sourceUrl": "https://laurentian.ca/about/news/PhD-Student-Jenny-Alabi-Champions-Sustainable-Innovation",
+      "excerpt": "Jenny Tola Alabi, a first-year PhD student in Engineering Science, won Laurentian's 2026 Be Your Own Boss pitch competition with her startup Green Subsidiaries.",
+      "orgPlace": "Be Your Own Boss",
+      "campusIds": [
+        "univ_laurentian"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Jenny Tola Alabi",
+          "aliases": [],
+          "campusId": "univ_laurentian",
+          "affiliationRole": "Founder, Green Subsidiaries",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Laurentian calls Green Subsidiaries her startup and describes her as a first-year PhD student.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "First-year PhD, Engineering Science",
+            "gradYear": null,
+            "evidence": "The Laurentian article calls Jenny Tola Alabi a first-year PhD student in Engineering Science."
+          },
+          "excerpt": "Jenny Tola Alabi, a first-year PhD student in Engineering Science, won with her startup Green Subsidiaries."
+        }
+      ]
+    },
+    {
+      "name": "Life-Cycle",
+      "description": "An app that scans a barcode or photo and suggests where to repair, donate, or recycle an item.",
+      "website": null,
+      "sourceUrl": "https://laurentian.ca/about/news/Be-Your-Own-Boss-Pitch-Competition-2026",
+      "excerpt": "Life-Cycle, pitched by Oliver Wuthrich-Giroux, placed second at Laurentian's 2026 Be Your Own Boss competition.",
+      "orgPlace": "Be Your Own Boss",
+      "campusIds": [
+        "univ_laurentian"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Oliver Wuthrich-Giroux",
+          "aliases": [],
+          "campusId": "univ_laurentian",
+          "affiliationRole": "Be Your Own Boss 2026, Life-Cycle",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as the Life-Cycle entrant. The page does not use the title founder or print a class year.",
+          "enrollment": null,
+          "excerpt": "Oliver Wuthrich-Giroux is named with Life-Cycle, second place at Be Your Own Boss."
+        }
+      ]
+    },
+    {
+      "name": "ROBOPARKS",
+      "description": "Humanoid-robotics programs that teach STEM to students who are new to code.",
+      "website": null,
+      "sourceUrl": "https://laurentian.ca/about/news/Be-Your-Own-Boss-Pitch-Competition-2026",
+      "excerpt": "ROBOPARKS, pitched by Xingyu Zheng and Haoliang Sheng, placed third at Laurentian's 2026 Be Your Own Boss competition.",
+      "orgPlace": "Be Your Own Boss",
+      "campusIds": [
+        "univ_laurentian"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Xingyu Zheng",
+          "aliases": [],
+          "campusId": "univ_laurentian",
+          "affiliationRole": "Be Your Own Boss 2026, ROBOPARKS",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the ROBOPARKS team. The page does not use the title founder or print a class year.",
+          "enrollment": null,
+          "excerpt": "Xingyu Zheng is named on the ROBOPARKS team."
+        },
+        {
+          "name": "Haoliang Sheng",
+          "aliases": [],
+          "campusId": "univ_laurentian",
+          "affiliationRole": "Be Your Own Boss 2026, ROBOPARKS",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the ROBOPARKS team. The page does not use the title founder or print a class year.",
+          "enrollment": null,
+          "excerpt": "Haoliang Sheng is named on the ROBOPARKS team."
+        }
+      ]
+    },
+    {
+      "name": "TriageIQ",
+      "description": "A clinician-supervised AI tool that turns patient intake into triage notes and routing decisions.",
+      "website": null,
+      "sourceUrl": "https://laurentian.ca/about/news/Be-Your-Own-Boss-Pitch-Competition-2026",
+      "excerpt": "TriageIQ, pitched by Md Rashed Azad Chowdhury, won People's Choice at Laurentian's 2026 Be Your Own Boss competition.",
+      "orgPlace": "Be Your Own Boss",
+      "campusIds": [
+        "univ_laurentian"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Md Rashed Azad Chowdhury",
+          "aliases": [],
+          "campusId": "univ_laurentian",
+          "affiliationRole": "Be Your Own Boss 2026, TriageIQ",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as the TriageIQ entrant. The page does not use the title founder or print a class year.",
+          "enrollment": null,
+          "excerpt": "Md Rashed Azad Chowdhury is named with TriageIQ, People's Choice at Be Your Own Boss."
+        }
+      ]
+    },
+    {
+      "name": "AdcoTx",
+      "description": "A therapeutic aimed at first-line treatment for colorectal cancer. Scientific co-founders are from the MRC Laboratory of Molecular Biology and are not named.",
+      "website": null,
+      "sourceUrl": "https://www.enterprise.cam.ac.uk/news/founders-at-the-university-of-cambridge-2026-cohort-heading-to-the-us-for-overseas-exposure-and-investment-opportunities/",
+      "excerpt": "AdcoTx is in the Founders at the University of Cambridge START 3.0 cohort. The article does not name the founders.",
+      "orgPlace": "START 3.0",
+      "campusIds": [
+        "univ_cambridge"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "AILA Biotech",
+      "description": "A CNS-targeted gene delivery platform based on research from Cambridge's Department of Pathology. The co-founders are not named.",
+      "website": null,
+      "sourceUrl": "https://www.enterprise.cam.ac.uk/news/founders-at-the-university-of-cambridge-2026-cohort-heading-to-the-us-for-overseas-exposure-and-investment-opportunities/",
+      "excerpt": "AILA Biotech is in the Founders at the University of Cambridge START 3.0 cohort. The article does not name the founders.",
+      "orgPlace": "START 3.0",
+      "campusIds": [
+        "univ_cambridge"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Auralytica",
+      "description": "Holographic hydrogel sensors for real-time molecular data, starting with food quality. The CEO's Cambridge Judge MBA and the CTO's Imperial PhD are stated without names.",
+      "website": null,
+      "sourceUrl": "https://www.enterprise.cam.ac.uk/news/founders-at-the-university-of-cambridge-2026-cohort-heading-to-the-us-for-overseas-exposure-and-investment-opportunities/",
+      "excerpt": "Auralytica is in the Founders at the University of Cambridge START 3.0 cohort. The article does not name the founders.",
+      "orgPlace": "START 3.0",
+      "campusIds": [
+        "univ_cambridge"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Cosysense",
+      "description": "AI agents and digital twins for building HVAC, drawing on research from Cambridge's Department of Engineering. The founders are not named.",
+      "website": null,
+      "sourceUrl": "https://www.enterprise.cam.ac.uk/news/founders-at-the-university-of-cambridge-2026-cohort-heading-to-the-us-for-overseas-exposure-and-investment-opportunities/",
+      "excerpt": "Cosysense is in the Founders at the University of Cambridge START 3.0 cohort. The article does not name the founders.",
+      "orgPlace": "START 3.0",
+      "campusIds": [
+        "univ_cambridge"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Neela Biotech",
+      "description": "Sustainable fuels and chemicals from biogas, synthetic biology, and AI. The co-founders are from Cambridge Engineering and Biochemistry and are not named.",
+      "website": null,
+      "sourceUrl": "https://www.enterprise.cam.ac.uk/news/founders-at-the-university-of-cambridge-2026-cohort-heading-to-the-us-for-overseas-exposure-and-investment-opportunities/",
+      "excerpt": "Neela Biotech is in the Founders at the University of Cambridge START 3.0 cohort. The article does not name the founders.",
+      "orgPlace": "START 3.0",
+      "campusIds": [
+        "univ_cambridge"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Satorus Group",
+      "description": "AI agents for intelligence-investigation analysis. A co-founder is from Cambridge POLIS and is not named.",
+      "website": null,
+      "sourceUrl": "https://www.enterprise.cam.ac.uk/news/founders-at-the-university-of-cambridge-2026-cohort-heading-to-the-us-for-overseas-exposure-and-investment-opportunities/",
+      "excerpt": "Satorus Group is in the Founders at the University of Cambridge START 3.0 cohort. The article does not name the founders.",
+      "orgPlace": "START 3.0",
+      "campusIds": [
+        "univ_cambridge"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Senesys.Bio",
+      "description": "Nanomedicine that delivers senolytic drugs for fibrotic and age-related disease, based on research from Cambridge Chemical Engineering and Biotechnology. The founders are not named.",
+      "website": null,
+      "sourceUrl": "https://www.enterprise.cam.ac.uk/news/founders-at-the-university-of-cambridge-2026-cohort-heading-to-the-us-for-overseas-exposure-and-investment-opportunities/",
+      "excerpt": "Senesys.Bio is in the Founders at the University of Cambridge START 3.0 cohort. The article does not name the founders.",
+      "orgPlace": "START 3.0",
+      "campusIds": [
+        "univ_cambridge"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Cambridge Cryogenics",
+      "description": "Solid-state millikelvin refrigeration for quantum computing, sensing, and materials research, from the Cavendish Laboratory.",
+      "website": null,
+      "sourceUrl": "https://www.enterprise.cam.ac.uk/news/founders-at-the-university-of-cambridge-2026-cohort-heading-to-the-us-for-overseas-exposure-and-investment-opportunities/",
+      "excerpt": "Cambridge Cryogenics was founded by Dr Stephen Rowley, with research from the Cavendish Laboratory in the Department of Physics.",
+      "orgPlace": "START 3.0",
+      "campusIds": [
+        "univ_cambridge"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Stephen Rowley",
+          "aliases": [],
+          "campusId": "univ_cambridge",
+          "affiliationRole": "Founder and CEO, Cambridge Cryogenics",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cambridge Enterprise says Cambridge Cryogenics was founded by Dr Stephen Rowley. The article does not say whether he is a student, postdoc, or faculty, so no enrollment status is stored.",
+          "enrollment": null,
+          "excerpt": "Cambridge Cryogenics was founded by Dr Stephen Rowley (CEO)."
+        }
+      ]
+    }
+  ],
+  "potential": [
+    {
+      "name": "Max Conine",
+      "aliases": [],
+      "campusId": "univ_hmc",
+      "affiliationRole": "Software intern, ExploraVist",
+      "potentialSignal": "Current Harvey Mudd student who interned on the student startup ExploraVist. The article does not call him a founder.",
+      "verificationStatus": "partial",
+      "verificationNote": "The Student Life article names Max Conine HM '28 as a software intern on ExploraVist.",
+      "orgPlace": "ExploraVist",
+      "sourceUrl": "https://tsl.news/mudd-startup-exploravist-keeps-accessibility-affordable-with-new-wearable-tech/",
+      "excerpt": "Max Conine HM '28 got involved with ExploraVist as a software intern.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "verified",
+        "label": "HM '28",
+        "gradYear": 2028,
+        "evidence": "The Student Life article lists Max Conine HM '28."
+      }
+    }
+  ],
+  "links": []
+}
