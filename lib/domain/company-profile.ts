@@ -39,6 +39,8 @@ export interface CompanyProfile {
   teamSize: SourcedValue | null;
   website: SourcedValue | null;
   companyLinkedin: SourcedValue | null;
+  /** active | acquired | dead | public, only when a page states it. */
+  operatingStatus: SourcedValue | null;
 }
 
 export interface CompanyFactRecord {
@@ -63,6 +65,7 @@ export function emptyCompanyProfile(): CompanyProfile {
     teamSize: null,
     website: null,
     companyLinkedin: null,
+    operatingStatus: null,
   };
 }
 
@@ -107,6 +110,7 @@ export function assembleCompanyProfile(rows: CompanyFactRecord[]): CompanyProfil
     else if (row.factKey === "team_size" && !profile.teamSize) profile.teamSize = sourced(row);
     else if (row.factKey === "website" && !profile.website) profile.website = sourced(row);
     else if (row.factKey === "company_linkedin" && !profile.companyLinkedin) profile.companyLinkedin = sourced(row);
+    else if (row.factKey === "operating_status" && !profile.operatingStatus) profile.operatingStatus = sourced(row);
     else if (row.factKey === "funding_round") {
       const extra = detail(row);
       const status = row.amountStatus === "announced" || row.amountStatus === "undisclosed" ? row.amountStatus : null;

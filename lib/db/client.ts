@@ -263,6 +263,30 @@ function migrate(db: Database.Database) {
   addColumnIfMissing("program_signals", "tier_rationale", "tier_rationale TEXT");
   addColumnIfMissing("program_signals", "tier_source_url", "tier_source_url TEXT");
 
+  db.exec(`CREATE TABLE IF NOT EXISTS accuracy_audit (
+    id TEXT PRIMARY KEY,
+    entity_type TEXT NOT NULL,
+    entity_id TEXT NOT NULL,
+    action TEXT NOT NULL,
+    field TEXT,
+    old_value TEXT,
+    new_value TEXT,
+    reason TEXT NOT NULL,
+    evidence_url TEXT,
+    checked_at TEXT NOT NULL,
+    idempotency_key TEXT NOT NULL UNIQUE
+  )`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_accuracy_audit_entity ON accuracy_audit(entity_type, entity_id)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_accuracy_audit_action ON accuracy_audit(action)`);
+  db.exec(`CREATE TABLE IF NOT EXISTS accuracy_audit_runs (
+    id TEXT PRIMARY KEY,
+    checked_at TEXT NOT NULL,
+    founders_checked INTEGER NOT NULL,
+    startups_checked INTEGER NOT NULL,
+    facts_checked INTEGER NOT NULL,
+    summary_json TEXT NOT NULL
+  )`);
+
   db.exec(`CREATE TABLE IF NOT EXISTS company_facts (
     id TEXT PRIMARY KEY,
     project_id TEXT NOT NULL REFERENCES projects(id),

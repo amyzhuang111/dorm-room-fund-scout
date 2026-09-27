@@ -428,3 +428,31 @@ CREATE TABLE IF NOT EXISTS drf_alumni (
 
 CREATE INDEX IF NOT EXISTS idx_drf_alumni_person ON drf_alumni(person_id);
 CREATE INDEX IF NOT EXISTS idx_drf_alumni_investor ON drf_alumni(investor_id);
+
+-- Accuracy audit trail. False positives stay in people/projects; this table
+-- records why they left a scout list. idempotency_key makes a re-run a no-op.
+CREATE TABLE IF NOT EXISTS accuracy_audit (
+  id TEXT PRIMARY KEY,
+  entity_type TEXT NOT NULL,
+  entity_id TEXT NOT NULL,
+  action TEXT NOT NULL,
+  field TEXT,
+  old_value TEXT,
+  new_value TEXT,
+  reason TEXT NOT NULL,
+  evidence_url TEXT,
+  checked_at TEXT NOT NULL,
+  idempotency_key TEXT NOT NULL UNIQUE
+);
+
+CREATE INDEX IF NOT EXISTS idx_accuracy_audit_entity ON accuracy_audit(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_accuracy_audit_action ON accuracy_audit(action);
+
+CREATE TABLE IF NOT EXISTS accuracy_audit_runs (
+  id TEXT PRIMARY KEY,
+  checked_at TEXT NOT NULL,
+  founders_checked INTEGER NOT NULL,
+  startups_checked INTEGER NOT NULL,
+  facts_checked INTEGER NOT NULL,
+  summary_json TEXT NOT NULL
+);
