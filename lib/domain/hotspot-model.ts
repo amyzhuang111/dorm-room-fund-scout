@@ -95,6 +95,9 @@ export const ORG_ALIAS_PHRASES: Record<string, readonly string[]> = {
   // Bare "launchpad" also appears in NYU Summer Launchpad, so the Berkeley club
   // is matched only when the stored role says Cal Launchpad.
   launchpad: ["cal launchpad"],
+  // The place name itself is not a safe phrase: a Cal Hacks project is named
+  // "Human Capital", and TreeHacks prizes say "Human Capital Fellowship Prize".
+  "human capital fellowship": ["delta fellowship", "hc fellowship"],
 };
 
 const MT_CORES = new Set([
@@ -191,6 +194,10 @@ const LEADING_CAMPUS = [
   "dartmouth",
 ].sort((a, b) => b.length - a.length);
 
+// Phrases matchPhrases would otherwise emit, but that also hit a different
+// project or a prize. Membership is recorded with the curated aliases above.
+const DROPPED_MATCH_PHRASES = new Set(["human capital", "human capital fellowship", "prod"]);
+
 const BLOCKED_PHRASES = new Set([
   "founders",
   "founder",
@@ -267,10 +274,17 @@ export function normPlace(name: string): NormPlace {
   return { core: placeKeyOf(name), full: normHotspotName(name) };
 }
 
+// A shorter name that is a different organization. "Human Capital" is a Cal
+// Hacks project. "Prod" is too generic to absorb "Prod fellowship".
+const PREFIX_MATCH_BLOCKED = new Set(["human capital", "prod"]);
+
 export function placesMatch(a: NormPlace, b: NormPlace): boolean {
   if (!a.core || !b.core) return false;
   if (a.core === b.core) return true;
-  if (a.core.startsWith(`${b.core} `) || b.core.startsWith(`${a.core} `)) return true;
+  if (a.core.startsWith(`${b.core} `) || b.core.startsWith(`${a.core} `)) {
+    const shorter = a.core.length <= b.core.length ? a.core : b.core;
+    if (!PREFIX_MATCH_BLOCKED.has(shorter)) return true;
+  }
   const sa = stripLeadingCampus(a.core);
   const sb = stripLeadingCampus(b.core);
   if (sa === sb && sa.length >= 6) return true;
@@ -417,7 +431,7 @@ export function matchPhrases(place: string): string[] {
     const collapsed = inner.toLowerCase().replace(/[^a-z0-9]+/g, "");
     if (/^[a-z0-9]{4,8}$/.test(collapsed) && !COMMON_PHRASE.has(collapsed) && !BLOCKED_PHRASES.has(collapsed)) phrases.add(collapsed);
   }
-  return [...phrases];
+  return [...phrases].filter((phrase) => !DROPPED_MATCH_PHRASES.has(phrase));
 }
 
 export function hasPhrase(haystackNorm: string, phrase: string): boolean {

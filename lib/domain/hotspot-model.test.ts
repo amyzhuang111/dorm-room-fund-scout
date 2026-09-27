@@ -1,13 +1,18 @@
 // Directory name matching. No database.
 
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
 import { CAMPUSES, compareCampusLabels } from "./campuses";
-import { campusFilterLabels, hasPhrase, matchPhrases, normHotspotName, samePlace, sortGroupFor } from "./hotspot-model";
+import { campusFilterLabels, cardsFromRows, hasPhrase, matchPhrases, normHotspotName, ORG_ALIAS_PHRASES, parseCsv, samePlace, sortGroupFor } from "./hotspot-model";
 
 assert.equal(samePlace("Jerome Fisher M&T", "Jerome Fisher Management & Technology"), true);
 assert.equal(samePlace("M&T", "Jerome Fisher M&T"), true);
 assert.equal(samePlace("Management & Technology", "Jerome Fisher M&T"), true);
 assert.equal(samePlace("Penn Labs", "Stanford Labs"), false);
+assert.equal(samePlace("Mayfield", "Mayfield Fellows Program"), true);
+assert.equal(samePlace("Human Capital", "Human Capital Fellowship"), false);
+assert.equal(samePlace("Prod", "Prod fellowship (prod.so)"), false);
 
 const mayfield = matchPhrases("Mayfield Fellows Program (STVP)");
 assert.ok(mayfield.includes("mayfield"));
@@ -26,6 +31,25 @@ assert.equal(hasPhrase(normHotspotName("a founder at a campus lab"), "yc founder
 assert.ok(matchPhrases("Wharton Analytics Fellows").includes("wharton analytics fellows"));
 assert.ok(matchPhrases("Management, Entrepreneurship, & Technology (M.E.T.)").includes("management entrepreneurship and technology"));
 assert.equal(hasPhrase(normHotspotName("Erfan Ballew (M.E.T. '28)"), "m e t"), true);
+
+const cards = cardsFromRows(parseCsv(fs.readFileSync(path.join(process.cwd(), "data", "imports", "campus_hotspots.csv"), "utf8")));
+assert.equal(cards.some((card) => /pennapps organising team/i.test(card.place)), false);
+assert.ok(cards.some((card) => card.tier === "D"));
+assert.equal(cards.find((card) => card.place === "Pear Fellows")?.tier, "A");
+assert.equal(cards.find((card) => card.place === "Pear Garage")?.tier, "B");
+assert.ok(cards.find((card) => card.place === "Pear Garage")?.howToGetIn.includes("engineering students"));
+assert.equal(cards.find((card) => card.place === "Human Capital Fellowship")?.tier, "A");
+assert.equal(cards.find((card) => card.place.startsWith("Prod fellowship"))?.tier, "A");
+assert.ok(cards.find((card) => card.place.startsWith("Prod fellowship"))?.url.startsWith("https://prod.so"));
+
+const humanCapital = matchPhrases("Human Capital Fellowship");
+assert.equal(humanCapital.includes("human capital"), false);
+assert.equal(humanCapital.includes("human capital fellowship"), false);
+const prod = matchPhrases("Prod fellowship (prod.so)");
+assert.ok(prod.includes("prod fellowship"));
+assert.equal(prod.includes("prod"), false);
+assert.ok(ORG_ALIAS_PHRASES["human capital fellowship"]?.includes("delta fellowship"));
+assert.ok(ORG_ALIAS_PHRASES["human capital fellowship"]?.includes("hc fellowship"));
 
 assert.equal(sortGroupFor("Penn", "campus"), 0);
 assert.equal(sortGroupFor("UC Berkeley", "campus"), 0);

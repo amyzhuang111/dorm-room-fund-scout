@@ -11,6 +11,7 @@ import { directoryLabel, hotspotGroupByMapId, hotspotGroups, personIdsForPlace, 
 import { bestCard, hotspotHref, samePlace, SECTION_SHORT, tierBandLabel } from "./hotspot-model";
 import { bestPersonLink, linkedinAction, type LinkedInAction, type PersonLinkTarget } from "./person-link";
 import { assembleProfileLinks, type ProfileIconLink } from "./profile-links";
+import { presenceForUniversity } from "./drf-presence";
 
 export interface FocusLink {
   id: string;
@@ -368,6 +369,17 @@ function campusFocus(db: ReturnType<typeof getDb>, id: string): NetworkFocus | n
     )
     .all(id) as { id: string; name: string }[];
   const short = CAMPUSES.find((campus) => campus.id === id)?.shortLabel ?? uni.name;
+  const presence = presenceForUniversity(id);
+  const facts: NetworkFocus["facts"] = [];
+  if (presence) {
+    facts.push({
+      label: "DRF status",
+      value: presence.status,
+      sourceUrl: presence.evidenceLinks[0] ?? null,
+      excerpt: presence.evidenceLinks[0] ? "DRF campus presence" : null,
+    });
+    if (presence.namedPartners) facts.push({ label: "Named partners", value: presence.namedPartners, sourceUrl: null, excerpt: null });
+  }
   return {
     id,
     kind: "campus",
@@ -379,7 +391,7 @@ function campusFocus(db: ReturnType<typeof getDb>, id: string): NetworkFocus | n
     link: null,
     linkedin: null,
     profileLinks: [],
-    facts: [],
+    facts,
     links: [
       { heading: "Programs", items: programs.map((item) => ({ id: item.id, name: item.name, role: null, round: null, sourceUrl: null })) },
       { heading: "Startups", items: startups.map((item) => ({ id: item.id, name: item.name, role: null, round: null, sourceUrl: null })) },
