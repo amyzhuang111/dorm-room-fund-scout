@@ -106,7 +106,7 @@ const LAYOUT_WEIGHT: Record<MapEdgeType, number> = {
   at_campus: 0.55,
 };
 
-const LAYOUT_VERSION = "16";
+const LAYOUT_VERSION = "17";
 /** How far apart region seeds start. ForceAtlas2 is free to move them. */
 const SEED_RADIUS = 340;
 
