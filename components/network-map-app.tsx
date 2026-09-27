@@ -576,7 +576,7 @@ export function NetworkMapApp() {
 
       <div
         className="absolute bottom-24 z-40 flex flex-col gap-1.5"
-        style={{ right: detailOpen ? "calc(min(20rem, 100% - 1.5rem) + 0.85rem)" : "1rem" }}
+        style={{ right: detailOpen ? `calc(min(${selectedNode?.type === "startup" && !isUserAddedId(selectedNode.id) ? "440px" : "20rem"}, 100% - 1.5rem) + 0.85rem)` : "1rem" }}
         role="group"
         aria-label="Map zoom"
       >
