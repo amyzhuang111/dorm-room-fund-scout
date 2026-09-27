@@ -16,6 +16,8 @@ import { useFeedbackRecords } from "./feedback-provider";
 import { projectShell, useProjectDetail } from "./use-project-detail";
 import { formatCampusList } from "@/lib/domain/campuses";
 import { CompanyNameLink } from "./company-website";
+import { useMergedCatalog } from "./user-pipeline-provider";
+import { userCompanyMatches } from "@/lib/domain/user-pipeline";
 
 const QUEUE_ORDER: Queue[] = ["top_prospects", "exploration", "watch", "reference_outside_brief"];
 
@@ -35,7 +37,14 @@ function useCompanies(
   const query = useDeferredValue(current);
   const records = useFeedbackRecords(initialRecords);
   const likes = useMemo(() => likeTargetsFrom(records, candidates, [], initialLikes), [records, candidates, initialLikes]);
-  const visible = useMemo(() => companiesInView(candidates, records, likes, query), [candidates, records, likes, query]);
+  const visible = useMemo(() => {
+    const viewed = companiesInView(candidates, records, likes, query);
+    const seen = new Set(viewed.map((company) => company.id));
+    const extras = candidates
+      .filter((company) => !seen.has(company.id) && userCompanyMatches(company, query))
+      .map((company) => ({ ...company, boostNote: null, boostScore: 0 }));
+    return [...viewed, ...extras];
+  }, [candidates, records, likes, query]);
   return { current, query, visible };
 }
 
@@ -70,7 +79,8 @@ function ShortlistBody({
   likes: FeedbackTarget[];
   initialDetail: ProjectDetail | null;
 }) {
-  const { current, query, visible } = useCompanies(candidates, records, likes);
+  const catalog = useMergedCatalog(universities, candidates, []);
+  const { current, query, visible } = useCompanies(catalog.candidates, records, likes);
   const fetched = useProjectDetail(current.project, initialDetail);
   const visibleSectors = sectorsForUniversity(sectors, current.university);
   const byQueue = useMemo(() => {
@@ -85,7 +95,7 @@ function ShortlistBody({
   }, [selected, query.project, fetched]);
   return (
     <div data-scout-live="" className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
-      <FilterSidebar universities={universities} basePath="/startup/shortlist" current={current} mode="startup" sectors={visibleSectors} />
+      <FilterSidebar universities={catalog.universities} basePath="/startup/shortlist" current={current} mode="startup" sectors={visibleSectors} />
       <div className="flex-1 space-y-8 p-4">
         <div>
           <h1 className="text-lg font-semibold text-foreground">Startup shortlist</h1>
@@ -178,7 +188,8 @@ function VerificationBody({
   records: FeedbackRecord[];
   likes: FeedbackTarget[];
 }) {
-  const { current, visible } = useCompanies(candidates, records, likes);
+  const catalog = useMergedCatalog(universities, candidates, []);
+  const { current, visible } = useCompanies(catalog.candidates, records, likes);
   const visibleSectors = sectorsForUniversity(sectors, current.university);
   const grouped = new Map<string, typeof visible>();
   for (const company of visible) {
@@ -190,7 +201,7 @@ function VerificationBody({
   const ordered = [...BLOCKER_ORDER.filter((blocker) => grouped.has(blocker)), ...[...grouped.keys()].filter((blocker) => !BLOCKER_ORDER.includes(blocker))];
   return (
     <div data-scout-live="" className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
-      <FilterSidebar universities={universities} basePath="/startup/verification" current={current} mode="startup" sectors={visibleSectors} />
+      <FilterSidebar universities={catalog.universities} basePath="/startup/verification" current={current} mode="startup" sectors={visibleSectors} />
       <div className="flex-1 p-4">
         <h1 className="text-lg font-semibold text-foreground">Verification</h1>
         <p className="mt-1 text-sm text-muted">

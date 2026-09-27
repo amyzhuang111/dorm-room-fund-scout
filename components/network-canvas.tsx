@@ -138,9 +138,12 @@ export function NetworkCanvas({
             const degree = neighbors.get(n.id)?.size ?? 0;
             const r = nodeRadius(n.type, degree);
             const faded = dimmed(n.id);
+            const userAdded = n.id.startsWith("user_") || n.id.startsWith("ufounder_") || n.id.startsWith("ucampus_") || n.sublabel === "User-added";
             const shape = (
               <g opacity={faded ? 0.15 : 1} style={{ transition: "opacity 160ms ease" }}>
-                {n.type === "university" ? (
+                {userAdded ? (
+                  <rect x={n.x - r} y={n.y - r} width={r * 2} height={r * 2} rx={2} fill="#ffffff" stroke="#111111" strokeWidth={2} />
+                ) : n.type === "university" ? (
                   <rect x={n.x - r} y={n.y - r} width={r * 2} height={r * 2} rx={4} fill={COLOR.university} />
                 ) : n.type === "community" ? (
                   <polygon
@@ -187,8 +190,12 @@ export function NetworkCanvas({
         </svg>
         <div className="mt-2 flex flex-wrap gap-3 text-[11px] text-muted">
           {graph.legend.map((l) => (
-            <span key={l.type} className="flex items-center gap-1.5">
-              <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: COLOR[l.type] }} />
+            <span key={`${l.type}-${l.label}`} className="flex items-center gap-1.5">
+              {l.label === "User-added" ? (
+                <span className="inline-block h-2.5 w-2.5 rounded-sm border-2 border-black bg-white" />
+              ) : (
+                <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: COLOR[l.type] }} />
+              )}
               {l.label}
             </span>
           ))}

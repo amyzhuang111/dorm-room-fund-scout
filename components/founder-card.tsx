@@ -8,6 +8,7 @@ import { EnrollmentBadge, LeftSchoolBadge, PotentialFounderBadge, SignalTierBadg
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CompanyNameLink } from "./company-website";
+import { EntityMarks } from "./entity-marks";
 
 export const FounderCard = memo(function FounderCard({
   founder,
@@ -29,7 +30,10 @@ export const FounderCard = memo(function FounderCard({
     <div className="row-cv rounded-md border border-border-c bg-surface p-3">
       <div className="flex items-start justify-between gap-2">
         <div>
-          <p className="font-medium text-foreground">{founder.name}</p>
+          <div className="flex flex-wrap items-center gap-1.5 font-medium text-foreground">
+            {founder.name}
+            <EntityMarks entityType="person" entityId={founder.id} name={founder.name} campusName={founder.universityName} websiteUrl={founder.linkedinUrl} />
+          </div>
           <p className="mt-1 text-xs text-muted">{founder.universityName ?? "University unknown"}</p>
           <p className="mt-1 flex flex-wrap items-center gap-1">
             {founder.founderStatus === "potential" && <PotentialFounderBadge />}
@@ -108,6 +112,7 @@ export const FounderCard = memo(function FounderCard({
                 return (
                   <li key={p.id} className="flex flex-wrap items-center gap-2">
                     <CompanyNameLink id={p.id} name={p.name} websiteUrl={p.websiteUrl} className="font-medium text-link hover:underline" />
+                    <EntityMarks entityType="project" entityId={p.id} name={p.name} campusName={founder.universityName} websiteUrl={p.websiteUrl} />
                     <SignalTierBadge tier={p.signalTier} />
                     <span className="text-xs text-muted">{p.role.replaceAll("_", " ")}</span>
                     {link && (
