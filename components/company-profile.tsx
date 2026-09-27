@@ -83,33 +83,40 @@ function groupInvestors(investors: InvestorFact[]): { round: string; investors: 
   return groups;
 }
 
-export function CompanyProfileCard({ profile, founders }: { profile: CompanyProfile; founders: NamedFounder[] }) {
+export function CompanyProfileCard({ profile, founders, compact = false }: { profile: CompanyProfile; founders: NamedFounder[]; compact?: boolean }) {
   const round = latestRound(profile);
   const cells: { label: string; value: ReactNode }[] = [
-    ...(profile.operatingStatus ? [{ label: "Status", value: <FactValue fact={profile.operatingStatus} /> }] : []),
+    ...(!compact && profile.operatingStatus ? [{ label: "Status", value: <FactValue fact={profile.operatingStatus} /> }] : []),
     { label: "Founded", value: <FactValue fact={profile.foundedYear} /> },
     { label: "Funding", value: <FactValue fact={displayedFunding(profile)} /> },
     { label: "Latest round", value: <RoundValue round={round} /> },
-    { label: "HQ", value: <FactValue fact={profile.hq} /> },
-    { label: "Team size", value: <FactValue fact={profile.teamSize} /> },
-    {
-      label: "Website",
-      value: profile.website ? (
-        <span>
-          <a href={profile.website.text} target="_blank" rel="noopener noreferrer" className="text-link hover:underline">
-            {profile.website.text.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
-          </a>
-          <FactSource fact={profile.website} />
-        </span>
-      ) : (
-        <span className="text-muted">Unknown</span>
-      ),
-    },
+    ...(!compact
+      ? [
+          { label: "HQ", value: <FactValue fact={profile.hq} /> },
+          { label: "Team size", value: <FactValue fact={profile.teamSize} /> },
+          {
+            label: "Website",
+            value: profile.website ? (
+              <span>
+                <a href={profile.website.text} target="_blank" rel="noopener noreferrer" className="text-link hover:underline">
+                  {profile.website.text.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
+                </a>
+                <FactSource fact={profile.website} />
+              </span>
+            ) : (
+              <span className="text-muted">Unknown</span>
+            ),
+          },
+        ]
+      : []),
   ];
+
+  if (compact && !profile.foundedYear && !displayedFunding(profile) && !round && profile.investors.length === 0 && profile.rounds.length === 0) return null;
 
   return (
     <section className="mt-3 rounded-md border border-border-c bg-surface p-3">
-      <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Profile</h3>
+      <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">{compact ? "Funding" : "Profile"}</h3>
+      {!compact && (
       <p className="mt-1 text-sm text-foreground">
         {profile.description ? (
           <>
@@ -120,6 +127,8 @@ export function CompanyProfileCard({ profile, founders }: { profile: CompanyProf
           <span className="text-muted">Unknown</span>
         )}
       </p>
+      )}
+      {!compact && (
       <div className="mt-3">
         <h4 className="text-[10px] font-semibold uppercase tracking-wide text-muted">Founders</h4>
         {founders.length === 0 ? (
@@ -139,7 +148,9 @@ export function CompanyProfileCard({ profile, founders }: { profile: CompanyProf
           </ul>
         )}
       </div>
-      <div className="mt-3">
+      )}
+      {(!compact || profile.investors.length > 0) && (
+      <div className={compact ? "mt-1" : "mt-3"}>
         <h4 className="text-[10px] font-semibold uppercase tracking-wide text-muted">Who funded</h4>
         {profile.investors.length === 0 ? (
           <p className="mt-0.5 text-xs text-muted">Unknown</p>
@@ -161,6 +172,7 @@ export function CompanyProfileCard({ profile, founders }: { profile: CompanyProf
           </div>
         )}
       </div>
+      )}
       <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-xs sm:grid-cols-3">
         {cells.map((cell) => (
           <div key={cell.label}>
@@ -182,7 +194,7 @@ export function CompanyProfileCard({ profile, founders }: { profile: CompanyProf
           </ul>
         </div>
       )}
-      {profile.companyLinkedin && (
+      {!compact && profile.companyLinkedin && (
         <p className="mt-2 text-xs">
           <a href={profile.companyLinkedin.text} target="_blank" rel="noopener noreferrer" className="text-link hover:underline">
             Company LinkedIn

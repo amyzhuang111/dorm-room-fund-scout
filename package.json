@@ -40,6 +40,7 @@
     "test:campus-signals": "tsx lib/domain/pitchbook.test.ts && tsx lib/domain/campus-hit-rate.test.ts && tsx lib/domain/same-school.test.ts",
     "test:drf-intro": "tsx lib/domain/drf-intro.test.ts",
     "test:who-can-intro": "tsx lib/domain/who-can-intro.test.ts",
+    "test:startup-card": "tsx lib/domain/startup-card.test.ts",
     "fetch-hotspot-members": "tsx scripts/ingest/fetch-hotspot-members.ts",
     "import:pear-hc-prod": "tsx scripts/ingest/import-pear-hc-prod-members.ts",
     "import:founders-inc-spc": "tsx scripts/ingest/import-founders-inc-spc.ts",

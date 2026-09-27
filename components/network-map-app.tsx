@@ -20,6 +20,7 @@ import { LinkedInIconButton, LinkedInOpenButton, LinkedInProfileLink, PersonLink
 import { DrfHopFilter } from "./drf-hop-filter";
 import { DrfReferrerOverlay } from "./drf-referrer-overlay";
 import { WarmIntroPaths } from "./warm-intro-paths";
+import { StartupCardSheet } from "./startup-directory-card";
 
 const LEGEND_REGION: Record<string, string> = {
   boston: "Northeast",
@@ -571,7 +572,7 @@ export function NetworkMapApp() {
 
       <div
         className="absolute bottom-4 z-30 flex flex-col overflow-hidden rounded border border-neutral-200 bg-white/90"
-        style={{ right: detailOpen ? "calc(min(22rem, 100% - 1.5rem) + 0.85rem)" : "0.75rem" }}
+        style={{ right: detailOpen ? `calc(min(${selectedNode?.type === "startup" && !isUserAddedId(selectedNode.id) ? "440px" : "20rem"}, 100% - 1.5rem) + 0.85rem)` : "0.75rem" }}
       >
         <ZoomButton label="Zoom in" onClick={() => graphApi.current?.zoomIn()}>
           +
@@ -624,7 +625,11 @@ export function NetworkMapApp() {
         )}
       </div>
 
-      {detailOpen && selectedNode && (
+      {detailOpen && selectedNode?.type === "startup" && !isUserAddedId(selectedNode.id) && (
+        <StartupCardSheet id={selectedNode.id} onClose={() => setSelected(null)} className="absolute inset-y-0 right-0 z-40 flex w-full justify-end max-sm:fixed max-sm:inset-0 max-sm:z-50 sm:w-auto" />
+      )}
+
+      {detailOpen && selectedNode && !(selectedNode.type === "startup" && !isUserAddedId(selectedNode.id)) && (
         <aside
           className="absolute bottom-3 right-3 top-14 z-30 flex w-[min(20rem,calc(100%-1.5rem))] flex-col overflow-hidden rounded-md border border-neutral-300 bg-white text-black shadow-sm"
           style={{ ["--link" as string]: "#111111", ["--foreground" as string]: "#111111", ["--muted" as string]: "#404040" }}
