@@ -5,20 +5,21 @@ const LABEL_FONT = "500 12px Satoshi, Arial, sans-serif";
 
 export const drawHaloLabel: NodeLabelDrawingFunction = (context, data, settings) => {
   if (!data.label) return;
+  const marker = Boolean((data as { marker?: boolean }).marker);
   const anchor = Boolean((data as { anchor?: boolean }).anchor);
-  const size = anchor ? 12 : settings.labelSize;
-  const limit = anchor ? 22 : 28;
+  const size = marker ? 13 : anchor ? 12 : settings.labelSize;
+  const limit = marker ? 28 : anchor ? 22 : 28;
   const text = data.label.length > limit ? `${data.label.slice(0, limit - 1)}…` : data.label;
   context.font = `${settings.labelWeight} ${size}px ${settings.labelFont}`;
   context.textAlign = "center";
-  context.textBaseline = anchor ? "bottom" : "top";
+  context.textBaseline = marker ? "middle" : anchor ? "bottom" : "top";
   context.lineWidth = 3;
   context.strokeStyle = "#ffffff";
   context.lineJoin = "round";
   const x = data.x;
-  const y = anchor ? data.y - data.size - 2 : data.y + data.size + 2;
+  const y = marker ? data.y : anchor ? data.y - data.size - 2 : data.y + data.size + 2;
   context.strokeText(text, x, y);
-  context.fillStyle = "#141414";
+  context.fillStyle = marker ? ((data as { color?: string }).color ?? "#141414") : "#141414";
   context.fillText(text, x, y);
 };
 
@@ -28,10 +29,11 @@ export const drawLightHover: NodeHoverDrawingFunction = (context, data, settings
   context.strokeStyle = "#111111";
   context.lineWidth = 1;
   context.stroke();
-  if (!data.label) return;
+  const text = (data as { fullLabel?: string }).fullLabel || data.label;
+  if (!text) return;
   const size = settings.labelSize;
   context.font = `${settings.labelWeight} ${size}px ${settings.labelFont}`;
-  const width = context.measureText(data.label).width;
+  const width = context.measureText(text).width;
   const x = data.x + data.size + 8;
   const y = data.y - size / 2 - 4;
   const boxW = width + 12;
@@ -45,7 +47,7 @@ export const drawLightHover: NodeHoverDrawingFunction = (context, data, settings
   context.stroke();
   context.fillStyle = "#111111";
   context.font = LABEL_FONT;
-  context.fillText(data.label, x + 6, data.y + size / 3);
+  context.fillText(text, x + 6, data.y + size / 3);
 };
 
 type SquareArgs = ConstructorParameters<typeof NodeSquareProgram>;
