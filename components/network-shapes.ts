@@ -1,17 +1,25 @@
 import { NodeSquareProgram } from "@sigma/node-square";
-import { drawDiscNodeLabel, type NodeHoverDrawingFunction, type NodeLabelDrawingFunction } from "sigma/rendering";
+import { type NodeHoverDrawingFunction, type NodeLabelDrawingFunction } from "sigma/rendering";
 
-const LABEL_FONT = "500 11px Satoshi, Arial, sans-serif";
+const LABEL_FONT = "500 12px Satoshi, Arial, sans-serif";
 
 export const drawHaloLabel: NodeLabelDrawingFunction = (context, data, settings) => {
   if (!data.label) return;
-  const size = settings.labelSize;
+  const anchor = Boolean((data as { anchor?: boolean }).anchor);
+  const size = anchor ? 12 : settings.labelSize;
+  const limit = anchor ? 22 : 28;
+  const text = data.label.length > limit ? `${data.label.slice(0, limit - 1)}…` : data.label;
   context.font = `${settings.labelWeight} ${size}px ${settings.labelFont}`;
-  context.lineWidth = 2;
+  context.textAlign = "center";
+  context.textBaseline = anchor ? "bottom" : "top";
+  context.lineWidth = 3;
   context.strokeStyle = "#ffffff";
   context.lineJoin = "round";
-  context.strokeText(data.label, data.x + data.size + 2, data.y + size / 3);
-  drawDiscNodeLabel(context, data, settings);
+  const x = data.x;
+  const y = anchor ? data.y - data.size - 2 : data.y + data.size + 2;
+  context.strokeText(text, x, y);
+  context.fillStyle = "#141414";
+  context.fillText(text, x, y);
 };
 
 export const drawLightHover: NodeHoverDrawingFunction = (context, data, settings) => {

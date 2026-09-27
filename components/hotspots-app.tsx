@@ -6,6 +6,7 @@ import { SignalTierBadge } from "./badges";
 import {
   SECTION_LABEL,
   SECTION_ORDER,
+  campusFilterLabels,
   compareCampuses,
   type HotspotCard,
   type HotspotSectionId,
@@ -17,9 +18,11 @@ const TIERS: HotspotTier[] = ["S", "A", "B", "C", "D"];
 export function HotspotsApp({
   cards,
   initial,
+  universities,
 }: {
   cards: HotspotCard[];
   initial: Record<string, string | undefined>;
+  universities: { id: string; name: string }[];
 }) {
   const [tier, setTier] = useState<string>(initial.tier ?? "");
   const [section, setSection] = useState<string>(initial.section ?? "");
@@ -28,8 +31,9 @@ export function HotspotsApp({
   const [city, setCity] = useState<string>(initial.city ?? "");
   const [q, setQ] = useState<string>(initial.q ?? "");
 
-  const campuses = useMemo(() => uniqueLabels(cards.filter((card) => card.placeKind !== "city")), [cards]);
-  const cities = useMemo(() => uniqueLabels(cards.filter((card) => card.placeKind === "city")), [cards]);
+  const filters = useMemo(() => campusFilterLabels(cards, universities), [cards, universities]);
+  const campuses = useMemo(() => [...filters.campuses, ...filters.programmes], [filters]);
+  const cities = filters.cities;
   const types = useMemo(() => [...new Set(cards.map((card) => card.type).filter(Boolean))].sort((a, b) => a.localeCompare(b)), [cards]);
 
   const visible = useMemo(() => {
@@ -166,14 +170,6 @@ function shortSection(section: HotspotSectionId): string {
   if (section === "existing_founders") return "Existing founders";
   if (section === "startups") return "Startups";
   return "Potential founders";
-}
-
-function uniqueLabels(cards: HotspotCard[]): string[] {
-  const seen = new Map<string, number>();
-  for (const card of cards) {
-    if (!seen.has(card.campus)) seen.set(card.campus, card.sortGroup * 1000 + card.campus.charCodeAt(0));
-  }
-  return [...seen.entries()].sort((a, b) => a[1] - b[1] || a[0].localeCompare(b[0])).map(([name]) => name);
 }
 
 function Select({ label, value, onChange, options }: { label: string; value: string; onChange: (value: string) => void; options: string[] }) {

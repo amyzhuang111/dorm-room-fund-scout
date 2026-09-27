@@ -14,6 +14,7 @@ import { CandidateTable } from "./candidate-table";
 import { ScoutNav, useScoutNav } from "./scout-nav";
 import { useFeedbackRecords } from "./feedback-provider";
 import { projectShell, useProjectDetail } from "./use-project-detail";
+import { formatCampusList } from "@/lib/domain/campuses";
 import { CompanyNameLink } from "./company-website";
 
 const QUEUE_ORDER: Queue[] = ["top_prospects", "exploration", "watch", "reference_outside_brief"];
@@ -211,7 +212,7 @@ function VerificationBody({
                       <div key={company.id} className="px-3 py-2 text-sm hover:bg-surface-2">
                         <CompanyNameLink id={company.id} name={company.name} websiteUrl={company.websiteUrl} />
                         <p className="mt-0.5 text-xs text-muted">
-                          {company.universities.join(", ") || "University unknown"}
+                          {formatCampusList(company.universities) || "University unknown"}
                           {blockerOutcome ? ` · ${blockerOutcome.rationale}` : ""}
                         </p>
                       </div>
@@ -229,7 +230,7 @@ function VerificationBody({
               {clear.map((company) => (
                 <div key={company.id} className="px-3 py-2 text-sm hover:bg-surface-2">
                   <CompanyNameLink id={company.id} name={company.name} websiteUrl={company.websiteUrl} />
-                  <p className="mt-0.5 text-xs text-muted">{company.universities.join(", ") || "University unknown"}</p>
+                  <p className="mt-0.5 text-xs text-muted">{formatCampusList(company.universities) || "University unknown"}</p>
                 </div>
               ))}
               {clear.length === 0 && <p className="px-3 py-3 text-sm text-muted">None yet.</p>}

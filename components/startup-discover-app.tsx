@@ -224,6 +224,6 @@ function NetworkSlot({
   if (!visible || visible.nodes.length === 0) {
     return <p className="p-6 text-sm text-muted">{graph ? "No evidence-backed connections on record for this campus yet." : "Loading network…"}</p>;
   }
-  const campusName = current.university ? (universities.find((u) => u.id === current.university)?.name ?? "campus") : "Penn and Berkeley";
+  const campusName = current.university ? (universities.find((u) => u.id === current.university)?.name ?? "campus") : "All campuses";
   return <NetworkCanvas graph={visible} basePath="/startup/discover" current={current} campusName={campusName} />;
 }

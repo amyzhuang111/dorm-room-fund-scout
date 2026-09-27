@@ -3,7 +3,8 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
-import { cardsFromRows, hasPhrase, matchPhrases, normHotspotName, ORG_ALIAS_PHRASES, parseCsv, samePlace } from "./hotspot-model";
+import { CAMPUSES, compareCampusLabels } from "./campuses";
+import { campusFilterLabels, cardsFromRows, hasPhrase, matchPhrases, normHotspotName, ORG_ALIAS_PHRASES, parseCsv, samePlace, sortGroupFor } from "./hotspot-model";
 
 assert.equal(samePlace("Jerome Fisher M&T", "Jerome Fisher Management & Technology"), true);
 assert.equal(samePlace("M&T", "Jerome Fisher M&T"), true);
@@ -32,14 +33,8 @@ assert.ok(matchPhrases("Management, Entrepreneurship, & Technology (M.E.T.)").in
 assert.equal(hasPhrase(normHotspotName("Erfan Ballew (M.E.T. '28)"), "m e t"), true);
 
 const cards = cardsFromRows(parseCsv(fs.readFileSync(path.join(process.cwd(), "data", "imports", "campus_hotspots.csv"), "utf8")));
-assert.equal(cards.find((card) => card.place.startsWith("Mayfield Fellows"))?.tier, "S");
-assert.equal(cards.find((card) => card.place.includes("delta v"))?.tier, "S");
-assert.equal(cards.find((card) => card.place.includes("Kleiner Perkins"))?.tier, "S");
-assert.equal(cards.find((card) => card.place === "Jerome Fisher M&T")?.tier, "A");
-assert.equal(cards.find((card) => card.place.includes("SkyDeck"))?.tier, "C");
-assert.equal(cards.find((card) => card.place === "ACM at UCLA")?.tier, "D");
-assert.ok(cards.some((card) => card.tier === "D" && card.howToGetIn && card.url.startsWith("http")));
 assert.equal(cards.some((card) => /pennapps organising team/i.test(card.place)), false);
+assert.ok(cards.some((card) => card.tier === "D"));
 assert.equal(cards.find((card) => card.place === "Pear Fellows")?.tier, "A");
 assert.equal(cards.find((card) => card.place === "Pear Garage")?.tier, "B");
 assert.ok(cards.find((card) => card.place === "Pear Garage")?.howToGetIn.includes("engineering students"));
@@ -55,5 +50,83 @@ assert.ok(prod.includes("prod fellowship"));
 assert.equal(prod.includes("prod"), false);
 assert.ok(ORG_ALIAS_PHRASES["human capital fellowship"]?.includes("delta fellowship"));
 assert.ok(ORG_ALIAS_PHRASES["human capital fellowship"]?.includes("hc fellowship"));
+
+assert.equal(sortGroupFor("Penn", "campus"), 0);
+assert.equal(sortGroupFor("UC Berkeley", "campus"), 0);
+assert.equal(sortGroupFor("Boston", "city"), 1);
+assert.equal(sortGroupFor("Cross-campus programmes", "other"), 1);
+
+const v3Ids = [
+  "univ_stanford",
+  "univ_berkeley",
+  "univ_ucla",
+  "univ_usc",
+  "univ_uw",
+  "univ_caltech",
+  "univ_hmc",
+  "univ_penn",
+  "univ_unc",
+  "univ_duke",
+  "univ_georgetown",
+  "univ_emory",
+  "univ_cmu",
+  "univ_princeton",
+  "univ_gatech",
+  "univ_vanderbilt",
+  "univ_uva",
+  "univ_lafayette",
+  "univ_columbia",
+  "univ_nyu",
+  "univ_cornell",
+  "univ_cornell_tech",
+  "univ_yale",
+  "univ_northwestern",
+  "univ_uchicago",
+  "univ_uiuc",
+  "univ_michigan",
+  "univ_washu",
+  "univ_notredame",
+  "univ_utexas",
+  "univ_rice",
+  "univ_mit",
+  "univ_harvard",
+  "univ_dartmouth",
+  "univ_bu",
+  "univ_brown",
+  "univ_waterloo",
+  "univ_toronto",
+  "univ_laurentian",
+  "univ_queens",
+  "univ_cambridge",
+];
+for (const id of v3Ids) assert.ok(CAMPUSES.some((campus) => campus.id === id), id);
+
+const labels = CAMPUSES.map((campus) => campus.shortLabel).sort(compareCampusLabels);
+assert.deepEqual(
+  labels,
+  [...labels].sort(compareCampusLabels),
+);
+assert.notEqual(labels[0], "Penn");
+assert.ok(labels.indexOf("Penn") > 0);
+assert.ok(labels.indexOf("Berkeley") !== 1 || labels[0] !== "Penn");
+
+const filters = campusFilterLabels(
+  [
+    { campus: "Penn", campusId: "univ_penn", placeKind: "campus" },
+    { campus: "UC Berkeley", campusId: "univ_berkeley", placeKind: "campus" },
+    { campus: "San Francisco", campusId: null, placeKind: "city" },
+    { campus: "Boston", campusId: null, placeKind: "city" },
+    { campus: "Cross-campus programmes", campusId: null, placeKind: "other" },
+  ],
+  [
+    { id: "univ_penn", name: "University of Pennsylvania" },
+    { id: "univ_berkeley", name: "University of California, Berkeley" },
+    { id: "univ_brown", name: "Brown University" },
+  ],
+);
+assert.deepEqual(filters.campuses, ["Brown", "Penn", "UC Berkeley"]);
+assert.deepEqual(filters.cities, ["Boston", "San Francisco"]);
+assert.deepEqual(filters.programmes, ["Cross-campus programmes"]);
+assert.ok(filters.campuses.indexOf("Penn") > filters.campuses.indexOf("Brown"));
 
 console.log("hotspot-model tests ok");

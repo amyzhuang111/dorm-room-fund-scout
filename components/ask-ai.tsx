@@ -4,14 +4,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { AskHit } from "@/lib/domain/ask-types";
+import { CAMPUSES, compareCampusLabels } from "@/lib/domain/campuses";
 import { setAskHighlight } from "./ask-highlight";
 
 export const ASK_EXAMPLES = [
-  "Penn juniors in M&T building in AI",
-  "Berkeley founders backed by a16z speedrun",
   "top-tier clubs with the most founders",
   "recent grads building in healthcare in NYC",
+  "juniors building in AI",
+  "founders backed by a16z speedrun",
 ];
+
+export const ASK_CAMPUS_SUGGESTIONS = [...CAMPUSES].map((campus) => campus.shortLabel).sort(compareCampusLabels);
 
 const ASK_ENV = "AI_GATEWAY_API_KEY";
 
@@ -251,6 +254,22 @@ function AskAiPanel({ onClose }: { onClose: () => void }) {
             ))}
           </ul>
         </div>
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-wide">Campuses</p>
+          <ul className="mt-1 flex flex-wrap gap-1">
+            {ASK_CAMPUS_SUGGESTIONS.map((campus) => (
+              <li key={campus}>
+                <button
+                  type="button"
+                  className="rounded-full border border-black px-2 py-0.5 text-left text-[11px] font-medium hover:bg-black hover:text-white"
+                  onClick={() => void ask(`${campus} founders`)}
+                >
+                  {campus}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
         <form
           onSubmit={(event) => {
             event.preventDefault();
@@ -266,7 +285,7 @@ function AskAiPanel({ onClose }: { onClose: () => void }) {
             value={question}
             disabled={needsKey || busy}
             onChange={(event) => setQuestion(event.target.value)}
-            placeholder="Penn juniors in M&T building in AI"
+            placeholder="juniors building in AI"
             className="w-full resize-none border border-black bg-white px-2 py-1.5 text-sm text-black placeholder:text-neutral-500 disabled:bg-neutral-100"
           />
           <button type="submit" disabled={needsKey || busy || !question.trim()} className="mt-2 bg-black px-3 py-1.5 text-xs font-semibold text-white disabled:bg-neutral-400">
