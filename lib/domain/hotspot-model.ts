@@ -88,6 +88,11 @@ export const ORG_ALIAS_PHRASES: Record<string, readonly string[]> = {
   "y combinator": ["yc founder"],
   // Berkeley prints the dual-degree abbreviation as M.E.T. '28.
   "management entrepreneurship and technology": ["m e t"],
+  // "VIP-X" strips to a phrase shorter than the matcher keeps on its own.
+  "vip x accelerator": ["vip x"],
+  // Bare "launchpad" also appears in NYU Summer Launchpad, so the Berkeley club
+  // is matched only when the stored role says Cal Launchpad.
+  launchpad: ["cal launchpad"],
 };
 
 const MT_CORES = new Set([
