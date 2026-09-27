@@ -250,7 +250,7 @@ export const ZONE_ARC: Record<"internal" | "external", { a0: number; a1: number 
 };
 
 export interface LayoutGuide {
-  kind: "zone" | "tier" | "arc" | "rule";
+  kind: "zone" | "tier" | "arc" | "rule" | "fill";
   text: string;
   x: number;
   y: number;
@@ -350,6 +350,15 @@ export function layoutZonedCampus(nodes: LayoutNode[], edges: LayoutEdge[]): Zon
       const titleAngle = zone === "external" ? Math.PI : 0;
       const titleRadius = 150;
       guides.push({
+        kind: "fill",
+        text: zone,
+        x: 0,
+        y: 0,
+        radius: zoneMax + 56,
+        a0: arc.a0,
+        a1: arc.a1,
+      });
+      guides.push({
         kind: "zone",
         text: zone === "external" ? "OUTSIDE" : "ON CAMPUS",
         x: Math.cos(titleAngle) * titleRadius,
@@ -359,14 +368,19 @@ export function layoutZonedCampus(nodes: LayoutNode[], edges: LayoutEdge[]): Zon
   }
   guides.push({ kind: "rule", text: "", x: 0, y: 0, radius: maxRadius + 30 });
 
+  const satellite = new Map<string, { radius: number; angle: number }>();
+  const pin = (id: string, angle: number, radius: number) => {
+    satellite.set(id, { radius, angle });
+    pos.set(id, { id, x: Math.cos(angle) * radius, y: Math.sin(angle) * radius });
+  };
+
   const outer = maxRadius + 170;
   for (const [orgId, angle] of orgAngle) {
     const members = people.filter((person) => home.get(person.id) === orgId);
     const radius = Math.max(outer, (orgRadius.get(orgId) ?? outer) + 150);
     members.forEach((member, index) => {
       const shift = members.length === 1 ? 0 : (index - (members.length - 1) / 2) * 0.12;
-      const at = angle + shift;
-      pos.set(member.id, { id: member.id, x: Math.cos(at) * radius, y: Math.sin(at) * radius });
+      pin(member.id, angle + shift, radius);
     });
   }
 
@@ -388,32 +402,67 @@ export function layoutZonedCampus(nodes: LayoutNode[], edges: LayoutEdge[]): Zon
     const base = Math.hypot(anchor.x, anchor.y) + 78;
     list.forEach((project, index) => {
       const shift = list.length === 1 ? 0 : (index - (list.length - 1) / 2) * 0.16;
-      const at = angle + shift;
-      pos.set(project.id, { id: project.id, x: Math.cos(at) * base, y: Math.sin(at) * base });
+      pin(project.id, angle + shift, base);
     });
   }
 
-  const loose: string[] = [];
-  for (const person of people) if (!pos.has(person.id)) loose.push(person.id);
-  for (const project of projects) if (!pos.has(project.id)) loose.push(project.id);
-  const looseRadius = outer + 150;
-  loose.forEach((id, index) => {
-    const angle = -Math.PI / 2 + ((index + 0.5) / Math.max(loose.length, 1)) * Math.PI * 2;
-    const radial = byId.get(id)?.type === "project" ? 46 : 0;
-    pos.set(id, { id, x: Math.cos(angle) * (looseRadius + radial), y: Math.sin(angle) * (looseRadius + radial) });
-  });
-
-  for (const node of nodes) {
-    if (!pos.has(node.id)) {
-      pos.set(node.id, { id: node.id, x: looseRadius, y: 0 });
+  // Campus people and startups with no club stay on the on-campus side,
+  // outside the tier bands, so they do not fill the gap between the zones.
+  const loosePeople = people.filter((person) => !pos.has(person.id));
+  const bundled = new Map<string, LayoutNode[]>();
+  const soloProjects: LayoutNode[] = [];
+  for (const project of projects) {
+    if (pos.has(project.id)) continue;
+    const person = neighbors(project.id)
+      .map((link) => byId.get(link.id))
+      .find((node): node is LayoutNode => node?.type === "person" && loosePeople.some((item) => item.id === node.id));
+    if (!person) {
+      soloProjects.push(project);
+      continue;
     }
+    const list = bundled.get(person.id) ?? [];
+    list.push(project);
+    bundled.set(person.id, list);
+  }
+  const queue = [...loosePeople, ...soloProjects];
+  const arc = ZONE_ARC.internal;
+  const span = arc.a1 - arc.a0;
+  const slot = 52;
+  let radius = outer + 160;
+  let cursor = 0;
+  while (cursor < queue.length) {
+    const capacity = Math.max(1, Math.floor((radius * span) / slot));
+    const count = Math.min(capacity, queue.length - cursor);
+    let grew = false;
+    for (let k = 0; k < count; k++) {
+      const angle = arc.a0 + ((k + 0.5) / count) * span;
+      const node = queue[cursor + k];
+      pin(node.id, angle, radius);
+      const extras = bundled.get(node.id) ?? [];
+      if (extras.length > 0) grew = true;
+      extras.forEach((project, index) => {
+        const shift = extras.length === 1 ? 0 : (index - (extras.length - 1) / 2) * 0.08;
+        pin(project.id, angle + shift, radius + 72);
+      });
+    }
+    cursor += count;
+    radius += grew ? 160 : 88;
   }
 
-  relax(pos, orgRadius, orgAngle);
+  for (const node of nodes) {
+    if (!pos.has(node.id)) pin(node.id, 0, outer + 160);
+  }
+
+  relax(pos, orgRadius, orgAngle, satellite);
   return { positions: rounded(pos), guides };
 }
 
-function relax(pos: Map<string, Point>, orgRadius: Map<string, number>, orgAngle: Map<string, number>) {
+function relax(
+  pos: Map<string, Point>,
+  orgRadius: Map<string, number>,
+  orgAngle: Map<string, number>,
+  satellite: Map<string, { radius: number; angle: number }>,
+) {
   const ids = [...pos.keys()];
   for (let iter = 0; iter < 36; iter++) {
     for (let i = 0; i < ids.length; i++) {
@@ -451,21 +500,24 @@ function relax(pos: Map<string, Point>, orgRadius: Map<string, number>, orgAngle
       }
       const radius = orgRadius.get(id);
       const angle = orgAngle.get(id);
-      if (radius != null && angle != null) {
+      const sat = satellite.get(id);
+      const homeRadius = radius ?? sat?.radius;
+      const homeAngle = angle ?? sat?.angle;
+      if (homeRadius != null && homeAngle != null) {
         const at = Math.atan2(point.y, point.x);
-        const clamped = clampAngle(at, angle);
-        point.x = Math.cos(clamped) * radius;
-        point.y = Math.sin(clamped) * radius;
+        const clamped = clampAngle(at, homeAngle, radius != null ? 0.22 : 0.16);
+        point.x = Math.cos(clamped) * homeRadius;
+        point.y = Math.sin(clamped) * homeRadius;
       }
     }
   }
 }
 
-function clampAngle(at: number, home: number): number {
+function clampAngle(at: number, home: number, limit: number): number {
   let delta = at - home;
   while (delta > Math.PI) delta -= Math.PI * 2;
   while (delta < -Math.PI) delta += Math.PI * 2;
-  const limited = Math.max(-0.22, Math.min(0.22, delta));
+  const limited = Math.max(-limit, Math.min(limit, delta));
   return home + limited;
 }
 

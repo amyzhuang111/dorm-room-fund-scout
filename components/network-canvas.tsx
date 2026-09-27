@@ -44,6 +44,15 @@ function arcPath(radius: number, a0: number, a1: number): string {
   return `M ${x0} ${y0} A ${radius} ${radius} 0 ${large} 1 ${x1} ${y1}`;
 }
 
+function wedgePath(radius: number, a0: number, a1: number): string {
+  const x0 = Math.cos(a0) * radius;
+  const y0 = Math.sin(a0) * radius;
+  const x1 = Math.cos(a1) * radius;
+  const y1 = Math.sin(a1) * radius;
+  const large = a1 - a0 > Math.PI ? 1 : 0;
+  return `M 0 0 L ${x0} ${y0} A ${radius} ${radius} 0 ${large} 1 ${x1} ${y1} Z`;
+}
+
 export function NetworkCanvas(props: {
   graph: NetworkGraph;
   basePath: string;
@@ -560,13 +569,24 @@ function CampusNetworkCanvas({
             <rect x={bounds.x} y={bounds.y} width={bounds.w} height={bounds.h} fill="#ffffff" />
             <g transform={`translate(${cx + pan.x} ${cy + pan.y}) scale(${zoom}) translate(${-cx} ${-cy})`}>
               {(graph.guides ?? []).map((guide, index) => {
+                if (guide.kind !== "fill" || guide.radius == null || guide.a0 == null || guide.a1 == null) return null;
+                return (
+                  <path
+                    key={`fill-${index}`}
+                    d={wedgePath(guide.radius, guide.a0, guide.a1)}
+                    fill={guide.text === "external" ? "#eef3f8" : "#f7f1ea"}
+                    stroke="none"
+                  />
+                );
+              })}
+              {(graph.guides ?? []).map((guide, index) => {
                 if (guide.kind === "rule" && guide.radius) {
-                  return <line key={index} x1={0} y1={-guide.radius} x2={0} y2={guide.radius} stroke="#e4dfec" strokeWidth={1} />;
+                  return <line key={index} x1={0} y1={-guide.radius} x2={0} y2={guide.radius} stroke="#d9d3e4" strokeWidth={1.25} />;
                 }
                 if (guide.kind === "arc" && guide.radius != null && guide.a0 != null && guide.a1 != null) {
-                  return <path key={index} d={arcPath(guide.radius, guide.a0, guide.a1)} fill="none" stroke="#e4dfec" strokeWidth={1.25} />;
+                  return <path key={index} d={arcPath(guide.radius, guide.a0, guide.a1)} fill="none" stroke="#d5cfdf" strokeWidth={1.25} />;
                 }
-                if (!guide.text) return null;
+                if (guide.kind === "fill" || !guide.text) return null;
                 const zone = guide.kind === "zone";
                 return (
                   <text
@@ -575,9 +595,12 @@ function CampusNetworkCanvas({
                     y={guide.y}
                     textAnchor="middle"
                     fill={zone ? "#141018" : "#5c5470"}
-                    fontSize={zone ? 13 : 11}
+                    fontSize={zone ? 15 : 11}
                     fontWeight={zone ? 700 : 600}
-                    letterSpacing={zone ? "0.08em" : "0.04em"}
+                    letterSpacing={zone ? "0.12em" : "0.04em"}
+                    stroke="#ffffff"
+                    strokeWidth={zone ? 5 : 3}
+                    paintOrder="stroke"
                     style={{ fontFamily: "Satoshi, Arial, sans-serif" }}
                   >
                     {guide.text}
@@ -588,11 +611,9 @@ function CampusNetworkCanvas({
                 const source = nodeById.get(edge.source);
                 const target = nodeById.get(edge.target);
                 if (!source || !target) return null;
-                const mx = (source.x + target.x) / 2;
-                const my = (source.y + target.y) / 2 - 18;
                 const highlighted = selectedEdge === index || (active != null && (edge.source === active || edge.target === active));
                 const quiet = spoke(edge) && !highlighted;
-                const d = `M ${source.x} ${source.y} Q ${mx} ${my} ${target.x} ${target.y}`;
+                const d = `M ${source.x} ${source.y} L ${target.x} ${target.y}`;
                 return (
                   <g key={index}>
                     <path

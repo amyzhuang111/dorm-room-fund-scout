@@ -86,7 +86,7 @@ TechCrunch articles in this run: Series (Yale; already stored), Breakthrough Ven
 
 ## Per-campus network zones
 
-The Discover network for one campus (never All campuses) draws two zones. Outside is the left half. On campus is the right half. A tier band is a concentric arc: S+ and S sit closest to the campus hub, then A, B, C, and D. People and startups stay further out, on the same side as the group they belong to. The letters are sourcing labels. They are not Founder Signal, eligibility, or an investment score.
+The Discover network for one campus (never All campuses) draws two zones. Outside is the left half. On campus is the right half. A tinted wedge and a vertical rule separate them. A tier band is a concentric arc: S+ and S sit closest to the campus hub, then A, B, C, and D, with a small letter on each band. People and startups stay further out, on the same side as the group they belong to. Campus people with no club edge stay on the on-campus side, outside the tier bands, instead of ringing the whole map. The letters are sourcing labels. They are not Founder Signal, eligibility, or an investment score.
 
 The org list is `data/imports/campus_hotspots.csv`, one node per organization after these collapses:
 
