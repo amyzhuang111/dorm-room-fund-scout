@@ -72,6 +72,7 @@ uniform float u_correctionRatio;
 
 varying vec4 v_color;
 varying vec2 v_local;
+varying float v_size;
 
 const float bias = 255.0 / 254.0;
 const float sqrt_8 = sqrt(8.0);
@@ -83,6 +84,7 @@ void main() {
   vec2 position = a_position + diffVector;
   gl_Position = vec4((u_matrix * vec3(position, 1)).xy, 0, 1);
   v_local = diffVector / max(size, 0.0001);
+  v_size = a_size;
 
   #ifdef PICKING_MODE
   v_color = a_id;
@@ -94,22 +96,12 @@ void main() {
 }
 `;
 
-const INK_BODY = /* glsl */ `
-  float w = max(fwidth(d), 0.015);
-  float cover = 1.0 - smoothstep(1.0 - w, 1.0 + w, d);
-  float inner = 1.0 - 1.35 * w;
-  float stroke = smoothstep(inner - w, inner, d);
-  vec4 color = mix(v_color, vec4(0.08, 0.08, 0.08, v_color.a), clamp(stroke, 0.0, 1.0));
-  color.a *= cover;
-  gl_FragColor = color;
-`;
-
-function polygonFragment(shapeDist: string): string {
-  return `#extension GL_OES_standard_derivatives : enable
-precision highp float;
+function polygonFragment(shapeDist: string, strokePx: string): string {
+  return `precision highp float;
 
 varying vec4 v_color;
 varying vec2 v_local;
+varying float v_size;
 
 const vec4 transparent = vec4(0.0, 0.0, 0.0, 0.0);
 
@@ -120,32 +112,48 @@ void main(void) {
   #ifdef PICKING_MODE
   gl_FragColor = d > 1.0 ? transparent : v_color;
   #else
-  ${INK_BODY}
+  float w = ${strokePx} / max(v_size, 0.5);
+  float cover = 1.0 - smoothstep(1.0 - w, 1.0 + w, d);
+  float inner = 1.0 - 1.35 * w;
+  float stroke = smoothstep(inner - w, inner, d);
+  vec4 color = mix(v_color, vec4(0.08, 0.08, 0.08, v_color.a), clamp(stroke, 0.0, 1.0));
+  color.a *= cover;
+  gl_FragColor = color;
   #endif
 }
 `;
 }
 
-const SQUARE_FRAG = polygonFragment(/* glsl */ `
+const SQUARE_FRAG = polygonFragment(
+  /* glsl */ `
 float shapeDist(vec2 p) {
   return max(abs(p.x), abs(p.y)) * 1.41421356;
 }
-`);
+`,
+  "1.2",
+);
 
-const DIAMOND_FRAG = polygonFragment(/* glsl */ `
+const DIAMOND_FRAG = polygonFragment(
+  /* glsl */ `
 float shapeDist(vec2 p) {
   return abs(p.x) + abs(p.y);
 }
-`);
+`,
+  "1.2",
+);
 
-const HEX_FRAG = polygonFragment(/* glsl */ `
+const HEX_FRAG = polygonFragment(
+  /* glsl */ `
 float shapeDist(vec2 p) {
   p = abs(p);
   return max(p.y, 0.8660254 * p.x + 0.5 * p.y);
 }
-`);
+`,
+  "1.7",
+);
 
-const TRIANGLE_FRAG = polygonFragment(/* glsl */ `
+const TRIANGLE_FRAG = polygonFragment(
+  /* glsl */ `
 float shapeDist(vec2 p) {
   p.y = -p.y;
   p.x = abs(p.x);
@@ -153,7 +161,9 @@ float shapeDist(vec2 p) {
   float sdBottom = -p.y - 0.5;
   return max(sdSlant, sdBottom) * 2.0 + 1.0;
 }
-`);
+`,
+  "1.7",
+);
 
 const CIRCLE_FRAG = /* glsl */ `
 precision highp float;

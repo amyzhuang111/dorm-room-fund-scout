@@ -118,21 +118,22 @@ export const EDGE_COLOR: Record<MapEdgeType, string> = {
 };
 
 /** Circle-radius in screen pixels. Polygon programs use the same number, so a square’s width matches a circle’s diameter. */
-const ORG_PX: Record<string, number> = { S: 6.8, A: 5.8, B: 4.9, C: 4.2, D: 3.6 };
+const ORG_PX: Record<string, number> = { S: 9.6, A: 8.1, B: 6.8, C: 5.7, D: 4.9 };
 
 /**
- * Screen pixels at every zoom. Large enough that a square, diamond, and circle
- * stay distinct at the fitted camera. Organization triangles grow with tier
- * (S largest). A high degree only nudges the size, and never past the next tier.
+ * Screen pixels at every zoom. People stay the small circles. Startups, investors,
+ * and clubs are large enough that a square, diamond, and hexagon read at the
+ * fitted camera. Campuses are the large circles. Organization triangles grow
+ * with tier (S largest). Degree only nudges size, and never past the next tier.
  */
 export function screenSize(node: MapNode): number {
   const hub = Math.sqrt(Math.max(node.degree, 1));
-  if (node.type === "organization") return clamp((ORG_PX[node.orgTier ?? ""] ?? 4.6) + Math.min(0.35, hub * 0.012), 3.6, 7.3);
-  if (node.type === "campus") return clamp(8 + hub * 0.015, 8, 9.4);
-  if (node.type === "investor") return clamp(4.35 + Math.min(1.1, hub * 0.04), 4.35, 5.6);
-  if (node.type === "program") return clamp(5 + Math.min(1.2, hub * 0.035), 5, 6.4);
-  if (node.type === "startup") return clamp(4.35 + Math.min(0.9, hub * 0.035), 4.35, 5.4);
-  return clamp(3.25 + Math.min(0.7, hub * 0.03), 3.25, 4.1);
+  if (node.type === "organization") return clamp((ORG_PX[node.orgTier ?? ""] ?? 6.4) + Math.min(0.45, hub * 0.01), 4.9, 10.2);
+  if (node.type === "campus") return clamp(12 + hub * 0.01, 12, 14);
+  if (node.type === "investor") return clamp(6.6 + Math.min(1.15, hub * 0.028), 6.6, 8);
+  if (node.type === "program") return clamp(7.2 + Math.min(1.2, hub * 0.028), 7.2, 8.6);
+  if (node.type === "startup") return clamp(6.8 + Math.min(1, hub * 0.025), 6.8, 8);
+  return clamp(5 + Math.min(0.75, hub * 0.02), 5, 5.9);
 }
 
 export interface RestingLabels {
