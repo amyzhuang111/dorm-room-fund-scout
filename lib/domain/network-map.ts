@@ -133,7 +133,7 @@ interface SimNode {
   sector?: string | null;
 }
 
-const LAYOUT_VERSION = "34";
+const LAYOUT_VERSION = "35";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -720,7 +720,18 @@ function assembleNetworkMap(): MapGraph {
   }
 
   const campusLabels = new Map(universities.map((uni) => [uni.id, campusName.get(uni.id) ?? uni.name]));
-  const regions = settleForceAtlas(simNodes, edges, campusLabels);
+  const tintCampus = new Map<string, string>();
+  for (const person of people) {
+    const campusId = campusesByPerson.get(person.id)?.[0];
+    if (campusId) tintCampus.set(person.id, campusId);
+  }
+  for (const startup of startups) {
+    const fromFounders = (foundersByCompany.get(startup.id) ?? []).flatMap((id) => campusesByPerson.get(id) ?? []);
+    const listed = campusesByCompany.get(startup.id);
+    const campusId = listed?.length ? listed[0] : [...new Set(fromFounders)][0];
+    if (campusId) tintCampus.set(startup.id, campusId);
+  }
+  const regions = settleForceAtlas(simNodes, edges, campusLabels, tintCampus);
 
   const pos = new Map(simNodes.map((node) => [node.id, node]));
   const nodes: MapNode[] = [];
@@ -929,7 +940,7 @@ const REGION_POSE: Record<string, { angle: number; scale: number }> = {
  * are packed until neighboring regions touch. Hubs inside a campus stay in
  * that blob. National programs are seated afterwards.
  */
-function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: Map<string, string>): RegionMarker[] {
+function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: Map<string, string>, tintCampus: Map<string, string>): RegionMarker[] {
   const byId = new Map(simNodes.map((node) => [node.id, node]));
   const degree = new Map<string, number>();
   const membersOf = new Map<string, string[]>();
@@ -990,6 +1001,11 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     node.anchor = false;
     if (node.type === "campus") {
       primary.set(node.id, node.id);
+      continue;
+    }
+    const tint = tintCampus.get(node.id);
+    if ((node.type === "person" || node.type === "startup") && tint && campusIdSet.has(tint)) {
+      primary.set(node.id, tint);
       continue;
     }
     const counts = new Map<string, number>();
@@ -1378,6 +1394,7 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
   // Similarity may rearrange campuses inside a region and slide whole regions. People are packed afterwards.
   pullCampusesBySimilarity(live, edges, primary);
   packCampusDiscs(live, primary);
+  separateColoredClouds(live, primary);
   const campusOf = new Map(primary);
   for (const [id, weights] of bridgeWeight) {
     if (campusOf.has(id)) continue;
@@ -1462,8 +1479,8 @@ function pullCampusesBySimilarity(live: LiveNode[], edges: MapEdge[], primary: M
     cy /= group.length;
     let maxR = 0;
     for (const campus of group) maxR = Math.max(maxR, Math.hypot(campus.x - cx, campus.y - cy));
-    const points: SimilarityPoint[] = group.map((node) => ({ id: node.id, x: node.x, y: node.y, r: radiusOf(node.id) }));
-    relaxSimilarity(points, linksByRegion.get(key) ?? [], { iterations: 28, anchor: 0.62, spring: 0.4, gap: 16 });
+    const points: SimilarityPoint[] = group.map((node) => ({ id: node.id, x: node.x, y: node.y, r: Math.max(6, radiusOf(node.id) * 0.42) }));
+    relaxSimilarity(points, linksByRegion.get(key) ?? [], { iterations: 28, anchor: 0.72, spring: 0.28, gap: 10 });
     let nx = 0;
     let ny = 0;
     for (const point of points) {
@@ -1917,13 +1934,21 @@ function separateCampusDiscs(group: LiveNode[], radiusOf: (id: string) => number
   }
 }
 
-/** Queen's and Cambridge are small discs with long names. Keep their centers far enough that the labels do not meet. */
+/**
+ * Centers sit closer than the two full people-discs, so schools in one region
+ * overlap into a single stack. Queen's and Cambridge keep a little extra room
+ * for their long names.
+ */
 function campusPairGap(a: LiveNode, b: LiveNode, radiusOf: (id: string) => number): number {
-  const touch = radiusOf(a.id) + radiusOf(b.id) + 3.5;
+  const ra = radiusOf(a.id);
+  const rb = radiusOf(b.id);
+  const touch = ra + rb + 3.5;
+  const stacked = Math.max(ra, rb) * 0.62 + Math.min(ra, rb) * 0.28 + 5;
+  let gap = Math.min(touch, stacked);
   const pair = `${a.id}|${b.id}`;
-  if (pair === "univ_queens|univ_cambridge" || pair === "univ_cambridge|univ_queens") return Math.max(touch, 48);
-  if (pair.includes("univ_laurentian") && (pair.includes("univ_queens") || pair.includes("univ_cambridge"))) return Math.max(touch, 44);
-  return touch;
+  if (pair === "univ_queens|univ_cambridge" || pair === "univ_cambridge|univ_queens") gap = Math.max(gap, 28);
+  else if (pair.includes("univ_laurentian") && (pair.includes("univ_queens") || pair.includes("univ_cambridge"))) gap = Math.max(gap, 24);
+  return gap;
 }
 
 function pinWaterlooInGroup(group: LiveNode[], radiusOf: (id: string) => number) {
@@ -1989,6 +2014,59 @@ function pullCampusSatellites(live: LiveNode[], primary: Map<string, string>) {
       if (dist <= want + 1) continue;
       campus.x = anchor.x + (dx / dist) * want;
       campus.y = anchor.y + (dy / dist) * want;
+    }
+  }
+}
+
+/**
+ * People are already seated on their campus. If two colored clouds still
+ * overlap, slide the whole regions apart and keep a small gap.
+ */
+function separateColoredClouds(live: LiveNode[], primary: Map<string, string>) {
+  const campuses = live.filter((node) => node.type === "campus");
+  const regionOf = new Map(campuses.map((campus) => [campus.id, campus.regionId || "international"]));
+  const members = new Map<string, LiveNode[]>();
+  const claim = (regionId: string, node: LiveNode) => {
+    const list = members.get(regionId) ?? [];
+    list.push(node);
+    members.set(regionId, list);
+  };
+  for (const campus of campuses) claim(campus.regionId || "international", campus);
+  for (const node of live) {
+    if (node.type !== "person" && node.type !== "startup") continue;
+    const campusId = primary.get(node.id);
+    const regionId = campusId ? regionOf.get(campusId) : undefined;
+    if (regionId) claim(regionId, node);
+  }
+  const before = new Map<string, { x: number; y: number; r: number }>();
+  for (const [regionId, group] of members) {
+    let x = 0;
+    let y = 0;
+    for (const node of group) {
+      x += node.x;
+      y += node.y;
+    }
+    x /= group.length || 1;
+    y /= group.length || 1;
+    let r = 8;
+    for (const node of group) r = Math.max(r, Math.hypot(node.x - x, node.y - y));
+    before.set(regionId, { x, y, r });
+  }
+  const bodies = [...before.entries()].map(([id, body]) => ({ id, x: body.x, y: body.y, r: body.r }));
+  relaxRegionBodies(bodies, [], { iterations: 1, anchor: 0, spring: 0, gap: REGION_GAP, spread: 0 });
+  const next = new Map(bodies.map((body) => [body.id, body]));
+  for (const [regionId, group] of members) {
+    const from = before.get(regionId);
+    const to = next.get(regionId);
+    if (!from || !to) continue;
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    if (Math.hypot(dx, dy) < 0.05) continue;
+    for (const node of group) {
+      node.x += dx;
+      node.y += dy;
+      node.tx = node.x;
+      node.ty = node.y;
     }
   }
 }
