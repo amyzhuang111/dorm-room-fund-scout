@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import type { WebWorkerMLCEngine } from "@mlc-ai/web-llm";
+import { ASK_BROWSER_MODELS, ASK_DEFAULT_MODEL_ID, formatDownload } from "@/lib/domain/ask-browser-models";
+import { ASK_SYSTEM_PROMPT, askUserPrompt, fallbackAnswer, NOT_IN_THE_DATA } from "@/lib/domain/ask-prompt";
 import type { AskHit } from "@/lib/domain/ask-types";
 import { CAMPUSES, compareCampusLabels } from "@/lib/domain/campuses";
 import { setAskHighlight } from "./ask-highlight";
@@ -16,14 +19,17 @@ export const ASK_EXAMPLES = [
 
 export const ASK_CAMPUS_SUGGESTIONS = [...CAMPUSES].map((campus) => campus.shortLabel).sort(compareCampusLabels);
 
-const ASK_ENV = "AI_GATEWAY_API_KEY";
-
 interface AskAiControls {
   open: boolean;
   toggle: () => void;
 }
 
 const AskAiContext = createContext<AskAiControls | null>(null);
+
+// Survives closing the panel so a downloaded model stays loaded.
+let browserWorker: Worker | null = null;
+let browserEngine: WebWorkerMLCEngine | null = null;
+let browserModelId: string | null = null;
 
 export function AskAiProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -102,7 +108,13 @@ function highlightFrom(hits: AskHit[]): {
 }
 
 function AskAiPanel({ onClose }: { onClose: () => void }) {
-  const [configured, setConfigured] = useState<boolean | null>(null);
+  const [serverConfigured, setServerConfigured] = useState(false);
+  const [webgpu, setWebgpu] = useState<boolean | null>(null);
+  const [modelId, setModelId] = useState(ASK_DEFAULT_MODEL_ID);
+  const [loadedId, setLoadedId] = useState<string | null>(browserModelId);
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [progressText, setProgressText] = useState("");
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [matches, setMatches] = useState<AskHit[]>([]);
@@ -110,17 +122,35 @@ function AskAiPanel({ onClose }: { onClose: () => void }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const model = ASK_BROWSER_MODELS.find((item) => item.id === modelId) ?? ASK_BROWSER_MODELS[0];
+  const usingServer = modelId === "server";
+  const modelReady = !usingServer && loadedId === modelId && browserEngine != null;
 
   useEffect(() => {
     let cancel = false;
     fetch("/api/ask")
       .then((res) => res.json())
-      .then((data: { configured?: boolean }) => {
-        if (!cancel) setConfigured(data.configured === true);
+      .then((data: { serverConfigured?: boolean; configured?: boolean }) => {
+        if (!cancel) setServerConfigured(data.serverConfigured === true || data.configured === true);
       })
       .catch(() => {
-        if (!cancel) setConfigured(false);
+        if (!cancel) setServerConfigured(false);
       });
+    const gpu = (navigator as Navigator & { gpu?: { requestAdapter: () => Promise<unknown> } }).gpu;
+    if (!gpu) {
+      Promise.resolve().then(() => {
+        if (!cancel) setWebgpu(false);
+      });
+    } else {
+      gpu
+        .requestAdapter()
+        .then((adapter) => {
+          if (!cancel) setWebgpu(adapter != null);
+        })
+        .catch(() => {
+          if (!cancel) setWebgpu(false);
+        });
+    }
     return () => {
       cancel = true;
     };
@@ -139,6 +169,89 @@ function AskAiPanel({ onClose }: { onClose: () => void }) {
     onClose();
   }
 
+  async function loadModel() {
+    if (loading || webgpu === false || usingServer) return;
+    setError(null);
+    setLoading(true);
+    setProgress(0);
+    setProgressText("Starting download…");
+    try {
+      const { CreateWebWorkerMLCEngine } = await import("@mlc-ai/web-llm");
+      if (!browserWorker) {
+        browserWorker = new Worker(new URL("./ask-ai.worker.ts", import.meta.url), { type: "module" });
+      }
+      const onProgress = (report: { progress: number; text: string }) => {
+        setProgress(report.progress);
+        setProgressText(report.text);
+      };
+      if (!browserEngine) {
+        browserEngine = await CreateWebWorkerMLCEngine(browserWorker, modelId, { initProgressCallback: onProgress });
+      } else if (browserModelId !== modelId) {
+        setProgressText("Switching model…");
+        await browserEngine.reload(modelId);
+      }
+      browserModelId = modelId;
+      setLoadedId(modelId);
+      setProgress(1);
+      setProgressText("Model ready. It stays cached in this browser.");
+    } catch (err) {
+      browserEngine = null;
+      browserModelId = null;
+      setLoadedId(null);
+      setError(err instanceof Error ? err.message : "The model could not load.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function askServer(trimmed: string, signal: AbortSignal) {
+    const res = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: trimmed }),
+      signal,
+    });
+    const type = res.headers.get("content-type") ?? "";
+    if (!type.includes("text/event-stream")) {
+      if (res.status === 429) {
+        setError("The server model is rate limited. The in-browser model has no limit.");
+        return;
+      }
+      setError("The server model is unavailable. Pick an in-browser model instead.");
+      return;
+    }
+    const reader = res.body?.getReader();
+    if (!reader) {
+      setError("The server model is unavailable.");
+      return;
+    }
+    const decoder = new TextDecoder();
+    let buffer = "";
+    let textOut = "";
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const chunks = buffer.split("\n\n");
+      buffer = chunks.pop() ?? "";
+      for (const chunk of chunks) {
+        const line = chunk.split("\n").find((item) => item.startsWith("data: "));
+        if (!line) continue;
+        const event = JSON.parse(line.slice(6)) as { type?: string; text?: string; matches?: AskHit[]; message?: string };
+        if (event.type === "text" && event.text) {
+          textOut += event.text;
+          setAnswer(textOut);
+        } else if (event.type === "matches" && Array.isArray(event.matches)) {
+          setMatches(event.matches);
+          setAskHighlight(event.matches.length ? highlightFrom(event.matches) : null);
+        } else if (event.type === "error") {
+          setError(event.message ?? "Ask AI could not finish that question.");
+        }
+      }
+    }
+    if (!textOut.trim()) setAnswer(NOT_IN_THE_DATA);
+  }
+
   async function ask(text: string) {
     const trimmed = text.trim();
     if (!trimmed || busy) return;
@@ -148,71 +261,65 @@ function AskAiPanel({ onClose }: { onClose: () => void }) {
     setAsked(true);
     setError(null);
     setAskHighlight(null);
-    if (configured === false) return;
-
     abortRef.current?.abort();
     const controller = new AbortController();
     abortRef.current = controller;
     setBusy(true);
     try {
-      const res = await fetch("/api/ask", {
+      if (usingServer) {
+        await askServer(trimmed, controller.signal);
+        return;
+      }
+      const res = await fetch("/api/ask/retrieve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: trimmed }),
         signal: controller.signal,
       });
-      const type = res.headers.get("content-type") ?? "";
-      if (!type.includes("text/event-stream")) {
-        const data = (await res.json().catch(() => null)) as { error?: string; envVar?: string } | null;
-        if (data?.error === "needs_key" || res.status === 503) {
-          setConfigured(false);
-          return;
-        }
-        if (res.status === 429) {
-          setError("Ask AI is rate limited. Try again in a minute.");
-          return;
-        }
-        setError("Ask AI could not answer that.");
+      if (!res.ok) {
+        setError("Campus Scout search failed.");
         return;
       }
-
-      const reader = res.body?.getReader();
-      if (!reader) {
-        setError("Ask AI could not answer that.");
+      const data = (await res.json()) as { matches?: AskHit[] };
+      const rows = Array.isArray(data.matches) ? data.matches : [];
+      setMatches(rows);
+      setAskHighlight(rows.length ? highlightFrom(rows) : null);
+      if (rows.length === 0) {
+        setAnswer(NOT_IN_THE_DATA);
         return;
       }
-      const decoder = new TextDecoder();
-      let buffer = "";
+      if (webgpu === false) {
+        setAnswer(fallbackAnswer(rows));
+        return;
+      }
+      if (!browserEngine || browserModelId !== modelId) {
+        setAnswer(`${fallbackAnswer(rows)} Load the model to write a short answer from these records.`);
+        return;
+      }
+      await browserEngine.resetChat();
+      const stream = await browserEngine.chat.completions.create({
+        stream: true,
+        temperature: 0.2,
+        max_tokens: 280,
+        messages: [
+          { role: "system", content: ASK_SYSTEM_PROMPT },
+          { role: "user", content: askUserPrompt(trimmed, rows) },
+        ],
+      });
       let textOut = "";
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        const chunks = buffer.split("\n\n");
-        buffer = chunks.pop() ?? "";
-        for (const chunk of chunks) {
-          const line = chunk.split("\n").find((item) => item.startsWith("data: "));
-          if (!line) continue;
-          const event = JSON.parse(line.slice(6)) as { type?: string; text?: string; matches?: AskHit[]; message?: string };
-          if (event.type === "text" && event.text) {
-            textOut += event.text;
-            setAnswer(textOut);
-          } else if (event.type === "matches" && Array.isArray(event.matches)) {
-            setMatches(event.matches);
-            setAskHighlight(event.matches.length ? highlightFrom(event.matches) : null);
-          } else if (event.type === "error") {
-            setError(event.message ?? "Ask AI could not finish that question.");
-          }
-        }
+      for await (const chunk of stream) {
+        const delta = chunk.choices[0]?.delta?.content ?? "";
+        if (!delta) continue;
+        textOut += delta;
+        setAnswer(textOut);
       }
+      if (!textOut.trim()) setAnswer(fallbackAnswer(rows));
     } catch (err) {
       if ((err as { name?: string }).name !== "AbortError") setError("Ask AI could not answer that.");
     } finally {
       setBusy(false);
     }
   }
-
-  const needsKey = configured === false;
 
   return (
     <aside
@@ -227,17 +334,57 @@ function AskAiPanel({ onClose }: { onClose: () => void }) {
         </button>
       </div>
       <div className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
-        <p className="text-xs text-black">Answers use Campus Scout records only.</p>
-        {needsKey && (
-          <div className="border border-black bg-white px-3 py-2" data-ask-ai-needs-key>
-            <p className="text-sm font-semibold">Ask AI needs an API key</p>
-            <p className="mt-1 text-xs leading-snug">
-              Set <code className="font-semibold">{ASK_ENV}</code> in the Vercel project environment. Optional <code className="font-semibold">ASK_AI_MODEL</code> swaps the model
-              (default <code className="font-semibold">openai/gpt-4.1-mini</code>).
-            </p>
+        <p className="text-xs text-black">Answers use Campus Scout records. The model runs in your browser, free of charge.</p>
+        {webgpu === false && (
+          <div className="border border-black px-3 py-2" data-ask-webgpu="no">
+            <p className="text-sm font-semibold">This browser can’t run the on-device model</p>
+            <p className="mt-1 text-xs leading-snug">WebGPU isn’t available on this browser or device. Ask still searches Campus Scout and lists the matching records.</p>
           </div>
         )}
-        {configured === null && <p className="text-xs">Checking whether Ask AI is configured…</p>}
+        {webgpu !== false && (
+          <div className="space-y-2">
+            <label className="block text-[10px] font-semibold uppercase tracking-wide" htmlFor="ask-ai-model">
+              Model
+            </label>
+            <select
+              id="ask-ai-model"
+              data-ask-model
+              value={modelId}
+              onChange={(event) => setModelId(event.target.value)}
+              className="w-full border border-black bg-white px-2 py-1.5 text-xs text-black"
+            >
+              {ASK_BROWSER_MODELS.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.label}
+                  {item.id === ASK_DEFAULT_MODEL_ID ? " (default)" : ""} — {formatDownload(item.bytes)}
+                </option>
+              ))}
+              {serverConfigured && <option value="server">Server model</option>}
+            </select>
+            {!usingServer && (
+              <>
+                <button
+                  type="button"
+                  data-ask-ai-load
+                  disabled={loading || modelReady}
+                  onClick={() => void loadModel()}
+                  className="bg-black px-3 py-1.5 text-xs font-semibold text-white disabled:bg-neutral-400"
+                >
+                  {loading ? "Loading…" : modelReady ? "Model ready" : `Load model (${formatDownload(model.bytes)})`}
+                </button>
+                <p className="text-[11px] leading-snug">Download {formatDownload(model.bytes)}. The browser caches it after the first time.</p>
+                {(loading || progressText) && (
+                  <div>
+                    <div className="h-2 border border-black" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)}>
+                      <div className="h-full bg-black" style={{ width: `${Math.min(100, Math.round(progress * 100))}%` }} />
+                    </div>
+                    <p className="mt-1 text-[11px] leading-snug">{progressText}</p>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-wide">Try</p>
           <ul className="mt-1 space-y-1">
@@ -283,12 +430,12 @@ function AskAiPanel({ onClose }: { onClose: () => void }) {
             id="ask-ai-q"
             rows={3}
             value={question}
-            disabled={needsKey || busy}
+            disabled={busy}
             onChange={(event) => setQuestion(event.target.value)}
             placeholder="juniors building in AI"
             className="w-full resize-none border border-black bg-white px-2 py-1.5 text-sm text-black placeholder:text-neutral-500 disabled:bg-neutral-100"
           />
-          <button type="submit" disabled={needsKey || busy || !question.trim()} className="mt-2 bg-black px-3 py-1.5 text-xs font-semibold text-white disabled:bg-neutral-400">
+          <button type="submit" disabled={busy || !question.trim()} className="mt-2 bg-black px-3 py-1.5 text-xs font-semibold text-white disabled:bg-neutral-400">
             {busy ? "Answering…" : "Ask"}
           </button>
         </form>
@@ -299,13 +446,11 @@ function AskAiPanel({ onClose }: { onClose: () => void }) {
             {answer}
           </p>
         )}
-        {asked && !busy && matches.length === 0 && !needsKey && !error && (
-          <p className="text-sm font-medium">Nothing in the Campus Scout database matched that question.</p>
-        )}
+        {asked && !busy && matches.length === 0 && !error && <p className="text-sm font-medium">{NOT_IN_THE_DATA}</p>}
         {matches.length > 0 && (
           <div>
             <div className="flex items-center justify-between gap-2">
-              <p className="text-[10px] font-semibold uppercase tracking-wide">{matches.length} matches</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wide">{matches.length} records</p>
               <button type="button" className="text-[11px] font-semibold underline" onClick={() => setAskHighlight(null)}>
                 Show full map
               </button>

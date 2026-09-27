@@ -84,7 +84,7 @@ function keepKnown(matches: AskHit[] | undefined, into: AskHit[], seen: Set<stri
 
 export async function streamAsk(question: string, send: (event: AskStreamEvent) => void, model: LanguageModel | null = askAiLanguageModel()): Promise<void> {
   if (!model) {
-    send({ type: "error", message: "Ask AI needs an API key" });
+    send({ type: "error", message: "The server model is not configured." });
     return;
   }
 

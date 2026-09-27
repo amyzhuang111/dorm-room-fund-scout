@@ -19,10 +19,11 @@ function clientIp(request: Request): string {
 
 export function GET() {
   const status = askAiStatus();
+  // The panel runs WebLLM in the browser. This flag only adds an optional
+  // server model when a key is already configured.
   return Response.json({
+    serverConfigured: status.configured,
     configured: status.configured,
-    envVar: status.envVar,
-    model: status.model,
   });
 }
 
@@ -37,7 +38,7 @@ export async function POST(request: Request) {
 
   const status = askAiStatus();
   if (!status.configured) {
-    return Response.json({ error: "needs_key", envVar: status.envVar, model: status.model }, { status: 503 });
+    return Response.json({ error: "server_unavailable" }, { status: 503 });
   }
 
   let body: unknown;
