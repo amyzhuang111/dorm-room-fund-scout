@@ -10,6 +10,42 @@ what's still missing. It's written to match what the code actually does,
 not the full brief — see `app/methodology/page.tsx` (also live at
 `/methodology` once running) for the same breakdown inside the app.
 
+## News
+
+`/news` lists public headlines for startups and founders already in
+`data/campus-universe.db`. A story is stored only when the startup name
+appears with a founder, a school, or the company domain. Each row is tagged
+press, social, launch, press release, or campus paper, and `/news` can
+filter on that tag. It does not change Founder Signal, eligibility, or
+investment score.
+
+Free sources: Google News RSS (including `site:` search for TechCrunch,
+Axios Pro Rata, Business Insider, Forbes 30 Under 30, Fortune Term Sheet,
+VentureBeat, The Information, Crunchbase News, PR Newswire, and Business
+Wire), outlet RSS where the publisher serves one, Hacker News, public YC
+launch posts (Bookface itself is login-only), Product Hunt, Reddit Atom
+feeds for r/startups and similar subreddits, campus-paper RSS, and company
+blog RSS. X has no free API. The fetch tries a public Nitter mirror, then
+Google News and Bing `site:x.com` / `site:twitter.com` snippets, and skips
+X when none of those return a feed.
+
+```powershell
+npm run news:fetch
+npm run news:fetch -- --limit 20
+npm run news:fetch -- --feeds-only
+```
+
+The command is safe to re-run. Targets fetched in the last 20 hours are
+skipped unless the last attempt errored. Penn, Berkeley, S/A tiers, and
+funded startups are queried first. Sources are free: Google News RSS, the
+Hacker News Algolia API, TechCrunch and campus-paper RSS, and YC launch
+posts.
+
+GitHub Actions runs `.github/workflows/news-fetch.yml` once a day and commits
+the database. That job refreshes shared feeds plus up to 400 priority
+targets so it stays inside the free Actions quota. A full sweep is the local
+command above.
+
 ## LinkedIn lookup on your Windows laptop
 
 This runs locally. It does not run in the deployed app. The lookup searches

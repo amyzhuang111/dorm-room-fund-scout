@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { track } from "@vercel/analytics";
 const FOUNDER_NAV = [
   { href: "/founder/discover", label: "Discover" },
+  { href: "/news", label: "News" },
   { href: "/hotspots?from=founder", label: "Hotspots" },
   { href: "/founder/shortlist", label: "Shortlist" },
   { href: "/startup/pipeline", label: "Pipeline" },
@@ -15,6 +16,7 @@ const FOUNDER_NAV = [
 
 const STARTUP_NAV = [
   { href: "/startup/discover", label: "Discover" },
+  { href: "/news", label: "News" },
   { href: "/hotspots?from=startup", label: "Hotspots" },
   { href: "/startup/shortlist", label: "Shortlist" },
   { href: "/startup/verification", label: "Verification" },

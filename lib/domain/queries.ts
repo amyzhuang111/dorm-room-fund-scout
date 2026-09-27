@@ -19,6 +19,8 @@ import { matchCandidate } from "./candidate-filter";
 import { presenceByUniversity, type DrfCampusPresence } from "./drf-presence";
 import { bestPrecollegeSignals, isPrecollegeSignalType, type PrecollegeSignalView } from "./precollege";
 import { bestProgramSignals, isProgramMatchStatus, isProgramSignalType, type ProgramSignalView } from "./program-signals";
+import { newsForProject } from "./news";
+import type { NewsListItem } from "./news-types";
 
 export type CoverageState = "not_scanned" | "partial" | "up_to_date" | "needs_attention";
 
@@ -701,6 +703,7 @@ export interface ProjectDetail extends CandidateSummary {
   manualNotes: ManualNote[];
   assessmentHistory: AssessmentHistoryRow[];
   hotspots: RelatedHotspot[];
+  news: NewsListItem[];
 }
 
 export function getProjectDetail(id: string): ProjectDetail | null {
@@ -795,6 +798,7 @@ export function getProjectDetail(id: string): ProjectDetail | null {
     manualNotes: listNotesFor("project", id),
     assessmentHistory: listAssessmentHistory(id),
     hotspots: relatedHotspotsForProject(id),
+    news: newsForProject(id),
   };
 }
 

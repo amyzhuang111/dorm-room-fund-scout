@@ -19,6 +19,8 @@
     "test:apify-linkedin": "tsx scripts/enrich/apify-linkedin.test.ts",
     "test:apify-linkedin-verify": "tsx scripts/enrich/apify-linkedin-verify.test.ts",
     "test:db-open": "tsx scripts/db/stale-wal.test.ts",
+    "news:fetch": "tsx scripts/news/fetch-news.ts",
+    "test:news": "tsx lib/domain/news-match.test.ts",
     "test:dedupe": "tsx scripts/db/dedupe.test.ts",
     "dedupe": "tsx scripts/db/dedupe.ts",
     "test:unknown-sweep": "tsx lib/domain/unknown-sweep.test.ts",
