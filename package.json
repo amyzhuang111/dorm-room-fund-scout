@@ -24,6 +24,7 @@
     "classify-enrollment": "tsx scripts/ingest/classify-enrollment.ts",
     "fetch-hotspot-founders": "tsx scripts/ingest/fetch-hotspot-founders.ts",
     "fetch-hotspot-members": "tsx scripts/ingest/fetch-hotspot-members.ts",
+    "fetch-scholar-cohorts": "tsx scripts/ingest/fetch-scholar-cohorts.ts",
     "test:hotspot-members": "tsx lib/domain/hotspot-members.test.ts",
     "test:class-years": "tsx lib/domain/class-year-funding.test.ts",
     "test:ask-query": "tsx lib/domain/ask-query.test.ts",
