@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import Sigma from "sigma";
 import { NodeCircleProgram } from "sigma/rendering";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
-import { NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
+import { NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { DIM_NODE, EDGE_COLOR, EDGE_CROSS, EDGE_HOVER, EDGE_HOVER_CROSS, NODE_SHAPE, campusKey, crossesCampus, nodeColor, screenSize } from "./network-style";
 
 export interface NetworkSigmaHandle {
@@ -36,6 +36,7 @@ const Z: Record<MapNodeType, number> = {
   person: 0,
   startup: 1,
   program: 1,
+  organization: 2,
   investor: 2,
   campus: 3,
 };
@@ -156,6 +157,7 @@ export function NetworkSigma({
         square: NodeSquareLightProgram,
         diamond: NodeDiamondProgram,
         hex: NodeHexProgram,
+        triangle: NodeTriangleProgram,
       } as never,
       nodeReducer: (node, data) => {
         const state = stateRef.current;

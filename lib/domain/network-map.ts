@@ -10,11 +10,12 @@ import forceAtlas2 from "graphology-layout-forceatlas2";
 import noverlap from "graphology-layout-noverlap";
 import { databasePath, getDb } from "../db/client";
 import { CAMPUSES } from "./campuses";
-import { hotspotGraphPatch } from "./hotspots";
+import type { HotspotSectionId, HotspotTier } from "./hotspot-model";
+import { hotspotGraphPatch, organizationMap } from "./hotspots";
 import { confirmedLinkedIn } from "./person-link";
 import { sectorLabel } from "./sectors";
 
-export type MapNodeType = "person" | "startup" | "campus" | "investor" | "program";
+export type MapNodeType = "person" | "startup" | "campus" | "investor" | "program" | "organization";
 export type MapEdgeType = "founded" | "co_founder" | "studied_at" | "invested_in" | "member_of" | "at_campus";
 
 export interface MapNode {
@@ -40,6 +41,14 @@ export interface MapNode {
   /** Stored linkedin.com/in path. Omitted when the person has neither a confirmed alias nor an unverified candidate. */
   linkedinUrl?: string;
   linkedinStatus?: "confirmed" | "unverified";
+  /** Directory tier for an organization node. Absent on every other type. */
+  orgTier?: HotspotTier;
+  /** Hotspot sections this organization appears in. */
+  orgSections?: HotspotSectionId[];
+  /** People with a stored link to this organization. */
+  linkedPeople?: number;
+  /** Linked people who also have a founder role on a startup in the map. */
+  linkedFounders?: number;
 }
 
 export interface MapEdge {
@@ -51,7 +60,7 @@ export interface MapEdge {
 export interface MapGraph {
   nodes: MapNode[];
   edges: MapEdge[];
-  counts: { people: number; startups: number; campuses: number; investors: number; programs: number };
+  counts: { people: number; startups: number; campuses: number; investors: number; programs: number; organizations: number };
 }
 
 const STAGE_RANK: Record<string, number> = {
@@ -73,6 +82,7 @@ interface SimNode {
   r: number;
   anchorX: number;
   anchorY: number;
+  layoutPx?: number;
 }
 
 /** Springs for ForceAtlas2. Campus affiliation is drawn, but it is not a spring — otherwise every student collapses onto a campus disc. */
@@ -85,7 +95,7 @@ const LAYOUT_WEIGHT: Record<MapEdgeType, number> = {
   at_campus: 0,
 };
 
-const LAYOUT_VERSION = "4";
+const LAYOUT_VERSION = "5";
 
 let cache: { stamp: string; graph: MapGraph } | null = null;
 
@@ -350,7 +360,10 @@ function assembleNetworkMap(): MapGraph {
     if (!list.includes(add.campusId)) list.push(add.campusId);
     campusesByCompany.set(add.id, list);
   }
-  for (const edge of hotspots.edges) addEdge(edge.source, edge.target, edge.type);
+  const founderIds = new Set<string>();
+  for (const ids of foundersByCompany.values()) for (const id of ids) founderIds.add(id);
+  const organizations = organizationMap({ personIds, startupIds, founderIds, universityIds: uniIds });
+  for (const edge of organizations.edges) addEdge(edge.source, edge.target, edge.type);
 
   const counts = new Map<string, number>();
   for (const campuses of campusesByPerson.values()) {
@@ -403,6 +416,7 @@ function assembleNetworkMap(): MapGraph {
     };
     node.r = radius(type, degree.get(id) ?? 0, tier, amount);
     simNodes.push(node);
+    return node;
   };
 
   for (const uni of universities) {
@@ -419,8 +433,9 @@ function assembleNetworkMap(): MapGraph {
     const campuses = campusesByCompany.get(program.id) ?? [];
     pushNode(program.id, "program", campuses, null, null);
   }
-  for (const program of hotspots.programs) {
-    pushNode(program.id, "program", program.campuses, null, null);
+  for (const org of organizations.nodes) {
+    const node = pushNode(org.id, "organization", org.campuses, org.tier, null);
+    node.layoutPx = org.tier === "S" ? 8 : org.tier === "A" ? 6 : org.tier === "B" ? 4.2 : org.tier === "C" ? 3.2 : 2.4;
   }
 
   const startupAnchor = new Map<string, { x: number; y: number }>();
@@ -456,8 +471,6 @@ function assembleNetworkMap(): MapGraph {
 
   const pos = new Map(simNodes.map((node) => [node.id, node]));
   const nodes: MapNode[] = [];
-  const founderIds = new Set<string>();
-  for (const ids of foundersByCompany.values()) for (const id of ids) founderIds.add(id);
 
   const emit = (node: Omit<MapNode, "year" | "founder" | "degree"> & { year?: number | null; founder?: boolean }) => {
     const at = pos.get(node.id);
@@ -549,21 +562,25 @@ function assembleNetworkMap(): MapGraph {
       potential: false,
     });
   }
-  for (const program of hotspots.programs) {
+  for (const org of organizations.nodes) {
     emit({
-      id: program.id,
-      type: "program",
-      label: program.label,
+      id: org.id,
+      type: "organization",
+      label: org.label,
       x: 0,
       y: 0,
-      r: 9,
-      campus: program.campuses[0] ?? null,
-      campuses: program.campuses.length > 1 ? program.campuses : undefined,
+      r: 8,
+      campus: org.campuses[0] ?? null,
+      campuses: org.campuses.length > 1 ? org.campuses : undefined,
       sector: null,
       tier: null,
       stage: null,
       enroll: null,
       potential: false,
+      orgTier: org.tier,
+      orgSections: org.sections,
+      linkedPeople: org.linkedPeople,
+      linkedFounders: org.linkedFounders,
     });
   }
   for (const [id, name] of investorNames) {
@@ -594,6 +611,7 @@ function assembleNetworkMap(): MapGraph {
       campuses: nodes.filter((node) => node.type === "campus").length,
       investors: nodes.filter((node) => node.type === "investor").length,
       programs: nodes.filter((node) => node.type === "program").length,
+      organizations: nodes.filter((node) => node.type === "organization").length,
     },
   };
   return graph;
@@ -639,6 +657,7 @@ const OVERLAP_PX: Record<MapNodeType, number> = {
   startup: 3.4,
   investor: 3.8,
   program: 3.6,
+  organization: 4,
   campus: 7,
 };
 
@@ -657,9 +676,11 @@ function separateOverlaps(g: Graph, simNodes: SimNode[]) {
   });
   const span = Math.max(maxX - minX, maxY - minY, 1);
   const unit = span / 980;
-  const byId = new Map(simNodes.map((node) => [node.id, node.type]));
+  const byId = new Map(simNodes.map((node) => [node.id, node]));
   g.forEachNode((id) => {
-    g.setNodeAttribute(id, "size", (OVERLAP_PX[byId.get(id) ?? "person"] ?? 2.6) * unit);
+    const sim = byId.get(id);
+    const px = sim?.layoutPx ?? OVERLAP_PX[sim?.type ?? "person"] ?? 2.6;
+    g.setNodeAttribute(id, "size", px * unit);
   });
   noverlap.assign(g, {
     maxIterations: 120,

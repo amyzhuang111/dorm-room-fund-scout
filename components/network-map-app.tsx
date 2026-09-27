@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { SECTION_SHORT, tierBandLabel, type HotspotSectionId } from "@/lib/domain/hotspot-model";
 import type { MapEdgeType, MapGraph, MapNode, MapNodeType } from "@/lib/domain/network-map";
 import type { NetworkFocus } from "@/lib/domain/network-focus";
 import { buildPersonLinkedInLookup } from "@/lib/domain/map-linkedin";
@@ -21,7 +22,11 @@ const NODE_TYPES: { id: MapNodeType; label: string }[] = [
   { id: "investor", label: "Investors" },
   { id: "campus", label: "Campuses" },
   { id: "program", label: "Clubs and labs" },
+  { id: "organization", label: "Organizations" },
 ];
+
+const ORG_SECTIONS: HotspotSectionId[] = ["existing_founders", "startups", "potential_founders"];
+type OrgTierMode = "all" | "1" | "12";
 
 const EDGE_TYPES: { id: MapEdgeType; label: string }[] = [
   { id: "founded", label: "Founded" },
@@ -52,6 +57,8 @@ interface Filters {
   peopleMode: PeopleMode;
   yearFrom: number | null;
   yearTo: number | null;
+  orgTier: OrgTierMode;
+  orgSections: HotspotSectionId[];
 }
 
 function campusesOf(node: MapNode): string[] {
@@ -117,6 +124,8 @@ export function NetworkMapApp() {
           peopleMode: "all",
           yearFrom: null,
           yearTo: null,
+          orgTier: "all",
+          orgSections: [...ORG_SECTIONS],
         };
         defaultsRef.current = initial;
         setFilters(initial);
@@ -154,12 +163,27 @@ export function NetworkMapApp() {
   }, [graph, query, hidden]);
 
   const visibleCounts = useMemo(() => {
-    const counts = { person: 0, startup: 0, campus: 0, investor: 0, program: 0 };
+    const counts = { person: 0, startup: 0, campus: 0, investor: 0, program: 0, organization: 0 };
     if (!graph) return counts;
     for (const node of graph.nodes) {
       if (!hidden.has(node.id)) counts[node.type] += 1;
     }
     return counts;
+  }, [graph, hidden]);
+
+  const topOrgs = useMemo(() => {
+    if (!graph) return [];
+    const rank: Record<string, number> = { S: 0, A: 1, B: 2, C: 3, D: 4 };
+    return graph.nodes
+      .filter((node) => node.type === "organization" && !hidden.has(node.id))
+      .sort(
+        (a, b) =>
+          (rank[a.orgTier ?? ""] ?? 9) - (rank[b.orgTier ?? ""] ?? 9) ||
+          (b.linkedFounders ?? 0) - (a.linkedFounders ?? 0) ||
+          (b.linkedPeople ?? 0) - (a.linkedPeople ?? 0) ||
+          a.label.localeCompare(b.label),
+      )
+      .slice(0, 6);
   }, [graph, hidden]);
 
   const yearChoices = useMemo(() => {
@@ -219,12 +243,29 @@ export function NetworkMapApp() {
           {filtersOpen ? "Hide filters" : "Filters"}
         </button>
         <p className="text-[11px] leading-snug text-neutral-700" style={{ fontVariantNumeric: "tabular-nums" }}>
-          {visibleCounts.person.toLocaleString()} people · {visibleCounts.startup.toLocaleString()} startups · {visibleCounts.investor} investors
+          {visibleCounts.person.toLocaleString()} people · {visibleCounts.startup.toLocaleString()} startups · {visibleCounts.investor} investors · {visibleCounts.organization} organizations
         </p>
         <label className="inline-flex items-center gap-1.5 rounded-md border border-black/15 bg-white px-2 py-1 text-[11px] text-black shadow-sm">
           <input type="checkbox" className="accent-black" checked={showIsolates} onChange={(event) => setShowIsolates(event.target.checked)} />
           Show unlinked
         </label>
+        {topOrgs.length > 0 && (
+          <div className="mt-1 w-full rounded-md border border-black/10 bg-white/95 px-2 py-1.5 text-[11px] text-black shadow-sm">
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-neutral-600">Top organizations</p>
+            <ul className="mt-1 space-y-0.5">
+              {topOrgs.map((node) => (
+                <li key={node.id}>
+                  <button type="button" className="flex w-full items-baseline justify-between gap-2 text-left hover:underline" onClick={() => choose(node.id)}>
+                    <span className="truncate">{node.label}</span>
+                    <span className="shrink-0 text-neutral-600">
+                      {node.orgTier} · {node.linkedFounders ?? 0}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
       {filtersOpen && filters && graph && (
@@ -304,9 +345,38 @@ export function NetworkMapApp() {
                   key={item.id}
                   label={item.label}
                   color={NODE_FILL[item.id]}
-                  shape={item.id === "startup" ? "square" : item.id === "investor" ? "diamond" : item.id === "program" ? "hex" : "circle"}
+                  shape={item.id === "startup" ? "square" : item.id === "investor" ? "diamond" : item.id === "program" ? "hex" : item.id === "organization" ? "triangle" : "circle"}
                   checked={filters.nodeTypes.includes(item.id)}
                   onChange={() => setFilters({ ...filters, nodeTypes: toggle(filters.nodeTypes, item.id) })}
+                />
+              ))}
+            </FilterGroup>
+            <FilterGroup title="Organization tier">
+              {(
+                [
+                  ["all", "All"],
+                  ["1", "Tier 1"],
+                  ["12", "Tier 1–2"],
+                ] as const
+              ).map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  className={`mr-1 mt-1 rounded border px-1.5 py-0.5 text-[11px] font-medium ${filters.orgTier === id ? "border-black bg-black text-white" : "border-black/20 bg-white text-black"}`}
+                  onClick={() => setFilters({ ...filters, orgTier: id })}
+                >
+                  {label}
+                </button>
+              ))}
+              <p className="mt-1 text-[10px] leading-snug text-neutral-600">Tier 1 is S. Tier 1–2 is S and A. Directory tiers do not change Founder Signal.</p>
+            </FilterGroup>
+            <FilterGroup title="Organization category">
+              {ORG_SECTIONS.map((section) => (
+                <Check
+                  key={section}
+                  label={SECTION_SHORT[section]}
+                  checked={filters.orgSections.includes(section)}
+                  onChange={() => setFilters({ ...filters, orgSections: toggle(filters.orgSections, section) })}
                 />
               ))}
             </FilterGroup>
@@ -374,7 +444,7 @@ export function NetworkMapApp() {
             }
             if (event.key === "Escape") setQuery("");
           }}
-          placeholder="Search people, startups, investors…"
+          placeholder="Search people, startups, organizations…"
           aria-label="Search the network"
           className="w-full rounded-md border border-black/20 bg-white px-3 py-2 text-sm text-black shadow-sm outline-none placeholder:text-neutral-500 focus:border-black"
         />
@@ -414,7 +484,8 @@ export function NetworkMapApp() {
           <LegendItem shape="diamond" color="#171717" label="Investor" />
           <LegendItem shape="circle" color="#171717" label="Campus" />
           <LegendItem shape="hex" color="#171717" label="Club / lab" />
-          <span className="text-neutral-600">Color = campus · line = link · amber = cross-campus</span>
+          <LegendItem shape="triangle" color={NODE_FILL.organization} label="Organization" />
+          <span className="text-neutral-600">Color = campus · triangle sized by tier · line = link · amber = cross-campus</span>
         </div>
       </div>
 
@@ -425,13 +496,15 @@ export function NetworkMapApp() {
         >
           <div className="flex items-start justify-between gap-2 border-b border-black/10 px-3 py-2">
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-neutral-600">{selectedNode.type}</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-neutral-600">{selectedNode.type === "organization" ? "Organization" : selectedNode.type}</p>
               <h2 className="text-base font-semibold text-black">{focus?.name ?? selectedNode.label}</h2>
               <p className="mt-0.5 text-xs text-neutral-700">
                 {[
                   selectedNode.year ? `Class of ${selectedNode.year}` : null,
+                  selectedNode.orgTier ? tierBandLabel(selectedNode.orgTier) : null,
                   selectedNode.sector,
                   selectedNode.stage,
+                  selectedNode.type === "organization" && selectedNode.linkedFounders != null ? `${selectedNode.linkedFounders} founders` : null,
                   selectedNode.degree ? `${selectedNode.degree} links` : null,
                 ]
                   .filter(Boolean)
@@ -559,6 +632,21 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
       if (!show) hidden.add(node.id);
       continue;
     }
+    if (node.type === "organization") {
+      const campuses = campusesOf(node);
+      const campusHit = campuses.length === 0 ? campusAll : campusAll || campuses.some((id) => filters.campuses.includes(id));
+      const tierHit = filters.orgTier === "all" || node.orgTier === "S" || (filters.orgTier === "12" && node.orgTier === "A");
+      const sections = node.orgSections ?? [];
+      const sectionAll = filters.orgSections.length === ORG_SECTIONS.length;
+      const sectionHit = sectionAll || sections.some((section) => filters.orgSections.includes(section));
+      let show = filters.nodeTypes.includes("organization") && campusHit && tierHit && sectionHit;
+      if (show && !showIsolates && (node.linkedPeople ?? 0) === 0) show = false;
+      if (show && narrowed) {
+        show = graph.edges.some((edge) => edge.type === "member_of" && (edge.source === node.id || edge.target === node.id) && (peopleOk.has(edge.source) || peopleOk.has(edge.target)));
+      }
+      if (!show) hidden.add(node.id);
+      continue;
+    }
     let show = filters.nodeTypes.includes("investor");
     if (show && (!campusAll || narrowed)) {
       show = graph.edges.some((edge) => edge.type === "invested_in" && edge.source === node.id && startupOk.has(edge.target));
@@ -588,7 +676,7 @@ function Check({
   checked: boolean;
   onChange: () => void;
   color?: string;
-  shape?: "circle" | "square" | "diamond" | "hex";
+  shape?: "circle" | "square" | "diamond" | "hex" | "triangle";
 }) {
   return (
     <label className="flex items-center gap-2 text-xs text-black">
@@ -634,7 +722,7 @@ function ZoomButton({ label, onClick, children }: { label: string; onClick: () =
   );
 }
 
-function LegendItem({ shape, color, label }: { shape: "circle" | "square" | "diamond" | "hex"; color: string; label: string }) {
+function LegendItem({ shape, color, label }: { shape: "circle" | "square" | "diamond" | "hex" | "triangle"; color: string; label: string }) {
   return (
     <span className="inline-flex items-center gap-1">
       <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
@@ -642,6 +730,7 @@ function LegendItem({ shape, color, label }: { shape: "circle" | "square" | "dia
         {shape === "square" && <rect x="1.5" y="1.5" width="9" height="9" rx="1" fill={color} />}
         {shape === "diamond" && <polygon points="6,1 11,6 6,11 1,6" fill={color} />}
         {shape === "hex" && <polygon points="6,1 10.2,3.5 10.2,8.5 6,11 1.8,8.5 1.8,3.5" fill={color} />}
+        {shape === "triangle" && <polygon points="6,1.2 11,10.6 1,10.6" fill={color} />}
       </svg>
       {label}
     </span>

@@ -7,8 +7,8 @@ import { CAMPUSES } from "./campuses";
 import { ownWebsite, publicLink } from "./company-link";
 import { assembleCompanyProfile, displayedFunding, type CompanyFactRecord } from "./company-profile";
 import { enrollmentBadge } from "./founder-status";
-import { hotspotGroupByMapId, hotspotGroups, personIdsForPlace, projectIdsForPlace, relatedHotspotsForPerson, relatedHotspotsForProject } from "./hotspots";
-import { bestCard, hotspotHref, samePlace } from "./hotspot-model";
+import { directoryLabel, hotspotGroupByMapId, hotspotGroups, personIdsForPlace, projectIdsForPlace, relatedHotspotsForPerson, relatedHotspotsForProject } from "./hotspots";
+import { bestCard, hotspotHref, samePlace, SECTION_SHORT, tierBandLabel } from "./hotspot-model";
 import { bestPersonLink, linkedinAction, type LinkedInAction, type PersonLinkTarget } from "./person-link";
 import { assembleProfileLinks, type ProfileIconLink } from "./profile-links";
 
@@ -24,7 +24,7 @@ export interface FocusLink {
 
 export interface NetworkFocus {
   id: string;
-  kind: "person" | "startup" | "campus" | "investor" | "program";
+  kind: "person" | "startup" | "campus" | "investor" | "program" | "organization";
   name: string;
   subtitle: string | null;
   href: string | null;
@@ -418,13 +418,14 @@ function hotspotFocus(id: string): NetworkFocus | null {
   const group = hotspotGroupByMapId(id);
   if (!group) return null;
   const card = bestCard(group.cards);
-  const people = relatedPeople(group.placeKey);
+  const ranked = relatedPeople(group.placeKey);
   const startups = relatedStartups(group.placeKey);
+  const sections = [...new Set(group.cards.map((item) => item.section))];
   return {
     id,
-    kind: "program",
-    name: group.label,
-    subtitle: [...new Set(group.cards.map((item) => item.campus))].join(" · "),
+    kind: "organization",
+    name: directoryLabel(group.cards),
+    subtitle: card.type || null,
     href: hotspotHref(card),
     hrefLabel: "Open hotspot",
     website: card.url ? { url: card.url, label: "Directory link" } : null,
@@ -434,13 +435,13 @@ function hotspotFocus(id: string): NetworkFocus | null {
     hotspotHref: hotspotHref(card),
     hotspotLabel: "Open hotspot",
     facts: [
-      { label: "Tier", value: card.tier, sourceUrl: card.url || null, excerpt: card.whatYoullFind },
-      { label: "What you'll find", value: card.whatYoullFind, sourceUrl: card.url || null, excerpt: null },
-      { label: "How to get in", value: card.howToGetIn, sourceUrl: null, excerpt: null },
-      { label: "When", value: card.when, sourceUrl: null, excerpt: null },
+      { label: "Tier", value: tierBandLabel(card.tier), sourceUrl: card.url || null, excerpt: card.whatYoullFind },
+      { label: "Category", value: sections.map((section) => SECTION_SHORT[section]).join(" · "), sourceUrl: null, excerpt: null },
+      { label: "Campus", value: [...new Set(group.cards.map((item) => item.campus))].join(" · "), sourceUrl: null, excerpt: null },
     ].filter((fact) => fact.value),
     links: [
-      { heading: "People", items: people },
+      { heading: "Founders", items: ranked.founders },
+      { heading: "Potential founders", items: ranked.potential },
       { heading: "Startups", items: startups },
     ].filter((item) => item.items.length > 0),
   };
@@ -452,12 +453,30 @@ function directoryLink(id: string, name: string): { href: string } | null {
   return { href: hotspotHref(bestCard(group.cards)) };
 }
 
-function relatedPeople(placeKey: string): FocusLink[] {
+function relatedPeople(placeKey: string): { founders: FocusLink[]; potential: FocusLink[] } {
   const db = getDb();
-  const ids = personIdsForPlace(placeKey).slice(0, 24);
-  if (!ids.length) return [];
-  const rows = db.prepare(`SELECT id, name FROM people WHERE id IN (${ids.map(() => "?").join(",")}) ORDER BY name`).all(...ids) as { id: string; name: string }[];
-  return rows.map((row) => ({ id: row.id, name: row.name, role: null, round: null, sourceUrl: null }));
+  const ids = personIdsForPlace(placeKey);
+  if (!ids.length) return { founders: [], potential: [] };
+  const rows = db
+    .prepare(
+      `SELECT pe.id, pe.name, pe.founder_status,
+         EXISTS (
+           SELECT 1 FROM person_project_roles ppr
+           JOIN projects p ON p.id = ppr.project_id
+           WHERE ppr.person_id = pe.id AND p.kind = 'company' AND p.is_investable_candidate = 1 AND ppr.role LIKE '%founder%'
+         ) AS has_startup
+       FROM people pe WHERE pe.id IN (${ids.map(() => "?").join(",")})`
+    )
+    .all(...ids) as { id: string; name: string; founder_status: string | null; has_startup: number }[];
+  const founders: FocusLink[] = [];
+  const potential: FocusLink[] = [];
+  const ranked = [...rows].sort((a, b) => a.name.localeCompare(b.name));
+  for (const row of ranked) {
+    const link = { id: row.id, name: row.name, role: null, round: null, sourceUrl: null };
+    if (row.has_startup === 1) founders.push({ ...link, role: "Founder" });
+    else if (row.founder_status === "potential") potential.push({ ...link, role: "Potential founder" });
+  }
+  return { founders: founders.slice(0, 40), potential: potential.slice(0, 40) };
 }
 
 function relatedStartups(placeKey: string): FocusLink[] {
