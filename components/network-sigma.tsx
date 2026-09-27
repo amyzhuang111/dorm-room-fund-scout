@@ -6,7 +6,7 @@ import Sigma from "sigma";
 import { NodeCircleProgram } from "sigma/rendering";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
-import { DIM_NODE, EDGE_CROSS, EDGE_DIM, EDGE_HOVER, EDGE_HOVER_PX, EDGE_PX, NODE_SHAPE, campusKey, campusSwatches, crossesCampus, edgeTint, labelMinSize, nodeColor, restingLabelIds, screenSize } from "./network-style";
+import { DIM_NODE, EDGE_CROSS, EDGE_DIM, EDGE_HOVER, EDGE_HOVER_PX, EDGE_PX, NODE_SHAPE, campusKey, campusSwatches, crossesCampus, edgeTint, hoverLabelBox, labelDegreeFloor, nodeColor, restingLabelIds, screenLabelTier, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -76,6 +76,7 @@ export function NetworkSigma({
   const onSelectRef = useRef(onSelect);
   const onReadyRef = useRef(onReady);
   const hiddenRef = useRef(hidden);
+  const recomputeLabelsRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     onSelectRef.current = onSelect;
@@ -90,6 +91,7 @@ export function NetworkSigma({
     stateRef.current.selected = selected;
     const renderer = rendererRef.current;
     if (!renderer) return;
+    recomputeLabelsRef.current();
     renderer.refresh();
     if (hiddenChanged) frameVisible(renderer, hidden);
   }, [hidden, edgeTypes, selected]);
@@ -105,7 +107,29 @@ export function NetworkSigma({
       else neighbors.set(a, new Set([b]));
     };
 
-    const labels = restingLabelIds(graph.nodes);
+    const suppressed = restingLabelIds(graph.nodes).suppress;
+    const measureCanvas = document.createElement("canvas");
+    const measureCtx = measureCanvas.getContext("2d");
+    const measure = (text: string, fontSize: number) => {
+      if (!measureCtx) return text.length * fontSize * 0.56;
+      measureCtx.font = `500 ${fontSize}px Satoshi, Arial, sans-serif`;
+      return measureCtx.measureText(text).width;
+    };
+    const placed = { ids: new Set<string>() };
+    const labelMeta: { id: string; tier: number; degree: number; text: string; fullText: string; marker: boolean; anchor: boolean; fontSize: number }[] = [];
+    for (const node of graph.nodes) {
+      const anchor = node.anchor === true;
+      labelMeta.push({
+        id: node.id,
+        tier: screenLabelTier(false, anchor, node.type),
+        degree: node.degree,
+        text: truncateMapLabel(node.label, false, anchor),
+        fullText: node.label,
+        marker: false,
+        anchor,
+        fontSize: anchor ? 12 : 11,
+      });
+    }
     const colors = new Map(campusSwatches(graph.nodes).map((swatch) => [swatch.id, swatch.color]));
     const campusOf = new Map(graph.nodes.map((node) => [node.id, campusKey(node)]));
     const primaryCampus = new Map(graph.nodes.map((node) => [node.id, node.campus]));
@@ -141,6 +165,16 @@ export function NetworkSigma({
         regionId: region.id,
         zIndex: 4,
       });
+      labelMeta.push({
+        id,
+        tier: screenLabelTier(true, true, "campus"),
+        degree: 0,
+        text: truncateMapLabel(region.label, true, true),
+        fullText: region.fullLabel,
+        marker: true,
+        anchor: true,
+        fontSize: 13,
+      });
     }
     for (const edge of graph.edges) {
       if (edge.source === edge.target || !g.hasNode(edge.source) || !g.hasNode(edge.target)) continue;
@@ -156,7 +190,6 @@ export function NetworkSigma({
       link(edge.target, edge.source);
     }
 
-    const view: { renderer: Sigma<NodeAttr, EdgeAttr> | null } = { renderer: null };
     const renderer = new Sigma<NodeAttr, EdgeAttr>(g, container, {
       allowInvalidContainer: true,
       enableCameraRotation: false,
@@ -193,21 +226,18 @@ export function NetworkSigma({
         if (data.marker) {
           const campuses = regionCampuses.get(node) ?? [];
           if (campuses.length > 0 && campuses.every((id) => state.hidden.has(id))) return { ...data, hidden: true };
+          if (!placed.ids.has(node)) return { ...data, label: undefined, forceLabel: false, zIndex: 6 };
           return { ...data, forceLabel: true, label: data.label, zIndex: 6 };
         }
         if (state.hidden.has(node)) return { ...data, hidden: true };
         const active = state.hovered ?? state.selected;
-        const ratio = view.renderer?.getCamera().ratio ?? 1;
-        const inShow = labels.show.has(node);
-        const suppressed = labels.suppress.has(node);
-        const fitted = ratio >= 0.7;
-        const showLabel = node === active || inShow || (!fitted && !suppressed && data.size >= labelMinSize(ratio));
-        const labeled = showLabel ? { ...data, forceLabel: !active && inShow } : { ...data, label: undefined, forceLabel: false };
-        if (!active) return labeled;
-        if (node === active) return { ...labeled, label: data.fullLabel, forceLabel: true, highlighted: true, zIndex: 5 };
+        if (node === active && state.hovered === node) return { ...data, label: undefined, forceLabel: false, highlighted: true, zIndex: 5 };
+        if (!placed.ids.has(node)) return { ...data, label: undefined, forceLabel: false };
+        if (node === active) return { ...data, label: data.fullLabel, forceLabel: true, highlighted: true, zIndex: 5 };
+        if (!active) return { ...data, forceLabel: true, label: data.label };
         const near = neighbors.get(active);
-        if (near?.has(node)) return { ...data, label: !suppressed && data.size >= 1.7 ? data.fullLabel : undefined, forceLabel: false, zIndex: 4 };
-        return { ...data, color: DIM_NODE, label: undefined, zIndex: 0, forceLabel: false };
+        if (data.kind === "campus" || near?.has(node)) return { ...data, forceLabel: true, label: data.label, zIndex: 4 };
+        return { ...data, color: DIM_NODE, label: undefined, forceLabel: false, zIndex: 0 };
       },
       edgeReducer: (edge, data) => {
         const state = stateRef.current;
@@ -225,26 +255,74 @@ export function NetworkSigma({
       },
     });
 
-    view.renderer = renderer;
-    let labelBucket = -1;
-    const refreshLabels = () => {
+    const recomputeLabels = () => {
+      const { hidden, hovered, selected } = stateRef.current;
+      const active = hovered ?? selected;
       const ratio = renderer.getCamera().ratio;
-      const bucket = ratio >= 0.7 ? 3 : ratio >= 0.36 ? 2 : ratio >= 0.16 ? 1 : 0;
-      if (bucket === labelBucket) return;
-      labelBucket = bucket;
+      const floor = labelDegreeFloor(ratio);
+      const dims = renderer.getDimensions();
+      const margin = 96;
+      const screen: ScreenLabel[] = [];
+      const reserved = [];
+      const near = active ? neighbors.get(active) : undefined;
+      for (const meta of labelMeta) {
+        if (meta.marker) {
+          const campuses = regionCampuses.get(meta.id) ?? [];
+          if (campuses.length > 0 && campuses.every((id) => hidden.has(id))) continue;
+        } else if (hidden.has(meta.id)) continue;
+        if (suppressed.has(meta.id) && meta.id !== active) continue;
+        const display = renderer.getNodeDisplayData(meta.id);
+        if (!display || display.hidden) continue;
+        const at = renderer.framedGraphToViewport(display);
+        const nodeSize = renderer.scaleSize(display.size);
+        if (meta.id === active && hovered) {
+          reserved.push(hoverLabelBox(at.x, at.y, nodeSize, measure(meta.fullText, 11), 11));
+          continue;
+        }
+        if (meta.tier === 1 && meta.degree < floor && meta.id !== active) continue;
+        if (active && meta.tier === 1 && meta.id !== active && !near?.has(meta.id)) continue;
+        if (at.x < -margin || at.y < -margin || at.x > dims.width + margin || at.y > dims.height + margin) continue;
+        const selectedLabel = meta.id === active;
+        screen.push({
+          id: meta.id,
+          tier: selectedLabel ? 4 : meta.tier,
+          degree: meta.degree,
+          text: meta.text,
+          x: at.x,
+          y: at.y,
+          nodeSize,
+          marker: meta.marker,
+          anchor: meta.anchor,
+          fontSize: meta.fontSize,
+        });
+      }
+      const next = selectVisibleLabels(screen, measure, reserved);
+      if (next.size === placed.ids.size && [...next].every((id) => placed.ids.has(id))) return;
+      placed.ids = next;
       renderer.refresh();
     };
-    renderer.getCamera().on("updated", refreshLabels);
-    const refresh = () => renderer.refresh();
+    recomputeLabelsRef.current = recomputeLabels;
+    let labelFrame = 0;
+    const scheduleLabels = () => {
+      if (labelFrame) return;
+      labelFrame = requestAnimationFrame(() => {
+        labelFrame = 0;
+        recomputeLabels();
+      });
+    };
+    renderer.getCamera().on("updated", scheduleLabels);
+    void document.fonts?.ready.then(() => {
+      if (rendererRef.current === renderer) scheduleLabels();
+    });
     renderer.on("enterNode", ({ node }) => {
       stateRef.current.hovered = node;
       container.style.cursor = "pointer";
-      refresh();
+      scheduleLabels();
     });
     renderer.on("leaveNode", ({ node }) => {
       if (stateRef.current.hovered === node) stateRef.current.hovered = null;
       container.style.cursor = "grab";
-      refresh();
+      scheduleLabels();
     });
     renderer.on("clickNode", ({ node }) => {
       if (g.getNodeAttribute(node, "marker")) return;
@@ -267,7 +345,9 @@ export function NetworkSigma({
 
     return () => {
       cancelAnimationFrame(frame);
-      renderer.getCamera().removeListener("updated", refreshLabels);
+      if (labelFrame) cancelAnimationFrame(labelFrame);
+      renderer.getCamera().removeListener("updated", scheduleLabels);
+      recomputeLabelsRef.current = () => {};
       onReadyRef.current(null);
       renderer.kill();
       rendererRef.current = null;

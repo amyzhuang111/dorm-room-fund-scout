@@ -150,8 +150,9 @@ type LabelCandidate = {
 /**
  * One label per entity (exact name, or the same name with a campus prefix such
  * as "MIT delta v" and "delta v"). Campus anchors outrank organization anchors,
- * which outrank the other default labels. Overlapping boxes keep the higher
- * priority label.
+ * which outrank the other default labels. The fitted-view boxes here are only
+ * a fallback. The map itself places labels in screen pixels on every camera
+ * change, so nothing overlaps at any zoom.
  */
 export function restingLabelIds(nodes: LabelCandidate[]): RestingLabels {
   const prefixes = campusPrefixes(nodes);
@@ -282,12 +283,108 @@ function boxesOverlap(a: LabelBox, b: LabelBox): boolean {
   return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
 }
 
-/** Lowest node size that may keep a label at this camera ratio. 1 is the fitted view; smaller ratios are zoomed in. */
-export function labelMinSize(cameraRatio: number): number {
-  if (cameraRatio >= 0.7) return 2.85;
-  if (cameraRatio >= 0.36) return 2.0;
-  if (cameraRatio >= 0.16) return 1.48;
-  return 1.12;
+/** 3 = region, 2 = campus, 1 = every other node (ordered by degree). */
+export function screenLabelTier(marker: boolean, anchor: boolean, type: string): number {
+  if (marker) return 3;
+  if (anchor && type === "campus") return 2;
+  return 1;
+}
+
+/** Same truncation drawHaloLabel uses, so the collision box matches the glyphs. */
+export function truncateMapLabel(text: string, marker: boolean, anchor: boolean): string {
+  const limit = marker ? 18 : anchor ? 22 : 28;
+  if (text.length <= limit) return text;
+  return `${text.slice(0, limit - 1)}…`;
+}
+
+/**
+ * How connected a non-campus node must be before its label may compete.
+ * The fitted view (ratio near 1) stays sparse. Zooming in (smaller ratio)
+ * lowers the bar, and the collision pass still drops anything that would overlap.
+ */
+export function labelDegreeFloor(cameraRatio: number): number {
+  if (cameraRatio >= 0.7) return 40;
+  if (cameraRatio >= 0.45) return 16;
+  if (cameraRatio >= 0.28) return 8;
+  if (cameraRatio >= 0.14) return 3;
+  return 1;
+}
+
+export interface ScreenLabel {
+  id: string;
+  tier: number;
+  degree: number;
+  text: string;
+  x: number;
+  y: number;
+  nodeSize: number;
+  marker: boolean;
+  anchor: boolean;
+  fontSize: number;
+}
+
+/** Hover card drawn to the right of the active node. Other labels must stay clear of it. */
+export function hoverLabelBox(x: number, y: number, nodeSize: number, textWidth: number, fontSize: number): LabelBox {
+  const left = x + nodeSize + 8;
+  const top = y - fontSize / 2 - 4;
+  return { left: left - 2, top: top - 2, right: left + textWidth + 14, bottom: top + fontSize + 10 };
+}
+
+/**
+ * Greedy screen-space placement. Higher tiers win (regions, then campuses,
+ * then high-degree nodes). A label that would touch one already kept is omitted.
+ */
+export function selectVisibleLabels(labels: ScreenLabel[], measure: (text: string, fontSize: number) => number, reserved: LabelBox[] = []): Set<string> {
+  const ranked = [...labels].sort((a, b) => b.tier - a.tier || b.degree - a.degree || a.id.localeCompare(b.id));
+  const cell = 72;
+  const grid = new Map<string, LabelBox[]>();
+  const index = (box: LabelBox) => {
+    const x0 = Math.floor(box.left / cell);
+    const x1 = Math.floor(box.right / cell);
+    const y0 = Math.floor(box.top / cell);
+    const y1 = Math.floor(box.bottom / cell);
+    for (let x = x0; x <= x1; x++) {
+      for (let y = y0; y <= y1; y++) {
+        const key = `${x}:${y}`;
+        const list = grid.get(key);
+        if (list) list.push(box);
+        else grid.set(key, [box]);
+      }
+    }
+  };
+  const hits = (box: LabelBox): boolean => {
+    const x0 = Math.floor(box.left / cell);
+    const x1 = Math.floor(box.right / cell);
+    const y0 = Math.floor(box.top / cell);
+    const y1 = Math.floor(box.bottom / cell);
+    for (let x = x0; x <= x1; x++) {
+      for (let y = y0; y <= y1; y++) {
+        const list = grid.get(`${x}:${y}`);
+        if (!list) continue;
+        for (const other of list) if (boxesOverlap(other, box)) return true;
+      }
+    }
+    return false;
+  };
+  for (const box of reserved) index(box);
+  const show = new Set<string>();
+  for (const label of ranked) {
+    const box = screenLabelBox(label, measure);
+    if (hits(box)) continue;
+    index(box);
+    show.add(label.id);
+  }
+  return show;
+}
+
+function screenLabelBox(label: ScreenLabel, measure: (text: string, fontSize: number) => number): LabelBox {
+  const width = Math.max(8, measure(label.text, label.fontSize)) + 10;
+  const height = label.fontSize + 8;
+  const x = label.x;
+  const y = label.marker ? label.y : label.anchor ? label.y - label.nodeSize - 2 : label.y + label.nodeSize + 2;
+  if (label.marker) return { left: x - width / 2, top: y - height / 2, right: x + width / 2, bottom: y + height / 2 };
+  if (label.anchor) return { left: x - width / 2, top: y - height, right: x + width / 2, bottom: y + 2 };
+  return { left: x - width / 2, top: y - 2, right: x + width / 2, bottom: y + height };
 }
 
 function clamp(value: number, min: number, max: number): number {
