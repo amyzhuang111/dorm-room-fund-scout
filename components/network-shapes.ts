@@ -28,10 +28,11 @@ export const drawLightHover: NodeHoverDrawingFunction = (context, data, settings
   context.strokeStyle = "#111111";
   context.lineWidth = 1;
   context.stroke();
-  if (!data.label) return;
+  const text = (data as { fullLabel?: string }).fullLabel || data.label;
+  if (!text) return;
   const size = settings.labelSize;
   context.font = `${settings.labelWeight} ${size}px ${settings.labelFont}`;
-  const width = context.measureText(data.label).width;
+  const width = context.measureText(text).width;
   const x = data.x + data.size + 8;
   const y = data.y - size / 2 - 4;
   const boxW = width + 12;
@@ -45,7 +46,7 @@ export const drawLightHover: NodeHoverDrawingFunction = (context, data, settings
   context.stroke();
   context.fillStyle = "#111111";
   context.font = LABEL_FONT;
-  context.fillText(data.label, x + 6, data.y + size / 3);
+  context.fillText(text, x + 6, data.y + size / 3);
 };
 
 type SquareArgs = ConstructorParameters<typeof NodeSquareProgram>;

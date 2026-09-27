@@ -6,7 +6,7 @@ import Sigma from "sigma";
 import { NodeCircleProgram } from "sigma/rendering";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
-import { DIM_NODE, EDGE_CROSS, EDGE_DIM, EDGE_HOVER, EDGE_HOVER_PX, EDGE_PX, NODE_SHAPE, campusKey, campusSwatches, crossesCampus, edgeTint, labelMinSize, nodeColor, screenSize } from "./network-style";
+import { DIM_NODE, EDGE_CROSS, EDGE_DIM, EDGE_HOVER, EDGE_HOVER_PX, EDGE_PX, NODE_SHAPE, campusKey, campusSwatches, crossesCampus, edgeTint, labelMinSize, nodeColor, restingLabelIds, screenSize } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -19,6 +19,7 @@ type NodeAttr = {
   y: number;
   size: number;
   label: string;
+  fullLabel: string;
   color: string;
   type: string;
   kind: MapNodeType;
@@ -102,13 +103,7 @@ export function NetworkSigma({
       else neighbors.set(a, new Set([b]));
     };
 
-    const prominent = new Set(
-      [...graph.nodes]
-        .filter((node) => !node.anchor)
-        .sort((a, b) => b.degree - a.degree || a.id.localeCompare(b.id))
-        .slice(0, 15)
-        .map((node) => node.id),
-    );
+    const labels = restingLabelIds(graph.nodes);
     const colors = new Map(campusSwatches(graph.nodes).map((swatch) => [swatch.id, swatch.color]));
     const campusOf = new Map(graph.nodes.map((node) => [node.id, campusKey(node)]));
     const primaryCampus = new Map(graph.nodes.map((node) => [node.id, node.campus]));
@@ -118,6 +113,7 @@ export function NetworkSigma({
         y: node.y,
         size: screenSize(node),
         label: node.label,
+        fullLabel: node.label,
         color: nodeColor(node, colors),
         type: NODE_SHAPE[node.type],
         kind: node.type,
@@ -154,8 +150,8 @@ export function NetworkSigma({
       labelSize: 11,
       labelWeight: "500",
       labelColor: { color: "#141414" },
-      labelDensity: 1,
-      labelGridCellSize: 92,
+      labelDensity: 0.7,
+      labelGridCellSize: 120,
       labelRenderedSizeThreshold: 0,
       minEdgeThickness: EDGE_PX,
       antiAliasingFeather: 0.55,
@@ -176,13 +172,15 @@ export function NetworkSigma({
         if (state.hidden.has(node)) return { ...data, hidden: true };
         const active = state.hovered ?? state.selected;
         const ratio = view.renderer?.getCamera().ratio ?? 1;
-        const prominentLabel = data.anchor || prominent.has(node);
-        const showLabel = node === active || prominentLabel || data.size >= labelMinSize(ratio);
-        const labeled = showLabel ? { ...data, forceLabel: data.anchor && !active } : { ...data, label: undefined, forceLabel: false };
+        const inShow = labels.show.has(node);
+        const suppressed = labels.suppress.has(node);
+        const fitted = ratio >= 0.7;
+        const showLabel = node === active || inShow || (!fitted && !suppressed && data.size >= labelMinSize(ratio));
+        const labeled = showLabel ? { ...data, forceLabel: !active && inShow } : { ...data, label: undefined, forceLabel: false };
         if (!active) return labeled;
-        if (node === active) return { ...labeled, label: data.label, forceLabel: true, highlighted: true, zIndex: 5 };
+        if (node === active) return { ...labeled, label: data.fullLabel, forceLabel: true, highlighted: true, zIndex: 5 };
         const near = neighbors.get(active);
-        if (near?.has(node)) return { ...data, label: data.size >= 1.7 ? data.label : undefined, forceLabel: false, zIndex: 4 };
+        if (near?.has(node)) return { ...data, label: !suppressed && data.size >= 1.7 ? data.fullLabel : undefined, forceLabel: false, zIndex: 4 };
         return { ...data, color: DIM_NODE, label: undefined, zIndex: 0, forceLabel: false };
       },
       edgeReducer: (edge, data) => {

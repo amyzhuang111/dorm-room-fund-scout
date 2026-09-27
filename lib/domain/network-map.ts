@@ -1,8 +1,9 @@
 // Full evidence graph for the Network map. Nodes and edges come from
 // affiliations, founder roles, program memberships, sourced investor facts,
 // and confirmed DRF portfolio matches. Positions are one cached ForceAtlas2
-// pass: nodes start near their campus or hub organization, then linLog
-// attraction and moderate gravity let shared edges pull clusters into a web.
+// pass: every campus and hub starts on the same circle, then linLog
+// attraction and moderate gravity pull shared edges into a round cloud.
+// The camera fits that cloud. Nothing is clamped onto a rectangle.
 
 import fs from "node:fs";
 import Graph from "graphology";
@@ -103,7 +104,7 @@ const LAYOUT_WEIGHT: Record<MapEdgeType, number> = {
   at_campus: 0.4,
 };
 
-const LAYOUT_VERSION = "12";
+const LAYOUT_VERSION = "13";
 
 /** The owner is dropping this organization. It must not seed a cluster. */
 function droppedOrganization(label: string): boolean {
@@ -641,8 +642,6 @@ function assembleNetworkMap(): MapGraph {
 
 /** Organizations this connected seed their own cluster (YC, Mayfield) instead of sitting inside a campus. */
 const HUB_DEGREE = 36;
-/** Fitted view is a wide viewport. The layout is stretched toward this aspect so both axes fill it. */
-const LAYOUT_ASPECT = 1.7;
 
 /**
  * One global ForceAtlas2 pass. Nodes are seeded on their campus or hub so
@@ -804,25 +803,14 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[]) {
     groups.set(dest, list);
   }
 
-  const homes = [...groups.keys()].filter((key) => key !== "loose");
-  homes.sort((a, b) => (groups.get(b)?.length ?? 0) - (groups.get(a)?.length ?? 0) || a.localeCompare(b));
-  const ordered: string[] = [];
-  const pending = [...homes];
-  while (pending.length) {
-    ordered.push(pending.shift()!);
-    if (pending.length) ordered.push(pending.pop()!);
-  }
-  const weight = ordered.map((key) => Math.sqrt(groups.get(key)?.length ?? 1));
-  const weightSum = weight.reduce((sum, value) => sum + value, 0) || 1;
-  const rx = 520;
-  const ry = rx / LAYOUT_ASPECT;
+  // Every campus and hub gets the same radius and the same angle step.
+  // Sorting by id keeps Penn and Berkeley from claiming a preferred seat.
+  const placed = [...groups.keys()].filter((key) => key !== "loose").sort((a, b) => a.localeCompare(b));
+  const radius = 560;
   const center = new Map<string, { x: number; y: number }>();
-  let angle = -Math.PI / 2;
-  ordered.forEach((key, index) => {
-    const sweep = (weight[index] / weightSum) * Math.PI * 2;
-    angle += sweep / 2;
-    center.set(key, { x: Math.cos(angle) * rx, y: Math.sin(angle) * ry });
-    angle += sweep / 2;
+  placed.forEach((key, index) => {
+    const angle = (index / Math.max(placed.length, 1)) * Math.PI * 2;
+    center.set(key, { x: Math.cos(angle) * radius, y: Math.sin(angle) * radius });
   });
   center.set("loose", { x: 0, y: 0 });
 
@@ -864,7 +852,7 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[]) {
       settings: {
         barnesHutOptimize: true,
         barnesHutTheta: 0.5,
-        gravity: 0.28,
+        gravity: 0.16,
         scalingRatio: 8,
         linLogMode: true,
         outboundAttractionDistribution: true,
@@ -882,7 +870,7 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[]) {
     node.y = Number.isFinite(at.y) ? at.y : node.y;
   }
 
-  fitLayoutAspect(simNodes);
+  fitLayoutCloud(simNodes);
   separateOverlaps(g, simNodes);
   for (const node of simNodes) {
     const at = g.getNodeAttributes(node.id);
@@ -890,54 +878,14 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[]) {
     node.y = Number.isFinite(at.y) ? at.y : node.y;
   }
   snapAnchors(simNodes, groups);
-  const visible = simNodes.filter((node) => (degree.get(node.id) ?? 0) > 0);
-  stretchToAspect(simNodes, visible.length ? visible : simNodes);
+  separateCampusClusters(simNodes, groups);
+  spreadInnerCampuses(simNodes, groups);
+  nudgeSmallCampuses(simNodes, groups);
+  snapAnchors(simNodes, groups);
 }
 
-/** Stretch the dense part of the cloud to the viewport aspect. Far outliers stay on the frame. */
-function stretchToAspect(simNodes: SimNode[], core: SimNode[]) {
-  const basis = core.length ? core : simNodes;
-  const xs = basis.map((node) => node.x).sort((a, b) => a - b);
-  const ys = basis.map((node) => node.y).sort((a, b) => a - b);
-  const pick = (values: number[], q: number) => values[Math.min(values.length - 1, Math.max(0, Math.floor(q * (values.length - 1))))];
-  const minX = pick(xs, 0.025);
-  const maxX = pick(xs, 0.975);
-  const minY = pick(ys, 0.025);
-  const maxY = pick(ys, 0.975);
-  const width = Math.max(maxX - minX, 1);
-  const height = Math.max(maxY - minY, 1);
-  const aspect = width / height;
-  const midX = (minX + maxX) / 2;
-  const midY = (minY + maxY) / 2;
-  const stretchX = aspect < LAYOUT_ASPECT ? LAYOUT_ASPECT / aspect : 1;
-  const stretchY = aspect > LAYOUT_ASPECT ? aspect / LAYOUT_ASPECT : 1;
-  for (const node of simNodes) {
-    node.x = midX + (node.x - midX) * stretchX;
-    node.y = midY + (node.y - midY) * stretchY;
-  }
-  const left = midX - (width * stretchX) / 2;
-  const right = midX + (width * stretchX) / 2;
-  const top = midY - (height * stretchY) / 2;
-  const bottom = midY + (height * stretchY) / 2;
-  for (const node of simNodes) clampInside(node, left, top, right, bottom);
-}
-
-function clampInside(node: SimNode, minX: number, minY: number, maxX: number, maxY: number) {
-  if (node.x >= minX && node.x <= maxX && node.y >= minY && node.y <= maxY) return;
-  const cx = (minX + maxX) / 2;
-  const cy = (minY + maxY) / 2;
-  const dx = node.x - cx;
-  const dy = node.y - cy;
-  const halfW = (maxX - minX) / 2;
-  const halfH = (maxY - minY) / 2;
-  const scaleX = dx === 0 ? Infinity : halfW / Math.abs(dx);
-  const scaleY = dy === 0 ? Infinity : halfH / Math.abs(dy);
-  const scale = Math.min(scaleX, scaleY);
-  node.x = cx + dx * scale;
-  node.y = cy + dy * scale;
-}
-/** Normalize the cloud, then stretch it toward the viewport aspect before overlap resolution. */
-function fitLayoutAspect(simNodes: SimNode[]) {
+/** Scale the cloud so overlap resolution sees a stable size. Axes stay equal, so the shape stays round. */
+function fitLayoutCloud(simNodes: SimNode[]) {
   let minX = Infinity;
   let minY = Infinity;
   let maxX = -Infinity;
@@ -957,13 +905,157 @@ function fitLayoutAspect(simNodes: SimNode[]) {
     node.x = (node.x - midX) * scale;
     node.y = (node.y - midY) * scale;
   }
-  const aspect = width / height;
-  if (aspect < LAYOUT_ASPECT) {
-    const stretch = LAYOUT_ASPECT / aspect;
-    for (const node of simNodes) node.x *= stretch;
-  } else if (aspect > LAYOUT_ASPECT) {
-    const stretch = aspect / LAYOUT_ASPECT;
-    for (const node of simNodes) node.y *= stretch;
+}
+
+/**
+ * Small campuses fall into the middle of the cloud. Move those ones out to
+ * the largest open angle, at the same radius band as the other campuses.
+ * Larger campuses stay where ForceAtlas2 settled them.
+ */
+function spreadInnerCampuses(simNodes: SimNode[], groups: Map<string, SimNode[]>) {
+  const campuses = simNodes.filter((node) => node.type === "campus");
+  if (campuses.length < 3) return;
+  let cx = 0;
+  let cy = 0;
+  for (const node of simNodes) {
+    cx += node.x;
+    cy += node.y;
+  }
+  cx /= simNodes.length;
+  cy /= simNodes.length;
+  const radiusOf = (node: SimNode) => Math.hypot(node.x - cx, node.y - cy);
+  const radii = campuses.map(radiusOf).sort((a, b) => a - b);
+  const median = radii[Math.floor(radii.length / 2)] || 1;
+  let cloud = 1;
+  for (const node of simNodes) cloud = Math.max(cloud, radiusOf(node));
+  const cut = median * 0.78;
+  const target = Math.max(median * 1.05, cloud * 0.46);
+  const inner = campuses.filter((node) => radiusOf(node) < cut && (groups.get(node.id)?.length ?? 1) < 36);
+  if (!inner.length) return;
+  const moving = new Set(inner.map((node) => node.id));
+  const taken = campuses.filter((node) => !moving.has(node.id)).map((node) => Math.atan2(node.y - cy, node.x - cx));
+  const shift = (id: string, dx: number, dy: number) => {
+    for (const member of groups.get(id) ?? []) {
+      member.x += dx;
+      member.y += dy;
+    }
+  };
+  const gapAt = (angle: number) => {
+    if (!taken.length) return Math.PI;
+    let best = Infinity;
+    for (const other of taken) {
+      const delta = Math.abs(Math.atan2(Math.sin(angle - other), Math.cos(angle - other)));
+      if (delta < best) best = delta;
+    }
+    return best;
+  };
+  for (const node of [...inner].sort((a, b) => radiusOf(a) - radiusOf(b) || a.id.localeCompare(b.id))) {
+    let bestAngle = 0;
+    let bestGap = -1;
+    for (let step = 0; step < 96; step++) {
+      const angle = (step / 96) * Math.PI * 2;
+      const gap = gapAt(angle);
+      if (gap > bestGap) {
+        bestGap = gap;
+        bestAngle = angle;
+      }
+    }
+    const nextX = cx + Math.cos(bestAngle) * target;
+    const nextY = cy + Math.sin(bestAngle) * target;
+    shift(node.id, nextX - node.x, nextY - node.y);
+    taken.push(bestAngle);
+  }
+}
+
+/** Give a small campus that still sits on a neighbour a little more room, without moving a large cluster. */
+function nudgeSmallCampuses(simNodes: SimNode[], groups: Map<string, SimNode[]>) {
+  const campuses = simNodes.filter((node) => node.type === "campus");
+  if (campuses.length < 2) return;
+  const sizeOf = (id: string) => groups.get(id)?.length ?? 1;
+  const minSep = 168;
+  const shift = (id: string, dx: number, dy: number) => {
+    for (const member of groups.get(id) ?? []) {
+      member.x += dx;
+      member.y += dy;
+    }
+  };
+  for (let pass = 0; pass < 48; pass++) {
+    let moved = false;
+    for (let i = 0; i < campuses.length; i++) {
+      for (let j = i + 1; j < campuses.length; j++) {
+        const a = campuses[i];
+        const b = campuses[j];
+        let dx = b.x - a.x;
+        let dy = b.y - a.y;
+        let dist = Math.hypot(dx, dy);
+        if (dist >= minSep) continue;
+        if (dist < 1) {
+          dx = 1;
+          dy = 0;
+          dist = 1;
+        }
+        const push = minSep - dist;
+        const ux = dx / dist;
+        const uy = dy / dist;
+        const aSize = sizeOf(a.id);
+        const bSize = sizeOf(b.id);
+        if (aSize >= 80 && bSize >= 80) {
+          shift(a.id, -ux * push * 0.5, -uy * push * 0.5);
+          shift(b.id, ux * push * 0.5, uy * push * 0.5);
+        } else if (aSize <= bSize) {
+          shift(a.id, -ux * push, -uy * push);
+        } else {
+          shift(b.id, ux * push, uy * push);
+        }
+        moved = true;
+      }
+    }
+    if (!moved) break;
+  }
+}
+
+/**
+ * Campuses that ForceAtlas2 dropped on top of each other are pushed apart,
+ * and their home-group members move with them. Large and small campuses use
+ * the same minimum gap.
+ */
+function separateCampusClusters(simNodes: SimNode[], groups: Map<string, SimNode[]>) {
+  const campuses = simNodes.filter((node) => node.type === "campus");
+  if (campuses.length < 2) return;
+  let maxR = 1;
+  for (const node of simNodes) maxR = Math.max(maxR, Math.hypot(node.x, node.y));
+  const minSep = Math.max(200, (2 * Math.PI * maxR * 0.62) / campuses.length);
+  const shift = (id: string, dx: number, dy: number) => {
+    const members = groups.get(id);
+    if (!members) return;
+    for (const member of members) {
+      member.x += dx;
+      member.y += dy;
+    }
+  };
+  for (let pass = 0; pass < 180; pass++) {
+    let moved = false;
+    for (let i = 0; i < campuses.length; i++) {
+      for (let j = i + 1; j < campuses.length; j++) {
+        const a = campuses[i];
+        const b = campuses[j];
+        let dx = b.x - a.x;
+        let dy = b.y - a.y;
+        let dist = Math.hypot(dx, dy);
+        if (dist >= minSep) continue;
+        if (dist < 1) {
+          const angle = ((i + 1) * (j + 3) * 2.399963229728653) % (Math.PI * 2);
+          dx = Math.cos(angle);
+          dy = Math.sin(angle);
+          dist = 1;
+        }
+        const push = (minSep - dist) / 2;
+        shift(a.id, (-dx / dist) * push, (-dy / dist) * push);
+        shift(b.id, (dx / dist) * push, (dy / dist) * push);
+        moved = true;
+      }
+    }
+    if (!moved) break;
   }
 }
 

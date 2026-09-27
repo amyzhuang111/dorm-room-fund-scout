@@ -1,3 +1,4 @@
+import { CAMPUSES } from "@/lib/domain/campuses";
 import type { MapEdgeType, MapNode, MapNodeType } from "@/lib/domain/network-map";
 
 /** Neutral ink for shapes that are not colored by campus. */
@@ -196,6 +197,158 @@ export function screenSize(node: MapNode): number {
   if (node.type === "program") return clamp(1.4 + hub * 0.07, 1.4, 2.35);
   if (node.type === "startup") return clamp(1.35 + hub * 0.09, 1.35, 2.4);
   return clamp(1.28 + hub * 0.1, 1.28, 2.35);
+}
+
+export interface RestingLabels {
+  /** Labels drawn on the fitted view. Collisions already removed the lower-priority ones. */
+  show: Set<string>;
+  /** Same entity as a shown label. Hidden at every zoom except when that node is hovered. */
+  suppress: Set<string>;
+}
+
+type LabelCandidate = {
+  id: string;
+  label: string;
+  type: string;
+  degree: number;
+  anchor?: boolean;
+  x: number;
+  y: number;
+};
+
+/**
+ * One label per entity (exact name, or the same name with a campus prefix such
+ * as "MIT delta v" and "delta v"). Campus anchors outrank organization anchors,
+ * which outrank the other default labels. Overlapping boxes keep the higher
+ * priority label.
+ */
+export function restingLabelIds(nodes: LabelCandidate[]): RestingLabels {
+  const prefixes = campusPrefixes(nodes);
+  const known = new Set(
+    nodes
+      .filter((node) => node.type !== "person" && node.type !== "startup")
+      .map((node) => normalizeLabel(node.label))
+      .filter((key) => key.length > 0),
+  );
+  const grouped = new Map<string, LabelCandidate[]>();
+  for (const node of nodes) {
+    const normalized = normalizeLabel(node.label);
+    const shared = node.type !== "person" && node.type !== "startup";
+    const key = shared && normalized ? entityKey(normalized, prefixes, known) : `${node.type}:${node.id}`;
+    const list = grouped.get(key) ?? [];
+    list.push(node);
+    grouped.set(key, list);
+  }
+  const suppress = new Set<string>();
+  const winners: LabelCandidate[] = [];
+  for (const group of grouped.values()) {
+    const ranked = [...group].sort(byLabelPriority);
+    winners.push(ranked[0]);
+    if (group.length < 2) continue;
+    for (const loser of ranked.slice(1)) suppress.add(loser.id);
+  }
+  const prominent = topIds(winners, suppress);
+  const resting = winners.filter((node) => node.anchor || prominent.has(node.id));
+  resting.sort(byLabelPriority);
+  const show = new Set<string>();
+  const boxes: LabelBox[] = [];
+  const frame = labelFrame(nodes);
+  for (const node of resting) {
+    if (suppress.has(node.id)) continue;
+    const box = labelBox(node, frame);
+    if (boxes.some((kept) => boxesOverlap(kept, box))) continue;
+    boxes.push(box);
+    show.add(node.id);
+  }
+  return { show, suppress };
+}
+
+function topIds(nodes: LabelCandidate[], suppress: Set<string>): Set<string> {
+  return new Set(
+    nodes
+      .filter((node) => !node.anchor && !suppress.has(node.id))
+      .sort((a, b) => b.degree - a.degree || a.id.localeCompare(b.id))
+      .slice(0, 15)
+      .map((node) => node.id),
+  );
+}
+
+function byLabelPriority(a: LabelCandidate, b: LabelCandidate): number {
+  return labelTier(b) - labelTier(a) || b.degree - a.degree || a.id.localeCompare(b.id);
+}
+
+function labelTier(node: LabelCandidate): number {
+  if (node.anchor && node.type === "campus") return 3;
+  if (node.anchor) return 2;
+  return 1;
+}
+
+function campusPrefixes(nodes: { type: string; label: string }[]): string[] {
+  const prefixes = new Set<string>();
+  const add = (value: string) => {
+    const key = normalizeLabel(value);
+    if (key.length >= 3) prefixes.add(key);
+  };
+  for (const campus of CAMPUSES) {
+    add(campus.shortLabel);
+    add(campus.name);
+    for (const alias of campus.aliases) add(alias);
+  }
+  for (const node of nodes) if (node.type === "campus") add(node.label);
+  return [...prefixes].sort((a, b) => b.length - a.length);
+}
+
+function normalizeLabel(label: string): string {
+  return label
+    .toLowerCase()
+    .replace(/['’]/g, "")
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+/** Prefer the unprefixed name when both "delta v" and "mit delta v" exist. */
+function entityKey(key: string, prefixes: string[], known: Set<string>): string {
+  for (const prefix of prefixes) {
+    if (!key.startsWith(`${prefix} `)) continue;
+    const rest = key.slice(prefix.length + 1);
+    if (rest.length >= 3 && known.has(rest)) return rest;
+  }
+  return key;
+}
+
+type LabelBox = { left: number; top: number; right: number; bottom: number };
+
+function labelFrame(nodes: { x: number; y: number }[]): { minX: number; minY: number; scale: number } {
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (const node of nodes) {
+    minX = Math.min(minX, node.x);
+    minY = Math.min(minY, node.y);
+    maxX = Math.max(maxX, node.x);
+    maxY = Math.max(maxY, node.y);
+  }
+  const span = Math.max(maxX - minX, maxY - minY, 1);
+  return { minX, minY, scale: 740 / span };
+}
+
+function labelBox(node: LabelCandidate, frame: { minX: number; minY: number; scale: number }): LabelBox {
+  const anchor = Boolean(node.anchor);
+  const limit = anchor ? 22 : 28;
+  const chars = Math.min(limit, Math.max(node.label.length, 1));
+  const width = chars * (anchor ? 7.1 : 6.5) + 8;
+  const height = 18;
+  const x = (node.x - frame.minX) * frame.scale;
+  const y = (node.y - frame.minY) * frame.scale;
+  if (anchor) return { left: x - width / 2, top: y - height - 8, right: x + width / 2, bottom: y - 2 };
+  return { left: x - width / 2, top: y + 2, right: x + width / 2, bottom: y + height + 4 };
+}
+
+function boxesOverlap(a: LabelBox, b: LabelBox): boolean {
+  return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
 }
 
 /** Lowest node size that may keep a label at this camera ratio. 1 is the fitted view; smaller ratios are zoomed in. */
