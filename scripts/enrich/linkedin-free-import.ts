@@ -192,7 +192,9 @@ function allLinkedIns(html: string): string[] {
 }
 
 function searchProofUrl(query: string, engine: string): string {
-  const q = encodeURIComponent(query);
+  const trimmed = query.trim();
+  if (!trimmed) return "";
+  const q = encodeURIComponent(trimmed);
   if (engine === "bing") return `https://www.bing.com/search?q=${q}`;
   if (engine === "duckduckgo") return `https://duckduckgo.com/html/?q=${q}`;
   return `https://www.google.com/search?hl=en&q=${q}`;
@@ -912,12 +914,24 @@ async function importHits(db: ReturnType<typeof getDb>, filePath: string) {
   ensureSource(db);
   const people = new Map(loadPeople(db).map((person) => [person.id, person]));
   const lines = fs.readFileSync(filePath, "utf8").split("\n").filter(Boolean);
+  const merged = new Map<string, MatchHit[]>();
+  for (const line of lines) {
+    const row = JSON.parse(line) as { person_id?: string; query?: string; hits?: MatchHit[] };
+    if (!row.person_id || !row.hits?.length) continue;
+    const list = merged.get(row.person_id) ?? [];
+    // The search query lives on the jsonl row. Copy it onto each hit so the
+    // stored proof URL is the search that returned the profile, not an empty query.
+    const query = (row.query ?? "").trim();
+    for (const hit of row.hits) {
+      list.push({ ...hit, query: (hit.query ?? "").trim() || query });
+    }
+    merged.set(row.person_id, list);
+  }
   let wrote = 0;
   let skipped = 0;
-  for (const line of lines) {
-    const row = JSON.parse(line) as { person_id?: string; hits?: MatchHit[] };
-    const person = row.person_id ? people.get(row.person_id) : undefined;
-    if (!person || !row.hits?.length) {
+  for (const [personId, hits] of merged) {
+    const person = people.get(personId);
+    if (!person || hits.length === 0) {
       skipped += 1;
       continue;
     }
@@ -927,7 +941,7 @@ async function importHits(db: ReturnType<typeof getDb>, filePath: string) {
       startups: person.startups,
       programs: person.programs,
       commonName: person.commonName,
-      hits: row.hits,
+      hits,
     });
     if (judged.outcome !== "accept") {
       skipped += 1;
