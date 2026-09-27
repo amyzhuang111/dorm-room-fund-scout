@@ -378,11 +378,19 @@ export function labelDegreeFloor(cameraRatio: number): number {
 }
 
 /**
- * Camera ratio for the opening frame. The span already includes a little
- * padding; multiplying under 1 zooms in so the cloud fills the canvas.
+ * Camera ratio for Fit. The span already includes a little padding; multiplying
+ * under 1 keeps the whole cloud on screen.
  */
 export function openingCameraRatio(span: number): number {
   return Math.min(0.96, Math.max(0.18, span * 0.9));
+}
+
+/**
+ * First view, closer than Fit. Campus and hub labels stay readable and the
+ * cloud fills the canvas. Fit still uses `openingCameraRatio`.
+ */
+export function openingZoomRatio(fitRatio: number): number {
+  return Math.max(0.18, Math.min(0.46, fitRatio * 0.52));
 }
 
 /**

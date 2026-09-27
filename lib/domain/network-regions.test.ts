@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { featuredNationalKey } from "./featured-national";
-import { CAMPUS_LABEL_MIN_MEMBERS, LABEL_CLUB, bundleInk, bundleOpacity, bundleWidth, campusHubDegreeFloor, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, programLineColor, readableInk, selectVisibleLabels, zoomSizeFactor } from "../../components/network-style";
+import { CAMPUS_LABEL_MIN_MEMBERS, LABEL_CLUB, bundleInk, bundleOpacity, bundleWidth, campusHubDegreeFloor, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, openingZoomRatio, programLineColor, readableInk, selectVisibleLabels, zoomSizeFactor } from "../../components/network-style";
 import { REGIONS, campusShade, packRegionCenters, regionForCampus, regionSwatch } from "./network-regions";
 
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
@@ -122,6 +122,9 @@ assert.equal(campusHubDegreeFloor(0.1), 1);
 
 assert.equal(openingCameraRatio(1), 0.9);
 assert.ok(openingCameraRatio(1) < 1);
+assert.ok(Math.abs(openingZoomRatio(0.9) - 0.46) < 1e-9);
+assert.ok(openingZoomRatio(0.9) < openingCameraRatio(1));
+assert.equal(openingZoomRatio(0.2), 0.18);
 assert.equal(labelDegreeFloor(0.9), 1_000_000);
 assert.equal(labelDegreeFloor(0.4), 24);
 assert.equal(labelDegreeFloor(0.12), 3);

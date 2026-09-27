@@ -8,7 +8,7 @@ import { featuredNationalKey } from "@/lib/domain/featured-national";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
-import { CAMPUS_LABEL_MIN_MEMBERS, DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, PROGRAM_LINE_ACTIVE, PROGRAM_LINE_DIM, REGION_TRACKING, bundleInk, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, zoomSizeFactor, type CampusDisc, type FramePoint, type LabelOffset, type ScreenLabel } from "./network-style";
+import { CAMPUS_LABEL_MIN_MEMBERS, DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, PROGRAM_LINE_ACTIVE, PROGRAM_LINE_DIM, REGION_TRACKING, bundleInk, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, openingZoomRatio, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, zoomSizeFactor, type CampusDisc, type FramePoint, type LabelOffset, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -105,6 +105,7 @@ export function NetworkSigma({
     focus: 0,
     focusFrame: 0,
     fitRatio: 1,
+    userFramed: false,
   });
   const onSelectRef = useRef(onSelect);
   const onReadyRef = useRef(onReady);
@@ -134,7 +135,7 @@ export function NetworkSigma({
     if (!renderer) return;
     recomputeLabelsRef.current();
     renderer.refresh();
-    if (hiddenChanged) stateRef.current.fitRatio = frameVisible(renderer, hidden);
+    if (hiddenChanged) stateRef.current.fitRatio = frameVisible(renderer, hidden, stateRef.current.userFramed ? "fit" : "open");
   }, [hidden, edgeTypes, selected]);
 
   useEffect(() => {
@@ -747,6 +748,7 @@ export function NetworkSigma({
       const wheel = payload.event as WheelCoords;
       const delta = Math.max(-2.2, Math.min(2.2, wheel.delta || 0));
       if (!delta) return;
+      stateRef.current.userFramed = true;
       const camera = renderer.getCamera();
       const factor = Math.exp(-delta * 0.42);
       const ratio = camera.getBoundedRatio(camera.getState().ratio * factor);
@@ -756,6 +758,7 @@ export function NetworkSigma({
     renderer.on("wheelStage", onWheel);
     renderer.on("wheelNode", onWheel);
     renderer.on("downStage", () => {
+      stateRef.current.userFramed = true;
       container.style.cursor = "grabbing";
     });
     renderer.on("downNode", () => {
@@ -777,10 +780,17 @@ export function NetworkSigma({
     rendererRef.current = renderer;
     container.style.cursor = "grab";
     const api: NetworkSigmaHandle = {
-      zoomIn: () => void renderer.getCamera().animatedZoom({ duration: 240, factor: 1.4 }),
-      zoomOut: () => void renderer.getCamera().animatedUnzoom({ duration: 240, factor: 1.4 }),
+      zoomIn: () => {
+        stateRef.current.userFramed = true;
+        void renderer.getCamera().animatedZoom({ duration: 240, factor: 1.4 });
+      },
+      zoomOut: () => {
+        stateRef.current.userFramed = true;
+        void renderer.getCamera().animatedUnzoom({ duration: 240, factor: 1.4 });
+      },
       fit: () => {
-        stateRef.current.fitRatio = frameVisible(renderer, stateRef.current.hidden);
+        stateRef.current.userFramed = true;
+        stateRef.current.fitRatio = frameVisible(renderer, stateRef.current.hidden, "fit");
       },
       pointOf(id: string) {
         if (!renderer.getGraph().hasNode(id)) return null;
@@ -802,7 +812,7 @@ export function NetworkSigma({
     onReadyRef.current(api);
     const frame = requestAnimationFrame(() => {
       renderer.resize();
-      stateRef.current.fitRatio = frameVisible(renderer, stateRef.current.hidden);
+      stateRef.current.fitRatio = frameVisible(renderer, stateRef.current.hidden, "open");
     });
 
     const focusState = stateRef.current;
@@ -841,7 +851,7 @@ export function NetworkSigma({
   return <div ref={containerRef} className="absolute inset-0 bg-white" role="application" aria-label="Founder and startup network graph" />;
 }
 
-function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>): number {
+function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>, mode: "open" | "fit" = "fit"): number {
   const frame = graphFrame(renderer);
   const xs: number[] = [];
   const ys: number[] = [];
@@ -879,9 +889,10 @@ function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>):
   const paddedMinX = minX - span0 * 0.04;
   const paddedMaxX = maxX + span0 * 0.04;
   const span = Math.max(paddedMaxX - paddedMinX, paddedMaxY - paddedMinY, 0.04);
-  const ratio = openingCameraRatio(span);
+  const fitRatio = openingCameraRatio(span);
+  const ratio = mode === "open" ? openingZoomRatio(fitRatio) : fitRatio;
   void renderer.getCamera().animate({ x: (paddedMinX + paddedMaxX) / 2, y: (paddedMinY + paddedMaxY) / 2, ratio }, { duration: 420, easing: "quadraticInOut" });
-  return ratio;
+  return fitRatio;
 }
 
 type CurveEdge = {
