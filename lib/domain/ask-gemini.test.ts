@@ -1,8 +1,42 @@
 import assert from "node:assert/strict";
-import { answerWithGemini, classifyGeminiFailure, GEMINI_MODEL, geminiApiKey } from "./ask-gemini";
+import { answerWithGemini, classifyGeminiFailure, GEMINI_GENERATE_URL, GEMINI_MODEL, geminiApiKey, normalizeGeminiKey, parseGeminiResponse } from "./ask-gemini";
 import { onDeviceNote } from "./ask-prompt";
 
 assert.equal(GEMINI_MODEL, "gemini-2.5-flash");
+assert.equal(GEMINI_GENERATE_URL, "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent");
+assert.equal(normalizeGeminiKey('  "quoted-key"  '), "quoted-key");
+assert.equal(normalizeGeminiKey("Bearer secret-key"), "secret-key");
+assert.equal(normalizeGeminiKey("  gemini test key  "), "geminitestkey");
+
+const thoughtsOnly = parseGeminiResponse(
+  JSON.stringify({
+    candidates: [{ finishReason: "MAX_TOKENS", content: { parts: [{ text: "hidden", thought: true }] } }],
+    usageMetadata: { thoughtsTokenCount: 512, candidatesTokenCount: 0 },
+  })
+);
+assert.equal(thoughtsOnly.text, "");
+assert.equal(thoughtsOnly.finishReason, "MAX_TOKENS");
+assert.deepEqual(thoughtsOnly.partKinds, ["thought"]);
+assert.equal(thoughtsOnly.thoughtsTokenCount, 512);
+
+const visible = parseGeminiResponse(
+  JSON.stringify({
+    candidates: [{ finishReason: "STOP", content: { parts: [{ text: "hidden", thought: true }, { text: "Visible answer." }] } }],
+  })
+);
+assert.equal(visible.text, "Visible answer.");
+
+const toolCall = parseGeminiResponse(
+  JSON.stringify({
+    candidates: [{ finishReason: "STOP", content: { parts: [{ functionCall: { name: "answer", args: { answer: "From the function call." } } }] } }],
+  })
+);
+assert.equal(toolCall.text, "From the function call.");
+assert.deepEqual(toolCall.partKinds, ["functionCall"]);
+
+const blocked = parseGeminiResponse(JSON.stringify({ promptFeedback: { blockReason: "SAFETY" }, error: { message: "blocked" } }));
+assert.equal(blocked.blockReason, "SAFETY");
+assert.equal(blocked.apiMessage, "blocked");
 assert.equal(classifyGeminiFailure(429, ""), "quota");
 assert.equal(classifyGeminiFailure(503, "unavailable"), "quota");
 assert.equal(classifyGeminiFailure(500, "RESOURCE_EXHAUSTED: quota exceeded"), "quota");

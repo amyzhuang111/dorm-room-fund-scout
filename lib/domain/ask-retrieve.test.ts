@@ -28,6 +28,21 @@ const penn = retrieveAsk("Penn juniors in M&T building in AI");
 assert.equal(penn.length, 0);
 assert.equal(fallbackAnswer(penn), NOT_IN_THE_DATA);
 
+const pennHealth = retrieveAsk("Penn founders in health tech");
+assert.ok(pennHealth.length > 0);
+assert.ok(pennHealth.some((hit) => hit.kind === "startup"));
+assert.ok(pennHealth.some((hit) => /healthtech|biotech|medtech|penn health-tech/i.test(hit.detail)));
+assert.ok(pennHealth.some((hit) => hit.name === "Eye-V Ultrasound" || hit.name === "Vasowatch" || /Penn Health-Tech/i.test(hit.detail)));
+
+for (const question of ["Penn digital health startups", "Penn medtech founders", "Penn biotech startups", "Penn healthcare founders"]) {
+  const rows = retrieveAsk(question);
+  assert.ok(rows.length > 0, question);
+  assert.ok(rows.some((hit) => /health|bio|med/i.test(`${hit.name} ${hit.detail}`)), question);
+}
+
+const program = retrieveAsk("Which startups are in Penn Health-Tech?");
+assert.ok(program.some((hit) => /Penn Health-Tech/i.test(hit.detail)));
+
 assert.equal(retrieveAsk("xqvzz mplkqq").length, 0);
 
 console.log("ask-retrieve tests ok", {
@@ -35,4 +50,5 @@ console.log("ask-retrieve tests ok", {
   berkeley: berkeley.slice(0, 3).map((hit) => `${hit.name} | ${hit.detail}`),
   health: health.slice(0, 3).map((hit) => `${hit.name} | ${hit.detail}`),
   pennJuniorsMtAi: NOT_IN_THE_DATA,
+  pennHealth: pennHealth.slice(0, 6).map((hit) => `${hit.name} | ${hit.detail}`),
 });
