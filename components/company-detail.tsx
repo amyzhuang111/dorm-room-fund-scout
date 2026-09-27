@@ -3,7 +3,7 @@ import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
 import { storedCompanyLinks } from "@/lib/domain/company-link";
 import { formatCampusList } from "@/lib/domain/campuses";
 import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SignalTierBadge, VerificationBadge } from "./badges";
-import { PipelineForm } from "./pipeline-form";
+import { EntityMarks, PipelineStageEditor } from "./entity-marks";
 import { NotesSection } from "./notes-section";
 import { AssessmentForm } from "./assessment-form";
 import { FeedbackControls } from "./feedback-controls";
@@ -33,6 +33,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
             {project.name}
             <SignalTierBadge tier={project.signalTier} basis={project.signalTierBasis} />
             <VerificationBadge status={project.verificationStatus} verifiedAt={project.lastVerifiedAt} note={project.verificationNote} />
+            <EntityMarks entityType="project" entityId={project.id} name={project.name} campusName={project.universities[0]} websiteUrl={project.websiteUrl} />
           </h2>
           <GateBadge result={project.overallGate} gateOutcomes={project.gateOutcomes} />
         </div>
@@ -180,6 +181,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
               <Link href={founderHref(f)} className="text-link hover:underline">
                 {f.name}
               </Link>
+              <EntityMarks entityType="person" entityId={f.personId} name={f.name} campusName={f.school ?? project.universities[0]} websiteUrl={f.linkedinUrl} />
               <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} />
               <LeftSchoolBadge leftSchool={f.leftSchool} />
               <PersonLinkButton link={f.link} name={f.name} />
@@ -284,7 +286,9 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
       {/* Pipeline */}
       <section id="pipeline">
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Pipeline</h3>
-        <PipelineForm projectId={project.id} pipeline={project.pipeline} />
+        <div className="mt-1">
+          <PipelineStageEditor entityType="project" entityId={project.id} name={project.name} campusName={project.universities[0]} websiteUrl={project.websiteUrl} />
+        </div>
       </section>
     </div>
   );

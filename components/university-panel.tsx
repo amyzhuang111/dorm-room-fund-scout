@@ -9,6 +9,7 @@ import { PersonLinkButton } from "./person-link";
 import { ScoutLink } from "./scout-nav";
 import { CompanyNameLink } from "./company-website";
 import { DrfPresenceNote } from "./drf-presence-note";
+import { EntityMarks } from "./entity-marks";
 
 const TABS = ["prospects", "builders", "signals", "sources"] as const;
 type Tab = (typeof TABS)[number];
@@ -104,6 +105,7 @@ export function UniversityPanel({
                         <span className="flex flex-wrap items-center gap-1.5">
                           <CompanyNameLink id={c.id} name={c.name} websiteUrl={c.websiteUrl} className="text-sm font-medium text-foreground hover:text-link" />
                           <SignalTierBadge tier={c.signalTier} basis={c.signalTierBasis} />
+                          <EntityMarks entityType="project" entityId={c.id} name={c.name} campusName={university.name} websiteUrl={c.websiteUrl} />
                         </span>
                         <QueueBadge queue={c.queue} />
                       </div>
@@ -112,6 +114,7 @@ export function UniversityPanel({
                         {c.founderLinks.slice(0, 3).map((f) => (
                           <li key={f.personId} className="flex flex-wrap items-center gap-1 text-xs">
                             <span className="text-foreground">{f.name}</span>
+                            <EntityMarks entityType="person" entityId={f.personId} name={f.name} campusName={university.name} />
                             <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} />
                             <LeftSchoolBadge leftSchool={f.leftSchool} />
                             <PersonLinkButton link={f.link} name={f.name} />

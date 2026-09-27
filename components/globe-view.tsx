@@ -9,6 +9,7 @@ import { PersonLinkButton } from "./person-link";
 import { CompanyNameLink } from "./company-website";
 import { DrfPresenceNote } from "./drf-presence-note";
 import { alphabeticalByLabel, shortCampusLabel } from "@/lib/domain/campuses";
+import type { UserMapMarker } from "@/lib/domain/user-pipeline";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 // Real MapLibre GL JS globe projection + the free OpenFreeMap "positron"
@@ -41,7 +42,7 @@ const MAP_THEME = {
 interface MapEvent {
   error?: unknown;
   point?: { x: number; y: number };
-  features?: { properties?: { id?: string; cluster_id?: number }; geometry?: { coordinates?: [number, number] } }[];
+  features?: { properties?: { id?: string; name?: string; cluster_id?: number }; geometry?: { coordinates?: [number, number] } }[];
 }
 
 interface CampusMap {
@@ -68,6 +69,9 @@ interface CampusMap {
     (type: string, handler: (event: MapEvent) => void): void;
     (type: string, layer: string, handler: (event: MapEvent) => void): void;
   };
+  hasImage?: (id: string) => boolean;
+  addImage?: (id: string, image: ImageData, options?: object) => void;
+  getContainer?: () => { setAttribute: (name: string, value: string) => void };
 }
 
 function prefersReducedMotion(): boolean {
@@ -84,6 +88,7 @@ export const GlobeView = memo(function GlobeView({
   onNavigate,
   active = true,
   emphasizeIds = [],
+  userMarkers = [],
 }: {
   universities: UniversitySummary[];
   basePath: string;
@@ -98,6 +103,8 @@ export const GlobeView = memo(function GlobeView({
   active?: boolean;
   /** Campus ids Ask AI matched. Others stay on the map, drawn lighter. */
   emphasizeIds?: string[];
+  /** User-added startups plotted beside a campus that already has coordinates. */
+  userMarkers?: UserMapMarker[];
 }) {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -105,6 +112,7 @@ export const GlobeView = memo(function GlobeView({
   const [status, setStatus] = useState<"loading" | "ok" | "unsupported">("loading");
   const [geoMode, setGeoMode] = useState<"campus" | "hq">("campus");
   const [hoverTip, setHoverTip] = useState<{ id: string; x: number; y: number } | null>(null);
+  const [userTip, setUserTip] = useState<{ id: string; name: string; x: number; y: number } | null>(null);
   const selectedUniversity = current.university ? universities.find((u) => u.id === current.university) : undefined;
   const placed = trayCandidates.filter((c) => c.recordedPlace);
   const unplaced = trayCandidates.filter((c) => !c.recordedPlace);
@@ -513,6 +521,88 @@ export const GlobeView = memo(function GlobeView({
     }
   }, [universities, campusArcs, status, current.university]);
 
+  const userLayerBound = useRef(false);
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || status !== "ok") return;
+    try {
+      if (map.hasImage && map.addImage && !map.hasImage("user-added-square")) {
+        const size = 18;
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.fillStyle = "#111111";
+          ctx.fillRect(1, 1, size - 2, size - 2);
+          ctx.strokeStyle = "#ffffff";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(2.5, 2.5, size - 5, size - 5);
+          map.addImage("user-added-square", ctx.getImageData(0, 0, size, size), { pixelRatio: 2 });
+        }
+      }
+      if (!map.getSource("user-added")) {
+        map.addSource("user-added", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+      }
+      if (!map.getLayer("user-added-icons")) {
+        map.addLayer({
+          id: "user-added-icons",
+          type: "symbol",
+          source: "user-added",
+          layout: {
+            "icon-image": "user-added-square",
+            "icon-size": 0.9,
+            "icon-allow-overlap": true,
+            "text-field": "User-added",
+            "text-size": 11,
+            "text-offset": [0, 1.35],
+            "text-anchor": "top",
+            "text-allow-overlap": true,
+          },
+          paint: { "text-color": "#111111", "text-halo-color": "#ffffff", "text-halo-width": 1.2 },
+        });
+      }
+      if (!userLayerBound.current) {
+        userLayerBound.current = true;
+        map.on("click", "user-added-icons", (event) => {
+          const id = event.features?.[0]?.properties?.id;
+          if (!id) return;
+          router.push(`/startup/${id}`);
+        });
+        map.on("mouseenter", "user-added-icons", () => {
+          map.getCanvas().style.cursor = "pointer";
+        });
+        map.on("mousemove", "user-added-icons", (event) => {
+          const id = event.features?.[0]?.properties?.id;
+          const name = event.features?.[0]?.properties?.name;
+          if (!id || !event.point) return;
+          setUserTip({ id, name: name || "User-added", x: event.point.x, y: event.point.y });
+        });
+        map.on("mouseleave", "user-added-icons", () => {
+          map.getCanvas().style.cursor = "";
+          setUserTip(null);
+        });
+      }
+      map.getSource("user-added")?.setData?.({
+        type: "FeatureCollection",
+        features: userMarkers.map((marker) => ({
+          type: "Feature",
+          geometry: { type: "Point", coordinates: [marker.lon, marker.lat] },
+          properties: { id: marker.id, name: marker.name },
+        })),
+      });
+      if (map.getLayer("user-added-icons")) {
+        map.setLayoutProperty("user-added-icons", "visibility", geoMode === "campus" ? "visible" : "none");
+      }
+      map.getContainer?.().setAttribute(
+        "aria-label",
+        userMarkers.length ? `User-added: ${userMarkers.map((marker) => marker.name).join(", ")}` : "Campus map"
+      );
+    } catch {
+      // The style can still be settling on the first frame after load.
+    }
+  }, [userMarkers, status, geoMode, router]);
+
   // Fly to / re-filter the selected campus without re-creating the map.
   useEffect(() => {
     const map = mapRef.current;
@@ -559,7 +649,7 @@ export const GlobeView = memo(function GlobeView({
     const map = mapRef.current;
     if (!map || status !== "ok") return;
     const visibility = geoMode === "campus" ? "visible" : "none";
-    for (const layer of ["campus-glow", "campus-dots", "campus-selected", "campus-labels", "campus-clusters", "campus-cluster-count", "campus-arcs"]) {
+    for (const layer of ["campus-glow", "campus-dots", "campus-selected", "campus-labels", "campus-clusters", "campus-cluster-count", "campus-arcs", "user-added-icons"]) {
       if (!map.getLayer(layer)) continue;
       map.setLayoutProperty(layer, "visibility", visibility);
     }
@@ -614,6 +704,12 @@ export const GlobeView = memo(function GlobeView({
         )}
         {status === "ok" && hoverTip && geoMode === "campus" && (
           <CampusHover universities={universities} tip={hoverTip} />
+        )}
+        {status === "ok" && userTip && geoMode === "campus" && (
+          <div className="pointer-events-none absolute z-10 rounded-md border border-black bg-white px-2.5 py-1.5 text-xs text-black" style={{ left: userTip.x + 12, top: userTip.y - 8 }}>
+            <p className="font-medium">{userTip.name}</p>
+            <p>User-added</p>
+          </div>
         )}
         {status === "loading" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">

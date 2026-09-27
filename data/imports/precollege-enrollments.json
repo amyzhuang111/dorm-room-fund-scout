@@ -1,0 +1,77 @@
+{
+  "people": [
+    {
+      "name": "Amanrai Singh Kahlon",
+      "aliases": ["Rai Kahlon"],
+      "university_id": "univ_penn",
+      "role": "undergrad",
+      "potential_signal": "2024 Regeneron STS finalist (Sanford School). Penn class of 2028.",
+      "claims": [
+        {
+          "claim_type": "affiliation",
+          "source_name": "Apollo Youth Medicine team page",
+          "source_url": "https://www.apolloprogram.org/the-team/",
+          "excerpt": "Apollo Youth Medicine's team page lists Amanrai Kahlon, University of Pennsylvania, Class of 2028, on Strategy and Operations, and as president for 2023-24.",
+          "verification_state": "corroborated"
+        },
+        {
+          "claim_type": "source_mention",
+          "source_name": "Society for Science",
+          "source_url": "https://www.societyforscience.org/regeneron-sts/2024-finalists/",
+          "excerpt": "Society for Science lists Amanrai Singh Kahlon, School: Sanford School, Hockessin, DE, as a 2024 Regeneron STS finalist. Project title: Enhancing Wearable Gait-Monitoring Systems: Identifying Optimal Kinematic Inputs.",
+          "verification_state": "corroborated"
+        }
+      ]
+    }
+  ],
+  "updates": [
+    {
+      "name": "Bilal Asmatullah",
+      "claims": [
+        {
+          "claim_type": "source_mention",
+          "source_name": "Y Combinator",
+          "source_url": "https://www.ycombinator.com/companies/sciloop",
+          "excerpt": "Y Combinator's page for Sciloop lists Bilal Asmatullah (Founder/CEO). Bio: Co-founder of Sciloop (YC F25), On Leave From MIT. International Physics Olympiad '22 medalist.",
+          "verification_state": "corroborated"
+        }
+      ]
+    },
+    {
+      "name": "Osman Siddique",
+      "claims": [
+        {
+          "claim_type": "source_mention",
+          "source_name": "Y Combinator",
+          "source_url": "https://www.ycombinator.com/companies/sciloop",
+          "excerpt": "Y Combinator's page for Sciloop lists Osman Siddique (Founder). Bio: CTO and co-founder of Sciloop (YC F25). CS student at MIT (on leave). Medalist and two-time highest national scorer at the 2022 International Physics Olympiad.",
+          "verification_state": "corroborated"
+        }
+      ]
+    },
+    {
+      "name": "Aaron Chew",
+      "claims": [
+        {
+          "claim_type": "source_mention",
+          "source_name": "Y Combinator",
+          "source_url": "https://www.ycombinator.com/companies/synthetic-society",
+          "excerpt": "Y Combinator's page for Synthetic Society lists Aaron Chew (Founder/CEO). Bio: Columbia CS Dropout. USACO Finalist, top 20 programmers in the USA.",
+          "verification_state": "corroborated"
+        }
+      ]
+    },
+    {
+      "name": "Jessica Wan",
+      "claims": [
+        {
+          "claim_type": "source_mention",
+          "source_name": "Mathematical Association of America",
+          "source_url": "https://maa.org/news/usa-first-at-imo/",
+          "excerpt": "The Mathematical Association of America (July 20, 2024) lists Jessica Wan, 18, of Florida, on the 2024 USA International Mathematical Olympiad team. The six high school team members received medals, and Jessica Wan placed fifth overall.",
+          "verification_state": "corroborated"
+        }
+      ]
+    }
+  ]
+}

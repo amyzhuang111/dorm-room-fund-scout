@@ -4,10 +4,11 @@ import type { FounderRow } from "@/lib/domain/queries";
 import { publicLink } from "@/lib/domain/company-link";
 import { buildHref } from "@/lib/domain/url";
 import { ScoutLink } from "./scout-nav";
-import { EnrollmentBadge, LeftSchoolBadge, PotentialFounderBadge, SignalTierBadge, UnverifiedBadge, VerificationBadge } from "./badges";
+import { EnrollmentBadge, LeftSchoolBadge, PotentialFounderBadge, PrecollegeBadges, SignalTierBadge, UnverifiedBadge, VerificationBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CompanyNameLink } from "./company-website";
+import { EntityMarks } from "./entity-marks";
 
 export const FounderCard = memo(function FounderCard({
   founder,
@@ -29,10 +30,14 @@ export const FounderCard = memo(function FounderCard({
     <div className="row-cv rounded-md border border-border-c bg-surface p-3">
       <div className="flex items-start justify-between gap-2">
         <div>
-          <p className="font-medium text-foreground">{founder.name}</p>
+          <div className="flex flex-wrap items-center gap-1.5 font-medium text-foreground">
+            {founder.name}
+            <EntityMarks entityType="person" entityId={founder.id} name={founder.name} campusName={founder.universityName} websiteUrl={founder.linkedinUrl} />
+          </div>
           <p className="mt-1 text-xs text-muted">{founder.universityName ?? "University unknown"}</p>
           <p className="mt-1 flex flex-wrap items-center gap-1">
             {founder.founderStatus === "potential" && <PotentialFounderBadge />}
+            <PrecollegeBadges signals={founder.precollegeSignals} />
             <EnrollmentBadge status={founder.enrollmentStatus} label={founder.enrollmentLabel} evidence={founder.enrollmentEvidence} basis={founder.enrollmentBasis} />
             <LeftSchoolBadge leftSchool={founder.leftSchool} />
             <SignalTierBadge tier={founder.signalTier} basis={founder.signalTierBasis} />
@@ -86,6 +91,24 @@ export const FounderCard = memo(function FounderCard({
 
       {open && (
         <div className="mt-3 space-y-3 border-t border-border-c pt-3 text-sm">
+          {founder.precollegeSignals.length > 0 && (
+            <section>
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Pre-college excellence</h3>
+              <ul className="mt-1 space-y-1.5">
+                {founder.precollegeSignals.map((signal) => (
+                  <li key={`${signal.signalType}-${signal.year ?? "na"}-${signal.sourceUrl}`} className="text-xs text-foreground">
+                    <a href={signal.sourceUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-link underline">
+                      {signal.label}
+                    </a>
+                    <span className="text-muted">
+                      {" "}
+                      · Tier {signal.tier} · {signal.matchStatus === "confirmed" ? "confirmed" : "likely"}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
           {founder.founderStatus === "potential" && founder.signalEvidence && (
             <section>
               <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Signal evidence</h3>
@@ -108,6 +131,7 @@ export const FounderCard = memo(function FounderCard({
                 return (
                   <li key={p.id} className="flex flex-wrap items-center gap-2">
                     <CompanyNameLink id={p.id} name={p.name} websiteUrl={p.websiteUrl} className="font-medium text-link hover:underline" />
+                    <EntityMarks entityType="project" entityId={p.id} name={p.name} campusName={founder.universityName} websiteUrl={p.websiteUrl} />
                     <SignalTierBadge tier={p.signalTier} />
                     <span className="text-xs text-muted">{p.role.replaceAll("_", " ")}</span>
                     {link && (

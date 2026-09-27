@@ -1,5 +1,6 @@
 import { buildHref } from "@/lib/domain/url";
 import { alphabeticalByLabel, compareCampusLabels, shortCampusLabel } from "@/lib/domain/campuses";
+import { isUserCampusId } from "@/lib/domain/user-pipeline";
 import type { CoverageState, SectorCount, UniversitySummary } from "@/lib/domain/queries";
 import { SIGNAL_TIERS } from "@/lib/domain/signal-tier";
 import { FeedbackSync } from "./feedback-sync";
@@ -25,6 +26,7 @@ function UniversityRow({
   mode: "founder" | "startup";
 }) {
   const coverage = COVERAGE_LABEL[u.coverage];
+  const userCampus = isUserCampusId(u.id);
   const label = shortCampusLabel(u.id, u.name);
   const count = mode === "founder" ? u.founderCount : u.companyCount;
   const switchingCampus = current.university !== u.id;
@@ -41,10 +43,10 @@ function UniversityRow({
     >
       <span className="truncate">{label}</span>
       <span className="flex shrink-0 items-center gap-1.5">
-        <span className={`text-[10px] ${coverage.cls}`}>{coverage.label}</span>
+        <span className={`text-[10px] ${userCampus ? "text-foreground" : coverage.cls}`}>{userCampus ? "User-added" : coverage.label}</span>
         {/* A campus that hasn't been scanned shows only its status, never a numeric "0" —
             unscanned is not the same claim as "zero found here." */}
-        {u.sourcesConfigured > 0 && <span className="rounded-full bg-surface-2 px-1.5 py-0.5 text-[11px] text-muted">{count}</span>}
+        {(u.sourcesConfigured > 0 || count > 0) && <span className="rounded-full bg-surface-2 px-1.5 py-0.5 text-[11px] text-muted">{count}</span>}
       </span>
     </ScoutLink>
   );
@@ -156,6 +158,37 @@ export function FilterSidebar({
           ))}
         </ul>
       </div>
+
+      {mode === "founder" && (
+        <div className="mt-5">
+          <div className="mb-1.5 flex items-baseline justify-between">
+            <span className="ui-label">Pre-college excellence</span>
+            {current.precollege && (
+              <ScoutLink href={buildHref(basePath, current, { precollege: null })} className="text-[11px] text-link underline">
+                reset
+              </ScoutLink>
+            )}
+          </div>
+          <ul className="flex flex-wrap gap-1">
+            {(
+              [
+                ["any", "Any"],
+                ["1", "Tier 1"],
+                ["2", "Tier 2"],
+              ] as const
+            ).map(([val, label]) => (
+              <li key={val}>
+                <ScoutLink
+                  href={buildHref(basePath, current, { precollege: current.precollege === val ? null : val })}
+                  className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${current.precollege === val ? "border-foreground bg-foreground text-white" : "border-border-c text-muted hover:bg-surface-2 hover:text-foreground"}`}
+                >
+                  {label}
+                </ScoutLink>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="mt-5">
         <span className="ui-label">Review</span>

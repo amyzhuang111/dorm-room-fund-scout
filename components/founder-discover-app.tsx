@@ -4,7 +4,9 @@ import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { buildHref } from "@/lib/domain/url";
 import { foundersInView } from "@/lib/domain/candidate-filter";
 import type { EnrollmentStatus } from "@/lib/domain/founder-status";
-import { matchesEnrollment, selectedEnrollment } from "@/lib/domain/founder-status";
+import { selectedEnrollment } from "@/lib/domain/founder-status";
+import { matchesPrecollegeFilter, precollegeRankBoost } from "@/lib/domain/precollege";
+import { userFounderPassesEnrollment } from "@/lib/domain/user-pipeline";
 import { isSignalTier, signalTierRank } from "@/lib/domain/signal-tier";
 import type { FeedbackRecord, FeedbackTarget } from "@/lib/domain/feedback";
 import { likeTargetsFrom, reviewFounders, reviewMode } from "@/lib/domain/review-view";
@@ -13,6 +15,7 @@ import { FilterSidebar } from "./filter-sidebar";
 import { FounderCard } from "./founder-card";
 import { ScoutLink, ScoutNav, useScoutNav } from "./scout-nav";
 import { useFeedbackRecords } from "./feedback-provider";
+import { useMergedCatalog } from "./user-pipeline-provider";
 import { EnrollmentChips } from "./enrollment-chips";
 
 export function FounderDiscoverApp({
@@ -74,19 +77,29 @@ function FounderBody({
   const { current } = useScoutNav()!;
   const filters = useDeferredValue(current);
   const records = useFeedbackRecords(initialRecords);
+  const catalog = useMergedCatalog(universities, [], founders);
   const showingPotential = filters.pool === "potential";
-  const pool = showingPotential ? potentialFounders : founders;
+  const pool = showingPotential ? potentialFounders : catalog.founders;
   const liveLikes = useMemo(() => likeTargetsFrom(records, [], pool, initialLikes), [records, pool, initialLikes]);
   const visible = useMemo(() => {
     const matched = foundersInView(pool, { universityId: filters.university, search: filters.q });
     const reviewed = reviewFounders(matched, records, liveLikes, reviewMode(filters.feedback)).filter((founder) =>
-      matchesEnrollment(founder.enrollmentStatus, selectedEnrollment(filters.enroll))
+      userFounderPassesEnrollment(founder, selectedEnrollment(filters.enroll))
     );
     const tiered = isSignalTier(filters.tier) ? reviewed.filter((founder) => founder.signalTier === filters.tier) : reviewed;
-    if (showingPotential || filters.sort === "tier") {
-      return [...tiered].sort((a, b) => signalTierRank(a.signalTier) - signalTierRank(b.signalTier) || a.name.localeCompare(b.name));
+    const precollege = tiered.filter((founder) => matchesPrecollegeFilter(founder.precollegeSignals, filters.precollege));
+    if (showingPotential) {
+      return [...precollege].sort(
+        (a, b) =>
+          precollegeRankBoost(b.precollegeSignals) - precollegeRankBoost(a.precollegeSignals) ||
+          signalTierRank(a.signalTier) - signalTierRank(b.signalTier) ||
+          a.name.localeCompare(b.name)
+      );
     }
-    return tiered;
+    if (filters.sort === "tier") {
+      return [...precollege].sort((a, b) => signalTierRank(a.signalTier) - signalTierRank(b.signalTier) || a.name.localeCompare(b.name));
+    }
+    return precollege;
   }, [pool, filters, records, liveLikes, showingPotential]);
   const counts = (current.university && enrollment.byUniversity[current.university]) || enrollment.all;
   const [query, setQuery] = useState(current.q ?? "");
@@ -108,7 +121,7 @@ function FounderBody({
 
   return (
     <div data-scout-live="" className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
-      <FilterSidebar universities={universities} basePath="/founder/discover" current={current} mode="founder" />
+      <FilterSidebar universities={catalog.universities} basePath="/founder/discover" current={current} mode="founder" />
       <div className="flex-1">
         <div className="border-b border-border-c px-4 py-3">
           <EnrollmentChips basePath="/founder/discover" current={current} counts={counts} />

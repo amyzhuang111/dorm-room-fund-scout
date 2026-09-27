@@ -1,4 +1,6 @@
 import { enrollmentBadge } from "@/lib/domain/founder-status";
+import type { PrecollegeSignalView } from "@/lib/domain/precollege";
+import { bestPrecollegeSignals } from "@/lib/domain/precollege";
 import type { Queue } from "@/lib/domain/queue";
 import { QUEUE_LABELS } from "@/lib/domain/queue";
 import { primaryBlocker, type GateOutcome } from "@/lib/screening/gates";
@@ -96,6 +98,49 @@ const ENROLLMENT_CLASS: Record<string, string> = {
   older_alumni: "bg-danger-bg text-danger border-danger/20",
   unknown: "bg-surface text-muted border-border-c",
 };
+
+function TrophyIcon() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
+      <path
+        fill="currentColor"
+        d="M7 3h10v2h3a1 1 0 0 1 1 1v3a5 5 0 0 1-5 5h-.3A6 6 0 0 1 13 16.9V19h3v2H8v-2h3v-2.1A6 6 0 0 1 8.3 14H8a5 5 0 0 1-5-5V6a1 1 0 0 1 1-1h3V3zm0 4H5v2a3 3 0 0 0 2.8 3H8V7zm10 0v5h.2A3 3 0 0 0 19 9V7h-2z"
+      />
+    </svg>
+  );
+}
+
+export function PrecollegeBadges({ signals }: { signals: PrecollegeSignalView[] | undefined }) {
+  const ranked = bestPrecollegeSignals(signals ?? []);
+  if (!ranked.length) return null;
+  const shown = ranked.slice(0, 2);
+  const extra = ranked.length - shown.length;
+  return (
+    <>
+      {shown.map((signal) => {
+        const likely = signal.matchStatus === "likely";
+        const tip = `${signal.label}. ${likely ? "Likely match: full name only, school and class year were not both confirmed." : "Confirmed: full name, school, and class year agree."} ${signal.sourceUrl}`;
+        return (
+          <a
+            key={`${signal.signalType}-${signal.year ?? "na"}-${signal.sourceUrl}`}
+            href={signal.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={tip}
+            className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-semibold leading-none ${
+              likely ? "border-dashed border-foreground bg-white text-foreground" : "border-foreground bg-foreground text-white"
+            }`}
+          >
+            <TrophyIcon />
+            {signal.label}
+            {likely ? <span className="font-medium">likely</span> : null}
+          </a>
+        );
+      })}
+      {extra > 0 && <span className="text-[10px] font-medium text-muted">+{extra}</span>}
+    </>
+  );
+}
 
 export function PotentialFounderBadge() {
   return (

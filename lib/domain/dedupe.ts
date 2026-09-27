@@ -1157,6 +1157,21 @@ function absorbPerson(db: Database.Database, survivorId: string, dropId: string,
   moveAffiliations(db, dropId, survivorId);
   movePersonRoles(db, dropId, survivorId);
   db.prepare(`UPDATE claims SET entity_id = ? WHERE entity_type = 'person' AND entity_id = ?`).run(survivorId, dropId);
+  const droppedSignals = db.prepare(`SELECT id, signal_type, year, source_url FROM precollege_signals WHERE person_id = ?`).all(dropId) as {
+    id: string;
+    signal_type: string;
+    year: number | null;
+    source_url: string;
+  }[];
+  for (const signal of droppedSignals) {
+    const clash = db
+      .prepare(
+        `SELECT id FROM precollege_signals WHERE person_id = ? AND signal_type = ? AND IFNULL(year, 0) = IFNULL(?, 0) AND source_url = ?`
+      )
+      .get(survivorId, signal.signal_type, signal.year, signal.source_url) as { id: string } | undefined;
+    if (clash) db.prepare(`DELETE FROM precollege_signals WHERE id = ?`).run(signal.id);
+    else db.prepare(`UPDATE precollege_signals SET person_id = ? WHERE id = ?`).run(survivorId, signal.id);
+  }
   retargetRelationships(db, "person", dropId, survivorId);
   db.prepare(`UPDATE notes SET entity_id = ? WHERE entity_id = ?`).run(survivorId, dropId);
   db.prepare(`UPDATE possible_companies SET person_id = ? WHERE person_id = ?`).run(survivorId, dropId);

@@ -17,6 +17,8 @@ import { ScoutNav, useScoutNav } from "./scout-nav";
 import { UniversityPanel } from "./university-panel";
 import { projectShell, useProjectDetail } from "./use-project-detail";
 import { useFeedbackRecords } from "./feedback-provider";
+import { useMergedCatalog, useUserPipeline } from "./user-pipeline-provider";
+import { attachUserScoutNetwork, userCompanyMatches, userMapMarkers } from "@/lib/domain/user-pipeline";
 
 const GlobeView = dynamic(() => import("./globe-view").then((mod) => mod.GlobeView), {
   ssr: false,
@@ -93,19 +95,29 @@ function DiscoverBody({
 }) {
   const nav = useScoutNav()!;
   const { current, navigate } = nav;
+  const catalog = useMergedCatalog(universities, candidates, []);
   // The toggle itself reads `current` so it paints immediately. Filtering 569
   // companies (and repainting the tray) follows on the next frame.
   const query = useDeferredValue(current);
   const records = useFeedbackRecords(initialRecords);
-  const likes = useMemo(() => likeTargetsFrom(records, candidates, [], initialLikes), [records, candidates, initialLikes]);
-  const sorted = useMemo(() => companiesInView(candidates, records, likes, query), [candidates, records, likes, query]);
+  const likes = useMemo(() => likeTargetsFrom(records, catalog.candidates, [], initialLikes), [records, catalog.candidates, initialLikes]);
+  const sorted = useMemo(() => {
+    const viewed = companiesInView(catalog.candidates, records, likes, query);
+    const seen = new Set(viewed.map((company) => company.id));
+    const extras = catalog.candidates
+      .filter((company) => !seen.has(company.id) && userCompanyMatches(company, query))
+      .map((company) => ({ ...company, boostNote: null, boostScore: 0 }));
+    return [...viewed, ...extras];
+  }, [catalog.candidates, records, likes, query]);
   const visibleSectors = useMemo(() => sectorsForUniversity(sectors, current.university), [sectors, current.university]);
   const counts = (current.university && enrollment.byUniversity[current.university]) || enrollment.all;
   const view = VIEWS.find((item) => item === current.view) ?? "globe";
   const [seen, setSeen] = useState({ globe: view === "globe", network: view === "network", table: view === "table" });
   if (!seen[view]) setSeen((prev) => ({ ...prev, [view]: true }));
   const detail = useProjectDetail(current.project, initialDetail);
-  const selectedUniversity = current.university ? universities.find((u) => u.id === current.university) : undefined;
+  const { state: pipelineState } = useUserPipeline();
+  const selectedUniversity = current.university ? catalog.universities.find((u) => u.id === current.university) : undefined;
+  const markers = useMemo(() => userMapMarkers(pipelineState, catalog.universities), [pipelineState, catalog.universities]);
   const showUniversityDrawer = !current.project && selectedUniversity && view !== "globe";
 
   useEffect(() => {
@@ -125,7 +137,7 @@ function DiscoverBody({
 
   return (
     <div data-scout-live="" className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
-      <FilterSidebar universities={universities} basePath="/startup/discover" current={current} mode="startup" sectors={visibleSectors} />
+      <FilterSidebar universities={catalog.universities} basePath="/startup/discover" current={current} mode="startup" sectors={visibleSectors} />
       <div className="min-w-0 flex-1">
         <ExploreToolbar
           basePath="/startup/discover"
@@ -142,13 +154,13 @@ function DiscoverBody({
         )}
         {seen.network && (
           <div className={view === "network" ? "" : "hidden"}>
-            <NetworkSlot universities={universities} current={query} records={records} initialGraph={initialGraph} />
+            <NetworkSlot universities={catalog.universities} current={query} records={records} initialGraph={initialGraph} />
           </div>
         )}
         {seen.globe && (
           <div className={view === "globe" ? "" : "hidden"}>
             <GlobeView
-              universities={universities}
+              universities={catalog.universities}
               basePath="/startup/discover"
               current={query}
               previewCandidates={query.university ? sorted : []}
@@ -156,6 +168,7 @@ function DiscoverBody({
               campusArcs={arcs}
               onNavigate={navigate}
               active={view === "globe"}
+              userMarkers={markers}
             />
           </div>
         )}
@@ -208,18 +221,20 @@ function NetworkSlot({
     };
   }, [key, loadedKey, graph, current.university, current.sector, current.enroll]);
 
+  const { state } = useUserPipeline();
   const visible = useMemo(() => {
     if (!graph) return null;
+    const withUsers = attachUserScoutNetwork(graph, state, current.university);
     const hiddenMode = current.feedback === "hidden";
-    const nodes = graph.nodes.filter((node) => {
+    const nodes = withUsers.nodes.filter((node) => {
       if (node.type === "university") return true;
       const entityType = node.type === "person" ? "person" : "project";
       const hidden = isHidden(records, { entityType, entityId: node.id, name: node.label, domain: domainKey(node.linkUrl) });
       return hiddenMode ? hidden : !hidden;
     });
     const keep = new Set(nodes.map((node) => node.id));
-    return { ...graph, nodes, edges: graph.edges.filter((edge) => keep.has(edge.source) && keep.has(edge.target)) };
-  }, [graph, records, current.feedback]);
+    return { ...withUsers, nodes, edges: withUsers.edges.filter((edge) => keep.has(edge.source) && keep.has(edge.target)) };
+  }, [graph, records, current.feedback, state, current.university]);
 
   if (!visible || visible.nodes.length === 0) {
     return <p className="p-6 text-sm text-muted">{graph ? "No evidence-backed connections on record for this campus yet." : "Loading network…"}</p>;

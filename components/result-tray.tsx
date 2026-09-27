@@ -7,6 +7,7 @@ import { FeedbackControls } from "./feedback-controls";
 import { PersonLinkButton } from "./person-link";
 import { CompanyNameLink } from "./company-website";
 import { EnrollmentBadge, LeftSchoolBadge, SignalTierBadge } from "./badges";
+import { EntityMarks } from "./entity-marks";
 
 // Design MD §5: "In canvas views, show a collapsible bottom result tray
 // with compact cards. Selecting a card selects the same entity on the
@@ -58,6 +59,7 @@ export function ResultTray({
                 <span className="flex items-center gap-1">
                   <CompanyNameLink id={c.id} name={c.name} websiteUrl={c.websiteUrl} className="block truncate font-medium text-foreground hover:text-link" />
                   <SignalTierBadge tier={c.signalTier} basis={c.signalTierBasis} />
+                  <EntityMarks entityType="project" entityId={c.id} name={c.name} campusName={c.universities[0]} websiteUrl={c.websiteUrl} />
                 </span>
                 <p className="line-clamp-2 text-muted">{c.description || c.founders[0] || "No description yet"}</p>
                 <p className="truncate text-muted">{c.universities[0] ?? "Campus not confirmed"}</p>

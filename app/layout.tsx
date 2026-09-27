@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { AskAiProvider } from "@/components/ask-ai";
 import { TopNav } from "@/components/top-nav";
 import { FeedbackProvider } from "@/components/feedback-provider";
+import { UserPipelineBanner, UserPipelineProvider } from "@/components/user-pipeline-provider";
 import { feedbackRedirects } from "@/lib/domain/entity-redirects";
 import "./globals.css";
 
@@ -38,14 +39,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <AskAiProvider>
+          <UserPipelineProvider>
           <header className="border-b border-border-c bg-background">
             <Suspense fallback={<div className="h-14" />}>
               <TopNav />
             </Suspense>
           </header>
+          <UserPipelineBanner />
           <FeedbackProvider redirects={feedbackRedirects()}>
             <main className="flex-1">{children}</main>
           </FeedbackProvider>
+          </UserPipelineProvider>
           <footer className="border-t border-border-c px-4 py-3 text-center text-xs text-muted sm:px-6">
             Independent scouting workspace — not an official Dorm Room Fund product. No automatic outreach; nothing here implies Amy represents DRF.
           </footer>
