@@ -18,11 +18,14 @@ export type RimBand = "outer" | "inward";
 /**
  * Programs the hotspot directory does not list. Tiers match the directory
  * scale: S is tier 1, A is tier 2. Placement and labels only.
+ * South Park Commons, Emergent Ventures, and HF0 sit with Thiel and Y
+ * Combinator on the tier-1 ring. Z Fellows is a directory A and is not listed
+ * here.
  */
 export const STATIC_RIM_TIERS: readonly { name: string; tier: HotspotTier }[] = [
   { name: "South Park Commons", tier: "S" },
-  { name: "Emergent Ventures", tier: "A" },
-  { name: "HF0", tier: "A" },
+  { name: "Emergent Ventures", tier: "S" },
+  { name: "HF0", tier: "S" },
 ];
 
 /** An S/A program needs only a couple of links before it takes an outer slot. */
@@ -138,19 +141,27 @@ export interface RimInput {
   degree: number;
 }
 
+export interface RimPlacement {
+  band: RimBand;
+  /** S is the far outer ring. A stays on the outer rim, smaller and a step closer in. */
+  tier: HotspotTier;
+}
+
 /**
  * `outer` — S/A fellowships and cross-campus S/A accelerators, plus the static
- * top programs. Labeled, slightly larger, on the outer rim.
+ * top programs. Labeled and on the outer rim. Tier S is larger and further out
+ * than tier A. Z Fellows is directory A, so it stays outside the cloud and
+ * behind Thiel, Y Combinator, South Park Commons, Emergent Ventures, and HF0.
  * `inward` — B/C/D programs, hackathon organising teams, clubs, and campus
  * accelerators such as SkyDeck, UC LAUNCH, and delta v. Smaller, muted, unlabeled.
  * `null` — no rim treatment (people, startups, campuses, and small low-tier nodes).
  */
-export function rimBandFor(input: RimInput): RimBand | null {
+export function rimPlacementFor(input: RimInput): RimPlacement | null {
   if (input.nodeType !== "organization" && input.nodeType !== "program" && input.nodeType !== "investor") return null;
   const listed = staticTier(input.label);
   const profile = lookup(input.label);
   if (input.nodeType === "investor" && profile && !investorUsesProfile(profile.type)) {
-    if (listed === "S" || listed === "A") return input.degree >= OUTER_MIN_LINKS ? "outer" : null;
+    if ((listed === "S" || listed === "A") && input.degree >= OUTER_MIN_LINKS) return { band: "outer", tier: listed };
     return null;
   }
   const tier = profile?.tier ?? listed;
@@ -163,13 +174,18 @@ export function rimBandFor(input: RimInput): RimBand | null {
     /\bskydeck\b/i.test(input.label) ||
     placeKeyOf(input.label) === "uc launch" ||
     placeKeyOf(input.label).startsWith("uc launch ");
-  if (low) return input.degree >= INWARD_MIN_LINKS ? "inward" : null;
+  if (low) return input.degree >= INWARD_MIN_LINKS ? { band: "inward", tier: tier ?? "C" } : null;
   const top =
-    (listed === "S" || listed === "A") ||
+    listed === "S" ||
+    listed === "A" ||
     ((tier === "S" || tier === "A") && (isFellowship(type) || isNationalAccelerator(type, placeKind)));
-  if (top) return input.degree >= OUTER_MIN_LINKS ? "outer" : null;
-  if (tier === "B" || tier === "C" || tier === "D") return input.degree >= INWARD_MIN_LINKS ? "inward" : null;
+  if (top && tier && (tier === "S" || tier === "A") && input.degree >= OUTER_MIN_LINKS) return { band: "outer", tier };
+  if ((tier === "B" || tier === "C" || tier === "D") && input.degree >= INWARD_MIN_LINKS) return { band: "inward", tier };
   return null;
+}
+
+export function rimBandFor(input: RimInput): RimBand | null {
+  return rimPlacementFor(input)?.band ?? null;
 }
 
 interface RimNode {
@@ -177,6 +193,7 @@ interface RimNode {
   type: string;
   label?: string;
   rimBand?: RimBand | null;
+  rimTier?: HotspotTier | null;
 }
 
 /** One outer node per program name. The copy with more links keeps the rim. */
@@ -197,7 +214,10 @@ export function demoteDuplicateOuter<T extends RimNode>(nodes: T[], degree: Map<
       if (links !== 0) return links;
       return typeRank(b.type) - typeRank(a.type) || a.id.localeCompare(b.id);
     });
-    for (const extra of group.slice(1)) extra.rimBand = "inward";
+    for (const extra of group.slice(1)) {
+      extra.rimBand = "inward";
+      extra.rimTier = null;
+    }
   }
 }
 

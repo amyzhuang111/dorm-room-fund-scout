@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
-import { demoteDuplicateOuter, rimBandFor } from "./rim-tier";
+import { screenSize } from "../../components/network-style";
+import type { MapNode } from "./network-map";
+import { demoteDuplicateOuter, rimBandFor, rimPlacementFor } from "./rim-tier";
 
 const band = (label: string, nodeType: string, degree: number) => rimBandFor({ label, nodeType, degree });
 
@@ -7,6 +9,12 @@ assert.equal(band("Thiel Fellowship", "organization", 58), "outer");
 assert.equal(band("Y Combinator", "organization", 1490), "outer");
 assert.equal(band("Neo Scholars", "organization", 106), "outer");
 assert.equal(band("Z Fellows", "organization", 2), "outer");
+assert.equal(rimPlacementFor({ label: "Z Fellows", nodeType: "organization", degree: 2 })?.tier, "A");
+assert.equal(rimPlacementFor({ label: "Thiel Fellowship", nodeType: "organization", degree: 58 })?.tier, "S");
+assert.equal(rimPlacementFor({ label: "Y Combinator", nodeType: "organization", degree: 1490 })?.tier, "S");
+assert.equal(rimPlacementFor({ label: "South Park Commons", nodeType: "investor", degree: 6 })?.tier, "S");
+assert.equal(rimPlacementFor({ label: "Emergent Ventures", nodeType: "organization", degree: 4 })?.tier, "S");
+assert.equal(rimPlacementFor({ label: "HF0", nodeType: "investor", degree: 3 })?.tier, "S");
 assert.equal(band("a16z speedrun", "organization", 236), "outer");
 assert.equal(band("a16z Speedrun", "investor", 94), "outer");
 assert.equal(band("Mayfield Fellows Program", "organization", 332), "outer");
@@ -45,5 +53,9 @@ const nodes = [
 demoteDuplicateOuter(nodes, new Map([["org", 1490], ["inv", 232]]));
 assert.equal(nodes[0].rimBand, "outer");
 assert.equal(nodes[1].rimBand, "inward");
+
+const sized = (rimTier: "S" | "A"): number =>
+  screenSize({ type: "organization", rimBand: "outer", rimTier, signalScore: 0.4 } as MapNode);
+assert.ok(sized("S") > sized("A") + 0.8);
 
 console.log("rim-tier tests ok");

@@ -119,7 +119,7 @@ export function NetworkSigma({
     const featuredNames = new Set<string>();
     for (const node of graph.nodes
       .filter((node) => node.rimBand === "outer")
-      .sort((a, b) => b.degree - a.degree || a.id.localeCompare(b.id))) {
+      .sort((a, b) => (a.rimTier === "S" ? 0 : 1) - (b.rimTier === "S" ? 0 : 1) || b.degree - a.degree || a.id.localeCompare(b.id))) {
       const name = node.label.trim().toLowerCase();
       if (!name || featuredNames.has(name)) continue;
       featuredNames.add(name);
@@ -137,16 +137,17 @@ export function NetworkSigma({
     for (const node of graph.nodes) {
       const campus = node.type === "campus";
       const hub = featured.has(node.id);
+      const lead = hub && node.rimTier === "S";
       const anchor = campus || hub;
       labelMeta.push({
         id: node.id,
-        tier: campus ? 5 : hub ? 4 : 1,
+        tier: campus ? 5 : lead ? 4 : hub ? 2 : 1,
         degree: node.degree,
         text: truncateMapLabel(node.label, false, anchor),
         fullText: node.label,
         marker: false,
         anchor,
-        fontSize: campus ? LABEL_CAMPUS : hub ? LABEL_HUB : LABEL_NODE,
+        fontSize: campus ? LABEL_CAMPUS : lead ? LABEL_HUB : hub ? 10 : LABEL_NODE,
         tracking: 0,
       });
     }
@@ -154,6 +155,7 @@ export function NetworkSigma({
     for (const node of graph.nodes) {
       const campus = node.type === "campus";
       const hub = featured.has(node.id);
+      const lead = hub && node.rimTier === "S";
       const color = nodeColor(node, colors);
       g.addNode(node.id, {
         x: node.x,
@@ -165,10 +167,10 @@ export function NetworkSigma({
         type: NODE_SHAPE[node.type],
         kind: node.type,
         anchor: campus || hub,
-        zIndex: node.rimBand === "outer" ? 3 : Z[node.type],
+        zIndex: lead ? 3 : Z[node.type],
         signalTip: signalTooltip(node),
         linkColor: emphasizeColor(color),
-        labelPx: campus ? LABEL_CAMPUS : hub ? LABEL_HUB : LABEL_NODE,
+        labelPx: campus ? LABEL_CAMPUS : lead ? LABEL_HUB : hub ? 10 : LABEL_NODE,
       });
     }
     const regionCampuses = new Map<string, string[]>();

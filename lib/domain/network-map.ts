@@ -14,7 +14,7 @@ import { CAMPUSES } from "./campuses";
 import { connectionSignal, founderSignalWeight, mentionsAccelerator, perCapitaSignal, signalFields, sqrtScores, startupSignalWeight, type SignalParts } from "./network-signal-size";
 import { REGIONS, regionForCampus, regionInk, type RegionMarker } from "./network-regions";
 import type { HotspotSectionId, HotspotTier } from "./hotspot-model";
-import { demoteDuplicateOuter, rimBandFor, type RimBand } from "./rim-tier";
+import { demoteDuplicateOuter, rimPlacementFor, type RimBand } from "./rim-tier";
 import { hotspotGraphPatch, organizationMap } from "./hotspots";
 import { confirmedLinkedIn } from "./person-link";
 import { sectorLabel } from "./sectors";
@@ -68,6 +68,8 @@ export interface MapNode {
    * Placement and labels only — not Founder Signal.
    */
   rimBand?: "outer" | "inward";
+  /** S sits further out and larger. A, including Z Fellows, stays on the outer rim a step behind. */
+  rimTier?: HotspotTier;
   /** Hotspot sections this organization appears in. */
   orgSections?: HotspotSectionId[];
   /** People with a stored link to this organization. */
@@ -117,9 +119,10 @@ interface SimNode {
   campuses?: string[];
   label?: string;
   rimBand?: RimBand | null;
+  rimTier?: HotspotTier | null;
 }
 
-const LAYOUT_VERSION = "23";
+const LAYOUT_VERSION = "24";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -743,6 +746,7 @@ function assembleNetworkMap(): MapGraph {
       ...signalFields(signal),
       ...(at.anchor ? { anchor: true } : {}),
       ...(at.rimBand ? { rimBand: at.rimBand } : {}),
+      ...(at.rimTier ? { rimTier: at.rimTier } : {}),
     });
   };
 
@@ -940,7 +944,9 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     }
   }
   for (const node of simNodes) {
-    node.rimBand = node.label ? rimBandFor({ label: node.label, nodeType: node.type, degree: degree.get(node.id) ?? 0 }) : null;
+    const placement = node.label ? rimPlacementFor({ label: node.label, nodeType: node.type, degree: degree.get(node.id) ?? 0 }) : null;
+    node.rimBand = placement?.band ?? null;
+    node.rimTier = placement?.band === "outer" ? placement.tier : null;
   }
   demoteDuplicateOuter(simNodes, degree);
 
@@ -1221,7 +1227,7 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     const radiiOfBody = body.map((node) => Math.hypot(node.tx - center.x, node.ty - center.y)).sort((a, b) => a - b);
     const outer = radiiOfBody.length ? radiiOfBody[Math.min(radiiOfBody.length - 1, Math.floor(radiiOfBody.length * 0.9))] : 48;
     const byDegree = (a: LiveNode, b: LiveNode) => (degree.get(b.id) ?? 0) - (degree.get(a.id) ?? 0) || a.id.localeCompare(b.id);
-    const place = (hubs: LiveNode[], rimBase: number, rimJitter: number, arcScale: number, clamp: number, spread: boolean) => {
+    const place = (hubs: LiveNode[], rimBase: number, rimJitter: number, arcScale: number, clamp: number, spread: boolean, bias = 0) => {
       const arc = Math.min(Math.PI * 1.75, Math.max(1.35, arcScale * Math.max(hubs.length, 1)));
       hubs.forEach((hub, index) => {
         const members = hubMembers.get(hub.id) ?? [];
@@ -1246,7 +1252,7 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
         }
         const spacing = arc / Math.max(hubs.length, 1);
         const slot = index === 0 ? 0 : (index % 2 === 0 ? 1 : -1) * Math.ceil(index / 2) * spacing;
-        let angle = spread ? outward + slot : preferred * 0.25 + (outward + slot) * 0.75;
+        let angle = (spread ? outward + slot : preferred * 0.25 + (outward + slot) * 0.75) + bias;
         let rel = angle - outward;
         while (rel > Math.PI) rel -= Math.PI * 2;
         while (rel < -Math.PI) rel += Math.PI * 2;
@@ -1261,10 +1267,12 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
         hubTargets.set(hub.id, { x: tx, y: ty });
       });
     };
-    const outers = group.filter((hub) => hub.rimBand === "outer").sort(byDegree);
+    const tier1 = group.filter((hub) => hub.rimBand === "outer" && hub.rimTier === "S").sort(byDegree);
+    const tier2 = group.filter((hub) => hub.rimBand === "outer" && hub.rimTier !== "S").sort(byDegree);
     const rest = group.filter((hub) => hub.rimBand !== "outer").sort(byDegree);
-    place(outers, outer + 86, 10, 0.85, Math.PI * 0.98, true);
-    place(rest, outer + 38, 14, 0.55, Math.PI * 0.82, false);
+    place(tier1, outer + 100, 8, 0.9, Math.PI * 0.98, true);
+    place(tier2, outer + 62, 8, 0.75, Math.PI * 0.9, true, 0.62);
+    place(rest, outer + 36, 14, 0.55, Math.PI * 0.82, false);
   }
 
   const hubs = live.filter((node) => node.hub);

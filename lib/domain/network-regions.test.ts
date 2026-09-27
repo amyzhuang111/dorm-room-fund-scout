@@ -77,7 +77,9 @@ const campusColors = new Map(siblings.map((campus) => [campus.id, campusShade(ca
 const person = nodeColor({ type: "person", campus: "univ_penn", id: "p1" }, campusColors);
 assert.match(person, /^rgba\(/);
 assert.doesNotMatch(person, /156,\s*163,\s*175/);
-const investor = nodeColor({ type: "investor", campus: null, id: "inv", rimBand: "outer" }, campusColors);
-assert.match(investor, /107,\s*114,\s*128/);
+const investor = nodeColor({ type: "investor", campus: null, id: "inv", rimBand: "outer", rimTier: "S" }, campusColors);
+assert.match(investor, /75,\s*85,\s*99/);
+const second = nodeColor({ type: "organization", campus: null, id: "z", rimBand: "outer", rimTier: "A" }, campusColors);
+assert.match(second, /156,\s*163,\s*175/);
 
 console.log("region color tests ok");

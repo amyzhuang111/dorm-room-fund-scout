@@ -65,10 +65,11 @@ function regionIndex(id: string): number {
   return index < 0 ? REGIONS.length : index;
 }
 
-export function nodeColor(node: { type: MapNodeType; campus: string | null; id?: string; rimBand?: "outer" | "inward" | null }, colors: Map<string, string>): string {
+export function nodeColor(node: { type: MapNodeType; campus: string | null; id?: string; rimBand?: "outer" | "inward" | null; rimTier?: "S" | "A" | "B" | "C" | "D" | null }, colors: Map<string, string>): string {
   if (node.id && (node.id.startsWith("user_") || node.id.startsWith("ufounder_") || node.id.startsWith("ucampus_"))) return withAlpha("#6b7280", 0.9);
   if (node.rimBand === "inward" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "rgba(196, 201, 209, 0.42)";
-  if (node.rimBand === "outer" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha("#6b7280", 0.94);
+  if (node.rimBand === "outer" && node.rimTier === "S" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha("#4b5563", 0.96);
+  if (node.rimBand === "outer" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha("#9ca3af", 0.82);
   if (node.type === "investor" || node.type === "organization" || node.type === "program") return withAlpha(NODE_FILL[node.type], 0.9);
   const id = node.campus ?? (node.type === "campus" ? node.id : null);
   if (id && colors.get(id)) return withAlpha(colors.get(id) as string, FILL_ALPHA);
@@ -142,7 +143,8 @@ export function screenSize(node: MapNode): number {
   const score = clamp(node.signalScore ?? 0, 0, 1);
   if (node.type === "campus") return Math.min(9.5, 6.4 + score * 3.1);
   if (node.type === "organization" || node.type === "program" || node.type === "investor") {
-    if (node.rimBand === "outer") return Math.min(5.15, 4.35 + score * 0.7);
+    if (node.rimBand === "outer" && node.rimTier === "S") return Math.min(5.4, 4.8 + score * 0.5);
+    if (node.rimBand === "outer") return Math.min(3.65, 3.1 + score * 0.4);
     if (node.rimBand === "inward") return Math.min(2.15, 1.65 + score * 0.35);
     return Math.min(4.2, 2.7 + score * 1.25);
   }
