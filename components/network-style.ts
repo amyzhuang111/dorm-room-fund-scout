@@ -20,7 +20,7 @@ export interface CampusSwatch {
   regionLabel: string;
 }
 
-/** Shades of one color family per region. Campuses in a wedge stay related and still distinct. */
+/** Shades of one color family per region. Campuses in a neighborhood stay related and still distinct. */
 export function assignCampusColors(campuses: { id: string; label?: string }[]): Map<string, string> {
   const list = campuses.map((campus) => ({ id: campus.id, label: campus.label ?? campus.id }));
   return new Map(list.map((campus) => [campus.id, campusShade(campus.id, campus.label, list)]));

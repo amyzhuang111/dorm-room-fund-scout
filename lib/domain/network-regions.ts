@@ -1,10 +1,10 @@
-// Regional wedges for the network map, in the order Amy asked for.
+// Soft regional neighborhoods for the network map, in the order Amy asked for.
 // Schools the config does not list yet (Drexel, Villanova, and later campuses)
-// still land in the right wedge by name.
+// still land in the right neighborhood by name.
 
 export interface RegionDef {
   id: string;
-  /** Short name drawn on the outer ring. */
+  /** Short name drawn just outside the cluster. */
   label: string;
   /** Full name in the legend and on hover. */
   fullLabel: string;
@@ -122,7 +122,7 @@ export interface RegionMarker {
   campusIds: string[];
 }
 
-/** Place every campus on its region's arc. Regions are adjacent wedges of one circle. */
+/** Starting seats only. Campuses in one region begin next to each other. The force layout is free to move them. */
 export function placeCampuses(campuses: { id: string; label: string }[], discRadius: number): { seats: Map<string, WedgeSeat>; markers: RegionMarker[] } {
   const byRegion = new Map<string, { id: string; label: string }[]>();
   for (const campus of campuses) {
@@ -140,25 +140,28 @@ export function placeCampuses(campuses: { id: string; label: string }[], discRad
   active.forEach((region, index) => {
     const span = (weights[index] / weightSum) * Math.PI * 2;
     const members = [...(byRegion.get(region.id) ?? [])].sort((a, b) => a.label.localeCompare(b.label) || a.id.localeCompare(b.id));
-    const pad = Math.min(span * 0.18, 0.14);
-    const inner = Math.max(span - pad * 2, span * 0.45);
+    const mid = angle + span / 2;
+    const centerX = Math.cos(mid) * discRadius;
+    const centerY = Math.sin(mid) * discRadius;
+    const tangentX = Math.cos(mid + Math.PI / 2);
+    const tangentY = Math.sin(mid + Math.PI / 2);
     members.forEach((campus, seat) => {
-      const slice = inner / members.length;
-      const theta = angle + pad + (seat + 0.5) * slice;
-      const ring = discRadius * 0.74;
+      const along = (seat - (members.length - 1) / 2) * 52;
+      const inward = (seat % 2) * 28;
+      const x = centerX + tangentX * along - Math.cos(mid) * inward;
+      const y = centerY + tangentY * along - Math.sin(mid) * inward;
       seats.set(campus.id, {
         id: campus.id,
-        x: Math.cos(theta) * ring,
-        y: Math.sin(theta) * ring,
-        angle: theta,
+        x,
+        y,
+        angle: Math.atan2(y, x),
         regionId: region.id,
         wedgeStart: angle,
         wedgeSpan: span,
-        sliceHalf: slice * 0.42,
+        sliceHalf: 0.2,
       });
     });
-    const mid = angle + span / 2;
-    const labelRadius = discRadius * 1.2;
+    const labelRadius = discRadius * 1.35;
     markers.push({
       id: region.id,
       label: region.label,
