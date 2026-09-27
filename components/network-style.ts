@@ -292,7 +292,7 @@ export function screenLabelTier(marker: boolean, anchor: boolean, type: string):
 
 /** Same truncation drawHaloLabel uses, so the collision box matches the glyphs. */
 export function truncateMapLabel(text: string, marker: boolean, anchor: boolean): string {
-  const limit = marker ? 18 : anchor ? 22 : 28;
+  const limit = marker ? 28 : anchor ? 22 : 28;
   if (text.length <= limit) return text;
   return `${text.slice(0, limit - 1)}…`;
 }

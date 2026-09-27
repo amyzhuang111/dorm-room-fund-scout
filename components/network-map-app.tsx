@@ -429,7 +429,7 @@ export function NetworkMapApp() {
             <FilterGroup title="Campus">
               {swatchGroups.map((group) => (
                 <div key={group.id} className="mt-1.5">
-                  <p className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: group.color }}>
+                  <p className="text-[10px] font-semibold leading-tight" style={{ color: group.color }}>
                     {group.label}
                   </p>
                   {group.swatches.map((swatch) => (
@@ -534,7 +534,7 @@ export function NetworkMapApp() {
       </div>
 
       <div
-        className="absolute bottom-3 z-20 w-44 rounded border border-neutral-200 bg-white/95 text-[11px] text-black shadow-sm"
+        className="absolute bottom-3 z-20 w-[22rem] rounded border border-neutral-200 bg-white/95 text-[11px] text-black shadow-sm"
         style={{ left: filtersOpen ? "18.2rem" : "0.75rem" }}
       >
         <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 border-b border-neutral-200 px-1.5 py-1 text-neutral-700">
@@ -550,10 +550,10 @@ export function NetworkMapApp() {
             Cross-campus
           </span>
         </div>
-        <ul className="max-h-52 overflow-y-auto py-0.5" aria-label="Campuses">
+        <div className="grid max-h-96 grid-cols-2 gap-x-1 overflow-y-auto py-0.5" role="list" aria-label="Campuses">
           {swatchGroups.map((group) => (
-            <li key={group.id}>
-              <p className="px-1.5 pt-1 text-[10px] font-semibold uppercase tracking-wide" style={{ color: group.color }}>
+            <div key={group.id}>
+              <p className="px-1.5 pt-1 text-[10px] font-semibold leading-tight" style={{ color: group.color }}>
                 {group.label}
               </p>
               <ul>
@@ -574,9 +574,9 @@ export function NetworkMapApp() {
                   );
                 })}
               </ul>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
 
       {detailOpen && selectedNode && (

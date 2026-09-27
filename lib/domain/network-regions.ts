@@ -1,74 +1,62 @@
-// Soft regional neighborhoods for the network map, in the order Amy asked for.
-// Schools the config does not list yet (Drexel, Villanova, and later campuses)
-// still land in the right neighborhood by name.
+// Dorm Room Fund's four recruiting teams, from dormroomfund.com/join, plus
+// International for campuses outside the US. Schools not in the config yet
+// still land in the right team by name.
 
 export interface RegionDef {
   id: string;
-  /** Short name drawn just outside the cluster. */
+  /** Official team name, drawn outside the cluster and used in the legend. */
   label: string;
-  /** Full name in the legend and on hover. */
+  /** Same official name, shown in full on hover. */
   fullLabel: string;
   /** Base hue for this region's color family. */
   hue: number;
 }
 
 export const REGIONS: RegionDef[] = [
-  { id: "philly", label: "Philly", fullLabel: "Philly / Mid-Atlantic", hue: 2 },
-  { id: "northeast", label: "Northeast", fullLabel: "Northeast / Boston", hue: 222 },
-  { id: "nyc", label: "NYC", fullLabel: "NYC", hue: 28 },
-  { id: "southeast", label: "Southeast", fullLabel: "Southeast", hue: 136 },
-  { id: "midwest", label: "Midwest", fullLabel: "Midwest", hue: 278 },
-  { id: "southwest", label: "Southwest", fullLabel: "Southwest / Texas", hue: 48 },
-  { id: "bay", label: "Bay Area", fullLabel: "West Coast / Bay Area", hue: 196 },
-  { id: "socal", label: "SoCal", fullLabel: "SoCal", hue: 332 },
-  { id: "pacific", label: "Pacific NW", fullLabel: "Pacific NW", hue: 164 },
-  { id: "canada", label: "Canada", fullLabel: "Canada", hue: 252 },
-  { id: "international", label: "UK", fullLabel: "UK / International", hue: 78 },
+  { id: "boston", label: "Boston & Northeast", fullLabel: "Boston & Northeast", hue: 252 },
+  { id: "ny", label: "NY & Midwest", fullLabel: "NY & Midwest", hue: 38 },
+  { id: "philly", label: "Philadelphia & Southeast", fullLabel: "Philadelphia & Southeast", hue: 354 },
+  { id: "west", label: "SF & West Coast", fullLabel: "SF & West Coast", hue: 188 },
+  { id: "international", label: "International", fullLabel: "International", hue: 312 },
 ];
 
 const REGION_BY_ID = new Map(REGIONS.map((region) => [region.id, region]));
 
 /** Known campuses. Anything else is matched by name, then treated as international. */
 const CAMPUS_REGION: Record<string, string> = {
+  univ_mit: "boston",
+  univ_harvard: "boston",
+  univ_brown: "boston",
+  univ_yale: "ny",
+  univ_cornell: "ny",
+  univ_nyu: "ny",
+  univ_columbia: "ny",
+  univ_michigan: "ny",
+  univ_notredame: "ny",
   univ_penn: "philly",
   univ_lafayette: "philly",
   univ_princeton: "philly",
   univ_cmu: "philly",
-  univ_mit: "northeast",
-  univ_harvard: "northeast",
-  univ_brown: "northeast",
-  univ_yale: "northeast",
-  univ_cornell: "northeast",
-  univ_nyu: "nyc",
-  univ_columbia: "nyc",
-  univ_duke: "southeast",
-  univ_gatech: "southeast",
-  univ_uva: "southeast",
-  univ_michigan: "midwest",
-  univ_notredame: "midwest",
-  univ_utexas: "southwest",
-  univ_stanford: "bay",
-  univ_berkeley: "bay",
-  univ_hmc: "socal",
-  univ_waterloo: "canada",
-  univ_toronto: "canada",
-  univ_queens: "canada",
-  univ_laurentian: "canada",
+  univ_duke: "philly",
+  univ_gatech: "philly",
+  univ_uva: "philly",
+  univ_stanford: "west",
+  univ_berkeley: "west",
+  univ_hmc: "west",
+  univ_utexas: "west",
+  univ_waterloo: "international",
+  univ_toronto: "international",
+  univ_queens: "international",
+  univ_laurentian: "international",
   univ_cambridge: "international",
 };
 
 const NAME_RULES: [RegExp, string][] = [
-  [/drexel|villanova|swarthmore|haverford|temple university|lehigh|lafayette|pennsylvania|princeton|carnegie mellon/i, "philly"],
-  [/massachusetts institute|\bmit\b|harvard|brown university|yale|tufts|boston college|boston university|northeastern|dartmouth|wellesley|amherst college|cornell/i, "northeast"],
-  [/new york university|\bnyu\b|columbia university|fordham|cooper union/i, "nyc"],
-  [/duke|georgia tech|georgia institute|university of virginia|\buva\b|north carolina|emory|vanderbilt|university of florida/i, "southeast"],
-  [/michigan|notre dame|northwestern|university of chicago|purdue|uiuc|wisconsin|minnesota|ohio state/i, "midwest"],
-  [/texas|austin|rice university|arizona state|university of arizona/i, "southwest"],
-  [/stanford|berkeley/i, "bay"],
-  [/harvey mudd|\bucla\b|southern california|\busc\b|caltech|uc san diego|uc irvine|pomona college/i, "socal"],
-  [/university of washington|oregon state|university of oregon/i, "pacific"],
-  [/waterloo|toronto|queen'?s university|laurentian|mcgill|university of british columbia|\bubc\b|university of alberta/i, "canada"],
-  [/cambridge|oxford|imperial college|london school/i, "international"],
+  [/waterloo|toronto|queen'?s university|laurentian|mcgill|university of british columbia|\bubc\b|university of alberta|cambridge|oxford|imperial college|london school of economics/i, "international"],
+  [/massachusetts institute|\bmit\b|harvard|\bbrown\b|tufts|boston college|boston university|northeastern university|dartmouth|wellesley|amherst college|williams college|bowdoin|middlebury|brandeis|babson/i, "boston"],
+  [/yale|cornell|new york university|\bnyu\b|columbia university|fordham|cooper union|rensselaer|syracuse university|university of rochester|michigan|notre dame|northwestern|university of chicago|purdue|\buiuc\b|university of illinois|wisconsin|minnesota|ohio state|university of iowa|indiana university|case western/i, "ny"],
+  [/pennsylvania|\bpenn\b|drexel|villanova|swarthmore|haverford|temple university|lehigh|lafayette|princeton|carnegie mellon|rutgers|duke|georgia tech|georgia institute|university of virginia|\buva\b|north carolina|emory|vanderbilt|university of florida|georgetown|george washington|johns hopkins|washington university|washu|tulane|clemson|university of maryland|university of miami|university of georgia/i, "philly"],
+  [/stanford|berkeley|harvey mudd|\bucla\b|southern california|\busc\b|caltech|uc san diego|uc irvine|pomona college|university of washington|oregon state|university of oregon|university of texas|ut austin|rice university|arizona state|university of arizona|university of colorado|university of utah|university of hawaii/i, "west"],
 ];
 
 export function regionForCampus(id: string, label = ""): string {
@@ -96,8 +84,9 @@ export function campusShade(id: string, label: string, siblings: { id: string; l
     .sort((a, b) => a.label.localeCompare(b.label) || a.id.localeCompare(b.id));
   const index = Math.max(0, family.findIndex((campus) => campus.id === id));
   const count = Math.max(family.length, 1);
-  const hue = regionDef(regionId).hue + (index - (count - 1) / 2) * 12;
-  const light = 32 + (count === 1 ? 6 : (index / (count - 1)) * 14);
+  const spread = Math.min(7, 28 / count);
+  const hue = regionDef(regionId).hue + (index - (count - 1) / 2) * spread;
+  const light = 30 + (count === 1 ? 8 : (index / (count - 1)) * 16);
   return hslToHex(((hue % 360) + 360) % 360, 76, light);
 }
 
