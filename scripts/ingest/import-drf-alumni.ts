@@ -29,7 +29,7 @@ function csvCell(value: string | number | null | undefined): string {
 }
 
 function writeCsv(records: DrfAlumniRecord[]) {
-  const header = ["name", "drf_team", "year_start", "year_end", "class_year", "school", "university_id", "current_role", "current_firm", "firm_type", "firm_confidence", "linkedin_url", "linkedin_confidence", "x_url", "confidence", "founder", "matched_startup_id", "evidence_urls", "source_url", "firm_source_url", "excerpt"];
+  const header = ["name", "drf_team", "year_start", "year_end", "class_year", "school", "university_id", "current_role", "current_firm", "firm_type", "firm_confidence", "linkedin_url", "linkedin_confidence", "location", "x_url", "confidence", "founder", "matched_startup_id", "evidence_urls", "source_url", "firm_source_url", "linkedin_source_url", "verification_note", "excerpt"];
   const lines = [header.join(",")];
   for (const record of records) {
     const founder = record.currentRole && /\bfounder\b/i.test(record.currentRole) ? "yes" : "";
@@ -48,6 +48,7 @@ function writeCsv(records: DrfAlumniRecord[]) {
         record.firmConfidence,
         record.linkedinUrl,
         record.linkedinConfidence,
+        record.location,
         record.xUrl,
         record.confidence,
         founder,
@@ -55,6 +56,8 @@ function writeCsv(records: DrfAlumniRecord[]) {
         record.sourceUrls.join(" "),
         record.sourceUrl,
         record.firmSourceUrl,
+        record.linkedinSourceUrl,
+        record.verificationNote,
         record.excerpt,
       ].map(csvCell).join(",")
     );
@@ -216,11 +219,11 @@ function main() {
       db.prepare(
         `INSERT INTO drf_alumni (
            id, person_id, name, drf_team, university_id, school_label, program_id, program_label,
-           year_start, year_end, class_year, current_firm, current_role, firm_type, firm_confidence, linkedin_confidence, investor_id,
+           year_start, year_end, class_year, current_firm, current_role, firm_type, firm_confidence, linkedin_confidence, linkedin_url, linkedin_source_url, location, verification_note, investor_id,
            source_url, firm_source_url, sources_json, confidence, excerpt
          ) VALUES (
            @id, @person_id, @name, @drf_team, @university_id, @school_label, @program_id, @program_label,
-           @year_start, @year_end, @class_year, @current_firm, @current_role, @firm_type, @firm_confidence, @linkedin_confidence, @investor_id,
+           @year_start, @year_end, @class_year, @current_firm, @current_role, @firm_type, @firm_confidence, @linkedin_confidence, @linkedin_url, @linkedin_source_url, @location, @verification_note, @investor_id,
            @source_url, @firm_source_url, @sources_json, @confidence, @excerpt
          )
          ON CONFLICT(id) DO UPDATE SET
@@ -239,6 +242,10 @@ function main() {
            firm_type = excluded.firm_type,
            firm_confidence = excluded.firm_confidence,
            linkedin_confidence = excluded.linkedin_confidence,
+           linkedin_url = excluded.linkedin_url,
+           linkedin_source_url = excluded.linkedin_source_url,
+           location = excluded.location,
+           verification_note = excluded.verification_note,
            investor_id = excluded.investor_id,
            source_url = excluded.source_url,
            firm_source_url = excluded.firm_source_url,
@@ -262,6 +269,10 @@ function main() {
         firm_type: record.firmType,
         firm_confidence: record.firmConfidence,
         linkedin_confidence: record.linkedinConfidence,
+        linkedin_url: record.linkedinUrl,
+        linkedin_source_url: record.linkedinSourceUrl,
+        location: record.location,
+        verification_note: record.verificationNote,
         investor_id: record.investorId,
         source_url: record.sourceUrl,
         firm_source_url: record.firmSourceUrl,
@@ -297,8 +308,14 @@ function main() {
     n: number;
   }[];
   const total = db.prepare(`SELECT confidence, COUNT(*) AS n FROM drf_alumni GROUP BY confidence`).all() as { confidence: string; n: number }[];
+  const linkedin = db.prepare(`SELECT COALESCE(linkedin_confidence, 'missing') AS linkedin_confidence, COUNT(*) AS n FROM drf_alumni GROUP BY linkedin_confidence`).all() as { linkedin_confidence: string; n: number }[];
+  const firms = db.prepare(`SELECT COUNT(*) AS n FROM drf_alumni WHERE current_firm IS NOT NULL AND current_firm != ''`).get() as { n: number };
+  const locations = db.prepare(`SELECT COUNT(*) AS n FROM drf_alumni WHERE location IS NOT NULL AND location != ''`).get() as { n: number };
   console.log(`drf alumni: ${records.length} records`);
   for (const row of total) console.log(`  ${row.confidence}: ${row.n}`);
+  for (const row of linkedin) console.log(`  linkedin ${row.linkedin_confidence}: ${row.n}`);
+  console.log(`  current firm filled: ${firms.n}`);
+  console.log(`  location filled: ${locations.n}`);
   for (const row of counts) console.log(`  ${row.confidence} · ${row.current_firm ?? "(no firm)"}: ${row.n}`);
 }
 

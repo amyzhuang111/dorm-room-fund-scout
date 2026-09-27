@@ -31,6 +31,8 @@ export interface DrfAlumniRecord {
   linkedinUrl: string | null;
   linkedinConfidence: DrfConfidence | null;
   linkedinSourceUrl: string | null;
+  location: string | null;
+  verificationNote: string | null;
   xUrl: string | null;
   foundedProjectId: string | null;
   sourceUrls: string[];
@@ -101,6 +103,10 @@ export function parseAlumniRecords(input: unknown): DrfAlumniRecord[] {
       throw new Error(`${id}: a confirmed LinkedIn profile needs the page that links it`);
     }
     const xUrl = httpUrl(row.x_url, "x_url", id);
+    const location = clean(row.location);
+    const verificationNote = clean(row.verification_note);
+    if (verificationNote && verificationNote.length < 40) throw new Error(`${id}: verification_note is too short to be evidence`);
+    const proofUrls = proofList(row.proof_urls, id);
     const foundedRaw = clean(row.founded_project_id);
     if (foundedRaw && !/^proj_[A-Za-z0-9_-]+$/.test(foundedRaw)) throw new Error(`${id}: founded_project_id is not a project id`);
     const firmType = firmTypeFor(role, firm, clean(row.firm_type));
@@ -109,7 +115,7 @@ export function parseAlumniRecords(input: unknown): DrfAlumniRecord[] {
       throw new Error(`${id}: firm_confidence must be confirmed or likely`);
     }
     const founderOnly = !!role && /\bfounder\b/i.test(role) && !/\b(partner|gp|investor|principal|vp)\b/i.test(role);
-    const urls = [sourceUrl, httpUrl(row.firm_source_url, "firm_source_url", id), httpUrl(row.team_source_url, "team_source_url", id), httpUrl(row.school_source_url, "school_source_url", id), linkedinUrl, linkedinSourceUrl, xUrl].filter(
+    const urls = [sourceUrl, httpUrl(row.firm_source_url, "firm_source_url", id), httpUrl(row.team_source_url, "team_source_url", id), httpUrl(row.school_source_url, "school_source_url", id), linkedinUrl, linkedinSourceUrl, xUrl, ...proofUrls].filter(
       (url): url is string => !!url
     );
     return {
@@ -134,6 +140,8 @@ export function parseAlumniRecords(input: unknown): DrfAlumniRecord[] {
       linkedinUrl,
       linkedinConfidence,
       linkedinSourceUrl,
+      location,
+      verificationNote,
       xUrl,
       foundedProjectId: foundedRaw,
       sourceUrls: [...new Set(urls)],
@@ -168,9 +176,23 @@ interface AlumniDbRow {
   investor_id: string | null;
   source_url: string;
   firm_source_url: string | null;
+  linkedin_url?: string | null;
+  linkedin_source_url?: string | null;
+  location?: string | null;
+  verification_note?: string | null;
   sources_json: string | null;
   confidence: string;
   excerpt: string;
+}
+
+function proofList(value: unknown, id: string): string[] {
+  if (value == null) return [];
+  if (!Array.isArray(value)) throw new Error(`${id}: proof_urls must be a list`);
+  return value.map((url, index) => {
+    const text = httpUrl(url, `proof_urls ${index + 1}`, id);
+    if (!text) throw new Error(`${id}: proof url ${index + 1} is empty`);
+    return text;
+  });
 }
 
 function fromDb(row: AlumniDbRow): DrfAlumRow {
@@ -202,14 +224,16 @@ function fromDb(row: AlumniDbRow): DrfAlumRow {
     investorId: row.investor_id,
     sourceUrl: row.source_url,
     firmSourceUrl: row.firm_source_url,
-    linkedinUrl: sourceUrls.find((url) => /linkedin\.com\/in\//i.test(url)) ?? null,
+    linkedinUrl: row.linkedin_url ?? sourceUrls.find((url) => /linkedin\.com\/in\//i.test(url)) ?? null,
     linkedinConfidence:
       row.linkedin_confidence === "confirmed" || row.linkedin_confidence === "likely"
         ? row.linkedin_confidence
         : sourceUrls.some((url) => /linkedin\.com\/in\//i.test(url))
           ? "likely"
           : null,
-    linkedinSourceUrl: null,
+    linkedinSourceUrl: row.linkedin_source_url ?? null,
+    location: row.location ?? null,
+    verificationNote: row.verification_note ?? null,
     xUrl: sourceUrls.find((url) => /(^https:\/\/(x|twitter)\.com\/)/i.test(url)) ?? null,
     foundedProjectId: null,
     sourceUrls,

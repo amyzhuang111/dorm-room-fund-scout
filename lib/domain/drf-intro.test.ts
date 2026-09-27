@@ -19,8 +19,8 @@ for (const row of records) {
 }
 assert.equal(records.find((row) => row.id === "dra_lauren_reeder")?.investorId, "inv_sequoia_capital");
 assert.equal(records.find((row) => row.id === "dra_lauren_reeder")?.linkedinConfidence, "confirmed");
-assert.equal(records.filter((row) => row.linkedinConfidence === "confirmed").length, 23);
-assert.equal(records.filter((row) => row.linkedinUrl).length, 175);
+assert.equal(records.filter((row) => row.linkedinConfidence === "confirmed").length, 78);
+assert.equal(records.filter((row) => row.linkedinUrl).length, 176);
 for (const row of records) {
   if (row.linkedinUrl) assert.ok(row.linkedinConfidence === "confirmed" || row.linkedinConfidence === "likely", row.id);
   else assert.equal(row.linkedinConfidence, null, row.id);
@@ -32,6 +32,17 @@ assert.equal(records.find((row) => row.id === "dra_michael_truell")?.foundedProj
 assert.equal(records.find((row) => row.id === "dra_michael_truell")?.investorId, null);
 assert.equal(records.find((row) => row.id === "dra_toni_oloko")?.foundedProjectId, "proj_-useAjLwlsUE");
 assert.equal(records.find((row) => row.id === "dra_heston_berkman")?.investorId, "inv_banter_capital");
+assert.equal(records.find((row) => row.id === "dra_kenta_yaegashi")?.linkedinConfidence, "confirmed");
+assert.equal(records.find((row) => row.id === "dra_kenta_yaegashi")?.location, "New York");
+assert.equal(records.find((row) => row.id === "dra_shawn_xu")?.currentRole, "Partner");
+assert.equal(records.find((row) => row.id === "dra_tony_shi")?.currentRole, "Partner");
+assert.equal(records.find((row) => row.id === "dra_anjney_midha")?.currentRole, "Venture Partner");
+assert.ok(records.find((row) => row.id === "dra_lan_jiang")?.linkedinSourceUrl?.includes("luxcapital.com"));
+assert.equal(records.find((row) => row.id === "dra_tori_orr")?.currentFirm, "NGP Capital");
+assert.equal(records.find((row) => row.id === "dra_trevor_sookraj")?.currentFirm, "Divisional");
+assert.equal(records.find((row) => row.id === "dra_steven_krouse")?.location, "Prospect Heights, Brooklyn");
+assert.equal(records.find((row) => row.id === "dra_bruno_faviero")?.linkedinUrl, "https://www.linkedin.com/in/faviero");
+assert.equal(records.find((row) => row.id === "dra_justine_humenansky")?.currentFirm, "Optimism Foundation");
 
 const penn: IntroOrg = {
   id: "univ_penn",
@@ -82,6 +93,8 @@ function alum(): DrfAlumRow {
     linkedinUrl: null,
     linkedinConfidence: null,
     linkedinSourceUrl: null,
+    location: null,
+    verificationNote: null,
     xUrl: null,
     foundedProjectId: null,
     sourceUrls: [],

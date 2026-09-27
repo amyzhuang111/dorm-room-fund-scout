@@ -10,7 +10,7 @@ function linkedInFor(name: string, url: string | null | undefined, confidence: "
   return linkedinActionFromStored({
     name,
     linkedinUrl: url,
-    linkedinStatus: confidence === "confirmed" ? "confirmed" : "unverified",
+    linkedinStatus: confidence === "confirmed" || confidence === "likely" ? confidence : "unverified",
     school,
     company: firm,
   });
@@ -48,7 +48,8 @@ export function WarmIntroPaths({ entityId, initial }: { entityId?: string; initi
       {data.alum && (
         <div className="rounded-md border border-black/15 bg-neutral-50 p-2 text-xs text-black">
           <p className="font-semibold">
-            DRF alum · {data.alum.confidence}
+            DRF alum
+            {data.alum.linkedinConfidence ? ` · LinkedIn ${data.alum.linkedinConfidence}` : " · LinkedIn not on file"}
           </p>
           <p className="mt-0.5 flex items-center gap-1.5">
             <span>
@@ -61,7 +62,7 @@ export function WarmIntroPaths({ entityId, initial }: { entityId?: string; initi
             })()}
           </p>
           <p className="mt-0.5 text-neutral-700">
-            {[data.alum.school, data.alum.team ? `${data.alum.team} team` : null, data.alum.program, data.alum.years].filter(Boolean).join(" · ") || "Campus not stated on the source"}
+            {[data.alum.school, data.alum.team ? `${data.alum.team} team` : null, data.alum.program, data.alum.years, data.alum.location].filter(Boolean).join(" · ") || "Campus not stated on the source"}
           </p>
           <p className="mt-1">
             <a href={data.alum.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline">
@@ -76,6 +77,7 @@ export function WarmIntroPaths({ entityId, initial }: { entityId?: string; initi
               </>
             )}
           </p>
+          {data.alum.linkedinNote && <p className="mt-1 text-neutral-700">{data.alum.linkedinNote}</p>}
         </div>
       )}
       {data.paths.length > 0 && (
