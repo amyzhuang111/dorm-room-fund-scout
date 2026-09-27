@@ -100,9 +100,9 @@ export const NODE_SHAPE: Record<MapNodeType, "circle" | "square" | "diamond" | "
 export const DIM_NODE = "#d5d5d5";
 /** Hairline at the fitted camera. Thickness is in screen pixels and does not grow with zoom. */
 export const EDGE_PX = 0.4;
-export const EDGE_GREY = "rgba(80, 80, 80, 0.46)";
+export const EDGE_GREY = "rgba(80, 80, 80, 0.34)";
 /** Faint amber for an edge whose ends sit on different campuses. */
-export const EDGE_CROSS = "rgba(176, 96, 24, 0.68)";
+export const EDGE_CROSS = "rgba(176, 96, 24, 0.55)";
 export const EDGE_DIM = "rgba(170, 170, 170, 0.14)";
 /** Colored only while a node is hovered or selected. */
 export const EDGE_HOVER = "#1e4b8a";
@@ -389,6 +389,20 @@ function screenLabelBox(label: ScreenLabel, measure: (text: string, fontSize: nu
 
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
+}
+
+/** Long spokes from a far organization fade out. Local edges stay as they are. */
+export function fadeLongEdge(color: string, spanFraction: number): string {
+  const factor = spanFraction > 0.42 ? 0.2 : spanFraction > 0.28 ? 0.42 : 1;
+  if (factor === 1) return color;
+  return scaleAlpha(color, factor);
+}
+
+function scaleAlpha(color: string, factor: number): string {
+  const match = color.match(/rgba\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)/);
+  if (!match) return color;
+  const alpha = Math.max(0.04, Number(match[4]) * factor);
+  return `rgba(${match[1]}, ${match[2]}, ${match[3]}, ${alpha.toFixed(3)})`;
 }
 
 function hexToRgba(hex: string, alpha: number): string {

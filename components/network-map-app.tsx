@@ -85,6 +85,7 @@ export function NetworkMapApp() {
   const seededCampuses = useRef(new Set<string>());
   const [error, setError] = useState<string | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [legendOpen, setLegendOpen] = useState(false);
   const [filters, setFilters] = useState<Filters | null>(null);
   const [showIsolates, setShowIsolates] = useState(false);
   const defaultsRef = useRef<Filters | null>(null);
@@ -533,10 +534,17 @@ export function NetworkMapApp() {
         </ZoomButton>
       </div>
 
-      <div
-        className="absolute bottom-3 z-20 w-[22rem] rounded border border-neutral-200 bg-white/95 text-[11px] text-black shadow-sm"
-        style={{ left: filtersOpen ? "18.2rem" : "0.75rem" }}
-      >
+      <div className="absolute bottom-3 z-20 flex flex-col-reverse items-start" style={{ left: filtersOpen ? "18.2rem" : "0.75rem" }}>
+        <button
+          type="button"
+          className="h-7 rounded border border-neutral-300 bg-white px-2 text-[11px] font-medium text-black"
+          aria-expanded={legendOpen}
+          onClick={() => setLegendOpen((open) => !open)}
+        >
+          {legendOpen ? "Hide legend" : "Legend"}
+        </button>
+        {legendOpen && (
+      <div className="mb-1 w-[22rem] rounded border border-neutral-200 bg-white/95 text-[11px] text-black shadow-sm">
         <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 border-b border-neutral-200 px-1.5 py-1 text-neutral-700">
           <LegendItem shape="circle" color={NODE_FILL.person} label="" title="Person" />
           <LegendItem shape="square" color={NODE_FILL.startup} label="" title="Startup" />
@@ -577,6 +585,8 @@ export function NetworkMapApp() {
             </div>
           ))}
         </div>
+      </div>
+        )}
       </div>
 
       {detailOpen && selectedNode && (
