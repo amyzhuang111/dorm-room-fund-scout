@@ -7,22 +7,27 @@ import { databasePath, getDb } from "../db/client";
 import { shortCampusLabel } from "./campuses";
 import {
   METROS,
-  claimProgramTexts,
   metroOf,
   perThousand,
-  programsInText,
   type AnalysisCell,
   type AnalysisColumn,
   type AnalysisRow,
   type DensityRow,
   type HeatmapTable,
   type NetworkAnalysis,
-  type ProgramName,
 } from "./network-analysis-model";
+import {
+  NATIONAL_PROGRAMS,
+  TOP_VC_ID,
+  TOP_VC_LABEL,
+  claimProgramTexts,
+  investorFactIsTopVc,
+  nationalProgramTierRank,
+  programsInText,
+} from "./national-programs";
 import { undergradEnrollment } from "./undergrad-enrollment";
 
 const CAMPUS_ROWS = 12;
-const PROGRAM_ROWS = 12;
 const METRO_COLUMNS = 8;
 const CAMPUS_COLUMNS = 8;
 const DENSITY_ROWS = 15;
@@ -234,18 +239,22 @@ function buildPrograms(
   companiesByPerson: Map<string, Set<string>>,
   peopleByCompany: Map<string, Set<string>>
 ): HeatmapTable {
-  const byProgram = new Map<string, { label: string; people: Map<string, Set<string>>; all: Set<string>; nodes: Set<string> }>();
+  const byProgram = new Map<string, { label: string; tier: string | null; people: Map<string, Set<string>>; all: Set<string>; nodes: Set<string> }>();
 
-  const ensure = (program: ProgramName) => {
+  const ensure = (program: { id: string; label: string; tier: string | null }) => {
     let row = byProgram.get(program.id);
     if (!row) {
-      row = { label: program.label, people: new Map(), all: new Set(), nodes: new Set() };
+      row = { label: program.label, tier: program.tier, people: new Map(), all: new Set(), nodes: new Set() };
       byProgram.set(program.id, row);
     }
     return row;
   };
 
-  const addPerson = (program: ProgramName, personId: string) => {
+  for (const program of NATIONAL_PROGRAMS) ensure(program);
+  const topVc = { id: TOP_VC_ID, label: TOP_VC_LABEL, tier: null as string | null };
+  ensure(topVc);
+
+  const addPerson = (program: { id: string; label: string; tier: string | null }, personId: string) => {
     if (!founders.has(personId)) return;
     const campuses = campusesByPerson.get(personId);
     if (!campuses || campuses.size === 0) return;
@@ -258,11 +267,11 @@ function buildPrograms(
     }
   };
 
-  const addCompany = (program: ProgramName, companyId: string) => {
+  const addCompany = (program: { id: string; label: string; tier: string | null }, companyId: string) => {
     for (const personId of peopleByCompany.get(companyId) ?? []) addPerson(program, personId);
   };
 
-  const addTexts = (texts: string[], onMatch: (program: ProgramName) => void) => {
+  const addTexts = (texts: string[], onMatch: (program: { id: string; label: string; tier: string | null }) => void) => {
     const seen = new Set<string>();
     for (const text of texts) {
       for (const program of programsInText(text)) {
@@ -278,7 +287,16 @@ function buildPrograms(
       `SELECT c.entity_type, c.entity_id, c.value_json, s.name AS source_name
        FROM claims c
        LEFT JOIN sources s ON s.id = c.source_id
-       WHERE c.claim_type IN ('program_membership', 'accelerator_membership', 'accelerator_founder')`
+       WHERE c.claim_type IN (
+         'program_membership',
+         'accelerator_membership',
+         'accelerator_founder',
+         'source_mention',
+         'affiliation',
+         'bio_membership',
+         'funding',
+         'potential_founder_signal'
+       )`
     )
     .all() as { entity_type: string; entity_id: string; value_json: string; source_name: string | null }[];
   for (const claim of claims) {
@@ -304,11 +322,16 @@ function buildPrograms(
     }
   }
 
+  for (const row of db.prepare(`SELECT person_id, role FROM affiliations WHERE length(trim(role)) > 0`).all() as { person_id: string; role: string }[]) {
+    addTexts([row.role], (program) => addPerson(program, row.person_id));
+  }
+
   for (const row of db.prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'investor' AND length(trim(value_text)) >= 2`).all() as {
     project_id: string;
     value_text: string;
   }[]) {
     for (const program of programsInText(row.value_text)) addCompany(program, row.project_id);
+    if (investorFactIsTopVc(row.value_text)) addCompany(topVc, row.project_id);
   }
 
   for (const row of db
@@ -318,18 +341,17 @@ function buildPrograms(
   }
 
   const ranked = [...byProgram.entries()]
-    .map(([id, row]) => {
-      const shown = new Set<string>();
-      for (const campusId of campusIds) {
-        for (const personId of row.people.get(campusId) ?? []) shown.add(personId);
-      }
-      return { id, row, shown: shown.size };
-    })
-    .filter((item) => item.shown > 0)
-    .sort((a, b) => b.row.all.size - a.row.all.size || b.shown - a.shown || a.row.label.localeCompare(b.row.label))
-    .slice(0, PROGRAM_ROWS);
+    .filter(([, row]) => row.all.size > 0)
+    .sort((a, b) => {
+      const aLast = a[0] === TOP_VC_ID ? 1 : 0;
+      const bLast = b[0] === TOP_VC_ID ? 1 : 0;
+      if (aLast !== bLast) return aLast - bLast;
+      const byTier = nationalProgramTierRank(a[1].tier) - nationalProgramTierRank(b[1].tier);
+      if (byTier !== 0) return byTier;
+      return b[1].all.size - a[1].all.size || a[1].label.localeCompare(b[1].label);
+    });
   const columns: AnalysisColumn[] = campusIds.map((id) => ({ id, label: labelOf.get(id) ?? id, shade: true }));
-  const rows: AnalysisRow[] = ranked.map(({ id, row }) => {
+  const rows: AnalysisRow[] = ranked.map(([id, row]) => {
     const cells = campusIds.map((campusId) => personCell(row.people.get(campusId) ?? new Set(), campusId, row.nodes, companiesByPerson));
     const allIds = new Set<string>(row.nodes);
     for (const personId of row.all) {
@@ -340,6 +362,7 @@ function buildPrograms(
     return {
       id,
       label: row.label,
+      tier: row.tier,
       cells,
       all: { count: row.all.size, ids: [...allIds] },
     };
@@ -348,13 +371,13 @@ function buildPrograms(
   return {
     id: "programs",
     title: "Programs to campuses",
-    subtitle: "Which clubs, accelerators, and fellowships draw founders from which campuses.",
+    subtitle: "National programs across every campus, ordered by tier and then by founder count.",
     rowHeader: "Program",
     columns,
     rows,
     allLabel: "All",
     caption:
-      "Cells are distinct founders with a stored program membership, accelerator record, program relationship, or a program named as an investor in a company they founded. All is distinct founders, so a person with two campus affiliations counts in each campus column and once in All. Columns are the eight campuses with the most founders on record.",
+      "National programs only. A row is kept when at least one founder matches. Cells count distinct founders matched from claim text, a source name, a program relationship, an affiliation role, or an investor fact on a company they founded. Aliases count, including Accel Leaders, Pear VC Garage, Founders, Inc., and SPC Founder Fellowship. Backed by top VC counts founders whose startup has an investor fact naming Sequoia, a16z, Benchmark, Accel, Founders Fund, Greylock, Lightspeed, General Catalyst, Index, Khosla, Thrive, Bessemer, GV, First Round, Pear, Floodgate, SV Angel, Lux, or NEA. The chip is a scouting tier, not Founder Signal. All counts each founder once, so two campuses share one All total. Columns are the eight campuses with the most founders on record.",
   };
 }
 
