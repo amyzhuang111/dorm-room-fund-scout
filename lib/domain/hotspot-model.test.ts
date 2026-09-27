@@ -1,8 +1,10 @@
 // Directory name matching. No database.
 
 import assert from "node:assert/strict";
+import fs from "node:fs";
 import { CAMPUSES, compareCampusLabels } from "./campuses";
-import { campusFilterLabels, hasPhrase, matchPhrases, normHotspotName, samePlace, sortGroupFor } from "./hotspot-model";
+import { loadHotspotEvents } from "./hotspot-dates";
+import { campusFilterLabels, cardsFromRows, hasPhrase, matchPhrases, normHotspotName, parseCsv, samePlace, sortGroupFor } from "./hotspot-model";
 
 assert.equal(samePlace("Jerome Fisher M&T", "Jerome Fisher Management & Technology"), true);
 assert.equal(samePlace("M&T", "Jerome Fisher M&T"), true);
@@ -104,5 +106,15 @@ assert.deepEqual(filters.campuses, ["Brown", "Penn", "UC Berkeley"]);
 assert.deepEqual(filters.cities, ["Boston", "San Francisco"]);
 assert.deepEqual(filters.programmes, ["Cross-campus programmes"]);
 assert.ok(filters.campuses.indexOf("Penn") > filters.campuses.indexOf("Brown"));
+
+const directory = cardsFromRows(parseCsv(fs.readFileSync("data/imports/campus_hotspots.csv", "utf8")));
+assert.equal(directory.some((card) => /pennapps organ/i.test(card.place)), false);
+const mayfieldCard = directory.find((card) => card.place.startsWith("Mayfield Fellows"));
+assert.equal(mayfieldCard?.tier, "S");
+assert.ok(mayfieldCard?.tierRationale);
+const events = loadHotspotEvents();
+assert.ok(events.length >= 30);
+assert.equal(events[0]?.where, "Penn");
+assert.match(events[0]?.url ?? "", /^https:\/\//);
 
 console.log("hotspot-model tests ok");

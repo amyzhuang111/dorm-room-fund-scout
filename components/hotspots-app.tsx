@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { SignalTierBadge } from "./badges";
+import type { HotspotEvent } from "@/lib/domain/hotspot-dates";
 import {
   SECTION_LABEL,
   SECTION_ORDER,
@@ -17,10 +18,12 @@ const TIERS: HotspotTier[] = ["S", "A", "B", "C", "D"];
 
 export function HotspotsApp({
   cards,
+  events,
   initial,
   universities,
 }: {
   cards: HotspotCard[];
+  events: HotspotEvent[];
   initial: Record<string, string | undefined>;
   universities: { id: string; name: string }[];
 }) {
@@ -75,6 +78,29 @@ export function HotspotsApp({
         </p>
       </div>
 
+      {events.length > 0 && (
+        <section className="mt-4 rounded-md border border-border-c bg-surface p-3">
+          <h2 className="text-sm font-medium text-foreground">Upcoming events</h2>
+          <ul className="mt-2 divide-y divide-border-c">
+            {events.map((event) => (
+              <li key={`${event.date}-${event.event}`} className="flex flex-col gap-0.5 py-2 sm:flex-row sm:items-baseline sm:gap-3">
+                <span className="shrink-0 text-xs font-medium text-muted sm:w-56">{event.date}</span>
+                <span className="min-w-0 text-sm text-foreground">
+                  {event.url ? (
+                    <a href={event.url} target="_blank" rel="noopener noreferrer" className="text-link hover:underline">
+                      {event.event}
+                    </a>
+                  ) : (
+                    event.event
+                  )}
+                  {event.where && <span className="text-muted"> · {event.where}</span>}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <div className="sticky top-14 z-10 mt-4 space-y-2 border-b border-border-c bg-background py-2">
         <div className="flex flex-wrap items-center gap-2">
           <input
@@ -126,6 +152,7 @@ export function HotspotsApp({
                             <div>
                               <h4 className="text-sm font-medium text-foreground">{card.place}</h4>
                               <p className="mt-0.5 text-xs text-muted">{card.type}</p>
+                              {card.tierRationale && <p className="mt-1 text-xs text-muted">{card.tierRationale}</p>}
                             </div>
                             <SignalTierBadge tier={card.tier} />
                           </div>

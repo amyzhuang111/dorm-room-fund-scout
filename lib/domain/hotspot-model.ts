@@ -23,6 +23,7 @@ export interface HotspotCard {
   whatYoullFind: string;
   howToGetIn: string;
   when: string;
+  tierRationale: string;
   linkLabel: string;
   url: string;
   placeKey: string;
@@ -565,8 +566,9 @@ export function cardsFromRows(rows: Record<string, string>[]): HotspotCard[] {
       type: field(row, "Type"),
       tier: tier as HotspotTier,
       whatYoullFind: field(row, "What you’ll find") || field(row, "What you'll find"),
-      howToGetIn: field(row, "How to get in the room"),
+      howToGetIn: field(row, "How to get in the room") || field(row, "How to get in"),
       when: field(row, "When"),
+      tierRationale: field(row, "Tier rationale"),
       linkLabel: field(row, "Link") || "link",
       url: field(row, "urls"),
       placeKey: placeKeyOf(place),
