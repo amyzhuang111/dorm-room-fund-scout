@@ -14,7 +14,7 @@ import {
   type HotspotTier,
 } from "@/lib/domain/hotspot-model";
 
-const TIERS: HotspotTier[] = ["S", "A", "B", "C", "D"];
+const TIERS: HotspotTier[] = ["S+", "S", "A", "B", "C", "D"];
 
 export function HotspotsApp({
   cards,
@@ -154,7 +154,7 @@ export function HotspotsApp({
                               <p className="mt-0.5 text-xs text-muted">{card.type}</p>
                               {card.tierRationale && <p className="mt-1 text-xs text-muted">{card.tierRationale}</p>}
                             </div>
-                            <SignalTierBadge tier={card.tier} />
+                            <SignalTierBadge tier={card.tier} basis={card.tierRationale || null} />
                           </div>
                           {card.whatYoullFind && <p className="mt-2 text-sm text-foreground">{card.whatYoullFind}</p>}
                           {card.howToGetIn && (

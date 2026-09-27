@@ -1,6 +1,6 @@
 import { setTierOverride, clearTierOverride } from "@/lib/actions/tier-override";
 
-const TIERS = ["S", "A", "B", "C", "D"];
+const TIERS = ["S+", "S", "A", "B", "C", "D"];
 
 export function TierOverrideForm({
   sourceId,

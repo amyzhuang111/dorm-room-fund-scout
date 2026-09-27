@@ -263,7 +263,7 @@ function RegistryView({
             {CAMPUS_LABEL[c] ?? c}
           </Link>
         ))}
-        {(["S", "A", "B", "C", "D"] as Tier[]).map((t) => (
+        {(["S+", "S", "A", "B", "C", "D"] as Tier[]).map((t) => (
           <Link key={t} href={buildHref("/sources", sp, { tier: sp.tier === t ? null : t })} className={`rounded-full border px-2 py-0.5 ${sp.tier === t ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}>
             Tier {t}
           </Link>
@@ -301,9 +301,9 @@ function PlaybookView({
       {groups.map((g) => {
         const groupCards = cards.filter((c) => c.campus === g.id);
         if (groupCards.length === 0) return null;
-        const founderBest = groupCards.filter((c) => c.founderScoutTier === "S" || c.founderScoutTier === "A").sort((a, b) => compareTiers(a.founderScoutTier, b.founderScoutTier));
-        const startupBest = groupCards.filter((c) => c.startupScoutTier === "S" || c.startupScoutTier === "A" || c.startupScoutTier === "B").sort((a, b) => compareTiers(a.startupScoutTier, b.startupScoutTier));
-        const lowPriority = groupCards.filter((c) => c.founderScoutTier !== "S" && c.founderScoutTier !== "A" && (c.startupScoutTier === "C" || c.startupScoutTier === "D") && !startupBest.includes(c));
+        const founderBest = groupCards.filter((c) => c.founderScoutTier === "S+" || c.founderScoutTier === "S" || c.founderScoutTier === "A").sort((a, b) => compareTiers(a.founderScoutTier, b.founderScoutTier));
+        const startupBest = groupCards.filter((c) => c.startupScoutTier === "S+" || c.startupScoutTier === "S" || c.startupScoutTier === "A" || c.startupScoutTier === "B").sort((a, b) => compareTiers(a.startupScoutTier, b.startupScoutTier));
+        const lowPriority = groupCards.filter((c) => c.founderScoutTier !== "S+" && c.founderScoutTier !== "S" && c.founderScoutTier !== "A" && (c.startupScoutTier === "C" || c.startupScoutTier === "D") && !startupBest.includes(c));
 
         return (
           <section key={g.name}>

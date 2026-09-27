@@ -36,7 +36,7 @@ export interface IntroGraph {
 }
 
 const COHORT = /cohort|class of|\bbatch\b/i;
-const STRONG_TIER = new Set(["S", "A", "B", "C", "D"]);
+const STRONG_TIER = new Set(["S+", "S", "A", "B", "C", "D"]);
 const VERIFIED = new Set(["confirmed", "partial"]);
 
 let cache: { stamp: string; graph: IntroGraph } | null = null;

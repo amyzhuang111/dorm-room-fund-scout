@@ -1,10 +1,11 @@
 import { memo } from "react";
 import Link from "next/link";
 import type { FounderRow } from "@/lib/domain/queries";
+import { membershipDirectory } from "@/lib/domain/program-signals";
 import { publicLink } from "@/lib/domain/company-link";
 import { buildHref } from "@/lib/domain/url";
 import { ScoutLink } from "./scout-nav";
-import { EnrollmentBadge, LeftSchoolBadge, PotentialFounderBadge, PrecollegeBadges, SignalTierBadge, UnverifiedBadge, VerificationBadge } from "./badges";
+import { EnrollmentBadge, LeftSchoolBadge, PotentialFounderBadge, PrecollegeBadges, ProgramBadges, SignalTierBadge, UnverifiedBadge, VerificationBadge } from "./badges";
 import { FeedbackControls, FeedbackUndo } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CompanyNameLink } from "./company-website";
@@ -39,6 +40,7 @@ export const FounderCard = memo(function FounderCard({
           <p className="mt-1 flex flex-wrap items-center gap-1">
             {founder.founderStatus === "potential" && <PotentialFounderBadge />}
             <PrecollegeBadges signals={founder.precollegeSignals} />
+            <ProgramBadges signals={founder.programSignals} />
             <EnrollmentBadge status={founder.enrollmentStatus} label={founder.enrollmentLabel} evidence={founder.enrollmentEvidence} basis={founder.enrollmentBasis} />
             <LeftSchoolBadge leftSchool={founder.leftSchool} />
             <SignalTierBadge tier={founder.signalTier} basis={founder.signalTierBasis} />
@@ -93,6 +95,36 @@ export const FounderCard = memo(function FounderCard({
       {open && (
         <div className="mt-3 space-y-3 border-t border-border-c pt-3 text-sm">
           <WarmIntroPaths entityId={founder.id} />
+          {founder.programSignals.length > 0 && (
+            <section>
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Program membership</h3>
+              <ul className="mt-1 space-y-1.5">
+                {founder.programSignals.map((signal) => {
+                  const fallback = membershipDirectory(signal.signalType, signal.label);
+                  const tier = signal.tier || fallback.tier;
+                  const rationale = signal.tierRationale || fallback.rationale;
+                  const source = signal.tierSourceUrl || fallback.sourceUrl;
+                  return (
+                    <li key={`${signal.signalType}-${signal.year ?? "na"}-${signal.sourceUrl}`} className="text-xs text-foreground">
+                      <a href={signal.sourceUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-link underline">
+                        {signal.label}
+                      </a>
+                      <span className="text-muted">
+                        {" "}
+                        · Tier {tier} · {signal.matchStatus === "confirmed" ? "confirmed" : "likely"}
+                      </span>
+                      <p className="text-muted" title={`${rationale} Source: ${source}`}>
+                        {rationale}{" "}
+                        <a href={source} target="_blank" rel="noopener noreferrer" className="text-link underline">
+                          Source
+                        </a>
+                      </p>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          )}
           {founder.precollegeSignals.length > 0 && (
             <section>
               <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Pre-college excellence</h3>

@@ -1,6 +1,8 @@
 import { enrollmentBadge } from "@/lib/domain/founder-status";
 import type { PrecollegeSignalView } from "@/lib/domain/precollege";
 import { bestPrecollegeSignals } from "@/lib/domain/precollege";
+import type { ProgramSignalView } from "@/lib/domain/program-signals";
+import { bestProgramSignals, membershipDirectory } from "@/lib/domain/program-signals";
 import type { Queue } from "@/lib/domain/queue";
 import { QUEUE_LABELS } from "@/lib/domain/queue";
 import { primaryBlocker, type GateOutcome } from "@/lib/screening/gates";
@@ -48,6 +50,7 @@ export function GateBadge({ result, gateOutcomes }: { result: string | null; gat
 }
 
 const TIER_CLASS: Record<string, string> = {
+  "S+": "border-foreground bg-foreground text-white px-2 text-[12px] font-bold ring-2 ring-accent ring-offset-1",
   S: "bg-accent text-accent-foreground border-accent",
   A: "bg-ok-bg text-ok border-ok/20",
   B: "bg-warn-bg text-warn border-warn/20",
@@ -58,9 +61,10 @@ const TIER_CLASS: Record<string, string> = {
 
 export function SignalTierBadge({ tier, basis }: { tier: string | null | undefined; basis?: string | null }) {
   if (!tier) return null;
+  const superTier = tier === "S+";
   return (
     <span
-      className={`inline-flex shrink-0 items-center rounded-full border px-1.5 py-0.5 text-[10px] font-semibold leading-none ${TIER_CLASS[tier] ?? "bg-surface-2 text-muted border-border-c"}`}
+      className={`inline-flex shrink-0 items-center rounded-full border leading-none ${superTier ? "px-2 py-0.5" : "px-1.5 py-0.5 text-[10px] font-semibold"} ${TIER_CLASS[tier] ?? "bg-surface-2 text-muted border-border-c"}`}
       title={basis ? `Signal tier ${tier}. ${basis}` : `Signal tier ${tier}`}
     >
       {tier}
@@ -120,6 +124,65 @@ export function PrecollegeBadges({ signals }: { signals: PrecollegeSignalView[] 
       {shown.map((signal) => {
         const likely = signal.matchStatus === "likely";
         const tip = `${signal.label}. ${likely ? "Likely match: full name only, school and class year were not both confirmed." : "Confirmed: full name, school, and class year agree."} ${signal.sourceUrl}`;
+        const thiel = signal.signalType === "thiel_fellow";
+        const chip = thiel
+          ? likely
+            ? "border-dashed border-foreground bg-white text-foreground"
+            : "border-foreground bg-foreground text-white ring-2 ring-accent ring-offset-1"
+          : likely
+            ? "border-dashed border-foreground bg-white text-foreground"
+            : "border-foreground bg-foreground text-white";
+        return (
+          <a
+            key={`${signal.signalType}-${signal.year ?? "na"}-${signal.sourceUrl}`}
+            href={signal.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={thiel ? `${tip} Tier S+.` : tip}
+            className={`inline-flex shrink-0 items-center gap-1 rounded-full border py-0.5 leading-none ${thiel ? "px-2 text-[11px] font-bold" : "px-1.5 text-[10px] font-semibold"} ${chip}`}
+          >
+            <TrophyIcon />
+            {signal.label}
+            {thiel ? <span>S+</span> : null}
+            {likely ? <span className="font-medium">likely</span> : null}
+          </a>
+        );
+      })}
+      {extra > 0 && <span className="text-[10px] font-medium text-muted">+{extra}</span>}
+    </>
+  );
+}
+
+function ProgramIcon() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 24 24" aria-hidden="true" className="shrink-0">
+      <path fill="currentColor" d="M12 3 3 8.2V11h18V8.2L12 3zm-7 9.5V21h5v-5h4v5h5v-8.5H5z" />
+    </svg>
+  );
+}
+
+const PROGRAM_TIER_CHIP: Record<string, string> = {
+  "S+": "border-foreground bg-foreground text-white text-[12px] font-bold px-2 ring-2 ring-accent ring-offset-1",
+  S: "border-accent bg-accent text-accent-foreground text-[11px] font-bold px-2",
+  A: "border-ok/30 bg-ok-bg text-ok text-[10px] font-semibold px-1.5",
+  B: "border-warn/30 bg-warn-bg text-warn text-[10px] font-medium px-1.5",
+  C: "border-border-c bg-surface-2 text-muted text-[10px] font-medium px-1.5",
+};
+
+export function ProgramBadges({ signals }: { signals: ProgramSignalView[] | undefined }) {
+  const ranked = bestProgramSignals(signals ?? []);
+  if (!ranked.length) return null;
+  const shown = ranked.slice(0, 2);
+  const extra = ranked.length - shown.length;
+  return (
+    <>
+      {shown.map((signal) => {
+        const fallback = membershipDirectory(signal.signalType, signal.label);
+        const tier = signal.tier || fallback.tier;
+        const rationale = signal.tierRationale || fallback.rationale;
+        const source = signal.tierSourceUrl || fallback.sourceUrl;
+        const likely = signal.matchStatus === "likely";
+        const tip = `${signal.label}. Tier ${tier}. ${rationale} Source: ${source}`;
         return (
           <a
             key={`${signal.signalType}-${signal.year ?? "na"}-${signal.sourceUrl}`}
@@ -127,12 +190,13 @@ export function PrecollegeBadges({ signals }: { signals: PrecollegeSignalView[] 
             target="_blank"
             rel="noopener noreferrer"
             title={tip}
-            className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-semibold leading-none ${
-              likely ? "border-dashed border-foreground bg-white text-foreground" : "border-foreground bg-foreground text-white"
+            className={`inline-flex shrink-0 items-center gap-1 rounded-full border py-0.5 leading-none ${PROGRAM_TIER_CHIP[tier] ?? PROGRAM_TIER_CHIP.C} ${
+              likely ? "border-dashed bg-white text-foreground" : ""
             }`}
           >
-            <TrophyIcon />
+            <ProgramIcon />
             {signal.label}
+            <span>{tier}</span>
             {likely ? <span className="font-medium">likely</span> : null}
           </a>
         );

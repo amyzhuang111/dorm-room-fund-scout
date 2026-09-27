@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getDb } from "../db/client";
 
-const VALID_TIERS = ["S", "A", "B", "C", "D"];
+const VALID_TIERS = ["S+", "S", "A", "B", "C", "D"];
 
 // Manual tier overrides are sticky by design: seed-source-tiers.ts checks
 // tier_override_by before touching a row, so a re-ingest or catalogue update

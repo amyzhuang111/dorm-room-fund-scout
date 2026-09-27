@@ -1,8 +1,7 @@
-// Founder-signal tiers from the scouting playbook. S is the strongest.
-// Null means no playbook rule applied. The tier is a label on the record,
-// not an input to Founder Signal or eligibility.
+// Directory tiers. S+ sits above S. Null means no playbook rule applied.
+// The tier is a label on the record, not an input to Founder Signal or eligibility.
 
-export const SIGNAL_TIERS = ["S", "A", "B", "C", "D", "talent"] as const;
+export const SIGNAL_TIERS = ["S+", "S", "A", "B", "C", "D", "talent"] as const;
 export type SignalTier = (typeof SIGNAL_TIERS)[number];
 
 export function isSignalTier(value: string | null | undefined): value is SignalTier {

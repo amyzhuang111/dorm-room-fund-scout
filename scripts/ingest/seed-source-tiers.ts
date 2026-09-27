@@ -35,7 +35,17 @@ function main() {
     );
     if (res.changes > 0) updated++;
   }
-  console.log(`Tier metadata applied to ${updated} source(s); ${skippedOverride} skipped (manually overridden).`);
+  const liftThiel = db.prepare(
+    `UPDATE people SET signal_tier='S+'
+     WHERE signal_tier_basis LIKE 'Thiel Fellow%' AND signal_tier IS NOT NULL AND signal_tier != 'S+'`
+  );
+  const liftThielProjects = db.prepare(
+    `UPDATE projects SET signal_tier='S+'
+     WHERE signal_tier_basis LIKE 'Thiel Fellow%' AND signal_tier IS NOT NULL AND signal_tier != 'S+'`
+  );
+  const people = liftThiel.run().changes;
+  const projects = liftThielProjects.run().changes;
+  console.log(`Tier metadata applied to ${updated} source(s); ${skippedOverride} skipped (manually overridden). Thiel Fellowship lifted to S+ on ${people} people and ${projects} projects.`);
 }
 
 main();

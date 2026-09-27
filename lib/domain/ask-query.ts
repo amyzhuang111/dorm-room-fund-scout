@@ -770,7 +770,7 @@ export function searchOrganizations(query: OrganizationQuery): AskToolResult {
     .filter((row) => {
       if (campusIds && !row.group.campusIds.some((id) => campusIds.includes(id))) return false;
       if (query.tier && row.card.tier !== query.tier) return false;
-      if (query.topTier && row.card.tier !== "S" && row.card.tier !== "A") return false;
+      if (query.topTier && row.card.tier !== "S+" && row.card.tier !== "S" && row.card.tier !== "A") return false;
       if (typeIncludes && !row.group.cards.some((card) => card.type.toLowerCase().includes(typeIncludes))) return false;
       if (row.founders.length < minFounders) return false;
       return true;

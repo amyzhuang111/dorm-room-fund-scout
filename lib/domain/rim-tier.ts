@@ -1,34 +1,19 @@
 // Which structural nodes sit on the outer rim of the network map.
 //
-// Directory tiers (S/A/B/C/D) come from the hotspot cards in
-// data/imports/campus_hotspots.csv. S is tier 1. These are scouting notes
-// for source priority. They decide rim placement, node size, and which
-// labels are on by default. They are not Founder Signal and they do not
-// change scores.
-//
-// South Park Commons, Emergent Ventures, and HF0 are not rows in that file.
-// STATIC_RIM_TIERS records them so a node with one of those names is treated
-// as a top program. Every other name uses the directory card.
+// Tiers come from PROGRAM_DIRECTORY when the node name is one of those
+// programs. Every other name, including the Thiel Fellowship, uses the
+// hotspot card in data/imports/campus_hotspots.csv. Thiel's card is S+.
+// These are scouting notes for source priority. They decide rim placement,
+// node size, and which labels are on by default. They are not Founder
+// Signal and they do not change scores.
 
 import { hotspotCards } from "./hotspots";
 import { bestCard, placeKeyOf, type HotspotCard, type HotspotPlaceKind, type HotspotTier } from "./hotspot-model";
+import { PROGRAM_DIRECTORY, PROGRAM_SIGNAL_LABEL, PROGRAM_SIGNAL_TYPES } from "./program-signals";
 
 export type RimBand = "outer" | "inward";
-/** S+ is rim prominence only. It is not a directory tier and not Founder Signal. */
-export type RimTier = "S+" | HotspotTier;
-
-/**
- * Programs the hotspot directory does not list. Tiers match the directory
- * scale: S is tier 1, A is tier 2. Placement and labels only.
- * South Park Commons, Emergent Ventures, and HF0 sit with Thiel and Y
- * Combinator on the tier-1 ring. Z Fellows is a directory A and is not listed
- * here.
- */
-export const STATIC_RIM_TIERS: readonly { name: string; tier: HotspotTier }[] = [
-  { name: "South Park Commons", tier: "S" },
-  { name: "Emergent Ventures", tier: "S" },
-  { name: "HF0", tier: "S" },
-];
+/** Same letters as the hotspot directory, including S+. Not Founder Signal. */
+export type RimTier = HotspotTier;
 
 /** An S/A program needs only a couple of links before it takes an outer slot. */
 export const OUTER_MIN_LINKS = 2;
@@ -102,13 +87,24 @@ function lookup(label: string): Profile | null {
   return found;
 }
 
-function staticTier(label: string): HotspotTier | null {
+function namesMatch(key: string, phrase: string): boolean {
+  if (!key || !phrase) return false;
+  if (key === phrase || key.startsWith(`${phrase} `) || key.endsWith(` ${phrase}`)) return true;
+  if (key === `${phrase}s` || phrase === `${key}s`) return true;
+  if (key.startsWith(`${phrase}s `) || key.endsWith(` ${phrase}s`)) return true;
+  return false;
+}
+
+/** Tier from PROGRAM_DIRECTORY. The longest matching program name wins. */
+function directoryTier(label: string): HotspotTier | null {
   const key = placeKeyOf(label);
-  for (const row of STATIC_RIM_TIERS) {
-    const phrase = placeKeyOf(row.name);
-    if (key === phrase || key.startsWith(`${phrase} `) || key.endsWith(` ${phrase}`)) return row.tier;
+  let best: { tier: HotspotTier; length: number } | null = null;
+  for (const program of PROGRAM_SIGNAL_TYPES) {
+    const phrase = placeKeyOf(PROGRAM_SIGNAL_LABEL[program]);
+    if (!namesMatch(key, phrase)) continue;
+    if (!best || phrase.length > best.length) best = { tier: PROGRAM_DIRECTORY[program].tier, length: phrase.length };
   }
-  return null;
+  return best?.tier ?? null;
 }
 
 function isHackathon(label: string, type: string): boolean {
@@ -146,37 +142,34 @@ export interface RimInput {
 export interface RimPlacement {
   band: RimBand;
   /**
-   * S+ is the single lead program on the far rim. S is the tier-1 ring.
+   * S+ is the lead program on the far rim. S is the tier-1 ring.
    * A stays on the outer rim, smaller and a step closer in.
    */
   tier: RimTier;
 }
 
-/** Directory tier S, promoted for rim placement. The hotspot card itself stays S. */
-function prominence(label: string, tier: HotspotTier): RimTier {
-  const key = placeKeyOf(label);
-  if (key === "thiel fellowship" || key.startsWith("thiel fellowship ")) return "S+";
-  return tier;
+function isOuterTier(tier: HotspotTier | null): tier is "S+" | "S" | "A" {
+  return tier === "S+" || tier === "S" || tier === "A";
 }
 
 /**
- * `outer` — S/A fellowships and cross-campus S/A accelerators, plus the static
- * top programs. Labeled and on the outer rim. Thiel Fellowship is S+, the one
- * program further out and larger than tier S. Z Fellows is directory A, so it
- * stays outside the cloud and behind that tier-1 ring.
+ * `outer` — S+/S/A fellowships and cross-campus S+/S/A accelerators, plus
+ * directory programs at those tiers. Labeled and on the outer rim. Thiel
+ * Fellowship is S+ because its hotspot card is S+. Z Fellows is directory A,
+ * so it stays outside the cloud and behind the tier-1 ring.
  * `inward` — B/C/D programs, hackathon organising teams, clubs, and campus
  * accelerators such as SkyDeck, UC LAUNCH, and delta v. Smaller, muted, unlabeled.
  * `null` — no rim treatment (people, startups, campuses, and small low-tier nodes).
  */
 export function rimPlacementFor(input: RimInput): RimPlacement | null {
   if (input.nodeType !== "organization" && input.nodeType !== "program" && input.nodeType !== "investor") return null;
-  const listed = staticTier(input.label);
+  const listed = directoryTier(input.label);
   const profile = lookup(input.label);
   if (input.nodeType === "investor" && profile && !investorUsesProfile(profile.type)) {
-    if ((listed === "S" || listed === "A") && input.degree >= OUTER_MIN_LINKS) return { band: "outer", tier: prominence(input.label, listed) };
+    if (isOuterTier(listed) && input.degree >= OUTER_MIN_LINKS) return { band: "outer", tier: listed };
     return null;
   }
-  const tier = profile?.tier ?? listed;
+  const tier = listed ?? profile?.tier ?? null;
   const type = profile?.type ?? "";
   const placeKind = profile?.placeKind ?? null;
   const low =
@@ -187,11 +180,8 @@ export function rimPlacementFor(input: RimInput): RimPlacement | null {
     placeKeyOf(input.label) === "uc launch" ||
     placeKeyOf(input.label).startsWith("uc launch ");
   if (low) return input.degree >= INWARD_MIN_LINKS ? { band: "inward", tier: tier ?? "C" } : null;
-  const top =
-    listed === "S" ||
-    listed === "A" ||
-    ((tier === "S" || tier === "A") && (isFellowship(type) || isNationalAccelerator(type, placeKind)));
-  if (top && tier && (tier === "S" || tier === "A") && input.degree >= OUTER_MIN_LINKS) return { band: "outer", tier: prominence(input.label, tier) };
+  const top = isOuterTier(listed) || (isOuterTier(tier) && (isFellowship(type) || isNationalAccelerator(type, placeKind)));
+  if (top && isOuterTier(tier) && input.degree >= OUTER_MIN_LINKS) return { band: "outer", tier };
   if ((tier === "B" || tier === "C" || tier === "D") && input.degree >= INWARD_MIN_LINKS) return { band: "inward", tier };
   return null;
 }

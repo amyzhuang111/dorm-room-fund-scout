@@ -30,9 +30,18 @@ export function startupSignalWeight(input: {
 export function founderSignalWeight(input: { verification: string | null; tier: string | null; startupWeight: number }): number {
   const verified = input.verification === "confirmed" ? 1 : input.verification === "partial" ? 0.5 : 0;
   if (verified === 0) return 0;
-  const strongTier = input.tier === "S" || input.tier === "A";
+  const strongTier = input.tier === "S+" || input.tier === "S" || input.tier === "A";
   if (!strongTier && input.startupWeight <= 0) return 0;
   return verified * (strongTier ? 1.5 : 1);
+}
+
+/** Extra screen pixels for an S+/S/A/B directory or signal tier. C and unset add nothing. */
+export function tierSizeBoost(tier: string | null | undefined): number {
+  if (tier === "S+") return 4.6;
+  if (tier === "S") return 3.2;
+  if (tier === "A") return 2;
+  if (tier === "B") return 0.9;
+  return 0;
 }
 
 /** Sqrt, then divide by the group max, so a small elite ratio can fill the range. */
@@ -98,15 +107,17 @@ function formatRatio(value: number): string {
 }
 
 /** Hover line: raw count, denominator, and the ratio that sets the size. */
-export function signalTooltip(node: { type: MapNodeType; signalCount?: number; signalWeight?: number; signalDenominator?: number; signalRatio?: number }): string {
+export function signalTooltip(node: { type: MapNodeType; signalCount?: number; signalWeight?: number; signalDenominator?: number; signalRatio?: number; tier?: string | null; orgTier?: string | null }): string {
   const count = node.signalCount ?? 0;
   const weight = node.signalWeight ?? count;
   const denominator = node.signalDenominator ?? 1;
   const ratio = node.signalRatio ?? 0;
+  const letter = node.tier && node.tier !== "talent" ? node.tier : node.orgTier;
+  const tier = letter ? ` · tier ${letter}` : "";
   if (node.type === "person" || node.type === "startup") {
-    return `${formatCount(count)} connections / ${formatCount(denominator)} · ratio ${formatRatio(ratio)}`;
+    return `${formatCount(count)} connections / ${formatCount(denominator)} · ratio ${formatRatio(ratio)}${tier}`;
   }
   const unit = node.type === "campus" ? "undergrads" : "members";
   const weighted = Math.abs(weight - count) > 0.05 ? ` (weight ${formatCount(weight)})` : "";
-  return `${formatCount(count)} strong${weighted} / ${formatCount(denominator)} ${unit} · ratio ${formatRatio(ratio)}`;
+  return `${formatCount(count)} strong${weighted} / ${formatCount(denominator)} ${unit} · ratio ${formatRatio(ratio)}${tier}`;
 }

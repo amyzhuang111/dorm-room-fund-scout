@@ -426,7 +426,7 @@ export function NetworkMapApp() {
                   {label}
                 </button>
               ))}
-              <p className="mt-1 text-[10px] leading-snug text-neutral-600">Tier 1 is S. Tier 1–2 is S and A. Directory tiers do not change Founder Signal.</p>
+              <p className="mt-1 text-[10px] leading-snug text-neutral-600">Tier 1 is S+ and S. Tier 1–2 adds A. Directory tiers do not change Founder Signal.</p>
             </FilterGroup>
             <FilterGroup title="Organization category">
               {ORG_SECTIONS.map((section) => (
@@ -784,7 +784,8 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
     if (node.type === "organization") {
       const campuses = campusesOf(node);
       const campusHit = campuses.length === 0 ? campusAll : campusAll || campuses.some((id) => filters.campuses.includes(id));
-      const tierHit = filters.orgTier === "all" || node.orgTier === "S" || (filters.orgTier === "12" && node.orgTier === "A");
+      const topTier = node.orgTier === "S+" || node.orgTier === "S";
+      const tierHit = filters.orgTier === "all" || (filters.orgTier === "1" && topTier) || (filters.orgTier === "12" && (topTier || node.orgTier === "A"));
       const sections = node.orgSections ?? [];
       const sectionAll = filters.orgSections.length === ORG_SECTIONS.length;
       const sectionHit = sectionAll || sections.some((section) => filters.orgSections.includes(section));
