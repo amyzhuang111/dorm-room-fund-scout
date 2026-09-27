@@ -1,10 +1,13 @@
 // Full evidence graph for the Network map. Nodes and edges come from
 // affiliations, founder roles, program memberships, sourced investor facts,
-// and confirmed DRF portfolio matches. The five DRF regions each form a
-// compact cluster pulled toward one shared cloud: neighboring regions touch,
-// and International sits against the West Coast instead of floating apart.
+// and confirmed DRF portfolio matches. The five DRF regions each form one
+// tight cluster. Region membership is the dominant force: a campus stays in
+// its color group, and a small gap separates the groups. Cosine similarity
+// on programs, sectors, investors, and club types may only nudge campuses
+// inside that group, and may shift whole regions relative to each other.
 // Campus-specific hubs sit inside their school. National programs sit in the
 // seams between the regions they link, nearer the stronger link.
+// Explicit program lines are drawn on top of this layout.
 
 import fs from "node:fs";
 import { forceCollide, forceSimulation, forceX, forceY } from "d3-force";
@@ -19,6 +22,7 @@ import { demoteDuplicateOuter, rimPlacementFor, type RimBand, type RimTier } fro
 import { hotspotGraphPatch, organizationMap } from "./hotspots";
 import { confirmedLinkedIn, readLinkedInCandidate } from "./person-link";
 import { sectorLabel } from "./sectors";
+import { cosineSimilarity, groupVector, linksWithinGroups, nearestSimilar, relaxRegionBodies, relaxSimilarity, similarityVectors, type SimilarityPoint } from "./similarity-layout";
 import { drfWorksAtEdges } from "./drf-alumni";
 
 export type MapNodeType = "person" | "startup" | "campus" | "investor" | "program" | "organization";
@@ -125,9 +129,11 @@ interface SimNode {
   rimTier?: RimTier | null;
   /** Set when this hub was tucked into one campus. Its color follows that campus. */
   homeCampus?: string;
+  /** Startup sector tag. Used to build campus and hub similarity. */
+  sector?: string | null;
 }
 
-const LAYOUT_VERSION = "32";
+const LAYOUT_VERSION = "35";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -654,7 +660,8 @@ function assembleNetworkMap(): MapGraph {
   for (const startup of startups) {
     const fromFounders = (foundersByCompany.get(startup.id) ?? []).flatMap((id) => campusesByPerson.get(id) ?? []);
     const campuses = campusesByCompany.get(startup.id) ?? [...new Set(fromFounders)];
-    pushNode(startup.id, "startup", campuses, startup.signal_tier, amountByProject.get(startup.id) ?? null);
+    const node = pushNode(startup.id, "startup", campuses, startup.signal_tier, amountByProject.get(startup.id) ?? null);
+    node.sector = sectorByProject.get(startup.id) ?? null;
   }
   for (const program of programs) {
     const campuses = campusesByCompany.get(program.id) ?? [];
@@ -713,7 +720,18 @@ function assembleNetworkMap(): MapGraph {
   }
 
   const campusLabels = new Map(universities.map((uni) => [uni.id, campusName.get(uni.id) ?? uni.name]));
-  const regions = settleForceAtlas(simNodes, edges, campusLabels);
+  const tintCampus = new Map<string, string>();
+  for (const person of people) {
+    const campusId = campusesByPerson.get(person.id)?.[0];
+    if (campusId) tintCampus.set(person.id, campusId);
+  }
+  for (const startup of startups) {
+    const fromFounders = (foundersByCompany.get(startup.id) ?? []).flatMap((id) => campusesByPerson.get(id) ?? []);
+    const listed = campusesByCompany.get(startup.id);
+    const campusId = listed?.length ? listed[0] : [...new Set(fromFounders)][0];
+    if (campusId) tintCampus.set(startup.id, campusId);
+  }
+  const regions = settleForceAtlas(simNodes, edges, campusLabels, tintCampus);
 
   const pos = new Map(simNodes.map((node) => [node.id, node]));
   const nodes: MapNode[] = [];
@@ -922,7 +940,7 @@ const REGION_POSE: Record<string, { angle: number; scale: number }> = {
  * are packed until neighboring regions touch. Hubs inside a campus stay in
  * that blob. National programs are seated afterwards.
  */
-function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: Map<string, string>): RegionMarker[] {
+function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: Map<string, string>, tintCampus: Map<string, string>): RegionMarker[] {
   const byId = new Map(simNodes.map((node) => [node.id, node]));
   const degree = new Map<string, number>();
   const membersOf = new Map<string, string[]>();
@@ -983,6 +1001,11 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     node.anchor = false;
     if (node.type === "campus") {
       primary.set(node.id, node.id);
+      continue;
+    }
+    const tint = tintCampus.get(node.id);
+    if ((node.type === "person" || node.type === "startup") && tint && campusIdSet.has(tint)) {
+      primary.set(node.id, tint);
       continue;
     }
     const counts = new Map<string, number>();
@@ -1366,9 +1389,12 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
   pullCampusSatellites(live, primary);
   // The presence file puts Waterloo on Boston & Northeast, same as Toronto. Sit it beside Toronto, not in the Harvard/MIT knot.
   seatWaterlooBesideToronto(live, primary);
-  // Draw each region's campuses into one cluster, then separate the clusters.
+  // Draw each region's campuses into one cluster, then leave a small gap between clusters.
   pullTowardRegionCentroids(live, primary);
+  // Similarity may rearrange campuses inside a region and slide whole regions. People are packed afterwards.
+  pullCampusesBySimilarity(live, edges, primary);
   packCampusDiscs(live, primary);
+  separateColoredClouds(live, primary);
   const campusOf = new Map(primary);
   for (const [id, weights] of bridgeWeight) {
     if (campusOf.has(id)) continue;
@@ -1383,13 +1409,15 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     if (bestId) campusOf.set(id, bestId);
   }
   placeLinkedPrograms(live, hubMembers, primary, campusOf);
+  // Hubs slide toward campuses and hubs with a similar profile. Campus discs stay pinned.
+  pullHubsBySimilarity(live, edges, primary);
   const markers: RegionMarker[] = [];
   for (const region of REGIONS) {
     const members = campusesByRegion.get(region.id) ?? [];
     if (!members.length) continue;
     markers.push({
-      id: region.id,
-      label: region.label,
+      id: `region:${region.id}`,
+      label: CANVAS_REGION_LABEL[region.id] ?? region.label,
       fullLabel: region.fullLabel,
       x: 0,
       y: 0,
@@ -1398,8 +1426,215 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     });
   }
   placeRegionLabels(markers, simNodes);
-  // Region names stay off the canvas. The legend carries the colors, and titles were clipping the fit.
-  return [];
+  return markers;
+}
+
+/** Short names drawn faintly beside each color group. The legend keeps the official team name. */
+const CANVAS_REGION_LABEL: Record<string, string> = {
+  boston: "Northeast",
+  ny: "Midwest",
+  philly: "Southeast",
+  west: "West Coast",
+  international: "International",
+};
+
+/**
+ * Similarity never pulls a campus into another color. Springs run inside one
+ * region, then whole regions slide, staying at least REGION_GAP apart.
+ */
+function pullCampusesBySimilarity(live: LiveNode[], edges: MapEdge[], primary: Map<string, string>) {
+  const vectors = layoutVectors(live, edges, primary);
+  const counts = memberCounts(primary, live);
+  const radiusOf = (id: string) => discRadius(counts.get(id) ?? 1);
+  const byRegion = new Map<string, LiveNode[]>();
+  const groupOf = new Map<string, string>();
+  for (const campus of live) {
+    if (campus.type !== "campus") continue;
+    const key = campus.regionId || "international";
+    const list = byRegion.get(key) ?? [];
+    list.push(campus);
+    byRegion.set(key, list);
+    groupOf.set(campus.id, key);
+  }
+  const links = linksWithinGroups(
+    nearestSimilar([...groupOf.keys()], vectors, 5, 0.22),
+    (id) => groupOf.get(id),
+  );
+  const linksByRegion = new Map<string, { a: string; b: string; sim: number }[]>();
+  for (const link of links) {
+    const key = groupOf.get(link.a) ?? "";
+    const list = linksByRegion.get(key) ?? [];
+    list.push(link);
+    linksByRegion.set(key, list);
+  }
+  for (const [key, group] of byRegion) {
+    if (group.length < 2) continue;
+    let cx = 0;
+    let cy = 0;
+    for (const campus of group) {
+      cx += campus.x;
+      cy += campus.y;
+    }
+    cx /= group.length;
+    cy /= group.length;
+    let maxR = 0;
+    for (const campus of group) maxR = Math.max(maxR, Math.hypot(campus.x - cx, campus.y - cy));
+    const points: SimilarityPoint[] = group.map((node) => ({ id: node.id, x: node.x, y: node.y, r: Math.max(6, radiusOf(node.id) * 0.42) }));
+    relaxSimilarity(points, linksByRegion.get(key) ?? [], { iterations: 28, anchor: 0.72, spring: 0.28, gap: 10 });
+    let nx = 0;
+    let ny = 0;
+    for (const point of points) {
+      nx += point.x;
+      ny += point.y;
+    }
+    nx /= points.length;
+    ny /= points.length;
+    const shiftX = cx - nx;
+    const shiftY = cy - ny;
+    const at = new Map(points.map((point) => [point.id, point]));
+    const limit = maxR + 2;
+    for (const campus of group) {
+      const point = at.get(campus.id);
+      if (!point || !Number.isFinite(point.x) || !Number.isFinite(point.y)) continue;
+      let x = point.x + shiftX;
+      let y = point.y + shiftY;
+      const ox = x - cx;
+      const oy = y - cy;
+      const dist = Math.hypot(ox, oy);
+      if (dist > limit && dist > 0) {
+        x = cx + (ox / dist) * limit;
+        y = cy + (oy / dist) * limit;
+      }
+      campus.x = x;
+      campus.y = y;
+      campus.tx = x;
+      campus.ty = y;
+    }
+  }
+  seatWaterlooBesideToronto(live, primary);
+  settleCampusGaps(live, primary);
+  const before = regionBodiesFrom(byRegion, radiusOf);
+  const bodies = [...before.entries()].map(([id, body]) => ({ id, x: body.x, y: body.y, r: body.r }));
+  const regionLinks: { a: string; b: string; sim: number }[] = [];
+  for (let i = 0; i < bodies.length; i++) {
+    for (let j = i + 1; j < bodies.length; j++) {
+      const left = (byRegion.get(bodies[i].id) ?? []).map((node) => node.id);
+      const right = (byRegion.get(bodies[j].id) ?? []).map((node) => node.id);
+      regionLinks.push({
+        a: bodies[i].id,
+        b: bodies[j].id,
+        sim: cosineSimilarity(groupVector(left, vectors), groupVector(right, vectors)),
+      });
+    }
+  }
+  relaxRegionBodies(bodies, regionLinks, { iterations: 28, anchor: 0.55, spring: 0.34, gap: REGION_GAP, spread: 22 });
+  const next = new Map(bodies.map((body) => [body.id, body]));
+  for (const [regionId, group] of byRegion) {
+    const from = before.get(regionId);
+    const to = next.get(regionId);
+    if (!from || !to) continue;
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    for (const campus of group) {
+      campus.x += dx;
+      campus.y += dy;
+      campus.tx = campus.x;
+      campus.ty = campus.y;
+    }
+  }
+}
+
+/** Slide free hubs toward similar campuses and hubs. Campus positions stay fixed. */
+function pullHubsBySimilarity(live: LiveNode[], edges: MapEdge[], primary: Map<string, string>) {
+  const vectors = layoutVectors(live, edges, primary);
+  const counts = memberCounts(primary, live);
+  const campuses = live.filter((node) => node.type === "campus");
+  const hubs = live.filter((node) => isFreeHub(node));
+  if (!hubs.length) return;
+  const points: SimilarityPoint[] = [
+    ...campuses.map((node) => ({ id: node.id, x: node.x, y: node.y, r: discRadius(counts.get(node.id) ?? 1), pinned: true })),
+    ...hubs.map((node) => ({ id: node.id, x: node.x, y: node.y, r: 8 })),
+  ];
+  const links = nearestSimilar(
+    points.map((point) => point.id),
+    vectors,
+    4,
+    0.2,
+  ).filter((link) => hubs.some((hub) => hub.id === link.a || hub.id === link.b));
+  relaxSimilarity(points, links, { iterations: 32, anchor: 0.18, spring: 0.5, gap: 28 });
+  const at = new Map(points.map((point) => [point.id, point]));
+  for (const hub of hubs) {
+    const next = at.get(hub.id);
+    if (!next || !Number.isFinite(next.x) || !Number.isFinite(next.y)) continue;
+    hub.x = next.x;
+    hub.y = next.y;
+    hub.tx = next.x;
+    hub.ty = next.y;
+  }
+  const placed = new Map<string, { x: number; y: number }>();
+  for (const hub of hubs) {
+    const key = featuredNationalKey(hub.label ?? "");
+    if (key && !placed.has(key)) placed.set(key, { x: hub.x, y: hub.y });
+  }
+  for (const node of live) {
+    const key = featuredNationalKey(node.label ?? "");
+    const spot = key ? placed.get(key) : undefined;
+    if (!spot) continue;
+    node.x = spot.x;
+    node.y = spot.y;
+    node.tx = spot.x;
+    node.ty = spot.y;
+  }
+}
+
+function layoutVectors(live: LiveNode[], edges: MapEdge[], primary: Map<string, string>) {
+  return similarityVectors({
+    nodes: live.map((node) => ({
+      id: node.id,
+      type: node.type,
+      label: node.label,
+      sector: node.sector,
+      hub: isFreeHub(node),
+    })),
+    edges,
+    primaryCampus: primary,
+  });
+}
+
+function isFreeHub(node: LiveNode): boolean {
+  if (node.homeCampus) return false;
+  return Boolean(node.hub || featuredNationalKey(node.label ?? ""));
+}
+
+/** Separate discs inside one region. A campus is never pushed into another region's cluster. */
+function settleCampusGaps(live: LiveNode[], primary: Map<string, string>) {
+  const counts = memberCounts(primary, live);
+  const radiusOf = (id: string) => discRadius(counts.get(id) ?? 1);
+  const byRegion = new Map<string, LiveNode[]>();
+  for (const campus of live) {
+    if (campus.type !== "campus") continue;
+    const key = campus.regionId || "international";
+    const list = byRegion.get(key) ?? [];
+    list.push(campus);
+    byRegion.set(key, list);
+  }
+  for (const group of byRegion.values()) {
+    for (let iter = 0; iter < 12; iter++) {
+      const vx = new Map<string, number>();
+      const vy = new Map<string, number>();
+      for (const campus of group) {
+        vx.set(campus.id, 0);
+        vy.set(campus.id, 0);
+      }
+      separateCampusDiscs(group, radiusOf, vx, vy);
+      for (const campus of group) {
+        campus.x += vx.get(campus.id) ?? 0;
+        campus.y += vy.get(campus.id) ?? 0;
+        campus.tx = campus.x;
+        campus.ty = campus.y;
+      }
+    }
+  }
 }
 
 function angleDelta(a: number, b: number): number {
@@ -1561,8 +1796,8 @@ function seatWaterlooBesideToronto(live: LiveNode[], primary: Map<string, string
   waterloo.y = toronto.y + (dy / len) * gap;
 }
 
-/** Clear space between neighboring region blobs. Small enough that the clouds touch. */
-const REGION_GAP = 4;
+/** Clear space between region bounding circles, in layout units. Small once the cloud is fitted. */
+const REGION_GAP = 14;
 
 /** Where each regional team sits once its campuses have been pulled into one cluster. Same angles as the previous arrangement. */
 const CLUSTER_ANGLE: Record<string, number> = {
@@ -1576,7 +1811,7 @@ const CLUSTER_ANGLE: Record<string, number> = {
 /**
  * Pull every campus in a region toward that region's centroid, keeping discs
  * from covering each other, then translate each cluster so neighboring
- * regions sit against each other. People and internal clubs are repacked onto
+ * regions keep a small gap. People and internal clubs are repacked onto
  * the campuses afterwards, so they come with the blob.
  */
 function pullTowardRegionCentroids(live: LiveNode[], primary: Map<string, string>) {
@@ -1699,13 +1934,21 @@ function separateCampusDiscs(group: LiveNode[], radiusOf: (id: string) => number
   }
 }
 
-/** Queen's and Cambridge are small discs with long names. Keep their centers far enough that the labels do not meet. */
+/**
+ * Centers sit closer than the two full people-discs, so schools in one region
+ * overlap into a single stack. Queen's and Cambridge keep a little extra room
+ * for their long names.
+ */
 function campusPairGap(a: LiveNode, b: LiveNode, radiusOf: (id: string) => number): number {
-  const touch = radiusOf(a.id) + radiusOf(b.id) + 3.5;
+  const ra = radiusOf(a.id);
+  const rb = radiusOf(b.id);
+  const touch = ra + rb + 3.5;
+  const stacked = Math.max(ra, rb) * 0.62 + Math.min(ra, rb) * 0.28 + 5;
+  let gap = Math.min(touch, stacked);
   const pair = `${a.id}|${b.id}`;
-  if (pair === "univ_queens|univ_cambridge" || pair === "univ_cambridge|univ_queens") return Math.max(touch, 48);
-  if (pair.includes("univ_laurentian") && (pair.includes("univ_queens") || pair.includes("univ_cambridge"))) return Math.max(touch, 44);
-  return touch;
+  if (pair === "univ_queens|univ_cambridge" || pair === "univ_cambridge|univ_queens") gap = Math.max(gap, 28);
+  else if (pair.includes("univ_laurentian") && (pair.includes("univ_queens") || pair.includes("univ_cambridge"))) gap = Math.max(gap, 24);
+  return gap;
 }
 
 function pinWaterlooInGroup(group: LiveNode[], radiusOf: (id: string) => number) {
@@ -1740,11 +1983,9 @@ function regionBodiesFrom(byRegion: Map<string, LiveNode[]>, radiusOf: (id: stri
 }
 
 function regionClusterCenters(bodies: Map<string, { x: number; y: number; r: number }>): Map<string, { x: number; y: number }> {
-  // The bounding circle reaches the farthest small campus. Packing on that circle
-  // leaves the dense cores as islands. Use the inner part of the blob so the
-  // colored clouds meet, and let the sparse outer campuses touch their neighbors.
+  // Pack on the full bounding circle. A campus of one color cannot land inside another region.
   return packRegionCenters(
-    [...bodies.entries()].map(([id, body]) => ({ id, r: Math.max(16, body.r * 0.28) })),
+    [...bodies.entries()].map(([id, body]) => ({ id, r: Math.max(16, body.r) })),
     (id) => CLUSTER_ANGLE[id] ?? 0,
     REGION_GAP,
   );
@@ -1773,6 +2014,59 @@ function pullCampusSatellites(live: LiveNode[], primary: Map<string, string>) {
       if (dist <= want + 1) continue;
       campus.x = anchor.x + (dx / dist) * want;
       campus.y = anchor.y + (dy / dist) * want;
+    }
+  }
+}
+
+/**
+ * People are already seated on their campus. If two colored clouds still
+ * overlap, slide the whole regions apart and keep a small gap.
+ */
+function separateColoredClouds(live: LiveNode[], primary: Map<string, string>) {
+  const campuses = live.filter((node) => node.type === "campus");
+  const regionOf = new Map(campuses.map((campus) => [campus.id, campus.regionId || "international"]));
+  const members = new Map<string, LiveNode[]>();
+  const claim = (regionId: string, node: LiveNode) => {
+    const list = members.get(regionId) ?? [];
+    list.push(node);
+    members.set(regionId, list);
+  };
+  for (const campus of campuses) claim(campus.regionId || "international", campus);
+  for (const node of live) {
+    if (node.type !== "person" && node.type !== "startup") continue;
+    const campusId = primary.get(node.id);
+    const regionId = campusId ? regionOf.get(campusId) : undefined;
+    if (regionId) claim(regionId, node);
+  }
+  const before = new Map<string, { x: number; y: number; r: number }>();
+  for (const [regionId, group] of members) {
+    let x = 0;
+    let y = 0;
+    for (const node of group) {
+      x += node.x;
+      y += node.y;
+    }
+    x /= group.length || 1;
+    y /= group.length || 1;
+    let r = 8;
+    for (const node of group) r = Math.max(r, Math.hypot(node.x - x, node.y - y));
+    before.set(regionId, { x, y, r });
+  }
+  const bodies = [...before.entries()].map(([id, body]) => ({ id, x: body.x, y: body.y, r: body.r }));
+  relaxRegionBodies(bodies, [], { iterations: 1, anchor: 0, spring: 0, gap: REGION_GAP, spread: 0 });
+  const next = new Map(bodies.map((body) => [body.id, body]));
+  for (const [regionId, group] of members) {
+    const from = before.get(regionId);
+    const to = next.get(regionId);
+    if (!from || !to) continue;
+    const dx = to.x - from.x;
+    const dy = to.y - from.y;
+    if (Math.hypot(dx, dy) < 0.05) continue;
+    for (const node of group) {
+      node.x += dx;
+      node.y += dy;
+      node.tx = node.x;
+      node.ty = node.y;
     }
   }
 }
@@ -2008,70 +2302,63 @@ function snapCampusCentroids(simNodes: SimNode[], primary: Map<string, string>) 
   }
 }
 
-/** Park each region name just past its own coloured cloud, outward from the middle. Hubs sit further out, so they are not part of the measurement. */
+/** Faint region name on the outer part of its own color group, away from the middle of the cloud. */
 function placeRegionLabels(markers: RegionMarker[], simNodes: SimNode[]) {
   if (!markers.length || !simNodes.length) return;
-  let cx = 0;
-  let cy = 0;
-  let counted = 0;
-  for (const node of simNodes) {
-    if (node.type !== "person" && node.type !== "startup" && node.type !== "campus") continue;
-    cx += node.x;
-    cy += node.y;
-    counted += 1;
-  }
-  if (!counted) return;
-  cx /= counted;
-  cy /= counted;
   const byId = new Map(simNodes.map((node) => [node.id, node]));
-  const centroids = markers.map((marker) => {
+  const campusNodes = simNodes.filter((node) => node.type === "campus");
+  const blobs = markers.map((marker) => {
     const campuses = marker.campusIds.map((id) => byId.get(id)).filter((node): node is SimNode => !!node);
-    let rx = 0;
-    let ry = 0;
+    let x = 0;
+    let y = 0;
     for (const campus of campuses) {
-      rx += campus.x;
-      ry += campus.y;
+      x += campus.x;
+      y += campus.y;
     }
     const count = campuses.length || 1;
-    return { marker, x: rx / count, y: ry / count };
-  });
-  const extent = new Map<string, number>();
-  for (const node of simNodes) {
-    if (node.type !== "person" && node.type !== "startup" && node.type !== "campus") continue;
-    let nearest = centroids[0];
-    let nearestDist = Infinity;
-    for (const centroid of centroids) {
-      const dist = Math.hypot(node.x - centroid.x, node.y - centroid.y);
-      if (dist < nearestDist) {
-        nearestDist = dist;
-        nearest = centroid;
+    x /= count;
+    y /= count;
+    const memberIds = new Set(campuses.map((campus) => campus.id));
+    let reach = 28;
+    for (const campus of campuses) reach = Math.max(reach, Math.hypot(campus.x - x, campus.y - y));
+    for (const node of simNodes) {
+      if (node.type !== "person" && node.type !== "startup") continue;
+      let nearestId = "";
+      let nearestDist = Infinity;
+      for (const campus of campusNodes) {
+        const dist = Math.hypot(node.x - campus.x, node.y - campus.y);
+        if (dist < nearestDist) {
+          nearestDist = dist;
+          nearestId = campus.id;
+        }
       }
+      if (!memberIds.has(nearestId)) continue;
+      reach = Math.max(reach, Math.hypot(node.x - x, node.y - y));
     }
-    if (!nearest) continue;
-    extent.set(nearest.marker.id, Math.max(extent.get(nearest.marker.id) ?? 0, nearestDist));
+    return { marker, x, y, reach };
+  });
+  let cx = 0;
+  let cy = 0;
+  for (const blob of blobs) {
+    cx += blob.x;
+    cy += blob.y;
   }
-  for (const centroid of centroids) {
-    const dx = centroid.x - cx;
-    const dy = centroid.y - cy;
-    const dist = Math.hypot(dx, dy) || 1;
-    const halo = extent.get(centroid.marker.id) ?? 64;
-    const edge = dist + halo;
-    const reach = Math.min(edge * 0.92, dist + halo * 0.62 + 14);
-    centroid.marker.x = cx + (dx / dist) * reach;
-    centroid.marker.y = cy + (dy / dist) * reach;
+  cx /= blobs.length || 1;
+  cy /= blobs.length || 1;
+  for (const blob of blobs) {
+    let dx = blob.x - cx;
+    let dy = blob.y - cy;
+    let dist = Math.hypot(dx, dy);
+    if (dist < 1) {
+      dx = 0;
+      dy = -1;
+      dist = 1;
+    }
+    const along = Math.max(32, blob.reach * 0.62);
+    blob.marker.x = blob.x + (dx / dist) * along;
+    blob.marker.y = blob.y + (dy / dist) * along;
   }
-  let minX = Infinity;
-  let maxX = -Infinity;
-  let minY = Infinity;
-  let maxY = -Infinity;
-  for (const node of simNodes) {
-    minX = Math.min(minX, node.x);
-    maxX = Math.max(maxX, node.x);
-    minY = Math.min(minY, node.y);
-    maxY = Math.max(maxY, node.y);
-  }
-  const span = Math.max(maxX - minX, maxY - minY, 1);
-  const gap = span * (72 / 740);
+  const gap = 52;
   for (let iter = 0; iter < 12; iter++) {
     for (let i = 0; i < markers.length; i++) {
       for (let j = i + 1; j < markers.length; j++) {

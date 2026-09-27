@@ -16,7 +16,9 @@ const GlobeView = dynamic(() => import("./globe-view").then((mod) => mod.GlobeVi
 const NetworkMapApp = dynamic(() => import("./network-map-app").then((mod) => mod.NetworkMapApp), {
   ssr: false,
   loading: () => (
-    <div className="grid h-[calc(100dvh-3.5rem)] min-h-[520px] place-items-center bg-white text-sm text-black">Loading network…</div>
+    <div className="grid min-h-[80vh] w-full place-items-center bg-white text-sm text-black" style={{ height: "max(80vh, calc(100dvh - 3.5rem))" }}>
+      Loading network…
+    </div>
   ),
 });
 

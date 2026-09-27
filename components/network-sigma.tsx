@@ -3,11 +3,12 @@
 import Graph from "graphology";
 import { useEffect, useRef } from "react";
 import Sigma from "sigma";
+import type { SigmaNodeEventPayload, SigmaStageEventPayload, WheelCoords } from "sigma/types";
 import { featuredNationalKey } from "@/lib/domain/featured-national";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
-import { CAMPUS_LABEL_MIN_MEMBERS, DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, MEGA_DEGREE, NODE_SHAPE, PROGRAM_LINE, PROGRAM_LINE_ACTIVE, PROGRAM_LINE_DIM, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type CampusDisc, type LabelOffset, type ScreenLabel } from "./network-style";
+import { CAMPUS_LABEL_MIN_MEMBERS, DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, PROGRAM_LINE_ACTIVE, PROGRAM_LINE_DIM, REGION_TRACKING, bundleInk, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, zoomSizeFactor, type CampusDisc, type FramePoint, type LabelOffset, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -33,9 +34,13 @@ type NodeAttr = {
   regionId?: string;
   zIndex: number;
   signalTip?: string;
+  /** Graph degree, shown on the hover card as a connection count. */
+  links?: number;
   tint?: string;
   linkColor: string;
   labelPx?: number;
+  /** Designed screen size at the fitted view. Drawn size is the inverse of the zoom. */
+  labelBase?: number;
   labelColor?: string;
   labelDx?: number;
   labelDy?: number;
@@ -99,11 +104,13 @@ export function NetworkSigma({
     focusNode: null as string | null,
     focus: 0,
     focusFrame: 0,
+    fitRatio: 1,
   });
   const onSelectRef = useRef(onSelect);
   const onReadyRef = useRef(onReady);
   const hiddenRef = useRef(hidden);
   const recomputeLabelsRef = useRef<() => void>(() => {});
+  const focusNeighborhoodRef = useRef<(id: string) => void>(() => {});
 
   useEffect(() => {
     onSelectRef.current = onSelect;
@@ -127,7 +134,7 @@ export function NetworkSigma({
     if (!renderer) return;
     recomputeLabelsRef.current();
     renderer.refresh();
-    if (hiddenChanged) frameVisible(renderer, hidden);
+    if (hiddenChanged) stateRef.current.fitRatio = frameVisible(renderer, hidden);
   }, [hidden, edgeTypes, selected]);
 
   useEffect(() => {
@@ -203,7 +210,7 @@ export function NetworkSigma({
       const strong = !lead && (named || (hub && node.rimTier === "S"));
       const campusHub = Boolean(node.homeCampus) && !campus;
       const anchor = campus || hub;
-      const fontSize = campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong || campusHub || named ? LABEL_HUB : hub ? 10 : LABEL_NODE;
+      const fontSize = campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong || campusHub || named ? LABEL_HUB : hub ? 11 : LABEL_NODE;
       const campusId = node.campus || node.id;
       labelMeta.push({
         id: node.id,
@@ -221,6 +228,28 @@ export function NetworkSigma({
         strictDiscs: !campus && named && featuredNationalKey(node.label) === "thiel",
         required: campus && (memberCount.get(campusId) ?? 0) >= CAMPUS_LABEL_MIN_MEMBERS,
         grayHub: !campus && !node.homeCampus && (node.type === "organization" || node.type === "program" || node.type === "investor"),
+      });
+    }
+    const regionCampuses = new Map<string, string[]>();
+    for (const marker of graph.regions) {
+      const id = marker.id.startsWith("region:") ? marker.id : `region:${marker.id}`;
+      if (!marker.campusIds.length) continue;
+      regionCampuses.set(id, marker.campusIds);
+      labelMeta.push({
+        id,
+        tier: 7,
+        degree: 1_000_000,
+        text: truncateMapLabel(marker.label, true, false),
+        fullText: marker.fullLabel,
+        marker: true,
+        anchor: false,
+        fontSize: LABEL_REGION,
+        tracking: REGION_TRACKING,
+        campusHub: false,
+        named: false,
+        strictDiscs: false,
+        required: true,
+        grayHub: false,
       });
     }
     const colors = new Map(campusSwatches(graph.nodes).map((swatch) => [swatch.id, swatch.color]));
@@ -244,13 +273,34 @@ export function NetworkSigma({
         anchor: campus || hub,
         zIndex: (lead ? 4 : strong ? 3 : Z[node.type]) + 1,
         signalTip: signalTooltip(node),
+        links: node.degree,
         linkColor: emphasizeColor(color),
-        labelPx: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong || campusHub || named ? LABEL_HUB : hub ? 10 : LABEL_NODE,
+        labelBase: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong || campusHub || named ? LABEL_HUB : hub ? 11 : LABEL_NODE,
         ...(campus ? { labelColor: "#111111" } : node.homeCampus ? { labelColor: readableInk(colors.get(node.homeCampus) ?? "#374151") } : {}),
       });
     }
-    // Region titles stay off the canvas. The legend carries the colors.
-    const regionCampuses = new Map<string, string[]>();
+    for (const marker of graph.regions) {
+      const id = marker.id.startsWith("region:") ? marker.id : `region:${marker.id}`;
+      if (g.hasNode(id) || !marker.campusIds.length) continue;
+      g.addNode(id, {
+        x: marker.x,
+        y: marker.y,
+        size: 0.2,
+        label: marker.label,
+        fullLabel: marker.fullLabel,
+        color: "#ffffff",
+        type: "circle",
+        kind: "campus",
+        anchor: false,
+        marker: true,
+        zIndex: 6,
+        links: 0,
+        linkColor: "#ffffff",
+        labelBase: LABEL_REGION,
+        tint: "#8d939c",
+        labelColor: "#8d939c",
+      });
+    }
     let minX = Infinity;
     let maxX = -Infinity;
     let minY = Infinity;
@@ -326,23 +376,35 @@ export function NetworkSigma({
       const campusId = campusOf.get(other.id);
       if (campusId) addBundle(program.id, campusId, 1);
     }
+    const curveEdges: CurveEdge[] = [];
     for (const bundle of bundles.values()) {
       if (bundle.count < 1) continue;
       const program = at.get(bundle.program);
       const accent = Boolean(featuredNationalKey(program?.label ?? ""));
       const key = `bundle|${bundle.program}|${bundle.campus}`;
       if (g.hasEdge(key)) continue;
+      const width = bundleWidth(bundle.count);
+      const sparse = !accent && bundle.count < 2;
       g.addEdgeWithKey(key, bundle.program, bundle.campus, {
         kind: "member_of",
-        color: accent ? PROGRAM_LINE : EDGE_GREY,
+        color: accent ? bundleInk(bundle.count) : EDGE_GREY,
         hoverColor: PROGRAM_LINE_ACTIVE,
-        size: accent ? bundleWidth(bundle.count) : Math.min(1.15, bundleWidth(bundle.count) * 0.35),
+        size: accent ? width : Math.min(1.15, width * 0.35),
         defer: false,
         bundle: true,
         accent,
         count: bundle.count,
-        sparse: !accent && bundle.count < 2,
+        sparse,
         zIndex: accent ? 3 : 0,
+      });
+      curveEdges.push({
+        source: bundle.program,
+        target: bundle.campus,
+        count: bundle.count,
+        accent,
+        sparse,
+        size: width,
+        bend: curveBend(bundle.program, bundle.campus),
       });
       link(bundle.program, bundle.campus);
       link(bundle.campus, bundle.program);
@@ -354,13 +416,17 @@ export function NetworkSigma({
       defaultEdgeType: "line",
       hideEdgesOnMove: false,
       hideLabelsOnMove: false,
-      zoomingRatio: 1.12,
-      zoomDuration: 200,
-      inertiaDuration: 280,
-      inertiaRatio: 0.25,
+      enableCameraZooming: true,
+      enableCameraPanning: true,
+      zoomingRatio: 1.18,
+      zoomDuration: 160,
+      doubleClickZoomingRatio: 1.45,
+      doubleClickZoomingDuration: 280,
+      inertiaDuration: 320,
+      inertiaRatio: 0.22,
       itemSizesReference: "screen",
-      // Identity keeps hairlines at EDGE_PX while zooming. The default sqrt grows them.
-      zoomToSizeRatioFunction: () => 1,
+      // Nodes and lines share one scale, so a closer view magnifies both. Labels do not use this.
+      zoomToSizeRatioFunction: (ratio) => zoomSizeFactor(ratio, stateRef.current.fitRatio),
       zIndex: true,
       labelFont: "Satoshi, Arial, sans-serif",
       labelSize: LABEL_NODE,
@@ -371,7 +437,7 @@ export function NetworkSigma({
       labelRenderedSizeThreshold: 0,
       minEdgeThickness: EDGE_PX,
       antiAliasingFeather: 0.85,
-      stagePadding: 108,
+      stagePadding: 12,
       minCameraRatio: 0.02,
       maxCameraRatio: 1.4,
       defaultDrawNodeLabel: drawHaloLabel as never,
@@ -386,9 +452,11 @@ export function NetworkSigma({
       nodeReducer: (node, data) => {
         const state = stateRef.current;
         const nudge = placed.offsets.get(node);
+        const cameraRatio = rendererRef.current?.getCamera().ratio ?? 1;
+        const labelPx = labelScreenPx(data.labelBase ?? LABEL_NODE, cameraRatio, stateRef.current.fitRatio || 1);
         const showLabel = (extra: Partial<NodeAttr> = {}) => {
           const offset = nudge ?? { dx: 0, dy: 0 };
-          return { ...data, ...extra, forceLabel: true, labelDx: offset.dx, labelDy: offset.dy };
+          return { ...data, ...extra, labelPx, forceLabel: true, labelDx: offset.dx, labelDy: offset.dy };
         };
         if (data.marker) {
           const campuses = regionCampuses.get(node) ?? [];
@@ -410,35 +478,20 @@ export function NetworkSigma({
         return { ...data, color: mixPaint(data.color, DIM_NODE, focus), label: undefined, forceLabel: false, zIndex: 1 };
       },
       edgeReducer: (edge, data) => {
+        // Program links are painted as weighted curves on a canvas behind the nodes.
+        if (data.bundle) return { ...data, hidden: true };
         const state = stateRef.current;
         const source = g.source(edge);
         const target = g.target(edge);
         if (state.hidden.has(source) || state.hidden.has(target) || !state.edgeTypes.has(data.kind)) return { ...data, hidden: true };
         const active = state.hovered ?? state.selected ?? (state.focus > 0.04 ? state.focusNode : null);
-        const focus = active ? state.focus : 0;
         const quiet = QUIET_EDGE.has(data.kind) || data.defer;
         if (active && (source === active || target === active)) {
           const activeKind = g.getNodeAttribute(active, "kind");
           const structuralActive = activeKind === "organization" || activeKind === "program" || activeKind === "investor";
-          if (data.bundle) {
-            if (data.sparse && !structuralActive) return { ...data, hidden: true, zIndex: 0 };
-            const hot = structuralActive ? PROGRAM_LINE_ACTIVE : (data.hoverColor ?? data.color);
-            return {
-              ...data,
-              color: mixPaint(data.color, hot, Math.max(focus, 0.35)),
-              size: structuralActive ? Math.max(data.size + 0.65, 2.15) : data.size + 0.15,
-              hidden: false,
-              zIndex: 4,
-            };
-          }
-          // A program keeps its bundled campus lines. Individual spokes would cover the cloud.
+          // A program keeps its bundled campus curves. Individual spokes would cover the cloud.
           if (structuralActive && (data.defer || QUIET_EDGE.has(data.kind))) return { ...data, hidden: true };
           return { ...data, color: g.getNodeAttribute(active, "linkColor"), size: EDGE_HOVER_PX, hidden: false };
-        }
-        if (data.bundle) {
-          if (!data.accent || data.sparse) return { ...data, hidden: true };
-          if (!active || focus < 0.04) return data;
-          return { ...data, color: mixPaint(data.color, PROGRAM_LINE_DIM, focus), size: Math.max(EDGE_PX, data.size * (1 - focus * 0.65)), zIndex: 0 };
         }
         if (quiet) return { ...data, hidden: true };
         if (!active) return data;
@@ -446,8 +499,85 @@ export function NetworkSigma({
       },
     });
 
+    const curveCanvas = renderer.createCanvas("curves", {
+      beforeLayer: "edges",
+      style: { pointerEvents: "none" },
+    });
+    const curveCtx = curveCanvas.getContext("2d");
+    const drawCurves = () => {
+      if (!curveCtx) return;
+      const { width, height } = renderer.getDimensions();
+      if (width < 2 || height < 2) return;
+      const pixelRatio = window.devicePixelRatio || 1;
+      const bufferW = Math.max(1, Math.round(width * pixelRatio));
+      const bufferH = Math.max(1, Math.round(height * pixelRatio));
+      if (curveCanvas.width !== bufferW || curveCanvas.height !== bufferH) {
+        curveCanvas.width = bufferW;
+        curveCanvas.height = bufferH;
+      }
+      curveCanvas.style.width = `${width}px`;
+      curveCanvas.style.height = `${height}px`;
+      curveCtx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      curveCtx.clearRect(0, 0, width, height);
+      const state = stateRef.current;
+      if (!state.edgeTypes.has("member_of")) return;
+      const active = state.hovered ?? state.selected ?? (state.focus > 0.04 ? state.focusNode : null);
+      const focus = active ? state.focus : 0;
+      const activeKind = active && g.hasNode(active) ? g.getNodeAttribute(active, "kind") : null;
+      const structuralActive = activeKind === "organization" || activeKind === "program" || activeKind === "investor";
+      const quiet: CurveStroke[] = [];
+      const hot: CurveStroke[] = [];
+      for (const edge of curveEdges) {
+        if (state.hidden.has(edge.source) || state.hidden.has(edge.target)) continue;
+        const source = renderer.getNodeDisplayData(edge.source);
+        const target = renderer.getNodeDisplayData(edge.target);
+        if (!source || !target || source.hidden || target.hidden) continue;
+        const touched = active != null && (edge.source === active || edge.target === active);
+        let color = bundleInk(edge.count);
+        let widthPx = renderer.scaleSize(edge.size);
+        let emphasize = false;
+        if (touched) {
+          if (edge.sparse && !structuralActive) continue;
+          color = structuralActive ? PROGRAM_LINE_ACTIVE : bundleInk(edge.count);
+          widthPx = renderer.scaleSize(structuralActive ? Math.max(edge.size + 0.65, 2.15) : edge.size + 0.15);
+          emphasize = true;
+        } else if (!edge.accent || edge.sparse) {
+          continue;
+        } else if (active && focus >= 0.04) {
+          color = mixPaint(bundleInk(edge.count), PROGRAM_LINE_DIM, focus);
+          widthPx = renderer.scaleSize(Math.max(EDGE_PX, edge.size * (1 - focus * 0.65)));
+        }
+        const from = renderer.framedGraphToViewport(source);
+        const to = renderer.framedGraphToViewport(target);
+        if ((from.x < -160 && to.x < -160) || (from.x > width + 160 && to.x > width + 160) || (from.y < -160 && to.y < -160) || (from.y > height + 160 && to.y > height + 160)) continue;
+        const midX = (from.x + to.x) / 2;
+        const midY = (from.y + to.y) / 2;
+        const dx = to.x - from.x;
+        const dy = to.y - from.y;
+        const length = Math.hypot(dx, dy) || 1;
+        // The control point sits off the chord. Short links stay gentle; long ones arc through the whitespace.
+        const bow = Math.sign(edge.bend) * Math.max(length * Math.abs(edge.bend), Math.min(36, length * 0.42));
+        const stroke: CurveStroke = {
+          x1: from.x,
+          y1: from.y,
+          cx: midX + (-dy / length) * bow,
+          cy: midY + (dx / length) * bow,
+          x2: to.x,
+          y2: to.y,
+          color,
+          width: Math.max(0.7, widthPx),
+        };
+        (emphasize ? hot : quiet).push(stroke);
+      }
+      curveCtx.lineCap = "round";
+      curveCtx.lineJoin = "round";
+      for (const stroke of quiet) paintCurve(curveCtx, stroke);
+      for (const stroke of hot) paintCurve(curveCtx, stroke);
+    };
+    renderer.on("afterRender", drawCurves);
+
     const recomputeLabels = () => {
-      const { hidden, hovered, selected } = stateRef.current;
+      const { hidden, hovered, selected, fitRatio } = stateRef.current;
       const active = hovered ?? selected;
       const ratio = renderer.getCamera().ratio;
       const floor = labelDegreeFloor(ratio);
@@ -488,7 +618,7 @@ export function NetworkSigma({
           nodeSize,
           marker: meta.marker,
           anchor: meta.anchor,
-          fontSize: meta.fontSize,
+          fontSize: labelScreenPx(meta.fontSize, ratio, fitRatio || ratio),
           tracking: meta.tracking,
           discId: meta.discId,
           strictDiscs: meta.strictDiscs,
@@ -562,29 +692,96 @@ export function NetworkSigma({
       stateRef.current.focusFrame = requestAnimationFrame(tick);
     };
     renderer.on("enterNode", ({ node }) => {
+      if (g.getNodeAttribute(node, "marker")) return;
       stateRef.current.hovered = node;
       stateRef.current.focusNode = node;
       container.style.cursor = "pointer";
       glideFocus(1);
     });
     renderer.on("leaveNode", ({ node }) => {
+      if (g.getNodeAttribute(node, "marker")) return;
       if (stateRef.current.hovered === node) stateRef.current.hovered = null;
       container.style.cursor = "grab";
       if (stateRef.current.selected) stateRef.current.focusNode = stateRef.current.selected;
       glideFocus(stateRef.current.selected ? 1 : 0);
     });
+    const layoutSpan = span;
+    const focusNeighborhood = (id: string) => {
+      if (!g.hasNode(id) || g.getNodeAttribute(id, "marker")) return;
+      const kind = g.getNodeAttribute(id, "kind");
+      if (kind !== "campus" && kind !== "program" && kind !== "organization") return;
+      const origin = g.getNodeAttributes(id);
+      const frame = graphFrame(renderer);
+      const points: FramePoint[] = [frame.toFrame(origin.x, origin.y)];
+      const hiddenNow = stateRef.current.hidden;
+      if (kind === "campus") {
+        const radius = Math.max(12, (layoutRadius.get(id) ?? 12) * 1.4);
+        g.forEachNode((nid, attrs) => {
+          if (nid === id || hiddenNow.has(nid)) return;
+          if (Math.hypot(attrs.x - origin.x, attrs.y - origin.y) <= radius) points.push(frame.toFrame(attrs.x, attrs.y));
+        });
+      } else {
+        const reach = Math.max(18, layoutSpan * 0.14);
+        const ranked: { d: number; x: number; y: number }[] = [];
+        g.forEachNode((nid, attrs) => {
+          if (nid === id || hiddenNow.has(nid) || attrs.marker) return;
+          ranked.push({ d: Math.hypot(attrs.x - origin.x, attrs.y - origin.y), x: attrs.x, y: attrs.y });
+        });
+        ranked.sort((a, b) => a.d - b.d);
+        const limit = Math.max(reach, ranked[14]?.d ?? reach);
+        for (const node of ranked) {
+          if (node.d > limit * 1.15) break;
+          points.push(frame.toFrame(node.x, node.y));
+          if (points.length >= 40) break;
+        }
+      }
+      const view = neighborhoodView(points, stateRef.current.fitRatio || renderer.getCamera().ratio);
+      const dims = renderer.getDimensions();
+      const frameWidth = view.ratio * (dims.width / Math.max(Math.min(dims.width, dims.height), 1));
+      const shift = frameWidth * (Math.min(340, dims.width * 0.3) / Math.max(dims.width, 1)) * 0.5;
+      void renderer.getCamera().animate({ x: view.x + shift, y: view.y, ratio: view.ratio }, { duration: 520, easing: "quadraticInOut" });
+    };
+    focusNeighborhoodRef.current = focusNeighborhood;
+    const onWheel = (payload: SigmaStageEventPayload | SigmaNodeEventPayload) => {
+      payload.preventSigmaDefault();
+      const wheel = payload.event as WheelCoords;
+      const delta = Math.max(-2.2, Math.min(2.2, wheel.delta || 0));
+      if (!delta) return;
+      const camera = renderer.getCamera();
+      const factor = Math.exp(-delta * 0.42);
+      const ratio = camera.getBoundedRatio(camera.getState().ratio * factor);
+      const next = renderer.getViewportZoomedState({ x: wheel.x, y: wheel.y }, ratio);
+      void camera.animate(next, { duration: 150, easing: "quadraticOut" });
+    };
+    renderer.on("wheelStage", onWheel);
+    renderer.on("wheelNode", onWheel);
+    renderer.on("downStage", () => {
+      container.style.cursor = "grabbing";
+    });
+    renderer.on("downNode", () => {
+      container.style.cursor = "grabbing";
+    });
+    renderer.on("upStage", () => {
+      container.style.cursor = "grab";
+    });
+    renderer.on("upNode", () => {
+      container.style.cursor = "grab";
+    });
     renderer.on("clickNode", ({ node }) => {
       if (g.getNodeAttribute(node, "marker")) return;
       onSelectRef.current(node);
+      focusNeighborhood(node);
     });
     renderer.on("clickStage", () => onSelectRef.current(null));
 
     rendererRef.current = renderer;
     container.style.cursor = "grab";
     const api: NetworkSigmaHandle = {
-      zoomIn: () => void renderer.getCamera().animatedZoom({ duration: 180 }),
-      zoomOut: () => void renderer.getCamera().animatedUnzoom({ duration: 180 }),
-      fit: () => frameVisible(renderer, stateRef.current.hidden),
+      zoomIn: () => void renderer.getCamera().animatedZoom({ duration: 240, factor: 1.4 }),
+      zoomOut: () => void renderer.getCamera().animatedUnzoom({ duration: 240, factor: 1.4 }),
+      fit: () => {
+        stateRef.current.fitRatio = frameVisible(renderer, stateRef.current.hidden);
+      },
       pointOf(id: string) {
         if (!renderer.getGraph().hasNode(id)) return null;
         const attrs = renderer.getGraph().getNodeAttributes(id);
@@ -605,7 +802,7 @@ export function NetworkSigma({
     onReadyRef.current(api);
     const frame = requestAnimationFrame(() => {
       renderer.resize();
-      frameVisible(renderer, stateRef.current.hidden);
+      stateRef.current.fitRatio = frameVisible(renderer, stateRef.current.hidden);
     });
 
     const focusState = stateRef.current;
@@ -616,6 +813,10 @@ export function NetworkSigma({
       renderer.getCamera().removeListener("updated", scheduleLabels);
       renderer.getCamera().removeListener("updated", notifyView);
       viewListeners.clear();
+      renderer.off("afterRender", drawCurves);
+      renderer.off("wheelStage", onWheel);
+      renderer.off("wheelNode", onWheel);
+      focusNeighborhoodRef.current = () => {};
       recomputeLabelsRef.current = () => {};
       onReadyRef.current(null);
       renderer.kill();
@@ -626,46 +827,100 @@ export function NetworkSigma({
   useEffect(() => {
     const renderer = rendererRef.current;
     if (!renderer || !flyId || !renderer.getGraph().hasNode(flyId)) return;
+    const kind = renderer.getGraph().getNodeAttribute(flyId, "kind");
+    if (kind === "campus" || kind === "program" || kind === "organization") {
+      focusNeighborhoodRef.current(flyId);
+      return;
+    }
     const at = framedPosition(renderer, flyId);
     if (!at) return;
     const camera = renderer.getCamera();
-    void camera.animate({ x: at.x, y: at.y, ratio: Math.min(camera.ratio, 0.16) }, { duration: 520 });
+    void camera.animate({ x: at.x, y: at.y, ratio: Math.min(camera.ratio, 0.16) }, { duration: 520, easing: "quadraticInOut" });
   }, [flyToken, flyId]);
 
   return <div ref={containerRef} className="absolute inset-0 bg-white" role="application" aria-label="Founder and startup network graph" />;
 }
 
-function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>) {
+function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>): number {
   const frame = graphFrame(renderer);
-  let minX = Infinity;
-  let minY = Infinity;
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-  let count = 0;
-  renderer.getGraph().forEachNode((id, attrs) => {
-    if (hidden.has(id)) return;
-    const at = frame.toFrame(attrs.x, attrs.y);
-    minX = Math.min(minX, at.x);
-    minY = Math.min(minY, at.y);
-    maxX = Math.max(maxX, at.x);
-    maxY = Math.max(maxY, at.y);
-    count += 1;
-  });
-  if (!count) {
+  const xs: number[] = [];
+  const ys: number[] = [];
+  const push = (onlyMembers: boolean) => {
+    xs.length = 0;
+    ys.length = 0;
+    renderer.getGraph().forEachNode((id, attrs) => {
+      if (hidden.has(id) || attrs.marker) return;
+      if (onlyMembers && attrs.kind !== "campus" && attrs.kind !== "person" && attrs.kind !== "startup") return;
+      const at = frame.toFrame(attrs.x, attrs.y);
+      xs.push(at.x);
+      ys.push(at.y);
+    });
+  };
+  push(true);
+  if (xs.length < 8) push(false);
+  if (!xs.length) {
     void renderer.getCamera().animatedReset({ duration: 280 });
-    return;
+    return 1;
   }
+  xs.sort((a, b) => a - b);
+  ys.sort((a, b) => a - b);
+  const atQuantile = (sorted: number[], p: number) => sorted[Math.min(sorted.length - 1, Math.max(0, Math.round((sorted.length - 1) * p)))] ?? 0.5;
+  // Trim the sparse rim so a few outlying programs do not shrink the cloud.
+  const minX = atQuantile(xs, 0.012);
+  const maxX = atQuantile(xs, 0.988);
+  const minY = atQuantile(ys, 0.012);
+  const maxY = atQuantile(ys, 0.988);
   const width = maxX - minX;
   const height = maxY - minY;
-  // High layout Y is the top of the screen. Pad that side for the search box and filters, and the low side for the Ask bar and legend.
+  // High layout Y is the top of the screen. A short pad clears the search box; the low side clears the legend and Ask bar.
   const span0 = Math.max(width, height, 0.04);
-  const paddedMaxY = maxY + span0 * 0.09;
-  const paddedMinY = minY - span0 * 0.14;
-  const paddedMinX = minX - span0 * 0.03;
-  const paddedMaxX = maxX + span0 * 0.05;
+  const paddedMaxY = maxY + span0 * 0.035;
+  const paddedMinY = minY - span0 * 0.07;
+  const paddedMinX = minX - span0 * 0.04;
+  const paddedMaxX = maxX + span0 * 0.04;
   const span = Math.max(paddedMaxX - paddedMinX, paddedMaxY - paddedMinY, 0.04);
-  const ratio = Math.min(1.22, Math.max(0.04, span * 1.04));
-  void renderer.getCamera().animate({ x: (paddedMinX + paddedMaxX) / 2, y: (paddedMinY + paddedMaxY) / 2, ratio }, { duration: 360 });
+  const ratio = openingCameraRatio(span);
+  void renderer.getCamera().animate({ x: (paddedMinX + paddedMaxX) / 2, y: (paddedMinY + paddedMaxY) / 2, ratio }, { duration: 420, easing: "quadraticInOut" });
+  return ratio;
+}
+
+type CurveEdge = {
+  source: string;
+  target: string;
+  count: number;
+  accent: boolean;
+  sparse: boolean;
+  size: number;
+  bend: number;
+};
+
+type CurveStroke = {
+  x1: number;
+  y1: number;
+  cx: number;
+  cy: number;
+  x2: number;
+  y2: number;
+  color: string;
+  width: number;
+};
+
+/** A stable sideways bow so program links read as organic curves, not a stack of chords. */
+function curveBend(program: string, campus: string): number {
+  const seed = `${program}|${campus}`;
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) hash = (hash * 33 + seed.charCodeAt(i)) >>> 0;
+  const sign = hash & 1 ? 1 : -1;
+  return sign * (0.18 + ((hash >>> 1) % 200) / 1000);
+}
+
+function paintCurve(context: CanvasRenderingContext2D, stroke: CurveStroke) {
+  context.beginPath();
+  context.moveTo(stroke.x1, stroke.y1);
+  context.quadraticCurveTo(stroke.cx, stroke.cy, stroke.x2, stroke.y2);
+  context.strokeStyle = stroke.color;
+  context.lineWidth = stroke.width;
+  context.stroke();
 }
 
 /** Blend two css colors. Used while focus eases in and out. */
@@ -696,6 +951,7 @@ function graphFrame(renderer: Sigma<NodeAttr, EdgeAttr>) {
   let maxX = -Infinity;
   let maxY = -Infinity;
   renderer.getGraph().forEachNode((_id, attrs) => {
+    if (attrs.marker) return;
     minX = Math.min(minX, attrs.x);
     minY = Math.min(minY, attrs.y);
     maxX = Math.max(maxX, attrs.x);
