@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { CAMPUSES } from "./campuses";
 import { hasPhrase, matchPhrases, normHotspotName, ORG_ALIAS_PHRASES } from "./hotspot-model";
-import { isProgramMatchStatus, isProgramSignalType } from "./program-signals";
+import { SOURCE_CATALOGUE } from "./source-quality";
+import { membershipDirectory, PROGRAM_DIRECTORY, PROGRAM_SIGNAL_TYPES, PROGRAM_SOURCE_ID, programTierLine, isProgramMatchStatus, isProgramSignalType } from "./program-signals";
 
 const campusIds = new Set(CAMPUSES.map((campus) => campus.id));
 const file = JSON.parse(fs.readFileSync("data/imports/founders-inc-spc.json", "utf8")) as {
@@ -127,5 +128,25 @@ assert.equal(hasPhrase(normHotspotName("role Harvard St. Commons"), "harvard st 
 assert.equal(hasPhrase(normHotspotName("role Frontier Tower"), "frontier tower"), true);
 assert.equal(hasPhrase(normHotspotName("role HF0 residency"), "hf0 residency"), true);
 assert.equal(hasPhrase(normHotspotName("role AGI House"), "agi house"), true);
+
+assert.equal(PROGRAM_DIRECTORY.z_fellows.tier, "S");
+assert.equal(PROGRAM_DIRECTORY.emergent_ventures.tier, "S");
+assert.equal(PROGRAM_DIRECTORY.hf0.tier, "S");
+assert.equal(PROGRAM_DIRECTORY.south_park_commons.tier, "S");
+assert.equal(PROGRAM_DIRECTORY.the_residency.tier, "A");
+assert.equal(PROGRAM_DIRECTORY.contrary_venture_partners.tier, "A");
+assert.equal(PROGRAM_DIRECTORY.medici_1517.tier, "A");
+assert.equal(PROGRAM_DIRECTORY.frontier_tower.tier, "C");
+assert.equal(PROGRAM_DIRECTORY.rice_residency.tier, "C");
+assert.equal(membershipDirectory("south_park_commons", "South Park Commons").tier, "A");
+assert.equal(membershipDirectory("south_park_commons", "South Park Commons Founder Fellow").tier, "S");
+assert.equal(membershipDirectory("south_park_commons", "South Park Commons W'24").tier, "S");
+for (const program of PROGRAM_SIGNAL_TYPES) {
+  const entry = SOURCE_CATALOGUE.find((row) => row.dbSourceId === PROGRAM_SOURCE_ID[program]);
+  assert.ok(entry, program);
+  assert.equal(entry?.founderScoutTier, PROGRAM_DIRECTORY[program].tier, program);
+  assert.equal(entry?.startupScoutTier, PROGRAM_DIRECTORY[program].tier, program);
+  assert.equal(entry?.tierRationale, programTierLine(PROGRAM_DIRECTORY[program]), program);
+}
 
 console.log(`program-signals tests ok (${file.people.length} founders-inc/spc, ${residencies.people.length} residencies, ${houses.people.length} houses)`);

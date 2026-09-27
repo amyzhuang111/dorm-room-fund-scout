@@ -255,6 +255,9 @@ function migrate(db: Database.Database) {
   db.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_program_person_signal
     ON program_signals(person_id, signal_type, IFNULL(year, 0), source_url)`);
   db.exec(`CREATE INDEX IF NOT EXISTS idx_program_person ON program_signals(person_id)`);
+  addColumnIfMissing("program_signals", "tier", "tier TEXT");
+  addColumnIfMissing("program_signals", "tier_rationale", "tier_rationale TEXT");
+  addColumnIfMissing("program_signals", "tier_source_url", "tier_source_url TEXT");
 
   db.exec(`CREATE TABLE IF NOT EXISTS company_facts (
     id TEXT PRIMARY KEY,

@@ -2,7 +2,7 @@ import { enrollmentBadge } from "@/lib/domain/founder-status";
 import type { PrecollegeSignalView } from "@/lib/domain/precollege";
 import { bestPrecollegeSignals } from "@/lib/domain/precollege";
 import type { ProgramSignalView } from "@/lib/domain/program-signals";
-import { bestProgramSignals } from "@/lib/domain/program-signals";
+import { bestProgramSignals, membershipDirectory } from "@/lib/domain/program-signals";
 import type { Queue } from "@/lib/domain/queue";
 import { QUEUE_LABELS } from "@/lib/domain/queue";
 import { primaryBlocker, type GateOutcome } from "@/lib/screening/gates";
@@ -152,6 +152,13 @@ function ProgramIcon() {
   );
 }
 
+const PROGRAM_TIER_CHIP: Record<string, string> = {
+  S: "border-accent bg-accent text-accent-foreground text-[11px] font-bold px-2",
+  A: "border-ok/30 bg-ok-bg text-ok text-[10px] font-semibold px-1.5",
+  B: "border-warn/30 bg-warn-bg text-warn text-[10px] font-medium px-1.5",
+  C: "border-border-c bg-surface-2 text-muted text-[10px] font-medium px-1.5",
+};
+
 export function ProgramBadges({ signals }: { signals: ProgramSignalView[] | undefined }) {
   const ranked = bestProgramSignals(signals ?? []);
   if (!ranked.length) return null;
@@ -160,8 +167,12 @@ export function ProgramBadges({ signals }: { signals: ProgramSignalView[] | unde
   return (
     <>
       {shown.map((signal) => {
+        const fallback = membershipDirectory(signal.signalType, signal.label);
+        const tier = signal.tier || fallback.tier;
+        const rationale = signal.tierRationale || fallback.rationale;
+        const source = signal.tierSourceUrl || fallback.sourceUrl;
         const likely = signal.matchStatus === "likely";
-        const tip = `${signal.label}. ${likely ? "Likely: the page does not name this person in full." : "Confirmed: the official page names this person."} ${signal.sourceUrl}`;
+        const tip = `${signal.label}. Tier ${tier}. ${rationale} Source: ${source}`;
         return (
           <a
             key={`${signal.signalType}-${signal.year ?? "na"}-${signal.sourceUrl}`}
@@ -169,12 +180,13 @@ export function ProgramBadges({ signals }: { signals: ProgramSignalView[] | unde
             target="_blank"
             rel="noopener noreferrer"
             title={tip}
-            className={`inline-flex shrink-0 items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-semibold leading-none ${
-              likely ? "border-dashed border-foreground bg-white text-foreground" : "border-foreground bg-foreground text-white"
+            className={`inline-flex shrink-0 items-center gap-1 rounded-full border py-0.5 leading-none ${PROGRAM_TIER_CHIP[tier] ?? PROGRAM_TIER_CHIP.C} ${
+              likely ? "border-dashed bg-white text-foreground" : ""
             }`}
           >
             <ProgramIcon />
             {signal.label}
+            <span>{tier}</span>
             {likely ? <span className="font-medium">likely</span> : null}
           </a>
         );

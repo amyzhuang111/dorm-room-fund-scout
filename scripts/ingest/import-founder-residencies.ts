@@ -28,7 +28,8 @@ import path from "node:path";
 import type Database from "better-sqlite3";
 import { getDb, newId, nowIso } from "../../lib/db/client";
 import { linkedinPersonSlug, normalizeCompanyName, normalizePersonName } from "../../lib/domain/dedupe";
-import { isProgramMatchStatus } from "../../lib/domain/program-signals";
+import { isProgramMatchStatus, PROGRAM_DIRECTORY, programTierLine } from "../../lib/domain/program-signals";
+import { membershipTierFields, writePersonDirectoryTier, writeProjectDirectoryTier, writeSourceDirectoryTier } from "./program-directory";
 
 const RESIDENCY_PROGRAMS = [
   "the_residency",
@@ -104,9 +105,7 @@ interface ProgramSpec {
   projectId: string;
   projectName: string;
   rationale: string;
-  founderTier: "S" | "A" | "B" | "C" | "D";
-  startupTier: "S" | "A" | "B" | "C" | "D";
-  // False when a source row already exists and its tiers should stay as they are.
+  // False skips renaming an existing source. The directory tier is still written.
   updateExistingSource: boolean;
 }
 
@@ -117,11 +116,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://www.livetheresidency.com/residencies",
     projectId: "proj_the_residency",
     projectName: "The Residency",
-    founderTier: "B",
-    startupTier: "B",
     updateExistingSource: true,
     rationale:
-      "Live-in houses for builders. The residencies page lists the Inventors Residency of San Francisco (12 weeks), sf2 (a hardware hacker house), Odyssey, and Arcadia in Berkeley (14 bedrooms, a former YC office), plus houses in Vancouver, Bangalore, Berlin, Vienna, and Hyderabad. The page does not name residents. Founder and startup tiers are B, matching the existing hotspot.",
+      "Live-in houses for builders. The residencies page lists the Inventors Residency of San Francisco (12 weeks), sf2 (a hardware hacker house), Odyssey, and Arcadia in Berkeley (14 bedrooms, a former YC office), plus houses in Vancouver, Bangalore, Berlin, Vienna, and Hyderabad. The page does not name residents.",
   },
   z_fellows: {
     sourceId: "src_z_fellows",
@@ -129,11 +126,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://www.zfellows.com/",
     projectId: "proj_z_fellows",
     projectName: "Z Fellows",
-    founderTier: "A",
-    startupTier: "A",
     updateExistingSource: true,
     rationale:
-      "One week and $10,000 for technical builders. The public alumni section names people and companies and does not name schools. Founder and startup tiers are A, matching the existing hotspot. A badge is stored only when that person's own public page says they are a Z Fellow and names a school.",
+      "One week and $10,000 for technical builders. The public alumni section names people and companies and does not name schools. A badge is stored only when that person's own public page says they are a Z Fellow and names a school.",
   },
   emergent_ventures: {
     sourceId: "src_emergent_ventures",
@@ -141,11 +136,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://marginalrevolution.com/marginalrevolution/2018/09/emergent-ventures-new-project-help-foment-enlightenment.html",
     projectId: "proj_emergent_ventures",
     projectName: "Emergent Ventures",
-    founderTier: "B",
-    startupTier: "C",
     updateExistingSource: true,
     rationale:
-      "Tyler Cowen's grant program. Winners are posted on Marginal Revolution, cohorts 36 through 59 (August 2024 through September 2026). A winner line names a person, a place, and a project. Many recipients are researchers rather than founders, so the founder tier is B and the startup tier is C.",
+      "Tyler Cowen's grant program. Winners are posted on Marginal Revolution, cohorts 36 through 59 (August 2024 through September 2026). A winner line names a person, a place, and a project. Many recipients are researchers rather than founders.",
   },
   medici_1517: {
     sourceId: "src_1517_medici",
@@ -153,11 +146,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://www.1517fund.com/medici",
     projectId: "proj_1517_medici",
     projectName: "1517 Medici Project",
-    founderTier: "B",
-    startupTier: "C",
     updateExistingSource: true,
     rationale:
-      "No-strings grants of at least $1,000 for high school students, college students, and dropouts. 1517 says the grants ran in stealth for almost a decade and that it cannot issue grants to teams outside North America. The page does not list recipients with schools. Founder tier B, startup tier C.",
+      "No-strings grants of at least $1,000 for high school students, college students, and dropouts. 1517 says the grants ran in stealth for almost a decade and that it cannot issue grants to teams outside North America. The page does not list recipients with schools.",
   },
   contrary_venture_partners: {
     sourceId: "src_contrary_venture_partners",
@@ -165,8 +156,6 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://contrary.com/blog/class-of-2026",
     projectId: "proj_contrary_venture_partners",
     projectName: "Contrary Venture Partners",
-    founderTier: "D",
-    startupTier: "D",
     updateExistingSource: false,
     rationale:
       "Contrary's Class of 2026 venture partners: nearly 1,500 applications and 20 accepted, announced 6 Nov 2025. Each bio names a school and a standing. This is a scout class, not a research fellowship. Source tiers stay D: membership is not evidence they founded a company. The hotspot stays B.",
@@ -177,11 +166,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://buildspace.so/",
     projectId: "proj_buildspace",
     projectName: "Buildspace",
-    founderTier: "C",
-    startupTier: "C",
     updateExistingSource: true,
     rationale:
-      "Archived. The homepage says this was buildspace, a school for people who wanted to work on their own ideas. The shutdown letter says the founder decided to fully shut it down, and names nights & weekends as part of what the company had. No participant roster is published. Founder and startup tiers are C.",
+      "Archived. The homepage says this was buildspace, a school for people who wanted to work on their own ideas. The shutdown letter says the founder decided to fully shut it down, and names nights & weekends as part of what the company had. No participant roster is published.",
   },
   afore_fir_u: {
     sourceId: "src_afore_fir_u",
@@ -189,11 +176,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://www.afore.vc/students",
     projectId: "proj_afore_fir_u",
     projectName: "Afore FIR U",
-    founderTier: "A",
-    startupTier: "A",
     updateExistingSource: true,
     rationale:
-      "Afore's two-month San Francisco program for students, dropouts, and recent graduates. The students page says Afore invests $20k–$100k+ and gives office space, and that applications are open for 2026. It does not pair each person with a school. Founder and startup tiers are A.",
+      "Afore's two-month San Francisco program for students, dropouts, and recent graduates. The students page says Afore invests $20k–$100k+ and gives office space, and that applications are open for 2026. It does not pair each person with a school.",
   },
   pioneer: {
     sourceId: "src_pioneer",
@@ -201,11 +186,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://pioneer.app/",
     projectId: "proj_pioneer",
     projectName: "Pioneer",
-    founderTier: "B",
-    startupTier: "B",
     updateExistingSource: true,
     rationale:
-      "Accelerator founded in 2018 by Rishi Narang and Daniel Gross. The site says it funded 150+ companies and stopped making new investments in 2024. Testimonials name founders and companies and do not name schools. Founder and startup tiers are B.",
+      "Accelerator founded in 2018 by Rishi Narang and Daniel Gross. The site says it funded 150+ companies and stopped making new investments in 2024. Testimonials name founders and companies and do not name schools.",
   },
   kleiner_perkins_fellows: {
     sourceId: "src_kleiner_perkins_fellows",
@@ -213,11 +196,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://jobs.ashbyhq.com/kleinerperkinsfellows",
     projectId: "proj_kleiner_perkins_fellows",
     projectName: "Kleiner Perkins Fellows",
-    founderTier: "S",
-    startupTier: "S",
     updateExistingSource: true,
     rationale:
-      "Small paid summer fellowship placed in Kleiner Perkins portfolio companies. The public jobs page does not name the current class. Founder and startup tiers are S, matching the existing hotspot. A badge is stored only when a public page names that person as a fellow and names a school.",
+      "Small paid summer fellowship placed in Kleiner Perkins portfolio companies. The public jobs page does not name the current class. A badge is stored only when a public page names that person as a fellow and names a school.",
   },
   agi_house: {
     sourceId: "src_agi_house",
@@ -225,11 +206,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://agihouse.ai/",
     projectId: "proj_agi_house",
     projectName: "AGI House",
-    founderTier: "A",
-    startupTier: "A",
     updateExistingSource: true,
     rationale:
-      "San Francisco AI hacker house. The homepage photo caption names roommates and companies and does not name schools. Founder and startup tiers are A, matching the existing hotspot. A badge is stored only when a public page names the person and a school.",
+      "San Francisco AI hacker house. The homepage photo caption names roommates and companies and does not name schools. A badge is stored only when a public page names the person and a school.",
   },
   hf0: {
     sourceId: "src_hf0",
@@ -237,11 +216,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://www.hf0.com/",
     projectId: "proj_hf0",
     projectName: "HF0",
-    founderTier: "A",
-    startupTier: "A",
     updateExistingSource: true,
     rationale:
-      "Residency for repeat founders. The site says it backs 10 teams at a time. The team page names staff and does not name resident founders or schools. Founder and startup tiers are A.",
+      "Residency for repeat founders. The site says it backs 10 teams at a time. The team page names staff and does not name resident founders or schools.",
   },
   frontier_tower: {
     sourceId: "src_frontier_tower",
@@ -249,11 +226,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://frontiertower.io/",
     projectId: "proj_frontier_tower",
     projectName: "Frontier Tower",
-    founderTier: "B",
-    startupTier: "B",
     updateExistingSource: true,
     rationale:
-      "16-floor vertical village at 995 Market Street, San Francisco. Public quotes on the site use first initials only. Founder and startup tiers are B.",
+      "16-floor vertical village at 995 Market Street, San Francisco. Public quotes on the site use first initials only.",
   },
   yale_hacker_house: {
     sourceId: "src_yale_hacker_house",
@@ -261,11 +236,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://www.yalehackerhouse.com/",
     projectId: "proj_yale_hacker_house",
     projectName: "Yale Hacker House",
-    founderTier: "A",
-    startupTier: "A",
     updateExistingSource: true,
     rationale:
-      "Yale's founder residency in San Francisco. The site publishes a first cohort and says each person is a Yale student. Founder and startup tiers are A.",
+      "Yale's founder residency in San Francisco. The site publishes a first cohort and says each person is a Yale student.",
   },
   farmhouse: {
     sourceId: "src_farmhouse",
@@ -273,11 +246,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://www.thefarm.haus/",
     projectId: "proj_farmhouse",
     projectName: "Farmhouse",
-    founderTier: "A",
-    startupTier: "B",
     updateExistingSource: true,
     rationale:
-      "Stanford hacker house. The site lists eight builders for summer 2026 and a Stanford major for each. It does not print a class year. Founder tier A, startup tier B.",
+      "Stanford hacker house. The site lists eight builders for summer 2026 and a Stanford major for each. It does not print a class year.",
   },
   gatech_hacker_house: {
     sourceId: "src_gatech_hacker_house",
@@ -285,11 +256,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://news.gatech.edu/news/2025/04/11/computing-student-launches-first-ever-hacker-house-campus",
     projectId: "proj_gatech_hacker_house",
     projectName: "Georgia Tech Hacker House",
-    founderTier: "A",
-    startupTier: "B",
     updateExistingSource: true,
     rationale:
-      "Nine-month live-in program at 160 6th St NW, 10 rooms and 20 spots, August 10 2025 through May 10 2026. Georgia Tech's news center says nearly 180 students applied. The story names the founder and does not name the other residents. Founder tier A, startup tier B.",
+      "Nine-month live-in program at 160 6th St NW, 10 rooms and 20 spots, August 10 2025 through May 10 2026. Georgia Tech's news center says nearly 180 students applied. The story names the founder and does not name the other residents.",
   },
   rice_residency: {
     sourceId: "src_rice_residency",
@@ -297,11 +266,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://www.riceresidency.com/",
     projectId: "proj_rice_residency",
     projectName: "Rice Residency",
-    founderTier: "B",
-    startupTier: "B",
     updateExistingSource: true,
     rationale:
-      "Student hacker house at Rice. The Rice Thresher (19 Nov 2025) says applications for the first cohort were opening and names two Will Rice juniors. Founder and startup tiers are B.",
+      "Student hacker house at Rice. The Rice Thresher (19 Nov 2025) says applications for the first cohort were opening and names two Will Rice juniors.",
   },
   foundher_house: {
     sourceId: "src_foundher_house",
@@ -309,11 +276,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://www.foundherhouse.org/",
     projectId: "proj_foundher_house",
     projectName: "FoundHer House",
-    founderTier: "B",
-    startupTier: "B",
     updateExistingSource: true,
     rationale:
-      "All-women hacker house in San Francisco. KTVU (2 Sep 2025) names the two USC student founders. The article says other residents represented Cornell and Stanford and that one dropout was from Penn, and it does not say which person. Founder and startup tiers are B.",
+      "All-women hacker house in San Francisco. KTVU (2 Sep 2025) names the two USC student founders. The article says other residents represented Cornell and Stanford and that one dropout was from Penn, and it does not say which person.",
   },
   playa_house: {
     sourceId: "src_playa_house",
@@ -321,11 +286,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://liveplayahouse.com/",
     projectId: "proj_playa_house",
     projectName: "Playa House",
-    founderTier: "A",
-    startupTier: "B",
     updateExistingSource: true,
     rationale:
-      "Student-run founder house in Isla Vista. UCSB Engineering (30 Jul 2026) says ten residents joined in fall 2025 and names four of them. UC Santa Barbara is not in the campus list, so those four are stored without a campus. Founder tier A, startup tier B.",
+      "Student-run founder house in Isla Vista. UCSB Engineering (30 Jul 2026) says ten residents joined in fall 2025 and names four of them. UC Santa Barbara is not in the campus list, so those four are stored without a campus.",
   },
   harvard_st_commons: {
     sourceId: "src_harvard_st_commons",
@@ -333,11 +296,9 @@ const PROGRAMS: Record<ResidencyProgram, ProgramSpec> = {
     sourceUrl: "https://harvardst.co/",
     projectId: "proj_harvard_st_commons",
     projectName: "Harvard St. Commons",
-    founderTier: "A",
-    startupTier: "B",
     updateExistingSource: true,
     rationale:
-      "Founder house in Cambridge. The site names the house leads and a school for two of them. It does not publish the full resident roster. Founder tier A, startup tier B.",
+      "Founder house in Cambridge. The site names the house leads and a school for two of them. It does not publish the full resident roster.",
   },
 };
 
@@ -398,29 +359,33 @@ function ensureSource(db: Database.Database, program: ResidencyProgram, retrieve
       spec.sourceUrl,
       retrievedAt,
       retrievedAt,
-      spec.founderTier,
-      spec.startupTier,
+      PROGRAM_DIRECTORY[program].tier,
+      PROGRAM_DIRECTORY[program].tier,
       dimensions,
-      spec.rationale
+      programTierLine(PROGRAM_DIRECTORY[program])
     );
     return;
   }
   db.prepare(`UPDATE sources SET status='available', last_attempt_at=?, last_success_at=? WHERE id=?`).run(retrievedAt, retrievedAt, spec.sourceId);
+  writeSourceDirectoryTier(db, spec.sourceId, program);
   if (!spec.updateExistingSource) return;
   db.prepare(
-    `UPDATE sources SET name=?, url=?, founder_scout_tier=?, startup_scout_tier=?, quality_dimensions_json=?, source_role='discovery', tier_rationale=?
+    `UPDATE sources SET name=?, url=?, quality_dimensions_json=?, source_role='discovery'
      WHERE id=? AND tier_override_by IS NULL`
-  ).run(spec.sourceName, spec.sourceUrl, spec.founderTier, spec.startupTier, dimensions, spec.rationale, spec.sourceId);
+  ).run(spec.sourceName, spec.sourceUrl, dimensions, spec.sourceId);
 }
 
 function ensureProgramProject(db: Database.Database, program: ResidencyProgram) {
   const spec = PROGRAMS[program];
   const existing = db.prepare(`SELECT id FROM projects WHERE id=?`).get(spec.projectId) as { id: string } | undefined;
-  if (existing) return;
-  db.prepare(
-    `INSERT INTO projects (id, name, aliases_json, kind, description, website_url, is_portfolio_reference, is_investable_candidate)
-     VALUES (?, ?, '[]', 'project', ?, ?, 0, 0)`
-  ).run(spec.projectId, spec.projectName, spec.rationale, spec.sourceUrl);
+  if (!existing) {
+    db.prepare(
+      `INSERT INTO projects (id, name, aliases_json, kind, description, website_url, is_portfolio_reference, is_investable_candidate)
+       VALUES (?, ?, '[]', 'project', ?, ?, 0, 0)`
+    ).run(spec.projectId, spec.projectName, spec.rationale, spec.sourceUrl);
+  }
+  writeProjectDirectoryTier(db, spec.projectId, program);
+  db.prepare(`UPDATE projects SET description=? WHERE id=?`).run(spec.rationale, spec.projectId);
 }
 
 function upsertClaim(
@@ -643,6 +608,7 @@ function ensureSignal(
   record: PersonRecord,
   claimId: string
 ) {
+  const tier = membershipTierFields(record.program, record.label);
   const existing = db
     .prepare(
       `SELECT id FROM program_signals
@@ -650,19 +616,36 @@ function ensureSignal(
     )
     .get(personId, record.program, record.year, record.sourceUrl) as { id: string } | undefined;
   if (existing) {
-    db.prepare(`UPDATE program_signals SET label=?, match_status=?, excerpt=?, claim_id=? WHERE id=?`).run(
+    db.prepare(`UPDATE program_signals SET label=?, match_status=?, excerpt=?, claim_id=?, tier=?, tier_rationale=?, tier_source_url=? WHERE id=?`).run(
       record.label,
       record.matchStatus,
       record.excerpt.slice(0, 1400),
       claimId,
+      tier.tier,
+      tier.rationale,
+      tier.sourceUrl,
       existing.id
     );
-    return;
+  } else {
+    db.prepare(
+      `INSERT INTO program_signals (id, person_id, signal_type, label, year, match_status, source_url, excerpt, claim_id, tier, tier_rationale, tier_source_url)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).run(
+      newId("psig"),
+      personId,
+      record.program,
+      record.label,
+      record.year,
+      record.matchStatus,
+      record.sourceUrl,
+      record.excerpt.slice(0, 1400),
+      claimId,
+      tier.tier,
+      tier.rationale,
+      tier.sourceUrl
+    );
   }
-  db.prepare(
-    `INSERT INTO program_signals (id, person_id, signal_type, label, year, match_status, source_url, excerpt, claim_id)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  ).run(newId("psig"), personId, record.program, record.label, record.year, record.matchStatus, record.sourceUrl, record.excerpt.slice(0, 1400), claimId);
+  writePersonDirectoryTier(db, personId, record.program, record.label);
 }
 
 function loadCompanies(db: Database.Database): CompanyRow[] {

@@ -20,7 +20,8 @@ import path from "node:path";
 import type Database from "better-sqlite3";
 import { getDb, newId, nowIso } from "../../lib/db/client";
 import { linkedinPersonSlug, normalizeCompanyName, normalizePersonName } from "../../lib/domain/dedupe";
-import { isProgramMatchStatus } from "../../lib/domain/program-signals";
+import { isProgramMatchStatus, PROGRAM_DIRECTORY, programTierLine } from "../../lib/domain/program-signals";
+import { membershipTierFields, writePersonDirectoryTier, writeProjectDirectoryTier, writeSourceDirectoryTier } from "./program-directory";
 
 // Kept local so new program badges do not have to be listed in this importer.
 const FOUNDERS_PROGRAMS = ["founders_inc", "south_park_commons"] as const;
@@ -81,7 +82,7 @@ const PROGRAMS: Record<
     projectId: "proj_founders_inc",
     projectName: "Founders Inc",
     rationale:
-      "San Francisco residency and first-check fund. Off Season is six weeks for students, recent grads, and dropouts (48 teams in 2025, 100 teams in 2026). First checks are typically $100k–$250k. Broader than a ~12-person fellowship, so founder and startup tiers are A.",
+      "San Francisco residency and first-check fund. Off Season is six weeks for students, recent grads, and dropouts (48 teams in 2025, 100 teams in 2026). First checks are typically $100k–$250k.",
   },
   south_park_commons: {
     sourceId: "src_south_park_commons",
@@ -90,7 +91,7 @@ const PROGRAMS: Record<
     projectId: "proj_south_park_commons",
     projectName: "South Park Commons",
     rationale:
-      "San Francisco founder community. The Founder Fellowship invests $400k for 7% and reserves $600k for the next external round. A separate residency runs six months at no cost and no equity. Founder and startup tiers are A.",
+      "San Francisco founder community. The Founder Fellowship invests $400k for 7% and reserves $600k for the next external round. A separate residency runs six months at no cost and no equity.",
   },
 };
 
@@ -140,28 +141,42 @@ function ensureSource(db: Database.Database, program: FoundersProgram, retrieved
   });
   db.prepare(
     `INSERT INTO sources (id, name, family, url, campuses_json, priority, ingestion_mode, status, last_attempt_at, last_success_at, founder_scout_tier, startup_scout_tier, quality_dimensions_json, source_role, tier_rationale)
-     VALUES (?, ?, 'accelerator', ?, '[]', 1, 'manual', 'available', ?, ?, 'A', 'A', ?, 'discovery', ?)
+     VALUES (?, ?, 'accelerator', ?, '[]', 1, 'manual', 'available', ?, ?, ?, ?, ?, 'discovery', ?)
      ON CONFLICT(id) DO UPDATE SET
        name=excluded.name,
        url=excluded.url,
        status='available',
        last_attempt_at=excluded.last_attempt_at,
        last_success_at=excluded.last_success_at`
-  ).run(spec.sourceId, spec.sourceName, spec.sourceUrl, retrievedAt, retrievedAt, dimensions, spec.rationale);
+  ).run(
+    spec.sourceId,
+    spec.sourceName,
+    spec.sourceUrl,
+    retrievedAt,
+    retrievedAt,
+    PROGRAM_DIRECTORY[program].tier,
+    PROGRAM_DIRECTORY[program].tier,
+    dimensions,
+    programTierLine(PROGRAM_DIRECTORY[program])
+  );
+  writeSourceDirectoryTier(db, spec.sourceId, program);
   db.prepare(
-    `UPDATE sources SET founder_scout_tier='A', startup_scout_tier='A', quality_dimensions_json=?, source_role='discovery', tier_rationale=?
+    `UPDATE sources SET quality_dimensions_json=?, source_role='discovery'
      WHERE id=? AND tier_override_by IS NULL`
-  ).run(dimensions, spec.rationale, spec.sourceId);
+  ).run(dimensions, spec.sourceId);
 }
 
 function ensureProgramProject(db: Database.Database, program: FoundersProgram) {
   const spec = PROGRAMS[program];
   const existing = db.prepare(`SELECT id FROM projects WHERE id=?`).get(spec.projectId) as { id: string } | undefined;
-  if (existing) return;
-  db.prepare(
-    `INSERT INTO projects (id, name, aliases_json, kind, description, website_url, is_portfolio_reference, is_investable_candidate)
-     VALUES (?, ?, '[]', 'project', ?, ?, 0, 0)`
-  ).run(spec.projectId, spec.projectName, spec.rationale, spec.sourceUrl);
+  if (!existing) {
+    db.prepare(
+      `INSERT INTO projects (id, name, aliases_json, kind, description, website_url, is_portfolio_reference, is_investable_candidate)
+       VALUES (?, ?, '[]', 'project', ?, ?, 0, 0)`
+    ).run(spec.projectId, spec.projectName, spec.rationale, spec.sourceUrl);
+  }
+  writeProjectDirectoryTier(db, spec.projectId, program);
+  db.prepare(`UPDATE projects SET description=? WHERE id=?`).run(spec.rationale, spec.projectId);
 }
 
 function upsertClaim(
@@ -362,6 +377,7 @@ function ensureSignal(
   record: PersonRecord,
   claimId: string
 ) {
+  const tier = membershipTierFields(record.program, record.label);
   const existing = db
     .prepare(
       `SELECT id FROM program_signals
@@ -369,19 +385,36 @@ function ensureSignal(
     )
     .get(personId, record.program, record.year, record.sourceUrl) as { id: string } | undefined;
   if (existing) {
-    db.prepare(`UPDATE program_signals SET label=?, match_status=?, excerpt=?, claim_id=? WHERE id=?`).run(
+    db.prepare(`UPDATE program_signals SET label=?, match_status=?, excerpt=?, claim_id=?, tier=?, tier_rationale=?, tier_source_url=? WHERE id=?`).run(
       record.label,
       record.matchStatus,
       record.excerpt.slice(0, 1400),
       claimId,
+      tier.tier,
+      tier.rationale,
+      tier.sourceUrl,
       existing.id
     );
-    return;
+  } else {
+    db.prepare(
+      `INSERT INTO program_signals (id, person_id, signal_type, label, year, match_status, source_url, excerpt, claim_id, tier, tier_rationale, tier_source_url)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).run(
+      newId("psig"),
+      personId,
+      record.program,
+      record.label,
+      record.year,
+      record.matchStatus,
+      record.sourceUrl,
+      record.excerpt.slice(0, 1400),
+      claimId,
+      tier.tier,
+      tier.rationale,
+      tier.sourceUrl
+    );
   }
-  db.prepare(
-    `INSERT INTO program_signals (id, person_id, signal_type, label, year, match_status, source_url, excerpt, claim_id)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
-  ).run(newId("psig"), personId, record.program, record.label, record.year, record.matchStatus, record.sourceUrl, record.excerpt.slice(0, 1400), claimId);
+  writePersonDirectoryTier(db, personId, record.program, record.label);
 }
 
 function loadCompanies(db: Database.Database): CompanyRow[] {

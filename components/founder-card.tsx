@@ -1,6 +1,7 @@
 import { memo } from "react";
 import Link from "next/link";
 import type { FounderRow } from "@/lib/domain/queries";
+import { membershipDirectory } from "@/lib/domain/program-signals";
 import { publicLink } from "@/lib/domain/company-link";
 import { buildHref } from "@/lib/domain/url";
 import { ScoutLink } from "./scout-nav";
@@ -98,14 +99,29 @@ export const FounderCard = memo(function FounderCard({
             <section>
               <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Program membership</h3>
               <ul className="mt-1 space-y-1.5">
-                {founder.programSignals.map((signal) => (
-                  <li key={`${signal.signalType}-${signal.year ?? "na"}-${signal.sourceUrl}`} className="text-xs text-foreground">
-                    <a href={signal.sourceUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-link underline">
-                      {signal.label}
-                    </a>
-                    <span className="text-muted"> · {signal.matchStatus === "confirmed" ? "confirmed" : "likely"}</span>
-                  </li>
-                ))}
+                {founder.programSignals.map((signal) => {
+                  const fallback = membershipDirectory(signal.signalType, signal.label);
+                  const tier = signal.tier || fallback.tier;
+                  const rationale = signal.tierRationale || fallback.rationale;
+                  const source = signal.tierSourceUrl || fallback.sourceUrl;
+                  return (
+                    <li key={`${signal.signalType}-${signal.year ?? "na"}-${signal.sourceUrl}`} className="text-xs text-foreground">
+                      <a href={signal.sourceUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-link underline">
+                        {signal.label}
+                      </a>
+                      <span className="text-muted">
+                        {" "}
+                        · Tier {tier} · {signal.matchStatus === "confirmed" ? "confirmed" : "likely"}
+                      </span>
+                      <p className="text-muted" title={`${rationale} Source: ${source}`}>
+                        {rationale}{" "}
+                        <a href={source} target="_blank" rel="noopener noreferrer" className="text-link underline">
+                          Source
+                        </a>
+                      </p>
+                    </li>
+                  );
+                })}
               </ul>
             </section>
           )}

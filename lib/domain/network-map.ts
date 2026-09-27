@@ -347,7 +347,7 @@ function radius(type: MapNodeType, degree: number, tier: string | null, amount: 
   const money = amount && amount > 0 ? Math.min(3.5, Math.log10(amount) - 5.2) : 0;
   if (type === "campus") return 18;
   if (type === "investor") return 8 + Math.min(7, Math.sqrt(degree) * 0.7);
-  if (type === "program") return 9 + Math.min(5, Math.sqrt(degree) * 0.45);
+  if (type === "program") return 9 + tierBoost(tier) + Math.min(5, Math.sqrt(degree) * 0.45);
   if (type === "startup") return 5 + tierBoost(tier) + Math.max(0, money) + Math.min(2.5, Math.sqrt(degree) * 0.35);
   return 3.4 + tierBoost(tier) * 0.45 + Math.min(2, Math.sqrt(degree) * 0.28);
 }
@@ -474,7 +474,7 @@ function assembleNetworkMap(): MapGraph {
 
   const programs = db
     .prepare(
-      `SELECT p.id, p.name FROM projects p
+      `SELECT p.id, p.name, p.signal_tier FROM projects p
        WHERE p.kind = 'project' AND (
          p.id IN (
            SELECT source_entity_id FROM relationships
@@ -485,7 +485,7 @@ function assembleNetworkMap(): MapGraph {
          )
        )`
     )
-    .all() as { id: string; name: string }[];
+    .all() as { id: string; name: string; signal_tier: string | null }[];
   const programIds = new Set(programs.map((row) => row.id));
 
   const founderRows = db
@@ -821,7 +821,7 @@ function assembleNetworkMap(): MapGraph {
       campus: campuses[0] ?? null,
       campuses: campuses.length > 1 ? campuses : undefined,
       sector: null,
-      tier: null,
+      tier: program.signal_tier,
       stage: null,
       enroll: null,
       potential: false,

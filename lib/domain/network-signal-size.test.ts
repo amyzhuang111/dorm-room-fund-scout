@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { founderSignalWeight, signalTooltip, sqrtScores, startupSignalWeight } from "./network-signal-size";
+import { founderSignalWeight, signalTooltip, sqrtScores, startupSignalWeight, tierSizeBoost } from "./network-signal-size";
 
 test("confirmed funded accelerator startups outweigh a plain confirmed one", () => {
   const plain = startupSignalWeight({ verification: "confirmed", funded: false, accelerator: false, strongTier: false });
@@ -34,4 +34,20 @@ test("tooltip shows the raw count, denominator, and ratio", () => {
     "18 strong (weight 24.5) / 921 undergrads · ratio 0.0266",
   );
   assert.equal(signalTooltip({ type: "person", signalCount: 4, signalWeight: 4, signalDenominator: 1, signalRatio: 4 }), "4 connections / 1 · ratio 4");
+  assert.equal(
+    signalTooltip({ type: "person", signalCount: 4, signalWeight: 4, signalDenominator: 1, signalRatio: 4, tier: "S" }),
+    "4 connections / 1 · ratio 4 · tier S",
+  );
+  assert.equal(
+    signalTooltip({ type: "organization", signalCount: 0, signalWeight: 0, signalDenominator: 1, signalRatio: 0, orgTier: "S" }),
+    "0 strong / 1 members · ratio 0 · tier S",
+  );
+});
+
+test("directory tiers add screen weight from S down to C", () => {
+  assert.ok(tierSizeBoost("S") > tierSizeBoost("A"));
+  assert.ok(tierSizeBoost("A") > tierSizeBoost("B"));
+  assert.ok(tierSizeBoost("B") > tierSizeBoost("C"));
+  assert.equal(tierSizeBoost("C"), 0);
+  assert.equal(tierSizeBoost(null), 0);
 });

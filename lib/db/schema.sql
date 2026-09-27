@@ -360,6 +360,9 @@ CREATE TABLE IF NOT EXISTS program_signals (
   source_url TEXT NOT NULL,
   excerpt TEXT NOT NULL,
   claim_id TEXT REFERENCES claims(id),
+  tier TEXT,                  -- S | A | B | C directory tier for this membership
+  tier_rationale TEXT,        -- one-line reason for that tier
+  tier_source_url TEXT,       -- page the tier is based on
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

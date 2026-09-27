@@ -1175,7 +1175,7 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
   const programByPerson = new Map<string, ProgramSignalView[]>();
   for (const row of db
     .prepare(
-      `SELECT person_id, signal_type, label, year, match_status, source_url
+      `SELECT person_id, signal_type, label, year, match_status, source_url, tier, tier_rationale, tier_source_url
        FROM program_signals
        WHERE source_url != '' AND label != ''`
     )
@@ -1186,8 +1186,12 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       year: number | null;
       match_status: string;
       source_url: string;
+      tier: string | null;
+      tier_rationale: string | null;
+      tier_source_url: string | null;
     }[]) {
     if (!isProgramSignalType(row.signal_type) || !isProgramMatchStatus(row.match_status)) continue;
+    const tier = row.tier === "S" || row.tier === "A" || row.tier === "B" || row.tier === "C" ? row.tier : null;
     const list = programByPerson.get(row.person_id) ?? [];
     list.push({
       signalType: row.signal_type,
@@ -1195,6 +1199,9 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       year: row.year,
       matchStatus: row.match_status,
       sourceUrl: row.source_url,
+      tier,
+      tierRationale: row.tier_rationale,
+      tierSourceUrl: row.tier_source_url,
     });
     programByPerson.set(row.person_id, list);
   }
