@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { featuredNationalKey } from "@/lib/domain/featured-national";
 import { SECTION_SHORT, tierBandLabel, type HotspotSectionId } from "@/lib/domain/hotspot-model";
 import type { MapEdgeType, MapGraph, MapNode, MapNodeType } from "@/lib/domain/network-map";
 import { REGIONS, regionSwatch } from "@/lib/domain/network-regions";
@@ -766,7 +767,7 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
   }
 
   for (const node of graph.nodes) {
-    if (!showIsolates && node.degree === 0) {
+    if (!showIsolates && node.degree === 0 && !featuredNationalKey(node.label)) {
       hidden.add(node.id);
       continue;
     }
@@ -801,7 +802,7 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
       const sectionAll = filters.orgSections.length === ORG_SECTIONS.length;
       const sectionHit = sectionAll || sections.some((section) => filters.orgSections.includes(section));
       let show = filters.nodeTypes.includes("organization") && campusHit && tierHit && sectionHit;
-      if (show && !showIsolates && (node.linkedPeople ?? 0) === 0 && (node.linkedStartups ?? 0) === 0) show = false;
+      if (show && !showIsolates && (node.linkedPeople ?? 0) === 0 && (node.linkedStartups ?? 0) === 0 && !featuredNationalKey(node.label)) show = false;
       if (show && narrowed) {
         show = graph.edges.some((edge) => edge.type === "member_of" && (edge.source === node.id || edge.target === node.id) && (peopleOk.has(edge.source) || peopleOk.has(edge.target)));
       }

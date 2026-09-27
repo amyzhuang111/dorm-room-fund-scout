@@ -14,6 +14,7 @@ import { CAMPUSES } from "./campuses";
 import { connectionSignal, founderSignalWeight, mentionsAccelerator, perCapitaSignal, signalFields, sqrtScores, startupSignalWeight, type SignalParts } from "./network-signal-size";
 import { REGIONS, regionForCampus, regionInk, type RegionMarker } from "./network-regions";
 import type { HotspotSectionId, HotspotTier } from "./hotspot-model";
+import { featuredNationalKey } from "./featured-national";
 import { demoteDuplicateOuter, rimPlacementFor, type RimBand, type RimTier } from "./rim-tier";
 import { hotspotGraphPatch, organizationMap } from "./hotspots";
 import { confirmedLinkedIn } from "./person-link";
@@ -126,7 +127,7 @@ interface SimNode {
   homeCampus?: string;
 }
 
-const LAYOUT_VERSION = "28";
+const LAYOUT_VERSION = "29";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -1177,7 +1178,8 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
   const pushMember = (hubId: string, memberId: string) => {
     const hub = byId.get(hubId) as LiveNode | undefined;
     const member = byId.get(memberId) as LiveNode | undefined;
-    if (!hub?.hub || !member || member.hub) return;
+    if (!hub || !member || member.hub) return;
+    if (!hub.hub && !featuredNationalKey(hub.label ?? "")) return;
     const list = hubMembers.get(hubId) ?? [];
     list.push(memberId);
     hubMembers.set(hubId, list);
@@ -1363,7 +1365,20 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
   // Repack after the simulation. The collide pass was leaving large campuses as hollow arcs, and nodes with no campus sat in a ring at the origin.
   pullCampusSatellites(live, primary);
   packCampusDiscs(live, primary);
-  placeLinkedPrograms(live, hubMembers, primary);
+  const campusOf = new Map(primary);
+  for (const [id, weights] of bridgeWeight) {
+    if (campusOf.has(id)) continue;
+    let bestId = "";
+    let bestN = -1;
+    for (const [campus, n] of weights) {
+      if (n > bestN || (n === bestN && campus < bestId)) {
+        bestN = n;
+        bestId = campus;
+      }
+    }
+    if (bestId) campusOf.set(id, bestId);
+  }
+  placeLinkedPrograms(live, hubMembers, primary, campusOf);
   const markers: RegionMarker[] = [];
   for (const region of REGIONS) {
     const members = campusesByRegion.get(region.id) ?? [];
@@ -1496,7 +1511,12 @@ function hashUnit(id: string): number {
 }
 
 function discRadius(count: number): number {
-  return Math.max(7, 0.78 * Math.sqrt(Math.max(count, 1)));
+  const n = Math.max(count, 1);
+  const full = 0.78 * Math.sqrt(n);
+  if (n <= 400) return Math.max(7, full);
+  // Past a few hundred members, more people add less radius. Penn stays the largest disc, and CMU, Princeton, and Georgia Tech are not parked on the rim.
+  const pivot = 0.78 * Math.sqrt(400);
+  return pivot + (full - pivot) * 0.48;
 }
 
 /** Uniform disc. sqrt(unit) keeps the middle as full as the edge. */
@@ -1588,6 +1608,7 @@ function packCampusDiscs(live: LiveNode[], primary: Map<string, string>) {
   }
   for (const node of live) {
     if (node.type === "campus" || node.type === "person" || node.type === "startup" || node.hub) continue;
+    if (featuredNationalKey(node.label ?? "")) continue;
     const named = node.homeCampus || campusNamedInLabel(node.label ?? "");
     const campus = (named && byId.get(named)) || nearestCampus(node);
     if (!campus) continue;
@@ -1598,9 +1619,10 @@ function packCampusDiscs(live: LiveNode[], primary: Map<string, string>) {
   }
 }
 
-/** National programs sit just outside the weighted center of the campuses they actually link to. */
-function placeLinkedPrograms(live: LiveNode[], hubMembers: Map<string, string[]>, primary: Map<string, string>) {
+/** National programs sit just outside the campus they link to most, fanned so they do not stack. */
+function placeLinkedPrograms(live: LiveNode[], hubMembers: Map<string, string[]>, primary: Map<string, string>, campusOf: Map<string, string>) {
   const campuses = new Map(live.filter((node) => node.type === "campus").map((node) => [node.id, node]));
+  const counts = memberCounts(primary, live);
   const people = live.filter((node) => node.type === "person" || node.type === "startup");
   let gx = 0;
   let gy = 0;
@@ -1611,68 +1633,101 @@ function placeLinkedPrograms(live: LiveNode[], hubMembers: Map<string, string[]>
   const count = Math.max(people.length, 1);
   gx /= count;
   gy /= count;
-  const nationals = live
-    .filter((node) => node.hub)
+  const ranked = live
+    .filter((node) => node.hub || featuredNationalKey(node.label ?? ""))
     .sort((a, b) => tierRank(a) - tierRank(b) || (hubMembers.get(b.id)?.length ?? 0) - (hubMembers.get(a.id)?.length ?? 0) || a.id.localeCompare(b.id));
-  const taken: { x: number; y: number }[] = [];
-  for (const hub of nationals) {
+  const seenKey = new Set<string>();
+  const chosen: LiveNode[] = [];
+  for (const node of ranked) {
+    const key = featuredNationalKey(node.label ?? "") ?? `id:${node.id}`;
+    if (seenKey.has(key)) continue;
+    seenKey.add(key);
+    chosen.push(node);
+  }
+  const radiusOf = (id: string) => discRadius(counts.get(id) ?? 1);
+  const weightsFor = (node: LiveNode) => {
     const weights = new Map<string, number>();
     const seen = new Set<string>();
-    for (const id of hubMembers.get(hub.id) ?? []) {
+    for (const id of hubMembers.get(node.id) ?? []) {
       if (seen.has(id)) continue;
       seen.add(id);
-      const campus = primary.get(id);
+      const campus = campusOf.get(id);
       if (!campus || !campuses.has(campus)) continue;
       weights.set(campus, (weights.get(campus) ?? 0) + 1);
     }
-    let sx = 0;
-    let sy = 0;
-    let weight = 0;
-    for (const [id, n] of weights) {
-      const campus = campuses.get(id);
-      if (!campus) continue;
-      sx += campus.x * n;
-      sy += campus.y * n;
-      weight += n;
-    }
+    return weights;
+  };
+  const bestCampus = (weights: Map<string, number>) => {
     let bestId = "";
-    let bestN = 0;
+    let bestN = -1;
+    let bestCount = -1;
     for (const [id, n] of weights) {
-      if (n > bestN) {
+      const members = counts.get(id) ?? 0;
+      if (n > bestN || (n === bestN && members > bestCount) || (n === bestN && members === bestCount && id < bestId)) {
         bestN = n;
+        bestCount = members;
         bestId = id;
       }
     }
-    const seat = (bestId && campuses.get(bestId)) || null;
-    const anchor = seat ?? (weight ? { x: sx / weight, y: sy / weight } : { x: hub.x, y: hub.y });
-    let dx = anchor.x - gx;
-    let dy = anchor.y - gy;
-    if (Math.hypot(dx, dy) < 12) {
-      dx = anchor.x - gx + 12;
-      dy = anchor.y - gy;
+    return bestId;
+  };
+  const groups = new Map<string, LiveNode[]>();
+  for (const node of chosen) {
+    const campusId = bestCampus(weightsFor(node));
+    const list = groups.get(campusId) ?? [];
+    list.push(node);
+    groups.set(campusId, list);
+  }
+  const taken: { x: number; y: number }[] = [];
+  const minGap = (x: number, y: number, ignoreId: string) => {
+    let gap = Infinity;
+    for (const campus of campuses.values()) {
+      if (campus.id === ignoreId) continue;
+      gap = Math.min(gap, Math.hypot(x - campus.x, y - campus.y) - radiusOf(campus.id));
     }
-    const len = Math.hypot(dx, dy) || 1;
-    let atCampus = 0;
-    if (bestId) {
-      for (const node of people) if (primary.get(node.id) === bestId) atCampus += 1;
+    return gap;
+  };
+  const freeOfPrograms = (x: number, y: number) => taken.every((prev) => Math.hypot(prev.x - x, prev.y - y) >= 12);
+  const seatAt = (node: LiveNode, x: number, y: number) => {
+    node.x = x;
+    node.y = y;
+    node.tx = x;
+    node.ty = y;
+    taken.push({ x, y });
+  };
+  const nearestClear = (originX: number, originY: number, angle: number, reach: number, ignoreId: string, clearance: number) => {
+    for (let extra = 0; extra <= 30; extra += 6) {
+      for (let step = 0; step < 20; step++) {
+        const spin = step === 0 ? 0 : (step % 2 === 0 ? 1 : -1) * Math.ceil(step / 2) * 0.28;
+        const tx = originX + Math.cos(angle + spin) * (reach + extra);
+        const ty = originY + Math.sin(angle + spin) * (reach + extra);
+        if (minGap(tx, ty, ignoreId) < clearance) continue;
+        if (!freeOfPrograms(tx, ty)) continue;
+        return { x: tx, y: ty };
+      }
     }
-    const pad = hub.rimTier === "S+" ? 12 : hub.rimTier === "S" ? 9 : 7;
-    const reach = (seat ? discRadius(atCampus) : 14) + pad;
-    let tx = anchor.x + (dx / len) * reach;
-    let ty = anchor.y + (dy / len) * reach;
-    for (const prev of taken) {
-      const ox = tx - prev.x;
-      const oy = ty - prev.y;
-      const dist = Math.hypot(ox, oy);
-      if (dist >= 15 || dist < 1e-3) continue;
-      tx += (ox / dist) * (15 - dist);
-      ty += (oy / dist) * (15 - dist);
+    return null;
+  };
+  for (const [campusId, group] of groups) {
+    const anchor = campusId ? campuses.get(campusId) : undefined;
+    if (!anchor) {
+      for (const node of group) {
+        let spot = nearestClear(gx, gy, Math.atan2(node.y - gy, node.x - gx), 36, "", 8);
+        if (!spot) spot = nearestClear(gx, gy, 0, 36, "", 3);
+        if (!spot) continue;
+        seatAt(node, spot.x, spot.y);
+      }
+      continue;
     }
-    taken.push({ x: tx, y: ty });
-    hub.x = tx;
-    hub.y = ty;
-    hub.tx = tx;
-    hub.ty = ty;
+    const base = Math.atan2(anchor.y - gy, anchor.x - gx);
+    group.forEach((node, index) => {
+      const pad = node.rimTier === "S+" ? 12 : node.rimTier === "S" ? 9 : 8;
+      const fan = index === 0 ? 0 : (index % 2 === 0 ? 1 : -1) * Math.ceil(index / 2) * 0.42;
+      const reach = radiusOf(anchor.id) + pad;
+      const spot = nearestClear(anchor.x, anchor.y, base + fan, reach, anchor.id, 8) ?? nearestClear(anchor.x, anchor.y, base + fan, reach, anchor.id, 3);
+      if (!spot) return;
+      seatAt(node, spot.x, spot.y);
+    });
   }
 }
 

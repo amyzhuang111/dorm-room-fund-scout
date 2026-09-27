@@ -17,8 +17,10 @@ export const drawHaloLabel: NodeLabelDrawingFunction = (context, data, settings)
   context.textAlign = "center";
   context.textBaseline = marker ? "middle" : anchor ? "bottom" : "top";
   context.lineJoin = "round";
-  const x = data.x;
-  const y = marker ? data.y : anchor ? data.y - data.size - 3 : data.y + data.size + 3;
+  const dx = (data as { labelDx?: number }).labelDx ?? 0;
+  const dy = (data as { labelDy?: number }).labelDy ?? 0;
+  const x = data.x + dx;
+  const y = (marker ? data.y : anchor ? data.y - data.size - 3 : data.y + data.size + 3) + dy;
   if (marker) {
     drawTracked(context, text, x, y, REGION_TRACKING, (data as { tint?: string }).tint || "#8d939c");
     return;

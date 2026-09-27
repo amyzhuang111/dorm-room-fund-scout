@@ -396,6 +396,30 @@ export interface ScreenLabel {
   anchor: boolean;
   fontSize: number;
   tracking?: number;
+  dx?: number;
+  dy?: number;
+  /** Campus disc this label may sit on. Other discs still block it. */
+  discId?: string;
+}
+
+export interface LabelOffset {
+  dx: number;
+  dy: number;
+}
+
+export interface CampusDisc {
+  id: string;
+  x: number;
+  y: number;
+  r: number;
+}
+
+const ANCHOR_OFFSETS: LabelOffset[] = [{ dx: 0, dy: 0 }];
+for (const radius of [28, 46, 66, 88]) {
+  for (let step = 0; step < 12; step++) {
+    const angle = (step / 12) * Math.PI * 2 - Math.PI / 2;
+    ANCHOR_OFFSETS.push({ dx: Math.round(Math.cos(angle) * radius), dy: Math.round(Math.sin(angle) * radius) });
+  }
 }
 
 /** Hover card drawn to the right of the active node. Other labels must stay clear of it. */
@@ -407,9 +431,15 @@ export function hoverLabelBox(x: number, y: number, nodeSize: number, textWidth:
 
 /**
  * Greedy screen-space placement. Higher tiers win (regions, then campuses,
- * then high-degree nodes). A label that would touch one already kept is omitted.
+ * then high-degree nodes). Anchor labels try nearby slots so a campus name
+ * can move off a neighbor. A label that would touch one already kept is omitted.
  */
-export function selectVisibleLabels(labels: ScreenLabel[], measure: (text: string, fontSize: number) => number, reserved: LabelBox[] = []): Set<string> {
+export function selectVisibleLabels(
+  labels: ScreenLabel[],
+  measure: (text: string, fontSize: number) => number,
+  reserved: LabelBox[] = [],
+  discs: CampusDisc[] = [],
+): Map<string, LabelOffset> {
   const ranked = [...labels].sort((a, b) => b.tier - a.tier || b.degree - a.degree || a.id.localeCompare(b.id));
   const cell = 72;
   const grid = new Map<string, LabelBox[]>();
@@ -441,23 +471,46 @@ export function selectVisibleLabels(labels: ScreenLabel[], measure: (text: strin
     }
     return false;
   };
+  const hitsDisc = (box: LabelBox, discId?: string) => discs.some((disc) => disc.id !== discId && boxHitsDisc(box, disc));
   for (const box of reserved) index(box);
-  const show = new Set<string>();
+  const show = new Map<string, LabelOffset>();
   for (const label of ranked) {
-    const box = screenLabelBox(label, measure);
-    if (hits(box)) continue;
-    index(box);
-    show.add(label.id);
+    const slots = label.anchor ? ANCHOR_OFFSETS : [{ dx: 0, dy: 0 }];
+    let fallback: { offset: LabelOffset; box: LabelBox } | null = null;
+    let chosen: { offset: LabelOffset; box: LabelBox } | null = null;
+    for (const offset of slots) {
+      const box = screenLabelBox({ ...label, dx: offset.dx, dy: offset.dy }, measure);
+      const padded = { left: box.left - 4, top: box.top - 3, right: box.right + 4, bottom: box.bottom + 3 };
+      if (hits(padded)) continue;
+      if (!hitsDisc(box, label.discId)) {
+        chosen = { offset, box: padded };
+        break;
+      }
+      if (!fallback) fallback = { offset, box: padded };
+    }
+    const use = chosen ?? fallback;
+    if (!use) continue;
+    index(use.box);
+    show.set(label.id, use.offset);
   }
   return show;
+}
+
+function boxHitsDisc(box: LabelBox, disc: CampusDisc): boolean {
+  const x = Math.max(box.left, Math.min(disc.x, box.right));
+  const y = Math.max(box.top, Math.min(disc.y, box.bottom));
+  const dx = x - disc.x;
+  const dy = y - disc.y;
+  const reach = disc.r + 4;
+  return dx * dx + dy * dy < reach * reach;
 }
 
 function screenLabelBox(label: ScreenLabel, measure: (text: string, fontSize: number) => number): LabelBox {
   const tracking = label.tracking ?? 0;
   const width = Math.max(8, measure(label.text, label.fontSize) + Math.max(0, label.text.length - 1) * tracking) + (label.marker ? 16 : 12);
   const height = label.fontSize + 10;
-  const x = label.x;
-  const y = label.marker ? label.y : label.anchor ? label.y - label.nodeSize - 2 : label.y + label.nodeSize + 2;
+  const x = label.x + (label.dx ?? 0);
+  const y = (label.marker ? label.y : label.anchor ? label.y - label.nodeSize - 2 : label.y + label.nodeSize + 2) + (label.dy ?? 0);
   if (label.marker) return { left: x - width / 2, top: y - height / 2, right: x + width / 2, bottom: y + height / 2 };
   if (label.anchor) return { left: x - width / 2, top: y - height, right: x + width / 2, bottom: y + 2 };
   return { left: x - width / 2, top: y - 2, right: x + width / 2, bottom: y + height };

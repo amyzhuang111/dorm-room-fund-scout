@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { featuredNationalKey } from "./featured-national";
 import { LABEL_CLUB, campusHubDegreeFloor, nodeColor, readableInk, selectVisibleLabels } from "../../components/network-style";
 import { REGIONS, campusShade, regionForCampus, regionSwatch } from "./network-regions";
 
@@ -133,5 +134,32 @@ assert.ok(placed.has("penn"));
 assert.ok(placed.has("labs"));
 assert.ok(!placed.has("clubs"));
 assert.ok(placed.has("sky"));
+
+const crowded = selectVisibleLabels(
+  [
+    { id: "mit", tier: 5, degree: 400, text: "MIT", x: 200, y: 200, nodeSize: 8, marker: false, anchor: true, fontSize: 12, discId: "mit" },
+    { id: "harvard", tier: 5, degree: 200, text: "Harvard", x: 228, y: 200, nodeSize: 8, marker: false, anchor: true, fontSize: 12, discId: "harvard" },
+  ],
+  measure,
+  [],
+  [
+    { id: "mit", x: 200, y: 200, r: 36 },
+    { id: "harvard", x: 228, y: 200, r: 28 },
+  ],
+);
+assert.ok(crowded.has("mit"));
+assert.ok(crowded.has("harvard"));
+const mitOffset = crowded.get("mit");
+const harvardOffset = crowded.get("harvard");
+assert.ok(mitOffset && harvardOffset);
+assert.ok(mitOffset.dx !== harvardOffset.dx || mitOffset.dy !== harvardOffset.dy);
+
+assert.equal(featuredNationalKey("HF0 residency"), "hf0");
+assert.equal(featuredNationalKey("a16z speedrun"), "speedrun");
+assert.equal(featuredNationalKey("Pear Fellows"), "pear");
+assert.equal(featuredNationalKey("Pear Garage"), null);
+assert.equal(featuredNationalKey("Pear Dorm"), null);
+assert.equal(featuredNationalKey("Neo Scholars"), "neo");
+assert.equal(featuredNationalKey("Kleiner Perkins Fellows"), "kp");
 
 console.log("region color tests ok");
