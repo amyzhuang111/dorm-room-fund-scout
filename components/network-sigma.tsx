@@ -3,9 +3,8 @@
 import Graph from "graphology";
 import { useEffect, useRef } from "react";
 import Sigma from "sigma";
-import { NodeCircleProgram } from "sigma/rendering";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
-import { NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
+import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { DIM_NODE, EDGE_CROSS, EDGE_DIM, EDGE_HOVER, EDGE_HOVER_PX, EDGE_PX, NODE_SHAPE, campusKey, campusSwatches, crossesCampus, edgeTint, fadeLongEdge, hoverLabelBox, labelDegreeFloor, nodeColor, restingLabelIds, screenLabelTier, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
@@ -231,7 +230,7 @@ export function NetworkSigma({
       defaultDrawNodeLabel: drawHaloLabel as never,
       defaultDrawNodeHover: drawLightHover as never,
       nodeProgramClasses: {
-        circle: NodeCircleProgram,
+        circle: NodeCircleCrispProgram,
         square: NodeSquareLightProgram,
         diamond: NodeDiamondProgram,
         hex: NodeHexProgram,

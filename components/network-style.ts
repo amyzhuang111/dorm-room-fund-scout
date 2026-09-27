@@ -117,17 +117,22 @@ export const EDGE_COLOR: Record<MapEdgeType, string> = {
   at_campus: EDGE_GREY,
 };
 
-const ORG_PX: Record<string, number> = { S: 2.35, A: 2.05, B: 1.7, C: 1.45, D: 1.25 };
+/** Circle-radius in screen pixels. Polygon programs use the same number, so a square’s width matches a circle’s diameter. */
+const ORG_PX: Record<string, number> = { S: 6.8, A: 5.8, B: 4.9, C: 4.2, D: 3.6 };
 
-/** Screen pixels at every zoom. Hubs are only a little larger than leaves. Organizations stay small triangles. */
+/**
+ * Screen pixels at every zoom. Large enough that a square, diamond, and circle
+ * stay distinct at the fitted camera. Organization triangles grow with tier
+ * (S largest). A high degree only nudges the size, and never past the next tier.
+ */
 export function screenSize(node: MapNode): number {
   const hub = Math.sqrt(Math.max(node.degree, 1));
-  if (node.type === "organization") return clamp((ORG_PX[node.orgTier ?? ""] ?? 1.55) + Math.min(1.05, hub * 0.032), 1.25, 3.45);
-  if (node.type === "campus") return clamp(2.4 + hub * 0.012, 2.4, 3.2);
-  if (node.type === "investor") return clamp(1.35 + hub * 0.09, 1.35, 2.45);
-  if (node.type === "program") return clamp(1.4 + hub * 0.07, 1.4, 2.35);
-  if (node.type === "startup") return clamp(1.35 + hub * 0.09, 1.35, 2.4);
-  return clamp(1.28 + hub * 0.1, 1.28, 2.35);
+  if (node.type === "organization") return clamp((ORG_PX[node.orgTier ?? ""] ?? 4.6) + Math.min(0.35, hub * 0.012), 3.6, 7.3);
+  if (node.type === "campus") return clamp(8 + hub * 0.015, 8, 9.4);
+  if (node.type === "investor") return clamp(4.35 + Math.min(1.1, hub * 0.04), 4.35, 5.6);
+  if (node.type === "program") return clamp(5 + Math.min(1.2, hub * 0.035), 5, 6.4);
+  if (node.type === "startup") return clamp(4.35 + Math.min(0.9, hub * 0.035), 4.35, 5.4);
+  return clamp(3.25 + Math.min(0.7, hub * 0.03), 3.25, 4.1);
 }
 
 export interface RestingLabels {

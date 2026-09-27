@@ -385,6 +385,7 @@ export function NetworkMapApp() {
                   label={item.label}
                   color={NODE_FILL[item.id]}
                   shape={item.id === "startup" ? "square" : item.id === "investor" ? "diamond" : item.id === "program" ? "hex" : item.id === "organization" ? "triangle" : "circle"}
+                  mark={item.id === "campus" ? "campus" : item.id === "person" ? "person" : "node"}
                   checked={filters.nodeTypes.includes(item.id)}
                   onChange={() => setFilters({ ...filters, nodeTypes: toggle(filters.nodeTypes, item.id) })}
                 />
@@ -431,6 +432,7 @@ export function NetworkMapApp() {
                       label={swatch.label}
                       color={swatch.color}
                       shape="circle"
+                      mark="campus"
                       checked={filters.campuses.includes(swatch.id)}
                       onChange={() => setFilters({ ...filters, campuses: toggle(filters.campuses, swatch.id) })}
                     />
@@ -530,10 +532,10 @@ export function NetworkMapApp() {
         {legendOpen ? (
           <div className="rounded-lg border border-neutral-200 bg-white/95 px-2.5 py-1.5 text-[11px] text-black shadow-sm" role="region" aria-label="Network legend">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-              <LegendItem shape="circle" color="#111111" label="Person" />
+              <LegendItem shape="circle" mark="person" color="#111111" label="Person" />
               <LegendItem shape="square" color="#111111" label="Startup" />
               <LegendItem shape="diamond" color="#111111" label="Investor" />
-              <LegendItem shape="circle" color="#111111" label="Campus" />
+              <LegendItem shape="circle" mark="campus" color="#111111" label="Campus" />
               <LegendItem shape="hex" color="#111111" label="Club / lab" />
               <LegendItem shape="triangle" color="#6d28d9" label="Organization" />
               <button
@@ -777,17 +779,19 @@ function Check({
   onChange,
   color,
   shape,
+  mark,
 }: {
   label: string;
   checked: boolean;
   onChange: () => void;
   color?: string;
   shape?: "circle" | "square" | "diamond" | "hex" | "triangle";
+  mark?: "person" | "campus" | "node";
 }) {
   return (
     <label className="flex items-center gap-2 text-xs text-black">
       <input type="checkbox" checked={checked} onChange={onChange} className="accent-black" />
-      {color && shape && <LegendItem shape={shape} color={color} label="" />}
+      {color && shape && <LegendItem shape={shape} mark={mark} color={color} label="" />}
       <span className="truncate">{label}</span>
     </label>
   );
@@ -828,15 +832,31 @@ function ZoomButton({ label, onClick, children }: { label: string; onClick: () =
   );
 }
 
-function LegendItem({ shape, color, label, title }: { shape: "circle" | "square" | "diamond" | "hex" | "triangle"; color: string; label: string; title?: string }) {
+const GLYPH_INK = "#141414";
+
+function LegendItem({
+  shape,
+  color,
+  label,
+  title,
+  mark = "node",
+}: {
+  shape: "circle" | "square" | "diamond" | "hex" | "triangle";
+  color: string;
+  label: string;
+  title?: string;
+  mark?: "person" | "campus" | "node";
+}) {
+  const stroke = { fill: color, stroke: GLYPH_INK, strokeWidth: 0.7, strokeLinejoin: "miter" as const };
   return (
     <span className="inline-flex items-center gap-1" title={title}>
-      <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-        {shape === "circle" && <circle cx="6" cy="6" r="4.5" fill={color} />}
-        {shape === "square" && <rect x="1.5" y="1.5" width="9" height="9" rx="1" fill={color} />}
-        {shape === "diamond" && <polygon points="6,1 11,6 6,11 1,6" fill={color} />}
-        {shape === "hex" && <polygon points="6,1 10.2,3.5 10.2,8.5 6,11 1.8,8.5 1.8,3.5" fill={color} />}
-        {shape === "triangle" && <polygon points="6,1.2 11,10.6 1,10.6" fill={color} />}
+      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
+        {shape === "circle" && mark === "campus" && <circle cx="7" cy="7" r="5.5" {...stroke} />}
+        {shape === "circle" && mark !== "campus" && <circle cx="7" cy="7" r={mark === "person" ? 2.5 : 3.3} {...stroke} />}
+        {shape === "square" && <rect x="2.15" y="2.15" width="9.7" height="9.7" {...stroke} />}
+        {shape === "diamond" && <polygon points="7,1.15 12.85,7 7,12.85 1.15,7" {...stroke} />}
+        {shape === "hex" && <polygon points="7,1.15 12.05,4.05 12.05,9.95 7,12.85 1.95,9.95 1.95,4.05" {...stroke} />}
+        {shape === "triangle" && <polygon points="7,1.2 12.7,12.55 1.3,12.55" {...stroke} />}
       </svg>
       {label}
     </span>
