@@ -86,6 +86,7 @@ function groupInvestors(investors: InvestorFact[]): { round: string; investors: 
 export function CompanyProfileCard({ profile, founders }: { profile: CompanyProfile; founders: NamedFounder[] }) {
   const round = latestRound(profile);
   const cells: { label: string; value: ReactNode }[] = [
+    ...(profile.operatingStatus ? [{ label: "Status", value: <FactValue fact={profile.operatingStatus} /> }] : []),
     { label: "Founded", value: <FactValue fact={profile.foundedYear} /> },
     { label: "Funding", value: <FactValue fact={displayedFunding(profile)} /> },
     { label: "Latest round", value: <RoundValue round={round} /> },

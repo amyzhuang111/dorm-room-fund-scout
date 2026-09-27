@@ -1519,6 +1519,8 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       hotspots: relatedHotspotsForPerson(founder.id, founder.universityId),
     };
     all.push(row);
+    // accuracy_audit keeps the row. founder_status "removed" is off both scout lists.
+    if (row.founderStatus === "removed") continue;
     if (row.founderStatus === "potential") potential.push(row);
     else if (row.promoted) promoted.push(row);
   }
