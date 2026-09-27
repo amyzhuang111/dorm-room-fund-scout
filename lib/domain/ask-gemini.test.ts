@@ -89,6 +89,71 @@ async function main() {
     assert.equal(empty.engine, "search");
   }
 
+  const originalFetch = globalThis.fetch;
+  const calls: { url: string; body: Record<string, unknown> }[] = [];
+  function mockFetch(handler: (call: number) => { status: number; json: unknown }) {
+    calls.length = 0;
+    globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+      const body = JSON.parse(String(init?.body)) as Record<string, unknown>;
+      calls.push({ url: String(input), body });
+      assert.equal(init?.headers && (init.headers as Record<string, string>)["x-goog-api-key"], "gemini-test-key");
+      const next = handler(calls.length);
+      return new Response(JSON.stringify(next.json), { status: next.status, headers: { "content-type": "application/json" } });
+    }) as typeof fetch;
+  }
+
+  process.env.GEMINI_API_KEY = "gemini-test-key";
+  mockFetch(() => ({
+    status: 200,
+    json: { candidates: [{ finishReason: "STOP", content: { parts: [{ text: "hidden", thought: true }, { text: "Dhruv Mangtani is in a16z speedrun." }] } }] },
+  }));
+  const answered = await answerWithGemini("Berkeley founders backed by a16z speedrun");
+  assert.equal(calls.length, 1);
+  assert.match(calls[0].url, /\/v1beta\/models\/gemini-3\.8-flash:generateContent$/);
+  const sent = calls[0].body as {
+    tools?: unknown;
+    systemInstruction: { parts: { text: string }[] };
+    generationConfig: { responseMimeType?: string; thinkingConfig?: { thinkingLevel?: string; thinkingBudget?: number } };
+  };
+  assert.equal(sent.tools, undefined);
+  assert.equal(typeof sent.systemInstruction.parts[0].text, "string");
+  assert.equal(sent.generationConfig.thinkingConfig?.thinkingLevel, "low");
+  assert.equal(sent.generationConfig.thinkingConfig?.thinkingBudget, undefined);
+  assert.equal(sent.generationConfig.responseMimeType, undefined);
+  assert.equal(answered.ok, true);
+  if (answered.ok) {
+    assert.equal(answered.engine, "gemini");
+    assert.equal(answered.answer, "Dhruv Mangtani is in a16z speedrun.");
+  }
+
+  const unavailable = "This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.8-flash for the latest features and improvements.";
+  mockFetch(() => ({ status: 404, json: { error: { code: 404, message: unavailable, status: "NOT_FOUND" } } }));
+  const missing = await answerWithGemini("Berkeley founders backed by a16z speedrun");
+  assert.equal(calls.length, 1);
+  assert.equal(missing.ok, false);
+  if (!missing.ok) {
+    assert.equal(missing.reason, "error");
+    assert.equal(missing.geminiStatus, 404);
+    assert.equal(missing.geminiMessage, unavailable.slice(0, 200));
+    assert.equal(missing.finishReason, null);
+    assert.ok(missing.matches.length > 0);
+  }
+
+  mockFetch((call) =>
+    call === 1
+      ? { status: 200, json: { candidates: [{ finishReason: "MAX_TOKENS", content: { parts: [{ text: "only thought", thought: true }] } }], usageMetadata: { thoughtsTokenCount: 4000 } } }
+      : { status: 200, json: { candidates: [{ finishReason: "STOP", content: { parts: [{ text: "Northwestern startups with recorded raises." }] } }] } }
+  );
+  const retried = await answerWithGemini("Which Northwestern startups raised money?");
+  assert.equal(calls.length, 2);
+  const retryConfig = (calls[1].body as { generationConfig: { thinkingConfig?: unknown; maxOutputTokens?: number } }).generationConfig;
+  assert.equal(retryConfig.thinkingConfig, undefined);
+  assert.equal(retryConfig.maxOutputTokens, 8192);
+  assert.equal(retried.ok, true);
+  if (retried.ok) assert.equal(retried.answer, "Northwestern startups with recorded raises.");
+
+  globalThis.fetch = originalFetch;
+
   if (savedGemini === undefined) delete process.env.GEMINI_API_KEY;
   else process.env.GEMINI_API_KEY = savedGemini;
   if (savedGoogle === undefined) delete process.env.GOOGLE_GENERATIVE_AI_API_KEY;
