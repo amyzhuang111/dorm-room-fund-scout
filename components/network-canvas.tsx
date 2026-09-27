@@ -7,6 +7,7 @@ import type { NetworkEdge, NetworkGraph, NetworkNode } from "@/lib/domain/networ
 import { selectNonOverlappingLabels } from "@/lib/domain/network-layout";
 import type { PersonLinkTarget } from "@/lib/domain/person-link";
 import { PersonLinkButton } from "./person-link";
+import { StartupCardSheet } from "./startup-directory-card";
 
 const PERSON_LINK_KINDS = new Set(["linkedin", "likely", "unverified", "website", "github", "devpost"]);
 
@@ -183,6 +184,23 @@ function OverviewNetworkCanvas({
                 )}
               </g>
             );
+            if (n.type === "project" && !n.id.startsWith("user_")) {
+              return (
+                <g
+                  key={n.id}
+                  onMouseEnter={() => setHover(n.id)}
+                  onMouseLeave={() => setHover(null)}
+                  onClick={() => {
+                    setSelectedEdge(null);
+                    setSelected(n.id === selected ? null : n.id);
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
+                  <title>{n.label}</title>
+                  {shape}
+                </g>
+              );
+            }
             if (n.type === "project") {
               return (
                 <ScoutLink key={n.id} href={`/startup/${n.id}`} aria-label={n.label}>
@@ -221,6 +239,9 @@ function OverviewNetworkCanvas({
             </span>
           ))}
         </div>
+        {selected && !selected.startsWith("user_") && nodeById.get(selected)?.type === "project" && (
+          <StartupCardSheet id={selected} onClose={() => setSelected(null)} className="absolute inset-0 z-30 flex justify-end max-sm:fixed max-sm:z-50" />
+        )}
       </div>
 
       <aside className="w-full shrink-0 rounded-xl border border-border-c bg-surface p-3 lg:w-80">
@@ -274,7 +295,7 @@ function OverviewNetworkCanvas({
             <p className="ui-label">Network</p>
             <p className="mt-1 text-sm font-medium text-foreground">{campusName}</p>
             <p className="mt-1 text-xs text-muted">
-              Hover a node to highlight its neighbours. Click a line to read the sourced relationship. Node size follows how many links that record has. Click a company to open it.
+              Hover a node to highlight its neighbours. Click a line to read the sourced relationship. Node size follows how many links that record has. Click a startup to open its card.
             </p>
             <p className="mt-3 text-xs text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
               {graph.edges.length} links · {graph.nodes.length} nodes
@@ -285,7 +306,11 @@ function OverviewNetworkCanvas({
                 .slice(0, 40)
                 .map((n) => (
                   <li key={n.id} className="flex items-center gap-1">
-                    {n.type === "project" ? (
+                    {n.type === "project" && !n.id.startsWith("user_") ? (
+                      <button type="button" onClick={() => setSelected(n.id)} className="min-w-0 flex-1 truncate rounded-md px-2 py-1 text-left text-xs font-medium text-foreground hover:bg-surface-2 hover:text-link">
+                        {n.label}
+                      </button>
+                    ) : n.type === "project" ? (
                       <Link href={`/startup/${n.id}`} className="min-w-0 flex-1 truncate rounded-md px-2 py-1 text-left text-xs font-medium text-foreground hover:bg-surface-2 hover:text-link">
                         {n.label}
                       </Link>
@@ -581,6 +606,24 @@ function CampusNetworkCanvas({
                     )}
                   </g>
                 );
+                if (node.type === "project" && !node.id.startsWith("user_")) {
+                  return (
+                    <g
+                      key={node.id}
+                      data-node=""
+                      onMouseEnter={() => setHover(node.id)}
+                      onMouseLeave={() => setHover(null)}
+                      onClick={() => {
+                        setSelectedEdge(null);
+                        setSelected(node.id === selected ? null : node.id);
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <title>{node.label}</title>
+                      {shape}
+                    </g>
+                  );
+                }
                 if (node.type === "project") {
                   return (
                     <ScoutLink key={node.id} href={`/startup/${node.id}`} aria-label={node.label}>
@@ -646,6 +689,9 @@ function CampusNetworkCanvas({
               Fit
             </button>
           </div>
+          {selected && !selected.startsWith("user_") && nodeById.get(selected)?.type === "project" && (
+            <StartupCardSheet id={selected} onClose={() => setSelected(null)} />
+          )}
         </div>
         <div className="mt-2 flex flex-wrap gap-3 text-[11px] text-[#3a3348]">
           {graph.legend.map((item) => (
@@ -719,7 +765,11 @@ function CampusNetworkCanvas({
                       .sort((a, b) => a.label.localeCompare(b.label))
                       .map((node) => (
                         <li key={node.id} className="flex items-center gap-1">
-                          {node.type === "project" ? (
+                          {node.type === "project" && !node.id.startsWith("user_") ? (
+                            <button type="button" onClick={() => setSelected(node.id)} className="min-w-0 flex-1 truncate rounded-md px-2 py-1 text-left text-xs font-medium text-[#141018] hover:bg-[#f3f0f8] hover:text-link">
+                              {node.label}
+                            </button>
+                          ) : node.type === "project" ? (
                             <Link href={`/startup/${node.id}`} className="min-w-0 flex-1 truncate rounded-md px-2 py-1 text-left text-xs font-medium text-[#141018] hover:bg-[#f3f0f8] hover:text-link">
                               {node.label}
                             </Link>

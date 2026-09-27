@@ -4,6 +4,7 @@ import { CompanyDetail } from "@/components/company-detail";
 import { UserStartupPage } from "@/components/user-startup-page";
 import { survivorId } from "@/lib/domain/entity-redirects";
 import { getProjectDetail } from "@/lib/domain/queries";
+import { getStartupCard } from "@/lib/domain/startup-card";
 
 export default async function StartupPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -19,7 +20,7 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
           All startups
         </Link>
       </div>
-      <CompanyDetail project={project} />
+      <CompanyDetail project={project} initialCard={getStartupCard(project.id)} />
     </div>
   );
 }

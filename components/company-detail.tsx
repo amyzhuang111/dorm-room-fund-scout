@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
+import type { StartupCard } from "@/lib/domain/startup-card";
 import { storedCompanyLinks } from "@/lib/domain/company-link";
 import { formatCampusList } from "@/lib/domain/campuses";
 import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SignalTierBadge, VerificationBadge } from "./badges";
@@ -11,6 +14,7 @@ import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CompanyProfileCard } from "./company-profile";
 import { WhoCanIntro } from "./who-can-intro";
 import { InTheNews } from "./in-the-news";
+import { StartupDirectoryCard, useStartupCard } from "./startup-directory-card";
 
 function founderHref(founder: NamedFounder): string {
   const params = new URLSearchParams({
@@ -21,7 +25,8 @@ function founderHref(founder: NamedFounder): string {
   return `/founder/discover?${params.toString()}`;
 }
 
-export function CompanyDetail({ project }: { project: ProjectDetail }) {
+export function CompanyDetail({ project, initialCard = null }: { project: ProjectDetail; initialCard?: StartupCard | null }) {
+  const { card } = useStartupCard(project.id, initialCard);
   const concernReasons = project.gateOutcomes.filter((g) => g.result !== "pass");
   const strongestEvidence = project.claims[0];
   const strongestConcern = concernReasons[0];
@@ -30,68 +35,76 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
     <div className="space-y-5 p-4">
       {/* Header */}
       <div>
-        <div className="flex items-start justify-between gap-2">
-          <h2 className="flex flex-wrap items-center gap-2 text-lg font-semibold text-foreground">
-            {project.name}
+        {card ? (
+          <StartupDirectoryCard card={card} embedded />
+        ) : (
+          <h2 className="text-lg font-semibold text-foreground">{project.name}</h2>
+        )}
+        <div className="mt-3 flex items-start justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <SignalTierBadge tier={project.signalTier} basis={project.signalTierBasis} />
             <VerificationBadge status={project.verificationStatus} verifiedAt={project.lastVerifiedAt} note={project.verificationNote} />
             <EntityMarks entityType="project" entityId={project.id} name={project.name} campusName={project.universities[0]} websiteUrl={project.websiteUrl} />
-          </h2>
+          </div>
           <GateBadge result={project.overallGate} gateOutcomes={project.gateOutcomes} />
         </div>
-        {(() => {
-          const links = storedCompanyLinks({
-            websiteUrl: project.websiteUrl,
-            primaryLink: project.primaryLink,
-            sourceUrls: [project.profile.companyLinkedin?.text, ...project.claims.map((claim) => claim.sourceUrl)],
-          });
-          return (
-            <>
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                {links.website ? (
-                  <a href={links.website} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-accent-foreground">
-                    Visit website
-                  </a>
-                ) : (
-                  <span className="text-sm text-muted">No website found</span>
-                )}
-                {links.fallback && (
-                  <a href={links.fallback.url} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md border border-border-c bg-white px-3 py-1.5 text-sm font-medium text-link hover:border-accent">
-                    {links.fallback.label} · source page
-                  </a>
-                )}
-                {links.linkedin && (
-                  <a href={links.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md border border-border-c bg-white px-3 py-1.5 text-sm font-medium text-link hover:border-accent">
-                    Company LinkedIn
-                  </a>
-                )}
-                {links.extras.map((link) => (
-                  <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md border border-border-c bg-white px-2.5 py-1 text-xs font-medium text-link hover:border-accent">
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-              <CompanyProfileCard profile={project.profile} founders={project.founderLinks} />
-              <div className="mt-3">
-                <WhoCanIntro entityId={project.id} />
-              </div>
-              <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-muted sm:grid-cols-3">
-                <div>
-                  <dt className="font-semibold uppercase tracking-wide">Sector</dt>
-                  <dd className="text-foreground">{project.sectorTags[0] || project.sector || "Not on record"}</dd>
+        {card ? (
+          <CompanyProfileCard profile={project.profile} founders={project.founderLinks} compact />
+        ) : (
+          (() => {
+            const links = storedCompanyLinks({
+              websiteUrl: project.websiteUrl,
+              primaryLink: project.primaryLink,
+              sourceUrls: [project.profile.companyLinkedin?.text, ...project.claims.map((claim) => claim.sourceUrl)],
+            });
+            return (
+              <>
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  {links.website ? (
+                    <a href={links.website} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-accent-foreground">
+                      Visit website
+                    </a>
+                  ) : (
+                    <span className="text-sm text-muted">No website found</span>
+                  )}
+                  {links.fallback && (
+                    <a href={links.fallback.url} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md border border-border-c bg-white px-3 py-1.5 text-sm font-medium text-link hover:border-accent">
+                      {links.fallback.label} · source page
+                    </a>
+                  )}
+                  {links.linkedin && (
+                    <a href={links.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md border border-border-c bg-white px-3 py-1.5 text-sm font-medium text-link hover:border-accent">
+                      Company LinkedIn
+                    </a>
+                  )}
+                  {links.extras.map((link) => (
+                    <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer" className="inline-flex rounded-md border border-border-c bg-white px-2.5 py-1 text-xs font-medium text-link hover:border-accent">
+                      {link.label}
+                    </a>
+                  ))}
                 </div>
-                <div>
-                  <dt className="font-semibold uppercase tracking-wide">Campus</dt>
-                  <dd className="text-foreground">{formatCampusList(project.universities) || "Not on record"}</dd>
+                <CompanyProfileCard profile={project.profile} founders={project.founderLinks} />
+                <div className="mt-3">
+                  <WhoCanIntro entityId={project.id} />
                 </div>
-                <div>
-                  <dt className="font-semibold uppercase tracking-wide">Signal tier</dt>
-                  <dd className="text-foreground">{project.signalTier || "Not on record"}</dd>
-                </div>
-              </dl>
-            </>
-          );
-        })()}
+                <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-muted sm:grid-cols-3">
+                  <div>
+                    <dt className="font-semibold uppercase tracking-wide">Sector</dt>
+                    <dd className="text-foreground">{project.sectorTags[0] || project.sector || "Not on record"}</dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold uppercase tracking-wide">Campus</dt>
+                    <dd className="text-foreground">{formatCampusList(project.universities) || "Not on record"}</dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold uppercase tracking-wide">Signal tier</dt>
+                    <dd className="text-foreground">{project.signalTier || "Not on record"}</dd>
+                  </div>
+                </dl>
+              </>
+            );
+          })()
+        )}
         {project.sectorTags.length > 0 && (
           <p className="mt-2 flex flex-wrap gap-1">
             {project.sectorTags.map((tag) => (
