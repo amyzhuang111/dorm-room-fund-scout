@@ -166,7 +166,13 @@ void main(void) {
   float gate = smoothstep(5.2, 6.8, v_size);
   float hair = 0.5 / max(v_size, 0.5);
   float stroke = smoothstep(1.0 - 2.2 * hair, 1.0 - 0.35 * hair, d) * gate;
-  vec4 color = mix(v_color, vec4(1.0, 1.0, 1.0, v_color.a), clamp(stroke, 0.0, 1.0));
+  float highlight = smoothstep(1.15, 0.22, length(v_local - vec2(-0.22, -0.3)));
+  float rim = smoothstep(0.7, 1.05, length(v_local));
+  vec3 rgb = v_color.rgb;
+  rgb = mix(rgb, min(vec3(1.0), rgb * 1.1 + vec3(0.035)), highlight * 0.28);
+  rgb = mix(rgb, rgb * 0.88, rim * 0.2);
+  vec4 color = vec4(rgb, v_color.a);
+  color = mix(color, vec4(1.0, 1.0, 1.0, v_color.a), clamp(stroke, 0.0, 1.0));
   color.a *= cover;
   gl_FragColor = color;
   #endif
@@ -272,9 +278,17 @@ void main(void) {
   gl_FragColor = dist > border + slop ? transparent : v_color;
   #else
   float t = dist > border ? 1.0 : (dist > 0.0 ? dist / border : 0.0);
+  float rad = max(v_radius, 1.0);
+  vec2 fromLight = v_diffVector / rad - vec2(-0.32, -0.4);
+  float highlight = smoothstep(1.05, 0.1, length(fromLight));
+  float rim = smoothstep(0.58, 1.02, length(v_diffVector) / rad);
+  vec3 rgb = v_color.rgb;
+  rgb = mix(rgb, min(vec3(1.0), rgb * 1.12 + vec3(0.045)), highlight * 0.32);
+  rgb = mix(rgb, rgb * 0.86, rim * 0.26);
   float gate = smoothstep(5.2, 6.8, v_size);
   float hair = smoothstep(border * 0.15, border * 0.85, dist);
-  vec4 color = mix(v_color, vec4(1.0, 1.0, 1.0, v_color.a), clamp(hair, 0.0, 1.0) * gate * (1.0 - t));
+  vec4 color = vec4(rgb, v_color.a);
+  color = mix(color, vec4(1.0, 1.0, 1.0, v_color.a), clamp(hair, 0.0, 1.0) * gate * (1.0 - t));
   gl_FragColor = mix(color, transparent, t);
   #endif
 }

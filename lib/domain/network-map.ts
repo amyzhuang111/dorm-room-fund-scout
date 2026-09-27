@@ -1,11 +1,10 @@
 // Full evidence graph for the Network map. Nodes and edges come from
 // affiliations, founder roles, program memberships, sourced investor facts,
 // and confirmed DRF portfolio matches. The five DRF regions each form a
-// compact cluster: a centroid pull draws every campus blob, and the clubs
-// inside it, toward that region's center, with a visible gap between
-// regions. Campus-specific hubs sit inside their school. National programs
-// that reach several regions sit in the gap between those clusters, nearer
-// the region they link to most.
+// compact cluster pulled toward one shared cloud: neighboring regions touch,
+// and International sits against the West Coast instead of floating apart.
+// Campus-specific hubs sit inside their school. National programs sit in the
+// seams between the regions they link, nearer the stronger link.
 
 import fs from "node:fs";
 import { forceCollide, forceSimulation, forceX, forceY } from "d3-force";
@@ -13,7 +12,7 @@ import { databasePath, getDb } from "../db/client";
 import { undergradEnrollment } from "./campus-enrollment";
 import { CAMPUSES } from "./campuses";
 import { connectionSignal, founderSignalWeight, mentionsAccelerator, perCapitaSignal, signalFields, sqrtScores, startupSignalWeight, type SignalParts } from "./network-signal-size";
-import { REGIONS, regionForCampus, regionInk, type RegionMarker } from "./network-regions";
+import { REGIONS, packRegionCenters, regionForCampus, regionInk, type RegionMarker } from "./network-regions";
 import type { HotspotSectionId, HotspotTier } from "./hotspot-model";
 import { featuredNationalKey } from "./featured-national";
 import { demoteDuplicateOuter, rimPlacementFor, type RimBand, type RimTier } from "./rim-tier";
@@ -128,7 +127,7 @@ interface SimNode {
   homeCampus?: string;
 }
 
-const LAYOUT_VERSION = "31";
+const LAYOUT_VERSION = "32";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -920,8 +919,8 @@ const REGION_POSE: Record<string, { angle: number; scale: number }> = {
 /**
  * One force simulation. Each region's campuses then pull toward that
  * region's centroid until the blobs form a compact cluster, and the clusters
- * are set far enough apart that a gap shows between them. Hubs inside a
- * campus stay in that blob. National programs are seated afterwards.
+ * are packed until neighboring regions touch. Hubs inside a campus stay in
+ * that blob. National programs are seated afterwards.
  */
 function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: Map<string, string>): RegionMarker[] {
   const byId = new Map(simNodes.map((node) => [node.id, node]));
@@ -1562,8 +1561,8 @@ function seatWaterlooBesideToronto(live: LiveNode[], primary: Map<string, string
   waterloo.y = toronto.y + (dy / len) * gap;
 }
 
-/** Minimum clear space between two region clusters, in layout units. */
-const REGION_GAP = 36;
+/** Clear space between neighboring region blobs. Small enough that the clouds touch. */
+const REGION_GAP = 4;
 
 /** Where each regional team sits once its campuses have been pulled into one cluster. Same angles as the previous arrangement. */
 const CLUSTER_ANGLE: Record<string, number> = {
@@ -1576,9 +1575,9 @@ const CLUSTER_ANGLE: Record<string, number> = {
 
 /**
  * Pull every campus in a region toward that region's centroid, keeping discs
- * from covering each other, then translate each cluster so a gap shows
- * between regions. People and internal clubs are repacked onto the campuses
- * afterwards, so they come with the blob.
+ * from covering each other, then translate each cluster so neighboring
+ * regions sit against each other. People and internal clubs are repacked onto
+ * the campuses afterwards, so they come with the blob.
  */
 function pullTowardRegionCentroids(live: LiveNode[], primary: Map<string, string>) {
   const counts = memberCounts(primary, live);
@@ -1741,71 +1740,14 @@ function regionBodiesFrom(byRegion: Map<string, LiveNode[]>, radiusOf: (id: stri
 }
 
 function regionClusterCenters(bodies: Map<string, { x: number; y: number; r: number }>): Map<string, { x: number; y: number }> {
-  const radius = (id: string) => bodies.get(id)?.r ?? 24;
-  const core = ["philly", "west", "ny", "boston"].filter((id) => bodies.has(id));
-  const placeCore = (scale: number) => {
-    const out = new Map<string, { x: number; y: number }>();
-    for (const id of core) {
-      const angle = CLUSTER_ANGLE[id] ?? 0;
-      const reach = (radius(id) + REGION_GAP) * scale;
-      out.set(id, { x: Math.cos(angle) * reach, y: Math.sin(angle) * reach });
-    }
-    return out;
-  };
-  let scale = 1;
-  let placed = placeCore(scale);
-  for (let attempt = 0; attempt < 12; attempt++) {
-    let clear = true;
-    for (let i = 0; i < core.length; i++) {
-      for (let j = i + 1; j < core.length; j++) {
-        const a = placed.get(core[i]);
-        const b = placed.get(core[j]);
-        if (!a || !b) continue;
-        if (Math.hypot(a.x - b.x, a.y - b.y) < radius(core[i]) + radius(core[j]) + REGION_GAP) clear = false;
-      }
-    }
-    if (clear) break;
-    scale *= 1.07;
-    placed = placeCore(scale);
-  }
-  if (bodies.has("international")) {
-    const west = placed.get("west");
-    const boston = placed.get("boston");
-    const anchor = west ?? boston ?? { x: -1, y: 1 };
-    let dirX = anchor.x;
-    let dirY = anchor.y;
-    if (west && boston) {
-      dirX = west.x + boston.x;
-      dirY = west.y + boston.y;
-    }
-    const dirLen = Math.hypot(dirX, dirY) || 1;
-    dirX /= dirLen;
-    dirY /= dirLen;
-    const from = west ?? anchor;
-    const fromId = west ? "west" : core[0] ?? "west";
-    let spot = {
-      x: from.x + dirX * (radius(fromId) + radius("international") + REGION_GAP),
-      y: from.y + dirY * (radius(fromId) + radius("international") + REGION_GAP),
-    };
-    for (let nudge = 0; nudge < 12; nudge++) {
-      let clear = true;
-      for (const id of core) {
-        const at = placed.get(id);
-        if (!at) continue;
-        const dist = Math.hypot(spot.x - at.x, spot.y - at.y);
-        const need = radius(id) + radius("international") + REGION_GAP;
-        if (dist >= need) continue;
-        clear = false;
-        const len = dist || 1;
-        const ux = (spot.x - at.x) / len || dirX;
-        const uy = (spot.y - at.y) / len || dirY;
-        spot = { x: at.x + ux * need, y: at.y + uy * need };
-      }
-      if (clear) break;
-    }
-    placed.set("international", spot);
-  }
-  return placed;
+  // The bounding circle reaches the farthest small campus. Packing on that circle
+  // leaves the dense cores as islands. Use the inner part of the blob so the
+  // colored clouds meet, and let the sparse outer campuses touch their neighbors.
+  return packRegionCenters(
+    [...bodies.entries()].map(([id, body]) => ({ id, r: Math.max(18, body.r * 0.4) })),
+    (id) => CLUSTER_ANGLE[id] ?? 0,
+    REGION_GAP,
+  );
 }
 
 /** Draw every smaller campus in until its disc touches the largest campus in the same region. */
