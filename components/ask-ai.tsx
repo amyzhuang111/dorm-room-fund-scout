@@ -198,7 +198,8 @@ function AskAiPanel({ onClose }: { onClose: () => void }) {
       browserEngine = null;
       browserModelId = null;
       setLoadedId(null);
-      setError(err instanceof Error ? err.message : "The model could not load.");
+      const message = err instanceof Error ? err.message : "";
+      setError(message || "The model could not load. Search results still work.");
     } finally {
       setLoading(false);
     }
@@ -446,7 +447,7 @@ function AskAiPanel({ onClose }: { onClose: () => void }) {
             {answer}
           </p>
         )}
-        {asked && !busy && matches.length === 0 && !error && <p className="text-sm font-medium">{NOT_IN_THE_DATA}</p>}
+        {asked && !busy && matches.length === 0 && !error && !answer && <p className="text-sm font-medium">{NOT_IN_THE_DATA}</p>}
         {matches.length > 0 && (
           <div>
             <div className="flex items-center justify-between gap-2">
