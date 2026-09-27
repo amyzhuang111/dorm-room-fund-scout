@@ -1,33 +1,16 @@
 import type { MapEdgeType, MapNode, MapNodeType } from "@/lib/domain/network-map";
 
+/** Muted type colors on white. Clusters read from position, not from a campus tint. */
 export const NODE_FILL: Record<MapNodeType, string> = {
-  person: "#111111",
-  startup: "#1d4ed8",
-  investor: "#3f3f46",
-  campus: "#0f766e",
-  program: "#6d28d9",
-  organization: "#a21caf",
+  person: "#5c6570",
+  startup: "#2f5f82",
+  investor: "#7a5b32",
+  campus: "#1f5c54",
+  program: "#4a4560",
+  organization: "#5c3d86",
 };
 
-/** Soft campus tints. Clusters read by color; type stays in the shape. */
-export const CAMPUS_COLOR: Record<string, string> = {
-  univ_penn: "#1d4ed8",
-  univ_berkeley: "#b45309",
-  univ_mit: "#be123c",
-  univ_stanford: "#047857",
-  univ_waterloo: "#6d28d9",
-  univ_harvard: "#9f1239",
-  univ_columbia: "#0e7490",
-  univ_gatech: "#c2410c",
-  univ_michigan: "#1e3a8a",
-  univ_princeton: "#a16207",
-  univ_cmu: "#4338ca",
-};
-
-export function nodeColor(node: { type: MapNodeType; campus: string | null }): string {
-  if (node.type === "investor") return NODE_FILL.investor;
-  if (node.type === "organization") return NODE_FILL.organization;
-  if (node.campus && CAMPUS_COLOR[node.campus]) return CAMPUS_COLOR[node.campus];
+export function nodeColor(node: { type: MapNodeType }): string {
   return NODE_FILL[node.type];
 }
 
@@ -40,46 +23,43 @@ export const NODE_SHAPE: Record<MapNodeType, "circle" | "square" | "diamond" | "
   organization: "triangle",
 };
 
-export const DIM_NODE = "#e4e4e4";
-/** ~1px grey that still reads on white. Alpha stays in the 0.3–0.4 band. */
-export const EDGE_GREY = "rgba(64, 64, 64, 0.38)";
-export const EDGE_CAMPUS = "rgba(64, 64, 64, 0.32)";
-/** Amber, opaque enough to see bridges between campus clusters. */
-export const EDGE_CROSS = "rgba(180, 83, 9, 0.75)";
-export const EDGE_HOVER = "#171717";
-export const EDGE_HOVER_CROSS = "#9a3412";
+export const DIM_NODE = "#d5d5d5";
+/** Hairline at the fitted camera. Thickness is in screen pixels and does not grow with zoom. */
+export const EDGE_PX = 0.4;
+export const EDGE_GREY = "rgba(120, 120, 120, 0.28)";
+export const EDGE_DIM = "rgba(170, 170, 170, 0.14)";
+/** Colored only while a node is hovered or selected. */
+export const EDGE_HOVER = "#1e4b8a";
+export const EDGE_HOVER_PX = 0.95;
 
 export const EDGE_COLOR: Record<MapEdgeType, string> = {
   founded: EDGE_GREY,
   co_founder: EDGE_GREY,
-  studied_at: EDGE_CAMPUS,
+  studied_at: EDGE_GREY,
   invested_in: EDGE_GREY,
   member_of: EDGE_GREY,
-  at_campus: EDGE_CAMPUS,
+  at_campus: EDGE_GREY,
 };
 
-const ORG_PX: Record<string, number> = { S: 7.4, A: 5.4, B: 3.8, C: 2.6, D: 1.9 };
+const ORG_PX: Record<string, number> = { S: 2.35, A: 2.05, B: 1.7, C: 1.45, D: 1.25 };
 
-/** Screen pixels at the fitted camera. Hubs are only a little larger than leaves. Organizations scale by directory tier. */
+/** Screen pixels at every zoom. Hubs are only a little larger than leaves. Organizations stay small triangles. */
 export function screenSize(node: MapNode): number {
-  if (node.type === "organization") return ORG_PX[node.orgTier ?? ""] ?? 2.6;
   const hub = Math.sqrt(Math.max(node.degree, 1));
-  if (node.type === "campus") return clamp(3.1 + hub * 0.04, 3.1, 5.2);
-  if (node.type === "investor") return clamp(1.45 + hub * 0.16, 1.45, 3.2);
-  if (node.type === "program") return clamp(1.55 + hub * 0.12, 1.55, 3);
-  if (node.type === "startup") return clamp(1.3 + hub * 0.08, 1.3, 2.8);
-  return clamp(1.05 + hub * 0.1, 1.05, 2.4);
+  if (node.type === "organization") return clamp((ORG_PX[node.orgTier ?? ""] ?? 1.55) + Math.min(1.05, hub * 0.032), 1.25, 3.45);
+  if (node.type === "campus") return clamp(2.15 + hub * 0.022, 2.15, 3.15);
+  if (node.type === "investor") return clamp(1.35 + hub * 0.09, 1.35, 2.45);
+  if (node.type === "program") return clamp(1.4 + hub * 0.07, 1.4, 2.35);
+  if (node.type === "startup") return clamp(1.15 + hub * 0.09, 1.15, 2.15);
+  return clamp(1.02 + hub * 0.1, 1.02, 2.05);
 }
 
-export function campusKey(node: { campus: string | null; campuses?: string[] }): string {
-  const ids = node.campuses?.length ? node.campuses : node.campus ? [node.campus] : [];
-  return [...ids].sort().join(",");
-}
-
-export function crossesCampus(a: string, b: string): boolean {
-  if (!a || !b) return false;
-  const other = new Set(b.split(","));
-  return !a.split(",").some((id) => other.has(id));
+/** Lowest node size that may keep a label at this camera ratio. 1 is the fitted view; smaller ratios are zoomed in. */
+export function labelMinSize(cameraRatio: number): number {
+  if (cameraRatio >= 0.7) return 2.85;
+  if (cameraRatio >= 0.36) return 2.0;
+  if (cameraRatio >= 0.16) return 1.48;
+  return 1.12;
 }
 
 function clamp(value: number, min: number, max: number): number {

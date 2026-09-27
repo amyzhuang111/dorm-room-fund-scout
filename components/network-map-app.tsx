@@ -260,43 +260,40 @@ export function NetworkMapApp() {
         <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-black">{error ?? "Laying out the map…"}</p>
       )}
 
-      <div className="absolute left-3 top-3 z-30 flex max-w-[16rem] flex-col items-start gap-1">
-        <button
-          type="button"
-          className="rounded-md border border-black/20 bg-white px-2.5 py-1.5 text-xs font-semibold text-black shadow-sm"
-          aria-expanded={filtersOpen}
-          onClick={() => setFiltersOpen((open) => !open)}
-        >
-          {filtersOpen ? "Hide filters" : "Filters"}
-        </button>
-        <p className="text-[11px] leading-snug text-neutral-700" style={{ fontVariantNumeric: "tabular-nums" }}>
+      <div className="absolute left-3 top-3 z-30 flex max-w-[22rem] flex-col items-start gap-1">
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            className="h-7 rounded border border-neutral-300 bg-white px-2 text-[11px] font-medium text-black"
+            aria-expanded={filtersOpen}
+            onClick={() => setFiltersOpen((open) => !open)}
+          >
+            {filtersOpen ? "Hide filters" : "Filters"}
+          </button>
+          <label className="inline-flex h-7 items-center gap-1.5 rounded border border-neutral-300 bg-white px-2 text-[11px] text-black">
+            <input type="checkbox" className="accent-black" checked={showIsolates} onChange={(event) => setShowIsolates(event.target.checked)} />
+            Unlinked
+          </label>
+        </div>
+        <p className="text-[11px] leading-snug text-neutral-800" style={{ fontVariantNumeric: "tabular-nums" }}>
           {visibleCounts.person.toLocaleString()} people · {visibleCounts.startup.toLocaleString()} startups · {visibleCounts.investor} investors · {visibleCounts.organization} organizations
         </p>
-        <label className="inline-flex items-center gap-1.5 rounded-md border border-black/15 bg-white px-2 py-1 text-[11px] text-black shadow-sm">
-          <input type="checkbox" className="accent-black" checked={showIsolates} onChange={(event) => setShowIsolates(event.target.checked)} />
-          Show unlinked
-        </label>
         {topOrgs.length > 0 && (
-          <div className="mt-1 w-full rounded-md border border-black/10 bg-white/95 px-2 py-1.5 text-[11px] text-black shadow-sm">
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-neutral-600">Top organizations</p>
-            <ul className="mt-1 space-y-0.5">
-              {topOrgs.map((node) => (
-                <li key={node.id}>
-                  <button type="button" className="flex w-full items-baseline justify-between gap-2 text-left hover:underline" onClick={() => choose(node.id)}>
-                    <span className="truncate">{node.label}</span>
-                    <span className="shrink-0 text-neutral-600">
-                      {node.orgTier} · {node.linkedFounders ?? 0}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <p className="text-[11px] leading-snug text-black">
+            {topOrgs.map((node, index) => (
+              <span key={node.id}>
+                {index > 0 && <span className="text-neutral-400"> · </span>}
+                <button type="button" className="hover:underline" onClick={() => choose(node.id)}>
+                  {node.label}
+                </button>
+              </span>
+            ))}
+          </p>
         )}
       </div>
 
       {filtersOpen && filters && graph && (
-        <aside className="absolute bottom-14 left-3 top-16 z-30 flex w-[17.5rem] flex-col overflow-hidden rounded-lg border border-black/15 bg-white text-black shadow-lg">
+        <aside className="absolute bottom-12 left-3 top-24 z-30 flex w-[16.5rem] flex-col overflow-hidden rounded-md border border-neutral-300 bg-white text-black shadow-sm">
           <div className="flex items-center justify-between border-b border-black/10 px-3 py-2">
             <p className="text-sm font-semibold">Filters</p>
             <button
@@ -461,7 +458,7 @@ export function NetworkMapApp() {
         </aside>
       )}
 
-      <div className="absolute left-1/2 top-3 z-30 w-[min(22rem,calc(100%-18rem))] -translate-x-1/2">
+      <div className="absolute left-1/2 top-3 z-30 w-[min(18rem,calc(100%-26rem))] -translate-x-1/2">
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
@@ -472,9 +469,9 @@ export function NetworkMapApp() {
             }
             if (event.key === "Escape") setQuery("");
           }}
-          placeholder="Search people, startups, organizations…"
+          placeholder="Search the network"
           aria-label="Search the network"
-          className="w-full rounded-md border border-black/20 bg-white px-3 py-2 text-sm text-black shadow-sm outline-none placeholder:text-neutral-500 focus:border-black"
+          className="h-8 w-full rounded border border-neutral-300 bg-white px-2.5 text-[13px] text-black outline-none placeholder:text-neutral-500 focus:border-black"
         />
         {matches.length > 0 && (
           <ul className="mt-1 max-h-64 overflow-y-auto rounded-md border border-black/15 bg-white shadow-md">
@@ -491,7 +488,7 @@ export function NetworkMapApp() {
       </div>
 
       <div
-        className="absolute bottom-3 z-30 flex flex-col overflow-hidden rounded-md border border-black/15 bg-white shadow-sm"
+        className="absolute bottom-3 z-30 flex flex-col overflow-hidden rounded border border-neutral-300 bg-white"
         style={{ right: detailOpen ? "calc(min(22rem, 100% - 1.5rem) + 0.85rem)" : "0.75rem" }}
       >
         <ZoomButton label="Zoom in" onClick={() => graphApi.current?.zoomIn()}>
@@ -505,21 +502,20 @@ export function NetworkMapApp() {
         </ZoomButton>
       </div>
 
-      <div className="pointer-events-none absolute bottom-20 left-3 z-20 max-w-[min(36rem,calc(100%-8rem))] rounded-md border border-black/10 bg-white/95 px-2.5 py-1.5 text-[11px] text-black shadow-sm">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <LegendItem shape="circle" color="#171717" label="Person" />
-          <LegendItem shape="square" color="#171717" label="Startup" />
-          <LegendItem shape="diamond" color="#171717" label="Investor" />
-          <LegendItem shape="circle" color="#171717" label="Campus" />
-          <LegendItem shape="hex" color="#171717" label="Club / lab" />
+      <div className="pointer-events-none absolute bottom-3 left-3 z-20 max-w-[min(40rem,calc(100%-8rem))] rounded border border-neutral-200 bg-white/95 px-2 py-1 text-[11px] text-black">
+        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0.5">
+          <LegendItem shape="circle" color={NODE_FILL.person} label="Person" />
+          <LegendItem shape="square" color={NODE_FILL.startup} label="Startup" />
+          <LegendItem shape="diamond" color={NODE_FILL.investor} label="Investor" />
+          <LegendItem shape="circle" color={NODE_FILL.campus} label="Campus" />
+          <LegendItem shape="hex" color={NODE_FILL.program} label="Club" />
           <LegendItem shape="triangle" color={NODE_FILL.organization} label="Organization" />
-          <span className="text-neutral-600">Color = campus · triangle sized by tier · line = link · amber = cross-campus · est. = inferred enrollment</span>
         </div>
       </div>
 
       {detailOpen && selectedNode && (
         <aside
-          className="absolute bottom-3 right-3 top-16 z-30 flex w-[min(22rem,calc(100%-1.5rem))] flex-col overflow-hidden rounded-lg border border-black/15 bg-white text-black shadow-lg"
+          className="absolute bottom-3 right-3 top-14 z-30 flex w-[min(20rem,calc(100%-1.5rem))] flex-col overflow-hidden rounded-md border border-neutral-300 bg-white text-black shadow-sm"
           style={{ ["--link" as string]: "#111111", ["--foreground" as string]: "#111111", ["--muted" as string]: "#404040" }}
         >
           <div className="flex items-start justify-between gap-2 border-b border-black/10 px-3 py-2">
@@ -745,7 +741,7 @@ function YearField({ label, value, onChange }: { label: string; value: number | 
 
 function ZoomButton({ label, onClick, children }: { label: string; onClick: () => void; children: ReactNode }) {
   return (
-    <button type="button" aria-label={label} onClick={onClick} className="h-8 min-w-8 border-b border-black/10 px-2 text-xs font-semibold text-black last:border-b-0 hover:bg-neutral-100">
+    <button type="button" aria-label={label} onClick={onClick} className="h-7 min-w-7 border-b border-neutral-200 px-1.5 text-[11px] font-semibold text-black last:border-b-0 hover:bg-neutral-100">
       {children}
     </button>
   );

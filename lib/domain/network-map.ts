@@ -1,8 +1,8 @@
 // Full evidence graph for the Network map. Nodes and edges come from
 // affiliations, founder roles, program memberships, sourced investor facts,
 // and confirmed DRF portfolio matches. Positions are a cached ForceAtlas2
-// layout (seeded near campuses, then settled and stopped) so the browser
-// only draws.
+// layout: each campus and large organization is settled on its own, then
+// the clusters are packed on a ring so the browser only draws.
 
 import fs from "node:fs";
 import Graph from "graphology";
@@ -99,7 +99,7 @@ const LAYOUT_WEIGHT: Record<MapEdgeType, number> = {
   at_campus: 0,
 };
 
-const LAYOUT_VERSION = "6";
+const LAYOUT_VERSION = "8";
 
 let cache: { stamp: string; graph: MapGraph } | null = null;
 
@@ -442,7 +442,7 @@ function assembleNetworkMap(): MapGraph {
   }
   for (const org of organizations.nodes) {
     const node = pushNode(org.id, "organization", org.campuses, org.tier, null);
-    node.layoutPx = org.tier === "S" ? 8 : org.tier === "A" ? 6 : org.tier === "B" ? 4.2 : org.tier === "C" ? 3.2 : 2.4;
+    node.layoutPx = org.tier === "S" ? 4.2 : org.tier === "A" ? 3.6 : org.tier === "B" ? 3.1 : 2.6;
   }
 
   const startupAnchor = new Map<string, { x: number; y: number }>();
@@ -482,8 +482,8 @@ function assembleNetworkMap(): MapGraph {
   const emit = (node: Omit<MapNode, "year" | "founder" | "degree"> & { year?: number | null; founder?: boolean }) => {
     const at = pos.get(node.id);
     if (!at) return;
-    node.x = Math.round(at.x);
-    node.y = Math.round(at.y);
+    node.x = Math.round(at.x * 10) / 10;
+    node.y = Math.round(at.y * 10) / 10;
     node.r = Math.round(at.r * 10) / 10;
     nodes.push({
       ...node,
@@ -626,35 +626,302 @@ function assembleNetworkMap(): MapGraph {
   return graph;
 }
 
-/** Run ForceAtlas2 to a stop, then a noverlap pass so stacked nodes separate. Positions stay fixed after this returns. */
+/** Organizations this connected become their own island (YC, Mayfield, PennApps) instead of a spoke into a campus disc. */
+const HUB_DEGREE = 36;
+
+/**
+ * ForceAtlas2 runs once per cluster, then the clusters are packed apart.
+ * A single global pass pulls every campus into one hairball through YC,
+ * Mayfield, and the investor bridges. Positions stay fixed after this returns.
+ */
 function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[]) {
-  const g = new Graph({ type: "undirected", multi: true });
-  for (const node of simNodes) g.addNode(node.id, { x: node.x, y: node.y });
+  const byId = new Map(simNodes.map((node) => [node.id, node]));
+  const degree = new Map<string, number>();
+  const memberships = new Map<string, string[]>();
+  const membersOf = new Map<string, string[]>();
+  const foundersOf = new Map<string, string[]>();
+  const campusesOf = new Map<string, string[]>();
+  const portfolio = new Map<string, string[]>();
+  for (const edge of edges) {
+    degree.set(edge.source, (degree.get(edge.source) ?? 0) + 1);
+    degree.set(edge.target, (degree.get(edge.target) ?? 0) + 1);
+    if (edge.type === "member_of") {
+      const orgs = memberships.get(edge.source) ?? [];
+      orgs.push(edge.target);
+      memberships.set(edge.source, orgs);
+      const people = membersOf.get(edge.target) ?? [];
+      people.push(edge.source);
+      membersOf.set(edge.target, people);
+    } else if (edge.type === "founded") {
+      const founders = foundersOf.get(edge.target) ?? [];
+      founders.push(edge.source);
+      foundersOf.set(edge.target, founders);
+    } else if (edge.type === "studied_at" || edge.type === "at_campus") {
+      const campuses = campusesOf.get(edge.source) ?? [];
+      campuses.push(edge.target);
+      campusesOf.set(edge.source, campuses);
+    } else if (edge.type === "invested_in") {
+      const startups = portfolio.get(edge.source) ?? [];
+      startups.push(edge.target);
+      portfolio.set(edge.source, startups);
+    }
+  }
+
+  const hubs = new Set<string>();
+  for (const node of simNodes) {
+    if (node.type === "organization" && (degree.get(node.id) ?? 0) >= HUB_DEGREE) hubs.add(node.id);
+  }
+
+  const home = new Map<string, string>();
+  for (const node of simNodes) {
+    if (node.type === "campus" || hubs.has(node.id)) home.set(node.id, node.id);
+  }
+
+  const bestHub = (ids: string[]): string | null => {
+    let best: string | null = null;
+    let score = -1;
+    for (const id of ids) {
+      if (!hubs.has(id)) continue;
+      const next = degree.get(id) ?? 0;
+      if (next > score) {
+        score = next;
+        best = id;
+      }
+    }
+    return best;
+  };
+  const campusHome = (id: string): string | null => (campusesOf.get(id) ?? []).find((campus) => byId.get(campus)?.type === "campus") ?? null;
+  const majority = (votes: Map<string, number>): string | null => {
+    let best: string | null = null;
+    let score = 0;
+    for (const [key, count] of votes) {
+      if (count > score) {
+        score = count;
+        best = key;
+      }
+    }
+    return best;
+  };
+
+  for (const node of simNodes) {
+    if (node.type !== "person" || home.has(node.id)) continue;
+    home.set(node.id, bestHub(memberships.get(node.id) ?? []) ?? campusHome(node.id) ?? "loose");
+  }
+  for (const node of simNodes) {
+    if (node.type !== "startup" || home.has(node.id)) continue;
+    const votes = new Map<string, number>();
+    for (const person of foundersOf.get(node.id) ?? []) {
+      const key = home.get(person);
+      if (key) votes.set(key, (votes.get(key) ?? 0) + 1);
+    }
+    home.set(node.id, majority(votes) ?? campusHome(node.id) ?? "loose");
+  }
+  for (const node of simNodes) {
+    if (home.has(node.id) || (node.type !== "program" && node.type !== "organization")) continue;
+    const votes = new Map<string, number>();
+    for (const person of membersOf.get(node.id) ?? []) {
+      const key = home.get(person);
+      if (key && key !== "loose") votes.set(key, (votes.get(key) ?? 0) + 1);
+    }
+    home.set(node.id, majority(votes) ?? campusHome(node.id) ?? "loose");
+  }
+  const bridgeNodes: SimNode[] = [];
+  const bridgeIds = new Set<string>();
+  for (const node of simNodes) {
+    if (node.type !== "investor" || home.has(node.id)) continue;
+    const votes = new Map<string, number>();
+    let total = 0;
+    for (const startup of portfolio.get(node.id) ?? []) {
+      const key = home.get(startup);
+      if (!key || key === "loose") continue;
+      total += 1;
+      votes.set(key, (votes.get(key) ?? 0) + 1);
+    }
+    let best: string | null = null;
+    let score = 0;
+    for (const [key, count] of votes) {
+      if (count > score) {
+        score = count;
+        best = key;
+      }
+    }
+    if (best && score >= Math.max(3, total * 0.55)) home.set(node.id, best);
+    else {
+      bridgeNodes.push(node);
+      bridgeIds.add(node.id);
+    }
+  }
+  for (const node of simNodes) if (!home.has(node.id) && !bridgeIds.has(node.id)) home.set(node.id, "loose");
+
+  const groups = new Map<string, SimNode[]>();
+  for (const node of simNodes) {
+    if (bridgeIds.has(node.id)) continue;
+    const key = home.get(node.id) ?? "loose";
+    const list = groups.get(key) ?? [];
+    list.push(node);
+    groups.set(key, list);
+  }
+
+  const packed: { nodes: SimNode[]; r: number }[] = [];
+  for (const [key, nodes] of groups) {
+    layoutCluster(nodes, edges, key);
+    let r = 20;
+    for (const node of nodes) r = Math.max(r, Math.hypot(node.x, node.y) + 12);
+    packed.push({ nodes, r });
+  }
+  packed.sort((a, b) => b.r - a.r || b.nodes.length - a.nodes.length);
+  const ordered: typeof packed = [];
+  const pending = [...packed];
+  while (pending.length) {
+    ordered.push(pending.shift()!);
+    if (pending.length) ordered.push(pending.pop()!);
+  }
+  const gap = 56;
+  const circumference = ordered.reduce((sum, group) => sum + group.r * 2 + gap, 0);
+  const ring = Math.max(120, (circumference / (2 * Math.PI)) * 1.12);
+  let angle = -Math.PI / 2;
+  for (const group of ordered) {
+    const step = (group.r * 2 + gap) / ring;
+    angle += step / 2;
+    const cx = Math.cos(angle) * ring;
+    const cy = Math.sin(angle) * ring;
+    angle += step / 2;
+    for (const node of group.nodes) {
+      node.x += cx;
+      node.y += cy;
+    }
+  }
+  placeBridgeInvestors(bridgeNodes, portfolio, byId);
+}
+
+/** Lay one campus or organization out around its anchor, then stop. */
+function layoutCluster(nodes: SimNode[], edges: MapEdge[], key: string) {
+  const anchor = nodes.find((node) => node.id === key) ?? nodes.find((node) => node.type === "campus" || node.type === "organization");
+  if (nodes.length === 1) {
+    nodes[0].x = 0;
+    nodes[0].y = 0;
+    return;
+  }
+  const g = new Graph({ type: "undirected" });
+  let seat = 0;
+  for (const node of nodes) {
+    if (anchor && node.id === anchor.id) {
+      node.x = 0;
+      node.y = 0;
+    } else {
+      const angle = seat * 2.399963229728653;
+      const dist = 7 * Math.sqrt(seat + 1);
+      seat += 1;
+      node.x = Math.cos(angle) * dist;
+      node.y = Math.sin(angle) * dist;
+    }
+    g.addNode(node.id, { x: node.x, y: node.y });
+  }
+  const ids = new Set(nodes.map((node) => node.id));
+  let linked = 0;
   for (const edge of edges) {
     const weight = LAYOUT_WEIGHT[edge.type];
-    if (!weight || edge.source === edge.target || !g.hasNode(edge.source) || !g.hasNode(edge.target)) continue;
+    if (!weight || edge.source === edge.target || !ids.has(edge.source) || !ids.has(edge.target)) continue;
+    if (!g.hasNode(edge.source) || !g.hasNode(edge.target)) continue;
+    if (g.hasEdge(edge.source, edge.target)) {
+      const existing = g.edge(edge.source, edge.target);
+      if (weight > g.getEdgeAttribute(existing, "weight")) g.setEdgeAttribute(existing, "weight", weight);
+      continue;
+    }
     g.addEdge(edge.source, edge.target, { weight });
+    linked += 1;
   }
-  const inferred = forceAtlas2.inferSettings(g);
-  forceAtlas2.assign(g, {
-    iterations: 220,
-    settings: {
-      ...inferred,
-      barnesHutOptimize: true,
-      barnesHutTheta: 0.5,
-      gravity: 0.14,
-      scalingRatio: 16,
-      linLogMode: true,
-      outboundAttractionDistribution: true,
-      edgeWeightInfluence: 1,
-      slowDown: 8,
-      strongGravityMode: false,
-      adjustSizes: false,
-    },
-    getEdgeWeight: "weight",
-  });
-  separateOverlaps(g, simNodes);
-  for (const node of simNodes) {
+  if (linked > 0) {
+    forceAtlas2.assign(g, {
+      iterations: Math.round(Math.min(160, 48 + nodes.length * 0.1)),
+      settings: {
+        barnesHutOptimize: nodes.length > 90,
+        barnesHutTheta: 0.55,
+        gravity: 0.55,
+        scalingRatio: 12,
+        linLogMode: true,
+        outboundAttractionDistribution: true,
+        edgeWeightInfluence: 0.45,
+        slowDown: 5,
+        strongGravityMode: false,
+        adjustSizes: false,
+      },
+      getEdgeWeight: "weight",
+    });
+  }
+  for (const node of nodes) {
+    const at = g.getNodeAttributes(node.id);
+    node.x = Number.isFinite(at.x) ? at.x : node.x;
+    node.y = Number.isFinite(at.y) ? at.y : node.y;
+  }
+  let cx = 0;
+  let cy = 0;
+  for (const node of nodes) {
+    cx += node.x;
+    cy += node.y;
+  }
+  cx /= nodes.length;
+  cy /= nodes.length;
+  for (const node of nodes) {
+    node.x -= cx;
+    node.y -= cy;
+    g.setNodeAttribute(node.id, "x", node.x);
+    g.setNodeAttribute(node.id, "y", node.y);
+  }
+  if (anchor) {
+    anchor.x = 0;
+    anchor.y = 0;
+    g.setNodeAttribute(anchor.id, "x", 0);
+    g.setNodeAttribute(anchor.id, "y", 0);
+  }
+  let reach = 1;
+  for (const node of nodes) reach = Math.max(reach, Math.hypot(node.x, node.y));
+  const target = 12 + 1.35 * Math.sqrt(nodes.length);
+  const scale = target / reach;
+  for (const node of nodes) {
+    node.x *= scale;
+    node.y *= scale;
+    g.setNodeAttribute(node.id, "x", node.x);
+    g.setNodeAttribute(node.id, "y", node.y);
+  }
+  separateOverlaps(g, nodes);
+  for (const node of nodes) {
+    const at = g.getNodeAttributes(node.id);
+    node.x = at.x;
+    node.y = at.y;
+  }
+}
+
+/** Investors that fund several clusters sit between those clusters, on the startups they actually back. */
+function placeBridgeInvestors(nodes: SimNode[], portfolio: Map<string, string[]>, byId: Map<string, SimNode>) {
+  if (!nodes.length) return;
+  let n = 0;
+  for (const node of nodes) {
+    let x = 0;
+    let y = 0;
+    let count = 0;
+    for (const startup of portfolio.get(node.id) ?? []) {
+      const at = byId.get(startup);
+      if (!at || !Number.isFinite(at.x) || !Number.isFinite(at.y)) continue;
+      x += at.x;
+      y += at.y;
+      count += 1;
+    }
+    if (!count) {
+      const angle = n * 2.399963229728653;
+      const dist = 40 * Math.sqrt(n + 1);
+      node.x = Math.cos(angle) * dist;
+      node.y = Math.sin(angle) * dist;
+    } else {
+      node.x = x / count;
+      node.y = y / count;
+    }
+    n += 1;
+  }
+  const g = new Graph({ type: "undirected" });
+  for (const node of nodes) g.addNode(node.id, { x: node.x, y: node.y, size: 28 });
+  noverlap.assign(g, { maxIterations: 40, settings: { margin: 18, ratio: 1.1, expansion: 1.3, gridSize: 20, speed: 4 } });
+  for (const node of nodes) {
     const at = g.getNodeAttributes(node.id);
     node.x = at.x;
     node.y = at.y;
@@ -672,33 +939,20 @@ const OVERLAP_PX: Record<MapNodeType, number> = {
 
 /** Push colliding nodes apart in graph units that survive the camera fit (a few screen pixels). */
 function separateOverlaps(g: Graph, simNodes: SimNode[]) {
-  let minX = Infinity;
-  let minY = Infinity;
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-  g.forEachNode((_, at) => {
-    if (!Number.isFinite(at.x) || !Number.isFinite(at.y)) return;
-    minX = Math.min(minX, at.x);
-    minY = Math.min(minY, at.y);
-    maxX = Math.max(maxX, at.x);
-    maxY = Math.max(maxY, at.y);
-  });
-  const span = Math.max(maxX - minX, maxY - minY, 1);
-  const unit = span / 980;
   const byId = new Map(simNodes.map((node) => [node.id, node]));
   g.forEachNode((id) => {
     const sim = byId.get(id);
     const px = sim?.layoutPx ?? OVERLAP_PX[sim?.type ?? "person"] ?? 2.6;
-    g.setNodeAttribute(id, "size", px * unit);
+    g.setNodeAttribute(id, "size", Math.max(2.4, px));
   });
   noverlap.assign(g, {
-    maxIterations: 120,
+    maxIterations: simNodes.length > 500 ? 80 : 70,
     settings: {
-      margin: 1.2 * unit,
+      margin: 0.35,
       ratio: 1,
-      expansion: 1.2,
-      gridSize: 56,
-      speed: 3,
+      expansion: 1.1,
+      gridSize: 28,
+      speed: 2.4,
     },
   });
 }
