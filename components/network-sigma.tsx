@@ -586,8 +586,8 @@ function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>) 
   const height = maxY - minY;
   // High layout Y is the top of the screen. Pad that side for the search box and filters, and the low side for the Ask bar and legend.
   const span0 = Math.max(width, height, 0.04);
-  const paddedMaxY = maxY + span0 * 0.07;
-  const paddedMinY = minY - span0 * 0.08;
+  const paddedMaxY = maxY + span0 * 0.09;
+  const paddedMinY = minY - span0 * 0.14;
   const paddedMinX = minX - span0 * 0.03;
   const paddedMaxX = maxX + span0 * 0.05;
   const span = Math.max(paddedMaxX - paddedMinX, paddedMaxY - paddedMinY, 0.04);
