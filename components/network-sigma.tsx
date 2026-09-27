@@ -8,7 +8,7 @@ import { featuredNationalKey } from "@/lib/domain/featured-national";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
-import { CAMPUS_LABEL_MIN_MEMBERS, DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, MEGA_DEGREE, NODE_SHAPE, PROGRAM_LINE, PROGRAM_LINE_ACTIVE, PROGRAM_LINE_DIM, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, zoomSizeFactor, type CampusDisc, type FramePoint, type LabelOffset, type ScreenLabel } from "./network-style";
+import { CAMPUS_LABEL_MIN_MEMBERS, DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, MEGA_DEGREE, NODE_SHAPE, PROGRAM_LINE_ACTIVE, PROGRAM_LINE_DIM, bundleInk, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, zoomSizeFactor, type CampusDisc, type FramePoint, type LabelOffset, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -34,6 +34,8 @@ type NodeAttr = {
   regionId?: string;
   zIndex: number;
   signalTip?: string;
+  /** Graph degree, shown on the hover card as a connection count. */
+  links?: number;
   tint?: string;
   linkColor: string;
   labelPx?: number;
@@ -249,6 +251,7 @@ export function NetworkSigma({
         anchor: campus || hub,
         zIndex: (lead ? 4 : strong ? 3 : Z[node.type]) + 1,
         signalTip: signalTooltip(node),
+        links: node.degree,
         linkColor: emphasizeColor(color),
         labelBase: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong || campusHub || named ? LABEL_HUB : hub ? 11 : LABEL_NODE,
         ...(campus ? { labelColor: "#111111" } : node.homeCampus ? { labelColor: readableInk(colors.get(node.homeCampus) ?? "#374151") } : {}),
@@ -331,23 +334,35 @@ export function NetworkSigma({
       const campusId = campusOf.get(other.id);
       if (campusId) addBundle(program.id, campusId, 1);
     }
+    const curveEdges: CurveEdge[] = [];
     for (const bundle of bundles.values()) {
       if (bundle.count < 1) continue;
       const program = at.get(bundle.program);
       const accent = Boolean(featuredNationalKey(program?.label ?? ""));
       const key = `bundle|${bundle.program}|${bundle.campus}`;
       if (g.hasEdge(key)) continue;
+      const width = bundleWidth(bundle.count);
+      const sparse = !accent && bundle.count < 2;
       g.addEdgeWithKey(key, bundle.program, bundle.campus, {
         kind: "member_of",
-        color: accent ? PROGRAM_LINE : EDGE_GREY,
+        color: accent ? bundleInk(bundle.count) : EDGE_GREY,
         hoverColor: PROGRAM_LINE_ACTIVE,
-        size: accent ? bundleWidth(bundle.count) : Math.min(1.15, bundleWidth(bundle.count) * 0.35),
+        size: accent ? width : Math.min(1.15, width * 0.35),
         defer: false,
         bundle: true,
         accent,
         count: bundle.count,
-        sparse: !accent && bundle.count < 2,
+        sparse,
         zIndex: accent ? 3 : 0,
+      });
+      curveEdges.push({
+        source: bundle.program,
+        target: bundle.campus,
+        count: bundle.count,
+        accent,
+        sparse,
+        size: width,
+        bend: curveBend(bundle.program, bundle.campus),
       });
       link(bundle.program, bundle.campus);
       link(bundle.campus, bundle.program);
@@ -421,41 +436,101 @@ export function NetworkSigma({
         return { ...data, color: mixPaint(data.color, DIM_NODE, focus), label: undefined, forceLabel: false, zIndex: 1 };
       },
       edgeReducer: (edge, data) => {
+        // Program links are painted as weighted curves on a canvas behind the nodes.
+        if (data.bundle) return { ...data, hidden: true };
         const state = stateRef.current;
         const source = g.source(edge);
         const target = g.target(edge);
         if (state.hidden.has(source) || state.hidden.has(target) || !state.edgeTypes.has(data.kind)) return { ...data, hidden: true };
         const active = state.hovered ?? state.selected ?? (state.focus > 0.04 ? state.focusNode : null);
-        const focus = active ? state.focus : 0;
         const quiet = QUIET_EDGE.has(data.kind) || data.defer;
         if (active && (source === active || target === active)) {
           const activeKind = g.getNodeAttribute(active, "kind");
           const structuralActive = activeKind === "organization" || activeKind === "program" || activeKind === "investor";
-          if (data.bundle) {
-            if (data.sparse && !structuralActive) return { ...data, hidden: true, zIndex: 0 };
-            const hot = structuralActive ? PROGRAM_LINE_ACTIVE : (data.hoverColor ?? data.color);
-            return {
-              ...data,
-              color: mixPaint(data.color, hot, Math.max(focus, 0.35)),
-              size: structuralActive ? Math.max(data.size + 0.65, 2.15) : data.size + 0.15,
-              hidden: false,
-              zIndex: 4,
-            };
-          }
-          // A program keeps its bundled campus lines. Individual spokes would cover the cloud.
+          // A program keeps its bundled campus curves. Individual spokes would cover the cloud.
           if (structuralActive && (data.defer || QUIET_EDGE.has(data.kind))) return { ...data, hidden: true };
           return { ...data, color: g.getNodeAttribute(active, "linkColor"), size: EDGE_HOVER_PX, hidden: false };
-        }
-        if (data.bundle) {
-          if (!data.accent || data.sparse) return { ...data, hidden: true };
-          if (!active || focus < 0.04) return data;
-          return { ...data, color: mixPaint(data.color, PROGRAM_LINE_DIM, focus), size: Math.max(EDGE_PX, data.size * (1 - focus * 0.65)), zIndex: 0 };
         }
         if (quiet) return { ...data, hidden: true };
         if (!active) return data;
         return { ...data, color: EDGE_DIM, size: EDGE_PX };
       },
     });
+
+    const curveCanvas = renderer.createCanvas("curves", {
+      beforeLayer: "edges",
+      style: { pointerEvents: "none" },
+    });
+    const curveCtx = curveCanvas.getContext("2d");
+    const drawCurves = () => {
+      if (!curveCtx) return;
+      const { width, height } = renderer.getDimensions();
+      if (width < 2 || height < 2) return;
+      const pixelRatio = window.devicePixelRatio || 1;
+      const bufferW = Math.max(1, Math.round(width * pixelRatio));
+      const bufferH = Math.max(1, Math.round(height * pixelRatio));
+      if (curveCanvas.width !== bufferW || curveCanvas.height !== bufferH) {
+        curveCanvas.width = bufferW;
+        curveCanvas.height = bufferH;
+      }
+      curveCanvas.style.width = `${width}px`;
+      curveCanvas.style.height = `${height}px`;
+      curveCtx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      curveCtx.clearRect(0, 0, width, height);
+      const state = stateRef.current;
+      if (!state.edgeTypes.has("member_of")) return;
+      const active = state.hovered ?? state.selected ?? (state.focus > 0.04 ? state.focusNode : null);
+      const focus = active ? state.focus : 0;
+      const activeKind = active && g.hasNode(active) ? g.getNodeAttribute(active, "kind") : null;
+      const structuralActive = activeKind === "organization" || activeKind === "program" || activeKind === "investor";
+      const quiet: CurveStroke[] = [];
+      const hot: CurveStroke[] = [];
+      for (const edge of curveEdges) {
+        if (state.hidden.has(edge.source) || state.hidden.has(edge.target)) continue;
+        const source = renderer.getNodeDisplayData(edge.source);
+        const target = renderer.getNodeDisplayData(edge.target);
+        if (!source || !target || source.hidden || target.hidden) continue;
+        const touched = active != null && (edge.source === active || edge.target === active);
+        let color = bundleInk(edge.count);
+        let widthPx = renderer.scaleSize(edge.size);
+        let emphasize = false;
+        if (touched) {
+          if (edge.sparse && !structuralActive) continue;
+          color = structuralActive ? PROGRAM_LINE_ACTIVE : bundleInk(edge.count);
+          widthPx = renderer.scaleSize(structuralActive ? Math.max(edge.size + 0.65, 2.15) : edge.size + 0.15);
+          emphasize = true;
+        } else if (!edge.accent || edge.sparse) {
+          continue;
+        } else if (active && focus >= 0.04) {
+          color = mixPaint(bundleInk(edge.count), PROGRAM_LINE_DIM, focus);
+          widthPx = renderer.scaleSize(Math.max(EDGE_PX, edge.size * (1 - focus * 0.65)));
+        }
+        const from = renderer.framedGraphToViewport(source);
+        const to = renderer.framedGraphToViewport(target);
+        if ((from.x < -160 && to.x < -160) || (from.x > width + 160 && to.x > width + 160) || (from.y < -160 && to.y < -160) || (from.y > height + 160 && to.y > height + 160)) continue;
+        const midX = (from.x + to.x) / 2;
+        const midY = (from.y + to.y) / 2;
+        const dx = to.x - from.x;
+        const dy = to.y - from.y;
+        const length = Math.hypot(dx, dy) || 1;
+        const stroke: CurveStroke = {
+          x1: from.x,
+          y1: from.y,
+          cx: midX + (-dy / length) * length * edge.bend,
+          cy: midY + (dx / length) * length * edge.bend,
+          x2: to.x,
+          y2: to.y,
+          color,
+          width: Math.max(0.7, widthPx),
+        };
+        (emphasize ? hot : quiet).push(stroke);
+      }
+      curveCtx.lineCap = "round";
+      curveCtx.lineJoin = "round";
+      for (const stroke of quiet) paintCurve(curveCtx, stroke);
+      for (const stroke of hot) paintCurve(curveCtx, stroke);
+    };
+    renderer.on("afterRender", drawCurves);
 
     const recomputeLabels = () => {
       const { hidden, hovered, selected, fitRatio } = stateRef.current;
@@ -692,6 +767,7 @@ export function NetworkSigma({
       renderer.getCamera().removeListener("updated", scheduleLabels);
       renderer.getCamera().removeListener("updated", notifyView);
       viewListeners.clear();
+      renderer.off("afterRender", drawCurves);
       renderer.off("wheelStage", onWheel);
       renderer.off("wheelNode", onWheel);
       focusNeighborhoodRef.current = () => {};
@@ -760,6 +836,45 @@ function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>):
   const ratio = openingCameraRatio(span);
   void renderer.getCamera().animate({ x: (paddedMinX + paddedMaxX) / 2, y: (paddedMinY + paddedMaxY) / 2, ratio }, { duration: 420, easing: "quadraticInOut" });
   return ratio;
+}
+
+type CurveEdge = {
+  source: string;
+  target: string;
+  count: number;
+  accent: boolean;
+  sparse: boolean;
+  size: number;
+  bend: number;
+};
+
+type CurveStroke = {
+  x1: number;
+  y1: number;
+  cx: number;
+  cy: number;
+  x2: number;
+  y2: number;
+  color: string;
+  width: number;
+};
+
+/** A stable sideways bow so program links read as organic curves, not a stack of chords. */
+function curveBend(program: string, campus: string): number {
+  const seed = `${program}|${campus}`;
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) hash = (hash * 33 + seed.charCodeAt(i)) >>> 0;
+  const sign = hash & 1 ? 1 : -1;
+  return sign * (0.1 + ((hash >>> 1) % 120) / 1000);
+}
+
+function paintCurve(context: CanvasRenderingContext2D, stroke: CurveStroke) {
+  context.beginPath();
+  context.moveTo(stroke.x1, stroke.y1);
+  context.quadraticCurveTo(stroke.cx, stroke.cy, stroke.x2, stroke.y2);
+  context.strokeStyle = stroke.color;
+  context.lineWidth = stroke.width;
+  context.stroke();
 }
 
 /** Blend two css colors. Used while focus eases in and out. */

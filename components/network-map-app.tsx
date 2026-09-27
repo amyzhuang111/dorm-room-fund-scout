@@ -328,13 +328,13 @@ export function NetworkMapApp() {
         <div className="flex flex-wrap items-center gap-1">
           <button
             type="button"
-            className="h-7 rounded border border-neutral-200 bg-white/80 px-2 text-[11px] font-medium text-neutral-700"
+            className="h-9 rounded-md border border-neutral-300 bg-white px-2.5 text-[11px] font-medium text-neutral-900 shadow-sm"
             aria-expanded={filtersOpen}
             onClick={() => setFiltersOpen((open) => !open)}
           >
             {filtersOpen ? "Hide filters" : "Filters"}
           </button>
-          <label className="inline-flex h-7 items-center gap-1.5 rounded border border-neutral-200 bg-white/80 px-2 text-[11px] text-neutral-700">
+          <label className="inline-flex h-9 items-center gap-1.5 rounded-md border border-neutral-300 bg-white px-2.5 text-[11px] text-neutral-900 shadow-sm">
             <input type="checkbox" className="accent-black" checked={showIsolates} onChange={(event) => setShowIsolates(event.target.checked)} />
             Unlinked
           </label>
@@ -549,7 +549,7 @@ export function NetworkMapApp() {
           }}
           placeholder="Search the network"
           aria-label="Search the network"
-          className="h-8 w-full rounded border border-neutral-200 bg-white/90 px-2.5 text-[13px] text-black outline-none placeholder:text-neutral-400 focus:border-neutral-400"
+          className="h-9 w-full rounded-lg border border-neutral-300 bg-white px-3 text-[13px] text-black shadow-sm outline-none placeholder:text-neutral-400 focus:border-neutral-500"
         />
         {pinned && (
           <p className="mt-1 flex items-center justify-between gap-2 rounded border border-neutral-300 bg-white px-2 py-1 text-[11px] text-black shadow-sm">
@@ -574,7 +574,7 @@ export function NetworkMapApp() {
       </div>
 
       <div
-        className="absolute bottom-24 z-40 flex flex-col overflow-hidden rounded-md border border-neutral-900 bg-white shadow-md"
+        className="absolute bottom-24 z-40 flex flex-col gap-1.5"
         style={{ right: detailOpen ? "calc(min(20rem, 100% - 1.5rem) + 0.85rem)" : "1rem" }}
         role="group"
         aria-label="Map zoom"
@@ -606,6 +606,18 @@ export function NetworkMapApp() {
               <LegendItem shape="triangle" color="#9ca3af" label="Organization" />
             </div>
             <p className="mt-1 text-[10px] leading-snug text-neutral-600">Campus club / hub: campus color</p>
+            <div className="mt-1.5 flex items-end gap-2 border-t border-neutral-200 pt-1.5" aria-hidden="true">
+              <svg width="28" height="10" viewBox="0 0 28 10">
+                <line x1="1" y1="6" x2="27" y2="6" stroke="rgba(12,12,12,0.28)" strokeWidth="1" strokeLinecap="round" />
+              </svg>
+              <svg width="28" height="10" viewBox="0 0 28 10">
+                <line x1="1" y1="5.5" x2="27" y2="5.5" stroke="rgba(12,12,12,0.55)" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+              <svg width="28" height="10" viewBox="0 0 28 10">
+                <line x1="2" y1="5" x2="26" y2="5" stroke="rgba(12,12,12,0.9)" strokeWidth="3.5" strokeLinecap="round" />
+              </svg>
+            </div>
+            <p className="text-[10px] leading-snug text-neutral-800">Line weight = people on the link</p>
             <div className="mt-1 flex items-start justify-between gap-2">
               <p className="text-[10px] leading-snug text-neutral-400">Size is per capita. People and startups take their campus shade.</p>
               <button
@@ -915,7 +927,7 @@ function YearField({ label, value, onChange }: { label: string; value: number | 
 
 function ZoomButton({ label, onClick, children }: { label: string; onClick: () => void; children: ReactNode }) {
   return (
-    <button type="button" aria-label={label} onClick={onClick} className="h-9 min-w-9 border-b border-neutral-200 px-2.5 text-sm font-semibold text-black last:border-b-0 hover:bg-neutral-100">
+    <button type="button" aria-label={label} onClick={onClick} className="h-9 min-w-9 rounded-md border border-neutral-300 bg-white px-2.5 text-sm font-semibold text-black shadow-sm hover:bg-neutral-50">
       {children}
     </button>
   );

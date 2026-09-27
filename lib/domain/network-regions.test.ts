@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { featuredNationalKey } from "./featured-national";
-import { CAMPUS_LABEL_MIN_MEMBERS, LABEL_CLUB, bundleWidth, campusHubDegreeFloor, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, programLineColor, readableInk, selectVisibleLabels, zoomSizeFactor } from "../../components/network-style";
+import { CAMPUS_LABEL_MIN_MEMBERS, LABEL_CLUB, bundleInk, bundleOpacity, bundleWidth, campusHubDegreeFloor, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, programLineColor, readableInk, selectVisibleLabels, zoomSizeFactor } from "../../components/network-style";
 import { REGIONS, campusShade, packRegionCenters, regionForCampus, regionSwatch } from "./network-regions";
 
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
@@ -223,6 +223,11 @@ assert.ok(bundleWidth(2) > bundleWidth(1));
 assert.ok(bundleWidth(2) >= 2.2 && bundleWidth(2) < 2.7);
 assert.ok(bundleWidth(64) > bundleWidth(8));
 assert.equal(bundleWidth(4000), 6.5);
+assert.ok(bundleOpacity(1) < bundleOpacity(8));
+assert.ok(bundleOpacity(8) < bundleOpacity(64));
+assert.ok(bundleOpacity(1) >= 0.28 && bundleOpacity(1) < 0.35);
+assert.ok(bundleOpacity(64) > 0.85 && bundleOpacity(64) <= 0.92);
+assert.equal(bundleInk(1), "rgba(12, 12, 12, 0.280)");
 
 const packed = packRegionCenters(
   [

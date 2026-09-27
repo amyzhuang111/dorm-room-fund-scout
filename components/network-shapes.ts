@@ -2,8 +2,6 @@ import { NodeSquareProgram } from "@sigma/node-square";
 import { NodeCircleProgram, type NodeHoverDrawingFunction, type NodeLabelDrawingFunction } from "sigma/rendering";
 import { LABEL_CAMPUS, LABEL_REGION, REGION_TRACKING } from "./network-style";
 
-const LABEL_FONT = "500 12px Satoshi, Arial, sans-serif";
-
 export const drawHaloLabel: NodeLabelDrawingFunction = (context, data, settings) => {
   if (!data.label) return;
   const marker = Boolean((data as { marker?: boolean }).marker);
@@ -64,37 +62,56 @@ function drawTracked(context: CanvasRenderingContext2D, text: string, x: number,
 
 export const drawLightHover: NodeHoverDrawingFunction = (context, data, settings) => {
   context.beginPath();
-  context.arc(data.x, data.y, data.size + 2, 0, Math.PI * 2);
+  context.arc(data.x, data.y, data.size + 3, 0, Math.PI * 2);
   context.strokeStyle = "#111111";
-  context.lineWidth = 1;
+  context.lineWidth = 1.25;
   context.stroke();
   const text = (data as { fullLabel?: string }).fullLabel || data.label;
   if (!text) return;
   const tip = (data as { signalTip?: string }).signalTip;
+  const links = (data as { links?: number }).links;
+  const linkLine = links != null && links > 0 ? `${links.toLocaleString()} connections` : null;
   const size = settings.labelSize;
-  context.font = `${settings.labelWeight} ${size}px ${settings.labelFont}`;
+  context.font = `600 ${size}px ${settings.labelFont}`;
   const titleWidth = context.measureText(text).width;
   context.font = "11px Satoshi, Arial, sans-serif";
   const tipWidth = tip ? context.measureText(tip).width : 0;
-  const width = Math.max(titleWidth, tipWidth);
-  const x = data.x + data.size + 8;
-  const y = data.y - size / 2 - 4;
-  const boxW = width + 12;
-  const boxH = tip ? size + 22 : size + 8;
+  const linkWidth = linkLine ? context.measureText(linkLine).width : 0;
+  const width = Math.max(titleWidth, tipWidth, linkWidth);
+  const boxW = width + 16;
+  const rows = 1 + (linkLine ? 1 : 0) + (tip ? 1 : 0);
+  const boxH = 10 + size + (rows - 1) * 14;
+  const viewW = context.canvas.width / (window.devicePixelRatio || 1);
+  let x = data.x + data.size + 10;
+  if (x + boxW > viewW - 12) x = Math.max(8, data.x - data.size - 10 - boxW);
+  const y = data.y - size / 2 - 8;
+  context.save();
+  context.shadowColor = "rgba(17, 17, 17, 0.14)";
+  context.shadowBlur = 14;
+  context.shadowOffsetY = 4;
   context.fillStyle = "#ffffff";
   context.strokeStyle = "#111111";
   context.lineWidth = 1;
   context.beginPath();
-  context.roundRect(x, y, boxW, boxH, 4);
+  context.roundRect(x, y, boxW, boxH, 6);
   context.fill();
+  context.shadowColor = "transparent";
   context.stroke();
+  context.restore();
   context.fillStyle = (data as { labelColor?: string }).labelColor || "#111111";
-  context.font = LABEL_FONT;
-  context.fillText(text, x + 6, data.y + size / 3);
+  context.font = `600 ${size}px ${settings.labelFont}`;
+  context.fillText(text, x + 8, y + size + 2);
+  let lineY = y + size + 16;
+  if (linkLine) {
+    context.font = "11px Satoshi, Arial, sans-serif";
+    context.fillStyle = "#111111";
+    context.fillText(linkLine, x + 8, lineY);
+    lineY += 14;
+  }
   if (tip) {
     context.font = "11px Satoshi, Arial, sans-serif";
     context.fillStyle = "#404040";
-    context.fillText(tip, x + 6, data.y + size / 3 + 14);
+    context.fillText(tip, x + 8, lineY);
   }
 };
 
