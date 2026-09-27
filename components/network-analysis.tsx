@@ -41,16 +41,16 @@ export function NetworkAnalysis({ data }: { data: NetworkAnalysis }) {
   return (
     <section className="bg-surface px-4 py-6 sm:px-6" aria-label="Network analysis">
       <div className="mx-auto flex max-w-[1400px] flex-col gap-4">
-        <Heatmap table={data.metros} />
         <Heatmap table={data.programs} />
         <Density table={data.density} />
+        <Heatmap table={data.metros} defaultOpen={false} />
       </div>
     </section>
   );
 }
 
-function Heatmap({ table }: { table: HeatmapTable }) {
-  const [open, setOpen] = useState(true);
+function Heatmap({ table, defaultOpen = true }: { table: HeatmapTable; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   const [active, setActive] = useState<string | null>(null);
   let max = 0;
   for (const row of table.rows) {
