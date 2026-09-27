@@ -171,6 +171,22 @@ export function isCommonName(tokens: string[], duplicateCount: number): boolean 
   return COMMON_FIRST.has(tokens[0].toLowerCase()) && COMMON_LAST.has(tokens[1].toLowerCase());
 }
 
+export function slugLooksLikeName(url: string, name: string): boolean {
+  const slug = (url.split("/in/")[1] ?? "").toLowerCase();
+  const tokens = nameTokens(name).map((token) => token.toLowerCase());
+  if (tokens.length < 2 || slug.length < 3) return false;
+  const first = tokens[0];
+  const last = tokens[tokens.length - 1];
+  const compact = slug.replace(/[^a-z]/g, "");
+  const firstStem = first.slice(0, Math.min(5, first.length));
+  const firstOk = first.length >= 3 && compact.startsWith(firstStem);
+  if (!firstOk) return false;
+  if (last.length >= 4) return compact.includes(last.slice(0, Math.min(6, last.length)));
+  const boundary = new RegExp(`(^|[^a-z])${last.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^a-z]|$)`).test(slug);
+  const glued = compact.endsWith(last);
+  return boundary || glued;
+}
+
 export function normalizeLinkedInUrl(raw: string | null | undefined): string | null {
   if (!raw) return null;
   const match = raw.match(/https?:\/\/(?:[\w.-]+\.)?linkedin\.com\/in\/([A-Za-z0-9\-_%]{3,100})/i);
@@ -223,9 +239,9 @@ interface Scored {
   score: number;
 }
 
-function scoreHit(hit: MatchHit, tokens: string[], schools: string[], startups: string[], programs: string[]): Scored | null {
+function scoreHit(hit: MatchHit, name: string, tokens: string[], schools: string[], startups: string[], programs: string[]): Scored | null {
   const url = normalizeLinkedInUrl(hit.url);
-  if (!url) return null;
+  if (!url || !slugLooksLikeName(url, name)) return null;
   const text = `${hit.title}\n${hit.snippet}`;
   if (!textHasTokens(text, tokens)) return null;
   const nameTokensLower = new Set(tokens.map((token) => token.toLowerCase()));
@@ -268,7 +284,7 @@ export function judgeHits(input: {
   if (tokens.length < 2) return { outcome: "reject" };
   const scored: Scored[] = [];
   for (const hit of input.hits) {
-    const row = scoreHit(hit, tokens, input.schools, input.startups, input.programs);
+    const row = scoreHit(hit, input.name, tokens, input.schools, input.startups, input.programs);
     if (row) scored.push(row);
   }
   if (scored.length === 0) return { outcome: "reject" };
@@ -316,23 +332,27 @@ export function nearbyLinkedIn(html: string, fullName: string): { url: string; e
   if (tokens.length < 2) return [];
   const found: { url: string; excerpt: string }[] = [];
   const seen = new Set<string>();
-  const re = /https?:\/\/(?:[\w.-]+\.)?linkedin\.com\/in\/[A-Za-z0-9\-_%]{3,100}/gi;
+  const re = /<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]{0,180}?)<\/a>/gi;
   let match: RegExpExecArray | null;
   while ((match = re.exec(html))) {
-    const url = normalizeLinkedInUrl(match[0]);
-    if (!url || seen.has(url)) continue;
-    const start = Math.max(0, match.index - 350);
-    const end = Math.min(html.length, match.index + match[0].length + 350);
-    const excerpt = html
-      .slice(start, end)
-      .replace(/<script[\s\S]*?<\/script>/gi, " ")
-      .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    const href = match[1].replace(/&amp;/g, "&");
+    if (!/linkedin\.com\/in\//i.test(href)) continue;
+    const absolute = href.startsWith("http") ? href : `https://${href.replace(/^\/+/, "")}`;
+    const url = normalizeLinkedInUrl(absolute);
+    if (!url || seen.has(url) || !slugLooksLikeName(url, fullName)) continue;
+    const anchor = match[2]
       .replace(/<[^>]+>/g, " ")
       .replace(/&amp;/g, "&")
-      .replace(/&#39;|&apos;/g, "'")
-      .replace(/&quot;/g, '"')
       .replace(/\s+/g, " ")
       .trim();
+    const before = html
+      .slice(Math.max(0, match.index - 160), match.index)
+      .replace(/<[^>]+>/g, " ")
+      .replace(/&amp;/g, "&")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(-80);
+    const excerpt = `${before} ${anchor}`.trim();
     if (!textHasTokens(excerpt, tokens)) continue;
     seen.add(url);
     found.push({ url, excerpt: excerpt.slice(0, 400) });

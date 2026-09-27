@@ -33,6 +33,7 @@ import {
   nearbyLinkedIn,
   normalizeLinkedInUrl,
   schoolPhrases,
+  slugLooksLikeName,
   usableOrgName,
   type AcceptMatch,
   type MatchHit,
@@ -442,7 +443,7 @@ function ownHit(html: string, person: Person, pageUrl: string): MatchHit | null 
     return { url: near[0].url, title: person.displayName, snippet: near[0].excerpt, query: pageUrl, fromSite: true };
   }
   if (near.length > 1) return null;
-  const all = allLinkedIns(html);
+  const all = allLinkedIns(html).filter((url) => slugLooksLikeName(url, person.name));
   if (all.length !== 1) return null;
   return { url: all[0], title: person.displayName, snippet: stripTags(html).slice(0, 320), query: pageUrl, fromSite: true };
 }
@@ -456,6 +457,10 @@ class SearchBrowser {
   private lastSearch = 0;
   disabledUntil = new Map<string, number>();
   private searchCount = 0;
+
+  enginesExhausted(): boolean {
+    return ["google", "bing", "duckduckgo"].every((engine) => (this.disabledUntil.get(engine) ?? 0) > Date.now());
+  }
 
   async start() {
     const ready = await this.cdpUp();
@@ -531,12 +536,13 @@ class SearchBrowser {
     });
   }
 
-  async search(query: string, person: Person): Promise<MatchHit[]> {
+  async search(query: string, person: Person): Promise<{ hits: MatchHit[]; blocked: boolean }> {
     const engines = ["google", "bing", "duckduckgo"];
     this.searchCount += 1;
     const start = this.searchCount % engines.length;
     const order = [...engines.slice(start), ...engines.slice(0, start)].filter((engine) => (this.disabledUntil.get(engine) ?? 0) < Date.now());
     const tried = order.length > 0 ? order : ["google"];
+    let blocked = false;
     for (const engine of tried) {
       const gap = SEARCH_GAP_MS - (Date.now() - this.lastSearch);
       if (gap > 0) await sleep(gap);
@@ -545,18 +551,21 @@ class SearchBrowser {
         const result =
           engine === "google" ? await this.searchGoogle(query, person) : engine === "bing" ? await searchBing(query, person) : await searchDuckDuckGo(query, person);
         if (result.blocked) {
+          blocked = true;
           this.disabledUntil.set(engine, Date.now() + 90_000);
           console.log(`  ${engine} blocked, rotating`);
           continue;
         }
-        if (result.hits.length > 0) return result.hits.map((hit) => ({ ...hit, query }));
-        if (engine === "google") return [];
+        const hits = result.hits.map((hit) => ({ ...hit, query }));
+        if (hits.length > 0) return { hits, blocked: false };
+        if (engine === "google") return { hits: [], blocked: false };
       } catch (error) {
+        blocked = true;
         this.disabledUntil.set(engine, Date.now() + 60_000);
         console.log(`  ${engine} error: ${error instanceof Error ? error.message : error}`);
       }
     }
-    return [];
+    return { hits: [], blocked };
   }
 
   private async searchGoogle(query: string, person: Person): Promise<{ blocked: boolean; hits: MatchHit[] }> {
@@ -935,9 +944,16 @@ async function main() {
       }
       const hits: MatchHit[] = [];
       let ambiguousReason = "";
-      for (const query of queriesFor(person)) {
+      let blockedQueries = 0;
+      const queries = queriesFor(person);
+      for (const query of queries) {
         const found = await browser.search(query, person);
-        hits.push(...found);
+        if (found.blocked && found.hits.length === 0) {
+          blockedQueries += 1;
+          if (browser.enginesExhausted()) break;
+          continue;
+        }
+        hits.push(...found.hits);
         const partial = judgeHits({
           name: person.name,
           schools: person.schools,
@@ -957,6 +973,10 @@ async function main() {
         commonName: person.commonName,
         hits,
       });
+      if (hits.length === 0 && queries.length > 0 && blockedQueries === queries.length) {
+        console.log("Search engines are blocked. Stopping so the remaining people can be retried.");
+        break;
+      }
       if (judged.outcome === "accept") {
         const outcome = storeMatch(db, person, judged, judged.fromSite ? "site" : "search");
         remember(checkpoint, person.id, {

@@ -6,6 +6,7 @@ import {
   nearbyLinkedIn,
   normalizeLinkedInUrl,
   schoolPhrases,
+  slugLooksLikeName,
   usableOrgName,
 } from "./linkedin-free-match";
 
@@ -17,6 +18,12 @@ assert.equal(nameTokens("Milidu J.").length < 2, true);
 assert.equal(normalizeLinkedInUrl("https://ca.linkedin.com/in/zaais-van-zyl?trk=public"), "https://www.linkedin.com/in/zaais-van-zyl");
 assert.equal(normalizeLinkedInUrl("https://www.linkedin.com/pub/dir/Milidu"), null);
 assert.equal(normalizeLinkedInUrl("https://www.linkedin.com/company/devpost"), null);
+assert.equal(slugLooksLikeName("https://www.linkedin.com/in/james-wright6", "James Wright"), true);
+assert.equal(slugLooksLikeName("https://www.linkedin.com/in/allan-guo", "Allan Guo"), true);
+assert.equal(slugLooksLikeName("https://www.linkedin.com/in/sachchitnis", "Eden Growney"), false);
+assert.equal(slugLooksLikeName("https://www.linkedin.com/in/jason-li", "Jason Li"), true);
+assert.equal(slugLooksLikeName("https://www.linkedin.com/in/skylerji", "Skyler Ji"), true);
+assert.equal(slugLooksLikeName("https://www.linkedin.com/in/zipingye", "Ziping Ye"), true);
 
 assert.equal(usableOrgName("Labs"), null);
 assert.equal(usableOrgName("Nematex"), "Nematex");
@@ -147,12 +154,12 @@ const tied = judgeHits({
   commonName: false,
   hits: [
     {
-      url: "https://www.linkedin.com/in/milidu-one",
+      url: "https://www.linkedin.com/in/milidu-jayaweera",
       title: "Milidu Jayaweera",
       snippet: "Milidu Jayaweera at Brown University",
     },
     {
-      url: "https://www.linkedin.com/in/milidu-two",
+      url: "https://www.linkedin.com/in/milidu-jayaweera-2",
       title: "Milidu Jayaweera",
       snippet: "Milidu Jayaweera, Brown University",
     },
@@ -184,5 +191,26 @@ const near = nearbyLinkedIn(page, "Riddhima Kapoor");
 assert.equal(near.length, 1);
 assert.equal(near[0].url, "https://www.linkedin.com/in/riddhima-kapoor");
 assert.equal(nearbyLinkedIn(page, "Someone Else").length, 0);
+
+const distant = `<p>Eden Growney, McCormick '26</p>${" word".repeat(80)}<a href="https://www.linkedin.com/in/sachchitnis">Sach Chitnis</a>`;
+assert.equal(nearbyLinkedIn(distant, "Eden Growney").length, 0);
+
+const wrongSlug = judgeHits({
+  name: "Eden Growney",
+  schools: ["Northwestern"],
+  startups: ["Xpnse AI"],
+  programs: [],
+  commonName: false,
+  hits: [
+    {
+      url: "https://www.linkedin.com/in/sachchitnis",
+      title: "Eden Growney",
+      snippet: "Eden Growney, McCormick '26",
+      fromSite: true,
+      query: "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+    },
+  ],
+});
+assert.equal(wrongSlug.outcome, "reject");
 
 console.log("linkedin-free-match.test.ts ok");
