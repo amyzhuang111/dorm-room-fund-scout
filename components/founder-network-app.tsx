@@ -176,13 +176,14 @@ function NetworkBody({
     const hiddenMode = current.feedback === "hidden";
     const nodes = graph.nodes.filter((item) => {
       if (item.type === "university") return true;
+      if (current.confirmed === "1" && item.confirmed !== true) return false;
       const entityType = item.type === "person" ? "person" : "project";
       const hidden = isHidden(records, { entityType, entityId: item.id, name: item.label, domain: domainKey(item.linkUrl) });
       return hiddenMode ? hidden : !hidden;
     });
     const keep = new Set(nodes.map((item) => item.id));
     return { ...graph, nodes, edges: graph.edges.filter((edge) => keep.has(edge.source) && keep.has(edge.target)) };
-  }, [graph, records, current.feedback]);
+  }, [graph, records, current.feedback, current.confirmed]);
 
   const campusName = current.university ? (universities.find((u) => u.id === current.university)?.name ?? "campus") : "All campuses";
   const shell = company;

@@ -105,7 +105,7 @@ function DiscoverBody({
     const viewed = companiesInView(catalog.candidates, records, likes, query);
     const seen = new Set(viewed.map((company) => company.id));
     const extras = catalog.candidates
-      .filter((company) => !seen.has(company.id) && userCompanyMatches(company, query))
+      .filter((company) => !seen.has(company.id) && userCompanyMatches(company, query) && (query.confirmed !== "1" || company.verificationStatus === "confirmed"))
       .map((company) => ({ ...company, boostNote: null, boostScore: 0 }));
     return [...viewed, ...extras];
   }, [catalog.candidates, records, likes, query]);
@@ -239,13 +239,14 @@ function NetworkSlot({
     const hiddenMode = current.feedback === "hidden";
     const nodes = withUsers.nodes.filter((node) => {
       if (node.type === "university") return true;
+      if (current.confirmed === "1" && node.confirmed !== true) return false;
       const entityType = node.type === "person" ? "person" : "project";
       const hidden = isHidden(records, { entityType, entityId: node.id, name: node.label, domain: domainKey(node.linkUrl) });
       return hiddenMode ? hidden : !hidden;
     });
     const keep = new Set(nodes.map((node) => node.id));
     return { ...withUsers, nodes, edges: withUsers.edges.filter((edge) => keep.has(edge.source) && keep.has(edge.target)) };
-  }, [graph, records, current.feedback, state, current.university]);
+  }, [graph, records, current.feedback, current.confirmed, state, current.university]);
 
   if (!current.university) return null;
   if (!visible || visible.nodes.length === 0) {

@@ -79,6 +79,7 @@ interface Filters {
   orgTier: OrgTierMode;
   orgSections: HotspotSectionId[];
   drfHops: boolean;
+  confirmedOnly: boolean;
 }
 
 function enrollCaption(status: string | null, basis: MapNode["enrollBasis"]): string | null {
@@ -171,6 +172,7 @@ export function NetworkMapApp() {
           orgTier: "all",
           orgSections: [...ORG_SECTIONS],
           drfHops: false,
+          confirmedOnly: false,
         };
         defaultsRef.current = initial;
         setFilters(initial);
@@ -370,6 +372,16 @@ export function NetworkMapApp() {
             </button>
           </div>
           <div className="flex-1 overflow-y-auto px-3 pb-3">
+            <FilterGroup title="Evidence">
+              <button
+                type="button"
+                className={`rounded border px-2 py-1 text-[11px] font-medium ${filters.confirmedOnly ? "border-black bg-black text-white" : "border-black/20 bg-white text-black"}`}
+                onClick={() => setFilters({ ...filters, confirmedOnly: !filters.confirmedOnly })}
+              >
+                Confirmed only
+              </button>
+              <p className="text-[11px] text-neutral-600">Hides people, startups, and organizations that are not marked confirmed from a public source. Campuses stay on the map.</p>
+            </FilterGroup>
             <FilterGroup title="People">
               <div className="grid grid-cols-3 gap-1">
                 {(
@@ -763,11 +775,12 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
   for (const node of graph.nodes) {
     if (node.type !== "startup") continue;
     const userNode = node.id.startsWith("user_");
+    const confirmedHit = !filters.confirmedOnly || node.verified === true;
     const campusHit = campusAll || campusesOf(node).some((id) => filters.campuses.includes(id));
     const sectorHit = sectorAll || (node.sector != null && filters.sectors.includes(node.sector));
     const tierHit = userNode || tierAll || filters.tiers.includes(node.tier ?? "Untiered");
     const stageHit = userNode || stageAll || filters.stages.includes(node.stage ?? "Unknown");
-    if (filters.nodeTypes.includes("startup") && campusHit && sectorHit && tierHit && stageHit) startupOk.add(node.id);
+    if (filters.nodeTypes.includes("startup") && campusHit && sectorHit && tierHit && stageHit && confirmedHit) startupOk.add(node.id);
   }
 
   const sectorPeople = new Set<string>();
@@ -783,6 +796,7 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
   for (const node of graph.nodes) {
     if (node.type !== "person") continue;
     const userPerson = node.id.startsWith("ufounder_");
+    const confirmedHit = !filters.confirmedOnly || node.verified === true;
     const campusHit = campusAll || campusesOf(node).some((id) => filters.campuses.includes(id));
     const tierHit = userPerson || tierAll || filters.tiers.includes(node.tier ?? "Untiered");
     const enrollHit = enrollAll || (userPerson && node.enroll == null) || (node.enroll != null && filters.enroll.includes(node.enroll));
@@ -790,6 +804,7 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
     if (
       filters.nodeTypes.includes("person") &&
       campusHit &&
+      confirmedHit &&
       tierHit &&
       enrollHit &&
       personRoleOk(node, filters.peopleMode) &&
@@ -829,7 +844,7 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
     }
     if (node.type === "program") {
       const campusHit = campusAll || campusesOf(node).some((id) => filters.campuses.includes(id));
-      let show = filters.nodeTypes.includes("program") && campusHit;
+      let show = filters.nodeTypes.includes("program") && campusHit && (!filters.confirmedOnly || node.verified === true);
       if (show && narrowed) {
         show = graph.edges.some((edge) => edge.type === "member_of" && (peopleOk.has(edge.source) || peopleOk.has(edge.target)) && (edge.source === node.id || edge.target === node.id));
       }
@@ -844,7 +859,7 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
       const sections = node.orgSections ?? [];
       const sectionAll = filters.orgSections.length === ORG_SECTIONS.length;
       const sectionHit = sectionAll || sections.some((section) => filters.orgSections.includes(section));
-      let show = filters.nodeTypes.includes("organization") && campusHit && tierHit && sectionHit;
+      let show = filters.nodeTypes.includes("organization") && campusHit && tierHit && sectionHit && (!filters.confirmedOnly || node.verified === true);
       if (show && !showIsolates && (node.linkedPeople ?? 0) === 0 && (node.linkedStartups ?? 0) === 0 && !featuredNationalKey(node.label)) show = false;
       if (show && narrowed) {
         show = graph.edges.some((edge) => edge.type === "member_of" && (edge.source === node.id || edge.target === node.id) && (peopleOk.has(edge.source) || peopleOk.has(edge.target)));
@@ -852,7 +867,7 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
       if (!show) hidden.add(node.id);
       continue;
     }
-    let show = filters.nodeTypes.includes("investor");
+    let show = filters.nodeTypes.includes("investor") && (!filters.confirmedOnly || node.verified === true);
     if (show && (!campusAll || narrowed)) {
       show = graph.edges.some((edge) => edge.type === "invested_in" && edge.source === node.id && startupOk.has(edge.target));
     }

@@ -60,6 +60,8 @@ export interface MapNode {
   signalScore: number;
   /** Campus or hub organization. Its label is drawn at the cluster center on the fitted view. */
   anchor?: boolean;
+  /** verification_status is confirmed. Campuses are always confirmed. */
+  verified?: boolean;
   potential: boolean;
   /** Stored linkedin.com/in path. Omitted when the person has neither a confirmed alias nor an unverified candidate. */
   linkedinUrl?: string;
@@ -789,6 +791,7 @@ function assembleNetworkMap(): MapGraph {
       stage: null,
       enroll: null,
       potential: false,
+      verified: true,
     });
   }
   for (const person of people) {
@@ -811,6 +814,7 @@ function assembleNetworkMap(): MapGraph {
       year: classYear(person.enrollment_grad_year, person.enrollment_label),
       founder: founderIds.has(person.id),
       potential: person.founder_status === "potential",
+      verified: person.verification_status === "confirmed",
       ...(linkedin ? { linkedinUrl: linkedin.url, linkedinStatus: linkedin.status } : {}),
     });
   }
@@ -831,6 +835,7 @@ function assembleNetworkMap(): MapGraph {
       stage: stageByProject.get(startup.id)?.stage ?? null,
       enroll: null,
       potential: false,
+      verified: startup.verification_status === "confirmed",
     });
   }
   for (const program of programs) {
@@ -1552,6 +1557,57 @@ function pullCampusesBySimilarity(live: LiveNode[], edges: MapEdge[], primary: M
   recenterRegions(byRegion, cores);
   holdRegionCores(byRegion, cores);
   seatWaterlooBesideToronto(live, primary);
+  drawPriorityCampusesInward(live);
+}
+
+/**
+ * Penn is the priority campus, then Berkeley. Slide each of those regions
+ * toward the origin without splitting the color group. Other regions move
+ * only when a disc would land on top of the priority group.
+ */
+function drawPriorityCampusesInward(live: LiveNode[]) {
+  const campuses = live.filter((node) => node.type === "campus");
+  const shiftRegion = (regionId: string, anchorId: string, keep: number) => {
+    const group = campuses.filter((node) => node.regionId === regionId);
+    const anchor = group.find((node) => node.id === anchorId);
+    if (!anchor || !group.length) return;
+    const dist = Math.hypot(anchor.x, anchor.y);
+    if (dist < 12) return;
+    const dx = anchor.x * (keep - 1);
+    const dy = anchor.y * (keep - 1);
+    for (const node of group) {
+      node.x += dx;
+      node.y += dy;
+      node.tx = node.x;
+      node.ty = node.y;
+    }
+  };
+  shiftRegion("philly", "univ_penn", 0.55);
+  shiftRegion("west", "univ_berkeley", 0.8);
+  const priority = new Set(campuses.filter((node) => node.regionId === "philly" || node.regionId === "west").map((node) => node.id));
+  for (let iter = 0; iter < 8; iter++) {
+    for (const campus of campuses) {
+      if (priority.has(campus.id)) continue;
+      for (const held of campuses) {
+        if (!priority.has(held.id)) continue;
+        let dx = campus.x - held.x;
+        let dy = campus.y - held.y;
+        let dist = Math.hypot(dx, dy);
+        const min = 18;
+        if (dist >= min) continue;
+        if (dist < 1) {
+          dx = campus.x || 1;
+          dy = campus.y;
+          dist = Math.hypot(dx, dy) || 1;
+        }
+        const push = (min - dist) / dist;
+        campus.x += dx * push;
+        campus.y += dy * push;
+        campus.tx = campus.x;
+        campus.ty = campus.y;
+      }
+    }
+  }
 }
 
 /** Cross-region leans may shift a border campus, but the color group's center stays put. */
@@ -2205,6 +2261,9 @@ function campusPairGap(a: LiveNode, b: LiveNode, radiusOf: (id: string) => numbe
   const pair = `${a.id}|${b.id}`;
   if (pair === "univ_queens|univ_cambridge" || pair === "univ_cambridge|univ_queens") gap = Math.max(gap, 28);
   else if (pair.includes("univ_laurentian") && (pair.includes("univ_queens") || pair.includes("univ_cambridge"))) gap = Math.max(gap, 24);
+  // Penn is the priority campus, then Berkeley. Their neighbors sit a little closer.
+  if (a.id === "univ_penn" || b.id === "univ_penn") gap *= 0.78;
+  else if (a.id === "univ_berkeley" || b.id === "univ_berkeley") gap *= 0.9;
   return gap;
 }
 
