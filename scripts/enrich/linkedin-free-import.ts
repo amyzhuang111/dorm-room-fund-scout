@@ -239,6 +239,23 @@ function ensureSource(db: ReturnType<typeof getDb>) {
   ).run(SOURCE_ID, nowIso());
 }
 
+function linkedInOwnedByOther(db: ReturnType<typeof getDb>, personId: string, url: string): boolean {
+  const aliasHit = db
+    .prepare(`SELECT id FROM people WHERE id != ? AND aliases_json LIKE ? LIMIT 1`)
+    .get(personId, `%linkedin:${url}"%`) as { id: string } | undefined;
+  if (aliasHit) return true;
+  const claimHit = db
+    .prepare(
+      `SELECT entity_id FROM claims
+       WHERE entity_type = 'person' AND entity_id != ? AND source_url = ?
+         AND claim_type IN ('linkedin_alias_discovered', 'linkedin_candidate')
+         AND verification_state IN ('corroborated', 'likely')
+       LIMIT 1`
+    )
+    .get(personId, url) as { entity_id: string } | undefined;
+  return Boolean(claimHit);
+}
+
 function storeMatch(db: ReturnType<typeof getDb>, person: { id: string; name: string }, match: AcceptMatch, engine: string): Outcome {
   const now = nowIso();
   const proofUrl = match.fromSite && /^https?:\/\//.test(match.query) ? match.query : searchProofUrl(match.query, engine);
@@ -258,6 +275,7 @@ function storeMatch(db: ReturnType<typeof getDb>, person: { id: string; name: st
     const row = db.prepare(`SELECT aliases_json FROM people WHERE id = ?`).get(person.id) as { aliases_json: string } | undefined;
     if (!row) return "not_found";
     if (hasLinkedInAlias(row.aliases_json)) return "existing";
+    if (linkedInOwnedByOther(db, person.id, match.url)) return "existing";
     if (match.confidence === "confirmed") {
       const aliases = JSON.parse(row.aliases_json || "[]") as string[];
       if (!aliases.some((alias) => alias.includes(match.url))) aliases.push(`linkedin:${match.url}`);

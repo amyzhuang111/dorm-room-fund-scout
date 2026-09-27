@@ -236,6 +236,23 @@ function appendResult(row: Record<string, unknown>) {
   fs.appendFileSync(RESULTS_PATH, `${JSON.stringify(row)}\n`);
 }
 
+function linkedInOwnedByOther(db: ReturnType<typeof getDb>, personId: string, url: string): boolean {
+  const aliasHit = db
+    .prepare(`SELECT id FROM people WHERE id != ? AND aliases_json LIKE ? LIMIT 1`)
+    .get(personId, `%linkedin:${url}"%`) as { id: string } | undefined;
+  if (aliasHit) return true;
+  const claimHit = db
+    .prepare(
+      `SELECT entity_id FROM claims
+       WHERE entity_type = 'person' AND entity_id != ? AND source_url = ?
+         AND claim_type IN ('linkedin_alias_discovered', 'linkedin_candidate')
+         AND verification_state IN ('corroborated', 'likely')
+       LIMIT 1`
+    )
+    .get(personId, url) as { entity_id: string } | undefined;
+  return Boolean(claimHit);
+}
+
 function storeMatch(
   db: ReturnType<typeof getDb>,
   person: { id: string; name: string },
@@ -260,6 +277,7 @@ function storeMatch(
     const row = db.prepare(`SELECT aliases_json FROM people WHERE id = ?`).get(person.id) as { aliases_json: string } | undefined;
     if (!row) return "existing";
     if (hasLinkedInAlias(row.aliases_json)) return "existing";
+    if (linkedInOwnedByOther(db, person.id, match.url)) return "existing";
     if (match.confidence === "confirmed") {
       const aliases = JSON.parse(row.aliases_json || "[]") as string[];
       if (!aliases.some((alias) => alias.includes(match.url))) aliases.push(`linkedin:${match.url}`);
@@ -313,17 +331,17 @@ function applyResults(db: ReturnType<typeof getDb>) {
   }
   ensureSource(db);
   const lines = fs.readFileSync(RESULTS_PATH, "utf8").split("\n").filter(Boolean);
-  const seen = new Set<string>();
-  let wrote = 0;
-  let skipped = 0;
+  const best = new Map<string, { person_id: string; name: string; url: string; confidence: string; page: string }>();
   for (const line of lines) {
     const row = JSON.parse(line) as { person_id: string; name: string; url: string; confidence: string; page: string };
     const key = `${row.person_id}|${row.url}`;
-    if (seen.has(key)) {
-      skipped += 1;
-      continue;
-    }
-    seen.add(key);
+    const prev = best.get(key);
+    // A later confirmed row for the same profile replaces an earlier likely row.
+    if (!prev || (prev.confidence !== "confirmed" && row.confidence === "confirmed")) best.set(key, row);
+  }
+  let wrote = 0;
+  let skipped = 0;
+  for (const row of best.values()) {
     const personId = resolvePersonId(db, row.person_id);
     const person = db.prepare(`SELECT id, name FROM people WHERE id = ?`).get(personId) as { id: string; name: string } | undefined;
     if (!person) {
