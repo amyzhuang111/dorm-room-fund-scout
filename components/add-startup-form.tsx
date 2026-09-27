@@ -169,14 +169,14 @@ export function AddStartupForm({
             <ul className="absolute z-20 mt-1 max-h-56 w-full overflow-y-auto rounded-md border border-black bg-white shadow-lg" role="listbox">
               {shown.map((campus) => (
                 <li key={campus.id}>
-                  <button type="button" className="block w-full px-2.5 py-1.5 text-left text-sm font-medium normal-case hover:bg-neutral-100" onClick={() => chooseCampus(campus)}>
+                  <button type="button" className="block w-full px-2.5 py-1.5 text-left text-sm font-medium normal-case hover:bg-neutral-100" onMouseDown={(event) => event.preventDefault()} onClick={() => chooseCampus(campus)}>
                     {campus.name}
                   </button>
                 </li>
               ))}
               {query.length >= 2 && !exact && (
                 <li>
-                  <button type="button" className="block w-full px-2.5 py-1.5 text-left text-sm font-medium normal-case hover:bg-neutral-100" onClick={chooseOther}>
+                  <button type="button" className="block w-full px-2.5 py-1.5 text-left text-sm font-medium normal-case hover:bg-neutral-100" onMouseDown={(event) => event.preventDefault()} onClick={chooseOther}>
                     Other university: {campusQuery.trim()}
                   </button>
                 </li>

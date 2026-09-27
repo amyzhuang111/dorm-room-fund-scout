@@ -79,6 +79,12 @@ assert.equal(dupes.some((hit) => hit.id === "proj_other"), false);
 
 const similar = findDuplicates({ name: "Northstarr", websiteUrl: null, founderNames: [] }, records);
 assert.ok(similar.some((hit) => hit.id === "proj_north" && hit.reason.includes("Similar")));
+const phrase = findDuplicates({ name: "Northstar Robotics", websiteUrl: null, founderNames: [] }, records);
+assert.ok(phrase.some((hit) => hit.id === "proj_north" && hit.reason.includes("Similar")));
+const unrelated = findDuplicates({ name: "Harborline", websiteUrl: "https://harborline.example", founderNames: [] }, [
+  { id: "proj_harbor", kind: "startup", name: "Harbor", campusName: "Michigan", websiteUrl: "https://harbor.example", href: "/startup/proj_harbor" },
+]);
+assert.equal(unrelated.length, 0);
 
 const universities = [
   {

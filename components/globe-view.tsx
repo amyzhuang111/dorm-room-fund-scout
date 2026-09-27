@@ -592,6 +592,10 @@ export const GlobeView = memo(function GlobeView({
       if (map.getLayer("user-added-icons")) {
         map.setLayoutProperty("user-added-icons", "visibility", geoMode === "campus" ? "visible" : "none");
       }
+      map.getContainer().setAttribute(
+        "aria-label",
+        userMarkers.length ? `User-added: ${userMarkers.map((marker) => marker.name).join(", ")}` : "Campus map"
+      );
     } catch {
       // The style can still be settling on the first frame after load.
     }

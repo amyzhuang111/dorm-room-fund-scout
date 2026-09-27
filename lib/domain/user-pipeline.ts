@@ -235,7 +235,10 @@ function levenshtein(a: string, b: string): number {
 function namesClose(a: string, b: string): "exact" | "similar" | null {
   if (!a || !b || a.length < 3 || b.length < 3) return null;
   if (a === b) return "exact";
-  if (a.length >= 5 && b.length >= 5 && (a.includes(b) || b.includes(a))) return "similar";
+  if (a.length >= 5 && b.length >= 5) {
+    const [shorter, longer] = a.length <= b.length ? [a, b] : [b, a];
+    if (` ${longer} `.includes(` ${shorter} `)) return "similar";
+  }
   const dist = levenshtein(a, b);
   const max = Math.max(a.length, b.length);
   if (max >= 5 && dist <= 2 && dist / max <= 0.34) return "similar";
