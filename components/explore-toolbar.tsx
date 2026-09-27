@@ -7,7 +7,7 @@ import type { EnrollmentStatus } from "@/lib/domain/founder-status";
 import { EnrollmentChips } from "./enrollment-chips";
 import { ScoutLink, useScoutNav } from "./scout-nav";
 
-const VIEWS = ["globe", "network", "table"] as const;
+const VIEWS = ["globe", "table"] as const;
 
 function SearchField({
   basePath,
