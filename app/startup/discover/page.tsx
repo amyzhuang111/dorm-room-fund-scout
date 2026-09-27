@@ -1,8 +1,7 @@
 import { permanentRedirect } from "next/navigation";
 import { StartupDiscoverApp } from "@/components/startup-discover-app";
 import { mergedParamHref } from "@/lib/domain/entity-redirects";
-import { selectedEnrollment, type EnrollmentStatus } from "@/lib/domain/founder-status";
-import { buildScoutNetwork } from "@/lib/domain/network";
+import type { EnrollmentStatus } from "@/lib/domain/founder-status";
 import {
   getProjectDetail,
   listCampusArcs,
@@ -21,9 +20,17 @@ export default async function StartupDiscoverPage({
   const sp = await searchParams;
   const mergedProject = mergedParamHref("/startup/discover", sp, "project", "project");
   if (mergedProject) permanentRedirect(mergedProject);
+  // Network view was removed. Globe is the default when `view` is absent.
+  if (sp.view === "network") {
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(sp)) {
+      if (key !== "view" && value) params.set(key, value);
+    }
+    const qs = params.toString();
+    permanentRedirect(qs ? `/startup/discover?${qs}` : "/startup/discover");
+  }
   const universities = listUniversities();
   const review = await readReviewState();
-  const view = sp.view ?? "globe";
   const enrollment = {
     all: listFounderStatusCounts(),
     byUniversity: Object.fromEntries(universities.map((university) => [university.id, listFounderStatusCounts(university.id)])) as Record<
@@ -42,11 +49,6 @@ export default async function StartupDiscoverPage({
       records={review.records}
       likes={review.likes}
       initialDetail={sp.project ? getProjectDetail(sp.project) : null}
-      initialGraph={
-        view === "network"
-          ? buildScoutNetwork(sp.university, { sector: sp.sector, enrollment: selectedEnrollment(sp.enroll) })
-          : null
-      }
     />
   );
 }
