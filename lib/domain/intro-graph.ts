@@ -5,6 +5,7 @@ import fs from "node:fs";
 import { databasePath, getDb } from "../db/client";
 import { shortCampusLabel } from "./campuses";
 import { listDrfAlumni, type DrfAlumRow } from "./drf-alumni";
+import { investorNodeId } from "./hotspot-model";
 
 export type IntroOrgKind = "campus" | "program" | "company";
 
@@ -24,6 +25,17 @@ export interface IntroLink {
   sourceUrl: string | null;
 }
 
+export interface SchoolSpan {
+  universityId: string;
+  start: number;
+  end: number;
+}
+
+export interface PortfolioCompany {
+  projectId: string;
+  sourceUrl: string;
+}
+
 export interface IntroGraph {
   people: Map<string, { id: string; name: string; campuses: string[] }>;
   orgs: Map<string, IntroOrg>;
@@ -33,6 +45,10 @@ export interface IntroGraph {
   startupsByPerson: Map<string, string[]>;
   alumni: DrfAlumRow[];
   strongFounders: Set<string>;
+  // Years a person was at a campus. A graduation year is stored as a four-year
+  // window ending that year. DRF years are the years the partner was on campus.
+  schoolYears: Map<string, SchoolSpan[]>;
+  portfolioByInvestor: Map<string, PortfolioCompany[]>;
 }
 
 const COHORT = /cohort|class of|\bbatch\b/i;
@@ -64,8 +80,14 @@ function push<K, V>(map: Map<K, V[]>, key: K, value: V) {
 export function assembleIntroGraph(): IntroGraph {
   const db = getDb();
   const people = new Map<string, { id: string; name: string; campuses: string[] }>();
-  for (const row of db.prepare(`SELECT id, name FROM people`).all() as { id: string; name: string }[]) {
+  const gradYear = new Map<string, number>();
+  for (const row of db.prepare(`SELECT id, name, enrollment_grad_year FROM people`).all() as {
+    id: string;
+    name: string;
+    enrollment_grad_year: number | null;
+  }[]) {
     people.set(row.id, { id: row.id, name: row.name, campuses: [] });
+    if (row.enrollment_grad_year) gradYear.set(row.id, row.enrollment_grad_year);
   }
 
   const strongFounders = new Set<string>();
@@ -191,6 +213,38 @@ export function assembleIntroGraph(): IntroGraph {
     }
   }
 
+  const alumni = listDrfAlumni();
+  const schoolYears = new Map<string, SchoolSpan[]>();
+  const addSpan = (personId: string, universityId: string | null, start: number | null, end: number | null) => {
+    if (!universityId || start == null || end == null) return;
+    const spanStart = Math.min(start, end);
+    const spanEnd = Math.max(start, end);
+    if (spanEnd < 1990 || spanStart > 2035) return;
+    const list = schoolYears.get(personId) ?? [];
+    list.push({ universityId, start: spanStart, end: spanEnd });
+    schoolYears.set(personId, list);
+  };
+  for (const [personId, year] of gradYear) {
+    for (const campusId of people.get(personId)?.campuses ?? []) addSpan(personId, campusId, year - 3, year);
+  }
+  for (const alum of alumni) {
+    const start = alum.yearStart ?? alum.yearEnd ?? alum.classYear;
+    const end = alum.yearEnd ?? alum.yearStart ?? alum.classYear;
+    addSpan(alum.personId, alum.universityId, start, end);
+  }
+
+  const portfolioByInvestor = new Map<string, PortfolioCompany[]>();
+  for (const row of db.prepare(
+    `SELECT project_id, value_text, source_url FROM company_facts WHERE fact_key = 'investor'`
+  ).all() as { project_id: string; value_text: string; source_url: string }[]) {
+    const investorId = investorNodeId(row.value_text);
+    const list = portfolioByInvestor.get(investorId) ?? [];
+    if (!list.some((item) => item.projectId === row.project_id)) {
+      list.push({ projectId: row.project_id, sourceUrl: row.source_url });
+    }
+    portfolioByInvestor.set(investorId, list);
+  }
+
   return {
     people,
     orgs,
@@ -198,7 +252,9 @@ export function assembleIntroGraph(): IntroGraph {
     peopleByOrg,
     cofounders,
     startupsByPerson,
-    alumni: listDrfAlumni(),
+    alumni,
     strongFounders,
+    schoolYears,
+    portfolioByInvestor,
   };
 }

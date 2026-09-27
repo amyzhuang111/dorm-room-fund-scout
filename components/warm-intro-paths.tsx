@@ -26,7 +26,7 @@ export function WarmIntroPaths({ entityId, initial }: { entityId?: string; initi
   if (failed) return null;
   if (!data) return null;
   if (!data.alum && data.paths.length === 0) {
-    return <p className="text-xs text-neutral-600">No DRF alum path within 3 hops.</p>;
+    return <p className="text-xs text-neutral-600">No strong or medium DRF alum path.</p>;
   }
 
   return (

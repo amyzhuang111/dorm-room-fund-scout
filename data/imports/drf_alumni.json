@@ -6,7 +6,13 @@
     "source_url": "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
     "excerpt": "DRF's 17 Jan 2025 Class of 2024 post introduces Aaron Anandji as a HQ investment partner.",
     "drf_team": "HQ",
-    "year_start": 2024
+    "year_start": 2024,
+    "current_role": "Growth Ops",
+    "current_firm": "Mecka",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/aaron-anandji",
+    "linkedin_url": "https://www.linkedin.com/in/aaron-anandji"
   },
   {
     "id": "dra_abhinav_karale",
@@ -48,7 +54,13 @@
     "school_role": "mba",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "AI Product Strategy Lead",
+    "current_firm": "Google",
+    "firm_type": "big_tech",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/adam-brudnick",
+    "linkedin_url": "https://www.linkedin.com/in/adam-brudnick"
   },
   {
     "id": "dra_adam_eldefrawy",
@@ -78,7 +90,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea"
+    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea",
+    "current_role": "Co-Managing Partner",
+    "current_firm": "Standard Crypto",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.marketscreener.com/insider/ADAM-GOLDBERG-A32KHT/"
   },
   {
     "id": "dra_adele_li",
@@ -93,7 +110,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Product Lead",
+    "current_firm": "OpenAI",
+    "firm_type": "big_tech",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.teahose.com/people/4267"
   },
   {
     "id": "dra_aditya_mukerjee",
@@ -121,7 +143,13 @@
     "school_label": "University of Virginia",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "current_role": "Principal",
+    "current_firm": "Halogen Ventures",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/adrianaochi",
+    "linkedin_url": "https://www.linkedin.com/in/adrianaochi"
   },
   {
     "id": "dra_advika_jayanti",
@@ -134,7 +162,13 @@
     "school_label": "Carnegie Mellon University",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "current_role": "Associate Product Manager",
+    "current_firm": "Samsara",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/advika-jayanti",
+    "linkedin_url": "https://www.linkedin.com/in/advika-jayanti"
   },
   {
     "id": "dra_akanksha_midha",
@@ -164,7 +198,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Group Product Manager",
+    "current_firm": "Google",
+    "firm_type": "big_tech",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/akshay-kirtikar",
+    "linkedin_url": "https://www.linkedin.com/in/akshay-kirtikar"
   },
   {
     "id": "dra_albert_dong",
@@ -178,7 +218,12 @@
     "school_role": "student",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Head of Special Projects",
+    "current_firm": "Voyager Ventures",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.voyagervc.com/team-members/albert-dong"
   },
   {
     "id": "dra_albert_lam",
@@ -238,7 +283,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork",
+    "current_role": "Founder and Chairman",
+    "current_firm": "Mercury Roadways",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.onelinepartners.com/",
+    "linkedin_url": "https://www.linkedin.com/in/alexmginsberg"
   },
   {
     "id": "dra_alex_immerman",
@@ -255,7 +306,9 @@
     "current_firm": "Andreessen Horowitz",
     "current_role": "General Partner",
     "firm_source_url": "https://www.linkedin.com/in/immerman",
-    "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed"
   },
   {
     "id": "dra_alex_marley",
@@ -269,7 +322,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "Investor",
+    "current_firm": "Upfront Ventures",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://alexgmarley.com/",
+    "linkedin_url": "https://www.linkedin.com/in/alex-marley"
   },
   {
     "id": "dra_alex_torrey",
@@ -286,7 +345,10 @@
     "year_end": 2020,
     "current_firm": "AIC & The Rounds",
     "current_role": "Founder",
-    "team_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_alex_wendland",
@@ -303,7 +365,10 @@
     "year_end": 2020,
     "current_firm": "Adaptive Innovations",
     "current_role": "Founder",
-    "team_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_alexa_davis",
@@ -331,7 +396,13 @@
     "school_label": "University of Pennsylvania",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "current_role": "Director",
+    "current_firm": "The Knowledge Society",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/alexaspagnola",
+    "linkedin_url": "https://www.linkedin.com/in/alexaspagnola"
   },
   {
     "id": "dra_alexander_becker",
@@ -376,7 +447,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork",
+    "current_role": "Partner & CEO",
+    "current_firm": "Treville",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://treville.com/team/ali-hamed"
   },
   {
     "id": "dra_alicia_tsai",
@@ -390,7 +466,13 @@
     "school_role": "student",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Senior Research Engineer",
+    "current_firm": "Google DeepMind",
+    "firm_type": "big_tech",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/aliciatsai",
+    "linkedin_url": "https://www.linkedin.com/in/aliciatsai"
   },
   {
     "id": "dra_alina_balean",
@@ -418,7 +500,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "Partner, Investment & Research",
+    "current_firm": "Paradigm",
+    "firm_type": "vc",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/alpin-yukseloglu",
+    "linkedin_url": "https://www.linkedin.com/in/alpin-yukseloglu"
   },
   {
     "id": "dra_amanda_bradford",
@@ -435,7 +523,10 @@
     "year_end": 2015,
     "current_firm": "The League",
     "current_role": "Founder",
-    "team_source_url": "https://web.archive.org/web/20130918015152/http://dormroomfund.com/bayarea"
+    "team_source_url": "https://web.archive.org/web/20130918015152/http://dormroomfund.com/bayarea",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_amber_yang",
@@ -453,7 +544,9 @@
     "current_firm": "Lightspeed Venture Partners",
     "current_role": "Enterprise Partner",
     "firm_source_url": "https://lsvp.com/team-member/amber-yang/",
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed"
   },
   {
     "id": "dra_amol_punjabi",
@@ -511,7 +604,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "Head of Strategic Partnerships",
+    "current_firm": "Earnin",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/anadiazhernandez",
+    "linkedin_url": "https://www.linkedin.com/in/anadiazhernandez"
   },
   {
     "id": "dra_anand_lalwani",
@@ -524,7 +623,13 @@
     "school_label": "Stanford",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "current_role": "Cofounder",
+    "current_firm": "Cardinal Robotics",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.forbes.com/profile/anand-lalwani/",
+    "linkedin_url": "https://www.linkedin.com/in/anandlalwani"
   },
   {
     "id": "dra_andre_mota",
@@ -537,7 +642,13 @@
     "school_label": "Wharton, Penn Law",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "current_role": "Vice President, Operations & Transformation",
+    "current_firm": "CareBridge",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/andrejmota",
+    "linkedin_url": "https://www.linkedin.com/in/andrejmota"
   },
   {
     "id": "dra_andrew_briggs",
@@ -579,7 +690,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Partner",
+    "current_firm": "Tidemark",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.tidemarkcap.com/team/andrew-walsh",
+    "linkedin_url": "https://www.linkedin.com/in/awalsh14"
   },
   {
     "id": "dra_andy_chen",
@@ -594,7 +711,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Senior Director of Finance",
+    "current_firm": "agilon health",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/andy-chen-md",
+    "linkedin_url": "https://www.linkedin.com/in/andy-chen-md"
   },
   {
     "id": "dra_andy_reed",
@@ -650,7 +773,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Chief Marketing Officer",
+    "current_firm": "Invisible Technologies",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://yespress.io/angela-winegar",
+    "linkedin_url": "https://www.linkedin.com/in/angelagwinegar"
   },
   {
     "id": "dra_anjney_midha",
@@ -667,7 +796,10 @@
     "year_end": 2015,
     "current_firm": "Andreessen Horowitz",
     "current_role": "General Partner",
-    "team_source_url": "https://web.archive.org/web/20130918015152/http://dormroomfund.com/bayarea"
+    "team_source_url": "https://web.archive.org/web/20130918015152/http://dormroomfund.com/bayarea",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_anna_kazlauskas",
@@ -681,7 +813,12 @@
     "school_role": "student",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "CEO",
+    "current_firm": "OpenDataLabs",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.opendatalabs.com/about"
   },
   {
     "id": "dra_anna_marie_manning",
@@ -732,7 +869,13 @@
     "source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
     "excerpt": "DRF's 12 May 2016 graduation note lists Ariel Winton on the Boston team.",
     "drf_team": "Boston",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Solo GP",
+    "current_firm": "The Aligned Fund",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.thealignedfund.com/",
+    "linkedin_url": "https://www.linkedin.com/in/arielwintonjones"
   },
   {
     "id": "dra_arshia_narula",
@@ -745,7 +888,13 @@
     "school_label": "University of California, Berkeley",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "current_role": "Product & Growth",
+    "current_firm": "Slash",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.arshianarula.com/about",
+    "linkedin_url": "https://www.linkedin.com/in/arshianarula05"
   },
   {
     "id": "dra_arun_kirubarajan",
@@ -760,7 +909,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Chief Architect",
+    "current_firm": "Kraken",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.arun.ai/",
+    "linkedin_url": "https://www.linkedin.com/in/arunkirubarajan"
   },
   {
     "id": "dra_ashley_aydin",
@@ -775,7 +930,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Principal",
+    "current_firm": "VamosVentures",
+    "firm_type": "vc",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.vanwickleventures.com/investment-committee/ashley-aydin-'13"
   },
   {
     "id": "dra_athena_kan",
@@ -789,7 +949,13 @@
     "school_role": "student",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "CEO",
+    "current_firm": "Dreambound",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/athenakan",
+    "linkedin_url": "https://www.linkedin.com/in/athenakan"
   },
   {
     "id": "dra_austin_ho",
@@ -832,7 +998,10 @@
     "year_end": 2022,
     "current_firm": "Floodgate",
     "current_role": "Investor",
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team"
   },
   {
     "id": "dra_bahram_tavakoli",
@@ -892,10 +1061,10 @@
   },
   {
     "id": "dra_ben_okeefe",
-    "name": "Ben O’Keefe",
+    "name": "Ben O\u2019Keefe",
     "confidence": "confirmed",
     "source_url": "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
-    "excerpt": "DRF's 17 Jan 2025 Class of 2024 post introduces Ben O’Keefe as a Bay Area investment partner (Stanford University).",
+    "excerpt": "DRF's 17 Jan 2025 Class of 2024 post introduces Ben O\u2019Keefe as a Bay Area investment partner (Stanford University).",
     "drf_team": "Bay Area",
     "university_id": "univ_stanford",
     "school_label": "Stanford University",
@@ -960,7 +1129,10 @@
     "year_end": 2020,
     "current_firm": "General Flash",
     "current_role": "VP",
-    "team_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_breton_birkhofer",
@@ -1001,7 +1173,13 @@
     "school_label": "New York University",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "current_role": "Investor",
+    "current_firm": "Bessemer Venture Partners",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.bvp.com/team/brielee-lu",
+    "linkedin_url": "https://www.linkedin.com/in/brieleelu"
   },
   {
     "id": "dra_brittany_walker",
@@ -1016,7 +1194,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "General Partner",
+    "current_firm": "CRV",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.crv.com/team/brittany-walker",
+    "linkedin_url": "https://www.linkedin.com/in/brittwalker1"
   },
   {
     "id": "dra_bruno_faviero",
@@ -1031,7 +1215,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
+    "current_role": "Co-Founder & CEO",
+    "current_firm": "Magna",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://iq.wiki/wiki/bruno-faviero"
   },
   {
     "id": "dra_bruno_lulinski",
@@ -1208,7 +1397,10 @@
     "source_url": "https://dormroomfund.com/our-team",
     "excerpt": "Dorm Room Fund's team page lists Christine Esserman among alumni as Partner, Accel. Dorm Room Fund's team page lists Christine Esserman among alumni as Partner, Accel. Dorm Room Fund's team page lists Christine Esserman among alumni as Partner, Accel.",
     "current_firm": "Accel",
-    "current_role": "Partner"
+    "current_role": "Partner",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_christopher_gray",
@@ -1280,7 +1472,10 @@
     "year_end": 2020,
     "current_firm": "BoxGroup",
     "current_role": "Partner",
-    "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_clay_garner",
@@ -1478,7 +1673,13 @@
     "school_label": "University of California, Berkeley",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Partner",
+    "current_firm": "The House Fund",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/davidbloom5",
+    "linkedin_url": "https://www.linkedin.com/in/davidbloom5"
   },
   {
     "id": "dra_david_chi",
@@ -1536,7 +1737,13 @@
     "school_label": "University of Pennsylvania",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2015
+    "year_start": 2015,
+    "current_role": "Co-Founder",
+    "current_firm": "Sound.xyz",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://nocap.blog/founder/david-greenstein/",
+    "linkedin_url": "https://www.linkedin.com/in/davidgreenstein"
   },
   {
     "id": "dra_david_kaufman",
@@ -1551,7 +1758,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
+    "current_role": "Co-Founder & CIO",
+    "current_firm": "Mana",
+    "firm_type": "founder",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/davidwkaufman",
+    "linkedin_url": "https://www.linkedin.com/in/davidwkaufman"
   },
   {
     "id": "dra_david_mackanic",
@@ -1568,7 +1781,10 @@
     "year_end": 2020,
     "current_firm": "Anthro Energy",
     "current_role": "Founder",
-    "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_david_sagalov",
@@ -1583,7 +1799,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2014,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20150509061327/http://www.dormroomfund.com/bayarea"
+    "team_source_url": "https://web.archive.org/web/20150509061327/http://www.dormroomfund.com/bayarea",
+    "current_role": "Head of Go-to-Market, USA Enterprise & Mid-Market",
+    "current_firm": "Western Union",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/dsagalov",
+    "linkedin_url": "https://www.linkedin.com/in/dsagalov"
   },
   {
     "id": "dra_deborah_li",
@@ -1598,7 +1820,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2014,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork",
+    "current_role": "Founder and Managing Partner",
+    "current_firm": "Alta One",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/debli",
+    "linkedin_url": "https://www.linkedin.com/in/debli"
   },
   {
     "id": "dra_declan_kunkel",
@@ -1639,7 +1867,13 @@
     "school_label": "Harvard University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "CEO & Co-Founder",
+    "current_firm": "Workstream",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/mynameisdesmond",
+    "linkedin_url": "https://www.linkedin.com/in/mynameisdesmond"
   },
   {
     "id": "dra_divyahans_gupta",
@@ -1652,7 +1886,13 @@
     "school_label": "Stanford University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Co-Founder",
+    "current_firm": "Beacon Software",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://divyahansg.com/",
+    "linkedin_url": "https://www.linkedin.com/in/divyahansg"
   },
   {
     "id": "dra_edgar_sze",
@@ -1676,7 +1916,13 @@
     "school_label": "UC San Diego",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "current_role": "Associate",
+    "current_firm": "2048 Ventures",
+    "firm_type": "vc",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/posts/2048vc_today-we-are-excited-to-welcome-edward-jin-activity-7403912169106448384-HroH",
+    "linkedin_url": "https://www.linkedin.com/in/eddieejin"
   },
   {
     "id": "dra_elijah_conniff",
@@ -1691,7 +1937,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Partner",
+    "current_firm": "Lightspeed Venture Partners",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://lsvp.com/team-member/elijah-conniff/",
+    "linkedin_url": "https://www.linkedin.com/in/elijahconniff"
   },
   {
     "id": "dra_elijah_kurien",
@@ -1714,7 +1966,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2014,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork",
+    "current_role": "CEO",
+    "current_firm": "DribbleUp",
+    "firm_type": "founder",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/ericforkosh",
+    "linkedin_url": "https://www.linkedin.com/in/ericforkosh"
   },
   {
     "id": "dra_eric_liu",
@@ -1743,7 +2001,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2015,
     "year_end": 2016,
-    "team_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b"
+    "team_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+    "current_role": "Group Product Manager",
+    "current_firm": "Superhuman",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/esungo",
+    "linkedin_url": "https://www.linkedin.com/in/esungo"
   },
   {
     "id": "dra_garros_li",
@@ -1800,7 +2064,13 @@
     "school_role": "student",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Investor",
+    "current_firm": "Mark Cuban Companies",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.newrisingventures.org/",
+    "linkedin_url": "https://www.linkedin.com/in/haywoodperry"
   },
   {
     "id": "dra_henry_tsai",
@@ -1813,7 +2083,12 @@
     "school_label": "Stanford University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Social Impact Products Lead",
+    "current_firm": "Meta",
+    "firm_type": "big_tech",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://ccsre.stanford.edu/people/henry-tsai"
   },
   {
     "id": "dra_heston_berkman",
@@ -1829,7 +2104,10 @@
     "year_start": 2015,
     "current_firm": "Banter Capital",
     "current_role": "Founder & GP",
-    "team_source_url": "https://web.archive.org/web/20150626075221/http://www.dormroomfund.com/philly"
+    "team_source_url": "https://web.archive.org/web/20150626075221/http://www.dormroomfund.com/philly",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_hillary_bush",
@@ -1855,7 +2133,13 @@
     "school_label": "Stanford Graduate School of Business",
     "school_role": "mba",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Senior Director of Product Management",
+    "current_firm": "Docusign",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/shahhiral",
+    "linkedin_url": "https://www.linkedin.com/in/shahhiral"
   },
   {
     "id": "dra_ian_mccreadie",
@@ -1890,7 +2174,13 @@
     "school_label": "Stanford Graduate School of Business",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Co-Founder & CEO",
+    "current_firm": "Just Appraised",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/imrankk",
+    "linkedin_url": "https://www.linkedin.com/in/imrankk"
   },
   {
     "id": "dra_irene_wu",
@@ -1933,7 +2223,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140403194126/http://www.dormroomfund.com/philly"
+    "team_source_url": "https://web.archive.org/web/20140403194126/http://www.dormroomfund.com/philly",
+    "current_role": "VP of Engineering",
+    "current_firm": "Ash",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.isaacsukin.com/",
+    "linkedin_url": "https://www.linkedin.com/in/isaacsukin"
   },
   {
     "id": "dra_isabel_sheinman",
@@ -1958,7 +2254,9 @@
     "excerpt": "Dorm Room Fund's team page lists Isabelle Phelps among alumni as Partner, Lerer Hippeau. Dorm Room Fund's team page lists Isabelle Phelps among alumni as Partner, Lerer Hippeau. Dorm Room Fund's team page lists Isabelle Phelps among alumni as Partner, Lerer Hippeau.",
     "current_firm": "Lerer Hippeau",
     "current_role": "Partner",
-    "firm_source_url": "https://www.lererhippeau.com/team"
+    "firm_source_url": "https://www.lererhippeau.com/team",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed"
   },
   {
     "id": "dra_isabelle_zhou",
@@ -1973,7 +2271,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Technical PM",
+    "current_firm": "OpenAI",
+    "firm_type": "big_tech",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.isabellezhou.com/",
+    "linkedin_url": "https://www.linkedin.com/in/isabellezhou"
   },
   {
     "id": "dra_ivan_zhao",
@@ -2001,7 +2305,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "CEO & Co-Founder",
+    "current_firm": "GlobalX Pharma",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/bitianyuan",
+    "linkedin_url": "https://www.linkedin.com/in/bitianyuan"
   },
   {
     "id": "dra_jackie_larossi",
@@ -2032,7 +2342,13 @@
     "source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
     "excerpt": "DRF's 12 May 2016 graduation note lists James Ruben on the Boston team.",
     "drf_team": "Boston",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Founder & CEO",
+    "current_firm": "Remy",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/jamesruben",
+    "linkedin_url": "https://www.linkedin.com/in/jamesruben"
   },
   {
     "id": "dra_james_wellemeyer",
@@ -2060,7 +2376,13 @@
     "school_label": "University of Illinois Urbana-Champaign",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "current_role": "Co-Founder",
+    "current_firm": "Dynamical Systems",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/jarrodbarnes",
+    "linkedin_url": "https://www.linkedin.com/in/jarrodbarnes"
   },
   {
     "id": "dra_jasman_singh",
@@ -2073,7 +2395,13 @@
     "school_label": "Princeton University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "current_role": "Lead Analyst",
+    "current_firm": "Profound",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/jasmansingh20",
+    "linkedin_url": "https://www.linkedin.com/in/jasmansingh20"
   },
   {
     "id": "dra_jasmine_kriston",
@@ -2101,7 +2429,13 @@
     "school_label": "University of Chicago",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "current_role": "Principal",
+    "current_firm": "Sapphire Ventures",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/jasonrbrooke",
+    "linkedin_url": "https://www.linkedin.com/in/jasonrbrooke"
   },
   {
     "id": "dra_jason_krone",
@@ -2113,7 +2447,13 @@
     "school_label": "Tufts University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Staff Research Scientist",
+    "current_firm": "Biohub",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/jasonkrone",
+    "linkedin_url": "https://www.linkedin.com/in/jasonkrone"
   },
   {
     "id": "dra_jason_seibel",
@@ -2186,7 +2526,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea"
+    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea",
+    "current_role": "Managing Partner",
+    "current_firm": "The House Fund",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/jfiance",
+    "linkedin_url": "https://www.linkedin.com/in/jfiance"
   },
   {
     "id": "dra_jeremy_navarro",
@@ -2202,7 +2548,9 @@
     "year_start": 2020,
     "current_firm": "General Catalyst",
     "current_role": "Investor",
-    "firm_source_url": "https://www.jeremynavarro.com/"
+    "firm_source_url": "https://www.jeremynavarro.com/",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed"
   },
   {
     "id": "dra_jessica_gartenstein",
@@ -2230,7 +2578,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "Founder/CTO",
+    "current_firm": "Cardinal",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.ycombinator.com/companies/trycardinal-ai",
+    "linkedin_url": "https://www.linkedin.com/in/jianna-liu-90747413b"
   },
   {
     "id": "dra_jiashan_wu",
@@ -2286,7 +2640,13 @@
     "school_label": "Harvard University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Executive Coach",
+    "current_firm": "Fynbos Collective",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/jwkahn",
+    "linkedin_url": "https://www.linkedin.com/in/jwkahn"
   },
   {
     "id": "dra_john_forbes",
@@ -2301,7 +2661,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2022,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Principal",
+    "current_firm": "Julian Capital",
+    "firm_type": "vc",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://signal.nfx.com/investors/john-forbes_1"
   },
   {
     "id": "dra_josh_ephraim",
@@ -2314,7 +2679,13 @@
     "school_label": "University of California, Berkeley",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "General Counsel",
+    "current_firm": "O.G. Venture Partners",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://f4.fund/firms/o-g-venture-partners",
+    "linkedin_url": "https://www.linkedin.com/in/joshephraim"
   },
   {
     "id": "dra_josh_lee",
@@ -2327,7 +2698,13 @@
     "school_label": "University of Pennsylvania",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2015
+    "year_start": 2015,
+    "current_role": "Head of Browser Co. Productions",
+    "current_firm": "The Browser Company",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://me.sh/profile/joshua-lee-adc17ea4",
+    "linkedin_url": "https://www.linkedin.com/in/lee94josh"
   },
   {
     "id": "dra_justine_humenansky",
@@ -2342,14 +2719,20 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Board Member",
+    "current_firm": "Optimism Foundation",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/justine-humenansky-cfa-b1036058",
+    "linkedin_url": "https://www.linkedin.com/in/justine-humenansky-cfa-b1036058"
   },
   {
     "id": "dra_jessica_leao",
-    "name": "Jéssica Leão",
+    "name": "J\u00e9ssica Le\u00e3o",
     "confidence": "confirmed",
     "source_url": "https://dormroomfund.com/our-team",
-    "excerpt": "Dorm Room Fund's team page lists Jéssica Leão among alumni as Partner, a16z. Archived DRF team page (2020) lists Jessica Leão on the Bay Area roster, Stanford Graduate School of Business. DRF's 20 Nov 2019 new-partner post introduces Jessica Leão as a Bay Area partner (Yale University). Dorm Room Fund's team page lists Jéssica Leão among alumni as Partner, a16z.",
+    "excerpt": "Dorm Room Fund's team page lists J\u00e9ssica Le\u00e3o among alumni as Partner, a16z. Archived DRF team page (2020) lists Jessica Le\u00e3o on the Bay Area roster, Stanford Graduate School of Business. DRF's 20 Nov 2019 new-partner post introduces Jessica Le\u00e3o as a Bay Area partner (Yale University). Dorm Room Fund's team page lists J\u00e9ssica Le\u00e3o among alumni as Partner, a16z.",
     "drf_team": "Bay Area",
     "university_id": "univ_stanford",
     "school_label": "Stanford Graduate School of Business",
@@ -2359,7 +2742,10 @@
     "year_end": 2020,
     "current_firm": "Andreessen Horowitz",
     "current_role": "Partner",
-    "team_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_kai_furbeck",
@@ -2372,7 +2758,13 @@
     "school_label": "NYU Stern School of Business",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2020
+    "year_start": 2020,
+    "current_role": "General Partner",
+    "current_firm": "One Eleven Capital Partners",
+    "firm_type": "vc",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/kai-furbeck-15767b41",
+    "linkedin_url": "https://www.linkedin.com/in/kai-furbeck-15767b41"
   },
   {
     "id": "dra_kanav_dhir",
@@ -2401,7 +2793,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Software Engineer",
+    "current_firm": "Coinbase",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/posts/kanwar-sahdra_join-dorm-room-fund-activity-7236738565164994562-m40V",
+    "linkedin_url": "https://www.linkedin.com/in/kanwar-sahdra"
   },
   {
     "id": "dra_karina_akib",
@@ -2432,7 +2830,10 @@
     "year_end": 2016,
     "current_firm": "Slope Agency",
     "current_role": "Founder",
-    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_karthik_menta",
@@ -2471,7 +2872,13 @@
     "school_label": "Duke University",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "current_role": "Head of Marketing",
+    "current_firm": "Cluely",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://wp.dormroomfund.com/the-new-instincts/",
+    "linkedin_url": "https://www.linkedin.com/in/katiexu1"
   },
   {
     "id": "dra_kc_simon",
@@ -2484,7 +2891,13 @@
     "school_label": "University of California, Berkeley",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Product Marketing Lead",
+    "current_firm": "Wealthfront",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/posts/kcsimon_wealthfront-is-now-a-public-company-im-activity-7405254430067064832-GVDF",
+    "linkedin_url": "https://www.linkedin.com/in/kcsimon"
   },
   {
     "id": "dra_kelsey_bishop",
@@ -2496,7 +2909,13 @@
     "school_label": "Boston College",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Head of Talent and Staffing",
+    "current_firm": "Tribe AI",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/bishopkelsey",
+    "linkedin_url": "https://www.linkedin.com/in/bishopkelsey"
   },
   {
     "id": "dra_kenta_yaegashi",
@@ -2511,7 +2930,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Vice President",
+    "current_firm": "Insight Partners",
+    "firm_type": "vc",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/kentayaegashi",
+    "linkedin_url": "https://www.linkedin.com/in/kentayaegashi"
   },
   {
     "id": "dra_kerry_omughelli",
@@ -2526,7 +2951,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Chief Operating Officer",
+    "current_firm": "LightBay Capital",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.lightbay.com/team-member/kerry-omughelli/",
+    "linkedin_url": "https://www.linkedin.com/in/kerryomughelli"
   },
   {
     "id": "dra_kieran_velasquez",
@@ -2550,7 +2981,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork",
+    "current_role": "Co-founder",
+    "current_firm": "Omsom",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://goldhouse.org/people/vanessa-pham-kim-pham/"
   },
   {
     "id": "dra_kimiloluwa_fafowora",
@@ -2576,7 +3012,13 @@
     "school_label": "Harvard Business School",
     "school_role": "mba",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "current_role": "MBA Intern",
+    "current_firm": "Revenant VC",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/kyledolce",
+    "linkedin_url": "https://www.linkedin.com/in/kyledolce"
   },
   {
     "id": "dra_kylie_to",
@@ -2604,7 +3046,10 @@
     "year_start": 2022,
     "current_firm": "Lux Capital",
     "current_role": "Partner",
-    "team_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_lauren_reeder",
@@ -2625,7 +3070,9 @@
     "current_firm": "Sequoia Capital",
     "current_role": "Partner",
     "firm_source_url": "https://fisher.wharton.upenn.edu/mt-for-life/lauren-reeder-mt16/",
-    "team_source_url": "https://web.archive.org/web/20150626075221/http://www.dormroomfund.com/philly"
+    "team_source_url": "https://web.archive.org/web/20150626075221/http://www.dormroomfund.com/philly",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed"
   },
   {
     "id": "dra_leonardo_girlando",
@@ -2639,7 +3086,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "Corporate Treasurer",
+    "current_firm": "Grupo Agrosilos",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/leonardogirlando",
+    "linkedin_url": "https://www.linkedin.com/in/leonardogirlando"
   },
   {
     "id": "dra_lily_peng",
@@ -2681,7 +3134,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
+    "current_role": "Co-Founder and General Partner",
+    "current_firm": "Coalition Operators",
+    "firm_type": "vc",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/lindsayu",
+    "linkedin_url": "https://www.linkedin.com/in/lindsayu"
   },
   {
     "id": "dra_linus_lee",
@@ -2696,7 +3155,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Head of AI",
+    "current_firm": "Thrive Capital",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://ai.engineer/speakers/linus-lee"
   },
   {
     "id": "dra_lisette_tellez",
@@ -2709,7 +3173,13 @@
     "school_label": "MIT",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Managing Director",
+    "current_firm": "Ocean Azul Partners",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://startupintros.com/people/lisette-tellez",
+    "linkedin_url": "https://www.linkedin.com/in/lisettellez"
   },
   {
     "id": "dra_liu_jiang",
@@ -2725,7 +3195,10 @@
     "year_start": 2015,
     "current_firm": "Sunflower Capital",
     "current_role": "Founder & GP",
-    "team_source_url": "https://web.archive.org/web/20150509061327/http://www.dormroomfund.com/bayarea"
+    "team_source_url": "https://web.archive.org/web/20150509061327/http://www.dormroomfund.com/bayarea",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_loewen_cavill",
@@ -2740,7 +3213,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Cofounder and CEO",
+    "current_firm": "Amira",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/loewen-cavill",
+    "linkedin_url": "https://www.linkedin.com/in/loewen-cavill"
   },
   {
     "id": "dra_lola_lafia",
@@ -2792,7 +3271,12 @@
     "school_label": "Columbia University Graduate School of Journalism",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2020
+    "year_start": 2020,
+    "current_role": "M&A Reporter",
+    "current_firm": "Bloomberg Law",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://news.bloomberglaw.com/author/mahira-dayal-23325234"
   },
   {
     "id": "dra_mariel_rosic",
@@ -2821,7 +3305,13 @@
     "school_role": "mba",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Co-Founder and Managing Partner",
+    "current_firm": "Infinity Ventures",
+    "firm_type": "vc",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/mariorruiz",
+    "linkedin_url": "https://www.linkedin.com/in/mariorruiz"
   },
   {
     "id": "dra_marissa_hu",
@@ -2850,7 +3340,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
+    "current_role": "Product and Partnerships Lead",
+    "current_firm": "AngelList",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/mattbilotti",
+    "linkedin_url": "https://www.linkedin.com/in/mattbilotti"
   },
   {
     "id": "dra_matt_gibstein",
@@ -2876,7 +3372,13 @@
     "school_label": "Cornell Tech",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2015
+    "year_start": 2015,
+    "current_role": "Sr. Director, AI Products",
+    "current_firm": "Pfizer",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/mewindt",
+    "linkedin_url": "https://www.linkedin.com/in/mewindt"
   },
   {
     "id": "dra_matthew_mizbani",
@@ -2906,7 +3408,10 @@
     "year_start": 2016,
     "current_firm": "Anthropic",
     "current_role": "Product",
-    "team_source_url": "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90"
+    "team_source_url": "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90",
+    "firm_type": "big_tech",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_matthew_wachter",
@@ -2914,7 +3419,10 @@
     "current_firm": "Tiger Global",
     "source_url": "https://fortune.com/2022/09/06/exclusive-student-run-vc-dorm-room-fund-spins-out-from-first-round-capital-raises-12-5m-fund-from-marc-andreessen-underscore-vc-insight-partners-others/",
     "confidence": "likely",
-    "excerpt": "Fortune (6 Sep 2022) names Tiger Global's Matthew Wachter among DRF alums. The article does not state a title, campus, or years, and no later team page was found in this pass."
+    "excerpt": "Fortune (6 Sep 2022) names Tiger Global's Matthew Wachter among DRF alums. The article does not state a title, campus, or years, and no later team page was found in this pass.",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://fortune.com/2022/09/06/exclusive-student-run-vc-dorm-room-fund-spins-out-from-first-round-capital-raises-12-5m-fund-from-marc-andreessen-underscore-vc-insight-partners-others/"
   },
   {
     "id": "dra_max_kanter",
@@ -2944,7 +3452,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2015,
     "year_end": 2016,
-    "team_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b"
+    "team_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+    "current_role": "Co-Founder and Co-CEO",
+    "current_firm": "The Loyalist",
+    "firm_type": "founder",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://clay.earth/profile/maxwell-ritz",
+    "linkedin_url": "https://www.linkedin.com/in/maxwellritz"
   },
   {
     "id": "dra_mea_lynn_wong",
@@ -2974,7 +3488,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Senior Product Manager",
+    "current_firm": "Uniswap",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/medhakothari",
+    "linkedin_url": "https://www.linkedin.com/in/medhakothari"
   },
   {
     "id": "dra_mediha_abdulhay",
@@ -2989,7 +3509,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea"
+    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea",
+    "current_role": "Group Product Manager",
+    "current_firm": "Google",
+    "firm_type": "big_tech",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/mediha-abdulhay",
+    "linkedin_url": "https://www.linkedin.com/in/mediha-abdulhay"
   },
   {
     "id": "dra_meryl_breidbart",
@@ -3019,7 +3545,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "Investor",
+    "current_firm": "CRV",
+    "firm_type": "vc",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://theorg.com/org/crv/org-chart/mia-krishnamurthy"
   },
   {
     "id": "dra_michael_chiang",
@@ -3065,7 +3596,10 @@
     "current_firm": "Cursor",
     "current_role": "Founder",
     "team_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
-    "founded_project_id": "proj_GjrFxToPH-cI"
+    "founded_project_id": "proj_GjrFxToPH-cI",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_michael_zhang",
@@ -3078,7 +3612,13 @@
     "school_label": "Stanford University",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "current_role": "Member of Technical Staff",
+    "current_firm": "OpenAI",
+    "firm_type": "big_tech",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/michaelyfzhang",
+    "linkedin_url": "https://www.linkedin.com/in/michaelyfzhang"
   },
   {
     "id": "dra_michael_zhu",
@@ -3096,7 +3636,10 @@
     "source_url": "https://dormroomfund.com/our-team",
     "excerpt": "Dorm Room Fund's team page lists Mike Annunziata among alumni as Founder & GP, Also Capital. Dorm Room Fund's team page lists Mike Annunziata among alumni as Founder & GP, Also Capital. Dorm Room Fund's team page lists Mike Annunziata among alumni as Founder & GP, Also Capital.",
     "current_firm": "Also Capital",
-    "current_role": "Founder & GP"
+    "current_role": "Founder & GP",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_mike_lapointe",
@@ -3110,7 +3653,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
+    "current_role": "Senior Product Manager",
+    "current_firm": "Ascend Analytics",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/mikelapointebc",
+    "linkedin_url": "https://www.linkedin.com/in/mikelapointebc"
   },
   {
     "id": "dra_mina_iskarous",
@@ -3136,7 +3685,13 @@
     "school_label": "University of Pennsylvania",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Product Manager",
+    "current_firm": "Meta",
+    "firm_type": "big_tech",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/mollywwang",
+    "linkedin_url": "https://www.linkedin.com/in/mollywwang"
   },
   {
     "id": "dra_momoko_ishii",
@@ -3177,7 +3732,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "Investor",
+    "current_firm": "Salesforce Ventures",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://salesforceventures.com/people/nathan-ho/",
+    "linkedin_url": "https://www.linkedin.com/in/nathanho12"
   },
   {
     "id": "dra_nathaniel_hajian",
@@ -3206,7 +3767,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea"
+    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea",
+    "current_role": "Cofounder and CEO",
+    "current_firm": "Curai Health",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/nealkhosla",
+    "linkedin_url": "https://www.linkedin.com/in/nealkhosla"
   },
   {
     "id": "dra_neil_bhammar",
@@ -3218,7 +3785,13 @@
     "school_label": "Northeastern University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "current_role": "Co-founder",
+    "current_firm": "ShortKit",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.everydev.ai/developers/shortkit",
+    "linkedin_url": "https://www.linkedin.com/in/neilbhammar"
   },
   {
     "id": "dra_nick_kim",
@@ -3228,7 +3801,9 @@
     "excerpt": "Dorm Room Fund's team page lists Nick Kim among alumni as Partner, Upfront Ventures. Dorm Room Fund's team page lists Nick Kim among alumni as Partner, Upfront Ventures. Dorm Room Fund's team page lists Nick Kim among alumni as Partner, Upfront Ventures.",
     "current_firm": "Upfront Ventures",
     "current_role": "Partner",
-    "firm_source_url": "https://www.dormroomfund.com/"
+    "firm_source_url": "https://www.dormroomfund.com/",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed"
   },
   {
     "id": "dra_nicole_ripka",
@@ -3243,7 +3818,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "Associate",
+    "current_firm": "Betaworks Ventures",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://people.equilar.com/bio/person/nicole-ripka-dorm-room-fund/42274387",
+    "linkedin_url": "https://www.linkedin.com/in/nicole-ripka"
   },
   {
     "id": "dra_nigel_coelho",
@@ -3352,7 +3933,13 @@
     "source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
     "excerpt": "DRF's 10 Nov 2021 new-partner post introduces Peter Nguyen on the HQ team.",
     "drf_team": "HQ",
-    "year_start": 2021
+    "year_start": 2021,
+    "current_role": "Software Engineer",
+    "current_firm": "Google",
+    "firm_type": "big_tech",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/petercrackthecode",
+    "linkedin_url": "https://www.linkedin.com/in/petercrackthecode"
   },
   {
     "id": "dra_philippe_griffiths",
@@ -3367,7 +3954,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "Principal",
+    "current_firm": "TLcom Capital",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://tlcomcapital.com/philippe-griffiths",
+    "linkedin_url": "https://www.linkedin.com/in/philippe-griffiths-49a0b1a5"
   },
   {
     "id": "dra_phillip_hui_bon_hoa",
@@ -3423,7 +4016,12 @@
     "school_role": "student",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Managing Partner",
+    "current_firm": "Onigiri Capital",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://sg.linkedin.com/in/looiqinen"
   },
   {
     "id": "dra_quenton_craddock",
@@ -3453,7 +4051,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "Co-founder",
+    "current_firm": "Tomo",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.raymondchen.me/work"
   },
   {
     "id": "dra_raymond_zhong",
@@ -3495,7 +4098,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea"
+    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea",
+    "current_role": "Co-Founder",
+    "current_firm": "Rascal Games",
+    "firm_type": "founder",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/rickling",
+    "linkedin_url": "https://www.linkedin.com/in/rickling"
   },
   {
     "id": "dra_ricky_berrin",
@@ -3525,7 +4134,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2014,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork",
+    "current_role": "Product",
+    "current_firm": "Sequoia Capital",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/narangrishi",
+    "linkedin_url": "https://www.linkedin.com/in/narangrishi"
   },
   {
     "id": "dra_rishi_sriram",
@@ -3551,7 +4166,13 @@
     "school_label": "Harvard (HBS)",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "current_role": "Senior Product Manager, Product Led Growth",
+    "current_firm": "Blue River Technology",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/robmcknight",
+    "linkedin_url": "https://www.linkedin.com/in/robmcknight"
   },
   {
     "id": "dra_rohan_kalahasty",
@@ -3579,7 +4200,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "Analyst",
+    "current_firm": "General Atlantic",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.generalatlantic.com/people/royce-tiger/",
+    "linkedin_url": "https://www.linkedin.com/in/roycetiger"
   },
   {
     "id": "dra_ruby_lee",
@@ -3594,7 +4221,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea"
+    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea",
+    "current_role": "Co-Founder and CTO",
+    "current_firm": "Juni Learning",
+    "firm_type": "founder",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://signal.nfx.com/investors/ruby-lee"
   },
   {
     "id": "dra_ryan_jung",
@@ -3609,7 +4241,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea"
+    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea",
+    "current_role": "Product Manager",
+    "current_firm": "Earnin",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://me.sh/profile/ryan-jung-fbad22e5"
   },
   {
     "id": "dra_ryan_marschang",
@@ -3654,7 +4291,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "Co-Founder",
+    "current_firm": "Empower Sleep",
+    "firm_type": "founder",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/choprasagar",
+    "linkedin_url": "https://www.linkedin.com/in/choprasagar"
   },
   {
     "id": "dra_sam_broner",
@@ -3671,7 +4314,10 @@
     "year_end": 2022,
     "current_firm": "The Better Money Company",
     "current_role": "Founder",
-    "team_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_sam_slover",
@@ -3731,7 +4377,10 @@
     "year_end": 2022,
     "current_firm": "OpenAI",
     "current_role": "Research",
-    "team_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team",
+    "firm_type": "big_tech",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_sanya_ohri",
@@ -3763,7 +4412,10 @@
     "year_end": 2020,
     "current_firm": "Alloy & Ando",
     "current_role": "Co-Founder",
-    "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_sarah_guzick",
@@ -3823,7 +4475,9 @@
     "current_firm": "Lowercarbon Capital",
     "current_role": "General Partner",
     "firm_source_url": "https://lowercarbon.com/team/shawn-xu/",
-    "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed"
   },
   {
     "id": "dra_shiroy_aspandiar",
@@ -3838,7 +4492,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Co-Founder and COO",
+    "current_firm": "Dreambound",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/shiroy-aspandiar",
+    "linkedin_url": "https://www.linkedin.com/in/shiroy-aspandiar"
   },
   {
     "id": "dra_shohini_gupta",
@@ -3867,7 +4527,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "CEO",
+    "current_firm": "Anecdote Travel",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/shreyg19",
+    "linkedin_url": "https://www.linkedin.com/in/shreyg19"
   },
   {
     "id": "dra_shreyas_parab",
@@ -3882,7 +4548,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Co-Founder and CEO",
+    "current_firm": "DayDream",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.dentalnachos.com/watch-the-recording-of-dental-nachos-presents-collect-more-at-lower-costs-how-ai-is-transforming-dental-practices"
   },
   {
     "id": "dra_shruti_agarwal",
@@ -3897,7 +4568,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Consultant",
+    "current_firm": "EY-Parthenon",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/shrutiagarwal17",
+    "linkedin_url": "https://www.linkedin.com/in/shrutiagarwal17"
   },
   {
     "id": "dra_shub_gaur",
@@ -3923,7 +4600,13 @@
     "school_label": "Stanford University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2015
+    "year_start": 2015,
+    "current_role": "Senior Advisor",
+    "current_firm": "8VC",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/shubham-goel-7b723419",
+    "linkedin_url": "https://www.linkedin.com/in/shubham-goel-7b723419"
   },
   {
     "id": "dra_sofia_cagliero",
@@ -3936,7 +4619,13 @@
     "school_label": "Harvard University",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "current_role": "Associate",
+    "current_firm": "Boston Consulting Group",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/sofia-cagliero-00128b205",
+    "linkedin_url": "https://www.linkedin.com/in/sofia-cagliero-00128b205"
   },
   {
     "id": "dra_sophia_popova",
@@ -3949,7 +4638,13 @@
     "school_label": "Harvard Business School",
     "school_role": "mba",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Partner",
+    "current_firm": "Summit Partners",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.summitpartners.com/team/sophia-popova",
+    "linkedin_url": "https://www.linkedin.com/in/sophiapopova"
   },
   {
     "id": "dra_spencer_yen",
@@ -3994,7 +4689,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Director",
+    "current_firm": "MIT delta v",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://entrepreneurship.mit.edu/eirs/"
   },
   {
     "id": "dra_stephanie_mccaffrey",
@@ -4009,7 +4709,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Co-Founder & CEO",
+    "current_firm": "Racketeer",
+    "firm_type": "founder",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/stephaniemccaffrey",
+    "linkedin_url": "https://www.linkedin.com/in/stephaniemccaffrey"
   },
   {
     "id": "dra_stephanie_weiner",
@@ -4024,7 +4730,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140403194126/http://www.dormroomfund.com/philly"
+    "team_source_url": "https://web.archive.org/web/20140403194126/http://www.dormroomfund.com/philly",
+    "current_role": "Head of New Verticals & Operations",
+    "current_firm": "INFINIT",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/stephmweiner",
+    "linkedin_url": "https://www.linkedin.com/in/stephmweiner"
   },
   {
     "id": "dra_sterling_witzke",
@@ -4039,7 +4751,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2014,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20150626075221/http://www.dormroomfund.com/philly"
+    "team_source_url": "https://web.archive.org/web/20150626075221/http://www.dormroomfund.com/philly",
+    "current_role": "General Partner",
+    "current_firm": "Merilot",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://cfc-stmoritz.com/profiles/sterling-witzke",
+    "linkedin_url": "https://www.linkedin.com/in/sterlingwitzke"
   },
   {
     "id": "dra_steve_flanagan",
@@ -4081,7 +4799,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140403194126/http://www.dormroomfund.com/philly"
+    "team_source_url": "https://web.archive.org/web/20140403194126/http://www.dormroomfund.com/philly",
+    "current_role": "CEO",
+    "current_firm": "Val Town",
+    "firm_type": "founder",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/stevekrouse",
+    "linkedin_url": "https://www.linkedin.com/in/stevekrouse"
   },
   {
     "id": "dra_sweyn_venderbush",
@@ -4094,7 +4818,13 @@
     "school_label": "Yale University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2015
+    "year_start": 2015,
+    "current_role": "Chief Product Officer",
+    "current_firm": "Starbridge",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/sweyn",
+    "linkedin_url": "https://www.linkedin.com/in/sweyn"
   },
   {
     "id": "dra_tafarii_mckenie",
@@ -4138,7 +4868,9 @@
     "current_firm": "Bessemer Venture Partners",
     "current_role": "Partner",
     "firm_source_url": "https://www.bvp.com/team",
-    "team_source_url": "https://web.archive.org/web/20130918035243/http://dormroomfund.com/philly"
+    "team_source_url": "https://web.archive.org/web/20130918035243/http://dormroomfund.com/philly",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed"
   },
   {
     "id": "dra_tanthai_pongstien",
@@ -4151,7 +4883,12 @@
     "school_label": "UC Berkeley",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2020
+    "year_start": 2020,
+    "current_role": "Founder & CEO",
+    "current_firm": "Wonderstruck",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://tanth.ai/"
   },
   {
     "id": "dra_taylor_francis",
@@ -4166,7 +4903,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork",
+    "current_role": "Co-Founder",
+    "current_firm": "Watershed",
+    "firm_type": "founder",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/taylor-francis-4ba49640",
+    "linkedin_url": "https://www.linkedin.com/in/taylor-francis-4ba49640"
   },
   {
     "id": "dra_tej_singh",
@@ -4181,7 +4924,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Co-founder & CEO",
+    "current_firm": "Spring",
+    "firm_type": "founder",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/tejsingh99",
+    "linkedin_url": "https://www.linkedin.com/in/tejsingh99"
   },
   {
     "id": "dra_tim_miller",
@@ -4209,7 +4958,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "current_role": "Chairman",
+    "current_firm": "Impact Nation",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/posts/taguthrie_helping-a-founder-with-an-off-market-cos-activity-7439379835946205184-E_f-"
   },
   {
     "id": "dra_toni_oloko",
@@ -4226,7 +4980,10 @@
     "current_firm": "Dandy",
     "current_role": "Co-Founder",
     "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
-    "founded_project_id": "proj_-useAjLwlsUE"
+    "founded_project_id": "proj_-useAjLwlsUE",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_tony_cuevo_bravo",
@@ -4243,7 +5000,10 @@
     "year_end": 2022,
     "current_firm": "Manifold",
     "current_role": "Investor",
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team"
   },
   {
     "id": "dra_tony_shi",
@@ -4256,7 +5016,13 @@
     "school_label": "Stanford GSB",
     "school_role": "mba",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "current_role": "Investment Partner",
+    "current_firm": "Felicis",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/t-shi",
+    "linkedin_url": "https://www.linkedin.com/in/t-shi"
   },
   {
     "id": "dra_tori_orr",
@@ -4271,7 +5037,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "Venture Capital Business Development Manager",
+    "current_firm": "Google",
+    "firm_type": "big_tech",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/toriorr",
+    "linkedin_url": "https://www.linkedin.com/in/toriorr"
   },
   {
     "id": "dra_trevor_sookraj",
@@ -4284,7 +5056,13 @@
     "school_role": "student",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Founder",
+    "current_firm": "Trevor's Tech Talk",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/trevorsookraj",
+    "linkedin_url": "https://www.linkedin.com/in/trevorsookraj"
   },
   {
     "id": "dra_trinity_donohugh",
@@ -4297,7 +5075,13 @@
     "school_label": "Stanford",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "current_role": "Engagement Manager",
+    "current_firm": "McKinsey & Company",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://fundraisingfox.com/people/trinity-d-dorm-room",
+    "linkedin_url": "https://www.linkedin.com/in/trinity-donohugh"
   },
   {
     "id": "dra_vedant_agrawal",
@@ -4336,7 +5120,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Co-Founder and CTO",
+    "current_firm": "Third Space",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/vinai-rachakonda-a41927117",
+    "linkedin_url": "https://www.linkedin.com/in/vinai-rachakonda-a41927117"
   },
   {
     "id": "dra_vishal_dubey",
@@ -4349,7 +5139,13 @@
     "school_label": "Columbia University",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "current_role": "Head of Product",
+    "current_firm": "Vibecode",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/vishaldubey01",
+    "linkedin_url": "https://www.linkedin.com/in/vishaldubey01"
   },
   {
     "id": "dra_viveca_morris",
@@ -4362,7 +5158,13 @@
     "school_label": "Yale University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2015
+    "year_start": 2015,
+    "current_role": "Executive Director",
+    "current_firm": "Yale Law School",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://law.yale.edu/viveca-morris",
+    "linkedin_url": "https://www.linkedin.com/in/viveca-morris"
   },
   {
     "id": "dra_will_fry",
@@ -4390,7 +5192,13 @@
     "school_label": "MIT Sloan",
     "school_role": "mba",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "current_role": "Sr. Director, Product Management",
+    "current_firm": "Confluent",
+    "firm_type": "other",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/greenws4",
+    "linkedin_url": "https://www.linkedin.com/in/greenws4"
   },
   {
     "id": "dra_will_manidis",
@@ -4405,7 +5213,10 @@
     "year_start": 2019,
     "current_firm": "ScienceIO",
     "current_role": "Founder",
-    "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://dormroomfund.com/our-team"
   },
   {
     "id": "dra_will_nichols",
@@ -4419,7 +5230,13 @@
     "school_role": "mba",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Strategy & Operations",
+    "current_firm": "Stripe",
+    "firm_type": "other",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://fundraisingfox.com/people/will-nichols-fj-labs",
+    "linkedin_url": "https://www.linkedin.com/in/wsumnernichols"
   },
   {
     "id": "dra_yanika_magan",
@@ -4461,7 +5278,12 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
-    "linkedin_url": "https://www.linkedin.com/in/yonidejene/"
+    "linkedin_url": "https://www.linkedin.com/in/yonidejene",
+    "current_role": "Founder",
+    "current_firm": "Alama",
+    "firm_type": "founder",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/posts/yoni-dejene_weve-been-building-voice-agents-for-the-activity-7340792770715860993-lb2N"
   },
   {
     "id": "dra_yvette_rodriguez",
@@ -4529,7 +5351,13 @@
     "school_role": "mba",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "current_role": "Partner",
+    "current_firm": "2048 Ventures",
+    "firm_type": "vc",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://2048.vc/team",
+    "linkedin_url": "https://www.linkedin.com/in/zannali"
   },
   {
     "id": "dra_zoe_lu",
@@ -4558,6 +5386,11 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_role": "Founder",
+    "current_firm": "Astros",
+    "firm_type": "founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.geekwire.com/2023/we-asked-24-startups-in-the-new-techstars-seattle-class-about-how-ai-is-impacting-their-business/"
   }
 ]

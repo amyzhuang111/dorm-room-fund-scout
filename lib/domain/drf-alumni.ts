@@ -7,6 +7,7 @@ import { investorNodeId } from "./hotspot-model";
 export const DRF_ALUM_TAG = "DRF alum";
 
 export type DrfConfidence = "confirmed" | "likely";
+export type FirmType = "vc" | "founder" | "big_tech" | "other";
 
 export interface DrfAlumniRecord {
   id: string;
@@ -22,6 +23,8 @@ export interface DrfAlumniRecord {
   classYear: number | null;
   currentFirm: string | null;
   currentRole: string | null;
+  firmType: FirmType | null;
+  firmConfidence: DrfConfidence | null;
   investorId: string | null;
   sourceUrl: string;
   firmSourceUrl: string | null;
@@ -88,6 +91,11 @@ export function parseAlumniRecords(input: unknown): DrfAlumniRecord[] {
     const xUrl = httpUrl(row.x_url, "x_url", id);
     const foundedRaw = clean(row.founded_project_id);
     if (foundedRaw && !/^proj_[A-Za-z0-9_-]+$/.test(foundedRaw)) throw new Error(`${id}: founded_project_id is not a project id`);
+    const firmType = firmTypeFor(role, firm, clean(row.firm_type));
+    const firmConfidenceRaw = clean(row.firm_confidence);
+    if (firm && firmConfidenceRaw && firmConfidenceRaw !== "confirmed" && firmConfidenceRaw !== "likely") {
+      throw new Error(`${id}: firm_confidence must be confirmed or likely`);
+    }
     const founderOnly = !!role && /\bfounder\b/i.test(role) && !/\b(partner|gp|investor|principal|vp)\b/i.test(role);
     const urls = [sourceUrl, httpUrl(row.firm_source_url, "firm_source_url", id), httpUrl(row.team_source_url, "team_source_url", id), httpUrl(row.school_source_url, "school_source_url", id), linkedinUrl, xUrl].filter(
       (url): url is string => !!url
@@ -106,6 +114,8 @@ export function parseAlumniRecords(input: unknown): DrfAlumniRecord[] {
       classYear: year(row.class_year, id, "class_year"),
       currentFirm: firm,
       currentRole: role,
+      firmType,
+      firmConfidence: firm ? ((firmConfidenceRaw as DrfConfidence | null) ?? "likely") : null,
       investorId: firm && !founderOnly ? investorNodeId(firm) : null,
       sourceUrl,
       firmSourceUrl: httpUrl(row.firm_source_url, "firm_source_url", id),
@@ -138,6 +148,8 @@ interface AlumniDbRow {
   class_year: number | null;
   current_firm: string | null;
   current_role: string | null;
+  firm_type: string | null;
+  firm_confidence: string | null;
   investor_id: string | null;
   source_url: string;
   firm_source_url: string | null;
@@ -170,6 +182,8 @@ function fromDb(row: AlumniDbRow): DrfAlumRow {
     classYear: row.class_year,
     currentFirm: row.current_firm,
     currentRole: row.current_role,
+    firmType: row.firm_type === "vc" || row.firm_type === "founder" || row.firm_type === "big_tech" || row.firm_type === "other" ? row.firm_type : null,
+    firmConfidence: row.firm_confidence === "confirmed" || row.firm_confidence === "likely" ? row.firm_confidence : null,
     investorId: row.investor_id,
     sourceUrl: row.source_url,
     firmSourceUrl: row.firm_source_url,
@@ -204,6 +218,21 @@ export function drfWorksAtEdges(): DrfWorksAt[] {
     edges.push({ personId: alum.personId, investorId: alum.investorId, firm: alum.currentFirm });
   }
   return edges;
+}
+
+const BIG_TECH = new Set(["google", "alphabet", "meta", "facebook", "apple", "amazon", "microsoft", "nvidia", "openai", "anthropic", "google deepmind", "deepmind"]);
+
+export function firmTypeFor(role: string | null, firm: string | null, explicit: string | null): FirmType | null {
+  if (explicit === "vc" || explicit === "founder" || explicit === "big_tech" || explicit === "other") return explicit;
+  if (!firm) return null;
+  const roleText = (role ?? "").toLowerCase();
+  const firmText = firm.toLowerCase();
+  const founderRole = /\bfounder\b/.test(roleText);
+  const investorRole = /\b(partner|gp|investor|principal)\b/.test(roleText);
+  if (founderRole && !investorRole) return "founder";
+  if (BIG_TECH.has(firmText)) return "big_tech";
+  if (investorRole || /\b(capital|ventures|venture partners)\b/i.test(firm)) return "vc";
+  return "other";
 }
 
 export function yearsLabel(alum: Pick<DrfAlumRow, "yearStart" | "yearEnd" | "classYear">): string | null {
