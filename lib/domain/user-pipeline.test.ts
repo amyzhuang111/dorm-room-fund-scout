@@ -27,6 +27,8 @@ function draft(overrides: Partial<StartupDraft> = {}): StartupDraft {
     verificationUrl: "https://news.example/northstar",
     verificationNotes: "Founder confirmed the site.",
     stage: "Sourced",
+    sourcedVia: null,
+    referrer: null,
     ...overrides,
   };
 }
@@ -58,7 +60,17 @@ const created = valid.ok ? upsertStartup(EMPTY_PIPELINE, valid.value, "Universit
 assert.equal(created.startups.length, 1);
 assert.equal(created.startups[0].campusId, "univ_penn");
 assert.equal(created.startups[0].founders[0].classYear, "2027");
+assert.equal(created.startups[0].sourcedVia, null);
 assert.equal(parseState(created).startups[0].name, "Northstar");
+
+const sourced = validateDraft(draft({ sourcedVia: "alum_referral", referrer: "  Lauren Reeder  " }));
+assert.equal(sourced.ok, true);
+const sourcedState = sourced.ok ? upsertStartup(EMPTY_PIPELINE, sourced.value, "University of Pennsylvania") : EMPTY_PIPELINE;
+assert.equal(sourcedState.startups[0].sourcedVia, "alum_referral");
+assert.equal(sourcedState.startups[0].referrer, "Lauren Reeder");
+assert.equal(parseState(sourcedState).startups[0].referrer, "Lauren Reeder");
+assert.equal(parseState({ startups: [{ ...sourcedState.startups[0], sourcedVia: "nope", referrer: "   " }] }).startups[0].sourcedVia, null);
+assert.equal(parseState({ startups: [{ ...sourcedState.startups[0], sourcedVia: "nope", referrer: "   " }] }).startups[0].referrer, null);
 assert.equal(parseState({ startups: [{ id: "nope", name: "X" }] }).startups.length, 0);
 
 const other = validateDraft(draft({ campusId: null, campusName: "Oberlin College", campusIsNew: true }));

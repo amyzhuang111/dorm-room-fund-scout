@@ -9,6 +9,7 @@ import { AssessmentForm } from "./assessment-form";
 import { FeedbackControls } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CompanyProfileCard } from "./company-profile";
+import { WarmIntroPaths } from "./warm-intro-paths";
 
 function founderHref(founder: NamedFounder): string {
   const params = new URLSearchParams({
@@ -70,6 +71,9 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
                 ))}
               </div>
               <CompanyProfileCard profile={project.profile} founders={project.founderLinks} />
+              <div className="mt-3">
+                <WarmIntroPaths entityId={project.id} />
+              </div>
               <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1 text-xs text-muted sm:grid-cols-3">
                 <div>
                   <dt className="font-semibold uppercase tracking-wide">Sector</dt>

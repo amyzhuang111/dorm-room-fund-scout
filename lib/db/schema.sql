@@ -374,3 +374,32 @@ CREATE TABLE IF NOT EXISTS drf_campus_presence (
 );
 
 CREATE INDEX IF NOT EXISTS idx_drf_campus_presence_university ON drf_campus_presence(university_id);
+
+-- Former DRF student partners, loaded from data/imports/drf_alumni.json.
+-- Every row keeps a public source URL. The importer does not invent people.
+CREATE TABLE IF NOT EXISTS drf_alumni (
+  id TEXT PRIMARY KEY,
+  person_id TEXT NOT NULL REFERENCES people(id),
+  name TEXT NOT NULL,
+  drf_team TEXT,
+  university_id TEXT,
+  school_label TEXT,
+  program_id TEXT,
+  program_label TEXT,
+  year_start INTEGER,
+  year_end INTEGER,
+  class_year INTEGER,
+  current_firm TEXT,
+  current_role TEXT,
+  investor_id TEXT,
+  source_url TEXT NOT NULL,
+  firm_source_url TEXT,
+  sources_json TEXT NOT NULL DEFAULT '[]',
+  confidence TEXT NOT NULL, -- confirmed | likely
+  excerpt TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(person_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_drf_alumni_person ON drf_alumni(person_id);
+CREATE INDEX IF NOT EXISTS idx_drf_alumni_investor ON drf_alumni(investor_id);

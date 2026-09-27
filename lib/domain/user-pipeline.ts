@@ -17,6 +17,27 @@ import { connectionSignal, perCapitaSignal, signalFields } from "./network-signa
 export const PIPELINE_STAGES = ["Sourced", "Contacted", "Meeting", "Diligence", "Passed", "Invested"] as const;
 export type PipelineStage = (typeof PIPELINE_STAGES)[number];
 
+export const SOURCE_CHANNELS = [
+  { id: "alum_referral", label: "Alum referral" },
+  { id: "relationship", label: "Relationship" },
+  { id: "open_application", label: "Open application" },
+  { id: "event", label: "Event" },
+  { id: "outbound", label: "Outbound" },
+  { id: "other", label: "Other" },
+] as const;
+export type SourceChannel = (typeof SOURCE_CHANNELS)[number]["id"];
+
+export function sourceChannel(value: unknown): SourceChannel | null {
+  return typeof value === "string" && SOURCE_CHANNELS.some((channel) => channel.id === value) ? (value as SourceChannel) : null;
+}
+
+export function referrerText(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const text = value.replace(/\s+/g, " ").trim();
+  if (!text) return null;
+  return text.slice(0, 120);
+}
+
 export interface UserFounder {
   id: string;
   name: string;
@@ -43,6 +64,8 @@ export interface UserStartup {
   verificationUrl: string;
   verificationNotes: string;
   stage: PipelineStage;
+  sourcedVia: SourceChannel | null;
+  referrer: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -58,6 +81,8 @@ export interface PipelineLink {
   stage: PipelineStage;
   verificationUrl: string | null;
   verificationNotes: string | null;
+  sourcedVia: SourceChannel | null;
+  referrer: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -83,6 +108,8 @@ export interface StartupDraft {
   verificationUrl: string;
   verificationNotes: string;
   stage: PipelineStage;
+  sourcedVia: SourceChannel | null;
+  referrer: string | null;
 }
 
 export interface ValidStartup {
@@ -97,6 +124,8 @@ export interface ValidStartup {
   verificationUrl: string;
   verificationNotes: string;
   stage: PipelineStage;
+  sourcedVia: SourceChannel | null;
+  referrer: string | null;
 }
 
 export interface DuplicateHit {
@@ -349,14 +378,18 @@ function isLink(value: unknown): value is PipelineLink {
   return typeof row.id === "string" && (row.entityType === "project" || row.entityType === "person") && typeof row.entityId === "string" && typeof row.name === "string" && isStage(row.stage);
 }
 
+function withSource<T extends { sourcedVia?: unknown; referrer?: unknown }>(row: T): T & { sourcedVia: SourceChannel | null; referrer: string | null } {
+  return { ...row, sourcedVia: sourceChannel(row.sourcedVia), referrer: referrerText(row.referrer) };
+}
+
 export function parseState(input: unknown): UserPipelineState {
   if (!input || typeof input !== "object") return EMPTY_PIPELINE;
   const raw = input as Partial<UserPipelineState>;
   return {
     version: 1,
     campuses: (Array.isArray(raw.campuses) ? raw.campuses.filter(isCampus) : []).slice(0, 400),
-    startups: (Array.isArray(raw.startups) ? raw.startups.filter(isStartup) : []).slice(0, 400),
-    links: (Array.isArray(raw.links) ? raw.links.filter(isLink) : []).slice(0, 800),
+    startups: (Array.isArray(raw.startups) ? raw.startups.filter(isStartup).map(withSource) : []).slice(0, 400),
+    links: (Array.isArray(raw.links) ? raw.links.filter(isLink).map(withSource) : []).slice(0, 800),
   };
 }
 
@@ -436,6 +469,8 @@ export function validateDraft(draft: StartupDraft): { ok: true; value: ValidStar
       verificationUrl: verificationUrl!,
       verificationNotes: notes,
       stage: draft.stage,
+      sourcedVia: sourceChannel(draft.sourcedVia),
+      referrer: referrerText(draft.referrer),
     },
   };
 }
@@ -477,6 +512,8 @@ export function upsertStartup(state: UserPipelineState, draft: ValidStartup, cam
     verificationUrl: draft.verificationUrl,
     verificationNotes: draft.verificationNotes,
     stage: draft.stage,
+    sourcedVia: draft.sourcedVia,
+    referrer: draft.referrer,
     createdAt: previous?.createdAt ?? nowIso(),
     updatedAt: nowIso(),
   };
@@ -502,6 +539,20 @@ export function setStartupStage(state: UserPipelineState, id: string, stage: Pip
   };
 }
 
+function liveReferrer(value: string | null): string | null {
+  if (value == null) return null;
+  return value.slice(0, 120);
+}
+
+export function setStartupSource(state: UserPipelineState, id: string, sourcedVia: SourceChannel | null, referrer: string | null): UserPipelineState {
+  return {
+    ...state,
+    startups: state.startups.map((startup) =>
+      startup.id === id ? { ...startup, sourcedVia: sourceChannel(sourcedVia), referrer: liveReferrer(referrer), updatedAt: nowIso() } : startup
+    ),
+  };
+}
+
 export function starEntity(
   state: UserPipelineState,
   input: {
@@ -513,6 +564,8 @@ export function starEntity(
     verificationUrl?: string | null;
     verificationNotes?: string | null;
     stage?: PipelineStage;
+    sourcedVia?: SourceChannel | null;
+    referrer?: string | null;
   }
 ): UserPipelineState {
   const existing = state.links.find((link) => link.entityType === input.entityType && link.entityId === input.entityId);
@@ -529,6 +582,8 @@ export function starEntity(
               verificationUrl: input.verificationUrl ?? link.verificationUrl,
               verificationNotes: input.verificationNotes ?? link.verificationNotes,
               stage: input.stage ?? link.stage,
+              sourcedVia: input.sourcedVia !== undefined ? sourceChannel(input.sourcedVia) : link.sourcedVia,
+              referrer: input.referrer !== undefined ? liveReferrer(input.referrer) : link.referrer,
               updatedAt: nowIso(),
             }
           : link
@@ -545,6 +600,8 @@ export function starEntity(
     stage: input.stage ?? "Sourced",
     verificationUrl: input.verificationUrl ?? null,
     verificationNotes: input.verificationNotes ?? null,
+    sourcedVia: sourceChannel(input.sourcedVia),
+    referrer: liveReferrer(input.referrer ?? null),
     createdAt: nowIso(),
     updatedAt: nowIso(),
   };
@@ -557,6 +614,13 @@ export function unstarEntity(state: UserPipelineState, entityType: "project" | "
 
 export function setLinkStage(state: UserPipelineState, id: string, stage: PipelineStage): UserPipelineState {
   return { ...state, links: state.links.map((link) => (link.id === id ? { ...link, stage, updatedAt: nowIso() } : link)) };
+}
+
+export function setLinkSource(state: UserPipelineState, id: string, sourcedVia: SourceChannel | null, referrer: string | null): UserPipelineState {
+  return {
+    ...state,
+    links: state.links.map((link) => (link.id === id ? { ...link, sourcedVia: sourceChannel(sourcedVia), referrer: liveReferrer(referrer), updatedAt: nowIso() } : link)),
+  };
 }
 
 export function removeLink(state: UserPipelineState, id: string): UserPipelineState {

@@ -15,6 +15,8 @@ import { NODE_FILL, campusSwatches, groupCampusSwatches } from "./network-style"
 import { useAskHighlight } from "./ask-highlight";
 import { NETWORK_FILTER_EVENT, type NetworkMapFilter } from "@/lib/domain/network-filter";
 import { LinkedInIconButton, LinkedInOpenButton, PersonLinkButton, ProfileIconLinks } from "./person-link";
+import { DrfHopFilter } from "./drf-hop-filter";
+import { WarmIntroPaths } from "./warm-intro-paths";
 
 const NetworkSigma = dynamic(() => import("./network-sigma").then((mod) => mod.NetworkSigma), {
   ssr: false,
@@ -40,6 +42,7 @@ const EDGE_TYPES: { id: MapEdgeType; label: string }[] = [
   { id: "invested_in", label: "Invested in" },
   { id: "member_of", label: "Member of" },
   { id: "at_campus", label: "At campus" },
+  { id: "works_at", label: "Works at" },
 ];
 
 const ENROLL: { id: string; label: string }[] = [
@@ -63,6 +66,7 @@ interface Filters {
   yearTo: number | null;
   orgTier: OrgTierMode;
   orgSections: HotspotSectionId[];
+  drfHops: boolean;
 }
 
 function enrollCaption(status: string | null, basis: MapNode["enrollBasis"]): string | null {
@@ -98,6 +102,7 @@ export function NetworkMapApp() {
   const graphApi = useRef<NetworkSigmaHandle | null>(null);
 
   const [pinned, setPinned] = useState<{ label: string; ids: Set<string> } | null>(null);
+  const [drfNear, setDrfNear] = useState<Set<string> | null>(null);
 
   useEffect(() => {
     const onFilter = (event: Event) => {
@@ -150,6 +155,7 @@ export function NetworkMapApp() {
           yearTo: null,
           orgTier: "all",
           orgSections: [...ORG_SECTIONS],
+          drfHops: false,
         };
         defaultsRef.current = initial;
         setFilters(initial);
@@ -185,9 +191,25 @@ export function NetworkMapApp() {
     setFilters({ ...filters, campuses: [...filters.campuses, ...fresh] });
   }, [shown, filters]);
 
+  useEffect(() => {
+    if (!filters?.drfHops || drfNear) return;
+    let cancel = false;
+    fetch("/api/drf/neighborhood")
+      .then((res) => (res.ok ? (res.json() as Promise<{ ids?: string[] }>) : { ids: [] }))
+      .then((data) => {
+        if (!cancel) setDrfNear(new Set(data.ids ?? []));
+      })
+      .catch(() => {
+        if (!cancel) setDrfNear(new Set());
+      });
+    return () => {
+      cancel = true;
+    };
+  }, [filters?.drfHops, drfNear]);
+
   const ask = useAskHighlight();
   const hidden = useMemo(() => {
-    const base = hiddenIds(shown, filters, showIsolates);
+    const base = hiddenIds(shown, filters, showIsolates, filters?.drfHops ? drfNear : null);
     let next = base;
     if (ask && shown && ask.ids.length > 0) {
       const keep = new Set(ask.ids);
@@ -206,7 +228,7 @@ export function NetworkMapApp() {
       return narrowed;
     }
     return next;
-  }, [shown, filters, showIsolates, ask, pinned]);
+  }, [shown, filters, showIsolates, ask, pinned, drfNear]);
   const edgeTypes = useMemo(() => new Set(filters?.edgeTypes ?? []), [filters]);
   const activeId = selected && !hidden.has(selected) ? selected : null;
 
@@ -500,6 +522,11 @@ export function NetworkMapApp() {
                   />
                 ))}
                 <p className="pt-1 text-[10px] leading-snug text-neutral-600">Studied-at links stay hidden until you hover a node, so campus clusters stay readable.</p>
+                <DrfHopFilter
+                  checked={filters.drfHops}
+                  disabled={filters.drfHops && !drfNear}
+                  onChange={(drfHops) => setFilters({ ...filters, drfHops })}
+                />
               </FilterGroup>
             </details>
           </div>
@@ -633,6 +660,11 @@ export function NetworkMapApp() {
             ) : (
               <p className="text-sm text-neutral-600">Loading…</p>
             )}
+            {(selectedNode.type === "person" || selectedNode.type === "startup") && !isUserAddedId(selectedNode.id) && (
+              <div className="mt-3 border-t border-black/10 pt-2">
+                <WarmIntroPaths entityId={selectedNode.id} />
+              </div>
+            )}
           </div>
         </aside>
       )}
@@ -681,7 +713,7 @@ function personYearOk(node: MapNode, filters: Filters): boolean {
   return true;
 }
 
-function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates: boolean): Set<string> {
+function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates: boolean, drfNear: Set<string> | null): Set<string> {
   const hidden = new Set<string>();
   if (!graph || !filters) return hidden;
   const allCampuses = graph.nodes.filter((node) => node.type === "campus").map((node) => node.campus).filter((id): id is string => !!id);
@@ -792,6 +824,11 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
       show = graph.edges.some((edge) => edge.type === "invested_in" && edge.source === node.id && startupOk.has(edge.target));
     }
     if (!show) hidden.add(node.id);
+  }
+  if (drfNear) {
+    for (const node of graph.nodes) {
+      if (!drfNear.has(node.id)) hidden.add(node.id);
+    }
   }
   return hidden;
 }

@@ -214,6 +214,32 @@ function migrate(db: Database.Database) {
     ON precollege_signals(person_id, signal_type, IFNULL(year, 0), source_url)`);
   db.exec(`CREATE INDEX IF NOT EXISTS idx_precollege_person ON precollege_signals(person_id)`);
 
+  db.exec(`CREATE TABLE IF NOT EXISTS drf_alumni (
+    id TEXT PRIMARY KEY,
+    person_id TEXT NOT NULL REFERENCES people(id),
+    name TEXT NOT NULL,
+    drf_team TEXT,
+    university_id TEXT,
+    school_label TEXT,
+    program_id TEXT,
+    program_label TEXT,
+    year_start INTEGER,
+    year_end INTEGER,
+    class_year INTEGER,
+    current_firm TEXT,
+    current_role TEXT,
+    investor_id TEXT,
+    source_url TEXT NOT NULL,
+    firm_source_url TEXT,
+    sources_json TEXT NOT NULL DEFAULT '[]',
+    confidence TEXT NOT NULL,
+    excerpt TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    UNIQUE(person_id)
+  )`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_drf_alumni_person ON drf_alumni(person_id)`);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_drf_alumni_investor ON drf_alumni(investor_id)`);
+
   db.exec(`CREATE TABLE IF NOT EXISTS company_facts (
     id TEXT PRIMARY KEY,
     project_id TEXT NOT NULL REFERENCES projects(id),

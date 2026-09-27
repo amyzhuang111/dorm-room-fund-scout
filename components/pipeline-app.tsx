@@ -6,6 +6,8 @@ import { useSearchParams } from "next/navigation";
 import { PIPELINE_STAGES, type PipelineStage, type UserStartup } from "@/lib/domain/user-pipeline";
 import { AddStartupForm } from "./add-startup-form";
 import { UserAddedBadge, VerifiedByUserBadge } from "./entity-marks";
+import { PipelineSourceFields } from "./pipeline-source-fields";
+import { PipelineSourceMix } from "./pipeline-source-mix";
 import { useUserPipeline } from "./user-pipeline-provider";
 
 export function PipelineApp({ campuses }: { campuses: { id: string; name: string }[] }) {
@@ -49,6 +51,8 @@ export function PipelineApp({ campuses }: { campuses: { id: string; name: string
       )}
       {pipeline.storage !== "local" && <div id="setup" />}
 
+      <PipelineSourceMix state={pipeline.state} />
+
       {showForm && (
         <div className="mt-4">
           <AddStartupForm
@@ -82,6 +86,7 @@ export function PipelineApp({ campuses }: { campuses: { id: string; name: string
                       startup={card.startup}
                       confirmDelete={confirmDelete === card.startup.id}
                       onStage={(next) => pipeline.setStartupStage(card.startup.id, next)}
+                      onSource={(next) => pipeline.setStartupSource(card.startup.id, next.sourcedVia, next.referrer)}
                       onEdit={() => {
                         setEditingId(card.startup.id);
                         setCreating(false);
@@ -114,6 +119,12 @@ export function PipelineApp({ campuses }: { campuses: { id: string; name: string
                           Remove
                         </button>
                       </div>
+                      <PipelineSourceFields
+                        compact
+                        sourcedVia={card.link.sourcedVia}
+                        referrer={card.link.referrer}
+                        onChange={(next) => pipeline.setLinkSource(card.link.id, next.sourcedVia, next.referrer)}
+                      />
                     </article>
                   )
                 )}
@@ -143,6 +154,7 @@ function StartupCard({
   startup,
   confirmDelete,
   onStage,
+  onSource,
   onEdit,
   onAskDelete,
   onCancelDelete,
@@ -151,6 +163,7 @@ function StartupCard({
   startup: UserStartup;
   confirmDelete: boolean;
   onStage: (stage: PipelineStage) => void;
+  onSource: (next: { sourcedVia: UserStartup["sourcedVia"]; referrer: string | null }) => void;
   onEdit: () => void;
   onAskDelete: () => void;
   onCancelDelete: () => void;
@@ -191,6 +204,7 @@ function StartupCard({
           </button>
         )}
       </div>
+      <PipelineSourceFields compact sourcedVia={startup.sourcedVia} referrer={startup.referrer} onChange={onSource} />
     </article>
   );
 }

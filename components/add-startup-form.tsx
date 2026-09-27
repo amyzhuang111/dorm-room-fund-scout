@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { isUserCampusId, PIPELINE_STAGES, type DuplicateHit, type StartupDraft, type UserStartup, type ValidStartup } from "@/lib/domain/user-pipeline";
+import { PipelineSourceFields } from "./pipeline-source-fields";
 import { useUserPipeline } from "./user-pipeline-provider";
 
 const inputClass = "w-full rounded-md border border-black bg-white px-2.5 py-1.5 text-sm text-black placeholder:text-neutral-500";
@@ -31,6 +32,8 @@ function fromStartup(startup: UserStartup): StartupDraft {
     verificationUrl: startup.verificationUrl,
     verificationNotes: startup.verificationNotes,
     stage: startup.stage,
+    sourcedVia: startup.sourcedVia,
+    referrer: startup.referrer,
   };
 }
 
@@ -58,6 +61,8 @@ export function AddStartupForm({
     verificationUrl: "",
     verificationNotes: "",
     stage: "Sourced",
+    sourcedVia: null,
+    referrer: null,
   }));
   const [campusQuery, setCampusQuery] = useState(initial?.campusName ?? "");
   const [campusOpen, setCampusOpen] = useState(false);
@@ -246,6 +251,11 @@ export function AddStartupForm({
           </select>
         </label>
       </div>
+      <PipelineSourceFields
+        sourcedVia={draft.sourcedVia}
+        referrer={draft.referrer}
+        onChange={(next) => setDraft({ ...draft, sourcedVia: next.sourcedVia, referrer: next.referrer })}
+      />
       <label className="mt-3 block text-xs font-semibold uppercase tracking-wide">
         Notes
         <textarea value={draft.verificationNotes} onChange={(event) => setDraft({ ...draft, verificationNotes: event.target.value })} rows={3} className={`${inputClass} mt-1`} />

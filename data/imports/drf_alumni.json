@@ -1,0 +1,137 @@
+[
+  {
+    "id": "dra_lauren_reeder",
+    "name": "Lauren Reeder",
+    "drf_team": "Philly",
+    "university_id": "univ_penn",
+    "school_label": "University of Pennsylvania",
+    "school_role": "undergrad",
+    "program_id": "proj_mt_penn",
+    "program_label": "M&T",
+    "class_year": 2016,
+    "affiliation_status": "older_alumni",
+    "current_firm": "Sequoia Capital",
+    "current_role": "Partner",
+    "source_url": "https://fortune.com/2022/09/06/exclusive-student-run-vc-dorm-room-fund-spins-out-from-first-round-capital-raises-12-5m-fund-from-marc-andreessen-underscore-vc-insight-partners-others/",
+    "firm_source_url": "https://fisher.wharton.upenn.edu/mt-for-life/lauren-reeder-mt16/",
+    "team_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+    "confidence": "confirmed",
+    "excerpt": "Fortune (6 Sep 2022) names Lauren Reeder as a Dorm Room Fund alum and a partner at Sequoia Capital. Penn's M&T page (4 Aug 2025) identifies her as M&T '16 and a partner on Sequoia's early-stage team. A DRF graduation note places her on the Philly team after the M&T program."
+  },
+  {
+    "id": "dra_talia_goldberg",
+    "name": "Talia Goldberg",
+    "current_firm": "Bessemer Venture Partners",
+    "current_role": "Partner",
+    "source_url": "https://join.dormroomfund.com/",
+    "firm_source_url": "https://www.bvp.com/team",
+    "confidence": "confirmed",
+    "excerpt": "Dorm Room Fund's recruiting page lists Talia Goldberg under Hear From Our Alumni as Partner, Bessemer Venture Partners. Fortune (6 Sep 2022) names her among DRF alums at Bessemer. Bessemer's team page lists Talia Goldberg. Campus and DRF years were not stated on these pages."
+  },
+  {
+    "id": "dra_alex_immerman",
+    "name": "Alex Immerman",
+    "current_firm": "Andreessen Horowitz",
+    "current_role": "General Partner",
+    "source_url": "https://join.dormroomfund.com/",
+    "firm_source_url": "https://www.linkedin.com/in/immerman",
+    "confidence": "confirmed",
+    "excerpt": "Dorm Room Fund's recruiting page lists Alex Immerman under Hear From Our Alumni as Partner, a16z. Fortune (6 Sep 2022) names Andreessen Horowitz's Alex Immerman among DRF alums. His public LinkedIn profile lists General Partner at Andreessen Horowitz as the current role. Campus and DRF years were not stated on these pages."
+  },
+  {
+    "id": "dra_amber_yang",
+    "name": "Amber Yang",
+    "current_firm": "Lightspeed Venture Partners",
+    "current_role": "Enterprise Partner",
+    "source_url": "https://fortune.com/2022/09/06/exclusive-student-run-vc-dorm-room-fund-spins-out-from-first-round-capital-raises-12-5m-fund-from-marc-andreessen-underscore-vc-insight-partners-others/",
+    "firm_source_url": "https://lsvp.com/team-member/amber-yang/",
+    "confidence": "confirmed",
+    "excerpt": "Fortune (6 Sep 2022) names Bloomberg Beta's Amber Yang among DRF alums. Lightspeed's team page says she joined in 2025 as an Enterprise Partner, after Bloomberg Beta and then CRV. Campus and DRF years were not stated on these pages."
+  },
+  {
+    "id": "dra_jeremy_navarro",
+    "name": "Jeremy Navarro",
+    "school_label": "Middlebury College",
+    "class_year": 2021,
+    "current_firm": "General Catalyst",
+    "current_role": "Investor",
+    "source_url": "https://fortune.com/2022/09/06/exclusive-student-run-vc-dorm-room-fund-spins-out-from-first-round-capital-raises-12-5m-fund-from-marc-andreessen-underscore-vc-insight-partners-others/",
+    "firm_source_url": "https://www.jeremynavarro.com/",
+    "school_source_url": "https://joinnova.co/events/RDV-info-session",
+    "confidence": "confirmed",
+    "excerpt": "Fortune (6 Sep 2022) names General Catalyst's Jeremy Navarro among DRF alums. His site describes him as an investor at General Catalyst. A Rough Draft Ventures event page says he graduated from Middlebury College in 2021. That page does not state his DRF team or years."
+  },
+  {
+    "id": "dra_shawn_xu",
+    "name": "Shawn Xu",
+    "university_id": "univ_penn",
+    "school_label": "University of Pennsylvania",
+    "school_role": "mba",
+    "affiliation_status": "older_alumni",
+    "current_firm": "Lowercarbon Capital",
+    "current_role": "Partner",
+    "source_url": "https://lowercarbon.com/team/shawn-xu/",
+    "firm_source_url": "https://lowercarbon.com/team/shawn-xu/",
+    "confidence": "confirmed",
+    "excerpt": "Lowercarbon's team page says Shawn Xu is a Partner and that before On Deck he was on the investing teams at Floodgate and First Round Capital's Dorm Room Fund. The same page says he holds an MBA/MA from Wharton and the Lauder Institute at Penn, and completed undergraduate studies at UC San Diego. DRF team and years were not stated."
+  },
+  {
+    "id": "dra_isabelle_phelps",
+    "name": "Isabelle Phelps",
+    "current_firm": "Lerer Hippeau",
+    "current_role": "Partner",
+    "source_url": "https://blog.dormroomfund.com/post/hear-from-our-alumni-4-ways-drf-can-advance-careers-in-startups-vc",
+    "firm_source_url": "https://www.lererhippeau.com/team",
+    "confidence": "confirmed",
+    "excerpt": "DRF's 23 Sep 2022 alumni post quotes Isabelle Phelps on joining the DRF investing team in business school, and titles her Partner at Lerer Hippeau. Lerer Hippeau's team page lists her as Partner. The school name and DRF years were not stated."
+  },
+  {
+    "id": "dra_nick_kim",
+    "name": "Nick Kim",
+    "current_firm": "Upfront Ventures",
+    "current_role": "Partner",
+    "source_url": "https://blog.dormroomfund.com/post/hear-from-our-alumni-4-ways-drf-can-advance-careers-in-startups-vc",
+    "firm_source_url": "https://www.dormroomfund.com/",
+    "confidence": "likely",
+    "excerpt": "DRF's 23 Sep 2022 alumni post titles Nick Kim Partner at Upfront Ventures and quotes him on DRF sourcing trips to UCLA and USC. The live DRF homepage still lists Nick Kim, Partner, Upfront Ventures, in its network. A current Upfront team page was not found in this pass, so the role is likely rather than reconfirmed. Campus and DRF years were not stated."
+  },
+  {
+    "id": "dra_avi_muller",
+    "name": "Avi Muller",
+    "university_id": "univ_nyu",
+    "school_label": "New York University",
+    "school_role": "undergrad",
+    "affiliation_status": "unverified",
+    "current_firm": "Floodgate",
+    "current_role": "Investor",
+    "source_url": "https://blog.dormroomfund.com/post/hear-from-our-alumni-4-ways-drf-can-advance-careers-in-startups-vc",
+    "confidence": "likely",
+    "excerpt": "DRF's 23 Sep 2022 alumni post titles Avi Muller Investor at Floodgate. He writes that he joined the Dorm Room Fund team at the start of his junior year at NYU. No later firm page was found in this pass, so the Floodgate role is the one stated in 2022. DRF team and years were not stated."
+  },
+  {
+    "id": "dra_tony_cuevo_bravo",
+    "name": "Tony Cuevo Bravo",
+    "drf_team": "NYC",
+    "current_firm": "Manifold",
+    "current_role": "Investor",
+    "source_url": "https://blog.dormroomfund.com/post/hear-from-our-alumni-4-ways-drf-can-advance-careers-in-startups-vc",
+    "confidence": "likely",
+    "excerpt": "DRF's 23 Sep 2022 alumni post titles Tony Cuevo Bravo Investor at Manifold and quotes him becoming an investment partner on the NYC team. No later firm page was found in this pass, so the Manifold role is the one stated in 2022. School and years were not stated."
+  },
+  {
+    "id": "dra_matthew_wachter",
+    "name": "Matthew Wachter",
+    "current_firm": "Tiger Global",
+    "source_url": "https://fortune.com/2022/09/06/exclusive-student-run-vc-dorm-room-fund-spins-out-from-first-round-capital-raises-12-5m-fund-from-marc-andreessen-underscore-vc-insight-partners-others/",
+    "confidence": "likely",
+    "excerpt": "Fortune (6 Sep 2022) names Tiger Global's Matthew Wachter among DRF alums. The article does not state a title, campus, or years, and no later team page was found in this pass."
+  },
+  {
+    "id": "dra_brent_willess",
+    "name": "Brent Willess",
+    "current_firm": "Founder Collective",
+    "source_url": "https://fortune.com/2022/09/06/exclusive-student-run-vc-dorm-room-fund-spins-out-from-first-round-capital-raises-12-5m-fund-from-marc-andreessen-underscore-vc-insight-partners-others/",
+    "confidence": "likely",
+    "excerpt": "Fortune (6 Sep 2022) names Founder Collective's Brent Willess among DRF alums. The article does not state a title, campus, or years, and no later team page was found in this pass."
+  }
+]
