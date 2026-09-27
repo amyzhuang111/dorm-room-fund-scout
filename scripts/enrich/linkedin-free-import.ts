@@ -819,6 +819,20 @@ function printStats(db: ReturnType<typeof getDb>, checkpoint: Checkpoint) {
   }
 }
 
+function resolvePersonId(db: ReturnType<typeof getDb>, personId: string): string {
+  let current = personId;
+  const seen = new Set<string>();
+  while (!seen.has(current)) {
+    seen.add(current);
+    const row = db.prepare(`SELECT survivor_id FROM entity_redirects WHERE old_id = ? AND entity_type = 'person'`).get(current) as
+      | { survivor_id: string }
+      | undefined;
+    if (!row?.survivor_id || row.survivor_id === current) break;
+    current = row.survivor_id;
+  }
+  return current;
+}
+
 async function applyResults(db: ReturnType<typeof getDb>) {
   if (!fs.existsSync(RESULTS_PATH)) {
     console.log("No results file to apply.");
@@ -830,11 +844,14 @@ async function applyResults(db: ReturnType<typeof getDb>) {
   let skipped = 0;
   for (const line of lines) {
     const row = JSON.parse(line) as StoredResult;
-    const person = db.prepare(`SELECT id, name FROM people WHERE id = ?`).get(row.person_id) as { id: string; name: string } | undefined;
+    const personId = resolvePersonId(db, row.person_id);
+    const person = db.prepare(`SELECT id, name FROM people WHERE id = ?`).get(personId) as { id: string; name: string } | undefined;
     if (!person) {
+      console.log(`skip missing ${row.person_id} ${row.name}`);
       skipped += 1;
       continue;
     }
+    if (personId !== row.person_id) console.log(`redirect ${row.name} ${row.person_id} -> ${person.id} ${person.name}`);
     const match: AcceptMatch = {
       outcome: "accept",
       confidence: row.confidence,
