@@ -1,0 +1,2386 @@
+{
+  "retrievedAt": "2026-09-27T22:00:00.000Z",
+  "companies": [
+    {
+      "name": "Bilisense",
+      "description": "A point-of-care device that measures newborn bilirubin in minutes.",
+      "website": null,
+      "sourceUrl": "https://viterbischool.usc.edu/news/2026/05/usc-viterbi-startup-showcase-awards-150k-to-student-ventures/",
+      "excerpt": "Victor Ong, the founder and CEO of Bilisense, received his undergraduate and doctorate degrees from USC Viterbi and is currently a post-doc.",
+      "orgPlace": "Maseeh Entrepreneurship Prize Competition",
+      "campusIds": [
+        "univ_usc"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Victor Ong",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Founder and CEO, Bilisense",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "USC Viterbi names Victor Ong as founder and CEO of Bilisense. He has finished his Viterbi degrees and is a post-doc, so no class year is stored.",
+          "enrollment": null,
+          "excerpt": "Victor Ong, the founder and CEO of Bilisense, received his undergraduate and doctorate degrees from Viterbi and is currently a post-doc."
+        }
+      ]
+    },
+    {
+      "name": "DermaVision Technologies",
+      "description": "A portable multispectral imaging device for detecting bruises, including injuries that are hard to see.",
+      "website": null,
+      "sourceUrl": "https://viterbischool.usc.edu/news/2026/05/usc-viterbi-startup-showcase-awards-150k-to-student-ventures/",
+      "excerpt": "DermaVision Technologies won the 2026 Min Family Challenge. Christine Ly is a co-founder and Alejandra Reyes is a member of the team.",
+      "orgPlace": "Min Family Challenge",
+      "campusIds": [
+        "univ_usc"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Christine Ly",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Co-founder, DermaVision Technologies",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "USC Viterbi names Christine Ly as a co-founder of DermaVision and a biomedical engineering Ph.D. student.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Ph.D. student, biomedical engineering",
+            "gradYear": null,
+            "evidence": "The Startup Showcase article calls Christine Ly a USC Viterbi Ph.D. student in biomedical engineering."
+          },
+          "excerpt": "Christine Ly, a co-founder of DermaVision and a USC Viterbi Ph.D. student in biomedical engineering, spoke at the Startup Showcase."
+        },
+        {
+          "name": "Alejandra Reyes",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "DermaVision Technologies team",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a member of the DermaVision team. The article does not call her a founder or print a class year.",
+          "enrollment": null,
+          "excerpt": "Alejandra Reyes, a member of the DermaVision team, said the technology addresses a gap in how physical evidence is captured."
+        }
+      ]
+    },
+    {
+      "name": "Pando Surgical",
+      "description": "A laparoscopic surgical tool pitched by four first-year USC biomedical engineering students and an external founder.",
+      "website": null,
+      "sourceUrl": "https://viterbischool.usc.edu/news/2026/05/usc-viterbi-startup-showcase-awards-150k-to-student-ventures/",
+      "excerpt": "Pando Surgical won the live pitch round. The article names external founder Noah Pearson and does not name the four USC students.",
+      "orgPlace": "USC Startup Showcase",
+      "campusIds": [
+        "univ_usc"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Noah Pearson",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "External founder, Pando Surgical",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The article calls Noah Pearson an external founder, so he is not given a USC affiliation.",
+          "enrollment": null,
+          "excerpt": "Pando Surgical, a venture comprising four first-year USC biomedical engineering students and external founder Noah Pearson, won the live pitch round."
+        }
+      ]
+    },
+    {
+      "name": "Precision Bio",
+      "description": "A real-time dosing tool for warfarin.",
+      "website": null,
+      "sourceUrl": "https://viterbischool.usc.edu/news/2026/05/usc-viterbi-startup-showcase-awards-150k-to-student-ventures/",
+      "excerpt": "Precision Bio is developing a real-time dosing tool for warfarin. The article does not name the team.",
+      "orgPlace": "USC Startup Showcase",
+      "campusIds": [
+        "univ_usc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "MatterFlow",
+      "description": "A deployable computer-vision system that sorts aluminum out of venue waste.",
+      "website": null,
+      "sourceUrl": "https://viterbischool.usc.edu/news/2026/05/team-matterflow-triumph-at-the-das-family-innovate-x-la-student-competition/",
+      "excerpt": "MatterFlow won the 2026 Das Family Innovate X LA Competition. The team is Ishaani Pradeep, Aiden Pushin, Salma Setia, Claudia Zambrano, and Cassius Palacio.",
+      "orgPlace": "Das Family Innovate X LA",
+      "campusIds": [
+        "univ_usc"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Ishaani Pradeep",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, MatterFlow",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Ishaani Pradeep is named on the MatterFlow team."
+        },
+        {
+          "name": "Aiden Pushin",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, MatterFlow",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Aiden Pushin is named on the MatterFlow team."
+        },
+        {
+          "name": "Salma Setia",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, MatterFlow",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Salma Setia is named on the MatterFlow team."
+        },
+        {
+          "name": "Claudia Zambrano",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, MatterFlow",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Claudia Zambrano is named on the MatterFlow team."
+        },
+        {
+          "name": "Cassius Palacio",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, MatterFlow",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Cassius Palacio is named on the MatterFlow team."
+        }
+      ]
+    },
+    {
+      "name": "RE-LEV",
+      "description": "A proposal to retrofit freight rail corridors with magnetic levitation.",
+      "website": null,
+      "sourceUrl": "https://viterbischool.usc.edu/news/2026/05/team-matterflow-triumph-at-the-das-family-innovate-x-la-student-competition/",
+      "excerpt": "RE-LEV was runner-up at the 2026 Das Family Innovate X LA Competition. Sarah Lee, Alnur Askar, and Seth Moberg are named on the team.",
+      "orgPlace": "Das Family Innovate X LA",
+      "campusIds": [
+        "univ_usc"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Sarah Lee",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, RE-LEV",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Sarah Lee is named on the RE-LEV team."
+        },
+        {
+          "name": "Alnur Askar",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Das Family Innovate X LA 2026, RE-LEV",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the RE-LEV team with a Santa Monica College major, so this person is not affiliated to USC.",
+          "enrollment": null,
+          "excerpt": "Alnur Askar (Business, Santa Monica College) is named on the RE-LEV team."
+        },
+        {
+          "name": "Seth Moberg",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Das Family Innovate X LA 2026, RE-LEV",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the RE-LEV team with a Santa Monica College major, so this person is not affiliated to USC.",
+          "enrollment": null,
+          "excerpt": "Seth Moberg (Public Policy, Santa Monica College) is named on the RE-LEV team."
+        }
+      ]
+    },
+    {
+      "name": "Charged",
+      "description": "Solar-powered outdoor workspaces with shade and device charging.",
+      "website": null,
+      "sourceUrl": "https://viterbischool.usc.edu/news/2026/05/team-matterflow-triumph-at-the-das-family-innovate-x-la-student-competition/",
+      "excerpt": "Charged won Audience Choice at the 2026 Das Family Innovate X LA Competition.",
+      "orgPlace": "Das Family Innovate X LA",
+      "campusIds": [
+        "univ_usc"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Sam Gold",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Charged",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Sam Gold is named on the Charged team."
+        },
+        {
+          "name": "Joel Aziangli Etchri",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Charged",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Joel Aziangli Etchri is named on the Charged team."
+        },
+        {
+          "name": "Giselle Orozco",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Charged",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Giselle Orozco is named on the Charged team."
+        },
+        {
+          "name": "Sam Kovar",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Charged",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Sam Kovar is named on the Charged team."
+        },
+        {
+          "name": "Keira Izumi",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Charged",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Keira Izumi is named on the Charged team."
+        },
+        {
+          "name": "Hannah Goldstein",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Charged",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Hannah Goldstein is named on the Charged team."
+        }
+      ]
+    },
+    {
+      "name": "Hydropulse",
+      "description": "A pump-as-turbine that captures energy otherwise lost at pressure-reducing valves.",
+      "website": null,
+      "sourceUrl": "https://viterbischool.usc.edu/news/2026/05/team-matterflow-triumph-at-the-das-family-innovate-x-la-student-competition/",
+      "excerpt": "Hydropulse pitched at the 2026 Das Family Innovate X LA Competition.",
+      "orgPlace": "Das Family Innovate X LA",
+      "campusIds": [
+        "univ_usc"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Jenny Nguyen",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Hydropulse",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Jenny Nguyen is named on the Hydropulse team."
+        },
+        {
+          "name": "Kaylee Kim",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Hydropulse",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Kaylee Kim is named on the Hydropulse team."
+        },
+        {
+          "name": "Zihe Jiang",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Hydropulse",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Zihe Jiang is named on the Hydropulse team."
+        }
+      ]
+    },
+    {
+      "name": "Hubl",
+      "description": "An event shuttle platform that groups riders into shared pickups.",
+      "website": null,
+      "sourceUrl": "https://viterbischool.usc.edu/news/2026/05/team-matterflow-triumph-at-the-das-family-innovate-x-la-student-competition/",
+      "excerpt": "Hubl pitched at the 2026 Das Family Innovate X LA Competition.",
+      "orgPlace": "Das Family Innovate X LA",
+      "campusIds": [
+        "univ_usc"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Aagam Jain",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Hubl",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Aagam Jain is named on the Hubl team."
+        },
+        {
+          "name": "Deacon Larson",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Hubl",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Deacon Larson is named on the Hubl team."
+        },
+        {
+          "name": "Hansi Lee",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Hubl",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Hansi Lee is named on the Hubl team."
+        },
+        {
+          "name": "Taehyung Kim",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Hubl",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Taehyung Kim is named on the Hubl team."
+        },
+        {
+          "name": "Jack Miller",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Hubl",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Jack Miller is named on the Hubl team."
+        }
+      ]
+    },
+    {
+      "name": "Harvi",
+      "description": "An on-site air-to-water system for workers in high heat.",
+      "website": null,
+      "sourceUrl": "https://viterbischool.usc.edu/news/2026/05/team-matterflow-triumph-at-the-das-family-innovate-x-la-student-competition/",
+      "excerpt": "Harvi pitched at the 2026 Das Family Innovate X LA Competition.",
+      "orgPlace": "Das Family Innovate X LA",
+      "campusIds": [
+        "univ_usc"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Natalie Lopez",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Harvi",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Natalie Lopez is named on the Harvi team."
+        },
+        {
+          "name": "Arian Tomar",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Harvi",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Arian Tomar is named on the Harvi team."
+        },
+        {
+          "name": "Pagnapech Chamroeun",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Harvi",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Pagnapech Chamroeun is named on the Harvi team."
+        },
+        {
+          "name": "Evelyn Zhong",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Harvi",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Evelyn Zhong is named on the Harvi team."
+        },
+        {
+          "name": "Bakytzhan Baitassov",
+          "aliases": [],
+          "campusId": "univ_usc",
+          "affiliationRole": "Das Family Innovate X LA 2026, Harvi",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on a 2026 Das Family Innovate X LA team. The article does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Das Family Innovate X LA article lists this person with a USC major on a 2026 student team and does not print a class year."
+          },
+          "excerpt": "Bakytzhan Baitassov is named on the Harvi team."
+        }
+      ]
+    },
+    {
+      "name": "NEXT-TFX",
+      "description": "Reverse-osmosis membranes that produce more water at higher salinity, heat, and pressure.",
+      "website": null,
+      "sourceUrl": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/showcase-2026",
+      "excerpt": "NEXT-TFX founder Patrick O'Brien (FTMBA '26) is in the UCLA Draper Innovation Showcase.",
+      "orgPlace": "UCLA Draper Innovation Showcase",
+      "campusIds": [
+        "univ_ucla"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Patrick O'Brien",
+          "aliases": [],
+          "campusId": "univ_ucla",
+          "affiliationRole": "Founder, NEXT-TFX",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The UCLA showcase page titles Patrick O'Brien as founder and prints FTMBA '26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "FTMBA '26",
+            "gradYear": 2026,
+            "evidence": "The UCLA showcase page lists Patrick O'Brien (FTMBA '26)."
+          },
+          "excerpt": "Founder Patrick O'Brien (FTMBA '26) is building NEXT-TFX."
+        }
+      ]
+    },
+    {
+      "name": "ThermoShade",
+      "description": "Radiative cooling panels that protect people and animals from heat stress.",
+      "website": null,
+      "sourceUrl": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/showcase-2026",
+      "excerpt": "ThermoShade is in the UCLA Draper Innovation Showcase. Emily Dinino (FTMBA '22) is named on the company.",
+      "orgPlace": "UCLA Draper Innovation Showcase",
+      "campusIds": [
+        "univ_ucla"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Emily Dinino",
+          "aliases": [],
+          "campusId": "univ_ucla",
+          "affiliationRole": "ThermoShade",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on ThermoShade with FTMBA '22. The page does not use the title founder.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": "FTMBA '22",
+            "gradYear": 2022,
+            "evidence": "The UCLA showcase page lists Emily Dinino (FTMBA '22)."
+          },
+          "excerpt": "Emily Dinino (FTMBA '22) is named on ThermoShade at the UCLA showcase."
+        }
+      ]
+    },
+    {
+      "name": "Yeast Bay Bio",
+      "description": "An RNA insecticide meant to kill the pest and spare people, pets, and other species.",
+      "website": null,
+      "sourceUrl": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/showcase-2026",
+      "excerpt": "Yeast Bay Bio is in the UCLA Draper Innovation Showcase. Lisa Jann, EMBA '24, is named on the company.",
+      "orgPlace": "UCLA Draper Innovation Showcase",
+      "campusIds": [
+        "univ_ucla"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Lisa Jann",
+          "aliases": [],
+          "campusId": "univ_ucla",
+          "affiliationRole": "Yeast Bay Bio",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The page prints Lisa Jann, EMBA '24, and does not use the title founder. Nazzy Pakpour is also named, without a UCLA degree, and is not imported.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "EMBA '24",
+            "gradYear": 2024,
+            "evidence": "The UCLA showcase page lists Lisa Jann, EMBA '24."
+          },
+          "excerpt": "Lisa Jann, EMBA '24, is named on Yeast Bay Bio at the UCLA showcase."
+        }
+      ]
+    },
+    {
+      "name": "My Block Skin",
+      "description": "A translucent mineral SPF meant to avoid the white cast of traditional mineral sunscreens.",
+      "website": null,
+      "sourceUrl": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/showcase-2026",
+      "excerpt": "My Block Skin founder Jason Williams is a Ph.D. candidate in the UCLA Department of Chemistry and Biochemistry.",
+      "orgPlace": "UCLA Draper Innovation Showcase",
+      "campusIds": [
+        "univ_ucla"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Jason Williams",
+          "aliases": [],
+          "campusId": "univ_ucla",
+          "affiliationRole": "Founder, My Block Skin",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The UCLA showcase page titles Jason Williams as founder and a Ph.D. candidate.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Ph.D. candidate, Chemistry and Biochemistry",
+            "gradYear": null,
+            "evidence": "The UCLA showcase page calls Jason Williams a Ph.D. candidate in the UCLA Department of Chemistry and Biochemistry."
+          },
+          "excerpt": "Founder Jason Williams, Ph.D. candidate, UCLA Department of Chemistry and Biochemistry, is building My Block Skin."
+        }
+      ]
+    },
+    {
+      "name": "BioMetal Health",
+      "description": "Metal implants that heal faster and then dissolve.",
+      "website": null,
+      "sourceUrl": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/showcase-2026",
+      "excerpt": "BioMetal Health founder Jerry Yen (B.S. '88) is in the UCLA Draper Innovation Showcase.",
+      "orgPlace": "UCLA Draper Innovation Showcase",
+      "campusIds": [
+        "univ_ucla"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Jerry Yen",
+          "aliases": [],
+          "campusId": "univ_ucla",
+          "affiliationRole": "Founder, BioMetal Health",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The UCLA showcase page titles Jerry Yen as founder and prints B.S. '88.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": "B.S. '88",
+            "gradYear": 1988,
+            "evidence": "The UCLA showcase page lists Jerry Yen (B.S. '88)."
+          },
+          "excerpt": "Founder Jerry Yen (B.S. '88) is building BioMetal Health."
+        }
+      ]
+    },
+    {
+      "name": "CombixBio",
+      "description": "AI and automated lab testing to find drug combinations for diseases that one drug does not treat.",
+      "website": null,
+      "sourceUrl": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/showcase-2026",
+      "excerpt": "CombixBio founder Alexandra Bermudez (Ph.D. '24, B.S. '18) is in the UCLA Draper Innovation Showcase. The page also names two UCLA associate professors, who are not imported.",
+      "orgPlace": "UCLA Draper Innovation Showcase",
+      "campusIds": [
+        "univ_ucla"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Alexandra Bermudez",
+          "aliases": [],
+          "campusId": "univ_ucla",
+          "affiliationRole": "Founder, CombixBio",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The UCLA showcase page lists Alexandra Bermudez among the founders, with Ph.D. '24 and B.S. '18.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Ph.D. '24",
+            "gradYear": 2024,
+            "evidence": "The UCLA showcase page lists Alexandra Bermudez, Ph.D. '24, B.S. '18."
+          },
+          "excerpt": "Founders of CombixBio include Alexandra Bermudez, Ph.D. '24, B.S. '18."
+        }
+      ]
+    },
+    {
+      "name": "LIQD",
+      "description": "A disposable, pre-medicated, biodegradable dental tray for at-home gum-disease treatment.",
+      "website": null,
+      "sourceUrl": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/showcase-2026",
+      "excerpt": "LIQD founder Julieun Kawasaki (EMBA '26) is in the UCLA Draper Innovation Showcase.",
+      "orgPlace": "UCLA Draper Innovation Showcase",
+      "campusIds": [
+        "univ_ucla"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Julieun Kawasaki",
+          "aliases": [],
+          "campusId": "univ_ucla",
+          "affiliationRole": "Founder, LIQD",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The UCLA showcase page titles Julieun Kawasaki as founder and prints EMBA '26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "EMBA '26",
+            "gradYear": 2026,
+            "evidence": "The UCLA showcase page lists Julieun Kawasaki (EMBA '26)."
+          },
+          "excerpt": "Founder Julieun Kawasaki (EMBA '26) is building LIQD."
+        }
+      ]
+    },
+    {
+      "name": "Paralos Bioscience",
+      "description": "Engineered bacteriophages that deliver toxic drugs only where they are needed.",
+      "website": null,
+      "sourceUrl": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/showcase-2026",
+      "excerpt": "Paralos Bioscience founder Steven Yang (Ph.D. '25) is in the UCLA Draper Innovation Showcase.",
+      "orgPlace": "UCLA Draper Innovation Showcase",
+      "campusIds": [
+        "univ_ucla"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Steven Yang",
+          "aliases": [],
+          "campusId": "univ_ucla",
+          "affiliationRole": "Founder, Paralos Bioscience",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The UCLA showcase page titles Steven Yang as founder and prints Ph.D. '25.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Ph.D. '25",
+            "gradYear": 2025,
+            "evidence": "The UCLA showcase page lists Steven Yang (Ph.D. '25)."
+          },
+          "excerpt": "Founder Steven Yang (Ph.D. '25) is building Paralos Bioscience."
+        }
+      ]
+    },
+    {
+      "name": "RaiCare",
+      "description": "SparkHeal, a self-powered bioelectronic patch for chronic wounds.",
+      "website": null,
+      "sourceUrl": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/showcase-2026",
+      "excerpt": "RaiCare founder Kanishk Rai (M.S. '26, Ph.D. candidate) is in the UCLA Draper Innovation Showcase.",
+      "orgPlace": "UCLA Draper Innovation Showcase",
+      "campusIds": [
+        "univ_ucla"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Kanishk Rai",
+          "aliases": [],
+          "campusId": "univ_ucla",
+          "affiliationRole": "Founder, RaiCare",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The UCLA showcase page titles Kanishk Rai as founder, M.S. '26 and Ph.D. candidate.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "M.S. '26, Ph.D. candidate",
+            "gradYear": null,
+            "evidence": "The UCLA showcase page lists Kanishk Rai (M.S. '26, Ph.D. candidate)."
+          },
+          "excerpt": "Founder Kanishk Rai (M.S. '26, Ph.D. candidate) is building RaiCare."
+        }
+      ]
+    },
+    {
+      "name": "Junto Platforms",
+      "description": "Software that takes routine IT help-desk tasks so technicians handle the exceptions.",
+      "website": null,
+      "sourceUrl": "https://www.anderson.ucla.edu/about/centers/price-center-for-entrepreneurship-and-innovation/anderson-venture-accelerator/showcase-2026",
+      "excerpt": "Junto Platforms founder Reed Watne (EMBA '26) is in the UCLA Draper Innovation Showcase.",
+      "orgPlace": "UCLA Draper Innovation Showcase",
+      "campusIds": [
+        "univ_ucla"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Reed Watne",
+          "aliases": [],
+          "campusId": "univ_ucla",
+          "affiliationRole": "Founder, Junto Platforms",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The UCLA showcase page titles Reed Watne as founder and prints EMBA '26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "EMBA '26",
+            "gradYear": 2026,
+            "evidence": "The UCLA showcase page lists Reed Watne (EMBA '26)."
+          },
+          "excerpt": "Founder Reed Watne (EMBA '26) is building Junto Platforms."
+        }
+      ]
+    },
+    {
+      "name": "BioBead",
+      "description": "Biodegradable pellets that carry soil bacteria and fungi so crops need less fertilizer. Incorporated as SymbioSoil.",
+      "website": "https://www.biobead.org",
+      "sourceUrl": "https://www.geekwire.com/2026/ag-tech-startup-wins-top-prize-as-uws-dempsey-competition-awards-92500-across-finalists/",
+      "excerpt": "BioBead won the 2026 Dempsey Startup Competition. Co-founder Korena Mafune is a UW research scientist and co-founder Renee Davis is finishing a UW doctorate. Professor Mari Winkler is not imported.",
+      "orgPlace": "Dempsey Startup Competition",
+      "campusIds": [
+        "univ_uw"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Korena Mafune",
+          "aliases": [],
+          "campusId": "univ_uw",
+          "affiliationRole": "Co-founder, BioBead",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "GeekWire calls Korena Mafune a BioBead co-founder and a UW research scientist.",
+          "enrollment": null,
+          "excerpt": "Korena Mafune, a BioBead co-founder and UW research scientist, described the soil organisms the pellets carry."
+        },
+        {
+          "name": "Renee Davis",
+          "aliases": [],
+          "campusId": "univ_uw",
+          "affiliationRole": "Co-founder, BioBead",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "GeekWire calls Renee Davis a BioBead co-founder who is finishing her doctoral degree at the UW.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Doctoral student",
+            "gradYear": null,
+            "evidence": "GeekWire says Renee Davis is finishing her doctoral degree at the UW."
+          },
+          "excerpt": "BioBead co-founder Renee Davis is finishing her doctoral degree at the UW."
+        }
+      ]
+    },
+    {
+      "name": "Thera-T",
+      "description": "A drinkable hydrogel meant to capture toxins in the gut.",
+      "website": null,
+      "sourceUrl": "https://www.engr.washington.edu/news/article/2026-08-31/sowing-beads-life",
+      "excerpt": "Thera-T, led by doctoral students Ming-Che Chung and Pei-Hsin Wang, won second prize at the 2026 Hollomon Health Innovation Challenge.",
+      "orgPlace": "Hollomon Health Innovation Challenge",
+      "campusIds": [
+        "univ_uw"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Ming-Che Chung",
+          "aliases": [],
+          "campusId": "univ_uw",
+          "affiliationRole": "Hollomon Health Innovation Challenge 2026, Thera-T",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The engineering article says Thera-T is led by this doctoral student. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "Doctoral student",
+            "gradYear": null,
+            "evidence": "The UW engineering article calls Ming-Che Chung a doctoral student and does not print a class year."
+          },
+          "excerpt": "Thera-T is led by doctoral student Ming-Che Chung."
+        },
+        {
+          "name": "Pei-Hsin Wang",
+          "aliases": [],
+          "campusId": "univ_uw",
+          "affiliationRole": "Hollomon Health Innovation Challenge 2026, Thera-T",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The engineering article says Thera-T is led by this doctoral student. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "Doctoral student",
+            "gradYear": null,
+            "evidence": "The UW engineering article calls Pei-Hsin Wang a doctoral student and does not print a class year."
+          },
+          "excerpt": "Thera-T is led by doctoral student Pei-Hsin Wang."
+        }
+      ]
+    },
+    {
+      "name": "A-Alpha Bio",
+      "description": "A synthetic-biology company that measures and engineers protein-protein interactions. The 2026 Dempsey awards named its co-founders UW Alumni Entrepreneurs of the Year.",
+      "website": null,
+      "sourceUrl": "https://uwbuerkcenter.medium.com/2026-dempsey-startup-awards-celebrate-student-entrepreneurship-across-the-cascadia-corridor-3bb8a397db9e",
+      "excerpt": "David Younger (Ph.D. Bioengineering, '17) and Randolph Lopez (Ph.D. Bioengineering, '18), co-founders of A-Alpha Bio, received the 2026 UW Alumni Entrepreneur of the Year Award.",
+      "orgPlace": "Dempsey Startup Competition",
+      "campusIds": [
+        "univ_uw"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "David Younger",
+          "aliases": [],
+          "campusId": "univ_uw",
+          "affiliationRole": "Co-founder, A-Alpha Bio",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Buerk Center recap calls David Younger a co-founder of A-Alpha Bio and prints Ph.D. Bioengineering '17.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": "Ph.D. Bioengineering '17",
+            "gradYear": 2017,
+            "evidence": "The Buerk Center recap lists David Younger (Ph.D. Bioengineering, '17)."
+          },
+          "excerpt": "David Younger (Ph.D. Bioengineering, '17), co-founder of A-Alpha Bio, received the UW Alumni Entrepreneur of the Year Award."
+        },
+        {
+          "name": "Randolph Lopez",
+          "aliases": [],
+          "campusId": "univ_uw",
+          "affiliationRole": "Co-founder, A-Alpha Bio",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Buerk Center recap calls Randolph Lopez a co-founder of A-Alpha Bio and prints Ph.D. Bioengineering '18.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": "Ph.D. Bioengineering '18",
+            "gradYear": 2018,
+            "evidence": "The Buerk Center recap lists Randolph Lopez (Ph.D. Bioengineering, '18)."
+          },
+          "excerpt": "Randolph Lopez (Ph.D. Bioengineering, '18), co-founder of A-Alpha Bio, received the UW Alumni Entrepreneur of the Year Award."
+        }
+      ]
+    },
+    {
+      "name": "CPRight",
+      "description": "A low-cost patch that reports compression depth and pace during CPR.",
+      "website": null,
+      "sourceUrl": "https://www.geekwire.com/2026/ag-tech-startup-wins-top-prize-as-uws-dempsey-competition-awards-92500-across-finalists/",
+      "excerpt": "CPRight (UW) is a 2026 Dempsey Startup Competition prize winner. GeekWire does not name the team.",
+      "orgPlace": "Dempsey Startup Competition",
+      "campusIds": [
+        "univ_uw"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Alarmable",
+      "description": "A wearable bracelet charm that can be triggered as an alarm.",
+      "website": null,
+      "sourceUrl": "https://www.geekwire.com/2026/ag-tech-startup-wins-top-prize-as-uws-dempsey-competition-awards-92500-across-finalists/",
+      "excerpt": "Alarmable (UW) is a 2026 Dempsey Startup Competition prize winner. GeekWire does not name the team.",
+      "orgPlace": "Dempsey Startup Competition",
+      "campusIds": [
+        "univ_uw"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Osanwe Link",
+      "description": "A 2026 Dempsey Startup Competition prize winner from the University of Washington.",
+      "website": null,
+      "sourceUrl": "https://www.geekwire.com/2026/ag-tech-startup-wins-top-prize-as-uws-dempsey-competition-awards-92500-across-finalists/",
+      "excerpt": "Osanwe Link (UW) is a 2026 Dempsey Startup Competition prize winner. GeekWire does not name the team.",
+      "orgPlace": "Dempsey Startup Competition",
+      "campusIds": [
+        "univ_uw"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "LEAF",
+      "description": "A 2026 Dempsey Startup Competition prize winner from the University of Washington.",
+      "website": null,
+      "sourceUrl": "https://www.geekwire.com/2026/ag-tech-startup-wins-top-prize-as-uws-dempsey-competition-awards-92500-across-finalists/",
+      "excerpt": "LEAF (UW) is a 2026 Dempsey Startup Competition prize winner. GeekWire does not name the team.",
+      "orgPlace": "Dempsey Startup Competition",
+      "campusIds": [
+        "univ_uw"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Adam Biotech",
+      "description": "A 2026 Dempsey Startup Competition prize winner from the University of Washington.",
+      "website": null,
+      "sourceUrl": "https://www.geekwire.com/2026/ag-tech-startup-wins-top-prize-as-uws-dempsey-competition-awards-92500-across-finalists/",
+      "excerpt": "Adam Biotech (UW) is a 2026 Dempsey Startup Competition prize winner. GeekWire does not name the team.",
+      "orgPlace": "Dempsey Startup Competition",
+      "campusIds": [
+        "univ_uw"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Clubless Collective",
+      "description": "A 2026 Dempsey Startup Competition prize winner from the University of Washington.",
+      "website": null,
+      "sourceUrl": "https://www.geekwire.com/2026/ag-tech-startup-wins-top-prize-as-uws-dempsey-competition-awards-92500-across-finalists/",
+      "excerpt": "Clubless Collective (UW) is a 2026 Dempsey Startup Competition prize winner. GeekWire does not name the team.",
+      "orgPlace": "Dempsey Startup Competition",
+      "campusIds": [
+        "univ_uw"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Kindred",
+      "description": "A 2026 Dempsey Startup Competition prize winner from the University of Washington.",
+      "website": null,
+      "sourceUrl": "https://www.geekwire.com/2026/ag-tech-startup-wins-top-prize-as-uws-dempsey-competition-awards-92500-across-finalists/",
+      "excerpt": "Kindred (UW) is a 2026 Dempsey Startup Competition prize winner. GeekWire does not name the team.",
+      "orgPlace": "Dempsey Startup Competition",
+      "campusIds": [
+        "univ_uw"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Emerald Dynamics",
+      "description": "A 2026 Dempsey Startup Competition prize winner from the University of Washington.",
+      "website": null,
+      "sourceUrl": "https://www.geekwire.com/2026/ag-tech-startup-wins-top-prize-as-uws-dempsey-competition-awards-92500-across-finalists/",
+      "excerpt": "Emerald Dynamics (UW) is a 2026 Dempsey Startup Competition prize winner. GeekWire does not name the team.",
+      "orgPlace": "Dempsey Startup Competition",
+      "campusIds": [
+        "univ_uw"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "UWEMS",
+      "description": "A 2026 Dempsey Startup Competition prize winner from the University of Washington.",
+      "website": null,
+      "sourceUrl": "https://www.geekwire.com/2026/ag-tech-startup-wins-top-prize-as-uws-dempsey-competition-awards-92500-across-finalists/",
+      "excerpt": "UWEMS (UW) is a 2026 Dempsey Startup Competition prize winner. GeekWire does not name the team.",
+      "orgPlace": "Dempsey Startup Competition",
+      "campusIds": [
+        "univ_uw"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Natrium Labs",
+      "description": "A dietary supplement concept meant to suppress the desire for sodium.",
+      "website": null,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "excerpt": "Yameng Zhang, a Caltech PhD student in neurobiology, developed her company Natrium Labs during the OTTCP summer internship.",
+      "orgPlace": "OTTCP Summer Internship",
+      "campusIds": [
+        "univ_caltech"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Yameng Zhang",
+          "aliases": [],
+          "campusId": "univ_caltech",
+          "affiliationRole": "Student startup, Natrium Labs",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The OTTCP page calls Natrium Labs her company. It does not print a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "PhD Neurobiology",
+            "gradYear": null,
+            "evidence": "The OTTCP page lists Yameng Zhang as a PhD student in neurobiology and does not print a class year."
+          },
+          "excerpt": "Yameng Zhang applied with her concept for company Natrium Labs, a dietary supplement that helps suppress people's desire for sodium consumption."
+        }
+      ]
+    },
+    {
+      "name": "Audiomatic",
+      "description": "AI-enabled dubbed translations of audio and video that keep the original speakers' voices.",
+      "website": null,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "excerpt": "Nika Chuzhoy, BSc Computer Science '26, is a co-founder of Audiomatic. Brian Hu, BSc Computer Science '26, built Audiomatic with her during the OTTCP internship.",
+      "orgPlace": "OTTCP Summer Internship",
+      "campusIds": [
+        "univ_caltech"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Nika Chuzhoy",
+          "aliases": [],
+          "campusId": "univ_caltech",
+          "affiliationRole": "Co-founder, Audiomatic",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The OTTCP page calls Nika Chuzhoy a co-founder of Audiomatic and prints BSc Computer Science '26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "The OTTCP page lists Nika Chuzhoy, BSc Computer Science, '26."
+          },
+          "excerpt": "Nika Chuzhoy, BSc Computer Science '26, is a co-founder of Audiomatic."
+        },
+        {
+          "name": "Brian Hu",
+          "aliases": [],
+          "campusId": "univ_caltech",
+          "affiliationRole": "Co-founder, Audiomatic",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The OTTCP page describes Brian Hu working alongside his Audiomatic co-founder Nika and prints BSc Computer Science '26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "The OTTCP page lists Brian Hu, BSc Computer Science, '26."
+          },
+          "excerpt": "Brian Hu, BSc Computer Science '26, applied alongside his Audiomatic co-founder Nika."
+        }
+      ]
+    },
+    {
+      "name": "Desert Farming",
+      "description": "Microbial communities for carbon fixation in seawater, and biocomposites from algae and agricultural waste.",
+      "website": null,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "excerpt": "Madison Dunitz and Helen Wexler describe Desert Farming as their company on the Caltech OTTCP page.",
+      "orgPlace": "OTTCP Summer Internship",
+      "campusIds": [
+        "univ_caltech"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Madison Dunitz",
+          "aliases": [],
+          "campusId": "univ_caltech",
+          "affiliationRole": "Student startup, Desert Farming",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The OTTCP page calls Desert Farming their company and prints PhD Geobiology '27.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "The OTTCP page lists Madison Dunitz, PhD Geobiology, '27."
+          },
+          "excerpt": "Madison Dunitz, PhD Geobiology '27, came into the internship after their company, Desert Farming, was a Bill Gross Prize finalist."
+        },
+        {
+          "name": "Helen Wexler",
+          "aliases": [],
+          "campusId": "univ_caltech",
+          "affiliationRole": "Student startup, Desert Farming",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The OTTCP page calls Desert Farming their company and prints PhD Bioengineering '25.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'25",
+            "gradYear": 2025,
+            "evidence": "The OTTCP page lists Helen Wexler, PhD Bioengineering, '25."
+          },
+          "excerpt": "Helen Wexler, PhD Bioengineering '25, applied to work on their company Desert Farming."
+        }
+      ]
+    },
+    {
+      "name": "Luria Health",
+      "description": "An AI system for personalized health analysis. Formerly Chiron.",
+      "website": null,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "excerpt": "Andrea Olsen, BSc '27, joined the OTTCP internship to keep launching her startup, Luria Health.",
+      "orgPlace": "OTTCP Summer Internship",
+      "campusIds": [
+        "univ_caltech"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Andrea Olsen",
+          "aliases": [],
+          "campusId": "univ_caltech",
+          "affiliationRole": "Student startup, Luria Health",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The OTTCP page calls Luria Health her startup and prints BSc '27.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "The OTTCP page lists Andrea Olsen, BSc, '27."
+          },
+          "excerpt": "Andrea Olsen, BSc '27, joined the internship to work towards launching her startup, Luria Health."
+        }
+      ]
+    },
+    {
+      "name": "String",
+      "description": "A student startup working on supply-chain optimization.",
+      "website": null,
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "excerpt": "The OTTCP page labels String as the student startup of Sean Theuri, Nyasha Makaya, Eden Obeng, and Abdulkarim Mugisha.",
+      "orgPlace": "OTTCP Summer Internship",
+      "campusIds": [
+        "univ_caltech"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Sean Theuri",
+          "aliases": [],
+          "campusId": "univ_caltech",
+          "affiliationRole": "Student startup, String",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The OTTCP page labels String as this student's startup and prints BSc '26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "The OTTCP page lists Sean Theuri with class year '26."
+          },
+          "excerpt": "Sean Theuri, BSc '26, is listed with student startup String."
+        },
+        {
+          "name": "Nyasha Makaya",
+          "aliases": [],
+          "campusId": "univ_caltech",
+          "affiliationRole": "Student startup, String",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The OTTCP page labels String as this student's startup and prints BSc '26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "The OTTCP page lists Nyasha Makaya with class year '26."
+          },
+          "excerpt": "Nyasha Makaya, BSc '26, is listed with student startup String."
+        },
+        {
+          "name": "Eden Obeng",
+          "aliases": [],
+          "campusId": "univ_caltech",
+          "affiliationRole": "Student startup, String",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The OTTCP page labels String as this student's startup and prints BSc '26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "The OTTCP page lists Eden Obeng with class year '26."
+          },
+          "excerpt": "Eden Obeng, BSc '26, is listed with student startup String."
+        },
+        {
+          "name": "Abdulkarim Mugisha",
+          "aliases": [],
+          "campusId": "univ_caltech",
+          "affiliationRole": "Student startup, String",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The OTTCP page labels String as this student's startup and prints BSc '26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "The OTTCP page lists Abdulkarim Mugisha with class year '26."
+          },
+          "excerpt": "Abdulkarim Mugisha, BSc '26, is listed with student startup String."
+        }
+      ]
+    },
+    {
+      "name": "Simantic",
+      "description": "Simulation software so engineers and AI systems can test firmware before the hardware exists.",
+      "website": null,
+      "sourceUrl": "https://uwaterloo.ca/engineering/news/student-startup-simantic-joins-y-combinator",
+      "excerpt": "Seungmin Hong (BASc '26) launched Simantic, and Ahnaf Shahriar (BASc in progress) joined as a co-founder. Both are Waterloo Engineering students.",
+      "orgPlace": "Velocity",
+      "campusIds": [
+        "univ_waterloo"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Seungmin Hong",
+          "aliases": [],
+          "campusId": "univ_waterloo",
+          "affiliationRole": "Founder, Simantic",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Waterloo Engineering article says Seungmin Hong launched Simantic and prints BASc '26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "BASc '26",
+            "gradYear": 2026,
+            "evidence": "The Waterloo Engineering article lists Seungmin Hong (BASc '26)."
+          },
+          "excerpt": "Seungmin Hong (BASc '26) launched Simantic in 2025."
+        },
+        {
+          "name": "Ahnaf Shahriar",
+          "aliases": [],
+          "campusId": "univ_waterloo",
+          "affiliationRole": "Co-founder, Simantic",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Waterloo Engineering article says Ahnaf Shahriar joined Simantic as a co-founder and prints BASc in progress.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "BASc in progress",
+            "gradYear": null,
+            "evidence": "The Waterloo Engineering article lists Ahnaf Shahriar (BASc in progress)."
+          },
+          "excerpt": "Ahnaf Shahriar (BASc in progress) joined Simantic as a co-founder in 2026."
+        }
+      ]
+    },
+    {
+      "name": "Magnesis Robotics",
+      "description": "Electromagnetic propulsion for underwater vehicles, inspired by squid.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/innovate/2026-innovators-night-recap-magnesis-robotics-and-farms-for-thought-win-top-prizes/",
+      "excerpt": "Magnesis Robotics, led by Pranav Sultania (ENG'27) and Isabella Santarpia (ENG'27), won the 2026 New Venture Competition general track. Pranav Sultania is quoted as co-founder.",
+      "orgPlace": "Innovate@BU New Venture Competition",
+      "campusIds": [
+        "univ_bu"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Pranav Sultania",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Co-founder, Magnesis Robotics",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Innovate@BU quotes Pranav Sultania as co-founder and prints ENG'27. The same article calls him a mechanical engineering Ph.D. student.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "ENG'27",
+            "gradYear": 2027,
+            "evidence": "Innovate@BU lists Pranav Sultania (ENG'27)."
+          },
+          "excerpt": "Pranav Sultania (ENG'27), co-founder, Magnesis Robotics, won first place."
+        },
+        {
+          "name": "Isabella Santarpia",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Magnesis Robotics",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Innovate@BU says the venture is led by Isabella Santarpia (ENG'27). It does not call her a founder in her own right.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "ENG'27",
+            "gradYear": 2027,
+            "evidence": "Innovate@BU lists Isabella Santarpia (ENG'27)."
+          },
+          "excerpt": "Magnesis Robotics is led by Isabella Santarpia (ENG'27)."
+        }
+      ]
+    },
+    {
+      "name": "Naya",
+      "description": "A reusable, self-disinfecting tampon applicator.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/articles/2026/2026-innovators-night/",
+      "excerpt": "Naya, a venture founded by Julia Yusupov (Questrom'25), placed second at BU's 2026 Innovators' Night.",
+      "orgPlace": "Innovate@BU New Venture Competition",
+      "campusIds": [
+        "univ_bu"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Julia Yusupov",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Founder, Naya",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "BU Today says Naya was founded by Julia Yusupov and prints Questrom'25.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Questrom'25",
+            "gradYear": 2025,
+            "evidence": "BU Today lists Julia Yusupov (Questrom'25)."
+          },
+          "excerpt": "Naya, a venture founded by Julia Yusupov (Questrom'25), earned second place."
+        }
+      ]
+    },
+    {
+      "name": "AttorneyAlert",
+      "description": "A platform that connects recently arrested people with criminal defense attorneys.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/innovate/2026-innovators-night-recap-magnesis-robotics-and-farms-for-thought-win-top-prizes/",
+      "excerpt": "AttorneyAlert, led by Brian Namnoum (MET'26), placed third in the 2026 New Venture Competition general track.",
+      "orgPlace": "Innovate@BU New Venture Competition",
+      "campusIds": [
+        "univ_bu"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Brian Namnoum",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "AttorneyAlert",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Innovate@BU says AttorneyAlert is led by Brian Namnoum (MET'26). It does not use the title founder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "MET'26",
+            "gradYear": 2026,
+            "evidence": "Innovate@BU lists Brian Namnoum (MET'26)."
+          },
+          "excerpt": "AttorneyAlert, led by Brian Namnoum (MET'26), placed third."
+        }
+      ]
+    },
+    {
+      "name": "Spectral Autonomy",
+      "description": "Portable, AI-enabled electromagnetic protection systems.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/articles/2026/2026-innovators-night/",
+      "excerpt": "Spectral Autonomy, developed by Anton Njavro (CAS'27), won Audience Choice at BU's 2026 Innovators' Night.",
+      "orgPlace": "Innovate@BU New Venture Competition",
+      "campusIds": [
+        "univ_bu"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Anton Njavro",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Spectral Autonomy",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "BU Today says Spectral Autonomy was developed by Anton Njavro (CAS'27). It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "CAS'27",
+            "gradYear": 2027,
+            "evidence": "BU Today lists Anton Njavro (CAS'27)."
+          },
+          "excerpt": "Spectral Autonomy, developed by Anton Njavro (CAS'27), was named the Audience Choice winner."
+        }
+      ]
+    },
+    {
+      "name": "Farms for Thought",
+      "description": "Autonomous vertical farms and a STEM curriculum for schools with limited access to fresh food.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/articles/2026/2026-innovators-night/",
+      "excerpt": "Farms for Thought, founded by Emma Hudson (ENG'27) and Maryam Bellakbira, a Cornell University student, won the 2026 social impact track.",
+      "orgPlace": "Innovate@BU New Venture Competition",
+      "campusIds": [
+        "univ_bu",
+        "univ_cornell"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Emma Hudson",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Co-founder, Farms for Thought",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Innovate@BU quotes Emma Hudson as co-founder and prints ENG'27. BU Today says the venture was founded by her and Maryam Bellakbira.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "ENG'27",
+            "gradYear": 2027,
+            "evidence": "Innovate@BU lists Emma Hudson (ENG'27)."
+          },
+          "excerpt": "Emma Hudson (ENG'27), co-founder, Farms for Thought, won the social impact track."
+        },
+        {
+          "name": "Maryam Bellakbira",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Farms for Thought",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "BU Today says Farms for Thought was founded by Maryam Bellakbira, a Cornell University student. It does not print a Cornell class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "Cornell University student",
+            "gradYear": null,
+            "evidence": "BU Today calls Maryam Bellakbira a Cornell University student and does not print a class year."
+          },
+          "excerpt": "Farms for Thought was founded by Maryam Bellakbira, a Cornell University student."
+        }
+      ]
+    },
+    {
+      "name": "JoHIL eKlinics",
+      "description": "Peri-urban clinics in Ghana that combine telemedicine with rotating specialist days.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/innovate/2026-innovators-night-recap-magnesis-robotics-and-farms-for-thought-win-top-prizes/",
+      "excerpt": "JoHIL eKlinics, led by Samuel Amoako-Kusi (SPH'27), placed second in the 2026 social impact track.",
+      "orgPlace": "Innovate@BU New Venture Competition",
+      "campusIds": [
+        "univ_bu"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Samuel Amoako-Kusi",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "JoHIL eKlinics",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Innovate@BU says JoHIL eKlinics is led by Samuel Amoako-Kusi (SPH'27). It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "SPH'27",
+            "gradYear": 2027,
+            "evidence": "Innovate@BU lists Samuel Amoako-Kusi (SPH'27)."
+          },
+          "excerpt": "JoHIL eKlinics, led by Samuel Amoako-Kusi (SPH'27), placed second."
+        }
+      ]
+    },
+    {
+      "name": "DesignMy Education",
+      "description": "An entrepreneurship platform delivered through public libraries.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/innovate/2026-innovators-night-recap-magnesis-robotics-and-farms-for-thought-win-top-prizes/",
+      "excerpt": "Aryan Jain (CAS'26), founder, DesignMy Education, placed third in the 2026 social impact track.",
+      "orgPlace": "Innovate@BU New Venture Competition",
+      "campusIds": [
+        "univ_bu"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Aryan Jain",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Founder, DesignMy Education",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Innovate@BU quotes Aryan Jain as founder of DesignMy Education and prints CAS'26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "CAS'26",
+            "gradYear": 2026,
+            "evidence": "Innovate@BU lists Aryan Jain (CAS'26) and says he is graduating."
+          },
+          "excerpt": "Aryan Jain (CAS'26), founder, DesignMy Education, said he is graduating."
+        }
+      ]
+    },
+    {
+      "name": "Vetra Technologies",
+      "description": "A platform that uses AI to help organizations model decisions and predict outcomes.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/articles/2026/2026-innovators-night/",
+      "excerpt": "Vetra Technologies, founded by Kylie Perales (Questrom'26) and Richard Shure (SHA'26), won the Abdullah Almarzouq Environmental Entrepreneurship Award.",
+      "orgPlace": "Innovate@BU",
+      "campusIds": [
+        "univ_bu"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Kylie Perales",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Founder, Vetra Technologies",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "BU Today says Vetra Technologies was founded by Kylie Perales and prints Questrom'26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Questrom'26",
+            "gradYear": 2026,
+            "evidence": "BU Today lists Kylie Perales (Questrom'26)."
+          },
+          "excerpt": "Vetra Technologies, founded by Kylie Perales (Questrom'26) and Richard Shure (SHA'26), won the environmental award."
+        },
+        {
+          "name": "Richard Shure",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Founder, Vetra Technologies",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "BU Today says Vetra Technologies was founded by Richard Shure and prints SHA'26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "SHA'26",
+            "gradYear": 2026,
+            "evidence": "BU Today lists Richard Shure (SHA'26)."
+          },
+          "excerpt": "Vetra Technologies, founded by Richard Shure (SHA'26), won the environmental award."
+        }
+      ]
+    },
+    {
+      "name": "LET",
+      "description": "A chemical recycling process that turns discarded tennis strings into apparel fiber.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/sustainability/2026/05/13/out-of-18000-teams-bu-startup-let-advances-to-the-top-80-of-the-global-hult-prize/",
+      "excerpt": "LET founder Jakob Esterowitz (ENG'27) advanced in the Hult Prize. The team includes co-founder and COO Jonah Dickson (MET'25) and Ouwen Lu (Questrom'21).",
+      "orgPlace": "Innovate@BU",
+      "campusIds": [
+        "univ_bu"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Jakob Esterowitz",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Founder, LET",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The BU sustainability article calls Jakob Esterowitz the founder and prints ENG'27.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "ENG'27",
+            "gradYear": 2027,
+            "evidence": "The BU sustainability article lists Jakob Esterowitz (ENG'27)."
+          },
+          "excerpt": "LET won a U.S. national round of the Hult Prize, advancing founder Jakob Esterowitz (ENG'27)."
+        },
+        {
+          "name": "Jonah Dickson",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Co-founder and COO, LET",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The BU sustainability article calls Jonah Dickson co-founder and COO and prints MET'25.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "MET'25",
+            "gradYear": 2025,
+            "evidence": "The BU sustainability article lists Jonah Dickson (MET'25)."
+          },
+          "excerpt": "The LET team includes co-founder and COO Jonah Dickson (MET'25)."
+        },
+        {
+          "name": "Ouwen Lu",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "LET",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the LET team with Questrom'21. The article does not call Ouwen Lu a founder.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": "Questrom'21",
+            "gradYear": 2021,
+            "evidence": "The BU sustainability article lists Ouwen Lu (Questrom'21)."
+          },
+          "excerpt": "The LET team includes Ouwen Lu (Questrom'21)."
+        }
+      ]
+    },
+    {
+      "name": "Chromatape",
+      "description": "A venture named in Nevaeh Calliste's 2026 Student Innovator of the Year citation.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/innovate/2026-innovators-night-recap-magnesis-robotics-and-farms-for-thought-win-top-prizes/",
+      "excerpt": "Nevaeh Calliste (COM'26) is a multi-venture founder of Chromatape and SA Warriors.",
+      "orgPlace": "Innovate@BU",
+      "campusIds": [
+        "univ_bu"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Nevaeh Calliste",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Founder, Chromatape",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Innovate@BU calls Nevaeh Calliste a multi-venture founder of Chromatape and SA Warriors and prints COM'26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "COM'26",
+            "gradYear": 2026,
+            "evidence": "Innovate@BU lists Nevaeh Calliste (COM'26)."
+          },
+          "excerpt": "Nevaeh Calliste (COM'26) is a multi-venture founder of Chromatape and SA Warriors."
+        }
+      ]
+    },
+    {
+      "name": "SA Warriors",
+      "description": "A platform supporting survivors of sexual assault and harassment.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/innovate/2026-innovators-night-recap-magnesis-robotics-and-farms-for-thought-win-top-prizes/",
+      "excerpt": "Nevaeh Calliste (COM'26) is a multi-venture founder of SA Warriors.",
+      "orgPlace": "Innovate@BU",
+      "campusIds": [
+        "univ_bu"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Nevaeh Calliste",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Founder, SA Warriors",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Innovate@BU calls Nevaeh Calliste a multi-venture founder of SA Warriors and prints COM'26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "COM'26",
+            "gradYear": 2026,
+            "evidence": "Innovate@BU lists Nevaeh Calliste (COM'26)."
+          },
+          "excerpt": "Nevaeh Calliste (COM'26) is a multi-venture founder of Chromatape and SA Warriors."
+        }
+      ]
+    },
+    {
+      "name": "SustainServ",
+      "description": "A meal service that turns unserved food from large venues into affordable meals.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/innovate/2026-innovators-night-recap-magnesis-robotics-and-farms-for-thought-win-top-prizes/",
+      "excerpt": "Robert Pak (SHA'27) is founder of SustainServ.",
+      "orgPlace": "Innovate@BU",
+      "campusIds": [
+        "univ_bu"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Robert Pak",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Founder, SustainServ",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Innovate@BU calls Robert Pak founder of SustainServ and prints SHA'27.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "SHA'27",
+            "gradYear": 2027,
+            "evidence": "Innovate@BU lists Robert Pak (SHA'27)."
+          },
+          "excerpt": "Robert Pak (SHA'27) is founder of SustainServ, a B2B meal service."
+        }
+      ]
+    },
+    {
+      "name": "Signable",
+      "description": "An ASL practice hub that gives learners feedback on their signing.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/innovate/2026-innovators-night-recap-magnesis-robotics-and-farms-for-thought-win-top-prizes/",
+      "excerpt": "Signable, the 2026 Student Innovator of the Year team from BU SPARK, was built by Ariel Diaz, Adrian Rojas, Augie Oppenheimer, Bryan Ayala, and Anurag Mathews.",
+      "orgPlace": "BU SPARK",
+      "campusIds": [
+        "univ_bu"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Ariel Diaz",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "BU SPARK, Signable",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a builder of Signable, the BU SPARK Student Innovator of the Year team. The article does not print class years or the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "Innovate@BU calls Signable a student team and does not print a class year."
+          },
+          "excerpt": "Ariel Diaz is named on the Signable team."
+        },
+        {
+          "name": "Adrian Rojas",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "BU SPARK, Signable",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a builder of Signable, the BU SPARK Student Innovator of the Year team. The article does not print class years or the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "Innovate@BU calls Signable a student team and does not print a class year."
+          },
+          "excerpt": "Adrian Rojas is named on the Signable team."
+        },
+        {
+          "name": "Augie Oppenheimer",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "BU SPARK, Signable",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a builder of Signable, the BU SPARK Student Innovator of the Year team. The article does not print class years or the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "Innovate@BU calls Signable a student team and does not print a class year."
+          },
+          "excerpt": "Augie Oppenheimer is named on the Signable team."
+        },
+        {
+          "name": "Bryan Ayala",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "BU SPARK, Signable",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a builder of Signable, the BU SPARK Student Innovator of the Year team. The article does not print class years or the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "Innovate@BU calls Signable a student team and does not print a class year."
+          },
+          "excerpt": "Bryan Ayala is named on the Signable team."
+        },
+        {
+          "name": "Anurag Mathews",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "BU SPARK, Signable",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as a builder of Signable, the BU SPARK Student Innovator of the Year team. The article does not print class years or the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "Innovate@BU calls Signable a student team and does not print a class year."
+          },
+          "excerpt": "Anurag Mathews is named on the Signable team."
+        }
+      ]
+    },
+    {
+      "name": "Averra",
+      "description": "The venture Trinity Olander and Meritxell Ortodo took to a prior New Venture Competition final.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/innovate/2026-innovators-night-recap-magnesis-robotics-and-farms-for-thought-win-top-prizes/",
+      "excerpt": "Trinity Olander (CAS'27) and Meritxell Ortodo (ENG'26) competed as New Venture Competition finalists with their venture Averra. Olander called it our startup.",
+      "orgPlace": "Innovate@BU New Venture Competition",
+      "campusIds": [
+        "univ_bu"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Trinity Olander",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Averra",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Innovate@BU says Trinity Olander competed with their venture Averra and quotes her calling it our startup. Class year CAS'27.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "CAS'27",
+            "gradYear": 2027,
+            "evidence": "Innovate@BU lists Trinity Olander (CAS'27)."
+          },
+          "excerpt": "Trinity Olander (CAS'27) competed as an NVC finalist with their venture Averra and said NVC was the catalyst for our startup."
+        },
+        {
+          "name": "Meritxell Ortodo",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Averra",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Innovate@BU says Meritxell Ortodo competed with their venture Averra. Class year ENG'26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "ENG'26",
+            "gradYear": 2026,
+            "evidence": "Innovate@BU lists Meritxell Ortodo (ENG'26)."
+          },
+          "excerpt": "Meritxell Ortodo (ENG'26) competed as an NVC finalist with their venture Averra."
+        }
+      ]
+    },
+    {
+      "name": "Astra Wellbeing",
+      "description": "An AI feedback platform for healthcare organizations. Innovate@BU says it was acquired.",
+      "website": null,
+      "sourceUrl": "https://www.bu.edu/innovate/2026-innovators-night-recap-magnesis-robotics-and-farms-for-thought-win-top-prizes/",
+      "excerpt": "Johar Singh (Questrom'24), founder of Astra Wellbeing, gave the 2026 Innovators' Night opening talk. The venture was recently acquired.",
+      "orgPlace": "Innovate@BU New Venture Competition",
+      "campusIds": [
+        "univ_bu"
+      ],
+      "investable": false,
+      "founders": [
+        {
+          "name": "Johar Singh",
+          "aliases": [],
+          "campusId": "univ_bu",
+          "affiliationRole": "Founder, Astra Wellbeing",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Innovate@BU calls Johar Singh a founder of Astra Wellbeing and prints Questrom'24. The same article says the company was acquired.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Questrom'24",
+            "gradYear": 2024,
+            "evidence": "Innovate@BU lists Johar Singh (Questrom'24)."
+          },
+          "excerpt": "Johar Singh (Questrom'24) returned to talk about his journey as a founder of Astra Wellbeing, which was recently acquired."
+        }
+      ]
+    },
+    {
+      "name": "SpaceOna",
+      "description": "A campus service that shows whether laundry machines are free.",
+      "website": "https://spaceona.com",
+      "sourceUrl": "https://advising.lafayette.edu/kashif-chopra-2026-pepper-prize-finalist/",
+      "excerpt": "Kashif Chopra, a 2026 Pepper Prize finalist, writes that he founded SpaceOna with two friends who are not named.",
+      "orgPlace": "Dyer Center",
+      "campusIds": [
+        "univ_lafayette"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Kashif Chopra",
+          "aliases": [],
+          "campusId": "univ_lafayette",
+          "affiliationRole": "Founder, SpaceOna",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Kashif Chopra's Pepper Prize statement says he founded SpaceOna. The page is his 2026 senior-class profile.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Class of 2026",
+            "gradYear": 2026,
+            "evidence": "The page is the 2026 Pepper Prize finalist profile for Kashif Chopra, and the prize is awarded to a member of the senior class."
+          },
+          "excerpt": "Kashif Chopra writes: I founded SpaceOna with two close friends."
+        }
+      ]
+    },
+    {
+      "name": "Stryde Health",
+      "description": "At-home cognitive assessments that sync a patient's progress to clinicians after discharge.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurs.utoronto.ca/meet-the-winners-2026-desjardins-startup-prize-pitch/",
+      "excerpt": "Stryde Health won a prize at the 2026 Desjardins Startup Prize. The page does not name the founders. The competition requires a University of Toronto student, post-doc, or recent alum on the team.",
+      "orgPlace": "Desjardins Startup Prize",
+      "campusIds": [
+        "univ_toronto"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Aiko Translations",
+      "description": "A two-way real-time translation device for older adults and healthcare providers in long-term care.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurs.utoronto.ca/meet-the-winners-2026-desjardins-startup-prize-pitch/",
+      "excerpt": "Aiko Translations won a prize at the 2026 Desjardins Startup Prize. The page does not name the founders. The competition requires a University of Toronto student, post-doc, or recent alum on the team.",
+      "orgPlace": "Desjardins Startup Prize",
+      "campusIds": [
+        "univ_toronto"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Farname Diagnosis",
+      "description": "Point-of-care devices for earlier ovarian cancer detection.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurs.utoronto.ca/meet-the-winners-2026-desjardins-startup-prize-pitch/",
+      "excerpt": "Farname Diagnosis won a prize at the 2026 Desjardins Startup Prize. The page does not name the founders. The competition requires a University of Toronto student, post-doc, or recent alum on the team.",
+      "orgPlace": "Desjardins Startup Prize",
+      "campusIds": [
+        "univ_toronto"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "VRiT",
+      "description": "A handheld bioprinter for wound and surgical care that is meant to remove the need for autografts.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurs.utoronto.ca/meet-the-winners-2026-desjardins-startup-prize-pitch/",
+      "excerpt": "VRiT won a prize at the 2026 Desjardins Startup Prize. The page does not name the founders. The competition requires a University of Toronto student, post-doc, or recent alum on the team.",
+      "orgPlace": "Desjardins Startup Prize",
+      "campusIds": [
+        "univ_toronto"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Tightbeam Photonics",
+      "description": "A silicon photonic beam receiver for satellite-to-ground communication.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurs.utoronto.ca/meet-the-winners-2026-desjardins-startup-prize-pitch/",
+      "excerpt": "Tightbeam Photonics won a prize at the 2026 Desjardins Startup Prize. The page does not name the founders. The competition requires a University of Toronto student, post-doc, or recent alum on the team.",
+      "orgPlace": "Desjardins Startup Prize",
+      "campusIds": [
+        "univ_toronto"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Graspr AI",
+      "description": "An app that turns PDFs into video explainers and quizzes.",
+      "website": null,
+      "sourceUrl": "https://entrepreneurs.utoronto.ca/meet-the-winners-2026-desjardins-startup-prize-pitch/",
+      "excerpt": "Graspr AI won a prize at the 2026 Desjardins Startup Prize. The page does not name the founders. The competition requires a University of Toronto student, post-doc, or recent alum on the team.",
+      "orgPlace": "Desjardins Startup Prize",
+      "campusIds": [
+        "univ_toronto"
+      ],
+      "investable": true,
+      "founders": []
+    }
+  ],
+  "potential": [
+    {
+      "name": "Raymond Provost",
+      "aliases": [],
+      "campusId": "univ_caltech",
+      "affiliationRole": "OTTCP Summer Internship 2025, 3Laws Robotics",
+      "potentialSignal": "The OTTCP page says the internship reinforced his goal to found a startup after graduation. He interned at 3Laws Robotics and is not listed as its founder.",
+      "verificationStatus": "partial",
+      "verificationNote": "Caltech student who states a goal to found a startup. Not a founder of the company he interned at.",
+      "orgPlace": "OTTCP Summer Internship",
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "excerpt": "Raymond Provost, BSc Mechanical Engineering and BEM '27, said the experience reinforced his goal to found a startup after graduation.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "verified",
+        "label": "'27",
+        "gradYear": 2027,
+        "evidence": "The OTTCP page lists Raymond Provost, BSc Mechanical Engineering and BEM, '27."
+      }
+    },
+    {
+      "name": "Robert Otieno",
+      "aliases": [
+        "Otis Otieno"
+      ],
+      "campusId": "univ_caltech",
+      "affiliationRole": "OTTCP Summer Internship 2025",
+      "potentialSignal": "The OTTCP page quotes him describing the skill set he wants when he is founder of a startup of his own.",
+      "verificationStatus": "partial",
+      "verificationNote": "Caltech student describing a future company of his own. Not recorded as a founder of Encryptiest.",
+      "orgPlace": "OTTCP Summer Internship",
+      "sourceUrl": "https://innovation.caltech.edu/entrepreneurship/ottcp-summer-internship",
+      "excerpt": "Robert Otieno, BSc Applied Computational Mathematics '27, said that when he is founder of a startup of his own he is confident in his skill set.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "verified",
+        "label": "'27",
+        "gradYear": 2027,
+        "evidence": "The OTTCP page lists Robert (Otis) Otieno, BSc Applied Computational Mathematics, '27."
+      }
+    },
+    {
+      "name": "Jolin Edmonson",
+      "aliases": [],
+      "campusId": "univ_bu",
+      "affiliationRole": "Student Innovator of the Year, Earl Center",
+      "potentialSignal": "Founded the Maker Mentors peer-learning initiative. The page does not describe a company.",
+      "verificationStatus": "partial",
+      "verificationNote": "Innovate@BU calls Jolin Edmonson founder of Maker Mentors, a peer-learning initiative, and prints Wheelock'26.",
+      "orgPlace": "Innovate@BU",
+      "sourceUrl": "https://www.bu.edu/innovate/2026-innovators-night-recap-magnesis-robotics-and-farms-for-thought-win-top-prizes/",
+      "excerpt": "Jolin Edmonson (Wheelock'26) is founder of the Maker Mentors peer-learning initiative.",
+      "enrollment": {
+        "status": "recent_grad",
+        "basis": "verified",
+        "label": "Wheelock'26",
+        "gradYear": 2026,
+        "evidence": "Innovate@BU lists Jolin Edmonson (Wheelock'26)."
+      }
+    }
+  ],
+  "links": []
+}

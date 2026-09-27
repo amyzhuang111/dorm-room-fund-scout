@@ -3,6 +3,7 @@ import { FounderSignalsTable } from "@/components/founder-signals-table";
 import { HotspotsApp } from "@/components/hotspots-app";
 import { loadDrfPresence } from "@/lib/domain/drf-presence";
 import { loadFounderSignals } from "@/lib/domain/founder-signals";
+import { loadHotspotEvents } from "@/lib/domain/hotspot-dates";
 import { hotspotCards } from "@/lib/domain/hotspots";
 import { listUniversities } from "@/lib/domain/queries";
 
@@ -13,7 +14,7 @@ export default async function HotspotsPage({ searchParams }: { searchParams: Pro
     <>
       <DrfPresenceTable rows={loadDrfPresence()} />
       <FounderSignalsTable rows={loadFounderSignals()} />
-      <HotspotsApp cards={hotspotCards()} initial={initial} universities={universities} />
+      <HotspotsApp cards={hotspotCards()} events={loadHotspotEvents()} initial={initial} universities={universities} />
     </>
   );
 }

@@ -1,0 +1,2477 @@
+{
+  "retrievedAt": "2026-09-27T18:00:00.000Z",
+  "companies": [
+    {
+      "name": "HaptE",
+      "description": "Computer vision system that reduces execution errors and optimizes the warehouse floor in real time.",
+      "website": null,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "excerpt": "VentureCat 2026 Grand Prize went to HaptE. Trevor Abbott, Founder and CEO, and Quinn McGinley, Head of Product Engineering at HaptE.",
+      "orgPlace": "VentureCat",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Trevor Abbott",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Founder and CEO, HaptE",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Garage names this person Founder or Co-Founder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Class of 2026",
+            "gradYear": 2026,
+            "evidence": "VentureCat 2026 results list Trevor Abbott, McCormick '26, Kellogg Certificate."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Trevor Abbott (McCormick '26, Kellogg Certificate) on HaptE."
+        },
+        {
+          "name": "Quinn McGinley",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Head of Product Engineering, HaptE",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2028",
+            "gradYear": 2028,
+            "evidence": "VentureCat 2026 results list Quinn McGinley, McCormick '28."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Quinn McGinley (McCormick '28) on HaptE."
+        }
+      ]
+    },
+    {
+      "name": "CityVerse AI",
+      "description": "Turns site photos into structured data, transforming operational data into project intelligence.",
+      "website": null,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "excerpt": "VentureCat 2026 Business Products and Services second place: CityVerse AI. Graduate Team: Neal Agarwal, SPS '27.",
+      "orgPlace": "VentureCat",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Neal Agarwal",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, CityVerse AI",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2027",
+            "gradYear": 2027,
+            "evidence": "VentureCat 2026 results list Neal Agarwal, SPS '27."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Neal Agarwal (SPS '27) on CityVerse AI."
+        }
+      ]
+    },
+    {
+      "name": "DoseUp",
+      "description": "An app that helps people on GLP-1 stay on track by tracking their shots and progress.",
+      "website": null,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "excerpt": "VentureCat 2026 Consumer Products first place: DoseUp. Undergraduate Team: Aryan Kalluvila, Weinberg '27.",
+      "orgPlace": "VentureCat",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Aryan Kalluvila",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, DoseUp",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2027",
+            "gradYear": 2027,
+            "evidence": "VentureCat 2026 results list Aryan Kalluvila, Weinberg '27."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Aryan Kalluvila (Weinberg '27) on DoseUp."
+        }
+      ]
+    },
+    {
+      "name": "Restless",
+      "description": "A better-for-you energy drink.",
+      "website": null,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "excerpt": "Daniel Medina, Founder and CEO at Restless, took third place at VentureCat 2026. Graduate Team: Daniel Medina, Kellogg '27.",
+      "orgPlace": "VentureCat",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Daniel Medina",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Founder and CEO, Restless",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Garage names this person Founder or Co-Founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2027",
+            "gradYear": 2027,
+            "evidence": "VentureCat 2026 results list Daniel Medina, Kellogg '27."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Daniel Medina (Kellogg '27) on Restless."
+        }
+      ]
+    },
+    {
+      "name": "EdgeLine",
+      "description": "Automates construction design review by bridging incompatible data formats to detect conflicts before construction begins.",
+      "website": null,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "excerpt": "VentureCat 2026 Energy and Sustainability first place: EdgeLine. Graduate Team: Sean Gibbons, Kellogg '28.",
+      "orgPlace": "VentureCat",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Sean Gibbons",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, EdgeLine",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2028",
+            "gradYear": 2028,
+            "evidence": "VentureCat 2026 results list Sean Gibbons, Kellogg '28."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Sean Gibbons (Kellogg '28) on EdgeLine."
+        }
+      ]
+    },
+    {
+      "name": "Aura Life Science",
+      "description": "Bioengineered photosynthetic microbes that convert light and CO2 into research enzymes.",
+      "website": null,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "excerpt": "VentureCat 2026 Energy and Sustainability second place: Aura Life Science. Graduate Team: Jacob Bhoi, Feinberg + Weinberg '26.",
+      "orgPlace": "VentureCat",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Jacob Bhoi",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, Aura Life Science",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Class of 2026",
+            "gradYear": 2026,
+            "evidence": "VentureCat 2026 results list Jacob Bhoi, Feinberg + Weinberg '26."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Jacob Bhoi (Feinberg + Weinberg '26) on Aura Life Science."
+        }
+      ]
+    },
+    {
+      "name": "HydroFlo",
+      "description": "Smart catheter technology to monitor shunt flow and detect shunt failure in hydrocephalus.",
+      "website": null,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "excerpt": "Eva Poliakova, Co-Founder and CEO at HydroFlo, took second place at VentureCat 2026. Undergraduate Team: Eva Poliakova, Weinberg '27; Rishi Garg McCormick '27; Viet Tong, McCormick '27.",
+      "orgPlace": "VentureCat",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Eva Poliakova",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Co-Founder and CEO, HydroFlo",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Garage names this person Founder or Co-Founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2027",
+            "gradYear": 2027,
+            "evidence": "VentureCat 2026 results list Eva Poliakova, Weinberg '27."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Eva Poliakova (Weinberg '27) on HydroFlo."
+        },
+        {
+          "name": "Rishi Garg",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, HydroFlo",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2027",
+            "gradYear": 2027,
+            "evidence": "VentureCat 2026 results list Rishi Garg, McCormick '27."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Rishi Garg (McCormick '27) on HydroFlo."
+        },
+        {
+          "name": "Viet Tong",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, HydroFlo",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2027",
+            "gradYear": 2027,
+            "evidence": "VentureCat 2026 results list Viet Tong, McCormick '27."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Viet Tong (McCormick '27) on HydroFlo."
+        }
+      ]
+    },
+    {
+      "name": "LumaLift",
+      "description": "A consumer wearable bodysuit aimed at alleviating lumbopelvic pain in pregnant women.",
+      "website": null,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "excerpt": "VentureCat 2026 Life Sciences second place: LumaLift. Graduate Team: Lucy Burton, Kellogg '26; Tiffany Sorto, McCormick '26; Fiona McKay, Kellogg '27; London Wheeler, Kellogg '27.",
+      "orgPlace": "VentureCat",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Lucy Burton",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, LumaLift",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Class of 2026",
+            "gradYear": 2026,
+            "evidence": "VentureCat 2026 results list Lucy Burton, Kellogg '26."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Lucy Burton (Kellogg '26) on LumaLift."
+        },
+        {
+          "name": "Tiffany Sorto",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, LumaLift",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Class of 2026",
+            "gradYear": 2026,
+            "evidence": "VentureCat 2026 results list Tiffany Sorto, McCormick '26."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Tiffany Sorto (McCormick '26) on LumaLift."
+        },
+        {
+          "name": "Fiona McKay",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, LumaLift",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2027",
+            "gradYear": 2027,
+            "evidence": "VentureCat 2026 results list Fiona McKay, Kellogg '27."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Fiona McKay (Kellogg '27) on LumaLift."
+        },
+        {
+          "name": "London Wheeler",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, LumaLift",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2027",
+            "gradYear": 2027,
+            "evidence": "VentureCat 2026 results list London Wheeler, Kellogg '27."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name London Wheeler (Kellogg '27) on LumaLift."
+        }
+      ]
+    },
+    {
+      "name": "Symbia",
+      "description": "Grows carbon-neutral leather out of recycled kombucha and bacterial culture.",
+      "website": null,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "excerpt": "VentureCat 2026 Social Impact first place: Symbia. Undergraduate Team: Rayden Yap, McCormick '29; Travis Kim, Weinberg '29; Marco Hartono, McCormick '29; Nicolas Angel-Ordonez, McCormick + Weinberg '29; Nolan Jones, Kellogg '27.",
+      "orgPlace": "VentureCat",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Rayden Yap",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, Symbia",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2029",
+            "gradYear": 2029,
+            "evidence": "VentureCat 2026 results list Rayden Yap, McCormick '29."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Rayden Yap (McCormick '29) on Symbia."
+        },
+        {
+          "name": "Travis Kim",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, Symbia",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2029",
+            "gradYear": 2029,
+            "evidence": "VentureCat 2026 results list Travis Kim, Weinberg '29."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Travis Kim (Weinberg '29) on Symbia."
+        },
+        {
+          "name": "Marco Hartono",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, Symbia",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2029",
+            "gradYear": 2029,
+            "evidence": "VentureCat 2026 results list Marco Hartono, McCormick '29."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Marco Hartono (McCormick '29) on Symbia."
+        },
+        {
+          "name": "Nicolas Angel-Ordonez",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, Symbia",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2029",
+            "gradYear": 2029,
+            "evidence": "VentureCat 2026 results list Nicolas Angel-Ordonez, McCormick + Weinberg '29."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Nicolas Angel-Ordonez (McCormick + Weinberg '29) on Symbia."
+        },
+        {
+          "name": "Nolan Jones",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, Symbia",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2027",
+            "gradYear": 2027,
+            "evidence": "VentureCat 2026 results list Nolan Jones, Kellogg '27."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Nolan Jones (Kellogg '27) on Symbia."
+        }
+      ]
+    },
+    {
+      "name": "Xpnse AI",
+      "description": "A financial coordination layer for organizations that run on volunteer treasurers and spreadsheets.",
+      "website": null,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "excerpt": "VentureCat 2026 Social Impact second place: Xpnse AI. Graduate Team: Shannen Lawson, Kellogg '27; Eden Growney, McCormick '26.",
+      "orgPlace": "VentureCat",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Shannen Lawson",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, Xpnse AI",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2027",
+            "gradYear": 2027,
+            "evidence": "VentureCat 2026 results list Shannen Lawson, Kellogg '27."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Shannen Lawson (Kellogg '27) on Xpnse AI."
+        },
+        {
+          "name": "Eden Growney",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "VentureCat 2026 team, Xpnse AI",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named on the VentureCat 2026 team. The page does not use the title founder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Class of 2026",
+            "gradYear": 2026,
+            "evidence": "VentureCat 2026 results list Eden Growney, McCormick '26."
+          },
+          "excerpt": "The Garage at Northwestern VentureCat 2026 results name Eden Growney (McCormick '26) on Xpnse AI."
+        }
+      ]
+    },
+    {
+      "name": "nLab",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "excerpt": "Angie Mercurio McC '26, Co-Founder and CEO of nLab and VentureCat 2025 third-place winner, emceed VentureCat 2026.",
+      "orgPlace": "VentureCat",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Angie Mercurio",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Co-Founder and CEO, nLab",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Garage names Angie Mercurio Co-Founder and CEO of nLab.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Class of 2026",
+            "gradYear": 2026,
+            "evidence": "VentureCat 2026 results list Angie Mercurio McC '26."
+          },
+          "excerpt": "Angie Mercurio McC '26, Co-Founder and CEO of nLab, emceed VentureCat 2026."
+        }
+      ]
+    },
+    {
+      "name": "The Neuron",
+      "description": "Acquired company. Noah Edelman is named co-founder and former CEO.",
+      "website": null,
+      "sourceUrl": "https://www.thegarage.northwestern.edu/news/venturecat-2026-the-results",
+      "excerpt": "Noah Edelman '25, Co-Founder and former CEO of The Neuron (acquired), emceed VentureCat 2026.",
+      "orgPlace": "VentureCat",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "investable": false,
+      "founders": [
+        {
+          "name": "Noah Edelman",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Co-Founder and former CEO, The Neuron",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Garage names Noah Edelman Co-Founder and former CEO of The Neuron.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Class of 2025",
+            "gradYear": 2025,
+            "evidence": "VentureCat 2026 results list Noah Edelman '25."
+          },
+          "excerpt": "Noah Edelman '25, Co-Founder and former CEO of The Neuron (acquired), emceed VentureCat 2026."
+        }
+      ]
+    },
+    {
+      "name": "Paytera",
+      "description": "Peer-to-peer payments app for everyday transactions between friends in Mexico.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/03/06/peer-to-peer-payment-app-paytera-takes-first-place-at-the-2026-college-new-venture-challenge/",
+      "excerpt": "Luis Carrillo, Paytera founder, won first place at the 2026 College New Venture Challenge. He is graduating this year from the College.",
+      "orgPlace": "College New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Luis Carrillo",
+          "aliases": [],
+          "campusId": "univ_uchicago",
+          "affiliationRole": "Founder, Paytera",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Polsky Center names Luis Carrillo as Paytera founder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "graduating this year from the College",
+            "gradYear": 2026,
+            "evidence": "The March 6, 2026 Polsky article says Luis Carrillo is graduating this year from the College."
+          },
+          "excerpt": "Luis Carrillo, Paytera founder, at the 2026 College New Venture Challenge, graduating this year from the College."
+        }
+      ]
+    },
+    {
+      "name": "HandsIn",
+      "description": "AI-driven American Sign Language e-learning platform.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/03/06/peer-to-peer-payment-app-paytera-takes-first-place-at-the-2026-college-new-venture-challenge/",
+      "excerpt": "Second place at the 2026 College New Venture Challenge: HandsIn, an AI-driven American Sign Language e-learning platform.",
+      "orgPlace": "College New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Haldune",
+      "description": "Debriefing technology that captures lessons learned for military and private-sector organizations.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/03/06/peer-to-peer-payment-app-paytera-takes-first-place-at-the-2026-college-new-venture-challenge/",
+      "excerpt": "Third place at the 2026 College New Venture Challenge: Haldune builds debriefing technology.",
+      "orgPlace": "College New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Hafestus",
+      "description": "AI platform that automates construction bidding.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/03/06/peer-to-peer-payment-app-paytera-takes-first-place-at-the-2026-college-new-venture-challenge/",
+      "excerpt": "The 2026 College New Venture Challenge finalists include Hafestus, an AI platform that automates construction bidding.",
+      "orgPlace": "College New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Roony",
+      "description": "AI-powered claims resolution platform for healthcare providers.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/03/06/peer-to-peer-payment-app-paytera-takes-first-place-at-the-2026-college-new-venture-challenge/",
+      "excerpt": "The 2026 College New Venture Challenge finalists include Roony, an AI-powered claims resolution platform.",
+      "orgPlace": "College New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Kinetide",
+      "description": "Wearable analytics platform for competitive athletes, starting with swimming.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/03/06/peer-to-peer-payment-app-paytera-takes-first-place-at-the-2026-college-new-venture-challenge/",
+      "excerpt": "The 2026 College New Venture Challenge finalists include Kinetide, a sports technology company.",
+      "orgPlace": "College New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Scout",
+      "description": "Private markets infrastructure platform connecting emerging fund managers with accredited investors through financial advisors.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/03/06/peer-to-peer-payment-app-paytera-takes-first-place-at-the-2026-college-new-venture-challenge/",
+      "excerpt": "The 2026 College New Venture Challenge finalists include Scout, a private markets infrastructure platform.",
+      "orgPlace": "College New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Slideflow Labs",
+      "description": "Cancer pathology AI infrastructure for hospitals to run biomarkers in-house.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/06/05/2-1-million-awarded-at-the-2026-edward-l-kaplan-71-new-venture-challenge-cancer-pathology-ai-company-takes-first/",
+      "excerpt": "Slideflow Labs, a cancer pathology AI company, won first place at the 2026 Edward L. Kaplan New Venture Challenge.",
+      "orgPlace": "Edward L. Kaplan New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Nestera",
+      "description": "Operating system for Hospital-at-Home programs.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/06/05/2-1-million-awarded-at-the-2026-edward-l-kaplan-71-new-venture-challenge-cancer-pathology-ai-company-takes-first/",
+      "excerpt": "Second place at the 2026 New Venture Challenge: Nestera, a vertically integrated operating system for Hospital-at-Home programs.",
+      "orgPlace": "Edward L. Kaplan New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Vidnova Therapeutics",
+      "description": "Microbiome therapeutic developed at the University of Chicago for liver disease.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/06/05/2-1-million-awarded-at-the-2026-edward-l-kaplan-71-new-venture-challenge-cancer-pathology-ai-company-takes-first/",
+      "excerpt": "Third place at the 2026 New Venture Challenge: Vidnova Therapeutics is advancing a microbiome therapeutic developed at the University of Chicago.",
+      "orgPlace": "Edward L. Kaplan New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "BRAIV",
+      "description": "Precision psychiatry decision intelligence platform.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/06/05/2-1-million-awarded-at-the-2026-edward-l-kaplan-71-new-venture-challenge-cancer-pathology-ai-company-takes-first/",
+      "excerpt": "Fourth place at the 2026 New Venture Challenge: BRAIV is a precision psychiatry decision intelligence platform.",
+      "orgPlace": "Edward L. Kaplan New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "CareLumi",
+      "description": "Infrastructure platform for healthcare compliance administration.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/06/05/2-1-million-awarded-at-the-2026-edward-l-kaplan-71-new-venture-challenge-cancer-pathology-ai-company-takes-first/",
+      "excerpt": "Fifth place at the 2026 New Venture Challenge: CareLumi is a unified infrastructure platform for healthcare compliance.",
+      "orgPlace": "Edward L. Kaplan New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Hydrastack",
+      "description": "AI-driven code translation that converts slot machine games into online formats.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/06/05/2-1-million-awarded-at-the-2026-edward-l-kaplan-71-new-venture-challenge-cancer-pathology-ai-company-takes-first/",
+      "excerpt": "Sixth place at the 2026 New Venture Challenge: Hydrastack compresses the time it takes to convert slot machine games into online formats.",
+      "orgPlace": "Edward L. Kaplan New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Rare Earth Rescue",
+      "description": "Domestic magnet-to-magnet recycling company supplying rare earth oxide.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/06/05/2-1-million-awarded-at-the-2026-edward-l-kaplan-71-new-venture-challenge-cancer-pathology-ai-company-takes-first/",
+      "excerpt": "Seventh place at the 2026 New Venture Challenge: Rare Earth Rescue is a domestic magnet-to-magnet recycling company.",
+      "orgPlace": "Edward L. Kaplan New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Inzollo",
+      "description": "Modular tools for distributor inventory, orders, and warehouse operations.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/06/05/2-1-million-awarded-at-the-2026-edward-l-kaplan-71-new-venture-challenge-cancer-pathology-ai-company-takes-first/",
+      "excerpt": "The 2026 New Venture Challenge winners include Inzollo, which builds modular distributor tools.",
+      "orgPlace": "Edward L. Kaplan New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Unloket",
+      "description": "AI concierge for mid-sized independent hotels.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/06/05/2-1-million-awarded-at-the-2026-edward-l-kaplan-71-new-venture-challenge-cancer-pathology-ai-company-takes-first/",
+      "excerpt": "The 2026 New Venture Challenge winners include Unloket, an AI concierge for independent hotels.",
+      "orgPlace": "Edward L. Kaplan New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "eep",
+      "description": "Performance intelligence system that forecasts and protects human performance capacity.",
+      "website": null,
+      "sourceUrl": "https://polsky.uchicago.edu/2026/06/05/2-1-million-awarded-at-the-2026-edward-l-kaplan-71-new-venture-challenge-cancer-pathology-ai-company-takes-first/",
+      "excerpt": "The 2026 New Venture Challenge winners include eep, a performance intelligence system.",
+      "orgPlace": "Edward L. Kaplan New Venture Challenge",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Archean Sciences",
+      "description": "Grows human neurons on a chip for drug testing and energy-efficient computing.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "Austin Ellis-Mohr, Ph.D. student in electrical and computer engineering and co-founder of Archean Sciences, and co-founder Mattia Gazzola won the 2026 Cozad grand prize at the University of Illinois Urbana-Champaign.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Austin Ellis-Mohr",
+          "aliases": [],
+          "campusId": "univ_uiuc",
+          "affiliationRole": "Co-founder, Archean Sciences",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Landuyt Center names Austin Ellis-Mohr co-founder of Archean Sciences.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Ph.D. student in electrical and computer engineering",
+            "gradYear": null,
+            "evidence": "The Cozad article calls Austin Ellis-Mohr a Ph.D. student in electrical and computer engineering."
+          },
+          "excerpt": "Austin Ellis-Mohr, Ph.D. student in electrical and computer engineering and co-founder of Archean Sciences, at the 2026 Cozad New Venture Challenge."
+        },
+        {
+          "name": "Mattia Gazzola",
+          "aliases": [],
+          "campusId": "univ_uiuc",
+          "affiliationRole": "Co-founder and Mechanical Science and Engineering Professor",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Landuyt Center names Mattia Gazzola co-founder and professor. Faculty, not a student.",
+          "enrollment": null,
+          "excerpt": "Co-founder and Mechanical Science and Engineering Professor Mattia Gazzola spoke about Archean Sciences at the 2026 Cozad New Venture Challenge."
+        }
+      ]
+    },
+    {
+      "name": "Cephal Corps",
+      "description": "Portable neurosurgical navigation device.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "Cephal Corps, led by Carle Illinois College of Medicine student Al Smith, took second place at the 2026 Cozad New Venture Challenge.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Al Smith",
+          "aliases": [],
+          "campusId": "univ_uiuc",
+          "affiliationRole": "Leads Cephal Corps",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Cozad article says Cephal Corps is led by Al Smith. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Carle Illinois College of Medicine student",
+            "gradYear": null,
+            "evidence": "The Cozad article calls Al Smith a Carle Illinois College of Medicine student."
+          },
+          "excerpt": "Cephal Corps, led by Carle Illinois College of Medicine student Al Smith, took second place at Cozad."
+        }
+      ]
+    },
+    {
+      "name": "UncertIA",
+      "description": "Software that helps robots make real-time decisions.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "UncertIA, led by aerospace engineering graduate students Gokul Puthumanaillam and Manav Vora, took third place at the 2026 Cozad New Venture Challenge.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Gokul Puthumanaillam",
+          "aliases": [],
+          "campusId": "univ_uiuc",
+          "affiliationRole": "Leads UncertIA",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Cozad article says UncertIA is led by Gokul Puthumanaillam. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "aerospace engineering graduate student",
+            "gradYear": null,
+            "evidence": "The Cozad article calls Gokul Puthumanaillam an aerospace engineering graduate student."
+          },
+          "excerpt": "UncertIA, led by aerospace engineering graduate students Gokul Puthumanaillam and Manav Vora."
+        },
+        {
+          "name": "Manav Vora",
+          "aliases": [],
+          "campusId": "univ_uiuc",
+          "affiliationRole": "Leads UncertIA",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Cozad article says UncertIA is led by Manav Vora. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "aerospace engineering graduate student",
+            "gradYear": null,
+            "evidence": "The Cozad article calls Manav Vora an aerospace engineering graduate student."
+          },
+          "excerpt": "UncertIA, led by aerospace engineering graduate students Gokul Puthumanaillam and Manav Vora."
+        }
+      ]
+    },
+    {
+      "name": "Echo Me",
+      "description": "Toys that target difficult speech sounds.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "Runner-up at the 2026 Cozad New Venture Challenge: Echo Me designs toys that target difficult speech sounds.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "AI/O",
+      "description": "Training platform for police communication practice.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad article names AI/O, a training platform that helps police officers practice high-stakes communications.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Second Chance Innovations",
+      "description": "Wearable neuro-rehab devices that detect muscle intent.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad article names Second Chance Innovations, which creates wearable neuro-rehab devices.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Dark Matter Robotics",
+      "description": "Automation for labs and manufacturing.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad article names Dark Matter Robotics, which designs automation solutions for labs and manufacturing.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Slate AI",
+      "description": "Automates video data workflows for filmmakers.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad article names Slate AI, which automates video data workflows.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Brekfuz",
+      "description": "Turns employee expertise into a queryable knowledge base.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad article names Brekfuz, which turns employee expertise into a live knowledge base.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Jungle BioTech",
+      "description": "Helps drug companies identify candidates likely to fail before clinical trials.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad article names Jungle BioTech, which helps drug companies identify candidates that will fail.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Peri Assist",
+      "description": "Assisted vaginal delivery device.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad rural health prizes include Peri Assist, an assisted vaginal delivery device.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "LumeNIRS",
+      "description": "Near-infrared device to monitor surgical wound healing.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad rural health prizes include LumeNIRS, a device using near infrared light therapy.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Jvala",
+      "description": "AI-native tracking app for unpredictable chronic condition flares.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad article names Jvala, an AI-native tracking app for chronic condition flares.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Flex-Able",
+      "description": "Assistive glove that enhances grip strength.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad sports medicine prize names Flex-Able, an assistive glove.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Unity Motion",
+      "description": "AI-driven biomechanical platform using camera-based movement assessment.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad sports medicine prize names Unity Motion, an AI-driven biomechanical platform.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Globi",
+      "description": "Social app for connecting through shared culture, language, religion, and values.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad Landuyt prize names Globi, a social app.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Sign Quest",
+      "description": "Card game that teaches American Sign Language.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad Landuyt prize names Sign Quest, a card game that teaches American Sign Language.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Pedal Pro",
+      "description": "Bedside mechanical pedal device for hospitalized patients.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad Landuyt prize names Pedal Pro, a bedside mechanical pedal device.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Agrivoy",
+      "description": "Booking platform for agritourism.",
+      "website": null,
+      "sourceUrl": "https://landuyt.illinois.edu/news/82423",
+      "excerpt": "The 2026 Cozad article names Agrivoy, a booking platform for agritourism.",
+      "orgPlace": "Cozad New Venture Challenge",
+      "campusIds": [
+        "univ_uiuc"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Analogical Engines",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/tepper/news/stories/mcginnis-venture-competition-2026",
+      "excerpt": "The 2026 McGinnis Venture Competition graduate-track Morgenthaler Prize went to Analogical Engines.",
+      "orgPlace": "McGinnis Venture Competition",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Hermes Vision",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/tepper/news/stories/mcginnis-venture-competition-2026",
+      "excerpt": "The 2026 McGinnis Venture Competition named Hermes Vision a second-place McGinnis Prize winner.",
+      "orgPlace": "McGinnis Venture Competition",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "RapidEye",
+      "description": "Computer-vision building inspection.",
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/tepper/news/stories/mcginnis-venture-competition-2026",
+      "excerpt": "Samuel Parks, co-founder of RapidEye, is quoted in the 2026 McGinnis Venture Competition story.",
+      "orgPlace": "McGinnis Venture Competition",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Pulse",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/tepper/news/stories/mcginnis-venture-competition-2026",
+      "excerpt": "The 2026 McGinnis Venture Competition social enterprise graduate prize went to Pulse.",
+      "orgPlace": "McGinnis Venture Competition",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Basics OS",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/tepper/news/stories/mcginnis-venture-competition-2026",
+      "excerpt": "The 2026 McGinnis Venture Competition undergraduate Morgenthaler Prize went to Basics OS.",
+      "orgPlace": "McGinnis Venture Competition",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "OS Keyboard",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/tepper/news/stories/mcginnis-venture-competition-2026",
+      "excerpt": "The 2026 McGinnis Venture Competition named OS Keyboard second place in the undergraduate track.",
+      "orgPlace": "McGinnis Venture Competition",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Caboodl",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/tepper/news/stories/mcginnis-venture-competition-2026",
+      "excerpt": "The 2026 McGinnis Venture Competition named Caboodl third place in the undergraduate track.",
+      "orgPlace": "McGinnis Venture Competition",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Heart Tech",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/tepper/news/stories/mcginnis-venture-competition-2026",
+      "excerpt": "The 2026 McGinnis Venture Competition Gebhardt Sandbox Fund prizes include Heart Tech.",
+      "orgPlace": "McGinnis Venture Competition",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Pierogi Therapeutics",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/tepper/news/stories/mcginnis-venture-competition-2026",
+      "excerpt": "The 2026 McGinnis Venture Competition Gebhardt Sandbox Fund prizes include Pierogi Therapeutics.",
+      "orgPlace": "McGinnis Venture Competition",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "MedQ AI",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/tepper/news/stories/mcginnis-venture-competition-2026",
+      "excerpt": "The 2026 McGinnis Venture Competition Gebhardt Sandbox Fund prizes include MedQ AI.",
+      "orgPlace": "McGinnis Venture Competition",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "SpoilSafe",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/tepper/news/stories/mcginnis-venture-competition-2026",
+      "excerpt": "The 2026 McGinnis Venture Competition crowd favorite was SpoilSafe.",
+      "orgPlace": "McGinnis Venture Competition",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "investable": true,
+      "founders": []
+    },
+    {
+      "name": "Hearo",
+      "description": "At-home ear exam that captures physician-usable images.",
+      "website": null,
+      "sourceUrl": "https://www.gatech.edu/news/2026/03/12/ear-innovation-hearo-wins-inventure-prize-home-ear-exam",
+      "excerpt": "Team Hearo won first place at the 2026 InVenture Prize. Teammates Ander DeOnaindia (computer engineering), Vasileios Kouloumentas (biomedical engineering), Luis Lujan (biomedical engineering), Agustin Munyau (biomedical engineering), Marilyn Pelayo-Montufar (computer science), and Luke Towery (mechanical engineering).",
+      "orgPlace": "InVenture Prize",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Ander DeOnaindia",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "InVenture Prize 2026 teammate, Hearo",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as an InVenture Prize teammate. The article does not use the title founder or print a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "computer engineering",
+            "gradYear": null,
+            "evidence": "The InVenture Prize article lists Ander DeOnaindia (computer engineering) and does not print a class year. The competition is for undergraduates and recent bachelor's graduates."
+          },
+          "excerpt": "The Georgia Tech InVenture Prize article names Ander DeOnaindia (computer engineering) on Hearo."
+        },
+        {
+          "name": "Vasileios Kouloumentas",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "InVenture Prize 2026 teammate, Hearo",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as an InVenture Prize teammate. The article does not use the title founder or print a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "biomedical engineering",
+            "gradYear": null,
+            "evidence": "The InVenture Prize article lists Vasileios Kouloumentas (biomedical engineering) and does not print a class year. The competition is for undergraduates and recent bachelor's graduates."
+          },
+          "excerpt": "The Georgia Tech InVenture Prize article names Vasileios Kouloumentas (biomedical engineering) on Hearo."
+        },
+        {
+          "name": "Luis Lujan",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "InVenture Prize 2026 teammate, Hearo",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as an InVenture Prize teammate. The article does not use the title founder or print a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "biomedical engineering",
+            "gradYear": null,
+            "evidence": "The InVenture Prize article lists Luis Lujan (biomedical engineering) and does not print a class year. The competition is for undergraduates and recent bachelor's graduates."
+          },
+          "excerpt": "The Georgia Tech InVenture Prize article names Luis Lujan (biomedical engineering) on Hearo."
+        },
+        {
+          "name": "Agustin Munyau",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "InVenture Prize 2026 teammate, Hearo",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as an InVenture Prize teammate. The article does not use the title founder or print a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "biomedical engineering",
+            "gradYear": null,
+            "evidence": "The InVenture Prize article lists Agustin Munyau (biomedical engineering) and does not print a class year. The competition is for undergraduates and recent bachelor's graduates."
+          },
+          "excerpt": "The Georgia Tech InVenture Prize article names Agustin Munyau (biomedical engineering) on Hearo."
+        },
+        {
+          "name": "Marilyn Pelayo-Montufar",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "InVenture Prize 2026 teammate, Hearo",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as an InVenture Prize teammate. The article does not use the title founder or print a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "computer science",
+            "gradYear": null,
+            "evidence": "The InVenture Prize article lists Marilyn Pelayo-Montufar (computer science) and does not print a class year. The competition is for undergraduates and recent bachelor's graduates."
+          },
+          "excerpt": "The Georgia Tech InVenture Prize article names Marilyn Pelayo-Montufar (computer science) on Hearo."
+        },
+        {
+          "name": "Luke Towery",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "InVenture Prize 2026 teammate, Hearo",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as an InVenture Prize teammate. The article does not use the title founder or print a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "mechanical engineering",
+            "gradYear": null,
+            "evidence": "The InVenture Prize article lists Luke Towery (mechanical engineering) and does not print a class year. The competition is for undergraduates and recent bachelor's graduates."
+          },
+          "excerpt": "The Georgia Tech InVenture Prize article names Luke Towery (mechanical engineering) on Hearo."
+        }
+      ]
+    },
+    {
+      "name": "PedalSwap",
+      "description": "Configurable guitar pedal with swappable effect cartridges.",
+      "website": null,
+      "sourceUrl": "https://www.gatech.edu/news/2026/03/12/ear-innovation-hearo-wins-inventure-prize-home-ear-exam",
+      "excerpt": "PedalSwap finished second at the 2026 InVenture Prize. Teammates Wylam DeSimone (electrical engineering), Zephyr Smith (music technology), and Tony Wu (electrical engineering).",
+      "orgPlace": "InVenture Prize",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Wylam DeSimone",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "InVenture Prize 2026 teammate, PedalSwap",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as an InVenture Prize teammate. The article does not use the title founder or print a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "electrical engineering",
+            "gradYear": null,
+            "evidence": "The InVenture Prize article lists Wylam DeSimone (electrical engineering) and does not print a class year. The competition is for undergraduates and recent bachelor's graduates."
+          },
+          "excerpt": "The Georgia Tech InVenture Prize article names Wylam DeSimone (electrical engineering) on PedalSwap."
+        },
+        {
+          "name": "Zephyr Smith",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "InVenture Prize 2026 teammate, PedalSwap",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as an InVenture Prize teammate. The article does not use the title founder or print a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "music technology",
+            "gradYear": null,
+            "evidence": "The InVenture Prize article lists Zephyr Smith (music technology) and does not print a class year. The competition is for undergraduates and recent bachelor's graduates."
+          },
+          "excerpt": "The Georgia Tech InVenture Prize article names Zephyr Smith (music technology) on PedalSwap."
+        },
+        {
+          "name": "Tony Wu",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "InVenture Prize 2026 teammate, PedalSwap",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as an InVenture Prize teammate. The article does not use the title founder or print a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "electrical engineering",
+            "gradYear": null,
+            "evidence": "The InVenture Prize article lists Tony Wu (electrical engineering) and does not print a class year. The competition is for undergraduates and recent bachelor's graduates."
+          },
+          "excerpt": "The Georgia Tech InVenture Prize article names Tony Wu (electrical engineering) on PedalSwap."
+        }
+      ]
+    },
+    {
+      "name": "DoorTix",
+      "description": "Automated ticket-purchasing platform.",
+      "website": null,
+      "sourceUrl": "https://www.gatech.edu/news/2026/03/12/ear-innovation-hearo-wins-inventure-prize-home-ear-exam",
+      "excerpt": "DoorTix won the 2026 InVenture Prize People's Choice. Teammates Shinhai Chen (industrial engineering), Dhruv Narang (mechanical engineering), and Arayna Saxena (computer science).",
+      "orgPlace": "InVenture Prize",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Shinhai Chen",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "InVenture Prize 2026 teammate, DoorTix",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as an InVenture Prize teammate. The article does not use the title founder or print a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "industrial engineering",
+            "gradYear": null,
+            "evidence": "The InVenture Prize article lists Shinhai Chen (industrial engineering) and does not print a class year. The competition is for undergraduates and recent bachelor's graduates."
+          },
+          "excerpt": "The Georgia Tech InVenture Prize article names Shinhai Chen (industrial engineering) on DoorTix."
+        },
+        {
+          "name": "Dhruv Narang",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "InVenture Prize 2026 teammate, DoorTix",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as an InVenture Prize teammate. The article does not use the title founder or print a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "mechanical engineering",
+            "gradYear": null,
+            "evidence": "The InVenture Prize article lists Dhruv Narang (mechanical engineering) and does not print a class year. The competition is for undergraduates and recent bachelor's graduates."
+          },
+          "excerpt": "The Georgia Tech InVenture Prize article names Dhruv Narang (mechanical engineering) on DoorTix."
+        },
+        {
+          "name": "Arayna Saxena",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "InVenture Prize 2026 teammate, DoorTix",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "Named as an InVenture Prize teammate. The article does not use the title founder or print a class year.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "computer science",
+            "gradYear": null,
+            "evidence": "The InVenture Prize article lists Arayna Saxena (computer science) and does not print a class year. The competition is for undergraduates and recent bachelor's graduates."
+          },
+          "excerpt": "The Georgia Tech InVenture Prize article names Arayna Saxena (computer science) on DoorTix."
+        }
+      ]
+    },
+    {
+      "name": "Loto Punto",
+      "description": "Self-service kiosks that bridge cash and digital payments for unbanked communities.",
+      "website": null,
+      "sourceUrl": "https://www.gatech.edu/news/2026/04/09/create-x-startup-brings-digital-access-unbanked",
+      "excerpt": "Victor Espinosa is the sole founder of Loto Punto and is pursuing his master's degree in computer science at Georgia Tech in the CREATE-X Startup Launch Spring 2026 cohort.",
+      "orgPlace": "CREATE-X",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Victor Espinosa",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "Sole founder, Loto Punto",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Georgia Tech names Victor Espinosa the sole founder of Loto Punto.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "master's student in computer science",
+            "gradYear": null,
+            "evidence": "The CREATE-X article says Victor Espinosa is currently pursuing his master's degree in computer science at Georgia Tech."
+          },
+          "excerpt": "Victor Espinosa is the sole founder of Loto Punto and is currently pursuing his master's degree in computer science at Georgia Tech."
+        }
+      ]
+    },
+    {
+      "name": "Alva",
+      "description": "Women's health technology startup combining AI and consulting to help biotech and medtech companies test products.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/news/2026/08/create-x-demo-day-meet-founders-building-whats-next",
+      "excerpt": "Yaashmita Senthilnathan, a second-year student, and Srija Konathala, a second-year student, are building Alva and launched it through CREATE-X. The article calls them the founders.",
+      "orgPlace": "CREATE-X",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Yaashmita Senthilnathan",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "Founder, Alva",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The CREATE-X Demo Day article calls Yaashmita Senthilnathan one of the founders of Alva.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "second-year student",
+            "gradYear": null,
+            "evidence": "The CREATE-X article calls Yaashmita Senthilnathan a second-year student."
+          },
+          "excerpt": "Yaashmita Senthilnathan, a second-year student in the College of Sciences and the Ivan Allen College of Liberal Arts, is building Alva."
+        },
+        {
+          "name": "Srija Konathala",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "Founder, Alva",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The CREATE-X Demo Day article calls Srija Konathala one of the founders of Alva.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "second-year student",
+            "gradYear": null,
+            "evidence": "The CREATE-X article calls Srija Konathala a second-year student."
+          },
+          "excerpt": "Srija Konathala, a second-year student in the College of Computing, is building Alva."
+        }
+      ]
+    },
+    {
+      "name": "AdaptaPlay",
+      "description": "Adaptive gaming technology for people with limited hand function.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/news/2026/08/create-x-demo-day-meet-founders-building-whats-next",
+      "excerpt": "Akos Vida, a second-year aerospace engineering student, is building AdaptaPlay through CREATE-X Startup Launch. The article refers to founders like Vida.",
+      "orgPlace": "CREATE-X",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Akos Vida",
+          "aliases": [],
+          "campusId": "univ_gatech",
+          "affiliationRole": "Founder, AdaptaPlay",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The CREATE-X Demo Day article describes Akos Vida building AdaptaPlay and groups him with founders.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "second-year aerospace engineering student",
+            "gradYear": null,
+            "evidence": "The CREATE-X article calls Akos Vida a second-year student in aerospace engineering."
+          },
+          "excerpt": "For Akos Vida, a second-year student in the Daniel Guggenheim School of Aerospace Engineering, the idea behind AdaptaPlay began with accessible gaming."
+        }
+      ]
+    },
+    {
+      "name": "BiliRoo",
+      "description": "Baby carrier that delivers filtered-sunlight phototherapy for newborn jaundice.",
+      "website": null,
+      "sourceUrl": "https://www.sciencenews.org/article/baby-sling-sunlight-treat-jaundice",
+      "excerpt": "John, a first-year medical student at the University of Michigan in Ann Arbor, founded a company, also called BiliRoo, to commercialize the concept. Daniel John models the carrier.",
+      "orgPlace": "University of Michigan",
+      "campusIds": [
+        "univ_michigan"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Daniel John",
+          "aliases": [],
+          "campusId": "univ_michigan",
+          "affiliationRole": "Founder, BiliRoo",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Science News says Daniel John founded BiliRoo and is a first-year medical student at the University of Michigan.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "first-year medical student",
+            "gradYear": null,
+            "evidence": "Science News calls Daniel John a first-year medical student at the University of Michigan in Ann Arbor."
+          },
+          "excerpt": "Daniel John, a first-year medical student at the University of Michigan in Ann Arbor, founded a company called BiliRoo."
+        }
+      ]
+    },
+    {
+      "name": "Pinpoint Irrigation",
+      "description": "Robotic sprinkler head that traces an area's boundaries and sprays only where water is needed.",
+      "website": null,
+      "sourceUrl": "https://news.utexas.edu/2026/07/01/startup-founded-at-ut-pinpoints-solution-to-common-landscape-challenges/",
+      "excerpt": "MBA graduate Stephen Herrera and Kevin Hartzog are building Pinpoint Irrigation. The pair was accepted into Forty Acres Founders at the University of Texas at Austin. Herrera is CEO and Hartzog is CTO.",
+      "orgPlace": "Forty Acres Founders",
+      "campusIds": [
+        "univ_utexas"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Stephen Herrera",
+          "aliases": [],
+          "campusId": "univ_utexas",
+          "affiliationRole": "CEO, Pinpoint Irrigation; Forty Acres Founders",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "UT News describes Stephen Herrera building Pinpoint Irrigation after acceptance into Forty Acres Founders.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "MBA graduate",
+            "gradYear": null,
+            "evidence": "The July 1, 2026 UT News article calls Stephen Herrera an MBA graduate."
+          },
+          "excerpt": "MBA graduate Stephen Herrera was accepted into Forty Acres Founders at the University of Texas at Austin while building Pinpoint Irrigation."
+        },
+        {
+          "name": "Kevin Hartzog",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "CTO, Pinpoint Irrigation",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "UT News names Kevin Hartzog CTO of Pinpoint Irrigation. The article does not say he is a UT Austin student, so no campus affiliation was added.",
+          "enrollment": null,
+          "excerpt": "Kevin Hartzog is Pinpoint Irrigation's CTO. Herrera (left) is CEO, while Hartzog (right) is the CTO."
+        }
+      ]
+    },
+    {
+      "name": "LocalLink",
+      "description": "Curated corporate gift boxes that highlight local small businesses for newly relocated employees.",
+      "website": "https://locallinkgifts.com",
+      "sourceUrl": "https://kswelinstitute.utexas.edu/local-link/",
+      "excerpt": "Praveena Arni, Class of 2027, describes creating LocalLink and securing partnerships with local small businesses.",
+      "orgPlace": "Kendra Scott Women's Entrepreneurial Leadership Institute",
+      "campusIds": [
+        "univ_utexas"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Praveena Arni",
+          "aliases": [],
+          "campusId": "univ_utexas",
+          "affiliationRole": "Founder, LocalLink",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Kendra Scott Institute profile presents Praveena Arni as the person who created LocalLink.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2027",
+            "gradYear": 2027,
+            "evidence": "The Kendra Scott Institute page lists Praveena Arni, Class of 2027."
+          },
+          "excerpt": "Praveena Arni, Class of 2027, created LocalLink after noticing how newly relocated employees struggled to connect with their communities."
+        }
+      ]
+    },
+    {
+      "name": "Cambrient AI",
+      "description": "AI-powered protection against phishing attacks.",
+      "website": "https://www.cambrient.ai/",
+      "sourceUrl": "https://www.uvafoundry.com/post/e-cup-launch-2026-winners",
+      "excerpt": "Armaan Chakrabarti and Collin Togher (College of Arts & Sciences '25 and '26) took the top prize of $40,000 at the 2026 UVA Entrepreneurship Cup for Cambrient AI.",
+      "orgPlace": "UVA Entrepreneurship Cup",
+      "campusIds": [
+        "univ_uva"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Armaan Chakrabarti",
+          "aliases": [],
+          "campusId": "univ_uva",
+          "affiliationRole": "E-Cup 2026 winner, Cambrient AI",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Foundry post names the team and the prize. It does not use the title founder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "College of Arts & Sciences '25 or '26",
+            "gradYear": null,
+            "evidence": "The Foundry post lists Armaan Chakrabarti and Collin Togher (College of Arts & Sciences '25 and '26) as a pair and does not assign which year belongs to which person."
+          },
+          "excerpt": "Armaan Chakrabarti and Collin Togher (College of Arts & Sciences '25 and '26) took home the top prize for Cambrient AI."
+        },
+        {
+          "name": "Collin Togher",
+          "aliases": [],
+          "campusId": "univ_uva",
+          "affiliationRole": "E-Cup 2026 winner, Cambrient AI",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Foundry post names the team and the prize. It does not use the title founder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "College of Arts & Sciences '25 or '26",
+            "gradYear": null,
+            "evidence": "The Foundry post lists Armaan Chakrabarti and Collin Togher (College of Arts & Sciences '25 and '26) as a pair and does not assign which year belongs to which person."
+          },
+          "excerpt": "Armaan Chakrabarti and Collin Togher (College of Arts & Sciences '25 and '26) took home the top prize for Cambrient AI."
+        }
+      ]
+    },
+    {
+      "name": "Dueflow",
+      "description": "Payments platform for groups and organizations.",
+      "website": "https://www.dueflow.co/",
+      "sourceUrl": "https://www.uvafoundry.com/post/e-cup-launch-2026-winners",
+      "excerpt": "Santiago Schmitt (College of Arts & Sciences '27) and Charlie Meyer (College of Arts & Sciences '26) earned second place for Dueflow.",
+      "orgPlace": "UVA Entrepreneurship Cup",
+      "campusIds": [
+        "univ_uva"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Santiago Schmitt",
+          "aliases": [],
+          "campusId": "univ_uva",
+          "affiliationRole": "E-Cup 2026 second place, Dueflow",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Foundry post names the team and the prize. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2027",
+            "gradYear": 2027,
+            "evidence": "The Foundry post lists Santiago Schmitt (College of Arts & Sciences '27)."
+          },
+          "excerpt": "Santiago Schmitt (College of Arts & Sciences '27) and Charlie Meyer earned second place for Dueflow."
+        },
+        {
+          "name": "Charlie Meyer",
+          "aliases": [],
+          "campusId": "univ_uva",
+          "affiliationRole": "E-Cup 2026 second place, Dueflow",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Foundry post names the team and the prize. It does not use the title founder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Class of 2026",
+            "gradYear": 2026,
+            "evidence": "The Foundry post lists Charlie Meyer (College of Arts & Sciences '26)."
+          },
+          "excerpt": "Santiago Schmitt and Charlie Meyer (College of Arts & Sciences '26) earned second place for Dueflow."
+        }
+      ]
+    },
+    {
+      "name": "GoGood",
+      "description": "Technology infrastructure for charities and volunteer organizations.",
+      "website": "https://gogood.app/",
+      "sourceUrl": "https://www.uvafoundry.com/post/e-cup-launch-2026-winners",
+      "excerpt": "Malorie Black (UVA Darden MBA '27) picked up third place and the audience choice award for GoGood.",
+      "orgPlace": "UVA Entrepreneurship Cup",
+      "campusIds": [
+        "univ_uva"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Malorie Black",
+          "aliases": [],
+          "campusId": "univ_uva",
+          "affiliationRole": "E-Cup 2026 third place, GoGood",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Foundry post names the team and the prize. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2027",
+            "gradYear": 2027,
+            "evidence": "The Foundry post lists Malorie Black (UVA Darden MBA '27)."
+          },
+          "excerpt": "Malorie Black (UVA Darden MBA '27) picked up third place for GoGood."
+        }
+      ]
+    },
+    {
+      "name": "Replication Scientific",
+      "description": "Access to lab equipment and custom research machines.",
+      "website": "https://replicationscientific.com/",
+      "sourceUrl": "https://www.uvafoundry.com/post/e-cup-launch-2026-winners",
+      "excerpt": "Alex Chen (UVA McIntire '26) took fourth place for Replication Scientific.",
+      "orgPlace": "UVA Entrepreneurship Cup",
+      "campusIds": [
+        "univ_uva"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Alex Chen",
+          "aliases": [],
+          "campusId": "univ_uva",
+          "affiliationRole": "E-Cup 2026 fourth place, Replication Scientific",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Foundry post names the team and the prize. It does not use the title founder.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "Class of 2026",
+            "gradYear": 2026,
+            "evidence": "The Foundry post lists Alex Chen (UVA McIntire '26)."
+          },
+          "excerpt": "Alex Chen (UVA McIntire '26) took home fourth place for Replication Scientific."
+        }
+      ]
+    },
+    {
+      "name": "Operative Insights",
+      "description": "Automates lighting in the operating theater.",
+      "website": "https://www.operativeinsights.org/",
+      "sourceUrl": "https://www.uvafoundry.com/post/e-cup-launch-2026-winners",
+      "excerpt": "Matt Dunovant (UVA Darden MBA '27) took fifth place for Operative Insights.",
+      "orgPlace": "UVA Entrepreneurship Cup",
+      "campusIds": [
+        "univ_uva"
+      ],
+      "investable": true,
+      "founders": [
+        {
+          "name": "Matt Dunovant",
+          "aliases": [],
+          "campusId": "univ_uva",
+          "affiliationRole": "E-Cup 2026 fifth place, Operative Insights",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "The Foundry post names the team and the prize. It does not use the title founder.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "Class of 2027",
+            "gradYear": 2027,
+            "evidence": "The Foundry post lists Matt Dunovant (UVA Darden MBA '27)."
+          },
+          "excerpt": "Matt Dunovant (UVA Darden MBA '27) took fifth place for Operative Insights."
+        }
+      ]
+    }
+  ],
+  "potential": [
+    {
+      "name": "Thomas Kanz",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Director of ScottyLabs",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Thomas Kanz as Director of ScottyLabs.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Thomas Kanz under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Evan Foster",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Director of Events",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Evan Foster as Director of Events.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Evan Foster under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Yuchen Zhou",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Director of Outreach",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Yuchen Zhou as Director of Outreach.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Yuchen Zhou under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Anish Pallati",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Director of Tech",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Anish Pallati as Director of Tech.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Anish Pallati under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Hana Benko",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Director of Labrador",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Hana Benko as Director of Labrador.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Hana Benko under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Jean Chen",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Director of Design",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Jean Chen as Director of Design.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Jean Chen under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Meera Rajendran",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Director of Finance",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Meera Rajendran as Director of Finance.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Meera Rajendran under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Sara Chokshi",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of Logistics",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Sara Chokshi as Head of Logistics.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Sara Chokshi under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Ryan Kim",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of Product Strategy",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Ryan Kim as Head of Product Strategy.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Ryan Kim under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Jonathan Gong",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of Go-To-Market",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Jonathan Gong as Head of Go-To-Market.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Jonathan Gong under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Daisy Zeng",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of Community Engagement",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Daisy Zeng as Head of Community Engagement.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Daisy Zeng under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "John Cao",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of Campus Partnerships",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists John Cao as Head of Campus Partnerships.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists John Cao under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Eunsoo Oh",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of External Partnerships",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Eunsoo Oh as Head of External Partnerships.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Eunsoo Oh under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Ivy Wang",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of Marketing",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Ivy Wang as Head of Marketing.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Ivy Wang under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Laasya Aki",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Co-Head of Product",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Laasya Aki as Co-Head of Product.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Laasya Aki under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Alan Pham",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Co-Head of Product",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Alan Pham as Co-Head of Product.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Alan Pham under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Dhiren Narne",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of Innovation",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Dhiren Narne as Head of Innovation.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Dhiren Narne under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Christina Li",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of Mentorship",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Christina Li as Head of Mentorship.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Christina Li under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Haresh Muralidharan",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of Engineering",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Haresh Muralidharan as Head of Engineering.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Haresh Muralidharan under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Sam Mathew",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of AI",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Sam Mathew as Head of AI.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Sam Mathew under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Yuxiang Huang",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of Onboarding and Documentation",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Yuxiang Huang as Head of Onboarding and Documentation.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Yuxiang Huang under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Bryan Huang",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of UI/UX",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Bryan Huang as Head of UI/UX.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Bryan Huang under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Bach Ha Lan Vu",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of UI/UX",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Bach Ha Lan Vu as Head of UI/UX.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Bach Ha Lan Vu under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Yelim Kim",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of Branding",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Yelim Kim as Head of Branding.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Yelim Kim under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Dipika Sharma",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of Branding",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Dipika Sharma as Head of Branding.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Dipika Sharma under 2026-27 leadership and does not print a class year."
+      }
+    },
+    {
+      "name": "Nandan Nair",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "ScottyLabs 2026-27 Head of Sponsorship",
+      "potentialSignal": "2026-27 ScottyLabs leadership",
+      "verificationStatus": "partial",
+      "verificationNote": "Listed on the 2026-27 ScottyLabs leadership roster. The page does not print a class year.",
+      "orgPlace": "ScottyLabs",
+      "sourceUrl": "https://scottylabs.org/team",
+      "excerpt": "The ScottyLabs 2026-27 leadership page lists Nandan Nair as Head of Sponsorship.",
+      "enrollment": {
+        "status": "current_student",
+        "basis": "inferred",
+        "label": "2026-27 ScottyLabs leadership",
+        "gradYear": null,
+        "evidence": "The ScottyLabs team page lists Nandan Nair under 2026-27 leadership and does not print a class year."
+      }
+    }
+  ],
+  "links": []
+}
