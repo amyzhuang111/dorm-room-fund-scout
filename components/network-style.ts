@@ -402,8 +402,10 @@ export interface ScreenLabel {
   dy?: number;
   /** Campus disc this label may sit on. Other discs still block it when strictDiscs is set. */
   discId?: string;
-  /** Drop the label rather than covering another campus. Used for campus names and Thiel. */
+  /** Drop the label rather than covering another campus. Used for Thiel. */
   strictDiscs?: boolean;
+  /** A campus disc large enough that its name stays on the fitted view. */
+  required?: boolean;
 }
 
 export interface LabelOffset {
@@ -431,6 +433,22 @@ const ANCHOR_OFFSETS: LabelOffset[] = [
   { dx: -14, dy: -8 },
 ];
 
+/** Extra room so two neighboring campus names can sit on opposite sides of their discs. */
+const REQUIRED_OFFSETS: LabelOffset[] = [
+  ...ANCHOR_OFFSETS,
+  { dx: 0, dy: -24 },
+  { dx: 0, dy: 22 },
+  { dx: 30, dy: 0 },
+  { dx: -30, dy: 0 },
+  { dx: 24, dy: -16 },
+  { dx: -24, dy: -16 },
+  { dx: 24, dy: 16 },
+  { dx: -24, dy: 16 },
+];
+
+/** Fitted-view guarantee. Dartmouth is the smallest of the major discs that must keep a name. */
+export const CAMPUS_LABEL_MIN_MEMBERS = 10;
+
 /** Hover card drawn to the right of the active node. Other labels must stay clear of it. */
 export function hoverLabelBox(x: number, y: number, nodeSize: number, textWidth: number, fontSize: number): LabelBox {
   const left = x + nodeSize + 8;
@@ -439,9 +457,10 @@ export function hoverLabelBox(x: number, y: number, nodeSize: number, textWidth:
 }
 
 /**
- * Greedy screen-space placement. Higher tiers win (regions, then campuses,
- * then high-degree nodes). Anchor labels try nearby slots so a campus name
- * can move off a neighbor. A label that would touch one already kept is omitted.
+ * Greedy screen-space placement. Required campus names go first, then higher
+ * tiers (Thiel, other campuses, programs, clubs). A club or hub that would
+ * touch a campus name is omitted. A required campus name is kept on the
+ * nearest free side of its disc.
  */
 export function selectVisibleLabels(
   labels: ScreenLabel[],
@@ -449,7 +468,8 @@ export function selectVisibleLabels(
   reserved: LabelBox[] = [],
   discs: CampusDisc[] = [],
 ): Map<string, LabelOffset> {
-  const ranked = [...labels].sort((a, b) => b.tier - a.tier || b.degree - a.degree || a.id.localeCompare(b.id));
+  const rank = (label: ScreenLabel) => (label.required ? 8 : label.tier);
+  const ranked = [...labels].sort((a, b) => rank(b) - rank(a) || b.tier - a.tier || b.degree - a.degree || a.id.localeCompare(b.id));
   const cell = 72;
   const grid = new Map<string, LabelBox[]>();
   const index = (box: LabelBox) => {
@@ -481,23 +501,55 @@ export function selectVisibleLabels(
     return false;
   };
   const hitsDisc = (box: LabelBox, discId?: string) => discs.some((disc) => disc.id !== discId && boxHitsDisc(box, disc));
+  const overlapScore = (box: LabelBox): number => {
+    const seen = new Set<LabelBox>();
+    let score = 0;
+    const x0 = Math.floor(box.left / cell);
+    const x1 = Math.floor(box.right / cell);
+    const y0 = Math.floor(box.top / cell);
+    const y1 = Math.floor(box.bottom / cell);
+    for (let x = x0; x <= x1; x++) {
+      for (let y = y0; y <= y1; y++) {
+        const list = grid.get(`${x}:${y}`);
+        if (!list) continue;
+        for (const other of list) {
+          if (seen.has(other)) continue;
+          seen.add(other);
+          if (!boxesOverlap(other, box)) continue;
+          const width = Math.min(other.right, box.right) - Math.max(other.left, box.left);
+          const height = Math.min(other.bottom, box.bottom) - Math.max(other.top, box.top);
+          score += Math.max(0, width) * Math.max(0, height);
+        }
+      }
+    }
+    return score;
+  };
   for (const box of reserved) index(box);
   const show = new Map<string, LabelOffset>();
+  const campusAnchors: { x: number; y: number; r: number }[] = [];
   for (const label of ranked) {
-    const slots = label.anchor ? ANCHOR_OFFSETS : [{ dx: 0, dy: 0 }];
+    const slots = label.required ? REQUIRED_OFFSETS : label.anchor ? ANCHOR_OFFSETS : [{ dx: 0, dy: 0 }];
+    const limit = label.required ? 32 : 22;
     let chosen: { offset: LabelOffset; box: LabelBox } | null = null;
+    let closest: { offset: LabelOffset; box: LabelBox; score: number } | null = null;
     for (const offset of slots) {
-      if (Math.hypot(offset.dx, offset.dy) > 22) continue;
+      if (Math.hypot(offset.dx, offset.dy) > limit) continue;
       const box = screenLabelBox({ ...label, dx: offset.dx, dy: offset.dy }, measure);
       const padded = { left: box.left - 4, top: box.top - 3, right: box.right + 4, bottom: box.bottom + 3 };
-      if (hits(padded)) continue;
-      if (label.strictDiscs && hitsDisc(box, label.discId)) continue;
       if (label.anchor && boxHitsCircle(box, label.x, label.y, label.nodeSize * 0.8)) continue;
-      chosen = { offset, box: padded };
-      break;
+      if (!label.required && campusAnchors.some((campus) => boxHitsCircle(box, campus.x, campus.y, campus.r))) continue;
+      if (label.strictDiscs && hitsDisc(box, label.discId)) continue;
+      const score = overlapScore(padded);
+      if (score === 0) {
+        chosen = { offset, box: padded };
+        break;
+      }
+      if (label.required && (!closest || score < closest.score)) closest = { offset, box: padded, score };
     }
+    if (!chosen && closest) chosen = { offset: closest.offset, box: closest.box };
     if (!chosen) continue;
     index(chosen.box);
+    if (label.required) campusAnchors.push({ x: label.x, y: label.y, r: Math.max(22, label.nodeSize * 2.4) });
     show.set(label.id, chosen.offset);
   }
   return show;

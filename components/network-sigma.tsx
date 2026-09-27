@@ -7,7 +7,7 @@ import { featuredNationalKey } from "@/lib/domain/featured-national";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
-import { DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_CLUB, LABEL_HUB, LABEL_LEAD, LABEL_NODE, MEGA_DEGREE, NODE_SHAPE, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, programLineColor, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type CampusDisc, type LabelOffset, type ScreenLabel } from "./network-style";
+import { CAMPUS_LABEL_MIN_MEMBERS, DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_CLUB, LABEL_HUB, LABEL_LEAD, LABEL_NODE, MEGA_DEGREE, NODE_SHAPE, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, programLineColor, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type CampusDisc, type LabelOffset, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -173,7 +173,12 @@ export function NetworkSigma({
       return measureCtx.measureText(text).width;
     };
     const placed: { offsets: Map<string, LabelOffset> } = { offsets: new Map() };
-    const labelMeta: { id: string; tier: number; degree: number; text: string; fullText: string; marker: boolean; anchor: boolean; fontSize: number; tracking: number; campusHub: boolean; named: boolean; discId?: string; strictDiscs: boolean }[] = [];
+    const memberCount = new Map<string, number>();
+    for (const node of graph.nodes) {
+      if ((node.type !== "person" && node.type !== "startup") || !node.campus) continue;
+      memberCount.set(node.campus, (memberCount.get(node.campus) ?? 0) + 1);
+    }
+    const labelMeta: { id: string; tier: number; degree: number; text: string; fullText: string; marker: boolean; anchor: boolean; fontSize: number; tracking: number; campusHub: boolean; named: boolean; discId?: string; strictDiscs: boolean; required: boolean; grayHub: boolean }[] = [];
     for (const node of graph.nodes) {
       const campus = node.type === "campus";
       const named = namedIds.has(node.id);
@@ -183,6 +188,7 @@ export function NetworkSigma({
       const campusHub = Boolean(node.homeCampus) && !campus;
       const anchor = campus || hub;
       const fontSize = campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong || campusHub || named ? LABEL_HUB : hub ? 10 : LABEL_NODE;
+      const campusId = node.campus || node.id;
       labelMeta.push({
         id: node.id,
         tier: campus ? 5 : lead ? 6 : strong ? 4 : campusHub ? 3 : hub ? 2 : 1,
@@ -195,8 +201,10 @@ export function NetworkSigma({
         tracking: 0,
         campusHub,
         named,
-        discId: campus ? node.campus || node.id : node.homeCampus || undefined,
-        strictDiscs: campus || (named && featuredNationalKey(node.label) === "thiel"),
+        discId: campus ? campusId : node.homeCampus || undefined,
+        strictDiscs: !campus && named && featuredNationalKey(node.label) === "thiel",
+        required: campus && (memberCount.get(campusId) ?? 0) >= CAMPUS_LABEL_MIN_MEMBERS,
+        grayHub: !campus && !node.homeCampus && (node.type === "organization" || node.type === "program" || node.type === "investor"),
       });
     }
     const colors = new Map(campusSwatches(graph.nodes).map((swatch) => [swatch.id, swatch.color]));
@@ -222,7 +230,7 @@ export function NetworkSigma({
         signalTip: signalTooltip(node),
         linkColor: emphasizeColor(color),
         labelPx: campus ? LABEL_CAMPUS : lead ? LABEL_LEAD : strong || campusHub || named ? LABEL_HUB : hub ? 10 : LABEL_NODE,
-        ...(node.homeCampus ? { labelColor: readableInk(colors.get(node.homeCampus) ?? "#374151") } : {}),
+        ...(campus ? { labelColor: "#111111" } : node.homeCampus ? { labelColor: readableInk(colors.get(node.homeCampus) ?? "#374151") } : {}),
       });
     }
     // Region titles stay off the canvas. The legend carries the colors.
@@ -368,6 +376,8 @@ export function NetworkSigma({
         if (state.hidden.has(node)) return { ...data, hidden: true };
         const active = state.hovered ?? state.selected;
         if (node === active && state.hovered === node) return { ...data, label: undefined, forceLabel: false, highlighted: true, zIndex: 5 };
+        const grayHub = (data.kind === "organization" || data.kind === "program" || data.kind === "investor") && !data.labelColor;
+        if (!nudge && grayHub) return { ...data, hidden: true, label: undefined, forceLabel: false };
         if (!nudge) return { ...data, label: undefined, forceLabel: false };
         if (node === active) return showLabel({ label: data.fullLabel, highlighted: true, zIndex: 5 });
         if (!active) return showLabel({ label: data.label });
@@ -420,7 +430,9 @@ export function NetworkSigma({
         } else if (hidden.has(meta.id)) continue;
         if (suppressed.has(meta.id) && meta.id !== active && !meta.named) continue;
         const display = renderer.getNodeDisplayData(meta.id);
-        if (!display || display.hidden) continue;
+        if (!display) continue;
+        // Gray hubs are hidden only after they lose the label pass. Skipping them here would keep Thiel unlabeled.
+        if (display.hidden && !meta.grayHub) continue;
         const at = renderer.framedGraphToViewport(display);
         const nodeSize = renderer.scaleSize(display.size);
         if (meta.id === active && hovered) {
@@ -447,6 +459,7 @@ export function NetworkSigma({
           tracking: meta.tracking,
           discId: meta.discId,
           strictDiscs: meta.strictDiscs,
+          required: meta.required,
         });
       }
       const search = document.querySelector('input[aria-label="Search the network"]');

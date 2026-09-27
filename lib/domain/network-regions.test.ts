@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { featuredNationalKey } from "./featured-national";
-import { LABEL_CLUB, bundleWidth, campusHubDegreeFloor, nodeColor, programLineColor, readableInk, selectVisibleLabels } from "../../components/network-style";
+import { CAMPUS_LABEL_MIN_MEMBERS, LABEL_CLUB, bundleWidth, campusHubDegreeFloor, nodeColor, programLineColor, readableInk, selectVisibleLabels } from "../../components/network-style";
 import { REGIONS, campusShade, regionForCampus, regionSwatch } from "./network-regions";
 
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
@@ -163,6 +163,27 @@ const covered = selectVisibleLabels(
 );
 const pearOffset = covered.get("pear");
 assert.ok(!pearOffset || !(pearOffset.dx === 0 && pearOffset.dy >= 10));
+
+assert.equal(CAMPUS_LABEL_MIN_MEMBERS, 10);
+const campusWins = selectVisibleLabels(
+  [
+    { id: "stanford", tier: 5, degree: 700, text: "Stanford", x: 100, y: 100, nodeSize: 9, marker: false, anchor: true, fontSize: 12, required: true },
+    { id: "club", tier: 3, degree: 40, text: "Rice Business Plan Competition", x: 108, y: 108, nodeSize: 3, marker: false, anchor: true, fontSize: 11 },
+  ],
+  measure,
+);
+assert.ok(campusWins.has("stanford"));
+assert.ok(!campusWins.has("club"));
+const neighbors = selectVisibleLabels(
+  [
+    { id: "columbia", tier: 5, degree: 118, text: "Columbia", x: 200, y: 200, nodeSize: 8, marker: false, anchor: true, fontSize: 12, required: true },
+    { id: "nyu", tier: 5, degree: 55, text: "NYU", x: 236, y: 200, nodeSize: 8, marker: false, anchor: true, fontSize: 12, required: true },
+  ],
+  measure,
+);
+assert.ok(neighbors.has("columbia"));
+assert.ok(neighbors.has("nyu"));
+for (const offset of neighbors.values()) assert.ok(Math.hypot(offset.dx, offset.dy) <= 32);
 
 const ycLine = programLineColor("Y Combinator");
 assert.equal(ycLine.toLowerCase(), "#ea580c");
