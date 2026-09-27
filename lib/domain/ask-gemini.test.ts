@@ -38,7 +38,10 @@ async function main() {
   }
   const empty = await answerWithGemini("Penn juniors in M&T building in AI");
   assert.equal(empty.ok, true);
-  if (empty.ok) assert.equal(empty.answer, "Not in the data.");
+  if (empty.ok) {
+    assert.equal(empty.answer, "Not in the data.");
+    assert.equal(empty.engine, "search");
+  }
 
   if (savedGemini === undefined) delete process.env.GEMINI_API_KEY;
   else process.env.GEMINI_API_KEY = savedGemini;

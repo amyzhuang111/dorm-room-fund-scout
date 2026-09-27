@@ -42,7 +42,7 @@ function textFromGemini(raw: string): string {
 
 export interface AskGeminiSuccess {
   ok: true;
-  engine: "gemini";
+  engine: "gemini" | "search";
   answer: string;
   matches: AskHit[];
 }
@@ -56,7 +56,7 @@ export interface AskGeminiFailure {
 export async function answerWithGemini(question: string): Promise<AskGeminiSuccess | AskGeminiFailure> {
   const matches = retrieveAsk(question);
   if (matches.length === 0) {
-    return { ok: true, engine: "gemini", answer: NOT_IN_THE_DATA, matches };
+    return { ok: true, engine: "search", answer: NOT_IN_THE_DATA, matches };
   }
   const key = geminiApiKey();
   if (!key) return { ok: false, reason: "no_key", matches };
