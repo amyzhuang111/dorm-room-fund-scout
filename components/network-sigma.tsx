@@ -8,7 +8,7 @@ import { featuredNationalKey } from "@/lib/domain/featured-national";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
-import { CAMPUS_LABEL_MIN_MEMBERS, DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, MEGA_DEGREE, NODE_SHAPE, PROGRAM_LINE_ACTIVE, PROGRAM_LINE_DIM, bundleInk, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, zoomSizeFactor, type CampusDisc, type FramePoint, type LabelOffset, type ScreenLabel } from "./network-style";
+import { CAMPUS_LABEL_MIN_MEMBERS, DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_LEAD, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, PROGRAM_LINE_ACTIVE, PROGRAM_LINE_DIM, REGION_TRACKING, bundleInk, bundleWidth, campusHubDegreeFloor, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, labelScreenPx, neighborhoodView, nodeColor, openingCameraRatio, readableInk, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, zoomSizeFactor, type CampusDisc, type FramePoint, type LabelOffset, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -230,6 +230,27 @@ export function NetworkSigma({
         grayHub: !campus && !node.homeCampus && (node.type === "organization" || node.type === "program" || node.type === "investor"),
       });
     }
+    const regionCampuses = new Map<string, string[]>();
+    for (const marker of graph.regions) {
+      const id = marker.id.startsWith("region:") ? marker.id : `region:${marker.id}`;
+      if (!marker.campusIds.length) continue;
+      regionCampuses.set(id, marker.campusIds);
+      labelMeta.push({
+        id,
+        tier: 7,
+        degree: 1_000_000,
+        text: truncateMapLabel(marker.label, true, false),
+        fullText: marker.fullLabel,
+        marker: true,
+        anchor: false,
+        fontSize: LABEL_REGION,
+        tracking: REGION_TRACKING,
+        campusHub: false,
+        named: false,
+        required: true,
+        grayHub: false,
+      });
+    }
     const colors = new Map(campusSwatches(graph.nodes).map((swatch) => [swatch.id, swatch.color]));
     for (const node of graph.nodes) {
       const campus = node.type === "campus";
@@ -257,8 +278,28 @@ export function NetworkSigma({
         ...(campus ? { labelColor: "#111111" } : node.homeCampus ? { labelColor: readableInk(colors.get(node.homeCampus) ?? "#374151") } : {}),
       });
     }
-    // Region titles stay off the canvas. The legend carries the colors.
-    const regionCampuses = new Map<string, string[]>();
+    for (const marker of graph.regions) {
+      const id = marker.id.startsWith("region:") ? marker.id : `region:${marker.id}`;
+      if (g.hasNode(id) || !marker.campusIds.length) continue;
+      g.addNode(id, {
+        x: marker.x,
+        y: marker.y,
+        size: 0.2,
+        label: marker.label,
+        fullLabel: marker.fullLabel,
+        color: "#ffffff",
+        type: "circle",
+        kind: "campus",
+        anchor: false,
+        marker: true,
+        zIndex: 6,
+        links: 0,
+        linkColor: "#ffffff",
+        labelBase: LABEL_REGION,
+        tint: "#8d939c",
+        labelColor: "#8d939c",
+      });
+    }
     let minX = Infinity;
     let maxX = -Infinity;
     let minY = Infinity;
@@ -650,12 +691,14 @@ export function NetworkSigma({
       stateRef.current.focusFrame = requestAnimationFrame(tick);
     };
     renderer.on("enterNode", ({ node }) => {
+      if (g.getNodeAttribute(node, "marker")) return;
       stateRef.current.hovered = node;
       stateRef.current.focusNode = node;
       container.style.cursor = "pointer";
       glideFocus(1);
     });
     renderer.on("leaveNode", ({ node }) => {
+      if (g.getNodeAttribute(node, "marker")) return;
       if (stateRef.current.hovered === node) stateRef.current.hovered = null;
       container.style.cursor = "grab";
       if (stateRef.current.selected) stateRef.current.focusNode = stateRef.current.selected;
@@ -907,6 +950,7 @@ function graphFrame(renderer: Sigma<NodeAttr, EdgeAttr>) {
   let maxX = -Infinity;
   let maxY = -Infinity;
   renderer.getGraph().forEachNode((_id, attrs) => {
+    if (attrs.marker) return;
     minX = Math.min(minX, attrs.x);
     minY = Math.min(minY, attrs.y);
     maxX = Math.max(maxX, attrs.x);

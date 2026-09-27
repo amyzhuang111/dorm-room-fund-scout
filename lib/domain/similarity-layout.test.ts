@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { clubTypeKey, cosineSimilarity, nearestSimilar, relaxSimilarity, similarityVectors, type SimilarityFacts } from "./similarity-layout";
+import { clubTypeKey, cosineSimilarity, groupVector, linksWithinGroups, nearestSimilar, relaxRegionBodies, relaxSimilarity, similarityVectors, type SimilarityFacts } from "./similarity-layout";
 
 assert.equal(clubTypeKey("Cal Hacks"), "hackathon");
 assert.equal(clubTypeKey("Y Combinator"), "accelerator");
@@ -82,5 +82,35 @@ const stacked = [
 ];
 relaxSimilarity(stacked, [{ a: "a", b: "b", sim: 1 }], { iterations: 20, anchor: 0.05, spring: 0.2 });
 assert.ok(between(stacked[0], stacked[1]) >= 40);
+
+const grouped = linksWithinGroups(
+  [
+    { a: "mit", b: "harvard", sim: 0.9 },
+    { a: "mit", b: "stanford", sim: 0.95 },
+  ],
+  (id) => (id === "stanford" ? "west" : "boston"),
+);
+assert.equal(grouped.length, 1);
+assert.equal(grouped[0].b, "harvard");
+
+const overlapped = [
+  { id: "boston", x: 0, y: 0, r: 20 },
+  { id: "west", x: 30, y: 0, r: 20 },
+];
+relaxRegionBodies(overlapped, [{ a: "boston", b: "west", sim: 0.95 }], { iterations: 30, anchor: 0.2, spring: 0.5, gap: 14, spread: 20 });
+const held = Math.hypot(overlapped[0].x - overlapped[1].x, overlapped[0].y - overlapped[1].y);
+assert.ok(held >= 20 + 20 + 14 - 0.05, `region gap held ${held}`);
+
+const farRegions = [
+  { id: "boston", x: 0, y: 0, r: 10 },
+  { id: "west", x: 200, y: 0, r: 10 },
+];
+relaxRegionBodies(farRegions, [{ a: "boston", b: "west", sim: 1 }], { iterations: 40, anchor: 0.15, spring: 0.6, gap: 12, spread: 30 });
+const closed = Math.hypot(farRegions[0].x - farRegions[1].x, farRegions[0].y - farRegions[1].y);
+assert.ok(closed < 160, `similar regions should close (${closed})`);
+assert.ok(closed >= 10 + 10 + 12 - 0.05, `hard gap ${closed}`);
+
+const mean = groupVector(["mit", "stanford"], vectors);
+assert.ok(cosineSimilarity(mean, vectors.get("mit")!) > 0);
 
 console.log("similarity layout tests ok");

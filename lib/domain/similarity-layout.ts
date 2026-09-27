@@ -206,6 +206,157 @@ export function nearestSimilar(ids: string[], vectors: Map<string, Map<string, n
 }
 
 /**
+ * Drop springs that join two groups. Callers use this so a campus can only
+ * be pulled toward campuses in its own region.
+ */
+export function linksWithinGroups(links: SimilarityLink[], groupOf: (id: string) => string | undefined): SimilarityLink[] {
+  return links.filter((link) => {
+    const left = groupOf(link.a);
+    const right = groupOf(link.b);
+    return left != null && left === right;
+  });
+}
+
+/** Mean of the member vectors, L2-normalized again. Empty when none of them have a bag. */
+export function groupVector(ids: string[], vectors: Map<string, Map<string, number>>): Map<string, number> {
+  const sum = new Map<string, number>();
+  let count = 0;
+  for (const id of ids) {
+    const bag = vectors.get(id);
+    if (!bag?.size) continue;
+    count += 1;
+    for (const [key, value] of bag) sum.set(key, (sum.get(key) ?? 0) + value);
+  }
+  if (!count) return new Map();
+  for (const [key, value] of sum) sum.set(key, value / count);
+  let norm = 0;
+  for (const value of sum.values()) norm += value * value;
+  norm = Math.sqrt(norm);
+  if (norm < 1e-9) return new Map();
+  const out = new Map<string, number>();
+  for (const [key, value] of sum) out.set(key, value / norm);
+  return out;
+}
+
+export interface RegionBody {
+  id: string;
+  x: number;
+  y: number;
+  r: number;
+}
+
+/**
+ * Slide whole regions. Centers never come closer than `rA + rB + gap`.
+ * A higher cosine shortens the preferred gap; a low cosine leaves a wider one.
+ * The anchor holds each region near the compass seed it started from.
+ */
+export function relaxRegionBodies(
+  bodies: RegionBody[],
+  links: SimilarityLink[],
+  options?: { iterations?: number; anchor?: number; spring?: number; gap?: number; spread?: number },
+): void {
+  const iterations = options?.iterations ?? 24;
+  const anchor = options?.anchor ?? 0.45;
+  const spring = options?.spring ?? 0.35;
+  const gap = options?.gap ?? 14;
+  const spread = options?.spread ?? 22;
+  const start = new Map(bodies.map((body) => [body.id, { x: body.x, y: body.y }]));
+  const byId = new Map(bodies.map((body) => [body.id, body]));
+  const linked = new Set<string>();
+  const pairs: { a: string; b: string; sim: number }[] = [];
+  for (const link of links) {
+    if (!byId.has(link.a) || !byId.has(link.b) || link.a === link.b) continue;
+    const key = link.a < link.b ? `${link.a}|${link.b}` : `${link.b}|${link.a}`;
+    if (linked.has(key)) continue;
+    linked.add(key);
+    pairs.push({ a: link.a, b: link.b, sim: Math.max(0, Math.min(1, link.sim)) });
+  }
+  for (let i = 0; i < bodies.length; i++) {
+    for (let j = i + 1; j < bodies.length; j++) {
+      const a = bodies[i].id;
+      const b = bodies[j].id;
+      const key = a < b ? `${a}|${b}` : `${b}|${a}`;
+      if (linked.has(key)) continue;
+      pairs.push({ a, b, sim: 0 });
+    }
+  }
+  for (let iter = 0; iter < iterations; iter++) {
+    const vx = new Map<string, number>();
+    const vy = new Map<string, number>();
+    const add = (id: string, x: number, y: number) => {
+      vx.set(id, (vx.get(id) ?? 0) + x);
+      vy.set(id, (vy.get(id) ?? 0) + y);
+    };
+    for (const body of bodies) {
+      const origin = start.get(body.id);
+      if (!origin) continue;
+      add(body.id, (origin.x - body.x) * anchor, (origin.y - body.y) * anchor);
+    }
+    for (const pair of pairs) {
+      const a = byId.get(pair.a)!;
+      const b = byId.get(pair.b)!;
+      let dx = b.x - a.x;
+      let dy = b.y - a.y;
+      let dist = Math.hypot(dx, dy);
+      if (dist < 1e-3) {
+        dx = 1;
+        dy = 0;
+        dist = 1;
+      }
+      const min = a.r + b.r + gap;
+      const ideal = min + (1 - pair.sim) * spread;
+      const mag = (spring * (dist - ideal)) / dist;
+      add(a.id, dx * mag * 0.5, dy * mag * 0.5);
+      add(b.id, -dx * mag * 0.5, -dy * mag * 0.5);
+    }
+    for (const body of bodies) {
+      let x = vx.get(body.id) ?? 0;
+      let y = vy.get(body.id) ?? 0;
+      const step = Math.hypot(x, y);
+      if (step > 12) {
+        x = (x / step) * 12;
+        y = (y / step) * 12;
+      }
+      if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+      body.x += x;
+      body.y += y;
+    }
+    separateRegionBodies(bodies, gap);
+  }
+  // The anchor pulls back toward the seed. Resolve the gap again so that pull cannot leave two colors overlapping.
+  separateRegionBodies(bodies, gap);
+}
+
+function separateRegionBodies(bodies: RegionBody[], gap: number) {
+  for (let sweep = 0; sweep < 32; sweep++) {
+    let moved = false;
+    for (let i = 0; i < bodies.length; i++) {
+      for (let j = i + 1; j < bodies.length; j++) {
+        const a = bodies[i];
+        const b = bodies[j];
+        let dx = b.x - a.x;
+        let dy = b.y - a.y;
+        let dist = Math.hypot(dx, dy);
+        const min = a.r + b.r + gap;
+        if (dist >= min - 0.05) continue;
+        if (dist < 1e-3) {
+          dx = 1;
+          dy = 0;
+          dist = 1;
+        }
+        const push = (min - dist) / 2;
+        a.x -= (dx / dist) * push;
+        a.y -= (dy / dist) * push;
+        b.x += (dx / dist) * push;
+        b.y += (dy / dist) * push;
+        moved = true;
+      }
+    }
+    if (!moved) break;
+  }
+}
+
+/**
  * Extra springs on top of a seed layout. High cosine shortens the rest length.
  * `pinned` nodes stay put, so a later pass can slide hubs toward campuses
  * without pulling the campus discs apart again.
