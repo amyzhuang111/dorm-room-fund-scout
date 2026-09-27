@@ -69,10 +69,11 @@ export interface ProgramDirectory {
 /**
  * One hotspot-style tier per program. S and A follow the owner's anchors
  * (SPC Founder Fellowship, Z Fellows, Emergent Ventures, HF0; Founders Inc
- * Off Season, The Residency, AGI House, Contrary, 1517). Houses with a small
+ * Off Season, The Residency, Contrary, 1517). Houses with a small
  * published cohort, and large or archived programs, sit at B or C.
  * Kleiner Perkins stays S: it is already a small paid fellowship in the
  * directory. Afore stays A: a funded student residency in the Off Season band.
+ * AGI House is S by owner override, so it ranks above The Residency.
  */
 export const PROGRAM_DIRECTORY: Record<ProgramSignalType, ProgramDirectory> = {
   founders_inc: {
@@ -131,8 +132,8 @@ export const PROGRAM_DIRECTORY: Record<ProgramSignalType, ProgramDirectory> = {
     sourceUrl: "https://jobs.ashbyhq.com/kleinerperkinsfellows",
   },
   agi_house: {
-    tier: "A",
-    rationale: "San Francisco AI hacker house. The homepage names roommates and companies and does not publish an acceptance rate.",
+    tier: "S",
+    rationale: "Owner override: ranked S so it sits above The Residency. San Francisco AI hacker house. The homepage names roommates and companies and does not publish an acceptance rate.",
     sourceUrl: "https://agihouse.ai/",
   },
   hf0: {

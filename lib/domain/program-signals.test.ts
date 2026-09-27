@@ -134,6 +134,8 @@ assert.equal(PROGRAM_DIRECTORY.emergent_ventures.tier, "S");
 assert.equal(PROGRAM_DIRECTORY.hf0.tier, "S");
 assert.equal(PROGRAM_DIRECTORY.south_park_commons.tier, "S");
 assert.equal(PROGRAM_DIRECTORY.the_residency.tier, "A");
+assert.equal(PROGRAM_DIRECTORY.agi_house.tier, "S");
+assert.match(PROGRAM_DIRECTORY.agi_house.rationale, /Owner override/);
 assert.equal(PROGRAM_DIRECTORY.contrary_venture_partners.tier, "A");
 assert.equal(PROGRAM_DIRECTORY.medici_1517.tier, "A");
 assert.equal(PROGRAM_DIRECTORY.frontier_tower.tier, "C");
