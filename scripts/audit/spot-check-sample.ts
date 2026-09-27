@@ -10,7 +10,7 @@ import { getDb, nowIso } from "../../lib/db/client";
 const CHECKED_ON = "2026-09-27";
 const CACHE = "/tmp/campus-scout-url-cache";
 const SAMPLE = 50;
-const LEGAL = new Set(["incorporated", "inc", "llc", "ltd", "limited", "corp", "corporation", "co", "company"]);
+const LEGAL = new Set(["incorporated", "inc", "llc", "ltd", "limited", "corp", "corporation", "co", "company", "gmbh", "pbc", "plc", "llp"]);
 
 type Row = { id: string; name: string; url: string; verification_status: string | null; table: "people" | "projects" };
 
@@ -51,7 +51,11 @@ function strip(html: string): string {
     .replace(/&nbsp;/g, " ")
     .replace(/\s+/g, " ")
     .trim()
-    .slice(0, 20000);
+    .slice(0, 250000);
+}
+
+function isPdf(text: string): boolean {
+  return text.startsWith("%PDF") || text.slice(0, 20).includes("%PDF");
 }
 
 function inconclusive(text: string): boolean {
@@ -62,7 +66,7 @@ function inconclusive(text: string): boolean {
 
 async function fetchCached(url: string): Promise<{ status: number; text: string; error?: string }> {
   fs.mkdirSync(CACHE, { recursive: true });
-  const file = path.join(CACHE, crypto.createHash("sha256").update(url).digest("hex") + ".json");
+  const file = path.join(CACHE, crypto.createHash("sha256").update(`${url}|v2`).digest("hex") + ".json");
   if (fs.existsSync(file)) return JSON.parse(fs.readFileSync(file, "utf8")) as { status: number; text: string; error?: string };
   let result: { status: number; text: string; error?: string };
   try {
@@ -134,6 +138,36 @@ async function main() {
       return;
     }
     const fetched = await fetchCached(row.url);
+    if (isPdf(fetched.text)) {
+      if (row.verification_status === "unverified") {
+        const prior = db
+          .prepare(`SELECT old_value FROM accuracy_audit WHERE idempotency_key = ?`)
+          .get(`spot:${row.table}:${row.id}:unverified`) as { old_value: string | null } | undefined;
+        if (prior?.old_value && prior.old_value !== "unverified") {
+          const reason = `Spot check restored ${prior.old_value}: ${row.url} is a PDF, so the page text could not be read.`;
+          const key = `spot-restore:${row.table}:${row.id}`;
+          if (row.table === "people") {
+            db.prepare(`UPDATE people SET verification_status = ?, last_verified_at = ?, verification_note = ? WHERE id = ?`).run(prior.old_value, CHECKED_ON, reason, row.id);
+          } else {
+            db.prepare(`UPDATE projects SET verification_status = ?, last_verified_at = ?, verification_note = ?, updated_at = ? WHERE id = ?`).run(
+              prior.old_value,
+              CHECKED_ON,
+              reason,
+              nowIso(),
+              row.id
+            );
+          }
+          db.prepare(
+            `INSERT OR IGNORE INTO accuracy_audit (id, entity_type, entity_id, action, field, old_value, new_value, reason, evidence_url, checked_at, idempotency_key)
+             VALUES (?, ?, ?, 'fix', 'verification_status', 'unverified', ?, ?, ?, ?, ?)`
+          ).run(auditId(key), row.table === "people" ? "person" : "project", row.id, prior.old_value, reason, row.url, CHECKED_ON, key);
+          summary.unchanged += 1;
+          return;
+        }
+      }
+      summary.inconclusive += 1;
+      return;
+    }
     let next: "confirmed" | "unverified" | null = null;
     let reason = "";
     if (fetched.status === 404 || fetched.status === 410) {
