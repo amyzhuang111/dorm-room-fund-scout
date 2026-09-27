@@ -513,11 +513,13 @@ export function NetworkSigma({
         const dx = to.x - from.x;
         const dy = to.y - from.y;
         const length = Math.hypot(dx, dy) || 1;
+        // The control point sits off the chord. Short links stay gentle; long ones arc through the whitespace.
+        const bow = Math.sign(edge.bend) * Math.max(length * Math.abs(edge.bend), Math.min(36, length * 0.42));
         const stroke: CurveStroke = {
           x1: from.x,
           y1: from.y,
-          cx: midX + (-dy / length) * length * edge.bend,
-          cy: midY + (dx / length) * length * edge.bend,
+          cx: midX + (-dy / length) * bow,
+          cy: midY + (dx / length) * bow,
           x2: to.x,
           y2: to.y,
           color,
