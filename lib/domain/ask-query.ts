@@ -19,10 +19,11 @@ import {
 } from "./hotspot-model";
 import { directoryLabel, hotspotGroups, personIdsForPlace, projectIdsForPlace, type HotspotPlaceGroup } from "./hotspots";
 import { sectorLabel } from "./sectors";
+import { signalTierRank } from "./signal-tier";
 import type { AskHit, AskKind, AskSource, AskToolResult } from "./ask-types";
 
 const DEFAULT_LIMIT = 12;
-const MAX_LIMIT = 20;
+const MAX_LIMIT = 30;
 
 const HEALTH_FAMILY = ["healthtech", "biotech", "medtech"];
 
@@ -94,6 +95,8 @@ export interface PeopleQuery {
   building?: boolean | null;
   verification?: "confirmed" | "partial" | "unverified" | null;
   name?: string | null;
+  /** When "tier", stronger Founder Scout tiers sort first. */
+  sort?: "tier" | null;
   limit?: number | null;
 }
 
@@ -103,6 +106,10 @@ export interface StartupQuery {
   investor?: string | null;
   city?: string | null;
   program?: string | null;
+  /** Round stage such as "seed" or "series a". Matches sort ahead of other raises. */
+  stage?: string | null;
+  /** Rank startups that have a round, amount, or funding story ahead of the rest. */
+  funding?: boolean | null;
   verification?: "confirmed" | "partial" | "unverified" | null;
   name?: string | null;
   limit?: number | null;
@@ -132,9 +139,29 @@ interface PersonRec {
   basis: string | null;
   founderStatus: string | null;
   verification: string | null;
+  signalTier: string | null;
   campuses: string[];
   roles: { projectId: string; role: string | null }[];
   sourceUrl: string | null;
+}
+
+interface FundingRoundRec {
+  stage: string | null;
+  amountText: string | null;
+  date: string | null;
+  leads: string[];
+  sourceUrl: string | null;
+}
+
+interface FundingEventRec {
+  amount: number | null;
+  instrument: string | null;
+  date: string | null;
+}
+
+interface FundingNewsRec {
+  headline: string;
+  url: string | null;
 }
 
 interface StartupRec {
@@ -144,8 +171,12 @@ interface StartupRec {
   website: string | null;
   verification: string | null;
   sectors: string[];
-  investors: { name: string; url: string }[];
+  investors: { name: string; url: string; round: string | null }[];
   hqs: { text: string; url: string }[];
+  rounds: FundingRoundRec[];
+  fundingTotal: string | null;
+  fundingEvents: FundingEventRec[];
+  fundingNews: FundingNewsRec[];
   campuses: string[];
   founderIds: string[];
   programs: string[];
@@ -185,11 +216,12 @@ function loadIndex(): Index {
   const basisSql = peopleColumns.has("enrollment_basis") ? "enrollment_basis" : "NULL AS enrollment_basis";
   const sourceSql = peopleColumns.has("enrollment_source_url") ? "enrollment_source_url" : "NULL AS enrollment_source_url";
   const personVerify = peopleColumns.has("verification_status") ? "verification_status" : "NULL AS verification_status";
+  const personTier = peopleColumns.has("signal_tier") ? "signal_tier" : "NULL AS signal_tier";
   const projectVerify = projectColumns.has("verification_status") ? "verification_status" : "NULL AS verification_status";
 
   const people = db
     .prepare(
-      `SELECT id, name, enrollment_status, enrollment_label, enrollment_grad_year, founder_status, ${basisSql}, ${sourceSql}, ${personVerify}
+      `SELECT id, name, enrollment_status, enrollment_label, enrollment_grad_year, founder_status, ${basisSql}, ${sourceSql}, ${personVerify}, ${personTier}
        FROM people
        WHERE id IN (SELECT person_id FROM affiliations)
           OR id IN (
@@ -208,6 +240,7 @@ function loadIndex(): Index {
     enrollment_basis: string | null;
     enrollment_source_url: string | null;
     verification_status: string | null;
+    signal_tier: string | null;
   }[];
 
   const personById = new Map<string, PersonRec>();
@@ -221,6 +254,7 @@ function loadIndex(): Index {
       basis: row.enrollment_basis,
       founderStatus: row.founder_status,
       verification: row.verification_status,
+      signalTier: row.signal_tier,
       campuses: [],
       roles: [],
       sourceUrl: row.enrollment_source_url && row.enrollment_source_url.startsWith("http") ? row.enrollment_source_url : null,
@@ -284,6 +318,10 @@ function loadIndex(): Index {
       sectors: [],
       investors: [],
       hqs: [],
+      rounds: [],
+      fundingTotal: null,
+      fundingEvents: [],
+      fundingNews: [],
       campuses: [],
       founderIds: [],
       programs: [],
@@ -354,6 +392,10 @@ function loadIndex(): Index {
         sectors: [],
         investors: [],
         hqs: [],
+        rounds: [],
+        fundingTotal: null,
+        fundingEvents: [],
+        fundingNews: [],
         campuses: [],
         founderIds: [],
         programs: [],
@@ -376,17 +418,91 @@ function loadIndex(): Index {
 
   const facts = db
     .prepare(
-      `SELECT project_id, fact_key, value_text, source_url FROM company_facts
-       WHERE fact_key IN ('investor', 'hq') AND length(trim(value_text)) >= 2`
+      `SELECT project_id, fact_key, value_text, detail_json, source_url FROM company_facts
+       WHERE fact_key IN ('investor', 'hq', 'funding_round', 'funding_total') AND length(trim(value_text)) >= 2`
     )
-    .all() as { project_id: string; fact_key: string; value_text: string; source_url: string }[];
+    .all() as {
+    project_id: string;
+    fact_key: string;
+    value_text: string;
+    detail_json: string | null;
+    source_url: string;
+  }[];
   for (const row of facts) {
     const startup = startups.get(row.project_id);
     if (!startup) continue;
     const url = row.source_url?.startsWith("http") ? row.source_url : "";
-    if (row.fact_key === "investor") startup.investors.push({ name: row.value_text.trim(), url });
-    if (row.fact_key === "hq") startup.hqs.push({ text: row.value_text.trim(), url });
+    const extra = parseJsonObject(row.detail_json);
+    if (row.fact_key === "investor") {
+      startup.investors.push({ name: row.value_text.trim(), url, round: asString(extra.round) });
+    } else if (row.fact_key === "hq") {
+      startup.hqs.push({ text: row.value_text.trim(), url });
+    } else if (row.fact_key === "funding_round") {
+      const stage = asString(extra.stage) || (!looksLikeMoney(row.value_text) ? row.value_text.trim() : null);
+      const amountText = asString(extra.amountText) || (looksLikeMoney(row.value_text) ? row.value_text.trim() : null);
+      startup.rounds.push({
+        stage,
+        amountText,
+        date: asString(extra.date),
+        leads: asStrings(extra.leads),
+        sourceUrl: url || null,
+      });
+    } else if (row.fact_key === "funding_total" && !startup.fundingTotal) {
+      startup.fundingTotal = row.value_text.trim();
+    }
     if (url && !startup.sourceUrl) startup.sourceUrl = url;
+  }
+  for (const startup of startups.values()) {
+    startup.rounds = uniqueRounds(startup.rounds).sort(
+      (a, b) => (STAGE_RANK[normStage(b.stage)] ?? 0) - (STAGE_RANK[normStage(a.stage)] ?? 0) || (b.date ?? "").localeCompare(a.date ?? "")
+    );
+  }
+
+  const events = db.prepare(`SELECT project_id, amount, instrument, event_date FROM funding_events`).all() as {
+    project_id: string;
+    amount: number | null;
+    instrument: string | null;
+    event_date: string | null;
+  }[];
+  for (const row of events) {
+    const startup = startups.get(row.project_id);
+    if (!startup || startup.rounds.length > 0) continue;
+    startup.fundingEvents.push({
+      amount: typeof row.amount === "number" ? row.amount : null,
+      instrument: row.instrument,
+      date: row.event_date,
+    });
+  }
+
+  const newsRows = db
+    .prepare(
+      `SELECT nm.project_id, na.headline, na.url
+       FROM news_mentions nm
+       JOIN news_articles na ON na.id = nm.article_id
+       WHERE na.category = 'funding' AND nm.project_id != ''`
+    )
+    .all() as { project_id: string; headline: string; url: string }[];
+  const newsByProject = new Map<string, { headline: string; url: string | null; rank: number }[]>();
+  for (const row of newsRows) {
+    const headline = row.headline.replace(/\s+/g, " ").trim();
+    if (headline.length < 8) continue;
+    const list = newsByProject.get(row.project_id) ?? [];
+    list.push({ headline, url: row.url?.startsWith("http") ? row.url : null, rank: fundingNewsRank(headline) });
+    newsByProject.set(row.project_id, list);
+  }
+  for (const [projectId, list] of newsByProject) {
+    const startup = startups.get(projectId);
+    if (!startup) continue;
+    const strong = list.filter((item) => item.rank > 0);
+    const picked = (strong.length ? strong : list).sort((a, b) => b.rank - a.rank || a.headline.localeCompare(b.headline));
+    const seenNews = new Set<string>();
+    for (const item of picked) {
+      const key = item.headline.toLowerCase();
+      if (seenNews.has(key)) continue;
+      seenNews.add(key);
+      startup.fundingNews.push({ headline: item.headline, url: item.url });
+      if (startup.fundingNews.length >= 2) break;
+    }
   }
 
   const companyCampus = db
@@ -423,6 +539,137 @@ function loadIndex(): Index {
   const programNames = [...new Set([...programByCompany.values()].flat())];
   cache = { stamp: current, people: [...personById.values()], startups, founderIds, programNames };
   return cache;
+}
+
+const STAGE_RANK: Record<string, number> = {
+  "pre-seed": 1,
+  seed: 2,
+  "series a": 3,
+  "series b": 4,
+  "series c": 5,
+  "series d": 6,
+  "series e": 7,
+};
+
+function parseJsonObject(raw: string | null): Record<string, unknown> {
+  if (!raw) return {};
+  try {
+    const value = JSON.parse(raw) as unknown;
+    return value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
+  } catch {
+    return {};
+  }
+}
+
+function asString(value: unknown): string | null {
+  return typeof value === "string" && value.trim() ? value.trim() : null;
+}
+
+function asStrings(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0).map((item) => item.trim());
+}
+
+function looksLikeMoney(value: string): boolean {
+  return /\$|\d/.test(value);
+}
+
+function normStage(value: string | null | undefined): string {
+  return (value ?? "").toLowerCase().replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function uniqueRounds(rounds: FundingRoundRec[]): FundingRoundRec[] {
+  const seen = new Set<string>();
+  const out: FundingRoundRec[] = [];
+  for (const round of rounds) {
+    const key = `${normStage(round.stage)}|${(round.amountText ?? "").toLowerCase()}|${round.date ?? ""}|${round.leads.join(",").toLowerCase()}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(round);
+  }
+  return out;
+}
+
+function fundingNewsRank(headline: string): number {
+  return /(\braises?\b|\braised\b|\braising\b|\bseries\s+[a-e]\b|\bpre-seed\b|\bseed\b|\$\s?\d|\d+(?:\.\d+)?\s*(?:million|billion)\b)/i.test(headline) ? 1 : 0;
+}
+
+function clipText(text: string, max: number): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  const space = cut.lastIndexOf(" ");
+  return (space > 80 ? cut.slice(0, space) : cut).trim();
+}
+
+function formatMoney(amount: number | null): string | null {
+  if (amount == null || !Number.isFinite(amount) || amount <= 0) return null;
+  const trimNum = (value: number) => (value >= 10 ? value.toFixed(0) : value.toFixed(1)).replace(/\.0$/, "");
+  if (amount >= 1_000_000_000) return `$${trimNum(amount / 1_000_000_000)}B`;
+  if (amount >= 1_000_000) return `$${trimNum(amount / 1_000_000)}M`;
+  if (amount >= 1_000) return `$${trimNum(amount / 1_000)}k`;
+  return `$${Math.round(amount)}`;
+}
+
+function roundLabel(round: FundingRoundRec): string {
+  const parts = [round.stage, round.amountText].filter((part): part is string => Boolean(part));
+  let text = parts.join(" ");
+  if (round.date) text = text ? `${text} (${round.date})` : round.date;
+  if (round.leads.length) text = text ? `${text} led by ${round.leads.slice(0, 3).join(", ")}` : `led by ${round.leads.slice(0, 3).join(", ")}`;
+  return text;
+}
+
+function eventLabel(event: FundingEventRec): string {
+  const amount = formatMoney(event.amount);
+  const kind = event.instrument && event.instrument !== "unknown" ? event.instrument : null;
+  return [kind, amount, event.date].filter((part): part is string => Boolean(part)).join(" ");
+}
+
+function stageHit(value: string | null | undefined, query: string): boolean {
+  const stage = normStage(value);
+  const want = normStage(query);
+  if (!stage || !want) return false;
+  if (want === "seed") return stage === "seed" || stage === "seed round";
+  return stage === want || stage.startsWith(`${want} `);
+}
+
+function textHasStage(text: string, query: string): boolean {
+  const want = normStage(query);
+  const hay = normStage(text);
+  if (!want || !hay) return false;
+  if (want === "seed") return /\bseed\b/.test(hay) && !/\bpre seed\b/.test(hay);
+  return hay.includes(want);
+}
+
+function startupMatchesStage(startup: StartupRec, stage: string): boolean {
+  if (startup.rounds.some((round) => stageHit(round.stage, stage) || textHasStage(round.amountText ?? "", stage))) return true;
+  if (startup.investors.some((investor) => stageHit(investor.round, stage))) return true;
+  if (startup.fundingNews.some((item) => textHasStage(item.headline, stage))) return true;
+  return false;
+}
+
+function fundingRank(startup: StartupRec, stage?: string | null): number {
+  let score = 0;
+  if (stage && startupMatchesStage(startup, stage)) score += 100;
+  if (startup.rounds.length) score += 20;
+  if (startup.fundingTotal) score += 8;
+  if (startup.fundingEvents.length) score += 12;
+  if (startup.fundingNews.length) score += 6;
+  if (startup.investors.length) score += 1;
+  return score;
+}
+
+function fundingBlurb(startup: StartupRec): string | null {
+  const parts: string[] = [];
+  const rounds = startup.rounds.slice(0, 2).map(roundLabel).filter(Boolean);
+  if (rounds.length) parts.push(`round: ${rounds.join("; ")}`);
+  else {
+    const events = startup.fundingEvents.slice(0, 2).map(eventLabel).filter(Boolean);
+    if (events.length) parts.push(`round: ${events.join("; ")}`);
+  }
+  if (startup.fundingTotal) parts.push(`total: ${startup.fundingTotal}`);
+  const news = startup.fundingNews[0]?.headline;
+  if (news) parts.push(`funding news: ${clipText(news, 140)}`);
+  return parts.length ? parts.join(" · ") : null;
 }
 
 function programImpliesHealth(name: string): boolean {
@@ -596,8 +843,9 @@ export function searchPeople(query: PeopleQuery): AskToolResult {
   const startupConstrained = Boolean(sectors || investorIds || cityIds);
   const name = text(query.name)?.toLowerCase();
   const verification = text(query.verification);
+  const limit = clampLimit(query.limit);
 
-  const matches: AskHit[] = [];
+  const matched: { person: PersonRec; hit: AskHit }[] = [];
   for (const person of index.people) {
     if (name && !person.name.toLowerCase().includes(name)) continue;
     if (campusIds && !person.campuses.some((id) => campusIds.includes(id))) continue;
@@ -625,8 +873,14 @@ export function searchPeople(query: PeopleQuery): AskToolResult {
       enrollCaption(person),
       person.verification,
       orgNodes.map((group) => directoryLabel(group.cards)).join(", ") || null,
-      startups.map((startup) => `${startup.name}${startup.sectors[0] ? ` (${sectorLabel(startup.sectors[0])})` : ""}`).join(", ") || null,
-      investorNames.join(", ") || null,
+      startups
+        .map((startup) => {
+          const sector = startup.sectors[0] ? ` (${sectorLabel(startup.sectors[0])})` : "";
+          const round = startup.rounds[0] ? ` [${roundLabel(startup.rounds[0])}]` : "";
+          return `${startup.name}${sector}${round}`;
+        })
+        .join(", ") || null,
+      investorNames.length ? `investors: ${investorNames.join(", ")}` : null,
       places.join(", ") || null,
     ]
       .filter(Boolean)
@@ -637,23 +891,30 @@ export function searchPeople(query: PeopleQuery): AskToolResult {
       ...startup.hqs.map((hq) => hq.url),
       startup.sourceUrl,
     ]);
-    matches.push({
-      id: person.id,
-      kind: "person",
-      name: person.name,
-      href,
-      detail,
-      campuses: person.campuses,
-      relatedIds: [
-        ...startups.map((startup) => startup.id),
-        ...orgNodes.map((group) => hotspotMapNodeId(group.placeKey)),
-        ...startups.flatMap((startup) => startup.investors.filter((investor) => !investorQuery || investorMatches(investor.name, investorQuery)).map((investor) => investorNodeId(investor.name))),
-        ...person.campuses,
-      ],
-      sources: sourcesFor(href, [person.sourceUrl, ...factUrls]),
+    matched.push({
+      person,
+      hit: {
+        id: person.id,
+        kind: "person",
+        name: person.name,
+        href,
+        detail,
+        campuses: person.campuses,
+        relatedIds: [
+          ...startups.map((startup) => startup.id),
+          ...orgNodes.map((group) => hotspotMapNodeId(group.placeKey)),
+          ...startups.flatMap((startup) => startup.investors.filter((investor) => !investorQuery || investorMatches(investor.name, investorQuery)).map((investor) => investorNodeId(investor.name))),
+          ...person.campuses,
+        ],
+        sources: sourcesFor(href, [person.sourceUrl, ...factUrls, ...startups.flatMap((startup) => startup.rounds.map((round) => round.sourceUrl)), ...startups.flatMap((startup) => startup.fundingNews.map((item) => item.url))]),
+      },
     });
-    if (matches.length >= clampLimit(query.limit)) break;
+    if (query.sort !== "tier" && matched.length >= limit) break;
   }
+  if (query.sort === "tier") {
+    matched.sort((a, b) => signalTierRank(a.person.signalTier) - signalTierRank(b.person.signalTier) || a.person.name.localeCompare(b.person.name));
+  }
+  const matches = matched.slice(0, limit).map((row) => row.hit);
   return { count: matches.length, matches };
 }
 
@@ -691,6 +952,7 @@ export function searchStartups(query: StartupQuery): AskToolResult {
   const name = text(query.name)?.toLowerCase();
   const verification = text(query.verification);
   const program = text(query.program);
+  const stage = text(query.stage);
   const rows: StartupRec[] = [];
   for (const startup of index.startups.values()) {
     if (name && !startup.name.toLowerCase().includes(name)) continue;
@@ -704,7 +966,12 @@ export function searchStartups(query: StartupQuery): AskToolResult {
   }
   const limit = clampLimit(query.limit);
   const healthQuery = Boolean(sectors?.some((tag) => HEALTH_FAMILY.includes(tag)));
-  const ordered = healthQuery ? mixHealthStartups(rows, limit) : rows.sort((a, b) => a.name.localeCompare(b.name)).slice(0, limit);
+  const rankFunding = query.funding === true || Boolean(stage);
+  const ordered = rankFunding
+    ? [...rows].sort((a, b) => fundingRank(b, stage) - fundingRank(a, stage) || a.name.localeCompare(b.name)).slice(0, limit)
+    : healthQuery
+      ? mixHealthStartups(rows, limit)
+      : [...rows].sort((a, b) => a.name.localeCompare(b.name)).slice(0, limit);
   const matches = ordered.map((startup) => startupHit(startup, investorQuery));
   return { count: matches.length, matches };
 }
@@ -717,15 +984,20 @@ function shortProgram(name: string): string {
     .trim();
 }
 
+function investorCaption(investor: { name: string; round: string | null }): string {
+  return investor.round ? `${investor.name} (${investor.round})` : investor.name;
+}
+
 function startupHit(startup: StartupRec, investorQuery?: string): AskHit {
   const href = `/startup/${startup.id}`;
-  const investors = investorQuery ? startup.investors.filter((investor) => investorMatches(investor.name, investorQuery)) : startup.investors.slice(0, 3);
+  const investors = investorQuery ? startup.investors.filter((investor) => investorMatches(investor.name, investorQuery)) : startup.investors.slice(0, 4);
   const detail = [
     campusCaption(startup.campuses),
     startup.sectors.slice(0, 2).map((tag) => sectorLabel(tag)).join(", ") || null,
     startup.programs.slice(0, 2).map(shortProgram).filter(Boolean).join(", ") || null,
     startup.hqs[0]?.text ?? null,
-    investors.map((investor) => investor.name).join(", ") || null,
+    fundingBlurb(startup),
+    investors.length ? `investors: ${investors.map(investorCaption).join(", ")}` : null,
     startup.verification,
   ]
     .filter(Boolean)
@@ -742,7 +1014,14 @@ function startupHit(startup: StartupRec, investorQuery?: string): AskHit {
       ...investors.map((investor) => investorNodeId(investor.name)),
       ...startup.campuses,
     ],
-    sources: sourcesFor(href, [startup.website, startup.sourceUrl, ...investors.map((investor) => investor.url), ...startup.hqs.map((hq) => hq.url)]),
+    sources: sourcesFor(href, [
+      startup.website,
+      startup.sourceUrl,
+      ...investors.map((investor) => investor.url),
+      ...startup.hqs.map((hq) => hq.url),
+      ...startup.rounds.map((round) => round.sourceUrl),
+      ...startup.fundingNews.map((item) => item.url),
+    ]),
   };
 }
 
