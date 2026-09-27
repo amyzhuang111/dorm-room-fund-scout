@@ -7,16 +7,23 @@ import type { IntroGraph, IntroOrg } from "./intro-graph";
 import { orgScore, rankWarmPaths, viaLabel } from "./warm-paths";
 
 const records = parseAlumniRecords(JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "imports", "drf_alumni.json"), "utf8")));
-assert.equal(records.length, 12);
-assert.equal(records.filter((row) => row.confidence === "confirmed").length, 7);
-assert.equal(records.filter((row) => row.confidence === "likely").length, 5);
+assert.equal(records.length, 324);
+assert.equal(records.filter((row) => row.confidence === "confirmed").length, 323);
+assert.equal(records.filter((row) => row.confidence === "likely").length, 1);
 for (const row of records) {
   assert.ok(row.sourceUrl.startsWith("https://"), row.id);
   assert.ok(row.excerpt.length >= 40, row.id);
-  if (row.currentFirm) assert.ok(row.investorId?.startsWith("inv_"), row.id);
+  const founderOnly = !!row.currentRole && /\bfounder\b/i.test(row.currentRole) && !/\b(partner|gp|investor|principal|vp)\b/i.test(row.currentRole);
+  if (row.currentFirm && !founderOnly) assert.ok(row.investorId?.startsWith("inv_"), row.id);
+  if (founderOnly) assert.equal(row.investorId, null, row.id);
 }
 assert.equal(records.find((row) => row.id === "dra_lauren_reeder")?.investorId, "inv_sequoia_capital");
 assert.equal(records.find((row) => row.id === "dra_matthew_wachter")?.currentRole, null);
+assert.equal(records.find((row) => row.id === "dra_matthew_wachter")?.confidence, "likely");
+assert.equal(records.find((row) => row.id === "dra_michael_truell")?.foundedProjectId, "proj_GjrFxToPH-cI");
+assert.equal(records.find((row) => row.id === "dra_michael_truell")?.investorId, null);
+assert.equal(records.find((row) => row.id === "dra_toni_oloko")?.foundedProjectId, "proj_-useAjLwlsUE");
+assert.equal(records.find((row) => row.id === "dra_heston_berkman")?.investorId, "inv_banter_capital");
 
 const penn: IntroOrg = {
   id: "univ_penn",
@@ -62,6 +69,9 @@ function alum(): DrfAlumRow {
     investorId: "inv_sequoia_capital",
     sourceUrl: "https://fortune.com/2022/09/06/exclusive-student-run-vc-dorm-room-fund-spins-out-from-first-round-capital-raises-12-5m-fund-from-marc-andreessen-underscore-vc-insight-partners-others/",
     firmSourceUrl: "https://fisher.wharton.upenn.edu/mt-for-life/lauren-reeder-mt16/",
+    linkedinUrl: null,
+    xUrl: null,
+    foundedProjectId: null,
     sourceUrls: [],
     affiliationStatus: null,
     confidence: "confirmed",

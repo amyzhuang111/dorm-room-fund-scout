@@ -25,6 +25,9 @@ export interface DrfAlumniRecord {
   investorId: string | null;
   sourceUrl: string;
   firmSourceUrl: string | null;
+  linkedinUrl: string | null;
+  xUrl: string | null;
+  foundedProjectId: string | null;
   sourceUrls: string[];
   affiliationStatus: "current_student" | "recent_grad" | "older_alumni" | "unverified" | null;
   confidence: DrfConfidence;
@@ -81,7 +84,12 @@ export function parseAlumniRecords(input: unknown): DrfAlumniRecord[] {
     if (affiliationStatus && !["current_student", "recent_grad", "older_alumni", "unverified"].includes(affiliationStatus)) {
       throw new Error(`${id}: affiliation_status is not a known status`);
     }
-    const urls = [sourceUrl, httpUrl(row.firm_source_url, "firm_source_url", id), httpUrl(row.team_source_url, "team_source_url", id), httpUrl(row.school_source_url, "school_source_url", id)].filter(
+    const linkedinUrl = httpUrl(row.linkedin_url, "linkedin_url", id);
+    const xUrl = httpUrl(row.x_url, "x_url", id);
+    const foundedRaw = clean(row.founded_project_id);
+    if (foundedRaw && !/^proj_[A-Za-z0-9_-]+$/.test(foundedRaw)) throw new Error(`${id}: founded_project_id is not a project id`);
+    const founderOnly = !!role && /\bfounder\b/i.test(role) && !/\b(partner|gp|investor|principal|vp)\b/i.test(role);
+    const urls = [sourceUrl, httpUrl(row.firm_source_url, "firm_source_url", id), httpUrl(row.team_source_url, "team_source_url", id), httpUrl(row.school_source_url, "school_source_url", id), linkedinUrl, xUrl].filter(
       (url): url is string => !!url
     );
     return {
@@ -98,9 +106,12 @@ export function parseAlumniRecords(input: unknown): DrfAlumniRecord[] {
       classYear: year(row.class_year, id, "class_year"),
       currentFirm: firm,
       currentRole: role,
-      investorId: firm ? investorNodeId(firm) : null,
+      investorId: firm && !founderOnly ? investorNodeId(firm) : null,
       sourceUrl,
       firmSourceUrl: httpUrl(row.firm_source_url, "firm_source_url", id),
+      linkedinUrl,
+      xUrl,
+      foundedProjectId: foundedRaw,
       sourceUrls: [...new Set(urls)],
       affiliationStatus: (affiliationStatus as DrfAlumniRecord["affiliationStatus"]) ?? null,
       confidence,
@@ -162,6 +173,9 @@ function fromDb(row: AlumniDbRow): DrfAlumRow {
     investorId: row.investor_id,
     sourceUrl: row.source_url,
     firmSourceUrl: row.firm_source_url,
+    linkedinUrl: sourceUrls.find((url) => /linkedin\.com\/in\//i.test(url)) ?? null,
+    xUrl: sourceUrls.find((url) => /(^https:\/\/(x|twitter)\.com\/)/i.test(url)) ?? null,
+    foundedProjectId: null,
     sourceUrls,
     affiliationStatus: null,
     confidence: row.confidence === "confirmed" ? "confirmed" : "likely",
@@ -193,6 +207,7 @@ export function drfWorksAtEdges(): DrfWorksAt[] {
 }
 
 export function yearsLabel(alum: Pick<DrfAlumRow, "yearStart" | "yearEnd" | "classYear">): string | null {
+  if (alum.yearStart && alum.yearEnd && alum.yearStart === alum.yearEnd) return String(alum.yearStart);
   if (alum.yearStart && alum.yearEnd) return `${alum.yearStart}–${alum.yearEnd}`;
   if (alum.yearStart) return `from ${alum.yearStart}`;
   if (alum.yearEnd) return `through ${alum.yearEnd}`;
