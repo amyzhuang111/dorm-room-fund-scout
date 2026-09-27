@@ -3,7 +3,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { parseCsv } from "./hotspot-model";
+import { parseCsv, resolveCampusParam } from "./hotspot-model";
 
 export interface FounderSignalRow {
   signal: string;
@@ -28,4 +28,10 @@ export function parseFounderSignals(text: string): FounderSignalRow[] {
 
 export function loadFounderSignals(): FounderSignalRow[] {
   return parseFounderSignals(fs.readFileSync(CSV_PATH, "utf8"));
+}
+
+/** Rows whose campus is this directory label. Same rows, scoped to one school. */
+export function founderSignalsForCampus(rows: FounderSignalRow[], campus: string): FounderSignalRow[] {
+  if (!campus.trim()) return [];
+  return rows.filter((row) => resolveCampusParam(row.campus, [campus]) === campus);
 }
