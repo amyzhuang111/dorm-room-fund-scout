@@ -38,8 +38,11 @@ type EdgeAttr = {
   kind: MapEdgeType;
   color: string;
   size: number;
-  /** Spoke of a rim hub. Drawn only while that hub or its neighbor is active. */
+  /** Spoke of a rim hub. Drawn only while a person or startup on that spoke is active. */
   defer: boolean;
+  /** One line per program-campus pair. Width follows how many people sit on it. */
+  bundle?: boolean;
+  hoverColor?: string;
 };
 
 const QUIET_EDGE = new Set<MapEdgeType>(["studied_at", "at_campus"]);
@@ -252,6 +255,49 @@ export function NetworkSigma({
       const fan = fanOf(source) || fanOf(target);
       attrs.defer = megaOf(source) || megaOf(target) || (fan && attrs.defer);
     });
+    const campusOf = new Map<string, string>();
+    for (const node of graph.nodes) {
+      if ((node.type === "person" || node.type === "startup") && node.campus) campusOf.set(node.id, node.campus);
+    }
+    for (const edge of graph.edges) {
+      if (edge.type !== "studied_at") continue;
+      const person = at.get(edge.source);
+      const campus = at.get(edge.target);
+      if (person?.type === "person" && campus?.type === "campus") campusOf.set(person.id, campus.id);
+    }
+    const bundles = new Map<string, { program: string; campus: string; count: number }>();
+    const addBundle = (programId: string, campusId: string, count: number) => {
+      if (!g.hasNode(programId) || !g.hasNode(campusId) || programId === campusId || count <= 0) return;
+      const key = `${programId}|${campusId}`;
+      const row = bundles.get(key) ?? { program: programId, campus: campusId, count: 0 };
+      row.count += count;
+      bundles.set(key, row);
+    };
+    for (const edge of graph.edges) {
+      if (edge.type !== "member_of" && edge.type !== "invested_in") continue;
+      const source = at.get(edge.source);
+      const target = at.get(edge.target);
+      if (!source || !target) continue;
+      const program = structural.has(source.type) ? source : structural.has(target.type) ? target : null;
+      const other = program === source ? target : program === target ? source : null;
+      if (!program || !other || (other.type !== "person" && other.type !== "startup")) continue;
+      const campusId = campusOf.get(other.id);
+      if (campusId) addBundle(program.id, campusId, 1);
+    }
+    for (const bundle of bundles.values()) {
+      if (bundle.count < 2) continue;
+      const tint = edgeTint(colors.get(bundle.campus) ?? "#6b7280", 0.22);
+      const key = `bundle|${bundle.program}|${bundle.campus}`;
+      if (g.hasEdge(key)) continue;
+      g.addEdgeWithKey(key, bundle.program, bundle.campus, {
+        kind: "member_of",
+        color: tint,
+        hoverColor: edgeTint(colors.get(bundle.campus) ?? "#6b7280", 0.62),
+        size: Math.min(1.45, 0.42 + Math.log2(bundle.count + 1) * 0.24),
+        defer: false,
+        bundle: true,
+      });
+    }
 
     const renderer = new Sigma<NodeAttr, EdgeAttr>(g, container, {
       allowInvalidContainer: true,
@@ -310,8 +356,14 @@ export function NetworkSigma({
         const active = state.hovered ?? state.selected;
         const quiet = QUIET_EDGE.has(data.kind) || data.defer;
         if (active && (source === active || target === active)) {
+          const activeKind = g.getNodeAttribute(active, "kind");
+          const structuralActive = activeKind === "organization" || activeKind === "program" || activeKind === "investor";
+          if (data.bundle) return { ...data, color: data.hoverColor ?? data.color, size: Math.min(2.1, data.size + 0.65), hidden: false };
+          // A program keeps its bundled campus lines. Individual spokes would cover the cloud.
+          if (structuralActive && (data.defer || QUIET_EDGE.has(data.kind))) return { ...data, hidden: true };
           return { ...data, color: g.getNodeAttribute(active, "linkColor"), size: EDGE_HOVER_PX, hidden: false };
         }
+        if (data.bundle) return data;
         if (quiet) return { ...data, hidden: true };
         if (!active) return data;
         return { ...data, color: EDGE_DIM, size: EDGE_PX };
@@ -458,6 +510,13 @@ function frameVisible(renderer: Sigma<NodeAttr, EdgeAttr>, hidden: Set<string>) 
   const span = Math.max(width, maxY - paddedMinY, 0.04);
   const ratio = Math.min(1.18, Math.max(0.04, span * 1.06));
   void renderer.getCamera().animate({ x: (minX + maxX) / 2, y: (paddedMinY + maxY) / 2, ratio }, { duration: 360 });
+}
+
+function edgeTint(color: string, alpha: number): string {
+  const match = /^#([0-9a-f]{6})$/i.exec(color.trim());
+  if (!match) return `rgba(107, 114, 128, ${alpha})`;
+  const value = Number.parseInt(match[1], 16);
+  return `rgba(${(value >> 16) & 255}, ${(value >> 8) & 255}, ${value & 255}, ${alpha})`;
 }
 
 /** Sigma's camera lives in the normalized frame (center 0.5), not raw layout coordinates. */
