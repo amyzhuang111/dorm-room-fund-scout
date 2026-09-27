@@ -14,6 +14,7 @@
     "import:apify-linkedin": "tsx scripts/enrich/import-apify-linkedin.ts",
     "enrich:apify-linkedin-verify": "tsx scripts/enrich/apify-linkedin-verify.ts",
     "import:linkedin-free": "tsx scripts/enrich/linkedin-free-import.ts",
+    "import:linkedin-direct": "tsx scripts/enrich/linkedin-direct-sources.ts",
     "test:linkedin-free": "tsx scripts/enrich/linkedin-free-match.test.ts",
     "test:apify-linkedin": "tsx scripts/enrich/apify-linkedin.test.ts",
     "test:apify-linkedin-verify": "tsx scripts/enrich/apify-linkedin-verify.test.ts",
