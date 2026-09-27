@@ -505,3 +505,32 @@ CREATE INDEX IF NOT EXISTS idx_news_articles_category ON news_articles(category)
 CREATE INDEX IF NOT EXISTS idx_news_articles_source_type ON news_articles(source_type);
 CREATE INDEX IF NOT EXISTS idx_news_mentions_project ON news_mentions(project_id);
 CREATE INDEX IF NOT EXISTS idx_news_mentions_person ON news_mentions(person_id);
+
+-- PitchBook 2026 university rankings. Undergraduate top 100 is the primary
+-- list; graduate and MBA rows are secondary. VC-backed founders from
+-- January 2015 through August 2026. capital_raised_usd converts the
+-- spreadsheet's millions figure into US dollars. university_id is set only
+-- when the PitchBook name matches a campus already in Scout.
+CREATE TABLE IF NOT EXISTS pitchbook_rankings (
+  id TEXT PRIMARY KEY,
+  university_id TEXT,
+  pitchbook_name TEXT NOT NULL,
+  country TEXT,
+  geography TEXT,
+  school_status TEXT,
+  track TEXT NOT NULL CHECK (track IN ('undergrad', 'grad', 'mba')),
+  rank INTEGER NOT NULL,
+  founder_count INTEGER NOT NULL,
+  company_count INTEGER NOT NULL,
+  capital_raised_usd REAL NOT NULL,
+  enrollment_band TEXT,
+  period_start TEXT NOT NULL,
+  period_end TEXT NOT NULL,
+  source_url TEXT NOT NULL,
+  list_url TEXT NOT NULL,
+  retrieved_at TEXT NOT NULL,
+  UNIQUE(pitchbook_name, track)
+);
+
+CREATE INDEX IF NOT EXISTS idx_pitchbook_rankings_university ON pitchbook_rankings(university_id);
+CREATE INDEX IF NOT EXISTS idx_pitchbook_rankings_track ON pitchbook_rankings(track, rank);

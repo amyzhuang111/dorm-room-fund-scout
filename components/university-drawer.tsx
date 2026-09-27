@@ -4,7 +4,8 @@ import { listBuildersForUniversity, listCandidateProjects, listSignalsForUnivers
 import { readReviewState } from "@/lib/domain/review-server";
 import { reviewCompanies } from "@/lib/domain/review-view";
 import { companyMatchesEnrollment, selectedEnrollment } from "@/lib/domain/founder-status";
-import { EnrollmentBadge, LeftSchoolBadge, QueueBadge, SignalTierBadge } from "./badges";
+import { EnrollmentBadge, LeftSchoolBadge, QueueBadge, SameSchoolBadge, SignalTierBadge } from "./badges";
+import { CampusBenchmarks } from "./campus-benchmarks";
 import { PersonLinkButton } from "./person-link";
 import { publicLink } from "@/lib/domain/company-link";
 import { CompanyNameLink } from "./company-website";
@@ -35,6 +36,7 @@ export function UniversityDrawer({
       </p>
       {university.coordSource && <p className="mt-0.5 text-[11px] text-muted">Coordinates: {university.coordSource}</p>}
       <DrfPresenceNote presence={university.drfPresence} />
+      <CampusBenchmarks pitchbook={university.pitchbook} hitRate={university.hitRate} />
 
       <div className="mt-3 flex gap-1 border-b border-border-c">
         {TABS.map((t) => (
@@ -84,6 +86,7 @@ async function ProspectsTab({ universityId, basePath, current }: { universityId:
                 <span className="flex flex-wrap items-center gap-1.5">
                   <CompanyNameLink id={c.id} name={c.name} websiteUrl={c.websiteUrl} className="text-sm font-medium text-foreground hover:text-link" />
                   <SignalTierBadge tier={c.signalTier} basis={c.signalTierBasis} />
+                  {c.sameSchoolCofounders ? <SameSchoolBadge /> : null}
                 </span>
                 <QueueBadge queue={c.queue} />
               </div>

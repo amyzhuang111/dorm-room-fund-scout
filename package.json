@@ -36,6 +36,8 @@
     "import:drf-alumni": "tsx scripts/ingest/import-drf-alumni.ts",
     "import:drf-linkedin-pass2": "tsx scripts/ingest/import-drf-linkedin-pass2.ts",
     "import:drf-linkedin-pass3": "tsx scripts/ingest/import-drf-linkedin-pass3.ts",
+    "import:pitchbook": "tsx scripts/ingest/import-pitchbook-rankings.ts",
+    "test:campus-signals": "tsx lib/domain/pitchbook.test.ts && tsx lib/domain/campus-hit-rate.test.ts && tsx lib/domain/same-school.test.ts",
     "test:drf-intro": "tsx lib/domain/drf-intro.test.ts",
     "test:who-can-intro": "tsx lib/domain/who-can-intro.test.ts",
     "fetch-hotspot-members": "tsx scripts/ingest/fetch-hotspot-members.ts",

@@ -57,10 +57,52 @@ export interface DensityTable {
   caption: string;
 }
 
+export interface PitchbookAnalysisRow {
+  id: string;
+  label: string;
+  rank: number;
+  founders: number;
+  companies: number;
+  capitalRaisedUsd: number;
+  enrollmentBand: string | null;
+  perThousand: number | null;
+  undergrads: number | null;
+}
+
+export interface PitchbookTable {
+  title: string;
+  subtitle: string;
+  rows: PitchbookAnalysisRow[];
+  caption: string;
+  sourceUrl: string;
+  sourceLabel: string;
+}
+
+export interface HitRateAnalysisRow {
+  id: string;
+  label: string;
+  founders: number;
+  good: number;
+  hitRate: number;
+  low: number;
+  high: number;
+  ids: string[];
+}
+
+export interface HitRateTable {
+  title: string;
+  subtitle: string;
+  sentence: string;
+  rows: HitRateAnalysisRow[];
+  caption: string;
+}
+
 export interface NetworkAnalysis {
   metros: HeatmapTable;
   programs: HeatmapTable;
   density: DensityTable;
+  pitchbook: PitchbookTable;
+  hitRate: HitRateTable;
 }
 
 export interface Metro {

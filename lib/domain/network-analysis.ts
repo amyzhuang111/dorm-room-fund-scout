@@ -25,6 +25,8 @@ import {
   nationalProgramTierRank,
   programsInText,
 } from "./national-programs";
+import { buildHitRateTable } from "./campus-hit-rate";
+import { buildPitchbookTable } from "./pitchbook";
 import { undergradEnrollment } from "./undergrad-enrollment";
 
 const CAMPUS_ROWS = 12;
@@ -118,7 +120,7 @@ function assemble(): NetworkAnalysis {
   const metros = buildMetros(metroCampuses, labelOf, peopleByCompany, campusesByPerson, hqByCompany);
   const programs = buildPrograms(db, programCampuses, labelOf, founders, campusesByPerson, companiesByPerson, peopleByCompany);
   const density = buildDensity(labelOf, founders, campusesByPerson, peopleByCompany, startupVerified);
-  return { metros, programs, density };
+  return { metros, programs, density, pitchbook: buildPitchbookTable(), hitRate: buildHitRateTable() };
 }
 
 function buildMetros(

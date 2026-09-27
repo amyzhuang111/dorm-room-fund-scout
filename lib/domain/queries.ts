@@ -21,6 +21,12 @@ import { bestPrecollegeSignals, isPrecollegeSignalType, type PrecollegeSignalVie
 import { bestProgramSignals, isProgramMatchStatus, isProgramSignalType, type ProgramSignalView } from "./program-signals";
 import { newsForProject } from "./news";
 import type { NewsListItem } from "./news-types";
+import { hitRateByCampus } from "./campus-hit-rate";
+import type { CampusHitRate } from "./campus-hit-rate-model";
+import { pitchbookByCampus } from "./pitchbook";
+import type { PitchbookCampus } from "./pitchbook-model";
+import { SAME_SCHOOL_FOUNDER_POINTS, SAME_SCHOOL_STARTUP_POINTS, scoreBonus } from "./same-school";
+import { sameSchoolIndex } from "./same-school-index";
 
 export type CoverageState = "not_scanned" | "partial" | "up_to_date" | "needs_attention";
 
@@ -54,6 +60,10 @@ export interface UniversitySummary {
   coverage: CoverageState;
   /** DRF partner presence for this campus, when the school maps to one row. */
   drfPresence: DrfCampusPresence | null;
+  /** PitchBook 2026 rankings when this campus matched a list. */
+  pitchbook: PitchbookCampus | null;
+  /** Scout hit rate for tracked founders at this campus. Null when nobody is tracked. */
+  hitRate: CampusHitRate | null;
 }
 
 export function listUniversities(): UniversitySummary[] {
@@ -98,6 +108,8 @@ function buildUniversities(): UniversitySummary[] {
   const founderCounts = new Map<string, number>();
   for (const u of universities) founderCounts.set(u.id, listFounders({ universityId: u.id }).length);
   const presence = presenceByUniversity();
+  const pitchbook = pitchbookByCampus();
+  const hitRates = hitRateByCampus();
 
   return universities.map((u) => {
     const companyCount = companyCounts.get(u.id) ?? 0;
@@ -129,6 +141,8 @@ function buildUniversities(): UniversitySummary[] {
       lastCheckedAt: sourceRow.last,
       coverage,
       drfPresence: presence.get(u.id) ?? null,
+      pitchbook: pitchbook.get(u.id) ?? null,
+      hitRate: hitRates.get(u.id) ?? null,
     };
   });
 }
@@ -191,6 +205,10 @@ export interface CandidateSummary {
   lastVerifiedAt: string | null;
   verificationNote: string | null;
   signalTierBasis: string | null;
+  /** Two or more co-founders attended the same campus in overlapping years. */
+  sameSchoolCofounders: boolean;
+  /** Points added to a headline quality score. Zero when the startup is unassessed. */
+  sameSchoolBonus: number;
 }
 
 function getGateOutcomesFor(db: ReturnType<typeof getDb>, projectId: string): GateOutcome[] {
@@ -461,6 +479,7 @@ export function listCandidateProjects(filters: { universityId?: string; queue?: 
 
 function buildAllCandidates(): CandidateSummary[] {
   const db = getDb();
+  const sameSchool = sameSchoolIndex();
   const unverified = unverifiedLinkedInByPerson(db);
   const profileClaims = profileClaimsByPerson(db);
   const projects = db
@@ -642,6 +661,9 @@ function buildAllCandidates(): CandidateSummary[] {
       strongestSignalKey = rubric.strongestSignal?.key ?? null;
       openQuestion = rubric.openQuestion;
     }
+    const sameSchoolCofounders = sameSchool.projects.has(p.id);
+    const startupBonus = scoreBonus(qualityScore, SAME_SCHOOL_STARTUP_POINTS, sameSchoolCofounders);
+    qualityScore = startupBonus.score;
     const queue = assignQueue({
       isPortfolioReference: !!p.is_portfolio_reference,
       overallGate,
@@ -678,6 +700,8 @@ function buildAllCandidates(): CandidateSummary[] {
       verificationStatus: p.verification_status,
       lastVerifiedAt: p.last_verified_at,
       verificationNote: p.verification_note,
+      sameSchoolCofounders,
+      sameSchoolBonus: startupBonus.applied,
     });
   }
   return out;
@@ -1071,6 +1095,10 @@ export interface FounderRow {
   promoted: boolean;
   promotionReasonLabel: string | null;
   founderSignal: FounderSignalResult;
+  /** A startup they founded has a same-school co-founder with overlapping years. */
+  sameSchoolCofounders: boolean;
+  /** Points added to Founder Signal. Zero when that score is still unassessed. */
+  sameSchoolBonus: number;
 }
 
 // Founder Scout's people universe: real people and the project evidence
@@ -1136,6 +1164,7 @@ function cachedFounders(): { promoted: FounderRow[]; potential: FounderRow[]; al
 
 function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all: FounderRow[]; affs: Map<string, { status: string | null; universityId: string | null; universityName: string | null }[]> } {
   const db = getDb();
+  const sameSchool = sameSchoolIndex();
   const precollegeByPerson = new Map<string, PrecollegeSignalView[]>();
   for (const row of db
     .prepare(
@@ -1306,6 +1335,8 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       reviewNotes: notesByPerson.get(r.id) ?? [],
       campuses: [],
       hotspots: [],
+      sameSchoolCofounders: false,
+      sameSchoolBonus: 0,
     });
   }
 
@@ -1486,6 +1517,9 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       award: projectIds.some((id) => awardProjects.has(id)),
       repeatCollaborator: repeatCollaborators.has(founder.id),
     };
+    const scored = computeFounderSignal(db, founder.id, projects, facts);
+    const sameSchoolCofounders = sameSchool.people.has(founder.id);
+    const founderBonus = scoreBonus(scored.founderSignal, SAME_SCHOOL_FOUNDER_POINTS, sameSchoolCofounders);
     const possible = company ? undefined : possibleByPerson.get(founder.id);
     const row: FounderRow = {
       ...founder,
@@ -1510,8 +1544,10 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       campuses: affs.get(founder.id) ?? [],
       promoted: promotion.promoted,
       promotionReasonLabel: promotion.reasonLabel,
-      founderSignal: computeFounderSignal(db, founder.id, projects, facts),
+      founderSignal: { ...scored, founderSignal: founderBonus.score },
       hotspots: relatedHotspotsForPerson(founder.id, founder.universityId),
+      sameSchoolCofounders,
+      sameSchoolBonus: founderBonus.applied,
     };
     all.push(row);
     // accuracy_audit keeps the row. founder_status "removed" is off both scout lists.

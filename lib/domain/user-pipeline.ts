@@ -10,6 +10,7 @@ import { matchesEnrollment, selectedEnrollment } from "./founder-status";
 import { isSignalTier } from "./signal-tier";
 import type { Queue } from "./queue";
 import type { CandidateSummary, FounderRow, NamedFounder, UniversitySummary } from "./queries";
+import { sameSchoolCofounderHits, scoreBonus, SAME_SCHOOL_FOUNDER_POINTS, SAME_SCHOOL_STARTUP_POINTS } from "./same-school";
 import type { NetworkEdge, NetworkGraph, NetworkNode } from "./network";
 import { undergradEnrollment } from "./campus-enrollment";
 import { connectionSignal, perCapitaSignal, signalFields } from "./network-signal-size";
@@ -666,8 +667,23 @@ function namedFounder(startup: UserStartup, founder: UserFounder): NamedFounder 
   };
 }
 
+function userSameSchool(startup: UserStartup): { hit: boolean; people: Set<string> } {
+  const hits = sameSchoolCofounderHits(
+    startup.founders.map((founder) => ({
+      projectId: startup.id,
+      personId: founder.id,
+      universityId: startup.campusId,
+      gradYear: classYearNumber(founder.classYear),
+      startYear: null,
+      endYear: null,
+    }))
+  );
+  return { hit: hits.length > 0, people: new Set(hits.flatMap((item) => item.personIds)) };
+}
+
 export function startupToCandidate(startup: UserStartup): CandidateSummary & { userAdded: true; verificationUrl: string; fundingStage: string | null } {
   const founders = startup.founders.map((founder) => namedFounder(startup, founder));
+  const same = userSameSchool(startup);
   const boosts = founders.map((founder) => (founder.enrollmentStatus === "current_student" ? 2 : founder.enrollmentStatus === "recent_grad" ? 1 : 0));
   return {
     id: startup.id,
@@ -705,6 +721,8 @@ export function startupToCandidate(startup: UserStartup): CandidateSummary & { u
     lastVerifiedAt: startup.updatedAt,
     verificationNote: startup.verificationNotes || null,
     signalTierBasis: null,
+    sameSchoolCofounders: same.hit,
+    sameSchoolBonus: scoreBonus(null, SAME_SCHOOL_STARTUP_POINTS, same.hit).applied,
     userAdded: true,
     verificationUrl: startup.verificationUrl,
     fundingStage: startup.fundingStage,
@@ -712,6 +730,7 @@ export function startupToCandidate(startup: UserStartup): CandidateSummary & { u
 }
 
 export function startupToFounders(startup: UserStartup): (FounderRow & { userAdded: true; verificationUrl: string })[] {
+  const same = userSameSchool(startup);
   return startup.founders.map((founder) => {
     const enrollment = enrollmentFromClassYear(founder.classYear);
     const year = classYearNumber(founder.classYear);
@@ -771,6 +790,8 @@ export function startupToFounders(startup: UserStartup): (FounderRow & { userAdd
       promoted: true,
       promotionReasonLabel: "User-added",
       founderSignal: { founderSignal: null, coverage: 0, dimensions: [] },
+      sameSchoolCofounders: same.people.has(founder.id),
+      sameSchoolBonus: scoreBonus(null, SAME_SCHOOL_FOUNDER_POINTS, same.people.has(founder.id)).applied,
       precollegeSignals: [],
       programSignals: [],
       userAdded: true,
@@ -797,6 +818,8 @@ function userCampusSummary(campus: UserCampus, startups: UserStartup[]): Univers
     lastCheckedAt: null,
     coverage: "not_scanned",
     drfPresence: null,
+    pitchbook: null,
+    hitRate: null,
   };
 }
 

@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
 import { storedCompanyLinks } from "@/lib/domain/company-link";
 import { formatCampusList } from "@/lib/domain/campuses";
-import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SignalTierBadge, VerificationBadge } from "./badges";
+import { EnrollmentBadge, GateBadge, LeftSchoolBadge, SameSchoolBadge, SignalTierBadge, VerificationBadge } from "./badges";
 import { EntityMarks, PipelineStageEditor } from "./entity-marks";
 import { NotesSection } from "./notes-section";
 import { AssessmentForm } from "./assessment-form";
@@ -34,6 +34,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
           <h2 className="flex flex-wrap items-center gap-2 text-lg font-semibold text-foreground">
             {project.name}
             <SignalTierBadge tier={project.signalTier} basis={project.signalTierBasis} />
+            {project.sameSchoolCofounders ? <SameSchoolBadge /> : null}
             <VerificationBadge status={project.verificationStatus} verifiedAt={project.lastVerifiedAt} note={project.verificationNote} />
             <EntityMarks entityType="project" entityId={project.id} name={project.name} campusName={project.universities[0]} websiteUrl={project.websiteUrl} />
           </h2>
@@ -152,6 +153,7 @@ export function CompanyDetail({ project }: { project: ProjectDetail }) {
         {project.qualityScore != null ? (
           <p className="mt-1 text-sm text-foreground">
             {project.qualityScore}/100 (coverage {Math.round((project.coverage ?? 0) * 100)}%)
+            {project.sameSchoolBonus > 0 ? ` Includes +${project.sameSchoolBonus} for same-school co-founders.` : ""}
           </p>
         ) : (
           <p className="mt-1 text-sm text-muted">Unassessed — {project.openQuestion ?? "no rubric dimensions rated yet."}</p>

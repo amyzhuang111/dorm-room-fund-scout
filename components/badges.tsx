@@ -59,6 +59,17 @@ const TIER_CLASS: Record<string, string> = {
   talent: "bg-surface-2 text-muted border-border-c",
 };
 
+export function SameSchoolBadge() {
+  return (
+    <span
+      className="inline-flex shrink-0 items-center rounded-full border border-border-c bg-white px-1.5 py-0.5 text-[10px] font-semibold leading-none text-foreground"
+      title="Two or more co-founders attended the same campus in overlapping years."
+    >
+      Same school
+    </span>
+  );
+}
+
 export function SignalTierBadge({ tier, basis }: { tier: string | null | undefined; basis?: string | null }) {
   if (!tier) return null;
   const superTier = tier === "S+";

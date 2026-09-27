@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { NETWORK_FILTER_EVENT, type NetworkMapFilter } from "@/lib/domain/network-filter";
-import type { AnalysisCell, DensityRow, DensityTable, HeatmapTable, NetworkAnalysis } from "@/lib/domain/network-analysis-model";
+import { formatHitRate } from "@/lib/domain/campus-hit-rate-model";
+import type { AnalysisCell, DensityRow, DensityTable, HeatmapTable, HitRateTable, NetworkAnalysis, PitchbookTable } from "@/lib/domain/network-analysis-model";
+import { formatCapitalUsd } from "@/lib/domain/pitchbook-model";
 
 function channel(value: number): number {
   const s = value / 255;
@@ -43,6 +45,8 @@ export function NetworkAnalysis({ data }: { data: NetworkAnalysis }) {
       <div className="mx-auto flex max-w-[1400px] flex-col gap-4">
         <Heatmap table={data.programs} />
         <Density table={data.density} />
+        <PitchbookRankings table={data.pitchbook} />
+        <HitRates table={data.hitRate} />
         <Heatmap table={data.metros} defaultOpen={false} />
       </div>
     </section>
@@ -242,6 +246,132 @@ function Density({ table }: { table: DensityTable }) {
   );
 }
 
+function PitchbookRankings({ table }: { table: PitchbookTable }) {
+  const [open, setOpen] = useState(true);
+  const maxRate = Math.max(0, ...table.rows.map((row) => row.perThousand ?? 0));
+  return (
+    <article className="overflow-hidden rounded-lg border border-border-c bg-white text-foreground shadow-sm">
+      <button type="button" className="flex w-full items-start justify-between gap-4 px-4 py-3 text-left" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+        <span>
+          <span className="block text-[15px] font-semibold tracking-tight text-foreground">{table.title}</span>
+          <span className="mt-0.5 block text-[13px] font-medium text-muted">{table.subtitle}</span>
+        </span>
+        <Chevron open={open} />
+      </button>
+      {open && (
+        <div className="px-3 pb-3">
+          <div className="overflow-x-auto">
+            <table className="w-full border-separate border-spacing-1 text-xs">
+              <thead>
+                <tr>
+                  {["Campus", "Rank", "Founders", "Companies", "Capital raised", "Enrollment band", "Founders per 1,000"].map((label, index) => (
+                    <th key={label} className={`bg-[#f6f5f8] px-2 py-2 text-[11px] font-semibold text-muted ${index === 0 ? "sticky left-0 z-10 min-w-[8.5rem] text-left" : "text-right"}`}>
+                      {label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {table.rows.map((row) => (
+                  <tr key={row.id}>
+                    <th className="sticky left-0 z-10 bg-white px-2 py-1 text-left text-xs font-medium text-foreground" scope="row">
+                      {row.label}
+                    </th>
+                    <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.rank}</td>
+                    <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.founders.toLocaleString()}</td>
+                    <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.companies.toLocaleString()}</td>
+                    <td className="px-2 py-1 text-right tabular-nums text-foreground">{formatCapitalUsd(row.capitalRaisedUsd)}</td>
+                    <td className="px-2 py-1 text-right text-foreground">{row.enrollmentBand ?? "—"}</td>
+                    <td className="p-0 text-right">
+                      {row.perThousand == null ? (
+                        <span className="inline-flex h-7 items-center px-2 text-muted">–</span>
+                      ) : (
+                        <span
+                          className="inline-flex h-7 min-w-[2.5rem] items-center justify-end rounded-md px-2 text-xs font-medium tabular-nums"
+                          style={paintCount(row.perThousand, maxRate)}
+                        >
+                          {row.perThousand.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {table.rows.length === 0 && <p className="px-1 text-sm text-muted">No PitchBook rankings are imported yet.</p>}
+          <Footer caption={table.caption} source={{ href: table.sourceUrl, label: table.sourceLabel }} />
+        </div>
+      )}
+    </article>
+  );
+}
+
+function HitRates({ table }: { table: HitRateTable }) {
+  const [open, setOpen] = useState(true);
+  const [active, setActive] = useState<string | null>(null);
+  const maxRate = Math.max(0, ...table.rows.map((row) => row.hitRate));
+  return (
+    <article className="overflow-hidden rounded-lg border border-border-c bg-white text-foreground shadow-sm">
+      <button type="button" className="flex w-full items-start justify-between gap-4 px-4 py-3 text-left" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+        <span>
+          <span className="block text-[15px] font-semibold tracking-tight text-foreground">{table.title}</span>
+          <span className="mt-0.5 block text-[13px] font-medium text-foreground">{table.sentence}</span>
+        </span>
+        <Chevron open={open} />
+      </button>
+      {open && (
+        <div className="px-3 pb-3">
+          <div className="overflow-x-auto">
+            <table className="w-full border-separate border-spacing-1 text-xs">
+              <thead>
+                <tr>
+                  {["Campus", "Tracked founders", "Good outcomes", "Hit rate", "95% interval"].map((label, index) => (
+                    <th key={label} className={`bg-[#f6f5f8] px-2 py-2 text-[11px] font-semibold text-muted ${index === 0 ? "sticky left-0 z-10 min-w-[8.5rem] text-left" : "text-right"}`}>
+                      {label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {table.rows.map((row) => (
+                  <tr key={row.id}>
+                    <th className="sticky left-0 z-10 bg-white px-2 py-1 text-left text-xs font-medium text-foreground" scope="row">
+                      <RowButton
+                        label={row.label}
+                        count={row.founders}
+                        pressed={active === row.id}
+                        onClick={() => {
+                          setActive(row.id);
+                          pinMap(`${row.label} tracked founders`, row.ids);
+                        }}
+                      />
+                    </th>
+                    <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.founders.toLocaleString()}</td>
+                    <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.good.toLocaleString()}</td>
+                    <td className="p-0 text-right">
+                      <span
+                        className="inline-flex h-7 min-w-[2.5rem] items-center justify-end rounded-md px-2 text-xs font-medium tabular-nums"
+                        style={paintCount(row.hitRate, maxRate)}
+                      >
+                        {formatHitRate(row.hitRate)}
+                      </span>
+                    </td>
+                    <td className="px-2 py-1 text-right tabular-nums text-foreground">
+                      {formatHitRate(row.low)}–{formatHitRate(row.high)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Footer caption={table.caption} />
+        </div>
+      )}
+    </article>
+  );
+}
+
 function chooseDensity(row: DensityRow, key: string, setActive: (value: string) => void) {
   setActive(`${row.id}:${key}`);
   pinMap(`${row.label} verified founders`, row.ids);
@@ -342,11 +472,18 @@ function RowButton({ label, count, pressed, onClick }: { label: string; count: n
   );
 }
 
-function Footer({ caption }: { caption: string }) {
+function Footer({ caption, source }: { caption: string; source?: { href: string; label: string } }) {
   const stops = [0.08, 0.28, 0.5, 0.72, 0.94];
   return (
     <div className="mt-2 flex flex-wrap items-end justify-between gap-3 px-1">
-      <p className="max-w-3xl text-[11px] leading-snug text-muted">{caption}</p>
+      <p className="max-w-3xl text-[11px] leading-snug text-muted">
+        {caption}{" "}
+        {source ? (
+          <a href={source.href} target="_blank" rel="noopener noreferrer" className="text-link underline">
+            {source.label}
+          </a>
+        ) : null}
+      </p>
       <p className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted">
         Fewer
         <span className="inline-flex items-center gap-0.5" aria-hidden="true">
