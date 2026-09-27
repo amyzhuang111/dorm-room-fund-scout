@@ -414,6 +414,8 @@ CREATE TABLE IF NOT EXISTS drf_alumni (
   class_year INTEGER,
   current_firm TEXT,
   current_role TEXT,
+  firm_type TEXT,             -- vc | founder | big_tech | other
+  firm_confidence TEXT,       -- confirmed | likely, for the current role only
   investor_id TEXT,
   source_url TEXT NOT NULL,
   firm_source_url TEXT,

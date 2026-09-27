@@ -61,6 +61,15 @@ export function scoreConnectors(graph: IntroGraph): { people: ConnectorPerson[];
     for (const cofounder of graph.cofounders.get(person.id) ?? []) {
       if (graph.strongFounders.has(cofounder.personId)) linked.add(cofounder.personId);
     }
+    const alum = graph.alumni.find((row) => row.personId === person.id);
+    if (alum?.investorId) {
+      const backed = new Set((graph.portfolioByInvestor?.get(alum.investorId) ?? []).map((item) => item.projectId));
+      for (const founderId of graph.strongFounders) {
+        if (founderId === person.id) continue;
+        const startups = graph.startupsByPerson.get(founderId) ?? [];
+        if (startups.some((projectId) => backed.has(projectId))) linked.add(founderId);
+      }
+    }
     if (linked.size === 0) continue;
     const campus = campusOf(graph, person.campuses);
     people.push({
