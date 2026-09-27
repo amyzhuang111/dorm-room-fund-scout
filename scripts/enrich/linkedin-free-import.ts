@@ -46,7 +46,7 @@ const FOCUS_CAMPUSES = new Set(["univ_penn", "univ_berkeley", "univ_stanford", "
 const UA = "Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0";
 const CDP_PORT = 9555;
 const SEARCH_DISPLAY = ":99";
-const SEARCH_GAP_MS = 6500;
+const SEARCH_GAP_MS = 4000;
 
 type Outcome = "confirmed" | "likely" | "ambiguous" | "not_found" | "existing" | "skipped_name";
 
@@ -598,7 +598,7 @@ class SearchBrowser {
   }
 
   private async searchGoogle(query: string, person: Person): Promise<{ blocked: boolean; hits: MatchHit[] }> {
-    const url = `https://www.google.com/search?hl=en&udm=14&num=8&q=${encodeURIComponent(query)}`;
+    const url = `https://www.google.com/search?hl=en&gbv=1&num=8&q=${encodeURIComponent(query)}`;
     await this.send("Page.navigate", { url });
     let preview = "";
     for (let attempt = 0; attempt < 16; attempt += 1) {
@@ -610,7 +610,9 @@ class SearchBrowser {
       preview = String(evaluated.result?.result?.value ?? "");
       if (/Search Results|No results found|unusual traffic|Before you continue|detected unusual/i.test(preview)) break;
     }
-    if (/unusual traffic|detected unusual|Before you continue to Google/i.test(preview) && !/Search Results/i.test(preview)) {
+    const locationEval = await this.send("Runtime.evaluate", { expression: "location.href", returnByValue: true });
+    const location = String(locationEval.result?.result?.value ?? "");
+    if (/\/sorry\/|unusual traffic|detected unusual|Before you continue to Google/i.test(`${location}\n${preview}`) && !/Search Results/i.test(preview)) {
       return { blocked: true, hits: [] };
     }
     const evaluated = await this.send("Runtime.evaluate", {
@@ -650,7 +652,7 @@ class SearchBrowser {
       const title = lines[0] ?? "";
       const snippet = lines.slice(1).join(" ") || block.text;
       let linked = citeUrl(block.text);
-      if (!linked && resolved < 2) {
+      if (!linked && resolved < 1) {
         resolved += 1;
         linked = await this.resolveLinkedIn(block.href);
       }
