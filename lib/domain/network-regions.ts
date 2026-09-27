@@ -87,12 +87,17 @@ export function regionDef(id: string): RegionDef {
   return REGION_BY_ID.get(id) ?? REGIONS[REGIONS.length - 1];
 }
 
-/** Dark, readable ink for a region label on white. */
+/** Dark, readable ink for a region name in the filter list. */
 export function regionInk(regionId: string): string {
-  return hslToHex(regionDef(regionId).hue, 72, 28);
+  return hslToHex(regionDef(regionId).hue, 42, 36);
 }
 
-/** One shade per campus inside a region, same family, different enough to tell apart. */
+/** Light tint for the map's region titles. Quiet next to black campus labels. */
+export function regionTint(regionId: string): string {
+  return hslToHex(regionDef(regionId).hue, 32, 52);
+}
+
+/** One muted shade per campus inside a region, same family, still distinct. */
 export function campusShade(id: string, label: string, siblings: { id: string; label: string }[]): string {
   const regionId = regionForCampus(id, label);
   const family = siblings
@@ -100,10 +105,10 @@ export function campusShade(id: string, label: string, siblings: { id: string; l
     .sort((a, b) => a.label.localeCompare(b.label) || a.id.localeCompare(b.id));
   const index = Math.max(0, family.findIndex((campus) => campus.id === id));
   const count = Math.max(family.length, 1);
-  const spread = Math.min(7, 28 / count);
+  const spread = Math.min(5, 18 / count);
   const hue = regionDef(regionId).hue + (index - (count - 1) / 2) * spread;
-  const light = 30 + (count === 1 ? 8 : (index / (count - 1)) * 16);
-  return hslToHex(((hue % 360) + 360) % 360, 76, light);
+  const light = 54 + (count === 1 ? 3 : (index / (count - 1)) * 10);
+  return hslToHex(((hue % 360) + 360) % 360, 40, light);
 }
 
 export interface WedgeSeat {

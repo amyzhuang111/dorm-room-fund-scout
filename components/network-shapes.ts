@@ -1,5 +1,6 @@
 import { NodeSquareProgram } from "@sigma/node-square";
 import { NodeCircleProgram, type NodeHoverDrawingFunction, type NodeLabelDrawingFunction } from "sigma/rendering";
+import { LABEL_CAMPUS, LABEL_REGION, REGION_TRACKING } from "./network-style";
 
 const LABEL_FONT = "500 12px Satoshi, Arial, sans-serif";
 
@@ -7,21 +8,55 @@ export const drawHaloLabel: NodeLabelDrawingFunction = (context, data, settings)
   if (!data.label) return;
   const marker = Boolean((data as { marker?: boolean }).marker);
   const anchor = Boolean((data as { anchor?: boolean }).anchor);
-  const size = marker ? 13 : anchor ? 12 : settings.labelSize;
-  const limit = marker ? 28 : anchor ? 22 : 28;
-  const text = data.label.length > limit ? `${data.label.slice(0, limit - 1)}…` : data.label;
+  const preferred = (data as { labelPx?: number }).labelPx;
+  const size = preferred ?? (marker ? LABEL_REGION : anchor ? LABEL_CAMPUS : settings.labelSize);
+  const limit = marker ? 32 : anchor ? 26 : 28;
+  const raw = data.label.length > limit ? `${data.label.slice(0, limit - 1)}…` : data.label;
+  const text = marker ? raw.toUpperCase() : raw;
   context.font = `${settings.labelWeight} ${size}px ${settings.labelFont}`;
   context.textAlign = "center";
   context.textBaseline = marker ? "middle" : anchor ? "bottom" : "top";
-  context.lineWidth = 3;
-  context.strokeStyle = "#ffffff";
   context.lineJoin = "round";
   const x = data.x;
-  const y = marker ? data.y : anchor ? data.y - data.size - 2 : data.y + data.size + 2;
+  const y = marker ? data.y : anchor ? data.y - data.size - 3 : data.y + data.size + 3;
+  if (marker) {
+    drawTracked(context, text, x, y, REGION_TRACKING, (data as { tint?: string }).tint || "#8d939c");
+    return;
+  }
+  context.lineWidth = 3.5;
+  context.strokeStyle = "#ffffff";
   context.strokeText(text, x, y);
-  context.fillStyle = marker ? ((data as { color?: string }).color ?? "#141414") : "#141414";
+  context.fillStyle = "#111111";
   context.fillText(text, x, y);
 };
+
+function drawTracked(context: CanvasRenderingContext2D, text: string, x: number, y: number, tracking: number, fill: string) {
+  const widths: number[] = [];
+  let total = 0;
+  for (const char of text) {
+    const width = context.measureText(char).width;
+    widths.push(width);
+    total += width;
+  }
+  total += tracking * Math.max(0, text.length - 1);
+  let cursor = x - total / 2;
+  context.textAlign = "left";
+  context.lineWidth = 2.5;
+  context.strokeStyle = "rgba(255, 255, 255, 0.94)";
+  for (let i = 0; i < text.length; i++) {
+    context.strokeText(text[i], cursor, y);
+    cursor += widths[i] + tracking;
+  }
+  cursor = x - total / 2;
+  context.fillStyle = fill;
+  context.globalAlpha = 0.78;
+  for (let i = 0; i < text.length; i++) {
+    context.fillText(text[i], cursor, y);
+    cursor += widths[i] + tracking;
+  }
+  context.globalAlpha = 1;
+  context.textAlign = "center";
+}
 
 export const drawLightHover: NodeHoverDrawingFunction = (context, data, settings) => {
   context.beginPath();
@@ -65,7 +100,7 @@ type ProgramDefinition = ReturnType<NodeSquareProgram["getDefinition"]>;
 /**
  * Vertex offsets are normalized onto the unit circle (`v_local`). Each fragment
  * shader turns that into a distance that is 1 on the polygon edge, then paints
- * a ~1px ink stroke so corners survive the fitted zoom.
+ * a soft edge. Large nodes can pick up a 0.5px white hairline; small ones stay unstroked.
  */
 const POLY_VERT = /* glsl */ `
 attribute vec4 a_id;
@@ -105,7 +140,7 @@ void main() {
 }
 `;
 
-function polygonFragment(shapeDist: string, strokePx: string): string {
+function polygonFragment(shapeDist: string): string {
   return `precision highp float;
 
 varying vec4 v_color;
@@ -119,13 +154,15 @@ ${shapeDist}
 void main(void) {
   float d = shapeDist(v_local);
   #ifdef PICKING_MODE
-  gl_FragColor = d > 1.0 ? transparent : v_color;
+  float pick = v_size < 3.2 ? 1.7 : 1.04;
+  gl_FragColor = d > pick ? transparent : v_color;
   #else
-  float w = ${strokePx} / max(v_size, 0.5);
+  float w = 0.7 / max(v_size, 0.5);
   float cover = 1.0 - smoothstep(1.0 - w, 1.0 + w, d);
-  float inner = 1.0 - 1.35 * w;
-  float stroke = smoothstep(inner - w, inner, d);
-  vec4 color = mix(v_color, vec4(0.08, 0.08, 0.08, v_color.a), clamp(stroke, 0.0, 1.0));
+  float gate = smoothstep(5.2, 6.8, v_size);
+  float hair = 0.5 / max(v_size, 0.5);
+  float stroke = smoothstep(1.0 - 2.2 * hair, 1.0 - 0.35 * hair, d) * gate;
+  vec4 color = mix(v_color, vec4(1.0, 1.0, 1.0, v_color.a), clamp(stroke, 0.0, 1.0));
   color.a *= cover;
   gl_FragColor = color;
   #endif
@@ -136,10 +173,13 @@ void main(void) {
 const SQUARE_FRAG = polygonFragment(
   /* glsl */ `
 float shapeDist(vec2 p) {
-  return max(abs(p.x), abs(p.y)) * 1.41421356;
+  float halfExtent = 0.70710678;
+  float radius = 0.13;
+  vec2 q = abs(p) - vec2(halfExtent - radius);
+  float dist = length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - radius;
+  return (dist + halfExtent) / halfExtent;
 }
 `,
-  "1.2",
 );
 
 const DIAMOND_FRAG = polygonFragment(
@@ -148,7 +188,6 @@ float shapeDist(vec2 p) {
   return abs(p.x) + abs(p.y);
 }
 `,
-  "1.2",
 );
 
 const HEX_FRAG = polygonFragment(
@@ -158,7 +197,6 @@ float shapeDist(vec2 p) {
   return max(p.y, 0.8660254 * p.x + 0.5 * p.y);
 }
 `,
-  "1.7",
 );
 
 const TRIANGLE_FRAG = polygonFragment(
@@ -171,8 +209,44 @@ float shapeDist(vec2 p) {
   return max(sdSlant, sdBottom) * 2.0 + 1.0;
 }
 `,
-  "1.7",
 );
+
+const CIRCLE_VERT = /* glsl */ `
+attribute vec4 a_id;
+attribute vec4 a_color;
+attribute vec2 a_position;
+attribute float a_size;
+attribute float a_angle;
+
+uniform mat3 u_matrix;
+uniform float u_sizeRatio;
+uniform float u_correctionRatio;
+
+varying vec4 v_color;
+varying vec2 v_diffVector;
+varying float v_radius;
+varying float v_size;
+
+const float bias = 255.0 / 254.0;
+
+void main() {
+  float size = a_size * u_correctionRatio / u_sizeRatio * 4.0;
+  vec2 diffVector = size * vec2(cos(a_angle), sin(a_angle));
+  vec2 position = a_position + diffVector;
+  gl_Position = vec4((u_matrix * vec3(position, 1)).xy, 0, 1);
+  v_diffVector = diffVector;
+  v_radius = size / 2.0;
+  v_size = a_size;
+
+  #ifdef PICKING_MODE
+  v_color = a_id;
+  #else
+  v_color = a_color;
+  #endif
+
+  v_color.a *= bias;
+}
+`;
 
 const CIRCLE_FRAG = /* glsl */ `
 precision highp float;
@@ -180,23 +254,24 @@ precision highp float;
 varying vec4 v_color;
 varying vec2 v_diffVector;
 varying float v_radius;
+varying float v_size;
 
 uniform float u_correctionRatio;
 
 const vec4 transparent = vec4(0.0, 0.0, 0.0, 0.0);
 
 void main(void) {
-  float px = u_correctionRatio * 2.0;
-  float dist = length(v_diffVector);
+  float border = u_correctionRatio * 2.0;
+  float dist = length(v_diffVector) - v_radius + border;
   #ifdef PICKING_MODE
-  gl_FragColor = dist > v_radius ? transparent : v_color;
+  float slop = v_size < 3.2 ? border * 2.4 : 0.0;
+  gl_FragColor = dist > border + slop ? transparent : v_color;
   #else
-  float cover = 1.0 - smoothstep(v_radius - px * 0.35, v_radius + px, dist);
-  float inner = v_radius - px * 1.25;
-  float stroke = smoothstep(inner - px, inner, dist);
-  vec4 color = mix(v_color, vec4(0.08, 0.08, 0.08, v_color.a), clamp(stroke, 0.0, 1.0));
-  color.a *= cover;
-  gl_FragColor = color;
+  float t = dist > border ? 1.0 : (dist > 0.0 ? dist / border : 0.0);
+  float gate = smoothstep(5.2, 6.8, v_size);
+  float hair = smoothstep(border * 0.15, border * 0.85, dist);
+  vec4 color = mix(v_color, vec4(1.0, 1.0, 1.0, v_color.a), clamp(hair, 0.0, 1.0) * gate * (1.0 - t));
+  gl_FragColor = mix(color, transparent, t);
   #endif
 }
 `;
@@ -221,7 +296,7 @@ class LightSquareProgram extends NodeSquareProgram {
 export class NodeCircleCrispProgram extends NodeCircleProgram {
   getDefinition() {
     const base = super.getDefinition();
-    return { ...base, FRAGMENT_SHADER_SOURCE: CIRCLE_FRAG };
+    return { ...base, VERTEX_SHADER_SOURCE: CIRCLE_VERT, FRAGMENT_SHADER_SOURCE: CIRCLE_FRAG };
   }
 }
 
