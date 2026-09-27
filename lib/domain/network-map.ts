@@ -3,7 +3,8 @@
 // and confirmed DRF portfolio matches. The five DRF regions share one
 // round universe: their centroids sit on a small ring and a single force
 // pass pulls members gently toward those seats, so the colours touch and
-// blend. High-degree organizations are pushed out to the rim.
+// blend. S/A fellowships and cross-campus accelerators sit on the outer rim.
+// Low-tier programs, clubs, hackathon teams, and campus accelerators sit inward.
 
 import fs from "node:fs";
 import { forceCollide, forceSimulation, forceX, forceY } from "d3-force";
@@ -13,6 +14,7 @@ import { CAMPUSES } from "./campuses";
 import { connectionSignal, founderSignalWeight, mentionsAccelerator, perCapitaSignal, signalFields, sqrtScores, startupSignalWeight, type SignalParts } from "./network-signal-size";
 import { REGIONS, regionForCampus, regionInk, type RegionMarker } from "./network-regions";
 import type { HotspotSectionId, HotspotTier } from "./hotspot-model";
+import { demoteDuplicateOuter, rimBandFor, type RimBand } from "./rim-tier";
 import { hotspotGraphPatch, organizationMap } from "./hotspots";
 import { confirmedLinkedIn } from "./person-link";
 import { sectorLabel } from "./sectors";
@@ -60,6 +62,12 @@ export interface MapNode {
   linkedinStatus?: "confirmed" | "unverified";
   /** Directory tier for an organization node. Absent on every other type. */
   orgTier?: HotspotTier;
+  /**
+   * Outer rim for S/A fellowships and cross-campus accelerators.
+   * Inward for low-tier programs, clubs, hackathon teams, and campus accelerators.
+   * Placement and labels only — not Founder Signal.
+   */
+  rimBand?: "outer" | "inward";
   /** Hotspot sections this organization appears in. */
   orgSections?: HotspotSectionId[];
   /** People with a stored link to this organization. */
@@ -107,9 +115,11 @@ interface SimNode {
   anchor?: boolean;
   /** Campuses recorded on the node, used when it has no campus edge. */
   campuses?: string[];
+  label?: string;
+  rimBand?: RimBand | null;
 }
 
-const LAYOUT_VERSION = "21";
+const LAYOUT_VERSION = "23";
 /** Organizations and programs at least this connected are rim hubs. */
 const HUB_DEGREE = 22;
 /** Investors need a larger book before they leave the cloud for the rim. */
@@ -639,10 +649,12 @@ function assembleNetworkMap(): MapGraph {
   }
   for (const program of programs) {
     const campuses = campusesByCompany.get(program.id) ?? [];
-    pushNode(program.id, "program", campuses, null, null);
+    const node = pushNode(program.id, "program", campuses, null, null);
+    node.label = program.name;
   }
   for (const org of organizations.nodes) {
     const node = pushNode(org.id, "organization", org.campuses, org.tier, null);
+    node.label = org.label;
     node.layoutPx = org.tier === "S" ? 7 : org.tier === "A" ? 6.2 : org.tier === "B" ? 5.4 : 4.8;
   }
 
@@ -676,12 +688,13 @@ function assembleNetworkMap(): MapGraph {
     prev.n += 1;
     investorAnchor.set(edge.target, prev);
   }
-  for (const [id] of investorNames) {
+  for (const [id, name] of investorNames) {
     const spot = investorAnchor.get(id);
     const nodeAnchor = spot && spot.n ? { x: spot.x / spot.n, y: spot.y / spot.n } : { x: 2800, y: 900 };
     simNodes.push({
       id,
       type: "investor",
+      label: name,
       r: radius("investor", degree.get(id) ?? 0, null, null),
       x: nodeAnchor.x,
       y: nodeAnchor.y,
@@ -729,6 +742,7 @@ function assembleNetworkMap(): MapGraph {
       degree: degree.get(node.id) ?? 0,
       ...signalFields(signal),
       ...(at.anchor ? { anchor: true } : {}),
+      ...(at.rimBand ? { rimBand: at.rimBand } : {}),
     });
   };
 
@@ -925,6 +939,10 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
       portfolio.set(edge.source, startups);
     }
   }
+  for (const node of simNodes) {
+    node.rimBand = node.label ? rimBandFor({ label: node.label, nodeType: node.type, degree: degree.get(node.id) ?? 0 }) : null;
+  }
+  demoteDuplicateOuter(simNodes, degree);
 
   const campusIdSet = new Set(simNodes.filter((node) => node.type === "campus").map((node) => node.id));
   const linkedCampuses = (node: SimNode): string[] => {
@@ -1127,8 +1145,11 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     node.y = ty;
     if (hub) {
       node.pull = 0;
-      node.collide = 12;
-      node.anchor = (degree.get(node.id) ?? 0) >= 28;
+      node.collide = node.rimBand === "outer" ? 14 : 12;
+      node.anchor = node.rimBand === "outer";
+    } else if (node.rimBand === "inward") {
+      node.pull = 0.22;
+      node.collide = 2.2;
     } else if (loose && (node.type === "person" || node.type === "startup")) {
       node.pull = 0.1;
       node.collide = 0;
@@ -1172,7 +1193,7 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
         for (const id of mine) if (other.has(id)) shared += 1;
         return shared / mine.size >= 0.72;
       });
-    if (!covered) {
+    if (!covered || hub.rimBand === "outer") {
       keptMembers.push(mine);
       continue;
     }
@@ -1199,45 +1220,51 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
     const body = live.filter((node) => !node.hub && node.regionId === (regionId === "none" ? null : regionId) && (node.type === "person" || node.type === "startup"));
     const radiiOfBody = body.map((node) => Math.hypot(node.tx - center.x, node.ty - center.y)).sort((a, b) => a - b);
     const outer = radiiOfBody.length ? radiiOfBody[Math.min(radiiOfBody.length - 1, Math.floor(radiiOfBody.length * 0.9))] : 48;
-    const sorted = [...group].sort((a, b) => (degree.get(b.id) ?? 0) - (degree.get(a.id) ?? 0) || a.id.localeCompare(b.id));
-    const arc = Math.min(Math.PI * 1.45, Math.max(1.15, 0.62 * sorted.length));
-    sorted.forEach((hub, index) => {
-      const members = hubMembers.get(hub.id) ?? [];
-      let mx = 0;
-      let my = 0;
-      let count = 0;
-      const seen = new Set<string>();
-      for (const id of members) {
-        if (seen.has(id)) continue;
-        seen.add(id);
-        const member = byId.get(id) as LiveNode | undefined;
-        if (!member) continue;
-        mx += member.tx;
-        my += member.ty;
-        count += 1;
-      }
-      let preferred = outward;
-      if (count) {
-        const dx = mx / count - center.x;
-        const dy = my / count - center.y;
-        if (Math.hypot(dx, dy) > outer * 0.2) preferred = Math.atan2(dy, dx);
-      }
-      const spacing = arc / Math.max(sorted.length, 1);
-      const slot = index === 0 ? 0 : (index % 2 === 0 ? 1 : -1) * Math.ceil(index / 2) * spacing;
-      let angle = preferred * 0.25 + (outward + slot) * 0.75;
-      let rel = angle - outward;
-      while (rel > Math.PI) rel -= Math.PI * 2;
-      while (rel < -Math.PI) rel += Math.PI * 2;
-      if (Math.abs(rel) > Math.PI * 0.82) angle = outward + Math.sign(rel || 1) * Math.PI * 0.82;
-      const rim = outer + 46 + hashUnit(hub.id) * 20;
-      const tx = center.x + Math.cos(angle) * rim;
-      const ty = center.y + Math.sin(angle) * rim;
-      hub.tx = tx;
-      hub.ty = ty;
-      hub.x = tx;
-      hub.y = ty;
-      hubTargets.set(hub.id, { x: tx, y: ty });
-    });
+    const byDegree = (a: LiveNode, b: LiveNode) => (degree.get(b.id) ?? 0) - (degree.get(a.id) ?? 0) || a.id.localeCompare(b.id);
+    const place = (hubs: LiveNode[], rimBase: number, rimJitter: number, arcScale: number, clamp: number, spread: boolean) => {
+      const arc = Math.min(Math.PI * 1.75, Math.max(1.35, arcScale * Math.max(hubs.length, 1)));
+      hubs.forEach((hub, index) => {
+        const members = hubMembers.get(hub.id) ?? [];
+        let mx = 0;
+        let my = 0;
+        let count = 0;
+        const seen = new Set<string>();
+        for (const id of members) {
+          if (seen.has(id)) continue;
+          seen.add(id);
+          const member = byId.get(id) as LiveNode | undefined;
+          if (!member) continue;
+          mx += member.tx;
+          my += member.ty;
+          count += 1;
+        }
+        let preferred = outward;
+        if (!spread && count) {
+          const dx = mx / count - center.x;
+          const dy = my / count - center.y;
+          if (Math.hypot(dx, dy) > outer * 0.2) preferred = Math.atan2(dy, dx);
+        }
+        const spacing = arc / Math.max(hubs.length, 1);
+        const slot = index === 0 ? 0 : (index % 2 === 0 ? 1 : -1) * Math.ceil(index / 2) * spacing;
+        let angle = spread ? outward + slot : preferred * 0.25 + (outward + slot) * 0.75;
+        let rel = angle - outward;
+        while (rel > Math.PI) rel -= Math.PI * 2;
+        while (rel < -Math.PI) rel += Math.PI * 2;
+        if (Math.abs(rel) > clamp) angle = outward + Math.sign(slot || rel || 1) * Math.min(clamp, Math.abs(slot) || clamp);
+        const rim = rimBase + hashUnit(hub.id) * rimJitter;
+        const tx = center.x + Math.cos(angle) * rim;
+        const ty = center.y + Math.sin(angle) * rim;
+        hub.tx = tx;
+        hub.ty = ty;
+        hub.x = tx;
+        hub.y = ty;
+        hubTargets.set(hub.id, { x: tx, y: ty });
+      });
+    };
+    const outers = group.filter((hub) => hub.rimBand === "outer").sort(byDegree);
+    const rest = group.filter((hub) => hub.rimBand !== "outer").sort(byDegree);
+    place(outers, outer + 86, 10, 0.85, Math.PI * 0.98, true);
+    place(rest, outer + 38, 14, 0.55, Math.PI * 0.82, false);
   }
 
   const hubs = live.filter((node) => node.hub);
@@ -1290,7 +1317,9 @@ function settleForceAtlas(simNodes: SimNode[], edges: MapEdge[], campusLabels: M
 }
 
 function isRimHub(node: SimNode, degree: Map<string, number>): boolean {
+  if (node.rimBand === "inward") return false;
   const links = degree.get(node.id) ?? 0;
+  if (node.rimBand === "outer") return links >= 2;
   if (node.type === "organization" || node.type === "program") return links >= HUB_DEGREE;
   if (node.type === "investor") return links >= INVESTOR_HUB_DEGREE;
   return false;

@@ -7,7 +7,7 @@ import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-ma
 import { regionTint } from "@/lib/domain/network-regions";
 import { NodeCircleCrispProgram, NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
 import { signalTooltip } from "@/lib/domain/network-signal-size";
-import { DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, REGION_TRACKING, TOP_HUB_LABELS, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
+import { DIM_NODE, EDGE_DIM, EDGE_GREY, EDGE_HOVER_PX, EDGE_PX, FAN_DEGREE, LABEL_CAMPUS, LABEL_HUB, LABEL_NODE, LABEL_REGION, MEGA_DEGREE, NODE_SHAPE, REGION_TRACKING, campusSwatches, emphasizeColor, hoverLabelBox, labelDegreeFloor, nodeColor, restingLabelIds, screenSize, selectVisibleLabels, truncateMapLabel, type ScreenLabel } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -118,13 +118,12 @@ export function NetworkSigma({
     const featured = new Set<string>();
     const featuredNames = new Set<string>();
     for (const node of graph.nodes
-      .filter((node) => node.type === "organization" || node.type === "investor" || node.type === "program")
+      .filter((node) => node.rimBand === "outer")
       .sort((a, b) => b.degree - a.degree || a.id.localeCompare(b.id))) {
       const name = node.label.trim().toLowerCase();
       if (!name || featuredNames.has(name)) continue;
       featuredNames.add(name);
       featured.add(node.id);
-      if (featured.size >= TOP_HUB_LABELS) break;
     }
     const measureCanvas = document.createElement("canvas");
     const measureCtx = measureCanvas.getContext("2d");
@@ -166,7 +165,7 @@ export function NetworkSigma({
         type: NODE_SHAPE[node.type],
         kind: node.type,
         anchor: campus || hub,
-        zIndex: Z[node.type],
+        zIndex: node.rimBand === "outer" ? 3 : Z[node.type],
         signalTip: signalTooltip(node),
         linkColor: emphasizeColor(color),
         labelPx: campus ? LABEL_CAMPUS : hub ? LABEL_HUB : LABEL_NODE,
