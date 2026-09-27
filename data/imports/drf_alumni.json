@@ -86,7 +86,21 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/adameldefrawy",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://dormroomfund.medium.com/meet-our-new-partners-807778527886",
+    "current_firm": "Goodlabs",
+    "current_role": "CTO and Co-Founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/adameldefrawy",
+    "location": "New York, New York",
+    "verification_note": "Dorm Room Fund's partner post says Adam is a sophomore at the University of Pennsylvania studying computer science. The profile for Adam Eldefrawy lists CTO and co-founder of Goodlabs in New York, and a public GitHub homework note for Penn CIS 240. The profile snippet does not list a Dorm Room Fund role.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/meet-our-new-partners-807778527886",
+      "https://www.linkedin.com/in/adameldefrawy",
+      "https://goodlabs.com/about"
+    ]
   },
   {
     "id": "dra_adam_goldberg",
@@ -106,7 +120,16 @@
     "current_firm": "Standard Crypto",
     "firm_type": "vc",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://www.marketscreener.com/insider/ADAM-GOLDBERG-A32KHT/"
+    "firm_source_url": "https://www.marketscreener.com/insider/ADAM-GOLDBERG-A32KHT/",
+    "linkedin_url": "https://www.linkedin.com/in/adamwgoldberg",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.svod.org/adam-goldberg/",
+    "location": "San Francisco, California",
+    "verification_note": "Silicon Valley Open Doors' biography of Adam Goldberg says he graduated from Stanford with a BS in computer science and was a founding partner of Dorm Room Fund there. The profile lists that Stanford computer science degree, Stanford InfoLab, and Co-Founder of Standard in San Francisco. A Standard colleague's page links this same profile URL. This is not the Adam Goldberg who is product counsel at Figure.",
+    "proof_urls": [
+      "https://www.svod.org/adam-goldberg/",
+      "https://www.linkedin.com/in/adamwgoldberg"
+    ]
   },
   {
     "id": "dra_adele_li",
@@ -126,7 +149,15 @@
     "current_firm": "OpenAI",
     "firm_type": "big_tech",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://www.teahose.com/people/4267"
+    "firm_source_url": "https://www.teahose.com/people/4267",
+    "linkedin_url": "https://www.linkedin.com/in/adeleli",
+    "linkedin_confidence": "likely",
+    "location": "San Francisco Bay Area",
+    "verification_note": "The profile for Adele Li lists Product Lead at OpenAI in the San Francisco Bay Area, leading ChatGPT Images, plus economics at Wharton and computer science at the University of Pennsylvania. Archived DRF team pages list Adele Li on the Philly roster at Penn. The profile does not list a Dorm Room Fund role.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/adeleli",
+      "https://www.engineering.upenn.edu/stories/claire-donovan-and-adele-li-pennapps-and-conscious-hacking-7f037be8dcda/"
+    ]
   },
   {
     "id": "dra_aditya_mukerjee",
@@ -141,7 +172,20 @@
     "affiliation_status": "older_alumni",
     "year_start": 2014,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork",
+    "linkedin_url": "https://www.linkedin.com/in/aditya-mukerjee-7291002a",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork",
+    "current_firm": "Stripe",
+    "current_role": "Site Lead",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/aditya-mukerjee-7291002a",
+    "location": "New York, New York",
+    "verification_note": "The public LinkedIn profile for Aditya Mukerjee lists Investor at Dorm Room Fund in New York from November 2013 to January 2014, a Cornell computer science master's, and the Cornell NYC Tech program. Current title on that profile is Site Lead at Stripe.",
+    "proof_urls": [
+      "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork",
+      "https://www.linkedin.com/in/aditya-mukerjee-7291002a"
+    ]
   },
   {
     "id": "dra_adriana_gadala_maria",
@@ -201,7 +245,21 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
+    "linkedin_url": "https://www.linkedin.com/in/akankshamidha",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://web.archive.org/web/20131111061938/http://dormroomfund.com/boston",
+    "current_firm": "Parchment Capital",
+    "current_role": "Co-Founder and Operating Partner",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/akankshamidha",
+    "firm_type": "vc",
+    "location": "United Kingdom",
+    "verification_note": "A 2013 Boston.com note on First Round's Dorm Room Fund names Akanksha Midha of MIT Sloan and Harvard Kennedy School. The profile for Akanksha Midha lists Co-Founder and Operating Partner at Parchment Capital. The profile snippet does not itself list Dorm Room Fund or those schools.",
+    "proof_urls": [
+      "https://web.archive.org/web/20131111061938/http://dormroomfund.com/boston",
+      "https://www.linkedin.com/in/akankshamidha"
+    ]
   },
   {
     "id": "dra_akshay_kirtikar",
@@ -382,11 +440,19 @@
     "year_start": 2019,
     "year_end": 2020,
     "current_firm": "AIC & The Rounds",
-    "current_role": "Founder",
+    "current_role": "Founder and CEO",
     "team_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://www.linkedin.com/in/atorrey",
+    "linkedin_url": "https://www.linkedin.com/in/atorrey",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.com/our-team",
+    "verification_note": "Dorm Room Fund's alumni list names Alex Torrey as founder of AIC and The Rounds. The profile, titled Alexander Torrey, lists Managing Partner at Dorm Room Fund from January 2019 to January 2020, an MBA at Wharton, and Founder and CEO of both AIC and The Rounds.",
+    "proof_urls": [
+      "https://dormroomfund.com/our-team",
+      "https://www.linkedin.com/in/atorrey"
+    ]
   },
   {
     "id": "dra_alex_wendland",
@@ -478,7 +544,19 @@
     "affiliation_status": "older_alumni",
     "year_start": 2014,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20150509062156/http://www.dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20150509062156/http://www.dormroomfund.com/boston",
+    "linkedin_url": "https://www.linkedin.com/in/hackerxbella",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dailyfreepress.com/04/29/21/79245/eng-juniors-join-local-student-run-venture-company/",
+    "current_firm": "Forrester",
+    "current_role": "Principal Analyst",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/hackerxbella",
+    "verification_note": "Boston University's Daily Free Press names ENG junior Alexandrea Mellen on Dorm Room Fund Boston. Her LinkedIn profile, under Allie Mellen, lists Investment Partner and Community Lead at Dorm Room Fund from April 2014 to May 2015 and a computer engineering degree at Boston University. Current title is Principal Analyst at Forrester.",
+    "proof_urls": [
+      "https://dailyfreepress.com/04/29/21/79245/eng-juniors-join-local-student-run-venture-company/",
+      "https://www.linkedin.com/in/hackerxbella"
+    ]
   },
   {
     "id": "dra_ali_hamed",
@@ -535,7 +613,21 @@
     "school_label": "New York University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2015
+    "year_start": 2015,
+    "linkedin_url": "https://www.linkedin.com/in/alinabalean",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://tisch.nyu.edu/itp/itp-people/alumni/alumni-highlights/alina-balean",
+    "current_firm": "Google",
+    "current_role": "Staff UX",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/alinabalean",
+    "firm_type": "big_tech",
+    "location": "New York, New York",
+    "verification_note": "The profile is titled Alina B. S. and lists Partner at Dorm Room Fund from August 2014 to May 2015, mentoring NYU founders, and a master's at NYU ITP from 2013 to 2015 in New York. NYU ITP's alumni highlight and a Gust company page use the name Alina Balean for a former Dorm Room Fund partner. Current title on the profile is Staff UX at Google.",
+    "proof_urls": [
+      "https://tisch.nyu.edu/itp/itp-people/alumni/alumni-highlights/alina-balean",
+      "https://www.linkedin.com/in/alinabalean"
+    ]
   },
   {
     "id": "dra_alpin_yukseloglu",
@@ -628,7 +720,21 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/amol-p-97aa44122",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://www.societyforscience.org/blog/investing-101-this-student-run-venture-capital-firm-is-making-waves/",
+    "current_firm": "OpenEvidence",
+    "current_role": "Chief Product Officer",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/amol-p-97aa44122",
+    "location": "San Francisco Bay Area",
+    "verification_note": "A Society for Science article names Amol Punjabi as a Dorm Room Fund partner and a Harvard undergraduate. The matching public profile is titled Amol P., lists Harvard University and Chief Product Officer at OpenEvidence in the San Francisco Bay Area, and does not spell the last name or the Dorm Room Fund role.",
+    "proof_urls": [
+      "https://www.societyforscience.org/blog/investing-101-this-student-run-venture-capital-firm-is-making-waves/",
+      "https://www.linkedin.com/in/amol-p-97aa44122",
+      "https://worksinprogress.co/our-authors/amol-punjabi/"
+    ]
   },
   {
     "id": "dra_amulya_kandikonda",
@@ -641,7 +747,20 @@
     "school_role": "student",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/amulya-kandikonda",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/graduating-partners-whats-next-897dcbaa90f8",
+    "current_firm": "Drata",
+    "current_role": "Senior Product Manager",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/amulya-kandikonda",
+    "location": "San Francisco Bay Area",
+    "verification_note": "Dorm Room Fund's 2019 graduation note says Amulya graduated from Barnard College, Columbia University, and was an investment partner at DRF. Her LinkedIn profile lists Partner at Dorm Room Fund from November 2017 to May 2019 in New York and a current Senior Product Manager role at Drata.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/graduating-partners-whats-next-897dcbaa90f8",
+      "https://www.linkedin.com/in/amulya-kandikonda"
+    ]
   },
   {
     "id": "dra_an_nguyen",
@@ -908,7 +1027,16 @@
     "current_firm": "OpenDataLabs",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://www.opendatalabs.com/about"
+    "firm_source_url": "https://www.opendatalabs.com/about",
+    "linkedin_url": "https://www.linkedin.com/in/annakaz",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://dormroomfund.medium.com/graduating-partners-whats-next-897dcbaa90f8",
+    "location": "San Francisco, California",
+    "verification_note": "Dorm Room Fund's 2019 graduation note says Anna joined Dorm Room Fund her senior year at MIT and graduated in computer science and economics. The profile for Anna Kazlauskas lists that MIT bachelor's and Cofounder and CEO of OpenDataLabs in San Francisco. It does not list a Dorm Room Fund role.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/graduating-partners-whats-next-897dcbaa90f8",
+      "https://www.linkedin.com/in/annakaz"
+    ]
   },
   {
     "id": "dra_anna_marie_manning",
@@ -921,7 +1049,16 @@
     "school_label": "Stanford University",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/anna-marie-manning-95a375130",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
+    "location": "Philadelphia, Pennsylvania",
+    "verification_note": "Dorm Room Fund's Class of 2024 post introduces Anna Marie Manning as a Philly investment partner from Stanford. Her profile lists Investment Partner at Dorm Room Fund from October 2024 to May 2026 in Philadelphia, annamarie@dormroomfund.com, a human-biology bachelor's and a biology master's at Stanford, and an MBA at Wharton.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
+      "https://www.linkedin.com/in/anna-marie-manning-95a375130"
+    ]
   },
   {
     "id": "dra_anne_kong",
@@ -950,7 +1087,21 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
+    "linkedin_url": "https://www.linkedin.com/in/anuv-ratan-a226182b",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://www.kkr.com/about/our-people/anuv-ratan",
+    "current_firm": "KKR",
+    "current_role": "Managing Director",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/anuv-ratan-a226182b",
+    "firm_type": "vc",
+    "location": "Menlo Park, California",
+    "verification_note": "A 2013 Boston.com Dorm Room Fund team list names Anuv Ratan of Harvard College, a senior studying neurobiology and computer science. The profile lists Anuv Ratan, an AB in neurobiology from Harvard, and Managing Director at KKR in Menlo Park. Dorm Room Fund is not on the profile snippet.",
+    "proof_urls": [
+      "https://www.kkr.com/about/our-people/anuv-ratan",
+      "https://www.linkedin.com/in/anuv-ratan-a226182b"
+    ]
   },
   {
     "id": "dra_ariel_winton",
@@ -1035,11 +1186,20 @@
     "year_start": 2019,
     "year_end": 2020,
     "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
-    "current_role": "Principal",
+    "current_role": "Partner",
     "current_firm": "VamosVentures",
     "firm_type": "vc",
-    "firm_confidence": "likely",
-    "firm_source_url": "https://www.vanwickleventures.com/investment-committee/ashley-aydin-'13"
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/ashleyaydin",
+    "linkedin_url": "https://www.linkedin.com/in/ashleyaydin",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://lifeselfmastery.com/2023/06/08/ep-297-ashley-aydin-on-her-journey-to-venture-capital-investing-in-diverse-founders-and-the-future-of-the-industry/",
+    "location": "New York, New York",
+    "verification_note": "A Life Self Mastery interview page prints https://www.linkedin.com/in/ashleyaydin/ and describes Ashley Aydin as an investor at Dorm Room Fund with an MBA from MIT Sloan, then at Vamos Ventures. The profile now lists Partner at VamosVentures in New York.",
+    "proof_urls": [
+      "https://lifeselfmastery.com/2023/06/08/ep-297-ashley-aydin-on-her-journey-to-venture-capital-investing-in-diverse-founders-and-the-future-of-the-industry/",
+      "https://www.linkedin.com/in/ashleyaydin"
+    ]
   },
   {
     "id": "dra_athena_kan",
@@ -1132,7 +1292,21 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "linkedin_url": "https://www.linkedin.com/in/bahramt",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.dcm.com/team/bahram-tavakoli",
+    "current_firm": "DCM Ventures",
+    "current_role": "Investor",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/bahramt",
+    "firm_type": "vc",
+    "location": "Boston, Massachusetts",
+    "verification_note": "DCM's team page for Bahram Tavakoli says he graduated from Babson College and was a partner at First Round-backed Dorm Room Fund. The profile titled Bahram T. lists Babson College, Alumni Partner at Dorm Room Fund, Boston, and the address btavakoli@dcm.com. Current title is Investor at DCM Ventures.",
+    "proof_urls": [
+      "https://www.dcm.com/team/bahram-tavakoli",
+      "https://www.linkedin.com/in/bahramt"
+    ]
   },
   {
     "id": "dra_bastiaan_janmaat",
@@ -1147,7 +1321,21 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea"
+    "team_source_url": "https://web.archive.org/web/20140625061402/http://dormroomfund.com/bayarea",
+    "linkedin_url": "https://www.linkedin.com/in/janmaat",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://stanforddaily.com/2013/05/29/dorm-room-fund-gives-students-500000-to-invest-in-student-startups/",
+    "current_firm": "Linse Capital",
+    "current_role": "Managing Director",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/janmaat",
+    "firm_type": "vc",
+    "location": "San Juan, Puerto Rico",
+    "verification_note": "The Stanford Daily's 2013 Dorm Room Fund piece names Bastiaan Janmaat, MBA '13, on the Bay Area team. His profile lists Bastiaan Janmaat, an MBA at Stanford GSB from 2011 to 2013, and Managing Director at Linse Capital in San Juan. A different Bastiaan Janmaat works in oil and gas in Malaysia.",
+    "proof_urls": [
+      "https://stanforddaily.com/2013/05/29/dorm-room-fund-gives-students-500000-to-invest-in-student-startups/",
+      "https://www.linkedin.com/in/janmaat"
+    ]
   },
   {
     "id": "dra_ben_draa",
@@ -1161,7 +1349,20 @@
     "school_role": "mba",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/bendraa",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+    "current_firm": "Golden State Warriors",
+    "current_role": "Vice President, Strategy and Analytics",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/bendraa",
+    "location": "San Francisco, California",
+    "verification_note": "The public profile for Ben Draa lists Investment Partner at Dorm Room Fund from October 2017 to June 2019 in San Francisco, an MBA at Stanford Graduate School of Business, and Vice President, Strategy & Analytics at the Golden State Warriors.",
+    "proof_urls": [
+      "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+      "https://www.linkedin.com/in/bendraa"
+    ]
   },
   {
     "id": "dra_ben_horwitz",
@@ -1275,12 +1476,19 @@
     "affiliation_status": "older_alumni",
     "year_start": 2016,
     "linkedin_url": "https://www.linkedin.com/in/breton-birkhofer-718013a",
-    "linkedin_confidence": "likely",
+    "linkedin_confidence": "confirmed",
     "current_role": "Managing Director, Venture Investments",
     "current_firm": "DivcoWest",
     "firm_type": "other",
     "firm_confidence": "likely",
-    "firm_source_url": "https://www.linkedin.com/in/breton-birkhofer-718013a"
+    "firm_source_url": "https://www.linkedin.com/in/breton-birkhofer-718013a",
+    "linkedin_source_url": "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90",
+    "location": "San Francisco, California",
+    "verification_note": "Dorm Room Fund's 2016 partner post says Breton Birkhofer is an MBA student at Berkeley Haas and holds a BA from Stanford. The stored profile lists Breton Birkhofer, Investment Partner at Dorm Room Fund from February 2016 to May 2017, an MBA at Berkeley Haas, a Stanford BA, and Managing Director, Venture Investments at DivcoWest in San Francisco.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90",
+      "https://www.linkedin.com/in/breton-birkhofer-718013a"
+    ]
   },
   {
     "id": "dra_bridget_labe",
@@ -1295,7 +1503,19 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/bglabe",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://dormroomfund.medium.com/meet-our-new-partners-807778527886",
+    "current_firm": "Compass Experience Labs",
+    "current_role": "Senior Director of Strategy and Data",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/bglabe",
+    "verification_note": "Dorm Room Fund's partner post says Bridget is a first-year MBA candidate at Wharton. The profile titled Bridget L. lists Investment Partner at Dorm Room Fund from September 2018 to May 2020 in Greater Philadelphia, an entrepreneurship MBA at Wharton, and Senior Director of Strategy and Data at Compass Experience Labs.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/meet-our-new-partners-807778527886",
+      "https://www.linkedin.com/in/bglabe"
+    ]
   },
   {
     "id": "dra_brielee_lu",
@@ -1380,7 +1600,19 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "linkedin_url": "https://www.linkedin.com/in/bruno-lulinski",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://wp.dormroomfund.com/meet-the-newest-dorm-room-fund-partners/",
+    "current_firm": "Aztec Labs",
+    "current_role": "Chief of Staff",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/bruno-lulinski",
+    "verification_note": "Dorm Room Fund's partner post says Bruno is a first-year MBA student at Wharton. The only public profile for Bruno Lulinski lists an MBA at Wharton from 2021 to 2023 in Philadelphia and Chief of Staff at Aztec Labs. It does not list a Dorm Room Fund role.",
+    "proof_urls": [
+      "https://wp.dormroomfund.com/meet-the-newest-dorm-room-fund-partners/",
+      "https://www.linkedin.com/in/bruno-lulinski"
+    ]
   },
   {
     "id": "dra_caroline_zhu",
@@ -1409,7 +1641,22 @@
     "school_role": "student",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/caseyfchow",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://dormroomfund.medium.com/meet-our-new-partners-807778527886",
+    "current_firm": "OpenAI",
+    "current_role": "Member of Technical Staff",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/caseyfchow",
+    "firm_type": "big_tech",
+    "location": "Seattle, Washington",
+    "verification_note": "Dorm Room Fund's 2019 partner note and 2019 graduation note describe Casey Chow as a Princeton computer science senior who interned at Google and Lyft. The profile for Casey Chow lists those same Princeton, Google, and Lyft facts and Member of Technical Staff at OpenAI. Other Casey Chow profiles lack that combination. The profile does not list Dorm Room Fund.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/meet-our-new-partners-807778527886",
+      "https://www.linkedin.com/in/caseyfchow",
+      "https://dormroomfund.medium.com/graduating-partners-whats-next-897dcbaa90f8"
+    ]
   },
   {
     "id": "dra_casey_hogan",
@@ -1443,7 +1690,21 @@
     "school_label": "University of Michigan",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/catherinemek",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
+    "current_firm": "KKR",
+    "current_role": "Technology Investor",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/catherinemek",
+    "firm_type": "vc",
+    "location": "New York, New York",
+    "verification_note": "The public profile for Catherine Mekhael lists Investment Partner at Dorm Room Fund from August 2024 to August 2026, a BBA at the University of Michigan Ross School of Business, the address cmekhael@umich.edu, and Technology Investor at KKR in New York.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
+      "https://www.linkedin.com/in/catherinemek"
+    ]
   },
   {
     "id": "dra_chelsea_goddard",
@@ -1480,7 +1741,20 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "linkedin_url": "https://www.linkedin.com/in/chiragmahapatra",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://chiragmahapatra.com/about/",
+    "current_firm": "Mercor",
+    "current_role": "Vice President of Engineering",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/chiragmahapatra",
+    "location": "San Francisco, California",
+    "verification_note": "The only Chirag Mahapatra profile lists a joint computer science and Booth degree at the University of Chicago and Vice President of Engineering at Mercor in San Francisco. His personal site describes the same Chicago and Berkeley path. An Office Hours page lists him as an investment partner at Dorm Room Fund from January 2021 to January 2023. The LinkedIn snippet itself does not show that role.",
+    "proof_urls": [
+      "https://chiragmahapatra.com/about/",
+      "https://www.linkedin.com/in/chiragmahapatra"
+    ]
   },
   {
     "id": "dra_chloe_lopez_lee",
@@ -1521,7 +1795,21 @@
     "school_label": "UC Berkeley Haas",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "linkedin_url": "https://www.linkedin.com/in/chris-quaidoo",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team",
+    "current_firm": "Griffin Gaming Partners",
+    "current_role": "Venture Partner",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/chris-quaidoo",
+    "firm_type": "vc",
+    "location": "Los Angeles, California",
+    "verification_note": "The public profile for Chris Quaidoo lists Investment Partner at Dorm Room Fund from October 2020 to May 2022 in San Francisco, an MBA at Berkeley Haas from 2020 to 2022, and Venture Partner at Griffin Gaming Partners. He is based in Los Angeles.",
+    "proof_urls": [
+      "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team",
+      "https://www.linkedin.com/in/chris-quaidoo"
+    ]
   },
   {
     "id": "dra_chris_seitz",
@@ -1563,7 +1851,16 @@
     "current_role": "Partner",
     "firm_type": "vc",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/christine-esserman-82834577",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.accel.com/team/christine-esserman",
+    "location": "San Francisco, California",
+    "verification_note": "Accel's team page for Christine Esserman links https://www.linkedin.com/in/christine-esserman-82834577/ and says she graduated from Wharton and joined Accel in 2017. Dorm Room Fund's alumni list names her Partner at Accel. The profile lists Partner at Accel in San Francisco.",
+    "proof_urls": [
+      "https://www.accel.com/team/christine-esserman",
+      "https://www.linkedin.com/in/christine-esserman-82834577"
+    ]
   },
   {
     "id": "dra_christopher_gray",
@@ -1611,7 +1908,20 @@
     "school_label": "Tufts University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "linkedin_url": "https://www.linkedin.com/in/christinemotch",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+    "current_firm": "Spotify",
+    "current_role": "Associate Director, Global Brand",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/christinemotch",
+    "location": "New York, New York",
+    "verification_note": "Dorm Room Fund's 2016 graduation note says Christy Motch is graduating from Tufts and joining Spotify as a Cultural Insights Analyst. The profile for Christine Motch lists Partner at Dorm Room Fund from May 2015 to May 2016 in Boston, a Tufts bachelor's in psychology and economics, that Spotify analyst role, and a current Associate Director, Global Brand title at Spotify in New York.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+      "https://www.linkedin.com/in/christinemotch"
+    ]
   },
   {
     "id": "dra_cindy_zhang",
@@ -1791,7 +2101,20 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2022,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/dbessonov",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://signal.nfx.com/investors/daniel-bessonov",
+    "current_firm": "Avora",
+    "current_role": "Founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/dbessonov",
+    "location": "San Francisco Bay Area",
+    "verification_note": "The profile is titled Daniel B. and lists Partner at Dorm Room Fund from October 2019 to August 2023 in Philadelphia, daniel@dormroomfund.com, a computer science master's and a Jerome Fisher M&T degree at Penn, and Founder of Avora. NFX uses the full name Daniel Bessonov for that Penn and Dorm Room Fund record. The profile title does not spell Bessonov.",
+    "proof_urls": [
+      "https://signal.nfx.com/investors/daniel-bessonov",
+      "https://www.linkedin.com/in/dbessonov"
+    ]
   },
   {
     "id": "dra_daniel_lee",
@@ -1848,7 +2171,13 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "linkedin_url": "https://www.linkedin.com/in/daryazakharova",
+    "linkedin_confidence": "likely",
+    "verification_note": "The profile for Darya Zakharova lists Columbia Business School from 2021 to 2023 and Visa. Other profiles with the same name are in Waterloo, Moscow, and Kazakhstan and do not list Columbia. Dorm Room Fund is not on this profile, and the Visa title is not public, so no firm is stored.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/daryazakharova"
+    ]
   },
   {
     "id": "dra_david_bloom",
@@ -1868,7 +2197,14 @@
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/davidbloom5",
     "linkedin_url": "https://www.linkedin.com/in/davidbloom5",
-    "linkedin_confidence": "likely"
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90",
+    "location": "Berkeley, California",
+    "verification_note": "Dorm Room Fund's 2016 partner post says David Bloom is a sophomore at UC Berkeley. The stored profile lists David Bloom, Investment Partner at Dorm Room Fund from February 2016 to May 2018, a bachelor's at UC Berkeley, and Partner at The House Fund in Berkeley.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90",
+      "https://www.linkedin.com/in/davidbloom5"
+    ]
   },
   {
     "id": "dra_david_chi",
@@ -1925,7 +2261,21 @@
     "affiliation_status": "older_alumni",
     "year_start": 2014,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork",
+    "linkedin_url": "https://www.linkedin.com/in/david-dworsky-3a830042",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://emcap.com/people/david-dworsky",
+    "current_firm": "Emergence Capital",
+    "current_role": "Principal",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/david-dworsky-3a830042",
+    "firm_type": "vc",
+    "location": "San Francisco Bay Area",
+    "verification_note": "The public profile for David Dworsky lists Partner at Dorm Room Fund from February 2014 to February 2015 in New York, philosophy and computer science at Princeton, and Principal at Emergence Capital in the San Francisco Bay Area. Emergence's people page also says he graduated from Princeton in philosophy and computer science.",
+    "proof_urls": [
+      "https://emcap.com/people/david-dworsky",
+      "https://www.linkedin.com/in/david-dworsky-3a830042"
+    ]
   },
   {
     "id": "dra_david_greenstein",
@@ -2051,7 +2401,18 @@
     "school_label": "Yale Law School",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "linkedin_url": "https://www.linkedin.com/in/declan-kunkel-1b853b3b3",
+    "linkedin_confidence": "likely",
+    "current_firm": "Kellogg, Hansen, Todd, Figel & Frederick",
+    "current_role": "Associate",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/declan-kunkel-1b853b3b3",
+    "location": "Washington, District of Columbia",
+    "verification_note": "The only public profile for Declan Kunkel lists a JD at Yale Law School, a BA at Yale, and Associate at Kellogg, Hansen, Todd, Figel & Frederick in Washington, DC. A Dorm Room Fund partner announcement lists Declan Kunkel on the New York and Midwest team. The profile does not list Dorm Room Fund.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/declan-kunkel-1b853b3b3"
+    ]
   },
   {
     "id": "dra_derek_kleinow",
@@ -2066,7 +2427,20 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140403194126/http://www.dormroomfund.com/philly"
+    "team_source_url": "https://web.archive.org/web/20140403194126/http://www.dormroomfund.com/philly",
+    "linkedin_url": "https://www.linkedin.com/in/derekkleinow",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://www.entrepreneur.com/business-news/students-funding-students-a-look-at-campus-based/227136",
+    "current_firm": "BarZar",
+    "current_role": "Co-Founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/derekkleinow",
+    "location": "New York, New York",
+    "verification_note": "Entrepreneur's campus-fund piece calls Derek Kleinow a founding member of Dorm Room Fund and a Wharton MBA student. The only profile for Derek Kleinow lists Co-Founder of BarZar in New York and organizer of Penn Founders Club. It does not list Dorm Room Fund.",
+    "proof_urls": [
+      "https://www.entrepreneur.com/business-news/students-funding-students-a-look-at-campus-based/227136",
+      "https://www.linkedin.com/in/derekkleinow"
+    ]
   },
   {
     "id": "dra_desmond_lim",
@@ -2126,7 +2500,19 @@
     "school_label": "Northeastern University",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/edgarsze",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
+    "current_firm": "Profound",
+    "current_role": "GTM Engineering Manager",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/edgarsze",
+    "verification_note": "The public profile for Edgar Sze lists Investment Partner at Dorm Room Fund, Northeastern University in Boston, and GTM Engineering Manager at Profound.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
+      "https://www.linkedin.com/in/edgarsze"
+    ]
   },
   {
     "id": "dra_edward_jin",
@@ -2254,7 +2640,21 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/garrosli",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://dormroomfund.medium.com/meet-our-new-partners-807778527886",
+    "current_firm": "Anthropic",
+    "current_role": "Enterprise GTM, Tech",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/garrosli",
+    "firm_type": "big_tech",
+    "location": "Seattle, Washington",
+    "verification_note": "Dorm Room Fund's partner post says Garros is an investment partner and an MBA student at Harvard Business School. The only profile for Garros Li lists an MBA at Harvard Business School from 2018 to 2020 and Enterprise GTM, Tech at Anthropic in Seattle. It does not list Dorm Room Fund.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/meet-our-new-partners-807778527886",
+      "https://www.linkedin.com/in/garrosli"
+    ]
   },
   {
     "id": "dra_george_liu",
@@ -2282,7 +2682,20 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/-havi-",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://medium.com/envision-accelerator/meet-envision-cohort-4-young-diverse-founders-building-the-future-ea76731c1508",
+    "current_firm": "Abby Care",
+    "current_role": "Founder and CEO",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/-havi-",
+    "location": "San Francisco, California",
+    "verification_note": "The profile is titled Havi N. and lists Investment Partner at Dorm Room Fund from January 2019 to January 2021 in New York, healthcare coursework at Columbia, and Founder and CEO of Abby Care in San Francisco. An Envision cohort note says Havi studied computer science at Columbia and was an investment partner at Dorm Room Fund. A different profile, linkedin.com/in/havi-nguyen, is a Brown student.",
+    "proof_urls": [
+      "https://medium.com/envision-accelerator/meet-envision-cohort-4-young-diverse-founders-building-the-future-ea76731c1508",
+      "https://www.linkedin.com/in/-havi-"
+    ]
   },
   {
     "id": "dra_haywood_l_perry_iii",
@@ -2345,7 +2758,16 @@
     "team_source_url": "https://web.archive.org/web/20150626075221/http://www.dormroomfund.com/philly",
     "firm_type": "vc",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/hestonberkman",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://penntoday.upenn.edu/2015-05-14/interviews/student-spotlight-heston-berkman",
+    "location": "New York, New York",
+    "verification_note": "Penn Today's 2015 student spotlight calls Heston Berkman a managing partner at Dorm Room Fund in the class of 2015. The only profile for Heston Berkman lists the University of Pennsylvania from 2011 to 2015. Dorm Room Fund's alumni page names him founder and GP of Banter Capital. The profile snippet does not list that fund.",
+    "proof_urls": [
+      "https://penntoday.upenn.edu/2015-05-14/interviews/student-spotlight-heston-berkman",
+      "https://www.linkedin.com/in/hestonberkman"
+    ]
   },
   {
     "id": "dra_hillary_bush",
@@ -2378,7 +2800,14 @@
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/shahhiral",
     "linkedin_url": "https://www.linkedin.com/in/shahhiral",
-    "linkedin_confidence": "likely"
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+    "location": "Palo Alto, California",
+    "verification_note": "Dorm Room Fund's 2016 graduation note says Hiral is graduating from Stanford GSB. The stored profile lists Hiral Shah, Investment Partner at Dorm Room Fund from June 2015 to June 2016 in Stanford, an MBA at Stanford GSB, and Senior Director of Product Management at Docusign in Palo Alto.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+      "https://www.linkedin.com/in/shahhiral"
+    ]
   },
   {
     "id": "dra_ian_mccreadie",
@@ -2387,7 +2816,17 @@
     "source_url": "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
     "excerpt": "DRF's 17 Jan 2025 Class of 2024 post introduces Ian McCreadie as a Philly investment partner.",
     "drf_team": "Philly",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/ian-mccreadie-5068a4185",
+    "linkedin_confidence": "likely",
+    "current_firm": "Ribbit Capital",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/ian-mccreadie-5068a4185",
+    "firm_type": "vc",
+    "verification_note": "Dorm Room Fund's Class of 2024 post describes Ian McCreadie. The profile that matches that bio lists a neurobiology BS at Georgetown, Guardian RF (YC S24), Thrive Capital, and Ribbit Capital. Several other Ian McCreadie profiles do not match that path. This profile does not list Dorm Room Fund, and it does not show a title at Ribbit.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/ian-mccreadie-5068a4185"
+    ]
   },
   {
     "id": "dra_ima_christian",
@@ -2400,7 +2839,15 @@
     "school_label": "Stanford University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "linkedin_url": "https://www.linkedin.com/in/imachris",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90",
+    "verification_note": "Dorm Room Fund's 2016 partner post introduces Ima Christian, a Stanford computer science freshman whose team built Five-0. The profile titled Ima C. lists Investment Partner at Dorm Room Fund and a Stanford bachelor's in science, technology, and society. The display name does not spell Christian.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90",
+      "https://www.linkedin.com/in/imachris"
+    ]
   },
   {
     "id": "dra_imran_khoja",
@@ -2491,7 +2938,20 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/isabel-sheinman-98021079",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://dormroomfund.medium.com/move-in-day-meet-dorm-room-funds-new-partners-a0b5d3d29178",
+    "current_firm": "Maka",
+    "current_role": "Co-Founder and CEO",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/isabel-sheinman-98021079",
+    "location": "Detroit, Michigan",
+    "verification_note": "Dorm Room Fund's move-in post says Isabel is a first-year MBA at NYU Stern who co-created NABU. The only profile for Isabel Sheinman lists an MBA at NYU Stern from 2019 to 2021, co-founder of NABU, and Co-Founder and CEO of Maka in Detroit. It does not list Dorm Room Fund.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/move-in-day-meet-dorm-room-funds-new-partners-a0b5d3d29178",
+      "https://www.linkedin.com/in/isabel-sheinman-98021079"
+    ]
   },
   {
     "id": "dra_isabelle_phelps",
@@ -2573,7 +3033,18 @@
     "source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
     "excerpt": "DRF's 12 May 2016 graduation note lists Jackie Larossi on the Boston team.",
     "drf_team": "Boston",
-    "year_start": 2016
+    "year_start": 2016,
+    "linkedin_url": "https://www.linkedin.com/in/jackieiarossi",
+    "linkedin_confidence": "likely",
+    "current_firm": "Wells Fargo",
+    "current_role": "Executive Director",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/jackieiarossi",
+    "location": "New York City Metropolitan Area",
+    "verification_note": "A search for Jackie Larossi returned Jackie Iarossi. That profile lists Investment Team Partner at Dorm Room Fund from May 2015 to May 2016, an MBA at MIT from 2014 to 2016, and Executive Director at Wells Fargo in the New York area. The indexed surname is Iarossi, so this stays a likely match to the Boston 2016 roster name Larossi.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/jackieiarossi"
+    ]
   },
   {
     "id": "dra_jacob_kopelman",
@@ -2598,13 +3069,20 @@
     "excerpt": "DRF's 12 May 2016 graduation note lists James Ruben on the Boston team.",
     "drf_team": "Boston",
     "year_start": 2016,
-    "current_role": "Founder & CEO",
+    "current_role": "Founder and CEO",
     "current_firm": "Remy",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/jamesruben",
     "linkedin_url": "https://www.linkedin.com/in/jamesruben",
-    "linkedin_confidence": "likely"
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+    "location": "San Francisco, California",
+    "verification_note": "Dorm Room Fund's 2016 graduation note says James Ruben is leaving the Boston team for a Google APM program. The stored profile lists James Ruben, Investment Partner at Dorm Room Fund from January 2015 to May 2016 in Boston, economics and computer science at Harvard College, an MBA at Stanford GSB, and Founder and CEO of Remy in San Francisco.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+      "https://www.linkedin.com/in/jamesruben"
+    ]
   },
   {
     "id": "dra_james_wellemeyer",
@@ -2681,7 +3159,20 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140403194126/http://www.dormroomfund.com/philly"
+    "team_source_url": "https://web.archive.org/web/20140403194126/http://www.dormroomfund.com/philly",
+    "linkedin_url": "https://www.linkedin.com/in/jkriston",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20130918035243/http://dormroomfund.com/philly",
+    "current_firm": "Lightspeed",
+    "current_role": "Vice President, Head of Community",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/jkriston",
+    "location": "San Francisco, California",
+    "verification_note": "The 2013 DRF Philly roster lists Jasmine Kriston at the University of Pennsylvania. The profile at linkedin.com/in/jkriston is titled Jasmine Cohn and lists Founding and Managing Partner at Dorm Room Fund from November 2012 to October 2014 in Philadelphia, a Wharton economics degree, and Vice President, Head of Community at Lightspeed in San Francisco.",
+    "proof_urls": [
+      "https://web.archive.org/web/20130918035243/http://dormroomfund.com/philly",
+      "https://www.linkedin.com/in/jkriston"
+    ]
   },
   {
     "id": "dra_jason_brooke",
@@ -2844,7 +3335,20 @@
     "school_label": "University of Chicago",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/jessica-gartenstein",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
+    "current_firm": "Frönen",
+    "current_role": "Board Observer",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/jessica-gartenstein",
+    "location": "Stanford, California",
+    "verification_note": "The public profile for Jessica Gartenstein lists a public-policy bachelor's at the University of Chicago, Managing Partner and Investment Partner at Dorm Room Fund, and Board Observer at Frönen. The profile places her in Stanford, California.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
+      "https://www.linkedin.com/in/jessica-gartenstein"
+    ]
   },
   {
     "id": "dra_jianna_liu",
@@ -2970,7 +3474,13 @@
     "firm_confidence": "confirmed",
     "firm_source_url": "https://f4.fund/firms/o-g-venture-partners",
     "linkedin_url": "https://www.linkedin.com/in/joshephraim",
-    "linkedin_confidence": "likely"
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90",
+    "verification_note": "Dorm Room Fund's 2016 partner post says Josh Ephraim is a JD-MBA student at Berkeley Law and Haas. The stored profile lists Josh Ephraim, Investor and Managing Partner at Dorm Room Fund from February 2016 to May 2018, Berkeley Haas, and General Counsel at O.G. Venture Partners.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90",
+      "https://www.linkedin.com/in/joshephraim"
+    ]
   },
   {
     "id": "dra_josh_lee",
@@ -3122,7 +3632,20 @@
     "school_role": "mba",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/karinaakib",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+    "current_firm": "Access TeleCare",
+    "current_role": "Senior Vice President, Operations",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/karinaakib",
+    "location": "Los Angeles Metropolitan Area",
+    "verification_note": "The public profile for Karina Akib lists an MBA at MIT Sloan, Venture Partner at Dorm Room Fund from October 2017 to January 2019, earlier work at Iterative Health and Google, and Senior Vice President of Operations at Access TeleCare in the Los Angeles area.",
+    "proof_urls": [
+      "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+      "https://www.linkedin.com/in/karinaakib"
+    ]
   },
   {
     "id": "dra_karine_hsu",
@@ -3163,7 +3686,20 @@
     "school_role": "mba",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/karthikmenta",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://dormroomfund.medium.com/empowering-student-entrepreneurs-across-the-nation-meet-dorm-room-funds-new-partners-bb24f698bf55",
+    "current_firm": "Strategy&",
+    "current_role": "Manager",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/karthikmenta",
+    "location": "New York City Metropolitan Area",
+    "verification_note": "Dorm Room Fund's partner post names Karthik Menta, a Cornell Johnson MBA. The profile at linkedin.com/in/karthikmenta is titled Karthik M. and lists Investment Partner at Dorm Room Fund, an MBA at Cornell, and Manager at Strategy& in New York.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/empowering-student-entrepreneurs-across-the-nation-meet-dorm-room-funds-new-partners-bb24f698bf55",
+      "https://www.linkedin.com/in/karthikmenta"
+    ]
   },
   {
     "id": "dra_kate_murdock",
@@ -3222,7 +3758,14 @@
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/posts/kcsimon_wealthfront-is-now-a-public-company-im-activity-7405254430067064832-GVDF",
     "linkedin_url": "https://www.linkedin.com/in/kcsimon",
-    "linkedin_confidence": "likely"
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+    "location": "San Francisco Bay Area",
+    "verification_note": "Dorm Room Fund's 2016 graduation note says KC is graduating from Berkeley Haas and returning to Square. The stored profile lists KC Simon, Investment Partner at Dorm Room Fund from January 2015 to January 2016, and Berkeley Haas from 2014 to 2016, in the San Francisco Bay Area. Current experience titles on the public page are redacted.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+      "https://www.linkedin.com/in/kcsimon"
+    ]
   },
   {
     "id": "dra_kelsey_bishop",
@@ -3301,7 +3844,14 @@
     "source_url": "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
     "excerpt": "DRF's 17 Jan 2025 Class of 2024 post introduces Kieran Velasquez as a NYC investment partner.",
     "drf_team": "NYC",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/kieran-velasquez",
+    "linkedin_confidence": "likely",
+    "location": "New York, New York",
+    "verification_note": "Dorm Room Fund's Class of 2024 post describes Kieran Velasquez. The profile lists Kieran Velasquez in New York, mechanical engineering at Michigan State, and earlier work at PPG Aerospace, Dow, and EY-Parthenon. It does not list a Dorm Room Fund role or a current company title.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/kieran-velasquez"
+    ]
   },
   {
     "id": "dra_kim_pham",
@@ -3341,7 +3891,20 @@
     "school_label": "Stanford GSB",
     "school_role": "mba",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "linkedin_url": "https://www.linkedin.com/in/kimiloluwa",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://blog.dormroomfund.com/post/introducing-our-newest-cohort-of-drfers",
+    "current_firm": "Rippling",
+    "current_role": "Senior Bizops",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/kimiloluwa",
+    "location": "Brooklyn, New York",
+    "verification_note": "Dorm Room Fund's cohort page names Kimiloluwa Fafowora at Stanford GSB. The profile titled Kimiloluwa F. lists an MBA at Stanford GSB from 2020 to 2022, Senior Bizops at Rippling in Brooklyn, and Founder and CEO of Gander. It does not list a Dorm Room Fund title.",
+    "proof_urls": [
+      "https://blog.dormroomfund.com/post/introducing-our-newest-cohort-of-drfers",
+      "https://www.linkedin.com/in/kimiloluwa"
+    ]
   },
   {
     "id": "dra_kyle_dolce",
@@ -3497,7 +4060,14 @@
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/lindsayu",
     "linkedin_url": "https://www.linkedin.com/in/lindsayu",
-    "linkedin_confidence": "likely"
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20131111061938/http://dormroomfund.com/boston",
+    "location": "New York, New York",
+    "verification_note": "The stored profile lists Lindsay Ullman, an MBA at Harvard Business School from 2013 to 2015, and advisor at Dorm Room Fund, the student venture fund backed by First Round Capital. The page places her in New York. The public company title is redacted, so the stored Coalition Operators role is unchanged.",
+    "proof_urls": [
+      "https://web.archive.org/web/20131111061938/http://dormroomfund.com/boston",
+      "https://www.linkedin.com/in/lindsayu"
+    ]
   },
   {
     "id": "dra_linus_lee",
@@ -3517,7 +4087,14 @@
     "current_firm": "Thrive Capital",
     "firm_type": "other",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://ai.engineer/speakers/linus-lee"
+    "firm_source_url": "https://ai.engineer/speakers/linus-lee",
+    "linkedin_url": "https://www.linkedin.com/in/thesephist",
+    "linkedin_confidence": "likely",
+    "location": "New York, New York",
+    "verification_note": "The profile is titled Linus L., not Linus Lee. It lists Head of AI at Thrive Capital in New York, a BA in computer science at UC Berkeley, and the line that he went to school in Berkeley. No independent page was found that links this URL, and Dorm Room Fund is not a role on the profile. Other Linus Lee profiles are in Singapore finance, at Stripe, and at NUS.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/thesephist"
+    ]
   },
   {
     "id": "dra_lisette_tellez",
@@ -3562,7 +4139,15 @@
     "team_source_url": "https://web.archive.org/web/20150509061327/http://www.dormroomfund.com/bayarea",
     "firm_type": "vc",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/liujiang1",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.com/our-team",
+    "verification_note": "Dorm Room Fund's alumni list names Liu Jiang as Founder and GP of Sunflower Capital. The profile at linkedin.com/in/liujiang1 lists Founder of Sunflower Capital, a prior partner role at Sequoia, Stanford trustee and TreeHacks activity, and Dorm Room Fund managing partner.",
+    "proof_urls": [
+      "https://dormroomfund.com/our-team",
+      "https://www.linkedin.com/in/liujiang1"
+    ]
   },
   {
     "id": "dra_loewen_cavill",
@@ -3625,7 +4210,21 @@
     "affiliation_status": "older_alumni",
     "year_start": 2015,
     "year_end": 2016,
-    "team_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b"
+    "team_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+    "linkedin_url": "https://www.linkedin.com/in/maccordrey",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+    "current_firm": "Castle Hook Partners",
+    "current_role": "Investor",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/maccordrey",
+    "firm_type": "vc",
+    "location": "New York, New York",
+    "verification_note": "Dorm Room Fund's 2016 graduation note says Mac Cordrey is graduating from Wharton and joining Bessemer. The profile titled Mac C. at linkedin.com/in/maccordrey lists Partner at Dorm Room Fund, a Wharton economics degree from 2012 to 2016, analyst at Bessemer Venture Partners, and Investor at Castle Hook Partners in New York.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+      "https://www.linkedin.com/in/maccordrey"
+    ]
   },
   {
     "id": "dra_mahira_dayal",
@@ -3781,7 +4380,21 @@
     "school_role": "undergrad",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/mmizbani",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://dormroomfund.medium.com/empowering-student-entrepreneurs-across-the-nation-meet-dorm-room-funds-new-partners-bb24f698bf55",
+    "current_firm": "Argo",
+    "current_role": "Investor",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/mmizbani",
+    "firm_type": "vc",
+    "location": "New York, New York",
+    "verification_note": "Dorm Room Fund's partner post calls Matthew Mizbani a Wharton junior. The profile for Matthew Mizbani lists The Wharton School and Investor at Argo in New York, with earlier roles at Paradigm, Coatue, and Morgan Stanley. It does not list Dorm Room Fund.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/empowering-student-entrepreneurs-across-the-nation-meet-dorm-room-funds-new-partners-bb24f698bf55",
+      "https://www.linkedin.com/in/mmizbani"
+    ]
   },
   {
     "id": "dra_matthew_piccolella",
@@ -3950,7 +4563,20 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://dormroomfund.medium.com/move-in-day-meet-dorm-room-funds-new-partners-a0b5d3d29178"
+    "team_source_url": "https://dormroomfund.medium.com/move-in-day-meet-dorm-room-funds-new-partners-a0b5d3d29178",
+    "linkedin_url": "https://www.linkedin.com/in/merylnatow",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
+    "current_firm": "A Good Place Therapy",
+    "current_role": "Psychotherapist",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/merylnatow",
+    "location": "Brooklyn, New York",
+    "verification_note": "The public profile for Meryl Breidbart lists Head of Design at Dorm Room Fund from November 2019 to May 2020, an MBA at Yale School of Management, and Psychotherapist at A Good Place Therapy in Brooklyn.",
+    "proof_urls": [
+      "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
+      "https://www.linkedin.com/in/merylnatow"
+    ]
   },
   {
     "id": "dra_mia_krishnamurthy",
@@ -3966,13 +4592,20 @@
     "year_start": 2021,
     "year_end": 2022,
     "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
-    "current_role": "Investor",
-    "current_firm": "CRV",
+    "current_role": "Partner",
+    "current_firm": "Lux Capital",
     "firm_type": "vc",
     "firm_confidence": "likely",
-    "firm_source_url": "https://theorg.com/org/crv/org-chart/mia-krishnamurthy",
+    "firm_source_url": "https://www.linkedin.com/in/mia-krishnamurthy",
     "linkedin_url": "https://www.linkedin.com/in/mia-krishnamurthy",
-    "linkedin_confidence": "likely"
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team",
+    "location": "San Francisco, California",
+    "verification_note": "The stored profile lists Mia Krishnamurthy, Cornell University, and Investment Partner at Dorm Room Fund from January 2021 to January 2022. A post on that profile says she joined Lux Capital, and the page places her in San Francisco. The Partner title at Lux is taken from that announcement.",
+    "proof_urls": [
+      "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team",
+      "https://www.linkedin.com/in/mia-krishnamurthy"
+    ]
   },
   {
     "id": "dra_michael_chiang",
@@ -4021,7 +4654,14 @@
     "founded_project_id": "proj_GjrFxToPH-cI",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/michael-t-5b1bbb122",
+    "linkedin_confidence": "likely",
+    "location": "San Francisco, California",
+    "verification_note": "Dorm Room Fund's alumni list names Michael Truell as founder of Cursor. The profile is titled Michael T. and lists Co-founder and CEO of Cursor from January 2022 to August 2026, a computer science and mathematics bachelor's at MIT, mntruell.com, and San Francisco. It now says he is building at SpaceXAI. The display name is abbreviated and Dorm Room Fund is not on the profile. A different Michael Truell is a mortgage consultant.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/michael-t-5b1bbb122"
+    ]
   },
   {
     "id": "dra_michael_zhang",
@@ -4062,7 +4702,16 @@
     "current_role": "Founder & GP",
     "firm_type": "vc",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/mike-annunziata-12853bb",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://www.alsocapital.com/",
+    "location": "New York, New York",
+    "verification_note": "Also Capital's site says Mike Annunziata began his direct-investment career as a student investor at Dorm Room Fund, matching Dorm Room Fund's alumni line that he is founder and GP of Also Capital. The profile lists Founder and Managing Partner at Also Capital in New York. Other Mike Annunziata profiles are in real estate.",
+    "proof_urls": [
+      "https://www.alsocapital.com/",
+      "https://www.linkedin.com/in/mike-annunziata-12853bb"
+    ]
   },
   {
     "id": "dra_mike_lapointe",
@@ -4112,13 +4761,20 @@
     "school_role": "student",
     "affiliation_status": "older_alumni",
     "year_start": 2016,
-    "current_role": "Product Manager",
+    "current_role": "Product Manager, Meta AI",
     "current_firm": "Meta",
     "firm_type": "big_tech",
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/mollywwang",
     "linkedin_url": "https://www.linkedin.com/in/mollywwang",
-    "linkedin_confidence": "likely"
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90",
+    "location": "New York, New York",
+    "verification_note": "Dorm Room Fund's 2016 partner post says Molly is a junior studying computer science and economics at Penn. The stored profile lists Molly Wang, Investment Partner at Dorm Room Fund from January 2015 to January 2017 in Philadelphia, that Penn degree, and Product Manager, Meta AI, in New York.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90",
+      "https://www.linkedin.com/in/mollywwang"
+    ]
   },
   {
     "id": "dra_momoko_ishii",
@@ -4131,7 +4787,14 @@
     "school_label": "Yale University",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/momokoishii",
+    "linkedin_confidence": "likely",
+    "location": "New York City Metropolitan Area",
+    "verification_note": "Dorm Room Fund's Class of 2024 post describes Momoko Ishii as a Yale PhD chemist. A colleague's LinkedIn page links linkedin.com/in/momokoishii for Momoko Ishii, PhD. The profile lists Chemical Scientist, IP and Licensing, in the New York area. It does not itself show Yale or Dorm Room Fund, so this stays likely.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/momokoishii"
+    ]
   },
   {
     "id": "dra_monica_shi",
@@ -4181,7 +4844,21 @@
     "affiliation_status": "older_alumni",
     "year_start": 2014,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20150509062156/http://www.dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20150509062156/http://www.dormroomfund.com/boston",
+    "linkedin_url": "https://www.linkedin.com/in/nathanielhajian",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
+    "current_firm": "Instagram",
+    "current_role": "Director, Product Staff",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/nathanielhajian",
+    "firm_type": "big_tech",
+    "location": "New York, New York",
+    "verification_note": "The public profile, titled Nate Hajian, lists Investment Partner at Dorm Room Fund from April 2014 to June 2015 in Boston, a political-science BA at Tufts from 2011 to 2015, and Director, Product Staff at Instagram in New York.",
+    "proof_urls": [
+      "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
+      "https://www.linkedin.com/in/nathanielhajian"
+    ]
   },
   {
     "id": "dra_neal_khosla",
@@ -4203,7 +4880,14 @@
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/nealkhosla",
     "linkedin_url": "https://www.linkedin.com/in/nealkhosla",
-    "linkedin_confidence": "likely"
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20130918015152/http://dormroomfund.com/bayarea",
+    "location": "Portola Valley, California",
+    "verification_note": "The stored profile lists Neal Khosla, Investment Team at Dorm Room Fund from April 2013 to December 2014 on the Bay Area team, a computer science master's at Stanford, and Cofounder and CEO of Curai in Portola Valley.",
+    "proof_urls": [
+      "https://web.archive.org/web/20130918015152/http://dormroomfund.com/bayarea",
+      "https://www.linkedin.com/in/nealkhosla"
+    ]
   },
   {
     "id": "dra_neil_bhammar",
@@ -4285,7 +4969,19 @@
     "school_label": "Drexel University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2015
+    "year_start": 2015,
+    "linkedin_url": "https://www.linkedin.com/in/nigelcoelho",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20150626075221/http://www.dormroomfund.com/philly",
+    "current_firm": "Lumber",
+    "current_role": "Director of Compliance Operations",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/nigelcoelho",
+    "verification_note": "The public profile for Nigel Coelho lists a BS in electrical and computer engineering at Drexel, Investment Partner at Dorm Room Fund, an MBA at Wharton, and Director of Compliance Operations at Lumber.",
+    "proof_urls": [
+      "https://web.archive.org/web/20150626075221/http://www.dormroomfund.com/philly",
+      "https://www.linkedin.com/in/nigelcoelho"
+    ]
   },
   {
     "id": "dra_nika_duan",
@@ -4300,7 +4996,21 @@
     "affiliation_status": "older_alumni",
     "year_start": 2021,
     "year_end": 2022,
-    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d"
+    "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "linkedin_url": "https://www.linkedin.com/in/nikaduan",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+    "current_firm": "Inflect Capital",
+    "current_role": "Partner",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/nikaduan",
+    "firm_type": "vc",
+    "location": "New York, New York",
+    "verification_note": "The public profile for Nika Duan lists Investment Partner at Dorm Room Fund from October 2021 to May 2023 in Boston, an MBA at Harvard Business School from 2021 to 2023, and Partner at Inflect Capital in New York.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
+      "https://www.linkedin.com/in/nikaduan"
+    ]
   },
   {
     "id": "dra_nilesh_kavthekar",
@@ -4375,7 +5085,20 @@
     "affiliation_status": "older_alumni",
     "year_start": 2015,
     "year_end": 2016,
-    "team_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b"
+    "team_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+    "linkedin_url": "https://www.linkedin.com/in/parthiloganathan",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+    "current_firm": "Letterdrop",
+    "current_role": "CEO and Founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/parthiloganathan",
+    "location": "San Francisco, California",
+    "verification_note": "Dorm Room Fund's 2016 graduation note says Parthi Loganathan is joining Google as an associate product manager after Columbia. The profile lists Parthi Loganathan, Managing Partner at Dorm Room Fund in New York, a computer-science degree at Columbia, Google, and CEO and Founder of Letterdrop in San Francisco.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+      "https://www.linkedin.com/in/parthiloganathan"
+    ]
   },
   {
     "id": "dra_peter_nguyen",
@@ -4432,7 +5155,19 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/philliphbh",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+    "current_firm": "Integral",
+    "current_role": "Founder",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/philliphbh",
+    "verification_note": "The 2019 DRF team archive lists Phillip Hui-Bon-Hoa at Boston College. The profile at linkedin.com/in/philliphbh lists Boston College and says joining Dorm Room Fund was one of the best decisions he made. The about line says he founded Integral.",
+    "proof_urls": [
+      "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+      "https://www.linkedin.com/in/philliphbh"
+    ]
   },
   {
     "id": "dra_pranav_ramabhadran",
@@ -4445,7 +5180,22 @@
     "school_label": "University of Pennsylvania",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "linkedin_url": "https://www.linkedin.com/in/pranavvishnu",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90",
+    "current_firm": "OpenAI",
+    "current_role": "Member of Product Staff",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/pranavvishnu",
+    "firm_type": "big_tech",
+    "location": "San Francisco, California",
+    "verification_note": "Dorm Room Fund's 2016 partner post says Pranav Ramabhadran directed PennApps and studies in Penn's Management and Technology program. The profile is titled Pranav Vishnu R. and lists Penn Engineering computer science, Wharton economics, the Jerome Fisher M&T program, and director of PennApps, plus Member of Product Staff at OpenAI. It does not show the surname Ramabhadran or a Dorm Room Fund role.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/meet-dorm-room-fund-s-newest-partners-16302ac01b90",
+      "https://www.linkedin.com/in/pranavvishnu",
+      "https://penntoday.upenn.edu/spotlights/creative-students-get-their-hack-pennapps"
+    ]
   },
   {
     "id": "dra_pulak_mittal",
@@ -4460,7 +5210,19 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140403194126/http://www.dormroomfund.com/philly"
+    "team_source_url": "https://web.archive.org/web/20140403194126/http://www.dormroomfund.com/philly",
+    "linkedin_url": "https://www.linkedin.com/in/potluck",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://medium.com/@potluck/im-25-years-old-today-6691e13f076c",
+    "current_firm": "Val Town",
+    "current_role": "COO",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/potluck",
+    "verification_note": "The profile titled Potluck Mittal says that at Penn he was a founding team member of Dorm Room Fund and lists Partner from October 2012 to December 2013 in Greater Philadelphia. His Medium post under the same handle says his birth name was Pulak. Current title is COO at Val Town.",
+    "proof_urls": [
+      "https://medium.com/@potluck/im-25-years-old-today-6691e13f076c",
+      "https://www.linkedin.com/in/potluck"
+    ]
   },
   {
     "id": "dra_qin_en_looi",
@@ -4653,7 +5415,17 @@
     "school_label": "California Institute of Technology",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/kalahasty",
+    "linkedin_confidence": "likely",
+    "current_firm": "Forge",
+    "current_role": "Co-Founder and CEO",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/kalahasty",
+    "verification_note": "The profile is titled Rohan K., links rohankalahasty.com, lists a physics BS at Caltech, and Cofounder and CEO of Forge. He reposted a Dorm Room Fund event. The profile does not list a Dorm Room Fund role.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/kalahasty"
+    ]
   },
   {
     "id": "dra_royce_tiger",
@@ -4814,7 +5586,16 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20140607193650/http://dormroomfund.com/newyork",
+    "linkedin_url": "https://www.linkedin.com/in/samslover",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20130906231556/http://www.dormroomfund.com/newyork",
+    "location": "New York, New York",
+    "verification_note": "The public profile for Sam Slover lists investor and founding member of Dorm Room Fund's New York team from March 2013 to June 2014, and an interactive-telecommunications master's at NYU from 2012 to 2014. He is in New York. The page does not name a current company.",
+    "proof_urls": [
+      "https://web.archive.org/web/20130906231556/http://www.dormroomfund.com/newyork",
+      "https://www.linkedin.com/in/samslover"
+    ]
   },
   {
     "id": "dra_samantha_ku",
@@ -4884,7 +5665,20 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/sanyaohri",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
+    "current_firm": "Tanglin Venture Partners",
+    "current_role": "Associate Vice President",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/sanyaohri",
+    "firm_type": "vc",
+    "verification_note": "The public profile for Sanya Ohri is headlined around early-stage investing and The Wharton School. It lists Investment Partner at Dorm Room Fund, an MBA at Wharton, and Associate Vice President at Tanglin Venture Partners.",
+    "proof_urls": [
+      "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
+      "https://www.linkedin.com/in/sanyaohri"
+    ]
   },
   {
     "id": "dra_sara_du",
@@ -4941,7 +5735,20 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20200815041115/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/sarah-moseson-719b3b152",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
+    "current_firm": "Parthenon Capital",
+    "firm_confidence": "likely",
+    "firm_source_url": "https://www.linkedin.com/in/sarah-moseson-719b3b152",
+    "firm_type": "vc",
+    "location": "San Francisco, California",
+    "verification_note": "The public profile for Sarah Moseson lists Investment Partner at Dorm Room Fund from October 2019 to May 2022, MIT, and the line that being an investment partner at DRF was one of her most valuable college experiences. It lists Parthenon Capital in San Francisco without a public title.",
+    "proof_urls": [
+      "https://web.archive.org/web/20200511192010/https://dormroomfund.com/team",
+      "https://www.linkedin.com/in/sarah-moseson-719b3b152"
+    ]
   },
   {
     "id": "dra_shasi_pinninti",
@@ -5025,7 +5832,14 @@
     "school_role": "student",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/shohini-gupta",
+    "linkedin_confidence": "likely",
+    "location": "Brooklyn, New York",
+    "verification_note": "A post on the profile for Shohini Gupta says she is the new managing partner for the Bay Area Dorm Room Fund team. The author card places her in Brooklyn. The indexed profile does not show UC Berkeley. A second Shohini Gupta is a Kolkata artist, so this stays likely.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/shohini-gupta"
+    ]
   },
   {
     "id": "dra_shrey_gupta",
@@ -5229,7 +6043,14 @@
     "current_firm": "MIT delta v",
     "firm_type": "other",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://entrepreneurship.mit.edu/eirs/"
+    "firm_source_url": "https://entrepreneurship.mit.edu/eirs/",
+    "linkedin_url": "https://www.linkedin.com/in/stephaniemacconnell",
+    "linkedin_confidence": "likely",
+    "location": "New York, New York",
+    "verification_note": "The profile for Stephanie MacConnell lists an MBA at MIT Sloan and Director of the NYC delta v accelerator at the Martin Trust Center from May 2023 to October 2025, then Founder of a stealth company in New York. Dorm Room Fund appears in posts she shared, not as a job on the profile, so the stored MIT delta v directorship is left as is.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/stephaniemacconnell"
+    ]
   },
   {
     "id": "dra_stephanie_mccaffrey",
@@ -5375,7 +6196,14 @@
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/sweyn",
     "linkedin_url": "https://www.linkedin.com/in/sweyn",
-    "linkedin_confidence": "likely"
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork",
+    "location": "New York City Metropolitan Area",
+    "verification_note": "The stored profile lists Sweyn Venderbush, Managing Partner and Partner at Dorm Room Fund from March 2015 to April 2018, a computer science bachelor's at Yale, and Chief Product Officer at Starbridge in the New York area.",
+    "proof_urls": [
+      "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork",
+      "https://www.linkedin.com/in/sweyn"
+    ]
   },
   {
     "id": "dra_tafarii_mckenie",
@@ -5390,12 +6218,19 @@
     "affiliation_status": "recent_grad",
     "year_start": 2024,
     "linkedin_url": "https://www.linkedin.com/in/tafarii-mckenzie",
-    "linkedin_confidence": "likely",
+    "linkedin_confidence": "confirmed",
     "current_role": "Director of Product & Network Strategy",
     "current_firm": "Lerer Hippeau",
     "firm_type": "other",
     "firm_confidence": "likely",
-    "firm_source_url": "https://www.linkedin.com/in/tafarii-mckenzie"
+    "firm_source_url": "https://www.linkedin.com/in/tafarii-mckenzie",
+    "linkedin_source_url": "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
+    "location": "New York, New York",
+    "verification_note": "The stored profile spells the surname McKenzie. It lists Tafarii McKenzie, Managing Partner and Investment Partner at Dorm Room Fund, MIT Sloan, and Director of Product and Network Strategy at Lerer Hippeau in New York. A post on the profile says Dorm Room Fund was the best thing she did during her MBA.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/welcoming-the-class-of-2024-partners-f48ea0788018",
+      "https://www.linkedin.com/in/tafarii-mckenzie"
+    ]
   },
   {
     "id": "dra_talal_alhammad",
@@ -5408,7 +6243,20 @@
     "school_label": "Stanford Graduate School of Business",
     "school_role": "mba",
     "affiliation_status": "older_alumni",
-    "year_start": 2016
+    "year_start": 2016,
+    "linkedin_url": "https://www.linkedin.com/in/talalalhammad",
+    "linkedin_confidence": "likely",
+    "linkedin_source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+    "current_firm": "Boxed",
+    "current_role": "GM, New Products",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/talalalhammad",
+    "location": "New York, New York",
+    "verification_note": "Dorm Room Fund's 2016 graduation note says Talal Alhammad is graduating from Stanford GSB and joining Boxed in New York. The profile titled Talal A. lists an MBA at Stanford GSB from 2014 to 2016 and GM, New Products at Boxed in New York. It does not list a Dorm Room Fund role.",
+    "proof_urls": [
+      "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
+      "https://www.linkedin.com/in/talalalhammad"
+    ]
   },
   {
     "id": "dra_talia_goldberg",
@@ -5478,7 +6326,13 @@
     "firm_confidence": "likely",
     "firm_source_url": "https://www.linkedin.com/in/taylor-francis-4ba49640",
     "linkedin_url": "https://www.linkedin.com/in/taylor-francis-4ba49640",
-    "linkedin_confidence": "likely"
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20130906231556/http://www.dormroomfund.com/newyork",
+    "verification_note": "The stored profile lists Taylor Francis, Partner at Dorm Room Fund from January 2013 to January 2014, Princeton from 2010 to 2014, and Watershed. The public Watershed title is redacted, so the stored Co-Founder role is unchanged.",
+    "proof_urls": [
+      "https://web.archive.org/web/20130906231556/http://www.dormroomfund.com/newyork",
+      "https://www.linkedin.com/in/taylor-francis-4ba49640"
+    ]
   },
   {
     "id": "dra_tej_singh",
@@ -5732,7 +6586,14 @@
     "firm_confidence": "confirmed",
     "firm_source_url": "https://www.linkedin.com/in/vinai-rachakonda-a41927117",
     "linkedin_url": "https://www.linkedin.com/in/vinai-rachakonda-a41927117",
-    "linkedin_confidence": "likely"
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+    "location": "New York, New York",
+    "verification_note": "The stored profile lists Vinai Rachakonda, Managing Partner of Dorm Room Fund's HQ team from May 2019 to May 2020, a computer and information science BSE and a Wharton economics BS at Penn, and Co-Founder and CTO of Third Space in New York.",
+    "proof_urls": [
+      "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+      "https://www.linkedin.com/in/vinai-rachakonda-a41927117"
+    ]
   },
   {
     "id": "dra_vishal_dubey",
@@ -5825,7 +6686,14 @@
     "team_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://dormroomfund.com/our-team"
+    "firm_source_url": "https://dormroomfund.com/our-team",
+    "linkedin_url": "https://www.linkedin.com/in/willmanidis",
+    "linkedin_confidence": "likely",
+    "location": "New York, New York",
+    "verification_note": "Dorm Room Fund's alumni list names Will Manidis as founder of ScienceIO. The profile is titled Will M. and lists CEO of ScienceIO from January 2020 to January 2024, mathematics, computer science, and biology at Olin College, the GitHub username WillManidis, and New York. The current company on the profile is Veradigm, the acquirer, with no public title. Dorm Room Fund is not a role on the profile.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/willmanidis"
+    ]
   },
   {
     "id": "dra_will_nichols",
@@ -5860,7 +6728,19 @@
     "school_role": "student",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/yanikamagan",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+    "current_firm": "Ontra",
+    "current_role": "Senior Product Manager",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/yanikamagan",
+    "verification_note": "The public profile for Yanika Magan lists Investment Partner at Dorm Room Fund from December 2017 to May 2019 in San Francisco, a BA in political science and economics at UC Berkeley, and Senior Product Manager at Ontra.",
+    "proof_urls": [
+      "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+      "https://www.linkedin.com/in/yanikamagan"
+    ]
   },
   {
     "id": "dra_yewande_alade",
@@ -5922,7 +6802,17 @@
     "affiliation_status": "older_alumni",
     "year_start": 2019,
     "year_end": 2020,
-    "team_source_url": "https://dormroomfund.medium.com/move-in-day-meet-dorm-room-funds-new-partners-a0b5d3d29178"
+    "team_source_url": "https://dormroomfund.medium.com/move-in-day-meet-dorm-room-funds-new-partners-a0b5d3d29178",
+    "linkedin_url": "https://www.linkedin.com/in/zainkho",
+    "linkedin_confidence": "likely",
+    "current_firm": "Ramp",
+    "current_role": "Staff Product Designer",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/zainkho",
+    "verification_note": "The profile lists a BS in information science at Cornell and Staff Product Designer at Ramp. Other Zain Khoja profiles are a CPA and a Barclays vice president from Warwick. This profile does not list Dorm Room Fund.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/zainkho"
+    ]
   },
   {
     "id": "dra_zak_kukoff",
@@ -5935,7 +6825,20 @@
     "school_label": "New York University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2015
+    "year_start": 2015,
+    "linkedin_url": "https://www.linkedin.com/in/kukoff",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork",
+    "current_firm": "Lewis-Burke Associates",
+    "current_role": "Chair, Tech and Venture Practice",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/kukoff",
+    "location": "Washington, District of Columbia",
+    "verification_note": "The public profile for Zak Kukoff lists Managing Partner at Dorm Room Fund from January 2015 to January 2017 in New York, a BA in behavioral economics at NYU, and Chair of the Tech and Venture Practice at Lewis-Burke Associates in Washington, DC.",
+    "proof_urls": [
+      "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork",
+      "https://www.linkedin.com/in/kukoff"
+    ]
   },
   {
     "id": "dra_zakaria_gedi",
@@ -5948,7 +6851,19 @@
     "school_label": "Yale University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "linkedin_url": "https://www.linkedin.com/in/zakaria-gedi",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team",
+    "current_firm": "Yale Investments",
+    "current_role": "Analyst",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/zakaria-gedi",
+    "verification_note": "The public profile for Zakaria Gedi lists Investor at Dorm Room Fund from January 2020 to January 2022 in New York, a bachelor's in computer science and economics at Yale, and Analyst at Yale Investments.",
+    "proof_urls": [
+      "https://web.archive.org/web/20220523042425/https://www.dormroomfund.com/team",
+      "https://www.linkedin.com/in/zakaria-gedi"
+    ]
   },
   {
     "id": "dra_zann_ali",
@@ -5984,7 +6899,19 @@
     "school_role": "student",
     "affiliation_status": "older_alumni",
     "year_start": 2019,
-    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team"
+    "team_source_url": "https://web.archive.org/web/20190722054452/https://dormroomfund.com/team",
+    "linkedin_url": "https://www.linkedin.com/in/siyulumit",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+    "current_firm": "Faunalytics",
+    "current_role": "Board Member",
+    "firm_confidence": "confirmed",
+    "firm_source_url": "https://www.linkedin.com/in/siyulumit",
+    "verification_note": "The public profile titled Zoe Lu lists Managing Partner at Dorm Room Fund from February 2017 to January 2019 in Boston, a mechanical engineering and computer science degree at MIT, product management at Two Sigma, a Google software internship, and Board Member at Faunalytics.",
+    "proof_urls": [
+      "https://web.archive.org/web/20190411085837/https://dormroomfund.com/team",
+      "https://www.linkedin.com/in/siyulumit"
+    ]
   },
   {
     "id": "dra_zsika_phillip",
@@ -6000,10 +6927,20 @@
     "year_start": 2021,
     "year_end": 2022,
     "team_source_url": "https://dormroomfund.medium.com/meet-the-newest-drf-partners-cb172e31799d",
-    "current_role": "Founder",
-    "current_firm": "Astros",
+    "current_role": "Founder and CEO",
+    "current_firm": "SpotPay",
     "firm_type": "founder",
     "firm_confidence": "confirmed",
-    "firm_source_url": "https://www.geekwire.com/2023/we-asked-24-startups-in-the-new-techstars-seattle-class-about-how-ai-is-impacting-their-business/"
+    "firm_source_url": "https://www.linkedin.com/in/zsika",
+    "linkedin_url": "https://www.linkedin.com/in/zsika",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://thevcinternfromx.substack.com/p/the-tuesday-elite-top-15-stealth-500",
+    "location": "San Francisco Bay Area",
+    "verification_note": "A public Substack roundup links https://www.linkedin.com/in/zsika for Zsika Phillip-Baptiste, a Stanford MBA. GeekWire's Techstars Seattle piece says Astros founder Zsika Phillip was an investment partner at Dorm Room Fund and a former Google product manager. The profile now lists Founder and CEO at SpotPay in the San Francisco Bay Area.",
+    "proof_urls": [
+      "https://thevcinternfromx.substack.com/p/the-tuesday-elite-top-15-stealth-500",
+      "https://www.linkedin.com/in/zsika",
+      "https://www.geekwire.com/2023/we-asked-24-startups-in-the-new-techstars-seattle-class-about-how-ai-is-impacting-their-business/"
+    ]
   }
 ]
