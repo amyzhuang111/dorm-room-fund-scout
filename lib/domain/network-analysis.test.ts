@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import { buildNetworkAnalysis } from "./network-analysis";
-import { metroOf, perThousand, programsInText } from "./network-analysis-model";
+import { metroOf, perThousand } from "./network-analysis-model";
+import {
+  NATIONAL_PROGRAMS,
+  TOP_VC_ID,
+  investorFactIsTopVc,
+  nationalProgramTierRank,
+  programsInText,
+} from "./national-programs";
 
 assert.equal(metroOf("San Francisco, California")?.id, "sf");
 assert.equal(metroOf("San Fransisco, California")?.id, "sf");
@@ -21,22 +28,72 @@ assert.equal(metroOf("Cambridge"), null);
 assert.equal(metroOf(""), null);
 
 const both = programsInText("Free Ventures S2026; YC X2026").map((program) => program.id);
-assert.ok(both.includes("free_ventures"), both.join(","));
-assert.ok(both.includes("yc"), both.join(","));
+assert.deepEqual(both, ["yc"]);
 assert.equal(programsInText("Pearson Labs").some((program) => program.id === "pear"), false);
 assert.equal(programsInText("Neon").some((program) => program.id === "neo"), false);
-assert.deepEqual(
-  programsInText("Delta Fellowship cohort 2").map((program) => program.id),
-  ["delta_fellowship"]
-);
-assert.deepEqual(
-  programsInText("MIT delta v 2026").map((program) => program.id),
-  ["deltav"]
-);
+assert.equal(programsInText("VIP-X Spring 2022 cohort").length, 0);
+assert.equal(programsInText("MIT delta v 2026").length, 0);
+assert.equal(programsInText("Entrepreneurs @ Berkeley").length, 0);
+assert.deepEqual(programsInText("Delta Fellowship cohort 2").map((program) => program.id), ["human_capital"]);
+assert.equal(programsInText("Human Capital").length, 0);
+assert.equal(programsInText("Human Capital Fellowship Prize ($50k)").length, 0);
+assert.ok(programsInText("Human Capital Fellowship").some((program) => program.id === "human_capital"));
+assert.ok(programsInText("HC Fellowship").some((program) => program.id === "human_capital"));
 assert.ok(programsInText("Neo Scholars 2024 cohort").some((program) => program.id === "neo"));
 assert.ok(programsInText("Thiel Fellowship 2026").some((program) => program.id === "thiel"));
-assert.ok(programsInText("VIP-X Spring 2022 cohort").some((program) => program.id === "vipx"));
 assert.ok(programsInText("a16z speedrun SR007").some((program) => program.id === "speedrun"));
+assert.equal(programsInText("a16z speedrun SR007").some((program) => program.id === "top_vc"), false);
+assert.ok(programsInText("Accel Leaders").some((program) => program.id === "accel_scholars"));
+assert.ok(programsInText("Accel Leadership Program fellow").some((program) => program.id === "accel_scholars"));
+assert.equal(programsInText("Claremont Accelerator").length, 0);
+assert.ok(programsInText("Pear VC Garage").some((program) => program.id === "pear"));
+assert.equal(programsInText("backed by pear vc").some((program) => program.id === "pear"), false);
+assert.ok(programsInText("Founders, Inc.").some((program) => program.id === "founders_inc"));
+assert.ok(programsInText("Founders Inc Off Season").some((program) => program.id === "founders_inc"));
+assert.equal(programsInText("Founders include PhD candidates in the GRASP Lab").length, 0);
+assert.ok(programsInText("SPC Founder Fellowship").some((program) => program.id === "spc"));
+assert.ok(programsInText("South Park Commons").some((program) => program.id === "spc"));
+assert.ok(programsInText("HF0").some((program) => program.id === "hf0"));
+assert.ok(programsInText("Emergent Ventures").some((program) => program.id === "emergent"));
+assert.ok(programsInText("Z Fellow").some((program) => program.id === "z_fellows"));
+assert.ok(programsInText("Kleiner Perkins Engineering Fellow").some((program) => program.id === "kp_fellows"));
+assert.equal(programsInText("Kleiner Perkins").some((program) => program.id === "kp_fellows"), false);
+assert.ok(programsInText("1517 Fund").some((program) => program.id === "fund_1517"));
+assert.equal(programsInText("https://www.linkedin.com/in/felix-fan-055115173").length, 0);
+assert.ok(programsInText("Contrary venture partner").some((program) => program.id === "contrary"));
+assert.ok(programsInText("AGI House SF").some((program) => program.id === "agi_house"));
+assert.equal(programsInText("YC founder; page names Stanford University").some((program) => program.id === "yc"), true);
+assert.equal(programsInText("NYC").length, 0);
+
+assert.equal(investorFactIsTopVc("Andreessen Horowitz"), true);
+assert.equal(investorFactIsTopVc("Sequoia Capital"), true);
+assert.equal(investorFactIsTopVc("First Round Capital"), true);
+assert.equal(investorFactIsTopVc("Lux Capital"), true);
+assert.equal(investorFactIsTopVc("Founders Fund"), true);
+assert.equal(investorFactIsTopVc("Bessemer Venture Partners"), true);
+assert.equal(investorFactIsTopVc("General Catalyst"), true);
+assert.equal(investorFactIsTopVc("a16z Speedrun"), false);
+assert.equal(investorFactIsTopVc("Y Combinator"), false);
+assert.equal(investorFactIsTopVc("Thiel Fellowship"), false);
+assert.equal(investorFactIsTopVc("Kleiner Perkins"), false);
+assert.equal(investorFactIsTopVc("Accel"), true);
+assert.equal(investorFactIsTopVc("Accel Scholars"), false);
+assert.equal(investorFactIsTopVc("Pear"), true);
+assert.equal(investorFactIsTopVc("Pear Fellows"), false);
+assert.equal(investorFactIsTopVc("Pear VC"), true);
+assert.equal(investorFactIsTopVc("GV"), true);
+assert.equal(investorFactIsTopVc("NEA"), true);
+assert.equal(investorFactIsTopVc("Index Ventures"), true);
+assert.equal(investorFactIsTopVc("SV Angel"), true);
+assert.equal(investorFactIsTopVc("Berkeley SkyDeck"), false);
+
+assert.equal(NATIONAL_PROGRAMS.find((program) => program.id === "thiel")?.tier, "S+");
+assert.equal(NATIONAL_PROGRAMS.find((program) => program.id === "spc")?.tier, "S");
+assert.equal(NATIONAL_PROGRAMS.find((program) => program.id === "hf0")?.tier, "S");
+assert.equal(NATIONAL_PROGRAMS.find((program) => program.id === "emergent")?.tier, "S");
+assert.equal(NATIONAL_PROGRAMS.find((program) => program.id === "z_fellows")?.tier, "A");
+assert.ok(nationalProgramTierRank("S+") < nationalProgramTierRank("S"));
+assert.ok(nationalProgramTierRank("S") < nationalProgramTierRank("A"));
 assert.equal(perThousand(10, 1000), 10);
 assert.equal(perThousand(373, 10650), 35);
 
@@ -59,12 +116,30 @@ for (const row of analysis.metros.rows) {
 }
 
 assert.ok(analysis.programs.rows.length >= 5);
-assert.ok(analysis.programs.rows.some((row) => row.id === "yc"));
 assert.equal(analysis.programs.columns.length, 8);
+assert.equal(analysis.programs.rows.some((row) => row.id === "vipx" || row.id === "penn_labs" || row.id === "eb"), false);
+const mustShow = ["thiel", "neo", "accel_scholars", "yc", "speedrun", "human_capital", "z_fellows", TOP_VC_ID];
+for (const id of mustShow) {
+  assert.ok(analysis.programs.rows.some((row) => row.id === id), `missing program row ${id}`);
+}
+assert.equal(analysis.programs.rows.at(-1)?.id, TOP_VC_ID);
+assert.equal(analysis.programs.rows.at(-1)?.tier ?? null, null);
+let previousRank = -1;
+let previousCount = Number.POSITIVE_INFINITY;
 for (const row of analysis.programs.rows) {
-  assert.ok(row.cells.some((cell) => cell.count > 0), `${row.label} has no campus cell`);
+  assert.equal(row.cells.length, analysis.programs.columns.length);
+  assert.ok(row.all.count > 0, `${row.label} has no founders`);
   assert.ok(row.all.count >= Math.max(...row.cells.map((cell) => cell.count)));
-  assert.ok(row.all.count > 0);
+  if (row.id === TOP_VC_ID) continue;
+  const configured = NATIONAL_PROGRAMS.find((program) => program.id === row.id);
+  assert.ok(configured, `${row.id} is not a national program`);
+  assert.equal(row.tier, configured?.tier);
+  assert.equal(row.label, configured?.label);
+  const rank = nationalProgramTierRank(row.tier);
+  assert.ok(rank > previousRank || (rank === previousRank && row.all.count <= previousCount), `${row.label} out of tier order`);
+  if (rank !== previousRank) previousCount = Number.POSITIVE_INFINITY;
+  previousRank = rank;
+  previousCount = row.all.count;
 }
 
 assert.ok(analysis.density.rows.length >= 5);

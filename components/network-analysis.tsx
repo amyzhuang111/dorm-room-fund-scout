@@ -79,7 +79,7 @@ function Heatmap({ table }: { table: HeatmapTable }) {
             <table className="w-full border-separate border-spacing-1 text-xs">
               <thead>
                 <tr>
-                  <th className="sticky left-0 z-10 min-w-[8.5rem] bg-[#f6f5f8] px-2 py-2 text-left text-[11px] font-semibold text-muted">{table.rowHeader}</th>
+                  <th className={`sticky left-0 z-10 bg-[#f6f5f8] px-2 py-2 text-left text-[11px] font-semibold text-muted ${table.id === "programs" ? "min-w-[16rem]" : "min-w-[8.5rem]"}`}>{table.rowHeader}</th>
                   {table.columns.map((column) => (
                     <th key={column.id} className="min-w-[4.25rem] bg-[#f6f5f8] px-1 py-2 text-center text-[11px] font-semibold leading-tight text-muted">
                       {column.label}
@@ -92,16 +92,19 @@ function Heatmap({ table }: { table: HeatmapTable }) {
                 {table.rows.map((row) => (
                   <tr key={row.id}>
                     <th className="sticky left-0 z-10 bg-white px-2 py-1 text-left text-xs font-medium text-foreground" scope="row">
-                      <RowButton
-                        label={row.label}
-                        count={row.all.count}
-                        pressed={active === `${row.id}:all`}
-                        onClick={() => {
-                          if (row.all.count === 0) return;
-                          setActive(`${row.id}:all`);
-                          pinMap(`${table.title}: ${row.label}`, row.all.ids);
-                        }}
-                      />
+                      <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                        <RowButton
+                          label={row.label}
+                          count={row.all.count}
+                          pressed={active === `${row.id}:all`}
+                          onClick={() => {
+                            if (row.all.count === 0) return;
+                            setActive(`${row.id}:all`);
+                            pinMap(`${table.title}: ${row.label}`, row.all.ids);
+                          }}
+                        />
+                        {row.tier ? <ProgramTierChip tier={row.tier} /> : null}
+                      </span>
                     </th>
                     {row.cells.map((cell, index) => {
                       const column = table.columns[index];
@@ -309,6 +312,24 @@ function RateCell({
     >
       {text}
     </button>
+  );
+}
+
+const PROGRAM_TIER_CLASS: Record<string, string> = {
+  "S+": "bg-accent text-accent-foreground border-accent",
+  S: "bg-accent text-accent-foreground border-accent",
+  A: "bg-ok-bg text-ok border-ok/20",
+  B: "bg-warn-bg text-warn border-warn/20",
+};
+
+function ProgramTierChip({ tier }: { tier: string }) {
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center rounded-full border px-1.5 py-0.5 text-[10px] font-semibold leading-none ${PROGRAM_TIER_CLASS[tier] ?? "bg-surface-2 text-muted border-border-c"}`}
+      title={`Scouting tier ${tier}`}
+    >
+      {tier}
+    </span>
   );
 }
 
