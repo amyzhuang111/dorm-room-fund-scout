@@ -84,6 +84,9 @@ CREATE TABLE IF NOT EXISTS people (
   left_school INTEGER NOT NULL DEFAULT 0, -- bio says dropout or leave; enrollment_status stays evidence-only
   founder_status TEXT,          -- founder | potential; null when the person has not been classified
   potential_signal TEXT,        -- why a potential founder is on the list; empty for founders
+  verification_status TEXT,     -- confirmed | partial | unverified
+  last_verified_at TEXT,        -- YYYY-MM-DD of the last public-source check
+  verification_note TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -113,6 +116,9 @@ CREATE TABLE IF NOT EXISTS projects (
   is_investable_candidate INTEGER NOT NULL DEFAULT 1, -- 0 for e.g. a builder org's own internal tools (still valuable as ability-to-build evidence, but not itself something to screen/score as an investment)
   signal_tier TEXT,             -- S | A | B | C | D from the founder-signal tier list; null when no rule applies
   signal_tier_basis TEXT,
+  verification_status TEXT,     -- confirmed | partial | unverified
+  last_verified_at TEXT,        -- YYYY-MM-DD of the last public-source check
+  verification_note TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 );

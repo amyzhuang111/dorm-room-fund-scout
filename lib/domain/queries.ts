@@ -177,6 +177,9 @@ export interface CandidateSummary {
   enrollmentBoost: number;
   /** Playbook founder-signal tier. Null when no rule applies. */
   signalTier: string | null;
+  verificationStatus: string | null;
+  lastVerifiedAt: string | null;
+  verificationNote: string | null;
   signalTierBasis: string | null;
 }
 
@@ -461,8 +464,8 @@ function buildAllCandidates(): CandidateSummary[] {
   const unverified = unverifiedLinkedInByPerson(db);
   const profileClaims = profileClaimsByPerson(db);
   const projects = db
-    .prepare(`SELECT id, name, sector, description, website_url, primary_link, primary_link_kind, is_portfolio_reference, signal_tier, signal_tier_basis FROM projects WHERE kind='company' AND is_investable_candidate=1 ORDER BY name`)
-    .all() as { id: string; name: string; sector: string | null; description: string | null; website_url: string | null; primary_link: string | null; primary_link_kind: string | null; is_portfolio_reference: number; signal_tier: string | null; signal_tier_basis: string | null }[];
+    .prepare(`SELECT id, name, sector, description, website_url, primary_link, primary_link_kind, is_portfolio_reference, signal_tier, signal_tier_basis, verification_status, last_verified_at, verification_note FROM projects WHERE kind='company' AND is_investable_candidate=1 ORDER BY name`)
+    .all() as { id: string; name: string; sector: string | null; description: string | null; website_url: string | null; primary_link: string | null; primary_link_kind: string | null; is_portfolio_reference: number; signal_tier: string | null; signal_tier_basis: string | null; verification_status: string | null; last_verified_at: string | null; verification_note: string | null }[];
 
   const schoolByPerson = new Map<string, string>();
   for (const row of db
@@ -672,6 +675,9 @@ function buildAllCandidates(): CandidateSummary[] {
       enrollmentBoost: founderLinks.reduce((best, founder) => Math.max(best, enrollmentBoost(founder.enrollmentStatus)), 0),
       signalTier: p.signal_tier,
       signalTierBasis: p.signal_tier_basis,
+      verificationStatus: p.verification_status,
+      lastVerifiedAt: p.last_verified_at,
+      verificationNote: p.verification_note,
     });
   }
   return out;
@@ -1046,6 +1052,9 @@ export interface FounderRow {
   leftSchool: boolean;
   enrollmentEvidence: string | null;
   enrollmentSourceUrl: string | null;
+  verificationStatus: string | null;
+  lastVerifiedAt: string | null;
+  verificationNote: string | null;
   websiteUrl: string | null; // a personal site found on a source page, stored as a `site:` alias
   sectorTags: string[];
   sourceIds: string[];
@@ -1139,7 +1148,9 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
               pe.enrollment_evidence as enrollment_evidence, pe.enrollment_source_url as enrollment_source_url,
               pe.left_school as left_school,
               pe.founder_status as founder_status, pe.potential_signal as potential_signal,
-              pe.signal_tier as signal_tier, pe.signal_tier_basis as signal_tier_basis
+              pe.signal_tier as signal_tier, pe.signal_tier_basis as signal_tier_basis,
+              pe.verification_status as verification_status, pe.last_verified_at as last_verified_at,
+              pe.verification_note as verification_note
        FROM people pe
        LEFT JOIN affiliations a ON a.person_id = pe.id
        LEFT JOIN universities u ON u.id = a.university_id
@@ -1162,6 +1173,9 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       potential_signal: string | null;
       signal_tier: string | null;
       signal_tier_basis: string | null;
+      verification_status: string | null;
+      last_verified_at: string | null;
+      verification_note: string | null;
     }[];
 
   const unverified = unverifiedLinkedInByPerson(db);
@@ -1209,6 +1223,9 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
       signalTierBasis: r.signal_tier_basis,
       founderStatus: r.founder_status,
       potentialSignal: r.potential_signal,
+      verificationStatus: r.verification_status,
+      lastVerifiedAt: r.last_verified_at,
+      verificationNote: r.verification_note,
       signalEvidence: null,
       websiteUrl,
       sectorTags: [],

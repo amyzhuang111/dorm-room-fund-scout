@@ -181,6 +181,12 @@ function migrate(db: Database.Database) {
   addColumnIfMissing("people", "left_school", "left_school INTEGER NOT NULL DEFAULT 0");
   addColumnIfMissing("people", "founder_status", "founder_status TEXT");
   addColumnIfMissing("people", "potential_signal", "potential_signal TEXT");
+  addColumnIfMissing("people", "verification_status", "verification_status TEXT");
+  addColumnIfMissing("people", "last_verified_at", "last_verified_at TEXT");
+  addColumnIfMissing("people", "verification_note", "verification_note TEXT");
+  addColumnIfMissing("projects", "verification_status", "verification_status TEXT");
+  addColumnIfMissing("projects", "last_verified_at", "last_verified_at TEXT");
+  addColumnIfMissing("projects", "verification_note", "verification_note TEXT");
   db.exec(`CREATE TABLE IF NOT EXISTS entity_redirects (
     old_id TEXT PRIMARY KEY,
     entity_type TEXT NOT NULL,
