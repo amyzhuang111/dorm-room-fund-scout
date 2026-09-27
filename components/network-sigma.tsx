@@ -6,7 +6,7 @@ import Sigma from "sigma";
 import { NodeCircleProgram } from "sigma/rendering";
 import type { MapEdgeType, MapGraph, MapNodeType } from "@/lib/domain/network-map";
 import { NodeDiamondProgram, NodeHexProgram, NodeSquareLightProgram, NodeTriangleProgram, drawHaloLabel, drawLightHover } from "./network-shapes";
-import { DIM_NODE, EDGE_CROSS, EDGE_DIM, EDGE_GREY, EDGE_HOVER, EDGE_HOVER_PX, EDGE_PX, NODE_SHAPE, campusKey, crossesCampus, labelMinSize, nodeColor, screenSize } from "./network-style";
+import { DIM_NODE, EDGE_CROSS, EDGE_DIM, EDGE_HOVER, EDGE_HOVER_PX, EDGE_PX, NODE_SHAPE, campusKey, campusSwatches, crossesCampus, edgeTint, labelMinSize, nodeColor, screenSize } from "./network-style";
 
 export interface NetworkSigmaHandle {
   zoomIn: () => void;
@@ -109,14 +109,16 @@ export function NetworkSigma({
         .slice(0, 15)
         .map((node) => node.id),
     );
+    const colors = new Map(campusSwatches(graph.nodes).map((swatch) => [swatch.id, swatch.color]));
     const campusOf = new Map(graph.nodes.map((node) => [node.id, campusKey(node)]));
+    const primaryCampus = new Map(graph.nodes.map((node) => [node.id, node.campus]));
     for (const node of graph.nodes) {
       g.addNode(node.id, {
         x: node.x,
         y: node.y,
         size: screenSize(node),
         label: node.label,
-        color: nodeColor(node),
+        color: nodeColor(node, colors),
         type: NODE_SHAPE[node.type],
         kind: node.type,
         anchor: node.anchor === true,
@@ -130,7 +132,7 @@ export function NetworkSigma({
       const cross = crossesCampus(campusOf.get(edge.source) ?? "", campusOf.get(edge.target) ?? "");
       g.addEdgeWithKey(key, edge.source, edge.target, {
         kind: edge.type,
-        color: cross ? EDGE_CROSS : EDGE_GREY,
+        color: cross ? EDGE_CROSS : edgeTint(primaryCampus.get(edge.source) ?? null, colors),
         size: EDGE_PX,
       });
       link(edge.source, edge.target);

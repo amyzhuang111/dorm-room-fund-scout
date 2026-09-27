@@ -8,7 +8,7 @@ import type { MapEdgeType, MapGraph, MapNode, MapNodeType } from "@/lib/domain/n
 import type { NetworkFocus } from "@/lib/domain/network-focus";
 import { buildPersonLinkedInLookup } from "@/lib/domain/map-linkedin";
 import type { NetworkSigmaHandle } from "./network-sigma";
-import { NODE_FILL } from "./network-style";
+import { NODE_FILL, campusSwatches } from "./network-style";
 import { useAskHighlight } from "./ask-highlight";
 import { LinkedInIconButton, LinkedInOpenButton, PersonLinkButton, ProfileIconLinks } from "./person-link";
 
@@ -239,7 +239,14 @@ export function NetworkMapApp() {
       : null;
   const detailOpen = activeId != null && selectedNode != null;
 
-  const campusNodes = graph?.nodes.filter((node) => node.type === "campus") ?? [];
+  const swatches = useMemo(() => (graph ? campusSwatches(graph.nodes) : []), [graph]);
+  const soloCampus = filters && swatches.length > 0 && filters.campuses.length === 1 ? filters.campuses[0] : null;
+
+  const focusCampus = (id: string) => {
+    if (!filters || !graph) return;
+    const all = graph.nodes.filter((node) => node.type === "campus" && node.campus).map((node) => node.campus as string);
+    setFilters({ ...filters, campuses: soloCampus === id ? all : [id] });
+  };
 
   return (
     <div className="fixed inset-x-0 top-14 bottom-0 z-20 bg-white text-black">
@@ -405,12 +412,14 @@ export function NetworkMapApp() {
               ))}
             </FilterGroup>
             <FilterGroup title="Campus">
-              {campusNodes.map((node) => (
+              {swatches.map((swatch) => (
                 <Check
-                  key={node.id}
-                  label={node.label}
-                  checked={filters.campuses.includes(node.campus ?? "")}
-                  onChange={() => setFilters({ ...filters, campuses: toggle(filters.campuses, node.campus ?? "") })}
+                  key={swatch.id}
+                  label={swatch.label}
+                  color={swatch.color}
+                  shape="circle"
+                  checked={filters.campuses.includes(swatch.id)}
+                  onChange={() => setFilters({ ...filters, campuses: toggle(filters.campuses, swatch.id) })}
                 />
               ))}
             </FilterGroup>
@@ -502,20 +511,40 @@ export function NetworkMapApp() {
         </ZoomButton>
       </div>
 
-      <div className="pointer-events-none absolute bottom-3 left-3 z-20 max-w-[min(40rem,calc(100%-8rem))] rounded border border-neutral-200 bg-white/95 px-2 py-1 text-[11px] text-black">
-        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0.5">
-          <LegendItem shape="circle" color={NODE_FILL.person} label="Person" />
-          <LegendItem shape="square" color={NODE_FILL.startup} label="Startup" />
-          <LegendItem shape="diamond" color={NODE_FILL.investor} label="Investor" />
-          <LegendItem shape="circle" color={NODE_FILL.campus} label="Campus" />
-          <LegendItem shape="hex" color={NODE_FILL.program} label="Club" />
-          <LegendItem shape="triangle" color={NODE_FILL.organization} label="Organization" />
-          <span className="text-neutral-600">Color follows campus</span>
+      <div
+        className="absolute bottom-3 z-20 w-36 rounded border border-neutral-200 bg-white/95 text-[11px] text-black shadow-sm"
+        style={{ left: filtersOpen ? "18.2rem" : "0.75rem" }}
+      >
+        <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 border-b border-neutral-200 px-1.5 py-1 text-neutral-700">
+          <LegendItem shape="circle" color={NODE_FILL.person} label="" title="Person" />
+          <LegendItem shape="square" color={NODE_FILL.startup} label="" title="Startup" />
+          <LegendItem shape="diamond" color={NODE_FILL.investor} label="" title="Investor" />
+          <LegendItem shape="hex" color={NODE_FILL.program} label="" title="Club" />
+          <LegendItem shape="triangle" color={NODE_FILL.organization} label="" title="Organization" />
+          <span className="sr-only">Circle person, square startup, diamond investor, hex club, triangle organization. Color is campus.</span>
           <span className="inline-flex items-center gap-1 text-neutral-600">
             <span className="inline-block h-px w-3.5 bg-[#b06018]" />
             Cross-campus
           </span>
         </div>
+        <ul className="max-h-36 overflow-y-auto py-0.5" aria-label="Campuses">
+          {swatches.map((swatch) => {
+            const on = soloCampus === swatch.id;
+            return (
+              <li key={swatch.id}>
+                <button
+                  type="button"
+                  aria-pressed={on}
+                  className={`flex w-full items-center gap-1.5 px-1.5 py-0.5 text-left hover:bg-neutral-100 ${on ? "bg-neutral-100 font-semibold" : ""}`}
+                  onClick={() => focusCampus(swatch.id)}
+                >
+                  <span className="inline-block h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: swatch.color }} />
+                  <span className="truncate">{swatch.label}</span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
       </div>
 
       {detailOpen && selectedNode && (
@@ -752,9 +781,9 @@ function ZoomButton({ label, onClick, children }: { label: string; onClick: () =
   );
 }
 
-function LegendItem({ shape, color, label }: { shape: "circle" | "square" | "diamond" | "hex" | "triangle"; color: string; label: string }) {
+function LegendItem({ shape, color, label, title }: { shape: "circle" | "square" | "diamond" | "hex" | "triangle"; color: string; label: string; title?: string }) {
   return (
-    <span className="inline-flex items-center gap-1">
+    <span className="inline-flex items-center gap-1" title={title}>
       <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
         {shape === "circle" && <circle cx="6" cy="6" r="4.5" fill={color} />}
         {shape === "square" && <rect x="1.5" y="1.5" width="9" height="9" rx="1" fill={color} />}
