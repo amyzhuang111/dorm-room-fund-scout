@@ -5,7 +5,7 @@
 // toward 1.0 with a Gamma prior whose mean is 1.
 
 export const HIT_RATE_SENTENCE =
-  "Hit rate divides this campus's share of founders with a follow-on round, funding past pre-seed, or a YC, Thiel, or Speedrun spot by its share of tracked founders in the same class year, and shrinks toward 1.0 when few founders are on record.";
+  "Hit rate divides this campus's share of founders with a follow-on round, funding past pre-seed, or a YC, Thiel, or Speedrun spot by its share of tracked founders in the same class year, or by its share of all tracked founders when no class year is on record, and shrinks toward 1.0 when few founders are on record.";
 
 export const MIN_FOUNDERS_FOR_HIT_RATE = 8;
 /** A wider 95% interval is too loose to rank. Those campuses stay on the campus page, greyed out. */
@@ -82,17 +82,25 @@ export function scoreHitRates(
   options?: { minFounders?: number; priorStrength?: number }
 ): CampusHitRate[] {
   const minFounders = options?.minFounders ?? MIN_FOUNDERS_FOR_HIT_RATE;
+  // A missing class year is not a cohort. Those founders use the overall
+  // good-outcome rate. Grouping them together was comparing new campus scans
+  // with older funded founders who simply have no graduation year on record.
+  let totalGood = 0;
   const strata = new Map<string, { good: number; n: number }>();
   for (const row of observations) {
+    if (row.good) totalGood += 1;
+    if (row.year == null) continue;
     const key = stratumKey(row.year);
     const stratum = strata.get(key) ?? { good: 0, n: 0 };
     stratum.n += 1;
     if (row.good) stratum.good += 1;
     strata.set(key, stratum);
   }
+  const globalRate = observations.length > 0 ? totalGood / observations.length : 0;
   const rateOf = (year: number | null) => {
+    if (year == null) return globalRate;
     const stratum = strata.get(stratumKey(year));
-    if (!stratum || stratum.n === 0) return 0;
+    if (!stratum || stratum.n === 0) return globalRate;
     return stratum.good / stratum.n;
   };
 

@@ -354,7 +354,7 @@ function HitRates({ table }: { table: HitRateTable }) {
                         className="inline-flex h-7 min-w-[2.5rem] items-center justify-end rounded-md px-2 text-xs font-medium tabular-nums"
                         style={paintCount(row.hitRate, maxRate)}
                       >
-                        {formatHitRate(row.hitRate)}
+                        {formatHitRate(row.hitRate)}×
                       </span>
                     </td>
                     <td className="px-2 py-1 text-right tabular-nums text-foreground">

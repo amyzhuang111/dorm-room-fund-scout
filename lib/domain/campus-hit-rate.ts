@@ -233,6 +233,6 @@ export function buildHitRateTable(): HitRateTable {
     subtitle: HIT_RATE_SENTENCE,
     sentence: HIT_RATE_SENTENCE,
     rows,
-    caption: `Compared with founders in the same class year when a graduation year is on record. The interval is a rough 95% range after shrinkage toward 1.0. ${hidden === 0 ? "Every campus with a tracked founder is shown." : `${hidden} ${hidden === 1 ? "campus is" : "campuses are"} left off this ranking because they have fewer than 8 tracked founders or a 95% interval wider than 1.25.`}`,
+    caption: `The hit rate is a multiple of the comparison group, not the share of founders with a good outcome. Founders with a graduation year are compared with that class year. Founders without one are compared with all tracked founders. The interval is a rough 95% range after shrinkage toward 1.0. ${hidden === 0 ? "Every campus with a tracked founder is shown." : `${hidden} ${hidden === 1 ? "campus is" : "campuses are"} left off this ranking because they have fewer than 8 tracked founders or a 95% interval wider than 1.25.`}`,
   };
 }

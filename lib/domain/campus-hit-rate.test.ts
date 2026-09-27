@@ -62,6 +62,17 @@ assert.ok(vague);
 assert.equal(vague.founders, 8);
 assert.equal(vague.reliable, false, "eight founders with a very wide interval stay off the ranking");
 
+const dated: HitObservation[] = Array.from({ length: 20 }, (_, i) => ({ id: `dated_${i}`, year: 2024, good: i < 4, campuses: ["univ_pool"] }));
+const undatedFunded: HitObservation[] = Array.from({ length: 10 }, (_, i) => ({ id: `funded_${i}`, year: null, good: true, campuses: ["univ_funded"] }));
+const undatedFocus: HitObservation[] = Array.from({ length: 10 }, (_, i) => ({ id: `focus_unknown_${i}`, year: null, good: i < 1, campuses: ["univ_focus_unknown"] }));
+const mixed = scoreHitRates([...dated, ...undatedFunded, ...undatedFocus], { priorStrength: 8, minFounders: 8 });
+const focusUnknown = mixed.find((row) => row.universityId === "univ_focus_unknown");
+assert.ok(focusUnknown);
+const globalRate = 15 / 40;
+const undatedExpected = 10 * globalRate;
+assert.ok(Math.abs(focusUnknown.hitRate - (1 + 8) / (undatedExpected + 8)) < 1e-9, `${focusUnknown.hitRate}`);
+assert.ok(focusUnknown.hitRate < 1, "an undated campus with one good outcome is below the overall rate");
+
 assert.ok(!HIT_RATE_SENTENCE.toLowerCase().includes("unicorn"));
 assert.equal((HIT_RATE_SENTENCE.match(/[.!?](?=\s|$)/g) ?? []).length, 1);
 

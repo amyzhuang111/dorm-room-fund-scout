@@ -45,9 +45,9 @@ export function CampusBenchmarks({ pitchbook, hitRate }: { pitchbook: PitchbookC
           <h3 className="text-xs font-semibold text-foreground">Campus hit rate</h3>
           <p className="mt-1 text-[13px] font-medium leading-snug text-foreground">{HIT_RATE_SENTENCE}</p>
           <p className={`mt-1 text-sm tabular-nums ${hitRate.reliable ? "text-foreground" : "text-muted"}`}>
-            {formatHitRate(hitRate.hitRate)}{" "}
+            {formatHitRate(hitRate.hitRate)}× the comparison group{" "}
             <span className="text-xs text-muted">
-              ({formatHitRate(hitRate.low)}–{formatHitRate(hitRate.high)}) · {hitRate.good.toLocaleString()} of {hitRate.founders.toLocaleString()} tracked founders
+              ({formatHitRate(hitRate.low)}–{formatHitRate(hitRate.high)}) · {hitRate.good.toLocaleString()} of {hitRate.founders.toLocaleString()} tracked founders had a good outcome
             </span>
           </p>
           {!hitRate.reliable && (
