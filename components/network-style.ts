@@ -433,7 +433,7 @@ const ANCHOR_OFFSETS: LabelOffset[] = [
   { dx: -14, dy: -8 },
 ];
 
-/** Extra room so two neighboring campus names can sit on opposite sides of their discs. */
+/** Extra room so two neighboring campus names, including Queen's and Cambridge, can sit on opposite sides. */
 const REQUIRED_OFFSETS: LabelOffset[] = [
   ...ANCHOR_OFFSETS,
   { dx: 0, dy: -24 },
@@ -444,6 +444,14 @@ const REQUIRED_OFFSETS: LabelOffset[] = [
   { dx: -24, dy: -16 },
   { dx: 24, dy: 16 },
   { dx: -24, dy: 16 },
+  { dx: 42, dy: 0 },
+  { dx: -42, dy: 0 },
+  { dx: 0, dy: -40 },
+  { dx: 0, dy: 36 },
+  { dx: 36, dy: -22 },
+  { dx: -36, dy: -22 },
+  { dx: 36, dy: 20 },
+  { dx: -36, dy: 20 },
 ];
 
 /** Fitted-view guarantee. Dartmouth is the smallest of the major discs that must keep a name. */
@@ -529,7 +537,7 @@ export function selectVisibleLabels(
   const campusAnchors: { x: number; y: number; r: number }[] = [];
   for (const label of ranked) {
     const slots = label.required ? REQUIRED_OFFSETS : label.anchor ? ANCHOR_OFFSETS : [{ dx: 0, dy: 0 }];
-    const limit = label.required ? 32 : 22;
+    const limit = label.required ? 48 : 22;
     let chosen: { offset: LabelOffset; box: LabelBox } | null = null;
     let closest: { offset: LabelOffset; box: LabelBox; score: number } | null = null;
     for (const offset of slots) {
