@@ -1744,7 +1744,7 @@ function regionClusterCenters(bodies: Map<string, { x: number; y: number; r: num
   // leaves the dense cores as islands. Use the inner part of the blob so the
   // colored clouds meet, and let the sparse outer campuses touch their neighbors.
   return packRegionCenters(
-    [...bodies.entries()].map(([id, body]) => ({ id, r: Math.max(18, body.r * 0.4) })),
+    [...bodies.entries()].map(([id, body]) => ({ id, r: Math.max(16, body.r * 0.28) })),
     (id) => CLUSTER_ANGLE[id] ?? 0,
     REGION_GAP,
   );

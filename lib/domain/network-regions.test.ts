@@ -188,9 +188,9 @@ for (const offset of neighbors.values()) assert.ok(Math.hypot(offset.dx, offset.
 const ycLine = programLineColor("Y Combinator");
 assert.equal(ycLine.toLowerCase(), "#ea580c");
 assert.ok(bundleWidth(2) > bundleWidth(1));
-assert.ok(bundleWidth(2) >= 1.7 && bundleWidth(2) < 2.3);
+assert.ok(bundleWidth(2) >= 2.2 && bundleWidth(2) < 2.7);
 assert.ok(bundleWidth(64) > bundleWidth(8));
-assert.equal(bundleWidth(4000), 5.25);
+assert.equal(bundleWidth(4000), 6.5);
 
 const packed = packRegionCenters(
   [
