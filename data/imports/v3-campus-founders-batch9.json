@@ -1,0 +1,2517 @@
+{
+  "retrievedAt": "2026-09-27T23:10:00.000Z",
+  "companies": [
+    {
+      "name": "AgPilot",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists AgPilot in the 2025-26 student startup cohort: Andrew James '26. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Andrew James",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Andrew James as a student founder of AgPilot and prints class year '26.",
+          "excerpt": "Cornell eLab lists Andrew James '26 on AgPilot in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Cornell eLab lists Andrew James '26 on AgPilot in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists AgPilot in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that AgPilot has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Airhouse",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists Airhouse in the 2025-26 student startup cohort: Boris Bialer '26. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Boris Bialer",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Boris Bialer as a student founder of Airhouse and prints class year '26.",
+          "excerpt": "Cornell eLab lists Boris Bialer '26 on Airhouse in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Cornell eLab lists Boris Bialer '26 on Airhouse in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists Airhouse in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that Airhouse has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Balkan Sauce",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists Balkan Sauce in the 2025-26 student startup cohort: Mohammad Alrahmah '27. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Mohammad Alrahmah",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Mohammad Alrahmah as a student founder of Balkan Sauce and prints class year '27.",
+          "excerpt": "Cornell eLab lists Mohammad Alrahmah '27 on Balkan Sauce in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Cornell eLab lists Mohammad Alrahmah '27 on Balkan Sauce in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists Balkan Sauce in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that Balkan Sauce has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Binary Holographics Corporations",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists Binary Holographics Corporations in the 2025-26 student startup cohort: HP Park '28. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "HP Park",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names HP Park as a student founder of Binary Holographics Corporations and prints class year '28.",
+          "excerpt": "Cornell eLab lists HP Park '28 on Binary Holographics Corporations in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Cornell eLab lists HP Park '28 on Binary Holographics Corporations in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists Binary Holographics Corporations in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that Binary Holographics Corporations has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Clique",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists Clique in the 2025-26 student startup cohort: Pragun Sharma '28. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Pragun Sharma",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Pragun Sharma as a student founder of Clique and prints class year '28.",
+          "excerpt": "Cornell eLab lists Pragun Sharma '28 on Clique in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Cornell eLab lists Pragun Sharma '28 on Clique in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists Clique in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that Clique has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Eduni",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists Eduni in the 2025-26 student startup cohort: Noah Wilson '26, Jasper Tripp '27. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Noah Wilson",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Noah Wilson as a student founder of Eduni and prints class year '26.",
+          "excerpt": "Cornell eLab lists Noah Wilson '26 on Eduni in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Cornell eLab lists Noah Wilson '26 on Eduni in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        },
+        {
+          "name": "Jasper Tripp",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Jasper Tripp as a student founder of Eduni and prints class year '27.",
+          "excerpt": "Cornell eLab lists Jasper Tripp '27 on Eduni in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Cornell eLab lists Jasper Tripp '27 on Eduni in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists Eduni in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that Eduni has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "FYBRE",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists FYBRE in the 2025-26 student startup cohort: Bren Bodin '26. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Bren Bodin",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Bren Bodin as a student founder of FYBRE and prints class year '26.",
+          "excerpt": "Cornell eLab lists Bren Bodin '26 on FYBRE in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Cornell eLab lists Bren Bodin '26 on FYBRE in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists FYBRE in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that FYBRE has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "GrannyGains",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists GrannyGains in the 2025-26 student startup cohort: Matthew Kahn '26. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Matthew Kahn",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Matthew Kahn as a student founder of GrannyGains and prints class year '26.",
+          "excerpt": "Cornell eLab lists Matthew Kahn '26 on GrannyGains in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Cornell eLab lists Matthew Kahn '26 on GrannyGains in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists GrannyGains in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that GrannyGains has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "GymPoint",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists GymPoint in the 2025-26 student startup cohort: Ezana Kavuma '28. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Ezana Kavuma",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Ezana Kavuma as a student founder of GymPoint and prints class year '28.",
+          "excerpt": "Cornell eLab lists Ezana Kavuma '28 on GymPoint in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Cornell eLab lists Ezana Kavuma '28 on GymPoint in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists GymPoint in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that GymPoint has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "HippoFlo",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists HippoFlo in the 2025-26 student startup cohort: Nancy Chen '27. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Nancy Chen",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Nancy Chen as a student founder of HippoFlo and prints class year '27.",
+          "excerpt": "Cornell eLab lists Nancy Chen '27 on HippoFlo in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Cornell eLab lists Nancy Chen '27 on HippoFlo in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists HippoFlo in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that HippoFlo has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Novl",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists Novl in the 2025-26 student startup cohort: Ryaan Aqid '27. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Ryaan Aqid",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Ryaan Aqid as a student founder of Novl and prints class year '27.",
+          "excerpt": "Cornell eLab lists Ryaan Aqid '27 on Novl in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Cornell eLab lists Ryaan Aqid '27 on Novl in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists Novl in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that Novl has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Paygent",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists Paygent in the 2025-26 student startup cohort: Ava Poole '27. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Ava Poole",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Ava Poole as a student founder of Paygent and prints class year '27.",
+          "excerpt": "Cornell eLab lists Ava Poole '27 on Paygent in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Cornell eLab lists Ava Poole '27 on Paygent in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists Paygent in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that Paygent has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Physis",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists Physis in the 2025-26 student startup cohort: Elissa Benham '26. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Elissa Benham",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Elissa Benham as a student founder of Physis and prints class year '26.",
+          "excerpt": "Cornell eLab lists Elissa Benham '26 on Physis in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Cornell eLab lists Elissa Benham '26 on Physis in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists Physis in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that Physis has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "PortNexus AI",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists PortNexus AI in the 2025-26 student startup cohort: Zijian Xu '26, Xibei Xie '26. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Zijian Xu",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Zijian Xu as a student founder of PortNexus AI and prints class year '26.",
+          "excerpt": "Cornell eLab lists Zijian Xu '26 on PortNexus AI in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Cornell eLab lists Zijian Xu '26 on PortNexus AI in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        },
+        {
+          "name": "Xibei Xie",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Xibei Xie as a student founder of PortNexus AI and prints class year '26.",
+          "excerpt": "Cornell eLab lists Xibei Xie '26 on PortNexus AI in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Cornell eLab lists Xibei Xie '26 on PortNexus AI in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists PortNexus AI in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that PortNexus AI has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Power Crunch",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists Power Crunch in the 2025-26 student startup cohort: Waritsara Khongkomolsakul '27. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Waritsara Khongkomolsakul",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Waritsara Khongkomolsakul as a student founder of Power Crunch and prints class year '27.",
+          "excerpt": "Cornell eLab lists Waritsara Khongkomolsakul '27 on Power Crunch in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Cornell eLab lists Waritsara Khongkomolsakul '27 on Power Crunch in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists Power Crunch in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that Power Crunch has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Rootulu",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists Rootulu in the 2025-26 student startup cohort: Dillon Gordon '26. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Dillon Gordon",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Dillon Gordon as a student founder of Rootulu and prints class year '26.",
+          "excerpt": "Cornell eLab lists Dillon Gordon '26 on Rootulu in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Cornell eLab lists Dillon Gordon '26 on Rootulu in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists Rootulu in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that Rootulu has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Scoobii!",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists Scoobii! in the 2025-26 student startup cohort: Jiaxi Wang '26. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Jiaxi Wang",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Jiaxi Wang as a student founder of Scoobii! and prints class year '26.",
+          "excerpt": "Cornell eLab lists Jiaxi Wang '26 on Scoobii! in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Cornell eLab lists Jiaxi Wang '26 on Scoobii! in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists Scoobii! in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that Scoobii! has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "VigilantAI",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists VigilantAI in the 2025-26 student startup cohort: Jay Patel '26. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Jay Patel",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Jay Patel as a student founder of VigilantAI and prints class year '26.",
+          "excerpt": "Cornell eLab lists Jay Patel '26 on VigilantAI in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Cornell eLab lists Jay Patel '26 on VigilantAI in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists VigilantAI in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that VigilantAI has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Wiha.Ai",
+      "description": "Student startup selected for Cornell eLab's 2025-26 cohort.",
+      "website": null,
+      "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+      "excerpt": "Cornell eLab lists Wiha.Ai in the 2025-26 student startup cohort: Lydia Yilekal '26. The page does not describe the product.",
+      "orgPlace": "Cornell eLab",
+      "campusIds": [
+        "univ_cornell"
+      ],
+      "founders": [
+        {
+          "name": "Lydia Yilekal",
+          "aliases": [],
+          "campusId": "univ_cornell",
+          "affiliationRole": "Cornell eLab 2025-26, Cornell University",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Cornell eLab's 2025-26 cohort page names Lydia Yilekal as a student founder of Wiha.Ai and prints class year '26.",
+          "excerpt": "Cornell eLab lists Lydia Yilekal '26 on Wiha.Ai in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Cornell eLab lists Lydia Yilekal '26 on Wiha.Ai in the 2025-26 student startup cohort. The program accepts student founders from Cornell's Ithaca campus."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Cornell eLab",
+          "excerpt": "Entrepreneurship at Cornell lists Wiha.Ai in the eLab 2025-26 cohort. The page says top-performing teams can receive a spring investment and does not state that Wiha.Ai has received one.",
+          "sourceUrl": "https://eship.cornell.edu/elab-accepts-record-number-of-student-startups-to-fall-cohort/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "FloDx",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.linkedin.com/posts/vntrlab_activity-7428169031628709888-E8jf",
+      "excerpt": "Venture Lab VIP-X Philly Spring 2026 lists FloDx with Nicholas Manuto, Sophia Jorgensen, Elliot Jang.",
+      "orgPlace": "Penn Venture Lab VIP-X",
+      "campusIds": [
+        "univ_penn"
+      ],
+      "founders": [
+        {
+          "name": "Nicholas Manuto",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philly Spring 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Venture Lab VIP-X Spring 2026 post names Nicholas Manuto as a founder of FloDx. No class year is printed for this person.",
+          "excerpt": "Venture Lab's VIP-X Philly Spring 2026 post lists Nicholas Manuto on FloDx. Siobhan Scott, Associate Director of VIP-X, posted the cohort."
+        },
+        {
+          "name": "Sophia Jorgensen",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philly Spring 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Venture Lab VIP-X Spring 2026 post names Sophia Jorgensen as a founder of FloDx. No class year is printed for this person.",
+          "excerpt": "Venture Lab's VIP-X Philly Spring 2026 post lists Sophia Jorgensen on FloDx. Siobhan Scott, Associate Director of VIP-X, posted the cohort."
+        },
+        {
+          "name": "Elliot Jang",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philly Spring 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Venture Lab VIP-X Spring 2026 post names Elliot Jang as a founder of FloDx. No class year is printed for this person.",
+          "excerpt": "Venture Lab's VIP-X Philly Spring 2026 post lists Elliot Jang on FloDx. Siobhan Scott, Associate Director of VIP-X, posted the cohort."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Penn Venture Lab VIP-X",
+          "excerpt": "The VIP-X Philly Spring 2026 post names FloDx. It does not state a dollar amount.",
+          "sourceUrl": "https://www.linkedin.com/posts/vntrlab_activity-7428169031628709888-E8jf",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Girl Math Capital",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.linkedin.com/posts/vntrlab_activity-7428169031628709888-E8jf",
+      "excerpt": "Venture Lab VIP-X Philly Spring 2026 lists Girl Math Capital with Serena Ainslie.",
+      "orgPlace": "Penn Venture Lab VIP-X",
+      "campusIds": [
+        "univ_penn"
+      ],
+      "founders": [
+        {
+          "name": "Serena Ainslie",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philly Spring 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Venture Lab VIP-X Spring 2026 post names Serena Ainslie as a founder of Girl Math Capital. No class year is printed for this person.",
+          "excerpt": "Venture Lab's VIP-X Philly Spring 2026 post lists Serena Ainslie on Girl Math Capital. Siobhan Scott, Associate Director of VIP-X, posted the cohort."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Penn Venture Lab VIP-X",
+          "excerpt": "The VIP-X Philly Spring 2026 post names Girl Math Capital. It does not state a dollar amount.",
+          "sourceUrl": "https://www.linkedin.com/posts/vntrlab_activity-7428169031628709888-E8jf",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "SABE",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.linkedin.com/posts/vntrlab_activity-7428169031628709888-E8jf",
+      "excerpt": "Venture Lab VIP-X Philly Spring 2026 lists SABE with Veronica Rivera.",
+      "orgPlace": "Penn Venture Lab VIP-X",
+      "campusIds": [
+        "univ_penn"
+      ],
+      "founders": [
+        {
+          "name": "Veronica Rivera",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philly Spring 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Venture Lab VIP-X Spring 2026 post names Veronica Rivera as a founder of SABE. No class year is printed for this person.",
+          "excerpt": "Venture Lab's VIP-X Philly Spring 2026 post lists Veronica Rivera on SABE. Siobhan Scott, Associate Director of VIP-X, posted the cohort."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Penn Venture Lab VIP-X",
+          "excerpt": "The VIP-X Philly Spring 2026 post names SABE. It does not state a dollar amount.",
+          "sourceUrl": "https://www.linkedin.com/posts/vntrlab_activity-7428169031628709888-E8jf",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Securest",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.linkedin.com/posts/vntrlab_activity-7428169031628709888-E8jf",
+      "excerpt": "Venture Lab VIP-X Philly Spring 2026 lists Securest with Chris Harrington.",
+      "orgPlace": "Penn Venture Lab VIP-X",
+      "campusIds": [
+        "univ_penn"
+      ],
+      "founders": [
+        {
+          "name": "Chris Harrington",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philly Spring 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Venture Lab VIP-X Spring 2026 post names Chris Harrington as a founder of Securest. No class year is printed for this person.",
+          "excerpt": "Venture Lab's VIP-X Philly Spring 2026 post lists Chris Harrington on Securest. Siobhan Scott, Associate Director of VIP-X, posted the cohort."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Penn Venture Lab VIP-X",
+          "excerpt": "The VIP-X Philly Spring 2026 post names Securest. It does not state a dollar amount.",
+          "sourceUrl": "https://www.linkedin.com/posts/vntrlab_activity-7428169031628709888-E8jf",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "TUFANY",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.linkedin.com/posts/vntrlab_activity-7428169031628709888-E8jf",
+      "excerpt": "Venture Lab VIP-X Philly Spring 2026 lists TUFANY with Ahmad Hasanian.",
+      "orgPlace": "Penn Venture Lab VIP-X",
+      "campusIds": [
+        "univ_penn"
+      ],
+      "founders": [
+        {
+          "name": "Ahmad Hasanian",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philly Spring 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Venture Lab VIP-X Spring 2026 post names Ahmad Hasanian as a founder of TUFANY. No class year is printed for this person.",
+          "excerpt": "Venture Lab's VIP-X Philly Spring 2026 post lists Ahmad Hasanian on TUFANY. Siobhan Scott, Associate Director of VIP-X, posted the cohort."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Penn Venture Lab VIP-X",
+          "excerpt": "The VIP-X Philly Spring 2026 post names TUFANY. It does not state a dollar amount.",
+          "sourceUrl": "https://www.linkedin.com/posts/vntrlab_activity-7428169031628709888-E8jf",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Avara",
+      "description": "Named in the Penn Venture Lab VIP-X Philadelphia Fall 2025 cohort.",
+      "website": null,
+      "sourceUrl": "https://www.linkedin.com/posts/siobhan-scott-803a87b0_after-many-weeks-of-reviewing-applications-activity-7383964763522826240-eDcO",
+      "excerpt": "Venture Lab VIP-X Philadelphia Fall 2025 lists Avara: Ariela Zebede '26.",
+      "orgPlace": "Penn Venture Lab VIP-X",
+      "campusIds": [
+        "univ_penn"
+      ],
+      "founders": [
+        {
+          "name": "Ariela Zebede",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philadelphia Fall 2025",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The VIP-X Fall 2025 post names Ariela Zebede as a founder of Avara. WG'26, MD'26.",
+          "excerpt": "Siobhan Scott's Venture Lab VIP-X Philadelphia Fall 2025 post lists Ariela Zebede ('26) on Avara. Class-year note on the post: WG'26, MD'26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Siobhan Scott's Venture Lab VIP-X Philadelphia Fall 2025 post lists Ariela Zebede ('26) on Avara. Class-year note on the post: WG'26, MD'26."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Penn Venture Lab VIP-X",
+          "excerpt": "The VIP-X Fall 2025 post names Avara. It does not state a dollar amount.",
+          "sourceUrl": "https://www.linkedin.com/posts/siobhan-scott-803a87b0_after-many-weeks-of-reviewing-applications-activity-7383964763522826240-eDcO",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Atelic",
+      "description": "Named in the Penn Venture Lab VIP-X Philadelphia Fall 2025 cohort.",
+      "website": null,
+      "sourceUrl": "https://www.linkedin.com/posts/siobhan-scott-803a87b0_after-many-weeks-of-reviewing-applications-activity-7383964763522826240-eDcO",
+      "excerpt": "Venture Lab VIP-X Philadelphia Fall 2025 lists Atelic: Stanley Liu '26, Shiyao Ning '26.",
+      "orgPlace": "Penn Venture Lab VIP-X",
+      "campusIds": [
+        "univ_penn"
+      ],
+      "founders": [
+        {
+          "name": "Stanley Liu",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philadelphia Fall 2025",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The VIP-X Fall 2025 post names Stanley Liu as a founder of Atelic. GEN'26.",
+          "excerpt": "Siobhan Scott's Venture Lab VIP-X Philadelphia Fall 2025 post lists Stanley Liu ('26) on Atelic. Class-year note on the post: GEN'26."
+        },
+        {
+          "name": "Shiyao Ning",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philadelphia Fall 2025",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The VIP-X Fall 2025 post names Shiyao Ning as a founder of Atelic. GEN'26.",
+          "excerpt": "Siobhan Scott's Venture Lab VIP-X Philadelphia Fall 2025 post lists Shiyao Ning ('26) on Atelic. Class-year note on the post: GEN'26."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Penn Venture Lab VIP-X",
+          "excerpt": "The VIP-X Fall 2025 post names Atelic. It does not state a dollar amount.",
+          "sourceUrl": "https://www.linkedin.com/posts/siobhan-scott-803a87b0_after-many-weeks-of-reviewing-applications-activity-7383964763522826240-eDcO",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "OnGov",
+      "description": "Named in the Penn Venture Lab VIP-X Philadelphia Fall 2025 cohort.",
+      "website": null,
+      "sourceUrl": "https://www.linkedin.com/posts/siobhan-scott-803a87b0_after-many-weeks-of-reviewing-applications-activity-7383964763522826240-eDcO",
+      "excerpt": "Venture Lab VIP-X Philadelphia Fall 2025 lists OnGov: Silas Deane '26.",
+      "orgPlace": "Penn Venture Lab VIP-X",
+      "campusIds": [
+        "univ_penn"
+      ],
+      "founders": [
+        {
+          "name": "Silas Deane",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philadelphia Fall 2025",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The VIP-X Fall 2025 post names Silas Deane as a founder of OnGov. G'26.",
+          "excerpt": "Siobhan Scott's Venture Lab VIP-X Philadelphia Fall 2025 post lists Silas Deane ('26) on OnGov. Class-year note on the post: G'26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Siobhan Scott's Venture Lab VIP-X Philadelphia Fall 2025 post lists Silas Deane ('26) on OnGov. Class-year note on the post: G'26."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Penn Venture Lab VIP-X",
+          "excerpt": "The VIP-X Fall 2025 post names OnGov. It does not state a dollar amount.",
+          "sourceUrl": "https://www.linkedin.com/posts/siobhan-scott-803a87b0_after-many-weeks-of-reviewing-applications-activity-7383964763522826240-eDcO",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Refract Network",
+      "description": "Named in the Penn Venture Lab VIP-X Philadelphia Fall 2025 cohort.",
+      "website": null,
+      "sourceUrl": "https://www.linkedin.com/posts/siobhan-scott-803a87b0_after-many-weeks-of-reviewing-applications-activity-7383964763522826240-eDcO",
+      "excerpt": "Venture Lab VIP-X Philadelphia Fall 2025 lists Refract Network: Brandon Kong '27.",
+      "orgPlace": "Penn Venture Lab VIP-X",
+      "campusIds": [
+        "univ_penn"
+      ],
+      "founders": [
+        {
+          "name": "Brandon Kong",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philadelphia Fall 2025",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The VIP-X Fall 2025 post names Brandon Kong as a founder of Refract Network. SEAS'27.",
+          "excerpt": "Siobhan Scott's Venture Lab VIP-X Philadelphia Fall 2025 post lists Brandon Kong ('27) on Refract Network. Class-year note on the post: SEAS'27.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Siobhan Scott's Venture Lab VIP-X Philadelphia Fall 2025 post lists Brandon Kong ('27) on Refract Network. Class-year note on the post: SEAS'27."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Penn Venture Lab VIP-X",
+          "excerpt": "The VIP-X Fall 2025 post names Refract Network. It does not state a dollar amount.",
+          "sourceUrl": "https://www.linkedin.com/posts/siobhan-scott-803a87b0_after-many-weeks-of-reviewing-applications-activity-7383964763522826240-eDcO",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Vairo.AI",
+      "description": "Named in the Penn Venture Lab VIP-X Philadelphia Fall 2025 cohort.",
+      "website": null,
+      "sourceUrl": "https://www.linkedin.com/posts/siobhan-scott-803a87b0_after-many-weeks-of-reviewing-applications-activity-7383964763522826240-eDcO",
+      "excerpt": "Venture Lab VIP-X Philadelphia Fall 2025 lists Vairo.AI: Evan Caracciolo '27, Ryan Caracciolo no class year printed.",
+      "orgPlace": "Penn Venture Lab VIP-X",
+      "campusIds": [
+        "univ_penn"
+      ],
+      "founders": [
+        {
+          "name": "Evan Caracciolo",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philadelphia Fall 2025",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The VIP-X Fall 2025 post names Evan Caracciolo as a founder of Vairo.AI. WG'27 for Evan Caracciolo; no class year is printed for Ryan Caracciolo.",
+          "excerpt": "Siobhan Scott's Venture Lab VIP-X Philadelphia Fall 2025 post lists Evan Caracciolo ('27) on Vairo.AI. Class-year note on the post: WG'27 for Evan Caracciolo; no class year is printed for Ryan Caracciolo.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "verified",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Siobhan Scott's Venture Lab VIP-X Philadelphia Fall 2025 post lists Evan Caracciolo ('27) on Vairo.AI. Class-year note on the post: WG'27 for Evan Caracciolo; no class year is printed for Ryan Caracciolo."
+          }
+        },
+        {
+          "name": "Ryan Caracciolo",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philadelphia Fall 2025",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The VIP-X Fall 2025 post names Ryan Caracciolo as a founder of Vairo.AI. WG'27 for Evan Caracciolo; no class year is printed for Ryan Caracciolo.",
+          "excerpt": "Siobhan Scott's Venture Lab VIP-X Philadelphia Fall 2025 post lists Ryan Caracciolo (no class year printed) on Vairo.AI. Class-year note on the post: WG'27 for Evan Caracciolo; no class year is printed for Ryan Caracciolo."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Penn Venture Lab VIP-X",
+          "excerpt": "The VIP-X Fall 2025 post names Vairo.AI. It does not state a dollar amount.",
+          "sourceUrl": "https://www.linkedin.com/posts/siobhan-scott-803a87b0_after-many-weeks-of-reviewing-applications-activity-7383964763522826240-eDcO",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "ZenBroth",
+      "description": "Named in the Penn Venture Lab VIP-X Philadelphia Fall 2025 cohort.",
+      "website": null,
+      "sourceUrl": "https://www.linkedin.com/posts/siobhan-scott-803a87b0_after-many-weeks-of-reviewing-applications-activity-7383964763522826240-eDcO",
+      "excerpt": "Venture Lab VIP-X Philadelphia Fall 2025 lists ZenBroth: Xiaofeng Zhu '26.",
+      "orgPlace": "Penn Venture Lab VIP-X",
+      "campusIds": [
+        "univ_penn"
+      ],
+      "founders": [
+        {
+          "name": "Xiaofeng Zhu",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Penn Venture Lab VIP-X Philadelphia Fall 2025",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The VIP-X Fall 2025 post names Xiaofeng Zhu as a founder of ZenBroth. GED'26.",
+          "excerpt": "Siobhan Scott's Venture Lab VIP-X Philadelphia Fall 2025 post lists Xiaofeng Zhu ('26) on ZenBroth. Class-year note on the post: GED'26.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Siobhan Scott's Venture Lab VIP-X Philadelphia Fall 2025 post lists Xiaofeng Zhu ('26) on ZenBroth. Class-year note on the post: GED'26."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "Penn Venture Lab VIP-X",
+          "excerpt": "The VIP-X Fall 2025 post names ZenBroth. It does not state a dollar amount.",
+          "sourceUrl": "https://www.linkedin.com/posts/siobhan-scott-803a87b0_after-many-weeks-of-reviewing-applications-activity-7383964763522826240-eDcO",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Kusuma Collective",
+      "description": "A clothing brand that fuses artisanal craftsmanship from India with contemporary design to create pieces that are made to last, to be lived in, and to be loved across generations.",
+      "website": null,
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Serena Ahuja on Kusuma Collective. A clothing brand that fuses artisanal craftsmanship from India with contemporary design to create pieces that are made to last, to be lived in, and to be loved across generations.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "campusIds": [
+        "univ_michigan"
+      ],
+      "founders": [
+        {
+          "name": "Serena Ahuja",
+          "aliases": [],
+          "campusId": "univ_michigan",
+          "affiliationRole": "Zell Entrepreneurs 2025-26 venture track, University of Michigan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Zell Lurie Institute 2025-26 venture-track page names Serena Ahuja with Kusuma Collective. No class year is printed.",
+          "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Serena Ahuja on Kusuma Collective. A clothing brand that fuses artisanal craftsmanship from India with contemporary design to create pieces that are made to last, to be lived in, and to be loved across generations."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Zell Lurie Institute",
+          "excerpt": "The Zell Entrepreneurs 2025-26 page names Kusuma Collective. It does not state a dollar amount.",
+          "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Fastflo",
+      "description": "A B2B SaaS hiring platform that revolutionizes frontline recruiting by moving the entire process into candidates' messaging apps.",
+      "website": null,
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Zannah Baker on Fastflo. A B2B SaaS hiring platform that revolutionizes frontline recruiting by moving the entire process into candidates' messaging apps.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "campusIds": [
+        "univ_michigan",
+        "univ_harvard"
+      ],
+      "founders": [
+        {
+          "name": "Zannah Baker",
+          "aliases": [],
+          "campusId": "univ_michigan",
+          "affiliationRole": "Zell Entrepreneurs 2025-26 venture track, University of Michigan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Zell Lurie Institute 2025-26 venture-track page names Zannah Baker with Fastflo. No class year is printed.",
+          "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Zannah Baker on Fastflo. A B2B SaaS hiring platform that revolutionizes frontline recruiting by moving the entire process into candidates' messaging apps."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Zell Lurie Institute",
+          "excerpt": "The Zell Entrepreneurs 2025-26 page names Fastflo. It does not state a dollar amount.",
+          "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Tinu AI",
+      "description": "Your organization's continuous memory. Lightweight journaling and AI summaries transform daily work into a living knowledge graph, ensuring the why behind decisions never leaves the organization.",
+      "website": null,
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Kelvin Chang on Tinu AI. Your organization's continuous memory. Lightweight journaling and AI summaries transform daily work into a living knowledge graph, ensuring the why behind decisions never leaves the organization.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "campusIds": [
+        "univ_michigan"
+      ],
+      "founders": [
+        {
+          "name": "Kelvin Chang",
+          "aliases": [],
+          "campusId": "univ_michigan",
+          "affiliationRole": "Zell Entrepreneurs 2025-26 venture track, University of Michigan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Zell Lurie Institute 2025-26 venture-track page names Kelvin Chang with Tinu AI. No class year is printed.",
+          "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Kelvin Chang on Tinu AI. Your organization's continuous memory. Lightweight journaling and AI summaries transform daily work into a living knowledge graph, ensuring the why behind decisions never leaves the organization."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Zell Lurie Institute",
+          "excerpt": "The Zell Entrepreneurs 2025-26 page names Tinu AI. It does not state a dollar amount.",
+          "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Roxbury",
+      "description": "A fintech platform modernizing nightlife payments through prepaid digital bar tabs.",
+      "website": null,
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Samuel Deutsch on Roxbury. A fintech platform modernizing nightlife payments through prepaid digital bar tabs.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "campusIds": [
+        "univ_michigan"
+      ],
+      "founders": [
+        {
+          "name": "Samuel Deutsch",
+          "aliases": [],
+          "campusId": "univ_michigan",
+          "affiliationRole": "Zell Entrepreneurs 2025-26 venture track, University of Michigan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Zell Lurie Institute 2025-26 venture-track page names Samuel Deutsch with Roxbury. No class year is printed.",
+          "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Samuel Deutsch on Roxbury. A fintech platform modernizing nightlife payments through prepaid digital bar tabs."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Zell Lurie Institute",
+          "excerpt": "The Zell Entrepreneurs 2025-26 page names Roxbury. It does not state a dollar amount.",
+          "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "BasisEdge",
+      "description": "Aims to give traders and farmers unprecedented clarity on when and where to move grain in the fragmented agricultural industry.",
+      "website": null,
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists William Furge on BasisEdge. Aims to give traders and farmers unprecedented clarity on when and where to move grain in the fragmented agricultural industry.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "campusIds": [
+        "univ_michigan"
+      ],
+      "founders": [
+        {
+          "name": "William Furge",
+          "aliases": [],
+          "campusId": "univ_michigan",
+          "affiliationRole": "Zell Entrepreneurs 2025-26 venture track, University of Michigan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Zell Lurie Institute 2025-26 venture-track page names William Furge with BasisEdge. No class year is printed.",
+          "excerpt": "The 2025-2026 Zell Entrepreneurs page lists William Furge on BasisEdge. Aims to give traders and farmers unprecedented clarity on when and where to move grain in the fragmented agricultural industry."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Zell Lurie Institute",
+          "excerpt": "The Zell Entrepreneurs 2025-26 page names BasisEdge. It does not state a dollar amount.",
+          "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Rupay Bachao",
+      "description": "An e-commerce platform designed to boost your business's sales through cashless transactions and goods to goods exchange trading.",
+      "website": null,
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Ishika Gupta on Rupay Bachao. An e-commerce platform designed to boost your business's sales through cashless transactions and goods to goods exchange trading.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "campusIds": [
+        "univ_michigan"
+      ],
+      "founders": [
+        {
+          "name": "Ishika Gupta",
+          "aliases": [],
+          "campusId": "univ_michigan",
+          "affiliationRole": "Zell Entrepreneurs 2025-26 venture track, University of Michigan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Zell Lurie Institute 2025-26 venture-track page names Ishika Gupta with Rupay Bachao. No class year is printed.",
+          "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Ishika Gupta on Rupay Bachao. An e-commerce platform designed to boost your business's sales through cashless transactions and goods to goods exchange trading."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Zell Lurie Institute",
+          "excerpt": "The Zell Entrepreneurs 2025-26 page names Rupay Bachao. It does not state a dollar amount.",
+          "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Krik Krak",
+      "description": "An educational platform designed to close the gap between school reading instruction and parental support at home.",
+      "website": null,
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Jaenelle Lauture on Krik Krak. An educational platform designed to close the gap between school reading instruction and parental support at home.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "campusIds": [
+        "univ_michigan"
+      ],
+      "founders": [
+        {
+          "name": "Jaenelle Lauture",
+          "aliases": [],
+          "campusId": "univ_michigan",
+          "affiliationRole": "Zell Entrepreneurs 2025-26 venture track, University of Michigan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Zell Lurie Institute 2025-26 venture-track page names Jaenelle Lauture with Krik Krak. No class year is printed.",
+          "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Jaenelle Lauture on Krik Krak. An educational platform designed to close the gap between school reading instruction and parental support at home."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Zell Lurie Institute",
+          "excerpt": "The Zell Entrepreneurs 2025-26 page names Krik Krak. It does not state a dollar amount.",
+          "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "OuterEdge",
+      "description": "Helps entrepreneurs and businesses leverage AI and other emerging technologies to ideate, launch, and scale what's next.",
+      "website": null,
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Ryan Lynn on OuterEdge. Helps entrepreneurs and businesses leverage AI and other emerging technologies to ideate, launch, and scale what's next.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "campusIds": [
+        "univ_michigan"
+      ],
+      "founders": [
+        {
+          "name": "Ryan Lynn",
+          "aliases": [],
+          "campusId": "univ_michigan",
+          "affiliationRole": "Zell Entrepreneurs 2025-26 venture track, University of Michigan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Zell Lurie Institute 2025-26 venture-track page names Ryan Lynn with OuterEdge. No class year is printed.",
+          "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Ryan Lynn on OuterEdge. Helps entrepreneurs and businesses leverage AI and other emerging technologies to ideate, launch, and scale what's next."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Zell Lurie Institute",
+          "excerpt": "The Zell Entrepreneurs 2025-26 page names OuterEdge. It does not state a dollar amount.",
+          "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "goTeff",
+      "description": "Disrupting the industry of nutrition for endurance athletes and health-conscious consumers by offering snacks made from Teff, the superfood that fuels world champion Ethiopian runners.",
+      "website": null,
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Saron Mechale on goTeff. Disrupting the industry of nutrition for endurance athletes and health-conscious consumers by offering snacks made from Teff, the superfood that fuels world champion Ethiopian runners.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "campusIds": [
+        "univ_michigan"
+      ],
+      "founders": [
+        {
+          "name": "Saron Mechale",
+          "aliases": [],
+          "campusId": "univ_michigan",
+          "affiliationRole": "Zell Entrepreneurs 2025-26 venture track, University of Michigan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Zell Lurie Institute 2025-26 venture-track page names Saron Mechale with goTeff. No class year is printed.",
+          "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Saron Mechale on goTeff. Disrupting the industry of nutrition for endurance athletes and health-conscious consumers by offering snacks made from Teff, the superfood that fuels world champion Ethiopian runners."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Zell Lurie Institute",
+          "excerpt": "The Zell Entrepreneurs 2025-26 page names goTeff. It does not state a dollar amount.",
+          "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Puffin Air Purifiers",
+      "description": "Designed with novel filtration technology to reduce CO2 and other gaseous pollutant levels in stuffy air filled indoor spaces, in order to boost people's productivity and wellness.",
+      "website": null,
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Rachel Silcox on Puffin Air Purifiers. Designed with novel filtration technology to reduce CO2 and other gaseous pollutant levels in stuffy air filled indoor spaces, in order to boost people's productivity and wellness.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "campusIds": [
+        "univ_michigan"
+      ],
+      "founders": [
+        {
+          "name": "Rachel Silcox",
+          "aliases": [],
+          "campusId": "univ_michigan",
+          "affiliationRole": "Zell Entrepreneurs 2025-26 venture track, University of Michigan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Zell Lurie Institute 2025-26 venture-track page names Rachel Silcox with Puffin Air Purifiers. No class year is printed.",
+          "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Rachel Silcox on Puffin Air Purifiers. Designed with novel filtration technology to reduce CO2 and other gaseous pollutant levels in stuffy air filled indoor spaces, in order to boost people's productivity and wellness."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Zell Lurie Institute",
+          "excerpt": "The Zell Entrepreneurs 2025-26 page names Puffin Air Purifiers. It does not state a dollar amount.",
+          "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Skala",
+      "description": "Connects high school students with college students for personalized and authentic conversations and insightful campus tours.",
+      "website": null,
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Shalin Zarboulas on Skala. Connects high school students with college students for personalized and authentic conversations and insightful campus tours.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "campusIds": [
+        "univ_michigan"
+      ],
+      "founders": [
+        {
+          "name": "Shalin Zarboulas",
+          "aliases": [],
+          "campusId": "univ_michigan",
+          "affiliationRole": "Zell Entrepreneurs 2025-26 venture track, University of Michigan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Zell Lurie Institute 2025-26 venture-track page names Shalin Zarboulas with Skala. No class year is printed.",
+          "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Shalin Zarboulas on Skala. Connects high school students with college students for personalized and authentic conversations and insightful campus tours."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Zell Lurie Institute",
+          "excerpt": "The Zell Entrepreneurs 2025-26 page names Skala. It does not state a dollar amount.",
+          "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Ground3d",
+      "description": "A digital tool for crowdsourcing hyperlocal environmental data, beginning with street-level documentation of cloudburst events in NYC.",
+      "website": "https://ground3d.xyz",
+      "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+      "excerpt": "MIT delta v 2025 lists Ground3d. Co-founders Wil Jones and Zoe Voss Lee met at MIT.",
+      "orgPlace": "MIT delta v 2025",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "founders": [
+        {
+          "name": "Wil Jones",
+          "aliases": [],
+          "campusId": "univ_mit",
+          "affiliationRole": "MIT delta v 2025",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The 2025 delta v page says Wil Jones is a co-founder of Ground3d and met at MIT. No class year is printed.",
+          "excerpt": "The 2025 MIT delta v page says co-founders Wil Jones met at MIT and founded Ground3d, a digital tool for crowdsourcing hyperlocal environmental data."
+        },
+        {
+          "name": "Zoe Voss Lee",
+          "aliases": [],
+          "campusId": "univ_mit",
+          "affiliationRole": "MIT delta v 2025",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The 2025 delta v page says Zoe Voss Lee is a co-founder of Ground3d and met at MIT. No class year is printed.",
+          "excerpt": "The 2025 MIT delta v page says co-founders Zoe Voss Lee met at MIT and founded Ground3d, a digital tool for crowdsourcing hyperlocal environmental data."
+        }
+      ],
+      "investors": [
+        {
+          "name": "MIT delta v",
+          "excerpt": "The 2025 delta v page lists Ground3d. It does not state a dollar amount.",
+          "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2025-delta-v/",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Clima Technologies",
+      "description": "An AI assistant that lets facilities managers talk to commercial buildings and act on fault diagnostics.",
+      "website": "https://climatechnologies.ai",
+      "sourceUrl": "https://entrepreneurship.mit.edu/wp-content/uploads/Investor-Day-2025-Look-Book-v3.pdf",
+      "excerpt": "The Investor Day 2025 lookbook lists Daniel Agudelo, MIT Sloan MBA '25, and Carlos Gosen, MIT Sloan MBA '25, on Clima Technologies. An AI assistant that lets facilities managers talk to commercial buildings and act on fault diagnostics.",
+      "orgPlace": "MIT delta v 2025",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "founders": [
+        {
+          "name": "Daniel Agudelo",
+          "aliases": [],
+          "campusId": "univ_mit",
+          "affiliationRole": "MIT delta v 2025, MIT Sloan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The MIT Investor Day 2025 lookbook names Daniel Agudelo on Clima Technologies with a 2025 MIT degree.",
+          "excerpt": "The Investor Day 2025 lookbook lists Daniel Agudelo, MIT Sloan MBA '25, and Carlos Gosen, MIT Sloan MBA '25, on Clima Technologies. This row is Daniel Agudelo, class year 2025, on Clima Technologies.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'25",
+            "gradYear": 2025,
+            "evidence": "The Investor Day 2025 lookbook lists Daniel Agudelo, MIT Sloan MBA '25, and Carlos Gosen, MIT Sloan MBA '25, on Clima Technologies. This row is Daniel Agudelo, class year 2025, on Clima Technologies."
+          }
+        },
+        {
+          "name": "Carlos Gosen",
+          "aliases": [],
+          "campusId": "univ_mit",
+          "affiliationRole": "MIT delta v 2025, MIT Sloan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The MIT Investor Day 2025 lookbook names Carlos Gosen on Clima Technologies with a 2025 MIT degree.",
+          "excerpt": "The Investor Day 2025 lookbook lists Daniel Agudelo, MIT Sloan MBA '25, and Carlos Gosen, MIT Sloan MBA '25, on Clima Technologies. This row is Carlos Gosen, class year 2025, on Clima Technologies.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'25",
+            "gradYear": 2025,
+            "evidence": "The Investor Day 2025 lookbook lists Daniel Agudelo, MIT Sloan MBA '25, and Carlos Gosen, MIT Sloan MBA '25, on Clima Technologies. This row is Carlos Gosen, class year 2025, on Clima Technologies."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "MIT delta v",
+          "excerpt": "The Investor Day 2025 lookbook lists Clima Technologies in the delta v cohort. It does not state a dollar amount on this page.",
+          "sourceUrl": "https://entrepreneurship.mit.edu/wp-content/uploads/Investor-Day-2025-Look-Book-v3.pdf",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Forma Systems",
+      "description": "Generative optimization software for code-compliant, fabrication-ready construction designs.",
+      "website": "https://forma-systems.com",
+      "sourceUrl": "https://entrepreneurship.mit.edu/wp-content/uploads/Investor-Day-2025-Look-Book-v3.pdf",
+      "excerpt": "The Investor Day 2025 lookbook lists Alexander Curth, MIT PhD '25, and Kiley Feickert, MIT PhD '25, on Forma Systems. Generative optimization software for code-compliant, fabrication-ready construction designs.",
+      "orgPlace": "MIT delta v 2025",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "founders": [
+        {
+          "name": "Alexander Curth",
+          "aliases": [],
+          "campusId": "univ_mit",
+          "affiliationRole": "MIT delta v 2025",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The MIT Investor Day 2025 lookbook names Alexander Curth on Forma Systems with a 2025 MIT degree.",
+          "excerpt": "The Investor Day 2025 lookbook lists Alexander Curth, MIT PhD '25, and Kiley Feickert, MIT PhD '25, on Forma Systems. This row is Alexander Curth, class year 2025, on Forma Systems.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'25",
+            "gradYear": 2025,
+            "evidence": "The Investor Day 2025 lookbook lists Alexander Curth, MIT PhD '25, and Kiley Feickert, MIT PhD '25, on Forma Systems. This row is Alexander Curth, class year 2025, on Forma Systems."
+          }
+        },
+        {
+          "name": "Kiley Feickert",
+          "aliases": [],
+          "campusId": "univ_mit",
+          "affiliationRole": "MIT delta v 2025",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The MIT Investor Day 2025 lookbook names Kiley Feickert on Forma Systems with a 2025 MIT degree.",
+          "excerpt": "The Investor Day 2025 lookbook lists Alexander Curth, MIT PhD '25, and Kiley Feickert, MIT PhD '25, on Forma Systems. This row is Kiley Feickert, class year 2025, on Forma Systems.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'25",
+            "gradYear": 2025,
+            "evidence": "The Investor Day 2025 lookbook lists Alexander Curth, MIT PhD '25, and Kiley Feickert, MIT PhD '25, on Forma Systems. This row is Kiley Feickert, class year 2025, on Forma Systems."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "MIT delta v",
+          "excerpt": "The Investor Day 2025 lookbook lists Forma Systems in the delta v cohort. It does not state a dollar amount on this page.",
+          "sourceUrl": "https://entrepreneurship.mit.edu/wp-content/uploads/Investor-Day-2025-Look-Book-v3.pdf",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "GrowthFactor",
+      "description": "An AI-powered software platform and fractional real estate analyst for commercial retail site selection.",
+      "website": "https://growthfactor.ai",
+      "sourceUrl": "https://entrepreneurship.mit.edu/wp-content/uploads/Investor-Day-2025-Look-Book-v3.pdf",
+      "excerpt": "The Investor Day 2025 lookbook lists Clyde Anderson, Raj Shrimali, and Samuel Hall, each MIT Sloan MBA '25, on GrowthFactor. An AI-powered software platform and fractional real estate analyst for commercial retail site selection.",
+      "orgPlace": "MIT delta v 2025",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "founders": [
+        {
+          "name": "Clyde Anderson",
+          "aliases": [],
+          "campusId": "univ_mit",
+          "affiliationRole": "MIT delta v 2025, MIT Sloan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The MIT Investor Day 2025 lookbook names Clyde Anderson on GrowthFactor with a 2025 MIT degree.",
+          "excerpt": "The Investor Day 2025 lookbook lists Clyde Anderson, Raj Shrimali, and Samuel Hall, each MIT Sloan MBA '25, on GrowthFactor. This row is Clyde Anderson, class year 2025, on GrowthFactor.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'25",
+            "gradYear": 2025,
+            "evidence": "The Investor Day 2025 lookbook lists Clyde Anderson, Raj Shrimali, and Samuel Hall, each MIT Sloan MBA '25, on GrowthFactor. This row is Clyde Anderson, class year 2025, on GrowthFactor."
+          }
+        },
+        {
+          "name": "Raj Shrimali",
+          "aliases": [],
+          "campusId": "univ_mit",
+          "affiliationRole": "MIT delta v 2025, MIT Sloan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The MIT Investor Day 2025 lookbook names Raj Shrimali on GrowthFactor with a 2025 MIT degree.",
+          "excerpt": "The Investor Day 2025 lookbook lists Clyde Anderson, Raj Shrimali, and Samuel Hall, each MIT Sloan MBA '25, on GrowthFactor. This row is Raj Shrimali, class year 2025, on GrowthFactor.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'25",
+            "gradYear": 2025,
+            "evidence": "The Investor Day 2025 lookbook lists Clyde Anderson, Raj Shrimali, and Samuel Hall, each MIT Sloan MBA '25, on GrowthFactor. This row is Raj Shrimali, class year 2025, on GrowthFactor."
+          }
+        },
+        {
+          "name": "Samuel Hall",
+          "aliases": [],
+          "campusId": "univ_mit",
+          "affiliationRole": "MIT delta v 2025, MIT Sloan",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "The MIT Investor Day 2025 lookbook names Samuel Hall on GrowthFactor with a 2025 MIT degree.",
+          "excerpt": "The Investor Day 2025 lookbook lists Clyde Anderson, Raj Shrimali, and Samuel Hall, each MIT Sloan MBA '25, on GrowthFactor. This row is Samuel Hall, class year 2025, on GrowthFactor.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "verified",
+            "label": "'25",
+            "gradYear": 2025,
+            "evidence": "The Investor Day 2025 lookbook lists Clyde Anderson, Raj Shrimali, and Samuel Hall, each MIT Sloan MBA '25, on GrowthFactor. This row is Samuel Hall, class year 2025, on GrowthFactor."
+          }
+        }
+      ],
+      "investors": [
+        {
+          "name": "MIT delta v",
+          "excerpt": "The Investor Day 2025 lookbook lists GrowthFactor in the delta v cohort. It does not state a dollar amount on this page.",
+          "sourceUrl": "https://entrepreneurship.mit.edu/wp-content/uploads/Investor-Day-2025-Look-Book-v3.pdf",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Analogical Engines",
+      "description": "Applies over a decade of CMU research to help R&D teams discover breakthrough innovations using computational analogies.",
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 lists Analogical Engines, founded by Aniket Kittur, Vikram Mohanty, and Nikolas Martelaro. applies over a decade of CMU research to help R&D teams discover breakthrough innovations using computational analogies.",
+      "orgPlace": "CMU VentureBridge '26",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "founders": [
+        {
+          "name": "Aniket Kittur",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Aniket Kittur as a founder of Analogical Engines. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Analogical Engines, founded by Aniket Kittur, Vikram Mohanty, and Nikolas Martelaro, applies over a decade of CMU research to help R&D teams discover breakthrough innovations using computational analogies. This row is Aniket Kittur."
+        },
+        {
+          "name": "Vikram Mohanty",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Vikram Mohanty as a founder of Analogical Engines. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Analogical Engines, founded by Aniket Kittur, Vikram Mohanty, and Nikolas Martelaro, applies over a decade of CMU research to help R&D teams discover breakthrough innovations using computational analogies. This row is Vikram Mohanty."
+        },
+        {
+          "name": "Nikolas Martelaro",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Nikolas Martelaro as a founder of Analogical Engines. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Analogical Engines, founded by Aniket Kittur, Vikram Mohanty, and Nikolas Martelaro, applies over a decade of CMU research to help R&D teams discover breakthrough innovations using computational analogies. This row is Nikolas Martelaro."
+        }
+      ],
+      "investors": [
+        {
+          "name": "CMU VentureBridge",
+          "excerpt": "The VentureBridge '26 page lists Analogical Engines in the funded portfolio. It does not state this company's check size.",
+          "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Avronna",
+      "description": "Is designing custom AI chips that allow companies to optimize computing infrastructure for specialized workloads.",
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 lists Avronna, founded by Rumi Naik. is designing custom AI chips that allow companies to optimize computing infrastructure for specialized workloads.",
+      "orgPlace": "CMU VentureBridge '26",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "founders": [
+        {
+          "name": "Rumi Naik",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Rumi Naik as a founder of Avronna. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Avronna, founded by Rumi Naik, is designing custom AI chips that allow companies to optimize computing infrastructure for specialized workloads. This row is Rumi Naik."
+        }
+      ],
+      "investors": [
+        {
+          "name": "CMU VentureBridge",
+          "excerpt": "The VentureBridge '26 page lists Avronna in the funded portfolio. It does not state this company's check size.",
+          "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Basics",
+      "description": "Is creating an open-source operating system template that helps organizations rapidly build and deploy internal tools.",
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 lists Basics, founded by Akeil Smith, Arav Bhardwaj, and team. is creating an open-source operating system template that helps organizations rapidly build and deploy internal tools.",
+      "orgPlace": "CMU VentureBridge '26",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "founders": [
+        {
+          "name": "Akeil Smith",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Akeil Smith as a founder of Basics. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Basics, founded by Akeil Smith, Arav Bhardwaj, and team, is creating an open-source operating system template that helps organizations rapidly build and deploy internal tools. This row is Akeil Smith."
+        },
+        {
+          "name": "Arav Bhardwaj",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Arav Bhardwaj as a founder of Basics. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Basics, founded by Akeil Smith, Arav Bhardwaj, and team, is creating an open-source operating system template that helps organizations rapidly build and deploy internal tools. This row is Arav Bhardwaj."
+        }
+      ],
+      "investors": [
+        {
+          "name": "CMU VentureBridge",
+          "excerpt": "The VentureBridge '26 page lists Basics in the funded portfolio. It does not state this company's check size.",
+          "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Fordje",
+      "description": "Uses AI to turn fragmented codes, zoning, and interconnection requirements into structured regulatory data.",
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 lists Fordje, founded by Gillian Sowray. uses AI to turn fragmented codes, zoning, and interconnection requirements into structured regulatory data.",
+      "orgPlace": "CMU VentureBridge '26",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "founders": [
+        {
+          "name": "Gillian Sowray",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Gillian Sowray as a founder of Fordje. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Fordje, founded by Gillian Sowray, uses AI to turn fragmented codes, zoning, and interconnection requirements into structured regulatory data. This row is Gillian Sowray."
+        }
+      ],
+      "investors": [
+        {
+          "name": "CMU VentureBridge",
+          "excerpt": "The VentureBridge '26 page lists Fordje in the funded portfolio. It does not state this company's check size.",
+          "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Oryn AI",
+      "description": "Is building a \"Large Physics Model.\"",
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 lists Oryn AI, founded by Mosam Dabhi. is building a \"Large Physics Model.\"",
+      "orgPlace": "CMU VentureBridge '26",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "founders": [
+        {
+          "name": "Mosam Dabhi",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Mosam Dabhi as a founder of Oryn AI. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Oryn AI, founded by Mosam Dabhi, is building a \"Large Physics Model.\" This row is Mosam Dabhi."
+        }
+      ],
+      "investors": [
+        {
+          "name": "CMU VentureBridge",
+          "excerpt": "The VentureBridge '26 page lists Oryn AI in the funded portfolio. It does not state this company's check size.",
+          "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Acalia",
+      "description": "Is using AI to improve revenue cycle management for independent physician practices.",
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 lists Acalia, founded by Michael Das. is using AI to improve revenue cycle management for independent physician practices.",
+      "orgPlace": "CMU VentureBridge '26",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "founders": [
+        {
+          "name": "Michael Das",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Michael Das as a founder of Acalia. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Acalia, founded by Michael Das, is using AI to improve revenue cycle management for independent physician practices. This row is Michael Das."
+        }
+      ],
+      "investors": [
+        {
+          "name": "CMU VentureBridge",
+          "excerpt": "The VentureBridge '26 page lists Acalia in the funded portfolio. It does not state this company's check size.",
+          "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Carob",
+      "description": "Captures and structures clinical reasoning data to train next-generation healthcare AI systems.",
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 lists Carob, founded by Alia Friedman. captures and structures clinical reasoning data to train next-generation healthcare AI systems.",
+      "orgPlace": "CMU VentureBridge '26",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "founders": [
+        {
+          "name": "Alia Friedman",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Alia Friedman as a founder of Carob. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Carob, founded by Alia Friedman, captures and structures clinical reasoning data to train next-generation healthcare AI systems. This row is Alia Friedman."
+        }
+      ],
+      "investors": [
+        {
+          "name": "CMU VentureBridge",
+          "excerpt": "The VentureBridge '26 page lists Carob in the funded portfolio. It does not state this company's check size.",
+          "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Pierogi Therapeutics",
+      "description": "Combines AI and physics to accelerate radiopharmaceutical drug discovery.",
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 lists Pierogi Therapeutics, founded by Benjamin Koby and Filipp Gusev. combines AI and physics to accelerate radiopharmaceutical drug discovery.",
+      "orgPlace": "CMU VentureBridge '26",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "founders": [
+        {
+          "name": "Benjamin Koby",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Benjamin Koby as a founder of Pierogi Therapeutics. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Pierogi Therapeutics, founded by Benjamin Koby and Filipp Gusev, combines AI and physics to accelerate radiopharmaceutical drug discovery. This row is Benjamin Koby."
+        },
+        {
+          "name": "Filipp Gusev",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Filipp Gusev as a founder of Pierogi Therapeutics. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Pierogi Therapeutics, founded by Benjamin Koby and Filipp Gusev, combines AI and physics to accelerate radiopharmaceutical drug discovery. This row is Filipp Gusev."
+        }
+      ],
+      "investors": [
+        {
+          "name": "CMU VentureBridge",
+          "excerpt": "The VentureBridge '26 page lists Pierogi Therapeutics in the funded portfolio. It does not state this company's check size.",
+          "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Synapse Symphony",
+      "description": "Is developing a non-invasive neuromodulation platform for chronic pain management.",
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 lists Synapse Symphony, founded by Vishal Jain. is developing a non-invasive neuromodulation platform for chronic pain management.",
+      "orgPlace": "CMU VentureBridge '26",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "founders": [
+        {
+          "name": "Vishal Jain",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Vishal Jain as a founder of Synapse Symphony. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Synapse Symphony, founded by Vishal Jain, is developing a non-invasive neuromodulation platform for chronic pain management. This row is Vishal Jain."
+        }
+      ],
+      "investors": [
+        {
+          "name": "CMU VentureBridge",
+          "excerpt": "The VentureBridge '26 page lists Synapse Symphony in the funded portfolio. It does not state this company's check size.",
+          "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Nth AI",
+      "description": "Builds Nexus, a self-improving vertical AI agent platform for enterprise reporting workflows.",
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 lists Nth AI, founded by Connie Yang. builds Nexus, a self-improving vertical AI agent platform for enterprise reporting workflows.",
+      "orgPlace": "CMU VentureBridge '26",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "founders": [
+        {
+          "name": "Connie Yang",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Connie Yang as a founder of Nth AI. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Nth AI, founded by Connie Yang, builds Nexus, a self-improving vertical AI agent platform for enterprise reporting workflows. This row is Connie Yang."
+        }
+      ],
+      "investors": [
+        {
+          "name": "CMU VentureBridge",
+          "excerpt": "The VentureBridge '26 page lists Nth AI in the funded portfolio. It does not state this company's check size.",
+          "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    },
+    {
+      "name": "Support Vector",
+      "description": "Uses vision-language models to guide manufacturing technicians through complex maintenance tasks.",
+      "website": null,
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 lists Support Vector, founded by Nalini Jain. uses vision-language models to guide manufacturing technicians through complex maintenance tasks.",
+      "orgPlace": "CMU VentureBridge '26",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "founders": [
+        {
+          "name": "Nalini Jain",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU VentureBridge '26",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "partial",
+          "verificationNote": "CMU VentureBridge '26 names Nalini Jain as a founder of Support Vector. The page does not print a class year or say whether this founder is a student, an alumnus, or faculty.",
+          "excerpt": "CMU VentureBridge '26 says Support Vector, founded by Nalini Jain, uses vision-language models to guide manufacturing technicians through complex maintenance tasks. This row is Nalini Jain."
+        }
+      ],
+      "investors": [
+        {
+          "name": "CMU VentureBridge",
+          "excerpt": "The VentureBridge '26 page lists Support Vector in the funded portfolio. It does not state this company's check size.",
+          "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+          "batch": null,
+          "kind": "accelerator"
+        }
+      ]
+    }
+  ],
+  "potential": [
+    {
+      "name": "Gunn Lakdee",
+      "aliases": [],
+      "campusId": "univ_michigan",
+      "affiliationRole": "Zell Entrepreneurs 2025-26, University of Michigan",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. The Zell Lurie 2025-26 page names Gunn Lakdee and does not name a launched product. The page lists Gunn Lakdee on Accelerate Blue Foundry as a founding member of a U-M technology, and does not name a separate company.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Gunn Lakdee. The page lists Gunn Lakdee on Accelerate Blue Foundry as a founding member of a U-M technology, and does not name a separate company."
+    },
+    {
+      "name": "Kenny Berrouet",
+      "aliases": [],
+      "campusId": "univ_michigan",
+      "affiliationRole": "Zell Entrepreneurs 2025-26, University of Michigan",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. The Zell Lurie 2025-26 page names Kenny Berrouet and does not name a launched product. Pursuing traditional Search in compliance-driven, labor-intensive B2B service companies.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Kenny Berrouet. Pursuing traditional Search in compliance-driven, labor-intensive B2B service companies."
+    },
+    {
+      "name": "Benton Boeck",
+      "aliases": [],
+      "campusId": "univ_michigan",
+      "affiliationRole": "Zell Entrepreneurs 2025-26, University of Michigan",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. The Zell Lurie 2025-26 page names Benton Boeck and does not name a launched product. Pursuing blue-collar or drone-based businesses in a tier 2 city in the US.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Benton Boeck. Pursuing blue-collar or drone-based businesses in a tier 2 city in the US."
+    },
+    {
+      "name": "Christopher Corbett",
+      "aliases": [],
+      "campusId": "univ_michigan",
+      "affiliationRole": "Zell Entrepreneurs 2025-26, University of Michigan",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. The Zell Lurie 2025-26 page names Christopher Corbett and does not name a launched product. Pursuing opportunities in Michigan and the Great Lakes region within the marine, environmental, and safety sectors.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Christopher Corbett. Pursuing opportunities in Michigan and the Great Lakes region within the marine, environmental, and safety sectors."
+    },
+    {
+      "name": "Ebbin Daniel",
+      "aliases": [],
+      "campusId": "univ_michigan",
+      "affiliationRole": "Zell Entrepreneurs 2025-26, University of Michigan",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. The Zell Lurie 2025-26 page names Ebbin Daniel and does not name a launched product. Pursuing opportunities in Manufacturing Services and Healthcare Services in the US.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Ebbin Daniel. Pursuing opportunities in Manufacturing Services and Healthcare Services in the US."
+    },
+    {
+      "name": "Mahsa Javadi",
+      "aliases": [],
+      "campusId": "univ_michigan",
+      "affiliationRole": "Zell Entrepreneurs 2025-26, University of Michigan",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. The Zell Lurie 2025-26 page names Mahsa Javadi and does not name a launched product. Pursuing lower middle-market healthcare and business services companies in the United States.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Mahsa Javadi. Pursuing lower middle-market healthcare and business services companies in the United States."
+    },
+    {
+      "name": "Tyler Jensen",
+      "aliases": [],
+      "campusId": "univ_michigan",
+      "affiliationRole": "Zell Entrepreneurs 2025-26, University of Michigan",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. The Zell Lurie 2025-26 page names Tyler Jensen and does not name a launched product. Pursuing all opportunities in the Southeast region of the US.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Tyler Jensen. Pursuing all opportunities in the Southeast region of the US."
+    },
+    {
+      "name": "Noah Kim",
+      "aliases": [],
+      "campusId": "univ_michigan",
+      "affiliationRole": "Zell Entrepreneurs 2025-26, University of Michigan",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. The Zell Lurie 2025-26 page names Noah Kim and does not name a launched product. Pursuing industrial outdoor storage businesses in the Midwest.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Noah Kim. Pursuing industrial outdoor storage businesses in the Midwest."
+    },
+    {
+      "name": "Brian Lipchik",
+      "aliases": [],
+      "campusId": "univ_michigan",
+      "affiliationRole": "Zell Entrepreneurs 2025-26, University of Michigan",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. The Zell Lurie 2025-26 page names Brian Lipchik and does not name a launched product. Pursuing all industries with a preference for B2B services and blue-collar sectors in the Phoenix Metro Area.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Brian Lipchik. Pursuing all industries with a preference for B2B services and blue-collar sectors in the Phoenix Metro Area."
+    },
+    {
+      "name": "Bryce Masterson",
+      "aliases": [],
+      "campusId": "univ_michigan",
+      "affiliationRole": "Zell Entrepreneurs 2025-26, University of Michigan",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. The Zell Lurie 2025-26 page names Bryce Masterson and does not name a launched product. Pursuing opportunities in the US for Digital Asset Assurance, Cybersecurity, or Infrastructure Construction Services.",
+      "orgPlace": "Zell Entrepreneurs 2025-26",
+      "sourceUrl": "https://zli.umich.edu/meet-the-2025-2026-zell-entrepreneurs/",
+      "excerpt": "The 2025-2026 Zell Entrepreneurs page lists Bryce Masterson. Pursuing opportunities in the US for Digital Asset Assurance, Cybersecurity, or Infrastructure Construction Services."
+    },
+    {
+      "name": "Aayush Bansal",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "CMU VentureBridge '26 fellow",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. Aayush Bansal, PhD, Robotics, School of Computer Science, is working on an idea in stealth. The page does not name a company or a class year.",
+      "orgPlace": "CMU VentureBridge '26",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 fellows: Aayush Bansal, PhD, Robotics, School of Computer Science, is working on an idea in stealth."
+    },
+    {
+      "name": "Kevin Dai",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "CMU VentureBridge '26 fellow",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. Kevin Dai, PhD, Mechanical Engineering, is creating biocompatible 3D printing technologies for medtech prototyping. The page does not name a company or a class year.",
+      "orgPlace": "CMU VentureBridge '26",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 fellows: Kevin Dai, PhD, Mechanical Engineering, is creating biocompatible 3D printing technologies for medtech prototyping."
+    },
+    {
+      "name": "Michael Rudow",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "CMU VentureBridge '26 fellow",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. Michael Rudow, PhD, School of Computer Science, is developing resilient real-time data delivery systems for robots and drones. The page does not name a company or a class year.",
+      "orgPlace": "CMU VentureBridge '26",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 fellows: Michael Rudow, PhD, School of Computer Science, is developing resilient real-time data delivery systems for robots and drones."
+    },
+    {
+      "name": "Ron Sarma",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "CMU VentureBridge '26 fellow",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. Ron Sarma, PhD, Chemistry, is building an AI-driven molecular energy prediction engine for computational chemistry and drug discovery. The page does not name a company or a class year.",
+      "orgPlace": "CMU VentureBridge '26",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 fellows: Ron Sarma, PhD, Chemistry, is building an AI-driven molecular energy prediction engine for computational chemistry and drug discovery."
+    },
+    {
+      "name": "Apoorv Singh",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "CMU VentureBridge '26 fellow",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. Apoorv Singh, Robotics, School of Computer Science, is building an AI-first software platform that helps home inspectors streamline report generation. The page does not name a company or a class year.",
+      "orgPlace": "CMU VentureBridge '26",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 fellows: Apoorv Singh, Robotics, School of Computer Science, is building an AI-first software platform that helps home inspectors streamline report generation."
+    },
+    {
+      "name": "David Hershenson",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "CMU VentureBridge '26 fellow",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. David Hershenson, Electrical and Computer Engineering, is developing a wearable sensor platform for tennis and pickleball swing analysis. The page does not name a company or a class year.",
+      "orgPlace": "CMU VentureBridge '26",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 fellows: David Hershenson, Electrical and Computer Engineering, is developing a wearable sensor platform for tennis and pickleball swing analysis."
+    },
+    {
+      "name": "Eshan Chordia",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "CMU VentureBridge '26 fellow",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. Eshan Chordia, School of Computer Science, is creating an autonomous machine learning engineer that converts business problems into production-ready models. The page does not name a company or a class year.",
+      "orgPlace": "CMU VentureBridge '26",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 fellows: Eshan Chordia, School of Computer Science, is creating an autonomous machine learning engineer that converts business problems into production-ready models."
+    },
+    {
+      "name": "Grant Wilkinson",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "CMU VentureBridge '26 fellow",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. Grant Wilkinson, College of Engineering, is developing drone-based intelligence to manage weeds and invasive species. The page does not name a company or a class year.",
+      "orgPlace": "CMU VentureBridge '26",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 fellows: Grant Wilkinson, College of Engineering, is developing drone-based intelligence to manage weeds and invasive species."
+    },
+    {
+      "name": "Shiv Panjwani",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "CMU VentureBridge '26 fellow",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. Shiv Panjwani, Tepper School of Business, is building an engineering project management platform for healthtech and robotics leaders. The page does not name a company or a class year.",
+      "orgPlace": "CMU VentureBridge '26",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 fellows: Shiv Panjwani, Tepper School of Business, is building an engineering project management platform for healthtech and robotics leaders."
+    },
+    {
+      "name": "Siddhartha Vanjari",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "CMU VentureBridge '26 fellow",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. Siddhartha Vanjari, Electrical and Computer Engineering, is building an AI incident response engine for regulated industries. The page does not name a company or a class year.",
+      "orgPlace": "CMU VentureBridge '26",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 fellows: Siddhartha Vanjari, Electrical and Computer Engineering, is building an AI incident response engine for regulated industries."
+    },
+    {
+      "name": "Stephen Wu",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "CMU VentureBridge '26 fellow",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. Stephen Wu, School of Computer Science, is building an AI-driven hedge fund using machine learning for equity signal generation. The page does not name a company or a class year.",
+      "orgPlace": "CMU VentureBridge '26",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 fellows: Stephen Wu, School of Computer Science, is building an AI-driven hedge fund using machine learning for equity signal generation."
+    },
+    {
+      "name": "Taranveer Singh",
+      "aliases": [],
+      "campusId": "univ_cmu",
+      "affiliationRole": "CMU VentureBridge '26 fellow",
+      "potentialSignal": "stealth or potential founder",
+      "verificationStatus": "confirmed",
+      "verificationNote": "stealth or potential founder. Taranveer Singh, School of Computer Science, and a visiting research fellow at Berkeley AI Research Lab, is developing a human behavior simulation platform. The page does not name a company or a class year.",
+      "orgPlace": "CMU VentureBridge '26",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "CMU VentureBridge '26 fellows: Taranveer Singh, School of Computer Science, and a visiting research fellow at Berkeley AI Research Lab, is developing a human behavior simulation platform."
+    }
+  ],
+  "links": []
+}

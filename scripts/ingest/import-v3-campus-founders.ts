@@ -85,6 +85,7 @@ interface PotentialRow {
   sourceUrl: string;
   excerpt: string;
   enrollment?: Enrollment | null;
+  leftSchool?: boolean;
 }
 
 interface LinkRow {
@@ -659,6 +660,7 @@ function main() {
           verificationStatus: person.verificationStatus,
           verificationNote: person.verificationNote,
           enrollment: person.enrollment,
+          leftSchool: person.leftSchool,
           excerpt: person.excerpt,
         },
         person.sourceUrl,
