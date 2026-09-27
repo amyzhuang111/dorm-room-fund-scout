@@ -3,7 +3,8 @@
 import { useDeferredValue, useMemo } from "react";
 import { foundersInView } from "@/lib/domain/candidate-filter";
 import type { EnrollmentStatus } from "@/lib/domain/founder-status";
-import { matchesEnrollment, selectedEnrollment } from "@/lib/domain/founder-status";
+import { selectedEnrollment } from "@/lib/domain/founder-status";
+import { userFounderPassesEnrollment } from "@/lib/domain/user-pipeline";
 import type { FeedbackRecord, FeedbackTarget } from "@/lib/domain/feedback";
 import { likeTargetsFrom, reviewFounders, reviewMode } from "@/lib/domain/review-view";
 import type { FounderRow, UniversitySummary } from "@/lib/domain/queries";
@@ -12,6 +13,7 @@ import { FilterSidebar } from "./filter-sidebar";
 import { FounderCard } from "./founder-card";
 import { ScoutNav, useScoutNav } from "./scout-nav";
 import { useFeedbackRecords } from "./feedback-provider";
+import { useMergedCatalog } from "./user-pipeline-provider";
 
 export function FounderShortlistApp({
   initial,
@@ -51,19 +53,20 @@ function ShortlistBody({
   const { current } = useScoutNav()!;
   const query = useDeferredValue(current);
   const records = useFeedbackRecords(initialRecords);
-  const liveLikes = useMemo(() => likeTargetsFrom(records, [], founders, initialLikes), [records, founders, initialLikes]);
+  const catalog = useMergedCatalog(universities, [], founders);
+  const liveLikes = useMemo(() => likeTargetsFrom(records, [], catalog.founders, initialLikes), [records, catalog.founders, initialLikes]);
   const visible = useMemo(() => {
-    const matched = foundersInView(founders, { universityId: query.university, search: query.q });
+    const matched = foundersInView(catalog.founders, { universityId: query.university, search: query.q });
     return reviewFounders(matched, records, liveLikes, reviewMode(query.feedback)).filter((founder) =>
-      matchesEnrollment(founder.enrollmentStatus, selectedEnrollment(query.enroll))
+      userFounderPassesEnrollment(founder, selectedEnrollment(query.enroll))
     );
-  }, [founders, query, records, liveLikes]);
+  }, [catalog.founders, query, records, liveLikes]);
   const counts = (current.university && enrollment.byUniversity[current.university]) || enrollment.all;
   const withEvidence = visible.filter((founder) => founder.strongestEvidence);
   const withoutEvidence = visible.filter((founder) => !founder.strongestEvidence);
   return (
     <div data-scout-live="" className="flex min-h-[calc(100vh-3.5rem-2.25rem)] flex-col sm:flex-row">
-      <FilterSidebar universities={universities} basePath="/founder/shortlist" current={current} mode="founder" />
+      <FilterSidebar universities={catalog.universities} basePath="/founder/shortlist" current={current} mode="founder" />
       <div className="flex-1 p-4">
         <EnrollmentChips basePath="/founder/shortlist" current={current} counts={counts} />
         <h1 className="mt-3 text-lg font-semibold text-foreground">Founder shortlist</h1>

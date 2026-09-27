@@ -131,6 +131,7 @@ export function campusSwatches(nodes: { id: string; type: string; label: string;
 }
 
 export function nodeColor(node: { type: MapNodeType; campus: string | null; id?: string }, colors: Map<string, string>): string {
+  if (node.id && (node.id.startsWith("user_") || node.id.startsWith("ufounder_") || node.id.startsWith("ucampus_"))) return "#111111";
   if (node.type === "investor" || node.type === "organization" || node.type === "program") return NODE_FILL[node.type];
   const id = node.campus ?? (node.type === "campus" ? node.id : null);
   if (id && colors.get(id)) return colors.get(id) as string;

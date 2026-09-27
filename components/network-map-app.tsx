@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { SECTION_SHORT, tierBandLabel, type HotspotSectionId } from "@/lib/domain/hotspot-model";
 import type { MapEdgeType, MapGraph, MapNode, MapNodeType } from "@/lib/domain/network-map";
+import { attachUserMapNodes, isUserAddedId } from "@/lib/domain/user-pipeline";
+import { useUserPipeline } from "./user-pipeline-provider";
 import type { NetworkFocus } from "@/lib/domain/network-focus";
 import { buildPersonLinkedInLookup } from "@/lib/domain/map-linkedin";
 import type { NetworkSigmaHandle } from "./network-sigma";
@@ -78,6 +80,9 @@ function toggle<T>(list: T[], value: T): T[] {
 
 export function NetworkMapApp() {
   const [graph, setGraph] = useState<MapGraph | null>(null);
+  const pipeline = useUserPipeline();
+  const shown = useMemo(() => (graph ? attachUserMapNodes(graph, pipeline.state) : null), [graph, pipeline.state]);
+  const seededCampuses = useRef(new Set<string>());
   const [error, setError] = useState<string | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [filters, setFilters] = useState<Filters | null>(null);
@@ -145,7 +150,7 @@ export function NetworkMapApp() {
   }, []);
 
   useEffect(() => {
-    if (!selected) return;
+    if (!selected || isUserAddedId(selected)) return;
     let cancel = false;
     fetch(`/api/network/focus?id=${encodeURIComponent(selected)}`)
       .then((res) => (res.ok ? res.json() : null))
@@ -158,40 +163,49 @@ export function NetworkMapApp() {
     };
   }, [selected]);
 
+  useEffect(() => {
+    if (!shown || !filters) return;
+    const ids = shown.nodes.filter((node) => node.type === "campus" && node.campus).map((node) => node.campus as string);
+    const fresh = ids.filter((id) => !seededCampuses.current.has(id) && !filters.campuses.includes(id));
+    for (const id of ids) seededCampuses.current.add(id);
+    if (fresh.length === 0) return;
+    setFilters({ ...filters, campuses: [...filters.campuses, ...fresh] });
+  }, [shown, filters]);
+
   const ask = useAskHighlight();
   const hidden = useMemo(() => {
-    const base = hiddenIds(graph, filters, showIsolates);
-    if (!ask || !graph || ask.ids.length === 0) return base;
+    const base = hiddenIds(shown, filters, showIsolates);
+    if (!ask || !shown || ask.ids.length === 0) return base;
     const keep = new Set(ask.ids);
-    if (!graph.nodes.some((node) => keep.has(node.id))) return base;
+    if (!shown.nodes.some((node) => keep.has(node.id))) return base;
     const next = new Set<string>();
-    for (const node of graph.nodes) {
+    for (const node of shown.nodes) {
       if (!keep.has(node.id)) next.add(node.id);
     }
     return next;
-  }, [graph, filters, showIsolates, ask]);
+  }, [shown, filters, showIsolates, ask]);
   const edgeTypes = useMemo(() => new Set(filters?.edgeTypes ?? []), [filters]);
   const activeId = selected && !hidden.has(selected) ? selected : null;
 
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!graph || q.length < 2) return [];
-    return graph.nodes.filter((node) => !hidden.has(node.id) && node.label.toLowerCase().includes(q)).slice(0, 8);
-  }, [graph, query, hidden]);
+    if (!shown || q.length < 2) return [];
+    return shown.nodes.filter((node) => !hidden.has(node.id) && node.label.toLowerCase().includes(q)).slice(0, 8);
+  }, [shown, query, hidden]);
 
   const visibleCounts = useMemo(() => {
     const counts = { person: 0, startup: 0, campus: 0, investor: 0, program: 0, organization: 0 };
-    if (!graph) return counts;
-    for (const node of graph.nodes) {
+    if (!shown) return counts;
+    for (const node of shown.nodes) {
       if (!hidden.has(node.id)) counts[node.type] += 1;
     }
     return counts;
-  }, [graph, hidden]);
+  }, [shown, hidden]);
 
   const topOrgs = useMemo(() => {
-    if (!graph) return [];
+    if (!shown) return [];
     const rank: Record<string, number> = { S: 0, A: 1, B: 2, C: 3, D: 4 };
-    return graph.nodes
+    return shown.nodes
       .filter((node) => node.type === "organization" && !hidden.has(node.id))
       .sort(
         (a, b) =>
@@ -201,17 +215,17 @@ export function NetworkMapApp() {
           a.label.localeCompare(b.label),
       )
       .slice(0, 6);
-  }, [graph, hidden]);
+  }, [shown, hidden]);
 
   const yearChoices = useMemo(() => {
     const counts = new Map<number, number>();
-    if (!graph) return [];
-    for (const node of graph.nodes) {
+    if (!shown) return [];
+    for (const node of shown.nodes) {
       if (node.type !== "person" || node.year == null) continue;
       counts.set(node.year, (counts.get(node.year) ?? 0) + 1);
     }
     return [...counts.entries()].sort((a, b) => b[0] - a[0]).slice(0, 8);
-  }, [graph]);
+  }, [shown]);
 
   function choose(id: string) {
     setSelected(id);
@@ -223,14 +237,14 @@ export function NetworkMapApp() {
   const [seenAsk, setSeenAsk] = useState(0);
   if (askToken !== seenAsk) {
     setSeenAsk(askToken);
-    if (ask?.focusId && graph?.nodes.some((node) => node.id === ask.focusId)) {
+    if (ask?.focusId && shown?.nodes.some((node) => node.id === ask.focusId)) {
       setSelected(ask.focusId);
       setFly((prev) => ({ id: ask.focusId ?? "", token: prev.token + 1 }));
     }
   }
 
-  const linkedinFor = useMemo(() => (graph ? buildPersonLinkedInLookup(graph) : null), [graph]);
-  const selectedNode = graph?.nodes.find((node) => node.id === activeId) ?? null;
+  const linkedinFor = useMemo(() => (shown ? buildPersonLinkedInLookup(shown) : null), [shown]);
+  const selectedNode = shown?.nodes.find((node) => node.id === activeId) ?? null;
   const personLinkedIn =
     selectedNode?.type === "person"
       ? focus?.id === selected && focus.linkedin
@@ -250,9 +264,9 @@ export function NetworkMapApp() {
 
   return (
     <div className="fixed inset-x-0 top-14 bottom-0 z-20 bg-white text-black">
-      {graph && filters ? (
+      {shown && filters ? (
         <NetworkSigma
-          graph={graph}
+          graph={shown}
           hidden={hidden}
           edgeTypes={edgeTypes}
           selected={activeId}
@@ -424,7 +438,7 @@ export function NetworkMapApp() {
               ))}
             </FilterGroup>
             <FilterGroup title="Sector">
-              {[...new Set(graph.nodes.map((node) => node.sector).filter((item): item is string => !!item))].sort().map((sector) => (
+              {[...new Set((shown ?? graph).nodes.map((node) => node.sector).filter((item): item is string => !!item))].sort().map((sector) => (
                 <Check key={sector} label={sector} checked={filters.sectors.includes(sector)} onChange={() => setFilters({ ...filters, sectors: toggle(filters.sectors, sector) })} />
               ))}
             </FilterGroup>
@@ -442,12 +456,12 @@ export function NetworkMapApp() {
                 <p className="pt-1 text-[10px] leading-snug text-neutral-600">est. means that bucket was inferred.</p>
               </FilterGroup>
               <FilterGroup title="Signal tier">
-                {[...new Set(graph.nodes.map((node) => node.tier ?? "Untiered"))].sort().map((tier) => (
+                {[...new Set((shown ?? graph).nodes.map((node) => node.tier ?? "Untiered"))].sort().map((tier) => (
                   <Check key={tier} label={tier} checked={filters.tiers.includes(tier)} onChange={() => setFilters({ ...filters, tiers: toggle(filters.tiers, tier) })} />
                 ))}
               </FilterGroup>
               <FilterGroup title="Stage">
-                {[...new Set(graph.nodes.map((node) => node.stage ?? "Unknown"))].sort().map((stage) => (
+                {[...new Set((shown ?? graph).nodes.map((node) => node.stage ?? "Unknown"))].sort().map((stage) => (
                   <Check key={stage} label={stage} checked={filters.stages.includes(stage)} onChange={() => setFilters({ ...filters, stages: toggle(filters.stages, stage) })} />
                 ))}
               </FilterGroup>
@@ -488,7 +502,7 @@ export function NetworkMapApp() {
               <li key={node.id}>
                 <button type="button" className="flex w-full items-baseline justify-between gap-2 px-3 py-1.5 text-left text-sm hover:bg-neutral-100" onClick={() => choose(node.id)}>
                   <span className="truncate text-black">{node.label}</span>
-                  <span className="shrink-0 text-[10px] uppercase tracking-wide text-neutral-600">{node.type}</span>
+                  <span className="shrink-0 text-[10px] uppercase tracking-wide text-neutral-600">{isUserAddedId(node.id) ? "User-added" : node.type}</span>
                 </button>
               </li>
             ))}
@@ -521,7 +535,8 @@ export function NetworkMapApp() {
           <LegendItem shape="diamond" color={NODE_FILL.investor} label="" title="Investor" />
           <LegendItem shape="hex" color={NODE_FILL.program} label="" title="Club" />
           <LegendItem shape="triangle" color={NODE_FILL.organization} label="" title="Organization" />
-          <span className="sr-only">Circle person, square startup, diamond investor, hex club, triangle organization. Color is campus.</span>
+          <LegendItem shape="square" color="#111111" label="" title="User-added" />
+          <span className="sr-only">Circle person, square startup, diamond investor, hex club, triangle organization, black square user-added. Color is campus.</span>
           <span className="inline-flex items-center gap-1 text-neutral-600">
             <span className="inline-block h-px w-3.5 bg-[#b06018]" />
             Cross-campus
@@ -554,7 +569,7 @@ export function NetworkMapApp() {
         >
           <div className="flex items-start justify-between gap-2 border-b border-black/10 px-3 py-2">
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-neutral-600">{selectedNode.type === "organization" ? "Organization" : selectedNode.type}</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-neutral-600">{isUserAddedId(selectedNode.id) ? "User-added" : selectedNode.type === "organization" ? "Organization" : selectedNode.type}</p>
               <h2 className="text-base font-semibold text-black">{focus?.name ?? selectedNode.label}</h2>
               <p className="mt-0.5 text-xs text-neutral-700">
                 {[
@@ -580,10 +595,43 @@ export function NetworkMapApp() {
             </button>
           </div>
           <div className="flex-1 overflow-y-auto px-3 py-2">
-            {focus && focus.id === activeId ? <FocusBody focus={focus} onJump={choose} /> : <p className="text-sm text-neutral-600">Loading…</p>}
+            {isUserAddedId(selectedNode.id) ? (
+              <UserAddedFocus id={selectedNode.id} />
+            ) : focus && focus.id === activeId ? (
+              <FocusBody focus={focus} onJump={choose} />
+            ) : (
+              <p className="text-sm text-neutral-600">Loading…</p>
+            )}
           </div>
         </aside>
       )}
+    </div>
+  );
+}
+
+function UserAddedFocus({ id }: { id: string }) {
+  const { state } = useUserPipeline();
+  const startup = state.startups.find((row) => row.id === id) ?? state.startups.find((row) => row.founders.some((founder) => founder.id === id));
+  const founder = startup?.founders.find((row) => row.id === id);
+  if (!startup) return <p className="text-sm">This user-added record is no longer in the pipeline.</p>;
+  return (
+    <div className="space-y-2 text-sm text-black">
+      <p>{founder ? founder.name : startup.name}</p>
+      <p className="text-xs text-neutral-700">{startup.campusName}{startup.fundingStage ? ` · ${startup.fundingStage}` : ""}</p>
+      {startup.description && <p>{startup.description}</p>}
+      <div className="flex flex-wrap gap-2 text-xs">
+        {startup.websiteUrl && (
+          <a href={startup.websiteUrl} target="_blank" rel="noopener noreferrer" className="rounded-md border border-black px-2 py-1 font-medium">
+            Website
+          </a>
+        )}
+        <a href={startup.verificationUrl} target="_blank" rel="noopener noreferrer" className="rounded-md border border-black px-2 py-1 font-medium">
+          Verified by user
+        </a>
+        <Link href={`/startup/${startup.id}`} className="font-medium underline">
+          Open record
+        </Link>
+      </div>
     </div>
   );
 }
@@ -619,10 +667,11 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
   const startupOk = new Set<string>();
   for (const node of graph.nodes) {
     if (node.type !== "startup") continue;
+    const userNode = node.id.startsWith("user_");
     const campusHit = campusAll || campusesOf(node).some((id) => filters.campuses.includes(id));
     const sectorHit = sectorAll || (node.sector != null && filters.sectors.includes(node.sector));
-    const tierHit = tierAll || filters.tiers.includes(node.tier ?? "Untiered");
-    const stageHit = stageAll || filters.stages.includes(node.stage ?? "Unknown");
+    const tierHit = userNode || tierAll || filters.tiers.includes(node.tier ?? "Untiered");
+    const stageHit = userNode || stageAll || filters.stages.includes(node.stage ?? "Unknown");
     if (filters.nodeTypes.includes("startup") && campusHit && sectorHit && tierHit && stageHit) startupOk.add(node.id);
   }
 
@@ -638,9 +687,10 @@ function hiddenIds(graph: MapGraph | null, filters: Filters | null, showIsolates
   const peopleOk = new Set<string>();
   for (const node of graph.nodes) {
     if (node.type !== "person") continue;
+    const userPerson = node.id.startsWith("ufounder_");
     const campusHit = campusAll || campusesOf(node).some((id) => filters.campuses.includes(id));
-    const tierHit = tierAll || filters.tiers.includes(node.tier ?? "Untiered");
-    const enrollHit = enrollAll || (node.enroll != null && filters.enroll.includes(node.enroll));
+    const tierHit = userPerson || tierAll || filters.tiers.includes(node.tier ?? "Untiered");
+    const enrollHit = enrollAll || (userPerson && node.enroll == null) || (node.enroll != null && filters.enroll.includes(node.enroll));
     const sectorHit = sectorAll || sectorPeople.has(node.id);
     if (
       filters.nodeTypes.includes("person") &&

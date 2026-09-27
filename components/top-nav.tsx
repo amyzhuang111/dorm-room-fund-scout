@@ -9,6 +9,7 @@ const FOUNDER_NAV = [
   { href: "/founder/discover", label: "Discover" },
   { href: "/hotspots?from=founder", label: "Hotspots" },
   { href: "/founder/shortlist", label: "Shortlist" },
+  { href: "/startup/pipeline", label: "Pipeline" },
   { href: "/signals?from=founder", label: "Signals" },
   { href: "/founder/network", label: "Network" },
   { href: "/sources?from=founder", label: "Sources" },

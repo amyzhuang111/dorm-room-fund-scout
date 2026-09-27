@@ -1,5 +1,6 @@
 import { buildHref } from "@/lib/domain/url";
 import { alphabeticalByLabel, compareCampusLabels, shortCampusLabel } from "@/lib/domain/campuses";
+import { isUserCampusId } from "@/lib/domain/user-pipeline";
 import type { CoverageState, SectorCount, UniversitySummary } from "@/lib/domain/queries";
 import { SIGNAL_TIERS } from "@/lib/domain/signal-tier";
 import { FeedbackSync } from "./feedback-sync";
@@ -25,6 +26,7 @@ function UniversityRow({
   mode: "founder" | "startup";
 }) {
   const coverage = COVERAGE_LABEL[u.coverage];
+  const userCampus = isUserCampusId(u.id);
   const label = shortCampusLabel(u.id, u.name);
   const count = mode === "founder" ? u.founderCount : u.companyCount;
   const switchingCampus = current.university !== u.id;
@@ -41,10 +43,10 @@ function UniversityRow({
     >
       <span className="truncate">{label}</span>
       <span className="flex shrink-0 items-center gap-1.5">
-        <span className={`text-[10px] ${coverage.cls}`}>{coverage.label}</span>
+        <span className={`text-[10px] ${userCampus ? "text-foreground" : coverage.cls}`}>{userCampus ? "User-added" : coverage.label}</span>
         {/* A campus that hasn't been scanned shows only its status, never a numeric "0" —
             unscanned is not the same claim as "zero found here." */}
-        {u.sourcesConfigured > 0 && <span className="rounded-full bg-surface-2 px-1.5 py-0.5 text-[11px] text-muted">{count}</span>}
+        {(u.sourcesConfigured > 0 || count > 0) && <span className="rounded-full bg-surface-2 px-1.5 py-0.5 text-[11px] text-muted">{count}</span>}
       </span>
     </ScoutLink>
   );

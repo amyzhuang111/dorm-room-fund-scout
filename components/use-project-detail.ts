@@ -18,7 +18,7 @@ export function useProjectDetail(id: string | undefined, initial: ProjectDetail 
   }
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || id.startsWith("user_")) return;
     let cancel = false;
     const load = () => {
       fetch(`/api/project/${encodeURIComponent(id)}`)
