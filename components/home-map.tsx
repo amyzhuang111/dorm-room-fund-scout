@@ -10,10 +10,17 @@ const GlobeView = dynamic(() => import("./globe-view").then((mod) => mod.GlobeVi
   loading: () => <GlobeShell />,
 });
 
-export function HomeMap({ initial }: { initial: Record<string, string | undefined> }) {
+const NetworkMapApp = dynamic(() => import("./network-map-app").then((mod) => mod.NetworkMapApp), {
+  ssr: false,
+  loading: () => (
+    <div className="fixed inset-x-0 top-14 bottom-0 z-20 grid place-items-center bg-white text-sm text-black">Loading network…</div>
+  ),
+});
+
+export function HomeMap({ initial, network }: { initial: Record<string, string | undefined>; network: boolean }) {
   return (
     <ScoutNav basePath="/" initial={initial}>
-      <HomeMapBody />
+      {network ? <NetworkMapApp /> : <HomeMapBody />}
     </ScoutNav>
   );
 }
