@@ -2,15 +2,18 @@ import { CAMPUSES } from "@/lib/domain/campuses";
 import type { MapEdgeType, MapNode, MapNodeType } from "@/lib/domain/network-map";
 import { REGIONS, campusShade, regionDef, regionForCampus, regionInk } from "@/lib/domain/network-regions";
 
-/** Neutral ink for shapes that are not colored by campus. */
+/** Mid grey for shapes that are not colored by campus. Never pure black. */
 export const NODE_FILL: Record<MapNodeType, string> = {
-  person: "#3a3a3a",
-  startup: "#3a3a3a",
-  investor: "#242424",
-  campus: "#3a3a3a",
-  program: "#2c2c2c",
-  organization: "#242424",
+  person: "#9aa3b2",
+  startup: "#9aa3b2",
+  investor: "#9ca3af",
+  campus: "#8b95a8",
+  program: "#9ca3af",
+  organization: "#9ca3af",
 };
+
+/** People and startups sit in this opacity so overlapping dots blend instead of stacking ink. */
+export const FILL_ALPHA = 0.88;
 
 export interface CampusSwatch {
   id: string;
@@ -62,19 +65,24 @@ function regionIndex(id: string): number {
   return index < 0 ? REGIONS.length : index;
 }
 
-export function nodeColor(node: { type: MapNodeType; campus: string | null; id?: string }, colors: Map<string, string>): string {
-  if (node.id && (node.id.startsWith("user_") || node.id.startsWith("ufounder_") || node.id.startsWith("ucampus_"))) return "#111111";
-  if (node.type === "investor" || node.type === "organization" || node.type === "program") return NODE_FILL[node.type];
+export function nodeColor(node: { type: MapNodeType; campus: string | null; id?: string; rimBand?: "outer" | "inward" | null; rimTier?: "S+" | "S" | "A" | "B" | "C" | "D" | null }, colors: Map<string, string>): string {
+  if (node.id && (node.id.startsWith("user_") || node.id.startsWith("ufounder_") || node.id.startsWith("ucampus_"))) return withAlpha("#6b7280", 0.9);
+  if (node.rimBand === "inward" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return "rgba(196, 201, 209, 0.42)";
+  if (node.rimBand === "outer" && node.rimTier === "S+" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha("#374151", 0.96);
+  if (node.rimBand === "outer" && node.rimTier === "S" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha("#4b5563", 0.96);
+  if (node.rimBand === "outer" && (node.type === "investor" || node.type === "organization" || node.type === "program")) return withAlpha("#9ca3af", 0.82);
+  if (node.type === "investor" || node.type === "organization" || node.type === "program") return withAlpha(NODE_FILL[node.type], 0.9);
   const id = node.campus ?? (node.type === "campus" ? node.id : null);
-  if (id && colors.get(id)) return colors.get(id) as string;
-  return NODE_FILL[node.type];
+  if (id && colors.get(id)) return withAlpha(colors.get(id) as string, FILL_ALPHA);
+  return withAlpha(NODE_FILL[node.type], FILL_ALPHA);
 }
 
-/** Faint tint of a campus color for an edge that stays inside that campus. */
-export function edgeTint(campusId: string | null, colors: Map<string, string>): string {
-  const hex = campusId ? colors.get(campusId) : undefined;
-  if (!hex) return "rgba(30, 30, 30, 0.45)";
-  return hexToRgba(hex, 0.72);
+/** The hovered node's neighborhood. Same hue, darker and more opaque than the resting hairline. */
+export function emphasizeColor(color: string): string {
+  const match = color.match(/rgba\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*[\d.]+\s*\)/);
+  if (!match) return "rgba(55, 65, 81, 0.55)";
+  const channel = (value: string) => Math.round(Number(value) * 0.8);
+  return `rgba(${channel(match[1])}, ${channel(match[2])}, ${channel(match[3])}, 0.58)`;
 }
 
 export function campusKey(node: { campus: string | null; campuses?: string[] }): string {
@@ -97,16 +105,26 @@ export const NODE_SHAPE: Record<MapNodeType, "circle" | "square" | "diamond" | "
   organization: "triangle",
 };
 
-export const DIM_NODE = "#d5d5d5";
+export const DIM_NODE = "#e5e7eb";
 /** Hairline at the fitted camera. Thickness is in screen pixels and does not grow with zoom. */
-export const EDGE_PX = 0.4;
-export const EDGE_GREY = "rgba(80, 80, 80, 0.34)";
-/** Faint amber for an edge whose ends sit on different campuses. */
-export const EDGE_CROSS = "rgba(176, 96, 24, 0.55)";
-export const EDGE_DIM = "rgba(170, 170, 170, 0.14)";
-/** Colored only while a node is hovered or selected. */
-export const EDGE_HOVER = "#1e4b8a";
-export const EDGE_HOVER_PX = 0.95;
+export const EDGE_PX = 0.5;
+export const EDGE_GREY = "rgba(120, 124, 130, 0.09)";
+export const EDGE_DIM = "rgba(170, 170, 170, 0.045)";
+export const EDGE_HOVER_PX = 1.05;
+/** Structural nodes at or above this degree hide their spokes until hover. */
+export const FAN_DEGREE = 12;
+/** A rim hub this connected draws none of its edges until hover. */
+export const MEGA_DEGREE = 34;
+/** Labels kept on the fitted view, besides campuses. */
+export const TOP_HUB_LABELS = 8;
+export const LABEL_CAMPUS = 12;
+export const LABEL_HUB = 11;
+/** Thiel Fellowship, the one program label that stays on at every zoom. */
+export const LABEL_LEAD = 13;
+export const LABEL_REGION = 10;
+export const LABEL_NODE = 11;
+/** Extra pixels between uppercase region letters. */
+export const REGION_TRACKING = 1.55;
 
 export const EDGE_COLOR: Record<MapEdgeType, string> = {
   founded: EDGE_GREY,
@@ -120,16 +138,22 @@ export const EDGE_COLOR: Record<MapEdgeType, string> = {
 
 /**
  * Screen pixels at every zoom. `signalScore` is already a 0–1 sqrt of the
- * per-capita ratio (or of the node's own connection count). People and startups
- * stay in a small band so a square still reads next to a circle. Campuses stay
- * the large circles. Clubs, organizations, and investors share a wider band.
+ * per-capita ratio (or of the node's own connection count). People are ~2px
+ * dots. Startups stay small squares. Only campuses grow, and they are capped
+ * so one node cannot dominate the cloud.
  */
 export function screenSize(node: MapNode): number {
   const score = clamp(node.signalScore ?? 0, 0, 1);
-  if (node.type === "campus") return 9.2 + score * 6.8;
-  if (node.type === "organization" || node.type === "program" || node.type === "investor") return 5.6 + score * 5;
-  if (node.type === "startup") return 6 + score * 1.6;
-  return 4.6 + score * 1.4;
+  if (node.type === "campus") return Math.min(9.5, 6.4 + score * 3.1);
+  if (node.type === "organization" || node.type === "program" || node.type === "investor") {
+    if (node.rimBand === "outer" && node.rimTier === "S+") return 6.2;
+    if (node.rimBand === "outer" && node.rimTier === "S") return Math.min(5.4, 4.8 + score * 0.5);
+    if (node.rimBand === "outer") return Math.min(3.65, 3.1 + score * 0.4);
+    if (node.rimBand === "inward") return Math.min(2.15, 1.65 + score * 0.35);
+    return Math.min(4.2, 2.7 + score * 1.25);
+  }
+  if (node.type === "startup") return 2.35 + score * 0.55;
+  return 1.15 + score * 0.25;
 }
 
 export interface RestingLabels {
@@ -202,7 +226,7 @@ function topIds(nodes: LabelCandidate[], suppress: Set<string>): Set<string> {
     nodes
       .filter((node) => !node.anchor && !suppress.has(node.id))
       .sort((a, b) => b.degree - a.degree || a.id.localeCompare(b.id))
-      .slice(0, 15)
+      .slice(0, TOP_HUB_LABELS)
       .map((node) => node.id),
   );
 }
@@ -295,7 +319,7 @@ export function screenLabelTier(marker: boolean, anchor: boolean, type: string):
 
 /** Same truncation drawHaloLabel uses, so the collision box matches the glyphs. */
 export function truncateMapLabel(text: string, marker: boolean, anchor: boolean): string {
-  const limit = marker ? 28 : anchor ? 22 : 28;
+  const limit = marker ? 32 : anchor ? 26 : 28;
   if (text.length <= limit) return text;
   return `${text.slice(0, limit - 1)}…`;
 }
@@ -306,10 +330,10 @@ export function truncateMapLabel(text: string, marker: boolean, anchor: boolean)
  * lowers the bar, and the collision pass still drops anything that would overlap.
  */
 export function labelDegreeFloor(cameraRatio: number): number {
-  if (cameraRatio >= 0.7) return 40;
-  if (cameraRatio >= 0.45) return 16;
-  if (cameraRatio >= 0.28) return 8;
-  if (cameraRatio >= 0.14) return 3;
+  if (cameraRatio >= 0.78) return 1_000_000;
+  if (cameraRatio >= 0.48) return 30;
+  if (cameraRatio >= 0.28) return 12;
+  if (cameraRatio >= 0.14) return 4;
   return 1;
 }
 
@@ -324,6 +348,7 @@ export interface ScreenLabel {
   marker: boolean;
   anchor: boolean;
   fontSize: number;
+  tracking?: number;
 }
 
 /** Hover card drawn to the right of the active node. Other labels must stay clear of it. */
@@ -381,8 +406,9 @@ export function selectVisibleLabels(labels: ScreenLabel[], measure: (text: strin
 }
 
 function screenLabelBox(label: ScreenLabel, measure: (text: string, fontSize: number) => number): LabelBox {
-  const width = Math.max(8, measure(label.text, label.fontSize)) + 10;
-  const height = label.fontSize + 8;
+  const tracking = label.tracking ?? 0;
+  const width = Math.max(8, measure(label.text, label.fontSize) + Math.max(0, label.text.length - 1) * tracking) + (label.marker ? 16 : 12);
+  const height = label.fontSize + 10;
   const x = label.x;
   const y = label.marker ? label.y : label.anchor ? label.y - label.nodeSize - 2 : label.y + label.nodeSize + 2;
   if (label.marker) return { left: x - width / 2, top: y - height / 2, right: x + width / 2, bottom: y + height / 2 };
@@ -394,21 +420,7 @@ function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
 
-/** Only the longest spokes fade, and not by much, so a hub's fan stays visible. */
-export function fadeLongEdge(color: string, spanFraction: number): string {
-  const factor = spanFraction > 0.62 ? 0.5 : spanFraction > 0.46 ? 0.72 : 1;
-  if (factor === 1) return color;
-  return scaleAlpha(color, factor);
-}
-
-function scaleAlpha(color: string, factor: number): string {
-  const match = color.match(/rgba\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)/);
-  if (!match) return color;
-  const alpha = Math.max(0.04, Number(match[4]) * factor);
-  return `rgba(${match[1]}, ${match[2]}, ${match[3]}, ${alpha.toFixed(3)})`;
-}
-
-function hexToRgba(hex: string, alpha: number): string {
+function withAlpha(hex: string, alpha: number): string {
   const value = Number.parseInt(hex.slice(1), 16);
   const red = (value >> 16) & 255;
   const green = (value >> 8) & 255;
