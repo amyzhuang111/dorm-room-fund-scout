@@ -82,6 +82,10 @@ function isPennAppsOrganisingTeam(place: string): boolean {
   return key.includes("pennapps") && (key.includes("organising") || key.includes("organizing"));
 }
 
+function isDormRoomFund(place: string): boolean {
+  return norm(place).startsWith("dorm room fund");
+}
+
 function isKeptDirectoryPlace(place: string): boolean {
   const key = norm(place);
   return key === "pear garage" || key === "pear fellows" || key === "human capital fellowship" || key.startsWith("prod fellowship");
@@ -118,7 +122,7 @@ function main() {
     const place = (row.Place ?? "").trim();
     const section = (row.Section ?? "").trim();
     if (!campus || !place || !section) continue;
-    if (isPennAppsOrganisingTeam(place)) {
+    if (isPennAppsOrganisingTeam(place) || isDormRoomFund(place)) {
       if (!excluded.includes(place)) excluded.push(place);
       continue;
     }
@@ -199,7 +203,12 @@ function main() {
 
   const lines = [HEADER.map(csvCell).join(",")];
   for (const row of written) lines.push(HEADER.map((key) => csvCell(row[key] ?? "")).join(","));
-  for (const row of appendix) lines.push(HEADER.map((key) => csvCell(row[key] ?? "")).join(","));
+  for (const row of appendix) {
+    const name = `${row.Name ?? ""} ${row.Place ?? ""}`;
+    const url = row.urls ?? "";
+    if (isDormRoomFund(name) || /dormroomfund\.com/i.test(url)) continue;
+    lines.push(HEADER.map((key) => csvCell(row[key] ?? "")).join(","));
+  }
   const body = `${lines.join("\n")}\n`;
   fs.writeFileSync(TARGET, body);
 

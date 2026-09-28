@@ -38,6 +38,8 @@ assert.equal(hasPhrase(normHotspotName("Erfan Ballew (M.E.T. '28)"), "m e t"), t
 
 const cards = cardsFromRows(parseCsv(fs.readFileSync(path.join(process.cwd(), "data", "imports", "campus_hotspots.csv"), "utf8")));
 assert.equal(cards.some((card) => /pennapps organising team/i.test(card.place)), false);
+assert.equal(cards.some((card) => /dorm room fund/i.test(card.place)), false);
+assert.equal(cards.some((card) => /dormroomfund\.com/i.test(card.url)), false);
 assert.ok(cards.some((card) => card.tier === "D"));
 assert.equal(cards.find((card) => card.place === "Pear Fellows")?.tier, "A");
 assert.equal(cards.find((card) => card.place === "Pear Garage")?.tier, "B");
