@@ -3,6 +3,7 @@ import {
   applyVerifiedLinkedIn,
   evidenceNote,
   evidenceSourceUrl,
+  isNyuSchool,
   isUnknownSchool,
   normalizeVerifiedLinkedIn,
   type VerifiedLinkedIn,
@@ -67,5 +68,38 @@ const second = applyVerifiedLinkedIn(first.alumni, inputs, taken, new Map([["dra
 assert.equal(second.matched.filter((item) => item.changed).length, 0);
 assert.equal(second.matched.length, 2);
 assert.equal(JSON.stringify(second.alumni), JSON.stringify(first.alumni));
+assert.equal(second.relinks.length, 0);
+
+assert.equal(isNyuSchool("NYU Stern School of Business", "univ_nyu"), true);
+assert.equal(isNyuSchool("Stanford University", "univ_stanford"), false);
+const isabelAlumni = [
+  row("dra_isabel_sheinman", "Isabel Sheinman", "NYU Stern School of Business", "https://www.linkedin.com/in/isabel-sheinman-98021079"),
+];
+isabelAlumni[0].university_id = "univ_nyu";
+isabelAlumni[0].linkedin_confidence = "likely";
+const isabelTaken = new Map<string, Set<string>>([
+  ["isabel-sheinman-98021079", new Set(["alum:dra_isabel_sheinman", "person:person_nuVh4GdlbP3H", "person:person_drf_isabel_sheinman"])],
+]);
+const isabelPeople = new Map([["person_nuVh4GdlbP3H", { id: "person_nuVh4GdlbP3H", name: "Isabel Sheinman" }]]);
+const isabel = applyVerifiedLinkedIn(
+  isabelAlumni,
+  [{ name: "Isabel Sheinman", school: "NYU Stern School of Business", linkedin_url: "https://www.linkedin.com/in/isabel-sheinman-98021079", evidence: "Manually confirmed by scout review, 2026-09-28" }],
+  isabelTaken,
+  new Map([["dra_isabel_sheinman", "person_drf_isabel_sheinman"]]),
+  isabelPeople
+);
+assert.equal(isabel.skipped.length, 0);
+assert.equal(isabel.matched[0]?.id, "dra_isabel_sheinman");
+assert.equal(isabel.alumni[0]?.linkedin_confidence, "confirmed");
+assert.deepEqual(isabel.relinks, [{ alumniId: "dra_isabel_sheinman", fromPersonId: "person_drf_isabel_sheinman", toPersonId: "person_nuVh4GdlbP3H" }]);
+const differentName = applyVerifiedLinkedIn(
+  isabelAlumni,
+  [{ name: "Isabel Sheinman", school: "NYU Stern School of Business", linkedin_url: "https://www.linkedin.com/in/isabel-sheinman-98021079", evidence: "Manually confirmed by scout review, 2026-09-28" }],
+  isabelTaken,
+  new Map([["dra_isabel_sheinman", "person_drf_isabel_sheinman"]]),
+  new Map([["person_nuVh4GdlbP3H", { id: "person_nuVh4GdlbP3H", name: "Someone Else" }]])
+);
+assert.equal(differentName.matched.length, 0);
+assert.ok(differentName.skipped.some((item) => item.reason.includes("person:person_nuVh4GdlbP3H")));
 
 console.log("import-drf-linkedin-verified.test.ts ok");
