@@ -18,6 +18,7 @@ import {
   type HotspotTier,
 } from "./hotspot-model";
 import { directoryLabel, hotspotGroups, personIdsForPlace, projectIdsForPlace, type HotspotPlaceGroup } from "./hotspots";
+import { fundingFit, fundingRecency, fuzzyNameHit, viewMentionsYear, type AskStage, type FundingView } from "./ask-intent";
 import { sectorLabel } from "./sectors";
 import { signalTierRank } from "./signal-tier";
 import type { AskHit, AskKind, AskSource, AskToolResult } from "./ask-types";
@@ -94,7 +95,10 @@ export interface PeopleQuery {
   founderOnly?: boolean | null;
   building?: boolean | null;
   verification?: "confirmed" | "partial" | "unverified" | null;
+  /** Funding stage. Unfunded keeps founders whose companies have no recorded funding. */
+  stage?: string | null;
   name?: string | null;
+  fuzzyName?: boolean | null;
   /** When "tier", stronger Founder Scout tiers sort first. */
   sort?: "tier" | null;
   limit?: number | null;
@@ -106,12 +110,18 @@ export interface StartupQuery {
   investor?: string | null;
   city?: string | null;
   program?: string | null;
-  /** Round stage such as "seed" or "series a". Matches sort ahead of other raises. */
+  /** Round stage such as "seed" or "series a". With matchStage, non-matches are dropped. */
   stage?: string | null;
+  /** When true, stage is a hard filter and results sort by stage match, then recency. */
+  matchStage?: boolean | null;
   /** Rank startups that have a round, amount, or funding story ahead of the rest. */
   funding?: boolean | null;
+  /** Keep startups whose round, batch, or news mentions this calendar year. */
+  year?: number | null;
   verification?: "confirmed" | "partial" | "unverified" | null;
   name?: string | null;
+  /** Typo-tolerant name match. Exact substring still counts. */
+  fuzzyName?: boolean | null;
   limit?: number | null;
 }
 
@@ -171,7 +181,7 @@ interface StartupRec {
   website: string | null;
   verification: string | null;
   sectors: string[];
-  investors: { name: string; url: string; round: string | null }[];
+  investors: { name: string; url: string; round: string | null; kind: string | null; batch: string | null }[];
   hqs: { text: string; url: string }[];
   rounds: FundingRoundRec[];
   fundingTotal: string | null;
@@ -179,6 +189,7 @@ interface StartupRec {
   fundingNews: FundingNewsRec[];
   campuses: string[];
   founderIds: string[];
+  founderNames: string[];
   programs: string[];
   sourceUrl: string | null;
 }
@@ -324,6 +335,7 @@ function loadIndex(): Index {
       fundingNews: [],
       campuses: [],
       founderIds: [],
+      founderNames: [],
       programs: [],
       sourceUrl: website,
     });
@@ -398,6 +410,7 @@ function loadIndex(): Index {
         fundingNews: [],
         campuses: [],
         founderIds: [],
+        founderNames: [],
         programs: [],
         sourceUrl: website,
       });
@@ -434,7 +447,13 @@ function loadIndex(): Index {
     const url = row.source_url?.startsWith("http") ? row.source_url : "";
     const extra = parseJsonObject(row.detail_json);
     if (row.fact_key === "investor") {
-      startup.investors.push({ name: row.value_text.trim(), url, round: asString(extra.round) });
+      startup.investors.push({
+        name: row.value_text.trim(),
+        url,
+        round: asString(extra.round),
+        kind: asString(extra.kind),
+        batch: asString(extra.batch),
+      });
     } else if (row.fact_key === "hq") {
       startup.hqs.push({ text: row.value_text.trim(), url });
     } else if (row.fact_key === "funding_round") {
@@ -531,6 +550,7 @@ function loadIndex(): Index {
       if ((role.role ?? "").toLowerCase().includes("founder")) {
         founderIds.add(person.id);
         if (!startup.founderIds.includes(person.id)) startup.founderIds.push(person.id);
+        if (person.name && !startup.founderNames.includes(person.name)) startup.founderNames.push(person.name);
       }
     }
     if (person.founderStatus === "founder") founderIds.add(person.id);
@@ -841,13 +861,16 @@ export function searchPeople(query: PeopleQuery): AskToolResult {
   const founderOnly = query.founderOnly === true;
   const building = query.building === true;
   const startupConstrained = Boolean(sectors || investorIds || cityIds);
-  const name = text(query.name)?.toLowerCase();
+  const name = text(query.name);
+  const fuzzyName = query.fuzzyName === true;
   const verification = text(query.verification);
+  const stage = text(query.stage) as AskStage | undefined;
   const limit = clampLimit(query.limit);
+  const collectAll = Boolean(stage) || query.sort === "tier";
 
-  const matched: { person: PersonRec; hit: AskHit }[] = [];
+  const matched: { person: PersonRec; hit: AskHit; recency: string }[] = [];
   for (const person of index.people) {
-    if (name && !person.name.toLowerCase().includes(name)) continue;
+    if (name && !nameHit(person.name, name, fuzzyName)) continue;
     if (campusIds && !person.campuses.some((id) => campusIds.includes(id))) continue;
     if (enrollment && person.enrollment !== enrollment) continue;
     if (classYear != null && !yearMatches(person, classYear)) continue;
@@ -858,8 +881,12 @@ export function searchPeople(query: PeopleQuery): AskToolResult {
     if (founderOnly && !startupConstrained && !index.founderIds.has(person.id)) continue;
     if (building && linked.length === 0 && person.founderStatus !== "founder" && person.founderStatus !== "potential") continue;
     if (building && startupConstrained && linked.length === 0) continue;
+    const linkedStartups = linked.map((id) => index.startups.get(id)).filter((startup): startup is StartupRec => Boolean(startup));
+    if (stage === "unfunded") {
+      if (linkedStartups.some((startup) => !fundingFit(toFundingView(startup), "unfunded").fits)) continue;
+    } else if (stage && !linkedStartups.some((startup) => fundingFit(toFundingView(startup), stage).fits)) continue;
 
-    const startups = linked.slice(0, 4).map((id) => index.startups.get(id)!).filter(Boolean);
+    const startups = linkedStartups.slice(0, 4);
     const orgNodes = (orgs ?? []).filter((group) => personIdsForPlace(group.placeKey).includes(person.id)).slice(0, 2);
     const investorNames = investorQuery
       ? [...new Set(startups.flatMap((startup) => startup.investors.filter((investor) => investorMatches(investor.name, investorQuery)).map((investor) => investor.name)))]
@@ -867,7 +894,13 @@ export function searchPeople(query: PeopleQuery): AskToolResult {
     const places = needles
       ? [...new Set(startups.flatMap((startup) => startup.hqs.filter((hq) => hqMatches(hq.text, needles)).map((hq) => hq.text)))]
       : [];
+    let recency = person.year ? `${person.year}-06-01` : "";
+    for (const startup of linkedStartups) {
+      const key = fundingRecency(toFundingView(startup));
+      if (key > recency) recency = key;
+    }
     const detail = [
+      stage === "unfunded" ? "recorded: no recorded funding" : null,
       campusCaption(person.campuses),
       classYear != null && yearMatches(person, classYear) ? `Class of ${classYear}` : person.year ? `Class of ${person.year}` : null,
       enrollCaption(person),
@@ -908,14 +941,33 @@ export function searchPeople(query: PeopleQuery): AskToolResult {
         ],
         sources: sourcesFor(href, [person.sourceUrl, ...factUrls, ...startups.flatMap((startup) => startup.rounds.map((round) => round.sourceUrl)), ...startups.flatMap((startup) => startup.fundingNews.map((item) => item.url))]),
       },
+      recency,
     });
-    if (query.sort !== "tier" && matched.length >= limit) break;
+    if (!collectAll && matched.length >= limit) break;
   }
-  if (query.sort === "tier") {
+  if (stage) {
+    matched.sort((a, b) => b.recency.localeCompare(a.recency) || a.person.name.localeCompare(b.person.name));
+  } else if (query.sort === "tier") {
     matched.sort((a, b) => signalTierRank(a.person.signalTier) - signalTierRank(b.person.signalTier) || a.person.name.localeCompare(b.person.name));
   }
   const matches = matched.slice(0, limit).map((row) => row.hit);
-  return { count: matches.length, matches };
+  return { count: stage ? matched.length : matches.length, matches };
+}
+
+function toFundingView(startup: StartupRec): FundingView {
+  return {
+    rounds: startup.rounds,
+    investors: startup.investors.map((investor) => ({ name: investor.name, round: investor.round, kind: investor.kind, batch: investor.batch })),
+    events: startup.fundingEvents,
+    news: startup.fundingNews.map((item) => item.headline),
+    fundingTotal: startup.fundingTotal,
+    description: startup.description,
+  };
+}
+
+function nameHit(name: string, query: string, fuzzy: boolean): boolean {
+  if (fuzzy) return fuzzyNameHit(name, query);
+  return name.toLowerCase().includes(query.toLowerCase());
 }
 
 function startupMatchesProgram(startup: StartupRec, query: string): boolean {
@@ -949,24 +1001,36 @@ export function searchStartups(query: StartupQuery): AskToolResult {
   if (sectors && sectors.length === 0) return { count: 0, matches: [] };
   const investorQuery = text(query.investor);
   const needles = cityNeedles(query.city);
-  const name = text(query.name)?.toLowerCase();
+  const name = text(query.name);
+  const fuzzyName = query.fuzzyName === true;
   const verification = text(query.verification);
   const program = text(query.program);
   const stage = text(query.stage);
+  const matchStage = query.matchStage === true && Boolean(stage);
+  const year = query.year ?? null;
   const rows: StartupRec[] = [];
   for (const startup of index.startups.values()) {
-    if (name && !startup.name.toLowerCase().includes(name)) continue;
+    if (name && !nameHit(startup.name, name, fuzzyName)) continue;
     if (campusIds && !startup.campuses.some((id) => campusIds.includes(id))) continue;
     if (sectors && !startup.sectors.some((tag) => sectors.includes(tag))) continue;
     if (program && !startupMatchesProgram(startup, program)) continue;
     if (investorQuery && !startup.investors.some((investor) => investorMatches(investor.name, investorQuery))) continue;
     if (needles && !startup.hqs.some((hq) => hqMatches(hq.text, needles))) continue;
     if (verification && startup.verification !== verification) continue;
+    if (year != null && !viewMentionsYear(toFundingView(startup), year)) continue;
     rows.push(startup);
   }
   const limit = clampLimit(query.limit);
   const healthQuery = Boolean(sectors?.some((tag) => HEALTH_FAMILY.includes(tag)));
   const rankFunding = query.funding === true || Boolean(stage);
+  if (matchStage) {
+    const ranked = rows
+      .map((startup) => ({ startup, fit: fundingFit(toFundingView(startup), stage as AskStage) }))
+      .filter((row) => row.fit.fits)
+      .sort((a, b) => b.fit.relevance - a.fit.relevance || b.fit.recency.localeCompare(a.fit.recency) || a.startup.name.localeCompare(b.startup.name));
+    const matches = ranked.slice(0, limit).map((row) => startupHit(row.startup, investorQuery, row.fit.label));
+    return { count: ranked.length, matches };
+  }
   const ordered = rankFunding
     ? [...rows].sort((a, b) => fundingRank(b, stage) - fundingRank(a, stage) || a.name.localeCompare(b.name)).slice(0, limit)
     : healthQuery
@@ -988,15 +1052,18 @@ function investorCaption(investor: { name: string; round: string | null }): stri
   return investor.round ? `${investor.name} (${investor.round})` : investor.name;
 }
 
-function startupHit(startup: StartupRec, investorQuery?: string): AskHit {
+function startupHit(startup: StartupRec, investorQuery?: string, recorded?: string): AskHit {
   const href = `/startup/${startup.id}`;
   const investors = investorQuery ? startup.investors.filter((investor) => investorMatches(investor.name, investorQuery)) : startup.investors.slice(0, 4);
+  const founders = startup.founderNames.slice(0, 4);
   const detail = [
+    recorded ? `recorded: ${recorded}` : null,
     campusCaption(startup.campuses),
     startup.sectors.slice(0, 2).map((tag) => sectorLabel(tag)).join(", ") || null,
     startup.programs.slice(0, 2).map(shortProgram).filter(Boolean).join(", ") || null,
     startup.hqs[0]?.text ?? null,
-    fundingBlurb(startup),
+    recorded ? null : fundingBlurb(startup),
+    founders.length ? `founders: ${founders.join(", ")}` : null,
     investors.length ? `investors: ${investors.map(investorCaption).join(", ")}` : null,
     startup.verification,
   ]

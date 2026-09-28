@@ -53,7 +53,9 @@ for (const hit of berkeley.matches) {
 
 const clubs = searchOrganizations({ typeIncludes: "club", limit: 8 });
 assertKnown(clubs.matches);
-assert.equal(searchOrganizations({ topTier: true, typeIncludes: "club", minFounders: 0 }).matches.length, 0);
+const topClubs = searchOrganizations({ topTier: true, typeIncludes: "club", minFounders: 0 });
+assert.ok(topClubs.matches.length >= 1);
+for (const hit of topClubs.matches) assert.match(hit.detail, /· (?:S\+|S|A) ·/);
 let previous = Infinity;
 for (const hit of clubs.matches) {
   assert.equal(hit.kind, "organization");
