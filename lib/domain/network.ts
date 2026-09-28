@@ -27,6 +27,8 @@ export interface NetworkNode {
   linkUrl?: string;
   linkLabel?: string;
   linkKind?: string;
+  /** Person or project verification_status is confirmed. Universities stay visible either way. */
+  confirmed?: boolean;
 }
 
 export interface NetworkEdge {
@@ -62,6 +64,21 @@ interface RawNode {
   tier?: string;
   /** Kept when a single-campus graph is capped, so clubs stay in the picture. */
   pinned?: boolean;
+  confirmed?: boolean;
+}
+
+function stampConfirmed(db: ReturnType<typeof getDb>, nodes: RawNode[]) {
+  const people = new Set(
+    (db.prepare(`SELECT id FROM people WHERE verification_status = 'confirmed'`).all() as { id: string }[]).map((row) => row.id)
+  );
+  const projects = new Set(
+    (db.prepare(`SELECT id FROM projects WHERE verification_status = 'confirmed'`).all() as { id: string }[]).map((row) => row.id)
+  );
+  for (const node of nodes) {
+    if (node.type === "university") node.confirmed = true;
+    else if (node.type === "person") node.confirmed = people.has(node.id);
+    else node.confirmed = projects.has(node.id);
+  }
 }
 
 // Evidence-backed neighborhood. Edges come from `relationships`, affiliations,
@@ -319,6 +336,7 @@ function assembleScoutNetwork(universityId?: string, opts?: { sector?: string; e
     const keep = new Set<string>([...protectedIds, ...ranked.slice(0, MAX_NODES - protectedIds.size).map((n) => n.id)]);
     nodesArr = nodesArr.filter((n) => keep.has(n.id));
   }
+  stampConfirmed(db, nodesArr);
   const keepIds = new Set(nodesArr.map((n) => n.id));
   const edges = rawEdges.filter((e) => keepIds.has(e.source) && keepIds.has(e.target));
   // De-duplicate parallel edges of the same type.
@@ -349,6 +367,7 @@ function assembleScoutNetwork(universityId?: string, opts?: { sector?: string; e
         linkUrl: node.linkUrl,
         linkLabel: node.linkLabel,
         linkKind: node.linkKind,
+        confirmed: node.confirmed,
       };
     });
     const peopleShown = nodes.filter((node) => node.type === "person").length;
@@ -405,6 +424,7 @@ function assembleScoutNetwork(universityId?: string, opts?: { sector?: string; e
     linkUrl: n.linkUrl,
     linkLabel: n.linkLabel,
     linkKind: n.linkKind,
+    confirmed: n.confirmed,
   }));
 
   const peopleShown = nodes.filter((n) => n.type === "person").length;

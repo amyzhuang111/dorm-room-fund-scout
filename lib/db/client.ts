@@ -346,6 +346,32 @@ function migrate(db: Database.Database) {
          SELECT id FROM claims WHERE source_id IN ('src_pennapps_devpost', 'src_treehacks_devpost', 'src_calhacks_devpost')
        )`
   ).run();
+
+  // Older rows labeled notes and funding-gate copy with a personal name.
+  // The displayed label is the role "scout". Founder names that happen to
+  // include Amy stay in people and claims.
+  db.prepare(`UPDATE notes SET author = 'scout' WHERE lower(author) = 'amy'`).run();
+  db.prepare(
+    `UPDATE gate_results SET rationale = replace(rationale, 'Amy''s sourcing guidance', 'internal sourcing guidance')
+     WHERE rationale LIKE '%Amy''s sourcing guidance%'`
+  ).run();
+  const notesSql = db.prepare(`SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'notes'`).get() as { sql: string } | undefined;
+  if (notesSql?.sql.includes("DEFAULT 'amy'")) {
+    db.exec(`
+      CREATE TABLE notes_neutral (
+        id TEXT PRIMARY KEY,
+        entity_type TEXT NOT NULL,
+        entity_id TEXT NOT NULL,
+        body TEXT NOT NULL,
+        author TEXT NOT NULL DEFAULT 'scout',
+        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+      INSERT INTO notes_neutral (id, entity_type, entity_id, body, author, created_at)
+        SELECT id, entity_type, entity_id, body, author, created_at FROM notes;
+      DROP TABLE notes;
+      ALTER TABLE notes_neutral RENAME TO notes;
+    `);
+  }
 }
 
 export function newId(prefix: string): string {

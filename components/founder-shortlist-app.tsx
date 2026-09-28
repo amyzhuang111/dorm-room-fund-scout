@@ -56,7 +56,7 @@ function ShortlistBody({
   const catalog = useMergedCatalog(universities, [], founders);
   const liveLikes = useMemo(() => likeTargetsFrom(records, [], catalog.founders, initialLikes), [records, catalog.founders, initialLikes]);
   const visible = useMemo(() => {
-    const matched = foundersInView(catalog.founders, { universityId: query.university, search: query.q });
+    const matched = foundersInView(catalog.founders, { universityId: query.university, search: query.q, confirmed: query.confirmed === "1" });
     return reviewFounders(matched, records, liveLikes, reviewMode(query.feedback)).filter((founder) =>
       userFounderPassesEnrollment(founder, selectedEnrollment(query.enroll))
     );

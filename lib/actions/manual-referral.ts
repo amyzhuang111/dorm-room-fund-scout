@@ -11,7 +11,7 @@ export async function addManualReferral(formData: FormData) {
   const founderNamesRaw = String(formData.get("founderNames") || "").trim();
   const founderStatus = String(formData.get("founderStatus") || "unverified") as FounderStatus;
   const noteBody = String(formData.get("noteBody") || "").trim();
-  const referrer = String(formData.get("referrer") || "amy").trim() || "amy";
+  const referrer = String(formData.get("referrer") || "scout").trim() || "scout";
 
   if (!companyName || !universityId || !founderNamesRaw || !noteBody) {
     throw new Error("Company name, university, at least one founder, and a firsthand note are all required.");

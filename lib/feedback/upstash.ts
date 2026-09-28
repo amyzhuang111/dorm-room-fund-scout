@@ -8,7 +8,7 @@
 //   UPSTASH_REDIS_REST_TOKEN
 //   FEEDBACK_REVIEWER_TOKEN   a passphrase you type once in the feedback panel
 // The API rejects any request whose token does not match, so a public deploy
-// does not share Amy's review state with anonymous visitors.
+// does not share one member's review state with anonymous visitors.
 
 const KEY = "scout-feedback";
 

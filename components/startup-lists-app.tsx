@@ -41,7 +41,7 @@ function useCompanies(
     const viewed = companiesInView(candidates, records, likes, query);
     const seen = new Set(viewed.map((company) => company.id));
     const extras = candidates
-      .filter((company) => !seen.has(company.id) && userCompanyMatches(company, query))
+      .filter((company) => !seen.has(company.id) && userCompanyMatches(company, query) && (query.confirmed !== "1" || company.verificationStatus === "confirmed"))
       .map((company) => ({ ...company, boostNote: null, boostScore: 0 }));
     return [...viewed, ...extras];
   }, [candidates, records, likes, query]);

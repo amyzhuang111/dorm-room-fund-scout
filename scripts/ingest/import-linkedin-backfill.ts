@@ -631,7 +631,7 @@ function main() {
      VALUES (?, 'person', ?, ?, ?, ?, ?, ?, ?, 'observed_fact', ?)`
   );
   const writeAliases = db.prepare(`UPDATE people SET aliases_json = ? WHERE id = ?`);
-  const insertNote = db.prepare(`INSERT INTO notes (id, entity_type, entity_id, body, author, created_at) VALUES (?, 'person', ?, ?, 'amy', ?)`);
+  const insertNote = db.prepare(`INSERT INTO notes (id, entity_type, entity_id, body, author, created_at) VALUES (?, 'person', ?, ?, 'scout', ?)`);
   const noteExists = db.prepare(`SELECT 1 as ok FROM notes WHERE entity_type = 'person' AND entity_id = ? AND body = ? LIMIT 1`);
 
   const tx = db.transaction(() => {

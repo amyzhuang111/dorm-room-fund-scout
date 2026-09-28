@@ -66,7 +66,7 @@ export function AssessmentForm({ projectId, history }: { projectId: string; hist
             <label className="block text-xs font-medium text-muted">Counterevidence (what would change your mind)</label>
             <textarea name="counterevidence" rows={2} className="mt-0.5 w-full rounded-md border border-border-c bg-surface px-2 py-1 text-xs" />
           </div>
-          <input type="hidden" name="evaluator" value="amy" />
+          <input type="hidden" name="evaluator" value="scout" />
           <button type="submit" className="rounded-md bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">
             Save assessment
           </button>

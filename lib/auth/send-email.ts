@@ -27,7 +27,14 @@ export function googleClientSecret(): string | null {
 function emailTransport(): EmailTransport | null {
   if (process.env.RESEND_API_KEY?.trim()) return "resend";
   if (process.env.EMAIL_SERVER?.trim()) return "smtp";
-  if (process.env.SMTP_HOST?.trim() && process.env.SMTP_USER?.trim() && process.env.SMTP_PASSWORD?.trim()) return "smtp";
+  if (
+    process.env.SMTP_HOST?.trim() &&
+    process.env.SMTP_PORT?.trim() &&
+    process.env.SMTP_USER?.trim() &&
+    process.env.SMTP_PASSWORD?.trim()
+  ) {
+    return "smtp";
+  }
   return null;
 }
 
@@ -40,7 +47,7 @@ function fromAddress(): string {
 
 export async function sendSignInEmail(to: string, url: string): Promise<{ ok: true } | { ok: false; error: string }> {
   const transport = emailTransport();
-  if (!transport) return { ok: false, error: "Sign-in email is not configured, so Pipeline and Shortlist stay locked." };
+  if (!transport) return { ok: false, error: "Sign-in isn't configured yet." };
   const subject = "Sign in to Campus Scout";
   const text = [
     "Sign in to Campus Scout",
@@ -57,13 +64,14 @@ export async function sendSignInEmail(to: string, url: string): Promise<{ ok: tr
     return await sendSmtp(to, subject, text);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Email could not be sent.";
-    return { ok: false, error: message };
+    console.warn(`[auth] sign-in email failed: ${redactMailError(message)}`);
+    return { ok: false, error: "The sign-in email could not be sent." };
   }
 }
 
 async function sendResend(to: string, subject: string, text: string): Promise<{ ok: true } | { ok: false; error: string }> {
   const key = process.env.RESEND_API_KEY?.trim();
-  if (!key) return { ok: false, error: "Sign-in email is not configured, so Pipeline and Shortlist stay locked." };
+  if (!key) return { ok: false, error: "Sign-in isn't configured yet." };
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
@@ -78,6 +86,15 @@ async function sendResend(to: string, subject: string, text: string): Promise<{ 
     detail = "";
   }
   return { ok: false, error: `The email service rejected the sign-in message.${detail}` };
+}
+
+function redactMailError(message: string): string {
+  let text = message;
+  for (const name of ["AUTH_SECRET", "NEXTAUTH_SECRET", "SMTP_PASSWORD", "SMTP_USER", "RESEND_API_KEY", "EMAIL_SERVER"]) {
+    const value = process.env[name]?.trim();
+    if (value) text = text.split(value).join(`[${name}]`);
+  }
+  return text;
 }
 
 async function sendSmtp(to: string, subject: string, text: string): Promise<{ ok: true } | { ok: false; error: string }> {

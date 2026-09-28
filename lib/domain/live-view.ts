@@ -20,6 +20,7 @@ export function companiesInView(
       queue: current.queue as Queue | undefined,
       sector: current.sector,
       search: current.q,
+      confirmed: current.confirmed === "1",
     })
   );
   const reviewed = reviewCompanies(matched, records, likes, reviewMode(current.feedback)).filter((company) =>

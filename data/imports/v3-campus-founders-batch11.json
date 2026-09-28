@@ -1,0 +1,1009 @@
+{
+  "retrievedAt": "2026-09-27T23:40:00.000Z",
+  "companies": [
+    {
+      "name": "Fetch Rewards",
+      "description": "Grocery rewards app co-founded by Wisconsin School of Business student Wes Schroll and UW–Madison computer science student Dan Litvak. Launched at Fresh Madison Market in October 2013, when the company was about 13 months old.",
+      "website": null,
+      "sourceUrl": "https://news.wisc.edu/business-students-launch-app-to-fetch-grocery-deals/",
+      "excerpt": "Fetch Rewards — a company Schroll, 20, co-founded with fellow UW–Madison student Dan Litvak, a computer science major. The company is only 13 months old and has won approximately $60,000 from business plan competitions across the country, including taking second at the G. Steven Burrill Business Plan Competition in May. The founders have also secured private funding.",
+      "orgPlace": "Fetch Rewards",
+      "campusIds": ["univ_wisc"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Wes Schroll",
+          "campusId": "univ_wisc",
+          "affiliationRole": "Wisconsin School of Business student; Fetch Rewards co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "UW–Madison News, 15 October 2013, names Wes Schroll as a Wisconsin School of Business student who co-founded Fetch Rewards. The same article says he and Dan Litvak were taking a semester off with a plan to return. No class year is printed, and this is not recorded as a 2026 enrollment status.",
+          "excerpt": "Wes Schroll was frustrated with his Target coupons. A lifelong entrepreneur and Wisconsin School of Business student, he knew there had to be a better way to find deals. Fetch Rewards — a company Schroll, 20, co-founded with fellow UW–Madison student Dan Litvak, a computer science major. Schroll and Litvak are both taking a semester off from college to build the venture, with the plan of returning if the company doesn’t take off."
+        },
+        {
+          "name": "Dan Litvak",
+          "campusId": "univ_wisc",
+          "affiliationRole": "UW–Madison computer science student; Fetch Rewards co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "UW–Madison News, 15 October 2013, names Dan Litvak as a UW–Madison computer science major and Fetch Rewards co-founder. No class year is printed.",
+          "excerpt": "Fetch Rewards — a company Schroll, 20, co-founded with fellow UW–Madison student Dan Litvak, a computer science major. Schroll and Litvak are both taking a semester off from college to build the venture, with the plan of returning if the company doesn’t take off."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "prize",
+          "amountUsd": null,
+          "amountText": "approximately $60,000",
+          "date": null,
+          "leads": [],
+          "investors": [],
+          "excerpt": "The company is only 13 months old and has won approximately $60,000 from business plan competitions across the country, including taking second at the G. Steven Burrill Business Plan Competition in May.",
+          "sourceUrl": "https://news.wisc.edu/business-students-launch-app-to-fetch-grocery-deals/"
+        },
+        {
+          "stage": "mixed",
+          "amountUsd": 240000000,
+          "amountText": "$240 million equity and debt",
+          "date": "2022-04-06",
+          "leads": ["Hamilton Lane"],
+          "investors": ["Vision Fund 2", "ICONIQ Capital", "DST Global"],
+          "excerpt": "April 6 (Reuters) - Fetch Rewards, a shopping rewards app backed by SoftBank Group's Vision Fund 2, has raised $240 million in a funding round that valued the company at more than $2.5 billion, Chief Executive Officer Wes Schroll told Reuters on Wednesday. The fresh capital, consisting of both equity and debt, came after the app doubled its active users base in the past year to 13 million. The latest round, led by investment management firm Hamilton Lane, brought the app's total funding to $578 million, and existing investors including Vision Fund 2, ICONIQ Capital and DST Global also participated.",
+          "sourceUrl": "https://www.reuters.com/technology/softbank-backed-fetch-rewards-raises-240-mln-funding-round-2022-04-07/"
+        }
+      ]
+    },
+    {
+      "name": "Zaymo",
+      "description": "E-commerce tool that embeds an online shopping experience inside a customer's email. BYU student team of Brice Douglas, Santiago Gomez-Paz, and Daniel Jones.",
+      "website": "https://zaymo.com",
+      "sourceUrl": "https://news.byu.edu/intellect/byus-next-unicorn-student-startup-zaymo-has-won-more-than-900-000-in-prize-money-this-spring",
+      "excerpt": "Zaymo, with its e-commerce tool that embeds the online shopping experience within a customer’s email, took home $875,000 in total cash investments after taking third place at the 2023 Rice Business Plan Competition last month. This comes after winning the $30,000 grand prize at the Utah Entrepreneur Challenge earlier this year. The BYU team of students Brice Douglas, Santiago Gomez-Paz and Daniel Jones, won six investment awards.",
+      "orgPlace": "Zaymo",
+      "campusIds": ["univ_byu"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Brice Douglas",
+          "campusId": "univ_byu",
+          "affiliationRole": "BYU student on the 2023 Zaymo founding team",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "BYU News, 26 June 2023, names Brice Douglas as a BYU student on the Zaymo team. The article does not print a class year, so no 2026 enrollment status is stored.",
+          "excerpt": "The BYU team of students Brice Douglas, Santiago Gomez-Paz and Daniel Jones, won six investment awards after pitching their business plan to investors, entrepreneurs and executives."
+        },
+        {
+          "name": "Santiago Gomez-Paz",
+          "campusId": "univ_byu",
+          "affiliationRole": "BYU student on the 2023 Zaymo founding team",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "BYU News, 26 June 2023, names Santiago Gomez-Paz as a BYU student on the Zaymo team. No class year is printed.",
+          "excerpt": "The BYU team of students Brice Douglas, Santiago Gomez-Paz and Daniel Jones, won six investment awards after pitching their business plan to investors, entrepreneurs and executives."
+        },
+        {
+          "name": "Daniel Jones",
+          "campusId": "univ_byu",
+          "affiliationRole": "BYU computer science student on the 2023 Zaymo founding team",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "BYU News, 26 June 2023, names Daniel Jones, a computer science major, as a BYU student on the Zaymo team. The photo caption also says Danny Jones. No class year is printed, so no 2026 enrollment status is stored. This attaches the existing Zaymo founder record to BYU.",
+          "excerpt": "The BYU team of students Brice Douglas, Santiago Gomez-Paz and Daniel Jones, won six investment awards. Jones, a computer science major with a minor in entrepreneurship."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "prize",
+          "amountUsd": 875000,
+          "amountText": "$875,000",
+          "date": "2023",
+          "leads": [],
+          "investors": [],
+          "excerpt": "Zaymo, with its e-commerce tool that embeds the online shopping experience within a customer’s email, took home $875,000 in total cash investments after taking third place at the 2023 Rice Business Plan Competition last month.",
+          "sourceUrl": "https://news.byu.edu/intellect/byus-next-unicorn-student-startup-zaymo-has-won-more-than-900-000-in-prize-money-this-spring"
+        },
+        {
+          "stage": "prize",
+          "amountUsd": 30000,
+          "amountText": "$30,000 grand prize",
+          "date": "2023",
+          "leads": [],
+          "investors": [],
+          "excerpt": "This comes after winning the $30,000 grand prize at the Utah Entrepreneur Challenge earlier this year.",
+          "sourceUrl": "https://news.byu.edu/intellect/byus-next-unicorn-student-startup-zaymo-has-won-more-than-900-000-in-prize-money-this-spring"
+        }
+      ]
+    },
+    {
+      "name": "Phospholutions",
+      "description": "RhizoSorb soil-enhancement product using technology from the Penn State College of Agricultural Sciences. Hunter Swisher began developing it as a Penn State plant sciences undergraduate.",
+      "website": null,
+      "sourceUrl": "https://www.psu.edu/news/impact/story/startups-recent-success-tied-penn-state-entrepreneurial-ecosystem",
+      "excerpt": "State College-based Phospholutions has grown from seven to 20 employees, and recently raised $10.3 million in venture capital funding to support the development and growth of its RhizoSorb soil-enhancement technology. Phospholutions CEO Hunter Swisher began developing RhizoSorb as an undergraduate in the plant sciences program at Penn State.",
+      "orgPlace": "Phospholutions",
+      "campusIds": ["univ_psu"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Hunter Swisher",
+          "campusId": "univ_psu",
+          "affiliationRole": "Penn State alumnus; Phospholutions CEO. Began RhizoSorb as a plant sciences undergraduate",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Penn State News, 27 May 2021, calls Hunter Swisher a Penn State alumnus and says he began developing RhizoSorb as an undergraduate in plant sciences. No class year is printed.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": null,
+            "gradYear": null,
+            "evidence": "Penn State News photo credit calls Hunter Swisher a Penn State alumnus, and the article says he began developing RhizoSorb as an undergraduate in the plant sciences program at Penn State. No class year is printed."
+          },
+          "excerpt": "Penn State alumnus Hunter Swisher, CEO of Phospholutions. Phospholutions CEO Hunter Swisher began developing RhizoSorb as an undergraduate in the plant sciences program at Penn State."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "venture",
+          "amountUsd": 10300000,
+          "amountText": "$10.3 million",
+          "date": null,
+          "leads": ["Continental Grain Company Ventures"],
+          "investors": ["Tekfen Ventures", "Ag Ventures Alliance Cooperative", "Maumee Ventures", "1855 Capital", "Ben Franklin Technology Partners"],
+          "excerpt": "Phospholutions has grown from seven to 20 employees, and recently raised $10.3 million in venture capital funding. The recent investment round was led by Continental Grain Company Ventures and included new investment from Tekfen Ventures, Ag Ventures Alliance Cooperative, and an individual angel investor. It also included follow-on investments from Maumee Ventures, the venture capital subsidiary of The Andersons Inc., as well as Penn State-affiliated 1855 Capital and Ben Franklin Technology Partners.",
+          "sourceUrl": "https://www.psu.edu/news/impact/story/startups-recent-success-tied-penn-state-entrepreneurial-ecosystem"
+        },
+        {
+          "stage": "prize",
+          "amountUsd": 75000,
+          "amountText": "$75,000",
+          "date": "2018",
+          "leads": [],
+          "investors": [],
+          "excerpt": "As an undergraduate developing Phospholutions, Swisher competed in the 2018 Invent Penn State Venture & IP Conference Tech Tournament, where he won first place and $75,000.",
+          "sourceUrl": "https://www.psu.edu/news/impact/story/startups-recent-success-tied-penn-state-entrepreneurial-ecosystem"
+        }
+      ]
+    },
+    {
+      "name": "Squarespace",
+      "description": "Website publishing platform Anthony Casalena started in a University of Maryland dorm room with a $30,000 loan from his father. He is a UMD Hinman CEOs alumnus.",
+      "website": "https://www.squarespace.com",
+      "sourceUrl": "https://eng.umd.edu/news/story/umd-alumnus-company-squarespace-to-run-inaugural-big-game-ad",
+      "excerpt": "Ten years ago, in a small dorm room at the University of Maryland, Anthony Casalena set out with a $30,000 loan from his father to change the way websites were built. Squarespace was born. Bootstrapped for six years, Squarespace completed a $38.5 million minority investment from Index Ventures and Accel Partners in 2010.",
+      "orgPlace": "Squarespace",
+      "campusIds": ["univ_umd"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Anthony Casalena",
+          "campusId": "univ_umd",
+          "affiliationRole": "University of Maryland Hinman CEOs alumnus; Squarespace founder and CEO",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "University of Maryland Clark School of Engineering, published 1 February 2014, names Anthony Casalena as a UMD Hinman CEOs alumnus and founder and CEO of Squarespace. No class year is printed.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The Clark School page calls Anthony Casalena a UMD Hinman CEOs alumnus and says he started Squarespace in a University of Maryland dorm room. No class year is printed."
+          },
+          "excerpt": "Anthony Casalena, UMD Hinman CEOs alumnus and founder and CEO of Squarespace. Ten years ago, in a small dorm room at the University of Maryland, Anthony Casalena set out with a $30,000 loan from his father."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "loan",
+          "amountUsd": 30000,
+          "amountText": "$30,000 loan",
+          "date": null,
+          "leads": [],
+          "investors": [],
+          "excerpt": "Ten years ago, in a small dorm room at the University of Maryland, Anthony Casalena set out with a $30,000 loan from his father to change the way websites were built and make it easy for anyone to create one. Squarespace was born.",
+          "sourceUrl": "https://eng.umd.edu/news/story/umd-alumnus-company-squarespace-to-run-inaugural-big-game-ad"
+        },
+        {
+          "stage": "minority investment",
+          "amountUsd": 38500000,
+          "amountText": "$38.5 million",
+          "date": "2010",
+          "leads": [],
+          "investors": ["Index Ventures", "Accel Partners"],
+          "excerpt": "Bootstrapped for six years, Squarespace completed a $38.5 million minority investment from Index Ventures and Accel Partners in 2010.",
+          "sourceUrl": "https://eng.umd.edu/news/story/umd-alumnus-company-squarespace-to-run-inaugural-big-game-ad"
+        }
+      ]
+    },
+    {
+      "name": "Nanome",
+      "description": "Virtual, augmented, and mixed reality software for molecular visualization, founded in 2016 by UC San Diego alumni Steven McCloskey, Keita Funakawa, Edgardo Leija, and Samuel Hessenauer.",
+      "website": null,
+      "sourceUrl": "https://today.ucsd.edu/story/team-of-uc-san-diego-entrepreneurs-pushes-biomedicine-forward-with-virtual-reality",
+      "excerpt": "Keita Funakawa, Samuel Hessenauer, Edgardo Leija and Steven McCloskey, who met as UC San Diego students, are co-founders of the biotech/virtual reality company Nanome. Founded by Steven McCloskey ’15, Keita Funakawa ’16, Edgardo Leija ’14 and Samuel Hessenauer ’16 in 2016. In 2017, the team raised almost $1 million.",
+      "orgPlace": "Nanome",
+      "campusIds": ["univ_ucsd"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Steven McCloskey",
+          "campusId": "univ_ucsd",
+          "affiliationRole": "UC San Diego NanoEngineering alumnus, class of 2015; Nanome co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "UC San Diego Today, 14 March 2023, names Steven McCloskey ’15 as a Nanome co-founder who met his co-founders as UC San Diego students.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": null,
+            "gradYear": 2015,
+            "evidence": "UC San Diego Today says Nanome was founded by Steven McCloskey ’15, who met his co-founders as UC San Diego students and was part of the first UC San Diego NanoEngineering graduating class."
+          },
+          "excerpt": "Founded by Steven McCloskey ’15, Keita Funakawa ’16, Edgardo Leija ’14 and Samuel Hessenauer ’16 in 2016, Nanome offers software that brings molecular interactions to vivid, three-dimensional life. Part of the first UC San Diego NanoEngineering graduating class."
+        },
+        {
+          "name": "Keita Funakawa",
+          "campusId": "univ_ucsd",
+          "affiliationRole": "UC San Diego management science alumnus, class of 2016; Nanome co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "UC San Diego Today, 14 March 2023, names Keita Funakawa ’16 as a Nanome co-founder and a management science major at UC San Diego.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": null,
+            "gradYear": 2016,
+            "evidence": "UC San Diego Today says Nanome was founded by Keita Funakawa ’16, a management science major with a minor in digital arts media at UC San Diego."
+          },
+          "excerpt": "Founded by Steven McCloskey ’15, Keita Funakawa ’16, Edgardo Leija ’14 and Samuel Hessenauer ’16 in 2016. Funakawa was a management science major with a minor in digital arts media."
+        },
+        {
+          "name": "Edgardo Leija",
+          "campusId": "univ_ucsd",
+          "affiliationRole": "UC San Diego cognitive science alumnus, class of 2014; Nanome co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "UC San Diego Today, 14 March 2023, names Edgardo Leija ’14 (Cognitive Science) as a Nanome co-founder recruited while an undergraduate.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": null,
+            "gradYear": 2014,
+            "evidence": "UC San Diego Today says McCloskey recruited Edgardo Leija ’14 (Cognitive Science) as an undergraduate co-founder of Nanome."
+          },
+          "excerpt": "McCloskey also recruited two other undergraduates to join the enterprise: Edgardo Leija ’14 (Cognitive Science), whom McCloskey had met at a San Diego Zoo Tech to Reconnect event."
+        },
+        {
+          "name": "Samuel Hessenauer",
+          "campusId": "univ_ucsd",
+          "affiliationRole": "UC San Diego electrical engineering alumnus, class of 2016; Nanome co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "UC San Diego Today, 14 March 2023, names Samuel Hessenauer ’16 (Electrical and Electronics Engineering) as a Nanome co-founder.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": null,
+            "gradYear": 2016,
+            "evidence": "UC San Diego Today says Nanome was founded by Samuel Hessenauer ’16 (Electrical and Electronics Engineering), recruited as an undergraduate."
+          },
+          "excerpt": "Samuel Hessenauer ’16 (Electrical and Electronics Engineering), a rugby teammate who bonded with McCloskey chatting about theoretical physics and electrical engineering on the field."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "venture",
+          "amountUsd": null,
+          "amountText": "almost $1 million",
+          "date": "2017",
+          "leads": [],
+          "investors": [],
+          "excerpt": "In 2017, the team raised almost $1 million.",
+          "sourceUrl": "https://today.ucsd.edu/story/team-of-uc-san-diego-entrepreneurs-pushes-biomedicine-forward-with-virtual-reality"
+        },
+        {
+          "stage": "prize",
+          "amountUsd": null,
+          "amountText": "more than $30,000",
+          "date": null,
+          "leads": [],
+          "investors": [],
+          "excerpt": "The team also participated in entrepreneurial contests on campus—including UC San Diego’s Entrepreneur Challenge and Triton Entrepreneur Night—honing their pitching skills, receiving valuable feedback, and winning more than $30,000 in startup funding.",
+          "sourceUrl": "https://today.ucsd.edu/story/team-of-uc-san-diego-entrepreneurs-pushes-biomedicine-forward-with-virtual-reality"
+        }
+      ]
+    },
+    {
+      "name": "Adranos",
+      "description": "Solid rocket propellant company. Co-founder and CTO Brandon Terry discovered ALITEC during PhD work at Purdue University.",
+      "website": null,
+      "sourceUrl": "https://techcrunch.com/2020/02/11/solid-rocket-fuel-startup-adranos-raises-1-million-to-scale-up-manufacturing/",
+      "excerpt": "Indiana-based rocket fuel startup Adranos has raised $1 million, after closing an oversubscribed round led by Archibald Cox Jr., chairman of private investment firm Sextant Group. ALITEC, which uses an aluminum-lithium alloy, was discovered by Adranos co-founder and CTO Brandon Terry during his PhD work at Purdue University.",
+      "orgPlace": "Adranos",
+      "campusIds": ["univ_purdue"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Brandon Terry",
+          "campusId": "univ_purdue",
+          "affiliationRole": "Adranos co-founder and CTO; discovered ALITEC during PhD work at Purdue",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "TechCrunch, 11 February 2020, names Brandon Terry as Adranos co-founder and CTO and says he discovered ALITEC during PhD work at Purdue. The page does not say he completed the degree.",
+          "excerpt": "ALITEC, which uses an aluminum-lithium alloy, was discovered by Adranos co-founder and CTO Brandon Terry during his PhD work at Purdue University."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "venture",
+          "amountUsd": 1000000,
+          "amountText": "$1 million",
+          "date": "2020-02-11",
+          "leads": ["Archibald Cox Jr."],
+          "investors": [],
+          "excerpt": "Adranos has raised $1 million, after closing an oversubscribed round led by Archibald Cox Jr., chairman of private investment firm Sextant Group.",
+          "sourceUrl": "https://techcrunch.com/2020/02/11/solid-rocket-fuel-startup-adranos-raises-1-million-to-scale-up-manufacturing/"
+        }
+      ]
+    },
+    {
+      "name": "ExactTarget",
+      "description": "Email and digital marketing company co-founded in 2000 by Scott Dorsey, who earned a marketing degree from Indiana University's Kelley School in 1989. Salesforce.com acquired ExactTarget in July 2013.",
+      "website": null,
+      "sourceUrl": "https://honorsandawards.iu.edu/awards/honoree/6643.html",
+      "excerpt": "Scott Dorsey, who earned a Bachelor of Science degree in marketing from the Kelley School in 1989, co-founded ExactTarget in 2000. Following Salesforce.com’s $2.5 billion acquisition of ExactTarget in July 2013, he was named the CEO of the Salesforce.com Marketing Cloud.",
+      "orgPlace": "ExactTarget",
+      "campusIds": ["univ_indiana"],
+      "investable": false,
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Scott Dorsey",
+          "campusId": "univ_indiana",
+          "affiliationRole": "Indiana University Kelley School of Business, B.S. marketing 1989; ExactTarget co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Indiana University Honors and Awards names Scott Dorsey as a 1989 Kelley School marketing graduate who co-founded ExactTarget in 2000. The same page says he also has an MBA from Northwestern's Kellogg School, recorded as a second affiliation.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": null,
+            "gradYear": 1989,
+            "evidence": "Indiana University Honors and Awards: Scott Dorsey earned a Bachelor of Science degree in marketing from the Kelley School in 1989."
+          },
+          "excerpt": "Scott Dorsey, who earned a Bachelor of Science degree in marketing from the Kelley School in 1989, is CEO of the Salesforce ExactTarget Marketing Cloud. He co-founded ExactTarget in 2000. Dorsey also has an MBA from the Kellogg Graduate School of Management at Northwestern University."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "acquisition",
+          "amountUsd": 2500000000,
+          "amountText": "$2.5 billion acquisition",
+          "date": "2013-07",
+          "leads": [],
+          "investors": ["Salesforce.com"],
+          "excerpt": "Following Salesforce.com’s $2.5 billion acquisition of ExactTarget in July 2013, he was named the CEO of the Salesforce.com Marketing Cloud.",
+          "sourceUrl": "https://honorsandawards.iu.edu/awards/honoree/6643.html"
+        }
+      ]
+    },
+    {
+      "name": "Feathr",
+      "description": "Digital marketing platform for associations and event organizers. Aidan Augustin was an industrial and systems engineering student at the University of Florida when he and a roommate founded it.",
+      "website": null,
+      "sourceUrl": "https://www.eng.ufl.edu/innovation/feathr-uf-engineering-alumnus-founded-startup-soars-into-2020-with-11m-investment-boost/",
+      "excerpt": "Feathr, a digital marketing platform built specifically for the needs of associations and event organizers, has closed a Series B financing totaling more than $11 million. Aidan Augustin was an industrial and systems engineering student at UF when he attended a national networking event. He and his roommate founded and developed Feathr.",
+      "orgPlace": "Feathr",
+      "campusIds": ["univ_florida"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Aidan Augustin",
+          "campusId": "univ_florida",
+          "affiliationRole": "University of Florida industrial and systems engineering alumnus; Feathr co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "UF Engineering Innovation Institute, 6 February 2020, calls Feathr a UF engineering alumnus-founded startup and says Aidan Augustin was an industrial and systems engineering student at UF. The roommate is not named. No class year is printed.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "The UF Engineering page headline calls Feathr a UF engineering alumnus-founded startup, and the body says Aidan Augustin was an industrial and systems engineering student at UF. No class year is printed."
+          },
+          "excerpt": "Aidan Augustin was an industrial and systems engineering student at UF when he attended a national networking event and was determined to improve on the way attendees engage with each other through technology and innovation. He and his roommate founded and developed Feathr."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "series b",
+          "amountUsd": null,
+          "amountText": "more than $11 million",
+          "date": "2020-02-06",
+          "leads": [],
+          "investors": [],
+          "excerpt": "Feathr, a digital marketing platform built specifically for the needs of associations and event organizers, has closed a Series B financing totaling more than $11 million.",
+          "sourceUrl": "https://www.eng.ufl.edu/innovation/feathr-uf-engineering-alumnus-founded-startup-soars-into-2020-with-11m-investment-boost/"
+        }
+      ]
+    },
+    {
+      "name": "Siren",
+      "description": "Temperature-sensing socks for diabetic foot ulcer detection. Founder Ran Ma studied biomedical engineering at Johns Hopkins and at Northwestern.",
+      "website": null,
+      "sourceUrl": "https://techcrunch.com/2025/01/08/sirens-smart-sock-for-diabetics-secures-strategic-funding-round/",
+      "excerpt": "After studying burn victims and war veterans, entrepreneur Ran Ma hand-made a sock that contained sensors to detect foot ulcers. Now, her company, Siren, has secured $9.5 million, with an $8 million check from lead investor Mölnlycke Health Care. I studied biomedical engineering at Johns Hopkins and at Northwestern University, Ma told TechCrunch.",
+      "orgPlace": "Siren",
+      "campusIds": ["univ_jhu"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ran Ma",
+          "campusId": "univ_jhu",
+          "affiliationRole": "Studied biomedical engineering at Johns Hopkins; Siren founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "TechCrunch, 8 January 2025, quotes Ran Ma: she studied biomedical engineering at Johns Hopkins and at Northwestern. The same article says she dropped out of Northwestern and of Copenhagen Business School, not of Johns Hopkins. No Johns Hopkins class year is printed.",
+          "excerpt": "Entrepreneur Ran Ma hand-made a sock that contained sensors to detect foot ulcers. Now, her company, Siren, has secured $9.5 million. I studied biomedical engineering at Johns Hopkins and at Northwestern University, Ma told TechCrunch."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "strategic",
+          "amountUsd": 9500000,
+          "amountText": "$9.5 million",
+          "date": "2025-01-08",
+          "leads": ["Mölnlycke Health Care"],
+          "investors": [],
+          "excerpt": "Siren, has secured $9.5 million, with an $8 million check from lead investor Mölnlycke Health Care to further the development and adoption of its diabetic foot ulcer (DFU) prevention product. It’s now raised $43 million to date.",
+          "sourceUrl": "https://techcrunch.com/2025/01/08/sirens-smart-sock-for-diabetics-secures-strategic-funding-round/"
+        },
+        {
+          "stage": "series b",
+          "amountUsd": 18000000,
+          "amountText": "$18 million Series B",
+          "date": null,
+          "leads": [],
+          "investors": ["Khosla Ventures", "Founders Fund", "DCM", "Manta Ray Ventures", "Aloft"],
+          "excerpt": "Since then, Siren has raised funding from Khosla Ventures, Founders Fund, DCM, Manta Ray Ventures, and Aloft among others, pulling in $18 million in a Series B.",
+          "sourceUrl": "https://techcrunch.com/2025/01/08/sirens-smart-sock-for-diabetics-secures-strategic-funding-round/"
+        }
+      ]
+    },
+    {
+      "name": "Opennote",
+      "description": "AI note-taking and tutoring app started by UC Irvine undergraduates Abhi Arya and Rishi Srihari. Third co-founder Vedant Vyas is a University of Guelph student, not a UC Irvine student.",
+      "website": null,
+      "sourceUrl": "https://news.uci.edu/2026/07/28/turning-notes-into-knowledge/",
+      "excerpt": "Opennote co-founders, from left, Abhi Arya, Rishi Srihari and Vedant Vyas. Two UC Irvine undergraduates, Abhi Arya and Rishi Srihari. The duo entered and won LA Hacks in 2024, earned admission into Y Combinator, raised more than $4 million in venture funding and, ultimately, agreed to be acquired by Reducto.",
+      "orgPlace": "Opennote",
+      "campusIds": ["univ_uci"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Abhi Arya",
+          "campusId": "univ_uci",
+          "affiliationRole": "UC Irvine computer science and engineering undergraduate; Opennote co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "UC Irvine News, 28 July 2026, names Abhi Arya as a UC Irvine computer science and engineering major and Opennote co-founder. The same article says he and Rishi Srihari later returned as mentors, so no current-student status is stored.",
+          "excerpt": "Two UC Irvine undergraduates, Abhi Arya and Rishi Srihari, adjusted a makeshift studio light. Arya, a computer science and engineering major."
+        },
+        {
+          "name": "Rishi Srihari",
+          "campusId": "univ_uci",
+          "affiliationRole": "UC Irvine computer science undergraduate; Opennote co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "UC Irvine News, 28 July 2026, names Rishi Srihari as a UC Irvine computer science major and Opennote co-founder. No class year is printed, and the article says the founders later returned as mentors.",
+          "excerpt": "For Arya and Srihari, a computer science major, the viral moment was exciting. Two UC Irvine undergraduates, Abhi Arya and Rishi Srihari."
+        },
+        {
+          "name": "Vedant Vyas",
+          "campusId": null,
+          "affiliationRole": "Opennote co-founder; software engineering student at the University of Guelph, not UC Irvine",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "UC Irvine News, 28 July 2026, quotes Abhi Arya naming Vedant Vyas as a software engineering student at the University of Guelph who became Opennote's third co-founder. He is not given a UC Irvine affiliation.",
+          "excerpt": "Vedant Vyas, a software engineering student at the University of Guelph, reached out to Rishi and me on LinkedIn, Arya says. He became our third co-founder when we incorporated in January 2025."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Y Combinator",
+          "excerpt": "That year, Opennote was accepted into Y Combinator. The duo earned admission into Y Combinator, raised more than $4 million in venture funding.",
+          "sourceUrl": "https://news.uci.edu/2026/07/28/turning-notes-into-knowledge/",
+          "kind": "accelerator"
+        }
+      ],
+      "funding": [
+        {
+          "stage": "venture",
+          "amountUsd": null,
+          "amountText": "more than $4 million",
+          "date": null,
+          "leads": [],
+          "investors": [],
+          "excerpt": "The duo entered and won LA Hacks in 2024, earned admission into Y Combinator, raised more than $4 million in venture funding and, ultimately, agreed to be acquired by Reducto.",
+          "sourceUrl": "https://news.uci.edu/2026/07/28/turning-notes-into-knowledge/"
+        }
+      ]
+    },
+    {
+      "name": "eBay",
+      "description": "Online auction marketplace created by Pierre Omidyar, a 1988 Tufts computer science graduate. He and Pamela Kerr Omidyar met as Tufts undergraduates.",
+      "website": null,
+      "sourceUrl": "https://tuftsjournal.tufts.edu/archive/2002/april/features/commencement.shtml",
+      "excerpt": "Pierre Omidyar, a 1988 graduate who majored in computer science, pioneered online person-to-person trading by creating eBay, a web-based community in which buyers and sellers are brought together in an auction-style format. The couple, who met while undergraduates at Tufts.",
+      "orgPlace": "eBay",
+      "campusIds": ["univ_tufts"],
+      "investable": false,
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Pierre Omidyar",
+          "campusId": "univ_tufts",
+          "affiliationRole": "Tufts University A88, computer science; eBay founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Tufts Journal, April 2002, says Pierre Omidyar is a 1988 computer science graduate who created eBay, and that he and Pamela Kerr Omidyar met as Tufts undergraduates. The page does not state a funding amount.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": "A88",
+            "gradYear": 1988,
+            "evidence": "Tufts Journal: Pierre Omidyar, a 1988 graduate who majored in computer science, created eBay. The couple met while undergraduates at Tufts."
+          },
+          "excerpt": "Internet pioneer Pierre Omidyar, founder of the wildly successful online auction service eBay. Pierre Omidyar, a 1988 graduate who majored in computer science, pioneered online person-to-person trading by creating eBay. The couple, who met while undergraduates at Tufts."
+        }
+      ]
+    },
+    {
+      "name": "WePay",
+      "description": "Online group-payments startup founded by Boston College graduates Bill Clerico and Rich Aberman.",
+      "website": null,
+      "sourceUrl": "https://archive.boston.com/business/technology/innoeco/2009/12/wepay_founders_put_down_roots.html",
+      "excerpt": "When I first met Bill Clerico and Rich Aberman last fall, the two fresh Boston College grads were just starting to talk to local investors about WePay, their online payment start-up. They've just raised $1.65 million from Menlo Park-based August Capital and a group of angel investors including Eric Dunn.",
+      "orgPlace": "WePay",
+      "campusIds": ["univ_bc"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Bill Clerico",
+          "campusId": "univ_bc",
+          "affiliationRole": "Boston College graduate; WePay co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Boston.com Innovation Economy, 22 December 2009, calls Bill Clerico a fresh Boston College graduate and WePay co-founder. No class year is printed.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "Boston.com, 22 December 2009, calls Bill Clerico and Rich Aberman fresh Boston College grads who founded WePay. No class year is printed."
+          },
+          "excerpt": "When I first met Bill Clerico and Rich Aberman last fall, the two fresh Boston College grads were just starting to talk to local investors about WePay, their online payment start-up."
+        },
+        {
+          "name": "Rich Aberman",
+          "campusId": "univ_bc",
+          "affiliationRole": "Boston College graduate; WePay co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Boston.com Innovation Economy, 22 December 2009, calls Rich Aberman a fresh Boston College graduate and WePay co-founder. No class year is printed.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": null,
+            "gradYear": null,
+            "evidence": "Boston.com, 22 December 2009, calls Bill Clerico and Rich Aberman fresh Boston College grads who founded WePay. No class year is printed."
+          },
+          "excerpt": "When I first met Bill Clerico and Rich Aberman last fall, the two fresh Boston College grads were just starting to talk to local investors about WePay, their online payment start-up."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "funding round",
+          "amountUsd": 1650000,
+          "amountText": "$1.65 million",
+          "date": "2009-12-22",
+          "leads": ["August Capital"],
+          "investors": ["Eric Dunn"],
+          "excerpt": "Clerico and Aberman are living in San Jose, and they've just raised $1.65 million from Menlo Park-based August Capital and a group of angel investors including Eric Dunn, a former chief technology officer at Intuit.",
+          "sourceUrl": "https://archive.boston.com/business/technology/innoeco/2009/12/wepay_founders_put_down_roots.html"
+        }
+      ]
+    },
+    {
+      "name": "AirGarage",
+      "description": "Parking marketplace and operator founded by Arizona State University students Jonathon Barkl, Scott Fitsimones, and Chelsea Border.",
+      "website": null,
+      "sourceUrl": "https://news.asu.edu/20211105-entrepreneurship-investors-park-funding-airgarage",
+      "excerpt": "AirGarage, the company born out of parking frustration by three Arizona State University students, just received a $12.5 million infusion of cash from Silicon Valley investors. In 2017 Barkl, Scott Fitsimones and Chelsea Border — all students at ASU — founded AirGarage.",
+      "orgPlace": "AirGarage",
+      "campusIds": ["univ_asu"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Jonathon Barkl",
+          "campusId": "univ_asu",
+          "affiliationRole": "Arizona State University alumnus, bachelor's in physics and economics, 2018; AirGarage co-founder and CEO",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "ASU News, 5 November 2021, names Jonathon Barkl as an AirGarage co-founder and CEO who graduated in 2018 with bachelor's degrees in physics and economics.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": null,
+            "gradYear": 2018,
+            "evidence": "ASU News: Barkl graduated in 2018 with bachelor's degrees in physics and economics. He, Scott Fitsimones, and Chelsea Border were ASU students when they founded AirGarage."
+          },
+          "excerpt": "Co-founder and CEO Jonathon Barkl. In 2017 Barkl, Scott Fitsimones and Chelsea Border — all students at ASU, and now alumni. Barkl graduated in 2018 with bachelor's degrees in physics and economics."
+        },
+        {
+          "name": "Scott Fitsimones",
+          "campusId": "univ_asu",
+          "affiliationRole": "Arizona State University alumnus, bachelor's in computer science, 2019; AirGarage co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "ASU News, 5 November 2021, names Scott Fitsimones as an AirGarage co-founder who graduated in 2019 with a bachelor's degree in computer science.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": null,
+            "gradYear": 2019,
+            "evidence": "ASU News: Fitsimones graduated in 2019 with a bachelor's degree in computer science. He was an ASU student when AirGarage was founded in 2017."
+          },
+          "excerpt": "In 2017 Barkl, Scott Fitsimones and Chelsea Border — all students at ASU, and now alumni. Fitsimones in 2019 with a bachelor's degree in computer science."
+        },
+        {
+          "name": "Chelsea Border",
+          "campusId": "univ_asu",
+          "affiliationRole": "Arizona State University alumna, bachelor's in business data analytics, 2018; AirGarage co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "ASU News, 5 November 2021, names Chelsea Border as an AirGarage co-founder who graduated in 2018 with a bachelor's degree in business data analytics.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": null,
+            "gradYear": 2018,
+            "evidence": "ASU News: Border graduated in 2018 with a bachelor’s degree in business data analytics. She was an ASU student when AirGarage was founded in 2017."
+          },
+          "excerpt": "In 2017 Barkl, Scott Fitsimones and Chelsea Border — all students at ASU, and now alumni. Border in 2018 with a bachelor’s degree in business data analytics."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "venture",
+          "amountUsd": 12500000,
+          "amountText": "$12.5 million",
+          "date": "2021-11-05",
+          "leads": [],
+          "investors": [],
+          "excerpt": "AirGarage, the company born out of parking frustration by three Arizona State University students, just received a $12.5 million infusion of cash from Silicon Valley investors.",
+          "sourceUrl": "https://news.asu.edu/20211105-entrepreneurship-investors-park-funding-airgarage"
+        }
+      ]
+    },
+    {
+      "name": "SparkCharge",
+      "description": "Mobile electric-vehicle charging network. Josh Aviv first developed it as a Syracuse University student.",
+      "website": "https://www.sparkcharge.io",
+      "sourceUrl": "https://library.syracuse.edu/news/sparkcharge-raises-23-million-to-scale/",
+      "excerpt": "SparkCharge announced a Series A funding investment of $23 million co-led by Tale Venture Partners and Pendulum. Josh Aviv ’15 ‘G17, first developed SparkCharge as a student at Syracuse University. To learn more about SparkCharge go to: www.SparkCharge.io.",
+      "orgPlace": "SparkCharge",
+      "campusIds": ["univ_syracuse"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Josh Aviv",
+          "aliases": ["Joshua Aviv"],
+          "campusId": "univ_syracuse",
+          "affiliationRole": "Syracuse University ’15 G’17; SparkCharge founder and CEO",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Syracuse University Libraries, 24 May 2022, names Josh Aviv ’15 G’17 as the person who first developed SparkCharge as a Syracuse student, and quotes him as CEO and Founder. The page also refers to him as Joshua Aviv.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": "’15 G’17",
+            "gradYear": 2017,
+            "evidence": "Syracuse University Libraries: Josh Aviv ’15 ‘G17 first developed SparkCharge as a student at Syracuse University."
+          },
+          "excerpt": "Josh Aviv ’15 ‘G17, first developed SparkCharge as a student at Syracuse University working with the Blackstone LaunchPad and Syracuse Center of Excellence. Josh Aviv, CEO and Founder of SparkCharge. Founder and CEO Joshua Aviv continues."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "series a",
+          "amountUsd": 23000000,
+          "amountText": "$23 million Series A",
+          "date": "2022-05-24",
+          "leads": ["Tale Venture Partners", "Pendulum"],
+          "investors": ["Revolution’s Rise of the Rest Seed Fund", "Mark Cuban Companies", "Silicon Valley Bank", "Pusha-T", "Summer Watson"],
+          "excerpt": "SparkCharge announced today it is continuing its journey to scale the first mobile and intelligent EV charging network in the U.S. with a Series A funding investment of $23 million co-led by Tale Venture Partners and Pendulum. SparkCharge has also received additional investments from a diverse group, Revolution’s Rise of the Rest Seed Fund, the Mark Cuban Companies, and Silicon Valley Bank. Pusha-T and Summer Watson make up some of the high-profile celebrities joining the round.",
+          "sourceUrl": "https://library.syracuse.edu/news/sparkcharge-raises-23-million-to-scale/"
+        }
+      ]
+    },
+    {
+      "name": "Mercor",
+      "description": null,
+      "website": "https://www.mercor.com/blog/series-c/",
+      "sourceUrl": "https://www.mercor.com/blog/series-c/",
+      "excerpt": "Since we founded Mercor almost three years ago. Today, we're announcing our $350 million Series C funding, led by Felicis with participation from Benchmark, General Catalyst, and Robinhood Ventures. This round values Mercor at $10 billion.",
+      "orgPlace": "Mercor",
+      "campusIds": ["univ_harvard", "univ_georgetown"],
+      "verificationStatus": "confirmed",
+      "founders": [],
+      "funding": [
+        {
+          "stage": "series c",
+          "amountUsd": 350000000,
+          "amountText": "Series C|$350M",
+          "date": "2025-10-27",
+          "leads": ["Felicis"],
+          "investors": ["Benchmark", "General Catalyst", "Robinhood Ventures"],
+          "excerpt": "Today, we're announcing our $350 million Series C funding, led by Felicis with participation from Benchmark, General Catalyst, and Robinhood Ventures. This round values Mercor at $10 billion, 5x our Series B valuation.",
+          "sourceUrl": "https://www.mercor.com/blog/series-c/"
+        }
+      ]
+    },
+    {
+      "name": "Backupify",
+      "description": "Business data-backup company Vik Chadha started with Rob May. Chadha earned an M.S. in electrical engineering from Virginia Tech in 1994.",
+      "website": null,
+      "sourceUrl": "https://news.vt.edu/articles/2021/10/univlib-vik-chadha-94.html",
+      "excerpt": "The idea to start Backupify, to help businesses back up critical information, was born. Backupify started as a lark with a good friend named Rob May. But that lark met a need and we sold, what began as a hobby and morphed into a fast-growing startup that raised $20 million in venture capital funding, for over $100 million, said Chadha.",
+      "orgPlace": "Backupify",
+      "campusIds": ["univ_vt"],
+      "investable": false,
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Vik Chadha",
+          "campusId": "univ_vt",
+          "affiliationRole": "Virginia Tech electrical engineering alumnus, M.S. 1994; Backupify co-founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Virginia Tech News, 5 October 2021, names Vik Chadha M.S. '94 as an electrical engineering alumnus and quotes him on starting Backupify with Rob May. The buyer of the company is not named.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "verified",
+            "label": "M.S. '94",
+            "gradYear": 1994,
+            "evidence": "Virginia Tech News: Electrical engineering alumnus Vik Chadha M.S. ’94. Since graduating from Virginia Tech."
+          },
+          "excerpt": "Electrical engineering alumnus Vik Chadha M.S. ’94. The idea to start Backupify, to help businesses back up critical information, was born. Backupify started as a lark with a good friend named Rob May, said Chadha."
+        },
+        {
+          "name": "Rob May",
+          "campusId": null,
+          "affiliationRole": "Backupify co-founder named by Vik Chadha; no Virginia Tech affiliation on this page",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Virginia Tech News quotes Vik Chadha saying Backupify started with Rob May. The page does not say Rob May attended Virginia Tech, so he is not given a campus affiliation.",
+          "excerpt": "Backupify started as a lark with a good friend named Rob May. But that lark met a need and we sold, what began as a hobby and morphed into a fast-growing startup that raised $20 million in venture capital funding, for over $100 million, said Chadha."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "venture",
+          "amountUsd": 20000000,
+          "amountText": "$20 million",
+          "date": null,
+          "leads": [],
+          "investors": [],
+          "excerpt": "Backupify started as a lark with a good friend named Rob May. But that lark met a need and we sold, what began as a hobby and morphed into a fast-growing startup that raised $20 million in venture capital funding, for over $100 million, said Chadha.",
+          "sourceUrl": "https://news.vt.edu/articles/2021/10/univlib-vik-chadha-94.html"
+        },
+        {
+          "stage": "acquisition",
+          "amountUsd": null,
+          "amountText": "over $100 million",
+          "date": null,
+          "leads": [],
+          "investors": [],
+          "excerpt": "we sold, what began as a hobby and morphed into a fast-growing startup that raised $20 million in venture capital funding, for over $100 million, said Chadha.",
+          "sourceUrl": "https://news.vt.edu/articles/2021/10/univlib-vik-chadha-94.html"
+        }
+      ]
+    },
+    {
+      "name": "Buffalo Automation",
+      "description": "Self-navigating boat technology founded in 2015 by University at Buffalo engineering students. CEO and co-founder Thiru Vikram took a leave of absence from UB.",
+      "website": null,
+      "sourceUrl": "https://www.buffalo.edu/ubnow/stories/2018/04/buffalo-automation.html",
+      "excerpt": "Buffalo Automation, an artificial intelligence (AI) startup that is developing technology for self-navigating boats, has secured $900,000 in seed funding. The company, led by CEO and co-founder Thiru Vikram, was founded in 2015 by UB engineering students.",
+      "orgPlace": "Buffalo Automation",
+      "campusIds": ["univ_suny"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Thiru Vikram",
+          "campusId": "univ_suny",
+          "affiliationRole": "University at Buffalo engineering student; Buffalo Automation co-founder and CEO. Took a leave of absence from UB.",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "University at Buffalo, 12 April 2018, names Thiru Vikram as CEO and co-founder of Buffalo Automation, founded by UB engineering students, and says he took a leave of absence from UB. No class year is printed.",
+          "leftSchool": true,
+          "excerpt": "The company, led by CEO and co-founder Thiru Vikram, is currently piloting its AutoMate system. Buffalo Automation, which was founded in 2015 by UB engineering students. The founders — including Vikram, who has taken a leave of absence from UB to focus on the startup full time."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "seed",
+          "amountUsd": 900000,
+          "amountText": "$900,000 seed",
+          "date": "2018-04-12",
+          "leads": ["Deeridge Group LLC"],
+          "investors": ["Gerald Lippes", "Ted Pierce", "John Somers", "Z80 Labs"],
+          "excerpt": "Buffalo Automation has secured $900,000 in seed funding from investors. Buffalo Automation’s latest funding round was led by the Jacobs Family, owners of Delaware North, through their investment vehicle Deeridge Group LLC. Other investors included Gerald Lippes, Ted Pierce, and John Somers. Z80 Labs made a follow-on investment of $100,000.",
+          "sourceUrl": "https://www.buffalo.edu/ubnow/stories/2018/04/buffalo-automation.html"
+        },
+        {
+          "stage": "seed",
+          "amountUsd": 25000,
+          "amountText": "$25,000",
+          "date": "2016",
+          "leads": [],
+          "investors": ["Launch NY", "Z80 Labs"],
+          "excerpt": "The company has quickly gained recognition as one of the region’s promising startups, winning UB’s Henry A. Panasci Jr. Technology Entrepreneurship Competition (Panasci TEC) in 2016 and securing a $25,000 investment from Launch NY and Z80 Labs the same year.",
+          "sourceUrl": "https://www.buffalo.edu/ubnow/stories/2018/04/buffalo-automation.html"
+        }
+      ]
+    },
+    {
+      "name": "BRCĒ",
+      "description": "Performance materials company, including shoelaces meant to stay tied, built by Michigan State students Madhav Aggarwal and Tanvi Gadamsetti.",
+      "website": null,
+      "sourceUrl": "https://msutoday.msu.edu/news/2026/03/student-entrepreneurs-land-deal-shark-tank",
+      "excerpt": "Michigan State University student entrepreneurs Madhav Aggarwal and Tanvi Gadamsetti, co-founders of BRCĒ, secured a $300,000 investment during their appearance on ABC’s Shark Tank, which aired on March 4, 2026. BRCĒ, pronounced brace, is a performance materials technology company built by Aggarwal and Gadamsetti while studying at MSU.",
+      "orgPlace": "BRCĒ",
+      "campusIds": ["univ_msu"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Madhav Aggarwal",
+          "campusId": "univ_msu",
+          "affiliationRole": "Michigan State University student co-founder of BRCĒ as of March 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "MSUToday, 5 March 2026, names Madhav Aggarwal as an MSU student and BRCĒ co-founder. The page does not print a class year or a graduation date, so no enrollment status is stored.",
+          "excerpt": "Michigan State University student entrepreneurs Madhav Aggarwal and Tanvi Gadamsetti, co-founders of BRCĒ, secured a $300,000 investment. BRCĒ is a performance materials technology company built by Aggarwal and Gadamsetti while studying at MSU."
+        },
+        {
+          "name": "Tanvi Gadamsetti",
+          "campusId": "univ_msu",
+          "affiliationRole": "Michigan State University student co-founder of BRCĒ as of March 2026",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "MSUToday, 5 March 2026, names Tanvi Gadamsetti as an MSU student and BRCĒ co-founder. No class year is printed, so no enrollment status is stored.",
+          "excerpt": "Michigan State University student entrepreneurs Madhav Aggarwal and Tanvi Gadamsetti, co-founders of BRCĒ. said Gadamsetti. BRCĒ is a performance materials technology company built by Aggarwal and Gadamsetti while studying at MSU."
+        }
+      ],
+      "funding": [
+        {
+          "stage": "equity",
+          "amountUsd": 300000,
+          "amountText": "$300,000 for 20% equity",
+          "date": "2026-03-04",
+          "leads": ["Daniel Lubetzky", "Fawn Weaver"],
+          "investors": [],
+          "excerpt": "Guest shark Fawn Weaver, CEO of Uncle Nearest Premium Whiskey, and Daniel Lubetzky, founder of KIND Snacks, teamed up to offer $300,000 for 20% equity, a deal the founders accepted. The appearance aired on March 4, 2026.",
+          "sourceUrl": "https://msutoday.msu.edu/news/2026/03/student-entrepreneurs-land-deal-shark-tank"
+        }
+      ]
+    },
+    {
+      "name": "Novoflow",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://www.businessinsider.com/novoflow-pitch-deck-y-combinator-founders-raised-3-million-2025-10",
+      "excerpt": "In his sophomore year at Emory University, Rihet came across a LinkedIn post by Georges Casassovici. Their startup Novoflow is building AI agents for medical clinics. The company has just raised $3.1 million in funding, led by super angel Justin Hamilton, with participation from N1 Ventures, Multifaceted Capital, and Standard Partners Fund.",
+      "orgPlace": "Novoflow",
+      "campusIds": ["univ_emory"],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Mathieu Rihet",
+          "campusId": "univ_emory",
+          "affiliationRole": "Emory University sophomore who left school to build Novoflow",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Business Insider, 3 November 2025, says Mathieu Rihet was an Emory sophomore, dropped out after Y Combinator accepted Novoflow, and does not plan to return. This clears an earlier current-student label.",
+          "leftSchool": true,
+          "excerpt": "Nineteen-year-old Mathieu Rihet initially wanted to be a cardiothoracic surgeon. In his sophomore year at Emory University, Rihet came across a LinkedIn post by Georges Casassovici. Both dropped out of school after being accepted into Y Combinator's Spring 2025 class. Neither of the founders plan to return to school, Rihet told Business Insider. Their startup Novoflow is building AI agents for medical clinics."
+        },
+        {
+          "name": "Georges Casassovici",
+          "campusId": null,
+          "affiliationRole": "Novoflow co-founder; high school student when he met Mathieu Rihet, not an Emory student",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Business Insider, 3 November 2025, names Georges Casassovici, 18, as a high school student who co-founded Novoflow with Mathieu Rihet. He is not described as an Emory student. The page says he dropped out and still received his diploma.",
+          "excerpt": "Georges Casassovici, 18, a high school student seeking a non-technical cofounder to build with. Their startup Novoflow is building AI agents for medical clinics. While Casassovici dropped out of school to start Novoflow, he still received his diploma after opting for pass/fail grading."
+        }
+      ],
+      "investors": [
+        {
+          "name": "Y Combinator",
+          "excerpt": "Both dropped out of school after being accepted into Y Combinator's Spring 2025 class. Their startup Novoflow is building AI agents for medical clinics.",
+          "sourceUrl": "https://www.businessinsider.com/novoflow-pitch-deck-y-combinator-founders-raised-3-million-2025-10",
+          "batch": "Spring 2025",
+          "kind": "accelerator"
+        }
+      ],
+      "funding": [
+        {
+          "stage": "seed",
+          "amountUsd": 3100000,
+          "amountText": "$3.1 million seed",
+          "date": "2025-11-03",
+          "leads": ["Justin Hamilton"],
+          "investors": ["N1 Ventures", "Multifaceted Capital", "Standard Partners Fund"],
+          "excerpt": "The company has just raised $3.1 million in funding, led by super angel Justin Hamilton, with participation from N1 Ventures, Multifaceted Capital, and Standard Partners Fund.",
+          "sourceUrl": "https://www.businessinsider.com/novoflow-pitch-deck-y-combinator-founders-raised-3-million-2025-10"
+        }
+      ]
+    }
+  ],
+  "potential": [],
+  "links": [
+    {
+      "personName": "Ran Ma",
+      "campusId": "univ_northwestern",
+      "affiliationRole": "Studied biomedical engineering at Northwestern University",
+      "founderStatus": "founder",
+      "sourceUrl": "https://techcrunch.com/2025/01/08/sirens-smart-sock-for-diabetics-secures-strategic-funding-round/",
+      "excerpt": "Entrepreneur Ran Ma hand-made a sock that contained sensors to detect foot ulcers. I studied biomedical engineering at Johns Hopkins and at Northwestern University, Ma told TechCrunch. Ma dropped out of school twice — once from Northwestern, and then from Copenhagen Business School."
+    },
+    {
+      "personName": "Scott Dorsey",
+      "campusId": "univ_northwestern",
+      "affiliationRole": "MBA, Kellogg Graduate School of Management, Northwestern University",
+      "founderStatus": "founder",
+      "sourceUrl": "https://honorsandawards.iu.edu/awards/honoree/6643.html",
+      "excerpt": "Scott Dorsey, who earned a Bachelor of Science degree in marketing from the Kelley School in 1989, co-founded ExactTarget in 2000. Dorsey also has an MBA from the Kellogg Graduate School of Management at Northwestern University.",
+      "enrollment": {
+        "status": "older_alumni",
+        "basis": "verified",
+        "label": null,
+        "gradYear": null,
+        "evidence": "Indiana University Honors and Awards: Dorsey also has an MBA from the Kellogg Graduate School of Management at Northwestern University. No Kellogg class year is printed."
+      }
+    }
+  ]
+}

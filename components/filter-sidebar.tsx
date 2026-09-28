@@ -191,6 +191,21 @@ export function FilterSidebar({
       )}
 
       <div className="mt-5">
+        <span className="ui-label">Evidence</span>
+        <ul className="mt-1 space-y-0.5">
+          <li>
+            <ScoutLink
+              href={buildHref(basePath, current, { confirmed: current.confirmed === "1" ? null : "1" })}
+              className={`block rounded-md px-2 py-1 text-sm ${current.confirmed === "1" ? "bg-accent-subtle font-medium text-foreground" : "text-foreground hover:bg-surface-2"}`}
+            >
+              Confirmed only
+            </ScoutLink>
+          </li>
+        </ul>
+        <p className="mt-1 text-[11px] text-muted">Hides people and startups that are not marked confirmed from a public source.</p>
+      </div>
+
+      <div className="mt-5">
         <span className="ui-label">Review</span>
         <ul className="mt-1 space-y-0.5">
           {(

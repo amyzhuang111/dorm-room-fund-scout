@@ -110,7 +110,7 @@ export function evaluatePriorFundingGate(facts: ProjectFacts): GateOutcome {
     return {
       gate: "prior_funding",
       result: "outside_current_brief",
-      rationale: `Known prior funding ($${total.toLocaleString()}) is at or above the $${trigger.toLocaleString()} review trigger (Amy's sourcing guidance, not a stated DRF policy).`,
+      rationale: `Known prior funding ($${total.toLocaleString()}) is at or above the $${trigger.toLocaleString()} review trigger (internal sourcing guidance, not a stated DRF policy).`,
     };
   }
   return {

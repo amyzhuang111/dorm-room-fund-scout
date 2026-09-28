@@ -4,8 +4,9 @@ import { sectorLabel } from "./sectors";
 
 export function matchCandidate(
   candidate: CandidateSummary,
-  filters: { universityId?: string; queue?: Queue; sector?: string; search?: string }
+  filters: { universityId?: string; queue?: Queue; sector?: string; search?: string; confirmed?: boolean }
 ): boolean {
+  if (filters.confirmed && candidate.verificationStatus !== "confirmed") return false;
   if (filters.universityId && !candidate.universityIds.includes(filters.universityId)) return false;
   if (
     filters.sector &&
@@ -35,9 +36,10 @@ export function sectorsForUniversity(sectors: SectorCount[], universityId?: stri
     .filter((sector) => sector.count > 0);
 }
 
-export function foundersInView(founders: FounderRow[], filters: { universityId?: string; search?: string }): FounderRow[] {
+export function foundersInView(founders: FounderRow[], filters: { universityId?: string; search?: string; confirmed?: boolean }): FounderRow[] {
   const q = filters.search?.toLowerCase();
   return founders.flatMap((founder) => {
+    if (filters.confirmed && founder.verificationStatus !== "confirmed") return [];
     if (q && !founder.name.toLowerCase().includes(q)) return [];
     if (!filters.universityId) return [founder];
     const match = founder.campuses?.find((campus) => campus.universityId === filters.universityId);

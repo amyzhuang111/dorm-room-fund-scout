@@ -18,7 +18,7 @@ export function TierOverrideForm({
       <summary className="cursor-pointer px-2 py-1 text-xs font-medium text-muted">Override tier</summary>
       <form action={setTierOverride} className="flex flex-wrap items-end gap-2 border-t border-border-c p-2">
         <input type="hidden" name="sourceId" value={sourceId} />
-        <input type="hidden" name="overrideBy" value="amy" />
+        <input type="hidden" name="overrideBy" value="scout" />
         <div>
           <label className="block text-[11px] text-muted">Founder Scout</label>
           <select name="founderScoutTier" defaultValue={currentFounderTier} className="rounded-md border border-border-c bg-surface px-1.5 py-1 text-xs">

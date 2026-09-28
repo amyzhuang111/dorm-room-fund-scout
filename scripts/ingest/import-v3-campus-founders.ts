@@ -68,6 +68,7 @@ interface CompanyRow {
   orgPlace: string;
   campusIds: string[];
   investable?: boolean;
+  verificationStatus?: "confirmed" | "partial" | "unverified";
   founders: FounderRow[];
   funding?: FundingRow[];
   investors?: InvestorRow[];
@@ -453,7 +454,21 @@ function main() {
       }
       applyVerification(db, id, row.verificationStatus, row.verificationNote, retrievedAt);
     }
-    if (row.leftSchool) db.prepare(`UPDATE people SET left_school=1 WHERE id=?`).run(id);
+    if (row.leftSchool) {
+      db.prepare(`UPDATE people SET left_school=1 WHERE id=?`).run(id);
+      // A person marked as having left this campus is not still a current student there.
+      if (row.campusId) {
+        const otherCampus = db
+          .prepare(`SELECT 1 FROM affiliations WHERE person_id=? AND university_id!=? LIMIT 1`)
+          .get(id, row.campusId);
+        if (!otherCampus) {
+          db.prepare(
+            `UPDATE people SET enrollment_status=NULL, enrollment_label=NULL, enrollment_grad_year=NULL, enrollment_basis='verified', enrollment_evidence=?, enrollment_source_url=?
+             WHERE id=? AND enrollment_status='current_student'`
+          ).run(row.excerpt, sourceUrl, id);
+        }
+      }
+    }
     const claimId = insertClaim(
       db,
       "person",
@@ -502,7 +517,7 @@ function main() {
         const website = company.website && linkKind(company.website).kind === "other" ? company.website : null;
         db.prepare(
           `INSERT INTO projects (id, name, aliases_json, kind, description, website_url, primary_link, primary_link_kind, is_portfolio_reference, is_investable_candidate, verification_status, verification_note, last_verified_at)
-           VALUES (?, ?, '[]', 'company', ?, ?, ?, ?, 0, ?, 'partial', ?, ?)`
+           VALUES (?, ?, '[]', 'company', ?, ?, ?, ?, 0, ?, ?, ?, ?)`
         ).run(
           id,
           company.name,
@@ -511,6 +526,7 @@ function main() {
           website ? company.sourceUrl : company.website || company.sourceUrl,
           website ? "other" : company.website ? linkKind(company.website).kind : linkKind(company.sourceUrl).kind,
           company.investable === false ? 0 : 1,
+          company.verificationStatus ?? "partial",
           `Named on ${company.sourceUrl}`,
           retrievedAt.slice(0, 10)
         );
@@ -519,6 +535,12 @@ function main() {
         byCompany.set(nameKey, list);
         newCompanies++;
         createdCompany = true;
+      }
+      if (company.verificationStatus === "confirmed") {
+        db.prepare(
+          `UPDATE projects SET verification_status='confirmed', verification_note=?, last_verified_at=?
+           WHERE id=? AND (verification_status IS NULL OR verification_status != 'confirmed')`
+        ).run(`Named on ${company.sourceUrl}`, retrievedAt.slice(0, 10), id);
       }
       const claimId = insertClaim(
         db,
@@ -611,7 +633,15 @@ function main() {
           `INSERT INTO funding_events (id, project_id, amount, currency, instrument, event_date, dedupe_key, claim_id)
            VALUES (?, ?, ?, 'USD', ?, ?, ?, ?)
            ON CONFLICT(dedupe_key) DO NOTHING`
-        ).run(newId("fund"), id, round.amountUsd, round.stage === "grant" || round.stage === "prize" ? "grant" : "equity", round.date, dedupe, claimId);
+        ).run(
+          newId("fund"),
+          id,
+          round.amountUsd,
+          round.stage === "grant" || round.stage === "prize" ? "grant" : round.stage === "loan" || round.stage === "debt" ? "debt" : round.stage === "acquisition" || round.stage === "ipo" || round.stage === "mixed" ? "unknown" : "equity",
+          round.date,
+          dedupe,
+          claimId
+        );
         for (const name of [...round.leads, ...round.investors]) {
           if (factExists.get(id, "investor", name)) continue;
           insertFact.run(

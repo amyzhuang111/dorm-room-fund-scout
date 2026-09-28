@@ -1,5 +1,5 @@
 // Search LinkedIn for people who still have no linkedin.com/in/ URL.
-// Meant to run on Amy's machine, where APIFY_API_TOKEN is in .env.local.
+// Meant to run locally, where APIFY_API_TOKEN is in .env.local.
 //
 // PowerShell (from the repo root):
 //   npx tsx scripts/ingest/search-linkedin-apify.ts --dry-run --campus univ_penn

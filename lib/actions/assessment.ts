@@ -13,7 +13,7 @@ import { RUBRIC_DIMENSIONS, RUBRIC_VERSION, computeRubric, type Ratings } from "
 export async function saveAssessment(formData: FormData) {
   await requireMemberAction();
   const projectId = String(formData.get("projectId") || "");
-  const evaluator = String(formData.get("evaluator") || "amy").trim() || "amy";
+  const evaluator = String(formData.get("evaluator") || "scout").trim() || "scout";
   const notes = String(formData.get("notes") || "").trim();
   const counterevidence = String(formData.get("counterevidence") || "").trim();
   if (!projectId) return;

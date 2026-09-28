@@ -1252,7 +1252,8 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
        FROM people pe
        LEFT JOIN affiliations a ON a.person_id = pe.id
        LEFT JOIN universities u ON u.id = a.university_id
-       ORDER BY pe.name`
+       ORDER BY pe.name,
+         CASE a.status WHEN 'current_student' THEN 0 WHEN 'recent_grad' THEN 1 WHEN 'older_alumni' THEN 2 ELSE 3 END`
     )
     .all() as {
       id: string;
@@ -1282,7 +1283,9 @@ function buildFounders(): { promoted: FounderRow[]; potential: FounderRow[]; all
   const byId = new Map<string, Omit<FounderRow, "promoted" | "promotionReasonLabel" | "founderSignal">>();
   for (const r of rows) {
     const affiliations = affs.get(r.id) ?? [];
-    affiliations.push({ status: r.status, universityId: r.university_id, universityName: r.university_name });
+    const prior = affiliations.find((item) => item.universityId === r.university_id);
+    if (!prior) affiliations.push({ status: r.status, universityId: r.university_id, universityName: r.university_name });
+    else if ((!prior.status || prior.status === "unverified") && r.status && r.status !== "unverified") prior.status = r.status;
     affs.set(r.id, affiliations);
     if (byId.has(r.id)) continue;
     const linkedinUrl = linkedinFromAliases(r.aliases_json);
