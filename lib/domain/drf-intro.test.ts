@@ -20,9 +20,9 @@ for (const row of records) {
 }
 assert.equal(records.find((row) => row.id === "dra_lauren_reeder")?.investorId, "inv_sequoia_capital");
 assert.equal(records.find((row) => row.id === "dra_lauren_reeder")?.linkedinConfidence, "confirmed");
-assert.equal(records.filter((row) => row.linkedinConfidence === "confirmed").length, 140);
-assert.equal(records.filter((row) => row.linkedinConfidence === "likely").length, 122);
-assert.equal(records.filter((row) => row.linkedinUrl).length, 262);
+assert.equal(records.filter((row) => row.linkedinConfidence === "confirmed").length, 270);
+assert.equal(records.filter((row) => row.linkedinConfidence === "likely").length, 0);
+assert.equal(records.filter((row) => row.linkedinUrl).length, 270);
 for (const row of records) {
   if (row.linkedinUrl) {
     assert.ok(row.linkedinConfidence === "confirmed" || row.linkedinConfidence === "likely", row.id);
@@ -40,6 +40,11 @@ assert.equal(records.find((row) => row.id === "dra_vesal_yazdi")?.linkedinUrl, "
 assert.equal(records.find((row) => row.id === "dra_richard_clay")?.linkedinConfidence, "confirmed");
 assert.equal(records.find((row) => row.id === "dra_richard_clay")?.linkedinSourceUrl ?? null, null);
 assert.equal(records.find((row) => row.id === "dra_ben_okeefe")?.linkedinUrl, "https://www.linkedin.com/in/ben-okeefe");
+assert.equal(records.find((row) => row.id === "dra_andy_chen")?.linkedinUrl, "https://www.linkedin.com/in/andy-chen-md");
+assert.equal(records.find((row) => row.id === "dra_andy_chen")?.linkedinConfidence, "confirmed");
+assert.ok(records.find((row) => row.id === "dra_andy_chen")?.verificationNote?.includes("Manually confirmed by scout review, 2026-09-28"));
+assert.equal(records.find((row) => row.id === "dra_isabel_sheinman")?.linkedinConfidence, "confirmed");
+assert.equal(records.find((row) => row.id === "dra_isabel_sheinman")?.linkedinUrl, "https://www.linkedin.com/in/isabel-sheinman-98021079");
 const linkedinSlugs = new Map<string, string>();
 for (const row of records) {
   const slug = linkedinPersonSlug(row.linkedinUrl);
