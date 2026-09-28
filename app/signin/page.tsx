@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { signInWithGoogle } from "@/lib/auth/actions";
 import { DRF_SIGNIN_MESSAGE, safeCallbackUrl } from "@/lib/auth/access";
 import { currentMember } from "@/lib/auth/guard";
+import { logMissingAuthEnv, SIGNIN_UNCONFIGURED_MESSAGE } from "@/lib/auth/required-env";
 import { authMethods } from "@/lib/auth/send-email";
 import { MagicLinkForm } from "@/components/magic-link-form";
 
@@ -16,6 +17,7 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
   const linkError = sp.error === "CredentialsSignin";
   const denied = sp.error === "AccessDenied";
   const unconfigured = sp.error === "Configuration" || (!methods.magicLink && !methods.google);
+  if (unconfigured) logMissingAuthEnv();
 
   return (
     <div className="mx-auto w-full max-w-md px-4 py-16 text-black">
@@ -27,9 +29,7 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
       {denied && <p className="mt-4 text-sm font-semibold text-black">That email is not on the member list.</p>}
       {linkError && <p className="mt-4 text-sm font-semibold text-black">That sign-in link is invalid or has expired. Request a new one.</p>}
       {unconfigured && (
-        <p className="mt-4 rounded-md border border-black bg-white p-4 text-sm font-medium text-black">
-          Sign-in is not configured on this server yet, so Pipeline and Shortlist stay locked. Public pages keep working.
-        </p>
+        <p className="mt-4 rounded-md border border-black bg-white p-4 text-sm font-medium text-black">{SIGNIN_UNCONFIGURED_MESSAGE}</p>
       )}
       {methods.magicLink && (
         <MagicLinkForm callbackUrl={callbackUrl} />

@@ -1,5 +1,6 @@
 import { DRF_SIGNIN_MESSAGE, authSecret, isAllowedEmail, safeCallbackUrl } from "@/lib/auth/access";
 import { createMagicToken } from "@/lib/auth/magic-link";
+import { logMissingAuthEnv, SIGNIN_UNCONFIGURED_MESSAGE } from "@/lib/auth/required-env";
 import { magicLinkConfigured, sendSignInEmail } from "@/lib/auth/send-email";
 
 export const runtime = "nodejs";
@@ -48,20 +49,16 @@ export async function POST(request: Request) {
     return Response.json({ error: DRF_SIGNIN_MESSAGE }, { status: 403 });
   }
   if (!authSecret() || !magicLinkConfigured()) {
-    return Response.json(
-      { error: "Sign-in email is not configured, so Pipeline and Shortlist stay locked." },
-      { status: 503 }
-    );
+    logMissingAuthEnv();
+    return Response.json({ error: SIGNIN_UNCONFIGURED_MESSAGE }, { status: 503 });
   }
   if (await tooMany(email)) {
     return Response.json({ error: "Wait a few minutes and request another sign-in link." }, { status: 429 });
   }
   const token = await createMagicToken(email);
   if (!token) {
-    return Response.json(
-      { error: "Sign-in email is not configured, so Pipeline and Shortlist stay locked." },
-      { status: 503 }
-    );
+    logMissingAuthEnv();
+    return Response.json({ error: SIGNIN_UNCONFIGURED_MESSAGE }, { status: 503 });
   }
   const callbackUrl = safeCallbackUrl(typeof body.callbackUrl === "string" ? body.callbackUrl : null);
   const url = `${originFrom(request)}/signin/verify?${new URLSearchParams({ token, callbackUrl }).toString()}`;
