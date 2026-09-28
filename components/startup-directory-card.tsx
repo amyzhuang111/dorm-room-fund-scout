@@ -212,15 +212,23 @@ export function StartupDirectoryCard({
                     )}
                   </div>
                   {founder.linkedinUrl && (
-                    <a
-                      href={founder.linkedinUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`LinkedIn for ${founder.name}`}
-                      className="inline-flex shrink-0 items-center gap-1 rounded-md bg-[#0a66c2] px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-[#004182]"
-                    >
-                      in
-                    </a>
+                    <span className="inline-flex shrink-0 items-center gap-1">
+                      <a
+                        href={founder.linkedinUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`LinkedIn for ${founder.name}`}
+                        title={founder.linkedinConfidence === "likely" ? "Likely LinkedIn profile. The name matched one of school, startup, or program." : "Open this person's LinkedIn profile"}
+                        className="inline-flex items-center gap-1 rounded-md bg-[#0a66c2] px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-[#004182]"
+                      >
+                        in
+                      </a>
+                      {founder.linkedinConfidence === "likely" && (
+                        <span className="rounded border border-dashed border-neutral-400 px-1 text-[10px] font-medium uppercase tracking-wide text-neutral-500">
+                          likely
+                        </span>
+                      )}
+                    </span>
                   )}
                 </li>
               );
