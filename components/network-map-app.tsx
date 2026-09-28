@@ -621,13 +621,13 @@ export function NetworkMapApp() {
             <p className="mt-1 text-[10px] leading-snug text-neutral-600">Campus club / hub: campus color</p>
             <div className="mt-1.5 flex items-end gap-2 border-t border-neutral-200 pt-1.5" aria-hidden="true">
               <svg width="28" height="10" viewBox="0 0 28 10">
-                <line x1="1" y1="6" x2="27" y2="6" stroke="rgba(12,12,12,0.28)" strokeWidth="1" strokeLinecap="round" />
+                <line x1="1" y1="6" x2="27" y2="6" stroke="rgba(32,34,38,0.34)" strokeWidth="0.5" strokeLinecap="round" />
               </svg>
               <svg width="28" height="10" viewBox="0 0 28 10">
-                <line x1="1" y1="5.5" x2="27" y2="5.5" stroke="rgba(12,12,12,0.55)" strokeWidth="2" strokeLinecap="round" />
+                <line x1="1" y1="5.5" x2="27" y2="5.5" stroke="rgba(32,34,38,0.58)" strokeWidth="1" strokeLinecap="round" />
               </svg>
               <svg width="28" height="10" viewBox="0 0 28 10">
-                <line x1="2" y1="5" x2="26" y2="5" stroke="rgba(12,12,12,0.9)" strokeWidth="3.5" strokeLinecap="round" />
+                <line x1="2" y1="5" x2="26" y2="5" stroke="rgba(32,34,38,0.82)" strokeWidth="1.75" strokeLinecap="round" />
               </svg>
             </div>
             <p className="text-[10px] leading-snug text-neutral-800">Line weight = people on the link</p>

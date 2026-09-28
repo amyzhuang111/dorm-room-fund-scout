@@ -613,6 +613,11 @@ function CampusNetworkCanvas({
                 if (!source || !target) return null;
                 const highlighted = selectedEdge === index || (active != null && (edge.source === active || edge.target === active));
                 const quiet = spoke(edge) && !highlighted;
+                const outside =
+                  (source.type === "community" && source.zone === "external") || (target.type === "community" && target.zone === "external");
+                const resting = edge.relationshipType === "founded" ? 1.35 : quiet ? 0.7 : 1;
+                // Accelerator spokes on the outside half were the darkest strokes. Half width, dark gray, still visible.
+                const thin = outside && !quiet && !highlighted;
                 const d = `M ${source.x} ${source.y} L ${target.x} ${target.y}`;
                 return (
                   <g key={index}>
@@ -633,8 +638,8 @@ function CampusNetworkCanvas({
                     <path
                       d={d}
                       fill="none"
-                      stroke={highlighted ? "#141018" : quiet ? "#ddd8e6" : edgeDimmed(edge) ? "#e4e0ea" : "#5c5470"}
-                      strokeWidth={highlighted ? 1.8 : edge.relationshipType === "founded" ? 1.35 : quiet ? 0.7 : 1}
+                      stroke={highlighted ? "#141018" : quiet ? "#ddd8e6" : edgeDimmed(edge) ? "#e4e0ea" : thin ? "rgba(32, 34, 38, 0.62)" : "#5c5470"}
+                      strokeWidth={highlighted ? 1.8 : thin ? resting / 2 : resting}
                       opacity={edgeDimmed(edge) && !highlighted ? 0.35 : 1}
                       pointerEvents="none"
                     />
