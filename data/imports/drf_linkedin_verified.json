@@ -1,0 +1,80 @@
+[
+  {
+    "name": "Connor McEwen",
+    "school": "Boston University",
+    "linkedin_url": "https://www.linkedin.com/in/cmcewen",
+    "evidence": "DRF podcast gives LinkedIn URL (https://podcasts.apple.com/ch/podcast/office-hours-with-dorm-room-fund/id1494752850)"
+  },
+  {
+    "name": "Richard Clay",
+    "school": "Bowie State University",
+    "linkedin_url": "https://www.linkedin.com/in/richardclay0000",
+    "evidence": "Bowie State and DRF on profile"
+  },
+  {
+    "name": "Nolan Walsh",
+    "school": "Columbia University",
+    "linkedin_url": "https://www.linkedin.com/in/nolan-walsh-98569628",
+    "evidence": "Thursday Boot founder bio: Columbia Business School and DRF partner (https://community.thriveglobal.com/treat-your-employees-as-your-partners-with-nolan-walsh-ceo-thursday-boot/)"
+  },
+  {
+    "name": "Michael Ma",
+    "school": "Harvard Business School",
+    "linkedin_url": "https://www.linkedin.com/in/michaelma8",
+    "evidence": "Liquid 2 bio: HBS and founding DRF Boston (https://www.liquid2.vc/team)"
+  },
+  {
+    "name": "Yvette Rodriguez",
+    "school": "MIT Sloan",
+    "linkedin_url": "https://www.linkedin.com/in/yvette-rodriguez-acosta",
+    "evidence": "The League community directory: DRF partner (https://theleaguevc.com/community)"
+  },
+  {
+    "name": "Ben Paster",
+    "school": "New York University",
+    "linkedin_url": "https://www.linkedin.com/in/benpaster",
+    "evidence": "Dribbleup bio: DRF experience (https://theorg.com/org/dribbleup/org-chart/ben-paster)"
+  },
+  {
+    "name": "Hillary Bush",
+    "school": "NYU Stern, UC Berkeley",
+    "linkedin_url": "https://www.linkedin.com/in/hillarybush",
+    "evidence": "bio ties profile to DRF role (https://me.sh/profile/hillary-bush)"
+  },
+  {
+    "name": "Daniel Toro",
+    "school": "Princeton University",
+    "linkedin_url": "https://www.linkedin.com/in/danieltoro1",
+    "evidence": "Princeton and DRF partner in bio (https://me.sh/profile/daniel-toro)"
+  },
+  {
+    "name": "Michael Chiang",
+    "school": "Princeton University",
+    "linkedin_url": "https://www.linkedin.com/in/mlchiang",
+    "evidence": "Frontier founder and DRF partner (https://www.crunchbase.com/organization/frontier-08b8)"
+  },
+  {
+    "name": "Ben O'Keefe",
+    "school": "Stanford University",
+    "linkedin_url": "https://www.linkedin.com/in/ben-okeefe",
+    "evidence": "DRF partner mentioned in recruiting post"
+  },
+  {
+    "name": "Cole Fairchild",
+    "school": "University of Pennsylvania",
+    "linkedin_url": "https://www.linkedin.com/in/cole-fairchild",
+    "evidence": "own LinkedIn post about DRF"
+  },
+  {
+    "name": "Jo Cheng",
+    "school": "Vanderbilt University",
+    "linkedin_url": "https://www.linkedin.com/in/joanna-cheng-988255123",
+    "evidence": "profile identifies Jo Cheng at DRF"
+  },
+  {
+    "name": "Vesal Yazdi",
+    "school": "(school unknown)",
+    "linkedin_url": "https://www.linkedin.com/in/vesalyazdi",
+    "evidence": "DRF article names Vesal Yazdi (https://wp.dormroomfund.com/inside-shield-ais-beginnings/)"
+  }
+]

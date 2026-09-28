@@ -1390,7 +1390,13 @@
     "school_label": "Stanford University",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/ben-okeefe",
+    "linkedin_confidence": "confirmed",
+    "verification_note": "DRF partner mentioned in recruiting post",
+    "proof_urls": [
+      "https://www.linkedin.com/in/ben-okeefe"
+    ]
   },
   {
     "id": "dra_ben_paster",
@@ -1405,7 +1411,15 @@
     "affiliation_status": "older_alumni",
     "year_start": 2014,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork",
+    "linkedin_url": "https://www.linkedin.com/in/benpaster",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://theorg.com/org/dribbleup/org-chart/ben-paster",
+    "verification_note": "Dribbleup bio: DRF experience (https://theorg.com/org/dribbleup/org-chart/ben-paster)",
+    "proof_urls": [
+      "https://theorg.com/org/dribbleup/org-chart/ben-paster",
+      "https://www.linkedin.com/in/benpaster"
+    ]
   },
   {
     "id": "dra_ben_penchas",
@@ -2027,7 +2041,13 @@
     "school_label": "University of Pennsylvania",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "linkedin_url": "https://www.linkedin.com/in/cole-fairchild",
+    "linkedin_confidence": "confirmed",
+    "verification_note": "Cole Fairchild: own LinkedIn post about DRF.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/cole-fairchild"
+    ]
   },
   {
     "id": "dra_connor_mcewen",
@@ -2042,7 +2062,15 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
+    "linkedin_url": "https://www.linkedin.com/in/cmcewen",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://podcasts.apple.com/ch/podcast/office-hours-with-dorm-room-fund/id1494752850",
+    "verification_note": "DRF podcast gives LinkedIn URL (https://podcasts.apple.com/ch/podcast/office-hours-with-dorm-room-fund/id1494752850)",
+    "proof_urls": [
+      "https://podcasts.apple.com/ch/podcast/office-hours-with-dorm-room-fund/id1494752850",
+      "https://www.linkedin.com/in/cmcewen"
+    ]
   },
   {
     "id": "dra_courtney_andrews",
@@ -2142,7 +2170,15 @@
     "school_label": "Princeton University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2015
+    "year_start": 2015,
+    "linkedin_url": "https://www.linkedin.com/in/danieltoro1",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://me.sh/profile/daniel-toro",
+    "verification_note": "Princeton and DRF partner in bio (https://me.sh/profile/daniel-toro)",
+    "proof_urls": [
+      "https://me.sh/profile/daniel-toro",
+      "https://www.linkedin.com/in/danieltoro1"
+    ]
   },
   {
     "id": "dra_darius_johnson",
@@ -2780,7 +2816,15 @@
     "school_label": "NYU Stern, UC Berkeley",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "linkedin_url": "https://www.linkedin.com/in/hillarybush",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://me.sh/profile/hillary-bush",
+    "verification_note": "bio ties profile to DRF role (https://me.sh/profile/hillary-bush)",
+    "proof_urls": [
+      "https://me.sh/profile/hillary-bush",
+      "https://www.linkedin.com/in/hillarybush"
+    ]
   },
   {
     "id": "dra_hiral_shah",
@@ -3414,7 +3458,13 @@
     "school_label": "Vanderbilt University",
     "school_role": "student",
     "affiliation_status": "recent_grad",
-    "year_start": 2024
+    "year_start": 2024,
+    "linkedin_url": "https://www.linkedin.com/in/joanna-cheng-988255123",
+    "linkedin_confidence": "confirmed",
+    "verification_note": "Jo Cheng: profile identifies Jo Cheng at DRF.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/joanna-cheng-988255123"
+    ]
   },
   {
     "id": "dra_joe_kahn",
@@ -4618,7 +4668,15 @@
     "school_label": "Princeton University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2015
+    "year_start": 2015,
+    "linkedin_url": "https://www.linkedin.com/in/mlchiang",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.crunchbase.com/organization/frontier-08b8",
+    "verification_note": "Frontier founder and DRF partner (https://www.crunchbase.com/organization/frontier-08b8)",
+    "proof_urls": [
+      "https://www.crunchbase.com/organization/frontier-08b8",
+      "https://www.linkedin.com/in/mlchiang"
+    ]
   },
   {
     "id": "dra_michael_ma",
@@ -4633,7 +4691,15 @@
     "affiliation_status": "older_alumni",
     "year_start": 2013,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston"
+    "team_source_url": "https://web.archive.org/web/20140607182716/http://dormroomfund.com/boston",
+    "linkedin_url": "https://www.linkedin.com/in/michaelma8",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://www.liquid2.vc/team",
+    "verification_note": "Liquid 2 bio: HBS and founding DRF Boston (https://www.liquid2.vc/team)",
+    "proof_urls": [
+      "https://www.liquid2.vc/team",
+      "https://www.linkedin.com/in/michaelma8"
+    ]
   },
   {
     "id": "dra_michael_truell",
@@ -5040,7 +5106,15 @@
     "affiliation_status": "older_alumni",
     "year_start": 2014,
     "year_end": 2015,
-    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork"
+    "team_source_url": "https://web.archive.org/web/20150427064840/http://dormroomfund.com/newyork",
+    "linkedin_url": "https://www.linkedin.com/in/nolan-walsh-98569628",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://community.thriveglobal.com/treat-your-employees-as-your-partners-with-nolan-walsh-ceo-thursday-boot/",
+    "verification_note": "Thursday Boot founder bio: Columbia Business School and DRF partner (https://community.thriveglobal.com/treat-your-employees-as-your-partners-with-nolan-walsh-ceo-thursday-boot/)",
+    "proof_urls": [
+      "https://community.thriveglobal.com/treat-your-employees-as-your-partners-with-nolan-walsh-ceo-thursday-boot/",
+      "https://www.linkedin.com/in/nolan-walsh-98569628"
+    ]
   },
   {
     "id": "dra_olivia_zhang",
@@ -5308,7 +5382,13 @@
     "school_label": "Bowie State University",
     "school_role": "student",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "linkedin_url": "https://www.linkedin.com/in/richardclay0000",
+    "linkedin_confidence": "confirmed",
+    "verification_note": "Richard Clay: Bowie State and DRF on profile.",
+    "proof_urls": [
+      "https://www.linkedin.com/in/richardclay0000"
+    ]
   },
   {
     "id": "dra_rick_ling",
@@ -6564,7 +6644,15 @@
     "source_url": "https://dormroomfund.medium.com/forever-drf-cheers-to-the-graduating-dorm-room-fund-partners-946a0fcb084b",
     "excerpt": "DRF's 12 May 2016 graduation note lists Vesal Yazdi on the Boston team.",
     "drf_team": "Boston",
-    "year_start": 2016
+    "year_start": 2016,
+    "linkedin_url": "https://www.linkedin.com/in/vesalyazdi",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://wp.dormroomfund.com/inside-shield-ais-beginnings/",
+    "verification_note": "DRF article names Vesal Yazdi (https://wp.dormroomfund.com/inside-shield-ais-beginnings/)",
+    "proof_urls": [
+      "https://wp.dormroomfund.com/inside-shield-ais-beginnings/",
+      "https://www.linkedin.com/in/vesalyazdi"
+    ]
   },
   {
     "id": "dra_vinai_rachakonda",
@@ -6787,7 +6875,15 @@
     "school_label": "MIT Sloan",
     "school_role": "mba",
     "affiliation_status": "older_alumni",
-    "year_start": 2022
+    "year_start": 2022,
+    "linkedin_url": "https://www.linkedin.com/in/yvette-rodriguez-acosta",
+    "linkedin_confidence": "confirmed",
+    "linkedin_source_url": "https://theleaguevc.com/community",
+    "verification_note": "The League community directory: DRF partner (https://theleaguevc.com/community)",
+    "proof_urls": [
+      "https://theleaguevc.com/community",
+      "https://www.linkedin.com/in/yvette-rodriguez-acosta"
+    ]
   },
   {
     "id": "dra_zain_khoja",

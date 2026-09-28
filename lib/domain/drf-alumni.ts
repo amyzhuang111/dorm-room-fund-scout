@@ -99,13 +99,16 @@ export function parseAlumniRecords(input: unknown): DrfAlumniRecord[] {
     if (!linkedinUrl && linkedinConfidenceRaw) throw new Error(`${id}: linkedin_confidence needs a profile URL`);
     const linkedinConfidence = linkedinUrl ? (linkedinConfidenceRaw as DrfConfidence) : null;
     const linkedinSourceUrl = httpUrl(row.linkedin_source_url, "linkedin_source_url", id);
-    if (linkedinConfidence === "confirmed" && !linkedinSourceUrl) {
-      throw new Error(`${id}: a confirmed LinkedIn profile needs the page that links it`);
+    if (linkedinSourceUrl && /linkedin\.com\/in\//i.test(linkedinSourceUrl)) {
+      throw new Error(`${id}: linkedin_source_url must be a page other than the LinkedIn profile`);
     }
     const xUrl = httpUrl(row.x_url, "x_url", id);
     const location = clean(row.location);
     const verificationNote = clean(row.verification_note);
     if (verificationNote && verificationNote.length < 40) throw new Error(`${id}: verification_note is too short to be evidence`);
+    if (linkedinConfidence === "confirmed" && !linkedinSourceUrl && !verificationNote) {
+      throw new Error(`${id}: a confirmed LinkedIn profile needs the page that links it or an evidence note`);
+    }
     const proofUrls = proofList(row.proof_urls, id);
     const foundedRaw = clean(row.founded_project_id);
     if (foundedRaw && !/^proj_[A-Za-z0-9_-]+$/.test(foundedRaw)) throw new Error(`${id}: founded_project_id is not a project id`);
