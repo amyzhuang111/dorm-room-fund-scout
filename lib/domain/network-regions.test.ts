@@ -223,14 +223,14 @@ for (const offset of neighbors.values()) assert.ok(Math.hypot(offset.dx, offset.
 const ycLine = programLineColor("Y Combinator");
 assert.equal(ycLine.toLowerCase(), "#ea580c");
 assert.ok(bundleWidth(2) > bundleWidth(1));
-assert.ok(bundleWidth(2) >= 2.2 && bundleWidth(2) < 2.7);
+assert.ok(bundleWidth(2) >= 1.1 && bundleWidth(2) < 1.35);
 assert.ok(bundleWidth(64) > bundleWidth(8));
-assert.equal(bundleWidth(4000), 6.5);
+assert.equal(bundleWidth(4000), 3.25);
 assert.ok(bundleOpacity(1) < bundleOpacity(8));
 assert.ok(bundleOpacity(8) < bundleOpacity(64));
-assert.ok(bundleOpacity(1) >= 0.28 && bundleOpacity(1) < 0.35);
-assert.ok(bundleOpacity(64) > 0.85 && bundleOpacity(64) <= 0.92);
-assert.equal(bundleInk(1), "rgba(12, 12, 12, 0.280)");
+assert.ok(bundleOpacity(1) >= 0.32 && bundleOpacity(1) < 0.38);
+assert.ok(bundleOpacity(64) > 0.78 && bundleOpacity(64) <= 0.84);
+assert.equal(bundleInk(1), "rgba(32, 34, 38, 0.340)");
 
 const packed = packRegionCenters(
   [

@@ -690,28 +690,33 @@ export function programLineColor(label: string, id = ""): string {
   return toHex(red, green, blue);
 }
 
-/** Near-black accelerator links on the white map. A strong cohort uses this; weaker ones fade. */
-export const PROGRAM_LINE = "rgba(12, 12, 12, 0.78)";
+/** Dark-gray accelerator links on the white map. A strong cohort uses this; weaker ones fade. */
+export const PROGRAM_LINE = "rgba(32, 34, 38, 0.62)";
 export const PROGRAM_LINE_ACTIVE = "#111111";
 export const PROGRAM_LINE_DIM = "rgba(180, 180, 180, 0.1)";
 
-/** Fitted-view pixels. A handful of members stays a readable stroke; a large cohort gets thicker. Zoom scales this with the nodes. */
+/**
+ * Fitted-view pixels. Half the previous weight: a handful of members stays a
+ * readable stroke, and a large cohort no longer covers the map. Zoom scales
+ * this with the nodes.
+ */
 export function bundleWidth(count: number): number {
-  return Math.min(6.5, 1.85 + Math.log2(Math.max(count, 1)) * 0.55);
+  return Math.min(3.25, 0.925 + Math.log2(Math.max(count, 1)) * 0.275);
 }
 
 /**
  * How dark a program link is. A single member stays a light stroke; a large
- * cohort approaches solid black. Thickness and this opacity move together.
+ * cohort approaches a dark gray, still short of solid black. Thickness and
+ * this opacity move together.
  */
 export function bundleOpacity(count: number): number {
   const t = Math.min(1, Math.log2(Math.max(count, 1)) / 6);
-  return Math.round((0.28 + t * 0.64) * 1000) / 1000;
+  return Math.round((0.34 + t * 0.48) * 1000) / 1000;
 }
 
-/** Weighted program ink. Same near-black hue, opacity from `bundleOpacity`. */
+/** Weighted program ink. Dark gray, opacity from `bundleOpacity`. */
 export function bundleInk(count: number): string {
-  return `rgba(12, 12, 12, ${bundleOpacity(count).toFixed(3)})`;
+  return `rgba(32, 34, 38, ${bundleOpacity(count).toFixed(3)})`;
 }
 
 function clamp(value: number, min: number, max: number): number {

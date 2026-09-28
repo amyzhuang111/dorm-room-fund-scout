@@ -57,7 +57,7 @@ type EdgeAttr = {
   bundle?: boolean;
   hoverColor?: string;
   count?: number;
-  /** A named accelerator. Drawn in near-black at rest, solid black while it is the focus. */
+  /** A named accelerator. Drawn in dark gray at rest, near-black and bolder while it is the focus. */
   accent?: boolean;
   /** Count is under 2 and this is not a named accelerator. Drawn only while its program is hovered or selected. */
   sparse?: boolean;
