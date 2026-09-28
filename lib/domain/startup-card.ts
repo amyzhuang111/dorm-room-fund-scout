@@ -6,7 +6,7 @@
 import { getDb } from "../db/client";
 import { survivorId } from "./entity-redirects";
 import { ownWebsite } from "./company-link";
-import { confirmedLinkedIn } from "./person-link";
+import { confirmedLinkedIn, readLinkedInCandidate } from "./person-link";
 import { isBoilerplateDescription, sectorLabel } from "./sectors";
 
 export const STARTUP_LINK_KINDS = ["website", "linkedin", "x", "crunchbase", "facebook", "github", "productHunt"] as const;
@@ -25,6 +25,8 @@ export interface StartupCardFounder {
   program: string | null;
   school: string | null;
   linkedinUrl: string | null;
+  /** confirmed is a saved linkedin.com/in alias. likely is a stored candidate the directory card also shows, labeled. */
+  linkedinConfidence: "confirmed" | "likely" | null;
   /** Not stored. Left null rather than parsed out of a bio. */
   photoUrl: string | null;
   linkedinFollowers: number | null;
@@ -50,6 +52,22 @@ export interface StartupCard {
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+export function canonicalPersonLinkedIn(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  const match = raw.match(/https?:\/\/(?:[\w.-]+\.)?linkedin\.com\/in\/([^/?#\s"'<>]+)/i);
+  if (!match) return null;
+  let slug = match[1].replace(/\/+$/, "");
+  try {
+    slug = decodeURIComponent(slug);
+  } catch {
+    // keep the raw slug
+  }
+  slug = slug.replace(/\/+$/, "");
+  if (slug.length < 2 || slug.length > 100) return null;
+  if (!/^[\p{L}\p{N}\-_%]+$/u.test(slug)) return null;
+  return `https://www.linkedin.com/in/${slug}`;
+}
 
 export function formatVerifiedDate(iso: string | null | undefined): string | null {
   if (!iso) return null;
@@ -323,13 +341,32 @@ export function getStartupCard(id: string): StartupCard | null {
          LIMIT 1`
       )
       .get(person.id) as { label: string } | undefined;
+    const confirmed = canonicalPersonLinkedIn(confirmedLinkedIn(person.aliases_json));
+    let linkedinUrl = confirmed;
+    let linkedinConfidence: "confirmed" | "likely" | null = confirmed ? "confirmed" : null;
+    if (!linkedinUrl) {
+      const candidateRow = db
+        .prepare(
+          `SELECT value_json, verification_state FROM claims
+           WHERE entity_type = 'person' AND entity_id = ? AND claim_type = 'linkedin_candidate' AND verification_state = 'likely'
+           ORDER BY rowid LIMIT 1`
+        )
+        .get(person.id) as { value_json: string; verification_state: string } | undefined;
+      const candidate = candidateRow ? readLinkedInCandidate(candidateRow.value_json, candidateRow.verification_state) : null;
+      const likely = candidate?.confidence === "likely" ? canonicalPersonLinkedIn(candidate.url) : null;
+      if (likely) {
+        linkedinUrl = likely;
+        linkedinConfidence = "likely";
+      }
+    }
     return {
       id: person.id,
       name: person.name,
       role: founderRoleLabel(person.role),
       program: program?.label?.trim() || null,
       school: school?.name ?? null,
-      linkedinUrl: confirmedLinkedIn(person.aliases_json),
+      linkedinUrl,
+      linkedinConfidence,
       photoUrl: null,
       linkedinFollowers: null,
       yearsExperience: null,

@@ -1,0 +1,90 @@
+[
+  {
+    "person_id": "person_A5XqADQKepfi",
+    "full_name": "Alejandro Ballesteros",
+    "status": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/alejandroballesteroscruz",
+    "profile_title": "Alejandro Ballesteros",
+    "evidence": "Page https://speedrun.a16z.com/companies/oleum names Alejandro Ballesteros next to https://www.linkedin.com/in/alejandroballesteroscruz. Snippet: name\":\"Ballesteros\",\"slug\":\"alejandro-ballesteros\",\"title\":\"CTO\",\"introduction\":\"Prev:\\nEquities Quant Research @ Bridgewater, \\nQuant Portfolio Manager @Gelber Group ,\\nUndergrad @ Stanford Engineering\",\"linkedin_url\":\"https://Linkedin.com/in/alejandroballesteroscruz\",\"profile_pic\":\"https://storage.googleapis.com/speedrun-prod-media/founders/f79",
+    "evidence_url": "https://speedrun.a16z.com/companies/oleum",
+    "query": "Alejandro Ballesteros Oleum linkedin",
+    "match_basis": "own_page"
+  },
+  {
+    "person_id": "person_hblGdAPFAK_X",
+    "full_name": "Daanish Shabbir",
+    "status": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/danishabbir",
+    "profile_title": "Daanish Shabbir",
+    "evidence": "Page https://www.southparkcommons.com/companies/equivariant-systems/ names Daanish Shabbir next to https://www.linkedin.com/in/danishabbir. Snippet: g:mt-0\"> Founder <a href=\"https://www.linkedin.com/in/danishabbir\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Daanish Shabbir on Linke",
+    "evidence_url": "https://www.southparkcommons.com/companies/equivariant-systems/",
+    "query": "Daanish Shabbir Equivariant Systems linkedin",
+    "match_basis": "own_page"
+  },
+  {
+    "person_id": "person_5tg6GsIJ--rw",
+    "full_name": "David Shijoon Bae",
+    "status": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/shijoonbae",
+    "profile_title": "David Shijoon Bae",
+    "evidence": "Page https://www.ycombinator.com/companies/flowmanual names David Shijoon Bae next to https://www.linkedin.com/in/shijoonbae. Snippet: full object-cover\" alt=\"David Shijoon Bae\"/> David Shijoon Bae <a href=\"https://www.linkedin.com/in/shijoonbae/\" class=\"white flex h-6 w-6 items-center justify-center rounded-md hover:bg-gra",
+    "evidence_url": "https://www.ycombinator.com/companies/flowmanual",
+    "query": "David Shijoon Bae FlowManual linkedin",
+    "match_basis": "own_page"
+  },
+  {
+    "person_id": "person_RMObLMyujOJc",
+    "full_name": "Gabriel Noya",
+    "status": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/gabriel-noya",
+    "profile_title": "Gabriel Noya",
+    "evidence": "Page https://www.ycombinator.com/companies/lyon names Gabriel Noya next to https://www.linkedin.com/in/gabriel-noya. Snippet: 3D%3D&X-Amz-SignedHeaders=host&X-Amz-Signature=493e3a7a4331d9c4090e8bc53c554cc0c6cd547cea58ff7a81c70791c0698a08\",\"twitter_url\":\"https://x.com/gabrielnoya7\",\"linkedin_url\":\"https://linkedin.com/in/gabriel-noya\",\"has_email\":true,\"latest_yc_company\":{\"name&quot",
+    "evidence_url": "https://www.ycombinator.com/companies/lyon",
+    "query": "Gabriel Noya Lyon linkedin",
+    "match_basis": "own_page"
+  },
+  {
+    "person_id": "person_VuXxlkLGx3uX",
+    "full_name": "Jung Won (Jason) Shin",
+    "status": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/jung-won-shin-86861311b",
+    "profile_title": "Jung Won (Jason) Shin",
+    "evidence": "Page https://f.inc/portfolio/deft-robotics/ names Jung Won (Jason) Shin next to https://www.linkedin.com/in/jung-won-shin-86861311b. Snippet: ifier\\\"},\\\"type\\\":\\\"BinaryOperation\\\"}}default\",[51,61],{\"CdP5oPtXD\":52,\"VJClxWWrA\":54,\"Wk6PScQkc\":56,\"mpSaijGwo\":58,\"id\":60},{\"type\":6,\"value\":53},\"jason-shin\",{\"type\":6,\"value\":55},\"Jason Shin\",{\"type\":28,\"value\":57},\"https://www.linkedin.com/in/jung-won-shin-86861311b/\",{\"type\":28,\"value\":59},\"https://x.com/jungwonshin95\",{\"type\":6,\"value\":19},{\"",
+    "evidence_url": "https://f.inc/portfolio/deft-robotics/",
+    "query": "Jung Won (Jason) Shin Deft Robotics linkedin",
+    "match_basis": "own_page"
+  },
+  {
+    "person_id": "person_mgzjUKfFQ1rH",
+    "full_name": "Korena Mafune",
+    "status": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/kmafune",
+    "profile_title": "Korena Mafune",
+    "evidence": "Page https://www.geekwire.com/2026/ag-tech-startup-wins-top-prize-as-uws-dempsey-competition-awards-92500-across-finalists/ names Korena Mafune next to https://www.linkedin.com/in/kmafune. Snippet: ping plants absorb essential nutrients including nitrogen and phosphorus. “People seem to be quite disconnected from everything below our feet because we can’t see it,” said Korena Mafune , a BioBead co-founder and UW research scientist. But those",
+    "evidence_url": "https://www.geekwire.com/2026/ag-tech-startup-wins-top-prize-as-uws-dempsey-competition-awards-92500-across-finalists/",
+    "query": "Korena Mafune BioBead linkedin",
+    "match_basis": "own_page"
+  },
+  {
+    "person_id": "person_l99dfKWpZSRM",
+    "full_name": "Kshitij Grover",
+    "status": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/kshithappens",
+    "profile_title": "Kshitij Grover",
+    "evidence": "Page https://www.southparkcommons.com/companies/orb/ names Kshitij Grover next to https://www.linkedin.com/in/kshithappens. Snippet: of South Park Commons. Alvaro holds dual degrees from MIT and is passionate about product-focused engineering and infrastructure that scales. <a href=\"https://linkedin.com/in/kshithappens\" target=\"_blank\" rel=\"noopener noreferrer\" aria-label=\"Kshitij Grover on Linked",
+    "evidence_url": "https://www.southparkcommons.com/companies/orb/",
+    "query": "Kshitij Grover Orb linkedin",
+    "match_basis": "own_page"
+  },
+  {
+    "person_id": "person_ffEWPQ--vcPv",
+    "full_name": "Ted Robertson",
+    "status": "confirmed",
+    "linkedin_url": "https://www.linkedin.com/in/tedr2020",
+    "profile_title": "Ted Robertson",
+    "evidence": "Page https://www.knit.health/company names Ted Robertson next to https://www.linkedin.com/in/tedr2020. Snippet: DSHOT%20ANSHUL%201.webp\" } }, { \"@type\": \"Person\", \"name\": \"Ted Robertson\", \"honorificSuffix\": \"M.P.A.\", \"jobTitle\": \"Co-Founder + COO\", \"sameAs\": [ \"https://www.linkedin.com/in/tedr2020/\" ], \"image\": { \"@type\": \"ImageObject\", \"ur",
+    "evidence_url": "https://www.knit.health/company",
+    "query": "Ted Robertson Knit Health linkedin",
+    "match_basis": "own_page"
+  }
+]

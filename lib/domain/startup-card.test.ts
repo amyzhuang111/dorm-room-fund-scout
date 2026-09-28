@@ -91,6 +91,7 @@ for (const founder of after.founders) {
   assert.equal(founder.linkedinFollowers, null);
   assert.equal(founder.yearsExperience, null);
   assert.ok(founder.linkedinUrl?.includes("linkedin.com/in/"));
+  assert.equal(founder.linkedinConfidence, "confirmed");
   assert.equal(founder.role, "Founder");
 }
 const spencer = after.founders.find((founder) => founder.name === "Spencer Mateega");
