@@ -297,9 +297,9 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { buildEvidence: "medium", identityQuality: "high", novelty: "high", extractability: "high" },
     tierRationale:
-      "Firsthand attributed knowledge is inherently high-signal — but this tier describes the ceiling, not the yield. Scale depends entirely on Amy's own network, not on any repeatable ingestion.",
+      "Firsthand attributed knowledge is inherently high-signal — but this tier describes the ceiling, not the yield. Scale depends entirely on the scout's own network, not on any repeatable ingestion.",
     whyItMatters: "The only source that captures 'who kept building after the hackathon' when nothing else recorded it.",
-    whatToExtract: ["whatever Amy directly observed — specific, not a vague endorsement"],
+    whatToExtract: ["whatever was directly observed — specific, not a vague endorsement"],
     whatNotToInfer: ["A referral is a labeled user_note claim, never an independently observed fact."],
     status: "implemented",
     dbSourceId: "src_manual_referrals",
@@ -776,7 +776,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatNotToInfer: ["Program acceptance ≠ investment-ready."],
     status: "checked_and_skipped",
     statusNote:
-      "Re-checked 2026-09-25: freeventures.org still returns a small client-rendered shell (about 2.6KB) with no roster, portfolio JSON, or company names in the HTML. Adapter not written. Needs either a public data endpoint or a manual export from Amy.",
+      "Re-checked 2026-09-25: freeventures.org still returns a small client-rendered shell (about 2.6KB) with no roster, portfolio JSON, or company names in the HTML. Adapter not written. Needs either a public data endpoint or a manual export.",
   },
   {
     id: "cat_berkeley_directories",

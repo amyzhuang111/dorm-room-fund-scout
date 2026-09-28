@@ -8,7 +8,7 @@ export default function MethodologyPage() {
         <h1 className="text-lg font-semibold text-foreground">Methodology</h1>
         <p className="mt-1 text-sm text-muted">
           This is an independent scouting workspace, not an official Dorm Room Fund product. Every rule below is tagged with where it came
-          from — public policy, Amy&apos;s sourcing guidance, or a proposed product default — so nothing gets presented as DRF&apos;s official
+          from — public policy, internal sourcing guidance, or a proposed product default — so nothing gets presented as DRF&apos;s official
           rubric.
         </p>
       </div>

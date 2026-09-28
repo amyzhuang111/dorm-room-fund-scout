@@ -26,7 +26,7 @@ function ensureManualReferralSource() {
   ).run(SOURCE_ID, nowIso(), nowIso());
 }
 
-// A firsthand lead Amy enters herself — e.g. "who kept building after the
+// A firsthand lead a scout enters — e.g. "who kept building after the
 // hackathon," per the brief's discovery-loop guidance. Labeled as a user_note
 // claim, never dressed up as an independently observed fact, and immediately
 // screened through the same deterministic gates every other candidate goes

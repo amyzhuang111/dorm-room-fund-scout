@@ -1,7 +1,7 @@
 // DRF screening configuration. Every rule is tagged with where it came from:
 // - public_policy: stated on DRF's own public FAQ (reviewed 2026-09-18)
-// - user_guidance: Amy's sourcing brief, not published DRF policy
-// - proposed_setting: a product default we invented to make the screen runnable, not attributed to DRF or Amy
+// - user_guidance: internal sourcing guidance, not published DRF policy
+// - proposed_setting: a product default we invented to make the screen runnable, not attributed to DRF
 //
 // Do not present user_guidance or proposed_setting values as DRF's official rules in the UI.
 
@@ -35,14 +35,14 @@ export const SCREENING_CONFIG = {
     value: 2_000_000,
     provenance: "user_guidance",
     reason:
-      "Amy's sourcing brief: usually pre-seed, before raising more than 'a couple million dollars.' This is a review trigger, not a confirmed DRF hard cap — the public FAQ does not state an exact figure.",
+      "Internal sourcing guidance: usually pre-seed, before raising more than 'a couple million dollars.' This is a review trigger, not a confirmed DRF hard cap — the public FAQ does not state an exact figure.",
   } as ScreeningConfigEntry<number>,
 
   stageAllowed: {
     key: "stage_allowed",
     value: ["pre-seed"] as string[],
     provenance: "user_guidance",
-    reason: "Amy's sourcing brief: pre-seed only for new targets.",
+    reason: "Internal sourcing guidance: pre-seed only for new targets.",
   } as ScreeningConfigEntry<string[]>,
 
   sectorExclusions: {
@@ -50,14 +50,14 @@ export const SCREENING_CONFIG = {
     value: ["molecule_level_biotech", "cpg_brand"] as string[],
     provenance: "user_guidance",
     reason:
-      "Amy's sourcing brief: avoid molecule-level hard biotech and most consumer packaged goods (as a brand, not as software sold to CPG brands). Not stated on DRF's public FAQ.",
+      "Internal sourcing guidance: avoid molecule-level hard biotech and most consumer packaged goods (as a brand, not as software sold to CPG brands). Not stated on DRF's public FAQ.",
   } as ScreeningConfigEntry<string[]>,
 
   sectorResearchInterests: {
     key: "sector_research_interests",
     value: ["ai_native", "robotics", "quantum", "data_rlhf_infra", "bio_selected"] as string[],
     provenance: "user_guidance",
-    reason: "Amy's sourcing brief: research interests to weight discovery toward, not an eligibility filter.",
+    reason: "Internal sourcing guidance: research interests to weight discovery toward, not an eligibility filter.",
   } as ScreeningConfigEntry<string[]>,
 
   coverageThresholdForHeadlineScore: {

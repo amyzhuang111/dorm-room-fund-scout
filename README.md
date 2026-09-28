@@ -1,9 +1,8 @@
 # Campus Universe — a Dorm Room Fund-shaped startup scout
 
-An independent scouting workspace for Amy (Penn) to discover and prioritize
+An independent scouting workspace to discover and prioritize
 pre-seed, student-founder prospects by university. **Not an official Dorm
-Room Fund product.** Nothing here implies Amy represents DRF, and there is
-no automatic outreach anywhere in the app.
+Room Fund product.** There is no automatic outreach anywhere in the app.
 
 This README is the honest status report: what's real, what's checked, and
 what's still missing. It's written to match what the code actually does,
@@ -671,7 +670,7 @@ named list and remain real, un-built backlog.
   as the brief requires, not a bug. Test data was then deleted, confirmed
   back to 0 assessments in the database.
 - **Manual referral entry** (`/sources/new-referral`, linked from Sources):
-  Amy can add a firsthand lead by hand — company, founder(s), university,
+  A scout can add a firsthand lead by hand — company, founder(s), university,
   and a required firsthand note. It's stored as a `user_note`-labeled claim
   (never dressed up as an independently observed fact) and immediately run
   through the exact same deterministic gates as every ingested candidate —
@@ -1697,8 +1696,8 @@ completely unchanged.
 
 **Live deploy was stale and has been refreshed.** On main the database
 stays gitignored, so Vercel's git auto-deploy never saw the laptop file
-and the production site only updated after a manual `npx vercel --prod`
-(authenticated as `amy-5078`). This branch commits `data/campus-universe.db`
+and the production site only updated after a manual `npx vercel --prod`.
+This branch commits `data/campus-universe.db`
 so a git deploy can bundle that coverage database. The manual production
 refresh above shipped the laptop database, including the "Unconfirmed"
 badge, to **https://dorm-room-fund-scout.vercel.app**.

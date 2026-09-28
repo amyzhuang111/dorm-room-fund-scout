@@ -44,7 +44,7 @@ export async function importReferralsCsv(formData: FormData) {
     const universityName = get("universityName");
     const founderNamesRaw = get("founderNames");
     const noteBody = get("noteBody");
-    const referrer = get("referrer") || "amy";
+    const referrer = get("referrer") || "scout";
     const statusRaw = get("founderStatus").toLowerCase() as FounderStatus;
     const founderStatus: FounderStatus = VALID_STATUSES.includes(statusRaw) ? statusRaw : "unverified";
 

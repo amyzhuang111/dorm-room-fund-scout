@@ -245,7 +245,7 @@ CREATE TABLE IF NOT EXISTS relationships (
   start_date TEXT,
   end_date TEXT,
   verification_state TEXT NOT NULL DEFAULT 'affiliation_only', -- affiliation_only | confirmed_personal | unverified
-  owner TEXT,                        -- set when this edge is part of Amy's private "My connections" overlay
+  owner TEXT,                        -- set when this edge is part of a private connections overlay
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -254,7 +254,7 @@ CREATE TABLE IF NOT EXISTS notes (
   entity_type TEXT NOT NULL,
   entity_id TEXT NOT NULL,
   body TEXT NOT NULL,
-  author TEXT NOT NULL DEFAULT 'amy',
+  author TEXT NOT NULL DEFAULT 'scout',
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

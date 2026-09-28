@@ -14,7 +14,7 @@ export async function setTierOverride(formData: FormData) {
   const founderTier = String(formData.get("founderScoutTier") || "");
   const startupTier = String(formData.get("startupScoutTier") || "");
   const reason = String(formData.get("reason") || "").trim();
-  const overrideBy = String(formData.get("overrideBy") || "amy").trim() || "amy";
+  const overrideBy = String(formData.get("overrideBy") || "scout").trim() || "scout";
 
   if (!sourceId || !VALID_TIERS.includes(founderTier) || !VALID_TIERS.includes(startupTier) || !reason) return;
 

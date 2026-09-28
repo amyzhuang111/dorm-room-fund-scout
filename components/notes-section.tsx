@@ -18,7 +18,7 @@ export function NotesSection({ entityType, entityId, notes }: { entityType: stri
       <form action={addNote} className="flex gap-2">
         <input type="hidden" name="entityType" value={entityType} />
         <input type="hidden" name="entityId" value={entityId} />
-        <input type="hidden" name="author" value="amy" />
+        <input type="hidden" name="author" value="scout" />
         <textarea
           name="body"
           placeholder="Add a note (your own inference or reminder — kept separate from sourced evidence)"

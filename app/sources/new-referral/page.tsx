@@ -69,7 +69,7 @@ export default function NewReferralPage() {
 
         <div>
           <label className="block text-xs font-medium text-muted">Your name (for attribution)</label>
-          <input name="referrer" defaultValue="amy" className="mt-1 w-full rounded-md border border-border-c bg-surface px-2.5 py-1.5 text-sm" />
+          <input name="referrer" placeholder="Name for attribution" className="mt-1 w-full rounded-md border border-border-c bg-surface px-2.5 py-1.5 text-sm" />
         </div>
 
         <button type="submit" className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground">

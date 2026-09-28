@@ -9,7 +9,7 @@ export async function addNote(formData: FormData) {
   const entityType = String(formData.get("entityType") || "");
   const entityId = String(formData.get("entityId") || "");
   const body = String(formData.get("body") || "").trim();
-  const author = String(formData.get("author") || "amy").trim() || "amy";
+  const author = String(formData.get("author") || "scout").trim() || "scout";
 
   if (!entityType || !entityId || !body) return;
 
