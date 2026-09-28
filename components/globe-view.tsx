@@ -854,10 +854,6 @@ export const GlobeView = memo(function GlobeView({
         )}
       </div>
       {status === "ok" && <ResultTray docked candidates={trayCandidates} basePath={basePath} current={current} />}
-      <p className="mt-2 text-[11px] text-black/70">
-        Marker size is the number of companies tied to that campus by sourced affiliation. It is not an estimate of every startup at the school.
-        Drag to look around. Click a campus to open it. Headquarters mode lists recorded place names and leaves unknown locations unplotted.
-      </p>
       <div className="mt-3 sm:hidden">
         <UniversityListFallback universities={universities} basePath={basePath} current={current} compact />
         {selectedUniversity && (
