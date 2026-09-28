@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { parseAlumniRecords, type DrfAlumRow } from "./drf-alumni";
+import { linkedinPersonSlug } from "./dedupe";
 import { scoreConnectors } from "./connectors";
 import type { IntroGraph, IntroOrg } from "./intro-graph";
 import { neighborhoodFromGraph, orgScore, rankWarmPaths, viaLabel } from "./warm-paths";
@@ -19,13 +20,33 @@ for (const row of records) {
 }
 assert.equal(records.find((row) => row.id === "dra_lauren_reeder")?.investorId, "inv_sequoia_capital");
 assert.equal(records.find((row) => row.id === "dra_lauren_reeder")?.linkedinConfidence, "confirmed");
-assert.equal(records.filter((row) => row.linkedinConfidence === "confirmed").length, 127);
+assert.equal(records.filter((row) => row.linkedinConfidence === "confirmed").length, 140);
 assert.equal(records.filter((row) => row.linkedinConfidence === "likely").length, 122);
-assert.equal(records.filter((row) => row.linkedinUrl).length, 249);
+assert.equal(records.filter((row) => row.linkedinUrl).length, 262);
 for (const row of records) {
-  if (row.linkedinUrl) assert.ok(row.linkedinConfidence === "confirmed" || row.linkedinConfidence === "likely", row.id);
-  else assert.equal(row.linkedinConfidence, null, row.id);
-  if (row.linkedinConfidence === "confirmed") assert.ok(row.linkedinSourceUrl && !row.linkedinSourceUrl.includes("linkedin.com/in/"), row.id);
+  if (row.linkedinUrl) {
+    assert.ok(row.linkedinConfidence === "confirmed" || row.linkedinConfidence === "likely", row.id);
+    assert.equal(row.linkedinUrl.endsWith("/"), false, row.id);
+  } else assert.equal(row.linkedinConfidence, null, row.id);
+  if (row.linkedinConfidence === "confirmed") {
+    if (row.linkedinSourceUrl) assert.ok(!row.linkedinSourceUrl.includes("linkedin.com/in/"), row.id);
+    else assert.ok(row.verificationNote && row.verificationNote.length >= 40, row.id);
+  }
+}
+assert.equal(records.find((row) => row.id === "dra_connor_mcewen")?.linkedinUrl, "https://www.linkedin.com/in/cmcewen");
+assert.equal(records.find((row) => row.id === "dra_connor_mcewen")?.linkedinConfidence, "confirmed");
+assert.ok(records.find((row) => row.id === "dra_connor_mcewen")?.linkedinSourceUrl?.includes("podcasts.apple.com"));
+assert.equal(records.find((row) => row.id === "dra_vesal_yazdi")?.linkedinUrl, "https://www.linkedin.com/in/vesalyazdi");
+assert.equal(records.find((row) => row.id === "dra_richard_clay")?.linkedinConfidence, "confirmed");
+assert.equal(records.find((row) => row.id === "dra_richard_clay")?.linkedinSourceUrl ?? null, null);
+assert.equal(records.find((row) => row.id === "dra_ben_okeefe")?.linkedinUrl, "https://www.linkedin.com/in/ben-okeefe");
+const linkedinSlugs = new Map<string, string>();
+for (const row of records) {
+  const slug = linkedinPersonSlug(row.linkedinUrl);
+  if (!slug) continue;
+  const prior = linkedinSlugs.get(slug);
+  assert.equal(prior, undefined, `${row.id} shares /in/${slug} with ${prior}`);
+  linkedinSlugs.set(slug, row.id);
 }
 assert.equal(records.find((row) => row.id === "dra_matthew_wachter")?.currentRole, null);
 assert.equal(records.find((row) => row.id === "dra_matthew_wachter")?.confidence, "likely");
