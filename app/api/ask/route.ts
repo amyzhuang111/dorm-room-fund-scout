@@ -34,9 +34,10 @@ export async function POST(request: Request) {
         geminiMessage: result.geminiMessage,
         finishReason: result.finishReason,
         matches: result.matches,
+        matchCount: result.matchCount,
       },
       { status }
     );
   }
-  return Response.json({ engine: result.engine, answer: result.answer, matches: result.matches });
+  return Response.json({ engine: result.engine, answer: result.answer, matches: result.matches, matchCount: result.matchCount });
 }

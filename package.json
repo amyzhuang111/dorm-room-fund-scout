@@ -51,6 +51,7 @@
     "test:class-years": "tsx lib/domain/class-year-funding.test.ts",
     "test:precollege": "tsx lib/domain/precollege.test.ts",
     "import:precollege": "tsx scripts/ingest/import-precollege-excellence.ts",
+    "test:ask-intent": "tsx lib/domain/ask-intent.test.ts",
     "test:ask-query": "tsx lib/domain/ask-query.test.ts",
     "test:ask-retrieve": "tsx lib/domain/ask-retrieve.test.ts",
     "test:ask-gemini": "tsx lib/domain/ask-gemini.test.ts",

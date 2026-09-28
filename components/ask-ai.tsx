@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { WebWorkerMLCEngine } from "@mlc-ai/web-llm";
 import { ASK_BROWSER_MODELS, ASK_DEFAULT_MODEL_ID, formatDownload } from "@/lib/domain/ask-browser-models";
-import { ASK_SYSTEM_PROMPT, askUserPrompt, fallbackAnswer, NOT_IN_THE_DATA, onDeviceNote } from "@/lib/domain/ask-prompt";
+import { answerFromRecords, ASK_SYSTEM_PROMPT, askUserPrompt, NOT_IN_THE_DATA, onDeviceNote } from "@/lib/domain/ask-prompt";
 import type { AskHit } from "@/lib/domain/ask-types";
 import { CAMPUSES, compareCampusLabels } from "@/lib/domain/campuses";
 import { setAskHighlight } from "./ask-highlight";
@@ -129,6 +129,7 @@ function AskAiDock() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [answer, setAnswer] = useState("");
   const [matches, setMatches] = useState<AskHit[]>([]);
+  const [matchCount, setMatchCount] = useState(0);
   const [asked, setAsked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -255,20 +256,20 @@ function AskAiDock() {
     return waitForWebgpu(() => webgpuRef.current);
   }
 
-  async function answerOnDevice(trimmed: string, rows: AskHit[], quota: boolean) {
+  async function answerOnDevice(trimmed: string, rows: AskHit[], quota: boolean, total: number) {
     const canRun = await deviceCanRunModel();
     const signal = abortRef.current?.signal ?? new AbortController().signal;
     if (!canRun) {
       setNote(onDeviceNote(quota, false));
       setEngine("search");
-      await revealAnswer(fallbackAnswer(rows), signal);
+      await revealAnswer(answerFromRecords(rows, trimmed, total), signal);
       return;
     }
     setNote(onDeviceNote(quota, true));
     const ready = await loadModel();
     if (!ready || !browserEngine) {
       setEngine("search");
-      await revealAnswer(fallbackAnswer(rows), signal);
+      await revealAnswer(answerFromRecords(rows, trimmed, total), signal);
       return;
     }
     setEngine("on-device");
@@ -279,7 +280,7 @@ function AskAiDock() {
       max_tokens: 280,
       messages: [
         { role: "system", content: ASK_SYSTEM_PROMPT },
-        { role: "user", content: askUserPrompt(trimmed, rows) },
+        { role: "user", content: askUserPrompt(trimmed, rows, total) },
       ],
     });
     let textOut = "";
@@ -289,7 +290,7 @@ function AskAiDock() {
       textOut += delta;
       setAnswer(textOut);
     }
-    if (!textOut.trim()) await revealAnswer(fallbackAnswer(rows), abortRef.current?.signal ?? new AbortController().signal);
+    if (!textOut.trim()) await revealAnswer(answerFromRecords(rows, trimmed, total), abortRef.current?.signal ?? new AbortController().signal);
   }
 
   async function ask(text: string) {
@@ -299,6 +300,7 @@ function AskAiDock() {
     setQuestion(trimmed);
     setAnswer("");
     setMatches([]);
+    setMatchCount(0);
     setAsked(true);
     setError(null);
     setEngine(null);
@@ -315,9 +317,11 @@ function AskAiDock() {
         body: JSON.stringify({ question: trimmed }),
         signal: controller.signal,
       });
-      const data = (await res.json()) as { engine?: string; answer?: string; matches?: AskHit[]; error?: string };
+      const data = (await res.json()) as { engine?: string; answer?: string; matches?: AskHit[]; matchCount?: number; error?: string };
       const rows = Array.isArray(data.matches) ? data.matches : [];
+      const total = typeof data.matchCount === "number" ? data.matchCount : rows.length;
       setMatches(rows);
+      setMatchCount(total);
       setAskHighlight(rows.length ? highlightFrom(rows) : null);
       if (res.ok && data.answer) {
         setEngine(data.engine === "gemini" ? "gemini" : "search");
@@ -333,7 +337,7 @@ function AskAiDock() {
         await revealAnswer(NOT_IN_THE_DATA, controller.signal);
         return;
       }
-      await answerOnDevice(trimmed, rows, res.status === 429 || data.error === "quota");
+      await answerOnDevice(trimmed, rows, res.status === 429 || data.error === "quota", total);
     } catch (err) {
       if ((err as { name?: string }).name !== "AbortError") setError("Ask AI could not answer that.");
     } finally {
@@ -485,7 +489,7 @@ function AskAiDock() {
               {matches.length > 0 && (
                 <div>
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-[10px] font-semibold uppercase tracking-wide">{matches.length} records</p>
+                    <p className="text-[10px] font-semibold uppercase tracking-wide">{matchCount} records</p>
                     <button type="button" className="text-[11px] font-semibold underline" onClick={() => setAskHighlight(null)}>
                       Show full map
                     </button>

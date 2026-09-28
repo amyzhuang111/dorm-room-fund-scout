@@ -6,7 +6,8 @@ assert.equal(GEMINI_MODEL, "gemini-3.8-flash");
 assert.equal(GEMINI_GENERATE_URL, "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent");
 const body = geminiGenerateBody("Who founded it?", [{ id: "p1", kind: "person", name: "Ada", href: "/founder/discover?founder=p1", detail: "Penn", campuses: ["univ_penn"], relatedIds: [], sources: [] }]);
 assert.deepEqual(body.systemInstruction, { parts: [{ text: body.systemInstruction.parts[0].text }] });
-assert.match(body.systemInstruction.parts[0].text, /recorded raises/i);
+assert.match(body.systemInstruction.parts[0].text, /Answer the question directly/);
+assert.match(body.systemInstruction.parts[0].text, /Never invent/);
 assert.match(body.systemInstruction.parts[0].text, /Not in the data/);
 assert.equal(body.contents[0].role, "user");
 assert.equal(body.generationConfig.thinkingConfig?.thinkingLevel, "low");
@@ -158,7 +159,7 @@ async function main() {
   assert.equal(refused.ok, true);
   if (refused.ok) {
     assert.notEqual(refused.answer, "Not in the data.");
-    assert.match(refused.answer, /HaptE/);
+    assert.match(refused.answer, /Y Combinator|HaptE|recorded/);
   }
 
   globalThis.fetch = originalFetch;

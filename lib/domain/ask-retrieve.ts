@@ -1,11 +1,25 @@
 // Keyword and filter retrieval for Ask AI. The browser model only sees
 // these rows. An empty list means the question is not in the data.
 
+import { nearestStages, parseAskIntent, type AskIntent, type AskStage } from "./ask-intent";
 import { CAMPUSES } from "./campuses";
 import { normHotspotName } from "./hotspot-model";
 import { directoryLabel, hotspotGroups } from "./hotspots";
-import { programInQuestion, searchInvestors, searchOrganizations, searchPeople, searchStartups, type PeopleQuery } from "./ask-query";
+import { programInQuestion, searchInvestors, searchOrganizations, searchPeople, searchStartups, type PeopleQuery, type StartupQuery } from "./ask-query";
 import type { AskHit } from "./ask-types";
+
+export interface AskStageSuggestion {
+  stage: AskStage;
+  matches: AskHit[];
+}
+
+export interface AskRetrieval {
+  matches: AskHit[];
+  /** Full match count before the card cap. */
+  total: number;
+  /** Nearest stage when the asked stage has no records. Not shown as matching cards. */
+  suggestion: AskStageSuggestion | null;
+}
 
 const LIMIT = 30;
 
@@ -121,12 +135,105 @@ function addHits(into: AskHit[], seen: Set<string>, rows: AskHit[]) {
   }
 }
 
-export function retrieveAsk(question: string): AskHit[] {
-  const q = question.trim();
-  if (!q) return [];
+function startupQuery(base: StartupQuery): StartupQuery {
+  return { limit: LIMIT, fuzzyName: Boolean(base.name), ...base };
+}
+
+function peopleQuery(base: PeopleQuery): PeopleQuery {
+  return { limit: LIMIT, fuzzyName: Boolean(base.name), ...base };
+}
+
+function retrieveByStage(
+  intent: AskIntent,
+  shared: {
+    campus?: string;
+    sector?: string;
+    program?: string;
+    city?: string;
+    investor?: string;
+    organization?: string;
+    standing?: PeopleQuery["standing"];
+    enrollment?: PeopleQuery["enrollment"];
+    verification?: "confirmed";
+    year?: number;
+    founderOnly: boolean;
+    startupFocus: boolean;
+    building: boolean;
+    top: boolean;
+  }
+): AskRetrieval {
+  const name = intent.founderName ?? intent.companyName ?? intent.name ?? undefined;
+  const startupBase: StartupQuery = {
+    campus: shared.campus,
+    sector: shared.sector,
+    program: shared.program,
+    city: shared.city,
+    investor: shared.investor,
+    stage: intent.stage,
+    matchStage: true,
+    year: shared.year,
+    verification: shared.verification,
+    name: intent.companyName ?? intent.name ?? undefined,
+    limit: LIMIT,
+  };
+  const peopleBase: PeopleQuery = {
+    campus: shared.campus,
+    sector: shared.sector,
+    city: shared.city,
+    investor: shared.investor,
+    organization: shared.organization,
+    standing: shared.standing,
+    enrollment: shared.enrollment,
+    founderOnly: shared.founderOnly || undefined,
+    building: shared.building || undefined,
+    verification: shared.verification,
+    classYear: shared.year,
+    stage: intent.stage,
+    name: intent.founderName ?? intent.name ?? undefined,
+    sort: shared.top ? "tier" : undefined,
+    limit: LIMIT,
+  };
+  const wantPeople = shared.founderOnly && !shared.startupFocus;
+  const wantStartups = shared.startupFocus || !shared.founderOnly;
+  if (wantPeople && !wantStartups) {
+    const people = searchPeople(peopleQuery(peopleBase));
+    if (people.matches.length) return { matches: people.matches, total: people.count, suggestion: null };
+    for (const stage of nearestStages(intent.stage!)) {
+      const alt = searchPeople(peopleQuery({ ...peopleBase, stage }));
+      if (alt.matches.length) return { matches: [], total: 0, suggestion: { stage, matches: alt.matches.slice(0, 5) } };
+    }
+    return { matches: [], total: 0, suggestion: null };
+  }
+  if (wantStartups && !wantPeople) {
+    const startups = searchStartups(startupQuery(startupBase));
+    if (startups.matches.length) return { matches: startups.matches, total: startups.count, suggestion: null };
+    for (const stage of nearestStages(intent.stage!)) {
+      const alt = searchStartups(startupQuery({ ...startupBase, stage, limit: 5 }));
+      if (alt.matches.length) return { matches: [], total: 0, suggestion: { stage, matches: alt.matches } };
+    }
+    return { matches: [], total: 0, suggestion: null };
+  }
   const hits: AskHit[] = [];
   const seen = new Set<string>();
-  const campus = campusIn(q);
+  const people = searchPeople(peopleQuery({ ...peopleBase, name }));
+  const startups = searchStartups(startupQuery(startupBase));
+  addHits(hits, seen, people.matches);
+  addHits(hits, seen, startups.matches);
+  if (hits.length) return { matches: hits.slice(0, LIMIT), total: people.count + startups.count, suggestion: null };
+  for (const stage of nearestStages(intent.stage!)) {
+    const alt = searchStartups(startupQuery({ ...startupBase, stage, limit: 5 }));
+    if (alt.matches.length) return { matches: [], total: 0, suggestion: { stage, matches: alt.matches } };
+  }
+  return { matches: [], total: 0, suggestion: null };
+}
+
+export function retrieveForAsk(question: string): AskRetrieval {
+  const q = question.trim();
+  if (!q) return { matches: [], total: 0, suggestion: null };
+  const intent = parseAskIntent(q);
+  const hits: AskHit[] = [];
+  const seen = new Set<string>();
+  const campus = intent.campus ?? campusIn(q);
   const organization = organizationIn(q);
   const standing: PeopleQuery["standing"] = /\bjuniors?\b/i.test(q)
     ? "junior"
@@ -144,7 +251,7 @@ export function retrieveAsk(question: string): AskHit[] {
       : /\bcurrent students?\b/i.test(q)
         ? "current_student"
         : undefined;
-  const sector = sectorIn(q);
+  const sector = intent.sector ?? sectorIn(q);
   const program = programInQuestion(q);
   const funding = fundingIntent(q);
   const city = /\bnyc\b|\bnew york\b/i.test(q) ? "NYC" : /\bsan francisco\b|\bsf\b/i.test(q) ? "San Francisco" : undefined;
@@ -160,10 +267,31 @@ export function retrieveAsk(question: string): AskHit[] {
   const clubRank = /\bclubs?\b/i.test(q) && /\b(top|most|tier)\b/i.test(q);
   const startupFocus = /\b(startups?|companies)\b/i.test(q) && !founderOnly;
   const top = /\btop\b/i.test(q);
+  const verification = intent.confirmedOnly ? ("confirmed" as const) : undefined;
+  const year = intent.year ?? undefined;
+
+  if (intent.stage) {
+    return retrieveByStage(intent, {
+      campus,
+      sector,
+      program,
+      city,
+      investor,
+      organization,
+      standing,
+      enrollment,
+      verification,
+      year,
+      founderOnly,
+      startupFocus,
+      building,
+      top,
+    });
+  }
 
   if (clubRank) {
     addHits(hits, seen, searchOrganizations({ typeIncludes: "club", limit: 15, minFounders: 1 }).matches);
-    return hits.slice(0, LIMIT);
+    return { matches: hits.slice(0, LIMIT), total: hits.length, suggestion: null };
   }
 
   const startupMatches = () =>
@@ -175,13 +303,15 @@ export function retrieveAsk(question: string): AskHit[] {
       program,
       stage: funding.stage,
       funding: funding.active || undefined,
+      year,
+      verification,
       limit: startupFocus ? LIMIT : 20,
     }).matches;
 
   if (startupFocus) {
     addHits(hits, seen, startupMatches());
     if (investor) addHits(hits, seen, searchInvestors({ name: investor, limit: 3 }).matches);
-    return hits.slice(0, LIMIT);
+    return { matches: hits.slice(0, LIMIT), total: hits.length, suggestion: null };
   }
 
   const personFiltered = Boolean(campus || standing || enrollment || sector || city || investor || organization || founderOnly || building || funding.active);
@@ -200,6 +330,8 @@ export function retrieveAsk(question: string): AskHit[] {
         founderOnly: founderOnly || undefined,
         building: building || undefined,
         sort: top ? "tier" : undefined,
+        verification,
+        classYear: year ?? undefined,
         limit: 20,
       }).matches
     );
@@ -222,5 +354,9 @@ export function retrieveAsk(question: string): AskHit[] {
       addHits(hits, seen, searchStartups({ name: token, limit: 5 }).matches);
     }
   }
-  return hits.slice(0, LIMIT);
+  return { matches: hits.slice(0, LIMIT), total: hits.length, suggestion: null };
+}
+
+export function retrieveAsk(question: string): AskHit[] {
+  return retrieveForAsk(question).matches;
 }
