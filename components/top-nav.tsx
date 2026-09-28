@@ -8,11 +8,11 @@ const FOUNDER_NAV = [
   { href: "/alumni?from=founder", label: "Alumni" },
   { href: "/news", label: "News" },
   { href: "/hotspots?from=founder", label: "Hotspots" },
-  { href: "/founder/shortlist", label: "Shortlist" },
-  { href: "/startup/pipeline", label: "Pipeline" },
   { href: "/signals?from=founder", label: "Signals" },
   { href: "/founder/network", label: "Network" },
   { href: "/sources?from=founder", label: "Sources" },
+  { href: "/founder/shortlist", label: "Shortlist" },
+  { href: "/startup/pipeline", label: "Pipeline" },
 ];
 
 const STARTUP_NAV = [
@@ -20,11 +20,11 @@ const STARTUP_NAV = [
   { href: "/alumni?from=startup", label: "Alumni" },
   { href: "/news", label: "News" },
   { href: "/hotspots?from=startup", label: "Hotspots" },
-  { href: "/startup/shortlist", label: "Shortlist" },
   { href: "/startup/verification", label: "Verification" },
   { href: "/signals?from=startup", label: "Signals" },
-  { href: "/startup/pipeline", label: "Pipeline" },
   { href: "/sources?from=startup", label: "Sources" },
+  { href: "/startup/shortlist", label: "Shortlist" },
+  { href: "/startup/pipeline", label: "Pipeline" },
 ];
 
 const UTILITY_NAV = [
