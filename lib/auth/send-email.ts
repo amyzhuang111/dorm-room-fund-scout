@@ -1,6 +1,16 @@
 import { authSecret } from "./access";
+import {
+  emailTransport,
+  redactSecrets,
+  SIGNIN_EMAIL_FAILED_MESSAGE,
+  SIGNIN_UNCONFIGURED_MESSAGE,
+  type EmailTransport,
+} from "./required-env";
 
-export type EmailTransport = "resend" | "smtp";
+export type { EmailTransport };
+
+const RESEND_EMAILS_URL = "https://api.resend.com/emails";
+const RESEND_DEFAULT_FROM = "Campus Scout <onboarding@resend.dev>";
 
 export function googleAuthConfigured(): boolean {
   return Boolean(googleClientId() && googleClientSecret() && authSecret());
@@ -24,30 +34,14 @@ export function googleClientSecret(): string | null {
   return value || null;
 }
 
-function emailTransport(): EmailTransport | null {
-  if (process.env.RESEND_API_KEY?.trim()) return "resend";
-  if (process.env.EMAIL_SERVER?.trim()) return "smtp";
-  if (
-    process.env.SMTP_HOST?.trim() &&
-    process.env.SMTP_PORT?.trim() &&
-    process.env.SMTP_USER?.trim() &&
-    process.env.SMTP_PASSWORD?.trim()
-  ) {
-    return "smtp";
-  }
-  return null;
-}
-
-function fromAddress(): string {
+export function signInFromAddress(): string {
   const explicit = process.env.EMAIL_FROM?.trim();
   if (explicit) return explicit;
-  if (process.env.RESEND_API_KEY?.trim()) return "Campus Scout <onboarding@resend.dev>";
-  return process.env.SMTP_USER?.trim() || "Campus Scout <onboarding@resend.dev>";
+  if (process.env.RESEND_API_KEY?.trim()) return RESEND_DEFAULT_FROM;
+  return process.env.SMTP_USER?.trim() || RESEND_DEFAULT_FROM;
 }
 
-export async function sendSignInEmail(to: string, url: string): Promise<{ ok: true } | { ok: false; error: string }> {
-  const transport = emailTransport();
-  if (!transport) return { ok: false, error: "Sign-in isn't configured yet." };
+export function signInEmailContent(url: string): { subject: string; text: string } {
   const subject = "Sign in to Campus Scout";
   const text = [
     "Sign in to Campus Scout",
@@ -58,43 +52,41 @@ export async function sendSignInEmail(to: string, url: string): Promise<{ ok: tr
     "",
     "If you did not ask for this email, you can ignore it.",
   ].join("\n");
+  return { subject, text };
+}
+
+export async function sendSignInEmail(to: string, url: string): Promise<{ ok: true } | { ok: false; error: string }> {
+  const transport = emailTransport();
+  if (!transport) return { ok: false, error: SIGNIN_UNCONFIGURED_MESSAGE };
+  const { subject, text } = signInEmailContent(url);
 
   try {
     if (transport === "resend") return await sendResend(to, subject, text);
     return await sendSmtp(to, subject, text);
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Email could not be sent.";
-    console.warn(`[auth] sign-in email failed: ${redactMailError(message)}`);
-    return { ok: false, error: "The sign-in email could not be sent." };
+    const message = err instanceof Error ? err.message : SIGNIN_EMAIL_FAILED_MESSAGE;
+    console.warn(`[auth] sign-in email failed: ${redactSecrets(message)}`);
+    return { ok: false, error: SIGNIN_EMAIL_FAILED_MESSAGE };
   }
 }
 
 async function sendResend(to: string, subject: string, text: string): Promise<{ ok: true } | { ok: false; error: string }> {
   const key = process.env.RESEND_API_KEY?.trim();
-  if (!key) return { ok: false, error: "Sign-in isn't configured yet." };
-  const res = await fetch("https://api.resend.com/emails", {
+  if (!key) return { ok: false, error: SIGNIN_UNCONFIGURED_MESSAGE };
+  const res = await fetch(RESEND_EMAILS_URL, {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from: fromAddress(), to: [to], subject, text }),
+    body: JSON.stringify({ from: signInFromAddress(), to: [to], subject, text }),
   });
   if (res.ok) return { ok: true };
   let detail = "";
   try {
-    const body = (await res.json()) as { message?: string };
-    if (body.message) detail = ` ${body.message}`;
+    detail = await res.text();
   } catch {
     detail = "";
   }
-  return { ok: false, error: `The email service rejected the sign-in message.${detail}` };
-}
-
-function redactMailError(message: string): string {
-  let text = message;
-  for (const name of ["AUTH_SECRET", "NEXTAUTH_SECRET", "SMTP_PASSWORD", "SMTP_USER", "RESEND_API_KEY", "EMAIL_SERVER"]) {
-    const value = process.env[name]?.trim();
-    if (value) text = text.split(value).join(`[${name}]`);
-  }
-  return text;
+  console.warn(`[auth] resend rejected sign-in email (${res.status}): ${redactSecrets(detail).slice(0, 300)}`);
+  return { ok: false, error: SIGNIN_EMAIL_FAILED_MESSAGE };
 }
 
 async function sendSmtp(to: string, subject: string, text: string): Promise<{ ok: true } | { ok: false; error: string }> {
@@ -109,6 +101,6 @@ async function sendSmtp(to: string, subject: string, text: string): Promise<{ ok
         secure: port === 465,
         auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD },
       });
-  await transport.sendMail({ from: fromAddress(), to, subject, text });
+  await transport.sendMail({ from: signInFromAddress(), to, subject, text });
   return { ok: true };
 }

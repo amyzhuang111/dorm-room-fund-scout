@@ -1,6 +1,6 @@
 import { DRF_SIGNIN_MESSAGE, authSecret, isAllowedEmail, safeCallbackUrl } from "@/lib/auth/access";
 import { createMagicToken } from "@/lib/auth/magic-link";
-import { logMissingAuthEnv, SIGNIN_UNCONFIGURED_MESSAGE } from "@/lib/auth/required-env";
+import { logMissingAuthEnv, SIGNIN_EMAIL_FAILED_MESSAGE, SIGNIN_UNCONFIGURED_MESSAGE } from "@/lib/auth/required-env";
 import { magicLinkConfigured, sendSignInEmail } from "@/lib/auth/send-email";
 
 export const runtime = "nodejs";
@@ -63,6 +63,12 @@ export async function POST(request: Request) {
   const callbackUrl = safeCallbackUrl(typeof body.callbackUrl === "string" ? body.callbackUrl : null);
   const url = `${originFrom(request)}/signin/verify?${new URLSearchParams({ token, callbackUrl }).toString()}`;
   const sent = await sendSignInEmail(email, url);
-  if (!sent.ok) return Response.json({ error: sent.error }, { status: 502 });
+  if (!sent.ok) {
+    if (sent.error === SIGNIN_UNCONFIGURED_MESSAGE) {
+      logMissingAuthEnv();
+      return Response.json({ error: SIGNIN_UNCONFIGURED_MESSAGE }, { status: 503 });
+    }
+    return Response.json({ error: SIGNIN_EMAIL_FAILED_MESSAGE }, { status: 502 });
+  }
   return Response.json({ ok: true });
 }
