@@ -492,20 +492,30 @@ use it). None of them are paid.
 | --- | --- |
 | `AUTH_SECRET` | Any long random string. On your machine: `openssl rand -base64 32`. This signs the session cookie. |
 | `ALLOWED_EMAILS` | `zhuanga@engineering.upenn.edu,amyzhuang880@gmail.com` |
-| `EMAIL_FROM` | The From address on the magic-link email. |
-| `RESEND_API_KEY` | Free Resend account at https://resend.com (3,000 emails/month, 100/day). Create an API key. Until you verify a domain (also free), Resend only delivers from `Campus Scout <onboarding@resend.dev>` to the email you used to sign up. |
-| `SMTP_HOST` | Use this instead of Resend if you want Gmail. `smtp.gmail.com` |
+| `EMAIL_FROM` | Optional From address. Leave unset with Resend so mail comes from `Campus Scout <onboarding@resend.dev>`. |
+| `RESEND_API_KEY` | Preferred sender. Free Resend account at https://resend.com (3,000 emails/month, 100/day). Create an API key. Until you verify a domain (also free), Resend only delivers from `Campus Scout <onboarding@resend.dev>` to the email you used to sign up. |
+| `SMTP_HOST` | Fallback when `RESEND_API_KEY` is unset. `smtp.gmail.com` |
 | `SMTP_PORT` | `587` |
 | `SMTP_USER` | The Gmail address that sends the link. |
 | `SMTP_PASSWORD` | A Google App Password, free: turn on 2-Step Verification, then https://myaccount.google.com/apppasswords. Gmail can send to any address on the allowlist. |
 | `AUTH_GOOGLE_ID` | Optional, instead of or in addition to magic links. Free Google Cloud OAuth client: https://console.cloud.google.com/apis/credentials — create an OAuth client (Web), authorized redirect `https://<your-vercel-domain>/api/auth/callback/google`. |
 | `AUTH_GOOGLE_SECRET` | The client secret from that same OAuth client. |
 
-Pick one sender: `RESEND_API_KEY` or the four `SMTP_*` variables. You do
-not need both. `EMAIL_SERVER` (`smtp://user:pass@smtp.gmail.com:587`) is
-accepted in place of the separate SMTP variables. Google sign-in needs
-`AUTH_SECRET`, `AUTH_GOOGLE_ID`, and `AUTH_GOOGLE_SECRET`, and still only
-admits `@dormroomfund.com` plus `ALLOWED_EMAILS`.
+Magic-link mail uses Resend's HTTP API (`https://api.resend.com/emails`)
+whenever `RESEND_API_KEY` is set, including when the SMTP variables are
+also present. SMTP is the fallback only when `RESEND_API_KEY` is absent.
+`EMAIL_SERVER` (`smtp://user:pass@smtp.gmail.com:587`) is accepted in
+place of the separate SMTP variables.
+
+`/api/auth/health` returns `{ "ok": true }` when `AUTH_SECRET` (or
+`NEXTAUTH_SECRET`) and a sender are set. With Resend, that sender is
+`RESEND_API_KEY` alone — `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, and
+`SMTP_PASSWORD` are not required. `missing` lists variable names only
+and never secret values. The message is neutral Campus Scout branding.
+
+Google sign-in needs `AUTH_SECRET`, `AUTH_GOOGLE_ID`, and
+`AUTH_GOOGLE_SECRET`, and still only admits `@dormroomfund.com` plus
+`ALLOWED_EMAILS`.
 
 `.env.example` lists the same names. `.env.local` is gitignored.
 
