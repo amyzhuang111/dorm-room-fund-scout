@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ScoutLink } from "./scout-nav";
 import type { NetworkEdge, NetworkGraph, NetworkNode } from "@/lib/domain/network";
 import { selectNonOverlappingLabels } from "@/lib/domain/network-layout";
@@ -369,6 +369,10 @@ function CampusNetworkCanvas({
   const [query, setQuery] = useState("");
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
+  const panRef = useRef(pan);
+  const zoomRef = useRef(zoom);
+  const layerRef = useRef<SVGGElement | null>(null);
+  const labelWrapRef = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState({ w: 800, h: 640 });
   const svgRef = useRef<SVGSVGElement>(null);
   const dragRef = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null);
@@ -422,6 +426,7 @@ function CampusNetworkCanvas({
   }, [graph.nodes, query]);
 
   useEffect(() => {
+    panRef.current = { x: 0, y: 0 };
     setZoom(1);
     setPan({ x: 0, y: 0 });
     setSelected(null);
@@ -441,13 +446,24 @@ function CampusNetworkCanvas({
   useEffect(() => {
     const el = svgRef.current;
     if (!el) return;
+    let frame = 0;
+    let pending = zoomRef.current;
     const onWheel = (event: WheelEvent) => {
       event.preventDefault();
       const factor = event.deltaY > 0 ? 0.9 : 1.12;
-      setZoom((current) => Math.min(5, Math.max(0.6, current * factor)));
+      const base = frame ? pending : zoomRef.current;
+      pending = Math.min(5, Math.max(0.6, base * factor));
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        setZoom(pending);
+      });
     };
     el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      el.removeEventListener("wheel", onWheel);
+    };
   }, []);
 
   const focus = active ? nodeById.get(active) : undefined;
@@ -466,6 +482,16 @@ function CampusNetworkCanvas({
     const renderH = size.w / vbAspect;
     return { renderW, renderH, offX: 0, offY: (size.h - renderH) / 2 };
   }, [bounds.w, bounds.h, size.w, size.h]);
+  useLayoutEffect(() => {
+    zoomRef.current = zoom;
+    const next = panRef.current;
+    layerRef.current?.setAttribute("transform", `translate(${cx + next.x} ${cy + next.y}) scale(${zoom}) translate(${-cx} ${-cy})`);
+    const wrap = labelWrapRef.current;
+    if (!wrap) return;
+    const dx = (next.x - pan.x) * (fitted.renderW / Math.max(bounds.w, 1));
+    const dy = (next.y - pan.y) * (fitted.renderH / Math.max(bounds.h, 1));
+    wrap.style.transform = dx || dy ? `translate(${dx}px, ${dy}px)` : "";
+  });
 
   function toScreen(x: number, y: number) {
     const zx = cx + (x - cx) * zoom + pan.x;
@@ -549,25 +575,42 @@ function CampusNetworkCanvas({
               const target = event.target as Element;
               if (target.closest("[data-node]") || target.closest("[data-zoom-control]")) return;
               svgRef.current?.setPointerCapture(event.pointerId);
-              dragRef.current = { x: event.clientX, y: event.clientY, panX: pan.x, panY: pan.y };
+              dragRef.current = { x: event.clientX, y: event.clientY, panX: panRef.current.x, panY: panRef.current.y };
             }}
             onPointerMove={(event) => {
               const drag = dragRef.current;
-              if (!drag) return;
-              setPan({
+              if (!drag || fitted.renderW < 1 || fitted.renderH < 1) return;
+              const next = {
                 x: drag.panX + (event.clientX - drag.x) * (bounds.w / fitted.renderW),
                 y: drag.panY + (event.clientY - drag.y) * (bounds.h / fitted.renderH),
-              });
+              };
+              panRef.current = next;
+              layerRef.current?.setAttribute(
+                "transform",
+                `translate(${cx + next.x} ${cy + next.y}) scale(${zoom}) translate(${-cx} ${-cy})`,
+              );
+              const wrap = labelWrapRef.current;
+              if (wrap) {
+                const dx = (next.x - pan.x) * (fitted.renderW / bounds.w);
+                const dy = (next.y - pan.y) * (fitted.renderH / bounds.h);
+                wrap.style.transform = `translate(${dx}px, ${dy}px)`;
+              }
             }}
             onPointerUp={() => {
+              if (!dragRef.current) return;
               dragRef.current = null;
+              if (labelWrapRef.current) labelWrapRef.current.style.transform = "";
+              setPan({ ...panRef.current });
             }}
             onPointerLeave={() => {
+              if (!dragRef.current) return;
               dragRef.current = null;
+              if (labelWrapRef.current) labelWrapRef.current.style.transform = "";
+              setPan({ ...panRef.current });
             }}
           >
             <rect x={bounds.x} y={bounds.y} width={bounds.w} height={bounds.h} fill="#ffffff" />
-            <g transform={`translate(${cx + pan.x} ${cy + pan.y}) scale(${zoom}) translate(${-cx} ${-cy})`}>
+            <g ref={layerRef} transform={`translate(${cx + pan.x} ${cy + pan.y}) scale(${zoom}) translate(${-cx} ${-cy})`}>
               {(graph.guides ?? []).map((guide, index) => {
                 if (guide.kind !== "fill" || guide.radius == null || guide.a0 == null || guide.a1 == null) return null;
                 return (
@@ -714,7 +757,7 @@ function CampusNetworkCanvas({
               })}
             </g>
           </svg>
-          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div ref={labelWrapRef} className="pointer-events-none absolute inset-0 overflow-hidden">
             {graph.nodes.map((node) => {
               if (!labelIds.has(node.id)) return null;
               const radius = nodeRadius(node.type, degreeOf(node.id));
@@ -744,6 +787,7 @@ function CampusNetworkCanvas({
               aria-label="Reset pan and zoom"
               className="h-8 w-8 border-t border-[#1c1525] text-[10px] font-semibold uppercase tracking-wide text-[#141018] hover:bg-[#f3f0f8]"
               onClick={() => {
+                panRef.current = { x: 0, y: 0 };
                 setZoom(1);
                 setPan({ x: 0, y: 0 });
               }}

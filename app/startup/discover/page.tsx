@@ -1,4 +1,5 @@
 import { permanentRedirect, redirect } from "next/navigation";
+import { GlobeLibraryBoot } from "@/components/map-boot";
 import { StartupDiscoverApp } from "@/components/startup-discover-app";
 import { resolveCampusSlug } from "@/lib/domain/campuses";
 import { mergedParamHref } from "@/lib/domain/entity-redirects";
@@ -7,7 +8,6 @@ import { buildScoutNetwork } from "@/lib/domain/network";
 import {
   getProjectDetail,
   listCampusArcs,
-  listCandidateProjects,
   listFounderStatusCounts,
   listSectorCounts,
   listUniversities,
@@ -46,10 +46,11 @@ export default async function StartupDiscoverPage({
     >,
   };
   return (
+    <>
+    {sp.view === "globe" || !sp.view ? <GlobeLibraryBoot /> : null}
     <StartupDiscoverApp
       initial={sp}
       universities={universities}
-      candidates={listCandidateProjects()}
       arcs={listCampusArcs()}
       sectors={listSectorCounts()}
       enrollment={enrollment}
@@ -62,5 +63,6 @@ export default async function StartupDiscoverPage({
           : null
       }
     />
+    </>
   );
 }

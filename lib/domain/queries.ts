@@ -74,6 +74,49 @@ export function listUniversities(): UniversitySummary[] {
   return rows;
 }
 
+// Campus founder counts for the globe. The full Founder Scout rows take seconds
+// to assemble, and the map only needs how many promoted people sit on each
+// campus. This matches listFounders({ universityId }).length.
+function founderCountsByUniversity(): Map<string, number> {
+  const db = getDb();
+  const projectsByPerson = new Map<string, { kind: string; role: string }[]>();
+  for (const row of db
+    .prepare(
+      `SELECT ppr.person_id as person_id, p.kind as kind, ppr.role as role
+       FROM person_project_roles ppr JOIN projects p ON p.id = ppr.project_id`
+    )
+    .all() as { person_id: string; kind: string; role: string }[]) {
+    const list = projectsByPerson.get(row.person_id) ?? [];
+    list.push({ kind: row.kind, role: row.role });
+    projectsByPerson.set(row.person_id, list);
+  }
+  const campusesByPerson = new Map<string, Set<string>>();
+  for (const row of db.prepare(`SELECT person_id, university_id FROM affiliations WHERE university_id IS NOT NULL`).all() as {
+    person_id: string;
+    university_id: string;
+  }[]) {
+    const set = campusesByPerson.get(row.person_id) ?? new Set<string>();
+    set.add(row.university_id);
+    campusesByPerson.set(row.person_id, set);
+  }
+  const counts = new Map<string, number>();
+  const people = db.prepare(`SELECT id, founder_status FROM people`).all() as { id: string; founder_status: string | null }[];
+  for (const person of people) {
+    if (person.founder_status === "removed" || person.founder_status === "potential") continue;
+    if (!evaluatePromotion(projectsByPerson.get(person.id) ?? []).promoted) continue;
+    for (const campusId of campusesByPerson.get(person.id) ?? []) {
+      counts.set(campusId, (counts.get(campusId) ?? 0) + 1);
+    }
+  }
+  return counts;
+}
+
+export function countCandidateProjects(): number {
+  const db = getDb();
+  const row = db.prepare(`SELECT COUNT(*) as c FROM projects WHERE kind = 'company' AND is_investable_candidate = 1`).get() as { c: number };
+  return row.c;
+}
+
 function buildUniversities(): UniversitySummary[] {
   const db = getDb();
   const universities = db.prepare(`SELECT id, name, country, lat, lon, coord_source FROM universities ORDER BY name`).all() as {
@@ -105,8 +148,7 @@ function buildUniversities(): UniversitySummary[] {
   for (const row of db.prepare(`SELECT university_id as id, COUNT(DISTINCT person_id) as c FROM affiliations GROUP BY university_id`).all() as { id: string; c: number }[]) {
     personCounts.set(row.id, row.c);
   }
-  const founderCounts = new Map<string, number>();
-  for (const u of universities) founderCounts.set(u.id, listFounders({ universityId: u.id }).length);
+  const founderCounts = founderCountsByUniversity();
   const presence = presenceByUniversity();
   const pitchbook = pitchbookByCampus();
   const hitRates = hitRateByCampus();

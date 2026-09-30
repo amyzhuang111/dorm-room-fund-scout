@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { loadNetworkMap } from "@/lib/client/map-prefetch";
 import { featuredNationalKey } from "@/lib/domain/featured-national";
 import { SECTION_SHORT, tierBandLabel, type HotspotSectionId } from "@/lib/domain/hotspot-model";
 import type { MapEdgeType, MapGraph, MapNode, MapNodeType } from "@/lib/domain/network-map";
@@ -30,7 +31,10 @@ const LEGEND_REGION: Record<string, string> = {
   international: "International",
 };
 
-const NetworkSigma = dynamic(() => import("./network-sigma").then((mod) => mod.NetworkSigma), {
+const sigmaChunk = () => import("./network-sigma");
+if (typeof window !== "undefined") void sigmaChunk();
+
+const NetworkSigma = dynamic(() => sigmaChunk().then((mod) => mod.NetworkSigma), {
   ssr: false,
   loading: () => <p className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm text-black">Drawing the network…</p>,
 });
@@ -146,11 +150,7 @@ export function NetworkMapApp() {
 
   useEffect(() => {
     let cancel = false;
-    fetch("/api/network/map")
-      .then((res) => {
-        if (!res.ok) throw new Error("map failed");
-        return res.json() as Promise<MapGraph>;
-      })
+    loadNetworkMap()
       .then((data) => {
         if (cancel) return;
         setGraph(data);
