@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { GlobeBoot, NetworkBoot } from "@/components/map-boot";
 import { HomeMap } from "@/components/home-map";
 import { NewsStrip } from "@/components/news-strip";
 import { NetworkAnalysis } from "@/components/network-analysis";
@@ -19,6 +20,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
   const network = sp.view === "network";
   return (
     <>
+      {network ? <NetworkBoot /> : <GlobeBoot />}
       {network ? null : <NewsStrip />}
       <HomeMap initial={sp} network={network} />
       {network ? <NetworkAnalysis data={buildNetworkAnalysis()} /> : null}

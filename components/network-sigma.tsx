@@ -593,6 +593,12 @@ export function NetworkSigma({
           if (campuses.length > 0 && campuses.every((id) => hidden.has(id))) continue;
         } else if (hidden.has(meta.id)) continue;
         if (suppressed.has(meta.id) && meta.id !== active && !meta.named) continue;
+        // Degree and neighborhood rejects are cheap. Skip the display lookup for
+        // the thousands of people that cannot win a label at this zoom.
+        if (meta.campusHub) {
+          if (meta.degree < campusHubDegreeFloor(ratio) && meta.id !== active) continue;
+        } else if (!meta.marker && meta.tier === 1 && meta.degree < floor && meta.id !== active) continue;
+        if (active && !meta.marker && meta.tier === 1 && meta.id !== active && !near?.has(meta.id)) continue;
         const display = renderer.getNodeDisplayData(meta.id);
         if (!display) continue;
         // Gray hubs are hidden only after they lose the label pass. Skipping them here would keep Thiel unlabeled.
@@ -663,7 +669,17 @@ export function NetworkSigma({
     };
     recomputeLabelsRef.current = recomputeLabels;
     let labelFrame = 0;
+    let layoutPaused = false;
+    let layoutTimer = 0;
+    const resumeLayout = () => {
+      window.clearTimeout(layoutTimer);
+      layoutTimer = window.setTimeout(() => {
+        layoutPaused = false;
+        scheduleLabels();
+      }, 140);
+    };
     const scheduleLabels = () => {
+      if (layoutPaused) return;
       if (labelFrame) return;
       labelFrame = requestAnimationFrame(() => {
         labelFrame = 0;
@@ -674,7 +690,21 @@ export function NetworkSigma({
     const notifyView = () => {
       for (const listener of viewListeners) listener();
     };
-    renderer.getCamera().on("updated", scheduleLabels);
+    let laidOut = false;
+    const onCamera = () => {
+      // The opening move and a drag both emit a camera update every frame.
+      // Laying out thousands of labels on each of those frames is what makes
+      // the graph hesitate. Draw once as motion starts, then once it settles.
+      if (!laidOut) {
+        laidOut = true;
+        layoutPaused = false;
+        scheduleLabels();
+        return;
+      }
+      layoutPaused = true;
+      resumeLayout();
+    };
+    renderer.getCamera().on("updated", onCamera);
     renderer.getCamera().on("updated", notifyView);
     void document.fonts?.ready.then(() => {
       if (rendererRef.current === renderer) scheduleLabels();
@@ -819,8 +849,9 @@ export function NetworkSigma({
     return () => {
       cancelAnimationFrame(frame);
       if (labelFrame) cancelAnimationFrame(labelFrame);
+      window.clearTimeout(layoutTimer);
       cancelAnimationFrame(focusState.focusFrame);
-      renderer.getCamera().removeListener("updated", scheduleLabels);
+      renderer.getCamera().removeListener("updated", onCamera);
       renderer.getCamera().removeListener("updated", notifyView);
       viewListeners.clear();
       renderer.off("afterRender", drawCurves);

@@ -2,18 +2,26 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
+import { loadCandidates, loadGlobeMap } from "@/lib/client/map-prefetch";
 import type { CampusArc, CandidateSummary, UniversitySummary } from "@/lib/domain/queries";
 import { useAskHighlight } from "./ask-highlight";
 import { ScoutNav, useScoutNav } from "./scout-nav";
 import { useUserPipeline } from "./user-pipeline-provider";
 import { mergeCatalog, userMapMarkers } from "@/lib/domain/user-pipeline";
 
-const GlobeView = dynamic(() => import("./globe-view").then((mod) => mod.GlobeView), {
+const globeChunk = () => import("./globe-view");
+const networkChunk = () => import("./network-map-app");
+if (typeof window !== "undefined") {
+  const network = new URLSearchParams(window.location.search).get("view") === "network";
+  void (network ? networkChunk() : globeChunk());
+}
+
+const GlobeView = dynamic(() => globeChunk().then((mod) => mod.GlobeView), {
   ssr: false,
   loading: () => <GlobeShell />,
 });
 
-const NetworkMapApp = dynamic(() => import("./network-map-app").then((mod) => mod.NetworkMapApp), {
+const NetworkMapApp = dynamic(() => networkChunk().then((mod) => mod.NetworkMapApp), {
   ssr: false,
   loading: () => (
     <div className="grid min-h-[80vh] w-full place-items-center bg-white text-sm text-black" style={{ height: "max(80vh, calc(100dvh - 3.5rem))" }}>
@@ -35,21 +43,30 @@ function HomeMapBody() {
   const [universities, setUniversities] = useState<UniversitySummary[]>([]);
   const [arcs, setArcs] = useState<CampusArc[]>([]);
   const [candidates, setCandidates] = useState<CandidateSummary[]>([]);
+  const [candidatesReady, setCandidatesReady] = useState(false);
+  const [knownResultCount, setKnownResultCount] = useState<number | null>(null);
 
   useEffect(() => {
     let cancel = false;
-    fetch("/api/globe")
-      .then((res) => {
-        if (!res.ok) throw new Error("globe failed");
-        return res.json() as Promise<{ universities: UniversitySummary[]; arcs: CampusArc[]; candidates: CandidateSummary[] }>;
-      })
+    // Campus dots do not wait on the company list. That list is several
+    // megabytes and only fills the tray and the campus preview.
+    loadGlobeMap()
       .then((data) => {
         if (cancel) return;
         setUniversities(data.universities ?? []);
         setArcs(data.arcs ?? []);
-        setCandidates(data.candidates ?? []);
+        setKnownResultCount(data.candidateCount ?? 0);
       })
       .catch(() => {});
+    loadCandidates()
+      .then((rows) => {
+        if (cancel) return;
+        setCandidates(rows);
+        setCandidatesReady(true);
+      })
+      .catch(() => {
+        if (!cancel) setCandidatesReady(true);
+      });
     return () => {
       cancel = true;
     };
@@ -84,6 +101,8 @@ function HomeMapBody() {
       emphasizeIds={ask?.campuses ?? []}
       userMarkers={markers}
       active
+      resultsPending={!candidatesReady}
+      knownResultCount={knownResultCount}
     />
   );
 }

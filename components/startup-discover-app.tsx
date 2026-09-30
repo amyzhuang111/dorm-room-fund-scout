@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useDeferredValue, useEffect, useMemo, useState } from "react";
+import { loadCandidates } from "@/lib/client/map-prefetch";
 import type { EnrollmentStatus } from "@/lib/domain/founder-status";
 import { sectorsForUniversity } from "@/lib/domain/candidate-filter";
 import { companiesInView } from "@/lib/domain/live-view";
@@ -20,12 +21,19 @@ import { useFeedbackRecords } from "./feedback-provider";
 import { useMergedCatalog, useUserPipeline } from "./user-pipeline-provider";
 import { attachUserScoutNetwork, userCompanyMatches, userMapMarkers } from "@/lib/domain/user-pipeline";
 
-const GlobeView = dynamic(() => import("./globe-view").then((mod) => mod.GlobeView), {
+const globeChunk = () => import("./globe-view");
+const networkChunk = () => import("./network-canvas");
+if (typeof window !== "undefined") {
+  const view = new URLSearchParams(window.location.search).get("view");
+  void (view === "network" ? networkChunk() : globeChunk());
+}
+
+const GlobeView = dynamic(() => globeChunk().then((mod) => mod.GlobeView), {
   ssr: false,
   loading: () => <div className="grid min-h-[70vh] place-items-center text-sm text-muted">Loading map…</div>,
 });
 
-const NetworkCanvas = dynamic(() => import("./network-canvas").then((mod) => mod.NetworkCanvas), {
+const NetworkCanvas = dynamic(() => networkChunk().then((mod) => mod.NetworkCanvas), {
   ssr: false,
   loading: () => <div className="grid min-h-[70vh] place-items-center text-sm text-muted">Loading network…</div>,
 });
@@ -35,7 +43,6 @@ const VIEWS = ["globe", "network", "table"] as const;
 export function StartupDiscoverApp({
   initial,
   universities,
-  candidates,
   arcs,
   sectors,
   enrollment,
@@ -46,7 +53,6 @@ export function StartupDiscoverApp({
 }: {
   initial: Record<string, string | undefined>;
   universities: UniversitySummary[];
-  candidates: CandidateSummary[];
   arcs: CampusArc[];
   sectors: SectorCount[];
   enrollment: { all: Record<EnrollmentStatus, number>; byUniversity: Record<string, Record<EnrollmentStatus, number>> };
@@ -59,7 +65,6 @@ export function StartupDiscoverApp({
     <ScoutNav basePath="/startup/discover" initial={initial}>
       <DiscoverBody
         universities={universities}
-        candidates={candidates}
         arcs={arcs}
         sectors={sectors}
         enrollment={enrollment}
@@ -74,7 +79,6 @@ export function StartupDiscoverApp({
 
 function DiscoverBody({
   universities,
-  candidates,
   arcs,
   sectors,
   enrollment,
@@ -84,7 +88,6 @@ function DiscoverBody({
   initialGraph,
 }: {
   universities: UniversitySummary[];
-  candidates: CandidateSummary[];
   arcs: CampusArc[];
   sectors: SectorCount[];
   enrollment: { all: Record<EnrollmentStatus, number>; byUniversity: Record<string, Record<EnrollmentStatus, number>> };
@@ -95,6 +98,23 @@ function DiscoverBody({
 }) {
   const nav = useScoutNav()!;
   const { current, navigate } = nav;
+  const [candidates, setCandidates] = useState<CandidateSummary[]>([]);
+  const [candidatesReady, setCandidatesReady] = useState(false);
+  useEffect(() => {
+    let cancel = false;
+    loadCandidates()
+      .then((rows) => {
+        if (cancel) return;
+        setCandidates(rows);
+        setCandidatesReady(true);
+      })
+      .catch(() => {
+        if (!cancel) setCandidatesReady(true);
+      });
+    return () => {
+      cancel = true;
+    };
+  }, []);
   const catalog = useMergedCatalog(universities, candidates, []);
   // The toggle itself reads `current` so it paints immediately. Filtering 569
   // companies (and repainting the tray) follows on the next frame.
@@ -184,6 +204,7 @@ function DiscoverBody({
               onNavigate={navigate}
               active={view === "globe"}
               userMarkers={markers}
+              resultsPending={!candidatesReady}
             />
           </div>
         )}

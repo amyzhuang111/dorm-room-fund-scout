@@ -9,5 +9,7 @@ export async function GET(request: Request) {
     sector,
     enrollment: selectedEnrollment(url.searchParams.get("enroll") ?? undefined),
   });
-  return Response.json(graph);
+  return Response.json(graph, {
+    headers: { "Cache-Control": "public, max-age=60, s-maxage=86400, stale-while-revalidate=604800" },
+  });
 }

@@ -2,6 +2,7 @@
 
 import { memo, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { buildHref } from "@/lib/domain/url";
 import type { CampusArc, CandidateSummary, UniversitySummary } from "@/lib/domain/queries";
 import { ResultTray } from "./result-tray";
@@ -90,6 +91,8 @@ export const GlobeView = memo(function GlobeView({
   active = true,
   emphasizeIds = [],
   userMarkers = [],
+  resultsPending = false,
+  knownResultCount = null,
 }: {
   universities: UniversitySummary[];
   basePath: string;
@@ -106,6 +109,10 @@ export const GlobeView = memo(function GlobeView({
   emphasizeIds?: string[];
   /** User-added startups plotted beside a campus that already has coordinates. */
   userMarkers?: UserMapMarker[];
+  /** Company rows are still downloading. The map itself does not wait on them. */
+  resultsPending?: boolean;
+  /** Unfiltered company count, so the stat can paint before the row list arrives. */
+  knownResultCount?: number | null;
 }) {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -155,8 +162,8 @@ export const GlobeView = memo(function GlobeView({
         // worked correctly. This is also literally what dashboard.vclense.ch/
         // ycglobe itself does (a plain CDN <script> tag, not an NPM bundle) — not
         // a workaround invented here, the same integration choice as the model.
-        // @ts-expect-error — remote URL import, no local type declarations to resolve
-        maplibregl = await import(/* webpackIgnore: true */ "https://unpkg.com/maplibre-gl@6.10.0/dist/maplibre-gl.mjs");
+        // The homepage starts this import from the document, before hydration.
+        maplibregl = (await loadMapLibre()) as { Map: new (options: object) => CampusMap };
       } catch {
         if (!cancelled) setStatus("unsupported");
         return;
@@ -664,7 +671,7 @@ export const GlobeView = memo(function GlobeView({
         { n: selectedUniversity.sourcesConfigured, label: "sources" },
       ]
     : [
-        { n: trayCandidates.length, label: "in view" },
+        { n: resultsPending ? (knownResultCount ?? trayCandidates.length) : trayCandidates.length, label: "in view" },
         { n: points.length, label: "campuses" },
         { n: monitored, label: "monitored" },
       ];
@@ -808,7 +815,9 @@ export const GlobeView = memo(function GlobeView({
                     )}
                   </li>
                 ))}
-                {previewCandidates.length === 0 && <li className="text-xs text-muted">No candidates found here yet.</li>}
+                {previewCandidates.length === 0 && (
+                  <li className="text-xs text-muted">{resultsPending ? "Loading candidates…" : "No candidates found here yet."}</li>
+                )}
               </ul>
               {previewCandidates.length > 5 && (
                 <a href={buildHref(basePath, current, { view: "table" })} className="mt-1.5 block text-[11px] text-link underline">
