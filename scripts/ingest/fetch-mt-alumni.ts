@@ -125,7 +125,7 @@ const FOUNDER_CLAIMS: FounderClaim[] = [
     personName: "Bret Pearlman",
     companyName: "Elevation Partners",
     companyDescription:
-      "A real growth-equity/private-equity firm, not a startup — recorded honestly as what the source discloses, not filtered for fitting DRF's pre-seed thesis. Never itself a pre-seed candidate (is_investable_candidate=0).",
+      "A real growth-equity/private-equity firm, not a startup — recorded honestly as what the source discloses, not filtered for fitting a pre-seed thesis. Never itself a pre-seed candidate (is_investable_candidate=0).",
     excerpt:
       "Author bio at the end of Bret Pearlman's own M&T alumni profile: \"Bret Pearlman (M&T'89) is the Co-Founder and Managing Director of Elevation Partners.\"",
     sourceUrl: "https://fisher.wharton.upenn.edu/mt-for-life/where-are-they-now-bret-pearlman-mt-89/",

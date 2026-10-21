@@ -1,7 +1,6 @@
-// Dorm Room Fund's four recruiting teams, checked against
-// data/imports/drf_campus_presence.csv, plus International for campuses that
-// file does not put on a US team. Schools not in the config yet still land
-// in the right team by name.
+// Geographic regions for the network map, plus International for campuses
+// outside those groups. Schools not in the config yet still land in a
+// region by name.
 
 export interface RegionDef {
   id: string;

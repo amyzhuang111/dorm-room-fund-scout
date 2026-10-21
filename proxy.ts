@@ -1,15 +1,14 @@
 import { getToken } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
-import { DRF_SIGNIN_MESSAGE, authSecret, isAllowedEmail, isProtectedPath, safeCallbackUrl } from "@/lib/auth/access";
+import { authSecret, isAllowedEmail, isProtectedPath, safeCallbackUrl } from "@/lib/auth/access";
 
-// Next.js 16 renamed middleware.ts to proxy.ts. This is that server-side
-// gate: it runs before Pipeline and Shortlist (and their API routes) render.
-// Route handlers check the session again. Hiding a nav link is not the lock.
+// Next.js 16 renamed middleware.ts to proxy.ts. The generic workspace leaves
+// every route public. isProtectedPath is empty, so this returns next.
 
 function deny(request: NextRequest) {
   const path = request.nextUrl.pathname;
   if (path.startsWith("/api/")) {
-    return NextResponse.json({ error: DRF_SIGNIN_MESSAGE }, { status: 401 });
+    return NextResponse.json({ error: "Sign in to use this route." }, { status: 401 });
   }
   const url = request.nextUrl.clone();
   url.pathname = "/signin";

@@ -3,8 +3,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { StartupCard, StartupCardFounder, StartupLinkKind } from "@/lib/domain/startup-card";
-import { WhoCanIntro } from "./who-can-intro";
-
 const LINK_LABEL: Record<StartupLinkKind, string> = {
   website: "Website",
   linkedin: "LinkedIn",
@@ -236,10 +234,6 @@ export function StartupDirectoryCard({
           </ul>
         )}
       </section>
-
-      <div className="mt-4 border-t border-neutral-200 pt-3">
-        <WhoCanIntro entityId={card.id} />
-      </div>
     </>
   );
   if (embedded) {

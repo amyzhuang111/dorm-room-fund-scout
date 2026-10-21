@@ -9,14 +9,13 @@ import { ResultTray } from "./result-tray";
 import { PersonLinkButton } from "./person-link";
 import { CompanyNameLink } from "./company-website";
 import { CampusBenchmarks } from "./campus-benchmarks";
-import { DrfPresenceNote } from "./drf-presence-note";
 import { alphabeticalByLabel, shortCampusLabel } from "@/lib/domain/campuses";
 import type { UserMapMarker } from "@/lib/domain/user-pipeline";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 // Real MapLibre GL JS globe projection + the free OpenFreeMap "positron"
 // vector style — the exact stack dashboard.vclense.ch/ycglobe uses (studied
-// directly from its page source), recolored here to the DRF-sampled palette
+// directly from its page source), recolored here to this app's palette
 // instead of their orange/cream theme. No API key needed (OpenFreeMap is a
 // free, no-auth tile service).
 const STYLE_URL = "https://tiles.openfreemap.org/styles/positron";
@@ -735,7 +734,7 @@ export const GlobeView = memo(function GlobeView({
         )}
 
         {/* Floating campus-summary panel — pattern studied from dashboard.vclense.ch/ycglobe's
-            frosted floating panels; colors/type still from the DRF-sampled tokens. */}
+            frosted floating panels. */}
         {geoMode === "hq" && status === "ok" && (
           <div className="glass-panel absolute left-3 top-16 w-72 max-h-[420px] overflow-y-auto">
             <div className="glass-panel-head">
@@ -797,7 +796,6 @@ export const GlobeView = memo(function GlobeView({
               </span>
             </div>
             <div className="px-3">
-              <DrfPresenceNote presence={selectedUniversity.drfPresence} />
               <CampusBenchmarks pitchbook={selectedUniversity.pitchbook} hitRate={selectedUniversity.hitRate} />
             </div>
             <div className="px-3 pb-3">
@@ -867,7 +865,6 @@ export const GlobeView = memo(function GlobeView({
         <UniversityListFallback universities={universities} basePath={basePath} current={current} compact />
         {selectedUniversity && (
           <div className="mt-2">
-            <DrfPresenceNote presence={selectedUniversity.drfPresence} />
             <CampusBenchmarks pitchbook={selectedUniversity.pitchbook} hitRate={selectedUniversity.hitRate} />
           </div>
         )}

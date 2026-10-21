@@ -33,8 +33,6 @@ assert.equal(one(berkeley, /uc launch/i).zone, "external");
 assert.equal(one(berkeley, /pear/i).zone, "external");
 assert.equal(one(berkeley, /pear/i).tier, "A");
 assert.equal(one(berkeley, /y combinator/i).zone, "external");
-assert.equal(berkeley.filter((org) => /dorm room fund/i.test(org.label)).length, 1);
-assert.equal(one(berkeley, /dorm room fund/i).zone, "internal");
 
 const stanford = orgsForCampus("univ_stanford", cards);
 const mayfield = stanford.filter((org) => /mayfield/i.test(org.label));

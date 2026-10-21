@@ -1,9 +1,9 @@
-// DRF screening configuration. Every rule is tagged with where it came from:
-// - public_policy: stated on DRF's own public FAQ (reviewed 2026-09-18)
-// - user_guidance: internal sourcing guidance, not published DRF policy
-// - proposed_setting: a product default we invented to make the screen runnable, not attributed to DRF
+// Screening configuration. Every rule is tagged with where it came from:
+// - public_policy: a published student-investor policy (reviewed 2026-09-18)
+// - user_guidance: internal sourcing guidance, not a published policy
+// - proposed_setting: a product default invented to make the screen runnable
 //
-// Do not present user_guidance or proposed_setting values as DRF's official rules in the UI.
+// Do not present user_guidance or proposed_setting values as a fund's official rules in the UI.
 
 export type Provenance = "public_policy" | "user_guidance" | "proposed_setting";
 
@@ -20,14 +20,14 @@ export const SCREENING_CONFIG = {
     value: 2,
     provenance: "public_policy",
     reason:
-      "DRF's public FAQ (dormroomfund.com, reviewed 2026-09-18) says it backs students and recent graduates, generally within two years of graduation, with DRF-community exceptions.",
+      "A typical student-investor brief backs students and recent graduates, generally within two years of graduation, with community exceptions. Reviewed 2026-09-18.",
   } as ScreeningConfigEntry<number>,
 
   mvpRequired: {
     key: "mvp_required",
     value: false,
     provenance: "public_policy",
-    reason: "DRF's public FAQ explicitly states an MVP is not required.",
+    reason: "The default brief does not require an MVP.",
   } as ScreeningConfigEntry<boolean>,
 
   priorFundingReviewTriggerUsd: {
@@ -35,7 +35,7 @@ export const SCREENING_CONFIG = {
     value: 2_000_000,
     provenance: "user_guidance",
     reason:
-      "Internal sourcing guidance: usually pre-seed, before raising more than 'a couple million dollars.' This is a review trigger, not a confirmed DRF hard cap — the public FAQ does not state an exact figure.",
+      "Internal sourcing guidance: usually pre-seed, before raising more than 'a couple million dollars.' This is a review trigger, not a hard cap — a published FAQ may not state an exact figure.",
   } as ScreeningConfigEntry<number>,
 
   stageAllowed: {
@@ -50,7 +50,7 @@ export const SCREENING_CONFIG = {
     value: ["molecule_level_biotech", "cpg_brand"] as string[],
     provenance: "user_guidance",
     reason:
-      "Internal sourcing guidance: avoid molecule-level hard biotech and most consumer packaged goods (as a brand, not as software sold to CPG brands). Not stated on DRF's public FAQ.",
+      "Internal sourcing guidance: avoid molecule-level hard biotech and most consumer packaged goods (as a brand, not as software sold to CPG brands). Not a published eligibility rule.",
   } as ScreeningConfigEntry<string[]>,
 
   sectorResearchInterests: {

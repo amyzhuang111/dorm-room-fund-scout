@@ -53,7 +53,7 @@ export function MagicLinkForm({ callbackUrl }: { callbackUrl: string }) {
         value={email}
         onChange={(event) => setEmail(event.target.value)}
         className="w-full rounded-md border border-black bg-white px-3 py-2 text-sm text-black"
-        placeholder="name@dormroomfund.com"
+        placeholder="name@example.com"
       />
       {error && <p className="text-sm font-semibold text-black">{error}</p>}
       <button type="submit" disabled={pending} className="w-full rounded-md border border-black bg-black px-3 py-2 text-sm font-semibold text-white disabled:opacity-60">

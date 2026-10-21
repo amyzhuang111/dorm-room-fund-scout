@@ -7,9 +7,9 @@ export default function MethodologyPage() {
       <div>
         <h1 className="text-lg font-semibold text-foreground">Methodology</h1>
         <p className="mt-1 text-sm text-muted">
-          This is an independent scouting workspace, not an official Dorm Room Fund product. Every rule below is tagged with where it came
-          from — public policy, internal sourcing guidance, or a proposed product default — so nothing gets presented as DRF&apos;s official
-          rubric.
+          This is a scouting workspace any fund can use. Every rule below is tagged with where it came
+          from — a published policy, internal sourcing guidance, or a proposed product default — so a default is never presented as your fund&apos;s
+          official rubric.
         </p>
       </div>
 
@@ -74,7 +74,7 @@ export default function MethodologyPage() {
       <section>
         <h2 className="text-sm font-semibold text-foreground">Quality rubric (version {RUBRIC_VERSION})</h2>
         <p className="mt-1 text-sm text-muted">
-          Proposed scouting weights, not DRF&apos;s official rubric or a prediction of returns. Founder-related dimensions total 45%. Ratings
+          Proposed scouting weights, not an official fund rubric or a prediction of returns. Founder-related dimensions total 45%. Ratings
           are 0–5 or null — null is never silently treated as zero. A headline score only shows once coverage and the required dimensions
           (ability to build, domain knowledge/access, customer pain) are met.
         </p>
@@ -119,10 +119,8 @@ export default function MethodologyPage() {
       <section>
         <h2 className="text-sm font-semibold text-foreground">Portfolio handling</h2>
         <p className="mt-1 text-sm text-muted">
-          DRF&apos;s public portfolio directory (dormroomfund.com/portfolio) was imported in full — 319 named, linkable entries across 5 pages
-          as of 2026-09-18. The directory&apos;s own headline says 340 &quot;first checks,&quot; which this import does not claim to match or
-          override; it is a reference/exclusion set, not a complete historical record. Portfolio companies are excluded from new-target
-          queues but kept visible for reference.
+          A fund can keep an existing portfolio as a reference set. Those companies stay visible and are left out of new-target
+          queues. This workspace does not ship a portfolio directory of its own.
         </p>
       </section>
 
@@ -135,7 +133,7 @@ export default function MethodologyPage() {
           <li>✅ Manual notes per company, preserved across ingestion refreshes and kept separate from sourced evidence.</li>
           <li>✅ Manual referral entry (single lead) at <code className="font-mono text-xs">/sources/new-referral</code>, plus CSV bulk import on <code className="font-mono text-xs">/sources</code> — both screened through the same gates as ingested candidates, with unmatched university names skipped and listed, never guessed.</li>
           <li>✅ Basic Network view for a selected university (server-rendered, capped at 60 nodes, keyboard-accessible node list).</li>
-          <li>✅ Globe view on real MapLibre GL JS with its native 3D globe projection and the free OpenFreeMap &quot;positron&quot; vector style (the same stack dashboard.vclense.ch/ycglobe uses), recolored to the DRF-sampled palette, with a floating glass campus-summary panel. Loaded from the CDN at runtime, not through Turbopack&apos;s bundle — Turbopack was found to break MapLibre&apos;s internal tile-loading Web Worker, which silently produced a map that painted only its flat background layer with zero tile requests ever firing. <strong>Actually visually verified</strong> with a real headless browser against the live production deployment: real continents/oceans/boundaries/labels and our own campus markers all confirmed rendering, and 8 real vector-tile requests confirmed firing. See README for the full root-cause writeup.</li>
+          <li>✅ Globe view on real MapLibre GL JS with its native 3D globe projection and the free OpenFreeMap &quot;positron&quot; vector style (the same stack dashboard.vclense.ch/ycglobe uses), with a floating glass campus-summary panel. Loaded from the CDN at runtime, not through Turbopack&apos;s bundle — Turbopack was found to break MapLibre&apos;s internal tile-loading Web Worker, which silently produced a map that painted only its flat background layer with zero tile requests ever firing. <strong>Actually visually verified</strong> with a real headless browser against the live production deployment: real continents/oceans/boundaries/labels and our own campus markers all confirmed rendering, and 8 real vector-tile requests confirmed firing. See README for the full root-cause writeup.</li>
           <li>✅ Source quality tiering — two independent tiers per source, campus playbooks, sticky manual overrides.</li>
           <li>✅ Real Berkeley sourcing (Cal Hacks 12.0, same Devpost pattern as PennApps/TreeHacks) — Berkeley now has real candidates, not just tier metadata.</li>
           <li>✅ UI/UX upgrade per a separate detailed spec: renamed Universe→Explore (with a redirect alias), new dark design tokens, search + Companies/Builders entity switch, reworked table columns and drawer ordering (Why look/Founder edge/Open question above the fold), a real compact Sources table with typed People/Projects/Ventures counts, and Signals filters/labels (also fixed a real bug: competition placements were mislabeled &quot;grant&quot; instead of &quot;award&quot;).</li>

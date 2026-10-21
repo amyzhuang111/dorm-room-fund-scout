@@ -1,6 +1,6 @@
 // Full evidence graph for the Network map. Nodes and edges come from
 // affiliations, founder roles, program memberships, sourced investor facts,
-// and confirmed DRF portfolio matches. The five DRF regions are one connected
+// and sourced investor facts. The five regions are one connected
 // cloud. Region color is a soft affinity: campuses of the same color sit near
 // each other, and a campus does not sit deep inside another region's core,
 // but the borders overlap. Shared programs, investors, and cosine similarity
@@ -22,8 +22,6 @@ import { hotspotGraphPatch, organizationMap } from "./hotspots";
 import { confirmedLinkedIn, readLinkedInCandidate } from "./person-link";
 import { sectorLabel } from "./sectors";
 import { cosineSimilarity, groupVector, linksWithinGroups, nearestSimilar, relaxRegionBodies, relaxSimilarity, similarityVectors, type SimilarityPoint } from "./similarity-layout";
-import { drfWorksAtEdges } from "./drf-alumni";
-
 export type MapNodeType = "person" | "startup" | "campus" | "investor" | "program" | "organization";
 export type MapEdgeType = "founded" | "co_founder" | "studied_at" | "invested_in" | "member_of" | "at_campus" | "works_at";
 
@@ -50,7 +48,7 @@ export interface MapNode {
   degree: number;
   /** Unweighted strong founders plus startups, or the node's own connection count. */
   signalCount: number;
-  /** Weighted numerator. Funded, accelerator, and S/A or DRF signals count extra. */
+  /** Weighted numerator. Funded, accelerator, and S/A signals count extra. */
   signalWeight: number;
   /** Undergraduate enrollment, member count, or 1 for a person or startup. */
   signalDenominator: number;
@@ -109,8 +107,6 @@ const STAGE_RANK: Record<string, number> = {
   "series c": 5,
   "series d": 6,
 };
-
-const DRF_ID = "inv_dorm_room_fund";
 
 interface SimNode {
   id: string;
@@ -207,7 +203,6 @@ function buildSignalSizes(input: {
   amountByProject: Map<string, number>;
   stageByProject: Map<string, { stage: string; rank: number }>;
   acceleratorStartups: Set<string>;
-  drfStartups: Set<string>;
   universities: { id: string }[];
   memberRows: { person_id: string; project_id: string }[];
   programIds: Set<string>;
@@ -224,7 +219,7 @@ function buildSignalSizes(input: {
         verification: startup.verification_status,
         funded: (input.amountByProject.get(startup.id) ?? 0) > 0 || input.stageByProject.has(startup.id),
         accelerator: mentionsAccelerator(startup.signal_tier_basis) || input.acceleratorStartups.has(startup.id),
-        strongTier: startup.signal_tier === "S+" || startup.signal_tier === "S" || startup.signal_tier === "A" || input.drfStartups.has(startup.id),
+        strongTier: startup.signal_tier === "S+" || startup.signal_tier === "S" || startup.signal_tier === "A",
       }),
     );
   }
@@ -521,10 +516,6 @@ function assembleNetworkMap(): MapGraph {
     .prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'investor' AND length(trim(value_text)) >= 2`)
     .all() as { project_id: string; value_text: string }[];
 
-  const drfRows = db
-    .prepare(`SELECT project_id FROM portfolio_memberships WHERE match_status = 'confirmed' AND project_id IS NOT NULL`)
-    .all() as { project_id: string }[];
-
   const foundersByCompany = new Map<string, string[]>();
   for (const row of founderRows) {
     if (!personIds.has(row.person_id) || !startupIds.has(row.project_id)) continue;
@@ -572,18 +563,6 @@ function assembleNetworkMap(): MapGraph {
     investorNames.set(id, name);
     addEdge(id, row.project_id, "invested_in");
   }
-  const drfTargets = drfRows.filter((row) => startupIds.has(row.project_id));
-  if (drfTargets.length) {
-    investorNames.set(DRF_ID, "Dorm Room Fund");
-    for (const row of drfTargets) addEdge(DRF_ID, row.project_id, "invested_in");
-  }
-
-  for (const edge of drfWorksAtEdges()) {
-    if (!personIds.has(edge.personId)) continue;
-    investorNames.set(edge.investorId, edge.firm);
-    addEdge(edge.personId, edge.investorId, "works_at");
-  }
-
   const hotspots = hotspotGraphPatch({ personIds, startupIds, universityIds: uniIds });
   for (const add of hotspots.campusAdds) {
     const list = campusesByCompany.get(add.id) ?? [];
@@ -746,7 +725,6 @@ function assembleNetworkMap(): MapGraph {
     amountByProject,
     stageByProject,
     acceleratorStartups: acceleratorBacked(investorRows),
-    drfStartups: new Set(drfTargets.map((row) => row.project_id)),
     universities,
     memberRows,
     programIds,
@@ -925,7 +903,7 @@ interface LiveNode extends SimNode {
 }
 
 /**
- * Where each DRF team sits in the shared universe. Angles are standard
+ * Where each region sits in the shared universe. Angles are standard
  * math angles with +y downward, matching the map: Philly on top, the West
  * Coast on the left, Boston low and central, NY on the right. International
  * is placed afterwards, tucked against the West Coast's lower edge.

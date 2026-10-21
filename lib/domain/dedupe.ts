@@ -1190,57 +1190,8 @@ function absorbPerson(db: Database.Database, survivorId: string, dropId: string,
   retargetRelationships(db, "person", dropId, survivorId);
   db.prepare(`UPDATE notes SET entity_id = ? WHERE entity_id = ?`).run(survivorId, dropId);
   db.prepare(`UPDATE possible_companies SET person_id = ? WHERE person_id = ?`).run(survivorId, dropId);
-  moveDrfAlumni(db, dropId, survivorId);
   rememberRedirect(db, dropId, "person", survivorId, reason);
   db.prepare(`DELETE FROM people WHERE id = ?`).run(dropId);
-}
-
-// Keep a DRF alumni row another import added. Fill only blank survivor fields,
-// then move the dropped person's row so the person delete can proceed.
-function moveDrfAlumni(db: Database.Database, from: string, to: string) {
-  const table = db.prepare(`SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'drf_alumni'`).get();
-  if (!table) return;
-  const dropped = db.prepare(`SELECT * FROM drf_alumni WHERE person_id = ?`).get(from) as Record<string, unknown> | undefined;
-  if (!dropped) return;
-  const survivor = db.prepare(`SELECT * FROM drf_alumni WHERE person_id = ?`).get(to) as Record<string, unknown> | undefined;
-  if (!survivor) {
-    db.prepare(`UPDATE drf_alumni SET person_id = ? WHERE person_id = ?`).run(to, from);
-    return;
-  }
-  const fields = [
-    "drf_team",
-    "university_id",
-    "school_label",
-    "program_id",
-    "program_label",
-    "year_start",
-    "year_end",
-    "class_year",
-    "current_firm",
-    "current_role",
-    "firm_type",
-    "firm_confidence",
-    "linkedin_confidence",
-    "linkedin_url",
-    "linkedin_source_url",
-    "location",
-    "verification_note",
-    "investor_id",
-    "source_url",
-    "firm_source_url",
-    "sources_json",
-    "confidence",
-    "excerpt",
-  ];
-  for (const field of fields) {
-    const current = survivor[field];
-    const incoming = dropped[field];
-    const blank = current == null || current === "" || current === "[]";
-    if (blank && incoming != null && incoming !== "" && incoming !== "[]") {
-      db.prepare(`UPDATE drf_alumni SET ${field} = ? WHERE person_id = ?`).run(incoming, to);
-    }
-  }
-  db.prepare(`DELETE FROM drf_alumni WHERE person_id = ?`).run(from);
 }
 
 export function mergeRecordedPair(

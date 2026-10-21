@@ -46,7 +46,7 @@ export function signInEmailContent(url: string): { subject: string; text: string
   const text = [
     "Sign in to Campus Scout",
     "",
-    "Pipeline and Shortlist are for Dorm Room Fund members. Open this link to sign in. It expires in 15 minutes.",
+    "Open this link to sign in to Campus Scout. It expires in 15 minutes.",
     "",
     url,
     "",

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { DRF_SIGNIN_MESSAGE, SEEDED_ALLOWED_EMAILS, isAllowedEmail, isProtectedPath, safeCallbackUrl } from "./access";
+import { SIGNIN_MESSAGE, SEEDED_ALLOWED_EMAILS, isAllowedEmail, isProtectedPath, safeCallbackUrl } from "./access";
 
 const saved = process.env.ALLOWED_EMAILS;
 
@@ -19,56 +19,52 @@ function test(name: string, fn: () => void) {
   }
 }
 
-test("DRF message is the member notice", () => {
-  assert.equal(DRF_SIGNIN_MESSAGE, "Pipeline and Shortlist are for Dorm Room Fund members, sign in with your DRF email");
+test("sign-in copy is fund-neutral", () => {
+  assert.equal(SIGNIN_MESSAGE, "Campus Scout is open without an account. Sign-in is optional.");
+  assert.equal(/\bdrf\b|dorm room|\bamy\b/i.test(SIGNIN_MESSAGE), false);
 });
 
-test("dormroomfund.com addresses are allowed", () => {
+test("an unset allowlist allows nobody", () => {
   delete process.env.ALLOWED_EMAILS;
-  assert.equal(isAllowedEmail("Ada@DormRoomFund.com"), true);
-  assert.equal(isAllowedEmail("ada@notdormroomfund.com"), false);
-  assert.equal(isAllowedEmail("ada@sub.dormroomfund.com"), false);
-});
-
-test("seeded owner emails are allowed when ALLOWED_EMAILS is unset", () => {
-  delete process.env.ALLOWED_EMAILS;
-  for (const email of SEEDED_ALLOWED_EMAILS) assert.equal(isAllowedEmail(email), true);
+  assert.equal(SEEDED_ALLOWED_EMAILS.length, 0);
+  assert.equal(isAllowedEmail("scout@example.com"), false);
   assert.equal(isAllowedEmail("someone@gmail.com"), false);
 });
 
-test("ALLOWED_EMAILS replaces the seed list", () => {
+test("ALLOWED_EMAILS is the only allowlist", () => {
   process.env.ALLOWED_EMAILS = "partner@example.com";
   assert.equal(isAllowedEmail("partner@example.com"), true);
-  assert.equal(isAllowedEmail("amyzhuang880@gmail.com"), false);
-  assert.equal(isAllowedEmail("member@dormroomfund.com"), true);
+  assert.equal(isAllowedEmail("Scout@Example.com"), false);
+  assert.equal(isAllowedEmail("someone@gmail.com"), false);
 });
 
-test("an empty allowlist still keeps the DRF domain", () => {
+test("an empty allowlist allows nobody", () => {
   process.env.ALLOWED_EMAILS = "";
-  assert.equal(isAllowedEmail("amyzhuang880@gmail.com"), false);
-  assert.equal(isAllowedEmail("member@dormroomfund.com"), true);
+  assert.equal(isAllowedEmail("partner@example.com"), false);
+  assert.equal(isAllowedEmail("scout@example.com"), false);
 });
 
-test("protected paths are pipeline, shortlist, and their APIs", () => {
-  assert.equal(isProtectedPath("/startup/pipeline"), true);
-  assert.equal(isProtectedPath("/founder/shortlist"), true);
-  assert.equal(isProtectedPath("/api/user-pipeline/duplicates"), true);
-  assert.equal(isProtectedPath("/pipeline"), true);
-  assert.equal(isProtectedPath("/shortlist"), true);
-  assert.equal(isProtectedPath("/startup/discover"), false);
-  assert.equal(isProtectedPath("/alumni"), false);
-  assert.equal(isProtectedPath("/hotspots"), false);
-  assert.equal(isProtectedPath("/news"), false);
-  assert.equal(isProtectedPath("/api/ask"), false);
-  assert.equal(isProtectedPath("/api/network/map"), false);
+test("no route is member-gated", () => {
+  for (const path of [
+    "/startup/pipeline",
+    "/founder/shortlist",
+    "/api/user-pipeline/duplicates",
+    "/pipeline",
+    "/shortlist",
+    "/startup/discover",
+    "/alumni",
+    "/hotspots",
+    "/news",
+    "/api/ask",
+    "/api/network/map",
+  ]) {
+    assert.equal(isProtectedPath(path), false, path);
+  }
 });
 
 test("callback urls stay on this site", () => {
   assert.equal(safeCallbackUrl("/founder/shortlist?from=founder"), "/founder/shortlist?from=founder");
-  assert.equal(
-    safeCallbackUrl("/startup/pipeline?outreach=proj_1&referrer=person_drf_a"),
-    "/startup/pipeline?outreach=proj_1&referrer=person_drf_a"
-  );
+  assert.equal(safeCallbackUrl("/startup/pipeline?outreach=proj_1"), "/startup/pipeline?outreach=proj_1");
   assert.equal(safeCallbackUrl("https://evil.example"), "/startup/pipeline");
   assert.equal(safeCallbackUrl("//evil.example"), "/startup/pipeline");
   assert.equal(safeCallbackUrl("/signin"), "/startup/pipeline");

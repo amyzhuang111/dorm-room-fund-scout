@@ -2,7 +2,7 @@
  "generated_at": "2026-09-25T20:49:00-04:00",
  "schema_note": "Pass 4: potential founders (students / 2023–2026 grads with talent signals, not yet recorded as founders). founder_status='potential'. signal_tier: A/B/C per playbook founder-signal tier list; 'talent' = strong talent signal the tier list does not rank. Tier bases marked 'analyst' are judgment calls where the tier list is silent. stage is from evidence only (stage_basis direct = stated in source; inferred = implied by a student-run role at that date; unknown otherwise). linkedin_status confirmed only when name + school/organisation appear together. updates = people already in main or scouted*.json (as non-founders) who gain a potential-founder signal.",
  "dedupe_against": [
-  "amyzhuang111/dorm-room-fund-scout main @ PR #5 merge (db snapshot 2026-09-25 20:12 ET)",
+  "campus-scout main @ PR #5 merge (db snapshot 2026-09-25 20:12 ET)",
   "scouted.json",
   "scouted2.json",
   "scouted3.json"

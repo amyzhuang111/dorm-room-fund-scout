@@ -10,7 +10,7 @@ async function main() {
   delete process.env.UPSTASH_REDIS_REST_URL;
   delete process.env.UPSTASH_REDIS_REST_TOKEN;
 
-  const email = "member@dormroomfund.com";
+  const email = "scout@example.com";
   const now = Date.parse("2026-09-27T12:00:00Z");
 
   const token = await createMagicToken(email, now);

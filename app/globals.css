@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Light page, DRF purple accent (sampled 2026-09-25 from the live site).
+/* Light page, purple accent (sampled 2026-09-25).
    Full-page pixel counts: ink and lavender are the field; #9378ee is the
    brand color that actually shows up (about 4% of the homepage, 15% of
    portfolio). Orange #ff6a33 is the Apply button only (~0.1% of pixels)
@@ -71,7 +71,7 @@ h1, h2, h3 {
   font-weight: 500;
   line-height: 1.1;
 }
-/* DRF's live h1 uses letter-spacing 0; h2/h3 use --letter-spacing--tightest. */
+/* Headings use letter-spacing 0 on h1 and a tight tracking on h2/h3. */
 h1 {
   letter-spacing: 0;
 }
@@ -87,8 +87,8 @@ h2, h3 {
 /* Dense-dashboard utilities, pattern borrowed from dashboard.vclense.ch/ycglobe
    (studied directly): tiny uppercase accent-colored group labels and compact
    pill toggles for control-heavy panels (filters, chips) — while page body
-   text stays at DRF's actual 16px above. Colors still come from the
-   DRF-sampled tokens, not vclense's palette. */
+   text stays at 16px above. Colors still come from this app's tokens,
+   not vclense's palette. */
 .ui-label {
   font-size: 0.75rem;
   font-weight: 500;

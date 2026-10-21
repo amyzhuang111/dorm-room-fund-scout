@@ -25,7 +25,7 @@ const QUEUE_NOTE: Record<Queue, string> = {
   top_prospects: "Passes current screening gates, has enough evidence for comparison, and there's a specific reason to meet.",
   exploration: "Meaningful positive signal, but eligibility or evidence gaps are still unresolved.",
   watch: "An explicit milestone or revisit date is on record.",
-  reference_outside_brief: "Existing DRF investments and out-of-scope opportunities, kept for reference only.",
+  reference_outside_brief: "Existing portfolio companies and out-of-scope opportunities, kept for reference only.",
 };
 
 function useCompanies(

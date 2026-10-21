@@ -7,8 +7,7 @@ import type { Queue } from "@/lib/domain/queue";
 import { QUEUE_LABELS } from "@/lib/domain/queue";
 import { primaryBlocker, type GateOutcome } from "@/lib/screening/gates";
 
-// Dark-text-on-light-bg chip style, matching dormroomfund.com's own status
-// pairs (e.g. their green-dark/green-light) rather than an opacity trick.
+// Dark-text-on-light-bg chip style, using solid status pairs rather than an opacity trick.
 const QUEUE_CLASS: Record<Queue, string> = {
   top_prospects: "bg-ok-bg text-ok border-ok/20",
   exploration: "bg-accent-2/20 text-link border-accent-2/40",

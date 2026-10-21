@@ -187,7 +187,6 @@ function orphanLinks(db: Database.Database): AuditIssue[] {
     { id: "relationships.target.person", sql: `SELECT COUNT(*) AS n FROM relationships r LEFT JOIN people p ON p.id = r.target_entity_id WHERE r.target_entity_type = 'person' AND p.id IS NULL` },
     { id: "relationships.target.project", sql: `SELECT COUNT(*) AS n FROM relationships r LEFT JOIN projects p ON p.id = r.target_entity_id WHERE r.target_entity_type = 'project' AND p.id IS NULL` },
     { id: "relationships.target.university", sql: `SELECT COUNT(*) AS n FROM relationships r LEFT JOIN universities u ON u.id = r.target_entity_id WHERE r.target_entity_type = 'university' AND u.id IS NULL` },
-    { id: "drf_alumni.person_id", sql: `SELECT COUNT(*) AS n FROM drf_alumni d LEFT JOIN people p ON p.id = d.person_id WHERE p.id IS NULL` },
     { id: "entity_redirects.person", sql: `SELECT COUNT(*) AS n FROM entity_redirects e LEFT JOIN people p ON p.id = e.survivor_id WHERE e.entity_type = 'person' AND p.id IS NULL` },
     { id: "entity_redirects.project", sql: `SELECT COUNT(*) AS n FROM entity_redirects e LEFT JOIN projects p ON p.id = e.survivor_id WHERE e.entity_type = 'project' AND p.id IS NULL` },
     { id: "program_signals.person_id", sql: `SELECT COUNT(*) AS n FROM program_signals s LEFT JOIN people p ON p.id = s.person_id WHERE p.id IS NULL` },

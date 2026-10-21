@@ -1,7 +1,6 @@
-// Reconciles ingested candidate projects against DRF's public portfolio
-// directory (scripts/ingest/fetch-drf-portfolio.ts → portfolio_memberships).
-// This is what makes the portfolio-relationship gate's claim
-// ("Matched to an existing DRF portfolio entry by name/alias/domain")
+// Reconciles ingested candidate projects against rows already stored in
+// portfolio_memberships. This is what makes the portfolio-relationship gate's claim
+// ("Matched to an existing portfolio entry by name, alias, or domain")
 // actually true — without this step, portfolio_memberships.match_status
 // never leaves 'unmatched' and evaluatePortfolioRelationshipGate() can never
 // fire, so a re-pitched portfolio company would silently look like a fresh

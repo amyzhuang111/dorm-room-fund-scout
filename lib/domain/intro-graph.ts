@@ -4,7 +4,6 @@
 import fs from "node:fs";
 import { databasePath, getDb } from "../db/client";
 import { shortCampusLabel } from "./campuses";
-import { listDrfAlumni, type DrfAlumRow } from "./drf-alumni";
 import { investorNodeId } from "./hotspot-model";
 
 export type IntroOrgKind = "campus" | "program" | "company";
@@ -36,6 +35,11 @@ export interface PortfolioCompany {
   sourceUrl: string;
 }
 
+export interface IntroAlum {
+  personId: string;
+  investorId: string | null;
+}
+
 export interface IntroGraph {
   people: Map<string, { id: string; name: string; campuses: string[] }>;
   orgs: Map<string, IntroOrg>;
@@ -43,10 +47,10 @@ export interface IntroGraph {
   peopleByOrg: Map<string, IntroLink[]>;
   cofounders: Map<string, IntroLink[]>;
   startupsByPerson: Map<string, string[]>;
-  alumni: DrfAlumRow[];
+  alumni: IntroAlum[];
   strongFounders: Set<string>;
   // Years a person was at a campus. A graduation year is stored as a four-year
-  // window ending that year. DRF years are the years the partner was on campus.
+  // window ending that year.
   schoolYears: Map<string, SchoolSpan[]>;
   portfolioByInvestor: Map<string, PortfolioCompany[]>;
 }
@@ -213,7 +217,7 @@ export function assembleIntroGraph(): IntroGraph {
     }
   }
 
-  const alumni = listDrfAlumni();
+  const alumni: IntroAlum[] = [];
   const schoolYears = new Map<string, SchoolSpan[]>();
   const addSpan = (personId: string, universityId: string | null, start: number | null, end: number | null) => {
     if (!universityId || start == null || end == null) return;
@@ -226,11 +230,6 @@ export function assembleIntroGraph(): IntroGraph {
   };
   for (const [personId, year] of gradYear) {
     for (const campusId of people.get(personId)?.campuses ?? []) addSpan(personId, campusId, year - 3, year);
-  }
-  for (const alum of alumni) {
-    const start = alum.yearStart ?? alum.yearEnd ?? alum.classYear;
-    const end = alum.yearEnd ?? alum.yearStart ?? alum.classYear;
-    addSpan(alum.personId, alum.universityId, start, end);
   }
 
   const portfolioByInvestor = new Map<string, PortfolioCompany[]>();

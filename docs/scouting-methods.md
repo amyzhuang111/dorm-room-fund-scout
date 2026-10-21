@@ -93,7 +93,7 @@ The org list is `data/imports/campus_hotspots.csv`, one node per organization af
 - The same place in more than one hotspot section is one node. Mayfield Fellows Program is the single Stanford S-tier entry.
 - Pear Fellows, Pear Dorm, and Pear Garage are one outside node, Pear Fellows / Pear Garage, at A.
 - Berkeley SkyDeck's demo day and cohort track are one on-campus node at C.
-- A national program that also has a campus chapter (Dorm Room Fund partners, GC Venture Fellows) is one node. The campus chapter stays on campus when the people in the room are students at that school.
+- A national program that also has a campus chapter (a student fund's partners, GC Venture Fellows) is one node. The campus chapter stays on campus when the people in the room are students at that school.
 
 Outside, even if a row was filed under the school: Y Combinator, a16z Speedrun, Neo, Z Fellows, Thiel, Contrary, Kleiner Perkins Fellows, Pear, Prod, Techstars, UC LAUNCH, and off-campus regional programs (NORCAT, Summer Company, Lab2Market). On campus: student clubs, campus accelerators and incubators, hackathons, entrepreneurship centers, and labs.
 

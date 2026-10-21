@@ -1,4 +1,4 @@
-import { DRF_SIGNIN_MESSAGE, authSecret, isAllowedEmail, safeCallbackUrl } from "@/lib/auth/access";
+import { SIGNIN_MESSAGE, authSecret, isAllowedEmail, safeCallbackUrl } from "@/lib/auth/access";
 import { createMagicToken } from "@/lib/auth/magic-link";
 import { logMissingAuthEnv, SIGNIN_EMAIL_FAILED_MESSAGE, SIGNIN_UNCONFIGURED_MESSAGE } from "@/lib/auth/required-env";
 import { magicLinkConfigured, sendSignInEmail } from "@/lib/auth/send-email";
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
   }
   const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
   if (!EMAIL.test(email) || !isAllowedEmail(email)) {
-    return Response.json({ error: DRF_SIGNIN_MESSAGE }, { status: 403 });
+    return Response.json({ error: SIGNIN_MESSAGE }, { status: 403 });
   }
   if (!authSecret() || !magicLinkConfigured()) {
     logMissingAuthEnv();

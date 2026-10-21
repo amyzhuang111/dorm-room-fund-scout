@@ -1,20 +1,13 @@
-// Who may open Pipeline and Shortlist. Public pages never call this.
-// @dormroomfund.com is always allowed. ALLOWED_EMAILS adds more addresses.
-// When that variable is unset, the two owner addresses below still work.
+// Optional sign-in. The generic workspace does not gate any route.
+// ALLOWED_EMAILS can still restrict the optional sign-in form.
+// When that variable is unset, nobody is on the allowlist.
 
-export const DRF_SIGNIN_MESSAGE =
-  "Pipeline and Shortlist are for Dorm Room Fund members, sign in with your DRF email";
+export const SIGNIN_MESSAGE =
+  "Campus Scout is open without an account. Sign-in is optional.";
 
-export const SEEDED_ALLOWED_EMAILS = ["zhuanga@engineering.upenn.edu", "amyzhuang880@gmail.com"] as const;
+export const SEEDED_ALLOWED_EMAILS = [] as const;
 
-const PROTECTED_PREFIXES = [
-  "/pipeline",
-  "/shortlist",
-  "/startup/pipeline",
-  "/startup/shortlist",
-  "/founder/shortlist",
-  "/api/user-pipeline",
-];
+const PROTECTED_PREFIXES: string[] = [];
 
 export function authSecret(): string | null {
   const value = process.env.AUTH_SECRET?.trim() || process.env.NEXTAUTH_SECRET?.trim();
@@ -48,8 +41,6 @@ function allowlist(): Set<string> {
 export function isAllowedEmail(email: string | null | undefined): boolean {
   const value = normalizedEmail(email);
   if (!value) return false;
-  const domain = value.slice(value.lastIndexOf("@") + 1);
-  if (domain === "dormroomfund.com") return true;
   return allowlist().has(value);
 }
 

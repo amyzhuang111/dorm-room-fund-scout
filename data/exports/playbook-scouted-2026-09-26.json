@@ -1,6 +1,6 @@
 {
  "generated_at": "2026-09-25T20:22:58-04:00",
- "schema_note": "Fields mirror amyzhuang111/dorm-room-fund-scout lib/db/schema.sql (projects, people, affiliations, person_project_roles, claims). Second pass. signal_tier (S/A/B/C/D) per playbook tier rules, null where no rule applies. kind=hackathon_project marks Devpost projects (not confirmed companies). See scouted2_summary.md.",
+ "schema_note": "Fields mirror campus-scout lib/db/schema.sql (projects, people, affiliations, person_project_roles, claims). Second pass. signal_tier (S/A/B/C/D) per playbook tier rules, null where no rule applies. kind=hackathon_project marks Devpost projects (not confirmed companies). See scouted2_summary.md.",
  "companies": [
   {
    "name": "Haru",
@@ -2705,7 +2705,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -2743,7 +2743,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -2781,7 +2781,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -2819,7 +2819,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -2857,7 +2857,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -2895,7 +2895,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -2933,7 +2933,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -2971,7 +2971,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3009,7 +3009,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3047,7 +3047,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3085,7 +3085,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3123,7 +3123,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3161,7 +3161,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3199,7 +3199,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3237,7 +3237,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3275,7 +3275,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3313,7 +3313,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3351,7 +3351,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3389,7 +3389,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3427,7 +3427,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3465,7 +3465,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3503,7 +3503,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",
@@ -3541,7 +3541,7 @@
     }
    ],
    "flags": [
-    "low_drf_relevance"
+    "low_relevance"
    ],
    "signal_tier": "D",
    "signal_tier_basis": "faculty/licensing spinout — low founder-age relevance; no student founder evidence",

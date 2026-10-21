@@ -1,6 +1,6 @@
 // Detail payload for a node on the network map. Every link is an id already
 // in the map, or a stored profile URL. Investor names come from company_facts
-// or a confirmed DRF portfolio match.
+// or a sourced investor fact.
 
 import { getDb } from "../db/client";
 import { CAMPUSES } from "./campuses";
@@ -11,8 +11,6 @@ import { directoryLabel, hotspotGroupByMapId, hotspotGroups, personIdsForPlace, 
 import { bestCard, hotspotHref, samePlace, SECTION_SHORT, tierBandLabel } from "./hotspot-model";
 import { bestPersonLink, linkedinAction, readLinkedInCandidate, type LinkedInAction, type PersonLinkTarget } from "./person-link";
 import { assembleProfileLinks, type ProfileIconLink } from "./profile-links";
-import { presenceForUniversity } from "./drf-presence";
-
 export interface FocusLink {
   id: string;
   name: string;
@@ -39,8 +37,6 @@ export interface NetworkFocus {
   hotspotHref?: string | null;
   hotspotLabel?: string | null;
 }
-
-const DRF_ID = "inv_dorm_room_fund";
 
 function roleLabel(role: string | null): string | null {
   if (!role) return null;
@@ -367,17 +363,6 @@ function campusFocus(db: ReturnType<typeof getDb>, id: string): NetworkFocus | n
     )
     .all(id) as { id: string; name: string }[];
   const short = CAMPUSES.find((campus) => campus.id === id)?.shortLabel ?? uni.name;
-  const presence = presenceForUniversity(id);
-  const facts: NetworkFocus["facts"] = [];
-  if (presence) {
-    facts.push({
-      label: "DRF status",
-      value: presence.status,
-      sourceUrl: presence.evidenceLinks[0] ?? null,
-      excerpt: presence.evidenceLinks[0] ? "DRF campus presence" : null,
-    });
-    if (presence.namedPartners) facts.push({ label: "Named partners", value: presence.namedPartners, sourceUrl: null, excerpt: null });
-  }
   return {
     id,
     kind: "campus",
@@ -389,7 +374,7 @@ function campusFocus(db: ReturnType<typeof getDb>, id: string): NetworkFocus | n
     link: null,
     linkedin: null,
     profileLinks: [],
-    facts,
+    facts: [],
     links: [
       { heading: "Programs", items: programs.map((item) => ({ id: item.id, name: item.name, role: null, round: null, sourceUrl: null })) },
       { heading: "Startups", items: startups.map((item) => ({ id: item.id, name: item.name, role: null, round: null, sourceUrl: null })) },
@@ -507,44 +492,6 @@ function relatedStartups(placeKey: string): FocusLink[] {
 }
 
 function investorFocus(db: ReturnType<typeof getDb>, id: string): NetworkFocus | null {
-  if (id === DRF_ID) {
-    const rows = db
-      .prepare(
-        `SELECT p.id, p.name, m.matched_name, m.source_url FROM portfolio_memberships m
-         JOIN projects p ON p.id = m.project_id
-         WHERE m.match_status = 'confirmed' AND p.kind = 'company' AND p.is_investable_candidate = 1
-         ORDER BY p.name`
-      )
-      .all() as { id: string; name: string; matched_name: string; source_url: string }[];
-    const directory = directoryLink(id, "Dorm Room Fund");
-    return {
-      id,
-      kind: "investor",
-      name: "Dorm Room Fund",
-      subtitle: "Confirmed matches from the public portfolio directory",
-      href: "https://www.dormroomfund.com/portfolio",
-      hrefLabel: "Portfolio directory",
-      website: null,
-      link: null,
-      linkedin: null,
-      profileLinks: [],
-      facts: [],
-      hotspotHref: directory?.href ?? null,
-      hotspotLabel: directory ? "Open hotspot" : null,
-      links: [
-        {
-          heading: "Startups",
-          items: rows.map((row) => ({
-            id: row.id,
-            name: row.name,
-            role: null,
-            round: null,
-            sourceUrl: "https://www.dormroomfund.com/portfolio",
-          })),
-        },
-      ],
-    };
-  }
   const names = db.prepare(`SELECT DISTINCT value_text FROM company_facts WHERE fact_key = 'investor'`).all() as { value_text: string }[];
   const name = names.map((row) => row.value_text.replace(/\s+/g, " ").trim()).find((value) => investorId(value) === id);
   if (!name) return null;

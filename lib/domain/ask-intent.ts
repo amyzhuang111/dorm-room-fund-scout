@@ -462,7 +462,7 @@ function isPriced(band: string): boolean {
 function isAccelerator(investor: FundingInvestorView): boolean {
   const kind = (investor.kind ?? "").toLowerCase();
   if (kind === "accelerator") return true;
-  return /\b(y combinator|\byc\b|dorm room fund|\bdrf\b|techstars)\b/i.test(investor.name);
+  return /\b(y combinator|\byc\b|techstars)\b/i.test(investor.name);
 }
 
 function isGrantInvestor(investor: FundingInvestorView): boolean {

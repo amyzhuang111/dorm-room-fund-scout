@@ -20,8 +20,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Campus Scout — DRF sourcing",
-  description: "An independent Founder Scout / Startup Scout sourcing workspace for Dorm Room Fund-shaped pre-seed prospects, by university.",
+  title: "Campus Scout",
+  description: "A Founder Scout and Startup Scout workspace for pre-seed student prospects, by university.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -31,8 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
-        {/* Satoshi is dormroomfund.com's actual brand font (var(--font-family--heading/body) in
-            their stylesheet); loaded from Fontshare, the font's own free CDN. */}
+        {/* Satoshi, loaded from Fontshare. */}
         <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="" />
         <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" media="print" />
         <script dangerouslySetInnerHTML={{ __html: `document.querySelector('link[href*="fontshare"]')?.setAttribute('media','all')` }} />

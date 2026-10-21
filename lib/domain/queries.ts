@@ -16,7 +16,6 @@ import { relatedHotspotsForPerson, relatedHotspotsForProject } from "./hotspots"
 import { assembleProfileLinks, type OtherSourceLink, type ProfileIconLink } from "./profile-links";
 import { assembleCompanyProfile, type CompanyFactRecord, type CompanyProfile } from "./company-profile";
 import { matchCandidate } from "./candidate-filter";
-import { presenceByUniversity, type DrfCampusPresence } from "./drf-presence";
 import { bestPrecollegeSignals, isPrecollegeSignalType, type PrecollegeSignalView } from "./precollege";
 import { bestProgramSignals, isProgramMatchStatus, isProgramSignalType, type ProgramSignalView } from "./program-signals";
 import { newsForProject } from "./news";
@@ -58,8 +57,6 @@ export interface UniversitySummary {
   sourcesConfigured: number;
   lastCheckedAt: string | null;
   coverage: CoverageState;
-  /** DRF partner presence for this campus, when the school maps to one row. */
-  drfPresence: DrfCampusPresence | null;
   /** PitchBook 2026 rankings when this campus matched a list. */
   pitchbook: PitchbookCampus | null;
   /** Scout hit rate for tracked founders at this campus. Null when nobody is tracked. */
@@ -149,7 +146,6 @@ function buildUniversities(): UniversitySummary[] {
     personCounts.set(row.id, row.c);
   }
   const founderCounts = founderCountsByUniversity();
-  const presence = presenceByUniversity();
   const pitchbook = pitchbookByCampus();
   const hitRates = hitRateByCampus();
 
@@ -182,7 +178,6 @@ function buildUniversities(): UniversitySummary[] {
       sourcesConfigured: sourceRow.c,
       lastCheckedAt: sourceRow.last,
       coverage,
-      drfPresence: presence.get(u.id) ?? null,
       pitchbook: pitchbook.get(u.id) ?? null,
       hitRate: hitRates.get(u.id) ?? null,
     };

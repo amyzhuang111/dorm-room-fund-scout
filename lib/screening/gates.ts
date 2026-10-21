@@ -50,7 +50,7 @@ export function evaluateAffiliationGate(facts: ProjectFacts): GateOutcome {
     return {
       gate: "affiliation",
       result: "pass",
-      rationale: `Dated evidence supports ${facts.affiliationStatus.replace("_", " ")}, within DRF's public ${SCREENING_CONFIG.studentRecencyYears.value}-year guidance.`,
+      rationale: `Dated evidence supports ${facts.affiliationStatus.replace("_", " ")}, within the brief's ${SCREENING_CONFIG.studentRecencyYears.value}-year guidance.`,
     };
   }
   if (facts.affiliationStatus === "older_alumni") {
@@ -58,7 +58,7 @@ export function evaluateAffiliationGate(facts: ProjectFacts): GateOutcome {
       gate: "affiliation",
       result: "needs_verification",
       rationale:
-        "Affiliation evidence points to alumni status beyond DRF's typical recency window. DRF-community exceptions exist — confirm before excluding.",
+        "Affiliation evidence points to alumni status beyond the brief's typical recency window. Confirm before excluding.",
     };
   }
   return {
@@ -110,7 +110,7 @@ export function evaluatePriorFundingGate(facts: ProjectFacts): GateOutcome {
     return {
       gate: "prior_funding",
       result: "outside_current_brief",
-      rationale: `Known prior funding ($${total.toLocaleString()}) is at or above the $${trigger.toLocaleString()} review trigger (internal sourcing guidance, not a stated DRF policy).`,
+      rationale: `Known prior funding ($${total.toLocaleString()}) is at or above the $${trigger.toLocaleString()} review trigger (internal sourcing guidance, not a published hard cap).`,
     };
   }
   return {
@@ -151,10 +151,10 @@ export function evaluatePortfolioRelationshipGate(facts: ProjectFacts): GateOutc
     return {
       gate: "portfolio_relationship",
       result: "outside_current_brief",
-      rationale: "Matched to an existing DRF portfolio entry by name/alias/domain — kept as a reference, excluded from new targets.",
+      rationale: "Matched to an existing portfolio entry by name, alias, or domain. Kept as a reference and left out of new targets.",
     };
   }
-  return { gate: "portfolio_relationship", result: "pass", rationale: "No confirmed match to the existing DRF portfolio directory." };
+  return { gate: "portfolio_relationship", result: "pass", rationale: "No confirmed match to a portfolio directory." };
 }
 
 export function evaluateFundingAvailabilityGate(facts: ProjectFacts): GateOutcome {

@@ -817,7 +817,6 @@ function userCampusSummary(campus: UserCampus, startups: UserStartup[]): Univers
     sourcesConfigured: 0,
     lastCheckedAt: null,
     coverage: "not_scanned",
-    drfPresence: null,
     pitchbook: null,
     hitRate: null,
   };

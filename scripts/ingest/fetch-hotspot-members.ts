@@ -11,7 +11,6 @@ import { getDb, newId, nowIso } from "../../lib/db/client";
 import { recomputePersonEnrollment } from "../../lib/domain/enrollment-store";
 import {
   parseCenterCityFounders,
-  parseDrfCampusPartners,
   parseFreeVenturesTeam,
   parseLaunchpadAbout,
   parseSkyDeckTeam,
@@ -175,9 +174,8 @@ async function main() {
   const ucUrl = "https://www.uclaunch.com/team";
   const ccvUrl = "https://www.centercityventures.com/team";
   const ccvHome = "https://www.centercityventures.com/";
-  const drfUrl = "https://www.dormroomfund.com/our-team";
 
-  const [vipHtml, vipSfHtml, fvHtml, launchHtml, skyHtml, ucHtml, ccvHtml, ccvHomeHtml, drfHtml] = await Promise.all([
+  const [vipHtml, vipSfHtml, fvHtml, launchHtml, skyHtml, ucHtml, ccvHtml, ccvHomeHtml] = await Promise.all([
     fetchText(vipUrl),
     fetchText(vipSfUrl),
     fetchText(fvPage),
@@ -186,7 +184,6 @@ async function main() {
     fetchText(ucUrl),
     fetchText(ccvUrl),
     fetchText(ccvHome),
-    fetchText(drfUrl),
   ]);
 
   const scriptSrc = cheerio.load(fvHtml)("script[src*='static/js/main']").attr("src");
@@ -199,17 +196,15 @@ async function main() {
   const sky = parseSkyDeckTeam(skyHtml);
   const uc = parseUcLaunchTeam(ucHtml);
   const ccv = parseCenterCityFounders(ccvHtml);
-  const drf = parseDrfCampusPartners(drfHtml);
   if (!/Wharton MBA Class of 2026/.test(ccvHomeHtml)) throw new Error("Center City Ventures homepage no longer states the Wharton MBA Class of 2026.");
 
-  console.log(JSON.stringify({ vip: vip.length, freeVentures: fv.length, launchpad: launch.length, skydeck: sky.length, ucLaunch: uc.length, centerCity: ccv.length, drf: drf.length }));
+  console.log(JSON.stringify({ vip: vip.length, freeVentures: fv.length, launchpad: launch.length, skydeck: sky.length, ucLaunch: uc.length, centerCity: ccv.length }));
   if (vip.length < 200) throw new Error("VIP-X pages parsed fewer named people than the public cohorts show.");
   if (fv.length < 10) throw new Error("Free Ventures team script parsed fewer people than the team page shows.");
   if (launch.length < 20) throw new Error("Launchpad about page parsed fewer F26 teammates than the page shows.");
   if (sky.length < 10) throw new Error("SkyDeck team page parsed fewer staff than the page shows.");
   if (uc.length < 5) throw new Error("UC LAUNCH team page parsed fewer officers than the page shows.");
   if (ccv.length < 2) throw new Error("Center City Ventures founding team was not on the team page.");
-  if (drf.length < 2) throw new Error("Dorm Room Fund team page did not name M&T or M.E.T. partners.");
 
   const batches: { sourceId: string; name: string; url: string; campuses: string[]; members: CampusMember[] }[] = [
     { sourceId: "src_hotspot_vipx", name: "VIP-X cohorts", url: vipUrl, campuses: ["univ_penn"], members: vip },
@@ -284,23 +279,6 @@ async function main() {
         sourceUrl: ccvUrl,
         linkedin: null,
         excerpt: `Center City Ventures team page lists ${member.line}. The fund homepage says it is funded and operated by the Wharton MBA Class of 2026.`,
-      })),
-    },
-    {
-      sourceId: "src_hotspot_drf_team",
-      name: "Student investment partner roster",
-      url: drfUrl,
-      campuses: ["univ_penn", "univ_berkeley"],
-      members: drf.map((partner) => ({
-        name: partner.name,
-        role: "Dorm Room Fund student investment partner",
-        universityId: partner.universityId,
-        campusLabel: partner.campusLabel,
-        org: "Dorm Room Fund",
-        tier: "B",
-        sourceUrl: drfUrl,
-        linkedin: null,
-        excerpt: `Dorm Room Fund student investment partners page lists ${partner.name} under ${partner.region.replace(/&amp;/g, "&")}: ${partner.school}.`,
       })),
     },
   ];

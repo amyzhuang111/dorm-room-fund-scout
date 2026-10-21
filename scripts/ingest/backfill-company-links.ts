@@ -49,7 +49,7 @@ async function main() {
 
   db.prepare(
     `INSERT INTO sources (id, name, family, url, campuses_json, priority, ingestion_mode, status, last_attempt_at, last_success_at)
-     VALUES ('src_public_link_backfill', 'Public pages already stored on claims', 'directory', 'https://github.com/amyzhuang111/dorm-room-fund-scout', '[]', 3, 'manual', 'available', ?, ?)
+     VALUES ('src_public_link_backfill', 'Public pages already stored on claims', 'directory', 'https://github.com/campus-scout/campus-scout', '[]', 3, 'manual', 'available', ?, ?)
      ON CONFLICT(id) DO UPDATE SET last_success_at = excluded.last_success_at`
   ).run(now, now);
 

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { signInWithGoogle } from "@/lib/auth/actions";
-import { DRF_SIGNIN_MESSAGE, safeCallbackUrl } from "@/lib/auth/access";
+import { SIGNIN_MESSAGE, safeCallbackUrl } from "@/lib/auth/access";
 import { currentMember } from "@/lib/auth/guard";
 import { logMissingAuthEnv, SIGNIN_UNCONFIGURED_MESSAGE } from "@/lib/auth/required-env";
 import { authMethods } from "@/lib/auth/send-email";
@@ -22,9 +22,9 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
   return (
     <div className="mx-auto w-full max-w-md px-4 py-16 text-black">
       <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
-      <p className="mt-4 rounded-md border border-black bg-white p-4 text-base font-medium leading-snug">{DRF_SIGNIN_MESSAGE}</p>
+      <p className="mt-4 rounded-md border border-black bg-white p-4 text-base font-medium leading-snug">{SIGNIN_MESSAGE}</p>
       <p className="mt-3 text-sm text-black">
-        Discover, Alumni, News, Hotspots, Verification, Signals, Sources, the globe, the network map, and Ask AI stay open without an account.
+        Discover, News, Hotspots, Verification, Signals, Sources, the globe, the network map, and Ask stay open without an account.
       </p>
       {denied && <p className="mt-4 text-sm font-semibold text-black">That email is not on the member list.</p>}
       {linkError && <p className="mt-4 text-sm font-semibold text-black">That sign-in link is invalid or has expired. Request a new one.</p>}

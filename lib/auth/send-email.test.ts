@@ -34,7 +34,7 @@ async function main() {
   assert.match(content.text, /https:\/\/scout\.example\/signin\/verify\?token=abc/);
 
   blank();
-  const unconfigured = await sendSignInEmail("member@dormroomfund.com", "https://scout.example/in");
+  const unconfigured = await sendSignInEmail("scout@example.com", "https://scout.example/in");
   assert.deepEqual(unconfigured, { ok: false, error: SIGNIN_UNCONFIGURED_MESSAGE });
 
   process.env.RESEND_API_KEY = "re_test_key_value";
@@ -50,7 +50,7 @@ async function main() {
     return new Response(JSON.stringify({ id: "email_123" }), { status: 200 });
   };
 
-  const sent = await sendSignInEmail("member@dormroomfund.com", "https://scout.example/signin/verify?token=abc");
+  const sent = await sendSignInEmail("scout@example.com", "https://scout.example/signin/verify?token=abc");
   assert.deepEqual(sent, { ok: true });
   assert.equal(calls.length, 1);
   assert.equal(calls[0]?.url, "https://api.resend.com/emails");
@@ -58,7 +58,7 @@ async function main() {
   assert.equal(headers.get("authorization"), "Bearer re_test_key_value");
   const body = JSON.parse(String(calls[0]?.init?.body)) as { from: string; to: string[]; subject: string; text: string };
   assert.equal(body.from, "Campus Scout <mail@example.com>");
-  assert.deepEqual(body.to, ["member@dormroomfund.com"]);
+  assert.deepEqual(body.to, ["scout@example.com"]);
   assertNeutral(body.from);
   assertNeutral(body.subject);
   assertNeutral(body.text);
@@ -66,19 +66,19 @@ async function main() {
 
   delete process.env.EMAIL_FROM;
   calls.length = 0;
-  await sendSignInEmail("member@dormroomfund.com", "https://scout.example/in");
+  await sendSignInEmail("scout@example.com", "https://scout.example/in");
   const fallbackFrom = JSON.parse(String(calls[0]?.init?.body)) as { from: string };
   assert.equal(fallbackFrom.from, "Campus Scout <onboarding@resend.dev>");
 
   globalThis.fetch = async () => new Response(JSON.stringify({ message: "invalid key re_test_key_value" }), { status: 403 });
-  const rejected = await sendSignInEmail("member@dormroomfund.com", "https://scout.example/in");
+  const rejected = await sendSignInEmail("scout@example.com", "https://scout.example/in");
   assert.deepEqual(rejected, { ok: false, error: SIGNIN_EMAIL_FAILED_MESSAGE });
   assert.equal(rejected.ok === false && rejected.error.includes("re_test_key_value"), false);
 
   globalThis.fetch = async () => {
     throw new Error("network down re_test_key_value");
   };
-  const thrown = await sendSignInEmail("member@dormroomfund.com", "https://scout.example/in");
+  const thrown = await sendSignInEmail("scout@example.com", "https://scout.example/in");
   assert.deepEqual(thrown, { ok: false, error: SIGNIN_EMAIL_FAILED_MESSAGE });
 
   process.env.SMTP_HOST = "127.0.0.1";
@@ -91,7 +91,7 @@ async function main() {
     calls.push({ url, init });
     return new Response(JSON.stringify({ id: "email_456" }), { status: 200 });
   };
-  const preferred = await sendSignInEmail("member@dormroomfund.com", "https://scout.example/in");
+  const preferred = await sendSignInEmail("scout@example.com", "https://scout.example/in");
   assert.deepEqual(preferred, { ok: true });
   assert.equal(calls.length, 1);
   assert.equal(calls[0]?.url, "https://api.resend.com/emails");
@@ -107,7 +107,7 @@ async function main() {
     throw new Error("resend should not be called");
   };
   assert.equal(signInFromAddress(), "scout@localhost");
-  const smtp = await sendSignInEmail("member@dormroomfund.com", "https://scout.example/in");
+  const smtp = await sendSignInEmail("scout@example.com", "https://scout.example/in");
   assert.equal(fetched, false);
   assert.equal(smtp.ok, false);
   if (!smtp.ok) {
