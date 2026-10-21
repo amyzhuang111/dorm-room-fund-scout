@@ -41,14 +41,14 @@ const DAY_THEME = {
 };
 
 const NIGHT_THEME = {
-  land: "#1a2556",
-  landAlt: "#152048",
+  land: "#3b4a8a",
+  landAlt: "#3b4a8a",
   ocean: "#0b0e17",
-  boundary: "#1f2536",
+  boundary: "#6d7cb8",
   labelText: "#eceef4",
   labelHalo: "#0b0e17",
   sky: "#0b0e17",
-  horizon: "#2f4fd8",
+  horizon: "#9eb4ff",
   fog: "#0b0e17",
   dot: "#7c8cf0",
   arc: "#7c8cf0",
@@ -208,12 +208,12 @@ export const GlobeView = memo(function GlobeView({
           container: containerRef.current,
           style: STYLE_URL,
           center: hero
-            ? [window.matchMedia("(max-width: 767px)").matches ? Math.max(-180, Math.min(180, (-new Date().getTimezoneOffset() / 60) * 15)) : -40, window.matchMedia("(max-width: 767px)").matches ? 20 : 28]
+            ? [window.matchMedia("(max-width: 767px)").matches ? Math.max(-180, Math.min(180, (-new Date().getTimezoneOffset() / 60) * 15)) : -98, window.matchMedia("(max-width: 767px)").matches ? 20 : 39]
             : [-98, 39],
           zoom: hero ? 1.6 : 3.35,
           minZoom: 1.5,
           maxZoom: 8,
-          attributionControl: { compact: true },
+          attributionControl: { compact: !hero },
         });
       } catch {
         // Headless or blocked-GPU browsers throw before any canvas exists.
@@ -275,7 +275,7 @@ export const GlobeView = memo(function GlobeView({
               "sky-horizon-blend": 0.45,
               "horizon-fog-blend": 0.72,
               "fog-ground-blend": 0.35,
-              "atmosphere-blend": hero ? 0.35 : ["interpolate", ["linear"], ["zoom"], 0, 1, 4, 0.55, 8, 0],
+              "atmosphere-blend": hero ? 0.85 : ["interpolate", ["linear"], ["zoom"], 0, 1, 4, 0.55, 8, 0],
             }),
           "sky/atmosphere"
         );
@@ -292,7 +292,7 @@ export const GlobeView = memo(function GlobeView({
             // was the actual cause of "the globe is just a white/purple circle," not the base
             // color choice. Verified in an isolated MapLibre harness before landing this.
             trySet(() => map.setPaintProperty(l.id, "fill-color", MAP_THEME.landAlt), `landAlt:${l.id}`);
-            trySet(() => map.setPaintProperty(l.id, "fill-opacity", 0.25), `landAlt-opacity:${l.id}`);
+            trySet(() => map.setPaintProperty(l.id, "fill-opacity", hero ? 0 : 0.25), `landAlt-opacity:${l.id}`);
           }
           if (l.type === "line" && /boundary/.test(l.id)) {
             trySet(() => map.setPaintProperty(l.id, "line-color", MAP_THEME.boundary), `boundary:${l.id}`);
@@ -329,16 +329,16 @@ export const GlobeView = memo(function GlobeView({
           }
 
           const unclustered = ["!", ["has", "point_count"]];
-          if (!hero && !map.getLayer("campus-glow")) {
+          if (!map.getLayer("campus-glow")) {
             map.addLayer({
               id: "campus-glow",
               type: "circle",
               source: "campuses",
               filter: unclustered,
               paint: {
-                "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 16, 20, 28, 200, 42],
-                "circle-color": MAP_THEME.dot,
-                "circle-opacity": 0.38,
+                "circle-radius": hero ? 12 : ["interpolate", ["linear"], ["get", "count"], 0, 16, 20, 28, 200, 42],
+                "circle-color": hero ? "#E8823A" : MAP_THEME.dot,
+                "circle-opacity": hero ? 0.55 : 0.38,
                 "circle-blur": 1,
               },
             });
@@ -352,9 +352,9 @@ export const GlobeView = memo(function GlobeView({
               filter: unclustered,
               paint: {
                 "circle-radius": hero
-                  ? ["min", 22, ["+", 4, ["*", 2.2, ["sqrt", ["coalesce", ["get", "founders"], 0]]]]]
+                  ? ["interpolate", ["linear"], ["min", ["sqrt", ["coalesce", ["get", "founders"], 1]], 10], 1, 6, 10, 10]
                   : ["interpolate", ["linear"], ["get", "count"], 0, 6, 20, 9, 200, 14],
-                "circle-color": hero ? ["case", ["==", ["get", "recent"], 1], "#E8823A", MAP_THEME.dot] : MAP_THEME.dot,
+                "circle-color": hero ? "#E8823A" : MAP_THEME.dot,
                 "circle-stroke-width": 1,
                 "circle-stroke-color": hero ? "#0B0E17" : "#fbfbfc",
                 "circle-opacity": hero ? 0.85 : 0.95,
@@ -368,7 +368,7 @@ export const GlobeView = memo(function GlobeView({
               source: "campuses",
               filter: ["==", ["get", "recent"], 1],
               paint: {
-                "circle-radius": ["min", 22, ["+", 4, ["*", 2.2, ["sqrt", ["coalesce", ["get", "founders"], 0]]]]],
+                "circle-radius": ["interpolate", ["linear"], ["sqrt", ["coalesce", ["get", "founders"], 0]], 0, 8, 10, 12],
                 "circle-color": "#E8823A",
                 "circle-opacity": 0.35,
                 "circle-stroke-width": prefersReducedMotion() ? 2 : 0,
@@ -532,7 +532,7 @@ export const GlobeView = memo(function GlobeView({
         const tick = (now: number) => {
           if (cancelled) return;
           raf = requestAnimationFrame(tick);
-          if (interacting || spinPaused.current || prefersReducedMotion()) {
+          if (interacting || spinPaused.current || prefersReducedMotion() || navigator.webdriver) {
             last = now;
             return;
           }
@@ -545,7 +545,7 @@ export const GlobeView = memo(function GlobeView({
             const phase = (now % 2400) / 2400;
             const scale = 1 + 1.6 * phase;
             try {
-              map.setPaintProperty("campus-pulse", "circle-radius", ["*", scale, ["min", 22, ["+", 4, ["*", 2.2, ["sqrt", ["coalesce", ["get", "founders"], 0]]]]]]);
+              map.setPaintProperty("campus-pulse", "circle-radius", ["*", scale, ["interpolate", ["linear"], ["sqrt", ["coalesce", ["get", "founders"], 0]], 0, 8, 10, 12]]);
               map.setPaintProperty("campus-pulse", "circle-opacity", 0.5 * (1 - phase));
             } catch {
               // The pulse layer can still be attaching on the first frames.
@@ -779,7 +779,7 @@ export const GlobeView = memo(function GlobeView({
           ))}
         </div>
       )}
-      <div className={hero ? "relative h-full min-h-[340px] w-full overflow-hidden" : locked ? "relative h-[280px] w-full overflow-hidden" : "relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-line sm:min-h-[520px]"} style={{ background: MAP_THEME.sky }}>
+      <div className={hero ? "hero-map relative h-full min-h-[340px] w-full overflow-hidden" : locked ? "relative h-[280px] w-full overflow-hidden" : "relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-line sm:min-h-[520px]"} style={{ background: MAP_THEME.sky }}>
         <div ref={containerRef} className="h-full w-full" />
         {status === "ok" && !hero && !locked && (
           <div className="segmented absolute right-3 top-3 z-10" role="group" aria-label="Map geography">
@@ -909,7 +909,7 @@ export const GlobeView = memo(function GlobeView({
         )}
 
         {status === "ok" && !locked && (
-          <div className={`absolute z-10 flex flex-col gap-1 ${hero ? "bottom-6 right-8" : "bottom-3 right-3"}`}>
+          <div className={`absolute z-10 flex flex-col gap-1 ${hero ? "bottom-6 right-6" : "bottom-3 right-3"}`}>
             <button
               type="button"
               onClick={() => mapRef.current?.zoomIn()}

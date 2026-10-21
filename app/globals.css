@@ -375,6 +375,31 @@ a, button {
   .ask-field { display: none; }
 }
 
+.hero-map .maplibregl-ctrl-bottom-right {
+  right: 72px;
+  bottom: 24px;
+  margin: 0;
+}
+.hero-map .maplibregl-ctrl-attrib,
+.hero-map .maplibregl-ctrl-attrib.maplibregl-compact,
+.hero-map .maplibregl-ctrl-attrib.maplibregl-compact-show {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  font-size: 10px !important;
+  line-height: 14px !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+.hero-map .maplibregl-ctrl-attrib a,
+.hero-map .maplibregl-ctrl-attrib-inner {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-size: 10px !important;
+}
+.hero-map .maplibregl-ctrl-attrib-button {
+  display: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation: none !important;

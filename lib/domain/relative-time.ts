@@ -1,3 +1,10 @@
+export function absoluteDate(iso: string | null): string {
+  if (!iso) return "no date stored";
+  const then = Date.parse(iso.includes("T") ? iso : iso.replace(" ", "T") + "Z");
+  if (Number.isNaN(then)) return iso.slice(0, 10);
+  return new Date(then).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+}
+
 export function relativeTime(iso: string | null, now = Date.now()): string {
   if (!iso) return "no timestamp";
   const then = Date.parse(iso.includes("T") ? iso : iso.replace(" ", "T") + "Z");

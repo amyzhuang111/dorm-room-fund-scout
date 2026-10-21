@@ -10,6 +10,7 @@ export interface WeekItem {
   campus: string;
   campusSlug: string | null;
   type: string;
+  event: string;
   at: string | null;
 }
 
@@ -20,6 +21,9 @@ export interface HeroStats {
   monitored: number;
   signalsWeek: number;
   updatedAt: string | null;
+  /** Newest stored signal or news time. The home feed uses this when the week is empty. */
+  lastSignalAt: string | null;
+  fresh: boolean;
   week: WeekItem[];
   recentCampusIds: string[];
   universities: (UniversitySummary & { slug: string })[];
@@ -30,8 +34,9 @@ function latestTimestamp(): string | null {
   const stamps: string[] = [];
   for (const sql of [
     `SELECT MAX(created_at) as t FROM signals`,
-    `SELECT MAX(published_at) as t FROM news_mentions`,
-    `SELECT MAX(created_at) as t FROM news_mentions`,
+    `SELECT MAX(source_date) as t FROM signals`,
+    `SELECT MAX(published_at) as t FROM news_articles`,
+    `SELECT MAX(fetched_at) as t FROM news_articles`,
   ]) {
     try {
       const row = db.prepare(sql).get() as { t?: string | null } | undefined;
@@ -42,6 +47,62 @@ function latestTimestamp(): string | null {
   }
   stamps.sort();
   return stamps.at(-1) ?? null;
+}
+
+interface FeedRow {
+  id: string;
+  at: string | null;
+  type: string | null;
+  event: string | null;
+  campus: string | null;
+  campus_id: string | null;
+}
+
+function weekFeed(db: ReturnType<typeof getDb>): { items: WeekItem[]; articleCount: number; campusIds: string[] } {
+  let rows: FeedRow[] = [];
+  try {
+    rows = db.prepare(
+      `SELECT a.id as id,
+              a.published_at as at,
+              a.category as type,
+              COALESCE(p.name, a.headline) as event,
+              u.id as campus_id,
+              u.name as campus
+         FROM news_articles a
+         JOIN news_mentions m ON m.article_id = a.id
+         LEFT JOIN projects p ON p.id = m.project_id
+         JOIN affiliations af ON af.person_id = COALESCE(
+           m.person_id,
+           (SELECT ppr.person_id FROM person_project_roles ppr WHERE ppr.project_id = m.project_id LIMIT 1)
+         )
+         JOIN universities u ON u.id = af.university_id
+        WHERE a.published_at >= datetime('now', '-7 days')
+        ORDER BY a.published_at DESC`,
+    ).all() as FeedRow[];
+  } catch {
+    rows = [];
+  }
+  const seenArticles = new Set<string>();
+  const seenCampuses = new Set<string>();
+  const items: WeekItem[] = [];
+  const campusIds: string[] = [];
+  for (const row of rows) {
+    if (!seenArticles.has(row.id)) seenArticles.add(row.id);
+    if (!row.campus_id || seenCampuses.has(row.campus_id)) continue;
+    seenCampuses.add(row.campus_id);
+    campusIds.push(row.campus_id);
+    if (items.length >= 5) continue;
+    const label = shortCampusLabel(row.campus_id, row.campus ?? row.campus_id);
+    items.push({
+      id: row.id,
+      campus: label,
+      campusSlug: campusSlug(label),
+      type: row.type ?? "news",
+      event: row.event ?? row.type ?? "News",
+      at: row.at,
+    });
+  }
+  return { items, articleCount: seenArticles.size, campusIds: campusIds.slice(0, 8) };
 }
 
 export function loadHeroStats(): HeroStats {
@@ -55,59 +116,17 @@ export function loadHeroStats(): HeroStats {
   const tracked = universities.reduce((sum, university) => sum + university.companyCount, 0);
   const monitored = universities.filter((university) => university.sourcesConfigured > 0).length;
 
-  let signalsWeek = 0;
+  const feed = weekFeed(db);
+  let signalRowsThisWeek = 0;
   try {
     const row = db.prepare(`SELECT COUNT(*) as c FROM signals WHERE created_at >= datetime('now', '-7 days')`).get() as { c: number };
-    signalsWeek = row.c;
+    signalRowsThisWeek = row.c;
   } catch {
-    signalsWeek = 0;
+    signalRowsThisWeek = 0;
   }
-
-  let week: WeekItem[] = [];
-  try {
-    week = (
-      db.prepare(
-        `SELECT s.id, s.signal_type as type, s.created_at as at,
-                (SELECT u.name FROM affiliations a
-                   JOIN universities u ON u.id = a.university_id
-                   JOIN person_project_roles ppr ON ppr.person_id = a.person_id
-                  WHERE ppr.project_id = s.project_id LIMIT 1) as campus,
-                (SELECT u.id FROM affiliations a
-                   JOIN universities u ON u.id = a.university_id
-                   JOIN person_project_roles ppr ON ppr.person_id = a.person_id
-                  WHERE ppr.project_id = s.project_id LIMIT 1) as campus_id
-           FROM signals s
-          ORDER BY s.created_at DESC
-          LIMIT 5`
-      ).all() as { id: string; type: string; at: string | null; campus: string | null; campus_id: string | null }[]
-    ).map((row) => ({
-      id: row.id,
-      campus: row.campus ?? "Campus not on record",
-      campusSlug: row.campus_id ? campusSlug(shortCampusLabel(row.campus_id, row.campus ?? row.campus_id)) : null,
-      type: row.type,
-      at: row.at,
-    }));
-  } catch {
-    week = [];
-  }
-
-  let recentCampusIds: string[] = [];
-  try {
-    recentCampusIds = (
-      db.prepare(
-        `SELECT a.university_id as id, COUNT(DISTINCT s.id) as c
-           FROM signals s
-           JOIN person_project_roles ppr ON ppr.project_id = s.project_id
-           JOIN affiliations a ON a.person_id = ppr.person_id
-          WHERE s.created_at >= datetime('now', '-7 days') AND a.university_id IS NOT NULL
-          GROUP BY a.university_id
-          ORDER BY c DESC
-          LIMIT 8`
-      ).all() as { id: string }[]
-    ).map((row) => row.id);
-  } catch {
-    recentCampusIds = [];
-  }
+  const signalsWeek = feed.articleCount + signalRowsThisWeek;
+  const updatedAt = latestTimestamp();
+  const fresh = feed.items.length > 0;
 
   return {
     founders,
@@ -115,9 +134,11 @@ export function loadHeroStats(): HeroStats {
     tracked,
     monitored,
     signalsWeek,
-    updatedAt: latestTimestamp(),
-    week,
-    recentCampusIds,
+    updatedAt,
+    lastSignalAt: feed.items[0]?.at ?? updatedAt,
+    fresh,
+    week: feed.items,
+    recentCampusIds: feed.campusIds,
     universities,
   };
 }
