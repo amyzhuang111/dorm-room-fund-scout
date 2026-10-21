@@ -42,7 +42,7 @@ function pinMap(label: string, ids: string[]) {
 export function NetworkAnalysis({ data }: { data: NetworkAnalysis }) {
   return (
     <section className="bg-surface px-4 py-6 sm:px-6" aria-label="Network analysis">
-      <div className="mx-auto flex max-w-[1400px] flex-col gap-4">
+      <div className="mx-auto flex max-w-[1100px] flex-col gap-4 px-6">
         <Heatmap table={data.programs} />
         <Density table={data.density} />
         <PitchbookRankings table={data.pitchbook} />

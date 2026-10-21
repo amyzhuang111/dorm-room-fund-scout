@@ -21,9 +21,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
   return (
     <>
       {network ? <NetworkBoot /> : <GlobeBoot />}
-      {network ? null : <NewsStrip />}
       <HomeMap initial={sp} network={network} />
-      {network ? <NetworkAnalysis data={buildNetworkAnalysis()} /> : null}
+      {network ? <NetworkAnalysis data={buildNetworkAnalysis()} /> : <NewsStrip />}
     </>
   );
 }

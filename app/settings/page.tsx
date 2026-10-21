@@ -2,9 +2,10 @@ import { SCREENING_CONFIG } from "@/lib/screening/config";
 
 export default function SettingsPage() {
   return (
-    <div className="mx-auto max-w-2xl space-y-6 p-4 sm:p-6">
+    <div className="mx-auto max-w-[1100px] space-y-6 px-6 pb-16 pt-10">
       <div>
-        <h1 className="text-lg font-semibold text-foreground">Settings</h1>
+        <p className="page-eyebrow">Read only</p>
+        <h1 className="page-title">Settings</h1>
         <p className="mt-1 text-sm text-muted">
           v1 is single-user and locally runnable — these values are edited in code (<code className="font-mono text-xs">lib/screening/config.ts</code>,{" "}
           <code className="font-mono text-xs">lib/scoring/rubric.ts</code>) rather than through a settings UI yet. Shown here read-only so

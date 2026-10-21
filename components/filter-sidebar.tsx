@@ -82,7 +82,7 @@ export function FilterSidebar({
   // unresearched, per brief section 1, so there's nothing to list for them).
   return (
     <CollapsibleSidebar>
-    <aside className="w-full shrink-0 border-b border-border-c bg-surface p-3 sm:w-[232px] sm:border-b-0 sm:border-r sm:p-4">
+    <aside className="paper-card w-full shrink-0 self-start p-4 sm:w-[232px]">
       <div className="mb-3 flex items-baseline justify-between">
         <span className="ui-label">Universities</span>
         {current.university && (

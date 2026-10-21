@@ -17,17 +17,17 @@ function personTarget(node: NetworkNode | undefined): PersonLinkTarget | null {
 }
 
 const COLOR: Record<NetworkNode["type"], string> = {
-  university: "#9378ee",
-  community: "#6f5ab2",
-  person: "#5c516e",
-  project: "#5840a0",
+  university: "#7a5c78",
+  community: "#b8893a",
+  person: "#6a7278",
+  project: "#a65d4e",
 };
 
 const CAMPUS_COLOR: Record<NetworkNode["type"], string> = {
-  university: "#1a1228",
-  community: "#3d2a78",
-  person: "#241c33",
-  project: "#4c3294",
+  university: "#7a5c78",
+  community: "#b8893a",
+  person: "#6a7278",
+  project: "#6e7f62",
 };
 
 function nodeRadius(type: NetworkNode["type"], degree: number): number {
@@ -196,7 +196,7 @@ function OverviewNetworkCanvas({
                   <circle cx={n.x} cy={n.y} r={r} fill={COLOR.person} />
                 )}
                 {(n.type !== "person" || active === n.id || matchIds?.has(n.id)) && (
-                  <text x={n.x} y={n.y + r + 12} textAnchor="middle" fontSize="11" fill="#1c1525" style={{ fontFamily: "Satoshi, Arial, sans-serif" }}>
+                  <text x={n.x} y={n.y + r + 12} textAnchor="middle" fontSize="11" fill="#1c1525" style={{ fontFamily: "Inter, Arial, sans-serif" }}>
                     {n.label.length > 22 ? n.label.slice(0, 21) + "…" : n.label}
                   </text>
                 )}
@@ -245,6 +245,7 @@ function OverviewNetworkCanvas({
             );
           })}
         </svg>
+        <p className="viz-legend">Color marks the kind of record. A square outline is user-added.</p>
         <div className="mt-2 flex flex-wrap gap-3 text-[11px] text-muted">
           {graph.legend.map((l) => (
             <span key={`${l.type}-${l.label}`} className="flex items-center gap-1.5">
@@ -644,7 +645,7 @@ function CampusNetworkCanvas({
                     stroke="#ffffff"
                     strokeWidth={zone ? 5 : 3}
                     paintOrder="stroke"
-                    style={{ fontFamily: "Satoshi, Arial, sans-serif" }}
+                    style={{ fontFamily: "Inter, Arial, sans-serif" }}
                   >
                     {guide.text}
                   </text>

@@ -117,16 +117,16 @@ export const CandidateTable = memo(function CandidateTable({
         ))}
         {windowed.padBottom > 0 && <li aria-hidden="true" style={{ height: windowed.padBottom }} />}
       </ul>
-      <div className="hidden overflow-x-auto sm:block">
+      <div className="paper-card hidden overflow-x-auto sm:block">
       <table className="w-full text-sm" style={{ fontVariantNumeric: "tabular-nums" }}>
-        <thead className="sticky top-0 z-10 bg-surface-2">
-          <tr className="border-b border-border-c text-left text-xs uppercase tracking-wide text-foreground">
-            <th className="px-3 py-2 font-medium">Company</th>
-            <th className="px-3 py-2 font-medium">Founder / campus</th>
-            <th className="px-3 py-2 font-medium">Why investigate</th>
-            <th className="px-3 py-2 font-medium">Eligibility</th>
-            <th className="px-3 py-2 font-medium">Priority</th>
-            <th className="px-3 py-2 font-medium">Latest activity</th>
+        <thead className="sticky top-0 z-10 bg-surface">
+          <tr className="border-b border-border-c text-left">
+            <th className="ui-label px-4 py-3 font-medium">Company</th>
+            <th className="ui-label px-4 py-3 font-medium">Founder / campus</th>
+            <th className="ui-label px-4 py-3 font-medium">Why investigate</th>
+            <th className="ui-label px-4 py-3 font-medium">Eligibility</th>
+            <th className="ui-label px-4 py-3 font-medium">Priority</th>
+            <th className="ui-label px-4 py-3 font-medium">Latest activity</th>
           </tr>
         </thead>
         <tbody>
@@ -138,8 +138,8 @@ export const CandidateTable = memo(function CandidateTable({
           {rows.map((c) => {
             return (
               <Fragment key={c.id}>
-              <tr className={`row-cv border-b border-border-c align-top hover:bg-surface ${current.project === c.id ? "bg-accent-subtle" : ""}`}>
-                <td className="px-3 py-2.5">
+              <tr className={`row-cv border-b border-border-c align-top hover:bg-background ${current.project === c.id ? "bg-accent-subtle" : ""}`}>
+                <td className="px-4 py-3">
                   <span className="flex flex-wrap items-center gap-1.5">
                     <CompanyNameLink id={c.id} name={c.name} websiteUrl={c.websiteUrl} className="font-medium text-foreground hover:text-link" />
                     <SignalTierBadge tier={c.signalTier} basis={c.signalTierBasis} />

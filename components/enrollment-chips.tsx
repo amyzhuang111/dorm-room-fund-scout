@@ -33,7 +33,7 @@ export function EnrollmentChips({
   }
 
   const primaryClass = (on: boolean) =>
-    `inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium ${
+    `inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm ${
       on ? "border-accent bg-accent text-accent-foreground" : "border-border-c bg-surface text-foreground hover:bg-surface-2"
     }`;
 

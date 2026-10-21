@@ -124,9 +124,10 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
   const connectorsOn = sp.connectors === "1";
   const basePath = "/signals";
   return (
-    <div className="mx-auto max-w-3xl p-4 sm:p-6">
-      <h1 className="text-lg font-semibold text-foreground">Signals</h1>
-      <p className="mt-1 text-sm text-muted">Recent company and founder activity, plus pre-college excellence on people. Top connectors ranks people and clubs by verified, tiered founders they are linked to.</p>
+    <div className="mx-auto max-w-[1100px] px-6 pb-16 pt-10">
+      <p className="page-eyebrow">Activity</p>
+      <h1 className="page-title">Signals</h1>
+      <p className="page-subtitle">Recent company and founder activity, plus pre-college excellence on people. Top connectors ranks people and clubs by verified, tiered founders they are linked to.</p>
 
       <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
         <Link

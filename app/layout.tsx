@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Geist_Mono, Inter } from "next/font/google";
 import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { AskAiProvider } from "@/components/ask-ai";
@@ -9,8 +9,13 @@ import { UserPipelineBanner, UserPipelineProvider } from "@/components/user-pipe
 import { feedbackRedirects } from "@/lib/domain/entity-redirects";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+});
+
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
 });
 
@@ -28,19 +33,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${fraunces.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <head>
-        {/* Satoshi, loaded from Fontshare. */}
-        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="" />
-        <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" media="print" />
-        <script dangerouslySetInnerHTML={{ __html: `document.querySelector('link[href*="fontshare"]')?.setAttribute('media','all')` }} />
-      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <AskAiProvider>
           <UserPipelineProvider>
-          <header className="border-b border-border-c bg-background">
-            <Suspense fallback={<div className="h-14" />}>
+          <header className="sticky top-0 z-40 border-b border-border-c bg-background">
+            <Suspense fallback={<div className="h-16" />}>
               <TopNavGate />
             </Suspense>
           </header>

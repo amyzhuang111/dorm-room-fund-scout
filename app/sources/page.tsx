@@ -76,10 +76,11 @@ export default async function SourcesPage({ searchParams }: { searchParams: Prom
   const sorted = sortCards(filtered, sortBy);
 
   return (
-    <div className="mx-auto max-w-4xl p-4 sm:p-6">
+    <div className="mx-auto max-w-[1100px] px-6 pb-16 pt-10">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h1 className="text-lg font-semibold text-foreground">Sources</h1>
+          <p className="page-eyebrow">Source registry</p>
+          <h1 className="page-title">Sources</h1>
           <p className="mt-1 text-sm text-muted">
             Source quality is not equal. Each source has two independent tiers — <strong>Founder Scout</strong> (how early/reliably it
             surfaces a builder before they are obvious) and <strong>Startup Scout</strong> (how well it surfaces formed, pitchable

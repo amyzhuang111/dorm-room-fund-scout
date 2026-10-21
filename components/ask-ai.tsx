@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { WebWorkerMLCEngine } from "@mlc-ai/web-llm";
 import { ASK_BROWSER_MODELS, ASK_DEFAULT_MODEL_ID, formatDownload } from "@/lib/domain/ask-browser-models";
@@ -66,12 +65,10 @@ async function ensureBrowserEngine(modelId: string, onProgress: (report: { progr
 }
 
 export function AskAiProvider({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
-  const onAskSurface = pathname === "/" || pathname === "/founder/network";
   return (
     <>
       {children}
-      {onAskSurface && <AskAiDock />}
+      <AskAiDock />
     </>
   );
 }
@@ -197,8 +194,16 @@ function AskAiDock() {
         inputRef.current?.blur();
       }
     }
+    function openFromNav() {
+      setOpen(true);
+      inputRef.current?.focus();
+    }
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("campus-scout-open-ask", openFromNav);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("campus-scout-open-ask", openFromNav);
+    };
   }, []);
 
   function close() {
@@ -350,7 +355,7 @@ function AskAiDock() {
       <section
         data-ask-ai-panel
         data-ask-open={open ? "yes" : "no"}
-        className={`pointer-events-auto w-[min(42rem,calc(100vw-1.5rem))] origin-bottom border border-black bg-white text-black shadow-[0_18px_50px_-20px_rgba(0,0,0,0.45)] transition-all duration-300 ease-out ${open ? "rounded-3xl" : "rounded-full"}`}
+        className={`pointer-events-auto w-[min(42rem,calc(100vw-1.5rem))] origin-bottom border border-border-c bg-surface text-foreground transition-all duration-300 ease-out ${open ? "rounded-2xl" : "rounded-full"}`}
         aria-label="Ask AI"
       >
         <form
@@ -373,23 +378,23 @@ function AskAiDock() {
             onChange={(event) => setQuestion(event.target.value)}
             onFocus={() => setOpen(true)}
             placeholder="Ask Campus Scout"
-            className="min-w-0 flex-1 bg-white text-sm text-black outline-none placeholder:text-neutral-500 disabled:bg-white"
+            className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted"
           />
           {open ? (
             <button type="button" className="text-xs font-semibold underline" onClick={close}>
               Close
             </button>
           ) : (
-            <kbd className="rounded border border-black px-1.5 py-0.5 text-[10px] font-semibold">/</kbd>
+            <kbd className="rounded border border-border-c px-1.5 py-0.5 text-[10px] font-semibold">/</kbd>
           )}
-          <button type="submit" disabled={busy || !question.trim()} aria-label="Ask" className="grid h-7 w-7 place-items-center rounded-full bg-black text-sm text-white disabled:bg-neutral-400">
+            <button type="submit" disabled={busy || !question.trim()} aria-label="Ask" className="grid h-7 w-7 place-items-center rounded-full bg-foreground text-sm text-background disabled:opacity-40">
             ↑
           </button>
         </form>
         <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
           <div className="overflow-hidden" inert={open ? undefined : true} aria-hidden={open ? undefined : true}>
-            <div className="max-h-[min(32rem,calc(100dvh-8rem))] space-y-3 overflow-y-auto border-t border-black px-3 py-3">
-              <p className="text-xs text-black">Answers use Campus Scout records. Gemini’s free tier answers first. If Gemini is unavailable, a small model runs in this browser.</p>
+            <div className="max-h-[min(32rem,calc(100dvh-8rem))] space-y-3 overflow-y-auto border-t border-border-c px-3 py-3">
+              <p className="text-xs text-foreground">Answers use Campus Scout records. Gemini’s free tier answers first. If Gemini is unavailable, a small model runs in this browser.</p>
               {!asked && (
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-wide">Try</p>
@@ -398,7 +403,7 @@ function AskAiDock() {
                       <button
                         key={example}
                         type="button"
-                        className="rounded-full border border-black px-3 py-1 text-left text-xs font-medium hover:bg-black hover:text-white"
+                        className="rounded-full border border-border-c px-3 py-1 text-left text-xs font-medium hover:bg-foreground hover:text-background"
                         onClick={() => void ask(example)}
                       >
                         {example}
@@ -411,7 +416,7 @@ function AskAiDock() {
                       <button
                         key={campus}
                         type="button"
-                        className="rounded-full border border-black px-2 py-0.5 text-[11px] font-medium hover:bg-black hover:text-white"
+                        className="rounded-full border border-border-c px-2 py-0.5 text-[11px] font-medium hover:bg-foreground hover:text-background"
                         onClick={() => void ask(`${campus} founders`)}
                       >
                         {campus}
@@ -421,13 +426,13 @@ function AskAiDock() {
                 </div>
               )}
               {webgpu === false && (
-                <div className="border border-black px-3 py-2" data-ask-webgpu="no">
+                <div className="border border-border-c px-3 py-2" data-ask-webgpu="no">
                   <p className="text-sm font-semibold">This browser can’t run the on-device model</p>
                   <p className="mt-1 text-xs leading-snug">WebGPU isn’t available on this browser or device. Ask still searches Campus Scout and lists the matching records.</p>
                 </div>
               )}
               {webgpu !== false && (
-                <details className="border border-black px-3 py-2">
+                <details className="border border-border-c px-3 py-2">
                   <summary className="cursor-pointer text-xs font-semibold">On-device fallback · {formatDownload(model.bytes)}</summary>
                   <div className="mt-2 space-y-2">
                     <label className="block text-[10px] font-semibold uppercase tracking-wide" htmlFor="ask-ai-model">
@@ -438,7 +443,7 @@ function AskAiDock() {
                       data-ask-model
                       value={modelId}
                       onChange={(event) => setModelId(event.target.value)}
-                      className="w-full border border-black bg-white px-2 py-1.5 text-xs text-black"
+                      className="w-full border border-border-c bg-surface px-2 py-1.5 text-xs text-foreground"
                     >
                       {ASK_BROWSER_MODELS.map((item) => (
                         <option key={item.id} value={item.id}>
@@ -452,14 +457,14 @@ function AskAiDock() {
                       data-ask-ai-load
                       disabled={loading || modelReady}
                       onClick={() => void loadModel()}
-                      className="bg-black px-3 py-1.5 text-xs font-semibold text-white disabled:bg-neutral-400"
+                      className="bg-foreground px-3 py-1.5 text-xs font-semibold text-background disabled:bg-neutral-400"
                     >
                       {loading ? "Loading…" : modelReady ? "Model ready" : `Load model (${formatDownload(model.bytes)})`}
                     </button>
                     {(loading || progressText) && (
                       <div>
-                        <div className="h-2 border border-black" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)}>
-                          <div className="h-full bg-black" style={{ width: `${Math.min(100, Math.round(progress * 100))}%` }} />
+                        <div className="h-2 border border-border-c" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)}>
+                          <div className="h-full bg-foreground" style={{ width: `${Math.min(100, Math.round(progress * 100))}%` }} />
                         </div>
                         <p className="mt-1 text-[11px] leading-snug">{progressText}</p>
                       </div>
@@ -482,7 +487,7 @@ function AskAiDock() {
               {answer && (
                 <p className="text-sm leading-snug" data-ask-ai-answer>
                   {answer}
-                  {busy && <span className="ml-0.5 inline-block h-3 w-1.5 translate-y-0.5 bg-black" />}
+                  {busy && <span className="ml-0.5 inline-block h-3 w-1.5 translate-y-0.5 bg-foreground" />}
                 </p>
               )}
               {asked && !busy && matches.length === 0 && !error && !answer && <p className="text-sm font-medium">{NOT_IN_THE_DATA}</p>}
@@ -500,7 +505,7 @@ function AskAiDock() {
                         <button
                           type="button"
                           data-ask-hit={hit.id}
-                          className="h-full w-full rounded-2xl border border-black bg-white p-2 text-left shadow-sm hover:bg-black hover:text-white"
+                          className="h-full w-full rounded-2xl border border-border-c bg-surface p-2 text-left shadow-sm hover:bg-foreground hover:text-background"
                           onClick={() => focusHit(hit)}
                         >
                           <span className="text-[10px] font-semibold uppercase tracking-wide">{hit.kind}</span>

@@ -3,9 +3,10 @@ import { SCREENING_CONFIG } from "@/lib/screening/config";
 
 export default function MethodologyPage() {
   return (
-    <div className="mx-auto max-w-3xl space-y-8 p-4 sm:p-6">
+    <div className="mx-auto max-w-[1100px] space-y-8 px-6 pb-16 pt-10">
       <div>
-        <h1 className="text-lg font-semibold text-foreground">Methodology</h1>
+        <p className="page-eyebrow">How a record is scored</p>
+        <h1 className="page-title">Methodology</h1>
         <p className="mt-1 text-sm text-muted">
           This is a scouting workspace any fund can use. Every rule below is tagged with where it came
           from — a published policy, internal sourcing guidance, or a proposed product default — so a default is never presented as your fund&apos;s

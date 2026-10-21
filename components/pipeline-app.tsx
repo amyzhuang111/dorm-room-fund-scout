@@ -26,10 +26,11 @@ export function PipelineApp({ campuses }: { campuses: { id: string; name: string
   ];
 
   return (
-    <div className="mx-auto max-w-[1400px] p-4 text-black sm:p-6">
+    <div className="mx-auto max-w-[1100px] px-6 pb-16 pt-10 text-foreground">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-lg font-semibold">Pipeline</h1>
+          <p className="page-eyebrow">Your list</p>
+          <h1 className="page-title">Pipeline</h1>
           <p className="mt-1 max-w-2xl text-sm text-neutral-700">
             Startups and founders you have verified, plus anyone you star from search or a detail page. Move a card between stages, edit it, or delete it.
           </p>

@@ -27,17 +27,17 @@ const STYLE_URL = "https://tiles.openfreemap.org/styles/positron";
 // another pale tint layered on top, or it reads as a blank white circle
 // (exactly what happened here the first time).
 const MAP_THEME = {
-  land: "#f1eff4",
-  landAlt: "#d9d5df",
-  ocean: "#ffffff",
-  boundary: "#5c516e",
-  labelText: "#1c1525",
-  labelHalo: "#ffffff",
-  sky: "#f7f6f8",
-  horizon: "#b9a8f5",
-  fog: "#ffffff",
-  dot: "#9378ee",
-  arc: "#5840a0",
+  land: "#e6dcc8",
+  landAlt: "#d9ceb6",
+  ocean: "#c5cdc6",
+  boundary: "#8a8478",
+  labelText: "#1f1e1b",
+  labelHalo: "#f7f6f1",
+  sky: "#f7f6f1",
+  horizon: "#d5d1c6",
+  fog: "#f7f6f1",
+  dot: "#a65d4e",
+  arc: "#7a5c78",
 };
 
 interface MapEvent {
@@ -92,6 +92,8 @@ export const GlobeView = memo(function GlobeView({
   userMarkers = [],
   resultsPending = false,
   knownResultCount = null,
+  hideStats = false,
+  flush = false,
 }: {
   universities: UniversitySummary[];
   basePath: string;
@@ -112,6 +114,10 @@ export const GlobeView = memo(function GlobeView({
   resultsPending?: boolean;
   /** Unfiltered company count, so the stat can paint before the row list arrives. */
   knownResultCount?: number | null;
+  /** Page headers own the stat strip. The map then skips its own numbers. */
+  hideStats?: boolean;
+  /** Drop the outer padding when the page column already frames the map. */
+  flush?: boolean;
 }) {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -312,7 +318,7 @@ export const GlobeView = memo(function GlobeView({
                 "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 6, 20, 9, 200, 14],
                 "circle-color": MAP_THEME.dot,
                 "circle-stroke-width": 1.5,
-                "circle-stroke-color": "#ffffff",
+                "circle-stroke-color": "#f7f6f1",
                 "circle-opacity": 0.95,
               },
             });
@@ -329,7 +335,7 @@ export const GlobeView = memo(function GlobeView({
                 "circle-color": MAP_THEME.dot,
                 "circle-opacity": 0.85,
                 "circle-stroke-width": 1.5,
-                "circle-stroke-color": "#ffffff",
+                "circle-stroke-color": "#f7f6f1",
               },
             });
           }
@@ -344,7 +350,7 @@ export const GlobeView = memo(function GlobeView({
                 "text-field": ["get", "point_count_abbreviated"],
                 "text-size": 11,
               },
-              paint: { "text-color": "#1c1525" },
+              paint: { "text-color": "#1f1e1b" },
             });
           }
 
@@ -356,7 +362,7 @@ export const GlobeView = memo(function GlobeView({
               filter: ["all", unclustered, ["==", ["get", "id"], current.university ?? "__none__"]],
               paint: {
                 "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 10, 20, 14, 200, 18],
-                "circle-color": "#ffffff",
+                "circle-color": "#f7f6f1",
                 "circle-stroke-width": 2,
                 "circle-stroke-color": MAP_THEME.dot,
               },
@@ -542,7 +548,7 @@ export const GlobeView = memo(function GlobeView({
         if (ctx) {
           ctx.fillStyle = "#111111";
           ctx.fillRect(1, 1, size - 2, size - 2);
-          ctx.strokeStyle = "#ffffff";
+          ctx.strokeStyle = "#f7f6f1";
           ctx.lineWidth = 2;
           ctx.strokeRect(2.5, 2.5, size - 5, size - 5);
           map.addImage("user-added-square", ctx.getImageData(0, 0, size, size), { pixelRatio: 2 });
@@ -566,7 +572,7 @@ export const GlobeView = memo(function GlobeView({
             "text-anchor": "top",
             "text-allow-overlap": true,
           },
-          paint: { "text-color": "#111111", "text-halo-color": "#ffffff", "text-halo-width": 1.2 },
+          paint: { "text-color": "#1f1e1b", "text-halo-color": "#f7f6f1", "text-halo-width": 1.2 },
         });
       }
       if (!userLayerBound.current) {
@@ -634,7 +640,7 @@ export const GlobeView = memo(function GlobeView({
     const marked = ids.length > 0;
     const inSet: unknown[] = ["in", ["get", "id"], ["literal", ids]];
     map.setPaintProperty("campus-dots", "circle-opacity", marked ? ["case", inSet, 1, 0.18] : 0.95);
-    map.setPaintProperty("campus-dots", "circle-stroke-color", marked ? ["case", inSet, "#000000", "#ffffff"] : "#ffffff");
+    map.setPaintProperty("campus-dots", "circle-stroke-color", marked ? ["case", inSet, "#1f1e1b", "#f7f6f1"] : "#f7f6f1");
     map.setPaintProperty("campus-dots", "circle-stroke-width", marked ? ["case", inSet, 3, 1.5] : 1.5);
     map.setPaintProperty("campus-glow", "circle-opacity", marked ? ["case", inSet, 0.55, 0.08] : 0.38);
     if (marked) {
@@ -676,35 +682,25 @@ export const GlobeView = memo(function GlobeView({
       ];
 
   return (
-    <div className="p-2">
-      {status === "ok" && (
-        <div className="mb-2 flex justify-center">
-          <div className="flex divide-x divide-black/10 rounded-lg border border-black/15 bg-white shadow-sm">
-            {statItems.map((s) => (
-              <div key={s.label} className="min-w-[5.5rem] px-4 py-2 text-center">
-                <div className="stat-num text-lg text-black sm:text-xl">{s.n.toLocaleString("en-US")}</div>
-                <div className="ui-label mt-0.5">{s.label}</div>
-              </div>
-            ))}
-          </div>
+    <div className={flush ? "" : "p-2"}>
+      {!hideStats && status === "ok" && (
+        <div className="stat-strip mb-6">
+          {statItems.map((s) => (
+            <p key={s.label}>
+              <span className="stat-num">{s.n.toLocaleString("en-US")}</span>
+              <span className="stat-kicker">{s.label}</span>
+            </p>
+          ))}
         </div>
       )}
-      <div className="relative h-[min(68dvh,820px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-border-c sm:min-h-[520px]" style={{ background: MAP_THEME.sky }}>
+      <div className="relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-2xl border border-border-c sm:min-h-[520px]" style={{ background: MAP_THEME.sky }}>
         <div ref={containerRef} className="h-full w-full" />
         {status === "ok" && (
-          <div className="absolute right-3 top-3 z-10 flex rounded-lg border border-black/15 bg-white p-0.5 shadow-sm">
-            <button
-              type="button"
-              onClick={() => setGeoMode("campus")}
-              className={`rounded-md px-2.5 py-1 text-[11px] font-medium ${geoMode === "campus" ? "bg-accent text-accent-foreground" : "text-muted"}`}
-            >
+          <div className="segmented absolute right-3 top-3 z-10" role="group" aria-label="Map geography">
+            <button type="button" onClick={() => setGeoMode("campus")} className={geoMode === "campus" ? "is-active" : ""}>
               Campuses
             </button>
-            <button
-              type="button"
-              onClick={() => setGeoMode("hq")}
-              className={`rounded-md px-2.5 py-1 text-[11px] font-medium ${geoMode === "hq" ? "bg-accent text-accent-foreground" : "text-muted"}`}
-            >
+            <button type="button" onClick={() => setGeoMode("hq")} className={geoMode === "hq" ? "is-active" : ""}>
               Headquarters
             </button>
           </div>
@@ -713,7 +709,7 @@ export const GlobeView = memo(function GlobeView({
           <CampusHover universities={universities} tip={hoverTip} />
         )}
         {status === "ok" && userTip && geoMode === "campus" && (
-          <div className="pointer-events-none absolute z-10 rounded-md border border-black bg-white px-2.5 py-1.5 text-xs text-black" style={{ left: userTip.x + 12, top: userTip.y - 8 }}>
+          <div className="pointer-events-none absolute z-10 rounded-xl border border-border-c bg-surface px-2.5 py-1.5 text-xs text-foreground" style={{ left: userTip.x + 12, top: userTip.y - 8 }}>
             <p className="font-medium">{userTip.name}</p>
             <p>User-added</p>
           </div>
@@ -738,7 +734,7 @@ export const GlobeView = memo(function GlobeView({
         {geoMode === "hq" && status === "ok" && (
           <div className="glass-panel absolute left-3 top-16 w-72 max-h-[420px] overflow-y-auto">
             <div className="glass-panel-head">
-              <span className="text-sm font-medium text-foreground">Headquarters</span>
+              <span className="font-serif text-base text-foreground">Headquarters</span>
             </div>
             <p className="px-3 pt-2 text-[11px] leading-snug text-muted">
               A company is plotted only when a source gives coordinates. A place name is not geocoded, and a campus is never used as a headquarters.
@@ -775,7 +771,7 @@ export const GlobeView = memo(function GlobeView({
         {geoMode === "campus" && selectedUniversity && status === "ok" && (
           <div className="glass-panel absolute left-3 top-16 hidden w-64 max-h-[420px] overflow-y-auto sm:block">
             <div className="glass-panel-head">
-              <span className="text-sm font-medium text-foreground">{selectedUniversity.name}</span>
+              <span className="font-serif text-base text-foreground">{selectedUniversity.name}</span>
               <a
                 href={buildHref(basePath, current, { university: null })}
                 className="ml-auto text-[11px] text-muted hover:text-foreground"
@@ -832,7 +828,7 @@ export const GlobeView = memo(function GlobeView({
               type="button"
               onClick={() => mapRef.current?.zoomIn()}
               aria-label="Zoom in"
-              className="flex h-7 w-7 items-center justify-center rounded-md border border-black/15 bg-white text-sm text-black shadow-sm"
+              className="flex h-7 w-7 items-center justify-center rounded-md border border-border-c bg-surface text-sm text-foreground"
             >
               +
             </button>
@@ -840,7 +836,7 @@ export const GlobeView = memo(function GlobeView({
               type="button"
               onClick={() => mapRef.current?.zoomOut()}
               aria-label="Zoom out"
-              className="flex h-7 w-7 items-center justify-center rounded-md border border-black/15 bg-white text-sm text-black shadow-sm"
+              className="flex h-7 w-7 items-center justify-center rounded-md border border-border-c bg-surface text-sm text-foreground"
             >
               −
             </button>
@@ -852,7 +848,7 @@ export const GlobeView = memo(function GlobeView({
                 frameCampuses(map, points);
               }}
               aria-label="Reset view"
-              className="flex h-7 w-7 items-center justify-center rounded-md border border-black/15 bg-white text-[10px] text-black shadow-sm"
+              className="flex h-7 w-7 items-center justify-center rounded-md border border-border-c bg-surface text-[10px] text-foreground"
               title="Fit campuses"
             >
               ⤢
@@ -860,6 +856,13 @@ export const GlobeView = memo(function GlobeView({
           </div>
         )}
       </div>
+      {status === "ok" && (
+        <p className="viz-legend">
+          {geoMode === "campus"
+            ? "Dot size follows candidate count. A ring marks the campus in view."
+            : "A company is plotted only when a source gives coordinates."}
+        </p>
+      )}
       {status === "ok" && <ResultTray docked candidates={trayCandidates} basePath={basePath} current={current} />}
       <div className="mt-3 sm:hidden">
         <UniversityListFallback universities={universities} basePath={basePath} current={current} compact />

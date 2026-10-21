@@ -125,7 +125,7 @@ export function StartupDirectoryCard({
 
       {card.sector && (
         <p className="mt-4">
-          <span className="inline-flex rounded-full bg-[#5840a0] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white">{card.sector}</span>
+          <span className="inline-flex rounded-full bg-plum px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-background">{card.sector}</span>
         </p>
       )}
 
@@ -189,7 +189,7 @@ export function StartupDirectoryCard({
       )}
 
       <section className="mt-5">
-        <h3 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#5840a0]">Founders</h3>
+        <h3 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-plum">Founders</h3>
         {card.founders.length === 0 ? (
           <p className="mt-2 text-sm text-neutral-600">No founders on record.</p>
         ) : (
