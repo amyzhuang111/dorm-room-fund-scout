@@ -43,7 +43,7 @@ const DAY_THEME = {
 const NIGHT_THEME = {
   land: "#3b4a8a",
   landAlt: "#3b4a8a",
-  ocean: "#0b0e17",
+  ocean: "#1a2748",
   boundary: "#6d7cb8",
   labelText: "#eceef4",
   labelHalo: "#0b0e17",
@@ -91,6 +91,29 @@ interface CampusMap {
 
 function prefersReducedMotion(): boolean {
   return typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+}
+
+function campusFeatureCollection(
+  universities: { id: string; name: string; lat: number | null; lon: number | null; companyCount: number; founderCount: number }[],
+  recentIds: string[],
+) {
+  const placed = universities.filter((university): university is typeof university & { lat: number; lon: number } => university.lat != null && university.lon != null);
+  const labeled = new Set([...placed].sort((a, b) => b.founderCount - a.founderCount).slice(0, 8).map((university) => university.id));
+  return {
+    type: "FeatureCollection" as const,
+    features: placed.map((university) => ({
+      type: "Feature" as const,
+      geometry: { type: "Point" as const, coordinates: [university.lon, university.lat] as [number, number] },
+      properties: {
+        id: university.id,
+        name: shortCampusLabel(university.id, university.name),
+        count: university.companyCount,
+        founders: university.founderCount,
+        recent: recentIds.includes(university.id) ? 1 : 0,
+        label: labeled.has(university.id) ? 1 : 0,
+      },
+    })),
+  };
 }
 
 export const GlobeView = memo(function GlobeView({
@@ -210,8 +233,8 @@ export const GlobeView = memo(function GlobeView({
           center: hero
             ? [window.matchMedia("(max-width: 767px)").matches ? Math.max(-180, Math.min(180, (-new Date().getTimezoneOffset() / 60) * 15)) : -98, window.matchMedia("(max-width: 767px)").matches ? 20 : 39]
             : [-98, 39],
-          zoom: hero ? 1.6 : 3.35,
-          minZoom: 1.5,
+          zoom: hero ? (window.matchMedia("(max-width: 767px)").matches ? 1.05 : 0.95) : 3.35,
+          minZoom: hero ? 0.4 : 1.5,
           maxZoom: 8,
           attributionControl: { compact: !hero },
         });
@@ -308,23 +331,10 @@ export const GlobeView = memo(function GlobeView({
           if (!map.getSource("campuses")) {
             map.addSource("campuses", {
               type: "geojson",
-              cluster: !hero,
-              clusterRadius: 48,
-              clusterMaxZoom: hero ? 0 : 4,
-              data: {
-                type: "FeatureCollection",
-                features: points.map((u) => ({
-                  type: "Feature",
-                  geometry: { type: "Point", coordinates: [u.lon, u.lat] },
-                  properties: {
-                    id: u.id,
-                    name: shortCampusLabel(u.id, u.name),
-                    count: u.companyCount,
-                    founders: u.founderCount,
-                    recent: 0,
-                  },
-                })),
-              },
+              cluster: true,
+              clusterRadius: hero ? 72 : 48,
+              clusterMaxZoom: hero ? 4 : 4,
+                data: campusFeatureCollection(points, recentIds),
             });
           }
 
@@ -376,20 +386,6 @@ export const GlobeView = memo(function GlobeView({
               },
             });
           }
-          if (hero && !map.getLayer("campus-counts")) {
-            try {
-              map.addLayer({
-                id: "campus-counts",
-                type: "symbol",
-                source: "campuses",
-                filter: [">=", ["get", "founders"], 21],
-                layout: { "text-field": ["to-string", ["get", "founders"]], "text-size": 10 },
-                paint: { "text-color": "#0B0E17" },
-              });
-            } catch (error) {
-              console.error("[globe-view] campus counts skipped:", error);
-            }
-          }
 
           if (!map.getLayer("campus-clusters")) {
             map.addLayer({
@@ -398,11 +394,11 @@ export const GlobeView = memo(function GlobeView({
               source: "campuses",
               filter: ["has", "point_count"],
               paint: {
-                "circle-radius": ["interpolate", ["linear"], ["get", "point_count"], 2, 14, 6, 22],
-                "circle-color": MAP_THEME.dot,
-                "circle-opacity": 0.85,
+                "circle-radius": ["interpolate", ["linear"], ["get", "point_count"], 2, 18, 8, 28, 24, 40],
+                "circle-color": hero ? "#E8823A" : MAP_THEME.dot,
+                "circle-opacity": 0.92,
                 "circle-stroke-width": 1.5,
-                "circle-stroke-color": "#f7f6f1",
+                "circle-stroke-color": hero ? "#0B0E17" : "#f7f6f1",
               },
             });
           }
@@ -415,9 +411,14 @@ export const GlobeView = memo(function GlobeView({
               filter: ["has", "point_count"],
               layout: {
                 "text-field": ["get", "point_count_abbreviated"],
-                "text-size": 11,
+                "text-size": hero ? 13 : 11,
+                "text-allow-overlap": true,
               },
-              paint: { "text-color": "#1f1e1b" },
+              paint: {
+                "text-color": hero ? "#0B0E17" : "#1f1e1b",
+                "text-halo-color": hero ? "#E8823A" : "#f7f6f1",
+                "text-halo-width": hero ? 1.5 : 0,
+              },
             });
           }
 
@@ -441,14 +442,15 @@ export const GlobeView = memo(function GlobeView({
               id: "campus-labels",
               type: "symbol",
               source: "campuses",
-              filter: unclustered,
+              filter: hero ? ["all", unclustered, ["==", ["get", "label"], 1]] : unclustered,
               layout: {
-                "text-field": ["concat", ["get", "name"], "  ", ["to-string", ["get", "count"]]],
-                "text-size": 11,
-                "text-offset": [0, 1.35],
+                "text-field": hero ? ["get", "name"] : ["concat", ["get", "name"], "  ", ["to-string", ["get", "count"]]],
+                "text-size": hero ? 12 : 11,
+                "text-offset": [0, 1.45],
                 "text-anchor": "top",
+                "text-allow-overlap": false,
               },
-              paint: { "text-color": MAP_THEME.labelText, "text-halo-color": MAP_THEME.labelHalo, "text-halo-width": 1.2 },
+              paint: { "text-color": MAP_THEME.labelText, "text-halo-color": MAP_THEME.labelHalo, "text-halo-width": hero ? 2 : 1.2 },
             });
           }
 
@@ -578,20 +580,7 @@ export const GlobeView = memo(function GlobeView({
     const map = mapRef.current;
     if (!map || status !== "ok" || !map.getSource("campuses")) return;
     const placedPoints = universities.filter((u) => u.lat != null && u.lon != null);
-    map.getSource("campuses")?.setData?.({
-      type: "FeatureCollection",
-      features: placedPoints.map((u) => ({
-        type: "Feature",
-        geometry: { type: "Point", coordinates: [u.lon, u.lat] },
-        properties: {
-          id: u.id,
-          name: shortCampusLabel(u.id, u.name),
-          count: u.companyCount,
-          founders: u.founderCount,
-          recent: recentIds.includes(u.id) ? 1 : 0,
-        },
-      })),
-    });
+    map.getSource("campuses")?.setData?.(campusFeatureCollection(placedPoints, recentIds));
     const arcFeatures = arcFeaturesFor(placedPoints, campusArcs, hero ? 60 : Infinity, current.university);
     const arcSource = map.getSource("campus-arcs");
     if (arcSource?.setData) {
@@ -1029,7 +1018,7 @@ function CampusHover({
   if (!u) return null;
   return (
     <div
-      className="glass-panel pointer-events-none absolute z-10 px-2.5 py-1.5 text-xs"
+      className="glass-panel pointer-events-none absolute z-10 px-2.5 py-1.5 text-[13px]"
       style={{ left: tip.x + 12, top: tip.y - 8 }}
     >
       <p className="font-medium text-foreground">{shortCampusLabel(u.id, u.name)}</p>

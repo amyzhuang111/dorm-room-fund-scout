@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserPipeline } from "./user-pipeline-provider";
 
 const SECTIONS = [
@@ -54,7 +54,12 @@ export function SiteNav() {
   const pipeline = useUserPipeline();
   const local = pipeline.storage === "local";
   const [open, setOpen] = useState(false);
+  const [night, setNight] = useState(pathname === "/");
   const subs = section && pathname !== "/" ? SUBS[section] : [];
+
+  useEffect(() => {
+    setNight(document.documentElement.dataset.theme !== "day");
+  }, [pathname]);
 
   function openAsk() {
     window.dispatchEvent(new Event("campus-scout-open-ask"));
@@ -64,16 +69,18 @@ export function SiteNav() {
     const next = document.documentElement.dataset.theme === "night" ? "day" : "night";
     document.documentElement.dataset.theme = next;
     localStorage.setItem("campus-scout-theme", next);
+    setNight(next === "night");
   }
 
   return (
     <div className="border-b border-line bg-bg">
-      <div className="mx-auto flex h-14 max-w-[1200px] items-center gap-6 px-5 sm:px-12">
+      <div className="flex h-16 items-center gap-4 px-6">
         <Link href="/" className="wordmark shrink-0">
           <span className="mark" aria-hidden />
           Campus Scout
         </Link>
-        <nav className="hidden items-center gap-5 md:flex" aria-label="Sections">
+        <p className="hidden text-[13px] text-fg-2 lg:block">Track student founders before they raise</p>
+        <nav className="ml-2 hidden items-center gap-5 md:flex" aria-label="Sections">
           {SECTIONS.map((item) => (
             <Link key={item.id} href={item.href} className={`nav-link ${section === item.id ? "is-active" : ""}`}>
               {item.label}
@@ -89,12 +96,9 @@ export function SiteNav() {
               Ask anything… ⌘K
             </button>
           )}
-          <button type="button" className="text-[13px] text-fg-2" onClick={toggleTheme} aria-label="Toggle color theme">
-            Theme
+          <button type="button" className="grid h-10 w-10 place-items-center rounded-full border border-line text-fg" onClick={toggleTheme} aria-label={night ? "Switch to day" : "Switch to night"}>
+            {night ? <MoonIcon /> : <SunIcon />}
           </button>
-          <Link href="/signin" className="grid h-7 w-7 place-items-center rounded-full border border-line text-[11px] text-fg-2" aria-label="Sign in">
-            •
-          </Link>
         </div>
         <button type="button" className="ml-auto text-sm text-fg md:hidden" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
           Menu
@@ -117,7 +121,7 @@ export function SiteNav() {
         </div>
       )}
       {subs.length > 0 && (
-        <div className="mx-auto flex h-10 max-w-[1200px] items-end gap-5 px-5 sm:px-12">
+        <div className="flex h-10 items-end gap-5 px-6">
           {subs.map((item) => (
             <Link key={item.href} href={item.href} className={`subtab ${subActive(pathname, item.href) ? "is-active" : ""}`}>
               {item.label}
@@ -126,5 +130,22 @@ export function SiteNav() {
         </div>
       )}
     </div>
+  );
+}
+
+function SunIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.75">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.75">
+      <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z" />
+    </svg>
   );
 }

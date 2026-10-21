@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { HeroStats } from "@/lib/domain/hero-stats";
-import { absoluteDate, relativeTime } from "@/lib/domain/relative-time";
+import { absoluteDate, updatedAgo, updatedWithinHour } from "@/lib/domain/relative-time";
 
 const GlobeView = dynamic(() => import("./globe-view").then((mod) => mod.GlobeView), { ssr: false });
 
@@ -17,6 +17,7 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
   const [mode, setMode] = useState<"campus" | "hq">("campus");
   const [ask, setAsk] = useState("");
   const [builders, setBuilders] = useState<{ name: string }[]>([]);
+  const live = updatedWithinHour(stats.updatedAt);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -54,46 +55,47 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
   }
 
   return (
-    <div className="hero-night relative h-[calc(100dvh-56px)] min-h-[640px] bg-bg text-fg max-md:h-auto max-md:min-h-0">
-      <div className="max-md:px-6 max-md:pb-4 max-md:pt-8 md:absolute md:left-6 md:top-16 md:z-20 md:w-[420px]">
-        {stats.fresh ? (
-          <p className="micro flex items-center gap-2">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-ember" />
-            Live · updated {relativeTime(stats.updatedAt)}
-          </p>
-        ) : (
-          <p className="text-[13px] text-[#C9CCD6]">Quiet week · last signal {absoluteDate(stats.lastSignalAt)}</p>
-        )}
+    <div className="hero-night relative h-[calc(100dvh-64px)] min-h-[640px] bg-bg text-fg max-md:h-auto max-md:min-h-0">
+      <div className="max-md:px-6 max-md:pb-4 max-md:pt-8 md:absolute md:left-6 md:top-16 md:z-20 md:w-[calc(50%-48px)]">
+        <p className="text-[13px] text-[#C9CCD6]">
+          {live ? "Live · updated " : "Updated "}
+          {updatedAgo(stats.updatedAt)}
+        </p>
         <h1 className="mt-4 max-w-[16ch] text-[28px] leading-[1.15] font-semibold tracking-[-0.035em] md:text-[36px]">
           <span className="text-[48px] leading-none text-ember md:text-[72px]">{stats.founders.toLocaleString("en-US")}</span>
           {" "}founders forming across {stats.campuses.toLocaleString("en-US")} campuses.
         </h1>
-        <Link href="/founders" className="mt-6 inline-flex h-10 items-center rounded bg-ember px-4 text-[14px] font-medium text-[#0b0e17]">
+        <Link href="/founders" className="mt-6 inline-flex h-12 items-center rounded bg-ember px-6 text-[16px] font-semibold text-[#0b0e17]">
           Explore founders
         </Link>
         <p className="mt-6 text-[13px] text-[#C9CCD6]">
-          <Link href="/companies" className="hover:text-fg">{stats.tracked.toLocaleString("en-US")} tracked</Link>
+          <Link href="/companies" className="hover:text-fg">{stats.tracked.toLocaleString("en-US")} companies</Link>
           {" · "}
-          <Link href="/campuses" className="hover:text-fg">{stats.monitored.toLocaleString("en-US")} monitored</Link>
+          <Link href="/campuses" className="hover:text-fg">{stats.monitored.toLocaleString("en-US")} campuses monitored</Link>
           {" · "}
           <Link href="/signals" className="hover:text-fg">{stats.signalsWeek.toLocaleString("en-US")} signals this week</Link>
         </p>
-        {stats.fresh && (
-          <ul className="mt-8 hidden md:block">
-            {stats.week.map((item) => (
-              <li key={item.id} className="flex h-9 items-center gap-3 text-[13px]">
-                <span className="w-[180px] shrink-0 truncate whitespace-nowrap text-fg-2">
-                  {item.campusSlug ? <Link href={`/campuses/${item.campusSlug}`}>{item.campus}</Link> : item.campus}
-                </span>
-                <span className="sig-dot shrink-0" />
-                <span className="min-w-0 flex-1 truncate">{item.event}</span>
-                <span className="ml-auto shrink-0 text-[12px] text-[#8A8FA3]" title={item.at ?? undefined}>{relativeTime(item.at)}</span>
-              </li>
-            ))}
-          </ul>
+        {stats.fresh ? (
+          <>
+            <h2 className="mt-8 text-[13px] font-medium text-[#C9CCD6]">Latest signals</h2>
+            <ul className="mt-2 hidden md:block">
+              {stats.week.map((item) => (
+                <li key={item.id} className="flex h-9 items-center gap-3 text-[13px]">
+                  <span className="w-[180px] shrink-0 truncate whitespace-nowrap text-[#C9CCD6]">
+                    {item.campusSlug ? <Link href={`/campuses/${item.campusSlug}`}>{item.campus}</Link> : item.campus}
+                  </span>
+                  <span className="sig-dot shrink-0" />
+                  <span className="min-w-0 flex-1 truncate">{item.event}</span>
+                  <span className="ml-auto shrink-0 text-right text-[12px] text-[#C9CCD6]" title={item.at ?? undefined}>{updatedAgo(item.at)}</span>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <p className="mt-8 text-[13px] text-[#C9CCD6]">Quiet week · last signal {absoluteDate(stats.lastSignalAt)}</p>
         )}
       </div>
-      <div className="relative h-[340px] md:absolute md:inset-0 md:h-auto">
+      <div className="relative mx-auto aspect-square h-[420px] w-full max-md:mt-4 md:absolute md:left-[53%] md:top-[44%] md:mx-0 md:h-auto md:w-[min(560px,42vw)] md:-translate-y-1/2">
         <GlobeView
           universities={stats.universities}
           basePath="/"
@@ -104,12 +106,6 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
           flush
           geoMode={mode}
           recentIds={stats.recentCampusIds}
-        />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-[radial-gradient(closest-side_at_80%_50%,color-mix(in_srgb,var(--amber)_6%,transparent),transparent)]" />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-[58%] top-1/2 hidden h-[min(720px,78vh)] w-[min(720px,78vh)] -translate-x-1/2 -translate-y-1/2 rounded-full md:block"
-          style={{ boxShadow: "0 0 12px 10px rgba(140, 168, 240, 0.55)" }}
         />
       </div>
       <div className="bottom-6 left-6 z-20 mt-4 flex gap-2 px-6 md:absolute md:mt-0 md:px-0">

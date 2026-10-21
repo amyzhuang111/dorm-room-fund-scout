@@ -7,7 +7,7 @@ export default function FoundersPage() {
     <div className="mx-auto max-w-[1200px] px-5 py-8 sm:px-12">
       <p className="micro">Explore</p>
       <h1 className="page-title">Founders</h1>
-      <p className="page-subtitle">{rows.length.toLocaleString("en-US")} promoted founders in this workspace.</p>
+      <p className="page-subtitle">{rows.length.toLocaleString("en-US")} founders</p>
       <div className="mt-8">
         <DataTable rows={rows} />
       </div>

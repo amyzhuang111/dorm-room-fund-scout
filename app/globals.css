@@ -10,7 +10,7 @@
   --line-strong: #d3d7e0;
   --fg: #0e1220;
   --fg-2: #4a5168;
-  --fg-3: #8a90a6;
+  --fg-3: #525a72;
   --cobalt: #2b47c9;
   --cobalt-haze: #e7ebfc;
   --ember: #c9661f;
@@ -66,7 +66,7 @@
   --line-strong: #2c3449;
   --fg: #eceef4;
   --fg-2: #a3aac0;
-  --fg-3: #6b7390;
+  --fg-3: #9aa3bc;
   --cobalt: #2f4fd8;
   --cobalt-haze: #1a2556;
   --ember: #e8823a;
@@ -211,6 +211,9 @@ h1, h2, h3 {
 
 .nav-link {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 64px;
   font-size: 14px;
   font-weight: 500;
   color: var(--fg-2);
@@ -220,7 +223,7 @@ h1, h2, h3 {
   content: "";
   position: absolute;
   left: 50%;
-  bottom: -18px;
+  bottom: 0;
   width: 16px;
   height: 2px;
   margin-left: -8px;
@@ -284,7 +287,7 @@ h1, h2, h3 {
   --line-strong: #2c3449;
   --fg: #eceef4;
   --fg-2: #a3aac0;
-  --fg-3: #6b7390;
+  --fg-3: #9aa3bc;
   --ember: #e8823a;
   --amber: #f2b35b;
   --cobalt: #2f4fd8;

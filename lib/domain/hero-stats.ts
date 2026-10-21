@@ -1,6 +1,6 @@
 import { getDb } from "../db/client";
 import { campusSlug, shortCampusLabel } from "./campuses";
-import { listUniversities, type UniversitySummary } from "./queries";
+import { listFounders, listUniversities, type UniversitySummary } from "./queries";
 import { relativeTime } from "./relative-time";
 
 export { relativeTime };
@@ -111,9 +111,24 @@ export function loadHeroStats(): HeroStats {
     ...university,
     slug: campusSlug(shortCampusLabel(university.id, university.name)),
   }));
-  const founders = universities.reduce((sum, university) => sum + university.founderCount, 0);
-  const campuses = universities.filter((university) => university.founderCount > 0).length;
-  const tracked = universities.reduce((sum, university) => sum + university.companyCount, 0);
+  // Same promoted-founder list the /founders table renders. Summing per-campus
+  // counts double-counts people who belong to more than one school.
+  const people = listFounders();
+  const founders = people.length;
+  const campusIds = new Set<string>();
+  const companyIds = new Set<string>();
+  for (const person of people) {
+    if (person.universityId) campusIds.add(person.universityId);
+    for (const campus of person.campuses) {
+      if (campus.universityId) campusIds.add(campus.universityId);
+    }
+    if (person.linkedCompany?.id) companyIds.add(person.linkedCompany.id);
+    for (const project of person.projects) {
+      if (project.kind === "company") companyIds.add(project.id);
+    }
+  }
+  const campuses = campusIds.size;
+  const tracked = companyIds.size;
   const monitored = universities.filter((university) => university.sourcesConfigured > 0).length;
 
   const feed = weekFeed(db);
