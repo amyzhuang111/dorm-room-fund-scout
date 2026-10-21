@@ -26,18 +26,32 @@ const STYLE_URL = "https://tiles.openfreemap.org/styles/positron";
 // looked at on its own at world zoom. It needs real contrast injected, not
 // another pale tint layered on top, or it reads as a blank white circle
 // (exactly what happened here the first time).
-const MAP_THEME = {
-  land: "#e6dcc8",
-  landAlt: "#d9ceb6",
-  ocean: "#c5cdc6",
-  boundary: "#8a8478",
-  labelText: "#1f1e1b",
-  labelHalo: "#f7f6f1",
-  sky: "#f7f6f1",
-  horizon: "#d5d1c6",
-  fog: "#f7f6f1",
-  dot: "#a65d4e",
-  arc: "#7a5c78",
+const DAY_THEME = {
+  land: "#e7ebfc",
+  landAlt: "#d5dcf8",
+  ocean: "#fbfbfc",
+  boundary: "#d3d7e0",
+  labelText: "#0e1220",
+  labelHalo: "#fbfbfc",
+  sky: "#fbfbfc",
+  horizon: "#2b47c9",
+  fog: "#fbfbfc",
+  dot: "#5b6ee0",
+  arc: "#7c8cf0",
+};
+
+const NIGHT_THEME = {
+  land: "#1a2556",
+  landAlt: "#152048",
+  ocean: "#0b0e17",
+  boundary: "#1f2536",
+  labelText: "#eceef4",
+  labelHalo: "#0b0e17",
+  sky: "#0b0e17",
+  horizon: "#2f4fd8",
+  fog: "#0b0e17",
+  dot: "#7c8cf0",
+  arc: "#7c8cf0",
 };
 
 interface MapEvent {
@@ -94,6 +108,10 @@ export const GlobeView = memo(function GlobeView({
   knownResultCount = null,
   hideStats = false,
   flush = false,
+  hero = false,
+  locked = false,
+  geoMode: geoModeProp,
+  recentIds = [],
 }: {
   universities: UniversitySummary[];
   basePath: string;
@@ -118,12 +136,21 @@ export const GlobeView = memo(function GlobeView({
   hideStats?: boolean;
   /** Drop the outer padding when the page column already frames the map. */
   flush?: boolean;
+  /** Full-bleed night globe: unlabeled land, founder-sized dots, capped arcs. */
+  hero?: boolean;
+  /** Mini-globe: no spin, no chrome. */
+  locked?: boolean;
+  geoMode?: "campus" | "hq";
+  recentIds?: string[];
 }) {
+  const MAP_THEME = hero ? NIGHT_THEME : DAY_THEME;
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<CampusMap | null>(null);
   const [status, setStatus] = useState<"loading" | "ok" | "unsupported">("loading");
-  const [geoMode, setGeoMode] = useState<"campus" | "hq">("campus");
+  const [geoModeState, setGeoModeState] = useState<"campus" | "hq">("campus");
+  const geoMode = geoModeProp ?? geoModeState;
+  const setGeoMode = setGeoModeState;
   const [hoverTip, setHoverTip] = useState<{ id: string; x: number; y: number } | null>(null);
   const [userTip, setUserTip] = useState<{ id: string; name: string; x: number; y: number } | null>(null);
   const selectedUniversity = current.university ? universities.find((u) => u.id === current.university) : undefined;
@@ -142,8 +169,9 @@ export const GlobeView = memo(function GlobeView({
   const framedRef = useRef(false);
   useEffect(() => {
     liveRef.current = { basePath, current, onNavigate };
-    spinPaused.current = Boolean(current.university) || geoMode === "hq";
-  }, [basePath, current, geoMode, onNavigate]);
+    const narrow = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
+    spinPaused.current = locked || (hero && narrow) || (!hero && (Boolean(current.university) || geoMode === "hq"));
+  }, [basePath, current, geoMode, hero, locked, onNavigate]);
 
   const points = universities.filter((u) => u.lat != null && u.lon != null);
 
@@ -179,8 +207,10 @@ export const GlobeView = memo(function GlobeView({
         map = new maplibregl.Map({
           container: containerRef.current,
           style: STYLE_URL,
-          center: [-98, 39],
-          zoom: 3.35,
+          center: hero
+            ? [window.matchMedia("(max-width: 767px)").matches ? Math.max(-180, Math.min(180, (-new Date().getTimezoneOffset() / 60) * 15)) : -40, window.matchMedia("(max-width: 767px)").matches ? 20 : 28]
+            : [-98, 39],
+          zoom: hero ? 1.6 : 3.35,
           minZoom: 1.5,
           maxZoom: 8,
           attributionControl: { compact: true },
@@ -231,6 +261,11 @@ export const GlobeView = memo(function GlobeView({
         };
 
         trySet(() => map.setProjection({ type: "globe" }), "globe projection");
+        if (hero) {
+          for (const layer of map.getStyle?.()?.layers ?? []) {
+            if (layer.type === "symbol") trySet(() => map.setLayoutProperty(layer.id, "visibility", "none"), `hide-label:${layer.id}`);
+          }
+        }
         trySet(
           () =>
             map.setSky({
@@ -240,7 +275,7 @@ export const GlobeView = memo(function GlobeView({
               "sky-horizon-blend": 0.45,
               "horizon-fog-blend": 0.72,
               "fog-ground-blend": 0.35,
-              "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 1, 4, 0.55, 8, 0],
+              "atmosphere-blend": hero ? 0.35 : ["interpolate", ["linear"], ["zoom"], 0, 1, 4, 0.55, 8, 0],
             }),
           "sky/atmosphere"
         );
@@ -273,9 +308,9 @@ export const GlobeView = memo(function GlobeView({
           if (!map.getSource("campuses")) {
             map.addSource("campuses", {
               type: "geojson",
-              cluster: true,
+              cluster: !hero,
               clusterRadius: 48,
-              clusterMaxZoom: 4,
+              clusterMaxZoom: hero ? 0 : 4,
               data: {
                 type: "FeatureCollection",
                 features: points.map((u) => ({
@@ -286,6 +321,7 @@ export const GlobeView = memo(function GlobeView({
                     name: shortCampusLabel(u.id, u.name),
                     count: u.companyCount,
                     founders: u.founderCount,
+                    recent: 0,
                   },
                 })),
               },
@@ -293,7 +329,7 @@ export const GlobeView = memo(function GlobeView({
           }
 
           const unclustered = ["!", ["has", "point_count"]];
-          if (!map.getLayer("campus-glow")) {
+          if (!hero && !map.getLayer("campus-glow")) {
             map.addLayer({
               id: "campus-glow",
               type: "circle",
@@ -315,13 +351,44 @@ export const GlobeView = memo(function GlobeView({
               source: "campuses",
               filter: unclustered,
               paint: {
-                "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 6, 20, 9, 200, 14],
-                "circle-color": MAP_THEME.dot,
-                "circle-stroke-width": 1.5,
-                "circle-stroke-color": "#f7f6f1",
-                "circle-opacity": 0.95,
+                "circle-radius": hero
+                  ? ["min", 22, ["+", 4, ["*", 2.2, ["sqrt", ["coalesce", ["get", "founders"], 0]]]]]
+                  : ["interpolate", ["linear"], ["get", "count"], 0, 6, 20, 9, 200, 14],
+                "circle-color": hero ? ["case", ["==", ["get", "recent"], 1], "#E8823A", MAP_THEME.dot] : MAP_THEME.dot,
+                "circle-stroke-width": 1,
+                "circle-stroke-color": hero ? "#0B0E17" : "#fbfbfc",
+                "circle-opacity": hero ? 0.85 : 0.95,
               },
             });
+          }
+          if (hero && !map.getLayer("campus-pulse")) {
+            map.addLayer({
+              id: "campus-pulse",
+              type: "circle",
+              source: "campuses",
+              filter: ["==", ["get", "recent"], 1],
+              paint: {
+                "circle-radius": ["min", 22, ["+", 4, ["*", 2.2, ["sqrt", ["coalesce", ["get", "founders"], 0]]]]],
+                "circle-color": "#E8823A",
+                "circle-opacity": 0.35,
+                "circle-stroke-width": prefersReducedMotion() ? 2 : 0,
+                "circle-stroke-color": "#E8823A",
+              },
+            });
+          }
+          if (hero && !map.getLayer("campus-counts")) {
+            try {
+              map.addLayer({
+                id: "campus-counts",
+                type: "symbol",
+                source: "campuses",
+                filter: [">=", ["get", "founders"], 21],
+                layout: { "text-field": ["to-string", ["get", "founders"]], "text-size": 10 },
+                paint: { "text-color": "#0B0E17" },
+              });
+            } catch (error) {
+              console.error("[globe-view] campus counts skipped:", error);
+            }
           }
 
           if (!map.getLayer("campus-clusters")) {
@@ -387,22 +454,19 @@ export const GlobeView = memo(function GlobeView({
 
           if (!map.getSource("campus-arcs") && campusArcs.length > 0) {
             const byId = new Map(points.map((u) => [u.id, u]));
-            const features = campusArcs.flatMap((arc) => {
-              const a = byId.get(arc.fromId);
-              const b = byId.get(arc.toId);
-              if (!a || a.lon == null || a.lat == null || !b || b.lon == null || b.lat == null) return [];
-              return [{
-                type: "Feature",
-                geometry: { type: "LineString", coordinates: greatCircle([a.lon, a.lat], [b.lon, b.lat]) },
-                properties: { count: arc.count },
-              }];
-            });
+            const features = arcFeaturesFor(points, campusArcs, hero ? 60 : Infinity, current.university);
             map.addSource("campus-arcs", { type: "geojson", data: { type: "FeatureCollection", features } });
             map.addLayer({
               id: "campus-arcs",
               type: "line",
               source: "campus-arcs",
-              paint: { "line-color": MAP_THEME.arc, "line-width": 1.4, "line-opacity": 0.55 },
+              paint: hero
+                ? {
+                    "line-color": ["case", ["==", ["get", "focus"], 1], "#F2B35B", "#7C8CF0"],
+                    "line-width": ["case", ["==", ["get", "focus"], 1], 1.5, 1],
+                    "line-opacity": ["case", ["==", ["get", "focus"], 1], 0.9, 0.22],
+                  }
+                : { "line-color": MAP_THEME.arc, "line-width": 1.4, "line-opacity": 0.55 },
             });
           }
 
@@ -417,7 +481,10 @@ export const GlobeView = memo(function GlobeView({
             if (go) go(overrides);
             else router.push(buildHref(livePath, liveCurrent, overrides));
           });
-          map.on("mouseenter", "campus-dots", () => (map.getCanvas().style.cursor = "pointer"));
+          map.on("mouseenter", "campus-dots", () => {
+            map.getCanvas().style.cursor = "pointer";
+            pauseSpin();
+          });
           map.on("mousemove", "campus-dots", (e: MapEvent) => {
             const id = e.features?.[0]?.properties?.id;
             if (!id || !e.point) return;
@@ -426,6 +493,7 @@ export const GlobeView = memo(function GlobeView({
           map.on("mouseleave", "campus-dots", () => {
             map.getCanvas().style.cursor = "";
             setHoverTip(null);
+            resumeSpin();
           });
           map.on("click", "campus-clusters", (e: MapEvent) => {
             const feature = e.features?.[0];
@@ -454,7 +522,7 @@ export const GlobeView = memo(function GlobeView({
           window.clearTimeout(resumeTimer);
           resumeTimer = window.setTimeout(() => {
             interacting = false;
-          }, 1200);
+          }, hero ? 4000 : 1200);
         };
         map.on("dragstart", pauseSpin);
         map.on("wheel", pauseSpin);
@@ -471,8 +539,18 @@ export const GlobeView = memo(function GlobeView({
           const dt = Math.min(0.05, (now - last) / 1000);
           last = now;
           const center = map.getCenter();
-          center.lng -= 2.4 * dt;
+          center.lng += (hero ? 3 : -2.4) * dt;
           map.setCenter(center);
+          if (hero && map.getLayer("campus-pulse") && !prefersReducedMotion()) {
+            const phase = (now % 2400) / 2400;
+            const scale = 1 + 1.6 * phase;
+            try {
+              map.setPaintProperty("campus-pulse", "circle-radius", ["*", scale, ["min", 22, ["+", 4, ["*", 2.2, ["sqrt", ["coalesce", ["get", "founders"], 0]]]]]]);
+              map.setPaintProperty("campus-pulse", "circle-opacity", 0.5 * (1 - phase));
+            } catch {
+              // The pulse layer can still be attaching on the first frames.
+            }
+          }
         };
         raf = requestAnimationFrame(tick);
         const stopSpin = () => {
@@ -510,10 +588,11 @@ export const GlobeView = memo(function GlobeView({
           name: shortCampusLabel(u.id, u.name),
           count: u.companyCount,
           founders: u.founderCount,
+          recent: recentIds.includes(u.id) ? 1 : 0,
         },
       })),
     });
-    const arcFeatures = arcFeaturesFor(placedPoints, campusArcs);
+    const arcFeatures = arcFeaturesFor(placedPoints, campusArcs, hero ? 60 : Infinity, current.university);
     const arcSource = map.getSource("campus-arcs");
     if (arcSource?.setData) {
       arcSource.setData({ type: "FeatureCollection", features: arcFeatures });
@@ -524,15 +603,21 @@ export const GlobeView = memo(function GlobeView({
           id: "campus-arcs",
           type: "line",
           source: "campus-arcs",
-          paint: { "line-color": MAP_THEME.arc, "line-width": 1.4, "line-opacity": 0.55 },
+          paint: hero
+            ? {
+                "line-color": ["case", ["==", ["get", "focus"], 1], "#F2B35B", "#7C8CF0"],
+                "line-width": ["case", ["==", ["get", "focus"], 1], 1.5, 1],
+                "line-opacity": ["case", ["==", ["get", "focus"], 1], 0.9, 0.22],
+              }
+            : { "line-color": MAP_THEME.arc, "line-width": 1.4, "line-opacity": 0.55 },
         });
       }
     }
-    if (!current.university && !framedRef.current && placedPoints.length > 0) {
+    if (!hero && !current.university && !framedRef.current && placedPoints.length > 0) {
       framedRef.current = true;
       frameCampuses(map, placedPoints);
     }
-  }, [universities, campusArcs, status, current.university]);
+  }, [universities, campusArcs, status, current.university, recentIds, hero]);
 
   const userLayerBound = useRef(false);
   useEffect(() => {
@@ -626,7 +711,7 @@ export const GlobeView = memo(function GlobeView({
     if (current.university) {
       const u = universities.find((x) => x.id === current.university);
       if (u?.lat != null && u?.lon != null) {
-        map.flyTo({ center: [u.lon, u.lat], zoom: 4.4, duration: prefersReducedMotion() ? 0 : 1100, essential: true });
+        map.flyTo({ center: [u.lon, u.lat], zoom: hero || locked ? 4 : 4.4, duration: prefersReducedMotion() || locked ? 0 : hero ? 320 : 1100, essential: true });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -634,6 +719,7 @@ export const GlobeView = memo(function GlobeView({
 
   const emphasizeKey = emphasizeIds.join(",");
   useEffect(() => {
+    if (hero) return;
     const map = mapRef.current;
     if (!map || status !== "ok" || !map.getLayer("campus-dots")) return;
     const ids = emphasizeKey ? emphasizeKey.split(",") : [];
@@ -649,7 +735,7 @@ export const GlobeView = memo(function GlobeView({
         universities.filter((university) => ids.includes(university.id))
       );
     }
-  }, [emphasizeKey, status, universities]);
+  }, [emphasizeKey, status, universities, hero]);
 
   useEffect(() => {
     if (!active || status !== "ok") return;
@@ -662,7 +748,7 @@ export const GlobeView = memo(function GlobeView({
     const map = mapRef.current;
     if (!map || status !== "ok") return;
     const visibility = geoMode === "campus" ? "visible" : "none";
-    for (const layer of ["campus-glow", "campus-dots", "campus-selected", "campus-labels", "campus-clusters", "campus-cluster-count", "campus-arcs", "user-added-icons"]) {
+    for (const layer of ["campus-glow", "campus-dots", "campus-pulse", "campus-counts", "campus-selected", "campus-labels", "campus-clusters", "campus-cluster-count", "campus-arcs", "user-added-icons"]) {
       if (!map.getLayer(layer)) continue;
       map.setLayoutProperty(layer, "visibility", visibility);
     }
@@ -682,7 +768,7 @@ export const GlobeView = memo(function GlobeView({
       ];
 
   return (
-    <div className={flush ? "" : "p-2"}>
+    <div className={hero ? "h-full" : flush ? "" : "p-2"}>
       {!hideStats && status === "ok" && (
         <div className="stat-strip mb-6">
           {statItems.map((s) => (
@@ -693,9 +779,9 @@ export const GlobeView = memo(function GlobeView({
           ))}
         </div>
       )}
-      <div className="relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-2xl border border-border-c sm:min-h-[520px]" style={{ background: MAP_THEME.sky }}>
+      <div className={hero ? "relative h-full min-h-[340px] w-full overflow-hidden" : locked ? "relative h-[280px] w-full overflow-hidden" : "relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-line sm:min-h-[520px]"} style={{ background: MAP_THEME.sky }}>
         <div ref={containerRef} className="h-full w-full" />
-        {status === "ok" && (
+        {status === "ok" && !hero && !locked && (
           <div className="segmented absolute right-3 top-3 z-10" role="group" aria-label="Map geography">
             <button type="button" onClick={() => setGeoMode("campus")} className={geoMode === "campus" ? "is-active" : ""}>
               Campuses
@@ -731,7 +817,7 @@ export const GlobeView = memo(function GlobeView({
 
         {/* Floating campus-summary panel — pattern studied from dashboard.vclense.ch/ycglobe's
             frosted floating panels. */}
-        {geoMode === "hq" && status === "ok" && (
+        {!hero && !locked && geoMode === "hq" && status === "ok" && (
           <div className="glass-panel absolute left-3 top-16 w-72 max-h-[420px] overflow-y-auto">
             <div className="glass-panel-head">
               <span className="font-serif text-base text-foreground">Headquarters</span>
@@ -768,7 +854,7 @@ export const GlobeView = memo(function GlobeView({
           </div>
         )}
 
-        {geoMode === "campus" && selectedUniversity && status === "ok" && (
+        {!hero && !locked && geoMode === "campus" && selectedUniversity && status === "ok" && (
           <div className="glass-panel absolute left-3 top-16 hidden w-64 max-h-[420px] overflow-y-auto sm:block">
             <div className="glass-panel-head">
               <span className="font-serif text-base text-foreground">{selectedUniversity.name}</span>
@@ -822,8 +908,8 @@ export const GlobeView = memo(function GlobeView({
           </div>
         )}
 
-        {status === "ok" && (
-          <div className="absolute bottom-3 right-3 z-10 flex flex-col gap-1">
+        {status === "ok" && !locked && (
+          <div className={`absolute z-10 flex flex-col gap-1 ${hero ? "bottom-6 right-8" : "bottom-3 right-3"}`}>
             <button
               type="button"
               onClick={() => mapRef.current?.zoomIn()}
@@ -856,22 +942,24 @@ export const GlobeView = memo(function GlobeView({
           </div>
         )}
       </div>
-      {status === "ok" && (
+      {status === "ok" && !hero && (
         <p className="viz-legend">
           {geoMode === "campus"
             ? "Dot size follows candidate count. A ring marks the campus in view."
             : "A company is plotted only when a source gives coordinates."}
         </p>
       )}
-      {status === "ok" && <ResultTray docked candidates={trayCandidates} basePath={basePath} current={current} />}
-      <div className="mt-3 sm:hidden">
-        <UniversityListFallback universities={universities} basePath={basePath} current={current} compact />
-        {selectedUniversity && (
-          <div className="mt-2">
-            <CampusBenchmarks pitchbook={selectedUniversity.pitchbook} hitRate={selectedUniversity.hitRate} />
-          </div>
-        )}
-      </div>
+      {status === "ok" && !hero && <ResultTray docked candidates={trayCandidates} basePath={basePath} current={current} />}
+      {!hero && (
+        <div className="mt-3 sm:hidden">
+          <UniversityListFallback universities={universities} basePath={basePath} current={current} compact />
+          {selectedUniversity && (
+            <div className="mt-2">
+              <CampusBenchmarks pitchbook={selectedUniversity.pitchbook} hitRate={selectedUniversity.hitRate} />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 });
@@ -892,16 +980,20 @@ function frameCampuses(map: CampusMap, points: UniversitySummary[]) {
   );
 }
 
-function arcFeaturesFor(points: UniversitySummary[], campusArcs: CampusArc[]) {
+function arcFeaturesFor(points: UniversitySummary[], campusArcs: CampusArc[], cap = Infinity, focusId?: string) {
   const byId = new Map(points.map((u) => [u.id, u]));
-  return campusArcs.flatMap((arc) => {
+  const ranked = [...campusArcs].sort((a, b) => b.count - a.count);
+  const chosen = focusId
+    ? ranked.filter((arc) => arc.fromId === focusId || arc.toId === focusId)
+    : ranked.slice(0, cap);
+  return chosen.flatMap((arc) => {
     const a = byId.get(arc.fromId);
     const b = byId.get(arc.toId);
     if (!a || a.lon == null || a.lat == null || !b || b.lon == null || b.lat == null) return [];
     return [{
       type: "Feature",
       geometry: { type: "LineString", coordinates: greatCircle([a.lon, a.lat], [b.lon, b.lat]) },
-      properties: { count: arc.count },
+      properties: { count: arc.count, focus: focusId ? 1 : 0 },
     }];
   });
 }

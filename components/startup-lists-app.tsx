@@ -131,7 +131,7 @@ function ShortlistBody({
                       ) : (
                         <p className="mt-1">
                           No candidates on record at all yet.{" "}
-                          <Link href="/sources?from=startup" className="text-link underline">
+                          <Link href="/signals/sources?from=startup" className="text-link underline">
                             Pick a source to scan
                           </Link>
                           .

@@ -104,13 +104,13 @@ export function ExploreToolbar({
 
         <div className="segmented shrink-0" role="group" aria-label="Candidate kind">
           <ScoutLink
-            href={buildHref("/startup/discover", current, {})}
+            href={buildHref("/companies", current, {})}
             className={basePath.startsWith("/startup") ? "is-active" : ""}
           >
             Companies
           </ScoutLink>
           <ScoutLink
-            href={buildHref("/founder/discover", { university: current.university, q: current.q, enroll: current.enroll, tier: current.tier, sort: current.sort }, {})}
+            href={buildHref("/founders", { university: current.university, q: current.q, enroll: current.enroll, tier: current.tier, sort: current.sort }, {})}
             className={basePath.startsWith("/founder") ? "is-active" : ""}
           >
             Founders
@@ -131,7 +131,7 @@ export function ExploreToolbar({
           </div>
         )}
 
-        <ScoutLink href="/sources?from=startup" className="shrink-0 rounded-md border border-border-c px-2.5 py-1 text-xs text-muted hover:bg-surface-2 hover:text-foreground">
+        <ScoutLink href="/signals/sources?from=startup" className="shrink-0 rounded-md border border-border-c px-2.5 py-1 text-xs text-muted hover:bg-surface-2 hover:text-foreground">
           Scan sources
         </ScoutLink>
       </div>

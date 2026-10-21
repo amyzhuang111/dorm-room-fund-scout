@@ -17,17 +17,17 @@ function personTarget(node: NetworkNode | undefined): PersonLinkTarget | null {
 }
 
 const COLOR: Record<NetworkNode["type"], string> = {
-  university: "#7a5c78",
-  community: "#b8893a",
-  person: "#6a7278",
-  project: "#a65d4e",
+  university: "#1A2556",
+  community: "#2F4FD8",
+  person: "#7C8CF0",
+  project: "#E8823A",
 };
 
 const CAMPUS_COLOR: Record<NetworkNode["type"], string> = {
-  university: "#7a5c78",
-  community: "#b8893a",
-  person: "#6a7278",
-  project: "#6e7f62",
+  university: "#1A2556",
+  community: "#2F4FD8",
+  person: "#7C8CF0",
+  project: "#F2B35B",
 };
 
 function nodeRadius(type: NetworkNode["type"], degree: number): number {

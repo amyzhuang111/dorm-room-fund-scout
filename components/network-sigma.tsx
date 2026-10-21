@@ -193,7 +193,7 @@ export function NetworkSigma({
     const measureCtx = measureCanvas.getContext("2d");
     const measure = (text: string, fontSize: number) => {
       if (!measureCtx) return text.length * fontSize * 0.56;
-      measureCtx.font = `500 ${fontSize}px Inter, Arial, sans-serif`;
+      measureCtx.font = `500 ${fontSize}px Geist, ui-sans-serif, sans-serif`;
       return measureCtx.measureText(text).width;
     };
     const placed: { offsets: Map<string, LabelOffset> } = { offsets: new Map() };
@@ -429,7 +429,7 @@ export function NetworkSigma({
       // Nodes and lines share one scale, so a closer view magnifies both. Labels do not use this.
       zoomToSizeRatioFunction: (ratio) => zoomSizeFactor(ratio, stateRef.current.fitRatio),
       zIndex: true,
-      labelFont: "Inter, Arial, sans-serif",
+      labelFont: "Geist, ui-sans-serif, sans-serif",
       labelSize: LABEL_NODE,
       labelWeight: "500",
       labelColor: { color: "#111111" },

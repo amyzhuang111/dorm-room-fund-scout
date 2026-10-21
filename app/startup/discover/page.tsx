@@ -34,7 +34,7 @@ export default async function StartupDiscoverPage({
     if (sp.view && sp.view !== "network") params.set("view", sp.view);
     if (sp.view === "network" && campusId) params.set("view", "network");
     const qs = params.toString();
-    redirect(qs ? `/startup/discover?${qs}` : "/startup/discover");
+    redirect(qs ? `/companies?${qs}` : "/companies");
   }
   const universities = listUniversities();
   const review = await readReviewState();

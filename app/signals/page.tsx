@@ -5,6 +5,7 @@ import { readReviewState } from "@/lib/domain/review-server";
 import { domainKey, isHidden } from "@/lib/domain/feedback";
 import { buildHref } from "@/lib/domain/url";
 import { topConnectors } from "@/lib/domain/connectors";
+import { listNews } from "@/lib/domain/news";
 import { TopConnectors } from "@/components/top-connectors";
 import { CompanyWebsiteIcon } from "@/components/company-website";
 import { PrecollegeBadges } from "@/components/badges";
@@ -110,7 +111,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
   const signals = allSignals.filter((s) => {
     if (precollegeOn) return false;
     if (sp.university && s.university_name !== universities.find((u) => u.id === sp.university)?.name) return false;
-    if (sp.type && s.signal_type !== sp.type) return false;
+    if (sp.type && sp.type !== "press" && s.signal_type !== sp.type) return false;
     return true;
   });
   const precollege = precollegeFeed.filter((row) => {
@@ -121,6 +122,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
     return true;
   });
 
+  const press = sp.type === "press" ? listNews({ limit: 40 }) : [];
   const connectorsOn = sp.connectors === "1";
   const basePath = "/signals";
   return (
@@ -186,6 +188,18 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
         <TopConnectors lists={topConnectors(sp.university)} activeCampus={sp.university ?? null} basePath={basePath} current={sp} />
       ) : (
       <ul className="mt-4 space-y-2">
+        {press.map((item) => (
+          <li key={item.id} className="rounded-md border border-line bg-raised p-3">
+            <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-[15px] font-medium text-fg">
+              {item.headline}
+            </a>
+            <p className="num mt-1 text-[12px] text-fg-3">
+              {item.sourceName}
+              {item.publishedAt ? ` · ${item.publishedAt.slice(0, 10)}` : ""}
+              {item.campuses[0] ? ` · ${item.campuses[0].name}` : ""}
+            </p>
+          </li>
+        ))}
         {precollege.map((row) => {
           const view: PrecollegeSignalView = {
             signalType: row.signal_type as PrecollegeSignalView["signalType"],
@@ -199,7 +213,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
           return (
             <li key={row.id} className="rounded-md border border-border-c bg-surface p-3">
               <Link
-                href={buildHref("/founder/discover", {}, { founder: row.person_id, pool, university: row.university_id })}
+                href={buildHref("/founders", {}, { founder: row.person_id, pool, university: row.university_id })}
                 className="text-sm font-medium text-foreground hover:text-link"
               >
                 {row.person_name}
@@ -223,7 +237,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
           // submissions/evidence (Founder Scout, kind='project') — only kind='company'
           // rows resolve on /startup/discover (see queries.ts listCandidateProjects),
           // so route each signal to whichever product surface actually has it.
-          const detailHref = s.project_kind === "company" ? `/startup/${s.project_id}` : `/founder/network?project=${s.project_id}`;
+          const detailHref = s.project_kind === "company" ? `/startup/${s.project_id}` : `/map/network?project=${s.project_id}`;
           const footerDate = s.source_date ? formatMonthYear(s.source_date) : `Discovered ${formatMonthDay(s.created_at)}`;
           return (
             <li key={s.id} className="rounded-md border border-border-c bg-surface p-3">

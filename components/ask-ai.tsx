@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { WebWorkerMLCEngine } from "@mlc-ai/web-llm";
 import { ASK_BROWSER_MODELS, ASK_DEFAULT_MODEL_ID, formatDownload } from "@/lib/domain/ask-browser-models";
@@ -73,15 +74,6 @@ export function AskAiProvider({ children }: { children: ReactNode }) {
   );
 }
 
-function SparkleIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" className="shrink-0">
-      <path fill="currentColor" d="M8 .6 9.3 5.4 14.2 6.6 9.3 7.9 8 12.8 6.7 7.9 1.8 6.6 6.7 5.4 8 .6Z" />
-      <path fill="currentColor" d="M12.6 1.2 13.1 2.8 14.7 3.3 13.1 3.8 12.6 5.4 12.1 3.8 10.5 3.3 12.1 2.8 12.6 1.2Z" />
-    </svg>
-  );
-}
-
 function highlightFrom(hits: AskHit[]): {
   ids: string[];
   campuses: string[];
@@ -115,6 +107,7 @@ function highlightFrom(hits: AskHit[]): {
 }
 
 function AskAiDock() {
+  const router = useRouter();
   const [webgpu, setWebgpu] = useState<boolean | null>(null);
   const [modelId, setModelId] = useState(ASK_DEFAULT_MODEL_ID);
   const [loadedId, setLoadedId] = useState<string | null>(browserModelId);
@@ -350,22 +343,50 @@ function AskAiDock() {
     }
   }
 
+  useEffect(() => {
+    if (open) inputRef.current?.focus();
+  }, [open]);
+
+  function go(text: string) {
+    const q = text.trim();
+    if (!q) return;
+    try {
+      const recent = JSON.parse(localStorage.getItem("campus-scout-ask-recent") || "[]") as string[];
+      const next = [q, ...recent.filter((item) => item !== q)].slice(0, 5);
+      localStorage.setItem("campus-scout-ask-recent", JSON.stringify(next));
+    } catch {
+      // Storage can be blocked. The question still opens.
+    }
+    setOpen(false);
+    router.push(`/ask?q=${encodeURIComponent(q)}`);
+  }
+
+  if (!open) return null;
+
+  const recent = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("campus-scout-ask-recent") || "[]") as string[];
+    } catch {
+      return [];
+    }
+  })();
+
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-5 z-50 flex justify-center px-3">
+    <div className="fixed inset-0 z-50 bg-[#0b0e17]/40" onMouseDown={() => setOpen(false)}>
       <section
         data-ask-ai-panel
-        data-ask-open={open ? "yes" : "no"}
-        className={`pointer-events-auto w-[min(42rem,calc(100vw-1.5rem))] origin-bottom border border-border-c bg-surface text-foreground transition-all duration-300 ease-out ${open ? "rounded-2xl" : "rounded-full"}`}
-        aria-label="Ask AI"
+        data-ask-open="yes"
+        className="absolute left-1/2 top-[120px] w-[min(640px,calc(100%-32px))] -translate-x-1/2 rounded-xl border border-line bg-raised text-fg"
+        aria-label="Ask"
+        onMouseDown={(event) => event.stopPropagation()}
       >
         <form
-          className="flex items-center gap-2 px-3 py-2"
+          className="flex items-center gap-2 px-4 py-2"
           onSubmit={(event) => {
             event.preventDefault();
-            void ask(question);
+            go(question);
           }}
         >
-          <SparkleIcon />
           <label htmlFor="ask-ai-q" className="sr-only">
             Ask Campus Scout
           </label>
@@ -397,14 +418,26 @@ function AskAiDock() {
               <p className="text-xs text-foreground">Answers use Campus Scout records. Gemini’s free tier answers first. If Gemini is unavailable, a small model runs in this browser.</p>
               {!asked && (
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-wide">Try</p>
+                  {recent.length > 0 && (
+                    <>
+                      <p className="micro">Recent</p>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {recent.map((item) => (
+                          <button key={item} type="button" className="rounded border border-line px-3 py-1 text-left text-xs" onClick={() => go(item)}>
+                            {item}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  <p className="micro mt-3">Try</p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {ASK_EXAMPLES.map((example) => (
                       <button
                         key={example}
                         type="button"
                         className="rounded-full border border-border-c px-3 py-1 text-left text-xs font-medium hover:bg-foreground hover:text-background"
-                        onClick={() => void ask(example)}
+                        onClick={() => go(example)}
                       >
                         {example}
                       </button>
@@ -417,7 +450,7 @@ function AskAiDock() {
                         key={campus}
                         type="button"
                         className="rounded-full border border-border-c px-2 py-0.5 text-[11px] font-medium hover:bg-foreground hover:text-background"
-                        onClick={() => void ask(`${campus} founders`)}
+                        onClick={() => go(`${campus} founders`)}
                       >
                         {campus}
                       </button>

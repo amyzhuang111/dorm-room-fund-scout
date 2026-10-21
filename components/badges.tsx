@@ -49,13 +49,13 @@ export function GateBadge({ result, gateOutcomes }: { result: string | null; gat
 }
 
 const TIER_CLASS: Record<string, string> = {
-  "S+": "border-foreground bg-foreground text-white px-2 text-[12px] font-bold ring-2 ring-accent ring-offset-1",
-  S: "bg-accent text-accent-foreground border-accent",
-  A: "bg-ok-bg text-ok border-ok/20",
-  B: "bg-warn-bg text-warn border-warn/20",
-  C: "bg-surface-2 text-muted border-border-c",
-  D: "bg-surface-2 text-muted border-border-c",
-  talent: "bg-surface-2 text-muted border-border-c",
+  "S+": "tier-chip tier-splus",
+  S: "tier-chip tier-s",
+  A: "tier-chip tier-a",
+  B: "tier-chip tier-b",
+  C: "tier-chip tier-c",
+  D: "tier-chip tier-d",
+  talent: "tier-chip tier-talent",
 };
 
 export function SameSchoolBadge() {
@@ -71,10 +71,9 @@ export function SameSchoolBadge() {
 
 export function SignalTierBadge({ tier, basis }: { tier: string | null | undefined; basis?: string | null }) {
   if (!tier) return null;
-  const superTier = tier === "S+";
   return (
     <span
-      className={`inline-flex shrink-0 items-center rounded-full border leading-none ${superTier ? "px-2 py-0.5" : "px-1.5 py-0.5 text-[10px] font-semibold"} ${TIER_CLASS[tier] ?? "bg-surface-2 text-muted border-border-c"}`}
+      className={`inline-flex shrink-0 items-center leading-none ${TIER_CLASS[tier] ?? "tier-chip tier-none"}`}
       title={basis ? `Signal tier ${tier}. ${basis}` : `Signal tier ${tier}`}
     >
       {tier}

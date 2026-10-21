@@ -3,19 +3,26 @@ import { SCREENING_CONFIG } from "@/lib/screening/config";
 
 export default function MethodologyPage() {
   return (
-    <div className="mx-auto max-w-[1100px] space-y-8 px-6 pb-16 pt-10">
+    <div className="mx-auto grid max-w-[1200px] gap-10 px-5 pb-16 pt-10 sm:px-12 lg:grid-cols-[200px_minmax(0,680px)]">
+      <nav className="micro sticky top-20 hidden space-y-3 lg:block" aria-label="On this page">
+        <a href="#products" className="block text-fg-3">Products</a>
+        <a href="#promotion" className="block text-fg-3">Promotion</a>
+      </nav>
+      <div className="max-w-[680px] space-y-8">
       <div>
-        <p className="page-eyebrow">How a record is scored</p>
+        <p className="num text-[12px] text-fg-3">Rules reviewed 2026-09-18</p>
+        <p className="page-eyebrow mt-3">How a record is scored</p>
         <h1 className="page-title">Methodology</h1>
-        <p className="mt-1 text-sm text-muted">
+        <p className="pull my-8">A default is never presented as your fund&apos;s official rubric.</p>
+        <p className="mt-1 text-[17px] leading-7 text-fg-2">
           This is a scouting workspace any fund can use. Every rule below is tagged with where it came
           from — a published policy, internal sourcing guidance, or a proposed product default — so a default is never presented as your fund&apos;s
           official rubric.
         </p>
       </div>
 
-      <section>
-        <h2 className="text-sm font-semibold text-foreground">Founder Scout vs. Startup Scout</h2>
+      <section id="products">
+        <h2 className="pt-8 text-2xl font-semibold tracking-[-0.02em] text-foreground">Founder Scout vs. Startup Scout</h2>
         <p className="mt-1 text-sm text-muted">
           These are two separate products sharing one workspace, not two views of the same list. <strong>Founder Scout</strong> tracks
           people and the project evidence attached to them — including hackathon submissions, which are founder evidence, not startups.
@@ -27,8 +34,8 @@ export default function MethodologyPage() {
         </p>
       </section>
 
-      <section>
-        <h2 className="text-sm font-semibold text-foreground">Founder candidate promotion</h2>
+      <section id="promotion">
+        <h2 className="pt-8 text-2xl font-semibold tracking-[-0.02em] text-foreground">Founder candidate promotion</h2>
         <p className="mt-1 text-sm text-muted">
           Founder Scout Discover does not show every resolved person — only <strong>promoted</strong> candidates, per a deterministic rule
           in <code className="font-mono text-xs">lib/domain/promotion.ts</code>: a person is promoted if they&apos;re linked to a real
@@ -112,7 +119,7 @@ export default function MethodologyPage() {
           Every source has two independent tiers — Founder Scout and Startup Scout (S/A/B/C/D) — because a source can be excellent for
           finding builders early and mediocre for finding formed startups, or the reverse. Prestige is never the tier. The
           rationale is written against 7 dimensions (campus purity, earliness, evidence of building, selectivity, novelty, identity
-          quality, extractability) on the <a href="/sources" className="text-link underline">Sources</a> page. Manual overrides are
+          quality, extractability) on the <a href="/signals/sources" className="text-link underline">Sources</a> page. Manual overrides are
           sticky and always attributed (who/when/why) — re-ingesting never silently reverts one.
         </p>
       </section>
@@ -149,6 +156,7 @@ export default function MethodologyPage() {
           <li>⏳ LLM-assisted assessment <em>proposals</em> — no provider configured, so rating is manual-only; none of the 8 shipped candidates are pre-rated (no invented scores).</li>
         </ul>
       </section>
+      </div>
     </div>
   );
 }

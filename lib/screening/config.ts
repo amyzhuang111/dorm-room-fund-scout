@@ -68,6 +68,13 @@ export const SCREENING_CONFIG = {
       "Proposed default so sparse profiles don't get a misleadingly precise number. Needs calibration; configurable in Settings.",
   } as ScreeningConfigEntry<number>,
 
+  orgName: {
+    key: "org_name",
+    value: "",
+    provenance: "proposed_setting",
+    reason: "Optional name for this workspace. Shortlist headings use it when it is set. Leave it empty to stay neutral.",
+  } as ScreeningConfigEntry<string>,
+
   requiredDimensionsForHeadlineScore: {
     key: "required_dimensions_for_headline_score",
     value: ["ability_to_build", "domain_knowledge_access", "customer_pain_market"] as string[],
