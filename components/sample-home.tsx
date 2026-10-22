@@ -12,7 +12,7 @@ import {
 } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
 
-export type Feed = "directory" | "leaderboard" | "map";
+export type Feed = "directory" | "leaderboard" | "map" | "world";
 
 function feedHref(feed: Feed, sector?: string, kind?: string): string {
   const query = new URLSearchParams();
@@ -34,7 +34,8 @@ export function SampleHome({
   kind?: string;
   stats: HeroStats | null;
 }) {
-  const data = feed === "map" ? null : loadDirectory();
+  const listed = feed === "directory" || feed === "leaderboard";
+  const data = listed ? loadDirectory() : null;
   const matched = data ? filterDirectory(data.cards, sector, kind) : [];
   const shown = feed === "leaderboard" ? leaderboardPage(matched) : directoryPage(matched);
   const total = feed === "leaderboard" ? matched.filter((card) => card.signals > 0).length : matched.length;
@@ -51,12 +52,13 @@ export function SampleHome({
             </svg>
           </Link>
         </span>
-        <div className="mt-4 flex h-10 items-center gap-1 border-b border-line" role="tablist" aria-label="Views">
+        <div className="mt-4 flex flex-wrap items-center gap-x-1 border-b border-line" role="tablist" aria-label="Views">
           <Tab href={feedHref("directory", sector, kind)} active={feed === "directory"}>Directory</Tab>
           <Tab href={feedHref("leaderboard", sector, kind)} active={feed === "leaderboard"}>Leaderboard</Tab>
           <Tab href={feedHref("map")} active={feed === "map"}>Map</Tab>
+          <Tab href={feedHref("world")} active={feed === "world"}>World</Tab>
         </div>
-        {feed !== "map" ? (
+        {listed ? (
           <>
             <h1 className="display mt-5 max-w-[18ch] text-[36px] leading-[40px]">
               {feed === "leaderboard" ? "Leaderboard" : "Student companies"}
@@ -70,8 +72,8 @@ export function SampleHome({
           </>
         ) : null}
       </div>
-      {feed === "map" && stats ? <GlobeHero stats={stats} band={false} /> : null}
-      {feed !== "map" ? (
+      {(feed === "map" || feed === "world") && stats ? <GlobeHero key={feed} stats={stats} band={false} world={feed === "world"} /> : null}
+      {listed ? (
         <div className="mx-auto w-full max-w-[880px] px-6 pb-16 pt-4">
           <p className="mb-3 text-[14px] text-fg-2">
             <span className="num text-fg">{Math.min(shown.length, total).toLocaleString("en-US")}</span>

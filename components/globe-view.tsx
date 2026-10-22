@@ -145,6 +145,14 @@ type HeroPin = { id: string; name: string; x: number; y: number; labelX: number;
 type HeroMark = { id: string; x: number; y: number; hot: boolean };
 
 const INSET_IDS = new Set(["univ_penn", "univ_mit", "univ_harvard", "univ_yale"]);
+const US_BOUNDS: [[number, number], [number, number]] = [
+  [-125, 24.2],
+  [-66.8, 49.4],
+];
+const WORLD_BOUNDS: [[number, number], [number, number]] = [
+  [-168, -55],
+  [178, 74],
+];
 
 function campusFeatureCollection(
   universities: { id: string; name: string; lat: number | null; lon: number | null; companyCount: number; founderCount: number }[],
@@ -185,6 +193,7 @@ export const GlobeView = memo(function GlobeView({
   hideStats = false,
   flush = false,
   hero = false,
+  world = false,
   locked = false,
   geoMode: geoModeProp,
   recentIds = [],
@@ -215,6 +224,8 @@ export const GlobeView = memo(function GlobeView({
   flush?: boolean;
   /** Full-bleed night globe: unlabeled land, founder-sized dots, capped arcs. */
   hero?: boolean;
+  /** Hero camera framed to the world. The US hero stays on the continental bounds. */
+  world?: boolean;
   /** Mini-globe: no spin, no chrome. */
   locked?: boolean;
   geoMode?: "campus" | "hq";
@@ -297,9 +308,9 @@ export const GlobeView = memo(function GlobeView({
         map = new maplibregl.Map({
           container: containerRef.current,
           style: hero ? HERO_STYLE : STYLE_URL,
-          center: lockedPoint ? [lockedPoint.lon as number, lockedPoint.lat as number] : [-98, 39],
-          zoom: locked ? 5.6 : hero ? (window.matchMedia("(max-width: 767px)").matches ? 2.4 : 3.1) : 3.35,
-          minZoom: hero ? 0.4 : locked ? 2 : 1.5,
+          center: lockedPoint ? [lockedPoint.lon as number, lockedPoint.lat as number] : hero && world ? [10, 12] : [-98, 39],
+          zoom: locked ? 5.6 : hero ? (world ? 1 : window.matchMedia("(max-width: 767px)").matches ? 2.4 : 3.1) : 3.35,
+          minZoom: hero ? (world ? -1 : 0.4) : locked ? 2 : 1.5,
           maxZoom: 8,
           attributionControl: hero || locked ? false : { compact: true },
         });
@@ -339,23 +350,52 @@ export const GlobeView = memo(function GlobeView({
         const textWidth = (text: string) => Math.min(120, Math.max(36, Math.ceil(text.length * 7.2)));
         const pins: HeroPin[] = [];
         const marks: HeroMark[] = [];
+        const abroadIds = new Set<string>();
+        if (world) {
+          const anchors: { x: number; y: number }[] = [];
+          const abroad = [...plotted]
+            .filter((university) => (university.country ?? "").trim().toLowerCase() !== "united states")
+            .sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name));
+          for (const university of abroad) {
+            const projected = map.project([university.lon as number, university.lat as number]);
+            if (projected.x < 8 || projected.y < 8 || projected.x > width - 8 || projected.y > height - 8) continue;
+            const crowded = anchors.some((anchor) => Math.hypot(anchor.x - projected.x, anchor.y - projected.y) < 64);
+            if (crowded) continue;
+            abroadIds.add(university.id);
+            anchors.push({ x: projected.x, y: projected.y });
+          }
+        }
         for (const university of plotted) {
           const projected = map.project([university.lon as number, university.lat as number]);
           const inInset = INSET_IDS.has(university.id);
           const hot = hotIds.has(university.id) && !inInset;
           marks.push({ id: university.id, x: projected.x, y: projected.y, hot });
-          if (university.id !== "univ_berkeley" && university.id !== "univ_stanford") continue;
+          const named = world ? abroadIds.has(university.id) : university.id === "univ_berkeley" || university.id === "univ_stanford";
+          if (!named) continue;
           const name = shortCampusLabel(university.id, university.name);
           const tw = textWidth(name);
-          const berkeley = university.id === "univ_berkeley";
           const blockH = hot ? 34 : 16;
-          // East of the dot stays over land. Berkeley sits above its dot, Stanford below, so the two labels cannot stack.
-          let labelX = projected.x + (berkeley ? 14 : 16);
-          let labelY = berkeley ? projected.y - blockH - 16 : projected.y + 16;
-          labelX = Math.max(projected.x + 8, Math.min(width - tw - 8, labelX));
-          labelY = Math.max(8, Math.min(height - blockH - 8, labelY));
-          const lineX = labelX;
-          const lineY = berkeley ? labelY + blockH : labelY;
+          let labelX: number;
+          let labelY: number;
+          let lineX: number;
+          let lineY: number;
+          if (world) {
+            labelX = projected.x - tw / 2;
+            labelY = projected.y - blockH - 22;
+            labelX = Math.max(8, Math.min(width - tw - 8, labelX));
+            labelY = Math.max(8, Math.min(height - blockH - 8, labelY));
+            lineX = Math.max(labelX, Math.min(labelX + tw, projected.x));
+            lineY = labelY + blockH;
+          } else {
+            const berkeley = university.id === "univ_berkeley";
+            // East of the dot stays over land. Berkeley sits above its dot, Stanford below, so the two labels cannot stack.
+            labelX = projected.x + (berkeley ? 14 : 16);
+            labelY = berkeley ? projected.y - blockH - 16 : projected.y + 16;
+            labelX = Math.max(projected.x + 8, Math.min(width - tw - 8, labelX));
+            labelY = Math.max(8, Math.min(height - blockH - 8, labelY));
+            lineX = labelX;
+            lineY = berkeley ? labelY + blockH : labelY;
+          }
           pins.push({ id: university.id, name, x: projected.x, y: projected.y, labelX, labelY, badge: hot, lineX, lineY });
         }
         setHeroPins(pins);
@@ -372,11 +412,17 @@ export const GlobeView = memo(function GlobeView({
         heroSizeRef.current = sizeKey;
         map.resize();
         map.fitBounds(
-          [
-            [-125, 24.2],
-            [-66.8, 49.4],
-          ],
-          { padding: width < 700 ? { top: 28, bottom: 48, left: 16, right: 16 } : { top: 28, bottom: 64, left: 36, right: 36 }, duration: 0 },
+          world ? WORLD_BOUNDS : US_BOUNDS,
+          {
+            padding: world
+              ? width < 700
+                ? { top: 44, bottom: 36, left: 12, right: 12 }
+                : { top: 44, bottom: 48, left: 20, right: 20 }
+              : width < 700
+                ? { top: 28, bottom: 48, left: 16, right: 16 }
+                : { top: 28, bottom: 64, left: 36, right: 36 },
+            duration: 0,
+          },
         );
         // fitBounds commits the camera after this turn. project() is stale until then,
         // and a layout here would pin the labels away from the bubbles.
@@ -896,7 +942,7 @@ export const GlobeView = memo(function GlobeView({
       ];
 
   return (
-    <div className={hero || locked ? "h-full" : flush ? "" : "p-2"}>
+    <div className={hero ? "h-[420px] w-full lg:h-full" : locked ? "h-full" : flush ? "" : "p-2"}>
       {!hideStats && status === "ok" && (
         <div className="stat-strip mb-6">
           {statItems.map((s) => (
@@ -907,7 +953,7 @@ export const GlobeView = memo(function GlobeView({
           ))}
         </div>
       )}
-      <div className={hero || locked ? "hero-map relative h-full w-full overflow-hidden" : "relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-line sm:min-h-[520px]"} style={{ background: hero ? "#2a3548" : MAP_THEME.sky }}>
+      <div className={hero ? "hero-map relative h-[420px] w-full overflow-hidden lg:h-full" : locked ? "hero-map relative h-full w-full overflow-hidden" : "relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-line sm:min-h-[520px]"} style={{ background: hero ? "#2a3548" : MAP_THEME.sky }}>
         <div ref={containerRef} className="h-full w-full" />
         {hero && status === "ok" && heroMarks.map((mark) => {
           const hovered = highlightId === mark.id;
@@ -1123,6 +1169,15 @@ export const GlobeView = memo(function GlobeView({
               onClick={() => {
                 const map = mapRef.current;
                 if (!map) return;
+                if (hero && world) {
+                  heroSizeRef.current = "";
+                  const width = containerRef.current?.clientWidth ?? 0;
+                  map.fitBounds(WORLD_BOUNDS, {
+                    padding: width < 700 ? { top: 44, bottom: 36, left: 12, right: 12 } : { top: 44, bottom: 48, left: 20, right: 20 },
+                    duration: 0,
+                  });
+                  return;
+                }
                 frameCampuses(map, points);
               }}
               aria-label="Reset view"

@@ -14,7 +14,7 @@ import { MapCredit } from "./map-credit";
 
 const GlobeView = dynamic(() => import("./globe-view").then((mod) => mod.GlobeView), { ssr: false });
 
-export function GlobeHero({ stats, band = true }: { stats: HeroStats; band?: boolean }) {
+export function GlobeHero({ stats, band = true, world = false }: { stats: HeroStats; band?: boolean; world?: boolean }) {
   const router = useRouter();
   const search = useSearchParams();
   const university = search.get("university");
@@ -141,23 +141,29 @@ export function GlobeHero({ stats, band = true }: { stats: HeroStats; band?: boo
             ))}
             <Link href="/map/network" className="grid h-10 place-items-center border-b-2 border-transparent px-3 text-[14px] font-medium text-fg-2">Network</Link>
           </div>
-          <div className="relative min-h-[420px] flex-1 overflow-hidden rounded-lg border border-line">
+          <div className="relative h-[420px] flex-1 overflow-hidden rounded-lg border border-line lg:h-auto lg:min-h-[420px]">
             <GlobeView
               universities={plotted}
               basePath="/"
               current={{ university: university ?? undefined }}
               onNavigate={navigate}
               hero
+              world={world}
               hideStats
               flush
               geoMode={mode}
               recentIds={hotIds}
               highlightId={highlight}
             />
+            {world ? (
+              <p className="pointer-events-none absolute left-3 top-3 z-20 max-w-[min(320px,calc(100%-24px))] rounded bg-[#0b0e17]/88 px-2.5 py-1.5 text-[13px] leading-4 text-[#d8dae3]">
+                {countryCoverage(plotted)}
+              </p>
+            ) : null}
             <div className="pointer-events-none absolute bottom-3 left-3 z-20 rounded bg-[#0b0e17]/88 px-2.5 py-1.5">
               <DotLegend />
             </div>
-            <NortheastPanel universities={plotted} />
+            <NortheastPanel universities={plotted} className={world ? "hidden lg:block" : ""} />
             <p className="pointer-events-auto absolute bottom-2 right-3 z-20 max-w-[240px] text-right text-[13px] leading-4 text-[#d8dae3]">
               <MapCredit />
             </p>
@@ -213,6 +219,22 @@ const LEGEND = [
   { count: 100, size: 14, color: "#d7e4ff" },
   { count: 700, size: 18, color: "#ffffff" },
 ];
+
+function countryCoverage(universities: UniversitySummary[]): string {
+  const plotted = universities.filter((university) => university.founderCount > 0 && university.lat != null && university.lon != null);
+  const counts = new Map<string, number>();
+  for (const university of plotted) {
+    const country = university.country?.trim();
+    if (!country) continue;
+    counts.set(country, (counts.get(country) ?? 0) + 1);
+  }
+  const names = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([name]) => name);
+  const campusWord = plotted.length === 1 ? "campus" : "campuses";
+  const countryWord = names.length === 1 ? "country" : "countries";
+  const listed = names.length <= 1 ? (names[0] ?? "") : names.length === 2 ? `${names[0]} and ${names[1]}` : `${names.slice(0, -1).join(", ")}, and ${names[names.length - 1]}`;
+  const count = `${plotted.length.toLocaleString("en-US")} ${campusWord} in ${names.length.toLocaleString("en-US")} ${countryWord}`;
+  return listed ? `${count}: ${listed}.` : `${count}.`;
+}
 
 function DotLegend() {
   return (
@@ -517,7 +539,7 @@ function signalWeekOf(university: UniversitySummary): number {
   return typeof value === "number" ? value : 0;
 }
 
-function NortheastPanel({ universities }: { universities: UniversitySummary[] }) {
+function NortheastPanel({ universities, className = "" }: { universities: UniversitySummary[]; className?: string }) {
   const hotIds = new Set(
     [...universities]
       .filter((university) => signalWeekOf(university) > 0)
@@ -529,7 +551,7 @@ function NortheastPanel({ universities }: { universities: UniversitySummary[] })
   const frameW = 340;
   const frameH = 168;
   return (
-    <div className="absolute bottom-14 right-3 z-20 w-[340px] overflow-hidden rounded border border-line bg-[#0c1320]" role="img" aria-label="Northeast">
+    <div className={`absolute bottom-14 right-3 z-20 w-[340px] overflow-hidden rounded border border-line bg-[#0c1320] ${className}`} role="img" aria-label="Northeast">
       <div className="px-2 pt-1.5 text-[13px] font-medium leading-4 text-[#f7f8fc]">Northeast</div>
       <div className="relative h-[168px]">
         <svg viewBox="0 0 1000 700" className="absolute inset-0 h-full w-full" aria-hidden>
