@@ -143,16 +143,27 @@ h1, h2, h3 {
   letter-spacing: -0.03em;
 }
 
-.display, .num, .stat-num, .page-title {
+h1, .hero-num, .page-title {
   font-family: var(--font-display), Georgia, serif;
+}
+
+.hero-num, .num, .stat-num, .page-title {
   font-variant-numeric: tabular-nums lining-nums;
   font-feature-settings: "tnum" 1, "lnum" 1;
 }
 
 .num, .stat-num {
+  font-family: var(--font-sans);
   font-weight: 600;
   letter-spacing: 0;
   color: var(--fg);
+}
+
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .micro, .ui-label, .page-eyebrow, .stat-kicker {
@@ -267,7 +278,7 @@ h1, h2, h3 {
   height: 20px;
   padding: 0 6px;
   border-radius: 999px;
-  font-family: var(--font-display), Georgia, serif;
+  font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
   font-size: 13px;
   font-weight: 600;

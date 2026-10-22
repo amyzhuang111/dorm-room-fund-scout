@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ClassYearChart } from "@/components/class-year-chart";
 import { DataTable } from "@/components/data-table";
 import { ShortlistCampusButton } from "@/components/shortlist-campus";
 import { campusSlug, resolveCampusSlug, shortCampusLabel } from "@/lib/domain/campuses";
-import { loadFounderTable, type FounderTableRow } from "@/lib/domain/founder-table";
+import { loadFounderTable, loadProjectRows } from "@/lib/domain/founder-table";
+import { SIGNALS_THIS_WEEK_LABEL, signalsThisWeek } from "@/lib/domain/hero-stats";
 import { listSignalsForUniversity, listSources, listUniversities, type UniversitySummary } from "@/lib/domain/queries";
 import { getDb } from "@/lib/db/client";
 
@@ -24,51 +26,6 @@ function resolveUniversity(slug: string): UniversitySummary | undefined {
   );
 }
 
-function signalsIn30Days(universityId: string): number {
-  let signals30 = 0;
-  try {
-    const rows = getDb()
-      .prepare(
-        `SELECT s.created_at as at
-           FROM signals s
-           JOIN person_project_roles ppr ON ppr.project_id = s.project_id
-           JOIN affiliations a ON a.person_id = ppr.person_id
-          WHERE a.university_id = ? AND s.created_at IS NOT NULL`,
-      )
-      .all(universityId) as { at: string }[];
-    const now = Date.now();
-    for (const row of rows) {
-      const iso = row.at.includes("T") ? row.at : `${row.at.replace(" ", "T")}Z`;
-      const time = Date.parse(iso);
-      if (Number.isNaN(time) || time > now) continue;
-      if (now - time <= 30 * 24 * 60 * 60 * 1000) signals30 += 1;
-    }
-  } catch {
-    return 0;
-  }
-  return signals30;
-}
-
-const TIER_ORDER = ["S+", "S", "A", "B", "C", "D"] as const;
-
-function founderBars(founders: FounderTableRow[]): { title: string; bars: { label: string; count: number }[] } | null {
-  const years = new Map<number, number>();
-  const tiers = new Map<string, number>();
-  for (const row of founders) {
-    if (row.year != null) years.set(row.year, (years.get(row.year) ?? 0) + 1);
-    if (row.tier) tiers.set(row.tier, (tiers.get(row.tier) ?? 0) + 1);
-  }
-  const yearBars = [...years.entries()].sort((a, b) => b[0] - a[0]);
-  if (yearBars.length >= 2) {
-    return {
-      title: "Founders by class year",
-      bars: yearBars.map(([year, count]) => ({ label: String(year), count })),
-    };
-  }
-  const tierBars = TIER_ORDER.map((tier) => ({ label: tier, count: tiers.get(tier) ?? 0 })).filter((bar) => bar.count > 0);
-  if (tierBars.length === 0) return null;
-  return { title: "Founders by tier", bars: tierBars };
-}
 
 function companies(universityId: string): { id: string; name: string; people: number }[] {
   try {
@@ -102,9 +59,14 @@ export default async function CampusPage({
   const label = shortCampusLabel(university.id, university.name);
   const tab = TABS.includes(sp.tab as (typeof TABS)[number]) ? (sp.tab as (typeof TABS)[number]) : "founders";
   const founders = loadFounderTable(university.id);
+  const projects = loadProjectRows(university.id);
   const topTier = founders.filter((row) => row.tier === "S" || row.tier === "S+").length;
-  const signals30 = signalsIn30Days(university.id);
-  const distribution = founderBars(founders);
+  const signalsWeek = signalsThisWeek(university.id);
+  const yearCounts = [...founders.reduce((counts, row) => {
+    if (row.year == null) return counts;
+    counts.set(row.year, (counts.get(row.year) ?? 0) + 1);
+    return counts;
+  }, new Map<number, number>())].map(([year, count]) => ({ year, count }));
   const affiliated = companies(university.id);
   const sources = listSources().filter((source) => source.campuses.includes(university.id));
   const signals = tab === "signals" ? listSignalsForUniversity(university.id) : [];
@@ -133,8 +95,8 @@ export default async function CampusPage({
             <span className="text-[14px] text-fg-2">Top tier</span>
           </p>
           <p>
-            <span className="num block text-[28px] leading-8">{signals30.toLocaleString("en-US")}</span>
-            <span className="text-[14px] text-fg-2">Signals in 30 days</span>
+            <span className="num block text-[28px] leading-8">{signalsWeek.toLocaleString("en-US")}</span>
+            <span className="text-[14px] text-fg-2">{SIGNALS_THIS_WEEK_LABEL}</span>
           </p>
           <ShortlistCampusButton id={university.id} />
         </div>
@@ -148,7 +110,7 @@ export default async function CampusPage({
       </div>
       <div className="mt-8 grid gap-x-6 gap-y-8 lg:grid-cols-12">
         <div className="lg:col-span-8">
-          {tab === "founders" && <DataTable rows={founders} campusLocked />}
+          {tab === "founders" && <DataTable rows={projects} campusLocked />}
           {tab === "companies" && (
             <ul>
               {affiliated.map((company) => (
@@ -179,25 +141,7 @@ export default async function CampusPage({
           )}
         </div>
         <aside className="space-y-6 lg:sticky lg:top-20 lg:col-span-4 lg:self-start">
-          {distribution && (
-            <div>
-              <p className="display text-[16px] font-medium">{distribution.title}</p>
-              <ul className="mt-3 space-y-1.5" aria-label={distribution.title}>
-                {distribution.bars.map((bar) => {
-                  const peak = distribution.bars[0] ? Math.max(...distribution.bars.map((item) => item.count)) : 1;
-                  return (
-                    <li key={bar.label} className="grid grid-cols-[52px_minmax(0,1fr)_36px] items-center gap-2">
-                      <span className="num text-[13px] text-fg-2">{bar.label}</span>
-                      <span className="block h-2 overflow-hidden rounded-sm bg-sunken">
-                        <span className="block h-2 rounded-sm bg-[#6d93d4]" style={{ width: `${Math.max(4, (bar.count / peak) * 100)}%` }} />
-                      </span>
-                      <span className="num text-right text-[13px]">{bar.count.toLocaleString("en-US")}</span>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          )}
+          {yearCounts.length > 0 && <ClassYearChart years={yearCounts} />}
           <div>
             <p className="text-[14px] font-medium" title="Listed from campus affiliations. Headquarters arcs are not stored as a ranked feeder list.">
               Affiliated companies

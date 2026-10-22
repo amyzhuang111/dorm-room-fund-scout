@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import type { FounderTableRow } from "@/lib/domain/founder-table";
+import type { ProjectMate, ProjectTableRow } from "@/lib/domain/founder-table";
 import { relativeTime } from "@/lib/domain/relative-time";
 import { useFeedback } from "./feedback-provider";
 import { useUserPipeline } from "./user-pipeline-provider";
@@ -14,50 +14,14 @@ function initials(name: string): string {
   return ((first[0] ?? "") + (last[0] ?? first[1] ?? "")).toUpperCase() || "·";
 }
 
-function signalKind(row: FounderTableRow): "yc" | "github" | "funding" | null {
-  const text = row.signal ?? "";
-  if (/Y Combinator/i.test(text)) return "yc";
-  if (/GitHub/i.test(text)) return "github";
-  if (row.signalType === "funding" || /\braises?\b|\bfunding\b/i.test(text)) return "funding";
-  return null;
+function calendarDay(iso: string | null): string | null {
+  if (!iso) return null;
+  const match = iso.trim().match(/^(\d{4}-\d{2}-\d{2})/);
+  return match ? match[1] : null;
 }
 
-function emptyOr(value: string | number | null | undefined) {
-  if (value == null || value === "") return null;
-  return value;
-}
-
-function signalLabel(text: string | null): string | null {
-  if (!text) return null;
-  const cleaned = text.replace(/:\s*"-"\s*(?:\u2014|\u2013|-)\s*-\./g, ".").replace(/[ \t]{2,}/g, " ").trim();
-  return cleaned || null;
-}
-
-function signalParts(text: string | null): { pill: string | null; detail: string | null; full: string | null } {
-  const full = signalLabel(text);
-  if (!full) return { pill: null, detail: null, full: null };
-  const match = full.match(/^(.*?)\s+project gallery submission\b[:.]?\s*(.*)$/i);
-  if (!match) return { pill: null, detail: full, full };
-  const pill = match[1].trim();
-  const detail = match[2].replace(/^\.\s*/, "").trim();
-  return { pill: pill || null, detail: detail || null, full };
-}
-
-function SourceMark({ kind }: { kind: "yc" | "github" | "funding" }) {
-  const color = kind === "yc" ? "#7C8CF0" : kind === "funding" ? "#3FB68B" : "currentColor";
-  if (kind === "github") {
-    return (
-      <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden className="shrink-0" fill="currentColor">
-        <path d="M8 1.2a6.8 6.8 0 0 0-2.15 13.25c.34.06.46-.15.46-.33v-1.16c-1.88.41-2.28-.8-2.28-.8-.3-.78-.75-1-.75-1-.62-.42.05-.41.05-.41.68.05 1.04.7 1.04.7.6 1.04 1.58.74 1.97.56.06-.44.23-.74.42-.91-1.5-.17-3.08-.75-3.08-3.34 0-.74.26-1.34.7-1.81-.07-.17-.3-.87.06-1.81 0 0 .57-.18 1.86.7a6.4 6.4 0 0 1 3.38 0c1.29-.88 1.86-.7 1.86-.7.36.94.13 1.64.06 1.81.44.47.7 1.07.7 1.81 0 2.6-1.58 3.17-3.09 3.33.24.21.46.62.46 1.26v1.87c0 .18.12.4.47.33A6.8 6.8 0 0 0 8 1.2z" />
-      </svg>
-    );
-  }
-  return (
-    <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden className="shrink-0">
-      <circle cx="8" cy="8" r="5.5" fill="none" stroke={color} strokeWidth="1.5" />
-      {kind === "funding" ? <path d="M8 4.5v7M6 6.2h3.2a1.4 1.4 0 0 1 0 2.8H6.8" fill="none" stroke={color} strokeWidth="1.3" /> : <text x="8" y="11" textAnchor="middle" fontSize="7" fill={color}>Y</text>}
-    </svg>
-  );
+function Empty() {
+  return <span className="text-fg-3">{"\u2014"}</span>;
 }
 
 function tierClass(tier: string | null): string {
@@ -69,11 +33,65 @@ function tierClass(tier: string | null): string {
   return "tier-chip tier-none";
 }
 
-export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRow[]; campusLocked?: boolean }) {
+function personLine(person: ProjectMate): string {
+  return person.signalAt ? `${person.name}, ${relativeTime(person.signalAt)}` : person.name;
+}
+
+function AvatarStack({ people }: { people: ProjectMate[] }) {
+  const shown = people.slice(0, 4);
+  const extra = people.length - shown.length;
+  return (
+    <span className="flex shrink-0 items-center">
+      {shown.map((person, index) => (
+        <span
+          key={person.id}
+          title={personLine(person)}
+          className="inline-grid h-7 w-7 place-items-center rounded-full border-2 border-bg bg-raised text-[11px] font-medium tracking-[-0.04em] text-fg"
+          style={{ marginLeft: index === 0 ? 0 : -8, zIndex: shown.length - index }}
+        >
+          {initials(person.name)}
+        </span>
+      ))}
+      {extra > 0 ? <span className="ml-1.5 text-[13px] text-fg-2">+{extra}</span> : null}
+    </span>
+  );
+}
+
+interface Group {
+  event: string | null;
+  at: string | null;
+  rows: ProjectTableRow[];
+}
+
+function groupRows(rows: ProjectTableRow[]): Group[] {
+  const groups: Group[] = [];
+  const byEvent = new Map<string, Group>();
+  for (const row of rows) {
+    if (row.event) {
+      const existing = byEvent.get(row.event);
+      if (existing) {
+        existing.rows.push(row);
+        if (calendarDay(row.signalAt) && calendarDay(row.signalAt) !== calendarDay(existing.at)) {
+          const rowTime = Date.parse(row.signalAt ?? "");
+          const groupTime = Date.parse(existing.at ?? "");
+          if (!Number.isNaN(rowTime) && (Number.isNaN(groupTime) || rowTime > groupTime)) existing.at = row.signalAt;
+        }
+      } else {
+        const group = { event: row.event, at: row.signalAt, rows: [row] };
+        byEvent.set(row.event, group);
+        groups.push(group);
+      }
+    } else {
+      groups.push({ event: null, at: null, rows: [row] });
+    }
+  }
+  return groups;
+}
+
+export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRow[]; campusLocked?: boolean }) {
   const [query, setQuery] = useState("");
   const [tier, setTier] = useState("");
   const [campus, setCampus] = useState("");
-  const [year, setYear] = useState("");
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [compact, setCompact] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
@@ -83,35 +101,32 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
   const pipeline = useUserPipeline();
 
   const campuses = useMemo(() => [...new Set(rows.map((row) => row.campus).filter(Boolean))] as string[], [rows]);
-  const years = useMemo(() => [...new Set(rows.map((row) => row.year).filter((value): value is number => value != null))].sort((a, b) => b - a), [rows]);
-  const mostlyEmpty = (filled: number) => rows.length === 0 || filled / rows.length < 0.5;
-  const companyFilled = rows.filter((row) => row.company).length;
-  const yearFilled = rows.filter((row) => row.year != null).length;
   const verifiedFilled = rows.filter((row) => row.verified).length;
   const head = rows.slice(0, 20);
-  const headHas = (filled: number, pick: (row: FounderTableRow) => boolean) =>
-    filled > 0 && head.length > 0 && head.filter(pick).length / head.length >= 0.25;
-  const autoColumns = {
-    tier: !mostlyEmpty(rows.filter((row) => row.tier).length),
-    company: headHas(companyFilled, (row) => Boolean(row.company)),
-    year: headHas(yearFilled, (row) => row.year != null),
-    score: !mostlyEmpty(rows.filter((row) => row.score != null).length),
-    verified: headHas(verifiedFilled, (row) => row.verified),
-  };
-  const [columnChoice, setColumnChoice] = useState<typeof autoColumns | null>(null);
-  const columns = columnChoice ?? autoColumns;
-  function setColumn(key: keyof typeof autoColumns, value: boolean) {
-    setColumnChoice({ ...columns, [key]: value });
-  }
+  const autoVerified = verifiedFilled > 0 && head.length > 0 && head.filter((row) => row.verified).length / head.length >= 0.25;
+  const [verifiedChoice, setVerifiedChoice] = useState<boolean | null>(null);
+  const showVerified = verifiedChoice ?? autoVerified;
+
   const filtered = rows.filter((row) => {
-    if (query && !`${row.name} ${row.company ?? ""} ${row.campus ?? ""}`.toLowerCase().includes(query.toLowerCase())) return false;
-    if (tier && row.tier !== tier) return false;
+    if (query) {
+      const hay = `${row.name} ${row.detail ?? ""} ${row.event ?? ""} ${row.people.map((person) => person.name).join(" ")}`.toLowerCase();
+      if (!hay.includes(query.toLowerCase())) return false;
+    }
+    if (tier && row.tier !== tier && !row.people.some((person) => person.tier === tier)) return false;
     if (campus && row.campus !== campus) return false;
-    if (year && String(row.year ?? "") !== year) return false;
     if (verifiedOnly && !row.verified) return false;
     return true;
   });
-  const open = filtered.find((row) => row.id === openId) ?? null;
+  const groups = useMemo(() => groupRows(filtered), [filtered]);
+  const ordered = useMemo(() => groups.flatMap((group) => group.rows), [groups]);
+  const open = ordered.find((row) => row.id === openId) ?? null;
+  const withSignal = rows.filter((row) => row.full || row.detail || row.signalAt).length;
+
+  function shortlistPeople(row: ProjectTableRow) {
+    for (const person of row.people) {
+      feedback.setAction({ entityType: "person", entityId: person.id, nameKey: person.name, domainKey: null, action: "like" });
+    }
+  }
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -120,20 +135,18 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
       if (event.key === "Escape") setOpenId(null);
       if (event.key === "ArrowDown") {
         event.preventDefault();
-        setCursor((index) => Math.min(filtered.length - 1, index + 1));
+        setCursor((index) => Math.min(ordered.length - 1, index + 1));
       }
       if (event.key === "ArrowUp") {
         event.preventDefault();
         setCursor((index) => Math.max(0, index - 1));
       }
-      if (event.key === "Enter" && filtered[cursor]) setOpenId(filtered[cursor].id);
-      if ((event.key === "s" || event.key === "S") && filtered[cursor]) {
-        feedback.setAction({ entityType: "person", entityId: filtered[cursor].id, nameKey: filtered[cursor].name, domainKey: null, action: "like" });
-      }
+      if (event.key === "Enter" && ordered[cursor]) setOpenId(ordered[cursor].id);
+      if ((event.key === "s" || event.key === "S") && ordered[cursor]) shortlistPeople(ordered[cursor]);
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [cursor, feedback, filtered]);
+  }, [cursor, feedback, ordered]);
 
   function toggle(id: string) {
     setSelected((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
@@ -141,29 +154,37 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
 
   function exportCsv() {
     const picked = rows.filter((row) => selected.includes(row.id));
-    const lines = ["name,tier,campus,company,year,score,verified", ...picked.map((row) => [row.name, row.tier ?? "", row.campus ?? "", row.company ?? "", row.year ?? "", row.score ?? "", row.verified ? "yes" : "no"].join(","))];
+    const lines = [
+      "project,tier,campus,people,signal",
+      ...picked.map((row) =>
+        [row.name, row.tier ?? "", row.campus ?? "", row.people.map((person) => person.name).join("; "), row.full ?? row.detail ?? ""]
+          .map((value) => `"${value.replace(/"/g, '""')}"`)
+          .join(","),
+      ),
+    ];
     const blob = new Blob([lines.join("\n")], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "founders.csv";
+    link.download = "projects.csv";
     link.click();
     URL.revokeObjectURL(url);
   }
 
-  const rowH = compact ? "h-9" : "h-11";
-  const withSignal = rows.filter((row) => row.signal).length;
-  const verifiedCount = rows.filter((row) => row.verified).length;
+  const pad = compact ? "py-1" : "py-2";
+  const columns = 4 + (campusLocked ? 0 : 1) + (showVerified ? 1 : 0);
+
+  let rowIndex = 0;
 
   return (
     <div>
       <p className="mb-4 flex flex-wrap gap-x-6 gap-y-1 text-[14px] text-fg-2">
-        {!campusLocked && <span><span className="num">{rows.length.toLocaleString("en-US")}</span> founders</span>}
+        <span><span className="num">{rows.length.toLocaleString("en-US")}</span> projects</span>
         <span><span className="num">{withSignal.toLocaleString("en-US")}</span> with a signal</span>
-        <span><span className="num">{verifiedCount.toLocaleString("en-US")}</span> verified</span>
+        {verifiedFilled > 0 ? <span><span className="num">{verifiedFilled.toLocaleString("en-US")}</span> verified</span> : null}
       </p>
       <div className="flex h-12 flex-wrap items-center gap-2">
-        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search founders" className="h-9 w-[280px] max-w-full rounded border border-[#8b93a7] bg-raised px-2 text-[14px] outline-none" />
+        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" className="h-9 w-[280px] max-w-full rounded border border-[#8b93a7] bg-raised px-2 text-[14px] outline-none" />
         <select value={tier} onChange={(event) => setTier(event.target.value)} className="h-8 rounded border border-line bg-raised px-2 text-[14px]" aria-label="Tier">
           <option value="">Tier</option>
           {["S+", "S", "A", "B", "C", "D"].map((value) => <option key={value}>{value}</option>)}
@@ -174,31 +195,27 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
             {campuses.map((value) => <option key={value}>{value}</option>)}
           </select>
         )}
-        {columns.year && (
-          <select value={year} onChange={(event) => setYear(event.target.value)} className="h-8 rounded border border-line bg-raised px-2 text-[14px]" aria-label="Class year">
-            <option value="">Year</option>
-            {years.map((value) => <option key={value}>{value}</option>)}
-          </select>
-        )}
-        <details className="relative">
-          <summary className="h-8 cursor-pointer list-none rounded px-2 leading-8 text-[14px] text-fg-2">Columns</summary>
-          <div className="absolute z-30 mt-1 w-40 rounded border border-line bg-bg p-2 text-[14px] shadow-[var(--shadow-menu)]">
-            {(["tier", "company", "year", "score", "verified"] as const).filter((key) => key !== "company" || companyFilled > 0).filter((key) => key !== "year" || yearFilled > 0).filter((key) => key !== "verified" || verifiedFilled > 0).map((key) => (
-              <label key={key} className="flex items-center gap-2 py-1 capitalize">
-                <input type="checkbox" checked={columns[key]} onChange={(event) => setColumn(key, event.target.checked)} />
-                {key}
+        {verifiedFilled > 0 && (
+          <details className="relative">
+            <summary className="h-8 cursor-pointer list-none rounded px-2 leading-8 text-[14px] text-fg-2">Columns</summary>
+            <div className="absolute z-30 mt-1 w-40 rounded border border-line bg-bg p-2 text-[14px] shadow-[var(--shadow-menu)]">
+              <label className="flex items-center gap-2 py-1">
+                <input type="checkbox" checked={showVerified} onChange={(event) => setVerifiedChoice(event.target.checked)} />
+                Verified
               </label>
-            ))}
-          </div>
-        </details>
-        <button type="button" className={`h-8 rounded px-2 text-[14px] ${verifiedOnly ? "bg-[var(--cobalt-haze)] text-fg" : "text-fg-2"}`} onClick={() => setVerifiedOnly((value) => !value)}>
-          Verified
-        </button>
+            </div>
+          </details>
+        )}
+        {verifiedFilled > 0 && (
+          <button type="button" className={`h-8 rounded px-2 text-[14px] ${verifiedOnly ? "bg-[var(--cobalt-haze)] text-fg" : "text-fg-2"}`} onClick={() => setVerifiedOnly((value) => !value)}>
+            Verified
+          </button>
+        )}
         <button type="button" className="h-8 rounded px-2 text-[14px] text-fg-2" onClick={() => setCompact((value) => !value)}>
           {compact ? "Comfortable" : "Compact"}
         </button>
-        {(!campusLocked || filtered.length !== rows.length) && (
-          <span className="ml-auto text-[14px] text-fg-2"><span className="num">{filtered.length.toLocaleString("en-US")}</span> founders</span>
+        {filtered.length !== rows.length && (
+          <span className="ml-auto text-[14px] text-fg-2"><span className="num">{filtered.length.toLocaleString("en-US")}</span> projects</span>
         )}
       </div>
       <div className="max-h-[calc(100dvh-220px)] overflow-auto border-t border-line-strong">
@@ -206,75 +223,91 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
           <thead className="sticky top-0 z-20">
             <tr className="h-9 text-[14px] text-fg-2">
               <th className="sticky top-0 z-20 w-8 border-b border-line-strong bg-bg px-2 font-medium" />
-              <th className="sticky top-0 z-20 w-[24%] border-b border-line-strong bg-bg px-2 font-medium">Name</th>
-              {columns.tier && <th className="sticky top-0 z-20 w-[72px] border-b border-line-strong bg-bg px-2 font-medium">Tier</th>}
-              {!campusLocked && <th className="sticky top-0 z-20 w-[14%] border-b border-line-strong bg-bg px-2 font-medium">Campus</th>}
-              {columns.company && <th className="sticky top-0 z-20 w-[16%] border-b border-line-strong bg-bg px-2 font-medium">Company</th>}
-              {columns.year && <th className="sticky top-0 z-20 w-[72px] border-b border-line-strong bg-bg px-2 text-right font-medium">Year</th>}
-              <th className="sticky top-0 z-20 border-b border-line-strong bg-bg px-2 font-medium">Last signal</th>
-              <th className="sticky top-0 z-20 w-[72px] border-b border-line-strong bg-bg px-2 text-right font-medium">Age</th>
-              {columns.score && <th className="sticky top-0 z-20 w-[88px] border-b border-line-strong bg-bg px-2 text-right font-medium">Score</th>}
-              {columns.verified && <th className="sticky top-0 z-20 w-[76px] border-b border-line-strong bg-bg px-2 font-medium">Verified</th>}
+              <th className="sticky top-0 z-20 w-[30%] border-b border-line-strong bg-bg px-2 font-medium">Project</th>
+              <th className="sticky top-0 z-20 w-[72px] border-b border-line-strong bg-bg px-2 font-medium">Tier</th>
+              {!campusLocked && <th className="sticky top-0 z-20 w-[16%] border-b border-line-strong bg-bg px-2 font-medium">Campus</th>}
+              <th className="sticky top-0 z-20 border-b border-line-strong bg-bg px-2 font-medium">Signal</th>
+              <th className="sticky top-0 z-20 w-[88px] border-b border-line-strong bg-bg px-2 text-right font-medium">Date</th>
+              {showVerified && <th className="sticky top-0 z-20 w-[76px] border-b border-line-strong bg-bg px-2 font-medium">Verified</th>}
             </tr>
           </thead>
           <tbody>
-            {filtered.map((row, index) => (
-              <tr
-                key={row.id}
-                className={`${rowH} align-middle [&>td]:border-b [&>td]:border-line ${openId === row.id ? "bg-[var(--cobalt-haze)] shadow-[inset_2px_0_0_var(--cobalt)]" : index === cursor ? "bg-sunken" : "hover:bg-[#161c2e]"}`}
-                onClick={() => { setCursor(index); setOpenId(row.id); }}
-              >
-                <td className="px-2" onClick={(event) => event.stopPropagation()}>
-                  <input type="checkbox" checked={selected.includes(row.id)} onChange={() => toggle(row.id)} aria-label={`Select ${row.name}`} />
-                </td>
-                <td className="px-2">
-                  <span className="flex min-w-0 items-center gap-2">
-                    <span className="inline-grid h-7 w-7 shrink-0 place-items-center rounded-full bg-raised text-[11px] font-medium tracking-[-0.04em] text-fg">{initials(row.name)}</span>
-                    <span className="truncate font-medium">{row.name}</span>
-                    {row.tier && !columns.tier ? <span className={`${tierClass(row.tier)} shrink-0`}>{row.tier}</span> : null}
-                  </span>
-                </td>
-                {columns.tier && <td className="px-2">{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : null}</td>}
-                {!campusLocked && <td className="truncate px-2">{row.campusSlug ? <Link href={`/campuses/${row.campusSlug}`} className="text-link">{row.campus}</Link> : emptyOr(row.campus)}</td>}
-                {columns.company && <td className="truncate px-2">{row.companyId ? <Link href={`/startup/${row.companyId}`} className="text-link">{row.company}</Link> : emptyOr(row.company)}</td>}
-                {columns.year && <td className="num px-2 text-right text-[14px]">{emptyOr(row.year)}</td>}
-                <td className="overflow-hidden px-2 text-[14px]">
-                  {(() => {
-                    const kind = signalKind(row);
-                    const parts = signalParts(row.signal);
-                    return (
-                      <span className="flex w-full min-w-0 items-center gap-2" title={parts.full ?? undefined}>
-                        {kind ? <SourceMark kind={kind} /> : null}
-                        {parts.pill ? <span className="shrink-0 rounded-full border border-line bg-raised px-2 py-px text-[13px] leading-5 text-fg-2">{parts.pill}</span> : null}
-                        {parts.detail ? <span className="min-w-0 flex-1 truncate">{parts.detail}</span> : null}
-                      </span>
-                    );
-                  })()}
-                </td>
-                <td className="num px-2 text-right text-[13px] text-fg-2">{row.signalAt ? relativeTime(row.signalAt) : null}</td>
-                {columns.score && (
-                  <td className="num px-2 text-right text-[14px]">
-                    {emptyOr(row.score)}
-                    {row.score != null && <span className="ml-2 inline-block h-1 w-10 align-middle bg-sunken"><span className="block h-1 bg-cobalt" style={{ width: `${Math.max(0, Math.min(100, row.score))}%` }} /></span>}
+            {groups.map((group) => {
+              const headerDay = calendarDay(group.at);
+              const header = group.event ? (
+                <tr key={`event:${group.event}`} className="bg-bg">
+                  <td colSpan={columns} className="border-b border-line px-2 py-2">
+                    <span className="inline-flex items-center gap-3">
+                      <span className="rounded-full border border-line bg-raised px-2 py-px text-[13px] leading-5 text-fg-2">{group.event}</span>
+                      {group.at ? <span className="num text-[13px] text-fg-2">{relativeTime(group.at)}</span> : <Empty />}
+                    </span>
                   </td>
-                )}
-                {columns.verified && <td className="px-2 text-[#6f7688]">{row.verified ? <span className="text-ok" title="Verified">✓</span> : null}</td>}
-              </tr>
-            ))}
+                </tr>
+              ) : null;
+              const body = group.rows.map((row) => {
+                const index = rowIndex;
+                rowIndex += 1;
+                const sameDay = group.event != null && headerDay != null && calendarDay(row.signalAt) === headerDay;
+                const date = !row.signalAt || sameDay ? null : relativeTime(row.signalAt);
+                const text = row.detail || (!group.event ? row.full : null);
+                return (
+                  <tr
+                    key={row.id}
+                    className={`align-top [&>td]:border-b [&>td]:border-line ${openId === row.id ? "bg-[var(--cobalt-haze)] shadow-[inset_2px_0_0_var(--cobalt)]" : index === cursor ? "bg-sunken" : "hover:bg-[#161c2e]"}`}
+                    onClick={() => { setCursor(index); setOpenId(row.id); }}
+                  >
+                    <td className={`${pad} px-2`} onClick={(event) => event.stopPropagation()}>
+                      <input type="checkbox" checked={selected.includes(row.id)} onChange={() => toggle(row.id)} aria-label={`Select ${row.name || row.people[0]?.name || "project"}`} />
+                    </td>
+                    <td className={`${pad} px-2`}>
+                      <span className="flex min-w-0 items-center gap-2">
+                        <AvatarStack people={row.people} />
+                        <span className="min-w-0 truncate font-medium">{row.name || <Empty />}</span>
+                      </span>
+                    </td>
+                    <td className={`${pad} px-2`}>{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : <Empty />}</td>
+                    {!campusLocked && (
+                      <td className={`${pad} truncate px-2`}>
+                        {row.campusSlug ? <Link href={`/campuses/${row.campusSlug}`} className="text-link">{row.campus}</Link> : row.campus || <Empty />}
+                      </td>
+                    )}
+                    <td className={`${pad} px-2`}>
+                      {text ? (
+                        <span className="clamp-2 text-[14px] leading-5" title={row.full ?? text}>{text}</span>
+                      ) : (
+                        <Empty />
+                      )}
+                    </td>
+                    <td className={`${pad} num px-2 text-right text-[13px] text-fg-2`}>{date ?? <Empty />}</td>
+                    {showVerified && <td className={`${pad} px-2`}>{row.verified ? <span className="text-ok" title="Verified">✓</span> : <Empty />}</td>}
+                  </tr>
+                );
+              });
+              return [header, ...body];
+            })}
           </tbody>
         </table>
-        {filtered.length === 0 && <p className="px-2 py-6 text-[14px] text-fg-2">No founders match. Clear filters.</p>}
+        {ordered.length === 0 && <p className="px-2 py-6 text-[14px] text-fg-2">No projects match. Clear filters.</p>}
       </div>
       {open && (
         <aside className="fixed bottom-0 right-0 top-14 z-30 w-[min(480px,100%)] overflow-y-auto border-l border-line bg-raised p-6">
           <button type="button" className="text-[14px] text-fg-2" onClick={() => setOpenId(null)}>Close</button>
-          <h2 className="mt-3 text-[24px] leading-[30px] font-semibold tracking-[-0.02em]">{open.name}</h2>
-          <p className="mt-1 text-[14px] text-fg-2">{open.campus ?? "Campus not on record"}{open.company ? ` · ${open.company}` : ""}</p>
+          <h2 className="mt-3 text-[24px] leading-[30px] font-semibold tracking-[-0.02em]">{open.name || open.people[0]?.name || "\u2014"}</h2>
+          <p className="mt-1 text-[14px] text-fg-2">{open.campus ?? "Campus not on record"}</p>
           {open.tier ? <p className="mt-4"><span className={tierClass(open.tier)}>{open.tier}</span></p> : null}
-          <p className="mt-4 text-[15px] leading-6">{signalLabel(open.signal) ?? "No signal text is stored for this person."}</p>
+          {open.event ? <p className="mt-4 text-[14px] text-fg-2">{open.event}</p> : null}
+          <p className="mt-4 text-[15px] leading-6">{open.full ?? "No signal text is stored for this project."}</p>
+          <ul className="mt-4 space-y-2">
+            {open.people.map((person) => (
+              <li key={person.id} className="flex items-center gap-2 text-[14px]">
+                <span className="inline-grid h-7 w-7 place-items-center rounded-full bg-bg text-[11px] font-medium">{initials(person.name)}</span>
+                <span>{person.name}</span>
+                <span className="num ml-auto text-[13px] text-fg-2">{person.signalAt ? relativeTime(person.signalAt) : <Empty />}</span>
+              </li>
+            ))}
+          </ul>
           <div className="mt-6 flex gap-4 text-[14px]">
             {open.campusSlug && <Link href={`/campuses/${open.campusSlug}`} className="text-link">Open campus</Link>}
-            {open.companyId && <Link href={`/startup/${open.companyId}`} className="text-link">Open company</Link>}
           </div>
         </aside>
       )}
@@ -284,14 +317,16 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
           <button type="button" className="rounded border border-line bg-bg px-3 py-1" onClick={() => {
             for (const id of selected) {
               const row = rows.find((item) => item.id === id);
-              if (row) feedback.setAction({ entityType: "person", entityId: row.id, nameKey: row.name, domainKey: null, action: "like" });
+              if (row) shortlistPeople(row);
             }
           }}>Add to shortlist</button>
           <button type="button" className="text-fg-2" onClick={() => {
             for (const id of selected) {
               const row = rows.find((item) => item.id === id);
               if (!row) continue;
-              pipeline.star({ entityType: "person", entityId: row.id, name: row.name, campusName: row.campus, websiteUrl: null, stage: "Sourced" });
+              const person = row.people[0];
+              if (!person) continue;
+              pipeline.star({ entityType: "person", entityId: person.id, name: person.name, campusName: row.campus, websiteUrl: null, stage: "Sourced" });
             }
           }}>Move to pipeline</button>
           <button type="button" className="text-fg-2" onClick={exportCsv}>Export CSV</button>

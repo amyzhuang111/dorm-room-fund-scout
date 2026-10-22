@@ -10,6 +10,7 @@ import { PersonLinkButton } from "./person-link";
 import { CompanyNameLink } from "./company-website";
 import { CampusBenchmarks } from "./campus-benchmarks";
 import { alphabeticalByLabel, shortCampusLabel } from "@/lib/domain/campuses";
+import { SIGNALS_THIS_WEEK_LABEL } from "@/lib/domain/signal-copy";
 import type { UserMapMarker } from "@/lib/domain/user-pipeline";
 import "maplibre-gl/dist/maplibre-gl.css";
 
@@ -125,7 +126,7 @@ function campusFeatureCollection(
   recentIds: string[],
 ) {
   const placed = universities.filter((university): university is typeof university & { lat: number; lon: number } => university.lat != null && university.lon != null);
-  const labeled = new Set([...placed].sort((a, b) => b.founderCount - a.founderCount).slice(0, 5).map((university) => university.id));
+  const labeled = new Set([...placed].sort((a, b) => b.founderCount - a.founderCount).slice(0, 10).map((university) => university.id));
   return {
     type: "FeatureCollection" as const,
     features: placed.map((university) => ({
@@ -303,15 +304,16 @@ export const GlobeView = memo(function GlobeView({
         const ranked = [...points]
           .filter((university) => university.lat != null && university.lon != null)
           .sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name))
-          .slice(0, 5);
+          .slice(0, 10);
         const pins: { id: string; name: string; x: number; y: number }[] = [];
         for (const university of ranked) {
           const projected = map.project([university.lon as number, university.lat as number]);
           let y = projected.y + 12;
           const x = projected.x;
           for (const pin of pins) {
-            if (Math.abs(pin.x - x) < 56 && Math.abs(pin.y - y) < 16) y = pin.y + 16;
+            if (Math.abs(pin.x - x) < 96 && Math.abs(pin.y - y) < 15) y = pin.y + 15;
           }
+          if (y > height - 18) y = Math.max(4, projected.y - 16);
           pins.push({ id: university.id, name: shortCampusLabel(university.id, university.name), x, y });
         }
         setHeroPins(pins);
@@ -1113,17 +1115,24 @@ function CampusHover({
   universities: UniversitySummary[];
   tip: { id: string; x: number; y: number };
 }) {
-  const u = universities.find((x) => x.id === tip.id);
+  const u = universities.find((x) => x.id === tip.id) as (UniversitySummary & { signalWeek?: number; latestSignal?: string | null }) | undefined;
   if (!u) return null;
+  const brief = u;
   return (
     <div
-      className="glass-panel pointer-events-none absolute z-10 px-2.5 py-1.5 text-[13px]"
+      className="glass-panel pointer-events-none absolute z-10 max-w-[240px] px-2.5 py-1.5 text-[13px]"
       style={{ left: tip.x + 12, top: tip.y - 8 }}
     >
       <p className="font-medium text-foreground">{shortCampusLabel(u.id, u.name)}</p>
-      <p className="text-[14px] text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
-        {u.founderCount.toLocaleString("en-US")} founders
+      <p className="text-[14px] text-muted">
+        <span className="num">{u.founderCount.toLocaleString("en-US")}</span> founders
       </p>
+      {brief.signalWeek != null && (
+        <p className="text-[14px] text-muted">
+          <span className="num">{brief.signalWeek.toLocaleString("en-US")}</span> {SIGNALS_THIS_WEEK_LABEL}
+        </p>
+      )}
+      {brief.latestSignal ? <p className="truncate text-[14px] text-fg-2" title={brief.latestSignal}>{brief.latestSignal}</p> : null}
     </div>
   );
 }

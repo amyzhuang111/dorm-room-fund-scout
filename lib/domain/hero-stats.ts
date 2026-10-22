@@ -2,8 +2,9 @@ import { getDb } from "../db/client";
 import { campusSlug, shortCampusLabel } from "./campuses";
 import { listFounders, listUniversities, type UniversitySummary } from "./queries";
 import { relativeTime } from "./relative-time";
+import { SIGNALS_THIS_WEEK_LABEL } from "./signal-copy";
 
-export { relativeTime };
+export { relativeTime, SIGNALS_THIS_WEEK_LABEL };
 
 export interface WeekItem {
   id: string;
@@ -15,8 +16,18 @@ export interface WeekItem {
   url: string | null;
   /** Set only when the stored source or category is YC, GitHub, or funding. */
   tag: "YC" | "GitHub" | "Funding" | null;
+  /** Stored article category, such as funding or launch. Empty when the row has none. */
+  category: string;
+  /** Stored snippet. Null when the article has no snippet. */
+  detail: string | null;
   /** True when this article's stored publish time is inside the last 7 days. */
   thisWeek: boolean;
+}
+
+export interface CampusSignalBrief {
+  current: number;
+  previous: number;
+  latest: string | null;
 }
 
 export interface HeroStats {
@@ -31,7 +42,7 @@ export interface HeroStats {
   fresh: boolean;
   week: WeekItem[];
   recentCampusIds: string[];
-  universities: (UniversitySummary & { slug: string })[];
+  universities: (UniversitySummary & { slug: string; signalWeek: number; signalPrev: number; latestSignal: string | null })[];
 }
 
 export function latestDataTimestamp(): string | null {
@@ -68,6 +79,7 @@ interface FeedRow {
   url: string | null;
   source_name: string | null;
   source_type: string | null;
+  snippet: string | null;
 }
 
 function signalTag(sourceName: string | null, category: string | null, sourceType: string | null): WeekItem["tag"] {
@@ -79,16 +91,7 @@ function signalTag(sourceName: string | null, category: string | null, sourceTyp
   return null;
 }
 
-const ARTICLE_SQL = `SELECT a.id as id,
-              a.published_at as at,
-              a.category as type,
-              a.url as url,
-              a.source_name as source_name,
-              a.source_type as source_type,
-              COALESCE(p.name, a.headline) as event,
-              u.id as campus_id,
-              u.name as campus
-         FROM news_articles a
+const ARTICLE_FROM = `FROM news_articles a
          JOIN news_mentions m ON m.article_id = a.id
          LEFT JOIN projects p ON p.id = m.project_id
          JOIN affiliations af ON af.person_id = COALESCE(
@@ -96,6 +99,69 @@ const ARTICLE_SQL = `SELECT a.id as id,
            (SELECT ppr.person_id FROM person_project_roles ppr WHERE ppr.project_id = m.project_id LIMIT 1)
          )
          JOIN universities u ON u.id = af.university_id`;
+
+const ARTICLE_SQL = `SELECT a.id as id,
+              a.published_at as at,
+              a.category as type,
+              a.url as url,
+              a.source_name as source_name,
+              a.source_type as source_type,
+              a.snippet as snippet,
+              COALESCE(p.name, a.headline) as event,
+              u.id as campus_id,
+              u.name as campus
+         ${ARTICLE_FROM}`;
+
+export function signalsThisWeek(universityId?: string): number {
+  try {
+    const row = getDb()
+      .prepare(
+        `SELECT COUNT(DISTINCT a.id) as c ${ARTICLE_FROM}
+          WHERE a.published_at >= datetime('now', '-7 days')${universityId ? " AND u.id = ?" : ""}`,
+      )
+      .get(...(universityId ? [universityId] : [])) as { c: number };
+    return row.c;
+  } catch {
+    return 0;
+  }
+}
+
+export function signalWeeksByCampus(): Map<string, CampusSignalBrief> {
+  const briefs = new Map<string, CampusSignalBrief>();
+  try {
+    const db = getDb();
+    const counts = db
+      .prepare(
+        `SELECT u.id as id,
+                COUNT(DISTINCT CASE WHEN a.published_at >= datetime('now', '-7 days') THEN a.id END) as current,
+                COUNT(DISTINCT CASE WHEN a.published_at < datetime('now', '-7 days') AND a.published_at >= datetime('now', '-14 days') THEN a.id END) as previous
+           ${ARTICLE_FROM}
+          WHERE a.published_at >= datetime('now', '-14 days')
+          GROUP BY u.id`,
+      )
+      .all() as { id: string; current: number; previous: number }[];
+    for (const row of counts) briefs.set(row.id, { current: row.current, previous: row.previous, latest: null });
+    const latest = db
+      .prepare(
+        `SELECT u.id as id, COALESCE(p.name, a.headline) as event
+           ${ARTICLE_FROM}
+          WHERE a.published_at IS NOT NULL
+          ORDER BY a.published_at DESC`,
+      )
+      .all() as { id: string; event: string | null }[];
+    const seen = new Set<string>();
+    for (const row of latest) {
+      if (!row.id || seen.has(row.id) || !row.event) continue;
+      seen.add(row.id);
+      const brief = briefs.get(row.id) ?? { current: 0, previous: 0, latest: null };
+      brief.latest = row.event;
+      briefs.set(row.id, brief);
+    }
+  } catch {
+    return briefs;
+  }
+  return briefs;
+}
 
 function articleRows(db: ReturnType<typeof getDb>, weekOnly: boolean): FeedRow[] {
   try {
@@ -113,10 +179,12 @@ function toWeekItem(row: FeedRow): WeekItem {
     campus: label,
     campusSlug: campusSlug(label),
     type: row.type ?? "news",
-    event: row.event ?? row.type ?? "News",
+    event: row.event ?? "",
     at: row.at,
     url: row.url,
     tag: signalTag(row.source_name, row.type, row.source_type),
+    category: row.type ?? "",
+    detail: row.snippet?.trim() || null,
     thisWeek: false,
   };
 }
@@ -146,10 +214,17 @@ function weekFeed(db: ReturnType<typeof getDb>): { items: WeekItem[]; articleCou
 
 export function loadHeroStats(): HeroStats {
   const db = getDb();
-  const universities = listUniversities().map((university) => ({
-    ...university,
-    slug: campusSlug(shortCampusLabel(university.id, university.name)),
-  }));
+  const briefs = signalWeeksByCampus();
+  const universities = listUniversities().map((university) => {
+    const brief = briefs.get(university.id);
+    return {
+      ...university,
+      slug: campusSlug(shortCampusLabel(university.id, university.name)),
+      signalWeek: brief?.current ?? 0,
+      signalPrev: brief?.previous ?? 0,
+      latestSignal: brief?.latest ?? null,
+    };
+  });
   // Same promoted-founder list the /founders table renders. Summing per-campus
   // counts double-counts people who belong to more than one school.
   const people = listFounders();
@@ -171,14 +246,7 @@ export function loadHeroStats(): HeroStats {
   const monitored = universities.filter((university) => university.sourcesConfigured > 0).length;
 
   const feed = weekFeed(db);
-  let signalRowsThisWeek = 0;
-  try {
-    const row = db.prepare(`SELECT COUNT(*) as c FROM signals WHERE created_at >= datetime('now', '-7 days')`).get() as { c: number };
-    signalRowsThisWeek = row.c;
-  } catch {
-    signalRowsThisWeek = 0;
-  }
-  const signalsWeek = feed.articleCount + signalRowsThisWeek;
+  const signalsWeek = signalsThisWeek();
   const updatedAt = latestTimestamp();
   const fresh = feed.items.length > 0;
 
