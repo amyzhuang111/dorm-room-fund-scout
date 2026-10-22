@@ -203,7 +203,7 @@ export const GlobeView = memo(function GlobeView({
   const geoMode = geoModeProp ?? geoModeState;
   const setGeoMode = setGeoModeState;
   const [hoverTip, setHoverTip] = useState<{ id: string; x: number; y: number } | null>(null);
-  const [heroPins, setHeroPins] = useState<{ id: string; name: string; x: number; y: number }[]>([]);
+  const [heroPins, setHeroPins] = useState<{ id: string; name: string; x: number; y: number; labelX: number; labelY: number; lineX: number; lineY: number }[]>([]);
   const [userTip, setUserTip] = useState<{ id: string; name: string; x: number; y: number } | null>(null);
   const selectedUniversity = current.university ? universities.find((u) => u.id === current.university) : undefined;
   const placed = trayCandidates.filter((c) => c.recordedPlace);
@@ -287,6 +287,46 @@ export const GlobeView = memo(function GlobeView({
       // this initial-layout race and for any later container resize (sidebar toggling,
       // window resize, drawer opening).
       let styleReady = false;
+      const layoutHeroLabels = () => {
+        const width = containerRef.current?.clientWidth ?? 0;
+        const height = containerRef.current?.clientHeight ?? 0;
+        if (width < 80 || height < 80) return;
+        const ranked = [...points]
+          .filter((university) => university.lat != null && university.lon != null)
+          .sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name))
+          .slice(0, 10);
+        const anchors = ranked.map((university) => {
+          const projected = map.project([university.lon as number, university.lat as number]);
+          const name = shortCampusLabel(university.id, university.name);
+          return { id: university.id, name, x: projected.x, y: projected.y, lon: university.lon as number, textW: Math.min(112, Math.max(36, name.length * 7.4)) };
+        });
+        const placeColumn = (group: typeof anchors, side: "west" | "east") => {
+          if (group.length === 0) return [];
+          const ordered = [...group].sort((a, b) => a.y - b.y);
+          let nextY = 10;
+          const placed = ordered.map((item) => {
+            let labelY = Math.max(item.y - 8, nextY);
+            labelY = Math.max(8, Math.min(height - 22, labelY));
+            nextY = labelY + 26;
+            return { ...item, labelY };
+          });
+          const overflow = (placed[placed.length - 1]?.labelY ?? 0) - (height - 22);
+          if (overflow > 0) {
+            for (const pin of placed) pin.labelY = Math.max(8, pin.labelY - overflow);
+          }
+          const edge = side === "west" ? Math.min(...group.map((item) => item.x)) : Math.max(...group.map((item) => item.x));
+          return placed.map((item) => {
+            const labelX = side === "west"
+              ? Math.max(6, edge - item.textW - 28)
+              : Math.min(width - item.textW - 6, edge + 28);
+            const lineX = side === "west" ? labelX + item.textW + 4 : labelX - 4;
+            return { id: item.id, name: item.name, x: item.x, y: item.y, labelX, labelY: item.labelY, lineX, lineY: item.labelY + 8 };
+          });
+        };
+        const west = anchors.filter((item) => item.lon < -104);
+        const east = anchors.filter((item) => item.lon >= -104);
+        setHeroPins([...placeColumn(west, "west"), ...placeColumn(east, "east")]);
+      };
       const frameHero = () => {
         if (!hero || !styleReady || framedRef.current) return;
         const width = containerRef.current?.clientWidth ?? 0;
@@ -296,28 +336,16 @@ export const GlobeView = memo(function GlobeView({
         map.resize();
         map.fitBounds(
           [
-            [-125, 24],
-            [-66.5, 49.2],
+            [-125, 24.2],
+            [-66.8, 49.4],
           ],
-          { padding: { top: 28, bottom: 28, left: 16, right: 16 }, duration: 0 },
+          { padding: { top: 28, bottom: 20, left: 108, right: 124 }, duration: 0 },
         );
-        const ranked = [...points]
-          .filter((university) => university.lat != null && university.lon != null)
-          .sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name))
-          .slice(0, 10);
-        const pins: { id: string; name: string; x: number; y: number }[] = [];
-        for (const university of ranked) {
-          const projected = map.project([university.lon as number, university.lat as number]);
-          let y = projected.y + 12;
-          const x = projected.x;
-          for (const pin of pins) {
-            if (Math.abs(pin.x - x) < 96 && Math.abs(pin.y - y) < 15) y = pin.y + 15;
-          }
-          if (y > height - 18) y = Math.max(4, projected.y - 16);
-          pins.push({ id: university.id, name: shortCampusLabel(university.id, university.name), x, y });
-        }
-        setHeroPins(pins);
+        layoutHeroLabels();
       };
+      map.on("moveend", () => {
+        if (!cancelled && hero && styleReady) layoutHeroLabels();
+      });
       resizeObserver = new ResizeObserver(() => {
         map?.resize();
         frameHero();
@@ -451,12 +479,12 @@ export const GlobeView = memo(function GlobeView({
               source: "campuses",
               filter: ["==", ["get", "recent"], 1],
               paint: {
-                "circle-radius": ["interpolate", ["linear"], ["sqrt", ["coalesce", ["get", "founders"], 0]], 0, 8, 10, 12, 28, 16],
+                "circle-radius": ["interpolate", ["linear"], ["sqrt", ["coalesce", ["get", "founders"], 0]], 0, 16, 10, 22, 28, 30],
                 "circle-color": "#E8823A",
-                "circle-opacity": 0.22,
-                "circle-stroke-width": 2,
+                "circle-opacity": 0.45,
+                "circle-stroke-width": 3,
                 "circle-stroke-color": "#E8823A",
-                "circle-stroke-opacity": 0.95,
+                "circle-stroke-opacity": 1,
               },
             });
           }
@@ -615,8 +643,8 @@ export const GlobeView = memo(function GlobeView({
             const phase = (now % 2400) / 2400;
             const scale = 1 + 0.45 * phase;
             try {
-              map.setPaintProperty("campus-pulse", "circle-radius", ["*", scale, ["interpolate", ["linear"], ["sqrt", ["coalesce", ["get", "founders"], 0]], 0, 8, 10, 12, 28, 16]]);
-              map.setPaintProperty("campus-pulse", "circle-opacity", 0.28 + 0.32 * (1 - phase));
+              map.setPaintProperty("campus-pulse", "circle-radius", ["*", scale, ["interpolate", ["linear"], ["sqrt", ["coalesce", ["get", "founders"], 0]], 0, 16, 10, 22, 28, 30]]);
+              map.setPaintProperty("campus-pulse", "circle-opacity", 0.35 + 0.4 * (1 - phase));
             } catch {
               // The pulse layer can still be attaching on the first frames.
             }
@@ -852,11 +880,18 @@ export const GlobeView = memo(function GlobeView({
       )}
       <div className={hero || locked ? "hero-map relative h-full w-full overflow-hidden" : "relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-line sm:min-h-[520px]"} style={{ background: hero ? "#2a3548" : MAP_THEME.sky }}>
         <div ref={containerRef} className="h-full w-full" />
+        {hero && status === "ok" && heroPins.length > 0 && (
+          <svg className="pointer-events-none absolute inset-0 z-10 h-full w-full" aria-hidden>
+            {heroPins.map((pin) => (
+              <line key={pin.id} x1={pin.x} y1={pin.y} x2={pin.lineX} y2={pin.lineY} stroke="#d5dbe8" strokeWidth="1.25" />
+            ))}
+          </svg>
+        )}
         {hero && status === "ok" && heroPins.map((pin) => (
           <span
             key={pin.id}
-            className="pointer-events-none absolute z-10 -translate-x-1/2 whitespace-nowrap text-[13px] font-medium text-[#f4f6fb]"
-            style={{ left: pin.x, top: pin.y, textShadow: "0 1px 2px #0c1320, 0 0 8px #0c1320" }}
+            className="pointer-events-none absolute z-10 whitespace-nowrap text-[14px] font-medium text-[#f7f8fc]"
+            style={{ left: pin.labelX, top: pin.labelY, textShadow: "0 1px 2px #0c1320, 0 0 8px #0c1320" }}
           >
             {pin.name}
           </span>

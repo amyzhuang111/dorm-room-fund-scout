@@ -87,16 +87,16 @@ export default async function CampusPage({
         </div>
         <div className="flex flex-wrap items-end gap-8">
           <p>
-            <span className="num block text-[28px] leading-8">{university.founderCount.toLocaleString("en-US")}</span>
-            <span className="text-[14px] text-fg-2">Founders</span>
+            <span className="num block text-[40px] leading-none md:text-[56px]">{university.founderCount.toLocaleString("en-US")}</span>
+            <span className="mt-1 block text-[14px] text-fg-2">Founders</span>
           </p>
           <p>
-            <span className="num block text-[28px] leading-8">{topTier.toLocaleString("en-US")}</span>
-            <span className="text-[14px] text-fg-2">Top tier</span>
+            <span className="num block text-[40px] leading-none md:text-[56px]">{topTier.toLocaleString("en-US")}</span>
+            <span className="mt-1 block text-[14px] text-fg-2">Top tier</span>
           </p>
           <p>
-            <span className="num block text-[28px] leading-8">{signalsWeek.toLocaleString("en-US")}</span>
-            <span className="text-[14px] text-fg-2">{SIGNALS_THIS_WEEK_LABEL}</span>
+            <span className="num block text-[40px] leading-none md:text-[56px]">{signalsWeek.toLocaleString("en-US")}</span>
+            <span className="mt-1 block text-[14px] text-fg-2">{SIGNALS_THIS_WEEK_LABEL}</span>
           </p>
           <ShortlistCampusButton id={university.id} />
         </div>

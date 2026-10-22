@@ -28,6 +28,8 @@ export interface CampusSignalBrief {
   current: number;
   previous: number;
   latest: string | null;
+  /** Eight stored weeks, oldest first. The last value is the current 7 days. */
+  series: number[];
 }
 
 export interface HeroStats {
@@ -42,7 +44,7 @@ export interface HeroStats {
   fresh: boolean;
   week: WeekItem[];
   recentCampusIds: string[];
-  universities: (UniversitySummary & { slug: string; signalWeek: number; signalPrev: number; latestSignal: string | null })[];
+  universities: (UniversitySummary & { slug: string; signalWeek: number; signalPrev: number; latestSignal: string | null; signalSeries: number[] })[];
 }
 
 export function latestDataTimestamp(): string | null {
@@ -80,6 +82,18 @@ interface FeedRow {
   source_name: string | null;
   source_type: string | null;
   snippet: string | null;
+}
+
+const EMPTY_SERIES = [0, 0, 0, 0, 0, 0, 0, 0];
+
+/** Raw @handle threads, including @grok replies, are not a signal summary. */
+export function isHandleJunk(text: string | null | undefined): boolean {
+  if (!text) return false;
+  const value = text.trim();
+  if (/^@[\w.]+/.test(value)) return true;
+  if (/\b@grok\b/i.test(value)) return true;
+  const handles = value.match(/@[\w.]+/g) ?? [];
+  return handles.length >= 2;
 }
 
 function signalTag(sourceName: string | null, category: string | null, sourceType: string | null): WeekItem["tag"] {
@@ -140,7 +154,7 @@ export function signalWeeksByCampus(): Map<string, CampusSignalBrief> {
           GROUP BY u.id`,
       )
       .all() as { id: string; current: number; previous: number }[];
-    for (const row of counts) briefs.set(row.id, { current: row.current, previous: row.previous, latest: null });
+    for (const row of counts) briefs.set(row.id, { current: row.current, previous: row.previous, latest: null, series: [...EMPTY_SERIES] });
     const latest = db
       .prepare(
         `SELECT u.id as id, COALESCE(p.name, a.headline) as event
@@ -151,10 +165,27 @@ export function signalWeeksByCampus(): Map<string, CampusSignalBrief> {
       .all() as { id: string; event: string | null }[];
     const seen = new Set<string>();
     for (const row of latest) {
-      if (!row.id || seen.has(row.id) || !row.event) continue;
+      if (!row.id || seen.has(row.id) || !row.event || isHandleJunk(row.event)) continue;
       seen.add(row.id);
-      const brief = briefs.get(row.id) ?? { current: 0, previous: 0, latest: null };
+      const brief = briefs.get(row.id) ?? { current: 0, previous: 0, latest: null, series: [...EMPTY_SERIES] };
       brief.latest = row.event;
+      briefs.set(row.id, brief);
+    }
+    const selects = [0, 1, 2, 3, 4, 5, 6, 7].map((weeksAgo) => {
+      const windowSql = weeksAgo === 0
+        ? `a.published_at >= datetime('now', '-7 days')`
+        : `a.published_at < datetime('now', '-${weeksAgo * 7} days') AND a.published_at >= datetime('now', '-${(weeksAgo + 1) * 7} days')`;
+      return `COUNT(DISTINCT CASE WHEN ${windowSql} THEN a.id END) as w${weeksAgo}`;
+    });
+    const seriesRows = db.prepare(
+      `SELECT u.id as id, ${selects.join(", ")} ${ARTICLE_FROM}
+        WHERE a.published_at >= datetime('now', '-56 days')
+        GROUP BY u.id`,
+    ).all() as ({ id: string } & Record<string, number>)[];
+    for (const row of seriesRows) {
+      const series = [7, 6, 5, 4, 3, 2, 1, 0].map((index) => Number(row[`w${index}`] ?? 0));
+      const brief = briefs.get(row.id) ?? { current: series[7] ?? 0, previous: series[6] ?? 0, latest: null, series };
+      brief.series = series;
       briefs.set(row.id, brief);
     }
   } catch {
@@ -206,7 +237,9 @@ function weekFeed(db: ReturnType<typeof getDb>): { items: WeekItem[]; articleCou
   for (const row of latestRows) {
     if (seenArticles.has(row.id) || !row.campus_id) continue;
     seenArticles.add(row.id);
-    items.push({ ...toWeekItem(row), thisWeek: weekArticles.has(row.id) });
+    const item = { ...toWeekItem(row), thisWeek: weekArticles.has(row.id) };
+    if (isHandleJunk(item.event) || isHandleJunk(item.detail)) continue;
+    items.push(item);
     if (items.length >= 8) break;
   }
   return { items, articleCount: weekArticles.size, campusIds: campusIds.slice(0, 8) };
@@ -223,6 +256,7 @@ export function loadHeroStats(): HeroStats {
       signalWeek: brief?.current ?? 0,
       signalPrev: brief?.previous ?? 0,
       latestSignal: brief?.latest ?? null,
+      signalSeries: brief?.series ?? [...EMPTY_SERIES],
     };
   });
   // Same promoted-founder list the /founders table renders. Summing per-campus

@@ -102,10 +102,19 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
 
   const campuses = useMemo(() => [...new Set(rows.map((row) => row.campus).filter(Boolean))] as string[], [rows]);
   const verifiedFilled = rows.filter((row) => row.verified).length;
+  const tierFilled = rows.filter((row) => row.tier).length;
+  const dateFilled = rows.filter((row) => row.signalAt).length;
+  const mostlyEmpty = (filled: number) => rows.length === 0 || filled / rows.length < 0.5;
   const head = rows.slice(0, 20);
   const autoVerified = verifiedFilled > 0 && head.length > 0 && head.filter((row) => row.verified).length / head.length >= 0.25;
+  const autoTier = campusLocked ? !mostlyEmpty(tierFilled) : true;
+  const autoDate = campusLocked ? !mostlyEmpty(dateFilled) : true;
   const [verifiedChoice, setVerifiedChoice] = useState<boolean | null>(null);
+  const [tierChoice, setTierChoice] = useState<boolean | null>(null);
+  const [dateChoice, setDateChoice] = useState<boolean | null>(null);
   const showVerified = verifiedChoice ?? autoVerified;
+  const showTier = tierChoice ?? autoTier;
+  const showDate = dateChoice ?? autoDate;
 
   const filtered = rows.filter((row) => {
     if (query) {
@@ -172,7 +181,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
   }
 
   const pad = compact ? "py-1" : "py-2";
-  const columns = 4 + (campusLocked ? 0 : 1) + (showVerified ? 1 : 0);
+  const columns = 2 + (showTier ? 1 : 0) + (campusLocked ? 0 : 1) + 1 + (showDate ? 1 : 0) + (showVerified ? 1 : 0);
 
   let rowIndex = 0;
 
@@ -195,14 +204,28 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
             {campuses.map((value) => <option key={value}>{value}</option>)}
           </select>
         )}
-        {verifiedFilled > 0 && (
+        {(campusLocked || verifiedFilled > 0) && (
           <details className="relative">
             <summary className="h-8 cursor-pointer list-none rounded px-2 leading-8 text-[14px] text-fg-2">Columns</summary>
             <div className="absolute z-30 mt-1 w-40 rounded border border-line bg-bg p-2 text-[14px] shadow-[var(--shadow-menu)]">
-              <label className="flex items-center gap-2 py-1">
-                <input type="checkbox" checked={showVerified} onChange={(event) => setVerifiedChoice(event.target.checked)} />
-                Verified
-              </label>
+              {campusLocked && (
+                <label className="flex items-center gap-2 py-1">
+                  <input type="checkbox" checked={showTier} onChange={(event) => setTierChoice(event.target.checked)} />
+                  Tier
+                </label>
+              )}
+              {campusLocked && (
+                <label className="flex items-center gap-2 py-1">
+                  <input type="checkbox" checked={showDate} onChange={(event) => setDateChoice(event.target.checked)} />
+                  Date
+                </label>
+              )}
+              {verifiedFilled > 0 && (
+                <label className="flex items-center gap-2 py-1">
+                  <input type="checkbox" checked={showVerified} onChange={(event) => setVerifiedChoice(event.target.checked)} />
+                  Verified
+                </label>
+              )}
             </div>
           </details>
         )}
@@ -224,10 +247,10 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
             <tr className="h-9 text-[14px] text-fg-2">
               <th className="sticky top-0 z-20 w-8 border-b border-line-strong bg-bg px-2 font-medium" />
               <th className="sticky top-0 z-20 w-[30%] border-b border-line-strong bg-bg px-2 font-medium">Project</th>
-              <th className="sticky top-0 z-20 w-[72px] border-b border-line-strong bg-bg px-2 font-medium">Tier</th>
+              {showTier && <th className="sticky top-0 z-20 w-[72px] border-b border-line-strong bg-bg px-2 font-medium">Tier</th>}
               {!campusLocked && <th className="sticky top-0 z-20 w-[16%] border-b border-line-strong bg-bg px-2 font-medium">Campus</th>}
               <th className="sticky top-0 z-20 border-b border-line-strong bg-bg px-2 font-medium">Signal</th>
-              <th className="sticky top-0 z-20 w-[88px] border-b border-line-strong bg-bg px-2 text-right font-medium">Date</th>
+              {showDate && <th className="sticky top-0 z-20 w-[88px] border-b border-line-strong bg-bg px-2 text-right font-medium">Date</th>}
               {showVerified && <th className="sticky top-0 z-20 w-[76px] border-b border-line-strong bg-bg px-2 font-medium">Verified</th>}
             </tr>
           </thead>
@@ -238,8 +261,8 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                 <tr key={`event:${group.event}`} className="bg-bg">
                   <td colSpan={columns} className="border-b border-line px-2 py-2">
                     <span className="inline-flex items-center gap-3">
-                      <span className="rounded-full border border-line bg-raised px-2 py-px text-[13px] leading-5 text-fg-2">{group.event}</span>
-                      {group.at ? <span className="num text-[13px] text-fg-2">{relativeTime(group.at)}</span> : <Empty />}
+                      <span className="rounded-full border border-line bg-raised px-2 py-px text-[14px] leading-5 text-fg-2">{group.event}</span>
+                      {group.at ? <span className="num text-[14px] text-fg-2">{relativeTime(group.at)}</span> : <Empty />}
                     </span>
                   </td>
                 </tr>
@@ -265,7 +288,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                         <span className="min-w-0 truncate font-medium">{row.name || <Empty />}</span>
                       </span>
                     </td>
-                    <td className={`${pad} px-2`}>{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : <Empty />}</td>
+                    {showTier && <td className={`${pad} px-2`}>{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : <Empty />}</td>}
                     {!campusLocked && (
                       <td className={`${pad} truncate px-2`}>
                         {row.campusSlug ? <Link href={`/campuses/${row.campusSlug}`} className="text-link">{row.campus}</Link> : row.campus || <Empty />}
@@ -278,7 +301,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                         <Empty />
                       )}
                     </td>
-                    <td className={`${pad} num px-2 text-right text-[13px] text-fg-2`}>{date ?? <Empty />}</td>
+                    {showDate && <td className={`${pad} num px-2 text-right text-[14px] text-fg-2`}>{date ?? <Empty />}</td>}
                     {showVerified && <td className={`${pad} px-2`}>{row.verified ? <span className="text-ok" title="Verified">✓</span> : <Empty />}</td>}
                   </tr>
                 );

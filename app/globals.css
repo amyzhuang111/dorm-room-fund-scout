@@ -65,8 +65,8 @@
   --line: #1f2536;
   --line-strong: #2c3449;
   --fg: #eceef4;
-  --fg-2: #a1a1aa;
-  --fg-3: #a1a1aa;
+  --fg-2: #c8c8d2;
+  --fg-3: #c8c8d2;
   --cobalt: #2f4fd8;
   --cobalt-haze: #1a2556;
   --ember: #e8823a;
@@ -136,6 +136,7 @@ body {
   font-size: 15px;
   font-weight: 400;
   line-height: 24px;
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
 h1, h2, h3 {
@@ -196,8 +197,8 @@ h1, .hero-num, .page-title {
 .mark {
   position: relative;
   display: inline-block;
-  width: 7px;
-  height: 7px;
+  width: 16px;
+  height: 16px;
   overflow: hidden;
   border-radius: 999px;
   flex: none;
@@ -216,10 +217,11 @@ h1, .hero-num, .page-title {
 .wordmark {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 17px;
+  gap: 10px;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 22px;
   font-weight: 600;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
   line-height: 1;
   color: var(--fg);
 }
@@ -228,8 +230,8 @@ h1, .hero-num, .page-title {
   position: relative;
   display: inline-flex;
   align-items: center;
-  height: 64px;
-  font-size: 14px;
+  height: 72px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--fg-2);
 }
@@ -237,12 +239,11 @@ h1, .hero-num, .page-title {
 .nav-link.is-active::after {
   content: "";
   position: absolute;
-  left: 50%;
+  left: 0;
+  right: 0;
   bottom: 0;
-  width: 16px;
   height: 2px;
-  margin-left: -8px;
-  background: #8eb4ff;
+  background: #e8823a;
 }
 
 .subtab {
@@ -256,7 +257,7 @@ h1, .hero-num, .page-title {
 }
 .subtab.is-active {
   color: var(--fg);
-  border-bottom-color: #8eb4ff;
+  border-bottom-color: #e8823a;
 }
 
 .ask-field {
@@ -267,8 +268,8 @@ h1, .hero-num, .page-title {
   padding: 0 10px;
   border-radius: var(--r-1);
   background: var(--bg-sunken);
-  color: var(--fg-3);
-  font-size: 13px;
+  color: var(--fg-2);
+  font-size: 14px;
   text-align: left;
 }
 
@@ -293,7 +294,7 @@ h1, .hero-num, .page-title {
 .stat-strip { display: flex; flex-wrap: wrap; gap: 32px; margin-top: 24px; }
 .stat-num { display: block; font-size: 28px; line-height: 32px; }
 .segmented { display: inline-flex; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--bg-sunken); }
-.segmented button { height: 32px; padding: 0 12px; font-size: 13px; color: var(--fg-2); }
+.segmented button { height: 32px; padding: 0 12px; font-size: 14px; color: var(--fg-2); }
 .segmented button.is-active { background: var(--bg-raised); color: var(--fg); }
 .viz-legend { margin-top: 8px; font-size: 13px; line-height: 20px; color: var(--fg-3); }
 .hero-night {
@@ -303,8 +304,8 @@ h1, .hero-num, .page-title {
   --line: #1f2536;
   --line-strong: #2c3449;
   --fg: #eceef4;
-  --fg-2: #a1a1aa;
-  --fg-3: #a1a1aa;
+  --fg-2: #c8c8d2;
+  --fg-3: #c8c8d2;
   --ember: #e8823a;
   --amber: #f2b35b;
   --cobalt: #2f4fd8;

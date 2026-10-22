@@ -33,18 +33,18 @@ export function ClassYearChart({ years }: { years: { year: number; count: number
       <div className="flex items-center justify-between gap-3">
         <p className="text-[16px] font-medium">Founders by class year</p>
         <div className="flex h-8 rounded border border-line p-0.5" role="group" aria-label="Class year range">
-          <button type="button" className={`rounded px-2 text-[13px] ${alumni ? "text-fg-2" : "bg-raised text-fg"}`} onClick={() => setAlumni(false)}>Current</button>
-          <button type="button" className={`rounded px-2 text-[13px] ${alumni ? "bg-raised text-fg" : "text-fg-2"}`} onClick={() => setAlumni(true)}>Alumni</button>
+          <button type="button" className={`rounded px-2 text-[14px] ${alumni ? "text-fg-2" : "bg-raised text-fg"}`} onClick={() => setAlumni(false)}>Current</button>
+          <button type="button" className={`rounded px-2 text-[14px] ${alumni ? "bg-raised text-fg" : "text-fg-2"}`} onClick={() => setAlumni(true)}>Alumni</button>
         </div>
       </div>
       <ul className="mt-3 space-y-1.5" aria-label="Founders by class year">
         {bars.map((bar) => (
           <li key={bar.label} className="grid grid-cols-[108px_minmax(0,1fr)_36px] items-center gap-2">
-            <span className="num text-[13px] text-fg-2">{bar.label}</span>
+            <span className="num text-[14px] text-fg-2">{bar.label}</span>
             <span className="block h-2 overflow-hidden rounded-sm bg-sunken">
               <span className="block h-2 rounded-sm" style={{ width: `${(bar.count / peak) * 100}%`, background: ramp(bar.count, peak) }} />
             </span>
-            <span className="num text-right text-[13px]">{bar.count.toLocaleString("en-US")}</span>
+            <span className="num text-right text-[14px]">{bar.count.toLocaleString("en-US")}</span>
           </li>
         ))}
       </ul>

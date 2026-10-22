@@ -75,7 +75,7 @@ export function SiteNav() {
 
   return (
     <div className="border-b border-line bg-bg">
-      <div className="flex h-16 items-center gap-4 px-6">
+      <div className="flex h-[72px] items-center gap-6 px-6">
         <Link href="/" className="wordmark shrink-0">
           <span className="mark" aria-hidden />
           Campus Scout
