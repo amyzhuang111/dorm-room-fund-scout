@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { EmptyHome } from "@/components/empty-home";
 import { GlobeBoot } from "@/components/map-boot";
 import { GlobeHero } from "@/components/globe-hero";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
@@ -15,6 +16,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
     redirect(query ? `/companies?${query}` : "/companies");
   }
   if (sp.view === "network") redirect("/map/network");
+  if (sp.sample !== "1") return <EmptyHome />;
   const stats = loadHeroStats();
   return (
     <>
