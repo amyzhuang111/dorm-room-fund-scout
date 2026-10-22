@@ -12,6 +12,9 @@ export interface WeekItem {
   type: string;
   event: string;
   at: string | null;
+  url: string | null;
+  /** Set only when the stored source or category is YC, GitHub, or funding. */
+  tag: "YC" | "GitHub" | "Funding" | null;
 }
 
 export interface HeroStats {
@@ -27,6 +30,10 @@ export interface HeroStats {
   week: WeekItem[];
   recentCampusIds: string[];
   universities: (UniversitySummary & { slug: string })[];
+}
+
+export function latestDataTimestamp(): string | null {
+  return latestTimestamp();
 }
 
 function latestTimestamp(): string | null {
@@ -56,6 +63,18 @@ interface FeedRow {
   event: string | null;
   campus: string | null;
   campus_id: string | null;
+  url: string | null;
+  source_name: string | null;
+  source_type: string | null;
+}
+
+function signalTag(sourceName: string | null, category: string | null, sourceType: string | null): WeekItem["tag"] {
+  const source = (sourceName ?? "").toLowerCase();
+  const kind = `${category ?? ""} ${sourceType ?? ""}`.toLowerCase();
+  if (source.includes("y combinator") || source === "yc") return "YC";
+  if (source.includes("github")) return "GitHub";
+  if (kind.includes("funding")) return "Funding";
+  return null;
 }
 
 function weekFeed(db: ReturnType<typeof getDb>): { items: WeekItem[]; articleCount: number; campusIds: string[] } {
@@ -65,6 +84,9 @@ function weekFeed(db: ReturnType<typeof getDb>): { items: WeekItem[]; articleCou
       `SELECT a.id as id,
               a.published_at as at,
               a.category as type,
+              a.url as url,
+              a.source_name as source_name,
+              a.source_type as source_type,
               COALESCE(p.name, a.headline) as event,
               u.id as campus_id,
               u.name as campus
@@ -100,6 +122,8 @@ function weekFeed(db: ReturnType<typeof getDb>): { items: WeekItem[]; articleCou
       type: row.type ?? "news",
       event: row.event ?? row.type ?? "News",
       at: row.at,
+      url: row.url,
+      tag: signalTag(row.source_name, row.type, row.source_type),
     });
   }
   return { items, articleCount: seenArticles.size, campusIds: campusIds.slice(0, 8) };

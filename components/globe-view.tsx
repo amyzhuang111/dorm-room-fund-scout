@@ -230,10 +230,8 @@ export const GlobeView = memo(function GlobeView({
         map = new maplibregl.Map({
           container: containerRef.current,
           style: STYLE_URL,
-          center: hero
-            ? [window.matchMedia("(max-width: 767px)").matches ? Math.max(-180, Math.min(180, (-new Date().getTimezoneOffset() / 60) * 15)) : -98, window.matchMedia("(max-width: 767px)").matches ? 20 : 39]
-            : [-98, 39],
-          zoom: hero ? (window.matchMedia("(max-width: 767px)").matches ? 1.05 : 0.95) : 3.35,
+          center: [-98, 39],
+          zoom: hero ? (window.matchMedia("(max-width: 767px)").matches ? 0.95 : 2.05) : 3.35,
           minZoom: hero ? 0.4 : 1.5,
           maxZoom: 8,
           attributionControl: { compact: !hero },
@@ -331,9 +329,9 @@ export const GlobeView = memo(function GlobeView({
           if (!map.getSource("campuses")) {
             map.addSource("campuses", {
               type: "geojson",
-              cluster: true,
-              clusterRadius: hero ? 72 : 48,
-              clusterMaxZoom: hero ? 4 : 4,
+              cluster: !hero,
+              clusterRadius: 48,
+              clusterMaxZoom: 4,
                 data: campusFeatureCollection(points, recentIds),
             });
           }
@@ -346,7 +344,9 @@ export const GlobeView = memo(function GlobeView({
               source: "campuses",
               filter: unclustered,
               paint: {
-                "circle-radius": hero ? 12 : ["interpolate", ["linear"], ["get", "count"], 0, 16, 20, 28, 200, 42],
+                "circle-radius": hero
+                  ? ["interpolate", ["linear"], ["sqrt", ["max", ["coalesce", ["get", "founders"], 0], 0]], 0, 10, 10, 18, 22, 26]
+                  : ["interpolate", ["linear"], ["get", "count"], 0, 16, 20, 28, 200, 42],
                 "circle-color": hero ? "#E8823A" : MAP_THEME.dot,
                 "circle-opacity": hero ? 0.55 : 0.38,
                 "circle-blur": 1,
@@ -362,7 +362,7 @@ export const GlobeView = memo(function GlobeView({
               filter: unclustered,
               paint: {
                 "circle-radius": hero
-                  ? ["interpolate", ["linear"], ["min", ["sqrt", ["coalesce", ["get", "founders"], 1]], 10], 1, 6, 10, 10]
+                  ? ["interpolate", ["linear"], ["sqrt", ["max", ["coalesce", ["get", "founders"], 0], 0]], 0, 6, 10, 12, 22, 18]
                   : ["interpolate", ["linear"], ["get", "count"], 0, 6, 20, 9, 200, 14],
                 "circle-color": hero ? "#E8823A" : MAP_THEME.dot,
                 "circle-stroke-width": 1,
@@ -442,7 +442,7 @@ export const GlobeView = memo(function GlobeView({
               id: "campus-labels",
               type: "symbol",
               source: "campuses",
-              filter: hero ? ["all", unclustered, ["==", ["get", "label"], 1]] : unclustered,
+              filter: hero ? ["==", ["get", "label"], 9] : unclustered,
               layout: {
                 "text-field": hero ? ["get", "name"] : ["concat", ["get", "name"], "  ", ["to-string", ["get", "count"]]],
                 "text-size": hero ? 12 : 11,
@@ -768,7 +768,7 @@ export const GlobeView = memo(function GlobeView({
           ))}
         </div>
       )}
-      <div className={hero ? "hero-map relative h-full min-h-[340px] w-full overflow-hidden" : locked ? "relative h-[280px] w-full overflow-hidden" : "relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-line sm:min-h-[520px]"} style={{ background: MAP_THEME.sky }}>
+      <div className={hero ? "hero-map relative h-full w-full overflow-hidden" : locked ? "relative h-[280px] w-full overflow-hidden" : "relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-line sm:min-h-[520px]"} style={{ background: MAP_THEME.sky }}>
         <div ref={containerRef} className="h-full w-full" />
         {status === "ok" && !hero && !locked && (
           <div className="segmented absolute right-3 top-3 z-10" role="group" aria-label="Map geography">
@@ -898,7 +898,7 @@ export const GlobeView = memo(function GlobeView({
         )}
 
         {status === "ok" && !locked && (
-          <div className={`absolute z-10 flex flex-col gap-1 ${hero ? "bottom-6 right-6" : "bottom-3 right-3"}`}>
+          <div className={`absolute z-10 flex flex-col gap-1 ${hero ? "bottom-2 right-2" : "bottom-3 right-3"}`}>
             <button
               type="button"
               onClick={() => mapRef.current?.zoomIn()}

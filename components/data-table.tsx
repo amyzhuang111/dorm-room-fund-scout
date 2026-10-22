@@ -7,14 +7,40 @@ import { relativeTime } from "@/lib/domain/relative-time";
 import { useFeedback } from "./feedback-provider";
 import { useUserPipeline } from "./user-pipeline-provider";
 
-const SIGNAL_COLOR: Record<string, string> = {
-  funding: "var(--sig-raise)",
-  demo: "var(--sig-launch)",
-  continued_dev: "var(--sig-launch)",
-  team_change: "var(--sig-hiring)",
-  award: "var(--sig-press)",
-  customer_evidence: "var(--sig-research)",
-};
+function initials(name: string): string {
+  const parts = name.split(/\s+/).filter(Boolean);
+  const first = (parts[0] ?? "").replace(/[^A-Za-z]/g, "");
+  const last = parts.length > 1 ? parts[parts.length - 1].replace(/[^A-Za-z]/g, "") : "";
+  return ((first[0] ?? "") + (last[0] ?? first[1] ?? "")).toUpperCase() || "·";
+}
+
+function signalPresentation(row: FounderTableRow): { label: string; kind: "yc" | "github" | "funding" | null } {
+  const text = row.signal ?? "";
+  if (/Y Combinator/i.test(text)) return { label: "YC", kind: "yc" };
+  if (/GitHub/i.test(text)) return { label: "GitHub", kind: "github" };
+  if (row.signalType === "funding" || /\braises?\b|\bfunding\b/i.test(text)) return { label: "Funding", kind: "funding" };
+  if (row.signalType === "demo" || row.signalType === "continued_dev") return { label: "Launch", kind: null };
+  if (row.signalType === "award") return { label: "Press", kind: null };
+  if (row.signal) return { label: "Note", kind: null };
+  return { label: "None", kind: null };
+}
+
+function SourceMark({ kind }: { kind: "yc" | "github" | "funding" }) {
+  const color = kind === "yc" ? "#7C8CF0" : kind === "funding" ? "#3FB68B" : "currentColor";
+  if (kind === "github") {
+    return (
+      <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden className="shrink-0" fill="currentColor">
+        <path d="M8 1.2a6.8 6.8 0 0 0-2.15 13.25c.34.06.46-.15.46-.33v-1.16c-1.88.41-2.28-.8-2.28-.8-.3-.78-.75-1-.75-1-.62-.42.05-.41.05-.41.68.05 1.04.7 1.04.7.6 1.04 1.58.74 1.97.56.06-.44.23-.74.42-.91-1.5-.17-3.08-.75-3.08-3.34 0-.74.26-1.34.7-1.81-.07-.17-.3-.87.06-1.81 0 0 .57-.18 1.86.7a6.4 6.4 0 0 1 3.38 0c1.29-.88 1.86-.7 1.86-.7.36.94.13 1.64.06 1.81.44.47.7 1.07.7 1.81 0 2.6-1.58 3.17-3.09 3.33.24.21.46.62.46 1.26v1.87c0 .18.12.4.47.33A6.8 6.8 0 0 0 8 1.2z" />
+      </svg>
+    );
+  }
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden className="shrink-0">
+      <circle cx="8" cy="8" r="5.5" fill="none" stroke={color} strokeWidth="1.5" />
+      {kind === "funding" ? <path d="M8 4.5v7M6 6.2h3.2a1.4 1.4 0 0 1 0 2.8H6.8" fill="none" stroke={color} strokeWidth="1.3" /> : <text x="8" y="11" textAnchor="middle" fontSize="7" fill={color}>Y</text>}
+    </svg>
+  );
+}
 
 function tierClass(tier: string | null): string {
   if (tier === "S+") return "tier-chip tier-splus";
@@ -166,17 +192,24 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
                   <input type="checkbox" checked={selected.includes(row.id)} onChange={() => toggle(row.id)} aria-label={`Select ${row.name}`} />
                 </td>
                 <td className="min-w-[180px] whitespace-nowrap px-2">
-                  <span className="mr-2 inline-grid h-6 w-6 place-items-center rounded-full bg-sunken text-[11px] text-fg-2">{row.name.slice(0, 1)}</span>
+                  <span className="mr-2 inline-grid h-7 w-7 shrink-0 place-items-center rounded-full bg-raised text-[11px] font-medium tracking-[-0.04em] text-fg">{initials(row.name)}</span>
                   <span className="font-medium">{row.name}</span>
                 </td>
                 {columns.tier && <td className="px-2">{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : <span className="text-fg-3">—</span>}</td>}
                 {!campusLocked && <td className="px-2 text-fg-2">{row.campusSlug ? <Link href={`/campuses/${row.campusSlug}`} className="text-cobalt">{row.campus}</Link> : row.campus ?? "—"}</td>}
                 <td className="px-2">{row.companyId ? <Link href={`/startup/${row.companyId}`} className="text-cobalt">{row.company}</Link> : row.company ?? "—"}</td>
                 {columns.year && <td className="num px-2 text-right text-[13px]">{row.year ?? "—"}</td>}
-                <td className="min-w-[320px] px-2 text-[13px] text-fg-2" title={row.signal ?? "No signal on record"}>
-                  <span className="sig-dot mr-2 inline-block" style={{ background: SIGNAL_COLOR[row.signalType ?? ""] ?? "var(--sig-social)" }} />
-                  <span className="inline-block max-w-[420px] truncate align-bottom">{row.signal ?? "No signal on record"}</span>
-                  {row.signalAt ? <span className="num ml-2 text-fg-3" title={row.signalAt}>{relativeTime(row.signalAt)}</span> : null}
+                <td className="min-w-[180px] whitespace-nowrap px-2 text-[14px]" title={row.signal ?? "No signal on record"}>
+                  {(() => {
+                    const signal = signalPresentation(row);
+                    return (
+                      <span className="flex w-full items-center gap-2">
+                        {signal.kind ? <SourceMark kind={signal.kind} /> : null}
+                        <span className={signal.kind === "yc" ? "text-[#7C8CF0]" : signal.kind === "funding" ? "text-[#3FB68B]" : "text-fg"}>{signal.label}</span>
+                        {row.signalAt ? <span className="ml-auto text-[12px] text-fg-2 tabular-nums" title={row.signalAt}>{relativeTime(row.signalAt)}</span> : null}
+                      </span>
+                    );
+                  })()}
                 </td>
                 {columns.score && (
                   <td className="num px-2 text-right text-[13px]">
@@ -184,7 +217,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
                     {row.score != null && <span className="ml-2 inline-block h-1 w-10 align-middle bg-sunken"><span className="block h-1 bg-cobalt" style={{ width: `${Math.max(0, Math.min(100, row.score))}%` }} /></span>}
                   </td>
                 )}
-                <td className="px-2">{row.verified ? <span className="text-ok">✓</span> : <span className="text-fg-3">○</span>}</td>
+                <td className="px-2">{row.verified ? <span className="text-ok" title="Verified">✓</span> : null}</td>
               </tr>
             ))}
           </tbody>

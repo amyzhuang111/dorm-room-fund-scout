@@ -21,6 +21,13 @@ export function updatedAgo(iso: string | null, now = Date.now()): string {
   return `${Math.floor(hours / 24)}d ago`;
 }
 
+export function updatedToday(iso: string | null, now = Date.now()): boolean {
+  if (!iso) return false;
+  const then = parsed(iso);
+  if (Number.isNaN(then)) return false;
+  return now - then < 24 * 60 * 60 * 1000;
+}
+
 export function updatedWithinHour(iso: string | null, now = Date.now()): boolean {
   if (!iso) return false;
   const then = parsed(iso);

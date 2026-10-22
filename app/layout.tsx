@@ -8,6 +8,8 @@ import { SiteNav } from "@/components/site-nav";
 import { FeedbackProvider } from "@/components/feedback-provider";
 import { UserPipelineProvider } from "@/components/user-pipeline-provider";
 import { feedbackRedirects } from "@/lib/domain/entity-redirects";
+import { latestDataTimestamp } from "@/lib/domain/hero-stats";
+import { absoluteDate } from "@/lib/domain/relative-time";
 import "./globals.css";
 
 const geist = Geist({
@@ -34,12 +36,13 @@ export const metadata: Metadata = {
   description: "Student founder intelligence, by campus.",
 };
 
-const themeScript = `try{var t=localStorage.getItem("campus-scout-theme");document.documentElement.dataset.theme=t==="night"||t==="day"?t:(location.pathname==="/"?"night":"day")}catch(e){document.documentElement.dataset.theme=location.pathname==="/"?"night":"day"}`;
+const themeScript = `try{var t=localStorage.getItem("campus-scout-theme");document.documentElement.dataset.theme=t==="day"?"day":"night"}catch(e){document.documentElement.dataset.theme="night"}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      data-theme="night"
       className={`${geist.variable} ${geistMono.variable} ${instrument.variable} h-full antialiased`}
       suppressHydrationWarning
     >
@@ -58,11 +61,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <main className="flex-1">{children}</main>
             </FeedbackProvider>
           </UserPipelineProvider>
-          <footer className="border-t border-line px-5 py-6 text-[13px] text-fg-3 sm:px-12">
-            <div className="mx-auto flex max-w-[1200px] gap-5">
+          <footer className="border-t border-line px-6 py-6 text-[12px] text-fg-2">
+            <div className="flex gap-5">
               <Link href="/methodology">Methodology</Link>
               <Link href="/settings">Settings</Link>
               <Link href="/signin">Sign in</Link>
+              <span className="ml-auto tabular-nums">Data through {absoluteDate(latestDataTimestamp())}</span>
             </div>
           </footer>
           <Analytics />
