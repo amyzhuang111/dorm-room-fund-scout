@@ -320,7 +320,7 @@ function RankFragment({ universities }: { universities: HeroStats["universities"
       .map((campus) => campus.id),
   );
   return (
-    <div className="absolute rounded-lg border border-line bg-raised px-3 py-2 shadow-[0_18px_40px_rgba(0,0,0,0.45)]" style={{ left: 0, top: 44, width: 268, transform: "rotate(-2deg)", zIndex: 1 }}>
+    <div className="rounded-lg border border-line bg-raised px-3 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.28)]">
       <div className="flex items-baseline justify-between gap-2">
         <span className="text-[14px] font-medium">Top campuses</span>
         <Link href="/campuses" className="text-[13px] text-fg hover:underline">View all</Link>
@@ -348,7 +348,7 @@ function RankFragment({ universities }: { universities: HeroStats["universities"
 function FounderFragment({ founder }: { founder: NonNullable<HeroStats["collageFounder"]> }) {
   const mark = initials(founder.name);
   return (
-    <Link href="/founders" className="absolute flex items-center gap-2.5 rounded-lg border border-line bg-raised px-3 py-2.5 shadow-[0_18px_40px_rgba(0,0,0,0.45)]" style={{ left: 176, top: 0, width: 252, transform: "rotate(2deg)", zIndex: 2 }}>
+    <Link href="/founders" className="flex items-center gap-2.5 rounded-lg border border-line bg-raised px-3 py-2.5 shadow-[0_8px_24px_rgba(0,0,0,0.28)]">
       {mark ? <span className="inline-grid h-8 w-8 shrink-0 place-items-center rounded-full bg-bg text-[13px] font-medium">{mark}</span> : null}
       <span className="min-w-0">
         <span className="block truncate text-[14px] font-medium leading-5">{founder.name}</span>
@@ -372,7 +372,7 @@ function SignalFragment({ item }: { item: WeekItem }) {
     <span className="truncate text-fg-2">{item.campus}</span>
   );
   return (
-    <div className="absolute rounded-lg border border-line bg-raised px-3 py-2.5 shadow-[0_18px_44px_rgba(0,0,0,0.5)]" style={{ left: 188, top: 156, width: 244, transform: "rotate(-1.5deg)", zIndex: 3 }}>
+    <div className="rounded-lg border border-line bg-raised px-3 py-2.5 shadow-[0_8px_24px_rgba(0,0,0,0.28)]">
       <div className="flex min-w-0 items-center gap-2 text-[14px]">
         <span className="h-2 w-2 shrink-0 rounded-full bg-[#c5d4ff]" />
         {campus}
@@ -390,11 +390,17 @@ function SignatureBand({ stats }: { stats: HeroStats }) {
   const hasRanks = stats.universities.some((item) => item.founderCount > 0);
   return (
     <section className="-mx-6 border-b border-line px-6 pb-5" aria-label="Campus Scout">
-      <div className="grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-10">
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-10">
         <div className="max-w-[640px]">
-          <div className="mb-3 flex items-center gap-3 text-[14px]">
-            <span className="font-medium">Sample data</span>
-            <Link href="/" className="text-fg-2 hover:underline">Close</Link>
+          <div className="mb-3">
+            <span className="inline-flex h-7 items-center gap-1 rounded-full border border-line bg-sunken pl-2.5 pr-1 text-[13px] leading-none text-fg-2">
+              Sample data
+              <Link href="/" aria-label="Close" className="grid h-5 w-5 place-items-center rounded-full text-fg-2 hover:bg-raised hover:text-fg">
+                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden>
+                  <path d="M2 2 8 8M8 2 2 8" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+                </svg>
+              </Link>
+            </span>
           </div>
           <p className="display text-[40px] font-semibold leading-[44px] sm:text-[48px] sm:leading-[52px]">
             Track student founders before they raise
@@ -404,9 +410,9 @@ function SignatureBand({ stats }: { stats: HeroStats }) {
           </p>
         </div>
         {signal || founder || hasRanks ? (
-          <div className="relative h-[176px] w-full max-w-[440px] sm:h-[232px]">
-            <div className="absolute left-0 top-0 h-[232px] w-[440px] origin-top-left scale-[0.74] sm:scale-100">
-              {hasRanks ? <RankFragment universities={stats.universities} /> : null}
+          <div className="grid w-full grid-cols-1 items-start gap-3 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+            {hasRanks ? <RankFragment universities={stats.universities} /> : null}
+            <div className="flex flex-col gap-3">
               {founder ? <FounderFragment founder={founder} /> : null}
               {signal ? <SignalFragment item={signal} /> : null}
             </div>
