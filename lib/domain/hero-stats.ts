@@ -1,5 +1,5 @@
 import { getDb } from "../db/client";
-import { campusSlug, shortCampusLabel } from "./campuses";
+import { campusSlug, shortCampusLabel, shortCampusName } from "./campuses";
 import { listFounders, listUniversities, type UniversitySummary } from "./queries";
 import { relativeTime } from "./relative-time";
 import { SIGNALS_THIS_WEEK_LABEL } from "./signal-copy";
@@ -32,6 +32,13 @@ export interface CampusSignalBrief {
   series: number[];
 }
 
+/** One real promoted founder for the home collage. No score. */
+export interface CollageFounder {
+  name: string;
+  campus: string;
+  company: string;
+}
+
 export interface HeroStats {
   founders: number;
   campuses: number;
@@ -45,6 +52,8 @@ export interface HeroStats {
   week: WeekItem[];
   recentCampusIds: string[];
   universities: (UniversitySummary & { slug: string; signalWeek: number; signalPrev: number; latestSignal: string | null; signalSeries: number[] })[];
+  /** First promoted founder, by name, who has a campus and a linked company. */
+  collageFounder: CollageFounder | null;
 }
 
 export function latestDataTimestamp(): string | null {
@@ -296,6 +305,18 @@ export function loadHeroStats(): HeroStats {
     week: feed.items,
     recentCampusIds: feed.campusIds,
     universities,
+    collageFounder: firstCollageFounder(people),
   };
+}
+
+function firstCollageFounder(people: { name: string; universityName: string | null; linkedCompany: { name: string } | null }[]): CollageFounder | null {
+  const sorted = [...people].sort((a, b) => a.name.localeCompare(b.name));
+  for (const person of sorted) {
+    const name = person.name.trim();
+    const campus = person.universityName?.trim() ? shortCampusName(person.universityName.trim()) : "";
+    const company = person.linkedCompany?.name.trim() ?? "";
+    if (name && campus && company) return { name, campus, company };
+  }
+  return null;
 }
 
