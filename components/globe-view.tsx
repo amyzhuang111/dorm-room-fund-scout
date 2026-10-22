@@ -345,11 +345,11 @@ export const GlobeView = memo(function GlobeView({
               filter: unclustered,
               paint: {
                 "circle-radius": hero
-                  ? ["interpolate", ["linear"], ["sqrt", ["max", ["coalesce", ["get", "founders"], 0], 0]], 0, 10, 10, 18, 22, 26]
+                  ? ["interpolate", ["linear"], ["sqrt", ["max", ["coalesce", ["get", "founders"], 0], 0]], 0, 4, 10, 6, 28, 9]
                   : ["interpolate", ["linear"], ["get", "count"], 0, 16, 20, 28, 200, 42],
                 "circle-color": hero ? "#E8823A" : MAP_THEME.dot,
-                "circle-opacity": hero ? 0.55 : 0.38,
-                "circle-blur": 1,
+                "circle-opacity": hero ? 0.4 : 0.38,
+                "circle-blur": hero ? 0.25 : 1,
               },
             });
           }
@@ -362,7 +362,7 @@ export const GlobeView = memo(function GlobeView({
               filter: unclustered,
               paint: {
                 "circle-radius": hero
-                  ? ["interpolate", ["linear"], ["sqrt", ["max", ["coalesce", ["get", "founders"], 0], 0]], 0, 6, 10, 12, 22, 18]
+                  ? ["interpolate", ["linear"], ["sqrt", ["max", ["coalesce", ["get", "founders"], 0], 0]], 0, 3, 10, 4.5, 28, 7]
                   : ["interpolate", ["linear"], ["get", "count"], 0, 6, 20, 9, 200, 14],
                 "circle-color": hero ? "#E8823A" : MAP_THEME.dot,
                 "circle-stroke-width": 1,
@@ -378,7 +378,7 @@ export const GlobeView = memo(function GlobeView({
               source: "campuses",
               filter: ["==", ["get", "recent"], 1],
               paint: {
-                "circle-radius": ["interpolate", ["linear"], ["sqrt", ["coalesce", ["get", "founders"], 0]], 0, 8, 10, 12],
+                "circle-radius": ["interpolate", ["linear"], ["sqrt", ["coalesce", ["get", "founders"], 0]], 0, 5, 10, 7],
                 "circle-color": "#E8823A",
                 "circle-opacity": 0.35,
                 "circle-stroke-width": prefersReducedMotion() ? 2 : 0,
@@ -547,7 +547,7 @@ export const GlobeView = memo(function GlobeView({
             const phase = (now % 2400) / 2400;
             const scale = 1 + 1.6 * phase;
             try {
-              map.setPaintProperty("campus-pulse", "circle-radius", ["*", scale, ["interpolate", ["linear"], ["sqrt", ["coalesce", ["get", "founders"], 0]], 0, 8, 10, 12]]);
+              map.setPaintProperty("campus-pulse", "circle-radius", ["*", scale, ["interpolate", ["linear"], ["sqrt", ["coalesce", ["get", "founders"], 0]], 0, 5, 10, 7]]);
               map.setPaintProperty("campus-pulse", "circle-opacity", 0.5 * (1 - phase));
             } catch {
               // The pulse layer can still be attaching on the first frames.
@@ -898,7 +898,7 @@ export const GlobeView = memo(function GlobeView({
         )}
 
         {status === "ok" && !locked && (
-          <div className={`absolute z-10 flex flex-col gap-1 ${hero ? "bottom-2 right-2" : "bottom-3 right-3"}`}>
+          <div className={`absolute z-10 flex flex-col gap-1 ${hero ? "bottom-3 right-3" : "bottom-3 right-3"}`}>
             <button
               type="button"
               onClick={() => mapRef.current?.zoomIn()}
@@ -1022,8 +1022,8 @@ function CampusHover({
       style={{ left: tip.x + 12, top: tip.y - 8 }}
     >
       <p className="font-medium text-foreground">{shortCampusLabel(u.id, u.name)}</p>
-      <p className="text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
-        {u.companyCount} companies · {u.founderCount} founders · {u.sourcesConfigured} sources
+      <p className="text-[14px] text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
+        {u.founderCount.toLocaleString("en-US")} founders
       </p>
     </div>
   );

@@ -65,8 +65,8 @@
   --line: #1f2536;
   --line-strong: #2c3449;
   --fg: #eceef4;
-  --fg-2: #a3aac0;
-  --fg-3: #9aa3bc;
+  --fg-2: #a1a1aa;
+  --fg-3: #a1a1aa;
   --cobalt: #2f4fd8;
   --cobalt-haze: #1a2556;
   --ember: #e8823a;
@@ -93,7 +93,7 @@
   --accent: var(--cobalt);
   --accent-foreground: #fbfbfc;
   --accent-subtle: var(--cobalt-haze);
-  --link: var(--cobalt);
+  --link: #b7c4ff;
 }
 
 @theme inline {
@@ -117,7 +117,7 @@
   --color-accent-foreground: #fbfbfc;
   --color-accent-2: var(--cobalt);
   --color-accent-subtle: var(--cobalt-haze);
-  --color-link: var(--cobalt);
+  --color-link: var(--link);
   --color-ok: var(--ok);
   --color-ok-bg: var(--ok-bg);
   --color-warn: var(--warn);
@@ -286,8 +286,8 @@ h1, h2, h3 {
   --line: #1f2536;
   --line-strong: #2c3449;
   --fg: #eceef4;
-  --fg-2: #a3aac0;
-  --fg-3: #9aa3bc;
+  --fg-2: #a1a1aa;
+  --fg-3: #a1a1aa;
   --ember: #e8823a;
   --amber: #f2b35b;
   --cobalt: #2f4fd8;

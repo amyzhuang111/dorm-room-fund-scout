@@ -61,7 +61,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <main className="flex-1">{children}</main>
             </FeedbackProvider>
           </UserPipelineProvider>
-          <footer className="border-t border-line px-6 py-6 text-[12px] text-fg-2">
+          <footer className="border-t border-line px-6 py-6 text-[14px] text-fg-2">
             <div className="flex gap-5">
               <Link href="/methodology">Methodology</Link>
               <Link href="/settings">Settings</Link>

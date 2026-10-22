@@ -57,80 +57,84 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
   }
 
   return (
-    <div className="hero-night grid min-h-[calc(100dvh-4rem)] grid-cols-1 content-between gap-x-6 gap-y-8 bg-bg px-6 py-8 text-fg md:grid-cols-12">
-      <section className="md:col-span-6">
-        {updatedToday(stats.updatedAt) ? <p className="text-[12px] text-fg-2">Updated today</p> : null}
-        <h1 className="max-w-[18ch] font-semibold tracking-[-0.035em]">
-          <span className="block text-[64px] leading-none tabular-nums">{stats.founders.toLocaleString("en-US")}</span>
-          <span className="mt-3 block text-[32px] leading-[1.15]">
-            founders forming
-            <br />
-            across {stats.campuses.toLocaleString("en-US")} campuses.
-          </span>
-        </h1>
-        <Link href="/founders" className="mt-6 inline-flex h-12 items-center rounded bg-ember px-6 text-[18px] font-semibold text-[#0b0e17]">
-          Explore founders
-        </Link>
-        <p className="mt-6 text-[14px] text-fg-2">
-          <Link href="/companies" className="tabular-nums hover:text-fg">{stats.tracked.toLocaleString("en-US")} companies</Link>
-          {" · "}
-          <Link href="/signals" className="tabular-nums hover:text-fg">{stats.signalsWeek.toLocaleString("en-US")} signals this week</Link>
-        </p>
-      </section>
-      <div className="relative h-[300px] md:col-span-6 md:col-start-7 md:row-span-2 md:h-[640px] md:self-start">
-        <div className="absolute left-2 top-2 z-20 flex gap-2">
-          {(["campus", "hq"] as const).map((value) => (
-            <button key={value} type="button" className={`h-8 rounded px-3 text-[14px] ${mode === value ? "bg-raised text-fg" : "text-fg-2"}`} onClick={() => setMode(value)}>
-              {value === "campus" ? "Campuses" : "HQs"}
-            </button>
-          ))}
-          <Link href="/map/network" className="grid h-8 place-items-center rounded px-3 text-[14px] text-fg-2">Network</Link>
+    <div className="hero-night bg-bg px-6 py-8 text-fg">
+      <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-12 md:gap-x-6">
+        <div className="flex flex-col gap-10 md:col-span-6">
+          <div>
+            {updatedToday(stats.updatedAt) ? <p className="mb-3 text-[14px] text-fg-2">Updated today</p> : null}
+            <h1 className="font-semibold tracking-[-0.035em]">
+              <span className="block text-[64px] leading-none tabular-nums">{stats.founders.toLocaleString("en-US")}</span>
+              <span className="mt-2 block text-[clamp(18px,4.8vw,32px)] leading-tight">
+                student founders across {stats.campuses.toLocaleString("en-US")} campuses
+              </span>
+            </h1>
+            <p className="mt-4 text-[18px] text-fg-2">Track student founders before they raise</p>
+          </div>
+          <p className="text-[14px] text-fg-2">
+            <Link href="/companies" className="tabular-nums text-fg hover:underline">{stats.tracked.toLocaleString("en-US")} companies</Link>
+            {" · "}
+            <Link href="/signals" className="tabular-nums text-fg hover:underline">{stats.signalsWeek.toLocaleString("en-US")} signals this week</Link>
+          </p>
+          <Link href="/founders" className="inline-flex h-12 w-fit items-center rounded bg-ember px-6 text-[18px] font-semibold text-[#0b0e17]">
+            Explore founders
+          </Link>
+          <section>
+            <div className="flex items-baseline justify-between">
+              <h2 className="text-[18px] font-semibold tracking-[-0.02em]">Latest signals</h2>
+              <Link href="/signals" className="text-[14px] text-fg-2 hover:text-fg">View all →</Link>
+            </div>
+            {stats.fresh ? (
+              <ul className="mt-3">
+                {stats.week.map((item) => (
+                  <SignalRow key={item.id} item={item} />
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-3 text-[14px] text-fg-2">Quiet week. Last signal {absoluteDate(stats.lastSignalAt)}</p>
+            )}
+          </section>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              const q = ask.trim();
+              if (q) router.push(`/ask?q=${encodeURIComponent(q)}`);
+            }}
+          >
+            <label className="sr-only" htmlFor="hero-ask">Ask</label>
+            <input
+              id="hero-ask"
+              value={ask}
+              onChange={(event) => setAsk(event.target.value)}
+              placeholder="Ask: AI founders at Waterloo who shipped in the last 30 days"
+              className="h-12 w-full rounded-lg border border-[#8b93a7] bg-raised px-4 text-[14px] text-fg outline-none placeholder:text-fg-2"
+            />
+          </form>
         </div>
-        <GlobeView
-          universities={plotted}
-          basePath="/"
-          current={{ university: university ?? undefined }}
-          onNavigate={navigate}
-          hero
-          hideStats
-          flush
-          geoMode={mode}
-          recentIds={stats.recentCampusIds}
-        />
-      </div>
-      <section className="md:col-span-6">
-        <div className="flex items-baseline justify-between">
-          <h2 className="text-[18px] font-semibold tracking-[-0.02em]">Latest signals</h2>
-          <Link href="/signals" className="text-[14px] text-fg-2 hover:text-fg">View all →</Link>
-        </div>
-        {stats.fresh ? (
-          <ul className="mt-3">
-            {stats.week.map((item) => (
-              <SignalRow key={item.id} item={item} />
+        <div className="flex flex-col md:col-span-6 md:col-start-7">
+          <div className="mb-3 flex h-10 items-center gap-1 border-b border-line" role="group" aria-label="Map geography">
+            {(["campus", "hq"] as const).map((value) => (
+              <button key={value} type="button" className={`h-8 rounded px-3 text-[14px] ${mode === value ? "bg-raised text-fg" : "text-fg-2"}`} onClick={() => setMode(value)}>
+                {value === "campus" ? "Campuses" : "HQs"}
+              </button>
             ))}
-          </ul>
-        ) : (
-          <p className="mt-3 text-[14px] text-fg-2">Quiet week · last signal {absoluteDate(stats.lastSignalAt)}</p>
-        )}
-        <form
-          className="mt-6"
-          onSubmit={(event) => {
-            event.preventDefault();
-            const q = ask.trim();
-            if (q) router.push(`/ask?q=${encodeURIComponent(q)}`);
-          }}
-        >
-          <label className="sr-only" htmlFor="hero-ask">Ask</label>
-          <input
-            id="hero-ask"
-            value={ask}
-            onChange={(event) => setAsk(event.target.value)}
-            placeholder="Ask: “AI founders at Waterloo who shipped in the last 30 days”"
-            className="h-12 w-full rounded-lg border border-line-strong bg-raised px-4 text-[14px] outline-none"
-          />
-        </form>
-      </section>
-      <section className="md:col-span-12">
+            <Link href="/map/network" className="grid h-8 place-items-center rounded px-3 text-[14px] text-fg-2">Network</Link>
+          </div>
+          <div className="relative h-[280px] md:h-[520px]">
+            <GlobeView
+              universities={plotted}
+              basePath="/"
+              current={{ university: university ?? undefined }}
+              onNavigate={navigate}
+              hero
+              hideStats
+              flush
+              geoMode={mode}
+              recentIds={stats.recentCampusIds}
+            />
+          </div>
+        </div>
+      </div>
+      <section className="mt-12">
         <h2 className="text-[18px] font-semibold tracking-[-0.02em]">Top campuses</h2>
         <ul className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-6">
           {topCampuses.map((campus) => (
@@ -138,7 +142,7 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
               <Link href={`/campuses/${campus.slug}`} className="block rounded-lg border border-line bg-raised px-3 py-3 hover:border-line-strong">
                 <span className="block truncate text-[14px]">{shortCampusLabel(campus.id, campus.name)}</span>
                 <span className="mt-1 block text-[18px] tabular-nums">{campus.founderCount.toLocaleString("en-US")}</span>
-                <span className="text-[12px] text-fg-2">founders</span>
+                <span className="text-[14px] text-fg-2">founders</span>
               </Link>
             </li>
           ))}
@@ -178,17 +182,17 @@ function SignalRow({ item }: { item: WeekItem }) {
     <Link href="/signals" className="min-w-0 truncate hover:text-fg">{item.event}</Link>
   );
   return (
-    <li className="grid h-8 grid-cols-[72px_minmax(0,1fr)_52px] items-center gap-3 text-[14px]">
+    <li className="grid h-8 grid-cols-[88px_minmax(0,1fr)_64px] items-center gap-3 text-[14px]">
       {item.campusSlug ? (
         <Link href={`/campuses/${item.campusSlug}`} className="truncate text-fg-2">{item.campus}</Link>
       ) : (
         <span className="truncate text-fg-2">{item.campus}</span>
       )}
       <span className="flex min-w-0 items-center gap-2">
-        {item.tag ? <span className={`shrink-0 text-[12px] font-medium ${TAG_CLASS[item.tag]}`}>{item.tag}</span> : null}
+        {item.tag ? <span className={`shrink-0 text-[14px] font-medium ${TAG_CLASS[item.tag]}`}>{item.tag}</span> : null}
         {event}
       </span>
-      <span className="text-right text-[12px] text-fg-2 tabular-nums" title={item.at ?? undefined}>{updatedAgo(item.at)}</span>
+      <span className="text-right text-[14px] text-fg-2 tabular-nums" title={item.at ?? undefined}>{updatedAgo(item.at)}</span>
     </li>
   );
 }

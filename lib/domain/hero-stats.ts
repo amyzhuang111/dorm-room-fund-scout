@@ -77,11 +77,7 @@ function signalTag(sourceName: string | null, category: string | null, sourceTyp
   return null;
 }
 
-function weekFeed(db: ReturnType<typeof getDb>): { items: WeekItem[]; articleCount: number; campusIds: string[] } {
-  let rows: FeedRow[] = [];
-  try {
-    rows = db.prepare(
-      `SELECT a.id as id,
+const ARTICLE_SQL = `SELECT a.id as id,
               a.published_at as at,
               a.category as type,
               a.url as url,
@@ -97,36 +93,52 @@ function weekFeed(db: ReturnType<typeof getDb>): { items: WeekItem[]; articleCou
            m.person_id,
            (SELECT ppr.person_id FROM person_project_roles ppr WHERE ppr.project_id = m.project_id LIMIT 1)
          )
-         JOIN universities u ON u.id = af.university_id
-        WHERE a.published_at >= datetime('now', '-7 days')
-        ORDER BY a.published_at DESC`,
-    ).all() as FeedRow[];
+         JOIN universities u ON u.id = af.university_id`;
+
+function articleRows(db: ReturnType<typeof getDb>, weekOnly: boolean): FeedRow[] {
+  try {
+    const where = weekOnly ? `WHERE a.published_at >= datetime('now', '-7 days')` : `WHERE a.published_at IS NOT NULL`;
+    return db.prepare(`${ARTICLE_SQL} ${where} ORDER BY a.published_at DESC`).all() as FeedRow[];
   } catch {
-    rows = [];
+    return [];
   }
-  const seenArticles = new Set<string>();
-  const seenCampuses = new Set<string>();
-  const items: WeekItem[] = [];
+}
+
+function toWeekItem(row: FeedRow): WeekItem {
+  const label = shortCampusLabel(row.campus_id ?? "", row.campus ?? row.campus_id ?? "");
+  return {
+    id: row.id,
+    campus: label,
+    campusSlug: campusSlug(label),
+    type: row.type ?? "news",
+    event: row.event ?? row.type ?? "News",
+    at: row.at,
+    url: row.url,
+    tag: signalTag(row.source_name, row.type, row.source_type),
+  };
+}
+
+function weekFeed(db: ReturnType<typeof getDb>): { items: WeekItem[]; articleCount: number; campusIds: string[] } {
+  const weekRows = articleRows(db, true);
+  const latestRows = articleRows(db, false);
+  const weekArticles = new Set<string>();
   const campusIds: string[] = [];
-  for (const row of rows) {
-    if (!seenArticles.has(row.id)) seenArticles.add(row.id);
+  const seenCampuses = new Set<string>();
+  for (const row of weekRows) {
+    weekArticles.add(row.id);
     if (!row.campus_id || seenCampuses.has(row.campus_id)) continue;
     seenCampuses.add(row.campus_id);
     campusIds.push(row.campus_id);
-    if (items.length >= 5) continue;
-    const label = shortCampusLabel(row.campus_id, row.campus ?? row.campus_id);
-    items.push({
-      id: row.id,
-      campus: label,
-      campusSlug: campusSlug(label),
-      type: row.type ?? "news",
-      event: row.event ?? row.type ?? "News",
-      at: row.at,
-      url: row.url,
-      tag: signalTag(row.source_name, row.type, row.source_type),
-    });
   }
-  return { items, articleCount: seenArticles.size, campusIds: campusIds.slice(0, 8) };
+  const items: WeekItem[] = [];
+  const seenArticles = new Set<string>();
+  for (const row of latestRows) {
+    if (seenArticles.has(row.id) || !row.campus_id) continue;
+    seenArticles.add(row.id);
+    items.push(toWeekItem(row));
+    if (items.length >= 8) break;
+  }
+  return { items, articleCount: weekArticles.size, campusIds: campusIds.slice(0, 8) };
 }
 
 export function loadHeroStats(): HeroStats {

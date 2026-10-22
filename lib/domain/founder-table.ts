@@ -41,7 +41,7 @@ export function loadFounderTable(universityId?: string): FounderTableRow[] {
     if (!signals.has(row.person_id)) signals.set(row.person_id, { type: row.type, at: row.at, text: row.text });
   }
 
-  return listFoundersForPage(universityId ? { universityId } : {})
+  const rows = listFoundersForPage(universityId ? { universityId } : {})
     .filter((founder) => (universityId ? founder.campuses.some((campus) => campus.universityId === universityId) || founder.universityId === universityId : true))
     .map((founder) => {
       const campusId = founder.universityId;
@@ -63,4 +63,12 @@ export function loadFounderTable(universityId?: string): FounderTableRow[] {
         verified: founder.verificationStatus === "confirmed",
       };
     });
+  rows.sort((a, b) => signalTime(b.signalAt) - signalTime(a.signalAt) || a.name.localeCompare(b.name));
+  return rows;
+}
+
+function signalTime(iso: string | null): number {
+  if (!iso) return Number.NEGATIVE_INFINITY;
+  const then = Date.parse(iso.includes("T") ? iso : iso.replace(" ", "T") + "Z");
+  return Number.isNaN(then) ? Number.NEGATIVE_INFINITY : then;
 }

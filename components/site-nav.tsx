@@ -79,8 +79,7 @@ export function SiteNav() {
           <span className="mark" aria-hidden />
           Campus Scout
         </Link>
-        <p className="hidden text-[13px] text-fg-2 lg:block">Track student founders before they raise</p>
-        <nav className="ml-2 hidden items-center gap-5 md:flex" aria-label="Sections">
+        <nav className="ml-6 hidden items-center gap-5 md:flex" aria-label="Sections">
           {SECTIONS.map((item) => (
             <Link key={item.id} href={item.href} className={`nav-link ${section === item.id ? "is-active" : ""}`}>
               {item.label}

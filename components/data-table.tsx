@@ -14,15 +14,17 @@ function initials(name: string): string {
   return ((first[0] ?? "") + (last[0] ?? first[1] ?? "")).toUpperCase() || "·";
 }
 
-function signalPresentation(row: FounderTableRow): { label: string; kind: "yc" | "github" | "funding" | null } {
+function signalKind(row: FounderTableRow): "yc" | "github" | "funding" | null {
   const text = row.signal ?? "";
-  if (/Y Combinator/i.test(text)) return { label: "YC", kind: "yc" };
-  if (/GitHub/i.test(text)) return { label: "GitHub", kind: "github" };
-  if (row.signalType === "funding" || /\braises?\b|\bfunding\b/i.test(text)) return { label: "Funding", kind: "funding" };
-  if (row.signalType === "demo" || row.signalType === "continued_dev") return { label: "Launch", kind: null };
-  if (row.signalType === "award") return { label: "Press", kind: null };
-  if (row.signal) return { label: "Note", kind: null };
-  return { label: "None", kind: null };
+  if (/Y Combinator/i.test(text)) return "yc";
+  if (/GitHub/i.test(text)) return "github";
+  if (row.signalType === "funding" || /\braises?\b|\bfunding\b/i.test(text)) return "funding";
+  return null;
+}
+
+function emptyOr(value: string | number | null | undefined) {
+  if (value == null || value === "") return <span className="text-[#6f7688]">-</span>;
+  return value;
 }
 
 function SourceMark({ kind }: { kind: "yc" | "github" | "funding" }) {
@@ -126,11 +128,18 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
   }
 
   const rowH = compact ? "h-9" : "h-11";
+  const withSignal = rows.filter((row) => row.signal).length;
+  const verifiedCount = rows.filter((row) => row.verified).length;
 
   return (
     <div>
+      <p className="mb-4 flex flex-wrap gap-x-6 gap-y-1 text-[14px] text-fg-2">
+        <span><span className="tabular-nums text-fg">{rows.length.toLocaleString("en-US")}</span> founders</span>
+        <span><span className="tabular-nums text-fg">{withSignal.toLocaleString("en-US")}</span> with a signal</span>
+        <span><span className="tabular-nums text-fg">{verifiedCount.toLocaleString("en-US")}</span> verified</span>
+      </p>
       <div className="flex h-12 flex-wrap items-center gap-2">
-        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search founders" className="h-8 w-[280px] max-w-full rounded border border-line bg-sunken px-2 text-[13px] outline-none" />
+        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search founders" className="h-9 w-[280px] max-w-full rounded border border-[#8b93a7] bg-raised px-2 text-[14px] outline-none" />
         <select value={tier} onChange={(event) => setTier(event.target.value)} className="h-8 rounded border border-line bg-raised px-2 text-[13px]" aria-label="Tier">
           <option value="">Tier</option>
           {["S+", "S", "A", "B", "C", "D"].map((value) => <option key={value}>{value}</option>)}
@@ -169,7 +178,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
       <div className="max-h-[calc(100dvh-220px)] overflow-auto border-t border-line-strong">
         <table className="w-full border-separate border-spacing-0 text-left text-[14px]">
           <thead className="sticky top-0 z-20">
-            <tr className="h-9 text-[11px] uppercase tracking-[0.06em] text-fg-3">
+            <tr className="h-9 text-[14px] uppercase tracking-[0.06em] text-fg-2">
               <th className="sticky top-0 z-20 w-8 border-b border-line-strong bg-bg px-2 font-medium" />
               <th className="sticky top-0 z-20 min-w-[180px] border-b border-line-strong bg-bg px-2 font-mono font-medium">Name</th>
               {columns.tier && <th className="sticky top-0 z-20 border-b border-line-strong bg-bg px-2 font-mono font-medium">Tier</th>}
@@ -185,7 +194,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
             {filtered.map((row, index) => (
               <tr
                 key={row.id}
-                className={`${rowH} align-middle [&>td]:border-b [&>td]:border-line ${index === cursor ? "bg-sunken" : ""} ${openId === row.id ? "bg-[var(--cobalt-haze)] shadow-[inset_2px_0_0_var(--cobalt)]" : ""}`}
+                className={`${rowH} align-middle [&>td]:border-b [&>td]:border-line ${openId === row.id ? "bg-[var(--cobalt-haze)] shadow-[inset_2px_0_0_var(--cobalt)]" : index === cursor ? "bg-sunken" : "hover:bg-[#161c2e]"}`}
                 onClick={() => { setCursor(index); setOpenId(row.id); }}
               >
                 <td className="px-2" onClick={(event) => event.stopPropagation()}>
@@ -195,29 +204,29 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
                   <span className="mr-2 inline-grid h-7 w-7 shrink-0 place-items-center rounded-full bg-raised text-[11px] font-medium tracking-[-0.04em] text-fg">{initials(row.name)}</span>
                   <span className="font-medium">{row.name}</span>
                 </td>
-                {columns.tier && <td className="px-2">{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : <span className="text-fg-3">—</span>}</td>}
-                {!campusLocked && <td className="px-2 text-fg-2">{row.campusSlug ? <Link href={`/campuses/${row.campusSlug}`} className="text-cobalt">{row.campus}</Link> : row.campus ?? "—"}</td>}
-                <td className="px-2">{row.companyId ? <Link href={`/startup/${row.companyId}`} className="text-cobalt">{row.company}</Link> : row.company ?? "—"}</td>
-                {columns.year && <td className="num px-2 text-right text-[13px]">{row.year ?? "—"}</td>}
-                <td className="min-w-[180px] whitespace-nowrap px-2 text-[14px]" title={row.signal ?? "No signal on record"}>
+                {columns.tier && <td className="px-2">{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : emptyOr(null)}</td>}
+                {!campusLocked && <td className="px-2">{row.campusSlug ? <Link href={`/campuses/${row.campusSlug}`} className="text-link">{row.campus}</Link> : emptyOr(row.campus)}</td>}
+                <td className="px-2">{row.companyId ? <Link href={`/startup/${row.companyId}`} className="text-link">{row.company}</Link> : emptyOr(row.company)}</td>
+                {columns.year && <td className="num px-2 text-right text-[14px]">{emptyOr(row.year)}</td>}
+                <td className="max-w-[480px] px-2 text-[14px]" title={row.signal ?? undefined}>
                   {(() => {
-                    const signal = signalPresentation(row);
+                    const kind = signalKind(row);
                     return (
                       <span className="flex w-full items-center gap-2">
-                        {signal.kind ? <SourceMark kind={signal.kind} /> : null}
-                        <span className={signal.kind === "yc" ? "text-[#7C8CF0]" : signal.kind === "funding" ? "text-[#3FB68B]" : "text-fg"}>{signal.label}</span>
-                        {row.signalAt ? <span className="ml-auto text-[12px] text-fg-2 tabular-nums" title={row.signalAt}>{relativeTime(row.signalAt)}</span> : null}
+                        {kind ? <SourceMark kind={kind} /> : null}
+                        <span className="min-w-0 flex-1 truncate">{emptyOr(row.signal)}</span>
+                        {row.signalAt ? <span className="shrink-0 text-[14px] text-fg-2 tabular-nums">{relativeTime(row.signalAt)}</span> : null}
                       </span>
                     );
                   })()}
                 </td>
                 {columns.score && (
-                  <td className="num px-2 text-right text-[13px]">
-                    {row.score == null ? "—" : row.score}
+                  <td className="num px-2 text-right text-[14px]">
+                    {emptyOr(row.score)}
                     {row.score != null && <span className="ml-2 inline-block h-1 w-10 align-middle bg-sunken"><span className="block h-1 bg-cobalt" style={{ width: `${Math.max(0, Math.min(100, row.score))}%` }} /></span>}
                   </td>
                 )}
-                <td className="px-2">{row.verified ? <span className="text-ok" title="Verified">✓</span> : null}</td>
+                <td className="px-2 text-[#6f7688]">{row.verified ? <span className="text-ok" title="Verified">✓</span> : null}</td>
               </tr>
             ))}
           </tbody>
@@ -232,8 +241,8 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
           <p className="mt-4"><span className={tierClass(open.tier)}>{open.tier ?? "Unranked"}</span></p>
           <p className="mt-4 text-[15px] leading-6">{open.signal ?? "No signal text is stored for this person."}</p>
           <div className="mt-6 flex gap-4 text-[13px]">
-            {open.campusSlug && <Link href={`/campuses/${open.campusSlug}`} className="text-cobalt">Open campus</Link>}
-            {open.companyId && <Link href={`/startup/${open.companyId}`} className="text-cobalt">Open company</Link>}
+            {open.campusSlug && <Link href={`/campuses/${open.campusSlug}`} className="text-link">Open campus</Link>}
+            {open.companyId && <Link href={`/startup/${open.companyId}`} className="text-link">Open company</Link>}
           </div>
         </aside>
       )}
