@@ -2,8 +2,13 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { EmptyHome } from "@/components/empty-home";
 import { GlobeBoot } from "@/components/map-boot";
-import { GlobeHero } from "@/components/globe-hero";
+import { SampleHome, type Feed } from "@/components/sample-home";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
+
+function feedOf(value: string | undefined): Feed {
+  if (value === "leaderboard" || value === "map") return value;
+  return "directory";
+}
 
 export default async function Home({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
@@ -17,12 +22,13 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
   }
   if (sp.view === "network") redirect("/map/network");
   if (sp.sample !== "1") return <EmptyHome />;
-  const stats = loadHeroStats();
+  const feed = feedOf(sp.feed);
+  const stats = feed === "map" ? loadHeroStats() : null;
   return (
     <>
-      <GlobeBoot />
+      {feed === "map" ? <GlobeBoot /> : null}
       <Suspense fallback={null}>
-        <GlobeHero stats={stats} />
+        <SampleHome feed={feed} sector={sp.sector} kind={sp.kind} stats={stats} />
       </Suspense>
     </>
   );

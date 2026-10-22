@@ -14,7 +14,7 @@ import { MapCredit } from "./map-credit";
 
 const GlobeView = dynamic(() => import("./globe-view").then((mod) => mod.GlobeView), { ssr: false });
 
-export function GlobeHero({ stats }: { stats: HeroStats }) {
+export function GlobeHero({ stats, band = true }: { stats: HeroStats; band?: boolean }) {
   const router = useRouter();
   const search = useSearchParams();
   const university = search.get("university");
@@ -75,8 +75,8 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
 
   return (
     <div className="hero-night flex flex-col bg-bg px-6 py-6 text-fg lg:min-h-[calc(100dvh-72px)]">
-      <SignatureBand stats={stats} />
-      <div className="mt-5 grid flex-1 grid-cols-1 items-start gap-6 lg:min-h-0 lg:grid-cols-12 lg:items-stretch">
+      {band ? <SignatureBand stats={stats} /> : null}
+      <div className={`${band ? "mt-5 " : ""}grid flex-1 grid-cols-1 items-start gap-6 lg:min-h-0 lg:grid-cols-12 lg:items-stretch`}>
         <div className="flex flex-col gap-4 lg:col-span-3">
           <div>
             {updatedToday(stats.updatedAt) ? <p className="mb-3 text-[14px] text-fg-2">Updated today</p> : null}
