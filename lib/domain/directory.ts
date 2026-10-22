@@ -64,6 +64,7 @@ function stageLabel(raw: string | null): string | null {
   return STAGE_LABEL[raw.trim().toLowerCase()] ?? null;
 }
 
+/** Reads companies, schools, sectors, and signal rows. A larger import shows up here without a layout change. */
 export function loadDirectory(): DirectoryData {
   const db = getDb();
   const companies = db

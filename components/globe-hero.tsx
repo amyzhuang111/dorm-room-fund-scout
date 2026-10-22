@@ -141,33 +141,16 @@ export function GlobeHero({ stats, band = true, world = false }: { stats: HeroSt
             ))}
             <Link href="/map/network" className="grid h-10 place-items-center border-b-2 border-transparent px-3 text-[14px] font-medium text-fg-2">Network</Link>
           </div>
-          <div className="relative h-[420px] flex-1 overflow-hidden rounded-lg border border-line lg:h-auto lg:min-h-[420px]">
-            <GlobeView
-              universities={plotted}
-              basePath="/"
-              current={{ university: university ?? undefined }}
-              onNavigate={navigate}
-              hero
-              world={world}
-              hideStats
-              flush
-              geoMode={mode}
-              recentIds={hotIds}
-              highlightId={highlight}
-            />
-            {world ? (
-              <p className="pointer-events-none absolute left-3 top-3 z-20 max-w-[min(320px,calc(100%-24px))] rounded bg-[#0b0e17]/88 px-2.5 py-1.5 text-[13px] leading-4 text-[#d8dae3]">
-                {countryCoverage(plotted)}
-              </p>
-            ) : null}
-            <div className="pointer-events-none absolute bottom-3 left-3 z-20 rounded bg-[#0b0e17]/88 px-2.5 py-1.5">
-              <DotLegend />
-            </div>
-            <NortheastPanel universities={plotted} className={world ? "hidden lg:block" : ""} />
-            <p className="pointer-events-auto absolute bottom-2 right-3 z-20 max-w-[240px] text-right text-[13px] leading-4 text-[#d8dae3]">
-              <MapCredit />
-            </p>
-          </div>
+          <CampusMap
+            className="h-[420px] flex-1 lg:h-auto lg:min-h-[420px]"
+            universities={plotted}
+            world={world}
+            mode={mode}
+            university={university}
+            onNavigate={navigate}
+            hotIds={hotIds}
+            highlightId={highlight}
+          />
         </div>
         <section className="lg:col-span-2" aria-label="Top campuses">
           <div className="flex items-baseline justify-between gap-2">
@@ -210,6 +193,91 @@ export function GlobeHero({ stats, band = true, world = false }: { stats: HeroSt
           <Link href={`/campuses/${selected.slug}`} className="mt-6 inline-block text-[14px] text-fg-2">Open campus →</Link>
         </aside>
       )}
+    </div>
+  );
+}
+
+export function WorldMap({ stats }: { stats: HeroStats }) {
+  const router = useRouter();
+  const search = useSearchParams();
+  const university = search.get("university");
+  const plotted = stats.universities.filter((item) => item.founderCount > 0);
+  const hotIds = [...stats.universities]
+    .filter((item) => item.signalWeek > 0 && item.lat != null && item.lon != null)
+    .sort((a, b) => b.signalWeek - a.signalWeek || b.founderCount - a.founderCount || a.name.localeCompare(b.name))
+    .slice(0, 3)
+    .map((item) => item.id);
+
+  function navigate(overrides: Record<string, string | null>) {
+    const next = new URLSearchParams(search.toString());
+    for (const [key, value] of Object.entries(overrides)) {
+      if (value) next.set(key, value);
+      else next.delete(key);
+    }
+    const qs = next.toString();
+    router.replace(qs ? `/?${qs}` : "/", { scroll: false });
+  }
+
+  return (
+    <CampusMap
+      className="h-[420px] lg:h-[680px]"
+      universities={plotted}
+      world
+      mode="campus"
+      university={university}
+      onNavigate={navigate}
+      hotIds={hotIds}
+      highlightId={null}
+    />
+  );
+}
+
+function CampusMap({
+  className,
+  universities,
+  world,
+  mode,
+  university,
+  onNavigate,
+  hotIds,
+  highlightId,
+}: {
+  className: string;
+  universities: UniversitySummary[];
+  world: boolean;
+  mode: "campus" | "hq";
+  university: string | null;
+  onNavigate: (overrides: Record<string, string | null>) => void;
+  hotIds: string[];
+  highlightId: string | null;
+}) {
+  return (
+    <div className={`relative overflow-hidden rounded-lg border border-line ${className}`}>
+      <GlobeView
+        universities={universities}
+        basePath="/"
+        current={{ university: university ?? undefined }}
+        onNavigate={onNavigate}
+        hero
+        world={world}
+        hideStats
+        flush
+        geoMode={mode}
+        recentIds={hotIds}
+        highlightId={highlightId}
+      />
+      {world ? (
+        <p className="pointer-events-none absolute left-3 top-3 z-20 max-w-[min(320px,calc(100%-24px))] rounded bg-[#0b0e17]/88 px-2.5 py-1.5 text-[13px] leading-4 text-[#d8dae3]">
+          {countryCoverage(universities)}
+        </p>
+      ) : null}
+      <div className="pointer-events-none absolute bottom-3 left-3 z-20 rounded bg-[#0b0e17]/88 px-2.5 py-1.5">
+        <DotLegend />
+      </div>
+      <NortheastPanel universities={universities} className={world ? "hidden lg:block" : ""} />
+      <p className="pointer-events-auto absolute bottom-2 right-3 z-20 max-w-[240px] text-right text-[13px] leading-4 text-[#d8dae3]">
+        <MapCredit />
+      </p>
     </div>
   );
 }

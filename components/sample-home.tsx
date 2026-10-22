@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { GlobeHero } from "@/components/globe-hero";
+import { GlobeHero, WorldMap } from "@/components/globe-hero";
 import {
   DIRECTORY_PAGE_SIZE,
   LEADERBOARD_PAGE_SIZE,
@@ -12,7 +12,7 @@ import {
 } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
 
-export type Feed = "directory" | "leaderboard" | "map" | "world";
+export type Feed = "directory" | "leaderboard" | "world";
 
 function feedHref(feed: Feed, sector?: string, kind?: string): string {
   const query = new URLSearchParams();
@@ -20,7 +20,7 @@ function feedHref(feed: Feed, sector?: string, kind?: string): string {
   if (feed !== "directory") query.set("feed", feed);
   if (sector) query.set("sector", sector);
   if (kind) query.set("kind", kind);
-  return `/?${query.toString()}`;
+  return `/?${query.toString()}#browse`;
 }
 
 export function SampleHome({
@@ -32,7 +32,7 @@ export function SampleHome({
   feed: Feed;
   sector?: string;
   kind?: string;
-  stats: HeroStats | null;
+  stats: HeroStats;
 }) {
   const listed = feed === "directory" || feed === "leaderboard";
   const data = listed ? loadDirectory() : null;
@@ -42,51 +42,48 @@ export function SampleHome({
   const pageSize = feed === "leaderboard" ? LEADERBOARD_PAGE_SIZE : DIRECTORY_PAGE_SIZE;
 
   return (
-    <div className="hero-night min-h-[calc(100dvh-72px)] bg-bg text-fg">
-      <div className="mx-auto w-full max-w-[880px] px-6 pt-6">
-        <span className="inline-flex h-7 items-center gap-1 rounded-full border border-line bg-sunken pl-2.5 pr-1 text-[13px] leading-none text-fg-2">
-          Sample data
-          <Link href="/" aria-label="Close" className="grid h-5 w-5 place-items-center rounded-full text-fg-2 hover:bg-raised hover:text-fg">
-            <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden>
-              <path d="M2 2 8 8M8 2 2 8" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
-            </svg>
-          </Link>
-        </span>
-        <div className="mt-4 flex flex-wrap items-center gap-x-1 border-b border-line" role="tablist" aria-label="Views">
-          <Tab href={feedHref("directory", sector, kind)} active={feed === "directory"}>Directory</Tab>
-          <Tab href={feedHref("leaderboard", sector, kind)} active={feed === "leaderboard"}>Leaderboard</Tab>
-          <Tab href={feedHref("map")} active={feed === "map"}>Map</Tab>
-          <Tab href={feedHref("world")} active={feed === "world"}>World</Tab>
+    <div className="hero-night bg-bg text-fg">
+      <GlobeHero stats={stats} />
+      <section id="browse" className="scroll-mt-20 border-t border-line px-6 pb-16 pt-6">
+        <div className="mx-auto w-full max-w-[880px]">
+          <div className="flex flex-wrap items-center gap-x-1 border-b border-line" role="tablist" aria-label="Views">
+            <Tab href={feedHref("directory", sector, kind)} active={feed === "directory"}>Directory</Tab>
+            <Tab href={feedHref("leaderboard", sector, kind)} active={feed === "leaderboard"}>Leaderboard</Tab>
+            <Tab href={feedHref("world")} active={feed === "world"}>World</Tab>
+          </div>
+          {listed ? (
+            <>
+              <h2 className="display mt-5 max-w-[18ch] text-[36px] leading-[40px]">
+                {feed === "leaderboard" ? "Leaderboard" : "Student companies"}
+              </h2>
+              <p className="mt-3 max-w-[36rem] text-[16px] leading-6 text-fg-2">
+                {feed === "leaderboard"
+                  ? "Companies ranked by how many signals are on record."
+                  : "The number on each card is how many signals are on record for that company."}
+              </p>
+              {data ? <Filters sectors={data.sectors} kinds={data.kinds} feed={feed} sector={sector} kind={kind} /> : null}
+            </>
+          ) : null}
         </div>
-        {listed ? (
-          <>
-            <h1 className="display mt-5 max-w-[18ch] text-[36px] leading-[40px]">
-              {feed === "leaderboard" ? "Leaderboard" : "Student companies"}
-            </h1>
-            <p className="mt-3 max-w-[36rem] text-[16px] leading-6 text-fg-2">
-              {feed === "leaderboard"
-                ? "Companies ranked by how many signals are on record."
-                : "The number on each card is how many signals are on record for that company."}
+        {feed === "world" ? (
+          <div className="mx-auto mt-5 w-full max-w-[1200px]">
+            <WorldMap stats={stats} />
+          </div>
+        ) : (
+          <div className="mx-auto w-full max-w-[880px] pt-4">
+            <p className="mb-3 text-[14px] text-fg-2">
+              <span className="num text-fg">{Math.min(shown.length, total).toLocaleString("en-US")}</span>
+              {total > pageSize ? ` of ${total.toLocaleString("en-US")}` : ""} companies
             </p>
-            {data ? <Filters sectors={data.sectors} kinds={data.kinds} feed={feed} sector={sector} kind={kind} /> : null}
-          </>
-        ) : null}
-      </div>
-      {(feed === "map" || feed === "world") && stats ? <GlobeHero key={feed} stats={stats} band={false} world={feed === "world"} /> : null}
-      {listed ? (
-        <div className="mx-auto w-full max-w-[880px] px-6 pb-16 pt-4">
-          <p className="mb-3 text-[14px] text-fg-2">
-            <span className="num text-fg">{Math.min(shown.length, total).toLocaleString("en-US")}</span>
-            {total > pageSize ? ` of ${total.toLocaleString("en-US")}` : ""} companies
-          </p>
-          {shown.length === 0 ? <p className="text-[14px] text-fg-2">No companies in this category.</p> : null}
-          <ol className="flex flex-col gap-3">
-            {shown.map((card, index) => (
-              <Card key={card.id} card={card} rank={feed === "leaderboard" ? index + 1 : null} />
-            ))}
-          </ol>
-        </div>
-      ) : null}
+            {shown.length === 0 ? <p className="text-[14px] text-fg-2">No companies in this category.</p> : null}
+            <ol className="flex flex-col gap-3">
+              {shown.map((card, index) => (
+                <Card key={card.id} card={card} rank={feed === "leaderboard" ? index + 1 : null} />
+              ))}
+            </ol>
+          </div>
+        )}
+      </section>
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { SampleHome, type Feed } from "@/components/sample-home";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
 
 function feedOf(value: string | undefined): Feed {
-  if (value === "leaderboard" || value === "map" || value === "world") return value;
+  if (value === "leaderboard" || value === "world") return value;
   return "directory";
 }
 
@@ -23,11 +23,10 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
   if (sp.view === "network") redirect("/map/network");
   if (sp.sample !== "1") return <EmptyHome />;
   const feed = feedOf(sp.feed);
-  const mapped = feed === "map" || feed === "world";
-  const stats = mapped ? loadHeroStats() : null;
+  const stats = loadHeroStats();
   return (
     <>
-      {mapped ? <GlobeBoot /> : null}
+      <GlobeBoot />
       <Suspense fallback={null}>
         <SampleHome feed={feed} sector={sp.sector} kind={sp.kind} stats={stats} />
       </Suspense>
