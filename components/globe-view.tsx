@@ -12,7 +12,6 @@ import { CampusBenchmarks } from "./campus-benchmarks";
 import { alphabeticalByLabel, shortCampusLabel } from "@/lib/domain/campuses";
 import { SIGNALS_THIS_WEEK_LABEL } from "@/lib/domain/signal-copy";
 import type { UserMapMarker } from "@/lib/domain/user-pipeline";
-import usStates from "@/public/us-states.json";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 // Real MapLibre GL JS globe projection + the free OpenFreeMap "positron"
@@ -30,7 +29,6 @@ const HERO_STYLE = {
   glyphs: "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
   sources: {
     openmaptiles: { type: "vector", url: "https://tiles.openfreemap.org/planet" },
-    usstates: { type: "geojson", data: "/us-states.json" },
   },
   layers: [
     { id: "background", type: "background", paint: { "background-color": "#2a3548" } },
@@ -54,15 +52,15 @@ const HERO_STYLE = {
     {
       id: "states",
       type: "line",
-      source: "usstates",
-      paint: { "line-color": "#e8eef8", "line-width": 1.5, "line-opacity": 0.15 },
+      source: "openmaptiles",
+      "source-layer": "boundary",
+      filter: ["any", ["==", ["get", "admin_level"], 4], ["==", ["get", "admin_level"], "4"]],
+      paint: { "line-color": "#8ea3c4", "line-width": 0.7, "line-opacity": 0.5 },
     },
   ],
 };
 
 const COOL_DOT = ["interpolate", ["linear"], ["coalesce", ["get", "founders"], 0], 1, "#c5d4ff", 80, "#d7e4ff", 250, "#eef3ff", 700, "#ffffff"] as const;
-const HERO_RADIUS = ["interpolate", ["linear"], ["sqrt", ["max", ["coalesce", ["get", "founders"], 0], 0]], 0, 4, 6, 7, 12, 11, 20, 16, 28, 22] as const;
-const HERO_GLOW = ["interpolate", ["linear"], ["sqrt", ["max", ["coalesce", ["get", "founders"], 0], 0]], 0, 8, 6, 14, 12, 20, 20, 28, 28, 36] as const;
 
 // Positron's OWN default colors are near-white by design (land
 // rgb(242,243,240), water rgb(194,200,202) — verified against the live
@@ -147,157 +145,6 @@ type HeroPin = { id: string; name: string; x: number; y: number; labelX: number;
 type HeroMark = { id: string; x: number; y: number; hot: boolean };
 
 const INSET_IDS = new Set(["univ_penn", "univ_mit", "univ_harvard", "univ_yale"]);
-const MAIN_SIDE: Record<string, "left" | "right"> = {
-  univ_berkeley: "left",
-  univ_stanford: "right",
-};
-
-const INSET_WEST = -80.2;
-const INSET_EAST = -67.6;
-const INSET_SOUTH = 38.6;
-const INSET_NORTH = 43.4;
-const INSET_LABEL_SIDE: Record<string, "left" | "right"> = {
-  univ_penn: "left",
-  univ_yale: "right",
-  univ_mit: "left",
-  univ_harvard: "right",
-};
-
-function mercatorY(lat: number): number {
-  const rad = (lat * Math.PI) / 180;
-  return Math.log(Math.tan(Math.PI / 4 + rad / 2));
-}
-
-const INSET_YN = mercatorY(INSET_NORTH);
-const INSET_YS = mercatorY(INSET_SOUTH);
-
-function insetXY(lon: number, lat: number): [number, number] {
-  const x = ((lon - INSET_WEST) / (INSET_EAST - INSET_WEST)) * 1000;
-  const y = ((INSET_YN - mercatorY(lat)) / (INSET_YN - INSET_YS)) * 700;
-  return [x, y];
-}
-
-function ringHits(ring: number[][]): boolean {
-  let minLon = 180;
-  let maxLon = -180;
-  let minLat = 90;
-  let maxLat = -90;
-  for (const pair of ring) {
-    const lon = pair[0];
-    const lat = pair[1];
-    if (lon < minLon) minLon = lon;
-    if (lon > maxLon) maxLon = lon;
-    if (lat < minLat) minLat = lat;
-    if (lat > maxLat) maxLat = lat;
-  }
-  return maxLon >= INSET_WEST && minLon <= INSET_EAST && maxLat >= INSET_SOUTH && minLat <= INSET_NORTH;
-}
-
-function ringPath(ring: number[][]): string {
-  if (ring.length < 3 || !ringHits(ring)) return "";
-  let path = "";
-  for (let index = 0; index < ring.length; index += 1) {
-    const [x, y] = insetXY(ring[index][0], ring[index][1]);
-    path += `${index === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`;
-  }
-  return `${path}Z`;
-}
-
-function northeastPath(): string {
-  const features = (usStates as { features: { geometry?: { type?: string; coordinates?: unknown } }[] }).features;
-  const parts: string[] = [];
-  for (const feature of features) {
-    const geometry = feature.geometry;
-    if (!geometry?.coordinates) continue;
-    if (geometry.type === "Polygon") {
-      for (const ring of geometry.coordinates as number[][][]) {
-        const path = ringPath(ring);
-        if (path) parts.push(path);
-      }
-    } else if (geometry.type === "MultiPolygon") {
-      for (const polygon of geometry.coordinates as number[][][][]) {
-        for (const ring of polygon) {
-          const path = ringPath(ring);
-          if (path) parts.push(path);
-        }
-      }
-    }
-  }
-  return parts.join("");
-}
-
-const NORTHEAST_PATH = northeastPath();
-
-function markerRadius(founders: number): number {
-  const size = Math.sqrt(Math.max(0, founders));
-  const stops: [number, number][] = [[0, 4], [6, 7], [12, 11], [20, 16], [28, 22]];
-  for (let index = 0; index < stops.length - 1; index += 1) {
-    const [start, startRadius] = stops[index];
-    const [end, endRadius] = stops[index + 1];
-    if (size <= end) {
-      const t = end === start ? 0 : (size - start) / (end - start);
-      return startRadius + t * (endRadius - startRadius);
-    }
-  }
-  return stops[stops.length - 1][1];
-}
-
-function markerColor(founders: number): string {
-  if (founders >= 700) return "#ffffff";
-  if (founders >= 250) return "#eef3ff";
-  if (founders >= 80) return "#d7e4ff";
-  return "#c5d4ff";
-}
-
-function NortheastInset({ universities }: { universities: UniversitySummary[] }) {
-  const hotIds = new Set(
-    [...universities]
-      .filter((university) => weekOf(university) > 0)
-      .sort((a, b) => weekOf(b) - weekOf(a) || b.founderCount - a.founderCount || a.name.localeCompare(b.name))
-      .slice(0, 3)
-      .map((university) => university.id),
-  );
-  const inside = universities.filter((university) => university.lat != null && university.lon != null && university.lon >= INSET_WEST && university.lon <= INSET_EAST && university.lat >= INSET_SOUTH && university.lat <= INSET_NORTH);
-  return (
-    <div className="pointer-events-none absolute bottom-3 left-3 z-30 h-[168px] w-[240px] overflow-hidden rounded border border-[rgba(232,238,248,0.28)] bg-[#0c1320] lg:h-[200px] lg:w-[286px]" role="img" aria-label="Northeast">
-      <svg viewBox="0 0 1000 700" className="absolute inset-0 h-full w-full" aria-hidden>
-        <path d={NORTHEAST_PATH} fill="#2a3548" stroke="#e8eef8" strokeWidth="5" strokeOpacity="0.45" />
-      </svg>
-      <span className="absolute left-2 top-1.5 text-[13px] font-medium text-[#f7f8fc]">Northeast</span>
-      {inside.map((university) => {
-        const [x, y] = insetXY(university.lon as number, university.lat as number);
-        const left = `${x / 10}%`;
-        const top = `${y / 7}%`;
-        const radius = Math.max(3.5, markerRadius(university.founderCount) * 0.42);
-        const side = INSET_LABEL_SIDE[university.id];
-        const hot = hotIds.has(university.id);
-        return (
-          <span key={university.id}>
-            {hot ? (
-              <span
-                className="absolute rounded-full"
-                style={{ left, top, width: 22, height: 22, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 2px #E8823A, 0 0 0 4px rgba(232,130,58,0.35)" }}
-              />
-            ) : null}
-            <span
-              className="absolute rounded-full"
-              style={{ left, top, width: radius * 2, height: radius * 2, transform: "translate(-50%, -50%)", background: markerColor(university.founderCount), boxShadow: "0 0 0 1px #0b0e17" }}
-            />
-            {side ? (
-              <span
-                className="absolute whitespace-nowrap text-[13px] font-medium leading-4 text-[#f7f8fc]"
-                style={{ left, top, textAlign: side === "left" ? "right" : "left", transform: side === "left" ? "translate(calc(-100% - 8px), -8px)" : "translate(8px, -8px)", textShadow: "0 1px 2px #0c1320" }}
-              >
-                <span className="block">{shortCampusLabel(university.id, university.name)}</span>
-                {hot ? <span className="block text-[#ffb07a]">new this week</span> : null}
-              </span>
-            ) : null}
-          </span>
-        );
-      })}
-    </div>
-  );
-}
 
 function campusFeatureCollection(
   universities: { id: string; name: string; lat: number | null; lon: number | null; companyCount: number; founderCount: number }[],
@@ -481,13 +328,6 @@ export const GlobeView = memo(function GlobeView({
         const height = containerRef.current?.clientHeight ?? 0;
         if (width < 80 || height < 80) return;
         const plotted = pointsRef.current.filter((university) => university.lat != null && university.lon != null);
-        const narrow = width < 700;
-        const ranked = new Set(
-          [...plotted]
-            .sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name))
-            .slice(0, narrow ? 3 : 5)
-            .map((university) => university.id),
-        );
         const hotIds = new Set(
           [...plotted]
             .filter((university) => weekOf(university) > 0)
@@ -495,7 +335,7 @@ export const GlobeView = memo(function GlobeView({
             .slice(0, 3)
             .map((university) => university.id),
         );
-        const textWidth = (text: string) => Math.min(120, Math.max(28, Math.ceil(text.length * 7.2)));
+        const textWidth = (text: string) => Math.min(120, Math.max(36, Math.ceil(text.length * 7.2)));
         const pins: HeroPin[] = [];
         const marks: HeroMark[] = [];
         for (const university of plotted) {
@@ -503,12 +343,15 @@ export const GlobeView = memo(function GlobeView({
           const inInset = INSET_IDS.has(university.id);
           const hot = hotIds.has(university.id) && !inInset;
           marks.push({ id: university.id, x: projected.x, y: projected.y, hot });
-          if (inInset || !ranked.has(university.id)) continue;
+          if (university.id !== "univ_berkeley" && university.id !== "univ_stanford") continue;
           const name = shortCampusLabel(university.id, university.name);
-          const side = MAIN_SIDE[university.id] ?? "right";
-          const gap = 10;
-          const labelX = side === "left" ? projected.x - gap - textWidth(name) : projected.x + gap;
-          pins.push({ id: university.id, name, x: projected.x, y: projected.y, labelX, labelY: projected.y - 9, badge: hot });
+          const tw = textWidth(name);
+          const berkeley = university.id === "univ_berkeley";
+          let labelX = berkeley ? projected.x - 22 - tw : projected.x + 22;
+          let labelY = berkeley ? projected.y - 30 : projected.y + 12;
+          labelX = Math.max(4, Math.min(width - tw - 4, labelX));
+          labelY = Math.max(4, Math.min(height - (hot ? 36 : 18) - 4, labelY));
+          pins.push({ id: university.id, name, x: projected.x, y: projected.y, labelX, labelY, badge: hot });
         }
         setHeroPins(pins);
         setHeroMarks(marks);
@@ -526,7 +369,7 @@ export const GlobeView = memo(function GlobeView({
             [-125, 24.2],
             [-66.8, 49.4],
           ],
-          { padding: width < 700 ? { top: 36, bottom: 16, left: 12, right: 12 } : { top: 36, bottom: 20, left: 84, right: 24 }, duration: 0 },
+          { padding: width < 700 ? { top: 36, bottom: 16, left: 12, right: 12 } : { top: 36, bottom: 24, left: 108, right: 88 }, duration: 0 },
         );
         // fitBounds commits the camera after this turn. project() is stale until then,
         // and a layout here would pin the labels away from the bubbles.
@@ -648,7 +491,7 @@ export const GlobeView = memo(function GlobeView({
               filter: unclustered,
               paint: {
                 "circle-radius": hero
-                  ? HERO_GLOW
+                  ? ["interpolate", ["linear"], ["sqrt", ["max", ["coalesce", ["get", "founders"], 0], 0]], 0, 6, 10, 10, 28, 16]
                   : ["interpolate", ["linear"], ["get", "count"], 0, 16, 20, 28, 200, 42],
                 "circle-color": hero ? COOL_DOT : MAP_THEME.dot,
                 "circle-opacity": hero ? 0.45 : 0.38,
@@ -667,7 +510,7 @@ export const GlobeView = memo(function GlobeView({
                 "circle-radius": locked
                   ? 7
                   : hero
-                    ? HERO_RADIUS
+                    ? ["interpolate", ["linear"], ["sqrt", ["max", ["coalesce", ["get", "founders"], 0], 0]], 0, 3.5, 10, 6, 28, 10]
                     : ["interpolate", ["linear"], ["get", "count"], 0, 6, 20, 9, 200, 14],
                 "circle-color": hero ? COOL_DOT : locked ? "#E8823A" : MAP_THEME.dot,
                 "circle-stroke-width": locked ? 0 : 1,
@@ -1057,11 +900,12 @@ export const GlobeView = memo(function GlobeView({
       )}
       <div className={hero || locked ? "hero-map relative h-full w-full overflow-hidden" : "relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-line sm:min-h-[520px]"} style={{ background: hero ? "#2a3548" : MAP_THEME.sky }}>
         <div ref={containerRef} className="h-full w-full" />
-        {hero && <NortheastInset universities={universities} />}
-        {hero && status === "ok" && heroMarks.filter((mark) => mark.hot || highlightId === mark.id).map((mark) => {
+        {hero && status === "ok" && heroMarks.map((mark) => {
+          const hovered = highlightId === mark.id;
+          if (!mark.hot && !hovered) return null;
           const color = mark.hot ? "#E8823A" : "#8eb4ff";
           const glow = mark.hot ? "rgba(232,130,58,0.85)" : "rgba(142,180,255,0.8)";
-          const size = mark.hot ? 26 : 34;
+          const size = hovered && !mark.hot ? 34 : 26;
           return (
             <span
               key={`ring-${mark.id}`}

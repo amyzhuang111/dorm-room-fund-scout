@@ -85,7 +85,7 @@ export function SiteNav() {
             <Link key={item.id} href={item.href} className={`nav-link ${section === item.id ? "is-active" : ""}`}>
               {item.label}
               {item.id === "work" && local ? (
-                <span className="ml-1 inline-block h-1.5 w-1.5 rounded-full bg-warn align-middle" title={pipeline.notice ?? "Pipeline entries are saved only in this browser."} />
+                <span className="ml-1 inline-block h-1.5 w-1.5 rounded-full bg-[#c8c8d2] align-middle" title={pipeline.notice ?? "Pipeline entries are saved only in this browser."} />
               ) : null}
             </Link>
           ))}

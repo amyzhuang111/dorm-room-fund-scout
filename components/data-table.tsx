@@ -181,7 +181,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
     URL.revokeObjectURL(url);
   }
 
-  const pad = compact ? "py-1.5" : "py-2.5";
+  const pad = compact ? "py-2" : "py-3";
   const columns = 2 + (showTier ? 1 : 0) + (campusLocked ? 0 : 1) + 1 + (showDate ? 1 : 0) + (showVerified ? 1 : 0);
   const control = "inline-flex h-9 items-center rounded border border-line bg-raised px-3 text-[14px] text-fg";
 
@@ -308,14 +308,12 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                     )}
                     <td className={`${pad} px-2`}>
                       {text ? (
-                        <span className="clamp-2 text-[14px] leading-5" title={row.full ?? text}>{text}</span>
-                      ) : quiet ? (
-                        <span className="text-[14px] text-fg-3">No signal yet</span>
+                        <span className="block truncate text-[14px] leading-5 text-fg" title={row.full ?? text}>{text}</span>
                       ) : (
-                        <Empty />
+                        <span className="inline-flex items-center rounded-full border border-line bg-raised px-2 py-px text-[13px] leading-5 text-fg">No signal yet</span>
                       )}
                     </td>
-                    {showDate && <td className={`${pad} num px-2 text-right text-[14px] text-fg-2`}>{date ?? <Empty />}</td>}
+                    {showDate && <td className={`${pad} num px-2 text-right text-[14px] text-fg`}>{date ?? <Empty />}</td>}
                     {showVerified && <td className={`${pad} px-2`}>{row.verified ? <span className="text-ok" title="Verified">✓</span> : <Empty />}</td>}
                   </tr>
                 );

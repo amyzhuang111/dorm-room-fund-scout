@@ -6,8 +6,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import type { HeroStats, WeekItem } from "@/lib/domain/hero-stats";
+import type { UniversitySummary } from "@/lib/domain/queries";
 import { SIGNALS_THIS_WEEK_LABEL } from "@/lib/domain/signal-copy";
 import { absoluteDate, updatedAgo, updatedToday } from "@/lib/domain/relative-time";
+import usStates from "@/public/us-states.json";
 import { MapCredit } from "./map-credit";
 
 const GlobeView = dynamic(() => import("./globe-view").then((mod) => mod.GlobeView), { ssr: false });
@@ -22,8 +24,8 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
   const [highlight, setHighlight] = useState<string | null>(null);
   const [builders, setBuilders] = useState<{ name: string }[]>([]);
   const plotted = stats.universities.filter((item) => item.founderCount > 0);
-  const rankedCampuses = [...plotted].sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name)).slice(0, 10);
-  const feed = stats.week.slice(0, 6);
+  const rankedCampuses = [...plotted].sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name)).slice(0, 5);
+  const thisWeek = stats.week.filter((item) => item.thisWeek).slice(0, 4);
   const hotIds = [...stats.universities]
     .filter((item) => item.signalWeek > 0 && item.lat != null && item.lon != null)
     .sort((a, b) => b.signalWeek - a.signalWeek || b.founderCount - a.founderCount || a.name.localeCompare(b.name))
@@ -68,21 +70,18 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
   return (
     <div className="hero-night bg-bg px-6 py-6 text-fg">
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12 lg:items-stretch">
-        <div className="flex flex-col gap-4 lg:col-span-2">
+        <div className="flex flex-col gap-4 lg:col-span-3">
           <div>
             {updatedToday(stats.updatedAt) ? <p className="mb-3 text-[14px] text-fg-2">Updated today</p> : null}
             <h1>
-              <span className="hero-num block text-[64px] leading-none">{stats.founders.toLocaleString("en-US")}</span>
-              <span className="mt-3 block text-[28px] font-medium leading-8">
+              <span className="hero-num block text-[64px] font-semibold leading-none">{stats.founders.toLocaleString("en-US")}</span>
+              <span className="mt-2 block whitespace-nowrap text-[18px] leading-6 lg:text-[20px]" style={{ fontWeight: 500 }}>
                 student founders across {stats.campuses.toLocaleString("en-US")} campuses
               </span>
             </h1>
-            <h2 className="display mt-3 text-[18px] leading-6 text-fg">
-              <span className="block">Track student founders</span>
-              <span className="block">before they raise</span>
-            </h2>
+            <h2 className="mt-2 text-[16px] leading-6 text-fg" style={{ fontWeight: 400 }}>Track student founders before they raise</h2>
           </div>
-          <p className="text-[16px] text-fg-2">
+          <p className="whitespace-nowrap text-[14px] leading-5 text-fg">
             <Link href="/companies" className="hover:underline"><span className="num">{stats.tracked.toLocaleString("en-US")}</span> companies</Link>
             {" · "}
             <Link href="/signals" className="hover:underline"><span className="num">{stats.signalsWeek.toLocaleString("en-US")}</span> {SIGNALS_THIS_WEEK_LABEL}</Link>
@@ -113,12 +112,12 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
           </form>
           <section aria-label={SIGNALS_THIS_WEEK_LABEL}>
             <div className="flex items-baseline justify-between gap-3">
-              <h3 className="display text-[18px] font-medium">{SIGNALS_THIS_WEEK_LABEL}</h3>
+              <h3 className="text-[14px] font-medium">{SIGNALS_THIS_WEEK_LABEL}</h3>
               <Link href="/signals" className="text-[14px] text-fg hover:underline">View all</Link>
             </div>
-            {feed.length > 0 ? (
+            {thisWeek.length > 0 ? (
               <ul className="mt-1">
-                {feed.map((item) => (
+                {thisWeek.map((item) => (
                   <CompactSignal key={item.id} item={item} />
                 ))}
               </ul>
@@ -127,7 +126,7 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
             )}
           </section>
         </div>
-        <div className="flex flex-col lg:col-span-8">
+        <div className="flex flex-col lg:col-span-7">
           <div className="mb-3 flex h-10 items-center gap-1 border-b border-line" role="group" aria-label="Map geography">
             {(["campus", "hq"] as const).map((value) => (
               <button key={value} type="button" className={`h-10 border-b-2 px-3 text-[14px] font-medium ${mode === value ? "border-[#8eb4ff] text-fg" : "border-transparent text-fg-2"}`} onClick={() => setMode(value)}>
@@ -150,22 +149,25 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
               highlightId={highlight}
             />
           </div>
-          <DotLegend />
-          <p className="mt-2 text-[14px] text-fg-2">
+          <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
+            <DotLegend />
+            <NortheastPanel universities={plotted} />
+          </div>
+          <p className="mt-2 text-[14px] text-fg">
             <MapCredit />
           </p>
         </div>
         <section className="lg:col-span-2" aria-label="Top campuses">
           <div className="flex items-baseline justify-between gap-2">
-            <h2 className="display text-[20px] font-medium">Top campuses</h2>
+            <h2 className="text-[16px] font-medium">Top campuses</h2>
             <Link href="/campuses" className="text-[14px] text-fg hover:underline">View all</Link>
           </div>
           <p className="mt-1 text-[14px] text-fg">8-week signals, vs last week</p>
-          <ol className="mt-1">
+          <ol className="mt-2">
             {rankedCampuses.map((campus, index) => (
               <li
                 key={campus.id}
-                className="border-t border-line py-1"
+                className="border-t border-line py-1.5"
                 onMouseEnter={() => setHighlight(campus.id)}
                 onMouseLeave={() => setHighlight((current) => (current === campus.id ? null : current))}
               >
@@ -200,14 +202,14 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
 }
 
 const LEGEND = [
-  { count: 10, size: 12, color: "#c5d4ff" },
-  { count: 100, size: 20, color: "#d7e4ff" },
-  { count: 700, size: 32, color: "#ffffff" },
+  { count: 10, size: 10, color: "#c5d4ff" },
+  { count: 100, size: 14, color: "#d7e4ff" },
+  { count: 700, size: 18, color: "#ffffff" },
 ];
 
 function DotLegend() {
   return (
-    <div className="mt-3 flex flex-wrap items-center gap-4 text-[14px] text-fg">
+    <div className="flex flex-wrap items-center gap-4 text-[14px] text-fg">
       <span>Founders</span>
       {LEGEND.map((stop) => (
         <span key={stop.count} className="inline-flex items-center gap-1.5">
@@ -221,29 +223,23 @@ function DotLegend() {
 
 function Sparkline({ values }: { values: number[] }) {
   if (values.length < 2) return null;
-  const width = 64;
-  const height = 20;
+  const width = 88;
+  const height = 32;
   const peak = Math.max(...values, 1);
-  const step = (width - 2) / (values.length - 1);
-  const points = values.map((value, index) => `${1 + index * step},${height - 3 - (value / peak) * (height - 6)}`).join(" ");
-  const end = values[values.length - 1] ?? 0;
+  const step = width / (values.length - 1);
+  const points = values.map((value, index) => `${index * step},${height - 4 - (value / peak) * (height - 8)}`).join(" ");
   return (
-    <span className="inline-flex items-center gap-1">
-      <svg width={width} height={height} role="img" aria-label="Signals each week for 8 weeks" className="shrink-0">
-        <line x1="0" y1={height - 2} x2={width} y2={height - 2} stroke="#d6e2ff" strokeOpacity="0.55" strokeWidth="1" />
-        <polyline fill="none" stroke="#d6e2ff" strokeWidth="1.75" points={points} />
-      </svg>
-      <span className="num text-[13px] text-fg">{end.toLocaleString("en-US")}</span>
-    </span>
+    <svg width={width} height={height} role="img" aria-label="Signals each week for 8 weeks" className="shrink-0">
+      <polyline fill="none" stroke="#d6e2ff" strokeWidth="2.75" strokeLinejoin="round" strokeLinecap="round" points={points} />
+    </svg>
   );
 }
 
 function WeekDelta({ delta }: { delta: number }) {
   const title = "Signals this week minus the previous 7 days";
-  const base = "num inline-flex min-w-[2.25rem] items-center justify-end gap-0.5 text-[15px] font-bold";
   if (delta > 0) {
     return (
-      <span className={`${base} text-[#3fb68b]`} title={title}>
+      <span className="num inline-flex items-center gap-0.5 text-[14px] font-semibold text-[#3fb68b]" title={title}>
         <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden><path d="M5 1.5 8.5 8H1.5Z" fill="currentColor" /></svg>
         {delta}
       </span>
@@ -251,13 +247,13 @@ function WeekDelta({ delta }: { delta: number }) {
   }
   if (delta < 0) {
     return (
-      <span className={`${base} text-[#e5484d]`} title={title}>
+      <span className="num inline-flex items-center gap-0.5 text-[14px] font-semibold text-[#e5484d]" title={title}>
         <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden><path d="M5 8.5 1.5 2h7Z" fill="currentColor" /></svg>
         {Math.abs(delta)}
       </span>
     );
   }
-  return <span className={`${base} text-fg`} title={title}>0</span>;
+  return <span className="num text-[14px] font-semibold text-fg" title={title}>0</span>;
 }
 
 const HIGH_VALUE = new Set(["funding", "launch", "award", "acquisition"]);
@@ -304,14 +300,125 @@ function CompactSignal({ item }: { item: WeekItem }) {
     <span className="truncate text-fg-2">{item.campus}</span>
   );
   return (
-    <li className="border-t border-line py-2">
+    <li className="border-t border-line py-1.5">
       <div className="flex min-w-0 items-center gap-2 text-[14px]">
-        <span className={`h-2 w-2 shrink-0 rounded-full ${item.thisWeek ? "bg-ember" : "bg-[#8eb4ff]"}`} title={item.thisWeek ? "This week" : undefined} />
+        <span className="h-2 w-2 shrink-0 rounded-full bg-[#c5d4ff]" />
         {campus}
         {chip ? <span className={`shrink-0 rounded-full px-1.5 py-px text-[13px] leading-5 ${chipClass(item, isHighValue(item))}`}>{chip}</span> : null}
         <span className="num ml-auto shrink-0 text-fg-2" title={item.at ?? undefined}>{updatedAgo(item.at)}</span>
       </div>
       <p className="mt-0.5 min-w-0">{heading}</p>
     </li>
+  );
+}
+
+const PANEL_WEST = -80.2;
+const PANEL_EAST = -67.6;
+const PANEL_SOUTH = 38.6;
+const PANEL_NORTH = 43.4;
+const PANEL_LABEL: Record<string, { side: "left" | "right"; dy: number }> = {
+  univ_penn: { side: "left", dy: -8 },
+  univ_yale: { side: "right", dy: 6 },
+  univ_mit: { side: "left", dy: -18 },
+  univ_harvard: { side: "right", dy: 8 },
+};
+
+function panelMercator(lat: number): number {
+  const rad = (lat * Math.PI) / 180;
+  return Math.log(Math.tan(Math.PI / 4 + rad / 2));
+}
+
+const PANEL_YN = panelMercator(PANEL_NORTH);
+const PANEL_YS = panelMercator(PANEL_SOUTH);
+
+function panelXY(lon: number, lat: number): [number, number] {
+  const x = ((lon - PANEL_WEST) / (PANEL_EAST - PANEL_WEST)) * 1000;
+  const y = ((PANEL_YN - panelMercator(lat)) / (PANEL_YN - PANEL_YS)) * 700;
+  return [x, y];
+}
+
+function panelRingHits(ring: number[][]): boolean {
+  let minLon = 180;
+  let maxLon = -180;
+  let minLat = 90;
+  let maxLat = -90;
+  for (const pair of ring) {
+    if (pair[0] < minLon) minLon = pair[0];
+    if (pair[0] > maxLon) maxLon = pair[0];
+    if (pair[1] < minLat) minLat = pair[1];
+    if (pair[1] > maxLat) maxLat = pair[1];
+  }
+  return maxLon >= PANEL_WEST && minLon <= PANEL_EAST && maxLat >= PANEL_SOUTH && minLat <= PANEL_NORTH;
+}
+
+function panelPath(): string {
+  const features = (usStates as { features: { geometry?: { type?: string; coordinates?: unknown } }[] }).features;
+  const parts: string[] = [];
+  for (const feature of features) {
+    const geometry = feature.geometry;
+    if (!geometry?.coordinates) continue;
+    const polygons = geometry.type === "Polygon" ? [geometry.coordinates as number[][][]] : geometry.type === "MultiPolygon" ? (geometry.coordinates as number[][][][]) : [];
+    for (const polygon of polygons) {
+      for (const ring of polygon) {
+        if (ring.length < 3 || !panelRingHits(ring)) continue;
+        let path = "";
+        for (let index = 0; index < ring.length; index += 1) {
+          const [x, y] = panelXY(ring[index][0], ring[index][1]);
+          path += `${index === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`;
+        }
+        parts.push(`${path}Z`);
+      }
+    }
+  }
+  return parts.join("");
+}
+
+const NORTHEAST_PATH = panelPath();
+
+function signalWeekOf(university: UniversitySummary): number {
+  const value = (university as UniversitySummary & { signalWeek?: number }).signalWeek;
+  return typeof value === "number" ? value : 0;
+}
+
+function NortheastPanel({ universities }: { universities: UniversitySummary[] }) {
+  const hotIds = new Set(
+    [...universities]
+      .filter((university) => signalWeekOf(university) > 0)
+      .sort((a, b) => signalWeekOf(b) - signalWeekOf(a) || b.founderCount - a.founderCount || a.name.localeCompare(b.name))
+      .slice(0, 3)
+      .map((university) => university.id),
+  );
+  const inside = universities.filter((university) => university.lat != null && university.lon != null && university.lon >= PANEL_WEST && university.lon <= PANEL_EAST && university.lat >= PANEL_SOUTH && university.lat <= PANEL_NORTH);
+  return (
+    <div className="relative h-[132px] w-[220px] shrink-0 overflow-hidden rounded border border-line bg-[#0c1320]" role="img" aria-label="Northeast">
+      <svg viewBox="0 0 1000 700" className="absolute inset-0 h-full w-full" aria-hidden>
+        <path d={NORTHEAST_PATH} fill="#2a3548" stroke="#e8eef8" strokeWidth="6" strokeOpacity="0.45" />
+      </svg>
+      <span className="absolute left-2 top-1 text-[13px] font-medium text-[#f7f8fc]">Northeast</span>
+      {inside.map((university) => {
+        const [x, y] = panelXY(university.lon as number, university.lat as number);
+        const left = `${x / 10}%`;
+        const top = `${y / 7}%`;
+        const place = PANEL_LABEL[university.id];
+        const side = place?.side;
+        const hot = hotIds.has(university.id) && Boolean(side);
+        const radius = university.founderCount >= 700 ? 6 : university.founderCount >= 200 ? 4.5 : 3.5;
+        return (
+          <span key={university.id}>
+            {hot ? <span className="absolute rounded-full" style={{ left, top, width: 16, height: 16, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 2px #E8823A" }} /> : null}
+            <span className="absolute rounded-full bg-[#d7e4ff]" style={{ left, top, width: radius * 2, height: radius * 2, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 1px #0b0e17" }} />
+            {side ? (
+              <span
+                className="absolute whitespace-nowrap text-[13px] font-medium leading-4 text-[#f7f8fc]"
+                style={{ left, top, textAlign: side === "left" ? "right" : "left", transform: side === "left" ? `translate(calc(-100% - 8px), ${place?.dy ?? 0}px)` : `translate(8px, ${place?.dy ?? 0}px)`, textShadow: "0 1px 2px #0c1320" }}
+              >
+                <span className="block">{shortCampusLabel(university.id, university.name)}</span>
+                {hot ? <span className="block text-[#ffb07a]">new this week</span> : null}
+              </span>
+            ) : null}
+          </span>
+        );
+      })}
+    </div>
   );
 }
