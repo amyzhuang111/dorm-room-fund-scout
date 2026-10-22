@@ -76,18 +76,18 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
   return (
     <div className="hero-night flex flex-col bg-bg px-6 py-6 text-fg lg:min-h-[calc(100dvh-72px)]">
       <div className="grid flex-1 grid-cols-1 items-start gap-6 lg:min-h-0 lg:grid-cols-12 lg:items-stretch">
-        <div className="flex flex-col gap-4 lg:col-span-3">
+        <div className="flex flex-col gap-4 lg:col-span-2">
           <div>
             {updatedToday(stats.updatedAt) ? <p className="mb-3 text-[14px] text-fg-2">Updated today</p> : null}
             <h1>
-              <span className="hero-num block text-[64px] font-semibold leading-none">{stats.founders.toLocaleString("en-US")}</span>
-              <span className="mt-2 block whitespace-nowrap text-[18px] leading-6 lg:text-[20px]" style={{ fontWeight: 500 }}>
+              <span className="hero-num block text-[64px] font-semibold leading-none text-fg lg:text-[32px] lg:text-fg-2">{stats.founders.toLocaleString("en-US")}</span>
+              <span className="mt-2 block whitespace-nowrap text-[18px] font-medium leading-6 text-fg lg:whitespace-normal lg:text-[16px] lg:font-normal lg:text-fg-2">
                 student founders across {stats.campuses.toLocaleString("en-US")} campuses
               </span>
             </h1>
-            <h2 className="mt-2 text-[16px] leading-6 text-fg" style={{ fontWeight: 400 }}>Track student founders before they raise</h2>
+            <h2 className="mt-2 text-[16px] leading-6 text-fg lg:text-fg-2" style={{ fontWeight: 400 }}>Track student founders before they raise</h2>
           </div>
-          <p className="whitespace-nowrap text-[14px] leading-5 text-fg">
+          <p className="whitespace-nowrap text-[14px] leading-5 text-fg lg:whitespace-normal lg:text-fg-2">
             <Link href="/companies" className="hover:underline"><span className="num">{stats.tracked.toLocaleString("en-US")}</span> companies</Link>
             {" · "}
             <Link href="/signals" className="hover:underline"><span className="num">{stats.signalsWeek.toLocaleString("en-US")}</span> {SIGNALS_THIS_WEEK_LABEL}</Link>
@@ -118,8 +118,8 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
           </form>
           <section aria-label={SIGNALS_THIS_WEEK_LABEL}>
             <div className="flex items-baseline justify-between gap-3">
-              <h3 className="text-[14px] font-medium">{SIGNALS_THIS_WEEK_LABEL}</h3>
-              <Link href="/signals" className="text-[14px] text-fg hover:underline">View all</Link>
+              <h3 className="text-[14px] font-medium text-fg-2">{SIGNALS_THIS_WEEK_LABEL}</h3>
+              <Link href="/signals" className="text-[14px] text-fg-2 hover:underline">View all</Link>
             </div>
             {thisWeek.length > 0 ? (
               <ul className="mt-1">
@@ -132,7 +132,7 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
             )}
           </section>
         </div>
-        <div className="flex min-h-[460px] flex-col lg:col-span-7 lg:min-h-0">
+        <div className="flex min-h-[460px] flex-col lg:col-span-8 lg:min-h-0">
           <div className="mb-3 flex h-10 items-center gap-1 border-b border-line" role="group" aria-label="Map geography">
             {(["campus", "hq"] as const).map((value) => (
               <button key={value} type="button" className={`h-10 border-b-2 px-3 text-[14px] font-medium ${mode === value ? "border-[#8eb4ff] text-fg" : "border-transparent text-fg-2"}`} onClick={() => setMode(value)}>
@@ -165,10 +165,10 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
         </div>
         <section className="lg:col-span-2" aria-label="Top campuses">
           <div className="flex items-baseline justify-between gap-2">
-            <h2 className="text-[16px] font-medium">Top campuses</h2>
-            <Link href="/campuses" className="text-[14px] text-fg hover:underline">View all</Link>
+            <h2 className="text-[16px] font-medium text-fg-2">Top campuses</h2>
+            <Link href="/campuses" className="text-[14px] text-fg-2 hover:underline">View all</Link>
           </div>
-          <p className="mt-1 text-[14px] text-fg"><span className="text-fg-2">8 wk</span> vs last week</p>
+          <p className="mt-1 text-[14px] text-fg-2">8 wk vs last week</p>
           <ol className="mt-2">
             {rankedCampuses.map((campus, index) => (
               <li
@@ -178,10 +178,10 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
                 onMouseLeave={() => setHighlight((current) => (current === campus.id ? null : current))}
               >
                 <div className="flex items-center gap-1 text-[14px]">
-                  <span className="num w-4 shrink-0 text-fg">{index + 1}</span>
-                  <Link href={`/campuses/${campus.slug}`} className="min-w-0 flex-1 truncate hover:underline" onFocus={() => setHighlight(campus.id)} onBlur={() => setHighlight((current) => (current === campus.id ? null : current))}>{shortCampusLabel(campus.id, campus.name)}</Link>
+                  <span className="num w-4 shrink-0 text-fg-2">{index + 1}</span>
+                  <Link href={`/campuses/${campus.slug}`} className="min-w-0 flex-1 truncate text-fg-2 hover:underline" onFocus={() => setHighlight(campus.id)} onBlur={() => setHighlight((current) => (current === campus.id ? null : current))}>{shortCampusLabel(campus.id, campus.name)}</Link>
                   {tiedIds.has(campus.id) ? <span className="shrink-0 text-[13px] text-fg-2">tie</span> : null}
-                  <span className="num w-9 shrink-0 text-right text-[14px] text-fg">{campus.founderCount.toLocaleString("en-US")}</span>
+                  <span className="num w-9 shrink-0 text-right text-[14px] text-fg-2">{campus.founderCount.toLocaleString("en-US")}</span>
                 </div>
                 <div className="mt-0.5 flex items-center justify-between gap-1 pl-5">
                   <Sparkline values={campus.signalSeries} peak={sparkPeak} />
@@ -239,7 +239,7 @@ function Sparkline({ values, peak }: { values: number[]; peak: number }) {
   return (
     <svg width={width} height={height} role="img" aria-label="Signals each week for 8 weeks" className="shrink-0">
       <line x1="0" y1={base} x2={width} y2={base} stroke="#d6e2ff" strokeOpacity="0.35" strokeWidth="1" />
-      <polyline fill="none" stroke="#d6e2ff" strokeWidth="2.75" strokeLinejoin="round" strokeLinecap="round" points={points} />
+      <polyline fill="none" stroke="#d6e2ff" strokeOpacity="0.55" strokeWidth="2.25" strokeLinejoin="round" strokeLinecap="round" points={points} />
     </svg>
   );
 }
@@ -299,9 +299,9 @@ function CompactSignal({ item }: { item: WeekItem }) {
   const title = item.event || (item.detail ? firstSentence(item.detail) : "");
   const chip = chipText(item);
   const heading = item.url ? (
-    <a href={item.url} className="truncate text-[14px] font-medium leading-5 hover:underline" target="_blank" rel="noreferrer">{title}</a>
+    <a href={item.url} className="truncate text-[14px] leading-5 text-fg-2 hover:underline" target="_blank" rel="noreferrer">{title}</a>
   ) : (
-    <Link href="/signals" className="truncate text-[14px] font-medium leading-5 hover:underline">{title}</Link>
+    <Link href="/signals" className="truncate text-[14px] leading-5 text-fg-2 hover:underline">{title}</Link>
   );
   const campus = item.campusSlug ? (
     <Link href={`/campuses/${item.campusSlug}`} className="truncate text-fg-2 hover:text-fg">{item.campus}</Link>
@@ -431,7 +431,7 @@ function NortheastPanel({ universities }: { universities: UniversitySummary[] })
           }
           return (
             <span key={university.id}>
-              {hot ? <span className="absolute rounded-full" style={{ left: px, top: py, width: 16, height: 16, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 2px #E8823A" }} /> : null}
+              {hot ? <span className="absolute rounded-full" style={{ left: px, top: py, width: 22, height: 22, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 2px #E8823A, 0 0 10px 2px rgba(232,130,58,0.75)" }} /> : null}
               <span className="absolute rounded-full bg-[#d7e4ff]" style={{ left: px, top: py, width: radius * 2, height: radius * 2, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 1px #0b0e17" }} />
               {side ? (
                 <span
