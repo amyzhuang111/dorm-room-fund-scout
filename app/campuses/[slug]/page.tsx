@@ -85,20 +85,20 @@ export default async function CampusPage({
           <h1 className="page-title">{university.name}</h1>
           <p className="mt-2 text-[14px] text-fg-2">{university.country ?? "Country not recorded"}</p>
         </div>
-        <div className="flex flex-wrap items-stretch gap-3">
-          {[
-            { n: university.founderCount, label: "Founders" },
-            { n: topTier, label: "Top tier" },
-            { n: signalsWeek, label: SIGNALS_THIS_WEEK_LABEL },
-          ].map((stat) => (
-            <div key={stat.label} className="min-w-[148px] rounded border border-line bg-raised px-4 py-3">
-              <span className="hero-num block text-[40px] leading-none md:text-[48px]">{stat.n.toLocaleString("en-US")}</span>
-              <span className="mt-2 block text-[14px] text-fg-2">{stat.label}</span>
-            </div>
-          ))}
-          <div className="flex items-end">
-            <ShortlistCampusButton id={university.id} />
+        <div className="flex flex-col items-start gap-4">
+          <div className="flex flex-wrap items-stretch gap-3">
+            {[
+              { n: university.founderCount, label: "Founders" },
+              { n: topTier, label: "Top tier" },
+              { n: signalsWeek, label: SIGNALS_THIS_WEEK_LABEL },
+            ].map((stat) => (
+              <div key={stat.label} className="min-w-[148px] rounded border border-line bg-raised px-4 py-3">
+                <span className="hero-num block text-[40px] leading-none md:text-[48px]">{stat.n.toLocaleString("en-US")}</span>
+                <span className="mt-2 block text-[14px] text-fg">{stat.label}</span>
+              </div>
+            ))}
           </div>
+          <ShortlistCampusButton id={university.id} />
         </div>
       </div>
       <div className="mt-8 flex gap-5 border-b border-line">

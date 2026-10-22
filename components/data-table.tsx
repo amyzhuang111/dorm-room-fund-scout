@@ -38,21 +38,18 @@ function personLine(person: ProjectMate): string {
 }
 
 function AvatarStack({ people }: { people: ProjectMate[] }) {
-  const shown = people.slice(0, 4);
-  const extra = people.length - shown.length;
+  const person = people[0];
+  if (!person) return null;
+  const extra = people.length - 1;
   return (
     <span className="flex shrink-0 items-center">
-      {shown.map((person, index) => (
-        <span
-          key={person.id}
-          title={personLine(person)}
-          className="inline-grid h-7 w-7 place-items-center rounded-full border-2 border-bg bg-raised text-[13px] font-medium tracking-[-0.04em] text-fg"
-          style={{ marginLeft: index === 0 ? 0 : -8, zIndex: shown.length - index }}
-        >
-          {initials(person.name)}
-        </span>
-      ))}
-      {extra > 0 ? <span className="ml-1.5 text-[13px] text-fg-2">+{extra}</span> : null}
+      <span
+        title={people.map((mate) => personLine(mate)).join(", ")}
+        className="inline-grid h-7 w-7 place-items-center rounded-full border-2 border-bg bg-raised text-[13px] font-medium tracking-[-0.04em] text-fg"
+      >
+        {initials(person.name)}
+      </span>
+      {extra > 0 ? <span className="ml-1.5 text-[13px] text-fg">+{extra}</span> : null}
     </span>
   );
 }
@@ -184,7 +181,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
     URL.revokeObjectURL(url);
   }
 
-  const pad = compact ? "py-1" : "py-2";
+  const pad = compact ? "py-1.5" : "py-2.5";
   const columns = 2 + (showTier ? 1 : 0) + (campusLocked ? 0 : 1) + 1 + (showDate ? 1 : 0) + (showVerified ? 1 : 0);
   const control = "inline-flex h-9 items-center rounded border border-line bg-raised px-3 text-[14px] text-fg";
 
@@ -192,69 +189,70 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
 
   return (
     <div>
-      <p className="mb-4 flex flex-wrap gap-x-6 gap-y-1 text-[14px] text-fg-2">
+      <p className="mb-4 flex flex-wrap gap-x-6 gap-y-1 text-[14px] text-fg">
         <span><span className="num">{rows.length.toLocaleString("en-US")}</span> projects</span>
         <span><span className="num">{withSignal.toLocaleString("en-US")}</span> with a signal</span>
         {verifiedFilled > 0 ? <span><span className="num">{verifiedFilled.toLocaleString("en-US")}</span> verified</span> : null}
       </p>
-      <div className="flex h-12 flex-wrap items-center gap-2">
-        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" className="h-9 w-[280px] max-w-full rounded border border-[#8b93a7] bg-raised px-2 text-[14px] outline-none" />
-        <select value={tier} onChange={(event) => setTier(event.target.value)} className={control} aria-label="Tier">
-          <option value="">Tier</option>
-          {["S+", "S", "A", "B", "C", "D"].map((value) => <option key={value}>{value}</option>)}
-        </select>
-        {!campusLocked && (
-          <select value={campus} onChange={(event) => setCampus(event.target.value)} className={control} aria-label="Campus">
-            <option value="">Campus</option>
-            {campuses.map((value) => <option key={value}>{value}</option>)}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filters">
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" className="h-9 w-[280px] max-w-full rounded border border-[#8b93a7] bg-raised px-2 text-[14px] text-fg outline-none" />
+          <select value={tier} onChange={(event) => setTier(event.target.value)} className={control} aria-label="Tier">
+            <option value="">Tier</option>
+            {["S+", "S", "A", "B", "C", "D"].map((value) => <option key={value}>{value}</option>)}
           </select>
-        )}
-        {(campusLocked || verifiedFilled > 0) && (
-          <details className="relative">
-            <summary className={`${control} cursor-pointer list-none`}>Columns</summary>
-            <div className="absolute z-30 mt-1 w-40 rounded border border-line bg-bg p-2 text-[14px] shadow-[var(--shadow-menu)]">
-              {campusLocked && (
-                <label className="flex items-center gap-2 py-1">
-                  <input type="checkbox" checked={showTier} onChange={(event) => setTierChoice(event.target.checked)} />
-                  Tier
-                </label>
-              )}
-              {campusLocked && (
-                <label className="flex items-center gap-2 py-1">
-                  <input type="checkbox" checked={showDate} onChange={(event) => setDateChoice(event.target.checked)} />
-                  Date
-                </label>
-              )}
-              {verifiedFilled > 0 && (
-                <label className="flex items-center gap-2 py-1">
-                  <input type="checkbox" checked={showVerified} onChange={(event) => setVerifiedChoice(event.target.checked)} />
-                  Verified
-                </label>
-              )}
-            </div>
-          </details>
-        )}
-        {verifiedFilled > 0 && (
-          <button type="button" className={`${control} ${verifiedOnly ? "border-[#8eb4ff]" : ""}`} onClick={() => setVerifiedOnly((value) => !value)}>
-            Verified
+          {!campusLocked && (
+            <select value={campus} onChange={(event) => setCampus(event.target.value)} className={control} aria-label="Campus">
+              <option value="">Campus</option>
+              {campuses.map((value) => <option key={value}>{value}</option>)}
+            </select>
+          )}
+          {verifiedFilled > 0 && (
+            <button type="button" className={`${control} ${verifiedOnly ? "border-[#8eb4ff]" : ""}`} onClick={() => setVerifiedOnly((value) => !value)}>
+              Verified
+            </button>
+          )}
+          {quietCount > 0 && (
+            <button type="button" className={control} onClick={() => setShowQuiet((value) => !value)}>
+              {showQuiet ? "Hide rows with no signal" : <><span className="num mr-1">{quietCount.toLocaleString("en-US")}</span> with no signal yet</>}
+            </button>
+          )}
+        </div>
+        <div className="flex flex-wrap items-center gap-2 border-l border-line pl-3" role="group" aria-label="View">
+          {(campusLocked || verifiedFilled > 0) && (
+            <details className="relative">
+              <summary className={`${control} cursor-pointer list-none`}>Columns</summary>
+              <div className="absolute z-30 mt-1 w-40 rounded border border-line bg-bg p-2 text-[14px] text-fg shadow-[var(--shadow-menu)]">
+                {campusLocked && (
+                  <label className="flex items-center gap-2 py-1">
+                    <input type="checkbox" checked={showTier} onChange={(event) => setTierChoice(event.target.checked)} />
+                    Tier
+                  </label>
+                )}
+                {campusLocked && (
+                  <label className="flex items-center gap-2 py-1">
+                    <input type="checkbox" checked={showDate} onChange={(event) => setDateChoice(event.target.checked)} />
+                    Date
+                  </label>
+                )}
+                {verifiedFilled > 0 && (
+                  <label className="flex items-center gap-2 py-1">
+                    <input type="checkbox" checked={showVerified} onChange={(event) => setVerifiedChoice(event.target.checked)} />
+                    Verified
+                  </label>
+                )}
+              </div>
+            </details>
+          )}
+          <button type="button" className={control} onClick={() => setCompact((value) => !value)}>
+            {compact ? "Comfortable" : "Compact"}
           </button>
-        )}
-        <button type="button" className={control} onClick={() => setCompact((value) => !value)}>
-          {compact ? "Comfortable" : "Compact"}
-        </button>
-        {quietCount > 0 && (
-          <button type="button" className={control} onClick={() => setShowQuiet((value) => !value)}>
-            {showQuiet ? "Hide rows with no signal" : <><span className="num mr-1">{quietCount.toLocaleString("en-US")}</span> with no signal yet</>}
-          </button>
-        )}
-        {listed.length !== rows.length && (
-          <span className="ml-auto text-[14px] text-fg-2"><span className="num">{listed.length.toLocaleString("en-US")}</span> projects</span>
-        )}
+        </div>
       </div>
-      <div className="max-h-[calc(100dvh-220px)] overflow-auto border-t border-line-strong">
-        <table className="w-full table-fixed border-separate border-spacing-0 text-left text-[14px]">
+      <div className="mt-3 max-h-[calc(100dvh-220px)] overflow-auto border-t border-line-strong">
+        <table className="w-full table-fixed border-separate border-spacing-0 text-left text-[14px] text-fg">
           <thead className="sticky top-0 z-20">
-            <tr className="h-9 text-[14px] text-fg-2">
+            <tr className="h-9 text-[14px] text-fg">
               <th className="sticky top-0 z-20 w-8 border-b border-line-strong bg-bg px-2 font-medium" />
               <th className="sticky top-0 z-20 w-[30%] border-b border-line-strong bg-bg px-2 font-medium">Project</th>
               {showTier && <th className="sticky top-0 z-20 w-[72px] border-b border-line-strong bg-bg px-2 font-medium">Tier</th>}
@@ -271,8 +269,8 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                 <tr key={`event:${group.event}`} className="bg-bg">
                   <td colSpan={columns} className="border-b border-line px-2 py-2">
                     <span className="inline-flex items-center gap-3">
-                      <span className="rounded-full border border-line bg-raised px-2 py-px text-[14px] leading-5 text-fg-2">{group.event}</span>
-                      {group.at ? <span className="num text-[14px] text-fg-2">{relativeTime(group.at)}</span> : <Empty />}
+                      <span className="rounded-full border border-line bg-raised px-2 py-px text-[14px] leading-5 text-fg">{group.event}</span>
+                      {group.at ? <span className="num text-[14px] text-fg">{relativeTime(group.at)}</span> : <Empty />}
                     </span>
                   </td>
                 </tr>
@@ -284,10 +282,11 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                 const date = !row.signalAt || sameDay ? null : relativeTime(row.signalAt);
                 const quiet = !hasSignal(row);
                 const text = row.detail || (!group.event ? row.full : null);
+                const stripe = index % 2 === 1 ? "bg-raised" : "";
                 return (
                   <tr
                     key={row.id}
-                    className={`align-top [&>td]:border-b [&>td]:border-line ${quiet ? "text-fg-2" : ""} ${openId === row.id ? "bg-[var(--cobalt-haze)] shadow-[inset_2px_0_0_var(--cobalt)]" : index === cursor ? "bg-sunken" : "hover:bg-[#161c2e]"}`}
+                    className={`align-top [&>td]:border-b [&>td]:border-line ${quiet ? "text-fg-2" : "text-fg"} ${openId === row.id ? "bg-[var(--cobalt-haze)] shadow-[inset_2px_0_0_var(--cobalt)]" : index === cursor ? "bg-sunken" : `${stripe} hover:bg-[#161c2e]`}`}
                     onClick={() => { setCursor(index); setOpenId(row.id); }}
                   >
                     <td className={`${pad} px-2`} onClick={(event) => event.stopPropagation()}>

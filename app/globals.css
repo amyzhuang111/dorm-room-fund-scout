@@ -144,8 +144,12 @@ h1, h2, h3 {
   letter-spacing: -0.03em;
 }
 
-h1, .hero-num, .page-title {
+h1, .hero-num, .page-title, .display {
   font-family: var(--font-display), Georgia, serif;
+}
+
+.display {
+  letter-spacing: -0.03em;
 }
 
 .hero-num, .num, .stat-num, .page-title {

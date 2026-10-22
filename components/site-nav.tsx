@@ -91,11 +91,9 @@ export function SiteNav() {
           ))}
         </nav>
         <div className="ml-auto hidden items-center gap-3 md:flex">
-          {pathname !== "/" && (
-            <button type="button" className="ask-field" onClick={openAsk}>
-              Ask anything… ⌘K
-            </button>
-          )}
+          <button type="button" className="ask-field" onClick={openAsk}>
+            Ask anything ⌘K
+          </button>
           <button type="button" className="grid h-10 w-10 place-items-center rounded-full border border-line text-fg" onClick={toggleTheme} aria-label={night ? "Switch to day" : "Switch to night"}>
             {night ? <MoonIcon /> : <SunIcon />}
           </button>
@@ -111,11 +109,9 @@ export function SiteNav() {
               {item.label}
             </Link>
           ))}
-          {pathname !== "/" && (
-            <button type="button" className="block py-1 text-sm text-fg-2" onClick={openAsk}>
-              Ask
-            </button>
-          )}
+          <button type="button" className="block py-1 text-sm text-fg" onClick={openAsk}>
+            Ask anything ⌘K
+          </button>
           <Link href="/methodology" className="block py-1 text-sm text-fg-2" onClick={() => setOpen(false)}>Methodology</Link>
           <Link href="/settings" className="block py-1 text-sm text-fg-2" onClick={() => setOpen(false)}>Settings</Link>
         </div>
