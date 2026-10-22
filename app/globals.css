@@ -65,8 +65,8 @@
   --line: #1f2536;
   --line-strong: #2c3449;
   --fg: #eceef4;
-  --fg-2: #c8c8d2;
-  --fg-3: #c8c8d2;
+  --fg-2: #d8dae3;
+  --fg-3: #d8dae3;
   --cobalt: #2f4fd8;
   --cobalt-haze: #1a2556;
   --ember: #e8823a;
@@ -133,9 +133,9 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
-  line-height: 24px;
+  line-height: 22px;
   font-variant-numeric: tabular-nums lining-nums;
 }
 
@@ -308,8 +308,8 @@ h1, .hero-num, .page-title, .display {
   --line: #1f2536;
   --line-strong: #2c3449;
   --fg: #eceef4;
-  --fg-2: #c8c8d2;
-  --fg-3: #c8c8d2;
+  --fg-2: #d8dae3;
+  --fg-3: #d8dae3;
   --ember: #e8823a;
   --amber: #f2b35b;
   --cobalt: #2f4fd8;

@@ -124,13 +124,14 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
     if (verifiedOnly && !row.verified) return false;
     return true;
   });
-  const hasSignal = (row: ProjectTableRow) => Boolean(row.detail || row.full || row.event);
+  const hasSignal = (row: ProjectTableRow) => Boolean(row.detail || row.full || row.event || row.signalAt);
   const quietCount = filtered.filter((row) => !hasSignal(row)).length;
   const listed = showQuiet ? filtered : filtered.filter(hasSignal);
   const groups = useMemo(() => groupRows(listed), [listed]);
   const ordered = useMemo(() => groups.flatMap((group) => group.rows), [groups]);
   const open = ordered.find((row) => row.id === openId) ?? null;
-  const withSignal = rows.filter((row) => row.full || row.detail || row.signalAt).length;
+  const withSignal = rows.filter((row) => row.full || row.detail || row.event || row.signalAt).length;
+  const noSignal = rows.length - withSignal;
 
   function shortlistPeople(row: ProjectTableRow) {
     for (const person of row.people) {
@@ -189,10 +190,13 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
 
   return (
     <div>
-      <p className="mb-4 flex flex-wrap gap-x-6 gap-y-1 text-[14px] text-fg">
-        <span><span className="num">{rows.length.toLocaleString("en-US")}</span> projects</span>
-        <span><span className="num">{withSignal.toLocaleString("en-US")}</span> with a signal</span>
-        {verifiedFilled > 0 ? <span><span className="num">{verifiedFilled.toLocaleString("en-US")}</span> verified</span> : null}
+      <p className="mb-4 text-[14px] leading-5 text-fg">
+        <span className="num">{rows.length.toLocaleString("en-US")}</span> projects
+        {" / "}
+        <span className="num">{withSignal.toLocaleString("en-US")}</span> with a signal
+        {" / "}
+        <span className="num">{noSignal.toLocaleString("en-US")}</span> with no signal yet
+        {verifiedFilled > 0 ? <>{" / "}<span className="num">{verifiedFilled.toLocaleString("en-US")}</span> verified</> : null}
       </p>
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filters">
@@ -214,7 +218,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
           )}
           {quietCount > 0 && (
             <button type="button" className={control} onClick={() => setShowQuiet((value) => !value)}>
-              {showQuiet ? "Hide rows with no signal" : <><span className="num mr-1">{quietCount.toLocaleString("en-US")}</span> with no signal yet</>}
+              {showQuiet ? "Hide rows with no signal" : "Show rows with no signal"}
             </button>
           )}
         </div>
@@ -308,9 +312,9 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                     )}
                     <td className={`${pad} px-2`}>
                       {text ? (
-                        <span className="block truncate text-[14px] leading-5 text-fg" title={row.full ?? text}>{text}</span>
+                        <span className="clamp-2 text-[14px] leading-5 text-fg" title={row.full ?? text}>{text}</span>
                       ) : (
-                        <span className="inline-flex items-center rounded-full border border-line bg-raised px-2 py-px text-[13px] leading-5 text-fg">No signal yet</span>
+                        <span className="text-[14px] text-fg-2">No signal yet</span>
                       )}
                     </td>
                     {showDate && <td className={`${pad} num px-2 text-right text-[14px] text-fg`}>{date ?? <Empty />}</td>}

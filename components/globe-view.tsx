@@ -141,7 +141,7 @@ function weekOf(university: UniversitySummary): number {
   return typeof value === "number" ? value : 0;
 }
 
-type HeroPin = { id: string; name: string; x: number; y: number; labelX: number; labelY: number; badge: boolean };
+type HeroPin = { id: string; name: string; x: number; y: number; labelX: number; labelY: number; badge: boolean; lineX: number; lineY: number };
 type HeroMark = { id: string; x: number; y: number; hot: boolean };
 
 const INSET_IDS = new Set(["univ_penn", "univ_mit", "univ_harvard", "univ_yale"]);
@@ -249,6 +249,7 @@ export const GlobeView = memo(function GlobeView({
   const liveRef = useRef({ basePath, current, onNavigate });
   const spinPaused = useRef(false);
   const framedRef = useRef(false);
+  const heroSizeRef = useRef("");
   const pointsRef = useRef(points);
   const relayoutRef = useRef<(() => void) | null>(null);
   const plotKey = universities.map((university) => `${university.id}:${university.founderCount}:${weekOf(university)}`).join("|");
@@ -347,37 +348,45 @@ export const GlobeView = memo(function GlobeView({
           const name = shortCampusLabel(university.id, university.name);
           const tw = textWidth(name);
           const berkeley = university.id === "univ_berkeley";
-          let labelX = berkeley ? projected.x - 22 - tw : projected.x + 22;
-          let labelY = berkeley ? projected.y - 30 : projected.y + 12;
-          labelX = Math.max(4, Math.min(width - tw - 4, labelX));
-          labelY = Math.max(4, Math.min(height - (hot ? 36 : 18) - 4, labelY));
-          pins.push({ id: university.id, name, x: projected.x, y: projected.y, labelX, labelY, badge: hot });
+          const blockH = hot ? 34 : 16;
+          // East of the dot stays over land. Berkeley sits above its dot, Stanford below, so the two labels cannot stack.
+          let labelX = projected.x + (berkeley ? 14 : 16);
+          let labelY = berkeley ? projected.y - blockH - 16 : projected.y + 16;
+          labelX = Math.max(projected.x + 8, Math.min(width - tw - 8, labelX));
+          labelY = Math.max(8, Math.min(height - blockH - 8, labelY));
+          const lineX = labelX;
+          const lineY = berkeley ? labelY + blockH : labelY;
+          pins.push({ id: university.id, name, x: projected.x, y: projected.y, labelX, labelY, badge: hot, lineX, lineY });
         }
         setHeroPins(pins);
         setHeroMarks(marks);
       };
       relayoutRef.current = layoutHeroLabels;
       const frameHero = () => {
-        if (!hero || !styleReady || framedRef.current) return;
+        if (!hero || !styleReady) return;
         const width = containerRef.current?.clientWidth ?? 0;
         const height = containerRef.current?.clientHeight ?? 0;
         if (width < 80 || height < 80) return;
-        framedRef.current = true;
+        const sizeKey = `${Math.round(width)}x${Math.round(height)}`;
+        if (heroSizeRef.current === sizeKey) return;
+        heroSizeRef.current = sizeKey;
         map.resize();
         map.fitBounds(
           [
             [-125, 24.2],
             [-66.8, 49.4],
           ],
-          { padding: width < 700 ? { top: 36, bottom: 16, left: 12, right: 12 } : { top: 36, bottom: 24, left: 108, right: 88 }, duration: 0 },
+          { padding: width < 700 ? { top: 28, bottom: 48, left: 16, right: 16 } : { top: 28, bottom: 64, left: 36, right: 36 }, duration: 0 },
         );
         // fitBounds commits the camera after this turn. project() is stale until then,
         // and a layout here would pin the labels away from the bubbles.
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            if (!cancelled) layoutHeroLabels();
-          });
-        });
+        const paintLabels = () => {
+          if (!cancelled) layoutHeroLabels();
+        };
+        requestAnimationFrame(() => requestAnimationFrame(paintLabels));
+        window.setTimeout(paintLabels, 60);
+        window.setTimeout(paintLabels, 240);
+        window.setTimeout(paintLabels, 700);
       };
       map.on("moveend", () => {
         if (!cancelled && hero && styleReady) layoutHeroLabels();
@@ -390,7 +399,7 @@ export const GlobeView = memo(function GlobeView({
         const timer = window.setInterval(() => {
           ticks += 1;
           if (!cancelled && styleReady) layoutHeroLabels();
-          if (ticks >= 6 || cancelled) window.clearInterval(timer);
+          if (ticks >= 24 || cancelled) window.clearInterval(timer);
         }, 400);
       }
       resizeObserver = new ResizeObserver(() => {
@@ -923,6 +932,27 @@ export const GlobeView = memo(function GlobeView({
             />
           );
         })}
+        {hero && status === "ok" && heroPins.length > 0 && (
+          <svg className="pointer-events-none absolute inset-0 z-20 h-full w-full" aria-hidden>
+            {heroPins.map((pin) => {
+              const dx = pin.lineX - pin.x;
+              const dy = pin.lineY - pin.y;
+              const len = Math.hypot(dx, dy) || 1;
+              const start = Math.min(9, len * 0.3);
+              return (
+                <line
+                  key={`leader-${pin.id}`}
+                  x1={pin.x + (dx / len) * start}
+                  y1={pin.y + (dy / len) * start}
+                  x2={pin.lineX}
+                  y2={pin.lineY}
+                  stroke="#d7e4ff"
+                  strokeWidth="1.25"
+                />
+              );
+            })}
+          </svg>
+        )}
         {hero && status === "ok" && heroPins.map((pin) => (
           <span
             key={pin.id}

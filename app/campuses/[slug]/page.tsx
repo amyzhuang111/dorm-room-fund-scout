@@ -75,7 +75,7 @@ export default async function CampusPage({
 
   return (
     <div className="px-6 py-8">
-      <div className="flex flex-wrap items-center justify-between gap-6">
+      <div className="flex flex-wrap items-start justify-between gap-6 pr-8">
         <div>
           <p className="text-[14px] text-fg">
             <Link href="/campuses" className="hover:underline">Campuses</Link>
@@ -85,7 +85,7 @@ export default async function CampusPage({
           <h1 className="page-title">{university.name}</h1>
           <p className="mt-2 text-[14px] text-fg">{university.country ?? "Country not recorded"}</p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-start gap-3">
           {[
             { n: university.founderCount, label: "Founders" },
             { n: topTier, label: "Top tier" },
@@ -139,7 +139,7 @@ export default async function CampusPage({
           )}
         </div>
         <aside className="space-y-6 lg:sticky lg:top-20 lg:col-span-4 lg:self-start">
-          {yearCounts.length > 0 && <ClassYearChart years={yearCounts} />}
+          {yearCounts.length > 0 && <ClassYearChart years={yearCounts} founders={university.founderCount} />}
           <div>
             <p className="text-[14px] font-medium" title="Listed from campus affiliations. Headquarters arcs are not stored as a ranked feeder list.">
               Affiliated companies

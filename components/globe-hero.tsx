@@ -25,6 +25,12 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
   const [builders, setBuilders] = useState<{ name: string }[]>([]);
   const plotted = stats.universities.filter((item) => item.founderCount > 0);
   const rankedCampuses = [...plotted].sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name)).slice(0, 5);
+  const sparkPeak = Math.max(1, ...rankedCampuses.flatMap((campus) => campus.signalSeries));
+  const tiedIds = new Set(
+    rankedCampuses
+      .filter((campus) => rankedCampuses.filter((other) => other.founderCount === campus.founderCount).length > 1)
+      .map((campus) => campus.id),
+  );
   const thisWeek = stats.week.filter((item) => item.thisWeek).slice(0, 4);
   const hotIds = [...stats.universities]
     .filter((item) => item.signalWeek > 0 && item.lat != null && item.lon != null)
@@ -68,8 +74,8 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
   }
 
   return (
-    <div className="hero-night bg-bg px-6 py-6 text-fg">
-      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12 lg:items-stretch">
+    <div className="hero-night flex flex-col bg-bg px-6 py-6 text-fg lg:min-h-[calc(100dvh-72px)]">
+      <div className="grid flex-1 grid-cols-1 items-start gap-6 lg:min-h-0 lg:grid-cols-12 lg:items-stretch">
         <div className="flex flex-col gap-4 lg:col-span-3">
           <div>
             {updatedToday(stats.updatedAt) ? <p className="mb-3 text-[14px] text-fg-2">Updated today</p> : null}
@@ -126,7 +132,7 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
             )}
           </section>
         </div>
-        <div className="flex flex-col lg:col-span-7">
+        <div className="flex min-h-[460px] flex-col lg:col-span-7 lg:min-h-0">
           <div className="mb-3 flex h-10 items-center gap-1 border-b border-line" role="group" aria-label="Map geography">
             {(["campus", "hq"] as const).map((value) => (
               <button key={value} type="button" className={`h-10 border-b-2 px-3 text-[14px] font-medium ${mode === value ? "border-[#8eb4ff] text-fg" : "border-transparent text-fg-2"}`} onClick={() => setMode(value)}>
@@ -135,7 +141,7 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
             ))}
             <Link href="/map/network" className="grid h-10 place-items-center border-b-2 border-transparent px-3 text-[14px] font-medium text-fg-2">Network</Link>
           </div>
-          <div className="relative h-[340px] overflow-hidden rounded-lg border border-line lg:h-[520px]">
+          <div className="relative min-h-[420px] flex-1 overflow-hidden rounded-lg border border-line">
             <GlobeView
               universities={plotted}
               basePath="/"
@@ -148,21 +154,21 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
               recentIds={hotIds}
               highlightId={highlight}
             />
-          </div>
-          <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
-            <DotLegend />
+            <div className="pointer-events-none absolute bottom-3 left-3 z-20 rounded bg-[#0b0e17]/88 px-2.5 py-1.5">
+              <DotLegend />
+            </div>
             <NortheastPanel universities={plotted} />
+            <p className="pointer-events-auto absolute bottom-2 right-3 z-20 max-w-[240px] text-right text-[13px] leading-4 text-[#d8dae3]">
+              <MapCredit />
+            </p>
           </div>
-          <p className="mt-2 text-[14px] text-fg">
-            <MapCredit />
-          </p>
         </div>
         <section className="lg:col-span-2" aria-label="Top campuses">
           <div className="flex items-baseline justify-between gap-2">
             <h2 className="text-[16px] font-medium">Top campuses</h2>
             <Link href="/campuses" className="text-[14px] text-fg hover:underline">View all</Link>
           </div>
-          <p className="mt-1 text-[14px] text-fg">8-week signals, vs last week</p>
+          <p className="mt-1 text-[14px] text-fg"><span className="text-fg-2">8 wk</span> vs last week</p>
           <ol className="mt-2">
             {rankedCampuses.map((campus, index) => (
               <li
@@ -174,10 +180,11 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
                 <div className="flex items-center gap-1 text-[14px]">
                   <span className="num w-4 shrink-0 text-fg">{index + 1}</span>
                   <Link href={`/campuses/${campus.slug}`} className="min-w-0 flex-1 truncate hover:underline" onFocus={() => setHighlight(campus.id)} onBlur={() => setHighlight((current) => (current === campus.id ? null : current))}>{shortCampusLabel(campus.id, campus.name)}</Link>
+                  {tiedIds.has(campus.id) ? <span className="shrink-0 text-[13px] text-fg-2">tie</span> : null}
                   <span className="num w-9 shrink-0 text-right text-[14px] text-fg">{campus.founderCount.toLocaleString("en-US")}</span>
                 </div>
                 <div className="mt-0.5 flex items-center justify-between gap-1 pl-5">
-                  <Sparkline values={campus.signalSeries} />
+                  <Sparkline values={campus.signalSeries} peak={sparkPeak} />
                   <WeekDelta delta={campus.signalWeek - campus.signalPrev} />
                 </div>
               </li>
@@ -221,15 +228,17 @@ function DotLegend() {
   );
 }
 
-function Sparkline({ values }: { values: number[] }) {
+function Sparkline({ values, peak }: { values: number[]; peak: number }) {
   if (values.length < 2) return null;
   const width = 88;
   const height = 32;
-  const peak = Math.max(...values, 1);
+  const scale = Math.max(peak, 1);
   const step = width / (values.length - 1);
-  const points = values.map((value, index) => `${index * step},${height - 4 - (value / peak) * (height - 8)}`).join(" ");
+  const base = height - 4;
+  const points = values.map((value, index) => `${index * step},${base - (value / scale) * (height - 8)}`).join(" ");
   return (
     <svg width={width} height={height} role="img" aria-label="Signals each week for 8 weeks" className="shrink-0">
+      <line x1="0" y1={base} x2={width} y2={base} stroke="#d6e2ff" strokeOpacity="0.35" strokeWidth="1" />
       <polyline fill="none" stroke="#d6e2ff" strokeWidth="2.75" strokeLinejoin="round" strokeLinecap="round" points={points} />
     </svg>
   );
@@ -253,7 +262,7 @@ function WeekDelta({ delta }: { delta: number }) {
       </span>
     );
   }
-  return <span className="num text-[14px] font-semibold text-fg" title={title}>0</span>;
+  return <span className="text-[14px] text-fg-2" title={title}>{"\u2014"}</span>;
 }
 
 const HIGH_VALUE = new Set(["funding", "launch", "award", "acquisition"]);
@@ -316,11 +325,11 @@ const PANEL_WEST = -80.2;
 const PANEL_EAST = -67.6;
 const PANEL_SOUTH = 38.6;
 const PANEL_NORTH = 43.4;
-const PANEL_LABEL: Record<string, { side: "left" | "right"; dy: number }> = {
-  univ_penn: { side: "left", dy: -8 },
-  univ_yale: { side: "right", dy: 6 },
-  univ_mit: { side: "left", dy: -18 },
-  univ_harvard: { side: "right", dy: 8 },
+const PANEL_LABEL: Record<string, "left" | "right"> = {
+  univ_penn: "left",
+  univ_yale: "right",
+  univ_mit: "left",
+  univ_harvard: "right",
 };
 
 function panelMercator(lat: number): number {
@@ -389,36 +398,54 @@ function NortheastPanel({ universities }: { universities: UniversitySummary[] })
       .map((university) => university.id),
   );
   const inside = universities.filter((university) => university.lat != null && university.lon != null && university.lon >= PANEL_WEST && university.lon <= PANEL_EAST && university.lat >= PANEL_SOUTH && university.lat <= PANEL_NORTH);
+  const frameW = 340;
+  const frameH = 168;
   return (
-    <div className="relative h-[132px] w-[220px] shrink-0 overflow-hidden rounded border border-line bg-[#0c1320]" role="img" aria-label="Northeast">
-      <svg viewBox="0 0 1000 700" className="absolute inset-0 h-full w-full" aria-hidden>
-        <path d={NORTHEAST_PATH} fill="#2a3548" stroke="#e8eef8" strokeWidth="6" strokeOpacity="0.45" />
-      </svg>
-      <span className="absolute left-2 top-1 text-[13px] font-medium text-[#f7f8fc]">Northeast</span>
-      {inside.map((university) => {
-        const [x, y] = panelXY(university.lon as number, university.lat as number);
-        const left = `${x / 10}%`;
-        const top = `${y / 7}%`;
-        const place = PANEL_LABEL[university.id];
-        const side = place?.side;
-        const hot = hotIds.has(university.id) && Boolean(side);
-        const radius = university.founderCount >= 700 ? 6 : university.founderCount >= 200 ? 4.5 : 3.5;
-        return (
-          <span key={university.id}>
-            {hot ? <span className="absolute rounded-full" style={{ left, top, width: 16, height: 16, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 2px #E8823A" }} /> : null}
-            <span className="absolute rounded-full bg-[#d7e4ff]" style={{ left, top, width: radius * 2, height: radius * 2, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 1px #0b0e17" }} />
-            {side ? (
-              <span
-                className="absolute whitespace-nowrap text-[13px] font-medium leading-4 text-[#f7f8fc]"
-                style={{ left, top, textAlign: side === "left" ? "right" : "left", transform: side === "left" ? `translate(calc(-100% - 8px), ${place?.dy ?? 0}px)` : `translate(8px, ${place?.dy ?? 0}px)`, textShadow: "0 1px 2px #0c1320" }}
-              >
-                <span className="block">{shortCampusLabel(university.id, university.name)}</span>
-                {hot ? <span className="block text-[#ffb07a]">new this week</span> : null}
-              </span>
-            ) : null}
-          </span>
-        );
-      })}
+    <div className="absolute bottom-14 right-3 z-20 w-[340px] overflow-hidden rounded border border-line bg-[#0c1320]" role="img" aria-label="Northeast">
+      <div className="px-2 pt-1.5 text-[13px] font-medium leading-4 text-[#f7f8fc]">Northeast</div>
+      <div className="relative h-[168px]">
+        <svg viewBox="0 0 1000 700" className="absolute inset-0 h-full w-full" aria-hidden>
+          <path d={NORTHEAST_PATH} fill="#2a3548" stroke="#e8eef8" strokeWidth="6" strokeOpacity="0.45" />
+        </svg>
+        {inside.map((university) => {
+          const [x, y] = panelXY(university.lon as number, university.lat as number);
+          const px = (x / 1000) * frameW;
+          const py = (y / 700) * frameH;
+          const preferred = PANEL_LABEL[university.id];
+          const hot = hotIds.has(university.id) && Boolean(preferred);
+          const name = shortCampusLabel(university.id, university.name);
+          const nameW = Math.ceil(name.length * 7.4);
+          const textW = Math.max(nameW, hot ? 104 : 0);
+          const blockH = hot ? 32 : 16;
+          const radius = university.founderCount >= 700 ? 6 : university.founderCount >= 200 ? 4.5 : 3.5;
+          const spaceLeft = px - 16;
+          const spaceRight = frameW - px - 16;
+          let side = preferred;
+          if (side === "left" && spaceLeft < textW && spaceRight >= textW) side = "right";
+          if (side === "right" && spaceRight < textW && spaceLeft >= textW) side = "left";
+          let labelX = side === "left" ? px - 16 - textW : side === "right" ? px + 16 : 0;
+          let labelY = py - blockH / 2;
+          if (side) {
+            labelX = Math.max(8, Math.min(frameW - textW - 8, labelX));
+            labelY = Math.max(6, Math.min(frameH - blockH - 6, labelY));
+          }
+          return (
+            <span key={university.id}>
+              {hot ? <span className="absolute rounded-full" style={{ left: px, top: py, width: 16, height: 16, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 2px #E8823A" }} /> : null}
+              <span className="absolute rounded-full bg-[#d7e4ff]" style={{ left: px, top: py, width: radius * 2, height: radius * 2, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 1px #0b0e17" }} />
+              {side ? (
+                <span
+                  className="absolute whitespace-nowrap text-[13px] font-medium leading-4 text-[#f7f8fc]"
+                  style={{ left: labelX, top: labelY, textShadow: "0 1px 2px #0c1320" }}
+                >
+                  <span className="block">{name}</span>
+                  {hot ? <span className="block text-[#ffb07a]">new this week</span> : null}
+                </span>
+              ) : null}
+            </span>
+          );
+        })}
+      </div>
     </div>
   );
 }
