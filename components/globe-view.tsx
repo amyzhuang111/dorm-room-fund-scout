@@ -913,8 +913,8 @@ export const GlobeView = memo(function GlobeView({
           const hovered = highlightId === mark.id;
           if (!mark.hot && !hovered) return null;
           const color = mark.hot ? "#E8823A" : "#8eb4ff";
-          const glow = mark.hot ? "rgba(232,130,58,0.9)" : "rgba(142,180,255,0.8)";
-          const size = mark.hot ? 52 : hovered ? 34 : 26;
+          const glow = mark.hot ? "rgba(232,130,58,0.85)" : "rgba(142,180,255,0.8)";
+          const size = hovered && !mark.hot ? 34 : 26;
           return (
             <span
               key={`ring-${mark.id}`}
@@ -926,7 +926,7 @@ export const GlobeView = memo(function GlobeView({
                 height: size,
                 transform: "translate(-50%, -50%)",
                 boxShadow: mark.hot
-                  ? `0 0 0 5px ${color}, 0 0 0 12px rgba(232,130,58,0.38), 0 0 28px 8px ${glow}`
+                  ? `0 0 0 2px ${color}, 0 0 0 5px rgba(232,130,58,0.35), 0 0 12px 3px ${glow}`
                   : `0 0 0 2px ${color}, 0 0 10px 3px ${glow}`,
               }}
             />
