@@ -46,7 +46,7 @@ function AvatarStack({ people }: { people: ProjectMate[] }) {
         <span
           key={person.id}
           title={personLine(person)}
-          className="inline-grid h-7 w-7 place-items-center rounded-full border-2 border-bg bg-raised text-[11px] font-medium tracking-[-0.04em] text-fg"
+          className="inline-grid h-7 w-7 place-items-center rounded-full border-2 border-bg bg-raised text-[13px] font-medium tracking-[-0.04em] text-fg"
           style={{ marginLeft: index === 0 ? 0 : -8, zIndex: shown.length - index }}
         >
           {initials(person.name)}
@@ -94,6 +94,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
   const [campus, setCampus] = useState("");
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [compact, setCompact] = useState(false);
+  const [showQuiet, setShowQuiet] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
   const [cursor, setCursor] = useState(0);
@@ -126,7 +127,10 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
     if (verifiedOnly && !row.verified) return false;
     return true;
   });
-  const groups = useMemo(() => groupRows(filtered), [filtered]);
+  const hasSignal = (row: ProjectTableRow) => Boolean(row.detail || row.full || row.event);
+  const quietCount = filtered.filter((row) => !hasSignal(row)).length;
+  const listed = showQuiet ? filtered : filtered.filter(hasSignal);
+  const groups = useMemo(() => groupRows(listed), [listed]);
   const ordered = useMemo(() => groups.flatMap((group) => group.rows), [groups]);
   const open = ordered.find((row) => row.id === openId) ?? null;
   const withSignal = rows.filter((row) => row.full || row.detail || row.signalAt).length;
@@ -182,6 +186,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
 
   const pad = compact ? "py-1" : "py-2";
   const columns = 2 + (showTier ? 1 : 0) + (campusLocked ? 0 : 1) + 1 + (showDate ? 1 : 0) + (showVerified ? 1 : 0);
+  const control = "inline-flex h-9 items-center rounded border border-line bg-raised px-3 text-[14px] text-fg";
 
   let rowIndex = 0;
 
@@ -194,19 +199,19 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
       </p>
       <div className="flex h-12 flex-wrap items-center gap-2">
         <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" className="h-9 w-[280px] max-w-full rounded border border-[#8b93a7] bg-raised px-2 text-[14px] outline-none" />
-        <select value={tier} onChange={(event) => setTier(event.target.value)} className="h-8 rounded border border-line bg-raised px-2 text-[14px]" aria-label="Tier">
+        <select value={tier} onChange={(event) => setTier(event.target.value)} className={control} aria-label="Tier">
           <option value="">Tier</option>
           {["S+", "S", "A", "B", "C", "D"].map((value) => <option key={value}>{value}</option>)}
         </select>
         {!campusLocked && (
-          <select value={campus} onChange={(event) => setCampus(event.target.value)} className="h-8 rounded border border-line bg-raised px-2 text-[14px]" aria-label="Campus">
+          <select value={campus} onChange={(event) => setCampus(event.target.value)} className={control} aria-label="Campus">
             <option value="">Campus</option>
             {campuses.map((value) => <option key={value}>{value}</option>)}
           </select>
         )}
         {(campusLocked || verifiedFilled > 0) && (
           <details className="relative">
-            <summary className="h-8 cursor-pointer list-none rounded px-2 leading-8 text-[14px] text-fg-2">Columns</summary>
+            <summary className={`${control} cursor-pointer list-none`}>Columns</summary>
             <div className="absolute z-30 mt-1 w-40 rounded border border-line bg-bg p-2 text-[14px] shadow-[var(--shadow-menu)]">
               {campusLocked && (
                 <label className="flex items-center gap-2 py-1">
@@ -230,15 +235,20 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
           </details>
         )}
         {verifiedFilled > 0 && (
-          <button type="button" className={`h-8 rounded px-2 text-[14px] ${verifiedOnly ? "bg-[var(--cobalt-haze)] text-fg" : "text-fg-2"}`} onClick={() => setVerifiedOnly((value) => !value)}>
+          <button type="button" className={`${control} ${verifiedOnly ? "border-[#8eb4ff]" : ""}`} onClick={() => setVerifiedOnly((value) => !value)}>
             Verified
           </button>
         )}
-        <button type="button" className="h-8 rounded px-2 text-[14px] text-fg-2" onClick={() => setCompact((value) => !value)}>
+        <button type="button" className={control} onClick={() => setCompact((value) => !value)}>
           {compact ? "Comfortable" : "Compact"}
         </button>
-        {filtered.length !== rows.length && (
-          <span className="ml-auto text-[14px] text-fg-2"><span className="num">{filtered.length.toLocaleString("en-US")}</span> projects</span>
+        {quietCount > 0 && (
+          <button type="button" className={control} onClick={() => setShowQuiet((value) => !value)}>
+            {showQuiet ? "Hide rows with no signal" : <><span className="num mr-1">{quietCount.toLocaleString("en-US")}</span> with no signal yet</>}
+          </button>
+        )}
+        {listed.length !== rows.length && (
+          <span className="ml-auto text-[14px] text-fg-2"><span className="num">{listed.length.toLocaleString("en-US")}</span> projects</span>
         )}
       </div>
       <div className="max-h-[calc(100dvh-220px)] overflow-auto border-t border-line-strong">
@@ -272,11 +282,12 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                 rowIndex += 1;
                 const sameDay = group.event != null && headerDay != null && calendarDay(row.signalAt) === headerDay;
                 const date = !row.signalAt || sameDay ? null : relativeTime(row.signalAt);
+                const quiet = !hasSignal(row);
                 const text = row.detail || (!group.event ? row.full : null);
                 return (
                   <tr
                     key={row.id}
-                    className={`align-top [&>td]:border-b [&>td]:border-line ${openId === row.id ? "bg-[var(--cobalt-haze)] shadow-[inset_2px_0_0_var(--cobalt)]" : index === cursor ? "bg-sunken" : "hover:bg-[#161c2e]"}`}
+                    className={`align-top [&>td]:border-b [&>td]:border-line ${quiet ? "text-fg-2" : ""} ${openId === row.id ? "bg-[var(--cobalt-haze)] shadow-[inset_2px_0_0_var(--cobalt)]" : index === cursor ? "bg-sunken" : "hover:bg-[#161c2e]"}`}
                     onClick={() => { setCursor(index); setOpenId(row.id); }}
                   >
                     <td className={`${pad} px-2`} onClick={(event) => event.stopPropagation()}>
@@ -285,7 +296,9 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                     <td className={`${pad} px-2`}>
                       <span className="flex min-w-0 items-center gap-2">
                         <AvatarStack people={row.people} />
-                        <span className="min-w-0 truncate font-medium">{row.name || <Empty />}</span>
+                        <span className="min-w-0 truncate font-medium text-fg">{row.name || <Empty />}</span>
+                        {campusLocked && !showTier && row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : null}
+                        {campusLocked && !showVerified && row.verified ? <span className="text-[13px] font-medium text-[#8eb4ff]">Verified</span> : null}
                       </span>
                     </td>
                     {showTier && <td className={`${pad} px-2`}>{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : <Empty />}</td>}
@@ -297,6 +310,8 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                     <td className={`${pad} px-2`}>
                       {text ? (
                         <span className="clamp-2 text-[14px] leading-5" title={row.full ?? text}>{text}</span>
+                      ) : quiet ? (
+                        <span className="text-[14px] text-fg-3">No signal yet</span>
                       ) : (
                         <Empty />
                       )}
@@ -310,7 +325,8 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
             })}
           </tbody>
         </table>
-        {ordered.length === 0 && <p className="px-2 py-6 text-[14px] text-fg-2">No projects match. Clear filters.</p>}
+        {ordered.length === 0 && quietCount > 0 && !showQuiet && <p className="px-2 py-6 text-[14px] text-fg-2">Rows with no signal are hidden.</p>}
+        {ordered.length === 0 && (quietCount === 0 || showQuiet) && <p className="px-2 py-6 text-[14px] text-fg-2">No projects match. Clear filters.</p>}
       </div>
       {open && (
         <aside className="fixed bottom-0 right-0 top-14 z-30 w-[min(480px,100%)] overflow-y-auto border-l border-line bg-raised p-6">
@@ -325,7 +341,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
               <li key={person.id} className="flex items-center gap-2 text-[14px]">
                 <span className="inline-grid h-7 w-7 place-items-center rounded-full bg-bg text-[11px] font-medium">{initials(person.name)}</span>
                 <span>{person.name}</span>
-                <span className="num ml-auto text-[13px] text-fg-2">{person.signalAt ? relativeTime(person.signalAt) : <Empty />}</span>
+                <span className="num ml-auto text-[14px] text-fg-2">{person.signalAt ? relativeTime(person.signalAt) : <Empty />}</span>
               </li>
             ))}
           </ul>

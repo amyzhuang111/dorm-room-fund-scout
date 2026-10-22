@@ -243,7 +243,7 @@ h1, .hero-num, .page-title {
   right: 0;
   bottom: 0;
   height: 2px;
-  background: #e8823a;
+  background: #8eb4ff;
 }
 
 .subtab {
@@ -257,7 +257,7 @@ h1, .hero-num, .page-title {
 }
 .subtab.is-active {
   color: var(--fg);
-  border-bottom-color: #e8823a;
+  border-bottom-color: #8eb4ff;
 }
 
 .ask-field {

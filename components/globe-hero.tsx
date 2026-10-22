@@ -19,13 +19,24 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
   const selected = stats.universities.find((item) => item.id === university) ?? null;
   const [mode, setMode] = useState<"campus" | "hq">("campus");
   const [ask, setAsk] = useState("");
+  const [highlight, setHighlight] = useState<string | null>(null);
   const [builders, setBuilders] = useState<{ name: string }[]>([]);
   const plotted = stats.universities.filter((item) => item.founderCount > 0);
   const rankedCampuses = [...plotted].sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name)).slice(0, 10);
-  const latest = stats.week.slice(0, 8);
+  const thisWeek = stats.week.filter((item) => item.thisWeek);
+  const hotIds = [...stats.universities]
+    .filter((item) => item.signalWeek > 0 && item.lat != null && item.lon != null)
+    .sort((a, b) => b.signalWeek - a.signalWeek || b.founderCount - a.founderCount || a.name.localeCompare(b.name))
+    .slice(0, 3)
+    .map((item) => item.id);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        document.getElementById("hero-ask")?.focus();
+        return;
+      }
       if (event.key === "Escape" && university) navigate({ university: null });
     }
     window.addEventListener("keydown", onKey);
@@ -71,7 +82,7 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
                 student founders across {stats.campuses.toLocaleString("en-US")} campuses
               </span>
             </h1>
-            <p className="mt-3 text-[16px] text-fg-2">Track student founders before they raise</p>
+            <h2 className="mt-3 text-[20px] font-medium leading-7 text-fg">Track student founders before they raise</h2>
           </div>
           <p className="text-[16px] text-fg-2">
             <Link href="/companies" className="hover:underline"><span className="num">{stats.tracked.toLocaleString("en-US")}</span> companies</Link>
@@ -81,11 +92,48 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
           <Link href="/founders" className="inline-flex h-12 w-fit items-center rounded bg-ember px-6 text-[16px] font-semibold text-[#0b0e17]">
             Explore founders
           </Link>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              const q = ask.trim();
+              if (q) router.push(`/ask?q=${encodeURIComponent(q)}`);
+            }}
+            className="relative"
+          >
+            <label className="sr-only" htmlFor="hero-ask">Search</label>
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-fg-2">
+              <circle cx="7" cy="7" r="4.25" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              <path d="M10.2 10.2 13 13" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+            <input
+              id="hero-ask"
+              value={ask}
+              onChange={(event) => setAsk(event.target.value)}
+              placeholder="Search founders, campuses, companies"
+              className="h-10 w-full rounded border border-line bg-sunken pl-9 pr-12 text-[14px] text-fg outline-none placeholder:text-fg-2"
+            />
+            <kbd className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 rounded border border-line px-1.5 py-0.5 text-[13px] text-fg-2">⌘K</kbd>
+          </form>
+          <section aria-label={SIGNALS_THIS_WEEK_LABEL}>
+            <div className="flex items-baseline justify-between gap-3">
+              <h3 className="text-[14px] font-medium">{SIGNALS_THIS_WEEK_LABEL}</h3>
+              <Link href="/signals" className="text-[14px] text-fg-2 hover:text-fg">View all</Link>
+            </div>
+            {thisWeek.length > 0 ? (
+              <ul className="mt-1">
+                {thisWeek.map((item) => (
+                  <CompactSignal key={item.id} item={item} />
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-2 text-[14px] text-fg-2">Quiet week. Last signal {absoluteDate(stats.lastSignalAt)}</p>
+            )}
+          </section>
         </div>
         <div className="flex flex-col lg:col-span-7">
           <div className="mb-3 flex h-10 items-center gap-1 border-b border-line" role="group" aria-label="Map geography">
             {(["campus", "hq"] as const).map((value) => (
-              <button key={value} type="button" className={`h-10 border-b-2 px-3 text-[14px] font-medium ${mode === value ? "border-ember text-fg" : "border-transparent text-fg-2"}`} onClick={() => setMode(value)}>
+              <button key={value} type="button" className={`h-10 border-b-2 px-3 text-[14px] font-medium ${mode === value ? "border-[#8eb4ff] text-fg" : "border-transparent text-fg-2"}`} onClick={() => setMode(value)}>
                 {value === "campus" ? "Campuses" : "HQs"}
               </button>
             ))}
@@ -101,7 +149,8 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
               hideStats
               flush
               geoMode={mode}
-              recentIds={stats.recentCampusIds}
+              recentIds={hotIds}
+              highlightId={highlight}
             />
           </div>
           <DotLegend />
@@ -110,17 +159,22 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
           </p>
         </div>
         <section className="lg:col-span-2" aria-label="Top campuses">
-          <h2 className="text-[14px] font-medium">Top campuses</h2>
-          <p className="mt-1 text-[14px] text-fg-2">Founders, signals vs last week</p>
+          <h2 className="text-[16px] font-medium">Top campuses</h2>
+          <p className="mt-1 text-[14px] text-fg-2">8-week signals, vs last week</p>
           <ol className="mt-2">
             {rankedCampuses.map((campus, index) => (
-              <li key={campus.id} className={`border-t border-line py-1.5 ${index === 0 ? "border-l-2 border-l-ember pl-2" : ""}`}>
+              <li
+                key={campus.id}
+                className="border-t border-line py-1.5"
+                onMouseEnter={() => setHighlight(campus.id)}
+                onMouseLeave={() => setHighlight((current) => (current === campus.id ? null : current))}
+              >
                 <div className="flex items-center gap-1.5 text-[14px]">
-                  <span className={`num w-4 ${index === 0 ? "text-ember" : "text-fg-2"}`}>{index + 1}</span>
-                  <Link href={`/campuses/${campus.slug}`} className="min-w-0 flex-1 truncate hover:underline">{shortCampusLabel(campus.id, campus.name)}</Link>
+                  <span className="num w-4 text-fg-2">{index + 1}</span>
+                  <Link href={`/campuses/${campus.slug}`} className="min-w-0 flex-1 truncate hover:underline" onFocus={() => setHighlight(campus.id)} onBlur={() => setHighlight((current) => (current === campus.id ? null : current))}>{shortCampusLabel(campus.id, campus.name)}</Link>
                   <WeekDelta delta={campus.signalWeek - campus.signalPrev} />
                 </div>
-                <div className="mt-1 flex items-center justify-between gap-2 pl-5">
+                <div className="mt-1 flex items-end justify-between gap-2 pl-5">
                   <Sparkline values={campus.signalSeries} />
                   <span className="num text-[14px]">{campus.founderCount.toLocaleString("en-US")}</span>
                 </div>
@@ -129,42 +183,6 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
           </ol>
         </section>
       </div>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          const q = ask.trim();
-          if (q) router.push(`/ask?q=${encodeURIComponent(q)}`);
-        }}
-        className="relative mt-6 max-w-xl"
-      >
-        <label className="sr-only" htmlFor="hero-ask">Search</label>
-        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-fg-2">
-          <circle cx="7" cy="7" r="4.25" fill="none" stroke="currentColor" strokeWidth="1.5" />
-          <path d="M10.2 10.2 13 13" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
-        <input
-          id="hero-ask"
-          value={ask}
-          onChange={(event) => setAsk(event.target.value)}
-          placeholder="Search founders, campuses, companies"
-          className="h-10 w-full rounded border border-line bg-sunken pl-9 pr-3 text-[14px] text-fg outline-none placeholder:text-fg-2"
-        />
-      </form>
-      <section className="mt-8">
-        <div className="flex items-baseline justify-between">
-          <h2 className="text-[16px] font-medium">Latest signals</h2>
-          <Link href="/signals" className="text-[14px] text-fg-2 hover:text-fg">View all</Link>
-        </div>
-        {latest.length > 0 ? (
-          <ul className="mt-3 grid grid-cols-1 gap-x-8 md:grid-cols-2">
-            {latest.map((item) => (
-              <SignalRow key={item.id} item={item} />
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-3 text-[14px] text-fg-2">Quiet week. Last signal {absoluteDate(stats.lastSignalAt)}</p>
-        )}
-      </section>
       {selected && (
         <aside className="fixed bottom-0 right-0 z-30 max-h-[60dvh] w-full overflow-y-auto border-line bg-raised p-5 md:top-14 md:max-h-none md:w-[400px] md:border-l">
           <button type="button" className="text-[14px] text-fg-2" onClick={() => navigate({ university: null })}>Close</button>
@@ -203,18 +221,14 @@ function DotLegend() {
 
 function Sparkline({ values }: { values: number[] }) {
   if (values.length < 2) return null;
-  const width = 64;
-  const height = 18;
+  const width = 88;
+  const height = 36;
   const peak = Math.max(...values, 1);
   const step = width / (values.length - 1);
-  const points = values.map((value, index) => `${index * step},${height - 2 - (value / peak) * (height - 4)}`).join(" ");
-  const last = values[values.length - 1] ?? 0;
-  const lastX = (values.length - 1) * step;
-  const lastY = height - 2 - (last / peak) * (height - 4);
+  const points = values.map((value, index) => `${index * step},${height - 3 - (value / peak) * (height - 6)}`).join(" ");
   return (
-    <svg width={width} height={height} aria-hidden className="shrink-0">
-      <polyline fill="none" stroke="#8ea3c4" strokeWidth="1.5" points={points} />
-      {last > 0 ? <circle cx={lastX} cy={lastY} r="2.5" fill="#E8823A" /> : null}
+    <svg width={width} height={height} role="img" aria-label="Signals each week for 8 weeks" className="shrink-0">
+      <polyline fill="none" stroke="#8eb4ff" strokeWidth="1.75" points={points} />
     </svg>
   );
 }
@@ -270,32 +284,28 @@ function firstSentence(text: string): string {
   return space > 60 ? cut.slice(0, space) : cut;
 }
 
-function SignalRow({ item }: { item: WeekItem }) {
-  const high = isHighValue(item);
-  const summary = item.detail && item.detail !== item.event ? firstSentence(item.detail) : "";
-  const title = item.event || summary;
-  const body = summary && summary !== title ? summary : "";
+function CompactSignal({ item }: { item: WeekItem }) {
+  const title = item.event || (item.detail ? firstSentence(item.detail) : "");
+  const chip = chipText(item);
   const heading = item.url ? (
-    <a href={item.url} className="text-[15px] font-medium leading-5 hover:underline" target="_blank" rel="noreferrer">{title}</a>
+    <a href={item.url} className="truncate text-[14px] font-medium leading-5 hover:underline" target="_blank" rel="noreferrer">{title}</a>
   ) : (
-    <Link href="/signals" className="text-[15px] font-medium leading-5 hover:underline">{title}</Link>
+    <Link href="/signals" className="truncate text-[14px] font-medium leading-5 hover:underline">{title}</Link>
   );
   const campus = item.campusSlug ? (
     <Link href={`/campuses/${item.campusSlug}`} className="truncate text-fg-2 hover:text-fg">{item.campus}</Link>
   ) : (
     <span className="truncate text-fg-2">{item.campus}</span>
   );
-  const chip = chipText(item);
   return (
-    <li className="border-t border-line py-3">
+    <li className="border-t border-line py-2">
       <div className="flex min-w-0 items-center gap-2 text-[14px]">
-        <span className={`h-2 w-2 shrink-0 rounded-full ${item.thisWeek ? "bg-ember" : "bg-[#7f9dcf]"}`} title={item.thisWeek ? "This week" : "Earlier"} />
+        <span className="h-2 w-2 shrink-0 rounded-full bg-ember" title="This week" />
         {campus}
-        {chip ? <span className={`shrink-0 rounded-full px-1.5 py-px text-[14px] leading-5 ${chipClass(item, high)}`}>{chip}</span> : null}
+        {chip ? <span className={`shrink-0 rounded-full px-1.5 py-px text-[13px] leading-5 ${chipClass(item, isHighValue(item))}`}>{chip}</span> : null}
         <span className="num ml-auto shrink-0 text-fg-2" title={item.at ?? undefined}>{updatedAgo(item.at)}</span>
       </div>
-      <p className="mt-1.5">{heading}</p>
-      {body ? <p className="mt-1 text-[14px] leading-5 text-fg-2" title={item.detail ?? body}>{body}</p> : null}
+      <p className="mt-0.5 min-w-0">{heading}</p>
     </li>
   );
 }

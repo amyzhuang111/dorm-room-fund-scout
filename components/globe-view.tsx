@@ -32,8 +32,15 @@ const HERO_STYLE = {
   },
   layers: [
     { id: "background", type: "background", paint: { "background-color": "#2a3548" } },
-    { id: "water", type: "fill", source: "openmaptiles", "source-layer": "water", paint: { "fill-color": "#0c1320" } },
+    { id: "water", type: "fill", source: "openmaptiles", "source-layer": "water", paint: { "fill-color": "#0c1320", "fill-outline-color": "#9aadc8" } },
     { id: "terrain", type: "fill", source: "openmaptiles", "source-layer": "landcover", paint: { "fill-color": "#33445c", "fill-opacity": 0.35 } },
+    {
+      id: "coast",
+      type: "line",
+      source: "openmaptiles",
+      "source-layer": "water",
+      paint: { "line-color": "#9aadc8", "line-width": 1.15, "line-opacity": 0.8 },
+    },
     {
       id: "boundary",
       type: "line",
@@ -41,6 +48,14 @@ const HERO_STYLE = {
       "source-layer": "boundary",
       filter: ["any", ["==", ["get", "admin_level"], 2], ["==", ["get", "admin_level"], "2"]],
       paint: { "line-color": "#8ea3c4", "line-width": 1.1 },
+    },
+    {
+      id: "states",
+      type: "line",
+      source: "openmaptiles",
+      "source-layer": "boundary",
+      filter: ["any", ["==", ["get", "admin_level"], 4], ["==", ["get", "admin_level"], "4"]],
+      paint: { "line-color": "#8ea3c4", "line-width": 0.7, "line-opacity": 0.5 },
     },
   ],
 };
@@ -121,6 +136,28 @@ function prefersReducedMotion(): boolean {
   return typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 }
 
+function weekOf(university: UniversitySummary): number {
+  const value = (university as UniversitySummary & { signalWeek?: number }).signalWeek;
+  return typeof value === "number" ? value : 0;
+}
+
+type HeroPin = { id: string; name: string; x: number; y: number; labelX: number; labelY: number; lineX: number; lineY: number };
+type HeroMark = { id: string; x: number; y: number; hot: boolean; badgeX: number; badgeY: number };
+
+const LABEL_PREFS: Record<string, [number, number][]> = {
+  univ_berkeley: [[-78, -28], [-88, 4], [-64, -52]],
+  univ_stanford: [[52, 34], [64, 52], [44, 12]],
+  univ_mit: [[-96, -18], [-84, -64], [-110, 8]],
+  univ_harvard: [[72, -52], [88, -24], [64, -72]],
+  univ_penn: [[-108, 40], [-92, 62], [-120, 14]],
+};
+
+const BADGE_PREFS: Record<string, [number, number][]> = {
+  univ_penn: [[-108, -14], [78, 56], [-96, 70]],
+  univ_stanford: [[18, -52], [-78, -44], [48, -36]],
+  univ_yale: [[78, -40], [88, 16], [64, -64]],
+};
+
 function campusFeatureCollection(
   universities: { id: string; name: string; lat: number | null; lon: number | null; companyCount: number; founderCount: number }[],
   recentIds: string[],
@@ -163,6 +200,7 @@ export const GlobeView = memo(function GlobeView({
   locked = false,
   geoMode: geoModeProp,
   recentIds = [],
+  highlightId = null,
 }: {
   universities: UniversitySummary[];
   basePath: string;
@@ -193,6 +231,8 @@ export const GlobeView = memo(function GlobeView({
   locked?: boolean;
   geoMode?: "campus" | "hq";
   recentIds?: string[];
+  /** Leaderboard row under the pointer. Draws a ring on that campus bubble. */
+  highlightId?: string | null;
 }) {
   const MAP_THEME = hero || locked ? NIGHT_THEME : DAY_THEME;
   const router = useRouter();
@@ -203,7 +243,8 @@ export const GlobeView = memo(function GlobeView({
   const geoMode = geoModeProp ?? geoModeState;
   const setGeoMode = setGeoModeState;
   const [hoverTip, setHoverTip] = useState<{ id: string; x: number; y: number } | null>(null);
-  const [heroPins, setHeroPins] = useState<{ id: string; name: string; x: number; y: number; labelX: number; labelY: number; lineX: number; lineY: number }[]>([]);
+  const [heroPins, setHeroPins] = useState<HeroPin[]>([]);
+  const [heroMarks, setHeroMarks] = useState<HeroMark[]>([]);
   const [userTip, setUserTip] = useState<{ id: string; name: string; x: number; y: number } | null>(null);
   const selectedUniversity = current.university ? universities.find((u) => u.id === current.university) : undefined;
   const placed = trayCandidates.filter((c) => c.recordedPlace);
@@ -216,16 +257,23 @@ export const GlobeView = memo(function GlobeView({
   // Updated in an effect (not during render) per the rules-of-hooks: a ref
   // write during render can be dropped by React and isn't guaranteed to be
   // visible to effects/handlers that read it later.
+  const points = universities.filter((u) => u.lat != null && u.lon != null);
   const liveRef = useRef({ basePath, current, onNavigate });
   const spinPaused = useRef(false);
   const framedRef = useRef(false);
+  const pointsRef = useRef(points);
+  const relayoutRef = useRef<(() => void) | null>(null);
+  const plotKey = universities.map((university) => `${university.id}:${university.founderCount}:${weekOf(university)}`).join("|");
+  const recentKey = recentIds.join("|");
+  useEffect(() => {
+    pointsRef.current = universities.filter((university) => university.lat != null && university.lon != null);
+    relayoutRef.current?.();
+  }, [plotKey, recentKey, universities]);
   useEffect(() => {
     liveRef.current = { basePath, current, onNavigate };
     const narrow = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
     spinPaused.current = locked || (hero && narrow) || (!hero && (Boolean(current.university) || geoMode === "hq"));
   }, [basePath, current, geoMode, hero, locked, onNavigate]);
-
-  const points = universities.filter((u) => u.lat != null && u.lon != null);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -291,42 +339,72 @@ export const GlobeView = memo(function GlobeView({
         const width = containerRef.current?.clientWidth ?? 0;
         const height = containerRef.current?.clientHeight ?? 0;
         if (width < 80 || height < 80) return;
-        const ranked = [...points]
-          .filter((university) => university.lat != null && university.lon != null)
-          .sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name))
-          .slice(0, 10);
-        const anchors = ranked.map((university) => {
+        const plotted = pointsRef.current.filter((university) => university.lat != null && university.lon != null);
+        const narrow = width < 700;
+        const ranked = [...plotted].sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name)).slice(0, narrow ? 3 : 5);
+        const hot = [...plotted]
+          .filter((university) => weekOf(university) > 0)
+          .sort((a, b) => weekOf(b) - weekOf(a) || b.founderCount - a.founderCount || a.name.localeCompare(b.name))
+          .slice(0, 3);
+        const hotIds = new Set(hot.map((university) => university.id));
+        type Box = { x1: number; y1: number; x2: number; y2: number };
+        const boxes: Box[] = [];
+        const hits = (box: Box) => boxes.some((other) => !(box.x2 < other.x1 - 4 || box.x1 > other.x2 + 4 || box.y2 < other.y1 - 4 || box.y1 > other.y2 + 4));
+        const textWidth = (text: string) => Math.min(140, Math.max(36, Math.ceil(text.length * 7.4)));
+        const projectOf = (university: (typeof plotted)[number]) => {
           const projected = map.project([university.lon as number, university.lat as number]);
-          const name = shortCampusLabel(university.id, university.name);
-          return { id: university.id, name, x: projected.x, y: projected.y, lon: university.lon as number, textW: Math.min(112, Math.max(36, name.length * 7.4)) };
-        });
-        const placeColumn = (group: typeof anchors, side: "west" | "east") => {
-          if (group.length === 0) return [];
-          const ordered = [...group].sort((a, b) => a.y - b.y);
-          let nextY = 10;
-          const placed = ordered.map((item) => {
-            let labelY = Math.max(item.y - 8, nextY);
-            labelY = Math.max(8, Math.min(height - 22, labelY));
-            nextY = labelY + 26;
-            return { ...item, labelY };
-          });
-          const overflow = (placed[placed.length - 1]?.labelY ?? 0) - (height - 22);
-          if (overflow > 0) {
-            for (const pin of placed) pin.labelY = Math.max(8, pin.labelY - overflow);
-          }
-          const edge = side === "west" ? Math.min(...group.map((item) => item.x)) : Math.max(...group.map((item) => item.x));
-          return placed.map((item) => {
-            const labelX = side === "west"
-              ? Math.max(6, edge - item.textW - 28)
-              : Math.min(width - item.textW - 6, edge + 28);
-            const lineX = side === "west" ? labelX + item.textW + 4 : labelX - 4;
-            return { id: item.id, name: item.name, x: item.x, y: item.y, labelX, labelY: item.labelY, lineX, lineY: item.labelY + 8 };
-          });
+          return { id: university.id, name: shortCampusLabel(university.id, university.name), x: projected.x, y: projected.y, lon: university.lon as number };
         };
-        const west = anchors.filter((item) => item.lon < -104);
-        const east = anchors.filter((item) => item.lon >= -104);
-        setHeroPins([...placeColumn(west, "west"), ...placeColumn(east, "east")]);
+        const occupy = (text: string, ax: number, ay: number, prefs: [number, number][]) => {
+          const tw = textWidth(text);
+          const th = 18;
+          const choices = prefs.length > 0 ? prefs : ([[14, -16]] as [number, number][]);
+          for (const [dx, dy] of choices) {
+            let x = ax + (dx < 0 ? dx - tw : dx);
+            let y = ay + dy;
+            x = Math.max(4, Math.min(width - tw - 4, x));
+            y = Math.max(4, Math.min(height - th - 4, y));
+            const box = { x1: x, y1: y, x2: x + tw, y2: y + th };
+            if (!hits(box)) {
+              boxes.push(box);
+              return { x, y, tw };
+            }
+          }
+          const [dx, dy] = choices[choices.length - 1];
+          let x = ax + (dx < 0 ? dx - tw : dx);
+          let y = ay + dy;
+          x = Math.max(4, Math.min(width - tw - 4, x));
+          y = Math.max(4, Math.min(height - th - 4, y));
+          boxes.push({ x1: x, y1: y, x2: x + tw, y2: y + th });
+          return { x, y, tw };
+        };
+        const anchors = new Map(plotted.map((university) => [university.id, projectOf(university)]));
+        for (const university of [...ranked, ...hot]) {
+          const anchor = anchors.get(university.id);
+          if (!anchor) continue;
+          const reach = hotIds.has(university.id) ? 30 : 16;
+          boxes.push({ x1: anchor.x - reach, y1: anchor.y - reach, x2: anchor.x + reach, y2: anchor.y + reach });
+        }
+        const pins: HeroPin[] = ranked.map((university) => {
+          const anchor = anchors.get(university.id)!;
+          const west = anchor.lon < -104;
+          const prefs = LABEL_PREFS[anchor.id] ?? (west ? ([[-22, -8], [22, 14]] as [number, number][]) : ([[-22, 16], [22, -12]] as [number, number][]));
+          const placed = occupy(anchor.name, anchor.x, anchor.y, prefs);
+          const lineX = placed.x + placed.tw / 2 < anchor.x ? placed.x + placed.tw + 2 : placed.x - 2;
+          return { id: anchor.id, name: anchor.name, x: anchor.x, y: anchor.y, labelX: placed.x, labelY: placed.y, lineX, lineY: placed.y + 8 };
+        });
+        const marks: HeroMark[] = plotted.map((university) => {
+          const anchor = anchors.get(university.id)!;
+          const isHot = hotIds.has(university.id);
+          if (!isHot) return { id: anchor.id, x: anchor.x, y: anchor.y, hot: false, badgeX: anchor.x, badgeY: anchor.y };
+          const prefs = BADGE_PREFS[anchor.id] ?? ([[22, -18], [-18, -18], [22, 16]] as [number, number][]);
+          const placed = occupy("new this week", anchor.x, anchor.y, prefs);
+          return { id: anchor.id, x: anchor.x, y: anchor.y, hot: true, badgeX: placed.x, badgeY: placed.y };
+        });
+        setHeroPins(pins);
+        setHeroMarks(marks);
       };
+      relayoutRef.current = layoutHeroLabels;
       const frameHero = () => {
         if (!hero || !styleReady || framedRef.current) return;
         const width = containerRef.current?.clientWidth ?? 0;
@@ -339,13 +417,30 @@ export const GlobeView = memo(function GlobeView({
             [-125, 24.2],
             [-66.8, 49.4],
           ],
-          { padding: { top: 28, bottom: 20, left: 108, right: 124 }, duration: 0 },
+          { padding: width < 700 ? { top: 52, bottom: 28, left: 16, right: 16 } : { top: 48, bottom: 28, left: 128, right: 140 }, duration: 0 },
         );
-        layoutHeroLabels();
+        // fitBounds commits the camera after this turn. project() is stale until then,
+        // and a layout here would pin the labels away from the bubbles.
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            if (!cancelled) layoutHeroLabels();
+          });
+        });
       };
       map.on("moveend", () => {
         if (!cancelled && hero && styleReady) layoutHeroLabels();
       });
+      map.on("idle", () => {
+        if (!cancelled && hero && styleReady) layoutHeroLabels();
+      });
+      if (hero) {
+        let ticks = 0;
+        const timer = window.setInterval(() => {
+          ticks += 1;
+          if (!cancelled && styleReady) layoutHeroLabels();
+          if (ticks >= 6 || cancelled) window.clearInterval(timer);
+        }, 400);
+      }
       resizeObserver = new ResizeObserver(() => {
         map?.resize();
         frameHero();
@@ -479,10 +574,10 @@ export const GlobeView = memo(function GlobeView({
               source: "campuses",
               filter: ["==", ["get", "recent"], 1],
               paint: {
-                "circle-radius": ["interpolate", ["linear"], ["sqrt", ["coalesce", ["get", "founders"], 0]], 0, 16, 10, 22, 28, 30],
+                "circle-radius": ["interpolate", ["linear"], ["sqrt", ["coalesce", ["get", "founders"], 0]], 0, 10, 10, 13, 28, 16],
                 "circle-color": "#E8823A",
-                "circle-opacity": 0.45,
-                "circle-stroke-width": 3,
+                "circle-opacity": 0.16,
+                "circle-stroke-width": 2,
                 "circle-stroke-color": "#E8823A",
                 "circle-stroke-opacity": 1,
               },
@@ -880,6 +975,29 @@ export const GlobeView = memo(function GlobeView({
       )}
       <div className={hero || locked ? "hero-map relative h-full w-full overflow-hidden" : "relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-line sm:min-h-[520px]"} style={{ background: hero ? "#2a3548" : MAP_THEME.sky }}>
         <div ref={containerRef} className="h-full w-full" />
+        {hero && status === "ok" && heroMarks.map((mark) => {
+          const hovered = highlightId === mark.id;
+          if (!mark.hot && !hovered) return null;
+          const color = mark.hot ? "#E8823A" : "#8eb4ff";
+          const glow = mark.hot ? "rgba(232,130,58,0.85)" : "rgba(142,180,255,0.8)";
+          const size = hovered && !mark.hot ? 34 : 26;
+          return (
+            <span
+              key={`ring-${mark.id}`}
+              className="pointer-events-none absolute z-10 rounded-full"
+              style={{
+                left: mark.x,
+                top: mark.y,
+                width: size,
+                height: size,
+                transform: "translate(-50%, -50%)",
+                boxShadow: mark.hot
+                  ? `0 0 0 2px ${color}, 0 0 0 5px rgba(232,130,58,0.35), 0 0 12px 3px ${glow}`
+                  : `0 0 0 2px ${color}, 0 0 10px 3px ${glow}`,
+              }}
+            />
+          );
+        })}
         {hero && status === "ok" && heroPins.length > 0 && (
           <svg className="pointer-events-none absolute inset-0 z-10 h-full w-full" aria-hidden>
             {heroPins.map((pin) => (
@@ -887,10 +1005,19 @@ export const GlobeView = memo(function GlobeView({
             ))}
           </svg>
         )}
+        {hero && status === "ok" && heroMarks.filter((mark) => mark.hot).map((mark) => (
+          <span
+            key={`week-${mark.id}`}
+            className="pointer-events-none absolute z-20 whitespace-nowrap text-[13px] font-medium leading-4 text-[#ffb07a]"
+            style={{ left: mark.badgeX, top: mark.badgeY, textShadow: "0 1px 2px #0c1320, 0 0 8px #0c1320" }}
+          >
+            new this week
+          </span>
+        ))}
         {hero && status === "ok" && heroPins.map((pin) => (
           <span
             key={pin.id}
-            className="pointer-events-none absolute z-10 whitespace-nowrap text-[14px] font-medium text-[#f7f8fc]"
+            className="pointer-events-none absolute z-20 whitespace-nowrap text-[14px] font-medium text-[#f7f8fc]"
             style={{ left: pin.labelX, top: pin.labelY, textShadow: "0 1px 2px #0c1320, 0 0 8px #0c1320" }}
           >
             {pin.name}
