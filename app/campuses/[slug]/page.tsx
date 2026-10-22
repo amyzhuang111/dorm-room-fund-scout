@@ -56,20 +56,19 @@ function activity(universityId: string): { weeks: number[]; signals30: number } 
   return { weeks, signals30 };
 }
 
-function companies(universityId: string): { id: string; name: string }[] {
+function companies(universityId: string): { id: string; name: string; people: number }[] {
   try {
     return getDb()
       .prepare(
-        `SELECT p.id as id, p.name as name
+        `SELECT p.id as id, p.name as name, COUNT(DISTINCT a.person_id) as people
            FROM projects p
            JOIN person_project_roles ppr ON ppr.project_id = p.id
            JOIN affiliations a ON a.person_id = ppr.person_id
           WHERE a.university_id = ? AND p.kind = 'company'
           GROUP BY p.id
-          ORDER BY p.name
-          LIMIT 24`,
+          ORDER BY people DESC, p.name COLLATE NOCASE`,
       )
-      .all(universityId) as { id: string; name: string }[];
+      .all(universityId) as { id: string; name: string; people: number }[];
   } catch {
     return [];
   }
@@ -95,20 +94,32 @@ export default async function CampusPage({
   const sources = listSources().filter((source) => source.campuses.includes(university.id));
   const signals = tab === "signals" ? listSignalsForUniversity(university.id) : [];
   const peak = Math.max(1, ...weeks);
+  const activeWeeks = weeks.filter((count) => count > 0).length;
+  const shownCompanies = affiliated.slice(0, 8);
+  const moreCompanies = Math.max(0, affiliated.length - shownCompanies.length);
 
   return (
-    <div className="mx-auto max-w-[1200px] px-5 py-8 sm:px-12">
+    <div className="px-6 py-8">
       <GlobeLibraryBoot />
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
-          <p className="micro">Campus</p>
+          <p className="text-[14px] text-fg-2">Campus</p>
           <h1 className="page-title">{university.name}</h1>
-          <p className="num mt-2 text-[13px] text-fg-2">{university.country ?? "Country not recorded"}</p>
+          <p className="mt-2 text-[14px] text-fg-2">{university.country ?? "Country not recorded"}</p>
         </div>
-        <div className="flex items-end gap-8">
-          <p><span className="stat-num">{university.founderCount.toLocaleString("en-US")}</span><span className="micro">Founders</span></p>
-          <p><span className="stat-num">{topTier.toLocaleString("en-US")}</span><span className="micro">S / S+</span></p>
-          <p><span className="stat-num">{signals30.toLocaleString("en-US")}</span><span className="micro">Signals 30d</span></p>
+        <div className="flex flex-wrap items-end gap-8">
+          <p>
+            <span className="num block text-[28px] leading-8">{university.founderCount.toLocaleString("en-US")}</span>
+            <span className="text-[14px] text-fg-2">Founders</span>
+          </p>
+          <p>
+            <span className="num block text-[28px] leading-8">{topTier.toLocaleString("en-US")}</span>
+            <span className="text-[14px] text-fg-2">Top tier</span>
+          </p>
+          <p>
+            <span className="num block text-[28px] leading-8">{signals30.toLocaleString("en-US")}</span>
+            <span className="text-[14px] text-fg-2">Signals in 30 days</span>
+          </p>
           <ShortlistCampusButton id={university.id} />
         </div>
       </div>
@@ -119,38 +130,43 @@ export default async function CampusPage({
           </Link>
         ))}
       </div>
-      <div className="mt-8 grid gap-8 lg:grid-cols-12">
+      <div className="mt-8 grid gap-x-6 gap-y-8 lg:grid-cols-12">
         <div className="lg:col-span-8">
           {tab === "founders" && (
             <>
-              <p className="micro">Activity · 52 weeks</p>
-              <div className="mt-3 flex h-[240px] items-end gap-0.5" aria-label="Signals by week">
-                {weeks.map((count, index) => (
-                  <div
-                    key={index}
-                    className="w-1"
-                    title={`${count} signal${count === 1 ? "" : "s"}`}
-                    style={{
-                      height: `${(count / peak) * 100}%`,
-                      minHeight: count > 0 ? 4 : 0,
-                      background: index === weeks.length - 1 ? "var(--ember)" : "var(--cobalt)",
-                    }}
-                  />
-                ))}
-              </div>
-              <div className="mt-8">
-                <DataTable rows={founders} campusLocked />
-              </div>
+              {activeWeeks >= 4 ? (
+                <div className="mb-8">
+                  <p className="text-[14px] text-fg-2">Activity, 52 weeks</p>
+                  <div className="mt-3 flex h-16 items-end gap-0.5" aria-label="Signals by week">
+                    {weeks.map((count, index) => (
+                      <div
+                        key={index}
+                        className="w-1"
+                        title={`${count} signal${count === 1 ? "" : "s"}`}
+                        style={{
+                          height: `${(count / peak) * 100}%`,
+                          minHeight: count > 0 ? 4 : 0,
+                          background: "var(--fg-2)",
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <p className="mb-6 text-[14px] text-fg-2">Not enough history yet</p>
+              )}
+              <DataTable rows={founders} campusLocked />
             </>
           )}
           {tab === "companies" && (
-            <ul className="divide-y divide-line">
+            <ul>
               {affiliated.map((company) => (
-                <li key={company.id} className="py-2">
-                  <Link href={`/startup/${company.id}`} className="text-[14px] text-fg">{company.name}</Link>
+                <li key={company.id} className="flex h-8 items-center justify-between gap-3 border-b border-line">
+                  <Link href={`/startup/${company.id}`} className="min-w-0 truncate text-[14px] text-fg">{company.name}</Link>
+                  <span className="num shrink-0 text-[14px] text-fg-2">{company.people.toLocaleString("en-US")}</span>
                 </li>
               ))}
-              {affiliated.length === 0 && <li className="text-[14px] text-fg-3">No affiliated companies are stored for {label}.</li>}
+              {affiliated.length === 0 && <li className="text-[14px] text-fg-2">No affiliated companies are stored for {label}.</li>}
             </ul>
           )}
           {tab === "signals" && (
@@ -159,7 +175,7 @@ export default async function CampusPage({
                 <li key={signal.id} className="py-3">
                   <p className="text-[15px] font-medium">{signal.project_name}</p>
                   <p className="mt-1 text-[14px] text-fg-2">{signal.current_observation}</p>
-                  <p className="num mt-1 text-[12px] text-fg-3">{signal.signal_type}{signal.source_date ? ` · ${signal.source_date}` : ""}</p>
+                  <p className="mt-1 text-[14px] text-fg-2">{signal.signal_type}{signal.source_date ? ` · ${signal.source_date}` : ""}</p>
                 </li>
               ))}
               {signals.length === 0 && <li className="text-[14px] text-fg-3">No signals are stored for {label}.</li>}
@@ -174,27 +190,36 @@ export default async function CampusPage({
         <aside className="space-y-6 lg:sticky lg:top-20 lg:col-span-4 lg:self-start">
           <CampusMiniGlobe university={university} />
           <div>
-            <p className="micro">Affiliated companies</p>
-            <p className="mt-1 text-[12px] text-fg-3">Listed from campus affiliations. Headquarters arcs are not stored as a ranked feeder list.</p>
+            <p className="text-[14px] font-medium" title="Listed from campus affiliations. Headquarters arcs are not stored as a ranked feeder list.">
+              Affiliated companies
+            </p>
             <ul className="mt-2">
-              {affiliated.slice(0, 8).map((company) => (
-                <li key={company.id}>
-                  <Link href={`/startup/${company.id}`} className="block h-8 truncate text-[14px] leading-8">{company.name}</Link>
+              {shownCompanies.map((company) => (
+                <li key={company.id} className="flex h-8 items-center justify-between gap-3">
+                  <Link href={`/startup/${company.id}`} className="min-w-0 truncate text-[14px] leading-8">{company.name}</Link>
+                  <span className="num shrink-0 text-[14px] text-fg-2">{company.people.toLocaleString("en-US")}</span>
                 </li>
               ))}
-              {affiliated.length === 0 && <li className="text-[13px] text-fg-3">None recorded.</li>}
+              {moreCompanies > 0 && (
+                <li>
+                  <Link href={`/campuses/${slug}?tab=companies`} className="block h-8 text-[14px] leading-8 text-fg-2">
+                    +{moreCompanies.toLocaleString("en-US")} more
+                  </Link>
+                </li>
+              )}
+              {affiliated.length === 0 && <li className="text-[14px] text-fg-2">None recorded.</li>}
             </ul>
           </div>
           <div>
-            <p className="micro">Sources</p>
+            <p className="text-[14px] font-medium">Sources</p>
             <ul className="mt-2 space-y-2">
               {sources.slice(0, 8).map((source) => (
-                <li key={source.id} className="num text-[12px] text-fg-2">
+                <li key={source.id} className="text-[14px] text-fg-2">
                   {source.name}
-                  <span className="text-fg-3"> · {source.lastSuccessAt?.slice(0, 10) ?? source.lastAttemptAt?.slice(0, 10) ?? "not checked"}</span>
+                  <span> · {source.lastSuccessAt?.slice(0, 10) ?? source.lastAttemptAt?.slice(0, 10) ?? "not checked"}</span>
                 </li>
               ))}
-              {sources.length === 0 && <li className="text-[13px] text-fg-3">No sources list this campus.</li>}
+              {sources.length === 0 && <li className="text-[14px] text-fg-2">No sources list this campus.</li>}
             </ul>
           </div>
         </aside>

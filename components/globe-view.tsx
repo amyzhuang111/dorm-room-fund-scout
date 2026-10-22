@@ -166,7 +166,7 @@ export const GlobeView = memo(function GlobeView({
   geoMode?: "campus" | "hq";
   recentIds?: string[];
 }) {
-  const MAP_THEME = hero ? NIGHT_THEME : DAY_THEME;
+  const MAP_THEME = hero || locked ? NIGHT_THEME : DAY_THEME;
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<CampusMap | null>(null);
@@ -227,14 +227,15 @@ export const GlobeView = memo(function GlobeView({
       if (cancelled || !containerRef.current) return;
 
       try {
+        const lockedPoint = locked ? points.find((university) => university.lat != null && university.lon != null) : undefined;
         map = new maplibregl.Map({
           container: containerRef.current,
           style: STYLE_URL,
-          center: [-98, 39],
-          zoom: hero ? (window.matchMedia("(max-width: 767px)").matches ? 0.95 : 2.05) : 3.35,
-          minZoom: hero ? 0.4 : 1.5,
+          center: lockedPoint ? [lockedPoint.lon as number, lockedPoint.lat as number] : [-98, 39],
+          zoom: locked ? 5.6 : hero ? (window.matchMedia("(max-width: 767px)").matches ? 2.4 : 3.1) : 3.35,
+          minZoom: hero ? 0.4 : locked ? 2 : 1.5,
           maxZoom: 8,
-          attributionControl: { compact: !hero },
+          attributionControl: hero || locked ? false : { compact: true },
         });
       } catch {
         // Headless or blocked-GPU browsers throw before any canvas exists.
@@ -256,7 +257,26 @@ export const GlobeView = memo(function GlobeView({
       // that calls resize() whenever the container's real size changes fixes it, for
       // this initial-layout race and for any later container resize (sidebar toggling,
       // window resize, drawer opening).
-      resizeObserver = new ResizeObserver(() => map?.resize());
+      let styleReady = false;
+      const frameHero = () => {
+        if (!hero || !styleReady || framedRef.current) return;
+        const width = containerRef.current?.clientWidth ?? 0;
+        const height = containerRef.current?.clientHeight ?? 0;
+        if (width < 80 || height < 80) return;
+        framedRef.current = true;
+        map.resize();
+        map.fitBounds(
+          [
+            [-125, 24],
+            [-66.5, 49.2],
+          ],
+          { padding: { top: 16, bottom: 16, left: 16, right: 16 }, duration: 0 },
+        );
+      };
+      resizeObserver = new ResizeObserver(() => {
+        map?.resize();
+        frameHero();
+      });
       resizeObserver.observe(containerRef.current);
 
       // MapLibre fires "error" for lots of non-fatal things too (a single tile 404,
@@ -281,8 +301,8 @@ export const GlobeView = memo(function GlobeView({
           }
         };
 
-        trySet(() => map.setProjection({ type: "globe" }), "globe projection");
-        if (hero) {
+        trySet(() => map.setProjection({ type: hero || locked ? "mercator" : "globe" }), hero || locked ? "mercator projection" : "globe projection");
+        if (hero || locked) {
           for (const layer of map.getStyle?.()?.layers ?? []) {
             if (layer.type === "symbol") trySet(() => map.setLayoutProperty(layer.id, "visibility", "none"), `hide-label:${layer.id}`);
           }
@@ -313,10 +333,14 @@ export const GlobeView = memo(function GlobeView({
             // was the actual cause of "the globe is just a white/purple circle," not the base
             // color choice. Verified in an isolated MapLibre harness before landing this.
             trySet(() => map.setPaintProperty(l.id, "fill-color", MAP_THEME.landAlt), `landAlt:${l.id}`);
-            trySet(() => map.setPaintProperty(l.id, "fill-opacity", hero ? 0 : 0.25), `landAlt-opacity:${l.id}`);
+            trySet(() => map.setPaintProperty(l.id, "fill-opacity", hero || locked ? 0 : 0.25), `landAlt-opacity:${l.id}`);
           }
-          if (l.type === "line" && /boundary/.test(l.id)) {
-            trySet(() => map.setPaintProperty(l.id, "line-color", MAP_THEME.boundary), `boundary:${l.id}`);
+          if (l.type === "line") {
+            const night = hero || locked;
+            trySet(() => map.setPaintProperty(l.id, "line-color", night ? "#243056" : MAP_THEME.boundary), `line:${l.id}`);
+            if (night && !/boundary|admin/i.test(l.id)) {
+              trySet(() => map.setPaintProperty(l.id, "line-opacity", 0), `line-hide:${l.id}`);
+            }
           }
           if (l.type === "symbol") {
             trySet(() => map.setPaintProperty(l.id, "text-color", MAP_THEME.labelText), `labelText:${l.id}`);
@@ -329,7 +353,7 @@ export const GlobeView = memo(function GlobeView({
           if (!map.getSource("campuses")) {
             map.addSource("campuses", {
               type: "geojson",
-              cluster: !hero,
+              cluster: !hero && !locked,
               clusterRadius: 48,
               clusterMaxZoom: 4,
                 data: campusFeatureCollection(points, recentIds),
@@ -337,7 +361,7 @@ export const GlobeView = memo(function GlobeView({
           }
 
           const unclustered = ["!", ["has", "point_count"]];
-          if (!map.getLayer("campus-glow")) {
+          if (!locked && !map.getLayer("campus-glow")) {
             map.addLayer({
               id: "campus-glow",
               type: "circle",
@@ -354,20 +378,22 @@ export const GlobeView = memo(function GlobeView({
             });
           }
 
-          if (!map.getLayer("campus-dots")) {
+          if (!locked && !map.getLayer("campus-dots")) {
             map.addLayer({
               id: "campus-dots",
               type: "circle",
               source: "campuses",
               filter: unclustered,
               paint: {
-                "circle-radius": hero
-                  ? ["interpolate", ["linear"], ["sqrt", ["max", ["coalesce", ["get", "founders"], 0], 0]], 0, 3, 10, 4.5, 28, 7]
-                  : ["interpolate", ["linear"], ["get", "count"], 0, 6, 20, 9, 200, 14],
-                "circle-color": hero ? "#E8823A" : MAP_THEME.dot,
-                "circle-stroke-width": 1,
+                "circle-radius": locked
+                  ? 7
+                  : hero
+                    ? ["interpolate", ["linear"], ["sqrt", ["max", ["coalesce", ["get", "founders"], 0], 0]], 0, 3, 10, 4.5, 28, 7]
+                    : ["interpolate", ["linear"], ["get", "count"], 0, 6, 20, 9, 200, 14],
+                "circle-color": hero || locked ? "#E8823A" : MAP_THEME.dot,
+                "circle-stroke-width": locked ? 0 : 1,
                 "circle-stroke-color": hero ? "#0B0E17" : "#fbfbfc",
-                "circle-opacity": hero ? 0.85 : 0.95,
+                "circle-opacity": locked ? 1 : hero ? 0.85 : 0.95,
               },
             });
           }
@@ -422,7 +448,7 @@ export const GlobeView = memo(function GlobeView({
             });
           }
 
-          if (!map.getLayer("campus-selected")) {
+          if (!locked && !map.getLayer("campus-selected")) {
             map.addLayer({
               id: "campus-selected",
               type: "circle",
@@ -437,18 +463,18 @@ export const GlobeView = memo(function GlobeView({
             });
           }
 
-          if (!map.getLayer("campus-labels")) {
+          if (!locked && !map.getLayer("campus-labels")) {
             map.addLayer({
               id: "campus-labels",
               type: "symbol",
               source: "campuses",
               filter: hero ? ["==", ["get", "label"], 9] : unclustered,
               layout: {
-                "text-field": hero ? ["get", "name"] : ["concat", ["get", "name"], "  ", ["to-string", ["get", "count"]]],
-                "text-size": hero ? 12 : 11,
-                "text-offset": [0, 1.45],
-                "text-anchor": "top",
-                "text-allow-overlap": false,
+                "text-field": hero ? ["get", "name"] : ["concat", ["get", "name"], " ", ["to-string", ["get", "count"]]],
+                "text-size": locked ? 14 : hero ? 12 : 11,
+                "text-offset": locked ? [1.15, 0] : [0, 1.45],
+                "text-anchor": locked ? "left" : "top",
+                "text-allow-overlap": locked,
               },
               paint: { "text-color": MAP_THEME.labelText, "text-halo-color": MAP_THEME.labelHalo, "text-halo-width": hero ? 2 : 1.2 },
             });
@@ -512,6 +538,8 @@ export const GlobeView = memo(function GlobeView({
         } catch (e) {
           console.error("[globe-view] FAILED adding campus source/layers:", e);
         }
+        styleReady = true;
+        if (hero) requestAnimationFrame(frameHero);
         setStatus("ok");
 
         let interacting = false;
@@ -534,7 +562,7 @@ export const GlobeView = memo(function GlobeView({
         const tick = (now: number) => {
           if (cancelled) return;
           raf = requestAnimationFrame(tick);
-          if (interacting || spinPaused.current || prefersReducedMotion() || navigator.webdriver) {
+          if (hero || locked || interacting || spinPaused.current || prefersReducedMotion() || navigator.webdriver) {
             last = now;
             return;
           }
@@ -700,7 +728,12 @@ export const GlobeView = memo(function GlobeView({
     if (current.university) {
       const u = universities.find((x) => x.id === current.university);
       if (u?.lat != null && u?.lon != null) {
-        map.flyTo({ center: [u.lon, u.lat], zoom: hero || locked ? 4 : 4.4, duration: prefersReducedMotion() || locked ? 0 : hero ? 320 : 1100, essential: true });
+        map.flyTo({
+          center: [u.lon, u.lat],
+          zoom: locked ? 5.6 : hero ? 4 : 4.4,
+          duration: prefersReducedMotion() || locked ? 0 : hero ? 320 : 1100,
+          essential: true,
+        });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -708,7 +741,7 @@ export const GlobeView = memo(function GlobeView({
 
   const emphasizeKey = emphasizeIds.join(",");
   useEffect(() => {
-    if (hero) return;
+    if (hero || locked) return;
     const map = mapRef.current;
     if (!map || status !== "ok" || !map.getLayer("campus-dots")) return;
     const ids = emphasizeKey ? emphasizeKey.split(",") : [];
@@ -757,7 +790,7 @@ export const GlobeView = memo(function GlobeView({
       ];
 
   return (
-    <div className={hero ? "h-full" : flush ? "" : "p-2"}>
+    <div className={hero || locked ? "h-full" : flush ? "" : "p-2"}>
       {!hideStats && status === "ok" && (
         <div className="stat-strip mb-6">
           {statItems.map((s) => (
@@ -768,8 +801,18 @@ export const GlobeView = memo(function GlobeView({
           ))}
         </div>
       )}
-      <div className={hero ? "hero-map relative h-full w-full overflow-hidden" : locked ? "relative h-[280px] w-full overflow-hidden" : "relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-line sm:min-h-[520px]"} style={{ background: MAP_THEME.sky }}>
+      <div className={hero || locked ? "hero-map relative h-full w-full overflow-hidden" : "relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-line sm:min-h-[520px]"} style={{ background: MAP_THEME.sky }}>
         <div ref={containerRef} className="h-full w-full" />
+        {locked && selectedUniversity && status === "ok" && (
+          <div className="pointer-events-none absolute inset-0 z-10">
+            <div className="absolute left-1/2 top-1/2 flex -translate-y-1/2 items-center">
+              <span className="h-3 w-3 shrink-0 -translate-x-1/2 rounded-full bg-[#E8823A]" />
+              <span className="ml-1.5 whitespace-nowrap text-[14px] font-medium text-[#eceef4]" style={{ textShadow: "0 1px 2px #0b0e17" }}>
+                {shortCampusLabel(selectedUniversity.id, selectedUniversity.name)} {selectedUniversity.companyCount.toLocaleString("en-US")}
+              </span>
+            </div>
+          </div>
+        )}
         {status === "ok" && !hero && !locked && (
           <div className="segmented absolute right-3 top-3 z-10" role="group" aria-label="Map geography">
             <button type="button" onClick={() => setGeoMode("campus")} className={geoMode === "campus" ? "is-active" : ""}>
@@ -931,7 +974,7 @@ export const GlobeView = memo(function GlobeView({
           </div>
         )}
       </div>
-      {status === "ok" && !hero && (
+      {status === "ok" && !hero && !locked && (
         <p className="viz-legend">
           {geoMode === "campus"
             ? "Dot size follows candidate count. A ring marks the campus in view."

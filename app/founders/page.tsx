@@ -4,10 +4,9 @@ import { loadFounderTable } from "@/lib/domain/founder-table";
 export default function FoundersPage() {
   const rows = loadFounderTable();
   return (
-    <div className="mx-auto max-w-[1200px] px-5 py-8 sm:px-12">
-      <p className="micro">Explore</p>
+    <div className="px-6 py-8">
       <h1 className="page-title">Founders</h1>
-      <p className="page-subtitle">{rows.length.toLocaleString("en-US")} founders</p>
+      <p className="mt-2 text-[14px] text-fg-2"><span className="num">{rows.length.toLocaleString("en-US")}</span> founders</p>
       <div className="mt-8">
         <DataTable rows={rows} />
       </div>

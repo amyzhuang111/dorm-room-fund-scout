@@ -23,8 +23,14 @@ function signalKind(row: FounderTableRow): "yc" | "github" | "funding" | null {
 }
 
 function emptyOr(value: string | number | null | undefined) {
-  if (value == null || value === "") return <span className="text-[#6f7688]">-</span>;
+  if (value == null || value === "") return null;
   return value;
+}
+
+function signalLabel(text: string | null): string | null {
+  if (!text) return null;
+  const cleaned = text.replace(/:\s*"-"\s*(?:\u2014|\u2013|-)\s*-\./g, ".").replace(/[ \t]{2,}/g, " ").trim();
+  return cleaned || null;
 }
 
 function SourceMark({ kind }: { kind: "yc" | "github" | "funding" }) {
@@ -69,9 +75,15 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
   const campuses = useMemo(() => [...new Set(rows.map((row) => row.campus).filter(Boolean))] as string[], [rows]);
   const years = useMemo(() => [...new Set(rows.map((row) => row.year).filter((value): value is number => value != null))].sort((a, b) => b - a), [rows]);
   const mostlyEmpty = (filled: number) => rows.length === 0 || filled / rows.length < 0.5;
+  const companyFilled = rows.filter((row) => row.company).length;
+  const yearFilled = rows.filter((row) => row.year != null).length;
+  const head = rows.slice(0, 20);
+  const headHas = (filled: number, pick: (row: FounderTableRow) => boolean) =>
+    filled > 0 && head.length > 0 && head.filter(pick).length / head.length >= 0.25;
   const autoColumns = {
     tier: !mostlyEmpty(rows.filter((row) => row.tier).length),
-    year: !mostlyEmpty(rows.filter((row) => row.year != null).length),
+    company: headHas(companyFilled, (row) => Boolean(row.company)),
+    year: headHas(yearFilled, (row) => row.year != null),
     score: !mostlyEmpty(rows.filter((row) => row.score != null).length),
   };
   const [columnChoice, setColumnChoice] = useState<typeof autoColumns | null>(null);
@@ -134,32 +146,32 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
   return (
     <div>
       <p className="mb-4 flex flex-wrap gap-x-6 gap-y-1 text-[14px] text-fg-2">
-        <span><span className="tabular-nums text-fg">{rows.length.toLocaleString("en-US")}</span> founders</span>
-        <span><span className="tabular-nums text-fg">{withSignal.toLocaleString("en-US")}</span> with a signal</span>
-        <span><span className="tabular-nums text-fg">{verifiedCount.toLocaleString("en-US")}</span> verified</span>
+        <span><span className="num">{rows.length.toLocaleString("en-US")}</span> founders</span>
+        <span><span className="num">{withSignal.toLocaleString("en-US")}</span> with a signal</span>
+        <span><span className="num">{verifiedCount.toLocaleString("en-US")}</span> verified</span>
       </p>
       <div className="flex h-12 flex-wrap items-center gap-2">
         <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search founders" className="h-9 w-[280px] max-w-full rounded border border-[#8b93a7] bg-raised px-2 text-[14px] outline-none" />
-        <select value={tier} onChange={(event) => setTier(event.target.value)} className="h-8 rounded border border-line bg-raised px-2 text-[13px]" aria-label="Tier">
+        <select value={tier} onChange={(event) => setTier(event.target.value)} className="h-8 rounded border border-line bg-raised px-2 text-[14px]" aria-label="Tier">
           <option value="">Tier</option>
           {["S+", "S", "A", "B", "C", "D"].map((value) => <option key={value}>{value}</option>)}
         </select>
         {!campusLocked && (
-          <select value={campus} onChange={(event) => setCampus(event.target.value)} className="h-8 rounded border border-line bg-raised px-2 text-[13px]" aria-label="Campus">
+          <select value={campus} onChange={(event) => setCampus(event.target.value)} className="h-8 rounded border border-line bg-raised px-2 text-[14px]" aria-label="Campus">
             <option value="">Campus</option>
             {campuses.map((value) => <option key={value}>{value}</option>)}
           </select>
         )}
         {columns.year && (
-          <select value={year} onChange={(event) => setYear(event.target.value)} className="h-8 rounded border border-line bg-raised px-2 text-[13px]" aria-label="Class year">
+          <select value={year} onChange={(event) => setYear(event.target.value)} className="h-8 rounded border border-line bg-raised px-2 text-[14px]" aria-label="Class year">
             <option value="">Year</option>
             {years.map((value) => <option key={value}>{value}</option>)}
           </select>
         )}
         <details className="relative">
-          <summary className="h-8 cursor-pointer list-none rounded px-2 leading-8 text-[13px] text-fg-2">Columns</summary>
-          <div className="absolute z-30 mt-1 w-40 rounded border border-line bg-bg p-2 text-[13px] shadow-[var(--shadow-menu)]">
-            {(["tier", "year", "score"] as const).map((key) => (
+          <summary className="h-8 cursor-pointer list-none rounded px-2 leading-8 text-[14px] text-fg-2">Columns</summary>
+          <div className="absolute z-30 mt-1 w-40 rounded border border-line bg-bg p-2 text-[14px] shadow-[var(--shadow-menu)]">
+            {(["tier", "company", "year", "score"] as const).filter((key) => key !== "company" || companyFilled > 0).filter((key) => key !== "year" || yearFilled > 0).map((key) => (
               <label key={key} className="flex items-center gap-2 py-1 capitalize">
                 <input type="checkbox" checked={columns[key]} onChange={(event) => setColumn(key, event.target.checked)} />
                 {key}
@@ -167,27 +179,27 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
             ))}
           </div>
         </details>
-        <button type="button" className={`h-8 rounded px-2 text-[13px] ${verifiedOnly ? "bg-[var(--cobalt-haze)] text-fg" : "text-fg-2"}`} onClick={() => setVerifiedOnly((value) => !value)}>
+        <button type="button" className={`h-8 rounded px-2 text-[14px] ${verifiedOnly ? "bg-[var(--cobalt-haze)] text-fg" : "text-fg-2"}`} onClick={() => setVerifiedOnly((value) => !value)}>
           Verified
         </button>
-        <button type="button" className="h-8 rounded px-2 text-[13px] text-fg-2" onClick={() => setCompact((value) => !value)}>
+        <button type="button" className="h-8 rounded px-2 text-[14px] text-fg-2" onClick={() => setCompact((value) => !value)}>
           {compact ? "Comfortable" : "Compact"}
         </button>
-        <span className="num ml-auto text-[13px] text-fg-2">{filtered.length.toLocaleString("en-US")} founders</span>
+        <span className="ml-auto text-[14px] text-fg-2"><span className="num">{filtered.length.toLocaleString("en-US")}</span> founders</span>
       </div>
       <div className="max-h-[calc(100dvh-220px)] overflow-auto border-t border-line-strong">
-        <table className="w-full border-separate border-spacing-0 text-left text-[14px]">
+        <table className="w-full table-fixed border-separate border-spacing-0 text-left text-[14px]">
           <thead className="sticky top-0 z-20">
-            <tr className="h-9 text-[14px] uppercase tracking-[0.06em] text-fg-2">
+            <tr className="h-9 text-[14px] text-fg-2">
               <th className="sticky top-0 z-20 w-8 border-b border-line-strong bg-bg px-2 font-medium" />
-              <th className="sticky top-0 z-20 min-w-[180px] border-b border-line-strong bg-bg px-2 font-mono font-medium">Name</th>
-              {columns.tier && <th className="sticky top-0 z-20 border-b border-line-strong bg-bg px-2 font-mono font-medium">Tier</th>}
-              {!campusLocked && <th className="sticky top-0 z-20 border-b border-line-strong bg-bg px-2 font-mono font-medium">Campus</th>}
-              <th className="sticky top-0 z-20 border-b border-line-strong bg-bg px-2 font-mono font-medium">Company</th>
-              {columns.year && <th className="sticky top-0 z-20 border-b border-line-strong bg-bg px-2 text-right font-mono font-medium">Year</th>}
-              <th className="sticky top-0 z-20 min-w-[320px] border-b border-line-strong bg-bg px-2 font-mono font-medium">Last signal</th>
-              {columns.score && <th className="sticky top-0 z-20 border-b border-line-strong bg-bg px-2 text-right font-mono font-medium">Score</th>}
-              <th className="sticky top-0 z-20 border-b border-line-strong bg-bg px-2 font-mono font-medium">Verified</th>
+              <th className="sticky top-0 z-20 w-[24%] border-b border-line-strong bg-bg px-2 font-medium">Name</th>
+              {columns.tier && <th className="sticky top-0 z-20 w-[72px] border-b border-line-strong bg-bg px-2 font-medium">Tier</th>}
+              {!campusLocked && <th className="sticky top-0 z-20 w-[14%] border-b border-line-strong bg-bg px-2 font-medium">Campus</th>}
+              {columns.company && <th className="sticky top-0 z-20 w-[16%] border-b border-line-strong bg-bg px-2 font-medium">Company</th>}
+              {columns.year && <th className="sticky top-0 z-20 w-[72px] border-b border-line-strong bg-bg px-2 text-right font-medium">Year</th>}
+              <th className="sticky top-0 z-20 w-[48%] border-b border-line-strong bg-bg px-2 font-medium">Last signal</th>
+              {columns.score && <th className="sticky top-0 z-20 w-[88px] border-b border-line-strong bg-bg px-2 text-right font-medium">Score</th>}
+              <th className="sticky top-0 z-20 w-[76px] border-b border-line-strong bg-bg px-2 font-medium">Verified</th>
             </tr>
           </thead>
           <tbody>
@@ -200,22 +212,25 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
                 <td className="px-2" onClick={(event) => event.stopPropagation()}>
                   <input type="checkbox" checked={selected.includes(row.id)} onChange={() => toggle(row.id)} aria-label={`Select ${row.name}`} />
                 </td>
-                <td className="min-w-[180px] whitespace-nowrap px-2">
-                  <span className="mr-2 inline-grid h-7 w-7 shrink-0 place-items-center rounded-full bg-raised text-[11px] font-medium tracking-[-0.04em] text-fg">{initials(row.name)}</span>
-                  <span className="font-medium">{row.name}</span>
+                <td className="px-2">
+                  <span className="flex min-w-0 items-center gap-2">
+                    <span className="inline-grid h-7 w-7 shrink-0 place-items-center rounded-full bg-raised text-[11px] font-medium tracking-[-0.04em] text-fg">{initials(row.name)}</span>
+                    <span className="truncate font-medium">{row.name}</span>
+                  </span>
                 </td>
-                {columns.tier && <td className="px-2">{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : emptyOr(null)}</td>}
-                {!campusLocked && <td className="px-2">{row.campusSlug ? <Link href={`/campuses/${row.campusSlug}`} className="text-link">{row.campus}</Link> : emptyOr(row.campus)}</td>}
-                <td className="px-2">{row.companyId ? <Link href={`/startup/${row.companyId}`} className="text-link">{row.company}</Link> : emptyOr(row.company)}</td>
+                {columns.tier && <td className="px-2">{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : null}</td>}
+                {!campusLocked && <td className="truncate px-2">{row.campusSlug ? <Link href={`/campuses/${row.campusSlug}`} className="text-link">{row.campus}</Link> : emptyOr(row.campus)}</td>}
+                {columns.company && <td className="truncate px-2">{row.companyId ? <Link href={`/startup/${row.companyId}`} className="text-link">{row.company}</Link> : emptyOr(row.company)}</td>}
                 {columns.year && <td className="num px-2 text-right text-[14px]">{emptyOr(row.year)}</td>}
-                <td className="max-w-[480px] px-2 text-[14px]" title={row.signal ?? undefined}>
+                <td className="overflow-hidden px-2 text-[14px]">
                   {(() => {
                     const kind = signalKind(row);
+                    const label = signalLabel(row.signal);
                     return (
-                      <span className="flex w-full items-center gap-2">
+                      <span className="flex w-full min-w-0 items-center gap-2">
                         {kind ? <SourceMark kind={kind} /> : null}
-                        <span className="min-w-0 flex-1 truncate">{emptyOr(row.signal)}</span>
-                        {row.signalAt ? <span className="shrink-0 text-[14px] text-fg-2 tabular-nums">{relativeTime(row.signalAt)}</span> : null}
+                        <span className="min-w-0 flex-1 truncate" title={label ?? undefined}>{label}</span>
+                        {row.signalAt ? <span className="num shrink-0 text-[14px] text-fg-2">{relativeTime(row.signalAt)}</span> : null}
                       </span>
                     );
                   })()}
@@ -231,23 +246,23 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
             ))}
           </tbody>
         </table>
-        {filtered.length === 0 && <p className="px-2 py-6 text-[13px] text-fg-2">No founders match. Clear filters.</p>}
+        {filtered.length === 0 && <p className="px-2 py-6 text-[14px] text-fg-2">No founders match. Clear filters.</p>}
       </div>
       {open && (
         <aside className="fixed bottom-0 right-0 top-14 z-30 w-[min(480px,100%)] overflow-y-auto border-l border-line bg-raised p-6">
-          <button type="button" className="text-[13px] text-fg-2" onClick={() => setOpenId(null)}>Close</button>
+          <button type="button" className="text-[14px] text-fg-2" onClick={() => setOpenId(null)}>Close</button>
           <h2 className="mt-3 text-[24px] leading-[30px] font-semibold tracking-[-0.02em]">{open.name}</h2>
-          <p className="mt-1 text-[13px] text-fg-2">{open.campus ?? "Campus not on record"}{open.company ? ` · ${open.company}` : ""}</p>
+          <p className="mt-1 text-[14px] text-fg-2">{open.campus ?? "Campus not on record"}{open.company ? ` · ${open.company}` : ""}</p>
           <p className="mt-4"><span className={tierClass(open.tier)}>{open.tier ?? "Unranked"}</span></p>
-          <p className="mt-4 text-[15px] leading-6">{open.signal ?? "No signal text is stored for this person."}</p>
-          <div className="mt-6 flex gap-4 text-[13px]">
+          <p className="mt-4 text-[15px] leading-6">{signalLabel(open.signal) ?? "No signal text is stored for this person."}</p>
+          <div className="mt-6 flex gap-4 text-[14px]">
             {open.campusSlug && <Link href={`/campuses/${open.campusSlug}`} className="text-link">Open campus</Link>}
             {open.companyId && <Link href={`/startup/${open.companyId}`} className="text-link">Open company</Link>}
           </div>
         </aside>
       )}
       {selected.length > 0 && (
-        <div className="fixed inset-x-0 bottom-0 z-40 flex h-12 items-center gap-4 border-t border-line bg-raised px-6 text-[13px]">
+        <div className="fixed inset-x-0 bottom-0 z-40 flex h-12 items-center gap-4 border-t border-line bg-raised px-6 text-[14px]">
           <span className="num">{selected.length} selected</span>
           <button type="button" className="rounded bg-ember px-3 py-1 text-[#0b0e17]" onClick={() => {
             for (const id of selected) {

@@ -234,7 +234,8 @@ h1, h2, h3 {
   display: inline-flex;
   align-items: center;
   height: 40px;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
   color: var(--fg-2);
   border-bottom: 2px solid transparent;
 }
