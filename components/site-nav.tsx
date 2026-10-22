@@ -55,7 +55,8 @@ export function SiteNav() {
   const local = pipeline.storage === "local";
   const [open, setOpen] = useState(false);
   const [night, setNight] = useState(pathname === "/");
-  const subs = section && pathname !== "/" ? SUBS[section] : [];
+  const campusDetail = /^\/campuses\/[^/]+$/.test(pathname);
+  const subs = section && pathname !== "/" && !campusDetail ? SUBS[section] : [];
 
   useEffect(() => {
     setNight(document.documentElement.dataset.theme !== "day");

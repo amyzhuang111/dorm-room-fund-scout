@@ -33,6 +33,16 @@ function signalLabel(text: string | null): string | null {
   return cleaned || null;
 }
 
+function signalParts(text: string | null): { pill: string | null; detail: string | null; full: string | null } {
+  const full = signalLabel(text);
+  if (!full) return { pill: null, detail: null, full: null };
+  const match = full.match(/^(.*?)\s+project gallery submission\b[:.]?\s*(.*)$/i);
+  if (!match) return { pill: null, detail: full, full };
+  const pill = match[1].trim();
+  const detail = match[2].replace(/^\.\s*/, "").trim();
+  return { pill: pill || null, detail: detail || null, full };
+}
+
 function SourceMark({ kind }: { kind: "yc" | "github" | "funding" }) {
   const color = kind === "yc" ? "#7C8CF0" : kind === "funding" ? "#3FB68B" : "currentColor";
   if (kind === "github") {
@@ -77,6 +87,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
   const mostlyEmpty = (filled: number) => rows.length === 0 || filled / rows.length < 0.5;
   const companyFilled = rows.filter((row) => row.company).length;
   const yearFilled = rows.filter((row) => row.year != null).length;
+  const verifiedFilled = rows.filter((row) => row.verified).length;
   const head = rows.slice(0, 20);
   const headHas = (filled: number, pick: (row: FounderTableRow) => boolean) =>
     filled > 0 && head.length > 0 && head.filter(pick).length / head.length >= 0.25;
@@ -85,6 +96,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
     company: headHas(companyFilled, (row) => Boolean(row.company)),
     year: headHas(yearFilled, (row) => row.year != null),
     score: !mostlyEmpty(rows.filter((row) => row.score != null).length),
+    verified: headHas(verifiedFilled, (row) => row.verified),
   };
   const [columnChoice, setColumnChoice] = useState<typeof autoColumns | null>(null);
   const columns = columnChoice ?? autoColumns;
@@ -146,7 +158,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
   return (
     <div>
       <p className="mb-4 flex flex-wrap gap-x-6 gap-y-1 text-[14px] text-fg-2">
-        <span><span className="num">{rows.length.toLocaleString("en-US")}</span> founders</span>
+        {!campusLocked && <span><span className="num">{rows.length.toLocaleString("en-US")}</span> founders</span>}
         <span><span className="num">{withSignal.toLocaleString("en-US")}</span> with a signal</span>
         <span><span className="num">{verifiedCount.toLocaleString("en-US")}</span> verified</span>
       </p>
@@ -171,7 +183,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
         <details className="relative">
           <summary className="h-8 cursor-pointer list-none rounded px-2 leading-8 text-[14px] text-fg-2">Columns</summary>
           <div className="absolute z-30 mt-1 w-40 rounded border border-line bg-bg p-2 text-[14px] shadow-[var(--shadow-menu)]">
-            {(["tier", "company", "year", "score"] as const).filter((key) => key !== "company" || companyFilled > 0).filter((key) => key !== "year" || yearFilled > 0).map((key) => (
+            {(["tier", "company", "year", "score", "verified"] as const).filter((key) => key !== "company" || companyFilled > 0).filter((key) => key !== "year" || yearFilled > 0).filter((key) => key !== "verified" || verifiedFilled > 0).map((key) => (
               <label key={key} className="flex items-center gap-2 py-1 capitalize">
                 <input type="checkbox" checked={columns[key]} onChange={(event) => setColumn(key, event.target.checked)} />
                 {key}
@@ -185,7 +197,9 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
         <button type="button" className="h-8 rounded px-2 text-[14px] text-fg-2" onClick={() => setCompact((value) => !value)}>
           {compact ? "Comfortable" : "Compact"}
         </button>
-        <span className="ml-auto text-[14px] text-fg-2"><span className="num">{filtered.length.toLocaleString("en-US")}</span> founders</span>
+        {(!campusLocked || filtered.length !== rows.length) && (
+          <span className="ml-auto text-[14px] text-fg-2"><span className="num">{filtered.length.toLocaleString("en-US")}</span> founders</span>
+        )}
       </div>
       <div className="max-h-[calc(100dvh-220px)] overflow-auto border-t border-line-strong">
         <table className="w-full table-fixed border-separate border-spacing-0 text-left text-[14px]">
@@ -197,9 +211,10 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
               {!campusLocked && <th className="sticky top-0 z-20 w-[14%] border-b border-line-strong bg-bg px-2 font-medium">Campus</th>}
               {columns.company && <th className="sticky top-0 z-20 w-[16%] border-b border-line-strong bg-bg px-2 font-medium">Company</th>}
               {columns.year && <th className="sticky top-0 z-20 w-[72px] border-b border-line-strong bg-bg px-2 text-right font-medium">Year</th>}
-              <th className="sticky top-0 z-20 w-[48%] border-b border-line-strong bg-bg px-2 font-medium">Last signal</th>
+              <th className="sticky top-0 z-20 border-b border-line-strong bg-bg px-2 font-medium">Last signal</th>
+              <th className="sticky top-0 z-20 w-[72px] border-b border-line-strong bg-bg px-2 text-right font-medium">Age</th>
               {columns.score && <th className="sticky top-0 z-20 w-[88px] border-b border-line-strong bg-bg px-2 text-right font-medium">Score</th>}
-              <th className="sticky top-0 z-20 w-[76px] border-b border-line-strong bg-bg px-2 font-medium">Verified</th>
+              {columns.verified && <th className="sticky top-0 z-20 w-[76px] border-b border-line-strong bg-bg px-2 font-medium">Verified</th>}
             </tr>
           </thead>
           <tbody>
@@ -216,6 +231,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
                   <span className="flex min-w-0 items-center gap-2">
                     <span className="inline-grid h-7 w-7 shrink-0 place-items-center rounded-full bg-raised text-[11px] font-medium tracking-[-0.04em] text-fg">{initials(row.name)}</span>
                     <span className="truncate font-medium">{row.name}</span>
+                    {row.tier && !columns.tier ? <span className={`${tierClass(row.tier)} shrink-0`}>{row.tier}</span> : null}
                   </span>
                 </td>
                 {columns.tier && <td className="px-2">{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : null}</td>}
@@ -225,23 +241,24 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
                 <td className="overflow-hidden px-2 text-[14px]">
                   {(() => {
                     const kind = signalKind(row);
-                    const label = signalLabel(row.signal);
+                    const parts = signalParts(row.signal);
                     return (
-                      <span className="flex w-full min-w-0 items-center gap-2">
+                      <span className="flex w-full min-w-0 items-center gap-2" title={parts.full ?? undefined}>
                         {kind ? <SourceMark kind={kind} /> : null}
-                        <span className="min-w-0 flex-1 truncate" title={label ?? undefined}>{label}</span>
-                        {row.signalAt ? <span className="num shrink-0 text-[14px] text-fg-2">{relativeTime(row.signalAt)}</span> : null}
+                        {parts.pill ? <span className="shrink-0 rounded-full border border-line bg-raised px-2 py-px text-[13px] leading-5 text-fg-2">{parts.pill}</span> : null}
+                        {parts.detail ? <span className="min-w-0 flex-1 truncate">{parts.detail}</span> : null}
                       </span>
                     );
                   })()}
                 </td>
+                <td className="num px-2 text-right text-[13px] text-fg-2">{row.signalAt ? relativeTime(row.signalAt) : null}</td>
                 {columns.score && (
                   <td className="num px-2 text-right text-[14px]">
                     {emptyOr(row.score)}
                     {row.score != null && <span className="ml-2 inline-block h-1 w-10 align-middle bg-sunken"><span className="block h-1 bg-cobalt" style={{ width: `${Math.max(0, Math.min(100, row.score))}%` }} /></span>}
                   </td>
                 )}
-                <td className="px-2 text-[#6f7688]">{row.verified ? <span className="text-ok" title="Verified">✓</span> : null}</td>
+                {columns.verified && <td className="px-2 text-[#6f7688]">{row.verified ? <span className="text-ok" title="Verified">✓</span> : null}</td>}
               </tr>
             ))}
           </tbody>
@@ -253,7 +270,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
           <button type="button" className="text-[14px] text-fg-2" onClick={() => setOpenId(null)}>Close</button>
           <h2 className="mt-3 text-[24px] leading-[30px] font-semibold tracking-[-0.02em]">{open.name}</h2>
           <p className="mt-1 text-[14px] text-fg-2">{open.campus ?? "Campus not on record"}{open.company ? ` · ${open.company}` : ""}</p>
-          <p className="mt-4"><span className={tierClass(open.tier)}>{open.tier ?? "Unranked"}</span></p>
+          {open.tier ? <p className="mt-4"><span className={tierClass(open.tier)}>{open.tier}</span></p> : null}
           <p className="mt-4 text-[15px] leading-6">{signalLabel(open.signal) ?? "No signal text is stored for this person."}</p>
           <div className="mt-6 flex gap-4 text-[14px]">
             {open.campusSlug && <Link href={`/campuses/${open.campusSlug}`} className="text-link">Open campus</Link>}
@@ -264,7 +281,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: FounderTableRo
       {selected.length > 0 && (
         <div className="fixed inset-x-0 bottom-0 z-40 flex h-12 items-center gap-4 border-t border-line bg-raised px-6 text-[14px]">
           <span className="num">{selected.length} selected</span>
-          <button type="button" className="rounded bg-ember px-3 py-1 text-[#0b0e17]" onClick={() => {
+          <button type="button" className="rounded border border-line bg-bg px-3 py-1" onClick={() => {
             for (const id of selected) {
               const row = rows.find((item) => item.id === id);
               if (row) feedback.setAction({ entityType: "person", entityId: row.id, nameKey: row.name, domainKey: null, action: "like" });

@@ -15,6 +15,8 @@ export interface WeekItem {
   url: string | null;
   /** Set only when the stored source or category is YC, GitHub, or funding. */
   tag: "YC" | "GitHub" | "Funding" | null;
+  /** True when this article's stored publish time is inside the last 7 days. */
+  thisWeek: boolean;
 }
 
 export interface HeroStats {
@@ -115,6 +117,7 @@ function toWeekItem(row: FeedRow): WeekItem {
     at: row.at,
     url: row.url,
     tag: signalTag(row.source_name, row.type, row.source_type),
+    thisWeek: false,
   };
 }
 
@@ -135,7 +138,7 @@ function weekFeed(db: ReturnType<typeof getDb>): { items: WeekItem[]; articleCou
   for (const row of latestRows) {
     if (seenArticles.has(row.id) || !row.campus_id) continue;
     seenArticles.add(row.id);
-    items.push(toWeekItem(row));
+    items.push({ ...toWeekItem(row), thisWeek: weekArticles.has(row.id) });
     if (items.length >= 8) break;
   }
   return { items, articleCount: weekArticles.size, campusIds: campusIds.slice(0, 8) };

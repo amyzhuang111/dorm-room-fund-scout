@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Fraunces, Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/next";
@@ -31,6 +31,12 @@ const instrument = Instrument_Serif({
   style: "italic",
 });
 
+const display = Fraunces({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
+
 export const metadata: Metadata = {
   title: "Campus Scout",
   description: "Student founder intelligence, by campus.",
@@ -43,7 +49,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       data-theme="night"
-      className={`${geist.variable} ${geistMono.variable} ${instrument.variable} h-full antialiased`}
+      className={`${geist.variable} ${geistMono.variable} ${instrument.variable} ${display.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

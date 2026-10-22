@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CampusMiniGlobe } from "@/components/campus-mini-globe";
 import { DataTable } from "@/components/data-table";
-import { GlobeLibraryBoot } from "@/components/map-boot";
 import { ShortlistCampusButton } from "@/components/shortlist-campus";
 import { campusSlug, resolveCampusSlug, shortCampusLabel } from "@/lib/domain/campuses";
-import { loadFounderTable } from "@/lib/domain/founder-table";
+import { loadFounderTable, type FounderTableRow } from "@/lib/domain/founder-table";
 import { listSignalsForUniversity, listSources, listUniversities, type UniversitySummary } from "@/lib/domain/queries";
 import { getDb } from "@/lib/db/client";
 
@@ -26,8 +24,7 @@ function resolveUniversity(slug: string): UniversitySummary | undefined {
   );
 }
 
-function activity(universityId: string): { weeks: number[]; signals30: number } {
-  const weeks = Array.from({ length: 52 }, () => 0);
+function signalsIn30Days(universityId: string): number {
   let signals30 = 0;
   try {
     const rows = getDb()
@@ -40,20 +37,37 @@ function activity(universityId: string): { weeks: number[]; signals30: number } 
       )
       .all(universityId) as { at: string }[];
     const now = Date.now();
-    const weekMs = 7 * 24 * 60 * 60 * 1000;
     for (const row of rows) {
       const iso = row.at.includes("T") ? row.at : `${row.at.replace(" ", "T")}Z`;
       const time = Date.parse(iso);
       if (Number.isNaN(time) || time > now) continue;
-      const age = now - time;
-      if (age <= 30 * 24 * 60 * 60 * 1000) signals30 += 1;
-      const index = Math.floor(age / weekMs);
-      if (index >= 0 && index < 52) weeks[51 - index] += 1;
+      if (now - time <= 30 * 24 * 60 * 60 * 1000) signals30 += 1;
     }
   } catch {
-    return { weeks, signals30: 0 };
+    return 0;
   }
-  return { weeks, signals30 };
+  return signals30;
+}
+
+const TIER_ORDER = ["S+", "S", "A", "B", "C", "D"] as const;
+
+function founderBars(founders: FounderTableRow[]): { title: string; bars: { label: string; count: number }[] } | null {
+  const years = new Map<number, number>();
+  const tiers = new Map<string, number>();
+  for (const row of founders) {
+    if (row.year != null) years.set(row.year, (years.get(row.year) ?? 0) + 1);
+    if (row.tier) tiers.set(row.tier, (tiers.get(row.tier) ?? 0) + 1);
+  }
+  const yearBars = [...years.entries()].sort((a, b) => b[0] - a[0]);
+  if (yearBars.length >= 2) {
+    return {
+      title: "Founders by class year",
+      bars: yearBars.map(([year, count]) => ({ label: String(year), count })),
+    };
+  }
+  const tierBars = TIER_ORDER.map((tier) => ({ label: tier, count: tiers.get(tier) ?? 0 })).filter((bar) => bar.count > 0);
+  if (tierBars.length === 0) return null;
+  return { title: "Founders by tier", bars: tierBars };
 }
 
 function companies(universityId: string): { id: string; name: string; people: number }[] {
@@ -89,21 +103,23 @@ export default async function CampusPage({
   const tab = TABS.includes(sp.tab as (typeof TABS)[number]) ? (sp.tab as (typeof TABS)[number]) : "founders";
   const founders = loadFounderTable(university.id);
   const topTier = founders.filter((row) => row.tier === "S" || row.tier === "S+").length;
-  const { weeks, signals30 } = activity(university.id);
+  const signals30 = signalsIn30Days(university.id);
+  const distribution = founderBars(founders);
   const affiliated = companies(university.id);
   const sources = listSources().filter((source) => source.campuses.includes(university.id));
   const signals = tab === "signals" ? listSignalsForUniversity(university.id) : [];
-  const peak = Math.max(1, ...weeks);
-  const activeWeeks = weeks.filter((count) => count > 0).length;
   const shownCompanies = affiliated.slice(0, 8);
   const moreCompanies = Math.max(0, affiliated.length - shownCompanies.length);
 
   return (
     <div className="px-6 py-8">
-      <GlobeLibraryBoot />
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div>
-          <p className="text-[14px] text-fg-2">Campus</p>
+          <p className="text-[14px] text-fg-2">
+            <Link href="/campuses" className="hover:text-fg">Campuses</Link>
+            <span> / </span>
+            <span>{label}</span>
+          </p>
           <h1 className="page-title">{university.name}</h1>
           <p className="mt-2 text-[14px] text-fg-2">{university.country ?? "Country not recorded"}</p>
         </div>
@@ -132,32 +148,7 @@ export default async function CampusPage({
       </div>
       <div className="mt-8 grid gap-x-6 gap-y-8 lg:grid-cols-12">
         <div className="lg:col-span-8">
-          {tab === "founders" && (
-            <>
-              {activeWeeks >= 4 ? (
-                <div className="mb-8">
-                  <p className="text-[14px] text-fg-2">Activity, 52 weeks</p>
-                  <div className="mt-3 flex h-16 items-end gap-0.5" aria-label="Signals by week">
-                    {weeks.map((count, index) => (
-                      <div
-                        key={index}
-                        className="w-1"
-                        title={`${count} signal${count === 1 ? "" : "s"}`}
-                        style={{
-                          height: `${(count / peak) * 100}%`,
-                          minHeight: count > 0 ? 4 : 0,
-                          background: "var(--fg-2)",
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <p className="mb-6 text-[14px] text-fg-2">Not enough history yet</p>
-              )}
-              <DataTable rows={founders} campusLocked />
-            </>
-          )}
+          {tab === "founders" && <DataTable rows={founders} campusLocked />}
           {tab === "companies" && (
             <ul>
               {affiliated.map((company) => (
@@ -188,7 +179,25 @@ export default async function CampusPage({
           )}
         </div>
         <aside className="space-y-6 lg:sticky lg:top-20 lg:col-span-4 lg:self-start">
-          <CampusMiniGlobe university={university} />
+          {distribution && (
+            <div>
+              <p className="display text-[16px] font-medium">{distribution.title}</p>
+              <ul className="mt-3 space-y-1.5" aria-label={distribution.title}>
+                {distribution.bars.map((bar) => {
+                  const peak = distribution.bars[0] ? Math.max(...distribution.bars.map((item) => item.count)) : 1;
+                  return (
+                    <li key={bar.label} className="grid grid-cols-[52px_minmax(0,1fr)_36px] items-center gap-2">
+                      <span className="num text-[13px] text-fg-2">{bar.label}</span>
+                      <span className="block h-2 overflow-hidden rounded-sm bg-sunken">
+                        <span className="block h-2 rounded-sm bg-[#6d93d4]" style={{ width: `${Math.max(4, (bar.count / peak) * 100)}%` }} />
+                      </span>
+                      <span className="num text-right text-[13px]">{bar.count.toLocaleString("en-US")}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
           <div>
             <p className="text-[14px] font-medium" title="Listed from campus affiliations. Headquarters arcs are not stored as a ranked feeder list.">
               Affiliated companies
