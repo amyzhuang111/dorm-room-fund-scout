@@ -39,11 +39,6 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
     .map((item) => item.id);
 
   useEffect(() => {
-    if (window.location.hash !== "#map") return;
-    document.getElementById("map")?.scrollIntoView();
-  }, []);
-
-  useEffect(() => {
     function onKey(event: KeyboardEvent) {
       if (event.key === "Escape" && university) navigate({ university: null });
     }
@@ -79,9 +74,7 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
   }
 
   return (
-    <>
-    <WeekScreen items={thisWeek} signalsWeek={stats.signalsWeek} updatedAt={stats.updatedAt} lastSignalAt={stats.lastSignalAt} />
-    <div id="map" className="hero-night flex scroll-mt-[72px] flex-col bg-bg px-6 py-6 text-fg lg:min-h-[calc(100dvh-72px)]">
+    <div className="hero-night flex flex-col bg-bg px-6 py-6 text-fg lg:min-h-[calc(100dvh-72px)]">
       <div className="grid flex-1 grid-cols-1 items-start gap-6 lg:min-h-0 lg:grid-cols-12 lg:items-stretch">
         <div className="flex flex-col gap-4 lg:col-span-3">
           <div>
@@ -212,70 +205,6 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
         </aside>
       )}
     </div>
-    </>
-  );
-}
-
-function WeekScreen({
-  items,
-  signalsWeek,
-  updatedAt,
-  lastSignalAt,
-}: {
-  items: WeekItem[];
-  signalsWeek: number;
-  updatedAt: string | null;
-  lastSignalAt: string | null;
-}) {
-  return (
-    <section className="hero-night flex min-h-[calc(100dvh-72px)] flex-col px-6 pb-8 pt-10" aria-label="Sample data">
-      <div className="flex items-center justify-between gap-4">
-        <p className="text-[14px] font-medium text-fg">Sample data</p>
-        <Link href="/" className="text-[14px] text-fg-2 hover:underline">Close</Link>
-      </div>
-      <div className="mt-10 grid items-start gap-8 lg:grid-cols-12 lg:gap-12">
-        <div className="lg:col-span-4">
-          <h1 className="max-w-[12ch] text-[36px] font-semibold leading-[1.05] tracking-[-0.03em] lg:text-[48px]">{SIGNALS_THIS_WEEK_LABEL}</h1>
-          <p className="mt-4 text-[16px] leading-6 text-fg-2">
-            <span className="num text-fg">{signalsWeek.toLocaleString("en-US")}</span> stored in the last 7 days.
-          </p>
-          {updatedToday(updatedAt) ? <p className="mt-2 text-[14px] text-fg-2">Updated today</p> : null}
-        </div>
-        <ol className="lg:col-span-8">
-          {items.length > 0 ? items.map((item) => <WeekRow key={item.id} item={item} />) : (
-            <li className="text-[16px] leading-6 text-fg-2">Quiet week. Last signal {absoluteDate(lastSignalAt)}</li>
-          )}
-        </ol>
-      </div>
-      <a href="#map" className="mt-auto pt-10 text-[16px] text-fg hover:underline">Open the map</a>
-    </section>
-  );
-}
-
-function WeekRow({ item }: { item: WeekItem }) {
-  const title = item.event || (item.detail ? firstSentence(item.detail) : "");
-  const chip = chipText(item);
-  const heading = item.url ? (
-    <a href={item.url} className="clamp-2 text-[18px] leading-7 text-fg hover:underline" target="_blank" rel="noreferrer">{title}</a>
-  ) : (
-    <Link href="/signals" className="clamp-2 text-[18px] leading-7 text-fg hover:underline">{title}</Link>
-  );
-  const campus = item.campusSlug ? (
-    <Link href={`/campuses/${item.campusSlug}`} className="hover:underline">{item.campus}</Link>
-  ) : (
-    <span>{item.campus}</span>
-  );
-  return (
-    <li className="border-t border-line py-5">
-      <div className="flex items-baseline justify-between gap-4 text-[14px] text-fg-2">
-        <span className="text-[20px] font-medium text-fg">{campus}</span>
-        <span className="flex shrink-0 items-center gap-2">
-          {chip ? <span className={`rounded-full px-1.5 py-px text-[13px] leading-5 ${chipClass(item, isHighValue(item))}`}>{chip}</span> : null}
-          <span className="num" title={item.at ?? undefined}>{updatedAgo(item.at)}</span>
-        </span>
-      </div>
-      <p className="mt-2 max-w-[68ch]">{heading}</p>
-    </li>
   );
 }
 
