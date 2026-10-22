@@ -86,7 +86,6 @@ export function GlobeHero({ stats }: { stats: HeroStats }) {
                 student founders across {stats.campuses.toLocaleString("en-US")} campuses
               </span>
             </h1>
-            <h2 className="mt-2 text-[16px] leading-6 text-fg" style={{ fontWeight: 400 }}>Track student founders before they raise</h2>
           </div>
           <p className="whitespace-nowrap text-[14px] leading-5 text-fg">
             <Link href="/companies" className="hover:underline"><span className="num">{stats.tracked.toLocaleString("en-US")}</span> companies</Link>
@@ -308,107 +307,40 @@ function initials(name: string): string {
   return ((first[0] ?? "") + (last[0] ?? first[1] ?? "")).toUpperCase();
 }
 
-const COLLAGE_WEST = -125;
-const COLLAGE_EAST = -66.8;
-const COLLAGE_SOUTH = 24.2;
-const COLLAGE_NORTH = 49.4;
-
-function collageMercator(lat: number): number {
-  const rad = (lat * Math.PI) / 180;
-  return Math.log(Math.tan(Math.PI / 4 + rad / 2));
-}
-
-const COLLAGE_YN = collageMercator(COLLAGE_NORTH);
-const COLLAGE_YS = collageMercator(COLLAGE_SOUTH);
-
-function collageXY(lon: number, lat: number): [number, number] {
-  const x = ((lon - COLLAGE_WEST) / (COLLAGE_EAST - COLLAGE_WEST)) * 1000;
-  const y = ((COLLAGE_YN - collageMercator(lat)) / (COLLAGE_YN - COLLAGE_YS)) * 640;
-  return [x, y];
-}
-
-function collageRingHits(ring: number[][]): boolean {
-  let minLon = 180;
-  let maxLon = -180;
-  let minLat = 90;
-  let maxLat = -90;
-  for (const pair of ring) {
-    if (pair[0] < minLon) minLon = pair[0];
-    if (pair[0] > maxLon) maxLon = pair[0];
-    if (pair[1] < minLat) minLat = pair[1];
-    if (pair[1] > maxLat) maxLat = pair[1];
-  }
-  return maxLon >= COLLAGE_WEST && minLon <= COLLAGE_EAST && maxLat >= COLLAGE_SOUTH && minLat <= COLLAGE_NORTH;
-}
-
-function collageLandPath(): string {
-  const features = (usStates as { features: { geometry?: { type?: string; coordinates?: unknown } }[] }).features;
-  const parts: string[] = [];
-  for (const feature of features) {
-    const geometry = feature.geometry;
-    if (!geometry?.coordinates) continue;
-    const polygons = geometry.type === "Polygon" ? [geometry.coordinates as number[][][]] : geometry.type === "MultiPolygon" ? (geometry.coordinates as number[][][][]) : [];
-    for (const polygon of polygons) {
-      for (const ring of polygon) {
-        if (ring.length < 3 || !collageRingHits(ring)) continue;
-        let path = "";
-        for (let index = 0; index < ring.length; index += 1) {
-          const [x, y] = collageXY(ring[index][0], ring[index][1]);
-          path += `${index === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`;
-        }
-        parts.push(`${path}Z`);
-      }
-    }
-  }
-  return parts.join("");
-}
-
-const COLLAGE_LAND = collageLandPath();
-
-function dotStyle(count: number): { size: number; color: string } {
-  if (count >= 700) return { size: 8, color: "#ffffff" };
-  if (count >= 100) return { size: 6, color: "#d7e4ff" };
-  return { size: 4, color: "#c5d4ff" };
-}
-
-function MapFragment({ universities }: { universities: HeroStats["universities"] }) {
-  const plotted = universities.filter((item) => item.founderCount > 0 && item.lat != null && item.lon != null && item.lon >= COLLAGE_WEST && item.lon <= COLLAGE_EAST && item.lat >= COLLAGE_SOUTH && item.lat <= COLLAGE_NORTH);
-  if (plotted.length === 0 || !COLLAGE_LAND) return null;
-  const labeled = [...plotted].sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name)).slice(0, 2);
-  const labeledIds = new Set(labeled.map((item) => item.id));
+function RankFragment({ universities }: { universities: HeroStats["universities"] }) {
+  const ranked = [...universities]
+    .filter((item) => item.founderCount > 0)
+    .sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name))
+    .slice(0, 3);
+  if (ranked.length === 0) return null;
+  const peak = Math.max(1, ...ranked.flatMap((campus) => campus.signalSeries));
+  const tiedIds = new Set(
+    ranked
+      .filter((campus) => ranked.filter((other) => other.founderCount === campus.founderCount).length > 1)
+      .map((campus) => campus.id),
+  );
   return (
-    <div className="absolute overflow-hidden rounded-lg border border-line bg-[#0c1320] shadow-[0_18px_40px_rgba(0,0,0,0.45)]" style={{ left: 0, top: 28, width: 300, height: 192, transform: "rotate(-2deg)" }} role="img" aria-label="Campus map">
-      <svg viewBox="0 0 1000 640" preserveAspectRatio="none" className="absolute inset-0 h-full w-full" aria-hidden>
-        <path d={COLLAGE_LAND} fill="#2a3548" stroke="#e8eef8" strokeWidth="3" strokeOpacity="0.4" />
-      </svg>
-      {plotted.map((university) => {
-        const [x, y] = collageXY(university.lon as number, university.lat as number);
-        const dot = dotStyle(university.founderCount);
-        const showLabel = labeledIds.has(university.id);
-        const placeLeft = x > 700;
-        const name = shortCampusLabel(university.id, university.name);
-        return (
-          <span key={university.id}>
-            <span
-              className="absolute rounded-full"
-              style={{ left: `${(x / 1000) * 100}%`, top: `${(y / 640) * 100}%`, width: dot.size, height: dot.size, background: dot.color, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 1px #0b0e17" }}
-            />
-            {showLabel ? (
-              <span
-                className="absolute whitespace-nowrap text-[13px] font-medium leading-4 text-[#f7f8fc]"
-                style={{
-                  left: `${(x / 1000) * 100}%`,
-                  top: `${(y / 640) * 100}%`,
-                  transform: placeLeft ? "translate(calc(-100% - 8px), -50%)" : "translate(8px, -50%)",
-                  textShadow: "0 1px 2px #0c1320",
-                }}
-              >
-                {name}
-              </span>
-            ) : null}
-          </span>
-        );
-      })}
+    <div className="absolute rounded-lg border border-line bg-raised px-3 py-2 shadow-[0_18px_40px_rgba(0,0,0,0.45)]" style={{ left: 0, top: 44, width: 268, transform: "rotate(-2deg)", zIndex: 1 }}>
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="text-[14px] font-medium">Top campuses</span>
+        <Link href="/campuses" className="text-[13px] text-fg hover:underline">View all</Link>
+      </div>
+      <ol className="mt-1">
+        {ranked.map((campus, index) => (
+          <li key={campus.id} className="border-t border-line py-1">
+            <div className="flex items-center gap-1 text-[14px]">
+              <span className="num w-4 shrink-0">{index + 1}</span>
+              <Link href={`/campuses/${campus.slug}`} className="min-w-0 flex-1 truncate hover:underline">{shortCampusLabel(campus.id, campus.name)}</Link>
+              {tiedIds.has(campus.id) ? <span className="shrink-0 text-[13px] text-fg-2">tie</span> : null}
+              <span className="num w-9 shrink-0 text-right">{campus.founderCount.toLocaleString("en-US")}</span>
+            </div>
+            <div className="flex items-center justify-between gap-1 pl-5">
+              <Sparkline values={campus.signalSeries} peak={peak} />
+              <WeekDelta delta={campus.signalWeek - campus.signalPrev} />
+            </div>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
@@ -416,7 +348,7 @@ function MapFragment({ universities }: { universities: HeroStats["universities"]
 function FounderFragment({ founder }: { founder: NonNullable<HeroStats["collageFounder"]> }) {
   const mark = initials(founder.name);
   return (
-    <Link href="/founders" className="absolute flex items-center gap-2.5 rounded-lg border border-line bg-raised px-3 py-2.5 shadow-[0_18px_40px_rgba(0,0,0,0.45)]" style={{ left: 156, top: 0, width: 272, transform: "rotate(2deg)" }}>
+    <Link href="/founders" className="absolute flex items-center gap-2.5 rounded-lg border border-line bg-raised px-3 py-2.5 shadow-[0_18px_40px_rgba(0,0,0,0.45)]" style={{ left: 176, top: 0, width: 252, transform: "rotate(2deg)", zIndex: 2 }}>
       {mark ? <span className="inline-grid h-8 w-8 shrink-0 place-items-center rounded-full bg-bg text-[13px] font-medium">{mark}</span> : null}
       <span className="min-w-0">
         <span className="block truncate text-[14px] font-medium leading-5">{founder.name}</span>
@@ -440,7 +372,7 @@ function SignalFragment({ item }: { item: WeekItem }) {
     <span className="truncate text-fg-2">{item.campus}</span>
   );
   return (
-    <div className="absolute rounded-lg border border-line bg-raised px-3 py-2.5 shadow-[0_18px_44px_rgba(0,0,0,0.5)]" style={{ left: 132, top: 160, width: 296, transform: "rotate(-1.5deg)" }}>
+    <div className="absolute rounded-lg border border-line bg-raised px-3 py-2.5 shadow-[0_18px_44px_rgba(0,0,0,0.5)]" style={{ left: 188, top: 156, width: 244, transform: "rotate(-1.5deg)", zIndex: 3 }}>
       <div className="flex min-w-0 items-center gap-2 text-[14px]">
         <span className="h-2 w-2 shrink-0 rounded-full bg-[#c5d4ff]" />
         {campus}
@@ -455,7 +387,7 @@ function SignalFragment({ item }: { item: WeekItem }) {
 function SignatureBand({ stats }: { stats: HeroStats }) {
   const signal = collageSignal(stats.week);
   const founder = stats.collageFounder;
-  const hasMap = stats.universities.some((item) => item.founderCount > 0 && item.lat != null && item.lon != null);
+  const hasRanks = stats.universities.some((item) => item.founderCount > 0);
   return (
     <section className="-mx-6 border-b border-line px-6 pb-5" aria-label="Campus Scout">
       <div className="grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-10">
@@ -471,10 +403,10 @@ function SignatureBand({ stats }: { stats: HeroStats }) {
             The campus map, the people on it, and this week&apos;s signals.
           </p>
         </div>
-        {signal || founder || hasMap ? (
+        {signal || founder || hasRanks ? (
           <div className="relative h-[176px] w-full max-w-[440px] sm:h-[232px]">
             <div className="absolute left-0 top-0 h-[232px] w-[440px] origin-top-left scale-[0.74] sm:scale-100">
-              {hasMap ? <MapFragment universities={stats.universities} /> : null}
+              {hasRanks ? <RankFragment universities={stats.universities} /> : null}
               {founder ? <FounderFragment founder={founder} /> : null}
               {signal ? <SignalFragment item={signal} /> : null}
             </div>
