@@ -125,7 +125,7 @@ export function StartupDirectoryCard({
 
       {card.sector && (
         <p className="mt-4">
-          <span className="inline-flex rounded-full bg-ember px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-background">{card.sector}</span>
+          <span className="inline-flex rounded-full bg-ember px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-accent-foreground">{card.sector}</span>
         </p>
       )}
 

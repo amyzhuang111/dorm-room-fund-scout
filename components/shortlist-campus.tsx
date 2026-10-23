@@ -23,7 +23,7 @@ export function ShortlistCampusButton({ id }: { id: string }) {
   }
 
   return (
-    <button type="button" onClick={toggle} className={`inline-flex h-9 items-center rounded px-3 text-[14px] font-semibold ${on ? "border border-[#8eb4ff] bg-transparent text-fg" : "bg-ember text-[#0b0e17]"}`}>
+    <button type="button" onClick={toggle} className={`inline-flex h-9 items-center rounded px-3 text-[14px] font-semibold ${on ? "border border-link bg-transparent text-fg" : "bg-ember text-accent-foreground"}`}>
       {on ? "Campus shortlisted" : "Shortlist campus"}
     </button>
   );

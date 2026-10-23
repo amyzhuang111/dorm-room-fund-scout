@@ -90,7 +90,7 @@ export function SampleHome({
 
 function Tab({ href, active, children }: { href: string; active: boolean; children: string }) {
   return (
-    <Link href={href} role="tab" aria-selected={active} className={`grid h-10 place-items-center border-b-2 px-3 text-[14px] font-medium ${active ? "border-[#8eb4ff] text-fg" : "border-transparent text-fg-2"}`}>
+    <Link href={href} role="tab" aria-selected={active} className={`grid h-10 place-items-center border-b-2 px-3 text-[14px] font-medium ${active ? "border-link text-fg" : "border-transparent text-fg-2"}`}>
       {children}
     </Link>
   );
@@ -111,7 +111,7 @@ function Filters({
 }) {
   const chip = "inline-flex h-8 items-center rounded-full border px-3 text-[13px]";
   const quiet = `${chip} border-line text-fg-2 hover:text-fg`;
-  const on = `${chip} border-[#8eb4ff] text-fg`;
+  const on = `${chip} border-link text-fg`;
   return (
     <div className="mt-4 flex flex-wrap gap-2">
       <Link href={feedHref(feed)} className={!sector && !kind ? on : quiet}>All</Link>
@@ -130,8 +130,10 @@ function Filters({
 }
 
 function signalClass(label: DirectoryCard["signalLabel"]): string {
-  if (label === "Funding") return "border border-[#3FB68B] bg-[#143028] font-medium text-[#8ee0c0]";
-  if (label === "Award" || label === "Acquisition" || label === "Launch") return "border border-[#8ea3c4] bg-[#243044] font-medium text-fg";
+  if (label === "Funding") return "sig-chip sig-funding";
+  if (label === "Launch") return "sig-chip sig-launch";
+  if (label === "Award") return "sig-chip sig-award";
+  if (label === "Acquisition") return "sig-chip sig-acquisition";
   return "border border-line text-fg-2";
 }
 

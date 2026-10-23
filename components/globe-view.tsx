@@ -31,15 +31,15 @@ const HERO_STYLE = {
     openmaptiles: { type: "vector", url: "https://tiles.openfreemap.org/planet" },
   },
   layers: [
-    { id: "background", type: "background", paint: { "background-color": "#2a3548" } },
-    { id: "water", type: "fill", source: "openmaptiles", "source-layer": "water", paint: { "fill-color": "#0c1320", "fill-outline-color": "#9aadc8" } },
-    { id: "terrain", type: "fill", source: "openmaptiles", "source-layer": "landcover", paint: { "fill-color": "#33445c", "fill-opacity": 0.35 } },
+    { id: "background", type: "background", paint: { "background-color": "#3c3832" } },
+    { id: "water", type: "fill", source: "openmaptiles", "source-layer": "water", paint: { "fill-color": "#12110f", "fill-outline-color": "#9a9184" } },
+    { id: "terrain", type: "fill", source: "openmaptiles", "source-layer": "landcover", paint: { "fill-color": "#4a453c", "fill-opacity": 0.35 } },
     {
       id: "coast",
       type: "line",
       source: "openmaptiles",
       "source-layer": "water",
-      paint: { "line-color": "#9aadc8", "line-width": 1.15, "line-opacity": 0.8 },
+      paint: { "line-color": "#9a9184", "line-width": 1.15, "line-opacity": 0.8 },
     },
     {
       id: "boundary",
@@ -47,7 +47,7 @@ const HERO_STYLE = {
       source: "openmaptiles",
       "source-layer": "boundary",
       filter: ["any", ["==", ["get", "admin_level"], 2], ["==", ["get", "admin_level"], "2"]],
-      paint: { "line-color": "#8ea3c4", "line-width": 1.1 },
+      paint: { "line-color": "#7d756b", "line-width": 1.1 },
     },
     {
       id: "states",
@@ -55,12 +55,12 @@ const HERO_STYLE = {
       source: "openmaptiles",
       "source-layer": "boundary",
       filter: ["any", ["==", ["get", "admin_level"], 4], ["==", ["get", "admin_level"], "4"]],
-      paint: { "line-color": "#8ea3c4", "line-width": 0.7, "line-opacity": 0.5 },
+      paint: { "line-color": "#7d756b", "line-width": 0.7, "line-opacity": 0.5 },
     },
   ],
 };
 
-const COOL_DOT = ["interpolate", ["linear"], ["coalesce", ["get", "founders"], 0], 1, "#c5d4ff", 80, "#d7e4ff", 250, "#eef3ff", 700, "#ffffff"] as const;
+const COOL_DOT = ["interpolate", ["linear"], ["coalesce", ["get", "founders"], 0], 1, "#e6dfd4", 80, "#f3eee6", 250, "#faf6f0", 700, "#fffaf4"] as const;
 
 // Positron's OWN default colors are near-white by design (land
 // rgb(242,243,240), water rgb(194,200,202) — verified against the live
@@ -69,31 +69,31 @@ const COOL_DOT = ["interpolate", ["linear"], ["coalesce", ["get", "founders"], 0
 // another pale tint layered on top, or it reads as a blank white circle
 // (exactly what happened here the first time).
 const DAY_THEME = {
-  land: "#e7ebfc",
-  landAlt: "#d5dcf8",
-  ocean: "#fbfbfc",
-  boundary: "#d3d7e0",
-  labelText: "#0e1220",
-  labelHalo: "#fbfbfc",
-  sky: "#fbfbfc",
-  horizon: "#2b47c9",
-  fog: "#fbfbfc",
-  dot: "#5b6ee0",
-  arc: "#7c8cf0",
+  land: "#e6e0d4",
+  landAlt: "#d9d2c4",
+  ocean: "#f4f1eb",
+  boundary: "#c9c0b2",
+  labelText: "#1c1915",
+  labelHalo: "#f4f1eb",
+  sky: "#f4f1eb",
+  horizon: "#3c42d4",
+  fog: "#f4f1eb",
+  dot: "#3c42d4",
+  arc: "#5a62e0",
 };
 
 const NIGHT_THEME = {
-  land: "#3b4a8a",
-  landAlt: "#3b4a8a",
-  ocean: "#1a2748",
-  boundary: "#6d7cb8",
-  labelText: "#eceef4",
-  labelHalo: "#0b0e17",
-  sky: "#0b0e17",
-  horizon: "#9eb4ff",
-  fog: "#0b0e17",
-  dot: "#7c8cf0",
-  arc: "#7c8cf0",
+  land: "#3c3832",
+  landAlt: "#4a453c",
+  ocean: "#12110f",
+  boundary: "#7d756b",
+  labelText: "#f4f0e8",
+  labelHalo: "#12110f",
+  sky: "#12110f",
+  horizon: "#c5c9ff",
+  fog: "#12110f",
+  dot: "#e6dfd4",
+  arc: "#c5c9ff",
 };
 
 interface MapEvent {
@@ -514,7 +514,7 @@ export const GlobeView = memo(function GlobeView({
           }
           if (l.type === "line") {
             const night = hero || locked;
-            trySet(() => map.setPaintProperty(l.id, "line-color", night ? "#243056" : MAP_THEME.boundary), `line:${l.id}`);
+            trySet(() => map.setPaintProperty(l.id, "line-color", night ? NIGHT_THEME.boundary : MAP_THEME.boundary), `line:${l.id}`);
             if (night && !/boundary|admin/i.test(l.id)) {
               trySet(() => map.setPaintProperty(l.id, "line-opacity", 0), `line-hide:${l.id}`);
             }
@@ -567,9 +567,9 @@ export const GlobeView = memo(function GlobeView({
                   : hero
                     ? ["interpolate", ["linear"], ["sqrt", ["max", ["coalesce", ["get", "founders"], 0], 0]], 0, 3.5, 10, 6, 28, 10]
                     : ["interpolate", ["linear"], ["get", "count"], 0, 6, 20, 9, 200, 14],
-                "circle-color": hero ? COOL_DOT : locked ? "#E8823A" : MAP_THEME.dot,
+                "circle-color": hero ? COOL_DOT : locked ? "#c5c9ff" : MAP_THEME.dot,
                 "circle-stroke-width": locked ? 0 : 1,
-                "circle-stroke-color": hero ? "#0B0E17" : "#fbfbfc",
+                "circle-stroke-color": hero ? "#12110f" : "#f4f1eb",
                 "circle-opacity": locked ? 1 : hero ? 0.85 : 0.95,
               },
             });
@@ -582,10 +582,10 @@ export const GlobeView = memo(function GlobeView({
               filter: ["has", "point_count"],
               paint: {
                 "circle-radius": ["interpolate", ["linear"], ["get", "point_count"], 2, 18, 8, 28, 24, 40],
-                "circle-color": hero ? "#6d93d4" : MAP_THEME.dot,
+                "circle-color": hero ? "#cfc6b8" : MAP_THEME.dot,
                 "circle-opacity": 0.92,
                 "circle-stroke-width": 1.5,
-                "circle-stroke-color": hero ? "#0B0E17" : "#f7f6f1",
+                "circle-stroke-color": hero ? "#12110f" : "#f4f1eb",
               },
             });
           }
@@ -602,8 +602,8 @@ export const GlobeView = memo(function GlobeView({
                 "text-allow-overlap": true,
               },
               paint: {
-                "text-color": hero ? "#0B0E17" : "#1f1e1b",
-                "text-halo-color": hero ? "#6d93d4" : "#f7f6f1",
+                "text-color": hero ? "#16151c" : "#1c1915",
+                "text-halo-color": hero ? "#cfc6b8" : "#f4f1eb",
                 "text-halo-width": hero ? 1.5 : 0,
               },
             });
@@ -617,7 +617,7 @@ export const GlobeView = memo(function GlobeView({
               filter: ["all", unclustered, ["==", ["get", "id"], current.university ?? "__none__"]],
               paint: {
                 "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 10, 20, 14, 200, 18],
-                "circle-color": "#f7f6f1",
+                "circle-color": "#fffaf4",
                 "circle-stroke-width": 2,
                 "circle-stroke-color": MAP_THEME.dot,
               },
@@ -652,7 +652,7 @@ export const GlobeView = memo(function GlobeView({
               source: "campus-arcs",
               paint: hero
                 ? {
-                    "line-color": ["case", ["==", ["get", "focus"], 1], "#F2B35B", "#7C8CF0"],
+                    "line-color": ["case", ["==", ["get", "focus"], 1], "#c5c9ff", "#8a8176"],
                     "line-width": ["case", ["==", ["get", "focus"], 1], 1.5, 1],
                     "line-opacity": ["case", ["==", ["get", "focus"], 1], 0.9, 0.22],
                   }
@@ -774,7 +774,7 @@ export const GlobeView = memo(function GlobeView({
           source: "campus-arcs",
           paint: hero
             ? {
-                "line-color": ["case", ["==", ["get", "focus"], 1], "#F2B35B", "#7C8CF0"],
+                "line-color": ["case", ["==", ["get", "focus"], 1], "#c5c9ff", "#8a8176"],
                 "line-width": ["case", ["==", ["get", "focus"], 1], 1.5, 1],
                 "line-opacity": ["case", ["==", ["get", "focus"], 1], 0.9, 0.22],
               }
@@ -800,9 +800,9 @@ export const GlobeView = memo(function GlobeView({
         canvas.height = size;
         const ctx = canvas.getContext("2d");
         if (ctx) {
-          ctx.fillStyle = "#111111";
+          ctx.fillStyle = "#16151c";
           ctx.fillRect(1, 1, size - 2, size - 2);
-          ctx.strokeStyle = "#f7f6f1";
+          ctx.strokeStyle = "#f4f0e8";
           ctx.lineWidth = 2;
           ctx.strokeRect(2.5, 2.5, size - 5, size - 5);
           map.addImage("user-added-square", ctx.getImageData(0, 0, size, size), { pixelRatio: 2 });
@@ -826,7 +826,7 @@ export const GlobeView = memo(function GlobeView({
             "text-anchor": "top",
             "text-allow-overlap": true,
           },
-          paint: { "text-color": "#1f1e1b", "text-halo-color": "#f7f6f1", "text-halo-width": 1.2 },
+          paint: { "text-color": "#1c1915", "text-halo-color": "#f4f1eb", "text-halo-width": 1.2 },
         });
       }
       if (!userLayerBound.current) {
@@ -900,7 +900,7 @@ export const GlobeView = memo(function GlobeView({
     const marked = ids.length > 0;
     const inSet: unknown[] = ["in", ["get", "id"], ["literal", ids]];
     map.setPaintProperty("campus-dots", "circle-opacity", marked ? ["case", inSet, 1, 0.18] : 0.95);
-    map.setPaintProperty("campus-dots", "circle-stroke-color", marked ? ["case", inSet, "#1f1e1b", "#f7f6f1"] : "#f7f6f1");
+    map.setPaintProperty("campus-dots", "circle-stroke-color", marked ? ["case", inSet, "#1c1915", "#f4f1eb"] : "#f4f1eb");
     map.setPaintProperty("campus-dots", "circle-stroke-width", marked ? ["case", inSet, 3, 1.5] : 1.5);
     map.setPaintProperty("campus-glow", "circle-opacity", marked ? ["case", inSet, 0.55, 0.08] : 0.38);
     if (marked) {
@@ -953,13 +953,13 @@ export const GlobeView = memo(function GlobeView({
           ))}
         </div>
       )}
-      <div className={hero ? "hero-map relative h-[420px] w-full overflow-hidden lg:h-full" : locked ? "hero-map relative h-full w-full overflow-hidden" : "relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-line sm:min-h-[520px]"} style={{ background: hero ? "#2a3548" : MAP_THEME.sky }}>
+      <div className={hero ? "hero-map relative h-[420px] w-full overflow-hidden lg:h-full" : locked ? "hero-map relative h-full w-full overflow-hidden" : "relative h-[min(62dvh,680px)] min-h-[420px] w-full overflow-hidden rounded-xl border border-line sm:min-h-[520px]"} style={{ background: hero ? "#3c3832" : MAP_THEME.sky }}>
         <div ref={containerRef} className="h-full w-full" />
         {hero && status === "ok" && heroMarks.map((mark) => {
           const hovered = highlightId === mark.id;
           if (!mark.hot && !hovered) return null;
-          const color = mark.hot ? "#E8823A" : "#8eb4ff";
-          const glow = mark.hot ? "rgba(232,130,58,0.85)" : "rgba(142,180,255,0.8)";
+          const color = mark.hot ? "#c5c9ff" : "#a8afff";
+          const glow = mark.hot ? "rgba(197,201,255,0.85)" : "rgba(168,175,255,0.75)";
           const size = hovered && !mark.hot ? 34 : 26;
           return (
             <span
@@ -972,7 +972,7 @@ export const GlobeView = memo(function GlobeView({
                 height: size,
                 transform: "translate(-50%, -50%)",
                 boxShadow: mark.hot
-                  ? `0 0 0 2px ${color}, 0 0 0 5px rgba(232,130,58,0.35), 0 0 12px 3px ${glow}`
+                  ? `0 0 0 2px ${color}, 0 0 0 5px rgba(197,201,255,0.35), 0 0 12px 3px ${glow}`
                   : `0 0 0 2px ${color}, 0 0 10px 3px ${glow}`,
               }}
             />
@@ -992,7 +992,7 @@ export const GlobeView = memo(function GlobeView({
                   y1={pin.y + (dy / len) * start}
                   x2={pin.lineX}
                   y2={pin.lineY}
-                  stroke="#d7e4ff"
+                  stroke="#e6dfd4"
                   strokeWidth="1.25"
                 />
               );
@@ -1002,18 +1002,18 @@ export const GlobeView = memo(function GlobeView({
         {hero && status === "ok" && heroPins.map((pin) => (
           <span
             key={pin.id}
-            className="pointer-events-none absolute z-20 whitespace-nowrap text-[14px] font-medium leading-4 text-[#f7f8fc]"
-            style={{ left: pin.labelX, top: pin.labelY, textShadow: "0 1px 2px #0c1320, 0 0 8px #0c1320" }}
+            className="pointer-events-none absolute z-20 whitespace-nowrap text-[14px] font-medium leading-4 text-fg"
+            style={{ left: pin.labelX, top: pin.labelY, textShadow: "0 1px 2px #12110f, 0 0 8px #12110f" }}
           >
             <span className="block">{pin.name}</span>
-            {pin.badge ? <span className="block text-[13px] text-[#ffb07a]">new this week</span> : null}
+            {pin.badge ? <span className="block text-[13px] text-link">new this week</span> : null}
           </span>
         ))}
         {locked && selectedUniversity && status === "ok" && (
           <div className="pointer-events-none absolute inset-0 z-10">
             <div className="absolute left-1/2 top-1/2 flex -translate-y-1/2 items-center">
-              <span className="h-3 w-3 shrink-0 -translate-x-1/2 rounded-full bg-[#E8823A]" />
-              <span className="ml-1.5 whitespace-nowrap text-[14px] font-medium text-[#eceef4]" style={{ textShadow: "0 1px 2px #0b0e17" }}>
+              <span className="h-3 w-3 shrink-0 -translate-x-1/2 rounded-full bg-[#c5c9ff]" />
+              <span className="ml-1.5 whitespace-nowrap text-[14px] font-medium text-fg" style={{ textShadow: "0 1px 2px #12110f" }}>
                 {shortCampusLabel(selectedUniversity.id, selectedUniversity.name)} {selectedUniversity.companyCount.toLocaleString("en-US")}
               </span>
             </div>

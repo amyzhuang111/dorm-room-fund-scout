@@ -200,7 +200,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
       </p>
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filters">
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" className="h-9 w-[280px] max-w-full rounded border border-[#8b93a7] bg-raised px-2 text-[14px] text-fg outline-none" />
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" className="h-9 w-[280px] max-w-full rounded border border-line bg-raised px-2 text-[14px] text-fg outline-none" />
           <select value={tier} onChange={(event) => setTier(event.target.value)} className={control} aria-label="Tier">
             <option value="">Tier</option>
             {["S+", "S", "A", "B", "C", "D"].map((value) => <option key={value}>{value}</option>)}
@@ -212,7 +212,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
             </select>
           )}
           {verifiedFilled > 0 && (
-            <button type="button" className={`${control} ${verifiedOnly ? "border-[#8eb4ff]" : ""}`} onClick={() => setVerifiedOnly((value) => !value)}>
+            <button type="button" className={`${control} ${verifiedOnly ? "border-link" : ""}`} onClick={() => setVerifiedOnly((value) => !value)}>
               Verified
             </button>
           )}
@@ -290,7 +290,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                 return (
                   <tr
                     key={row.id}
-                    className={`align-top [&>td]:border-b [&>td]:border-line ${quiet ? "text-fg-2" : "text-fg"} ${openId === row.id ? "bg-[var(--cobalt-haze)] shadow-[inset_2px_0_0_var(--cobalt)]" : index === cursor ? "bg-sunken" : `${stripe} hover:bg-[#161c2e]`}`}
+                    className={`align-top [&>td]:border-b [&>td]:border-line ${quiet ? "text-fg-2" : "text-fg"} ${openId === row.id ? "bg-[var(--cobalt-haze)] shadow-[inset_2px_0_0_var(--cobalt)]" : index === cursor ? "bg-sunken" : `${stripe} hover:bg-sunken`}`}
                     onClick={() => { setCursor(index); setOpenId(row.id); }}
                   >
                     <td className={`${pad} px-2`} onClick={(event) => event.stopPropagation()}>
@@ -301,7 +301,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                         <AvatarStack people={row.people} />
                         <span className="min-w-0 truncate font-medium text-fg">{row.name || <Empty />}</span>
                         {campusLocked && !showTier && row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : null}
-                        {campusLocked && !showVerified && row.verified ? <span className="text-[13px] font-medium text-[#8eb4ff]">Verified</span> : null}
+                        {campusLocked && !showVerified && row.verified ? <span className="text-[13px] font-medium text-link">Verified</span> : null}
                       </span>
                     </td>
                     {showTier && <td className={`${pad} px-2`}>{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : <Empty />}</td>}

@@ -372,7 +372,7 @@ function AskAiDock() {
   })();
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#0b0e17]/40" onMouseDown={() => setOpen(false)}>
+    <div className="fixed inset-0 z-50 bg-[#12110f]/40" onMouseDown={() => setOpen(false)}>
       <section
         data-ask-ai-panel
         data-ask-open="yes"

@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-const BAR = "#b7cffc";
-
 function range(start: number, end: number): number[] {
   const years: number[] = [];
   for (let year = start; year <= end; year += 1) years.push(year);
@@ -46,7 +44,7 @@ export function ClassYearChart({ years, founders }: { years: { year: number; cou
           <li key={bar.label} className="grid grid-cols-[108px_minmax(0,1fr)_56px] items-center gap-2">
             <span className="num text-[14px] text-fg">{bar.label}</span>
             <span className="block h-2 w-full overflow-hidden rounded-sm bg-sunken">
-              <span className="block h-2 rounded-sm" style={{ width: `${(bar.count / peak) * 100}%`, background: BAR }} />
+              <span className="block h-2 rounded-sm bg-ember" style={{ width: `${(bar.count / peak) * 100}%` }} />
             </span>
             <span className="num text-right text-[14px] text-fg">{bar.count.toLocaleString("en-US")}</span>
           </li>

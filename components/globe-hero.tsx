@@ -93,7 +93,7 @@ export function GlobeHero({ stats, band = true, world = false }: { stats: HeroSt
             {" · "}
             <Link href="/signals" className="hover:underline"><span className="num">{stats.signalsTotal.toLocaleString("en-US")}</span> signals</Link>
           </p>
-          <Link href="/founders" className="inline-flex h-12 w-fit items-center rounded bg-ember px-6 text-[16px] font-semibold text-[#0b0e17]">
+          <Link href="/founders" className="inline-flex h-12 w-fit items-center rounded bg-ember px-6 text-[16px] font-semibold text-accent-foreground">
             Explore founders
           </Link>
           <form
@@ -136,7 +136,7 @@ export function GlobeHero({ stats, band = true, world = false }: { stats: HeroSt
         <div className="flex min-h-[460px] flex-col lg:col-span-7 lg:min-h-0">
           <div className="mb-3 flex h-10 items-center gap-1 border-b border-line" role="group" aria-label="Map geography">
             {(["campus", "hq"] as const).map((value) => (
-              <button key={value} type="button" className={`h-10 border-b-2 px-3 text-[14px] font-medium ${mode === value ? "border-[#8eb4ff] text-fg" : "border-transparent text-fg-2"}`} onClick={() => setMode(value)}>
+              <button key={value} type="button" className={`h-10 border-b-2 px-3 text-[14px] font-medium ${mode === value ? "border-link text-fg" : "border-transparent text-fg-2"}`} onClick={() => setMode(value)}>
                 {value === "campus" ? "Campuses" : "HQs"}
               </button>
             ))}
@@ -267,15 +267,15 @@ function CampusMap({
         highlightId={highlightId}
       />
       {world ? (
-        <p className="pointer-events-none absolute left-3 top-3 z-20 max-w-[min(320px,calc(100%-24px))] rounded bg-[#0b0e17]/88 px-2.5 py-1.5 text-[13px] leading-4 text-[#d8dae3]">
+        <p className="pointer-events-none absolute left-3 top-3 z-20 max-w-[min(320px,calc(100%-24px))] rounded bg-bg/88 px-2.5 py-1.5 text-[13px] leading-4 text-fg-2">
           {countryCoverage(universities)}
         </p>
       ) : null}
-      <div className="pointer-events-none absolute bottom-3 left-3 z-20 rounded bg-[#0b0e17]/88 px-2.5 py-1.5">
+      <div className="pointer-events-none absolute bottom-3 left-3 z-20 rounded bg-bg/88 px-2.5 py-1.5">
         <DotLegend />
       </div>
       <NortheastPanel universities={universities} className={world ? "hidden lg:block" : ""} />
-      <p className="pointer-events-auto absolute bottom-2 right-3 z-20 max-w-[240px] text-right text-[13px] leading-4 text-[#d8dae3]">
+      <p className="pointer-events-auto absolute bottom-2 right-3 z-20 max-w-[240px] text-right text-[13px] leading-4 text-fg-2">
         <MapCredit />
       </p>
     </div>
@@ -283,9 +283,9 @@ function CampusMap({
 }
 
 const LEGEND = [
-  { count: 10, size: 10, color: "#c5d4ff" },
-  { count: 100, size: 14, color: "#d7e4ff" },
-  { count: 700, size: 18, color: "#ffffff" },
+  { count: 10, size: 10, color: "#e6dfd4" },
+  { count: 100, size: 14, color: "#f3eee6" },
+  { count: 700, size: 18, color: "#fffaf4" },
 ];
 
 function countryCoverage(universities: UniversitySummary[]): string {
@@ -332,8 +332,8 @@ function Sparkline({ values, peak }: { values: number[]; peak: number }) {
   const points = values.map((value, index) => `${index * step},${base - (value / scale) * (height - 8)}`).join(" ");
   return (
     <svg width={width} height={height} role="img" aria-label="Signals each week for 8 weeks" className="shrink-0">
-      <line x1="0" y1={base} x2={width} y2={base} stroke="#d6e2ff" strokeOpacity="0.35" strokeWidth="1" />
-      <polyline fill="none" stroke="#d6e2ff" strokeWidth="2.75" strokeLinejoin="round" strokeLinecap="round" points={points} />
+      <line x1="0" y1={base} x2={width} y2={base} stroke="#e6dfd4" strokeOpacity="0.35" strokeWidth="1" />
+      <polyline fill="none" stroke="#e6dfd4" strokeWidth="2.75" strokeLinejoin="round" strokeLinecap="round" points={points} />
     </svg>
   );
 }
@@ -342,7 +342,7 @@ function WeekDelta({ delta }: { delta: number }) {
   const title = "Signals this week minus the previous 7 days";
   if (delta > 0) {
     return (
-      <span className="num inline-flex items-center gap-0.5 text-[14px] font-semibold text-[#3fb68b]" title={title}>
+      <span className="num inline-flex items-center gap-0.5 text-[14px] font-semibold text-ok" title={title}>
         <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden><path d="M5 1.5 8.5 8H1.5Z" fill="currentColor" /></svg>
         {delta}
       </span>
@@ -350,7 +350,7 @@ function WeekDelta({ delta }: { delta: number }) {
   }
   if (delta < 0) {
     return (
-      <span className="num inline-flex items-center gap-0.5 text-[14px] font-semibold text-[#e5484d]" title={title}>
+      <span className="num inline-flex items-center gap-0.5 text-[14px] font-semibold text-danger" title={title}>
         <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden><path d="M5 8.5 1.5 2h7Z" fill="currentColor" /></svg>
         {Math.abs(delta)}
       </span>
@@ -374,9 +374,13 @@ function isHighValue(item: WeekItem): boolean {
 }
 
 function chipClass(item: WeekItem, high: boolean): string {
-  if (item.tag === "Funding") return "border border-[#3FB68B] bg-[#143028] font-medium text-[#8ee0c0]";
-  if (item.tag === "YC") return "border border-[#7C8CF0] bg-[#1c2140] font-medium text-[#d5dcff]";
-  if (high) return "border border-[#8ea3c4] bg-[#243044] font-medium text-fg";
+  const label = (item.tag || item.category || "").trim().toLowerCase();
+  if (label === "funding") return "sig-chip sig-funding";
+  if (label === "launch") return "sig-chip sig-launch";
+  if (label === "award") return "sig-chip sig-award";
+  if (label === "acquisition") return "sig-chip sig-acquisition";
+  if (label === "yc" || label === "press") return "sig-chip sig-press";
+  if (high) return "sig-chip sig-launch";
   return "border border-line text-fg-2";
 }
 
@@ -468,7 +472,7 @@ function SignalFragment({ item }: { item: WeekItem }) {
   return (
     <div className="rounded-lg border border-line bg-raised px-3 py-2.5 shadow-[0_8px_24px_rgba(0,0,0,0.28)]">
       <div className="flex min-w-0 items-center gap-2 text-[14px]">
-        <span className="h-2 w-2 shrink-0 rounded-full bg-[#c5d4ff]" />
+        <span className="h-2 w-2 shrink-0 rounded-full bg-[#e6dfd4]" />
         {campus}
         {chip ? <span className={`shrink-0 rounded-full px-1.5 py-px text-[13px] leading-5 ${chipClass(item, isHighValue(item))}`}>{chip}</span> : null}
         <span className="num ml-auto shrink-0 text-fg-2" title={item.at ?? undefined}>{updatedAgo(item.at)}</span>
@@ -533,7 +537,7 @@ function CompactSignal({ item }: { item: WeekItem }) {
   return (
     <li className="border-t border-line py-1.5">
       <div className="flex min-w-0 items-center gap-2 text-[14px]">
-        <span className="h-2 w-2 shrink-0 rounded-full bg-[#c5d4ff]" />
+        <span className="h-2 w-2 shrink-0 rounded-full bg-[#e6dfd4]" />
         {campus}
         {chip ? <span className={`shrink-0 rounded-full px-1.5 py-px text-[13px] leading-5 ${chipClass(item, isHighValue(item))}`}>{chip}</span> : null}
         <span className="num ml-auto shrink-0 text-fg-2" title={item.at ?? undefined}>{updatedAgo(item.at)}</span>
@@ -623,11 +627,11 @@ function NortheastPanel({ universities, className = "" }: { universities: Univer
   const frameW = 340;
   const frameH = 168;
   return (
-    <div className={`absolute bottom-14 right-3 z-20 w-[340px] overflow-hidden rounded border border-line bg-[#0c1320] ${className}`} role="img" aria-label="Northeast">
-      <div className="px-2 pt-1.5 text-[13px] font-medium leading-4 text-[#f7f8fc]">Northeast</div>
+    <div className={`absolute bottom-14 right-3 z-20 w-[340px] overflow-hidden rounded border border-line bg-bg ${className}`} role="img" aria-label="Northeast">
+      <div className="px-2 pt-1.5 text-[13px] font-medium leading-4 text-fg">Northeast</div>
       <div className="relative h-[168px]">
         <svg viewBox="0 0 1000 700" className="absolute inset-0 h-full w-full" aria-hidden>
-          <path d={NORTHEAST_PATH} fill="#2a3548" stroke="#e8eef8" strokeWidth="6" strokeOpacity="0.45" />
+          <path d={NORTHEAST_PATH} fill="#3c3832" stroke="#e6dfd4" strokeWidth="6" strokeOpacity="0.45" />
         </svg>
         {inside.map((university) => {
           const [x, y] = panelXY(university.lon as number, university.lat as number);
@@ -653,15 +657,15 @@ function NortheastPanel({ universities, className = "" }: { universities: Univer
           }
           return (
             <span key={university.id}>
-              {hot ? <span className="absolute rounded-full" style={{ left: px, top: py, width: 16, height: 16, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 2px #E8823A" }} /> : null}
-              <span className="absolute rounded-full bg-[#d7e4ff]" style={{ left: px, top: py, width: radius * 2, height: radius * 2, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 1px #0b0e17" }} />
+              {hot ? <span className="absolute rounded-full" style={{ left: px, top: py, width: 16, height: 16, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 2px #c5c9ff, 0 0 10px 2px rgba(197,201,255,0.55)" }} /> : null}
+              <span className="absolute rounded-full bg-[#f3eee6]" style={{ left: px, top: py, width: radius * 2, height: radius * 2, transform: "translate(-50%, -50%)", boxShadow: "0 0 0 1px #12110f" }} />
               {side ? (
                 <span
-                  className="absolute whitespace-nowrap text-[13px] font-medium leading-4 text-[#f7f8fc]"
-                  style={{ left: labelX, top: labelY, textShadow: "0 1px 2px #0c1320" }}
+                  className="absolute whitespace-nowrap text-[13px] font-medium leading-4 text-fg"
+                  style={{ left: labelX, top: labelY, textShadow: "0 1px 2px #12110f" }}
                 >
                   <span className="block">{name}</span>
-                  {hot ? <span className="block text-[#ffb07a]">new this week</span> : null}
+                  {hot ? <span className="block text-link">new this week</span> : null}
                 </span>
               ) : null}
             </span>
