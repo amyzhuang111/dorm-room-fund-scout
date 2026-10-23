@@ -26,6 +26,7 @@ interface SignalRow {
   significance_note: string | null;
   source_date: string | null;
   source_name: string | null;
+  source_url: string | null;
   created_at: string;
 }
 
@@ -36,10 +37,36 @@ const TYPE_LABEL: Record<string, string> = {
   funding: "Funding",
   customer_evidence: "Customer evidence",
   team_change: "Team change",
+  accelerator: "Accelerator",
+  launch: "Launch",
 };
 
-function formatMonthYear(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-US", { month: "short", year: "numeric" });
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/** Stored precision only. A month or a year never gains a day. */
+function formatSignalDate(value: string): string {
+  const stored = value.trim();
+  const full = /^(\d{4})-(\d{2})-(\d{2})$/.exec(stored);
+  if (full) {
+    const month = MONTHS[Number(full[2]) - 1];
+    const day = Number(full[3]);
+    if (month && day >= 1 && day <= 31) return `${month} ${day}, ${full[1]}`;
+  }
+  const monthOnly = /^(\d{4})-(\d{2})$/.exec(stored);
+  if (monthOnly) {
+    const month = MONTHS[Number(monthOnly[2]) - 1];
+    if (month) return `${month} ${monthOnly[1]}`;
+  }
+  if (/^\d{4}$/.test(stored)) return stored;
+  return stored;
+}
+
+function sourceHost(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return "source";
+  }
 }
 
 function formatMonthDay(iso: string): string {
@@ -102,7 +129,8 @@ function listAllSignals(): SignalRow[] {
                  ) ids JOIN universities u ON u.id = ids.id
               )) as university_ids,
               s.signal_type, s.current_observation, s.significance_note, s.source_date, s.created_at,
-              (SELECT src.name FROM claims c JOIN sources src ON src.id = c.source_id WHERE c.id IN (SELECT value FROM json_each(s.claim_ids_json)) ORDER BY c.retrieved_at DESC LIMIT 1) as source_name
+              (SELECT src.name FROM claims c JOIN sources src ON src.id = c.source_id WHERE c.id IN (SELECT value FROM json_each(s.claim_ids_json)) ORDER BY c.retrieved_at DESC LIMIT 1) as source_name,
+              (SELECT c.source_url FROM claims c WHERE c.id IN (SELECT value FROM json_each(s.claim_ids_json)) AND c.source_url IS NOT NULL AND c.source_url != '' ORDER BY c.retrieved_at DESC LIMIT 1) as source_url
        FROM signals s JOIN projects p ON p.id = s.project_id
        ORDER BY COALESCE(s.source_date, s.created_at) DESC`
     )
@@ -260,7 +288,8 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
           // rows resolve on /startup/discover (see queries.ts listCandidateProjects),
           // so route each signal to whichever product surface actually has it.
           const detailHref = s.project_kind === "company" ? `/startup/${s.project_id}` : `/map/network?project=${s.project_id}`;
-          const footerDate = s.source_date ? formatMonthYear(s.source_date) : `Discovered ${formatMonthDay(s.created_at)}`;
+          const footerDate = s.source_date ? formatSignalDate(s.source_date) : `Discovered ${formatMonthDay(s.created_at)}`;
+          const lowConfidence = (s.significance_note ?? "").startsWith("Low confidence");
           return (
             <li key={s.id} className="rounded-md border border-border-c bg-surface p-3">
               <span className="inline-flex items-center gap-1">
@@ -272,9 +301,20 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
               </span>
               <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-link">{TYPE_LABEL[s.signal_type] ?? s.signal_type}</p>
               <p className="mt-1 text-sm text-foreground">{s.current_observation}</p>
-              {s.significance_note && <p className="mt-1 text-sm text-muted">Why it matters: {s.significance_note}</p>}
+              {s.significance_note && lowConfidence ? <p className="mt-1 text-sm text-muted">{s.significance_note}</p> : null}
+              {s.significance_note && !lowConfidence ? <p className="mt-1 text-sm text-muted">Why it matters: {s.significance_note}</p> : null}
               <p className="mt-1.5 text-xs text-muted">
-                {s.source_name ?? "Source unknown"} · {footerDate}
+                {s.source_name ? <span>{s.source_name}</span> : null}
+                {s.source_name && s.source_url ? " · " : null}
+                {s.source_url ? (
+                  <a href={s.source_url} target="_blank" rel="noopener noreferrer" className="text-link underline">
+                    {sourceHost(s.source_url)}
+                  </a>
+                ) : s.source_name ? null : (
+                  "Source unknown"
+                )}
+                {" · "}
+                {footerDate}
               </p>
             </li>
           );

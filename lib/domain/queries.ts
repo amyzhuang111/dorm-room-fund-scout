@@ -1666,12 +1666,18 @@ export function listSignalsForUniversity(universityId: string) {
       `SELECT DISTINCT s.id, p.name as project_name, s.signal_type, s.current_observation, s.source_date, s.significance_note
        FROM signals s
        JOIN projects p ON p.id = s.project_id
-       JOIN person_project_roles ppr ON ppr.project_id = p.id
-       JOIN affiliations a ON a.person_id = ppr.person_id
-       WHERE a.university_id = ?
-       ORDER BY s.created_at DESC`
+       WHERE s.project_id IN (
+         SELECT ppr.project_id FROM person_project_roles ppr
+         JOIN affiliations a ON a.person_id = ppr.person_id
+         WHERE a.university_id = ?
+         UNION
+         SELECT r.source_entity_id FROM relationships r
+         WHERE r.source_entity_type = 'project' AND r.target_entity_type = 'university'
+           AND r.relationship_type = 'affiliated_with' AND r.target_entity_id = ?
+       )
+       ORDER BY COALESCE(s.source_date, s.created_at) DESC`
     )
-    .all(universityId) as { id: string; project_name: string; signal_type: string; current_observation: string; source_date: string | null; significance_note: string | null }[];
+    .all(universityId, universityId) as { id: string; project_name: string; signal_type: string; current_observation: string; source_date: string | null; significance_note: string | null }[];
 }
 
 export function getUniversity(id: string) {
