@@ -60,7 +60,7 @@ export interface HeroStats {
   fresh: boolean;
   week: WeekItem[];
   recentCampusIds: string[];
-  universities: (UniversitySummary & { slug: string; signalWeek: number; signalPrev: number; latestSignal: string | null; signalSeries: number[] })[];
+  universities: (UniversitySummary & { slug: string; signalWeek: number; signalPrev: number; latestSignal: string | null; signalSeries: number[]; signalCount: number })[];
   /** First promoted founder, by name, who has a campus and a linked company. */
   collageFounder: CollageFounder | null;
   /** Every stored signal, counted by type. */
@@ -268,6 +268,7 @@ function weekFeed(db: ReturnType<typeof getDb>): { items: WeekItem[]; articleCou
 export function loadHeroStats(): HeroStats {
   const db = getDb();
   const briefs = signalWeeksByCampus();
+  const signalCounts = signalCountsByCampus(db);
   const universities = listUniversities().map((university) => {
     const brief = briefs.get(university.id);
     return {
@@ -277,6 +278,7 @@ export function loadHeroStats(): HeroStats {
       signalPrev: brief?.previous ?? 0,
       latestSignal: brief?.latest ?? null,
       signalSeries: brief?.series ?? [...EMPTY_SERIES],
+      signalCount: signalCounts.get(university.id) ?? 0,
     };
   });
   // Same promoted-founder list the /founders table renders. Summing per-campus
@@ -323,6 +325,28 @@ const SIGNAL_TYPE_LABEL: Record<string, string> = {
   launch: "Launch",
   affiliation_change: "Affiliation change",
 };
+
+function signalCountsByCampus(db: ReturnType<typeof getDb>): Map<string, number> {
+  const rows = db
+    .prepare(
+      `WITH link AS (
+         SELECT ppr.project_id as project_id, a.university_id as university_id
+         FROM person_project_roles ppr
+         JOIN affiliations a ON a.person_id = ppr.person_id
+         WHERE a.university_id IS NOT NULL
+         UNION
+         SELECT r.source_entity_id, r.target_entity_id
+         FROM relationships r
+         WHERE r.source_entity_type = 'project' AND r.target_entity_type = 'university'
+       )
+       SELECT link.university_id as id, COUNT(DISTINCT s.id) as n
+       FROM link
+       JOIN signals s ON s.project_id = link.project_id
+       GROUP BY link.university_id`,
+    )
+    .all() as { id: string; n: number }[];
+  return new Map(rows.map((row) => [row.id, row.n]));
+}
 
 function signalTypeCounts(db: ReturnType<typeof getDb>): SignalTypeCount[] {
   const rows = db.prepare(`SELECT signal_type as type, COUNT(*) as count FROM signals GROUP BY signal_type`).all() as { type: string; count: number }[];

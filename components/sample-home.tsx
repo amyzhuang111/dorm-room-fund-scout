@@ -14,12 +14,13 @@ import type { HeroStats } from "@/lib/domain/hero-stats";
 
 export type Feed = "directory" | "leaderboard" | "world";
 
-function feedHref(feed: Feed, sector?: string, kind?: string): string {
+function feedHref(feed: Feed, sector?: string, kind?: string, campus?: string): string {
   const query = new URLSearchParams();
   query.set("sample", "1");
   if (feed !== "directory") query.set("feed", feed);
   if (sector) query.set("sector", sector);
   if (kind) query.set("kind", kind);
+  if (campus) query.set("campus", campus);
   return `/?${query.toString()}#browse`;
 }
 
@@ -27,29 +28,34 @@ export function SampleHome({
   feed,
   sector,
   kind,
+  campus,
   stats,
 }: {
   feed: Feed;
   sector?: string;
   kind?: string;
+  campus?: string;
   stats: HeroStats;
 }) {
+  const campusRow = campus ? stats.universities.find((university) => university.id === campus) : undefined;
+  const campusId = campusRow?.id;
   const listed = feed === "directory" || feed === "leaderboard";
   const data = listed ? loadDirectory() : null;
-  const matched = data ? filterDirectory(data.cards, sector, kind) : [];
+  const matched = data ? filterDirectory(data.cards, sector, kind, campusId) : [];
+  const campusTotal = data && campusId ? filterDirectory(data.cards, undefined, undefined, campusId).length : null;
   const shown = feed === "leaderboard" ? leaderboardPage(matched) : directoryPage(matched);
   const total = feed === "leaderboard" ? matched.filter((card) => card.signals > 0).length : matched.length;
   const pageSize = feed === "leaderboard" ? LEADERBOARD_PAGE_SIZE : DIRECTORY_PAGE_SIZE;
 
   return (
     <div className="hero-night bg-bg text-fg">
-      <GlobeHero stats={stats} />
+      <GlobeHero stats={stats} showGlobe={feed !== "world"} />
       <section id="browse" className="scroll-mt-20 border-t border-line px-6 pb-16 pt-6">
         <div className="mx-auto w-full max-w-[880px]">
           <div className="flex flex-wrap items-center gap-x-1 border-b border-line" role="tablist" aria-label="Views">
-            <Tab href={feedHref("directory", sector, kind)} active={feed === "directory"}>Directory</Tab>
-            <Tab href={feedHref("leaderboard", sector, kind)} active={feed === "leaderboard"}>Leaderboard</Tab>
-            <Tab href={feedHref("world")} active={feed === "world"}>World</Tab>
+            <Tab href={feedHref("directory", sector, kind, campusId)} active={feed === "directory"}>Directory</Tab>
+            <Tab href={feedHref("leaderboard", sector, kind, campusId)} active={feed === "leaderboard"}>Leaderboard</Tab>
+            <Tab href={feedHref("world", undefined, undefined, campusId)} active={feed === "world"}>World</Tab>
           </div>
           {listed ? (
             <>
@@ -61,7 +67,7 @@ export function SampleHome({
                   ? "Companies ranked by how many signals are on record."
                   : "The number on each card is how many signals are on record for that company."}
               </p>
-              {data ? <Filters sectors={data.sectors} kinds={data.kinds} feed={feed} sector={sector} kind={kind} /> : null}
+              {data ? <Filters sectors={data.sectors} kinds={data.kinds} feed={feed} sector={sector} kind={kind} campus={campusId} /> : null}
             </>
           ) : null}
         </div>
@@ -74,8 +80,20 @@ export function SampleHome({
             <p className="mb-3 text-[14px] text-fg-2">
               <span className="num text-fg">{Math.min(shown.length, total).toLocaleString("en-US")}</span>
               {total > pageSize ? ` of ${total.toLocaleString("en-US")}` : ""} companies
+              {campusRow ? (
+                <>
+                  {" · "}
+                  {campusRow.name}
+                  {" · "}
+                  <Link href={feedHref(feed, sector, kind)} className="text-fg hover:underline">Clear</Link>
+                </>
+              ) : null}
             </p>
-            {shown.length === 0 ? <p className="text-[14px] text-fg-2">No companies in this category.</p> : null}
+            {shown.length === 0 ? (
+              <p className="text-[14px] text-fg-2">
+                {campusRow && campusTotal === 0 ? `No companies are stored for ${campusRow.name}.` : "No companies in this category."}
+              </p>
+            ) : null}
             <ol className="flex flex-col gap-3">
               {shown.map((card, index) => (
                 <Card key={card.id} card={card} rank={feed === "leaderboard" ? index + 1 : null} />
@@ -102,26 +120,28 @@ function Filters({
   feed,
   sector,
   kind,
+  campus,
 }: {
   sectors: DirectoryFilter[];
   kinds: DirectoryFilter[];
   feed: Feed;
   sector?: string;
   kind?: string;
+  campus?: string;
 }) {
   const chip = "inline-flex h-8 items-center rounded-full border px-3 text-[13px]";
   const quiet = `${chip} border-line text-fg-2 hover:text-fg`;
   const on = `${chip} border-link text-fg`;
   return (
     <div className="mt-4 flex flex-wrap gap-2">
-      <Link href={feedHref(feed)} className={!sector && !kind ? on : quiet}>All</Link>
+      <Link href={feedHref(feed, undefined, undefined, campus)} className={!sector && !kind ? on : quiet}>All</Link>
       {sectors.map((item) => (
-        <Link key={item.id} href={feedHref(feed, sector === item.id ? undefined : item.id, kind)} className={sector === item.id ? on : quiet}>
+        <Link key={item.id} href={feedHref(feed, sector === item.id ? undefined : item.id, kind, campus)} className={sector === item.id ? on : quiet}>
           {item.label}
         </Link>
       ))}
       {kinds.map((item) => (
-        <Link key={item.id} href={feedHref(feed, sector, kind === item.id ? undefined : item.id)} className={kind === item.id ? on : quiet}>
+        <Link key={item.id} href={feedHref(feed, sector, kind === item.id ? undefined : item.id, campus)} className={kind === item.id ? on : quiet}>
           {item.label}
         </Link>
       ))}

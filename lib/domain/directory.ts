@@ -7,6 +7,7 @@ export interface DirectoryCard {
   name: string;
   description: string | null;
   school: string | null;
+  schoolId: string | null;
   schoolSlug: string | null;
   sectorId: string | null;
   sector: string | null;
@@ -145,6 +146,7 @@ export function loadDirectory(): DirectoryData {
       name: company.name,
       description,
       school: short,
+      schoolId: school?.id ?? null,
       schoolSlug: short ? campusSlug(short) : null,
       sectorId,
       sector: sectorId ? sectorLabel(sectorId) : null,
@@ -174,10 +176,11 @@ export function loadDirectory(): DirectoryData {
   return { cards, sectors, kinds };
 }
 
-export function filterDirectory(cards: DirectoryCard[], sector: string | undefined, kind: string | undefined): DirectoryCard[] {
+export function filterDirectory(cards: DirectoryCard[], sector: string | undefined, kind: string | undefined, campus?: string): DirectoryCard[] {
   return cards.filter((card) => {
     if (sector && card.sectorId !== sector) return false;
     if (kind && card.signalKind !== kind) return false;
+    if (campus && card.schoolId !== campus) return false;
     return true;
   });
 }

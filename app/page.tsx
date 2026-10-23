@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { EmptyHome } from "@/components/empty-home";
-import { GlobeBoot } from "@/components/map-boot";
 import { SampleHome, type Feed } from "@/components/sample-home";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
 
@@ -25,11 +24,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
   const feed = feedOf(sp.feed);
   const stats = loadHeroStats();
   return (
-    <>
-      <GlobeBoot />
-      <Suspense fallback={null}>
-        <SampleHome feed={feed} sector={sp.sector} kind={sp.kind} stats={stats} />
-      </Suspense>
-    </>
+    <Suspense fallback={null}>
+      <SampleHome feed={feed} sector={sp.sector} kind={sp.kind} campus={sp.campus} stats={stats} />
+    </Suspense>
   );
 }

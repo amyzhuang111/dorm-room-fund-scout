@@ -61,6 +61,7 @@
     "ai": "^7.0.117",
     "better-sqlite3": "^13.0.3",
     "cheerio": "^1.2.0",
+    "cobe": "^0.6.5",
     "d3-force": "^3.0.0",
     "graphology": "^0.26.0",
     "graphology-layout-forceatlas2": "^0.10.1",
