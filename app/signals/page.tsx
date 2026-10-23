@@ -20,6 +20,7 @@ interface SignalRow {
   primary_link: string | null;
   founder_name: string | null;
   university_name: string | null;
+  university_ids: string | null;
   signal_type: string;
   current_observation: string;
   significance_note: string | null;
@@ -82,11 +83,28 @@ function listAllSignals(): SignalRow[] {
     .prepare(
       `SELECT s.id, s.project_id, p.kind as project_kind, p.name as project_name, p.website_url, p.primary_link,
               (SELECT pe.name FROM person_project_roles ppr JOIN people pe ON pe.id = ppr.person_id WHERE ppr.project_id = p.id AND ppr.role LIKE '%founder%' LIMIT 1) as founder_name,
-              (SELECT u.name FROM affiliations a JOIN person_project_roles ppr ON ppr.person_id = a.person_id JOIN universities u ON u.id = a.university_id WHERE ppr.project_id = p.id LIMIT 1) as university_name,
+              (SELECT group_concat(name, ' · ') FROM (
+                 SELECT DISTINCT u.name as name FROM (
+                   SELECT a.university_id as id FROM person_project_roles ppr JOIN affiliations a ON a.person_id = ppr.person_id
+                    WHERE ppr.project_id = s.project_id AND a.university_id IS NOT NULL
+                   UNION
+                   SELECT r.target_entity_id FROM relationships r
+                    WHERE r.source_entity_type = 'project' AND r.source_entity_id = s.project_id AND r.target_entity_type = 'university'
+                 ) ids JOIN universities u ON u.id = ids.id
+              )) as university_name,
+              (SELECT group_concat(id, ',') FROM (
+                 SELECT DISTINCT u.id as id FROM (
+                   SELECT a.university_id as id FROM person_project_roles ppr JOIN affiliations a ON a.person_id = ppr.person_id
+                    WHERE ppr.project_id = s.project_id AND a.university_id IS NOT NULL
+                   UNION
+                   SELECT r.target_entity_id FROM relationships r
+                    WHERE r.source_entity_type = 'project' AND r.source_entity_id = s.project_id AND r.target_entity_type = 'university'
+                 ) ids JOIN universities u ON u.id = ids.id
+              )) as university_ids,
               s.signal_type, s.current_observation, s.significance_note, s.source_date, s.created_at,
               (SELECT src.name FROM claims c JOIN sources src ON src.id = c.source_id WHERE c.id IN (SELECT value FROM json_each(s.claim_ids_json)) ORDER BY c.retrieved_at DESC LIMIT 1) as source_name
        FROM signals s JOIN projects p ON p.id = s.project_id
-       ORDER BY s.created_at DESC`
+       ORDER BY COALESCE(s.source_date, s.created_at) DESC`
     )
     .all() as SignalRow[];
 }
@@ -110,7 +128,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
 
   const signals = allSignals.filter((s) => {
     if (precollegeOn) return false;
-    if (sp.university && s.university_name !== universities.find((u) => u.id === sp.university)?.name) return false;
+    if (sp.university && !(s.university_ids ?? "").split(",").includes(sp.university)) return false;
     if (sp.type && sp.type !== "press" && s.signal_type !== sp.type) return false;
     return true;
   });
@@ -129,7 +147,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
     <div className="mx-auto max-w-[1100px] px-6 pb-16 pt-10">
       <p className="page-eyebrow">Activity</p>
       <h1 className="page-title">Signals</h1>
-      <p className="page-subtitle">Recent company and founder activity, plus pre-college excellence on people. Top connectors ranks people and clubs by verified, tiered founders they are linked to.</p>
+      <p className="page-subtitle">Recent company and founder activity, by date, for every campus that has a stored signal. Top connectors ranks people and clubs by verified, tiered founders they are linked to.</p>
 
       <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
         <Link
@@ -156,7 +174,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
           </Link>
         ))}
         {universities
-          .filter((u) => allSignals.some((s) => s.university_name === u.name))
+          .filter((u) => allSignals.some((s) => (s.university_ids ?? "").split(",").includes(u.id)))
           .map((u) => (
             <Link
               key={u.id}
@@ -187,6 +205,10 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
       {connectorsOn ? (
         <TopConnectors lists={topConnectors(sp.university)} activeCampus={sp.university ?? null} basePath={basePath} current={sp} />
       ) : (
+      <>
+      {!precollegeOn ? (
+        <p className="mt-4 text-[14px] text-fg-2"><span className="num text-fg">{signals.length.toLocaleString("en-US")}</span> signals</p>
+      ) : null}
       <ul className="mt-4 space-y-2">
         {press.map((item) => (
           <li key={item.id} className="rounded-md border border-line bg-raised p-3">
@@ -259,6 +281,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
         })}
         {signals.length === 0 && precollege.length === 0 && <p className="text-sm text-muted">No signals match these filters.</p>}
       </ul>
+      </>
       )}
     </div>
   );

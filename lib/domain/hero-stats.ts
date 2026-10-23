@@ -1,6 +1,6 @@
 import { getDb } from "../db/client";
 import { campusSlug, shortCampusLabel, shortCampusName } from "./campuses";
-import { listFounders, listUniversities, type UniversitySummary } from "./queries";
+import { countCandidateProjects, listFounders, listUniversities, type UniversitySummary } from "./queries";
 import { relativeTime } from "./relative-time";
 import { SIGNALS_THIS_WEEK_LABEL } from "./signal-copy";
 
@@ -45,6 +45,8 @@ export interface HeroStats {
   tracked: number;
   monitored: number;
   signalsWeek: number;
+  /** Every row in `signals`, not the 7-day slice. */
+  signalsTotal: number;
   updatedAt: string | null;
   /** Newest stored signal or news time. The home feed uses this when the week is empty. */
   lastSignalAt: string | null;
@@ -272,20 +274,10 @@ export function loadHeroStats(): HeroStats {
   // counts double-counts people who belong to more than one school.
   const people = listFounders();
   const founders = people.length;
-  const campusIds = new Set<string>();
-  const companyIds = new Set<string>();
-  for (const person of people) {
-    if (person.universityId) campusIds.add(person.universityId);
-    for (const campus of person.campuses) {
-      if (campus.universityId) campusIds.add(campus.universityId);
-    }
-    if (person.linkedCompany?.id) companyIds.add(person.linkedCompany.id);
-    for (const project of person.projects) {
-      if (project.kind === "company") companyIds.add(project.id);
-    }
-  }
-  const campuses = campusIds.size;
-  const tracked = companyIds.size;
+  // Every campus row, including schools with no promoted founder yet.
+  const campuses = universities.length;
+  const tracked = countCandidateProjects();
+  const signalsTotal = (db.prepare(`SELECT COUNT(*) as c FROM signals`).get() as { c: number }).c;
   const monitored = universities.filter((university) => university.sourcesConfigured > 0).length;
 
   const feed = weekFeed(db);
@@ -299,6 +291,7 @@ export function loadHeroStats(): HeroStats {
     tracked,
     monitored,
     signalsWeek,
+    signalsTotal,
     updatedAt,
     lastSignalAt: feed.items[0]?.at ?? updatedAt,
     fresh,

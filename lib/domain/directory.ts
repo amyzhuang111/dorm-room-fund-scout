@@ -136,8 +136,7 @@ export function loadDirectory(): DirectoryData {
   const cards: DirectoryCard[] = [];
   for (const company of companies) {
     const school = schoolByProject.get(company.id);
-    if (!school) continue;
-    const short = shortCampusLabel(school.id, school.name);
+    const short = school ? shortCampusLabel(school.id, school.name) : null;
     const description = company.description && !isBoilerplateDescription(company.description) ? oneLine(company.description) : null;
     const sectorId = sectorByProject.get(company.id) ?? null;
     const signalKind = signalByProject.get(company.id) ?? null;
@@ -146,7 +145,7 @@ export function loadDirectory(): DirectoryData {
       name: company.name,
       description,
       school: short,
-      schoolSlug: campusSlug(short),
+      schoolSlug: short ? campusSlug(short) : null,
       sectorId,
       sector: sectorId ? sectorLabel(sectorId) : null,
       stage: stageByProject.get(company.id) ?? null,

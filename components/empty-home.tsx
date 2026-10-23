@@ -7,7 +7,7 @@ export function EmptyHome() {
         Track student founders before they raise
       </h1>
       <p className="mt-4 max-w-[28rem] text-[16px] leading-6 text-fg-2">
-        The campus map, the people on it, and this week&apos;s signals.
+        The campus map, the people on it, and recent signals.
       </p>
       <Link href="/?sample=1" className="mt-8 inline-flex h-12 items-center rounded bg-ember px-6 text-[16px] font-semibold text-[#0b0e17]">
         Sample data

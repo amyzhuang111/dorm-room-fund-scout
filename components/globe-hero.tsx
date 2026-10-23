@@ -23,7 +23,7 @@ export function GlobeHero({ stats, band = true, world = false }: { stats: HeroSt
   const [ask, setAsk] = useState("");
   const [highlight, setHighlight] = useState<string | null>(null);
   const [builders, setBuilders] = useState<{ name: string }[]>([]);
-  const plotted = stats.universities.filter((item) => item.founderCount > 0);
+  const plotted = stats.universities.filter((item) => item.lat != null && item.lon != null);
   const rankedCampuses = [...plotted].sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name)).slice(0, 5);
   const sparkPeak = Math.max(1, ...rankedCampuses.flatMap((campus) => campus.signalSeries));
   const tiedIds = new Set(
@@ -31,7 +31,8 @@ export function GlobeHero({ stats, band = true, world = false }: { stats: HeroSt
       .filter((campus) => rankedCampuses.filter((other) => other.founderCount === campus.founderCount).length > 1)
       .map((campus) => campus.id),
   );
-  const thisWeek = stats.week.filter((item) => item.thisWeek).slice(0, 4);
+  const recentSignals = stats.week.slice(0, 4);
+  const recentHeading = recentSignals.length > 0 && recentSignals.every((item) => item.thisWeek) ? SIGNALS_THIS_WEEK_LABEL : "Recent signals";
   const hotIds = [...stats.universities]
     .filter((item) => item.signalWeek > 0 && item.lat != null && item.lon != null)
     .sort((a, b) => b.signalWeek - a.signalWeek || b.founderCount - a.founderCount || a.name.localeCompare(b.name))
@@ -90,7 +91,7 @@ export function GlobeHero({ stats, band = true, world = false }: { stats: HeroSt
           <p className="whitespace-nowrap text-[14px] leading-5 text-fg">
             <Link href="/companies" className="hover:underline"><span className="num">{stats.tracked.toLocaleString("en-US")}</span> companies</Link>
             {" · "}
-            <Link href="/signals" className="hover:underline"><span className="num">{stats.signalsWeek.toLocaleString("en-US")}</span> {SIGNALS_THIS_WEEK_LABEL}</Link>
+            <Link href="/signals" className="hover:underline"><span className="num">{stats.signalsTotal.toLocaleString("en-US")}</span> signals</Link>
           </p>
           <Link href="/founders" className="inline-flex h-12 w-fit items-center rounded bg-ember px-6 text-[16px] font-semibold text-[#0b0e17]">
             Explore founders
@@ -116,19 +117,19 @@ export function GlobeHero({ stats, band = true, world = false }: { stats: HeroSt
               className="h-10 w-full rounded border border-line bg-sunken pl-9 pr-3 text-[14px] text-fg outline-none placeholder:text-fg-2"
             />
           </form>
-          <section aria-label={SIGNALS_THIS_WEEK_LABEL}>
+          <section aria-label={recentHeading}>
             <div className="flex items-baseline justify-between gap-3">
-              <h3 className="text-[14px] font-medium">{SIGNALS_THIS_WEEK_LABEL}</h3>
+              <h3 className="text-[14px] font-medium">{recentHeading}</h3>
               <Link href="/signals" className="text-[14px] text-fg hover:underline">View all</Link>
             </div>
-            {thisWeek.length > 0 ? (
+            {recentSignals.length > 0 ? (
               <ul className="mt-1">
-                {thisWeek.map((item) => (
+                {recentSignals.map((item) => (
                   <CompactSignal key={item.id} item={item} />
                 ))}
               </ul>
             ) : (
-              <p className="mt-2 text-[14px] text-fg-2">Quiet week. Last signal {absoluteDate(stats.lastSignalAt)}</p>
+              <p className="mt-2 text-[14px] text-fg-2">No recent signals. Last signal {absoluteDate(stats.lastSignalAt)}</p>
             )}
           </section>
         </div>
@@ -201,7 +202,6 @@ export function WorldMap({ stats }: { stats: HeroStats }) {
   const router = useRouter();
   const search = useSearchParams();
   const university = search.get("university");
-  const plotted = stats.universities.filter((item) => item.founderCount > 0);
   const hotIds = [...stats.universities]
     .filter((item) => item.signalWeek > 0 && item.lat != null && item.lon != null)
     .sort((a, b) => b.signalWeek - a.signalWeek || b.founderCount - a.founderCount || a.name.localeCompare(b.name))
@@ -221,7 +221,7 @@ export function WorldMap({ stats }: { stats: HeroStats }) {
   return (
     <CampusMap
       className="h-[420px] lg:h-[680px]"
-      universities={plotted}
+      universities={stats.universities}
       world
       mode="campus"
       university={university}
@@ -289,7 +289,7 @@ const LEGEND = [
 ];
 
 function countryCoverage(universities: UniversitySummary[]): string {
-  const plotted = universities.filter((university) => university.founderCount > 0 && university.lat != null && university.lon != null);
+  const plotted = universities.filter((university) => university.lat != null && university.lon != null);
   const counts = new Map<string, number>();
   for (const university of plotted) {
     const country = university.country?.trim();
@@ -301,7 +301,11 @@ function countryCoverage(universities: UniversitySummary[]): string {
   const countryWord = names.length === 1 ? "country" : "countries";
   const listed = names.length <= 1 ? (names[0] ?? "") : names.length === 2 ? `${names[0]} and ${names[1]}` : `${names.slice(0, -1).join(", ")}, and ${names[names.length - 1]}`;
   const count = `${plotted.length.toLocaleString("en-US")} ${campusWord} in ${names.length.toLocaleString("en-US")} ${countryWord}`;
-  return listed ? `${count}: ${listed}.` : `${count}.`;
+  const base = listed ? `${count}: ${listed}.` : `${count}.`;
+  const unplotted = universities.length - plotted.length;
+  if (unplotted <= 0) return base;
+  const stored = unplotted === 1 ? "1 campus is stored without coordinates." : `${unplotted.toLocaleString("en-US")} campuses are stored without coordinates.`;
+  return `${base} ${stored}`;
 }
 
 function DotLegend() {
@@ -496,7 +500,7 @@ function SignatureBand({ stats }: { stats: HeroStats }) {
             Track student founders before they raise
           </p>
           <p className="mt-3 max-w-[34rem] text-[16px] leading-6 text-fg-2">
-            The campus map, the people on it, and this week&apos;s signals.
+            The campus map, the people on it, and recent signals.
           </p>
         </div>
         {signal || founder || hasRanks ? (
