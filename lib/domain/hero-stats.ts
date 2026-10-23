@@ -39,6 +39,13 @@ export interface CollageFounder {
   company: string;
 }
 
+/** Stored signal rows grouped by type. Labels match the signals feed. */
+export interface SignalTypeCount {
+  type: string;
+  label: string;
+  count: number;
+}
+
 export interface HeroStats {
   founders: number;
   campuses: number;
@@ -56,6 +63,8 @@ export interface HeroStats {
   universities: (UniversitySummary & { slug: string; signalWeek: number; signalPrev: number; latestSignal: string | null; signalSeries: number[] })[];
   /** First promoted founder, by name, who has a campus and a linked company. */
   collageFounder: CollageFounder | null;
+  /** Every stored signal, counted by type. */
+  signalTypes: SignalTypeCount[];
 }
 
 export function latestDataTimestamp(): string | null {
@@ -299,7 +308,28 @@ export function loadHeroStats(): HeroStats {
     recentCampusIds: feed.campusIds,
     universities,
     collageFounder: firstCollageFounder(people),
+    signalTypes: signalTypeCounts(db),
   };
+}
+
+const SIGNAL_TYPE_LABEL: Record<string, string> = {
+  demo: "Product launch",
+  continued_dev: "Technical release",
+  award: "Award",
+  funding: "Funding",
+  customer_evidence: "Customer evidence",
+  team_change: "Team change",
+  accelerator: "Accelerator",
+  launch: "Launch",
+  affiliation_change: "Affiliation change",
+};
+
+function signalTypeCounts(db: ReturnType<typeof getDb>): SignalTypeCount[] {
+  const rows = db.prepare(`SELECT signal_type as type, COUNT(*) as count FROM signals GROUP BY signal_type`).all() as { type: string; count: number }[];
+  return rows
+    .filter((row) => row.type && row.count > 0)
+    .map((row) => ({ type: row.type, label: SIGNAL_TYPE_LABEL[row.type] ?? row.type.replace(/_/g, " "), count: row.count }))
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 }
 
 function firstCollageFounder(people: { name: string; universityName: string | null; linkedCompany: { name: string } | null }[]): CollageFounder | null {

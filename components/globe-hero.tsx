@@ -405,40 +405,30 @@ function initials(name: string): string {
   return ((first[0] ?? "") + (last[0] ?? first[1] ?? "")).toUpperCase();
 }
 
-function RankFragment({ universities }: { universities: HeroStats["universities"] }) {
-  const ranked = [...universities]
-    .filter((item) => item.founderCount > 0)
-    .sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name))
-    .slice(0, 3);
-  if (ranked.length === 0) return null;
-  const peak = Math.max(1, ...ranked.flatMap((campus) => campus.signalSeries));
-  const tiedIds = new Set(
-    ranked
-      .filter((campus) => ranked.filter((other) => other.founderCount === campus.founderCount).length > 1)
-      .map((campus) => campus.id),
-  );
+function mixChipClass(type: string): string {
+  if (type === "funding") return "sig-chip sig-funding";
+  if (type === "launch" || type === "demo") return "sig-chip sig-launch";
+  if (type === "award") return "sig-chip sig-award";
+  if (type === "acquisition") return "sig-chip sig-acquisition";
+  return "rounded-full border border-line text-fg-2";
+}
+
+function SignalMix({ counts }: { counts: HeroStats["signalTypes"] }) {
+  if (counts.length === 0) return null;
   return (
     <div className="rounded-lg border border-line bg-raised px-3 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.28)]">
       <div className="flex items-baseline justify-between gap-2">
-        <span className="text-[14px] font-medium">Top campuses</span>
-        <Link href="/campuses" className="text-[13px] text-fg hover:underline">View all</Link>
+        <span className="text-[14px] font-medium">Signals</span>
+        <Link href="/signals" className="text-[13px] text-fg hover:underline">View all</Link>
       </div>
-      <ol className="mt-1">
-        {ranked.map((campus, index) => (
-          <li key={campus.id} className="border-t border-line py-1">
-            <div className="flex items-center gap-1 text-[14px]">
-              <span className="num w-4 shrink-0">{index + 1}</span>
-              <Link href={`/campuses/${campus.slug}`} className="min-w-0 flex-1 truncate hover:underline">{shortCampusLabel(campus.id, campus.name)}</Link>
-              {tiedIds.has(campus.id) ? <span className="shrink-0 text-[13px] text-fg-2">tie</span> : null}
-              <span className="num w-9 shrink-0 text-right">{campus.founderCount.toLocaleString("en-US")}</span>
-            </div>
-            <div className="flex items-center justify-between gap-1 pl-5">
-              <Sparkline values={campus.signalSeries} peak={peak} />
-              <WeekDelta delta={campus.signalWeek - campus.signalPrev} />
-            </div>
+      <ul className="mt-1">
+        {counts.map((row) => (
+          <li key={row.type} className="flex items-center justify-between gap-2 border-t border-line py-1">
+            <span className={`min-w-0 truncate rounded-full px-1.5 py-px text-[13px] leading-5 ${mixChipClass(row.type)}`}>{row.label}</span>
+            <span className="num shrink-0 text-[14px]">{row.count.toLocaleString("en-US")}</span>
           </li>
         ))}
-      </ol>
+      </ul>
     </div>
   );
 }
@@ -485,7 +475,7 @@ function SignalFragment({ item }: { item: WeekItem }) {
 function SignatureBand({ stats }: { stats: HeroStats }) {
   const signal = collageSignal(stats.week);
   const founder = stats.collageFounder;
-  const hasRanks = stats.universities.some((item) => item.founderCount > 0);
+  const signalTypes = stats.signalTypes;
   return (
     <section className="-mx-6 border-b border-line px-6 pb-5" aria-label="Campus Scout">
       <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-10">
@@ -507,9 +497,9 @@ function SignatureBand({ stats }: { stats: HeroStats }) {
             The campus map, the people on it, and recent signals.
           </p>
         </div>
-        {signal || founder || hasRanks ? (
+        {signal || founder || signalTypes.length > 0 ? (
           <div className="grid w-full grid-cols-1 items-start gap-3 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-            {hasRanks ? <RankFragment universities={stats.universities} /> : null}
+            {signalTypes.length > 0 ? <SignalMix counts={signalTypes} /> : null}
             <div className="flex flex-col gap-3">
               {founder ? <FounderFragment founder={founder} /> : null}
               {signal ? <SignalFragment item={signal} /> : null}
