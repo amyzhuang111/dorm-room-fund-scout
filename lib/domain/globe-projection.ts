@@ -35,11 +35,11 @@ function rotate(columns: [number, number, number][], vector: [number, number, nu
 }
 
 /** Same sample count the globe passes to cobe. Markers are drawn on the snapped point. */
-export const GLOBE_MAP_SAMPLES = 480000;
+export const GLOBE_MAP_SAMPLES = 16000;
 
 /** Opening angle. North America faces the camera; phi 0 would center longitude -90. */
 export const GLOBE_PHI = 0.12;
-export const GLOBE_THETA = 0.22;
+export const GLOBE_THETA = 0.2;
 
 const SQRT5 = 2.23606797749979;
 const GOLDEN = 1.618033988749895;

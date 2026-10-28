@@ -12,10 +12,11 @@ export interface GlobeCampus {
   signals: number;
 }
 
-const LAND: [number, number, number] = [0.235, 0.22, 0.196];
-const INDIGO: [number, number, number] = [0.773, 0.788, 1];
-const HOT: [number, number, number] = [0.957, 0.941, 0.91];
-const GLOW: [number, number, number] = [0.42, 0.45, 0.86];
+// Matches the cobe globe at https://cobe.vercel.app: white sphere, gray stipple, blue points.
+const LAND: [number, number, number] = [1, 1, 1];
+const POINT: [number, number, number] = [0.3, 0.45, 0.85];
+const HOT: [number, number, number] = [0, 0.2, 1];
+const GLOW: [number, number, number] = [0.94, 0.93, 0.91];
 
 function nearestCampus(campuses: GlobeCampus[], phi: number, theta: number, size: number, x: number, y: number): GlobeCampus | null {
   let best: GlobeCampus | null = null;
@@ -89,19 +90,19 @@ export function CampusGlobe({
         height: size * pixelRatio,
         phi: frame.current.phi,
         theta: frame.current.theta,
-        dark: 1,
-        diffuse: 1.15,
+        dark: 0,
+        diffuse: 1.5,
         mapSamples: GLOBE_MAP_SAMPLES,
-        mapBrightness: 5.5,
-        mapBaseBrightness: 0.08,
+        mapBrightness: 10,
+        mapBaseBrightness: 0,
         baseColor: LAND,
-        markerColor: INDIGO,
+        markerColor: POINT,
         glowColor: GLOW,
         markers: [],
-        opacity: 0.92,
+        opacity: 1,
         onRender: (state) => {
           const current = frame.current;
-          if (!current.reduce && !current.dragging && !current.hoverId) current.phi += 0.0016;
+          if (!current.reduce && !current.dragging && !current.hoverId) current.phi += 0.005;
           const list = campusesRef.current;
           const peak = Math.max(1, ...list.map((campus) => campus.signals));
           state.phi = current.phi;
@@ -113,7 +114,7 @@ export function CampusGlobe({
             return {
               location: [campus.lat, campus.lon] as [number, number],
               size: markerSize(campus.signals, peak) * (hot ? 1.35 : 1),
-              color: hot ? HOT : INDIGO,
+              color: hot ? HOT : POINT,
             };
           });
         },
