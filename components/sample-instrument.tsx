@@ -48,7 +48,7 @@ function NeutralMark({ name, cls }: { name: string; cls: string }) {
   const initials = companyInitials(name).slice(0, 2);
   return (
     <span
-      className={`${cls} grid shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/55 bg-[linear-gradient(145deg,var(--cobalt-haze,#1A2556),#0E1428)] font-mono text-[8px] font-semibold tracking-tight text-[color:var(--ember,#E8823A)] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.15)]`}
+      className={`${cls} grid shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/70 bg-[linear-gradient(145deg,#24306A,#121933)] font-mono text-[8px] font-semibold tracking-tight text-[color:var(--fg,#ECEEF4)] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.25)]`}
       aria-hidden
       title={name}
     >
@@ -124,7 +124,7 @@ export function LogoPill({
   return (
     <Link
       href={href}
-      className="relative flex h-5 min-w-0 max-w-[7.5rem] items-center gap-1 rounded-md border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)] px-1 text-[9px] leading-none text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--ember,#E8823A)]"
+      className="relative flex h-6 min-w-0 max-w-[8rem] items-center gap-1 rounded-md border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)] px-1 text-[9px] leading-none text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--ember,#E8823A)]"
       title={name}
     >
       {ok && logoUrl ? (
@@ -134,11 +134,11 @@ export function LogoPill({
           alt=""
           width={14}
           height={14}
-          className="h-3.5 w-3.5 shrink-0 rounded-sm border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] object-contain"
+          className="h-4 w-4 shrink-0 rounded-sm border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] object-contain"
           onError={() => setOk(false)}
         />
       ) : (
-        <span className="grid h-3.5 w-3.5 shrink-0 place-items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/55 bg-[linear-gradient(145deg,var(--cobalt-haze,#1A2556),#0E1428)] font-mono text-[7px] font-semibold tracking-tight text-[color:var(--ember,#E8823A)]" aria-hidden>
+        <span className="grid h-4 w-4 shrink-0 place-items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/70 bg-[linear-gradient(145deg,#24306A,#121933)] font-mono text-[8px] font-semibold tracking-tight text-[color:var(--fg,#ECEEF4)]" aria-hidden>
           {initials}
         </span>
       )}
@@ -714,7 +714,7 @@ export function IntelligenceBoards({
               <li key={item.id}>
                 <div className="flex items-center gap-1.5 text-[11px]">
                   <span className={`${COUNT} w-3.5 shrink-0 text-[10px]`}>{index + 1}</span>
-                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/50 bg-[linear-gradient(145deg,var(--cobalt-haze,#1A2556),#0E1428)] font-mono text-[8px] font-semibold text-[color:var(--ember,#E8823A)]" aria-hidden title={item.label}>
+                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/70 bg-[linear-gradient(145deg,#24306A,#121933)] font-mono text-[8px] font-semibold text-[color:var(--fg,#ECEEF4)]" aria-hidden title={item.label}>
                     {companyInitials(item.label)}
                   </span>
                   <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#ECEEF4)]">{item.label}</span>
