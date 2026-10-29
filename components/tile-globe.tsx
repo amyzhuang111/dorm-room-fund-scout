@@ -17,12 +17,13 @@ export interface TileCampus {
 }
 
 const OCEAN = "#FFDBBB";
-const LAND = "#F0873C";
-const LAND_ALT = "#EF8438";
-const BOUNDARY = "#d9691f";
+const LAND = "#DD8A4E";
+const LAND_ALT = "#D48148";
+const BOUNDARY = "#C4733E";
 const LABEL = "#5a2c0e";
 const HALO = "#FFE9D6";
 const BRAND = "#FB651E";
+const COUNT = "font-bold tabular-nums text-[#E05612]";
 
 const COUNTRY_COLOR: Record<string, string> = {
   "United States": "#3b6fd8",
@@ -46,7 +47,7 @@ export function TileGlobe({
   className?: string;
 }) {
   const mapNode = useRef<HTMLDivElement | null>(null);
-  const [stageHeight, setStageHeight] = useState(420);
+  const [stageHeight, setStageHeight] = useState(720);
   const mapRef = useRef<{
     getSource: (id: string) => { setData: (data: unknown) => void } | undefined;
     setFilter: (layer: string, filter: unknown) => void;
@@ -109,7 +110,11 @@ export function TileGlobe({
       getCanvas: () => HTMLCanvasElement;
     } | null = null;
 
-    const fit = () => setStageHeight(window.innerWidth >= 1024 ? 520 : 340);
+    const fit = () => {
+      const wide = window.innerWidth >= 1024;
+      const vh = window.innerHeight;
+      setStageHeight(wide ? Math.max(720, vh - 150) : Math.max(460, vh - 300));
+    };
     fit();
     window.addEventListener("resize", fit);
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -147,8 +152,8 @@ export function TileGlobe({
       const created = new mod.Map({
         container: mapNode.current,
         style: "https://tiles.openfreemap.org/styles/positron",
-        center: [-32, 18],
-        zoom: 1.65,
+        center: [-28, 16],
+        zoom: window.innerWidth >= 1024 ? 2.5 : 1.2,
         minZoom: 1.15,
         maxPitch: 0,
         attributionControl: false,
@@ -160,13 +165,13 @@ export function TileGlobe({
         if (dead || !map) return;
         map.setProjection({ type: "globe" });
         map.setSky({
-          "sky-color": "#FFE3CC",
-          "horizon-color": "#FFEEDD",
+          "sky-color": "#FFE8D6",
+          "horizon-color": "#FFF8F2",
           "fog-color": "#FFF3E9",
-          "sky-horizon-blend": 0.6,
-          "horizon-fog-blend": 0.5,
-          "fog-ground-blend": 0.5,
-          "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 0.8, 5, 0.15],
+          "sky-horizon-blend": 0.45,
+          "horizon-fog-blend": 0.7,
+          "fog-ground-blend": 0.55,
+          "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 1, 2.2, 0.9, 4, 0.4],
         });
         for (const layer of map.getStyle().layers) {
           try {
@@ -308,8 +313,8 @@ export function TileGlobe({
         <RankCard title="Most signals" rows={bySignals} metric="signals" onPick={focus} />
       </aside>
       <div className="absolute bottom-3 left-3 right-3 z-10 hidden items-center gap-2 rounded-2xl border border-[#f0d9c6] bg-white/92 px-3 py-2 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)] lg:flex">
-        <span className="shrink-0 text-[13px] font-semibold">
-          <span className="num">{shown.length.toLocaleString("en-US")}</span> campuses
+        <span className="shrink-0 text-[13px] font-semibold text-[#20140c]">
+          <span className={COUNT}>{shown.length.toLocaleString("en-US")}</span> campuses
         </span>
         <div className="flex min-w-0 flex-1 gap-1.5 overflow-hidden">
           {chips.map((campus) => (
@@ -323,9 +328,9 @@ export function TileGlobe({
         <div className="pointer-events-none absolute z-20 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-xl border border-[#f0d9c6] bg-white px-2.5 py-1.5 text-left text-[#20140c] shadow" style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}>
           <p className="text-[13px] font-medium leading-4">{hover.name}</p>
           <p className="mt-0.5 text-[12px] leading-4 text-[#6b5443]">
-            <span className="num text-[#20140c]">{hover.founders.toLocaleString("en-US")}</span> founders
+            <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> founders
             {" · "}
-            <span className="num text-[#20140c]">{hover.signals.toLocaleString("en-US")}</span> signals
+            <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> signals
           </p>
         </div>
       ) : null}
@@ -362,9 +367,9 @@ function RankCard({
         {rows.map((campus, index) => (
           <li key={campus.id}>
             <button type="button" onClick={() => onPick(campus)} className="flex w-full items-baseline gap-2 text-left text-[13px] hover:text-[#FB651E]">
-              <span className="num w-4 shrink-0 text-[#6b5443]">{index + 1}</span>
-              <span className="min-w-0 flex-1 truncate">{shortCampusLabel(campus.id, campus.name)}</span>
-              <span className="num shrink-0">{(metric === "founders" ? campus.founders : campus.signals).toLocaleString("en-US")}</span>
+              <span className={`${COUNT} w-4 shrink-0`}>{index + 1}</span>
+              <span className="min-w-0 flex-1 truncate text-[#20140c]">{shortCampusLabel(campus.id, campus.name)}</span>
+              <span className={`${COUNT} shrink-0`}>{(metric === "founders" ? campus.founders : campus.signals).toLocaleString("en-US")}</span>
             </button>
           </li>
         ))}

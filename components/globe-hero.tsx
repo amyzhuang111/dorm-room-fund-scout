@@ -64,8 +64,8 @@ function GlobeBlock({ stats, height, bare = false }: { stats: HeroStats; height:
   return (
     <div className="mt-5">
       <p className="text-center text-[16px] leading-6">
-        <span className="num">{stats.founders.toLocaleString("en-US")}</span> student founders across{" "}
-        <span className="num">{stats.campuses.toLocaleString("en-US")}</span> campuses
+        <span className="font-bold tabular-nums text-[#E05612]">{stats.founders.toLocaleString("en-US")}</span> student founders across{" "}
+        <span className="font-bold tabular-nums text-[#E05612]">{stats.campuses.toLocaleString("en-US")}</span> campuses
       </p>
       <div className="mt-3">{globe}</div>
       <p className="mx-auto mt-3 max-w-[40rem] text-center text-[13px] leading-5 text-fg-2">
@@ -271,8 +271,8 @@ function SignatureBand({ stats, globe }: { stats: HeroStats; globe?: ReactNode }
           </p>
           {globe ? (
             <p className="mt-3 text-[16px] leading-6 text-[#20140c]">
-              <span className="num">{stats.founders.toLocaleString("en-US")}</span> student founders across{" "}
-              <span className="num">{stats.campuses.toLocaleString("en-US")}</span> campuses
+              <span className="font-bold tabular-nums text-[#E05612]">{stats.founders.toLocaleString("en-US")}</span> student founders across{" "}
+              <span className="font-bold tabular-nums text-[#E05612]">{stats.campuses.toLocaleString("en-US")}</span> campuses
             </p>
           ) : (
             <p className="mt-3 max-w-[34rem] text-[16px] leading-6 text-fg-2">
