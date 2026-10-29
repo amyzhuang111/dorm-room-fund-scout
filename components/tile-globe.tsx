@@ -10,6 +10,7 @@ import {
   emptyFacets,
   FacetRail,
   IntelligenceBoards,
+  preferLogoCompanies,
   ViewDrawer,
   type FacetState,
 } from "./sample-instrument";
@@ -98,11 +99,12 @@ export function TileGlobe({
   );
   const countryIds = useMemo(() => new Set(shown.map((campus) => campus.id)), [shown]);
   const filteredCompanies = useMemo(() => {
-    const base = applyFacets(companies, facets, countryIds);
+    const scope = country ? countryIds : undefined;
+    const base = applyFacets(companies, facets, scope);
     if (selectedId) return base.filter((company) => company.schoolId === selectedId);
     return base;
-  }, [companies, facets, countryIds, selectedId]);
-  const companyStrip = useMemo(() => filteredCompanies.slice(0, 96), [filteredCompanies]);
+  }, [companies, facets, country, countryIds, selectedId]);
+  const companyStrip = useMemo(() => preferLogoCompanies(filteredCompanies).slice(0, 96), [filteredCompanies]);
   const founderStrip = useMemo(() => {
     const rows: { key: string; name: string; companyId: string; companyName: string }[] = [];
     for (const company of filteredCompanies) {

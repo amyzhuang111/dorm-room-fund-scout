@@ -2,7 +2,11 @@
 
 export type RecencyId = "month" | "year" | "older" | "none";
 export type StatusId = "active" | "acquired" | "closed";
-export type FlagId = "new" | "signaled" | "funded" | "logo";
+/** Product flags backed by stored fields only (no meta asset flags like logo). */
+export type FlagId = "new" | "signaled" | "funded" | "founders";
+
+export const NOT_ON_RECORD = "not_on_record";
+export const NOT_ON_RECORD_LABEL = "Not on record";
 
 export interface FacetCompany {
   id: string;
@@ -66,7 +70,7 @@ export const FLAG_LABEL: Record<FlagId, string> = {
   new: "New",
   signaled: "Has signals",
   funded: "Funded",
-  logo: "Has logo",
+  founders: "Has founders",
 };
 
 /** Status from stored operating_status + acquisition signals only. */
@@ -80,7 +84,7 @@ export function hasFlag(company: FacetCompany, flag: FlagId): boolean {
   if (flag === "new") return (company.foundedYear ?? 0) >= 2025;
   if (flag === "signaled") return company.signals > 0;
   if (flag === "funded") return company.signalKind === "funding" || Boolean(company.stage);
-  if (flag === "logo") return Boolean(company.logoUrl);
+  if (flag === "founders") return (company.founders?.length ?? 0) > 0;
   return false;
 }
 
@@ -96,6 +100,50 @@ export function countBy<T>(items: T[], keyOf: (item: T) => string | null | undef
     .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
 }
 
+/** Year buckets including an explicit Not on record row. Sum equals companies.length. */
+export function foundedYearBuckets(companies: FacetCompany[]): FacetCount[] {
+  const counts = new Map<string, number>();
+  let missing = 0;
+  for (const company of companies) {
+    if (company.foundedYear == null) {
+      missing += 1;
+      continue;
+    }
+    const id = String(company.foundedYear);
+    counts.set(id, (counts.get(id) ?? 0) + 1);
+  }
+  const years = [...counts.entries()]
+    .map(([id, count]) => ({ id, label: id, count, year: Number(id) }))
+    .sort((a, b) => b.year - a.year)
+    .map(({ id, label, count }) => ({ id, label, count }));
+  // Put Not on record first so the hollow majority is honest and visible.
+  if (missing > 0) years.unshift({ id: NOT_ON_RECORD, label: NOT_ON_RECORD_LABEL, count: missing });
+  return years;
+}
+
+/** HQ buckets including Not on record. Sum equals companies.length. */
+export function hqRegionBuckets(companies: FacetCompany[]): FacetCount[] {
+  const counts = new Map<string, number>();
+  let missing = 0;
+  for (const company of companies) {
+    const region = company.hqRegion?.trim();
+    if (!region) {
+      missing += 1;
+      continue;
+    }
+    counts.set(region, (counts.get(region) ?? 0) + 1);
+  }
+  const regions = [...counts.entries()]
+    .map(([id, count]) => ({ id, label: id, count }))
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+  if (missing > 0) regions.unshift({ id: NOT_ON_RECORD, label: NOT_ON_RECORD_LABEL, count: missing });
+  return regions;
+}
+
+export function bucketSum(buckets: FacetCount[]): number {
+  return buckets.reduce((sum, item) => sum + item.count, 0);
+}
+
 export function filterFacetCompanies(
   companies: FacetCompany[],
   opts: {
@@ -105,6 +153,7 @@ export function filterFacetCompanies(
     campus?: string | null;
     recency?: RecencyId | null;
     foundedYear?: number | null;
+    yearMissing?: boolean;
     status?: StatusId | null;
     flag?: FlagId | null;
     hqRegion?: string | null;
@@ -118,14 +167,44 @@ export function filterFacetCompanies(
     if (opts.stage && company.stage !== opts.stage) return false;
     if (opts.campus && company.schoolId !== opts.campus) return false;
     if (opts.recency && recencyOf(company.latestSignalAt) !== opts.recency) return false;
-    if (opts.foundedYear != null && company.foundedYear !== opts.foundedYear) return false;
+    if (opts.yearMissing) {
+      if (company.foundedYear != null) return false;
+    } else if (opts.foundedYear != null && company.foundedYear !== opts.foundedYear) {
+      return false;
+    }
     if (opts.status && statusOf(company) !== opts.status) return false;
     if (opts.flag && !hasFlag(company, opts.flag)) return false;
-    if (opts.hqRegion && company.hqRegion !== opts.hqRegion) return false;
+    if (opts.hqRegion === NOT_ON_RECORD) {
+      if (company.hqRegion) return false;
+    } else if (opts.hqRegion && company.hqRegion !== opts.hqRegion) {
+      return false;
+    }
     if (tokens.length) {
       const hay = [company.name, company.sector ?? "", company.school ?? "", ...(company.founders ?? [])].join("\n").toLowerCase();
       if (!tokens.every((token) => hay.includes(token))) return false;
     }
     return true;
   });
+}
+
+/** Directory card subtitle from stored fields only. Empty string means hide the line. */
+export function directoryCardSubtitle(card: {
+  school?: string | null;
+  hqRegion?: string | null;
+  sector?: string | null;
+  stage?: string | null;
+  signalLabel?: string | null;
+}): string {
+  return [card.school, card.hqRegion, card.sector, card.stage, card.signalLabel].filter(Boolean).join(" · ");
+}
+
+/** Prefer real logos first for dense drawers; stable by name within each group. */
+export function preferLogoCompanies<T extends { logoUrl?: string | null; name: string }>(companies: T[]): T[] {
+  const withLogo: T[] = [];
+  const without: T[] = [];
+  for (const company of companies) {
+    if (company.logoUrl) withLogo.push(company);
+    else without.push(company);
+  }
+  return [...withLogo, ...without];
 }

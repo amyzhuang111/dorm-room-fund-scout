@@ -8,7 +8,11 @@ import {
   countBy,
   FLAG_LABEL,
   filterFacetCompanies,
+  foundedYearBuckets,
   hasFlag,
+  hqRegionBuckets,
+  NOT_ON_RECORD,
+  preferLogoCompanies,
   RECENCY_LABEL,
   recencyOf,
   STATUS_LABEL,
@@ -19,6 +23,8 @@ import {
   type RecencyId,
   type StatusId,
 } from "@/lib/domain/sample-facets";
+
+export { preferLogoCompanies };
 
 export const INK = "text-[#20140c]";
 export const MUTED = "text-[#6b5443]";
@@ -63,6 +69,7 @@ export function LogoPill({
   mark?: string;
 }) {
   const [failed, setFailed] = useState(false);
+  const showLetter = Boolean(mark) && (!logoUrl || failed);
   const letter = (mark || name).trim().charAt(0).toUpperCase() || "?";
   return (
     <Link
@@ -70,12 +77,14 @@ export function LogoPill({
       className="flex h-4 min-w-0 max-w-[6.5rem] items-center gap-0.5 rounded-full border border-[#f0d9c6] bg-white px-1 text-[8px] leading-none text-[#20140c] hover:border-[#E05612]"
       title={name}
     >
-      {!logoUrl || failed ? (
+      {logoUrl && !failed ? (
+        <Image src={logoUrl} alt="" width={12} height={12} unoptimized className="h-3 w-3 shrink-0 rounded-full border border-[#f0d9c6] bg-white object-contain" onError={() => setFailed(true)} />
+      ) : showLetter ? (
         <span className="grid h-3 w-3 shrink-0 place-items-center rounded-full bg-[#FFF1E6] text-[6px] font-semibold text-[#E05612]" aria-hidden>
           {letter}
         </span>
       ) : (
-        <Image src={logoUrl} alt="" width={12} height={12} unoptimized className="h-3 w-3 shrink-0 rounded-full border border-[#f0d9c6] bg-white object-contain" onError={() => setFailed(true)} />
+        <span className="h-3 w-3 shrink-0 rounded-full border border-[#f0d9c6] bg-[#FFF1E6]" aria-hidden />
       )}
       <span className="min-w-0 truncate">{name}</span>
     </Link>
@@ -111,7 +120,7 @@ const FLAG_ICON: Record<FlagId, string> = {
   new: "✦",
   signaled: "◎",
   funded: "$",
-  logo: "▣",
+  founders: "👤",
 };
 
 const SECTOR_DOTS = ["#3b82f6", "#a855f7", "#ef4444", "#f59e0b", "#10b981", "#ec4899", "#6366f1", "#14b8a6"];
@@ -130,6 +139,7 @@ export interface FacetState {
   country: string | null;
   recency: RecencyId | null;
   foundedYear: number | null;
+  yearMissing: boolean;
   status: StatusId | null;
   flag: FlagId | null;
   hqRegion: string | null;
@@ -145,6 +155,7 @@ export function emptyFacets(): FacetState {
     country: null,
     recency: null,
     foundedYear: null,
+    yearMissing: false,
     status: null,
     flag: null,
     hqRegion: null,
@@ -174,21 +185,15 @@ export function FacetRail({
   }, [campuses, facets.country]);
 
   const baseCompanies = useMemo(() => {
+    if (!facets.country) return companies;
     const ids = new Set(countryScoped.map((campus) => campus.id));
     return companies.filter((company) => !company.schoolId || ids.has(company.schoolId));
-  }, [companies, countryScoped]);
+  }, [companies, countryScoped, facets.country]);
 
   const sectors = useMemo(() => countBy(baseCompanies, (c) => c.sectorId, (id) => baseCompanies.find((c) => c.sectorId === id)?.sector ?? id).slice(0, 10), [baseCompanies]);
   const kinds = useMemo(() => countBy(baseCompanies, (c) => c.signalKind, (id) => baseCompanies.find((c) => c.signalKind === id)?.signalLabel ?? id), [baseCompanies]);
   const stages = useMemo(() => countBy(baseCompanies, (c) => c.stage, (id) => id), [baseCompanies]);
-  const years = useMemo(() => {
-    const counts = new Map<number, number>();
-    for (const company of baseCompanies) {
-      if (company.foundedYear == null) continue;
-      counts.set(company.foundedYear, (counts.get(company.foundedYear) ?? 0) + 1);
-    }
-    return [...counts.entries()].sort((a, b) => b[0] - a[0]).map(([year, count]) => ({ id: String(year), year, count }));
-  }, [baseCompanies]);
+  const years = useMemo(() => foundedYearBuckets(baseCompanies), [baseCompanies]);
   const statuses = useMemo(() => {
     const counts = new Map<StatusId, number>();
     for (const company of baseCompanies) {
@@ -204,7 +209,7 @@ export function FacetRail({
       .map((id) => ({ id, label: FLAG_LABEL[id], count: baseCompanies.filter((c) => hasFlag(c, id)).length }))
       .filter((item) => item.count > 0);
   }, [baseCompanies]);
-  const hqRegions = useMemo(() => countBy(baseCompanies, (c) => c.hqRegion, (id) => id).slice(0, 10), [baseCompanies]);
+  const hqRegions = useMemo(() => hqRegionBuckets(baseCompanies), [baseCompanies]);
   const recency = useMemo(() => {
     const counts = new Map<RecencyId, number>();
     for (const company of baseCompanies) {
@@ -254,10 +259,29 @@ export function FacetRail({
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto">
         <FacetGroup title="Founded year">
-          <Chip active={facets.foundedYear == null} onClick={() => set({ foundedYear: null })} label={`All · ${baseCompanies.length}`} />
-          {years.map((item) => (
-            <Chip key={item.id} active={facets.foundedYear === item.year} onClick={() => set({ foundedYear: facets.foundedYear === item.year ? null : item.year })} label={`${item.year} · ${item.count}`} />
-          ))}
+          <Chip
+            active={facets.foundedYear == null && !facets.yearMissing}
+            onClick={() => set({ foundedYear: null, yearMissing: false })}
+            label={`All · ${baseCompanies.length}`}
+          />
+          {years.map((item) => {
+            const missing = item.id === NOT_ON_RECORD;
+            const active = missing ? facets.yearMissing : facets.foundedYear === Number(item.id);
+            return (
+              <Chip
+                key={item.id}
+                active={active}
+                onClick={() =>
+                  set(
+                    missing
+                      ? { foundedYear: null, yearMissing: !facets.yearMissing }
+                      : { foundedYear: active ? null : Number(item.id), yearMissing: false },
+                  )
+                }
+                label={`${item.label} · ${item.count}`}
+              />
+            );
+          })}
         </FacetGroup>
         <FacetGroup title="Status">
           <Chip active={!facets.status} onClick={() => set({ status: null })} label="All" />
@@ -277,10 +301,15 @@ export function FacetRail({
             <Chip key={item.id} active={facets.sector === item.id} onClick={() => set({ sector: facets.sector === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} dot={sectorDot(item.id)} />
           ))}
         </FacetGroup>
-        <FacetGroup title="HQ region" defaultOpen={hqRegions.length > 0}>
+        <FacetGroup title="HQ region">
           <Chip active={!facets.hqRegion} onClick={() => set({ hqRegion: null })} label={`All · ${baseCompanies.length}`} />
           {hqRegions.map((item) => (
-            <Chip key={item.id} active={facets.hqRegion === item.id} onClick={() => set({ hqRegion: facets.hqRegion === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} />
+            <Chip
+              key={item.id}
+              active={facets.hqRegion === item.id}
+              onClick={() => set({ hqRegion: facets.hqRegion === item.id ? null : item.id })}
+              label={`${item.label} · ${item.count}`}
+            />
           ))}
         </FacetGroup>
         <FacetGroup title="Country" defaultOpen={false}>
@@ -340,6 +369,7 @@ export function applyFacets(companies: FacetCompany[], facets: FacetState, count
     campus: facets.campus,
     recency: facets.recency,
     foundedYear: facets.foundedYear,
+    yearMissing: facets.yearMissing,
     status: facets.status,
     flag: facets.flag,
     hqRegion: facets.hqRegion,
@@ -603,7 +633,7 @@ export function ViewDrawer({
       </div>
       <div className="flex max-h-[7rem] flex-wrap content-start gap-0 overflow-y-auto">
         {mode === "startups"
-          ? companies.map((company) => <LogoPill key={company.id} href={`/startup/${company.id}`} name={company.name} logoUrl={company.logoUrl} />)
+          ? preferLogoCompanies(companies).map((company) => <LogoPill key={company.id} href={`/startup/${company.id}`} name={company.name} logoUrl={company.logoUrl} />)
           : founders.map((person) => <LogoPill key={person.key} href={`/startup/${person.companyId}`} name={person.name} mark={person.name} />)}
       </div>
     </div>

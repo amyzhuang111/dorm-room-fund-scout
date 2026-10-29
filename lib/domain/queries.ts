@@ -114,11 +114,28 @@ export function countCandidateProjects(): number {
   return row.c;
 }
 
+/** Public campus coordinates for rows missing lat/lon in SQLite (verifiable locations only). */
+const CAMPUS_COORD_OVERRIDES: Record<string, { lat: number; lon: number; country: string }> = {
+  // Franklin W. Olin College of Engineering, Needham, MA
+  univ_olin_college: { lat: 42.2925, lon: -71.2639, country: "United States" },
+  // Huron University College (Western University), London, Ontario
+  univ_western_university_huron_college: { lat: 43.0125, lon: -81.2736, country: "Canada" },
+};
+
 function buildUniversities(): UniversitySummary[] {
   const db = getDb();
   const universities = db.prepare(`SELECT id, name, country, lat, lon, coord_source FROM universities ORDER BY name`).all() as {
     id: string; name: string; country: string | null; lat: number | null; lon: number | null; coord_source: string | null;
   }[];
+  for (const row of universities) {
+    if (row.lat != null && row.lon != null) continue;
+    const override = CAMPUS_COORD_OVERRIDES[row.id];
+    if (!override) continue;
+    row.lat = override.lat;
+    row.lon = override.lon;
+    if (!row.country) row.country = override.country;
+    row.coord_source = row.coord_source || "public_campus";
+  }
 
   const companyCounts = new Map<string, number>();
   for (const row of db

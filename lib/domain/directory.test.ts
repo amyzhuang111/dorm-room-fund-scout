@@ -8,6 +8,8 @@ import {
   sortDirectory,
   type DirectoryCard,
 } from "./directory";
+import { countCandidateProjects } from "./queries";
+import { bucketSum, foundedYearBuckets, hqRegionBuckets } from "./sample-facets";
 
 function card(partial: Partial<DirectoryCard> & Pick<DirectoryCard, "id" | "name">): DirectoryCard {
   return {
@@ -84,3 +86,9 @@ assert.deepEqual(
 );
 
 console.log("directory tests ok");
+
+const live = loadDirectory();
+assert.equal(live.cards.length, countCandidateProjects());
+assert.equal(bucketSum(foundedYearBuckets(live.cards)), live.cards.length);
+assert.equal(bucketSum(hqRegionBuckets(live.cards)), live.cards.length);
+console.log("directory count surfaces agree", live.cards.length);

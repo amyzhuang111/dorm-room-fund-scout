@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
+import { directoryCardSubtitle } from "@/lib/domain/sample-facets";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import {
   applyFacets,
@@ -170,6 +171,7 @@ export function SampleInstrumentBrowse({
                 ["flag", "new", "New"],
                 ["flag", "signaled", "Has signals"],
                 ["flag", "funded", "Funded"],
+                ["flag", "founders", "Has founders"],
                 ["status", "active", "Active"],
                 ["status", "acquired", "Acquired"],
               ] as const
@@ -246,20 +248,21 @@ export function SampleInstrumentBrowse({
 }
 
 function DirectoryPill({ card, rank }: { card: DirectoryCard; rank: number | null }) {
+  const subtitle = directoryCardSubtitle(card);
   return (
     <Link href={`/startup/${card.id}`} className="flex items-center gap-2 rounded-xl border border-[#f0d9c6] bg-white px-2 py-1.5 hover:border-[#E05612]">
       {rank != null ? <span className="w-4 shrink-0 text-center text-[11px] font-bold tabular-nums text-[#E05612]">{rank}</span> : null}
       <LogoMark name={card.name} logoUrl={card.logoUrl} />
       <div className="min-w-0 flex-1">
         <p className="truncate text-[12px] font-medium text-[#20140c]">{card.name}</p>
-        <p className="truncate text-[10px] text-[#8a7260]">
-          {[card.school, card.sector, card.stage, card.signalLabel].filter(Boolean).join(" · ") || "On record"}
-        </p>
+        {subtitle ? <p className="truncate text-[10px] text-[#8a7260]">{subtitle}</p> : null}
       </div>
-      <div className="shrink-0 text-right">
-        <p className="text-[13px] font-bold tabular-nums leading-none text-[#E05612]">{card.signals.toLocaleString("en-US")}</p>
-        <p className="text-[9px] uppercase tracking-[0.04em] text-[#8a7260]">signals</p>
-      </div>
+      {card.signals > 0 ? (
+        <div className="shrink-0 text-right">
+          <p className="text-[13px] font-bold tabular-nums leading-none text-[#E05612]">{card.signals.toLocaleString("en-US")}</p>
+          <p className="whitespace-nowrap text-[9px] uppercase tracking-[0.04em] text-[#8a7260]">signals</p>
+        </div>
+      ) : null}
     </Link>
   );
 }
