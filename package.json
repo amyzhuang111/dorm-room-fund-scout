@@ -89,6 +89,7 @@
     "apify-client": "^2.25.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
+    "playwright": "^1.64.1",
     "tailwindcss": "^4",
     "tsx": "^4.23.13",
     "typescript": "^5"

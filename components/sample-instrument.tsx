@@ -651,17 +651,41 @@ export function IntelligenceBoards({
   compact?: boolean;
   hideSector?: boolean;
 }) {
-  const recentN = 3;
-  const founderN = 3;
+  const recentN = compact ? 2 : 3;
+  const founderN = compact ? 2 : 3;
   const recent = useMemo(() => recentSignals(companies).slice(0, recentN), [companies, recentN]);
-  const mix = useMemo(() => sectorMix(companies).slice(0, compact ? 4 : 5), [companies, compact]);
+  const mix = useMemo(() => sectorMix(companies).slice(0, compact ? 3 : 5), [companies, compact]);
   const founders = useMemo(() => topFounders(companies).slice(0, founderN), [companies, founderN]);
   const programs = useMemo(() => topPrograms(companies), [companies]);
   const maxProg = programs[0]?.count || 1;
-  const gap = "space-y-2";
+  const gap = compact ? "space-y-1.5" : "space-y-2";
   const rowGap = "divide-y divide-[color:var(--line,#E1E5EF)]";
+  const programsBoard =
+    programs.length > 0 ? (
+      <Board title="Top programs" unit="companies">
+        <ol className={rowGap}>
+          {programs.slice(0, 3).map((item, index) => (
+            <li key={item.id} className="py-1">
+              <div className="flex items-center gap-2 text-[11px]">
+                <span className={`${COUNT} w-5 shrink-0 text-right text-[11px] tracking-tight`}>{String(index + 1).padStart(2, "0")}</span>
+                <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/70 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[8px] font-semibold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden title={item.label}>
+                  {companyInitials(item.label).slice(0, 2)}
+                </span>
+                <span className="min-w-0 flex-1 truncate font-medium text-[color:var(--fg,#0B0E17)]">{item.label}</span>
+                <span className={`${COUNT} shrink-0 text-[11px]`}>{item.count.toLocaleString("en-US")}</span>
+              </div>
+              <div className="ml-12 mt-1 h-0.5 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
+                <div className="h-full rounded-full bg-[color:var(--ember,#D96B1C)]" style={{ width: `${Math.max(8, Math.round((item.count / maxProg) * 100))}%` }} />
+              </div>
+            </li>
+          ))}
+        </ol>
+      </Board>
+    ) : null;
   return (
     <div className={gap}>
+      {/* Compact fold: programs sit above sector/founders so #3 Penn Venture Lab is in the 900px fold. */}
+      {compact ? programsBoard : null}
       <Board title="Recent signals" unit="kind · date">
         <ol className={rowGap}>
           {recent.map((company, index) => (
@@ -708,27 +732,7 @@ export function IntelligenceBoards({
           ))}
         </ol>
       </Board>
-      {programs.length > 0 ? (
-        <Board title="Top programs" unit="companies">
-          <ol className={rowGap}>
-            {programs.slice(0, 3).map((item, index) => (
-              <li key={item.id} className="py-1.5">
-                <div className="flex items-center gap-2 text-[11px]">
-                  <span className={`${COUNT} w-5 shrink-0 text-right text-[11px] tracking-tight`}>{String(index + 1).padStart(2, "0")}</span>
-                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/70 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[8px] font-semibold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden title={item.label}>
-                    {companyInitials(item.label).slice(0, 2)}
-                  </span>
-                  <span className="min-w-0 flex-1 truncate font-medium text-[color:var(--fg,#0B0E17)]">{item.label}</span>
-                  <span className={`${COUNT} shrink-0 text-[11px]`}>{item.count.toLocaleString("en-US")}</span>
-                </div>
-                <div className="ml-12 mt-1 h-0.5 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
-                  <div className="h-full rounded-full bg-[color:var(--ember,#D96B1C)]" style={{ width: `${Math.max(8, Math.round((item.count / maxProg) * 100))}%` }} />
-                </div>
-              </li>
-            ))}
-          </ol>
-        </Board>
-      ) : null}
+      {!compact ? programsBoard : null}
       {!compact ? (
         <div className={`${PANEL} relative overflow-hidden p-1.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
           <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Scout ask</p>

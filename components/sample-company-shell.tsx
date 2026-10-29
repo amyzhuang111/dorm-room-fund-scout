@@ -123,7 +123,15 @@ export function SampleCompanyShell({
               <span>Scout filters</span>
               <span className="text-[color:var(--ember,#D96B1C)]">Open</span>
             </button>
-            <div className="mt-3 space-y-2 lg:hidden">
+            <div className={`${PANEL} relative mt-3 overflow-hidden p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] lg:hidden`}>
+              <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-1.5">
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
+                <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                  <span className={COUNT}>{filtered.length.toLocaleString("en-US")}</span>
+                  {" · "}
+                  <span className="text-[color:var(--ember,#D96B1C)]">{signaled.toLocaleString("en-US")} signaled</span>
+                </p>
+              </div>
               <IntelligenceBoards companies={filtered} compact hideSector />
             </div>
           </div>

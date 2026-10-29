@@ -360,7 +360,7 @@ export function TileGlobe({
               <span className="text-[color:var(--ember,#D96B1C)]">{liveCount.toLocaleString("en-US")}</span>
             </p>
             <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies forming on campus</p>
-            <p className="mt-0.5 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)] max-sm:sr-only">
+            <p className="sr-only mt-0.5 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">
               <span className={COUNT} data-count="campuses-on-map">{shown.length.toLocaleString("en-US")}</span> campuses on map
               {" · "}
               <span className={COUNT} data-count="founders-listed">{founderCount.toLocaleString("en-US")}</span> founders listed
@@ -405,7 +405,13 @@ export function TileGlobe({
                 />
               </div>
             ) : (
-              <IntelligenceBoards companies={filteredCompanies} compact />
+              <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
+                <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
+                  <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{filteredCompanies.length.toLocaleString("en-US")}</p>
+                </div>
+                <IntelligenceBoards companies={filteredCompanies} compact />
+              </div>
             )}
           </div>
         </aside>
