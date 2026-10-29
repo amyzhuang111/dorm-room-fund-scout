@@ -754,8 +754,8 @@ export function MobileBrowsePulse({ companies }: { companies: FacetCompany[] }) 
   const mix = useMemo(() => sectorMix(companies).slice(0, 4), [companies]);
   const mixTotal = mix.reduce((s, m) => s + m.count, 0) || 1;
   return (
-    <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      <div className={`${PANEL} relative min-w-[min(100%,280px)] flex-1 overflow-hidden p-2 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
+    <div className="flex flex-col gap-2 sm:flex-row sm:overflow-x-auto sm:pb-1 sm:[-ms-overflow-style:none] sm:[scrollbar-width:none] sm:[&::-webkit-scrollbar]:hidden">
+      <div className={`${PANEL} relative w-full min-w-0 flex-1 overflow-hidden p-2 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
         <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Recent signals</p>
         <ol className="mt-1.5 space-y-1">
           {recent.map((company, index) => (
@@ -765,7 +765,7 @@ export function MobileBrowsePulse({ companies }: { companies: FacetCompany[] }) 
           ))}
         </ol>
       </div>
-      <div className={`${PANEL} relative min-w-[min(100%,240px)] flex-1 overflow-hidden p-2 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
+      <div className={`${PANEL} relative w-full min-w-0 flex-1 overflow-hidden p-2 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
         <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Sector mix</p>
         <div className="mt-1.5 flex h-1.5 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
           {mix.map((item) => (
