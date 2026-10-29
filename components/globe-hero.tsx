@@ -250,7 +250,7 @@ function SignatureBand({ stats, companies = [], globe }: { stats: HeroStats; com
           <SamplePill />
           <p className="text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)] sm:text-[13px]" data-sample-strip-counts>
             <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]" data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
-            {" founders listed · "}
+            {" founder names listed · "}
             <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]" data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
             {" campuses on map"}
           </p>

@@ -130,11 +130,11 @@ export function LogoPill({
   );
 }
 
-function FacetGroup({ title, children, defaultOpen = true }: { title: string; children: ReactNode; defaultOpen?: boolean }) {
+function FacetGroup({ title, children, defaultOpen = true, dense = false }: { title: string; children: ReactNode; defaultOpen?: boolean; dense?: boolean }) {
   return (
-    <details className="border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5" open={defaultOpen}>
+    <details className={`border-b border-[color:var(--line,#E1E5EF)] ${dense ? "px-1.5 py-1" : "px-2 py-1.5"}`} open={defaultOpen}>
       <summary className="cursor-pointer text-[10px] font-medium uppercase tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]">{title}</summary>
-      <div className="mt-1.5 flex flex-wrap gap-1">{children}</div>
+      <div className={`flex flex-wrap ${dense ? "mt-1 gap-0.5" : "mt-1.5 gap-1"}`}>{children}</div>
     </details>
   );
 }
@@ -242,6 +242,7 @@ export function FacetRail({
   onCampusFocus,
   footer,
   searchPlaceholder = "Search company or founder",
+  dense = false,
 }: {
   companies: FacetCompany[];
   campuses: { id: string; name: string; country: string; founders: number }[];
@@ -250,6 +251,8 @@ export function FacetRail({
   onCampusFocus?: (id: string) => void;
   footer?: ReactNode;
   searchPlaceholder?: string;
+  /** Drop outer chrome when nested in a modal/details that already labels Scout filters. */
+  dense?: boolean;
 }) {
   const countryScoped = useMemo(() => {
     if (!facets.country) return campuses;
@@ -321,10 +324,14 @@ export function FacetRail({
   }
 
   return (
-    <div className={`flex h-full min-h-0 flex-col overflow-hidden ${PANEL}`} data-facet-rail="scout">
-      <div className="border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2">
-        <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Scout filters</p>
-        <p className="mt-0.5 text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the map</p>
+    <div className={`flex h-full min-h-0 flex-col overflow-hidden ${dense ? "" : PANEL}`} data-facet-rail="scout">
+      <div className={`border-b border-[color:var(--line,#E1E5EF)] ${dense ? "px-1.5 py-1.5" : "px-2.5 py-2"}`}>
+        {dense ? null : (
+          <>
+            <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Scout filters</p>
+            <p className="mt-0.5 text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the map</p>
+          </>
+        )}
         <label className="sr-only" htmlFor="sample-facet-q">
           {searchPlaceholder}
         </label>
@@ -334,11 +341,23 @@ export function FacetRail({
           value={facets.query}
           onChange={(event) => set({ query: event.target.value })}
           placeholder={searchPlaceholder}
-          className="mt-1.5 h-7 w-full rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2 text-[11px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)]"
+          className={`${dense ? "mt-0" : "mt-1.5"} h-7 w-full rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2 text-[11px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)]`}
         />
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <FacetGroup title="Founded year">
+        <FacetGroup title="Status" dense={dense}>
+          <Chip facet="status" count={baseCompanies.length} active={!facets.status} onClick={() => set({ status: null })} label={`All · ${baseCompanies.length}`} />
+          {statuses.map((item) => (
+            <Chip key={item.id} facet="status" count={item.count} active={facets.status === item.id} onClick={() => set({ status: facets.status === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} dot={STATUS_DOT[item.id]} />
+          ))}
+        </FacetGroup>
+        <FacetGroup title="Flags" dense={dense}>
+          <Chip facet="flag" active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
+          {flags.map((item) => (
+            <Chip key={item.id} facet="flag" count={item.count} active={facets.flag === item.id} onClick={() => set({ flag: facets.flag === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} icon={FLAG_ICON[item.id]} />
+          ))}
+        </FacetGroup>
+        <FacetGroup title="Founded year" dense={dense}>
           <Chip
             facet="year"
             count={baseCompanies.length}
@@ -367,19 +386,7 @@ export function FacetRail({
             );
           })}
         </FacetGroup>
-        <FacetGroup title="Status">
-          <Chip facet="status" count={baseCompanies.length} active={!facets.status} onClick={() => set({ status: null })} label={`All · ${baseCompanies.length}`} />
-          {statuses.map((item) => (
-            <Chip key={item.id} facet="status" count={item.count} active={facets.status === item.id} onClick={() => set({ status: facets.status === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} dot={STATUS_DOT[item.id]} />
-          ))}
-        </FacetGroup>
-        <FacetGroup title="Flags">
-          <Chip facet="flag" active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
-          {flags.map((item) => (
-            <Chip key={item.id} facet="flag" count={item.count} active={facets.flag === item.id} onClick={() => set({ flag: facets.flag === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} icon={FLAG_ICON[item.id]} />
-          ))}
-        </FacetGroup>
-        <FacetGroup title="HQ city">
+        <FacetGroup title="HQ city" dense={dense}>
           <Chip facet="hq" count={baseCompanies.length} active={!facets.hqRegion} onClick={() => set({ hqRegion: null })} label={`All · ${baseCompanies.length}`} />
           {hqRegions.map((item) => (
             <Chip
@@ -402,7 +409,7 @@ export function FacetRail({
             />
           ) : null}
         </FacetGroup>
-        <FacetGroup title="Sector">
+        <FacetGroup title="Sector" dense={dense}>
           <Chip facet="sector" count={baseCompanies.length} active={!facets.sector && !facets.sectorMissing} onClick={() => set({ sector: null, sectorMissing: false })} label={`All · ${baseCompanies.length}`} />
           {sectorRows.map((item) => {
             const missing = item.id === NOT_ON_RECORD;
@@ -435,13 +442,13 @@ export function FacetRail({
             />
           ) : null}
         </FacetGroup>
-        <FacetGroup title="Country" defaultOpen={false}>
+        <FacetGroup title="Country" defaultOpen={false} dense={dense}>
           <Chip active={!facets.country} onClick={() => set({ country: null })} label={`All · ${campuses.length}`} />
           {countries.map(([name, count]) => (
             <Chip key={name} active={facets.country === name} onClick={() => set({ country: facets.country === name ? null : name })} label={`${name} · ${count}`} />
           ))}
         </FacetGroup>
-        <FacetGroup title="Campus" defaultOpen={false}>
+        <FacetGroup title="Campus" defaultOpen={false} dense={dense}>
           {campusRows.map((campus) => (
             <button
               key={campus.id}
@@ -457,19 +464,19 @@ export function FacetRail({
             </button>
           ))}
         </FacetGroup>
-        <FacetGroup title="Signal kind" defaultOpen={false}>
+        <FacetGroup title="Signal kind" defaultOpen={false} dense={dense}>
           <Chip active={!facets.kind} onClick={() => set({ kind: null })} label="All" />
           {kinds.map((item) => (
             <Chip key={item.id} active={facets.kind === item.id} onClick={() => set({ kind: facets.kind === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} />
           ))}
         </FacetGroup>
-        <FacetGroup title="Stage" defaultOpen={false}>
+        <FacetGroup title="Stage" defaultOpen={false} dense={dense}>
           <Chip active={!facets.stage} onClick={() => set({ stage: null })} label="All" />
           {stages.map((item) => (
             <Chip key={item.id} active={facets.stage === item.id} onClick={() => set({ stage: facets.stage === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} />
           ))}
         </FacetGroup>
-        <FacetGroup title="Signal recency" defaultOpen={false}>
+        <FacetGroup title="Signal recency" defaultOpen={false} dense={dense}>
           <Chip active={!facets.recency} onClick={() => set({ recency: null })} label="All" />
           {recency.map((item) => (
             <Chip key={item.id} active={facets.recency === item.id} onClick={() => set({ recency: facets.recency === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} />

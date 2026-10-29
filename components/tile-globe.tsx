@@ -360,7 +360,7 @@ export function TileGlobe({
             <p className="sr-only mt-0.5 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">
               <span className={COUNT} data-count="campuses-on-map">{universeCounts.campusesOnMap.toLocaleString("en-US")}</span> campuses on map
               {" · "}
-              <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span> founders listed
+              <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span> founder names listed
             </p>
           </div>
           <div className="flex flex-wrap gap-1.5">
@@ -443,19 +443,23 @@ export function TileGlobe({
       </div>
       {mobileFiltersOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
-          <button type="button" className="absolute inset-0 bg-slate-900/40" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
-          <div className={`${PANEL} absolute inset-x-0 bottom-0 flex max-h-[min(85dvh,640px)] flex-col overflow-hidden rounded-t-xl border-t border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg-raised,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)]`}>
-            <div className="flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-3 py-2">
-              <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#0B0E17)]">Scout filters · {shown.length} campuses</p>
-              <button type="button" onClick={() => setMobileFiltersOpen(false)} className="font-mono text-[11px] text-[color:var(--ember,#D96B1C)]">Done</button>
+          <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
+          <div className={`${PANEL} absolute inset-x-0 bottom-0 flex max-h-[min(78dvh,560px)] flex-col overflow-hidden rounded-t-lg border-t border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg-raised,#FFFFFF)] shadow-[0_-6px_20px_rgba(15,23,42,0.10)]`}>
+            <div className="flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-1.5">
+              <div className="min-w-0">
+                <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#0B0E17)]">Scout filters · {shown.length} campuses</p>
+                <p className="font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Status · Year · Sector · Campus</p>
+              </div>
+              <button type="button" onClick={() => setMobileFiltersOpen(false)} className="inline-flex h-7 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-2.5 font-mono text-[11px] font-semibold text-white">Done</button>
             </div>
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2">
-              <div className="h-[min(70dvh,520px)]">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-1">
+              <div className="h-[min(68dvh,500px)]">
                 <FacetRail
                   companies={companies}
                   campuses={campuses}
                   facets={facets}
                   onChange={onFacetChange}
+                  dense
                   onCampusFocus={(id) => {
                     const campus = campuses.find((row) => row.id === id);
                     if (campus) focus(campus);

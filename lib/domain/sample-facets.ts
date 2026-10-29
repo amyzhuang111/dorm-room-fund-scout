@@ -70,7 +70,7 @@ export const FLAG_LABEL: Record<FlagId, string> = {
   new: "Founded in 2026",
   signaled: "Active this month",
   funded: "Raised funding",
-  founders: "Founders listed",
+  founders: "Has named founders",
 };
 
 /** Status from stored operating_status + acquisition signals only. */

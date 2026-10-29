@@ -128,11 +128,11 @@ export function SampleInstrumentBrowse({
         </div>
       </aside>
       <div className="min-w-0">
-        <div className="mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3">
+        <div className="mb-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
           <div className="flex flex-wrap items-end justify-between gap-3">
           <div className="min-w-0">
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{feed === "leaderboard" ? "Scout dispatch · signals" : "Scout dispatch · ledger"}</p>
-            <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
+            <p className="mt-1 font-mono text-[36px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
               <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
             </p>
             <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
@@ -176,8 +176,8 @@ export function SampleInstrumentBrowse({
           ) : null}
           </div>
         </div>
-        <div className="mb-2 space-y-2">
-          <div className="flex flex-wrap gap-1">
+        <div className="mb-2 space-y-1.5">
+          <div className="-mx-0.5 flex gap-1 overflow-x-auto px-0.5 pb-0.5 [scrollbar-width:none] sm:flex-wrap sm:overflow-visible [&::-webkit-scrollbar]:hidden">
             {([2026, 2025, 2024] as const).map((year) => {
               const active = facets.foundedYear === year;
               return (
@@ -223,7 +223,7 @@ export function SampleInstrumentBrowse({
           <button
             type="button"
             onClick={() => setMobileFiltersOpen(true)}
-            className={`${PANEL} flex w-full items-center justify-between px-2.5 py-2 text-left font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#0B0E17)] lg:hidden`}
+            className={`${PANEL} flex w-full items-center justify-between px-2.5 py-1.5 text-left font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#0B0E17)] lg:hidden`}
           >
             <span>Scout filters</span>
             <span className="text-[color:var(--ember,#D96B1C)]">Open</span>
@@ -231,7 +231,7 @@ export function SampleInstrumentBrowse({
           <details className={`${PANEL} hidden px-2.5 py-2 lg:block`}>
             <summary className="cursor-pointer font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#0B0E17)]">Scout filters</summary>
             <div className="mt-2 h-[min(50vh,420px)]">
-              <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={commitFacet} />
+              <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={commitFacet} dense />
             </div>
           </details>
         </div>
@@ -248,7 +248,7 @@ export function SampleInstrumentBrowse({
             className={
               feed === "leaderboard"
                 ? "divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]"
-                : "grid grid-cols-1 gap-2 sm:grid-cols-2"
+                : "grid grid-cols-1 gap-1.5 sm:grid-cols-2"
             }
           >
             {cards.map((card, index) => (
@@ -294,9 +294,9 @@ export function SampleInstrumentBrowse({
               </div>
               <button type="button" onClick={() => setMobileFiltersOpen(false)} className="inline-flex h-7 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-2.5 font-mono text-[11px] font-semibold text-white">Done</button>
             </div>
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-1.5">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-1">
               <div className="h-[min(68dvh,500px)]">
-                <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={commitFacet} />
+                <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={commitFacet} dense />
               </div>
             </div>
           </div>
@@ -326,8 +326,8 @@ function DirectoryPill({ card, rank, ranked = false }: { card: DirectoryCard; ra
   const subtitle = directoryCardSubtitle(card);
   const meta = signalMeta(card);
   const shell = ranked
-    ? "group flex items-start gap-3 px-3 py-2.5 transition-[background-color,color] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/45"
-    : "group relative flex items-start gap-3 border border-[color:var(--line,#E1E5EF)] border-l-[3px] border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 transition-[border-color,background-color,box-shadow] hover:border-[color:var(--cobalt,#2F4FD8)]/55 hover:border-l-[color:var(--ember,#D96B1C)] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 hover:shadow-[inset_0_-1px_0_0_color-mix(in_srgb,var(--cobalt,#2F4FD8)_35%,transparent)]";
+    ? "group flex items-start gap-2.5 px-3 py-2 transition-[background-color,color] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/45 sm:gap-3 sm:py-2.5"
+    : "group relative flex items-start gap-2.5 border border-[color:var(--line,#E1E5EF)] border-l-[3px] border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 transition-[border-color,background-color,box-shadow] before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-[color:var(--cobalt,#2F4FD8)]/20 hover:border-[color:var(--cobalt,#2F4FD8)]/55 hover:border-l-[color:var(--ember,#D96B1C)] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 hover:shadow-[inset_0_-1px_0_0_color-mix(in_srgb,var(--cobalt,#2F4FD8)_35%,transparent)] sm:gap-3 sm:px-3 sm:py-2.5";
   return (
     <Link href={`/startup/${card.id}`} className={shell}>
       {rank != null ? (
@@ -337,7 +337,7 @@ function DirectoryPill({ card, rank, ranked = false }: { card: DirectoryCard; ra
       ) : null}
       <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 22 : 24} />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)] sm:text-[15px]">{card.name}</p>
+        <p className="truncate text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[15px]">{card.name}</p>
         {subtitle ? <p className="mt-0.5 truncate font-mono text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)]">{subtitle}</p> : null}
         {meta ? (
           <span className="mt-1.5 flex flex-wrap items-center gap-1.5">

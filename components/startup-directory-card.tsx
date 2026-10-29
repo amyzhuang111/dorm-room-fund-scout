@@ -265,37 +265,37 @@ export function StartupDirectoryCard({
   );
   if (embedded) {
     return (
-      <div data-testid="startup-directory-card" className="space-y-4 bg-transparent p-0 shadow-none">
-        <header className="space-y-2">
-          <div className="flex items-start gap-3">
+      <div data-testid="startup-directory-card" className="space-y-3 bg-transparent p-0 shadow-none">
+        <header className="space-y-1.5">
+          <div className="flex items-start gap-2.5">
             <CompanyLogo name={card.name} websiteUrl={card.websiteUrl} />
             <div className="min-w-0 flex-1">
               {name}
-              {card.subtitle ? <p className="mt-1 text-[14px] leading-snug text-[color:var(--fg-2,#3F465C)]">{card.subtitle}</p> : null}
+              {card.subtitle ? <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg-2,#3F465C)] sm:text-[14px]">{card.subtitle}</p> : null}
               {card.sector ? (
-                <p className="mt-2">
+                <p className="mt-1.5">
                   <span className="inline-flex rounded-sm border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--ember,#D96B1C)]/10 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)]">{card.sector}</span>
                 </p>
               ) : null}
             </div>
           </div>
-          {card.description ? <p className="text-[15px] leading-snug text-[color:var(--fg,#0B0E17)]">{card.description}</p> : null}
+          {card.description ? <p className="text-[14px] leading-snug text-[color:var(--fg,#0B0E17)] sm:text-[15px]">{card.description}</p> : null}
         </header>
 
         <section>
-          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founders</h3>
+          <h3 className="border-b border-[color:var(--line,#E1E5EF)] pb-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founders</h3>
           {card.founders.length === 0 ? (
-            <p className="mt-2 text-sm text-[color:var(--fg-3,#5C647A)]">No founders on record.</p>
+            <p className="mt-1.5 text-sm text-[color:var(--fg-3,#5C647A)]">No founders on record.</p>
           ) : (
-            <ul className="mt-2 space-y-2">
+            <ul className="mt-1.5 space-y-1.5">
               {card.founders.map((founder) => {
                 const meta = founderMeta(founder);
                 return (
-                  <li key={founder.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-2.5 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-2.5">
+                  <li key={founder.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-2 rounded-sm border border-[color:var(--line,#E1E5EF)] border-l-[3px] border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] p-2">
                     <FounderAvatar name={founder.name} />
                     <div className="min-w-0">
-                      <p className="break-words text-[14px] font-semibold leading-snug text-[color:var(--fg,#0B0E17)]">{founder.name}</p>
-                      {founder.role ? <p className="mt-0.5 text-sm leading-snug text-[color:var(--fg-2,#3F465C)]">{founder.role}</p> : null}
+                      <p className="break-words text-[13px] font-semibold leading-snug text-[color:var(--fg,#0B0E17)] sm:text-[14px]">{founder.name}</p>
+                      {founder.role ? <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg-2,#3F465C)]">{founder.role}</p> : null}
                       {meta ? (
                         <p className="mt-1 flex items-start gap-1 text-xs leading-snug text-[color:var(--fg-3,#5C647A)]">
                           <SchoolIcon />
@@ -310,7 +310,7 @@ export function StartupDirectoryCard({
                         rel="noopener noreferrer"
                         aria-label={`LinkedIn for ${founder.name}`}
                         title="Verified public LinkedIn profile"
-                        className="inline-flex shrink-0 items-center gap-1 rounded-md bg-[#0a66c2] px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-[#004182]"
+                        className="inline-flex shrink-0 items-center gap-1 rounded-md bg-[#0a66c2] px-2 py-1 text-xs font-semibold text-white hover:bg-[#004182]"
                       >
                         in
                       </a>
@@ -327,8 +327,8 @@ export function StartupDirectoryCard({
         </section>
 
         <section>
-          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Signals</h3>
-          <dl className="mt-2 space-y-1.5 text-sm text-[color:var(--fg,#0B0E17)]">
+          <h3 className="border-b border-[color:var(--line,#E1E5EF)] pb-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Signals</h3>
+          <dl className="mt-1.5 space-y-1.5 text-sm text-[color:var(--fg,#0B0E17)]">
             {card.region ? (
               <div className="grid grid-cols-[6.5rem_1fr] gap-2">
                 <dt className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Region</dt>
@@ -356,10 +356,10 @@ export function StartupDirectoryCard({
           </dl>
         </section>
 
-        <section className="pb-2">
-          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Links</h3>
+        <section className="pb-1">
+          <h3 className="border-b border-[color:var(--line,#E1E5EF)] pb-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Links</h3>
           {card.links.length > 0 ? (
-            <ul className="mt-2 space-y-1.5">
+            <ul className="mt-1.5 space-y-1.5">
               {card.links.map((link) => (
                 <li key={link.kind}>
                   <a
@@ -377,7 +377,7 @@ export function StartupDirectoryCard({
               ))}
             </ul>
           ) : (
-            <div className="mt-2 rounded-md border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-3 py-2.5">
+            <div className="mt-1.5 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2.5 py-2">
               <p className="font-mono text-[11px] text-[color:var(--fg-3,#5C647A)]">Not on record</p>
               <p className="mt-0.5 break-words text-[11px] leading-snug text-[color:var(--fg-3,#5C647A)]">No verified website or social links stored.</p>
             </div>
@@ -400,7 +400,7 @@ export function StartupDirectoryCard({
 
 function FounderAvatar({ name }: { name: string }) {
   return (
-    <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-neutral-100 text-sm font-bold text-black" aria-hidden>
+    <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-[color:var(--cobalt-haze,#E8ECFA)] font-mono text-[11px] font-bold text-[color:var(--cobalt,#2F4FD8)] sm:h-10 sm:w-10 sm:text-xs" aria-hidden>
       {personInitials(name)}
     </div>
   );
