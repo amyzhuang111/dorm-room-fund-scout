@@ -47,7 +47,8 @@ export function GlobeHero({ stats, companies = [], showGlobe = true }: { stats: 
       <div className={showGlobe ? "max-lg:min-h-[calc(100svh-48px)] lg:min-h-[calc(100dvh-48px)]" : ""}>
         <SignatureBand stats={stats} globe={showGlobe ? <GlobeBlock stats={stats} companies={companies} /> : null} />
       </div>
-      {showGlobe ? (
+      {/* Collage teasers compete with Directory tabs on mobile browse; instrument rails carry signals instead. */}
+      {!showGlobe ? (
         <div className="mx-auto mt-8 w-full max-w-[880px]">
           <Collage stats={stats} />
         </div>

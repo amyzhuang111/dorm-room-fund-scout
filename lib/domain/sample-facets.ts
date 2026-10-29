@@ -1,6 +1,8 @@
 /** Facet helpers for the sample instrument. Counts come from stored directory cards only. */
 
 export type RecencyId = "month" | "year" | "older" | "none";
+export type StatusId = "active" | "acquired" | "closed";
+export type FlagId = "new" | "signaled" | "funded" | "logo";
 
 export interface FacetCompany {
   id: string;
@@ -16,6 +18,10 @@ export interface FacetCompany {
   signalKind?: string | null;
   signalLabel?: string | null;
   latestSignalAt?: string | null;
+  foundedYear?: number | null;
+  operatingStatus?: "acquired" | "dead" | null;
+  hqRegion?: string | null;
+  primaryProgram?: string | null;
 }
 
 export interface FacetCount {
@@ -50,6 +56,34 @@ export const RECENCY_LABEL: Record<RecencyId, string> = {
   none: "No date",
 };
 
+export const STATUS_LABEL: Record<StatusId, string> = {
+  active: "Active",
+  acquired: "Acquired",
+  closed: "Closed",
+};
+
+export const FLAG_LABEL: Record<FlagId, string> = {
+  new: "New",
+  signaled: "Has signals",
+  funded: "Funded",
+  logo: "Has logo",
+};
+
+/** Status from stored operating_status + acquisition signals only. */
+export function statusOf(company: FacetCompany): StatusId {
+  if (company.operatingStatus === "dead") return "closed";
+  if (company.operatingStatus === "acquired" || company.signalKind === "acquisition") return "acquired";
+  return "active";
+}
+
+export function hasFlag(company: FacetCompany, flag: FlagId): boolean {
+  if (flag === "new") return (company.foundedYear ?? 0) >= 2025;
+  if (flag === "signaled") return company.signals > 0;
+  if (flag === "funded") return company.signalKind === "funding" || Boolean(company.stage);
+  if (flag === "logo") return Boolean(company.logoUrl);
+  return false;
+}
+
 export function countBy<T>(items: T[], keyOf: (item: T) => string | null | undefined, labelOf: (id: string) => string): FacetCount[] {
   const counts = new Map<string, number>();
   for (const item of items) {
@@ -70,6 +104,10 @@ export function filterFacetCompanies(
     stage?: string | null;
     campus?: string | null;
     recency?: RecencyId | null;
+    foundedYear?: number | null;
+    status?: StatusId | null;
+    flag?: FlagId | null;
+    hqRegion?: string | null;
     query?: string;
   },
 ): FacetCompany[] {
@@ -80,6 +118,10 @@ export function filterFacetCompanies(
     if (opts.stage && company.stage !== opts.stage) return false;
     if (opts.campus && company.schoolId !== opts.campus) return false;
     if (opts.recency && recencyOf(company.latestSignalAt) !== opts.recency) return false;
+    if (opts.foundedYear != null && company.foundedYear !== opts.foundedYear) return false;
+    if (opts.status && statusOf(company) !== opts.status) return false;
+    if (opts.flag && !hasFlag(company, opts.flag)) return false;
+    if (opts.hqRegion && company.hqRegion !== opts.hqRegion) return false;
     if (tokens.length) {
       const hay = [company.name, company.sector ?? "", company.school ?? "", ...(company.founders ?? [])].join("\n").toLowerCase();
       if (!tokens.every((token) => hay.includes(token))) return false;

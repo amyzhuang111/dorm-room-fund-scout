@@ -7,14 +7,10 @@ import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import {
   applyFacets,
-  BarRow,
-  Board,
   emptyFacets,
   FacetRail,
+  IntelligenceBoards,
   LogoMark,
-  recentSignals,
-  sectorMix,
-  topFounders,
   type FacetState,
 } from "./sample-instrument";
 
@@ -88,15 +84,10 @@ export function SampleInstrumentBrowse({
     query: query ?? "",
   }));
 
-  // URL is source of truth for listed results; local facets refine the right-rail boards and quick pills.
   const boardCompanies = useMemo(() => applyFacets(companies, facets), [companies, facets]);
-  const mix = useMemo(() => sectorMix(boardCompanies), [boardCompanies]);
-  const recent = useMemo(() => recentSignals(boardCompanies), [boardCompanies]);
-  const founders = useMemo(() => topFounders(boardCompanies), [boardCompanies]);
 
   function commitFacet(next: FacetState) {
     setFacets(next);
-    // Navigate when a URL-backed facet changes so directory results stay real/server-filtered.
     const href = browseHref({
       feed,
       sector: next.sector ?? undefined,
@@ -159,10 +150,52 @@ export function SampleInstrumentBrowse({
             </div>
           ) : null}
         </div>
-        <div className="mb-2 lg:hidden">
+        <div className="mb-2 space-y-2 lg:hidden">
+          <div className="flex flex-wrap gap-1">
+            {([2026, 2025, 2024] as const).map((year) => {
+              const active = facets.foundedYear === year;
+              return (
+                <button
+                  key={year}
+                  type="button"
+                  onClick={() => commitFacet({ ...facets, foundedYear: active ? null : year })}
+                  className={`inline-flex h-6 items-center rounded-full border px-2 text-[11px] ${active ? "border-[#FB651E] bg-[#FB651E] text-white" : "border-[#f0d9c6] bg-white text-[#20140c]"}`}
+                >
+                  {year}
+                </button>
+              );
+            })}
+            {(
+              [
+                ["flag", "new", "New"],
+                ["flag", "signaled", "Has signals"],
+                ["flag", "funded", "Funded"],
+                ["status", "active", "Active"],
+                ["status", "acquired", "Acquired"],
+              ] as const
+            ).map(([kind, id, label]) => {
+              const active = kind === "flag" ? facets.flag === id : facets.status === id;
+              return (
+                <button
+                  key={`${kind}:${id}`}
+                  type="button"
+                  onClick={() =>
+                    commitFacet({
+                      ...facets,
+                      flag: kind === "flag" ? (facets.flag === id ? null : (id as FacetState["flag"])) : facets.flag,
+                      status: kind === "status" ? (facets.status === id ? null : (id as FacetState["status"])) : facets.status,
+                    })
+                  }
+                  className={`inline-flex h-6 items-center rounded-full border px-2 text-[11px] ${active ? "border-[#FB651E] bg-[#FB651E] text-white" : "border-[#f0d9c6] bg-white text-[#20140c]"}`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
           <details className="rounded-xl border border-[#f0d9c6] bg-white px-2.5 py-2">
-            <summary className="cursor-pointer text-[12px] font-semibold text-[#20140c]">Filters</summary>
-            <div className="mt-2 h-[280px]">
+            <summary className="cursor-pointer text-[12px] font-semibold text-[#20140c]">All filters</summary>
+            <div className="mt-2 h-[min(50vh,380px)]">
               <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={commitFacet} />
             </div>
           </details>
@@ -189,7 +222,6 @@ export function SampleInstrumentBrowse({
             Show more
           </Link>
         ) : null}
-        {/* Keep sector/kind quick links for crawlers / no-js parity with prior filters */}
         <div className="sr-only">
           {sectors.map((item) => (
             <Link key={item.id} href={browseHref({ feed, sector: item.id, kind, campus, q: query, sort: feed === "directory" ? sort : undefined })}>
@@ -202,53 +234,12 @@ export function SampleInstrumentBrowse({
             </Link>
           ))}
         </div>
+        <div className="mt-3 lg:hidden">
+          <IntelligenceBoards companies={boardCompanies} limit={4} />
+        </div>
       </div>
-      <div className="hidden space-y-2 lg:block">
-        <Board title="Recent signals" unit="date">
-          <ol className="space-y-1.5">
-            {recent.map((company, index) => (
-              <li key={company.id}>
-                <Link href={`/startup/${company.id}`} className="block hover:text-[#FB651E]">
-                  <div className="flex items-baseline gap-1.5 text-[11px]">
-                    <span className="w-3.5 shrink-0 font-bold tabular-nums text-[#E05612]">{index + 1}</span>
-                    <span className="min-w-0 flex-1 truncate">{company.name}</span>
-                    <span className="shrink-0 text-[10px] text-[#8a7260]">{company.signalLabel ?? "Signal"}</span>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </Board>
-        <Board title="Sector mix" unit="companies">
-          <ol className="space-y-1.5">
-            {mix.map((item, index) => (
-              <li key={item.id}>
-                <BarRow
-                  rank={index + 1}
-                  label={item.label}
-                  value={item.count}
-                  max={mix[0]?.count || 1}
-                  href={browseHref({ feed, sector: item.id, kind, campus, q: query, sort: feed === "directory" ? sort : undefined })}
-                />
-              </li>
-            ))}
-          </ol>
-        </Board>
-        <Board title="Top founders" unit="signals">
-          <ol className="space-y-1.5">
-            {founders.map((person, index) => (
-              <li key={person.key}>
-                <Link href={`/startup/${person.companyId}`} className="block hover:text-[#FB651E]" title={person.companyName}>
-                  <div className="flex items-baseline gap-1.5 text-[11px]">
-                    <span className="w-3.5 shrink-0 font-bold tabular-nums text-[#E05612]">{index + 1}</span>
-                    <span className="min-w-0 flex-1 truncate">{person.name}</span>
-                    <span className="shrink-0 font-bold tabular-nums text-[#E05612]">{person.signals}</span>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </Board>
+      <div className="hidden lg:block">
+        <IntelligenceBoards companies={boardCompanies} />
       </div>
     </div>
   );

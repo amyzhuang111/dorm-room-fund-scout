@@ -80,6 +80,10 @@ export function SampleHome({
     signalKind: card.signalKind,
     signalLabel: card.signalLabel,
     latestSignalAt: card.latestSignalAt,
+    foundedYear: card.foundedYear,
+    operatingStatus: card.operatingStatus,
+    hqRegion: card.hqRegion,
+    primaryProgram: card.primaryProgram,
   }));
   const matched = searchDirectory(filterDirectory(data.cards, sector, kind, campusId), query);
   const campusTotal = campusId ? filterDirectory(data.cards, undefined, undefined, campusId).length : null;

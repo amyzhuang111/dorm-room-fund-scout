@@ -30,6 +30,10 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
     signalKind: card.signalKind,
     signalLabel: card.signalLabel,
     latestSignalAt: card.latestSignalAt,
+    foundedYear: card.foundedYear,
+    operatingStatus: card.operatingStatus,
+    hqRegion: card.hqRegion,
+    primaryProgram: card.primaryProgram,
   }));
   const campuses = loadHeroStats().universities
     .filter((university) => university.lat != null && university.lon != null)

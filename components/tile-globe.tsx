@@ -2,19 +2,14 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
-import { shortCampusLabel } from "@/lib/domain/campuses";
 import { markerRadius, markerSizeLegend } from "@/lib/domain/marker-radius";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { MapCredit } from "./map-credit";
 import {
   applyFacets,
-  BarRow,
-  Board,
   emptyFacets,
   FacetRail,
-  recentSignals,
-  sectorMix,
-  topFounders,
+  IntelligenceBoards,
   ViewDrawer,
   type FacetState,
 } from "./sample-instrument";
@@ -107,14 +102,6 @@ export function TileGlobe({
     if (selectedId) return base.filter((company) => company.schoolId === selectedId);
     return base;
   }, [companies, facets, countryIds, selectedId]);
-  const byFounders = useMemo(
-    () => [...shown].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name)).slice(0, 6),
-    [shown],
-  );
-  const maxFounders = byFounders[0]?.founders || 1;
-  const sectors = useMemo(() => sectorMix(filteredCompanies), [filteredCompanies]);
-  const recent = useMemo(() => recentSignals(filteredCompanies), [filteredCompanies]);
-  const foundersBoard = useMemo(() => topFounders(filteredCompanies), [filteredCompanies]);
   const companyStrip = useMemo(() => filteredCompanies.slice(0, 96), [filteredCompanies]);
   const founderStrip = useMemo(() => {
     const rows: { key: string; name: string; companyId: string; companyName: string }[] = [];
@@ -401,69 +388,8 @@ export function TileGlobe({
             }
           />
         </aside>
-        <aside className="absolute bottom-[5.75rem] right-2 top-2 z-10 hidden w-[236px] space-y-2 overflow-y-auto lg:block">
-          <Board title="Leading campuses" unit="founders">
-            <ol className="space-y-1.5">
-              {byFounders.map((campus, index) => (
-                <li key={campus.id}>
-                  <BarRow
-                    rank={index + 1}
-                    label={shortCampusLabel(campus.id, campus.name)}
-                    value={campus.founders}
-                    max={maxFounders}
-                    onClick={() => focus(campus)}
-                  />
-                </li>
-              ))}
-            </ol>
-          </Board>
-          <Board title="Recent signals" unit="date">
-            <ol className="space-y-1.5">
-              {recent.map((company, index) => (
-                <li key={company.id}>
-                  <a href={`/startup/${company.id}`} className="block text-left hover:text-[#FB651E]">
-                    <div className="flex items-baseline gap-1.5 text-[11px]">
-                      <span className={`${COUNT} w-3.5 shrink-0 text-[10px]`}>{index + 1}</span>
-                      <span className="min-w-0 flex-1 truncate text-[#20140c]">{company.name}</span>
-                      <span className="shrink-0 text-[10px] text-[#8a7260]">{company.signalLabel ?? "Signal"}</span>
-                    </div>
-                    <p className="ml-[18px] text-[10px] tabular-nums text-[#8a7260]">{(company.latestSignalAt ?? "").replace(/-00/g, "") || "Date not stored"}</p>
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </Board>
-          <Board title="Sector mix" unit="companies">
-            <ol className="space-y-1.5">
-              {sectors.map((item, index) => (
-                <li key={item.id}>
-                  <BarRow
-                    rank={index + 1}
-                    label={item.label}
-                    value={item.count}
-                    max={sectors[0]?.count || 1}
-                    onClick={() => setFacets((prev) => ({ ...prev, sector: prev.sector === item.id ? null : item.id }))}
-                  />
-                </li>
-              ))}
-            </ol>
-          </Board>
-          <Board title="Top founders" unit="signals">
-            <ol className="space-y-1.5">
-              {foundersBoard.map((person, index) => (
-                <li key={person.key}>
-                  <a href={`/startup/${person.companyId}`} className="block text-left hover:text-[#FB651E]" title={person.companyName}>
-                    <div className="flex items-baseline gap-1.5 text-[11px]">
-                      <span className={`${COUNT} w-3.5 shrink-0 text-[10px]`}>{index + 1}</span>
-                      <span className="min-w-0 flex-1 truncate text-[#20140c]">{person.name}</span>
-                      <span className={`${COUNT} shrink-0 text-[10px]`}>{person.signals.toLocaleString("en-US")}</span>
-                    </div>
-                    <p className="ml-[18px] truncate text-[10px] text-[#8a7260]">{person.companyName}</p>
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </Board>
+        <aside className="absolute bottom-[4.75rem] right-2 top-1.5 z-10 hidden w-[236px] overflow-y-auto overscroll-contain lg:block">
+          <IntelligenceBoards companies={filteredCompanies} />
         </aside>
         {hover ? (
           <div className="pointer-events-none absolute z-20 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-xl border border-[#f0d9c6] bg-white px-2.5 py-1.5 text-left text-[#20140c] shadow" style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}>

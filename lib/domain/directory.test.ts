@@ -24,6 +24,10 @@ function card(partial: Partial<DirectoryCard> & Pick<DirectoryCard, "id" | "name
     founders: [],
     latestSignalAt: null,
     logoUrl: null,
+    foundedYear: null,
+    operatingStatus: null,
+    hqRegion: null,
+    primaryProgram: null,
     ...partial,
   };
 }

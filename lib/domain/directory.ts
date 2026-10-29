@@ -23,6 +23,14 @@ export interface DirectoryCard {
   latestSignalAt: string | null;
   /** A logo or favicon URL already stored for this company. Never invented. */
   logoUrl: string | null;
+  /** Founded year from company_facts.founded_year when stored. */
+  foundedYear: number | null;
+  /** operating_status fact when stored: acquired | dead. */
+  operatingStatus: "acquired" | "dead" | null;
+  /** Normalized HQ city from company_facts.hq when stored. */
+  hqRegion: string | null;
+  /** First investor/program fact when stored (e.g. Y Combinator, SkyDeck). */
+  primaryProgram: string | null;
 }
 
 export interface DirectoryFilter {
@@ -127,6 +135,26 @@ function stageLabel(raw: string | null): string | null {
   return STAGE_LABEL[raw.trim().toLowerCase()] ?? null;
 }
 
+
+function hqRegionOf(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  const text = raw.trim();
+  if (!text) return null;
+  const lower = text.toLowerCase();
+  if (lower.includes("san francisco") || lower === "sf" || lower.startsWith("sf,")) return "San Francisco";
+  if (lower.includes("new york") || lower.includes("nyc") || lower === "ny") return "New York";
+  if (lower.includes("los angeles") || lower.includes("l.a.") || lower === "la") return "Los Angeles";
+  if (lower.includes("palo alto") || lower.includes("stanford") || lower.includes("menlo park") || lower.includes("mountain view")) return "Bay Area";
+  if (lower.includes("boston") || lower.includes("cambridge")) return "Boston";
+  if (lower.includes("seattle")) return "Seattle";
+  if (lower.includes("austin")) return "Austin";
+  if (lower.includes("london")) return "London";
+  if (lower.includes("toronto")) return "Toronto";
+  // Keep a short stored city when it is already a single token/city.
+  const short = text.split(",")[0]?.trim() || text;
+  return short.length <= 24 ? short : short.slice(0, 24);
+}
+
 /** Reads companies, schools, sectors, and signal rows. A larger import shows up here without a layout change. */
 export function loadDirectory(): DirectoryData {
   const db = getDb();
@@ -221,6 +249,41 @@ export function loadDirectory(): DirectoryData {
     if (key && (!prev || key > prev)) latestSignal.set(row.project_id, key);
   }
 
+  const hqByProject = new Map<string, string>();
+  for (const row of db
+    .prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'hq'`)
+    .all() as { project_id: string; value_text: string | null }[]) {
+    if (hqByProject.has(row.project_id)) continue;
+    const region = hqRegionOf(row.value_text);
+    if (region) hqByProject.set(row.project_id, region);
+  }
+
+  const programByProject = new Map<string, string>();
+  for (const row of db
+    .prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'investor'`)
+    .all() as { project_id: string; value_text: string | null }[]) {
+    if (programByProject.has(row.project_id)) continue;
+    const name = String(row.value_text ?? "").trim();
+    if (name) programByProject.set(row.project_id, name);
+  }
+
+  const foundedYearByProject = new Map<string, number>();
+  for (const row of db
+    .prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'founded_year'`)
+    .all() as { project_id: string; value_text: string | null }[]) {
+    if (foundedYearByProject.has(row.project_id)) continue;
+    const year = Number(String(row.value_text ?? "").trim());
+    if (Number.isFinite(year) && year >= 1990 && year <= 2100) foundedYearByProject.set(row.project_id, year);
+  }
+
+  const operatingStatusByProject = new Map<string, "acquired" | "dead">();
+  for (const row of db
+    .prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'operating_status'`)
+    .all() as { project_id: string; value_text: string | null }[]) {
+    const value = String(row.value_text ?? "").trim().toLowerCase();
+    if (value === "acquired" || value === "dead") operatingStatusByProject.set(row.project_id, value);
+  }
+
   const logoByProject = new Map<string, string>();
   for (const row of db
     .prepare(
@@ -263,6 +326,10 @@ export function loadDirectory(): DirectoryData {
       founders: foundersByProject.get(company.id) ?? [],
       latestSignalAt: latestSignal.get(company.id) ?? null,
       logoUrl: logoByProject.get(company.id) ?? null,
+      foundedYear: foundedYearByProject.get(company.id) ?? null,
+      operatingStatus: operatingStatusByProject.get(company.id) ?? null,
+      hqRegion: hqByProject.get(company.id) ?? null,
+      primaryProgram: programByProject.get(company.id) ?? null,
     });
   }
   cards.sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name));

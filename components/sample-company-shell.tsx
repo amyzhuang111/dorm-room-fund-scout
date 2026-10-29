@@ -6,16 +6,52 @@ import { useMemo, useState, type ReactNode } from "react";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import {
   applyFacets,
-  BarRow,
-  Board,
   emptyFacets,
   FacetRail,
-  recentSignals,
+  IntelligenceBoards,
   sectorMix,
-  topFounders,
+  COUNT,
+  PANEL,
   type FacetState,
 } from "./sample-instrument";
 import { SampleTheme } from "./sample-theme";
+
+function MobileInstrumentStrip({ companies }: { companies: FacetCompany[] }) {
+  const mix = useMemo(() => sectorMix(companies).slice(0, 5), [companies]);
+  const signaled = companies.filter((c) => c.signals > 0).length;
+  const total = mix.reduce((sum, item) => sum + item.count, 0) || 1;
+  const dots = ["#3b82f6", "#a855f7", "#ef4444", "#f59e0b", "#10b981"];
+  return (
+    <div className={`${PANEL} mb-2 p-1.5 lg:hidden`}>
+      <div className="flex items-baseline justify-between gap-2">
+        <p className="text-[11px] font-semibold text-[#20140c]">Directory pulse</p>
+        <p className="text-[10px] text-[#8a7260]">
+          <span className={COUNT}>{signaled.toLocaleString("en-US")}</span> signaled ·{" "}
+          <span className={COUNT}>{companies.length.toLocaleString("en-US")}</span> in view
+        </p>
+      </div>
+      <div className="mt-1.5 flex h-1.5 overflow-hidden rounded-full bg-[#FFF1E6]">
+        {mix.map((item, index) => (
+          <div
+            key={item.id}
+            className="h-full"
+            style={{ width: `${Math.max(3, Math.round((item.count / total) * 100))}%`, background: dots[index % dots.length] }}
+            title={`${item.label}: ${item.count}`}
+          />
+        ))}
+      </div>
+      <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
+        {mix.slice(0, 4).map((item, index) => (
+          <span key={item.id} className="inline-flex items-center gap-1 text-[9px] text-[#6b5443]">
+            <span className="h-1.5 w-1.5 rounded-full" style={{ background: dots[index % dots.length] }} aria-hidden />
+            {item.label}
+            <span className={COUNT}>{item.count}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function SampleCompanyShell({
   children,
@@ -29,32 +65,35 @@ export function SampleCompanyShell({
   const router = useRouter();
   const [facets, setFacets] = useState<FacetState>(emptyFacets);
   const filtered = useMemo(() => applyFacets(companies, facets), [companies, facets]);
-  const mix = useMemo(() => sectorMix(filtered), [filtered]);
-  const recent = useMemo(() => recentSignals(filtered), [filtered]);
-  const founders = useMemo(() => topFounders(filtered), [filtered]);
+
+  function onFacetChange(next: FacetState) {
+    setFacets(next);
+    const params = new URLSearchParams({ sample: "1" });
+    if (next.sector) params.set("sector", next.sector);
+    if (next.kind) params.set("kind", next.kind);
+    if (next.campus) params.set("campus", next.campus);
+    if (next.query.trim()) params.set("q", next.query.trim());
+    if (next.hqRegion) params.set("hq", next.hqRegion);
+    if (
+      next.sector ||
+      next.kind ||
+      next.campus ||
+      next.query.trim() ||
+      next.foundedYear ||
+      next.status ||
+      next.flag ||
+      next.hqRegion
+    ) {
+      router.push(`/?${params.toString()}#browse`);
+    }
+  }
 
   return (
     <div className="sample-paper min-h-[calc(100dvh-48px)]">
       <SampleTheme />
       <div className="mx-auto grid w-full max-w-[1280px] gap-3 px-3 py-3 sm:px-5 lg:grid-cols-[240px_minmax(0,1fr)_236px]">
         <div className="hidden h-[min(70vh,720px)] lg:block">
-          <FacetRail
-            companies={companies}
-            campuses={campuses}
-            facets={facets}
-            onChange={(next) => {
-              setFacets(next);
-              const params = new URLSearchParams({ sample: "1" });
-              if (next.sector) params.set("sector", next.sector);
-              if (next.kind) params.set("kind", next.kind);
-              if (next.campus) params.set("campus", next.campus);
-              if (next.query.trim()) params.set("q", next.query.trim());
-              // Facet clicks on company page jump back to directory with the same filters.
-              if (next.sector || next.kind || next.campus || next.query.trim()) {
-                router.push(`/?${params.toString()}#browse`);
-              }
-            }}
-          />
+          <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={onFacetChange} />
         </div>
         <div className="min-w-0">
           <div className="mb-2 border-b border-[#f0d9c6] pb-2">
@@ -62,40 +101,20 @@ export function SampleCompanyShell({
               All startups
             </Link>
           </div>
+          <MobileInstrumentStrip companies={filtered} />
           <div className="company-instrument rounded-xl border border-[#f0d9c6] bg-white/94 p-1">{children}</div>
+          <div className="mt-3 space-y-2 lg:hidden">
+            <IntelligenceBoards companies={filtered} compact />
+            <details className="rounded-xl border border-[#f0d9c6] bg-white px-2.5 py-2">
+              <summary className="cursor-pointer text-[12px] font-semibold text-[#20140c]">Filters</summary>
+              <div className="mt-2 h-[min(45vh,360px)]">
+                <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={onFacetChange} />
+              </div>
+            </details>
+          </div>
         </div>
-        <div className="hidden space-y-2 lg:block">
-          <Board title="Recent signals" unit="date">
-            <ol className="space-y-1.5">
-              {recent.slice(0, 5).map((company, index) => (
-                <li key={company.id}>
-                  <Link href={`/startup/${company.id}`} className="block text-[11px] hover:text-[#FB651E]">
-                    <span className="font-bold tabular-nums text-[#E05612]">{index + 1}</span> {company.name}
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </Board>
-          <Board title="Sector mix" unit="companies">
-            <ol className="space-y-1.5">
-              {mix.map((item, index) => (
-                <li key={item.id}>
-                  <BarRow rank={index + 1} label={item.label} value={item.count} max={mix[0]?.count || 1} href={`/?sample=1&sector=${encodeURIComponent(item.id)}#browse`} />
-                </li>
-              ))}
-            </ol>
-          </Board>
-          <Board title="Top founders" unit="signals">
-            <ol className="space-y-1.5">
-              {founders.map((person, index) => (
-                <li key={person.key}>
-                  <Link href={`/startup/${person.companyId}`} className="block text-[11px] hover:text-[#FB651E]">
-                    <span className="font-bold tabular-nums text-[#E05612]">{index + 1}</span> {person.name}
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </Board>
+        <div className="hidden lg:block">
+          <IntelligenceBoards companies={filtered} />
         </div>
       </div>
     </div>
