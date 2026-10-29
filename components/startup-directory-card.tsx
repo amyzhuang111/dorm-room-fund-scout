@@ -287,11 +287,11 @@ export function StartupDirectoryCard({
           {card.founders.length === 0 ? (
             <p className="mt-1.5 text-sm text-[color:var(--fg-3,#5C647A)]">No founders on record.</p>
           ) : (
-            <ul className="mt-1.5 space-y-1.5">
+            <ul className="mt-1.5 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)]">
               {card.founders.map((founder) => {
                 const meta = founderMeta(founder);
                 return (
-                  <li key={founder.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-2 rounded-sm border border-[color:var(--line,#E1E5EF)] border-l-[3px] border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] p-2">
+                  <li key={founder.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-2.5 px-2.5 py-2">
                     <FounderAvatar name={founder.name} />
                     <div className="min-w-0">
                       <p className="break-words text-[13px] font-semibold leading-snug text-[color:var(--fg,#0B0E17)] sm:text-[14px]">{founder.name}</p>

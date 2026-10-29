@@ -132,9 +132,9 @@ export function LogoPill({
 
 function FacetGroup({ title, children, defaultOpen = true, dense = false }: { title: string; children: ReactNode; defaultOpen?: boolean; dense?: boolean }) {
   return (
-    <details className={`border-b border-[color:var(--line,#E1E5EF)] ${dense ? "px-1.5 py-1" : "px-2 py-1.5"}`} open={defaultOpen}>
-      <summary className="cursor-pointer text-[10px] font-medium uppercase tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]">{title}</summary>
-      <div className={`flex flex-wrap ${dense ? "mt-1 gap-0.5" : "mt-1.5 gap-1"}`}>{children}</div>
+    <details className={`border-b border-[color:var(--line,#E1E5EF)] ${dense ? "px-2 py-1.5" : "px-2.5 py-2"}`} open={defaultOpen}>
+      <summary className={`cursor-pointer font-mono text-[10px] font-medium uppercase ${dense ? "tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]" : "tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]"}`}>{title}</summary>
+      <div className={`flex flex-wrap ${dense ? "mt-1.5 gap-1" : "mt-1.5 gap-1"}`}>{children}</div>
     </details>
   );
 }
@@ -171,7 +171,7 @@ function Chip({
       onClick={onClick}
       data-facet={facet || undefined}
       data-facet-count={count != null ? String(count) : undefined}
-      className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-md border px-1.5 py-0.5 font-mono text-[10px] tracking-tight ${tone}`}
+      className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-sm border px-1.5 py-0.5 font-mono text-[10px] tracking-tight ${tone}`}
     >
       {dot ? <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: active ? "#FFFFFF" : dot }} aria-hidden /> : null}
       {icon && !dot ? <span className="text-[9px] leading-none text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>{icon}</span> : null}
@@ -345,9 +345,9 @@ export function FacetRail({
         />
       </div>
       {dense ? (
-        <div className="shrink-0 border-b border-[color:var(--line,#E1E5EF)] px-1.5 py-1" data-facet-status-pin="">
-          <p className="text-[10px] font-medium uppercase tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]">Status</p>
-          <div className="mt-1 flex flex-wrap gap-0.5">
+        <div className="shrink-0 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5" data-facet-status-pin="">
+          <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Status</p>
+          <div className="mt-1.5 flex flex-wrap gap-1">
             <Chip facet="status" count={baseCompanies.length} active={!facets.status} onClick={() => set({ status: null })} label={`All · ${baseCompanies.length}`} />
             {statuses.map((item) => (
               <Chip key={item.id} facet="status" count={item.count} active={facets.status === item.id} onClick={() => set({ status: facets.status === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} dot={STATUS_DOT[item.id]} />
