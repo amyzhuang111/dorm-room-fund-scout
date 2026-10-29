@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function EmptyHome() {
   return (
-    <div className="hero-night min-h-[calc(100dvh-72px)] bg-bg px-6 pb-16 pt-14 text-fg">
+    <div className="hero-night min-h-[calc(100dvh-48px)] bg-bg px-6 pb-16 pt-14 text-fg">
       <h1 className="max-w-[12ch] text-[44px] leading-[48px] tracking-[-0.03em] sm:text-[56px] sm:leading-[60px]">
         Track student founders before they raise
       </h1>

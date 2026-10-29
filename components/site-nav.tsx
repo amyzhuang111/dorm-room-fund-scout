@@ -78,12 +78,12 @@ export function SiteNav() {
 
   return (
     <div className="border-b border-line bg-bg">
-      <div className="flex h-[72px] items-center gap-6 px-6">
+      <div className="flex h-12 items-center gap-4 px-5">
         <Link href="/" className="wordmark shrink-0">
           <span className="mark" aria-hidden />
           Campus Scout
         </Link>
-        <nav className="ml-6 hidden items-center gap-5 md:flex" aria-label="Sections">
+        <nav className="ml-4 hidden items-center gap-4 md:flex" aria-label="Sections">
           {SECTIONS.map((item) => (
             <Link key={item.id} href={item.href} className={`nav-link ${section === item.id ? "is-active" : ""}`}>
               {item.label}
@@ -93,11 +93,11 @@ export function SiteNav() {
             </Link>
           ))}
         </nav>
-        <div className="ml-auto hidden items-center gap-3 md:flex">
+        <div className="ml-auto hidden items-center gap-2 md:flex">
           <button type="button" className="ask-field" onClick={openAsk}>
             Ask anything ⌘K
           </button>
-          <button type="button" className="grid h-10 w-10 place-items-center rounded-full border border-line text-fg" onClick={toggleTheme} aria-label={night ? "Switch to day" : "Switch to night"}>
+          <button type="button" className="grid h-7 w-7 place-items-center rounded-full border border-line text-fg" onClick={toggleTheme} aria-label={night ? "Switch to day" : "Switch to night"}>
             {night ? <MoonIcon /> : <SunIcon />}
           </button>
         </div>
@@ -134,7 +134,7 @@ export function SiteNav() {
 
 function SunIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.75">
+    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.75">
       <circle cx="12" cy="12" r="4" />
       <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
     </svg>
@@ -143,7 +143,7 @@ function SunIcon() {
 
 function MoonIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.75">
+    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.75">
       <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z" />
     </svg>
   );

@@ -53,8 +53,8 @@ const SIGNAL_LABEL = {
   acquisition: "Acquisition",
 } as const;
 
-const DIRECTORY_LIMIT = 30;
-const LEADERBOARD_LIMIT = 20;
+const DIRECTORY_LIMIT = 5;
+const LEADERBOARD_LIMIT = 5;
 const LOGO_FACT_KEYS = new Set(["logo", "favicon", "logo_url", "favicon_url"]);
 const STAGE_ORDER = ["Pre-seed", "Seed", "Series A", "Series B", "Series C", "Venture"];
 

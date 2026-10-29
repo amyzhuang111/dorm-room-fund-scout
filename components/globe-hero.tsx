@@ -43,12 +43,12 @@ function GlobeBlock({ stats, companies }: { stats: HeroStats; companies: TileCom
 
 export function GlobeHero({ stats, companies = [], showGlobe = true }: { stats: HeroStats; companies?: TileCompany[]; showGlobe?: boolean }) {
   return (
-    <div className={showGlobe ? "bg-[#FFF7F0] px-6 py-3 text-[#20140c] lg:py-2" : "bg-bg px-6 py-6 text-fg"}>
-      <div className={showGlobe ? "max-lg:min-h-[calc(100svh-72px)] lg:min-h-[calc(100dvh-72px)]" : ""}>
+    <div className={showGlobe ? "bg-[#FFF7F0] px-4 py-1.5 text-[#20140c] sm:px-5 lg:py-1" : "bg-bg px-6 py-6 text-fg"}>
+      <div className={showGlobe ? "max-lg:min-h-[calc(100svh-48px)] lg:min-h-[calc(100dvh-48px)]" : ""}>
         <SignatureBand stats={stats} globe={showGlobe ? <GlobeBlock stats={stats} companies={companies} /> : null} />
       </div>
       {showGlobe ? (
-        <div className="mx-auto mt-10 w-full max-w-[880px]">
+        <div className="mx-auto mt-8 w-full max-w-[880px]">
           <Collage stats={stats} />
         </div>
       ) : null}
@@ -202,13 +202,25 @@ function SamplePill({ cream = false }: { cream?: boolean }) {
   );
 }
 
-function HeroActions({ cream = false }: { cream?: boolean }) {
+function HeroActions({ cream = false, compact = false }: { cream?: boolean; compact?: boolean }) {
   const search = useSearchParams();
   const directory = new URLSearchParams(search.toString());
   directory.set("sample", "1");
   directory.delete("feed");
   const world = new URLSearchParams(directory.toString());
   world.set("feed", "world");
+  if (compact) {
+    return (
+      <div className="flex flex-wrap items-center gap-1.5">
+        <Link href={`/?${world.toString()}#browse`} className="inline-flex h-6 items-center rounded bg-[#FB651E] px-2 text-[11px] font-semibold text-white sm:h-7 sm:px-2.5 sm:text-[12px]">
+          Explore map
+        </Link>
+        <Link href={`/?${directory.toString()}#browse`} className="inline-flex h-6 items-center rounded border border-[#e7cbb6] bg-white px-2 text-[11px] font-medium text-[#20140c] sm:h-7 sm:px-2.5 sm:text-[12px]">
+          Browse directory
+        </Link>
+      </div>
+    );
+  }
   return (
     <div className="mt-1.5 flex flex-wrap items-center gap-2 lg:mt-1">
       <Link href={`/?${world.toString()}#browse`} className={`inline-flex h-10 items-center rounded px-4 text-[14px] font-semibold ${cream ? "bg-[#FB651E] text-white" : "bg-ember text-accent-foreground"}`}>
@@ -222,29 +234,35 @@ function HeroActions({ cream = false }: { cream?: boolean }) {
 }
 
 function SignatureBand({ stats, globe }: { stats: HeroStats; globe?: ReactNode }) {
+  if (globe) {
+    return (
+      <section className="-mx-4 px-0 pb-1 sm:-mx-5" aria-label="Campus Scout">
+        <div className="mb-1 flex flex-wrap items-center gap-2">
+          <SamplePill cream />
+          <p className="text-[12px] leading-4 text-[#20140c] sm:text-[13px]">
+            <span className="font-bold tabular-nums text-[#E05612]">{stats.founders.toLocaleString("en-US")}</span>
+            {" founders · "}
+            <span className="font-bold tabular-nums text-[#E05612]">{stats.campuses.toLocaleString("en-US")}</span>
+            {" campuses"}
+          </p>
+        </div>
+        <div className="min-h-0">{globe}</div>
+      </section>
+    );
+  }
   return (
     <section className="-mx-6 px-6 pb-2" aria-label="Campus Scout">
-      <div className={globe ? "flex flex-col gap-1.5 lg:gap-1" : "max-w-[640px]"}>
-        <div className="max-w-[720px]">
-          <div className="mb-1.5 lg:mb-1">
-            <SamplePill cream={Boolean(globe)} />
-          </div>
-          <p className={`display font-semibold ${globe ? "text-[28px] leading-[32px] sm:text-[30px] sm:leading-[34px] lg:text-[22px] lg:leading-[26px]" : "text-[32px] leading-[36px] sm:text-[36px] sm:leading-[40px]"}`}>
-            Track student founders before they raise
-          </p>
-          {globe ? (
-            <p className="mt-1.5 text-[15px] leading-5 text-[#20140c] lg:mt-1 lg:text-[14px]">
-              <span className="font-bold tabular-nums text-[#E05612]">{stats.founders.toLocaleString("en-US")}</span> student founders across{" "}
-              <span className="font-bold tabular-nums text-[#E05612]">{stats.campuses.toLocaleString("en-US")}</span> campuses
-            </p>
-          ) : (
-            <p className="mt-3 max-w-[34rem] text-[16px] leading-6 text-fg-2">
-              The campus map, the people on it, and recent signals.
-            </p>
-          )}
-          <HeroActions cream={Boolean(globe)} />
+      <div className="max-w-[640px]">
+        <div className="mb-1.5">
+          <SamplePill />
         </div>
-        {globe ? <div className="min-h-0">{globe}</div> : null}
+        <p className="display text-[32px] font-semibold leading-[36px] sm:text-[36px] sm:leading-[40px]">
+          Track student founders before they raise
+        </p>
+        <p className="mt-3 max-w-[34rem] text-[16px] leading-6 text-fg-2">
+          The campus map, the people on it, and recent signals.
+        </p>
+        <HeroActions />
       </div>
     </section>
   );

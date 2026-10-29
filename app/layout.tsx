@@ -59,7 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <AskAiProvider>
           <UserPipelineProvider>
             <header className="sticky top-0 z-40">
-              <Suspense fallback={<div className="h-[72px] border-b border-line bg-bg" />}>
+              <Suspense fallback={<div className="h-12 border-b border-line bg-bg" />}>
                 <SiteNav />
               </Suspense>
             </header>
