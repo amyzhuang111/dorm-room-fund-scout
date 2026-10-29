@@ -47,6 +47,8 @@ function markerColor(country: string): string {
 }
 
 function campusCollection(campuses: TileCampus[]) {
+  const ranked = [...campuses].sort((a, b) => b.signals - a.signals || b.founders - a.founders || a.name.localeCompare(b.name));
+  const topIds = new Set(ranked.slice(0, 3).map((c) => c.id));
   return {
     type: "FeatureCollection",
     features: campuses.map((campus) => ({
@@ -58,7 +60,9 @@ function campusCollection(campuses: TileCampus[]) {
         founders: campus.founders,
         signals: campus.signals,
         country: campus.country,
-        color: markerColor(campus.country),
+        // Cobalt field; ember marks the top-3 desk campuses (memorable dispatch signature).
+        color: topIds.has(campus.id) ? "#D96B1C" : markerColor(campus.country),
+        top: topIds.has(campus.id) ? 1 : 0,
         radius: markerRadius(campus.signals),
       },
     })),
@@ -197,14 +201,16 @@ export function TileGlobe({
             }
             if (layer.type === "line" && /boundary/.test(layer.id)) {
               map.setPaintProperty(layer.id, "line-color", "#2F4FD8");
-              try { map.setPaintProperty(layer.id, "line-width", 1.05); } catch {}
-              try { map.setPaintProperty(layer.id, "line-opacity", 0.9); } catch {}
-              try { map.setPaintProperty(layer.id, "line-dasharray", [1.2, 1.6]); } catch {}
+              try { map.setPaintProperty(layer.id, "line-width", 0.7); } catch {}
+              try { map.setPaintProperty(layer.id, "line-opacity", 0.55); } catch {}
+              try { map.setPaintProperty(layer.id, "line-dasharray", [0.6, 1.8]); } catch {}
             }
             if (layer.type === "line" && /coast|waterway/.test(layer.id)) {
               try { map.setPaintProperty(layer.id, "line-color", "#2F4FD8"); } catch {}
-              try { map.setPaintProperty(layer.id, "line-opacity", 0.45); } catch {}
-              try { map.setPaintProperty(layer.id, "line-dasharray", [0.8, 1.4]); } catch {}
+              try { map.setPaintProperty(layer.id, "line-width", 0.95); } catch {}
+              try { map.setPaintProperty(layer.id, "line-opacity", 0.85); } catch {}
+              // Solid coast — precise line-art, not dashed noise
+              try { map.setPaintProperty(layer.id, "line-dasharray", [1, 0]); } catch {}
             }
             if (layer.type === "symbol" && /country|water_name|marine|sea|ocean/.test(layer.id)) {
               map.setLayoutProperty(layer.id, "text-font", ["Noto Sans Italic"]);
@@ -218,15 +224,27 @@ export function TileGlobe({
         }
         map.addSource("campuses", { type: "geojson", data: collection() });
         map.addLayer({
+          id: "campus-halo",
+          type: "circle",
+          source: "campuses",
+          filter: ["==", ["get", "top"], 1],
+          paint: {
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, ["+", ["get", "radius"], 4.5], 3, ["+", ["*", ["get", "radius"], 1.55], 5.5], 5, ["+", ["*", ["get", "radius"], 2.1], 6.5]],
+            "circle-color": "#D96B1C",
+            "circle-opacity": 0.18,
+            "circle-stroke-width": 0,
+          },
+        });
+        map.addLayer({
           id: "campus-dots",
           type: "circle",
           source: "campuses",
           paint: {
-            "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, ["get", "radius"], 3, ["*", ["get", "radius"], 1.55], 5, ["*", ["get", "radius"], 2.1]],
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, ["get", "radius"], 3, ["*", ["get", "radius"], 1.55], 5, ["*", ["get", "radius"], 2.15]],
             "circle-color": ["get", "color"],
-            "circle-stroke-color": "#FFFFFF",
-            "circle-stroke-width": 1.15,
-            "circle-opacity": 0.95,
+            "circle-stroke-color": ["case", ["==", ["get", "top"], 1], "#FFFFFF", "#FFFFFF"],
+            "circle-stroke-width": ["case", ["==", ["get", "top"], 1], 1.6, 1.05],
+            "circle-opacity": 0.96,
           },
         });
         map.addLayer({
@@ -235,10 +253,10 @@ export function TileGlobe({
           source: "campuses",
           filter: ["==", ["get", "id"], ""],
           paint: {
-            "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, ["+", ["get", "radius"], 3.2], 3, ["+", ["*", ["get", "radius"], 1.55], 4], 5, ["+", ["*", ["get", "radius"], 2.1], 5]],
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, ["+", ["get", "radius"], 3.2], 3, ["+", ["*", ["get", "radius"], 1.55], 4], 5, ["+", ["*", ["get", "radius"], 2.15], 5]],
             "circle-color": ["get", "color"],
             "circle-stroke-color": "#D96B1C",
-            "circle-stroke-width": 2.6,
+            "circle-stroke-width": 2.8,
             "circle-opacity": 1,
           },
         });
@@ -346,44 +364,65 @@ export function TileGlobe({
   // not the filtered map/facet slice — so strip and fold data-count nodes never diverge.
   const universeCounts = sampleSurfaceCounts(companies, campuses);
 
+  const topCampus = useMemo(() => {
+    return [...campuses].sort((a, b) => b.signals - a.signals || b.founders - a.founders || a.name.localeCompare(b.name))[0] ?? null;
+  }, [campuses]);
+
   return (
     <div className={className}>
-      {/* Scout Dispatch masthead: editorial mono band, not a three-pane YC skeleton */}
-      <div className="mb-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div className="min-w-0" data-fold-counts>
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dispatch</p>
-            <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
-              <span className="text-[color:var(--ember,#D96B1C)]">{liveCount.toLocaleString("en-US")}</span>
-            </p>
-            <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies forming on campus</p>
-            <p className="sr-only mt-0.5 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">
-              <span className={COUNT} data-count="campuses-on-map">{universeCounts.campusesOnMap.toLocaleString("en-US")}</span> campuses on map
-              {" · "}
-              <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span> founder names listed
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            <button
-              type="button"
-              onClick={() => {
-                if (typeof window !== "undefined" && window.innerWidth < 1024) setMobileFiltersOpen(true);
-                else setFiltersOpen((v) => !v);
-              }}
-              className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
-            >
-              {filtersOpen ? "Hide filters" : "Filters"}
-            </button>
-            <a
-              href="/ask"
-              className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
-            >
-              Scout ask
-            </a>
+      {/* Shared column grid: masthead + wire + stage share one vertical rhythm */}
+      <div className="grid gap-x-3 gap-y-0 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)]">
+        <div className="col-span-full mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-counts>
+          <div className="grid items-end gap-3 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)]">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Scout dispatch</p>
+              </div>
+              <p className="mt-2 font-mono text-[52px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[64px]">
+                {liveCount.toLocaleString("en-US")}
+              </p>
+              <p className="mt-2 text-[16px] font-semibold leading-tight tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[17px]">
+                companies forming on campus
+              </p>
+            </div>
+            <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <p className="font-mono text-[11px] tabular-nums leading-relaxed text-[color:var(--fg-2,#3F465C)]">
+                <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
+                {" founder names listed"}
+                <span className="mx-1.5 text-[color:var(--line-strong,#C5CAD8)]">·</span>
+                <span className={COUNT} data-count="campuses-on-map">{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
+                {" campuses on map"}
+                {topCampus ? (
+                  <>
+                    <span className="mx-1.5 text-[color:var(--line-strong,#C5CAD8)]">·</span>
+                    <span className="font-semibold text-[color:var(--ember,#D96B1C)]">01</span>
+                    {" desk · "}
+                    <span className="text-[color:var(--fg,#0B0E17)]">{topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}</span>
+                  </>
+                ) : null}
+              </p>
+              <div className="flex shrink-0 flex-wrap gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== "undefined" && window.innerWidth < 1024) setMobileFiltersOpen(true);
+                    else setFiltersOpen((v) => !v);
+                  }}
+                  className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                >
+                  {filtersOpen ? "Hide filters" : "Filters"}
+                </button>
+                <a
+                  href="/ask"
+                  className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
+                >
+                  Scout ask
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="grid gap-3 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)]">
         {/* One strong editorial column */}
         <aside className="hidden min-w-0 lg:block">
           <div className="sticky top-14 space-y-2">
@@ -395,7 +434,7 @@ export function TileGlobe({
                   facets={facets}
                   onChange={onFacetChange}
                   sheet
-                  caption="Narrow the map"
+                  caption="Narrow the dispatch"
                   onCampusFocus={(id) => {
                     const campus = campuses.find((row) => row.id === id);
                     if (campus) focus(campus);
@@ -415,8 +454,16 @@ export function TileGlobe({
           </div>
         </aside>
         <div className="min-w-0">
-      <div className="relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]" style={{ height: stageHeight }}>
+      <div className="relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.04)]" style={{ height: stageHeight }}>
         <div ref={mapNode} className="h-full w-full" />
+        {/* Signature: dispatch scale card — cobalt pins / ember top desk */}
+        <div className="pointer-events-none absolute left-2.5 top-2.5 z-10 hidden rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1.5 backdrop-blur-[2px] lg:block" data-dispatch-scale="">
+          <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Dispatch scale</p>
+          <div className="mt-1 flex items-center gap-3 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+            <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--cobalt,#2F4FD8)]" aria-hidden />field</span>
+            <span className="inline-flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />top desk</span>
+          </div>
+        </div>
         <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 hidden -translate-x-1/2 lg:block" data-map-credit>
           <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
             <MapCredit />
@@ -450,7 +497,7 @@ export function TileGlobe({
             <div className="relative flex items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3 py-2.5">
               <div className="min-w-0">
                 <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout filters · {shown.length} campuses</p>
-                <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the map</p>
+                <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the dispatch</p>
                 <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Status · Year · Sector · Campus</p>
               </div>
               <button type="button" onClick={() => setMobileFiltersOpen(false)} className="inline-flex h-8 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white">Done</button>
