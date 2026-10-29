@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ProjectMate, ProjectTableRow } from "@/lib/domain/founder-table";
 import { relativeTime } from "@/lib/domain/relative-time";
 import { useFeedback } from "./feedback-provider";
@@ -133,11 +133,11 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
   const withSignal = rows.filter((row) => row.full || row.detail || row.event || row.signalAt).length;
   const noSignal = rows.length - withSignal;
 
-  function shortlistPeople(row: ProjectTableRow) {
+  const shortlistPeople = useCallback((row: ProjectTableRow) => {
     for (const person of row.people) {
       feedback.setAction({ entityType: "person", entityId: person.id, nameKey: person.name, domainKey: null, action: "like" });
     }
-  }
+  }, [feedback]);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -157,7 +157,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [cursor, feedback, ordered]);
+  }, [cursor, feedback, ordered, shortlistPeople]);
 
   function toggle(id: string) {
     setSelected((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
@@ -186,7 +186,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
   const columns = 2 + (showTier ? 1 : 0) + (campusLocked ? 0 : 1) + 1 + (showDate ? 1 : 0) + (showVerified ? 1 : 0);
   const control = "inline-flex h-9 items-center rounded border border-line bg-raised px-3 text-[14px] text-fg";
 
-  const rowStarts = groups.reduce<number[]>((starts, group) => {
+  const rowStarts = groups.reduce<number[]>((starts) => {
     const previous = starts.length === 0 ? 0 : starts[starts.length - 1] + groups[starts.length - 1].rows.length;
     starts.push(previous);
     return starts;

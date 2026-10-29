@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { shortCampusLabel } from "@/lib/domain/campuses";
@@ -21,6 +22,7 @@ export interface TileCompany {
   name: string;
   schoolId: string | null;
   signals: number;
+  logoUrl?: string | null;
 }
 
 const OCEAN = "#FFDBBB";
@@ -40,6 +42,30 @@ const COUNTRY_COLOR: Record<string, string> = {
 
 function markerColor(country: string): string {
   return COUNTRY_COLOR[country] ?? BRAND;
+}
+
+function markerRadius(signals: number): number {
+  const count = Number.isFinite(signals) ? Math.max(0, signals) : 0;
+  return Math.round((2.6 + Math.min(5.5, Math.sqrt(count) * 0.45)) * 10) / 10;
+}
+
+function campusCollection(campuses: TileCampus[]) {
+  return {
+    type: "FeatureCollection",
+    features: campuses.map((campus) => ({
+      type: "Feature",
+      geometry: { type: "Point", coordinates: [campus.lon, campus.lat] },
+      properties: {
+        id: campus.id,
+        name: campus.name,
+        founders: campus.founders,
+        signals: campus.signals,
+        country: campus.country,
+        color: markerColor(campus.country),
+        radius: markerRadius(campus.signals),
+      },
+    })),
+  };
 }
 
 export function TileGlobe({
@@ -136,21 +162,7 @@ export function TileGlobe({
     };
     motion.addEventListener("change", onMotion);
 
-    const collection = () => ({
-      type: "FeatureCollection",
-      features: campuses.map((campus) => ({
-        type: "Feature",
-        geometry: { type: "Point", coordinates: [campus.lon, campus.lat] },
-        properties: {
-          id: campus.id,
-          name: campus.name,
-          founders: campus.founders,
-          signals: campus.signals,
-          country: campus.country,
-          color: markerColor(campus.country),
-        },
-      })),
-    });
+    const collection = () => campusCollection(campuses);
 
     const spin = () => {
       if (dead || !map || reduce || interacting || hovering) return;
@@ -207,7 +219,7 @@ export function TileGlobe({
           type: "circle",
           source: "campuses",
           paint: {
-            "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, 3.2, 3, 5.5, 5, 8],
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, ["get", "radius"], 3, ["*", ["get", "radius"], 1.55], 5, ["*", ["get", "radius"], 2.1]],
             "circle-color": ["get", "color"],
             "circle-stroke-color": "#ffffff",
             "circle-stroke-width": 1.15,
@@ -220,7 +232,7 @@ export function TileGlobe({
           source: "campuses",
           filter: ["==", ["get", "id"], ""],
           paint: {
-            "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, 7, 3, 12, 5, 16],
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, ["+", ["get", "radius"], 3.2], 3, ["+", ["*", ["get", "radius"], 1.55], 4], 5, ["+", ["*", ["get", "radius"], 2.1], 5]],
             "circle-color": ["get", "color"],
             "circle-stroke-color": "#20140c",
             "circle-stroke-width": 2.6,
@@ -294,21 +306,7 @@ export function TileGlobe({
   useEffect(() => {
     const source = mapRef.current?.getSource("campuses");
     if (!source) return;
-    source.setData({
-      type: "FeatureCollection",
-      features: campuses.map((campus) => ({
-        type: "Feature",
-        geometry: { type: "Point", coordinates: [campus.lon, campus.lat] },
-        properties: {
-          id: campus.id,
-          name: campus.name,
-          founders: campus.founders,
-          signals: campus.signals,
-          country: campus.country,
-          color: markerColor(campus.country),
-        },
-      })),
-    });
+    source.setData(campusCollection(campuses));
   }, [campuses, ready]);
 
   useEffect(() => {
@@ -384,13 +382,37 @@ export function TileGlobe({
   );
 }
 
+function CompanyMark({ name, logoUrl }: { name: string; logoUrl: string | null }) {
+  const [failed, setFailed] = useState(false);
+  const letter = name.trim().charAt(0).toUpperCase() || "?";
+  if (!logoUrl || failed) {
+    return (
+      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-[#FFF1E6] text-[12px] font-semibold text-[#E05612]" aria-hidden>
+        {letter}
+      </span>
+    );
+  }
+  return (
+    <Image
+      src={logoUrl}
+      alt=""
+      width={28}
+      height={28}
+      unoptimized
+      className="h-7 w-7 shrink-0 rounded-md border border-[#f0d9c6] bg-white object-contain"
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
 function CompanyStrip({ companies }: { companies: TileCompany[] }) {
   if (companies.length === 0) return null;
   return (
-    <div className="flex items-center gap-1.5 overflow-x-auto rounded-2xl border border-[#f0d9c6] bg-white/92 px-3 py-2 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)]">
+    <div className="flex items-center gap-1.5 overflow-x-auto rounded-2xl border border-[#f0d9c6] bg-white/92 px-2 py-1.5 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)]">
       {companies.map((company) => (
-        <a key={company.id} href={`/startup/${company.id}`} className="shrink-0 rounded-full border border-[#f0d9c6] bg-white px-2.5 py-1 text-[12px] text-[#20140c] hover:border-[#E05612]">
-          {company.name}
+        <a key={company.id} href={`/startup/${company.id}`} className="flex shrink-0 items-center gap-1.5 rounded-xl border border-[#f0d9c6] bg-white px-1.5 py-1 text-[12px] text-[#20140c] hover:border-[#E05612]">
+          <CompanyMark name={company.name} logoUrl={company.logoUrl ?? null} />
+          <span className="max-w-[8.5rem] truncate pr-1">{company.name}</span>
         </a>
       ))}
     </div>

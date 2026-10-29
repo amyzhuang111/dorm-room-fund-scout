@@ -17,6 +17,12 @@ export interface DirectoryCard {
   signalKind: "funding" | "launch" | "award" | "acquisition" | null;
   /** Rows in `signals` for this company. */
   signals: number;
+  /** People linked to this company. Used for search, not a score. */
+  founders: string[];
+  /** Latest signal date as YYYY-MM-DD, with missing parts as 00. Empty when none are stored. */
+  latestSignalAt: string | null;
+  /** A logo or favicon URL already stored for this company. Never invented. */
+  logoUrl: string | null;
 }
 
 export interface DirectoryFilter {
@@ -49,6 +55,62 @@ const SIGNAL_LABEL = {
 
 const DIRECTORY_LIMIT = 30;
 const LEADERBOARD_LIMIT = 20;
+const LOGO_FACT_KEYS = new Set(["logo", "favicon", "logo_url", "favicon_url"]);
+const STAGE_ORDER = ["Pre-seed", "Seed", "Series A", "Series B", "Series C", "Venture"];
+
+export type DirectorySort = "name" | "recent" | "stage";
+
+export function directorySortOf(value: string | undefined): DirectorySort {
+  if (value === "name" || value === "stage") return value;
+  return "recent";
+}
+
+function httpUrl(value: string | null | undefined): string | null {
+  if (!value) return null;
+  const text = value.trim();
+  if (!/^https?:\/\//i.test(text)) return null;
+  try {
+    const url = new URL(text);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return null;
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
+/** A logo or favicon only when that URL is already stored. A website is not a logo. */
+export function logoUrlFromStored(factKey: string, valueText: string | null, detailJson: string | null): string | null {
+  if (LOGO_FACT_KEYS.has(factKey)) {
+    const direct = httpUrl(valueText);
+    if (direct) return direct;
+  }
+  if (!detailJson) return null;
+  try {
+    const detail = JSON.parse(detailJson) as Record<string, unknown>;
+    for (const key of ["logo", "favicon", "logoUrl", "logo_url", "faviconUrl", "favicon_url"]) {
+      const value = detail[key];
+      if (typeof value !== "string") continue;
+      const url = httpUrl(value);
+      if (url) return url;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+/** Sort key for a stored signal date. Year-only and month-only dates stay behind fuller dates in that period. */
+export function signalSortKey(raw: string | null | undefined): string {
+  if (!raw) return "";
+  const text = raw.trim();
+  const full = text.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (full) return `${full[1]}-${full[2]}-${full[3]}`;
+  const month = text.match(/^(\d{4})-(\d{2})/);
+  if (month) return `${month[1]}-${month[2]}-00`;
+  const year = text.match(/^(\d{4})/);
+  if (year) return `${year[1]}-00-00`;
+  return "";
+}
 
 function oneLine(text: string): string {
   const flat = text.replace(/\s+/g, " ").trim();
@@ -134,6 +196,50 @@ export function loadDirectory(): DirectoryData {
     }
   }
 
+  const foundersByProject = new Map<string, string[]>();
+  for (const row of db
+    .prepare(
+      `SELECT r.project_id as project_id, p.name as name
+         FROM person_project_roles r
+         JOIN people p ON p.id = r.person_id
+        WHERE trim(p.name) != ''`,
+    )
+    .all() as { project_id: string; name: string }[]) {
+    const list = foundersByProject.get(row.project_id) ?? [];
+    if (!list.includes(row.name)) list.push(row.name);
+    foundersByProject.set(row.project_id, list);
+  }
+
+  const latestSignal = new Map<string, string>();
+  for (const row of db.prepare(`SELECT project_id, source_date, created_at FROM signals`).all() as {
+    project_id: string;
+    source_date: string | null;
+    created_at: string;
+  }[]) {
+    const key = signalSortKey(row.source_date) || signalSortKey(row.created_at);
+    const prev = latestSignal.get(row.project_id);
+    if (key && (!prev || key > prev)) latestSignal.set(row.project_id, key);
+  }
+
+  const logoByProject = new Map<string, string>();
+  for (const row of db
+    .prepare(
+      `SELECT project_id, fact_key, value_text, detail_json
+         FROM company_facts
+        WHERE fact_key IN ('logo', 'favicon', 'logo_url', 'favicon_url')
+           OR detail_json LIKE '%"logo"%'
+           OR detail_json LIKE '%"favicon"%'
+           OR detail_json LIKE '%"logoUrl"%'
+           OR detail_json LIKE '%"faviconUrl"%'
+           OR detail_json LIKE '%"logo_url"%'
+           OR detail_json LIKE '%"favicon_url"%'`,
+    )
+    .all() as { project_id: string; fact_key: string; value_text: string; detail_json: string }[]) {
+    if (logoByProject.has(row.project_id)) continue;
+    const url = logoUrlFromStored(row.fact_key, row.value_text, row.detail_json);
+    if (url) logoByProject.set(row.project_id, url);
+  }
+
   const cards: DirectoryCard[] = [];
   for (const company of companies) {
     const school = schoolByProject.get(company.id);
@@ -141,7 +247,7 @@ export function loadDirectory(): DirectoryData {
     const description = company.description && !isBoilerplateDescription(company.description) ? oneLine(company.description) : null;
     const sectorId = sectorByProject.get(company.id) ?? null;
     const signalKind = signalByProject.get(company.id) ?? null;
-    cards.push({
+      cards.push({
       id: company.id,
       name: company.name,
       description,
@@ -154,6 +260,9 @@ export function loadDirectory(): DirectoryData {
       signalKind,
       signalLabel: signalKind ? SIGNAL_LABEL[signalKind] : null,
       signals: signalCount.get(company.id) ?? 0,
+      founders: foundersByProject.get(company.id) ?? [],
+      latestSignalAt: latestSignal.get(company.id) ?? null,
+      logoUrl: logoByProject.get(company.id) ?? null,
     });
   }
   cards.sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name));
@@ -185,12 +294,52 @@ export function filterDirectory(cards: DirectoryCard[], sector: string | undefin
   });
 }
 
+export function searchDirectory(cards: DirectoryCard[], query: string | undefined): DirectoryCard[] {
+  const tokens = (query ?? "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return cards;
+  return cards.filter((card) => {
+    const haystack = [card.name, card.description ?? "", ...card.founders].join("\n").toLowerCase();
+    return tokens.every((token) => haystack.includes(token));
+  });
+}
+
+export function sortDirectory(cards: DirectoryCard[], sort: DirectorySort): DirectoryCard[] {
+  const copy = [...cards];
+  if (sort === "name") {
+    copy.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+    return copy;
+  }
+  if (sort === "stage") {
+    const rank = (stage: string | null) => {
+      if (!stage) return STAGE_ORDER.length + 1;
+      const index = STAGE_ORDER.indexOf(stage);
+      return index === -1 ? STAGE_ORDER.length : index;
+    };
+    copy.sort((a, b) => rank(a.stage) - rank(b.stage) || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+    return copy;
+  }
+  copy.sort((a, b) => {
+    const left = a.latestSignalAt ?? "";
+    const right = b.latestSignalAt ?? "";
+    if (left !== right) {
+      if (!left) return 1;
+      if (!right) return -1;
+      return right.localeCompare(left);
+    }
+    return a.name.localeCompare(b.name) || a.id.localeCompare(b.id);
+  });
+  return copy;
+}
+
 export function directoryPage(cards: DirectoryCard[], pages = 1): DirectoryCard[] {
   return cards.slice(0, Math.max(1, pages) * DIRECTORY_LIMIT);
 }
 
 export function leaderboardPage(cards: DirectoryCard[], pages = 1): DirectoryCard[] {
-  return cards.filter((card) => card.signals > 0).slice(0, Math.max(1, pages) * LEADERBOARD_LIMIT);
+  return cards
+    .filter((card) => card.signals > 0)
+    .sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name) || a.id.localeCompare(b.id))
+    .slice(0, Math.max(1, pages) * LEADERBOARD_LIMIT);
 }
 
 export const DIRECTORY_PAGE_SIZE = DIRECTORY_LIMIT;

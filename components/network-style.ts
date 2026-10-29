@@ -567,20 +567,6 @@ export function selectVisibleLabels(
       }
     }
   };
-  const hits = (box: LabelBox): boolean => {
-    const x0 = Math.floor(box.left / cell);
-    const x1 = Math.floor(box.right / cell);
-    const y0 = Math.floor(box.top / cell);
-    const y1 = Math.floor(box.bottom / cell);
-    for (let x = x0; x <= x1; x++) {
-      for (let y = y0; y <= y1; y++) {
-        const list = grid.get(`${x}:${y}`);
-        if (!list) continue;
-        for (const other of list) if (boxesOverlap(other, box)) return true;
-      }
-    }
-    return false;
-  };
   const hitsDisc = (box: LabelBox, discId?: string) => discs.some((disc) => disc.id !== discId && boxHitsDisc(box, disc));
   const overlapScore = (box: LabelBox): number => {
     const seen = new Set<LabelBox>();

@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    // Stored company logos can live on any host already saved in the database.
+    remotePatterns: [
+      { protocol: "https", hostname: "*" },
+      { protocol: "http", hostname: "*" },
+    ],
+  },
   // Dev HMR and the RSC debug channel are blocked for 127.0.0.1 unless it is
   // listed. Without this, `next dev` serves HTML at that host but never
   // hydrates, so the globe stays on "Loading globe".

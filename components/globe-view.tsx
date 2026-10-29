@@ -643,7 +643,6 @@ export const GlobeView = memo(function GlobeView({
           }
 
           if (!map.getSource("campus-arcs") && campusArcs.length > 0) {
-            const byId = new Map(points.map((u) => [u.id, u]));
             const features = arcFeaturesFor(points, campusArcs, hero ? 60 : Infinity, current.university);
             map.addSource("campus-arcs", { type: "geojson", data: { type: "FeatureCollection", features } });
             map.addLayer({
@@ -786,7 +785,7 @@ export const GlobeView = memo(function GlobeView({
       framedRef.current = true;
       frameCampuses(map, placedPoints);
     }
-  }, [universities, campusArcs, status, current.university, recentIds, hero]);
+  }, [universities, campusArcs, status, current.university, recentIds, hero, MAP_THEME.arc]);
 
   const userLayerBound = useRef(false);
   useEffect(() => {
@@ -909,7 +908,7 @@ export const GlobeView = memo(function GlobeView({
         universities.filter((university) => ids.includes(university.id))
       );
     }
-  }, [emphasizeKey, status, universities, hero]);
+  }, [emphasizeKey, status, universities, hero, locked]);
 
   useEffect(() => {
     if (!active || status !== "ok") return;

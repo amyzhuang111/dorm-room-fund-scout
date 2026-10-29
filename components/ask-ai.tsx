@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { WebWorkerMLCEngine } from "@mlc-ai/web-llm";
 import { ASK_BROWSER_MODELS, ASK_DEFAULT_MODEL_ID, formatDownload } from "@/lib/domain/ask-browser-models";
-import { answerFromRecords, ASK_SYSTEM_PROMPT, askUserPrompt, NOT_IN_THE_DATA, onDeviceNote } from "@/lib/domain/ask-prompt";
+import { NOT_IN_THE_DATA } from "@/lib/domain/ask-prompt";
 import type { AskHit } from "@/lib/domain/ask-types";
 import { CAMPUSES, compareCampusLabels } from "@/lib/domain/campuses";
 import { setAskHighlight } from "./ask-highlight";
@@ -24,16 +24,6 @@ let browserWorker: Worker | null = null;
 let browserEngine: WebWorkerMLCEngine | null = null;
 let browserModelId: string | null = null;
 let browserLoad: Promise<boolean> | null = null;
-
-async function waitForWebgpu(read: () => boolean | null): Promise<boolean> {
-  if (read() === false) return false;
-  if (read() === true) return true;
-  const started = Date.now();
-  while (read() === null && Date.now() - started < 2500) {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-  }
-  return read() === true;
-}
 
 async function ensureBrowserEngine(modelId: string, onProgress: (report: { progress: number; text: string }) => void): Promise<boolean> {
   if (browserEngine && browserModelId === modelId) return true;
@@ -117,15 +107,14 @@ function AskAiDock() {
   const [open, setOpen] = useState(false);
   const [question, setQuestion] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const [answer, setAnswer] = useState("");
-  const [matches, setMatches] = useState<AskHit[]>([]);
-  const [matchCount, setMatchCount] = useState(0);
-  const [asked, setAsked] = useState(false);
-  const [busy, setBusy] = useState(false);
+  const [answer] = useState("");
+  const [matches] = useState<AskHit[]>([]);
+  const [matchCount] = useState(0);
+  const [asked] = useState(false);
+  const [busy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [engine, setEngine] = useState<"gemini" | "on-device" | "search" | null>(null);
-  const [note, setNote] = useState<string | null>(null);
-  const abortRef = useRef<AbortController | null>(null);
+  const [engine] = useState<"gemini" | "on-device" | "search" | null>(null);
+  const [note] = useState<string | null>(null);
   const webgpuRef = useRef(webgpu);
   useEffect(() => {
     webgpuRef.current = webgpu;
@@ -161,7 +150,6 @@ function AskAiDock() {
 
   useEffect(() => {
     return () => {
-      abortRef.current?.abort();
       setAskHighlight(null);
     };
   }, []);
@@ -200,7 +188,6 @@ function AskAiDock() {
   }, []);
 
   function close() {
-    abortRef.current?.abort();
     setAskHighlight(null);
     setOpen(false);
     inputRef.current?.blur();
@@ -211,16 +198,6 @@ function AskAiDock() {
     next.focusId = hit.id;
     next.focusCampus = hit.campuses[0] ?? null;
     setAskHighlight(next);
-  }
-
-  async function revealAnswer(text: string, signal: AbortSignal) {
-    const size = Math.max(2, Math.ceil(text.length / 28));
-    for (let i = size; i < text.length; i += size) {
-      if (signal.aborted) return;
-      setAnswer(text.slice(0, i));
-      await new Promise((resolve) => setTimeout(resolve, 16));
-    }
-    if (!signal.aborted) setAnswer(text);
   }
 
   async function loadModel(): Promise<boolean> {
@@ -247,99 +224,6 @@ function AskAiDock() {
       return false;
     } finally {
       setLoading(false);
-    }
-  }
-
-  function deviceCanRunModel(): Promise<boolean> {
-    return waitForWebgpu(() => webgpuRef.current);
-  }
-
-  async function answerOnDevice(trimmed: string, rows: AskHit[], quota: boolean, total: number) {
-    const canRun = await deviceCanRunModel();
-    const signal = abortRef.current?.signal ?? new AbortController().signal;
-    if (!canRun) {
-      setNote(onDeviceNote(quota, false));
-      setEngine("search");
-      await revealAnswer(answerFromRecords(rows, trimmed, total), signal);
-      return;
-    }
-    setNote(onDeviceNote(quota, true));
-    const ready = await loadModel();
-    if (!ready || !browserEngine) {
-      setEngine("search");
-      await revealAnswer(answerFromRecords(rows, trimmed, total), signal);
-      return;
-    }
-    setEngine("on-device");
-    await browserEngine.resetChat();
-    const stream = await browserEngine.chat.completions.create({
-      stream: true,
-      temperature: 0.2,
-      max_tokens: 280,
-      messages: [
-        { role: "system", content: ASK_SYSTEM_PROMPT },
-        { role: "user", content: askUserPrompt(trimmed, rows, total) },
-      ],
-    });
-    let textOut = "";
-    for await (const chunk of stream) {
-      const delta = chunk.choices[0]?.delta?.content ?? "";
-      if (!delta) continue;
-      textOut += delta;
-      setAnswer(textOut);
-    }
-    if (!textOut.trim()) await revealAnswer(answerFromRecords(rows, trimmed, total), abortRef.current?.signal ?? new AbortController().signal);
-  }
-
-  async function ask(text: string) {
-    const trimmed = text.trim();
-    if (!trimmed || busy) return;
-    setOpen(true);
-    setQuestion(trimmed);
-    setAnswer("");
-    setMatches([]);
-    setMatchCount(0);
-    setAsked(true);
-    setError(null);
-    setEngine(null);
-    setNote(null);
-    setAskHighlight(null);
-    abortRef.current?.abort();
-    const controller = new AbortController();
-    abortRef.current = controller;
-    setBusy(true);
-    try {
-      const res = await fetch("/api/ask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: trimmed }),
-        signal: controller.signal,
-      });
-      const data = (await res.json()) as { engine?: string; answer?: string; matches?: AskHit[]; matchCount?: number; error?: string };
-      const rows = Array.isArray(data.matches) ? data.matches : [];
-      const total = typeof data.matchCount === "number" ? data.matchCount : rows.length;
-      setMatches(rows);
-      setMatchCount(total);
-      setAskHighlight(rows.length ? highlightFrom(rows) : null);
-      if (res.ok && data.answer) {
-        setEngine(data.engine === "gemini" ? "gemini" : "search");
-        await revealAnswer(data.answer, controller.signal);
-        return;
-      }
-      if (!res.ok && data.error === "bad_request") {
-        setError("Ask AI could not read that question.");
-        return;
-      }
-      if (rows.length === 0) {
-        setEngine("search");
-        await revealAnswer(NOT_IN_THE_DATA, controller.signal);
-        return;
-      }
-      await answerOnDevice(trimmed, rows, res.status === 429 || data.error === "quota", total);
-    } catch (err) {
-      if ((err as { name?: string }).name !== "AbortError") setError("Ask AI could not answer that.");
-    } finally {
-      setBusy(false);
     }
   }
 

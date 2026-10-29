@@ -10,7 +10,7 @@
 // is a different Berkeley program and is not this entity.
 
 import crypto from "node:crypto";
-import { getDb, newId, nowIso } from "../../lib/db/client";
+import { getDb, nowIso } from "../../lib/db/client";
 import { mergeRecordedPair } from "../../lib/domain/dedupe";
 
 const CHECKED_ON = "2026-09-27";

@@ -896,7 +896,6 @@ async function main() {
   cursor = 0;
   attempted = 0;
   await Promise.all([worker("company"), worker("company"), worker("company")]);
-  const companyAttempts = attempted;
   const companyAttemptsDone = attempted;
   cursor = 0;
   await Promise.all([worker("founder"), worker("founder")]);

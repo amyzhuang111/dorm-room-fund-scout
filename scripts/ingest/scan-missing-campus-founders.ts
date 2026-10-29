@@ -166,7 +166,6 @@ const SEARCHES = [
   "Laurentian",
 ];
 
-const AFFILIATION = /\b(student|students|freshm\w*|sophomore|junior|senior|studied|studying|study|alumni|alums?\b|graduated|undergrad|undergraduate|phd|ph\.d|class of|backgrounds?|researchers from|engineers from|spin-?off|degree|mba|dropout|dropped out|left|fellow|founder|majoring)\b/i;
 const CUSTOMER = /\b(using|used by|customers?|partnership with|partnered with|researchers at leading|already using|payment option|hospitals?|launched at|including the)\b/i;
 
 const CSL_2026 = "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/";

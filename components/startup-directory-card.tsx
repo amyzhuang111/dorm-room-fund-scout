@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { StartupCard, StartupCardFounder, StartupLinkKind } from "@/lib/domain/startup-card";
@@ -47,9 +48,12 @@ function CompanyLogo({ name, websiteUrl }: { name: string; websiteUrl: string | 
     );
   }
   return (
-    <img
+    <Image
       src={src}
       alt=""
+      width={56}
+      height={56}
+      unoptimized
       className="h-14 w-14 shrink-0 rounded-xl border border-neutral-200 bg-white object-contain p-2 shadow-sm"
       onError={() => setFailedUrl(websiteUrl)}
     />

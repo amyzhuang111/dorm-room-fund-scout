@@ -4,34 +4,39 @@ import {
   DIRECTORY_PAGE_SIZE,
   LEADERBOARD_PAGE_SIZE,
   directoryPage,
+  directorySortOf,
   filterDirectory,
   leaderboardPage,
   loadDirectory,
+  searchDirectory,
+  sortDirectory,
   type DirectoryCard,
   type DirectoryFilter,
+  type DirectorySort,
 } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
 
 export type Feed = "directory" | "leaderboard" | "world";
 
-function moreHref(feed: Feed, sector: string | undefined, kind: string | undefined, campus: string | undefined, pages: number): string {
+function browseHref(opts: {
+  feed?: Feed;
+  sector?: string;
+  kind?: string;
+  campus?: string;
+  q?: string;
+  sort?: DirectorySort;
+  more?: number;
+}): string {
   const query = new URLSearchParams();
   query.set("sample", "1");
-  if (feed !== "directory") query.set("feed", feed);
-  if (sector) query.set("sector", sector);
-  if (kind) query.set("kind", kind);
-  if (campus) query.set("campus", campus);
-  query.set("more", String(pages + 1));
-  return `/?${query.toString()}#browse`;
-}
-
-function feedHref(feed: Feed, sector?: string, kind?: string, campus?: string): string {
-  const query = new URLSearchParams();
-  query.set("sample", "1");
-  if (feed !== "directory") query.set("feed", feed);
-  if (sector) query.set("sector", sector);
-  if (kind) query.set("kind", kind);
-  if (campus) query.set("campus", campus);
+  if (opts.feed && opts.feed !== "directory") query.set("feed", opts.feed);
+  if (opts.sector) query.set("sector", opts.sector);
+  if (opts.kind) query.set("kind", opts.kind);
+  if (opts.campus) query.set("campus", opts.campus);
+  const q = opts.q?.trim();
+  if (q) query.set("q", q);
+  if (opts.sort && opts.sort !== "recent") query.set("sort", opts.sort);
+  if (opts.more && opts.more > 1) query.set("more", String(opts.more));
   return `/?${query.toString()}#browse`;
 }
 
@@ -41,6 +46,8 @@ export function SampleHome({
   kind,
   campus,
   more,
+  q,
+  sort,
   stats,
 }: {
   feed: Feed;
@@ -48,28 +55,34 @@ export function SampleHome({
   kind?: string;
   campus?: string;
   more?: string;
+  q?: string;
+  sort?: string;
   stats: HeroStats;
 }) {
   const pages = Math.max(1, Math.floor(Number(more)) || 1);
+  const query = q?.trim() ?? "";
+  const order = directorySortOf(sort);
   const campusRow = campus ? stats.universities.find((university) => university.id === campus) : undefined;
   const campusId = campusRow?.id;
   const listed = feed === "directory" || feed === "leaderboard";
   const data = loadDirectory();
-  const matched = filterDirectory(data.cards, sector, kind, campusId);
+  const tiles = data.cards.map((card) => ({ id: card.id, name: card.name, schoolId: card.schoolId, signals: card.signals, logoUrl: card.logoUrl }));
+  const matched = searchDirectory(filterDirectory(data.cards, sector, kind, campusId), query);
   const campusTotal = campusId ? filterDirectory(data.cards, undefined, undefined, campusId).length : null;
-  const shown = feed === "leaderboard" ? leaderboardPage(matched, pages) : directoryPage(matched, pages);
+  const ordered = feed === "directory" ? sortDirectory(matched, order) : matched;
+  const shown = feed === "leaderboard" ? leaderboardPage(ordered, pages) : directoryPage(ordered, pages);
   const total = feed === "leaderboard" ? matched.filter((card) => card.signals > 0).length : matched.length;
   const pageSize = feed === "leaderboard" ? LEADERBOARD_PAGE_SIZE : DIRECTORY_PAGE_SIZE;
 
   return (
     <div className="hero-night bg-bg text-fg">
-      <GlobeHero stats={stats} showGlobe={feed !== "world"} companies={data.cards} />
+      <GlobeHero stats={stats} showGlobe={feed !== "world"} companies={tiles} />
       <section id="browse" className="scroll-mt-20 border-t border-line px-6 pb-16 pt-6">
         <div className="mx-auto w-full max-w-[880px]">
           <div className="flex flex-wrap items-center gap-x-1 border-b border-line" role="tablist" aria-label="Views">
-            <Tab href={feedHref("directory", sector, kind, campusId)} active={feed === "directory"}>Directory</Tab>
-            <Tab href={feedHref("leaderboard", sector, kind, campusId)} active={feed === "leaderboard"}>Leaderboard</Tab>
-            <Tab href={feedHref("world", undefined, undefined, campusId)} active={feed === "world"}>World</Tab>
+            <Tab href={browseHref({ feed: "directory", sector, kind, campus: campusId, q: query, sort: order })} active={feed === "directory"}>Directory</Tab>
+            <Tab href={browseHref({ feed: "leaderboard", sector, kind, campus: campusId, q: query })} active={feed === "leaderboard"}>Leaderboard</Tab>
+            <Tab href={browseHref({ feed: "world", campus: campusId })} active={feed === "world"}>World</Tab>
           </div>
           {listed ? (
             <>
@@ -81,13 +94,13 @@ export function SampleHome({
                   ? "Companies ranked by how many signals are on record."
                   : "The number on each card is how many signals are on record for that company."}
               </p>
-              {data ? <Filters sectors={data.sectors} kinds={data.kinds} feed={feed} sector={sector} kind={kind} campus={campusId} /> : null}
+              {data ? <Filters sectors={data.sectors} kinds={data.kinds} feed={feed} sector={sector} kind={kind} campus={campusId} q={query} sort={order} /> : null}
             </>
           ) : null}
         </div>
         {feed === "world" ? (
           <div className="mx-auto mt-5 w-full max-w-[1200px]">
-            <WorldMap stats={stats} companies={data.cards} />
+            <WorldMap stats={stats} companies={tiles} />
           </div>
         ) : (
           <div className="mx-auto w-full max-w-[880px] pt-4">
@@ -99,13 +112,17 @@ export function SampleHome({
                   {" · "}
                   {campusRow.name}
                   {" · "}
-                  <Link href={feedHref(feed, sector, kind)} className="text-fg hover:underline">Clear</Link>
+                  <Link href={browseHref({ feed, sector, kind, q: query, sort: feed === "directory" ? order : undefined })} className="text-fg hover:underline">Clear</Link>
                 </>
               ) : null}
             </p>
             {shown.length === 0 ? (
               <p className="text-[14px] text-fg-2">
-                {campusRow && campusTotal === 0 ? `No companies are stored for ${campusRow.name}.` : "No companies in this category."}
+                {query
+                  ? `No companies match "${query}".`
+                  : campusRow && campusTotal === 0
+                    ? `No companies are stored for ${campusRow.name}.`
+                    : "No companies in this category."}
               </p>
             ) : null}
             <ol className="flex flex-col gap-3">
@@ -114,7 +131,7 @@ export function SampleHome({
               ))}
             </ol>
             {shown.length < total ? (
-              <Link href={moreHref(feed, sector, kind, campusId, pages)} className="mt-4 inline-flex h-10 items-center rounded border border-line px-4 text-[14px] font-medium">
+              <Link href={browseHref({ feed, sector, kind, campus: campusId, q: query, sort: feed === "directory" ? order : undefined, more: pages + 1 })} className="mt-4 inline-flex h-10 items-center rounded border border-line px-4 text-[14px] font-medium">
                 Show {Math.min(pageSize, total - shown.length).toLocaleString("en-US")} more
               </Link>
             ) : null}
@@ -140,6 +157,8 @@ function Filters({
   sector,
   kind,
   campus,
+  q,
+  sort,
 }: {
   sectors: DirectoryFilter[];
   kinds: DirectoryFilter[];
@@ -147,23 +166,61 @@ function Filters({
   sector?: string;
   kind?: string;
   campus?: string;
+  q?: string;
+  sort: DirectorySort;
 }) {
   const chip = "inline-flex h-8 items-center rounded-full border px-3 text-[13px]";
   const quiet = `${chip} border-line text-fg-2 hover:text-fg`;
   const on = `${chip} border-link text-fg`;
+  const keep = { feed, sector, kind, campus, q, sort: feed === "directory" ? sort : undefined };
+  const sorts: { id: DirectorySort; label: string }[] = [
+    { id: "name", label: "Name" },
+    { id: "recent", label: "Recent signal" },
+    { id: "stage", label: "Stage" },
+  ];
   return (
-    <div className="mt-4 flex flex-wrap gap-2">
-      <Link href={feedHref(feed, undefined, undefined, campus)} className={!sector && !kind ? on : quiet}>All</Link>
-      {sectors.map((item) => (
-        <Link key={item.id} href={feedHref(feed, sector === item.id ? undefined : item.id, kind, campus)} className={sector === item.id ? on : quiet}>
-          {item.label}
-        </Link>
-      ))}
-      {kinds.map((item) => (
-        <Link key={item.id} href={feedHref(feed, sector, kind === item.id ? undefined : item.id, campus)} className={kind === item.id ? on : quiet}>
-          {item.label}
-        </Link>
-      ))}
+    <div className="mt-4 space-y-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <form action="/#browse" method="get" className="flex h-8 items-center gap-1" role="search">
+          <input type="hidden" name="sample" value="1" />
+          {feed !== "directory" ? <input type="hidden" name="feed" value={feed} /> : null}
+          {sector ? <input type="hidden" name="sector" value={sector} /> : null}
+          {kind ? <input type="hidden" name="kind" value={kind} /> : null}
+          {campus ? <input type="hidden" name="campus" value={campus} /> : null}
+          {feed === "directory" && sort !== "recent" ? <input type="hidden" name="sort" value={sort} /> : null}
+          <label htmlFor="directory-q" className="sr-only">Search companies, founders, and one-liners</label>
+          <input
+            id="directory-q"
+            type="search"
+            name="q"
+            defaultValue={q ?? ""}
+            placeholder="Company, founder, or one-liner"
+            className="h-8 w-44 rounded-full border border-line bg-raised px-3 text-[13px] text-fg outline-none placeholder:text-fg-3 sm:w-56"
+          />
+          <button type="submit" className="inline-flex h-8 items-center rounded-full border border-line px-3 text-[13px] text-fg">Search</button>
+        </form>
+        <Link href={browseHref({ ...keep, sector: undefined, kind: undefined })} className={!sector && !kind ? on : quiet}>All</Link>
+        {sectors.map((item) => (
+          <Link key={item.id} href={browseHref({ ...keep, sector: sector === item.id ? undefined : item.id })} className={sector === item.id ? on : quiet}>
+            {item.label}
+          </Link>
+        ))}
+        {kinds.map((item) => (
+          <Link key={item.id} href={browseHref({ ...keep, kind: kind === item.id ? undefined : item.id })} className={kind === item.id ? on : quiet}>
+            {item.label}
+          </Link>
+        ))}
+      </div>
+      {feed === "directory" ? (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[13px] text-fg-2">Sort</span>
+          {sorts.map((item) => (
+            <Link key={item.id} href={browseHref({ feed, sector, kind, campus, q, sort: item.id })} className={sort === item.id ? on : quiet}>
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

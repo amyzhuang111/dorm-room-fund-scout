@@ -19,7 +19,8 @@ export async function currentMember(): Promise<{ email: string } | null> {
   }
 }
 
-export async function requireMemberPage(_callbackPath: string): Promise<{ email: string }> {
+export async function requireMemberPage(callbackPath: string): Promise<{ email: string }> {
+  void callbackPath;
   return (await currentMember()) ?? { email: "" };
 }
 
