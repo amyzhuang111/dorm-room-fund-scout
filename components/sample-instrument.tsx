@@ -344,13 +344,26 @@ export function FacetRail({
           className={`${dense ? "mt-0" : "mt-1.5"} h-7 w-full rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2 text-[11px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)]`}
         />
       </div>
+      {dense ? (
+        <div className="shrink-0 border-b border-[color:var(--line,#E1E5EF)] px-1.5 py-1" data-facet-status-pin="">
+          <p className="text-[10px] font-medium uppercase tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]">Status</p>
+          <div className="mt-1 flex flex-wrap gap-0.5">
+            <Chip facet="status" count={baseCompanies.length} active={!facets.status} onClick={() => set({ status: null })} label={`All · ${baseCompanies.length}`} />
+            {statuses.map((item) => (
+              <Chip key={item.id} facet="status" count={item.count} active={facets.status === item.id} onClick={() => set({ status: facets.status === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} dot={STATUS_DOT[item.id]} />
+            ))}
+          </div>
+        </div>
+      ) : null}
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <FacetGroup title="Status" dense={dense}>
-          <Chip facet="status" count={baseCompanies.length} active={!facets.status} onClick={() => set({ status: null })} label={`All · ${baseCompanies.length}`} />
-          {statuses.map((item) => (
-            <Chip key={item.id} facet="status" count={item.count} active={facets.status === item.id} onClick={() => set({ status: facets.status === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} dot={STATUS_DOT[item.id]} />
-          ))}
-        </FacetGroup>
+        {dense ? null : (
+          <FacetGroup title="Status" dense={dense}>
+            <Chip facet="status" count={baseCompanies.length} active={!facets.status} onClick={() => set({ status: null })} label={`All · ${baseCompanies.length}`} />
+            {statuses.map((item) => (
+              <Chip key={item.id} facet="status" count={item.count} active={facets.status === item.id} onClick={() => set({ status: facets.status === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} dot={STATUS_DOT[item.id]} />
+            ))}
+          </FacetGroup>
+        )}
         <FacetGroup title="Flags" dense={dense}>
           <Chip facet="flag" active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
           {flags.map((item) => (
