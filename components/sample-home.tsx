@@ -107,13 +107,13 @@ export function SampleHome({
         <div className="mx-auto w-full max-w-[1280px]">
           <div className="flex flex-wrap items-center gap-x-1 border-b border-line" role="tablist" aria-label="Views">
             <Tab href={browseHref({ feed: "directory", sector, kind, campus: campusId, q: query, sort: order })} active={feed === "directory"}>
-              Directory
+              Ledger
             </Tab>
             <Tab href={browseHref({ feed: "leaderboard", sector, kind, campus: campusId, q: query })} active={feed === "leaderboard"}>
-              Leaderboard
+              Signals
             </Tab>
             <Tab href={browseHref({ feed: "world", campus: campusId })} active={feed === "world"}>
-              World
+              Atlas
             </Tab>
           </div>
         </div>
@@ -157,7 +157,7 @@ export function SampleHome({
 
 function Tab({ href, active, children }: { href: string; active: boolean; children: string }) {
   return (
-    <Link href={href} role="tab" aria-selected={active} className={`grid h-8 place-items-center border-b-2 px-2.5 text-[13px] font-medium ${active ? "border-link text-fg" : "border-transparent text-fg-2"}`}>
+    <Link href={href} role="tab" aria-selected={active} className={`grid h-8 place-items-center border-b-2 px-2.5 font-mono text-[12px] font-medium uppercase tracking-[0.08em] ${active ? "border-[color:var(--ember,#E8823A)] text-[color:var(--fg,#ECEEF4)]" : "border-transparent text-[color:var(--fg-3,#6B7390)] hover:text-[color:var(--fg-2,#A3AAC0)]"}`}>
       {children}
     </Link>
   );

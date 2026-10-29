@@ -45,11 +45,10 @@ export function companyInitials(name: string): string {
 }
 
 function NeutralMark({ name, cls }: { name: string; cls: string }) {
-  const initials = companyInitials(name);
-  const mono = initials.length > 2 ? "text-[7px]" : initials.length > 1 ? "text-[8px]" : "text-[10px]";
+  const initials = companyInitials(name).slice(0, 2);
   return (
     <span
-      className={`${cls} grid shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/50 bg-[linear-gradient(145deg,var(--cobalt-haze,#1A2556),#0E1428)] font-mono ${mono} font-semibold tracking-tight text-[color:var(--ember,#E8823A)]`}
+      className={`${cls} grid shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/55 bg-[linear-gradient(145deg,var(--cobalt-haze,#1A2556),#0E1428)] font-mono text-[8px] font-semibold tracking-tight text-[color:var(--ember,#E8823A)] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.15)]`}
       aria-hidden
       title={name}
     >
@@ -70,20 +69,39 @@ export function LogoMark({
   size?: number;
 }) {
   void mark;
-  const [failed, setFailed] = useState(false);
-  const cls = size <= 16 ? "h-4 w-4" : size <= 20 ? "h-5 w-5" : size <= 24 ? "h-6 w-6" : "h-7 w-7";
-  if (!logoUrl || failed) {
-    return <NeutralMark name={name} cls={cls} />;
+  // Google s2 stubs paint as 16px blobs; stay on monogram until a real mark proves itself.
+  const needsProof = Boolean(logoUrl && /google\.com\/s2\/favicons/i.test(logoUrl));
+  const [ok, setOk] = useState(!needsProof && Boolean(logoUrl));
+  const cls = size <= 16 ? "h-4 w-4" : size <= 20 ? "h-5 w-5" : size <= 24 ? "h-6 w-6" : size <= 28 ? "h-7 w-7" : "h-8 w-8";
+  if (!logoUrl || !ok) {
+    return (
+      <span className="relative inline-grid shrink-0">
+        <NeutralMark name={name} cls={cls} />
+        {logoUrl && needsProof ? (
+          // eslint-disable-next-line @next/next/no-img-element -- probe only; hidden until verified
+          <img
+            src={logoUrl}
+            alt=""
+            width={1}
+            height={1}
+            className="pointer-events-none absolute h-0 w-0 opacity-0"
+            onLoad={(e) => {
+              if (e.currentTarget.naturalWidth > 16) setOk(true);
+            }}
+          />
+        ) : null}
+      </span>
+    );
   }
   return (
-    // eslint-disable-next-line @next/next/no-img-element -- favicon hosts vary; onError must swap to NeutralMark
+    // eslint-disable-next-line @next/next/no-img-element -- favicon hosts vary; verified above for google s2
     <img
       src={logoUrl}
       alt=""
       width={size}
       height={size}
       className={`${cls} shrink-0 rounded-md border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] object-contain`}
-      onError={() => setFailed(true)}
+      onError={() => setOk(false)}
     />
   );
 }
@@ -100,22 +118,43 @@ export function LogoPill({
   mark?: string;
 }) {
   void mark;
-  const [failed, setFailed] = useState(false);
-  const showImage = Boolean(logoUrl) && !failed;
+  const needsProof = Boolean(logoUrl && /google\.com\/s2\/favicons/i.test(logoUrl));
+  const [ok, setOk] = useState(!needsProof && Boolean(logoUrl));
+  const initials = companyInitials(name).slice(0, 2);
   return (
     <Link
       href={href}
-      className="flex h-4 min-w-0 max-w-[6.5rem] items-center gap-0.5 rounded-md border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)] px-1 text-[8px] leading-none text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--ember,#E8823A)]"
+      className="relative flex h-5 min-w-0 max-w-[7.5rem] items-center gap-1 rounded-md border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)] px-1 text-[9px] leading-none text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--ember,#E8823A)]"
       title={name}
     >
-      {showImage ? (
+      {ok && logoUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={logoUrl!} alt="" width={12} height={12} className="h-3 w-3 shrink-0 rounded-md border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] object-contain" onError={() => setFailed(true)} />
+        <img
+          src={logoUrl}
+          alt=""
+          width={14}
+          height={14}
+          className="h-3.5 w-3.5 shrink-0 rounded-sm border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] object-contain"
+          onError={() => setOk(false)}
+        />
       ) : (
-        <span className="grid h-3 w-3 shrink-0 place-items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--cobalt-haze,#1A2556)] font-mono text-[6px] font-semibold text-[color:var(--ember,#E8823A)]" aria-hidden>
-          {companyInitials(name).slice(0, 2)}
+        <span className="grid h-3.5 w-3.5 shrink-0 place-items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/55 bg-[linear-gradient(145deg,var(--cobalt-haze,#1A2556),#0E1428)] font-mono text-[7px] font-semibold tracking-tight text-[color:var(--ember,#E8823A)]" aria-hidden>
+          {initials}
         </span>
       )}
+      {logoUrl && needsProof && !ok ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={logoUrl}
+          alt=""
+          width={1}
+          height={1}
+          className="pointer-events-none absolute h-0 w-0 opacity-0"
+          onLoad={(e) => {
+            if (e.currentTarget.naturalWidth > 16) setOk(true);
+          }}
+        />
+      ) : null}
       <span className="min-w-0 truncate">{name}</span>
     </Link>
   );
@@ -572,6 +611,7 @@ export function SignalFeedRow({ company, index }: { company: FacetCompany; index
   return (
     <Link href={`/startup/${company.id}`} className="flex items-center gap-1.5 text-left text-[11px] hover:text-[color:var(--ember,#E8823A)]">
       <span className={`${COUNT} w-3 shrink-0 text-[10px]`}>{index + 1}</span>
+      <LogoMark name={company.name} logoUrl={company.logoUrl} size={16} />
       <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#ECEEF4)]">{company.name}</span>
       <span className="shrink-0 tabular-nums text-[9px] text-[color:var(--fg-3,#6B7390)]">{date}</span>
       <span className="shrink-0 rounded-full border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)] px-1 py-px text-[8px] text-[color:var(--fg-2,#A3AAC0)]">{company.signalLabel ?? "Signal"}</span>
@@ -589,14 +629,7 @@ export function FounderFeedRow({
   return (
     <Link href={`/startup/${person.companyId}`} className="flex items-center gap-1.5 text-left hover:text-[color:var(--ember,#E8823A)]" title={person.companyName}>
       <span className={`${COUNT} w-3 shrink-0 text-[10px]`}>{index + 1}</span>
-      {person.logoUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={person.logoUrl} alt="" width={16} height={16} className="h-4 w-4 shrink-0 rounded-md border border-[color:var(--line,#1F2536)] object-contain" />
-      ) : (
-        <span className="grid h-4 w-4 shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/50 bg-[linear-gradient(145deg,var(--cobalt-haze,#1A2556),#0E1428)] font-mono text-[7px] font-semibold text-[color:var(--ember,#E8823A)]" aria-hidden>
-          {companyInitials(person.name)}
-        </span>
-      )}
+      <LogoMark name={person.name} logoUrl={person.logoUrl} size={16} />
       <span className="min-w-0 flex-1 truncate text-[11px] text-[color:var(--fg,#ECEEF4)]">
         {person.name}
         <span className="text-[color:var(--fg-3,#6B7390)]"> · {person.companyName}</span>
@@ -729,8 +762,8 @@ export function ViewDrawer({
   const total = mode === "startups" ? companyTotal : founderTotal;
   if (companyTotal === 0 && founderTotal === 0) return null;
   return (
-    <div className={`${PANEL} px-1.5 py-1`}>
-      <div className="mb-1 flex flex-wrap items-center gap-1 px-0.5">
+    <div className={`${PANEL} relative overflow-hidden px-1.5 py-1.5 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
+      <div className="mb-1.5 flex flex-wrap items-center gap-1 px-0.5">
         <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Ledger</p>
         <p className={`${COUNT} text-[11px]`}>{total.toLocaleString("en-US")}</p>
         <div className="ml-auto inline-flex overflow-hidden rounded-full border border-[color:var(--line,#1F2536)]">
@@ -742,7 +775,7 @@ export function ViewDrawer({
           </button>
         </div>
       </div>
-      <div className="flex max-h-[min(70vh,560px)] flex-wrap content-start gap-0.5 overflow-y-auto">
+      <div className="flex max-h-[min(70vh,560px)] flex-wrap content-start gap-1 overflow-y-auto pr-0.5">
         {mode === "startups"
           ? preferLogoCompanies(companies).map((company) => <LogoPill key={company.id} href={`/startup/${company.id}`} name={company.name} logoUrl={company.logoUrl} />)
           : founders.map((person) => <LogoPill key={person.key} href={`/startup/${person.companyId}`} name={person.name} mark={person.name} />)}

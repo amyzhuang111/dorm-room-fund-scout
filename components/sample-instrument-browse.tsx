@@ -116,9 +116,9 @@ export function SampleInstrumentBrowse({
       : "border-[color:var(--cobalt-haze,#1A2556)] bg-[color:var(--bg-sunken,#080A11)] font-mono text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--cobalt,#2F4FD8)]";
 
   return (
-    <div className="mx-auto mt-3 grid w-full max-w-[1100px] gap-3">
+    <div className="mx-auto mt-2 grid w-full max-w-[1280px] gap-2.5 lg:grid-cols-[minmax(0,1fr)_240px] sm:mt-3 sm:gap-3">
       <div className="min-w-0">
-        <div className={`${PANEL} mb-2 flex flex-wrap items-end justify-between gap-2 p-2.5`}>
+        <div className={`${PANEL} relative mb-2 flex flex-wrap items-end justify-between gap-2 overflow-hidden p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#E8823A)]`}>
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">{feed === "leaderboard" ? "Signal ledger" : "Company ledger"}</p>
             <p className="mt-0.5 text-[13px] text-[color:var(--fg-2,#A3AAC0)]">
@@ -219,7 +219,7 @@ export function SampleInstrumentBrowse({
           <ol className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
             {cards.map((card, index) => (
               <li key={card.id}>
-                <DirectoryPill card={card} rank={feed === "leaderboard" ? (pages - 1) * 5 + index + 1 : null} />
+                <DirectoryPill card={card} rank={feed === "leaderboard" ? (pages - 1) * 14 + index + 1 : null} />
               </li>
             ))}
           </ol>
@@ -241,9 +241,14 @@ export function SampleInstrumentBrowse({
             </Link>
           ))}
         </div>
-        <div className="mt-4">
+      </div>
+      <aside className="hidden min-w-0 lg:block">
+        <div className="sticky top-14 space-y-2">
           <IntelligenceBoards companies={boardCompanies} compact />
         </div>
+      </aside>
+      <div className="lg:hidden">
+        <IntelligenceBoards companies={boardCompanies} compact />
       </div>
     </div>
   );
@@ -269,15 +274,15 @@ function DirectoryPill({ card, rank }: { card: DirectoryCard; rank: number | nul
   const subtitle = directoryCardSubtitle(card);
   const meta = signalMeta(card);
   return (
-    <Link href={`/startup/${card.id}`} className="flex items-center gap-2.5 rounded-md border border-[color:var(--line,#1F2536)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg-raised,#121726)] px-2.5 py-2 hover:border-l-[color:var(--ember,#E8823A)]">
+    <Link href={`/startup/${card.id}`} className="group flex items-center gap-2.5 rounded-md border border-[color:var(--line,#1F2536)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg-raised,#121726)] px-2.5 py-2.5 transition-colors hover:border-[color:var(--cobalt,#2F4FD8)]/60 hover:border-l-[color:var(--ember,#E8823A)] hover:bg-[color:var(--bg-sunken,#080A11)]">
       {rank != null ? <span className="w-5 shrink-0 text-center font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#E8823A)]">{rank}</span> : null}
       <LogoMark name={card.name} logoUrl={card.logoUrl} size={28} />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[13px] font-medium tracking-tight text-[color:var(--fg,#ECEEF4)]">{card.name}</p>
+        <p className="truncate text-[13px] font-medium tracking-tight text-[color:var(--fg,#ECEEF4)] group-hover:text-white">{card.name}</p>
         {subtitle ? <p className="truncate font-mono text-[10px] text-[color:var(--fg-3,#6B7390)]">{subtitle}</p> : null}
       </div>
       {meta ? (
-        <div className="max-w-[4.5rem] shrink-0 text-right">
+        <div className="max-w-[4.75rem] shrink-0 text-right">
           <p className="truncate font-mono text-[11px] font-semibold leading-none text-[color:var(--ember,#E8823A)]">{meta.primary}</p>
           {meta.secondary ? <p className="mt-0.5 truncate whitespace-nowrap font-mono text-[9px] text-[color:var(--fg-3,#6B7390)]">{meta.secondary}</p> : null}
         </div>

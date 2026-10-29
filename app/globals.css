@@ -579,3 +579,8 @@ a, button {
 .sample-paper .company-instrument .bg-ember {
   background-color: color-mix(in oklab, var(--ember) 85%, black) !important;
 }
+
+.sample-paper .company-instrument .sample-ops-chrome + *,
+.sample-paper .company-instrument [class*="GateBadge"] {
+  /* keep gate if present */
+}

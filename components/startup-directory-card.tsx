@@ -41,17 +41,36 @@ function companyInitials(name: string): string {
 }
 
 function CompanyLogo({ name, websiteUrl }: { name: string; websiteUrl: string | null }) {
-  const [failed, setFailed] = useState(false);
-  const src = websiteUrl && !failed ? faviconUrlForWebsite(websiteUrl) : null;
-  if (!src) {
+  const src = faviconUrlForWebsite(websiteUrl);
+  const [ok, setOk] = useState(false);
+  const mono = (
+    <div
+      className="grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-[#2F4FD8]/55 bg-[linear-gradient(145deg,#1A2556,#0E1428)] font-mono text-[18px] font-semibold tracking-tight text-[#E8823A] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.2)]"
+      aria-hidden
+      title={name}
+    >
+      {companyInitials(name).slice(0, 2)}
+    </div>
+  );
+  if (!src || !ok) {
     return (
-      <div
-        className="grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-[#2F4FD8]/55 bg-[linear-gradient(145deg,#1A2556,#0E1428)] font-mono text-[18px] font-semibold tracking-tight text-[#E8823A] shadow-sm"
-        aria-hidden
-        title={name}
-      >
-        {companyInitials(name)}
-      </div>
+      <span className="relative inline-grid shrink-0">
+        {mono}
+        {src ? (
+          <Image
+            src={src}
+            alt=""
+            width={1}
+            height={1}
+            unoptimized
+            className="pointer-events-none absolute h-0 w-0 opacity-0"
+            onLoadingComplete={(img) => {
+              if (img.naturalWidth > 16) setOk(true);
+            }}
+            onError={() => setOk(false)}
+          />
+        ) : null}
+      </span>
     );
   }
   return (
@@ -62,7 +81,7 @@ function CompanyLogo({ name, websiteUrl }: { name: string; websiteUrl: string | 
       height={56}
       unoptimized
       className="h-14 w-14 shrink-0 rounded-xl border border-neutral-200 bg-white object-contain p-2 shadow-sm"
-      onError={() => setFailed(true)}
+      onError={() => setOk(false)}
     />
   );
 }

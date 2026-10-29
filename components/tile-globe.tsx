@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { markerRadius, markerSizeLegend } from "@/lib/domain/marker-radius";
@@ -435,16 +436,23 @@ export function TileGlobe({
       </div>
       {/* Mobile: brief + filters sheet, no YC three-pane clone */}
       <div className="mt-2 space-y-2 lg:hidden">
-        <div className={`${PANEL} p-2.5`}>
+        <div className={`${PANEL} relative overflow-hidden p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#E8823A)]`}>
           <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Live · campus scout</p>
-          <p className="mt-1 text-[15px] font-semibold" data-fold-counts-mobile>
-            <span className={COUNT}>{liveCount.toLocaleString("en-US")}</span> companies
+          <p className="mt-1 text-[17px] font-semibold tracking-tight" data-fold-counts-mobile>
+            <span className={COUNT}>{liveCount.toLocaleString("en-US")}</span>{" "}
+            <span className="text-[color:var(--fg,#ECEEF4)]">companies</span>
           </p>
           <p className="mt-0.5 font-mono text-[11px] text-[color:var(--fg-2,#A3AAC0)]">
             <span className={COUNT} data-count="campuses-on-map">{shown.length.toLocaleString("en-US")}</span> campuses on map
             {" · "}
             <span className={COUNT} data-count="founders-listed">{founderCount.toLocaleString("en-US")}</span> founders listed
           </p>
+          <Link
+            href="/ask"
+            className="mt-2 inline-flex h-7 items-center gap-1.5 rounded-sm border border-[color:var(--ember,#E8823A)]/50 bg-[color:var(--ember,#E8823A)]/10 px-2 font-mono text-[11px] text-[color:var(--ember,#E8823A)]"
+          >
+            <span aria-hidden>{">"}</span> Scout ask
+          </Link>
         </div>
         <ViewDrawer
           mode={stripMode}
@@ -454,8 +462,9 @@ export function TileGlobe({
           companyTotal={filteredCompanies.length}
           founderTotal={founderTotalListed}
         />
+        <IntelligenceBoards companies={filteredCompanies} compact />
         <details className={`${PANEL} px-2.5 py-2`}>
-          <summary className="cursor-pointer font-mono text-[11px] font-semibold uppercase tracking-[0.08em]">Scout filters · {shown.length} campuses</summary>
+          <summary className="cursor-pointer font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#ECEEF4)]">Scout filters · {shown.length} campuses</summary>
           <div className="mt-2 h-[320px]">
             <FacetRail
               companies={companies}

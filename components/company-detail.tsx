@@ -39,7 +39,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
         ) : (
           <h2 className="text-lg font-semibold text-foreground">{project.name}</h2>
         )}
-        <div className="mt-3 flex items-start justify-between gap-2">
+        <div className="sample-ops-chrome mt-3 flex items-start justify-between gap-2">
           <div className="flex flex-wrap items-center gap-2">
             <SignalTierBadge tier={project.signalTier} basis={project.signalTierBasis} />
             {project.sameSchoolCofounders ? <SameSchoolBadge /> : null}

@@ -61,8 +61,8 @@ const SIGNAL_LABEL = {
   acquisition: "Acquisition",
 } as const;
 
-const DIRECTORY_LIMIT = 10;
-const LEADERBOARD_LIMIT = 10;
+const DIRECTORY_LIMIT = 14;
+const LEADERBOARD_LIMIT = 14;
 const LOGO_FACT_KEYS = new Set(["logo", "favicon", "logo_url", "favicon_url"]);
 const STAGE_ORDER = ["Pre-seed", "Seed", "Series A", "Series B", "Series C", "Venture"];
 
@@ -92,9 +92,9 @@ const NON_COMPANY_HOST =
   /(?:^|\.)(google|github|linkedin|twitter|x|notion|medium|devpost|producthunt|facebook|instagram|youtube|crunchbase|angel|wellfound|substack|businesswire|techcrunch|geekwire|pulse2|freeventures|velocityincubator|ycombinator|techstars|startupschool|skydeck|venturelab|southparkcommons|luma|pitchbook)\./i;
 
 const SCHOOL_OR_NEWS_HOST =
-  /(?:\.edu|\.ac\.uk|university|utoronto|emorybusiness|thedp\.com|hypepotamus|grepbeat|entrepreneurs\.|speedrun\.a16z)/i;
+  /(?:\.edu|\.ac\.uk|university|utoronto|emorybusiness|thedp\.com|thedartmouth\.com|hypepotamus|grepbeat|entrepreneurs\.|speedrun\.a16z|campuspress|squarespace|wixsite|notion\.site)/i;
 
-/** Deterministic favicon URL from a website host (same google s2 pattern already stored in facts). */
+/** Deterministic favicon URL from a website host (google s2). LogoMark rejects the 16px default stub. */
 export function faviconFromWebsiteHost(websiteUrl: string | null | undefined): string | null {
   const direct = httpUrl(websiteUrl);
   if (!direct) return null;
