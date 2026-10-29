@@ -67,19 +67,8 @@ function GlobeBlock({ stats, height, bare = false }: { stats: HeroStats; height:
   return (
     <div className="mt-5">
       <p className="text-center text-[16px] leading-6">
-        <Link href="/founders" className="hover:underline">
-          <span className="num">{stats.founders.toLocaleString("en-US")}</span> student founders
-        </Link>
-        {" across "}
-        <span className="num">{stats.campuses.toLocaleString("en-US")}</span>
-        {" campuses · "}
-        <Link href="/companies" className="hover:underline">
-          <span className="num">{stats.tracked.toLocaleString("en-US")}</span> companies
-        </Link>
-        {" · "}
-        <Link href="/signals" className="hover:underline">
-          <span className="num">{stats.signalsTotal.toLocaleString("en-US")}</span> signals
-        </Link>
+        <span className="num">{stats.founders.toLocaleString("en-US")}</span> student founders across{" "}
+        <span className="num">{stats.campuses.toLocaleString("en-US")}</span> campuses
       </p>
       <div className="mt-3">{globe}</div>
       <p className="mx-auto mt-3 max-w-[40rem] text-center text-[13px] leading-5 text-fg-2">
@@ -92,7 +81,17 @@ function GlobeBlock({ stats, height, bare = false }: { stats: HeroStats; height:
 export function GlobeHero({ stats, showGlobe = true }: { stats: HeroStats; showGlobe?: boolean }) {
   return (
     <div className="bg-bg px-6 py-6 text-fg">
-      <SignatureBand stats={stats} globe={showGlobe ? <GlobeBlock stats={stats} height={600} bare /> : null} />
+      <div className={showGlobe ? "max-lg:min-h-[calc(100svh-72px)] lg:min-h-[calc(100dvh-72px)]" : ""}>
+        <SignatureBand stats={stats} globe={showGlobe ? <GlobeBlock stats={stats} height={580} bare /> : null} />
+      </div>
+      {showGlobe ? (
+        <div className="mx-auto mt-10 w-full max-w-[880px]">
+          <Collage stats={stats} />
+          <p className="mt-4 max-w-[40rem] text-[13px] leading-5 text-fg-2">
+            {countryCoverage(stats.universities)} Point size follows how many signals are on record.
+          </p>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -230,58 +229,62 @@ function Collage({ stats }: { stats: HeroStats }) {
   );
 }
 
+function SamplePill() {
+  return (
+    <span className="inline-flex h-6 items-center gap-0.5 rounded-full border border-line bg-sunken pl-2 pr-0.5 text-[12px] leading-none text-fg-3">
+      Sample data
+      <Link href="/" aria-label="Close" className="grid h-4 w-4 place-items-center rounded-full text-fg-3 hover:bg-raised hover:text-fg">
+        <svg width="8" height="8" viewBox="0 0 10 10" aria-hidden>
+          <path d="M2 2 8 8M8 2 2 8" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+        </svg>
+      </Link>
+    </span>
+  );
+}
+
+function HeroActions() {
+  const search = useSearchParams();
+  const directory = new URLSearchParams(search.toString());
+  directory.set("sample", "1");
+  directory.delete("feed");
+  const world = new URLSearchParams(directory.toString());
+  world.set("feed", "world");
+  return (
+    <div className="mt-5 flex flex-wrap items-center gap-2">
+      <Link href={`/?${world.toString()}#browse`} className="inline-flex h-10 items-center rounded bg-ember px-4 text-[14px] font-semibold text-accent-foreground">
+        Explore map
+      </Link>
+      <Link href={`/?${directory.toString()}#browse`} className="inline-flex h-10 items-center rounded border border-line px-4 text-[14px] font-medium text-fg">
+        Browse directory
+      </Link>
+    </div>
+  );
+}
+
 function SignatureBand({ stats, globe }: { stats: HeroStats; globe?: ReactNode }) {
   return (
-    <section className="-mx-6 border-b border-line px-6 pb-5" aria-label="Campus Scout">
-      <div className={globe ? "flex flex-col gap-2 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(500px,620px)] lg:items-center lg:gap-8" : "grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-10"}>
+    <section className="-mx-6 px-6 pb-2" aria-label="Campus Scout">
+      <div className={globe ? "flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(480px,580px)] lg:items-center lg:gap-8" : "max-w-[640px]"}>
         <div className="order-1 max-w-[640px]">
           <div className="mb-3">
-            <span className="inline-flex h-7 items-center gap-1 rounded-full border border-line bg-sunken pl-2.5 pr-1 text-[13px] leading-none text-fg-2">
-              Sample data
-              <Link href="/" aria-label="Close" className="grid h-5 w-5 place-items-center rounded-full text-fg-2 hover:bg-raised hover:text-fg">
-                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden>
-                  <path d="M2 2 8 8M8 2 2 8" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
-                </svg>
-              </Link>
-            </span>
+            <SamplePill />
           </div>
           <p className="display text-[40px] font-semibold leading-[44px] sm:text-[48px] sm:leading-[52px]">
             Track student founders before they raise
           </p>
-          <p className="mt-3 max-w-[34rem] text-[16px] leading-6 text-fg-2">
-            The campus map, the people on it, and recent signals.
-          </p>
           {globe ? (
-            <p className="mt-4 max-w-[36rem] text-[15px] leading-6">
-              <Link href="/founders" className="hover:underline">
-                <span className="num">{stats.founders.toLocaleString("en-US")}</span> student founders
-              </Link>
-              {" across "}
-              <span className="num">{stats.campuses.toLocaleString("en-US")}</span>
-              {" campuses · "}
-              <Link href="/companies" className="hover:underline">
-                <span className="num">{stats.tracked.toLocaleString("en-US")}</span> companies
-              </Link>
-              {" · "}
-              <Link href="/signals" className="hover:underline">
-                <span className="num">{stats.signalsTotal.toLocaleString("en-US")}</span> signals
-              </Link>
+            <p className="mt-3 text-[16px] leading-6 text-fg-2">
+              <span className="num text-fg">{stats.founders.toLocaleString("en-US")}</span> student founders across{" "}
+              <span className="num text-fg">{stats.campuses.toLocaleString("en-US")}</span> campuses
             </p>
-          ) : null}
-        </div>
-        {globe ? <div className="order-2 lg:col-start-2 lg:row-span-2 lg:row-start-1">{globe}</div> : null}
-        <div className={globe ? "order-3 mt-4 lg:col-start-1 lg:mt-6" : ""}>
-          {globe ? (
-            <>
-              <Collage stats={stats} />
-              <p className="mt-4 max-w-[40rem] text-[13px] leading-5 text-fg-2">
-                {countryCoverage(stats.universities)} Point size follows how many signals are on record.
-              </p>
-            </>
           ) : (
-            <Collage stats={stats} />
+            <p className="mt-3 max-w-[34rem] text-[16px] leading-6 text-fg-2">
+              The campus map, the people on it, and recent signals.
+            </p>
           )}
+          <HeroActions />
         </div>
+        {globe ? <div className="order-2 lg:col-start-2 lg:row-start-1">{globe}</div> : null}
       </div>
     </section>
   );

@@ -295,15 +295,6 @@ h1, .hero-num, .page-title, .display {
   color: var(--fg-2);
 }
 .nav-link.is-active { color: var(--fg); }
-.nav-link.is-active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2px;
-  background: var(--link);
-}
 
 .subtab {
   display: inline-flex;
