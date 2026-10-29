@@ -67,10 +67,10 @@ export const STATUS_LABEL: Record<StatusId, string> = {
 };
 
 export const FLAG_LABEL: Record<FlagId, string> = {
-  new: "New",
-  signaled: "Has signals",
-  funded: "Funded",
-  founders: "Has founders",
+  new: "New this year",
+  signaled: "Active this month",
+  funded: "Raised funding",
+  founders: "Founders listed",
 };
 
 /** Status from stored operating_status + acquisition signals only. */
@@ -82,7 +82,8 @@ export function statusOf(company: FacetCompany): StatusId {
 
 export function hasFlag(company: FacetCompany, flag: FlagId): boolean {
   if (flag === "new") return (company.foundedYear ?? 0) >= 2025;
-  if (flag === "signaled") return company.signals > 0;
+  // Active this month: a stored signal dated in the current/recent-month bucket.
+  if (flag === "signaled") return recencyOf(company.latestSignalAt) === "month";
   if (flag === "funded") return company.signalKind === "funding" || Boolean(company.stage);
   if (flag === "founders") return (company.founders?.length ?? 0) > 0;
   return false;
@@ -140,6 +141,46 @@ export function hqRegionBuckets(companies: FacetCompany[]): FacetCount[] {
   return regions;
 }
 
+/** Sector buckets including Not on record. Sum equals companies.length. */
+export function sectorBuckets(companies: FacetCompany[]): FacetCount[] {
+  const counts = new Map<string, number>();
+  const labels = new Map<string, string>();
+  let missing = 0;
+  for (const company of companies) {
+    const id = company.sectorId?.trim();
+    if (!id) {
+      missing += 1;
+      continue;
+    }
+    counts.set(id, (counts.get(id) ?? 0) + 1);
+    if (!labels.has(id)) labels.set(id, company.sector?.trim() || id);
+  }
+  const sectors = [...counts.entries()]
+    .map(([id, count]) => ({ id, label: labels.get(id) ?? id, count }))
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+  if (missing > 0) sectors.unshift({ id: NOT_ON_RECORD, label: NOT_ON_RECORD_LABEL, count: missing });
+  return sectors;
+}
+
+/** HQ city pills for the rail: Not on record first, then top N cities, optional More remainder. */
+export function hqRegionPills(companies: FacetCompany[], topN = 8): { visible: FacetCount[]; more: FacetCount[]; moreCount: number } {
+  const all = hqRegionBuckets(companies);
+  const missing = all.filter((b) => b.id === NOT_ON_RECORD);
+  const cities = all.filter((b) => b.id !== NOT_ON_RECORD);
+  const visibleCities = cities.slice(0, topN);
+  const more = cities.slice(topN);
+  return {
+    visible: [...missing, ...visibleCities],
+    more,
+    moreCount: more.reduce((s, b) => s + b.count, 0),
+  };
+}
+
+/** Plural-safe signal unit for directory cards. */
+export function signalsUnit(count: number): string {
+  return count === 1 ? "signal" : "signals";
+}
+
 export function bucketSum(buckets: FacetCount[]): number {
   return buckets.reduce((sum, item) => sum + item.count, 0);
 }
@@ -148,6 +189,7 @@ export function filterFacetCompanies(
   companies: FacetCompany[],
   opts: {
     sector?: string | null;
+    sectorMissing?: boolean;
     kind?: string | null;
     stage?: string | null;
     campus?: string | null;
@@ -162,7 +204,11 @@ export function filterFacetCompanies(
 ): FacetCompany[] {
   const tokens = (opts.query ?? "").trim().toLowerCase().split(/\s+/).filter(Boolean);
   return companies.filter((company) => {
-    if (opts.sector && company.sectorId !== opts.sector) return false;
+    if (opts.sectorMissing) {
+      if (company.sectorId) return false;
+    } else if (opts.sector && company.sectorId !== opts.sector) {
+      return false;
+    }
     if (opts.kind && company.signalKind !== opts.kind) return false;
     if (opts.stage && company.stage !== opts.stage) return false;
     if (opts.campus && company.schoolId !== opts.campus) return false;

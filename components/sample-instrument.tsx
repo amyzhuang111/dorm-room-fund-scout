@@ -10,11 +10,12 @@ import {
   filterFacetCompanies,
   foundedYearBuckets,
   hasFlag,
-  hqRegionBuckets,
+  hqRegionPills,
   NOT_ON_RECORD,
   preferLogoCompanies,
   RECENCY_LABEL,
   recencyOf,
+  sectorBuckets,
   STATUS_LABEL,
   statusOf,
   type FacetCompany,
@@ -26,10 +27,10 @@ import {
 
 export { preferLogoCompanies };
 
-export const INK = "text-[#20140c]";
-export const MUTED = "text-[#6b5443]";
-export const COUNT = "font-bold tabular-nums text-[#E05612]";
-export const PANEL = "rounded-xl border border-[#f0d9c6] bg-white/94 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)]";
+export const INK = "text-[color:var(--fg,#ECEEF4)]";
+export const MUTED = "text-[color:var(--fg-2,#A3AAC0)]";
+export const COUNT = "font-bold tabular-nums text-[color:var(--ember,#E8823A)]";
+export const PANEL = "rounded-lg border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)]/96 text-[color:var(--fg,#ECEEF4)] shadow-none";
 
 export function LogoMark({
   name,
@@ -42,18 +43,15 @@ export function LogoMark({
   mark?: string;
   size?: number;
 }) {
+  void mark;
   const [failed, setFailed] = useState(false);
-  const letter = (mark || name).trim().charAt(0).toUpperCase() || "?";
-  const cls = size <= 16 ? "h-4 w-4 text-[8px]" : size <= 20 ? "h-5 w-5 text-[9px]" : "h-6 w-6 text-[10px]";
+  const cls = size <= 16 ? "h-4 w-4" : size <= 20 ? "h-5 w-5" : "h-6 w-6";
   if (!logoUrl || failed) {
-    return (
-      <span className={`grid shrink-0 place-items-center rounded-full bg-[#FFF1E6] font-semibold text-[#E05612] ${cls}`} aria-hidden>
-        {letter}
-      </span>
-    );
+    // Neutral disc: no letter avatar (avoids synthetic look when no mark is stored).
+    return <span className={`${cls} shrink-0 rounded-full border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)]`} aria-hidden title={name} />;
   }
   return (
-    <Image src={logoUrl} alt="" width={size} height={size} unoptimized className={`${cls.split(" ").slice(0, 2).join(" ")} shrink-0 rounded-full border border-[#f0d9c6] bg-white object-contain`} onError={() => setFailed(true)} />
+    <Image src={logoUrl} alt="" width={size} height={size} unoptimized className={`${cls} shrink-0 rounded-full border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] object-contain`} onError={() => setFailed(true)} />
   );
 }
 
@@ -74,17 +72,17 @@ export function LogoPill({
   return (
     <Link
       href={href}
-      className="flex h-4 min-w-0 max-w-[6.5rem] items-center gap-0.5 rounded-full border border-[#f0d9c6] bg-white px-1 text-[8px] leading-none text-[#20140c] hover:border-[#E05612]"
+      className="flex h-4 min-w-0 max-w-[6.5rem] items-center gap-0.5 rounded-full border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)] px-1 text-[8px] leading-none text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--ember,#E8823A)]"
       title={name}
     >
       {logoUrl && !failed ? (
-        <Image src={logoUrl} alt="" width={12} height={12} unoptimized className="h-3 w-3 shrink-0 rounded-full border border-[#f0d9c6] bg-white object-contain" onError={() => setFailed(true)} />
+        <Image src={logoUrl} alt="" width={12} height={12} unoptimized className="h-3 w-3 shrink-0 rounded-full border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] object-contain" onError={() => setFailed(true)} />
       ) : showLetter ? (
-        <span className="grid h-3 w-3 shrink-0 place-items-center rounded-full bg-[#FFF1E6] text-[6px] font-semibold text-[#E05612]" aria-hidden>
+        <span className="grid h-3 w-3 shrink-0 place-items-center rounded-full bg-[color:var(--bg-sunken,#080A11)] text-[6px] font-semibold text-[color:var(--ember,#E8823A)]" aria-hidden>
           {letter}
         </span>
       ) : (
-        <span className="h-3 w-3 shrink-0 rounded-full border border-[#f0d9c6] bg-[#FFF1E6]" aria-hidden />
+        <span className="h-3 w-3 shrink-0 rounded-full border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)]" aria-hidden />
       )}
       <span className="min-w-0 truncate">{name}</span>
     </Link>
@@ -93,8 +91,8 @@ export function LogoPill({
 
 function FacetGroup({ title, children, defaultOpen = true }: { title: string; children: ReactNode; defaultOpen?: boolean }) {
   return (
-    <details className="border-b border-[#f0d9c6] px-2 py-1.5" open={defaultOpen}>
-      <summary className="cursor-pointer text-[10px] font-medium uppercase tracking-[0.06em] text-[#8a7260]">{title}</summary>
+    <details className="border-b border-[color:var(--line,#1F2536)] px-2 py-1.5" open={defaultOpen}>
+      <summary className="cursor-pointer text-[10px] font-medium uppercase tracking-[0.06em] text-[color:var(--fg-3,#6B7390)]">{title}</summary>
       <div className="mt-1.5 flex flex-wrap gap-1">{children}</div>
     </details>
   );
@@ -102,7 +100,7 @@ function FacetGroup({ title, children, defaultOpen = true }: { title: string; ch
 
 function Chip({ active, label, onClick, dot, icon }: { active: boolean; label: string; onClick: () => void; dot?: string; icon?: string }) {
   return (
-    <button type="button" onClick={onClick} className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border px-1.5 py-0.5 text-[10px] ${active ? "border-[#FB651E] bg-[#FB651E] text-white" : "border-[#f0d9c6] bg-white text-[#20140c]"}`}>
+    <button type="button" onClick={onClick} className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border px-1.5 py-0.5 text-[10px] ${active ? "border-[color:var(--ember,#E8823A)] bg-[color:var(--ember,#E8823A)] text-[#0B0E17]" : "border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)] text-[color:var(--fg,#ECEEF4)]"}`}>
       {dot ? <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: active ? "#fff" : dot }} aria-hidden /> : null}
       {icon && !dot ? <span className="text-[9px] leading-none" aria-hidden>{icon}</span> : null}
       {label}
@@ -117,10 +115,10 @@ const STATUS_DOT: Record<StatusId, string> = {
 };
 
 const FLAG_ICON: Record<FlagId, string> = {
-  new: "✦",
-  signaled: "◎",
+  new: "◆",
+  signaled: "●",
   funded: "$",
-  founders: "👤",
+  founders: "◎",
 };
 
 const SECTOR_DOTS = ["#3b82f6", "#a855f7", "#ef4444", "#f59e0b", "#10b981", "#ec4899", "#6366f1", "#14b8a6"];
@@ -133,6 +131,7 @@ function sectorDot(id: string): string {
 export interface FacetState {
   query: string;
   sector: string | null;
+  sectorMissing: boolean;
   kind: string | null;
   stage: string | null;
   campus: string | null;
@@ -149,6 +148,7 @@ export function emptyFacets(): FacetState {
   return {
     query: "",
     sector: null,
+    sectorMissing: false,
     kind: null,
     stage: null,
     campus: null,
@@ -190,7 +190,10 @@ export function FacetRail({
     return companies.filter((company) => !company.schoolId || ids.has(company.schoolId));
   }, [companies, countryScoped, facets.country]);
 
-  const sectors = useMemo(() => countBy(baseCompanies, (c) => c.sectorId, (id) => baseCompanies.find((c) => c.sectorId === id)?.sector ?? id).slice(0, 10), [baseCompanies]);
+  const [hqExpanded, setHqExpanded] = useState(false);
+  const sectors = useMemo(() => sectorBuckets(baseCompanies), [baseCompanies]);
+  const sectorNamed = useMemo(() => sectors.filter((s) => s.id !== NOT_ON_RECORD).slice(0, 10), [sectors]);
+  const sectorMissingCount = useMemo(() => sectors.find((s) => s.id === NOT_ON_RECORD)?.count ?? 0, [sectors]);
   const kinds = useMemo(() => countBy(baseCompanies, (c) => c.signalKind, (id) => baseCompanies.find((c) => c.signalKind === id)?.signalLabel ?? id), [baseCompanies]);
   const stages = useMemo(() => countBy(baseCompanies, (c) => c.stage, (id) => id), [baseCompanies]);
   const years = useMemo(() => foundedYearBuckets(baseCompanies), [baseCompanies]);
@@ -209,7 +212,8 @@ export function FacetRail({
       .map((id) => ({ id, label: FLAG_LABEL[id], count: baseCompanies.filter((c) => hasFlag(c, id)).length }))
       .filter((item) => item.count > 0);
   }, [baseCompanies]);
-  const hqRegions = useMemo(() => hqRegionBuckets(baseCompanies), [baseCompanies]);
+  const hqPills = useMemo(() => hqRegionPills(baseCompanies, 8), [baseCompanies]);
+  const hqRegions = hqExpanded ? [...hqPills.visible, ...hqPills.more] : hqPills.visible;
   const recency = useMemo(() => {
     const counts = new Map<RecencyId, number>();
     for (const company of baseCompanies) {
@@ -243,7 +247,7 @@ export function FacetRail({
 
   return (
     <div className={`flex h-full min-h-0 flex-col overflow-hidden ${PANEL}`}>
-      <div className="border-b border-[#f0d9c6] px-2.5 py-2">
+      <div className="border-b border-[color:var(--line,#1F2536)] px-2.5 py-2">
         <p className="text-[12px] font-semibold tracking-tight">Filters</p>
         <label className="sr-only" htmlFor="sample-facet-q">
           {searchPlaceholder}
@@ -254,7 +258,7 @@ export function FacetRail({
           value={facets.query}
           onChange={(event) => set({ query: event.target.value })}
           placeholder={searchPlaceholder}
-          className="mt-1.5 h-7 w-full rounded-md border border-[#f0d9c6] bg-[#FFF7F0] px-2 text-[11px] text-[#20140c] outline-none placeholder:text-[#8a7260]"
+          className="mt-1.5 h-7 w-full rounded-md border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)] px-2 text-[11px] text-[color:var(--fg,#ECEEF4)] outline-none placeholder:text-[color:var(--fg-3,#6B7390)]"
         />
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto">
@@ -296,12 +300,25 @@ export function FacetRail({
           ))}
         </FacetGroup>
         <FacetGroup title="Sector">
-          <Chip active={!facets.sector} onClick={() => set({ sector: null })} label={`All · ${baseCompanies.length}`} />
-          {sectors.map((item) => (
-            <Chip key={item.id} active={facets.sector === item.id} onClick={() => set({ sector: facets.sector === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} dot={sectorDot(item.id)} />
+          <Chip active={!facets.sector && !facets.sectorMissing} onClick={() => set({ sector: null, sectorMissing: false })} label={`All · ${baseCompanies.length}`} />
+          {sectorMissingCount > 0 ? (
+            <Chip
+              active={facets.sectorMissing}
+              onClick={() => set({ sectorMissing: !facets.sectorMissing, sector: null })}
+              label={`Not on record · ${sectorMissingCount}`}
+            />
+          ) : null}
+          {sectorNamed.map((item) => (
+            <Chip
+              key={item.id}
+              active={facets.sector === item.id}
+              onClick={() => set({ sector: facets.sector === item.id ? null : item.id, sectorMissing: false })}
+              label={`${item.label} · ${item.count}`}
+              dot={sectorDot(item.id)}
+            />
           ))}
         </FacetGroup>
-        <FacetGroup title="HQ region">
+        <FacetGroup title="HQ">
           <Chip active={!facets.hqRegion} onClick={() => set({ hqRegion: null })} label={`All · ${baseCompanies.length}`} />
           {hqRegions.map((item) => (
             <Chip
@@ -311,6 +328,13 @@ export function FacetRail({
               label={`${item.label} · ${item.count}`}
             />
           ))}
+          {!hqExpanded && hqPills.more.length > 0 ? (
+            <Chip
+              active={false}
+              onClick={() => setHqExpanded(true)}
+              label={`More · ${hqPills.moreCount}`}
+            />
+          ) : null}
         </FacetGroup>
         <FacetGroup title="Country" defaultOpen={false}>
           <Chip active={!facets.country} onClick={() => set({ country: null })} label={`All · ${campuses.length}`} />
@@ -327,7 +351,7 @@ export function FacetRail({
                 set({ campus: facets.campus === campus.id ? null : campus.id });
                 onCampusFocus?.(campus.id);
               }}
-              className={`flex w-full items-baseline gap-1 rounded-md px-1 py-0.5 text-left text-[11px] hover:bg-[#FFF1E6] ${facets.campus === campus.id ? "bg-[#FFF1E6]" : ""}`}
+              className={`flex w-full items-baseline gap-1 rounded-md px-1 py-0.5 text-left text-[11px] hover:bg-[color:var(--bg-sunken,#080A11)] ${facets.campus === campus.id ? "bg-[color:var(--bg-sunken,#080A11)]" : ""}`}
             >
               <span className="min-w-0 flex-1 truncate">{shortCampusLabel(campus.id, campus.name)}</span>
               <span className={`${COUNT} shrink-0 text-[10px]`}>{campus.founders.toLocaleString("en-US")}</span>
@@ -353,7 +377,7 @@ export function FacetRail({
           ))}
         </FacetGroup>
       </div>
-      {footer ? <div className="border-t border-[#f0d9c6] px-2.5 py-1.5 text-[10px] leading-[14px] text-[#6b5443]">{footer}</div> : null}
+      {footer ? <div className="border-t border-[color:var(--line,#1F2536)] px-2.5 py-1.5 text-[10px] leading-[14px] text-[color:var(--fg-2,#A3AAC0)]">{footer}</div> : null}
     </div>
   );
 }
@@ -364,6 +388,7 @@ export function applyFacets(companies: FacetCompany[], facets: FacetState, count
     : companies;
   return filterFacetCompanies(scoped, {
     sector: facets.sector,
+    sectorMissing: facets.sectorMissing,
     kind: facets.kind,
     stage: facets.stage,
     campus: facets.campus,
@@ -406,7 +431,7 @@ export function Board({ title, unit, children }: { title: string; unit?: string;
     <div className={`${PANEL} p-1.5`}>
       <div className="flex items-baseline justify-between gap-2">
         <p className="text-[11px] font-semibold">{title}</p>
-        {unit ? <p className="text-[9px] uppercase tracking-[0.04em] text-[#8a7260]">{unit}</p> : null}
+        {unit ? <p className="text-[9px] uppercase tracking-[0.04em] text-[color:var(--fg-3,#6B7390)]">{unit}</p> : null}
       </div>
       <div className="mt-1">{children}</div>
     </div>
@@ -433,23 +458,23 @@ export function BarRow({
     <>
       <div className="flex items-baseline gap-1.5 text-[11px]">
         <span className={`${COUNT} w-3.5 shrink-0 text-[10px]`}>{rank}</span>
-        <span className="min-w-0 flex-1 truncate text-[#20140c]">{label}</span>
+        <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#ECEEF4)]">{label}</span>
         <span className={`${COUNT} shrink-0 text-[10px]`}>{value.toLocaleString("en-US")}</span>
       </div>
-      <div className="ml-[18px] mt-0.5 h-1.5 overflow-hidden rounded-full bg-[#FFF1E6]">
-        <div className="h-full rounded-full bg-[#FB651E]" style={{ width: `${width}%` }} />
+      <div className="ml-[18px] mt-0.5 h-1.5 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#080A11)]">
+        <div className="h-full rounded-full bg-[color:var(--ember,#E8823A)]" style={{ width: `${width}%` }} />
       </div>
     </>
   );
   if (href) {
     return (
-      <Link href={href} className="block w-full text-left hover:text-[#FB651E]">
+      <Link href={href} className="block w-full text-left hover:text-[color:var(--ember,#E8823A)]">
         {inner}
       </Link>
     );
   }
   return (
-    <button type="button" onClick={onClick} className="w-full text-left hover:text-[#FB651E]">
+    <button type="button" onClick={onClick} className="w-full text-left hover:text-[color:var(--ember,#E8823A)]">
       {inner}
     </button>
   );
@@ -465,11 +490,11 @@ function initials(name: string): string {
 export function SignalFeedRow({ company, index }: { company: FacetCompany; index: number }) {
   const date = (company.latestSignalAt ?? "").replace(/-00/g, "") || "Date not stored";
   return (
-    <Link href={`/startup/${company.id}`} className="flex items-center gap-1.5 text-left text-[11px] hover:text-[#FB651E]">
+    <Link href={`/startup/${company.id}`} className="flex items-center gap-1.5 text-left text-[11px] hover:text-[color:var(--ember,#E8823A)]">
       <span className={`${COUNT} w-3 shrink-0 text-[10px]`}>{index + 1}</span>
-      <span className="min-w-0 flex-1 truncate text-[#20140c]">{company.name}</span>
-      <span className="shrink-0 tabular-nums text-[9px] text-[#8a7260]">{date}</span>
-      <span className="shrink-0 rounded-full border border-[#f0d9c6] bg-[#FFF7F0] px-1 py-px text-[8px] text-[#6b5443]">{company.signalLabel ?? "Signal"}</span>
+      <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#ECEEF4)]">{company.name}</span>
+      <span className="shrink-0 tabular-nums text-[9px] text-[color:var(--fg-3,#6B7390)]">{date}</span>
+      <span className="shrink-0 rounded-full border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)] px-1 py-px text-[8px] text-[color:var(--fg-2,#A3AAC0)]">{company.signalLabel ?? "Signal"}</span>
     </Link>
   );
 }
@@ -482,14 +507,14 @@ export function FounderFeedRow({
   index: number;
 }) {
   return (
-    <Link href={`/startup/${person.companyId}`} className="flex items-center gap-1 text-left hover:text-[#FB651E]" title={person.companyName}>
+    <Link href={`/startup/${person.companyId}`} className="flex items-center gap-1 text-left hover:text-[color:var(--ember,#E8823A)]" title={person.companyName}>
       <span className={`${COUNT} w-3 shrink-0 text-[10px]`}>{index + 1}</span>
-      <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full bg-[#FFF1E6] text-[7px] font-semibold text-[#E05612]" aria-hidden>
+      <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full bg-[color:var(--bg-sunken,#080A11)] text-[7px] font-semibold text-[color:var(--ember,#E8823A)]" aria-hidden>
         {initials(person.name)}
       </span>
-      <span className="min-w-0 flex-1 truncate text-[11px] text-[#20140c]">
+      <span className="min-w-0 flex-1 truncate text-[11px] text-[color:var(--fg,#ECEEF4)]">
         {person.name}
-        <span className="text-[#8a7260]"> · {person.companyName}</span>
+        <span className="text-[color:var(--fg-3,#6B7390)]"> · {person.companyName}</span>
       </span>
       <span className={`${COUNT} shrink-0 text-[10px]`}>{person.signals.toLocaleString("en-US")}</span>
     </Link>
@@ -530,7 +555,7 @@ export function IntelligenceBoards({
         </ol>
       </Board>
       <Board title="Sector mix" unit="companies">
-        <div className="flex h-2 overflow-hidden rounded-full bg-[#FFF1E6]">
+        <div className="flex h-2 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#080A11)]">
           {mix.map((item) => (
             <div
               key={item.id}
@@ -546,9 +571,9 @@ export function IntelligenceBoards({
         <ul className="mt-1.5 space-y-0.5">
           {mix.map((item) => (
             <li key={item.id}>
-              <Link href={`/?sample=1&sector=${encodeURIComponent(item.id)}#browse`} className="flex items-center gap-1.5 text-[10px] hover:text-[#FB651E]">
+              <Link href={`/?sample=1&sector=${encodeURIComponent(item.id)}#browse`} className="flex items-center gap-1.5 text-[10px] hover:text-[color:var(--ember,#E8823A)]">
                 <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: sectorDot(item.id) }} aria-hidden />
-                <span className="min-w-0 flex-1 truncate text-[#20140c]">{item.label}</span>
+                <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#ECEEF4)]">{item.label}</span>
                 <span className={`${COUNT} shrink-0`}>{item.count.toLocaleString("en-US")}</span>
               </Link>
             </li>
@@ -571,14 +596,14 @@ export function IntelligenceBoards({
               <li key={item.id}>
                 <div className="flex items-center gap-1.5 text-[11px]">
                   <span className={`${COUNT} w-3.5 shrink-0 text-[10px]`}>{index + 1}</span>
-                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md bg-[#FFF1E6] text-[8px] font-semibold text-[#E05612]" aria-hidden>
+                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md bg-[color:var(--bg-sunken,#080A11)] text-[8px] font-semibold text-[color:var(--ember,#E8823A)]" aria-hidden>
                     {item.label.trim().charAt(0).toUpperCase() || "?"}
                   </span>
-                  <span className="min-w-0 flex-1 truncate text-[#20140c]">{item.label}</span>
+                  <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#ECEEF4)]">{item.label}</span>
                   <span className={`${COUNT} shrink-0 text-[10px]`}>{item.count.toLocaleString("en-US")}</span>
                 </div>
-                <div className="ml-[18px] mt-0.5 h-1 overflow-hidden rounded-full bg-[#FFF1E6]">
-                  <div className="h-full rounded-full bg-[#FB651E]" style={{ width: `${Math.max(8, Math.round((item.count / maxProg) * 100))}%` }} />
+                <div className="ml-[18px] mt-0.5 h-1 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#080A11)]">
+                  <div className="h-full rounded-full bg-[color:var(--ember,#E8823A)]" style={{ width: `${Math.max(8, Math.round((item.count / maxProg) * 100))}%` }} />
                 </div>
               </li>
             ))}
@@ -590,7 +615,7 @@ export function IntelligenceBoards({
           <p className="text-[11px] font-semibold">Ask Campus Scout</p>
           <Link
             href="/ask"
-            className="mt-1 flex h-7 items-center rounded-md border border-[#f0d9c6] bg-[#FFF7F0] px-2 text-[11px] text-[#8a7260] hover:border-[#E05612] hover:text-[#E05612]"
+            className="mt-1 flex h-7 items-center rounded-md border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)] px-2 text-[11px] text-[color:var(--fg-3,#6B7390)] hover:border-[color:var(--ember,#E8823A)] hover:text-[color:var(--ember,#E8823A)]"
           >
             Tell me a theme. I will narrow the globe.
           </Link>
@@ -622,16 +647,16 @@ export function ViewDrawer({
       <div className="mb-1 flex flex-wrap items-center gap-1 px-0.5">
         <p className="text-[11px] font-semibold tracking-tight">Current view</p>
         <p className={`${COUNT} text-[11px]`}>{total.toLocaleString("en-US")}</p>
-        <div className="ml-auto inline-flex overflow-hidden rounded-full border border-[#f0d9c6]">
-          <button type="button" onClick={() => onMode("startups")} className={`h-5 px-2 text-[10px] font-medium ${mode === "startups" ? "bg-[#FB651E] text-white" : "bg-white text-[#6b5443]"}`}>
+        <div className="ml-auto inline-flex overflow-hidden rounded-full border border-[color:var(--line,#1F2536)]">
+          <button type="button" onClick={() => onMode("startups")} className={`h-5 px-2 text-[10px] font-medium ${mode === "startups" ? "bg-[color:var(--ember,#E8823A)] text-[#0B0E17]" : "bg-[color:var(--bg-sunken,#080A11)] text-[color:var(--fg-2,#A3AAC0)]"}`}>
             Startups
           </button>
-          <button type="button" onClick={() => onMode("founders")} className={`h-5 px-2 text-[10px] font-medium ${mode === "founders" ? "bg-[#FB651E] text-white" : "bg-white text-[#6b5443]"}`}>
+          <button type="button" onClick={() => onMode("founders")} className={`h-5 px-2 text-[10px] font-medium ${mode === "founders" ? "bg-[color:var(--ember,#E8823A)] text-[#0B0E17]" : "bg-[color:var(--bg-sunken,#080A11)] text-[color:var(--fg-2,#A3AAC0)]"}`}>
             Founders
           </button>
         </div>
       </div>
-      <div className="flex max-h-[7rem] flex-wrap content-start gap-0 overflow-y-auto">
+      <div className="flex max-h-[min(70vh,560px)] flex-wrap content-start gap-0.5 overflow-y-auto">
         {mode === "startups"
           ? preferLogoCompanies(companies).map((company) => <LogoPill key={company.id} href={`/startup/${company.id}`} name={company.name} logoUrl={company.logoUrl} />)
           : founders.map((person) => <LogoPill key={person.key} href={`/startup/${person.companyId}`} name={person.name} mark={person.name} />)}

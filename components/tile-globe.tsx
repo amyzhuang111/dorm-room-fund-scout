@@ -28,19 +28,19 @@ export interface TileCampus {
 
 export type TileCompany = FacetCompany;
 
-const OCEAN = "#FFDBBB";
-const LAND = "#DD8A4E";
-const LAND_ALT = "#D48148";
-const BOUNDARY = "#C4733E";
-const LABEL = "#5a2c0e";
-const HALO = "#FFE9D6";
-const BRAND = "#FB651E";
-const COUNT = "font-bold tabular-nums text-[#E05612]";
+const OCEAN = "#0B0E17";
+const LAND = "#1A2556";
+const LAND_ALT = "#16204A";
+const BOUNDARY = "#1F2536";
+const LABEL = "#A3AAC0";
+const HALO = "#0B0E17";
+const BRAND = "#7C8CF0";
+const COUNT = "font-bold tabular-nums text-[color:var(--ember,#E8823A)]";
 
 const COUNTRY_COLOR: Record<string, string> = {
-  "United States": "#3b6fd8",
-  Canada: "#e23b4a",
-  "United Kingdom": "#2f9e6b",
+  "United States": "#7C8CF0",
+  Canada: "#E8823A",
+  "United Kingdom": "#3FB68B",
 };
 
 function markerColor(country: string): string {
@@ -89,6 +89,7 @@ export function TileGlobe({
   } | null>(null);
   const [facets, setFacets] = useState<FacetState>(emptyFacets);
   const [stripMode, setStripMode] = useState<"startups" | "founders">("startups");
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [hover, setHover] = useState<{ name: string; founders: number; signals: number; x: number; y: number } | null>(null);
   const [ready, setReady] = useState(false);
 
@@ -105,6 +106,11 @@ export function TileGlobe({
     return base;
   }, [companies, facets, country, countryIds, selectedId]);
   const companyStrip = useMemo(() => preferLogoCompanies(filteredCompanies).slice(0, 96), [filteredCompanies]);
+  const founderTotalListed = useMemo(() => {
+    let n = 0;
+    for (const company of filteredCompanies) n += (company.founders?.length ?? 0);
+    return n;
+  }, [filteredCompanies]);
   const founderStrip = useMemo(() => {
     const rows: { key: string; name: string; companyId: string; companyName: string }[] = [];
     for (const company of filteredCompanies) {
@@ -188,13 +194,13 @@ export function TileGlobe({
         if (dead || !map) return;
         map.setProjection({ type: "globe" });
         map.setSky({
-          "sky-color": "#FFE8D6",
-          "horizon-color": "#FFF8F2",
-          "fog-color": "#FFF3E9",
-          "sky-horizon-blend": 0.45,
-          "horizon-fog-blend": 0.7,
-          "fog-ground-blend": 0.55,
-          "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 1, 2.2, 0.9, 4, 0.4],
+          "sky-color": "#0B0E17",
+          "horizon-color": "#121726",
+          "fog-color": "#0B0E17",
+          "sky-horizon-blend": 0.35,
+          "horizon-fog-blend": 0.55,
+          "fog-ground-blend": 0.4,
+          "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 0.85, 2.2, 0.55, 4, 0.2],
         });
         for (const layer of map.getStyle().layers) {
           try {
@@ -220,7 +226,7 @@ export function TileGlobe({
           paint: {
             "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, ["get", "radius"], 3, ["*", ["get", "radius"], 1.55], 5, ["*", ["get", "radius"], 2.1]],
             "circle-color": ["get", "color"],
-            "circle-stroke-color": "#ffffff",
+            "circle-stroke-color": "#0B0E17",
             "circle-stroke-width": 1.15,
             "circle-opacity": 0.95,
           },
@@ -233,7 +239,7 @@ export function TileGlobe({
           paint: {
             "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, ["+", ["get", "radius"], 3.2], 3, ["+", ["*", ["get", "radius"], 1.55], 4], 5, ["+", ["*", ["get", "radius"], 2.1], 5]],
             "circle-color": ["get", "color"],
-            "circle-stroke-color": "#20140c",
+            "circle-stroke-color": "#E8823A",
             "circle-stroke-width": 2.6,
             "circle-opacity": 1,
           },
@@ -337,84 +343,131 @@ export function TileGlobe({
     }
   }
 
-  const mobileChoices = (
-    <div className="mt-2 space-y-2 lg:hidden">
-      <ViewDrawer
-        mode={stripMode}
-        onMode={setStripMode}
-        companies={companyStrip}
-        founders={founderStrip}
-        companyTotal={filteredCompanies.length}
-        founderTotal={founderStrip.length}
-      />
-      <details className="rounded-xl border border-[#f0d9c6] bg-white/94 px-2.5 py-2 text-[#20140c]">
-        <summary className="cursor-pointer text-[12px] font-semibold">Filters · {shown.length} campuses</summary>
-        <div className="mt-2 h-[320px]">
-          <FacetRail
-            companies={companies}
-            campuses={campuses}
-            facets={facets}
-            onChange={onFacetChange}
-            onCampusFocus={(id) => {
-              const campus = campuses.find((row) => row.id === id);
-              if (campus) focus(campus);
-            }}
-            footer={markerSizeLegend()}
-          />
-        </div>
-      </details>
-    </div>
-  );
+  const liveCount = filteredCompanies.length;
+  const founderCount = founderTotalListed;
 
   return (
     <div className={className}>
-      <div className="relative overflow-hidden rounded-2xl bg-[#FFF7F0]" style={{ height: stageHeight }}>
+      <div className="relative overflow-hidden rounded-xl border border-[color:var(--line,#1F2536)] bg-[#0B0E17]" style={{ height: stageHeight }}>
         <div ref={mapNode} className="h-full w-full" />
-        <aside className="absolute bottom-3 left-2 top-2 z-10 hidden w-[240px] lg:block">
-          <FacetRail
-            companies={companies}
-            campuses={campuses}
-            facets={facets}
-            onChange={onFacetChange}
-            onCampusFocus={(id) => {
-              const campus = campuses.find((row) => row.id === id);
-              if (campus) focus(campus);
-            }}
-            footer={
-              <>
-                <p>{markerSizeLegend()}</p>
-                <p className="mt-1">
-                  <MapCredit />
-                </p>
-              </>
-            }
-          />
-        </aside>
-        <aside className="absolute bottom-[4.75rem] right-2 top-1.5 z-10 hidden w-[236px] overflow-y-auto overscroll-contain lg:block">
-          <IntelligenceBoards companies={filteredCompanies} />
-        </aside>
-        {hover ? (
-          <div className="pointer-events-none absolute z-20 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-xl border border-[#f0d9c6] bg-white px-2.5 py-1.5 text-left text-[#20140c] shadow" style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}>
-            <p className="text-[13px] font-medium leading-4">{hover.name}</p>
-            <p className="mt-0.5 text-[12px] leading-4 text-[#6b5443]">
-              <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> founders
-              {" · "}
-              <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> signals
+        {/* Halflight left overlay: scout brief, not a YC-style filter rail */}
+        <aside className="pointer-events-none absolute bottom-3 left-3 top-3 z-10 hidden w-[min(340px,34%)] flex-col gap-2 lg:flex">
+          <div className="pointer-events-auto rounded-lg border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)]/96 p-3">
+            <p className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#6B7390)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--ember,#E8823A)]" aria-hidden />
+              Live · campus scout
             </p>
+            <p className="mt-2 text-[22px] font-semibold leading-7 tracking-[-0.03em] text-[color:var(--fg,#ECEEF4)]">
+              <span className={`${COUNT} font-mono text-[24px]`}>{liveCount.toLocaleString("en-US")}</span>
+              {" companies forming"}
+            </p>
+            <p className="mt-1 font-mono text-[12px] text-[color:var(--fg-2,#A3AAC0)]">
+              <span className={COUNT}>{shown.length.toLocaleString("en-US")}</span> campuses
+              {" · "}
+              <span className={COUNT}>{founderCount.toLocaleString("en-US")}</span> founders listed
+            </p>
+            <div className="mt-3 flex flex-wrap gap-1">
+              <button
+                type="button"
+                onClick={() => setFiltersOpen((v) => !v)}
+                className="inline-flex h-7 items-center rounded border border-[color:var(--line-strong,#2C3449)] bg-[color:var(--bg-sunken,#080A11)] px-2.5 text-[11px] font-medium text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--ember,#E8823A)]"
+              >
+                {filtersOpen ? "Hide filters" : "Filters"}
+              </button>
+              <a
+                href="/ask"
+                className="inline-flex h-7 items-center rounded bg-[color:var(--ember,#E8823A)] px-2.5 text-[11px] font-semibold text-[#0B0E17]"
+              >
+                Ask
+              </a>
+            </div>
           </div>
-        ) : null}
-        <div className="absolute bottom-2 left-[252px] right-[252px] z-10 hidden lg:block">
+          <div className="pointer-events-auto min-h-0 flex-1 overflow-y-auto overscroll-contain">
+            <IntelligenceBoards companies={filteredCompanies} compact />
+          </div>
+        </aside>
+        {/* Right edge: logo stack (not a bottom YC drawer) */}
+        <aside className="absolute bottom-3 right-3 top-3 z-10 hidden w-[168px] lg:block">
           <ViewDrawer
             mode={stripMode}
             onMode={setStripMode}
             companies={companyStrip}
             founders={founderStrip}
             companyTotal={filteredCompanies.length}
-            founderTotal={founderStrip.length}
+            founderTotal={founderTotalListed}
           />
-        </div>
+        </aside>
+        {/* Filter sheet overlays when opened — not a permanent left clone */}
+        {filtersOpen ? (
+          <div className="absolute bottom-3 left-[min(352px,36%)] top-3 z-20 hidden w-[260px] lg:block">
+            <FacetRail
+              companies={companies}
+              campuses={campuses}
+              facets={facets}
+              onChange={onFacetChange}
+              onCampusFocus={(id) => {
+                const campus = campuses.find((row) => row.id === id);
+                if (campus) focus(campus);
+              }}
+              footer={
+                <>
+                  <p>{markerSizeLegend()}</p>
+                  <p className="mt-1">
+                    <MapCredit />
+                  </p>
+                </>
+              }
+            />
+          </div>
+        ) : null}
+        {hover ? (
+          <div
+            className="pointer-events-none absolute z-30 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-lg border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] px-2.5 py-1.5 text-left text-[color:var(--fg,#ECEEF4)]"
+            style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}
+          >
+            <p className="text-[13px] font-medium leading-4">{hover.name}</p>
+            <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#A3AAC0)]">
+              <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> founders
+              {" · "}
+              <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> signals
+            </p>
+          </div>
+        ) : null}
       </div>
-      {mobileChoices}
+      {/* Mobile: brief + filters sheet, no YC three-pane clone */}
+      <div className="mt-2 space-y-2 lg:hidden">
+        <div className="rounded-lg border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] p-2.5">
+          <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#6B7390)]">Live · campus scout</p>
+          <p className="mt-1 text-[15px] font-semibold">
+            <span className={COUNT}>{liveCount.toLocaleString("en-US")}</span> companies ·{" "}
+            <span className={COUNT}>{shown.length.toLocaleString("en-US")}</span> campuses
+          </p>
+        </div>
+        <ViewDrawer
+          mode={stripMode}
+          onMode={setStripMode}
+          companies={companyStrip}
+          founders={founderStrip}
+          companyTotal={filteredCompanies.length}
+          founderTotal={founderTotalListed}
+        />
+        <details className="rounded-lg border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] px-2.5 py-2">
+          <summary className="cursor-pointer text-[12px] font-semibold">Filters · {shown.length} campuses</summary>
+          <div className="mt-2 h-[320px]">
+            <FacetRail
+              companies={companies}
+              campuses={campuses}
+              facets={facets}
+              onChange={onFacetChange}
+              onCampusFocus={(id) => {
+                const campus = campuses.find((row) => row.id === id);
+                if (campus) focus(campus);
+              }}
+              footer={markerSizeLegend()}
+            />
+          </div>
+        </details>
+      </div>
     </div>
   );
 }

@@ -482,19 +482,23 @@ a, button {
 }
 
 
-/* Sample product: one cream paper palette (hero + directory + company). */
+/* Sample product: Halflight dusk instrument (cobalt field, ember signal). Distinct from YCGlobe cream. */
 .sample-paper {
-  --bg: #FFF7F0;
-  --bg-raised: #ffffff;
-  --bg-sunken: #FFF1E6;
-  --fg: #20140c;
-  --fg-2: #6b5443;
-  --fg-3: #8a7260;
-  --line: #f0d9c6;
-  --link: #E05612;
-  --ember: #FB651E;
-  --accent: #FB651E;
-  --accent-foreground: #ffffff;
+  --bg: #0B0E17;
+  --bg-raised: #121726;
+  --bg-sunken: #080A11;
+  --fg: #ECEEF4;
+  --fg-2: #A3AAC0;
+  --fg-3: #6B7390;
+  --line: #1F2536;
+  --line-strong: #2C3449;
+  --cobalt: #2F4FD8;
+  --cobalt-haze: #1A2556;
+  --link: #7C8CF0;
+  --ember: #E8823A;
+  --amber: #F2B35B;
+  --accent: #E8823A;
+  --accent-foreground: #0B0E17;
   --background: var(--bg);
   --surface: var(--bg-raised);
   --surface-2: var(--bg-sunken);
@@ -503,6 +507,11 @@ a, button {
   --border-c: var(--line);
   color: var(--fg);
   background: var(--bg);
+  font-family: var(--font-geist, var(--font-sans), ui-sans-serif, system-ui, sans-serif);
+}
+.sample-paper .num {
+  font-family: var(--font-geist-mono, var(--font-mono), ui-monospace, monospace);
+  font-variant-numeric: tabular-nums;
 }
 
 .chip-scroll {

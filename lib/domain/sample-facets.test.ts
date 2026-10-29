@@ -7,9 +7,12 @@ import {
   foundedYearBuckets,
   hasFlag,
   hqRegionBuckets,
+  hqRegionPills,
   NOT_ON_RECORD,
   preferLogoCompanies,
   recencyOf,
+  sectorBuckets,
+  signalsUnit,
   statusOf,
 } from "./sample-facets";
 
@@ -33,6 +36,20 @@ assert.equal(hasFlag(rows[0], "funded"), true);
 assert.equal(hasFlag(rows[0], "founders"), true);
 assert.equal(hasFlag(rows[1], "founders"), false);
 assert.equal(hasFlag(rows[1], "new"), false);
+assert.equal(hasFlag(rows[0], "signaled"), true);
+assert.equal(hasFlag(rows[1], "signaled"), false);
+assert.equal(signalsUnit(1), "signal");
+assert.equal(signalsUnit(2), "signals");
+
+const sectorAll = sectorBuckets(rows);
+assert.equal(bucketSum(sectorAll), rows.length);
+assert.ok(sectorAll.some((b) => b.id === NOT_ON_RECORD && b.count === 1));
+
+const pills = hqRegionPills(rows, 1);
+assert.ok(pills.visible.some((b) => b.id === NOT_ON_RECORD));
+assert.equal(pills.visible.filter((b) => b.id !== NOT_ON_RECORD).length, 1);
+assert.ok(pills.moreCount >= 1);
+
 assert.equal(filterFacetCompanies(rows, { sector: "ai" }).length, 2);
 assert.equal(filterFacetCompanies(rows, { recency: "older" }).length, 2);
 assert.equal(filterFacetCompanies(rows, { foundedYear: 2026 }).length, 1);
@@ -69,7 +86,14 @@ assert.equal(ordered[1]?.name, "Zulu");
 const data = loadDirectory();
 assert.equal(bucketSum(foundedYearBuckets(data.cards)), data.cards.length);
 assert.equal(bucketSum(hqRegionBuckets(data.cards)), data.cards.length);
+assert.equal(bucketSum(sectorBuckets(data.cards)), data.cards.length);
 assert.equal(data.cards.length, 2513);
+const sectorMissing = sectorBuckets(data.cards).find((b) => b.id === NOT_ON_RECORD)?.count ?? 0;
+assert.ok(sectorMissing > 0);
+const namedSector = sectorBuckets(data.cards).filter((b) => b.id !== NOT_ON_RECORD).reduce((s, b) => s + b.count, 0);
+assert.ok(namedSector >= 700, `expected broader sector coverage, got ${namedSector}`);
+const withLogo = data.cards.filter((c) => c.logoUrl).length;
+assert.ok(withLogo >= 1183, `expected favicons filled, got ${withLogo}`);
 
 const active = data.cards.filter((c) => statusOf(c) === "active").length;
 const acquired = data.cards.filter((c) => statusOf(c) === "acquired").length;

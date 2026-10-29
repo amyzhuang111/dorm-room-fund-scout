@@ -1,6 +1,6 @@
 import { getDb } from "../db/client";
 import { campusSlug, shortCampusLabel } from "./campuses";
-import { isBoilerplateDescription, sectorLabel } from "./sectors";
+import { classifyDescription, isBoilerplateDescription, primaryTag, sectorLabel } from "./sectors";
 
 export interface DirectoryCard {
   id: string;
@@ -81,6 +81,25 @@ function httpUrl(value: string | null | undefined): string | null {
     const url = new URL(text);
     if (url.protocol !== "http:" && url.protocol !== "https:") return null;
     return url.toString();
+  } catch {
+    return null;
+  }
+}
+
+
+/** Deterministic favicon URL from a website host (same google s2 pattern already stored in facts). */
+export function faviconFromWebsiteHost(websiteUrl: string | null | undefined): string | null {
+  const direct = httpUrl(websiteUrl);
+  if (!direct) return null;
+  try {
+    const host = new URL(direct).hostname.replace(/^www\./i, "");
+    if (!host || host === "localhost" || !host.includes(".")) return null;
+    // Skip generic hosts that are not a company mark.
+    if (/^(docs\.google|github|linkedin|twitter|x|notion|medium|devpost|producthunt)\./i.test(host) ||
+        /^(github|linkedin|twitter|x|notion|medium|devpost|producthunt)\.com$/i.test(host)) {
+      return null;
+    }
+    return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=128`;
   } catch {
     return null;
   }
@@ -303,14 +322,27 @@ export function loadDirectory(): DirectoryData {
     if (url) logoByProject.set(row.project_id, url);
   }
 
+  const websiteByProject = new Map<string, string>();
+  for (const row of db
+    .prepare(`SELECT id, website_url FROM projects WHERE website_url IS NOT NULL AND trim(website_url) != ''`)
+    .all() as { id: string; website_url: string }[]) {
+    websiteByProject.set(row.id, row.website_url);
+  }
+
   const cards: DirectoryCard[] = [];
   for (const company of companies) {
     const school = schoolByProject.get(company.id);
     const short = school ? shortCampusLabel(school.id, school.name) : null;
     const description = company.description && !isBoilerplateDescription(company.description) ? oneLine(company.description) : null;
-    const sectorId = sectorByProject.get(company.id) ?? null;
+    let sectorId = sectorByProject.get(company.id) ?? null;
+    if (!sectorId && description) {
+      const hit = primaryTag(classifyDescription(description, company.name));
+      if (hit) sectorId = hit.tag;
+    }
     const signalKind = signalByProject.get(company.id) ?? null;
-      cards.push({
+    const storedLogo = logoByProject.get(company.id) ?? null;
+    const derivedLogo = storedLogo ?? faviconFromWebsiteHost(websiteByProject.get(company.id));
+    cards.push({
       id: company.id,
       name: company.name,
       description,
@@ -325,7 +357,7 @@ export function loadDirectory(): DirectoryData {
       signals: signalCount.get(company.id) ?? 0,
       founders: foundersByProject.get(company.id) ?? [],
       latestSignalAt: latestSignal.get(company.id) ?? null,
-      logoUrl: logoByProject.get(company.id) ?? null,
+      logoUrl: derivedLogo,
       foundedYear: foundedYearByProject.get(company.id) ?? null,
       operatingStatus: operatingStatusByProject.get(company.id) ?? null,
       hqRegion: hqByProject.get(company.id) ?? null,

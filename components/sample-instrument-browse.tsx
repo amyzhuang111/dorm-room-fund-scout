@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
-import { directoryCardSubtitle } from "@/lib/domain/sample-facets";
+import { directoryCardSubtitle, signalsUnit } from "@/lib/domain/sample-facets";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import {
   applyFacets,
@@ -108,23 +108,20 @@ export function SampleInstrumentBrowse({
   }
 
   return (
-    <div className="mx-auto mt-3 grid w-full max-w-[1280px] gap-3 lg:grid-cols-[240px_minmax(0,1fr)_236px]">
-      <div className="hidden h-[min(70vh,720px)] lg:block">
-        <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={commitFacet} />
-      </div>
+    <div className="mx-auto mt-3 grid w-full max-w-[1100px] gap-3">
       <div className="min-w-0">
         <div className="mb-2 flex flex-wrap items-end justify-between gap-2">
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-[#8a7260]">{feed === "leaderboard" ? "Leaderboard" : "Directory"}</p>
-            <p className="mt-0.5 text-[13px] text-[#6b5443]">
-              Showing <span className="font-bold tabular-nums text-[#E05612]">{total.toLocaleString("en-US")}</span>{" "}
+            <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-[color:var(--fg-3,#6B7390)]">{feed === "leaderboard" ? "Leaderboard" : "Directory"}</p>
+            <p className="mt-0.5 text-[13px] text-[color:var(--fg-2,#A3AAC0)]">
+              Showing <span className="font-bold tabular-nums text-[color:var(--ember,#E8823A)]">{total.toLocaleString("en-US")}</span>{" "}
               {total === 1 ? "company" : "companies"}
               {campusName ? (
                 <>
                   {" · "}
                   {campusName}
                   {" · "}
-                  <Link href={clearCampusHref} className="text-[#20140c] hover:underline">
+                  <Link href={clearCampusHref} className="text-[color:var(--fg,#ECEEF4)] hover:underline">
                     Clear
                   </Link>
                 </>
@@ -143,7 +140,7 @@ export function SampleInstrumentBrowse({
                 <Link
                   key={id}
                   href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
-                  className={`inline-flex h-6 items-center rounded-full border px-2 text-[11px] ${sort === id ? "border-[#FB651E] bg-[#FB651E] text-white" : "border-[#f0d9c6] text-[#20140c]"}`}
+                  className={`inline-flex h-6 items-center rounded-full border px-2 text-[11px] ${sort === id ? "border-[color:var(--ember,#E8823A)] bg-[color:var(--ember,#E8823A)] text-white" : "border-[color:var(--line,#1F2536)] text-[color:var(--fg,#ECEEF4)]"}`}
                 >
                   {label}
                 </Link>
@@ -151,7 +148,7 @@ export function SampleInstrumentBrowse({
             </div>
           ) : null}
         </div>
-        <div className="mb-2 space-y-2 lg:hidden">
+        <div className="mb-2 space-y-2">
           <div className="flex flex-wrap gap-1">
             {([2026, 2025, 2024] as const).map((year) => {
               const active = facets.foundedYear === year;
@@ -160,7 +157,7 @@ export function SampleInstrumentBrowse({
                   key={year}
                   type="button"
                   onClick={() => commitFacet({ ...facets, foundedYear: active ? null : year })}
-                  className={`inline-flex h-6 items-center rounded-full border px-2 text-[11px] ${active ? "border-[#FB651E] bg-[#FB651E] text-white" : "border-[#f0d9c6] bg-white text-[#20140c]"}`}
+                  className={`inline-flex h-6 items-center rounded-full border px-2 text-[11px] ${active ? "border-[color:var(--ember,#E8823A)] bg-[color:var(--ember,#E8823A)] text-white" : "border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] text-[color:var(--fg,#ECEEF4)]"}`}
                 >
                   {year}
                 </button>
@@ -168,10 +165,10 @@ export function SampleInstrumentBrowse({
             })}
             {(
               [
-                ["flag", "new", "New"],
-                ["flag", "signaled", "Has signals"],
-                ["flag", "funded", "Funded"],
-                ["flag", "founders", "Has founders"],
+                ["flag", "new", "New this year"],
+                ["flag", "signaled", "Active this month"],
+                ["flag", "funded", "Raised funding"],
+                ["flag", "founders", "Founders listed"],
                 ["status", "active", "Active"],
                 ["status", "acquired", "Acquired"],
               ] as const
@@ -188,22 +185,22 @@ export function SampleInstrumentBrowse({
                       status: kind === "status" ? (facets.status === id ? null : (id as FacetState["status"])) : facets.status,
                     })
                   }
-                  className={`inline-flex h-6 items-center rounded-full border px-2 text-[11px] ${active ? "border-[#FB651E] bg-[#FB651E] text-white" : "border-[#f0d9c6] bg-white text-[#20140c]"}`}
+                  className={`inline-flex h-6 items-center rounded-full border px-2 text-[11px] ${active ? "border-[color:var(--ember,#E8823A)] bg-[color:var(--ember,#E8823A)] text-white" : "border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] text-[color:var(--fg,#ECEEF4)]"}`}
                 >
                   {label}
                 </button>
               );
             })}
           </div>
-          <details className="rounded-xl border border-[#f0d9c6] bg-white px-2.5 py-2">
-            <summary className="cursor-pointer text-[12px] font-semibold text-[#20140c]">All filters</summary>
+          <details className="rounded-xl border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] px-2.5 py-2">
+            <summary className="cursor-pointer text-[12px] font-semibold text-[color:var(--fg,#ECEEF4)]">All filters</summary>
             <div className="mt-2 h-[min(50vh,380px)]">
               <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={commitFacet} />
             </div>
           </details>
         </div>
         {cards.length === 0 ? (
-          <p className="text-[13px] text-[#6b5443]">
+          <p className="text-[13px] text-[color:var(--fg-2,#A3AAC0)]">
             {query
               ? `No companies match "${query}".`
               : campusName && campusTotal === 0
@@ -220,7 +217,7 @@ export function SampleInstrumentBrowse({
           </ol>
         )}
         {cards.length < total ? (
-          <Link href={moreHref} className="mt-3 inline-flex h-8 items-center rounded-full border border-[#f0d9c6] bg-white px-3 text-[12px] font-medium text-[#20140c] hover:border-[#E05612]">
+          <Link href={moreHref} className="mt-3 inline-flex h-8 items-center rounded-full border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] px-3 text-[12px] font-medium text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--ember,#E8823A)]">
             Show more
           </Link>
         ) : null}
@@ -236,12 +233,9 @@ export function SampleInstrumentBrowse({
             </Link>
           ))}
         </div>
-        <div className="mt-3 lg:hidden">
-          <IntelligenceBoards companies={boardCompanies} limit={4} />
+        <div className="mt-4">
+          <IntelligenceBoards companies={boardCompanies} compact />
         </div>
-      </div>
-      <div className="hidden lg:block">
-        <IntelligenceBoards companies={boardCompanies} />
       </div>
     </div>
   );
@@ -250,17 +244,17 @@ export function SampleInstrumentBrowse({
 function DirectoryPill({ card, rank }: { card: DirectoryCard; rank: number | null }) {
   const subtitle = directoryCardSubtitle(card);
   return (
-    <Link href={`/startup/${card.id}`} className="flex items-center gap-2 rounded-xl border border-[#f0d9c6] bg-white px-2 py-1.5 hover:border-[#E05612]">
-      {rank != null ? <span className="w-4 shrink-0 text-center text-[11px] font-bold tabular-nums text-[#E05612]">{rank}</span> : null}
+    <Link href={`/startup/${card.id}`} className="flex items-center gap-2 rounded-xl border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] px-2 py-1.5 hover:border-[color:var(--ember,#E8823A)]">
+      {rank != null ? <span className="w-4 shrink-0 text-center text-[11px] font-bold tabular-nums text-[color:var(--ember,#E8823A)]">{rank}</span> : null}
       <LogoMark name={card.name} logoUrl={card.logoUrl} />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[12px] font-medium text-[#20140c]">{card.name}</p>
-        {subtitle ? <p className="truncate text-[10px] text-[#8a7260]">{subtitle}</p> : null}
+        <p className="truncate text-[12px] font-medium text-[color:var(--fg,#ECEEF4)]">{card.name}</p>
+        {subtitle ? <p className="truncate text-[10px] text-[color:var(--fg-3,#6B7390)]">{subtitle}</p> : null}
       </div>
       {card.signals > 0 ? (
-        <div className="shrink-0 text-right">
-          <p className="text-[13px] font-bold tabular-nums leading-none text-[#E05612]">{card.signals.toLocaleString("en-US")}</p>
-          <p className="whitespace-nowrap text-[9px] uppercase tracking-[0.04em] text-[#8a7260]">signals</p>
+        <div className="w-[3.25rem] shrink-0 text-right">
+          <p className="text-[13px] font-bold tabular-nums leading-none text-[color:var(--ember,#E8823A)]">{card.signals.toLocaleString("en-US")}</p>
+          <p className="whitespace-nowrap text-[9px] uppercase tracking-[0.02em] text-[color:var(--fg-3,#6B7390)]">{signalsUnit(card.signals)}</p>
         </div>
       ) : null}
     </Link>
