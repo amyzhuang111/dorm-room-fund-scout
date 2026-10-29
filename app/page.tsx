@@ -28,7 +28,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
     <>
       <GlobeBoot />
       <Suspense fallback={null}>
-        <SampleHome feed={feed} sector={sp.sector} kind={sp.kind} campus={sp.campus} stats={stats} />
+        <SampleHome feed={feed} sector={sp.sector} kind={sp.kind} campus={sp.campus} more={sp.more} stats={stats} />
       </Suspense>
     </>
   );

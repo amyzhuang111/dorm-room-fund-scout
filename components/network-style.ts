@@ -102,7 +102,8 @@ export function readableInk(hex: string): string {
   if (!parsed) return "#374151";
   let [red, green, blue] = parsed;
   if (contrastOnWhite(red, green, blue) >= 4.5) return toHex(red, green, blue);
-  let { h, s, l } = rgbToHsl(red, green, blue);
+  const { h, s, l: startL } = rgbToHsl(red, green, blue);
+  let l = startL;
   for (let step = 0; step < 28 && contrastOnWhite(red, green, blue) < 4.5; step++) {
     l = Math.max(12, l - 3);
     [red, green, blue] = hslToRgb(h, s, l);

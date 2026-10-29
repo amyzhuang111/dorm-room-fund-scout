@@ -186,7 +186,11 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
   const columns = 2 + (showTier ? 1 : 0) + (campusLocked ? 0 : 1) + 1 + (showDate ? 1 : 0) + (showVerified ? 1 : 0);
   const control = "inline-flex h-9 items-center rounded border border-line bg-raised px-3 text-[14px] text-fg";
 
-  let rowIndex = 0;
+  const rowStarts = groups.reduce<number[]>((starts, group) => {
+    const previous = starts.length === 0 ? 0 : starts[starts.length - 1] + groups[starts.length - 1].rows.length;
+    starts.push(previous);
+    return starts;
+  }, []);
 
   return (
     <div>
@@ -267,7 +271,8 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
             </tr>
           </thead>
           <tbody>
-            {groups.map((group) => {
+            {groups.map((group, groupIndex) => {
+              const rowIndex = rowStarts[groupIndex] ?? 0;
               const headerDay = calendarDay(group.at);
               const header = group.event ? (
                 <tr key={`event:${group.event}`} className="bg-bg">
@@ -279,9 +284,8 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                   </td>
                 </tr>
               ) : null;
-              const body = group.rows.map((row) => {
-                const index = rowIndex;
-                rowIndex += 1;
+              const body = group.rows.map((row, offset) => {
+                const index = rowIndex + offset;
                 const sameDay = group.event != null && headerDay != null && calendarDay(row.signalAt) === headerDay;
                 const date = !row.signalAt || sameDay ? null : relativeTime(row.signalAt);
                 const quiet = !hasSignal(row);

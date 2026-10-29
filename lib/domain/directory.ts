@@ -185,12 +185,12 @@ export function filterDirectory(cards: DirectoryCard[], sector: string | undefin
   });
 }
 
-export function directoryPage(cards: DirectoryCard[]): DirectoryCard[] {
-  return cards.slice(0, DIRECTORY_LIMIT);
+export function directoryPage(cards: DirectoryCard[], pages = 1): DirectoryCard[] {
+  return cards.slice(0, Math.max(1, pages) * DIRECTORY_LIMIT);
 }
 
-export function leaderboardPage(cards: DirectoryCard[]): DirectoryCard[] {
-  return cards.filter((card) => card.signals > 0).slice(0, LEADERBOARD_LIMIT);
+export function leaderboardPage(cards: DirectoryCard[], pages = 1): DirectoryCard[] {
+  return cards.filter((card) => card.signals > 0).slice(0, Math.max(1, pages) * LEADERBOARD_LIMIT);
 }
 
 export const DIRECTORY_PAGE_SIZE = DIRECTORY_LIMIT;

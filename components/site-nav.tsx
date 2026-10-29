@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { useUserPipeline } from "./user-pipeline-provider";
 
 const SECTIONS = [
@@ -54,13 +54,16 @@ export function SiteNav() {
   const pipeline = useUserPipeline();
   const local = pipeline.storage === "local";
   const [open, setOpen] = useState(false);
-  const [night, setNight] = useState(pathname === "/");
+  const night = useSyncExternalStore(
+    (notify) => {
+      window.addEventListener("campus-scout-theme", notify);
+      return () => window.removeEventListener("campus-scout-theme", notify);
+    },
+    () => document.documentElement.dataset.theme !== "day",
+    () => true,
+  );
   const campusDetail = /^\/campuses\/[^/]+$/.test(pathname);
   const subs = section && pathname !== "/" && !campusDetail ? SUBS[section] : [];
-
-  useEffect(() => {
-    setNight(document.documentElement.dataset.theme !== "day");
-  }, [pathname]);
 
   function openAsk() {
     window.dispatchEvent(new Event("campus-scout-open-ask"));
@@ -70,7 +73,7 @@ export function SiteNav() {
     const next = document.documentElement.dataset.theme === "night" ? "day" : "night";
     document.documentElement.dataset.theme = next;
     localStorage.setItem("campus-scout-theme", next);
-    setNight(next === "night");
+    window.dispatchEvent(new Event("campus-scout-theme"));
   }
 
   return (

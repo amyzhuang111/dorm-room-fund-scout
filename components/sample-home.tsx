@@ -14,6 +14,17 @@ import type { HeroStats } from "@/lib/domain/hero-stats";
 
 export type Feed = "directory" | "leaderboard" | "world";
 
+function moreHref(feed: Feed, sector: string | undefined, kind: string | undefined, campus: string | undefined, pages: number): string {
+  const query = new URLSearchParams();
+  query.set("sample", "1");
+  if (feed !== "directory") query.set("feed", feed);
+  if (sector) query.set("sector", sector);
+  if (kind) query.set("kind", kind);
+  if (campus) query.set("campus", campus);
+  query.set("more", String(pages + 1));
+  return `/?${query.toString()}#browse`;
+}
+
 function feedHref(feed: Feed, sector?: string, kind?: string, campus?: string): string {
   const query = new URLSearchParams();
   query.set("sample", "1");
@@ -29,27 +40,30 @@ export function SampleHome({
   sector,
   kind,
   campus,
+  more,
   stats,
 }: {
   feed: Feed;
   sector?: string;
   kind?: string;
   campus?: string;
+  more?: string;
   stats: HeroStats;
 }) {
+  const pages = Math.max(1, Math.floor(Number(more)) || 1);
   const campusRow = campus ? stats.universities.find((university) => university.id === campus) : undefined;
   const campusId = campusRow?.id;
   const listed = feed === "directory" || feed === "leaderboard";
-  const data = listed ? loadDirectory() : null;
-  const matched = data ? filterDirectory(data.cards, sector, kind, campusId) : [];
-  const campusTotal = data && campusId ? filterDirectory(data.cards, undefined, undefined, campusId).length : null;
-  const shown = feed === "leaderboard" ? leaderboardPage(matched) : directoryPage(matched);
+  const data = loadDirectory();
+  const matched = filterDirectory(data.cards, sector, kind, campusId);
+  const campusTotal = campusId ? filterDirectory(data.cards, undefined, undefined, campusId).length : null;
+  const shown = feed === "leaderboard" ? leaderboardPage(matched, pages) : directoryPage(matched, pages);
   const total = feed === "leaderboard" ? matched.filter((card) => card.signals > 0).length : matched.length;
   const pageSize = feed === "leaderboard" ? LEADERBOARD_PAGE_SIZE : DIRECTORY_PAGE_SIZE;
 
   return (
     <div className="hero-night bg-bg text-fg">
-      <GlobeHero stats={stats} showGlobe={feed !== "world"} />
+      <GlobeHero stats={stats} showGlobe={feed !== "world"} companies={data.cards} />
       <section id="browse" className="scroll-mt-20 border-t border-line px-6 pb-16 pt-6">
         <div className="mx-auto w-full max-w-[880px]">
           <div className="flex flex-wrap items-center gap-x-1 border-b border-line" role="tablist" aria-label="Views">
@@ -73,7 +87,7 @@ export function SampleHome({
         </div>
         {feed === "world" ? (
           <div className="mx-auto mt-5 w-full max-w-[1200px]">
-            <WorldMap stats={stats} />
+            <WorldMap stats={stats} companies={data.cards} />
           </div>
         ) : (
           <div className="mx-auto w-full max-w-[880px] pt-4">
@@ -99,6 +113,11 @@ export function SampleHome({
                 <Card key={card.id} card={card} rank={feed === "leaderboard" ? index + 1 : null} />
               ))}
             </ol>
+            {shown.length < total ? (
+              <Link href={moreHref(feed, sector, kind, campusId, pages)} className="mt-4 inline-flex h-10 items-center rounded border border-line px-4 text-[14px] font-medium">
+                Show {Math.min(pageSize, total - shown.length).toLocaleString("en-US")} more
+              </Link>
+            ) : null}
           </div>
         )}
       </section>

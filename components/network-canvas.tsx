@@ -380,6 +380,14 @@ function CampusNetworkCanvas({
   const active = selected ?? hover;
   const peopleShown = graph.nodes.filter((node) => node.type === "person").length;
   const hubId = graph.nodes.find((node) => node.type === "university")?.id ?? campusName;
+  const [seenHub, setSeenHub] = useState(hubId);
+  if (seenHub !== hubId) {
+    setSeenHub(hubId);
+    setZoom(1);
+    setPan({ x: 0, y: 0 });
+    setSelected(null);
+    setSelectedEdge(null);
+  }
 
   const nodeById = useMemo(() => new Map(graph.nodes.map((node) => [node.id, node])), [graph.nodes]);
   const neighbors = useMemo(() => {
@@ -427,12 +435,8 @@ function CampusNetworkCanvas({
   }, [graph.nodes, query]);
 
   useEffect(() => {
-    panRef.current = { x: 0, y: 0 };
-    setZoom(1);
-    setPan({ x: 0, y: 0 });
-    setSelected(null);
-    setSelectedEdge(null);
-  }, [hubId]);
+    panRef.current = pan;
+  }, [pan]);
 
   useEffect(() => {
     const el = svgRef.current;

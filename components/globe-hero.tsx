@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { TileGlobe, type TileCampus } from "@/components/tile-globe";
+import { TileGlobe, type TileCampus, type TileCompany } from "@/components/tile-globe";
 import type { HeroStats, WeekItem } from "@/lib/domain/hero-stats";
 import { updatedAgo } from "@/lib/domain/relative-time";
 
@@ -21,7 +21,7 @@ function plottedCampuses(stats: HeroStats): TileCampus[] {
     }));
 }
 
-function GlobeBlock({ stats }: { stats: HeroStats }) {
+function GlobeBlock({ stats, companies }: { stats: HeroStats; companies: TileCompany[] }) {
   const router = useRouter();
   const search = useSearchParams();
   const campuses = plottedCampuses(stats);
@@ -38,14 +38,14 @@ function GlobeBlock({ stats }: { stats: HeroStats }) {
     router.push(`/?${next.toString()}#browse`);
   }
 
-  return <TileGlobe campuses={campuses} selectedId={selectedId} onSelect={onSelect} />;
+  return <TileGlobe campuses={campuses} companies={companies} selectedId={selectedId} onSelect={onSelect} />;
 }
 
-export function GlobeHero({ stats, showGlobe = true }: { stats: HeroStats; showGlobe?: boolean }) {
+export function GlobeHero({ stats, companies = [], showGlobe = true }: { stats: HeroStats; companies?: TileCompany[]; showGlobe?: boolean }) {
   return (
-    <div className={showGlobe ? "bg-[#FFF7F0] px-6 py-5 text-[#20140c]" : "bg-bg px-6 py-6 text-fg"}>
+    <div className={showGlobe ? "bg-[#FFF7F0] px-6 py-4 text-[#20140c]" : "bg-bg px-6 py-6 text-fg"}>
       <div className={showGlobe ? "max-lg:min-h-[calc(100svh-72px)] lg:min-h-[calc(100dvh-72px)]" : ""}>
-        <SignatureBand stats={stats} globe={showGlobe ? <GlobeBlock stats={stats} /> : null} />
+        <SignatureBand stats={stats} globe={showGlobe ? <GlobeBlock stats={stats} companies={companies} /> : null} />
       </div>
       {showGlobe ? (
         <div className="mx-auto mt-10 w-full max-w-[880px]">
@@ -56,8 +56,8 @@ export function GlobeHero({ stats, showGlobe = true }: { stats: HeroStats; showG
   );
 }
 
-export function WorldMap({ stats }: { stats: HeroStats }) {
-  return <GlobeBlock stats={stats} />;
+export function WorldMap({ stats, companies = [] }: { stats: HeroStats; companies?: TileCompany[] }) {
+  return <GlobeBlock stats={stats} companies={companies} />;
 }
 
 const HIGH_VALUE = new Set(["funding", "launch", "award", "acquisition"]);
@@ -210,7 +210,7 @@ function HeroActions({ cream = false }: { cream?: boolean }) {
   const world = new URLSearchParams(directory.toString());
   world.set("feed", "world");
   return (
-    <div className="mt-4 flex flex-wrap items-center gap-2">
+    <div className="mt-2 flex flex-wrap items-center gap-2">
       <Link href={`/?${world.toString()}#browse`} className={`inline-flex h-10 items-center rounded px-4 text-[14px] font-semibold ${cream ? "bg-[#FB651E] text-white" : "bg-ember text-accent-foreground"}`}>
         Explore map
       </Link>
@@ -224,16 +224,16 @@ function HeroActions({ cream = false }: { cream?: boolean }) {
 function SignatureBand({ stats, globe }: { stats: HeroStats; globe?: ReactNode }) {
   return (
     <section className="-mx-6 px-6 pb-2" aria-label="Campus Scout">
-      <div className={globe ? "flex flex-col gap-4" : "max-w-[640px]"}>
+      <div className={globe ? "flex flex-col gap-2" : "max-w-[640px]"}>
         <div className="max-w-[720px]">
-          <div className="mb-3">
+          <div className="mb-2">
             <SamplePill cream={Boolean(globe)} />
           </div>
-          <p className="display text-[40px] font-semibold leading-[44px] sm:text-[48px] sm:leading-[52px]">
+          <p className="display text-[32px] font-semibold leading-[36px] sm:text-[36px] sm:leading-[40px]">
             Track student founders before they raise
           </p>
           {globe ? (
-            <p className="mt-3 text-[16px] leading-6 text-[#20140c]">
+            <p className="mt-2 text-[16px] leading-6 text-[#20140c]">
               <span className="font-bold tabular-nums text-[#E05612]">{stats.founders.toLocaleString("en-US")}</span> student founders across{" "}
               <span className="font-bold tabular-nums text-[#E05612]">{stats.campuses.toLocaleString("en-US")}</span> campuses
             </p>

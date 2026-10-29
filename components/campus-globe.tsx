@@ -61,8 +61,10 @@ export function CampusGlobe({
   const [size, setSize] = useState(height);
   const campusesRef = useRef(campuses);
   const selectedRef = useRef(selectedId);
-  campusesRef.current = campuses;
-  selectedRef.current = selectedId;
+  useEffect(() => {
+    campusesRef.current = campuses;
+    selectedRef.current = selectedId;
+  });
   const [hover, setHover] = useState<{ campus: GlobeCampus; x: number; y: number } | null>(null);
 
   useEffect(() => {

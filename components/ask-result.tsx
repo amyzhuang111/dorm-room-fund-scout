@@ -12,13 +12,17 @@ export function AskResult({ question }: { question: string }) {
   const [answer, setAnswer] = useState<string | null>(null);
   const [matches, setMatches] = useState<AskHit[]>([]);
   const [note, setNote] = useState<string | null>(null);
+  const [forQuestion, setForQuestion] = useState(question);
+  if (forQuestion !== question) {
+    setForQuestion(question);
+    setAnswer(null);
+    setMatches([]);
+    setNote(null);
+  }
 
   useEffect(() => {
     if (!question) return;
     let cancel = false;
-    setAnswer(null);
-    setMatches([]);
-    setNote(null);
     fetch("/api/ask", {
       method: "POST",
       headers: { "content-type": "application/json" },

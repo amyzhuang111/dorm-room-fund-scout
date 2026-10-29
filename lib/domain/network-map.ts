@@ -1739,9 +1739,9 @@ function leanCampusesAcrossRegions(byRegion: Map<string, LiveNode[]>, links: { a
     for (const link of live) {
       const a = points.get(link.a)!;
       const b = points.get(link.b)!;
-      let dx = b.x - a.x;
-      let dy = b.y - a.y;
-      let dist = Math.hypot(dx, dy);
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const dist = Math.hypot(dx, dy);
       if (dist < 1e-3) continue;
       const ideal = 22 + (1 - Math.min(1, link.sim)) * 26;
       if (dist <= ideal) continue;
@@ -1795,9 +1795,9 @@ function holdRegionCores(byRegion: Map<string, LiveNode[]>, cores: Map<string, {
       if (!own) continue;
       const leash = Math.max(18, own.r * 1.2);
       for (const campus of group) {
-        let dx = campus.x - own.x;
-        let dy = campus.y - own.y;
-        let dist = Math.hypot(dx, dy);
+        const dx = campus.x - own.x;
+        const dy = campus.y - own.y;
+        const dist = Math.hypot(dx, dy);
         if (dist > leash && dist > 0) {
           campus.x = own.x + (dx / dist) * leash;
           campus.y = own.y + (dy / dist) * leash;
@@ -2251,8 +2251,8 @@ function pinWaterlooInGroup(group: LiveNode[], radiusOf: (id: string) => number)
   if (!waterloo || !toronto) return;
   const mit = group.find((node) => node.id === "univ_mit");
   const gap = radiusOf("univ_toronto") + radiusOf("univ_waterloo") + 8;
-  let dx = toronto.x - (mit?.x ?? toronto.x - 18);
-  let dy = toronto.y - (mit?.y ?? toronto.y);
+  const dx = toronto.x - (mit?.x ?? toronto.x - 18);
+  const dy = toronto.y - (mit?.y ?? toronto.y);
   const len = Math.hypot(dx, dy) || 1;
   waterloo.x = toronto.x + (dx / len) * gap;
   waterloo.y = toronto.y + (dy / len) * gap;

@@ -16,6 +16,13 @@ export interface TileCampus {
   country: string;
 }
 
+export interface TileCompany {
+  id: string;
+  name: string;
+  schoolId: string | null;
+  signals: number;
+}
+
 const OCEAN = "#FFDBBB";
 const LAND = "#DD8A4E";
 const LAND_ALT = "#D48148";
@@ -37,11 +44,13 @@ function markerColor(country: string): string {
 
 export function TileGlobe({
   campuses,
+  companies = [],
   selectedId,
   onSelect,
   className = "",
 }: {
   campuses: TileCampus[];
+  companies?: TileCompany[];
   selectedId?: string | null;
   onSelect: (id: string) => void;
   className?: string;
@@ -76,6 +85,13 @@ export function TileGlobe({
     () => [...shown].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name)).slice(0, 5),
     [shown],
   );
+  const companyStrip = useMemo(() => {
+    const ids = new Set(shown.map((campus) => campus.id));
+    return companies
+      .filter((company) => company.schoolId && ids.has(company.schoolId) && (!selectedId || company.schoolId === selectedId))
+      .sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name))
+      .slice(0, 12);
+  }, [companies, shown, selectedId]);
 
   useEffect(() => {
     const node = mapNode.current;
@@ -103,9 +119,13 @@ export function TileGlobe({
     } | null = null;
 
     const fit = () => {
+      const node = mapNode.current;
       const wide = window.innerWidth >= 1024;
-      const vh = window.innerHeight;
-      setStageHeight(wide ? Math.max(720, vh - 150) : Math.max(460, vh - 300));
+      const docTop = node ? node.getBoundingClientRect().top + window.scrollY : wide ? 248 : 300;
+      // Desktop strip is inside the stage. Mobile chips and the strip sit under it.
+      const reserve = wide ? 8 : 136;
+      const available = Math.round(window.innerHeight - docTop - reserve);
+      setStageHeight(Math.max(wide ? 520 : 280, available));
     };
     fit();
     window.addEventListener("resize", fit);
@@ -192,6 +212,19 @@ export function TileGlobe({
             "circle-stroke-color": "#ffffff",
             "circle-stroke-width": 1.15,
             "circle-opacity": 0.95,
+          },
+        });
+        map.addLayer({
+          id: "campus-selected",
+          type: "circle",
+          source: "campuses",
+          filter: ["==", ["get", "id"], ""],
+          paint: {
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, 7, 3, 12, 5, 16],
+            "circle-color": ["get", "color"],
+            "circle-stroke-color": "#20140c",
+            "circle-stroke-width": 2.6,
+            "circle-opacity": 1,
           },
         });
         setReady(true);
@@ -281,15 +314,41 @@ export function TileGlobe({
   useEffect(() => {
     if (!ready || !mapRef.current) return;
     mapRef.current.setFilter("campus-dots", country ? ["==", ["get", "country"], country] : null);
-  }, [country, ready]);
+    const selected = selectedId
+      ? country
+        ? ["all", ["==", ["get", "id"], selectedId], ["==", ["get", "country"], country]]
+        : ["==", ["get", "id"], selectedId]
+      : ["==", ["get", "id"], ""];
+    mapRef.current.setFilter("campus-selected", selected);
+  }, [country, ready, selectedId]);
 
   function focus(campus: TileCampus) {
     mapRef.current?.flyTo({ center: [campus.lon, campus.lat], zoom: 3.1, essential: true });
     onSelect(campus.id);
   }
 
+  const mobileChoices = (
+    <div className="mt-3 space-y-2 lg:hidden">
+      <div className="flex gap-1.5 overflow-x-auto">
+        <FilterChip active={!country} onClick={() => setCountry(null)} label={`All ${campuses.length}`} />
+        {countries.map(([name, count]) => (
+          <FilterChip key={name} active={country === name} onClick={() => setCountry(country === name ? null : name)} label={`${name} ${count}`} />
+        ))}
+      </div>
+      <div className="flex gap-1.5 overflow-x-auto">
+        {byFounders.map((campus) => (
+          <button key={campus.id} type="button" onClick={() => focus(campus)} className="shrink-0 whitespace-nowrap rounded-full border border-[#f0d9c6] bg-white px-2.5 py-1 text-[12px] text-[#20140c]">
+            {shortCampusLabel(campus.id, campus.name)} <span className={COUNT}>{campus.founders.toLocaleString("en-US")}</span>
+          </button>
+        ))}
+      </div>
+      <CompanyStrip companies={companyStrip} />
+    </div>
+  );
+
   return (
-    <div className={`relative overflow-hidden rounded-3xl bg-[#FFF7F0] ${className}`} style={{ height: stageHeight }}>
+    <div className={className}>
+    <div className="relative overflow-hidden rounded-3xl bg-[#FFF7F0]" style={{ height: stageHeight }}>
       <div ref={mapNode} className="h-full w-full" />
       <aside className="absolute left-3 top-3 z-10 hidden w-[228px] rounded-2xl border border-[#f0d9c6] bg-white/92 p-3 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)] lg:block">
         <p className="text-[13px] font-semibold">Campuses</p>
@@ -313,16 +372,34 @@ export function TileGlobe({
           </p>
         </div>
       ) : null}
-      <p className="pointer-events-auto absolute bottom-2 right-3 z-10 max-w-[220px] text-right text-[11px] leading-4 text-[#6b5443]">
+      <div className="absolute bottom-3 left-3 right-3 z-10 hidden lg:block">
+        <CompanyStrip companies={companyStrip} />
+      </div>
+      <p className="pointer-events-auto absolute bottom-14 right-3 z-10 hidden max-w-[220px] text-right text-[11px] leading-4 text-[#6b5443] lg:block">
         <MapCredit />
       </p>
+    </div>
+    {mobileChoices}
+    </div>
+  );
+}
+
+function CompanyStrip({ companies }: { companies: TileCompany[] }) {
+  if (companies.length === 0) return null;
+  return (
+    <div className="flex items-center gap-1.5 overflow-x-auto rounded-2xl border border-[#f0d9c6] bg-white/92 px-3 py-2 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)]">
+      {companies.map((company) => (
+        <a key={company.id} href={`/startup/${company.id}`} className="shrink-0 rounded-full border border-[#f0d9c6] bg-white px-2.5 py-1 text-[12px] text-[#20140c] hover:border-[#E05612]">
+          {company.name}
+        </a>
+      ))}
     </div>
   );
 }
 
 function FilterChip({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} className={`rounded-full border px-2.5 py-1 text-[12px] ${active ? "border-[#FB651E] bg-[#FB651E] text-white" : "border-[#f0d9c6] bg-white text-[#20140c]"}`}>
+    <button type="button" onClick={onClick} className={`shrink-0 whitespace-nowrap rounded-full border px-2.5 py-1 text-[12px] ${active ? "border-[#FB651E] bg-[#FB651E] text-white" : "border-[#f0d9c6] bg-white text-[#20140c]"}`}>
       {label}
     </button>
   );
