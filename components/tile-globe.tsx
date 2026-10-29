@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { markerRadius, markerSizeLegend } from "@/lib/domain/marker-radius";
@@ -12,8 +11,7 @@ import {
   FacetRail,
   IntelligenceBoards,
   PANEL,
-  preferLogoCompanies,
-  ViewDrawer,
+  DispatchWire,
   type FacetState,
 } from "./sample-instrument";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -30,19 +28,18 @@ export interface TileCampus {
 
 export type TileCompany = FacetCompany;
 
-const OCEAN = "#D9E2EF";
-const LAND = "#F4F6FA";
-const LAND_ALT = "#E8ECF4";
-const BOUNDARY = "#C5CAD8";
-const LABEL = "#3F465C";
+const OCEAN = "#FFFFFF";
+const LAND = "#FFFFFF";
+const LAND_ALT = "#FFFFFF";
+const LABEL = "#2F4FD8";
 const HALO = "#FFFFFF";
 const BRAND = "#2F4FD8";
 const COUNT = "font-bold tabular-nums text-[color:var(--ember,#D96B1C)]";
 
 const COUNTRY_COLOR: Record<string, string> = {
   "United States": "#2F4FD8",
-  Canada: "#D96B1C",
-  "United Kingdom": "#1F8A66",
+  Canada: "#2F4FD8",
+  "United Kingdom": "#2F4FD8",
 };
 
 function markerColor(country: string): string {
@@ -90,7 +87,6 @@ export function TileGlobe({
     resize: () => void;
   } | null>(null);
   const [facets, setFacets] = useState<FacetState>(emptyFacets);
-  const [stripMode, setStripMode] = useState<"startups" | "founders">("startups");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [hover, setHover] = useState<{ name: string; founders: number; signals: number; x: number; y: number } | null>(null);
@@ -108,25 +104,11 @@ export function TileGlobe({
     if (selectedId) return base.filter((company) => company.schoolId === selectedId);
     return base;
   }, [companies, facets, country, countryIds, selectedId]);
-  const companyStrip = useMemo(() => preferLogoCompanies(filteredCompanies).slice(0, 96), [filteredCompanies]);
   const founderTotalListed = useMemo(() => {
     let n = 0;
     for (const company of filteredCompanies) n += (company.founders?.length ?? 0);
     return n;
   }, [filteredCompanies]);
-  const founderStrip = useMemo(() => {
-    const rows: { key: string; name: string; companyId: string; companyName: string }[] = [];
-    for (const company of filteredCompanies) {
-      for (const person of company.founders ?? []) {
-        const name = person.trim();
-        if (!name) continue;
-        rows.push({ key: `${company.id}:${name}`, name, companyId: company.id, companyName: company.name });
-        if (rows.length >= 96) return rows;
-      }
-    }
-    return rows;
-  }, [filteredCompanies]);
-
   useEffect(() => {
     const node = mapNode.current;
     if (!node) return;
@@ -198,20 +180,37 @@ export function TileGlobe({
         if (dead || !map) return;
         map.setProjection({ type: "globe" });
         map.setSky({
-          "sky-color": "#EEF2F8",
+          "sky-color": "#FFFFFF",
           "horizon-color": "#FFFFFF",
-          "fog-color": "#E4EAF2",
-          "sky-horizon-blend": 0.55,
-          "horizon-fog-blend": 0.35,
-          "fog-ground-blend": 0.25,
-          "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 0.55, 2.2, 0.28, 4, 0.08],
+          "fog-color": "#EEF1FB",
+          "sky-horizon-blend": 0.7,
+          "horizon-fog-blend": 0.2,
+          "fog-ground-blend": 0.15,
+          "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 0.35, 2.2, 0.12, 4, 0.04],
         });
         for (const layer of map.getStyle().layers) {
           try {
             if (layer.type === "background") map.setPaintProperty(layer.id, "background-color", LAND);
             if (layer.id === "water") map.setPaintProperty(layer.id, "fill-color", OCEAN);
-            if (layer.type === "fill" && /landcover|landuse|park|wood|sand/.test(layer.id)) map.setPaintProperty(layer.id, "fill-color", LAND_ALT);
-            if (layer.type === "line" && /boundary/.test(layer.id)) map.setPaintProperty(layer.id, "line-color", BOUNDARY);
+            // Line-art globe: no filled land masses (escape YC filled-land skeleton)
+            if (layer.type === "fill" && /landcover|landuse|park|wood|sand|land|earth|building/.test(layer.id)) {
+              try { map.setPaintProperty(layer.id, "fill-opacity", 0); } catch {}
+              try { map.setPaintProperty(layer.id, "fill-color", LAND_ALT); } catch {}
+            }
+            if (layer.type === "fill" && /land|earth|continent/.test(layer.id) && layer.id !== "water") {
+              try { map.setLayoutProperty(layer.id, "visibility", "none"); } catch {}
+            }
+            if (layer.type === "line" && /boundary/.test(layer.id)) {
+              map.setPaintProperty(layer.id, "line-color", "#2F4FD8");
+              try { map.setPaintProperty(layer.id, "line-width", 1.05); } catch {}
+              try { map.setPaintProperty(layer.id, "line-opacity", 0.9); } catch {}
+              try { map.setPaintProperty(layer.id, "line-dasharray", [1.2, 1.6]); } catch {}
+            }
+            if (layer.type === "line" && /coast|waterway/.test(layer.id)) {
+              try { map.setPaintProperty(layer.id, "line-color", "#2F4FD8"); } catch {}
+              try { map.setPaintProperty(layer.id, "line-opacity", 0.45); } catch {}
+              try { map.setPaintProperty(layer.id, "line-dasharray", [0.8, 1.4]); } catch {}
+            }
             if (layer.type === "symbol" && /country|water_name|marine|sea|ocean/.test(layer.id)) {
               map.setLayoutProperty(layer.id, "text-font", ["Noto Sans Italic"]);
               map.setPaintProperty(layer.id, "text-color", LABEL);
@@ -352,71 +351,67 @@ export function TileGlobe({
 
   return (
     <div className={className}>
-      <div className="relative overflow-hidden rounded-xl border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]" style={{ height: stageHeight }}>
-        <div ref={mapNode} className="h-full w-full" />
-        {/* Halflight left overlay: scout brief, not a YC-style filter rail */}
-        <aside className="pointer-events-none absolute bottom-3 left-3 top-3 z-10 hidden w-[min(340px,34%)] flex-col gap-2 lg:flex">
-          <div className="pointer-events-auto rounded-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)]/96 p-3">
-            <p className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />
-              Live · campus scout
+      {/* Scout Dispatch masthead: editorial mono band, not a three-pane YC skeleton */}
+      <div className="mb-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div className="min-w-0" data-fold-counts>
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dispatch</p>
+            <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
+              <span className="text-[color:var(--ember,#D96B1C)]">{liveCount.toLocaleString("en-US")}</span>
             </p>
-            <p className="mt-2 text-[22px] font-semibold leading-7 tracking-[-0.03em] text-[color:var(--fg,#0B0E17)]">
-              <span className={`${COUNT} font-mono text-[24px]`}>{liveCount.toLocaleString("en-US")}</span>
-              {" companies forming"}
-            </p>
-            <p className="mt-1 font-mono text-[12px] text-[color:var(--fg-2,#3F465C)]" data-fold-counts>
+            <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies forming on campus</p>
+            <p className="mt-0.5 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">
               <span className={COUNT} data-count="campuses-on-map">{shown.length.toLocaleString("en-US")}</span> campuses on map
               {" · "}
               <span className={COUNT} data-count="founders-listed">{founderCount.toLocaleString("en-US")}</span> founders listed
             </p>
-            <div className="mt-3 flex flex-wrap gap-1">
-              <button
-                type="button"
-                onClick={() => setFiltersOpen((v) => !v)}
-                className="inline-flex h-7 items-center rounded border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2.5 text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--ember,#D96B1C)]"
-              >
-                {filtersOpen ? "Hide filters" : "Filters"}
-              </button>
-              <a
-                href="/ask"
-                className="inline-flex h-7 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2.5 font-mono text-[11px] font-semibold text-[color:var(--ember,#D96B1C)]"
-              >
-                Scout ask
-              </a>
-            </div>
           </div>
-          <div className="pointer-events-auto min-h-0 flex-1 overflow-y-auto overscroll-contain">
-            <IntelligenceBoards companies={filteredCompanies} compact />
-          </div>
-        </aside>
-        {/* Right edge: logo stack (not a bottom YC drawer) */}
-        <aside className="absolute bottom-3 right-3 top-3 z-10 hidden w-[168px] lg:block">
-          <ViewDrawer
-            mode={stripMode}
-            onMode={setStripMode}
-            companies={companyStrip}
-            founders={founderStrip}
-            companyTotal={filteredCompanies.length}
-            founderTotal={founderTotalListed}
-          />
-        </aside>
-        {/* Filter sheet overlays when opened — not a permanent left clone */}
-        {filtersOpen ? (
-          <div className="absolute bottom-3 left-[min(352px,36%)] top-3 z-20 hidden w-[260px] lg:block">
-            <FacetRail
-              companies={companies}
-              campuses={campuses}
-              facets={facets}
-              onChange={onFacetChange}
-              onCampusFocus={(id) => {
-                const campus = campuses.find((row) => row.id === id);
-                if (campus) focus(campus);
+          <div className="flex flex-wrap gap-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                if (typeof window !== "undefined" && window.innerWidth < 1024) setMobileFiltersOpen(true);
+                else setFiltersOpen((v) => !v);
               }}
-              footer={<p>{markerSizeLegend()}</p>}
-            />
+              className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+            >
+              {filtersOpen ? "Hide filters" : "Filters"}
+            </button>
+            <a
+              href="/ask"
+              className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
+            >
+              Scout ask
+            </a>
           </div>
-        ) : null}
+        </div>
+      </div>
+      <div className="grid gap-3 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)]">
+        {/* One strong editorial column */}
+        <aside className="hidden min-w-0 lg:block">
+          <div className="sticky top-14 space-y-2">
+            {filtersOpen ? (
+              <div className="h-[min(70vh,640px)]">
+                <FacetRail
+                  companies={companies}
+                  campuses={campuses}
+                  facets={facets}
+                  onChange={onFacetChange}
+                  onCampusFocus={(id) => {
+                    const campus = campuses.find((row) => row.id === id);
+                    if (campus) focus(campus);
+                  }}
+                  footer={<p>{markerSizeLegend()}</p>}
+                />
+              </div>
+            ) : (
+              <IntelligenceBoards companies={filteredCompanies} compact />
+            )}
+          </div>
+        </aside>
+        <div className="min-w-0">
+      <div className="relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]" style={{ height: stageHeight }}>
+        <div ref={mapNode} className="h-full w-full" />
         <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 hidden -translate-x-1/2 lg:block" data-map-credit>
           <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
             <MapCredit />
@@ -436,48 +431,11 @@ export function TileGlobe({
           </div>
         ) : null}
       </div>
-      {/* Mobile: Live + Ledger in first viewport; boards + filter sheet below */}
-      <div className="mt-2 space-y-2 lg:hidden">
-        <div className={`${PANEL} relative overflow-hidden p-2 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
-          <div className="flex flex-wrap items-end justify-between gap-2">
-            <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Live · campus scout</p>
-              <p className="mt-0.5 text-[15px] font-semibold tracking-tight" data-fold-counts-mobile>
-                <span className={COUNT}>{liveCount.toLocaleString("en-US")}</span>{" "}
-                <span className="text-[color:var(--fg,#0B0E17)]">companies</span>
-              </p>
-              <p className="mt-0.5 font-mono text-[10px] text-[color:var(--fg-2,#3F465C)]">
-                <span className={COUNT} data-count="campuses-on-map">{shown.length.toLocaleString("en-US")}</span> campuses on map
-                {" · "}
-                <span className={COUNT} data-count="founders-listed">{founderCount.toLocaleString("en-US")}</span> founders listed
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-1">
-              <button
-                type="button"
-                onClick={() => setMobileFiltersOpen(true)}
-                className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2 font-mono text-[11px] text-[color:var(--fg,#0B0E17)]"
-              >
-                Filters
-              </button>
-              <Link
-                href="/ask"
-                className="inline-flex h-7 items-center gap-1 rounded-sm border border-[color:var(--ember,#D96B1C)]/50 bg-[color:var(--ember,#D96B1C)]/10 px-2 font-mono text-[11px] text-[color:var(--ember,#D96B1C)]"
-              >
-                <span aria-hidden>{">"}</span> Scout ask
-              </Link>
-            </div>
-          </div>
         </div>
-        <ViewDrawer
-          mode={stripMode}
-          onMode={setStripMode}
-          companies={companyStrip}
-          founders={founderStrip}
-          companyTotal={filteredCompanies.length}
-          founderTotal={founderTotalListed}
-          compact
-        />
+      </div>
+      {/* Mobile: Dispatch wire (named tiles with counts) + boards */}
+      <div className="mt-2 space-y-2 lg:hidden" data-fold-counts-mobile>
+        <DispatchWire companies={filteredCompanies} limit={8} />
         <IntelligenceBoards companies={filteredCompanies} compact />
       </div>
       {mobileFiltersOpen ? (

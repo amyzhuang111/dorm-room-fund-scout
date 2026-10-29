@@ -14,7 +14,6 @@ import {
   LogoMark,
   MobileBrowsePulse,
   PANEL,
-  COUNT,
   type FacetState,
 } from "./sample-instrument";
 import { FLAG_LABEL } from "@/lib/domain/sample-facets";
@@ -118,13 +117,22 @@ export function SampleInstrumentBrowse({
       : "border-[color:var(--cobalt-haze,#E8ECFA)] bg-[color:var(--bg-sunken,#F3F5F9)] font-mono text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]";
 
   return (
-    <div className="mx-auto mt-2 grid w-full max-w-[1280px] gap-2.5 lg:grid-cols-[minmax(0,1fr)_240px] sm:mt-3 sm:gap-3">
+    <div className="mx-auto mt-2 grid w-full max-w-[1280px] gap-2.5 lg:grid-cols-[minmax(260px,300px)_minmax(0,1fr)] sm:mt-3 sm:gap-3">
+      <aside className="hidden min-w-0 lg:block">
+        <div className={`${PANEL} relative sticky top-14 space-y-2 overflow-hidden p-2 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
+          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
+          <IntelligenceBoards companies={boardCompanies} compact />
+        </div>
+      </aside>
       <div className="min-w-0">
-        <div className={`${PANEL} relative mb-2 flex flex-wrap items-end justify-between gap-2 overflow-hidden p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
-          <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">{feed === "leaderboard" ? "Signal ledger" : "Company ledger"}</p>
-            <p className="mt-0.5 text-[13px] text-[color:var(--fg-2,#3F465C)]">
-              <span className={COUNT}>{total.toLocaleString("en-US")}</span>{" "}
+        <div className="mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+          <div className="min-w-0">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{feed === "leaderboard" ? "Scout dispatch · signals" : "Scout dispatch · ledger"}</p>
+            <p className="mt-1 font-mono text-[36px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[44px]">
+              <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
+            </p>
+            <p className="mt-1 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
               {total === 1 ? "company" : "companies"}
               {campusName ? (
                 <>
@@ -157,6 +165,7 @@ export function SampleInstrumentBrowse({
               ))}
             </div>
           ) : null}
+          </div>
         </div>
         <div className="mb-2 space-y-2">
           <div className="flex flex-wrap gap-1">
@@ -255,12 +264,6 @@ export function SampleInstrumentBrowse({
           ))}
         </div>
       </div>
-      <aside className="hidden min-w-0 lg:block">
-        <div className={`${PANEL} relative sticky top-14 space-y-2 overflow-hidden p-2 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
-          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Scout boards</p>
-          <IntelligenceBoards companies={boardCompanies} compact />
-        </div>
-      </aside>
       {mobileFiltersOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
           <button type="button" className="absolute inset-0 bg-slate-900/40" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />

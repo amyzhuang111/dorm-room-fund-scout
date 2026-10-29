@@ -265,8 +265,118 @@ export function StartupDirectoryCard({
   );
   if (embedded) {
     return (
-      <div data-testid="startup-directory-card" className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
-        {body}
+      <div data-testid="startup-directory-card" className="space-y-4 bg-transparent p-0 shadow-none">
+        <header className="space-y-2">
+          <div className="flex items-start gap-3">
+            <CompanyLogo name={card.name} websiteUrl={card.websiteUrl} />
+            <div className="min-w-0 flex-1">
+              {name}
+              {card.subtitle ? <p className="mt-1 text-[14px] leading-snug text-[color:var(--fg-2,#3F465C)]">{card.subtitle}</p> : null}
+              {card.sector ? (
+                <p className="mt-2">
+                  <span className="inline-flex rounded-sm border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--ember,#D96B1C)]/10 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)]">{card.sector}</span>
+                </p>
+              ) : null}
+            </div>
+          </div>
+          {card.description ? <p className="text-[15px] leading-snug text-[color:var(--fg,#0B0E17)]">{card.description}</p> : null}
+        </header>
+
+        <section>
+          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founders</h3>
+          {card.founders.length === 0 ? (
+            <p className="mt-2 text-sm text-[color:var(--fg-3,#5C647A)]">No founders on record.</p>
+          ) : (
+            <ul className="mt-2 space-y-2">
+              {card.founders.map((founder) => {
+                const meta = founderMeta(founder);
+                return (
+                  <li key={founder.id} className="flex items-center gap-3 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-2.5">
+                    <FounderAvatar name={founder.name} />
+                    <div className="min-w-0 flex-1">
+                      <p className="font-semibold text-[color:var(--fg,#0B0E17)]">{founder.name}</p>
+                      {founder.role ? <p className="text-sm text-[color:var(--fg-2,#3F465C)]">{founder.role}</p> : null}
+                      {meta ? (
+                        <p className="mt-0.5 flex items-start gap-1 text-xs text-[color:var(--fg-3,#5C647A)]">
+                          <SchoolIcon />
+                          <span>{meta}</span>
+                        </p>
+                      ) : null}
+                    </div>
+                    {founder.linkedinUrl && founder.linkedinConfidence === "confirmed" ? (
+                      <a
+                        href={founder.linkedinUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`LinkedIn for ${founder.name}`}
+                        title="Verified public LinkedIn profile"
+                        className="inline-flex shrink-0 items-center gap-1 rounded-md bg-[#0a66c2] px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-[#004182]"
+                      >
+                        in
+                      </a>
+                    ) : (
+                      <span className="shrink-0 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2 py-1 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
+                        Not on record
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
+
+        <section>
+          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Signals</h3>
+          <dl className="mt-2 space-y-1.5 text-sm text-[color:var(--fg,#0B0E17)]">
+            {card.region ? (
+              <div className="grid grid-cols-[6.5rem_1fr] gap-2">
+                <dt className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Region</dt>
+                <dd>{card.region}</dd>
+              </div>
+            ) : null}
+            {card.campuses.length > 0 ? (
+              <div className="grid grid-cols-[6.5rem_1fr] gap-2">
+                <dt className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">{card.campuses.length > 1 ? "Campuses" : "Campus"}</dt>
+                <dd>{card.campuses.join(", ")}</dd>
+              </div>
+            ) : null}
+            {card.status ? (
+              <div className="grid grid-cols-[6.5rem_1fr] gap-2">
+                <dt className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Status</dt>
+                <dd>{card.status}</dd>
+              </div>
+            ) : null}
+            {card.teamSize ? (
+              <div className="grid grid-cols-[6.5rem_1fr] gap-2">
+                <dt className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Team</dt>
+                <dd>{card.teamSize}</dd>
+              </div>
+            ) : null}
+          </dl>
+        </section>
+
+        <section>
+          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Links</h3>
+          {card.links.length > 0 ? (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {card.links.map((link) => (
+                <a
+                  key={link.kind}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-8 items-center gap-1.5 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[11px] text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                >
+                  <LinkMark kind={link.kind} />
+                  {LINK_LABEL[link.kind]}
+                </a>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-2 font-mono text-[11px] text-[color:var(--fg-3,#5C647A)]">Not on record</p>
+          )}
+        </section>
       </div>
     );
   }

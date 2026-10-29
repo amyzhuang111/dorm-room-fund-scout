@@ -607,14 +607,20 @@ export function BarRow({
 }
 
 export function SignalFeedRow({ company, index }: { company: FacetCompany; index: number }) {
-  const date = (company.latestSignalAt ?? "").replace(/-00/g, "") || "Date not stored";
+  const date = (company.latestSignalAt ?? "").replace(/-00/g, "") || "n/a";
+  const kind = company.signalLabel ?? "Signal";
   return (
-    <Link href={`/startup/${company.id}`} className="flex items-center gap-1.5 text-left text-[11px] hover:text-[color:var(--ember,#D96B1C)]">
-      <span className={`${COUNT} w-3 shrink-0 text-[10px]`}>{index + 1}</span>
-      <LogoMark name={company.name} logoUrl={company.logoUrl} size={16} />
-      <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#0B0E17)]">{company.name}</span>
-      <span className="shrink-0 tabular-nums text-[9px] text-[color:var(--fg-3,#5C647A)]">{date}</span>
-      <span className="shrink-0 rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-1 py-px text-[8px] text-[color:var(--fg-2,#3F465C)]">{company.signalLabel ?? "Signal"}</span>
+    <Link href={`/startup/${company.id}`} className="group flex items-start gap-2 rounded-md px-1 py-1.5 text-left hover:bg-[color:var(--bg-sunken,#F3F5F9)]">
+      <span className={`${COUNT} mt-0.5 w-4 shrink-0 text-[11px]`}>{index + 1}</span>
+      <LogoMark name={company.name} logoUrl={company.logoUrl} size={20} />
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-[12px] font-semibold leading-4 text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]">{company.name}</span>
+        <span className="mt-1 flex flex-wrap items-center gap-1">
+          <span className="inline-flex h-4 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[9px] font-medium text-[color:var(--cobalt,#2F4FD8)]">{kind}</span>
+          <span className="inline-flex h-4 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{date}</span>
+        </span>
+      </span>
+      {company.signals > 0 ? <span className={`${COUNT} mt-0.5 shrink-0 text-[11px]`}>{company.signals}</span> : null}
     </Link>
   );
 }
@@ -661,11 +667,11 @@ export function IntelligenceBoards({
   const founders = useMemo(() => topFounders(companies).slice(0, founderN), [companies, founderN]);
   const programs = useMemo(() => topPrograms(companies), [companies]);
   const maxProg = programs[0]?.count || 1;
-  const gap = "space-y-1.5";
-  const rowGap = "space-y-1";
+  const gap = "space-y-2";
+  const rowGap = "divide-y divide-[color:var(--line,#E1E5EF)]";
   return (
     <div className={gap}>
-      <Board title="Recent signals" unit="time · kind">
+      <Board title="Recent signals" unit="kind · date">
         <ol className={rowGap}>
           {recent.map((company, index) => (
             <li key={company.id}>
@@ -782,6 +788,49 @@ export function MobileBrowsePulse({ companies }: { companies: FacetCompany[] }) 
           ))}
         </ul>
       </div>
+    </div>
+  );
+}
+
+
+/** Mobile fold wire: always-filled monogram + name + count (no empty outline pills). */
+export function DispatchWire({
+  companies,
+  limit = 10,
+}: {
+  companies: FacetCompany[];
+  limit?: number;
+}) {
+  const rows = useMemo(() => {
+    return [...companies]
+      .filter((c) => c.name && c.name.trim())
+      .sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name))
+      .slice(0, limit);
+  }, [companies, limit]);
+  if (rows.length === 0) return null;
+  return (
+    <div className={`${PANEL} relative overflow-hidden p-2 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
+      <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
+        <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
+        <p className="font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">{rows.length} on desk</p>
+      </div>
+      <ul className="divide-y divide-[color:var(--line,#E1E5EF)]">
+        {rows.map((company, index) => {
+          const initials = companyInitials(company.name).slice(0, 2) || "·";
+          return (
+            <li key={company.id}>
+              <Link href={`/startup/${company.id}`} className="flex items-center gap-2 py-1.5 hover:bg-[color:var(--bg-sunken,#F3F5F9)]">
+                <span className={`${COUNT} w-4 shrink-0 text-center text-[10px]`}>{index + 1}</span>
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[9px] font-bold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>
+                  {initials}
+                </span>
+                <span className="min-w-0 flex-1 truncate text-[12px] font-medium text-[color:var(--fg,#0B0E17)]">{company.name}</span>
+                <span className={`${COUNT} shrink-0 text-[11px]`}>{company.signals.toLocaleString("en-US")}</span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

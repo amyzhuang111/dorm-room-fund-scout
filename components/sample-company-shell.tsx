@@ -9,49 +9,11 @@ import {
   emptyFacets,
   FacetRail,
   IntelligenceBoards,
-  sectorMix,
   COUNT,
   PANEL,
   type FacetState,
 } from "./sample-instrument";
 import { SampleTheme } from "./sample-theme";
-
-function MobileInstrumentStrip({ companies }: { companies: FacetCompany[] }) {
-  const mix = useMemo(() => sectorMix(companies).slice(0, 5), [companies]);
-  const signaled = companies.filter((c) => c.signals > 0).length;
-  const total = mix.reduce((sum, item) => sum + item.count, 0) || 1;
-  const dots = ["#2F4FD8", "#D96B1C", "#1F8A66", "#C47A12", "#7A4FBF"];
-  return (
-    <div className={`${PANEL} relative mb-2 overflow-hidden p-2 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#E8823A)]`}>
-      <div className="flex items-baseline justify-between gap-2">
-        <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Scout pulse</p>
-        <p className="text-[10px] text-[color:var(--fg-3,#6B7390)]">
-          <span className={COUNT}>{signaled.toLocaleString("en-US")}</span> signaled ·{" "}
-          <span className={COUNT}>{companies.length.toLocaleString("en-US")}</span> in view
-        </p>
-      </div>
-      <div className="mt-1.5 flex h-1.5 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#080A11)]">
-        {mix.map((item, index) => (
-          <div
-            key={item.id}
-            className="h-full"
-            style={{ width: `${Math.max(3, Math.round((item.count / total) * 100))}%`, background: dots[index % dots.length] }}
-            title={`${item.label}: ${item.count}`}
-          />
-        ))}
-      </div>
-      <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
-        {mix.slice(0, 4).map((item, index) => (
-          <span key={item.id} className="inline-flex items-center gap-1 text-[9px] text-[color:var(--fg-2,#A3AAC0)]">
-            <span className="h-1.5 w-1.5 rounded-full" style={{ background: dots[index % dots.length] }} aria-hidden />
-            {item.label}
-            <span className={COUNT}>{item.count}</span>
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 export function SampleCompanyShell({
   children,
@@ -65,6 +27,8 @@ export function SampleCompanyShell({
   const router = useRouter();
   const [facets, setFacets] = useState<FacetState>(emptyFacets);
   const filtered = useMemo(() => applyFacets(companies, facets), [companies, facets]);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [deskFiltersOpen, setDeskFiltersOpen] = useState(false);
 
   function onFacetChange(next: FacetState) {
     setFacets(next);
@@ -88,28 +52,66 @@ export function SampleCompanyShell({
     }
   }
 
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const signaled = filtered.filter((c) => c.signals > 0).length;
 
   return (
     <div className="sample-paper min-h-[calc(100dvh-48px)]">
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 sm:px-5">
-        <div className="mb-2 flex flex-wrap items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-          <Link href="/?sample=1#browse" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
-            ← Company ledger
-          </Link>
-          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</p>
+        {/* Scout Dispatch masthead — same signature as fold */}
+        <div className="mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <Link href="/?sample=1#browse" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
+                  ← Company ledger
+                </Link>
+                <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
+              </div>
+              <p className="mt-1 font-mono text-[36px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[44px]">
+                <span className="text-[color:var(--ember,#D96B1C)]">{filtered.length.toLocaleString("en-US")}</span>
+              </p>
+              <p className="mt-1 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies in this dispatch</p>
+              <p className="mt-0.5 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">
+                <span className={COUNT}>{signaled.toLocaleString("en-US")}</span> signaled
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof window !== "undefined" && window.innerWidth < 1024) setMobileFiltersOpen(true);
+                  else setDeskFiltersOpen((v) => !v);
+                }}
+                className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+              >
+                {deskFiltersOpen ? "Hide filters" : "Filters"}
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="grid gap-3 lg:grid-cols-[240px_minmax(0,1fr)_250px]">
+
+        {/* Asymmetric: one editorial column + dossier (no left filters / right boards sandwich) */}
+        <div className="grid gap-3 lg:grid-cols-[minmax(260px,300px)_minmax(0,1fr)]">
           <aside className="hidden min-w-0 lg:block">
-            <div className={`${PANEL} relative sticky top-14 h-[min(72vh,680px)] overflow-hidden p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
-              <p className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Scout filters</p>
-              <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={onFacetChange} />
+            <div className="sticky top-14 space-y-2">
+              {deskFiltersOpen ? (
+                <div className={`${PANEL} relative h-[min(72vh,680px)] overflow-hidden p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
+                  <p className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Scout filters</p>
+                  <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={onFacetChange} />
+                </div>
+              ) : (
+                <div className={`${PANEL} relative overflow-hidden p-2 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
+                  <p className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
+                  <IntelligenceBoards companies={filtered} compact hideSector />
+                </div>
+              )}
             </div>
           </aside>
           <div className="min-w-0">
-            <MobileInstrumentStrip companies={filtered} />
-            <div className="company-instrument relative overflow-hidden rounded-md border border-[color:var(--cobalt,#2F4FD8)]/30 border-l-[3px] border-l-[color:var(--ember,#D96B1C)] bg-[color:var(--bg-raised,#FFFFFF)] p-2.5 shadow-[inset_0_1px_0_rgba(47,79,216,0.12)] sm:p-3.5 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">{children}</div>
+            <div className="company-instrument relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 border-l-[3px] border-l-[color:var(--ember,#D96B1C)] bg-[color:var(--bg-raised,#FFFFFF)] p-3 sm:p-4 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
+              {children}
+            </div>
             <button
               type="button"
               onClick={() => setMobileFiltersOpen(true)}
@@ -118,14 +120,9 @@ export function SampleCompanyShell({
               <span>Scout filters</span>
               <span className="text-[color:var(--ember,#D96B1C)]">Open</span>
             </button>
-          </div>
-          <aside className="hidden min-w-0 lg:block">
-            <div className="sticky top-14 space-y-2">
+            <div className="mt-3 space-y-2 lg:hidden">
               <IntelligenceBoards companies={filtered} compact hideSector />
             </div>
-          </aside>
-          <div className="mt-3 space-y-2 lg:hidden">
-            <IntelligenceBoards companies={filtered} compact hideSector />
           </div>
         </div>
       </div>
