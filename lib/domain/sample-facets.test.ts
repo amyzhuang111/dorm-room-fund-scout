@@ -15,9 +15,11 @@ import {
   preferLogoCompanies,
   recencyOf,
   sectorBuckets,
+  sampleSurfaceCounts,
   sectorPills,
   signalsUnit,
   statusOf,
+  FLAG_LABEL,
 } from "./sample-facets";
 
 assert.equal(recencyOf("2026-10-01"), "month");
@@ -35,6 +37,8 @@ const rows = [
 assert.equal(statusOf(rows[0]), "active");
 assert.equal(statusOf(rows[1]), "closed");
 assert.equal(statusOf(rows[2]), "acquired");
+
+assert.equal(FLAG_LABEL.new, "Founded in 2026");
 assert.equal(newThisYear(2026), true);
 assert.equal(newThisYear(2025), false);
 assert.equal(activeThisMonth("2026-10-15"), true);
@@ -120,6 +124,11 @@ assert.equal(newCount, data.cards.filter((c) => c.foundedYear === 2026).length);
 assert.ok(activeCount < 50, `active this month should be a tight 30d window, got ${activeCount}`);
 const withLogo = data.cards.filter((c) => c.logoUrl).length;
 assert.ok(withLogo >= 1183, `expected favicons filled, got ${withLogo}`);
+const surface = sampleSurfaceCounts(data.cards, [{ id: "a" }, { id: "b" }]);
+assert.equal(surface.companies, data.cards.length);
+assert.equal(surface.campusesOnMap, 2);
+assert.equal(surface.foundersListed, data.cards.reduce((s, c) => s + (c.founders?.length ?? 0), 0));
+assert.ok(surface.foundersListed > 2000);
 
 const active = data.cards.filter((c) => statusOf(c) === "active").length;
 const acquired = data.cards.filter((c) => statusOf(c) === "acquired").length;

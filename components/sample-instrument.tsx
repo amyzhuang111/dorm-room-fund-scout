@@ -31,14 +31,29 @@ export const MUTED = "text-[color:var(--fg-2,#A3AAC0)]";
 export const COUNT = "font-bold tabular-nums text-[color:var(--ember,#E8823A)]";
 export const PANEL = "rounded-md border border-[color:var(--line,#1F2536)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg-raised,#121726)]/96 text-[color:var(--fg,#ECEEF4)] shadow-none";
 
+/** Real initials from the company name — intentional monogram, not an orange-dot stub. */
+export function companyInitials(name: string): string {
+  const cleaned = name.replace(/["""'']/g, " ").replace(/[^a-zA-Z0-9&+\s.-]/g, " ").trim();
+  const parts = cleaned.split(/[\s._-]+/).filter(Boolean).filter((p) => !/^(inc|llc|ltd|co|corp|the|and|&)$/i.test(p));
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) {
+    const w = parts[0]!;
+    if (/^[A-Z0-9]{2,4}$/.test(w)) return w.slice(0, 3).toUpperCase();
+    return w.slice(0, 2).toUpperCase();
+  }
+  return `${parts[0]!.charAt(0)}${parts[1]!.charAt(0)}`.toUpperCase();
+}
+
 function NeutralMark({ name, cls }: { name: string; cls: string }) {
+  const initials = companyInitials(name);
+  const mono = initials.length > 2 ? "text-[7px]" : initials.length > 1 ? "text-[8px]" : "text-[10px]";
   return (
     <span
-      className={`${cls} grid shrink-0 place-items-center rounded-md border border-[color:var(--cobalt-haze,#1A2556)] bg-[color:var(--cobalt-haze,#1A2556)]`}
+      className={`${cls} grid shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/50 bg-[linear-gradient(145deg,var(--cobalt-haze,#1A2556),#0E1428)] font-mono ${mono} font-semibold tracking-tight text-[color:var(--ember,#E8823A)]`}
       aria-hidden
       title={name}
     >
-      <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--ember,#E8823A)]" />
+      {initials}
     </span>
   );
 }
@@ -56,7 +71,7 @@ export function LogoMark({
 }) {
   void mark;
   const [failed, setFailed] = useState(false);
-  const cls = size <= 16 ? "h-4 w-4" : size <= 20 ? "h-5 w-5" : "h-6 w-6";
+  const cls = size <= 16 ? "h-4 w-4" : size <= 20 ? "h-5 w-5" : size <= 24 ? "h-6 w-6" : "h-7 w-7";
   if (!logoUrl || failed) {
     return <NeutralMark name={name} cls={cls} />;
   }
@@ -97,8 +112,8 @@ export function LogoPill({
         // eslint-disable-next-line @next/next/no-img-element
         <img src={logoUrl!} alt="" width={12} height={12} className="h-3 w-3 shrink-0 rounded-md border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] object-contain" onError={() => setFailed(true)} />
       ) : (
-        <span className="grid h-3 w-3 shrink-0 place-items-center rounded-sm bg-[color:var(--cobalt-haze,#1A2556)]" aria-hidden>
-          <span className="h-1 w-1 rounded-full bg-[color:var(--ember,#E8823A)]" />
+        <span className="grid h-3 w-3 shrink-0 place-items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--cobalt-haze,#1A2556)] font-mono text-[6px] font-semibold text-[color:var(--ember,#E8823A)]" aria-hidden>
+          {companyInitials(name).slice(0, 2)}
         </span>
       )}
       <span className="min-w-0 truncate">{name}</span>
@@ -123,6 +138,7 @@ function Chip({
   icon,
   facet,
   count,
+  emphasis,
 }: {
   active: boolean;
   label: string;
@@ -132,14 +148,21 @@ function Chip({
   /** Facet group id for DOM sum checks (e.g. sector, hq, year). */
   facet?: string;
   count?: number;
+  /** High-visibility chip for truncated "More" remainders. */
+  emphasis?: boolean;
 }) {
+  const tone = active
+    ? "border-[color:var(--ember,#E8823A)] bg-[color:var(--ember,#E8823A)] text-[#0B0E17]"
+    : emphasis
+      ? "border-[color:var(--ember,#E8823A)] bg-[color:var(--ember,#E8823A)]/15 text-[color:var(--ember,#E8823A)] shadow-[0_0_0_1px_rgba(232,130,58,0.25)] hover:bg-[color:var(--ember,#E8823A)]/25"
+      : "border-[color:var(--cobalt-haze,#1A2556)] bg-[color:var(--bg-sunken,#080A11)] text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--cobalt,#2F4FD8)]";
   return (
     <button
       type="button"
       onClick={onClick}
       data-facet={facet || undefined}
       data-facet-count={count != null ? String(count) : undefined}
-      className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-md border px-1.5 py-0.5 font-mono text-[10px] tracking-tight ${active ? "border-[color:var(--ember,#E8823A)] bg-[color:var(--ember,#E8823A)] text-[#0B0E17]" : "border-[color:var(--cobalt-haze,#1A2556)] bg-[color:var(--bg-sunken,#080A11)] text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--cobalt,#2F4FD8)]"}`}
+      className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-md border px-1.5 py-0.5 font-mono text-[10px] tracking-tight ${tone}`}
     >
       {dot ? <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: active ? "#0B0E17" : dot }} aria-hidden /> : null}
       {icon && !dot ? <span className="text-[9px] leading-none text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>{icon}</span> : null}
@@ -361,8 +384,9 @@ export function FacetRail({
               facet="hq-more"
               count={hqPills.moreCount}
               active={false}
+              emphasis
               onClick={() => setHqExpanded(true)}
-              label={`More · ${hqPills.moreCount}`}
+              label={`More cities · ${hqPills.moreCount}`}
             />
           ) : null}
         </FacetGroup>
@@ -393,8 +417,9 @@ export function FacetRail({
               facet="sector-more"
               count={sectorPack.moreCount}
               active={false}
+              emphasis
               onClick={() => setSectorExpanded(true)}
-              label={`More · ${sectorPack.moreCount}`}
+              label={`More sectors · ${sectorPack.moreCount}`}
             />
           ) : null}
         </FacetGroup>
@@ -542,13 +567,6 @@ export function BarRow({
   );
 }
 
-function initials(name: string): string {
-  const parts = name.split(/\s+/).filter(Boolean);
-  const first = (parts[0] ?? "").replace(/[^A-Za-z]/g, "");
-  const last = parts.length > 1 ? parts[parts.length - 1].replace(/[^A-Za-z]/g, "") : "";
-  return ((first[0] ?? "") + (last[0] ?? first[1] ?? "")).toUpperCase() || "?";
-}
-
 export function SignalFeedRow({ company, index }: { company: FacetCompany; index: number }) {
   const date = (company.latestSignalAt ?? "").replace(/-00/g, "") || "Date not stored";
   return (
@@ -569,11 +587,16 @@ export function FounderFeedRow({
   index: number;
 }) {
   return (
-    <Link href={`/startup/${person.companyId}`} className="flex items-center gap-1 text-left hover:text-[color:var(--ember,#E8823A)]" title={person.companyName}>
+    <Link href={`/startup/${person.companyId}`} className="flex items-center gap-1.5 text-left hover:text-[color:var(--ember,#E8823A)]" title={person.companyName}>
       <span className={`${COUNT} w-3 shrink-0 text-[10px]`}>{index + 1}</span>
-      <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full bg-[color:var(--bg-sunken,#080A11)] text-[7px] font-semibold text-[color:var(--ember,#E8823A)]" aria-hidden>
-        {initials(person.name)}
-      </span>
+      {person.logoUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={person.logoUrl} alt="" width={16} height={16} className="h-4 w-4 shrink-0 rounded-md border border-[color:var(--line,#1F2536)] object-contain" />
+      ) : (
+        <span className="grid h-4 w-4 shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/50 bg-[linear-gradient(145deg,var(--cobalt-haze,#1A2556),#0E1428)] font-mono text-[7px] font-semibold text-[color:var(--ember,#E8823A)]" aria-hidden>
+          {companyInitials(person.name)}
+        </span>
+      )}
       <span className="min-w-0 flex-1 truncate text-[11px] text-[color:var(--fg,#ECEEF4)]">
         {person.name}
         <span className="text-[color:var(--fg-3,#6B7390)]"> · {person.companyName}</span>
@@ -658,8 +681,8 @@ export function IntelligenceBoards({
               <li key={item.id}>
                 <div className="flex items-center gap-1.5 text-[11px]">
                   <span className={`${COUNT} w-3.5 shrink-0 text-[10px]`}>{index + 1}</span>
-                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md border border-[color:var(--cobalt-haze,#1A2556)] bg-[color:var(--cobalt-haze,#1A2556)]" aria-hidden title={item.label}>
-                    <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--ember,#E8823A)]" />
+                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/50 bg-[linear-gradient(145deg,var(--cobalt-haze,#1A2556),#0E1428)] font-mono text-[8px] font-semibold text-[color:var(--ember,#E8823A)]" aria-hidden title={item.label}>
+                    {companyInitials(item.label)}
                   </span>
                   <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#ECEEF4)]">{item.label}</span>
                   <span className={`${COUNT} shrink-0 text-[10px]`}>{item.count.toLocaleString("en-US")}</span>

@@ -94,16 +94,16 @@ export function SampleCompanyShell({
       <div className="mx-auto grid w-full max-w-[960px] gap-3 px-3 py-3 sm:px-5">
         <div className="min-w-0">
           <div className="mb-2 border-b border-[color:var(--line,#1F2536)] pb-2">
-            <Link href="/?sample=1#browse" className="text-[12px] font-medium text-[color:var(--ember,#E8823A)] hover:underline">
-              All startups
+            <Link href="/?sample=1#browse" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#E8823A)] hover:underline">
+              ← Company ledger
             </Link>
           </div>
           <MobileInstrumentStrip companies={filtered} />
-          <div className="company-instrument rounded-lg border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] p-1">{children}</div>
+          <div className="company-instrument rounded-md border border-[color:var(--line,#1F2536)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg-raised,#121726)] p-1">{children}</div>
           <div className="mt-3 space-y-2">
             <IntelligenceBoards companies={filtered} compact />
-            <details className="rounded-lg border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] px-2.5 py-2">
-              <summary className="cursor-pointer text-[12px] font-semibold text-[color:var(--fg,#ECEEF4)]">Filters</summary>
+            <details className={`${PANEL} px-2.5 py-2`}>
+              <summary className="cursor-pointer font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#ECEEF4)]">Scout filters</summary>
               <div className="mt-2 h-[min(45vh,360px)]">
                 <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={onFacetChange} />
               </div>

@@ -533,8 +533,49 @@ a, button {
 
 .sample-paper .company-instrument {
   font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  color: var(--fg);
 }
 .sample-paper .company-instrument h2 {
   font-size: 1.25rem;
   letter-spacing: -0.02em;
+  color: var(--fg) !important;
+}
+/* StartupDirectoryCard / CompanyDetail ship light surfaces; restyle inside sample. */
+.sample-paper .company-instrument .bg-white,
+.sample-paper .company-instrument [class*="bg-white"],
+.sample-paper .company-instrument .bg-neutral-50,
+.sample-paper .company-instrument .bg-neutral-100 {
+  background-color: var(--bg-sunken) !important;
+}
+.sample-paper .company-instrument .text-black,
+.sample-paper .company-instrument .text-neutral-900,
+.sample-paper .company-instrument .text-neutral-800 {
+  color: var(--fg) !important;
+}
+.sample-paper .company-instrument .text-neutral-600,
+.sample-paper .company-instrument .text-neutral-500,
+.sample-paper .company-instrument .text-muted {
+  color: var(--fg-2) !important;
+}
+.sample-paper .company-instrument .border-neutral-200,
+.sample-paper .company-instrument .border-border-c,
+.sample-paper .company-instrument .border-border {
+  border-color: var(--line) !important;
+}
+.sample-paper .company-instrument a.bg-accent {
+  background-color: var(--ember) !important;
+  color: var(--accent-foreground) !important;
+}
+.sample-paper .company-instrument .shadow-sm {
+  box-shadow: none !important;
+}
+
+
+
+.sample-paper .company-instrument .sample-ops-chrome {
+  display: none;
+}
+.sample-paper .company-instrument [class*="rounded-full"][class*="bg-ember"],
+.sample-paper .company-instrument .bg-ember {
+  background-color: color-mix(in oklab, var(--ember) 85%, black) !important;
 }

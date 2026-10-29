@@ -89,6 +89,13 @@ const sectorMore = sumRows(await collect(page, "sector-more"));
 const hq = sumRows(await collect(page, "hq"));
 const hqMore = sumRows(await collect(page, "hq-more"));
 const flags = await collect(page, "flag");
+const moreLabelsBefore = await page.evaluate(() => {
+  const root = document.querySelector('[data-facet-rail-active="1"]');
+  if (!root) return [];
+  return [...root.querySelectorAll('[data-facet="sector-more"], [data-facet="hq-more"]')].map((el) =>
+    (el.textContent || "").replace(/\s+/g, " ").trim(),
+  );
+});
 
 const sectorCovered = sector.sum + sectorMore.sum;
 const hqCovered = hq.sum + hqMore.sum;
@@ -109,10 +116,28 @@ const flagCounts = flags
   .filter((f) => !/^All\b/i.test(f.label))
   .map((f) => ({ label: f.label, count: Number(f.countAttr) || parseMidDotCount(f.label) || 0 }));
 
-const newC = flagCounts.find((f) => /new this year/i.test(f.label))?.count;
+const newC = flagCounts.find((f) => /founded in 2026/i.test(f.label))?.count;
 const actC = flagCounts.find((f) => /active this month/i.test(f.label))?.count;
 
+
+const strip = await page.evaluate(() => {
+  const root = document.querySelector("[data-sample-strip-counts]");
+  if (!root) return null;
+  const founders = root.querySelector('[data-count="founders-listed"]')?.textContent?.replace(/,/g, "");
+  const campuses = root.querySelector('[data-count="campuses-on-map"]')?.textContent?.replace(/,/g, "");
+  return { founders: Number(founders), campuses: Number(campuses) };
+});
+const fold = await page.evaluate(() => {
+  const root = document.querySelector("[data-fold-counts]");
+  if (!root) return null;
+  const founders = root.querySelector('[data-count="founders-listed"]')?.textContent?.replace(/,/g, "");
+  const campuses = root.querySelector('[data-count="campuses-on-map"]')?.textContent?.replace(/,/g, "");
+  return { founders: Number(founders), campuses: Number(campuses) };
+});
 const report = {
+  strip,
+  fold,
+  moreLabels: moreLabelsBefore,
   yearSum: year.sum,
   statusSum: status.sum,
   sectorCollapsed: sector.sum,
@@ -134,7 +159,16 @@ const report = {
     hqExpanded: hqExpanded.sum === TOTAL,
     flagsDiffer: newC != null && actC != null && newC !== actC,
     newIsFoundedYear: newC === 147,
+    foundedLabel: flagCounts.some((f) => /founded in 2026/i.test(f.label)),
     activeIsTight: actC != null && actC < 50,
+    countsAgree:
+      strip != null &&
+      fold != null &&
+      strip.founders === fold.founders &&
+      strip.campuses === fold.campuses &&
+      strip.founders > 0 &&
+      strip.campuses > 0,
+    moreObvious: moreLabelsBefore.some((l) => /more sectors/i.test(l)) && moreLabelsBefore.some((l) => /more cities/i.test(l)),
   },
 };
 

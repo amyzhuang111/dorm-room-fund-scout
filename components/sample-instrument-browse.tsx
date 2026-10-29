@@ -12,8 +12,11 @@ import {
   FacetRail,
   IntelligenceBoards,
   LogoMark,
+  PANEL,
+  COUNT,
   type FacetState,
 } from "./sample-instrument";
+import { FLAG_LABEL } from "@/lib/domain/sample-facets";
 
 type Feed = "directory" | "leaderboard";
 
@@ -107,21 +110,26 @@ export function SampleInstrumentBrowse({
     }
   }
 
+  const chip = (active: boolean) =>
+    active
+      ? "border-[color:var(--ember,#E8823A)] bg-[color:var(--ember,#E8823A)] text-[#0B0E17]"
+      : "border-[color:var(--cobalt-haze,#1A2556)] bg-[color:var(--bg-sunken,#080A11)] font-mono text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--cobalt,#2F4FD8)]";
+
   return (
     <div className="mx-auto mt-3 grid w-full max-w-[1100px] gap-3">
       <div className="min-w-0">
-        <div className="mb-2 flex flex-wrap items-end justify-between gap-2">
+        <div className={`${PANEL} mb-2 flex flex-wrap items-end justify-between gap-2 p-2.5`}>
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-[color:var(--fg-3,#6B7390)]">{feed === "leaderboard" ? "Leaderboard" : "Directory"}</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">{feed === "leaderboard" ? "Signal ledger" : "Company ledger"}</p>
             <p className="mt-0.5 text-[13px] text-[color:var(--fg-2,#A3AAC0)]">
-              Showing <span className="font-bold tabular-nums text-[color:var(--ember,#E8823A)]">{total.toLocaleString("en-US")}</span>{" "}
+              <span className={COUNT}>{total.toLocaleString("en-US")}</span>{" "}
               {total === 1 ? "company" : "companies"}
               {campusName ? (
                 <>
                   {" · "}
                   {campusName}
                   {" · "}
-                  <Link href={clearCampusHref} className="text-[color:var(--fg,#ECEEF4)] hover:underline">
+                  <Link href={clearCampusHref} className="text-[color:var(--ember,#E8823A)] hover:underline">
                     Clear
                   </Link>
                 </>
@@ -140,7 +148,7 @@ export function SampleInstrumentBrowse({
                 <Link
                   key={id}
                   href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
-                  className={`inline-flex h-6 items-center rounded-full border px-2 text-[11px] ${sort === id ? "border-[color:var(--ember,#E8823A)] bg-[color:var(--ember,#E8823A)] text-white" : "border-[color:var(--line,#1F2536)] text-[color:var(--fg,#ECEEF4)]"}`}
+                  className={`inline-flex h-6 items-center rounded-md border px-2 text-[11px] ${chip(sort === id)}`}
                 >
                   {label}
                 </Link>
@@ -157,7 +165,7 @@ export function SampleInstrumentBrowse({
                   key={year}
                   type="button"
                   onClick={() => commitFacet({ ...facets, foundedYear: active ? null : year })}
-                  className={`inline-flex h-6 items-center rounded-full border px-2 text-[11px] ${active ? "border-[color:var(--ember,#E8823A)] bg-[color:var(--ember,#E8823A)] text-white" : "border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] text-[color:var(--fg,#ECEEF4)]"}`}
+                  className={`inline-flex h-6 items-center rounded-md border px-2 text-[11px] ${chip(active)}`}
                 >
                   {year}
                 </button>
@@ -165,10 +173,10 @@ export function SampleInstrumentBrowse({
             })}
             {(
               [
-                ["flag", "new", "New this year"],
-                ["flag", "signaled", "Active this month"],
-                ["flag", "funded", "Raised funding"],
-                ["flag", "founders", "Founders listed"],
+                ["flag", "new", FLAG_LABEL.new],
+                ["flag", "signaled", FLAG_LABEL.signaled],
+                ["flag", "funded", FLAG_LABEL.funded],
+                ["flag", "founders", FLAG_LABEL.founders],
                 ["status", "active", "Active"],
                 ["status", "acquired", "Acquired"],
               ] as const
@@ -185,16 +193,16 @@ export function SampleInstrumentBrowse({
                       status: kind === "status" ? (facets.status === id ? null : (id as FacetState["status"])) : facets.status,
                     })
                   }
-                  className={`inline-flex h-6 items-center rounded-full border px-2 text-[11px] ${active ? "border-[color:var(--ember,#E8823A)] bg-[color:var(--ember,#E8823A)] text-white" : "border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] text-[color:var(--fg,#ECEEF4)]"}`}
+                  className={`inline-flex h-6 items-center rounded-md border px-2 text-[11px] ${chip(Boolean(active))}`}
                 >
                   {label}
                 </button>
               );
             })}
           </div>
-          <details className="rounded-xl border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] px-2.5 py-2">
-            <summary className="cursor-pointer text-[12px] font-semibold text-[color:var(--fg,#ECEEF4)]">All filters</summary>
-            <div className="mt-2 h-[min(50vh,380px)]">
+          <details className={`${PANEL} px-2.5 py-2`}>
+            <summary className="cursor-pointer font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#ECEEF4)]">Scout filters</summary>
+            <div className="mt-2 h-[min(50vh,420px)]">
               <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={commitFacet} />
             </div>
           </details>
@@ -208,7 +216,7 @@ export function SampleInstrumentBrowse({
                 : "No companies in this category."}
           </p>
         ) : (
-          <ol className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+          <ol className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
             {cards.map((card, index) => (
               <li key={card.id}>
                 <DirectoryPill card={card} rank={feed === "leaderboard" ? (pages - 1) * 5 + index + 1 : null} />
@@ -217,7 +225,7 @@ export function SampleInstrumentBrowse({
           </ol>
         )}
         {cards.length < total ? (
-          <Link href={moreHref} className="mt-3 inline-flex h-8 items-center rounded-full border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] px-3 text-[12px] font-medium text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--ember,#E8823A)]">
+          <Link href={moreHref} className="mt-3 inline-flex h-8 items-center rounded-md border border-[color:var(--ember,#E8823A)]/50 bg-[color:var(--ember,#E8823A)]/10 px-3 font-mono text-[12px] font-medium text-[color:var(--ember,#E8823A)] hover:border-[color:var(--ember,#E8823A)]">
             Show more
           </Link>
         ) : null}
@@ -261,12 +269,12 @@ function DirectoryPill({ card, rank }: { card: DirectoryCard; rank: number | nul
   const subtitle = directoryCardSubtitle(card);
   const meta = signalMeta(card);
   return (
-    <Link href={`/startup/${card.id}`} className="flex items-center gap-2 rounded-md border border-[color:var(--line,#1F2536)] border-l-2 border-l-[color:var(--cobalt-haze,#1A2556)] bg-[color:var(--bg-raised,#121726)] px-2 py-1.5 hover:border-l-[color:var(--ember,#E8823A)]">
-      {rank != null ? <span className="w-4 shrink-0 text-center font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#E8823A)]">{rank}</span> : null}
-      <LogoMark name={card.name} logoUrl={card.logoUrl} />
+    <Link href={`/startup/${card.id}`} className="flex items-center gap-2.5 rounded-md border border-[color:var(--line,#1F2536)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg-raised,#121726)] px-2.5 py-2 hover:border-l-[color:var(--ember,#E8823A)]">
+      {rank != null ? <span className="w-5 shrink-0 text-center font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#E8823A)]">{rank}</span> : null}
+      <LogoMark name={card.name} logoUrl={card.logoUrl} size={28} />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[12px] font-medium text-[color:var(--fg,#ECEEF4)]">{card.name}</p>
-        {subtitle ? <p className="truncate text-[10px] text-[color:var(--fg-3,#6B7390)]">{subtitle}</p> : null}
+        <p className="truncate text-[13px] font-medium tracking-tight text-[color:var(--fg,#ECEEF4)]">{card.name}</p>
+        {subtitle ? <p className="truncate font-mono text-[10px] text-[color:var(--fg-3,#6B7390)]">{subtitle}</p> : null}
       </div>
       {meta ? (
         <div className="max-w-[4.5rem] shrink-0 text-right">

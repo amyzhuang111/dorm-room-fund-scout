@@ -45,7 +45,11 @@ export function GlobeHero({ stats, companies = [], showGlobe = true }: { stats: 
   return (
     <div className={showGlobe ? "bg-[#0B0E17] px-4 py-1.5 text-[color:var(--fg,#ECEEF4)] sm:px-5 lg:py-1" : "bg-bg px-6 py-6 text-fg"}>
       <div className={showGlobe ? "max-lg:min-h-[calc(100svh-48px)] lg:min-h-[calc(100dvh-48px)]" : ""}>
-        <SignatureBand stats={stats} globe={showGlobe ? <GlobeBlock stats={stats} companies={companies} /> : null} />
+        <SignatureBand
+          stats={stats}
+          companies={companies}
+          globe={showGlobe ? <GlobeBlock stats={stats} companies={companies} /> : null}
+        />
       </div>
       {/* Collage teasers compete with Directory tabs on mobile browse; instrument rails carry signals instead. */}
       {!showGlobe ? (
@@ -234,17 +238,21 @@ function HeroActions({ cream = false, compact = false }: { cream?: boolean; comp
   );
 }
 
-function SignatureBand({ stats, globe }: { stats: HeroStats; globe?: ReactNode }) {
+function SignatureBand({ stats, companies = [], globe }: { stats: HeroStats; companies?: TileCompany[]; globe?: ReactNode }) {
+  // Same source of truth as the fold instrument: founders listed on directory
+  // companies + campuses with coordinates on the map (not the full scout roster).
+  const campusesOnMap = plottedCampuses(stats).length;
+  const foundersListed = companies.reduce((sum, company) => sum + (company.founders?.length ?? 0), 0);
   if (globe) {
     return (
       <section className="-mx-4 px-0 pb-1 sm:-mx-5" aria-label="Campus Scout">
         <div className="mb-1 flex flex-wrap items-center gap-2">
           <SamplePill />
-          <p className="text-[12px] leading-4 text-[color:var(--fg-2,#A3AAC0)] sm:text-[13px]">
-            <span className="font-bold tabular-nums text-[color:var(--ember,#E8823A)]">{stats.founders.toLocaleString("en-US")}</span>
-            {" founders · "}
-            <span className="font-bold tabular-nums text-[color:var(--ember,#E8823A)]">{stats.campuses.toLocaleString("en-US")}</span>
-            {" campuses"}
+          <p className="text-[12px] leading-4 text-[color:var(--fg-2,#A3AAC0)] sm:text-[13px]" data-sample-strip-counts>
+            <span className="font-bold tabular-nums text-[color:var(--ember,#E8823A)]" data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
+            {" founders listed · "}
+            <span className="font-bold tabular-nums text-[color:var(--ember,#E8823A)]" data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
+            {" campuses on map"}
           </p>
         </div>
         <div className="min-h-0">{globe}</div>

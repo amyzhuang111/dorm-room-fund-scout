@@ -32,17 +32,25 @@ function personInitials(name: string): string {
   return `${parts[0].charAt(0)}${parts[parts.length - 1].charAt(0)}`.toUpperCase();
 }
 
+function companyInitials(name: string): string {
+  const cleaned = name.replace(/[^a-zA-Z0-9&+\s.-]/g, " ").trim();
+  const parts = cleaned.split(/[\s._-]+/).filter(Boolean).filter((p) => !/^(inc|llc|ltd|co|corp|the|and|&)$/i.test(p));
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) return parts[0]!.slice(0, 2).toUpperCase();
+  return `${parts[0]!.charAt(0)}${parts[1]!.charAt(0)}`.toUpperCase();
+}
+
 function CompanyLogo({ name, websiteUrl }: { name: string; websiteUrl: string | null }) {
   const [failed, setFailed] = useState(false);
   const src = websiteUrl && !failed ? faviconUrlForWebsite(websiteUrl) : null;
   if (!src) {
     return (
       <div
-        className="grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-[#1A2556] bg-[#1A2556] shadow-sm"
+        className="grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-[#2F4FD8]/55 bg-[linear-gradient(145deg,#1A2556,#0E1428)] font-mono text-[18px] font-semibold tracking-tight text-[#E8823A] shadow-sm"
         aria-hidden
         title={name}
       >
-        <span className="h-3 w-3 rounded-full bg-[#E8823A]" />
+        {companyInitials(name)}
       </div>
     );
   }

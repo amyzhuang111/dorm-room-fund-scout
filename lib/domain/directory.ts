@@ -61,8 +61,8 @@ const SIGNAL_LABEL = {
   acquisition: "Acquisition",
 } as const;
 
-const DIRECTORY_LIMIT = 5;
-const LEADERBOARD_LIMIT = 5;
+const DIRECTORY_LIMIT = 10;
+const LEADERBOARD_LIMIT = 10;
 const LOGO_FACT_KEYS = new Set(["logo", "favicon", "logo_url", "favicon_url"]);
 const STAGE_ORDER = ["Pre-seed", "Seed", "Series A", "Series B", "Series C", "Venture"];
 
@@ -87,6 +87,13 @@ function httpUrl(value: string | null | undefined): string | null {
 }
 
 
+/** Hosts that are never a company mark (aggregators, schools, incubators, social). */
+const NON_COMPANY_HOST =
+  /(?:^|\.)(google|github|linkedin|twitter|x|notion|medium|devpost|producthunt|facebook|instagram|youtube|crunchbase|angel|wellfound|substack|businesswire|techcrunch|geekwire|pulse2|freeventures|velocityincubator|ycombinator|techstars|startupschool|skydeck|venturelab|southparkcommons|luma|pitchbook)\./i;
+
+const SCHOOL_OR_NEWS_HOST =
+  /(?:\.edu|\.ac\.uk|university|utoronto|emorybusiness|thedp\.com|hypepotamus|grepbeat|entrepreneurs\.|speedrun\.a16z)/i;
+
 /** Deterministic favicon URL from a website host (same google s2 pattern already stored in facts). */
 export function faviconFromWebsiteHost(websiteUrl: string | null | undefined): string | null {
   const direct = httpUrl(websiteUrl);
@@ -94,11 +101,7 @@ export function faviconFromWebsiteHost(websiteUrl: string | null | undefined): s
   try {
     const host = new URL(direct).hostname.replace(/^www\./i, "");
     if (!host || host === "localhost" || !host.includes(".")) return null;
-    // Skip generic hosts that are not a company mark.
-    if (/^(docs\.google|github|linkedin|twitter|x|notion|medium|devpost|producthunt)\./i.test(host) ||
-        /^(github|linkedin|twitter|x|notion|medium|devpost|producthunt)\.com$/i.test(host)) {
-      return null;
-    }
+    if (NON_COMPANY_HOST.test(host + ".") || SCHOOL_OR_NEWS_HOST.test(host)) return null;
     return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=128`;
   } catch {
     return null;
@@ -328,6 +331,23 @@ export function loadDirectory(): DirectoryData {
     .all() as { id: string; website_url: string }[]) {
     websiteByProject.set(row.id, row.website_url);
   }
+  // Own-domain primary links only when the host is unique to one project (not a shared listing page).
+  const primaryHostCount = new Map<string, number>();
+  const primaryByProject = new Map<string, string>();
+  for (const row of db
+    .prepare(`SELECT id, primary_link FROM projects WHERE primary_link IS NOT NULL AND trim(primary_link) != ''`)
+    .all() as { id: string; primary_link: string }[]) {
+    const direct = httpUrl(row.primary_link);
+    if (!direct) continue;
+    try {
+      const host = new URL(direct).hostname.replace(/^www\./i, "");
+      if (!host) continue;
+      primaryHostCount.set(host, (primaryHostCount.get(host) ?? 0) + 1);
+      primaryByProject.set(row.id, direct);
+    } catch {
+      /* ignore */
+    }
+  }
 
   const cards: DirectoryCard[] = [];
   for (const company of companies) {
@@ -341,7 +361,19 @@ export function loadDirectory(): DirectoryData {
     }
     const signalKind = signalByProject.get(company.id) ?? null;
     const storedLogo = logoByProject.get(company.id) ?? null;
-    const derivedLogo = storedLogo ?? faviconFromWebsiteHost(websiteByProject.get(company.id));
+    let site = websiteByProject.get(company.id);
+    if (!site) {
+      const primary = primaryByProject.get(company.id);
+      if (primary) {
+        try {
+          const host = new URL(primary).hostname.replace(/^www\./i, "");
+          if ((primaryHostCount.get(host) ?? 0) === 1) site = primary;
+        } catch {
+          /* ignore */
+        }
+      }
+    }
+    const derivedLogo = storedLogo ?? faviconFromWebsiteHost(site);
     cards.push({
       id: company.id,
       name: company.name,

@@ -67,7 +67,7 @@ export const STATUS_LABEL: Record<StatusId, string> = {
 };
 
 export const FLAG_LABEL: Record<FlagId, string> = {
-  new: "New this year",
+  new: "Founded in 2026",
   signaled: "Active this month",
   funded: "Raised funding",
   founders: "Founders listed",
@@ -290,4 +290,19 @@ export function preferLogoCompanies<T extends { logoUrl?: string | null; name: s
     else without.push(company);
   }
   return [...withLogo, ...without];
+}
+
+
+/** Single source of truth for sample instrument surfaces (fold, strip, browse, DOM tests). */
+export function sampleSurfaceCounts(
+  companies: { founders?: readonly unknown[] | null }[],
+  campuses: { id: string }[],
+): { companies: number; foundersListed: number; campusesOnMap: number } {
+  let foundersListed = 0;
+  for (const company of companies) foundersListed += company.founders?.length ?? 0;
+  return {
+    companies: companies.length,
+    foundersListed,
+    campusesOnMap: campuses.length,
+  };
 }

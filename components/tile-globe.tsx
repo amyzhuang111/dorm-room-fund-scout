@@ -10,6 +10,7 @@ import {
   emptyFacets,
   FacetRail,
   IntelligenceBoards,
+  PANEL,
   preferLogoCompanies,
   ViewDrawer,
   type FacetState,
@@ -361,10 +362,10 @@ export function TileGlobe({
               <span className={`${COUNT} font-mono text-[24px]`}>{liveCount.toLocaleString("en-US")}</span>
               {" companies forming"}
             </p>
-            <p className="mt-1 font-mono text-[12px] text-[color:var(--fg-2,#A3AAC0)]">
-              <span className={COUNT}>{shown.length.toLocaleString("en-US")}</span> campuses
+            <p className="mt-1 font-mono text-[12px] text-[color:var(--fg-2,#A3AAC0)]" data-fold-counts>
+              <span className={COUNT} data-count="campuses-on-map">{shown.length.toLocaleString("en-US")}</span> campuses on map
               {" · "}
-              <span className={COUNT}>{founderCount.toLocaleString("en-US")}</span> founders listed
+              <span className={COUNT} data-count="founders-listed">{founderCount.toLocaleString("en-US")}</span> founders listed
             </p>
             <div className="mt-3 flex flex-wrap gap-1">
               <button
@@ -434,11 +435,15 @@ export function TileGlobe({
       </div>
       {/* Mobile: brief + filters sheet, no YC three-pane clone */}
       <div className="mt-2 space-y-2 lg:hidden">
-        <div className="rounded-lg border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] p-2.5">
-          <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#6B7390)]">Live · campus scout</p>
-          <p className="mt-1 text-[15px] font-semibold">
-            <span className={COUNT}>{liveCount.toLocaleString("en-US")}</span> companies ·{" "}
-            <span className={COUNT}>{shown.length.toLocaleString("en-US")}</span> campuses
+        <div className={`${PANEL} p-2.5`}>
+          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Live · campus scout</p>
+          <p className="mt-1 text-[15px] font-semibold" data-fold-counts-mobile>
+            <span className={COUNT}>{liveCount.toLocaleString("en-US")}</span> companies
+          </p>
+          <p className="mt-0.5 font-mono text-[11px] text-[color:var(--fg-2,#A3AAC0)]">
+            <span className={COUNT} data-count="campuses-on-map">{shown.length.toLocaleString("en-US")}</span> campuses on map
+            {" · "}
+            <span className={COUNT} data-count="founders-listed">{founderCount.toLocaleString("en-US")}</span> founders listed
           </p>
         </div>
         <ViewDrawer
@@ -449,8 +454,8 @@ export function TileGlobe({
           companyTotal={filteredCompanies.length}
           founderTotal={founderTotalListed}
         />
-        <details className="rounded-lg border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] px-2.5 py-2">
-          <summary className="cursor-pointer text-[12px] font-semibold">Filters · {shown.length} campuses</summary>
+        <details className={`${PANEL} px-2.5 py-2`}>
+          <summary className="cursor-pointer font-mono text-[11px] font-semibold uppercase tracking-[0.08em]">Scout filters · {shown.length} campuses</summary>
           <div className="mt-2 h-[320px]">
             <FacetRail
               companies={companies}
@@ -461,7 +466,7 @@ export function TileGlobe({
                 const campus = campuses.find((row) => row.id === id);
                 if (campus) focus(campus);
               }}
-              footer={markerSizeLegend()}
+              footer={<p>{markerSizeLegend()}</p>}
             />
           </div>
         </details>

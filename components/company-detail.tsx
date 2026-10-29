@@ -109,7 +109,9 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
             ))}
           </p>
         )}
-        <FeedbackControls entityType="project" entityId={project.id} name={project.name} url={project.websiteUrl || project.primaryLink} />
+        <div className="sample-ops-chrome">
+          <FeedbackControls entityType="project" entityId={project.id} name={project.name} url={project.websiteUrl || project.primaryLink} />
+        </div>
       </div>
 
       {/* Above the fold: why look / founder edge / open question */}
