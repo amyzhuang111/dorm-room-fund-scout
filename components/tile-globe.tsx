@@ -394,6 +394,8 @@ export function TileGlobe({
                   campuses={campuses}
                   facets={facets}
                   onChange={onFacetChange}
+                  sheet
+                  caption="Narrow the map"
                   onCampusFocus={(id) => {
                     const campus = campuses.find((row) => row.id === id);
                     if (campus) focus(campus);
@@ -407,7 +409,7 @@ export function TileGlobe({
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
                   <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{filteredCompanies.length.toLocaleString("en-US")}</p>
                 </div>
-                <IntelligenceBoards companies={filteredCompanies} compact />
+                <IntelligenceBoards companies={filteredCompanies} compact surface="fold" />
               </div>
             )}
           </div>
@@ -439,7 +441,7 @@ export function TileGlobe({
       {/* Mobile: Dispatch wire (named tiles with counts) + boards */}
       <div className="mt-2 space-y-2 lg:hidden" data-fold-counts-mobile>
         <DispatchWire companies={filteredCompanies} limit={8} />
-        <IntelligenceBoards companies={filteredCompanies} compact />
+        <IntelligenceBoards companies={filteredCompanies} compact surface="fold" />
       </div>
       {mobileFiltersOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">

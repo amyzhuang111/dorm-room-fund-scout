@@ -43,9 +43,16 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
       country: university.country?.trim() || "Unknown",
       founders: university.founderCount,
     }));
+  const card = getStartupCard(project.id);
+  const directoryRow = data.cards.find((row) => row.id === project.id);
+  const dossier = {
+    name: card?.name ?? project.name,
+    campus: card?.campuses?.[0] ?? directoryRow?.school ?? null,
+    year: directoryRow?.foundedYear ?? null,
+  };
   return (
-    <SampleCompanyShell companies={companies} campuses={campuses}>
-      <CompanyDetail project={project} initialCard={getStartupCard(project.id)} />
+    <SampleCompanyShell companies={companies} campuses={campuses} dossier={dossier}>
+      <CompanyDetail project={project} initialCard={card} />
     </SampleCompanyShell>
   );
 }

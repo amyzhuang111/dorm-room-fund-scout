@@ -19,10 +19,13 @@ export function SampleCompanyShell({
   children,
   companies,
   campuses,
+  dossier,
 }: {
   children: ReactNode;
   companies: FacetCompany[];
   campuses: { id: string; name: string; country: string; founders: number }[];
+  /** Local company beat — name / campus / year. Not the global dispatch count. */
+  dossier?: { name: string; campus?: string | null; year?: number | null };
 }) {
   const router = useRouter();
   const [facets, setFacets] = useState<FacetState>(emptyFacets);
@@ -58,8 +61,8 @@ export function SampleCompanyShell({
     <div className="sample-paper min-h-[calc(100dvh-48px)]">
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 sm:px-5">
-        {/* Scout Dispatch masthead — same signature as fold */}
-        <div className="mb-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+        {/* Dossier hero — company name / campus / year, not the global 2,513 stamp */}
+        <div className="mb-2 border-b border-[color:var(--line,#E1E5EF)] pb-2" data-dossier-hero="">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
@@ -68,18 +71,35 @@ export function SampleCompanyShell({
                 </Link>
                 <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
               </div>
-              <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
-                <span className="text-[color:var(--ember,#D96B1C)]">{filtered.length.toLocaleString("en-US")}</span>
-              </p>
-              <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies in this dispatch</p>
-              <p className="mt-0.5 flex items-baseline gap-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                <span>
-                  <span className={COUNT}>{signaled.toLocaleString("en-US")}</span>
-                  {" signaled"}
-                </span>
-                <span className="text-[color:var(--fg-3,#5C647A)]">·</span>
-                <span className="uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Wire</span>
-              </p>
+              {dossier?.name ? (
+                <>
+                  <p className="mt-1 text-[28px] font-bold leading-[1.05] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[36px]">
+                    {dossier.name}
+                  </p>
+                  <p className="mt-1 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:text-[13px]">
+                    {dossier.campus ? <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.campus}</span> : <span>Campus not on record</span>}
+                    {" · "}
+                    {dossier.year != null ? (
+                      <span>
+                        <span className={COUNT}>{dossier.year}</span>
+                        {" founded"}
+                      </span>
+                    ) : (
+                      <span>Year not on record</span>
+                    )}
+                  </p>
+                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">
+                    Dossier wire · {signaled.toLocaleString("en-US")} signaled nearby
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
+                    <span className="text-[color:var(--ember,#D96B1C)]">{filtered.length.toLocaleString("en-US")}</span>
+                  </p>
+                  <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies in this dispatch</p>
+                </>
+              )}
             </div>
             <div className="flex flex-wrap gap-1.5">
               <button
@@ -102,15 +122,22 @@ export function SampleCompanyShell({
             <div className="sticky top-14 space-y-2">
               {deskFiltersOpen ? (
                 <div className="h-[min(70vh,640px)]">
-                  <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={onFacetChange} />
+                  <FacetRail
+                    companies={companies}
+                    campuses={campuses}
+                    facets={facets}
+                    onChange={onFacetChange}
+                    sheet
+                    caption="Narrow the ledger"
+                  />
                 </div>
               ) : (
                 <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
                   <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Dossier wire</p>
                     <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{filtered.length.toLocaleString("en-US")}</p>
                   </div>
-                  <IntelligenceBoards companies={filtered} compact hideSector />
+                  <IntelligenceBoards companies={filtered} compact hideSector surface="company" />
                 </div>
               )}
             </div>
@@ -128,7 +155,7 @@ export function SampleCompanyShell({
                 <span className={COUNT}>{signaled.toLocaleString("en-US")}</span>
                 {" signaled in this dispatch"}
               </p>
-              <IntelligenceBoards companies={filtered} compact hideSector />
+              <IntelligenceBoards companies={filtered} compact hideSector surface="company" />
             </div>
           </div>
         </div>

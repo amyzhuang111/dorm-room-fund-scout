@@ -243,6 +243,8 @@ export function FacetRail({
   footer,
   searchPlaceholder = "Search company or founder",
   dense = false,
+  sheet = false,
+  caption = "Narrow the map",
 }: {
   companies: FacetCompany[];
   campuses: { id: string; name: string; country: string; founders: number }[];
@@ -253,6 +255,10 @@ export function FacetRail({
   searchPlaceholder?: string;
   /** Drop outer chrome when nested in a modal/details that already labels Scout filters. */
   dense?: boolean;
+  /** Editorial filter-sheet chrome (desktop aside + mobile sheet language). */
+  sheet?: boolean;
+  /** Sheet/desk title under Scout filters (map vs ledger). */
+  caption?: string;
 }) {
   const countryScoped = useMemo(() => {
     if (!facets.country) return campuses;
@@ -323,13 +329,24 @@ export function FacetRail({
     onChange({ ...facets, ...partial });
   }
 
+  // Sheet + dense share cobalt kickers / Status pin; sheet adds editorial outer chrome for desk.
+  const editorial = dense || sheet;
+  const shell = sheet
+    ? "relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]"
+    : dense
+      ? ""
+      : PANEL;
+
   return (
-    <div className={`flex h-full min-h-0 flex-col overflow-hidden ${dense ? "" : PANEL}`} data-facet-rail="scout">
-      <div className={`border-b border-[color:var(--line,#E1E5EF)] ${dense ? "px-1.5 py-1.5" : "px-2.5 py-2"}`}>
-        {dense ? null : (
+    <div className={`flex h-full min-h-0 flex-col overflow-hidden ${shell}`} data-facet-rail="scout" data-facet-sheet={sheet ? "1" : undefined}>
+      <div className={`border-b border-[color:var(--line,#E1E5EF)] ${editorial ? "px-2 py-2" : "px-2.5 py-2"}`}>
+        {dense && !sheet ? null : (
           <>
-            <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">Scout filters</p>
-            <p className="mt-0.5 text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the map</p>
+            <p className={`font-mono text-[10px] uppercase ${sheet || dense ? "tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]" : "tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]"}`}>Scout filters</p>
+            <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{caption}</p>
+            {sheet ? (
+              <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Status · Year · Sector · Campus</p>
+            ) : null}
           </>
         )}
         <label className="sr-only" htmlFor="sample-facet-q">
@@ -341,10 +358,10 @@ export function FacetRail({
           value={facets.query}
           onChange={(event) => set({ query: event.target.value })}
           placeholder={searchPlaceholder}
-          className={`${dense ? "mt-0" : "mt-1.5"} h-7 w-full rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2 text-[11px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)]`}
+          className={`${dense && !sheet ? "mt-0" : "mt-1.5"} h-7 w-full rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2 text-[11px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)]`}
         />
       </div>
-      {dense ? (
+      {editorial ? (
         <div className="shrink-0 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5" data-facet-status-pin="">
           <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Status</p>
           <div className="mt-1.5 flex flex-wrap gap-1">
@@ -356,21 +373,21 @@ export function FacetRail({
         </div>
       ) : null}
       <div className="min-h-0 flex-1 overflow-y-auto">
-        {dense ? null : (
-          <FacetGroup title="Status" dense={dense}>
+        {editorial ? null : (
+          <FacetGroup title="Status" dense={editorial}>
             <Chip facet="status" count={baseCompanies.length} active={!facets.status} onClick={() => set({ status: null })} label={`All · ${baseCompanies.length}`} />
             {statuses.map((item) => (
               <Chip key={item.id} facet="status" count={item.count} active={facets.status === item.id} onClick={() => set({ status: facets.status === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} dot={STATUS_DOT[item.id]} />
             ))}
           </FacetGroup>
         )}
-        <FacetGroup title="Flags" dense={dense}>
+        <FacetGroup title="Flags" dense={editorial}>
           <Chip facet="flag" active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
           {flags.map((item) => (
             <Chip key={item.id} facet="flag" count={item.count} active={facets.flag === item.id} onClick={() => set({ flag: facets.flag === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} icon={FLAG_ICON[item.id]} />
           ))}
         </FacetGroup>
-        <FacetGroup title="Founded year" dense={dense}>
+        <FacetGroup title="Founded year" dense={editorial}>
           <Chip
             facet="year"
             count={baseCompanies.length}
@@ -399,7 +416,7 @@ export function FacetRail({
             );
           })}
         </FacetGroup>
-        <FacetGroup title="HQ city" dense={dense}>
+        <FacetGroup title="HQ city" dense={editorial}>
           <Chip facet="hq" count={baseCompanies.length} active={!facets.hqRegion} onClick={() => set({ hqRegion: null })} label={`All · ${baseCompanies.length}`} />
           {hqRegions.map((item) => (
             <Chip
@@ -422,7 +439,7 @@ export function FacetRail({
             />
           ) : null}
         </FacetGroup>
-        <FacetGroup title="Sector" dense={dense}>
+        <FacetGroup title="Sector" dense={editorial}>
           <Chip facet="sector" count={baseCompanies.length} active={!facets.sector && !facets.sectorMissing} onClick={() => set({ sector: null, sectorMissing: false })} label={`All · ${baseCompanies.length}`} />
           {sectorRows.map((item) => {
             const missing = item.id === NOT_ON_RECORD;
@@ -455,13 +472,13 @@ export function FacetRail({
             />
           ) : null}
         </FacetGroup>
-        <FacetGroup title="Country" defaultOpen={false} dense={dense}>
+        <FacetGroup title="Country" defaultOpen={false} dense={editorial}>
           <Chip active={!facets.country} onClick={() => set({ country: null })} label={`All · ${campuses.length}`} />
           {countries.map(([name, count]) => (
             <Chip key={name} active={facets.country === name} onClick={() => set({ country: facets.country === name ? null : name })} label={`${name} · ${count}`} />
           ))}
         </FacetGroup>
-        <FacetGroup title="Campus" defaultOpen={false} dense={dense}>
+        <FacetGroup title="Campus" defaultOpen={false} dense={editorial}>
           {campusRows.map((campus) => (
             <button
               key={campus.id}
@@ -477,19 +494,19 @@ export function FacetRail({
             </button>
           ))}
         </FacetGroup>
-        <FacetGroup title="Signal kind" defaultOpen={false} dense={dense}>
+        <FacetGroup title="Signal kind" defaultOpen={false} dense={editorial}>
           <Chip active={!facets.kind} onClick={() => set({ kind: null })} label="All" />
           {kinds.map((item) => (
             <Chip key={item.id} active={facets.kind === item.id} onClick={() => set({ kind: facets.kind === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} />
           ))}
         </FacetGroup>
-        <FacetGroup title="Stage" defaultOpen={false} dense={dense}>
+        <FacetGroup title="Stage" defaultOpen={false} dense={editorial}>
           <Chip active={!facets.stage} onClick={() => set({ stage: null })} label="All" />
           {stages.map((item) => (
             <Chip key={item.id} active={facets.stage === item.id} onClick={() => set({ stage: facets.stage === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} />
           ))}
         </FacetGroup>
-        <FacetGroup title="Signal recency" defaultOpen={false} dense={dense}>
+        <FacetGroup title="Signal recency" defaultOpen={false} dense={editorial}>
           <Chip active={!facets.recency} onClick={() => set({ recency: null })} label="All" />
           {recency.map((item) => (
             <Chip key={item.id} active={facets.recency === item.id} onClick={() => set({ recency: facets.recency === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} />
@@ -660,16 +677,19 @@ export function topPrograms(companies: FacetCompany[]): FacetCount[] {
     .slice(0, 5);
 }
 
-/** Shared right-rail intelligence boards (no campus list). */
+/** Shared intelligence boards — surface varies module order so Explore / Signals / company do not stamp one WIRE. */
 export function IntelligenceBoards({
   companies,
   compact = false,
   hideSector = false,
+  surface = "fold",
 }: {
   companies: FacetCompany[];
   limit?: number;
   compact?: boolean;
   hideSector?: boolean;
+  /** fold keeps programs-first; browse leads sector; signals leads programs+recent; company is dossier-thin. */
+  surface?: "fold" | "browse" | "signals" | "company";
 }) {
   const recentN = compact ? 2 : 3;
   const founderN = compact ? 2 : 3;
@@ -680,11 +700,14 @@ export function IntelligenceBoards({
   const maxProg = programs[0]?.count || 1;
   const gap = compact ? "space-y-1.5" : "space-y-2";
   const rowGap = "divide-y divide-[color:var(--line,#E1E5EF)]";
+  const showSector = !hideSector && surface !== "company" && surface !== "signals";
+  const showFounders = surface !== "signals";
+  const showPrograms = surface !== "browse" && surface !== "company";
   const programsBoard =
-    programs.length > 0 ? (
-      <Board title="Top programs" unit="companies">
+    showPrograms && programs.length > 0 ? (
+      <Board title={surface === "signals" ? "Campus programs" : "Top programs"} unit="companies">
         <ol className={rowGap}>
-          {programs.slice(0, 3).map((item, index) => (
+          {programs.slice(0, surface === "signals" ? 4 : 3).map((item, index) => (
             <li key={item.id} className="py-1">
               <div className="flex items-center gap-2 text-[11px]">
                 <span className={`${COUNT} w-5 shrink-0 text-right text-[11px] tracking-tight`}>{String(index + 1).padStart(2, "0")}</span>
@@ -702,58 +725,76 @@ export function IntelligenceBoards({
         </ol>
       </Board>
     ) : null;
+  const recentBoard = (
+    <Board title="Recent signals" unit="kind · date">
+      <ol className={rowGap}>
+        {recent.map((company, index) => (
+          <li key={company.id}>
+            <SignalFeedRow company={company} index={index} />
+          </li>
+        ))}
+      </ol>
+    </Board>
+  );
+  const sectorBoard = showSector ? (
+    <Board title="Sector mix" unit="companies">
+      <div className="flex h-2 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
+        {mix.map((item) => (
+          <div
+            key={item.id}
+            className="h-full"
+            style={{
+              width: `${Math.max(3, Math.round((item.count / Math.max(1, mix.reduce((s, m) => s + m.count, 0))) * 100))}%`,
+              background: sectorDot(item.id),
+            }}
+            title={`${item.label}: ${item.count}`}
+          />
+        ))}
+      </div>
+      <ul className="mt-1.5 space-y-0.5">
+        {mix.map((item) => (
+          <li key={item.id}>
+            <Link href={`/?sample=1&sector=${encodeURIComponent(item.id)}#browse`} className="flex items-center gap-1.5 text-[10px] hover:text-[color:var(--ember,#D96B1C)]">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: sectorDot(item.id) }} aria-hidden />
+              <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#0B0E17)]">{item.label}</span>
+              <span className={`${COUNT} shrink-0`}>{item.count.toLocaleString("en-US")}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </Board>
+  ) : null;
+  const foundersBoard = showFounders ? (
+    <Board title="Top founders" unit="signals">
+      <ol className={rowGap}>
+        {founders.map((person, index) => (
+          <li key={person.key}>
+            <FounderFeedRow person={person} index={index} />
+          </li>
+        ))}
+      </ol>
+    </Board>
+  ) : null;
+
+  // Per-surface order breaks the stamped WIRE template across Explore / Signals / company.
+  let modules: ReactNode[] = [];
+  if (surface === "browse") {
+    modules = [sectorBoard, foundersBoard, recentBoard].filter(Boolean);
+  } else if (surface === "signals") {
+    modules = [programsBoard, recentBoard].filter(Boolean);
+  } else if (surface === "company") {
+    modules = [recentBoard, foundersBoard].filter(Boolean);
+  } else if (compact) {
+    // Fold compact: programs above sector/founders so #3 Penn Venture Lab stays in the 900px fold.
+    modules = [programsBoard, recentBoard, sectorBoard, foundersBoard].filter(Boolean);
+  } else {
+    modules = [recentBoard, sectorBoard, foundersBoard, programsBoard].filter(Boolean);
+  }
+
   return (
     <div className={gap}>
-      {/* Compact fold: programs sit above sector/founders so #3 Penn Venture Lab is in the 900px fold. */}
-      {compact ? programsBoard : null}
-      <Board title="Recent signals" unit="kind · date">
-        <ol className={rowGap}>
-          {recent.map((company, index) => (
-            <li key={company.id}>
-              <SignalFeedRow company={company} index={index} />
-            </li>
-          ))}
-        </ol>
-      </Board>
-      {!hideSector ? (
-      <Board title="Sector mix" unit="companies">
-        <div className="flex h-2 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
-          {mix.map((item) => (
-            <div
-              key={item.id}
-              className="h-full"
-              style={{
-                width: `${Math.max(3, Math.round((item.count / Math.max(1, mix.reduce((s, m) => s + m.count, 0))) * 100))}%`,
-                background: sectorDot(item.id),
-              }}
-              title={`${item.label}: ${item.count}`}
-            />
-          ))}
-        </div>
-        <ul className="mt-1.5 space-y-0.5">
-          {mix.map((item) => (
-            <li key={item.id}>
-              <Link href={`/?sample=1&sector=${encodeURIComponent(item.id)}#browse`} className="flex items-center gap-1.5 text-[10px] hover:text-[color:var(--ember,#D96B1C)]">
-                <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: sectorDot(item.id) }} aria-hidden />
-                <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#0B0E17)]">{item.label}</span>
-                <span className={`${COUNT} shrink-0`}>{item.count.toLocaleString("en-US")}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Board>
-      ) : null}
-      <Board title="Top founders" unit="signals">
-        <ol className={rowGap}>
-          {founders.map((person, index) => (
-            <li key={person.key}>
-              <FounderFeedRow person={person} index={index} />
-            </li>
-          ))}
-        </ol>
-      </Board>
-      {!compact ? programsBoard : null}
-      {!compact ? (
+      {modules}
+      {!compact && surface === "fold" ? (
         <div className={`${PANEL} relative overflow-hidden p-1.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
           <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Scout ask</p>
           <Link

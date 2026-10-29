@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import { directoryCardSubtitle } from "@/lib/domain/sample-facets";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
+import { shortCampusLabel } from "@/lib/domain/campuses";
 import {
   applyFacets,
   emptyFacets,
@@ -14,6 +15,7 @@ import {
   LogoMark,
   MobileBrowsePulse,
   PANEL,
+  sectorMix,
   type FacetState,
 } from "./sample-instrument";
 
@@ -90,6 +92,11 @@ export function SampleInstrumentBrowse({
   const [deskFiltersOpen, setDeskFiltersOpen] = useState(false);
 
   const boardCompanies = useMemo(() => applyFacets(companies, facets), [companies, facets]);
+  const topCampus = useMemo(() => {
+    return [...campuses].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))[0] ?? null;
+  }, [campuses]);
+  const topSector = useMemo(() => sectorMix(boardCompanies)[0] ?? null, [boardCompanies]);
+  const wireSurface = feed === "leaderboard" ? "signals" : "browse";
 
   function commitFacet(next: FacetState) {
     setFacets(next);
@@ -135,48 +142,86 @@ export function SampleInstrumentBrowse({
         <div className="sticky top-14 space-y-2">
           {deskFiltersOpen ? (
             <div className="h-[min(70vh,640px)]">
-              <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={commitFacet} />
+              <FacetRail
+                companies={companies}
+                campuses={campuses}
+                facets={facets}
+                onChange={commitFacet}
+                sheet
+                caption="Narrow the ledger"
+              />
             </div>
           ) : (
             <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
               <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
+                  {feed === "leaderboard" ? "Signal wire" : "Ledger wire"}
+                </p>
                 <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{boardCompanies.length.toLocaleString("en-US")}</p>
               </div>
-              <IntelligenceBoards companies={boardCompanies} compact />
+              <IntelligenceBoards companies={boardCompanies} compact surface={wireSurface} />
             </div>
           )}
         </div>
       </aside>
 
       <div className="min-w-0">
-        {/* Editorial masthead — same signature as fold */}
-        <div className="mb-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+        {/* Distinct hero per surface — fold language, not the fold stamp */}
+        <div className="mb-2 border-b border-[color:var(--line,#E1E5EF)] pb-2" data-browse-hero={feed}>
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div className="min-w-0">
-              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
-              <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
-                <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
-              </p>
-              <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                {caption}
-                {campusName ? (
-                  <>
+              {feed === "leaderboard" && topCampus ? (
+                <>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Signal desk · #1 campus</p>
+                  <p className="mt-1 font-mono text-[48px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">01</p>
+                  <p className="mt-1 text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[18px]">
+                    {shortCampusLabel(topCampus.id, topCampus.name)}
+                  </p>
+                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{topCampus.founders.toLocaleString("en-US")}</span>
+                    {" founder names · ranked signal desk below · "}
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
+                    {" companies"}
+                  </p>
+                </>
+              ) : topSector ? (
+                <>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout ledger · top sector</p>
+                  <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
+                    <span className="text-[color:var(--ember,#D96B1C)]">{topSector.count.toLocaleString("en-US")}</span>
+                  </p>
+                  <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                    {topSector.label}
+                    {campusName ? (
+                      <>
+                        {" · "}
+                        {campusName}
+                        {" · "}
+                        <Link href={clearCampusHref} className="text-[color:var(--ember,#D96B1C)] hover:underline">
+                          Clear
+                        </Link>
+                      </>
+                    ) : null}
+                  </p>
+                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    {total.toLocaleString("en-US")}
+                    {" on the ledger · "}
+                    {subline}
                     {" · "}
-                    {campusName}
-                    {" · "}
-                    <Link href={clearCampusHref} className="text-[color:var(--ember,#D96B1C)] hover:underline">
-                      Clear
-                    </Link>
-                  </>
-                ) : null}
-              </p>
-              <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                {subline}
-                {" · "}
-                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
-                {" on page"}
-              </p>
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
+                    {" on page"}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
+                  <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
+                    <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
+                  </p>
+                  <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{caption}</p>
+                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{subline}</p>
+                </>
+              )}
             </div>
             <div className="flex flex-wrap items-center gap-1.5">
               {feed === "directory"
@@ -332,7 +377,7 @@ function LedgerRow({ card, rank, ranked = false }: { card: DirectoryCard; rank: 
         <p
           className={
             ranked
-              ? "text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[15px] sm:leading-5"
+              ? "text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[15px] sm:leading-5 [overflow-wrap:anywhere]"
               : "truncate text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[15px]"
           }
         >
