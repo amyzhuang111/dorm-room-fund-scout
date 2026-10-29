@@ -76,14 +76,6 @@ export function TileGlobe({
     () => [...shown].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name)).slice(0, 5),
     [shown],
   );
-  const bySignals = useMemo(
-    () => [...shown].sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name)).slice(0, 5),
-    [shown],
-  );
-  const chips = useMemo(
-    () => [...shown].sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name)).slice(0, 8),
-    [shown],
-  );
 
   useEffect(() => {
     const node = mapNode.current;
@@ -308,22 +300,9 @@ export function TileGlobe({
           ))}
         </div>
       </aside>
-      <aside className="absolute right-3 top-3 z-10 hidden w-[250px] space-y-3 lg:block">
-        <RankCard title="Leading campuses" rows={byFounders} metric="founders" onPick={focus} />
-        <RankCard title="Most signals" rows={bySignals} metric="signals" onPick={focus} />
+      <aside className="absolute right-3 top-3 z-10 hidden w-[250px] lg:block">
+        <RankCard title="Leading campuses" rows={byFounders} onPick={focus} />
       </aside>
-      <div className="absolute bottom-3 left-3 right-3 z-10 hidden items-center gap-2 rounded-2xl border border-[#f0d9c6] bg-white/92 px-3 py-2 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)] lg:flex">
-        <span className="shrink-0 text-[13px] font-semibold text-[#20140c]">
-          <span className={COUNT}>{shown.length.toLocaleString("en-US")}</span> campuses
-        </span>
-        <div className="flex min-w-0 flex-1 gap-1.5 overflow-hidden">
-          {chips.map((campus) => (
-            <button key={campus.id} type="button" onClick={() => focus(campus)} className="shrink-0 rounded-full border border-[#f0d9c6] bg-white px-2.5 py-1 text-[12px] text-[#20140c] hover:border-[#FB651E]">
-              {shortCampusLabel(campus.id, campus.name)}
-            </button>
-          ))}
-        </div>
-      </div>
       {hover ? (
         <div className="pointer-events-none absolute z-20 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-xl border border-[#f0d9c6] bg-white px-2.5 py-1.5 text-left text-[#20140c] shadow" style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}>
           <p className="text-[13px] font-medium leading-4">{hover.name}</p>
@@ -349,17 +328,7 @@ function FilterChip({ active, label, onClick }: { active: boolean; label: string
   );
 }
 
-function RankCard({
-  title,
-  rows,
-  metric,
-  onPick,
-}: {
-  title: string;
-  rows: TileCampus[];
-  metric: "founders" | "signals";
-  onPick: (campus: TileCampus) => void;
-}) {
+function RankCard({ title, rows, onPick }: { title: string; rows: TileCampus[]; onPick: (campus: TileCampus) => void }) {
   return (
     <div className="rounded-2xl border border-[#f0d9c6] bg-white/92 p-3 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)]">
       <p className="text-[13px] font-semibold">{title}</p>
@@ -369,7 +338,7 @@ function RankCard({
             <button type="button" onClick={() => onPick(campus)} className="flex w-full items-baseline gap-2 text-left text-[13px] hover:text-[#FB651E]">
               <span className={`${COUNT} w-4 shrink-0`}>{index + 1}</span>
               <span className="min-w-0 flex-1 truncate text-[#20140c]">{shortCampusLabel(campus.id, campus.name)}</span>
-              <span className={`${COUNT} shrink-0`}>{(metric === "founders" ? campus.founders : campus.signals).toLocaleString("en-US")}</span>
+              <span className={`${COUNT} shrink-0`}>{campus.founders.toLocaleString("en-US")}</span>
             </button>
           </li>
         ))}

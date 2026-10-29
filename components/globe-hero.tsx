@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { TileGlobe, type TileCampus } from "@/components/tile-globe";
 import type { HeroStats, WeekItem } from "@/lib/domain/hero-stats";
-import type { UniversitySummary } from "@/lib/domain/queries";
 import { updatedAgo } from "@/lib/domain/relative-time";
 
 function plottedCampuses(stats: HeroStats): TileCampus[] {
@@ -22,27 +21,7 @@ function plottedCampuses(stats: HeroStats): TileCampus[] {
     }));
 }
 
-function countryCoverage(universities: UniversitySummary[]): string {
-  const plotted = universities.filter((university) => university.lat != null && university.lon != null);
-  const counts = new Map<string, number>();
-  for (const university of plotted) {
-    const country = university.country?.trim();
-    if (!country) continue;
-    counts.set(country, (counts.get(country) ?? 0) + 1);
-  }
-  const names = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([name]) => name);
-  const campusWord = plotted.length === 1 ? "campus" : "campuses";
-  const countryWord = names.length === 1 ? "country" : "countries";
-  const listed = names.length <= 1 ? (names[0] ?? "") : names.length === 2 ? `${names[0]} and ${names[1]}` : `${names.slice(0, -1).join(", ")}, and ${names[names.length - 1]}`;
-  const count = `${plotted.length.toLocaleString("en-US")} ${campusWord} in ${names.length.toLocaleString("en-US")} ${countryWord}`;
-  const base = listed ? `${count}: ${listed}.` : `${count}.`;
-  const unplotted = universities.length - plotted.length;
-  if (unplotted <= 0) return base;
-  const stored = unplotted === 1 ? "1 campus is stored without coordinates." : `${unplotted.toLocaleString("en-US")} campuses are stored without coordinates.`;
-  return `${base} ${stored}`;
-}
-
-function GlobeBlock({ stats, height, bare = false }: { stats: HeroStats; height: number; bare?: boolean }) {
+function GlobeBlock({ stats }: { stats: HeroStats }) {
   const router = useRouter();
   const search = useSearchParams();
   const campuses = plottedCampuses(stats);
@@ -59,34 +38,18 @@ function GlobeBlock({ stats, height, bare = false }: { stats: HeroStats; height:
     router.push(`/?${next.toString()}#browse`);
   }
 
-  const globe = <TileGlobe campuses={campuses} selectedId={selectedId} onSelect={onSelect} />;
-  if (bare) return globe;
-  return (
-    <div className="mt-5">
-      <p className="text-center text-[16px] leading-6">
-        <span className="font-bold tabular-nums text-[#E05612]">{stats.founders.toLocaleString("en-US")}</span> student founders across{" "}
-        <span className="font-bold tabular-nums text-[#E05612]">{stats.campuses.toLocaleString("en-US")}</span> campuses
-      </p>
-      <div className="mt-3">{globe}</div>
-      <p className="mx-auto mt-3 max-w-[40rem] text-center text-[13px] leading-5 text-fg-2">
-        {countryCoverage(stats.universities)} Point size follows how many signals are on record.
-      </p>
-    </div>
-  );
+  return <TileGlobe campuses={campuses} selectedId={selectedId} onSelect={onSelect} />;
 }
 
 export function GlobeHero({ stats, showGlobe = true }: { stats: HeroStats; showGlobe?: boolean }) {
   return (
     <div className={showGlobe ? "bg-[#FFF7F0] px-6 py-5 text-[#20140c]" : "bg-bg px-6 py-6 text-fg"}>
       <div className={showGlobe ? "max-lg:min-h-[calc(100svh-72px)] lg:min-h-[calc(100dvh-72px)]" : ""}>
-        <SignatureBand stats={stats} globe={showGlobe ? <GlobeBlock stats={stats} height={640} bare /> : null} />
+        <SignatureBand stats={stats} globe={showGlobe ? <GlobeBlock stats={stats} /> : null} />
       </div>
       {showGlobe ? (
         <div className="mx-auto mt-10 w-full max-w-[880px]">
           <Collage stats={stats} />
-          <p className="mt-4 max-w-[40rem] text-[13px] leading-5 text-fg-2">
-            {countryCoverage(stats.universities)} Point size follows how many signals are on record.
-          </p>
         </div>
       ) : null}
     </div>
@@ -94,7 +57,7 @@ export function GlobeHero({ stats, showGlobe = true }: { stats: HeroStats; showG
 }
 
 export function WorldMap({ stats }: { stats: HeroStats }) {
-  return <GlobeBlock stats={stats} height={640} />;
+  return <GlobeBlock stats={stats} />;
 }
 
 const HIGH_VALUE = new Set(["funding", "launch", "award", "acquisition"]);
