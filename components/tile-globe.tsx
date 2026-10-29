@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { markerRadius, markerSizeLegend } from "@/lib/domain/marker-radius";
-import type { FacetCompany } from "@/lib/domain/sample-facets";
+import { sampleSurfaceCounts, type FacetCompany } from "@/lib/domain/sample-facets";
 import { MapCredit } from "./map-credit";
 import {
   applyFacets,
@@ -104,11 +104,6 @@ export function TileGlobe({
     if (selectedId) return base.filter((company) => company.schoolId === selectedId);
     return base;
   }, [companies, facets, country, countryIds, selectedId]);
-  const founderTotalListed = useMemo(() => {
-    let n = 0;
-    for (const company of filteredCompanies) n += (company.founders?.length ?? 0);
-    return n;
-  }, [filteredCompanies]);
   useEffect(() => {
     const node = mapNode.current;
     if (!node) return;
@@ -347,7 +342,9 @@ export function TileGlobe({
   }
 
   const liveCount = filteredCompanies.length;
-  const founderCount = founderTotalListed;
+  // Masthead founders/campuses match the sample strip (universe totals via sampleSurfaceCounts),
+  // not the filtered map/facet slice — so strip and fold data-count nodes never diverge.
+  const universeCounts = sampleSurfaceCounts(companies, campuses);
 
   return (
     <div className={className}>
@@ -361,9 +358,9 @@ export function TileGlobe({
             </p>
             <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies forming on campus</p>
             <p className="sr-only mt-0.5 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">
-              <span className={COUNT} data-count="campuses-on-map">{shown.length.toLocaleString("en-US")}</span> campuses on map
+              <span className={COUNT} data-count="campuses-on-map">{universeCounts.campusesOnMap.toLocaleString("en-US")}</span> campuses on map
               {" · "}
-              <span className={COUNT} data-count="founders-listed">{founderCount.toLocaleString("en-US")}</span> founders listed
+              <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span> founders listed
             </p>
           </div>
           <div className="flex flex-wrap gap-1.5">

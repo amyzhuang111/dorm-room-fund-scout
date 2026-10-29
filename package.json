@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "prebuild": "tsx scripts/precompute-map-cache.ts",
     "start": "next start",
     "lint": "eslint",

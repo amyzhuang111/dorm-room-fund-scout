@@ -128,6 +128,7 @@ const surface = sampleSurfaceCounts(data.cards, [{ id: "a" }, { id: "b" }]);
 assert.equal(surface.companies, data.cards.length);
 assert.equal(surface.campusesOnMap, 2);
 assert.equal(surface.foundersListed, data.cards.reduce((s, c) => s + (c.founders?.length ?? 0), 0));
+assert.equal(surface.foundersListed, 2766);
 assert.ok(surface.foundersListed > 2000);
 
 const active = data.cards.filter((c) => statusOf(c) === "active").length;

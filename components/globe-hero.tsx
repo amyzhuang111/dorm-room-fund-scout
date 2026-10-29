@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { TileGlobe, type TileCampus, type TileCompany } from "@/components/tile-globe";
 import type { HeroStats, WeekItem } from "@/lib/domain/hero-stats";
 import { updatedAgo } from "@/lib/domain/relative-time";
+import { sampleSurfaceCounts } from "@/lib/domain/sample-facets";
 
 function plottedCampuses(stats: HeroStats): TileCampus[] {
   return stats.universities
@@ -239,10 +240,9 @@ function HeroActions({ cream = false, compact = false }: { cream?: boolean; comp
 }
 
 function SignatureBand({ stats, companies = [], globe }: { stats: HeroStats; companies?: TileCompany[]; globe?: ReactNode }) {
-  // Same source of truth as the fold instrument: founders listed on directory
+  // Same source of truth as the fold instrument: sampleSurfaceCounts on directory
   // companies + campuses with coordinates on the map (not the full scout roster).
-  const campusesOnMap = plottedCampuses(stats).length;
-  const foundersListed = companies.reduce((sum, company) => sum + (company.founders?.length ?? 0), 0);
+  const { foundersListed, campusesOnMap } = sampleSurfaceCounts(companies, plottedCampuses(stats));
   if (globe) {
     return (
       <section className="-mx-4 px-0 pb-1 sm:-mx-5" aria-label="Campus Scout">

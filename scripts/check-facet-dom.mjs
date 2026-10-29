@@ -6,6 +6,9 @@ import { chromium } from "playwright";
 
 const BASE = process.env.BASE || "http://127.0.0.1:3460";
 const TOTAL = 2513;
+/** Directory sampleSurfaceCounts.foundersListed / campusesOnMap — must match strip + fold. */
+const EXPECTED_FOUNDERS_LISTED = 2766;
+const EXPECTED_CAMPUSES_ON_MAP = 74;
 
 function parseMidDotCount(label) {
   const m = String(label).match(/·\s*([\d,]+)\s*$/);
@@ -167,7 +170,7 @@ const report = {
     hqCollapsedPlusMore: hqCovered === TOTAL,
     hqExpanded: hqExpanded.sum === TOTAL,
     flagsDiffer: newC != null && actC != null && newC !== actC,
-    newIsFoundedYear: newC === 147,
+    newIsFoundedYear: newC === 213,
     foundedLabel: flagCounts.some((f) => /founded in 2026/i.test(f.label)),
     activeIsTight: actC != null && actC < 50,
     countsAgree:
@@ -175,8 +178,10 @@ const report = {
       fold != null &&
       strip.founders === fold.founders &&
       strip.campuses === fold.campuses &&
-      strip.founders > 0 &&
-      strip.campuses > 0,
+      strip.founders === EXPECTED_FOUNDERS_LISTED &&
+      fold.founders === EXPECTED_FOUNDERS_LISTED &&
+      strip.campuses === EXPECTED_CAMPUSES_ON_MAP &&
+      fold.campuses === EXPECTED_CAMPUSES_ON_MAP,
     statusBuckets:
       statusActive === 2497 && statusAcquired === 8 && statusClosed === 8 && statusActive + statusAcquired + statusClosed === TOTAL,
     moreObvious: moreLabelsBefore.some((l) => /more sectors/i.test(l)) && moreLabelsBefore.some((l) => /more cities/i.test(l)),
