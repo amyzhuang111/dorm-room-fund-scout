@@ -68,42 +68,12 @@ export function LogoMark({
   mark?: string;
   size?: number;
 }) {
+  // Monogram-first: sample UI stays cobalt NeutralMarks. External favicons (e.g. AfterQuery
+  // dark squares) break WIRE rhythm next to monograms.
+  void logoUrl;
   void mark;
-  // Google s2 stubs paint as 16px blobs; stay on monogram until a real mark proves itself.
-  const needsProof = Boolean(logoUrl && /google\.com\/s2\/favicons/i.test(logoUrl));
-  const [ok, setOk] = useState(!needsProof && Boolean(logoUrl));
   const cls = size <= 16 ? "h-4 w-4" : size <= 20 ? "h-5 w-5" : size <= 24 ? "h-6 w-6" : size <= 28 ? "h-7 w-7" : "h-8 w-8";
-  if (!logoUrl || !ok) {
-    return (
-      <span className="relative inline-grid shrink-0">
-        <NeutralMark name={name} cls={cls} />
-        {logoUrl && needsProof ? (
-          // eslint-disable-next-line @next/next/no-img-element -- probe only; hidden until verified
-          <img
-            src={logoUrl}
-            alt=""
-            width={1}
-            height={1}
-            className="pointer-events-none absolute h-0 w-0 opacity-0"
-            onLoad={(e) => {
-              if (e.currentTarget.naturalWidth > 16) setOk(true);
-            }}
-          />
-        ) : null}
-      </span>
-    );
-  }
-  return (
-    // eslint-disable-next-line @next/next/no-img-element -- favicon hosts vary; verified above for google s2
-    <img
-      src={logoUrl}
-      alt=""
-      width={size}
-      height={size}
-      className={`${cls} shrink-0 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] object-contain`}
-      onError={() => setOk(false)}
-    />
-  );
+  return <NeutralMark name={name} cls={cls} />;
 }
 
 export function LogoPill({
@@ -554,7 +524,7 @@ export function topFounders(companies: FacetCompany[]): { key: string; name: str
 
 export function Board({ title, unit, children }: { title: string; unit?: string; children: ReactNode }) {
   return (
-    <div className={`${PANEL} relative overflow-hidden p-1.5 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
+    <div className={`${PANEL} relative overflow-hidden p-2 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
       <div className="flex items-baseline justify-between gap-2">
         <p className="font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">{title}</p>
         {unit ? <p className="font-mono text-[9px] uppercase tracking-[0.04em] text-[color:var(--fg-3,#5C647A)]">{unit}</p> : null}
@@ -610,17 +580,17 @@ export function SignalFeedRow({ company, index }: { company: FacetCompany; index
   const date = (company.latestSignalAt ?? "").replace(/-00/g, "") || "n/a";
   const kind = company.signalLabel ?? "Signal";
   return (
-    <Link href={`/startup/${company.id}`} className="group flex items-start gap-2 rounded-md px-1 py-1.5 text-left hover:bg-[color:var(--bg-sunken,#F3F5F9)]">
-      <span className={`${COUNT} mt-0.5 w-4 shrink-0 text-[11px]`}>{index + 1}</span>
-      <LogoMark name={company.name} logoUrl={company.logoUrl} size={20} />
+    <Link href={`/startup/${company.id}`} className="group flex items-start gap-2.5 px-0.5 py-2 text-left hover:bg-[color:var(--bg-sunken,#F3F5F9)]">
+      <span className={`${COUNT} mt-0.5 w-4 shrink-0 text-center text-[12px]`}>{index + 1}</span>
+      <LogoMark name={company.name} logoUrl={company.logoUrl} size={22} />
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[12px] font-semibold leading-4 text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]">{company.name}</span>
-        <span className="mt-1 flex flex-wrap items-center gap-1">
-          <span className="inline-flex h-4 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[9px] font-medium text-[color:var(--cobalt,#2F4FD8)]">{kind}</span>
-          <span className="inline-flex h-4 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{date}</span>
+        <span className="block truncate text-[13px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]">{company.name}</span>
+        <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
+          <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[10px] font-semibold tracking-[0.02em] text-[color:var(--cobalt,#2F4FD8)]">{kind}</span>
+          <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{date}</span>
         </span>
       </span>
-      {company.signals > 0 ? <span className={`${COUNT} mt-0.5 shrink-0 text-[11px]`}>{company.signals}</span> : null}
+      {company.signals > 0 ? <span className={`${COUNT} mt-0.5 shrink-0 text-[12px]`}>{company.signals}</span> : null}
     </Link>
   );
 }
@@ -633,14 +603,14 @@ export function FounderFeedRow({
   index: number;
 }) {
   return (
-    <Link href={`/startup/${person.companyId}`} className="flex items-center gap-1.5 text-left hover:text-[color:var(--ember,#D96B1C)]" title={person.companyName}>
-      <span className={`${COUNT} w-3 shrink-0 text-[10px]`}>{index + 1}</span>
-      <LogoMark name={person.name} logoUrl={person.logoUrl} size={16} />
-      <span className="min-w-0 flex-1 truncate text-[11px] text-[color:var(--fg,#0B0E17)]">
-        {person.name}
-        <span className="text-[color:var(--fg-3,#5C647A)]"> · {person.companyName}</span>
+    <Link href={`/startup/${person.companyId}`} className="flex items-center gap-2.5 px-0.5 py-2 text-left hover:bg-[color:var(--bg-sunken,#F3F5F9)]" title={person.companyName}>
+      <span className={`${COUNT} w-4 shrink-0 text-center text-[12px]`}>{index + 1}</span>
+      <LogoMark name={person.name} logoUrl={person.logoUrl} size={20} />
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-[13px] font-semibold leading-5 text-[color:var(--fg,#0B0E17)]">{person.name}</span>
+        <span className="mt-0.5 block truncate font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">{person.companyName}</span>
       </span>
-      <span className={`${COUNT} shrink-0 text-[10px]`}>{person.signals.toLocaleString("en-US")}</span>
+      <span className={`${COUNT} shrink-0 text-[12px]`}>{person.signals.toLocaleString("en-US")}</span>
     </Link>
   );
 }
@@ -721,16 +691,16 @@ export function IntelligenceBoards({
         <Board title="Top programs" unit="companies">
           <ol className={rowGap}>
             {programs.slice(0, 3).map((item, index) => (
-              <li key={item.id}>
-                <div className="flex items-center gap-1.5 text-[11px]">
-                  <span className={`${COUNT} w-3.5 shrink-0 text-[10px]`}>{index + 1}</span>
+              <li key={item.id} className="py-1.5">
+                <div className="flex items-center gap-2 text-[11px]">
+                  <span className={`${COUNT} w-4 shrink-0 text-center text-[11px]`}>{index + 1}</span>
                   <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/70 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[8px] font-semibold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden title={item.label}>
-                    {companyInitials(item.label)}
+                    {companyInitials(item.label).slice(0, 2)}
                   </span>
-                  <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#0B0E17)]">{item.label}</span>
-                  <span className={`${COUNT} shrink-0 text-[10px]`}>{item.count.toLocaleString("en-US")}</span>
+                  <span className="min-w-0 flex-1 truncate font-medium text-[color:var(--fg,#0B0E17)]">{item.label}</span>
+                  <span className={`${COUNT} shrink-0 text-[11px]`}>{item.count.toLocaleString("en-US")}</span>
                 </div>
-                <div className="ml-[18px] mt-0.5 h-1 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
+                <div className="ml-11 mt-1 h-0.5 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
                   <div className="h-full rounded-full bg-[color:var(--ember,#D96B1C)]" style={{ width: `${Math.max(8, Math.round((item.count / maxProg) * 100))}%` }} />
                 </div>
               </li>
@@ -756,38 +726,11 @@ export function IntelligenceBoards({
 
 
 export function MobileBrowsePulse({ companies }: { companies: FacetCompany[] }) {
-  const recent = useMemo(() => recentSignals(companies).slice(0, 3), [companies]);
-  const mix = useMemo(() => sectorMix(companies).slice(0, 4), [companies]);
-  const mixTotal = mix.reduce((s, m) => s + m.count, 0) || 1;
+  // Same Wire craft as desktop rail — stacked boards, not a thin dual strip.
   return (
-    <div className="flex flex-col gap-2 sm:flex-row sm:overflow-x-auto sm:pb-1 sm:[-ms-overflow-style:none] sm:[scrollbar-width:none] sm:[&::-webkit-scrollbar]:hidden">
-      <div className={`${PANEL} relative w-full min-w-0 flex-1 overflow-hidden p-2 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
-        <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Recent signals</p>
-        <ol className="mt-1.5 space-y-1">
-          {recent.map((company, index) => (
-            <li key={company.id}>
-              <SignalFeedRow company={company} index={index} />
-            </li>
-          ))}
-        </ol>
-      </div>
-      <div className={`${PANEL} relative w-full min-w-0 flex-1 overflow-hidden p-2 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
-        <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Sector mix</p>
-        <div className="mt-1.5 flex h-1.5 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
-          {mix.map((item) => (
-            <div key={item.id} className="h-full" style={{ width: `${Math.max(3, Math.round((item.count / mixTotal) * 100))}%`, background: sectorDot(item.id) }} title={`${item.label}: ${item.count}`} />
-          ))}
-        </div>
-        <ul className="mt-1.5 space-y-0.5">
-          {mix.map((item) => (
-            <li key={item.id} className="flex items-center gap-1.5 text-[10px]">
-              <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: sectorDot(item.id) }} aria-hidden />
-              <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#0B0E17)]">{item.label}</span>
-              <span className={COUNT}>{item.count}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className={`${PANEL} relative overflow-hidden p-2 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
+      <p className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
+      <IntelligenceBoards companies={companies} compact />
     </div>
   );
 }

@@ -119,7 +119,7 @@ export function SampleInstrumentBrowse({
   return (
     <div className="mx-auto mt-2 grid w-full max-w-[1280px] gap-2.5 lg:grid-cols-[minmax(260px,300px)_minmax(0,1fr)] sm:mt-3 sm:gap-3">
       <aside className="hidden min-w-0 lg:block">
-        <div className={`${PANEL} relative sticky top-14 space-y-2 overflow-hidden p-2 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
+        <div className={`${PANEL} relative sticky top-14 space-y-2 overflow-hidden p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
           <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
           <IntelligenceBoards companies={boardCompanies} compact />
         </div>
@@ -129,10 +129,10 @@ export function SampleInstrumentBrowse({
           <div className="flex flex-wrap items-end justify-between gap-3">
           <div className="min-w-0">
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{feed === "leaderboard" ? "Scout dispatch · signals" : "Scout dispatch · ledger"}</p>
-            <p className="mt-1 font-mono text-[36px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[44px]">
+            <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
               <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
             </p>
-            <p className="mt-1 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+            <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
               {total === 1 ? "company" : "companies"}
               {campusName ? (
                 <>
@@ -158,7 +158,7 @@ export function SampleInstrumentBrowse({
                 <Link
                   key={id}
                   href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
-                  className={`inline-flex h-6 items-center rounded-md border px-2 text-[11px] ${chip(sort === id)}`}
+                  className={`inline-flex h-7 items-center rounded-sm border px-2.5 font-mono text-[11px] ${chip(sort === id)}`}
                 >
                   {label}
                 </Link>
@@ -176,7 +176,7 @@ export function SampleInstrumentBrowse({
                   key={year}
                   type="button"
                   onClick={() => commitFacet({ ...facets, foundedYear: active ? null : year })}
-                  className={`inline-flex h-6 items-center rounded-md border px-2 text-[11px] ${chip(active)}`}
+                  className={`inline-flex h-7 items-center rounded-sm border px-2.5 font-mono text-[11px] ${chip(active)}`}
                 >
                   {year}
                 </button>
@@ -204,7 +204,7 @@ export function SampleInstrumentBrowse({
                       status: kind === "status" ? (facets.status === id ? null : (id as FacetState["status"])) : facets.status,
                     })
                   }
-                  className={`inline-flex h-6 items-center rounded-md border px-2 text-[11px] ${chip(Boolean(active))}`}
+                  className={`inline-flex h-7 items-center rounded-sm border px-2.5 font-mono text-[11px] ${chip(Boolean(active))}`}
                 >
                   {label}
                 </button>
@@ -304,19 +304,19 @@ function DirectoryPill({ card, rank }: { card: DirectoryCard; rank: number | nul
   const subtitle = directoryCardSubtitle(card);
   const meta = signalMeta(card);
   return (
-    <Link href={`/startup/${card.id}`} className="group flex items-center gap-2.5 rounded-md border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-2.5 transition-colors hover:border-[color:var(--cobalt,#2F4FD8)]/60 hover:border-l-[color:var(--ember,#D96B1C)] hover:bg-[color:var(--bg-sunken,#F3F5F9)]">
-      {rank != null ? <span className="w-5 shrink-0 text-center font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{rank}</span> : null}
-      <LogoMark name={card.name} logoUrl={card.logoUrl} size={28} />
+    <Link href={`/startup/${card.id}`} className="group flex items-start gap-2.5 rounded-none border border-[color:var(--line,#E1E5EF)] border-l-[3px] border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg-raised,#FFFFFF)] px-3 py-2.5 transition-colors hover:border-l-[color:var(--ember,#D96B1C)] hover:bg-[color:var(--bg-sunken,#F3F5F9)]">
+      {rank != null ? <span className="mt-0.5 w-5 shrink-0 text-center font-mono text-[13px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{rank}</span> : null}
+      <LogoMark name={card.name} logoUrl={card.logoUrl} size={24} />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[13px] font-medium tracking-tight text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]">{card.name}</p>
-        {subtitle ? <p className="truncate font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">{subtitle}</p> : null}
+        <p className="truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]">{card.name}</p>
+        {subtitle ? <p className="mt-0.5 truncate font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">{subtitle}</p> : null}
+        {meta ? (
+          <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
+            <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--ember,#D96B1C)]/10 px-1.5 font-mono text-[10px] font-semibold text-[color:var(--ember,#D96B1C)]">{meta.primary}</span>
+            {meta.secondary ? <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{meta.secondary}</span> : null}
+          </span>
+        ) : null}
       </div>
-      {meta ? (
-        <div className="max-w-[4.75rem] shrink-0 text-right">
-          <p className="truncate font-mono text-[11px] font-semibold leading-none text-[color:var(--ember,#D96B1C)]">{meta.primary}</p>
-          {meta.secondary ? <p className="mt-0.5 truncate whitespace-nowrap font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">{meta.secondary}</p> : null}
-        </div>
-      ) : null}
     </Link>
   );
 }

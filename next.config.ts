@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Hide the Next.js route/dev indicator (floating N) so review shots stay clean.
+  devIndicators: false,
   images: {
     // Stored company logos can live on any host already saved in the database.
     remotePatterns: [

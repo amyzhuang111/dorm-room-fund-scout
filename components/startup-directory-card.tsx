@@ -291,15 +291,15 @@ export function StartupDirectoryCard({
               {card.founders.map((founder) => {
                 const meta = founderMeta(founder);
                 return (
-                  <li key={founder.id} className="flex items-center gap-3 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-2.5">
+                  <li key={founder.id} className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-2.5 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-2.5">
                     <FounderAvatar name={founder.name} />
-                    <div className="min-w-0 flex-1">
-                      <p className="font-semibold text-[color:var(--fg,#0B0E17)]">{founder.name}</p>
-                      {founder.role ? <p className="text-sm text-[color:var(--fg-2,#3F465C)]">{founder.role}</p> : null}
+                    <div className="min-w-0">
+                      <p className="break-words text-[14px] font-semibold leading-snug text-[color:var(--fg,#0B0E17)]">{founder.name}</p>
+                      {founder.role ? <p className="mt-0.5 text-sm leading-snug text-[color:var(--fg-2,#3F465C)]">{founder.role}</p> : null}
                       {meta ? (
-                        <p className="mt-0.5 flex items-start gap-1 text-xs text-[color:var(--fg-3,#5C647A)]">
+                        <p className="mt-1 flex items-start gap-1 text-xs leading-snug text-[color:var(--fg-3,#5C647A)]">
                           <SchoolIcon />
-                          <span>{meta}</span>
+                          <span className="min-w-0 break-words">{meta}</span>
                         </p>
                       ) : null}
                     </div>
@@ -315,7 +315,7 @@ export function StartupDirectoryCard({
                         in
                       </a>
                     ) : (
-                      <span className="shrink-0 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2 py-1 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
+                      <span className="inline-flex max-w-[5.5rem] shrink-0 flex-col rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-1.5 py-1 text-center font-mono text-[9px] leading-tight text-[color:var(--fg-3,#5C647A)]">
                         Not on record
                       </span>
                     )}
@@ -356,25 +356,31 @@ export function StartupDirectoryCard({
           </dl>
         </section>
 
-        <section>
+        <section className="pb-2">
           <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Links</h3>
           {card.links.length > 0 ? (
-            <div className="mt-2 flex flex-wrap gap-2">
+            <ul className="mt-2 space-y-1.5">
               {card.links.map((link) => (
-                <a
-                  key={link.kind}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex h-8 items-center gap-1.5 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[11px] text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
-                >
-                  <LinkMark kind={link.kind} />
-                  {LINK_LABEL[link.kind]}
-                </a>
+                <li key={link.kind}>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-9 items-center gap-2 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[12px] text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                  >
+                    <span className="grid h-5 w-5 shrink-0 place-items-center text-[color:var(--cobalt,#2F4FD8)]">
+                      <LinkMark kind={link.kind} />
+                    </span>
+                    <span className="min-w-0 truncate">{LINK_LABEL[link.kind]}</span>
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
           ) : (
-            <p className="mt-2 font-mono text-[11px] text-[color:var(--fg-3,#5C647A)]">Not on record</p>
+            <div className="mt-2 rounded-md border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-3 py-2.5">
+              <p className="font-mono text-[11px] text-[color:var(--fg-3,#5C647A)]">Not on record</p>
+              <p className="mt-0.5 break-words text-[11px] leading-snug text-[color:var(--fg-3,#5C647A)]">No verified website or social links stored.</p>
+            </div>
           )}
         </section>
       </div>
