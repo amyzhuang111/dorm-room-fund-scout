@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CampusGlobe, type GlobeCampus } from "@/components/campus-globe";
@@ -40,7 +41,7 @@ function countryCoverage(universities: UniversitySummary[]): string {
   return `${base} ${stored}`;
 }
 
-function GlobeBlock({ stats, height }: { stats: HeroStats; height: number }) {
+function GlobeBlock({ stats, height, bare = false }: { stats: HeroStats; height: number; bare?: boolean }) {
   const router = useRouter();
   const search = useSearchParams();
   const campuses = plottedCampuses(stats);
@@ -57,6 +58,12 @@ function GlobeBlock({ stats, height }: { stats: HeroStats; height: number }) {
     router.push(`/?${next.toString()}#browse`);
   }
 
+  const globe = (
+    <div className="flex justify-center">
+      <CampusGlobe campuses={campuses} height={height} selectedId={selectedId} onSelect={onSelect} />
+    </div>
+  );
+  if (bare) return globe;
   return (
     <div className="mt-5">
       <p className="text-center text-[16px] leading-6">
@@ -74,9 +81,7 @@ function GlobeBlock({ stats, height }: { stats: HeroStats; height: number }) {
           <span className="num">{stats.signalsTotal.toLocaleString("en-US")}</span> signals
         </Link>
       </p>
-      <div className="mt-3 flex justify-center">
-        <CampusGlobe campuses={campuses} height={height} selectedId={selectedId} onSelect={onSelect} />
-      </div>
+      <div className="mt-3">{globe}</div>
       <p className="mx-auto mt-3 max-w-[40rem] text-center text-[13px] leading-5 text-fg-2">
         {countryCoverage(stats.universities)} Point size follows how many signals are on record.
       </p>
@@ -87,14 +92,13 @@ function GlobeBlock({ stats, height }: { stats: HeroStats; height: number }) {
 export function GlobeHero({ stats, showGlobe = true }: { stats: HeroStats; showGlobe?: boolean }) {
   return (
     <div className="bg-bg px-6 py-6 text-fg">
-      <SignatureBand stats={stats} />
-      {showGlobe ? <GlobeBlock stats={stats} height={440} /> : null}
+      <SignatureBand stats={stats} globe={showGlobe ? <GlobeBlock stats={stats} height={600} bare /> : null} />
     </div>
   );
 }
 
 export function WorldMap({ stats }: { stats: HeroStats }) {
-  return <GlobeBlock stats={stats} height={680} />;
+  return <GlobeBlock stats={stats} height={640} />;
 }
 
 const HIGH_VALUE = new Set(["funding", "launch", "award", "acquisition"]);
@@ -210,14 +214,27 @@ function SignalFragment({ item }: { item: WeekItem }) {
   );
 }
 
-function SignatureBand({ stats }: { stats: HeroStats }) {
+function Collage({ stats }: { stats: HeroStats }) {
   const signal = collageSignal(stats.week);
   const founder = stats.collageFounder;
   const signalTypes = stats.signalTypes;
+  if (!signal && !founder && signalTypes.length === 0) return null;
+  return (
+    <div className="grid w-full grid-cols-1 items-start gap-3 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+      {signalTypes.length > 0 ? <SignalMix counts={signalTypes} /> : null}
+      <div className="flex flex-col gap-3">
+        {founder ? <FounderFragment founder={founder} /> : null}
+        {signal ? <SignalFragment item={signal} /> : null}
+      </div>
+    </div>
+  );
+}
+
+function SignatureBand({ stats, globe }: { stats: HeroStats; globe?: ReactNode }) {
   return (
     <section className="-mx-6 border-b border-line px-6 pb-5" aria-label="Campus Scout">
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-10">
-        <div className="max-w-[640px]">
+      <div className={globe ? "flex flex-col gap-2 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(500px,620px)] lg:items-center lg:gap-8" : "grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-10"}>
+        <div className="order-1 max-w-[640px]">
           <div className="mb-3">
             <span className="inline-flex h-7 items-center gap-1 rounded-full border border-line bg-sunken pl-2.5 pr-1 text-[13px] leading-none text-fg-2">
               Sample data
@@ -234,16 +251,37 @@ function SignatureBand({ stats }: { stats: HeroStats }) {
           <p className="mt-3 max-w-[34rem] text-[16px] leading-6 text-fg-2">
             The campus map, the people on it, and recent signals.
           </p>
+          {globe ? (
+            <p className="mt-4 max-w-[36rem] text-[15px] leading-6">
+              <Link href="/founders" className="hover:underline">
+                <span className="num">{stats.founders.toLocaleString("en-US")}</span> student founders
+              </Link>
+              {" across "}
+              <span className="num">{stats.campuses.toLocaleString("en-US")}</span>
+              {" campuses · "}
+              <Link href="/companies" className="hover:underline">
+                <span className="num">{stats.tracked.toLocaleString("en-US")}</span> companies
+              </Link>
+              {" · "}
+              <Link href="/signals" className="hover:underline">
+                <span className="num">{stats.signalsTotal.toLocaleString("en-US")}</span> signals
+              </Link>
+            </p>
+          ) : null}
         </div>
-        {signal || founder || signalTypes.length > 0 ? (
-          <div className="grid w-full grid-cols-1 items-start gap-3 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-            {signalTypes.length > 0 ? <SignalMix counts={signalTypes} /> : null}
-            <div className="flex flex-col gap-3">
-              {founder ? <FounderFragment founder={founder} /> : null}
-              {signal ? <SignalFragment item={signal} /> : null}
-            </div>
-          </div>
-        ) : null}
+        {globe ? <div className="order-2 lg:col-start-2 lg:row-span-2 lg:row-start-1">{globe}</div> : null}
+        <div className={globe ? "order-3 mt-4 lg:col-start-1 lg:mt-6" : ""}>
+          {globe ? (
+            <>
+              <Collage stats={stats} />
+              <p className="mt-4 max-w-[40rem] text-[13px] leading-5 text-fg-2">
+                {countryCoverage(stats.universities)} Point size follows how many signals are on record.
+              </p>
+            </>
+          ) : (
+            <Collage stats={stats} />
+          )}
+        </div>
       </div>
     </section>
   );

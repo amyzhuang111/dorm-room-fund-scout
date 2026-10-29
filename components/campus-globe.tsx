@@ -12,11 +12,11 @@ export interface GlobeCampus {
   signals: number;
 }
 
-// Matches the cobe globe at https://cobe.vercel.app: white sphere, gray stipple, blue points.
-const LAND: [number, number, number] = [1, 1, 1];
-const POINT: [number, number, number] = [0.3, 0.45, 0.85];
-const HOT: [number, number, number] = [0, 0.2, 1];
-const GLOW: [number, number, number] = [0.94, 0.93, 0.91];
+// Dark cobe sphere: lit gray dot land, warm rim, orange markers.
+const LAND: [number, number, number] = [0.45, 0.47, 0.5];
+const POINT: [number, number, number] = [1, 0.4, 0];
+const HOT: [number, number, number] = [1, 0.72, 0.35];
+const GLOW: [number, number, number] = [0.42, 0.2, 0.08];
 
 function nearestCampus(campuses: GlobeCampus[], phi: number, theta: number, size: number, x: number, y: number): GlobeCampus | null {
   let best: GlobeCampus | null = null;
@@ -46,7 +46,18 @@ export function CampusGlobe({
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
-  const frame = useRef({ phi: GLOBE_PHI, theta: GLOBE_THETA, dragging: false, moved: 0, lastX: 0, lastY: 0, hoverId: null as string | null, reduce: false });
+  const frame = useRef({
+    phi: GLOBE_PHI,
+    theta: GLOBE_THETA,
+    dragging: false,
+    moved: 0,
+    lastX: 0,
+    lastY: 0,
+    velPhi: 0,
+    velTheta: 0,
+    hoverId: null as string | null,
+    reduce: false,
+  });
   const [size, setSize] = useState(height);
   const campusesRef = useRef(campuses);
   const selectedRef = useRef(selectedId);
@@ -79,7 +90,7 @@ export function CampusGlobe({
 
     let destroyed = false;
     let globe: { destroy: () => void } | null = null;
-    const pixelRatio = Math.min(2, window.devicePixelRatio || 1);
+    const pixelRatio = 2;
 
     void import("cobe").then(({ default: createGlobe }) => {
       if (destroyed || !canvasRef.current) return;
@@ -90,10 +101,10 @@ export function CampusGlobe({
         height: size * pixelRatio,
         phi: frame.current.phi,
         theta: frame.current.theta,
-        dark: 0,
-        diffuse: 1.5,
+        dark: 1,
+        diffuse: 1.8,
         mapSamples: GLOBE_MAP_SAMPLES,
-        mapBrightness: 10,
+        mapBrightness: 6,
         mapBaseBrightness: 0,
         baseColor: LAND,
         markerColor: POINT,
@@ -102,7 +113,17 @@ export function CampusGlobe({
         opacity: 1,
         onRender: (state) => {
           const current = frame.current;
-          if (!current.reduce && !current.dragging && !current.hoverId) current.phi += 0.005;
+          if (!current.dragging) {
+            const spinning = Math.abs(current.velPhi) > 0.00008 || Math.abs(current.velTheta) > 0.00008;
+            if (spinning) {
+              current.phi += current.velPhi;
+              current.theta = Math.max(-0.35, Math.min(0.6, current.theta + current.velTheta));
+              current.velPhi *= 0.94;
+              current.velTheta *= 0.94;
+            } else if (!current.reduce && !current.hoverId) {
+              current.phi += 0.0036;
+            }
+          }
           const list = campusesRef.current;
           const peak = Math.max(1, ...list.map((campus) => campus.signals));
           state.phi = current.phi;
@@ -155,6 +176,8 @@ export function CampusGlobe({
           const point = pointer(event);
           frame.current.dragging = true;
           frame.current.moved = 0;
+          frame.current.velPhi = 0;
+          frame.current.velTheta = 0;
           frame.current.lastX = point.x;
           frame.current.lastY = point.y;
           frame.current.hoverId = null;
@@ -167,9 +190,13 @@ export function CampusGlobe({
             const dy = point.y - frame.current.lastY;
             frame.current.lastX = point.x;
             frame.current.lastY = point.y;
+            const dPhi = dx / 280;
+            const dTheta = dy / 400;
             frame.current.moved += Math.hypot(dx, dy);
-            frame.current.phi += dx / 220;
-            frame.current.theta = Math.max(-0.2, Math.min(0.7, frame.current.theta + dy / 320));
+            frame.current.phi += dPhi;
+            frame.current.theta = Math.max(-0.35, Math.min(0.6, frame.current.theta + dTheta));
+            frame.current.velPhi = dPhi;
+            frame.current.velTheta = dTheta;
             setHover(null);
             return;
           }
@@ -180,6 +207,8 @@ export function CampusGlobe({
           const dragged = frame.current.moved > 6;
           frame.current.dragging = false;
           if (!dragged) {
+            frame.current.velPhi = 0;
+            frame.current.velTheta = 0;
             const campus = nearestCampus(campusesRef.current, frame.current.phi, frame.current.theta, point.view, point.x, point.y);
             if (campus) onSelect(campus.id);
           }
