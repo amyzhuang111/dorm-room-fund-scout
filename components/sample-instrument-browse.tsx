@@ -12,6 +12,7 @@ import {
   FacetRail,
   IntelligenceBoards,
   LogoMark,
+  MobileBrowsePulse,
   PANEL,
   COUNT,
   type FacetState,
@@ -87,6 +88,7 @@ export function SampleInstrumentBrowse({
     campus: campus ?? null,
     query: query ?? "",
   }));
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   const boardCompanies = useMemo(() => applyFacets(companies, facets), [companies, facets]);
 
@@ -112,16 +114,16 @@ export function SampleInstrumentBrowse({
 
   const chip = (active: boolean) =>
     active
-      ? "border-[color:var(--ember,#E8823A)] bg-[color:var(--ember,#E8823A)] text-[#0B0E17]"
-      : "border-[color:var(--cobalt-haze,#1A2556)] bg-[color:var(--bg-sunken,#080A11)] font-mono text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--cobalt,#2F4FD8)]";
+      ? "border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] text-white"
+      : "border-[color:var(--cobalt-haze,#E8ECFA)] bg-[color:var(--bg-sunken,#F3F5F9)] font-mono text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]";
 
   return (
     <div className="mx-auto mt-2 grid w-full max-w-[1280px] gap-2.5 lg:grid-cols-[minmax(0,1fr)_240px] sm:mt-3 sm:gap-3">
       <div className="min-w-0">
-        <div className={`${PANEL} relative mb-2 flex flex-wrap items-end justify-between gap-2 overflow-hidden p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#E8823A)]`}>
+        <div className={`${PANEL} relative mb-2 flex flex-wrap items-end justify-between gap-2 overflow-hidden p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">{feed === "leaderboard" ? "Signal ledger" : "Company ledger"}</p>
-            <p className="mt-0.5 text-[13px] text-[color:var(--fg-2,#A3AAC0)]">
+            <p className="mt-0.5 text-[13px] text-[color:var(--fg-2,#3F465C)]">
               <span className={COUNT}>{total.toLocaleString("en-US")}</span>{" "}
               {total === 1 ? "company" : "companies"}
               {campusName ? (
@@ -129,7 +131,7 @@ export function SampleInstrumentBrowse({
                   {" · "}
                   {campusName}
                   {" · "}
-                  <Link href={clearCampusHref} className="text-[color:var(--ember,#E8823A)] hover:underline">
+                  <Link href={clearCampusHref} className="text-[color:var(--ember,#D96B1C)] hover:underline">
                     Clear
                   </Link>
                 </>
@@ -200,15 +202,26 @@ export function SampleInstrumentBrowse({
               );
             })}
           </div>
-          <details className={`${PANEL} px-2.5 py-2`}>
-            <summary className="cursor-pointer font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#ECEEF4)]">Scout filters</summary>
+          <div className="lg:hidden">
+            <MobileBrowsePulse companies={boardCompanies} />
+          </div>
+          <button
+            type="button"
+            onClick={() => setMobileFiltersOpen(true)}
+            className={`${PANEL} flex w-full items-center justify-between px-2.5 py-2 text-left font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#0B0E17)] lg:hidden`}
+          >
+            <span>Scout filters</span>
+            <span className="text-[color:var(--ember,#D96B1C)]">Open</span>
+          </button>
+          <details className={`${PANEL} hidden px-2.5 py-2 lg:block`}>
+            <summary className="cursor-pointer font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#0B0E17)]">Scout filters</summary>
             <div className="mt-2 h-[min(50vh,420px)]">
               <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={commitFacet} />
             </div>
           </details>
         </div>
         {cards.length === 0 ? (
-          <p className="text-[13px] text-[color:var(--fg-2,#A3AAC0)]">
+          <p className="text-[13px] text-[color:var(--fg-2,#3F465C)]">
             {query
               ? `No companies match "${query}".`
               : campusName && campusTotal === 0
@@ -225,7 +238,7 @@ export function SampleInstrumentBrowse({
           </ol>
         )}
         {cards.length < total ? (
-          <Link href={moreHref} className="mt-3 inline-flex h-8 items-center rounded-md border border-[color:var(--ember,#E8823A)]/50 bg-[color:var(--ember,#E8823A)]/10 px-3 font-mono text-[12px] font-medium text-[color:var(--ember,#E8823A)] hover:border-[color:var(--ember,#E8823A)]">
+          <Link href={moreHref} className="mt-3 inline-flex h-8 items-center rounded-md border border-[color:var(--ember,#D96B1C)]/50 bg-[color:var(--ember,#D96B1C)]/10 px-3 font-mono text-[12px] font-medium text-[color:var(--ember,#D96B1C)] hover:border-[color:var(--ember,#D96B1C)]">
             Show more
           </Link>
         ) : null}
@@ -243,13 +256,27 @@ export function SampleInstrumentBrowse({
         </div>
       </div>
       <aside className="hidden min-w-0 lg:block">
-        <div className="sticky top-14 space-y-2">
+        <div className={`${PANEL} relative sticky top-14 space-y-2 overflow-hidden p-2 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
+          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Scout boards</p>
           <IntelligenceBoards companies={boardCompanies} compact />
         </div>
       </aside>
-      <div className="lg:hidden">
-        <IntelligenceBoards companies={boardCompanies} compact />
-      </div>
+      {mobileFiltersOpen ? (
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
+          <button type="button" className="absolute inset-0 bg-slate-900/40" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
+          <div className={`${PANEL} absolute inset-x-0 bottom-0 flex max-h-[min(85dvh,640px)] flex-col overflow-hidden rounded-t-xl border-t border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg-raised,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)]`}>
+            <div className="flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-3 py-2">
+              <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#0B0E17)]">Scout filters</p>
+              <button type="button" onClick={() => setMobileFiltersOpen(false)} className="font-mono text-[11px] text-[color:var(--ember,#D96B1C)]">Done</button>
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2">
+              <div className="h-[min(70dvh,520px)]">
+                <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={commitFacet} />
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -274,17 +301,17 @@ function DirectoryPill({ card, rank }: { card: DirectoryCard; rank: number | nul
   const subtitle = directoryCardSubtitle(card);
   const meta = signalMeta(card);
   return (
-    <Link href={`/startup/${card.id}`} className="group flex items-center gap-2.5 rounded-md border border-[color:var(--line,#1F2536)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg-raised,#121726)] px-2.5 py-2.5 transition-colors hover:border-[color:var(--cobalt,#2F4FD8)]/60 hover:border-l-[color:var(--ember,#E8823A)] hover:bg-[color:var(--bg-sunken,#080A11)]">
-      {rank != null ? <span className="w-5 shrink-0 text-center font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#E8823A)]">{rank}</span> : null}
+    <Link href={`/startup/${card.id}`} className="group flex items-center gap-2.5 rounded-md border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-2.5 transition-colors hover:border-[color:var(--cobalt,#2F4FD8)]/60 hover:border-l-[color:var(--ember,#D96B1C)] hover:bg-[color:var(--bg-sunken,#F3F5F9)]">
+      {rank != null ? <span className="w-5 shrink-0 text-center font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{rank}</span> : null}
       <LogoMark name={card.name} logoUrl={card.logoUrl} size={28} />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[13px] font-medium tracking-tight text-[color:var(--fg,#ECEEF4)] group-hover:text-white">{card.name}</p>
-        {subtitle ? <p className="truncate font-mono text-[10px] text-[color:var(--fg-3,#6B7390)]">{subtitle}</p> : null}
+        <p className="truncate text-[13px] font-medium tracking-tight text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]">{card.name}</p>
+        {subtitle ? <p className="truncate font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">{subtitle}</p> : null}
       </div>
       {meta ? (
         <div className="max-w-[4.75rem] shrink-0 text-right">
-          <p className="truncate font-mono text-[11px] font-semibold leading-none text-[color:var(--ember,#E8823A)]">{meta.primary}</p>
-          {meta.secondary ? <p className="mt-0.5 truncate whitespace-nowrap font-mono text-[9px] text-[color:var(--fg-3,#6B7390)]">{meta.secondary}</p> : null}
+          <p className="truncate font-mono text-[11px] font-semibold leading-none text-[color:var(--ember,#D96B1C)]">{meta.primary}</p>
+          {meta.secondary ? <p className="mt-0.5 truncate whitespace-nowrap font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">{meta.secondary}</p> : null}
         </div>
       ) : null}
     </Link>

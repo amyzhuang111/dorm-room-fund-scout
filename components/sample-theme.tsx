@@ -2,15 +2,20 @@
 
 import { useEffect } from "react";
 
-/** Keep the sample product on the Halflight night palette (globe + browse + company). */
+/** Keep the sample product on Halflight daylight: true white + ember/cobalt. */
 export function SampleTheme() {
   useEffect(() => {
-    const prev = document.documentElement.dataset.theme;
-    document.documentElement.dataset.theme = "night";
+    const root = document.documentElement;
+    const prevTheme = root.dataset.theme;
+    const prevSample = root.dataset.sample;
+    root.dataset.theme = "day";
+    root.dataset.sample = "halflight";
     window.dispatchEvent(new Event("campus-scout-theme"));
     return () => {
+      if (prevSample) root.dataset.sample = prevSample;
+      else delete root.dataset.sample;
       const stored = localStorage.getItem("campus-scout-theme");
-      document.documentElement.dataset.theme = stored === "day" ? "day" : prev === "day" ? "day" : "night";
+      root.dataset.theme = stored === "night" ? "night" : prevTheme === "night" ? "night" : "day";
       window.dispatchEvent(new Event("campus-scout-theme"));
     };
   }, []);

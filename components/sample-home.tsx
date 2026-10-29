@@ -157,7 +157,7 @@ export function SampleHome({
 
 function Tab({ href, active, children }: { href: string; active: boolean; children: string }) {
   return (
-    <Link href={href} role="tab" aria-selected={active} className={`grid h-8 place-items-center border-b-2 px-2.5 font-mono text-[12px] font-medium uppercase tracking-[0.08em] ${active ? "border-[color:var(--ember,#E8823A)] text-[color:var(--fg,#ECEEF4)]" : "border-transparent text-[color:var(--fg-3,#6B7390)] hover:text-[color:var(--fg-2,#A3AAC0)]"}`}>
+    <Link href={href} role="tab" aria-selected={active} className={`grid h-8 place-items-center border-b-2 px-2.5 font-mono text-[12px] font-medium uppercase tracking-[0.08em] ${active ? "border-[color:var(--ember,#D96B1C)] text-[color:var(--fg,#0B0E17)]" : "border-transparent text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg-2,#3F465C)]"}`}>
       {children}
     </Link>
   );

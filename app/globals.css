@@ -482,23 +482,55 @@ a, button {
 }
 
 
-/* Sample product: Halflight dusk instrument (cobalt field, ember signal). Distinct from YCGlobe cream. */
-.sample-paper {
-  --bg: #0B0E17;
-  --bg-raised: #121726;
-  --bg-sunken: #080A11;
-  --fg: #ECEEF4;
-  --fg-2: #A3AAC0;
-  --fg-3: #6B7390;
-  --line: #1F2536;
-  --line-strong: #2C3449;
+/* Sample Halflight daylight: force true white on document while sample is open (nav included). Not cream. */
+html[data-sample="halflight"],
+html[data-sample="halflight"] body {
+  --bg: #FFFFFF;
+  --bg-raised: #FFFFFF;
+  --bg-sunken: #F3F5F9;
+  --fg: #0B0E17;
+  --fg-2: #3F465C;
+  --fg-3: #5C647A;
+  --line: #E1E5EF;
+  --line-strong: #C5CAD8;
   --cobalt: #2F4FD8;
-  --cobalt-haze: #1A2556;
-  --link: #7C8CF0;
-  --ember: #E8823A;
-  --amber: #F2B35B;
-  --accent: #E8823A;
-  --accent-foreground: #0B0E17;
+  --cobalt-haze: #E8ECFA;
+  --link: #2F4FD8;
+  --ember: #D96B1C;
+  --amber: #E89A3A;
+  --accent: #D96B1C;
+  --accent-foreground: #FFFFFF;
+  --on-ember: #FFFFFF;
+  --accent-2: #D96B1C;
+  --accent-subtle: #F3E7DC;
+  --background: #FFFFFF;
+  --surface: #FFFFFF;
+  --surface-2: #F3F5F9;
+  --foreground: #0B0E17;
+  --muted: #3F465C;
+  --border-c: #E1E5EF;
+  color: #0B0E17;
+  background: #FFFFFF;
+}
+
+/* Sample product: Halflight daylight - true white field, ember signal, cobalt type. Not YCGlobe cream. */
+.sample-paper {
+  --bg: #FFFFFF;
+  --bg-raised: #FFFFFF;
+  --bg-sunken: #F3F5F9;
+  --fg: #0B0E17;
+  --fg-2: #3F465C;
+  --fg-3: #5C647A;
+  --line: #E1E5EF;
+  --line-strong: #C5CAD8;
+  --cobalt: #2F4FD8;
+  --cobalt-haze: #E8ECFA;
+  --link: #2F4FD8;
+  --ember: #D96B1C;
+  --amber: #E89A3A;
+  --accent: #D96B1C;
+  --accent-foreground: #FFFFFF;
+  --on-ember: #FFFFFF;
   --background: var(--bg);
   --surface: var(--bg-raised);
   --surface-2: var(--bg-sunken);
@@ -540,16 +572,18 @@ a, button {
   letter-spacing: -0.02em;
   color: var(--fg) !important;
 }
-/* StartupDirectoryCard / CompanyDetail ship light surfaces; restyle inside sample. */
+/* StartupDirectoryCard / CompanyDetail inherit white Halflight; enforce AA ink. */
 .sample-paper .company-instrument .bg-white,
 .sample-paper .company-instrument [class*="bg-white"],
 .sample-paper .company-instrument .bg-neutral-50,
-.sample-paper .company-instrument .bg-neutral-100 {
-  background-color: var(--bg-sunken) !important;
+.sample-paper .company-instrument .bg-neutral-100,
+.sample-paper .company-instrument .bg-surface {
+  background-color: var(--bg) !important;
 }
 .sample-paper .company-instrument .text-black,
 .sample-paper .company-instrument .text-neutral-900,
-.sample-paper .company-instrument .text-neutral-800 {
+.sample-paper .company-instrument .text-neutral-800,
+.sample-paper .company-instrument .text-foreground {
   color: var(--fg) !important;
 }
 .sample-paper .company-instrument .text-neutral-600,
@@ -567,17 +601,23 @@ a, button {
   color: var(--accent-foreground) !important;
 }
 .sample-paper .company-instrument .shadow-sm {
-  box-shadow: none !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06) !important;
 }
 
-
-
+.sample-paper .company-instrument .dossier-brief {
+  border-color: var(--line) !important;
+  background: var(--bg-sunken) !important;
+}
+.sample-paper .company-instrument .dossier-brief h3 {
+  color: var(--cobalt) !important;
+}
 .sample-paper .company-instrument .sample-ops-chrome {
   display: none;
 }
 .sample-paper .company-instrument [class*="rounded-full"][class*="bg-ember"],
 .sample-paper .company-instrument .bg-ember {
-  background-color: color-mix(in oklab, var(--ember) 85%, black) !important;
+  background-color: var(--ember) !important;
+  color: var(--accent-foreground) !important;
 }
 
 .sample-paper .company-instrument .sample-ops-chrome + *,

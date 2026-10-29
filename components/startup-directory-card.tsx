@@ -45,7 +45,7 @@ function CompanyLogo({ name, websiteUrl }: { name: string; websiteUrl: string | 
   const [ok, setOk] = useState(false);
   const mono = (
     <div
-      className="grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-[#2F4FD8]/55 bg-[linear-gradient(145deg,#1A2556,#0E1428)] font-mono text-[18px] font-semibold tracking-tight text-[#E8823A] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.2)]"
+      className="grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-[#2F4FD8]/40 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[18px] font-semibold tracking-tight text-[#2F4FD8] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.12)]"
       aria-hidden
       title={name}
     >
@@ -239,23 +239,20 @@ export function StartupDirectoryCard({
                       </p>
                     )}
                   </div>
-                  {founder.linkedinUrl && (
-                    <span className="inline-flex shrink-0 items-center gap-1">
-                      <a
-                        href={founder.linkedinUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`LinkedIn for ${founder.name}`}
-                        title={founder.linkedinConfidence === "likely" ? "Likely LinkedIn profile. The name matched one of school, startup, or program." : "Open this person's LinkedIn profile"}
-                        className="inline-flex items-center gap-1 rounded-md bg-[#0a66c2] px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-[#004182]"
-                      >
-                        in
-                      </a>
-                      {founder.linkedinConfidence === "likely" && (
-                        <span className="rounded border border-dashed border-neutral-400 px-1 text-[10px] font-medium uppercase tracking-wide text-neutral-500">
-                          likely
-                        </span>
-                      )}
+                  {founder.linkedinUrl && founder.linkedinConfidence === "confirmed" ? (
+                    <a
+                      href={founder.linkedinUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`LinkedIn for ${founder.name}`}
+                      title="Verified public LinkedIn profile"
+                      className="inline-flex shrink-0 items-center gap-1 rounded-md bg-[#0a66c2] px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-[#004182]"
+                    >
+                      in
+                    </a>
+                  ) : (
+                    <span className="shrink-0 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2 py-1 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
+                      Not on record
                     </span>
                   )}
                 </li>

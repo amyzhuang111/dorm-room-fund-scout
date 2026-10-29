@@ -43,8 +43,8 @@ function GlobeBlock({ stats, companies }: { stats: HeroStats; companies: TileCom
 
 export function GlobeHero({ stats, companies = [], showGlobe = true }: { stats: HeroStats; companies?: TileCompany[]; showGlobe?: boolean }) {
   return (
-    <div className={showGlobe ? "bg-[#0B0E17] px-4 py-1.5 text-[color:var(--fg,#ECEEF4)] sm:px-5 lg:py-1" : "bg-bg px-6 py-6 text-fg"}>
-      <div className={showGlobe ? "max-lg:min-h-[calc(100svh-48px)] lg:min-h-[calc(100dvh-48px)]" : ""}>
+    <div className={showGlobe ? "bg-[color:var(--bg,#FFFFFF)] px-4 py-1.5 text-[color:var(--fg,#0B0E17)] sm:px-5 lg:py-1" : "bg-bg px-6 py-6 text-fg"}>
+      <div className={showGlobe ? "lg:min-h-[calc(100dvh-48px)]" : ""}>
         <SignatureBand
           stats={stats}
           companies={companies}
@@ -168,7 +168,7 @@ function SignalFragment({ item }: { item: WeekItem }) {
   return (
     <div className="rounded-lg border border-line bg-raised px-3 py-2.5 shadow-[0_8px_24px_rgba(0,0,0,0.28)]">
       <div className="flex min-w-0 items-center gap-2 text-[14px]">
-        <span className="h-2 w-2 shrink-0 rounded-full bg-[#e6dfd4]" />
+        <span className="h-2 w-2 shrink-0 rounded-full bg-[color:var(--ember,#D96B1C)]" />
         {campus}
         {chip ? <span className={`shrink-0 rounded-full px-1.5 py-px text-[13px] leading-5 ${chipClass(item, isHighValue(item))}`}>{chip}</span> : null}
         <span className="num ml-auto shrink-0 text-fg-2" title={item.at ?? undefined}>{updatedAgo(item.at)}</span>
@@ -196,9 +196,9 @@ function Collage({ stats }: { stats: HeroStats }) {
 
 function SamplePill({ cream = false }: { cream?: boolean }) {
   return (
-    <span className={`inline-flex h-6 items-center gap-0.5 rounded-full border pl-2 pr-0.5 text-[12px] leading-none ${cream ? "border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)]/80 text-[color:var(--fg-3,#6B7390)]" : "border-line bg-sunken text-fg-3"}`}>
+    <span className={`inline-flex h-6 items-center gap-0.5 rounded-full border pl-2 pr-0.5 text-[12px] leading-none ${cream ? "border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)]/80 text-[color:var(--fg-3,#5C647A)]" : "border-line bg-sunken text-fg-3"}`}>
       Sample data
-      <Link href="/" aria-label="Close" className={`grid h-4 w-4 place-items-center rounded-full ${cream ? "text-[color:var(--fg-3,#6B7390)] hover:bg-[color:var(--bg-sunken,#080A11)]" : "text-fg-3 hover:bg-raised hover:text-fg"}`}>
+      <Link href="/" aria-label="Close" className={`grid h-4 w-4 place-items-center rounded-full ${cream ? "text-[color:var(--fg-3,#5C647A)] hover:bg-[color:var(--bg-sunken,#F3F5F9)]" : "text-fg-3 hover:bg-raised hover:text-fg"}`}>
         <svg width="8" height="8" viewBox="0 0 10 10" aria-hidden>
           <path d="M2 2 8 8M8 2 2 8" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
         </svg>
@@ -217,10 +217,10 @@ function HeroActions({ cream = false, compact = false }: { cream?: boolean; comp
   if (compact) {
     return (
       <div className="flex flex-wrap items-center gap-1.5">
-        <Link href={`/?${world.toString()}#browse`} className="inline-flex h-6 items-center rounded bg-[color:var(--ember,#E8823A)] px-2 text-[11px] font-semibold text-white sm:h-7 sm:px-2.5 sm:text-[12px]">
+        <Link href={`/?${world.toString()}#browse`} className="inline-flex h-6 items-center rounded bg-[color:var(--ember,#D96B1C)] px-2 text-[11px] font-semibold text-white sm:h-7 sm:px-2.5 sm:text-[12px]">
           Explore map
         </Link>
-        <Link href={`/?${directory.toString()}#browse`} className="inline-flex h-6 items-center rounded border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] px-2 text-[11px] font-medium text-[color:var(--fg,#ECEEF4)] sm:h-7 sm:px-2.5 sm:text-[12px]">
+        <Link href={`/?${directory.toString()}#browse`} className="inline-flex h-6 items-center rounded border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2 text-[11px] font-medium text-[color:var(--fg,#0B0E17)] sm:h-7 sm:px-2.5 sm:text-[12px]">
           Browse directory
         </Link>
       </div>
@@ -228,7 +228,7 @@ function HeroActions({ cream = false, compact = false }: { cream?: boolean; comp
   }
   return (
     <div className="mt-1.5 flex flex-wrap items-center gap-2 lg:mt-1">
-      <Link href={`/?${world.toString()}#browse`} className={`inline-flex h-10 items-center rounded px-4 text-[14px] font-semibold ${cream ? "bg-[color:var(--ember,#E8823A)] text-white" : "bg-ember text-accent-foreground"}`}>
+      <Link href={`/?${world.toString()}#browse`} className={`inline-flex h-10 items-center rounded px-4 text-[14px] font-semibold ${cream ? "bg-[color:var(--ember,#D96B1C)] text-white" : "bg-ember text-accent-foreground"}`}>
         Explore map
       </Link>
       <Link href={`/?${directory.toString()}#browse`} className={`inline-flex h-10 items-center rounded border px-4 text-[14px] font-medium ${cream ? "border-[#e7cbb6] bg-white text-[#20140c]" : "border-line text-fg"}`}>
@@ -248,10 +248,10 @@ function SignatureBand({ stats, companies = [], globe }: { stats: HeroStats; com
       <section className="-mx-4 px-0 pb-1 sm:-mx-5" aria-label="Campus Scout">
         <div className="mb-1 flex flex-wrap items-center gap-2">
           <SamplePill />
-          <p className="text-[12px] leading-4 text-[color:var(--fg-2,#A3AAC0)] sm:text-[13px]" data-sample-strip-counts>
-            <span className="font-bold tabular-nums text-[color:var(--ember,#E8823A)]" data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
+          <p className="text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)] sm:text-[13px]" data-sample-strip-counts>
+            <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]" data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
             {" founders listed · "}
-            <span className="font-bold tabular-nums text-[color:var(--ember,#E8823A)]" data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
+            <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]" data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
             {" campuses on map"}
           </p>
         </div>

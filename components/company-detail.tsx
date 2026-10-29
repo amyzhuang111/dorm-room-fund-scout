@@ -115,26 +115,26 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
       </div>
 
       {/* Above the fold: why look / founder edge / open question */}
-      <section className="space-y-3 rounded-md border border-border-c bg-surface p-3">
+      <section className="dossier-brief relative space-y-3 overflow-hidden rounded-md border border-border-c border-l-[3px] border-l-[color:var(--ember,#D96B1C)] bg-surface p-3 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
         <div>
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Why look</h3>
+          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Why look</h3>
           <p className="mt-0.5 text-sm text-foreground">{project.latestSignalNote ?? "No supporting evidence recorded yet."}</p>
         </div>
         <div>
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Founder edge</h3>
+          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founder edge</h3>
           <p className="mt-0.5 text-sm text-foreground">
-            {project.founders.length ? `${project.founders.join(", ")} — see Evidence below for what's attributed to them directly.` : "Not yet identified from evidence."}
+            {project.founders.length ? `${project.founders.join(", ")} · see Evidence below for what's attributed to them directly.` : "Not yet identified from evidence."}
           </p>
         </div>
         <div>
-          <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Open question</h3>
+          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Open question</h3>
           <p className="mt-0.5 text-sm text-foreground">{strongestConcern ? strongestConcern.rationale : "No unresolved eligibility concerns on record."}</p>
         </div>
         <div className="flex flex-wrap gap-2 pt-1">
           <a href="#evidence" className="rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground">
             Research company
           </a>
-          <a href="#pipeline" className="rounded-md border border-border-c px-3 py-1.5 text-xs text-foreground hover:bg-surface">
+          <a href="#pipeline" className="rounded-md border border-[color:var(--ember,#D96B1C)]/40 px-3 py-1.5 text-xs text-[color:var(--ember,#D96B1C)] hover:bg-[color:var(--ember,#D96B1C)]/10">
             Save / add to pipeline
           </a>
         </div>
@@ -167,7 +167,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
             {project.sameSchoolBonus > 0 ? ` Includes +${project.sameSchoolBonus} for same-school co-founders.` : ""}
           </p>
         ) : (
-          <p className="mt-1 text-sm text-muted">Unassessed — {project.openQuestion ?? "no rubric dimensions rated yet."}</p>
+          <p className="mt-1 text-sm text-muted">Unassessed · {project.openQuestion ?? "no rubric dimensions rated yet."}</p>
         )}
         <div className="mt-2">
           <AssessmentForm projectId={project.id} history={project.assessmentHistory} />
@@ -193,7 +193,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
 
       {/* Founders */}
       <section>
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Founders</h3>
+        <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founders</h3>
         <ul className="mt-1 space-y-1 text-sm text-foreground">
           {project.founderLinks.length === 0 && <li>None identified yet.</li>}
           {project.founderLinks.map((f) => (
@@ -223,7 +223,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
                           {host}
                         </a>
                         {item.status === "unverified" ? " · unverified" : ""}
-                        {item.excerpt ? ` — ${item.excerpt}` : ""}
+                        {item.excerpt ? ` · ${item.excerpt}` : ""}
                       </li>
                     );
                   })}

@@ -30,19 +30,19 @@ export interface TileCampus {
 
 export type TileCompany = FacetCompany;
 
-const OCEAN = "#0B0E17";
-const LAND = "#1A2556";
-const LAND_ALT = "#16204A";
-const BOUNDARY = "#1F2536";
-const LABEL = "#A3AAC0";
-const HALO = "#0B0E17";
-const BRAND = "#7C8CF0";
-const COUNT = "font-bold tabular-nums text-[color:var(--ember,#E8823A)]";
+const OCEAN = "#D9E2EF";
+const LAND = "#F4F6FA";
+const LAND_ALT = "#E8ECF4";
+const BOUNDARY = "#C5CAD8";
+const LABEL = "#3F465C";
+const HALO = "#FFFFFF";
+const BRAND = "#2F4FD8";
+const COUNT = "font-bold tabular-nums text-[color:var(--ember,#D96B1C)]";
 
 const COUNTRY_COLOR: Record<string, string> = {
-  "United States": "#7C8CF0",
-  Canada: "#E8823A",
-  "United Kingdom": "#3FB68B",
+  "United States": "#2F4FD8",
+  Canada: "#D96B1C",
+  "United Kingdom": "#1F8A66",
 };
 
 function markerColor(country: string): string {
@@ -92,6 +92,7 @@ export function TileGlobe({
   const [facets, setFacets] = useState<FacetState>(emptyFacets);
   const [stripMode, setStripMode] = useState<"startups" | "founders">("startups");
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [hover, setHover] = useState<{ name: string; founders: number; signals: number; x: number; y: number } | null>(null);
   const [ready, setReady] = useState(false);
 
@@ -156,9 +157,10 @@ export function TileGlobe({
       const wide = window.innerWidth >= 1024;
       const docTop = node ? node.getBoundingClientRect().top + window.scrollY : wide ? 96 : 120;
       // Desktop strip is inside the stage. Mobile chips and the strip sit under it.
-      const reserve = wide ? 8 : 150;
+      const reserve = wide ? 8 : 320; // room for Live + Ledger strip under the stage
       const available = Math.round(window.innerHeight - docTop - reserve);
-      setStageHeight(Math.max(wide ? 560 : 280, available));
+      const raw = Math.max(wide ? 560 : 220, available);
+      setStageHeight(wide ? raw : Math.min(360, raw));
     };
     fit();
     window.addEventListener("resize", fit);
@@ -196,13 +198,13 @@ export function TileGlobe({
         if (dead || !map) return;
         map.setProjection({ type: "globe" });
         map.setSky({
-          "sky-color": "#0B0E17",
-          "horizon-color": "#121726",
-          "fog-color": "#0B0E17",
-          "sky-horizon-blend": 0.35,
-          "horizon-fog-blend": 0.55,
-          "fog-ground-blend": 0.4,
-          "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 0.85, 2.2, 0.55, 4, 0.2],
+          "sky-color": "#EEF2F8",
+          "horizon-color": "#FFFFFF",
+          "fog-color": "#E4EAF2",
+          "sky-horizon-blend": 0.55,
+          "horizon-fog-blend": 0.35,
+          "fog-ground-blend": 0.25,
+          "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 0.55, 2.2, 0.28, 4, 0.08],
         });
         for (const layer of map.getStyle().layers) {
           try {
@@ -228,7 +230,7 @@ export function TileGlobe({
           paint: {
             "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, ["get", "radius"], 3, ["*", ["get", "radius"], 1.55], 5, ["*", ["get", "radius"], 2.1]],
             "circle-color": ["get", "color"],
-            "circle-stroke-color": "#0B0E17",
+            "circle-stroke-color": "#FFFFFF",
             "circle-stroke-width": 1.15,
             "circle-opacity": 0.95,
           },
@@ -241,7 +243,7 @@ export function TileGlobe({
           paint: {
             "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, ["+", ["get", "radius"], 3.2], 3, ["+", ["*", ["get", "radius"], 1.55], 4], 5, ["+", ["*", ["get", "radius"], 2.1], 5]],
             "circle-color": ["get", "color"],
-            "circle-stroke-color": "#E8823A",
+            "circle-stroke-color": "#D96B1C",
             "circle-stroke-width": 2.6,
             "circle-opacity": 1,
           },
@@ -350,20 +352,20 @@ export function TileGlobe({
 
   return (
     <div className={className}>
-      <div className="relative overflow-hidden rounded-xl border border-[color:var(--line,#1F2536)] bg-[#0B0E17]" style={{ height: stageHeight }}>
+      <div className="relative overflow-hidden rounded-xl border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]" style={{ height: stageHeight }}>
         <div ref={mapNode} className="h-full w-full" />
         {/* Halflight left overlay: scout brief, not a YC-style filter rail */}
         <aside className="pointer-events-none absolute bottom-3 left-3 top-3 z-10 hidden w-[min(340px,34%)] flex-col gap-2 lg:flex">
-          <div className="pointer-events-auto rounded-lg border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)]/96 p-3">
-            <p className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#6B7390)]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--ember,#E8823A)]" aria-hidden />
+          <div className="pointer-events-auto rounded-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)]/96 p-3">
+            <p className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />
               Live · campus scout
             </p>
-            <p className="mt-2 text-[22px] font-semibold leading-7 tracking-[-0.03em] text-[color:var(--fg,#ECEEF4)]">
+            <p className="mt-2 text-[22px] font-semibold leading-7 tracking-[-0.03em] text-[color:var(--fg,#0B0E17)]">
               <span className={`${COUNT} font-mono text-[24px]`}>{liveCount.toLocaleString("en-US")}</span>
               {" companies forming"}
             </p>
-            <p className="mt-1 font-mono text-[12px] text-[color:var(--fg-2,#A3AAC0)]" data-fold-counts>
+            <p className="mt-1 font-mono text-[12px] text-[color:var(--fg-2,#3F465C)]" data-fold-counts>
               <span className={COUNT} data-count="campuses-on-map">{shown.length.toLocaleString("en-US")}</span> campuses on map
               {" · "}
               <span className={COUNT} data-count="founders-listed">{founderCount.toLocaleString("en-US")}</span> founders listed
@@ -372,13 +374,13 @@ export function TileGlobe({
               <button
                 type="button"
                 onClick={() => setFiltersOpen((v) => !v)}
-                className="inline-flex h-7 items-center rounded border border-[color:var(--line-strong,#2C3449)] bg-[color:var(--bg-sunken,#080A11)] px-2.5 text-[11px] font-medium text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--ember,#E8823A)]"
+                className="inline-flex h-7 items-center rounded border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2.5 text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--ember,#D96B1C)]"
               >
                 {filtersOpen ? "Hide filters" : "Filters"}
               </button>
               <a
                 href="/ask"
-                className="inline-flex h-7 items-center rounded-sm border border-[color:var(--ember,#E8823A)] bg-[color:var(--bg-sunken,#080A11)] px-2.5 font-mono text-[11px] font-semibold text-[color:var(--ember,#E8823A)]"
+                className="inline-flex h-7 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2.5 font-mono text-[11px] font-semibold text-[color:var(--ember,#D96B1C)]"
               >
                 Scout ask
               </a>
@@ -416,17 +418,17 @@ export function TileGlobe({
           </div>
         ) : null}
         <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 hidden -translate-x-1/2 lg:block" data-map-credit>
-          <p className="rounded bg-[#0B0E17]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#6B7390)]">
+          <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
             <MapCredit />
           </p>
         </div>
         {hover ? (
           <div
-            className="pointer-events-none absolute z-30 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-lg border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] px-2.5 py-1.5 text-left text-[color:var(--fg,#ECEEF4)]"
+            className="pointer-events-none absolute z-30 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-1.5 text-left text-[color:var(--fg,#0B0E17)]"
             style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}
           >
             <p className="text-[13px] font-medium leading-4">{hover.name}</p>
-            <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#A3AAC0)]">
+            <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
               <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> founders
               {" · "}
               <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> signals
@@ -434,25 +436,38 @@ export function TileGlobe({
           </div>
         ) : null}
       </div>
-      {/* Mobile: brief + filters sheet, no YC three-pane clone */}
+      {/* Mobile: Live + Ledger in first viewport; boards + filter sheet below */}
       <div className="mt-2 space-y-2 lg:hidden">
-        <div className={`${PANEL} relative overflow-hidden p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#E8823A)]`}>
-          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Live · campus scout</p>
-          <p className="mt-1 text-[17px] font-semibold tracking-tight" data-fold-counts-mobile>
-            <span className={COUNT}>{liveCount.toLocaleString("en-US")}</span>{" "}
-            <span className="text-[color:var(--fg,#ECEEF4)]">companies</span>
-          </p>
-          <p className="mt-0.5 font-mono text-[11px] text-[color:var(--fg-2,#A3AAC0)]">
-            <span className={COUNT} data-count="campuses-on-map">{shown.length.toLocaleString("en-US")}</span> campuses on map
-            {" · "}
-            <span className={COUNT} data-count="founders-listed">{founderCount.toLocaleString("en-US")}</span> founders listed
-          </p>
-          <Link
-            href="/ask"
-            className="mt-2 inline-flex h-7 items-center gap-1.5 rounded-sm border border-[color:var(--ember,#E8823A)]/50 bg-[color:var(--ember,#E8823A)]/10 px-2 font-mono text-[11px] text-[color:var(--ember,#E8823A)]"
-          >
-            <span aria-hidden>{">"}</span> Scout ask
-          </Link>
+        <div className={`${PANEL} relative overflow-hidden p-2 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
+          <div className="flex flex-wrap items-end justify-between gap-2">
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Live · campus scout</p>
+              <p className="mt-0.5 text-[15px] font-semibold tracking-tight" data-fold-counts-mobile>
+                <span className={COUNT}>{liveCount.toLocaleString("en-US")}</span>{" "}
+                <span className="text-[color:var(--fg,#0B0E17)]">companies</span>
+              </p>
+              <p className="mt-0.5 font-mono text-[10px] text-[color:var(--fg-2,#3F465C)]">
+                <span className={COUNT} data-count="campuses-on-map">{shown.length.toLocaleString("en-US")}</span> campuses on map
+                {" · "}
+                <span className={COUNT} data-count="founders-listed">{founderCount.toLocaleString("en-US")}</span> founders listed
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              <button
+                type="button"
+                onClick={() => setMobileFiltersOpen(true)}
+                className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2 font-mono text-[11px] text-[color:var(--fg,#0B0E17)]"
+              >
+                Filters
+              </button>
+              <Link
+                href="/ask"
+                className="inline-flex h-7 items-center gap-1 rounded-sm border border-[color:var(--ember,#D96B1C)]/50 bg-[color:var(--ember,#D96B1C)]/10 px-2 font-mono text-[11px] text-[color:var(--ember,#D96B1C)]"
+              >
+                <span aria-hidden>{">"}</span> Scout ask
+              </Link>
+            </div>
+          </div>
         </div>
         <ViewDrawer
           mode={stripMode}
@@ -461,25 +476,36 @@ export function TileGlobe({
           founders={founderStrip}
           companyTotal={filteredCompanies.length}
           founderTotal={founderTotalListed}
+          compact
         />
         <IntelligenceBoards companies={filteredCompanies} compact />
-        <details className={`${PANEL} px-2.5 py-2`}>
-          <summary className="cursor-pointer font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#ECEEF4)]">Scout filters · {shown.length} campuses</summary>
-          <div className="mt-2 h-[320px]">
-            <FacetRail
-              companies={companies}
-              campuses={campuses}
-              facets={facets}
-              onChange={onFacetChange}
-              onCampusFocus={(id) => {
-                const campus = campuses.find((row) => row.id === id);
-                if (campus) focus(campus);
-              }}
-              footer={<p>{markerSizeLegend()}</p>}
-            />
-          </div>
-        </details>
       </div>
+      {mobileFiltersOpen ? (
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
+          <button type="button" className="absolute inset-0 bg-slate-900/40" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
+          <div className={`${PANEL} absolute inset-x-0 bottom-0 flex max-h-[min(85dvh,640px)] flex-col overflow-hidden rounded-t-xl border-t border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg-raised,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)]`}>
+            <div className="flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-3 py-2">
+              <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#0B0E17)]">Scout filters · {shown.length} campuses</p>
+              <button type="button" onClick={() => setMobileFiltersOpen(false)} className="font-mono text-[11px] text-[color:var(--ember,#D96B1C)]">Done</button>
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2">
+              <div className="h-[min(70dvh,520px)]">
+                <FacetRail
+                  companies={companies}
+                  campuses={campuses}
+                  facets={facets}
+                  onChange={onFacetChange}
+                  onCampusFocus={(id) => {
+                    const campus = campuses.find((row) => row.id === id);
+                    if (campus) focus(campus);
+                  }}
+                  footer={<p>{markerSizeLegend()}</p>}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
