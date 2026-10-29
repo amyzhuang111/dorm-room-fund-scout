@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import { MapCredit } from "./map-credit";
+import { markerRadius, markerSizeLegend } from "@/lib/domain/marker-radius";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 export interface TileCampus {
@@ -44,10 +45,6 @@ function markerColor(country: string): string {
   return COUNTRY_COLOR[country] ?? BRAND;
 }
 
-function markerRadius(signals: number): number {
-  const count = Number.isFinite(signals) ? Math.max(0, signals) : 0;
-  return Math.round((2.6 + Math.min(5.5, Math.sqrt(count) * 0.45)) * 10) / 10;
-}
 
 function campusCollection(campuses: TileCampus[]) {
   return {
@@ -111,13 +108,13 @@ export function TileGlobe({
     () => [...shown].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name)).slice(0, 5),
     [shown],
   );
-  const companyStrip = useMemo(() => {
+  const companiesInView = useMemo(() => {
     const ids = new Set(shown.map((campus) => campus.id));
     return companies
       .filter((company) => company.schoolId && ids.has(company.schoolId) && (!selectedId || company.schoolId === selectedId))
-      .sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name))
-      .slice(0, 12);
+      .sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name));
   }, [companies, shown, selectedId]);
+  const companyStrip = useMemo(() => companiesInView.slice(0, 48), [companiesInView]);
 
   useEffect(() => {
     const node = mapNode.current;
@@ -327,10 +324,11 @@ export function TileGlobe({
 
   const mobileChoices = (
     <div className="mt-3 space-y-2 lg:hidden">
+      <p className="text-[11px] leading-4 text-[#6b5443]">{markerSizeLegend()}</p>
       <div className="flex gap-1.5 overflow-x-auto">
-        <FilterChip active={!country} onClick={() => setCountry(null)} label={`All ${campuses.length}`} />
+        <FilterChip active={!country} onClick={() => setCountry(null)} label={`All · ${campuses.length}`} />
         {countries.map(([name, count]) => (
-          <FilterChip key={name} active={country === name} onClick={() => setCountry(country === name ? null : name)} label={`${name} ${count}`} />
+          <FilterChip key={name} active={country === name} onClick={() => setCountry(country === name ? null : name)} label={`${name} · ${count}`} />
         ))}
       </div>
       <div className="flex gap-1.5 overflow-x-auto">
@@ -340,7 +338,7 @@ export function TileGlobe({
           </button>
         ))}
       </div>
-      <CompanyStrip companies={companyStrip} />
+      <CompanyStrip companies={companyStrip} total={companiesInView.length} />
     </div>
   );
 
@@ -351,9 +349,9 @@ export function TileGlobe({
       <aside className="absolute left-3 top-3 z-10 hidden w-[228px] rounded-2xl border border-[#f0d9c6] bg-white/92 p-3 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)] lg:block">
         <p className="text-[13px] font-semibold">Campuses</p>
         <div className="mt-2 flex flex-wrap gap-1.5">
-          <FilterChip active={!country} onClick={() => setCountry(null)} label={`All ${campuses.length}`} />
+          <FilterChip active={!country} onClick={() => setCountry(null)} label={`All · ${campuses.length}`} />
           {countries.map(([name, count]) => (
-            <FilterChip key={name} active={country === name} onClick={() => setCountry(country === name ? null : name)} label={`${name} ${count}`} />
+            <FilterChip key={name} active={country === name} onClick={() => setCountry(country === name ? null : name)} label={`${name} · ${count}`} />
           ))}
         </div>
       </aside>
@@ -371,7 +369,8 @@ export function TileGlobe({
         </div>
       ) : null}
       <div className="absolute bottom-3 left-3 right-3 z-10 hidden lg:block">
-        <CompanyStrip companies={companyStrip} />
+        <p className="mb-1.5 px-1 text-[11px] leading-4 text-[#6b5443]">{markerSizeLegend()}</p>
+        <CompanyStrip companies={companyStrip} total={companiesInView.length} />
       </div>
       <p className="pointer-events-auto absolute bottom-14 right-3 z-10 hidden max-w-[220px] text-right text-[11px] leading-4 text-[#6b5443] lg:block">
         <MapCredit />
@@ -405,16 +404,23 @@ function CompanyMark({ name, logoUrl }: { name: string; logoUrl: string | null }
   );
 }
 
-function CompanyStrip({ companies }: { companies: TileCompany[] }) {
-  if (companies.length === 0) return null;
+function CompanyStrip({ companies, total }: { companies: TileCompany[]; total: number }) {
+  if (total === 0) return null;
   return (
-    <div className="flex items-center gap-1.5 overflow-x-auto rounded-2xl border border-[#f0d9c6] bg-white/92 px-2 py-1.5 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)]">
-      {companies.map((company) => (
-        <a key={company.id} href={`/startup/${company.id}`} className="flex shrink-0 items-center gap-1.5 rounded-xl border border-[#f0d9c6] bg-white px-1.5 py-1 text-[12px] text-[#20140c] hover:border-[#E05612]">
-          <CompanyMark name={company.name} logoUrl={company.logoUrl ?? null} />
-          <span className="max-w-[8.5rem] truncate pr-1">{company.name}</span>
-        </a>
-      ))}
+    <div className="rounded-2xl border border-[#f0d9c6] bg-white/92 px-2.5 py-2 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)]">
+      <div className="mb-1.5 flex items-baseline gap-2 px-0.5">
+        <p className="text-[12px] font-semibold tracking-tight">Current view</p>
+        <p className={`${COUNT} text-[13px]`}>{total.toLocaleString("en-US")}</p>
+        <p className="text-[11px] text-[#6b5443]">{total === 1 ? "company" : "companies"}</p>
+      </div>
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5">
+        {companies.map((company) => (
+          <a key={company.id} href={`/startup/${company.id}`} className="flex shrink-0 items-center gap-1.5 rounded-xl border border-[#f0d9c6] bg-white px-1.5 py-1 text-[12px] text-[#20140c] hover:border-[#E05612]">
+            <CompanyMark name={company.name} logoUrl={company.logoUrl ?? null} />
+            <span className="max-w-[8.5rem] truncate pr-1">{company.name}</span>
+          </a>
+        ))}
+      </div>
     </div>
   );
 }
@@ -430,11 +436,14 @@ function FilterChip({ active, label, onClick }: { active: boolean; label: string
 function RankCard({ title, rows, onPick }: { title: string; rows: TileCampus[]; onPick: (campus: TileCampus) => void }) {
   return (
     <div className="rounded-2xl border border-[#f0d9c6] bg-white/92 p-3 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)]">
-      <p className="text-[13px] font-semibold">{title}</p>
+      <div className="flex items-baseline justify-between gap-2">
+        <p className="text-[13px] font-semibold">{title}</p>
+        <p className="text-[11px] text-[#6b5443]">founders</p>
+      </div>
       <ol className="mt-2 space-y-1.5">
         {rows.map((campus, index) => (
           <li key={campus.id}>
-            <button type="button" onClick={() => onPick(campus)} className="flex w-full items-baseline gap-2 text-left text-[13px] hover:text-[#FB651E]">
+            <button type="button" onClick={() => onPick(campus)} className="flex w-full items-baseline gap-2 text-left text-[13px] hover:text-[#FB651E]" title={`${campus.founders.toLocaleString("en-US")} founders`}>
               <span className={`${COUNT} w-4 shrink-0`}>{index + 1}</span>
               <span className="min-w-0 flex-1 truncate text-[#20140c]">{shortCampusLabel(campus.id, campus.name)}</span>
               <span className={`${COUNT} shrink-0`}>{campus.founders.toLocaleString("en-US")}</span>

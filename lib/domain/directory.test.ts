@@ -68,7 +68,8 @@ assert.deepEqual(sortDirectory(rows, "recent").map((item) => item.name), ["After
 const stored = loadDirectory();
 const after = searchDirectory(stored.cards, "Spencer Mateega").find((item) => item.name === "AfterQuery");
 assert.ok(after, "founder name search should find AfterQuery");
-assert.equal(after.logoUrl, null);
+assert.ok(after.logoUrl && after.logoUrl.startsWith("https://"), "AfterQuery should use a stored https favicon when a website fact exists");
+assert.ok(after.logoUrl.includes("afterquery.com"), "favicon should come from the stored website host");
 assert.ok(after.founders.includes("Spencer Mateega"));
 assert.equal(searchDirectory(stored.cards, "zzzz-not-a-company-zzzz").length, 0);
 const sample = stored.cards.slice(0, 40);

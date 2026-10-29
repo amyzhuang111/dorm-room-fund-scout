@@ -199,6 +199,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
               <Link href={founderHref(f)} className="text-link hover:underline">
                 {f.name}
               </Link>
+              {f.role ? <span className="text-xs text-muted">{f.role.replaceAll("_", " ")}</span> : null}
               <EntityMarks entityType="person" entityId={f.personId} name={f.name} campusName={f.school ?? project.universities[0]} websiteUrl={f.linkedinUrl} />
               <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} />
               <LeftSchoolBadge leftSchool={f.leftSchool} />

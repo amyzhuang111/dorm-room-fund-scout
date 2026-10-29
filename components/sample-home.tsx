@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { GlobeHero, WorldMap } from "@/components/globe-hero";
 import {
-  DIRECTORY_PAGE_SIZE,
-  LEADERBOARD_PAGE_SIZE,
   directoryPage,
   directorySortOf,
   filterDirectory,
@@ -72,7 +70,6 @@ export function SampleHome({
   const ordered = feed === "directory" ? sortDirectory(matched, order) : matched;
   const shown = feed === "leaderboard" ? leaderboardPage(ordered, pages) : directoryPage(ordered, pages);
   const total = feed === "leaderboard" ? matched.filter((card) => card.signals > 0).length : matched.length;
-  const pageSize = feed === "leaderboard" ? LEADERBOARD_PAGE_SIZE : DIRECTORY_PAGE_SIZE;
 
   return (
     <div className="hero-night bg-bg text-fg">
@@ -105,8 +102,8 @@ export function SampleHome({
         ) : (
           <div className="mx-auto w-full max-w-[880px] pt-4">
             <p className="mb-3 text-[14px] text-fg-2">
-              <span className="num text-fg">{Math.min(shown.length, total).toLocaleString("en-US")}</span>
-              {total > pageSize ? ` of ${total.toLocaleString("en-US")}` : ""} companies
+              Showing <span className="num font-medium text-fg">{total.toLocaleString("en-US")}</span>{" "}
+              {total === 1 ? "company" : "companies"}
               {campusRow ? (
                 <>
                   {" · "}
@@ -131,8 +128,8 @@ export function SampleHome({
               ))}
             </ol>
             {shown.length < total ? (
-              <Link href={browseHref({ feed, sector, kind, campus: campusId, q: query, sort: feed === "directory" ? order : undefined, more: pages + 1 })} className="mt-4 inline-flex h-10 items-center rounded border border-line px-4 text-[14px] font-medium">
-                Show {Math.min(pageSize, total - shown.length).toLocaleString("en-US")} more
+              <Link href={browseHref({ feed, sector, kind, campus: campusId, q: query, sort: feed === "directory" ? order : undefined, more: pages + 1 })} className="mt-4 inline-flex h-10 items-center rounded border border-line px-4 text-[14px] font-medium text-fg hover:bg-raised">
+                Show more
               </Link>
             ) : null}
           </div>
@@ -242,6 +239,12 @@ function Card({ card, rank }: { card: DirectoryCard; rank: number | null }) {
           <Link href={`/startup/${card.id}`} className="hover:underline">{card.name}</Link>
         </h2>
         {card.description ? <p className="mt-1 text-[14px] leading-5 text-fg-2">{card.description}</p> : null}
+        {card.founders.length > 0 ? (
+          <p className="mt-1 text-[13px] leading-5 text-fg-3">
+            {card.founders.slice(0, 3).join(", ")}
+            {card.founders.length > 3 ? ` +${card.founders.length - 3}` : ""}
+          </p>
+        ) : null}
         <div className="mt-2 flex flex-wrap gap-1.5">
           {card.school && card.schoolSlug ? (
             <Link href={`/campuses/${card.schoolSlug}`} className="inline-flex h-6 items-center rounded-full border border-line px-2 text-[13px] text-fg-2 hover:text-fg">{card.school}</Link>
