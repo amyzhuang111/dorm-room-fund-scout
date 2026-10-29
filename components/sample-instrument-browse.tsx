@@ -129,7 +129,7 @@ export function SampleInstrumentBrowse({
     feed === "leaderboard" ? "Ranked by recent signal weight" : "Sorted ledger · Scout Dispatch";
 
   return (
-    <div className="mx-auto mt-2 grid w-full max-w-[1280px] gap-3 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)] sm:mt-3">
+    <div className="mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-3 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)] sm:mt-3">
       {/* WIRE / Filters — fold language: one strong editorial column */}
       <aside className="hidden min-w-0 lg:block">
         <div className="sticky top-14 space-y-2">
@@ -221,7 +221,7 @@ export function SampleInstrumentBrowse({
           </p>
         ) : (
           <ol
-            data-ledger-stage={feed}
+            data-ledger-stage={feed} data-ledger-top=""
             className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] divide-y divide-[color:var(--line,#E1E5EF)]"
           >
             {cards.map((card, index) => (
