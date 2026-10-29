@@ -101,8 +101,11 @@ export function SampleCompanyShell({
                   <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={onFacetChange} />
                 </div>
               ) : (
-                <div className={`${PANEL} relative overflow-hidden p-2 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
-                  <p className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
+                <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
+                  <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
+                    <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{filtered.length.toLocaleString("en-US")}</p>
+                  </div>
                   <IntelligenceBoards companies={filtered} compact hideSector />
                 </div>
               )}

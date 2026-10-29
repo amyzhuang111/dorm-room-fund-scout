@@ -275,9 +275,12 @@ export function FacetRail({
       const id = statusOf(company);
       counts.set(id, (counts.get(id) ?? 0) + 1);
     }
-    return (Object.keys(STATUS_LABEL) as StatusId[])
-      .filter((id) => (counts.get(id) ?? 0) > 0)
-      .map((id) => ({ id, label: STATUS_LABEL[id], count: counts.get(id) ?? 0 }));
+    // Always emit Active / Acquired / Closed with real counts (never omit a zero as a blank chip).
+    return (Object.keys(STATUS_LABEL) as StatusId[]).map((id) => ({
+      id,
+      label: STATUS_LABEL[id],
+      count: counts.get(id) ?? 0,
+    }));
   }, [baseCompanies]);
   const flags = useMemo(() => {
     return (Object.keys(FLAG_LABEL) as FlagId[])
@@ -365,7 +368,7 @@ export function FacetRail({
           })}
         </FacetGroup>
         <FacetGroup title="Status">
-          <Chip facet="status" active={!facets.status} onClick={() => set({ status: null })} label="All" />
+          <Chip facet="status" count={baseCompanies.length} active={!facets.status} onClick={() => set({ status: null })} label={`All · ${baseCompanies.length}`} />
           {statuses.map((item) => (
             <Chip key={item.id} facet="status" count={item.count} active={facets.status === item.id} onClick={() => set({ status: facets.status === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} dot={STATUS_DOT[item.id]} />
           ))}
@@ -552,12 +555,12 @@ export function BarRow({
   const width = Math.max(8, Math.round((value / Math.max(1, max)) * 100));
   const inner = (
     <>
-      <div className="flex items-baseline gap-1.5 text-[11px]">
-        <span className={`${COUNT} w-3.5 shrink-0 text-[10px]`}>{rank}</span>
-        <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#0B0E17)]">{label}</span>
-        <span className={`${COUNT} shrink-0 text-[10px]`}>{value.toLocaleString("en-US")}</span>
+      <div className="flex items-baseline gap-1.5 font-mono text-[11px]">
+        <span className={`${COUNT} w-4 shrink-0 text-right text-[11px] tracking-tight`}>{String(rank).padStart(2, "0")}</span>
+        <span className="min-w-0 flex-1 truncate font-sans text-[color:var(--fg,#0B0E17)]">{label}</span>
+        <span className={`${COUNT} shrink-0 text-[11px]`}>{value.toLocaleString("en-US")}</span>
       </div>
-      <div className="ml-[18px] mt-0.5 h-1.5 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
+      <div className="ml-5 mt-0.5 h-1.5 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
         <div className="h-full rounded-full bg-[color:var(--ember,#D96B1C)]" style={{ width: `${width}%` }} />
       </div>
     </>
@@ -580,8 +583,8 @@ export function SignalFeedRow({ company, index }: { company: FacetCompany; index
   const date = (company.latestSignalAt ?? "").replace(/-00/g, "") || "n/a";
   const kind = company.signalLabel ?? "Signal";
   return (
-    <Link href={`/startup/${company.id}`} className="group flex items-start gap-2.5 px-0.5 py-2 text-left hover:bg-[color:var(--bg-sunken,#F3F5F9)]">
-      <span className={`${COUNT} mt-0.5 w-4 shrink-0 text-center text-[12px]`}>{index + 1}</span>
+    <Link href={`/startup/${company.id}`} className="group flex items-start gap-2.5 px-0.5 py-2 text-left transition-colors hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50">
+      <span className={`${COUNT} mt-0.5 w-5 shrink-0 text-right text-[12px] tracking-tight`}>{String(index + 1).padStart(2, "0")}</span>
       <LogoMark name={company.name} logoUrl={company.logoUrl} size={22} />
       <span className="min-w-0 flex-1">
         <span className="block truncate text-[13px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]">{company.name}</span>
@@ -603,11 +606,11 @@ export function FounderFeedRow({
   index: number;
 }) {
   return (
-    <Link href={`/startup/${person.companyId}`} className="flex items-center gap-2.5 px-0.5 py-2 text-left hover:bg-[color:var(--bg-sunken,#F3F5F9)]" title={person.companyName}>
-      <span className={`${COUNT} w-4 shrink-0 text-center text-[12px]`}>{index + 1}</span>
+    <Link href={`/startup/${person.companyId}`} className="group flex items-center gap-2.5 px-0.5 py-2 text-left transition-colors hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50" title={person.companyName}>
+      <span className={`${COUNT} w-5 shrink-0 text-right text-[12px] tracking-tight`}>{String(index + 1).padStart(2, "0")}</span>
       <LogoMark name={person.name} logoUrl={person.logoUrl} size={20} />
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[13px] font-semibold leading-5 text-[color:var(--fg,#0B0E17)]">{person.name}</span>
+        <span className="block truncate text-[13px] font-semibold leading-5 text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]">{person.name}</span>
         <span className="mt-0.5 block truncate font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">{person.companyName}</span>
       </span>
       <span className={`${COUNT} shrink-0 text-[12px]`}>{person.signals.toLocaleString("en-US")}</span>
@@ -615,8 +618,26 @@ export function FounderFeedRow({
   );
 }
 
+/** Display label for stored investor/program facts (VIP-X is Penn Venture Lab). */
+export function programDisplayName(raw: string): string {
+  const name = raw.trim();
+  if (!name) return name;
+  if (/venture\s*lab\s*vip-?x/i.test(name) || /^penn\s+venture\s+lab$/i.test(name)) return "Penn Venture Lab";
+  return name;
+}
+
 export function topPrograms(companies: FacetCompany[]): FacetCount[] {
-  return countBy(companies, (c) => c.primaryProgram, (id) => id).slice(0, 5);
+  const counts = new Map<string, number>();
+  for (const company of companies) {
+    const raw = company.primaryProgram?.trim();
+    if (!raw) continue;
+    const label = programDisplayName(raw);
+    counts.set(label, (counts.get(label) ?? 0) + 1);
+  }
+  return [...counts.entries()]
+    .map(([id, count]) => ({ id, label: id, count }))
+    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))
+    .slice(0, 5);
 }
 
 /** Shared right-rail intelligence boards (no campus list). */
@@ -693,14 +714,14 @@ export function IntelligenceBoards({
             {programs.slice(0, 3).map((item, index) => (
               <li key={item.id} className="py-1.5">
                 <div className="flex items-center gap-2 text-[11px]">
-                  <span className={`${COUNT} w-4 shrink-0 text-center text-[11px]`}>{index + 1}</span>
+                  <span className={`${COUNT} w-5 shrink-0 text-right text-[11px] tracking-tight`}>{String(index + 1).padStart(2, "0")}</span>
                   <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/70 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[8px] font-semibold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden title={item.label}>
                     {companyInitials(item.label).slice(0, 2)}
                   </span>
                   <span className="min-w-0 flex-1 truncate font-medium text-[color:var(--fg,#0B0E17)]">{item.label}</span>
                   <span className={`${COUNT} shrink-0 text-[11px]`}>{item.count.toLocaleString("en-US")}</span>
                 </div>
-                <div className="ml-11 mt-1 h-0.5 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
+                <div className="ml-12 mt-1 h-0.5 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
                   <div className="h-full rounded-full bg-[color:var(--ember,#D96B1C)]" style={{ width: `${Math.max(8, Math.round((item.count / maxProg) * 100))}%` }} />
                 </div>
               </li>
@@ -726,12 +747,19 @@ export function IntelligenceBoards({
 
 
 export function MobileBrowsePulse({ companies }: { companies: FacetCompany[] }) {
-  // Same Wire craft as desktop rail — stacked boards, not a thin dual strip.
+  // Collapsed by default so the company feed leads on mobile; expand for Wire boards.
   return (
-    <div className={`${PANEL} relative overflow-hidden p-2 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
-      <p className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
-      <IntelligenceBoards companies={companies} compact />
-    </div>
+    <details className={`${PANEL} relative overflow-hidden before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
+      <summary className="cursor-pointer list-none px-2.5 py-2 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#0B0E17)] [&::-webkit-details-marker]:hidden">
+        <span className="flex items-center justify-between gap-2">
+          <span>Wire</span>
+          <span className="font-mono text-[10px] font-medium normal-case tracking-normal tabular-nums text-[color:var(--ember,#D96B1C)]">{companies.length.toLocaleString("en-US")} · Boards</span>
+        </span>
+      </summary>
+      <div className="border-t border-[color:var(--line,#E1E5EF)] px-2 pb-2 pt-2">
+        <IntelligenceBoards companies={companies} compact />
+      </div>
+    </details>
   );
 }
 
@@ -762,8 +790,8 @@ export function DispatchWire({
           const initials = companyInitials(company.name).slice(0, 2) || "·";
           return (
             <li key={company.id}>
-              <Link href={`/startup/${company.id}`} className="flex items-center gap-2 py-1.5 hover:bg-[color:var(--bg-sunken,#F3F5F9)]">
-                <span className={`${COUNT} w-4 shrink-0 text-center text-[10px]`}>{index + 1}</span>
+              <Link href={`/startup/${company.id}`} className="flex items-center gap-2 py-1.5 transition-colors hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50">
+                <span className={`${COUNT} w-5 shrink-0 text-right text-[10px] tracking-tight`}>{String(index + 1).padStart(2, "0")}</span>
                 <span className="grid h-6 w-6 shrink-0 place-items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[9px] font-bold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>
                   {initials}
                 </span>

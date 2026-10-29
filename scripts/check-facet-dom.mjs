@@ -119,6 +119,11 @@ const flagCounts = flags
 const newC = flagCounts.find((f) => /founded in 2026/i.test(f.label))?.count;
 const actC = flagCounts.find((f) => /active this month/i.test(f.label))?.count;
 
+const statusRows = sumRows(await collect(page, "status"));
+const statusActive = statusRows.parts.find((p) => /^Active\b/i.test(p.label))?.count ?? null;
+const statusAcquired = statusRows.parts.find((p) => /^Acquired\b/i.test(p.label))?.count ?? null;
+const statusClosed = statusRows.parts.find((p) => /^Closed\b/i.test(p.label))?.count ?? null;
+
 
 const strip = await page.evaluate(() => {
   const root = document.querySelector("[data-sample-strip-counts]");
@@ -149,6 +154,10 @@ const report = {
   hqCovered,
   hqExpanded: hqExpanded.sum,
   namedSectorVisible: sector.parts.filter((p) => !/not on record/i.test(p.label)).reduce((s, p) => s + p.count, 0),
+  statusActive,
+  statusAcquired,
+  statusClosed,
+  statusSumBuckets: (statusActive ?? 0) + (statusAcquired ?? 0) + (statusClosed ?? 0),
   flags: flagCounts,
   ok: {
     year: year.sum === TOTAL,
@@ -168,6 +177,8 @@ const report = {
       strip.campuses === fold.campuses &&
       strip.founders > 0 &&
       strip.campuses > 0,
+    statusBuckets:
+      statusActive === 2497 && statusAcquired === 8 && statusClosed === 8 && statusActive + statusAcquired + statusClosed === TOTAL,
     moreObvious: moreLabelsBefore.some((l) => /more sectors/i.test(l)) && moreLabelsBefore.some((l) => /more cities/i.test(l)),
   },
 };

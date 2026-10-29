@@ -113,14 +113,17 @@ export function SampleInstrumentBrowse({
 
   const chip = (active: boolean) =>
     active
-      ? "border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] text-white"
-      : "border-[color:var(--cobalt-haze,#E8ECFA)] bg-[color:var(--bg-sunken,#F3F5F9)] font-mono text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]";
+      ? "border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] font-mono text-white"
+      : "border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] font-mono text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]";
 
   return (
     <div className="mx-auto mt-2 grid w-full max-w-[1280px] gap-2.5 lg:grid-cols-[minmax(260px,300px)_minmax(0,1fr)] sm:mt-3 sm:gap-3">
       <aside className="hidden min-w-0 lg:block">
-        <div className={`${PANEL} relative sticky top-14 space-y-2 overflow-hidden p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
-          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
+        <div className={`${PANEL} relative sticky top-14 space-y-2.5 overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
+          <div className="flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
+            <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{boardCompanies.length.toLocaleString("en-US")}</p>
+          </div>
           <IntelligenceBoards companies={boardCompanies} compact />
         </div>
       </aside>
@@ -133,7 +136,7 @@ export function SampleInstrumentBrowse({
               <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
             </p>
             <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-              {total === 1 ? "company" : "companies"}
+              {feed === "leaderboard" ? (total === 1 ? "company on the signal desk" : "companies on the signal desk") : (total === 1 ? "company on the ledger" : "companies on the ledger")}
               {campusName ? (
                 <>
                   {" · "}
@@ -144,6 +147,12 @@ export function SampleInstrumentBrowse({
                   </Link>
                 </>
               ) : null}
+            </p>
+            <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              {feed === "leaderboard" ? "Ranked by recent signal weight" : "Sorted ledger · Scout Dispatch"}
+              {" · "}
+              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
+              {" on page"}
             </p>
           </div>
           {feed === "directory" ? (
@@ -211,9 +220,6 @@ export function SampleInstrumentBrowse({
               );
             })}
           </div>
-          <div className="lg:hidden">
-            <MobileBrowsePulse companies={boardCompanies} />
-          </div>
           <button
             type="button"
             onClick={() => setMobileFiltersOpen(true)}
@@ -238,19 +244,32 @@ export function SampleInstrumentBrowse({
                 : "No companies in this category."}
           </p>
         ) : (
-          <ol className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+          <ol
+            className={
+              feed === "leaderboard"
+                ? "divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]"
+                : "grid grid-cols-1 gap-2 sm:grid-cols-2"
+            }
+          >
             {cards.map((card, index) => (
               <li key={card.id}>
-                <DirectoryPill card={card} rank={feed === "leaderboard" ? (pages - 1) * 14 + index + 1 : null} />
+                <DirectoryPill
+                  card={card}
+                  rank={feed === "leaderboard" ? (pages - 1) * 14 + index + 1 : null}
+                  ranked={feed === "leaderboard"}
+                />
               </li>
             ))}
           </ol>
         )}
         {cards.length < total ? (
-          <Link href={moreHref} className="mt-3 inline-flex h-8 items-center rounded-md border border-[color:var(--ember,#D96B1C)]/50 bg-[color:var(--ember,#D96B1C)]/10 px-3 font-mono text-[12px] font-medium text-[color:var(--ember,#D96B1C)] hover:border-[color:var(--ember,#D96B1C)]">
+          <Link href={moreHref} className="mt-3 inline-flex h-9 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-4 font-mono text-[12px] font-semibold text-white hover:opacity-90">
             Show more
           </Link>
         ) : null}
+        <div className="mt-3 lg:hidden">
+          <MobileBrowsePulse companies={boardCompanies} />
+        </div>
         <div className="sr-only">
           {sectors.map((item) => (
             <Link key={item.id} href={browseHref({ feed, sector: item.id, kind, campus, q: query, sort: feed === "directory" ? sort : undefined })}>
@@ -300,23 +319,35 @@ function signalMeta(card: DirectoryCard): { primary: string; secondary: string }
   return null;
 }
 
-function DirectoryPill({ card, rank }: { card: DirectoryCard; rank: number | null }) {
+function DirectoryPill({ card, rank, ranked = false }: { card: DirectoryCard; rank: number | null; ranked?: boolean }) {
   const subtitle = directoryCardSubtitle(card);
   const meta = signalMeta(card);
+  const shell = ranked
+    ? "group flex items-start gap-3 px-3 py-2.5 transition-[background-color,color] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/45"
+    : "group flex items-start gap-3 border border-[color:var(--line,#E1E5EF)] border-l-[3px] border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 transition-[border-color,background-color] hover:border-[color:var(--cobalt,#2F4FD8)]/45 hover:border-l-[color:var(--ember,#D96B1C)] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40";
   return (
-    <Link href={`/startup/${card.id}`} className="group flex items-start gap-2.5 rounded-none border border-[color:var(--line,#E1E5EF)] border-l-[3px] border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg-raised,#FFFFFF)] px-3 py-2.5 transition-colors hover:border-l-[color:var(--ember,#D96B1C)] hover:bg-[color:var(--bg-sunken,#F3F5F9)]">
-      {rank != null ? <span className="mt-0.5 w-5 shrink-0 text-center font-mono text-[13px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{rank}</span> : null}
-      <LogoMark name={card.name} logoUrl={card.logoUrl} size={24} />
+    <Link href={`/startup/${card.id}`} className={shell}>
+      {rank != null ? (
+        <span className="mt-0.5 w-7 shrink-0 text-right font-mono text-[17px] font-bold tabular-nums leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+          {String(rank).padStart(2, "0")}
+        </span>
+      ) : null}
+      <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 22 : 24} />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]">{card.name}</p>
-        {subtitle ? <p className="mt-0.5 truncate font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">{subtitle}</p> : null}
+        <p className="truncate text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)] sm:text-[15px]">{card.name}</p>
+        {subtitle ? <p className="mt-0.5 truncate font-mono text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)]">{subtitle}</p> : null}
         {meta ? (
           <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
-            <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--ember,#D96B1C)]/10 px-1.5 font-mono text-[10px] font-semibold text-[color:var(--ember,#D96B1C)]">{meta.primary}</span>
-            {meta.secondary ? <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{meta.secondary}</span> : null}
+            <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)]">{meta.primary}</span>
+            {meta.secondary ? (
+              <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{meta.secondary}</span>
+            ) : null}
           </span>
         ) : null}
       </div>
+      {ranked && card.signals > 0 ? (
+        <span className="mt-0.5 shrink-0 font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{card.signals.toLocaleString("en-US")}</span>
+      ) : null}
     </Link>
   );
 }
