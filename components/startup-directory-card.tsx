@@ -25,11 +25,6 @@ function faviconUrlForWebsite(website: string | null): string | null {
   }
 }
 
-function companyLetter(name: string): string {
-  const letter = name.trim().charAt(0).toUpperCase();
-  return letter || "?";
-}
-
 function personInitials(name: string): string {
   const parts = name.split(/\s+/).filter(Boolean);
   if (parts.length === 0) return "?";
@@ -38,12 +33,16 @@ function personInitials(name: string): string {
 }
 
 function CompanyLogo({ name, websiteUrl }: { name: string; websiteUrl: string | null }) {
-  const [failedUrl, setFailedUrl] = useState<string | null>(null);
-  const src = websiteUrl && failedUrl !== websiteUrl ? faviconUrlForWebsite(websiteUrl) : null;
+  const [failed, setFailed] = useState(false);
+  const src = websiteUrl && !failed ? faviconUrlForWebsite(websiteUrl) : null;
   if (!src) {
     return (
-      <div className="grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-neutral-100 text-xl font-bold text-black shadow-sm" aria-hidden>
-        {companyLetter(name)}
+      <div
+        className="grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-[#1A2556] bg-[#1A2556] shadow-sm"
+        aria-hidden
+        title={name}
+      >
+        <span className="h-3 w-3 rounded-full bg-[#E8823A]" />
       </div>
     );
   }
@@ -55,7 +54,7 @@ function CompanyLogo({ name, websiteUrl }: { name: string; websiteUrl: string | 
       height={56}
       unoptimized
       className="h-14 w-14 shrink-0 rounded-xl border border-neutral-200 bg-white object-contain p-2 shadow-sm"
-      onError={() => setFailedUrl(websiteUrl)}
+      onError={() => setFailed(true)}
     />
   );
 }

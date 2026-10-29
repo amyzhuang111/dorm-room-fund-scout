@@ -80,10 +80,32 @@ export function statusOf(company: FacetCompany): StatusId {
   return "active";
 }
 
+/** Calendar day distance from TODAY (box clock). Full YYYY-MM-DD only; partial dates do not count. */
+export function daysSinceSignal(latestSignalAt: string | null | undefined, today = TODAY): number | null {
+  if (!latestSignalAt || latestSignalAt.length < 10) return null;
+  const y = Number(latestSignalAt.slice(0, 4));
+  const m = Number(latestSignalAt.slice(5, 7));
+  const d = Number(latestSignalAt.slice(8, 10));
+  if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d) || m < 1 || d < 1) return null;
+  const then = Date.UTC(y, m - 1, d);
+  const now = Date.UTC(today.y, today.m - 1, today.d);
+  return Math.floor((now - then) / 86400000);
+}
+
+/** Last full-date signal within the last 30 days (inclusive of today). */
+export function activeThisMonth(latestSignalAt: string | null | undefined, today = TODAY): boolean {
+  const days = daysSinceSignal(latestSignalAt, today);
+  return days != null && days >= 0 && days <= 30;
+}
+
+/** Founded in the current calendar year (not "last two years"). */
+export function newThisYear(foundedYear: number | null | undefined, today = TODAY): boolean {
+  return foundedYear === today.y;
+}
+
 export function hasFlag(company: FacetCompany, flag: FlagId): boolean {
-  if (flag === "new") return (company.foundedYear ?? 0) >= 2025;
-  // Active this month: a stored signal dated in the current/recent-month bucket.
-  if (flag === "signaled") return recencyOf(company.latestSignalAt) === "month";
+  if (flag === "new") return newThisYear(company.foundedYear);
+  if (flag === "signaled") return activeThisMonth(company.latestSignalAt);
   if (flag === "funded") return company.signalKind === "funding" || Boolean(company.stage);
   if (flag === "founders") return (company.founders?.length ?? 0) > 0;
   return false;
@@ -160,6 +182,21 @@ export function sectorBuckets(companies: FacetCompany[]): FacetCount[] {
     .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
   if (missing > 0) sectors.unshift({ id: NOT_ON_RECORD, label: NOT_ON_RECORD_LABEL, count: missing });
   return sectors;
+}
+
+/** Sector pills: Not on record first, then top N named, optional More remainder. Visible+More+missing sum to total. */
+export function sectorPills(companies: FacetCompany[], topN = 10): { visible: FacetCount[]; more: FacetCount[]; moreCount: number; all: FacetCount[] } {
+  const all = sectorBuckets(companies);
+  const missing = all.filter((b) => b.id === NOT_ON_RECORD);
+  const named = all.filter((b) => b.id !== NOT_ON_RECORD);
+  const visibleNamed = named.slice(0, topN);
+  const more = named.slice(topN);
+  return {
+    all,
+    visible: [...missing, ...visibleNamed],
+    more,
+    moreCount: more.reduce((s, b) => s + b.count, 0),
+  };
 }
 
 /** HQ city pills for the rail: Not on record first, then top N cities, optional More remainder. */

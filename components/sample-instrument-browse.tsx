@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
-import { directoryCardSubtitle, signalsUnit } from "@/lib/domain/sample-facets";
+import { directoryCardSubtitle } from "@/lib/domain/sample-facets";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import {
   applyFacets,
@@ -241,20 +241,37 @@ export function SampleInstrumentBrowse({
   );
 }
 
+function signalMeta(card: DirectoryCard): { primary: string; secondary: string } | null {
+  if (card.signals <= 0) return null;
+  const date = (card.latestSignalAt ?? "").replace(/-00/g, "").trim();
+  // Prefer kind + date over a uniform "1 signal" count that reads as a placeholder.
+  if (card.signalLabel || date) {
+    return {
+      primary: card.signalLabel ?? (card.signals > 1 ? String(card.signals) : "Signal"),
+      secondary: date || (card.signals > 1 ? "signals" : ""),
+    };
+  }
+  if (card.signals > 1) {
+    return { primary: String(card.signals), secondary: "signals" };
+  }
+  return null;
+}
+
 function DirectoryPill({ card, rank }: { card: DirectoryCard; rank: number | null }) {
   const subtitle = directoryCardSubtitle(card);
+  const meta = signalMeta(card);
   return (
-    <Link href={`/startup/${card.id}`} className="flex items-center gap-2 rounded-xl border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] px-2 py-1.5 hover:border-[color:var(--ember,#E8823A)]">
-      {rank != null ? <span className="w-4 shrink-0 text-center text-[11px] font-bold tabular-nums text-[color:var(--ember,#E8823A)]">{rank}</span> : null}
+    <Link href={`/startup/${card.id}`} className="flex items-center gap-2 rounded-md border border-[color:var(--line,#1F2536)] border-l-2 border-l-[color:var(--cobalt-haze,#1A2556)] bg-[color:var(--bg-raised,#121726)] px-2 py-1.5 hover:border-l-[color:var(--ember,#E8823A)]">
+      {rank != null ? <span className="w-4 shrink-0 text-center font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#E8823A)]">{rank}</span> : null}
       <LogoMark name={card.name} logoUrl={card.logoUrl} />
       <div className="min-w-0 flex-1">
         <p className="truncate text-[12px] font-medium text-[color:var(--fg,#ECEEF4)]">{card.name}</p>
         {subtitle ? <p className="truncate text-[10px] text-[color:var(--fg-3,#6B7390)]">{subtitle}</p> : null}
       </div>
-      {card.signals > 0 ? (
-        <div className="w-[3.25rem] shrink-0 text-right">
-          <p className="text-[13px] font-bold tabular-nums leading-none text-[color:var(--ember,#E8823A)]">{card.signals.toLocaleString("en-US")}</p>
-          <p className="whitespace-nowrap text-[9px] uppercase tracking-[0.02em] text-[color:var(--fg-3,#6B7390)]">{signalsUnit(card.signals)}</p>
+      {meta ? (
+        <div className="max-w-[4.5rem] shrink-0 text-right">
+          <p className="truncate font-mono text-[11px] font-semibold leading-none text-[color:var(--ember,#E8823A)]">{meta.primary}</p>
+          {meta.secondary ? <p className="mt-0.5 truncate whitespace-nowrap font-mono text-[9px] text-[color:var(--fg-3,#6B7390)]">{meta.secondary}</p> : null}
         </div>
       ) : null}
     </Link>

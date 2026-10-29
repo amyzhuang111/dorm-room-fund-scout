@@ -1,17 +1,21 @@
 import assert from "node:assert/strict";
 import { loadDirectory } from "./directory";
 import {
+  activeThisMonth,
   bucketSum,
+  daysSinceSignal,
   directoryCardSubtitle,
   filterFacetCompanies,
   foundedYearBuckets,
   hasFlag,
   hqRegionBuckets,
   hqRegionPills,
+  newThisYear,
   NOT_ON_RECORD,
   preferLogoCompanies,
   recencyOf,
   sectorBuckets,
+  sectorPills,
   signalsUnit,
   statusOf,
 } from "./sample-facets";
@@ -31,11 +35,23 @@ const rows = [
 assert.equal(statusOf(rows[0]), "active");
 assert.equal(statusOf(rows[1]), "closed");
 assert.equal(statusOf(rows[2]), "acquired");
+assert.equal(newThisYear(2026), true);
+assert.equal(newThisYear(2025), false);
+assert.equal(activeThisMonth("2026-10-15"), true);
+assert.equal(activeThisMonth("2026-09-25"), false);
+assert.equal(activeThisMonth("2026-09-00"), false);
+assert.equal(daysSinceSignal("2026-10-29"), 0);
+assert.equal(daysSinceSignal("2026-09-29"), 30);
+assert.equal(daysSinceSignal("2026-09-28"), 31);
+assert.equal(activeThisMonth("2026-09-29"), true);
+assert.equal(activeThisMonth("2026-09-28"), false);
+assert.equal(daysSinceSignal("2026-10"), null);
 assert.equal(hasFlag(rows[0], "new"), true);
 assert.equal(hasFlag(rows[0], "funded"), true);
 assert.equal(hasFlag(rows[0], "founders"), true);
 assert.equal(hasFlag(rows[1], "founders"), false);
 assert.equal(hasFlag(rows[1], "new"), false);
+assert.equal(hasFlag(rows[2], "new"), false);
 assert.equal(hasFlag(rows[0], "signaled"), true);
 assert.equal(hasFlag(rows[1], "signaled"), false);
 assert.equal(signalsUnit(1), "signal");
@@ -44,6 +60,9 @@ assert.equal(signalsUnit(2), "signals");
 const sectorAll = sectorBuckets(rows);
 assert.equal(bucketSum(sectorAll), rows.length);
 assert.ok(sectorAll.some((b) => b.id === NOT_ON_RECORD && b.count === 1));
+const sectorPack = sectorPills(rows, 1);
+assert.equal(bucketSum(sectorPack.visible) + sectorPack.moreCount, rows.length);
+
 
 const pills = hqRegionPills(rows, 1);
 assert.ok(pills.visible.some((b) => b.id === NOT_ON_RECORD));
@@ -57,7 +76,7 @@ assert.equal(filterFacetCompanies(rows, { yearMissing: true }).length, 1);
 assert.equal(filterFacetCompanies(rows, { hqRegion: "San Francisco" }).length, 1);
 assert.equal(filterFacetCompanies(rows, { hqRegion: NOT_ON_RECORD }).length, 2);
 assert.equal(filterFacetCompanies(rows, { status: "closed" }).length, 1);
-assert.equal(filterFacetCompanies(rows, { flag: "new" }).length, 2);
+assert.equal(filterFacetCompanies(rows, { flag: "new" }).length, 1);
 assert.equal(filterFacetCompanies(rows, { flag: "founders" }).length, 2);
 
 const yearBuckets = foundedYearBuckets(rows);
@@ -92,6 +111,13 @@ const sectorMissing = sectorBuckets(data.cards).find((b) => b.id === NOT_ON_RECO
 assert.ok(sectorMissing > 0);
 const namedSector = sectorBuckets(data.cards).filter((b) => b.id !== NOT_ON_RECORD).reduce((s, b) => s + b.count, 0);
 assert.ok(namedSector >= 700, `expected broader sector coverage, got ${namedSector}`);
+const pack = sectorPills(data.cards, 10);
+assert.equal(bucketSum(pack.visible.filter((b) => b.id !== NOT_ON_RECORD)) + pack.moreCount + (pack.visible.find((b) => b.id === NOT_ON_RECORD)?.count ?? 0), data.cards.length);
+const newCount = data.cards.filter((c) => hasFlag(c, "new")).length;
+const activeCount = data.cards.filter((c) => hasFlag(c, "signaled")).length;
+assert.ok(newCount !== activeCount, `flags must differ: new=${newCount} active=${activeCount}`);
+assert.equal(newCount, data.cards.filter((c) => c.foundedYear === 2026).length);
+assert.ok(activeCount < 50, `active this month should be a tight 30d window, got ${activeCount}`);
 const withLogo = data.cards.filter((c) => c.logoUrl).length;
 assert.ok(withLogo >= 1183, `expected favicons filled, got ${withLogo}`);
 

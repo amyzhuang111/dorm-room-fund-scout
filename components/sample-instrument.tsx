@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState, type ReactNode } from "react";
 import { shortCampusLabel } from "@/lib/domain/campuses";
@@ -15,7 +14,7 @@ import {
   preferLogoCompanies,
   RECENCY_LABEL,
   recencyOf,
-  sectorBuckets,
+  sectorPills,
   STATUS_LABEL,
   statusOf,
   type FacetCompany,
@@ -30,7 +29,19 @@ export { preferLogoCompanies };
 export const INK = "text-[color:var(--fg,#ECEEF4)]";
 export const MUTED = "text-[color:var(--fg-2,#A3AAC0)]";
 export const COUNT = "font-bold tabular-nums text-[color:var(--ember,#E8823A)]";
-export const PANEL = "rounded-lg border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)]/96 text-[color:var(--fg,#ECEEF4)] shadow-none";
+export const PANEL = "rounded-md border border-[color:var(--line,#1F2536)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg-raised,#121726)]/96 text-[color:var(--fg,#ECEEF4)] shadow-none";
+
+function NeutralMark({ name, cls }: { name: string; cls: string }) {
+  return (
+    <span
+      className={`${cls} grid shrink-0 place-items-center rounded-md border border-[color:var(--cobalt-haze,#1A2556)] bg-[color:var(--cobalt-haze,#1A2556)]`}
+      aria-hidden
+      title={name}
+    >
+      <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--ember,#E8823A)]" />
+    </span>
+  );
+}
 
 export function LogoMark({
   name,
@@ -47,11 +58,18 @@ export function LogoMark({
   const [failed, setFailed] = useState(false);
   const cls = size <= 16 ? "h-4 w-4" : size <= 20 ? "h-5 w-5" : "h-6 w-6";
   if (!logoUrl || failed) {
-    // Neutral disc: no letter avatar (avoids synthetic look when no mark is stored).
-    return <span className={`${cls} shrink-0 rounded-full border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)]`} aria-hidden title={name} />;
+    return <NeutralMark name={name} cls={cls} />;
   }
   return (
-    <Image src={logoUrl} alt="" width={size} height={size} unoptimized className={`${cls} shrink-0 rounded-full border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] object-contain`} onError={() => setFailed(true)} />
+    // eslint-disable-next-line @next/next/no-img-element -- favicon hosts vary; onError must swap to NeutralMark
+    <img
+      src={logoUrl}
+      alt=""
+      width={size}
+      height={size}
+      className={`${cls} shrink-0 rounded-md border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] object-contain`}
+      onError={() => setFailed(true)}
+    />
   );
 }
 
@@ -66,23 +84,22 @@ export function LogoPill({
   logoUrl?: string | null;
   mark?: string;
 }) {
+  void mark;
   const [failed, setFailed] = useState(false);
-  const showLetter = Boolean(mark) && (!logoUrl || failed);
-  const letter = (mark || name).trim().charAt(0).toUpperCase() || "?";
+  const showImage = Boolean(logoUrl) && !failed;
   return (
     <Link
       href={href}
-      className="flex h-4 min-w-0 max-w-[6.5rem] items-center gap-0.5 rounded-full border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)] px-1 text-[8px] leading-none text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--ember,#E8823A)]"
+      className="flex h-4 min-w-0 max-w-[6.5rem] items-center gap-0.5 rounded-md border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)] px-1 text-[8px] leading-none text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--ember,#E8823A)]"
       title={name}
     >
-      {logoUrl && !failed ? (
-        <Image src={logoUrl} alt="" width={12} height={12} unoptimized className="h-3 w-3 shrink-0 rounded-full border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] object-contain" onError={() => setFailed(true)} />
-      ) : showLetter ? (
-        <span className="grid h-3 w-3 shrink-0 place-items-center rounded-full bg-[color:var(--bg-sunken,#080A11)] text-[6px] font-semibold text-[color:var(--ember,#E8823A)]" aria-hidden>
-          {letter}
-        </span>
+      {showImage ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={logoUrl!} alt="" width={12} height={12} className="h-3 w-3 shrink-0 rounded-md border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] object-contain" onError={() => setFailed(true)} />
       ) : (
-        <span className="h-3 w-3 shrink-0 rounded-full border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)]" aria-hidden />
+        <span className="grid h-3 w-3 shrink-0 place-items-center rounded-sm bg-[color:var(--cobalt-haze,#1A2556)]" aria-hidden>
+          <span className="h-1 w-1 rounded-full bg-[color:var(--ember,#E8823A)]" />
+        </span>
       )}
       <span className="min-w-0 truncate">{name}</span>
     </Link>
@@ -98,11 +115,34 @@ function FacetGroup({ title, children, defaultOpen = true }: { title: string; ch
   );
 }
 
-function Chip({ active, label, onClick, dot, icon }: { active: boolean; label: string; onClick: () => void; dot?: string; icon?: string }) {
+function Chip({
+  active,
+  label,
+  onClick,
+  dot,
+  icon,
+  facet,
+  count,
+}: {
+  active: boolean;
+  label: string;
+  onClick: () => void;
+  dot?: string;
+  icon?: string;
+  /** Facet group id for DOM sum checks (e.g. sector, hq, year). */
+  facet?: string;
+  count?: number;
+}) {
   return (
-    <button type="button" onClick={onClick} className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border px-1.5 py-0.5 text-[10px] ${active ? "border-[color:var(--ember,#E8823A)] bg-[color:var(--ember,#E8823A)] text-[#0B0E17]" : "border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)] text-[color:var(--fg,#ECEEF4)]"}`}>
-      {dot ? <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: active ? "#fff" : dot }} aria-hidden /> : null}
-      {icon && !dot ? <span className="text-[9px] leading-none" aria-hidden>{icon}</span> : null}
+    <button
+      type="button"
+      onClick={onClick}
+      data-facet={facet || undefined}
+      data-facet-count={count != null ? String(count) : undefined}
+      className={`inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-md border px-1.5 py-0.5 font-mono text-[10px] tracking-tight ${active ? "border-[color:var(--ember,#E8823A)] bg-[color:var(--ember,#E8823A)] text-[#0B0E17]" : "border-[color:var(--cobalt-haze,#1A2556)] bg-[color:var(--bg-sunken,#080A11)] text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--cobalt,#2F4FD8)]"}`}
+    >
+      {dot ? <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: active ? "#0B0E17" : dot }} aria-hidden /> : null}
+      {icon && !dot ? <span className="text-[9px] leading-none text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>{icon}</span> : null}
       {label}
     </button>
   );
@@ -191,9 +231,9 @@ export function FacetRail({
   }, [companies, countryScoped, facets.country]);
 
   const [hqExpanded, setHqExpanded] = useState(false);
-  const sectors = useMemo(() => sectorBuckets(baseCompanies), [baseCompanies]);
-  const sectorNamed = useMemo(() => sectors.filter((s) => s.id !== NOT_ON_RECORD).slice(0, 10), [sectors]);
-  const sectorMissingCount = useMemo(() => sectors.find((s) => s.id === NOT_ON_RECORD)?.count ?? 0, [sectors]);
+  const [sectorExpanded, setSectorExpanded] = useState(false);
+  const sectorPack = useMemo(() => sectorPills(baseCompanies, 10), [baseCompanies]);
+  const sectorRows = sectorExpanded ? [...sectorPack.visible, ...sectorPack.more] : sectorPack.visible;
   const kinds = useMemo(() => countBy(baseCompanies, (c) => c.signalKind, (id) => baseCompanies.find((c) => c.signalKind === id)?.signalLabel ?? id), [baseCompanies]);
   const stages = useMemo(() => countBy(baseCompanies, (c) => c.stage, (id) => id), [baseCompanies]);
   const years = useMemo(() => foundedYearBuckets(baseCompanies), [baseCompanies]);
@@ -246,9 +286,10 @@ export function FacetRail({
   }
 
   return (
-    <div className={`flex h-full min-h-0 flex-col overflow-hidden ${PANEL}`}>
+    <div className={`flex h-full min-h-0 flex-col overflow-hidden ${PANEL}`} data-facet-rail="scout">
       <div className="border-b border-[color:var(--line,#1F2536)] px-2.5 py-2">
-        <p className="text-[12px] font-semibold tracking-tight">Filters</p>
+        <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#6B7390)]">Scout filters</p>
+        <p className="mt-0.5 text-[12px] font-semibold tracking-tight text-[color:var(--fg,#ECEEF4)]">Narrow the map</p>
         <label className="sr-only" htmlFor="sample-facet-q">
           {searchPlaceholder}
         </label>
@@ -264,6 +305,8 @@ export function FacetRail({
       <div className="min-h-0 flex-1 overflow-y-auto">
         <FacetGroup title="Founded year">
           <Chip
+            facet="year"
+            count={baseCompanies.length}
             active={facets.foundedYear == null && !facets.yearMissing}
             onClick={() => set({ foundedYear: null, yearMissing: false })}
             label={`All · ${baseCompanies.length}`}
@@ -274,6 +317,8 @@ export function FacetRail({
             return (
               <Chip
                 key={item.id}
+                facet="year"
+                count={item.count}
                 active={active}
                 onClick={() =>
                   set(
@@ -288,41 +333,24 @@ export function FacetRail({
           })}
         </FacetGroup>
         <FacetGroup title="Status">
-          <Chip active={!facets.status} onClick={() => set({ status: null })} label="All" />
+          <Chip facet="status" active={!facets.status} onClick={() => set({ status: null })} label="All" />
           {statuses.map((item) => (
-            <Chip key={item.id} active={facets.status === item.id} onClick={() => set({ status: facets.status === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} dot={STATUS_DOT[item.id]} />
+            <Chip key={item.id} facet="status" count={item.count} active={facets.status === item.id} onClick={() => set({ status: facets.status === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} dot={STATUS_DOT[item.id]} />
           ))}
         </FacetGroup>
         <FacetGroup title="Flags">
-          <Chip active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
+          <Chip facet="flag" active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
           {flags.map((item) => (
-            <Chip key={item.id} active={facets.flag === item.id} onClick={() => set({ flag: facets.flag === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} icon={FLAG_ICON[item.id]} />
+            <Chip key={item.id} facet="flag" count={item.count} active={facets.flag === item.id} onClick={() => set({ flag: facets.flag === item.id ? null : item.id })} label={`${item.label} · ${item.count}`} icon={FLAG_ICON[item.id]} />
           ))}
         </FacetGroup>
-        <FacetGroup title="Sector">
-          <Chip active={!facets.sector && !facets.sectorMissing} onClick={() => set({ sector: null, sectorMissing: false })} label={`All · ${baseCompanies.length}`} />
-          {sectorMissingCount > 0 ? (
-            <Chip
-              active={facets.sectorMissing}
-              onClick={() => set({ sectorMissing: !facets.sectorMissing, sector: null })}
-              label={`Not on record · ${sectorMissingCount}`}
-            />
-          ) : null}
-          {sectorNamed.map((item) => (
-            <Chip
-              key={item.id}
-              active={facets.sector === item.id}
-              onClick={() => set({ sector: facets.sector === item.id ? null : item.id, sectorMissing: false })}
-              label={`${item.label} · ${item.count}`}
-              dot={sectorDot(item.id)}
-            />
-          ))}
-        </FacetGroup>
-        <FacetGroup title="HQ">
-          <Chip active={!facets.hqRegion} onClick={() => set({ hqRegion: null })} label={`All · ${baseCompanies.length}`} />
+        <FacetGroup title="HQ city">
+          <Chip facet="hq" count={baseCompanies.length} active={!facets.hqRegion} onClick={() => set({ hqRegion: null })} label={`All · ${baseCompanies.length}`} />
           {hqRegions.map((item) => (
             <Chip
               key={item.id}
+              facet="hq"
+              count={item.count}
               active={facets.hqRegion === item.id}
               onClick={() => set({ hqRegion: facets.hqRegion === item.id ? null : item.id })}
               label={`${item.label} · ${item.count}`}
@@ -330,9 +358,43 @@ export function FacetRail({
           ))}
           {!hqExpanded && hqPills.more.length > 0 ? (
             <Chip
+              facet="hq-more"
+              count={hqPills.moreCount}
               active={false}
               onClick={() => setHqExpanded(true)}
               label={`More · ${hqPills.moreCount}`}
+            />
+          ) : null}
+        </FacetGroup>
+        <FacetGroup title="Sector">
+          <Chip facet="sector" count={baseCompanies.length} active={!facets.sector && !facets.sectorMissing} onClick={() => set({ sector: null, sectorMissing: false })} label={`All · ${baseCompanies.length}`} />
+          {sectorRows.map((item) => {
+            const missing = item.id === NOT_ON_RECORD;
+            return (
+              <Chip
+                key={item.id}
+                facet="sector"
+                count={item.count}
+                active={missing ? facets.sectorMissing : facets.sector === item.id}
+                onClick={() =>
+                  set(
+                    missing
+                      ? { sectorMissing: !facets.sectorMissing, sector: null }
+                      : { sector: facets.sector === item.id ? null : item.id, sectorMissing: false },
+                  )
+                }
+                label={`${item.label} · ${item.count}`}
+                dot={missing ? undefined : sectorDot(item.id)}
+              />
+            );
+          })}
+          {!sectorExpanded && sectorPack.more.length > 0 ? (
+            <Chip
+              facet="sector-more"
+              count={sectorPack.moreCount}
+              active={false}
+              onClick={() => setSectorExpanded(true)}
+              label={`More · ${sectorPack.moreCount}`}
             />
           ) : null}
         </FacetGroup>
@@ -428,10 +490,10 @@ export function topFounders(companies: FacetCompany[]): { key: string; name: str
 
 export function Board({ title, unit, children }: { title: string; unit?: string; children: ReactNode }) {
   return (
-    <div className={`${PANEL} p-1.5`}>
+    <div className={`${PANEL} relative overflow-hidden p-1.5 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--ember,#E8823A)]`}>
       <div className="flex items-baseline justify-between gap-2">
-        <p className="text-[11px] font-semibold">{title}</p>
-        {unit ? <p className="text-[9px] uppercase tracking-[0.04em] text-[color:var(--fg-3,#6B7390)]">{unit}</p> : null}
+        <p className="font-mono text-[10px] font-medium uppercase tracking-[0.06em] text-[color:var(--fg-2,#A3AAC0)]">{title}</p>
+        {unit ? <p className="font-mono text-[9px] uppercase tracking-[0.04em] text-[color:var(--fg-3,#6B7390)]">{unit}</p> : null}
       </div>
       <div className="mt-1">{children}</div>
     </div>
@@ -596,8 +658,8 @@ export function IntelligenceBoards({
               <li key={item.id}>
                 <div className="flex items-center gap-1.5 text-[11px]">
                   <span className={`${COUNT} w-3.5 shrink-0 text-[10px]`}>{index + 1}</span>
-                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md bg-[color:var(--bg-sunken,#080A11)] text-[8px] font-semibold text-[color:var(--ember,#E8823A)]" aria-hidden>
-                    {item.label.trim().charAt(0).toUpperCase() || "?"}
+                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md border border-[color:var(--cobalt-haze,#1A2556)] bg-[color:var(--cobalt-haze,#1A2556)]" aria-hidden title={item.label}>
+                    <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--ember,#E8823A)]" />
                   </span>
                   <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#ECEEF4)]">{item.label}</span>
                   <span className={`${COUNT} shrink-0 text-[10px]`}>{item.count.toLocaleString("en-US")}</span>
@@ -611,13 +673,14 @@ export function IntelligenceBoards({
         </Board>
       ) : null}
       {!compact ? (
-        <div className={`${PANEL} p-1.5`}>
-          <p className="text-[11px] font-semibold">Ask Campus Scout</p>
+        <div className={`${PANEL} relative overflow-hidden p-1.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#E8823A)]`}>
+          <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Scout ask</p>
           <Link
             href="/ask"
-            className="mt-1 flex h-7 items-center rounded-md border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-sunken,#080A11)] px-2 text-[11px] text-[color:var(--fg-3,#6B7390)] hover:border-[color:var(--ember,#E8823A)] hover:text-[color:var(--ember,#E8823A)]"
+            className="mt-1 flex h-8 items-center gap-2 rounded-sm border border-[color:var(--ember,#E8823A)]/40 bg-[color:var(--bg-sunken,#080A11)] px-2 font-mono text-[11px] text-[color:var(--fg,#ECEEF4)] hover:border-[color:var(--ember,#E8823A)]"
           >
-            Tell me a theme. I will narrow the globe.
+            <span className="font-mono text-[10px] text-[color:var(--ember,#E8823A)]" aria-hidden>{">"}</span>
+            Forming on campus this month?
           </Link>
         </div>
       ) : null}
@@ -645,7 +708,7 @@ export function ViewDrawer({
   return (
     <div className={`${PANEL} px-1.5 py-1`}>
       <div className="mb-1 flex flex-wrap items-center gap-1 px-0.5">
-        <p className="text-[11px] font-semibold tracking-tight">Current view</p>
+        <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Ledger</p>
         <p className={`${COUNT} text-[11px]`}>{total.toLocaleString("en-US")}</p>
         <div className="ml-auto inline-flex overflow-hidden rounded-full border border-[color:var(--line,#1F2536)]">
           <button type="button" onClick={() => onMode("startups")} className={`h-5 px-2 text-[10px] font-medium ${mode === "startups" ? "bg-[color:var(--ember,#E8823A)] text-[#0B0E17]" : "bg-[color:var(--bg-sunken,#080A11)] text-[color:var(--fg-2,#A3AAC0)]"}`}>

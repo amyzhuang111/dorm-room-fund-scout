@@ -376,9 +376,9 @@ export function TileGlobe({
               </button>
               <a
                 href="/ask"
-                className="inline-flex h-7 items-center rounded bg-[color:var(--ember,#E8823A)] px-2.5 text-[11px] font-semibold text-[#0B0E17]"
+                className="inline-flex h-7 items-center rounded-sm border border-[color:var(--ember,#E8823A)] bg-[color:var(--bg-sunken,#080A11)] px-2.5 font-mono text-[11px] font-semibold text-[color:var(--ember,#E8823A)]"
               >
-                Ask
+                Scout ask
               </a>
             </div>
           </div>
@@ -409,17 +409,15 @@ export function TileGlobe({
                 const campus = campuses.find((row) => row.id === id);
                 if (campus) focus(campus);
               }}
-              footer={
-                <>
-                  <p>{markerSizeLegend()}</p>
-                  <p className="mt-1">
-                    <MapCredit />
-                  </p>
-                </>
-              }
+              footer={<p>{markerSizeLegend()}</p>}
             />
           </div>
         ) : null}
+        <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 hidden -translate-x-1/2 lg:block" data-map-credit>
+          <p className="rounded bg-[#0B0E17]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#6B7390)]">
+            <MapCredit />
+          </p>
+        </div>
         {hover ? (
           <div
             className="pointer-events-none absolute z-30 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-lg border border-[color:var(--line,#1F2536)] bg-[color:var(--bg-raised,#121726)] px-2.5 py-1.5 text-left text-[color:var(--fg,#ECEEF4)]"
