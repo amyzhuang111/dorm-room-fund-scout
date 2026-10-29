@@ -521,3 +521,11 @@ a, button {
 @media (min-width: 640px) {
   details.browse-filters > summary { display: none; }
 }
+
+.sample-paper .company-instrument {
+  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+}
+.sample-paper .company-instrument h2 {
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}

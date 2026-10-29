@@ -1,11 +1,23 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { shortCampusLabel } from "@/lib/domain/campuses";
-import { MapCredit } from "./map-credit";
 import { markerRadius, markerSizeLegend } from "@/lib/domain/marker-radius";
+import type { FacetCompany } from "@/lib/domain/sample-facets";
+import { MapCredit } from "./map-credit";
+import {
+  applyFacets,
+  BarRow,
+  Board,
+  emptyFacets,
+  FacetRail,
+  recentSignals,
+  sectorMix,
+  topFounders,
+  ViewDrawer,
+  type FacetState,
+} from "./sample-instrument";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 export interface TileCampus {
@@ -18,14 +30,7 @@ export interface TileCampus {
   country: string;
 }
 
-export interface TileCompany {
-  id: string;
-  name: string;
-  schoolId: string | null;
-  signals: number;
-  logoUrl?: string | null;
-  founders?: string[];
-}
+export type TileCompany = FacetCompany;
 
 const OCEAN = "#FFDBBB";
 const LAND = "#DD8A4E";
@@ -45,7 +50,6 @@ const COUNTRY_COLOR: Record<string, string> = {
 function markerColor(country: string): string {
   return COUNTRY_COLOR[country] ?? BRAND;
 }
-
 
 function campusCollection(campuses: TileCampus[]) {
   return {
@@ -87,72 +91,43 @@ export function TileGlobe({
     flyTo: (opts: object) => void;
     resize: () => void;
   } | null>(null);
-  const [country, setCountry] = useState<string | null>(null);
-  const [query, setQuery] = useState("");
+  const [facets, setFacets] = useState<FacetState>(emptyFacets);
   const [stripMode, setStripMode] = useState<"startups" | "founders">("startups");
   const [hover, setHover] = useState<{ name: string; founders: number; signals: number; x: number; y: number } | null>(null);
   const [ready, setReady] = useState(false);
 
-  const countries = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const campus of campuses) {
-      const name = campus.country.trim();
-      if (!name) continue;
-      counts.set(name, (counts.get(name) ?? 0) + 1);
-    }
-    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-  }, [campuses]);
-
+  const country = facets.country;
   const shown = useMemo(
     () => (country ? campuses.filter((campus) => campus.country === country) : campuses),
     [campuses, country],
   );
-  const filteredCampuses = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const base = shown;
-    if (!q) return base;
-    return base.filter((campus) => campus.name.toLowerCase().includes(q) || shortCampusLabel(campus.id, campus.name).toLowerCase().includes(q));
-  }, [shown, query]);
+  const countryIds = useMemo(() => new Set(shown.map((campus) => campus.id)), [shown]);
+  const filteredCompanies = useMemo(() => {
+    const base = applyFacets(companies, facets, countryIds);
+    if (selectedId) return base.filter((company) => company.schoolId === selectedId);
+    return base;
+  }, [companies, facets, countryIds, selectedId]);
   const byFounders = useMemo(
-    () => [...filteredCampuses].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name)).slice(0, 8),
-    [filteredCampuses],
-  );
-  const bySignals = useMemo(
-    () => [...filteredCampuses].sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name)).slice(0, 6),
-    [filteredCampuses],
+    () => [...shown].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name)).slice(0, 6),
+    [shown],
   );
   const maxFounders = byFounders[0]?.founders || 1;
-  const countryRows = useMemo(() => {
-    return countries.slice(0, 5).map(([name, count], index) => ({
-      id: `country-${name}`,
-      name,
-      lat: 0,
-      lon: 0,
-      founders: count,
-      signals: count,
-      country: name,
-      _index: index,
-    })) as TileCampus[];
-  }, [countries]);
-  const companiesInView = useMemo(() => {
-    const ids = new Set(shown.map((campus) => campus.id));
-    return companies
-      .filter((company) => company.schoolId && ids.has(company.schoolId) && (!selectedId || company.schoolId === selectedId))
-      .sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name));
-  }, [companies, shown, selectedId]);
-  const companyStrip = useMemo(() => companiesInView.slice(0, 72), [companiesInView]);
+  const sectors = useMemo(() => sectorMix(filteredCompanies), [filteredCompanies]);
+  const recent = useMemo(() => recentSignals(filteredCompanies), [filteredCompanies]);
+  const foundersBoard = useMemo(() => topFounders(filteredCompanies), [filteredCompanies]);
+  const companyStrip = useMemo(() => filteredCompanies.slice(0, 96), [filteredCompanies]);
   const founderStrip = useMemo(() => {
     const rows: { key: string; name: string; companyId: string; companyName: string }[] = [];
-    for (const company of companiesInView) {
+    for (const company of filteredCompanies) {
       for (const person of company.founders ?? []) {
         const name = person.trim();
         if (!name) continue;
         rows.push({ key: `${company.id}:${name}`, name, companyId: company.id, companyName: company.name });
-        if (rows.length >= 72) return rows;
+        if (rows.length >= 96) return rows;
       }
     }
     return rows;
-  }, [companiesInView]);
+  }, [filteredCompanies]);
 
   useEffect(() => {
     const node = mapNode.current;
@@ -355,9 +330,22 @@ export function TileGlobe({
     mapRef.current.setFilter("campus-selected", selected);
   }, [country, ready, selectedId]);
 
+
   function focus(campus: TileCampus) {
     mapRef.current?.flyTo({ center: [campus.lon, campus.lat], zoom: 3.1, essential: true });
     onSelect(campus.id);
+    setFacets((prev) => ({ ...prev, campus: campus.id }));
+  }
+
+  function onFacetChange(next: FacetState) {
+    setFacets(next);
+    if (next.campus && next.campus !== facets.campus) {
+      const campus = campuses.find((row) => row.id === next.campus);
+      if (campus) {
+        mapRef.current?.flyTo({ center: [campus.lon, campus.lat], zoom: 3.1, essential: true });
+        onSelect(campus.id);
+      }
+    }
   }
 
   const mobileChoices = (
@@ -367,26 +355,23 @@ export function TileGlobe({
         onMode={setStripMode}
         companies={companyStrip}
         founders={founderStrip}
-        companyTotal={companiesInView.length}
+        companyTotal={filteredCompanies.length}
         founderTotal={founderStrip.length}
       />
       <details className="rounded-xl border border-[#f0d9c6] bg-white/94 px-2.5 py-2 text-[#20140c]">
-        <summary className="cursor-pointer text-[12px] font-semibold">Campuses · {shown.length}</summary>
-        <div className="mt-2 space-y-2">
-          <p className="text-[11px] leading-4 text-[#6b5443]">{markerSizeLegend()}</p>
-          <div className="chip-scroll">
-            <FilterChip active={!country} onClick={() => setCountry(null)} label={`All · ${campuses.length}`} />
-            {countries.map(([name, count]) => (
-              <FilterChip key={name} active={country === name} onClick={() => setCountry(country === name ? null : name)} label={`${name} · ${count}`} />
-            ))}
-          </div>
-          <div className="chip-scroll">
-            {byFounders.map((campus) => (
-              <button key={campus.id} type="button" onClick={() => focus(campus)} className="shrink-0 whitespace-nowrap rounded-full border border-[#f0d9c6] bg-white px-2.5 py-1 text-[12px] text-[#20140c]">
-                {shortCampusLabel(campus.id, campus.name)} <span className={COUNT}>{campus.founders.toLocaleString("en-US")}</span>
-              </button>
-            ))}
-          </div>
+        <summary className="cursor-pointer text-[12px] font-semibold">Filters · {shown.length} campuses</summary>
+        <div className="mt-2 h-[320px]">
+          <FacetRail
+            companies={companies}
+            campuses={campuses}
+            facets={facets}
+            onChange={onFacetChange}
+            onCampusFocus={(id) => {
+              const campus = campuses.find((row) => row.id === id);
+              if (campus) focus(campus);
+            }}
+            footer={markerSizeLegend()}
+          />
         </div>
       </details>
     </div>
@@ -394,232 +379,114 @@ export function TileGlobe({
 
   return (
     <div className={className}>
-    <div className="relative overflow-hidden rounded-2xl bg-[#FFF7F0]" style={{ height: stageHeight }}>
-      <div ref={mapNode} className="h-full w-full" />
-      <aside className="absolute bottom-3 left-2 top-2 z-10 hidden w-[220px] flex-col overflow-hidden rounded-xl border border-[#f0d9c6] bg-white/94 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)] lg:flex">
-        <div className="border-b border-[#f0d9c6] px-2.5 py-2">
-          <p className="text-[12px] font-semibold tracking-tight">Filters</p>
-          <label className="sr-only" htmlFor="globe-campus-q">Filter campuses</label>
-          <input
-            id="globe-campus-q"
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search campuses"
-            className="mt-1.5 h-7 w-full rounded-md border border-[#f0d9c6] bg-[#FFF7F0] px-2 text-[12px] text-[#20140c] outline-none placeholder:text-[#8a7260]"
+      <div className="relative overflow-hidden rounded-2xl bg-[#FFF7F0]" style={{ height: stageHeight }}>
+        <div ref={mapNode} className="h-full w-full" />
+        <aside className="absolute bottom-3 left-2 top-2 z-10 hidden w-[240px] lg:block">
+          <FacetRail
+            companies={companies}
+            campuses={campuses}
+            facets={facets}
+            onChange={onFacetChange}
+            onCampusFocus={(id) => {
+              const campus = campuses.find((row) => row.id === id);
+              if (campus) focus(campus);
+            }}
+            footer={
+              <>
+                <p>{markerSizeLegend()}</p>
+                <p className="mt-1">
+                  <MapCredit />
+                </p>
+              </>
+            }
           />
-        </div>
-        <div className="border-b border-[#f0d9c6] px-2.5 py-2">
-          <p className="mb-1 text-[10px] font-medium uppercase tracking-[0.06em] text-[#8a7260]">Country</p>
-          <div className="flex flex-wrap gap-1">
-            <FilterChip active={!country} onClick={() => setCountry(null)} label={`All · ${campuses.length}`} />
-            {countries.map(([name, count]) => (
-              <FilterChip key={name} active={country === name} onClick={() => setCountry(country === name ? null : name)} label={`${name} · ${count}`} />
-            ))}
-          </div>
-          <p className="mb-1 mt-2 text-[10px] font-medium uppercase tracking-[0.06em] text-[#8a7260]">Signal weight</p>
-          <p className="text-[11px] leading-4 text-[#6b5443]">Marker size follows stored campus signals (see legend).</p>
-        </div>
-        <div className="min-h-0 flex-1 overflow-y-auto px-1.5 py-1.5">
-          <p className="px-1 pb-1 text-[10px] font-medium uppercase tracking-[0.06em] text-[#8a7260]">Campuses</p>
-          <ul className="space-y-0.5">
-            {filteredCampuses
-              .slice()
-              .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))
-              .slice(0, 40)
-              .map((campus) => (
+        </aside>
+        <aside className="absolute bottom-[5.75rem] right-2 top-2 z-10 hidden w-[236px] space-y-2 overflow-y-auto lg:block">
+          <Board title="Leading campuses" unit="founders">
+            <ol className="space-y-1.5">
+              {byFounders.map((campus, index) => (
                 <li key={campus.id}>
-                  <button
-                    type="button"
+                  <BarRow
+                    rank={index + 1}
+                    label={shortCampusLabel(campus.id, campus.name)}
+                    value={campus.founders}
+                    max={maxFounders}
                     onClick={() => focus(campus)}
-                    className={`flex w-full items-baseline gap-1.5 rounded-md px-1.5 py-1 text-left text-[12px] hover:bg-[#FFF1E6] ${selectedId === campus.id ? "bg-[#FFF1E6]" : ""}`}
-                  >
-                    <span className="min-w-0 flex-1 truncate text-[#20140c]">{shortCampusLabel(campus.id, campus.name)}</span>
-                    <span className={`${COUNT} shrink-0 text-[11px]`}>{campus.founders.toLocaleString("en-US")}</span>
-                  </button>
+                  />
                 </li>
               ))}
-          </ul>
-        </div>
-        <p className="border-t border-[#f0d9c6] px-2.5 py-1.5 text-[10px] leading-[14px] text-[#6b5443]">{markerSizeLegend()}</p>
-      </aside>
-      <aside className="absolute bottom-[6.25rem] right-2 top-2 z-10 hidden w-[236px] space-y-2 overflow-y-auto lg:block">
-        <RankCard title="Leading campuses" metric="founders" rows={byFounders} max={maxFounders} onPick={focus} />
-        <RankCard title="Top by signals" metric="signals" rows={bySignals} max={bySignals[0]?.signals || 1} onPick={focus} />
-        <RankCard
-          title="Countries"
-          metric="founders"
-          rows={countryRows}
-          max={countryRows[0]?.founders || 1}
-          onPick={(row) => setCountry(row.country === country ? null : row.country)}
-          valueLabel="campuses"
-        />
-      </aside>
-      {hover ? (
-        <div className="pointer-events-none absolute z-20 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-xl border border-[#f0d9c6] bg-white px-2.5 py-1.5 text-left text-[#20140c] shadow" style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}>
-          <p className="text-[13px] font-medium leading-4">{hover.name}</p>
-          <p className="mt-0.5 text-[12px] leading-4 text-[#6b5443]">
-            <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> founders
-            {" · "}
-            <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> signals
-          </p>
-        </div>
-      ) : null}
-      <div className="absolute bottom-2 left-[232px] right-2 z-10 hidden lg:block">
-        <ViewDrawer
-          mode={stripMode}
-          onMode={setStripMode}
-          companies={companyStrip}
-          founders={founderStrip}
-          companyTotal={companiesInView.length}
-          founderTotal={founderStrip.length}
-        />
-      </div>
-      <p className="pointer-events-auto absolute bottom-[6.5rem] right-2 z-10 hidden max-w-[220px] text-right text-[10px] leading-[14px] text-[#6b5443] lg:block">
-        <MapCredit />
-      </p>
-    </div>
-    {mobileChoices}
-    </div>
-  );
-}
-
-function CompanyMark({ name, logoUrl }: { name: string; logoUrl: string | null }) {
-  const [failed, setFailed] = useState(false);
-  const letter = name.trim().charAt(0).toUpperCase() || "?";
-  if (!logoUrl || failed) {
-    return (
-      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-[#FFF1E6] text-[11px] font-semibold text-[#E05612]" aria-hidden>
-        {letter}
-      </span>
-    );
-  }
-  return (
-    <Image
-      src={logoUrl}
-      alt=""
-      width={28}
-      height={28}
-      unoptimized
-      className="h-7 w-7 shrink-0 rounded-md border border-[#f0d9c6] bg-white object-contain"
-      onError={() => setFailed(true)}
-    />
-  );
-}
-
-function personInitials(name: string): string {
-  const parts = name.split(/\s+/).filter(Boolean);
-  const first = (parts[0] ?? "").replace(/[^A-Za-z]/g, "");
-  const last = parts.length > 1 ? parts[parts.length - 1].replace(/[^A-Za-z]/g, "") : "";
-  return ((first[0] ?? "") + (last[0] ?? first[1] ?? "")).toUpperCase() || "?";
-}
-
-function ViewDrawer({
-  mode,
-  onMode,
-  companies,
-  founders,
-  companyTotal,
-  founderTotal,
-}: {
-  mode: "startups" | "founders";
-  onMode: (mode: "startups" | "founders") => void;
-  companies: TileCompany[];
-  founders: { key: string; name: string; companyId: string; companyName: string }[];
-  companyTotal: number;
-  founderTotal: number;
-}) {
-  const total = mode === "startups" ? companyTotal : founderTotal;
-  if (companyTotal === 0 && founderTotal === 0) return null;
-  return (
-    <div className="rounded-xl border border-[#f0d9c6] bg-white/94 px-2.5 py-2 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)]">
-      <div className="mb-1.5 flex flex-wrap items-center gap-2 px-0.5">
-        <p className="text-[12px] font-semibold tracking-tight">Current view</p>
-        <p className={`${COUNT} text-[12px]`}>{total.toLocaleString("en-US")}</p>
-        <div className="ml-auto inline-flex overflow-hidden rounded-md border border-[#f0d9c6]">
-          <button type="button" onClick={() => onMode("startups")} className={`h-6 px-2 text-[11px] font-medium ${mode === "startups" ? "bg-[#FB651E] text-white" : "bg-white text-[#6b5443]"}`}>
-            Startups
-          </button>
-          <button type="button" onClick={() => onMode("founders")} className={`h-6 px-2 text-[11px] font-medium ${mode === "founders" ? "bg-[#FB651E] text-white" : "bg-white text-[#6b5443]"}`}>
-            Founders
-          </button>
+            </ol>
+          </Board>
+          <Board title="Recent signals" unit="date">
+            <ol className="space-y-1.5">
+              {recent.map((company, index) => (
+                <li key={company.id}>
+                  <a href={`/startup/${company.id}`} className="block text-left hover:text-[#FB651E]">
+                    <div className="flex items-baseline gap-1.5 text-[11px]">
+                      <span className={`${COUNT} w-3.5 shrink-0 text-[10px]`}>{index + 1}</span>
+                      <span className="min-w-0 flex-1 truncate text-[#20140c]">{company.name}</span>
+                      <span className="shrink-0 text-[10px] text-[#8a7260]">{company.signalLabel ?? "Signal"}</span>
+                    </div>
+                    <p className="ml-[18px] text-[10px] tabular-nums text-[#8a7260]">{(company.latestSignalAt ?? "").replace(/-00/g, "") || "Date not stored"}</p>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </Board>
+          <Board title="Sector mix" unit="companies">
+            <ol className="space-y-1.5">
+              {sectors.map((item, index) => (
+                <li key={item.id}>
+                  <BarRow
+                    rank={index + 1}
+                    label={item.label}
+                    value={item.count}
+                    max={sectors[0]?.count || 1}
+                    onClick={() => setFacets((prev) => ({ ...prev, sector: prev.sector === item.id ? null : item.id }))}
+                  />
+                </li>
+              ))}
+            </ol>
+          </Board>
+          <Board title="Top founders" unit="signals">
+            <ol className="space-y-1.5">
+              {foundersBoard.map((person, index) => (
+                <li key={person.key}>
+                  <a href={`/startup/${person.companyId}`} className="block text-left hover:text-[#FB651E]" title={person.companyName}>
+                    <div className="flex items-baseline gap-1.5 text-[11px]">
+                      <span className={`${COUNT} w-3.5 shrink-0 text-[10px]`}>{index + 1}</span>
+                      <span className="min-w-0 flex-1 truncate text-[#20140c]">{person.name}</span>
+                      <span className={`${COUNT} shrink-0 text-[10px]`}>{person.signals.toLocaleString("en-US")}</span>
+                    </div>
+                    <p className="ml-[18px] truncate text-[10px] text-[#8a7260]">{person.companyName}</p>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </Board>
+        </aside>
+        {hover ? (
+          <div className="pointer-events-none absolute z-20 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-xl border border-[#f0d9c6] bg-white px-2.5 py-1.5 text-left text-[#20140c] shadow" style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}>
+            <p className="text-[13px] font-medium leading-4">{hover.name}</p>
+            <p className="mt-0.5 text-[12px] leading-4 text-[#6b5443]">
+              <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> founders
+              {" · "}
+              <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> signals
+            </p>
+          </div>
+        ) : null}
+        <div className="absolute bottom-2 left-[252px] right-[252px] z-10 hidden lg:block">
+          <ViewDrawer
+            mode={stripMode}
+            onMode={setStripMode}
+            companies={companyStrip}
+            founders={founderStrip}
+            companyTotal={filteredCompanies.length}
+            founderTotal={founderStrip.length}
+          />
         </div>
       </div>
-      {mode === "startups" ? (
-        <div className="grid max-h-[5.5rem] grid-cols-2 gap-1 overflow-y-auto sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
-          {companies.map((company) => (
-            <a key={company.id} href={`/startup/${company.id}`} className="flex min-w-0 items-center gap-1.5 rounded-lg border border-[#f0d9c6] bg-white px-1.5 py-1 text-[11px] text-[#20140c] hover:border-[#E05612]">
-              <CompanyMark name={company.name} logoUrl={company.logoUrl ?? null} />
-              <span className="min-w-0 truncate">{company.name}</span>
-            </a>
-          ))}
-        </div>
-      ) : (
-        <div className="grid max-h-[5.5rem] grid-cols-2 gap-1 overflow-y-auto sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
-          {founders.map((person) => (
-            <a key={person.key} href={`/startup/${person.companyId}`} className="flex min-w-0 items-center gap-1.5 rounded-lg border border-[#f0d9c6] bg-white px-1.5 py-1 text-[11px] text-[#20140c] hover:border-[#E05612]" title={person.companyName}>
-              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-[#FFF1E6] text-[10px] font-semibold text-[#E05612]" aria-hidden>
-                {personInitials(person.name)}
-              </span>
-              <span className="min-w-0 truncate">{person.name}</span>
-            </a>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function FilterChip({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) {
-  return (
-    <button type="button" onClick={onClick} className={`shrink-0 whitespace-nowrap rounded-full border px-2 py-0.5 text-[11px] ${active ? "border-[#FB651E] bg-[#FB651E] text-white" : "border-[#f0d9c6] bg-white text-[#20140c]"}`}>
-      {label}
-    </button>
-  );
-}
-
-function RankCard({
-  title,
-  metric,
-  rows,
-  max,
-  onPick,
-  valueLabel,
-}: {
-  title: string;
-  metric: "founders" | "signals";
-  rows: TileCampus[];
-  max: number;
-  onPick: (campus: TileCampus) => void;
-  valueLabel?: string;
-}) {
-  const unit = valueLabel ?? metric;
-  return (
-    <div className="rounded-xl border border-[#f0d9c6] bg-white/94 p-2.5 text-[#20140c] shadow-[0_10px_30px_rgba(90,44,14,0.08)]">
-      <div className="flex items-baseline justify-between gap-2">
-        <p className="text-[12px] font-semibold">{title}</p>
-        <p className="text-[10px] uppercase tracking-[0.04em] text-[#8a7260]">{unit}</p>
-      </div>
-      <ol className="mt-1.5 space-y-1.5">
-        {rows.map((campus, index) => {
-          const value = metric === "founders" ? campus.founders : campus.signals;
-          const width = Math.max(8, Math.round((value / Math.max(1, max)) * 100));
-          return (
-            <li key={campus.id}>
-              <button type="button" onClick={() => onPick(campus)} className="w-full text-left hover:text-[#FB651E]" title={`${value.toLocaleString("en-US")} ${unit}`}>
-                <div className="flex items-baseline gap-1.5 text-[12px]">
-                  <span className={`${COUNT} w-3.5 shrink-0 text-[11px]`}>{index + 1}</span>
-                  <span className="min-w-0 flex-1 truncate text-[#20140c]">{campus.id.startsWith("country-") ? campus.name : shortCampusLabel(campus.id, campus.name)}</span>
-                  <span className={`${COUNT} shrink-0 text-[11px]`}>{value.toLocaleString("en-US")}</span>
-                </div>
-                <div className="ml-[18px] mt-0.5 h-1 overflow-hidden rounded-full bg-[#FFF1E6]">
-                  <div className="h-full rounded-full bg-[#FB651E]" style={{ width: `${width}%` }} />
-                </div>
-              </button>
-            </li>
-          );
-        })}
-      </ol>
+      {mobileChoices}
     </div>
   );
 }
