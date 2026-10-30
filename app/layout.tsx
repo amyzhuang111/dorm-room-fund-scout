@@ -3,7 +3,7 @@ import { Fraunces, Geist, Geist_Mono, Instrument_Serif } from "next/font/google"
 import Link from "next/link";
 import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/next";
-import { AskAiProvider } from "@/components/ask-ai";
+import { AskAiDockSlot } from "@/components/ask-ai-dock-slot";
 import { SiteNav } from "@/components/site-nav";
 import { FeedbackProvider } from "@/components/feedback-provider";
 import { UserPipelineProvider } from "@/components/user-pipeline-provider";
@@ -40,7 +40,7 @@ const instrument = Instrument_Serif({
 const display = Fraunces({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: "600",
   display: "swap",
   preload: true,
 });
@@ -64,8 +64,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="flex min-h-full flex-col bg-bg font-sans text-fg">
-        <AskAiProvider>
-          <UserPipelineProvider>
+        <UserPipelineProvider>
             <header className="sticky top-0 z-40">
               <Suspense fallback={<div className="h-12 border-b border-line bg-bg" />}>
                 <SiteNav />
@@ -83,8 +82,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <span className="ml-auto tabular-nums">Data through {absoluteDate(latestDataTimestamp())}</span>
             </div>
           </footer>
+          <AskAiDockSlot />
           <Analytics />
-        </AskAiProvider>
       </body>
     </html>
   );

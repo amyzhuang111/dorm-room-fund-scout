@@ -86,6 +86,8 @@ function campusCollection(campuses: TileCampus[]) {
 export function TileGlobe({
   campuses,
   companies = [],
+  companyCount = 0,
+  foundersListed = 0,
   selectedId,
   onSelect,
   className = "",
@@ -93,6 +95,9 @@ export function TileGlobe({
 }: {
   campuses: TileCampus[];
   companies?: TileCompany[];
+  /** Full catalog size, used until /data/directory.json arrives. */
+  companyCount?: number;
+  foundersListed?: number;
   selectedId?: string | null;
   onSelect: (id: string) => void;
   className?: string;
@@ -389,7 +394,8 @@ export function TileGlobe({
     }
   }
 
-  const liveCount = filteredCompanies.length;
+  const catalogReady = companies.length > 0;
+  const liveCount = catalogReady ? filteredCompanies.length : companyCount;
   const signaledLive = useMemo(
     () => filteredCompanies.filter((c) => (c.signals ?? 0) > 0).length,
     [filteredCompanies],
@@ -444,7 +450,9 @@ export function TileGlobe({
 
   // Masthead founders/campuses match the sample strip (universe totals via sampleSurfaceCounts),
   // not the filtered map/facet slice — so strip and fold data-count nodes never diverge.
-  const universeCounts = sampleSurfaceCounts(companies, campuses);
+  const universeCounts = catalogReady
+    ? sampleSurfaceCounts(companies, campuses)
+    : { companies: companyCount, foundersListed, campusesOnMap: campuses.length };
 
   /** Campus plates sitewide — ranked by founder names (Penn 757 / Stanford 300 / MIT 238). */
   const topDesksByFounders = useMemo(() => campusFoundersTop(campuses, 8), [campuses]);

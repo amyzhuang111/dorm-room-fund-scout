@@ -41,7 +41,7 @@ const nextConfig: NextConfig = {
     // The database is opened by a runtime path, and better-sqlite3 picks a
     // prebuild for the deploy architecture. Include both explicitly so a
     // Vercel function is not missing the file the tracer did not follow.
-    "/**": ["./data/campus-universe.db", "./node_modules/better-sqlite3/prebuilds/**/*"],
+    "/**": ["./data/campus-universe.db", "./data/snapshots/**/*", "./node_modules/better-sqlite3/prebuilds/**/*"],
   },
 };
 

@@ -45,6 +45,8 @@ export function SampleHome({
   const campusId = campusRow?.id;
   const listed = feed === "directory" || feed === "leaderboard";
   const data = loadDirectory();
+  let foundersListed = 0;
+  for (const card of data.cards) foundersListed += card.founders.length;
   const matched = searchDirectory(filterDirectory(data.cards, sector, kind, campusId), query);
   const campusTotal = campusId ? filterDirectory(data.cards, undefined, undefined, campusId).length : null;
   const ordered = feed === "directory" ? sortDirectory(matched, order) : matched;
@@ -101,6 +103,7 @@ export function SampleHome({
       stats={stats}
       cardCount={data.cards.length}
       signalCompanyCount={data.cards.filter((c) => c.signals > 0).length}
+      foundersListed={foundersListed}
       newestHome={newestHome}
       directoryUrl="/data/sample-directory.json"
     />

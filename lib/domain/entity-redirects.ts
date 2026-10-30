@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import path from "node:path";
 import { databasePath, getDb } from "../db/client";
 import { resolveRedirect } from "./feedback";
 
@@ -68,6 +69,15 @@ export function survivorId(entityType: RedirectEntityType, id: string): string |
 
 /** old id → survivor id, for likes / passes / never-show records. */
 export function feedbackRedirects(): Record<string, string> {
+  if (process.env.CAMPUS_SCOUT_IGNORE_PRECOMPUTE !== "1") {
+    try {
+      const file = path.join(process.cwd(), "public", "data", "shell.json");
+      const parsed = JSON.parse(fs.readFileSync(file, "utf8")) as { redirects?: Record<string, string> };
+      if (parsed.redirects) return parsed.redirects;
+    } catch {
+      // Fall through to SQLite when the build snapshot is absent.
+    }
+  }
   return loadRedirects().flat;
 }
 

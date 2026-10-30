@@ -75,6 +75,7 @@ export function SampleHomeClient(props: {
   stats: HeroStats;
   cardCount: number;
   signalCompanyCount: number;
+  foundersListed: number;
   newestHome: { label: string; detail: string } | null;
   directoryUrl?: string;
 }) {
@@ -96,6 +97,7 @@ export function SampleHomeClient(props: {
     stats,
     cardCount,
     signalCompanyCount,
+    foundersListed,
     newestHome,
     directoryUrl = "/data/sample-directory.json",
   } = props;
@@ -119,7 +121,7 @@ export function SampleHomeClient(props: {
   return (
     <div className="sample-paper" data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
-      <GlobeHero stats={stats} showGlobe={feed !== "world"} companies={companies} />
+      <GlobeHero stats={stats} showGlobe={feed !== "world"} companies={companies} companyCount={cardCount} foundersListed={foundersListed} />
       <section id="browse" className="scroll-mt-14 border-t border-line px-3 pb-10 pt-2 sm:px-5">
         <div className="mx-auto w-full max-w-[1280px]">
           <div className="flex flex-wrap items-center gap-x-1 border-b border-line" role="tablist" aria-label="Views">
@@ -153,7 +155,7 @@ export function SampleHomeClient(props: {
         </div>
         {feed === "world" ? (
           <div className="mx-auto mt-3 w-full max-w-[1280px]">
-            <WorldMap stats={stats} companies={companies} />
+            <WorldMap stats={stats} companies={companies} companyCount={cardCount} foundersListed={foundersListed} />
           </div>
         ) : listed ? (
           <SampleInstrumentBrowse

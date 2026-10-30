@@ -1,27 +1,25 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { createContext, useContext } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { GlobeFoldSkeleton } from "@/components/globe-fold-skeleton";
 import type { TileCampus, TileCompany } from "@/components/tile-globe";
-
-const TileGlobe = dynamic(
-  () => import("@/components/tile-globe").then((mod) => ({ default: mod.TileGlobe })),
-  {
-    ssr: true,
-    loading: () => (
-      <div
-        className="w-full bg-[color:var(--bg,#FFFFFF)]"
-        style={{ minHeight: "min(100dvh, 780px)" }}
-        aria-hidden
-      />
-    ),
-  },
-);
 import type { HeroStats, WeekItem } from "@/lib/domain/hero-stats";
 import { updatedAgo } from "@/lib/domain/relative-time";
-import { sampleSurfaceCounts } from "@/lib/domain/sample-facets";
+
+const FoldSkeletonContext = createContext<React.ComponentProps<typeof GlobeFoldSkeleton>>({});
+
+const TileGlobe = dynamic(() => import("./tile-globe").then((mod) => mod.TileGlobe), {
+  ssr: false,
+  loading: () => <GlobeFoldSkeletonFromContext />,
+});
+
+function GlobeFoldSkeletonFromContext() {
+  return <GlobeFoldSkeleton {...useContext(FoldSkeletonContext)} />;
+}
 
 function plottedCampuses(stats: HeroStats): TileCampus[] {
   return stats.universities
@@ -37,12 +35,23 @@ function plottedCampuses(stats: HeroStats): TileCampus[] {
     }));
 }
 
-function GlobeBlock({ stats, companies }: { stats: HeroStats; companies: TileCompany[] }) {
+function GlobeBlock({
+  stats,
+  companies,
+  companyCount,
+  foundersListed,
+}: {
+  stats: HeroStats;
+  companies: TileCompany[];
+  companyCount: number;
+  foundersListed: number;
+}) {
   const router = useRouter();
   const search = useSearchParams();
   const campuses = plottedCampuses(stats);
   const requested = search.get("campus");
   const selectedId = campuses.some((campus) => campus.id === requested) ? requested : null;
+  const top = [...campuses].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))[0];
 
   function onSelect(id: string) {
     const next = new URLSearchParams(search.toString());
@@ -54,17 +63,51 @@ function GlobeBlock({ stats, companies }: { stats: HeroStats; companies: TileCom
     router.push(`/?${next.toString()}#browse`);
   }
 
-  return <TileGlobe campuses={campuses} companies={companies} selectedId={selectedId} onSelect={onSelect} dataThrough={stats.updatedAt} />;
+  const skeleton = {
+    companyCount,
+    foundersListed,
+    campusesOnMap: campuses.length,
+    dataThrough: stats.updatedAt,
+    topName: top?.name ?? "",
+    topFounders: top?.founders ?? 0,
+    topSignals: top?.signals ?? 0,
+  };
+
+  return (
+    <FoldSkeletonContext.Provider value={skeleton}>
+      <TileGlobe
+        campuses={campuses}
+        companies={companies}
+        companyCount={companyCount}
+        foundersListed={foundersListed}
+        selectedId={selectedId}
+        onSelect={onSelect}
+        dataThrough={stats.updatedAt}
+      />
+    </FoldSkeletonContext.Provider>
+  );
 }
 
-export function GlobeHero({ stats, companies = [], showGlobe = true }: { stats: HeroStats; companies?: TileCompany[]; showGlobe?: boolean }) {
+export function GlobeHero({
+  stats,
+  companies = [],
+  companyCount = 0,
+  foundersListed = 0,
+  showGlobe = true,
+}: {
+  stats: HeroStats;
+  companies?: TileCompany[];
+  companyCount?: number;
+  foundersListed?: number;
+  showGlobe?: boolean;
+}) {
   return (
     <div className={showGlobe ? "bg-[color:var(--bg,#FFFFFF)] px-4 py-1.5 text-[color:var(--fg,#0B0E17)] sm:px-5 lg:py-1" : "bg-bg px-6 py-6 text-fg"}>
       <div className={showGlobe ? "lg:min-h-[calc(100dvh-48px)]" : ""}>
         <SignatureBand
           stats={stats}
-          companies={companies}
-          globe={showGlobe ? <GlobeBlock stats={stats} companies={companies} /> : null}
+          foundersListed={foundersListed}
+          globe={showGlobe ? <GlobeBlock stats={stats} companies={companies} companyCount={companyCount} foundersListed={foundersListed} /> : null}
         />
       </div>
       {/* Collage teasers compete with Directory tabs on mobile browse; instrument rails carry signals instead. */}
@@ -77,8 +120,18 @@ export function GlobeHero({ stats, companies = [], showGlobe = true }: { stats: 
   );
 }
 
-export function WorldMap({ stats, companies = [] }: { stats: HeroStats; companies?: TileCompany[] }) {
-  return <GlobeBlock stats={stats} companies={companies} />;
+export function WorldMap({
+  stats,
+  companies = [],
+  companyCount = 0,
+  foundersListed = 0,
+}: {
+  stats: HeroStats;
+  companies?: TileCompany[];
+  companyCount?: number;
+  foundersListed?: number;
+}) {
+  return <GlobeBlock stats={stats} companies={companies} companyCount={companyCount} foundersListed={foundersListed} />;
 }
 
 const HIGH_VALUE = new Set(["funding", "launch", "award", "acquisition"]);
@@ -254,10 +307,8 @@ function HeroActions({ cream = false, compact = false }: { cream?: boolean; comp
   );
 }
 
-function SignatureBand({ stats, companies = [], globe }: { stats: HeroStats; companies?: TileCompany[]; globe?: ReactNode }) {
-  // Same source of truth as the fold instrument: sampleSurfaceCounts on directory
-  // companies + campuses with coordinates on the map (not the full scout roster).
-  const { foundersListed, campusesOnMap } = sampleSurfaceCounts(companies, plottedCampuses(stats));
+function SignatureBand({ stats, foundersListed = 0, globe }: { stats: HeroStats; foundersListed?: number; globe?: ReactNode }) {
+  const campusesOnMap = plottedCampuses(stats).length;
   if (globe) {
     return (
       <section className="-mx-4 px-0 pb-1 sm:-mx-5" aria-label="Campus Scout">

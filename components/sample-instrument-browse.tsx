@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { loadDirectoryClient } from "@/lib/client/directory-cache";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import { directoryCardSubtitle } from "@/lib/domain/sample-facets";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
@@ -169,8 +170,22 @@ export function SampleInstrumentBrowse({
     query: query ?? "",
   }));
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [catalog, setCatalog] = useState<FacetCompany[] | null>(null);
 
-  const boardCompanies = useMemo(() => applyFacets(companies, facets), [companies, facets]);
+  useEffect(() => {
+    let cancel = false;
+    void loadDirectoryClient()
+      .then((data) => {
+        if (!cancel) setCatalog(data.cards);
+      })
+      .catch(() => {});
+    return () => {
+      cancel = true;
+    };
+  }, []);
+
+  const companiesLive = catalog ?? companies;
+  const boardCompanies = useMemo(() => applyFacets(companiesLive, facets), [companiesLive, facets]);
   const topCampus = useMemo(() => {
     return [...campuses].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))[0] ?? null;
   }, [campuses]);
@@ -185,7 +200,7 @@ export function SampleInstrumentBrowse({
   /** Visible page / rank-band / loaded-end slice for chronograph (not the global 369). */
   const pageSlice = useMemo(() => cards as FacetCompany[], [cards]);
   const sliceInsight = useMemo(() => endSliceInsight(cards), [cards]);
-  const contentsUnfiltered = boardCompanies.length === companies.length;
+  const contentsUnfiltered = boardCompanies.length === companiesLive.length;
   const contentsChrono = useMemo(() => signalChronographDetail(boardCompanies), [boardCompanies]);
   const contentsInsight = useMemo(() => contentsPageInsight(boardCompanies), [boardCompanies]);
   const pageInsight = useMemo(() => contentsPageInsight(pageSlice), [pageSlice]);
@@ -322,7 +337,7 @@ export function SampleInstrumentBrowse({
           ) : null}
           <div className="h-[min(52vh,480px)]" data-contents-facet-map="">
             <FacetRail
-              companies={companies}
+              companies={companiesLive}
               campuses={campuses}
               facets={facets}
               onChange={commitFacet}
@@ -1047,7 +1062,7 @@ export function SampleInstrumentBrowse({
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain" data-mobile-facet-map="">
               <div className="h-[min(58dvh,480px)]">
-                <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={commitFacet} dense />
+                <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
               </div>
               <div className="border-t border-[color:var(--line,#E1E5EF)] px-3 py-2.5">
                 <ScoutChronograph

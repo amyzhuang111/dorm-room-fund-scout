@@ -96,7 +96,7 @@ function highlightFrom(hits: AskHit[]): {
   };
 }
 
-function AskAiDock() {
+export function AskAiDock() {
   const router = useRouter();
   const [webgpu, setWebgpu] = useState<boolean | null>(null);
   const [modelId, setModelId] = useState(ASK_DEFAULT_MODEL_ID);

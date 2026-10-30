@@ -13,6 +13,12 @@ export const GLOBE_BOOT_SCRIPT = `
       return fallback.json();
     });
   }
+  if (!w.__directoryPromise) {
+    w.__directoryPromise = fetch("/data/sample-directory.json").then(async (res) => {
+      if (!res.ok) throw new Error("directory");
+      return res.json();
+    });
+  }
 `;
 
 export const NETWORK_BOOT_SCRIPT = `
