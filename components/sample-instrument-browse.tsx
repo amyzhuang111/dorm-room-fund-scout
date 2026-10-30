@@ -185,8 +185,14 @@ export function SampleInstrumentBrowse({
               {" matching on Contents"}
             </p>
           </div>
-          <ScoutChronograph companies={boardCompanies} variant="compact" kicker="Chronograph" />
-          <div className="h-[min(62vh,560px)]">
+          <ScoutChronograph
+            companies={boardCompanies}
+            variant="hero"
+            kicker={feed === "leaderboard" ? "Signal chronograph · Contents" : "Ledger chronograph · Contents"}
+            datedLabel={`${signaledMatch.toLocaleString("en-US")} with a stored signal date`}
+            reading={`${boardCompanies.length.toLocaleString("en-US")} matching on this Contents slice · ${quietMatch.toLocaleString("en-US")} quiet`}
+          />
+          <div className="h-[min(52vh,480px)]">
             <FacetRail
               companies={companies}
               campuses={campuses}
@@ -364,7 +370,7 @@ export function SampleInstrumentBrowse({
         <div className="mb-3 space-y-3 lg:hidden" data-mobile-browse-compose="">
           <ScoutChronograph
             companies={boardCompanies}
-            variant={pages > 1 && feed === "directory" ? "folio" : feed === "leaderboard" ? "folio" : "ribbon"}
+            variant="hero"
             kicker={
               feed === "leaderboard"
                 ? "Signal chronograph"
@@ -373,6 +379,13 @@ export function SampleInstrumentBrowse({
                   : "Ledger chronograph"
             }
             datedLabel={`${signaledMatch.toLocaleString("en-US")} with a stored signal date`}
+            reading={
+              feed === "leaderboard"
+                ? `Signal desk slice · ${signaledMatch.toLocaleString("en-US")} dated`
+                : pages > 1
+                  ? `Continued ledger · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")} · ${quietMatch.toLocaleString("en-US")} quiet`
+                  : `Open ledger · ${quietMatch.toLocaleString("en-US")} quiet · ${cards.length.toLocaleString("en-US")} on page`
+            }
           />
           {feed === "directory" && pages <= 1 ? (
             <div data-mobile-sector-folio="">
@@ -408,7 +421,7 @@ export function SampleInstrumentBrowse({
         <div className="mb-3 hidden lg:block" data-desk-browse-chronograph="">
           <ScoutChronograph
             companies={boardCompanies}
-            variant={pages > 1 ? "hero" : "ribbon"}
+            variant="hero"
             kicker={
               feed === "leaderboard"
                 ? "Signal chronograph"
@@ -417,6 +430,13 @@ export function SampleInstrumentBrowse({
                   : "Ledger chronograph"
             }
             datedLabel={`${signaledMatch.toLocaleString("en-US")} with a stored signal date`}
+            reading={
+              feed === "leaderboard"
+                ? `Signal desk slice · ${signaledMatch.toLocaleString("en-US")} dated`
+                : pages > 1
+                  ? `Continued ledger · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")} · ${quietMatch.toLocaleString("en-US")} quiet`
+                  : `Open ledger · ${quietMatch.toLocaleString("en-US")} quiet · ${cards.length.toLocaleString("en-US")} on page`
+            }
           />
         </div>
 
@@ -491,9 +511,10 @@ export function SampleInstrumentBrowse({
               <div className="mt-0 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 sm:px-3.5" data-ledger-end-chrono="">
                 <ScoutChronograph
                   companies={boardCompanies}
-                  variant="compact"
-                  kicker="Chronograph · end of loaded page"
-                  datedLabel={`${signaledMatch.toLocaleString("en-US")} dated`}
+                  variant="hero"
+                  kicker="Ledger chronograph · end of loaded page"
+                  datedLabel={`${signaledMatch.toLocaleString("en-US")} with a stored signal date`}
+                  reading={`Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")} · ${quietMatch.toLocaleString("en-US")} quiet`}
                 />
               </div>
             ) : null}
@@ -652,7 +673,13 @@ export function SampleInstrumentBrowse({
                 <span>Campus</span>
               </p>
               <div className="mt-2.5">
-                <ScoutChronograph companies={boardCompanies} variant="compact" kicker="Chronograph" />
+                <ScoutChronograph
+                  companies={boardCompanies}
+                  variant="hero"
+                  kicker={feed === "leaderboard" ? "Signal chronograph · filters" : "Ledger chronograph · filters"}
+                  datedLabel={`${signaledMatch.toLocaleString("en-US")} with a stored signal date`}
+                  reading={`Filtered Contents · ${boardCompanies.length.toLocaleString("en-US")} matching · ${quietMatch.toLocaleString("en-US")} quiet`}
+                />
               </div>
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">

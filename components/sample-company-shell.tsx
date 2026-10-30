@@ -153,9 +153,16 @@ export function SampleCompanyShell({
         <div className="mb-3" data-dossier-chronograph="">
           <ScoutChronograph
             companies={wireCompanies}
-            variant="ribbon"
+            variant="hero"
             kicker="Campus chronograph"
-            datedLabel={`${wireCompanies.filter((c) => (c.latestSignalAt ?? "").length >= 7).length.toLocaleString("en-US")} dated on this wire`}
+            datedLabel={`${wireCompanies.filter((c) => (c.latestSignalAt ?? "").length >= 7).length.toLocaleString("en-US")} dated on this campus wire`}
+            reading={
+              campusPeers
+                ? `${campusShort} campus slice · ${wireCount.toLocaleString("en-US")} companies · includes this company`
+                : sectorPeers
+                  ? `Sector slice · ${wireCount.toLocaleString("en-US")} companies · includes this company`
+                  : `Nearby signaled slice · ${wireCount.toLocaleString("en-US")} companies`
+            }
           />
         </div>
 

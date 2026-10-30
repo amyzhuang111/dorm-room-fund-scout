@@ -588,17 +588,22 @@ export type ChronoMonth = { id: string; label: string; short: string; count: num
 
 const MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-export function signalChronograph(companies: FacetCompany[], limit = 9): ChronoMonth[] {
+/** Snapshot ceiling — never draw months after the Scout dispatch through-date. */
+export const CHRONO_THROUGH_YM = "2026-10";
+
+export function signalChronograph(companies: FacetCompany[], limit = 9, throughYm = CHRONO_THROUGH_YM): ChronoMonth[] {
   const months = new Map<string, number>();
   for (const company of companies) {
     const at = company.latestSignalAt;
     if (!at || at.length < 7) continue;
     const ym = at.slice(0, 7);
     if (ym.endsWith("-00")) continue;
+    if (throughYm && ym > throughYm) continue;
     months.set(ym, (months.get(ym) ?? 0) + 1);
   }
   const sorted = [...months.entries()].sort((a, b) => a[0].localeCompare(b[0]));
   const slice = sorted.slice(-limit);
+  if (slice.length === 0) return [];
   const max = Math.max(1, ...slice.map(([, n]) => n));
   return slice.map(([id, count]) => {
     const y = id.slice(0, 4);
@@ -623,12 +628,15 @@ export function ScoutChronograph({
   variant = "ribbon",
   kicker = "Signal chronograph",
   datedLabel,
+  reading,
 }: {
   companies: FacetCompany[];
   variant?: "ribbon" | "folio" | "hero" | "compact";
   kicker?: string;
   /** Override "N dated" caption; defaults to sum of bar counts. */
   datedLabel?: string;
+  /** Page-specific real-data reading under the peak caption. */
+  reading?: string;
 }) {
   const bars = useMemo(() => signalChronograph(companies), [companies]);
   if (bars.length === 0) return null;
@@ -638,27 +646,33 @@ export function ScoutChronograph({
   const caption = datedLabel ?? `${dated.toLocaleString("en-US")} dated`;
 
   if (variant === "compact") {
+    // Narrow-column hero: large peak figure + reading, short footprint so FacetRail stays usable.
     return (
-      <div className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/30 bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]" data-scout-chronograph="compact">
+      <div className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]" data-scout-chronograph="compact">
         <div className="flex items-baseline justify-between gap-2">
           <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">{kicker}</p>
           <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{caption}</p>
         </div>
-        <div className="mt-2 flex h-8 items-end gap-1">
+        <p className="mt-1.5 font-mono text-[28px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+          {peak.count.toLocaleString("en-US")}
+        </p>
+        <p className="mt-1 text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+          peak month · {peak.label}
+        </p>
+        {reading ? <p className="mt-0.5 font-mono text-[9px] leading-snug text-[color:var(--fg-2,#3F465C)]">{reading}</p> : null}
+        <div className="mt-2 flex h-10 items-end gap-1">
           {bars.map((b) => (
             <div key={b.id} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-0.5" title={`${b.label}: ${b.count}`}>
               <span
                 className={`w-full rounded-sm ${b.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/35"}`}
-                style={{ height: `${Math.max(4, Math.round((b.count / max) * 28))}px` }}
+                style={{ height: `${Math.max(5, Math.round((b.count / max) * 36))}px` }}
               />
+              <span className={`font-mono text-[7px] uppercase tracking-[0.04em] ${b.peak ? "font-bold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-3,#5C647A)]"}`}>
+                {b.short}
+              </span>
             </div>
           ))}
         </div>
-        <p className="mt-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{peak.count.toLocaleString("en-US")}</span>
-          {" peak · "}
-          {peak.label}
-        </p>
       </div>
     );
   }
@@ -670,6 +684,15 @@ export function ScoutChronograph({
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">{kicker}</p>
           <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{caption}</p>
         </div>
+        <div className="relative mb-2 overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]">
+          <p className="font-mono text-[32px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+            {peak.count.toLocaleString("en-US")}
+          </p>
+          <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+            peak month · {peak.label}
+          </p>
+          {reading ? <p className="mt-0.5 font-mono text-[10px] text-[color:var(--fg-2,#3F465C)]">{reading}</p> : null}
+        </div>
         <ol className="relative overflow-hidden divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]">
           {bars.map((b) => (
             <li key={b.id} className={b.peak ? "bg-[color:var(--ember,#D96B1C)]/6" : undefined}>
@@ -677,7 +700,7 @@ export function ScoutChronograph({
                 <span className={`w-12 shrink-0 font-mono text-[11px] font-semibold tabular-nums ${b.peak ? "text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-2,#3F465C)]"}`}>
                   {b.short}
                 </span>
-                <span className="relative h-2 min-w-0 flex-1 overflow-hidden rounded-sm bg-[color:var(--bg-sunken,#F3F5F9)]">
+                <span className="relative h-2.5 min-w-0 flex-1 overflow-hidden rounded-sm bg-[color:var(--bg-sunken,#F3F5F9)]">
                   <span
                     className={`absolute inset-y-0 left-0 ${b.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/45"}`}
                     style={{ width: `${Math.max(6, Math.round((b.count / max) * 100))}%` }}
@@ -690,47 +713,47 @@ export function ScoutChronograph({
             </li>
           ))}
         </ol>
-        <p className="mt-1.5 px-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-          Peak{" "}
-          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{peak.count.toLocaleString("en-US")}</span>
-          {" companies with a stored signal in "}
-          {peak.label}
-        </p>
       </div>
     );
   }
 
-  // ribbon + hero share bar chrome; hero adds large peak figure
+  // ribbon + hero share bar chrome; hero = fold-desk treatment (large peak + tall bars), mobile-scaled
   const tall = variant === "hero";
   return (
     <div
       className={`relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] ${tall ? "px-3 py-3 sm:px-4 sm:py-3.5" : "px-2.5 py-2.5"}`}
       data-scout-chronograph={variant}
+      data-chrono-peak={String(peak.count)}
+      data-chrono-peak-month={peak.id}
     >
       <div className={`flex flex-wrap items-end justify-between gap-3 ${tall ? "gap-4" : ""}`}>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1 basis-[12rem]">
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">{kicker}</p>
           {tall ? (
             <>
-              <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[48px]">
+              <p className="mt-1 font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[44px] lg:text-[48px]">
                 {peak.count.toLocaleString("en-US")}
               </p>
-              <p className="mt-1.5 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[15px]">
+              <p className="mt-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[15px]">
                 peak month · {peak.label}
               </p>
               <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{caption}</p>
+              {reading ? <p className="mt-1 font-mono text-[10px] leading-snug text-[color:var(--fg-2,#3F465C)]">{reading}</p> : null}
             </>
           ) : (
-            <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{peak.count.toLocaleString("en-US")}</span>
-              {" peak · "}
-              {peak.label}
-              {" · "}
-              {caption}
-            </p>
+            <>
+              <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{peak.count.toLocaleString("en-US")}</span>
+                {" peak · "}
+                {peak.label}
+                {" · "}
+                {caption}
+              </p>
+              {reading ? <p className="mt-0.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">{reading}</p> : null}
+            </>
           )}
         </div>
-        <div className={`flex items-end gap-1.5 ${tall ? "h-16 sm:h-20" : "h-11"} w-full max-w-[420px] sm:w-auto sm:min-w-[240px] sm:flex-1 lg:max-w-none`}>
+        <div className={`flex items-end gap-1.5 ${tall ? "h-14 sm:h-16 lg:h-20" : "h-11"} w-full max-w-[420px] sm:w-auto sm:min-w-[200px] sm:flex-1 lg:max-w-none`}>
           {bars.map((b) => (
             <div key={b.id} className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1" title={`${b.label}: ${b.count}`}>
               <span

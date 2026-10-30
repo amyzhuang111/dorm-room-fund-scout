@@ -462,36 +462,29 @@ export function TileGlobe({
           variant="hero"
           kicker="Scout chronograph · campus signals"
           datedLabel={`${signaledLive.toLocaleString("en-US")} with a stored signal date`}
+          reading={
+            filtersOpen
+              ? `Filtered dispatch · ${liveCount.toLocaleString("en-US")} matching · ${quietLive.toLocaleString("en-US")} quiet`
+              : `Full dispatch · ${liveCount.toLocaleString("en-US")} companies · ${quietLive.toLocaleString("en-US")} quiet`
+          }
         />
       </div>
 
       {/* Structural desk: chronograph folio | map | wire. One map stage for desk+mobile. */}
       <div className="grid gap-3 lg:grid-cols-[minmax(220px,260px)_minmax(0,1fr)_minmax(220px,280px)]" data-fold-desk-spread="">
         <aside className="hidden min-w-0 lg:block" data-fold-desk-left="">
-          <div className="sticky top-14 h-[min(70vh,640px)]">
+          <div className="sticky top-14 h-[min(78vh,720px)]">
             {filtersOpen ? (
               <div className="flex h-full min-h-0 flex-col gap-2" data-fold-filters-index="">
-                <div className="shrink-0 space-y-2" data-fold-filter-split="">
-                  <div
-                    className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
-                  >
-                    <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Dispatch · signal split</p>
-                    <div className="mt-1.5 grid grid-cols-2 gap-2">
-                      <div>
-                        <p className="font-mono text-[24px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                          {signaledLive.toLocaleString("en-US")}
-                        </p>
-                        <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">with signal</p>
-                      </div>
-                      <div>
-                        <p className="font-mono text-[24px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
-                          {quietLive.toLocaleString("en-US")}
-                        </p>
-                        <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
-                      </div>
-                    </div>
-                  </div>
-                  <ScoutChronograph companies={filteredCompanies} variant="compact" kicker="Chronograph" />
+                {/* Narrow-column hero (compact scale) — full-width hero above already carries filtered reading. */}
+                <div className="shrink-0" data-fold-filter-chrono="">
+                  <ScoutChronograph
+                    companies={filteredCompanies}
+                    variant="compact"
+                    kicker="Filtered chronograph"
+                    datedLabel={`${signaledLive.toLocaleString("en-US")} with a stored signal date`}
+                    reading={`Narrow slice · ${liveCount.toLocaleString("en-US")} matching · ${quietLive.toLocaleString("en-US")} quiet`}
+                  />
                 </div>
                 <div className="min-h-0 flex-1">
                   <FacetRail
@@ -518,6 +511,7 @@ export function TileGlobe({
                     variant="folio"
                     kicker="Chronograph folio"
                     datedLabel={`${signaledLive.toLocaleString("en-US")} dated`}
+                    reading={`Desk slice · ${quietLive.toLocaleString("en-US")} quiet`}
                   />
                 </div>
                 <div
@@ -636,9 +630,10 @@ export function TileGlobe({
       >
         <ScoutChronograph
           companies={filteredCompanies}
-          variant="folio"
+          variant="hero"
           kicker="Scout chronograph"
-          datedLabel={`${signaledLive.toLocaleString("en-US")} dated`}
+          datedLabel={`${signaledLive.toLocaleString("en-US")} with a stored signal date`}
+          reading={`Mobile dispatch · ${liveCount.toLocaleString("en-US")} companies · ${quietLive.toLocaleString("en-US")} quiet`}
         />
         <div data-mobile-desk-roster="">
           <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
