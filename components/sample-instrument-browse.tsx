@@ -90,7 +90,6 @@ export function SampleInstrumentBrowse({
     query: query ?? "",
   }));
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [deskFiltersOpen, setDeskFiltersOpen] = useState(false);
 
   const boardCompanies = useMemo(() => applyFacets(companies, facets), [companies, facets]);
   const topCampus = useMemo(() => {
@@ -136,57 +135,35 @@ export function SampleInstrumentBrowse({
   const subline =
     feed === "leaderboard" ? "Ranked by recent signal weight" : "Sorted ledger · Scout Dispatch";
 
+  const wireLabel =
+    feed === "leaderboard"
+      ? "Signal wire"
+      : pages > 1
+        ? "Ledger wire · continued"
+        : "Ledger wire";
+
   return (
-    <div className="mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-3 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)] sm:mt-3">
-      {/* WIRE / Filters — fold language: one strong editorial column */}
-      <aside className="hidden min-w-0 lg:block">
-        <div className="sticky top-14 space-y-2">
-          {deskFiltersOpen ? (
-            <div className="h-[min(70vh,640px)]">
-              <FacetRail
-                companies={companies}
-                campuses={campuses}
-                facets={facets}
-                onChange={commitFacet}
-                sheet
-                caption="Narrow the ledger"
-              />
-            </div>
-          ) : (
-            <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
-              <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
-                  {feed === "leaderboard"
-                    ? "Signal wire"
-                    : pages > 1
-                      ? "Ledger wire · continued"
-                      : "Ledger wire"}
-                </p>
-                <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                  {pages > 1 && feed === "directory" ? (
-                    <>
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length}</span>
-                      {" / "}
-                      {boardCompanies.length.toLocaleString("en-US")}
-                    </>
-                  ) : (
-                    boardCompanies.length.toLocaleString("en-US")
-                  )}
-                </p>
-              </div>
-              {/* Expanded ledger: recent-first wire so browse-more is not a twin of browse. */}
-              <IntelligenceBoards
-                companies={boardCompanies}
-                compact
-                surface={pages > 1 && feed === "directory" ? "signals" : wireSurface}
-                hideSector={pages > 1 && feed === "directory"}
-              />
-            </div>
-          )}
+    <div
+      className="mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-3 sm:mt-3 lg:grid-cols-[minmax(240px,280px)_minmax(0,1fr)_minmax(240px,300px)]"
+      data-browse-spread=""
+    >
+      {/* Col 1 — persistent ruled index (magazine TOC), not a sheet over content */}
+      <aside className="hidden min-w-0 lg:block" data-browse-index="">
+        <div className="sticky top-14 h-[min(78vh,720px)]">
+          <FacetRail
+            companies={companies}
+            campuses={campuses}
+            facets={facets}
+            onChange={commitFacet}
+            index
+            indexCount={boardCompanies.length}
+            caption={feed === "leaderboard" ? "Signal index" : "Ledger index"}
+          />
         </div>
       </aside>
 
-      <div className="min-w-0">
+      {/* Col 2 — ember figure hero + ledger */}
+      <div className="min-w-0" data-browse-ledger="">
         {/* Distinct hero per surface — fold language, not the fold stamp */}
         <div className="mb-2 border-b border-[color:var(--line,#E1E5EF)] pb-2" data-browse-hero={feed}>
           <div className="flex flex-wrap items-end justify-between gap-3">
@@ -194,7 +171,7 @@ export function SampleInstrumentBrowse({
               {feed === "leaderboard" && topCampus ? (
                 <>
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Signal desk · #1 campus</p>
-                  <p className="mt-1 font-mono text-[64px] font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">01</p>
+                  <p className="mt-1 font-mono text-[64px] font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[64px] lg:text-[72px]">01</p>
                   <p className="mt-1 text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[18px]">
                     {shortCampusLabel(topCampus.id, topCampus.name)}
                   </p>
@@ -210,7 +187,7 @@ export function SampleInstrumentBrowse({
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
                     {pages > 1 ? "Scout ledger · continued" : "Scout ledger · top sector"}
                   </p>
-                  <p className="mt-1 font-mono text-[56px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
+                  <p className="mt-1 font-mono text-[56px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)] sm:text-[56px] lg:text-[64px]">
                     <span className="text-[color:var(--ember,#D96B1C)]">
                       {pages > 1 ? String(cards.length).padStart(2, "0") : topSector.count.toLocaleString("en-US")}
                     </span>
@@ -264,7 +241,7 @@ export function SampleInstrumentBrowse({
               ) : (
                 <>
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
-                  <p className="mt-1 font-mono text-[56px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
+                  <p className="mt-1 font-mono text-[56px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)] sm:text-[56px] lg:text-[64px]">
                     <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
                   </p>
                   <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{caption}</p>
@@ -272,7 +249,7 @@ export function SampleInstrumentBrowse({
                 </>
               )}
             </div>
-            {/* Desktop: pill sort chips. Mobile: ruled segmented control. */}
+            {/* Desktop: pill sort only — filters live in the persistent index column. */}
             <div className="hidden flex-wrap items-center gap-1.5 lg:flex">
               {feed === "directory"
                 ? (
@@ -291,13 +268,6 @@ export function SampleInstrumentBrowse({
                     </Link>
                   ))
                 : null}
-              <button
-                type="button"
-                onClick={() => setDeskFiltersOpen((v) => !v)}
-                className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
-              >
-                {deskFiltersOpen ? "Hide filters" : "Filters"}
-              </button>
             </div>
           </div>
           {feed === "directory" ? (
@@ -413,21 +383,24 @@ export function SampleInstrumentBrowse({
             </ol>
             {pages > 1 ? (
               <div
-                className="mt-0 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg-sunken,#F3F5F9)] px-3 py-3 sm:px-3.5"
+                className="mt-0 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg-sunken,#F3F5F9)] px-3 py-4 sm:px-3.5"
                 data-ledger-end=""
               >
                 <div className="flex items-center gap-2">
-                  <span className="h-px flex-1 bg-[color:var(--ember,#D96B1C)]/50" aria-hidden />
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
+                  <span className="h-[2px] flex-1 bg-[color:var(--ember,#D96B1C)]/60" aria-hidden />
+                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">
                     {cards.length < total ? "End of loaded page" : "End of ledger"}
                   </p>
-                  <span className="h-px flex-1 bg-[color:var(--ember,#D96B1C)]/50" aria-hidden />
+                  <span className="h-[2px] flex-1 bg-[color:var(--ember,#D96B1C)]/60" aria-hidden />
                 </div>
+                <p className="mt-2 text-center font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)] sm:text-[32px]">
+                  {String(cards.length).padStart(2, "0")}
+                </p>
                 <p className="mt-1.5 text-center font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                  Through row{" "}
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{String(cards.length).padStart(2, "0")}</span>
+                  Through row {String(cards.length).padStart(2, "0")}
                   {" · "}
-                  {(total - cards.length).toLocaleString("en-US")} still on the shelf
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{(total - cards.length).toLocaleString("en-US")}</span>
+                  {" still on the shelf"}
                 </p>
               </div>
             ) : null}
@@ -468,6 +441,34 @@ export function SampleInstrumentBrowse({
         </div>
       </div>
 
+      {/* Col 3 — WIRE digest (desk), aligned to fold grid */}
+      <aside className="hidden min-w-0 lg:block" data-browse-wire="">
+        <div className="sticky top-14">
+          <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
+            <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{wireLabel}</p>
+              <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                {pages > 1 && feed === "directory" ? (
+                  <>
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length}</span>
+                    {" / "}
+                    {boardCompanies.length.toLocaleString("en-US")}
+                  </>
+                ) : (
+                  boardCompanies.length.toLocaleString("en-US")
+                )}
+              </p>
+            </div>
+            <IntelligenceBoards
+              companies={boardCompanies}
+              compact
+              surface={pages > 1 && feed === "directory" ? "signals" : wireSurface}
+              hideSector={pages > 1 && feed === "directory"}
+            />
+          </div>
+        </div>
+      </aside>
+
       <MobileFilterDock
         onOpen={() => setMobileFiltersOpen(true)}
         count={boardCompanies.length}
@@ -481,15 +482,15 @@ export function SampleInstrumentBrowse({
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
           <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
           <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col overflow-hidden rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
-            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3 py-2.5 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--ember,#D96B1C)]">
+            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3 py-3 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--ember,#D96B1C)]">
               <div className="flex items-end justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout filters</p>
-                  <p className="mt-0.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the ledger</p>
-                  <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
-                    {" on desk · Status pinned"}
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Ledger index</p>
+                  <p className="mt-1 font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+                    {boardCompanies.length.toLocaleString("en-US")}
                   </p>
+                  <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the ledger</p>
+                  <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">Status pinned · ruled sheet</p>
                 </div>
                 <button
                   type="button"

@@ -42,7 +42,6 @@ export function SampleCompanyShell({
   const [facets, setFacets] = useState<FacetState>(emptyFacets);
   const filtered = useMemo(() => applyFacets(companies, facets), [companies, facets]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [deskFiltersOpen, setDeskFiltersOpen] = useState(false);
 
   function onFacetChange(next: FacetState) {
     setFacets(next);
@@ -97,118 +96,72 @@ export function SampleCompanyShell({
     <div className="sample-paper min-h-[calc(100dvh-48px)]">
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 sm:px-5">
-        {/* Magazine dossier cover — mobile-native profile, not a shrunk desktop header */}
+        {/* Magazine dossier cover — desk + mobile share the profile treatment */}
         <div className="mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-dossier-hero="" data-mobile-magazine="">
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <Link href="/?sample=1#browse" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
-                  ← Company ledger
-                </Link>
-                <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
-              </div>
-              {dossier?.name ? (
-                <>
-                  <p className="mt-2 text-[32px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)] sm:mt-1 sm:text-[36px]">
-                    {dossier.name}
-                  </p>
-                  {/* Magazine deck + pull figure */}
-                  <div className="mt-3 flex items-end gap-4 lg:mt-1 lg:block">
-                    <div className="min-w-0 flex-1">
-                      <p className="font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:text-[13px]">
-                        {dossier.campus ? <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.campus}</span> : <span>Campus not on record</span>}
-                        {" · "}
-                        {dossier.year != null ? (
-                          <span>
-                            <span className={COUNT}>{dossier.year}</span>
-                            {" founded"}
-                          </span>
-                        ) : (
-                          <span>Year not on record</span>
-                        )}
-                      </p>
-                      <p className="mt-0.5 hidden font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)] lg:block" data-dossier-wire-count="">
-                        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Dossier wire</span>
-                        {" · "}
-                        <span className={COUNT}>{wireCount.toLocaleString("en-US")}</span>
-                        {" "}
-                        {wireScope}
-                        {wireIncludeNote ? (
-                          <>
-                            {" · "}
-                            <span className="text-[color:var(--fg-3,#5C647A)]">{wireIncludeNote}</span>
-                          </>
-                        ) : null}
-                      </p>
-                    </div>
-                    <div className="shrink-0 text-right lg:hidden" data-dossier-wire-count="">
-                      <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Campus wire</p>
-                      <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-                        {wireCount.toLocaleString("en-US")}
-                      </p>
-                      <p className="mt-1 max-w-[7.5rem] font-mono text-[9px] leading-snug text-[color:var(--fg-3,#5C647A)]">
-                        {wireScope}
-                        {wireIncludeNote ? " · incl." : ""}
-                      </p>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <p className="mt-1 font-mono text-[56px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
-                    <span className="text-[color:var(--ember,#D96B1C)]">{filtered.length.toLocaleString("en-US")}</span>
-                  </p>
-                  <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies in this dispatch</p>
-                </>
-              )}
-            </div>
-            <div className="hidden flex-wrap gap-1.5 lg:flex">
-              <button
-                type="button"
-                onClick={() => setDeskFiltersOpen((v) => !v)}
-                className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
-              >
-                {deskFiltersOpen ? "Hide filters" : "Filters"}
-              </button>
-            </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link href="/?sample=1#browse" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
+              ← Company ledger
+            </Link>
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
           </div>
+          {dossier?.name ? (
+            <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
+              <div className="min-w-0 flex-1">
+                <p className="text-[32px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[40px] lg:text-[44px]">
+                  {dossier.name}
+                </p>
+                <p className="mt-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:text-[13px]">
+                  {dossier.campus ? <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.campus}</span> : <span>Campus not on record</span>}
+                  {" · "}
+                  {dossier.year != null ? (
+                    <span>
+                      <span className={COUNT}>{dossier.year}</span>
+                      {" founded"}
+                    </span>
+                  ) : (
+                    <span>Year not on record</span>
+                  )}
+                </p>
+              </div>
+              <div className="shrink-0 text-right" data-dossier-wire-count="">
+                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Campus wire</p>
+                <p className="mt-1 font-mono text-[48px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[56px] lg:text-[64px]">
+                  {wireCount.toLocaleString("en-US")}
+                </p>
+                <p className="mt-1.5 max-w-[12rem] text-right font-mono text-[10px] leading-snug text-[color:var(--fg-3,#5C647A)] sm:max-w-[16rem]">
+                  {wireScope}
+                  {wireIncludeNote ? (
+                    <>
+                      {" · "}
+                      {wireIncludeNote}
+                    </>
+                  ) : null}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <>
+              <p className="mt-1 font-mono text-[56px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
+                <span className="text-[color:var(--ember,#D96B1C)]">{filtered.length.toLocaleString("en-US")}</span>
+              </p>
+              <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies in this dispatch</p>
+            </>
+          )}
         </div>
 
-        {/* Asymmetric: one editorial column + dossier (no left filters / right boards sandwich) */}
-        <div className="grid gap-3 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)]">
-          <aside className="hidden min-w-0 lg:block">
-            <div className="sticky top-14 space-y-2">
-              {deskFiltersOpen ? (
-                <div className="h-[min(70vh,640px)]">
-                  <FacetRail
-                    companies={companies}
-                    campuses={campuses}
-                    facets={facets}
-                    onChange={onFacetChange}
-                    sheet
-                    caption="Narrow the ledger"
-                  />
-                </div>
-              ) : (
-                <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
-                  <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Dossier wire</p>
-                    <p className="font-mono text-[10px] tabular-nums text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</p>
-                  </div>
-                  <p className="mb-2 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-dossier-wire-count="">
-                    <span className={COUNT}>{wireCount.toLocaleString("en-US")}</span>
-                    {" "}
-                    {wireScope}
-                    {wireIncludeNote ? (
-                      <>
-                        {" · "}
-                        <span>{wireIncludeNote}</span>
-                      </>
-                    ) : null}
-                  </p>
-                  <IntelligenceBoards companies={wireCompanies} compact hideSector surface="company" />
-                </div>
-              )}
+        {/* Three-column desk: index · profile · wire digest */}
+        <div className="grid gap-3 lg:grid-cols-[minmax(240px,280px)_minmax(0,1fr)_minmax(240px,300px)]" data-dossier-spread="">
+          <aside className="hidden min-w-0 lg:block" data-dossier-index="">
+            <div className="sticky top-14 h-[min(78vh,720px)]">
+              <FacetRail
+                companies={companies}
+                campuses={campuses}
+                facets={facets}
+                onChange={onFacetChange}
+                index
+                indexCount={wireCount}
+                caption="Dossier index"
+              />
             </div>
           </aside>
           <div className="min-w-0">
@@ -225,6 +178,28 @@ export function SampleCompanyShell({
               {children}
             </div>
           </div>
+          <aside className="hidden min-w-0 lg:block" data-dossier-wire="">
+            <div className="sticky top-14">
+              <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
+                <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Dossier wire</p>
+                  <p className="font-mono text-[10px] tabular-nums text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</p>
+                </div>
+                <p className="mb-2 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                  <span className={COUNT}>{wireCount.toLocaleString("en-US")}</span>
+                  {" "}
+                  {wireScope}
+                  {wireIncludeNote ? (
+                    <>
+                      {" · "}
+                      <span>{wireIncludeNote}</span>
+                    </>
+                  ) : null}
+                </p>
+                <IntelligenceBoards companies={wireCompanies} compact hideSector surface="company" />
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
       <MobileFilterDock

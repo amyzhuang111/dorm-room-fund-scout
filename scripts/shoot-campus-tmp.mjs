@@ -101,12 +101,16 @@ const browser = await chromium.launch({ headless: true });
   }
   await shot(page, "browse-more-end-1440");
 
-  // Filters on first-page ledger (not continued), so the sheet is not busy with CONTINUED chrome.
+  // Desk: persistent ledger index is always visible (no Filters toggle). Frame the TOC column.
   await page.goto(`${BASE}/?sample=1#browse`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForTimeout(1500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
   await page.waitForTimeout(400);
-  await openBrowseFilters(page);
+  const index = page.locator("[data-browse-index], [data-facet-index='1']").first();
+  if (await index.count()) {
+    await index.scrollIntoViewIfNeeded().catch(() => {});
+    await page.waitForTimeout(300);
+  }
   await shot(page, "browse-filters-1440");
 
   await page.goto(`${BASE}/?sample=1&feed=leaderboard#browse`, { waitUntil: "networkidle", timeout: 90000 });

@@ -262,7 +262,9 @@ export function FacetRail({
   searchPlaceholder = "Search company or founder",
   dense = false,
   sheet = false,
+  index = false,
   caption = "Narrow the map",
+  indexCount,
 }: {
   companies: FacetCompany[];
   campuses: { id: string; name: string; country: string; founders: number }[];
@@ -275,8 +277,12 @@ export function FacetRail({
   dense?: boolean;
   /** Editorial filter-sheet chrome (desktop aside + mobile sheet language). */
   sheet?: boolean;
+  /** Persistent magazine table-of-contents column (desk) — not a sheet over content. */
+  index?: boolean;
   /** Sheet/desk title under Scout filters (map vs ledger). */
   caption?: string;
+  /** Live count figure for index column header. */
+  indexCount?: number;
 }) {
   const countryScoped = useMemo(() => {
     if (!facets.country) return campuses;
@@ -347,22 +353,31 @@ export function FacetRail({
     onChange({ ...facets, ...partial });
   }
 
-  // Sheet + dense share cobalt kickers / Status pin; sheet adds editorial outer chrome for desk.
-  const editorial = dense || sheet;
-  const shell = sheet
-    ? "relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]"
-    : dense
-      ? ""
-      : PANEL;
+  // Sheet / index / dense share cobalt kickers / Status pin; index = persistent TOC column.
+  const editorial = dense || sheet || index;
+  const shell = index
+    ? "relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+    : sheet
+      ? "relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]"
+      : dense
+        ? ""
+        : PANEL;
 
   return (
-    <div className={`flex h-full min-h-0 flex-col overflow-hidden ${shell}`} data-facet-rail="scout" data-facet-sheet={sheet ? "1" : undefined}>
-      <div className={`border-b border-[color:var(--line,#E1E5EF)] ${editorial ? "px-2 py-2" : "px-2.5 py-2"}`}>
-        {dense && !sheet ? null : (
+    <div className={`flex h-full min-h-0 flex-col overflow-hidden ${shell}`} data-facet-rail="scout" data-facet-sheet={sheet ? "1" : undefined} data-facet-index={index ? "1" : undefined}>
+      <div className={`border-b border-[color:var(--line,#E1E5EF)] ${editorial ? "px-2.5 py-2.5" : "px-2.5 py-2"}`}>
+        {dense && !sheet && !index ? null : (
           <>
-            <p className={`font-mono text-[10px] uppercase ${sheet || dense ? "tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]" : "tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]"}`}>Scout filters</p>
-            <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{caption}</p>
-            {sheet ? (
+            <p className={`font-mono text-[10px] uppercase ${sheet || dense || index ? "tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]" : "tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]"}`}>
+              {index ? "Contents" : "Scout filters"}
+            </p>
+            {index && indexCount != null ? (
+              <p className="mt-1.5 font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+                {indexCount.toLocaleString("en-US")}
+              </p>
+            ) : null}
+            <p className={`mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] ${index && indexCount != null ? "mt-1.5" : ""}`}>{caption}</p>
+            {sheet || index ? (
               <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Status · Year · Sector · Campus</p>
             ) : null}
           </>
