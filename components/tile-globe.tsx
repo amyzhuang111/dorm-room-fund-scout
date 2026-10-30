@@ -374,7 +374,7 @@ export function TileGlobe({
   }, [campuses]);
 
   return (
-    <div className={className}>
+    <div className={className} data-fold-mobile-root="">
       {/* Shared column grid: masthead + wire + stage share one vertical rhythm */}
       <div className="grid gap-x-3 gap-y-0 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)]">
         <div className="col-span-full mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-counts>
@@ -535,6 +535,7 @@ export function TileGlobe({
         caption="Narrow the dispatch"
         tone="ember"
         kicker="Map filters"
+        observe="[data-fold-mobile-root]"
       />
       {mobileFiltersOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">

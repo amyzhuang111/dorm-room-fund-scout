@@ -474,6 +474,7 @@ export function SampleInstrumentBrowse({
         caption="Narrow the ledger"
         tone="outline"
         kicker="Ledger filters"
+        observe="#browse"
       />
 
       {mobileFiltersOpen ? (

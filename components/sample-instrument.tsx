@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import {
   countBy,
@@ -957,13 +957,16 @@ export function MobileWireStrip({
   );
 }
 
-/** Bottom-anchored filter dock — tone varies per page so docks do not twin. */
+/** Bottom-anchored filter dock — tone varies per page so docks do not twin.
+ *  When `observe` is set, the dock only mounts while that selector intersects the viewport
+ *  (home page hosts both fold + browse docks; without this they stack as twins). */
 export function MobileFilterDock({
   onOpen,
   count,
   caption = "Narrow the desk",
   tone = "ember",
   kicker = "Scout filters",
+  observe,
 }: {
   onOpen: () => void;
   count?: number;
@@ -971,7 +974,23 @@ export function MobileFilterDock({
   /** ember = filled (fold); outline = cobalt framed (browse); magazine = hairline bar (company) */
   tone?: "ember" | "outline" | "magazine";
   kicker?: string;
+  /** CSS selector — dock shows only while this node is in view */
+  observe?: string;
 }) {
+  const [inView, setInView] = useState(() => !observe);
+  useEffect(() => {
+    if (!observe) return;
+    const el = document.querySelector(observe);
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setInView(Boolean(entry?.isIntersecting)),
+      { root: null, threshold: 0.12, rootMargin: "-18% 0px -28% 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [observe]);
+  if (observe && !inView) return null;
+
   const shell =
     tone === "ember"
       ? "fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)]/95 px-3 py-2.5 backdrop-blur-sm lg:hidden"
