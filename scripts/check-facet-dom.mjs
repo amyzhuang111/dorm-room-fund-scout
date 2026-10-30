@@ -9,6 +9,12 @@ const TOTAL = 2513;
 /** Directory sampleSurfaceCounts.foundersListed / campusesOnMap — must match strip + fold. */
 const EXPECTED_FOUNDERS_LISTED = 2766;
 const EXPECTED_CAMPUSES_ON_MAP = 74;
+/** Chronograph honesty: last-9 window + Earlier bucket = dated (signals with latestSignalAt). */
+const EXPECTED_CHRONO_WINDOW = 588;
+const EXPECTED_CHRONO_EARLIER = 47; // 13 pre-window ym + 34 month -00
+const EXPECTED_CHRONO_DATED = 635; // 588 + 47
+const EXPECTED_CHRONO_PEAK = 369;
+const EXPECTED_CHRONO_PEAK_MONTH = "2026-09";
 
 function parseMidDotCount(label) {
   const m = String(label).match(/·\s*([\d,]+)\s*$/);
@@ -142,6 +148,25 @@ const fold = await page.evaluate(() => {
   const campuses = root.querySelector('[data-count="campuses-on-map"]')?.textContent?.replace(/,/g, "");
   return { founders: Number(founders), campuses: Number(campuses) };
 });
+const chrono = await page.evaluate(() => {
+  const root =
+    document.querySelector("[data-fold-chronograph] [data-scout-chronograph]") ||
+    document.querySelector("[data-scout-chronograph=\"hero\"]") ||
+    document.querySelector("[data-scout-chronograph]");
+  if (!root) return null;
+  return {
+    peak: Number(root.getAttribute("data-chrono-peak") || 0),
+    peakMonth: root.getAttribute("data-chrono-peak-month") || "",
+    dated: Number(root.getAttribute("data-chrono-dated") || 0),
+    earlier: Number(root.getAttribute("data-chrono-earlier") || 0),
+    inWindow: Number(root.getAttribute("data-chrono-window") || 0),
+    lead: root.getAttribute("data-chrono-lead") || "",
+    hasEarlierBar: Boolean(root.querySelector('[title^="Earlier"], [title*="Earlier:"]')) ||
+      /\bEar\b/.test(root.textContent || "") ||
+      /earlier/i.test(root.textContent || ""),
+  };
+});
+
 const report = {
   strip,
   fold,
@@ -162,6 +187,7 @@ const report = {
   statusClosed,
   statusSumBuckets: (statusActive ?? 0) + (statusAcquired ?? 0) + (statusClosed ?? 0),
   flags: flagCounts,
+  chrono,
   ok: {
     year: year.sum === TOTAL,
     status: status.sum === TOTAL,
@@ -185,6 +211,13 @@ const report = {
     statusBuckets:
       statusActive === 2497 && statusAcquired === 8 && statusClosed === 8 && statusActive + statusAcquired + statusClosed === TOTAL,
     moreObvious: moreLabelsBefore.some((l) => /more sectors/i.test(l)) && moreLabelsBefore.some((l) => /more cities/i.test(l)),
+    chronographPeak369: chrono != null && chrono.peak === EXPECTED_CHRONO_PEAK && chrono.peakMonth === EXPECTED_CHRONO_PEAK_MONTH,
+    chronographWindow588: chrono != null && chrono.inWindow === EXPECTED_CHRONO_WINDOW,
+    chronographEarlier47: chrono != null && chrono.earlier === EXPECTED_CHRONO_EARLIER,
+    chronographDated635: chrono != null && chrono.dated === EXPECTED_CHRONO_DATED,
+    chronographBarsSumDated: chrono != null && chrono.inWindow + chrono.earlier === chrono.dated,
+    chronographNoGap: chrono != null && chrono.inWindow + chrono.earlier === EXPECTED_CHRONO_DATED,
+    chronographEarlierVisible: chrono != null && chrono.hasEarlierBar === true,
   },
 };
 

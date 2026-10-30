@@ -461,7 +461,6 @@ export function TileGlobe({
           companies={filteredCompanies}
           variant="hero"
           kicker="Scout chronograph · campus signals"
-          datedLabel={`${signaledLive.toLocaleString("en-US")} with a stored signal date`}
           reading={
             filtersOpen
               ? `Filtered dispatch · ${liveCount.toLocaleString("en-US")} matching · ${quietLive.toLocaleString("en-US")} quiet`
@@ -482,8 +481,12 @@ export function TileGlobe({
                     companies={filteredCompanies}
                     variant="compact"
                     kicker="Filtered chronograph"
-                    datedLabel={`${signaledLive.toLocaleString("en-US")} with a stored signal date`}
-                    reading={`Narrow slice · ${liveCount.toLocaleString("en-US")} matching · ${quietLive.toLocaleString("en-US")} quiet`}
+                    lead={liveCount === companies.length ? "earlier" : "peak"}
+                    reading={
+                      liveCount === companies.length
+                        ? `Outside window · ${quietLive.toLocaleString("en-US")} quiet · open a filter for a slice`
+                        : `Narrow slice · ${liveCount.toLocaleString("en-US")} matching · ${quietLive.toLocaleString("en-US")} quiet`
+                    }
                   />
                 </div>
                 <div className="min-h-0 flex-1">
@@ -510,7 +513,6 @@ export function TileGlobe({
                     companies={filteredCompanies}
                     variant="folio"
                     kicker="Chronograph folio"
-                    datedLabel={`${signaledLive.toLocaleString("en-US")} dated`}
                     reading={`Desk slice · ${quietLive.toLocaleString("en-US")} quiet`}
                   />
                 </div>
@@ -632,7 +634,6 @@ export function TileGlobe({
           companies={filteredCompanies}
           variant="hero"
           kicker="Scout chronograph"
-          datedLabel={`${signaledLive.toLocaleString("en-US")} with a stored signal date`}
           reading={`Mobile dispatch · ${liveCount.toLocaleString("en-US")} companies · ${quietLive.toLocaleString("en-US")} quiet`}
         />
         <div data-mobile-desk-roster="">

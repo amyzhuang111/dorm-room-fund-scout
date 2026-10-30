@@ -104,6 +104,9 @@ export function SampleInstrumentBrowse({
   );
   /** Quiet matching companies (no stored signal) — insight, not pagination. */
   const quietMatch = boardCompanies.length - signaledMatch;
+  /** Visible page / rank-band / loaded-end slice for chronograph (not the global 369). */
+  const pageSlice = useMemo(() => cards as FacetCompany[], [cards]);
+  const contentsUnfiltered = boardCompanies.length === companies.length;
   const wireSurface = feed === "leaderboard" ? "signals" : "browse";
 
   function commitFacet(next: FacetState) {
@@ -189,8 +192,12 @@ export function SampleInstrumentBrowse({
             companies={boardCompanies}
             variant="hero"
             kicker={feed === "leaderboard" ? "Signal chronograph · Contents" : "Ledger chronograph · Contents"}
-            datedLabel={`${signaledMatch.toLocaleString("en-US")} with a stored signal date`}
-            reading={`${boardCompanies.length.toLocaleString("en-US")} matching on this Contents slice · ${quietMatch.toLocaleString("en-US")} quiet`}
+            lead={contentsUnfiltered ? "earlier" : "peak"}
+            reading={
+              contentsUnfiltered
+                ? `Contents window · ${boardCompanies.length.toLocaleString("en-US")} matching · open a filter for a slice`
+                : `Filtered Contents · ${boardCompanies.length.toLocaleString("en-US")} matching · ${quietMatch.toLocaleString("en-US")} quiet`
+            }
           />
           <div className="h-[min(52vh,480px)]">
             <FacetRail
@@ -369,22 +376,21 @@ export function SampleInstrumentBrowse({
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
         <div className="mb-3 space-y-3 lg:hidden" data-mobile-browse-compose="">
           <ScoutChronograph
-            companies={boardCompanies}
+            companies={pageSlice}
             variant="hero"
             kicker={
               feed === "leaderboard"
-                ? "Signal chronograph"
+                ? "Signal chronograph · rank band"
                 : pages > 1
-                  ? "Ledger chronograph · continued"
-                  : "Ledger chronograph"
+                  ? "Ledger chronograph · loaded page"
+                  : "Ledger chronograph · on page"
             }
-            datedLabel={`${signaledMatch.toLocaleString("en-US")} with a stored signal date`}
             reading={
               feed === "leaderboard"
-                ? `Signal desk slice · ${signaledMatch.toLocaleString("en-US")} dated`
+                ? `Rank band · ${cards.length.toLocaleString("en-US")} on desk · peak on this band`
                 : pages > 1
-                  ? `Continued ledger · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")} · ${quietMatch.toLocaleString("en-US")} quiet`
-                  : `Open ledger · ${quietMatch.toLocaleString("en-US")} quiet · ${cards.length.toLocaleString("en-US")} on page`
+                  ? `Loaded page slice · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`
+                  : `Page slice · ${cards.length.toLocaleString("en-US")} on page · not the full dispatch`
             }
           />
           {feed === "directory" && pages <= 1 ? (
@@ -420,22 +426,21 @@ export function SampleInstrumentBrowse({
         {/* Desk chronograph ribbon — same system as mobile, under hero */}
         <div className="mb-3 hidden lg:block" data-desk-browse-chronograph="">
           <ScoutChronograph
-            companies={boardCompanies}
+            companies={pageSlice}
             variant="hero"
             kicker={
               feed === "leaderboard"
-                ? "Signal chronograph"
+                ? "Signal chronograph · rank band"
                 : pages > 1
-                  ? "Ledger chronograph · continued"
-                  : "Ledger chronograph"
+                  ? "Ledger chronograph · loaded page"
+                  : "Ledger chronograph · on page"
             }
-            datedLabel={`${signaledMatch.toLocaleString("en-US")} with a stored signal date`}
             reading={
               feed === "leaderboard"
-                ? `Signal desk slice · ${signaledMatch.toLocaleString("en-US")} dated`
+                ? `Rank band · ${cards.length.toLocaleString("en-US")} on desk · peak on this band`
                 : pages > 1
-                  ? `Continued ledger · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")} · ${quietMatch.toLocaleString("en-US")} quiet`
-                  : `Open ledger · ${quietMatch.toLocaleString("en-US")} quiet · ${cards.length.toLocaleString("en-US")} on page`
+                  ? `Loaded page slice · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`
+                  : `Page slice · ${cards.length.toLocaleString("en-US")} on page · not the full dispatch`
             }
           />
         </div>
@@ -510,11 +515,10 @@ export function SampleInstrumentBrowse({
             {pages > 1 ? (
               <div className="mt-0 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 sm:px-3.5" data-ledger-end-chrono="">
                 <ScoutChronograph
-                  companies={boardCompanies}
+                  companies={pageSlice}
                   variant="hero"
-                  kicker="Ledger chronograph · end of loaded page"
-                  datedLabel={`${signaledMatch.toLocaleString("en-US")} with a stored signal date`}
-                  reading={`Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")} · ${quietMatch.toLocaleString("en-US")} quiet`}
+                  kicker="Ledger chronograph · end slice"
+                  reading={`End of loaded page · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")} · peak on this slice`}
                 />
               </div>
             ) : null}
@@ -677,8 +681,12 @@ export function SampleInstrumentBrowse({
                   companies={boardCompanies}
                   variant="hero"
                   kicker={feed === "leaderboard" ? "Signal chronograph · filters" : "Ledger chronograph · filters"}
-                  datedLabel={`${signaledMatch.toLocaleString("en-US")} with a stored signal date`}
-                  reading={`Filtered Contents · ${boardCompanies.length.toLocaleString("en-US")} matching · ${quietMatch.toLocaleString("en-US")} quiet`}
+                  lead={contentsUnfiltered ? "earlier" : "peak"}
+                  reading={
+                    contentsUnfiltered
+                      ? `Filter sheet · outside window · ${quietMatch.toLocaleString("en-US")} quiet`
+                      : `Filtered Contents · ${boardCompanies.length.toLocaleString("en-US")} matching · ${quietMatch.toLocaleString("en-US")} quiet`
+                  }
                 />
               </div>
             </div>
