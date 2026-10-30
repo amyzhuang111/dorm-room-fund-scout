@@ -98,6 +98,13 @@ export function SampleHome({
       country: university.country?.trim() || "Unknown",
       founders: university.founderCount,
     }));
+  const programCounts = new Map<string, number>();
+  for (const card of data.cards) {
+    const label = card.primaryProgram?.trim();
+    if (!label) continue;
+    programCounts.set(label, (programCounts.get(label) ?? 0) + 1);
+  }
+  const leadProgramHome = [...programCounts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0] ?? null;
 
   return (
     <div className="sample-paper">
@@ -122,7 +129,15 @@ export function SampleHome({
               <span className="font-bold text-[color:var(--ember,#D96B1C)]">{data.cards.length.toLocaleString("en-US")}</span>
               {" companies · "}
               <span className="font-bold text-[color:var(--ember,#D96B1C)]">{data.cards.filter((c) => c.signals > 0).length.toLocaleString("en-US")}</span>
-              {" with signal · white dispatch"}
+              {" with signal"}
+              {leadProgramHome ? (
+                <>
+                  {" · "}
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{leadProgramHome[0]}</span>
+                  {" "}
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{leadProgramHome[1].toLocaleString("en-US")}</span>
+                </>
+              ) : null}
             </p>
           </div>
         </div>

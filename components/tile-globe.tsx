@@ -17,6 +17,8 @@ import {
   ScoutChronograph,
   signalChronographDetail,
   chronographCaption,
+  topPrograms,
+  sectorMix,
   type FacetState,
 } from "./sample-instrument";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -409,13 +411,15 @@ export function TileGlobe({
   }, [facets, campuses]);
 
   const universeChrono = useMemo(() => signalChronographDetail(companies), [companies]);
-  const universePeak = useMemo(() => {
-    const peak = universeChrono.bars.find((b) => b.peak) ?? universeChrono.bars[universeChrono.bars.length - 1];
-    return {
-      count: peak?.count ?? 0,
-      label: peak?.label ?? "Peak",
-    };
-  }, [universeChrono]);
+  // Third mast beat: leading program (not peak 369 — chronograph owns the peak).
+  const leadProgram = useMemo(() => topPrograms(companies)[0] ?? null, [companies]);
+  const leadSector = useMemo(() => sectorMix(companies)[0] ?? null, [companies]);
+  const signaledUniverse = useMemo(() => companies.filter((c) => c.signals > 0).length, [companies]);
+  const quietUniverse = companies.length - signaledUniverse;
+  const sliceLeadProgram = useMemo(() => topPrograms(filteredCompanies)[0] ?? null, [filteredCompanies]);
+  const sliceLeadSector = useMemo(() => sectorMix(filteredCompanies)[0] ?? null, [filteredCompanies]);
+  const sliceSignaled = useMemo(() => filteredCompanies.filter((c) => c.signals > 0).length, [filteredCompanies]);
+  const sliceQuiet = filteredCompanies.length - sliceSignaled;
 
   // Masthead founders/campuses match the sample strip (universe totals via sampleSurfaceCounts),
   // not the filtered map/facet slice — so strip and fold data-count nodes never diverge.
@@ -473,6 +477,14 @@ export function TileGlobe({
                   </span>
                   <span className="font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]"> signals</span>
                 </p>
+                {leadProgram ? (
+                  <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-mobile-program-whisper="">
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{leadProgram.count.toLocaleString("en-US")}</span>
+                    {" "}
+                    {leadProgram.label}
+                    {" · program desk"}
+                  </p>
+                ) : null}
               </div>
               <div className="hidden sm:block">
                 <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
@@ -491,22 +503,28 @@ export function TileGlobe({
               </div>
             </div>
           ) : null}
-          {/* Desk fifth beat: peak month as mast figure (real chronograph peak). Hidden on mobile so fold-375 holds. */}
-          <div className="hidden min-w-0 border-l border-[color:var(--line,#E1E5EF)] pl-6 lg:block" data-peak-desk-figure="">
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Peak month · dispatch</p>
+          {/* Desk fifth beat: leading program (real density). Chronograph keeps peak 369 — no mast echo. Hidden on mobile so fold-375 holds. */}
+          <div className="hidden min-w-0 border-l border-[color:var(--line,#E1E5EF)] pl-6 lg:block" data-program-desk-figure="">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">01 · program desk</p>
             <p className="mt-1 font-mono text-[64px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">
-              {universePeak.count.toLocaleString("en-US")}
+              {(leadProgram?.count ?? 0).toLocaleString("en-US")}
             </p>
             <p className="mt-1 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-              {universePeak.label}
+              {leadProgram?.label ?? "Program"}
             </p>
             <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              <span className={COUNT}>{universeChrono.dated.toLocaleString("en-US")}</span>
-              {" dated · "}
-              <span className={COUNT}>{universeChrono.earlierValid.toLocaleString("en-US")}</span>
-              {" earlier · "}
-              <span className={COUNT}>{universeChrono.undatedMonth.toLocaleString("en-US")}</span>
-              {" month unknown"}
+              <span className={COUNT}>{signaledUniverse.toLocaleString("en-US")}</span>
+              {" with signal · "}
+              <span className={COUNT}>{quietUniverse.toLocaleString("en-US")}</span>
+              {" quiet"}
+              {leadSector ? (
+                <>
+                  {" · "}
+                  <span className={COUNT}>{leadSector.count.toLocaleString("en-US")}</span>
+                  {" "}
+                  {leadSector.label}
+                </>
+              ) : null}
             </p>
           </div>
         </div>
@@ -542,46 +560,112 @@ export function TileGlobe({
           <div
             className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] sm:px-4"
             data-fold-filter-invite=""
+            data-fold-contents-lead=""
           >
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Filtered chronograph · pick a slice</p>
-            <div className="mt-2 grid grid-cols-2 gap-3 sm:max-w-md">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Contents · dispatch index</p>
+            <div className="mt-2 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6">
               <div>
-                <p className="font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[40px]">
-                  {universeChrono.earlierValid.toLocaleString("en-US")}
+                <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
+                  {signaledUniverse.toLocaleString("en-US")}
                 </p>
-                <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">earlier than this window</p>
+                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">with signal</p>
               </div>
               <div>
-                <p className="font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--cobalt,#2F4FD8)] sm:text-[40px]">
-                  {universeChrono.undatedMonth.toLocaleString("en-US")}
+                <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--fg,#0B0E17)] sm:text-[56px]">
+                  {quietUniverse.toLocaleString("en-US")}
                 </p>
-                <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">month unknown</p>
+                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
               </div>
+              {leadProgram ? (
+                <div className="col-span-2 sm:col-span-1">
+                  <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
+                    {leadProgram.count.toLocaleString("en-US")}
+                  </p>
+                  <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{leadProgram.label}</p>
+                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">program desk</p>
+                </div>
+              ) : null}
             </div>
             <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
               {chronographCaption(universeChrono)}
-              {" · "}
-              {universeChrono.inWindow.toLocaleString("en-US")}
-              {" in window"}
+              {leadSector ? (
+                <>
+                  {" · "}
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{leadSector.count.toLocaleString("en-US")}</span>
+                  {" "}
+                  {leadSector.label}
+                </>
+              ) : null}
             </p>
             <p className="mt-1 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
-              Open a flag or sector in Contents for a real filtered-slice hero
+              Open a flag or sector in Contents for a filtered-slice chronograph
             </p>
+          </div>
+        ) : filtersOpen && facetsActive ? (
+          <div className="space-y-2" data-fold-filters-slice-lead="">
+            <div
+              className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] sm:px-4"
+              data-fold-slice-contents=""
+            >
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
+                Contents · {filterSliceLabel}
+              </p>
+              <div className="mt-2 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6">
+                <div>
+                  <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
+                    {liveCount.toLocaleString("en-US")}
+                  </p>
+                  <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">matching</p>
+                </div>
+                <div>
+                  <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--fg,#0B0E17)] sm:text-[56px]">
+                    {sliceSignaled.toLocaleString("en-US")}
+                  </p>
+                  <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">with signal</p>
+                </div>
+                {sliceLeadProgram ? (
+                  <div className="col-span-2 sm:col-span-1">
+                    <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
+                      {sliceLeadProgram.count.toLocaleString("en-US")}
+                    </p>
+                    <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{sliceLeadProgram.label}</p>
+                    <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">on this slice</p>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--fg,#0B0E17)] sm:text-[56px]">
+                      {sliceQuiet.toLocaleString("en-US")}
+                    </p>
+                    <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
+                  </div>
+                )}
+              </div>
+              <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceQuiet.toLocaleString("en-US")}</span>
+                {" quiet"}
+                {sliceLeadSector ? (
+                  <>
+                    {" · "}
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceLeadSector.count.toLocaleString("en-US")}</span>
+                    {" "}
+                    {sliceLeadSector.label}
+                  </>
+                ) : null}
+              </p>
+            </div>
+            <ScoutChronograph
+              companies={filteredCompanies}
+              variant="compact"
+              kicker={`Filtered chronograph · ${filterSliceLabel}`}
+              reading={`Supporting · ${liveCount.toLocaleString("en-US")} matching · peak on this slice`}
+            />
           </div>
         ) : (
           <ScoutChronograph
             companies={filteredCompanies}
             variant="hero"
-            kicker={
-              filtersOpen && facetsActive
-                ? `Filtered chronograph · ${filterSliceLabel}`
-                : "Scout chronograph · campus signals"
-            }
-            reading={
-              filtersOpen && facetsActive
-                ? `Filtered slice · ${liveCount.toLocaleString("en-US")} matching · ${quietLive.toLocaleString("en-US")} quiet · peak on this slice`
-                : `Full dispatch · ${liveCount.toLocaleString("en-US")} companies · ${quietLive.toLocaleString("en-US")} quiet`
-            }
+            kicker="Scout chronograph · campus signals"
+            reading={`Full dispatch · ${liveCount.toLocaleString("en-US")} companies · ${quietLive.toLocaleString("en-US")} quiet`}
           />
         )}
       </div>
@@ -594,11 +678,15 @@ export function TileGlobe({
         <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Scout edition</p>
         <p className="min-w-0 flex-1 text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
           <span className="font-bold text-[color:var(--ember,#D96B1C)]">{universeChrono.dated.toLocaleString("en-US")}</span>
-          {" dated · peak "}
-          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{universePeak.label}</span>
-          {" "}
-          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{universePeak.count.toLocaleString("en-US")}</span>
-          {" · "}
+          {" dated · "}
+          {leadProgram ? (
+            <>
+              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{leadProgram.label}</span>
+              {" "}
+              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{leadProgram.count.toLocaleString("en-US")}</span>
+              {" · "}
+            </>
+          ) : null}
           <span className={COUNT}>{universeCounts.foundersListed.toLocaleString("en-US")}</span>
           {" founders · "}
           <span className={COUNT}>{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
@@ -699,13 +787,23 @@ export function TileGlobe({
                 <span className="inline-flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />top desk</span>
               </div>
             </div>
-            <div className="pointer-events-none absolute right-[18%] top-[28%] z-10 hidden lg:block" data-dispatch-orbit="" aria-hidden>
-              <div className="relative h-16 w-16">
-                <span className="absolute inset-0 rounded-full border border-dashed border-[color:var(--ember,#D96B1C)]/55" />
-                <span className="absolute inset-2 rounded-full border border-[color:var(--ember,#D96B1C)]/35" />
-                <span className="absolute inset-4 rounded-full border border-[color:var(--ember,#D96B1C)]/70" />
-                <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color:var(--ember,#D96B1C)]" />
-                <span className="absolute -right-1 top-2 h-1.5 w-1.5 rounded-full bg-[color:var(--ember,#D96B1C)]/80" />
+            <div className="pointer-events-none absolute right-3 top-3 z-10 hidden max-w-[220px] overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)]/96 shadow-[0_2px_0_rgba(47,79,216,0.12)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)] lg:block" data-dispatch-orbit="" data-desk-constellation="">
+              <div className="px-2.5 py-2 pl-3">
+                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Desk constellation</p>
+                <ol className="mt-1.5 space-y-1">
+                  {topDesks.slice(0, 3).map((campus, i) => {
+                    const label = campus.name.replace(/^University of /, "").replace(/ University$/, "");
+                    return (
+                      <li key={campus.id} className="flex items-baseline gap-2">
+                        <span className="w-4 shrink-0 text-right font-mono text-[10px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="min-w-0 flex-1 truncate text-[11px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
+                        <span className={`shrink-0 font-mono text-[11px] ${COUNT}`}>{campus.founders.toLocaleString("en-US")}</span>
+                      </li>
+                    );
+                  })}
+                </ol>
               </div>
             </div>
             {topCampus ? (

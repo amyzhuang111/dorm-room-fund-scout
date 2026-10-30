@@ -37,6 +37,11 @@ export function SampleCompanyShell({
     schoolId?: string | null;
     sectorId?: string | null;
     sector?: string | null;
+    primaryProgram?: string | null;
+    founders?: string[];
+    signals?: number;
+    operatingStatus?: string | null;
+    latestSignalAt?: string | null;
   };
 }) {
   const router = useRouter();
@@ -122,22 +127,77 @@ export function SampleCompanyShell({
                   ) : (
                     <span>Year not on record</span>
                   )}
-                </p>
-              </div>
-              <div className="shrink-0 text-right" data-dossier-wire-count="">
-                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Campus wire</p>
-                <p className="mt-1.5 font-mono text-[56px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:mt-1 sm:text-[56px] sm:leading-none sm:tracking-[-0.05em] lg:text-[64px]">
-                  {wireCount.toLocaleString("en-US")}
-                </p>
-                <p className="mt-1.5 max-w-[12rem] text-right font-mono text-[10px] leading-snug text-[color:var(--fg-3,#5C647A)] sm:max-w-[16rem]">
-                  {wireScope}
-                  {wireIncludeNote ? (
+                  {dossier.sector ? (
                     <>
                       {" · "}
-                      {wireIncludeNote}
+                      <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.sector}</span>
                     </>
                   ) : null}
                 </p>
+                <p className="mt-1.5 flex flex-wrap gap-x-2 gap-y-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-dossier-facts="">
+                  {dossier.primaryProgram ? (
+                    <span>
+                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.primaryProgram}</span>
+                    </span>
+                  ) : null}
+                  {(dossier.founders?.length ?? 0) > 0 ? (
+                    <span>
+                      {dossier.primaryProgram ? <span aria-hidden> · </span> : null}
+                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.founders!.length.toLocaleString("en-US")}</span>
+                      {" founders"}
+                      {dossier.founders!.length <= 3 ? (
+                        <span className="text-[color:var(--fg-3,#5C647A)]">
+                          {" ("}
+                          {dossier.founders!.join(", ")}
+                          {")"}
+                        </span>
+                      ) : null}
+                    </span>
+                  ) : null}
+                  {dossier.operatingStatus ? (
+                    <span>
+                      {(dossier.primaryProgram || (dossier.founders?.length ?? 0) > 0) ? <span aria-hidden> · </span> : null}
+                      {dossier.operatingStatus}
+                    </span>
+                  ) : null}
+                  {(dossier.signals ?? 0) > 0 && dossier.latestSignalAt ? (
+                    <span>
+                      {" · "}
+                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.signals!.toLocaleString("en-US")}</span>
+                      {" signals · "}
+                      {dossier.latestSignalAt.replace(/-00/g, "")}
+                    </span>
+                  ) : null}
+                </p>
+              </div>
+              <div className="flex shrink-0 gap-4 text-right sm:gap-6" data-dossier-wire-count="">
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Campus wire</p>
+                  <p className="mt-1.5 font-mono text-[48px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[56px] lg:text-[64px]">
+                    {wireCount.toLocaleString("en-US")}
+                  </p>
+                  <p className="mt-1.5 max-w-[11rem] text-right font-mono text-[10px] leading-snug text-[color:var(--fg-3,#5C647A)] sm:max-w-[14rem]">
+                    {wireScope}
+                    {wireIncludeNote ? (
+                      <>
+                        {" · "}
+                        {wireIncludeNote}
+                      </>
+                    ) : null}
+                  </p>
+                </div>
+                {sectorPeers && campusPeers && sectorPeers.length !== campusPeers.length ? (
+                  <div data-dossier-sector-figure="">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Sector peers</p>
+                    <p className="mt-1.5 font-mono text-[48px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--fg,#0B0E17)] sm:text-[56px] lg:text-[64px]">
+                      {sectorPeers.length.toLocaleString("en-US")}
+                    </p>
+                    <p className="mt-1.5 max-w-[10rem] text-right font-mono text-[10px] leading-snug text-[color:var(--fg-3,#5C647A)]">
+                      {dossier.sector ?? "sector"}
+                      {" · includes this company"}
+                    </p>
+                  </div>
+                ) : null}
               </div>
             </div>
           ) : (
@@ -151,11 +211,23 @@ export function SampleCompanyShell({
         </div>
         <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-2" data-dossier-colophon="">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Scout edition</p>
-          <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+          <p className="min-w-0 flex-1 truncate text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
             {" "}
             {wireScope}
-            {wireIncludeNote ? ` · ${wireIncludeNote}` : ""}
+            {dossier?.primaryProgram ? (
+              <>
+                {" · "}
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.primaryProgram}</span>
+              </>
+            ) : null}
+            {dossier?.year != null ? (
+              <>
+                {" · "}
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.year}</span>
+                {" founded"}
+              </>
+            ) : null}
           </p>
         </div>
 
