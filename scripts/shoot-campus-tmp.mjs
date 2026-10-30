@@ -41,11 +41,28 @@ async function openBrowseFilters(page) {
     }
     return;
   }
-  const openBtn = browse.getByRole("button", { name: /Scout filters/i }).first();
+  // Dock kickers vary per page (Ledger / Map / Dossier / Scout filters).
+  const openBtn = browse.getByRole("button", { name: /filters/i }).first();
   if ((await openBtn.count()) && (await openBtn.isVisible().catch(() => false))) {
     await openBtn.click();
     await page.waitForTimeout(700);
+    const sheet = page.getByRole("dialog", { name: /Scout filters/i });
+    if (await sheet.count()) {
+      const rail = sheet.locator('[data-facet-rail="scout"]');
+      if (await rail.count()) {
+        await rail.evaluate((el) => {
+          const scroller = el.querySelector(".overflow-y-auto") || el;
+          scroller.scrollTop = Math.min(70, scroller.scrollHeight);
+        }).catch(() => {});
+      }
+      await page.waitForTimeout(400);
+    }
     return;
+  }
+  const dock = page.locator("[data-mobile-filter-dock] button").first();
+  if ((await dock.count()) && (await dock.isVisible().catch(() => false))) {
+    await dock.click();
+    await page.waitForTimeout(700);
   }
 }
 

@@ -521,13 +521,20 @@ export function TileGlobe({
         </div>
       </div>
       {/* Mobile-native: figure above, map band, swipe WIRE digest, bottom filter dock */}
-      <div className="mt-3 space-y-3 pb-20 lg:hidden" data-fold-counts-mobile data-mobile-fold-compose="">
+      <div
+        className="mt-3 space-y-3 lg:hidden"
+        data-fold-counts-mobile
+        data-mobile-fold-compose=""
+        style={{ paddingBottom: "calc(5.75rem + env(safe-area-inset-bottom, 0px))" }}
+      >
         <MobileWireStrip companies={filteredCompanies} label="Dispatch wire" surface="fold" />
       </div>
       <MobileFilterDock
         onOpen={() => setMobileFiltersOpen(true)}
         count={liveCount}
         caption="Narrow the dispatch"
+        tone="ember"
+        kicker="Map filters"
       />
       {mobileFiltersOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">

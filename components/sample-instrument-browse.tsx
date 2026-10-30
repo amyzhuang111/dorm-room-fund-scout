@@ -272,7 +272,8 @@ export function SampleInstrumentBrowse({
                 </>
               )}
             </div>
-            <div className="flex flex-wrap items-center gap-1.5">
+            {/* Desktop: pill sort chips. Mobile: ruled segmented control. */}
+            <div className="hidden flex-wrap items-center gap-1.5 lg:flex">
               {feed === "directory"
                 ? (
                     [
@@ -293,12 +294,45 @@ export function SampleInstrumentBrowse({
               <button
                 type="button"
                 onClick={() => setDeskFiltersOpen((v) => !v)}
-                className="hidden h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)] lg:inline-flex"
+                className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
               >
                 {deskFiltersOpen ? "Hide filters" : "Filters"}
               </button>
             </div>
           </div>
+          {feed === "directory" ? (
+            <div
+              className="mt-3 flex w-full overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 lg:hidden"
+              data-mobile-sort-segment=""
+              role="group"
+              aria-label="Sort ledger"
+            >
+              {(
+                [
+                  ["name", "Name"],
+                  ["recent", "Recent"],
+                  ["stage", "Stage"],
+                ] as const
+              ).map(([id, label], i) => {
+                const active = sort === id;
+                return (
+                  <Link
+                    key={id}
+                    href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
+                    className={`relative flex h-9 flex-1 items-center justify-center font-mono text-[11px] font-semibold uppercase tracking-[0.08em] ${
+                      i > 0 ? "border-l border-[color:var(--cobalt,#2F4FD8)]/25" : ""
+                    } ${
+                      active
+                        ? "bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--cobalt,#2F4FD8)] after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:bg-[color:var(--ember,#D96B1C)]"
+                        : "bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg-2,#3F465C)]"
+                    }`}
+                  >
+                    {label}
+                  </Link>
+                );
+              })}
+            </div>
+          ) : null}
         </div>
 
         {/* Mobile-native: horizontal WIRE digest — composition, not a shrunk sidebar */}
@@ -418,7 +452,7 @@ export function SampleInstrumentBrowse({
           </p>
         ) : null}
 
-        <div className="h-16 lg:hidden" aria-hidden />
+        <div className="h-20 lg:hidden" aria-hidden data-mobile-dock-spacer="" />
 
         <div className="sr-only">
           {sectors.map((item) => (
@@ -438,6 +472,8 @@ export function SampleInstrumentBrowse({
         onOpen={() => setMobileFiltersOpen(true)}
         count={boardCompanies.length}
         caption="Narrow the ledger"
+        tone="outline"
+        kicker="Ledger filters"
       />
 
       {mobileFiltersOpen ? (

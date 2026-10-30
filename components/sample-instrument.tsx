@@ -827,7 +827,8 @@ export function IntelligenceBoards({
 }
 
 
-/** Mobile-native WIRE: horizontal swipe digest — not a shrunk desktop column. */
+/** Mobile-native WIRE: horizontal swipe digest — not a shrunk desktop column.
+ *  Per-surface card mix + accent so fold / browse / continued / company do not twin. */
 export function MobileWireStrip({
   companies,
   label = "Wire",
@@ -844,7 +845,8 @@ export function MobileWireStrip({
 
   type Card = { key: string; kicker: string; figure: string; caption: string; href?: string };
   const cards: Card[] = [];
-  if (surface === "fold" || surface === "signals") {
+  // fold: programs only — dispatch desk beat
+  if (surface === "fold") {
     for (const [i, p] of programs.entries()) {
       cards.push({
         key: `prog-${p.id}`,
@@ -854,7 +856,8 @@ export function MobileWireStrip({
       });
     }
   }
-  if (surface === "browse" || surface === "fold") {
+  // browse: sectors lead the ledger
+  if (surface === "browse") {
     for (const s of mix) {
       cards.push({
         key: `sec-${s.id}`,
@@ -865,7 +868,8 @@ export function MobileWireStrip({
       });
     }
   }
-  if (surface === "company" || surface === "signals" || surface === "browse") {
+  // signals (browse-more continued): recent signals only — label must match
+  if (surface === "signals") {
     for (const [i, c] of recent.entries()) {
       cards.push({
         key: `sig-${c.id}`,
@@ -876,7 +880,17 @@ export function MobileWireStrip({
       });
     }
   }
-  if (surface !== "signals") {
+  // company: peer signals + founders
+  if (surface === "company") {
+    for (const [i, c] of recent.entries()) {
+      cards.push({
+        key: `sig-${c.id}`,
+        kicker: `0${i + 1} signal`,
+        figure: c.signalLabel ?? "Signal",
+        caption: c.name,
+        href: `/startup/${c.id}`,
+      });
+    }
     for (const [i, f] of founders.entries()) {
       cards.push({
         key: `f-${f.key}`,
@@ -889,29 +903,51 @@ export function MobileWireStrip({
   }
   if (cards.length === 0) return null;
 
+  const hint =
+    surface === "fold"
+      ? "Swipe · programs"
+      : surface === "browse"
+        ? "Swipe · sectors"
+        : surface === "signals"
+          ? "Swipe · recent"
+          : "Swipe · peers";
+
+  // Distinct card chrome per surface (avoid twin strips)
+  const cardCls =
+    surface === "fold"
+      ? "relative w-[152px] shrink-0 overflow-hidden rounded-none border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+      : surface === "browse"
+        ? "relative w-[148px] shrink-0 overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]"
+        : surface === "signals"
+          ? "relative w-[140px] shrink-0 overflow-hidden rounded-none border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg-sunken,#F3F5F9)] p-2 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--ember,#D96B1C)]"
+          : "relative w-[148px] shrink-0 overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] p-2.5 after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:bg-[color:var(--ember,#D96B1C)]";
+
+  const figureCls =
+    surface === "signals"
+      ? "mt-1 font-mono text-[18px] font-bold leading-none tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]"
+      : "mt-1.5 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]";
+
   return (
     <div className="lg:hidden" data-mobile-wire-strip={surface}>
       <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
         <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{label}</p>
-        <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Swipe · digest</p>
+        <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{hint}</p>
       </div>
       <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {cards.map((card) => {
           const inner = (
             <>
               <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{card.kicker}</p>
-              <p className="mt-1.5 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">{card.figure}</p>
+              <p className={figureCls}>{card.figure}</p>
               <p className="mt-1.5 line-clamp-2 text-[12px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">{card.caption}</p>
             </>
           );
-          const cls =
-            "relative w-[148px] shrink-0 overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]";
           return card.href ? (
-            <Link key={card.key} href={card.href} className={cls}>
+            <Link key={card.key} href={card.href} className={cardCls}>
               {inner}
             </Link>
           ) : (
-            <div key={card.key} className={cls}>
+            <div key={card.key} className={cardCls}>
               {inner}
             </div>
           );
@@ -921,34 +957,60 @@ export function MobileWireStrip({
   );
 }
 
-/** Bottom-anchored filter dock — mobile composition, not a header chip. */
+/** Bottom-anchored filter dock — tone varies per page so docks do not twin. */
 export function MobileFilterDock({
   onOpen,
   count,
   caption = "Narrow the desk",
+  tone = "ember",
+  kicker = "Scout filters",
 }: {
   onOpen: () => void;
   count?: number;
   caption?: string;
+  /** ember = filled (fold); outline = cobalt framed (browse); magazine = hairline bar (company) */
+  tone?: "ember" | "outline" | "magazine";
+  kicker?: string;
 }) {
+  const shell =
+    tone === "ember"
+      ? "fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)]/95 px-3 py-2.5 backdrop-blur-sm lg:hidden"
+      : tone === "outline"
+        ? "fixed inset-x-0 bottom-0 z-40 border-t-2 border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2 lg:hidden"
+        : "fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg-sunken,#F3F5F9)] px-3 py-2 lg:hidden";
+
+  const btn =
+    tone === "ember"
+      ? "flex h-11 w-full items-center justify-between gap-3 rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 text-left"
+      : tone === "outline"
+        ? "flex h-10 w-full items-center justify-between gap-3 rounded-none border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-left before:absolute"
+        : "flex h-10 w-full items-center justify-between gap-3 rounded-none border-0 border-l-[3px] border-l-[color:var(--ember,#D96B1C)] bg-transparent px-3 text-left";
+
+  const kickerCls =
+    tone === "ember"
+      ? "block font-mono text-[10px] uppercase tracking-[0.14em] text-white/80"
+      : "block font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]";
+  const captionCls =
+    tone === "ember"
+      ? "mt-0.5 block truncate text-[13px] font-semibold text-white"
+      : "mt-0.5 block truncate text-[13px] font-semibold text-[color:var(--fg,#0B0E17)]";
+  const countCls =
+    tone === "ember"
+      ? "shrink-0 font-mono text-[12px] font-bold tabular-nums text-white"
+      : "shrink-0 font-mono text-[14px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]";
+
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 px-3 py-2.5 backdrop-blur-sm lg:hidden"
-      data-mobile-filter-dock=""
+      className={shell}
+      data-mobile-filter-dock={tone}
       style={{ paddingBottom: "max(0.625rem, env(safe-area-inset-bottom))" }}
     >
-      <button
-        type="button"
-        onClick={onOpen}
-        className="flex h-11 w-full items-center justify-between gap-3 rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 text-left"
-      >
+      <button type="button" onClick={onOpen} className={btn}>
         <span className="min-w-0">
-          <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-white/80">Scout filters</span>
-          <span className="mt-0.5 block truncate text-[13px] font-semibold text-white">{caption}</span>
+          <span className={kickerCls}>{kicker}</span>
+          <span className={captionCls}>{caption}</span>
         </span>
-        <span className="shrink-0 font-mono text-[12px] font-bold tabular-nums text-white">
-          {count != null ? count.toLocaleString("en-US") : "Open"}
-        </span>
+        <span className={countCls}>{count != null ? count.toLocaleString("en-US") : "Open"}</span>
       </button>
     </div>
   );

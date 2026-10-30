@@ -213,7 +213,12 @@ export function SampleCompanyShell({
           </aside>
           <div className="min-w-0">
             {/* Mobile magazine: swipe WIRE digest above the profile card */}
-            <div className="mb-3 pb-16 lg:hidden lg:pb-0" data-dossier-wire-mobile="" data-mobile-magazine-wire="">
+            <div
+              className="mb-3 lg:hidden"
+              data-dossier-wire-mobile=""
+              data-mobile-magazine-wire=""
+              style={{ paddingBottom: "calc(5.25rem + env(safe-area-inset-bottom, 0px))" }}
+            >
               <MobileWireStrip companies={wireCompanies} label="Dossier wire" surface="company" />
             </div>
             <div className="company-instrument relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] p-3 sm:p-4 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] before:content-[''] after:absolute after:inset-x-0 after:top-0 after:h-0.5 after:bg-[color:var(--cobalt,#2F4FD8)] after:content-['']">
@@ -225,7 +230,9 @@ export function SampleCompanyShell({
       <MobileFilterDock
         onOpen={() => setMobileFiltersOpen(true)}
         count={wireCount}
-        caption="Narrow the ledger"
+        caption="Scout this campus"
+        tone="magazine"
+        kicker="Dossier filters"
       />
 
       {mobileFiltersOpen ? (
