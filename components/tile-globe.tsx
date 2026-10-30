@@ -365,6 +365,11 @@ export function TileGlobe({
   }
 
   const liveCount = filteredCompanies.length;
+  const signaledLive = useMemo(
+    () => filteredCompanies.filter((c) => (c.signals ?? 0) > 0).length,
+    [filteredCompanies],
+  );
+  const quietLive = liveCount - signaledLive;
   // Masthead founders/campuses match the sample strip (universe totals via sampleSurfaceCounts),
   // not the filtered map/facet slice — so strip and fold data-count nodes never diverge.
   const universeCounts = sampleSurfaceCounts(companies, campuses);
@@ -454,20 +459,44 @@ export function TileGlobe({
         <aside className="hidden min-w-0 lg:block" data-fold-desk-left="">
           <div className="sticky top-14 h-[min(70vh,640px)]">
             {filtersOpen ? (
-              <FacetRail
-                companies={companies}
-                campuses={campuses}
-                facets={facets}
-                onChange={onFacetChange}
-                index
-                indexCount={liveCount}
-                caption="Dispatch index"
-                onCampusFocus={(id) => {
-                  const campus = campuses.find((row) => row.id === id);
-                  if (campus) focus(campus);
-                }}
-                footer={<p>{markerSizeLegend()}</p>}
-              />
+              <div className="flex h-full min-h-0 flex-col gap-2" data-fold-filters-index="">
+                <div
+                  className="relative shrink-0 overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+                  data-fold-filter-split=""
+                >
+                  <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Dispatch · signal split</p>
+                  <div className="mt-1.5 grid grid-cols-2 gap-2">
+                    <div>
+                      <p className="font-mono text-[24px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                        {signaledLive.toLocaleString("en-US")}
+                      </p>
+                      <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">with signal</p>
+                    </div>
+                    <div>
+                      <p className="font-mono text-[24px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
+                        {quietLive.toLocaleString("en-US")}
+                      </p>
+                      <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="min-h-0 flex-1">
+                  <FacetRail
+                    companies={companies}
+                    campuses={campuses}
+                    facets={facets}
+                    onChange={onFacetChange}
+                    index
+                    indexCount={liveCount}
+                    caption="Dispatch index"
+                    onCampusFocus={(id) => {
+                      const campus = campuses.find((row) => row.id === id);
+                      if (campus) focus(campus);
+                    }}
+                    footer={<p>{markerSizeLegend()}</p>}
+                  />
+                </div>
+              </div>
             ) : (
               <div
                 className="relative flex h-full min-h-0 flex-col overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
@@ -539,20 +568,19 @@ export function TileGlobe({
               </div>
             </div>
             {topCampus ? (
-              <div className="pointer-events-none absolute bottom-3 right-3 z-10 hidden max-w-[220px] overflow-hidden rounded-sm border border-[color:var(--ember,#D96B1C)]/45 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_1px_0_rgba(217,107,28,0.15)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)] lg:block" data-top-desk-callout="">
-                <div className="px-2.5 py-1.5 pl-3">
-                  <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
-                  <p className="mt-0.5 flex items-baseline gap-2">
-                    <span className="font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">01</span>
-                    <span className="text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                      {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
-                    </span>
+              <div className="pointer-events-none absolute bottom-3 right-3 z-10 hidden max-w-[248px] overflow-hidden rounded-none border border-[color:var(--ember,#D96B1C)]/55 bg-[color:var(--bg,#FFFFFF)]/96 shadow-[0_2px_0_rgba(217,107,28,0.2)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] lg:block" data-top-desk-callout="">
+                <div className="px-3 py-2.5 pl-3.5">
+                  <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
+                  <p className="mt-1 font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+                    {topCampus.founders.toLocaleString("en-US")}
+                  </p>
+                  <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                    {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
+                    {" founder names"}
                   </p>
                   <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                    <span className={COUNT}>{topCampus.founders.toLocaleString("en-US")}</span>
-                    {" founder names · "}
                     <span className={COUNT}>{topCampus.signals.toLocaleString("en-US")}</span>
-                    {" signals"}
+                    {" campus signals · rank 01"}
                   </p>
                 </div>
               </div>
@@ -647,7 +675,12 @@ export function TileGlobe({
                 <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout filters · {shown.length} campuses</p>
                 <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">{liveCount.toLocaleString("en-US")}</p>
                 <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the dispatch</p>
-                <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Status · Year · Sector · Campus</p>
+                <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledLive.toLocaleString("en-US")}</span>
+                  {" with signal · "}
+                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietLive.toLocaleString("en-US")}</span>
+                  {" quiet"}
+                </p>
               </div>
               <button type="button" onClick={() => setMobileFiltersOpen(false)} className="inline-flex h-9 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white">Done</button>
             </div>

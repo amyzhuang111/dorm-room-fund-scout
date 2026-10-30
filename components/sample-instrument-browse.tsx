@@ -101,6 +101,8 @@ export function SampleInstrumentBrowse({
     () => boardCompanies.filter((c) => (c.signals ?? 0) > 0).length,
     [boardCompanies],
   );
+  /** Quiet matching companies (no stored signal) — insight, not pagination. */
+  const quietMatch = boardCompanies.length - signaledMatch;
   const wireSurface = feed === "leaderboard" ? "signals" : "browse";
 
   function commitFacet(next: FacetState) {
@@ -161,15 +163,25 @@ export function SampleInstrumentBrowse({
             data-index-signal-beat=""
           >
             <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
-              {feed === "leaderboard" ? "Signal desk" : "Matching · with signal"}
+              {feed === "leaderboard" ? "Signal desk" : "Matching · signal split"}
             </p>
-            <p className="mt-1 flex items-baseline gap-2">
-              <span className="font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                {signaledMatch.toLocaleString("en-US")}
-              </span>
-              <span className="font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                of {boardCompanies.length.toLocaleString("en-US")} matching
-              </span>
+            <div className="mt-1.5 grid grid-cols-2 gap-2">
+              <div>
+                <p className="font-mono text-[26px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                  {signaledMatch.toLocaleString("en-US")}
+                </p>
+                <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">with signal</p>
+              </div>
+              <div>
+                <p className="font-mono text-[26px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
+                  {quietMatch.toLocaleString("en-US")}
+                </p>
+                <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
+              </div>
+            </div>
+            <p className="mt-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+              {boardCompanies.length.toLocaleString("en-US")}
+              {" matching on Contents"}
             </p>
           </div>
           <div className="h-[min(70vh,640px)]">
@@ -191,12 +203,13 @@ export function SampleInstrumentBrowse({
         {/* Distinct hero per surface — fold language, not the fold stamp */}
         <div
           className={`mb-2 pb-2 ${
-            pages > 1
+            feed === "directory"
               ? "relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] lg:border-0 lg:border-b lg:border-[color:var(--line,#E1E5EF)] lg:px-0 lg:py-0 lg:before:hidden"
               : "border-b border-[color:var(--line,#E1E5EF)]"
           }`}
           data-browse-hero={feed}
           data-continued-chapter={pages > 1 ? "1" : undefined}
+          data-ledger-chapter={feed === "directory" ? "1" : undefined}
         >
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div className="min-w-0">
@@ -254,22 +267,23 @@ export function SampleInstrumentBrowse({
                       </>
                     )}
                   </p>
-                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-ledger-showing-hero="">
                     {pages > 1 ? (
                       <>
+                        {"Showing "}
+                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
+                        {" of "}
                         <span className="font-bold text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
-                        {" matching · rows 01–"}
-                        {String(cards.length).padStart(2, "0")}
-                        {" on desk · "}
-                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{(total - cards.length).toLocaleString("en-US")}</span>
-                        {" still on the shelf"}
+                        {" matching · "}
+                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{quietMatch.toLocaleString("en-US")}</span>
+                        {" quiet (no signal)"}
                       </>
                     ) : (
                       <>
-                        {total.toLocaleString("en-US")}
-                        {" on the ledger · "}
-                        {subline}
-                        {" · "}
+                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
+                        {" with signal · "}
+                        <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
+                        {" quiet · "}
                         <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
                         {" on page"}
                       </>
@@ -343,25 +357,59 @@ export function SampleInstrumentBrowse({
           ) : null}
         </div>
 
-        {/* Mobile-native: horizontal WIRE digest — composition, not a shrunk sidebar */}
+        {/* Mobile-native compose: directory page-1 = vertical Sector folio (not swipe twin);
+            continued = Recent wire; leaderboard keeps Signal wire. */}
         <div className="mb-3 lg:hidden" data-mobile-browse-compose="">
-          <MobileWireStrip
-            companies={boardCompanies}
-            label={
-              feed === "leaderboard"
-                ? "Signal wire"
-                : pages > 1 && feed === "directory"
-                  ? "Recent wire"
-                  : "Ledger wire"
-            }
-            surface={
-              feed === "leaderboard"
-                ? "fold"
-                : pages > 1 && feed === "directory"
-                  ? "signals"
-                  : "browse"
-            }
-          />
+          {feed === "directory" && pages <= 1 ? (
+            <div data-mobile-sector-folio="">
+              <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Sector folio</p>
+                <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
+                  {" with signal"}
+                </p>
+              </div>
+              <ol className="relative overflow-hidden divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]">
+                {sectorMix(boardCompanies).slice(0, 3).map((sec, i) => (
+                  <li key={sec.id}>
+                    <Link
+                      href={browseHref({ feed, sector: sec.id, kind, campus, q: query, sort })}
+                      className="flex items-center gap-3 px-3 py-2.5 hover:bg-[color:var(--ember,#D96B1C)]/5"
+                    >
+                      <span className="w-6 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{sec.label}</span>
+                        <span className="mt-0.5 block font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Sector</span>
+                      </span>
+                      <span className="shrink-0 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                        {sec.count.toLocaleString("en-US")}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ) : (
+            <MobileWireStrip
+              companies={boardCompanies}
+              label={
+                feed === "leaderboard"
+                  ? "Signal wire"
+                  : pages > 1 && feed === "directory"
+                    ? "Recent wire"
+                    : "Ledger wire"
+              }
+              surface={
+                feed === "leaderboard"
+                  ? "fold"
+                  : pages > 1 && feed === "directory"
+                    ? "signals"
+                    : "browse"
+              }
+            />
+          )}
         </div>
 
         {/* One strong ledger stage — map-stage language: cobalt frame, ruled rows.
@@ -443,11 +491,17 @@ export function SampleInstrumentBrowse({
                   </p>
                   <span className="h-[2px] flex-1 bg-[color:var(--ember,#D96B1C)]/60" aria-hidden />
                 </div>
-                <p className="mt-2 text-center font-mono text-[13px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="">
+                <p className="mt-2.5 text-center font-mono text-[15px] font-semibold tabular-nums tracking-tight text-[color:var(--fg,#0B0E17)]" data-ledger-showing="">
                   {"Showing "}
-                  {cards.length.toLocaleString("en-US")}
+                  <span className="text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
                   {" of "}
-                  {total.toLocaleString("en-US")}
+                  <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
+                </p>
+                <p className="mt-1 text-center font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
+                  {" with signal · "}
+                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
+                  {" quiet"}
                 </p>
               </div>
             ) : null}
@@ -462,8 +516,11 @@ export function SampleInstrumentBrowse({
             >
               {pages > 1 ? "Load next page" : "Show more"}
             </Link>
-            <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-              {(total - cards.length).toLocaleString("en-US")} more on the ledger
+            <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing-next="">
+              {"Showing "}
+              {cards.length.toLocaleString("en-US")}
+              {" of "}
+              {total.toLocaleString("en-US")}
             </p>
           </div>
         ) : pages > 1 ? (
@@ -520,7 +577,7 @@ export function SampleInstrumentBrowse({
         onOpen={() => setMobileFiltersOpen(true)}
         count={boardCompanies.length}
         caption={feed === "leaderboard" ? "Narrow the signal desk" : "Narrow the ledger"}
-        tone={feed === "leaderboard" ? "ember" : "outline"}
+        tone="ember"
         kicker={feed === "leaderboard" ? "Signal filters" : "Ledger filters"}
         observe="#browse"
       />
@@ -529,22 +586,35 @@ export function SampleInstrumentBrowse({
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
           <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
           <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col overflow-hidden rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
-            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3 py-3 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--ember,#D96B1C)]">
+            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3 py-3 before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[color:var(--ember,#D96B1C)]">
               <div className="flex items-end justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
-                    {feed === "leaderboard" ? "Signal index" : "Ledger index"}
-                  </p>
-                  <p className="mt-1 font-mono text-[44px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-                    {boardCompanies.length.toLocaleString("en-US")}
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
+                    {feed === "leaderboard" ? "Signal contents" : "Ledger contents"}
                   </p>
                   <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
                     {feed === "leaderboard" ? "Narrow the signal desk" : "Narrow the ledger"}
                   </p>
-                  <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                    {" with a stored signal · Status pinned"}
-                  </p>
+                  <div className="mt-2 grid grid-cols-3 gap-2" data-filter-split="">
+                    <div>
+                      <p className="font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                        {boardCompanies.length.toLocaleString("en-US")}
+                      </p>
+                      <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">matching</p>
+                    </div>
+                    <div>
+                      <p className="font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                        {signaledMatch.toLocaleString("en-US")}
+                      </p>
+                      <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">signal</p>
+                    </div>
+                    <div>
+                      <p className="font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
+                        {quietMatch.toLocaleString("en-US")}
+                      </p>
+                      <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
+                    </div>
+                  </div>
                 </div>
                 <button
                   type="button"
