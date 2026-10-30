@@ -15,6 +15,7 @@ import {
   MobileFilterDock,
   MobileWireStrip,
   PANEL,
+  ScoutChronograph,
   type FacetState,
 } from "./sample-instrument";
 import { SampleTheme } from "./sample-theme";
@@ -147,6 +148,15 @@ export function SampleCompanyShell({
               <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies in this dispatch</p>
             </>
           )}
+        </div>
+
+        <div className="mb-3" data-dossier-chronograph="">
+          <ScoutChronograph
+            companies={wireCompanies}
+            variant="ribbon"
+            kicker="Campus chronograph"
+            datedLabel={`${wireCompanies.filter((c) => (c.latestSignalAt ?? "").length >= 7).length.toLocaleString("en-US")} dated on this wire`}
+          />
         </div>
 
         {/* Three-column desk: index · profile · wire digest */}

@@ -583,6 +583,171 @@ export function recentSignals(companies: FacetCompany[]): FacetCompany[] {
     .slice(0, 6);
 }
 
+/** Real-data signal month buckets from latestSignalAt (skip invalid -00 months). */
+export type ChronoMonth = { id: string; label: string; short: string; count: number; peak: boolean };
+
+const MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+export function signalChronograph(companies: FacetCompany[], limit = 9): ChronoMonth[] {
+  const months = new Map<string, number>();
+  for (const company of companies) {
+    const at = company.latestSignalAt;
+    if (!at || at.length < 7) continue;
+    const ym = at.slice(0, 7);
+    if (ym.endsWith("-00")) continue;
+    months.set(ym, (months.get(ym) ?? 0) + 1);
+  }
+  const sorted = [...months.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+  const slice = sorted.slice(-limit);
+  const max = Math.max(1, ...slice.map(([, n]) => n));
+  return slice.map(([id, count]) => {
+    const y = id.slice(0, 4);
+    const m = Number(id.slice(5, 7));
+    const short = MONTH_SHORT[m - 1] ?? id.slice(5, 7);
+    return {
+      id,
+      label: `${short} ${y.slice(2)}`,
+      short,
+      count,
+      peak: count === max,
+    };
+  });
+}
+
+/**
+ * Scout Chronograph — unifying editorial system across fold / browse / signals / company.
+ * Real latestSignalAt month bars; peak month is the editorial figure (not decoration).
+ */
+export function ScoutChronograph({
+  companies,
+  variant = "ribbon",
+  kicker = "Signal chronograph",
+  datedLabel,
+}: {
+  companies: FacetCompany[];
+  variant?: "ribbon" | "folio" | "hero" | "compact";
+  kicker?: string;
+  /** Override "N dated" caption; defaults to sum of bar counts. */
+  datedLabel?: string;
+}) {
+  const bars = useMemo(() => signalChronograph(companies), [companies]);
+  if (bars.length === 0) return null;
+  const dated = bars.reduce((sum, b) => sum + b.count, 0);
+  const peak = bars.find((b) => b.peak) ?? bars[bars.length - 1]!;
+  const max = Math.max(1, ...bars.map((b) => b.count));
+  const caption = datedLabel ?? `${dated.toLocaleString("en-US")} dated`;
+
+  if (variant === "compact") {
+    return (
+      <div className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/30 bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]" data-scout-chronograph="compact">
+        <div className="flex items-baseline justify-between gap-2">
+          <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">{kicker}</p>
+          <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{caption}</p>
+        </div>
+        <div className="mt-2 flex h-8 items-end gap-1">
+          {bars.map((b) => (
+            <div key={b.id} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-0.5" title={`${b.label}: ${b.count}`}>
+              <span
+                className={`w-full rounded-sm ${b.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/35"}`}
+                style={{ height: `${Math.max(4, Math.round((b.count / max) * 28))}px` }}
+              />
+            </div>
+          ))}
+        </div>
+        <p className="mt-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{peak.count.toLocaleString("en-US")}</span>
+          {" peak · "}
+          {peak.label}
+        </p>
+      </div>
+    );
+  }
+
+  if (variant === "folio") {
+    return (
+      <div data-scout-chronograph="folio">
+        <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">{kicker}</p>
+          <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{caption}</p>
+        </div>
+        <ol className="relative overflow-hidden divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]">
+          {bars.map((b) => (
+            <li key={b.id} className={b.peak ? "bg-[color:var(--ember,#D96B1C)]/6" : undefined}>
+              <div className="flex items-center gap-3 px-3 py-2">
+                <span className={`w-12 shrink-0 font-mono text-[11px] font-semibold tabular-nums ${b.peak ? "text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-2,#3F465C)]"}`}>
+                  {b.short}
+                </span>
+                <span className="relative h-2 min-w-0 flex-1 overflow-hidden rounded-sm bg-[color:var(--bg-sunken,#F3F5F9)]">
+                  <span
+                    className={`absolute inset-y-0 left-0 ${b.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/45"}`}
+                    style={{ width: `${Math.max(6, Math.round((b.count / max) * 100))}%` }}
+                  />
+                </span>
+                <span className={`shrink-0 font-mono text-[16px] font-bold leading-none tabular-nums tracking-[-0.03em] ${b.peak ? "text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg,#0B0E17)]"}`}>
+                  {b.count.toLocaleString("en-US")}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p className="mt-1.5 px-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+          Peak{" "}
+          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{peak.count.toLocaleString("en-US")}</span>
+          {" companies with a stored signal in "}
+          {peak.label}
+        </p>
+      </div>
+    );
+  }
+
+  // ribbon + hero share bar chrome; hero adds large peak figure
+  const tall = variant === "hero";
+  return (
+    <div
+      className={`relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] ${tall ? "px-3 py-3 sm:px-4 sm:py-3.5" : "px-2.5 py-2.5"}`}
+      data-scout-chronograph={variant}
+    >
+      <div className={`flex flex-wrap items-end justify-between gap-3 ${tall ? "gap-4" : ""}`}>
+        <div className="min-w-0">
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">{kicker}</p>
+          {tall ? (
+            <>
+              <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[48px]">
+                {peak.count.toLocaleString("en-US")}
+              </p>
+              <p className="mt-1.5 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[15px]">
+                peak month · {peak.label}
+              </p>
+              <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{caption}</p>
+            </>
+          ) : (
+            <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{peak.count.toLocaleString("en-US")}</span>
+              {" peak · "}
+              {peak.label}
+              {" · "}
+              {caption}
+            </p>
+          )}
+        </div>
+        <div className={`flex items-end gap-1.5 ${tall ? "h-16 sm:h-20" : "h-11"} w-full max-w-[420px] sm:w-auto sm:min-w-[240px] sm:flex-1 lg:max-w-none`}>
+          {bars.map((b) => (
+            <div key={b.id} className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1" title={`${b.label}: ${b.count}`}>
+              <span
+                className={`w-full max-w-[28px] rounded-sm ${b.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/40"}`}
+                style={{ height: `${Math.max(tall ? 8 : 6, Math.round((b.count / max) * (tall ? 72 : 40)))}px` }}
+              />
+              <span className={`font-mono text-[8px] uppercase tracking-[0.06em] ${b.peak ? "font-bold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-3,#5C647A)]"}`}>
+                {b.short}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function topFounders(companies: FacetCompany[]): { key: string; name: string; companyId: string; companyName: string; signals: number; logoUrl?: string | null }[] {
   const rows: { key: string; name: string; companyId: string; companyName: string; signals: number; logoUrl?: string | null }[] = [];
   for (const company of [...companies].sort((a, b) => b.signals - a.signals)) {

@@ -14,6 +14,7 @@ import {
   MobileFilterDock,
   MobileWireStrip,
   PANEL,
+  ScoutChronograph,
   type FacetState,
 } from "./sample-instrument";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -454,31 +455,43 @@ export function TileGlobe({
         </div>
       </div>
 
-      {/* Structural desk: roster | map | wire. One map stage for desk+mobile. */}
+      {/* Scout Chronograph — full-width signal timeline (unifying editorial system) */}
+      <div className="mb-3" data-fold-chronograph="">
+        <ScoutChronograph
+          companies={filteredCompanies}
+          variant="hero"
+          kicker="Scout chronograph · campus signals"
+          datedLabel={`${signaledLive.toLocaleString("en-US")} with a stored signal date`}
+        />
+      </div>
+
+      {/* Structural desk: chronograph folio | map | wire. One map stage for desk+mobile. */}
       <div className="grid gap-3 lg:grid-cols-[minmax(220px,260px)_minmax(0,1fr)_minmax(220px,280px)]" data-fold-desk-spread="">
         <aside className="hidden min-w-0 lg:block" data-fold-desk-left="">
           <div className="sticky top-14 h-[min(70vh,640px)]">
             {filtersOpen ? (
               <div className="flex h-full min-h-0 flex-col gap-2" data-fold-filters-index="">
-                <div
-                  className="relative shrink-0 overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
-                  data-fold-filter-split=""
-                >
-                  <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Dispatch · signal split</p>
-                  <div className="mt-1.5 grid grid-cols-2 gap-2">
-                    <div>
-                      <p className="font-mono text-[24px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                        {signaledLive.toLocaleString("en-US")}
-                      </p>
-                      <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">with signal</p>
-                    </div>
-                    <div>
-                      <p className="font-mono text-[24px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
-                        {quietLive.toLocaleString("en-US")}
-                      </p>
-                      <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
+                <div className="shrink-0 space-y-2" data-fold-filter-split="">
+                  <div
+                    className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+                  >
+                    <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Dispatch · signal split</p>
+                    <div className="mt-1.5 grid grid-cols-2 gap-2">
+                      <div>
+                        <p className="font-mono text-[24px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                          {signaledLive.toLocaleString("en-US")}
+                        </p>
+                        <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">with signal</p>
+                      </div>
+                      <div>
+                        <p className="font-mono text-[24px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
+                          {quietLive.toLocaleString("en-US")}
+                        </p>
+                        <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
+                      </div>
                     </div>
                   </div>
+                  <ScoutChronograph companies={filteredCompanies} variant="compact" kicker="Chronograph" />
                 </div>
                 <div className="min-h-0 flex-1">
                   <FacetRail
@@ -498,48 +511,44 @@ export function TileGlobe({
                 </div>
               </div>
             ) : (
-              <div
-                className="relative flex h-full min-h-0 flex-col overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
-                data-desk-roster=""
-              >
-                <div className="shrink-0 border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2.5">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Desk roster</p>
-                  <p className="mt-1 font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                    {String(topDesks.length).padStart(2, "0")}
-                  </p>
-                  <p className="mt-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Top desks by campus signal</p>
-                  <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                    Ranked · {universeCounts.campusesOnMap.toLocaleString("en-US")} on map
-                  </p>
+              <div className="flex h-full min-h-0 flex-col gap-2" data-desk-chronograph-col="">
+                <div className="min-h-0 flex-[1.4] overflow-y-auto" data-desk-chrono-folio="">
+                  <ScoutChronograph
+                    companies={filteredCompanies}
+                    variant="folio"
+                    kicker="Chronograph folio"
+                    datedLabel={`${signaledLive.toLocaleString("en-US")} dated`}
+                  />
                 </div>
-                <ol className="min-h-0 flex-1 divide-y divide-[color:var(--line,#E1E5EF)] overflow-y-auto">
-                  {topDesks.map((campus, i) => {
-                    const active = selectedId === campus.id;
-                    const label = campus.name.replace(/^University of /, "").replace(/ University$/, "");
-                    return (
-                      <li key={campus.id}>
-                        <button
-                          type="button"
-                          onClick={() => focus(campus)}
-                          className={`flex w-full items-start gap-2 px-2.5 py-2 text-left hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50 ${active ? "bg-[color:var(--ember,#D96B1C)]/8" : ""}`}
-                        >
-                          <span className="mt-0.5 w-6 shrink-0 text-right font-mono text-[14px] font-bold tabular-nums leading-none text-[color:var(--ember,#D96B1C)]">
-                            {String(i + 1).padStart(2, "0")}
-                          </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
-                            <span className="mt-0.5 block font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                              <span className={COUNT}>{campus.founders.toLocaleString("en-US")}</span>
-                              {" founders · "}
-                              <span className={COUNT}>{campus.signals.toLocaleString("en-US")}</span>
-                              {" signals"}
+                <div
+                  className="relative shrink-0 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)]"
+                  data-desk-roster=""
+                >
+                  <div className="border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-1.5">
+                    <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Top desks</p>
+                  </div>
+                  <ol className="divide-y divide-[color:var(--line,#E1E5EF)]">
+                    {topDesks.slice(0, 4).map((campus, i) => {
+                      const active = selectedId === campus.id;
+                      const label = campus.name.replace(/^University of /, "").replace(/ University$/, "");
+                      return (
+                        <li key={campus.id}>
+                          <button
+                            type="button"
+                            onClick={() => focus(campus)}
+                            className={`flex w-full items-center gap-2 px-2.5 py-1.5 text-left hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50 ${active ? "bg-[color:var(--ember,#D96B1C)]/8" : ""}`}
+                          >
+                            <span className="w-5 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
+                              {String(i + 1).padStart(2, "0")}
                             </span>
-                          </span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ol>
+                            <span className="min-w-0 flex-1 truncate text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
+                            <span className={`shrink-0 font-mono text-[11px] ${COUNT}`}>{campus.signals.toLocaleString("en-US")}</span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ol>
+                </div>
               </div>
             )}
           </div>
@@ -625,9 +634,15 @@ export function TileGlobe({
         data-mobile-fold-compose=""
         style={{ paddingBottom: "calc(5.75rem + env(safe-area-inset-bottom, 0px))" }}
       >
+        <ScoutChronograph
+          companies={filteredCompanies}
+          variant="folio"
+          kicker="Scout chronograph"
+          datedLabel={`${signaledLive.toLocaleString("en-US")} dated`}
+        />
         <div data-mobile-desk-roster="">
           <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Desk roster</p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Desk roster</p>
             <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Swipe · top desks</p>
           </div>
           <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

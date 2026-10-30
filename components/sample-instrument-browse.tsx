@@ -16,6 +16,7 @@ import {
   MobileFilterDock,
   MobileWireStrip,
   PANEL,
+  ScoutChronograph,
   sectorMix,
   type FacetState,
 } from "./sample-instrument";
@@ -184,7 +185,8 @@ export function SampleInstrumentBrowse({
               {" matching on Contents"}
             </p>
           </div>
-          <div className="h-[min(70vh,640px)]">
+          <ScoutChronograph companies={boardCompanies} variant="compact" kicker="Chronograph" />
+          <div className="h-[min(62vh,560px)]">
             <FacetRail
               companies={companies}
               campuses={campuses}
@@ -357,33 +359,39 @@ export function SampleInstrumentBrowse({
           ) : null}
         </div>
 
-        {/* Mobile-native compose: directory page-1 = vertical Sector folio (not swipe twin);
-            continued = Recent wire; leaderboard keeps Signal wire. */}
-        <div className="mb-3 lg:hidden" data-mobile-browse-compose="">
+        {/* Scout Chronograph — unifying system. Browse-more uses folio (originality priority);
+            page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
+        <div className="mb-3 space-y-3 lg:hidden" data-mobile-browse-compose="">
+          <ScoutChronograph
+            companies={boardCompanies}
+            variant={pages > 1 && feed === "directory" ? "folio" : feed === "leaderboard" ? "folio" : "ribbon"}
+            kicker={
+              feed === "leaderboard"
+                ? "Signal chronograph"
+                : pages > 1
+                  ? "Ledger chronograph · continued"
+                  : "Ledger chronograph"
+            }
+            datedLabel={`${signaledMatch.toLocaleString("en-US")} with a stored signal date`}
+          />
           {feed === "directory" && pages <= 1 ? (
             <div data-mobile-sector-folio="">
               <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Sector folio</p>
-                <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                  {" with signal"}
-                </p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Sector strip</p>
+                <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Top 3</p>
               </div>
-              <ol className="relative overflow-hidden divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]">
+              <ol className="relative overflow-hidden divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
                 {sectorMix(boardCompanies).slice(0, 3).map((sec, i) => (
                   <li key={sec.id}>
                     <Link
                       href={browseHref({ feed, sector: sec.id, kind, campus, q: query, sort })}
-                      className="flex items-center gap-3 px-3 py-2.5 hover:bg-[color:var(--ember,#D96B1C)]/5"
+                      className="flex items-center gap-3 px-3 py-2 hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40"
                     >
-                      <span className="w-6 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
+                      <span className="w-6 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{sec.label}</span>
-                        <span className="mt-0.5 block font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Sector</span>
-                      </span>
-                      <span className="shrink-0 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                      <span className="min-w-0 flex-1 truncate text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{sec.label}</span>
+                      <span className="shrink-0 font-mono text-[16px] font-bold leading-none tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]">
                         {sec.count.toLocaleString("en-US")}
                       </span>
                     </Link>
@@ -391,25 +399,25 @@ export function SampleInstrumentBrowse({
                 ))}
               </ol>
             </div>
-          ) : (
-            <MobileWireStrip
-              companies={boardCompanies}
-              label={
-                feed === "leaderboard"
-                  ? "Signal wire"
-                  : pages > 1 && feed === "directory"
-                    ? "Recent wire"
-                    : "Ledger wire"
-              }
-              surface={
-                feed === "leaderboard"
-                  ? "fold"
-                  : pages > 1 && feed === "directory"
-                    ? "signals"
-                    : "browse"
-              }
-            />
-          )}
+          ) : feed === "leaderboard" ? (
+            <MobileWireStrip companies={boardCompanies} label="Signal wire" surface="fold" />
+          ) : null}
+        </div>
+
+        {/* Desk chronograph ribbon — same system as mobile, under hero */}
+        <div className="mb-3 hidden lg:block" data-desk-browse-chronograph="">
+          <ScoutChronograph
+            companies={boardCompanies}
+            variant={pages > 1 ? "hero" : "ribbon"}
+            kicker={
+              feed === "leaderboard"
+                ? "Signal chronograph"
+                : pages > 1
+                  ? "Ledger chronograph · continued"
+                  : "Ledger chronograph"
+            }
+            datedLabel={`${signaledMatch.toLocaleString("en-US")} with a stored signal date`}
+          />
         </div>
 
         {/* One strong ledger stage — map-stage language: cobalt frame, ruled rows.
@@ -479,6 +487,16 @@ export function SampleInstrumentBrowse({
                 );
               })}
             </ol>
+            {pages > 1 ? (
+              <div className="mt-0 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 sm:px-3.5" data-ledger-end-chrono="">
+                <ScoutChronograph
+                  companies={boardCompanies}
+                  variant="compact"
+                  kicker="Chronograph · end of loaded page"
+                  datedLabel={`${signaledMatch.toLocaleString("en-US")} dated`}
+                />
+              </div>
+            ) : null}
             {pages > 1 ? (
               <div
                 className="mt-0 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg-sunken,#F3F5F9)] px-3 py-4 sm:px-3.5"
@@ -633,6 +651,9 @@ export function SampleInstrumentBrowse({
                 <span aria-hidden>·</span>
                 <span>Campus</span>
               </p>
+              <div className="mt-2.5">
+                <ScoutChronograph companies={boardCompanies} variant="compact" kicker="Chronograph" />
+              </div>
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
               <div className="h-[min(70dvh,540px)]">
