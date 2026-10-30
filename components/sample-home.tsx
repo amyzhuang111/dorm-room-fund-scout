@@ -98,18 +98,29 @@ export function SampleHome({
       country: university.country?.trim() || "Unknown",
       founders: university.founderCount,
     }));
-  const newestSectorCounts = new Map<string, { label: string; count: number }>();
+  // Server-safe newest-sector strip (mirrors contentsPageInsight; avoid client import).
+  type Agg = { id: string; label: string; n: number; sig: number; recent: number };
+  const sectorAgg = new Map<string, Agg>();
   for (const card of data.cards) {
-    const id = card.sectorId?.trim();
-    const label = card.sector?.trim();
+    const id = card.sectorId?.trim() || "";
+    const label = card.sector?.trim() || "";
     if (!id || !label || /^unlabeled$/i.test(label)) continue;
+    const row = sectorAgg.get(id) ?? { id, label, n: 0, sig: 0, recent: 0 };
+    row.n += 1;
+    if ((card.signals ?? 0) > 0) row.sig += 1;
     const at = card.latestSignalAt ?? "";
-    if (at.length < 7 || at.slice(0, 7) < "2026-09") continue;
-    const prev = newestSectorCounts.get(id);
-    if (prev) prev.count += 1;
-    else newestSectorCounts.set(id, { label, count: 1 });
+    if (at.length >= 7 && at.slice(0, 7) >= "2026-09") row.recent += 1;
+    sectorAgg.set(id, row);
   }
-  const newestHome = [...newestSectorCounts.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))[0] ?? null;
+  const newestHomeRow = [...sectorAgg.values()]
+    .filter((row) => row.recent > 0)
+    .sort((a, b) => b.recent - a.recent || b.sig - a.sig || a.label.localeCompare(b.label))[0] ?? null;
+  const newestHome = newestHomeRow
+    ? {
+        label: newestHomeRow.label,
+        detail: `${newestHomeRow.sig.toLocaleString("en-US")} of ${newestHomeRow.n.toLocaleString("en-US")} since Sep`,
+      }
+    : null;
 
   return (
     <div className="sample-paper">
@@ -138,8 +149,8 @@ export function SampleHome({
               {newestHome ? (
                 <>
                   {" · "}
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{newestHome.count.toLocaleString("en-US")}</span>
-                  {" newest · "}
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{newestHome.detail}</span>
+                  {" · "}
                   {newestHome.label}
                 </>
               ) : null}

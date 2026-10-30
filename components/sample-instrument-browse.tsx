@@ -275,11 +275,15 @@ export function SampleInstrumentBrowse({
                 <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{contentsInsight.kicker}</p>
                 <p className="mt-1 flex items-baseline gap-2">
                   <span className="font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                    {contentsInsight.figure.toLocaleString("en-US")}
+                    {contentsInsight.signaled.toLocaleString("en-US")}
                   </span>
                   <span className="min-w-0 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{contentsInsight.label}</span>
                 </p>
-                <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{contentsInsight.detail}</p>
+                <p className="mt-1 font-mono text-[11px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{contentsInsight.detail}</p>
+                <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{contentsInsight.figure.toLocaleString("en-US")}</span>
+                  {" newest in window"}
+                </p>
               </div>
             ) : null}
             <p className="mt-1.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
@@ -450,7 +454,7 @@ export function SampleInstrumentBrowse({
         <div className="mb-4 space-y-3 lg:hidden" data-mobile-browse-compose="">
           {feed === "directory" && (pages > 1 ? pageInsight : contentsInsight) ? (
             <div
-              className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+              className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
               data-mobile-page-insight=""
             >
               <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
@@ -458,16 +462,22 @@ export function SampleInstrumentBrowse({
                   ? `Newest on loaded page · ${(pageInsight ?? contentsInsight)!.kicker}`
                   : `${contentsInsight!.kicker} · ledger`}
               </p>
-              <p className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                <span className="font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-                  {(pages > 1 ? pageInsight : contentsInsight)!.figure.toLocaleString("en-US")}
+              <p className="mt-1.5 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span className="font-mono text-[44px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+                  {(pages > 1 ? pageInsight : contentsInsight)!.signaled.toLocaleString("en-US")}
                 </span>
                 <span className="text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
                   {(pages > 1 ? pageInsight : contentsInsight)!.label}
                 </span>
               </p>
-              <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              <p className="mt-1.5 font-mono text-[12px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">
                 {(pages > 1 ? pageInsight : contentsInsight)!.detail}
+              </p>
+              <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">
+                  {(pages > 1 ? pageInsight : contentsInsight)!.figure.toLocaleString("en-US")}
+                </span>
+                {" newest in window · sector strip"}
               </p>
             </div>
           ) : null}
@@ -552,7 +562,9 @@ export function SampleInstrumentBrowse({
                 <div data-mobile-newest-folio="">
                   <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
                     <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Newest sectors</p>
-                    <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Since Sep</p>
+                    <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                      {contentsInsight ? contentsInsight.detail : "Since Sep"}
+                    </p>
                   </div>
                   <ol className="relative overflow-hidden divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]">
                     {newestSectors.slice(0, 3).map((sec, i) => (
@@ -591,9 +603,9 @@ export function SampleInstrumentBrowse({
                 <div className="min-w-0">
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Sector folio · matching</p>
                   {contentsInsight ? (
-                    <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{contentsInsight.figure.toLocaleString("en-US")}</span>
-                      {" newest · "}
+                    <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{contentsInsight.detail}</span>
+                      {" · "}
                       {contentsInsight.label}
                     </p>
                   ) : null}
@@ -646,8 +658,17 @@ export function SampleInstrumentBrowse({
                 data-newest-folio-desk=""
               >
                 <div className="flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Newest sectors · matching</p>
-                  <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                  <div className="min-w-0">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Newest sectors · matching</p>
+                    {contentsInsight ? (
+                      <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{contentsInsight.detail}</span>
+                        {" · "}
+                        {contentsInsight.label}
+                      </p>
+                    ) : null}
+                  </div>
+                  <p className="shrink-0 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
                     {boardCompanies.length.toLocaleString("en-US")}
                     {" on Contents"}
                   </p>
@@ -912,13 +933,20 @@ export function SampleInstrumentBrowse({
                     {" matching · facet map below"}
                   </p>
                   {contentsInsight ? (
-                    <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-contents-page-insight="">
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{contentsInsight.figure.toLocaleString("en-US")}</span>
-                      {" newest · "}
-                      {contentsInsight.label}
-                      {" · "}
-                      {contentsInsight.kicker}
-                    </p>
+                    <div className="mt-2.5 border-t border-[color:var(--line,#E1E5EF)] pt-2" data-contents-page-insight="">
+                      <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{contentsInsight.kicker}</p>
+                      <p className="mt-1 flex items-baseline gap-2">
+                        <span className="font-mono text-[32px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                          {contentsInsight.signaled.toLocaleString("en-US")}
+                        </span>
+                        <span className="min-w-0 truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{contentsInsight.label}</span>
+                      </p>
+                      <p className="mt-1 font-mono text-[12px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{contentsInsight.detail}</p>
+                      <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{contentsInsight.figure.toLocaleString("en-US")}</span>
+                        {" newest in window"}
+                      </p>
+                    </div>
                   ) : null}
                   <p className="mt-0.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
                     {chronographCaption(contentsChrono)}

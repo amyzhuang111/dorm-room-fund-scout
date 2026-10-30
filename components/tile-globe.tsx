@@ -94,7 +94,7 @@ export function TileGlobe({
   dataThrough?: string | null;
 }) {
   const mapNode = useRef<HTMLDivElement | null>(null);
-  const [stageHeight, setStageHeight] = useState(720);
+  const [stageHeight, setStageHeight] = useState(780);
   const mapRef = useRef<{
     getSource: (id: string) => { setData: (data: unknown) => void } | undefined;
     setFilter: (layer: string, filter: unknown) => void;
@@ -481,8 +481,8 @@ export function TileGlobe({
                 </p>
                 {dispatchInsight ? (
                   <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-mobile-dispatch-whisper="">
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dispatchInsight.figure.toLocaleString("en-US")}</span>
-                    {" newest · "}
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dispatchInsight.detail}</span>
+                    {" · "}
                     {dispatchInsight.label}
                   </p>
                 ) : null}
@@ -580,10 +580,10 @@ export function TileGlobe({
               {dispatchInsight ? (
                 <div className="col-span-2 sm:col-span-1">
                   <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
-                    {dispatchInsight.figure.toLocaleString("en-US")}
+                    {dispatchInsight.signaled.toLocaleString("en-US")}
                   </p>
                   <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{dispatchInsight.label}</p>
-                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">{dispatchInsight.kicker}</p>
+                  <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{dispatchInsight.detail}</p>
                 </div>
               ) : null}
             </div>
@@ -675,36 +675,51 @@ export function TileGlobe({
       <div
         className="mb-3 hidden items-baseline justify-between gap-3 border-y border-[color:var(--line,#E1E5EF)] py-2 lg:flex"
         data-dispatch-colophon=""
+        data-colophon-mode={filtersOpen && facetsActive ? "slice" : "dispatch"}
       >
         <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Scout edition</p>
         <p className="min-w-0 flex-1 text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{universeChrono.dated.toLocaleString("en-US")}</span>
-          {" dated · "}
-          {dispatchInsight ? (
+          {filtersOpen && facetsActive ? (
             <>
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dispatchInsight.figure.toLocaleString("en-US")}</span>
-              {" newest · "}
-              {dispatchInsight.label}
+              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceQuiet.toLocaleString("en-US")}</span>
+              {" quiet on slice"}
+              {sliceLeadSector ? (
+                <>
+                  {" · "}
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceLeadSector.count.toLocaleString("en-US")}</span>
+                  {" "}
+                  {sliceLeadSector.label}
+                </>
+              ) : null}
               {" · "}
+              <span className={COUNT}>{liveCount.toLocaleString("en-US")}</span>
+              {" matching"}
             </>
-          ) : leadProgram ? (
+          ) : (
             <>
-              {"program desk · "}
-              {leadProgram.label}
-              {" · "}
+              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{universeChrono.dated.toLocaleString("en-US")}</span>
+              {" dated · "}
+              {dispatchInsight ? (
+                <>
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dispatchInsight.detail}</span>
+                  {" · "}
+                  {dispatchInsight.label}
+                  {" · "}
+                </>
+              ) : null}
+              <span className={COUNT}>{universeCounts.foundersListed.toLocaleString("en-US")}</span>
+              {" founders · "}
+              <span className={COUNT}>{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
+              {" campuses on map"}
             </>
-          ) : null}
-          <span className={COUNT}>{universeCounts.foundersListed.toLocaleString("en-US")}</span>
-          {" founders · "}
-          <span className={COUNT}>{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
-          {" campuses on map"}
+          )}
         </p>
       </div>
 
       {/* Structural desk: chronograph folio | map | wire. Filters open: Contents | map | wire. */}
-      <div className="grid gap-3 lg:grid-cols-[minmax(220px,260px)_minmax(0,1fr)_minmax(220px,280px)]" data-fold-desk-spread="">
+      <div className="grid gap-3 lg:grid-cols-[minmax(200px,240px)_minmax(0,1.15fr)_minmax(200px,260px)]" data-fold-desk-spread="">
         <aside className="hidden min-w-0 lg:block" data-fold-desk-left="">
-          <div className="sticky top-14 h-[min(78vh,720px)]">
+          <div className="sticky top-14 h-[min(78vh,780px)]">
             {filtersOpen ? (
               <div className="flex h-full min-h-0 flex-col gap-2" data-fold-filters-index="">
                 {facetsActive ? (
@@ -788,11 +803,20 @@ export function TileGlobe({
             data-dispatch-map-stage=""
           >
             <div ref={mapNode} className="h-full w-full" />
-            <div className="pointer-events-none absolute left-2.5 top-2.5 z-10 hidden rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1.5 backdrop-blur-[2px] lg:block" data-dispatch-scale="">
-              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Dispatch scale</p>
-              <div className="mt-1 flex items-center gap-3 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--cobalt,#2F4FD8)]" aria-hidden />field</span>
-                <span className="inline-flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />top desk</span>
+            <div className="pointer-events-none absolute left-2.5 top-2.5 z-10 hidden max-w-[220px] overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)]/94 shadow-[0_2px_0_rgba(47,79,216,0.1)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)] lg:block" data-dispatch-scale="" data-atlas-plate="">
+              <div className="px-2.5 py-2 pl-3">
+                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Atlas plate</p>
+                <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                  White dispatch map
+                </p>
+                <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <span className={COUNT}>{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
+                  {" campuses · field vs top desk"}
+                </p>
+                <div className="mt-1.5 flex items-center gap-3 font-mono text-[10px] text-[color:var(--fg-2,#3F465C)]">
+                  <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--cobalt,#2F4FD8)]" aria-hidden />field</span>
+                  <span className="inline-flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />top desk</span>
+                </div>
               </div>
             </div>
             <div className="pointer-events-none absolute right-3 top-3 z-10 hidden lg:block" data-dispatch-orbit="" data-desk-constellation="">
@@ -802,7 +826,7 @@ export function TileGlobe({
                   <span className="absolute inset-3 rounded-full border border-[color:var(--ember,#D96B1C)]/30" />
                   <span className="absolute inset-6 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35" />
                 </div>
-                <div className="relative max-w-[260px] overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--bg,#FFFFFF)]/96 shadow-[0_3px_0_rgba(47,79,216,0.14)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)]">
+                <div className="relative max-w-[280px] overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--bg,#FFFFFF)]/96 shadow-[0_3px_0_rgba(47,79,216,0.14)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)]">
                   <div className="flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-1.5 pl-3">
                     <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Desk constellation</p>
                     <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Founders</p>

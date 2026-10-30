@@ -618,8 +618,13 @@ export const CHRONO_THROUGH_YM = "2026-10";
 /** Page-specific Contents figure — newest-sector or signal-rate lead; never a global program stamp. */
 export type ContentsInsight = {
   figure: number;
+  /** Signaled companies in the sector (e.g. 46). */
+  signaled: number;
+  /** Sector size (e.g. 353). */
+  sectorSize: number;
   kicker: string;
   label: string;
+  /** Spell-out strip: "46 of 353 since Sep". */
   detail: string;
   sectorId: string;
 };
@@ -656,9 +661,11 @@ export function contentsPageInsight(
     const top = byRecent[0];
     return {
       figure: top.recent,
+      signaled: top.sig,
+      sectorSize: top.n,
       kicker: "Newest sector",
       label: top.label,
-      detail: `${top.sig.toLocaleString("en-US")} signaled of ${top.n.toLocaleString("en-US")} · since ${startShort}`,
+      detail: `${top.sig.toLocaleString("en-US")} of ${top.n.toLocaleString("en-US")} since ${startShort}`,
       sectorId: top.id,
     };
   }
@@ -670,9 +677,11 @@ export function contentsPageInsight(
     const pct = Math.round((top.sig / top.n) * 100);
     return {
       figure: top.sig,
+      signaled: top.sig,
+      sectorSize: top.n,
       kicker: "Signal-rate lead",
       label: top.label,
-      detail: `${pct}% signaled · ${top.n.toLocaleString("en-US")} in sector`,
+      detail: `${pct}% of ${top.n.toLocaleString("en-US")} since ${startShort}`,
       sectorId: top.id,
     };
   }
