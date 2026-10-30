@@ -678,12 +678,14 @@ export function TileGlobe({
             />
           </div>
         ) : (
-          <ScoutChronograph
-            companies={filteredCompanies}
-            variant="hero"
-            kicker="Scout chronograph · campus signals"
-            reading={`Full dispatch · ${liveCount.toLocaleString("en-US")} companies · ${quietLive.toLocaleString("en-US")} quiet`}
-          />
+          <div className="lg:hidden">
+            <ScoutChronograph
+              companies={filteredCompanies}
+              variant="hero"
+              kicker="Scout chronograph · campus signals"
+              reading={`Full dispatch · ${liveCount.toLocaleString("en-US")} companies · ${quietLive.toLocaleString("en-US")} quiet`}
+            />
+          </div>
         )}
       </div>
 
@@ -733,12 +735,24 @@ export function TileGlobe({
       </div>
 
       {/* Chronograph identity — non-geographic fold hero. Map stays support; no new geo chrome. */}
-      <div className="mb-3 hidden lg:block" data-fold-chrono-identity="">
+      <div className="mb-3 hidden lg:block" data-fold-chrono-identity="" data-fold-chrono-typographic="">
+        <div className="mb-2 flex items-end justify-between gap-4 border-b-2 border-[color:var(--ember,#D96B1C)]/50 pb-2">
+          <div className="min-w-0">
+            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Chronograph identity</p>
+            <p className="mt-1 text-[22px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Peak month owns the fold · typographic, not geographic</p>
+          </div>
+          <p className="shrink-0 text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+            <span className="font-bold text-[color:var(--ember,#D96B1C)]">{quietLive.toLocaleString("en-US")}</span>
+            {" quiet · "}
+            <span className="font-bold text-[color:var(--fg,#0B0E17)]">{liveCount.toLocaleString("en-US")}</span>
+            {" matching"}
+          </p>
+        </div>
         <ScoutChronograph
           companies={filteredCompanies}
           variant="hero"
-          kicker="Scout chronograph · desk identity"
-          reading={`Quiet ${quietLive.toLocaleString("en-US")} · ${liveCount.toLocaleString("en-US")} matching · peak owns the fold`}
+          kicker="Identity · peak count leads"
+          reading={`Typographic beat · not a map label · ${quietLive.toLocaleString("en-US")} quiet on desk`}
         />
       </div>
 
@@ -955,11 +969,11 @@ export function TileGlobe({
             )}
           </div>
         ) : null}
-        <div className="space-y-4" data-mobile-dispatch-ticket="" data-mobile-chrono-identity="">
+        <div className="space-y-4" data-mobile-fold-spine="" data-mobile-chrono-identity="">
           <ScoutChronograph
             companies={filteredCompanies}
-            variant="ticket"
-            kicker="Fold · signal ticket"
+            variant="spine"
+            kicker="Fold · chronograph spine"
             reading={
               topCampus
                 ? `${shortCampusLabel(topCampus.id, topCampus.name)} · #1 by founders · ${topCampus.founders.toLocaleString("en-US")} names`

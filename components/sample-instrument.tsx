@@ -57,6 +57,132 @@ export function campusFoundersAtlasRows(
 }
 
 /** Fold-desk atlas language for util pages — word-led plate, real rows, no twin stamps. */
+
+/** Leaderboard-mobile identity: ranked podium ladder — not a shared ticket or atlas dial. */
+export function ScoutSignalPodium({
+  rows,
+  totalOnDesk,
+}: {
+  rows: { id: string; label: string; founders: number; signals: number }[];
+  totalOnDesk: number;
+}) {
+  if (!rows.length) return null;
+  const max = Math.max(1, ...rows.map((r) => r.founders));
+  return (
+    <div
+      className="relative overflow-hidden border-2 border-[color:var(--ember,#D96B1C)]/45 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[4px] before:bg-[color:var(--ember,#D96B1C)]"
+      data-signal-podium=""
+      data-campus-metric="founders"
+    >
+      <div className="flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4">
+        <div className="min-w-0">
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">Signal podium</p>
+          <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Ranked by founder names</p>
+        </div>
+        <p className="shrink-0 text-right font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{totalOnDesk.toLocaleString("en-US")}</span>
+          {" on desk"}
+        </p>
+      </div>
+      <ol className="divide-y divide-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
+        {rows.map((row, i) => (
+          <li key={row.id} className={i === 0 ? "bg-[color:var(--ember,#D96B1C)]/[0.06]" : undefined}>
+            <div className="flex items-end gap-3 px-3.5 py-3.5 pl-4">
+              <span className={`shrink-0 font-mono font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] ${i === 0 ? "text-[40px]" : i === 1 ? "text-[28px]" : "text-[22px]"}`}>
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className={`min-w-0 truncate font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] ${i === 0 ? "text-[18px]" : "text-[15px]"}`}>{row.label}</span>
+                  <span className="shrink-0 font-mono text-[18px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{row.founders.toLocaleString("en-US")}</span>
+                </div>
+                <div className="mt-2 h-2 overflow-hidden rounded-sm bg-[color:var(--bg-sunken,#F3F5F9)]">
+                  <div
+                    className="h-full rounded-sm bg-[color:var(--ember,#D96B1C)]"
+                    style={{ width: `${Math.max(8, Math.round((row.founders / max) * 100))}%` }}
+                  />
+                </div>
+                <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{row.signals.toLocaleString("en-US")}</span>
+                  {" signals on record"}
+                </p>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+/** Browse-more-end identity: closing colophon + next programs to scout — not a reused chronograph dial. */
+export function ScoutEndColophon({
+  showing,
+  total,
+  signaled,
+  quiet,
+  namedCompany,
+  namedMeta,
+  namedHref,
+  nextPrograms,
+}: {
+  showing: number;
+  total: number;
+  signaled: number;
+  quiet: number;
+  namedCompany: string;
+  namedMeta: string;
+  namedHref: string;
+  nextPrograms: { id: string; label: string; count: number }[];
+}) {
+  return (
+    <div
+      className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)]"
+      data-scout-end-colophon=""
+      data-next-to-scout=""
+    >
+      <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3 sm:px-4">
+        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Ledger colophon</p>
+        <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="">
+          {"Showing "}
+          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{showing.toLocaleString("en-US")}</span>
+          {" of "}
+          <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
+          {" · "}
+          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaled.toLocaleString("en-US")}</span>
+          {" with signal · "}
+          <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quiet.toLocaleString("en-US")}</span>
+          {" quiet"}
+        </p>
+        <div className="mt-3">
+          <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Named on slice</p>
+          <a href={namedHref} className="mt-1 block truncate text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline">
+            {namedCompany}
+          </a>
+          <p className="mt-0.5 truncate font-mono text-[11px] text-[color:var(--fg-3,#5C647A)]">{namedMeta}</p>
+        </div>
+      </div>
+      {nextPrograms.length ? (
+        <div className="px-3.5 py-3 sm:px-4">
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Next to scout</p>
+          <ol className="mt-2 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)]">
+            {nextPrograms.map((prog, i) => (
+              <li key={prog.id} className="flex items-center gap-3 px-3 py-2.5">
+                <span className="w-6 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{prog.label}</span>
+                <span className="shrink-0 font-mono text-[15px] font-bold text-[color:var(--ember,#D96B1C)]">{prog.count.toLocaleString("en-US")}</span>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-2 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">Programs by company count on the matching desk · not pagination</p>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export function ScoutAtlasPlate({
   kicker,
   title,
@@ -894,7 +1020,7 @@ export function ScoutChronograph({
   lead = "peak",
 }: {
   companies: FacetCompany[];
-  variant?: "ribbon" | "folio" | "hero" | "compact" | "ticket";
+  variant?: "ribbon" | "folio" | "hero" | "compact" | "ticket" | "spine";
   kicker?: string;
   /** Override dated caption; defaults to "N dated · N earlier · N month unknown". */
   datedLabel?: string;
@@ -936,6 +1062,49 @@ export function ScoutChronograph({
     if (b.monthUnknown || b.earlier || b.peak) return "font-bold text-[color:var(--ember,#D96B1C)]";
     return "text-[color:var(--fg-3,#5C647A)]";
   }
+
+  /** Fold-mobile only: typographic chronograph spine — not the shared dispatch ticket. */
+  if (variant === "spine") {
+    const monthWord = figureIsUnknown ? "UNKNOWN" : figureIsEarlier ? "EARLIER" : figure.label.replace(/\s+\d{4}$/, "").toUpperCase();
+    return (
+      <div
+        className="relative overflow-hidden border-2 border-[color:var(--ember,#D96B1C)]/50 bg-[color:var(--bg,#FFFFFF)]"
+        data-scout-chronograph="spine"
+        data-fold-chrono-spine=""
+        data-chrono-peak={String(peak.count)}
+        data-chrono-peak-month={peak.id}
+        data-chrono-dated={String(dated)}
+        data-chrono-earlier={String(detail.earlierValid)}
+        data-chrono-month-unknown={String(detail.undatedMonth)}
+        data-chrono-window={String(detail.inWindow)}
+        data-chrono-lead={figureIsUnknown ? "monthUnknown" : figureIsEarlier ? "earlier" : "peak"}
+      >
+        <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[color:var(--ember,#D96B1C)]">{kicker}</p>
+        </div>
+        <div className="grid grid-cols-[minmax(0,1fr)_5.5rem] items-stretch">
+          <div className="min-w-0 px-3.5 py-5">
+            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">{monthWord}</p>
+            <p className="mt-2 font-mono text-[64px] font-bold leading-[0.82] tracking-[-0.08em] text-[color:var(--ember,#D96B1C)]">
+              {figure.count.toLocaleString("en-US")}
+            </p>
+            <p className="mt-3 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{figureCaption}</p>
+            <p data-chrono-caption="" className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{caption}</p>
+            {reading ? <p className="mt-2 font-mono text-[11px] leading-snug text-[color:var(--fg-2,#3F465C)]">{reading}</p> : null}
+          </div>
+          <div className="flex flex-col justify-between gap-0.5 border-l border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--ember,#D96B1C)]/[0.04] px-1.5 py-3" data-spine-rail="">
+            {bars.map((b) => (
+              <div key={b.id} data-chrono-bar={b.id} className="flex min-h-0 flex-1 items-center gap-1" title={`${b.label}: ${b.count}`}>
+                <span className={`h-full w-1.5 shrink-0 rounded-sm ${barFill(b)}`} style={{ minHeight: 4, height: `${Math.max(4, Math.round((b.count / max) * 100))}%` }} />
+                <span className={`font-mono text-[7px] uppercase leading-none tracking-[0.04em] ${barLabelClass(b)}`}>{b.short}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   /** Mobile identity: dispatch ticket + vertical chronograph spine — not a shrunken desk atlas. */
   if (variant === "ticket") {
     return (
@@ -1077,12 +1246,15 @@ export function ScoutChronograph({
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">{kicker}</p>
           {tall ? (
             <>
-              <p className="mt-1.5 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:mt-1 sm:text-[48px] sm:leading-none sm:tracking-[-0.06em] lg:text-[56px]">
+              <p className="font-mono text-[12px] font-bold uppercase tracking-[0.32em] text-[color:var(--cobalt,#2F4FD8)]" data-chrono-month-word="">
+                {figureIsUnknown ? "MONTH UNKNOWN" : figureIsEarlier ? "EARLIER" : figure.label.replace(/\s+\d{4}$/, "").toUpperCase()}
+              </p>
+              <p className="mt-1.5 font-mono text-[64px] font-bold leading-[0.82] tracking-[-0.08em] text-[color:var(--ember,#D96B1C)] sm:mt-1 sm:text-[56px] sm:leading-none sm:tracking-[-0.07em] lg:text-[72px]">
                 {figure.count.toLocaleString("en-US")}
               </p>
-              <p className="mt-2 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:mt-1.5 sm:text-[16px]">{figureCaption}</p>
-              <p data-chrono-caption="" className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{caption}</p>
-              {reading ? <p className="mt-1 font-mono text-[10px] leading-snug text-[color:var(--fg-2,#3F465C)]">{reading}</p> : null}
+              <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:mt-1.5 sm:text-[17px]">{figureCaption}</p>
+              <p data-chrono-caption="" className="mt-0.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{caption}</p>
+              {reading ? <p className="mt-1.5 max-w-[28rem] font-mono text-[11px] leading-snug text-[color:var(--fg-2,#3F465C)]">{reading}</p> : null}
             </>
           ) : (
             <>

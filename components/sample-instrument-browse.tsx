@@ -15,9 +15,9 @@ import {
   IntelligenceBoards,
   LogoMark,
   MobileFilterDock,
-  MobileWireStrip,
   PANEL,
   ScoutAtlasPlate,
+  ScoutSignalPodium,
   campusFoundersAtlasRows,
   campusFoundersTop,
   ScoutChronograph,
@@ -26,6 +26,7 @@ import {
   sectorMix,
   contentsPageInsight,
   newestSectorMix,
+  topPrograms,
   type FacetState,
 } from "./sample-instrument";
 
@@ -211,6 +212,23 @@ export function SampleInstrumentBrowse({
     [campuses],
   );
   const topFoundersCampus = useMemo(() => campusFoundersTop(campuses, 1)[0] ?? null, [campuses]);
+  /** Leaderboard podium: top-3 campuses by founders; signals = companies with signal on that desk. */
+  const podiumRows = useMemo(() => {
+    const signaledByCampus = new Map<string, number>();
+    for (const card of boardCompanies) {
+      const id = card.schoolId;
+      if (!id || !(card.signals > 0)) continue;
+      signaledByCampus.set(id, (signaledByCampus.get(id) ?? 0) + 1);
+    }
+    return campusFoundersTop(campuses, 3).map((c) => ({
+      id: c.id,
+      label: shortCampusLabel(c.id, c.name),
+      founders: c.founders,
+      signals: signaledByCampus.get(c.id) ?? 0,
+    }));
+  }, [campuses, boardCompanies]);
+  /** End-colophon: next programs on the matching desk (real primaryProgram counts). */
+  const nextToScout = useMemo(() => topPrograms(boardCompanies).slice(0, 4), [boardCompanies]);
 
   const wireSurface = feed === "leaderboard" ? "signals" : "browse";
 
@@ -393,7 +411,7 @@ export function SampleInstrumentBrowse({
                     </p>
                   </div>
                   {deskConstellation.length ? (
-                    <div className="min-w-0" data-signal-atlas-plate="" data-campus-metric="founders">
+                    <div className="hidden min-w-0 lg:block" data-signal-atlas-plate="" data-campus-metric="founders">
                       <ScoutAtlasPlate
                         kicker="Atlas plate · founders"
                         title="Campus founders on record"
@@ -510,18 +528,23 @@ export function SampleInstrumentBrowse({
         {/* Scout Chronograph — unifying system. Browse-more uses folio (originality priority);
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
         <div className="mb-5 space-y-4 lg:hidden" data-mobile-browse-compose="">
-          {feed === "leaderboard" || pages > 1 ? (
-            <div className="mb-1" data-mobile-dispatch-ticket="" data-mobile-chrono-identity="">
-              <ScoutChronograph
-                companies={pageSlice}
-                variant="ticket"
-                kicker={feed === "leaderboard" ? "Signal desk · ticket" : "Ledger continued · ticket"}
-                reading={
-                  topFoundersCampus
-                    ? `${shortCampusLabel(topFoundersCampus.id, topFoundersCampus.name)} · #1 by founders · ${topFoundersCampus.founders.toLocaleString("en-US")} names`
-                    : `Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`
-                }
-              />
+          {/* Leaderboard podium mounts inside data-ledger-stage (shot frames that). Browse-more keeps a folio insight, not a shared ticket. */}
+          {feed === "directory" && pages > 1 ? (
+            <div
+              className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)]"
+              data-mobile-continued-mast=""
+            >
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Ledger continued</p>
+              <p className="mt-2 font-mono text-[44px] font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">
+                {signaledMatch.toLocaleString("en-US")}
+              </p>
+              <p className="mt-2 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">with a stored signal on this desk</p>
+              <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                {"Showing "}
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
+                {" of "}
+                {total.toLocaleString("en-US")}
+              </p>
             </div>
           ) : null}
           {feed === "directory" && (pages > 1 ? pageInsight : contentsInsight) ? (
@@ -551,24 +574,22 @@ export function SampleInstrumentBrowse({
               </p>
             </div>
           ) : null}
-          <ScoutChronograph
-            companies={pageSlice}
-            variant="compact"
-            kicker={
-              feed === "leaderboard"
-                ? "Signal chronograph · supporting"
-                : pages > 1
+          {feed !== "leaderboard" ? (
+            <ScoutChronograph
+              companies={pageSlice}
+              variant="compact"
+              kicker={
+                pages > 1
                   ? "Ledger chronograph · loaded page"
                   : "Ledger chronograph · on page"
-            }
-            reading={
-              feed === "leaderboard"
-                ? `Supporting · ${cards.length.toLocaleString("en-US")} on desk · peak on this band`
-                : pages > 1
+              }
+              reading={
+                pages > 1
                   ? `Loaded page slice · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`
                   : `Page slice · ${cards.length.toLocaleString("en-US")} on page · not the full dispatch`
-            }
-          />
+              }
+            />
+          ) : null}
           {feed === "directory" ? (
             <div
               className="flex w-full overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30"
@@ -657,8 +678,6 @@ export function SampleInstrumentBrowse({
                 </div>
               ) : null}
             </div>
-          ) : feed === "leaderboard" ? (
-            <MobileWireStrip companies={boardCompanies} label="Signal wire" surface="fold" />
           ) : null}
         </div>
 
@@ -807,10 +826,14 @@ export function SampleInstrumentBrowse({
                 </div>
               </div>
             ) : null}
+            <div data-ledger-stage={feed} data-ledger-top={pages > 1 ? undefined : ""}>
+            {feed === "leaderboard" ? (
+              <div className="mb-0 lg:hidden">
+                <ScoutSignalPodium rows={podiumRows} totalOnDesk={total} />
+              </div>
+            ) : null}
             <ol
-              data-ledger-stage={feed}
-              data-ledger-top={pages > 1 ? undefined : ""}
-              className={`relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] divide-y divide-[color:var(--line,#E1E5EF)] ${pages > 1 ? "border-t-0" : ""}`}
+              className={`relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] divide-y divide-[color:var(--line,#E1E5EF)] ${pages > 1 ? "border-t-0" : ""} ${feed === "leaderboard" ? "border-t-0 lg:border-t" : ""}`}
             >
               {cards.map((card, index) => {
                 const chunk = 14;
@@ -840,6 +863,7 @@ export function SampleInstrumentBrowse({
                 );
               })}
             </ol>
+            </div>
             {pages > 1 && sliceInsight ? (
               <div
                 className="mt-0 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]"
@@ -888,13 +912,20 @@ export function SampleInstrumentBrowse({
                     {" quiet"}
                   </p>
                 </div>
-                <div className="px-3.5 py-3 sm:px-4" data-ledger-end-chrono="">
-                  <ScoutChronograph
-                    companies={pageSlice}
-                    variant="compact"
-                    kicker="Ledger chronograph · end slice"
-                    reading={`Supporting · peak on this loaded slice · not pagination`}
-                  />
+                <div className="border-t border-[color:var(--line,#E1E5EF)] px-3.5 py-3 sm:px-4" data-ledger-end-colophon="" data-next-to-scout="">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Next to scout</p>
+                  <ol className="mt-2 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)]">
+                    {nextToScout.map((prog, i) => (
+                      <li key={prog.id} className="flex items-center gap-3 px-3 py-2.5">
+                        <span className="w-6 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{prog.label}</span>
+                        <span className="shrink-0 font-mono text-[15px] font-bold text-[color:var(--ember,#D96B1C)]">{prog.count.toLocaleString("en-US")}</span>
+                      </li>
+                    ))}
+                  </ol>
+                  <p className="mt-2 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">Programs by company count on the matching desk · not a chronograph dial</p>
                 </div>
               </div>
             ) : null}

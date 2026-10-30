@@ -132,9 +132,15 @@ const browser = await chromium.launch({ headless: true });
   }
   await shot(page, "browse-more-1440");
 
-  // Prove end mark in viewport (sticky header alone is not enough).
+  // Prove next-to-scout / end colophon in viewport (distinct from prior chrono dial).
+  const nextScout = page.locator("[data-next-to-scout]").first();
   const end = page.locator("[data-ledger-end]").first();
-  if (await end.count()) {
+  if (await nextScout.count()) {
+    await nextScout.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(400);
+    await page.evaluate(() => window.scrollBy(0, -48));
+    await page.waitForTimeout(200);
+  } else if (await end.count()) {
     await end.scrollIntoViewIfNeeded();
     await page.waitForTimeout(400);
     await page.evaluate(() => window.scrollBy(0, -40));
@@ -174,9 +180,14 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(2500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
   await page.waitForTimeout(400);
-  // Ranked ledger is the desk hero — pin the stage so big 01/02/03 numerals dominate.
+  // Signal podium (mobile) / ranked stage — frame the distinct LB composition.
+  const podium = page.locator("[data-signal-podium]").first();
   const stage = page.locator("[data-ledger-stage='leaderboard']").first();
-  if (await stage.count()) {
+  if (await podium.count() && await podium.isVisible().catch(() => false)) {
+    await podium.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.waitForTimeout(300);
+    await page.evaluate(() => window.scrollBy(0, -64));
+  } else if (await stage.count()) {
     await stage.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(300);
     await page.evaluate(() => window.scrollBy(0, -96));
@@ -252,9 +263,14 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(2000);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
   await page.waitForTimeout(300);
-  // Mobile lb lead = ranked ledger with big numerals — frame the stage, not campus mast.
+  // Mobile lb lead = signal podium (distinct composition; prove non-zero pixel vs prior).
+  const podiumM = page.locator("[data-signal-podium]").first();
   const stageM = page.locator("[data-ledger-stage='leaderboard']").first();
-  if (await stageM.count()) {
+  if (await podiumM.count()) {
+    await podiumM.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.waitForTimeout(350);
+    await page.evaluate(() => window.scrollBy(0, -56));
+  } else if (await stageM.count()) {
     await stageM.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(300);
     await page.evaluate(() => window.scrollBy(0, -72));
@@ -269,9 +285,16 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(300);
   await shot(page, "leaderboard-375");
 
-  // Exact Sim dossier (Berkeley campus wire 138).
+  // Exact Sim dossier — frame founder/timeline spread (distinct mobile identity).
   await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(1200);
+  const dossierM = page.locator("[data-dossier-timeline], [data-dossier-spread-mobile]").first();
+  if (await dossierM.count()) {
+    await dossierM.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.waitForTimeout(350);
+    await page.evaluate(() => window.scrollBy(0, -48));
+  }
+  await page.waitForTimeout(400);
   await shot(page, "company-sim-375");
   await page.close();
 }
