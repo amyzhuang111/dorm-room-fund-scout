@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { markerRadius, markerSizeLegend } from "@/lib/domain/marker-radius";
+import { absoluteDate } from "@/lib/domain/relative-time";
 import { sampleSurfaceCounts, type FacetCompany } from "@/lib/domain/sample-facets";
 import { MapCredit } from "./map-credit";
 import {
@@ -75,12 +76,15 @@ export function TileGlobe({
   selectedId,
   onSelect,
   className = "",
+  dataThrough = null,
 }: {
   campuses: TileCampus[];
   companies?: TileCompany[];
   selectedId?: string | null;
   onSelect: (id: string) => void;
   className?: string;
+  /** ISO from HeroStats.updatedAt / latestDataTimestamp — never invent. */
+  dataThrough?: string | null;
 }) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   const [stageHeight, setStageHeight] = useState(720);
@@ -375,19 +379,14 @@ export function TileGlobe({
         <div className="col-span-full mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-counts>
           <div className="grid items-end gap-3 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)]">
             <div className="min-w-0" data-dispatch-figure="">
-              <div className="flex items-center gap-2">
-                <span className="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center" aria-hidden>
-                  <span className="absolute inset-0 rounded-full bg-[color:var(--ember,#D96B1C)]/25" />
-                  <span className="absolute inset-[3px] rounded-full bg-[color:var(--ember,#D96B1C)]/45" />
-                  <span className="relative h-1.5 w-1.5 rounded-full bg-[color:var(--ember,#D96B1C)]" />
-                </span>
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Scout dispatch</p>
-                <span className="inline-flex items-center gap-1 rounded-sm border border-[color:var(--ember,#D96B1C)]/50 bg-[color:var(--ember,#D96B1C)]/10 px-1.5 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">
-                  <span className="relative flex h-1.5 w-1.5" aria-hidden>
-                    <span className="absolute inset-0 rounded-full bg-[color:var(--ember,#D96B1C)] opacity-40" />
-                    <span className="relative m-auto h-1 w-1 rounded-full bg-[color:var(--ember,#D96B1C)]" />
-                  </span>
-                  Live
+                <span
+                  className="inline-flex items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-1.5 py-0.5 font-mono text-[9px] tabular-nums tracking-[0.04em] text-[color:var(--fg-2,#3F465C)]"
+                  data-dispatch-snapshot=""
+                >
+                  Snapshot · {absoluteDate(dataThrough)}
                 </span>
               </div>
               <p className="mt-2 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[72px]">

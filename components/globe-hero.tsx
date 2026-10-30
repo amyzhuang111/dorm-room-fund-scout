@@ -39,7 +39,7 @@ function GlobeBlock({ stats, companies }: { stats: HeroStats; companies: TileCom
     router.push(`/?${next.toString()}#browse`);
   }
 
-  return <TileGlobe campuses={campuses} companies={companies} selectedId={selectedId} onSelect={onSelect} />;
+  return <TileGlobe campuses={campuses} companies={companies} selectedId={selectedId} onSelect={onSelect} dataThrough={stats.updatedAt} />;
 }
 
 export function GlobeHero({ stats, companies = [], showGlobe = true }: { stats: HeroStats; companies?: TileCompany[]; showGlobe?: boolean }) {
