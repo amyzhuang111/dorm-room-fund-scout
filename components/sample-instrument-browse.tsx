@@ -189,7 +189,15 @@ export function SampleInstrumentBrowse({
       {/* Col 2 — ember figure hero + ledger */}
       <div className="min-w-0" data-browse-ledger="">
         {/* Distinct hero per surface — fold language, not the fold stamp */}
-        <div className="mb-2 border-b border-[color:var(--line,#E1E5EF)] pb-2" data-browse-hero={feed}>
+        <div
+          className={`mb-2 pb-2 ${
+            pages > 1
+              ? "relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] lg:border-0 lg:border-b lg:border-[color:var(--line,#E1E5EF)] lg:px-0 lg:py-0 lg:before:hidden"
+              : "border-b border-[color:var(--line,#E1E5EF)]"
+          }`}
+          data-browse-hero={feed}
+          data-continued-chapter={pages > 1 ? "1" : undefined}
+        >
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div className="min-w-0">
               {feed === "leaderboard" && topCampus ? (
@@ -339,8 +347,20 @@ export function SampleInstrumentBrowse({
         <div className="mb-3 lg:hidden" data-mobile-browse-compose="">
           <MobileWireStrip
             companies={boardCompanies}
-            label={pages > 1 && feed === "directory" ? "Recent wire" : "Ledger wire"}
-            surface={pages > 1 && feed === "directory" ? "signals" : "browse"}
+            label={
+              feed === "leaderboard"
+                ? "Signal wire"
+                : pages > 1 && feed === "directory"
+                  ? "Recent wire"
+                  : "Ledger wire"
+            }
+            surface={
+              feed === "leaderboard"
+                ? "fold"
+                : pages > 1 && feed === "directory"
+                  ? "signals"
+                  : "browse"
+            }
           />
         </div>
 
@@ -499,9 +519,9 @@ export function SampleInstrumentBrowse({
       <MobileFilterDock
         onOpen={() => setMobileFiltersOpen(true)}
         count={boardCompanies.length}
-        caption="Narrow the ledger"
-        tone="outline"
-        kicker="Ledger filters"
+        caption={feed === "leaderboard" ? "Narrow the signal desk" : "Narrow the ledger"}
+        tone={feed === "leaderboard" ? "ember" : "outline"}
+        kicker={feed === "leaderboard" ? "Signal filters" : "Ledger filters"}
         observe="#browse"
       />
 
@@ -512,11 +532,15 @@ export function SampleInstrumentBrowse({
             <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3 py-3 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--ember,#D96B1C)]">
               <div className="flex items-end justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Ledger index</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
+                    {feed === "leaderboard" ? "Signal index" : "Ledger index"}
+                  </p>
                   <p className="mt-1 font-mono text-[44px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
                     {boardCompanies.length.toLocaleString("en-US")}
                   </p>
-                  <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the ledger</p>
+                  <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                    {feed === "leaderboard" ? "Narrow the signal desk" : "Narrow the ledger"}
+                  </p>
                   <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
                     {" with a stored signal · Status pinned"}

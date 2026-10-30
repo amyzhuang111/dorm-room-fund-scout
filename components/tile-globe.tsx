@@ -372,194 +372,264 @@ export function TileGlobe({
   const topCampus = useMemo(() => {
     return [...campuses].sort((a, b) => b.signals - a.signals || b.founders - a.founders || a.name.localeCompare(b.name))[0] ?? null;
   }, [campuses]);
+  const topDesks = useMemo(() => {
+    return [...campuses]
+      .sort((a, b) => b.signals - a.signals || b.founders - a.founders || a.name.localeCompare(b.name))
+      .slice(0, 8);
+  }, [campuses]);
 
   return (
     <div className={className} data-fold-mobile-root="">
-      {/* Shared column grid: masthead + wire + stage share one vertical rhythm */}
-      <div className="grid gap-x-3 gap-y-0 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)]">
-        <div className="col-span-full mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-counts>
-          <div className="grid items-end gap-3 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)]">
-            <div className="min-w-0" data-dispatch-figure="">
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Scout dispatch</p>
-                <span
-                  className="inline-flex items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-1.5 py-0.5 font-mono text-[9px] tabular-nums tracking-[0.04em] text-[color:var(--fg-2,#3F465C)]"
-                  data-dispatch-snapshot=""
-                >
-                  Snapshot · {absoluteDate(dataThrough)}
-                </span>
-              </div>
-              <p className="mt-2 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[72px]">
-                {liveCount.toLocaleString("en-US")}
+      {/* Full-width dual-figure masthead — newspaper banner, not a left-column stamp */}
+      <div className="mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-counts="">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Scout dispatch</p>
+          <span
+            className="inline-flex items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-1.5 py-0.5 font-mono text-[9px] tabular-nums tracking-[0.04em] text-[color:var(--fg-2,#3F465C)]"
+            data-dispatch-snapshot=""
+          >
+            Snapshot · {absoluteDate(dataThrough)}
+          </span>
+        </div>
+        <div className="mt-3 grid items-end gap-4 sm:grid-cols-2 lg:gap-8" data-dispatch-dual="">
+          <div className="min-w-0" data-dispatch-figure="">
+            <p className="mt-0 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[72px]">
+              {liveCount.toLocaleString("en-US")}
+            </p>
+            <div className="mt-2 flex items-end gap-2" aria-hidden>
+              <span className="h-px w-8 bg-[color:var(--cobalt,#2F4FD8)]" />
+              <span className="h-[3px] flex-1 max-w-[180px] bg-[color:var(--ember,#D96B1C)]" />
+            </div>
+            <p className="mt-2 text-[16px] font-semibold leading-tight tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[17px]">
+              companies forming on campus
+            </p>
+          </div>
+          {topCampus ? (
+            <div className="min-w-0 border-t border-[color:var(--line,#E1E5EF)] pt-3 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0" data-top-desk-figure="">
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
+              <p className="mt-1 font-mono text-[48px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
+                01
               </p>
-              {/* Signature underline: cobalt hairline + ember weight — magazine figure rule */}
-              <div className="mt-2 flex items-end gap-2" aria-hidden>
-                <span className="h-px w-8 bg-[color:var(--cobalt,#2F4FD8)]" />
-                <span className="h-[3px] flex-1 max-w-[180px] bg-[color:var(--ember,#D96B1C)]" />
-              </div>
-              <p className="mt-2 text-[16px] font-semibold leading-tight tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[17px]">
-                companies forming on campus
+              <p className="mt-1 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[17px]">
+                {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
+              </p>
+              <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                <span className={COUNT}>{topCampus.founders.toLocaleString("en-US")}</span>
+                {" founder names · "}
+                <span className={COUNT}>{topCampus.signals.toLocaleString("en-US")}</span>
+                {" campus signals"}
               </p>
             </div>
-            <div className="flex min-w-0 flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
-              {/* Desk-only dual figure: #1 top desk — the fold wow past a single count stamp */}
-              {topCampus ? (
-                <div
-                  className="hidden min-w-0 border-l border-[color:var(--line,#E1E5EF)] pl-4 lg:block"
-                  data-top-desk-figure=""
-                >
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
-                  <p className="mt-1 font-mono text-[48px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">
-                    01
-                  </p>
-                  <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
-                  </p>
-                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                    <span className={COUNT}>{topCampus.founders.toLocaleString("en-US")}</span>
-                    {" founder names · "}
-                    <span className={COUNT}>{topCampus.signals.toLocaleString("en-US")}</span>
-                    {" campus signals"}
-                  </p>
-                </div>
-              ) : null}
-              <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-                <p className="font-mono text-[11px] tabular-nums leading-relaxed text-[color:var(--fg-2,#3F465C)] lg:max-w-[14rem]">
-                  <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
-                  {" founder names listed"}
-                  <span className="mx-1.5 text-[color:var(--line-strong,#C5CAD8)]">·</span>
-                  <span className={COUNT} data-count="campuses-on-map">{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
-                  {" campuses on map"}
-                  {topCampus ? (
-                    <span className="lg:hidden">
-                      <span className="mx-1.5 text-[color:var(--line-strong,#C5CAD8)]">·</span>
-                      <span className="font-semibold text-[color:var(--ember,#D96B1C)]">01</span>
-                      {" desk · "}
-                      <span className="text-[color:var(--fg,#0B0E17)]">{topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}</span>
-                    </span>
-                  ) : null}
-                </p>
-                <div className="flex shrink-0 flex-wrap gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => setFiltersOpen((v) => !v)}
-                    className="hidden h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)] lg:inline-flex"
-                  >
-                    {filtersOpen ? "Hide filters" : "Filters"}
-                  </button>
-                  <a
-                    href="/ask"
-                    className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
-                  >
-                    Scout ask
-                  </a>
-                </div>
-              </div>
-            </div>
+          ) : null}
+        </div>
+        <div className="mt-3 flex flex-wrap items-end justify-between gap-2">
+          <p className="font-mono text-[11px] tabular-nums leading-relaxed text-[color:var(--fg-2,#3F465C)]">
+            <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
+            {" founder names listed"}
+            <span className="mx-1.5 text-[color:var(--line-strong,#C5CAD8)]">·</span>
+            <span className={COUNT} data-count="campuses-on-map">{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
+            {" campuses on map"}
+          </p>
+          <div className="flex shrink-0 flex-wrap gap-1.5">
+            <button
+              type="button"
+              onClick={() => setFiltersOpen((v) => !v)}
+              className="hidden h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)] lg:inline-flex"
+            >
+              {filtersOpen ? "Show desk roster" : "Filters"}
+            </button>
+            <a
+              href="/ask"
+              className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
+            >
+              Scout ask
+            </a>
           </div>
         </div>
-        {/* One strong editorial column */}
-        <aside className="hidden min-w-0 lg:block">
-          <div className="sticky top-14 space-y-2">
+      </div>
+
+      {/* Structural desk: roster | map | wire. One map stage for desk+mobile. */}
+      <div className="grid gap-3 lg:grid-cols-[minmax(220px,260px)_minmax(0,1fr)_minmax(220px,280px)]" data-fold-desk-spread="">
+        <aside className="hidden min-w-0 lg:block" data-fold-desk-left="">
+          <div className="sticky top-14 h-[min(70vh,640px)]">
             {filtersOpen ? (
-              <div className="h-[min(70vh,640px)]">
-                <FacetRail
-                  companies={companies}
-                  campuses={campuses}
-                  facets={facets}
-                  onChange={onFacetChange}
-                  sheet
-                  indexCount={liveCount}
-                  caption="Narrow the dispatch"
-                  onCampusFocus={(id) => {
-                    const campus = campuses.find((row) => row.id === id);
-                    if (campus) focus(campus);
-                  }}
-                  footer={<p>{markerSizeLegend()}</p>}
-                />
-              </div>
+              <FacetRail
+                companies={companies}
+                campuses={campuses}
+                facets={facets}
+                onChange={onFacetChange}
+                index
+                indexCount={liveCount}
+                caption="Dispatch index"
+                onCampusFocus={(id) => {
+                  const campus = campuses.find((row) => row.id === id);
+                  if (campus) focus(campus);
+                }}
+                footer={<p>{markerSizeLegend()}</p>}
+              />
             ) : (
-              <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
-                <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
-                  <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{filteredCompanies.length.toLocaleString("en-US")}</p>
+              <div
+                className="relative flex h-full min-h-0 flex-col overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+                data-desk-roster=""
+              >
+                <div className="shrink-0 border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2.5">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Desk roster</p>
+                  <p className="mt-1 font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                    {String(topDesks.length).padStart(2, "0")}
+                  </p>
+                  <p className="mt-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Top desks by campus signal</p>
+                  <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                    Ranked · {universeCounts.campusesOnMap.toLocaleString("en-US")} on map
+                  </p>
                 </div>
-                <IntelligenceBoards companies={filteredCompanies} compact surface="fold" />
+                <ol className="min-h-0 flex-1 divide-y divide-[color:var(--line,#E1E5EF)] overflow-y-auto">
+                  {topDesks.map((campus, i) => {
+                    const active = selectedId === campus.id;
+                    const label = campus.name.replace(/^University of /, "").replace(/ University$/, "");
+                    return (
+                      <li key={campus.id}>
+                        <button
+                          type="button"
+                          onClick={() => focus(campus)}
+                          className={`flex w-full items-start gap-2 px-2.5 py-2 text-left hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50 ${active ? "bg-[color:var(--ember,#D96B1C)]/8" : ""}`}
+                        >
+                          <span className="mt-0.5 w-6 shrink-0 text-right font-mono text-[14px] font-bold tabular-nums leading-none text-[color:var(--ember,#D96B1C)]">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
+                            <span className="mt-0.5 block font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                              <span className={COUNT}>{campus.founders.toLocaleString("en-US")}</span>
+                              {" founders · "}
+                              <span className={COUNT}>{campus.signals.toLocaleString("en-US")}</span>
+                              {" signals"}
+                            </span>
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ol>
               </div>
             )}
           </div>
         </aside>
-        <div className="min-w-0">
-      <div className="relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.04)]" style={{ height: stageHeight }}>
-        <div ref={mapNode} className="h-full w-full" />
-        {/* Signature: dispatch scale card — cobalt pins / ember top desk */}
-        <div className="pointer-events-none absolute left-2.5 top-2.5 z-10 hidden rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1.5 backdrop-blur-[2px] lg:block" data-dispatch-scale="">
-          <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Dispatch scale</p>
-          <div className="mt-1 flex items-center gap-3 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-            <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--cobalt,#2F4FD8)]" aria-hidden />field</span>
-            <span className="inline-flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />top desk</span>
-          </div>
-        </div>
-        {/* Static mid-animation feel: orbit rings + top-desk callout (fold signature). */}
-        <div className="pointer-events-none absolute right-[18%] top-[28%] z-10 hidden lg:block" data-dispatch-orbit="" aria-hidden>
-          <div className="relative h-16 w-16">
-            <span className="absolute inset-0 rounded-full border border-dashed border-[color:var(--ember,#D96B1C)]/55" />
-            <span className="absolute inset-2 rounded-full border border-[color:var(--ember,#D96B1C)]/35" />
-            <span className="absolute inset-4 rounded-full border border-[color:var(--ember,#D96B1C)]/70" />
-            <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color:var(--ember,#D96B1C)]" />
-            <span className="absolute -right-1 top-2 h-1.5 w-1.5 rounded-full bg-[color:var(--ember,#D96B1C)]/80" />
-          </div>
-        </div>
-        {topCampus ? (
-          <div className="pointer-events-none absolute bottom-3 right-3 z-10 hidden max-w-[220px] overflow-hidden rounded-sm border border-[color:var(--ember,#D96B1C)]/45 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_1px_0_rgba(217,107,28,0.15)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)] lg:block" data-top-desk-callout="">
-            <div className="px-2.5 py-1.5 pl-3">
-              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
-              <p className="mt-0.5 flex items-baseline gap-2">
-                <span className="font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">01</span>
-                <span className="text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                  {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
-                </span>
-              </p>
-              <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                <span className={COUNT}>{topCampus.founders.toLocaleString("en-US")}</span>
-                {" founder names · "}
-                <span className={COUNT}>{topCampus.signals.toLocaleString("en-US")}</span>
-                {" signals"}
+
+        <div className="min-w-0" data-fold-desk-map="">
+          <div
+            className="relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.04)]"
+            style={{ height: stageHeight }}
+          >
+            <div ref={mapNode} className="h-full w-full" />
+            <div className="pointer-events-none absolute left-2.5 top-2.5 z-10 hidden rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1.5 backdrop-blur-[2px] lg:block" data-dispatch-scale="">
+              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Dispatch scale</p>
+              <div className="mt-1 flex items-center gap-3 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--cobalt,#2F4FD8)]" aria-hidden />field</span>
+                <span className="inline-flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />top desk</span>
+              </div>
+            </div>
+            <div className="pointer-events-none absolute right-[18%] top-[28%] z-10 hidden lg:block" data-dispatch-orbit="" aria-hidden>
+              <div className="relative h-16 w-16">
+                <span className="absolute inset-0 rounded-full border border-dashed border-[color:var(--ember,#D96B1C)]/55" />
+                <span className="absolute inset-2 rounded-full border border-[color:var(--ember,#D96B1C)]/35" />
+                <span className="absolute inset-4 rounded-full border border-[color:var(--ember,#D96B1C)]/70" />
+                <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color:var(--ember,#D96B1C)]" />
+                <span className="absolute -right-1 top-2 h-1.5 w-1.5 rounded-full bg-[color:var(--ember,#D96B1C)]/80" />
+              </div>
+            </div>
+            {topCampus ? (
+              <div className="pointer-events-none absolute bottom-3 right-3 z-10 hidden max-w-[220px] overflow-hidden rounded-sm border border-[color:var(--ember,#D96B1C)]/45 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_1px_0_rgba(217,107,28,0.15)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)] lg:block" data-top-desk-callout="">
+                <div className="px-2.5 py-1.5 pl-3">
+                  <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
+                  <p className="mt-0.5 flex items-baseline gap-2">
+                    <span className="font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">01</span>
+                    <span className="text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                      {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
+                    </span>
+                  </p>
+                  <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    <span className={COUNT}>{topCampus.founders.toLocaleString("en-US")}</span>
+                    {" founder names · "}
+                    <span className={COUNT}>{topCampus.signals.toLocaleString("en-US")}</span>
+                    {" signals"}
+                  </p>
+                </div>
+              </div>
+            ) : null}
+            <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 hidden -translate-x-1/2 lg:block" data-map-credit>
+              <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
+                <MapCredit />
               </p>
             </div>
+            {hover ? (
+              <div
+                className="pointer-events-none absolute z-30 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-1.5 text-left text-[color:var(--fg,#0B0E17)]"
+                style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}
+              >
+                <p className="text-[13px] font-medium leading-4">{hover.name}</p>
+                <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
+                  <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> founders
+                  {" · "}
+                  <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> signals
+                </p>
+              </div>
+            ) : null}
           </div>
-        ) : null}
-        <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 hidden -translate-x-1/2 lg:block" data-map-credit>
-          <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
-            <MapCredit />
-          </p>
         </div>
-        {hover ? (
-          <div
-            className="pointer-events-none absolute z-30 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-1.5 text-left text-[color:var(--fg,#0B0E17)]"
-            style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}
-          >
-            <p className="text-[13px] font-medium leading-4">{hover.name}</p>
-            <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
-              <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> founders
-              {" · "}
-              <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> signals
-            </p>
+
+        <aside className="hidden min-w-0 lg:block" data-fold-desk-wire="">
+          <div className="sticky top-14">
+            <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
+              <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Dispatch wire</p>
+                <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{filteredCompanies.length.toLocaleString("en-US")}</p>
+              </div>
+              <IntelligenceBoards companies={filteredCompanies} compact surface="fold" />
+            </div>
           </div>
-        ) : null}
+        </aside>
       </div>
-        </div>
-      </div>
-      {/* Mobile-native: figure above, map band, swipe WIRE digest, bottom filter dock */}
+
       <div
         className="mt-3 space-y-3 lg:hidden"
-        data-fold-counts-mobile
+        data-fold-counts-mobile=""
         data-mobile-fold-compose=""
         style={{ paddingBottom: "calc(5.75rem + env(safe-area-inset-bottom, 0px))" }}
       >
+        <div data-mobile-desk-roster="">
+          <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Desk roster</p>
+            <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Swipe · top desks</p>
+          </div>
+          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {topDesks.slice(0, 5).map((campus, i) => {
+              const label = campus.name.replace(/^University of /, "").replace(/ University$/, "");
+              return (
+                <button
+                  key={campus.id}
+                  type="button"
+                  onClick={() => focus(campus)}
+                  className="relative w-[148px] shrink-0 overflow-hidden rounded-none border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] p-2.5 text-left before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+                >
+                  <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+                    {String(i + 1).padStart(2, "0")} desk
+                  </p>
+                  <p className="mt-1.5 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                    {campus.signals.toLocaleString("en-US")}
+                  </p>
+                  <p className="mt-1.5 line-clamp-2 text-[12px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</p>
+                  <p className="mt-1 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                    {campus.founders.toLocaleString("en-US")} founders
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
         <MobileWireStrip companies={filteredCompanies} label="Dispatch wire" surface="fold" />
       </div>
+
       <MobileFilterDock
         onOpen={() => setMobileFiltersOpen(true)}
         count={liveCount}
