@@ -96,6 +96,11 @@ export function SampleInstrumentBrowse({
     return [...campuses].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))[0] ?? null;
   }, [campuses]);
   const topSector = useMemo(() => sectorMix(boardCompanies)[0] ?? null, [boardCompanies]);
+  /** Continued-view insight: matching companies with ≥1 stored signal (not pagination). */
+  const signaledMatch = useMemo(
+    () => boardCompanies.filter((c) => (c.signals ?? 0) > 0).length,
+    [boardCompanies],
+  );
   const wireSurface = feed === "leaderboard" ? "signals" : "browse";
 
   function commitFacet(next: FacetState) {
@@ -149,16 +154,35 @@ export function SampleInstrumentBrowse({
     >
       {/* Col 1 — persistent ruled index (magazine TOC), not a sheet over content */}
       <aside className="hidden min-w-0 lg:block" data-browse-index="">
-        <div className="sticky top-14 h-[min(78vh,720px)]">
-          <FacetRail
-            companies={companies}
-            campuses={campuses}
-            facets={facets}
-            onChange={commitFacet}
-            index
-            indexCount={boardCompanies.length}
-            caption={feed === "leaderboard" ? "Signal index" : "Ledger index"}
-          />
+        <div className="sticky top-14 space-y-2">
+          {/* Ember beat for open Contents — trails 353/01/138 hero pages without twinning them */}
+          <div
+            className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+            data-index-signal-beat=""
+          >
+            <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+              {feed === "leaderboard" ? "Signal desk" : "Matching · with signal"}
+            </p>
+            <p className="mt-1 flex items-baseline gap-2">
+              <span className="font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                {signaledMatch.toLocaleString("en-US")}
+              </span>
+              <span className="font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                of {boardCompanies.length.toLocaleString("en-US")} matching
+              </span>
+            </p>
+          </div>
+          <div className="h-[min(70vh,640px)]">
+            <FacetRail
+              companies={companies}
+              campuses={campuses}
+              facets={facets}
+              onChange={commitFacet}
+              index
+              indexCount={boardCompanies.length}
+              caption={feed === "leaderboard" ? "Signal index" : "Ledger index"}
+            />
+          </div>
         </div>
       </aside>
 
@@ -185,21 +209,24 @@ export function SampleInstrumentBrowse({
               ) : topSector ? (
                 <>
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
-                    {pages > 1 ? "Scout ledger · continued" : "Scout ledger · top sector"}
+                    {pages > 1 ? "Scout ledger · signal desk" : "Scout ledger · top sector"}
                   </p>
                   <p className="mt-1 font-mono text-[56px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)] sm:text-[56px] lg:text-[64px]">
                     <span className="text-[color:var(--ember,#D96B1C)]">
-                      {pages > 1 ? String(cards.length).padStart(2, "0") : topSector.count.toLocaleString("en-US")}
+                      {pages > 1
+                        ? signaledMatch.toLocaleString("en-US")
+                        : topSector.count.toLocaleString("en-US")}
                     </span>
                   </p>
                   <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
                     {pages > 1 ? (
                       <>
-                        rows on desk
+                        matching companies with a stored signal
                         {topSector.label ? (
                           <>
                             {" · "}
                             {topSector.label}
+                            {" still leads"}
                           </>
                         ) : null}
                       </>
@@ -220,16 +247,19 @@ export function SampleInstrumentBrowse({
                     )}
                   </p>
                   <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                    {total.toLocaleString("en-US")}
-                    {" on the ledger · "}
                     {pages > 1 ? (
                       <>
-                        {"rows 01–"}
+                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
+                        {" matching · rows 01–"}
                         {String(cards.length).padStart(2, "0")}
-                        {" loaded"}
+                        {" on desk · "}
+                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{(total - cards.length).toLocaleString("en-US")}</span>
+                        {" still on the shelf"}
                       </>
                     ) : (
                       <>
+                        {total.toLocaleString("en-US")}
+                        {" on the ledger · "}
                         {subline}
                         {" · "}
                         <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
@@ -334,16 +364,16 @@ export function SampleInstrumentBrowse({
                       {feed === "leaderboard" ? "Signal desk continued" : "Ledger continued"}
                     </p>
                     <p className="mt-0.5 hidden font-mono text-[10px] text-[color:var(--fg-3,#5C647A)] sm:block">Section rules every 14 rows · end mark below</p>
-                    <p className="mt-0.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)] sm:hidden">End mark below · page on desk</p>
+                    <p className="mt-0.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)] sm:hidden">
+                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
+                      {" with signal · end mark below"}
+                    </p>
                   </div>
-                  <p className="shrink-0 text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <p className="shrink-0 text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-continued-insight="">
                     <span className="block text-[18px] font-bold leading-none tracking-tight text-[color:var(--ember,#D96B1C)] sm:text-[20px]">
-                      {String(cards.length).padStart(2, "0")}
+                      {signaledMatch.toLocaleString("en-US")}
                     </span>
-                    <span className="mt-0.5 block text-[9px] uppercase tracking-[0.1em]">
-                      {"of "}
-                      {total.toLocaleString("en-US")}
-                    </span>
+                    <span className="mt-0.5 block text-[9px] uppercase tracking-[0.1em]">with signal</span>
                   </p>
                 </div>
               </div>
@@ -393,14 +423,14 @@ export function SampleInstrumentBrowse({
                   </p>
                   <span className="h-[2px] flex-1 bg-[color:var(--ember,#D96B1C)]/60" aria-hidden />
                 </div>
-                <p className="mt-2 text-center font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)] sm:text-[32px]">
-                  {String(cards.length).padStart(2, "0")}
+                <p className="mt-2 text-center font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)] sm:text-[32px]" data-shelf-remaining="">
+                  {(total - cards.length).toLocaleString("en-US")}
                 </p>
                 <p className="mt-1.5 text-center font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                  Through row {String(cards.length).padStart(2, "0")}
-                  {" · "}
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{(total - cards.length).toLocaleString("en-US")}</span>
-                  {" still on the shelf"}
+                  still on the shelf · through row {String(cards.length).padStart(2, "0")}
+                  {" of "}
+                  {total.toLocaleString("en-US")}
+                  {" matching"}
                 </p>
               </div>
             ) : null}
@@ -486,11 +516,14 @@ export function SampleInstrumentBrowse({
               <div className="flex items-end justify-between gap-3">
                 <div className="min-w-0">
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Ledger index</p>
-                  <p className="mt-1 font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+                  <p className="mt-1 font-mono text-[44px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
                     {boardCompanies.length.toLocaleString("en-US")}
                   </p>
                   <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the ledger</p>
-                  <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">Status pinned · ruled sheet</p>
+                  <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
+                    {" with a stored signal · Status pinned"}
+                  </p>
                 </div>
                 <button
                   type="button"

@@ -371,12 +371,15 @@ export function FacetRail({
             <p className={`font-mono text-[10px] uppercase ${sheet || dense || index ? "tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]" : "tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]"}`}>
               {index ? "Contents" : "Scout filters"}
             </p>
-            {index && indexCount != null ? (
-              <p className="mt-1.5 font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+            {(index || sheet) && indexCount != null ? (
+              <p
+                className={`mt-1.5 font-mono font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] ${index ? "text-[44px]" : "text-[36px]"}`}
+                data-facet-figure=""
+              >
                 {indexCount.toLocaleString("en-US")}
               </p>
             ) : null}
-            <p className={`mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] ${index && indexCount != null ? "mt-1.5" : ""}`}>{caption}</p>
+            <p className={`mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] ${(index || sheet) && indexCount != null ? "mt-1.5" : ""}`}>{caption}</p>
             {sheet || index ? (
               <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Status · Year · Sector · Campus</p>
             ) : null}

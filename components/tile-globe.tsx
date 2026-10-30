@@ -402,36 +402,59 @@ export function TileGlobe({
                 companies forming on campus
               </p>
             </div>
-            <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-              <p className="font-mono text-[11px] tabular-nums leading-relaxed text-[color:var(--fg-2,#3F465C)]">
-                <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
-                {" founder names listed"}
-                <span className="mx-1.5 text-[color:var(--line-strong,#C5CAD8)]">·</span>
-                <span className={COUNT} data-count="campuses-on-map">{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
-                {" campuses on map"}
-                {topCampus ? (
-                  <>
-                    <span className="mx-1.5 text-[color:var(--line-strong,#C5CAD8)]">·</span>
-                    <span className="font-semibold text-[color:var(--ember,#D96B1C)]">01</span>
-                    {" desk · "}
-                    <span className="text-[color:var(--fg,#0B0E17)]">{topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}</span>
-                  </>
-                ) : null}
-              </p>
-              <div className="flex shrink-0 flex-wrap gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => setFiltersOpen((v) => !v)}
-                  className="hidden h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)] lg:inline-flex"
+            <div className="flex min-w-0 flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
+              {/* Desk-only dual figure: #1 top desk — the fold wow past a single count stamp */}
+              {topCampus ? (
+                <div
+                  className="hidden min-w-0 border-l border-[color:var(--line,#E1E5EF)] pl-4 lg:block"
+                  data-top-desk-figure=""
                 >
-                  {filtersOpen ? "Hide filters" : "Filters"}
-                </button>
-                <a
-                  href="/ask"
-                  className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
-                >
-                  Scout ask
-                </a>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
+                  <p className="mt-1 font-mono text-[48px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">
+                    01
+                  </p>
+                  <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                    {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
+                  </p>
+                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    <span className={COUNT}>{topCampus.founders.toLocaleString("en-US")}</span>
+                    {" founder names · "}
+                    <span className={COUNT}>{topCampus.signals.toLocaleString("en-US")}</span>
+                    {" campus signals"}
+                  </p>
+                </div>
+              ) : null}
+              <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <p className="font-mono text-[11px] tabular-nums leading-relaxed text-[color:var(--fg-2,#3F465C)] lg:max-w-[14rem]">
+                  <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
+                  {" founder names listed"}
+                  <span className="mx-1.5 text-[color:var(--line-strong,#C5CAD8)]">·</span>
+                  <span className={COUNT} data-count="campuses-on-map">{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
+                  {" campuses on map"}
+                  {topCampus ? (
+                    <span className="lg:hidden">
+                      <span className="mx-1.5 text-[color:var(--line-strong,#C5CAD8)]">·</span>
+                      <span className="font-semibold text-[color:var(--ember,#D96B1C)]">01</span>
+                      {" desk · "}
+                      <span className="text-[color:var(--fg,#0B0E17)]">{topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}</span>
+                    </span>
+                  ) : null}
+                </p>
+                <div className="flex shrink-0 flex-wrap gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setFiltersOpen((v) => !v)}
+                    className="hidden h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)] lg:inline-flex"
+                  >
+                    {filtersOpen ? "Hide filters" : "Filters"}
+                  </button>
+                  <a
+                    href="/ask"
+                    className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
+                  >
+                    Scout ask
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -447,6 +470,7 @@ export function TileGlobe({
                   facets={facets}
                   onChange={onFacetChange}
                   sheet
+                  indexCount={liveCount}
                   caption="Narrow the dispatch"
                   onCampusFocus={(id) => {
                     const campus = campuses.find((row) => row.id === id);
@@ -488,15 +512,22 @@ export function TileGlobe({
           </div>
         </div>
         {topCampus ? (
-          <div className="pointer-events-none absolute bottom-3 right-3 z-10 hidden max-w-[200px] rounded-sm border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)]/95 px-2.5 py-1.5 shadow-[0_1px_0_rgba(217,107,28,0.15)] backdrop-blur-[2px] lg:block" data-top-desk-callout="">
-            <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
-            <p className="mt-0.5 text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-              {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
-            </p>
-            <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              <span className={COUNT}>{topCampus.founders.toLocaleString("en-US")}</span>
-              {" founder names"}
-            </p>
+          <div className="pointer-events-none absolute bottom-3 right-3 z-10 hidden max-w-[220px] overflow-hidden rounded-sm border border-[color:var(--ember,#D96B1C)]/45 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_1px_0_rgba(217,107,28,0.15)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)] lg:block" data-top-desk-callout="">
+            <div className="px-2.5 py-1.5 pl-3">
+              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
+              <p className="mt-0.5 flex items-baseline gap-2">
+                <span className="font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">01</span>
+                <span className="text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                  {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
+                </span>
+              </p>
+              <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                <span className={COUNT}>{topCampus.founders.toLocaleString("en-US")}</span>
+                {" founder names · "}
+                <span className={COUNT}>{topCampus.signals.toLocaleString("en-US")}</span>
+                {" signals"}
+              </p>
+            </div>
           </div>
         ) : null}
         <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 hidden -translate-x-1/2 lg:block" data-map-credit>
@@ -541,13 +572,14 @@ export function TileGlobe({
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
           <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
           <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col overflow-hidden rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
-            <div className="relative flex items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3 py-2.5">
+            <div className="relative flex items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3 py-3 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--ember,#D96B1C)]">
               <div className="min-w-0">
                 <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout filters · {shown.length} campuses</p>
-                <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the dispatch</p>
+                <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">{liveCount.toLocaleString("en-US")}</p>
+                <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the dispatch</p>
                 <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Status · Year · Sector · Campus</p>
               </div>
-              <button type="button" onClick={() => setMobileFiltersOpen(false)} className="inline-flex h-8 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white">Done</button>
+              <button type="button" onClick={() => setMobileFiltersOpen(false)} className="inline-flex h-9 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white">Done</button>
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
               <div className="h-[min(70dvh,540px)]">
