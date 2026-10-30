@@ -74,7 +74,21 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(4500);
   await shot(page, "fold-1440");
   await openFilters(page);
-  await page.waitForTimeout(800);
+  await page.waitForTimeout(500);
+  // Real filtered-slice hero: Founded in 2026 (213) — peak on this slice, not global 369.
+  const founded = page.locator('[data-facet-rail="scout"] [data-facet="flag"]').filter({ hasText: /Founded in 2026/i }).first();
+  if (await founded.count()) {
+    await founded.click({ force: true });
+    await page.waitForTimeout(900);
+  }
+  // Facet click can scroll the rail; pin chronograph hero back into the viewport.
+  const chrono = page.locator("[data-fold-chronograph]").first();
+  if (await chrono.count()) {
+    await chrono.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.waitForTimeout(200);
+    await page.evaluate(() => window.scrollBy(0, -72));
+    await page.waitForTimeout(300);
+  }
   await shot(page, "fold-filters-1440");
 
   await page.goto(`${BASE}/?sample=1#browse`, { waitUntil: "networkidle", timeout: 90000 });

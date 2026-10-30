@@ -17,6 +17,8 @@ import {
   MobileWireStrip,
   PANEL,
   ScoutChronograph,
+  chronographCaption,
+  signalChronographDetail,
   sectorMix,
   type FacetState,
 } from "./sample-instrument";
@@ -107,6 +109,8 @@ export function SampleInstrumentBrowse({
   /** Visible page / rank-band / loaded-end slice for chronograph (not the global 369). */
   const pageSlice = useMemo(() => cards as FacetCompany[], [cards]);
   const contentsUnfiltered = boardCompanies.length === companies.length;
+  const contentsChrono = useMemo(() => signalChronographDetail(boardCompanies), [boardCompanies]);
+
   const wireSurface = feed === "leaderboard" ? "signals" : "browse";
 
   function commitFacet(next: FacetState) {
@@ -192,10 +196,10 @@ export function SampleInstrumentBrowse({
             companies={boardCompanies}
             variant="hero"
             kicker={feed === "leaderboard" ? "Signal chronograph · Contents" : "Ledger chronograph · Contents"}
-            lead={contentsUnfiltered ? "earlier" : "peak"}
+            lead={contentsUnfiltered ? "monthUnknown" : "peak"}
             reading={
               contentsUnfiltered
-                ? `Contents window · ${boardCompanies.length.toLocaleString("en-US")} matching · open a filter for a slice`
+                ? `Contents · ${boardCompanies.length.toLocaleString("en-US")} matching · month unknown vs earlier split`
                 : `Filtered Contents · ${boardCompanies.length.toLocaleString("en-US")} matching · ${quietMatch.toLocaleString("en-US")} quiet`
             }
           />
@@ -681,10 +685,10 @@ export function SampleInstrumentBrowse({
                   companies={boardCompanies}
                   variant="hero"
                   kicker={feed === "leaderboard" ? "Signal chronograph · filters" : "Ledger chronograph · filters"}
-                  lead={contentsUnfiltered ? "earlier" : "peak"}
+                  lead={contentsUnfiltered ? "monthUnknown" : "peak"}
                   reading={
                     contentsUnfiltered
-                      ? `Filter sheet · outside window · ${quietMatch.toLocaleString("en-US")} quiet`
+                      ? `Filter sheet · ${chronographCaption(contentsChrono)} · pick a slice`
                       : `Filtered Contents · ${boardCompanies.length.toLocaleString("en-US")} matching · ${quietMatch.toLocaleString("en-US")} quiet`
                   }
                 />

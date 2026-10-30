@@ -15,6 +15,8 @@ import {
   MobileWireStrip,
   PANEL,
   ScoutChronograph,
+  signalChronographDetail,
+  chronographCaption,
   type FacetState,
 } from "./sample-instrument";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -371,6 +373,43 @@ export function TileGlobe({
     [filteredCompanies],
   );
   const quietLive = liveCount - signaledLive;
+  const facetsActive = useMemo(() => {
+    const f = facets;
+    return Boolean(
+      f.query.trim() ||
+        f.sector ||
+        f.sectorMissing ||
+        f.kind ||
+        f.stage ||
+        f.campus ||
+        f.country ||
+        f.recency ||
+        f.foundedYear != null ||
+        f.yearMissing ||
+        f.status ||
+        f.flag ||
+        f.hqRegion,
+    );
+  }, [facets]);
+  const filterSliceLabel = useMemo(() => {
+    if (facets.flag === "new") return "Founded in 2026";
+    if (facets.flag === "signaled") return "Active this month";
+    if (facets.flag === "funded") return "Raised funding";
+    if (facets.flag === "founders") return "Has named founders";
+    if (facets.sector) return facets.sector;
+    if (facets.status) return facets.status;
+    if (facets.campus) {
+      const campus = campuses.find((row) => row.id === facets.campus);
+      return campus ? campus.name.replace(/^University of /, "").replace(/ University$/, "") : "Campus";
+    }
+    if (facets.foundedYear != null) return `Founded ${facets.foundedYear}`;
+    if (facets.hqRegion) return facets.hqRegion;
+    if (facets.query.trim()) return `Search “${facets.query.trim()}”`;
+    return "Filtered slice";
+  }, [facets, campuses]);
+
+  const universeChrono = useMemo(() => signalChronographDetail(companies), [companies]);
+
   // Masthead founders/campuses match the sample strip (universe totals via sampleSurfaceCounts),
   // not the filtered map/facet slice — so strip and fold data-count nodes never diverge.
   const universeCounts = sampleSurfaceCounts(companies, campuses);
@@ -455,40 +494,75 @@ export function TileGlobe({
         </div>
       </div>
 
-      {/* Scout Chronograph — full-width signal timeline (unifying editorial system) */}
-      <div className="mb-3" data-fold-chronograph="">
-        <ScoutChronograph
-          companies={filteredCompanies}
-          variant="hero"
-          kicker="Scout chronograph · campus signals"
-          reading={
-            filtersOpen
-              ? `Filtered dispatch · ${liveCount.toLocaleString("en-US")} matching · ${quietLive.toLocaleString("en-US")} quiet`
-              : `Full dispatch · ${liveCount.toLocaleString("en-US")} companies · ${quietLive.toLocaleString("en-US")} quiet`
-          }
-        />
+      {/* Scout Chronograph — full-width. Desk: global 369. Filters open + facet: filtered-slice hero. */}
+      <div className="mb-3" data-fold-chronograph="" data-fold-filters-slice={filtersOpen && facetsActive ? "1" : undefined}>
+        {filtersOpen && !facetsActive ? (
+          <div
+            className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] sm:px-4"
+            data-fold-filter-invite=""
+          >
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Filtered chronograph · pick a slice</p>
+            <div className="mt-2 grid grid-cols-2 gap-3 sm:max-w-md">
+              <div>
+                <p className="font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[40px]">
+                  {universeChrono.earlierValid.toLocaleString("en-US")}
+                </p>
+                <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">earlier than this window</p>
+              </div>
+              <div>
+                <p className="font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--cobalt,#2F4FD8)] sm:text-[40px]">
+                  {universeChrono.undatedMonth.toLocaleString("en-US")}
+                </p>
+                <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">month unknown</p>
+              </div>
+            </div>
+            <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              {chronographCaption(universeChrono)}
+              {" · "}
+              {universeChrono.inWindow.toLocaleString("en-US")}
+              {" in window"}
+            </p>
+            <p className="mt-1 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
+              Open a flag or sector in Contents for a real filtered-slice hero
+            </p>
+          </div>
+        ) : (
+          <ScoutChronograph
+            companies={filteredCompanies}
+            variant="hero"
+            kicker={
+              filtersOpen && facetsActive
+                ? `Filtered chronograph · ${filterSliceLabel}`
+                : "Scout chronograph · campus signals"
+            }
+            reading={
+              filtersOpen && facetsActive
+                ? `Filtered slice · ${liveCount.toLocaleString("en-US")} matching · ${quietLive.toLocaleString("en-US")} quiet · peak on this slice`
+                : `Full dispatch · ${liveCount.toLocaleString("en-US")} companies · ${quietLive.toLocaleString("en-US")} quiet`
+            }
+          />
+        )}
       </div>
 
-      {/* Structural desk: chronograph folio | map | wire. One map stage for desk+mobile. */}
+      {/* Structural desk: chronograph folio | map | wire. Filters open: Contents | map | wire. */}
       <div className="grid gap-3 lg:grid-cols-[minmax(220px,260px)_minmax(0,1fr)_minmax(220px,280px)]" data-fold-desk-spread="">
         <aside className="hidden min-w-0 lg:block" data-fold-desk-left="">
           <div className="sticky top-14 h-[min(78vh,720px)]">
             {filtersOpen ? (
               <div className="flex h-full min-h-0 flex-col gap-2" data-fold-filters-index="">
-                {/* Narrow-column hero (compact scale) — full-width hero above already carries filtered reading. */}
-                <div className="shrink-0" data-fold-filter-chrono="">
-                  <ScoutChronograph
-                    companies={filteredCompanies}
-                    variant="compact"
-                    kicker="Filtered chronograph"
-                    lead={liveCount === companies.length ? "earlier" : "peak"}
-                    reading={
-                      liveCount === companies.length
-                        ? `Outside window · ${quietLive.toLocaleString("en-US")} quiet · open a filter for a slice`
-                        : `Narrow slice · ${liveCount.toLocaleString("en-US")} matching · ${quietLive.toLocaleString("en-US")} quiet`
-                    }
-                  />
-                </div>
+                {facetsActive ? (
+                  <div
+                    className="shrink-0 relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+                    data-fold-filter-slice-pin=""
+                  >
+                    <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Slice on</p>
+                    <p className="mt-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{filterSliceLabel}</p>
+                    <p className="mt-0.5 font-mono text-[20px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                      {liveCount.toLocaleString("en-US")}
+                    </p>
+                    <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">matching</p>
+                  </div>
+                ) : null}
                 <div className="min-h-0 flex-1">
                   <FacetRail
                     companies={companies}
@@ -634,7 +708,12 @@ export function TileGlobe({
           companies={filteredCompanies}
           variant="hero"
           kicker="Scout chronograph"
-          reading={`Mobile dispatch · ${liveCount.toLocaleString("en-US")} companies · ${quietLive.toLocaleString("en-US")} quiet`}
+          lead={facetsActive ? "peak" : "monthUnknown"}
+          reading={
+            facetsActive
+              ? `Mobile filtered · ${liveCount.toLocaleString("en-US")} matching · ${quietLive.toLocaleString("en-US")} quiet`
+              : `Mobile dispatch · ${chronographCaption(universeChrono)} · ${quietLive.toLocaleString("en-US")} quiet`
+          }
         />
         <div data-mobile-desk-roster="">
           <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">

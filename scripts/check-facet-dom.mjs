@@ -9,10 +9,11 @@ const TOTAL = 2513;
 /** Directory sampleSurfaceCounts.foundersListed / campusesOnMap — must match strip + fold. */
 const EXPECTED_FOUNDERS_LISTED = 2766;
 const EXPECTED_CAMPUSES_ON_MAP = 74;
-/** Chronograph honesty: last-9 window + Earlier bucket = dated (signals with latestSignalAt). */
+/** Chronograph honesty: window + earlierValid + undatedMonth = dated (verified from loadDirectory). */
 const EXPECTED_CHRONO_WINDOW = 588;
-const EXPECTED_CHRONO_EARLIER = 47; // 13 pre-window ym + 34 month -00
-const EXPECTED_CHRONO_DATED = 635; // 588 + 47
+const EXPECTED_CHRONO_EARLIER = 13; // pre-window with real month
+const EXPECTED_CHRONO_MONTH_UNKNOWN = 34; // e.g. 2026-00-00 — year only, not "earlier"
+const EXPECTED_CHRONO_DATED = 635; // 588 + 13 + 34
 const EXPECTED_CHRONO_PEAK = 369;
 const EXPECTED_CHRONO_PEAK_MONTH = "2026-09";
 
@@ -77,10 +78,40 @@ function sumRows(rows) {
   return { sum, parts };
 }
 
+async function readChrono(page) {
+  return page.evaluate(() => {
+    const root =
+      document.querySelector("[data-fold-chronograph] [data-scout-chronograph]") ||
+      document.querySelector('[data-scout-chronograph="hero"]') ||
+      document.querySelector("[data-scout-chronograph]");
+    if (!root) return null;
+    return {
+      peak: Number(root.getAttribute("data-chrono-peak") || 0),
+      peakMonth: root.getAttribute("data-chrono-peak-month") || "",
+      dated: Number(root.getAttribute("data-chrono-dated") || 0),
+      earlier: Number(root.getAttribute("data-chrono-earlier") || 0),
+      monthUnknown: Number(root.getAttribute("data-chrono-month-unknown") || 0),
+      inWindow: Number(root.getAttribute("data-chrono-window") || 0),
+      lead: root.getAttribute("data-chrono-lead") || "",
+      caption: (root.querySelector("[data-chrono-caption]")?.textContent || root.textContent || "").replace(/\s+/g, " ").trim(),
+      hasEarlierBar:
+        Boolean(root.querySelector('[title^="Earlier"], [title*="Earlier:"], [data-chrono-bar="earlier"]')) ||
+        /\bEar\b/.test(root.textContent || "") ||
+        /\bearlier\b/i.test(root.textContent || ""),
+      hasMonthUnknownBar:
+        Boolean(root.querySelector('[title*="Month unknown"], [data-chrono-bar="month-unknown"]')) ||
+        /\bUnk\b/.test(root.textContent || "") ||
+        /month unknown/i.test(root.textContent || ""),
+    };
+  });
+}
+
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 await page.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
 await page.waitForTimeout(1500);
+// Chronograph lives on the closed fold; filters-open invite replaces it — read honesty first.
+const chrono = await readChrono(page);
 await openFilters(page);
 await page.waitForTimeout(400);
 const picked = await pickRail(page);
@@ -148,25 +179,6 @@ const fold = await page.evaluate(() => {
   const campuses = root.querySelector('[data-count="campuses-on-map"]')?.textContent?.replace(/,/g, "");
   return { founders: Number(founders), campuses: Number(campuses) };
 });
-const chrono = await page.evaluate(() => {
-  const root =
-    document.querySelector("[data-fold-chronograph] [data-scout-chronograph]") ||
-    document.querySelector("[data-scout-chronograph=\"hero\"]") ||
-    document.querySelector("[data-scout-chronograph]");
-  if (!root) return null;
-  return {
-    peak: Number(root.getAttribute("data-chrono-peak") || 0),
-    peakMonth: root.getAttribute("data-chrono-peak-month") || "",
-    dated: Number(root.getAttribute("data-chrono-dated") || 0),
-    earlier: Number(root.getAttribute("data-chrono-earlier") || 0),
-    inWindow: Number(root.getAttribute("data-chrono-window") || 0),
-    lead: root.getAttribute("data-chrono-lead") || "",
-    hasEarlierBar: Boolean(root.querySelector('[title^="Earlier"], [title*="Earlier:"]')) ||
-      /\bEar\b/.test(root.textContent || "") ||
-      /earlier/i.test(root.textContent || ""),
-  };
-});
-
 const report = {
   strip,
   fold,
@@ -213,11 +225,17 @@ const report = {
     moreObvious: moreLabelsBefore.some((l) => /more sectors/i.test(l)) && moreLabelsBefore.some((l) => /more cities/i.test(l)),
     chronographPeak369: chrono != null && chrono.peak === EXPECTED_CHRONO_PEAK && chrono.peakMonth === EXPECTED_CHRONO_PEAK_MONTH,
     chronographWindow588: chrono != null && chrono.inWindow === EXPECTED_CHRONO_WINDOW,
-    chronographEarlier47: chrono != null && chrono.earlier === EXPECTED_CHRONO_EARLIER,
+    chronographEarlier13: chrono != null && chrono.earlier === EXPECTED_CHRONO_EARLIER,
+    chronographMonthUnknown34: chrono != null && chrono.monthUnknown === EXPECTED_CHRONO_MONTH_UNKNOWN,
     chronographDated635: chrono != null && chrono.dated === EXPECTED_CHRONO_DATED,
-    chronographBarsSumDated: chrono != null && chrono.inWindow + chrono.earlier === chrono.dated,
-    chronographNoGap: chrono != null && chrono.inWindow + chrono.earlier === EXPECTED_CHRONO_DATED,
+    chronographBarsSumDated:
+      chrono != null && chrono.inWindow + chrono.earlier + chrono.monthUnknown === chrono.dated,
+    chronographNoGap:
+      chrono != null &&
+      chrono.inWindow + chrono.earlier + chrono.monthUnknown === EXPECTED_CHRONO_DATED &&
+      EXPECTED_CHRONO_WINDOW + EXPECTED_CHRONO_EARLIER + EXPECTED_CHRONO_MONTH_UNKNOWN === EXPECTED_CHRONO_DATED,
     chronographEarlierVisible: chrono != null && chrono.hasEarlierBar === true,
+    chronographMonthUnknownVisible: chrono != null && chrono.hasMonthUnknownBar === true,
   },
 };
 
