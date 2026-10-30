@@ -12,6 +12,8 @@ import {
   FacetRail,
   IntelligenceBoards,
   COUNT,
+  MobileFilterDock,
+  MobileWireStrip,
   PANEL,
   type FacetState,
 } from "./sample-instrument";
@@ -95,8 +97,8 @@ export function SampleCompanyShell({
     <div className="sample-paper min-h-[calc(100dvh-48px)]">
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 sm:px-5">
-        {/* Dossier hero — company name / campus / year, not the global 2,513 stamp */}
-        <div className="mb-2 border-b border-[color:var(--line,#E1E5EF)] pb-2" data-dossier-hero="">
+        {/* Magazine dossier cover — mobile-native profile, not a shrunk desktop header */}
+        <div className="mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-dossier-hero="" data-mobile-magazine="">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
@@ -107,51 +109,63 @@ export function SampleCompanyShell({
               </div>
               {dossier?.name ? (
                 <>
-                  <p className="mt-1 text-[28px] font-bold leading-[1.05] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[36px]">
+                  <p className="mt-2 text-[32px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)] sm:mt-1 sm:text-[36px]">
                     {dossier.name}
                   </p>
-                  <p className="mt-1 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:text-[13px]">
-                    {dossier.campus ? <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.campus}</span> : <span>Campus not on record</span>}
-                    {" · "}
-                    {dossier.year != null ? (
-                      <span>
-                        <span className={COUNT}>{dossier.year}</span>
-                        {" founded"}
-                      </span>
-                    ) : (
-                      <span>Year not on record</span>
-                    )}
-                  </p>
-                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-dossier-wire-count="">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Dossier wire</span>
-                    {" · "}
-                    <span className={COUNT}>{wireCount.toLocaleString("en-US")}</span>
-                    {" "}
-                    {wireScope}
-                    {wireIncludeNote ? (
-                      <>
+                  {/* Magazine deck + pull figure */}
+                  <div className="mt-3 flex items-end gap-4 lg:mt-1 lg:block">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:text-[13px]">
+                        {dossier.campus ? <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.campus}</span> : <span>Campus not on record</span>}
                         {" · "}
-                        <span className="text-[color:var(--fg-3,#5C647A)]">{wireIncludeNote}</span>
-                      </>
-                    ) : null}
-                  </p>
+                        {dossier.year != null ? (
+                          <span>
+                            <span className={COUNT}>{dossier.year}</span>
+                            {" founded"}
+                          </span>
+                        ) : (
+                          <span>Year not on record</span>
+                        )}
+                      </p>
+                      <p className="mt-0.5 hidden font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)] lg:block" data-dossier-wire-count="">
+                        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Dossier wire</span>
+                        {" · "}
+                        <span className={COUNT}>{wireCount.toLocaleString("en-US")}</span>
+                        {" "}
+                        {wireScope}
+                        {wireIncludeNote ? (
+                          <>
+                            {" · "}
+                            <span className="text-[color:var(--fg-3,#5C647A)]">{wireIncludeNote}</span>
+                          </>
+                        ) : null}
+                      </p>
+                    </div>
+                    <div className="shrink-0 text-right lg:hidden" data-dossier-wire-count="">
+                      <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Campus wire</p>
+                      <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+                        {wireCount.toLocaleString("en-US")}
+                      </p>
+                      <p className="mt-1 max-w-[7.5rem] font-mono text-[9px] leading-snug text-[color:var(--fg-3,#5C647A)]">
+                        {wireScope}
+                        {wireIncludeNote ? " · incl." : ""}
+                      </p>
+                    </div>
+                  </div>
                 </>
               ) : (
                 <>
-                  <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
+                  <p className="mt-1 font-mono text-[56px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
                     <span className="text-[color:var(--ember,#D96B1C)]">{filtered.length.toLocaleString("en-US")}</span>
                   </p>
                   <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies in this dispatch</p>
                 </>
               )}
             </div>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="hidden flex-wrap gap-1.5 lg:flex">
               <button
                 type="button"
-                onClick={() => {
-                  if (typeof window !== "undefined" && window.innerWidth < 1024) setMobileFiltersOpen(true);
-                  else setDeskFiltersOpen((v) => !v);
-                }}
+                onClick={() => setDeskFiltersOpen((v) => !v)}
                 className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
               >
                 {deskFiltersOpen ? "Hide filters" : "Filters"}
@@ -198,30 +212,9 @@ export function SampleCompanyShell({
             </div>
           </aside>
           <div className="min-w-0">
-            {/* Mobile: local WIRE above the dossier card so the campus count is in the first screen. */}
-            <div
-              className={`${PANEL} relative mb-3 overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)] lg:hidden`}
-              data-dossier-wire-mobile=""
-            >
-              <div className="mb-2 flex items-end justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-                <div className="min-w-0">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Dossier wire</p>
-                  <p className="mt-1 font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                    {wireCount.toLocaleString("en-US")}
-                  </p>
-                  <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                    {wireScope}
-                    {wireIncludeNote ? (
-                      <>
-                        {" · "}
-                        <span className="text-[color:var(--fg-3,#5C647A)]">{wireIncludeNote}</span>
-                      </>
-                    ) : null}
-                  </p>
-                </div>
-                <p className="shrink-0 font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Local desk</p>
-              </div>
-              <IntelligenceBoards companies={wireCompanies} compact hideSector surface="company" />
+            {/* Mobile magazine: swipe WIRE digest above the profile card */}
+            <div className="mb-3 pb-16 lg:hidden lg:pb-0" data-dossier-wire-mobile="" data-mobile-magazine-wire="">
+              <MobileWireStrip companies={wireCompanies} label="Dossier wire" surface="company" />
             </div>
             <div className="company-instrument relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] p-3 sm:p-4 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] before:content-[''] after:absolute after:inset-x-0 after:top-0 after:h-0.5 after:bg-[color:var(--cobalt,#2F4FD8)] after:content-['']">
               {children}
@@ -229,6 +222,12 @@ export function SampleCompanyShell({
           </div>
         </div>
       </div>
+      <MobileFilterDock
+        onOpen={() => setMobileFiltersOpen(true)}
+        count={wireCount}
+        caption="Narrow the ledger"
+      />
+
       {mobileFiltersOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
           <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />

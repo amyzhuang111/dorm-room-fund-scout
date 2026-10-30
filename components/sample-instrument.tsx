@@ -827,21 +827,136 @@ export function IntelligenceBoards({
 }
 
 
-export function MobileBrowsePulse({ companies }: { companies: FacetCompany[] }) {
-  // Collapsed by default so the company feed leads on mobile; expand for Wire boards.
+/** Mobile-native WIRE: horizontal swipe digest — not a shrunk desktop column. */
+export function MobileWireStrip({
+  companies,
+  label = "Wire",
+  surface = "browse",
+}: {
+  companies: FacetCompany[];
+  label?: string;
+  surface?: "fold" | "browse" | "signals" | "company";
+}) {
+  const mix = useMemo(() => sectorMix(companies).slice(0, 3), [companies]);
+  const recent = useMemo(() => recentSignals(companies).slice(0, 3), [companies]);
+  const founders = useMemo(() => topFounders(companies).slice(0, 2), [companies]);
+  const programs = useMemo(() => topPrograms(companies).slice(0, 3), [companies]);
+
+  type Card = { key: string; kicker: string; figure: string; caption: string; href?: string };
+  const cards: Card[] = [];
+  if (surface === "fold" || surface === "signals") {
+    for (const [i, p] of programs.entries()) {
+      cards.push({
+        key: `prog-${p.id}`,
+        kicker: `0${i + 1} program`,
+        figure: p.count.toLocaleString("en-US"),
+        caption: p.label,
+      });
+    }
+  }
+  if (surface === "browse" || surface === "fold") {
+    for (const s of mix) {
+      cards.push({
+        key: `sec-${s.id}`,
+        kicker: "Sector",
+        figure: s.count.toLocaleString("en-US"),
+        caption: s.label,
+        href: `/?sample=1&sector=${encodeURIComponent(s.id)}#browse`,
+      });
+    }
+  }
+  if (surface === "company" || surface === "signals" || surface === "browse") {
+    for (const [i, c] of recent.entries()) {
+      cards.push({
+        key: `sig-${c.id}`,
+        kicker: `0${i + 1} signal`,
+        figure: c.signalLabel ?? "Signal",
+        caption: c.name,
+        href: `/startup/${c.id}`,
+      });
+    }
+  }
+  if (surface !== "signals") {
+    for (const [i, f] of founders.entries()) {
+      cards.push({
+        key: `f-${f.key}`,
+        kicker: `0${i + 1} founder`,
+        figure: String(f.signals),
+        caption: f.name,
+        href: `/startup/${f.companyId}`,
+      });
+    }
+  }
+  if (cards.length === 0) return null;
+
   return (
-    <details className={`${PANEL} relative overflow-hidden before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
-      <summary className="cursor-pointer list-none px-2.5 py-2 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg,#0B0E17)] [&::-webkit-details-marker]:hidden">
-        <span className="flex items-center justify-between gap-2">
-          <span>Wire</span>
-          <span className="font-mono text-[10px] font-medium normal-case tracking-normal tabular-nums text-[color:var(--ember,#D96B1C)]">{companies.length.toLocaleString("en-US")} · Boards</span>
-        </span>
-      </summary>
-      <div className="border-t border-[color:var(--line,#E1E5EF)] px-2 pb-2 pt-2">
-        <IntelligenceBoards companies={companies} compact />
+    <div className="lg:hidden" data-mobile-wire-strip={surface}>
+      <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
+        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{label}</p>
+        <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Swipe · digest</p>
       </div>
-    </details>
+      <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {cards.map((card) => {
+          const inner = (
+            <>
+              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{card.kicker}</p>
+              <p className="mt-1.5 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">{card.figure}</p>
+              <p className="mt-1.5 line-clamp-2 text-[12px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">{card.caption}</p>
+            </>
+          );
+          const cls =
+            "relative w-[148px] shrink-0 overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]";
+          return card.href ? (
+            <Link key={card.key} href={card.href} className={cls}>
+              {inner}
+            </Link>
+          ) : (
+            <div key={card.key} className={cls}>
+              {inner}
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
+}
+
+/** Bottom-anchored filter dock — mobile composition, not a header chip. */
+export function MobileFilterDock({
+  onOpen,
+  count,
+  caption = "Narrow the desk",
+}: {
+  onOpen: () => void;
+  count?: number;
+  caption?: string;
+}) {
+  return (
+    <div
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 px-3 py-2.5 backdrop-blur-sm lg:hidden"
+      data-mobile-filter-dock=""
+      style={{ paddingBottom: "max(0.625rem, env(safe-area-inset-bottom))" }}
+    >
+      <button
+        type="button"
+        onClick={onOpen}
+        className="flex h-11 w-full items-center justify-between gap-3 rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 text-left"
+      >
+        <span className="min-w-0">
+          <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-white/80">Scout filters</span>
+          <span className="mt-0.5 block truncate text-[13px] font-semibold text-white">{caption}</span>
+        </span>
+        <span className="shrink-0 font-mono text-[12px] font-bold tabular-nums text-white">
+          {count != null ? count.toLocaleString("en-US") : "Open"}
+        </span>
+      </button>
+    </div>
+  );
+}
+
+/** @deprecated Prefer MobileWireStrip — kept as alias for any residual imports. */
+export function MobileBrowsePulse({ companies }: { companies: FacetCompany[] }) {
+  return <MobileWireStrip companies={companies} label="Wire" surface="browse" />;
 }
 
 

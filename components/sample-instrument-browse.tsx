@@ -13,7 +13,8 @@ import {
   FacetRail,
   IntelligenceBoards,
   LogoMark,
-  MobileBrowsePulse,
+  MobileFilterDock,
+  MobileWireStrip,
   PANEL,
   sectorMix,
   type FacetState,
@@ -193,7 +194,7 @@ export function SampleInstrumentBrowse({
               {feed === "leaderboard" && topCampus ? (
                 <>
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Signal desk · #1 campus</p>
-                  <p className="mt-1 font-mono text-[48px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">01</p>
+                  <p className="mt-1 font-mono text-[64px] font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">01</p>
                   <p className="mt-1 text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[18px]">
                     {shortCampusLabel(topCampus.id, topCampus.name)}
                   </p>
@@ -209,7 +210,7 @@ export function SampleInstrumentBrowse({
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
                     {pages > 1 ? "Scout ledger · continued" : "Scout ledger · top sector"}
                   </p>
-                  <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
+                  <p className="mt-1 font-mono text-[56px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
                     <span className="text-[color:var(--ember,#D96B1C)]">
                       {pages > 1 ? String(cards.length).padStart(2, "0") : topSector.count.toLocaleString("en-US")}
                     </span>
@@ -263,7 +264,7 @@ export function SampleInstrumentBrowse({
               ) : (
                 <>
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
-                  <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
+                  <p className="mt-1 font-mono text-[56px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
                     <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
                   </p>
                   <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{caption}</p>
@@ -291,16 +292,22 @@ export function SampleInstrumentBrowse({
                 : null}
               <button
                 type="button"
-                onClick={() => {
-                  if (typeof window !== "undefined" && window.innerWidth < 1024) setMobileFiltersOpen(true);
-                  else setDeskFiltersOpen((v) => !v);
-                }}
-                className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                onClick={() => setDeskFiltersOpen((v) => !v)}
+                className="hidden h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)] lg:inline-flex"
               >
                 {deskFiltersOpen ? "Hide filters" : "Filters"}
               </button>
             </div>
           </div>
+        </div>
+
+        {/* Mobile-native: horizontal WIRE digest — composition, not a shrunk sidebar */}
+        <div className="mb-3 lg:hidden" data-mobile-browse-compose="">
+          <MobileWireStrip
+            companies={boardCompanies}
+            label={pages > 1 && feed === "directory" ? "Recent wire" : "Ledger wire"}
+            surface={pages > 1 && feed === "directory" ? "signals" : "browse"}
+          />
         </div>
 
         {/* One strong ledger stage — map-stage language: cobalt frame, ruled rows.
@@ -411,9 +418,7 @@ export function SampleInstrumentBrowse({
           </p>
         ) : null}
 
-        <div className="mt-3 lg:hidden">
-          <MobileBrowsePulse companies={boardCompanies} />
-        </div>
+        <div className="h-16 lg:hidden" aria-hidden />
 
         <div className="sr-only">
           {sectors.map((item) => (
@@ -428,6 +433,12 @@ export function SampleInstrumentBrowse({
           ))}
         </div>
       </div>
+
+      <MobileFilterDock
+        onOpen={() => setMobileFiltersOpen(true)}
+        count={boardCompanies.length}
+        caption="Narrow the ledger"
+      />
 
       {mobileFiltersOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
@@ -503,7 +514,7 @@ function LedgerRow({
   return (
     <Link
       href={`/startup/${card.id}`}
-      className="group flex items-start gap-2.5 px-3 py-2.5 transition-[background-color,color] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:gap-3 sm:px-3.5 sm:py-3"
+      className="group flex items-start gap-3 px-3.5 py-3.5 transition-[background-color,color] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:gap-3 sm:px-3.5 sm:py-3"
     >
       {rank != null ? (
         <span className="mt-0.5 w-6 shrink-0 text-right font-mono text-[16px] font-bold tabular-nums leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)] sm:w-8 sm:text-[20px]">
@@ -516,7 +527,7 @@ function LedgerRow({
           className={
             ranked
               ? "line-clamp-2 break-words text-[13px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[15px] sm:leading-5 sm:[overflow-wrap:anywhere]"
-              : "truncate text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[15px]"
+              : "truncate text-[15px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[15px]"
           }
         >
           {card.name}

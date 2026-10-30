@@ -11,8 +11,9 @@ import {
   emptyFacets,
   FacetRail,
   IntelligenceBoards,
+  MobileFilterDock,
+  MobileWireStrip,
   PANEL,
-  DispatchWire,
   type FacetState,
 } from "./sample-instrument";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -145,7 +146,7 @@ export function TileGlobe({
       const reserve = wide ? 8 : 320; // room for Live + Ledger strip under the stage
       const available = Math.round(window.innerHeight - docTop - reserve);
       const raw = Math.max(wide ? 560 : 220, available);
-      setStageHeight(wide ? raw : Math.min(360, raw));
+      setStageHeight(wide ? raw : Math.min(260, raw));
     };
     fit();
     window.addEventListener("resize", fit);
@@ -420,11 +421,8 @@ export function TileGlobe({
               <div className="flex shrink-0 flex-wrap gap-1.5">
                 <button
                   type="button"
-                  onClick={() => {
-                    if (typeof window !== "undefined" && window.innerWidth < 1024) setMobileFiltersOpen(true);
-                    else setFiltersOpen((v) => !v);
-                  }}
-                  className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                  onClick={() => setFiltersOpen((v) => !v)}
+                  className="hidden h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)] lg:inline-flex"
                 >
                   {filtersOpen ? "Hide filters" : "Filters"}
                 </button>
@@ -522,11 +520,15 @@ export function TileGlobe({
       </div>
         </div>
       </div>
-      {/* Mobile: Dispatch wire (named tiles with counts) + boards */}
-      <div className="mt-2 space-y-2 lg:hidden" data-fold-counts-mobile>
-        <DispatchWire companies={filteredCompanies} limit={8} />
-        <IntelligenceBoards companies={filteredCompanies} compact surface="fold" />
+      {/* Mobile-native: figure above, map band, swipe WIRE digest, bottom filter dock */}
+      <div className="mt-3 space-y-3 pb-20 lg:hidden" data-fold-counts-mobile data-mobile-fold-compose="">
+        <MobileWireStrip companies={filteredCompanies} label="Dispatch wire" surface="fold" />
       </div>
+      <MobileFilterDock
+        onOpen={() => setMobileFiltersOpen(true)}
+        count={liveCount}
+        caption="Narrow the dispatch"
+      />
       {mobileFiltersOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
           <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
