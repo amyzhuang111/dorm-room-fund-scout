@@ -615,6 +615,95 @@ const MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Se
 /** Snapshot ceiling — never draw months after the Scout dispatch through-date. */
 export const CHRONO_THROUGH_YM = "2026-10";
 
+/** Page-specific Contents figure — newest-sector or signal-rate lead; never a global program stamp. */
+export type ContentsInsight = {
+  figure: number;
+  kicker: string;
+  label: string;
+  detail: string;
+  sectorId: string;
+};
+
+export function contentsPageInsight(
+  companies: FacetCompany[],
+  throughYm: string = CHRONO_THROUGH_YM,
+): ContentsInsight | null {
+  const [yy, mm] = throughYm.split("-").map((x) => Number(x));
+  if (!yy || !mm) return null;
+  const startM = mm === 1 ? 12 : mm - 1;
+  const startY = mm === 1 ? yy - 1 : yy;
+  const startYm = `${startY}-${String(startM).padStart(2, "0")}`;
+  const startShort = MONTH_SHORT[startM - 1] ?? startYm;
+
+  type Agg = { id: string; label: string; n: number; sig: number; recent: number };
+  const map = new Map<string, Agg>();
+  for (const company of companies) {
+    const id = company.sectorId?.trim() || "";
+    const label = company.sector?.trim() || "";
+    if (!id || !label || /^unlabeled$/i.test(label)) continue;
+    const row = map.get(id) ?? { id, label, n: 0, sig: 0, recent: 0 };
+    row.n += 1;
+    if ((company.signals ?? 0) > 0) row.sig += 1;
+    const at = company.latestSignalAt ?? "";
+    if (at.length >= 7 && at.slice(0, 7) >= startYm) row.recent += 1;
+    map.set(id, row);
+  }
+  const rows = [...map.values()];
+  const byRecent = [...rows]
+    .filter((row) => row.recent > 0)
+    .sort((a, b) => b.recent - a.recent || b.sig - a.sig || a.label.localeCompare(b.label));
+  if (byRecent[0] && byRecent[0].recent >= 3) {
+    const top = byRecent[0];
+    return {
+      figure: top.recent,
+      kicker: "Newest sector",
+      label: top.label,
+      detail: `${top.sig.toLocaleString("en-US")} signaled of ${top.n.toLocaleString("en-US")} · since ${startShort}`,
+      sectorId: top.id,
+    };
+  }
+  const byRate = [...rows]
+    .filter((row) => row.n >= 15)
+    .sort((a, b) => b.sig / b.n - a.sig / a.n || b.sig - a.sig || a.label.localeCompare(b.label));
+  if (byRate[0]) {
+    const top = byRate[0];
+    const pct = Math.round((top.sig / top.n) * 100);
+    return {
+      figure: top.sig,
+      kicker: "Signal-rate lead",
+      label: top.label,
+      detail: `${pct}% signaled · ${top.n.toLocaleString("en-US")} in sector`,
+      sectorId: top.id,
+    };
+  }
+  return null;
+}
+
+/** Named sectors ranked by newest signals in the last two chrono months. */
+export function newestSectorMix(
+  companies: FacetCompany[],
+  throughYm: string = CHRONO_THROUGH_YM,
+  limit = 5,
+): FacetCount[] {
+  const [yy, mm] = throughYm.split("-").map((x) => Number(x));
+  if (!yy || !mm) return [];
+  const startM = mm === 1 ? 12 : mm - 1;
+  const startY = mm === 1 ? yy - 1 : yy;
+  const startYm = `${startY}-${String(startM).padStart(2, "0")}`;
+  const map = new Map<string, FacetCount>();
+  for (const company of companies) {
+    const id = company.sectorId?.trim() || "";
+    const label = company.sector?.trim() || "";
+    if (!id || !label || /^unlabeled$/i.test(label)) continue;
+    const at = company.latestSignalAt ?? "";
+    if (at.length < 7 || at.slice(0, 7) < startYm) continue;
+    const prev = map.get(id);
+    if (prev) prev.count += 1;
+    else map.set(id, { id, label, count: 1 });
+  }
+  return [...map.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label)).slice(0, limit);
+}
+
 /**
  * Build chronograph bars from latestSignalAt.
  * Last `limit` valid months through throughYm, plus separate Earlier and Month unknown

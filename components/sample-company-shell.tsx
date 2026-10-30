@@ -90,10 +90,11 @@ export function SampleCompanyShell({
     ? shortCampusLabel(dossier.schoolId, dossier.campus ?? "Campus")
     : (dossier?.campus ?? "Campus").replace(/^University of (?:California, )?/, "").replace(/ University$/, "");
   const wireScope = campusPeers
-    ? `${campusShort} companies on campus`
+    ? `${campusShort} companies`
     : sectorPeers
       ? "companies in sector"
       : "signaled nearby";
+  const wireUnit = campusPeers ? "companies on this campus" : sectorPeers ? "companies in this sector" : "signaled nearby";
   // Explicit: the subject company is included in the campus peer count.
   const wireIncludeNote = campusPeers ? "includes this company" : sectorPeers ? "includes this company" : null;
   const wireCompanies = campusPeers ?? sectorPeers ?? filtered.filter((c) => c.signals > 0);
@@ -176,8 +177,11 @@ export function SampleCompanyShell({
                   <p className="mt-1.5 font-mono text-[48px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[56px] lg:text-[64px]">
                     {wireCount.toLocaleString("en-US")}
                   </p>
-                  <p className="mt-1.5 max-w-[11rem] text-right font-mono text-[10px] leading-snug text-[color:var(--fg-3,#5C647A)] sm:max-w-[14rem]">
+                  <p className="mt-1 max-w-[12rem] text-right text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:max-w-[14rem]">
                     {wireScope}
+                  </p>
+                  <p className="mt-0.5 max-w-[12rem] text-right font-mono text-[10px] leading-snug text-[color:var(--fg-3,#5C647A)] sm:max-w-[14rem]">
+                    {wireUnit}
                     {wireIncludeNote ? (
                       <>
                         {" · "}

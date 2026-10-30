@@ -19,6 +19,7 @@ import {
   chronographCaption,
   topPrograms,
   sectorMix,
+  contentsPageInsight,
   type FacetState,
 } from "./sample-instrument";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -414,6 +415,7 @@ export function TileGlobe({
   // Third mast beat: leading program (not peak 369 — chronograph owns the peak).
   const leadProgram = useMemo(() => topPrograms(companies)[0] ?? null, [companies]);
   const leadSector = useMemo(() => sectorMix(companies)[0] ?? null, [companies]);
+  const dispatchInsight = useMemo(() => contentsPageInsight(companies), [companies]);
   const signaledUniverse = useMemo(() => companies.filter((c) => c.signals > 0).length, [companies]);
   const quietUniverse = companies.length - signaledUniverse;
   const sliceLeadProgram = useMemo(() => topPrograms(filteredCompanies)[0] ?? null, [filteredCompanies]);
@@ -477,12 +479,11 @@ export function TileGlobe({
                   </span>
                   <span className="font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]"> signals</span>
                 </p>
-                {leadProgram ? (
-                  <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-mobile-program-whisper="">
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{leadProgram.count.toLocaleString("en-US")}</span>
-                    {" "}
-                    {leadProgram.label}
-                    {" · program desk"}
+                {dispatchInsight ? (
+                  <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-mobile-dispatch-whisper="">
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dispatchInsight.figure.toLocaleString("en-US")}</span>
+                    {" newest · "}
+                    {dispatchInsight.label}
                   </p>
                 ) : null}
               </div>
@@ -576,13 +577,13 @@ export function TileGlobe({
                 </p>
                 <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
               </div>
-              {leadProgram ? (
+              {dispatchInsight ? (
                 <div className="col-span-2 sm:col-span-1">
                   <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
-                    {leadProgram.count.toLocaleString("en-US")}
+                    {dispatchInsight.figure.toLocaleString("en-US")}
                   </p>
-                  <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{leadProgram.label}</p>
-                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">program desk</p>
+                  <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{dispatchInsight.label}</p>
+                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">{dispatchInsight.kicker}</p>
                 </div>
               ) : null}
             </div>
@@ -679,18 +680,24 @@ export function TileGlobe({
         <p className="min-w-0 flex-1 text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
           <span className="font-bold text-[color:var(--ember,#D96B1C)]">{universeChrono.dated.toLocaleString("en-US")}</span>
           {" dated · "}
-          {leadProgram ? (
+          {dispatchInsight ? (
             <>
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{leadProgram.label}</span>
-              {" "}
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{leadProgram.count.toLocaleString("en-US")}</span>
+              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dispatchInsight.figure.toLocaleString("en-US")}</span>
+              {" newest · "}
+              {dispatchInsight.label}
+              {" · "}
+            </>
+          ) : leadProgram ? (
+            <>
+              {"program desk · "}
+              {leadProgram.label}
               {" · "}
             </>
           ) : null}
           <span className={COUNT}>{universeCounts.foundersListed.toLocaleString("en-US")}</span>
           {" founders · "}
           <span className={COUNT}>{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
-          {" campuses"}
+          {" campuses on map"}
         </p>
       </div>
 
@@ -776,8 +783,9 @@ export function TileGlobe({
 
         <div className="min-w-0" data-fold-desk-map="">
           <div
-            className="relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.04)]"
+            className="relative overflow-hidden rounded-none border-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--bg,#FFFFFF)] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.06),0_1px_0_rgba(217,107,28,0.18)]"
             style={{ height: stageHeight }}
+            data-dispatch-map-stage=""
           >
             <div ref={mapNode} className="h-full w-full" />
             <div className="pointer-events-none absolute left-2.5 top-2.5 z-10 hidden rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1.5 backdrop-blur-[2px] lg:block" data-dispatch-scale="">
@@ -787,23 +795,37 @@ export function TileGlobe({
                 <span className="inline-flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />top desk</span>
               </div>
             </div>
-            <div className="pointer-events-none absolute right-3 top-3 z-10 hidden max-w-[220px] overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)]/96 shadow-[0_2px_0_rgba(47,79,216,0.12)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)] lg:block" data-dispatch-orbit="" data-desk-constellation="">
-              <div className="px-2.5 py-2 pl-3">
-                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Desk constellation</p>
-                <ol className="mt-1.5 space-y-1">
-                  {topDesks.slice(0, 3).map((campus, i) => {
-                    const label = campus.name.replace(/^University of /, "").replace(/ University$/, "");
-                    return (
-                      <li key={campus.id} className="flex items-baseline gap-2">
-                        <span className="w-4 shrink-0 text-right font-mono text-[10px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="min-w-0 flex-1 truncate text-[11px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
-                        <span className={`shrink-0 font-mono text-[11px] ${COUNT}`}>{campus.founders.toLocaleString("en-US")}</span>
-                      </li>
-                    );
-                  })}
-                </ol>
+            <div className="pointer-events-none absolute right-3 top-3 z-10 hidden lg:block" data-dispatch-orbit="" data-desk-constellation="">
+              <div className="relative">
+                <div className="pointer-events-none absolute -right-6 -top-6 h-28 w-28" aria-hidden>
+                  <span className="absolute inset-0 rounded-full border border-dashed border-[color:var(--ember,#D96B1C)]/45" />
+                  <span className="absolute inset-3 rounded-full border border-[color:var(--ember,#D96B1C)]/30" />
+                  <span className="absolute inset-6 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35" />
+                </div>
+                <div className="relative max-w-[260px] overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--bg,#FFFFFF)]/96 shadow-[0_3px_0_rgba(47,79,216,0.14)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)]">
+                  <div className="flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-1.5 pl-3">
+                    <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Desk constellation</p>
+                    <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Founders</p>
+                  </div>
+                  <ol className="divide-y divide-[color:var(--line,#E1E5EF)]">
+                    {topDesks.slice(0, 3).map((campus, i) => {
+                      const label = campus.name.replace(/^University of /, "").replace(/ University$/, "");
+                      return (
+                        <li key={campus.id} className="flex items-baseline gap-2 px-2.5 py-1.5 pl-3">
+                          <span className="w-4 shrink-0 text-right font-mono text-[10px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <span className="min-w-0 flex-1 truncate text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
+                          <span className={`shrink-0 font-mono text-[12px] font-bold ${COUNT}`}>{campus.founders.toLocaleString("en-US")}</span>
+                          <span className="shrink-0 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">founders</span>
+                        </li>
+                      );
+                    })}
+                  </ol>
+                  <p className="border-t border-[color:var(--line,#E1E5EF)] px-2.5 py-1.5 pl-3 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                    Ranked by campus signals · founder names on record
+                  </p>
+                </div>
               </div>
             </div>
             {topCampus ? (

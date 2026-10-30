@@ -20,7 +20,8 @@ import {
   chronographCaption,
   signalChronographDetail,
   sectorMix,
-  topPrograms,
+  contentsPageInsight,
+  newestSectorMix,
   type FacetState,
 } from "./sample-instrument";
 
@@ -183,8 +184,9 @@ export function SampleInstrumentBrowse({
   const sliceInsight = useMemo(() => endSliceInsight(cards), [cards]);
   const contentsUnfiltered = boardCompanies.length === companies.length;
   const contentsChrono = useMemo(() => signalChronographDetail(boardCompanies), [boardCompanies]);
-  const leadProgram = useMemo(() => topPrograms(boardCompanies)[0] ?? null, [boardCompanies]);
-  const programMix = useMemo(() => topPrograms(boardCompanies).slice(0, 3), [boardCompanies]);
+  const contentsInsight = useMemo(() => contentsPageInsight(boardCompanies), [boardCompanies]);
+  const pageInsight = useMemo(() => contentsPageInsight(pageSlice), [pageSlice]);
+  const newestSectors = useMemo(() => newestSectorMix(boardCompanies, undefined, 5), [boardCompanies]);
 
   const wireSurface = feed === "leaderboard" ? "signals" : "browse";
 
@@ -268,23 +270,16 @@ export function SampleInstrumentBrowse({
               {boardCompanies.length.toLocaleString("en-US")}
               {" matching · facet map below"}
             </p>
-            {leadProgram ? (
-              <div className="mt-2.5 border-t border-[color:var(--line,#E1E5EF)] pt-2.5" data-contents-program-lead="">
-                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Program desk</p>
+            {contentsInsight ? (
+              <div className="mt-2.5 border-t border-[color:var(--line,#E1E5EF)] pt-2.5" data-contents-page-insight="">
+                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{contentsInsight.kicker}</p>
                 <p className="mt-1 flex items-baseline gap-2">
                   <span className="font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                    {leadProgram.count.toLocaleString("en-US")}
+                    {contentsInsight.figure.toLocaleString("en-US")}
                   </span>
-                  <span className="min-w-0 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{leadProgram.label}</span>
+                  <span className="min-w-0 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{contentsInsight.label}</span>
                 </p>
-                {topSector ? (
-                  <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{topSector.count.toLocaleString("en-US")}</span>
-                    {" "}
-                    {topSector.label}
-                    {" · top sector"}
-                  </p>
-                ) : null}
+                <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{contentsInsight.detail}</p>
               </div>
             ) : null}
             <p className="mt-1.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
@@ -453,31 +448,26 @@ export function SampleInstrumentBrowse({
         {/* Scout Chronograph — unifying system. Browse-more uses folio (originality priority);
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
         <div className="mb-4 space-y-3 lg:hidden" data-mobile-browse-compose="">
-          {feed === "directory" && leadProgram ? (
+          {feed === "directory" && (pages > 1 ? pageInsight : contentsInsight) ? (
             <div
               className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
-              data-mobile-program-lead=""
+              data-mobile-page-insight=""
             >
               <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
-                {pages > 1 ? "Program desk · matching" : "Program desk · ledger"}
+                {pages > 1
+                  ? `Newest on loaded page · ${(pageInsight ?? contentsInsight)!.kicker}`
+                  : `${contentsInsight!.kicker} · ledger`}
               </p>
               <p className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
                 <span className="font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-                  {leadProgram.count.toLocaleString("en-US")}
+                  {(pages > 1 ? pageInsight : contentsInsight)!.figure.toLocaleString("en-US")}
                 </span>
-                <span className="text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{leadProgram.label}</span>
+                <span className="text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                  {(pages > 1 ? pageInsight : contentsInsight)!.label}
+                </span>
               </p>
               <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                {topSector ? (
-                  <>
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{topSector.count.toLocaleString("en-US")}</span>
-                    {" "}
-                    {topSector.label}
-                    {" · "}
-                  </>
-                ) : null}
-                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                {" with signal"}
+                {(pages > 1 ? pageInsight : contentsInsight)!.detail}
               </p>
             </div>
           ) : null}
@@ -558,22 +548,27 @@ export function SampleInstrumentBrowse({
                   ))}
                 </ol>
               </div>
-              {programMix.length ? (
-                <div data-mobile-program-folio="">
+              {newestSectors.length ? (
+                <div data-mobile-newest-folio="">
                   <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Program desk</p>
-                    <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Top 3</p>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Newest sectors</p>
+                    <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Since Sep</p>
                   </div>
                   <ol className="relative overflow-hidden divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]">
-                    {programMix.map((prog, i) => (
-                      <li key={prog.id} className="flex items-center gap-3 px-3 py-2">
-                        <span className="w-6 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="min-w-0 flex-1 truncate text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{prog.label}</span>
-                        <span className="shrink-0 font-mono text-[16px] font-bold leading-none tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]">
-                          {prog.count.toLocaleString("en-US")}
-                        </span>
+                    {newestSectors.slice(0, 3).map((sec, i) => (
+                      <li key={sec.id}>
+                        <Link
+                          href={browseHref({ feed, sector: sec.id, kind, campus, q: query, sort })}
+                          className="flex items-center gap-3 px-3 py-2 hover:bg-[color:var(--ember,#D96B1C)]/5"
+                        >
+                          <span className="w-6 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <span className="min-w-0 flex-1 truncate text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{sec.label}</span>
+                          <span className="shrink-0 font-mono text-[16px] font-bold leading-none tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]">
+                            {sec.count.toLocaleString("en-US")}
+                          </span>
+                        </Link>
                       </li>
                     ))}
                   </ol>
@@ -595,12 +590,11 @@ export function SampleInstrumentBrowse({
               <div className="flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5">
                 <div className="min-w-0">
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Sector folio · matching</p>
-                  {leadProgram ? (
+                  {contentsInsight ? (
                     <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{leadProgram.count.toLocaleString("en-US")}</span>
-                      {" "}
-                      {leadProgram.label}
-                      {" · program desk"}
+                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{contentsInsight.figure.toLocaleString("en-US")}</span>
+                      {" newest · "}
+                      {contentsInsight.label}
                     </p>
                   ) : null}
                 </div>
@@ -645,29 +639,34 @@ export function SampleInstrumentBrowse({
             />
           </div>
         ) : (
-          <div className="mb-4 hidden space-y-3 lg:block" data-desk-browse-dominant="program-folio" data-desk-browse-chronograph="">
-            {leadProgram ? (
+          <div className="mb-4 hidden space-y-3 lg:block" data-desk-browse-dominant="newest-folio" data-desk-browse-chronograph="">
+            {newestSectors.length ? (
               <div
                 className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
-                data-program-folio-desk=""
+                data-newest-folio-desk=""
               >
                 <div className="flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Program folio · matching</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Newest sectors · matching</p>
                   <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
                     {boardCompanies.length.toLocaleString("en-US")}
                     {" on Contents"}
                   </p>
                 </div>
                 <ol className="divide-y divide-[color:var(--line,#E1E5EF)]">
-                  {programMix.map((prog, i) => (
-                    <li key={prog.id} className="flex items-center gap-3 px-3.5 py-2.5">
-                      <span className="w-10 shrink-0 text-right font-mono text-[22px] font-bold tabular-nums leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className="min-w-0 flex-1 truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{prog.label}</span>
-                      <span className="shrink-0 font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                        {prog.count.toLocaleString("en-US")}
-                      </span>
+                  {newestSectors.map((sec, i) => (
+                    <li key={sec.id}>
+                      <Link
+                        href={browseHref({ feed, sector: sec.id, kind, campus, q: query, sort })}
+                        className="flex items-center gap-3 px-3.5 py-2.5 hover:bg-[color:var(--ember,#D96B1C)]/5"
+                      >
+                        <span className="w-10 shrink-0 text-right font-mono text-[22px] font-bold tabular-nums leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="min-w-0 flex-1 truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{sec.label}</span>
+                        <span className="shrink-0 font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                          {sec.count.toLocaleString("en-US")}
+                        </span>
+                      </Link>
                     </li>
                   ))}
                 </ol>
@@ -912,19 +911,13 @@ export function SampleInstrumentBrowse({
                     {boardCompanies.length.toLocaleString("en-US")}
                     {" matching · facet map below"}
                   </p>
-                  {leadProgram ? (
-                    <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-contents-program-lead="">
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{leadProgram.count.toLocaleString("en-US")}</span>
-                      {" "}
-                      {leadProgram.label}
-                      {topSector ? (
-                        <>
-                          {" · "}
-                          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{topSector.count.toLocaleString("en-US")}</span>
-                          {" "}
-                          {topSector.label}
-                        </>
-                      ) : null}
+                  {contentsInsight ? (
+                    <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-contents-page-insight="">
+                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{contentsInsight.figure.toLocaleString("en-US")}</span>
+                      {" newest · "}
+                      {contentsInsight.label}
+                      {" · "}
+                      {contentsInsight.kicker}
                     </p>
                   ) : null}
                   <p className="mt-0.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">

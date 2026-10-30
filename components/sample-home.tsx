@@ -98,13 +98,18 @@ export function SampleHome({
       country: university.country?.trim() || "Unknown",
       founders: university.founderCount,
     }));
-  const programCounts = new Map<string, number>();
+  const newestSectorCounts = new Map<string, { label: string; count: number }>();
   for (const card of data.cards) {
-    const label = card.primaryProgram?.trim();
-    if (!label) continue;
-    programCounts.set(label, (programCounts.get(label) ?? 0) + 1);
+    const id = card.sectorId?.trim();
+    const label = card.sector?.trim();
+    if (!id || !label || /^unlabeled$/i.test(label)) continue;
+    const at = card.latestSignalAt ?? "";
+    if (at.length < 7 || at.slice(0, 7) < "2026-09") continue;
+    const prev = newestSectorCounts.get(id);
+    if (prev) prev.count += 1;
+    else newestSectorCounts.set(id, { label, count: 1 });
   }
-  const leadProgramHome = [...programCounts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0] ?? null;
+  const newestHome = [...newestSectorCounts.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))[0] ?? null;
 
   return (
     <div className="sample-paper">
@@ -130,12 +135,12 @@ export function SampleHome({
               {" companies · "}
               <span className="font-bold text-[color:var(--ember,#D96B1C)]">{data.cards.filter((c) => c.signals > 0).length.toLocaleString("en-US")}</span>
               {" with signal"}
-              {leadProgramHome ? (
+              {newestHome ? (
                 <>
                   {" · "}
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{leadProgramHome[0]}</span>
-                  {" "}
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{leadProgramHome[1].toLocaleString("en-US")}</span>
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{newestHome.count.toLocaleString("en-US")}</span>
+                  {" newest · "}
+                  {newestHome.label}
                 </>
               ) : null}
             </p>
