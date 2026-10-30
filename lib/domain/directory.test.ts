@@ -92,3 +92,16 @@ assert.equal(live.cards.length, countCandidateProjects());
 assert.equal(bucketSum(foundedYearBuckets(live.cards)), live.cards.length);
 assert.equal(bucketSum(hqRegionBuckets(live.cards)), live.cards.length);
 console.log("directory count surfaces agree", live.cards.length);
+
+// Live directory: Berkeley peers include the subject company (Sim). Export 139 was stale.
+{
+  const berkeley = loadDirectory().cards.filter((c) => c.schoolId === "univ_berkeley");
+  assert.equal(berkeley.length, 138, "univ_berkeley peer count (incl. subject)");
+  assert.ok(berkeley.some((c) => c.name === "Sim"), "Sim is a Berkeley peer");
+  assert.equal(
+    berkeley.filter((c) => c.id !== "proj_9GUOmdEYxbuH").length,
+    137,
+    "peers excluding Sim",
+  );
+}
+

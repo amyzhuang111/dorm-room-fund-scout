@@ -306,3 +306,13 @@ export function sampleSurfaceCounts(
     campusesOnMap: campuses.length,
   };
 }
+
+/** Companies on the same campus as `schoolId`, including the subject company. */
+export function campusPeerCompanies<T extends { schoolId: string | null }>(
+  companies: T[],
+  schoolId: string | null | undefined,
+): T[] {
+  if (!schoolId) return [];
+  return companies.filter((c) => c.schoolId === schoolId);
+}
+

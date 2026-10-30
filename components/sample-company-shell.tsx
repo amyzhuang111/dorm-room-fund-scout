@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, type ReactNode } from "react";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
+import { campusPeerCompanies } from "@/lib/domain/sample-facets";
+import { shortCampusLabel } from "@/lib/domain/campuses";
 import {
   applyFacets,
   emptyFacets,
@@ -66,20 +68,27 @@ export function SampleCompanyShell({
   const campusPeers = useMemo(() => {
     const sid = dossier?.schoolId;
     if (!sid) return null;
-    return companies.filter((c) => c.schoolId === sid);
+    const peers = campusPeerCompanies(companies, sid);
+    return peers.length ? peers : null;
   }, [companies, dossier?.schoolId]);
   const sectorPeers = useMemo(() => {
     const sec = dossier?.sectorId;
     if (!sec) return null;
-    return companies.filter((c) => c.sectorId === sec);
+    const peers = companies.filter((c) => c.sectorId === sec);
+    return peers.length ? peers : null;
   }, [companies, dossier?.sectorId]);
-  // Side-column count: this company's campus (preferred) or sector — never the global 2,513.
+  // Side-column count: campus peers including this company (preferred), else sector — never global 2,513.
   const wireCount = campusPeers?.length ?? sectorPeers?.length ?? signaled;
+  const campusShort = dossier?.schoolId
+    ? shortCampusLabel(dossier.schoolId, dossier.campus ?? "Campus")
+    : (dossier?.campus ?? "Campus").replace(/^University of (?:California, )?/, "").replace(/ University$/, "");
   const wireScope = campusPeers
-    ? "on campus"
+    ? `${campusShort} companies on campus`
     : sectorPeers
-      ? "in sector"
+      ? "companies in sector"
       : "signaled nearby";
+  // Explicit: the subject company is included in the campus peer count.
+  const wireIncludeNote = campusPeers ? "includes this company" : sectorPeers ? "includes this company" : null;
   const wireCompanies = campusPeers ?? sectorPeers ?? filtered.filter((c) => c.signals > 0);
 
   return (
@@ -113,8 +122,18 @@ export function SampleCompanyShell({
                       <span>Year not on record</span>
                     )}
                   </p>
-                  <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">
-                    Dossier wire · {signaled.toLocaleString("en-US")} signaled nearby
+                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-dossier-wire-count="">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Dossier wire</span>
+                    {" · "}
+                    <span className={COUNT}>{wireCount.toLocaleString("en-US")}</span>
+                    {" "}
+                    {wireScope}
+                    {wireIncludeNote ? (
+                      <>
+                        {" · "}
+                        <span className="text-[color:var(--fg-3,#5C647A)]">{wireIncludeNote}</span>
+                      </>
+                    ) : null}
                   </p>
                 </>
               ) : (
@@ -162,10 +181,16 @@ export function SampleCompanyShell({
                     <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Dossier wire</p>
                     <p className="font-mono text-[10px] tabular-nums text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</p>
                   </div>
-                  <p className="mb-2 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                  <p className="mb-2 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-dossier-wire-count="">
                     <span className={COUNT}>{wireCount.toLocaleString("en-US")}</span>
                     {" "}
                     {wireScope}
+                    {wireIncludeNote ? (
+                      <>
+                        {" · "}
+                        <span>{wireIncludeNote}</span>
+                      </>
+                    ) : null}
                   </p>
                   <IntelligenceBoards companies={wireCompanies} compact hideSector surface="company" />
                 </div>
@@ -173,20 +198,33 @@ export function SampleCompanyShell({
             </div>
           </aside>
           <div className="min-w-0">
+            {/* Mobile: local WIRE above the dossier card so the campus count is in the first screen. */}
+            <div
+              className={`${PANEL} relative mb-3 overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)] lg:hidden`}
+              data-dossier-wire-mobile=""
+            >
+              <div className="mb-2 flex items-end justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+                <div className="min-w-0">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Dossier wire</p>
+                  <p className="mt-1 font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                    {wireCount.toLocaleString("en-US")}
+                  </p>
+                  <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    {wireScope}
+                    {wireIncludeNote ? (
+                      <>
+                        {" · "}
+                        <span className="text-[color:var(--fg-3,#5C647A)]">{wireIncludeNote}</span>
+                      </>
+                    ) : null}
+                  </p>
+                </div>
+                <p className="shrink-0 font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Local desk</p>
+              </div>
+              <IntelligenceBoards companies={wireCompanies} compact hideSector surface="company" />
+            </div>
             <div className="company-instrument relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] p-3 sm:p-4 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] before:content-[''] after:absolute after:inset-x-0 after:top-0 after:h-0.5 after:bg-[color:var(--cobalt,#2F4FD8)] after:content-['']">
               {children}
-            </div>
-            <div className={`${PANEL} relative mt-3 overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] lg:hidden`}>
-              <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Dossier wire</p>
-                <p className="font-mono text-[10px] tabular-nums text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</p>
-              </div>
-              <p className="mb-2 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                <span className={COUNT}>{wireCount.toLocaleString("en-US")}</span>
-                {" "}
-                {wireScope}
-              </p>
-              <IntelligenceBoards companies={wireCompanies} compact hideSector surface="company" />
             </div>
           </div>
         </div>

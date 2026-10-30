@@ -374,14 +374,30 @@ export function TileGlobe({
       <div className="grid gap-x-3 gap-y-0 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)]">
         <div className="col-span-full mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-counts>
           <div className="grid items-end gap-3 lg:grid-cols-[minmax(280px,340px)_minmax(0,1fr)]">
-            <div className="min-w-0">
+            <div className="min-w-0" data-dispatch-figure="">
               <div className="flex items-center gap-2">
-                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />
+                <span className="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center" aria-hidden>
+                  <span className="absolute inset-0 rounded-full bg-[color:var(--ember,#D96B1C)]/25" />
+                  <span className="absolute inset-[3px] rounded-full bg-[color:var(--ember,#D96B1C)]/45" />
+                  <span className="relative h-1.5 w-1.5 rounded-full bg-[color:var(--ember,#D96B1C)]" />
+                </span>
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Scout dispatch</p>
+                <span className="inline-flex items-center gap-1 rounded-sm border border-[color:var(--ember,#D96B1C)]/50 bg-[color:var(--ember,#D96B1C)]/10 px-1.5 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">
+                  <span className="relative flex h-1.5 w-1.5" aria-hidden>
+                    <span className="absolute inset-0 rounded-full bg-[color:var(--ember,#D96B1C)] opacity-40" />
+                    <span className="relative m-auto h-1 w-1 rounded-full bg-[color:var(--ember,#D96B1C)]" />
+                  </span>
+                  Live
+                </span>
               </div>
-              <p className="mt-2 font-mono text-[52px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[64px]">
+              <p className="mt-2 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[72px]">
                 {liveCount.toLocaleString("en-US")}
               </p>
+              {/* Signature underline: cobalt hairline + ember weight — magazine figure rule */}
+              <div className="mt-2 flex items-end gap-2" aria-hidden>
+                <span className="h-px w-8 bg-[color:var(--cobalt,#2F4FD8)]" />
+                <span className="h-[3px] flex-1 max-w-[180px] bg-[color:var(--ember,#D96B1C)]" />
+              </div>
               <p className="mt-2 text-[16px] font-semibold leading-tight tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[17px]">
                 companies forming on campus
               </p>
@@ -464,6 +480,28 @@ export function TileGlobe({
             <span className="inline-flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />top desk</span>
           </div>
         </div>
+        {/* Static mid-animation feel: orbit rings + top-desk callout (fold signature). */}
+        <div className="pointer-events-none absolute right-[18%] top-[28%] z-10 hidden lg:block" data-dispatch-orbit="" aria-hidden>
+          <div className="relative h-16 w-16">
+            <span className="absolute inset-0 rounded-full border border-dashed border-[color:var(--ember,#D96B1C)]/55" />
+            <span className="absolute inset-2 rounded-full border border-[color:var(--ember,#D96B1C)]/35" />
+            <span className="absolute inset-4 rounded-full border border-[color:var(--ember,#D96B1C)]/70" />
+            <span className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[color:var(--ember,#D96B1C)]" />
+            <span className="absolute -right-1 top-2 h-1.5 w-1.5 rounded-full bg-[color:var(--ember,#D96B1C)]/80" />
+          </div>
+        </div>
+        {topCampus ? (
+          <div className="pointer-events-none absolute bottom-3 right-3 z-10 hidden max-w-[200px] rounded-sm border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)]/95 px-2.5 py-1.5 shadow-[0_1px_0_rgba(217,107,28,0.15)] backdrop-blur-[2px] lg:block" data-top-desk-callout="">
+            <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
+            <p className="mt-0.5 text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+              {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
+            </p>
+            <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              <span className={COUNT}>{topCampus.founders.toLocaleString("en-US")}</span>
+              {" founder names"}
+            </p>
+          </div>
+        ) : null}
         <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 hidden -translate-x-1/2 lg:block" data-map-credit>
           <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
             <MapCredit />

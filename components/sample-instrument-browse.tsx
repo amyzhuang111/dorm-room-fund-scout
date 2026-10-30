@@ -316,17 +316,25 @@ export function SampleInstrumentBrowse({
         ) : (
           <div data-ledger-expanded={pages > 1 ? "1" : "0"}>
             {pages > 1 ? (
-              <div className="relative sticky top-12 z-10 mb-0 flex items-baseline justify-between gap-3 border border-b-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 px-3 py-2 backdrop-blur-sm before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)] sm:px-3.5">
-                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
-                  {feed === "leaderboard" ? "Signal desk continued" : "Ledger continued"}
-                </p>
-                <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">
-                    {String(1).padStart(2, "0")}–{String(cards.length).padStart(2, "0")}
-                  </span>
-                  {" of "}
-                  {total.toLocaleString("en-US")}
-                </p>
+              <div className="relative sticky top-12 z-10 mb-0 border border-b-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 backdrop-blur-sm before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]">
+                <div className="flex items-end justify-between gap-3 px-3 py-2 sm:px-3.5">
+                  <div className="min-w-0">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+                      {feed === "leaderboard" ? "Signal desk continued" : "Ledger continued"}
+                    </p>
+                    <p className="mt-0.5 hidden font-mono text-[10px] text-[color:var(--fg-3,#5C647A)] sm:block">Section rules every 14 rows · end mark below</p>
+                    <p className="mt-0.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)] sm:hidden">End mark below · page on desk</p>
+                  </div>
+                  <p className="shrink-0 text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    <span className="block text-[18px] font-bold leading-none tracking-tight text-[color:var(--ember,#D96B1C)] sm:text-[20px]">
+                      {String(cards.length).padStart(2, "0")}
+                    </span>
+                    <span className="mt-0.5 block text-[9px] uppercase tracking-[0.1em]">
+                      {"of "}
+                      {total.toLocaleString("en-US")}
+                    </span>
+                  </p>
+                </div>
               </div>
             ) : null}
             <ol
@@ -364,15 +372,21 @@ export function SampleInstrumentBrowse({
             </ol>
             {pages > 1 ? (
               <div
-                className="mt-0 flex items-center justify-between gap-3 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 sm:px-3.5"
+                className="mt-0 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg-sunken,#F3F5F9)] px-3 py-3 sm:px-3.5"
                 data-ledger-end=""
               >
-                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--fg-3,#5C647A)]">
-                  {cards.length < total ? "End of loaded page" : "End of ledger"}
-                </p>
-                <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                <div className="flex items-center gap-2">
+                  <span className="h-px flex-1 bg-[color:var(--ember,#D96B1C)]/50" aria-hidden />
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
+                    {cards.length < total ? "End of loaded page" : "End of ledger"}
+                  </p>
+                  <span className="h-px flex-1 bg-[color:var(--ember,#D96B1C)]/50" aria-hidden />
+                </div>
+                <p className="mt-1.5 text-center font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                   Through row{" "}
                   <span className="font-bold text-[color:var(--ember,#D96B1C)]">{String(cards.length).padStart(2, "0")}</span>
+                  {" · "}
+                  {(total - cards.length).toLocaleString("en-US")} still on the shelf
                 </p>
               </div>
             ) : null}
@@ -419,19 +433,33 @@ export function SampleInstrumentBrowse({
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
           <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
           <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col overflow-hidden rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
-            <div className="relative flex items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3 py-2.5">
-              <div className="min-w-0">
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout filters</p>
-                <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the ledger</p>
-                <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Status · Year · Sector · Campus</p>
+            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3 py-2.5 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--ember,#D96B1C)]">
+              <div className="flex items-end justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout filters</p>
+                  <p className="mt-0.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the ledger</p>
+                  <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
+                    {" on desk · Status pinned"}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setMobileFiltersOpen(false)}
+                  className="inline-flex h-9 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white"
+                >
+                  Done
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => setMobileFiltersOpen(false)}
-                className="inline-flex h-8 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
-              >
-                Done
-              </button>
+              <p className="mt-2 flex flex-wrap gap-x-2 gap-y-1 font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">
+                <span className="text-[color:var(--cobalt,#2F4FD8)]">Status</span>
+                <span aria-hidden>·</span>
+                <span>Year</span>
+                <span aria-hidden>·</span>
+                <span>Sector</span>
+                <span aria-hidden>·</span>
+                <span>Campus</span>
+              </p>
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
               <div className="h-[min(70dvh,540px)]">
