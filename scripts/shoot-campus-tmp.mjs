@@ -94,7 +94,13 @@ const browser = await chromium.launch({ headless: true });
   await page.goto(`${BASE}/?sample=1#browse`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForTimeout(2500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
-  await page.waitForTimeout(500);
+  const folio = page.locator("[data-sector-folio-desk]").first();
+  if (await folio.count()) {
+    await folio.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.waitForTimeout(250);
+    await page.evaluate(() => window.scrollBy(0, -120));
+  }
+  await page.waitForTimeout(400);
   await shot(page, "browse-1440");
 
   const more = page.getByRole("link", { name: /Show more/i }).first();
@@ -115,15 +121,28 @@ const browser = await chromium.launch({ headless: true });
   }
   await shot(page, "browse-more-end-1440");
 
-  // Desk: persistent ledger index always on — frame hero + Contents TOC + wire.
+  // Desk filters: Contents index / facet map is the hero.
+  // Scroll past sector folio so sticky Contents + FacetRail dominate; chronograph stays compact/support.
   await page.goto(`${BASE}/?sample=1#browse`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForTimeout(1500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
-  const heroF = page.locator("[data-browse-hero]").first();
-  if (await heroF.count()) {
-    await heroF.evaluate((el) => el.scrollIntoView({ block: "start" }));
+  const ledgerStage = page.locator("[data-ledger-stage='directory']").first();
+  if (await ledgerStage.count()) {
+    await ledgerStage.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(300);
-    await page.evaluate(() => window.scrollBy(0, -56));
+    await page.evaluate(() => window.scrollBy(0, -48));
+  } else {
+    const contents = page.locator("[data-contents-hero]").first();
+    if (await contents.count()) {
+      await contents.evaluate((el) => el.scrollIntoView({ block: "start" }));
+      await page.waitForTimeout(300);
+      await page.evaluate(() => window.scrollBy(0, -64));
+    }
+  }
+  // Nudge FacetRail Status into view inside sticky Contents.
+  const facetMap = page.locator("[data-contents-facet-map]").first();
+  if (await facetMap.count()) {
+    await facetMap.evaluate((el) => el.scrollIntoView({ block: "nearest" })).catch(() => {});
   }
   await page.waitForTimeout(400);
   await shot(page, "browse-filters-1440");
@@ -132,12 +151,19 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(2500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
   await page.waitForTimeout(400);
-  // Keep #1 campus hero in frame (data-browse-hero), with rank 01 of the list still visible below.
-  const hero = page.locator("[data-browse-hero='leaderboard']").first();
-  if (await hero.count()) {
-    await hero.evaluate((el) => el.scrollIntoView({ block: "start" }));
+  // Ranked ledger is the desk hero — pin the stage so big 01/02/03 numerals dominate.
+  const stage = page.locator("[data-ledger-stage='leaderboard']").first();
+  if (await stage.count()) {
+    await stage.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(300);
-    await page.evaluate(() => window.scrollBy(0, -72));
+    await page.evaluate(() => window.scrollBy(0, -96));
+  } else {
+    const hero = page.locator("[data-browse-hero='leaderboard']").first();
+    if (await hero.count()) {
+      await hero.evaluate((el) => el.scrollIntoView({ block: "start" }));
+      await page.waitForTimeout(300);
+      await page.evaluate(() => window.scrollBy(0, -72));
+    }
   }
   await page.waitForTimeout(300);
   await shot(page, "leaderboard-1440");
