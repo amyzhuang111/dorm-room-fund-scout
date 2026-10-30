@@ -831,7 +831,7 @@ export function ScoutChronograph({
   const tall = variant === "hero";
   return (
     <div
-      className={`relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] ${tall ? "px-3 py-3 sm:px-4 sm:py-3.5" : "px-2.5 py-2.5"}`}
+      className={`relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] ${tall ? "px-3.5 py-4 sm:px-4 sm:py-3.5" : "px-2.5 py-2.5"}`}
       data-scout-chronograph={variant}
       data-chrono-peak={String(peak.count)}
       data-chrono-peak-month={peak.id}
@@ -841,15 +841,15 @@ export function ScoutChronograph({
       data-chrono-window={String(detail.inWindow)}
       data-chrono-lead={figureIsUnknown ? "monthUnknown" : figureIsEarlier ? "earlier" : "peak"}
     >
-      <div className={`flex flex-wrap items-end justify-between gap-3 ${tall ? "gap-4" : ""}`}>
-        <div className="min-w-0 flex-1 basis-[12rem]">
+      <div className={`flex flex-wrap items-end justify-between gap-3 ${tall ? "flex-col items-stretch gap-4 sm:flex-row sm:items-end sm:gap-4" : ""}`}>
+        <div className={`min-w-0 ${tall ? "w-full sm:flex-1 sm:basis-[12rem]" : "flex-1 basis-[12rem]"}`}>
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">{kicker}</p>
           {tall ? (
             <>
-              <p className="mt-1 font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[44px] lg:text-[48px]">
+              <p className="mt-1.5 font-mono text-[52px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:mt-1 sm:text-[44px] sm:leading-none sm:tracking-[-0.05em] lg:text-[48px]">
                 {figure.count.toLocaleString("en-US")}
               </p>
-              <p className="mt-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[15px]">{figureCaption}</p>
+              <p className="mt-2 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:mt-1.5 sm:text-[15px]">{figureCaption}</p>
               <p data-chrono-caption="" className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{caption}</p>
               {reading ? <p className="mt-1 font-mono text-[10px] leading-snug text-[color:var(--fg-2,#3F465C)]">{reading}</p> : null}
             </>
@@ -866,7 +866,7 @@ export function ScoutChronograph({
             </>
           )}
         </div>
-        <div className={`flex items-end gap-1.5 ${tall ? "h-14 sm:h-16 lg:h-20" : "h-11"} w-full max-w-[460px] sm:w-auto sm:min-w-[200px] sm:flex-1 lg:max-w-none`}>
+        <div className={`flex items-end gap-1.5 ${tall ? "h-[4.5rem] sm:h-16 lg:h-20" : "h-11"} w-full max-w-[460px] sm:w-auto sm:min-w-[200px] sm:flex-1 lg:max-w-none`}>
           {bars.map((b) => (
             <div key={b.id} data-chrono-bar={b.id} className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1" title={`${b.label}: ${b.count}`}>
               <span

@@ -221,10 +221,8 @@ export function SampleInstrumentBrowse({
       <div className="min-w-0" data-browse-ledger="">
         {/* Distinct hero per surface — fold language, not the fold stamp */}
         <div
-          className={`mb-2 pb-2 ${
-            feed === "directory"
-              ? "relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] lg:border-0 lg:border-b lg:border-[color:var(--line,#E1E5EF)] lg:px-0 lg:py-0 lg:before:hidden"
-              : "border-b border-[color:var(--line,#E1E5EF)]"
+          className={`mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3 lg:mb-2 lg:pb-2 ${
+            feed === "directory" ? "" : ""
           }`}
           data-browse-hero={feed}
           data-continued-chapter={pages > 1 ? "1" : undefined}
@@ -235,7 +233,7 @@ export function SampleInstrumentBrowse({
               {feed === "leaderboard" && topCampus ? (
                 <>
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Signal desk · #1 campus</p>
-                  <p className="mt-1 font-mono text-[64px] font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[64px] lg:text-[72px]">01</p>
+                  <p className="mt-1.5 font-mono text-[72px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:mt-1 sm:text-[64px] sm:leading-none sm:tracking-[-0.06em] lg:text-[72px]">01</p>
                   <p className="mt-1 text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[18px]">
                     {shortCampusLabel(topCampus.id, topCampus.name)}
                   </p>
@@ -251,7 +249,13 @@ export function SampleInstrumentBrowse({
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
                     {pages > 1 ? "Scout ledger · signal desk" : "Scout ledger · top sector"}
                   </p>
-                  <p className="mt-1 font-mono text-[56px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)] sm:text-[56px] lg:text-[64px]">
+                  <p
+                    className={`mt-1.5 font-mono font-bold text-[color:var(--fg,#0B0E17)] sm:mt-1 sm:leading-none sm:tracking-[-0.05em] lg:text-[64px] ${
+                      pages > 1
+                        ? "text-[56px] leading-[0.9] tracking-[-0.06em] sm:text-[56px]"
+                        : "text-[64px] leading-[0.88] tracking-[-0.06em] sm:text-[56px]"
+                    }`}
+                  >
                     <span className="text-[color:var(--ember,#D96B1C)]">
                       {pages > 1
                         ? signaledMatch.toLocaleString("en-US")
@@ -261,12 +265,12 @@ export function SampleInstrumentBrowse({
                   <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
                     {pages > 1 ? (
                       <>
-                        matching companies with a stored signal
+                        with a stored signal
                         {topSector.label ? (
                           <>
                             {" · "}
                             {topSector.label}
-                            {" still leads"}
+                            {" leads"}
                           </>
                         ) : null}
                       </>
@@ -312,7 +316,7 @@ export function SampleInstrumentBrowse({
               ) : (
                 <>
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
-                  <p className="mt-1 font-mono text-[56px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)] sm:text-[56px] lg:text-[64px]">
+                  <p className="mt-1.5 font-mono text-[64px] font-bold leading-[0.88] tracking-[-0.06em] text-[color:var(--fg,#0B0E17)] sm:mt-1 sm:text-[56px] sm:leading-none sm:tracking-[-0.05em] lg:text-[64px]">
                     <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
                   </p>
                   <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{caption}</p>
@@ -341,9 +345,32 @@ export function SampleInstrumentBrowse({
                 : null}
             </div>
           </div>
+        </div>
+
+        {/* Scout Chronograph — unifying system. Browse-more uses folio (originality priority);
+            page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
+        <div className="mb-4 space-y-4 lg:hidden" data-mobile-browse-compose="">
+          <ScoutChronograph
+            companies={pageSlice}
+            variant="hero"
+            kicker={
+              feed === "leaderboard"
+                ? "Signal chronograph · rank band"
+                : pages > 1
+                  ? "Ledger chronograph · loaded page"
+                  : "Ledger chronograph · on page"
+            }
+            reading={
+              feed === "leaderboard"
+                ? `Rank band · ${cards.length.toLocaleString("en-US")} on desk · peak on this band`
+                : pages > 1
+                  ? `Loaded page slice · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`
+                  : `Page slice · ${cards.length.toLocaleString("en-US")} on page · not the full dispatch`
+            }
+          />
           {feed === "directory" ? (
             <div
-              className="mt-3 flex w-full overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 lg:hidden"
+              className="flex w-full overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30"
               data-mobile-sort-segment=""
               role="group"
               aria-label="Sort ledger"
@@ -374,29 +401,6 @@ export function SampleInstrumentBrowse({
               })}
             </div>
           ) : null}
-        </div>
-
-        {/* Scout Chronograph — unifying system. Browse-more uses folio (originality priority);
-            page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
-        <div className="mb-3 space-y-3 lg:hidden" data-mobile-browse-compose="">
-          <ScoutChronograph
-            companies={pageSlice}
-            variant="hero"
-            kicker={
-              feed === "leaderboard"
-                ? "Signal chronograph · rank band"
-                : pages > 1
-                  ? "Ledger chronograph · loaded page"
-                  : "Ledger chronograph · on page"
-            }
-            reading={
-              feed === "leaderboard"
-                ? `Rank band · ${cards.length.toLocaleString("en-US")} on desk · peak on this band`
-                : pages > 1
-                  ? `Loaded page slice · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`
-                  : `Page slice · ${cards.length.toLocaleString("en-US")} on page · not the full dispatch`
-            }
-          />
           {feed === "directory" && pages <= 1 ? (
             <div data-mobile-sector-folio="">
               <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
@@ -428,7 +432,7 @@ export function SampleInstrumentBrowse({
         </div>
 
         {/* Desk chronograph ribbon — same system as mobile, under hero */}
-        <div className="mb-3 hidden lg:block" data-desk-browse-chronograph="">
+        <div className="mb-4 hidden lg:block" data-desk-browse-chronograph="">
           <ScoutChronograph
             companies={pageSlice}
             variant="hero"

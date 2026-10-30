@@ -439,7 +439,7 @@ export function TileGlobe({
         </div>
         <div className="mt-3 grid items-end gap-4 sm:grid-cols-2 lg:gap-8" data-dispatch-dual="">
           <div className="min-w-0" data-dispatch-figure="">
-            <p className="mt-0 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[72px]">
+            <p className="mt-0 font-mono text-[64px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[72px]">
               {liveCount.toLocaleString("en-US")}
             </p>
             <div className="mt-2 flex items-end gap-2" aria-hidden>
@@ -451,20 +451,37 @@ export function TileGlobe({
             </p>
           </div>
           {topCampus ? (
-            <div className="min-w-0 border-t border-[color:var(--line,#E1E5EF)] pt-3 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0" data-top-desk-figure="">
-              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
-              <p className="mt-1 font-mono text-[48px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
-                01
-              </p>
-              <p className="mt-1 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[17px]">
-                {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
-              </p>
-              <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                <span className={COUNT}>{topCampus.founders.toLocaleString("en-US")}</span>
-                {" founder names · "}
-                <span className={COUNT}>{topCampus.signals.toLocaleString("en-US")}</span>
-                {" campus signals"}
-              </p>
+            <div className="min-w-0 border-t border-[color:var(--line,#E1E5EF)] pt-2.5 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0" data-top-desk-figure="">
+              {/* Mobile: one quiet line so 2,513 + chronograph own the fold. Desk: dual figure held. */}
+              <div className="sm:hidden" data-top-desk-compact="">
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
+                <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                  {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
+                  <span className="ml-2 font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
+                    {topCampus.founders.toLocaleString("en-US")}
+                  </span>
+                  <span className="font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]"> founders · </span>
+                  <span className="font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
+                    {topCampus.signals.toLocaleString("en-US")}
+                  </span>
+                  <span className="font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]"> signals</span>
+                </p>
+              </div>
+              <div className="hidden sm:block">
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
+                <p className="mt-1 font-mono text-[48px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
+                  01
+                </p>
+                <p className="mt-1 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[17px]">
+                  {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
+                </p>
+                <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <span className={COUNT}>{topCampus.founders.toLocaleString("en-US")}</span>
+                  {" founder names · "}
+                  <span className={COUNT}>{topCampus.signals.toLocaleString("en-US")}</span>
+                  {" campus signals"}
+                </p>
+              </div>
             </div>
           ) : null}
         </div>
@@ -699,22 +716,12 @@ export function TileGlobe({
       </div>
 
       <div
-        className="mt-3 space-y-3 lg:hidden"
+        className="mt-3 space-y-4 lg:hidden"
         data-fold-counts-mobile=""
         data-mobile-fold-compose=""
         style={{ paddingBottom: "calc(5.75rem + env(safe-area-inset-bottom, 0px))" }}
       >
-        <ScoutChronograph
-          companies={filteredCompanies}
-          variant="hero"
-          kicker="Scout chronograph"
-          lead={facetsActive ? "peak" : "monthUnknown"}
-          reading={
-            facetsActive
-              ? `Mobile filtered · ${liveCount.toLocaleString("en-US")} matching · ${quietLive.toLocaleString("en-US")} quiet`
-              : `Mobile dispatch · ${chronographCaption(universeChrono)} · ${quietLive.toLocaleString("en-US")} quiet`
-          }
-        />
+        {/* Chronograph lives once above the map (fold desk composition). Hierarchy below only. */}
         <div data-mobile-desk-roster="">
           <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Desk roster</p>

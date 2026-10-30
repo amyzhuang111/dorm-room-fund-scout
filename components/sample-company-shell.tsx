@@ -98,7 +98,7 @@ export function SampleCompanyShell({
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 sm:px-5">
         {/* Magazine dossier cover — desk + mobile share the profile treatment */}
-        <div className="mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-dossier-hero="" data-mobile-magazine="">
+        <div className="mb-4 border-b border-[color:var(--line,#E1E5EF)] pb-4 sm:mb-3 sm:pb-3" data-dossier-hero="" data-mobile-magazine="">
           <div className="flex flex-wrap items-center gap-2">
             <Link href="/?sample=1#browse" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
               ← Company ledger
@@ -108,7 +108,7 @@ export function SampleCompanyShell({
           {dossier?.name ? (
             <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
               <div className="min-w-0 flex-1">
-                <p className="text-[32px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[40px] lg:text-[44px]">
+                <p className="text-[36px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[40px] lg:text-[44px]">
                   {dossier.name}
                 </p>
                 <p className="mt-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:text-[13px]">
@@ -126,7 +126,7 @@ export function SampleCompanyShell({
               </div>
               <div className="shrink-0 text-right" data-dossier-wire-count="">
                 <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Campus wire</p>
-                <p className="mt-1 font-mono text-[48px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[56px] lg:text-[64px]">
+                <p className="mt-1.5 font-mono text-[56px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:mt-1 sm:text-[56px] sm:leading-none sm:tracking-[-0.05em] lg:text-[64px]">
                   {wireCount.toLocaleString("en-US")}
                 </p>
                 <p className="mt-1.5 max-w-[12rem] text-right font-mono text-[10px] leading-snug text-[color:var(--fg-3,#5C647A)] sm:max-w-[16rem]">
@@ -150,7 +150,7 @@ export function SampleCompanyShell({
           )}
         </div>
 
-        <div className="mb-3" data-dossier-chronograph="">
+        <div className="mb-4 sm:mb-3" data-dossier-chronograph="">
           <ScoutChronograph
             companies={wireCompanies}
             variant="hero"
