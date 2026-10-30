@@ -237,25 +237,18 @@ export function SampleInstrumentBrowse({
             <div className="min-w-0">
               {feed === "leaderboard" && topCampus ? (
                 <>
-                  {/* Mobile keeps big 01 campus; desk demotes it so ranked ledger numerals are the hero. */}
+                  {/* Quiet mast all sizes — ranked ledger numerals (mobile + desk) are the lead. */}
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
-                    <span className="lg:hidden">Signal desk · #1 campus</span>
-                    <span className="hidden lg:inline">Signal desk · ranked ledger</span>
+                    Signal desk · ranked ledger
                   </p>
-                  <p className="mt-1.5 font-mono text-[72px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:mt-1 sm:text-[64px] sm:leading-none sm:tracking-[-0.06em] lg:hidden">01</p>
-                  <p className="mt-1 text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[18px] lg:mt-2 lg:text-[22px]">
-                    <span className="lg:hidden">{shortCampusLabel(topCampus.id, topCampus.name)}</span>
-                    <span className="hidden lg:inline">Ranked by recent signal weight</span>
+                  <p className="mt-2 text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[18px] lg:text-[22px]">
+                    Ranked by recent signal weight
                   </p>
                   <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{topCampus.founders.toLocaleString("en-US")}</span>
-                    {" founder names · "}
-                    <span className="hidden lg:inline">
-                      {"#1 "}
-                      {shortCampusLabel(topCampus.id, topCampus.name)}
-                      {" · "}
-                    </span>
-                    <span className="lg:hidden">ranked signal desk below · </span>
+                    {" founder names · #1 "}
+                    {shortCampusLabel(topCampus.id, topCampus.name)}
+                    {" · "}
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
                     {" companies"}
                   </p>
@@ -368,17 +361,17 @@ export function SampleInstrumentBrowse({
         <div className="mb-4 space-y-4 lg:hidden" data-mobile-browse-compose="">
           <ScoutChronograph
             companies={pageSlice}
-            variant="hero"
+            variant={feed === "leaderboard" ? "compact" : "hero"}
             kicker={
               feed === "leaderboard"
-                ? "Signal chronograph · rank band"
+                ? "Signal chronograph · supporting"
                 : pages > 1
                   ? "Ledger chronograph · loaded page"
                   : "Ledger chronograph · on page"
             }
             reading={
               feed === "leaderboard"
-                ? `Rank band · ${cards.length.toLocaleString("en-US")} on desk · peak on this band`
+                ? `Supporting · ${cards.length.toLocaleString("en-US")} on desk · peak on this band`
                 : pages > 1
                   ? `Loaded page slice · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`
                   : `Page slice · ${cards.length.toLocaleString("en-US")} on page · not the full dispatch`
@@ -575,7 +568,7 @@ export function SampleInstrumentBrowse({
               })}
             </ol>
             {pages > 1 ? (
-              <div className="mt-0 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 sm:px-3.5" data-ledger-end-chrono="">
+              <div className="mt-0 hidden border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 sm:px-3.5 lg:block" data-ledger-end-chrono="">
                 <ScoutChronograph
                   companies={pageSlice}
                   variant="hero"
@@ -586,7 +579,7 @@ export function SampleInstrumentBrowse({
             ) : null}
             {pages > 1 ? (
               <div
-                className="mt-0 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg-sunken,#F3F5F9)] px-3 py-4 sm:px-3.5"
+                className="mt-0 hidden border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg-sunken,#F3F5F9)] px-3 py-4 sm:px-3.5 lg:block"
                 data-ledger-end=""
               >
                 <div className="flex items-center gap-2">
@@ -608,6 +601,57 @@ export function SampleInstrumentBrowse({
                   <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
                   {" quiet"}
                 </p>
+              </div>
+            ) : null}
+            {pages > 1 && cards.length > 0 ? (
+              <div
+                className="mt-0 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] lg:hidden"
+                data-ledger-end=""
+                data-ledger-end-mobile=""
+              >
+                <div
+                  className="relative overflow-hidden border-b border-[color:var(--line,#E1E5EF)] px-3 py-3.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+                  data-end-lead=""
+                >
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
+                    {cards.length < total ? "End of loaded page · closing entry" : "End of ledger · closing entry"}
+                  </p>
+                  <div className="mt-2 flex items-end justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-mono text-[52px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
+                        {cards.length.toLocaleString("en-US")}
+                      </p>
+                      <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                        {"of "}
+                        <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
+                        {" loaded"}
+                      </p>
+                    </div>
+                    <div className="min-w-0 flex-1 text-right">
+                      <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Last on page</p>
+                      <p className="mt-1 truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                        {cards[cards.length - 1].name}
+                      </p>
+                      <p className="mt-0.5 truncate font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                        {directoryCardSubtitle(cards[cards.length - 1]) || (cards[cards.length - 1].latestSignalAt ?? "on record")}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="mt-2.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
+                    {" with signal · "}
+                    <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
+                    {" quiet"}
+                  </p>
+                </div>
+                <div className="px-3 py-2.5" data-ledger-end-chrono="">
+                  <ScoutChronograph
+                    companies={pageSlice}
+                    variant="compact"
+                    kicker="Ledger chronograph · end slice"
+                    reading={`Supporting · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`}
+                  />
+                </div>
               </div>
             ) : null}
           </div>
@@ -691,35 +735,33 @@ export function SampleInstrumentBrowse({
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
           <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
           <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col overflow-hidden rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
-            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3 py-3 before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[color:var(--ember,#D96B1C)]">
-              <div className="flex items-end justify-between gap-3">
-                <div className="min-w-0">
+            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3 py-3 before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[color:var(--ember,#D96B1C)]" data-mobile-contents-hero="">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0 flex-1">
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
-                    {feed === "leaderboard" ? "Signal contents" : "Ledger contents"}
+                    {feed === "leaderboard" ? "Contents · signal desk" : "Contents · ledger index"}
                   </p>
-                  <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    {feed === "leaderboard" ? "Narrow the signal desk" : "Narrow the ledger"}
-                  </p>
-                  <div className="mt-2 grid grid-cols-3 gap-2" data-filter-split="">
+                  <div className="mt-2 grid grid-cols-2 gap-3" data-filter-split="">
                     <div>
-                      <p className="font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                        {boardCompanies.length.toLocaleString("en-US")}
-                      </p>
-                      <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">matching</p>
-                    </div>
-                    <div>
-                      <p className="font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                      <p className="font-mono text-[44px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
                         {signaledMatch.toLocaleString("en-US")}
                       </p>
-                      <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">signal</p>
+                      <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">with signal</p>
                     </div>
                     <div>
-                      <p className="font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
+                      <p className="font-mono text-[44px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--fg,#0B0E17)]">
                         {quietMatch.toLocaleString("en-US")}
                       </p>
-                      <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
+                      <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
                     </div>
                   </div>
+                  <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    {boardCompanies.length.toLocaleString("en-US")}
+                    {" matching · facet map below"}
+                  </p>
+                  <p className="mt-0.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
+                    {chronographCaption(contentsChrono)}
+                  </p>
                 </div>
                 <button
                   type="button"
@@ -729,7 +771,7 @@ export function SampleInstrumentBrowse({
                   Done
                 </button>
               </div>
-              <p className="mt-2 flex flex-wrap gap-x-2 gap-y-1 font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">
+              <p className="mt-2.5 flex flex-wrap gap-x-2 gap-y-1 font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">
                 <span className="text-[color:var(--cobalt,#2F4FD8)]">Status</span>
                 <span aria-hidden>·</span>
                 <span>Year</span>
@@ -737,24 +779,26 @@ export function SampleInstrumentBrowse({
                 <span>Sector</span>
                 <span aria-hidden>·</span>
                 <span>Campus</span>
+                <span aria-hidden>·</span>
+                <span>facet map</span>
               </p>
-              <div className="mt-2.5">
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain" data-mobile-facet-map="">
+              <div className="h-[min(58dvh,480px)]">
+                <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={commitFacet} dense />
+              </div>
+              <div className="border-t border-[color:var(--line,#E1E5EF)] px-3 py-2.5">
                 <ScoutChronograph
                   companies={boardCompanies}
-                  variant="hero"
+                  variant="compact"
                   kicker={feed === "leaderboard" ? "Signal chronograph · filters" : "Ledger chronograph · filters"}
                   lead={contentsUnfiltered ? "monthUnknown" : "peak"}
                   reading={
                     contentsUnfiltered
-                      ? `Filter sheet · ${chronographCaption(contentsChrono)} · pick a slice`
-                      : `Filtered Contents · ${boardCompanies.length.toLocaleString("en-US")} matching · ${quietMatch.toLocaleString("en-US")} quiet`
+                      ? `Supporting · ${boardCompanies.length.toLocaleString("en-US")} matching`
+                      : `Filtered · ${boardCompanies.length.toLocaleString("en-US")} matching · ${quietMatch.toLocaleString("en-US")} quiet`
                   }
                 />
-              </div>
-            </div>
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-              <div className="h-[min(70dvh,540px)]">
-                <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={commitFacet} dense />
               </div>
             </div>
           </div>
@@ -802,7 +846,7 @@ function LedgerRow({
         <span
           className={`shrink-0 text-right font-mono font-bold tabular-nums tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] ${
             ranked
-              ? "mt-0 w-10 text-[28px] leading-none sm:w-12 sm:text-[32px] lg:w-16 lg:text-[44px]"
+              ? "mt-0 w-12 text-[40px] leading-none sm:w-14 sm:text-[40px] lg:w-16 lg:text-[44px]"
               : "mt-0.5 w-6 text-[16px] leading-none sm:w-8 sm:text-[20px]"
           }`}
         >

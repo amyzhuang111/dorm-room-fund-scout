@@ -195,12 +195,19 @@ const browser = await chromium.launch({ headless: true });
   }
   await shot(page, "browse-more-375");
 
-  const endM = page.locator("[data-ledger-end]").first();
+  // Mobile end lead = closing entry + big loaded count (mobile-only node).
+  const endM = page.locator("[data-ledger-end-mobile]").first();
   if (await endM.count()) {
-    await endM.scrollIntoViewIfNeeded();
-    await page.waitForTimeout(400);
-    await page.evaluate(() => window.scrollBy(0, -32));
-    await page.waitForTimeout(200);
+    await endM.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.waitForTimeout(450);
+    await page.evaluate(() => window.scrollBy(0, -48));
+    await page.waitForTimeout(250);
+  } else {
+    const fallback = page.locator("[data-ledger-end]").last();
+    if (await fallback.count()) {
+      await fallback.evaluate((el) => el.scrollIntoView({ block: "start" }));
+      await page.waitForTimeout(400);
+    }
   }
   await shot(page, "browse-more-end-375");
 
@@ -209,17 +216,31 @@ const browser = await chromium.launch({ headless: true });
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
   await page.waitForTimeout(300);
   await openBrowseFilters(page);
+  // Contents dual mast + facet map are the mobile filters lead.
+  const contentsM = page.locator("[data-mobile-contents-hero]").first();
+  if (await contentsM.count()) {
+    await contentsM.evaluate((el) => el.scrollIntoView({ block: "start" })).catch(() => {});
+    await page.waitForTimeout(250);
+  }
   await shot(page, "browse-filters-375");
 
   await page.goto(`${BASE}/?sample=1&feed=leaderboard#browse`, { waitUntil: "networkidle" });
   await page.waitForTimeout(2000);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
   await page.waitForTimeout(300);
-  const heroM = page.locator("[data-browse-hero='leaderboard']").first();
-  if (await heroM.count()) {
-    await heroM.evaluate((el) => el.scrollIntoView({ block: "start" }));
+  // Mobile lb lead = ranked ledger with big numerals — frame the stage, not campus mast.
+  const stageM = page.locator("[data-ledger-stage='leaderboard']").first();
+  if (await stageM.count()) {
+    await stageM.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(300);
-    await page.evaluate(() => window.scrollBy(0, -64));
+    await page.evaluate(() => window.scrollBy(0, -72));
+  } else {
+    const heroM = page.locator("[data-browse-hero='leaderboard']").first();
+    if (await heroM.count()) {
+      await heroM.evaluate((el) => el.scrollIntoView({ block: "start" }));
+      await page.waitForTimeout(300);
+      await page.evaluate(() => window.scrollBy(0, -64));
+    }
   }
   await page.waitForTimeout(300);
   await shot(page, "leaderboard-375");
