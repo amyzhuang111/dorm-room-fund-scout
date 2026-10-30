@@ -16,6 +16,7 @@ import {
   MobileFilterDock,
   MobileWireStrip,
   PANEL,
+  ScoutAtlasPlate,
   ScoutChronograph,
   chronographCaption,
   signalChronographDetail,
@@ -187,6 +188,18 @@ export function SampleInstrumentBrowse({
   const contentsInsight = useMemo(() => contentsPageInsight(boardCompanies), [boardCompanies]);
   const pageInsight = useMemo(() => contentsPageInsight(pageSlice), [pageSlice]);
   const newestSectors = useMemo(() => newestSectorMix(boardCompanies, undefined, 5), [boardCompanies]);
+  /** Page-specific campus atlas (founders on record) — util lead, not fold mast twin. */
+  const deskConstellation = useMemo(() => {
+    return [...campuses]
+      .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))
+      .slice(0, 3)
+      .map((campus, i) => ({
+        rank: String(i + 1).padStart(2, "0"),
+        label: shortCampusLabel(campus.id, campus.name),
+        value: campus.founders.toLocaleString("en-US"),
+        unit: "founders",
+      }));
+  }, [campuses]);
 
   const wireSurface = feed === "leaderboard" ? "signals" : "browse";
 
@@ -236,7 +249,7 @@ export function SampleInstrumentBrowse({
 
   return (
     <div
-      className="mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-3 sm:mt-3 lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(220px,280px)]"
+      className="mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-4 sm:mt-3 lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(220px,280px)] lg:gap-5"
       data-browse-spread=""
     >
       {/* Col 1 — persistent ruled index (magazine TOC), not a sheet over content */}
@@ -245,50 +258,57 @@ export function SampleInstrumentBrowse({
           {/* Ember beat for open Contents — trails 353/01/138 hero pages without twinning them */}
           {/* Contents index is the desk-filters hero — big split + FacetRail first; chrono supports. */}
           <div
-            className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+            className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
             data-index-signal-beat=""
             data-contents-hero=""
+            data-contents-insight-lead=""
           >
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
               {feed === "leaderboard" ? "Contents · signal desk" : "Contents · ledger index"}
             </p>
-            <div className="mt-2 grid grid-cols-2 gap-3">
-              <div>
-                <p className="font-mono text-[52px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
-                  {signaledMatch.toLocaleString("en-US")}
-                </p>
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">with signal</p>
-              </div>
-              <div>
-                <p className="font-mono text-[52px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--fg,#0B0E17)]">
-                  {quietMatch.toLocaleString("en-US")}
-                </p>
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
-              </div>
-            </div>
-            <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              {boardCompanies.length.toLocaleString("en-US")}
-              {" matching · facet map below"}
-            </p>
             {contentsInsight ? (
-              <div className="mt-2.5 border-t border-[color:var(--line,#E1E5EF)] pt-2.5" data-contents-page-insight="">
-                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{contentsInsight.kicker}</p>
-                <p className="mt-1 flex items-baseline gap-2">
-                  <span className="font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                    {contentsInsight.signaled.toLocaleString("en-US")}
-                  </span>
-                  <span className="min-w-0 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{contentsInsight.label}</span>
+              <div className="mt-3" data-contents-page-insight="">
+                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{contentsInsight.kicker}</p>
+                <p className="mt-2 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
+                  {contentsInsight.signaled.toLocaleString("en-US")}
                 </p>
-                <p className="mt-1 font-mono text-[11px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{contentsInsight.detail}</p>
-                <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{contentsInsight.label}</p>
+                <p className="mt-2 font-mono text-[13px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{contentsInsight.detail}</p>
+                <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                   <span className="font-bold text-[color:var(--ember,#D96B1C)]">{contentsInsight.figure.toLocaleString("en-US")}</span>
-                  {" newest in window"}
+                  {" newest in window · page lead"}
                 </p>
               </div>
-            ) : null}
-            <p className="mt-1.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
-              {chronographCaption(contentsChrono)}
-            </p>
+            ) : (
+              <div className="mt-3 grid grid-cols-2 gap-4">
+                <div>
+                  <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
+                    {signaledMatch.toLocaleString("en-US")}
+                  </p>
+                  <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">with signal</p>
+                </div>
+                <div>
+                  <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--fg,#0B0E17)]">
+                    {quietMatch.toLocaleString("en-US")}
+                  </p>
+                  <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
+                </div>
+              </div>
+            )}
+            <div className="mt-4 border-t border-[color:var(--line,#E1E5EF)] pt-3">
+              <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
+                {" with signal · "}
+                <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
+                {" quiet · "}
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
+                {" matching"}
+              </p>
+              <p className="mt-1.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
+                {chronographCaption(contentsChrono)}
+                {" · facet map below"}
+              </p>
+            </div>
           </div>
           <div className="h-[min(58vh,560px)]" data-contents-facet-map="">
             <FacetRail
@@ -330,20 +350,20 @@ export function SampleInstrumentBrowse({
             <div className="min-w-0">
               {feed === "leaderboard" && topCampus ? (
                 <>
-                  {/* Quiet mast all sizes — ranked ledger numerals (mobile + desk) are the lead. */}
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
                     Signal desk · ranked ledger
                   </p>
-                  <p className="mt-2 text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[18px] lg:text-[22px]">
-                    Ranked by recent signal weight
+                  <p className="mt-2 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[64px] lg:text-[72px]">
+                    {topCampus.founders.toLocaleString("en-US")}
                   </p>
-                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{topCampus.founders.toLocaleString("en-US")}</span>
-                    {" founder names · #1 "}
+                  <p className="mt-2 text-[18px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[20px] lg:text-[22px]">
                     {shortCampusLabel(topCampus.id, topCampus.name)}
-                    {" · "}
+                    {" founder names · #1 desk"}
+                  </p>
+                  <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    Ranked by recent signal weight ·{" "}
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
-                    {" companies"}
+                    {" companies on desk"}
                   </p>
                 </>
               ) : topSector ? (
@@ -449,12 +469,24 @@ export function SampleInstrumentBrowse({
           </div>
         </div>
 
+        {feed === "leaderboard" && deskConstellation.length ? (
+          <div className="mb-5" data-signal-atlas-plate="">
+            <ScoutAtlasPlate
+              kicker="Atlas plate · signal desk"
+              title="Campus founders on record"
+              rows={deskConstellation}
+              caption={`${total.toLocaleString("en-US")} companies ranked · founders listed by campus`}
+              tone="cobalt"
+            />
+          </div>
+        ) : null}
+
         {/* Scout Chronograph — unifying system. Browse-more uses folio (originality priority);
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
-        <div className="mb-4 space-y-3 lg:hidden" data-mobile-browse-compose="">
+        <div className="mb-5 space-y-4 lg:hidden" data-mobile-browse-compose="">
           {feed === "directory" && (pages > 1 ? pageInsight : contentsInsight) ? (
             <div
-              className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+              className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
               data-mobile-page-insight=""
             >
               <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
@@ -462,22 +494,20 @@ export function SampleInstrumentBrowse({
                   ? `Newest on loaded page · ${(pageInsight ?? contentsInsight)!.kicker}`
                   : `${contentsInsight!.kicker} · ledger`}
               </p>
-              <p className="mt-1.5 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                <span className="font-mono text-[44px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-                  {(pages > 1 ? pageInsight : contentsInsight)!.signaled.toLocaleString("en-US")}
-                </span>
-                <span className="text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                  {(pages > 1 ? pageInsight : contentsInsight)!.label}
-                </span>
+              <p className="mt-3 font-mono text-[52px] font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">
+                {(pages > 1 ? pageInsight : contentsInsight)!.signaled.toLocaleString("en-US")}
               </p>
-              <p className="mt-1.5 font-mono text-[12px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">
+              <p className="mt-2 text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                {(pages > 1 ? pageInsight : contentsInsight)!.label}
+              </p>
+              <p className="mt-2 font-mono text-[13px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">
                 {(pages > 1 ? pageInsight : contentsInsight)!.detail}
               </p>
-              <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                 <span className="font-bold text-[color:var(--ember,#D96B1C)]">
                   {(pages > 1 ? pageInsight : contentsInsight)!.figure.toLocaleString("en-US")}
                 </span>
-                {" newest in window · sector strip"}
+                {" newest in window · page lead"}
               </p>
             </div>
           ) : null}
@@ -544,7 +574,7 @@ export function SampleInstrumentBrowse({
                     <li key={sec.id}>
                       <Link
                         href={browseHref({ feed, sector: sec.id, kind, campus, q: query, sort })}
-                        className="flex items-center gap-3 px-3 py-2 hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40"
+                        className="flex items-center gap-3 px-3 py-3 hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40"
                       >
                         <span className="w-6 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
                           {String(i + 1).padStart(2, "0")}
@@ -571,7 +601,7 @@ export function SampleInstrumentBrowse({
                       <li key={sec.id}>
                         <Link
                           href={browseHref({ feed, sector: sec.id, kind, campus, q: query, sort })}
-                          className="flex items-center gap-3 px-3 py-2 hover:bg-[color:var(--ember,#D96B1C)]/5"
+                          className="flex items-center gap-3 px-3 py-3 hover:bg-[color:var(--ember,#D96B1C)]/5"
                         >
                           <span className="w-6 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
                             {String(i + 1).padStart(2, "0")}
@@ -616,11 +646,11 @@ export function SampleInstrumentBrowse({
                 </p>
               </div>
               <ol className="divide-y divide-[color:var(--line,#E1E5EF)]">
-                {sectorMix(boardCompanies).slice(0, 5).map((sec, i) => (
+                {sectorMix(boardCompanies).slice(0, 3).map((sec, i) => (
                   <li key={sec.id}>
                     <Link
                       href={browseHref({ feed, sector: sec.id, kind, campus, q: query, sort })}
-                      className="flex items-center gap-3 px-3.5 py-2.5 hover:bg-[color:var(--ember,#D96B1C)]/5"
+                      className="flex items-center gap-3 px-3.5 py-3.5 hover:bg-[color:var(--ember,#D96B1C)]/5"
                     >
                       <span className="w-10 shrink-0 text-right font-mono text-[22px] font-bold tabular-nums leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
                         {String(i + 1).padStart(2, "0")}
@@ -674,11 +704,11 @@ export function SampleInstrumentBrowse({
                   </p>
                 </div>
                 <ol className="divide-y divide-[color:var(--line,#E1E5EF)]">
-                  {newestSectors.map((sec, i) => (
+                  {newestSectors.slice(0, 3).map((sec, i) => (
                     <li key={sec.id}>
                       <Link
                         href={browseHref({ feed, sector: sec.id, kind, campus, q: query, sort })}
-                        className="flex items-center gap-3 px-3.5 py-2.5 hover:bg-[color:var(--ember,#D96B1C)]/5"
+                        className="flex items-center gap-3 px-3.5 py-3.5 hover:bg-[color:var(--ember,#D96B1C)]/5"
                       >
                         <span className="w-10 shrink-0 text-right font-mono text-[22px] font-bold tabular-nums leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
                           {String(i + 1).padStart(2, "0")}
@@ -908,48 +938,52 @@ export function SampleInstrumentBrowse({
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
           <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
           <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col overflow-hidden rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
-            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3 py-3 before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[color:var(--ember,#D96B1C)]" data-mobile-contents-hero="">
+            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-4 before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[color:var(--ember,#D96B1C)]" data-mobile-contents-hero="" data-contents-insight-lead="">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
                     {feed === "leaderboard" ? "Contents · signal desk" : "Contents · ledger index"}
                   </p>
-                  <div className="mt-2 grid grid-cols-2 gap-3" data-filter-split="">
-                    <div>
-                      <p className="font-mono text-[44px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
-                        {signaledMatch.toLocaleString("en-US")}
-                      </p>
-                      <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">with signal</p>
-                    </div>
-                    <div>
-                      <p className="font-mono text-[44px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--fg,#0B0E17)]">
-                        {quietMatch.toLocaleString("en-US")}
-                      </p>
-                      <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
-                    </div>
-                  </div>
-                  <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                    {boardCompanies.length.toLocaleString("en-US")}
-                    {" matching · facet map below"}
-                  </p>
                   {contentsInsight ? (
-                    <div className="mt-2.5 border-t border-[color:var(--line,#E1E5EF)] pt-2" data-contents-page-insight="">
-                      <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{contentsInsight.kicker}</p>
-                      <p className="mt-1 flex items-baseline gap-2">
-                        <span className="font-mono text-[32px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                          {contentsInsight.signaled.toLocaleString("en-US")}
-                        </span>
-                        <span className="min-w-0 truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{contentsInsight.label}</span>
+                    <div className="mt-3" data-contents-page-insight="">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{contentsInsight.kicker}</p>
+                      <p className="mt-2 font-mono text-[52px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
+                        {contentsInsight.signaled.toLocaleString("en-US")}
                       </p>
-                      <p className="mt-1 font-mono text-[12px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{contentsInsight.detail}</p>
-                      <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                      <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{contentsInsight.label}</p>
+                      <p className="mt-2 font-mono text-[13px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{contentsInsight.detail}</p>
+                      <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                         <span className="font-bold text-[color:var(--ember,#D96B1C)]">{contentsInsight.figure.toLocaleString("en-US")}</span>
                         {" newest in window"}
                       </p>
                     </div>
-                  ) : null}
-                  <p className="mt-0.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
+                  ) : (
+                    <div className="mt-3 grid grid-cols-2 gap-3" data-filter-split="">
+                      <div>
+                        <p className="font-mono text-[44px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
+                          {signaledMatch.toLocaleString("en-US")}
+                        </p>
+                        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">with signal</p>
+                      </div>
+                      <div>
+                        <p className="font-mono text-[44px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--fg,#0B0E17)]">
+                          {quietMatch.toLocaleString("en-US")}
+                        </p>
+                        <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
+                      </div>
+                    </div>
+                  )}
+                  <p className="mt-3 border-t border-[color:var(--line,#E1E5EF)] pt-3 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
+                    {" with signal · "}
+                    <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
+                    {" quiet · "}
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
+                    {" matching"}
+                  </p>
+                  <p className="mt-1 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
                     {chronographCaption(contentsChrono)}
+                    {" · facet map below"}
                   </p>
                 </div>
                 <button
@@ -1028,7 +1062,7 @@ function LedgerRow({
     <Link
       href={`/startup/${card.id}`}
       className={`group flex items-start gap-3 px-3.5 transition-[background-color,color] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:gap-3 sm:px-3.5 ${
-        ranked ? "py-4 sm:py-3.5 lg:gap-4 lg:py-5" : "py-3.5 sm:py-3"
+        ranked ? "py-5 sm:py-4 lg:gap-4 lg:py-6" : "py-4 sm:py-3.5"
       }`}
     >
       {rank != null ? (
@@ -1047,8 +1081,8 @@ function LedgerRow({
         <p
           className={
             ranked
-              ? "line-clamp-2 break-words text-[13px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[15px] sm:leading-5 sm:[overflow-wrap:anywhere]"
-              : "truncate text-[15px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[15px]"
+              ? "line-clamp-2 break-words text-[16px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[17px] sm:leading-5 sm:[overflow-wrap:anywhere]"
+              : "truncate text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
           }
         >
           {card.name}

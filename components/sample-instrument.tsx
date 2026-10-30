@@ -29,6 +29,67 @@ export { preferLogoCompanies };
 export const INK = "text-[color:var(--fg,#0B0E17)]";
 export const MUTED = "text-[color:var(--fg-2,#3F465C)]";
 export const COUNT = "font-bold tabular-nums text-[color:var(--ember,#D96B1C)]";
+
+/** Fold-desk atlas language for util pages — word-led plate, real rows, no twin stamps. */
+export function ScoutAtlasPlate({
+  kicker,
+  title,
+  figure,
+  figureLabel,
+  rows,
+  caption,
+  tone = "cobalt",
+}: {
+  kicker: string;
+  title: string;
+  figure?: number | string;
+  figureLabel?: string;
+  rows?: { rank: string; label: string; value: string; unit?: string }[];
+  caption?: string;
+  tone?: "cobalt" | "ember";
+}) {
+  const edgeClass =
+    tone === "ember"
+      ? "border-[color:var(--ember,#D96B1C)]/35 before:bg-[color:var(--ember,#D96B1C)]"
+      : "border-[color:var(--cobalt,#2F4FD8)]/35 before:bg-[color:var(--cobalt,#2F4FD8)]";
+  const kickerClass =
+    tone === "ember" ? "text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--cobalt,#2F4FD8)]";
+  return (
+    <div
+      className={`relative overflow-hidden rounded-none border bg-[color:var(--bg,#FFFFFF)] shadow-[0_2px_0_rgba(47,79,216,0.1)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] ${edgeClass}`}
+      data-scout-atlas-plate=""
+    >
+      <div className="px-3.5 py-3.5 pl-4">
+        <p className={`font-mono text-[10px] uppercase tracking-[0.16em] ${kickerClass}`}>{kicker}</p>
+        <p className="mt-1.5 text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[18px]">{title}</p>
+        {figure != null ? (
+          <p className="mt-2.5 font-mono text-[52px] font-bold leading-[0.88] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
+            {typeof figure === "number" ? figure.toLocaleString("en-US") : figure}
+          </p>
+        ) : null}
+        {figureLabel ? (
+          <p className="mt-1.5 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{figureLabel}</p>
+        ) : null}
+        {rows && rows.length ? (
+          <ol className="mt-3 divide-y divide-[color:var(--line,#E1E5EF)] border-t border-[color:var(--line,#E1E5EF)]">
+            {rows.map((row) => (
+              <li key={row.rank + row.label} className="flex items-baseline gap-2.5 py-2.5">
+                <span className="w-5 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{row.rank}</span>
+                <span className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</span>
+                <span className="shrink-0 font-mono text-[15px] font-bold tabular-nums text-[color:var(--fg,#0B0E17)]">{row.value}</span>
+                {row.unit ? <span className="shrink-0 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">{row.unit}</span> : null}
+              </li>
+            ))}
+          </ol>
+        ) : null}
+        {caption ? (
+          <p className="mt-2.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{caption}</p>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 export const PANEL = "rounded-md border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg-raised,#FFFFFF)] text-[color:var(--fg,#0B0E17)] shadow-[0_1px_2px_rgba(15,23,42,0.04)]";
 
 /** Real initials from the company name — intentional monogram, not an orange-dot stub. */
@@ -1331,17 +1392,17 @@ export function MobileWireStrip({
   // Distinct card chrome per surface (avoid twin strips)
   const cardCls =
     surface === "fold"
-      ? "relative w-[152px] shrink-0 overflow-hidden rounded-none border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+      ? "relative w-[168px] shrink-0 overflow-hidden rounded-none border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] p-3.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
       : surface === "browse"
-        ? "relative w-[148px] shrink-0 overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] p-2.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]"
+        ? "relative w-[168px] shrink-0 overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] p-3.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)]"
         : surface === "signals"
-          ? "relative w-[140px] shrink-0 overflow-hidden rounded-none border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg-sunken,#F3F5F9)] p-2 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--ember,#D96B1C)]"
-          : "relative w-[148px] shrink-0 overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] p-2.5 after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:bg-[color:var(--ember,#D96B1C)]";
+          ? "relative w-[160px] shrink-0 overflow-hidden rounded-none border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] p-3 before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+          : "relative w-[168px] shrink-0 overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] p-3.5 after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:bg-[color:var(--ember,#D96B1C)]";
 
   const figureCls =
     surface === "signals"
-      ? "mt-1 font-mono text-[18px] font-bold leading-none tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]"
-      : "mt-1.5 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]";
+      ? "mt-2 font-mono text-[24px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]"
+      : "mt-2 font-mono text-[28px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]";
 
   return (
     <div className="lg:hidden" data-mobile-wire-strip={surface}>
@@ -1349,13 +1410,13 @@ export function MobileWireStrip({
         <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{label}</p>
         <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{hint}</p>
       </div>
-      <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {cards.map((card) => {
           const inner = (
             <>
               <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{card.kicker}</p>
               <p className={figureCls}>{card.figure}</p>
-              <p className="mt-1.5 line-clamp-2 text-[12px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">{card.caption}</p>
+              <p className="mt-2 line-clamp-2 text-[13px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">{card.caption}</p>
             </>
           );
           return card.href ? (

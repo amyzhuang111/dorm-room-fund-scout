@@ -15,6 +15,7 @@ import {
   MobileFilterDock,
   MobileWireStrip,
   PANEL,
+  ScoutAtlasPlate,
   ScoutChronograph,
   type FacetState,
 } from "./sample-instrument";
@@ -98,13 +99,24 @@ export function SampleCompanyShell({
   // Explicit: the subject company is included in the campus peer count.
   const wireIncludeNote = campusPeers ? "includes this company" : sectorPeers ? "includes this company" : null;
   const wireCompanies = campusPeers ?? sectorPeers ?? filtered.filter((c) => c.signals > 0);
+  const peerAtlasRows = useMemo(() => {
+    return [...wireCompanies]
+      .sort((a, b) => (b.signals ?? 0) - (a.signals ?? 0) || a.name.localeCompare(b.name))
+      .slice(0, 3)
+      .map((c, i) => ({
+        rank: String(i + 1).padStart(2, "0"),
+        label: c.name,
+        value: (c.signals ?? 0).toLocaleString("en-US"),
+        unit: "signals",
+      }));
+  }, [wireCompanies]);
 
   return (
     <div className="sample-paper min-h-[calc(100dvh-48px)]">
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 sm:px-5">
         {/* Magazine dossier cover — desk + mobile share the profile treatment */}
-        <div className="mb-4 border-b border-[color:var(--line,#E1E5EF)] pb-4 sm:mb-3 sm:pb-3" data-dossier-hero="" data-mobile-magazine="">
+        <div className="mb-6 border-b border-[color:var(--line,#E1E5EF)] pb-6 sm:mb-5 sm:pb-5" data-dossier-hero="" data-mobile-magazine="">
           <div className="flex flex-wrap items-center gap-2">
             <Link href="/?sample=1#browse" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
               ← Company ledger
@@ -114,7 +126,7 @@ export function SampleCompanyShell({
           {dossier?.name ? (
             <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
               <div className="min-w-0 flex-1">
-                <p className="text-[40px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[44px] lg:text-[48px]">
+                <p className="text-[44px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[48px] lg:text-[56px]">
                   {dossier.name}
                 </p>
                 <p className="mt-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:text-[13px]">
@@ -213,7 +225,7 @@ export function SampleCompanyShell({
             </>
           )}
         </div>
-        <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-2" data-dossier-colophon="">
+        <div className="mb-4 flex items-baseline justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-dossier-colophon="">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Scout edition</p>
           <p className="min-w-0 flex-1 truncate text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
@@ -235,7 +247,21 @@ export function SampleCompanyShell({
           </p>
         </div>
 
-        <div className="mb-4 sm:mb-3" data-dossier-chronograph="">
+        {peerAtlasRows.length ? (
+          <div className="mb-5" data-dossier-atlas-plate="">
+            <ScoutAtlasPlate
+              kicker={campusPeers ? "Atlas plate · campus wire" : "Atlas plate · sector peers"}
+              title={campusPeers ? `${campusShort} companies on wire` : `${dossier?.sector ?? "Sector"} peers`}
+              figure={wireCount}
+              figureLabel={wireUnit}
+              rows={peerAtlasRows}
+              caption={wireIncludeNote ? `${wireScope} · ${wireIncludeNote}` : wireScope}
+              tone="ember"
+            />
+          </div>
+        ) : null}
+
+        <div className="mb-5 sm:mb-4" data-dossier-chronograph="">
           <ScoutChronograph
             companies={wireCompanies}
             variant="hero"

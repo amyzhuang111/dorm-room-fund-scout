@@ -13,6 +13,7 @@ import {
   IntelligenceBoards,
   MobileFilterDock,
   MobileWireStrip,
+  ScoutAtlasPlate,
   PANEL,
   ScoutChronograph,
   signalChronographDetail,
@@ -905,37 +906,99 @@ export function TileGlobe({
       </div>
 
       <div
-        className="mt-3 space-y-4 lg:hidden"
+        className="mt-4 space-y-5 lg:hidden"
         data-fold-counts-mobile=""
         data-mobile-fold-compose=""
         style={{ paddingBottom: "calc(5.75rem + env(safe-area-inset-bottom, 0px))" }}
       >
-        {/* Chronograph lives once above the map (fold desk composition). Hierarchy below only. */}
-        <div data-mobile-desk-roster="">
-          <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Desk roster</p>
-            <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Swipe · top desks</p>
+        {/* Fold-filters clarity on mobile: large insight / atlas plate, then sparse desk cards. */}
+        {dispatchInsight ? (
+          <div
+            className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+            data-mobile-fold-insight=""
+          >
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
+              {filtersOpen && facetsActive ? `Contents · ${filterSliceLabel}` : "Dispatch · newest sector"}
+            </p>
+            {filtersOpen && facetsActive ? (
+              <>
+                <p className="mt-3 font-mono text-[52px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
+                  {sliceQuiet.toLocaleString("en-US")}
+                </p>
+                <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">quiet on this slice</p>
+                <p className="mt-2 font-mono text-[13px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{liveCount.toLocaleString("en-US")}</span>
+                  {" matching · "}
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceSignaled.toLocaleString("en-US")}</span>
+                  {" with signal"}
+                  {sliceLeadSector ? (
+                    <>
+                      {" · "}
+                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceLeadSector.count.toLocaleString("en-US")}</span>
+                      {" "}
+                      {sliceLeadSector.label}
+                    </>
+                  ) : null}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="mt-3 font-mono text-[52px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
+                  {dispatchInsight.signaled.toLocaleString("en-US")}
+                </p>
+                <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{dispatchInsight.label}</p>
+                <p className="mt-2 font-mono text-[13px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{dispatchInsight.detail}</p>
+                <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dispatchInsight.figure.toLocaleString("en-US")}</span>
+                  {" newest in window · fold lead"}
+                </p>
+              </>
+            )}
           </div>
-          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {topDesks.slice(0, 5).map((campus, i) => {
+        ) : null}
+        <div data-mobile-desk-atlas="">
+          <ScoutAtlasPlate
+            kicker="Atlas plate · top desks"
+            title="Founders on record"
+            rows={topDesks.slice(0, 3).map((campus, i) => ({
+              rank: String(i + 1).padStart(2, "0"),
+              label: campus.name.replace(/^University of /, "").replace(/ University$/, ""),
+              value: campus.founders.toLocaleString("en-US"),
+              unit: "founders",
+            }))}
+            caption="Ranked by campus signals · founder names"
+            tone="cobalt"
+          />
+        </div>
+        <div data-mobile-desk-roster="">
+          <div className="mb-2 flex items-baseline justify-between gap-2 px-0.5">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Desk roster</p>
+            <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Top 3 · tap to focus</p>
+          </div>
+          <div className="grid grid-cols-1 gap-3">
+            {topDesks.slice(0, 3).map((campus, i) => {
               const label = campus.name.replace(/^University of /, "").replace(/ University$/, "");
               return (
                 <button
                   key={campus.id}
                   type="button"
                   onClick={() => focus(campus)}
-                  className="relative w-[148px] shrink-0 overflow-hidden rounded-none border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] p-2.5 text-left before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+                  className="relative overflow-hidden rounded-none border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-3.5 text-left before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
                 >
-                  <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
-                    {String(i + 1).padStart(2, "0")} desk
-                  </p>
-                  <p className="mt-1.5 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                    {campus.signals.toLocaleString("en-US")}
-                  </p>
-                  <p className="mt-1.5 line-clamp-2 text-[12px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</p>
-                  <p className="mt-1 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                    {campus.founders.toLocaleString("en-US")} founders
-                  </p>
+                  <div className="flex items-end justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+                        {String(i + 1).padStart(2, "0")} desk
+                      </p>
+                      <p className="mt-1.5 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</p>
+                      <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                        {campus.founders.toLocaleString("en-US")} founders · {campus.signals.toLocaleString("en-US")} signals
+                      </p>
+                    </div>
+                    <p className="shrink-0 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+                      {campus.founders.toLocaleString("en-US")}
+                    </p>
+                  </div>
                 </button>
               );
             })}
