@@ -24,8 +24,15 @@ export function SampleCompanyShell({
   children: ReactNode;
   companies: FacetCompany[];
   campuses: { id: string; name: string; country: string; founders: number }[];
-  /** Local company beat — name / campus / year. Not the global dispatch count. */
-  dossier?: { name: string; campus?: string | null; year?: number | null };
+  /** Local company beat — name / campus / year / ids. Not the global dispatch count. */
+  dossier?: {
+    name: string;
+    campus?: string | null;
+    year?: number | null;
+    schoolId?: string | null;
+    sectorId?: string | null;
+    sector?: string | null;
+  };
 }) {
   const router = useRouter();
   const [facets, setFacets] = useState<FacetState>(emptyFacets);
@@ -56,6 +63,24 @@ export function SampleCompanyShell({
   }
 
   const signaled = filtered.filter((c) => c.signals > 0).length;
+  const campusPeers = useMemo(() => {
+    const sid = dossier?.schoolId;
+    if (!sid) return null;
+    return companies.filter((c) => c.schoolId === sid);
+  }, [companies, dossier?.schoolId]);
+  const sectorPeers = useMemo(() => {
+    const sec = dossier?.sectorId;
+    if (!sec) return null;
+    return companies.filter((c) => c.sectorId === sec);
+  }, [companies, dossier?.sectorId]);
+  // Side-column count: this company's campus (preferred) or sector — never the global 2,513.
+  const wireCount = campusPeers?.length ?? sectorPeers?.length ?? signaled;
+  const wireScope = campusPeers
+    ? "on campus"
+    : sectorPeers
+      ? "in sector"
+      : "signaled nearby";
+  const wireCompanies = campusPeers ?? sectorPeers ?? filtered.filter((c) => c.signals > 0);
 
   return (
     <div className="sample-paper min-h-[calc(100dvh-48px)]">
@@ -135,9 +160,14 @@ export function SampleCompanyShell({
                 <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
                   <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
                     <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Dossier wire</p>
-                    <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{filtered.length.toLocaleString("en-US")}</p>
+                    <p className="font-mono text-[10px] tabular-nums text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</p>
                   </div>
-                  <IntelligenceBoards companies={filtered} compact hideSector surface="company" />
+                  <p className="mb-2 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                    <span className={COUNT}>{wireCount.toLocaleString("en-US")}</span>
+                    {" "}
+                    {wireScope}
+                  </p>
+                  <IntelligenceBoards companies={wireCompanies} compact hideSector surface="company" />
                 </div>
               )}
             </div>
@@ -148,14 +178,15 @@ export function SampleCompanyShell({
             </div>
             <div className={`${PANEL} relative mt-3 overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] lg:hidden`}>
               <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Wire</p>
-                <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{filtered.length.toLocaleString("en-US")}</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Dossier wire</p>
+                <p className="font-mono text-[10px] tabular-nums text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</p>
               </div>
               <p className="mb-2 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                <span className={COUNT}>{signaled.toLocaleString("en-US")}</span>
-                {" signaled in this dispatch"}
+                <span className={COUNT}>{wireCount.toLocaleString("en-US")}</span>
+                {" "}
+                {wireScope}
               </p>
-              <IntelligenceBoards companies={filtered} compact hideSector surface="company" />
+              <IntelligenceBoards companies={wireCompanies} compact hideSector surface="company" />
             </div>
           </div>
         </div>

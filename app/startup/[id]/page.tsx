@@ -49,6 +49,9 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
     name: card?.name ?? project.name,
     campus: card?.campuses?.[0] ?? directoryRow?.school ?? null,
     year: directoryRow?.foundedYear ?? null,
+    schoolId: directoryRow?.schoolId ?? null,
+    sectorId: directoryRow?.sectorId ?? null,
+    sector: directoryRow?.sector ?? null,
   };
   return (
     <SampleCompanyShell companies={companies} campuses={campuses} dossier={dossier}>

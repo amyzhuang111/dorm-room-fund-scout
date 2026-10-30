@@ -155,11 +155,31 @@ export function SampleInstrumentBrowse({
             <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
               <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
                 <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
-                  {feed === "leaderboard" ? "Signal wire" : "Ledger wire"}
+                  {feed === "leaderboard"
+                    ? "Signal wire"
+                    : pages > 1
+                      ? "Ledger wire · continued"
+                      : "Ledger wire"}
                 </p>
-                <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{boardCompanies.length.toLocaleString("en-US")}</p>
+                <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                  {pages > 1 && feed === "directory" ? (
+                    <>
+                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length}</span>
+                      {" / "}
+                      {boardCompanies.length.toLocaleString("en-US")}
+                    </>
+                  ) : (
+                    boardCompanies.length.toLocaleString("en-US")
+                  )}
+                </p>
               </div>
-              <IntelligenceBoards companies={boardCompanies} compact surface={wireSurface} />
+              {/* Expanded ledger: recent-first wire so browse-more is not a twin of browse. */}
+              <IntelligenceBoards
+                companies={boardCompanies}
+                compact
+                surface={pages > 1 && feed === "directory" ? "signals" : wireSurface}
+                hideSector={pages > 1 && feed === "directory"}
+              />
             </div>
           )}
         </div>
@@ -186,30 +206,58 @@ export function SampleInstrumentBrowse({
                 </>
               ) : topSector ? (
                 <>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout ledger · top sector</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
+                    {pages > 1 ? "Scout ledger · continued" : "Scout ledger · top sector"}
+                  </p>
                   <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
-                    <span className="text-[color:var(--ember,#D96B1C)]">{topSector.count.toLocaleString("en-US")}</span>
+                    <span className="text-[color:var(--ember,#D96B1C)]">
+                      {pages > 1 ? String(cards.length).padStart(2, "0") : topSector.count.toLocaleString("en-US")}
+                    </span>
                   </p>
                   <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    {topSector.label}
-                    {campusName ? (
+                    {pages > 1 ? (
                       <>
-                        {" · "}
-                        {campusName}
-                        {" · "}
-                        <Link href={clearCampusHref} className="text-[color:var(--ember,#D96B1C)] hover:underline">
-                          Clear
-                        </Link>
+                        rows on desk
+                        {topSector.label ? (
+                          <>
+                            {" · "}
+                            {topSector.label}
+                          </>
+                        ) : null}
                       </>
-                    ) : null}
+                    ) : (
+                      <>
+                        {topSector.label}
+                        {campusName ? (
+                          <>
+                            {" · "}
+                            {campusName}
+                            {" · "}
+                            <Link href={clearCampusHref} className="text-[color:var(--ember,#D96B1C)] hover:underline">
+                              Clear
+                            </Link>
+                          </>
+                        ) : null}
+                      </>
+                    )}
                   </p>
                   <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                     {total.toLocaleString("en-US")}
                     {" on the ledger · "}
-                    {subline}
-                    {" · "}
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
-                    {" on page"}
+                    {pages > 1 ? (
+                      <>
+                        {"rows 01–"}
+                        {String(cards.length).padStart(2, "0")}
+                        {" loaded"}
+                      </>
+                    ) : (
+                      <>
+                        {subline}
+                        {" · "}
+                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
+                        {" on page"}
+                      </>
+                    )}
                   </p>
                 </>
               ) : (
@@ -255,7 +303,8 @@ export function SampleInstrumentBrowse({
           </div>
         </div>
 
-        {/* One strong ledger stage — map-stage language: cobalt frame, ruled rows */}
+        {/* One strong ledger stage — map-stage language: cobalt frame, ruled rows.
+            Browse-more (pages > 1): sticky row-range, section dividers, end mark. */}
         {cards.length === 0 ? (
           <p className="text-[13px] text-[color:var(--fg-2,#3F465C)]">
             {query
@@ -265,34 +314,87 @@ export function SampleInstrumentBrowse({
                 : "No companies in this category."}
           </p>
         ) : (
-          <ol
-            data-ledger-stage={feed} data-ledger-top=""
-            className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] divide-y divide-[color:var(--line,#E1E5EF)]"
-          >
-            {cards.map((card, index) => (
-              <li key={card.id}>
-                <LedgerRow
-                  card={card}
-                  rank={feed === "leaderboard" ? (pages - 1) * 14 + index + 1 : null}
-                  ranked={feed === "leaderboard"}
-                />
-              </li>
-            ))}
-          </ol>
+          <div data-ledger-expanded={pages > 1 ? "1" : "0"}>
+            {pages > 1 ? (
+              <div className="relative sticky top-12 z-10 mb-0 flex items-baseline justify-between gap-3 border border-b-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 px-3 py-2 backdrop-blur-sm before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)] sm:px-3.5">
+                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+                  {feed === "leaderboard" ? "Signal desk continued" : "Ledger continued"}
+                </p>
+                <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">
+                    {String(1).padStart(2, "0")}–{String(cards.length).padStart(2, "0")}
+                  </span>
+                  {" of "}
+                  {total.toLocaleString("en-US")}
+                </p>
+              </div>
+            ) : null}
+            <ol
+              data-ledger-stage={feed}
+              data-ledger-top={pages > 1 ? undefined : ""}
+              className={`relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] divide-y divide-[color:var(--line,#E1E5EF)] ${pages > 1 ? "border-t-0" : ""}`}
+            >
+              {cards.map((card, index) => {
+                const chunk = 14;
+                const showDivider = pages > 1 && index > 0 && index % chunk === 0;
+                const sectionFrom = Math.floor(index / chunk) * chunk + 1;
+                const sectionTo = Math.min(sectionFrom + chunk - 1, cards.length);
+                return (
+                  <li key={card.id}>
+                    {showDivider ? (
+                      <div
+                        className="flex items-center gap-2 border-t-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/50 px-3 py-1.5 sm:px-3.5"
+                        data-ledger-section={String(Math.floor(index / chunk) + 1)}
+                      >
+                        <span className="h-px flex-1 bg-[color:var(--cobalt,#2F4FD8)]/25" aria-hidden />
+                        <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+                          Rows {String(sectionFrom).padStart(2, "0")}–{String(sectionTo).padStart(2, "0")}
+                        </span>
+                        <span className="h-px flex-1 bg-[color:var(--cobalt,#2F4FD8)]/25" aria-hidden />
+                      </div>
+                    ) : null}
+                    <LedgerRow
+                      card={card}
+                      rank={feed === "leaderboard" ? index + 1 : null}
+                      ranked={feed === "leaderboard"}
+                      />
+                  </li>
+                );
+              })}
+            </ol>
+            {pages > 1 ? (
+              <div
+                className="mt-0 flex items-center justify-between gap-3 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 sm:px-3.5"
+                data-ledger-end=""
+              >
+                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--fg-3,#5C647A)]">
+                  {cards.length < total ? "End of loaded page" : "End of ledger"}
+                </p>
+                <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  Through row{" "}
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{String(cards.length).padStart(2, "0")}</span>
+                </p>
+              </div>
+            ) : null}
+          </div>
         )}
 
         {cards.length < total ? (
-          <div className="mt-3 flex flex-wrap items-center gap-2">
+          <div className={`mt-3 flex flex-wrap items-center gap-2 ${pages > 1 ? "justify-between border-t border-dashed border-[color:var(--line-strong,#C5CAD8)] pt-3" : ""}`}>
             <Link
               href={moreHref}
               className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white hover:opacity-90"
             >
-              Show more
+              {pages > 1 ? "Load next page" : "Show more"}
             </Link>
             <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
               {(total - cards.length).toLocaleString("en-US")} more on the ledger
             </p>
           </div>
+        ) : pages > 1 ? (
+          <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--fg-3,#5C647A)]">
+            Full ledger on desk
+          </p>
         ) : null}
 
         <div className="mt-3 lg:hidden">
@@ -359,32 +461,40 @@ function signalMeta(card: DirectoryCard): { primary: string; secondary: string }
 }
 
 /** Editorial ledger row — fold/map-stage language: ruled, mono meta, ember hover. */
-function LedgerRow({ card, rank, ranked = false }: { card: DirectoryCard; rank: number | null; ranked?: boolean }) {
+function LedgerRow({
+  card,
+  rank,
+  ranked = false,
+}: {
+  card: DirectoryCard;
+  rank: number | null;
+  ranked?: boolean;
+}) {
   const subtitle = directoryCardSubtitle(card);
   const meta = signalMeta(card);
   return (
     <Link
       href={`/startup/${card.id}`}
-      className="group flex items-start gap-3 px-3 py-2.5 transition-[background-color,color] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:px-3.5 sm:py-3"
+      className="group flex items-start gap-2.5 px-3 py-2.5 transition-[background-color,color] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:gap-3 sm:px-3.5 sm:py-3"
     >
       {rank != null ? (
-        <span className="mt-0.5 w-7 shrink-0 text-right font-mono text-[18px] font-bold tabular-nums leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)] sm:w-8 sm:text-[20px]">
+        <span className="mt-0.5 w-6 shrink-0 text-right font-mono text-[16px] font-bold tabular-nums leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)] sm:w-8 sm:text-[20px]">
           {String(rank).padStart(2, "0")}
         </span>
       ) : null}
-      <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 22 : 24} />
+      <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 20 : 24} />
       <div className="min-w-0 flex-1">
         <p
           className={
             ranked
-              ? "text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[15px] sm:leading-5 [overflow-wrap:anywhere]"
+              ? "line-clamp-2 break-words text-[13px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[15px] sm:leading-5 sm:[overflow-wrap:anywhere]"
               : "truncate text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[15px]"
           }
         >
           {card.name}
         </p>
         {subtitle ? (
-          <p className={`mt-0.5 font-mono text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)] ${ranked ? "line-clamp-2 sm:truncate" : "truncate"}`}>
+          <p className={`mt-0.5 font-mono text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)] ${ranked ? "line-clamp-2" : "truncate"}`}>
             {subtitle}
           </p>
         ) : null}

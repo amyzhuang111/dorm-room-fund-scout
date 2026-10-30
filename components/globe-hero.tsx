@@ -248,10 +248,11 @@ function SignatureBand({ stats, companies = [], globe }: { stats: HeroStats; com
       <section className="-mx-4 px-0 pb-1 sm:-mx-5" aria-label="Campus Scout">
         <div className="mb-1 flex flex-wrap items-center gap-2">
           <SamplePill />
-          <p className="text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)] sm:text-[13px]" data-sample-strip-counts>
-            <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]" data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
+          {/* Counts live in the fold masthead; keep DOM anchors for check-facet-dom. */}
+          <p className="sr-only" data-sample-strip-counts>
+            <span data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
             {" founder names listed · "}
-            <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]" data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
+            <span data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
             {" campuses on map"}
           </p>
         </div>
