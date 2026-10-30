@@ -1,9 +1,24 @@
 "use client";
 
 import type { ReactNode } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { TileGlobe, type TileCampus, type TileCompany } from "@/components/tile-globe";
+import type { TileCampus, TileCompany } from "@/components/tile-globe";
+
+const TileGlobe = dynamic(
+  () => import("@/components/tile-globe").then((mod) => ({ default: mod.TileGlobe })),
+  {
+    ssr: true,
+    loading: () => (
+      <div
+        className="w-full bg-[color:var(--bg,#FFFFFF)]"
+        style={{ minHeight: "min(100dvh, 780px)" }}
+        aria-hidden
+      />
+    ),
+  },
+);
 import type { HeroStats, WeekItem } from "@/lib/domain/hero-stats";
 import { updatedAgo } from "@/lib/domain/relative-time";
 import { sampleSurfaceCounts } from "@/lib/domain/sample-facets";

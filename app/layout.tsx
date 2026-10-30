@@ -16,12 +16,16 @@ const geist = Geist({
   variable: "--font-geist",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
+  display: "swap",
+  preload: true,
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
   weight: ["400", "500"],
+  display: "swap",
+  preload: true,
 });
 
 const instrument = Instrument_Serif({
@@ -29,12 +33,16 @@ const instrument = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
   style: "italic",
+  display: "swap",
+  preload: true,
 });
 
 const display = Fraunces({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["500", "600", "700"],
+  display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {

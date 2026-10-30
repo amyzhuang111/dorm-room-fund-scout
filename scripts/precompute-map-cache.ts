@@ -4,8 +4,14 @@
 import fs from "node:fs";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
+
+// Always rebuild from SQLite — never read a stale public/data JSON.
+process.env.CAMPUS_SCOUT_IGNORE_PRECOMPUTE = "1";
+
 import { listCampusArcs, listCandidateProjects, listUniversities } from "../lib/domain/queries";
 import { buildNetworkMap } from "../lib/domain/network-map";
+import { buildDirectoryFromDb } from "../lib/domain/directory";
+import { buildHeroStatsFromDb } from "../lib/domain/hero-stats";
 
 const dir = path.join(process.cwd(), "public", "data");
 fs.mkdirSync(dir, { recursive: true });
@@ -26,3 +32,9 @@ write("candidates.json", candidates, universitiesStarted);
 
 const networkStarted = performance.now();
 write("network-map.json", buildNetworkMap(), networkStarted);
+
+const directoryStarted = performance.now();
+write("sample-directory.json", buildDirectoryFromDb(), directoryStarted);
+
+const heroStarted = performance.now();
+write("hero-stats.json", buildHeroStatsFromDb(), heroStarted);

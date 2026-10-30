@@ -115,7 +115,8 @@ async function readChrono(page) {
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 await page.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
-await page.waitForTimeout(1500);
+await page.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
+await page.waitForTimeout(800);
 // Chronograph lives on the closed fold; filters-open invite replaces it — read honesty first.
 const chrono = await readChrono(page);
 await openFilters(page);

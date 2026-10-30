@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import { getDb } from "../db/client";
 import { campusSlug, shortCampusLabel } from "./campuses";
 import { classifyDescription, isBoilerplateDescription, primaryTag, sectorLabel } from "./sectors";
@@ -177,8 +179,35 @@ function hqRegionOf(raw: string | null | undefined): string | null {
   return short.length <= 24 ? short : short.slice(0, 24);
 }
 
-/** Reads companies, schools, sectors, and signal rows. A larger import shows up here without a layout change. */
+let directoryMemo: DirectoryData | null = null;
+
+function readPrecomputedDirectory(): DirectoryData | null {
+  if (process.env.CAMPUS_SCOUT_IGNORE_PRECOMPUTE === "1") return null;
+  try {
+    const file = path.join(process.cwd(), "public", "data", "sample-directory.json");
+    if (!fs.existsSync(file)) return null;
+    const parsed = JSON.parse(fs.readFileSync(file, "utf8")) as DirectoryData;
+    if (!parsed?.cards?.length) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+/** Reads companies, schools, sectors, and signal rows. Prefer build-time JSON on the hot path. */
 export function loadDirectory(): DirectoryData {
+  if (directoryMemo) return directoryMemo;
+  const precomputed = readPrecomputedDirectory();
+  if (precomputed) {
+    directoryMemo = precomputed;
+    return directoryMemo;
+  }
+  directoryMemo = buildDirectoryFromDb();
+  return directoryMemo;
+}
+
+/** SQLite build used by precompute-map-cache. */
+export function buildDirectoryFromDb(): DirectoryData {
   const db = getDb();
   const companies = db
     .prepare(

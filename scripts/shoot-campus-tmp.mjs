@@ -11,6 +11,10 @@ async function shot(page, name) {
   console.log("wrote", path);
 }
 
+async function waitDirectory(page) {
+  await page.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 }).catch(() => {});
+}
+
 async function openFilters(page) {
   const btn = page.getByRole("button", { name: /^Filters$/ });
   if ((await btn.count()) && (await btn.first().isVisible().catch(() => false))) {
@@ -86,6 +90,7 @@ const browser = await chromium.launch({ headless: true });
 {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await waitDirectory(page);
   await page.waitForTimeout(4500);
   await shot(page, "fold-1440");
   await openFilters(page);
@@ -107,6 +112,7 @@ const browser = await chromium.launch({ headless: true });
   await shot(page, "fold-filters-1440");
 
   await page.goto(`${BASE}/?sample=1#browse`, { waitUntil: "networkidle", timeout: 90000 });
+  await waitDirectory(page);
   await page.waitForTimeout(2500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
   const folio = page.locator("[data-sector-folio-desk]").first();
@@ -139,6 +145,7 @@ const browser = await chromium.launch({ headless: true });
   // Desk filters: Contents index / facet map is the hero.
   // Scroll past sector folio so sticky Contents + FacetRail dominate; chronograph stays compact/support.
   await page.goto(`${BASE}/?sample=1#browse`, { waitUntil: "networkidle", timeout: 90000 });
+  await waitDirectory(page);
   await page.waitForTimeout(1500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
   const ledgerStage = page.locator("[data-ledger-stage='directory']").first();
@@ -163,6 +170,7 @@ const browser = await chromium.launch({ headless: true });
   await shot(page, "browse-filters-1440");
 
   await page.goto(`${BASE}/?sample=1&feed=leaderboard#browse`, { waitUntil: "networkidle", timeout: 90000 });
+  await waitDirectory(page);
   await page.waitForTimeout(2500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
   await page.waitForTimeout(400);
@@ -193,6 +201,7 @@ const browser = await chromium.launch({ headless: true });
 {
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
   await page.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await waitDirectory(page);
   await page.waitForTimeout(4500);
   await shot(page, "fold-375");
 

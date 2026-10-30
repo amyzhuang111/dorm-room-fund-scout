@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import { getDb } from "../db/client";
 import { campusSlug, shortCampusLabel, shortCampusName } from "./campuses";
 import { countCandidateProjects, listFounders, listUniversities, type UniversitySummary } from "./queries";
@@ -68,6 +70,9 @@ export interface HeroStats {
 }
 
 export function latestDataTimestamp(): string | null {
+  // Layout footer runs on every page — prefer precomputed hero clock when present.
+  const precomputed = readPrecomputedHeroStats();
+  if (precomputed?.updatedAt) return precomputed.updatedAt;
   return latestTimestamp();
 }
 
@@ -265,7 +270,35 @@ function weekFeed(db: ReturnType<typeof getDb>): { items: WeekItem[]; articleCou
   return { items, articleCount: weekArticles.size, campusIds: campusIds.slice(0, 8) };
 }
 
+let heroStatsMemo: HeroStats | null = null;
+
+function readPrecomputedHeroStats(): HeroStats | null {
+  if (process.env.CAMPUS_SCOUT_IGNORE_PRECOMPUTE === "1") return null;
+  try {
+    const file = path.join(process.cwd(), "public", "data", "hero-stats.json");
+    if (!fs.existsSync(file)) return null;
+    const parsed = JSON.parse(fs.readFileSync(file, "utf8")) as HeroStats;
+    if (!parsed || typeof parsed.founders !== "number") return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+/** Prefer build-time JSON so cold loads skip the multi-second founders scan. */
 export function loadHeroStats(): HeroStats {
+  if (heroStatsMemo) return heroStatsMemo;
+  const precomputed = readPrecomputedHeroStats();
+  if (precomputed) {
+    heroStatsMemo = precomputed;
+    return heroStatsMemo;
+  }
+  heroStatsMemo = buildHeroStatsFromDb();
+  return heroStatsMemo;
+}
+
+/** SQLite build used by precompute-map-cache. */
+export function buildHeroStatsFromDb(): HeroStats {
   const db = getDb();
   const briefs = signalWeeksByCampus();
   const signalCounts = signalCountsByCampus(db);

@@ -178,7 +178,8 @@ export function TileGlobe({
       map.easeTo({ center, duration: 1400, easing: (t: number) => t, essential: true });
     };
 
-    void loadMapLibre().then((mod) => {
+    const startMap = () => {
+      void loadMapLibre().then((mod) => {
       if (dead || !mapNode.current) return;
       const created = new mod.Map({
         container: mapNode.current,
@@ -326,6 +327,11 @@ export function TileGlobe({
         if (!interacting) spin();
       });
     });
+    };
+
+    const ric = window.requestIdleCallback?.bind(window);
+    if (ric) ric(() => { if (!dead) startMap(); }, { timeout: 500 });
+    else window.setTimeout(() => { if (!dead) startMap(); }, 0);
 
     const observer = new ResizeObserver(() => mapRef.current?.resize());
     observer.observe(node);

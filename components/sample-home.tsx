@@ -1,7 +1,4 @@
-import Link from "next/link";
-import { GlobeHero, WorldMap } from "@/components/globe-hero";
-import { SampleInstrumentBrowse } from "@/components/sample-instrument-browse";
-import { SampleTheme } from "@/components/sample-theme";
+import dynamic from "next/dynamic";
 import {
   directoryPage,
   directorySortOf,
@@ -12,33 +9,15 @@ import {
   sortDirectory,
   type DirectoryCard,
   type DirectoryFilter,
-  type DirectorySort,
 } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
 
 export type Feed = "directory" | "leaderboard" | "world";
 
-function browseHref(opts: {
-  feed?: Feed;
-  sector?: string;
-  kind?: string;
-  campus?: string;
-  q?: string;
-  sort?: DirectorySort;
-  more?: number;
-}): string {
-  const query = new URLSearchParams();
-  query.set("sample", "1");
-  if (opts.feed && opts.feed !== "directory") query.set("feed", opts.feed);
-  if (opts.sector) query.set("sector", opts.sector);
-  if (opts.kind) query.set("kind", opts.kind);
-  if (opts.campus) query.set("campus", opts.campus);
-  const q = opts.q?.trim();
-  if (q) query.set("q", q);
-  if (opts.sort && opts.sort !== "recent") query.set("sort", opts.sort);
-  if (opts.more && opts.more > 1) query.set("more", String(opts.more));
-  return `/?${query.toString()}#browse`;
-}
+const SampleHomeClient = dynamic(
+  () => import("@/components/sample-home-client").then((mod) => ({ default: mod.SampleHomeClient })),
+  { ssr: true },
+);
 
 export function SampleHome({
   feed,
@@ -66,25 +45,6 @@ export function SampleHome({
   const campusId = campusRow?.id;
   const listed = feed === "directory" || feed === "leaderboard";
   const data = loadDirectory();
-  const tiles = data.cards.map((card) => ({
-    id: card.id,
-    name: card.name,
-    schoolId: card.schoolId,
-    school: card.school,
-    signals: card.signals,
-    logoUrl: card.logoUrl,
-    founders: card.founders,
-    sectorId: card.sectorId,
-    sector: card.sector,
-    stage: card.stage,
-    signalKind: card.signalKind,
-    signalLabel: card.signalLabel,
-    latestSignalAt: card.latestSignalAt,
-    foundedYear: card.foundedYear,
-    operatingStatus: card.operatingStatus,
-    hqRegion: card.hqRegion,
-    primaryProgram: card.primaryProgram,
-  }));
   const matched = searchDirectory(filterDirectory(data.cards, sector, kind, campusId), query);
   const campusTotal = campusId ? filterDirectory(data.cards, undefined, undefined, campusId).length : null;
   const ordered = feed === "directory" ? sortDirectory(matched, order) : matched;
@@ -123,83 +83,27 @@ export function SampleHome({
     : null;
 
   return (
-    <div className="sample-paper">
-      <SampleTheme />
-      <GlobeHero stats={stats} showGlobe={feed !== "world"} companies={tiles} />
-      <section id="browse" className="scroll-mt-14 border-t border-line px-3 pb-10 pt-2 sm:px-5">
-        <div className="mx-auto w-full max-w-[1280px]">
-          <div className="flex flex-wrap items-center gap-x-1 border-b border-line" role="tablist" aria-label="Views">
-            <Tab href={browseHref({ feed: "directory", sector, kind, campus: campusId, q: query, sort: order })} active={feed === "directory"}>
-              Ledger
-            </Tab>
-            <Tab href={browseHref({ feed: "leaderboard", sector, kind, campus: campusId, q: query })} active={feed === "leaderboard"}>
-              Signals
-            </Tab>
-            <Tab href={browseHref({ feed: "world", campus: campusId })} active={feed === "world"}>
-              Atlas
-            </Tab>
-          </div>
-          <div className="flex items-baseline justify-between gap-3 border-b border-line py-1.5" data-browse-edition="">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Scout edition</p>
-            <p className="min-w-0 truncate text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{data.cards.length.toLocaleString("en-US")}</span>
-              {" companies · "}
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{data.cards.filter((c) => c.signals > 0).length.toLocaleString("en-US")}</span>
-              {" with signal"}
-              {newestHome ? (
-                <>
-                  {" · "}
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{newestHome.detail}</span>
-                  {" · "}
-                  {newestHome.label}
-                </>
-              ) : null}
-            </p>
-          </div>
-        </div>
-        {feed === "world" ? (
-          <div className="mx-auto mt-3 w-full max-w-[1280px]">
-            <WorldMap stats={stats} companies={tiles} />
-          </div>
-        ) : listed ? (
-          <SampleInstrumentBrowse
-            feed={feed}
-            cards={shown}
-            total={total}
-            pages={pages}
-            sector={sector}
-            kind={kind}
-            campus={campusId}
-            campusName={campusRow?.name}
-            campusTotal={campusTotal}
-            query={query}
-            sort={order}
-            sectors={data.sectors}
-            kinds={data.kinds}
-            campuses={campuses}
-            companies={tiles}
-            moreHref={browseHref({
-              feed,
-              sector,
-              kind,
-              campus: campusId,
-              q: query,
-              sort: feed === "directory" ? order : undefined,
-              more: pages + 1,
-            })}
-            clearCampusHref={browseHref({ feed, sector, kind, q: query, sort: feed === "directory" ? order : undefined })}
-          />
-        ) : null}
-      </section>
-    </div>
-  );
-}
-
-function Tab({ href, active, children }: { href: string; active: boolean; children: string }) {
-  return (
-    <Link href={href} role="tab" aria-selected={active} className={`grid h-8 place-items-center border-b-2 px-2.5 font-mono text-[12px] font-medium uppercase tracking-[0.08em] ${active ? "border-[color:var(--ember,#D96B1C)] text-[color:var(--fg,#0B0E17)]" : "border-transparent text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg-2,#3F465C)]"}`}>
-      {children}
-    </Link>
+    <SampleHomeClient
+      feed={feed}
+      sector={sector}
+      kind={kind}
+      campusId={campusId}
+      campusName={campusRow?.name}
+      campusTotal={campusTotal}
+      query={query}
+      order={order}
+      pages={pages}
+      shown={listed ? shown : []}
+      total={total}
+      sectors={data.sectors}
+      kinds={data.kinds}
+      campuses={campuses}
+      stats={stats}
+      cardCount={data.cards.length}
+      signalCompanyCount={data.cards.filter((c) => c.signals > 0).length}
+      newestHome={newestHome}
+      directoryUrl="/data/sample-directory.json"
+    />
   );
 }
 
