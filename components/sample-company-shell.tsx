@@ -260,8 +260,25 @@ export function SampleCompanyShell({
           </p>
         </div>
 
+        {/* Mobile identity: dispatch ticket (not a shrunken desk atlas). Desk keeps atlas plate. */}
+        <div className="mb-5 sm:hidden" data-mobile-dispatch-ticket="" data-mobile-chrono-identity="">
+          <ScoutChronograph
+            companies={wireCompanies}
+            variant="ticket"
+            kicker="Dossier · campus ticket"
+            datedLabel={`${wireCompanies.filter((c) => (c.latestSignalAt ?? "").length >= 7).length.toLocaleString("en-US")} dated on this campus wire`}
+            reading={
+              campusPeers
+                ? `${campusShort} campus slice · ${wireCount.toLocaleString("en-US")} companies · includes this company`
+                : sectorPeers
+                  ? `Sector slice · ${wireCount.toLocaleString("en-US")} companies · includes this company`
+                  : `Nearby signaled slice · ${wireCount.toLocaleString("en-US")} companies`
+            }
+          />
+        </div>
+
         {peerAtlasRows.length ? (
-          <div className="mb-6 sm:mb-6" data-dossier-atlas-plate="" data-dossier-atlas-lead="" data-mobile-atlas-lead="">
+          <div className="mb-6 hidden sm:block" data-dossier-atlas-plate="" data-dossier-atlas-lead="">
             <ScoutAtlasPlate
               kicker={campusPeers ? "Atlas plate · campus wire" : "Atlas plate · sector peers"}
               title={campusPeers ? `${campusShort} companies on wire` : `${dossier?.sector ?? "Sector"} peers`}
@@ -274,7 +291,7 @@ export function SampleCompanyShell({
           </div>
         ) : null}
 
-        <div className="mb-6 sm:mb-4" data-dossier-chronograph="">
+        <div className="mb-6 hidden sm:block sm:mb-4" data-dossier-chronograph="">
           <ScoutChronograph
             companies={wireCompanies}
             variant="hero"

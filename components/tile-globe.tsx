@@ -14,9 +14,7 @@ import {
   IntelligenceBoards,
   MobileFilterDock,
   MobileWireStrip,
-  ScoutAtlasPlate,
   campusFoundersTop,
-  campusFoundersAtlasRows,
   PANEL,
   ScoutChronograph,
   signalChronographDetail,
@@ -159,7 +157,7 @@ export function TileGlobe({
       // Desktop strip is inside the stage. Mobile chips and the strip sit under it.
       const reserve = wide ? 8 : 320; // room for Live + Ledger strip under the stage
       const available = Math.round(window.innerHeight - docTop - reserve);
-      const raw = Math.max(wide ? 600 : 220, available);
+      const raw = Math.max(wide ? 520 : 220, available);
       setStageHeight(wide ? raw : Math.min(260, raw));
     };
     fit();
@@ -279,39 +277,6 @@ export function TileGlobe({
             "circle-opacity": 1,
           },
         });
-        map.addLayer({
-          id: "campus-labels",
-          type: "symbol",
-          source: "campuses",
-          filter: ["<=", ["get", "labelRank"], 8],
-          layout: {
-            "text-field": ["get", "shortLabel"],
-            "text-font": ["Noto Sans Regular"],
-            "text-size": [
-              "interpolate",
-              ["linear"],
-              ["zoom"],
-              1.2,
-              ["case", ["==", ["get", "top"], 1], 11, 9],
-              3,
-              ["case", ["==", ["get", "top"], 1], 13, 11],
-              5,
-              ["case", ["==", ["get", "top"], 1], 15, 12],
-            ],
-            "text-offset": [0, 1.2],
-            "text-anchor": "top",
-            "text-allow-overlap": false,
-            "text-ignore-placement": false,
-            "symbol-sort-key": ["get", "labelRank"],
-            "text-max-width": 8,
-          },
-          paint: {
-            "text-color": ["case", ["==", ["get", "top"], 1], "#D96B1C", "#3F465C"],
-            "text-halo-color": "#FFFFFF",
-            "text-halo-width": 1.7,
-            "text-halo-blur": 0.2,
-          },
-        });
         setReady(true);
         map.resize();
         spin();
@@ -391,12 +356,6 @@ export function TileGlobe({
       country
         ? ["all", ["==", ["get", "top"], 1], ["==", ["get", "country"], country]]
         : ["==", ["get", "top"], 1],
-    );
-    mapRef.current.setFilter(
-      "campus-labels",
-      country
-        ? ["all", ["<=", ["get", "labelRank"], 8], ["==", ["get", "country"], country]]
-        : ["<=", ["get", "labelRank"], 8],
     );
     const selected = selectedId
       ? country
@@ -484,7 +443,6 @@ export function TileGlobe({
   /** Campus plates sitewide — ranked by founder names (Penn 757 / Stanford 300 / MIT 238). */
   const topDesksByFounders = useMemo(() => campusFoundersTop(campuses, 8), [campuses]);
   const topCampus = topDesksByFounders[0] ?? null;
-  const foundersAtlasRows = useMemo(() => campusFoundersAtlasRows(campuses, 3, shortCampusLabel), [campuses]);
 
   return (
     <div className={className} data-fold-mobile-root="">
@@ -543,7 +501,7 @@ export function TileGlobe({
                   {shortCampusLabel(topCampus.id, topCampus.name)}
                 </p>
                 <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                  {"#1 by founder names · map labels the desk"}
+                  {"#1 by founder names · chronograph is the desk"}
                 </p>
               </div>
             </div>
@@ -760,7 +718,17 @@ export function TileGlobe({
         </p>
       </div>
 
-      {/* Structural desk: chronograph folio | map | wire. Filters open: Contents | map | wire. */}
+      {/* Chronograph identity — non-geographic fold hero. Map stays support; no new geo chrome. */}
+      <div className="mb-3 hidden lg:block" data-fold-chrono-identity="">
+        <ScoutChronograph
+          companies={filteredCompanies}
+          variant="hero"
+          kicker="Scout chronograph · desk identity"
+          reading={`Quiet ${quietLive.toLocaleString("en-US")} · ${liveCount.toLocaleString("en-US")} matching · peak owns the fold`}
+        />
+      </div>
+
+      {/* Structural desk: roster | map | wire. Filters open: Contents | map | wire. Chronograph lives above. */}
       <div className="grid gap-3 lg:grid-cols-[minmax(200px,240px)_minmax(0,1.15fr)_minmax(200px,260px)]" data-fold-desk-spread="">
         <aside className="hidden min-w-0 lg:block" data-fold-desk-left="">
           <div className="sticky top-14 h-[min(78vh,780px)]">
@@ -798,20 +766,12 @@ export function TileGlobe({
               </div>
             ) : (
               <div className="flex h-full min-h-0 flex-col gap-2" data-desk-chronograph-col="">
-                <div className="min-h-0 flex-[1.4] overflow-y-auto" data-desk-chrono-folio="">
-                  <ScoutChronograph
-                    companies={filteredCompanies}
-                    variant="folio"
-                    kicker="Chronograph folio"
-                    reading={`Desk slice · ${quietLive.toLocaleString("en-US")} quiet`}
-                  />
-                </div>
                 <div
-                  className="relative shrink-0 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)]"
+                  className="relative min-h-0 flex-1 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)]"
                   data-desk-roster=""
                 >
                   <div className="border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-1.5">
-                    <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Top desks</p>
+                    <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Top desks · founders</p>
                   </div>
                   <ol className="divide-y divide-[color:var(--line,#E1E5EF)]">
                     {topDesksByFounders.slice(0, 4).map((campus, i) => {
@@ -851,11 +811,11 @@ export function TileGlobe({
               <div className="px-2.5 py-2 pl-3">
                 <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Atlas plate · map</p>
                 <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                  Founders-weighted desks
+                  White dispatch field
                 </p>
                 <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                   <span className={COUNT}>{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
-                  {" campuses · size by founder names"}
+                  {" campuses · chronograph owns the beat"}
                 </p>
                 <div className="mt-1.5 flex items-center gap-3 font-mono text-[10px] text-[color:var(--fg-2,#3F465C)]">
                   <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--cobalt,#2F4FD8)]" aria-hidden />field</span>
@@ -981,34 +941,41 @@ export function TileGlobe({
             )}
           </div>
         ) : null}
-        <div className="space-y-4" data-mobile-desk-atlas="" data-campus-metric="founders" data-mobile-atlas-lead="">
-          <ScoutAtlasPlate
-            kicker="Atlas plate · fold"
-            title="Campus founders on record"
-            figure={topDesksByFounders[0]?.founders}
-            figureLabel={topDesksByFounders[0] ? `${shortCampusLabel(topDesksByFounders[0].id, topDesksByFounders[0].name)} · #1 by founders` : undefined}
-            rows={foundersAtlasRows}
-            caption="Ranked by founder names · Penn 757 / Stanford 300 / MIT 238"
-            tone="ember"
+        <div className="space-y-4" data-mobile-dispatch-ticket="" data-mobile-chrono-identity="">
+          <ScoutChronograph
+            companies={filteredCompanies}
+            variant="ticket"
+            kicker="Fold · signal ticket"
+            reading={
+              topCampus
+                ? `${shortCampusLabel(topCampus.id, topCampus.name)} · #1 by founders · ${topCampus.founders.toLocaleString("en-US")} names`
+                : `Desk slice · ${quietLive.toLocaleString("en-US")} quiet`
+            }
           />
-          <div data-mobile-desk-roster="">
-            <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Tap a desk · focus map</p>
-            <div className="grid grid-cols-3 gap-2">
+          <div data-mobile-desk-roster="" data-campus-metric="founders">
+            <div className="mb-2 flex items-baseline justify-between gap-2">
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Top desks · founders</p>
+              <p className="font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">Penn · Stanford · MIT</p>
+            </div>
+            <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
               {topDesksByFounders.slice(0, 3).map((campus, i) => {
                 const label = shortCampusLabel(campus.id, campus.name);
                 return (
-                  <button
-                    key={campus.id}
-                    type="button"
-                    onClick={() => focus(campus)}
-                    className="relative overflow-hidden rounded-none border border-[color:var(--ember,#D96B1C)]/30 bg-[color:var(--bg,#FFFFFF)] px-2 py-2.5 text-left before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--ember,#D96B1C)]"
-                  >
-                    <p className="font-mono text-[9px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{String(i + 1).padStart(2, "0")}</p>
-                    <p className="mt-1 truncate text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</p>
-                  </button>
+                  <li key={campus.id}>
+                    <button
+                      type="button"
+                      onClick={() => focus(campus)}
+                      className="flex w-full items-baseline gap-2 px-3 py-2.5 text-left hover:bg-[color:var(--ember,#D96B1C)]/5"
+                    >
+                      <span className="w-5 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{String(i + 1).padStart(2, "0")}</span>
+                      <span className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
+                      <span className={`shrink-0 font-mono text-[13px] font-bold ${COUNT}`}>{campus.founders.toLocaleString("en-US")}</span>
+                      <span className="shrink-0 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">founders</span>
+                    </button>
+                  </li>
                 );
               })}
-            </div>
+            </ol>
           </div>
         </div>
         <MobileWireStrip companies={filteredCompanies} label="Dispatch wire" surface="fold" />

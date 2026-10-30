@@ -66,6 +66,21 @@ async function openBrowseFilters(page) {
   }
 }
 
+fs.writeFileSync(
+  `${OUT}/META.json`,
+  JSON.stringify(
+    {
+      shotAt: new Date().toISOString(),
+      base: BASE,
+      out: OUT,
+      gitHead: process.env.GIT_HEAD || null,
+      buildId: process.env.BUILD_ID || null,
+    },
+    null,
+    2,
+  ),
+);
+
 const browser = await chromium.launch({ headless: true });
 
 {

@@ -306,7 +306,8 @@ export function SampleInstrumentBrowse({
               </p>
             </div>
           </div>
-          {deskConstellation.length ? (
+          {/* Single desk atlas — page-1 Contents only. Browse-more must not twin this with an end plate. */}
+          {deskConstellation.length && pages <= 1 ? (
             <div data-contents-atlas-plate="" data-campus-metric="founders">
               <ScoutAtlasPlate
                 kicker="Atlas plate · Contents"
@@ -494,16 +495,17 @@ export function SampleInstrumentBrowse({
         {/* Scout Chronograph — unifying system. Browse-more uses folio (originality priority);
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
         <div className="mb-5 space-y-4 lg:hidden" data-mobile-browse-compose="">
-          {deskConstellation.length && (feed === "leaderboard" || pages > 1) ? (
-            <div className="mb-1" data-mobile-util-atlas="" data-campus-metric="founders" data-mobile-atlas-lead="">
-              <ScoutAtlasPlate
-                kicker={feed === "leaderboard" ? "Atlas plate · signal desk" : "Atlas plate · ledger continued"}
-                title="Campus founders on record"
-                figure={topFoundersCampus?.founders}
-                figureLabel={topFoundersCampus ? `${shortCampusLabel(topFoundersCampus.id, topFoundersCampus.name)} · #1 by founders` : undefined}
-                rows={deskConstellation}
-                caption="Ranked by founder names · Penn 757 / Stanford 300 / MIT 238"
-                tone="ember"
+          {feed === "leaderboard" || pages > 1 ? (
+            <div className="mb-1" data-mobile-dispatch-ticket="" data-mobile-chrono-identity="">
+              <ScoutChronograph
+                companies={pageSlice}
+                variant="ticket"
+                kicker={feed === "leaderboard" ? "Signal desk · ticket" : "Ledger continued · ticket"}
+                reading={
+                  topFoundersCampus
+                    ? `${shortCampusLabel(topFoundersCampus.id, topFoundersCampus.name)} · #1 by founders · ${topFoundersCampus.founders.toLocaleString("en-US")} names`
+                    : `Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`
+                }
               />
             </div>
           ) : null}
@@ -871,17 +873,6 @@ export function SampleInstrumentBrowse({
                     {" quiet"}
                   </p>
                 </div>
-                {deskConstellation.length ? (
-                  <div className="hidden border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-4 lg:block sm:px-4" data-end-atlas-plate="" data-campus-metric="founders">
-                    <ScoutAtlasPlate
-                      kicker="Atlas plate · end mark"
-                      title="Campus founders on record"
-                      rows={deskConstellation}
-                      caption="Same founders metric · Penn 757 / Stanford 300 / MIT 238"
-                      tone="ember"
-                    />
-                  </div>
-                ) : null}
                 <div className="px-3.5 py-3 sm:px-4" data-ledger-end-chrono="">
                   <ScoutChronograph
                     companies={pageSlice}
@@ -1029,19 +1020,19 @@ export function SampleInstrumentBrowse({
                   Done
                 </button>
               </div>
-              {deskConstellation.length ? (
-                <div className="mt-3" data-contents-atlas-plate="" data-campus-metric="founders">
-                  <ScoutAtlasPlate
-                    kicker="Atlas plate · Contents"
-                    title="Campus founders on record"
-                    figure={topFoundersCampus?.founders}
-                    figureLabel={topFoundersCampus ? `${shortCampusLabel(topFoundersCampus.id, topFoundersCampus.name)} · #1 by founders` : undefined}
-                    rows={deskConstellation}
-                    caption="Ranked by founder names on record"
-                    tone="ember"
-                  />
-                </div>
-              ) : null}
+              <div className="mt-3" data-mobile-dispatch-ticket="" data-mobile-chrono-identity="">
+                <ScoutChronograph
+                  companies={boardCompanies}
+                  variant="ticket"
+                  kicker={feed === "leaderboard" ? "Filters · signal ticket" : "Filters · ledger ticket"}
+                  lead={contentsUnfiltered ? "monthUnknown" : "peak"}
+                  reading={
+                    contentsUnfiltered
+                      ? `Supporting · ${boardCompanies.length.toLocaleString("en-US")} matching`
+                      : `Filtered · ${boardCompanies.length.toLocaleString("en-US")} matching · ${quietMatch.toLocaleString("en-US")} quiet`
+                  }
+                />
+              </div>
               <p className="mt-2.5 flex flex-wrap gap-x-2 gap-y-1 font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">
                 <span className="text-[color:var(--cobalt,#2F4FD8)]">Status</span>
                 <span aria-hidden>·</span>

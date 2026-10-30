@@ -894,7 +894,7 @@ export function ScoutChronograph({
   lead = "peak",
 }: {
   companies: FacetCompany[];
-  variant?: "ribbon" | "folio" | "hero" | "compact";
+  variant?: "ribbon" | "folio" | "hero" | "compact" | "ticket";
   kicker?: string;
   /** Override dated caption; defaults to "N dated · N earlier · N month unknown". */
   datedLabel?: string;
@@ -936,6 +936,52 @@ export function ScoutChronograph({
     if (b.monthUnknown || b.earlier || b.peak) return "font-bold text-[color:var(--ember,#D96B1C)]";
     return "text-[color:var(--fg-3,#5C647A)]";
   }
+  /** Mobile identity: dispatch ticket + vertical chronograph spine — not a shrunken desk atlas. */
+  if (variant === "ticket") {
+    return (
+      <div
+        className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/45 bg-[color:var(--bg,#FFFFFF)] shadow-[0_2px_0_rgba(217,107,28,0.12)]"
+        data-scout-chronograph="ticket"
+        data-dispatch-ticket=""
+        data-chrono-peak={String(peak.count)}
+        data-chrono-peak-month={peak.id}
+        data-chrono-dated={String(dated)}
+        data-chrono-earlier={String(detail.earlierValid)}
+        data-chrono-month-unknown={String(detail.undatedMonth)}
+        data-chrono-window={String(detail.inWindow)}
+        data-chrono-lead={figureIsUnknown ? "monthUnknown" : figureIsEarlier ? "earlier" : "peak"}
+      >
+        <div className="flex items-stretch">
+          <div className="min-w-0 flex-1 border-r border-dashed border-[color:var(--line-strong,#C5CAD8)] px-3.5 py-4">
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />
+              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">Dispatch ticket</p>
+            </div>
+            <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
+            <p className="mt-3 font-mono text-[44px] font-bold leading-[0.88] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">
+              {figure.count.toLocaleString("en-US")}
+            </p>
+            <p className="mt-2 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{figureCaption}</p>
+            <p data-chrono-caption="" className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{caption}</p>
+            {reading ? <p className="mt-2 font-mono text-[11px] leading-snug text-[color:var(--fg-2,#3F465C)]">{reading}</p> : null}
+            <p className="mt-4 font-mono text-[9px] uppercase tracking-[0.16em] text-[color:var(--fg-3,#5C647A)]">Scout · chronograph spine</p>
+          </div>
+          <div className="flex w-[4.25rem] shrink-0 flex-col justify-between gap-1 bg-[color:var(--bg,#FFFFFF)] px-2 py-3" data-ticket-spine="">
+            {bars.map((b) => (
+              <div key={b.id} data-chrono-bar={b.id} className="flex min-h-0 flex-1 flex-col items-center justify-end gap-0.5" title={`${b.label}: ${b.count}`}>
+                <span
+                  className={`w-full max-w-[1.35rem] rounded-sm ${barFill(b)}`}
+                  style={{ height: `${Math.max(6, Math.round((b.count / max) * 28))}px` }}
+                />
+                <span className={`font-mono text-[6px] uppercase tracking-[0.04em] ${barLabelClass(b)}`}>{b.short}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (variant === "compact") {
     return (
       <div
