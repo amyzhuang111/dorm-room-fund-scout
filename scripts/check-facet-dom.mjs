@@ -16,6 +16,12 @@ const EXPECTED_CHRONO_MONTH_UNKNOWN = 34; // e.g. 2026-00-00 — year only, not 
 const EXPECTED_CHRONO_DATED = 635; // 588 + 13 + 34
 const EXPECTED_CHRONO_PEAK = 369;
 const EXPECTED_CHRONO_PEAK_MONTH = "2026-09";
+/** Campus plates sitewide: founder names on record (not signals / not companies). */
+const EXPECTED_CAMPUS_FOUNDERS_TOP = [
+  { founders: 757, nameRe: /penn|pennsylvania/i },
+  { founders: 300, nameRe: /stanford/i },
+  { founders: 238, nameRe: /mit|massachusetts institute/i },
+];
 
 function parseMidDotCount(label) {
   const m = String(label).match(/·\s*([\d,]+)\s*$/);
@@ -179,9 +185,34 @@ const fold = await page.evaluate(() => {
   const campuses = root.querySelector('[data-count="campuses-on-map"]')?.textContent?.replace(/,/g, "");
   return { founders: Number(founders), campuses: Number(campuses) };
 });
+/** Desk constellation / campus plates — must be founders-ranked (Penn 757 / Stanford 300 / MIT 238). */
+const campusFoundersTop = await page.evaluate(() => {
+  const root =
+    document.querySelector("[data-campus-founders-top]") ||
+    document.querySelector('[data-desk-constellation][data-campus-metric="founders"] ol');
+  if (!root) return null;
+  const rows = [...root.querySelectorAll("li")].slice(0, 3).map((li) => {
+    const text = (li.textContent || "").replace(/\s+/g, " ").trim();
+    const nums = [...text.matchAll(/(\d[\d,]*)/g)].map((m) => Number(m[1].replace(/,/g, "")));
+    // Prefer the founders figure (last substantial numeral beside unit).
+    const founders = nums.length ? nums[nums.length - 1] : null;
+    return { text, founders };
+  });
+  const metric = document.querySelector("[data-campus-metric]")?.getAttribute("data-campus-metric") || null;
+  return { metric, rows };
+});
+const campusFoundersTopOk =
+  campusFoundersTop != null &&
+  campusFoundersTop.metric === "founders" &&
+  campusFoundersTop.rows.length === 3 &&
+  EXPECTED_CAMPUS_FOUNDERS_TOP.every((exp, i) => {
+    const row = campusFoundersTop.rows[i];
+    return row && row.founders === exp.founders && exp.nameRe.test(row.text);
+  });
 const report = {
   strip,
   fold,
+  campusFoundersTop,
   moreLabels: moreLabelsBefore,
   yearSum: year.sum,
   statusSum: status.sum,
@@ -236,6 +267,7 @@ const report = {
       EXPECTED_CHRONO_WINDOW + EXPECTED_CHRONO_EARLIER + EXPECTED_CHRONO_MONTH_UNKNOWN === EXPECTED_CHRONO_DATED,
     chronographEarlierVisible: chrono != null && chrono.hasEarlierBar === true,
     chronographMonthUnknownVisible: chrono != null && chrono.hasMonthUnknownBar === true,
+    campusFoundersTopPennStanfordMit: campusFoundersTopOk,
   },
 };
 

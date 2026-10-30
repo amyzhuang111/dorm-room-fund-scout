@@ -30,6 +30,32 @@ export const INK = "text-[color:var(--fg,#0B0E17)]";
 export const MUTED = "text-[color:var(--fg-2,#3F465C)]";
 export const COUNT = "font-bold tabular-nums text-[color:var(--ember,#D96B1C)]";
 
+
+/** Sitewide campus-plate ranking: founder names on record (not signals, not companies). */
+export type CampusFoundersRow = { id: string; name: string; founders: number };
+export function campusFoundersTop<T extends CampusFoundersRow>(
+  campuses: T[],
+  limit = 3,
+): T[] {
+  return [...campuses]
+    .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))
+    .slice(0, limit);
+}
+
+export function campusFoundersAtlasRows(
+  campuses: CampusFoundersRow[],
+  limit = 3,
+  shortLabel: (id: string, name: string) => string = (_id, name) =>
+    name.replace(/^University of /, "").replace(/ University$/, ""),
+): { rank: string; label: string; value: string; unit: string }[] {
+  return campusFoundersTop(campuses, limit).map((campus, i) => ({
+    rank: String(i + 1).padStart(2, "0"),
+    label: shortLabel(campus.id, campus.name),
+    value: campus.founders.toLocaleString("en-US"),
+    unit: "founders",
+  }));
+}
+
 /** Fold-desk atlas language for util pages — word-led plate, real rows, no twin stamps. */
 export function ScoutAtlasPlate({
   kicker,

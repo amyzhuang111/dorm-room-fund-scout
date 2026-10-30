@@ -17,6 +17,8 @@ import {
   MobileWireStrip,
   PANEL,
   ScoutAtlasPlate,
+  campusFoundersAtlasRows,
+  campusFoundersTop,
   ScoutChronograph,
   chronographCaption,
   signalChronographDetail,
@@ -188,18 +190,12 @@ export function SampleInstrumentBrowse({
   const contentsInsight = useMemo(() => contentsPageInsight(boardCompanies), [boardCompanies]);
   const pageInsight = useMemo(() => contentsPageInsight(pageSlice), [pageSlice]);
   const newestSectors = useMemo(() => newestSectorMix(boardCompanies, undefined, 5), [boardCompanies]);
-  /** Page-specific campus atlas (founders on record) — util lead, not fold mast twin. */
-  const deskConstellation = useMemo(() => {
-    return [...campuses]
-      .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))
-      .slice(0, 3)
-      .map((campus, i) => ({
-        rank: String(i + 1).padStart(2, "0"),
-        label: shortCampusLabel(campus.id, campus.name),
-        value: campus.founders.toLocaleString("en-US"),
-        unit: "founders",
-      }));
-  }, [campuses]);
+  /** Sitewide campus plate: founders metric (Penn 757 / Stanford 300 / MIT 238). */
+  const deskConstellation = useMemo(
+    () => campusFoundersAtlasRows(campuses, 3, shortCampusLabel),
+    [campuses],
+  );
+  const topFoundersCampus = useMemo(() => campusFoundersTop(campuses, 1)[0] ?? null, [campuses]);
 
   const wireSurface = feed === "leaderboard" ? "signals" : "browse";
 
@@ -310,7 +306,20 @@ export function SampleInstrumentBrowse({
               </p>
             </div>
           </div>
-          <div className="h-[min(58vh,560px)]" data-contents-facet-map="">
+          {deskConstellation.length ? (
+            <div data-contents-atlas-plate="" data-campus-metric="founders">
+              <ScoutAtlasPlate
+                kicker="Atlas plate · Contents"
+                title="Campus founders on record"
+                figure={topFoundersCampus?.founders}
+                figureLabel={topFoundersCampus ? `${shortCampusLabel(topFoundersCampus.id, topFoundersCampus.name)} · #1 by founders` : undefined}
+                rows={deskConstellation}
+                caption="Ranked by founder names on record"
+                tone="ember"
+              />
+            </div>
+          ) : null}
+          <div className="h-[min(52vh,480px)]" data-contents-facet-map="">
             <FacetRail
               companies={companies}
               campuses={campuses}
@@ -349,23 +358,36 @@ export function SampleInstrumentBrowse({
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div className="min-w-0">
               {feed === "leaderboard" && topCampus ? (
-                <>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
-                    Signal desk · ranked ledger
-                  </p>
-                  <p className="mt-2 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[64px] lg:text-[72px]">
-                    {topCampus.founders.toLocaleString("en-US")}
-                  </p>
-                  <p className="mt-2 text-[18px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[20px] lg:text-[22px]">
-                    {shortCampusLabel(topCampus.id, topCampus.name)}
-                    {" founder names · #1 desk"}
-                  </p>
-                  <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                    Ranked by recent signal weight ·{" "}
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
-                    {" companies on desk"}
-                  </p>
-                </>
+                <div className="grid w-full gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(260px,320px)] lg:items-start" data-signal-hero-spread="">
+                  <div className="min-w-0">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
+                      Signal desk · ranked ledger
+                    </p>
+                    <p className="mt-2 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[64px] lg:text-[64px]">
+                      {topCampus.founders.toLocaleString("en-US")}
+                    </p>
+                    <p className="mt-2 text-[18px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[20px] lg:text-[22px]">
+                      {shortCampusLabel(topCampus.id, topCampus.name)}
+                      {" founder names · #1 by founders"}
+                    </p>
+                    <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                      Companies ranked by recent signal weight ·{" "}
+                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
+                      {" on desk"}
+                    </p>
+                  </div>
+                  {deskConstellation.length ? (
+                    <div className="min-w-0" data-signal-atlas-plate="" data-campus-metric="founders">
+                      <ScoutAtlasPlate
+                        kicker="Atlas plate · founders"
+                        title="Campus founders on record"
+                        rows={deskConstellation}
+                        caption="Ranked by founder names · Penn 757 / Stanford 300 / MIT 238"
+                        tone="ember"
+                      />
+                    </div>
+                  ) : null}
+                </div>
               ) : topSector ? (
                 <>
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
@@ -469,21 +491,22 @@ export function SampleInstrumentBrowse({
           </div>
         </div>
 
-        {feed === "leaderboard" && deskConstellation.length ? (
-          <div className="mb-5" data-signal-atlas-plate="">
-            <ScoutAtlasPlate
-              kicker="Atlas plate · signal desk"
-              title="Campus founders on record"
-              rows={deskConstellation}
-              caption={`${total.toLocaleString("en-US")} companies ranked · founders listed by campus`}
-              tone="cobalt"
-            />
-          </div>
-        ) : null}
-
         {/* Scout Chronograph — unifying system. Browse-more uses folio (originality priority);
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
         <div className="mb-5 space-y-4 lg:hidden" data-mobile-browse-compose="">
+          {deskConstellation.length && (feed === "leaderboard" || pages > 1) ? (
+            <div data-mobile-util-atlas="" data-campus-metric="founders">
+              <ScoutAtlasPlate
+                kicker={feed === "leaderboard" ? "Atlas plate · signal desk" : "Atlas plate · ledger"}
+                title="Campus founders on record"
+                figure={topFoundersCampus?.founders}
+                figureLabel={topFoundersCampus ? `${shortCampusLabel(topFoundersCampus.id, topFoundersCampus.name)} · #1 by founders` : undefined}
+                rows={deskConstellation}
+                caption="Ranked by founder names on record"
+                tone="ember"
+              />
+            </div>
+          ) : null}
           {feed === "directory" && (pages > 1 ? pageInsight : contentsInsight) ? (
             <div
               className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
@@ -681,7 +704,20 @@ export function SampleInstrumentBrowse({
             />
           </div>
         ) : (
-          <div className="mb-4 hidden space-y-3 lg:block" data-desk-browse-dominant="newest-folio" data-desk-browse-chronograph="">
+          <div className="mb-4 hidden space-y-4 lg:block" data-desk-browse-dominant="newest-folio" data-desk-browse-chronograph="">
+            {deskConstellation.length ? (
+              <div data-continued-atlas-plate="" data-campus-metric="founders">
+                <ScoutAtlasPlate
+                  kicker="Atlas plate · ledger continued"
+                  title="Campus founders on record"
+                  figure={topFoundersCampus?.founders}
+                  figureLabel={topFoundersCampus ? `${shortCampusLabel(topFoundersCampus.id, topFoundersCampus.name)} · #1 by founders` : undefined}
+                  rows={deskConstellation}
+                  caption="Ranked by founder names on record"
+                  tone="ember"
+                />
+              </div>
+            ) : null}
             {newestSectors.length ? (
               <div
                 className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
@@ -994,6 +1030,19 @@ export function SampleInstrumentBrowse({
                   Done
                 </button>
               </div>
+              {deskConstellation.length ? (
+                <div className="mt-3" data-contents-atlas-plate="" data-campus-metric="founders">
+                  <ScoutAtlasPlate
+                    kicker="Atlas plate · Contents"
+                    title="Campus founders on record"
+                    figure={topFoundersCampus?.founders}
+                    figureLabel={topFoundersCampus ? `${shortCampusLabel(topFoundersCampus.id, topFoundersCampus.name)} · #1 by founders` : undefined}
+                    rows={deskConstellation}
+                    caption="Ranked by founder names on record"
+                    tone="ember"
+                  />
+                </div>
+              ) : null}
               <p className="mt-2.5 flex flex-wrap gap-x-2 gap-y-1 font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">
                 <span className="text-[color:var(--cobalt,#2F4FD8)]">Status</span>
                 <span aria-hidden>·</span>

@@ -116,7 +116,7 @@ export function SampleCompanyShell({
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 sm:px-5">
         {/* Magazine dossier cover — desk + mobile share the profile treatment */}
-        <div className="mb-6 border-b border-[color:var(--line,#E1E5EF)] pb-6 sm:mb-5 sm:pb-5" data-dossier-hero="" data-mobile-magazine="">
+        <div className="mb-5 border-b border-[color:var(--line,#E1E5EF)] pb-5 sm:mb-5 sm:pb-5" data-dossier-hero="" data-mobile-magazine="">
           <div className="flex flex-wrap items-center gap-2">
             <Link href="/?sample=1#browse" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
               ← Company ledger
@@ -248,7 +248,7 @@ export function SampleCompanyShell({
         </div>
 
         {peerAtlasRows.length ? (
-          <div className="mb-5" data-dossier-atlas-plate="">
+          <div className="mb-5 sm:mb-6" data-dossier-atlas-plate="" data-dossier-atlas-lead="">
             <ScoutAtlasPlate
               kicker={campusPeers ? "Atlas plate · campus wire" : "Atlas plate · sector peers"}
               title={campusPeers ? `${campusShort} companies on wire` : `${dossier?.sector ?? "Sector"} peers`}

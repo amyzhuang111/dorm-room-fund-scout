@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { markerRadius, markerSizeLegend } from "@/lib/domain/marker-radius";
 import { absoluteDate } from "@/lib/domain/relative-time";
+import { shortCampusLabel } from "@/lib/domain/campuses";
 import { sampleSurfaceCounts, type FacetCompany } from "@/lib/domain/sample-facets";
 import { MapCredit } from "./map-credit";
 import {
@@ -14,6 +15,8 @@ import {
   MobileFilterDock,
   MobileWireStrip,
   ScoutAtlasPlate,
+  campusFoundersTop,
+  campusFoundersAtlasRows,
   PANEL,
   ScoutChronograph,
   signalChronographDetail,
@@ -428,14 +431,10 @@ export function TileGlobe({
   // not the filtered map/facet slice — so strip and fold data-count nodes never diverge.
   const universeCounts = sampleSurfaceCounts(companies, campuses);
 
-  const topCampus = useMemo(() => {
-    return [...campuses].sort((a, b) => b.signals - a.signals || b.founders - a.founders || a.name.localeCompare(b.name))[0] ?? null;
-  }, [campuses]);
-  const topDesks = useMemo(() => {
-    return [...campuses]
-      .sort((a, b) => b.signals - a.signals || b.founders - a.founders || a.name.localeCompare(b.name))
-      .slice(0, 8);
-  }, [campuses]);
+  /** Campus plates sitewide — ranked by founder names (Penn 757 / Stanford 300 / MIT 238). */
+  const topDesksByFounders = useMemo(() => campusFoundersTop(campuses, 8), [campuses]);
+  const topCampus = topDesksByFounders[0] ?? null;
+  const foundersAtlasRows = useMemo(() => campusFoundersAtlasRows(campuses, 3, shortCampusLabel), [campuses]);
 
   return (
     <div className={className} data-fold-mobile-root="">
@@ -771,7 +770,7 @@ export function TileGlobe({
                     <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Top desks</p>
                   </div>
                   <ol className="divide-y divide-[color:var(--line,#E1E5EF)]">
-                    {topDesks.slice(0, 4).map((campus, i) => {
+                    {topDesksByFounders.slice(0, 4).map((campus, i) => {
                       const active = selectedId === campus.id;
                       const label = campus.name.replace(/^University of /, "").replace(/ University$/, "");
                       return (
@@ -820,7 +819,7 @@ export function TileGlobe({
                 </div>
               </div>
             </div>
-            <div className="pointer-events-none absolute right-3 top-3 z-10 hidden lg:block" data-dispatch-orbit="" data-desk-constellation="">
+            <div className="pointer-events-none absolute right-3 top-3 z-10 hidden lg:block" data-dispatch-orbit="" data-desk-constellation="" data-campus-metric="founders">
               <div className="relative">
                 <div className="pointer-events-none absolute -right-6 -top-6 h-28 w-28" aria-hidden>
                   <span className="absolute inset-0 rounded-full border border-dashed border-[color:var(--ember,#D96B1C)]/45" />
@@ -832,9 +831,9 @@ export function TileGlobe({
                     <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Desk constellation</p>
                     <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Founders</p>
                   </div>
-                  <ol className="divide-y divide-[color:var(--line,#E1E5EF)]">
-                    {topDesks.slice(0, 3).map((campus, i) => {
-                      const label = campus.name.replace(/^University of /, "").replace(/ University$/, "");
+                  <ol className="divide-y divide-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
+                    {topDesksByFounders.slice(0, 3).map((campus, i) => {
+                      const label = shortCampusLabel(campus.id, campus.name);
                       return (
                         <li key={campus.id} className="flex items-baseline gap-2 px-2.5 py-1.5 pl-3">
                           <span className="w-4 shrink-0 text-right font-mono text-[10px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
@@ -848,7 +847,7 @@ export function TileGlobe({
                     })}
                   </ol>
                   <p className="border-t border-[color:var(--line,#E1E5EF)] px-2.5 py-1.5 pl-3 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                    Ranked by campus signals · founder names on record
+                    Ranked by founder names on record
                   </p>
                 </div>
               </div>
@@ -861,12 +860,12 @@ export function TileGlobe({
                     {topCampus.founders.toLocaleString("en-US")}
                   </p>
                   <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
+                    {shortCampusLabel(topCampus.id, topCampus.name)}
                     {" founder names"}
                   </p>
                   <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                     <span className={COUNT}>{topCampus.signals.toLocaleString("en-US")}</span>
-                    {" campus signals · rank 01"}
+                    {" campus signals on record · founders ranked #1"}
                   </p>
                 </div>
               </div>
@@ -956,18 +955,15 @@ export function TileGlobe({
             )}
           </div>
         ) : null}
-        <div data-mobile-desk-atlas="">
+        <div className="space-y-3" data-mobile-desk-atlas="" data-campus-metric="founders">
           <ScoutAtlasPlate
             kicker="Atlas plate · top desks"
-            title="Founders on record"
-            rows={topDesks.slice(0, 3).map((campus, i) => ({
-              rank: String(i + 1).padStart(2, "0"),
-              label: campus.name.replace(/^University of /, "").replace(/ University$/, ""),
-              value: campus.founders.toLocaleString("en-US"),
-              unit: "founders",
-            }))}
-            caption="Ranked by campus signals · founder names"
-            tone="cobalt"
+            title="Campus founders on record"
+            figure={topDesksByFounders[0]?.founders}
+            figureLabel={topDesksByFounders[0] ? `${shortCampusLabel(topDesksByFounders[0].id, topDesksByFounders[0].name)} · #1 by founders` : undefined}
+            rows={foundersAtlasRows}
+            caption="Ranked by founder names on record · Penn / Stanford / MIT"
+            tone="ember"
           />
         </div>
         <div data-mobile-desk-roster="">
@@ -976,8 +972,8 @@ export function TileGlobe({
             <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Top 3 · tap to focus</p>
           </div>
           <div className="grid grid-cols-1 gap-3">
-            {topDesks.slice(0, 3).map((campus, i) => {
-              const label = campus.name.replace(/^University of /, "").replace(/ University$/, "");
+            {topDesksByFounders.slice(0, 3).map((campus, i) => {
+              const label = shortCampusLabel(campus.id, campus.name);
               return (
                 <button
                   key={campus.id}
