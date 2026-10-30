@@ -423,14 +423,11 @@ export function SampleInstrumentBrowse({
                   </p>
                   <span className="h-[2px] flex-1 bg-[color:var(--ember,#D96B1C)]/60" aria-hidden />
                 </div>
-                <p className="mt-2 text-center font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)] sm:text-[32px]" data-shelf-remaining="">
-                  {(total - cards.length).toLocaleString("en-US")}
-                </p>
-                <p className="mt-1.5 text-center font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                  still on the shelf · through row {String(cards.length).padStart(2, "0")}
+                <p className="mt-2 text-center font-mono text-[13px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="">
+                  {"Showing "}
+                  {cards.length.toLocaleString("en-US")}
                   {" of "}
                   {total.toLocaleString("en-US")}
-                  {" matching"}
                 </p>
               </div>
             ) : null}
