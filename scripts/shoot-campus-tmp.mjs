@@ -128,16 +128,10 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(300);
   await shot(page, "leaderboard-1440");
 
-  await page.goto(`${BASE}/?sample=1&q=Sim#browse`, { waitUntil: "networkidle" });
-  await page.waitForTimeout(1200);
-  const sim = page.locator('#browse a[href^="/startup/"]').filter({ hasText: /^Sim$/ }).first();
-  const link = (await sim.count()) ? sim : page.locator('#browse a[href^="/startup/"]').first();
-  const href = await link.getAttribute("href");
-  if (href) {
-    await page.goto(`${BASE}${href}`, { waitUntil: "networkidle", timeout: 90000 });
-    await page.waitForTimeout(2500);
-    await shot(page, "company-sim-1440");
-  }
+  // Exact Sim dossier (Berkeley campus wire 138).
+  await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.waitForTimeout(2500);
+  await shot(page, "company-sim-1440");
   await page.close();
 }
 
@@ -190,16 +184,10 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(300);
   await shot(page, "leaderboard-375");
 
-  await page.goto(`${BASE}/?sample=1&q=Sim#browse`, { waitUntil: "networkidle" });
-  await page.waitForTimeout(1000);
-  const simM = page.locator('#browse a[href^="/startup/"]').filter({ hasText: /^Sim$/ }).first();
-  const link = (await simM.count()) ? simM : page.locator('#browse a[href^="/startup/"]').first();
-  const href = await link.getAttribute("href");
-  if (href) {
-    await page.goto(`${BASE}${href}`, { waitUntil: "networkidle", timeout: 90000 });
-    await page.waitForTimeout(2000);
-    await shot(page, "company-sim-375");
-  }
+  // Exact Sim dossier (Berkeley campus wire 138).
+  await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.waitForTimeout(2000);
+  await shot(page, "company-sim-375");
   await page.close();
 }
 
