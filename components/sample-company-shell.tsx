@@ -116,7 +116,7 @@ export function SampleCompanyShell({
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 sm:px-5">
         {/* Magazine dossier cover — desk + mobile share the profile treatment */}
-        <div className="mb-5 border-b border-[color:var(--line,#E1E5EF)] pb-5 sm:mb-5 sm:pb-5" data-dossier-hero="" data-mobile-magazine="">
+        <div className="mb-6 border-b border-[color:var(--line,#E1E5EF)] pb-6 sm:mb-5 sm:pb-5" data-dossier-hero="" data-mobile-magazine="">
           <div className="flex flex-wrap items-center gap-2">
             <Link href="/?sample=1#browse" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
               ← Company ledger
@@ -183,16 +183,17 @@ export function SampleCompanyShell({
                   ) : null}
                 </p>
               </div>
-              <div className="flex shrink-0 gap-4 text-right sm:gap-6" data-dossier-wire-count="">
+              {/* Mobile whisper; desk keeps dual wire stamps. Atlas plate owns the mobile lead figure. */}
+              <div className="hidden shrink-0 gap-4 text-right sm:flex sm:gap-6" data-dossier-wire-count="">
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Campus wire</p>
-                  <p className="mt-1.5 font-mono text-[48px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[56px] lg:text-[64px]">
+                  <p className="mt-1.5 font-mono text-[56px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] lg:text-[64px]">
                     {wireCount.toLocaleString("en-US")}
                   </p>
-                  <p className="mt-1 max-w-[12rem] text-right text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:max-w-[14rem]">
+                  <p className="mt-1 max-w-[14rem] text-right text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
                     {wireScope}
                   </p>
-                  <p className="mt-0.5 max-w-[12rem] text-right font-mono text-[10px] leading-snug text-[color:var(--fg-3,#5C647A)] sm:max-w-[14rem]">
+                  <p className="mt-0.5 max-w-[14rem] text-right font-mono text-[10px] leading-snug text-[color:var(--fg-3,#5C647A)]">
                     {wireUnit}
                     {wireIncludeNote ? (
                       <>
@@ -205,7 +206,7 @@ export function SampleCompanyShell({
                 {sectorPeers && campusPeers && sectorPeers.length !== campusPeers.length ? (
                   <div data-dossier-sector-figure="">
                     <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Sector peers</p>
-                    <p className="mt-1.5 font-mono text-[48px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--fg,#0B0E17)] sm:text-[56px] lg:text-[64px]">
+                    <p className="mt-1.5 font-mono text-[56px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--fg,#0B0E17)] lg:text-[64px]">
                       {sectorPeers.length.toLocaleString("en-US")}
                     </p>
                     <p className="mt-1.5 max-w-[10rem] text-right font-mono text-[10px] leading-snug text-[color:var(--fg-3,#5C647A)]">
@@ -215,6 +216,18 @@ export function SampleCompanyShell({
                   </div>
                 ) : null}
               </div>
+              <p className="mt-3 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:hidden" data-dossier-wire-whisper="">
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
+                {" "}
+                {wireScope}
+                {sectorPeers && campusPeers && sectorPeers.length !== campusPeers.length ? (
+                  <>
+                    {" · "}
+                    <span className="font-bold text-[color:var(--fg,#0B0E17)]">{sectorPeers.length.toLocaleString("en-US")}</span>
+                    {" sector peers"}
+                  </>
+                ) : null}
+              </p>
             </div>
           ) : (
             <>
@@ -248,7 +261,7 @@ export function SampleCompanyShell({
         </div>
 
         {peerAtlasRows.length ? (
-          <div className="mb-5 sm:mb-6" data-dossier-atlas-plate="" data-dossier-atlas-lead="">
+          <div className="mb-6 sm:mb-6" data-dossier-atlas-plate="" data-dossier-atlas-lead="" data-mobile-atlas-lead="">
             <ScoutAtlasPlate
               kicker={campusPeers ? "Atlas plate · campus wire" : "Atlas plate · sector peers"}
               title={campusPeers ? `${campusShort} companies on wire` : `${dossier?.sector ?? "Sector"} peers`}
@@ -261,7 +274,7 @@ export function SampleCompanyShell({
           </div>
         ) : null}
 
-        <div className="mb-5 sm:mb-4" data-dossier-chronograph="">
+        <div className="mb-6 sm:mb-4" data-dossier-chronograph="">
           <ScoutChronograph
             companies={wireCompanies}
             variant="hero"

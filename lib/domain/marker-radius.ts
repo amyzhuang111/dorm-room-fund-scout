@@ -5,6 +5,13 @@ export function markerRadius(signals: number): number {
   return Math.round((2.6 + Math.min(8.2, Math.sqrt(count) * 0.415)) * 10) / 10;
 }
 
+/** Point radius from founder names on record — fold map dominant visual. */
+export function markerRadiusByFounders(founders: number): number {
+  const count = Number.isFinite(founders) ? Math.max(0, founders) : 0;
+  // Penn 757 > Stanford 300 > MIT 238 stay distinct; soft cap for the field.
+  return Math.round((2.8 + Math.min(9.6, Math.sqrt(count) * 0.29)) * 10) / 10;
+}
+
 export function markerSizeLegend(): string {
-  return "Point size scales with stored campus signals. Ember marks the top desk.";
+  return "Point size scales with founder names on record. Ember marks the top desks.";
 }

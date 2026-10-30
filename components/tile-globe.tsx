@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
-import { markerRadius, markerSizeLegend } from "@/lib/domain/marker-radius";
+import { markerRadiusByFounders, markerSizeLegend } from "@/lib/domain/marker-radius";
 import { absoluteDate } from "@/lib/domain/relative-time";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import { sampleSurfaceCounts, type FacetCompany } from "@/lib/domain/sample-facets";
@@ -59,8 +59,10 @@ function markerColor(country: string): string {
 }
 
 function campusCollection(campuses: TileCampus[]) {
-  const ranked = [...campuses].sort((a, b) => b.signals - a.signals || b.founders - a.founders || a.name.localeCompare(b.name));
+  /** Founders-weighted map: top desks + label priority match campus plates (Penn / Stanford / MIT). */
+  const ranked = [...campuses].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name));
   const topIds = new Set(ranked.slice(0, 3).map((c) => c.id));
+  const labelRank = new Map(ranked.slice(0, 8).map((c, i) => [c.id, i + 1]));
   return {
     type: "FeatureCollection",
     features: campuses.map((campus) => ({
@@ -69,13 +71,15 @@ function campusCollection(campuses: TileCampus[]) {
       properties: {
         id: campus.id,
         name: campus.name,
+        shortLabel: shortCampusLabel(campus.id, campus.name),
         founders: campus.founders,
         signals: campus.signals,
         country: campus.country,
-        // Cobalt field; ember marks the top-3 desk campuses (memorable dispatch signature).
+        // Cobalt field; ember marks founders top-3 (Penn / Stanford / MIT).
         color: topIds.has(campus.id) ? "#D96B1C" : markerColor(campus.country),
         top: topIds.has(campus.id) ? 1 : 0,
-        radius: markerRadius(campus.signals),
+        labelRank: labelRank.get(campus.id) ?? 99,
+        radius: markerRadiusByFounders(campus.founders),
       },
     })),
   };
@@ -155,7 +159,7 @@ export function TileGlobe({
       // Desktop strip is inside the stage. Mobile chips and the strip sit under it.
       const reserve = wide ? 8 : 320; // room for Live + Ledger strip under the stage
       const available = Math.round(window.innerHeight - docTop - reserve);
-      const raw = Math.max(wide ? 560 : 220, available);
+      const raw = Math.max(wide ? 600 : 220, available);
       setStageHeight(wide ? raw : Math.min(260, raw));
     };
     fit();
@@ -275,6 +279,39 @@ export function TileGlobe({
             "circle-opacity": 1,
           },
         });
+        map.addLayer({
+          id: "campus-labels",
+          type: "symbol",
+          source: "campuses",
+          filter: ["<=", ["get", "labelRank"], 8],
+          layout: {
+            "text-field": ["get", "shortLabel"],
+            "text-font": ["Noto Sans Regular"],
+            "text-size": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              1.2,
+              ["case", ["==", ["get", "top"], 1], 11, 9],
+              3,
+              ["case", ["==", ["get", "top"], 1], 13, 11],
+              5,
+              ["case", ["==", ["get", "top"], 1], 15, 12],
+            ],
+            "text-offset": [0, 1.2],
+            "text-anchor": "top",
+            "text-allow-overlap": false,
+            "text-ignore-placement": false,
+            "symbol-sort-key": ["get", "labelRank"],
+            "text-max-width": 8,
+          },
+          paint: {
+            "text-color": ["case", ["==", ["get", "top"], 1], "#D96B1C", "#3F465C"],
+            "text-halo-color": "#FFFFFF",
+            "text-halo-width": 1.7,
+            "text-halo-blur": 0.2,
+          },
+        });
         setReady(true);
         map.resize();
         spin();
@@ -347,7 +384,20 @@ export function TileGlobe({
 
   useEffect(() => {
     if (!ready || !mapRef.current) return;
-    mapRef.current.setFilter("campus-dots", country ? ["==", ["get", "country"], country] : null);
+    const countryFilter = country ? ["==", ["get", "country"], country] : null;
+    mapRef.current.setFilter("campus-dots", countryFilter);
+    mapRef.current.setFilter(
+      "campus-halo",
+      country
+        ? ["all", ["==", ["get", "top"], 1], ["==", ["get", "country"], country]]
+        : ["==", ["get", "top"], 1],
+    );
+    mapRef.current.setFilter(
+      "campus-labels",
+      country
+        ? ["all", ["<=", ["get", "labelRank"], 8], ["==", ["get", "country"], country]]
+        : ["<=", ["get", "labelRank"], 8],
+    );
     const selected = selectedId
       ? country
         ? ["all", ["==", ["get", "id"], selectedId], ["==", ["get", "country"], country]]
@@ -489,17 +539,11 @@ export function TileGlobe({
               </div>
               <div className="hidden sm:block">
                 <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
-                <p className="mt-1 font-mono text-[48px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[56px] lg:text-[64px]">
-                  01
+                <p className="mt-1 text-[28px] font-bold leading-[0.95] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[32px] lg:text-[36px]">
+                  {shortCampusLabel(topCampus.id, topCampus.name)}
                 </p>
-                <p className="mt-1 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[17px]">
-                  {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
-                </p>
-                <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                  <span className={COUNT}>{topCampus.founders.toLocaleString("en-US")}</span>
-                  {" founder names · "}
-                  <span className={COUNT}>{topCampus.signals.toLocaleString("en-US")}</span>
-                  {" campus signals"}
+                <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  {"#1 by founder names · map labels the desk"}
                 </p>
               </div>
             </div>
@@ -772,7 +816,7 @@ export function TileGlobe({
                   <ol className="divide-y divide-[color:var(--line,#E1E5EF)]">
                     {topDesksByFounders.slice(0, 4).map((campus, i) => {
                       const active = selectedId === campus.id;
-                      const label = campus.name.replace(/^University of /, "").replace(/ University$/, "");
+                      const label = shortCampusLabel(campus.id, campus.name);
                       return (
                         <li key={campus.id}>
                           <button
@@ -784,7 +828,7 @@ export function TileGlobe({
                               {String(i + 1).padStart(2, "0")}
                             </span>
                             <span className="min-w-0 flex-1 truncate text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
-                            <span className={`shrink-0 font-mono text-[11px] ${COUNT}`}>{campus.signals.toLocaleString("en-US")}</span>
+                            <span className={`shrink-0 font-mono text-[11px] ${COUNT}`}>{campus.founders.toLocaleString("en-US")}</span>
                           </button>
                         </li>
                       );
@@ -803,19 +847,19 @@ export function TileGlobe({
             data-dispatch-map-stage=""
           >
             <div ref={mapNode} className="h-full w-full" />
-            <div className="pointer-events-none absolute left-2.5 top-2.5 z-10 hidden max-w-[220px] overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)]/94 shadow-[0_2px_0_rgba(47,79,216,0.1)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)] lg:block" data-dispatch-scale="" data-atlas-plate="">
+            <div className="pointer-events-none absolute left-2.5 top-2.5 z-10 hidden max-w-[240px] overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)]/94 shadow-[0_2px_0_rgba(47,79,216,0.1)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)] lg:block" data-dispatch-scale="" data-atlas-plate="">
               <div className="px-2.5 py-2 pl-3">
-                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Atlas plate</p>
+                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Atlas plate · map</p>
                 <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                  White dispatch map
+                  Founders-weighted desks
                 </p>
                 <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                   <span className={COUNT}>{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
-                  {" campuses · field vs top desk"}
+                  {" campuses · size by founder names"}
                 </p>
                 <div className="mt-1.5 flex items-center gap-3 font-mono text-[10px] text-[color:var(--fg-2,#3F465C)]">
                   <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--cobalt,#2F4FD8)]" aria-hidden />field</span>
-                  <span className="inline-flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />top desk</span>
+                  <span className="inline-flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />Penn · Stanford · MIT</span>
                 </div>
               </div>
             </div>
@@ -852,24 +896,6 @@ export function TileGlobe({
                 </div>
               </div>
             </div>
-            {topCampus ? (
-              <div className="pointer-events-none absolute bottom-3 right-3 z-10 hidden max-w-[248px] overflow-hidden rounded-none border border-[color:var(--ember,#D96B1C)]/55 bg-[color:var(--bg,#FFFFFF)]/96 shadow-[0_2px_0_rgba(217,107,28,0.2)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] lg:block" data-top-desk-callout="">
-                <div className="px-3 py-2.5 pl-3.5">
-                  <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
-                  <p className="mt-1 font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-                    {topCampus.founders.toLocaleString("en-US")}
-                  </p>
-                  <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    {shortCampusLabel(topCampus.id, topCampus.name)}
-                    {" founder names"}
-                  </p>
-                  <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                    <span className={COUNT}>{topCampus.signals.toLocaleString("en-US")}</span>
-                    {" campus signals on record · founders ranked #1"}
-                  </p>
-                </div>
-              </div>
-            ) : null}
             <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 hidden -translate-x-1/2 lg:block" data-map-credit>
               <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
                 <MapCredit />
@@ -955,49 +981,34 @@ export function TileGlobe({
             )}
           </div>
         ) : null}
-        <div className="space-y-3" data-mobile-desk-atlas="" data-campus-metric="founders">
+        <div className="space-y-4" data-mobile-desk-atlas="" data-campus-metric="founders" data-mobile-atlas-lead="">
           <ScoutAtlasPlate
-            kicker="Atlas plate · top desks"
+            kicker="Atlas plate · fold"
             title="Campus founders on record"
             figure={topDesksByFounders[0]?.founders}
             figureLabel={topDesksByFounders[0] ? `${shortCampusLabel(topDesksByFounders[0].id, topDesksByFounders[0].name)} · #1 by founders` : undefined}
             rows={foundersAtlasRows}
-            caption="Ranked by founder names on record · Penn / Stanford / MIT"
+            caption="Ranked by founder names · Penn 757 / Stanford 300 / MIT 238"
             tone="ember"
           />
-        </div>
-        <div data-mobile-desk-roster="">
-          <div className="mb-2 flex items-baseline justify-between gap-2 px-0.5">
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Desk roster</p>
-            <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Top 3 · tap to focus</p>
-          </div>
-          <div className="grid grid-cols-1 gap-3">
-            {topDesksByFounders.slice(0, 3).map((campus, i) => {
-              const label = shortCampusLabel(campus.id, campus.name);
-              return (
-                <button
-                  key={campus.id}
-                  type="button"
-                  onClick={() => focus(campus)}
-                  className="relative overflow-hidden rounded-none border border-[color:var(--ember,#D96B1C)]/35 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-3.5 text-left before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
-                >
-                  <div className="flex items-end justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
-                        {String(i + 1).padStart(2, "0")} desk
-                      </p>
-                      <p className="mt-1.5 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</p>
-                      <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                        {campus.founders.toLocaleString("en-US")} founders · {campus.signals.toLocaleString("en-US")} signals
-                      </p>
-                    </div>
-                    <p className="shrink-0 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-                      {campus.founders.toLocaleString("en-US")}
-                    </p>
-                  </div>
-                </button>
-              );
-            })}
+          <div data-mobile-desk-roster="">
+            <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Tap a desk · focus map</p>
+            <div className="grid grid-cols-3 gap-2">
+              {topDesksByFounders.slice(0, 3).map((campus, i) => {
+                const label = shortCampusLabel(campus.id, campus.name);
+                return (
+                  <button
+                    key={campus.id}
+                    type="button"
+                    onClick={() => focus(campus)}
+                    className="relative overflow-hidden rounded-none border border-[color:var(--ember,#D96B1C)]/30 bg-[color:var(--bg,#FFFFFF)] px-2 py-2.5 text-left before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--ember,#D96B1C)]"
+                  >
+                    <p className="font-mono text-[9px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{String(i + 1).padStart(2, "0")}</p>
+                    <p className="mt-1 truncate text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</p>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
         <MobileWireStrip companies={filteredCompanies} label="Dispatch wire" surface="fold" />

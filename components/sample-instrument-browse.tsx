@@ -495,14 +495,14 @@ export function SampleInstrumentBrowse({
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
         <div className="mb-5 space-y-4 lg:hidden" data-mobile-browse-compose="">
           {deskConstellation.length && (feed === "leaderboard" || pages > 1) ? (
-            <div data-mobile-util-atlas="" data-campus-metric="founders">
+            <div className="mb-1" data-mobile-util-atlas="" data-campus-metric="founders" data-mobile-atlas-lead="">
               <ScoutAtlasPlate
-                kicker={feed === "leaderboard" ? "Atlas plate · signal desk" : "Atlas plate · ledger"}
+                kicker={feed === "leaderboard" ? "Atlas plate · signal desk" : "Atlas plate · ledger continued"}
                 title="Campus founders on record"
                 figure={topFoundersCampus?.founders}
                 figureLabel={topFoundersCampus ? `${shortCampusLabel(topFoundersCampus.id, topFoundersCampus.name)} · #1 by founders` : undefined}
                 rows={deskConstellation}
-                caption="Ranked by founder names on record"
+                caption="Ranked by founder names · Penn 757 / Stanford 300 / MIT 238"
                 tone="ember"
               />
             </div>
@@ -705,19 +705,7 @@ export function SampleInstrumentBrowse({
           </div>
         ) : (
           <div className="mb-4 hidden space-y-4 lg:block" data-desk-browse-dominant="newest-folio" data-desk-browse-chronograph="">
-            {deskConstellation.length ? (
-              <div data-continued-atlas-plate="" data-campus-metric="founders">
-                <ScoutAtlasPlate
-                  kicker="Atlas plate · ledger continued"
-                  title="Campus founders on record"
-                  figure={topFoundersCampus?.founders}
-                  figureLabel={topFoundersCampus ? `${shortCampusLabel(topFoundersCampus.id, topFoundersCampus.name)} · #1 by founders` : undefined}
-                  rows={deskConstellation}
-                  caption="Ranked by founder names on record"
-                  tone="ember"
-                />
-              </div>
-            ) : null}
+            {/* One atlas lives in the Contents column — no twin plate here on browse-more. */}
             {newestSectors.length ? (
               <div
                 className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
@@ -843,35 +831,35 @@ export function SampleInstrumentBrowse({
                 data-end-insight={sliceInsight.kicker}
               >
                 <div
-                  className="relative overflow-hidden border-b border-[color:var(--line,#E1E5EF)] px-3 py-3.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] sm:px-3.5 sm:py-4"
+                  className="relative overflow-hidden border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] sm:px-4 sm:py-6"
                   data-end-lead=""
                 >
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
                     {sliceInsight.kicker}
                   </p>
-                  <div className="mt-2 flex flex-wrap items-end justify-between gap-3">
+                  <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
                     <div className="min-w-0">
-                      <p className="font-mono text-[52px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[56px] lg:text-[64px]">
+                      <p className="font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[64px] lg:text-[72px]">
                         {sliceInsight.figure.toLocaleString("en-US")}
                       </p>
-                      <p className="mt-1.5 max-w-[22rem] text-[14px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[15px]">
+                      <p className="mt-2 max-w-[24rem] text-[15px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[16px]">
                         {sliceInsight.figureUnit}
                       </p>
                     </div>
-                    <div className="min-w-0 flex-1 sm:max-w-[16rem] sm:text-right">
+                    <div className="min-w-0 flex-1 sm:max-w-[18rem] sm:text-right">
                       <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Named on slice</p>
                       <Link
                         href={`/startup/${sliceInsight.companyId}?sample=1`}
-                        className="mt-1 block truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline"
+                        className="mt-1.5 block truncate text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline sm:text-[18px]"
                       >
                         {sliceInsight.companyName}
                       </Link>
-                      <p className="mt-0.5 truncate font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                      <p className="mt-1 truncate font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
                         {sliceInsight.companyMeta}
                       </p>
                     </div>
                   </div>
-                  <p className="mt-2.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="">
+                  <p className="mt-3 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="">
                     {"Showing "}
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
                     {" of "}
@@ -883,7 +871,18 @@ export function SampleInstrumentBrowse({
                     {" quiet"}
                   </p>
                 </div>
-                <div className="px-3 py-2.5 sm:px-3.5" data-ledger-end-chrono="">
+                {deskConstellation.length ? (
+                  <div className="hidden border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-4 lg:block sm:px-4" data-end-atlas-plate="" data-campus-metric="founders">
+                    <ScoutAtlasPlate
+                      kicker="Atlas plate · end mark"
+                      title="Campus founders on record"
+                      rows={deskConstellation}
+                      caption="Same founders metric · Penn 757 / Stanford 300 / MIT 238"
+                      tone="ember"
+                    />
+                  </div>
+                ) : null}
+                <div className="px-3.5 py-3 sm:px-4" data-ledger-end-chrono="">
                   <ScoutChronograph
                     companies={pageSlice}
                     variant="compact"
