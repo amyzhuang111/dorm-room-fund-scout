@@ -47,6 +47,77 @@ function browseHref(opts: {
   return `/?${query.toString()}#browse`;
 }
 
+
+type EndSliceInsight = {
+  figure: number;
+  figureUnit: string;
+  kicker: string;
+  companyName: string;
+  companyMeta: string;
+  companyId: string;
+};
+
+/** Real insight from the loaded page slice — never pagination batch size. */
+function endSliceInsight(cards: DirectoryCard[]): EndSliceInsight | null {
+  if (cards.length === 0) return null;
+
+  const programCounts = new Map<string, { label: string; count: number; example: DirectoryCard }>();
+  for (const card of cards) {
+    const label = card.primaryProgram?.trim();
+    if (!label) continue;
+    const prev = programCounts.get(label);
+    if (prev) prev.count += 1;
+    else programCounts.set(label, { label, count: 1, example: card });
+  }
+  const topProgram = [...programCounts.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))[0];
+  if (topProgram && topProgram.count >= 3) {
+    return {
+      figure: topProgram.count,
+      figureUnit: `on ${topProgram.label} this page`,
+      kicker: "End of loaded page · program lead",
+      companyName: topProgram.example.name,
+      companyMeta: directoryCardSubtitle(topProgram.example) || topProgram.example.latestSignalAt || "on record",
+      companyId: topProgram.example.id,
+    };
+  }
+
+  const dated = cards
+    .filter((c) => c.latestSignalAt && !/-00-00$/.test(c.latestSignalAt))
+    .slice()
+    .sort((a, b) => (a.latestSignalAt ?? "").localeCompare(b.latestSignalAt ?? "") || a.name.localeCompare(b.name));
+  const oldestSignal = dated[0];
+  if (oldestSignal?.latestSignalAt) {
+    const monthKey = oldestSignal.latestSignalAt.slice(0, 7);
+    const sameMonth = dated.filter((c) => (c.latestSignalAt ?? "").startsWith(monthKey)).length;
+    return {
+      figure: sameMonth,
+      figureUnit: `earliest month on page · ${oldestSignal.latestSignalAt}`,
+      kicker: "End of loaded page · oldest signal",
+      companyName: oldestSignal.name,
+      companyMeta: directoryCardSubtitle(oldestSignal) || oldestSignal.latestSignalAt,
+      companyId: oldestSignal.id,
+    };
+  }
+
+  const founded = cards
+    .filter((c) => c.foundedYear != null)
+    .slice()
+    .sort((a, b) => (a.foundedYear ?? 0) - (b.foundedYear ?? 0) || a.name.localeCompare(b.name));
+  const oldestFounded = founded[0];
+  if (oldestFounded?.foundedYear != null) {
+    return {
+      figure: oldestFounded.foundedYear,
+      figureUnit: "oldest founded year on page",
+      kicker: "End of loaded page · founding lead",
+      companyName: oldestFounded.name,
+      companyMeta: directoryCardSubtitle(oldestFounded) || String(oldestFounded.foundedYear),
+      companyId: oldestFounded.id,
+    };
+  }
+
+  return null;
+}
+
 export function SampleInstrumentBrowse({
   feed,
   cards,
@@ -108,6 +179,7 @@ export function SampleInstrumentBrowse({
   const quietMatch = boardCompanies.length - signaledMatch;
   /** Visible page / rank-band / loaded-end slice for chronograph (not the global 369). */
   const pageSlice = useMemo(() => cards as FacetCompany[], [cards]);
+  const sliceInsight = useMemo(() => endSliceInsight(cards), [cards]);
   const contentsUnfiltered = boardCompanies.length === companies.length;
   const contentsChrono = useMemo(() => signalChronographDetail(boardCompanies), [boardCompanies]);
 
@@ -567,89 +639,60 @@ export function SampleInstrumentBrowse({
                 );
               })}
             </ol>
-            {pages > 1 ? (
-              <div className="mt-0 hidden border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 sm:px-3.5 lg:block" data-ledger-end-chrono="">
-                <ScoutChronograph
-                  companies={pageSlice}
-                  variant="hero"
-                  kicker="Ledger chronograph · end slice"
-                  reading={`End of loaded page · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")} · peak on this slice`}
-                />
-              </div>
-            ) : null}
-            {pages > 1 ? (
+            {pages > 1 && sliceInsight ? (
               <div
-                className="mt-0 hidden border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg-sunken,#F3F5F9)] px-3 py-4 sm:px-3.5 lg:block"
-                data-ledger-end=""
-              >
-                <div className="flex items-center gap-2">
-                  <span className="h-[2px] flex-1 bg-[color:var(--ember,#D96B1C)]/60" aria-hidden />
-                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">
-                    {cards.length < total ? "End of loaded page" : "End of ledger"}
-                  </p>
-                  <span className="h-[2px] flex-1 bg-[color:var(--ember,#D96B1C)]/60" aria-hidden />
-                </div>
-                <p className="mt-2.5 text-center font-mono text-[15px] font-semibold tabular-nums tracking-tight text-[color:var(--fg,#0B0E17)]" data-ledger-showing="">
-                  {"Showing "}
-                  <span className="text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
-                  {" of "}
-                  <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
-                </p>
-                <p className="mt-1 text-center font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                  {" with signal · "}
-                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
-                  {" quiet"}
-                </p>
-              </div>
-            ) : null}
-            {pages > 1 && cards.length > 0 ? (
-              <div
-                className="mt-0 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] lg:hidden"
+                className="mt-0 border border-t-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]"
                 data-ledger-end=""
                 data-ledger-end-mobile=""
+                data-end-insight={sliceInsight.kicker}
               >
                 <div
-                  className="relative overflow-hidden border-b border-[color:var(--line,#E1E5EF)] px-3 py-3.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+                  className="relative overflow-hidden border-b border-[color:var(--line,#E1E5EF)] px-3 py-3.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] sm:px-3.5 sm:py-4"
                   data-end-lead=""
                 >
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
-                    {cards.length < total ? "End of loaded page · closing entry" : "End of ledger · closing entry"}
+                    {sliceInsight.kicker}
                   </p>
-                  <div className="mt-2 flex items-end justify-between gap-3">
+                  <div className="mt-2 flex flex-wrap items-end justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="font-mono text-[52px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
-                        {cards.length.toLocaleString("en-US")}
+                      <p className="font-mono text-[52px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[56px] lg:text-[64px]">
+                        {sliceInsight.figure.toLocaleString("en-US")}
                       </p>
-                      <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                        {"of "}
-                        <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
-                        {" loaded"}
+                      <p className="mt-1.5 max-w-[22rem] text-[14px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[15px]">
+                        {sliceInsight.figureUnit}
                       </p>
                     </div>
-                    <div className="min-w-0 flex-1 text-right">
-                      <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Last on page</p>
-                      <p className="mt-1 truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                        {cards[cards.length - 1].name}
-                      </p>
+                    <div className="min-w-0 flex-1 sm:max-w-[16rem] sm:text-right">
+                      <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Named on slice</p>
+                      <Link
+                        href={`/startup/${sliceInsight.companyId}?sample=1`}
+                        className="mt-1 block truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline"
+                      >
+                        {sliceInsight.companyName}
+                      </Link>
                       <p className="mt-0.5 truncate font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                        {directoryCardSubtitle(cards[cards.length - 1]) || (cards[cards.length - 1].latestSignalAt ?? "on record")}
+                        {sliceInsight.companyMeta}
                       </p>
                     </div>
                   </div>
-                  <p className="mt-2.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                  <p className="mt-2.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="">
+                    {"Showing "}
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
+                    {" of "}
+                    <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
+                    {" · "}
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
                     {" with signal · "}
                     <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
                     {" quiet"}
                   </p>
                 </div>
-                <div className="px-3 py-2.5" data-ledger-end-chrono="">
+                <div className="px-3 py-2.5 sm:px-3.5" data-ledger-end-chrono="">
                   <ScoutChronograph
                     companies={pageSlice}
                     variant="compact"
                     kicker="Ledger chronograph · end slice"
-                    reading={`Supporting · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`}
+                    reading={`Supporting · peak on this loaded slice · not pagination`}
                   />
                 </div>
               </div>
@@ -867,6 +910,25 @@ function LedgerRow({
         {subtitle ? (
           <p className={`mt-0.5 font-mono text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)] ${ranked ? "line-clamp-2" : "truncate"}`}>
             {subtitle}
+          </p>
+        ) : null}
+        {(card.foundedYear != null || card.primaryProgram || (card.founders?.length ?? 0) > 0) ? (
+          <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "line-clamp-2" : "truncate"}`} data-card-facts="">
+            {card.foundedYear != null ? (
+              <span>
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{card.foundedYear}</span>
+                {" founded"}
+              </span>
+            ) : null}
+            {card.foundedYear != null && card.primaryProgram ? <span aria-hidden> · </span> : null}
+            {card.primaryProgram ? <span className="text-[color:var(--fg-2,#3F465C)]">{card.primaryProgram}</span> : null}
+            {(card.foundedYear != null || card.primaryProgram) && (card.founders?.length ?? 0) > 0 ? <span aria-hidden> · </span> : null}
+            {(card.founders?.length ?? 0) > 0 ? (
+              <span>
+                <span className="font-bold text-[color:var(--fg,#0B0E17)]">{card.founders.length.toLocaleString("en-US")}</span>
+                {" founders"}
+              </span>
+            ) : null}
           </p>
         ) : null}
         {meta ? (

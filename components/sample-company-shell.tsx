@@ -108,7 +108,7 @@ export function SampleCompanyShell({
           {dossier?.name ? (
             <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
               <div className="min-w-0 flex-1">
-                <p className="text-[36px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[40px] lg:text-[44px]">
+                <p className="text-[40px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[44px] lg:text-[48px]">
                   {dossier.name}
                 </p>
                 <p className="mt-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:text-[13px]">
@@ -148,6 +148,15 @@ export function SampleCompanyShell({
               <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies in this dispatch</p>
             </>
           )}
+        </div>
+        <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-2" data-dossier-colophon="">
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Scout edition</p>
+          <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+            <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
+            {" "}
+            {wireScope}
+            {wireIncludeNote ? ` · ${wireIncludeNote}` : ""}
+          </p>
         </div>
 
         <div className="mb-4 sm:mb-3" data-dossier-chronograph="">

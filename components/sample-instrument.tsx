@@ -846,10 +846,10 @@ export function ScoutChronograph({
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">{kicker}</p>
           {tall ? (
             <>
-              <p className="mt-1.5 font-mono text-[52px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:mt-1 sm:text-[44px] sm:leading-none sm:tracking-[-0.05em] lg:text-[48px]">
+              <p className="mt-1.5 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:mt-1 sm:text-[48px] sm:leading-none sm:tracking-[-0.06em] lg:text-[56px]">
                 {figure.count.toLocaleString("en-US")}
               </p>
-              <p className="mt-2 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:mt-1.5 sm:text-[15px]">{figureCaption}</p>
+              <p className="mt-2 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:mt-1.5 sm:text-[16px]">{figureCaption}</p>
               <p data-chrono-caption="" className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{caption}</p>
               {reading ? <p className="mt-1 font-mono text-[10px] leading-snug text-[color:var(--fg-2,#3F465C)]">{reading}</p> : null}
             </>
@@ -866,12 +866,12 @@ export function ScoutChronograph({
             </>
           )}
         </div>
-        <div className={`flex items-end gap-1.5 ${tall ? "h-[4.5rem] sm:h-16 lg:h-20" : "h-11"} w-full max-w-[460px] sm:w-auto sm:min-w-[200px] sm:flex-1 lg:max-w-none`}>
+        <div className={`flex items-end gap-1.5 ${tall ? "h-20 sm:h-[4.75rem] lg:h-24" : "h-11"} w-full max-w-[460px] sm:w-auto sm:min-w-[200px] sm:flex-1 lg:max-w-none`}>
           {bars.map((b) => (
             <div key={b.id} data-chrono-bar={b.id} className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1" title={`${b.label}: ${b.count}`}>
               <span
                 className={`w-full max-w-[28px] rounded-sm ${barFill(b)}`}
-                style={{ height: `${Math.max(tall ? 8 : 6, Math.round((b.count / max) * (tall ? 72 : 40)))}px` }}
+                style={{ height: `${Math.max(tall ? 10 : 6, Math.round((b.count / max) * (tall ? 84 : 40)))}px` }}
               />
               <span className={`font-mono text-[8px] uppercase tracking-[0.06em] ${barLabelClass(b)}`}>{b.short}</span>
             </div>

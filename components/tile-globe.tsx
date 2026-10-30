@@ -409,6 +409,13 @@ export function TileGlobe({
   }, [facets, campuses]);
 
   const universeChrono = useMemo(() => signalChronographDetail(companies), [companies]);
+  const universePeak = useMemo(() => {
+    const peak = universeChrono.bars.find((b) => b.peak) ?? universeChrono.bars[universeChrono.bars.length - 1];
+    return {
+      count: peak?.count ?? 0,
+      label: peak?.label ?? "Peak",
+    };
+  }, [universeChrono]);
 
   // Masthead founders/campuses match the sample strip (universe totals via sampleSurfaceCounts),
   // not the filtered map/facet slice — so strip and fold data-count nodes never diverge.
@@ -437,9 +444,9 @@ export function TileGlobe({
             Snapshot · {absoluteDate(dataThrough)}
           </span>
         </div>
-        <div className="mt-3 grid items-end gap-4 sm:grid-cols-2 lg:gap-8" data-dispatch-dual="">
+        <div className="mt-3 grid items-end gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" data-dispatch-dual="">
           <div className="min-w-0" data-dispatch-figure="">
-            <p className="mt-0 font-mono text-[64px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[72px]">
+            <p className="mt-0 font-mono text-[64px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[72px] lg:text-[80px]">
               {liveCount.toLocaleString("en-US")}
             </p>
             <div className="mt-2 flex items-end gap-2" aria-hidden>
@@ -452,7 +459,7 @@ export function TileGlobe({
           </div>
           {topCampus ? (
             <div className="min-w-0 border-t border-[color:var(--line,#E1E5EF)] pt-2.5 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0" data-top-desk-figure="">
-              {/* Mobile: one quiet line so 2,513 + chronograph own the fold. Desk: dual figure held. */}
+              {/* Mobile: one quiet line so 2,513 + chronograph own the fold. Desk: dual figure + peak beat. */}
               <div className="sm:hidden" data-top-desk-compact="">
                 <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
                 <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
@@ -469,7 +476,7 @@ export function TileGlobe({
               </div>
               <div className="hidden sm:block">
                 <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
-                <p className="mt-1 font-mono text-[48px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
+                <p className="mt-1 font-mono text-[48px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[56px] lg:text-[64px]">
                   01
                 </p>
                 <p className="mt-1 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[17px]">
@@ -484,6 +491,24 @@ export function TileGlobe({
               </div>
             </div>
           ) : null}
+          {/* Desk fifth beat: peak month as mast figure (real chronograph peak). Hidden on mobile so fold-375 holds. */}
+          <div className="hidden min-w-0 border-l border-[color:var(--line,#E1E5EF)] pl-6 lg:block" data-peak-desk-figure="">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Peak month · dispatch</p>
+            <p className="mt-1 font-mono text-[64px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">
+              {universePeak.count.toLocaleString("en-US")}
+            </p>
+            <p className="mt-1 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+              {universePeak.label}
+            </p>
+            <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              <span className={COUNT}>{universeChrono.dated.toLocaleString("en-US")}</span>
+              {" dated · "}
+              <span className={COUNT}>{universeChrono.earlierValid.toLocaleString("en-US")}</span>
+              {" earlier · "}
+              <span className={COUNT}>{universeChrono.undatedMonth.toLocaleString("en-US")}</span>
+              {" month unknown"}
+            </p>
+          </div>
         </div>
         <div className="mt-3 flex flex-wrap items-end justify-between gap-2">
           <p className="font-mono text-[11px] tabular-nums leading-relaxed text-[color:var(--fg-2,#3F465C)]">
@@ -559,6 +584,26 @@ export function TileGlobe({
             }
           />
         )}
+      </div>
+
+      {/* Edition colophon — sitewide editorial rhythm under the chronograph instrument. */}
+      <div
+        className="mb-3 hidden items-baseline justify-between gap-3 border-y border-[color:var(--line,#E1E5EF)] py-2 lg:flex"
+        data-dispatch-colophon=""
+      >
+        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Scout edition</p>
+        <p className="min-w-0 flex-1 text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{universeChrono.dated.toLocaleString("en-US")}</span>
+          {" dated · peak "}
+          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{universePeak.label}</span>
+          {" "}
+          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{universePeak.count.toLocaleString("en-US")}</span>
+          {" · "}
+          <span className={COUNT}>{universeCounts.foundersListed.toLocaleString("en-US")}</span>
+          {" founders · "}
+          <span className={COUNT}>{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
+          {" campuses"}
+        </p>
       </div>
 
       {/* Structural desk: chronograph folio | map | wire. Filters open: Contents | map | wire. */}

@@ -116,6 +116,15 @@ export function SampleHome({
               Atlas
             </Tab>
           </div>
+          <div className="flex items-baseline justify-between gap-3 border-b border-line py-1.5" data-browse-edition="">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Scout edition</p>
+            <p className="min-w-0 truncate text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{data.cards.length.toLocaleString("en-US")}</span>
+              {" companies · "}
+              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{data.cards.filter((c) => c.signals > 0).length.toLocaleString("en-US")}</span>
+              {" with signal · white dispatch"}
+            </p>
+          </div>
         </div>
         {feed === "world" ? (
           <div className="mx-auto mt-3 w-full max-w-[1280px]">
