@@ -555,14 +555,52 @@ export function SampleInstrumentBrowse({
                 data-ledger-end-mobile=""
                 data-end-insight={sliceInsight.kicker}
               >
-                <div className="px-3.5 py-8 sm:px-6 sm:py-10" data-ledger-end-colophon="" data-next-to-scout="">
-                  <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--ember,#D96B1C)]">Next to scout</p>
-                  <p className="mt-3 max-w-[28rem] text-[22px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
+                {/* Mobile: one strong end-of-chapter lead (desk keeps Next to scout). */}
+                <div
+                  className="border-b border-[color:var(--line,#E1E5EF)] px-4 pb-4 pt-5 lg:hidden"
+                  data-ledger-end-lead=""
+                >
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
+                    End of chapter
+                  </p>
+                  {nextToScout[0] ? (
+                    <>
+                      <p className="mt-1.5 font-mono text-[44px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+                        {nextToScout[0].count.toLocaleString("en-US")}
+                      </p>
+                      <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                        {nextToScout[0].label}
+                        {" leads programs on this desk"}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="mt-1.5 font-mono text-[44px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+                        {cards.length.toLocaleString("en-US")}
+                      </p>
+                      <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                        companies loaded on this chapter
+                      </p>
+                    </>
+                  )}
+                  <p className="mt-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    {"Showing "}
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
+                    {" of "}
+                    <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
+                  </p>
+                </div>
+                <div className="px-3.5 py-5 sm:px-6 sm:py-10 lg:py-10" data-ledger-end-colophon="" data-next-to-scout="">
+                  <p className="hidden font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--ember,#D96B1C)] lg:block">Next to scout</p>
+                  <p className="mt-0 hidden max-w-[28rem] text-[22px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] lg:mt-3 lg:block">
                     Programs ranked by company count on this desk
                   </p>
-                  <ol className="mt-6 divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]">
+                  <p className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)] lg:hidden">
+                    Programs
+                  </p>
+                  <ol className="mt-3 divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)] lg:mt-6">
                     {nextToScout.map((prog, i) => (
-                      <li key={prog.id} className="flex items-baseline gap-4 py-4">
+                      <li key={prog.id} className="flex items-baseline gap-4 py-3.5 lg:py-4">
                         <span className="w-8 shrink-0 text-right font-mono text-[13px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
                           {String(i + 1).padStart(2, "0")}
                         </span>
@@ -581,12 +619,21 @@ export function SampleInstrumentBrowse({
                       </li>
                     ))}
                   </ol>
-                  <p className="mt-4 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="" data-end-lead="">
+                  <p className="mt-4 hidden font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)] lg:block" data-ledger-showing="" data-end-lead="">
                     {"Showing "}
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
                     {" of "}
                     <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
                     {" · "}
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
+                    {" "}
+                    {sliceInsight.figureUnit}
+                    {" · "}
+                    <Link href={`/startup/${sliceInsight.companyId}?sample=1`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline">
+                      {sliceInsight.companyName}
+                    </Link>
+                  </p>
+                  <p className="mt-3 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)] lg:hidden" data-ledger-showing-mobile="">
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
                     {" "}
                     {sliceInsight.figureUnit}

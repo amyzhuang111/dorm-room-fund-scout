@@ -254,10 +254,15 @@ export function SampleCompanyShell({
           </Link>
           <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
         </div>
-        <div className="mb-4 mt-1 sm:hidden" data-dossier-timeline="" data-mobile-chrono-identity="" data-company-mobile-hero="">
+        <div
+          className="mb-4 mt-1 scroll-mt-[5.5rem] sm:hidden"
+          data-dossier-timeline=""
+          data-mobile-chrono-identity=""
+          data-company-mobile-hero=""
+        >
           <div className="border-b border-[color:var(--line,#E1E5EF)] pb-4" data-dossier-spread-mobile="">
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Dossier</p>
-            <p className="mt-2 text-[36px] font-bold leading-[1.0] tracking-tight text-[color:var(--fg,#0B0E17)]">
+            <p className="mt-1.5 text-[44px] font-bold leading-[0.92] tracking-tight text-[color:var(--fg,#0B0E17)]" data-company-name-lead="">
               {dossier?.name ?? "Company"}
             </p>
             <p className="mt-2.5 border-l-2 border-[color:var(--cobalt,#2F4FD8)] pl-3 font-mono text-[13px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
@@ -287,8 +292,8 @@ export function SampleCompanyShell({
                 </>
               ) : null}
             </p>
-            {/* Keep timeline nodes for DOM/shot identity · visually quiet one-line strip */}
-            <ol className="mt-3 flex flex-wrap gap-x-3 gap-y-1 border-t border-[color:var(--line,#E1E5EF)] pt-2.5" data-dossier-signal-timeline="">
+            {/* DOM/shot identity · single quiet line so the name stays the lead in frame */}
+            <ol className="mt-2.5 flex flex-wrap gap-x-2.5 gap-y-0.5" data-dossier-signal-timeline="">
               {wireCompanies
                 .filter((c) => (c.latestSignalAt ?? "").length >= 4)
                 .slice()
@@ -297,10 +302,10 @@ export function SampleCompanyShell({
                 .map((c, i) => {
                   const at = (c.latestSignalAt ?? "").replace(/-00/g, "");
                   return (
-                    <li key={c.id} className="font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                      <span className="text-[color:var(--fg-3,#5C647A)]">{String(i + 1).padStart(2, "0")}</span>
+                    <li key={c.id} className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                      <span>{String(i + 1).padStart(2, "0")}</span>
                       {" "}
-                      <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{c.name}</span>
+                      <span className="font-semibold text-[color:var(--fg-2,#3F465C)]">{c.name}</span>
                       {" "}
                       <span className="font-bold text-[color:var(--ember,#D96B1C)]">{at}</span>
                     </li>

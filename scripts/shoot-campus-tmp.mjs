@@ -266,10 +266,19 @@ const browser = await chromium.launch({ headless: true });
 
   await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForTimeout(1200);
-  const dossierM = page.locator("[data-dossier-timeline], [data-dossier-spread-mobile]").first();
+  // Pin the company name lead in frame (below sticky chrome via scroll-mt on hero).
+  const dossierM = page.locator("[data-company-mobile-hero]").first();
   if (await dossierM.count()) {
-    await dossierM.evaluate((el) => el.scrollIntoView({ block: "start" }));
-    await page.waitForTimeout(350);
+    await dossierM.evaluate((el) => el.scrollIntoView({ block: "start", inline: "nearest" }));
+    await page.waitForTimeout(400);
+    // If sticky nav still clips the name, nudge down so data-company-name-lead is fully visible.
+    await page.evaluate(() => {
+      const name = document.querySelector("[data-company-name-lead]");
+      if (!name) return;
+      const top = name.getBoundingClientRect().top;
+      if (top < 56) window.scrollBy(0, top - 64);
+    });
+    await page.waitForTimeout(200);
   }
   await shot(page, "company-sim-375");
   await page.close();
