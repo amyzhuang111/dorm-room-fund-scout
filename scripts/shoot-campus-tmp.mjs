@@ -227,8 +227,19 @@ const browser = await chromium.launch({ headless: true });
   }
   await shot(page, "companies-more-375");
 
+  const endLead = page.locator("[data-ledger-end-lead]").first();
   const endM = page.locator("[data-ledger-end-mobile]").first();
-  if (await endM.count()) {
+  if (await endLead.count()) {
+    await endLead.evaluate((el) => el.scrollIntoView({ block: "start", inline: "nearest" }));
+    await page.waitForTimeout(350);
+    await page.evaluate(() => {
+      const lead = document.querySelector("[data-ledger-end-lead]");
+      if (!lead) return;
+      const top = lead.getBoundingClientRect().top;
+      if (top < 56) window.scrollBy(0, top - 64);
+    });
+    await page.waitForTimeout(200);
+  } else if (await endM.count()) {
     await endM.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(400);
   } else {

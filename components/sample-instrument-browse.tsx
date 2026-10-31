@@ -557,7 +557,7 @@ export function SampleInstrumentBrowse({
               >
                 {/* Mobile: one strong end-of-chapter lead (desk keeps Next to scout). */}
                 <div
-                  className="border-b border-[color:var(--line,#E1E5EF)] px-4 pb-4 pt-5 lg:hidden"
+                  className="scroll-mt-[5.5rem] border-b border-[color:var(--line,#E1E5EF)] px-4 pb-4 pt-5 lg:hidden"
                   data-ledger-end-lead=""
                 >
                   <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
