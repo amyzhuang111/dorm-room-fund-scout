@@ -23,6 +23,15 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
     redirect(query ? `/companies?${query}` : "/companies");
   }
   if (sp.view === "network") redirect("/map/network");
+  if (sp.sample === "1" && (sp.feed === "directory" || sp.feed === "leaderboard")) {
+    const qs = new URLSearchParams();
+    qs.set("sample", "1");
+    for (const key of ["feed", "sector", "kind", "campus", "q", "sort", "more"] as const) {
+      const value = sp[key];
+      if (value) qs.set(key, value);
+    }
+    redirect(`/companies?${qs.toString()}`);
+  }
   if (sp.sample !== "1") return <EmptyHome />;
   const feed = feedOf(sp.feed);
   const stats = loadHeroStats();

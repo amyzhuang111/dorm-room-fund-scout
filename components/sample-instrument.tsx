@@ -1424,12 +1424,15 @@ export function IntelligenceBoards({
   companies,
   compact = false,
   hideSector = false,
+  hideLatest = false,
   surface = "fold",
 }: {
   companies: FacetCompany[];
   limit?: number;
   compact?: boolean;
   hideSector?: boolean;
+  /** Map home does not list startups. */
+  hideLatest?: boolean;
   /** fold keeps programs-first; browse leads sector; signals leads programs+recent; company is dossier-thin. */
   surface?: "fold" | "browse" | "signals" | "company";
 }) {
@@ -1479,7 +1482,7 @@ export function IntelligenceBoards({
         </ol>
       </Board>
     ) : null;
-  const recentBoard = (
+  const recentBoard = hideLatest ? null : (
     <Board title="Latest" unit="kind · date">
       <ol className={rowGap}>
         {recent.map((company, index) => (
@@ -1508,7 +1511,7 @@ export function IntelligenceBoards({
       <ul className="mt-1.5 space-y-0.5">
         {mix.map((item) => (
           <li key={item.id}>
-            <Link href={`/?sample=1&sector=${encodeURIComponent(item.id)}#browse`} className="flex items-center gap-1.5 text-[10px] hover:text-[color:var(--ember,#D96B1C)]">
+            <Link href={`/companies?sample=1&sector=${encodeURIComponent(item.id)}`} className="flex items-center gap-1.5 text-[10px] hover:text-[color:var(--ember,#D96B1C)]">
               <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: sectorDot(item.id) }} aria-hidden />
               <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#0B0E17)]">{item.label}</span>
               <span className={`${COUNT} shrink-0`}>{item.count.toLocaleString("en-US")}</span>
@@ -1609,7 +1612,7 @@ export function MobileWireStrip({
         kicker: "Sector",
         figure: s.count.toLocaleString("en-US"),
         caption: s.label,
-        href: `/?sample=1&sector=${encodeURIComponent(s.id)}#browse`,
+        href: `/companies?sample=1&sector=${encodeURIComponent(s.id)}`,
       });
     }
   }

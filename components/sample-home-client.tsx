@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { GlobeHero, WorldMap } from "@/components/globe-hero";
+import { GlobeHero } from "@/components/globe-hero";
 import { SampleTheme } from "@/components/sample-theme";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
@@ -54,7 +54,7 @@ function browseHref(opts: {
   if (q) query.set("q", q);
   if (opts.sort && opts.sort !== "rank") query.set("sort", opts.sort);
   if (opts.more && opts.more > 1) query.set("more", String(opts.more));
-  return `/?${query.toString()}#browse`;
+  return `/companies?${query.toString()}`;
 }
 
 export function SampleHomeClient(props: {
@@ -78,6 +78,7 @@ export function SampleHomeClient(props: {
   foundersListed: number;
   newestHome: { label: string; detail: string } | null;
   directoryUrl?: string;
+  place?: "map" | "explore";
 }) {
   const {
     feed,
@@ -98,6 +99,7 @@ export function SampleHomeClient(props: {
     cardCount,
     foundersListed,
     directoryUrl = "/data/sample-directory.json",
+    place = "map",
   } = props;
 
   const [companies, setCompanies] = useState<FacetCompany[]>([]);
@@ -119,7 +121,10 @@ export function SampleHomeClient(props: {
   return (
     <div className="sample-paper" data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
-      <GlobeHero stats={stats} showGlobe={feed !== "world"} companies={companies} companyCount={cardCount} foundersListed={foundersListed} />
+      {place === "map" ? (
+        <GlobeHero stats={stats} showGlobe={feed !== "world"} companies={companies} companyCount={cardCount} foundersListed={foundersListed} />
+      ) : null}
+      {place === "explore" ? (
       <section id="browse" className="scroll-mt-14 border-t border-line px-3 pb-10 pt-2 sm:px-5">
         <div className="mx-auto w-full max-w-[1280px]">
           <div className="flex flex-wrap items-center gap-x-1 border-b border-line" role="tablist" aria-label="Views">
@@ -129,16 +134,12 @@ export function SampleHomeClient(props: {
             <Tab href={browseHref({ feed: "leaderboard", sector, kind, campus: campusId, q: query })} active={feed === "leaderboard"}>
               Signals
             </Tab>
-            <Tab href={browseHref({ feed: "world", campus: campusId })} active={feed === "world"}>
+            <Tab href="/?sample=1" active={false}>
               Map
             </Tab>
           </div>
         </div>
-        {feed === "world" ? (
-          <div className="mx-auto mt-3 w-full max-w-[1280px]">
-            <WorldMap stats={stats} companies={companies} companyCount={cardCount} foundersListed={foundersListed} />
-          </div>
-        ) : listed ? (
+        {listed ? (
           <SampleInstrumentBrowse
             feed={feed}
             cards={shown}
@@ -168,6 +169,7 @@ export function SampleHomeClient(props: {
           />
         ) : null}
       </section>
+      ) : null}
     </div>
   );
 }

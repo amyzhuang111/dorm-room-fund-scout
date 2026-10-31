@@ -60,7 +60,7 @@ function GlobeBlock({
     next.delete("university");
     if (requested === id) next.delete("campus");
     else next.set("campus", id);
-    router.push(`/?${next.toString()}#browse`);
+    router.push(`/?${next.toString()}`);
   }
 
   const skeleton = {
@@ -286,22 +286,22 @@ function HeroActions({ cream = false, compact = false }: { cream?: boolean; comp
   if (compact) {
     return (
       <div className="flex flex-wrap items-center gap-1.5">
-        <Link href={`/?${world.toString()}#browse`} className="inline-flex h-6 items-center rounded bg-[color:var(--ember,#D96B1C)] px-2 text-[11px] font-semibold text-white sm:h-7 sm:px-2.5 sm:text-[12px]">
-          Explore map
+        <Link href={`/?${world.toString()}`} className="inline-flex h-6 items-center rounded bg-[color:var(--ember,#D96B1C)] px-2 text-[11px] font-semibold text-white sm:h-7 sm:px-2.5 sm:text-[12px]">
+          Map
         </Link>
-        <Link href={`/?${directory.toString()}#browse`} className="inline-flex h-6 items-center rounded border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2 text-[11px] font-medium text-[color:var(--fg,#0B0E17)] sm:h-7 sm:px-2.5 sm:text-[12px]">
-          Browse directory
+        <Link href="/companies?sample=1" className="inline-flex h-6 items-center rounded border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2 text-[11px] font-medium text-[color:var(--fg,#0B0E17)] sm:h-7 sm:px-2.5 sm:text-[12px]">
+          Companies
         </Link>
       </div>
     );
   }
   return (
     <div className="mt-1.5 flex flex-wrap items-center gap-2 lg:mt-1">
-      <Link href={`/?${world.toString()}#browse`} className={`inline-flex h-10 items-center rounded px-4 text-[14px] font-semibold ${cream ? "bg-[color:var(--ember,#D96B1C)] text-white" : "bg-ember text-accent-foreground"}`}>
-        Explore map
+      <Link href={`/?${world.toString()}`} className={`inline-flex h-10 items-center rounded px-4 text-[14px] font-semibold ${cream ? "bg-[color:var(--ember,#D96B1C)] text-white" : "bg-ember text-accent-foreground"}`}>
+        Map
       </Link>
-      <Link href={`/?${directory.toString()}#browse`} className={`inline-flex h-10 items-center rounded border px-4 text-[14px] font-medium ${cream ? "border-[#e7cbb6] bg-white text-[#20140c]" : "border-line text-fg"}`}>
-        Browse directory
+      <Link href="/companies?sample=1" className={`inline-flex h-10 items-center rounded border px-4 text-[14px] font-medium ${cream ? "border-[#e7cbb6] bg-white text-[#20140c]" : "border-line text-fg"}`}>
+        Companies
       </Link>
     </div>
   );

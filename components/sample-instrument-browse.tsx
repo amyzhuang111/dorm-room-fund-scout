@@ -46,7 +46,7 @@ function browseHref(opts: {
   if (q) query.set("q", q);
   if (opts.sort && opts.sort !== "rank") query.set("sort", opts.sort);
   if (opts.more && opts.more > 1) query.set("more", String(opts.more));
-  return `/?${query.toString()}#browse`;
+  return `/companies?${query.toString()}`;
 }
 
 
@@ -646,6 +646,7 @@ export function SampleInstrumentBrowse({
               compact
               surface={wireSurface}
               hideSector={feed === "directory"}
+              hideLatest
             />
           </div>
         </div>

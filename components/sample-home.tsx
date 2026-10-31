@@ -28,6 +28,7 @@ export function SampleHome({
   q,
   sort,
   stats,
+  place = "map",
 }: {
   feed: Feed;
   sector?: string;
@@ -37,6 +38,8 @@ export function SampleHome({
   q?: string;
   sort?: string;
   stats: HeroStats;
+  /** Map is the globe. Explore is the ranked company list. */
+  place?: "map" | "explore";
 }) {
   const pages = Math.max(1, Math.floor(Number(more)) || 1);
   const query = q?.trim() ?? "";
@@ -106,6 +109,7 @@ export function SampleHome({
       foundersListed={foundersListed}
       newestHome={newestHome}
       directoryUrl="/data/sample-directory.json"
+      place={place}
     />
   );
 }

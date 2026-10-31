@@ -66,7 +66,7 @@ export function SampleCompanyShell({
       next.flag ||
       next.hqRegion
     ) {
-      router.push(`/?${params.toString()}#browse`);
+      router.push(`/companies?${params.toString()}`);
     }
   }
 
@@ -105,8 +105,8 @@ export function SampleCompanyShell({
         {/* Magazine dossier cover — desk + mobile share the profile treatment */}
         <div className="mb-4 hidden border-b border-[color:var(--line,#E1E5EF)] pb-4 sm:mb-5 sm:block sm:pb-5" data-dossier-hero="" data-mobile-magazine="">
           <div className="flex flex-wrap items-center gap-2">
-            <Link href="/?sample=1#browse" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
-              ← Company ledger
+            <Link href="/companies?sample=1" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
+              ← Companies
             </Link>
             <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
           </div>
@@ -249,8 +249,8 @@ export function SampleCompanyShell({
 
         {/* Mobile identity: founder + timeline dossier — not a shared ticket or atlas dial. */}
         <div className="mb-3 flex items-center justify-between gap-2 sm:hidden" data-dossier-mobile-nav="">
-          <Link href="/?sample=1#browse" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
-            ← Company ledger
+          <Link href="/companies?sample=1" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
+            ← Companies
           </Link>
           <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
         </div>

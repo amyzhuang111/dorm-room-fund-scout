@@ -657,7 +657,7 @@ export function TileGlobe({
           </ol>
           <p className="mt-2 text-[12px] leading-5 text-[color:var(--fg-3,#5C647A)]">{markerSizeLegend()}</p>
         </section>
-        <IntelligenceBoards companies={filteredCompanies} surface="fold" />
+        <IntelligenceBoards companies={filteredCompanies} surface="fold" hideLatest />
       </div>
 
       <MobileFilterDock

@@ -29,7 +29,7 @@ const SUBS: Record<string, { href: string; label: string }[]> = {
   explore: [
     { href: "/campuses", label: "Campuses" },
     { href: "/founders", label: "Founders" },
-    { href: "/companies", label: "Companies" },
+    { href: "/companies?sample=1", label: "Companies" },
   ],
   signals: [
     { href: "/signals", label: "Feed" },
@@ -43,9 +43,10 @@ const SUBS: Record<string, { href: string; label: string }[]> = {
 };
 
 function subActive(pathname: string, href: string): boolean {
-  if (href === "/") return pathname === "/";
-  if (href === "/signals") return pathname === "/signals";
-  return pathname === href || pathname.startsWith(href + "/");
+  const path = href.split("?")[0] ?? href;
+  if (path === "/") return pathname === "/";
+  if (path === "/signals") return pathname === "/signals";
+  return pathname === path || pathname.startsWith(path + "/");
 }
 
 export function SiteNav() {
