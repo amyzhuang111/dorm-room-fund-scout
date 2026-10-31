@@ -57,17 +57,23 @@ export function whyWorthALookCandidates(founder: FounderLead): string[] {
   const out: string[] = [];
   const seen = new Set<string>();
   function push(label: string | null | undefined) {
-    if (!label || seen.has(label)) return;
-    seen.add(label);
-    out.push(label);
+    const text = label?.trim();
+    if (!text || seen.has(text)) return;
+    seen.add(text);
+    out.push(text);
   }
+  // Keep why off fields already on the card (campus, company, sector, year, role).
   const STRONG = new Set(["funding", "launch", "accelerator", "award"]);
-  const strong = founder.signalTypes.filter((t) => STRONG.has(t));
-  const RANK: Record<string, number> = { funding: 0, launch: 1, accelerator: 2, award: 3 };
-  for (const t of [...strong].sort((a, b) => (RANK[a] ?? 50) - (RANK[b] ?? 50) || a.localeCompare(b))) {
-    push(signalTypeLabel(t));
+  const strong = [...founder.signalTypes.filter((t) => STRONG.has(t))].sort(
+    (a, b) => ({ funding: 0, launch: 1, accelerator: 2, award: 3 }[a] ?? 50) - ({ funding: 0, launch: 1, accelerator: 2, award: 3 }[b] ?? 50) || a.localeCompare(b),
+  );
+  if (strong.length >= 2) {
+    push(`${signalTypeLabel(strong[0])} and ${signalTypeLabel(strong[1]).toLowerCase()} on record`);
   }
-  // Default why prefers YC when present; assignWhyWorthALook may skip a used YC for the next program.
+  for (const t of strong) {
+    push(`${signalTypeLabel(t)} on record`);
+  }
+  // Named programs are the specific desk facts (diversifier may skip a repeated YC).
   const programs = [...founder.programs].sort((a, b) => Number(isYcReason(b)) - Number(isYcReason(a)) || a.localeCompare(b));
   for (const name of programs) push(name);
   const WEAK_RANK: Record<string, number> = {
@@ -78,7 +84,7 @@ export function whyWorthALookCandidates(founder: FounderLead): string[] {
   for (const t of [...founder.signalTypes]
     .filter((x) => !STRONG.has(x))
     .sort((a, b) => (WEAK_RANK[a] ?? 50) - (WEAK_RANK[b] ?? 50) || a.localeCompare(b))) {
-    push(signalTypeLabel(t));
+    push(`${signalTypeLabel(t)} on record`);
   }
   return out;
 }

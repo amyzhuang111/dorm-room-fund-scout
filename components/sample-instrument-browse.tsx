@@ -443,53 +443,34 @@ export function SampleInstrumentBrowse({
           {/* Leaderboard podium mounts inside data-ledger-stage (shot frames that). Browse-more keeps a folio insight, not a shared ticket. */}
           {feed === "directory" && pages > 1 ? (
             <div
-              className="relative scroll-mt-14 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-3.5 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]"
+              className="relative scroll-mt-14 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]"
               data-mobile-continued-mast=""
               data-page-window=""
               data-page-peak=""
             >
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">On this page</p>
-              <div className="mt-2 flex items-end justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-                    {pageSignaled.toLocaleString("en-US")}
-                    <span className="ml-1 font-mono text-[16px] font-semibold tracking-tight text-[color:var(--fg-2,#3F465C)]">
-                      / {cards.length.toLocaleString("en-US")}
-                    </span>
-                  </p>
-                  <p className="mt-1.5 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    {pagePeakLabel
-                      ? `Highest: ${pagePeakLabel}`
-                      : `${pageSignaled} carry a dated signal`}
-                  </p>
-                </div>
-                {pageSignalBars.length > 0 ? (
-                  <div className="flex h-14 max-w-[42%] flex-1 items-end justify-end gap-0.5" data-page-signal-bars="" aria-hidden>
-                    {pageSignalBars.map((bar) => (
-                      <span
-                        key={bar.key}
-                        title={`${bar.label ?? bar.key}: ${bar.count}`}
-                        className={`min-w-[5px] flex-1 rounded-sm ${bar.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/45"}`}
-                        style={{ height: `${Math.max(8, Math.round((bar.count / pageSignalBarsMax) * 52))}px` }}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex h-14 w-16 items-end" data-page-signal-bars="empty" aria-hidden>
-                    <span className="w-full rounded-sm bg-[color:var(--cobalt,#2F4FD8)]/25" style={{ height: 28 }} />
-                  </div>
-                )}
-              </div>
-              {sliceInsight ? (
-                <p className="mt-2.5 text-[12px] leading-5 text-[color:var(--fg-2,#3F465C)]">
-                  <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{sliceInsight.companyName}</span>
-                  {" · "}
-                  {sliceInsight.figure.toLocaleString("en-US")} {sliceInsight.figureUnit}
-                </p>
-              ) : null}
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
+                Companies 1 to {cards.length.toLocaleString("en-US")} of {total.toLocaleString("en-US")}
+              </p>
+              <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                <span className="font-mono font-bold text-[color:var(--ember,#D96B1C)]">{pageSignaled.toLocaleString("en-US")}</span>
+                {" of these "}
+                <span className="font-mono font-bold text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
+                {" have a dated signal"}
+              </p>
+              <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                {"Universe "}
+                <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
+                {" companies"}
+                {pagePeakLabel ? (
+                  <>
+                    {" · peak "}
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{pagePeakLabel}</span>
+                  </>
+                ) : null}
+              </p>
             </div>
           ) : null}
-          {feed === "directory" ? (
+          {feed === "directory" && pages <= 1 ? (
             <div
               className="flex w-full overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30"
               data-mobile-sort-segment=""
@@ -525,6 +506,33 @@ export function SampleInstrumentBrowse({
           ) : null}
           {/* Secondary sector strips culled · mobile page-1 owns the newest-insight hero alone. */}
         </div>
+
+        {mobileFiltersOpen ? (
+          <div
+            className="mb-3 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] lg:hidden"
+            role="region"
+            aria-label="Scout filters"
+            data-mobile-filters-inline=""
+            data-mobile-filters-sheet=""
+            data-mobile-contents-hero=""
+            data-filters-index-hero=""
+          >
+            <div className="flex items-baseline justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5">
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
+                Filters
+                <span className="ml-2 font-mono text-[12px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--ember,#D96B1C)]">
+                  {boardCompanies.length.toLocaleString("en-US")}
+                </span>
+                <span className="ml-1 font-mono text-[10px] font-medium normal-case tracking-normal text-[color:var(--fg-2,#3F465C)]">
+                  of {total.toLocaleString("en-US")} in view
+                </span>
+              </p>
+            </div>
+            <div className="max-h-[min(42dvh,360px)] overflow-y-auto overscroll-contain px-1 pb-3" data-mobile-facet-map="">
+              <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
+            </div>
+          </div>
+        ) : null}
 
         {feed === "directory" && pages > 1 ? (
           <div className="mb-3 hidden lg:block" data-desk-browse-dominant="page-window" data-page-window="">
@@ -633,63 +641,40 @@ export function SampleInstrumentBrowse({
             </div>
             {pages > 1 && sliceInsight ? (
               <div
-                className="mt-4 scroll-mt-24 border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]"
+                className="mt-5 scroll-mt-24 border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--cobalt-haze,#E8ECFA)]/35"
                 data-ledger-end=""
                 data-ledger-end-mobile=""
                 data-end-insight={sliceInsight.kicker}
               >
-                {/* Mobile lead + desk share one programs list; Showing appears once below. */}
-                <div
-                  className="scroll-mt-[5.5rem] border-b border-[color:var(--line,#E1E5EF)] px-4 pb-3 pt-4"
-                  data-ledger-end-lead=""
-                >
+                <div className="scroll-mt-[5.5rem] px-4 py-5 sm:px-5" data-ledger-end-lead="">
                   <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
-                    End of list
+                    Loaded so far
                   </p>
-                  <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                  <p className="mt-2 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[44px]">
+                    {cards.length.toLocaleString("en-US")}
+                    <span className="mx-1.5 text-[18px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">of</span>
+                    <span className="text-[28px] font-bold tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[32px]">
+                      {total.toLocaleString("en-US")}
+                    </span>
+                  </p>
+                  <p className="mt-2.5 max-w-[28rem] text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
                     {"Companies 1 to "}
                     {cards.length.toLocaleString("en-US")}
                     {" of "}
                     {total.toLocaleString("en-US")}
+                    {" on this desk"}
                   </p>
                   {nextToScout[0] ? (
-                    <p className="mt-1 text-[13px] text-[color:var(--fg-2,#3F465C)]">
+                    <p className="mt-1.5 text-[13px] text-[color:var(--fg-2,#3F465C)]" data-next-to-scout="">
                       <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].label}</span>
-                      {" leads with "}
+                      {" accounts for "}
                       <span className="font-mono font-bold text-[color:var(--ember,#D96B1C)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
-                      {" companies on this desk"}
+                      {" of the "}
+                      {total.toLocaleString("en-US")}
+                      {" companies"}
                     </p>
                   ) : null}
-                </div>
-                <div className="px-3.5 py-4 sm:px-5 sm:py-5" data-ledger-end-colophon="" data-next-to-scout="">
-                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">
-                    Programs on this desk
-                  </p>
-                  <p className="mt-1 max-w-[28rem] text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    Ranked by company count
-                  </p>
-                  <ol className="mt-4 divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]">
-                    {nextToScout.map((prog, i) => (
-                      <li key={prog.id} className="flex items-baseline gap-4 py-3.5">
-                        <span className="w-8 shrink-0 text-right font-mono text-[13px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="min-w-0 flex-1 truncate text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[17px]">{prog.label}</span>
-                        <span
-                          className="shrink-0 font-mono text-[15px] font-bold leading-none tabular-nums tracking-[-0.02em] text-[color:var(--ember,#D96B1C)] sm:text-[16px]"
-                          {...(isYcProgramLabel(prog.label) && prog.count === YC_MEMBERSHIP_EXPECTED
-                            ? { "data-yc-membership-count": String(prog.count) }
-                            : {})}
-                        >
-                          {prog.count.toLocaleString("en-US")}
-                        </span>
-                        {isYcProgramLabel(prog.label) && prog.count === YC_MEMBERSHIP_EXPECTED ? (
-                          <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-3,#5C647A)]">in YC</span>
-                        ) : null}
-                      </li>
-                    ))}
-                  </ol>
-                  <p className="mt-4 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="" data-end-lead="">
+                  <p className="mt-3 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="" data-end-lead="">
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
                     {" "}
                     {sliceInsight.figureUnit}
@@ -699,12 +684,11 @@ export function SampleInstrumentBrowse({
                     </Link>
                   </p>
                   {cards.length < total ? (
-                    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--line,#E1E5EF)] pt-3.5" data-ledger-end-more="">
+                    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--cobalt,#2F4FD8)]/20 pt-3.5" data-ledger-end-more="" data-ledger-end-colophon="">
                       <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                        {"Companies 1 to "}
-                        <span className="font-bold text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
-                        {" of "}
-                        {total.toLocaleString("en-US")}
+                        {"Still "}
+                        <span className="font-bold text-[color:var(--fg,#0B0E17)]">{(total - cards.length).toLocaleString("en-US")}</span>
+                        {" to load"}
                       </p>
                       <Link
                         href={moreHref}
@@ -788,48 +772,15 @@ export function SampleInstrumentBrowse({
       </aside>
 
       <MobileFilterDock
-        onOpen={() => setMobileFiltersOpen(true)}
+        onOpen={() => setMobileFiltersOpen((open) => !open)}
         count={boardCompanies.length}
-        caption={feed === "leaderboard" ? "Narrow the signal desk" : "Narrow the ledger"}
+        caption={mobileFiltersOpen ? "Hide filters" : feed === "leaderboard" ? "Narrow the signal desk" : "Narrow the ledger"}
         tone="ember"
-        kicker="Filters"
+        kicker={mobileFiltersOpen ? "Hide" : "Filters"}
         observe="#browse"
       />
 
-      {mobileFiltersOpen ? (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters" data-mobile-filters-sheet="">
-          <button type="button" className="absolute inset-0 bg-transparent" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
-          {/* Bottom sheet · list stays readable above; dock Narrow keeps clearance below Done */}
-          <div className="absolute inset-x-0 bottom-[3.75rem] flex max-h-[min(55dvh,440px)] flex-col overflow-hidden rounded-t-xl border border-[color:var(--cobalt,#2F4FD8)]/20 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-12px_36px_rgba(15,23,42,0.12)]">
-            <div className="flex justify-center pt-2" aria-hidden>
-              <span className="h-1 w-9 rounded-full bg-[color:var(--line-strong,#C5CAD8)]" />
-            </div>
-            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-4 pb-3.5 pt-1.5" data-mobile-contents-hero="" data-filters-index-hero="">
-              <div className="flex items-end justify-between gap-4">
-                <div className="min-w-0 flex-1">
-                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
-                    Narrow
-                  </p>
-                  <p className="mt-1 font-mono text-[26px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                    {boardCompanies.length.toLocaleString("en-US")}
-                  </p>
-                  <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies still in view</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setMobileFiltersOpen(false)}
-                  className="mb-0.5 inline-flex h-9 shrink-0 items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] px-4 font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)]"
-                >
-                  Done
-                </button>
-              </div>
-            </div>
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-1 pb-4" data-mobile-facet-map="">
-              <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
-            </div>
-          </div>
-        </div>
-      ) : null}
+      {/* Mobile filters: inline expandable above the list (no sheet, no Done). */}
     </div>
   );
 }

@@ -240,10 +240,10 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(150);
   await shot(page, "companies-more-375");
 
-  // Frame last ledger card (uncut) + end lead + pagination together
+  // Frame end moment as the shot hero (Loaded so far), not a leftover lone card
   const endM = page.locator("[data-ledger-end-mobile]").first();
   const endLead = page.locator("[data-ledger-end-lead]").first();
-  if (await endM.count()) {
+  if (await endLead.count()) {
     const headerBottom = await page.evaluate(() => {
       const nav = document.querySelector("header");
       const tabs = [...document.querySelectorAll("a,button")].find(
@@ -251,33 +251,23 @@ const browser = await chromium.launch({ headless: true });
       );
       return Math.max(nav?.getBoundingClientRect().bottom || 0, tabs?.getBoundingClientRect().bottom || 0, 96);
     });
-    await endM.evaluate((hb) => {
-      const last = document.querySelector("[data-ledger-stage] ol li:last-child");
-      const end = document.querySelector("[data-ledger-end-mobile]");
-      if (!last) return;
-      last.scrollIntoView({ block: "start" });
-      const lastTop = last.getBoundingClientRect().top;
-      window.scrollBy(0, lastTop - (hb + 8));
+    await endLead.evaluate((hb) => {
+      const lead = document.querySelector("[data-ledger-end-lead]");
+      const end = document.querySelector("[data-ledger-end-mobile]") || lead;
+      if (!lead) return;
+      lead.scrollIntoView({ block: "start" });
+      const top = lead.getBoundingClientRect().top;
+      window.scrollBy(0, top - (hb + 12));
       if (end) {
+        const bottom = end.getBoundingClientRect().bottom;
         const room = window.innerHeight - 8;
-        const endBottom = end.getBoundingClientRect().bottom;
-        if (endBottom > room) {
-          const maxScroll = last.getBoundingClientRect().top - (hb + 8);
-          const need = endBottom - room + 4;
-          window.scrollBy(0, Math.min(need, Math.max(0, maxScroll)));
-        }
+        if (bottom > room) window.scrollBy(0, bottom - room + 4);
       }
     }, headerBottom);
     await page.waitForTimeout(350);
-  } else if (await endLead.count()) {
-    await endLead.evaluate((el) => el.scrollIntoView({ block: "start", inline: "nearest" }));
+  } else if (await endM.count()) {
+    await endM.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(350);
-  } else {
-    const fallback = page.locator("[data-ledger-end]").last();
-    if (await fallback.count()) {
-      await fallback.evaluate((el) => el.scrollIntoView({ block: "start" }));
-      await page.waitForTimeout(400);
-    }
   }
   await shot(page, "companies-more-end-375");
 

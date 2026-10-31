@@ -45,7 +45,7 @@ export function FoldPeakShare({
   return (
     <div className="mb-0" data-fold-peak-identity="" data-fold-baseline="8" data-fold-peak-shell={live ? "live" : "ssr"}>
       {/* Desk: peak hero + quiet bars (no count labels) + Scout edition · reserved min height */}
-      <div className="mb-1 hidden min-h-[15rem] lg:block" data-fold-peak-desk="">
+      <div className="mb-1 hidden min-h-[13.5rem] lg:block" data-fold-peak-desk="">
         <div
           className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-end gap-5 border-b border-[color:var(--line,#E1E5EF)] pb-3"
           data-fold-peak-share=""
@@ -109,7 +109,7 @@ export function FoldPeakShare({
               {" on map"}
             </p>
             {topCampuses.length > 0 ? (
-              <ol className="mt-3 space-y-2.5" data-fold-peak-campus-rank="">
+              <ol className="mt-2.5 space-y-1.5" data-fold-peak-campus-rank="">
                 {topCampuses.map((campus, i) => (
                   <li key={campus.id} className="flex items-baseline justify-between gap-3">
                     <span className="min-w-0 truncate">
@@ -118,7 +118,7 @@ export function FoldPeakShare({
                       </span>
                       <span className="text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{campus.name}</span>
                     </span>
-                    <span className="shrink-0 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                    <span className="shrink-0 font-mono text-[16px] font-bold leading-none tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]">
                       {campus.founders.toLocaleString("en-US")}
                     </span>
                   </li>
@@ -169,7 +169,7 @@ export function FoldPeakShare({
         </ol>
         {topCampuses.length > 0 ? (
           <ol
-            className="mt-2.5 flex flex-nowrap items-baseline gap-x-3 overflow-hidden border-t border-[color:var(--line,#E1E5EF)] pt-2"
+            className="mt-2.5 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-t border-[color:var(--line,#E1E5EF)] pt-2"
             data-fold-peak-campus-rank-mobile=""
           >
             {topCampuses.map((campus, i) => (

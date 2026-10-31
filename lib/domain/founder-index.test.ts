@@ -44,9 +44,9 @@ assert.deepEqual(penn.map((row) => row.name), ["Ada Thin"]);
 const missingCampus = filterFounders(rows, { campusId: "missing" });
 assert.deepEqual(missingCampus.map((row) => row.name), ["Bea None"]);
 
-assert.equal(whyWorthALook(rows[2]!), "Funding");
+assert.equal(whyWorthALook(rows[2]!), "Funding on record");
 assert.equal(whyWorthALook(rows[1]!), null);
-assert.equal(whyWorthALook(rows[0]!), "Award");
+assert.equal(whyWorthALook(rows[0]!), "Award on record");
 assert.equal(
   whyWorthALook(lead({ id: "yc", name: "Only YC", programs: ["Penn Venture Lab", "Y Combinator", "a16z Speedrun"] })),
   "Y Combinator",

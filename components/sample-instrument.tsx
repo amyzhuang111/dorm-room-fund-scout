@@ -1707,25 +1707,19 @@ export function MobileWireStrip({
       });
     }
   }
-  // company: recent signals + founders (af1645b richness; honest dates only on SignalFeedRow)
+  // company: campus peers by signal weight (6c770b0; skip empty founder stubs)
   if (surface === "company") {
-    for (const [i, c] of recent.entries()) {
-      const at = (c.latestSignalAt ?? "").replace(/-00/g, "").trim();
+    const peers = [...companies]
+      .filter((c) => (c.signals ?? 0) > 0)
+      .sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name))
+      .slice(0, 6);
+    for (const [i, c] of peers.entries()) {
       cards.push({
-        key: `sig-${c.id}`,
-        kicker: at ? at : `0${i + 1} signal`,
-        figure: c.signalLabel ?? "Signal",
-        caption: c.name,
+        key: `peer-${c.id}`,
+        kicker: c.school ? c.school : `0${i + 1} peer`,
+        figure: String(c.signals),
+        caption: c.signalLabel ? `${c.name} · ${c.signalLabel}` : c.name,
         href: `/startup/${c.id}`,
-      });
-    }
-    for (const [i, f] of founders.entries()) {
-      cards.push({
-        key: `f-${f.key}`,
-        kicker: f.campus ? f.campus : `0${i + 1} founder`,
-        figure: String(f.signals),
-        caption: f.companyName ? `${f.name} · ${f.companyName}` : f.name,
-        href: `/startup/${f.companyId}`,
       });
     }
   }

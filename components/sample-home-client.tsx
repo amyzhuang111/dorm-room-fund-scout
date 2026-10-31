@@ -88,7 +88,7 @@ function PeakShareLite({
   const pct = Math.round((peakCount / Math.max(1, shell.dated)) * 100);
   return (
     <div data-fold-peak-ssr-shell="" data-fold-peak-identity="" data-fold-baseline="8">
-      <div className="mb-1 hidden min-h-[15rem] lg:block" data-fold-peak-desk="">
+      <div className="mb-1 hidden min-h-[13.5rem] lg:block" data-fold-peak-desk="">
         <div className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-end gap-5 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-peak-share="">
           <div className="min-w-0">
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
@@ -120,7 +120,7 @@ function PeakShareLite({
               {" on map"}
             </p>
             {/* Height twin for live campus ranks · avoids SSR name payload */}
-            <div className="mt-3 h-[5.25rem]" data-fold-peak-campus-rank-reserve="" aria-hidden="true" />
+            <div className="mt-2.5 h-[9.5rem]" data-fold-peak-campus-rank-reserve="" aria-hidden="true" />
           </div>
         </div>
       </div>
@@ -158,7 +158,7 @@ function PeakShareSlot({
   // Keep SSR lite until the client Peak chunk has painted (same box → CLS ≈ 0).
   const showLive = live;
   return (
-    <div className="relative mb-3 min-h-[11.5rem] lg:mb-4 lg:min-h-[15rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
+    <div className="relative mb-3 min-h-[11.5rem] lg:mb-3 lg:min-h-[13.5rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
       <div className={showLive ? "hidden" : undefined} aria-hidden={showLive || undefined} data-fold-peak-ssr-wrap="">
         {shell ? (
           <PeakShareLite shell={shell} foundersListed={foundersListed} campusesOnMap={campusesOnMap} topCampuses={topCampuses} />
@@ -238,7 +238,7 @@ export function SampleHomeClient(props: {
     return [...campuses]
       .filter((c) => (c.founders ?? 0) > 0)
       .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))
-      .slice(0, 3)
+      .slice(0, 8)
       .map((c) => ({
         id: c.id,
         name: shortCampusLabel(c.id, c.name),
@@ -307,7 +307,7 @@ export function SampleHomeClient(props: {
                 foundersIndexed={founders.length || undefined}
               />
             </div>
-            <div className="order-1 lg:order-2 min-w-0 lg:sticky lg:top-3 lg:max-h-[calc(100dvh-1.5rem)] lg:overflow-y-auto" data-fold-founders-col="">
+            <div className="order-1 lg:order-2 min-w-0 lg:sticky lg:top-3 lg:max-h-[calc(100dvh-1.5rem)] lg:overflow-y-auto lg:scroll-pt-1 lg:pb-6" data-fold-founders-col="">
               <FounderResults
                 founders={founders}
                 status={founderStatus}
