@@ -138,6 +138,13 @@ const browser = await chromium.launch({ headless: true });
     await page.waitForTimeout(1200);
     await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
   }
+  const chapter = page.locator("[data-chapter-window]").first();
+  if (await chapter.count()) {
+    await chapter.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.waitForTimeout(300);
+    await page.evaluate(() => window.scrollBy(0, -48));
+    await page.waitForTimeout(200);
+  }
   await shot(page, "browse-more-1440");
 
   // Prove next-to-scout / end colophon in viewport (distinct from prior chrono dial).
@@ -162,11 +169,11 @@ const browser = await chromium.launch({ headless: true });
   await waitDirectory(page);
   await page.waitForTimeout(1500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
-  const ledgerStage = page.locator("[data-ledger-stage='directory']").first();
-  if (await ledgerStage.count()) {
-    await ledgerStage.evaluate((el) => el.scrollIntoView({ block: "start" }));
+  const filtersHero = page.locator("[data-filters-index-hero]").first();
+  if (await filtersHero.count()) {
+    await filtersHero.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(300);
-    await page.evaluate(() => window.scrollBy(0, -48));
+    await page.evaluate(() => window.scrollBy(0, -56));
   } else {
     const contents = page.locator("[data-contents-hero]").first();
     if (await contents.count()) {
@@ -234,6 +241,12 @@ const browser = await chromium.launch({ headless: true });
   await page.goto(`${BASE}/?sample=1#browse`, { waitUntil: "networkidle" });
   await page.waitForTimeout(2000);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
+  const browseMobHero = page.locator("[data-browse-mobile-hero]").first();
+  if (await browseMobHero.count()) {
+    await browseMobHero.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.waitForTimeout(300);
+    await page.evaluate(() => window.scrollBy(0, -40));
+  }
   await page.waitForTimeout(400);
   await shot(page, "browse-375");
 
@@ -242,6 +255,12 @@ const browser = await chromium.launch({ headless: true });
     await more.click().catch(() => {});
     await page.waitForTimeout(1000);
     await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
+  }
+  const chapterM = page.locator("[data-chapter-window]").first();
+  if (await chapterM.count()) {
+    await chapterM.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.waitForTimeout(300);
+    await page.evaluate(() => window.scrollBy(0, -40));
   }
   await shot(page, "browse-more-375");
 

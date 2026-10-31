@@ -16,6 +16,8 @@ const EXPECTED_CHRONO_MONTH_UNKNOWN = 34; // e.g. 2026-00-00 — year only, not 
 const EXPECTED_CHRONO_DATED = 635; // 588 + 13 + 34
 const EXPECTED_CHRONO_PEAK = 369;
 const EXPECTED_CHRONO_PEAK_MONTH = "2026-09";
+/** Programs[] membership — every on-page YC universe figure must match (labelled in YC). */
+const EXPECTED_YC_MEMBERSHIP = 564;
 /** Campus plates sitewide: founder names on record (not signals / not companies). */
 const EXPECTED_CAMPUS_FOUNDERS_TOP = [
   { founders: 757, nameRe: /penn|pennsylvania/i },
@@ -199,6 +201,35 @@ const campusFoundersTop = await page.evaluate(() => {
   const metric = document.querySelector("[data-campus-metric]")?.getAttribute("data-campus-metric") || null;
   return { metric, rows };
 });
+
+const ycMembershipNodes = await page.evaluate(() => {
+  return [...document.querySelectorAll("[data-yc-membership-count]")].map((el) => ({
+    count: Number(String(el.getAttribute("data-yc-membership-count") || "").replace(/,/g, "")),
+    text: (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 40),
+  }));
+});
+const ycMembershipOk =
+  ycMembershipNodes.length > 0 &&
+  ycMembershipNodes.every((n) => n.count === EXPECTED_YC_MEMBERSHIP);
+const ycPrimaryLeak = await page.evaluate(() => {
+  // Fail if a visible Y Combinator row still shows the primary-only 561 universe total.
+  const hits = [];
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  let n;
+  while ((n = walker.nextNode())) {
+    const t = (n.textContent || "").trim();
+    if (t !== "561") continue;
+    let el = n.parentElement;
+    let ctx = "";
+    for (let i = 0; i < 4 && el; i++) {
+      ctx += " " + (el.textContent || "");
+      el = el.parentElement;
+    }
+    if (/y\s*combinator/i.test(ctx)) hits.push(ctx.replace(/\s+/g, " ").trim().slice(0, 120));
+  }
+  return hits;
+});
+
 const campusFoundersTopOk =
   campusFoundersTop != null &&
   campusFoundersTop.metric === "founders" &&
@@ -211,6 +242,8 @@ const report = {
   strip,
   fold,
   campusFoundersTop,
+  ycMembershipNodes,
+  ycPrimaryLeak,
   moreLabels: moreLabelsBefore,
   yearSum: year.sum,
   statusSum: status.sum,
@@ -267,6 +300,8 @@ const report = {
     chronographMonthUnknownVisible: chrono != null && chrono.undatedCaption === true && chrono.unknownBar === false,
     chronographLabelsUntruncated: chrono != null && chrono.truncatedStub === false,
     campusFoundersTopPennStanfordMit: campusFoundersTopOk,
+    ycMembershipEverywhere: ycMembershipOk,
+    ycNoPrimary561Leak: ycPrimaryLeak.length === 0,
   },
 };
 

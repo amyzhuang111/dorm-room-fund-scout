@@ -103,7 +103,7 @@ export function SampleCompanyShell({
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 sm:px-5">
         {/* Magazine dossier cover — desk + mobile share the profile treatment */}
-        <div className="mb-4 border-b border-[color:var(--line,#E1E5EF)] pb-4 sm:mb-5 sm:pb-5" data-dossier-hero="" data-mobile-magazine="">
+        <div className="mb-4 hidden border-b border-[color:var(--line,#E1E5EF)] pb-4 sm:mb-5 sm:block sm:pb-5" data-dossier-hero="" data-mobile-magazine="">
           <div className="flex flex-wrap items-center gap-2">
             <Link href="/?sample=1#browse" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
               ← Company ledger
@@ -225,7 +225,7 @@ export function SampleCompanyShell({
             </>
           )}
         </div>
-        <div className="mb-4 flex items-baseline justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-dossier-colophon="">
+        <div className="mb-4 hidden items-baseline justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-3 sm:flex" data-dossier-colophon="">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Scout edition</p>
           <p className="min-w-0 flex-1 truncate text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
@@ -248,28 +248,34 @@ export function SampleCompanyShell({
         </div>
 
         {/* Mobile identity: founder + timeline dossier — not a shared ticket or atlas dial. */}
-        <div className="mb-8 mt-2 sm:hidden" data-dossier-timeline="" data-mobile-chrono-identity="">
+        <div className="mb-3 flex items-center justify-between gap-2 sm:hidden" data-dossier-mobile-nav="">
+          <Link href="/?sample=1#browse" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
+            ← Company ledger
+          </Link>
+          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
+        </div>
+        <div className="mb-10 mt-1 sm:hidden" data-dossier-timeline="" data-mobile-chrono-identity="" data-company-mobile-hero="">
           <div
             className="relative overflow-hidden border-2 border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[4px] before:bg-[color:var(--cobalt,#2F4FD8)]"
             data-dossier-spread-mobile=""
           >
-            <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4">
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Dossier timeline</p>
+            <div className="border-b border-[color:var(--line,#E1E5EF)] px-4 py-4 pl-5">
+              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Dossier timeline</p>
               <p className="mt-0.5 truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
                 {dossier?.name ?? "Company"}
                 {dossier?.campus ? ` · ${campusShort}` : ""}
               </p>
             </div>
             <div className="grid grid-cols-2 gap-0 border-b border-[color:var(--line,#E1E5EF)]">
-              <div className="border-r border-[color:var(--line,#E1E5EF)] px-3.5 py-3 pl-4">
+              <div className="border-r border-[color:var(--line,#E1E5EF)] px-4 py-5 pl-5">
                 <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founded</p>
-                <p className="mt-1 font-mono text-[32px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+                <p className="mt-2 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
                   {dossier?.year != null ? dossier.year : "-"}
                 </p>
               </div>
-              <div className="px-3.5 py-3">
+              <div className="px-4 py-5">
                 <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">On campus wire</p>
-                <p className="mt-1 font-mono text-[32px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">
+                <p className="mt-2 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">
                   {wireCount.toLocaleString("en-US")}
                 </p>
               </div>

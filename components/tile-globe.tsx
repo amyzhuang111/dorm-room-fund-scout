@@ -20,6 +20,7 @@ import {
   signalChronographDetail,
   chronographCaption,
   topPrograms,
+  isYcProgramLabel,
   sectorMix,
   contentsPageInsight,
   type FacetState,
@@ -594,11 +595,19 @@ export function TileGlobe({
           {/* Desk fifth beat: leading program (real density). Chronograph keeps peak 369 — no mast echo. Hidden on mobile so fold-375 holds. */}
           <div className="hidden min-w-0 border-l border-[color:var(--line,#E1E5EF)] pl-6 lg:block" data-program-desk-figure="">
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">01 · program desk</p>
-            <p className="mt-1 font-mono text-[64px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">
+            <p
+              className="mt-1 font-mono text-[64px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]"
+              {...(leadProgram && isYcProgramLabel(leadProgram.label)
+                ? { "data-yc-membership-count": String(leadProgram.count) }
+                : {})}
+            >
               {(leadProgram?.count ?? 0).toLocaleString("en-US")}
             </p>
             <p className="mt-1 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
               {leadProgram?.label ?? "Program"}
+              {leadProgram && isYcProgramLabel(leadProgram.label) ? (
+                <span className="ml-2 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">in YC</span>
+              ) : null}
             </p>
             <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
               <span className={COUNT}>{signaledUniverse.toLocaleString("en-US")}</span>

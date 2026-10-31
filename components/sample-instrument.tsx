@@ -1383,6 +1383,19 @@ export function programDisplayName(raw: string): string {
   return name;
 }
 
+/** Universe program totals use programs[] membership (not primaryProgram alone). YC = 564 in sample. */
+export const YC_MEMBERSHIP_EXPECTED = 564;
+
+export function isYcProgramLabel(label: string): boolean {
+  return /^y\s*combinator$/i.test(label.trim());
+}
+
+/** Membership count of companies with Y Combinator in programs[] (fallback primaryProgram). */
+export function ycMembershipCount(companies: FacetCompany[]): number {
+  const yc = topPrograms(companies).find((p) => isYcProgramLabel(p.label));
+  return yc?.count ?? 0;
+}
+
 export function topPrograms(companies: FacetCompany[]): FacetCount[] {
   const counts = new Map<string, number>();
   for (const company of companies) {
@@ -1435,7 +1448,15 @@ export function IntelligenceBoards({
                   {companyInitials(item.label).slice(0, 2)}
                 </span>
                 <span className="min-w-0 flex-1 truncate font-medium text-[color:var(--fg,#0B0E17)]">{item.label}</span>
-                <span className={`${COUNT} shrink-0 text-[11px]`}>{item.count.toLocaleString("en-US")}</span>
+                <span
+                  className={`${COUNT} shrink-0 text-[11px]`}
+                  {...(isYcProgramLabel(item.label) ? { "data-yc-membership-count": String(item.count) } : {})}
+                >
+                  {item.count.toLocaleString("en-US")}
+                </span>
+                {isYcProgramLabel(item.label) ? (
+                  <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">in YC</span>
+                ) : null}
               </div>
               <div className="ml-12 mt-1 h-0.5 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
                 <div className="h-full rounded-full bg-[color:var(--ember,#D96B1C)]" style={{ width: `${Math.max(8, Math.round((item.count / maxProg) * 100))}%` }} />
@@ -1547,7 +1568,7 @@ export function MobileWireStrip({
   const founders = useMemo(() => topFounders(companies).slice(0, 2), [companies]);
   const programs = useMemo(() => topPrograms(companies).slice(0, 3), [companies]);
 
-  type Card = { key: string; kicker: string; figure: string; caption: string; href?: string };
+  type Card = { key: string; kicker: string; figure: string; caption: string; href?: string; ycCount?: number };
   const cards: Card[] = [];
   // fold: programs only — dispatch desk beat
   if (surface === "fold") {
@@ -1556,7 +1577,8 @@ export function MobileWireStrip({
         key: `prog-${p.id}`,
         kicker: `0${i + 1} program`,
         figure: p.count.toLocaleString("en-US"),
-        caption: p.label,
+        caption: isYcProgramLabel(p.label) ? `${p.label} · in YC` : p.label,
+        ycCount: isYcProgramLabel(p.label) ? p.count : undefined,
       });
     }
   }
@@ -1642,7 +1664,12 @@ export function MobileWireStrip({
           const inner = (
             <>
               <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{card.kicker}</p>
-              <p className={figureCls}>{card.figure}</p>
+              <p
+                className={figureCls}
+                {...(card.ycCount != null ? { "data-yc-membership-count": String(card.ycCount) } : {})}
+              >
+                {card.figure}
+              </p>
               <p className="mt-2 line-clamp-2 text-[13px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">{card.caption}</p>
             </>
           );
