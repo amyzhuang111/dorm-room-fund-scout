@@ -11,6 +11,8 @@ import {
 } from "@/lib/domain/founder-index";
 
 const PAGE = 24;
+/** Exact mobile (375) height: heading + collapsed filters + PAGE cards. */
+const FOUNDER_MOBILE_PAGE_MIN_PX = 3757;
 
 function missing(value: string | null | undefined, label: string): string {
   const text = value?.trim();
@@ -112,9 +114,15 @@ export function FounderResults({
   );
   const page = matches.slice(0, shown);
   const unfiltered = !query.trim() && !campusId && !program && !sector && !year && !signalType;
+  // Mobile CLS: hold exact first-page height from first paint so the globe does not jump when cards hydrate.
+  const reserveMobileFirstPage = status !== "ready" || (unfiltered && page.length >= PAGE);
 
   return (
-    <section className={`mt-0 ${status !== "ready" ? "min-h-[28rem]" : ""} lg:min-h-0`} data-founder-results="">
+    <section
+      className={`mt-0 lg:min-h-0 ${reserveMobileFirstPage ? "max-lg:min-h-[3757px]" : ""}`}
+      data-founder-results=""
+      data-founder-mobile-min={reserveMobileFirstPage ? String(FOUNDER_MOBILE_PAGE_MIN_PX) : undefined}
+    >
       <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="text-[22px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] lg:text-[18px]">Founders</h2>
