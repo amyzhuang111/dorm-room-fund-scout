@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FounderResults, FounderSearchBar } from "@/components/founder-sourcing";
 import { GlobeHero } from "@/components/globe-hero";
@@ -13,11 +13,14 @@ import type { FounderLead } from "@/lib/domain/founder-index";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import type { Feed } from "@/components/sample-home";
 import type { PeakShell } from "@/lib/domain/peak-shell";
+import { shortCampusLabel } from "@/lib/domain/campuses";
 
 const SampleInstrumentBrowse = dynamic(
   () => import("@/components/sample-instrument-browse").then((mod) => ({ default: mod.SampleInstrumentBrowse })),
   { ssr: true },
 );
+
+type TopCampus = { id: string; name: string; founders: number };
 
 /** Client-only Peak share · outer slot reserves exact height so CLS ≈ 0 (HTML stays lean). */
 const FoldPeakShare = dynamic(
@@ -73,10 +76,12 @@ function PeakShareLite({
   shell,
   foundersListed,
   campusesOnMap,
+  topCampuses = [],
 }: {
   shell: PeakShell;
   foundersListed: number;
   campusesOnMap: number;
+  topCampuses?: TopCampus[];
 }) {
   const peakCount = shell.peakCount;
   const peakLabel = shell.peakLabel;
@@ -106,33 +111,30 @@ function PeakShareLite({
               {shell.quiet.toLocaleString("en-US")} quiet
             </p>
           </div>
-          <div className="min-w-0 self-stretch border-l border-[color:var(--line,#E1E5EF)] pl-4">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">Scout edition</p>
-            <p className="mt-2.5 font-mono text-[12px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{shell.dated.toLocaleString("en-US")}</span>
-              {" dated"}
-              <br />
-              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{shell.quiet.toLocaleString("en-US")}</span>
-              {" quiet"}
-              <br />
+          <div className="min-w-0 self-stretch border-l border-[color:var(--line,#E1E5EF)] pl-4" data-fold-top-campuses-desk="" data-fold-top-campuses-ssr="">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Top campuses</p>
+            <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
               <span className="font-bold text-[color:var(--fg,#0B0E17)]">{foundersListed.toLocaleString("en-US")}</span>
-              {" founder names"}
-              <br />
+              {" names · "}
               <span className="font-bold text-[color:var(--fg,#0B0E17)]">{campusesOnMap.toLocaleString("en-US")}</span>
-              {" campuses on map"}
+              {" on map"}
             </p>
+            {/* Height twin for live campus ranks · avoids SSR name payload */}
+            <div className="mt-3 h-[5.25rem]" data-fold-peak-campus-rank-reserve="" aria-hidden="true" />
           </div>
         </div>
       </div>
-      <div className="min-h-[3.25rem] border-b border-[color:var(--line,#E1E5EF)] pb-2.5 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
-        <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-          <span className="font-mono text-[28px] font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">{peakCount.toLocaleString("en-US")}</span>
-          <span className="font-mono text-[14px] font-semibold text-[color:var(--fg-3,#5C647A)]">/</span>
-          <span className="font-mono text-[18px] font-bold tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
-          <span className="text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-            {peakLabel} · {pct}% of dated
-          </span>
+      <div className="min-h-[9.5rem] border-b border-[color:var(--line,#E1E5EF)] pb-3 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
+        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
+        <p className="mt-1 font-mono text-[40px] font-bold leading-[0.84] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
+          {peakCount.toLocaleString("en-US")}
+          <span className="mx-1.5 text-[18px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
+          <span className="text-[24px] font-bold tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
         </p>
+        <p className="mt-1.5 text-[14px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
+          {peakLabel} took <span className="text-[color:var(--ember,#D96B1C)]">{pct}%</span> of every dated signal
+        </p>
+        <div className="mt-2.5 h-9 border-t border-[color:var(--line,#E1E5EF)] pt-2.5" data-fold-peak-campus-rank-mobile-reserve="" aria-hidden="true" />
       </div>
     </div>
   );
@@ -142,26 +144,31 @@ function PeakShareSlot({
   companies,
   foundersListed,
   campusesOnMap,
+  topCampuses = [],
   shell,
 }: {
   companies: FacetCompany[];
   foundersListed: number;
   campusesOnMap: number;
+  topCampuses?: TopCampus[];
   shell?: PeakShell | null;
 }) {
   const [live, setLive] = useState(false);
   // Keep SSR lite until the client Peak chunk has painted (same box → CLS ≈ 0).
   const showLive = live;
   return (
-    <div className="relative mb-4 min-h-[3.25rem] lg:min-h-[14rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
+    <div className="relative mb-3 min-h-[9.5rem] lg:mb-4 lg:min-h-[14rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
       <div className={showLive ? "hidden" : undefined} aria-hidden={showLive || undefined} data-fold-peak-ssr-wrap="">
-        {shell ? <PeakShareLite shell={shell} foundersListed={foundersListed} campusesOnMap={campusesOnMap} /> : null}
+        {shell ? (
+          <PeakShareLite shell={shell} foundersListed={foundersListed} campusesOnMap={campusesOnMap} topCampuses={topCampuses} />
+        ) : null}
       </div>
       <div className={showLive ? undefined : "absolute left-0 right-0 top-0 opacity-0 pointer-events-none"} data-fold-peak-live-wrap="" aria-hidden={!showLive || undefined}>
         <FoldPeakShare
           companies={companies}
           foundersListed={foundersListed}
           campusesOnMap={campusesOnMap}
+          topCampuses={topCampuses}
           shell={shell}
           onReady={() => setLive(true)}
         />
@@ -226,6 +233,17 @@ export function SampleHomeClient(props: {
   const router = useRouter();
   const mapCampusId = search.get("campus");
   const listed = feed === "directory" || feed === "leaderboard";
+  const topCampuses = useMemo<TopCampus[]>(() => {
+    return [...campuses]
+      .filter((c) => (c.founders ?? 0) > 0)
+      .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))
+      .slice(0, 3)
+      .map((c) => ({
+        id: c.id,
+        name: shortCampusLabel(c.id, c.name),
+        founders: c.founders,
+      }));
+  }, [campuses]);
 
   useEffect(() => {
     let dead = false;
@@ -258,15 +276,21 @@ export function SampleHomeClient(props: {
       <SampleTheme />
       {place === "map" ? (
         <div className="px-4 pb-8 pt-3 sm:px-5" data-fold-hierarchy="">
-          {/* 1. Search always first */}
-          <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
-          {/* Peak lite SSR shell + client FoldPeakShare · same box → CLS ≈ 0; lean vs full static import. */}
-          <PeakShareSlot
-            companies={companies}
-            foundersListed={foundersListed}
-            campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
-            shell={peakShell}
-          />
+          {/* Mobile: Peak leads. Desk: search first, then Peak. */}
+          <div className="flex flex-col" data-fold-mast="">
+            <div className="order-2 lg:order-1">
+              <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
+            </div>
+            <div className="order-1 lg:order-2">
+              <PeakShareSlot
+                companies={companies}
+                foundersListed={foundersListed}
+                campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
+                topCampuses={topCampuses}
+                shell={peakShell}
+              />
+            </div>
+          </div>
           {/* Mobile: founders above map. Desk: founders beside a short globe so cards clear the fold at 1440. */}
           <div
             className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(320px,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-5"

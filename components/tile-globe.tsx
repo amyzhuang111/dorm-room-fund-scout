@@ -504,7 +504,7 @@ export function TileGlobe({
       </section>
 
       <section className="mt-3 hidden max-w-sm lg:block" data-campus-metric="founders">
-          <h2 className="mb-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Top campuses</h2>
+          <h2 className="mb-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Filter campus</h2>
           <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
             {topCampuses.map((campus, i) => {
               const active = selectedId === campus.id;

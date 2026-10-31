@@ -270,12 +270,12 @@ export function SampleInstrumentBrowse({
             data-contents-hero=""
             data-filters-index-hero=""
           >
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Contents</p>
-            <p className="mt-1 font-mono text-[28px] font-bold leading-[0.88] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Contents</p>
+            <p className="mt-1.5 font-mono text-[40px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
               {boardCompanies.length.toLocaleString("en-US")}
             </p>
-            <p className="mt-1 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">
-              {feed === "leaderboard" ? "on the signal desk" : "in this list"}
+            <p className="mt-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+              {feed === "leaderboard" ? "on the signal desk" : "companies in this list"}
             </p>
           </div>
           {/* FacetRail is the filters hero · Contents is a quiet caption only. */}
@@ -329,7 +329,7 @@ export function SampleInstrumentBrowse({
               ) : (
                 <>
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
-                  <p className="mt-1 font-mono text-[36px] font-bold leading-[0.88] tracking-[-0.045em] text-[color:var(--fg,#0B0E17)]">
+                  <p className="mt-1.5 font-mono text-[44px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">
                     <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
                   </p>
                   <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">

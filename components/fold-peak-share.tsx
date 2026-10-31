@@ -12,16 +12,20 @@ export { buildPeakShell } from "@/lib/domain/peak-shell";
  * (no third 369 label). No data-scout-chronograph (DOM chronographGoneFromHome).
  * Accepts SSR shell so first paint reserves exact height (CLS ≈ 0).
  */
+export type FoldTopCampus = { id: string; name: string; founders: number };
+
 export function FoldPeakShare({
   companies,
   foundersListed,
   campusesOnMap,
+  topCampuses = [],
   shell = null,
   onReady,
 }: {
   companies: FacetCompany[];
   foundersListed: number;
   campusesOnMap: number;
+  topCampuses?: FoldTopCampus[];
   shell?: PeakShell | null;
   onReady?: () => void;
 }) {
@@ -89,39 +93,69 @@ export function FoldPeakShare({
               {quiet.toLocaleString("en-US")} quiet
             </p>
           </div>
-          <div className="min-w-0 self-stretch border-l border-[color:var(--line,#E1E5EF)] pl-4">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">Scout edition</p>
-            <p className="mt-2.5 font-mono text-[12px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{detail.dated.toLocaleString("en-US")}</span>
-              {" dated"}
-              <br />
-              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quiet.toLocaleString("en-US")}</span>
-              {" quiet"}
-              <br />
+          <div className="min-w-0 self-stretch border-l border-[color:var(--line,#E1E5EF)] pl-4" data-fold-top-campuses-desk="">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Top campuses</p>
+            <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
               <span className="font-bold text-[color:var(--fg,#0B0E17)]">{foundersListed.toLocaleString("en-US")}</span>
-              {" founder names"}
-              <br />
+              {" names · "}
               <span className="font-bold text-[color:var(--fg,#0B0E17)]">{campusesOnMap.toLocaleString("en-US")}</span>
-              {" campuses on map"}
+              {" on map"}
             </p>
+            {topCampuses.length > 0 ? (
+              <ol className="mt-3 space-y-2.5" data-fold-peak-campus-rank="">
+                {topCampuses.map((campus, i) => (
+                  <li key={campus.id} className="flex items-baseline justify-between gap-3">
+                    <span className="min-w-0 truncate">
+                      <span className="mr-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{campus.name}</span>
+                    </span>
+                    <span className="shrink-0 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                      {campus.founders.toLocaleString("en-US")}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p className="mt-3 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{detail.dated.toLocaleString("en-US")}</span>
+                {" dated · "}
+                <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quiet.toLocaleString("en-US")}</span>
+                {" quiet"}
+              </p>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Mobile: one calm Peak line · Founders leads below; no meta stack */}
-      <div className="min-h-[3.25rem] border-b border-[color:var(--line,#E1E5EF)] pb-2.5 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
-        <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-          <span className="font-mono text-[28px] font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">
-            {peakBar.count.toLocaleString("en-US")}
-          </span>
-          <span className="font-mono text-[14px] font-semibold text-[color:var(--fg-3,#5C647A)]">/</span>
-          <span className="font-mono text-[18px] font-bold tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
+      {/* Mobile lead: stacked Peak statement + real campus ranks · search/founders follow */}
+      <div className="min-h-[9.5rem] border-b border-[color:var(--line,#E1E5EF)] pb-3 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
+        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
+        <p className="mt-1 font-mono text-[40px] font-bold leading-[0.84] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
+          {peakBar.count.toLocaleString("en-US")}
+          <span className="mx-1.5 text-[18px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
+          <span className="text-[24px] font-bold tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">
             {detail.dated.toLocaleString("en-US")}
           </span>
-          <span className="text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-            {peakBar.label} · {pct}% of dated
-          </span>
         </p>
+        <p className="mt-1.5 text-[14px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
+          {peakBar.label} took <span className="text-[color:var(--ember,#D96B1C)]">{pct}%</span> of every dated signal
+        </p>
+        {topCampuses.length > 0 ? (
+          <ol
+            className="mt-2.5 flex flex-nowrap items-baseline gap-x-3 overflow-hidden border-t border-[color:var(--line,#E1E5EF)] pt-2.5"
+            data-fold-peak-campus-rank-mobile=""
+          >
+            {topCampuses.map((campus, i) => (
+              <li key={campus.id} className="flex items-baseline gap-1.5 font-mono text-[11px] tabular-nums">
+                <span className="text-[color:var(--fg-3,#5C647A)]">{String(i + 1).padStart(2, "0")}</span>
+                <span className="text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{campus.name}</span>
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{campus.founders.toLocaleString("en-US")}</span>
+              </li>
+            ))}
+          </ol>
+        ) : null}
       </div>
     </div>
   );
