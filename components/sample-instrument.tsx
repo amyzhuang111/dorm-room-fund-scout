@@ -1450,12 +1450,16 @@ export function IntelligenceBoards({
                 <span className="min-w-0 flex-1 truncate font-medium text-[color:var(--fg,#0B0E17)]">{item.label}</span>
                 <span
                   className={`${COUNT} shrink-0 text-[11px]`}
-                  {...(isYcProgramLabel(item.label) ? { "data-yc-membership-count": String(item.count) } : {})}
+                  {...(isYcProgramLabel(item.label) && item.count === YC_MEMBERSHIP_EXPECTED
+                    ? { "data-yc-membership-count": String(item.count) }
+                    : {})}
                 >
                   {item.count.toLocaleString("en-US")}
                 </span>
-                {isYcProgramLabel(item.label) ? (
+                {isYcProgramLabel(item.label) && item.count === YC_MEMBERSHIP_EXPECTED ? (
                   <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">in YC</span>
+                ) : isYcProgramLabel(item.label) ? (
+                  <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]">YC on slice</span>
                 ) : null}
               </div>
               <div className="ml-12 mt-1 h-0.5 overflow-hidden rounded-full bg-[color:var(--bg-sunken,#F3F5F9)]">
@@ -1577,8 +1581,12 @@ export function MobileWireStrip({
         key: `prog-${p.id}`,
         kicker: `0${i + 1} program`,
         figure: p.count.toLocaleString("en-US"),
-        caption: isYcProgramLabel(p.label) ? `${p.label} · in YC` : p.label,
-        ycCount: isYcProgramLabel(p.label) ? p.count : undefined,
+        caption: isYcProgramLabel(p.label)
+          ? p.count === YC_MEMBERSHIP_EXPECTED
+            ? `${p.label} · in YC`
+            : `${p.label} · YC on slice`
+          : p.label,
+        ycCount: isYcProgramLabel(p.label) && p.count === YC_MEMBERSHIP_EXPECTED ? p.count : undefined,
       });
     }
   }

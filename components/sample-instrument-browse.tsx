@@ -709,11 +709,13 @@ export function SampleInstrumentBrowse({
                         <span className="min-w-0 flex-1 truncate text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{prog.label}</span>
                         <span
                           className="shrink-0 font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]"
-                          {...(isYcProgramLabel(prog.label) ? { "data-yc-membership-count": String(prog.count) } : {})}
+                          {...(isYcProgramLabel(prog.label) && prog.count === YC_MEMBERSHIP_EXPECTED
+                            ? { "data-yc-membership-count": String(prog.count) }
+                            : {})}
                         >
                           {prog.count.toLocaleString("en-US")}
                         </span>
-                        {isYcProgramLabel(prog.label) ? (
+                        {isYcProgramLabel(prog.label) && prog.count === YC_MEMBERSHIP_EXPECTED ? (
                           <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-3,#5C647A)]">in YC</span>
                         ) : null}
                       </li>

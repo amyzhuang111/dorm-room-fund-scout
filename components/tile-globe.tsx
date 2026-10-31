@@ -21,6 +21,7 @@ import {
   chronographCaption,
   topPrograms,
   isYcProgramLabel,
+  YC_MEMBERSHIP_EXPECTED,
   sectorMix,
   contentsPageInsight,
   type FacetState,
@@ -597,7 +598,7 @@ export function TileGlobe({
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">01 · program desk</p>
             <p
               className="mt-1 font-mono text-[64px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]"
-              {...(leadProgram && isYcProgramLabel(leadProgram.label)
+              {...(leadProgram && isYcProgramLabel(leadProgram.label) && leadProgram.count === YC_MEMBERSHIP_EXPECTED
                 ? { "data-yc-membership-count": String(leadProgram.count) }
                 : {})}
             >
@@ -605,7 +606,7 @@ export function TileGlobe({
             </p>
             <p className="mt-1 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
               {leadProgram?.label ?? "Program"}
-              {leadProgram && isYcProgramLabel(leadProgram.label) ? (
+              {leadProgram && isYcProgramLabel(leadProgram.label) && leadProgram.count === YC_MEMBERSHIP_EXPECTED ? (
                 <span className="ml-2 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">in YC</span>
               ) : null}
             </p>
