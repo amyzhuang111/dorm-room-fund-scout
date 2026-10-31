@@ -641,12 +641,14 @@ export function FacetRail({
             ))}
           </FacetGroup>
         )}
-                <FacetGroup title="Flags" dense={editorial}>
-          <FacetRow facet="flag" active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
-          {flags.map((item) => (
-            <FacetRow key={item.id} facet="flag" count={item.count} active={facets.flag === item.id} onClick={() => set({ flag: facets.flag === item.id ? null : item.id })} label={item.label} icon={FLAG_ICON[item.id]} />
-          ))}
-        </FacetGroup>
+                {flags.length > 0 ? (
+          <FacetGroup title="Flags" dense={editorial}>
+            <FacetRow facet="flag" active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
+            {flags.map((item) => (
+              <FacetRow key={item.id} facet="flag" count={item.count} active={facets.flag === item.id} onClick={() => set({ flag: item.id })} label={item.label} />
+            ))}
+          </FacetGroup>
+        ) : null}
 <FacetGroup title="Founded year" dense={editorial}>
           <FacetRow
             facet="year"
@@ -1590,7 +1592,7 @@ export function IntelligenceBoards({
       </ul>
     </Board>
   ) : null;
-  const foundersBoard = showFounders ? (
+  const foundersBoard = showFounders && founders.length > 0 ? (
     <Board title="Founders" unit="signals">
       <ol className={rowGap}>
         {founders.map((person, index) => (
@@ -1697,24 +1699,19 @@ export function MobileWireStrip({
       });
     }
   }
-  // company: peer signals + founders
+  // company: campus peers by signal weight (skip empty founder stubs)
   if (surface === "company") {
-    for (const [i, c] of recent.entries()) {
+    const peers = [...companies]
+      .filter((c) => (c.signals ?? 0) > 0)
+      .sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name))
+      .slice(0, 6);
+    for (const [i, c] of peers.entries()) {
       cards.push({
-        key: `sig-${c.id}`,
-        kicker: `0${i + 1} signal`,
-        figure: c.signalLabel ?? "Signal",
-        caption: c.name,
+        key: `peer-${c.id}`,
+        kicker: c.school ? c.school : `0${i + 1} peer`,
+        figure: String(c.signals),
+        caption: c.signalLabel ? `${c.name} · ${c.signalLabel}` : c.name,
         href: `/startup/${c.id}`,
-      });
-    }
-    for (const [i, f] of founders.entries()) {
-      cards.push({
-        key: `f-${f.key}`,
-        kicker: `0${i + 1} founder`,
-        figure: String(f.signals),
-        caption: f.name,
-        href: `/startup/${f.companyId}`,
       });
     }
   }
@@ -1737,7 +1734,7 @@ export function MobileWireStrip({
         ? "relative w-[168px] shrink-0 overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] p-3.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)]"
         : surface === "signals"
           ? "relative w-[160px] shrink-0 overflow-hidden rounded-none border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] p-3 before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[color:var(--ember,#D96B1C)]"
-          : "relative w-[168px] shrink-0 overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] p-3.5 after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:bg-[color:var(--ember,#D96B1C)]";
+          : "relative w-[196px] shrink-0 overflow-hidden rounded-none border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] p-4 shadow-[0_1px_0_rgba(15,23,42,0.04)] after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:bg-[color:var(--ember,#D96B1C)]";
 
   const figureCls =
     surface === "signals"
@@ -1818,14 +1815,14 @@ export function MobileFilterDock({
       ? "fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)]/95 px-3 py-2.5 backdrop-blur-sm lg:hidden"
       : tone === "outline"
         ? "fixed inset-x-0 bottom-0 z-40 border-t-2 border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2 lg:hidden"
-        : "fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg-sunken,#F3F5F9)] px-3 py-2 lg:hidden";
+        : "fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/90 px-3 py-1.5 lg:hidden";
 
   const btn =
     tone === "ember"
       ? "flex h-11 w-full items-center justify-between gap-3 rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 text-left"
       : tone === "outline"
         ? "flex h-10 w-full items-center justify-between gap-3 rounded-none border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-left before:absolute"
-        : "flex h-10 w-full items-center justify-between gap-3 rounded-none border-0 border-l-[3px] border-l-[color:var(--ember,#D96B1C)] bg-transparent px-3 text-left";
+        : "flex h-9 w-full items-center justify-between gap-3 rounded-none border-0 bg-transparent px-2.5 text-left";
 
   const kickerCls =
     tone === "ember"

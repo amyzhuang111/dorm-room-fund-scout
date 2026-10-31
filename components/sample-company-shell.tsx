@@ -283,34 +283,47 @@ export function SampleCompanyShell({
             </p>
             <p className="mt-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
               <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
-              {" on campus wire"}
+              {" "}
+              {wireUnit}
               {(dossier?.founders?.length ?? 0) > 0 ? (
                 <>
-                  {" · "}
+                  <span className="mx-1.5 text-[color:var(--line-strong,#C5CAD8)]" aria-hidden>
+                    ·
+                  </span>
                   <span className="font-bold text-[color:var(--fg,#0B0E17)]">{dossier!.founders!.length.toLocaleString("en-US")}</span>
-                  {dossier!.founders!.length === 1 ? " founder" : " founders"}
+                  {dossier!.founders!.length === 1 ? " founder on record" : " founders on record"}
                 </>
               ) : null}
             </p>
-            {/* DOM/shot identity · single quiet line so the name stays the lead in frame */}
-            <ol className="mt-2.5 flex flex-wrap gap-x-2.5 gap-y-0.5" data-dossier-signal-timeline="">
-              {wireCompanies
-                .filter((c) => (c.latestSignalAt ?? "").length >= 4)
-                .slice()
-                .sort((a, b) => (b.latestSignalAt ?? "").localeCompare(a.latestSignalAt ?? ""))
-                .slice(0, 3)
-                .map((c, i) => {
+            {/* Peer signal strip · hide identical scrape dates; prefer kind labels */}
+            <ol className="mt-2.5 space-y-1" data-dossier-signal-timeline="">
+              {(() => {
+                const rows = wireCompanies
+                  .filter((c) => (c.signals ?? 0) > 0 || (c.latestSignalAt ?? "").length >= 4)
+                  .slice()
+                  .sort((a, b) => (b.signals ?? 0) - (a.signals ?? 0) || (b.latestSignalAt ?? "").localeCompare(a.latestSignalAt ?? ""))
+                  .slice(0, 3);
+                const dates = rows.map((c) => (c.latestSignalAt ?? "").replace(/-00/g, "")).filter(Boolean);
+                const unique = new Set(dates);
+                const scrapeOnly = unique.size <= 1 && dates.length >= 2;
+                return rows.map((c, i) => {
                   const at = (c.latestSignalAt ?? "").replace(/-00/g, "");
                   return (
-                    <li key={c.id} className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                      <span>{String(i + 1).padStart(2, "0")}</span>
-                      {" "}
-                      <span className="font-semibold text-[color:var(--fg-2,#3F465C)]">{c.name}</span>
-                      {" "}
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{at}</span>
+                    <li key={c.id} className="flex flex-wrap items-baseline gap-x-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                      <span className="w-4 shrink-0 text-[color:var(--cobalt,#2F4FD8)]">{String(i + 1).padStart(2, "0")}</span>
+                      <span className="min-w-0 flex-1 truncate font-semibold text-[color:var(--fg,#0B0E17)]">{c.name}</span>
+                      {c.signalLabel ? (
+                        <span className="shrink-0 font-bold text-[color:var(--ember,#D96B1C)]">{c.signalLabel}</span>
+                      ) : null}
+                      {at && !scrapeOnly ? (
+                        <span className="shrink-0">{at}</span>
+                      ) : at && scrapeOnly && i === 0 ? (
+                        <span className="shrink-0 text-[color:var(--fg-3,#5C647A)]">Indexed {at}</span>
+                      ) : null}
                     </li>
                   );
-                })}
+                });
+              })()}
             </ol>
           </div>
         </div>
@@ -332,15 +345,10 @@ export function SampleCompanyShell({
           </aside>
           <div className="min-w-0">
             {/* Mobile magazine: swipe WIRE digest above the profile card */}
-            <div
-              className="mb-3 lg:hidden"
-              data-dossier-wire-mobile=""
-              data-mobile-magazine-wire=""
-              style={{ paddingBottom: "calc(5.25rem + env(safe-area-inset-bottom, 0px))" }}
-            >
-              <MobileWireStrip companies={wireCompanies} label="Dossier wire" surface="company" />
+            <div className="mb-3 lg:hidden" data-dossier-wire-mobile="" data-mobile-magazine-wire="">
+              <MobileWireStrip companies={wireCompanies} label="Campus peers" surface="company" />
             </div>
-            <div className="company-instrument relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] p-3 sm:p-4 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] before:content-[''] after:absolute after:inset-x-0 after:top-0 after:h-0.5 after:bg-[color:var(--cobalt,#2F4FD8)] after:content-['']">
+            <div className="company-instrument relative overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3.5 sm:overflow-hidden sm:border-[color:var(--cobalt,#2F4FD8)]/25 sm:p-4 sm:before:absolute sm:before:inset-y-0 sm:before:left-0 sm:before:w-0.5 sm:before:bg-[color:var(--cobalt,#2F4FD8)] sm:before:content-['']">
               {children}
             </div>
           </div>
@@ -371,9 +379,9 @@ export function SampleCompanyShell({
       <MobileFilterDock
         onOpen={() => setMobileFiltersOpen(true)}
         count={wireCount}
-        caption="Scout this campus"
+        caption={wireUnit}
         tone="magazine"
-        kicker="Dossier filters"
+        kicker="Campus filters"
       />
 
       {mobileFiltersOpen ? (

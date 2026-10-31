@@ -240,9 +240,26 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(150);
   await shot(page, "companies-more-375");
 
-  const endLead = page.locator("[data-ledger-end-lead]").first();
+  // Frame last ledger rows + end chapter + load-next together
   const endM = page.locator("[data-ledger-end-mobile]").first();
-  if (await endLead.count()) {
+  const endLead = page.locator("[data-ledger-end-lead]").first();
+  if (await endM.count()) {
+    await endM.evaluate((el) => {
+      const list = document.querySelector("[data-ledger-stage] ol");
+      const last = list?.querySelector("li:last-child");
+      if (last) last.scrollIntoView({ block: "center" });
+      el.scrollIntoView({ block: "end" });
+    });
+    await page.waitForTimeout(350);
+    await page.evaluate(() => {
+      const end = document.querySelector("[data-ledger-end-mobile]");
+      if (!end) return;
+      const bottom = end.getBoundingClientRect().bottom;
+      const room = window.innerHeight - 72;
+      if (bottom > room) window.scrollBy(0, bottom - room + 12);
+    });
+    await page.waitForTimeout(200);
+  } else if (await endLead.count()) {
     await endLead.evaluate((el) => el.scrollIntoView({ block: "start", inline: "nearest" }));
     await page.waitForTimeout(350);
     await page.evaluate(() => {
@@ -252,9 +269,6 @@ const browser = await chromium.launch({ headless: true });
       if (top < 56) window.scrollBy(0, top - 64);
     });
     await page.waitForTimeout(200);
-  } else if (await endM.count()) {
-    await endM.evaluate((el) => el.scrollIntoView({ block: "start" }));
-    await page.waitForTimeout(400);
   } else {
     const fallback = page.locator("[data-ledger-end]").last();
     if (await fallback.count()) {

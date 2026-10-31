@@ -183,6 +183,39 @@ export function sortFounders(founders: FounderLead[]): FounderLead[] {
   });
 }
 
+
+/** Prefer different companies (and campuses) in the early window so the fold is not a single-startup clone stack. */
+export function diversifyFounders(founders: FounderLead[], window = 24): FounderLead[] {
+  if (founders.length <= 1) return founders;
+  const picked: FounderLead[] = [];
+  const rest = [...founders];
+  const usedCompany = new Set<string>();
+  const usedCampus = new Set<string>();
+  while (rest.length && picked.length < window) {
+    let idx = rest.findIndex((f) => {
+      const company = (f.companyId || f.company || "").trim();
+      const campus = (f.campusId || f.campus || "").trim();
+      const companyOk = !company || !usedCompany.has(company);
+      const campusOk = !campus || !usedCampus.has(campus) || usedCampus.size >= Math.min(8, window);
+      return companyOk && campusOk;
+    });
+    if (idx < 0) {
+      idx = rest.findIndex((f) => {
+        const company = (f.companyId || f.company || "").trim();
+        return !company || !usedCompany.has(company);
+      });
+    }
+    if (idx < 0) idx = 0;
+    const next = rest.splice(idx, 1)[0]!;
+    picked.push(next);
+    const company = (next.companyId || next.company || "").trim();
+    const campus = (next.campusId || next.campus || "").trim();
+    if (company) usedCompany.add(company);
+    if (campus) usedCampus.add(campus);
+  }
+  return picked.concat(rest);
+}
+
 export function filterFounders(founders: FounderLead[], query: FounderQuery): FounderLead[] {
-  return sortFounders(founders.filter((founder) => founderMatches(founder, query)));
+  return diversifyFounders(sortFounders(founders.filter((founder) => founderMatches(founder, query))));
 }

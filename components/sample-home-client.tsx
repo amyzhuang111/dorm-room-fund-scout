@@ -276,12 +276,12 @@ export function SampleHomeClient(props: {
       <SampleTheme />
       {place === "map" ? (
         <div className="px-4 pb-8 pt-3 sm:px-5" data-fold-hierarchy="">
-          {/* Mobile: Peak leads. Desk: search first, then Peak. */}
+          {/* Mobile (fold-375): Peak leads, then search — 9dec. Desk (fold-1440): search first. */}
           <div className="flex flex-col" data-fold-mast="">
-            <div className="order-1 lg:order-1">
+            <div className="order-2 lg:order-1">
               <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
             </div>
-            <div className="order-2 lg:order-2">
+            <div className="order-1 lg:order-2">
               <PeakShareSlot
                 companies={companies}
                 foundersListed={foundersListed}

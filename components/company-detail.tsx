@@ -191,11 +191,10 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
         </section>
       )}
 
-      {/* Founders */}
-      <section>
+      {project.founderLinks.length > 0 ? (
+      <section data-company-founders="">
         <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founders</h3>
         <ul className="mt-1 space-y-1 text-sm text-foreground">
-          {project.founderLinks.length === 0 && <li>None identified yet.</li>}
           {project.founderLinks.map((f) => (
             <li key={f.personId} className="flex flex-wrap items-center gap-2">
               <Link href={founderHref(f)} className="text-link hover:underline">
@@ -232,7 +231,8 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
             </li>
           ))}
         </ul>
-      </section>
+      </section> ) : null}
+
 
       <section>
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Sources</h3>

@@ -618,7 +618,7 @@ export function SampleInstrumentBrowse({
             </div>
             {pages > 1 && sliceInsight ? (
               <div
-                className="mt-4 border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]"
+                className="mt-3 border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]"
                 data-ledger-end=""
                 data-ledger-end-mobile=""
                 data-end-insight={sliceInsight.kicker}
@@ -689,35 +689,44 @@ export function SampleInstrumentBrowse({
                       {sliceInsight.companyName}
                     </Link>
                   </p>
+                  {cards.length < total ? (
+                    <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-[color:var(--line,#E1E5EF)] pt-4" data-ledger-end-more="">
+                      <Link
+                        href={moreHref}
+                        className="inline-flex h-9 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white hover:opacity-90"
+                      >
+                        Load next page
+                      </Link>
+                      <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                        {"Showing "}
+                        <span className="font-bold text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
+                        {" of "}
+                        {total.toLocaleString("en-US")}
+                      </p>
+                    </div>
+                  ) : null}
                 </div>
               </div>
             ) : null}
           </div>
         )}
 
-        {cards.length < total ? (
-          <div
-            className={`mt-3 flex flex-wrap items-center gap-2.5 ${pages > 1 ? "border-t border-[color:var(--line,#E1E5EF)]/70 pt-3" : ""}`}
-            data-ledger-more-footer=""
-          >
+        {cards.length < total && pages <= 1 ? (
+          <div className="mt-3 flex flex-wrap items-center gap-2.5" data-ledger-more-footer="">
             <Link
               href={moreHref}
-              className={`inline-flex items-center rounded-sm border px-3 font-mono text-[11px] font-medium hover:opacity-90 ${
-                pages > 1
-                  ? "h-7 border-[color:var(--line,#E1E5EF)]/80 bg-transparent text-[color:var(--fg-3,#5C647A)]"
-                  : "h-8 border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] text-white font-semibold"
-              }`}
+              className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white hover:opacity-90"
             >
-              {pages > 1 ? "Load next page" : "Show more"}
+              Show more
             </Link>
-            <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]/90" data-ledger-showing-next="">
+            <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing-next="">
               {"Showing "}
               <span className="font-medium text-[color:var(--fg-2,#3F465C)]">{cards.length.toLocaleString("en-US")}</span>
               {" of "}
               {total.toLocaleString("en-US")}
             </p>
           </div>
-        ) : pages > 1 ? (
+        ) : pages > 1 && cards.length >= total ? (
           <p className="mt-4 text-center font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--fg-3,#5C647A)]">
             All companies shown
           </p>
@@ -779,36 +788,36 @@ export function SampleInstrumentBrowse({
       />
 
       {mobileFiltersOpen ? (
-        <div
-          className="fixed inset-x-0 top-12 z-50 max-h-[min(42dvh,360px)] overflow-hidden border-b border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] shadow-[0_10px_28px_rgba(15,23,42,0.08)] lg:hidden"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Scout filters"
-          data-mobile-filters-drawer=""
-        >
-          {/* Top drawer · no dim · list and chart stay visible underneath */}
-          <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2" data-mobile-contents-hero="" data-filters-index-hero="">
-            <div className="flex items-center justify-between gap-3">
-              <div className="min-w-0 flex-1">
-                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
-                  Filters
-                </p>
-                <p className="mt-0.5 font-mono text-[18px] font-bold leading-none tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]">
-                  {boardCompanies.length.toLocaleString("en-US")}
-                  <span className="ml-1.5 font-mono text-[11px] font-medium text-[color:var(--fg-2,#3F465C)]">in this list</span>
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setMobileFiltersOpen(false)}
-                className="inline-flex h-8 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
-              >
-                Done
-              </button>
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters" data-mobile-filters-sheet="">
+          <button type="button" className="absolute inset-0 bg-slate-900/20" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
+          {/* Bottom sheet · list stays readable above; dock Narrow keeps clearance below Done */}
+          <div className="absolute inset-x-0 bottom-[3.75rem] flex max-h-[min(58dvh,480px)] flex-col overflow-hidden rounded-t-xl border border-[color:var(--cobalt,#2F4FD8)]/20 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-12px_36px_rgba(15,23,42,0.12)]">
+            <div className="flex justify-center pt-2" aria-hidden>
+              <span className="h-1 w-9 rounded-full bg-[color:var(--line-strong,#C5CAD8)]" />
             </div>
-          </div>
-          <div className="max-h-[min(34dvh,300px)] overflow-y-auto overscroll-contain" data-mobile-facet-map="">
-            <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
+            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-4 pb-3.5 pt-1.5" data-mobile-contents-hero="" data-filters-index-hero="">
+              <div className="flex items-end justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
+                    Narrow
+                  </p>
+                  <p className="mt-1 font-mono text-[26px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                    {boardCompanies.length.toLocaleString("en-US")}
+                  </p>
+                  <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies still in view</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setMobileFiltersOpen(false)}
+                  className="mb-0.5 inline-flex h-9 shrink-0 items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] px-4 font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)]"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-1 pb-4" data-mobile-facet-map="">
+              <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
+            </div>
           </div>
         </div>
       ) : null}

@@ -232,7 +232,7 @@ export function FounderResults({
             const why = whyById.get(founder.id) ?? null;
             return (
               <li key={founder.id} data-founder-card="">
-                <article className="px-3 py-2 sm:px-4 sm:py-2.5">
+                <article className="px-3 py-3 sm:px-4 lg:py-2.5">
                   <h3 className="text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{founder.name}</h3>
                   <p className="mt-1 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">
                     <Field label="Campus" value={founder.campus} />
@@ -255,7 +255,7 @@ export function FounderResults({
                     <Field label="Year" value={founder.gradYear != null ? String(founder.gradYear) : null} />
                   </p>
                   {why ? (
-                    <p className="mt-1.5 border-l-2 border-[color:var(--ember,#D96B1C)]/50 pl-2 text-[12px] leading-4 text-[color:var(--fg,#0B0E17)]" data-why-worth="">
+                    <p className="mt-2 border-l-2 border-[color:var(--ember,#D96B1C)]/50 pl-2.5 text-[13px] leading-5 text-[color:var(--fg,#0B0E17)] lg:mt-1.5 lg:pl-2 lg:text-[12px] lg:leading-4" data-why-worth="">
                       <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Why worth a look</span>
                       <span className="mt-0.5 block">{why}</span>
                     </p>
