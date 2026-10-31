@@ -194,6 +194,16 @@ export function SampleInstrumentBrowse({
   /** Quiet matching companies (no stored signal) — insight, not pagination. */
   const quietMatch = boardCompanies.length - signaledMatch;
   const pageSignalBars = useMemo(() => {
+    /** Prefer per-company signal counts so the page always shows a multi-bar peak. */
+    const ranked = cards
+      .filter((c) => (c.signals ?? 0) > 0)
+      .map((c) => ({ key: c.id, label: c.name, count: c.signals }))
+      .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))
+      .slice(0, 12);
+    if (ranked.length >= 2) {
+      const max = Math.max(...ranked.map((r) => r.count));
+      return ranked.map((r) => ({ key: r.key, count: r.count, peak: r.count === max, label: r.label }));
+    }
     const months = new Map<string, number>();
     for (const card of cards) {
       const at = card.latestSignalAt;
@@ -202,19 +212,36 @@ export function SampleInstrumentBrowse({
       if (key.length < 7) continue;
       months.set(key, (months.get(key) ?? 0) + 1);
     }
-    const rows = [...months.entries()]
-      .sort((a, b) => a[0].localeCompare(b[0]))
-      .map(([key, count]) => ({ key, count, peak: false as boolean }));
-    if (!rows.length) return [] as { key: string; count: number; peak: boolean }[];
-    const max = Math.max(...rows.map((r) => r.count));
-    return rows.map((r) => ({ ...r, peak: r.count === max }));
+    const keys = [...months.keys()].sort();
+    if (!keys.length) return [] as { key: string; count: number; peak: boolean; label?: string }[];
+    const [y0, m0] = keys[0]!.split("-").map(Number);
+    const [y1, m1] = keys[keys.length - 1]!.split("-").map(Number);
+    const rows: { key: string; count: number; peak: boolean; label?: string }[] = [];
+    let y = y0!, m = m0!;
+    while (y < y1! || (y === y1 && m <= m1!)) {
+      const key = `${y}-${String(m).padStart(2, "0")}`;
+      const count = months.get(key) ?? 0;
+      rows.push({ key, count, peak: false });
+      m += 1;
+      if (m > 12) { m = 1; y += 1; }
+      if (rows.length > 14) break;
+    }
+    const max = Math.max(1, ...rows.map((r) => r.count));
+    return rows.map((r) => ({ ...r, peak: r.count === max && r.count > 0 }));
   }, [cards]);
   const pageSignalBarsMax = Math.max(1, ...pageSignalBars.map((b) => b.count));
   const pageSignaled = useMemo(
     () => cards.filter((c) => (c.signals ?? 0) > 0).length,
     [cards],
   );
-  const pagePeakMonth = pageSignalBars.find((b) => b.peak)?.key ?? "";
+  const pagePeakLabel = useMemo(() => {
+    const peak = pageSignalBars.find((b) => b.peak);
+    if (!peak) return "";
+    if (peak.label) return peak.label;
+    const mon = Number(peak.key.slice(5, 7));
+    const names = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return names[mon] || peak.key;
+  }, [pageSignalBars]);
   const sliceInsight = useMemo(() => endSliceInsight(cards), [cards]);
   /** Leaderboard podium: top-3 campuses by founders; signals = companies with signal on that desk. */
   const podiumRows = useMemo(() => {
@@ -426,19 +453,19 @@ export function SampleInstrumentBrowse({
                     </span>
                   </p>
                   <p className="mt-1.5 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    {pagePeakMonth
-                      ? `Peak ${pagePeakMonth.slice(5)} among the ${cards.length} loaded`
+                    {pagePeakLabel
+                      ? `Highest: ${pagePeakLabel}`
                       : `${pageSignaled} carry a dated signal`}
                   </p>
                 </div>
                 {pageSignalBars.length > 0 ? (
-                  <div className="flex h-14 items-end gap-0.5" data-page-signal-bars="" aria-hidden>
+                  <div className="flex h-14 max-w-[42%] flex-1 items-end justify-end gap-0.5" data-page-signal-bars="" aria-hidden>
                     {pageSignalBars.map((bar) => (
                       <span
                         key={bar.key}
-                        title={`${bar.key}: ${bar.count}`}
-                        className={`w-2.5 rounded-sm ${bar.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/45"}`}
-                        style={{ height: `${Math.max(10, Math.round((bar.count / pageSignalBarsMax) * 52))}px` }}
+                        title={`${bar.label ?? bar.key}: ${bar.count}`}
+                        className={`min-w-[5px] flex-1 rounded-sm ${bar.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/45"}`}
+                        style={{ height: `${Math.max(8, Math.round((bar.count / pageSignalBarsMax) * 52))}px` }}
                       />
                     ))}
                   </div>
