@@ -15,7 +15,6 @@ import {
   FacetRail,
   IntelligenceBoards,
   LogoMark,
-  MobileFilterDock,
   PANEL,
   ScoutSignalPodium,
   campusFoundersTop,
@@ -38,7 +37,7 @@ function browseHref(opts: {
   more?: number;
 }): string {
   const query = new URLSearchParams();
-  query.set("sample", "1");
+  // Corpus is the default; ?sample=1 remains a harmless alias if present upstream.
   if (opts.feed && opts.feed !== "directory") query.set("feed", opts.feed);
   if (opts.sector) query.set("sector", opts.sector);
   if (opts.kind) query.set("kind", opts.kind);
@@ -47,7 +46,8 @@ function browseHref(opts: {
   if (q) query.set("q", q);
   if (opts.sort && opts.sort !== "rank") query.set("sort", opts.sort);
   if (opts.more && opts.more > 1) query.set("more", String(opts.more));
-  return `/companies?${query.toString()}`;
+  const qs = query.toString();
+  return qs ? `/companies?${qs}` : "/companies";
 }
 
 
@@ -443,34 +443,60 @@ export function SampleInstrumentBrowse({
           {/* Leaderboard podium mounts inside data-ledger-stage (shot frames that). Browse-more keeps a folio insight, not a shared ticket. */}
           {feed === "directory" && pages > 1 ? (
             <div
-              className="relative scroll-mt-14 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]"
+              className="relative scroll-mt-14 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-3.5 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]"
               data-mobile-continued-mast=""
               data-page-window=""
               data-page-peak=""
             >
-              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
-                Companies 1 to {cards.length.toLocaleString("en-US")} of {total.toLocaleString("en-US")}
-              </p>
-              <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                <span className="font-mono font-bold text-[color:var(--ember,#D96B1C)]">{pageSignaled.toLocaleString("en-US")}</span>
-                {" of these "}
-                <span className="font-mono font-bold text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
-                {" have a dated signal"}
-              </p>
-              <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                {"Universe "}
-                <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
-                {" companies"}
-                {pagePeakLabel ? (
-                  <>
-                    {" · peak "}
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{pagePeakLabel}</span>
-                  </>
-                ) : null}
-              </p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">On this page</p>
+              <div className="mt-2 flex items-end justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+                    <span data-page-signaled-count="">{pageSignaled.toLocaleString("en-US")}</span>
+                    <span className="ml-1 font-mono text-[16px] font-semibold tracking-tight text-[color:var(--fg-2,#3F465C)]">
+                      / {cards.length.toLocaleString("en-US")}
+                    </span>
+                  </p>
+                  <p className="mt-1.5 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                    <span className="font-mono font-bold text-[color:var(--ember,#D96B1C)]">{pageSignaled.toLocaleString("en-US")}</span>
+                    {" of these "}
+                    <span className="font-mono font-bold text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
+                    {" have a signal"}
+                    {pagePeakLabel ? (
+                      <span className="font-normal text-[color:var(--fg-3,#5C647A)]">
+                        {" · peak "}
+                        <span className="font-semibold text-[color:var(--ember,#D96B1C)]">{pagePeakLabel}</span>
+                      </span>
+                    ) : null}
+                  </p>
+                </div>
+                {pageSignalBars.length > 0 ? (
+                  <div className="flex h-14 max-w-[42%] flex-1 items-end justify-end gap-0.5" data-page-signal-bars="" aria-hidden>
+                    {pageSignalBars.map((bar) => (
+                      <span
+                        key={bar.key}
+                        title={`${bar.label ?? bar.key}: ${bar.count}`}
+                        className={`min-w-[5px] flex-1 rounded-sm ${bar.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/45"}`}
+                        style={{ height: `${Math.max(8, Math.round((bar.count / pageSignalBarsMax) * 52))}px` }}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex h-14 w-16 items-end" data-page-signal-bars="empty" aria-hidden>
+                    <span className="w-full rounded-sm bg-[color:var(--cobalt,#2F4FD8)]/25" style={{ height: 28 }} />
+                  </div>
+                )}
+              </div>
+              {sliceInsight ? (
+                <p className="mt-2.5 text-[12px] leading-5 text-[color:var(--fg-2,#3F465C)]">
+                  <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{sliceInsight.companyName}</span>
+                  {" · "}
+                  {sliceInsight.figure.toLocaleString("en-US")} {sliceInsight.figureUnit}
+                </p>
+              ) : null}
             </div>
           ) : null}
-          {feed === "directory" && pages <= 1 ? (
+          {feed === "directory" ? (
             <div
               className="flex w-full overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30"
               data-mobile-sort-segment=""
@@ -507,31 +533,40 @@ export function SampleInstrumentBrowse({
           {/* Secondary sector strips culled · mobile page-1 owns the newest-insight hero alone. */}
         </div>
 
-        {mobileFiltersOpen ? (
-          <div
-            className="mb-3 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] lg:hidden"
-            role="region"
-            aria-label="Scout filters"
-            data-mobile-filters-inline=""
-            data-mobile-contents-hero=""
-            data-filters-index-hero=""
+        {/* Mobile filters: one quiet row by default; expands inline (no sheet, no loud orange). */}
+        <div
+          className="mb-3 overflow-hidden border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] lg:hidden"
+          role="region"
+          aria-label="Scout filters"
+          data-mobile-filters-inline=""
+          data-mobile-contents-hero=""
+          data-filters-index-hero=""
+        >
+          <button
+            type="button"
+            className="flex w-full items-center justify-between gap-3 px-3 py-2 text-left"
+            onClick={() => setMobileFiltersOpen((open) => !open)}
+            aria-expanded={mobileFiltersOpen}
           >
-            <div className="flex items-baseline justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5">
-              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
-                Filters
-                <span className="ml-2 font-mono text-[12px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--ember,#D96B1C)]">
-                  {boardCompanies.length.toLocaleString("en-US")}
-                </span>
-                <span className="ml-1 font-mono text-[10px] font-medium normal-case tracking-normal text-[color:var(--fg-2,#3F465C)]">
-                  of {total.toLocaleString("en-US")} in view
-                </span>
-              </p>
-            </div>
-            <div className="max-h-[min(42dvh,360px)] overflow-y-auto overscroll-contain px-1 pb-3" data-mobile-facet-map="">
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-2,#3F465C)]">
+              Filters
+              <span className="ml-2 font-mono text-[11px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">
+                {boardCompanies.length.toLocaleString("en-US")}
+              </span>
+              <span className="ml-1 font-mono text-[10px] font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
+                of {total.toLocaleString("en-US")}
+              </span>
+            </p>
+            <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">
+              {mobileFiltersOpen ? "Close" : "Open"}
+            </span>
+          </button>
+          {mobileFiltersOpen ? (
+            <div className="max-h-[min(36dvh,300px)] overflow-y-auto overscroll-contain border-t border-[color:var(--line,#E1E5EF)] px-1 pb-3" data-mobile-facet-map="">
               <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
             </div>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
 
         {feed === "directory" && pages > 1 ? (
           <div className="mb-3 hidden lg:block" data-desk-browse-dominant="page-window" data-page-window="">
@@ -639,66 +674,104 @@ export function SampleInstrumentBrowse({
             </ol>
             </div>
             {pages > 1 && sliceInsight ? (
-              <div
-                className="mt-5 scroll-mt-24 border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--cobalt-haze,#E8ECFA)]/35"
-                data-ledger-end=""
-                data-ledger-end-mobile=""
-                data-end-insight={sliceInsight.kicker}
-              >
-                <div className="scroll-mt-[5.5rem] px-4 py-5 sm:px-5" data-ledger-end-lead="">
-                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
-                    Loaded so far
-                  </p>
-                  <p className="mt-2 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[44px]">
-                    {cards.length.toLocaleString("en-US")}
-                    <span className="mx-1.5 text-[18px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">of</span>
-                    <span className="text-[28px] font-bold tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[32px]">
-                      {total.toLocaleString("en-US")}
-                    </span>
-                  </p>
-                  <p className="mt-2.5 max-w-[28rem] text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    {"Companies 1 to "}
-                    {cards.length.toLocaleString("en-US")}
-                    {" of "}
-                    {total.toLocaleString("en-US")}
-                    {" on this desk"}
-                  </p>
-                  {nextToScout[0] ? (
-                    <p className="mt-1.5 text-[13px] text-[color:var(--fg-2,#3F465C)]" data-next-to-scout="">
-                      <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].label}</span>
-                      {" accounts for "}
-                      <span className="font-mono font-bold text-[color:var(--ember,#D96B1C)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
-                      {" of the "}
-                      {total.toLocaleString("en-US")}
-                      {" companies"}
+              <>
+                {/* Desk more-end-1440: Loaded so far (from 502803b) */}
+                <div
+                  className="mt-5 hidden scroll-mt-24 border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 lg:block"
+                  data-ledger-end=""
+                  data-end-insight={sliceInsight.kicker}
+                >
+                  <div className="scroll-mt-[5.5rem] px-4 py-5 sm:px-5" data-ledger-end-lead="">
+                    <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
+                      Loaded so far
                     </p>
-                  ) : null}
-                  <p className="mt-3 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="" data-end-lead="">
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
-                    {" "}
-                    {sliceInsight.figureUnit}
-                    {" · see "}
-                    <Link href={`/startup/${sliceInsight.companyId}?sample=1`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline">
-                      {sliceInsight.companyName}
-                    </Link>
-                  </p>
-                  {cards.length < total ? (
-                    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--cobalt,#2F4FD8)]/20 pt-3.5" data-ledger-end-more="" data-ledger-end-colophon="">
-                      <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                        {"Still "}
-                        <span className="font-bold text-[color:var(--fg,#0B0E17)]">{(total - cards.length).toLocaleString("en-US")}</span>
-                        {" to load"}
+                    <p className="mt-2 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[44px]">
+                      {cards.length.toLocaleString("en-US")}
+                      <span className="mx-1.5 text-[18px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">of</span>
+                      <span className="text-[28px] font-bold tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[32px]">
+                        {total.toLocaleString("en-US")}
+                      </span>
+                    </p>
+                    <p className="mt-2.5 max-w-[28rem] text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                      {"Companies 1 to "}
+                      {cards.length.toLocaleString("en-US")}
+                      {" of "}
+                      {total.toLocaleString("en-US")}
+                      {" on this desk"}
+                    </p>
+                    {nextToScout[0] ? (
+                      <p className="mt-1.5 text-[13px] text-[color:var(--fg-2,#3F465C)]" data-next-to-scout="">
+                        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].label}</span>
+                        {" accounts for "}
+                        <span className="font-mono font-bold text-[color:var(--ember,#D96B1C)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
+                        {" of the "}
+                        {total.toLocaleString("en-US")}
+                        {" companies"}
                       </p>
+                    ) : null}
+                    <p className="mt-3 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="" data-end-lead="">
+                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
+                      {" "}
+                      {sliceInsight.figureUnit}
+                      {" · see "}
+                      <Link href={`/startup/${sliceInsight.companyId}`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline">
+                        {sliceInsight.companyName}
+                      </Link>
+                    </p>
+                    {cards.length < total ? (
+                      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--cobalt,#2F4FD8)]/20 pt-3.5" data-ledger-end-more="" data-ledger-end-colophon="">
+                        <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                          {"Still "}
+                          <span className="font-bold text-[color:var(--fg,#0B0E17)]">{(total - cards.length).toLocaleString("en-US")}</span>
+                          {" to load"}
+                        </p>
+                        <Link
+                          href={moreHref}
+                          className="inline-flex h-9 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white hover:opacity-90"
+                        >
+                          Load next
+                        </Link>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+                {/* Mobile more-end-375: one line so cards remain in frame */}
+                <div
+                  className="mt-3 scroll-mt-24 border-t border-[color:var(--line,#E1E5EF)] pt-3 lg:hidden"
+                  data-ledger-end=""
+                  data-ledger-end-mobile=""
+                  data-end-insight={sliceInsight.kicker}
+                >
+                  <div
+                    className="flex flex-wrap items-center justify-between gap-2 px-0.5"
+                    data-ledger-end-lead=""
+                    data-ledger-end-more=""
+                  >
+                    <p className="font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="" data-end-lead="">
+                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
+                      {" of "}
+                      <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
+                      {" loaded"}
+                      {nextToScout[0] ? (
+                        <>
+                          {" · "}
+                          <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].label}</span>
+                          {" "}
+                          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
+                        </>
+                      ) : null}
+                    </p>
+                    {cards.length < total ? (
                       <Link
                         href={moreHref}
-                        className="inline-flex h-9 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white hover:opacity-90"
+                        className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]"
                       >
                         Load next
                       </Link>
-                    </div>
-                  ) : null}
+                    ) : null}
+                  </div>
                 </div>
-              </div>
+              </>
             ) : null}
           </div>
         )}
@@ -724,7 +797,7 @@ export function SampleInstrumentBrowse({
           </p>
         ) : null}
 
-        <div className="h-20 lg:hidden" aria-hidden data-mobile-dock-spacer="" />
+        <div className="h-4 lg:hidden" aria-hidden data-mobile-dock-spacer="" />
 
         <div className="sr-only">
           {sectors.map((item) => (
@@ -770,16 +843,7 @@ export function SampleInstrumentBrowse({
         </div>
       </aside>
 
-      <MobileFilterDock
-        onOpen={() => setMobileFiltersOpen((open) => !open)}
-        count={boardCompanies.length}
-        caption={mobileFiltersOpen ? "Hide filters" : feed === "leaderboard" ? "Narrow the signal desk" : "Narrow the ledger"}
-        tone="ember"
-        kicker={mobileFiltersOpen ? "Hide" : "Filters"}
-        observe="#browse"
-      />
-
-      {/* Mobile filters: inline expandable above the list (no sheet, no Done). */}
+      {/* Filters live in the quiet inline row above the list (no bottom dock). */}
     </div>
   );
 }
@@ -815,6 +879,8 @@ function LedgerRow({
   return (
     <Link
       href={`/startup/${card.id}`}
+      data-card-signals={card.signals}
+      data-card-dated={card.latestSignalAt ? "1" : "0"}
       className={`group flex items-start gap-3 px-3.5 transition-[background-color,color] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:gap-3 sm:px-3.5 ${
         ranked ? "py-3.5 sm:py-3 lg:gap-3 lg:py-3.5" : "py-3.5 sm:py-3"
       }`}

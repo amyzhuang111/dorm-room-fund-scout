@@ -65,9 +65,9 @@ fs.writeFileSync(
       gitHead: process.env.GIT_HEAD || null,
       buildId: process.env.BUILD_ID || null,
       routes: {
-        home: "/?sample=1",
-        companies: "/companies?sample=1",
-        signals: "/companies?sample=1&feed=leaderboard",
+        home: "/",
+        companies: "/companies",
+        signals: "/companies?feed=leaderboard",
       },
     },
     null,
@@ -79,7 +79,7 @@ const browser = await chromium.launch({ headless: true });
 
 {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-  await page.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForSelector("[data-founder-search]", { timeout: 20000 });
   await waitGlobeIdle(page);
@@ -100,7 +100,7 @@ const browser = await chromium.launch({ headless: true });
   await shot(page, "fold-filters-1440");
 
   // Explore → Companies (ranked list moved off home).
-  await page.goto(`${BASE}/companies?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.goto(`${BASE}/companies`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForTimeout(1500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
@@ -139,7 +139,7 @@ const browser = await chromium.launch({ headless: true });
   }
   await shot(page, "companies-more-end-1440");
 
-  await page.goto(`${BASE}/companies?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.goto(`${BASE}/companies`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForTimeout(1200);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
@@ -159,7 +159,7 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(400);
   await shot(page, "companies-filters-1440");
 
-  await page.goto(`${BASE}/companies?sample=1&feed=leaderboard`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.goto(`${BASE}/companies?feed=leaderboard`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForTimeout(2000);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
@@ -177,7 +177,7 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(300);
   await shot(page, "companies-signals-1440");
 
-  await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForTimeout(2000);
   await shot(page, "company-sim-1440");
   await page.close();
@@ -185,7 +185,7 @@ const browser = await chromium.launch({ headless: true });
 
 {
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
-  await page.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForSelector("[data-founder-search]", { timeout: 20000 });
   await waitGlobeIdle(page);
@@ -202,7 +202,7 @@ const browser = await chromium.launch({ headless: true });
   await page.evaluate(() => window.scrollTo(0, 0));
   await shot(page, "fold-filters-375");
 
-  await page.goto(`${BASE}/companies?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.goto(`${BASE}/companies`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForTimeout(1500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
@@ -271,7 +271,7 @@ const browser = await chromium.launch({ headless: true });
   }
   await shot(page, "companies-more-end-375");
 
-  await page.goto(`${BASE}/companies?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.goto(`${BASE}/companies`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForTimeout(1000);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
@@ -283,7 +283,7 @@ const browser = await chromium.launch({ headless: true });
   }
   await shot(page, "companies-filters-375");
 
-  await page.goto(`${BASE}/companies?sample=1&feed=leaderboard`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.goto(`${BASE}/companies?feed=leaderboard`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForTimeout(1500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
@@ -295,7 +295,7 @@ const browser = await chromium.launch({ headless: true });
   }
   await shot(page, "companies-signals-375");
 
-  await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForTimeout(1200);
   // Pin the company name lead in frame (below sticky chrome via scroll-mt on hero).
   const dossierM = page.locator("[data-company-mobile-hero]").first();

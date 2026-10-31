@@ -45,7 +45,7 @@ export function FoldPeakShare({
   return (
     <div className="mb-0" data-fold-peak-identity="" data-fold-baseline="8" data-fold-peak-shell={live ? "live" : "ssr"}>
       {/* Desk: peak hero + quiet bars (no count labels) + Scout edition · reserved min height */}
-      <div className="mb-1 hidden min-h-[12.5rem] lg:block" data-fold-peak-desk="">
+      <div className="mb-1 hidden min-h-[15rem] lg:block" data-fold-peak-desk="">
         <div
           className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-end gap-5 border-b border-[color:var(--line,#E1E5EF)] pb-3"
           data-fold-peak-share=""
@@ -65,7 +65,7 @@ export function FoldPeakShare({
               {" of every dated signal on record"}
             </p>
             <ol
-              className="mt-2.5 flex h-[3.5rem] items-end gap-1"
+              className="mt-3 flex h-[4.25rem] items-end gap-1"
               data-fold-peak-bars=""
               data-fold-peak-month-bars=""
               data-chrono-peak={String(peakBar.count)}
@@ -86,7 +86,7 @@ export function FoldPeakShare({
                   )}
                   <span
                     className={`w-full max-w-[1.5rem] rounded-sm ${b.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/30"}`}
-                    style={{ height: `${Math.max(4, Math.round((b.count / max) * 32))}px` }}
+                    style={{ height: `${Math.max(4, Math.round((b.count / max) * 40))}px` }}
                   />
                   <span className={`whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.04em] ${b.peak ? "font-bold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-3,#5C647A)]"}`}>{b.short}</span>
                 </li>
@@ -109,16 +109,16 @@ export function FoldPeakShare({
               {" on map"}
             </p>
             {topCampuses.length > 0 ? (
-              <ol className="mt-2 space-y-1" data-fold-peak-campus-rank="">
+              <ol className="mt-3 space-y-2.5" data-fold-peak-campus-rank="">
                 {topCampuses.map((campus, i) => (
                   <li key={campus.id} className="flex items-baseline justify-between gap-3">
                     <span className="min-w-0 truncate">
                       <span className="mr-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <span className="text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{campus.name}</span>
+                      <span className="text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{campus.name}</span>
                     </span>
-                    <span className="shrink-0 font-mono text-[14px] font-bold leading-none tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]">
+                    <span className="shrink-0 font-mono text-[16px] font-bold leading-none tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]">
                       {campus.founders.toLocaleString("en-US")}
                     </span>
                   </li>

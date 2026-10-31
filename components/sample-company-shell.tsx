@@ -105,7 +105,7 @@ export function SampleCompanyShell({
         {/* Magazine dossier cover · desk + mobile share the profile treatment */}
         <div className="mb-3 hidden border-b border-[color:var(--line,#E1E5EF)] pb-3 sm:mb-4 sm:block sm:pb-4" data-dossier-hero="" data-mobile-magazine="">
           <div className="flex flex-wrap items-center gap-2">
-            <Link href="/companies?sample=1" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
+            <Link href="/companies" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
               ← Companies
             </Link>
             <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
@@ -249,7 +249,7 @@ export function SampleCompanyShell({
 
         {/* Mobile identity: one strong company lead · peers live in the wire strip below. */}
         <div className="mb-3 flex items-center justify-between gap-2 sm:hidden" data-dossier-mobile-nav="">
-          <Link href="/companies?sample=1" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
+          <Link href="/companies" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
             ← Companies
           </Link>
           <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>

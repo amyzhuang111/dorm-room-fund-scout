@@ -1590,7 +1590,7 @@ export function IntelligenceBoards({
       <ul className="mt-1.5 space-y-0.5">
         {mix.map((item) => (
           <li key={item.id}>
-            <Link href={`/companies?sample=1&sector=${encodeURIComponent(item.id)}`} className="flex items-center gap-1.5 text-[10px] hover:text-[color:var(--ember,#D96B1C)]">
+            <Link href={`/companies?sector=${encodeURIComponent(item.id)}`} className="flex items-center gap-1.5 text-[10px] hover:text-[color:var(--ember,#D96B1C)]">
               <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: sectorDot(item.id) }} aria-hidden />
               <span className="min-w-0 flex-1 truncate text-[color:var(--fg,#0B0E17)]">{item.label}</span>
               <span className={`${COUNT} shrink-0`}>{item.count.toLocaleString("en-US")}</span>
@@ -1691,7 +1691,7 @@ export function MobileWireStrip({
         kicker: "Sector",
         figure: s.count.toLocaleString("en-US"),
         caption: s.label,
-        href: `/companies?sample=1&sector=${encodeURIComponent(s.id)}`,
+        href: `/companies?sector=${encodeURIComponent(s.id)}`,
       });
     }
   }
@@ -1707,7 +1707,7 @@ export function MobileWireStrip({
       });
     }
   }
-  // company: campus peers by signal weight (6c770b0; skip empty founder stubs)
+  // company: campus peers by signal weight (6c770b0; skip empty founder stubs) — sim-375
   if (surface === "company") {
     const peers = [...companies]
       .filter((c) => (c.signals ?? 0) > 0)
@@ -1834,8 +1834,8 @@ export function MobileFilterDock({
 
   const kickerCls =
     tone === "ember"
-      ? "block font-mono text-[10px] uppercase tracking-[0.14em] text-white/80"
-      : "block font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]";
+      ? "block font-mono text-[10px] uppercase tracking-[0.08em] text-white/80"
+      : "block whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]";
   const captionCls =
     tone === "ember"
       ? "mt-0.5 block truncate text-[13px] font-semibold text-white"

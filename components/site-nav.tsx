@@ -29,7 +29,7 @@ const SUBS: Record<string, { href: string; label: string }[]> = {
   explore: [
     { href: "/campuses", label: "Campuses" },
     { href: "/founders", label: "Founders" },
-    { href: "/companies?sample=1", label: "Companies" },
+    { href: "/companies", label: "Companies" },
   ],
   signals: [
     { href: "/signals", label: "Feed" },

@@ -88,7 +88,7 @@ function PeakShareLite({
   const pct = Math.round((peakCount / Math.max(1, shell.dated)) * 100);
   return (
     <div data-fold-peak-ssr-shell="" data-fold-peak-identity="" data-fold-baseline="8">
-      <div className="mb-1 hidden min-h-[12.5rem] lg:block" data-fold-peak-desk="">
+      <div className="mb-1 hidden min-h-[15rem] lg:block" data-fold-peak-desk="">
         <div className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-end gap-5 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-peak-share="">
           <div className="min-w-0">
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
@@ -102,7 +102,7 @@ function PeakShareLite({
               {" of every dated signal on record"}
             </p>
             {/* Height twin for month bars · marks paint on live hydrate */}
-            <div className="mt-2.5 h-[3.5rem]" data-fold-peak-bars-reserve="" aria-hidden="true" />
+            <div className="mt-3 h-[4.25rem]" data-fold-peak-bars-reserve="" aria-hidden="true" />
             <p className="mt-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
               {shell.dated.toLocaleString("en-US")} dated
               {shell.earlierValid > 0 ? ` · ${shell.earlierValid.toLocaleString("en-US")} earlier` : ""}
@@ -158,7 +158,7 @@ function PeakShareSlot({
   // Keep SSR lite until the client Peak chunk has painted (same box → CLS ≈ 0).
   const showLive = live;
   return (
-    <div className="relative mb-3 min-h-[9.75rem] lg:mb-3 lg:min-h-[12.5rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
+    <div className="relative mb-3 min-h-[9.75rem] lg:mb-4 lg:min-h-[15rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
       <div className={showLive ? "hidden" : undefined} aria-hidden={showLive || undefined} data-fold-peak-ssr-wrap="">
         {shell ? (
           <PeakShareLite shell={shell} foundersListed={foundersListed} campusesOnMap={campusesOnMap} topCampuses={topCampuses} />
@@ -238,7 +238,7 @@ export function SampleHomeClient(props: {
     return [...campuses]
       .filter((c) => (c.founders ?? 0) > 0)
       .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))
-      .slice(0, 8)
+      .slice(0, 3)
       .map((c) => ({
         id: c.id,
         name: shortCampusLabel(c.id, c.name),
@@ -335,7 +335,7 @@ export function SampleHomeClient(props: {
       <section id="browse" className="scroll-mt-14 border-t border-line px-3 pb-10 pt-2 sm:px-5">
         <div className="mx-auto w-full max-w-[1280px]">
           <div
-            className={`flex flex-wrap items-center gap-x-1 border-b border-line ${pages > 1 ? "hidden lg:flex" : ""}`}
+            className="flex flex-wrap items-center gap-x-1 border-b border-line"
             role="tablist"
             aria-label="Views"
           >
@@ -345,7 +345,7 @@ export function SampleHomeClient(props: {
             <Tab href={browseHref({ feed: "leaderboard", sector, kind, campus: campusId, q: query })} active={feed === "leaderboard"}>
               Signals
             </Tab>
-            <Tab href="/?sample=1" active={false}>
+            <Tab href="/" active={false}>
               Map
             </Tab>
           </div>

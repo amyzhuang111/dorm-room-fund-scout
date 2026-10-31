@@ -8,20 +8,22 @@ export default async function CompaniesPage({
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
   const sp = await searchParams;
-  if (sp.sample === "1") {
-    return (
-      <SampleHome
-        place="explore"
-        feed={sp.feed === "leaderboard" ? "leaderboard" : "directory"}
-        sector={sp.sector}
-        kind={sp.kind}
-        campus={sp.campus}
-        more={sp.more}
-        q={sp.q}
-        sort={sp.sort}
-        stats={loadHeroStats()}
-      />
-    );
+  // Real corpus is the default. ?sample=1 stays a harmless alias.
+  // Legacy Discover UI only when explicitly requested.
+  if (sp.discover === "1") {
+    return <Discover searchParams={Promise.resolve(sp)} />;
   }
-  return <Discover searchParams={Promise.resolve(sp)} />;
+  return (
+    <SampleHome
+      place="explore"
+      feed={sp.feed === "leaderboard" ? "leaderboard" : "directory"}
+      sector={sp.sector}
+      kind={sp.kind}
+      campus={sp.campus}
+      more={sp.more}
+      q={sp.q}
+      sort={sp.sort}
+      stats={loadHeroStats()}
+    />
+  );
 }

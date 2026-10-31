@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { EmptyHome } from "@/components/empty-home";
 import { GlobeFoldSkeleton } from "@/components/globe-fold-skeleton";
 import { GlobeBoot } from "@/components/map-boot";
 import { SampleHome, type Feed } from "@/components/sample-home";
@@ -23,16 +22,16 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
     redirect(query ? `/companies?${query}` : "/companies");
   }
   if (sp.view === "network") redirect("/map/network");
-  if (sp.sample === "1" && (sp.feed === "directory" || sp.feed === "leaderboard")) {
+  // Browse feeds live under /companies; keep ?sample=1 as a harmless alias.
+  if (sp.feed === "directory" || sp.feed === "leaderboard") {
     const qs = new URLSearchParams();
-    qs.set("sample", "1");
+    if (sp.sample === "1") qs.set("sample", "1");
     for (const key of ["feed", "sector", "kind", "campus", "q", "sort", "more"] as const) {
       const value = sp[key];
       if (value) qs.set(key, value);
     }
     redirect(`/companies?${qs.toString()}`);
   }
-  if (sp.sample !== "1") return <EmptyHome />;
   const feed = feedOf(sp.feed);
   const stats = loadHeroStats();
   const directory = loadDirectory();

@@ -57,7 +57,6 @@ function GlobeBlock({
 
   function onSelect(id: string) {
     const next = new URLSearchParams(search.toString());
-    next.set("sample", "1");
     next.delete("feed");
     next.delete("university");
     if (requested === id) next.delete("campus");
@@ -269,27 +268,10 @@ function Collage({ stats }: { stats: HeroStats }) {
   );
 }
 
-function SamplePill({ cream = false }: { cream?: boolean }) {
-  return (
-    <span
-      data-sample-pill=""
-      title="Sample mode: full seed set of 2,513 companies"
-      className={`inline-flex h-5 items-center gap-0.5 rounded-sm px-1.5 font-mono text-[9px] uppercase tracking-[0.14em] leading-none text-[color:var(--fg-3,#5C647A)]/80 ${cream ? "" : ""}`}
-    >
-      Sample
-      <Link href="/" aria-label="Leave sample mode" className="grid h-3.5 w-3.5 place-items-center rounded-sm text-[color:var(--fg-3,#5C647A)]/70 hover:text-[color:var(--fg-2,#3F465C)]">
-        <svg width="7" height="7" viewBox="0 0 10 10" aria-hidden>
-          <path d="M2 2 8 8M8 2 2 8" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
-        </svg>
-      </Link>
-    </span>
-  );
-}
 
 function HeroActions({ cream = false, compact = false }: { cream?: boolean; compact?: boolean }) {
   const search = useSearchParams();
   const directory = new URLSearchParams(search.toString());
-  directory.set("sample", "1");
   directory.delete("feed");
   const world = new URLSearchParams(directory.toString());
   world.set("feed", "world");
@@ -299,7 +281,7 @@ function HeroActions({ cream = false, compact = false }: { cream?: boolean; comp
         <Link href={`/?${world.toString()}`} className="inline-flex h-6 items-center rounded bg-[color:var(--ember,#D96B1C)] px-2 text-[11px] font-semibold text-white sm:h-7 sm:px-2.5 sm:text-[12px]">
           Map
         </Link>
-        <Link href="/companies?sample=1" className="inline-flex h-6 items-center rounded border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2 text-[11px] font-medium text-[color:var(--fg,#0B0E17)] sm:h-7 sm:px-2.5 sm:text-[12px]">
+        <Link href="/companies" className="inline-flex h-6 items-center rounded border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2 text-[11px] font-medium text-[color:var(--fg,#0B0E17)] sm:h-7 sm:px-2.5 sm:text-[12px]">
           Companies
         </Link>
       </div>
@@ -310,7 +292,7 @@ function HeroActions({ cream = false, compact = false }: { cream?: boolean; comp
       <Link href={`/?${world.toString()}`} className={`inline-flex h-10 items-center rounded px-4 text-[14px] font-semibold ${cream ? "bg-[color:var(--ember,#D96B1C)] text-white" : "bg-ember text-accent-foreground"}`}>
         Map
       </Link>
-      <Link href="/companies?sample=1" className={`inline-flex h-10 items-center rounded border px-4 text-[14px] font-medium ${cream ? "border-[#e7cbb6] bg-white text-[#20140c]" : "border-line text-fg"}`}>
+      <Link href="/companies" className={`inline-flex h-10 items-center rounded border px-4 text-[14px] font-medium ${cream ? "border-[#e7cbb6] bg-white text-[#20140c]" : "border-line text-fg"}`}>
         Companies
       </Link>
     </div>
@@ -323,7 +305,6 @@ function SignatureBand({ stats, foundersListed = 0, foundersIndexed = 0, globe }
     return (
       <section className="pb-1" aria-label="Campus Scout">
         <div className="mb-1 flex flex-wrap items-center gap-2">
-          <SamplePill />
           {/* Counts live in the fold masthead; keep DOM anchors for check-facet-dom. */}
           <p className="sr-only" data-sample-strip-counts>
             <span data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
@@ -342,7 +323,6 @@ function SignatureBand({ stats, foundersListed = 0, foundersIndexed = 0, globe }
     <section className="-mx-6 px-6 pb-2" aria-label="Campus Scout">
       <div className="max-w-[640px]">
         <div className="mb-1.5">
-          <SamplePill />
         </div>
         <p className="display text-[32px] font-semibold leading-[36px] sm:text-[36px] sm:leading-[40px]">
           Track student founders before they raise

@@ -118,7 +118,7 @@ const browser = await chromium.launch({
   args: process.env.CHROME_PATH ? ["--no-sandbox", "--disable-dev-shm-usage"] : [],
 });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-await page.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+await page.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 90000 });
 await page.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
 await page.waitForSelector("[data-founder-search]", { timeout: 20000 });
 await page.waitForSelector("[data-founder-card]", { timeout: 20000 });
@@ -154,12 +154,7 @@ const founderHome = await page.evaluate(() => {
     foundersIndexedStrip: stripIndexed ? Number(stripIndexed) : null,
     countNote: Boolean(document.querySelector("[data-founder-count-note]")),
     countryLegend,
-    samplePillQuiet: (() => {
-      const pill = document.querySelector("[data-sample-pill]");
-      if (!pill) return false;
-      const t = (pill.textContent || "").replace(/\s+/g, " ").trim();
-      return /^Sample\b/i.test(t) && !/Sample data/i.test(t);
-    })(),
+    samplePillAbsent: document.querySelector("[data-sample-pill]") == null,
   };
 });
 await page.locator("[data-campus-founders-top] button").first().click();
@@ -203,7 +198,7 @@ const campusFoundersTop = await page.evaluate(() => {
 
 // Mobile: founder search/filters/cards must sit above the map.
 const mobile = await browser.newPage({ viewport: { width: 375, height: 812 } });
-await mobile.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+await mobile.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 90000 });
 await mobile.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
 await mobile.waitForSelector("[data-founder-filters]", { timeout: 20000 });
 await mobile.waitForSelector('[data-globe-state="ready"]', { timeout: 45000 });
@@ -221,7 +216,7 @@ await mobile.close();
 
 // Desk 1440: founder cards must clear the fold (beside or under a short globe).
 const desk = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-await desk.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+await desk.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 90000 });
 await desk.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
 await desk.waitForSelector("[data-founder-card]", { timeout: 20000 });
 await desk.waitForSelector('[data-globe-state="ready"]', { timeout: 45000 });
@@ -247,7 +242,7 @@ const deskFold = await desk.evaluate(() => {
 });
 await desk.close();
 
-await page.goto(`${BASE}/companies?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+await page.goto(`${BASE}/companies`, { waitUntil: "networkidle", timeout: 90000 });
 await page.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
 await page.waitForTimeout(400);
 const chrono = await readChrono(page);
@@ -272,6 +267,30 @@ const companiesLabels = await page.evaluate(() => {
     dated: Number(landed?.getAttribute("data-chrono-dated") || 0),
   };
 });
+// Continued mast (mobile): page signaled count must match cards with signals>0 (not dated/source_date).
+const moreMobile = await browser.newPage({ viewport: { width: 375, height: 812 } });
+await moreMobile.goto(`${BASE}/companies?more=2`, { waitUntil: "networkidle", timeout: 90000 });
+await moreMobile.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
+await moreMobile.waitForSelector("[data-mobile-continued-mast]", { timeout: 20000 });
+const pageSignalMast = await moreMobile.evaluate(() => {
+  const mast = document.querySelector("[data-mobile-continued-mast]");
+  const shownRaw = (document.querySelector("[data-page-signaled-count]")?.textContent || "").replace(/,/g, "").trim();
+  const shown = Number(shownRaw);
+  const rows = [...document.querySelectorAll("[data-ledger-stage] a[data-card-signals]")];
+  const withSignal = rows.filter((el) => Number(el.getAttribute("data-card-signals") || 0) > 0).length;
+  const withDated = rows.filter((el) => el.getAttribute("data-card-dated") === "1").length;
+  const text = (mast?.textContent || "").replace(/\s+/g, " ");
+  return {
+    shown,
+    withSignal,
+    withDated,
+    rowCount: rows.length,
+    hasSignalCopy: /have a signal/.test(text),
+    hasDatedCopy: /dated signal/.test(text),
+  };
+});
+await moreMobile.close();
+
 await openFilters(page);
 await page.waitForTimeout(400);
 const picked = await pickRail(page);
@@ -389,6 +408,7 @@ const report = {
   flags: flagCounts,
   chrono,
   companiesLabels,
+  pageSignalMast,
   ok: {
     year: year.sum === TOTAL,
     status: status.sum === TOTAL,
@@ -427,7 +447,12 @@ const report = {
       founderHome.foundersIndexedStrip === EXPECTED_FOUNDERS_INDEXED &&
       founderHome.countNote === true,
     noCountryLegend: founderHome.countryLegend === false,
-    samplePillQuiet: founderHome.samplePillQuiet === true,
+    samplePillAbsent: founderHome.samplePillAbsent === true,
+    pageSignaledMatchesCards:
+      pageSignalMast.hasSignalCopy === true &&
+      pageSignalMast.hasDatedCopy === false &&
+      pageSignalMast.shown === pageSignalMast.withSignal &&
+      pageSignalMast.rowCount > 0,
     mobileFoundersAboveMap: mobileOrder.filtersAboveMap && mobileOrder.cardAboveMap,
     deskFoundersAboveFold1440: deskFold.cardAboveFold === true,
     noEmDashInUi:
