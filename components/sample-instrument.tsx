@@ -582,7 +582,7 @@ export function FacetRail({
         {dense && !sheet && !index ? null : (
           <>
             <p className={`font-mono text-[10px] uppercase ${sheet || dense || index ? "tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]" : "tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]"}`}>
-              {index ? "Contents" : "Scout filters"}
+              Filters
             </p>
             {(index || sheet) && indexCount != null ? (
               <p

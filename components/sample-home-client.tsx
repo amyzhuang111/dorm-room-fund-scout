@@ -52,7 +52,7 @@ function browseHref(opts: {
   if (opts.campus) query.set("campus", opts.campus);
   const q = opts.q?.trim();
   if (q) query.set("q", q);
-  if (opts.sort && opts.sort !== "recent") query.set("sort", opts.sort);
+  if (opts.sort && opts.sort !== "rank") query.set("sort", opts.sort);
   if (opts.more && opts.more > 1) query.set("more", String(opts.more));
   return `/?${query.toString()}#browse`;
 }
@@ -124,7 +124,7 @@ export function SampleHomeClient(props: {
         <div className="mx-auto w-full max-w-[1280px]">
           <div className="flex flex-wrap items-center gap-x-1 border-b border-line" role="tablist" aria-label="Views">
             <Tab href={browseHref({ feed: "directory", sector, kind, campus: campusId, q: query, sort: order })} active={feed === "directory"}>
-              Ledger
+              Companies
             </Tab>
             <Tab href={browseHref({ feed: "leaderboard", sector, kind, campus: campusId, q: query })} active={feed === "leaderboard"}>
               Signals

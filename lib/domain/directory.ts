@@ -2,7 +2,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { getDb } from "../db/client";
 import { campusSlug, shortCampusLabel } from "./campuses";
+import { directoryRank, whyItsHere } from "./directory-rank";
 import { classifyDescription, isBoilerplateDescription, primaryTag, sectorLabel } from "./sectors";
+
+export { directoryRank, whyItsHere };
 
 export interface DirectoryCard {
   id: string;
@@ -70,11 +73,12 @@ const LEADERBOARD_LIMIT = 14;
 const LOGO_FACT_KEYS = new Set(["logo", "favicon", "logo_url", "favicon_url"]);
 const STAGE_ORDER = ["Pre-seed", "Seed", "Series A", "Series B", "Series C", "Venture"];
 
-export type DirectorySort = "name" | "recent" | "stage";
+export type DirectorySort = "rank" | "name" | "recent" | "stage";
 
 export function directorySortOf(value: string | undefined): DirectorySort {
-  if (value === "name" || value === "stage") return value;
-  return "recent";
+  if (value === "newest") return "recent";
+  if (value === "name" || value === "stage" || value === "recent" || value === "rank") return value;
+  return "rank";
 }
 
 function httpUrl(value: string | null | undefined): string | null {
@@ -485,14 +489,24 @@ export function sortDirectory(cards: DirectoryCard[], sort: DirectorySort): Dire
     copy.sort((a, b) => rank(a.stage) - rank(b.stage) || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
     return copy;
   }
+  if (sort === "recent") {
+    copy.sort((a, b) => {
+      const left = a.latestSignalAt ?? "";
+      const right = b.latestSignalAt ?? "";
+      if (left !== right) {
+        if (!left) return 1;
+        if (!right) return -1;
+        return right.localeCompare(left);
+      }
+      return a.name.localeCompare(b.name) || a.id.localeCompare(b.id);
+    });
+    return copy;
+  }
   copy.sort((a, b) => {
-    const left = a.latestSignalAt ?? "";
-    const right = b.latestSignalAt ?? "";
-    if (left !== right) {
-      if (!left) return 1;
-      if (!right) return -1;
-      return right.localeCompare(left);
-    }
+    const left = directoryRank(a);
+    const right = directoryRank(b);
+    if (left.tier !== right.tier) return left.tier - right.tier;
+    if (left.score !== right.score) return right.score - left.score;
     return a.name.localeCompare(b.name) || a.id.localeCompare(b.id);
   });
   return copy;

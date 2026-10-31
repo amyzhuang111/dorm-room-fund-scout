@@ -49,10 +49,12 @@ assert.equal(logoUrlFromStored("description", "not a url", JSON.stringify({ favi
 assert.equal(logoUrlFromStored("description", "", JSON.stringify({ logo: "relative/logo.png" })), null);
 assert.equal(logoUrlFromStored("favicon", "ftp://files.example.com/icon.ico", null), null);
 
-assert.equal(directorySortOf(undefined), "recent");
+assert.equal(directorySortOf(undefined), "rank");
 assert.equal(directorySortOf("name"), "name");
 assert.equal(directorySortOf("stage"), "stage");
-assert.equal(directorySortOf("signals"), "recent");
+assert.equal(directorySortOf("recent"), "recent");
+assert.equal(directorySortOf("newest"), "recent");
+assert.equal(directorySortOf("signals"), "rank");
 
 const rows = [
   card({ id: "a", name: "Arden", description: "A translation device for clinics.", founders: ["Aiko Tanaka"], stage: "Seed", latestSignalAt: "2024-01-01", signals: 1 }),
@@ -71,6 +73,21 @@ assert.deepEqual(searchDirectory(rows, "ZEPHYR").map((item) => item.id), ["c"]);
 assert.deepEqual(sortDirectory(rows, "name").map((item) => item.name), ["AfterQuery", "Arden", "Beacon", "Zephyr"]);
 assert.deepEqual(sortDirectory(rows, "stage").map((item) => item.name), ["Beacon", "Arden", "AfterQuery", "Zephyr"]);
 assert.deepEqual(sortDirectory(rows, "recent").map((item) => item.name), ["AfterQuery", "Beacon", "Arden", "Zephyr"]);
+
+{
+  const ranked = [
+    card({ id: "thin", name: "Coveted", school: null, schoolId: null, signals: 1, signalKind: null, founders: ["A"], latestSignalAt: "2026-10-16" }),
+    card({ id: "one", name: "Frutecho", school: "Penn", schoolId: "univ_penn", signals: 1, signalKind: null, founders: ["B"], latestSignalAt: "2026-10-16" }),
+    card({ id: "yc", name: "Sim", school: "Berkeley", schoolId: "univ_berkeley", signals: 3, signalKind: "funding", signalLabel: "Funding", founders: ["Emir Karabeg", "Waleed Latif"], programs: ["Y Combinator"], stage: "Seed", latestSignalAt: "2026-09-25" }),
+    card({ id: "nocampus", name: "Orphan", school: null, signals: 6, signalKind: "funding", signalLabel: "Funding", founders: ["C", "D"], programs: ["Y Combinator"], latestSignalAt: "2026-10-01" }),
+  ];
+  const order = sortDirectory(ranked, "rank").map((item) => item.name);
+  assert.equal(order[0], "Sim", "a campus company with signals, founders, and a program leads");
+  assert.ok(order.indexOf("Sim") < order.indexOf("Frutecho"));
+  assert.ok(order.indexOf("Sim") < order.indexOf("Coveted"));
+  assert.ok(order.indexOf("Frutecho") < order.indexOf("Coveted"), "a campus outranks a record with no campus");
+  assert.ok(order.indexOf("Sim") < order.indexOf("Orphan"), "no campus never leads ahead of a ranked campus company");
+}
 
 const stored = loadDirectory();
 const after = searchDirectory(stored.cards, "Spencer Mateega").find((item) => item.name === "AfterQuery");

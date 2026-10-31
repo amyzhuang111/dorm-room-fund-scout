@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { loadDirectoryClient } from "@/lib/client/directory-cache";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
+import { whyItsHere } from "@/lib/domain/directory-rank";
 import { directoryCardSubtitle } from "@/lib/domain/sample-facets";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { shortCampusLabel } from "@/lib/domain/campuses";
@@ -16,12 +17,8 @@ import {
   LogoMark,
   MobileFilterDock,
   PANEL,
-  ScoutAtlasPlate,
   ScoutSignalPodium,
-  campusFoundersAtlasRows,
   campusFoundersTop,
-  sectorMix,
-  contentsPageInsight,
   topPrograms,
   isYcProgramLabel,
   YC_MEMBERSHIP_EXPECTED,
@@ -47,7 +44,7 @@ function browseHref(opts: {
   if (opts.campus) query.set("campus", opts.campus);
   const q = opts.q?.trim();
   if (q) query.set("q", q);
-  if (opts.sort && opts.sort !== "recent") query.set("sort", opts.sort);
+  if (opts.sort && opts.sort !== "rank") query.set("sort", opts.sort);
   if (opts.more && opts.more > 1) query.set("more", String(opts.more));
   return `/?${query.toString()}#browse`;
 }
@@ -188,7 +185,6 @@ export function SampleInstrumentBrowse({
   const topCampus = useMemo(() => {
     return [...campuses].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))[0] ?? null;
   }, [campuses]);
-  const topSector = useMemo(() => sectorMix(boardCompanies)[0] ?? null, [boardCompanies]);
   /** Continued-view insight: matching companies with ≥1 stored signal (not pagination). */
   const signaledMatch = useMemo(
     () => boardCompanies.filter((c) => (c.signals ?? 0) > 0).length,
@@ -197,13 +193,6 @@ export function SampleInstrumentBrowse({
   /** Quiet matching companies (no stored signal) — insight, not pagination. */
   const quietMatch = boardCompanies.length - signaledMatch;
   const sliceInsight = useMemo(() => endSliceInsight(cards), [cards]);
-  const contentsInsight = useMemo(() => contentsPageInsight(boardCompanies), [boardCompanies]);
-  /** Sitewide campus plate: founders metric (Penn 757 / Stanford 300 / MIT 238). */
-  const deskConstellation = useMemo(
-    () => campusFoundersAtlasRows(campuses, 3, shortCampusLabel),
-    [campuses],
-  );
-  const topFoundersCampus = useMemo(() => campusFoundersTop(campuses, 1)[0] ?? null, [campuses]);
   /** Leaderboard podium: top-3 campuses by founders; signals = companies with signal on that desk. */
   const podiumRows = useMemo(() => {
     const signaledByCampus = new Map<string, number>();
@@ -249,24 +238,20 @@ export function SampleInstrumentBrowse({
       ? "border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] text-white"
       : "border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]";
 
-  const kicker = feed === "leaderboard" ? "Scout dispatch · signals" : "Scout dispatch · ledger";
-  const caption =
-    feed === "leaderboard"
-      ? total === 1
-        ? "company on the signal desk"
-        : "companies on the signal desk"
-      : total === 1
-        ? "company on the ledger"
-        : "companies on the ledger";
+  const kicker = feed === "leaderboard" ? "Signals" : "Companies";
+  const caption = total === 1 ? "company" : "companies";
   const subline =
-    feed === "leaderboard" ? "Ranked by recent signal weight" : "Sorted ledger · Scout Dispatch";
-
-  const wireLabel =
     feed === "leaderboard"
-      ? "Signal wire"
-      : pages > 1
-        ? "Ledger wire · continued"
-        : "Ledger wire";
+      ? "Ordered by how many signals are stored"
+      : sort === "recent"
+        ? "Newest signal first"
+        : sort === "name"
+          ? "Alphabetical"
+          : sort === "stage"
+            ? "Ordered by stage"
+            : "Ranked from signals, founders, programs, and stage";
+
+  const wireLabel = pages > 1 ? "More on this list" : "On this list";
 
   return (
     <div
@@ -285,19 +270,19 @@ export function SampleInstrumentBrowse({
             data-filters-index-hero=""
           >
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">
-              {feed === "leaderboard" ? "Facet index · signal desk" : "Facet index · ledger"}
+              {feed === "leaderboard" ? "Signals" : "Companies"}
             </p>
             <p className="mt-3 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
               {boardCompanies.length.toLocaleString("en-US")}
             </p>
-            <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies on this index</p>
+            <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">in this list</p>
             <p className="mt-3 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
               <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
               {" with a signal · "}
               <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
               {" with no signal"}
             </p>
-            <p className="mt-1.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">Facet map below · one index hero</p>
+            <p className="mt-1.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">Filters below</p>
           </div>
           {/* FacetRail is the browse-filters hero — atlas lives on sector-folio (browse-1440), not this rail. */}
           <div className="h-[min(58vh,560px)] pt-1" data-contents-facet-map="">
@@ -308,7 +293,7 @@ export function SampleInstrumentBrowse({
               onChange={commitFacet}
               index
               indexCount={boardCompanies.length}
-              caption={feed === "leaderboard" ? "Signal index" : "Ledger index"}
+              caption={feed === "leaderboard" ? "Signals" : "Companies"}
             />
           </div>
         </div>
@@ -347,82 +332,25 @@ export function SampleInstrumentBrowse({
                     </p>
                   </div>
                 </div>
-              ) : topSector ? (
-                <>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
-                    {pages > 1 ? "Scout ledger · signal desk" : "Scout ledger · top sector"}
-                  </p>
-                  <p
-                    className={`mt-1.5 font-mono font-bold text-[color:var(--fg,#0B0E17)] sm:mt-1 sm:leading-none sm:tracking-[-0.05em] ${
-                      pages > 1
-                        ? "text-[56px] leading-[0.9] tracking-[-0.06em] sm:text-[56px] lg:text-[64px]"
-                        : "text-[64px] leading-[0.88] tracking-[-0.06em] sm:text-[56px] lg:text-[44px]"
-                    }`}
-                  >
-                    <span className="text-[color:var(--ember,#D96B1C)]">
-                      {pages > 1
-                        ? signaledMatch.toLocaleString("en-US")
-                        : topSector.count.toLocaleString("en-US")}
-                    </span>
-                  </p>
-                  <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    {pages > 1 ? (
-                      <>
-                        with a stored signal
-                        {topSector.label ? (
-                          <>
-                            {" · "}
-                            {topSector.label}
-                            {" leads"}
-                          </>
-                        ) : null}
-                      </>
-                    ) : (
-                      <>
-                        {topSector.label}
-                        {campusName ? (
-                          <>
-                            {" · "}
-                            {campusName}
-                            {" · "}
-                            <Link href={clearCampusHref} className="text-[color:var(--ember,#D96B1C)] hover:underline">
-                              Clear
-                            </Link>
-                          </>
-                        ) : null}
-                      </>
-                    )}
-                  </p>
-                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-ledger-showing-hero="">
-                    {pages > 1 ? (
-                      <>
-                        {"Showing "}
-                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
-                        {" of "}
-                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
-                        {" matching · "}
-                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{quietMatch.toLocaleString("en-US")}</span>
-                        {" with no signal"}
-                      </>
-                    ) : (
-                      <>
-                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                        {" with signal · "}
-                        <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
-                        {" with no signal · "}
-                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
-                        {" on page"}
-                      </>
-                    )}
-                  </p>
-                </>
               ) : (
                 <>
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
                   <p className="mt-1.5 font-mono text-[64px] font-bold leading-[0.88] tracking-[-0.06em] text-[color:var(--fg,#0B0E17)] sm:mt-1 sm:text-[56px] sm:leading-none sm:tracking-[-0.05em] lg:text-[64px]">
                     <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
                   </p>
-                  <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{caption}</p>
+                  <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                    {caption}
+                    {campusName ? (
+                      <>
+                        {" · "}
+                        {campusName}
+                        {" · "}
+                        <Link href={clearCampusHref} className="text-[color:var(--ember,#D96B1C)] hover:underline">
+                          Clear
+                        </Link>
+                      </>
+                    ) : null}
+                  </p>
                   <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{subline}</p>
                 </>
               )}
@@ -432,8 +360,9 @@ export function SampleInstrumentBrowse({
               {feed === "directory"
                 ? (
                     [
+                      ["rank", "Rank"],
+                      ["recent", "Newest"],
                       ["name", "Name"],
-                      ["recent", "Recent"],
                       ["stage", "Stage"],
                     ] as const
                   ).map(([id, label]) => (
@@ -473,32 +402,6 @@ export function SampleInstrumentBrowse({
               </p>
             </div>
           ) : null}
-          {feed === "directory" && pages <= 1 && contentsInsight ? (
-            <div
-              className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-4 py-7 before:absolute before:inset-y-0 before:left-0 before:w-[4px] before:bg-[color:var(--ember,#D96B1C)]"
-              data-mobile-page-insight=""
-              data-browse-mobile-hero=""
-            >
-              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--ember,#D96B1C)]">
-                Newest sector · ledger
-              </p>
-              <p className="mt-4 font-mono text-[64px] font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">
-                {contentsInsight!.signaled.toLocaleString("en-US")}
-              </p>
-              <p className="mt-3 text-[18px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                {contentsInsight!.label}
-              </p>
-              <p className="mt-3 font-mono text-[14px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">
-                {contentsInsight!.detail}
-              </p>
-              <p className="mt-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                <span className="font-bold text-[color:var(--ember,#D96B1C)]">
-                  {contentsInsight!.figure.toLocaleString("en-US")}
-                </span>
-                {" newest in window · page lead"}
-              </p>
-            </div>
-          ) : null}
           {feed === "directory" ? (
             <div
               className="flex w-full overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30"
@@ -508,8 +411,9 @@ export function SampleInstrumentBrowse({
             >
               {(
                 [
+                  ["rank", "Rank"],
+                  ["recent", "Newest"],
                   ["name", "Name"],
-                  ["recent", "Recent"],
                   ["stage", "Stage"],
                 ] as const
               ).map(([id, label], i) => {
@@ -535,67 +439,7 @@ export function SampleInstrumentBrowse({
           {/* Secondary sector strips culled — mobile page-1 owns the newest-insight hero alone. */}
         </div>
 
-        {/* Desk mid-pack: distinct dominant beats — chronograph supports (mobile keep hero compose). */}
-        {feed === "directory" && pages <= 1 ? (
-          <div className="mb-4 hidden space-y-3 lg:block" data-desk-browse-dominant="sector-folio">
-            <div
-              className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
-              data-sector-folio-desk=""
-            >
-              <div className="flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5">
-                <div className="min-w-0">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Sector folio · matching</p>
-                  {contentsInsight ? (
-                    <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{contentsInsight.detail}</span>
-                      {" · "}
-                      {contentsInsight.label}
-                    </p>
-                  ) : null}
-                </div>
-                <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                  {boardCompanies.length.toLocaleString("en-US")}
-                  {" on Contents"}
-                </p>
-              </div>
-              <ol className="divide-y divide-[color:var(--line,#E1E5EF)]">
-                {sectorMix(boardCompanies).slice(0, 3).map((sec, i) => (
-                  <li key={sec.id}>
-                    <Link
-                      href={browseHref({ feed, sector: sec.id, kind, campus, q: query, sort })}
-                      className="flex items-center gap-3 px-3.5 py-3.5 hover:bg-[color:var(--ember,#D96B1C)]/5"
-                    >
-                      <span className="w-10 shrink-0 text-right font-mono text-[22px] font-bold tabular-nums leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className="min-w-0 flex-1 truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{sec.label}</span>
-                      <span className="shrink-0 font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                        {sec.count.toLocaleString("en-US")}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-            </div>
-            {/* Atlas plate owns browse-1440 only — not fold-filters / browse-filters rail. */}
-            {deskConstellation.length ? (
-              <div data-contents-atlas-plate="" data-campus-metric="founders" className="mt-3">
-                <ScoutAtlasPlate
-                  kicker="Founders plate · Ledger"
-                  title="Campus founders on record"
-                  figure={topFoundersCampus?.founders}
-                  figureLabel={topFoundersCampus ? `${shortCampusLabel(topFoundersCampus.id, topFoundersCampus.name)} · #1 by founders` : undefined}
-                  rows={deskConstellation}
-                  caption="Ranked by founder names on record"
-                  tone="ember"
-                />
-              </div>
-            ) : null}
-                      </div>
-        ) : feed === "leaderboard" ? (
-          <div className="mb-3 hidden lg:block" data-desk-browse-dominant="rank-rail" data-desk-browse-chronograph="">
-                      </div>
-        ) : (
+        {feed === "directory" && pages > 1 ? (
           <div className="mb-6 hidden lg:block" data-desk-browse-dominant="chapter-window" data-chapter-window="">
             {/* Browse-more exclusive: chapter window — not atlas / chrono / next-to-scout / podium. */}
             <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--bg,#FFFFFF)] px-5 py-8 before:absolute before:inset-y-0 before:left-0 before:w-[4px] before:bg-[color:var(--cobalt,#2F4FD8)]">
@@ -615,7 +459,7 @@ export function SampleInstrumentBrowse({
               </p>
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* One strong ledger stage — map-stage language: cobalt frame, ruled rows.
             Browse-more (pages > 1): sticky row-range, section dividers, end mark. */}
@@ -634,7 +478,7 @@ export function SampleInstrumentBrowse({
                 <div className="flex items-end justify-between gap-3 px-3 py-2 sm:px-3.5">
                   <div className="min-w-0">
                     <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
-                      {feed === "leaderboard" ? "Signal desk continued" : "Ledger continued"}
+                      {feed === "leaderboard" ? "More signals" : "More companies"}
                     </p>
                     <p className="mt-0.5 hidden font-mono text-[10px] text-[color:var(--fg-3,#5C647A)] sm:block">Section rules every 14 rows · end mark below</p>
                     <p className="mt-0.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)] sm:hidden">
@@ -759,7 +603,7 @@ export function SampleInstrumentBrowse({
           </div>
         ) : pages > 1 ? (
           <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--fg-3,#5C647A)]">
-            Full ledger on desk
+            All companies shown
           </p>
         ) : null}
 
@@ -801,7 +645,7 @@ export function SampleInstrumentBrowse({
               companies={boardCompanies}
               compact
               surface={wireSurface}
-              hideSector={pages > 1 && feed === "directory"}
+              hideSector={feed === "directory"}
             />
           </div>
         </div>
@@ -812,7 +656,7 @@ export function SampleInstrumentBrowse({
         count={boardCompanies.length}
         caption={feed === "leaderboard" ? "Narrow the signal desk" : "Narrow the ledger"}
         tone="ember"
-        kicker={feed === "leaderboard" ? "Signal filters" : "Ledger filters"}
+        kicker="Filters"
         observe="#browse"
       />
 
@@ -824,19 +668,19 @@ export function SampleInstrumentBrowse({
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--ember,#D96B1C)]">
-                    Facet index · ledger
+                    Companies
                   </p>
                   <p className="mt-3 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
                     {boardCompanies.length.toLocaleString("en-US")}
                   </p>
-                  <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies on this index</p>
+                  <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">in this list</p>
                   <p className="mt-3 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
                     {" with a signal · "}
                     <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
                     {" with no signal"}
                   </p>
-                  <p className="mt-1.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">Facet map below · one index hero</p>
+                  <p className="mt-1.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">Filters below</p>
                 </div>
                 <button
                   type="button"
@@ -931,6 +775,9 @@ function LedgerRow({
             {subtitle}
           </p>
         ) : null}
+        <p className="mt-1 text-[12px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-why-here="">
+          Why it&apos;s here: {whyItsHere(card)}
+        </p>
         {(card.foundedYear != null || card.primaryProgram || (card.founders?.length ?? 0) > 0) ? (
           <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "line-clamp-2" : "truncate"}`} data-card-facts="">
             {card.foundedYear != null ? (
