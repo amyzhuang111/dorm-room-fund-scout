@@ -24,7 +24,7 @@ export interface DirectoryCard {
   signals: number;
   /** People linked to this company. Used for search, not a score. */
   founders: string[];
-  /** Latest signal date as YYYY-MM-DD, with missing parts as 00. Empty when none are stored. */
+  /** Latest source_date as YYYY-MM-DD (missing parts as 00). Null when no source_date is stored — never created_at. */
   latestSignalAt: string | null;
   /** A logo or favicon URL already stored for this company. Never invented. */
   logoUrl: string | null;
@@ -295,15 +295,16 @@ export function buildDirectoryFromDb(): DirectoryData {
     foundersByProject.set(row.project_id, list);
   }
 
+  // Peak / chronograph: source_date only. Never fall back to created_at (scrape day).
   const latestSignal = new Map<string, string>();
-  for (const row of db.prepare(`SELECT project_id, source_date, created_at FROM signals`).all() as {
+  for (const row of db.prepare(`SELECT project_id, source_date FROM signals`).all() as {
     project_id: string;
     source_date: string | null;
-    created_at: string;
   }[]) {
-    const key = signalSortKey(row.source_date) || signalSortKey(row.created_at);
+    const key = signalSortKey(row.source_date);
+    if (!key) continue;
     const prev = latestSignal.get(row.project_id);
-    if (key && (!prev || key > prev)) latestSignal.set(row.project_id, key);
+    if (!prev || key > prev) latestSignal.set(row.project_id, key);
   }
 
   const hqByProject = new Map<string, string>();

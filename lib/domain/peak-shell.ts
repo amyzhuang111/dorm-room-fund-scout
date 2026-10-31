@@ -17,7 +17,7 @@ export type PeakShell = {
 
 type SignalRow = { latestSignalAt?: string | null; signals?: number };
 
-/** Server + client: peak share math from directory cards (real latestSignalAt). */
+/** Server + client: peak share from directory cards. latestSignalAt is source_date only. */
 export function buildPeakShell(rows: SignalRow[]): PeakShell | null {
   const months = new Map<string, number>();
   let dated = 0;

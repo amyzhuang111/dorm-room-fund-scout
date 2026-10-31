@@ -132,7 +132,7 @@ function listAllSignals(): SignalRow[] {
               (SELECT src.name FROM claims c JOIN sources src ON src.id = c.source_id WHERE c.id IN (SELECT value FROM json_each(s.claim_ids_json)) ORDER BY c.retrieved_at DESC LIMIT 1) as source_name,
               (SELECT c.source_url FROM claims c WHERE c.id IN (SELECT value FROM json_each(s.claim_ids_json)) AND c.source_url IS NOT NULL AND c.source_url != '' ORDER BY c.retrieved_at DESC LIMIT 1) as source_url
        FROM signals s JOIN projects p ON p.id = s.project_id
-       ORDER BY COALESCE(s.source_date, s.created_at) DESC`
+       ORDER BY (s.source_date IS NULL OR trim(s.source_date) = ''), s.source_date DESC, s.created_at DESC`
     )
     .all() as SignalRow[];
 }
@@ -171,11 +171,16 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
   const press = sp.type === "press" ? listNews({ limit: 40 }) : [];
   const connectorsOn = sp.connectors === "1";
   const basePath = "/signals";
+  const withSourceDate = allSignals.filter((s) => Boolean(s.source_date && s.source_date.trim())).length;
+  const withoutSourceDate = allSignals.length - withSourceDate;
   return (
     <div className="mx-auto max-w-[1100px] px-6 pb-16 pt-10">
       <p className="page-eyebrow">Activity</p>
       <h1 className="page-title">Signals</h1>
       <p className="page-subtitle">Recent company and founder activity, by date, for every campus that has a stored signal. Top connectors ranks people and clubs by verified, tiered founders they are linked to.</p>
+      <p className="mt-2 font-mono text-[11px] tabular-nums text-muted">
+        {withSourceDate.toLocaleString("en-US")} with a source date · {withoutSourceDate.toLocaleString("en-US")} indexed without one · listed source date first
+      </p>
 
       <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
         <Link

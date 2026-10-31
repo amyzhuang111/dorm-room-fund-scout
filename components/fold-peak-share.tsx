@@ -8,8 +8,8 @@ export type { PeakShell, PeakBar } from "@/lib/domain/peak-shell";
 export { buildPeakShell } from "@/lib/domain/peak-shell";
 
 /**
- * Fold Peak share — single typographic hero (369/635). Bars are visual only
- * (no third 369 label). No data-scout-chronograph (DOM chronographGoneFromHome).
+ * Fold Peak share — typographic hero from source_date only. Bars are visual only
+ * (no third peak label). No data-scout-chronograph (DOM chronographGoneFromHome).
  * Accepts SSR shell so first paint reserves exact height (CLS ≈ 0).
  */
 export type FoldTopCampus = { id: string; name: string; founders: number };
@@ -44,7 +44,7 @@ export function FoldPeakShare({
 
   return (
     <div className="mb-0" data-fold-peak-identity="" data-fold-baseline="8" data-fold-peak-shell={live ? "live" : "ssr"}>
-      {/* Desk: one 369 hero + quiet bars (no count labels) + Scout edition · reserved min height */}
+      {/* Desk: peak hero + quiet bars (no count labels) + Scout edition · reserved min height */}
       <div className="mb-1 hidden min-h-[14rem] lg:block" data-fold-peak-desk="">
         <div
           className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-end gap-5 border-b border-[color:var(--line,#E1E5EF)] pb-3"

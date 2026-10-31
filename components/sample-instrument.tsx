@@ -940,11 +940,11 @@ export function newestSectorMix(
 }
 
 /**
- * Build chronograph bars from latestSignalAt.
+ * Build chronograph bars from latestSignalAt (source_date only).
  * Bars are the last `limit` real months through throughYm. Earlier months and
- * year-only dates stay off the bars (universe caption: 13 earlier, 34 undated).
+ * year-only dates stay off the bars (caption: 13 earlier, 34 year-only).
  * Month bars sum to inWindow. dated = inWindow + earlierValid + undatedMonth
- * (universe 588 + 13 + 34 = 635).
+ * (source_date universe 223 + 13 + 34 = 270; peak Apr 2026 = 109).
  */
 export function signalChronographDetail(
   companies: FacetCompany[],
@@ -1076,7 +1076,7 @@ export function ScoutChronograph({
   datedLabel?: string;
   /** Page-specific real-data reading under the peak caption. */
   reading?: string;
-  /** Unfiltered filter rails can lead with month-unknown (honest non-369 beat). */
+  /** Unfiltered filter rails can lead with month-unknown (honest non-peak beat). */
   lead?: "peak" | "earlier" | "monthUnknown";
 }) {
   const detail = useMemo(() => signalChronographDetail(companies), [companies]);

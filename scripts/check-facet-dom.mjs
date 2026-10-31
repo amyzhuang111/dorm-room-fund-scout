@@ -11,12 +11,12 @@ const EXPECTED_FOUNDERS_LISTED = 2766;
 const EXPECTED_FOUNDERS_INDEXED = 3068;
 const EXPECTED_CAMPUSES_ON_MAP = 74;
 /** Chronograph honesty: window + earlierValid + undatedMonth = dated (verified from loadDirectory). */
-const EXPECTED_CHRONO_WINDOW = 588;
+const EXPECTED_CHRONO_WINDOW = 223;
 const EXPECTED_CHRONO_EARLIER = 13; // pre-window with real month
 const EXPECTED_CHRONO_MONTH_UNKNOWN = 34; // e.g. 2026-00-00 — year only, not "earlier"
-const EXPECTED_CHRONO_DATED = 635; // 588 + 13 + 34
-const EXPECTED_CHRONO_PEAK = 369;
-const EXPECTED_CHRONO_PEAK_MONTH = "2026-09";
+const EXPECTED_CHRONO_DATED = 270; // 223 + 13 + 34 (source_date only)
+const EXPECTED_CHRONO_PEAK = 109;
+const EXPECTED_CHRONO_PEAK_MONTH = "2026-04";
 /** Programs[] membership — every on-page YC universe figure must match (labelled in YC). */
 const EXPECTED_YC_MEMBERSHIP = 564;
 /** Campus plates sitewide: founder names on record (not signals / not companies). */
