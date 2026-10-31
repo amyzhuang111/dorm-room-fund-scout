@@ -696,7 +696,7 @@ export function SampleInstrumentBrowse({
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
           <button type="button" className="absolute inset-0 bg-slate-900/25" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
           {/* Partial-height sheet · leaves the signals chart hero readable above */}
-          <div className="absolute inset-x-0 bottom-0 flex max-h-[min(58dvh,480px)] flex-col overflow-hidden rounded-t-xl border border-[color:var(--cobalt,#2F4FD8)]/20 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-12px_36px_rgba(15,23,42,0.14)]">
+          <div className="absolute inset-x-0 bottom-0 flex max-h-[min(62dvh,520px)] flex-col overflow-hidden rounded-t-xl border border-[color:var(--cobalt,#2F4FD8)]/20 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-12px_36px_rgba(15,23,42,0.14)]">
             <div className="flex justify-center pt-2" aria-hidden>
               <span className="h-1 w-9 rounded-full bg-[color:var(--line-strong,#C5CAD8)]" />
             </div>

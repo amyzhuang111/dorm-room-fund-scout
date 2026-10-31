@@ -636,12 +636,6 @@ export function FacetRail({
             ))}
           </FacetGroup>
         )}
-        <FacetGroup title="Flags" defaultOpen={!dense} dense={editorial}>
-          <FacetRow facet="flag" active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
-          {flags.map((item) => (
-            <FacetRow key={item.id} facet="flag" count={item.count} active={facets.flag === item.id} onClick={() => set({ flag: facets.flag === item.id ? null : item.id })} label={item.label} icon={FLAG_ICON[item.id]} />
-          ))}
-        </FacetGroup>
         <FacetGroup title="Founded year" defaultOpen dense={editorial}>
           <FacetRow
             facet="year"
@@ -670,6 +664,12 @@ export function FacetRail({
               />
             );
           })}
+        </FacetGroup>
+        <FacetGroup title="Flags" defaultOpen={!dense} dense={editorial}>
+          <FacetRow facet="flag" active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
+          {flags.map((item) => (
+            <FacetRow key={item.id} facet="flag" count={item.count} active={facets.flag === item.id} onClick={() => set({ flag: facets.flag === item.id ? null : item.id })} label={item.label} icon={FLAG_ICON[item.id]} />
+          ))}
         </FacetGroup>
         <FacetGroup title="HQ city" defaultOpen={!dense} dense={editorial}>
           <FacetRow facet="hq" count={baseCompanies.length} active={!facets.hqRegion} onClick={() => set({ hqRegion: null })} label="All" />
