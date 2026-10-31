@@ -228,16 +228,21 @@ await desk.waitForSelector('[data-globe-state="ready"]', { timeout: 45000 });
 const deskFold = await desk.evaluate(() => {
   const card = document.querySelector("[data-founder-card]");
   const map = document.querySelector("[data-dispatch-map-stage]");
+  const note = document.querySelector("[data-founder-count-note]");
   const text = document.body.innerText || "";
+  const noteText = (note?.textContent || "").replace(/\s+/g, " ").trim();
   const cr = card?.getBoundingClientRect();
   const mr = map?.getBoundingClientRect();
+  const dashRe = /[\u2014\u2013]/;
   return {
     cardTop: cr?.top ?? 9999,
     cardBottom: cr?.bottom ?? 9999,
     mapTop: mr?.top ?? 9999,
     mapBottom: mr?.bottom ?? 9999,
     cardAboveFold: (cr?.top ?? 9999) < 900 && (cr?.bottom ?? 9999) > 0,
-    emDashInUi: /[\u2014\u2013]/.test(text),
+    emDashInUi: dashRe.test(text),
+    emDashInFounderNote: dashRe.test(noteText),
+    founderNote: noteText,
   };
 });
 await desk.close();
@@ -258,6 +263,7 @@ const companiesLabels = await page.evaluate(() => {
     signalsLanded: Boolean(landed),
     signalMonths: months,
     signalsAside: (landed?.querySelector("[data-signals-landed-aside]")?.textContent || "").replace(/\s+/g, " ").trim(),
+    emDashInSignalsAside: /[\u2014\u2013]/.test((landed?.querySelector("[data-signals-landed-aside]")?.textContent || "")),
     peak: landed?.getAttribute("data-chrono-peak") || null,
     peakMonth: landed?.getAttribute("data-chrono-peak-month") || null,
     window: Number(landed?.getAttribute("data-chrono-window") || 0),
@@ -424,7 +430,11 @@ const report = {
     samplePillQuiet: founderHome.samplePillQuiet === true,
     mobileFoundersAboveMap: mobileOrder.filtersAboveMap && mobileOrder.cardAboveMap,
     deskFoundersAboveFold1440: deskFold.cardAboveFold === true,
-    noEmDashInUi: deskFold.emDashInUi === false && companiesLabels.emDashInUi === false,
+    noEmDashInUi:
+      deskFold.emDashInUi === false &&
+      deskFold.emDashInFounderNote === false &&
+      companiesLabels.emDashInUi === false &&
+      companiesLabels.emDashInSignalsAside === false,
     statusBuckets:
       statusActive === 2497 && statusAcquired === 8 && statusClosed === 8 && statusActive + statusAcquired + statusClosed === TOTAL,
     moreObvious: moreLabelsBefore.some((l) => /more sectors/i.test(l)) && moreLabelsBefore.some((l) => /more cities/i.test(l)),

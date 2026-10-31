@@ -50,6 +50,10 @@ assert.equal(
   whyWorthALook(lead({ id: "yc", name: "Only YC", programs: ["Penn Venture Lab", "Y Combinator", "a16z Speedrun"] })),
   "Y Combinator",
 );
+assert.equal(
+  whyWorthALook(lead({ id: "weak", name: "Weak+YC", programs: ["Y Combinator"], signalTypes: ["demo"] })),
+  "Y Combinator",
+);
 
 const byProgram = filterFounders(rows, { text: "combinator 2026" });
 assert.deepEqual(byProgram.map((row) => row.name), ["Emir Karabeg"]);

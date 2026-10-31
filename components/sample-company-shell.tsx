@@ -113,7 +113,7 @@ export function SampleCompanyShell({
           {dossier?.name ? (
             <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
               <div className="min-w-0 flex-1">
-                <p className="text-[44px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[48px] lg:text-[56px]">
+                <p className="text-[32px] font-bold leading-[1.05] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[36px] lg:text-[40px]">
                   {dossier.name}
                 </p>
                 <p className="mt-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:text-[13px]">
@@ -174,7 +174,7 @@ export function SampleCompanyShell({
               <div className="hidden shrink-0 gap-4 text-right sm:flex sm:gap-6" data-dossier-wire-count="">
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Campus wire</p>
-                  <p className="mt-1.5 font-mono text-[56px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] lg:text-[64px]">
+                  <p className="mt-1 font-mono text-[32px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
                     {wireCount.toLocaleString("en-US")}
                   </p>
                   <p className="mt-1 max-w-[14rem] text-right text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
@@ -193,7 +193,7 @@ export function SampleCompanyShell({
                 {sectorPeers && campusPeers && sectorPeers.length !== campusPeers.length ? (
                   <div data-dossier-sector-figure="">
                     <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Sector peers</p>
-                    <p className="mt-1.5 font-mono text-[56px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--fg,#0B0E17)] lg:text-[64px]">
+                    <p className="mt-1 font-mono text-[32px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
                       {sectorPeers.length.toLocaleString("en-US")}
                     </p>
                     <p className="mt-1.5 max-w-[10rem] text-right font-mono text-[10px] leading-snug text-[color:var(--fg-3,#5C647A)]">
@@ -218,7 +218,7 @@ export function SampleCompanyShell({
             </div>
           ) : (
             <>
-              <p className="mt-1 font-mono text-[56px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)] sm:text-[48px]">
+              <p className="mt-1 font-mono text-[32px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
                 <span className="text-[color:var(--ember,#D96B1C)]">{filtered.length.toLocaleString("en-US")}</span>
               </p>
               <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies in this dispatch</p>
@@ -254,28 +254,28 @@ export function SampleCompanyShell({
           </Link>
           <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
         </div>
-        <div className="mb-10 mt-1 sm:hidden" data-dossier-timeline="" data-mobile-chrono-identity="" data-company-mobile-hero="">
+        <div className="mb-5 mt-1 sm:hidden" data-dossier-timeline="" data-mobile-chrono-identity="" data-company-mobile-hero="">
           <div
-            className="relative overflow-hidden border-2 border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[4px] before:bg-[color:var(--cobalt,#2F4FD8)]"
+            className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]"
             data-dossier-spread-mobile=""
           >
-            <div className="border-b border-[color:var(--line,#E1E5EF)] px-4 py-4 pl-5">
-              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Dossier timeline</p>
+            <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3 pl-4">
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Dossier timeline</p>
               <p className="mt-0.5 truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
                 {dossier?.name ?? "Company"}
                 {dossier?.campus ? ` · ${campusShort}` : ""}
               </p>
             </div>
             <div className="grid grid-cols-2 gap-0 border-b border-[color:var(--line,#E1E5EF)]">
-              <div className="border-r border-[color:var(--line,#E1E5EF)] px-4 py-5 pl-5">
+              <div className="border-r border-[color:var(--line,#E1E5EF)] px-3.5 py-3 pl-4">
                 <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founded</p>
-                <p className="mt-2 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+                <p className="mt-1.5 font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
                   {dossier?.year != null ? dossier.year : "-"}
                 </p>
               </div>
-              <div className="px-4 py-5">
+              <div className="px-3.5 py-3">
                 <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">On campus wire</p>
-                <p className="mt-2 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">
+                <p className="mt-1.5 font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
                   {wireCount.toLocaleString("en-US")}
                 </p>
               </div>

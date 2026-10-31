@@ -453,9 +453,9 @@ export function SampleInstrumentBrowse({
         {feed === "directory" && pages > 1 ? (
           <div className="mb-6 hidden lg:block" data-desk-browse-dominant="chapter-window" data-chapter-window="">
             {/* Browse-more exclusive: chapter window · not atlas / chrono / next-to-scout / podium. */}
-            <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--bg,#FFFFFF)] px-5 py-8 before:absolute before:inset-y-0 before:left-0 before:w-[4px] before:bg-[color:var(--cobalt,#2F4FD8)]">
+            <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-4 py-4 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]">
               <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Chapter window</p>
-              <p className="mt-4 font-mono text-[72px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
+              <p className="mt-2 font-mono text-[36px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
                 {cards.length.toLocaleString("en-US")}
               </p>
               <p className="mt-3 text-[20px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies loaded on this chapter</p>

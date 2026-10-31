@@ -215,7 +215,7 @@ export function ScoutAtlasPlate({
         <p className={`font-mono text-[10px] uppercase tracking-[0.16em] ${kickerClass}`}>{kicker}</p>
         <p className="mt-1.5 text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[18px]">{title}</p>
         {figure != null ? (
-          <p className="mt-2.5 font-mono text-[52px] font-bold leading-[0.88] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
+          <p className="mt-1.5 font-mono text-[28px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
             {typeof figure === "number" ? figure.toLocaleString("en-US") : figure}
           </p>
         ) : null}
@@ -586,7 +586,7 @@ export function FacetRail({
             </p>
             {(index || sheet) && indexCount != null ? (
               <p
-                className={`mt-1.5 font-mono font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] ${index ? "text-[44px]" : "text-[36px]"}`}
+                className={`mt-1.5 font-mono font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] ${index ? "text-[28px]" : "text-[24px]"}`}
                 data-facet-figure=""
               >
                 {indexCount.toLocaleString("en-US")}
