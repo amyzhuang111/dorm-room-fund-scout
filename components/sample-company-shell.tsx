@@ -287,9 +287,7 @@ export function SampleCompanyShell({
               {wireUnit}
               {(dossier?.founders?.length ?? 0) > 0 ? (
                 <>
-                  <span className="mx-1.5 text-[color:var(--line-strong,#C5CAD8)]" aria-hidden>
-                    ·
-                  </span>
+                  {" · "}
                   <span className="font-bold text-[color:var(--fg,#0B0E17)]">{dossier!.founders!.length.toLocaleString("en-US")}</span>
                   {dossier!.founders!.length === 1 ? " founder on record" : " founders on record"}
                 </>
