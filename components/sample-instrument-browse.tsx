@@ -210,6 +210,11 @@ export function SampleInstrumentBrowse({
     return rows.map((r) => ({ ...r, peak: r.count === max }));
   }, [cards]);
   const pageSignalBarsMax = Math.max(1, ...pageSignalBars.map((b) => b.count));
+  const pageSignaled = useMemo(
+    () => cards.filter((c) => (c.signals ?? 0) > 0).length,
+    [cards],
+  );
+  const pagePeakMonth = pageSignalBars.find((b) => b.peak)?.key ?? "";
   const sliceInsight = useMemo(() => endSliceInsight(cards), [cards]);
   /** Leaderboard podium: top-3 campuses by founders; signals = companies with signal on that desk. */
   const podiumRows = useMemo(() => {
@@ -406,44 +411,50 @@ export function SampleInstrumentBrowse({
           {/* Leaderboard podium mounts inside data-ledger-stage (shot frames that). Browse-more keeps a folio insight, not a shared ticket. */}
           {feed === "directory" && pages > 1 ? (
             <div
-              className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]"
+              className="relative scroll-mt-14 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-3.5 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]"
               data-mobile-continued-mast=""
               data-chapter-window=""
               data-chapter-peak=""
             >
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Signals on this page</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">On this page</p>
               <div className="mt-2 flex items-end justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-                    {signaledMatch.toLocaleString("en-US")}
+                  <p className="font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+                    {pageSignaled.toLocaleString("en-US")}
+                    <span className="ml-1 font-mono text-[16px] font-semibold tracking-tight text-[color:var(--fg-2,#3F465C)]">
+                      / {cards.length.toLocaleString("en-US")}
+                    </span>
                   </p>
-                  <p className="mt-2 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    of {cards.length.toLocaleString("en-US")} companies have a signal
+                  <p className="mt-1.5 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                    {pagePeakMonth
+                      ? `Peak ${pagePeakMonth.slice(5)} among the ${cards.length} loaded`
+                      : `${pageSignaled} carry a dated signal`}
                   </p>
                 </div>
                 {pageSignalBars.length > 0 ? (
-                  <div className="flex h-14 items-end gap-1" data-page-signal-bars="" aria-hidden>
+                  <div className="flex h-14 items-end gap-0.5" data-page-signal-bars="" aria-hidden>
                     {pageSignalBars.map((bar) => (
                       <span
                         key={bar.key}
                         title={`${bar.key}: ${bar.count}`}
-                        className={`w-2 rounded-sm ${bar.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/45"}`}
-                        style={{ height: `${Math.max(12, Math.round((bar.count / pageSignalBarsMax) * 52))}px` }}
+                        className={`w-2.5 rounded-sm ${bar.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/45"}`}
+                        style={{ height: `${Math.max(10, Math.round((bar.count / pageSignalBarsMax) * 52))}px` }}
                       />
                     ))}
                   </div>
-                ) : null}
+                ) : (
+                  <div className="flex h-14 w-16 items-end" data-page-signal-bars="empty" aria-hidden>
+                    <span className="w-full rounded-sm bg-[color:var(--cobalt,#2F4FD8)]/25" style={{ height: 28 }} />
+                  </div>
+                )}
               </div>
               {sliceInsight ? (
-                <p className="mt-3 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">
+                <p className="mt-2.5 text-[12px] leading-5 text-[color:var(--fg-2,#3F465C)]">
                   <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{sliceInsight.companyName}</span>
                   {" · "}
                   {sliceInsight.figure.toLocaleString("en-US")} {sliceInsight.figureUnit}
                 </p>
               ) : null}
-              <p className="mt-2 text-[12px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                {cards.length.toLocaleString("en-US")} of {total.toLocaleString("en-US")} loaded
-              </p>
             </div>
           ) : null}
           {feed === "directory" ? (
@@ -659,22 +670,22 @@ export function SampleInstrumentBrowse({
 
         {cards.length < total ? (
           <div
-            className={`mt-4 flex flex-wrap items-center gap-3 ${pages > 1 ? "border-t border-[color:var(--line,#E1E5EF)] pt-4" : ""}`}
+            className={`mt-3 flex flex-wrap items-center gap-2.5 ${pages > 1 ? "border-t border-[color:var(--line,#E1E5EF)]/70 pt-3" : ""}`}
             data-ledger-more-footer=""
           >
             <Link
               href={moreHref}
-              className={`inline-flex items-center rounded-sm border px-3 font-mono text-[11px] font-semibold hover:opacity-90 ${
+              className={`inline-flex items-center rounded-sm border px-3 font-mono text-[11px] font-medium hover:opacity-90 ${
                 pages > 1
-                  ? "h-7 border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg-2,#3F465C)]"
-                  : "h-8 border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] text-white"
+                  ? "h-7 border-[color:var(--line,#E1E5EF)]/80 bg-transparent text-[color:var(--fg-3,#5C647A)]"
+                  : "h-8 border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] text-white font-semibold"
               }`}
             >
               {pages > 1 ? "Load next page" : "Show more"}
             </Link>
-            <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing-next="">
+            <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]/90" data-ledger-showing-next="">
               {"Showing "}
-              <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
+              <span className="font-medium text-[color:var(--fg-2,#3F465C)]">{cards.length.toLocaleString("en-US")}</span>
               {" of "}
               {total.toLocaleString("en-US")}
             </p>

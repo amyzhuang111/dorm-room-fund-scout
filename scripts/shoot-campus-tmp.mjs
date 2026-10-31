@@ -223,7 +223,14 @@ const browser = await chromium.launch({ headless: true });
   const chapterM = page.locator("[data-chapter-window]").first();
   if (await chapterM.count()) {
     await chapterM.evaluate((el) => el.scrollIntoView({ block: "start" }));
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(200);
+    await page.evaluate(() => {
+      const el = document.querySelector("[data-chapter-peak], [data-chapter-window]");
+      if (!el) return;
+      const top = el.getBoundingClientRect().top;
+      if (top < 56) window.scrollBy(0, top - 64);
+    });
+    await page.waitForTimeout(250);
   }
   await page.mouse.move(0, 0);
   await page.evaluate(() => {
