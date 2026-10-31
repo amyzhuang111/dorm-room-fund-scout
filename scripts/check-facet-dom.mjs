@@ -121,11 +121,13 @@ await page.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 
 await page.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
 await page.waitForSelector("[data-founder-search]", { timeout: 20000 });
 await page.waitForSelector("[data-founder-card]", { timeout: 20000 });
+await page.waitForSelector('[data-globe-state="ready"]', { timeout: 45000 });
 await page.waitForTimeout(400);
 
 const founderHome = await page.evaluate(() => {
   const search = document.querySelectorAll("[data-founder-search] input");
   const text = document.body.innerText || "";
+  const globe = document.querySelector("[data-dispatch-map-stage]");
   return {
     searchInputs: search.length,
     results: Boolean(document.querySelector("[data-founder-results]")),
@@ -133,6 +135,12 @@ const founderHome = await page.evaluate(() => {
     why: (document.querySelector("[data-why-worth]")?.textContent || "").replace(/\s+/g, " ").trim(),
     browse: Boolean(document.querySelector("#browse")),
     demoWord: /\bdemo\b/i.test(text),
+    globeState: globe?.getAttribute("data-globe-state") || null,
+    loadingGlobeCopy: /loading globe/i.test(globe?.textContent || ""),
+    earUnkStub: /\bEar\b/.test(text) || /\bUnk\b/.test(text),
+    jargon: /\b(chronograph|constellation|folio|wireframe|LCP|TTFB)\b/i.test(text),
+    filters: Boolean(document.querySelector("[data-founder-filters]")),
+    chronograph: Boolean(document.querySelector("[data-scout-chronograph]")),
   };
 });
 await page.locator("[data-campus-founders-top] button").first().click();
@@ -177,6 +185,14 @@ await page.goto(`${BASE}/companies?sample=1`, { waitUntil: "networkidle", timeou
 await page.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
 await page.waitForTimeout(400);
 const chrono = await readChrono(page);
+const companiesLabels = await page.evaluate(() => {
+  const text = document.body.innerText || "";
+  return {
+    earUnkStub: /\bEar\b/.test(text) || /\bUnk\b/.test(text),
+    jargon: /\b(chronograph|constellation|folio|wireframe|LCP|TTFB)\b/i.test(text),
+    chronoPresent: Boolean(document.querySelector("[data-scout-chronograph]")),
+  };
+});
 await openFilters(page);
 await page.waitForTimeout(400);
 const picked = await pickRail(page);
@@ -292,6 +308,7 @@ const report = {
   statusSumBuckets: (statusActive ?? 0) + (statusAcquired ?? 0) + (statusClosed ?? 0),
   flags: flagCounts,
   chrono,
+  companiesLabels,
   ok: {
     year: year.sum === TOTAL,
     status: status.sum === TOTAL,
@@ -322,6 +339,26 @@ const report = {
     campusFoundersTopPennStanfordMit: campusFoundersTopOk,
     ycMembershipEverywhere: ycMembershipOk,
     ycNoPrimary561Leak: ycPrimaryLeak.length === 0,
+    globeReadyNoSkeleton: founderHome.globeState === "ready" && founderHome.loadingGlobeCopy === false,
+    founderFiltersPresent: founderHome.filters === true,
+    earUnkRemoved:
+      founderHome.earUnkStub === false &&
+      companiesLabels.earUnkStub === false &&
+      (chrono == null || chrono.truncatedStub === false),
+    plainLabelsNoJargon: founderHome.jargon === false && companiesLabels.jargon === false,
+    chronographGoneFromHome: founderHome.chronograph === false,
+    // Chronograph left the product surface; if remounted, honesty counts must hold.
+    chronographHonestyIfPresent:
+      chrono == null ||
+      (chrono.peak === EXPECTED_CHRONO_PEAK &&
+        chrono.peakMonth === EXPECTED_CHRONO_PEAK_MONTH &&
+        chrono.inWindow === EXPECTED_CHRONO_WINDOW &&
+        chrono.earlier === EXPECTED_CHRONO_EARLIER &&
+        chrono.monthUnknown === EXPECTED_CHRONO_MONTH_UNKNOWN &&
+        chrono.dated === EXPECTED_CHRONO_DATED &&
+        chrono.inWindow + chrono.earlier + chrono.monthUnknown === chrono.dated &&
+        chrono.earlierBar === false &&
+        chrono.unknownBar === false),
   },
 };
 

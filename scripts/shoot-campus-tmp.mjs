@@ -15,52 +15,37 @@ async function waitDirectory(page) {
   await page.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 }).catch(() => {});
 }
 
-async function openFilters(page) {
-  const btn = page.getByRole("button", { name: /^Filters$/ });
-  if ((await btn.count()) && (await btn.first().isVisible().catch(() => false))) {
-    await btn.first().click();
-    await page.waitForTimeout(600);
+/** Fold shots must wait for MapLibre idle → data-globe-state=ready (no LOADING GLOBE). */
+async function waitGlobeIdle(page) {
+  await page.waitForSelector('[data-globe-state="ready"]', { timeout: 45000 });
+  // One extra paint after ready so cream fill + dots settle.
+  await page.waitForTimeout(400);
+  const state = await page.evaluate(() => {
+    const stage = document.querySelector("[data-dispatch-map-stage]");
+    const text = (stage?.textContent || "").replace(/\s+/g, " ");
+    return {
+      attr: stage?.getAttribute("data-globe-state") || null,
+      loadingCopy: /loading globe/i.test(text),
+    };
+  });
+  if (state.attr !== "ready" || state.loadingCopy) {
+    throw new Error(`globe not idle for shot: ${JSON.stringify(state)}`);
   }
 }
 
 async function openBrowseFilters(page) {
   const browse = page.locator("#browse");
   await browse.scrollIntoViewIfNeeded().catch(() => {});
-  // Fold-language Filters control (desk swaps Wire↔rail; mobile opens sheet).
   const filters = browse.getByRole("button", { name: /^Filters$/ }).first();
   if ((await filters.count()) && (await filters.isVisible().catch(() => false))) {
     await filters.click();
     await page.waitForTimeout(700);
-    const sheet = page.getByRole("dialog", { name: /Scout filters/i });
-    if (await sheet.count()) {
-      const rail = sheet.locator('[data-facet-rail="scout"]');
-      if (await rail.count()) {
-        await rail.evaluate((el) => {
-          const scroller = el.querySelector(".overflow-y-auto") || el;
-          // Keep Status pin in view; nudge to show year rhythm under Flags.
-          scroller.scrollTop = Math.min(70, scroller.scrollHeight);
-        }).catch(() => {});
-      }
-      await page.waitForTimeout(400);
-    }
     return;
   }
-  // Dock kickers vary per page (Ledger / Map / Dossier / Scout filters).
   const openBtn = browse.getByRole("button", { name: /filters/i }).first();
   if ((await openBtn.count()) && (await openBtn.isVisible().catch(() => false))) {
     await openBtn.click();
     await page.waitForTimeout(700);
-    const sheet = page.getByRole("dialog", { name: /Scout filters/i });
-    if (await sheet.count()) {
-      const rail = sheet.locator('[data-facet-rail="scout"]');
-      if (await rail.count()) {
-        await rail.evaluate((el) => {
-          const scroller = el.querySelector(".overflow-y-auto") || el;
-          scroller.scrollTop = Math.min(70, scroller.scrollHeight);
-        }).catch(() => {});
-      }
-      await page.waitForTimeout(400);
-    }
     return;
   }
   const dock = page.locator("[data-mobile-filter-dock] button").first();
@@ -79,6 +64,11 @@ fs.writeFileSync(
       out: OUT,
       gitHead: process.env.GIT_HEAD || null,
       buildId: process.env.BUILD_ID || null,
+      routes: {
+        home: "/?sample=1",
+        companies: "/companies?sample=1",
+        signals: "/companies?sample=1&feed=leaderboard",
+      },
     },
     null,
     2,
@@ -91,37 +81,28 @@ const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
-  await page.waitForTimeout(4500);
-  // Peak-share typographic moment owns fold desk craft.
-  const peakShare = page.locator("[data-fold-peak-share]").first();
-  if (await peakShare.count()) {
-    await peakShare.evaluate((el) => el.scrollIntoView({ block: "start" }));
-    await page.waitForTimeout(300);
-    await page.evaluate(() => window.scrollBy(0, -56));
-    await page.waitForTimeout(200);
-  }
+  await page.waitForSelector("[data-founder-search]", { timeout: 20000 });
+  await waitGlobeIdle(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(200);
   await shot(page, "fold-1440");
-  await openFilters(page);
-  await page.waitForTimeout(500);
-  // Real filtered-slice hero: Founded in 2026 (213) — peak on this slice, not global 369.
-  const founded = page.locator('[data-facet-rail="scout"] [data-facet="flag"]').filter({ hasText: /Founded in 2026/i }).first();
-  if (await founded.count()) {
-    await founded.click({ force: true });
-    await page.waitForTimeout(900);
+
+  // Founder filters (program/sector/year/signal) — home, not browse facet rail.
+  const program = page.locator('[data-founder-filters] select').first();
+  if (await program.count()) {
+    await program.selectOption({ index: 1 }).catch(() => {});
+    await page.waitForTimeout(500);
   }
-  // Facet click can scroll the rail; pin chronograph hero back into the viewport.
-  const chrono = page.locator("[data-fold-chronograph]").first();
-  if (await chrono.count()) {
-    await chrono.evaluate((el) => el.scrollIntoView({ block: "start" }));
-    await page.waitForTimeout(200);
-    await page.evaluate(() => window.scrollBy(0, -72));
-    await page.waitForTimeout(300);
-  }
+  await page.locator("[data-campus-founders-top] button").first().click().catch(() => {});
+  await page.waitForTimeout(700);
+  await waitGlobeIdle(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
   await shot(page, "fold-filters-1440");
 
-  await page.goto(`${BASE}/?sample=1#browse`, { waitUntil: "networkidle", timeout: 90000 });
+  // Explore → Companies (ranked list moved off home).
+  await page.goto(`${BASE}/companies?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
-  await page.waitForTimeout(2500);
+  await page.waitForTimeout(1500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
   const folio = page.locator("[data-sector-folio-desk]").first();
   if (await folio.count()) {
@@ -130,7 +111,7 @@ const browser = await chromium.launch({ headless: true });
     await page.evaluate(() => window.scrollBy(0, -120));
   }
   await page.waitForTimeout(400);
-  await shot(page, "browse-1440");
+  await shot(page, "companies-1440");
 
   const more = page.getByRole("link", { name: /Show more/i }).first();
   if (await more.count()) {
@@ -143,31 +124,24 @@ const browser = await chromium.launch({ headless: true });
     await chapter.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(300);
     await page.evaluate(() => window.scrollBy(0, -48));
-    await page.waitForTimeout(200);
   }
-  await shot(page, "browse-more-1440");
+  await shot(page, "companies-more-1440");
 
-  // Prove next-to-scout / end colophon in viewport (distinct from prior chrono dial).
   const nextScout = page.locator("[data-next-to-scout]").first();
   const end = page.locator("[data-ledger-end]").first();
   if (await nextScout.count()) {
     await nextScout.scrollIntoViewIfNeeded();
     await page.waitForTimeout(400);
     await page.evaluate(() => window.scrollBy(0, -48));
-    await page.waitForTimeout(200);
   } else if (await end.count()) {
     await end.scrollIntoViewIfNeeded();
     await page.waitForTimeout(400);
-    await page.evaluate(() => window.scrollBy(0, -40));
-    await page.waitForTimeout(200);
   }
-  await shot(page, "browse-more-end-1440");
+  await shot(page, "companies-more-end-1440");
 
-  // Desk filters: Contents index / facet map is the hero.
-  // Scroll past sector folio so sticky Contents + FacetRail dominate; chronograph stays compact/support.
-  await page.goto(`${BASE}/?sample=1#browse`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.goto(`${BASE}/companies?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
-  await page.waitForTimeout(1500);
+  await page.waitForTimeout(1200);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
   const filtersHero = page.locator("[data-filters-index-hero]").first();
   if (await filtersHero.count()) {
@@ -182,23 +156,16 @@ const browser = await chromium.launch({ headless: true });
       await page.evaluate(() => window.scrollBy(0, -64));
     }
   }
-  // Nudge FacetRail Status into view inside sticky Contents.
-  const facetMap = page.locator("[data-contents-facet-map]").first();
-  if (await facetMap.count()) {
-    await facetMap.evaluate((el) => el.scrollIntoView({ block: "nearest" })).catch(() => {});
-  }
   await page.waitForTimeout(400);
-  await shot(page, "browse-filters-1440");
+  await shot(page, "companies-filters-1440");
 
-  await page.goto(`${BASE}/?sample=1&feed=leaderboard#browse`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.goto(`${BASE}/companies?sample=1&feed=leaderboard`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
-  await page.waitForTimeout(2500);
+  await page.waitForTimeout(2000);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
-  await page.waitForTimeout(400);
-  // Signal podium (mobile) / ranked stage — frame the distinct LB composition.
   const podium = page.locator("[data-signal-podium]").first();
   const stage = page.locator("[data-ledger-stage='leaderboard']").first();
-  if (await podium.count() && await podium.isVisible().catch(() => false)) {
+  if (await podium.count() && (await podium.isVisible().catch(() => false))) {
     await podium.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(300);
     await page.evaluate(() => window.scrollBy(0, -64));
@@ -206,20 +173,12 @@ const browser = await chromium.launch({ headless: true });
     await stage.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(300);
     await page.evaluate(() => window.scrollBy(0, -96));
-  } else {
-    const hero = page.locator("[data-browse-hero='leaderboard']").first();
-    if (await hero.count()) {
-      await hero.evaluate((el) => el.scrollIntoView({ block: "start" }));
-      await page.waitForTimeout(300);
-      await page.evaluate(() => window.scrollBy(0, -72));
-    }
   }
   await page.waitForTimeout(300);
-  await shot(page, "leaderboard-1440");
+  await shot(page, "companies-signals-1440");
 
-  // Exact Sim dossier (Berkeley campus wire 138).
   await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
-  await page.waitForTimeout(2500);
+  await page.waitForTimeout(2000);
   await shot(page, "company-sim-1440");
   await page.close();
 }
@@ -228,18 +187,14 @@ const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
   await page.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
-  await page.waitForTimeout(4500);
-  const spine = page.locator("[data-mobile-fold-spine], [data-scout-chronograph=\"spine\"]").first();
-  if (await spine.count()) {
-    await spine.evaluate((el) => el.scrollIntoView({ block: "start" }));
-    await page.waitForTimeout(300);
-    await page.evaluate(() => window.scrollBy(0, -48));
-  }
-  await page.waitForTimeout(200);
+  await page.waitForSelector("[data-founder-search]", { timeout: 20000 });
+  await waitGlobeIdle(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
   await shot(page, "fold-375");
 
-  await page.goto(`${BASE}/?sample=1#browse`, { waitUntil: "networkidle" });
-  await page.waitForTimeout(2000);
+  await page.goto(`${BASE}/companies?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await waitDirectory(page);
+  await page.waitForTimeout(1500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
   const browseMobHero = page.locator("[data-browse-mobile-hero]").first();
   if (await browseMobHero.count()) {
@@ -248,29 +203,24 @@ const browser = await chromium.launch({ headless: true });
     await page.evaluate(() => window.scrollBy(0, -40));
   }
   await page.waitForTimeout(400);
-  await shot(page, "browse-375");
+  await shot(page, "companies-375");
 
   const more = page.getByRole("link", { name: /Show more/i }).first();
   if (await more.count()) {
     await more.click().catch(() => {});
     await page.waitForTimeout(1000);
-    await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
   }
   const chapterM = page.locator("[data-chapter-window]").first();
   if (await chapterM.count()) {
     await chapterM.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(300);
-    await page.evaluate(() => window.scrollBy(0, -40));
   }
-  await shot(page, "browse-more-375");
+  await shot(page, "companies-more-375");
 
-  // Mobile end lead = closing entry + big loaded count (mobile-only node).
   const endM = page.locator("[data-ledger-end-mobile]").first();
   if (await endM.count()) {
     await endM.evaluate((el) => el.scrollIntoView({ block: "start" }));
-    await page.waitForTimeout(450);
-    await page.evaluate(() => window.scrollBy(0, -48));
-    await page.waitForTimeout(250);
+    await page.waitForTimeout(400);
   } else {
     const fallback = page.locator("[data-ledger-end]").last();
     if (await fallback.count()) {
@@ -278,57 +228,39 @@ const browser = await chromium.launch({ headless: true });
       await page.waitForTimeout(400);
     }
   }
-  await shot(page, "browse-more-end-375");
+  await shot(page, "companies-more-end-375");
 
-  await page.goto(`${BASE}/?sample=1#browse`, { waitUntil: "networkidle" });
-  await page.waitForTimeout(1200);
+  await page.goto(`${BASE}/companies?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await waitDirectory(page);
+  await page.waitForTimeout(1000);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
-  await page.waitForTimeout(300);
   await openBrowseFilters(page);
-  // Contents dual mast + facet map are the mobile filters lead.
   const contentsM = page.locator("[data-mobile-contents-hero]").first();
   if (await contentsM.count()) {
     await contentsM.evaluate((el) => el.scrollIntoView({ block: "start" })).catch(() => {});
     await page.waitForTimeout(250);
   }
-  await shot(page, "browse-filters-375");
+  await shot(page, "companies-filters-375");
 
-  await page.goto(`${BASE}/?sample=1&feed=leaderboard#browse`, { waitUntil: "networkidle" });
-  await page.waitForTimeout(2000);
+  await page.goto(`${BASE}/companies?sample=1&feed=leaderboard`, { waitUntil: "networkidle", timeout: 90000 });
+  await waitDirectory(page);
+  await page.waitForTimeout(1500);
   await page.locator("#browse").scrollIntoViewIfNeeded().catch(() => {});
-  await page.waitForTimeout(300);
-  // Mobile lb lead = signal podium (distinct composition; prove non-zero pixel vs prior).
   const podiumM = page.locator("[data-signal-podium]").first();
-  const stageM = page.locator("[data-ledger-stage='leaderboard']").first();
   if (await podiumM.count()) {
     await podiumM.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(350);
     await page.evaluate(() => window.scrollBy(0, -56));
-  } else if (await stageM.count()) {
-    await stageM.evaluate((el) => el.scrollIntoView({ block: "start" }));
-    await page.waitForTimeout(300);
-    await page.evaluate(() => window.scrollBy(0, -72));
-  } else {
-    const heroM = page.locator("[data-browse-hero='leaderboard']").first();
-    if (await heroM.count()) {
-      await heroM.evaluate((el) => el.scrollIntoView({ block: "start" }));
-      await page.waitForTimeout(300);
-      await page.evaluate(() => window.scrollBy(0, -64));
-    }
   }
-  await page.waitForTimeout(300);
-  await shot(page, "leaderboard-375");
+  await shot(page, "companies-signals-375");
 
-  // Exact Sim dossier — frame founder/timeline spread (distinct mobile identity).
   await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForTimeout(1200);
   const dossierM = page.locator("[data-dossier-timeline], [data-dossier-spread-mobile]").first();
   if (await dossierM.count()) {
     await dossierM.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(350);
-    await page.evaluate(() => window.scrollBy(0, -48));
   }
-  await page.waitForTimeout(400);
   await shot(page, "company-sim-375");
   await page.close();
 }

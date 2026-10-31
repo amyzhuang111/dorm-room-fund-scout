@@ -316,6 +316,9 @@ export function TileGlobe({
         };
         map.on("render", reveal);
         map.on("idle", reveal);
+        // Cap skeleton time: first paint must not sit on LOADING GLOBE for long
+        // even if idle/render stall (offline tiles, slow network).
+        window.setTimeout(reveal, 900);
       });
 
       const read = (event: { features?: { properties?: Record<string, unknown> }[]; point?: { x: number; y: number } }) => {
