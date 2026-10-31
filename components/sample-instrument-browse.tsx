@@ -249,8 +249,6 @@ export function SampleInstrumentBrowse({
   );
   /** Quiet matching companies (no stored signal) — insight, not pagination. */
   const quietMatch = boardCompanies.length - signaledMatch;
-  const pageFrom = Math.max(1, cards.length - 27);
-  const pageContext = `Companies ${pageFrom.toLocaleString("en-US")} to ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`;
   const pageSignalBars = useMemo(() => {
     /** Prefer per-company signal counts so the page always shows a multi-bar peak. */
     const ranked = cards
@@ -834,22 +832,19 @@ export function SampleInstrumentBrowse({
                     ) : null}
                   </div>
                 </div>
-                {/* Mobile more-end-375: range context + designed load-next; keep cards in frame */}
+                {/* Mobile more-end-375: one line so cards remain in frame */}
                 <div
-                  className="mt-3 scroll-mt-24 lg:hidden"
+                  className="mt-3 scroll-mt-24 border-t border-[color:var(--line,#E1E5EF)] pt-3 lg:hidden"
                   data-ledger-end=""
                   data-ledger-end-mobile=""
                   data-end-insight={sliceInsight.kicker}
                 >
-                  <p className="px-0.5 text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]" data-more-context="">
-                    {pageContext}
-                  </p>
                   <div
-                    className="mt-2 flex items-center justify-between gap-3 border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--cobalt-haze,#E8ECFA)]/30 px-3 py-2.5"
+                    className="flex flex-wrap items-center justify-between gap-2 px-0.5"
                     data-ledger-end-lead=""
                     data-ledger-end-more=""
                   >
-                    <p className="min-w-0 font-mono text-[11px] tabular-nums leading-snug text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="" data-end-lead="">
+                    <p className="font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="" data-end-lead="">
                       <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
                       {" of "}
                       <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
@@ -866,7 +861,7 @@ export function SampleInstrumentBrowse({
                     {cards.length < total ? (
                       <Link
                         href={moreHref}
-                        className="inline-flex h-8 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white hover:opacity-90"
+                        className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]"
                       >
                         Load next
                       </Link>
