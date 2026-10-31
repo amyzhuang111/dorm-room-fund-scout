@@ -11,6 +11,7 @@ import {
   type DirectoryFilter,
 } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
+import { buildPeakShell } from "@/lib/domain/peak-shell";
 
 export type Feed = "directory" | "leaderboard" | "world";
 
@@ -86,6 +87,7 @@ export function SampleHome({
         detail: `${newestHomeRow.sig.toLocaleString("en-US")} of ${newestHomeRow.n.toLocaleString("en-US")} since Sep`,
       }
     : null;
+  const peakShell = buildPeakShell(data.cards);
 
   return (
     <SampleHomeClient
@@ -108,6 +110,7 @@ export function SampleHome({
       signalCompanyCount={data.cards.filter((c) => c.signals > 0).length}
       foundersListed={foundersListed}
       newestHome={newestHome}
+      peakShell={peakShell}
       directoryUrl="/data/sample-directory.json"
       place={place}
     />

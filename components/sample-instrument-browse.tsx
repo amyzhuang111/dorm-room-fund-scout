@@ -270,17 +270,12 @@ export function SampleInstrumentBrowse({
             data-contents-hero=""
             data-filters-index-hero=""
           >
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
-              {feed === "leaderboard" ? "Signals" : "Companies"}
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Contents</p>
+            <p className="mt-1 font-mono text-[22px] font-bold leading-[0.9] tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]">
+              {boardCompanies.length.toLocaleString("en-US")}
             </p>
-            <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
-              {feed === "leaderboard" ? " on the signal desk" : " in this list"}
-              {" · "}
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-              {" with a signal · "}
-              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
-              {" quiet"}
+            <p className="mt-1 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">
+              {feed === "leaderboard" ? "on the signal desk" : "in this list"}
             </p>
           </div>
           {/* FacetRail is the filters hero · Contents is a quiet caption only. */}
@@ -675,14 +670,10 @@ export function SampleInstrumentBrowse({
                   <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
                     Filters
                   </p>
-                  <p className="mt-1 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
-                    {" in this list · "}
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                    {" with a signal · "}
-                    <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
-                    {" quiet"}
+                  <p className="mt-1 font-mono text-[20px] font-bold leading-none tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]">
+                    {boardCompanies.length.toLocaleString("en-US")}
                   </p>
+                  <p className="mt-1 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">in this list</p>
                 </div>
                 <button
                   type="button"

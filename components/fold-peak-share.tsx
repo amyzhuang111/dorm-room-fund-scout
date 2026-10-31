@@ -1,70 +1,47 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
+import { buildPeakShell, type PeakShell } from "@/lib/domain/peak-shell";
 
-const MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const THROUGH_YM = "2026-10";
-
-type Bar = { id: string; label: string; short: string; count: number; peak: boolean };
-
-function peakDetail(companies: FacetCompany[]) {
-  const months = new Map<string, number>();
-  let dated = 0;
-  let undatedMonth = 0;
-  for (const company of companies) {
-    const at = company.latestSignalAt;
-    if (!at || at.length < 7) continue;
-    dated += 1;
-    const ym = at.slice(0, 7);
-    if (ym.endsWith("-00")) {
-      undatedMonth += 1;
-      continue;
-    }
-    if (ym > THROUGH_YM) continue;
-    months.set(ym, (months.get(ym) ?? 0) + 1);
-  }
-  const sorted = [...months.entries()].sort((a, b) => a[0].localeCompare(b[0]));
-  const slice = sorted.slice(-9);
-  const earlierValid = sorted.slice(0, Math.max(0, sorted.length - 9)).reduce((sum, [, n]) => sum + n, 0);
-  const inWindow = slice.reduce((sum, [, n]) => sum + n, 0);
-  const bars: Bar[] = slice.map(([id, count]) => {
-    const y = id.slice(0, 4);
-    const m = Number(id.slice(5, 7));
-    const short = MONTH_SHORT[m - 1] ?? id.slice(5, 7);
-    return { id, label: `${short} ${y.slice(2)}`, short, count, peak: false };
-  });
-  if (bars.length) {
-    const max = Math.max(1, ...bars.map((b) => b.count));
-    for (const b of bars) b.peak = b.count === max;
-  }
-  return { bars, dated, inWindow, earlierValid, undatedMonth };
-}
+export type { PeakShell, PeakBar } from "@/lib/domain/peak-shell";
+export { buildPeakShell } from "@/lib/domain/peak-shell";
 
 /**
  * Fold Peak share — single typographic hero (369/635). Bars are visual only
  * (no third 369 label). No data-scout-chronograph (DOM chronographGoneFromHome).
+ * Accepts SSR shell so first paint reserves exact height (CLS ≈ 0).
  */
 export function FoldPeakShare({
   companies,
   foundersListed,
   campusesOnMap,
+  shell = null,
+  onReady,
 }: {
   companies: FacetCompany[];
   foundersListed: number;
   campusesOnMap: number;
+  shell?: PeakShell | null;
+  onReady?: () => void;
 }) {
-  const detail = useMemo(() => peakDetail(companies), [companies]);
-  const peakBar = detail.bars.find((b) => b.peak) ?? null;
-  const quiet = useMemo(() => companies.filter((c) => c.signals === 0).length, [companies]);
-  if (!peakBar || detail.dated === 0 || detail.bars.length === 0) return null;
+  const live = useMemo(() => (companies.length ? buildPeakShell(companies) : null), [companies]);
+  useEffect(() => {
+    onReady?.();
+    // mount once — parent swaps SSR lite → live without layout change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const detail = live ?? shell;
+  if (!detail || detail.dated === 0 || detail.bars.length === 0) return null;
+  const peakBar = detail.bars.find((b) => b.peak) ?? detail.bars[0];
   const pct = Math.round((peakBar.count / Math.max(1, detail.dated)) * 100);
   const max = Math.max(1, ...detail.bars.map((b) => b.count));
+  const quiet = detail.quiet;
 
   return (
-    <div className="mb-4" data-fold-peak-identity="" data-fold-baseline="8">
-      {/* Desk: one 369 hero + quiet bars (no count labels) + Scout edition */}
-      <div className="mb-1 hidden lg:block" data-fold-peak-desk="">
+    <div className="mb-0" data-fold-peak-identity="" data-fold-baseline="8" data-fold-peak-shell={live ? "live" : "ssr"}>
+      {/* Desk: one 369 hero + quiet bars (no count labels) + Scout edition · reserved min height */}
+      <div className="mb-1 hidden min-h-[13rem] lg:block" data-fold-peak-desk="">
         <div
           className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-end gap-5 border-b border-[color:var(--line,#E1E5EF)] pb-3"
           data-fold-peak-share=""
@@ -131,23 +108,19 @@ export function FoldPeakShare({
         </div>
       </div>
 
-      {/* Mobile: one calm Peak line · no heavy card stack */}
-      <div className="border-b border-[color:var(--line,#E1E5EF)] pb-3 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
-        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
-        <p className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-          <span className="font-mono text-[36px] font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">
+      {/* Mobile: one calm Peak line · Founders leads below; no meta stack */}
+      <div className="min-h-[3.25rem] border-b border-[color:var(--line,#E1E5EF)] pb-2.5 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
+        <p className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+          <span className="font-mono text-[28px] font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">
             {peakBar.count.toLocaleString("en-US")}
           </span>
-          <span className="font-mono text-[16px] font-semibold text-[color:var(--fg-3,#5C647A)]">/</span>
-          <span className="font-mono text-[22px] font-bold tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
+          <span className="font-mono text-[14px] font-semibold text-[color:var(--fg-3,#5C647A)]">/</span>
+          <span className="font-mono text-[18px] font-bold tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
             {detail.dated.toLocaleString("en-US")}
           </span>
           <span className="text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
             {peakBar.label} · {pct}% of dated
           </span>
-        </p>
-        <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-          {quiet.toLocaleString("en-US")} quiet · {foundersListed.toLocaleString("en-US")} founder names · {campusesOnMap.toLocaleString("en-US")} campuses
         </p>
       </div>
     </div>

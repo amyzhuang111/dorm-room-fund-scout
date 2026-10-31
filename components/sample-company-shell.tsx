@@ -103,7 +103,7 @@ export function SampleCompanyShell({
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 sm:px-5">
         {/* Magazine dossier cover · desk + mobile share the profile treatment */}
-        <div className="mb-4 hidden border-b border-[color:var(--line,#E1E5EF)] pb-4 sm:mb-5 sm:block sm:pb-5" data-dossier-hero="" data-mobile-magazine="">
+        <div className="mb-3 hidden border-b border-[color:var(--line,#E1E5EF)] pb-3 sm:mb-4 sm:block sm:pb-4" data-dossier-hero="" data-mobile-magazine="">
           <div className="flex flex-wrap items-center gap-2">
             <Link href="/companies?sample=1" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
               ← Companies
@@ -134,7 +134,7 @@ export function SampleCompanyShell({
                     </>
                   ) : null}
                 </p>
-                <p className="mt-1.5 flex flex-wrap gap-x-2 gap-y-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-dossier-facts="">
+                <p className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-dossier-facts="">
                   {dossier.primaryProgram ? (
                     <span>
                       <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.primaryProgram}</span>

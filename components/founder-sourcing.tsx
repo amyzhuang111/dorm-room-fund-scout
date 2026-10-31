@@ -26,7 +26,7 @@ export function FounderSearchBar({
 }) {
   return (
     <form
-      className="mb-4"
+      className="mb-3 lg:mb-4"
       role="search"
       onSubmit={(event) => event.preventDefault()}
       data-founder-search=""
@@ -67,6 +67,7 @@ export function FounderResults({
   const [sector, setSector] = useState("");
   const [year, setYear] = useState("");
   const [signalType, setSignalType] = useState("");
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const filterKey = `${query}\n${campusId ?? ""}\n${program}\n${sector}\n${year}\n${signalType}`;
   const [windowState, setWindowState] = useState({ key: filterKey, shown: PAGE });
   const shown = windowState.key === filterKey ? windowState.shown : PAGE;
@@ -113,10 +114,10 @@ export function FounderResults({
   const unfiltered = !query.trim() && !campusId && !program && !sector && !year && !signalType;
 
   return (
-    <section className="mt-0" data-founder-results="">
+    <section className={`mt-0 ${status !== "ready" ? "min-h-[28rem]" : ""} lg:min-h-0`} data-founder-results="">
       <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="text-[18px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Founders</h2>
+          <h2 className="text-[22px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] lg:text-[18px]">Founders</h2>
           <p className="mt-1 text-[14px] text-[color:var(--fg-2,#3F465C)]">
             {status === "ready" ? (
               <>
@@ -156,42 +157,56 @@ export function FounderResults({
           </p>
         </div>
       </div>
-      <div className="mb-4 flex flex-wrap gap-2" data-founder-filters="">
-        <FilterSelect label="Program" value={program} onChange={setProgram}>
-          <option value="">Any program</option>
-          {options.programs.map(([name, count]) => (
-            <option key={name} value={name}>
-              {name} ({count.toLocaleString("en-US")})
-            </option>
-          ))}
-        </FilterSelect>
-        <FilterSelect label="Sector" value={sector} onChange={setSector}>
-          <option value="">Any sector</option>
-          <option value="missing">Sector missing</option>
-          {options.sectors.map(([name, count]) => (
-            <option key={name} value={name}>
-              {name} ({count.toLocaleString("en-US")})
-            </option>
-          ))}
-        </FilterSelect>
-        <FilterSelect label="Graduation year" value={year} onChange={setYear}>
-          <option value="">Any year</option>
-          <option value="missing">Year missing</option>
-          {options.years.map(([value, count]) => (
-            <option key={value} value={String(value)}>
-              {value} ({count.toLocaleString("en-US")})
-            </option>
-          ))}
-        </FilterSelect>
-        <FilterSelect label="Signal type" value={signalType} onChange={setSignalType}>
-          <option value="">Any signal</option>
-          <option value="missing">Signal missing</option>
-          {options.signals.map(([type, count]) => (
-            <option key={type} value={type}>
-              {signalTypeLabel(type)} ({count.toLocaleString("en-US")})
-            </option>
-          ))}
-        </FilterSelect>
+      <div className="mb-3" data-founder-filters="">
+        <button
+          type="button"
+          className="mb-2 inline-flex h-8 items-center gap-1.5 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)] lg:hidden"
+          aria-expanded={filtersOpen}
+          onClick={() => setFiltersOpen((open) => !open)}
+          data-founder-filters-toggle=""
+        >
+          {filtersOpen ? "Hide filters" : "Filters"}
+          {(program || sector || year || signalType) ? (
+            <span className="font-bold normal-case tracking-normal text-[color:var(--ember,#D96B1C)]">· on</span>
+          ) : null}
+        </button>
+        <div className={`${filtersOpen ? "flex" : "hidden"} flex-wrap gap-2 lg:flex`}>
+          <FilterSelect label="Program" value={program} onChange={setProgram}>
+            <option value="">Any program</option>
+            {options.programs.map(([name, count]) => (
+              <option key={name} value={name}>
+                {name} ({count.toLocaleString("en-US")})
+              </option>
+            ))}
+          </FilterSelect>
+          <FilterSelect label="Sector" value={sector} onChange={setSector}>
+            <option value="">Any sector</option>
+            <option value="missing">Sector missing</option>
+            {options.sectors.map(([name, count]) => (
+              <option key={name} value={name}>
+                {name} ({count.toLocaleString("en-US")})
+              </option>
+            ))}
+          </FilterSelect>
+          <FilterSelect label="Graduation year" value={year} onChange={setYear}>
+            <option value="">Any year</option>
+            <option value="missing">Year missing</option>
+            {options.years.map(([value, count]) => (
+              <option key={value} value={String(value)}>
+                {value} ({count.toLocaleString("en-US")})
+              </option>
+            ))}
+          </FilterSelect>
+          <FilterSelect label="Signal type" value={signalType} onChange={setSignalType}>
+            <option value="">Any signal</option>
+            <option value="missing">Signal missing</option>
+            {options.signals.map(([type, count]) => (
+              <option key={type} value={type}>
+                {signalTypeLabel(type)} ({count.toLocaleString("en-US")})
+              </option>
+            ))}
+          </FilterSelect>
+        </div>
       </div>
       {status === "loading" ? (
         <p className="text-[14px] text-[color:var(--fg-2,#3F465C)]">Founder list is still loading.</p>
