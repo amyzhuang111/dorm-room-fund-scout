@@ -557,7 +557,7 @@ export function SampleInstrumentBrowse({
         ) : (
           <div data-ledger-expanded={pages > 1 ? "1" : "0"}>
             {pages > 1 ? (
-              <div className="relative sticky top-12 z-10 mb-0 border border-b-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 backdrop-blur-sm before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]">
+              <div className="relative z-10 mb-0 border border-b-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 backdrop-blur-sm before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)] lg:sticky lg:top-12">
                 {/* Desk (more-1440): f53d loud sticky. Mobile (more-375): quieter bar. */}
                 <div className="hidden items-end justify-between gap-3 px-3 py-2 sm:px-3.5 lg:flex">
                   <div className="min-w-0">
@@ -676,7 +676,7 @@ export function SampleInstrumentBrowse({
                         </span>
                         <span className="min-w-0 flex-1 truncate text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[17px]">{prog.label}</span>
                         <span
-                          className="shrink-0 font-mono text-[18px] font-bold leading-none tracking-[-0.03em] text-[color:var(--ember,#D96B1C)] sm:text-[20px]"
+                          className="shrink-0 font-mono text-[15px] font-bold leading-none tabular-nums tracking-[-0.02em] text-[color:var(--ember,#D96B1C)] sm:text-[16px]"
                           {...(isYcProgramLabel(prog.label) && prog.count === YC_MEMBERSHIP_EXPECTED
                             ? { "data-yc-membership-count": String(prog.count) }
                             : {})}

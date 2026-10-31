@@ -245,30 +245,22 @@ const browser = await chromium.launch({ headless: true });
   const endLead = page.locator("[data-ledger-end-lead]").first();
   if (await endM.count()) {
     await endM.evaluate(() => {
-      const list = document.querySelector("[data-ledger-stage] ol");
-      const last = list?.querySelector("li:last-child");
+      const last = document.querySelector("[data-ledger-stage] ol li:last-child");
       const end = document.querySelector("[data-ledger-end-mobile]");
+      const lead = document.querySelector("[data-ledger-end-lead]");
       if (last) last.scrollIntoView({ block: "start" });
+      if (lead) {
+        const top = lead.getBoundingClientRect().top;
+        // Full prior card visible above end (~210px under nav)
+        window.scrollBy(0, top - 210);
+      }
       if (end) {
-        const top = end.getBoundingClientRect().top;
-        // Keep a full prior card peek (~150px) above the end lead
-        if (top < 160) window.scrollBy(0, top - 160);
+        const bottom = end.getBoundingClientRect().bottom;
+        const room = window.innerHeight - 52;
+        if (bottom > room) window.scrollBy(0, bottom - room + 6);
       }
     });
     await page.waitForTimeout(350);
-    await page.evaluate(() => {
-      const end = document.querySelector("[data-ledger-end-mobile]");
-      if (!end) return;
-      const bottom = end.getBoundingClientRect().bottom;
-      const room = window.innerHeight - 64;
-      if (bottom > room) window.scrollBy(0, bottom - room + 8);
-      const lead = document.querySelector("[data-ledger-end-lead]");
-      if (lead) {
-        const top = lead.getBoundingClientRect().top;
-        if (top < 140) window.scrollBy(0, top - 150);
-      }
-    });
-    await page.waitForTimeout(200);
   } else if (await endLead.count()) {
     await endLead.evaluate((el) => el.scrollIntoView({ block: "start", inline: "nearest" }));
     await page.waitForTimeout(350);
@@ -276,7 +268,7 @@ const browser = await chromium.launch({ headless: true });
       const lead = document.querySelector("[data-ledger-end-lead]");
       if (!lead) return;
       const top = lead.getBoundingClientRect().top;
-      if (top < 72) window.scrollBy(0, top - 88);
+      if (top < 140) window.scrollBy(0, top - 160);
     });
     await page.waitForTimeout(200);
   } else {
