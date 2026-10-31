@@ -293,9 +293,9 @@ export function SampleInstrumentBrowse({
             <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies on this index</p>
             <p className="mt-3 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
               <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-              {" with signal · "}
+              {" with a signal · "}
               <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
-              {" quiet"}
+              {" with no signal"}
             </p>
             <p className="mt-1.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">Facet map below · one index hero</p>
           </div>
@@ -402,14 +402,14 @@ export function SampleInstrumentBrowse({
                         <span className="font-bold text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
                         {" matching · "}
                         <span className="font-bold text-[color:var(--ember,#D96B1C)]">{quietMatch.toLocaleString("en-US")}</span>
-                        {" quiet (no signal)"}
+                        {" with no signal"}
                       </>
                     ) : (
                       <>
                         <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
                         {" with signal · "}
                         <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
-                        {" quiet · "}
+                        {" with no signal · "}
                         <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
                         {" on page"}
                       </>
@@ -832,9 +832,9 @@ export function SampleInstrumentBrowse({
                   <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies on this index</p>
                   <p className="mt-3 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                    {" with signal · "}
+                    {" with a signal · "}
                     <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
-                    {" quiet"}
+                    {" with no signal"}
                   </p>
                   <p className="mt-1.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">Facet map below · one index hero</p>
                 </div>

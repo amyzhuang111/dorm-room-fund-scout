@@ -13,17 +13,8 @@ import {
   FacetRail,
   IntelligenceBoards,
   MobileFilterDock,
-  MobileWireStrip,
   campusFoundersTop,
-  PANEL,
   ScoutChronograph,
-  signalChronographDetail,
-  chronographCaption,
-  topPrograms,
-  isYcProgramLabel,
-  YC_MEMBERSHIP_EXPECTED,
-  sectorMix,
-  contentsPageInsight,
   type FacetState,
 } from "./sample-instrument";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -210,14 +201,9 @@ export function TileGlobe({
     } | null = null;
 
     const fit = () => {
-      const node = mapNode.current;
       const wide = window.innerWidth >= 1024;
-      const docTop = node ? node.getBoundingClientRect().top + window.scrollY : wide ? 96 : 120;
-      // Desktop strip is inside the stage. Mobile chips and the strip sit under it.
-      const reserve = wide ? 8 : 320; // room for Live + Ledger strip under the stage
-      const available = Math.round(window.innerHeight - docTop - reserve);
-      const raw = Math.max(wide ? 520 : 220, available);
-      setStageHeight(wide ? raw : Math.min(260, raw));
+      const target = Math.round(window.innerHeight * (wide ? 0.58 : 0.48));
+      setStageHeight(wide ? Math.max(480, Math.min(640, target)) : Math.max(320, Math.min(420, target)));
     };
     fit();
     window.addEventListener("resize", fit);
@@ -508,546 +494,210 @@ export function TileGlobe({
     return "Filtered slice";
   }, [facets, campuses]);
 
-  const universeChrono = useMemo(() => signalChronographDetail(companies), [companies]);
-  const peakBar = useMemo(() => universeChrono.bars.find((b) => b.peak) ?? null, [universeChrono]);
-  // Third mast beat: leading program (not peak 369 — chronograph owns the peak).
-  const leadProgram = useMemo(() => topPrograms(companies)[0] ?? null, [companies]);
-  const leadSector = useMemo(() => sectorMix(companies)[0] ?? null, [companies]);
-  const dispatchInsight = useMemo(() => contentsPageInsight(companies), [companies]);
   const signaledUniverse = useMemo(() => companies.filter((c) => c.signals > 0).length, [companies]);
   const quietUniverse = companies.length - signaledUniverse;
-  const sliceLeadProgram = useMemo(() => topPrograms(filteredCompanies)[0] ?? null, [filteredCompanies]);
-  const sliceLeadSector = useMemo(() => sectorMix(filteredCompanies)[0] ?? null, [filteredCompanies]);
-  const sliceSignaled = useMemo(() => filteredCompanies.filter((c) => c.signals > 0).length, [filteredCompanies]);
-  const sliceQuiet = filteredCompanies.length - sliceSignaled;
 
-  // Masthead founders/campuses match the sample strip (universe totals via sampleSurfaceCounts),
-  // not the filtered map/facet slice — so strip and fold data-count nodes never diverge.
+  // One campus count: the campuses actually drawn on the globe.
   const universeCounts = catalogReady
     ? sampleSurfaceCounts(companies, campuses)
     : { companies: companyCount, foundersListed, campusesOnMap: campuses.length };
+  const campusesOnMap = universeCounts.campusesOnMap;
 
-  /** Campus plates sitewide — ranked by founder names (Penn 757 / Stanford 300 / MIT 238). */
-  const topDesksByFounders = useMemo(() => campusFoundersTop(campuses, 8), [campuses]);
-  const topCampus = topDesksByFounders[0] ?? null;
+  const topCampuses = useMemo(() => campusFoundersTop(campuses, 3), [campuses]);
 
   return (
     <div className={className} data-fold-mobile-root="">
-      {/* Full-width dual-figure masthead — newspaper banner, not a left-column stamp */}
-      <div className="mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-counts="">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Scout dispatch</p>
-          <span
-            className="inline-flex items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-1.5 py-0.5 font-mono text-[9px] tabular-nums tracking-[0.04em] text-[color:var(--fg-2,#3F465C)]"
-            data-dispatch-snapshot=""
-          >
-            Snapshot · {absoluteDate(dataThrough)}
+      <div className="mb-4 flex flex-wrap items-end justify-between gap-x-4 gap-y-2" data-fold-counts="">
+        <p className="flex min-w-0 flex-wrap items-baseline gap-x-4 gap-y-1 text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)]">
+          <span>
+            <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
+            {" companies"}
           </span>
-        </div>
-        <div className="mt-3 grid items-end gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6" data-dispatch-dual="">
-          <div className="min-w-0" data-dispatch-figure="">
-            <p className="mt-0 font-mono text-[64px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[72px] lg:text-[80px]">
-              {liveCount.toLocaleString("en-US")}
-            </p>
-            <div className="mt-2 flex items-end gap-2" aria-hidden>
-              <span className="h-px w-8 bg-[color:var(--cobalt,#2F4FD8)]" />
-              <span className="h-[3px] flex-1 max-w-[180px] bg-[color:var(--ember,#D96B1C)]" />
-            </div>
-            <p className="mt-2 text-[16px] font-semibold leading-tight tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[17px]">
-              companies forming on campus
-            </p>
-          </div>
-          {topCampus ? (
-            <div className="min-w-0 border-t border-[color:var(--line,#E1E5EF)] pt-2.5 sm:border-l sm:border-t-0 sm:pl-6 sm:pt-0" data-top-desk-figure="">
-              {/* Mobile: one quiet line so 2,513 + chronograph own the fold. Desk: dual figure + peak beat. */}
-              <div className="sm:hidden" data-top-desk-compact="">
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
-                <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                  {topCampus.name.replace(/^University of /, "").replace(/ University$/, "")}
-                  <span className="ml-2 font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
-                    {topCampus.founders.toLocaleString("en-US")}
-                  </span>
-                  <span className="font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]"> founders · </span>
-                  <span className="font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
-                    {topCampus.signals.toLocaleString("en-US")}
-                  </span>
-                  <span className="font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]"> signals</span>
-                </p>
-                {dispatchInsight ? (
-                  <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-mobile-dispatch-whisper="">
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dispatchInsight.detail}</span>
-                    {" · "}
-                    {dispatchInsight.label}
-                  </p>
-                ) : null}
-              </div>
-              <div className="hidden sm:block">
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">01 · top desk</p>
-                <p className="mt-1 text-[28px] font-bold leading-[0.95] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[32px] lg:text-[36px]">
-                  {shortCampusLabel(topCampus.id, topCampus.name)}
-                </p>
-                <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                  {"#1 by founder names · chronograph is the desk"}
-                </p>
-              </div>
-            </div>
-          ) : null}
-          {/* Desk fifth beat: leading program (real density). Chronograph keeps peak 369 — no mast echo. Hidden on mobile so fold-375 holds. */}
-          <div className="hidden min-w-0 border-l border-[color:var(--line,#E1E5EF)] pl-6 lg:block" data-program-desk-figure="">
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">01 · program desk</p>
-            <p
-              className="mt-1 font-mono text-[64px] font-bold leading-[0.9] tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]"
-              {...(leadProgram && isYcProgramLabel(leadProgram.label) && leadProgram.count === YC_MEMBERSHIP_EXPECTED
-                ? { "data-yc-membership-count": String(leadProgram.count) }
-                : {})}
-            >
-              {(leadProgram?.count ?? 0).toLocaleString("en-US")}
-            </p>
-            <p className="mt-1 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-              {leadProgram?.label ?? "Program"}
-              {leadProgram && isYcProgramLabel(leadProgram.label) && leadProgram.count === YC_MEMBERSHIP_EXPECTED ? (
-                <span className="ml-2 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">in YC</span>
-              ) : null}
-            </p>
-            <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              <span className={COUNT}>{signaledUniverse.toLocaleString("en-US")}</span>
-              {" with signal · "}
-              <span className={COUNT}>{quietUniverse.toLocaleString("en-US")}</span>
-              {" quiet"}
-              {leadSector ? (
-                <>
-                  {" · "}
-                  <span className={COUNT}>{leadSector.count.toLocaleString("en-US")}</span>
-                  {" "}
-                  {leadSector.label}
-                </>
-              ) : null}
-            </p>
-          </div>
-        </div>
-        <div className="mt-3 flex flex-wrap items-end justify-between gap-2">
-          <p className="font-mono text-[11px] tabular-nums leading-relaxed text-[color:var(--fg-2,#3F465C)]">
-            <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
-            {" founder names listed"}
-            <span className="mx-1.5 text-[color:var(--line-strong,#C5CAD8)]">·</span>
-            <span className={COUNT} data-count="campuses-on-map">{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
-            {" campuses on map"}
-          </p>
-          <div className="flex shrink-0 flex-wrap gap-1.5">
-            <button
-              type="button"
-              onClick={() => setFiltersOpen((v) => !v)}
-              className="hidden h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)] lg:inline-flex"
-            >
-              {filtersOpen ? "Show desk roster" : "Filters"}
-            </button>
-            <a
-              href="/ask"
-              className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
-            >
-              Scout ask
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* Scout Chronograph — full-width. Desk: global 369. Filters open + facet: filtered-slice hero. */}
-      <div className="mb-3" data-fold-chronograph="" data-fold-filters-slice={filtersOpen && facetsActive ? "1" : undefined}>
-        {filtersOpen && !facetsActive ? (
-          <div
-            className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] sm:px-4"
-            data-fold-filter-invite=""
-            data-fold-contents-lead=""
-          >
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Contents · dispatch index</p>
-            <div className="mt-2 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6">
-              <div>
-                <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
-                  {signaledUniverse.toLocaleString("en-US")}
-                </p>
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">with signal</p>
-              </div>
-              <div>
-                <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--fg,#0B0E17)] sm:text-[56px]">
-                  {quietUniverse.toLocaleString("en-US")}
-                </p>
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
-              </div>
-              {dispatchInsight ? (
-                <div className="col-span-2 sm:col-span-1">
-                  <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
-                    {dispatchInsight.signaled.toLocaleString("en-US")}
-                  </p>
-                  <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{dispatchInsight.label}</p>
-                  <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{dispatchInsight.detail}</p>
-                </div>
-              ) : null}
-            </div>
-            <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              {chronographCaption(universeChrono)}
-              {leadSector ? (
-                <>
-                  {" · "}
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{leadSector.count.toLocaleString("en-US")}</span>
-                  {" "}
-                  {leadSector.label}
-                </>
-              ) : null}
-            </p>
-            <p className="mt-1 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
-              Open a flag or sector in Contents for a filtered-slice chronograph
-            </p>
-          </div>
-        ) : filtersOpen && facetsActive ? (
-          <div className="space-y-2" data-fold-filters-slice-lead="">
-            <div
-              className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] sm:px-4"
-              data-fold-slice-contents=""
-            >
-              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
-                Contents · {filterSliceLabel}
-              </p>
-              <div className="mt-2 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6">
-                <div>
-                  <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
-                    {liveCount.toLocaleString("en-US")}
-                  </p>
-                  <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">matching</p>
-                </div>
-                <div>
-                  <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--fg,#0B0E17)] sm:text-[56px]">
-                    {sliceSignaled.toLocaleString("en-US")}
-                  </p>
-                  <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">with signal</p>
-                </div>
-                {sliceLeadProgram ? (
-                  <div className="col-span-2 sm:col-span-1">
-                    <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[56px]">
-                      {sliceLeadProgram.count.toLocaleString("en-US")}
-                    </p>
-                    <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{sliceLeadProgram.label}</p>
-                    <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">on this slice</p>
-                  </div>
-                ) : (
-                  <div>
-                    <p className="font-mono text-[48px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--fg,#0B0E17)] sm:text-[56px]">
-                      {sliceQuiet.toLocaleString("en-US")}
-                    </p>
-                    <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">quiet</p>
-                  </div>
-                )}
-              </div>
-              <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceQuiet.toLocaleString("en-US")}</span>
-                {" quiet"}
-                {sliceLeadSector ? (
-                  <>
-                    {" · "}
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceLeadSector.count.toLocaleString("en-US")}</span>
-                    {" "}
-                    {sliceLeadSector.label}
-                  </>
-                ) : null}
-              </p>
-            </div>
-          </div>
-        ) : null}
-      </div>
-
-      {/* Fold owns the chronograph dial exclusively — 8px rhythm, peak-share moment, one dial. */}
-      <div className="mb-4 hidden space-y-4 lg:block" data-fold-chrono-identity="" data-fold-chrono-typographic="" data-fold-baseline="8">
-        <div className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] items-end gap-4 border-b border-[color:var(--line,#E1E5EF)] pb-4" data-fold-peak-share="">
-          <div className="min-w-0">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
-            <p className="mt-2 font-mono text-[72px] font-bold leading-[0.82] tracking-[-0.08em] text-[color:var(--ember,#D96B1C)]">
-              {(peakBar?.count ?? 0).toLocaleString("en-US")}
-              <span className="mx-2 text-[28px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
-              <span className="text-[40px] font-bold tracking-[-0.06em] text-[color:var(--fg,#0B0E17)]">{universeChrono.dated.toLocaleString("en-US")}</span>
-            </p>
-            <p className="mt-3 max-w-[36rem] text-[18px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
-              {peakBar?.label ?? "Peak month"} took{" "}
-              <span className="text-[color:var(--ember,#D96B1C)]">
-                {Math.round(((peakBar?.count ?? 0) / Math.max(1, universeChrono.dated)) * 100)}%
+          {catalogReady ? (
+            <>
+              <span>
+                <span className={COUNT}>{signaledUniverse.toLocaleString("en-US")}</span>
+                {" with a signal"}
               </span>
-              {" of every dated signal on record"}
-            </p>
-          </div>
-          <div className="min-w-0 self-stretch border-l border-[color:var(--line,#E1E5EF)] pl-4">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">Scout edition</p>
-            <p className="mt-3 font-mono text-[13px] leading-6 tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{universeChrono.dated.toLocaleString("en-US")}</span>
-              {" dated"}
-              <br />
-              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietLive.toLocaleString("en-US")}</span>
-              {" quiet"}
-              <br />
-              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
-              {" founder names"}
-              <br />
-              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
-              {" campuses on map"}
-            </p>
-          </div>
+              <span>
+                <span className={COUNT}>{quietUniverse.toLocaleString("en-US")}</span>
+                {" with no signal"}
+              </span>
+            </>
+          ) : null}
+          <span>
+            <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
+            {" founder names"}
+          </span>
+          <span>
+            <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
+            {" campuses on the map"}
+          </span>
+          {facetsActive ? <span>Showing {liveCount.toLocaleString("en-US")}</span> : null}
+          {dataThrough ? <span>Updated {absoluteDate(dataThrough)}</span> : null}
+        </p>
+        <div className="flex shrink-0 flex-wrap gap-1.5">
+          <button
+            type="button"
+            onClick={() => setFiltersOpen((v) => !v)}
+            className="hidden h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)] lg:inline-flex"
+          >
+            {filtersOpen ? "Hide filters" : "Filters"}
+          </button>
+          <a
+            href="/ask"
+            className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
+          >
+            Scout ask
+          </a>
         </div>
+      </div>
+
+      {filtersOpen ? (
+        <div className="mb-4" data-fold-filters-index="">
+          {facetsActive ? (
+            <p className="mb-2 text-[14px] text-[color:var(--fg,#0B0E17)]">
+              Showing {liveCount.toLocaleString("en-US")} companies
+              {filterSliceLabel ? ` · ${filterSliceLabel}` : ""}
+            </p>
+          ) : (
+            <p className="mb-2 text-[14px] text-[color:var(--fg-2,#3F465C)]">Filter the companies on the map.</p>
+          )}
+          <FacetRail
+            companies={companies}
+            campuses={campuses}
+            facets={facets}
+            onChange={onFacetChange}
+            indexCount={liveCount}
+            caption="Filters"
+            onCampusFocus={(id) => {
+              const campus = campuses.find((row) => row.id === id);
+              if (campus) focus(campus);
+            }}
+            footer={<p>{markerSizeLegend()}</p>}
+          />
+        </div>
+      ) : null}
+
+      <div className="mb-4" data-fold-chronograph="">
         <ScoutChronograph
           companies={filteredCompanies}
           variant="hero"
-          kicker="Chronograph · fold owns this dial"
-          reading={`Baseline 8 · peak owns the fold · ${quietLive.toLocaleString("en-US")} quiet`}
+          kicker="Signals by month"
+          reading="Each bar is companies whose latest signal falls in that month. The number above is that tallest bar."
         />
       </div>
 
-      {/* Structural desk: roster | map | wire. Filters open: Contents | map | wire. Chronograph lives above. */}
-      <div className="grid gap-4 lg:grid-cols-[minmax(200px,240px)_minmax(0,1.15fr)_minmax(200px,260px)]" data-fold-desk-spread="">
-        <aside className="hidden min-w-0 lg:block" data-fold-desk-left="">
-          <div className="sticky top-14 h-[min(78vh,780px)]">
-            {filtersOpen ? (
-              <div className="flex h-full min-h-0 flex-col gap-2" data-fold-filters-index="">
-                {facetsActive ? (
-                  <div
-                    className="shrink-0 relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
-                    data-fold-filter-slice-pin=""
-                  >
-                    <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Slice on</p>
-                    <p className="mt-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{filterSliceLabel}</p>
-                    <p className="mt-0.5 font-mono text-[20px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                      {liveCount.toLocaleString("en-US")}
-                    </p>
-                    <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-2,#3F465C)]">matching</p>
-                  </div>
-                ) : null}
-                <div className="min-h-0 flex-1">
-                  <FacetRail
-                    companies={companies}
-                    campuses={campuses}
-                    facets={facets}
-                    onChange={onFacetChange}
-                    index
-                    indexCount={liveCount}
-                    caption="Dispatch index"
-                    onCampusFocus={(id) => {
-                      const campus = campuses.find((row) => row.id === id);
-                      if (campus) focus(campus);
-                    }}
-                    footer={<p>{markerSizeLegend()}</p>}
-                  />
-                </div>
+      <section className="mb-4" data-fold-desk-map="" aria-label="Map">
+        <h2 className="mb-2 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Map</h2>
+        <div
+          className="relative overflow-hidden rounded-none border-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[#FFDBBB]"
+          style={{ height: stageHeight }}
+          data-dispatch-map-stage=""
+          data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
+        >
+          <div ref={mapNode} className={`h-full w-full ${painted && !failed ? "" : "invisible"}`} />
+          {!painted ? (
+            <div className="absolute inset-0 z-30 bg-[#FFF7F0]" aria-busy="true" aria-live="polite">
+              <div className="grid h-full place-items-center">
+                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#6b5443]">{failed ? "Globe unavailable" : "Loading globe"}</p>
               </div>
-            ) : (
-              <div className="flex h-full min-h-0 flex-col gap-2" data-desk-chronograph-col="">
-                <div
-                  className="relative min-h-0 flex-1 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)]"
-                  data-desk-roster=""
-                  data-campus-metric="founders"
-                >
-                  <div className="border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-1.5">
-                    <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Top desks · founders</p>
-                  </div>
-                  <ol className="divide-y divide-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
-                    {topDesksByFounders.slice(0, 3).map((campus, i) => {
-                      const active = selectedId === campus.id;
-                      const label = shortCampusLabel(campus.id, campus.name);
-                      return (
-                        <li key={campus.id}>
-                          <button
-                            type="button"
-                            onClick={() => focus(campus)}
-                            className={`flex w-full items-center gap-2 px-2.5 py-1.5 text-left hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50 ${active ? "bg-[color:var(--ember,#D96B1C)]/8" : ""}`}
-                          >
-                            <span className="w-5 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
-                              {String(i + 1).padStart(2, "0")}
-                            </span>
-                            <span className="min-w-0 flex-1 truncate text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
-                            <span className={`shrink-0 font-mono text-[11px] ${COUNT}`}>{campus.founders.toLocaleString("en-US")}</span>
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ol>
-                </div>
-              </div>
-            )}
+            </div>
+          ) : null}
+          <div className="pointer-events-none absolute left-3 top-3 z-10 flex flex-wrap gap-x-3 gap-y-1 rounded-sm bg-[color:var(--bg,#FFFFFF)]/90 px-2.5 py-1.5 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">
+            <span className="inline-flex items-center gap-1"><span className="inline-block h-2 w-2 rounded-full bg-[#3b6fd8]" aria-hidden />United States</span>
+            <span className="inline-flex items-center gap-1"><span className="inline-block h-2 w-2 rounded-full bg-[#e23b4a]" aria-hidden />Canada</span>
+            <span className="inline-flex items-center gap-1"><span className="inline-block h-2 w-2 rounded-full bg-[#2f9e6b]" aria-hidden />United Kingdom</span>
           </div>
-        </aside>
-
-        <div className="min-w-0" data-fold-desk-map="">
-          <div
-            className="relative overflow-hidden rounded-none border-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[#FFDBBB] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.06),0_1px_0_rgba(217,107,28,0.18)]"
-            style={{ height: stageHeight }}
-            data-dispatch-map-stage=""
-            data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
-          >
-            <div ref={mapNode} className={`h-full w-full ${painted && !failed ? "" : "invisible"}`} />
-            {!painted ? (
-              <div className="absolute inset-0 z-30 bg-[#FFF7F0]" aria-busy="true" aria-live="polite">
-                <div className="grid h-full place-items-center">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#6b5443]">{failed ? "Globe unavailable" : "Loading globe"}</p>
-                </div>
-              </div>
-            ) : null}
-            <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 hidden -translate-x-1/2 lg:block" data-map-credit>
-              <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
-                <MapCredit />
+          <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 -translate-x-1/2" data-map-credit>
+            <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
+              <MapCredit />
+            </p>
+          </div>
+          {hover ? (
+            <div
+              className="pointer-events-none absolute z-30 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-1.5 text-left text-[color:var(--fg,#0B0E17)]"
+              style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}
+            >
+              <p className="text-[13px] font-medium leading-4">{hover.name}</p>
+              <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
+                <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> founders
+                {" · "}
+                <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> signals
               </p>
             </div>
-            {hover ? (
-              <div
-                className="pointer-events-none absolute z-30 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-1.5 text-left text-[color:var(--fg,#0B0E17)]"
-                style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}
-              >
-                <p className="text-[13px] font-medium leading-4">{hover.name}</p>
-                <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
-                  <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> founders
-                  {" · "}
-                  <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> signals
-                </p>
-              </div>
-            ) : null}
-          </div>
+          ) : null}
         </div>
+      </section>
 
-        <aside className="hidden min-w-0 lg:block" data-fold-desk-wire="">
-          <div className="sticky top-14">
-            <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]`}>
-              <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Dispatch wire</p>
-                <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{filteredCompanies.length.toLocaleString("en-US")}</p>
-              </div>
-              <IntelligenceBoards companies={filteredCompanies} compact surface="fold" />
-            </div>
-          </div>
-        </aside>
-      </div>
-
-      <div
-        className="mt-4 space-y-8 lg:hidden"
-        data-fold-counts-mobile=""
-        data-mobile-fold-compose=""
-        style={{ paddingBottom: "calc(5.75rem + env(safe-area-inset-bottom, 0px))" }}
-      >
-        <div className="space-y-4" data-mobile-fold-spine="" data-mobile-chrono-identity="">
-          <ScoutChronograph
-            companies={filteredCompanies}
-            variant="spine"
-            kicker="Fold · chronograph spine"
-            reading={`Typographic spine · ${quietLive.toLocaleString("en-US")} quiet · ${liveCount.toLocaleString("en-US")} matching`}
-          />
-        </div>
-        <div data-mobile-desk-roster="" data-campus-metric="founders">
-          <div className="mb-2 flex items-baseline justify-between gap-2">
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Top desks · founders</p>
-            <p className="font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">Penn · Stanford · MIT</p>
-          </div>
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(220px,280px)_minmax(0,1fr)]">
+        <section data-campus-metric="founders">
+          <h2 className="mb-2 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Top campuses</h2>
           <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
-            {topDesksByFounders.slice(0, 3).map((campus, i) => {
+            {topCampuses.map((campus, i) => {
+              const active = selectedId === campus.id;
               const label = shortCampusLabel(campus.id, campus.name);
               return (
                 <li key={campus.id}>
                   <button
                     type="button"
                     onClick={() => focus(campus)}
-                    className="flex w-full items-baseline gap-2 px-3 py-2.5 text-left hover:bg-[color:var(--ember,#D96B1C)]/5"
+                    className={`flex w-full items-baseline gap-2 px-3 py-2.5 text-left hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50 ${active ? "bg-[color:var(--ember,#D96B1C)]/8" : ""}`}
                   >
-                    <span className="w-5 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
+                    <span className="w-5 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="min-w-0 flex-1 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
                     <span className={`shrink-0 font-mono text-[13px] font-bold ${COUNT}`}>{campus.founders.toLocaleString("en-US")}</span>
-                    <span className="shrink-0 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">founders</span>
+                    <span className="shrink-0 text-[12px] text-[color:var(--fg-3,#5C647A)]">founders</span>
                   </button>
                 </li>
               );
             })}
           </ol>
-        </div>
-        {/* Secondary insight below spine hero — fold-mobile owns spine only above the fold. */}
-        {dispatchInsight ? (
-          <div
-            className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
-            data-mobile-fold-insight=""
-          >
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
-              {filtersOpen && facetsActive ? `Contents · ${filterSliceLabel}` : "Dispatch · newest sector"}
-            </p>
-            {filtersOpen && facetsActive ? (
-              <>
-                <p className="mt-3 font-mono text-[52px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
-                  {sliceQuiet.toLocaleString("en-US")}
-                </p>
-                <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">quiet on this slice</p>
-                <p className="mt-2 font-mono text-[13px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{liveCount.toLocaleString("en-US")}</span>
-                  {" matching · "}
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceSignaled.toLocaleString("en-US")}</span>
-                  {" with signal"}
-                  {sliceLeadSector ? (
-                    <>
-                      {" · "}
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceLeadSector.count.toLocaleString("en-US")}</span>
-                      {" "}
-                      {sliceLeadSector.label}
-                    </>
-                  ) : null}
-                </p>
-              </>
-            ) : (
-              <>
-                <p className="mt-3 font-mono text-[52px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
-                  {dispatchInsight.signaled.toLocaleString("en-US")}
-                </p>
-                <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{dispatchInsight.label}</p>
-                <p className="mt-2 font-mono text-[13px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{dispatchInsight.detail}</p>
-                <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dispatchInsight.figure.toLocaleString("en-US")}</span>
-                  {" newest in window · fold lead"}
-                </p>
-              </>
-            )}
-          </div>
-        ) : null}
-        <MobileWireStrip companies={filteredCompanies} label="Dispatch wire" surface="fold" />
+          <p className="mt-2 text-[12px] leading-5 text-[color:var(--fg-3,#5C647A)]">{markerSizeLegend()}</p>
+        </section>
+        <IntelligenceBoards companies={filteredCompanies} surface="fold" />
       </div>
 
       <MobileFilterDock
         onOpen={() => setMobileFiltersOpen(true)}
         count={liveCount}
-        caption="Narrow the dispatch"
+        caption="Filter companies"
         tone="ember"
-        kicker="Map filters"
+        kicker="Filters"
         observe="[data-fold-mobile-root]"
       />
       {mobileFiltersOpen ? (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Filters">
           <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
-          <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col overflow-hidden rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
-            <div className="relative flex items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3 py-3 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--ember,#D96B1C)]">
+          <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)]">
+            <div className="flex items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3 py-3">
               <div className="min-w-0">
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout filters · {shown.length} campuses</p>
-                <p className="mt-1 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">{liveCount.toLocaleString("en-US")}</p>
-                <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the dispatch</p>
-                <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledLive.toLocaleString("en-US")}</span>
-                  {" with signal · "}
-                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietLive.toLocaleString("en-US")}</span>
-                  {" quiet"}
+                <p className="text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Filters</p>
+                <p className="mt-1 text-[13px] text-[color:var(--fg-2,#3F465C)]">
+                  {liveCount.toLocaleString("en-US")} companies
+                  {" · "}
+                  {signaledLive.toLocaleString("en-US")} with a signal
+                  {" · "}
+                  {quietLive.toLocaleString("en-US")} with no signal
                 </p>
               </div>
               <button type="button" onClick={() => setMobileFiltersOpen(false)} className="inline-flex h-9 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white">Done</button>
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-              <div className="h-[min(70dvh,540px)]">
-                <FacetRail
-                  companies={companies}
-                  campuses={campuses}
-                  facets={facets}
-                  onChange={onFacetChange}
-                  dense
-                  onCampusFocus={(id) => {
-                    const campus = campuses.find((row) => row.id === id);
-                    if (campus) focus(campus);
-                  }}
-                  footer={<p>{markerSizeLegend()}</p>}
-                />
-              </div>
+              <FacetRail
+                companies={companies}
+                campuses={campuses}
+                facets={facets}
+                onChange={onFacetChange}
+                dense
+                onCampusFocus={(id) => {
+                  const campus = campuses.find((row) => row.id === id);
+                  if (campus) focus(campus);
+                }}
+                footer={<p>{markerSizeLegend()}</p>}
+              />
             </div>
           </div>
         </div>

@@ -226,8 +226,8 @@ export function SampleCompanyShell({
           )}
         </div>
         <div className="mb-4 hidden items-baseline justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-3 sm:flex" data-dossier-colophon="">
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Scout edition</p>
-          <p className="min-w-0 flex-1 truncate text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">On this campus</p>
+          <p className="min-w-0 flex-1 text-right font-mono text-[11px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
             {" "}
             {wireScope}

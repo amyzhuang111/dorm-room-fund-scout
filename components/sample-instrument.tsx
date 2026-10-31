@@ -150,9 +150,9 @@ export function ScoutEndColophon({
           <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
           {" · "}
           <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaled.toLocaleString("en-US")}</span>
-          {" with signal · "}
+          {" with a signal · "}
           <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quiet.toLocaleString("en-US")}</span>
-          {" quiet"}
+          {" with no signal"}
         </p>
         <div className="mt-3">
           <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Named on slice</p>
@@ -996,7 +996,7 @@ export function chronographCaption(detail: ChronographDetail): string {
 export function ScoutChronograph({
   companies,
   variant = "ribbon",
-  kicker = "Signal chronograph",
+  kicker = "Signals by month",
   datedLabel,
   reading,
   lead = "peak",
@@ -1030,10 +1030,10 @@ export function ScoutChronograph({
   const bucketCaption = chronographCaption(detail);
   const caption = [datedLabel, bucketCaption].filter(Boolean).join(" · ") || `${dated.toLocaleString("en-US")} dated`;
   const figureCaption = figureIsUnknown
-    ? `month unknown · year only (e.g. 2026-00-00)`
+    ? "Year on record, month not on record"
     : figureIsEarlier
-      ? `earlier than this window · ${detail.inWindow.toLocaleString("en-US")} in window`
-      : `peak month · ${figure.label}`;
+      ? "Before the months in this chart"
+      : `Tallest bar · ${figure.label}`;
 
   function barFill(b: ChronoMonth): string {
     if (b.monthUnknown) return "bg-[color:var(--cobalt,#2F4FD8)]/70";
@@ -1252,14 +1252,15 @@ export function ScoutChronograph({
             </>
           )}
         </div>
-        <div className={`flex items-end gap-1.5 ${tall ? "h-20 sm:h-[4.75rem] lg:h-24" : "h-11"} w-full max-w-[460px] sm:w-auto sm:min-w-[200px] sm:flex-1 lg:max-w-none`}>
+        <div className={`flex items-end gap-1.5 ${tall ? "h-32 sm:h-36" : "h-16"} w-full`}>
           {bars.map((b) => (
-            <div key={b.id} data-chrono-bar={b.id} className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1" title={`${b.label}: ${b.count}`}>
+            <div key={b.id} data-chrono-bar={b.id} className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1" title={`${b.label}: ${b.count} companies`}>
+              <span className={`whitespace-nowrap font-mono text-[11px] font-bold tabular-nums ${barLabelClass(b)}`}>{b.count.toLocaleString("en-US")}</span>
               <span
-                className={`w-full max-w-[28px] rounded-sm ${barFill(b)}`}
-                style={{ height: `${Math.max(tall ? 10 : 6, Math.round((b.count / max) * (tall ? 84 : 40)))}px` }}
+                className={`w-full max-w-[36px] rounded-sm ${barFill(b)}`}
+                style={{ height: `${Math.max(tall ? 8 : 6, Math.round((b.count / max) * (tall ? 72 : 36)))}px` }}
               />
-              <span className={`whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.04em] ${barLabelClass(b)}`}>{b.short}</span>
+              <span className={`whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.04em] ${barLabelClass(b)}`}>{b.short}</span>
             </div>
           ))}
         </div>
@@ -1269,13 +1270,21 @@ export function ScoutChronograph({
 }
 
 
-export function topFounders(companies: FacetCompany[]): { key: string; name: string; companyId: string; companyName: string; signals: number; logoUrl?: string | null }[] {
-  const rows: { key: string; name: string; companyId: string; companyName: string; signals: number; logoUrl?: string | null }[] = [];
+export function topFounders(companies: FacetCompany[]): { key: string; name: string; companyId: string; companyName: string; campus: string; signals: number; logoUrl?: string | null }[] {
+  const rows: { key: string; name: string; companyId: string; companyName: string; campus: string; signals: number; logoUrl?: string | null }[] = [];
   for (const company of [...companies].sort((a, b) => b.signals - a.signals)) {
     for (const person of company.founders ?? []) {
       const name = person.trim();
       if (!name) continue;
-      rows.push({ key: `${company.id}:${name}`, name, companyId: company.id, companyName: company.name, signals: company.signals, logoUrl: company.logoUrl });
+      rows.push({
+        key: `${company.id}:${name}`,
+        name,
+        companyId: company.id,
+        companyName: company.name,
+        campus: company.school?.trim() || "Campus not on record",
+        signals: company.signals,
+        logoUrl: company.logoUrl,
+      });
       if (rows.length >= 6) return rows;
     }
   }
@@ -1359,16 +1368,16 @@ export function FounderFeedRow({
   person,
   index,
 }: {
-  person: { key: string; name: string; companyId: string; companyName: string; signals: number; logoUrl?: string | null };
+  person: { key: string; name: string; companyId: string; companyName: string; campus: string; signals: number; logoUrl?: string | null };
   index: number;
 }) {
   return (
-    <Link href={`/startup/${person.companyId}`} className="group flex items-center gap-2.5 px-0.5 py-2 text-left transition-colors hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50" title={person.companyName}>
+    <Link href={`/startup/${person.companyId}`} className="group flex items-center gap-2.5 px-0.5 py-2 text-left transition-colors hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50" title={`${person.name} · ${person.campus}`}>
       <span className={`${COUNT} w-5 shrink-0 text-right text-[12px] tracking-tight`}>{String(index + 1).padStart(2, "0")}</span>
       <LogoMark name={person.name} logoUrl={person.logoUrl} size={20} />
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[13px] font-semibold leading-5 text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]">{person.name}</span>
-        <span className="mt-0.5 block truncate font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">{person.companyName}</span>
+        <span className="block text-[13px] font-semibold leading-5 text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]">{person.name}</span>
+        <span className="mt-0.5 block text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">{person.campus}</span>
       </span>
       <span className={`${COUNT} shrink-0 text-[12px]`}>{person.signals.toLocaleString("en-US")}</span>
     </Link>
@@ -1438,7 +1447,7 @@ export function IntelligenceBoards({
   const showPrograms = surface !== "browse" && surface !== "company";
   const programsBoard =
     showPrograms && programs.length > 0 ? (
-      <Board title={surface === "signals" ? "Campus programs" : "Top programs"} unit="companies">
+      <Board title="Programs" unit="companies">
         <ol className={rowGap}>
           {programs.slice(0, surface === "signals" ? 4 : 3).map((item, index) => (
             <li key={item.id} className="py-1">
@@ -1471,7 +1480,7 @@ export function IntelligenceBoards({
       </Board>
     ) : null;
   const recentBoard = (
-    <Board title="Recent signals" unit="kind · date">
+    <Board title="Latest" unit="kind · date">
       <ol className={rowGap}>
         {recent.map((company, index) => (
           <li key={company.id}>
@@ -1510,7 +1519,7 @@ export function IntelligenceBoards({
     </Board>
   ) : null;
   const foundersBoard = showFounders ? (
-    <Board title="Top founders" unit="signals">
+    <Board title="Founders" unit="signals">
       <ol className={rowGap}>
         {founders.map((person, index) => (
           <li key={person.key}>
@@ -1538,7 +1547,9 @@ export function IntelligenceBoards({
 
   return (
     <div className={gap}>
-      {modules}
+      {modules.map((node, index) => (
+        <div key={index}>{node}</div>
+      ))}
       {!compact && surface === "fold" ? (
         <div className={`${PANEL} relative overflow-hidden p-1.5 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
           <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Scout ask</p>
