@@ -343,11 +343,45 @@ export function LogoPill({
   );
 }
 
-function FacetGroup({ title, children, defaultOpen = true, dense = false }: { title: string; children: ReactNode; defaultOpen?: boolean; dense?: boolean }) {
+function FacetGroup({
+  title,
+  children,
+  defaultOpen = true,
+  dense = false,
+  roomy = false,
+}: {
+  title: string;
+  children: ReactNode;
+  defaultOpen?: boolean;
+  dense?: boolean;
+  /** Mobile filter sheet: more air, bigger kickers (desk index stays tight). */
+  roomy?: boolean;
+}) {
   return (
-    <details className={`border-b border-[color:var(--line,#E1E5EF)] ${dense ? "px-2 py-1.5" : "px-2.5 py-2"}`} open={defaultOpen}>
-      <summary className={`cursor-pointer font-mono text-[10px] font-medium uppercase ${dense ? "tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]" : "tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]"}`}>{title}</summary>
-      <div className="mt-1.5 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)]">{children}</div>
+    <details
+      className={`border-b border-[color:var(--line,#E1E5EF)] ${
+        roomy ? "px-3.5 py-3" : dense ? "px-2 py-1.5" : "px-2.5 py-2"
+      }`}
+      open={defaultOpen}
+    >
+      <summary
+        className={`cursor-pointer font-mono font-medium uppercase ${
+          roomy
+            ? "text-[11px] font-semibold tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]"
+            : dense
+              ? "text-[10px] tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]"
+              : "text-[10px] tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]"
+        }`}
+      >
+        {title}
+      </summary>
+      <div
+        className={`divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] ${
+          roomy ? "mt-2.5" : "mt-1.5"
+        }`}
+      >
+        {children}
+      </div>
     </details>
   );
 }
@@ -475,6 +509,7 @@ export function FacetRail({
   searchPlaceholder = "Search company or founder",
   dense = false,
   sheet = false,
+  roomy = false,
   index = false,
   caption = "Narrow the map",
   indexCount,
@@ -490,6 +525,8 @@ export function FacetRail({
   dense?: boolean;
   /** Editorial filter-sheet chrome (desktop aside + mobile sheet language). */
   sheet?: boolean;
+  /** Mobile bottom sheet: airier groups; use with dense to avoid double chrome. */
+  roomy?: boolean;
   /** Persistent magazine table-of-contents column (desk) — not a sheet over content. */
   index?: boolean;
   /** Sheet/desk title under Scout filters (map vs ledger). */
@@ -623,20 +660,20 @@ export function FacetRail({
       ) : null}
       <div className="min-h-0 flex-1 overflow-y-auto">
         {editorial ? null : (
-          <FacetGroup title="Status" dense={editorial}>
+          <FacetGroup title="Status" dense={editorial} roomy={roomy}>
             <FacetRow facet="status" count={baseCompanies.length} active={!facets.status} onClick={() => set({ status: null })} label="All" />
             {statuses.map((item) => (
               <FacetRow key={item.id} facet="status" count={item.count} active={facets.status === item.id} onClick={() => set({ status: facets.status === item.id ? null : item.id })} label={item.label} dot={STATUS_DOT[item.id]} />
             ))}
           </FacetGroup>
         )}
-        <FacetGroup title="Flags" dense={editorial}>
+        <FacetGroup title="Flags" defaultOpen={!(sheet || roomy)} dense={editorial} roomy={roomy}>
           <FacetRow facet="flag" active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
           {flags.map((item) => (
             <FacetRow key={item.id} facet="flag" count={item.count} active={facets.flag === item.id} onClick={() => set({ flag: facets.flag === item.id ? null : item.id })} label={item.label} icon={FLAG_ICON[item.id]} />
           ))}
         </FacetGroup>
-        <FacetGroup title="Founded year" dense={editorial}>
+        <FacetGroup title="Founded year" defaultOpen={!(sheet || roomy)} dense={editorial} roomy={roomy}>
           <FacetRow
             facet="year"
             count={baseCompanies.length}
@@ -665,7 +702,7 @@ export function FacetRail({
             );
           })}
         </FacetGroup>
-        <FacetGroup title="HQ city" dense={editorial}>
+        <FacetGroup title="HQ city" dense={editorial} roomy={roomy}>
           <FacetRow facet="hq" count={baseCompanies.length} active={!facets.hqRegion} onClick={() => set({ hqRegion: null })} label="All" />
           {hqRegions.map((item) => (
             <FacetRow
@@ -688,7 +725,7 @@ export function FacetRail({
             />
           ) : null}
         </FacetGroup>
-        <FacetGroup title="Sector" dense={editorial}>
+        <FacetGroup title="Sector" dense={editorial} roomy={roomy}>
           <FacetRow facet="sector" count={baseCompanies.length} active={!facets.sector && !facets.sectorMissing} onClick={() => set({ sector: null, sectorMissing: false })} label="All" />
           {sectorRows.map((item) => {
             const missing = item.id === NOT_ON_RECORD;
@@ -721,13 +758,13 @@ export function FacetRail({
             />
           ) : null}
         </FacetGroup>
-        <FacetGroup title="Country" defaultOpen={false} dense={editorial}>
+        <FacetGroup title="Country" defaultOpen={false} dense={editorial} roomy={roomy}>
           <FacetRow active={!facets.country} onClick={() => set({ country: null })} label="All" count={campuses.length} />
           {countries.map(([name, count]) => (
             <FacetRow key={name} active={facets.country === name} onClick={() => set({ country: facets.country === name ? null : name })} label={name} count={count} />
           ))}
         </FacetGroup>
-        <FacetGroup title="Campus" defaultOpen={false} dense={editorial}>
+        <FacetGroup title="Campus" defaultOpen={false} dense={editorial} roomy={roomy}>
           {campusRows.map((campus) => (
             <FacetRow
               key={campus.id}
@@ -741,19 +778,19 @@ export function FacetRail({
             />
           ))}
         </FacetGroup>
-        <FacetGroup title="Signal kind" defaultOpen={false} dense={editorial}>
+        <FacetGroup title="Signal kind" defaultOpen={false} dense={editorial} roomy={roomy}>
           <FacetRow active={!facets.kind} onClick={() => set({ kind: null })} label="All" />
           {kinds.map((item) => (
             <FacetRow key={item.id} active={facets.kind === item.id} onClick={() => set({ kind: facets.kind === item.id ? null : item.id })} label={item.label} count={item.count} />
           ))}
         </FacetGroup>
-        <FacetGroup title="Stage" defaultOpen={false} dense={editorial}>
+        <FacetGroup title="Stage" defaultOpen={false} dense={editorial} roomy={roomy}>
           <FacetRow active={!facets.stage} onClick={() => set({ stage: null })} label="All" />
           {stages.map((item) => (
             <FacetRow key={item.id} active={facets.stage === item.id} onClick={() => set({ stage: facets.stage === item.id ? null : item.id })} label={item.label} count={item.count} />
           ))}
         </FacetGroup>
-        <FacetGroup title="Signal recency" defaultOpen={false} dense={editorial}>
+        <FacetGroup title="Signal recency" defaultOpen={false} dense={editorial} roomy={roomy}>
           <FacetRow active={!facets.recency} onClick={() => set({ recency: null })} label="All" />
           {recency.map((item) => (
             <FacetRow key={item.id} active={facets.recency === item.id} onClick={() => set({ recency: facets.recency === item.id ? null : item.id })} label={item.label} count={item.count} />

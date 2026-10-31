@@ -247,30 +247,36 @@ export function SampleCompanyShell({
           </p>
         </div>
 
-        {/* Mobile identity: founder + timeline dossier · not a shared ticket or atlas dial. */}
+        {/* Mobile identity: one strong company lead · peers live in the wire strip below. */}
         <div className="mb-3 flex items-center justify-between gap-2 sm:hidden" data-dossier-mobile-nav="">
           <Link href="/companies?sample=1" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
             ← Companies
           </Link>
           <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
         </div>
-        <div className="mb-5 mt-1 sm:hidden" data-dossier-timeline="" data-mobile-chrono-identity="" data-company-mobile-hero="">
-          <div
-            className="border-b border-[color:var(--line,#E1E5EF)] pb-3"
-            data-dossier-spread-mobile=""
-          >
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Dossier</p>
-            <p className="mt-1 truncate text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+        <div className="mb-4 mt-1 sm:hidden" data-dossier-timeline="" data-mobile-chrono-identity="" data-company-mobile-hero="">
+          <div className="border-b border-[color:var(--line,#E1E5EF)] pb-4" data-dossier-spread-mobile="">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Dossier</p>
+            <p className="mt-2 text-[36px] font-bold leading-[1.0] tracking-tight text-[color:var(--fg,#0B0E17)]">
               {dossier?.name ?? "Company"}
-              {dossier?.campus ? ` · ${campusShort}` : ""}
             </p>
-            <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+            <p className="mt-2.5 border-l-2 border-[color:var(--cobalt,#2F4FD8)] pl-3 font-mono text-[13px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              {dossier?.campus ? <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.campus}</span> : <span>Campus not on record</span>}
               {dossier?.year != null ? (
                 <>
+                  {" · "}
                   <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.year}</span>
-                  {" founded · "}
+                  {" founded"}
                 </>
               ) : null}
+              {dossier?.sector ? (
+                <>
+                  {" · "}
+                  <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.sector}</span>
+                </>
+              ) : null}
+            </p>
+            <p className="mt-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
               <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
               {" on campus wire"}
               {(dossier?.founders?.length ?? 0) > 0 ? (
@@ -281,20 +287,22 @@ export function SampleCompanyShell({
                 </>
               ) : null}
             </p>
-            <ol className="mt-3 space-y-2" data-dossier-signal-timeline="">
+            {/* Keep timeline nodes for DOM/shot identity · visually quiet one-line strip */}
+            <ol className="mt-3 flex flex-wrap gap-x-3 gap-y-1 border-t border-[color:var(--line,#E1E5EF)] pt-2.5" data-dossier-signal-timeline="">
               {wireCompanies
                 .filter((c) => (c.latestSignalAt ?? "").length >= 4)
                 .slice()
                 .sort((a, b) => (b.latestSignalAt ?? "").localeCompare(a.latestSignalAt ?? ""))
                 .slice(0, 3)
-                .map((c) => {
+                .map((c, i) => {
                   const at = (c.latestSignalAt ?? "").replace(/-00/g, "");
                   return (
-                    <li key={c.id} className="flex items-baseline justify-between gap-2">
-                      <span className="min-w-0 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{c.name}</span>
-                      <span className="shrink-0 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{at}</span>
-                      </span>
+                    <li key={c.id} className="font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                      <span className="text-[color:var(--fg-3,#5C647A)]">{String(i + 1).padStart(2, "0")}</span>
+                      {" "}
+                      <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{c.name}</span>
+                      {" "}
+                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{at}</span>
                     </li>
                   );
                 })}
@@ -328,7 +336,7 @@ export function SampleCompanyShell({
             >
               <MobileWireStrip companies={wireCompanies} label="Dossier wire" surface="company" />
             </div>
-            <div className="company-instrument relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] p-3 sm:p-4 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] before:content-[''] after:absolute after:inset-x-0 after:top-0 after:h-0.5 after:bg-[color:var(--cobalt,#2F4FD8)] after:content-['']">
+            <div className="company-instrument relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] p-4 sm:p-4 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] before:content-[''] after:absolute after:inset-x-0 after:top-0 after:h-0.5 after:bg-[color:var(--cobalt,#2F4FD8)] after:content-['']">
               {children}
             </div>
           </div>
@@ -366,19 +374,24 @@ export function SampleCompanyShell({
 
       {mobileFiltersOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
-          <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
-          <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col overflow-hidden rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
-            <div className="relative flex items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3 py-2.5">
-              <div className="min-w-0">
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout filters</p>
-                <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the ledger</p>
-                <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Status · Year · Sector · Campus</p>
-              </div>
-              <button type="button" onClick={() => setMobileFiltersOpen(false)} className="inline-flex h-8 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white">Done</button>
+          <button type="button" className="absolute inset-0 bg-slate-900/40" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
+          <div className="absolute inset-x-0 bottom-0 flex max-h-[min(88dvh,680px)] flex-col overflow-hidden rounded-t-lg border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-12px_40px_rgba(15,23,42,0.18)]">
+            <div className="flex justify-center pt-2.5" aria-hidden>
+              <span className="h-1 w-10 rounded-full bg-[color:var(--line-strong,#C5CAD8)]" />
             </div>
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-              <div className="h-[min(70dvh,540px)]">
-                <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={onFacetChange} dense />
+            <div className="relative flex items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-4 pb-3.5 pt-2">
+              <div className="min-w-0">
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Dossier filters</p>
+                <p className="mt-1.5 font-mono text-[32px] font-bold leading-[0.88] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                  {wireCount.toLocaleString("en-US")}
+                </p>
+                <p className="mt-1.5 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">on this campus wire</p>
+              </div>
+              <button type="button" onClick={() => setMobileFiltersOpen(false)} className="inline-flex h-11 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-4 font-mono text-[12px] font-semibold text-white">Done</button>
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-1 pb-6">
+              <div className="min-h-[min(62dvh,520px)]">
+                <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={onFacetChange} dense roomy />
               </div>
             </div>
           </div>
