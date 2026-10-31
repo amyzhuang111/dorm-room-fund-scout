@@ -40,10 +40,7 @@ export type TileCompany = FacetCompany;
 
 const OCEAN = "#FFDBBB";
 const LAND = "#DD8A4E";
-const LAND_ALT = "#D48148";
 const BOUNDARY = "#C4733E";
-const LABEL = "#5a2c0e";
-const HALO = "#FFE9D6";
 const BRAND = "#FB651E";
 const COUNT = "font-bold tabular-nums text-[color:var(--ember,#D96B1C)]";
 
@@ -55,6 +52,54 @@ const COUNTRY_COLOR: Record<string, string> = {
 
 function markerColor(country: string): string {
   return COUNTRY_COLOR[country] ?? BRAND;
+}
+
+/** Orange land and cream ocean are in the style, so the first painted frame is the globe, not stock positron. */
+const GLOBE_STYLE = {
+  version: 8,
+  name: "Campus Scout globe",
+  glyphs: "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
+  sources: {
+    openmaptiles: { type: "vector", url: "https://tiles.openfreemap.org/planet" },
+  },
+  layers: [
+    { id: "background", type: "background", paint: { "background-color": LAND } },
+    {
+      id: "water",
+      type: "fill",
+      source: "openmaptiles",
+      "source-layer": "water",
+      paint: { "fill-color": OCEAN, "fill-opacity": 1 },
+    },
+    {
+      id: "coast",
+      type: "line",
+      source: "openmaptiles",
+      "source-layer": "water",
+      paint: { "line-color": BOUNDARY, "line-width": 0.6, "line-opacity": 0.4 },
+    },
+    {
+      id: "boundary",
+      type: "line",
+      source: "openmaptiles",
+      "source-layer": "boundary",
+      filter: ["any", ["==", ["get", "admin_level"], 2], ["==", ["get", "admin_level"], "2"]],
+      paint: { "line-color": BOUNDARY, "line-width": 0.7, "line-opacity": 0.5 },
+    },
+  ],
+};
+
+/**
+ * Keep the globe disk inside the stage. MapLibre's equator is 512 * 2^zoom px,
+ * so the sphere diameter is that divided by π. A higher zoom clips the horizon
+ * at the panel edges and reads as a flat outline.
+ */
+function globeView(width: number, height: number): { center: [number, number]; zoom: number } {
+  const minDim = Math.max(160, Math.min(width, height));
+  const diameter = minDim * 0.92;
+  const zoom = Math.log2((diameter * Math.PI) / 512);
+  // Faces the US, with Canada and the UK still on the near side.
+  return { center: [-72, 36], zoom: Math.min(3, Math.max(0.4, zoom)) };
 }
 
 function campusCollection(campuses: TileCampus[]) {
@@ -110,8 +155,11 @@ export function TileGlobe({
     getSource: (id: string) => { setData: (data: unknown) => void } | undefined;
     setFilter: (layer: string, filter: unknown) => void;
     flyTo: (opts: object) => void;
-    resize: () => void;
+      jumpTo: (opts: object) => void;
+      resize: () => void;
+    loaded: () => boolean;
   } | null>(null);
+  const frameRef = useRef<(() => void) | null>(null);
   const [facets, setFacets] = useState<FacetState>(emptyFacets);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -144,7 +192,6 @@ export function TileGlobe({
       setProjection: (opts: object) => void;
       setSky: (opts: object) => void;
       setPaintProperty: (layer: string, prop: string, value: unknown) => void;
-      setLayoutProperty: (layer: string, prop: string, value: unknown) => void;
       addSource: (id: string, source: object) => void;
       addLayer: (layer: object) => void;
       getSource: (id: string) => { setData: (data: unknown) => void } | undefined;
@@ -155,6 +202,7 @@ export function TileGlobe({
       jumpTo: (opts: object) => void;
       resize: () => void;
       remove: () => void;
+      loaded: () => boolean;
       getCanvas: () => HTMLCanvasElement;
       getCanvasContainer: () => HTMLElement;
     } | null = null;
@@ -196,12 +244,14 @@ export function TileGlobe({
       if (dead || !mapNode.current) return;
       const created = new mod.Map({
         container: mapNode.current,
-        style: "https://tiles.openfreemap.org/styles/positron",
-        center: [-98, 39],
-        zoom: window.innerWidth >= 1024 ? 2.4 : 1.05,
-        minZoom: 0.8,
+        style: JSON.parse(JSON.stringify(GLOBE_STYLE)) as object,
+        center: [-72, 36],
+        zoom: 1.4,
+        minZoom: 0.35,
         maxPitch: 0,
+        renderWorldCopies: false,
         attributionControl: false,
+        fadeDuration: 0,
       });
       map = created as unknown as NonNullable<typeof map>;
       mapRef.current = map;
@@ -227,37 +277,9 @@ export function TileGlobe({
         } catch {
           // The globe still paints without a custom sky.
         }
-        let recolored = false;
-        for (const layer of map.getStyle().layers) {
-          try {
-            if (layer.type === "background") {
-              map.setPaintProperty(layer.id, "background-color", LAND);
-              recolored = true;
-            }
-            if (layer.id === "water") {
-              map.setPaintProperty(layer.id, "fill-color", OCEAN);
-              recolored = true;
-            }
-            if (layer.type === "fill" && layer.id !== "water") {
-              map.setPaintProperty(layer.id, "fill-color", /landcover|landuse|park|wood|sand/.test(layer.id) ? LAND_ALT : LAND);
-              try { map.setPaintProperty(layer.id, "fill-opacity", 1); } catch { /* layer has no opacity */ }
-            }
-            if (layer.type === "line" && /boundary|coast/.test(layer.id)) {
-              map.setPaintProperty(layer.id, "line-color", BOUNDARY);
-              try { map.setPaintProperty(layer.id, "line-opacity", 0.85); } catch { /* no opacity */ }
-              try { map.setPaintProperty(layer.id, "line-dasharray", [1, 0]); } catch { /* not a dashed line */ }
-            }
-            if (layer.type === "symbol" && /country|water_name|marine|sea|ocean/.test(layer.id)) {
-              map.setLayoutProperty(layer.id, "text-font", ["Noto Sans Italic"]);
-              map.setPaintProperty(layer.id, "text-color", LABEL);
-              map.setPaintProperty(layer.id, "text-halo-color", HALO);
-              map.setPaintProperty(layer.id, "text-halo-width", 1.4);
-            }
-          } catch {
-            // Icon-only symbol layers have no text paint.
-          }
-        }
-        if (!recolored) {
+        const layers = map.getStyle().layers;
+        const styled = layers.some((layer) => layer.id === "water") && layers.some((layer) => layer.type === "background");
+        if (!styled) {
           setFailed(true);
           return;
         }
@@ -268,9 +290,9 @@ export function TileGlobe({
           source: "campuses",
           filter: ["==", ["get", "top"], 1],
           paint: {
-            "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, ["+", ["get", "radius"], 4.5], 3, ["+", ["*", ["get", "radius"], 1.55], 5.5], 5, ["+", ["*", ["get", "radius"], 2.1], 6.5]],
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["+", ["*", ["get", "radius"], 0.85], 3], 1.8, ["+", ["get", "radius"], 4], 3.2, ["+", ["*", ["get", "radius"], 1.4], 5]],
             "circle-color": "#D96B1C",
-            "circle-opacity": 0.18,
+            "circle-opacity": 0.2,
             "circle-stroke-width": 0,
           },
         });
@@ -279,9 +301,9 @@ export function TileGlobe({
           type: "circle",
           source: "campuses",
           paint: {
-            "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, ["get", "radius"], 3, ["*", ["get", "radius"], 1.55], 5, ["*", ["get", "radius"], 2.15]],
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["*", ["get", "radius"], 0.85], 1.8, ["get", "radius"], 3.2, ["*", ["get", "radius"], 1.35]],
             "circle-color": ["get", "color"],
-            "circle-stroke-color": ["case", ["==", ["get", "top"], 1], "#FFFFFF", "#FFFFFF"],
+            "circle-stroke-color": "#FFFFFF",
             "circle-stroke-width": ["case", ["==", ["get", "top"], 1], 1.6, 1.05],
             "circle-opacity": 0.96,
           },
@@ -292,7 +314,7 @@ export function TileGlobe({
           source: "campuses",
           filter: ["==", ["get", "id"], ""],
           paint: {
-            "circle-radius": ["interpolate", ["linear"], ["zoom"], 1.2, ["+", ["get", "radius"], 3.2], 3, ["+", ["*", ["get", "radius"], 1.55], 4], 5, ["+", ["*", ["get", "radius"], 2.15], 5]],
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["+", ["*", ["get", "radius"], 0.85], 3], 1.8, ["+", ["get", "radius"], 3.2], 3.2, ["+", ["*", ["get", "radius"], 1.35], 4]],
             "circle-color": ["get", "color"],
             "circle-stroke-color": "#D96B1C",
             "circle-stroke-width": 2.8,
@@ -300,29 +322,35 @@ export function TileGlobe({
           },
         });
         window.clearTimeout(styleTimer);
-        const stage = mapNode.current?.parentElement;
-        const height = stage?.clientHeight || mapNode.current?.clientHeight || 520;
-        const width = stage?.clientWidth || mapNode.current?.clientWidth || 640;
-        if (mapNode.current) mapNode.current.style.height = `${height}px`;
-        const canvasBox = map.getCanvasContainer();
-        canvasBox.style.width = `${width}px`;
-        canvasBox.style.height = `${height}px`;
+        const frame = () => {
+          if (dead || !map) return;
+          const stage = mapNode.current?.parentElement;
+          const height = stage?.clientHeight || mapNode.current?.clientHeight || 520;
+          const width = stage?.clientWidth || mapNode.current?.clientWidth || 640;
+          if (mapNode.current) {
+            mapNode.current.style.width = `${width}px`;
+            mapNode.current.style.height = `${height}px`;
+          }
+          const canvasBox = map.getCanvasContainer();
+          canvasBox.style.width = `${width}px`;
+          canvasBox.style.height = `${height}px`;
+          map.resize();
+          map.jumpTo(globeView(width, height));
+        };
+        frameRef.current = frame;
+        frame();
         setReady(true);
-        map.resize();
-        const wide = window.innerWidth >= 1024;
-        const camera = { center: [-98, 39], zoom: wide ? 2.4 : 1.05 };
-        map.jumpTo(camera);
         let revealed = false;
         const reveal = () => {
           if (dead || revealed || !map) return;
+          if (!map.loaded()) return;
           revealed = true;
-          map.resize();
-          map.jumpTo(camera);
+          frame();
           setPainted(true);
           spin();
         };
+        if (map.loaded()) reveal();
         map.on("idle", reveal);
-        window.setTimeout(reveal, 1400);
       });
 
       const read = (event: { features?: { properties?: Record<string, unknown> }[]; point?: { x: number; y: number } }) => {
@@ -391,7 +419,7 @@ export function TileGlobe({
   }, []);
 
   useEffect(() => {
-    mapRef.current?.resize();
+    frameRef.current?.();
   }, [stageHeight]);
 
   useEffect(() => {
@@ -835,7 +863,7 @@ export function TileGlobe({
 
         <div className="min-w-0" data-fold-desk-map="">
           <div
-            className="relative overflow-hidden rounded-none border-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--bg,#FFFFFF)] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.06),0_1px_0_rgba(217,107,28,0.18)]"
+            className="relative overflow-hidden rounded-none border-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[#FFDBBB] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.06),0_1px_0_rgba(217,107,28,0.18)]"
             style={{ height: stageHeight }}
             data-dispatch-map-stage=""
             data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
@@ -844,7 +872,7 @@ export function TileGlobe({
             {!painted ? (
               <div className="absolute inset-0 z-30 bg-[#FFF7F0]" aria-busy="true" aria-live="polite">
                 <div className="grid h-full place-items-center">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#6b5443]">Loading globe</p>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#6b5443]">{failed ? "Globe unavailable" : "Loading globe"}</p>
                 </div>
               </div>
             ) : null}

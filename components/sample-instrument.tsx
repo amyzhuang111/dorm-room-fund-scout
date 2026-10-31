@@ -928,8 +928,10 @@ export function newestSectorMix(
 
 /**
  * Build chronograph bars from latestSignalAt.
- * Last `limit` valid months through throughYm, plus separate Earlier and Month unknown
- * buckets so bar sum == dated. Universe: 588 + 13 + 34 = 635.
+ * Bars are the last `limit` real months through throughYm. Earlier months and
+ * year-only dates stay off the bars (universe caption: 13 earlier, 34 undated).
+ * Month bars sum to inWindow. dated = inWindow + earlierValid + undatedMonth
+ * (universe 588 + 13 + 34 = 635).
  */
 export function signalChronographDetail(
   companies: FacetCompany[],
@@ -955,39 +957,18 @@ export function signalChronographDetail(
   const slice = sorted.slice(-limit);
   const earlierValid = sorted.slice(0, Math.max(0, sorted.length - limit)).reduce((sum, [, n]) => sum + n, 0);
   const inWindow = slice.reduce((sum, [, n]) => sum + n, 0);
-  const bars: ChronoMonth[] = [];
-  if (earlierValid > 0) {
-    bars.push({
-      id: "earlier",
-      label: "Earlier",
-      short: "Ear",
-      count: earlierValid,
-      peak: false,
-      earlier: true,
-    });
-  }
-  if (undatedMonth > 0) {
-    bars.push({
-      id: "month-unknown",
-      label: "Month unknown",
-      short: "Unk",
-      count: undatedMonth,
-      peak: false,
-      monthUnknown: true,
-    });
-  }
-  for (const [id, count] of slice) {
+  const bars: ChronoMonth[] = slice.map(([id, count]) => {
     const y = id.slice(0, 4);
     const m = Number(id.slice(5, 7));
     const short = MONTH_SHORT[m - 1] ?? id.slice(5, 7);
-    bars.push({
+    return {
       id,
       label: `${short} ${y.slice(2)}`,
       short,
       count,
       peak: false,
-    });
-  }
+    };
+  });
   if (bars.length === 0) {
     return { bars, dated, inWindow, earlierValid, undatedMonth, earlier: earlierValid };
   }
@@ -1000,11 +981,12 @@ export function signalChronograph(companies: FacetCompany[], limit = 9, throughY
   return signalChronographDetail(companies, limit, throughYm).bars;
 }
 
+/** Plain caption for counts that are not month bars. Example: "13 earlier, 34 undated". */
 export function chronographCaption(detail: ChronographDetail): string {
-  const parts = [`${detail.dated.toLocaleString("en-US")} dated`];
+  const parts: string[] = [];
   if (detail.earlierValid > 0) parts.push(`${detail.earlierValid.toLocaleString("en-US")} earlier`);
-  if (detail.undatedMonth > 0) parts.push(`${detail.undatedMonth.toLocaleString("en-US")} month unknown`);
-  return parts.join(" · ");
+  if (detail.undatedMonth > 0) parts.push(`${detail.undatedMonth.toLocaleString("en-US")} undated`);
+  return parts.join(", ");
 }
 
 /**
@@ -1022,7 +1004,7 @@ export function ScoutChronograph({
   companies: FacetCompany[];
   variant?: "ribbon" | "folio" | "hero" | "compact" | "ticket" | "spine";
   kicker?: string;
-  /** Override dated caption; defaults to "N dated · N earlier · N month unknown". */
+  /** Extra dated line. The earlier/undated caption is always appended in full. */
   datedLabel?: string;
   /** Page-specific real-data reading under the peak caption. */
   reading?: string;
@@ -1045,7 +1027,8 @@ export function ScoutChronograph({
   const figureIsEarlier = Boolean(figure.earlier);
   const figureIsUnknown = Boolean(figure.monthUnknown);
   const max = Math.max(1, ...bars.map((b) => b.count));
-  const caption = datedLabel ?? chronographCaption(detail);
+  const bucketCaption = chronographCaption(detail);
+  const caption = [datedLabel, bucketCaption].filter(Boolean).join(" · ") || `${dated.toLocaleString("en-US")} dated`;
   const figureCaption = figureIsUnknown
     ? `month unknown · year only (e.g. 2026-00-00)`
     : figureIsEarlier
@@ -1096,7 +1079,7 @@ export function ScoutChronograph({
             {bars.map((b) => (
               <div key={b.id} data-chrono-bar={b.id} className="flex min-h-0 flex-1 items-center gap-1" title={`${b.label}: ${b.count}`}>
                 <span className={`h-full w-1.5 shrink-0 rounded-sm ${barFill(b)}`} style={{ minHeight: 4, height: `${Math.max(4, Math.round((b.count / max) * 100))}%` }} />
-                <span className={`font-mono text-[7px] uppercase leading-none tracking-[0.04em] ${barLabelClass(b)}`}>{b.short}</span>
+                <span className={`whitespace-nowrap font-mono text-[10px] uppercase leading-none tracking-[0.04em] ${barLabelClass(b)}`}>{b.short}</span>
               </div>
             ))}
           </div>
@@ -1142,7 +1125,7 @@ export function ScoutChronograph({
                   className={`w-full max-w-[1.35rem] rounded-sm ${barFill(b)}`}
                   style={{ height: `${Math.max(6, Math.round((b.count / max) * 28))}px` }}
                 />
-                <span className={`font-mono text-[6px] uppercase tracking-[0.04em] ${barLabelClass(b)}`}>{b.short}</span>
+                <span className={`whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.04em] ${barLabelClass(b)}`}>{b.short}</span>
               </div>
             ))}
           </div>
@@ -1166,7 +1149,7 @@ export function ScoutChronograph({
       >
         <div className="flex items-baseline justify-between gap-2">
           <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">{kicker}</p>
-          <p data-chrono-caption="" className="max-w-[58%] truncate text-right font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{caption}</p>
+          <p data-chrono-caption="" className="min-w-0 text-right font-mono text-[11px] tabular-nums leading-snug text-[color:var(--fg-2,#3F465C)]">{caption}</p>
         </div>
         <p className="mt-1.5 font-mono text-[28px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
           {figure.count.toLocaleString("en-US")}
@@ -1177,7 +1160,7 @@ export function ScoutChronograph({
           {bars.map((b) => (
             <div key={b.id} data-chrono-bar={b.id} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-0.5" title={`${b.label}: ${b.count}`}>
               <span className={`w-full rounded-sm ${barFill(b)}`} style={{ height: `${Math.max(5, Math.round((b.count / max) * 36))}px` }} />
-              <span className={`font-mono text-[7px] uppercase tracking-[0.04em] ${barLabelClass(b)}`}>{b.short}</span>
+              <span className={`whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.04em] ${barLabelClass(b)}`}>{b.short}</span>
             </div>
           ))}
         </div>
@@ -1198,7 +1181,7 @@ export function ScoutChronograph({
       >
         <div className="mb-1.5 flex items-baseline justify-between gap-2 px-0.5">
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">{kicker}</p>
-          <p data-chrono-caption="" className="max-w-[55%] truncate text-right font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{caption}</p>
+          <p data-chrono-caption="" className="min-w-0 text-right font-mono text-[11px] tabular-nums leading-snug text-[color:var(--fg-2,#3F465C)]">{caption}</p>
         </div>
         <div className="relative mb-2 overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]">
           <p className="font-mono text-[32px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
@@ -1211,8 +1194,8 @@ export function ScoutChronograph({
           {bars.map((b) => (
             <li key={b.id} data-chrono-bar={b.id} className={b.peak || b.earlier || b.monthUnknown ? "bg-[color:var(--ember,#D96B1C)]/6" : undefined}>
               <div className="flex items-center gap-3 px-3 py-2">
-                <span className={`w-12 shrink-0 font-mono text-[11px] font-semibold tabular-nums ${b.earlier || b.monthUnknown || b.peak ? "text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-2,#3F465C)]"}`}>
-                  {b.short}
+                <span className={`shrink-0 whitespace-nowrap font-mono text-[11px] font-semibold tabular-nums ${b.earlier || b.monthUnknown || b.peak ? "text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-2,#3F465C)]"}`}>
+                  {b.label}
                 </span>
                 <span className="relative h-2.5 min-w-0 flex-1 overflow-hidden rounded-sm bg-[color:var(--bg-sunken,#F3F5F9)]">
                   <span className={`absolute inset-y-0 left-0 ${barFill(b)}`} style={{ width: `${Math.max(6, Math.round((b.count / max) * 100))}%` }} />
@@ -1276,7 +1259,7 @@ export function ScoutChronograph({
                 className={`w-full max-w-[28px] rounded-sm ${barFill(b)}`}
                 style={{ height: `${Math.max(tall ? 10 : 6, Math.round((b.count / max) * (tall ? 84 : 40)))}px` }}
               />
-              <span className={`font-mono text-[8px] uppercase tracking-[0.06em] ${barLabelClass(b)}`}>{b.short}</span>
+              <span className={`whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.04em] ${barLabelClass(b)}`}>{b.short}</span>
             </div>
           ))}
         </div>

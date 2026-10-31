@@ -99,15 +99,12 @@ async function readChrono(page) {
       monthUnknown: Number(root.getAttribute("data-chrono-month-unknown") || 0),
       inWindow: Number(root.getAttribute("data-chrono-window") || 0),
       lead: root.getAttribute("data-chrono-lead") || "",
-      caption: (root.querySelector("[data-chrono-caption]")?.textContent || root.textContent || "").replace(/\s+/g, " ").trim(),
-      hasEarlierBar:
-        Boolean(root.querySelector('[title^="Earlier"], [title*="Earlier:"], [data-chrono-bar="earlier"]')) ||
-        /\bEar\b/.test(root.textContent || "") ||
-        /\bearlier\b/i.test(root.textContent || ""),
-      hasMonthUnknownBar:
-        Boolean(root.querySelector('[title*="Month unknown"], [data-chrono-bar="month-unknown"]')) ||
-        /\bUnk\b/.test(root.textContent || "") ||
-        /month unknown/i.test(root.textContent || ""),
+      caption: (root.querySelector("[data-chrono-caption]")?.textContent || "").replace(/\s+/g, " ").trim(),
+      earlierBar: Boolean(root.querySelector('[data-chrono-bar="earlier"]')),
+      unknownBar: Boolean(root.querySelector('[data-chrono-bar="month-unknown"]')),
+      truncatedStub: /\bEar\b/.test(root.textContent || "") || /\bUnk\b/.test(root.textContent || ""),
+      earlierCaption: /\d[\d,]* earlier\b/.test((root.querySelector("[data-chrono-caption]")?.textContent || "").replace(/\s+/g, " ")),
+      undatedCaption: /\d[\d,]* undated\b/.test((root.querySelector("[data-chrono-caption]")?.textContent || "").replace(/\s+/g, " ")),
     };
   });
 }
@@ -266,8 +263,9 @@ const report = {
       chrono != null &&
       chrono.inWindow + chrono.earlier + chrono.monthUnknown === EXPECTED_CHRONO_DATED &&
       EXPECTED_CHRONO_WINDOW + EXPECTED_CHRONO_EARLIER + EXPECTED_CHRONO_MONTH_UNKNOWN === EXPECTED_CHRONO_DATED,
-    chronographEarlierVisible: chrono != null && chrono.hasEarlierBar === true,
-    chronographMonthUnknownVisible: chrono != null && chrono.hasMonthUnknownBar === true,
+    chronographEarlierVisible: chrono != null && chrono.earlierCaption === true && chrono.earlierBar === false,
+    chronographMonthUnknownVisible: chrono != null && chrono.undatedCaption === true && chrono.unknownBar === false,
+    chronographLabelsUntruncated: chrono != null && chrono.truncatedStub === false,
     campusFoundersTopPennStanfordMit: campusFoundersTopOk,
   },
 };

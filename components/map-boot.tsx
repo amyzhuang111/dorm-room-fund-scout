@@ -7,7 +7,7 @@ export function GlobeBoot() {
     <>
       <link rel="preconnect" href="https://unpkg.com" crossOrigin="" />
       <link rel="preconnect" href="https://tiles.openfreemap.org" crossOrigin="" />
-      <link rel="preload" as="fetch" href="https://tiles.openfreemap.org/styles/positron" crossOrigin="anonymous" />
+      <link rel="preload" as="fetch" href="https://tiles.openfreemap.org/planet" crossOrigin="anonymous" />
       <link rel="preload" as="fetch" href="/data/globe-map.json" />
       <link rel="preload" as="fetch" href="/data/sample-directory.json" />
       {/* Prefetch MapLibre without putting it on the critical path (no modulepreload). */}
