@@ -251,8 +251,12 @@ export function FounderResults({
                   </p>
                   <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
                     <Field label="Sector" value={founder.sector} />
-                    {" · "}
-                    <Field label="Year" value={founder.gradYear != null ? String(founder.gradYear) : null} />
+                    {founder.gradYear != null ? (
+                      <>
+                        {" · "}
+                        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{founder.gradYear}</span>
+                      </>
+                    ) : null}
                     {founder.role ? (
                       <>
                         {" · "}
@@ -311,15 +315,22 @@ function FilterSelect({
   children: ReactNode;
 }) {
   return (
-    <label className="text-[12px] text-[color:var(--fg-2,#3F465C)]">
-      <span className="mb-1 block font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">{label}</span>
-      <select
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className="h-9 max-w-[220px] rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[13px] text-[color:var(--fg,#0B0E17)]"
-      >
-        {children}
-      </select>
+    <label className="relative block min-w-[9.5rem] text-[12px] text-[color:var(--fg-2,#3F465C)]" data-founder-filter-select="">
+      <span className="mb-1 block font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{label}</span>
+      <span className="relative block">
+        <select
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          className="h-9 w-full appearance-none rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[linear-gradient(180deg,#FFFFFF_0%,#F4F6FC_100%)] py-1.5 pl-2.5 pr-8 text-[13px] font-medium text-[color:var(--fg,#0B0E17)] shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] outline-none focus:border-[color:var(--ember,#D96B1C)]"
+        >
+          {children}
+        </select>
+        <span className="pointer-events-none absolute inset-y-0 right-2 flex items-center text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
+            <path d="M1 1.25L5 4.75L9 1.25" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+      </span>
     </label>
   );
 }

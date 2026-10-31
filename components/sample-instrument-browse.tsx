@@ -290,6 +290,16 @@ export function SampleInstrumentBrowse({
 
   const kicker = feed === "leaderboard" ? "Signals" : "Companies";
   const caption = total === 1 ? "company" : "companies";
+  const sortLabel =
+    feed === "leaderboard"
+      ? "signal count"
+      : sort === "recent"
+        ? "Newest"
+        : sort === "name"
+          ? "Name"
+          : sort === "stage"
+            ? "Stage"
+            : "Rank";
   const subline =
     feed === "leaderboard"
       ? "Ordered by how many signals are stored"
@@ -300,6 +310,8 @@ export function SampleInstrumentBrowse({
           : sort === "stage"
             ? "Ordered by stage"
             : "Ranked from signals, founders, programs, and stage";
+  const pageFrom = Math.max(1, cards.length - 27);
+  const pageContext = `Companies ${pageFrom.toLocaleString("en-US")} to ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")} · sorted by ${sortLabel}`;
 
   const wireLabel = pages > 1 ? "More on this list" : "On this list";
 
@@ -437,9 +449,44 @@ export function SampleInstrumentBrowse({
         <div className="mb-3 space-y-3 lg:hidden" data-mobile-browse-compose="">
           {feed === "directory" && pages <= 1 ? (
             <div data-signals-landed-mobile="">
-              <SignalsLanded companies={companiesLive} />
+              <SignalsLanded companies={companiesLive} compact />
             </div>
           ) : null}
+
+          {/* Filters collapsed under peak hero so the list is not pushed down. */}
+          <div
+            className="overflow-hidden border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]"
+            role="region"
+            aria-label="Scout filters"
+            data-mobile-filters-inline=""
+            data-mobile-contents-hero=""
+            data-filters-index-hero=""
+          >
+            <button
+              type="button"
+              className="flex w-full items-center justify-between gap-3 px-3 py-1.5 text-left"
+              onClick={() => setMobileFiltersOpen((open) => !open)}
+              aria-expanded={mobileFiltersOpen}
+            >
+              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-2,#3F465C)]">
+                Filters
+                <span className="ml-2 font-mono text-[11px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">
+                  {boardCompanies.length.toLocaleString("en-US")}
+                </span>
+                <span className="ml-1 font-mono text-[10px] font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
+                  of {total.toLocaleString("en-US")}
+                </span>
+              </p>
+              <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">
+                {mobileFiltersOpen ? "Close" : "Open"}
+              </span>
+            </button>
+            {mobileFiltersOpen ? (
+              <div className="max-h-[min(36dvh,300px)] overflow-y-auto overscroll-contain border-t border-[color:var(--line,#E1E5EF)] px-1 pb-3" data-mobile-facet-map="">
+                <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
+              </div>
+            ) : null}
+          </div>
           {/* Leaderboard podium mounts inside data-ledger-stage (shot frames that). Browse-more keeps a folio insight, not a shared ticket. */}
           {feed === "directory" && pages > 1 ? (
             <div
@@ -533,40 +580,6 @@ export function SampleInstrumentBrowse({
           {/* Secondary sector strips culled · mobile page-1 owns the newest-insight hero alone. */}
         </div>
 
-        {/* Mobile filters: one quiet row by default; expands inline (no sheet, no loud orange). */}
-        <div
-          className="mb-3 overflow-hidden border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] lg:hidden"
-          role="region"
-          aria-label="Scout filters"
-          data-mobile-filters-inline=""
-          data-mobile-contents-hero=""
-          data-filters-index-hero=""
-        >
-          <button
-            type="button"
-            className="flex w-full items-center justify-between gap-3 px-3 py-2 text-left"
-            onClick={() => setMobileFiltersOpen((open) => !open)}
-            aria-expanded={mobileFiltersOpen}
-          >
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-2,#3F465C)]">
-              Filters
-              <span className="ml-2 font-mono text-[11px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">
-                {boardCompanies.length.toLocaleString("en-US")}
-              </span>
-              <span className="ml-1 font-mono text-[10px] font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
-                of {total.toLocaleString("en-US")}
-              </span>
-            </p>
-            <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">
-              {mobileFiltersOpen ? "Close" : "Open"}
-            </span>
-          </button>
-          {mobileFiltersOpen ? (
-            <div className="max-h-[min(36dvh,300px)] overflow-y-auto overscroll-contain border-t border-[color:var(--line,#E1E5EF)] px-1 pb-3" data-mobile-facet-map="">
-              <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
-            </div>
-          ) : null}
-        </div>
 
         {feed === "directory" && pages > 1 ? (
           <div className="mb-3 hidden lg:block" data-desk-browse-dominant="page-window" data-page-window="">
@@ -620,17 +633,9 @@ export function SampleInstrumentBrowse({
                     <span className="mt-0.5 block text-[9px] uppercase tracking-[0.1em]">with a signal</span>
                   </p>
                 </div>
-                <div className="flex items-baseline justify-between gap-3 px-3 py-2.5 lg:hidden">
-                  <p className="text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    {feed === "leaderboard" ? "Signals" : "Companies"}
-                    {" 1 to "}
-                    {cards.length.toLocaleString("en-US")}
-                    {" of "}
-                    {total.toLocaleString("en-US")}
-                  </p>
-                  <p className="shrink-0 text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                    {" with a signal"}
+                <div className="flex items-baseline justify-between gap-3 px-3 py-2.5 lg:hidden" data-more-sticky="">
+                  <p className="min-w-0 text-[12px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
+                    {`Companies 1 to ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")} · sorted by ${sortLabel}`}
                   </p>
                 </div>
               </div>
@@ -735,19 +740,22 @@ export function SampleInstrumentBrowse({
                     ) : null}
                   </div>
                 </div>
-                {/* Mobile more-end-375: one line so cards remain in frame */}
+                {/* Mobile more-end-375: context header + designed load-next footer */}
                 <div
-                  className="mt-3 scroll-mt-24 border-t border-[color:var(--line,#E1E5EF)] pt-3 lg:hidden"
+                  className="mt-3 scroll-mt-24 lg:hidden"
                   data-ledger-end=""
                   data-ledger-end-mobile=""
                   data-end-insight={sliceInsight.kicker}
                 >
+                  <p className="px-0.5 text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]" data-more-context="">
+                    {pageContext}
+                  </p>
                   <div
-                    className="flex flex-wrap items-center justify-between gap-2 px-0.5"
+                    className="mt-2 flex items-center justify-between gap-3 border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--cobalt-haze,#E8ECFA)]/30 px-3 py-2.5"
                     data-ledger-end-lead=""
                     data-ledger-end-more=""
                   >
-                    <p className="font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="" data-end-lead="">
+                    <p className="min-w-0 font-mono text-[11px] tabular-nums leading-snug text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="" data-end-lead="">
                       <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
                       {" of "}
                       <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
@@ -764,7 +772,7 @@ export function SampleInstrumentBrowse({
                     {cards.length < total ? (
                       <Link
                         href={moreHref}
-                        className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]"
+                        className="inline-flex h-8 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white hover:opacity-90"
                       >
                         Load next
                       </Link>

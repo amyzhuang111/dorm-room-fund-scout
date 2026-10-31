@@ -93,6 +93,18 @@ export function SampleHome({
       }
     : null;
   const peakShell = buildPeakShell(data.cards);
+  // Explore does not mount GlobeHero — omit heavy university rankings from RSC HTML (~160KB).
+  const clientStats =
+    place === "explore"
+      ? {
+          ...stats,
+          week: [],
+          universities: [],
+          recentCampusIds: [],
+          signalTypes: [],
+          collageFounder: null,
+        }
+      : stats;
 
   return (
     <SampleHomeClient
@@ -110,7 +122,7 @@ export function SampleHome({
       sectors={data.sectors}
       kinds={data.kinds}
       campuses={campuses}
-      stats={stats}
+      stats={clientStats}
       cardCount={data.cards.length}
       signalCompanyCount={data.cards.filter((c) => c.signals > 0).length}
       foundersListed={foundersListed}

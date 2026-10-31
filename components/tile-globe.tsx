@@ -468,12 +468,12 @@ export function TileGlobe({
       <section className="mb-4" data-fold-desk-map="" aria-label="Map">
         <h2 className="mb-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]">Map</h2>
         <div
-          className="relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/45 bg-[#F7F8FC] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.08)] before:pointer-events-none before:absolute before:inset-2 before:z-[1] before:border before:border-[color:var(--cobalt,#2F4FD8)]/15 before:content-['']"
+          className="relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/45 bg-[linear-gradient(165deg,#FBFCFE_0%,#F0F3FA_48%,#E6EBF6_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.85),inset_0_-18px_40px_rgba(47,79,216,0.07),0_1px_2px_rgba(15,23,42,0.04)] before:pointer-events-none before:absolute before:inset-2 before:z-[1] before:border before:border-[color:var(--cobalt,#2F4FD8)]/15 before:content-[''] after:pointer-events-none after:absolute after:inset-0 after:z-[1] after:bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.55),transparent_55%),radial-gradient(ellipse_at_70%_85%,rgba(47,79,216,0.08),transparent_50%)] after:content-['']"
           style={{ height: stageHeight }}
           data-dispatch-map-stage=""
           data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
         >
-          <div ref={mapNode} className={`h-full w-full ${painted && !failed ? "" : "invisible"}`} />
+          <div ref={mapNode} className={`relative z-[2] h-full w-full ${painted && !failed ? "" : "invisible"}`} />
           {!painted ? (
             <div className="absolute inset-0 z-30 bg-[#FFFFFF]" aria-busy="true" aria-live="polite">
               <div className="grid h-full place-items-center">

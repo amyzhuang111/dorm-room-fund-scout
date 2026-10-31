@@ -192,9 +192,9 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
       )}
 
       {project.founderLinks.length > 0 ? (
-      <section data-company-founders="">
+      <section data-company-founders="" className="pb-4">
         <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founders</h3>
-        <ul className="mt-1 space-y-1 text-sm text-foreground">
+        <ul className="mt-1 space-y-2 text-sm text-foreground">
           {project.founderLinks.map((f) => (
             <li key={f.personId} className="flex flex-wrap items-center gap-2">
               <Link href={founderHref(f)} className="text-link hover:underline">

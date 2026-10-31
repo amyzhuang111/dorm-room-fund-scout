@@ -52,7 +52,7 @@ function isYcReason(label: string): boolean {
   return /y\s*combinator/i.test(label);
 }
 
-/** Ordered real-data leads for a founder (strong signals, then programs with YC last, then weak). */
+/** Ordered real-data leads for a founder (specific facts first; diversifier skips repeats). */
 export function whyWorthALookCandidates(founder: FounderLead): string[] {
   const out: string[] = [];
   const seen = new Set<string>();
@@ -62,20 +62,32 @@ export function whyWorthALookCandidates(founder: FounderLead): string[] {
     seen.add(text);
     out.push(text);
   }
-  // Keep why off fields already on the card (campus, company, sector, year, role).
+  const company = founder.company?.trim() || "";
   const STRONG = new Set(["funding", "launch", "accelerator", "award"]);
   const strong = [...founder.signalTypes.filter((t) => STRONG.has(t))].sort(
     (a, b) => ({ funding: 0, launch: 1, accelerator: 2, award: 3 }[a] ?? 50) - ({ funding: 0, launch: 1, accelerator: 2, award: 3 }[b] ?? 50) || a.localeCompare(b),
   );
+  const programs = [...founder.programs].sort((a, b) => Number(isYcReason(b)) - Number(isYcReason(a)) || a.localeCompare(b));
+  // Specific: program + signal + company (unique on the page when possible).
+  if (programs[0] && strong[0] && company) {
+    push(`${programs[0]} · ${signalTypeLabel(strong[0]).toLowerCase()} · ${company}`);
+  }
+  if (programs[0] && company) {
+    push(`${programs[0]} · ${company}`);
+  }
+  if (strong[0] && company) {
+    push(`${signalTypeLabel(strong[0])} at ${company}`);
+  }
   if (strong.length >= 2) {
     push(`${signalTypeLabel(strong[0])} and ${signalTypeLabel(strong[1]).toLowerCase()} on record`);
   }
   for (const t of strong) {
     push(`${signalTypeLabel(t)} on record`);
   }
-  // Named programs are the specific desk facts (diversifier may skip a repeated YC).
-  const programs = [...founder.programs].sort((a, b) => Number(isYcReason(b)) - Number(isYcReason(a)) || a.localeCompare(b));
   for (const name of programs) push(name);
+  if (founder.gradYear != null && company) {
+    push(`Class of ${founder.gradYear} · ${company}`);
+  }
   const WEAK_RANK: Record<string, number> = {
     affiliation_change: 0,
     continued_dev: 1,
@@ -84,7 +96,7 @@ export function whyWorthALookCandidates(founder: FounderLead): string[] {
   for (const t of [...founder.signalTypes]
     .filter((x) => !STRONG.has(x))
     .sort((a, b) => (WEAK_RANK[a] ?? 50) - (WEAK_RANK[b] ?? 50) || a.localeCompare(b))) {
-    push(`${signalTypeLabel(t)} on record`);
+    push(company ? `${signalTypeLabel(t)} · ${company}` : `${signalTypeLabel(t)} on record`);
   }
   return out;
 }
@@ -96,28 +108,23 @@ export function whyWorthALookCandidates(founder: FounderLead): string[] {
 export function assignWhyWorthALook(founders: readonly FounderLead[]): Map<string, string | null> {
   const usedReasons = new Set<string>();
   const usedPairs = new Set<string>();
+  let usedYc = false;
   const assigned = new Map<string, string | null>();
   for (const founder of founders) {
     const pairKey = (reason: string) => `${founder.companyId ?? founder.company ?? ""}|${reason}`;
     const cands = whyWorthALookCandidates(founder);
+    const blocked = (c: string) =>
+      usedPairs.has(pairKey(c)) || usedReasons.has(c) || (isYcReason(c) && usedYc);
     let pick: string | null = null;
     for (const c of cands) {
-      if (usedPairs.has(pairKey(c))) continue;
-      if (isYcReason(c) && usedReasons.has(c)) continue;
-      if (usedReasons.has(c) && cands.some((x) => !usedReasons.has(x) && !usedPairs.has(pairKey(x)) && !(isYcReason(x) && usedReasons.has(x)))) {
-        continue;
-      }
+      if (blocked(c)) continue;
       pick = c;
       break;
-    }
-    if (!pick) {
-      pick =
-        cands.find((c) => !usedPairs.has(pairKey(c)) && !(isYcReason(c) && usedReasons.has(c))) ??
-        null;
     }
     if (pick) {
       usedReasons.add(pick);
       usedPairs.add(pairKey(pick));
+      if (isYcReason(pick)) usedYc = true;
     }
     assigned.set(founder.id, pick);
   }

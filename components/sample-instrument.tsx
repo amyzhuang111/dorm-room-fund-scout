@@ -258,12 +258,13 @@ export function companyInitials(name: string): string {
 }
 
 function NeutralMark({ name, cls }: { name: string; cls: string }) {
-  const initials = companyInitials(name).slice(0, 1);
+  const initials = companyInitials(name).slice(0, 2);
   return (
     <span
-      className={`${cls} grid shrink-0 place-items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] font-mono text-[9px] font-medium tracking-tight text-[color:var(--fg-3,#5C647A)]`}
+      className={`${cls} grid shrink-0 place-items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/55 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[9px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]`}
       aria-hidden
       title={name}
+      data-monogram=""
     >
       {initials}
     </span>
@@ -283,12 +284,15 @@ export function LogoMark({
 }) {
   void mark;
   const cls = size <= 16 ? "h-4 w-4" : size <= 20 ? "h-5 w-5" : size <= 24 ? "h-6 w-6" : size <= 28 ? "h-7 w-7" : "h-8 w-8";
-  const [ok, setOk] = useState(Boolean(logoUrl));
-  if (logoUrl && ok) {
+  // Google s2 favicons often paint a blank white tile at any sz — never trust them.
+  const isGoogleStub = Boolean(logoUrl && /google\.com\/s2\/favicons/i.test(logoUrl));
+  const trustedUrl = logoUrl && !isGoogleStub ? logoUrl : null;
+  const [ok, setOk] = useState(Boolean(trustedUrl));
+  if (trustedUrl && ok) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={logoUrl}
+        src={trustedUrl}
         alt=""
         width={size}
         height={size}
@@ -312,8 +316,9 @@ export function LogoPill({
   mark?: string;
 }) {
   void mark;
-  const needsProof = Boolean(logoUrl && /google\.com\/s2\/favicons/i.test(logoUrl));
-  const [ok, setOk] = useState(!needsProof && Boolean(logoUrl));
+  const isGoogleStub = Boolean(logoUrl && /google\.com\/s2\/favicons/i.test(logoUrl));
+  const trustedUrl = logoUrl && !isGoogleStub ? logoUrl : null;
+  const [ok, setOk] = useState(Boolean(trustedUrl));
   const initials = companyInitials(name).slice(0, 2);
   return (
     <Link
@@ -321,10 +326,10 @@ export function LogoPill({
       className="relative flex h-6 min-w-0 max-w-[8rem] items-center gap-1 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-1 text-[9px] leading-none text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--ember,#D96B1C)]"
       title={name}
     >
-      {ok && logoUrl ? (
+      {ok && trustedUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={logoUrl}
+          src={trustedUrl}
           alt=""
           width={14}
           height={14}
@@ -336,19 +341,6 @@ export function LogoPill({
           {initials}
         </span>
       )}
-      {logoUrl && needsProof && !ok ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={logoUrl}
-          alt=""
-          width={1}
-          height={1}
-          className="pointer-events-none absolute h-0 w-0 opacity-0"
-          onLoad={(e) => {
-            if (e.currentTarget.naturalWidth > 16) setOk(true);
-          }}
-        />
-      ) : null}
       <span className="min-w-0 truncate">{name}</span>
     </Link>
   );
@@ -1006,12 +998,65 @@ export function chronographCaption(detail: ChronographDetail): string {
  * Plain-language "when signals landed" — real calendar months only.
  * Earlier / year-only counts stay in a caption; never as Ear/Unk bar codes.
  */
-export function SignalsLanded({ companies }: { companies: FacetCompany[] }) {
+export function SignalsLanded({ companies, compact = false }: { companies: FacetCompany[]; compact?: boolean }) {
   const detail = useMemo(() => signalChronographDetail(companies), [companies]);
   const bars = detail.bars;
   if (bars.length === 0) return null;
   const max = Math.max(1, ...bars.map((b) => b.count));
   const peak = bars.find((b) => b.peak) ?? bars[bars.length - 1]!;
+  const aside = [
+    detail.earlierValid > 0 ? `${detail.earlierValid.toLocaleString("en-US")} earlier` : null,
+    detail.undatedMonth > 0 ? `${detail.undatedMonth.toLocaleString("en-US")} year-only` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  if (compact) {
+    // filters-375 / companies-375: peak sparkline + count as hero (list stays high)
+    return (
+      <section
+        className="border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2"
+        data-signals-landed=""
+        data-signals-landed-compact=""
+        data-chrono-peak={String(peak.count)}
+        data-chrono-peak-month={peak.id}
+        data-chrono-window={String(detail.inWindow)}
+        data-chrono-earlier={String(detail.earlierValid)}
+        data-chrono-month-unknown={String(detail.undatedMonth)}
+        data-chrono-dated={String(detail.dated)}
+      >
+        <div className="flex items-end justify-between gap-3">
+          <div className="min-w-0">
+            <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Peak · {peak.short} {peak.id.slice(0, 4)}</p>
+            <p className="mt-1 font-mono text-[28px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+              {peak.count.toLocaleString("en-US")}
+              <span className="ml-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
+                / {detail.dated.toLocaleString("en-US")}
+              </span>
+            </p>
+            <p className="mt-1 text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+              {peak.label} took {Math.round((peak.count / Math.max(1, detail.dated)) * 100)}% of dated signals
+            </p>
+          </div>
+          <ol className="flex h-11 max-w-[46%] flex-1 items-end gap-0.5" data-signals-landed-bars="" aria-hidden>
+            {bars.map((b) => (
+              <li key={b.id} className="flex min-w-0 flex-1 flex-col items-center justify-end" data-signal-month={b.id} title={`${b.label}: ${b.count}`}>
+                <span
+                  className={`w-full max-w-[1.1rem] rounded-sm ${b.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/35"}`}
+                  style={{ height: `${Math.max(3, Math.round((b.count / max) * 36))}px` }}
+                />
+              </li>
+            ))}
+          </ol>
+        </div>
+        {aside ? (
+          <p className="mt-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-signals-landed-aside="">
+            {aside}
+            {" · not on the chart"}
+          </p>
+        ) : null}
+      </section>
+    );
+  }
   return (
     <section
       className="border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2 sm:px-4 sm:py-3"
@@ -1041,14 +1086,9 @@ export function SignalsLanded({ companies }: { companies: FacetCompany[] }) {
           </li>
         ))}
       </ol>
-      {(detail.earlierValid > 0 || detail.undatedMonth > 0) ? (
+      {aside ? (
         <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-signals-landed-aside="">
-          {[
-            detail.earlierValid > 0 ? `${detail.earlierValid.toLocaleString("en-US")} earlier` : null,
-            detail.undatedMonth > 0 ? `${detail.undatedMonth.toLocaleString("en-US")} year-only` : null,
-          ]
-            .filter(Boolean)
-            .join(" · ")}
+          {aside}
           {" · not on the chart"}
         </p>
       ) : null}
@@ -1727,12 +1767,12 @@ export function MobileWireStrip({
 
   const hint =
     surface === "fold"
-      ? "Swipe · programs"
+      ? `Swipe · ${cards.length} programs`
       : surface === "browse"
-        ? "Swipe · sectors"
+        ? `Swipe · ${cards.length} sectors`
         : surface === "signals"
-          ? "Swipe · recent"
-          : "Swipe · peers";
+          ? `Swipe · ${cards.length} recent`
+          : `Swipe · ${cards.length} peers`;
 
   // Distinct card chrome per surface (avoid twin strips)
   const cardCls =
@@ -1755,7 +1795,8 @@ export function MobileWireStrip({
         <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{label}</p>
         <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{hint}</p>
       </div>
-      <div className="-mx-1 flex gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="relative -mx-1">
+      <div className="-mx-0 flex gap-3 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-peer-swipe="">
         {cards.map((card) => {
           const inner = (
             <>
@@ -1779,6 +1820,10 @@ export function MobileWireStrip({
             </div>
           );
         })}
+      </div>
+      {cards.length > 1 ? (
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-[color:var(--bg,#FFFFFF)] to-transparent" aria-hidden data-peer-swipe-fade="" />
+      ) : null}
       </div>
     </div>
   );
@@ -1823,7 +1868,7 @@ export function MobileFilterDock({
       ? "fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)]/95 px-3 py-2.5 backdrop-blur-sm lg:hidden"
       : tone === "outline"
         ? "fixed inset-x-0 bottom-0 z-40 border-t-2 border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2 lg:hidden"
-        : "fixed inset-x-0 bottom-0 z-40 border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/90 px-3 py-1.5 lg:hidden";
+        : "relative z-10 mt-2 border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2 lg:hidden";
 
   const btn =
     tone === "ember"

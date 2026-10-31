@@ -59,7 +59,6 @@ function browseHref(opts: {
   more?: number;
 }): string {
   const query = new URLSearchParams();
-  query.set("sample", "1");
   if (opts.feed && opts.feed !== "directory") query.set("feed", opts.feed);
   if (opts.sector) query.set("sector", opts.sector);
   if (opts.kind) query.set("kind", opts.kind);
