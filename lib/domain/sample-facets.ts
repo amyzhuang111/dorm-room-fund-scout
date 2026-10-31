@@ -279,7 +279,11 @@ export function directoryCardSubtitle(card: {
   stage?: string | null;
   signalLabel?: string | null;
 }): string {
-  return [card.school, card.hqRegion, card.sector, card.stage, card.signalLabel].filter(Boolean).join(" · ");
+  const signal =
+    card.signalLabel === "Acquisition"
+      ? "Acquired"
+      : card.signalLabel ?? null;
+  return [card.school, card.hqRegion, card.sector, card.stage, signal].filter(Boolean).join(" · ");
 }
 
 /** Prefer real logos first for dense drawers; stable by name within each group. */

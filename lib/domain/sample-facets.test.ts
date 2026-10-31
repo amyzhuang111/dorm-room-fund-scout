@@ -95,6 +95,7 @@ assert.equal(directoryCardSubtitle({ school: "Berkeley", sector: "AI" }), "Berke
 assert.equal(directoryCardSubtitle({ hqRegion: "San Francisco" }), "San Francisco");
 assert.equal(directoryCardSubtitle({}), "");
 assert.equal(directoryCardSubtitle({ school: null, sector: null, stage: null, signalLabel: null }), "");
+assert.equal(directoryCardSubtitle({ school: "Georgetown", stage: "Series C", signalLabel: "Acquisition" }), "Georgetown · Series C · Acquired");
 assert.ok(!directoryCardSubtitle({}).toLowerCase().includes("on record"));
 
 const ordered = preferLogoCompanies([

@@ -392,17 +392,24 @@ export function SampleInstrumentBrowse({
               className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]"
               data-mobile-continued-mast=""
               data-chapter-window=""
+              data-chapter-peak=""
             >
-              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Chapter window</p>
-              <p className="mt-2 font-mono text-[32px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                {cards.length.toLocaleString("en-US")}
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Peak on this load</p>
+              <p className="mt-2 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+                {signaledMatch.toLocaleString("en-US")}
               </p>
-              <p className="mt-3 text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies loaded on this chapter</p>
-              <p className="mt-3 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                {"Showing "}
-                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
-                {" of "}
-                <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
+              <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                with a signal among {cards.length.toLocaleString("en-US")} loaded
+              </p>
+              {sliceInsight ? (
+                <p className="mt-3 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">
+                  <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{sliceInsight.companyName}</span>
+                  {" · "}
+                  {sliceInsight.figure.toLocaleString("en-US")} {sliceInsight.figureUnit}
+                </p>
+              ) : null}
+              <p className="mt-2 text-[12px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                {cards.length.toLocaleString("en-US")} of {total.toLocaleString("en-US")} on the desk
               </p>
             </div>
           ) : null}
@@ -475,12 +482,12 @@ export function SampleInstrumentBrowse({
             {pages > 1 ? (
               <div className="relative sticky top-12 z-10 mb-0 border border-b-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 backdrop-blur-sm before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]">
                 <div className="flex items-baseline justify-between gap-3 px-3 py-2.5 sm:px-3.5">
-                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+                  <p className="text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]">
                     {feed === "leaderboard" ? "More signals" : "More companies"}
                   </p>
-                  <p className="shrink-0 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-continued-insight="">
+                  <p className="shrink-0 text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-continued-insight="">
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                    {" signaled on this chapter"}
+                    {" with a signal"}
                   </p>
                 </div>
               </div>
@@ -754,7 +761,7 @@ function LedgerRow({
   return (
     <Link
       href={`/startup/${card.id}`}
-      className={`group flex items-start gap-3 px-3.5 transition-[background-color,color] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:gap-3 sm:px-3.5 ${
+      className={`group flex items-start gap-3 px-3.5 transition-[background-color,color] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:gap-3 sm:px-3.5 ${
         ranked ? "py-3.5 sm:py-3 lg:gap-3 lg:py-3.5" : "py-3.5 sm:py-3"
       }`}
     >
@@ -774,14 +781,14 @@ function LedgerRow({
         <p
           className={
             ranked
-              ? "line-clamp-2 break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
-              : "truncate text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
+              ? "line-clamp-2 break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
+              : "truncate text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
           }
         >
           {card.name}
         </p>
         {subtitle ? (
-          <p className={`mt-0.5 font-mono text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)] ${ranked ? "line-clamp-2" : "truncate"}`}>
+          <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)] line-clamp-2">
             {subtitle}
           </p>
         ) : null}

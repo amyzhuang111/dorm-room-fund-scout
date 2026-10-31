@@ -225,6 +225,12 @@ const browser = await chromium.launch({ headless: true });
     await chapterM.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(300);
   }
+  await page.mouse.move(0, 0);
+  await page.evaluate(() => {
+    const a = document.activeElement;
+    if (a && a instanceof HTMLElement) a.blur();
+  });
+  await page.waitForTimeout(150);
   await shot(page, "companies-more-375");
 
   const endLead = page.locator("[data-ledger-end-lead]").first();
