@@ -13,5 +13,5 @@ export function markerRadiusByFounders(founders: number): number {
 }
 
 export function markerSizeLegend(): string {
-  return "Point size scales with founder names on record. Ember marks the top desks.";
+  return "Point size scales with founder names on record. Color is the campus country.";
 }

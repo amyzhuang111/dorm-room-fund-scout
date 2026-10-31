@@ -30,6 +30,7 @@ function card(partial: Partial<DirectoryCard> & Pick<DirectoryCard, "id" | "name
     operatingStatus: null,
     hqRegion: null,
     primaryProgram: null,
+    programs: [],
     ...partial,
   };
 }

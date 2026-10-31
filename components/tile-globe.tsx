@@ -38,18 +38,19 @@ export interface TileCampus {
 
 export type TileCompany = FacetCompany;
 
-const OCEAN = "#FFFFFF";
-const LAND = "#FFFFFF";
-const LAND_ALT = "#FFFFFF";
-const LABEL = "#2F4FD8";
-const HALO = "#FFFFFF";
-const BRAND = "#2F4FD8";
+const OCEAN = "#FFDBBB";
+const LAND = "#DD8A4E";
+const LAND_ALT = "#D48148";
+const BOUNDARY = "#C4733E";
+const LABEL = "#5a2c0e";
+const HALO = "#FFE9D6";
+const BRAND = "#FB651E";
 const COUNT = "font-bold tabular-nums text-[color:var(--ember,#D96B1C)]";
 
 const COUNTRY_COLOR: Record<string, string> = {
-  "United States": "#2F4FD8",
-  Canada: "#2F4FD8",
-  "United Kingdom": "#2F4FD8",
+  "United States": "#3b6fd8",
+  Canada: "#e23b4a",
+  "United Kingdom": "#2f9e6b",
 };
 
 function markerColor(country: string): string {
@@ -73,8 +74,7 @@ function campusCollection(campuses: TileCampus[]) {
         founders: campus.founders,
         signals: campus.signals,
         country: campus.country,
-        // Cobalt field; ember marks founders top-3 (Penn / Stanford / MIT).
-        color: topIds.has(campus.id) ? "#D96B1C" : markerColor(campus.country),
+        color: markerColor(campus.country),
         top: topIds.has(campus.id) ? 1 : 0,
         labelRank: labelRank.get(campus.id) ?? 99,
         radius: markerRadiusByFounders(campus.founders),
@@ -117,6 +117,8 @@ export function TileGlobe({
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [hover, setHover] = useState<{ name: string; founders: number; signals: number; x: number; y: number } | null>(null);
   const [ready, setReady] = useState(false);
+  const [painted, setPainted] = useState(false);
+  const [failed, setFailed] = useState(false);
 
   const country = facets.country;
   const shown = useMemo(
@@ -150,9 +152,11 @@ export function TileGlobe({
       getCenter: () => { lng: number; lat: number };
       easeTo: (opts: object) => void;
       flyTo: (opts: object) => void;
+      jumpTo: (opts: object) => void;
       resize: () => void;
       remove: () => void;
       getCanvas: () => HTMLCanvasElement;
+      getCanvasContainer: () => HTMLElement;
     } | null = null;
 
     const fit = () => {
@@ -183,15 +187,19 @@ export function TileGlobe({
       map.easeTo({ center, duration: 1400, easing: (t: number) => t, essential: true });
     };
 
+    const styleTimer = window.setTimeout(() => {
+      if (!dead) setFailed(true);
+    }, 15000);
+
     const startMap = () => {
       void loadMapLibre().then((mod) => {
       if (dead || !mapNode.current) return;
       const created = new mod.Map({
         container: mapNode.current,
         style: "https://tiles.openfreemap.org/styles/positron",
-        center: [-28, 16],
-        zoom: window.innerWidth >= 1024 ? 2.5 : 1.2,
-        minZoom: 1.15,
+        center: [-98, 39],
+        zoom: window.innerWidth >= 1024 ? 2.4 : 1.05,
+        minZoom: 0.8,
         maxPitch: 0,
         attributionControl: false,
       });
@@ -200,40 +208,44 @@ export function TileGlobe({
 
       map.on("style.load", () => {
         if (dead || !map) return;
-        map.setProjection({ type: "globe" });
-        map.setSky({
-          "sky-color": "#FFFFFF",
-          "horizon-color": "#FFFFFF",
-          "fog-color": "#EEF1FB",
-          "sky-horizon-blend": 0.7,
-          "horizon-fog-blend": 0.2,
-          "fog-ground-blend": 0.15,
-          "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 0.35, 2.2, 0.12, 4, 0.04],
-        });
+        try {
+          map.setProjection({ type: "globe" });
+        } catch {
+          setFailed(true);
+          return;
+        }
+        try {
+          map.setSky({
+            "sky-color": "#FFE8D6",
+            "horizon-color": "#FFF8F2",
+            "fog-color": "#FFF3E9",
+            "sky-horizon-blend": 0.45,
+            "horizon-fog-blend": 0.7,
+            "fog-ground-blend": 0.55,
+            "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 1, 2.2, 0.9, 4, 0.4],
+          });
+        } catch {
+          // The globe still paints without a custom sky.
+        }
+        let recolored = false;
         for (const layer of map.getStyle().layers) {
           try {
-            if (layer.type === "background") map.setPaintProperty(layer.id, "background-color", LAND);
-            if (layer.id === "water") map.setPaintProperty(layer.id, "fill-color", OCEAN);
-            // Line-art globe: no filled land masses (escape YC filled-land skeleton)
-            if (layer.type === "fill" && /landcover|landuse|park|wood|sand|land|earth|building/.test(layer.id)) {
-              try { map.setPaintProperty(layer.id, "fill-opacity", 0); } catch {}
-              try { map.setPaintProperty(layer.id, "fill-color", LAND_ALT); } catch {}
+            if (layer.type === "background") {
+              map.setPaintProperty(layer.id, "background-color", LAND);
+              recolored = true;
             }
-            if (layer.type === "fill" && /land|earth|continent/.test(layer.id) && layer.id !== "water") {
-              try { map.setLayoutProperty(layer.id, "visibility", "none"); } catch {}
+            if (layer.id === "water") {
+              map.setPaintProperty(layer.id, "fill-color", OCEAN);
+              recolored = true;
             }
-            if (layer.type === "line" && /boundary/.test(layer.id)) {
-              map.setPaintProperty(layer.id, "line-color", "#2F4FD8");
-              try { map.setPaintProperty(layer.id, "line-width", 0.7); } catch {}
-              try { map.setPaintProperty(layer.id, "line-opacity", 0.55); } catch {}
-              try { map.setPaintProperty(layer.id, "line-dasharray", [0.6, 1.8]); } catch {}
+            if (layer.type === "fill" && layer.id !== "water") {
+              map.setPaintProperty(layer.id, "fill-color", /landcover|landuse|park|wood|sand/.test(layer.id) ? LAND_ALT : LAND);
+              try { map.setPaintProperty(layer.id, "fill-opacity", 1); } catch { /* layer has no opacity */ }
             }
-            if (layer.type === "line" && /coast|waterway/.test(layer.id)) {
-              try { map.setPaintProperty(layer.id, "line-color", "#2F4FD8"); } catch {}
-              try { map.setPaintProperty(layer.id, "line-width", 0.95); } catch {}
-              try { map.setPaintProperty(layer.id, "line-opacity", 0.85); } catch {}
-              // Solid coast — precise line-art, not dashed noise
-              try { map.setPaintProperty(layer.id, "line-dasharray", [1, 0]); } catch {}
+            if (layer.type === "line" && /boundary|coast/.test(layer.id)) {
+              map.setPaintProperty(layer.id, "line-color", BOUNDARY);
+              try { map.setPaintProperty(layer.id, "line-opacity", 0.85); } catch { /* no opacity */ }
+              try { map.setPaintProperty(layer.id, "line-dasharray", [1, 0]); } catch { /* not a dashed line */ }
             }
             if (layer.type === "symbol" && /country|water_name|marine|sea|ocean/.test(layer.id)) {
               map.setLayoutProperty(layer.id, "text-font", ["Noto Sans Italic"]);
@@ -244,6 +256,10 @@ export function TileGlobe({
           } catch {
             // Icon-only symbol layers have no text paint.
           }
+        }
+        if (!recolored) {
+          setFailed(true);
+          return;
         }
         map.addSource("campuses", { type: "geojson", data: collection() });
         map.addLayer({
@@ -283,9 +299,30 @@ export function TileGlobe({
             "circle-opacity": 1,
           },
         });
+        window.clearTimeout(styleTimer);
+        const stage = mapNode.current?.parentElement;
+        const height = stage?.clientHeight || mapNode.current?.clientHeight || 520;
+        const width = stage?.clientWidth || mapNode.current?.clientWidth || 640;
+        if (mapNode.current) mapNode.current.style.height = `${height}px`;
+        const canvasBox = map.getCanvasContainer();
+        canvasBox.style.width = `${width}px`;
+        canvasBox.style.height = `${height}px`;
         setReady(true);
         map.resize();
-        spin();
+        const wide = window.innerWidth >= 1024;
+        const camera = { center: [-98, 39], zoom: wide ? 2.4 : 1.05 };
+        map.jumpTo(camera);
+        let revealed = false;
+        const reveal = () => {
+          if (dead || revealed || !map) return;
+          revealed = true;
+          map.resize();
+          map.jumpTo(camera);
+          setPainted(true);
+          spin();
+        };
+        map.on("idle", reveal);
+        window.setTimeout(reveal, 1400);
       });
 
       const read = (event: { features?: { properties?: Record<string, unknown> }[]; point?: { x: number; y: number } }) => {
@@ -342,6 +379,7 @@ export function TileGlobe({
     observer.observe(node);
     return () => {
       dead = true;
+      window.clearTimeout(styleTimer);
       observer.disconnect();
       window.removeEventListener("resize", fit);
       motion.removeEventListener("change", onMotion);
@@ -351,6 +389,10 @@ export function TileGlobe({
     // The map is created once. Campus data is pushed in the effect below.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    mapRef.current?.resize();
+  }, [stageHeight]);
 
   useEffect(() => {
     const source = mapRef.current?.getSource("campuses");
@@ -833,21 +875,30 @@ export function TileGlobe({
             className="relative overflow-hidden rounded-none border-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--bg,#FFFFFF)] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.06),0_1px_0_rgba(217,107,28,0.18)]"
             style={{ height: stageHeight }}
             data-dispatch-map-stage=""
+            data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
           >
-            <div ref={mapNode} className="h-full w-full" />
+            <div ref={mapNode} className={`h-full w-full ${painted && !failed ? "" : "invisible"}`} />
+            {!painted ? (
+              <div className="absolute inset-0 z-30 bg-[#FFF7F0]" aria-busy="true" aria-live="polite">
+                <div className="grid h-full place-items-center">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#6b5443]">Loading globe</p>
+                </div>
+              </div>
+            ) : null}
             <div className="pointer-events-none absolute left-2.5 top-2.5 z-10 hidden max-w-[240px] overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)]/94 shadow-[0_2px_0_rgba(47,79,216,0.1)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)] lg:block" data-dispatch-scale="" data-atlas-plate="">
               <div className="px-2.5 py-2 pl-3">
                 <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Atlas plate · map</p>
                 <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                  White dispatch field
+                  Campus globe
                 </p>
                 <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                   <span className={COUNT}>{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
-                  {" campuses · chronograph owns the beat"}
+                  {" campuses plotted"}
                 </p>
-                <div className="mt-1.5 flex items-center gap-3 font-mono text-[10px] text-[color:var(--fg-2,#3F465C)]">
-                  <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[color:var(--cobalt,#2F4FD8)]" aria-hidden />field</span>
-                  <span className="inline-flex items-center gap-1"><span className="inline-block h-2.5 w-2.5 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />Penn · Stanford · MIT</span>
+                <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] text-[color:var(--fg-2,#3F465C)]">
+                  <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[#3b6fd8]" aria-hidden />United States</span>
+                  <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[#e23b4a]" aria-hidden />Canada</span>
+                  <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[#2f9e6b]" aria-hidden />United Kingdom</span>
                 </div>
               </div>
             </div>

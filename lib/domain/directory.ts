@@ -33,6 +33,8 @@ export interface DirectoryCard {
   hqRegion: string | null;
   /** First investor/program fact when stored (e.g. Y Combinator, SkyDeck). */
   primaryProgram: string | null;
+  /** Every stored investor/program name for this company. */
+  programs: string[];
 }
 
 export interface DirectoryFilter {
@@ -310,12 +312,16 @@ export function buildDirectoryFromDb(): DirectoryData {
   }
 
   const programByProject = new Map<string, string>();
+  const programsByProject = new Map<string, string[]>();
   for (const row of db
     .prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'investor'`)
     .all() as { project_id: string; value_text: string | null }[]) {
-    if (programByProject.has(row.project_id)) continue;
     const name = String(row.value_text ?? "").trim();
-    if (name) programByProject.set(row.project_id, name);
+    if (!name) continue;
+    if (!programByProject.has(row.project_id)) programByProject.set(row.project_id, name);
+    const list = programsByProject.get(row.project_id) ?? [];
+    if (!list.includes(name)) list.push(name);
+    programsByProject.set(row.project_id, list);
   }
 
   const foundedYearByProject = new Map<string, number>();
@@ -423,6 +429,7 @@ export function buildDirectoryFromDb(): DirectoryData {
       operatingStatus: operatingStatusByProject.get(company.id) ?? null,
       hqRegion: hqByProject.get(company.id) ?? null,
       primaryProgram: programByProject.get(company.id) ?? null,
+      programs: programsByProject.get(company.id) ?? [],
     });
   }
   cards.sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name));

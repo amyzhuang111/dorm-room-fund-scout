@@ -1403,10 +1403,10 @@ export function programDisplayName(raw: string): string {
 export function topPrograms(companies: FacetCompany[]): FacetCount[] {
   const counts = new Map<string, number>();
   for (const company of companies) {
-    const raw = company.primaryProgram?.trim();
-    if (!raw) continue;
-    const label = programDisplayName(raw);
-    counts.set(label, (counts.get(label) ?? 0) + 1);
+    const raws = company.programs?.map((name) => name.trim()).filter(Boolean) ?? [];
+    const names = raws.length > 0 ? raws : company.primaryProgram?.trim() ? [company.primaryProgram.trim()] : [];
+    const labels = new Set(names.map((name) => programDisplayName(name)).filter(Boolean));
+    for (const label of labels) counts.set(label, (counts.get(label) ?? 0) + 1);
   }
   return [...counts.entries()]
     .map(([id, count]) => ({ id, label: id, count }))

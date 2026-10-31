@@ -26,6 +26,7 @@ export interface FacetCompany {
   operatingStatus?: "acquired" | "dead" | null;
   hqRegion?: string | null;
   primaryProgram?: string | null;
+  programs?: string[] | null;
 }
 
 export interface FacetCount {
