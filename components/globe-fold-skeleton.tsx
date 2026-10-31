@@ -35,7 +35,7 @@ export function GlobeFoldSkeleton({
         </p>
       </div>
       <div
-        className="relative overflow-hidden border-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[#FFF7F0]"
+        className="relative overflow-hidden border-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[#FFFFFF]"
         style={{ height: 560 }}
         data-dispatch-map-stage=""
       >

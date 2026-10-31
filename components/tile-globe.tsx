@@ -22,9 +22,9 @@ export interface TileCampus {
 
 export type TileCompany = FacetCompany;
 
-const OCEAN = "#FFDBBB";
-const LAND = "#DD8A4E";
-const BOUNDARY = "#C4733E";
+const OCEAN = "#FFFFFF";
+const LAND = "#B7C0D4";
+const BOUNDARY = "#2F4FD8";
 const BRAND = "#FB651E";
 const COUNT = "font-bold tabular-nums text-[color:var(--ember,#D96B1C)]";
 
@@ -38,7 +38,7 @@ function markerColor(country: string): string {
   return COUNTRY_COLOR[country] ?? BRAND;
 }
 
-/** Orange land and cream ocean are in the style, so the first painted frame is the globe, not stock positron. */
+/** White ocean + cool slate land (own atlas, not YCGlobe cream). First painted frame is the globe. */
 const GLOBE_STYLE = {
   version: 8,
   name: "Campus Scout globe",
@@ -234,9 +234,9 @@ export function TileGlobe({
         }
         try {
           map.setSky({
-            "sky-color": "#FFE8D6",
-            "horizon-color": "#FFF8F2",
-            "fog-color": "#FFF3E9",
+            "sky-color": "#F4F6FB",
+            "horizon-color": "#FFFFFF",
+            "fog-color": "#EEF1F8",
             "sky-horizon-blend": 0.45,
             "horizon-fog-blend": 0.7,
             "fog-ground-blend": 0.55,
@@ -468,16 +468,16 @@ export function TileGlobe({
       <section className="mb-4" data-fold-desk-map="" aria-label="Map">
         <h2 className="mb-2 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Map</h2>
         <div
-          className="relative overflow-hidden rounded-none border-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[#FFDBBB]"
+          className="relative overflow-hidden rounded-none border-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[#FFFFFF]"
           style={{ height: stageHeight }}
           data-dispatch-map-stage=""
           data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
         >
           <div ref={mapNode} className={`h-full w-full ${painted && !failed ? "" : "invisible"}`} />
           {!painted ? (
-            <div className="absolute inset-0 z-30 bg-[#FFF7F0]" aria-busy="true" aria-live="polite">
+            <div className="absolute inset-0 z-30 bg-[#FFFFFF]" aria-busy="true" aria-live="polite">
               <div className="grid h-full place-items-center">
-                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#6b5443]">{failed ? "Globe unavailable" : "Loading globe"}</p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{failed ? "Globe unavailable" : "Loading globe"}</p>
               </div>
             </div>
           ) : null}
