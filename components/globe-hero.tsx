@@ -273,10 +273,11 @@ function SamplePill({ cream = false }: { cream?: boolean }) {
   return (
     <span
       data-sample-pill=""
+      title="Sample mode: full seed set of 2,513 companies"
       className={`inline-flex h-5 items-center gap-0.5 rounded-sm px-1.5 font-mono text-[9px] uppercase tracking-[0.14em] leading-none text-[color:var(--fg-3,#5C647A)]/80 ${cream ? "" : ""}`}
     >
       Sample
-      <Link href="/" aria-label="Leave sample" className="grid h-3.5 w-3.5 place-items-center rounded-sm text-[color:var(--fg-3,#5C647A)]/70 hover:text-[color:var(--fg-2,#3F465C)]">
+      <Link href="/" aria-label="Leave sample mode" className="grid h-3.5 w-3.5 place-items-center rounded-sm text-[color:var(--fg-3,#5C647A)]/70 hover:text-[color:var(--fg-2,#3F465C)]">
         <svg width="7" height="7" viewBox="0 0 10 10" aria-hidden>
           <path d="M2 2 8 8M8 2 2 8" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
         </svg>

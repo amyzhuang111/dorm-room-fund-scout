@@ -513,7 +513,6 @@ export function SampleInstrumentBrowse({
             role="region"
             aria-label="Scout filters"
             data-mobile-filters-inline=""
-            data-mobile-filters-sheet=""
             data-mobile-contents-hero=""
             data-filters-index-hero=""
           >

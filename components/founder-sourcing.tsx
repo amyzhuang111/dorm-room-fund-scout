@@ -28,7 +28,7 @@ export function FounderSearchBar({
 }) {
   return (
     <form
-      className="mb-2.5 lg:mb-4"
+      className="mb-2 lg:mb-4"
       role="search"
       onSubmit={(event) => event.preventDefault()}
       data-founder-search=""
@@ -42,7 +42,7 @@ export function FounderSearchBar({
         value={query}
         onChange={(event) => onQuery(event.target.value)}
         placeholder="Name, campus, program, or company"
-        className="mt-1 h-11 w-full rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[16px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)] focus:border-[color:var(--ember,#D96B1C)]"
+        className="mt-1 h-9 w-full rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[16px] lg:h-11 text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)] focus:border-[color:var(--ember,#D96B1C)]"
       />
     </form>
   );
@@ -123,9 +123,9 @@ export function FounderResults({
       data-founder-results=""
       data-founder-mobile-min={reserveMobileFirstPage ? String(FOUNDER_MOBILE_PAGE_MIN_PX) : undefined}
     >
-      <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
+      <div className="mb-2 flex flex-wrap items-end justify-between gap-2 lg:mb-3 lg:gap-3">
         <div>
-          <h2 className="text-[22px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] lg:text-[18px]">Founders</h2>
+          <h2 className="text-[20px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] lg:text-[18px]">Founders</h2>
           <p className="mt-1 text-[14px] text-[color:var(--fg-2,#3F465C)]">
             {status === "ready" ? (
               <>
