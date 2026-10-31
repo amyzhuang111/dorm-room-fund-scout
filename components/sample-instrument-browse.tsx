@@ -687,32 +687,34 @@ export function SampleInstrumentBrowse({
 
       {mobileFiltersOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
-          <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
-          <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col overflow-hidden rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
-            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5" data-mobile-contents-hero="" data-filters-index-hero="">
-              <div className="flex items-center justify-between gap-3">
+          <button type="button" className="absolute inset-0 bg-slate-900/25" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
+          {/* Partial-height sheet · leaves the signals chart hero readable above */}
+          <div className="absolute inset-x-0 bottom-0 flex max-h-[min(58dvh,480px)] flex-col overflow-hidden rounded-t-xl border border-[color:var(--cobalt,#2F4FD8)]/20 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-12px_36px_rgba(15,23,42,0.14)]">
+            <div className="flex justify-center pt-2" aria-hidden>
+              <span className="h-1 w-9 rounded-full bg-[color:var(--line-strong,#C5CAD8)]" />
+            </div>
+            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-4 pb-3 pt-1.5" data-mobile-contents-hero="" data-filters-index-hero="">
+              <div className="flex items-end justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
                     Filters
                   </p>
-                  <p className="mt-1 font-mono text-[20px] font-bold leading-none tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]">
+                  <p className="mt-1 font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
                     {boardCompanies.length.toLocaleString("en-US")}
                   </p>
-                  <p className="mt-1 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">in this list</p>
+                  <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies in this list</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setMobileFiltersOpen(false)}
-                  className="inline-flex h-9 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white"
+                  className="inline-flex h-9 shrink-0 items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] px-3.5 font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)]"
                 >
                   Done
                 </button>
               </div>
             </div>
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain" data-mobile-facet-map="">
-              <div className="h-[min(58dvh,480px)]">
-                <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
-              </div>
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-5" data-mobile-facet-map="">
+              <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
             </div>
           </div>
         </div>
