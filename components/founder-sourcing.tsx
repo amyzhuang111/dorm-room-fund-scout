@@ -253,7 +253,18 @@ export function FounderResults({
                     <Field label="Sector" value={founder.sector} />
                     {" · "}
                     <Field label="Year" value={founder.gradYear != null ? String(founder.gradYear) : null} />
+                    {founder.role ? (
+                      <>
+                        {" · "}
+                        <Field label="Role" value={founder.role} />
+                      </>
+                    ) : null}
                   </p>
+                  {founder.programs.length > 0 ? (
+                    <p className="mt-0.5 font-mono text-[11px] text-[color:var(--fg-3,#5C647A)]">
+                      {founder.programs.slice(0, 2).join(" · ")}
+                    </p>
+                  ) : null}
                   {why ? (
                     <p className="mt-2 border-l-2 border-[color:var(--ember,#D96B1C)]/50 pl-2.5 text-[13px] leading-5 text-[color:var(--fg,#0B0E17)] lg:mt-1.5 lg:pl-2 lg:text-[12px] lg:leading-4" data-why-worth="">
                       <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Why worth a look</span>

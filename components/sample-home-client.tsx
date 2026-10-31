@@ -88,7 +88,7 @@ function PeakShareLite({
   const pct = Math.round((peakCount / Math.max(1, shell.dated)) * 100);
   return (
     <div data-fold-peak-ssr-shell="" data-fold-peak-identity="" data-fold-baseline="8">
-      <div className="mb-1 hidden min-h-[14rem] lg:block" data-fold-peak-desk="">
+      <div className="mb-1 hidden min-h-[15rem] lg:block" data-fold-peak-desk="">
         <div className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-end gap-5 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-peak-share="">
           <div className="min-w-0">
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
@@ -102,7 +102,7 @@ function PeakShareLite({
               {" of every dated signal on record"}
             </p>
             {/* Height twin for month bars · marks paint on live hydrate */}
-            <div className="mt-3 h-10" data-fold-peak-bars-reserve="" aria-hidden="true" />
+            <div className="mt-3 h-[4.25rem]" data-fold-peak-bars-reserve="" aria-hidden="true" />
             <p className="mt-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
               {shell.dated.toLocaleString("en-US")} dated
               {shell.earlierValid > 0 ? ` · ${shell.earlierValid.toLocaleString("en-US")} earlier` : ""}
@@ -124,7 +124,7 @@ function PeakShareLite({
           </div>
         </div>
       </div>
-      <div className="min-h-[9.5rem] border-b border-[color:var(--line,#E1E5EF)] pb-3 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
+      <div className="min-h-[11.5rem] border-b border-[color:var(--line,#E1E5EF)] pb-3 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
         <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
         <p className="mt-1 font-mono text-[40px] font-bold leading-[0.84] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
           {peakCount.toLocaleString("en-US")}
@@ -134,7 +134,8 @@ function PeakShareLite({
         <p className="mt-1.5 text-[14px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
           {peakLabel} took <span className="text-[color:var(--ember,#D96B1C)]">{pct}%</span> of every dated signal
         </p>
-        <div className="mt-2.5 h-9 border-t border-[color:var(--line,#E1E5EF)] pt-2.5" data-fold-peak-campus-rank-mobile-reserve="" aria-hidden="true" />
+        <div className="mt-2.5 h-[3.75rem]" data-fold-peak-bars-mobile-reserve="" aria-hidden="true" />
+        <div className="mt-2 h-9 border-t border-[color:var(--line,#E1E5EF)] pt-2" data-fold-peak-campus-rank-mobile-reserve="" aria-hidden="true" />
       </div>
     </div>
   );
@@ -157,7 +158,7 @@ function PeakShareSlot({
   // Keep SSR lite until the client Peak chunk has painted (same box → CLS ≈ 0).
   const showLive = live;
   return (
-    <div className="relative mb-3 min-h-[9.5rem] lg:mb-4 lg:min-h-[14rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
+    <div className="relative mb-3 min-h-[11.5rem] lg:mb-4 lg:min-h-[15rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
       <div className={showLive ? "hidden" : undefined} aria-hidden={showLive || undefined} data-fold-peak-ssr-wrap="">
         {shell ? (
           <PeakShareLite shell={shell} foundersListed={foundersListed} campusesOnMap={campusesOnMap} topCampuses={topCampuses} />

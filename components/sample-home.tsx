@@ -80,7 +80,7 @@ export function SampleHome({
     row.n += 1;
     if ((card.signals ?? 0) > 0) row.sig += 1;
     const at = card.latestSignalAt ?? "";
-    if (at.length >= 7 && at.slice(0, 7) >= "2026-09") row.recent += 1;
+    if (at.length >= 7 && at.slice(0, 7) >= "2026-04" && !at.includes("-00")) row.recent += 1;
     sectorAgg.set(id, row);
   }
   const newestHomeRow = [...sectorAgg.values()]
@@ -89,7 +89,7 @@ export function SampleHome({
   const newestHome = newestHomeRow
     ? {
         label: newestHomeRow.label,
-        detail: `${newestHomeRow.sig.toLocaleString("en-US")} of ${newestHomeRow.n.toLocaleString("en-US")} since Sep`,
+        detail: `${newestHomeRow.sig.toLocaleString("en-US")} of ${newestHomeRow.n.toLocaleString("en-US")} since Apr`,
       }
     : null;
   const peakShell = buildPeakShell(data.cards);

@@ -240,23 +240,33 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(150);
   await shot(page, "companies-more-375");
 
-  // Frame last ledger rows + end chapter + load-next together
+  // Frame last ledger card (uncut) + end lead + pagination together
   const endM = page.locator("[data-ledger-end-mobile]").first();
   const endLead = page.locator("[data-ledger-end-lead]").first();
   if (await endM.count()) {
-    await endM.evaluate((el) => {
+    await endM.evaluate(() => {
       const list = document.querySelector("[data-ledger-stage] ol");
       const last = list?.querySelector("li:last-child");
-      if (last) last.scrollIntoView({ block: "center" });
-      el.scrollIntoView({ block: "end" });
+      const end = document.querySelector("[data-ledger-end-mobile]");
+      if (last) last.scrollIntoView({ block: "start" });
+      if (end) {
+        const top = end.getBoundingClientRect().top;
+        // Keep a full prior card peek (~150px) above the end lead
+        if (top < 160) window.scrollBy(0, top - 160);
+      }
     });
     await page.waitForTimeout(350);
     await page.evaluate(() => {
       const end = document.querySelector("[data-ledger-end-mobile]");
       if (!end) return;
       const bottom = end.getBoundingClientRect().bottom;
-      const room = window.innerHeight - 72;
-      if (bottom > room) window.scrollBy(0, bottom - room + 12);
+      const room = window.innerHeight - 64;
+      if (bottom > room) window.scrollBy(0, bottom - room + 8);
+      const lead = document.querySelector("[data-ledger-end-lead]");
+      if (lead) {
+        const top = lead.getBoundingClientRect().top;
+        if (top < 140) window.scrollBy(0, top - 150);
+      }
     });
     await page.waitForTimeout(200);
   } else if (await endLead.count()) {
@@ -266,7 +276,7 @@ const browser = await chromium.launch({ headless: true });
       const lead = document.querySelector("[data-ledger-end-lead]");
       if (!lead) return;
       const top = lead.getBoundingClientRect().top;
-      if (top < 56) window.scrollBy(0, top - 64);
+      if (top < 72) window.scrollBy(0, top - 88);
     });
     await page.waitForTimeout(200);
   } else {

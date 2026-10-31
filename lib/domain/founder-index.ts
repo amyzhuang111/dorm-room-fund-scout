@@ -11,6 +11,8 @@ export interface FounderLead {
   signalTypes: string[];
   company: string | null;
   companyId: string | null;
+  /** Stored person_project_roles.role for the linked company, when present. */
+  role: string | null;
 }
 
 export interface FounderQuery {

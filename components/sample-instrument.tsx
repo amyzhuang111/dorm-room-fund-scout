@@ -645,7 +645,7 @@ export function FacetRail({
           <FacetGroup title="Flags" dense={editorial}>
             <FacetRow facet="flag" active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
             {flags.map((item) => (
-              <FacetRow key={item.id} facet="flag" count={item.count} active={facets.flag === item.id} onClick={() => set({ flag: item.id })} label={item.label} />
+              <FacetRow key={item.id} facet="flag" count={item.count} active={facets.flag === item.id} onClick={() => set({ flag: facets.flag === item.id ? null : item.id })} label={item.label} />
             ))}
           </FacetGroup>
         ) : null}
@@ -976,7 +976,7 @@ export function signalChronographDetail(
     const short = MONTH_SHORT[m - 1] ?? id.slice(5, 7);
     return {
       id,
-      label: `${short} ${y.slice(2)}`,
+      label: `${short} ${y}`,
       short,
       count,
       peak: false,
@@ -1414,7 +1414,8 @@ export function BarRow({
 }
 
 export function SignalFeedRow({ company, index }: { company: FacetCompany; index: number }) {
-  const date = (company.latestSignalAt ?? "").replace(/-00/g, "") || "n/a";
+  const rawDate = (company.latestSignalAt ?? "").replace(/-00/g, "").trim();
+  const date = rawDate || null;
   const kind = company.signalLabel ?? "Signal";
   return (
     <Link href={`/startup/${company.id}`} className="group flex items-start gap-2.5 px-0.5 py-2 text-left transition-colors hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50">
@@ -1424,7 +1425,11 @@ export function SignalFeedRow({ company, index }: { company: FacetCompany; index
         <span className="block truncate text-[13px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]">{company.name}</span>
         <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
           <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[10px] font-semibold tracking-[0.02em] text-[color:var(--cobalt,#2F4FD8)]">{kind}</span>
-          <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{date}</span>
+          {date ? (
+            <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{date}</span>
+          ) : (
+            <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">No source date</span>
+          )}
         </span>
       </span>
       {company.signals > 0 ? <span className={`${COUNT} mt-0.5 shrink-0 text-[12px]`}>{company.signals}</span> : null}
@@ -1445,7 +1450,10 @@ export function FounderFeedRow({
       <LogoMark name={person.name} logoUrl={person.logoUrl} size={20} />
       <span className="min-w-0 flex-1">
         <span className="block text-[13px] font-semibold leading-5 text-[color:var(--fg,#0B0E17)] group-hover:text-[color:var(--ember,#D96B1C)]">{person.name}</span>
-        <span className="mt-0.5 block text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">{person.campus}</span>
+        <span className="mt-0.5 block text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
+          {person.campus}
+          {person.companyName ? ` · ${person.companyName}` : ""}
+        </span>
       </span>
       <span className={`${COUNT} shrink-0 text-[12px]`}>{person.signals.toLocaleString("en-US")}</span>
     </Link>
@@ -1508,7 +1516,7 @@ export function IntelligenceBoards({
   surface?: "fold" | "browse" | "signals" | "company";
 }) {
   const recentN = compact ? 2 : 3;
-  const founderN = compact ? 2 : 3;
+  const founderN = compact ? 2 : surface === "browse" ? 4 : 3;
   const recent = useMemo(() => recentSignals(companies).slice(0, recentN), [companies, recentN]);
   const mix = useMemo(() => sectorMix(companies).slice(0, compact ? 3 : 5), [companies, compact]);
   const founders = useMemo(() => topFounders(companies).slice(0, founderN), [companies, founderN]);
@@ -1607,7 +1615,7 @@ export function IntelligenceBoards({
   // Per-surface order breaks the stamped WIRE template across Explore / Signals / company.
   let modules: ReactNode[] = [];
   if (surface === "browse") {
-    modules = [programsBoard, sectorBoard, foundersBoard, recentBoard].filter(Boolean);
+    modules = [recentBoard, foundersBoard, programsBoard, sectorBoard].filter(Boolean);
   } else if (surface === "signals") {
     modules = [programsBoard, recentBoard].filter(Boolean);
   } else if (surface === "company") {
@@ -1699,19 +1707,25 @@ export function MobileWireStrip({
       });
     }
   }
-  // company: campus peers by signal weight (skip empty founder stubs)
+  // company: recent signals + founders (af1645b richness; honest dates only on SignalFeedRow)
   if (surface === "company") {
-    const peers = [...companies]
-      .filter((c) => (c.signals ?? 0) > 0)
-      .sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name))
-      .slice(0, 6);
-    for (const [i, c] of peers.entries()) {
+    for (const [i, c] of recent.entries()) {
+      const at = (c.latestSignalAt ?? "").replace(/-00/g, "").trim();
       cards.push({
-        key: `peer-${c.id}`,
-        kicker: c.school ? c.school : `0${i + 1} peer`,
-        figure: String(c.signals),
-        caption: c.signalLabel ? `${c.name} · ${c.signalLabel}` : c.name,
+        key: `sig-${c.id}`,
+        kicker: at ? at : `0${i + 1} signal`,
+        figure: c.signalLabel ?? "Signal",
+        caption: c.name,
         href: `/startup/${c.id}`,
+      });
+    }
+    for (const [i, f] of founders.entries()) {
+      cards.push({
+        key: `f-${f.key}`,
+        kicker: f.campus ? f.campus : `0${i + 1} founder`,
+        figure: String(f.signals),
+        caption: f.companyName ? `${f.name} · ${f.companyName}` : f.name,
+        href: `/startup/${f.companyId}`,
       });
     }
   }

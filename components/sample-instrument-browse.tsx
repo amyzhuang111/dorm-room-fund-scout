@@ -350,7 +350,7 @@ export function SampleInstrumentBrowse({
             feed === "directory" && pages <= 1 ? "hidden lg:block" : ""
           } ${feed === "directory" && pages > 1 ? "hidden lg:block" : ""}`}
           data-browse-hero={feed}
-          data-continued-chapter={pages > 1 ? "1" : undefined}
+          data-continued-page={pages > 1 ? "1" : undefined}
           data-ledger-chapter={feed === "directory" ? "1" : undefined}
         >
           <div className="flex flex-wrap items-end justify-between gap-3">
@@ -425,6 +425,11 @@ export function SampleInstrumentBrowse({
               <SignalsLanded companies={companiesLive} />
             </div>
           ) : null}
+          {feed === "directory" && pages > 1 ? (
+            <div className="mt-3 hidden lg:block" data-signals-landed-desk-continued="">
+              <SignalsLanded companies={companiesLive} />
+            </div>
+          ) : null}
         </div>
 
         {/* Scout Chronograph · unifying system. Browse-more uses folio (originality priority);
@@ -440,8 +445,8 @@ export function SampleInstrumentBrowse({
             <div
               className="relative scroll-mt-14 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-3.5 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]"
               data-mobile-continued-mast=""
-              data-chapter-window=""
-              data-chapter-peak=""
+              data-page-window=""
+              data-page-peak=""
             >
               <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">On this page</p>
               <div className="mt-2 flex items-end justify-between gap-3">
@@ -522,12 +527,13 @@ export function SampleInstrumentBrowse({
         </div>
 
         {feed === "directory" && pages > 1 ? (
-          <div className="mb-3 hidden lg:block" data-desk-browse-dominant="chapter-window" data-chapter-window="">
-            {/* Browse-more: thin chapter rule · cards lead, not a second hero stamp. */}
+          <div className="mb-3 hidden lg:block" data-desk-browse-dominant="page-window" data-page-window="">
             <p className="flex flex-wrap items-baseline gap-x-2 border-b border-[color:var(--line,#E1E5EF)] pb-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              <span className="font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Chapter</span>
+              <span className="font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Companies</span>
               <span>
-                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{"1"}</span>
+                {" to "}
+                <span className="font-bold text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
                 {" of "}
                 <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
                 {" · "}
@@ -556,9 +562,14 @@ export function SampleInstrumentBrowse({
                 <div className="hidden items-end justify-between gap-3 px-3 py-2 sm:px-3.5 lg:flex">
                   <div className="min-w-0">
                     <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
-                      {feed === "leaderboard" ? "More signals" : "More companies"}
+                      {feed === "leaderboard" ? "Signals" : "Companies"}
                     </p>
-                    <p className="mt-0.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">Section rules every 14 rows</p>
+                    <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                      {"1 to "}
+                      {cards.length.toLocaleString("en-US")}
+                      {" of "}
+                      {total.toLocaleString("en-US")}
+                    </p>
                   </div>
                   <p className="shrink-0 text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-continued-insight="">
                     <span className="block text-[18px] font-bold leading-none tracking-tight text-[color:var(--ember,#D96B1C)] sm:text-[20px]">
@@ -568,8 +579,12 @@ export function SampleInstrumentBrowse({
                   </p>
                 </div>
                 <div className="flex items-baseline justify-between gap-3 px-3 py-2.5 lg:hidden">
-                  <p className="text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]">
-                    {feed === "leaderboard" ? "More signals" : "More companies"}
+                  <p className="text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                    {feed === "leaderboard" ? "Signals" : "Companies"}
+                    {" 1 to "}
+                    {cards.length.toLocaleString("en-US")}
+                    {" of "}
+                    {total.toLocaleString("en-US")}
                   </p>
                   <p className="shrink-0 text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
@@ -601,7 +616,7 @@ export function SampleInstrumentBrowse({
                       >
                         <span className="h-px flex-1 bg-[color:var(--cobalt,#2F4FD8)]/25" aria-hidden />
                         <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
-                          Rows {String(sectionFrom).padStart(2, "0")}-{String(sectionTo).padStart(2, "0")}
+                          Companies {sectionFrom} to {sectionTo}
                         </span>
                         <span className="h-px flex-1 bg-[color:var(--cobalt,#2F4FD8)]/25" aria-hidden />
                       </div>
@@ -618,46 +633,40 @@ export function SampleInstrumentBrowse({
             </div>
             {pages > 1 && sliceInsight ? (
               <div
-                className="mt-3 border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]"
+                className="mt-4 scroll-mt-24 border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]"
                 data-ledger-end=""
                 data-ledger-end-mobile=""
                 data-end-insight={sliceInsight.kicker}
               >
                 {/* Mobile lead + desk share one programs list; Showing appears once below. */}
                 <div
-                  className="scroll-mt-[5.5rem] border-b border-[color:var(--line,#E1E5EF)] px-4 pb-4 pt-5"
+                  className="scroll-mt-[5.5rem] border-b border-[color:var(--line,#E1E5EF)] px-4 pb-3 pt-4"
                   data-ledger-end-lead=""
                 >
                   <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
-                    End of chapter
+                    End of list
+                  </p>
+                  <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                    {"Companies 1 to "}
+                    {cards.length.toLocaleString("en-US")}
+                    {" of "}
+                    {total.toLocaleString("en-US")}
                   </p>
                   {nextToScout[0] ? (
-                    <>
-                      <p className="mt-1.5 font-mono text-[44px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] lg:text-[40px]">
-                        {nextToScout[0].count.toLocaleString("en-US")}
-                      </p>
-                      <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] lg:text-[18px]">
-                        {nextToScout[0].label}
-                        {" leads programs on this desk"}
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <p className="mt-1.5 font-mono text-[44px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-                        {cards.length.toLocaleString("en-US")}
-                      </p>
-                      <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                        companies loaded on this chapter
-                      </p>
-                    </>
-                  )}
+                    <p className="mt-1 text-[13px] text-[color:var(--fg-2,#3F465C)]">
+                      <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].label}</span>
+                      {" leads with "}
+                      <span className="font-mono font-bold text-[color:var(--ember,#D96B1C)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
+                      {" companies on this desk"}
+                    </p>
+                  ) : null}
                 </div>
-                <div className="px-3.5 py-5 sm:px-5 sm:py-6" data-ledger-end-colophon="" data-next-to-scout="">
+                <div className="px-3.5 py-4 sm:px-5 sm:py-5" data-ledger-end-colophon="" data-next-to-scout="">
                   <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">
-                    Next to scout
+                    Programs on this desk
                   </p>
-                  <p className="mt-1.5 max-w-[28rem] text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[16px]">
-                    Programs by company count on this desk
+                  <p className="mt-1 max-w-[28rem] text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                    Ranked by company count
                   </p>
                   <ol className="mt-4 divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]">
                     {nextToScout.map((prog, i) => (
@@ -667,7 +676,7 @@ export function SampleInstrumentBrowse({
                         </span>
                         <span className="min-w-0 flex-1 truncate text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[17px]">{prog.label}</span>
                         <span
-                          className="shrink-0 font-mono text-[24px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)] sm:text-[28px]"
+                          className="shrink-0 font-mono text-[18px] font-bold leading-none tracking-[-0.03em] text-[color:var(--ember,#D96B1C)] sm:text-[20px]"
                           {...(isYcProgramLabel(prog.label) && prog.count === YC_MEMBERSHIP_EXPECTED
                             ? { "data-yc-membership-count": String(prog.count) }
                             : {})}
@@ -690,19 +699,19 @@ export function SampleInstrumentBrowse({
                     </Link>
                   </p>
                   {cards.length < total ? (
-                    <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-[color:var(--line,#E1E5EF)] pt-4" data-ledger-end-more="">
-                      <Link
-                        href={moreHref}
-                        className="inline-flex h-9 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white hover:opacity-90"
-                      >
-                        Load next page
-                      </Link>
+                    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--line,#E1E5EF)] pt-3.5" data-ledger-end-more="">
                       <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                        {"Showing "}
+                        {"Companies 1 to "}
                         <span className="font-bold text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
                         {" of "}
                         {total.toLocaleString("en-US")}
                       </p>
+                      <Link
+                        href={moreHref}
+                        className="inline-flex h-9 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white hover:opacity-90"
+                      >
+                        Load next
+                      </Link>
                     </div>
                   ) : null}
                 </div>
@@ -720,7 +729,7 @@ export function SampleInstrumentBrowse({
               Show more
             </Link>
             <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing-next="">
-              {"Showing "}
+              {"Companies 1 to "}
               <span className="font-medium text-[color:var(--fg-2,#3F465C)]">{cards.length.toLocaleString("en-US")}</span>
               {" of "}
               {total.toLocaleString("en-US")}
@@ -768,11 +777,11 @@ export function SampleInstrumentBrowse({
             </div>
             <IntelligenceBoards
               companies={boardCompanies}
-              compact
+              compact={pages <= 1}
               surface={wireSurface}
-              hideSector={feed === "directory"}
-              hideLatest
-              hidePrograms={pages > 1 && feed === "directory"}
+              hideSector={feed === "directory" && pages <= 1}
+              hideLatest={pages <= 1}
+              hidePrograms={false}
             />
           </div>
         </div>
@@ -789,9 +798,9 @@ export function SampleInstrumentBrowse({
 
       {mobileFiltersOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters" data-mobile-filters-sheet="">
-          <button type="button" className="absolute inset-0 bg-slate-900/20" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
+          <button type="button" className="absolute inset-0 bg-transparent" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
           {/* Bottom sheet · list stays readable above; dock Narrow keeps clearance below Done */}
-          <div className="absolute inset-x-0 bottom-[3.75rem] flex max-h-[min(58dvh,480px)] flex-col overflow-hidden rounded-t-xl border border-[color:var(--cobalt,#2F4FD8)]/20 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-12px_36px_rgba(15,23,42,0.12)]">
+          <div className="absolute inset-x-0 bottom-[3.75rem] flex max-h-[min(55dvh,440px)] flex-col overflow-hidden rounded-t-xl border border-[color:var(--cobalt,#2F4FD8)]/20 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-12px_36px_rgba(15,23,42,0.12)]">
             <div className="flex justify-center pt-2" aria-hidden>
               <span className="h-1 w-9 rounded-full bg-[color:var(--line-strong,#C5CAD8)]" />
             </div>

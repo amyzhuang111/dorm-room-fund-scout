@@ -8,8 +8,8 @@ export type { PeakShell, PeakBar } from "@/lib/domain/peak-shell";
 export { buildPeakShell } from "@/lib/domain/peak-shell";
 
 /**
- * Fold Peak share — typographic hero from source_date only. Bars are visual only
- * (no third peak label). No data-scout-chronograph (DOM chronographGoneFromHome).
+ * Fold Peak share from source_date only. Month bars carry the peak label.
+ * No data-scout-chronograph (DOM chronographGoneFromHome).
  * Accepts SSR shell so first paint reserves exact height (CLS ≈ 0).
  */
 export type FoldTopCampus = { id: string; name: string; founders: number };
@@ -45,7 +45,7 @@ export function FoldPeakShare({
   return (
     <div className="mb-0" data-fold-peak-identity="" data-fold-baseline="8" data-fold-peak-shell={live ? "live" : "ssr"}>
       {/* Desk: peak hero + quiet bars (no count labels) + Scout edition · reserved min height */}
-      <div className="mb-1 hidden min-h-[14rem] lg:block" data-fold-peak-desk="">
+      <div className="mb-1 hidden min-h-[15rem] lg:block" data-fold-peak-desk="">
         <div
           className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-end gap-5 border-b border-[color:var(--line,#E1E5EF)] pb-3"
           data-fold-peak-share=""
@@ -65,7 +65,7 @@ export function FoldPeakShare({
               {" of every dated signal on record"}
             </p>
             <ol
-              className="mt-3 flex h-10 items-end gap-1"
+              className="mt-3 flex h-[4.25rem] items-end gap-1"
               data-fold-peak-bars=""
               data-fold-peak-month-bars=""
               data-chrono-peak={String(peakBar.count)}
@@ -77,11 +77,18 @@ export function FoldPeakShare({
             >
               {detail.bars.map((b) => (
                 <li key={b.id} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-0.5" data-signal-month={b.id} title={`${b.label}: ${b.count}`}>
+                  {b.peak ? (
+                    <span className="font-mono text-[11px] font-bold tabular-nums leading-none text-[color:var(--ember,#D96B1C)]" data-fold-peak-bar-label="">
+                      {b.count.toLocaleString("en-US")}
+                    </span>
+                  ) : (
+                    <span className="h-[11px]" aria-hidden />
+                  )}
                   <span
                     className={`w-full max-w-[1.5rem] rounded-sm ${b.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/30"}`}
-                    style={{ height: `${Math.max(4, Math.round((b.count / max) * 32))}px` }}
+                    style={{ height: `${Math.max(4, Math.round((b.count / max) * 40))}px` }}
                   />
-                  <span className="whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.04em] text-[color:var(--fg-3,#5C647A)]">{b.short}</span>
+                  <span className={`whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.04em] ${b.peak ? "font-bold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-3,#5C647A)]"}`}>{b.short}</span>
                 </li>
               ))}
             </ol>
@@ -130,7 +137,7 @@ export function FoldPeakShare({
       </div>
 
       {/* Mobile lead: stacked Peak statement + real campus ranks · search/founders follow */}
-      <div className="min-h-[9.5rem] border-b border-[color:var(--line,#E1E5EF)] pb-3 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
+      <div className="min-h-[11.5rem] border-b border-[color:var(--line,#E1E5EF)] pb-3 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
         <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
         <p className="mt-1 font-mono text-[40px] font-bold leading-[0.84] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
           {peakBar.count.toLocaleString("en-US")}
@@ -142,9 +149,27 @@ export function FoldPeakShare({
         <p className="mt-1.5 text-[14px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
           {peakBar.label} took <span className="text-[color:var(--ember,#D96B1C)]">{pct}%</span> of every dated signal
         </p>
+        <ol className="mt-2.5 flex h-[3.75rem] items-end gap-0.5" data-fold-peak-bars-mobile="" data-fold-peak-month-bars="">
+          {detail.bars.map((b) => (
+            <li key={b.id} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-0.5" data-signal-month={b.id} title={`${b.label}: ${b.count}`}>
+              {b.peak ? (
+                <span className="font-mono text-[10px] font-bold tabular-nums leading-none text-[color:var(--ember,#D96B1C)]" data-fold-peak-bar-label="">
+                  {b.count.toLocaleString("en-US")}
+                </span>
+              ) : (
+                <span className="h-[10px]" aria-hidden />
+              )}
+              <span
+                className={`w-full max-w-[1.25rem] rounded-sm ${b.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/30"}`}
+                style={{ height: `${Math.max(3, Math.round((b.count / max) * 28))}px` }}
+              />
+              <span className={`whitespace-nowrap font-mono text-[8px] uppercase tracking-[0.03em] ${b.peak ? "font-bold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-3,#5C647A)]"}`}>{b.short}</span>
+            </li>
+          ))}
+        </ol>
         {topCampuses.length > 0 ? (
           <ol
-            className="mt-2.5 flex flex-nowrap items-baseline gap-x-3 overflow-hidden border-t border-[color:var(--line,#E1E5EF)] pt-2.5"
+            className="mt-2.5 flex flex-nowrap items-baseline gap-x-3 overflow-hidden border-t border-[color:var(--line,#E1E5EF)] pt-2"
             data-fold-peak-campus-rank-mobile=""
           >
             {topCampuses.map((campus, i) => (

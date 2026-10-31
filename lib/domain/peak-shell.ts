@@ -44,7 +44,7 @@ export function buildPeakShell(rows: SignalRow[]): PeakShell | null {
     const y = id.slice(0, 4);
     const m = Number(id.slice(5, 7));
     const short = MONTH_SHORT[m - 1] ?? id.slice(5, 7);
-    return { id, label: `${short} ${y.slice(2)}`, short, count, peak: false };
+    return { id, label: `${short} ${y}`, short, count, peak: false };
   });
   if (!bars.length || dated === 0) return null;
   const max = Math.max(1, ...bars.map((b) => b.count));

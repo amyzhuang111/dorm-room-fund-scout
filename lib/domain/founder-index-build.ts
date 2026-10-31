@@ -49,6 +49,14 @@ export function buildFounderIndex(): FounderLead[] {
     signalsByProject.set(row.project_id, list);
   }
 
+  const roleByPersonProject = new Map<string, string>();
+  for (const row of db.prepare(
+    `SELECT person_id, project_id, role FROM person_project_roles WHERE role IS NOT NULL AND trim(role) != ''`,
+  ).all() as { person_id: string; project_id: string; role: string }[]) {
+    const key = `${row.person_id}::${row.project_id}`;
+    if (!roleByPersonProject.has(key)) roleByPersonProject.set(key, row.role.trim());
+  }
+
   const leads: FounderLead[] = [];
   for (const founder of listFounders()) {
     const companyIds: string[] = [];
@@ -81,6 +89,21 @@ export function buildFounderIndex(): FounderLead[] {
     const companyId = founder.linkedCompany?.id ?? companyIds[0] ?? null;
     const campusId = founder.universityId;
     const campus = founder.universityName ? shortCampusLabel(campusId ?? "", founder.universityName) : null;
+    const rawRole = companyId ? roleByPersonProject.get(`${founder.id}::${companyId}`) ?? null : null;
+    const role = rawRole
+      ? rawRole
+          .replace(/[—–]/g, " · ")
+          .replace(/_/g, " ")
+          .replace(/\bteam member\b/gi, "Team member")
+          .replace(/\bco-founder\b/gi, "Co-founder")
+          .replace(/\bfounder\b/gi, "Founder")
+          .replace(/\bmember\b/gi, "Member")
+          .replace(/\bcontributor\b/gi, "Contributor")
+          .replace(/\balumnus\b/gi, "Alumnus")
+          .replace(/\bnot listed\b/gi, "Not listed")
+          .replace(/\s+·\s+/g, " · ")
+          .trim()
+      : null;
     leads.push({
       id: founder.id,
       name: founder.name,
@@ -92,6 +115,7 @@ export function buildFounderIndex(): FounderLead[] {
       signalTypes,
       company,
       companyId,
+      role,
     });
   }
   leads.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));

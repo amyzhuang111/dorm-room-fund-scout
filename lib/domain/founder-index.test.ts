@@ -11,6 +11,7 @@ function lead(partial: Partial<FounderLead> & Pick<FounderLead, "id" | "name">):
     signalTypes: [],
     company: null,
     companyId: null,
+    role: null,
     ...partial,
   };
 }
