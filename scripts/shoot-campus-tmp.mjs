@@ -244,33 +244,34 @@ const browser = await chromium.launch({ headless: true });
   const endM = page.locator("[data-ledger-end-mobile]").first();
   const endLead = page.locator("[data-ledger-end-lead]").first();
   if (await endM.count()) {
-    await endM.evaluate(() => {
+    const headerBottom = await page.evaluate(() => {
+      const nav = document.querySelector("header");
+      const tabs = [...document.querySelectorAll("a,button")].find(
+        (el) => /Companies/i.test(el.textContent || "") && el.getBoundingClientRect().bottom > 40,
+      );
+      return Math.max(nav?.getBoundingClientRect().bottom || 0, tabs?.getBoundingClientRect().bottom || 0, 96);
+    });
+    await endM.evaluate((hb) => {
       const last = document.querySelector("[data-ledger-stage] ol li:last-child");
       const end = document.querySelector("[data-ledger-end-mobile]");
-      const lead = document.querySelector("[data-ledger-end-lead]");
-      if (last) last.scrollIntoView({ block: "start" });
-      if (lead) {
-        const top = lead.getBoundingClientRect().top;
-        // Full prior card visible above end (~210px under nav)
-        window.scrollBy(0, top - 210);
-      }
+      if (!last) return;
+      last.scrollIntoView({ block: "start" });
+      const lastTop = last.getBoundingClientRect().top;
+      window.scrollBy(0, lastTop - (hb + 8));
       if (end) {
-        const bottom = end.getBoundingClientRect().bottom;
-        const room = window.innerHeight - 52;
-        if (bottom > room) window.scrollBy(0, bottom - room + 6);
+        const room = window.innerHeight - 8;
+        const endBottom = end.getBoundingClientRect().bottom;
+        if (endBottom > room) {
+          const maxScroll = last.getBoundingClientRect().top - (hb + 8);
+          const need = endBottom - room + 4;
+          window.scrollBy(0, Math.min(need, Math.max(0, maxScroll)));
+        }
       }
-    });
+    }, headerBottom);
     await page.waitForTimeout(350);
   } else if (await endLead.count()) {
     await endLead.evaluate((el) => el.scrollIntoView({ block: "start", inline: "nearest" }));
     await page.waitForTimeout(350);
-    await page.evaluate(() => {
-      const lead = document.querySelector("[data-ledger-end-lead]");
-      if (!lead) return;
-      const top = lead.getBoundingClientRect().top;
-      if (top < 140) window.scrollBy(0, top - 160);
-    });
-    await page.waitForTimeout(200);
   } else {
     const fallback = page.locator("[data-ledger-end]").last();
     if (await fallback.count()) {
