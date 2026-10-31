@@ -113,7 +113,7 @@ export function SampleCompanyShell({
           {dossier?.name ? (
             <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
               <div className="min-w-0 flex-1">
-                <p className="text-[32px] font-bold leading-[1.05] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[36px] lg:text-[40px]">
+                <p className="text-[34px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[38px] lg:text-[44px]">
                   {dossier.name}
                 </p>
                 <p className="mt-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:text-[13px]">

@@ -41,17 +41,17 @@ export function FoldPeakShare({
   return (
     <div className="mb-0" data-fold-peak-identity="" data-fold-baseline="8" data-fold-peak-shell={live ? "live" : "ssr"}>
       {/* Desk: one 369 hero + quiet bars (no count labels) + Scout edition · reserved min height */}
-      <div className="mb-1 hidden min-h-[13rem] lg:block" data-fold-peak-desk="">
+      <div className="mb-1 hidden min-h-[14rem] lg:block" data-fold-peak-desk="">
         <div
           className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-end gap-5 border-b border-[color:var(--line,#E1E5EF)] pb-3"
           data-fold-peak-share=""
         >
           <div className="min-w-0">
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
-            <p className="mt-1.5 font-mono text-[64px] font-bold leading-[0.84] tracking-[-0.08em] text-[color:var(--ember,#D96B1C)]">
+            <p className="mt-1 font-mono text-[72px] font-bold leading-[0.82] tracking-[-0.08em] text-[color:var(--ember,#D96B1C)]">
               {peakBar.count.toLocaleString("en-US")}
-              <span className="mx-2 text-[24px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
-              <span className="text-[36px] font-bold tracking-[-0.06em] text-[color:var(--fg,#0B0E17)]">
+              <span className="mx-2 text-[26px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
+              <span className="text-[40px] font-bold tracking-[-0.06em] text-[color:var(--fg,#0B0E17)]">
                 {detail.dated.toLocaleString("en-US")}
               </span>
             </p>

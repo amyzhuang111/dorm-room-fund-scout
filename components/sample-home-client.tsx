@@ -83,14 +83,14 @@ function PeakShareLite({
   const pct = Math.round((peakCount / Math.max(1, shell.dated)) * 100);
   return (
     <div data-fold-peak-ssr-shell="" data-fold-peak-identity="" data-fold-baseline="8">
-      <div className="mb-1 hidden min-h-[13rem] lg:block" data-fold-peak-desk="">
+      <div className="mb-1 hidden min-h-[14rem] lg:block" data-fold-peak-desk="">
         <div className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-end gap-5 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-peak-share="">
           <div className="min-w-0">
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
-            <p className="mt-1.5 font-mono text-[64px] font-bold leading-[0.84] tracking-[-0.08em] text-[color:var(--ember,#D96B1C)]">
+            <p className="mt-1 font-mono text-[72px] font-bold leading-[0.82] tracking-[-0.08em] text-[color:var(--ember,#D96B1C)]">
               {peakCount.toLocaleString("en-US")}
-              <span className="mx-2 text-[24px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
-              <span className="text-[36px] font-bold tracking-[-0.06em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
+              <span className="mx-2 text-[26px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
+              <span className="text-[40px] font-bold tracking-[-0.06em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
             </p>
             <p className="mt-2 max-w-[34rem] text-[16px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
               {peakLabel} took <span className="text-[color:var(--ember,#D96B1C)]">{pct}%</span>
@@ -153,7 +153,7 @@ function PeakShareSlot({
   // Keep SSR lite until the client Peak chunk has painted (same box → CLS ≈ 0).
   const showLive = live;
   return (
-    <div className="relative mb-4 min-h-[3.25rem] lg:min-h-[13rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
+    <div className="relative mb-4 min-h-[3.25rem] lg:min-h-[14rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
       <div className={showLive ? "hidden" : undefined} aria-hidden={showLive || undefined} data-fold-peak-ssr-wrap="">
         {shell ? <PeakShareLite shell={shell} foundersListed={foundersListed} campusesOnMap={campusesOnMap} /> : null}
       </div>
@@ -269,7 +269,7 @@ export function SampleHomeClient(props: {
           />
           {/* Mobile: founders above map. Desk: founders beside a short globe so cards clear the fold at 1440. */}
           <div
-            className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(380px,0.95fr)_minmax(0,1.05fr)] lg:items-start lg:gap-5"
+            className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(320px,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-5"
             data-fold-stack=""
           >
             <div className="order-2 lg:order-2 min-w-0" data-fold-globe-col="">

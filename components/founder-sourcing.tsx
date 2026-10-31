@@ -28,12 +28,12 @@ export function FounderSearchBar({
 }) {
   return (
     <form
-      className="mb-3 lg:mb-4"
+      className="mb-2.5 lg:mb-4"
       role="search"
       onSubmit={(event) => event.preventDefault()}
       data-founder-search=""
     >
-      <label htmlFor="founder-search" className="font-mono text-[11px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+      <label htmlFor="founder-search" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
         Search founders
       </label>
       <input
@@ -230,7 +230,7 @@ export function FounderResults({
             const why = whyWorthALook(founder);
             return (
               <li key={founder.id} data-founder-card="">
-                <article className="px-3 py-3.5 sm:px-4">
+                <article className="px-3 py-3 sm:px-4 sm:py-3.5">
                   <h3 className="text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{founder.name}</h3>
                   <p className="mt-1 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">
                     <Field label="Campus" value={founder.campus} />

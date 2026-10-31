@@ -182,8 +182,9 @@ export function TileGlobe({
 
     const fit = () => {
       const wide = window.innerWidth >= 1024;
-      const target = Math.round(window.innerHeight * (wide ? 0.42 : 0.48));
-      setStageHeight(wide ? Math.max(320, Math.min(420, target)) : Math.max(220, Math.min(280, target)));
+      // Desk: taller stage like 8b fold wow (map fills the column). Mobile: compact under founders.
+      const target = Math.round(window.innerHeight * (wide ? 0.58 : 0.42));
+      setStageHeight(wide ? Math.max(480, Math.min(620, target)) : Math.max(220, Math.min(260, target)));
     };
     fit();
     window.addEventListener("resize", fit);
@@ -425,8 +426,8 @@ export function TileGlobe({
 
   return (
     <div className={className} data-fold-mobile-root="">
-      <div className="mb-3 flex flex-wrap items-end justify-between gap-x-4 gap-y-1" data-fold-counts="">
-        <p className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[12px] tabular-nums leading-5 text-[color:var(--fg-2,#3F465C)]">
+      <div className="mb-2 flex flex-wrap items-end justify-between gap-x-4 gap-y-1" data-fold-counts="">
+        <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1 font-mono text-[11px] tabular-nums leading-5 text-[color:var(--fg-2,#3F465C)]">
           <span>
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
             {" companies"}
@@ -435,40 +436,40 @@ export function TileGlobe({
             <>
               <span>
                 <span className={COUNT}>{signaledUniverse.toLocaleString("en-US")}</span>
-                {" with a signal"}
+                {" signaled"}
               </span>
               <span>
                 <span className={COUNT}>{quietUniverse.toLocaleString("en-US")}</span>
-                {" with no signal"}
+                {" quiet"}
               </span>
             </>
           ) : null}
           <span>
             <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
-            {" founder names on companies"}
+            {" founder names"}
           </span>
           {foundersIndexed > 0 ? (
             <span>
               <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
-              {" in the founder index"}
+              {" indexed"}
             </span>
           ) : null}
           <span>
             <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
-            {" campuses on the map"}
+            {" campuses"}
           </span>
           {dataThrough ? <span>Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
-        <p className="mt-1 max-w-3xl text-[12px] leading-5 text-[color:var(--fg-3,#5C647A)]" data-founder-count-note="">
+        <p className="mt-1 max-w-3xl text-[11px] leading-4 text-[color:var(--fg-3,#5C647A)] lg:sr-only" data-founder-count-note="">
           On companies counts names listed on company cards. The founder index is every searchable person · some are not yet attached to a company card.
         </p>
-        <p className="mt-1.5 text-[13px] text-[color:var(--fg,#0B0E17)]">Click a campus to see its founders.</p>
+        <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">Click a campus to see its founders.</p>
       </div>
 
       <section className="mb-4" data-fold-desk-map="" aria-label="Map">
         <h2 className="mb-2 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Map</h2>
         <div
-          className="relative overflow-hidden rounded-none border-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[#FFFFFF]"
+          className="relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[#FFFFFF] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.06)]"
           style={{ height: stageHeight }}
           data-dispatch-map-stage=""
           data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
@@ -502,9 +503,9 @@ export function TileGlobe({
         </div>
       </section>
 
-      <section className="mt-4 hidden max-w-sm lg:block" data-campus-metric="founders">
-          <h2 className="mb-2 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Top campuses</h2>
-          <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
+      <section className="mt-3 hidden max-w-sm lg:block" data-campus-metric="founders">
+          <h2 className="mb-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Top campuses</h2>
+          <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
             {topCampuses.map((campus, i) => {
               const active = selectedId === campus.id;
               const label = shortCampusLabel(campus.id, campus.name);
@@ -513,7 +514,7 @@ export function TileGlobe({
                   <button
                     type="button"
                     onClick={() => focus(campus)}
-                    className={`flex w-full items-baseline gap-2 px-3 py-2.5 text-left hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50 ${active ? "bg-[color:var(--ember,#D96B1C)]/8" : ""}`}
+                    className={`flex w-full items-baseline gap-2 px-1 py-2 text-left hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50 ${active ? "bg-[color:var(--ember,#D96B1C)]/8" : ""}`}
                   >
                     <span className="w-5 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
                       {String(i + 1).padStart(2, "0")}

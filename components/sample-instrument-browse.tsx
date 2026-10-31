@@ -271,7 +271,7 @@ export function SampleInstrumentBrowse({
             data-filters-index-hero=""
           >
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Contents</p>
-            <p className="mt-1 font-mono text-[22px] font-bold leading-[0.9] tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]">
+            <p className="mt-1 font-mono text-[28px] font-bold leading-[0.88] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
               {boardCompanies.length.toLocaleString("en-US")}
             </p>
             <p className="mt-1 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">
@@ -312,7 +312,7 @@ export function SampleInstrumentBrowse({
                     <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
                       Signal desk · ranked ledger
                     </p>
-                    <p className="mt-1 font-mono text-[22px] font-bold leading-[0.9] tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]">
+                    <p className="mt-1 font-mono text-[28px] font-bold leading-[0.88] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
                       {topCampus.founders.toLocaleString("en-US")}
                     </p>
                     <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
@@ -329,7 +329,7 @@ export function SampleInstrumentBrowse({
               ) : (
                 <>
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
-                  <p className="mt-1 font-mono text-[32px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
+                  <p className="mt-1 font-mono text-[36px] font-bold leading-[0.88] tracking-[-0.045em] text-[color:var(--fg,#0B0E17)]">
                     <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
                   </p>
                   <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
