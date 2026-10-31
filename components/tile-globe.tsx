@@ -22,16 +22,16 @@ export interface TileCampus {
 
 export type TileCompany = FacetCompany;
 
-const OCEAN = "#FFFFFF";
-const LAND = "#B7C0D4";
+const OCEAN = "#F7F8FC";
+const LAND = "#A8B4C9";
 const BOUNDARY = "#2F4FD8";
-const BRAND = "#FB651E";
+const BRAND = "#2F4FD8";
 const COUNT = "font-bold tabular-nums text-[color:var(--ember,#D96B1C)]";
 
 const COUNTRY_COLOR: Record<string, string> = {
-  "United States": "#3b6fd8",
-  Canada: "#e23b4a",
-  "United Kingdom": "#2f9e6b",
+  "United States": "#2F4FD8",
+  Canada: "#5C6FA8",
+  "United Kingdom": "#3F465C",
 };
 
 function markerColor(country: string): string {
@@ -60,7 +60,7 @@ const GLOBE_STYLE = {
       type: "line",
       source: "openmaptiles",
       "source-layer": "water",
-      paint: { "line-color": BOUNDARY, "line-width": 0.6, "line-opacity": 0.4 },
+      paint: { "line-color": BOUNDARY, "line-width": 1.1, "line-opacity": 0.55 },
     },
     {
       id: "boundary",
@@ -68,7 +68,7 @@ const GLOBE_STYLE = {
       source: "openmaptiles",
       "source-layer": "boundary",
       filter: ["any", ["==", ["get", "admin_level"], 2], ["==", ["get", "admin_level"], "2"]],
-      paint: { "line-color": BOUNDARY, "line-width": 0.7, "line-opacity": 0.5 },
+      paint: { "line-color": BOUNDARY, "line-width": 0.9, "line-opacity": 0.45 },
     },
   ],
 };
@@ -427,49 +427,46 @@ export function TileGlobe({
   return (
     <div className={className} data-fold-mobile-root="">
       <div className="mb-2 flex flex-wrap items-end justify-between gap-x-4 gap-y-1" data-fold-counts="">
-        <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1 font-mono text-[11px] tabular-nums leading-5 text-[color:var(--fg-2,#3F465C)]">
+        <p className="flex min-w-0 flex-wrap items-baseline gap-x-2.5 gap-y-1 text-[12px] tabular-nums leading-5 text-[color:var(--fg-2,#3F465C)]">
           <span>
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
             {" companies"}
           </span>
           {catalogReady ? (
-            <>
-              <span>
-                <span className={COUNT}>{signaledUniverse.toLocaleString("en-US")}</span>
-                {" signaled"}
-              </span>
-              <span>
-                <span className={COUNT}>{quietUniverse.toLocaleString("en-US")}</span>
-                {" quiet"}
-              </span>
-            </>
-          ) : null}
-          <span>
-            <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
-            {" founder names"}
-          </span>
-          {foundersIndexed > 0 ? (
             <span>
-              <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
-              {" indexed"}
+              <span className={COUNT}>{signaledUniverse.toLocaleString("en-US")}</span>
+              {" signaled"}
             </span>
           ) : null}
           <span>
             <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
             {" campuses"}
           </span>
-          {dataThrough ? <span>Updated {absoluteDate(dataThrough)}</span> : null}
+          {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
-        <p className="mt-1 max-w-3xl text-[11px] leading-4 text-[color:var(--fg-3,#5C647A)] lg:sr-only" data-founder-count-note="">
-          On companies counts names listed on company cards. The founder index is every searchable person · some are not yet attached to a company card.
+        <p className="sr-only" data-founder-count-note="">
+          <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
+          {" founder names on companies · "}
+          {foundersIndexed > 0 ? (
+            <>
+              <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
+              {" indexed · "}
+            </>
+          ) : null}
+          {catalogReady ? (
+            <>
+              <span className={COUNT}>{quietUniverse.toLocaleString("en-US")}</span>
+              {" quiet"}
+            </>
+          ) : null}
         </p>
         <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">Click a campus to see its founders.</p>
       </div>
 
       <section className="mb-4" data-fold-desk-map="" aria-label="Map">
-        <h2 className="mb-2 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Map</h2>
+        <h2 className="mb-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]">Map</h2>
         <div
-          className="relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[#FFFFFF] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.06)]"
+          className="relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/45 bg-[#F7F8FC] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.08)] before:pointer-events-none before:absolute before:inset-2 before:z-[1] before:border before:border-[color:var(--cobalt,#2F4FD8)]/15 before:content-['']"
           style={{ height: stageHeight }}
           data-dispatch-map-stage=""
           data-globe-state={painted ? "ready" : failed ? "error" : "loading"}

@@ -43,30 +43,77 @@ export function signalTypeLabel(type: string): string {
  */
 /** Prefer the single strongest stored lead; blank when none. Never dump the whole program list. */
 export function whyWorthALook(founder: FounderLead): string | null {
+  return whyWorthALookCandidates(founder)[0] ?? null;
+}
+
+function isYcReason(label: string): boolean {
+  return /y\s*combinator/i.test(label);
+}
+
+/** Ordered real-data leads for a founder (strong signals, then programs with YC last, then weak). */
+export function whyWorthALookCandidates(founder: FounderLead): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  function push(label: string | null | undefined) {
+    if (!label || seen.has(label)) return;
+    seen.add(label);
+    out.push(label);
+  }
   const STRONG = new Set(["funding", "launch", "accelerator", "award"]);
   const strong = founder.signalTypes.filter((t) => STRONG.has(t));
-  if (strong.length) {
-    const RANK: Record<string, number> = { funding: 0, launch: 1, accelerator: 2, award: 3 };
-    const best = [...strong].sort((a, b) => (RANK[a] ?? 50) - (RANK[b] ?? 50) || a.localeCompare(b))[0]!;
-    return signalTypeLabel(best);
+  const RANK: Record<string, number> = { funding: 0, launch: 1, accelerator: 2, award: 3 };
+  for (const t of [...strong].sort((a, b) => (RANK[a] ?? 50) - (RANK[b] ?? 50) || a.localeCompare(b))) {
+    push(signalTypeLabel(t));
   }
-  if (founder.programs.length) {
-    const yc = founder.programs.find((name) => /y\s*combinator/i.test(name));
-    return yc ?? founder.programs[0]!;
+  // Default why prefers YC when present; assignWhyWorthALook may skip a used YC for the next program.
+  const programs = [...founder.programs].sort((a, b) => Number(isYcReason(b)) - Number(isYcReason(a)) || a.localeCompare(b));
+  for (const name of programs) push(name);
+  const WEAK_RANK: Record<string, number> = {
+    affiliation_change: 0,
+    continued_dev: 1,
+    demo: 2,
+  };
+  for (const t of [...founder.signalTypes]
+    .filter((x) => !STRONG.has(x))
+    .sort((a, b) => (WEAK_RANK[a] ?? 50) - (WEAK_RANK[b] ?? 50) || a.localeCompare(b))) {
+    push(signalTypeLabel(t));
   }
-  // Weak signals only when nothing else is on record.
-  if (founder.signalTypes.length) {
-    const WEAK_RANK: Record<string, number> = {
-      affiliation_change: 0,
-      continued_dev: 1,
-      demo: 2,
-    };
-    const best = [...founder.signalTypes].sort(
-      (a, b) => (WEAK_RANK[a] ?? 50) - (WEAK_RANK[b] ?? 50) || a.localeCompare(b),
-    )[0]!;
-    return signalTypeLabel(best);
+  return out;
+}
+
+/**
+ * Assign why-lines across a visible page: no repeated YC reason, no repeated
+ * company+reason pair. Prefer unused candidates; blank rather than duplicate YC.
+ */
+export function assignWhyWorthALook(founders: readonly FounderLead[]): Map<string, string | null> {
+  const usedReasons = new Set<string>();
+  const usedPairs = new Set<string>();
+  const assigned = new Map<string, string | null>();
+  for (const founder of founders) {
+    const pairKey = (reason: string) => `${founder.companyId ?? founder.company ?? ""}|${reason}`;
+    const cands = whyWorthALookCandidates(founder);
+    let pick: string | null = null;
+    for (const c of cands) {
+      if (usedPairs.has(pairKey(c))) continue;
+      if (isYcReason(c) && usedReasons.has(c)) continue;
+      if (usedReasons.has(c) && cands.some((x) => !usedReasons.has(x) && !usedPairs.has(pairKey(x)) && !(isYcReason(x) && usedReasons.has(x)))) {
+        continue;
+      }
+      pick = c;
+      break;
+    }
+    if (!pick) {
+      pick =
+        cands.find((c) => !usedPairs.has(pairKey(c)) && !(isYcReason(c) && usedReasons.has(c))) ??
+        null;
+    }
+    if (pick) {
+      usedReasons.add(pick);
+      usedPairs.add(pairKey(pick));
+    }
+    assigned.set(founder.id, pick);
   }
-  return null;
+  return assigned;
 }
 
 function tokens(text: string | undefined): string[] {

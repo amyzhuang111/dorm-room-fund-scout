@@ -94,17 +94,35 @@ export function SiteNav() {
             </Link>
           ))}
         </nav>
-        <div className="ml-auto hidden items-center gap-2 md:flex">
-          <button type="button" className="ask-field" onClick={openAsk}>
-            Ask anything ⌘K
-          </button>
-          <button type="button" className="grid h-7 w-7 place-items-center rounded-full border border-line text-fg" onClick={toggleTheme} aria-label={night ? "Switch to day" : "Switch to night"}>
+        <div className="ml-auto hidden items-center md:flex">
+          <div className="flex items-center gap-0.5 rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] p-0.5 shadow-[inset_0_0_0_1px_rgba(47,79,216,0.04)]">
+            <button type="button" className="ask-field border-0 shadow-none" onClick={openAsk}>
+              Ask anything ⌘K
+            </button>
+            <button
+              type="button"
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-[color:var(--fg-2,#3F465C)] hover:bg-[color:var(--cobalt-haze,#E8ECFA)] hover:text-[color:var(--cobalt,#2F4FD8)]"
+              onClick={toggleTheme}
+              aria-label={night ? "Switch to day" : "Switch to night"}
+              title={night ? "Day" : "Night"}
+            >
+              {night ? <MoonIcon /> : <SunIcon />}
+            </button>
+          </div>
+        </div>
+        <div className="ml-auto flex items-center gap-2 md:hidden">
+          <button
+            type="button"
+            className="grid h-8 w-8 place-items-center rounded-full border border-[color:var(--line,#E1E5EF)] text-[color:var(--fg-2,#3F465C)]"
+            onClick={toggleTheme}
+            aria-label={night ? "Switch to day" : "Switch to night"}
+          >
             {night ? <MoonIcon /> : <SunIcon />}
           </button>
+          <button type="button" className="text-sm text-fg" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+            Menu
+          </button>
         </div>
-        <button type="button" className="ml-auto text-sm text-fg md:hidden" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
-          Menu
-        </button>
       </div>
       {open && (
         <div className="space-y-1 border-t border-line px-5 py-3 md:hidden">

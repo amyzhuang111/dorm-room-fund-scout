@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { filterFounders, whyWorthALook, type FounderLead } from "./founder-index";
+import { assignWhyWorthALook, filterFounders, whyWorthALook, type FounderLead } from "./founder-index";
 
 function lead(partial: Partial<FounderLead> & Pick<FounderLead, "id" | "name">): FounderLead {
   return {
@@ -61,3 +61,18 @@ const bySignal = filterFounders(rows, { text: "funding" });
 assert.deepEqual(bySignal.map((row) => row.name), ["Emir Karabeg"]);
 
 console.log("founder index tests ok");
+
+{
+  const sameYc = [
+    lead({ id: "a", name: "A", company: "Keye", companyId: "k1", programs: ["Y Combinator"] }),
+    lead({ id: "b", name: "B", company: "Keye", companyId: "k1", programs: ["Y Combinator", "Penn Venture Lab"] }),
+    lead({ id: "c", name: "C", company: "Other", companyId: "o1", programs: ["Y Combinator"] }),
+  ];
+  const why = assignWhyWorthALook(sameYc);
+  assert.equal(why.get("a"), "Y Combinator");
+  assert.equal(why.get("b"), "Penn Venture Lab");
+  // Third may take YC only if not already used — YC already used, so blank or other
+  assert.notEqual(why.get("b"), "Y Combinator");
+  const ycCount = [...why.values()].filter((v) => v === "Y Combinator").length;
+  assert.ok(ycCount <= 1, "YC reason at most once on a page");
+}

@@ -6,7 +6,7 @@ import {
   filterFounders,
   founderMatches,
   signalTypeLabel,
-  whyWorthALook,
+  assignWhyWorthALook,
   type FounderLead,
 } from "@/lib/domain/founder-index";
 
@@ -226,8 +226,10 @@ export function FounderResults({
         <p className="text-[14px] text-[color:var(--fg-2,#3F465C)]">No founders match. Missing fields stay missing, so try clearing a filter.</p>
       ) : (
         <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]" data-founder-card-list="">
-          {page.map((founder) => {
-            const why = whyWorthALook(founder);
+          {(() => {
+            const whyById = assignWhyWorthALook(page);
+            return page.map((founder) => {
+            const why = whyById.get(founder.id) ?? null;
             return (
               <li key={founder.id} data-founder-card="">
                 <article className="px-3 py-3 sm:px-4 sm:py-3.5">
@@ -265,7 +267,8 @@ export function FounderResults({
                 </article>
               </li>
             );
-          })}
+          });
+          })()}
         </ol>
       )}
       {shown < matches.length ? (
