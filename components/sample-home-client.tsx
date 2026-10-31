@@ -278,10 +278,10 @@ export function SampleHomeClient(props: {
         <div className="px-4 pb-8 pt-3 sm:px-5" data-fold-hierarchy="">
           {/* Mobile: Peak leads. Desk: search first, then Peak. */}
           <div className="flex flex-col" data-fold-mast="">
-            <div className="order-2 lg:order-1">
+            <div className="order-1 lg:order-1">
               <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
             </div>
-            <div className="order-1 lg:order-2">
+            <div className="order-2 lg:order-2">
               <PeakShareSlot
                 companies={companies}
                 foundersListed={foundersListed}
@@ -296,7 +296,7 @@ export function SampleHomeClient(props: {
             className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(320px,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-5"
             data-fold-stack=""
           >
-            <div className="order-2 lg:order-2 min-w-0" data-fold-globe-col="">
+            <div className="order-2 lg:order-1 min-w-0" data-fold-globe-col="">
               <GlobeHero
                 stats={stats}
                 showGlobe={feed !== "world"}
@@ -306,7 +306,7 @@ export function SampleHomeClient(props: {
                 foundersIndexed={founders.length || undefined}
               />
             </div>
-            <div className="order-1 lg:order-1 min-w-0 lg:sticky lg:top-3 lg:max-h-[calc(100dvh-1.5rem)] lg:overflow-y-auto" data-fold-founders-col="">
+            <div className="order-1 lg:order-2 min-w-0 lg:sticky lg:top-3 lg:max-h-[calc(100dvh-1.5rem)] lg:overflow-y-auto" data-fold-founders-col="">
               <FounderResults
                 founders={founders}
                 status={founderStatus}

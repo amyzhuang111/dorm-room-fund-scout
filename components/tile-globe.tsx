@@ -259,10 +259,12 @@ export function TileGlobe({
           source: "campuses",
           filter: ["==", ["get", "top"], 1],
           paint: {
-            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["+", ["*", ["get", "radius"], 0.85], 3], 1.8, ["+", ["get", "radius"], 4], 3.2, ["+", ["*", ["get", "radius"], 1.4], 5]],
-            "circle-color": "#D96B1C",
-            "circle-opacity": 0.2,
-            "circle-stroke-width": 0,
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["+", ["*", ["get", "radius"], 0.9], 5], 1.8, ["+", ["get", "radius"], 6], 3.2, ["+", ["*", ["get", "radius"], 1.45], 7]],
+            "circle-color": "#2F4FD8",
+            "circle-opacity": 0.14,
+            "circle-stroke-color": "#D96B1C",
+            "circle-stroke-width": 1.2,
+            "circle-stroke-opacity": 0.55,
           },
         });
         map.addLayer({
@@ -271,10 +273,10 @@ export function TileGlobe({
           source: "campuses",
           paint: {
             "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["*", ["get", "radius"], 0.85], 1.8, ["get", "radius"], 3.2, ["*", ["get", "radius"], 1.35]],
-            "circle-color": ["get", "color"],
-            "circle-stroke-color": "#FFFFFF",
-            "circle-stroke-width": ["case", ["==", ["get", "top"], 1], 1.6, 1.05],
-            "circle-opacity": 0.96,
+            "circle-color": ["case", ["==", ["get", "top"], 1], "#2F4FD8", ["get", "color"]],
+            "circle-stroke-color": ["case", ["==", ["get", "top"], 1], "#D96B1C", "#FFFFFF"],
+            "circle-stroke-width": ["case", ["==", ["get", "top"], 1], 2.0, 1.1],
+            "circle-opacity": 0.94,
           },
         });
         map.addLayer({

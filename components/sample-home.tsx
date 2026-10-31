@@ -47,14 +47,19 @@ export function SampleHome({
   const order = directorySortOf(sort);
   const campusRow = campus ? stats.universities.find((university) => university.id === campus) : undefined;
   const campusId = campusRow?.id;
-  const listed = feed === "directory" || feed === "leaderboard";
+  const listed = place === "explore" && (feed === "directory" || feed === "leaderboard");
   const data = loadDirectory();
   let foundersListed = 0;
   for (const card of data.cards) foundersListed += card.founders.length;
   const matched = searchDirectory(filterDirectory(data.cards, sector, kind, campusId), query);
   const campusTotal = campusId ? filterDirectory(data.cards, undefined, undefined, campusId).length : null;
   const ordered = feed === "directory" ? sortDirectory(matched, order) : matched;
-  const shown = feed === "leaderboard" ? leaderboardPage(ordered, pages) : directoryPage(ordered, pages);
+  // Map home loads companies client-side; skip card SSR to keep HTML ~210 KB.
+  const shown = listed
+    ? feed === "leaderboard"
+      ? leaderboardPage(ordered, pages)
+      : directoryPage(ordered, pages)
+    : [];
   const total = feed === "leaderboard" ? matched.filter((card) => card.signals > 0).length : matched.length;
   const campuses = stats.universities
     .filter((university) => university.lat != null && university.lon != null)

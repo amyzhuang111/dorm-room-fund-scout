@@ -144,7 +144,7 @@ export function SampleCompanyShell({
                     <span>
                       {dossier.primaryProgram ? <span aria-hidden> · </span> : null}
                       <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.founders!.length.toLocaleString("en-US")}</span>
-                      {" founders"}
+                      {dossier.founders!.length === 1 ? " founder" : " founders"}
                       {dossier.founders!.length <= 3 ? (
                         <span className="text-[color:var(--fg-3,#5C647A)]">
                           {" ("}
@@ -288,7 +288,7 @@ export function SampleCompanyShell({
                 <>
                   {" · "}
                   <span className="font-bold text-[color:var(--fg,#0B0E17)]">{dossier!.founders!.length.toLocaleString("en-US")}</span>
-                  {" founders"}
+                  {dossier!.founders!.length === 1 ? " founder" : " founders"}
                 </>
               ) : null}
             </p>
