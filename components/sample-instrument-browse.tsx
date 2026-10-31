@@ -382,25 +382,9 @@ export function SampleInstrumentBrowse({
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
         <div className="mb-3 space-y-3 lg:hidden" data-mobile-browse-compose="">
           {feed === "directory" && pages <= 1 ? (
-            <>
-              <div
-                className="border-b border-[color:var(--line,#E1E5EF)] pb-3"
-                data-mobile-ledger-lead=""
-              >
-                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
-                  Companies
-                </p>
-                <p className="mt-1.5 font-mono text-[44px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-                  {total.toLocaleString("en-US")}
-                </p>
-                <p className="mt-2 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                  Ranked from signals, founders, programs, and stage
-                </p>
-              </div>
-              <div data-signals-landed-mobile="">
-                <SignalsLanded companies={companiesLive} />
-              </div>
-            </>
+            <div data-signals-landed-mobile="">
+              <SignalsLanded companies={companiesLive} />
+            </div>
           ) : null}
           {/* Leaderboard podium mounts inside data-ledger-stage (shot frames that). Browse-more keeps a folio insight, not a shared ticket. */}
           {feed === "directory" && pages > 1 ? (
@@ -410,10 +394,10 @@ export function SampleInstrumentBrowse({
               data-chapter-window=""
             >
               <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Chapter window</p>
-              <p className="mt-2 font-mono text-[44px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+              <p className="mt-2 font-mono text-[32px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
                 {cards.length.toLocaleString("en-US")}
               </p>
-              <p className="mt-3 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies on this chapter</p>
+              <p className="mt-3 text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies loaded on this chapter</p>
               <p className="mt-3 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                 {"Showing "}
                 <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
@@ -619,21 +603,12 @@ export function SampleInstrumentBrowse({
                       </li>
                     ))}
                   </ol>
-                  <p className="mt-4 hidden font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)] lg:block" data-ledger-showing="" data-end-lead="">
+                  <p className="mt-4 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="" data-end-lead="">
                     {"Showing "}
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
                     {" of "}
                     <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
                     {" · "}
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
-                    {" "}
-                    {sliceInsight.figureUnit}
-                    {" · "}
-                    <Link href={`/startup/${sliceInsight.companyId}?sample=1`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline">
-                      {sliceInsight.companyName}
-                    </Link>
-                  </p>
-                  <p className="mt-3 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)] lg:hidden" data-ledger-showing-mobile="">
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
                     {" "}
                     {sliceInsight.figureUnit}
@@ -725,34 +700,31 @@ export function SampleInstrumentBrowse({
 
       {mobileFiltersOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
-          <button type="button" className="absolute inset-0 bg-slate-900/40" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
-          <div className="absolute inset-x-0 bottom-0 flex max-h-[min(88dvh,680px)] flex-col overflow-hidden rounded-t-lg border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-12px_40px_rgba(15,23,42,0.18)]">
-            <div className="flex justify-center pt-2.5" aria-hidden>
-              <span className="h-1 w-10 rounded-full bg-[color:var(--line-strong,#C5CAD8)]" />
-            </div>
-            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-4 pb-3.5 pt-2" data-mobile-contents-hero="" data-filters-index-hero="">
-              <div className="flex items-end justify-between gap-3">
+          <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
+          <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col overflow-hidden rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
+            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5" data-mobile-contents-hero="" data-filters-index-hero="">
+              <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
                     Filters
                   </p>
-                  <p className="mt-1.5 font-mono text-[36px] font-bold leading-[0.88] tracking-[-0.045em] text-[color:var(--ember,#D96B1C)]">
+                  <p className="mt-1 font-mono text-[20px] font-bold leading-none tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]">
                     {boardCompanies.length.toLocaleString("en-US")}
                   </p>
-                  <p className="mt-1.5 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies in this list</p>
+                  <p className="mt-1 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">in this list</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setMobileFiltersOpen(false)}
-                  className="inline-flex h-11 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-4 font-mono text-[12px] font-semibold text-white"
+                  className="inline-flex h-9 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white"
                 >
                   Done
                 </button>
               </div>
             </div>
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-1 pb-6" data-mobile-facet-map="">
-              <div className="min-h-[min(62dvh,520px)]">
-                <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense roomy />
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain" data-mobile-facet-map="">
+              <div className="h-[min(58dvh,480px)]">
+                <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
               </div>
             </div>
           </div>
@@ -788,14 +760,13 @@ function LedgerRow({
   ranked?: boolean;
 }) {
   const subtitle = directoryCardSubtitle(card);
-  const mobileLine = [card.school, card.sector].filter(Boolean).join(" · ");
   const meta = signalMeta(card);
   const why = whyItsHere(card);
   return (
     <Link
       href={`/startup/${card.id}`}
       className={`group flex items-start gap-3 px-3.5 transition-[background-color,color] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:gap-3 sm:px-3.5 ${
-        ranked ? "py-4 lg:gap-3 lg:py-3.5" : "py-4 lg:py-3"
+        ranked ? "py-3.5 sm:py-3 lg:gap-3 lg:py-3.5" : "py-3.5 sm:py-3"
       }`}
     >
       {rank != null ? (
@@ -809,37 +780,32 @@ function LedgerRow({
           {String(rank).padStart(2, "0")}
         </span>
       ) : null}
-      <span className="hidden lg:inline">
-        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 20 : 24} />
-      </span>
+      <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 20 : 24} />
       <div className="min-w-0 flex-1">
         <p
           className={
             ranked
-              ? "line-clamp-2 break-words text-[19px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 lg:line-clamp-none lg:text-[18px] lg:leading-5 lg:[overflow-wrap:anywhere]"
-              : "text-[19px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 lg:truncate lg:text-[16px] lg:leading-5"
+              ? "line-clamp-2 break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
+              : "truncate text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
           }
         >
           {card.name}
         </p>
-        {mobileLine ? (
-          <p className="mt-1 font-mono text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)] lg:hidden">{mobileLine}</p>
-        ) : null}
         {subtitle ? (
-          <p className={`mt-0.5 hidden font-mono text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)] lg:block ${ranked ? "lg:line-clamp-2" : "lg:truncate"}`}>
+          <p className={`mt-0.5 font-mono text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)] ${ranked ? "line-clamp-2" : "truncate"}`}>
             {subtitle}
           </p>
         ) : null}
         {why ? (
-          <p className="mt-2.5 border-l-2 border-[color:var(--ember,#D96B1C)]/45 pl-2.5 text-[13px] leading-5 text-[color:var(--fg,#0B0E17)] lg:mt-1.5 lg:pl-2 lg:text-[12px]" data-why-here="">
-            <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)] lg:text-[9px]">Why it&apos;s here</span>
+          <p className="mt-1.5 border-l-2 border-[color:var(--ember,#D96B1C)]/45 pl-2 text-[12px] leading-5 text-[color:var(--fg,#0B0E17)]" data-why-here="">
+            <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Why it&apos;s here</span>
             <span className="mt-0.5 block">{why}</span>
           </p>
         ) : (
           <p className="sr-only" data-why-here="" data-why-blank="1">Why it&apos;s here blank</p>
         )}
         {(card.foundedYear != null || card.primaryProgram || (card.founders?.length ?? 0) > 0) ? (
-          <p className={`mt-1 hidden font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] lg:block ${ranked ? "lg:line-clamp-2" : "lg:truncate"}`} data-card-facts="">
+          <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "line-clamp-2" : "truncate"}`} data-card-facts="">
             {card.foundedYear != null ? (
               <span>
                 <span className="font-bold text-[color:var(--ember,#D96B1C)]">{card.foundedYear}</span>
@@ -858,10 +824,15 @@ function LedgerRow({
           </p>
         ) : null}
         {meta ? (
-          <span className="mt-1.5 hidden flex-wrap items-center gap-1.5 lg:flex">
+          <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
             <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)]">
               {meta.primary}
             </span>
+            {meta.secondary ? (
+              <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:hidden">
+                {meta.secondary}
+              </span>
+            ) : null}
           </span>
         ) : null}
       </div>
@@ -870,7 +841,7 @@ function LedgerRow({
           {card.signals.toLocaleString("en-US")}
         </span>
       ) : !ranked && meta?.secondary ? (
-        <span className="mt-0.5 hidden shrink-0 self-center font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)] lg:inline">
+        <span className="mt-0.5 hidden shrink-0 self-center font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)] sm:inline">
           {meta.secondary}
         </span>
       ) : null}

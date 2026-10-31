@@ -315,7 +315,6 @@ export function SampleCompanyShell({
           </div>
         </div>
 
-
         {/* Three-column desk: index · profile · wire digest */}
         <div className="grid gap-3 lg:grid-cols-[minmax(240px,280px)_minmax(0,1fr)_minmax(240px,300px)]" data-dossier-spread="">
           <aside className="hidden min-w-0 lg:block" data-dossier-index="">
@@ -341,7 +340,7 @@ export function SampleCompanyShell({
             >
               <MobileWireStrip companies={wireCompanies} label="Dossier wire" surface="company" />
             </div>
-            <div className="company-instrument relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] p-4 sm:p-4 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] before:content-[''] after:absolute after:inset-x-0 after:top-0 after:h-0.5 after:bg-[color:var(--cobalt,#2F4FD8)] after:content-['']">
+            <div className="company-instrument relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] p-3 sm:p-4 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] before:content-[''] after:absolute after:inset-x-0 after:top-0 after:h-0.5 after:bg-[color:var(--cobalt,#2F4FD8)] after:content-['']">
               {children}
             </div>
           </div>
@@ -379,24 +378,19 @@ export function SampleCompanyShell({
 
       {mobileFiltersOpen ? (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
-          <button type="button" className="absolute inset-0 bg-slate-900/40" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
-          <div className="absolute inset-x-0 bottom-0 flex max-h-[min(88dvh,680px)] flex-col overflow-hidden rounded-t-lg border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-12px_40px_rgba(15,23,42,0.18)]">
-            <div className="flex justify-center pt-2.5" aria-hidden>
-              <span className="h-1 w-10 rounded-full bg-[color:var(--line-strong,#C5CAD8)]" />
-            </div>
-            <div className="relative flex items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-4 pb-3.5 pt-2">
+          <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
+          <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col overflow-hidden rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
+            <div className="relative flex items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3 py-2.5">
               <div className="min-w-0">
-                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Dossier filters</p>
-                <p className="mt-1.5 font-mono text-[32px] font-bold leading-[0.88] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                  {wireCount.toLocaleString("en-US")}
-                </p>
-                <p className="mt-1.5 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">on this campus wire</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout filters</p>
+                <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the ledger</p>
+                <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Status · Year · Sector · Campus</p>
               </div>
-              <button type="button" onClick={() => setMobileFiltersOpen(false)} className="inline-flex h-11 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-4 font-mono text-[12px] font-semibold text-white">Done</button>
+              <button type="button" onClick={() => setMobileFiltersOpen(false)} className="inline-flex h-8 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white">Done</button>
             </div>
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-1 pb-6">
-              <div className="min-h-[min(62dvh,520px)]">
-                <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={onFacetChange} dense roomy />
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+              <div className="h-[min(70dvh,540px)]">
+                <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={onFacetChange} dense />
               </div>
             </div>
           </div>
