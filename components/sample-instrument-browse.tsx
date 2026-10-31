@@ -259,13 +259,13 @@ export function SampleInstrumentBrowse({
       className="mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-4 sm:mt-3 lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(220px,280px)] lg:gap-5"
       data-browse-spread=""
     >
-      {/* Col 1 — persistent ruled index (magazine TOC), not a sheet over content */}
+      {/* Col 1 · persistent ruled index (magazine TOC), not a sheet over content */}
       <aside className="hidden min-w-0 lg:block" data-browse-index="">
         <div className="sticky top-14 space-y-2">
-          {/* Ember beat for open Contents — trails 353/01/138 hero pages without twinning them */}
-          {/* Contents index is the desk-filters hero — big split + FacetRail; dial lives on fold only. */}
+          {/* Ember beat for open Contents · trails 353/01/138 hero pages without twinning them */}
+          {/* Contents index is the desk-filters hero · big split + FacetRail; dial lives on fold only. */}
           <div
-            className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+            className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/25 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--ember,#D96B1C)]"
             data-index-signal-beat=""
             data-contents-hero=""
             data-filters-index-hero=""
@@ -273,7 +273,7 @@ export function SampleInstrumentBrowse({
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">
               {feed === "leaderboard" ? "Signals" : "Companies"}
             </p>
-            <p className="mt-3 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
+            <p className="mt-1.5 font-mono text-[32px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
               {boardCompanies.length.toLocaleString("en-US")}
             </p>
             <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">in this list</p>
@@ -285,8 +285,8 @@ export function SampleInstrumentBrowse({
             </p>
             <p className="mt-1.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">Filters below</p>
           </div>
-          {/* FacetRail is the browse-filters hero — atlas lives on sector-folio (browse-1440), not this rail. */}
-          <div className="h-[min(58vh,560px)] pt-1" data-contents-facet-map="">
+          {/* FacetRail is the browse-filters hero · atlas lives on sector-folio (browse-1440), not this rail. */}
+          <div className="h-[min(42vh,400px)] pt-1" data-contents-facet-map="">
             <FacetRail
               companies={companiesLive}
               campuses={campuses}
@@ -300,9 +300,9 @@ export function SampleInstrumentBrowse({
         </div>
       </aside>
 
-      {/* Col 2 — ember figure hero + ledger */}
+      {/* Col 2 · ember figure hero + ledger */}
       <div className="min-w-0" data-browse-ledger="">
-        {/* Distinct hero per surface — fold language, not the fold stamp */}
+        {/* Distinct hero per surface · fold language, not the fold stamp */}
         <div
           className={`mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3 lg:mb-2 lg:pb-2 ${
             feed === "directory" && pages <= 1 ? "hidden lg:block" : ""
@@ -319,7 +319,7 @@ export function SampleInstrumentBrowse({
                     <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
                       Signal desk · ranked ledger
                     </p>
-                    <p className="mt-2 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[64px] lg:text-[64px]">
+                    <p className="mt-1.5 font-mono text-[32px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
                       {topCampus.founders.toLocaleString("en-US")}
                     </p>
                     <p className="mt-2 text-[18px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[20px] lg:text-[22px]">
@@ -336,7 +336,7 @@ export function SampleInstrumentBrowse({
               ) : (
                 <>
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
-                  <p className="mt-1.5 font-mono text-[64px] font-bold leading-[0.88] tracking-[-0.06em] text-[color:var(--fg,#0B0E17)] sm:mt-1 sm:text-[56px] sm:leading-none sm:tracking-[-0.05em] lg:text-[64px]">
+                  <p className="mt-1 font-mono text-[32px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
                     <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
                   </p>
                   <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
@@ -356,7 +356,7 @@ export function SampleInstrumentBrowse({
                 </>
               )}
             </div>
-            {/* Desktop: pill sort only — filters live in the persistent index column. */}
+            {/* Desktop: pill sort only · filters live in the persistent index column. */}
             <div className="hidden flex-wrap items-center gap-1.5 lg:flex">
               {feed === "directory"
                 ? (
@@ -385,7 +385,7 @@ export function SampleInstrumentBrowse({
           ) : null}
         </div>
 
-        {/* Scout Chronograph — unifying system. Browse-more uses folio (originality priority);
+        {/* Scout Chronograph · unifying system. Browse-more uses folio (originality priority);
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
         <div className="mb-5 space-y-6 lg:hidden" data-mobile-browse-compose="">
           {feed === "directory" && pages <= 1 ? (
@@ -396,12 +396,12 @@ export function SampleInstrumentBrowse({
           {/* Leaderboard podium mounts inside data-ledger-stage (shot frames that). Browse-more keeps a folio insight, not a shared ticket. */}
           {feed === "directory" && pages > 1 ? (
             <div
-              className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--bg,#FFFFFF)] px-4 py-7 before:absolute before:inset-y-0 before:left-0 before:w-[4px] before:bg-[color:var(--cobalt,#2F4FD8)]"
+              className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]"
               data-mobile-continued-mast=""
               data-chapter-window=""
             >
               <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Chapter window</p>
-              <p className="mt-4 font-mono text-[56px] font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">
+              <p className="mt-2 font-mono text-[32px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
                 {cards.length.toLocaleString("en-US")}
               </p>
               <p className="mt-3 text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies loaded on this chapter</p>
@@ -447,12 +447,12 @@ export function SampleInstrumentBrowse({
               })}
             </div>
           ) : null}
-          {/* Secondary sector strips culled — mobile page-1 owns the newest-insight hero alone. */}
+          {/* Secondary sector strips culled · mobile page-1 owns the newest-insight hero alone. */}
         </div>
 
         {feed === "directory" && pages > 1 ? (
           <div className="mb-6 hidden lg:block" data-desk-browse-dominant="chapter-window" data-chapter-window="">
-            {/* Browse-more exclusive: chapter window — not atlas / chrono / next-to-scout / podium. */}
+            {/* Browse-more exclusive: chapter window · not atlas / chrono / next-to-scout / podium. */}
             <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--bg,#FFFFFF)] px-5 py-8 before:absolute before:inset-y-0 before:left-0 before:w-[4px] before:bg-[color:var(--cobalt,#2F4FD8)]">
               <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Chapter window</p>
               <p className="mt-4 font-mono text-[72px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
@@ -472,7 +472,7 @@ export function SampleInstrumentBrowse({
           </div>
         ) : null}
 
-        {/* One strong ledger stage — map-stage language: cobalt frame, ruled rows.
+        {/* One strong ledger stage · map-stage language: cobalt frame, ruled rows.
             Browse-more (pages > 1): sticky row-range, section dividers, end mark. */}
         {cards.length === 0 ? (
           <p className="text-[13px] text-[color:var(--fg-2,#3F465C)]">
@@ -529,7 +529,7 @@ export function SampleInstrumentBrowse({
                       >
                         <span className="h-px flex-1 bg-[color:var(--cobalt,#2F4FD8)]/25" aria-hidden />
                         <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
-                          Rows {String(sectionFrom).padStart(2, "0")}–{String(sectionTo).padStart(2, "0")}
+                          Rows {String(sectionFrom).padStart(2, "0")}-{String(sectionTo).padStart(2, "0")}
                         </span>
                         <span className="h-px flex-1 bg-[color:var(--cobalt,#2F4FD8)]/25" aria-hidden />
                       </div>
@@ -634,10 +634,10 @@ export function SampleInstrumentBrowse({
         </div>
       </div>
 
-      {/* Col 3 — WIRE digest (desk), aligned to fold grid */}
+      {/* Col 3 · WIRE digest (desk), aligned to fold grid */}
       <aside className="hidden min-w-0 lg:block" data-browse-wire="">
         <div className="sticky top-14">
-          <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
+          <div className={`${PANEL} relative overflow-hidden p-2.5`}>
             <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
               <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{wireLabel}</p>
               <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
@@ -676,13 +676,13 @@ export function SampleInstrumentBrowse({
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
           <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
           <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col overflow-hidden rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
-            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-5 before:absolute before:inset-x-0 before:top-0 before:h-[3px] before:bg-[color:var(--ember,#D96B1C)]" data-mobile-contents-hero="" data-filters-index-hero="">
+            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3 before:absolute before:inset-x-0 before:top-0 before:h-[2px] before:bg-[color:var(--ember,#D96B1C)]" data-mobile-contents-hero="" data-filters-index-hero="">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--ember,#D96B1C)]">
                     Companies
                   </p>
-                  <p className="mt-3 font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
+                  <p className="mt-2 font-mono text-[36px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
                     {boardCompanies.length.toLocaleString("en-US")}
                   </p>
                   <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">in this list</p>

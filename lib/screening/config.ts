@@ -35,7 +35,7 @@ export const SCREENING_CONFIG = {
     value: 2_000_000,
     provenance: "user_guidance",
     reason:
-      "Internal sourcing guidance: usually pre-seed, before raising more than 'a couple million dollars.' This is a review trigger, not a hard cap — a published FAQ may not state an exact figure.",
+      "Internal sourcing guidance: usually pre-seed, before raising more than 'a couple million dollars.' This is a review trigger, not a hard cap · a published FAQ may not state an exact figure.",
   } as ScreeningConfigEntry<number>,
 
   stageAllowed: {

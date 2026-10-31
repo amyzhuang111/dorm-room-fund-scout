@@ -64,17 +64,17 @@ export function directoryRank(card: RankCard): { tier: number; score: number } {
  * Blank when there is nothing beyond "no signals".
  */
 export function whyItsHere(card: RankCard): string | null {
-  const parts: string[] = [];
   const signals = Math.max(0, card.signals);
   const kind = card.signalLabel ? card.signalLabel.toLowerCase() : "";
-  if (signals > 1) parts.push(kind ? `${signals} signals, latest ${kind}` : `${signals} signals`);
-  else if (signals === 1) parts.push(kind ? `1 ${kind} signal` : "1 signal");
-  else if (kind) parts.push(`${kind} on record`);
+  if (card.operatingStatus === "acquired") return "Acquired";
+  if (signals > 1) return kind ? `${signals} signals, latest ${kind}` : `${signals} signals`;
+  if (signals === 1) return kind ? `1 ${kind} signal` : "1 signal";
+  if (kind) return `${kind} on record`;
   const programs = [...new Set(card.programs.map(programLabel).filter(Boolean))];
-  if (programs.length === 1) parts.push(programs[0]!);
-  else if (programs.length > 1) parts.push(`${programs[0]} +${programs.length - 1}`);
-  if (card.stage) parts.push(card.stage);
-  if (card.operatingStatus === "acquired") parts.push("acquired");
-  if (!parts.length) return null;
-  return parts.join(" · ");
+  if (programs.length) {
+    const yc = programs.find((name) => /y\s*combinator/i.test(name));
+    return yc ?? programs[0]!;
+  }
+  if (card.stage) return card.stage;
+  return null;
 }

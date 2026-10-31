@@ -52,7 +52,7 @@ export interface UniversitySummary {
   /** @deprecated use companyCount */
   candidateProjectCount: number;
   companyCount: number; // Startup Scout: formed/plausibly-formed companies only (kind='company')
-  founderCount: number; // Founder Scout: PROMOTED founder candidates only (see lib/domain/promotion.ts) — not every resolved person
+  founderCount: number; // Founder Scout: PROMOTED founder candidates only (see lib/domain/promotion.ts) · not every resolved person
   resolvedPersonCount: number; // total distinct people resolved with any affiliation to this campus, promoted or not
   sourcesConfigured: number;
   lastCheckedAt: string | null;
@@ -1121,8 +1121,8 @@ export interface FounderRow {
   programSignals: ProgramSignalView[];
   signalEvidence: { excerpt: string; sourceUrl: string | null; sourceName: string | null; unverified: boolean } | null;
   linkedCompany: { id: string; name: string } | null; // a real kind='company' project they're linked to, if any
-  possibleCompany: { name: string; status: "unreviewed" | "confirmed" } | null; // §65-67: a bio-derived hint, never auto-promoted — null once linkedCompany is set
-  linkedinUrl: string | null; // from a captured `linkedin:<url>` alias — a URL found on a source page, not built from a name
+  possibleCompany: { name: string; status: "unreviewed" | "confirmed" } | null; // §65-67: a bio-derived hint, never auto-promoted · null once linkedCompany is set
+  linkedinUrl: string | null; // from a captured `linkedin:<url>` alias · a URL found on a source page, not built from a name
   linkedinCandidates: LinkedInCandidate[];
   link: PersonLinkTarget | null;
   profileLinks: ProfileIconLink[];
@@ -1765,7 +1765,7 @@ export interface NetworkNodeDetail {
     enrollmentLabel: string | null;
     leftSchool: boolean;
     school: string | null;
-  }[]; // every person with a role on this project, role shown as-is — not all team members are founders (§8/§18)
+  }[]; // every person with a role on this project, role shown as-is · not all team members are founders (§8/§18)
   claims: { excerpt: string; sourceUrl: string; retrievedAt: string }[];
   linkedCompanyId: string | null; // set when kind='company', for a Founder Scout node to deep-link into Startup Scout
 }

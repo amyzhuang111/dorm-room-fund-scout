@@ -258,7 +258,7 @@ export function inferEnrollment(input: InferInput): InferResult {
       "recent_grad",
       "inferred",
       year
-        ? `The record says they left school. The newest dated evidence is ${year}, inside 2023–${ENROLLMENT_AS_OF_YEAR}.`
+        ? `The record says they left school. The newest dated evidence is ${year}, inside 2023-${ENROLLMENT_AS_OF_YEAR}.`
         : "The record says they left school, and no graduation year before 2023 is stated.",
       newest ?? snippets[0] ?? null,
       null,
@@ -314,7 +314,7 @@ export function inferEnrollment(input: InferInput): InferResult {
       return fromHit(
         "recent_grad",
         "inferred",
-        `No class year is stated. The newest dated evidence is ${newest.year} (${newest.excerpt}), inside the 2023–${ENROLLMENT_AS_OF_YEAR} window.`,
+        `No class year is stated. The newest dated evidence is ${newest.year} (${newest.excerpt}), inside the 2023-${ENROLLMENT_AS_OF_YEAR} window.`,
         newest,
         null,
         false,
@@ -338,7 +338,7 @@ export function inferEnrollment(input: InferInput): InferResult {
       "recent_grad",
       "inferred",
       roster
-        ? `Listed as “${roster}”. That roster does not state a class year, so this is estimated in the 2023–${ENROLLMENT_AS_OF_YEAR} window rather than recorded as a current student.`
+        ? `Listed as “${roster}”. That roster does not state a class year, so this is estimated in the 2023-${ENROLLMENT_AS_OF_YEAR} window rather than recorded as a current student.`
         : "Affiliated to a campus in Scout, and no graduation year, cohort, or founding year is stated, so this is estimated in the recent-grad window.",
       snippets[0] ?? null,
       null,

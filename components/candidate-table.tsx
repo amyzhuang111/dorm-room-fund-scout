@@ -15,7 +15,7 @@ import { EntityMarks } from "./entity-marks";
 function whyInvestigate(c: CandidateSummary): string {
   if (c.latestSignalNote) return c.latestSignalNote;
   if (c.openQuestion) return c.openQuestion;
-  return "No supporting evidence recorded yet — open the drawer to research.";
+  return "No supporting evidence recorded yet · open the drawer to research.";
 }
 
 function FounderLinks({ founders }: { founders: CandidateSummary["founderLinks"] }) {
@@ -180,7 +180,7 @@ export const CandidateTable = memo(function CandidateTable({
                 </td>
                 <td className="px-3 py-2.5 text-muted">{priorityLabel(c)}</td>
                 <td className="px-3 py-2.5 max-w-[200px] truncate text-muted" title={c.latestSignalNote ?? undefined}>
-                  {c.latestSignalNote ?? "—"}
+                  {c.latestSignalNote ?? "-"}
                 </td>
               </tr>
               {detail && detail.id === c.id && (

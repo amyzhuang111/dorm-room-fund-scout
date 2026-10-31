@@ -79,7 +79,7 @@ export interface ProgramDirectory {
 export const PROGRAM_DIRECTORY: Record<ProgramSignalType, ProgramDirectory> = {
   founders_inc: {
     tier: "A",
-    rationale: "Off Season is six weeks for students and recent grads: 48 teams in 2025 and 100 in 2026, with first checks typically $100k–$250k.",
+    rationale: "Off Season is six weeks for students and recent grads: 48 teams in 2025 and 100 in 2026, with first checks typically $100k-$250k.",
     sourceUrl: "https://f.inc/",
   },
   south_park_commons: {
@@ -119,7 +119,7 @@ export const PROGRAM_DIRECTORY: Record<ProgramSignalType, ProgramDirectory> = {
   },
   afore_fir_u: {
     tier: "A",
-    rationale: "Two months in San Francisco for students, dropouts, and recent graduates, with a $20k–$100k+ check.",
+    rationale: "Two months in San Francisco for students, dropouts, and recent graduates, with a $20k-$100k+ check.",
     sourceUrl: "https://www.afore.vc/students",
   },
   pioneer: {

@@ -1036,7 +1036,7 @@ export function SignalsLanded({ companies }: { companies: FacetCompany[] }) {
           ]
             .filter(Boolean)
             .join(" · ")}
-          {" — not on the chart"}
+          {" · not on the chart"}
         </p>
       ) : null}
     </section>

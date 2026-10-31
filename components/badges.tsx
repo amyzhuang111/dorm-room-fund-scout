@@ -82,7 +82,7 @@ export function SignalTierBadge({ tier, basis }: { tier: string | null | undefin
 }
 
 export function TierBadge({ tier, label }: { tier: string | null; label: string }) {
-  if (!tier) return <span className="text-xs text-muted">{label}: —</span>;
+  if (!tier) return <span className="text-xs text-muted">{label}:  · </span>;
   return (
     <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium ${TIER_CLASS[tier] ?? ""}`}>
       {label}: {tier}
@@ -324,8 +324,8 @@ const AFFILIATION_STATUS_LABEL: Record<string, string> = {
 const AFFILIATION_STATUS_TITLE: Record<string, string> = {
   current_student: "Enrollment status confirmed by the source (e.g. a program directory or class-year mention).",
   recent_grad: "Recently graduated, per the source.",
-  older_alumni: "Alumni, per the source — not necessarily a current student.",
-  unverified: "Real evidence ties this person to the university (e.g. a hackathon roster or campus-org listing), but that source alone can't confirm they're currently enrolled — not independently checked yet.",
+  older_alumni: "Alumni, per the source · not necessarily a current student.",
+  unverified: "Real evidence ties this person to the university (e.g. a hackathon roster or campus-org listing), but that source alone can't confirm they're currently enrolled · not independently checked yet.",
 };
 
 export function AffiliationStatusBadge({ status }: { status: string }) {

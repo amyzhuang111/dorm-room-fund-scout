@@ -380,7 +380,7 @@ function degreeYearHits(snippet: EvidenceSnippet, hits: YearHit[]) {
     pushYear(hits, year, year ? labelFromYear(year) : "", snippet);
   }
   const range =
-    /\b(?:bachelor(?:'s|s)?|master(?:'s|s)?|degree|bs|bse|ba|ms|mse)\b[^.\n]{0,140}?\b((?:19|20)\d{2})\s*[–—-]\s*((?:19|20)\d{2})\b/gi;
+    /\b(?:bachelor(?:'s|s)?|master(?:'s|s)?|degree|bs|bse|ba|ms|mse)\b[^.\n]{0,140}?\b((?:19|20)\d{2})\s*[- · -]\s*((?:19|20)\d{2})\b/gi;
   for (const match of text.matchAll(range)) {
     const year = fullYear(parseInt(match[2], 10));
     pushYear(hits, year, year ? labelFromYear(year) : "", snippet);

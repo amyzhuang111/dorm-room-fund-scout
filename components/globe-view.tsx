@@ -1046,13 +1046,13 @@ export const GlobeView = memo(function GlobeView({
         {status === "unsupported" && (
           <div className="absolute inset-0 flex flex-col items-start justify-start gap-2 overflow-y-auto p-4">
             <p className="text-sm text-muted">
-              The map couldn&apos;t load (likely no WebGL) — here&apos;s the same campus list it would show.
+              The map couldn&apos;t load (likely no WebGL) · here&apos;s the same campus list it would show.
             </p>
             <UniversityListFallback universities={universities} basePath={basePath} current={current} />
           </div>
         )}
 
-        {/* Floating campus-summary panel — pattern studied from dashboard.vclense.ch/ycglobe's
+        {/* Floating campus-summary panel · pattern studied from dashboard.vclense.ch/ycglobe's
             frosted floating panels. */}
         {!hero && !locked && geoMode === "hq" && status === "ok" && (
           <div className="glass-panel absolute left-3 top-16 w-72 max-h-[420px] overflow-y-auto">

@@ -44,7 +44,7 @@ export function evaluateAffiliationGate(facts: ProjectFacts): GateOutcome {
         gate: "affiliation",
         result: "needs_verification",
         rationale:
-          "Enrollment/graduation claim exists but isn't dated — an old biography is not proof of current status. Needs a dated source.",
+          "Enrollment/graduation claim exists but isn't dated · an old biography is not proof of current status. Needs a dated source.",
       };
     }
     return {
@@ -64,7 +64,7 @@ export function evaluateAffiliationGate(facts: ProjectFacts): GateOutcome {
   return {
     gate: "affiliation",
     result: "needs_verification",
-    rationale: "No dated affiliation evidence yet. Unknown is not the same as ineligible — route to research.",
+    rationale: "No dated affiliation evidence yet. Unknown is not the same as ineligible · route to research.",
   };
 }
 
@@ -75,7 +75,7 @@ export function evaluateStageGate(facts: ProjectFacts): GateOutcome {
       gate: "stage",
       result: "needs_verification",
       rationale: facts.selfReportedStage
-        ? `Only a self-reported stage ("${facts.selfReportedStage}") exists — a self-selected pre-seed label alone is insufficient. Needs independent corroboration (round report, program record, or founder-disclosed detail with a date).`
+        ? `Only a self-reported stage ("${facts.selfReportedStage}") exists · a self-selected pre-seed label alone is insufficient. Needs independent corroboration (round report, program record, or founder-disclosed detail with a date).`
         : "No stage evidence yet.",
     };
   }
@@ -96,7 +96,7 @@ export function evaluatePriorFundingGate(facts: ProjectFacts): GateOutcome {
     return {
       gate: "prior_funding",
       result: "needs_verification",
-      rationale: "No funding events on record. No announcement found does not mean zero funding — treat as unknown, not cleared.",
+      rationale: "No funding events on record. No announcement found does not mean zero funding · treat as unknown, not cleared.",
     };
   }
   if (hasUnknown) {
@@ -166,7 +166,7 @@ export function evaluateFundingAvailabilityGate(facts: ProjectFacts): GateOutcom
     };
   }
   if (facts.fundingAvailability === "closed") {
-    return { gate: "funding_availability", result: "needs_verification", rationale: "Round reported closed — confirm before treating as actionable." };
+    return { gate: "funding_availability", result: "needs_verification", rationale: "Round reported closed · confirm before treating as actionable." };
   }
   return { gate: "funding_availability", result: "pass", rationale: `Funding availability: ${facts.fundingAvailability}.` };
 }

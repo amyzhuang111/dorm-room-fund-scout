@@ -218,6 +218,30 @@ const mobileOrder = await mobile.evaluate(() => {
 });
 await mobile.close();
 
+
+// Desk 1440: founder cards must clear the fold (beside or under a short globe).
+const desk = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+await desk.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+await desk.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
+await desk.waitForSelector("[data-founder-card]", { timeout: 20000 });
+await desk.waitForSelector('[data-globe-state="ready"]', { timeout: 45000 });
+const deskFold = await desk.evaluate(() => {
+  const card = document.querySelector("[data-founder-card]");
+  const map = document.querySelector("[data-dispatch-map-stage]");
+  const text = document.body.innerText || "";
+  const cr = card?.getBoundingClientRect();
+  const mr = map?.getBoundingClientRect();
+  return {
+    cardTop: cr?.top ?? 9999,
+    cardBottom: cr?.bottom ?? 9999,
+    mapTop: mr?.top ?? 9999,
+    mapBottom: mr?.bottom ?? 9999,
+    cardAboveFold: (cr?.top ?? 9999) < 900 && (cr?.bottom ?? 9999) > 0,
+    emDashInUi: /[\u2014\u2013]/.test(text),
+  };
+});
+await desk.close();
+
 await page.goto(`${BASE}/companies?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
 await page.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
 await page.waitForTimeout(400);
@@ -227,6 +251,7 @@ const companiesLabels = await page.evaluate(() => {
   const landed = document.querySelector("[data-signals-landed]");
   const months = landed ? [...landed.querySelectorAll("[data-signal-month]")].map((el) => el.getAttribute("data-signal-month")) : [];
   return {
+    emDashInUi: /[\u2014\u2013]/.test(text),
     earUnkStub: /\bEar\b/.test(text) || /\bUnk\b/.test(text),
     jargon: /\b(chronograph|constellation|folio|wireframe|LCP|TTFB)\b/i.test(text),
     chronoPresent: Boolean(document.querySelector("[data-scout-chronograph]")),
@@ -398,6 +423,8 @@ const report = {
     noCountryLegend: founderHome.countryLegend === false,
     samplePillQuiet: founderHome.samplePillQuiet === true,
     mobileFoundersAboveMap: mobileOrder.filtersAboveMap && mobileOrder.cardAboveMap,
+    deskFoundersAboveFold1440: deskFold.cardAboveFold === true,
+    noEmDashInUi: deskFold.emDashInUi === false && companiesLabels.emDashInUi === false,
     statusBuckets:
       statusActive === 2497 && statusAcquired === 8 && statusClosed === 8 && statusActive + statusAcquired + statusClosed === TOTAL,
     moreObvious: moreLabelsBefore.some((l) => /more sectors/i.test(l)) && moreLabelsBefore.some((l) => /more cities/i.test(l)),

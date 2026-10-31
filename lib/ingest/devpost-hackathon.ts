@@ -157,7 +157,7 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
       html = await fetchText(pageUrl);
       fetches++;
     } catch (e) {
-      console.log(`${cfg.eventLabel} gallery page ${page}: fetch failed (${(e as Error).message}) — stopping the pagination walk here for this run.`);
+      console.log(`${cfg.eventLabel} gallery page ${page}: fetch failed (${(e as Error).message}) · stopping the pagination walk here for this run.`);
       break;
     }
 
@@ -172,7 +172,7 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
     if (pageEntries.length === 0) {
       // Past the last real page — wrap back to page 1 on the next run so a
       // late-added submission (or a re-numbered gallery) still gets picked up.
-      console.log(`${cfg.eventLabel} gallery: page ${page} is empty — reached the end of the gallery.`);
+      console.log(`${cfg.eventLabel} gallery: page ${page} is empty · reached the end of the gallery.`);
       reachedEnd = true;
       resumePage = 1;
       break;
@@ -192,13 +192,13 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
       page++;
     } else {
       entriesToProcess.push(...newOnThisPage.slice(0, remainingBudget));
-      resumePage = page; // leftover new entries remain on this page — retry it next run
+      resumePage = page; // leftover new entries remain on this page · retry it next run
       break;
     }
   }
 
   console.log(
-    `${cfg.eventLabel} gallery: walked page ${startPage}${page > startPage ? `–${reachedEnd ? page - 1 : page}` : ""}, ${entriesToProcess.length} new project(s) queued this run (bounded sample, not necessarily the full event yet).`
+    `${cfg.eventLabel} gallery: walked page ${startPage}${page > startPage ? `-${reachedEnd ? page - 1 : page}` : ""}, ${entriesToProcess.length} new project(s) queued this run (bounded sample, not necessarily the full event yet).`
   );
 
   const insertProject = db.prepare(
@@ -247,7 +247,7 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
 
   for (const entry of entriesToProcess) {
     if (fetches >= maxFetches) {
-      console.log(`Hit the ${maxFetches}-fetch scan budget — stopping early (this is intentional, not a bug).`);
+      console.log(`Hit the ${maxFetches}-fetch scan budget · stopping early (this is intentional, not a bug).`);
       break;
     }
     if (findProjectByUrl.get(entry.url)) continue; // already ingested this exact submission (found again on a re-walked page)
@@ -271,13 +271,13 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
     insertProject.run(projectId, entry.name, detail.tagline || entry.tagline || null, entry.url);
     newProjects++;
 
-    const winnerNote = entry.isWinner ? " (won a prize at the event — one evidence record, not a ranking by itself)" : "";
+    const winnerNote = entry.isWinner ? " (won a prize at the event · one evidence record, not a ranking by itself)" : "";
     insertSignal.run(
       newId("sig"),
       projectId,
-      `${cfg.eventLabel} project gallery submission: "${entry.name}" — ${detail.tagline || entry.tagline}${winnerNote}.`,
+      `${cfg.eventLabel} project gallery submission: "${entry.name}" · ${detail.tagline || entry.tagline}${winnerNote}.`,
       null,
-      "Hackathon submission is a real, dated build-evidence signal. Absence of a prize is not evidence against the team — non-winning teams can still be strong.",
+      "Hackathon submission is a real, dated build-evidence signal. Absence of a prize is not evidence against the team · non-winning teams can still be strong.",
       JSON.stringify([])
     );
 
@@ -310,7 +310,7 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
 
       const excerpt = `Devpost profile "${member.profileUrl}" (display name "${member.name}") listed as a team member on ${cfg.eventLabel} submission "${entry.name}".${
         member.contributionNote ? ` Their own note: "${member.contributionNote}"` : ""
-      } Devpost profiles carry no school field, so this does NOT by itself confirm enrollment — affiliation is seeded as unverified pending independent research.`;
+      } Devpost profiles carry no school field, so this does NOT by itself confirm enrollment · affiliation is seeded as unverified pending independent research.`;
       const claimId = newId("claim");
       insertClaim.run(claimId, "project", projectId, "hackathon_submission", JSON.stringify({ project: entry.name, member: member.name }), excerpt, cfg.sourceId, detailSnapshotId, entry.url, retrievedAt, "observed_fact");
 
@@ -343,6 +343,6 @@ export async function ingestDevpostHackathon(cfg: DevpostHackathonConfig) {
   console.log(
     `${newProjects} new project(s), ${newPeople} new person(s), ${linkedinFound} personal LinkedIn link(s) captured, ${fetches} total fetches used, ${totalIngested} total ingested from this source so far.`
   );
-  console.log(`Next run resumes at gallery page ${resumePage}${reachedEnd ? " (wrapped back to the start — the last walk reached the end of the gallery)" : "."}`);
-  console.log("All affiliations seeded as 'unverified' — confirming enrollment for any of these people is a research task, not assumed.");
+  console.log(`Next run resumes at gallery page ${resumePage}${reachedEnd ? " (wrapped back to the start · the last walk reached the end of the gallery)" : "."}`);
+  console.log("All affiliations seeded as 'unverified' · confirming enrollment for any of these people is a research task, not assumed.");
 }

@@ -34,7 +34,7 @@ export function CampusBenchmarks({ pitchbook, hitRate }: { pitchbook: PitchbookC
         {pitchbook?.grad && <p className="mt-1 text-xs text-foreground">{trackLine("Graduate list", pitchbook.grad)}</p>}
         {pitchbook?.mba && <p className="mt-1 text-xs text-foreground">{trackLine("MBA list", pitchbook.mba)}</p>}
         <p className="mt-1 text-[11px] text-muted">
-          VC-backed alumni founders, January 2015–August 2026.{" "}
+          VC-backed alumni founders, January 2015-August 2026.{" "}
           <a href={PITCHBOOK_SOURCE_URL} target="_blank" rel="noopener noreferrer" className="text-link underline">
             PitchBook university rankings
           </a>
@@ -47,7 +47,7 @@ export function CampusBenchmarks({ pitchbook, hitRate }: { pitchbook: PitchbookC
           <p className={`mt-1 text-sm tabular-nums ${hitRate.reliable ? "text-foreground" : "text-muted"}`}>
             {formatHitRate(hitRate.hitRate)}× the comparison group{" "}
             <span className="text-xs text-muted">
-              ({formatHitRate(hitRate.low)}–{formatHitRate(hitRate.high)}) · {hitRate.good.toLocaleString()} of {hitRate.founders.toLocaleString()} tracked founders had a good outcome
+              ({formatHitRate(hitRate.low)}-{formatHitRate(hitRate.high)}) · {hitRate.good.toLocaleString()} of {hitRate.founders.toLocaleString()} tracked founders had a good outcome
             </span>
           </p>
           {!hitRate.reliable && (

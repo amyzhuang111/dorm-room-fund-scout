@@ -182,8 +182,8 @@ export function TileGlobe({
 
     const fit = () => {
       const wide = window.innerWidth >= 1024;
-      const target = Math.round(window.innerHeight * (wide ? 0.58 : 0.48));
-      setStageHeight(wide ? Math.max(480, Math.min(640, target)) : Math.max(220, Math.min(280, target)));
+      const target = Math.round(window.innerHeight * (wide ? 0.42 : 0.48));
+      setStageHeight(wide ? Math.max(320, Math.min(420, target)) : Math.max(220, Math.min(280, target)));
     };
     fit();
     window.addEventListener("resize", fit);
@@ -460,7 +460,7 @@ export function TileGlobe({
           {dataThrough ? <span>Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
         <p className="mt-1 max-w-3xl text-[12px] leading-5 text-[color:var(--fg-3,#5C647A)]" data-founder-count-note="">
-          On companies counts names listed on company cards. The founder index is every searchable person — some are not yet attached to a company card.
+          On companies counts names listed on company cards. The founder index is every searchable person · some are not yet attached to a company card.
         </p>
         <p className="mt-2 text-[14px] text-[color:var(--fg,#0B0E17)]">Click a campus to see its founders.</p>
       </div>

@@ -365,7 +365,7 @@ export function AskAiDock() {
                       {ASK_BROWSER_MODELS.map((item) => (
                         <option key={item.id} value={item.id}>
                           {item.label}
-                          {item.id === ASK_DEFAULT_MODEL_ID ? " (default)" : ""} — {formatDownload(item.bytes)}
+                          {item.id === ASK_DEFAULT_MODEL_ID ? " (default)" : ""} · {formatDownload(item.bytes)}
                         </option>
                       ))}
                     </select>

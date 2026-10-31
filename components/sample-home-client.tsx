@@ -148,9 +148,12 @@ export function SampleHomeClient(props: {
         <div className="px-4 pb-8 pt-3 sm:px-5" data-fold-hierarchy="">
           {/* 1. Search always first */}
           <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
-          {/* Mobile: founders (filters + cards) above map. Desktop: globe then results — clear vertical hierarchy. */}
-          <div className="flex flex-col gap-5 lg:gap-6" data-fold-stack="">
-            <div className="order-2 lg:order-1" data-fold-globe-col="">
+          {/* Mobile: founders above map. Desk: founders beside a short globe so cards clear the fold at 1440. */}
+          <div
+            className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(380px,0.95fr)_minmax(0,1.05fr)] lg:items-start lg:gap-5"
+            data-fold-stack=""
+          >
+            <div className="order-2 lg:order-2 min-w-0" data-fold-globe-col="">
               <GlobeHero
                 stats={stats}
                 showGlobe={feed !== "world"}
@@ -160,7 +163,7 @@ export function SampleHomeClient(props: {
                 foundersIndexed={founders.length || undefined}
               />
             </div>
-            <div className="order-1 lg:order-2" data-fold-founders-col="">
+            <div className="order-1 lg:order-1 min-w-0 lg:sticky lg:top-3 lg:max-h-[calc(100dvh-1.5rem)] lg:overflow-y-auto" data-fold-founders-col="">
               <FounderResults
                 founders={founders}
                 status={founderStatus}

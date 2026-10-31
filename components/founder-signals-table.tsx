@@ -39,8 +39,8 @@ export function FounderSignalsTable({ rows }: { rows: FounderSignalRow[] }) {
                   </span>
                 </td>
                 <td className="px-3 py-2 text-foreground">{row.why}</td>
-                <td className="px-3 py-2 text-foreground">{row.howToGetIn || "—"}</td>
-                <td className="px-3 py-2 text-foreground">{row.timing || "—"}</td>
+                <td className="px-3 py-2 text-foreground">{row.howToGetIn || "-"}</td>
+                <td className="px-3 py-2 text-foreground">{row.timing || "-"}</td>
                 <td className="px-3 py-2">
                   <ul className="space-y-1">
                     {row.sources.map((url) => (

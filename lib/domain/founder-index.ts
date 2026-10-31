@@ -41,14 +41,28 @@ export function signalTypeLabel(type: string): string {
  * Lead reasons not already on the card (card shows campus · company · sector · year).
  * Blank when there is no program or signal on record — never invent, never pad.
  */
+/** Prefer the single strongest stored lead; blank when none. Never dump the whole program list. */
 export function whyWorthALook(founder: FounderLead): string | null {
-  const parts: string[] = [];
+  const SIGNAL_RANK: Record<string, number> = {
+    funding: 0,
+    launch: 1,
+    accelerator: 2,
+    award: 3,
+    affiliation_change: 4,
+    continued_dev: 5,
+    demo: 6,
+  };
   if (founder.signalTypes.length) {
-    parts.push(founder.signalTypes.map(signalTypeLabel).join(", "));
+    const best = [...founder.signalTypes].sort(
+      (a, b) => (SIGNAL_RANK[a] ?? 50) - (SIGNAL_RANK[b] ?? 50) || a.localeCompare(b),
+    )[0]!;
+    return signalTypeLabel(best);
   }
-  if (founder.programs.length) parts.push(founder.programs.join(", "));
-  if (!parts.length) return null;
-  return parts.join(" · ");
+  if (founder.programs.length) {
+    const yc = founder.programs.find((name) => /y\s*combinator/i.test(name));
+    return yc ?? founder.programs[0]!;
+  }
+  return null;
 }
 
 function tokens(text: string | undefined): string[] {

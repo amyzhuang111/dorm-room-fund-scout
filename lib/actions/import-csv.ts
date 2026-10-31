@@ -54,7 +54,7 @@ export async function importReferralsCsv(formData: FormData) {
     }
     const universityId = uniByName.get(universityName.toLowerCase());
     if (!universityId) {
-      skipped.push(`Row ${r + 1} (${companyName}): university "${universityName}" doesn't match any known campus — not guessed.`);
+      skipped.push(`Row ${r + 1} (${companyName}): university "${universityName}" doesn't match any known campus · not guessed.`);
       continue;
     }
     const founderNames = founderNamesRaw

@@ -82,9 +82,9 @@ export default async function SourcesPage({ searchParams }: { searchParams: Prom
           <p className="page-eyebrow">Source registry</p>
           <h1 className="page-title">Sources</h1>
           <p className="mt-1 text-sm text-muted">
-            Source quality is not equal. Each source has two independent tiers — <strong>Founder Scout</strong> (how early/reliably it
+            Source quality is not equal. Each source has two independent tiers · <strong>Founder Scout</strong> (how early/reliably it
             surfaces a builder before they are obvious) and <strong>Startup Scout</strong> (how well it surfaces formed, pitchable
-            companies). Tier is never inferred from prestige — see the rationale on each card.
+            companies). Tier is never inferred from prestige · see the rationale on each card.
           </p>
         </div>
         <Link href="/sources/new-referral" className="shrink-0 rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground">
@@ -119,7 +119,7 @@ export default async function SourcesPage({ searchParams }: { searchParams: Prom
         <h2 className="text-sm font-semibold text-foreground">Bulk import manual referrals (CSV)</h2>
         <p className="mt-1 text-xs text-muted">
           Header row required: <code className="font-mono">companyName,description,websiteUrl,universityName,founderNames,founderStatus,noteBody,referrer</code>.{" "}
-          <code className="font-mono">universityName</code> must match a known campus exactly — unmatched rows are skipped and listed, never
+          <code className="font-mono">universityName</code> must match a known campus exactly · unmatched rows are skipped and listed, never
           guessed. Every row goes through the same screening gates as any other candidate.
         </p>
         <form action={importReferralsCsv} className="mt-2 flex flex-wrap items-center gap-2">
@@ -191,7 +191,7 @@ function RegistryTable({
               const yieldPct =
                 c.live && c.live.discoveredLeadCount > 0
                   ? `${Math.round((c.live.reviewedRelevantCount / c.live.discoveredLeadCount) * 100)}%`
-                  : "—";
+                  : "-";
               const typed = c.dbSourceId ? typedCountsById.get(c.dbSourceId) : undefined;
               return (
                 <tr key={c.id} className="border-b border-border-c">
@@ -200,23 +200,23 @@ function RegistryTable({
                   <td className="px-2 py-2 text-muted">{c.sourceType.replace(/_/g, " ")}</td>
                   <td className="px-2 py-2 text-muted">{c.founderScoutTier}</td>
                   <td className="px-2 py-2 text-muted">{c.startupScoutTier}</td>
-                  <td className="px-2 py-2 text-muted capitalize">{c.live?.communitySignal?.confidence ?? "—"}</td>
+                  <td className="px-2 py-2 text-muted capitalize">{c.live?.communitySignal?.confidence ?? "-"}</td>
                   <td className="px-2 py-2 text-muted capitalize">{c.role}</td>
                   <td className="px-2 py-2 text-muted">{statusLabel}</td>
                   <td className="px-2 py-2 text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
-                    {typed ? typed.people : "—"}
+                    {typed ? typed.people : "-"}
                   </td>
                   <td className="px-2 py-2 text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
-                    {typed ? typed.projects : "—"}
+                    {typed ? typed.projects : "-"}
                   </td>
                   <td className="px-2 py-2 text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
-                    {typed ? typed.ventures : "—"}
+                    {typed ? typed.ventures : "-"}
                   </td>
                   <td className="px-2 py-2 text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {yieldPct}
                   </td>
                   <td className="px-2 py-2 text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
-                    {c.live?.lastSuccessAt?.slice(0, 10) ?? "—"}
+                    {c.live?.lastSuccessAt?.slice(0, 10) ?? "-"}
                   </td>
                 </tr>
               );

@@ -239,7 +239,7 @@ function OverviewNetworkCanvas({
                 }}
                 style={{ cursor: "pointer" }}
               >
-                <title>{n.sublabel ? `${n.label} — ${n.sublabel}` : n.label}</title>
+                <title>{n.sublabel ? `${n.label} · ${n.sublabel}` : n.label}</title>
                 {shape}
               </g>
             );
@@ -755,7 +755,7 @@ function CampusNetworkCanvas({
                     }}
                     style={{ cursor: "pointer" }}
                   >
-                    <title>{node.sublabel ? `${node.label} — ${node.sublabel}` : node.label}</title>
+                    <title>{node.sublabel ? `${node.label} · ${node.sublabel}` : node.label}</title>
                     {shape}
                   </g>
                 );
@@ -809,9 +809,9 @@ function CampusNetworkCanvas({
             <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: CAMPUS_COLOR.university }} />
             Campus
           </span>
-          <span>Left, OUTSIDE — accelerators, fellowships, and funds</span>
-          <span>Right, ON CAMPUS — clubs, hackathons, centers, and labs</span>
-          <span>Bands — S+ and S closest to campus, then A, B, C, D. A sourcing label, not a Founder Signal.</span>
+          <span>Left, OUTSIDE · accelerators, fellowships, and funds</span>
+          <span>Right, ON CAMPUS · clubs, hackathons, centers, and labs</span>
+          <span>Bands · S+ and S closest to campus, then A, B, C, D. A sourcing label, not a Founder Signal.</span>
         </div>
       </div>
 

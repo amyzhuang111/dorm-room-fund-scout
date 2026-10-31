@@ -129,7 +129,7 @@ export function parseDeltaV2026(html: string): RosterCompany[] {
     out.push({
       name,
       website,
-      description: [tagline, description].filter(Boolean).join(" — ").slice(0, 500),
+      description: [tagline, description].filter(Boolean).join(" · ").slice(0, 500),
       year: 2026,
       session: "2026 delta v",
     });

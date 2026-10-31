@@ -8,7 +8,7 @@ import { buildHref } from "@/lib/domain/url";
 const TIERS = ["S+", "S", "A", "B", "C", "D"];
 
 export const metadata = {
-  title: "News — Campus Scout",
+  title: "News · Campus Scout",
   description: "Public news about startups and founders in Campus Scout.",
 };
 

@@ -130,7 +130,7 @@ function Heatmap({ table, defaultOpen = true }: { table: HeatmapTable; defaultOp
                     })}
                     <td className="p-0 text-right">
                       {row.all.count === 0 ? (
-                        <span className="inline-flex h-7 items-center px-2 text-muted">–</span>
+                        <span className="inline-flex h-7 items-center px-2 text-muted">-</span>
                       ) : (
                         <button
                           type="button"
@@ -281,10 +281,10 @@ function PitchbookRankings({ table }: { table: PitchbookTable }) {
                     <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.founders.toLocaleString()}</td>
                     <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.companies.toLocaleString()}</td>
                     <td className="px-2 py-1 text-right tabular-nums text-foreground">{formatCapitalUsd(row.capitalRaisedUsd)}</td>
-                    <td className="px-2 py-1 text-right text-foreground">{row.enrollmentBand ?? "—"}</td>
+                    <td className="px-2 py-1 text-right text-foreground">{row.enrollmentBand ?? "-"}</td>
                     <td className="p-0 text-right">
                       {row.perThousand == null ? (
-                        <span className="inline-flex h-7 items-center px-2 text-muted">–</span>
+                        <span className="inline-flex h-7 items-center px-2 text-muted">-</span>
                       ) : (
                         <span
                           className="inline-flex h-7 min-w-[2.5rem] items-center justify-end rounded-md px-2 text-xs font-medium tabular-nums"
@@ -358,7 +358,7 @@ function HitRates({ table }: { table: HitRateTable }) {
                       </span>
                     </td>
                     <td className="px-2 py-1 text-right tabular-nums text-foreground">
-                      {formatHitRate(row.low)}–{formatHitRate(row.high)}
+                      {formatHitRate(row.low)}-{formatHitRate(row.high)}
                     </td>
                   </tr>
                 ))}
@@ -393,7 +393,7 @@ function HeatCell({
   if (cell.count <= 0) {
     return (
       <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-md px-1.5 text-muted" aria-label={`${label}, none`}>
-        –
+        -
       </span>
     );
   }
@@ -429,7 +429,7 @@ function RateCell({
 }) {
   const text = digits ? value.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : value.toLocaleString();
   if (value <= 0) {
-    return <span className="inline-flex h-7 min-w-7 items-center justify-end rounded-md px-2 text-muted">–</span>;
+    return <span className="inline-flex h-7 min-w-7 items-center justify-end rounded-md px-2 text-muted">-</span>;
   }
   return (
     <button

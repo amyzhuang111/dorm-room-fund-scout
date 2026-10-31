@@ -18,7 +18,7 @@ Reply with exactly "Not in the data." only when no record is provided. Write at 
 export function recordsForPrompt(hits: AskHit[]): string {
   return hits
     .slice(0, 30)
-    .map((hit, index) => `${index + 1}. ${hit.name} (${hit.kind}) — ${hit.detail} — ${hit.href}`)
+    .map((hit, index) => `${index + 1}. ${hit.name} (${hit.kind}) · ${hit.detail} · ${hit.href}`)
     .join("\n");
 }
 

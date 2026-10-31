@@ -418,7 +418,7 @@ export function NetworkMapApp() {
                 [
                   ["all", "All"],
                   ["1", "Tier 1"],
-                  ["12", "Tier 1–2"],
+                  ["12", "Tier 1-2"],
                 ] as const
               ).map(([id, label]) => (
                 <button
@@ -430,7 +430,7 @@ export function NetworkMapApp() {
                   {label}
                 </button>
               ))}
-              <p className="mt-1 text-[10px] leading-snug text-neutral-600">Tier 1 is S+ and S. Tier 1–2 adds A. Directory tiers do not change Founder Signal.</p>
+              <p className="mt-1 text-[10px] leading-snug text-neutral-600">Tier 1 is S+ and S. Tier 1-2 adds A. Directory tiers do not change Founder Signal.</p>
             </FilterGroup>
             <FilterGroup title="Organization category">
               {ORG_SECTIONS.map((section) => (

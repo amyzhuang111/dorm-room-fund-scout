@@ -143,6 +143,6 @@ export function scoreHitRates(
 }
 
 export function formatHitRate(value: number): string {
-  if (!Number.isFinite(value)) return "—";
+  if (!Number.isFinite(value)) return "-";
   return value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }

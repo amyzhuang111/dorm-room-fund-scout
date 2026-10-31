@@ -102,7 +102,7 @@ export function SampleCompanyShell({
     <div className="sample-paper min-h-[calc(100dvh-48px)]">
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 sm:px-5">
-        {/* Magazine dossier cover — desk + mobile share the profile treatment */}
+        {/* Magazine dossier cover · desk + mobile share the profile treatment */}
         <div className="mb-4 hidden border-b border-[color:var(--line,#E1E5EF)] pb-4 sm:mb-5 sm:block sm:pb-5" data-dossier-hero="" data-mobile-magazine="">
           <div className="flex flex-wrap items-center gap-2">
             <Link href="/companies?sample=1" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
@@ -247,7 +247,7 @@ export function SampleCompanyShell({
           </p>
         </div>
 
-        {/* Mobile identity: founder + timeline dossier — not a shared ticket or atlas dial. */}
+        {/* Mobile identity: founder + timeline dossier · not a shared ticket or atlas dial. */}
         <div className="mb-3 flex items-center justify-between gap-2 sm:hidden" data-dossier-mobile-nav="">
           <Link href="/companies?sample=1" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
             ← Companies

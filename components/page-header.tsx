@@ -25,7 +25,7 @@ export function PageHeader({
         <div className="stat-strip">
           {stats.map((stat) => (
             <p key={stat.label}>
-              <span className="stat-num">{stat.n == null ? "–" : stat.n.toLocaleString("en-US")}</span>
+              <span className="stat-num">{stat.n == null ? "-" : stat.n.toLocaleString("en-US")}</span>
               <span className="stat-kicker">{stat.label}</span>
             </p>
           ))}

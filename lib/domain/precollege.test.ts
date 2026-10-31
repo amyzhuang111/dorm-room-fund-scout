@@ -39,7 +39,7 @@ assert.equal(detectPrecollegeMentions("Left MIT as freshmen (ISEF circuit); Code
 assert.equal(detectPrecollegeMentions("Won an ISEF grand award in 2019, Priya Shah").length, 1);
 
 assert.equal(detectPrecollegeMentions("attended Georgia Tech on a scholarship described as LATAM’s Thiel Fellowship").length, 0);
-assert.equal(detectPrecollegeMentions("The 2026 Thiel Fellows include: Aubrey Niederhoffer — Swoop").length, 1);
+assert.equal(detectPrecollegeMentions("The 2026 Thiel Fellows include: Aubrey Niederhoffer · Swoop").length, 1);
 
 assert.equal(detectPrecollegeMentions("IOAI absolute winner").length, 0);
 

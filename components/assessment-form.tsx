@@ -4,12 +4,12 @@ import type { AssessmentHistoryRow } from "@/lib/domain/queries";
 
 const RATING_OPTIONS = [
   { value: "unknown", label: "Unknown / not assessable" },
-  { value: "0", label: "0 — affirmative evidence of a major weakness" },
-  { value: "1", label: "1 — materially weak evidence" },
-  { value: "2", label: "2 — relevant evidence, major concerns" },
-  { value: "3", label: "3 — credible evidence" },
-  { value: "4", label: "4 — unusually strong, specific evidence" },
-  { value: "5", label: "5 — exceptional, corroborated evidence" },
+  { value: "0", label: "0 · affirmative evidence of a major weakness" },
+  { value: "1", label: "1 · materially weak evidence" },
+  { value: "2", label: "2 · relevant evidence, major concerns" },
+  { value: "3", label: "3 · credible evidence" },
+  { value: "4", label: "4 · unusually strong, specific evidence" },
+  { value: "5", label: "5 · exceptional, corroborated evidence" },
 ];
 
 export function AssessmentForm({ projectId, history }: { projectId: string; history: AssessmentHistoryRow[] }) {

@@ -40,11 +40,11 @@ export interface QualityDimensions {
 
 export const TIER_MEANING: Record<Tier, string> = {
   "S+": "Highest directory tier, above S. Spend time here first. The letter is a sourcing label, not a Founder Signal input.",
-  S: "Exceptional sourcing source — use aggressively, likely to surface exceptional people/projects before they're obvious.",
-  A: "Strong — consistently useful, part of default ingestion and monitoring.",
-  B: "Useful — real signal but requires filtering; good corroborating/discovery source.",
-  C: "Weak — occasionally useful but noisy/downstream/broad. Presence here should not make a candidate interesting by itself.",
-  D: "Reference only — weak for novel sourcing, but useful for validation, entity resolution, or funding verification.",
+  S: "Exceptional sourcing source · use aggressively, likely to surface exceptional people/projects before they're obvious.",
+  A: "Strong · consistently useful, part of default ingestion and monitoring.",
+  B: "Useful · real signal but requires filtering; good corroborating/discovery source.",
+  C: "Weak · occasionally useful but noisy/downstream/broad. Presence here should not make a candidate interesting by itself.",
+  D: "Reference only · weak for novel sourcing, but useful for validation, entity resolution, or funding verification.",
 };
 
 export const ROLE_LABEL: Record<SourceRole, string> = {
@@ -90,17 +90,17 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { campusPurity: "medium", earliness: "high", buildEvidence: "high", selectivity: "medium", novelty: "high", identityQuality: "medium", extractability: "medium" },
     tierRationale:
-      "Students build, teams form, projects are visible, execution is inspectable, very early. Campus purity is medium rather than high because PennApps draws hackers beyond Penn — every participant's university needs independent confirmation, not an assumption from attending.",
+      "Students build, teams form, projects are visible, execution is inspectable, very early. Campus purity is medium rather than high because PennApps draws hackers beyond Penn · every participant's university needs independent confirmation, not an assumption from attending.",
     whyItMatters: "Very early technical execution is directly observable, before anyone calls themselves a founder.",
     whatToExtract: ["teams", "projects", "GitHub links", "participants where public", "winners", "finalists", "repeat hackers", "project continuation after the event"],
     whatNotToInfer: [
-      "Do not only watch prize winners — a project that keeps getting commits 3 months later can be a stronger founder signal than a sponsor prize.",
+      "Do not only watch prize winners · a project that keeps getting commits 3 months later can be a stronger founder signal than a sponsor prize.",
       "Winning ≠ elite founder.",
-      "Attendance alone does not confirm Penn enrollment — verify independently.",
+      "Attendance alone does not confirm Penn enrollment · verify independently.",
     ],
     status: "checked_and_skipped",
     statusNote:
-      "Checked directly (2026-09-18): the live site is a pre-registration landing page for PennApps XXVII, not yet run — no gallery exists right now. The most recent past edition's real Devpost gallery (PennApps XXVI) was also checked; see the Devpost row for why that specific data wasn't ingested.",
+      "Checked directly (2026-09-18): the live site is a pre-registration landing page for PennApps XXVII, not yet run · no gallery exists right now. The most recent past edition's real Devpost gallery (PennApps XXVI) was also checked; see the Devpost row for why that specific data wasn't ingested.",
   },
   {
     id: "cat_devpost_pennapps",
@@ -114,13 +114,13 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "corroboration",
     dimensions: { campusPurity: "low", earliness: "high", buildEvidence: "high", selectivity: "medium", novelty: "high", identityQuality: "low", extractability: "high" },
     tierRationale:
-      "Real projects and real team-member profiles, structurally easy to extract — but those profiles carry no school field, so there's no non-guessed way to confirm Penn affiliation from a submission alone. Strong build evidence, weak identity quality for this specific use — hence B/C rather than S/A despite the strong extraction.",
+      "Real projects and real team-member profiles, structurally easy to extract · but those profiles carry no school field, so there's no non-guessed way to confirm Penn affiliation from a submission alone. Strong build evidence, weak identity quality for this specific use · hence B/C rather than S/A despite the strong extraction.",
     whyItMatters: "Confirms what got built and by which named people; every affiliation is seeded 'unverified' so the gate correctly asks for research rather than assuming eligibility.",
     whatToExtract: ["project name + description", "team member names + Devpost profile URLs", "per-member contribution notes", "linked repos/demos", "prize/winner status"],
-    whatNotToInfer: ["Submitting to a Penn-hosted hackathon does not by itself confirm the person is a Penn student — affiliation stays 'unverified' until independently confirmed.", "Winner status is one evidence record, not a ranking."],
+    whatNotToInfer: ["Submitting to a Penn-hosted hackathon does not by itself confirm the person is a Penn student · affiliation stays 'unverified' until independently confirmed.", "Winner status is one evidence record, not a ranking."],
     status: "implemented",
     statusNote:
-      "PennApps XXVI was walked to the end of its gallery earlier. PennApps XXV is a 9-project sample. PennApps XXII (64 projects), XXIII (60), and XXIV (114) were walked to the end of each gallery on 2026-09-25. Every affiliation stays unverified: Devpost has no school field. LinkedIn was not fetched on the XXII–XXIV walk.",
+      "PennApps XXVI was walked to the end of its gallery earlier. PennApps XXV is a 9-project sample. PennApps XXII (64 projects), XXIII (60), and XXIV (114) were walked to the end of each gallery on 2026-09-25. Every affiliation stays unverified: Devpost has no school field. LinkedIn was not fetched on the XXII-XXIV walk.",
   },
   {
     id: "cat_pennapps_xxii",
@@ -188,13 +188,13 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { campusPurity: "high", earliness: "high", buildEvidence: "high", selectivity: "high", novelty: "high", identityQuality: "medium", extractability: "low" },
     tierRationale:
-      "Deep-tech founder discovery for robotics/autonomy/CV/controls/hardware/embodied AI is exactly what a downstream accelerator can't surface. Tier drops to A rather than staying S whenever a student is only listed as lab personnel rather than clearly leading/building a specific project — that distinction has to be made per-person, not assumed campus-wide.",
+      "Deep-tech founder discovery for robotics/autonomy/CV/controls/hardware/embodied AI is exactly what a downstream accelerator can't surface. Tier drops to A rather than staying S whenever a student is only listed as lab personnel rather than clearly leading/building a specific project · that distinction has to be made per-person, not assumed campus-wide.",
     whyItMatters: "One of the few sources positioned to catch deep-tech founders before they're anywhere near fundable.",
     whatToExtract: ["named researchers/students", "project pages", "demos", "publications with student authorship", "spinout mentions"],
-    whatNotToInfer: ["Being listed in a lab roster is weaker evidence than clearly leading or building a specific project — don't conflate the two."],
+    whatNotToInfer: ["Being listed in a lab roster is weaker evidence than clearly leading or building a specific project · don't conflate the two."],
     status: "implemented",
     statusNote:
-      "The Startups page itself renders nothing in raw HTML (fully AJAX via the Ajax Load More plugin) — guessing at its admin-ajax.php contract returned a wrong-but-200 response, so that path was abandoned rather than shipped. grasp.upenn.edu turned out to expose a real, documented WP REST API instead (/wp-json/wp/v2/startup) — used that. Ingested 2026-09-22: all 13 real GRASP-connected startups, with 6 named student/PhD founders hand-extracted from unambiguous founding statements on 4 of them (Alex Kushleyev + Daniel Mellinger/KMel, Matthew Piccoli/IQ Motion Control, Avik De + Gavin Kenneally/Ghost Robotics, Berkay Deniz Ilhan/Augean Robotics) — NOT a generic regex, to avoid misparsing an 'advised by'/'affiliated with' faculty mention (both appear in this dataset) as a founder claim. Faculty named as a company's research origin (Exyn's Dr. Vijay Kumar, Aptonomy's Dr. Mihail Pivtoraiko) were deliberately left unrecorded as person_project_roles — real, but not this tool's target candidate type. Scope was Startups only, not the site's `people` post type (1941 rows spanning all roles/decades with no bio content in the REST payload — would be exactly the roster-membership conflation this category's own whatNotToInfer warns against) or `project` (94 research posts whose REST `author` is the lab's web content manager, not the actual student — attributing a real name would need scraping each post's arbitrary external link, another guess). 35/50-fetch-equivalent budget; verified idempotent (0 new rows on a second run); tsc/build clean.",
+      "The Startups page itself renders nothing in raw HTML (fully AJAX via the Ajax Load More plugin) · guessing at its admin-ajax.php contract returned a wrong-but-200 response, so that path was abandoned rather than shipped. grasp.upenn.edu turned out to expose a real, documented WP REST API instead (/wp-json/wp/v2/startup) · used that. Ingested 2026-09-22: all 13 real GRASP-connected startups, with 6 named student/PhD founders hand-extracted from unambiguous founding statements on 4 of them (Alex Kushleyev + Daniel Mellinger/KMel, Matthew Piccoli/IQ Motion Control, Avik De + Gavin Kenneally/Ghost Robotics, Berkay Deniz Ilhan/Augean Robotics) · NOT a generic regex, to avoid misparsing an 'advised by'/'affiliated with' faculty mention (both appear in this dataset) as a founder claim. Faculty named as a company's research origin (Exyn's Dr. Vijay Kumar, Aptonomy's Dr. Mihail Pivtoraiko) were deliberately left unrecorded as person_project_roles · real, but not this tool's target candidate type. Scope was Startups only, not the site's `people` post type (1941 rows spanning all roles/decades with no bio content in the REST payload · would be exactly the roster-membership conflation this category's own whatNotToInfer warns against) or `project` (94 research posts whose REST `author` is the lab's web content manager, not the actual student · attributing a real name would need scraping each post's arbitrary external link, another guess). 35/50-fetch-equivalent budget; verified idempotent (0 new rows on a second run); tsc/build clean.",
   },
   {
     id: "cat_penn_labs",
@@ -207,19 +207,19 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { campusPurity: "high", earliness: "high", buildEvidence: "high", selectivity: "medium", novelty: "high", identityQuality: "high", extractability: "high" },
     tierRationale:
-      "Real Penn students who repeatedly ship real, deployed products, with a public roster and roles. Weak for Startup Scout on purpose — Penn Labs' own products (Penn Mobile, Penn Clubs, etc.) are internal tools, not startups, and must never be promoted into candidates themselves; only the people are the signal.",
+      "Real Penn students who repeatedly ship real, deployed products, with a public roster and roles. Weak for Startup Scout on purpose · Penn Labs' own products (Penn Mobile, Penn Clubs, etc.) are internal tools, not startups, and must never be promoted into candidates themselves; only the people are the signal.",
     whyItMatters: "Discovers technical leads and repeat collaborators before they've ever pitched anything.",
     whatToExtract: ["team roster", "per-product roles", "join dates", "alumni status"],
     whatNotToInfer: [
       "Penn Mobile → project → contributors → founder/builder candidates is correct. Penn Mobile → startup candidate is not, unless independent company evidence exists.",
-      "Club membership alone doesn't establish 'exceptional' — look for actual output, ownership, and repeat execution.",
+      "Club membership alone doesn't establish 'exceptional' · look for actual output, ownership, and repeat execution.",
     ],
     status: "implemented",
     dbSourceId: "src_penn_labs",
   },
   {
     id: "cat_venture_lab_challenge",
-    name: "Venture Lab — Startup Challenge",
+    name: "Venture Lab · Startup Challenge",
     campus: "univ_penn",
     sourceType: "competition",
     url: "https://venturelab.upenn.edu/2026-SC-PR",
@@ -228,7 +228,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { campusPurity: "high", earliness: "medium", buildEvidence: "medium", selectivity: "high", novelty: "medium", identityQuality: "high", extractability: "high" },
     tierRationale:
-      "Useful for formed startups with real, named Penn founders and dated class-year evidence — but less differentiated for Founder Scout, since entrants have already self-selected into entrepreneurship and a competition. This is our only real Startup Scout source at Penn so far, which is why it's A there despite the founder-side caveat.",
+      "Useful for formed startups with real, named Penn founders and dated class-year evidence · but less differentiated for Founder Scout, since entrants have already self-selected into entrepreneurship and a competition. This is our only real Startup Scout source at Penn so far, which is why it's A there despite the founder-side caveat.",
     whyItMatters: "The clearest real source of already-formed, Penn-affiliated pre-seed companies with named founders.",
     whatToExtract: ["company name", "prize category", "founder names + class years", "announcement date"],
     whatNotToInfer: ["A winner is not automatically the best startup to meet. Treat a placement as one evidence record among several, not a ranking."],
@@ -262,7 +262,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "corroboration",
     dimensions: { buildEvidence: "high", identityQuality: "high", extractability: "high", novelty: "low" },
     tierRationale:
-      "Real commit/release activity corroborates continued building on products we already track — strong for validating ability-to-build, but it doesn't discover new founders on its own and Penn Labs isn't a startup, so it's near-irrelevant for Startup Scout.",
+      "Real commit/release activity corroborates continued building on products we already track · strong for validating ability-to-build, but it doesn't discover new founders on its own and Penn Labs isn't a startup, so it's near-irrelevant for Startup Scout.",
     whyItMatters: "Turns a static team-roster claim into a dated, verifiable 'still actively maintained' signal.",
     whatToExtract: ["stars", "last-pushed date", "open issues", "repo description"],
     whatNotToInfer: ["Repo activity on an internal tool is not evidence the org (or its members) run an investable startup."],
@@ -280,9 +280,9 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { buildEvidence: "medium", identityQuality: "high", novelty: "high", extractability: "high" },
     tierRationale:
-      "Firsthand attributed knowledge is inherently high-signal — but this tier describes the ceiling, not the yield. Scale depends entirely on the scout's own network, not on any repeatable ingestion.",
+      "Firsthand attributed knowledge is inherently high-signal · but this tier describes the ceiling, not the yield. Scale depends entirely on the scout's own network, not on any repeatable ingestion.",
     whyItMatters: "The only source that captures 'who kept building after the hackathon' when nothing else recorded it.",
-    whatToExtract: ["whatever was directly observed — specific, not a vague endorsement"],
+    whatToExtract: ["whatever was directly observed · specific, not a vague endorsement"],
     whatNotToInfer: ["A referral is a labeled user_note claim, never an independently observed fact."],
     status: "implemented",
     dbSourceId: "src_manual_referrals",
@@ -297,7 +297,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "A",
     role: "discovery",
     dimensions: { campusPurity: "high", earliness: "medium", extractability: "low" },
-    tierRationale: "Same shape as the Startup Challenge — real formed Penn ventures, later-stage than a hackathon for founder discovery specifically.",
+    tierRationale: "Same shape as the Startup Challenge · real formed Penn ventures, later-stage than a hackathon for founder discovery specifically.",
     whyItMatters: "Another real source of named, funded (small amounts), Penn-affiliated ventures.",
     whatToExtract: ["recipient venture names", "announcement dates"],
     whatNotToInfer: ["A fund recipient is not automatically investment-ready."],
@@ -314,7 +314,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "A",
     role: "discovery",
     dimensions: { campusPurity: "high", earliness: "medium" },
-    tierRationale: "Structurally similar to the Startup Challenge/Innovation Fund — useful, later-stage than a hackathon.",
+    tierRationale: "Structurally similar to the Startup Challenge/Innovation Fund · useful, later-stage than a hackathon.",
     whyItMatters: "The public VIP-X alumni page is a multi-year list of formed Penn ventures with named founders.",
     whatToExtract: ["venture profiles", "showcase announcements"],
     whatNotToInfer: ["Program acceptance ≠ investment-ready."],
@@ -326,7 +326,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
   {
     id: "cat_penn_startup_challenge_archive",
     dbSourceId: "src_penn_startup_challenge_archive",
-    name: "Venture Lab — Startup Challenge finalists (2022–2025)",
+    name: "Venture Lab · Startup Challenge finalists (2022-2025)",
     campus: "univ_penn",
     sourceType: "competition",
     url: "https://venturelab.upenn.edu/2025-startup-challenge-finalists",
@@ -381,7 +381,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatNotToInfer: ["A portfolio card is not evidence of a student founder.", "Do not treat the technology as an investable Startup Scout company when no founder is named."],
     status: "implemented",
     statusNote:
-      "Pages 1–2 of healthtech.upenn.edu/portfolio (36 cards; page 3 is empty). Stored as companies with is_investable_candidate=0 so they do not enter Startup Scout. Detail pages often name faculty; those names were not turned into student founder rows.",
+      "Pages 1-2 of healthtech.upenn.edu/portfolio (36 cards; page 3 is empty). Stored as companies with is_investable_candidate=0 so they do not enter Startup Scout. Detail pages often name faculty; those names were not turned into student founder rows.",
   },
   {
     id: "cat_a16z_speedrun_penn",
@@ -541,13 +541,13 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "C",
     role: "discovery",
     dimensions: { campusPurity: "high", buildEvidence: "high" },
-    tierRationale: "Real students shipping real software for nonprofit clients — direct build evidence, not just membership. Startup Scout weak on purpose: the org builds for clients, not its own ventures.",
-    whyItMatters: "Community discussion (unverified — see community signal) recommends it alongside Penn Labs as a place to build real software.",
+    tierRationale: "Real students shipping real software for nonprofit clients · direct build evidence, not just membership. Startup Scout weak on purpose: the org builds for clients, not its own ventures.",
+    whyItMatters: "Community discussion (unverified · see community signal) recommends it alongside Penn Labs as a place to build real software.",
     whatToExtract: ["tech leads", "project leads", "repeat contributors", "shipped client projects"],
-    whatNotToInfer: ["Membership alone remains weak — prioritize named leadership/technical-lead roles."],
+    whatNotToInfer: ["Membership alone remains weak · prioritize named leadership/technical-lead roles."],
     status: "implemented",
     statusNote:
-      "Ingested (2026-09-21): upenn.hack4impact.org/projects embeds a clean Next.js __NEXT_DATA__ JSON payload — real project names + real team-member names, no HTML scraping needed. 7 real projects, 35 real people. Team roles are undifferentiated (a flat name list, same gap as a Devpost hackathon gallery) — seeded 'team_member', never 'founder'; affiliation seeded 'unverified'. People keyed by name only (no stronger identifier exposed in this data) — a real, accepted limitation, same class of risk as the Penn Venture Lab Startup Challenge's founder keying.",
+      "Ingested (2026-09-21): upenn.hack4impact.org/projects embeds a clean Next.js __NEXT_DATA__ JSON payload · real project names + real team-member names, no HTML scraping needed. 7 real projects, 35 real people. Team roles are undifferentiated (a flat name list, same gap as a Devpost hackathon gallery) · seeded 'team_member', never 'founder'; affiliation seeded 'unverified'. People keyed by name only (no stronger identifier exposed in this data) · a real, accepted limitation, same class of risk as the Penn Venture Lab Startup Challenge's founder keying.",
   },
   {
     id: "cat_penn_electric_racing",
@@ -560,13 +560,13 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "C",
     role: "discovery",
     dimensions: { campusPurity: "high", buildEvidence: "high" },
-    tierRationale: "A real, competitive Formula SAE Electric build team (10 custom cars since 2013) — practical embedded/hardware/controls/software engineering ownership, strong ability-to-build evidence.",
-    whyItMatters: "Community discussion (unverified — see community signal) surfaces it as a place where software engineers do real build work, not just automotive specialists.",
+    tierRationale: "A real, competitive Formula SAE Electric build team (10 custom cars since 2013) · practical embedded/hardware/controls/software engineering ownership, strong ability-to-build evidence.",
+    whyItMatters: "Community discussion (unverified · see community signal) surfaces it as a place where software engineers do real build work, not just automotive specialists.",
     whatToExtract: ["technical leads", "subsystem owners (embedded/hardware/controls/software)", "repeat builders across seasons"],
-    whatNotToInfer: ["Team membership alone isn't the signal — individual technical ownership is."],
+    whatNotToInfer: ["Team membership alone isn't the signal · individual technical ownership is."],
     status: "implemented",
     statusNote:
-      "Ingested (2026-09-23): pennelectricracing.com/team-members-2526's Squarespace gallery lists 67 real 2025-26 roster slides (62 unique people after de-duping repeated slide markup), each with a real self-written bio. Bounded to this single current season — the site's separate 2020-21 through 2024-25 archive pages exist but aren't pulled, so 'repeat builders across seasons' is honestly not attempted. No bio ever uses a leadership title ('Lead'/'Captain'/etc, checked across all 67) — every person seeded role='team_member' with subteam noted as text only (Mechanical/Electrical Hardware/Software/Operations), never elevated, per this source's own whatNotToInfer. 8 of 67 bios self-link the member's own personal LinkedIn profile, captured as a real alias — but LinkedIn profile content itself isn't fetched (no reliable logged-out access), so unlike WDB this does not feed company-detection. People keyed by name only, same accepted limitation as Hack4Impact.",
+      "Ingested (2026-09-23): pennelectricracing.com/team-members-2526's Squarespace gallery lists 67 real 2025-26 roster slides (62 unique people after de-duping repeated slide markup), each with a real self-written bio. Bounded to this single current season · the site's separate 2020-21 through 2024-25 archive pages exist but aren't pulled, so 'repeat builders across seasons' is honestly not attempted. No bio ever uses a leadership title ('Lead'/'Captain'/etc, checked across all 67) · every person seeded role='team_member' with subteam noted as text only (Mechanical/Electrical Hardware/Software/Operations), never elevated, per this source's own whatNotToInfer. 8 of 67 bios self-link the member's own personal LinkedIn profile, captured as a real alias · but LinkedIn profile content itself isn't fetched (no reliable logged-out access), so unlike WDB this does not feed company-detection. People keyed by name only, same accepted limitation as Hack4Impact.",
   },
   {
     id: "cat_penn_aerial_robotics",
@@ -579,13 +579,13 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "C",
     role: "discovery",
     dimensions: { campusPurity: "high", buildEvidence: "high" },
-    tierRationale: "Real UAV/autonomy build team competing in SAE Aero Design and IARC — same logic as Electric Racing: strong only where individual technical ownership is visible.",
-    whyItMatters: "Community discussion (unverified — see community signal) names it alongside Electric Racing as real build-work engineering orgs.",
+    tierRationale: "Real UAV/autonomy build team competing in SAE Aero Design and IARC · same logic as Electric Racing: strong only where individual technical ownership is visible.",
+    whyItMatters: "Community discussion (unverified · see community signal) names it alongside Electric Racing as real build-work engineering orgs.",
     whatToExtract: ["autonomy/codebase leads", "subsystem owners", "competition results"],
-    whatNotToInfer: ["Team membership alone isn't the signal — individual technical ownership is."],
+    whatNotToInfer: ["Team membership alone isn't the signal · individual technical ownership is."],
     status: "implemented",
     statusNote:
-      "Ingested (2026-09-24): pennaerial.com/team/ is a server-rendered WordPress block-editor page carrying 9 real named leaders, each with an explicit site-authored title (President, VP Operations, VP Finance, Mechanical Lead x2, Software Lead x2, Electrical Lead x2 — 2 of the 9 raw titles had a literal typo, 'LEad', normalized for grouping with the raw text kept in the claim excerpt). 7 of 9 people were new to the DB (2 already existed from other Penn sources). CORRECTION (2026-09-25): the original claim that this page has 'no bios, majors, class years, or personal links at all' was wrong — found by accident while chasing captured LinkedIn URLs for a separate Apify pass. The page has a second, ~85-entry photo-caption bio gallery below the officer list, same richness as PER's, that the original h6/p-only extraction never looked for. Now also ingested: 11 more entries (10 new people), bounded to only full-'Firstname Lastname' captions or ones with a personal LinkedIn link attached — ~25 bare-first-name-only entries with no LinkedIn to disambiguate were deliberately excluded (several first names repeat with conflicting bios on the site's own page, not safely mergeable without guessing). One flagged, unresolved discrepancy: 'Xiangyu's bio reads as a President-level description, conflicting with the officer list's 'Aidan Kuo' — left for a human to check.",
+      "Ingested (2026-09-24): pennaerial.com/team/ is a server-rendered WordPress block-editor page carrying 9 real named leaders, each with an explicit site-authored title (President, VP Operations, VP Finance, Mechanical Lead x2, Software Lead x2, Electrical Lead x2 · 2 of the 9 raw titles had a literal typo, 'LEad', normalized for grouping with the raw text kept in the claim excerpt). 7 of 9 people were new to the DB (2 already existed from other Penn sources). CORRECTION (2026-09-25): the original claim that this page has 'no bios, majors, class years, or personal links at all' was wrong · found by accident while chasing captured LinkedIn URLs for a separate Apify pass. The page has a second, ~85-entry photo-caption bio gallery below the officer list, same richness as PER's, that the original h6/p-only extraction never looked for. Now also ingested: 11 more entries (10 new people), bounded to only full-'Firstname Lastname' captions or ones with a personal LinkedIn link attached · ~25 bare-first-name-only entries with no LinkedIn to disambiguate were deliberately excluded (several first names repeat with conflicting bios on the site's own page, not safely mergeable without guessing). One flagged, unresolved discrepancy: 'Xiangyu's bio reads as a President-level description, conflicting with the officer list's 'Aidan Kuo' · left for a human to check.",
   },
   {
     id: "cat_mt_penn",
@@ -599,13 +599,13 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "reference",
     dimensions: { campusPurity: "high", selectivity: "high" },
     tierRationale:
-      "A dual-degree admissions cohort (Engineering + Wharton), not a builder org — Founder Scout tier reflects it as a high-density SEARCH POOL of small, selective, career-driven students with disclosed startup/tech/VC interest, never as direct build evidence. Standalone evidence strength is deliberately low (D) — NEVER assign founder points just for M&T membership.",
-    whyItMatters: "Community discussion (unverified — see community signal) characterizes it as small, close-knit, extremely career-driven, with meaningful AI/startup participation — useful for identity-graph search, not scoring.",
-    whatToExtract: ["members who separately show up building something real elsewhere — cross-reference only"],
-    whatNotToInfer: ["M&T membership is not Founder Signal by itself, under any circumstance — it's an admissions cohort, not a build community."],
+      "A dual-degree admissions cohort (Engineering + Wharton), not a builder org · Founder Scout tier reflects it as a high-density SEARCH POOL of small, selective, career-driven students with disclosed startup/tech/VC interest, never as direct build evidence. Standalone evidence strength is deliberately low (D) · NEVER assign founder points just for M&T membership.",
+    whyItMatters: "Community discussion (unverified · see community signal) characterizes it as small, close-knit, extremely career-driven, with meaningful AI/startup participation · useful for identity-graph search, not scoring.",
+    whatToExtract: ["members who separately show up building something real elsewhere · cross-reference only"],
+    whatNotToInfer: ["M&T membership is not Founder Signal by itself, under any circumstance · it's an admissions cohort, not a build community."],
     status: "implemented",
     statusNote:
-      "Ingested (2026-09-24): fisher.wharton.upenn.edu/alumni-profiles/ (10 real profiles server-rendered, no pagination found — bounded to exactly those 10) is deliberately NOT a full student directory (which would be a real privacy concern for a university program) — it's alumni the program itself chose to publicly feature. All 10 recorded as identity-graph affiliation only ('alumnus' role, no founder signal), per this source's own whatNotToInfer. Each profile's actual text was read (not just the list) for explicit self-disclosed founder claims — 8 of 10 had zero founder language (genuine career updates: SpaceX, etc.); 2 did: Arjun Srinivas (M&T'07) explicitly named forming Innova Dynamics with 3 co-founders (later acquired by TPK Holdings — disclosed as an exit, not a live candidate), and Bret Pearlman (M&T'89)'s author bio discloses Co-Founder/Managing Director of Elevation Partners (a PE firm, not a startup — recorded honestly regardless of fitting the pre-seed thesis). The 3 co-founders named only in Arjun's own text (not their own profiles) are flagged in their claim's excerpt as corroborated by his account alone. 13 new people, 2 new companies, 5 founder roles total.",
+      "Ingested (2026-09-24): fisher.wharton.upenn.edu/alumni-profiles/ (10 real profiles server-rendered, no pagination found · bounded to exactly those 10) is deliberately NOT a full student directory (which would be a real privacy concern for a university program) · it's alumni the program itself chose to publicly feature. All 10 recorded as identity-graph affiliation only ('alumnus' role, no founder signal), per this source's own whatNotToInfer. Each profile's actual text was read (not just the list) for explicit self-disclosed founder claims · 8 of 10 had zero founder language (genuine career updates: SpaceX, etc.); 2 did: Arjun Srinivas (M&T'07) explicitly named forming Innova Dynamics with 3 co-founders (later acquired by TPK Holdings · disclosed as an exit, not a live candidate), and Bret Pearlman (M&T'89)'s author bio discloses Co-Founder/Managing Director of Elevation Partners (a PE firm, not a startup · recorded honestly regardless of fitting the pre-seed thesis). The 3 co-founders named only in Arjun's own text (not their own profiles) are flagged in their claim's excerpt as corroborated by his account alone. 13 new people, 2 new companies, 5 founder roles total.",
   },
   {
     id: "cat_pennovation",
@@ -619,13 +619,13 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { campusPurity: "medium", earliness: "low" },
     tierRationale:
-      "Formal entrepreneurship/innovation infrastructure (23-acre tech park, 100+ resident companies) — community signal is MIXED (unverified — see community signal): some discussion praises the resources, other threads argue the most interesting builders aren't concentrated in the formal center. Use for startup/company discovery, not as the best founder discovery layer.",
-    whyItMatters: "A real, formal Penn innovation hub with resident companies — useful for Startup Scout discovery, not Founder Scout.",
+      "Formal entrepreneurship/innovation infrastructure (23-acre tech park, 100+ resident companies) · community signal is MIXED (unverified · see community signal): some discussion praises the resources, other threads argue the most interesting builders aren't concentrated in the formal center. Use for startup/company discovery, not as the best founder discovery layer.",
+    whyItMatters: "A real, formal Penn innovation hub with resident companies · useful for Startup Scout discovery, not Founder Scout.",
     whatToExtract: ["resident/member company names", "showcase announcements"],
-    whatNotToInfer: ["Formal infrastructure visibility ≠ where the strongest current-student founders actually are — that's a separate, community-sourced question."],
+    whatNotToInfer: ["Formal infrastructure visibility ≠ where the strongest current-student founders actually are · that's a separate, community-sourced question."],
     status: "checked_and_skipped",
     statusNote:
-      "Checked (2026-09-24): pennovation.upenn.edu has no consolidated resident-company directory anywhere in its nav (About the Works, News, Pennovation Center, The Community/'Available Spaces', site search all checked directly) — individual companies (Axonova Medical, Avisi Technologies, IQ Motion Control, Opertech Bio, etc.) only appear scattered across individual News/'Year in Review' articles, not a structured list. Extracting a real roster would mean crawling and hand-parsing an unbounded number of news posts for company mentions — a fundamentally different (much larger, fuzzier) task than this codebase's other adapters, not attempted this pass.",
+      "Checked (2026-09-24): pennovation.upenn.edu has no consolidated resident-company directory anywhere in its nav (About the Works, News, Pennovation Center, The Community/'Available Spaces', site search all checked directly) · individual companies (Axonova Medical, Avisi Technologies, IQ Motion Control, Opertech Bio, etc.) only appear scattered across individual News/'Year in Review' articles, not a structured list. Extracting a real roster would mean crawling and hand-parsing an unbounded number of news posts for company mentions · a fundamentally different (much larger, fuzzier) task than this codebase's other adapters, not attempted this pass.",
   },
 
   // ---------- BERKELEY ----------
@@ -644,10 +644,10 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
       "Owner rates Web Development at Berkeley good, around A-/B+. This scale has no minus grades, so A on both sides. Signal still comes from output and ownership, never from membership alone.",
     whyItMatters: "One of Berkeley's densest concentrations of students actively shipping real technical work for real clients.",
     whatToExtract: ["project leads", "engineering leads", "repeat contributors across semesters", "independently shipped projects", "recurring team pairs"],
-    whatNotToInfer: ["Do not automatically promote all members — club membership is not the signal, ownership + output is."],
+    whatNotToInfer: ["Do not automatically promote all members · club membership is not the signal, ownership + output is."],
     status: "implemented",
     statusNote:
-      "webatberkeley.org itself has no team roster or per-project credits page (verified by direct inspection), and its Behance project showcase carries no credits field either — both dead ends. Real evidence instead comes from WDB's GitHub org (github.com/web-at-berkeley, public REST API, no auth): real commit-author credit across 2 external client repos (Kiwibot, Berkeley Investment Group), 2 of WDB's own internal tools, and 5 recent Training-initiative team-project repos. Ingested 2026-09-21: 9 projects, 21 people (real commit-based team_member credit, all affiliations seeded 'unverified'), 35/50 fetches used. One person's own public GitHub bio self-disclosed a real company (\"co-founder @simstudioai\" / company field \"Sim\") — recorded as a genuine founder candidate sourced to their own profile, not guessed.",
+      "webatberkeley.org itself has no team roster or per-project credits page (verified by direct inspection), and its Behance project showcase carries no credits field either · both dead ends. Real evidence instead comes from WDB's GitHub org (github.com/web-at-berkeley, public REST API, no auth): real commit-author credit across 2 external client repos (Kiwibot, Berkeley Investment Group), 2 of WDB's own internal tools, and 5 recent Training-initiative team-project repos. Ingested 2026-09-21: 9 projects, 21 people (real commit-based team_member credit, all affiliations seeded 'unverified'), 35/50 fetches used. One person's own public GitHub bio self-disclosed a real company (\"co-founder @simstudioai\" / company field \"Sim\") · recorded as a genuine founder candidate sourced to their own profile, not guessed.",
   },
   {
     id: "cat_calhacks",
@@ -664,7 +664,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
       "Owner rates the founder side A/B and the startup side A. This scale has no A- or B+, so founder is B. Free Ventures sits one step above on the founder side. Projects and teams are still the thing to inspect; winner status is one data point.",
     whyItMatters: "Projects, teams, technical ambition, and early startup formation, all inspectable.",
     whatToExtract: ["projects", "teams", "repeat hackers", "technical ambition signals", "early startup formation"],
-    whatNotToInfer: ["Winner ≠ automatically best founder — inspect the team and the actual build.", "Devpost carries no school field — affiliation stays 'unverified' until independently confirmed."],
+    whatNotToInfer: ["Winner ≠ automatically best founder · inspect the team and the actual build.", "Devpost carries no school field · affiliation stays 'unverified' until independently confirmed."],
     status: "implemented",
     statusNote:
       "Ingested a bounded sample (2026-09-18) via Cal Hacks 12.0's real Devpost gallery: page 1, 24 projects, 67 real people, 25 total fetches. Every affiliation seeded 'unverified'.",
@@ -679,10 +679,10 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "C",
     role: "discovery",
     dimensions: { selectivity: "medium" },
-    tierRationale: "AI/ML builder groups, technical consulting/building orgs, open-source groups, engineering project teams — evaluate each individually; do not blanket-assign A to every Berkeley club.",
+    tierRationale: "AI/ML builder groups, technical consulting/building orgs, open-source groups, engineering project teams · evaluate each individually; do not blanket-assign A to every Berkeley club.",
     whyItMatters: "Potential high-signal categories once a specific org demonstrates real technical output.",
     whatToExtract: ["specific project output", "technical selectivity", "builder density"],
-    whatNotToInfer: ["Do not automatically make all Berkeley clubs A-tier — require demonstrated projects, technical output, and selectivity per-org."],
+    whatNotToInfer: ["Do not automatically make all Berkeley clubs A-tier · require demonstrated projects, technical output, and selectivity per-org."],
     status: "unconfigured",
   },
   {
@@ -695,10 +695,10 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "C",
     role: "discovery",
     dimensions: { campusPurity: "high" },
-    tierRationale: "Useful when students have ownership, real technical contribution, projects, and public repos — a directory listing alone is weaker than leading a meaningful project.",
+    tierRationale: "Useful when students have ownership, real technical contribution, projects, and public repos · a directory listing alone is weaker than leading a meaningful project.",
     whyItMatters: "Deep technical evidence when ownership (not just membership) is confirmed.",
     whatToExtract: ["project ownership", "public repositories", "research prototypes"],
-    whatNotToInfer: ["Being listed in a lab is weaker than leading a meaningful project — don't conflate the two."],
+    whatNotToInfer: ["Being listed in a lab is weaker than leading a meaningful project · don't conflate the two."],
     status: "unconfigured",
   },
   {
@@ -719,7 +719,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatNotToInfer: ["Do not heavily increase founder signal just because someone appears in SkyDeck."],
     status: "implemented",
     statusNote:
-      "Ingested (2026-09-25) from skydeck.berkeley.edu/companies/, pages 1–40 (246 companies). Page 41 returns 404, so this is the public archive as of that fetch, not a sample. Each card is a company name and external URL. The byline is SkyDeck staff, so no founder rows are created. Every company description states that SkyDeck is not limited to current Berkeley students.",
+      "Ingested (2026-09-25) from skydeck.berkeley.edu/companies/, pages 1-40 (246 companies). Page 41 returns 404, so this is the public archive as of that fetch, not a sample. Each card is a company name and external URL. The byline is SkyDeck staff, so no founder rows are created. Every company description states that SkyDeck is not limited to current Berkeley students.",
   },
   {
     id: "cat_eb_berkeley",
@@ -736,7 +736,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
       "Owner downgraded Entrepreneurs at Berkeley to founder B and startup B. The public roster is a small current-student club, and a club page is not the same thing as a formed company.",
     whyItMatters: "Community discussion repeatedly names it as where Berkeley's active current-student founders actually are, ahead of larger official-looking entrepreneurship infrastructure.",
     whatToExtract: ["cohort/member rosters if public", "project/company outcomes", "officer-disclosed selectivity numbers (label as insider, not independent)"],
-    whatNotToInfer: ["A Reddit recommendation is not itself Founder Signal for any individual member — see lib/domain/community-signal.ts.", "An officer's own description of the club is operational detail, not an independent endorsement."],
+    whatNotToInfer: ["A Reddit recommendation is not itself Founder Signal for any individual member · see lib/domain/community-signal.ts.", "An officer's own description of the club is operational detail, not an independent endorsement."],
     status: "implemented",
     statusNote:
       "Ingested (2026-09-25) from the server-rendered /companies and /founders pages on entrepreneursatberkeley.com. An earlier note called the homepage a client-only dead end; those two routes now include the roster in the HTML. Founder bios are stored as quoted claims. Several bios name UC Berkeley; affiliation status stays unverified because the page does not give a dated current-enrollment record. The public roster at fetch time was the whole page (Showing 6 of 6 companies, Showing 8 of 8 founders), not a sample.",
@@ -793,7 +793,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     tierRationale: "Students build during the event, teams and projects are visible, technical execution is observable, very early. New founder combinations form here.",
     whyItMatters: "One of Stanford's densest concentrations of students actively shipping new technical projects.",
     whatToExtract: ["participants where public", "teams", "projects", "winners", "finalists", "project descriptions", "Devpost/project URLs", "GitHub", "personal sites", "repeat participation"],
-    whatNotToInfer: ["Winning is not required — strong builders may be on non-winning teams.", "Do not only ingest winners.", "Devpost carries no school field — affiliation stays 'unverified' until independently confirmed, same as PennApps."],
+    whatNotToInfer: ["Winning is not required · strong builders may be on non-winning teams.", "Do not only ingest winners.", "Devpost carries no school field · affiliation stays 'unverified' until independently confirmed, same as PennApps."],
     status: "implemented",
     statusNote:
       "Ingested a bounded sample (2026-09-18) via TreeHacks 2026's real Devpost gallery: page 1, 24 projects, 82 real people, 25 total fetches. Every affiliation seeded 'unverified'.",
@@ -808,10 +808,10 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "B",
     role: "discovery",
     dimensions: { campusPurity: "high", buildEvidence: "high" },
-    tierRationale: "Research project pages, technical projects, AI/systems/robotics labs, open-source work — tier is S/A depending on the specific lab/project, not a blanket rating.",
+    tierRationale: "Research project pages, technical projects, AI/systems/robotics labs, open-source work · tier is S/A depending on the specific lab/project, not a blanket rating.",
     whyItMatters: "Students shipping, leading repos, turning research into products, repeat collaborators.",
     whatToExtract: ["students shipping", "repo leadership", "research-to-product transitions", "repeat collaborators"],
-    whatNotToInfer: ["Lab affiliation alone isn't the signal — look for who's actually leading and shipping."],
+    whatNotToInfer: ["Lab affiliation alone isn't the signal · look for who's actually leading and shipping."],
     status: "unconfigured",
   },
   {
@@ -824,7 +824,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "C",
     role: "discovery",
     dimensions: { selectivity: "medium" },
-    tierRationale: "Use individually — do not assign A automatically to every Stanford club. Require demonstrated projects, technical output, selectivity, builder density.",
+    tierRationale: "Use individually · do not assign A automatically to every Stanford club. Require demonstrated projects, technical output, selectivity, builder density.",
     whyItMatters: "High-signal only when the specific org demonstrates real output.",
     whatToExtract: ["demonstrated projects", "technical output"],
     whatNotToInfer: ["Club prestige is not tier."],
@@ -840,7 +840,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "B",
     role: "discovery",
     dimensions: { earliness: "low" },
-    tierRationale: "Useful for startup discovery, team formation, validation — but often later than project/hackathon sources.",
+    tierRationale: "Useful for startup discovery, team formation, validation · but often later than project/hackathon sources.",
     whyItMatters: "Startup discovery and team-formation signal, later-stage.",
     whatToExtract: ["team formation", "startup discovery leads"],
     whatNotToInfer: ["Later-stage visibility ≠ early founder discovery."],
@@ -857,7 +857,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "reference",
     dimensions: { buildEvidence: "low" },
     tierRationale: "Speaker events, networking mixers, newsletters, conference attendee lists. Attendance ≠ building.",
-    whyItMatters: "Minimal — occasional name for cross-checking.",
+    whyItMatters: "Minimal · occasional name for cross-checking.",
     whatToExtract: ["names worth cross-checking elsewhere"],
     whatNotToInfer: ["Attendance is not a founder signal."],
     status: "unconfigured",
@@ -874,13 +874,13 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { campusPurity: "high", selectivity: "medium" },
     tierRationale:
-      "One of the largest student-run entrepreneurship orgs in the world (founded 1996), running the 150K Challenge, E-Bootcamp, and the Freshman Battalion. Community discussion (unverified — see community signal) recommends it specifically as the entrepreneurship club and place to meet other startup-interested students.",
-    whyItMatters: "Real challenge/cohort structure with a long track record — use challenge participants, active builders, leadership, teams, alumni company formation.",
+      "One of the largest student-run entrepreneurship orgs in the world (founded 1996), running the 150K Challenge, E-Bootcamp, and the Freshman Battalion. Community discussion (unverified · see community signal) recommends it specifically as the entrepreneurship club and place to meet other startup-interested students.",
+    whyItMatters: "Real challenge/cohort structure with a long track record · use challenge participants, active builders, leadership, teams, alumni company formation.",
     whatToExtract: ["150K Challenge participants/finalists", "E-Bootcamp cohorts", "leadership/officer roles", "alumni company formation"],
-    whatNotToInfer: ["Membership alone is not Founder Signal — BASES is large and broad; look for named participation/leadership."],
+    whatNotToInfer: ["Membership alone is not Founder Signal · BASES is large and broad; look for named participation/leadership."],
     status: "unconfigured",
     statusNote:
-      "Investigated, not built (2026-09-24): bases.stanford.edu is a Next.js site (real server-rendered RSC content, not a dead client-only SPA like Free Ventures/E@B below). /challenge is real but pure marketing/stats ('250+ competing companies', '$150K+ prize pool') with zero finalist/winner/team names in its flight payload. /writing (blog) and the /leadership URL a web search surfaced (404 — stale) were also checked; no page found this pass with an actual finalists/leadership roster. Not ruled out entirely — a roster may exist behind a URL not yet found (e.g. a specific past-cohort page) — but the obvious candidates are exhausted for now.",
+      "Investigated, not built (2026-09-24): bases.stanford.edu is a Next.js site (real server-rendered RSC content, not a dead client-only SPA like Free Ventures/E@B below). /challenge is real but pure marketing/stats ('250+ competing companies', '$150K+ prize pool') with zero finalist/winner/team names in its flight payload. /writing (blog) and the /leadership URL a web search surfaced (404 · stale) were also checked; no page found this pass with an actual finalists/leadership roster. Not ruled out entirely · a roster may exist behind a URL not yet found (e.g. a specific past-cohort page) · but the obvious candidates are exhausted for now.",
   },
   {
     id: "cat_cardinal_ventures",
@@ -894,13 +894,13 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { campusPurity: "high", selectivity: "high" },
     tierRationale:
-      "The only equity-free, student-run accelerator at Stanford (150+ graduated companies, $1B+ raised) — a real selection layer over Stanford founders, not just a discovery source. Community discussion (unverified — see community signal) points students toward it specifically. SECURITY NOTE (2026-09-21, RESOLVED 2026-09-24): the domain cardinalventures.org, which appeared as the official site in search results, was checked directly and is domain-squatted — it 302-redirects to an unrelated Indonesian online-gambling site (slotplaydemo.link), not Cardinal Ventures. Never link to cardinalventures.org anywhere, including www.cardinalventures.org (unverified, not checked — the risk of a squat wasn't worth probing further once a real official URL was found). REAL URL FOUND (2026-09-24): Stanford's own official directory, sen.stanford.edu/cardinal-ventures, 301-redirects to sen.stanford.edu/stanford-ventures — the org now lists under the name \"Stanford Ventures\" there, with a 'Visit Website' link to https://svfund.stanford.edu/ (a verified .stanford.edu subdomain, safe).",
-    whyItMatters: "Treat as a selection/corroboration layer — companies here already cleared a real student-run bar.",
+      "The only equity-free, student-run accelerator at Stanford (150+ graduated companies, $1B+ raised) · a real selection layer over Stanford founders, not just a discovery source. Community discussion (unverified · see community signal) points students toward it specifically. SECURITY NOTE (2026-09-21, RESOLVED 2026-09-24): the domain cardinalventures.org, which appeared as the official site in search results, was checked directly and is domain-squatted · it 302-redirects to an unrelated Indonesian online-gambling site (slotplaydemo.link), not Cardinal Ventures. Never link to cardinalventures.org anywhere, including www.cardinalventures.org (unverified, not checked · the risk of a squat wasn't worth probing further once a real official URL was found). REAL URL FOUND (2026-09-24): Stanford's own official directory, sen.stanford.edu/cardinal-ventures, 301-redirects to sen.stanford.edu/stanford-ventures · the org now lists under the name \"Stanford Ventures\" there, with a 'Visit Website' link to https://svfund.stanford.edu/ (a verified .stanford.edu subdomain, safe).",
+    whyItMatters: "Treat as a selection/corroboration layer · companies here already cleared a real student-run bar.",
     whatToExtract: ["cohort company names", "founder names", "sector focus (DeepTech/BioTech per their own positioning)"],
     whatNotToInfer: ["Cohort acceptance corroborates, but the underlying company/founder evidence still needs to be checked directly."],
     status: "unconfigured",
     statusNote:
-      "Investigated, not built (2026-09-24): svfund.stanford.edu itself is a client-only SPA shell — every route (including plausible data endpoints like /data.json, /content.json, /api/content) returns the exact same empty index.html (Content-Type: text/html, not JSON), confirmed by inspecting response headers/bodies directly, not guessed. No server-rendered content, no discoverable JSON API. Same access class as Free Ventures/Entrepreneurs @ Berkeley above — real org, real (now-verified) URL, but nothing scrapable without a headless browser this environment doesn't have.",
+      "Investigated, not built (2026-09-24): svfund.stanford.edu itself is a client-only SPA shell · every route (including plausible data endpoints like /data.json, /content.json, /api/content) returns the exact same empty index.html (Content-Type: text/html, not JSON), confirmed by inspecting response headers/bodies directly, not guessed. No server-rendered content, no discoverable JSON API. Same access class as Free Ventures/Entrepreneurs @ Berkeley above · real org, real (now-verified) URL, but nothing scrapable without a headless browser this environment doesn't have.",
   },
   {
     id: "cat_startx",
@@ -914,10 +914,10 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { campusPurity: "high", earliness: "low" },
     tierRationale:
-      "No-equity, no-fee nonprofit accelerator requiring a Stanford tie per founder — 1800+ alumni, 700+ well-funded growth-stage startups. Community discussion (unverified — see community signal) recommends it as a startup resource/mentor network, but this is more downstream than a TreeHacks project or early builder community — use primarily for Startup Scout, not early founder discovery.",
-    whyItMatters: "A real, well-documented Stanford-founder accelerator — strong for finding already-formed companies with a verified Stanford tie.",
+      "No-equity, no-fee nonprofit accelerator requiring a Stanford tie per founder · 1800+ alumni, 700+ well-funded growth-stage startups. Community discussion (unverified · see community signal) recommends it as a startup resource/mentor network, but this is more downstream than a TreeHacks project or early builder community · use primarily for Startup Scout, not early founder discovery.",
+    whyItMatters: "A real, well-documented Stanford-founder accelerator · strong for finding already-formed companies with a verified Stanford tie.",
     whatToExtract: ["cohort company names", "founder names + Stanford affiliation (StartX itself requires this)"],
-    whatNotToInfer: ["Downstream of early discovery — a company here has already formed and applied; don't treat as a founder-discovery layer."],
+    whatNotToInfer: ["Downstream of early discovery · a company here has already formed and applied; don't treat as a founder-discovery layer."],
     status: "unconfigured",
   },
 
@@ -934,10 +934,10 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { campusPurity: "high", earliness: "medium" },
     tierRationale:
-      "Harvard's central innovation hub across all 13 schools (4,000+ teams/companies incubated, $7B+ raised) — real scale and track record. Community discussion (unverified — see community signal) repeatedly identifies it as the central entrepreneurship community. Founder Scout kept at A rather than S because 'walked into i-lab' and 'accepted team actively building in i-lab' are meaningfully different signals that need to be distinguished per-person, not assumed.",
-    whyItMatters: "The clearest single Harvard entrepreneurship hub — but also search project/thesis artifacts directly (building independently, summer/startup internships, thesis-to-company), not only i-lab rosters, per the community discussion's own emphasis.",
+      "Harvard's central innovation hub across all 13 schools (4,000+ teams/companies incubated, $7B+ raised) · real scale and track record. Community discussion (unverified · see community signal) repeatedly identifies it as the central entrepreneurship community. Founder Scout kept at A rather than S because 'walked into i-lab' and 'accepted team actively building in i-lab' are meaningfully different signals that need to be distinguished per-person, not assumed.",
+    whyItMatters: "The clearest single Harvard entrepreneurship hub · but also search project/thesis artifacts directly (building independently, summer/startup internships, thesis-to-company), not only i-lab rosters, per the community discussion's own emphasis.",
     whatToExtract: ["Student i-lab accepted teams (not just visitors)", "Pagliuca Life Lab ventures", "President's Innovation Challenge participants"],
-    whatNotToInfer: ["'Walked into i-lab' is not the same evidence as 'accepted team actively building in i-lab' — keep the distinction explicit."],
+    whatNotToInfer: ["'Walked into i-lab' is not the same evidence as 'accepted team actively building in i-lab' · keep the distinction explicit."],
     status: "unconfigured",
   },
 
@@ -953,7 +953,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { campusPurity: "high", buildEvidence: "high" },
     tierRationale: "Prioritize projects, labs, GitHub, student technical teams, hackathons, research prototypes over generic entrepreneurship programs.",
-    whyItMatters: "Same early-discovery logic as Stanford/Berkeley/Penn labs — before company formation, not after.",
+    whyItMatters: "Same early-discovery logic as Stanford/Berkeley/Penn labs · before company formation, not after.",
     whatToExtract: ["projects", "GitHub", "student technical teams", "hackathons", "research prototypes"],
     whatNotToInfer: ["Generic entrepreneurship-program visibility is downstream of this."],
     status: "unconfigured",
@@ -970,13 +970,13 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { campusPurity: "high", earliness: "low" },
     tierRationale:
-      "Strong for Startup Scout — founders are actively building companies, a prototype/early product is expected, teams work full-time, GTM-oriented. Not automatically S for Founder Scout because the company already exists and the founder already self-identifies as one — relatively downstream vs. project discovery.",
-    whyItMatters: "Real, full-time-committed MIT founders with expected prototypes — but caught later than a hackathon would.",
+      "Strong for Startup Scout · founders are actively building companies, a prototype/early product is expected, teams work full-time, GTM-oriented. Not automatically S for Founder Scout because the company already exists and the founder already self-identifies as one · relatively downstream vs. project discovery.",
+    whyItMatters: "Real, full-time-committed MIT founders with expected prototypes · but caught later than a hackathon would.",
     whatToExtract: ["cohort company names", "founder names", "product/prototype stage"],
-    whatNotToInfer: ["Cohort acceptance ≠ elite founder discovery — use heavily for startup sourcing, less for unique early founder discovery."],
+    whatNotToInfer: ["Cohort acceptance ≠ elite founder discovery · use heavily for startup sourcing, less for unique early founder discovery."],
     status: "implemented",
     statusNote:
-      "Ingested (2026-09-21): entrepreneurship.mit.edu's real public 'Past Teams' page (11 cohort years, 2015-2025). Bounded to the 2025 cohort only (22 companies) — older cohorts aren't pre-seed candidates a decade later. Unlike Velocity, delta v's own page has no per-company founder listing (only an external link to each company's own site), so these companies are ingested with 'Founders not yet identified' rather than a guessed founder.",
+      "Ingested (2026-09-21): entrepreneurship.mit.edu's real public 'Past Teams' page (11 cohort years, 2015-2025). Bounded to the 2025 cohort only (22 companies) · older cohorts aren't pre-seed candidates a decade later. Unlike Velocity, delta v's own page has no per-company founder listing (only an external link to each company's own site), so these companies are ingested with 'Founders not yet identified' rather than a guessed founder.",
   },
   {
     id: "cat_mit_mixers",
@@ -1006,10 +1006,10 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "B",
     role: "discovery",
     dimensions: { campusPurity: "high", buildEvidence: "high" },
-    tierRationale: "Prioritize engineering projects, GitHub, technical teams, hackathons, builders emerging from co-op — especially repeat shippers across environments.",
+    tierRationale: "Prioritize engineering projects, GitHub, technical teams, hackathons, builders emerging from co-op · especially repeat shippers across environments.",
     whyItMatters: "Waterloo's co-op structure means technical output is unusually visible early and often.",
     whatToExtract: ["engineering projects", "GitHub", "technical teams", "hackathons", "co-op builder patterns"],
-    whatNotToInfer: ["Co-op placement alone isn't the signal — repeat shipping is."],
+    whatNotToInfer: ["Co-op placement alone isn't the signal · repeat shipping is."],
     status: "unconfigured",
   },
   {
@@ -1024,12 +1024,12 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "discovery",
     dimensions: { campusPurity: "medium", earliness: "high", buildEvidence: "high" },
     tierRationale: "Same hackathon-discovery shape as TreeHacks/PennApps/Cal Hacks.",
-    whyItMatters: "Canada's largest hackathon, hosted at Waterloo — dense builder discovery.",
+    whyItMatters: "Canada's largest hackathon, hosted at Waterloo · dense builder discovery.",
     whatToExtract: ["teams", "projects", "winners", "finalists", "repeat hackers"],
     whatNotToInfer: ["Winning ≠ elite founder."],
     status: "implemented",
     statusNote:
-      "Ingested (2026-09-25): scripts/ingest/fetch-hackthenorth-devpost.ts, using the shared lib/ingest/devpost-hackathon.ts (same real markup as PennApps/TreeHacks/Cal Hacks, verified, not assumed) against Hack the North 2026 (the most recent completed event, not 2025 — same 'most recent cohort' precedent as MIT delta v/Velocity). 61 projects ingested across several bounded runs (fetch budget increased 30->40 to afford one extra fetch per new person, described below). This event also motivated a real enhancement to the SHARED library: every new team member's own Devpost profile page is now fetched once for a personal LinkedIn link (verified present on 2 of 5 real sample profiles before writing the extractor) — applies to PennApps/TreeHacks/Cal Hacks too on their next run, though those 3 were already fully walked in prior sessions so had nothing new to backfill this pass. 51 people total now carry a captured LinkedIn alias across all sources, resolved via scripts/ingest/fetch-linkedin-apify.ts (Apify) — see that script's own header comment for two real bugs found and fixed in the same pass: a sync-endpoint timeout silently returning 1-of-51 results as if legitimate 'not found', and a batch size that triggered LinkedIn-side throttling even through the correct async pattern (empirically fixed at chunk size 5). Found 5 new real self-disclosed founder claims this way (Jaden Park/Tweak, Aaron Shangguan/R&S Studio, Rohan Gottipati/Stealth Startup, Yufan Wang/Pantheon Capital, Ari Khan/RHHacks). LinkedIn links are now also rendered directly on founder cards in the UI (components/founder-card.tsx), not just stored — see README for the full account.",
+      "Ingested (2026-09-25): scripts/ingest/fetch-hackthenorth-devpost.ts, using the shared lib/ingest/devpost-hackathon.ts (same real markup as PennApps/TreeHacks/Cal Hacks, verified, not assumed) against Hack the North 2026 (the most recent completed event, not 2025 · same 'most recent cohort' precedent as MIT delta v/Velocity). 61 projects ingested across several bounded runs (fetch budget increased 30->40 to afford one extra fetch per new person, described below). This event also motivated a real enhancement to the SHARED library: every new team member's own Devpost profile page is now fetched once for a personal LinkedIn link (verified present on 2 of 5 real sample profiles before writing the extractor) · applies to PennApps/TreeHacks/Cal Hacks too on their next run, though those 3 were already fully walked in prior sessions so had nothing new to backfill this pass. 51 people total now carry a captured LinkedIn alias across all sources, resolved via scripts/ingest/fetch-linkedin-apify.ts (Apify) · see that script's own header comment for two real bugs found and fixed in the same pass: a sync-endpoint timeout silently returning 1-of-51 results as if legitimate 'not found', and a batch size that triggered LinkedIn-side throttling even through the correct async pattern (empirically fixed at chunk size 5). Found 5 new real self-disclosed founder claims this way (Jaden Park/Tweak, Aaron Shangguan/R&S Studio, Rohan Gottipati/Stealth Startup, Yufan Wang/Pantheon Capital, Ari Khan/RHHacks). LinkedIn links are now also rendered directly on founder cards in the UI (components/founder-card.tsx), not just stored · see README for the full account.",
   },
   {
     id: "cat_velocity",
@@ -1042,13 +1042,13 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "A",
     role: "discovery",
     dimensions: { campusPurity: "medium", earliness: "low" },
-    tierRationale: "Useful for real pre-seed companies, but don't assume every Velocity founder is a current Waterloo student — verify university relationship independently.",
+    tierRationale: "Useful for real pre-seed companies, but don't assume every Velocity founder is a current Waterloo student · verify university relationship independently.",
     whyItMatters: "Real formed Waterloo-area pre-seed companies.",
     whatToExtract: ["cohort company names", "founder names"],
     whatNotToInfer: ["Velocity founder ≠ confirmed current Waterloo student without independent verification."],
     status: "implemented",
     statusNote:
-      "Ingested (2026-09-20): velocityincubator.com's real public company directory (Webflow CMS, ~90 companies spanning 2009–2026) plus per-company detail pages with real named founders. Bounded to the 2025–2026 cohorts only (10 companies) — the full directory includes long-since-scaled companies (e.g. ApplyBoard, a 2015 cohort company now a large late-stage business), which aren't pre-seed candidates. Founder-Waterloo affiliation seeded 'unverified' per the tier rationale.",
+      "Ingested (2026-09-20): velocityincubator.com's real public company directory (Webflow CMS, ~90 companies spanning 2009-2026) plus per-company detail pages with real named founders. Bounded to the 2025-2026 cohorts only (10 companies) · the full directory includes long-since-scaled companies (e.g. ApplyBoard, a 2015 cohort company now a large late-stage business), which aren't pre-seed candidates. Founder-Waterloo affiliation seeded 'unverified' per the tier rationale.",
   },
 
   // ---------- GLOBAL / NOT CAMPUS-SPECIFIC ----------
@@ -1064,13 +1064,13 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     role: "corroboration",
     dimensions: { campusPurity: "low", earliness: "low", novelty: "medium", identityQuality: "high", extractability: "medium" },
     tierRationale:
-      "Downstream of company formation — a YC batch is not early founder signal. Useful once the company's own public page names Penn or Berkeley. Campus is attached only from that text, never from the batch itself.",
+      "Downstream of company formation · a YC batch is not early founder signal. Useful once the company's own public page names Penn or Berkeley. Campus is attached only from that text, never from the batch itself.",
     whyItMatters: "Finds formed companies whose public YC page actually names a Penn or Berkeley founder or team background.",
     whatToExtract: ["company name", "one-line product", "founder names", "school mentions quoted from the page"],
     whatNotToInfer: ["Do not treat YC acceptance as Founder Signal.", "Do not copy YC's standard deal in as a funding total.", "A team-level school mention does not identify which founder attended."],
     status: "implemented",
     statusNote:
-      "Scans active companies in 2024–2026 batches via the public directory, then reads each company page. Older batches are not scanned. Companies are kept only when the page text ties Penn or Berkeley to a person or the team in an affiliation context, not as a customer.",
+      "Scans active companies in 2024-2026 batches via the public directory, then reads each company page. Older batches are not scanned. Companies are kept only when the page text ties Penn or Berkeley to a person or the team in an affiliation context, not as a customer.",
   },
   {
     id: "cat_github_founder_bios",
@@ -1102,7 +1102,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "C",
     role: "reference",
     dimensions: { campusPurity: "low", identityQuality: "low" },
-    tierRationale: "No campus signal at all and posts rarely expose affiliation — same identity-quality problem documented for Devpost.",
+    tierRationale: "No campus signal at all and posts rarely expose affiliation · same identity-quality problem documented for Devpost.",
     whyItMatters: "Occasionally surfaces a real shipped product; can't confirm who or where on its own.",
     whatToExtract: ["product name/description", "author profile if linked"],
     whatNotToInfer: ["A Show HN post is not affiliation or quality evidence by itself."],
@@ -1118,7 +1118,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "D",
     role: "corroboration",
     dimensions: { buildEvidence: "medium", identityQuality: "low" },
-    tierRationale: "Decent technical-build corroboration once a creator is already identified some other way; not a discovery source on its own — no campus signal.",
+    tierRationale: "Decent technical-build corroboration once a creator is already identified some other way; not a discovery source on its own · no campus signal.",
     whyItMatters: "Corroborates AI/ML build evidence for someone already on the radar.",
     whatToExtract: ["space activity/likes", "linked models/datasets", "creator profile"],
     whatNotToInfer: ["A popular Space is not founder or startup evidence by itself."],
@@ -1135,7 +1135,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "A",
     role: "discovery",
     dimensions: { campusPurity: "low", earliness: "medium", buildEvidence: "medium", selectivity: "medium", novelty: "medium", identityQuality: "high", extractability: "medium" },
-    tierRationale: "Off Season is six weeks for students and recent grads: 48 teams in 2025 and 100 in 2026, with first checks typically $100k–$250k. Source: https://f.inc/",
+    tierRationale: "Off Season is six weeks for students and recent grads: 48 teams in 2025 and 100 in 2026, with first checks typically $100k-$250k. Source: https://f.inc/",
     whyItMatters: "A public portfolio and a student-heavy residency in San Francisco, with named founders on company pages.",
     whatToExtract: ["portfolio founder names", "company name and site", "school only when the page names that person", "cohort or founded year when the page states it"],
     whatNotToInfer: [
@@ -1232,7 +1232,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
       "A university name is not a class year. Enrollment is stored only when the line says student.",
     ],
     status: "implemented",
-    statusNote: "Imported from the Marginal Revolution winner posts for cohorts 36–59. No third-party winner database was used.",
+    statusNote: "Imported from the Marginal Revolution winner posts for cohorts 36-59. No third-party winner database was used.",
   },
   {
     id: "cat_1517_medici",
@@ -1281,7 +1281,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     startupScoutTier: "A",
     role: "discovery",
     dimensions: { campusPurity: "low", earliness: "high", buildEvidence: "medium", selectivity: "high", identityQuality: "low", extractability: "low" },
-    tierRationale: "Two months in San Francisco for students, dropouts, and recent graduates, with a $20k–$100k+ check. Source: https://www.afore.vc/students",
+    tierRationale: "Two months in San Francisco for students, dropouts, and recent graduates, with a $20k-$100k+ check. Source: https://www.afore.vc/students",
     whyItMatters: "A selective student residency with a check, in the same band as other small founder residencies.",
     whatToExtract: ["program terms", "a person only when a public page names that person and their school"],
     whatNotToInfer: [
