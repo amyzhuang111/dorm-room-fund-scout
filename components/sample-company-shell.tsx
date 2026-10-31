@@ -171,7 +171,7 @@ export function SampleCompanyShell({
                 </p>
               </div>
               {/* Mobile whisper; desk keeps dual wire stamps. Atlas plate owns the mobile lead figure. */}
-              <div className="hidden shrink-0 gap-4 text-right sm:flex sm:gap-6" data-dossier-wire-count="">
+              <div className="hidden" data-dossier-wire-count="" aria-hidden="true">
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Campus wire</p>
                   <p className="mt-1 font-mono text-[32px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
@@ -225,7 +225,7 @@ export function SampleCompanyShell({
             </>
           )}
         </div>
-        <div className="mb-4 hidden items-baseline justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-3 sm:flex" data-dossier-colophon="">
+        <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-2" data-dossier-colophon="">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">On this campus</p>
           <p className="min-w-0 flex-1 text-right font-mono text-[11px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>

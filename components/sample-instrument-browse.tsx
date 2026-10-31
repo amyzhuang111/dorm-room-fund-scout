@@ -265,7 +265,7 @@ export function SampleInstrumentBrowse({
           {/* Ember beat for open Contents · trails 353/01/138 hero pages without twinning them */}
           {/* Contents index is the desk-filters hero · big split + FacetRail; dial lives on fold only. */}
           <div
-            className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/25 bg-[color:var(--bg,#FFFFFF)] px-3 py-3 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--ember,#D96B1C)]"
+            className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/25 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--ember,#D96B1C)]"
             data-index-signal-beat=""
             data-contents-hero=""
             data-filters-index-hero=""
@@ -273,17 +273,26 @@ export function SampleInstrumentBrowse({
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">
               {feed === "leaderboard" ? "Signals" : "Companies"}
             </p>
-            <p className="mt-1.5 font-mono text-[32px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-              {boardCompanies.length.toLocaleString("en-US")}
-            </p>
-            <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">in this list</p>
-            <p className="mt-3 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-              {" with a signal · "}
-              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
-              {" with no signal"}
-            </p>
-            <p className="mt-1.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">Filters below</p>
+            {feed === "leaderboard" ? (
+              <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
+                {" on the signal desk · filters below"}
+              </p>
+            ) : (
+              <>
+                <p className="mt-1.5 font-mono text-[28px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                  {boardCompanies.length.toLocaleString("en-US")}
+                </p>
+                <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">in this list</p>
+                <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
+                  {" with a signal · "}
+                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
+                  {" with no signal"}
+                </p>
+                <p className="mt-1 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">Filters below</p>
+              </>
+            )}
           </div>
           {/* FacetRail is the browse-filters hero · atlas lives on sector-folio (browse-1440), not this rail. */}
           <div className="h-[min(42vh,400px)] pt-1" data-contents-facet-map="">
@@ -319,15 +328,15 @@ export function SampleInstrumentBrowse({
                     <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
                       Signal desk · ranked ledger
                     </p>
-                    <p className="mt-1.5 font-mono text-[32px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                    <p className="mt-1 font-mono text-[22px] font-bold leading-[0.9] tracking-[-0.03em] text-[color:var(--ember,#D96B1C)]">
                       {topCampus.founders.toLocaleString("en-US")}
                     </p>
-                    <p className="mt-2 text-[18px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[20px] lg:text-[22px]">
+                    <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
                       {shortCampusLabel(topCampus.id, topCampus.name)}
-                      {" founder names · #1 by founders"}
+                      {" · #1 by founders"}
                     </p>
-                    <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                      Companies ranked by recent signal weight ·{" "}
+                    <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                      Ranked by recent signal weight ·{" "}
                       <span className="font-bold text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
                       {" on desk"}
                     </p>
@@ -387,7 +396,7 @@ export function SampleInstrumentBrowse({
 
         {/* Scout Chronograph · unifying system. Browse-more uses folio (originality priority);
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
-        <div className="mb-5 space-y-6 lg:hidden" data-mobile-browse-compose="">
+        <div className="mb-3 space-y-3 lg:hidden" data-mobile-browse-compose="">
           {feed === "directory" && pages <= 1 ? (
             <div data-signals-landed-mobile="">
               <SignalsLanded companies={companiesLive} />
@@ -451,24 +460,19 @@ export function SampleInstrumentBrowse({
         </div>
 
         {feed === "directory" && pages > 1 ? (
-          <div className="mb-6 hidden lg:block" data-desk-browse-dominant="chapter-window" data-chapter-window="">
-            {/* Browse-more exclusive: chapter window · not atlas / chrono / next-to-scout / podium. */}
-            <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-4 py-4 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]">
-              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Chapter window</p>
-              <p className="mt-2 font-mono text-[36px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                {cards.length.toLocaleString("en-US")}
-              </p>
-              <p className="mt-3 text-[20px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">companies loaded on this chapter</p>
-              <p className="mt-4 max-w-[28rem] font-mono text-[13px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                {"Showing "}
+          <div className="mb-3 hidden lg:block" data-desk-browse-dominant="chapter-window" data-chapter-window="">
+            {/* Browse-more: thin chapter rule · cards lead, not a second hero stamp. */}
+            <p className="flex flex-wrap items-baseline gap-x-2 border-b border-[color:var(--line,#E1E5EF)] pb-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              <span className="font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Chapter</span>
+              <span>
                 <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
                 {" of "}
                 <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
                 {" · "}
                 <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                {" with signal on the matching desk"}
-              </p>
-            </div>
+                {" with a signal"}
+              </span>
+            </p>
           </div>
         ) : null}
 
@@ -758,14 +762,14 @@ function LedgerRow({
     <Link
       href={`/startup/${card.id}`}
       className={`group flex items-start gap-3 px-3.5 transition-[background-color,color] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:gap-3 sm:px-3.5 ${
-        ranked ? "py-5 sm:py-4 lg:gap-4 lg:py-6" : "py-4 sm:py-3.5"
+        ranked ? "py-3.5 sm:py-3 lg:gap-3 lg:py-3.5" : "py-3.5 sm:py-3"
       }`}
     >
       {rank != null ? (
         <span
           className={`shrink-0 text-right font-mono font-bold tabular-nums tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] ${
             ranked
-              ? "mt-0 w-12 text-[40px] leading-none sm:w-14 sm:text-[40px] lg:w-16 lg:text-[44px]"
+              ? "mt-0 w-9 text-[22px] leading-none sm:w-10 sm:text-[24px] lg:w-11 lg:text-[26px]"
               : "mt-0.5 w-6 text-[16px] leading-none sm:w-8 sm:text-[20px]"
           }`}
         >

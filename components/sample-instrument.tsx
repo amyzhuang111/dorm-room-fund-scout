@@ -1001,7 +1001,7 @@ export function SignalsLanded({ companies }: { companies: FacetCompany[] }) {
   const peak = bars.find((b) => b.peak) ?? bars[bars.length - 1]!;
   return (
     <section
-      className="border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 py-3 sm:px-4"
+      className="border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2 sm:px-4 sm:py-3"
       data-signals-landed=""
       data-chrono-peak={String(peak.count)}
       data-chrono-peak-month={peak.id}
@@ -1014,7 +1014,7 @@ export function SignalsLanded({ companies }: { companies: FacetCompany[] }) {
       <p className="mt-1 text-[13px] text-[color:var(--fg-2,#3F465C)]">
         Real months only · months through October 2026
       </p>
-      <ol className="mt-3 flex h-24 items-end gap-1" data-signals-landed-bars="">
+      <ol className="mt-2 flex h-14 items-end gap-1 sm:mt-3 sm:h-20" data-signals-landed-bars="">
         {bars.map((b) => (
           <li key={b.id} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-1" data-signal-month={b.id} title={`${b.label}: ${b.count}`}>
             <span className={`font-mono text-[10px] font-bold tabular-nums ${b.peak ? "text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-2,#3F465C)]"}`}>
