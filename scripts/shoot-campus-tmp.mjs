@@ -92,6 +92,14 @@ const browser = await chromium.launch({ headless: true });
   await page.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForTimeout(4500);
+  // Peak-share typographic moment owns fold desk craft.
+  const peakShare = page.locator("[data-fold-peak-share]").first();
+  if (await peakShare.count()) {
+    await peakShare.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.waitForTimeout(300);
+    await page.evaluate(() => window.scrollBy(0, -56));
+    await page.waitForTimeout(200);
+  }
   await shot(page, "fold-1440");
   await openFilters(page);
   await page.waitForTimeout(500);
@@ -214,6 +222,13 @@ const browser = await chromium.launch({ headless: true });
   await page.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForTimeout(4500);
+  const spine = page.locator("[data-mobile-fold-spine], [data-scout-chronograph=\"spine\"]").first();
+  if (await spine.count()) {
+    await spine.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.waitForTimeout(300);
+    await page.evaluate(() => window.scrollBy(0, -48));
+  }
+  await page.waitForTimeout(200);
   await shot(page, "fold-375");
 
   await page.goto(`${BASE}/?sample=1#browse`, { waitUntil: "networkidle" });

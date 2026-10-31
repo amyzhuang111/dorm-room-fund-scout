@@ -15,8 +15,6 @@ import {
   MobileFilterDock,
   MobileWireStrip,
   PANEL,
-  ScoutAtlasPlate,
-  ScoutChronograph,
   type FacetState,
 } from "./sample-instrument";
 import { SampleTheme } from "./sample-theme";
@@ -99,24 +97,13 @@ export function SampleCompanyShell({
   // Explicit: the subject company is included in the campus peer count.
   const wireIncludeNote = campusPeers ? "includes this company" : sectorPeers ? "includes this company" : null;
   const wireCompanies = campusPeers ?? sectorPeers ?? filtered.filter((c) => c.signals > 0);
-  const peerAtlasRows = useMemo(() => {
-    return [...wireCompanies]
-      .sort((a, b) => (b.signals ?? 0) - (a.signals ?? 0) || a.name.localeCompare(b.name))
-      .slice(0, 3)
-      .map((c, i) => ({
-        rank: String(i + 1).padStart(2, "0"),
-        label: c.name,
-        value: (c.signals ?? 0).toLocaleString("en-US"),
-        unit: "signals",
-      }));
-  }, [wireCompanies]);
 
   return (
     <div className="sample-paper min-h-[calc(100dvh-48px)]">
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 sm:px-5">
         {/* Magazine dossier cover — desk + mobile share the profile treatment */}
-        <div className="mb-6 border-b border-[color:var(--line,#E1E5EF)] pb-6 sm:mb-5 sm:pb-5" data-dossier-hero="" data-mobile-magazine="">
+        <div className="mb-4 border-b border-[color:var(--line,#E1E5EF)] pb-4 sm:mb-5 sm:pb-5" data-dossier-hero="" data-mobile-magazine="">
           <div className="flex flex-wrap items-center gap-2">
             <Link href="/?sample=1#browse" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
               ← Company ledger
@@ -261,7 +248,7 @@ export function SampleCompanyShell({
         </div>
 
         {/* Mobile identity: founder + timeline dossier — not a shared ticket or atlas dial. */}
-        <div className="mb-5 sm:hidden" data-dossier-timeline="" data-mobile-chrono-identity="">
+        <div className="mb-8 mt-2 sm:hidden" data-dossier-timeline="" data-mobile-chrono-identity="">
           <div
             className="relative overflow-hidden border-2 border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[4px] before:bg-[color:var(--cobalt,#2F4FD8)]"
             data-dossier-spread-mobile=""
@@ -334,35 +321,6 @@ export function SampleCompanyShell({
           </div>
         </div>
 
-        {peerAtlasRows.length ? (
-          <div className="mb-6 hidden sm:block" data-dossier-atlas-plate="" data-dossier-atlas-lead="">
-            <ScoutAtlasPlate
-              kicker={campusPeers ? "Atlas plate · campus wire" : "Atlas plate · sector peers"}
-              title={campusPeers ? `${campusShort} companies on wire` : `${dossier?.sector ?? "Sector"} peers`}
-              figure={wireCount}
-              figureLabel={wireUnit}
-              rows={peerAtlasRows}
-              caption={wireIncludeNote ? `${wireScope} · ${wireIncludeNote}` : wireScope}
-              tone="ember"
-            />
-          </div>
-        ) : null}
-
-        <div className="mb-6 hidden sm:block sm:mb-4" data-dossier-chronograph="">
-          <ScoutChronograph
-            companies={wireCompanies}
-            variant="hero"
-            kicker="Campus chronograph"
-            datedLabel={`${wireCompanies.filter((c) => (c.latestSignalAt ?? "").length >= 7).length.toLocaleString("en-US")} dated on this campus wire`}
-            reading={
-              campusPeers
-                ? `${campusShort} campus slice · ${wireCount.toLocaleString("en-US")} companies · includes this company`
-                : sectorPeers
-                  ? `Sector slice · ${wireCount.toLocaleString("en-US")} companies · includes this company`
-                  : `Nearby signaled slice · ${wireCount.toLocaleString("en-US")} companies`
-            }
-          />
-        </div>
 
         {/* Three-column desk: index · profile · wire digest */}
         <div className="grid gap-3 lg:grid-cols-[minmax(240px,280px)_minmax(0,1fr)_minmax(240px,300px)]" data-dossier-spread="">

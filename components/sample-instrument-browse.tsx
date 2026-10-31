@@ -20,7 +20,6 @@ import {
   ScoutSignalPodium,
   campusFoundersAtlasRows,
   campusFoundersTop,
-  ScoutChronograph,
   chronographCaption,
   signalChronographDetail,
   sectorMix,
@@ -198,13 +197,9 @@ export function SampleInstrumentBrowse({
   );
   /** Quiet matching companies (no stored signal) — insight, not pagination. */
   const quietMatch = boardCompanies.length - signaledMatch;
-  /** Visible page / rank-band / loaded-end slice for chronograph (not the global 369). */
-  const pageSlice = useMemo(() => cards as FacetCompany[], [cards]);
   const sliceInsight = useMemo(() => endSliceInsight(cards), [cards]);
-  const contentsUnfiltered = boardCompanies.length === companiesLive.length;
   const contentsChrono = useMemo(() => signalChronographDetail(boardCompanies), [boardCompanies]);
   const contentsInsight = useMemo(() => contentsPageInsight(boardCompanies), [boardCompanies]);
-  const pageInsight = useMemo(() => contentsPageInsight(pageSlice), [pageSlice]);
   const newestSectors = useMemo(() => newestSectorMix(boardCompanies, undefined, 5), [boardCompanies]);
   /** Sitewide campus plate: founders metric (Penn 757 / Stanford 300 / MIT 238). */
   const deskConstellation = useMemo(
@@ -285,7 +280,7 @@ export function SampleInstrumentBrowse({
       <aside className="hidden min-w-0 lg:block" data-browse-index="">
         <div className="sticky top-14 space-y-2">
           {/* Ember beat for open Contents — trails 353/01/138 hero pages without twinning them */}
-          {/* Contents index is the desk-filters hero — big split + FacetRail first; chrono supports. */}
+          {/* Contents index is the desk-filters hero — big split + FacetRail; dial lives on fold only. */}
           <div
             className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
             data-index-signal-beat=""
@@ -364,17 +359,6 @@ export function SampleInstrumentBrowse({
               caption={feed === "leaderboard" ? "Signal index" : "Ledger index"}
             />
           </div>
-          <ScoutChronograph
-            companies={boardCompanies}
-            variant="compact"
-            kicker={feed === "leaderboard" ? "Signal chronograph · Contents" : "Ledger chronograph · Contents"}
-            lead={contentsUnfiltered ? "monthUnknown" : "peak"}
-            reading={
-              contentsUnfiltered
-                ? `Supporting · ${boardCompanies.length.toLocaleString("en-US")} matching`
-                : `Filtered · ${boardCompanies.length.toLocaleString("en-US")} matching · ${quietMatch.toLocaleString("en-US")} quiet`
-            }
-          />
         </div>
       </aside>
 
@@ -392,7 +376,7 @@ export function SampleInstrumentBrowse({
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div className="min-w-0">
               {feed === "leaderboard" && topCampus ? (
-                <div className="grid w-full gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(260px,320px)] lg:items-start" data-signal-hero-spread="">
+                <div className="min-w-0" data-signal-hero-spread="">
                   <div className="min-w-0">
                     <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
                       Signal desk · ranked ledger
@@ -410,17 +394,6 @@ export function SampleInstrumentBrowse({
                       {" on desk"}
                     </p>
                   </div>
-                  {deskConstellation.length ? (
-                    <div className="hidden min-w-0 lg:block" data-signal-atlas-plate="" data-campus-metric="founders">
-                      <ScoutAtlasPlate
-                        kicker="Atlas plate · founders"
-                        title="Campus founders on record"
-                        rows={deskConstellation}
-                        caption="Ranked by founder names · Penn 757 / Stanford 300 / MIT 238"
-                        tone="ember"
-                      />
-                    </div>
-                  ) : null}
                 </div>
               ) : topSector ? (
                 <>
@@ -527,7 +500,7 @@ export function SampleInstrumentBrowse({
 
         {/* Scout Chronograph — unifying system. Browse-more uses folio (originality priority);
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
-        <div className="mb-5 space-y-4 lg:hidden" data-mobile-browse-compose="">
+        <div className="mb-5 space-y-6 lg:hidden" data-mobile-browse-compose="">
           {/* Leaderboard podium mounts inside data-ledger-stage (shot frames that). Browse-more keeps a folio insight, not a shared ticket. */}
           {feed === "directory" && pages > 1 ? (
             <div
@@ -547,48 +520,30 @@ export function SampleInstrumentBrowse({
               </p>
             </div>
           ) : null}
-          {feed === "directory" && (pages > 1 ? pageInsight : contentsInsight) ? (
+          {feed === "directory" && pages <= 1 && contentsInsight ? (
             <div
               className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
               data-mobile-page-insight=""
             >
               <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
-                {pages > 1
-                  ? `Newest on loaded page · ${(pageInsight ?? contentsInsight)!.kicker}`
-                  : `${contentsInsight!.kicker} · ledger`}
+                {`${contentsInsight.kicker} · ledger`}
               </p>
               <p className="mt-3 font-mono text-[52px] font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)]">
-                {(pages > 1 ? pageInsight : contentsInsight)!.signaled.toLocaleString("en-US")}
+                {contentsInsight!.signaled.toLocaleString("en-US")}
               </p>
               <p className="mt-2 text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                {(pages > 1 ? pageInsight : contentsInsight)!.label}
+                {contentsInsight!.label}
               </p>
               <p className="mt-2 font-mono text-[13px] font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">
-                {(pages > 1 ? pageInsight : contentsInsight)!.detail}
+                {contentsInsight!.detail}
               </p>
               <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                 <span className="font-bold text-[color:var(--ember,#D96B1C)]">
-                  {(pages > 1 ? pageInsight : contentsInsight)!.figure.toLocaleString("en-US")}
+                  {contentsInsight!.figure.toLocaleString("en-US")}
                 </span>
                 {" newest in window · page lead"}
               </p>
             </div>
-          ) : null}
-          {feed !== "leaderboard" ? (
-            <ScoutChronograph
-              companies={pageSlice}
-              variant="compact"
-              kicker={
-                pages > 1
-                  ? "Ledger chronograph · loaded page"
-                  : "Ledger chronograph · on page"
-              }
-              reading={
-                pages > 1
-                  ? `Loaded page slice · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`
-                  : `Page slice · ${cards.length.toLocaleString("en-US")} on page · not the full dispatch`
-              }
-            />
           ) : null}
           {feed === "directory" ? (
             <div
@@ -723,22 +678,10 @@ export function SampleInstrumentBrowse({
                 ))}
               </ol>
             </div>
-            <ScoutChronograph
-              companies={pageSlice}
-              variant="compact"
-              kicker="Ledger chronograph · on page"
-              reading={`Supporting · ${cards.length.toLocaleString("en-US")} on page · not the full dispatch`}
-            />
-          </div>
+                      </div>
         ) : feed === "leaderboard" ? (
           <div className="mb-3 hidden lg:block" data-desk-browse-dominant="rank-rail" data-desk-browse-chronograph="">
-            <ScoutChronograph
-              companies={pageSlice}
-              variant="compact"
-              kicker="Signal chronograph · rank band"
-              reading={`Supporting · ${cards.length.toLocaleString("en-US")} on desk · peak on this band`}
-            />
-          </div>
+                      </div>
         ) : (
           <div className="mb-4 hidden space-y-4 lg:block" data-desk-browse-dominant="newest-folio" data-desk-browse-chronograph="">
             {/* One atlas lives in the Contents column — no twin plate here on browse-more. */}
@@ -783,13 +726,7 @@ export function SampleInstrumentBrowse({
                 </ol>
               </div>
             ) : null}
-            <ScoutChronograph
-              companies={pageSlice}
-              variant="compact"
-              kicker="Ledger chronograph · loaded page"
-              reading={`Supporting · Showing ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`}
-            />
-          </div>
+                      </div>
         )}
 
         {/* One strong ledger stage — map-stage language: cobalt frame, ruled rows.
@@ -828,7 +765,7 @@ export function SampleInstrumentBrowse({
             ) : null}
             <div data-ledger-stage={feed} data-ledger-top={pages > 1 ? undefined : ""}>
             {feed === "leaderboard" ? (
-              <div className="mb-0 lg:hidden">
+              <div className="mb-4 lg:hidden">
                 <ScoutSignalPodium rows={podiumRows} totalOnDesk={total} />
               </div>
             ) : null}
@@ -871,61 +808,36 @@ export function SampleInstrumentBrowse({
                 data-ledger-end-mobile=""
                 data-end-insight={sliceInsight.kicker}
               >
-                <div
-                  className="relative overflow-hidden border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)] sm:px-4 sm:py-6"
-                  data-end-lead=""
-                >
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">
-                    {sliceInsight.kicker}
+                <div className="px-3.5 py-8 sm:px-6 sm:py-10" data-ledger-end-colophon="" data-next-to-scout="">
+                  <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--ember,#D96B1C)]">Next to scout</p>
+                  <p className="mt-3 max-w-[28rem] text-[22px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
+                    Programs ranked by company count on this desk
                   </p>
-                  <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
-                    <div className="min-w-0">
-                      <p className="font-mono text-[56px] font-bold leading-[0.88] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)] sm:text-[64px] lg:text-[72px]">
-                        {sliceInsight.figure.toLocaleString("en-US")}
-                      </p>
-                      <p className="mt-2 max-w-[24rem] text-[15px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[16px]">
-                        {sliceInsight.figureUnit}
-                      </p>
-                    </div>
-                    <div className="min-w-0 flex-1 sm:max-w-[18rem] sm:text-right">
-                      <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Named on slice</p>
-                      <Link
-                        href={`/startup/${sliceInsight.companyId}?sample=1`}
-                        className="mt-1.5 block truncate text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline sm:text-[18px]"
-                      >
-                        {sliceInsight.companyName}
-                      </Link>
-                      <p className="mt-1 truncate font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                        {sliceInsight.companyMeta}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="mt-3 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="">
+                  <ol className="mt-6 divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]">
+                    {nextToScout.map((prog, i) => (
+                      <li key={prog.id} className="flex items-baseline gap-4 py-4">
+                        <span className="w-8 shrink-0 text-right font-mono text-[13px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="min-w-0 flex-1 truncate text-[17px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{prog.label}</span>
+                        <span className="shrink-0 font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">{prog.count.toLocaleString("en-US")}</span>
+                      </li>
+                    ))}
+                  </ol>
+                  <p className="mt-4 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="" data-end-lead="">
                     {"Showing "}
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
                     {" of "}
                     <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
                     {" · "}
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                    {" with signal · "}
-                    <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
-                    {" quiet"}
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
+                    {" "}
+                    {sliceInsight.figureUnit}
+                    {" · "}
+                    <Link href={`/startup/${sliceInsight.companyId}?sample=1`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline">
+                      {sliceInsight.companyName}
+                    </Link>
                   </p>
-                </div>
-                <div className="border-t border-[color:var(--line,#E1E5EF)] px-3.5 py-3 sm:px-4" data-ledger-end-colophon="" data-next-to-scout="">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--ember,#D96B1C)]">Next to scout</p>
-                  <ol className="mt-2 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)]">
-                    {nextToScout.map((prog, i) => (
-                      <li key={prog.id} className="flex items-center gap-3 px-3 py-2.5">
-                        <span className="w-6 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{prog.label}</span>
-                        <span className="shrink-0 font-mono text-[15px] font-bold text-[color:var(--ember,#D96B1C)]">{prog.count.toLocaleString("en-US")}</span>
-                      </li>
-                    ))}
-                  </ol>
-                  <p className="mt-2 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">Programs by company count on the matching desk · not a chronograph dial</p>
                 </div>
               </div>
             ) : null}
@@ -1066,20 +978,7 @@ export function SampleInstrumentBrowse({
                   Done
                 </button>
               </div>
-              <div className="mt-3" data-mobile-dispatch-ticket="" data-mobile-chrono-identity="">
-                <ScoutChronograph
-                  companies={boardCompanies}
-                  variant="ticket"
-                  kicker={feed === "leaderboard" ? "Filters · signal ticket" : "Filters · ledger ticket"}
-                  lead={contentsUnfiltered ? "monthUnknown" : "peak"}
-                  reading={
-                    contentsUnfiltered
-                      ? `Supporting · ${boardCompanies.length.toLocaleString("en-US")} matching`
-                      : `Filtered · ${boardCompanies.length.toLocaleString("en-US")} matching · ${quietMatch.toLocaleString("en-US")} quiet`
-                  }
-                />
-              </div>
-              <p className="mt-2.5 flex flex-wrap gap-x-2 gap-y-1 font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">
+<p className="mt-2.5 flex flex-wrap gap-x-2 gap-y-1 font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">
                 <span className="text-[color:var(--cobalt,#2F4FD8)]">Status</span>
                 <span aria-hidden>·</span>
                 <span>Year</span>
@@ -1094,19 +993,6 @@ export function SampleInstrumentBrowse({
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain" data-mobile-facet-map="">
               <div className="h-[min(58dvh,480px)]">
                 <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
-              </div>
-              <div className="border-t border-[color:var(--line,#E1E5EF)] px-3 py-2.5">
-                <ScoutChronograph
-                  companies={boardCompanies}
-                  variant="compact"
-                  kicker={feed === "leaderboard" ? "Signal chronograph · filters" : "Ledger chronograph · filters"}
-                  lead={contentsUnfiltered ? "monthUnknown" : "peak"}
-                  reading={
-                    contentsUnfiltered
-                      ? `Supporting · ${boardCompanies.length.toLocaleString("en-US")} matching`
-                      : `Filtered · ${boardCompanies.length.toLocaleString("en-US")} matching · ${quietMatch.toLocaleString("en-US")} quiet`
-                  }
-                />
               </div>
             </div>
           </div>

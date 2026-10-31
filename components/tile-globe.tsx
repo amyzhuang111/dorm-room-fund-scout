@@ -479,6 +479,7 @@ export function TileGlobe({
   }, [facets, campuses]);
 
   const universeChrono = useMemo(() => signalChronographDetail(companies), [companies]);
+  const peakBar = useMemo(() => universeChrono.bars.find((b) => b.peak) ?? null, [universeChrono]);
   // Third mast beat: leading program (not peak 369 — chronograph owns the peak).
   const leadProgram = useMemo(() => topPrograms(companies)[0] ?? null, [companies]);
   const leadSector = useMemo(() => sectorMix(companies)[0] ?? null, [companies]);
@@ -712,94 +713,55 @@ export function TileGlobe({
                 ) : null}
               </p>
             </div>
-            <ScoutChronograph
-              companies={filteredCompanies}
-              variant="compact"
-              kicker={`Filtered chronograph · ${filterSliceLabel}`}
-              reading={`Supporting · ${liveCount.toLocaleString("en-US")} matching · peak on this slice`}
-            />
           </div>
-        ) : (
-          <div className="lg:hidden">
-            <ScoutChronograph
-              companies={filteredCompanies}
-              variant="hero"
-              kicker="Scout chronograph · campus signals"
-              reading={`Full dispatch · ${liveCount.toLocaleString("en-US")} companies · ${quietLive.toLocaleString("en-US")} quiet`}
-            />
-          </div>
-        )}
+        ) : null}
       </div>
 
-      {/* Edition colophon — sitewide editorial rhythm under the chronograph instrument. */}
-      <div
-        className="mb-3 hidden items-baseline justify-between gap-3 border-y border-[color:var(--line,#E1E5EF)] py-2 lg:flex"
-        data-dispatch-colophon=""
-        data-colophon-mode={filtersOpen && facetsActive ? "slice" : "dispatch"}
-      >
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Scout edition</p>
-        <p className="min-w-0 flex-1 text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-          {filtersOpen && facetsActive ? (
-            <>
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceQuiet.toLocaleString("en-US")}</span>
-              {" quiet on slice"}
-              {sliceLeadSector ? (
-                <>
-                  {" · "}
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceLeadSector.count.toLocaleString("en-US")}</span>
-                  {" "}
-                  {sliceLeadSector.label}
-                </>
-              ) : null}
-              {" · "}
-              <span className={COUNT}>{liveCount.toLocaleString("en-US")}</span>
-              {" matching"}
-            </>
-          ) : (
-            <>
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{universeChrono.dated.toLocaleString("en-US")}</span>
-              {" dated · "}
-              {dispatchInsight ? (
-                <>
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dispatchInsight.detail}</span>
-                  {" · "}
-                  {dispatchInsight.label}
-                  {" · "}
-                </>
-              ) : null}
-              <span className={COUNT}>{universeCounts.foundersListed.toLocaleString("en-US")}</span>
-              {" founders · "}
-              <span className={COUNT}>{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
-              {" campuses on map"}
-            </>
-          )}
-        </p>
-      </div>
-
-      {/* Chronograph identity — non-geographic fold hero. Map stays support; no new geo chrome. */}
-      <div className="mb-3 hidden lg:block" data-fold-chrono-identity="" data-fold-chrono-typographic="">
-        <div className="mb-2 flex items-end justify-between gap-4 border-b-2 border-[color:var(--ember,#D96B1C)]/50 pb-2">
+      {/* Fold owns the chronograph dial exclusively — 8px rhythm, peak-share moment, one dial. */}
+      <div className="mb-4 hidden space-y-4 lg:block" data-fold-chrono-identity="" data-fold-chrono-typographic="" data-fold-baseline="8">
+        <div className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] items-end gap-4 border-b border-[color:var(--line,#E1E5EF)] pb-4" data-fold-peak-share="">
           <div className="min-w-0">
-            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Chronograph identity</p>
-            <p className="mt-1 text-[22px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Peak month owns the fold · typographic, not geographic</p>
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
+            <p className="mt-2 font-mono text-[72px] font-bold leading-[0.82] tracking-[-0.08em] text-[color:var(--ember,#D96B1C)]">
+              {(peakBar?.count ?? 0).toLocaleString("en-US")}
+              <span className="mx-2 text-[28px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
+              <span className="text-[40px] font-bold tracking-[-0.06em] text-[color:var(--fg,#0B0E17)]">{universeChrono.dated.toLocaleString("en-US")}</span>
+            </p>
+            <p className="mt-3 max-w-[36rem] text-[18px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
+              {peakBar?.label ?? "Peak month"} took{" "}
+              <span className="text-[color:var(--ember,#D96B1C)]">
+                {Math.round(((peakBar?.count ?? 0) / Math.max(1, universeChrono.dated)) * 100)}%
+              </span>
+              {" of every dated signal on record"}
+            </p>
           </div>
-          <p className="shrink-0 text-right font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-            <span className="font-bold text-[color:var(--ember,#D96B1C)]">{quietLive.toLocaleString("en-US")}</span>
-            {" quiet · "}
-            <span className="font-bold text-[color:var(--fg,#0B0E17)]">{liveCount.toLocaleString("en-US")}</span>
-            {" matching"}
-          </p>
+          <div className="min-w-0 self-stretch border-l border-[color:var(--line,#E1E5EF)] pl-4">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">Scout edition</p>
+            <p className="mt-3 font-mono text-[13px] leading-6 tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{universeChrono.dated.toLocaleString("en-US")}</span>
+              {" dated"}
+              <br />
+              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietLive.toLocaleString("en-US")}</span>
+              {" quiet"}
+              <br />
+              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
+              {" founder names"}
+              <br />
+              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
+              {" campuses on map"}
+            </p>
+          </div>
         </div>
         <ScoutChronograph
           companies={filteredCompanies}
           variant="hero"
-          kicker="Identity · peak count leads"
-          reading={`Typographic beat · not a map label · ${quietLive.toLocaleString("en-US")} quiet on desk`}
+          kicker="Chronograph · fold owns this dial"
+          reading={`Baseline 8 · peak owns the fold · ${quietLive.toLocaleString("en-US")} quiet`}
         />
       </div>
 
       {/* Structural desk: roster | map | wire. Filters open: Contents | map | wire. Chronograph lives above. */}
-      <div className="grid gap-3 lg:grid-cols-[minmax(200px,240px)_minmax(0,1.15fr)_minmax(200px,260px)]" data-fold-desk-spread="">
+      <div className="grid gap-4 lg:grid-cols-[minmax(200px,240px)_minmax(0,1.15fr)_minmax(200px,260px)]" data-fold-desk-spread="">
         <aside className="hidden min-w-0 lg:block" data-fold-desk-left="">
           <div className="sticky top-14 h-[min(78vh,780px)]">
             {filtersOpen ? (
@@ -839,12 +801,13 @@ export function TileGlobe({
                 <div
                   className="relative min-h-0 flex-1 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)]"
                   data-desk-roster=""
+                  data-campus-metric="founders"
                 >
                   <div className="border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-1.5">
                     <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Top desks · founders</p>
                   </div>
-                  <ol className="divide-y divide-[color:var(--line,#E1E5EF)]">
-                    {topDesksByFounders.slice(0, 4).map((campus, i) => {
+                  <ol className="divide-y divide-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
+                    {topDesksByFounders.slice(0, 3).map((campus, i) => {
                       const active = selectedId === campus.id;
                       const label = shortCampusLabel(campus.id, campus.name);
                       return (
@@ -885,56 +848,6 @@ export function TileGlobe({
                 </div>
               </div>
             ) : null}
-            <div className="pointer-events-none absolute left-2.5 top-2.5 z-10 hidden max-w-[240px] overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)]/94 shadow-[0_2px_0_rgba(47,79,216,0.1)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)] lg:block" data-dispatch-scale="" data-atlas-plate="">
-              <div className="px-2.5 py-2 pl-3">
-                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Atlas plate · map</p>
-                <p className="mt-1 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                  Campus globe
-                </p>
-                <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                  <span className={COUNT}>{universeCounts.campusesOnMap.toLocaleString("en-US")}</span>
-                  {" campuses plotted"}
-                </p>
-                <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] text-[color:var(--fg-2,#3F465C)]">
-                  <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[#3b6fd8]" aria-hidden />United States</span>
-                  <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[#e23b4a]" aria-hidden />Canada</span>
-                  <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[#2f9e6b]" aria-hidden />United Kingdom</span>
-                </div>
-              </div>
-            </div>
-            <div className="pointer-events-none absolute right-3 top-3 z-10 hidden lg:block" data-dispatch-orbit="" data-desk-constellation="" data-campus-metric="founders">
-              <div className="relative">
-                <div className="pointer-events-none absolute -right-6 -top-6 h-28 w-28" aria-hidden>
-                  <span className="absolute inset-0 rounded-full border border-dashed border-[color:var(--ember,#D96B1C)]/45" />
-                  <span className="absolute inset-3 rounded-full border border-[color:var(--ember,#D96B1C)]/30" />
-                  <span className="absolute inset-6 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35" />
-                </div>
-                <div className="relative max-w-[280px] overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--bg,#FFFFFF)]/96 shadow-[0_3px_0_rgba(47,79,216,0.14)] backdrop-blur-[2px] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)]">
-                  <div className="flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-1.5 pl-3">
-                    <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Desk constellation</p>
-                    <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Founders</p>
-                  </div>
-                  <ol className="divide-y divide-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
-                    {topDesksByFounders.slice(0, 3).map((campus, i) => {
-                      const label = shortCampusLabel(campus.id, campus.name);
-                      return (
-                        <li key={campus.id} className="flex items-baseline gap-2 px-2.5 py-1.5 pl-3">
-                          <span className="w-4 shrink-0 text-right font-mono text-[10px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
-                            {String(i + 1).padStart(2, "0")}
-                          </span>
-                          <span className="min-w-0 flex-1 truncate text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
-                          <span className={`shrink-0 font-mono text-[12px] font-bold ${COUNT}`}>{campus.founders.toLocaleString("en-US")}</span>
-                          <span className="shrink-0 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">founders</span>
-                        </li>
-                      );
-                    })}
-                  </ol>
-                  <p className="border-t border-[color:var(--line,#E1E5EF)] px-2.5 py-1.5 pl-3 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                    Ranked by founder names on record
-                  </p>
-                </div>
-              </div>
-            </div>
             <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 hidden -translate-x-1/2 lg:block" data-map-credit>
               <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
                 <MapCredit />
@@ -970,12 +883,45 @@ export function TileGlobe({
       </div>
 
       <div
-        className="mt-4 space-y-5 lg:hidden"
+        className="mt-4 space-y-8 lg:hidden"
         data-fold-counts-mobile=""
         data-mobile-fold-compose=""
         style={{ paddingBottom: "calc(5.75rem + env(safe-area-inset-bottom, 0px))" }}
       >
-        {/* Fold-filters clarity on mobile: large insight / atlas plate, then sparse desk cards. */}
+        <div className="space-y-4" data-mobile-fold-spine="" data-mobile-chrono-identity="">
+          <ScoutChronograph
+            companies={filteredCompanies}
+            variant="spine"
+            kicker="Fold · chronograph spine"
+            reading={`Typographic spine · ${quietLive.toLocaleString("en-US")} quiet · ${liveCount.toLocaleString("en-US")} matching`}
+          />
+        </div>
+        <div data-mobile-desk-roster="" data-campus-metric="founders">
+          <div className="mb-2 flex items-baseline justify-between gap-2">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Top desks · founders</p>
+            <p className="font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">Penn · Stanford · MIT</p>
+          </div>
+          <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
+            {topDesksByFounders.slice(0, 3).map((campus, i) => {
+              const label = shortCampusLabel(campus.id, campus.name);
+              return (
+                <li key={campus.id}>
+                  <button
+                    type="button"
+                    onClick={() => focus(campus)}
+                    className="flex w-full items-baseline gap-2 px-3 py-2.5 text-left hover:bg-[color:var(--ember,#D96B1C)]/5"
+                  >
+                    <span className="w-5 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
+                    <span className={`shrink-0 font-mono text-[13px] font-bold ${COUNT}`}>{campus.founders.toLocaleString("en-US")}</span>
+                    <span className="shrink-0 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">founders</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+        {/* Secondary insight below spine hero — fold-mobile owns spine only above the fold. */}
         {dispatchInsight ? (
           <div
             className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/40 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
@@ -1020,43 +966,6 @@ export function TileGlobe({
             )}
           </div>
         ) : null}
-        <div className="space-y-4" data-mobile-fold-spine="" data-mobile-chrono-identity="">
-          <ScoutChronograph
-            companies={filteredCompanies}
-            variant="spine"
-            kicker="Fold · chronograph spine"
-            reading={
-              topCampus
-                ? `${shortCampusLabel(topCampus.id, topCampus.name)} · #1 by founders · ${topCampus.founders.toLocaleString("en-US")} names`
-                : `Desk slice · ${quietLive.toLocaleString("en-US")} quiet`
-            }
-          />
-          <div data-mobile-desk-roster="" data-campus-metric="founders">
-            <div className="mb-2 flex items-baseline justify-between gap-2">
-              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Top desks · founders</p>
-              <p className="font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">Penn · Stanford · MIT</p>
-            </div>
-            <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
-              {topDesksByFounders.slice(0, 3).map((campus, i) => {
-                const label = shortCampusLabel(campus.id, campus.name);
-                return (
-                  <li key={campus.id}>
-                    <button
-                      type="button"
-                      onClick={() => focus(campus)}
-                      className="flex w-full items-baseline gap-2 px-3 py-2.5 text-left hover:bg-[color:var(--ember,#D96B1C)]/5"
-                    >
-                      <span className="w-5 shrink-0 text-right font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{String(i + 1).padStart(2, "0")}</span>
-                      <span className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>
-                      <span className={`shrink-0 font-mono text-[13px] font-bold ${COUNT}`}>{campus.founders.toLocaleString("en-US")}</span>
-                      <span className="shrink-0 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">founders</span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ol>
-          </div>
-        </div>
         <MobileWireStrip companies={filteredCompanies} label="Dispatch wire" surface="fold" />
       </div>
 
