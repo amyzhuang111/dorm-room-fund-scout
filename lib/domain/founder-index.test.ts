@@ -43,11 +43,9 @@ assert.deepEqual(penn.map((row) => row.name), ["Ada Thin"]);
 const missingCampus = filterFounders(rows, { campusId: "missing" });
 assert.deepEqual(missingCampus.map((row) => row.name), ["Bea None"]);
 
-assert.equal(
-  whyWorthALook(rows[2]!),
-  "Funding · Y Combinator · class of 2026 · AI agents/apps · Sim · Berkeley",
-);
-assert.match(whyWorthALook(rows[1]!), /No campus, program, signal/);
+assert.equal(whyWorthALook(rows[2]!), "Funding · Y Combinator");
+assert.equal(whyWorthALook(rows[1]!), null);
+assert.equal(whyWorthALook(rows[0]!), "Award");
 
 const byProgram = filterFounders(rows, { text: "combinator 2026" });
 assert.deepEqual(byProgram.map((row) => row.name), ["Emir Karabeg"]);

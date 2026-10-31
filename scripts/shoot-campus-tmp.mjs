@@ -192,6 +192,16 @@ const browser = await chromium.launch({ headless: true });
   await page.evaluate(() => window.scrollTo(0, 0));
   await shot(page, "fold-375");
 
+  const programM = page.locator("[data-founder-filters] select").first();
+  if (await programM.count()) {
+    await programM.selectOption({ index: 1 }).catch(() => {});
+    await page.waitForTimeout(400);
+  }
+  await page.locator("[data-campus-founders-top] button").first().click().catch(() => {});
+  await page.waitForTimeout(600);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await shot(page, "fold-filters-375");
+
   await page.goto(`${BASE}/companies?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForTimeout(1500);

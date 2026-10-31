@@ -8,6 +8,7 @@ const BASE = process.env.BASE || "http://127.0.0.1:3460";
 const TOTAL = 2513;
 /** Directory sampleSurfaceCounts.foundersListed / campusesOnMap — must match strip + fold. */
 const EXPECTED_FOUNDERS_LISTED = 2766;
+const EXPECTED_FOUNDERS_INDEXED = 3068;
 const EXPECTED_CAMPUSES_ON_MAP = 74;
 /** Chronograph honesty: window + earlierValid + undatedMonth = dated (verified from loadDirectory). */
 const EXPECTED_CHRONO_WINDOW = 588;
@@ -128,11 +129,19 @@ const founderHome = await page.evaluate(() => {
   const search = document.querySelectorAll("[data-founder-search] input");
   const text = document.body.innerText || "";
   const globe = document.querySelector("[data-dispatch-map-stage]");
+  const whyNodes = [...document.querySelectorAll("[data-why-worth]")].slice(0, 8).map((el) => ({
+    text: (el.textContent || "").replace(/\s+/g, " ").trim(),
+    blank: el.getAttribute("data-why-blank") === "1",
+  }));
+  const foldIndexed = document.querySelector('[data-fold-counts] [data-count="founders-indexed"]')?.textContent?.replace(/,/g, "");
+  const stripIndexed = document.querySelector('[data-sample-strip-counts] [data-count="founders-indexed"]')?.textContent?.replace(/,/g, "");
+  const countryLegend = /United States.*Canada.*United Kingdom/s.test(globe?.textContent || "");
   return {
     searchInputs: search.length,
     results: Boolean(document.querySelector("[data-founder-results]")),
     cards: document.querySelectorAll("[data-founder-card]").length,
-    why: (document.querySelector("[data-why-worth]")?.textContent || "").replace(/\s+/g, " ").trim(),
+    why: whyNodes[0]?.text || "",
+    whyNodes,
     browse: Boolean(document.querySelector("#browse")),
     demoWord: /\bdemo\b/i.test(text),
     globeState: globe?.getAttribute("data-globe-state") || null,
@@ -141,6 +150,16 @@ const founderHome = await page.evaluate(() => {
     jargon: /\b(chronograph|constellation|folio|wireframe|LCP|TTFB)\b/i.test(text),
     filters: Boolean(document.querySelector("[data-founder-filters]")),
     chronograph: Boolean(document.querySelector("[data-scout-chronograph]")),
+    foundersIndexedFold: foldIndexed ? Number(foldIndexed) : null,
+    foundersIndexedStrip: stripIndexed ? Number(stripIndexed) : null,
+    countNote: Boolean(document.querySelector("[data-founder-count-note]")),
+    countryLegend,
+    samplePillQuiet: (() => {
+      const pill = document.querySelector("[data-sample-pill]");
+      if (!pill) return false;
+      const t = (pill.textContent || "").replace(/\s+/g, " ").trim();
+      return /^Sample\b/i.test(t) && !/Sample data/i.test(t);
+    })(),
   };
 });
 await page.locator("[data-campus-founders-top] button").first().click();
@@ -181,16 +200,45 @@ const campusFoundersTop = await page.evaluate(() => {
   return { metric, rows };
 });
 
+
+// Mobile: founder search/filters/cards must sit above the map.
+const mobile = await browser.newPage({ viewport: { width: 375, height: 812 } });
+await mobile.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+await mobile.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
+await mobile.waitForSelector("[data-founder-filters]", { timeout: 20000 });
+await mobile.waitForSelector('[data-globe-state="ready"]', { timeout: 45000 });
+const mobileOrder = await mobile.evaluate(() => {
+  const filters = document.querySelector("[data-founder-filters]");
+  const card = document.querySelector("[data-founder-card]");
+  const map = document.querySelector("[data-dispatch-map-stage]");
+  const ft = filters?.getBoundingClientRect().top ?? 9999;
+  const ct = card?.getBoundingClientRect().top ?? 9999;
+  const mt = map?.getBoundingClientRect().top ?? 0;
+  return { filtersAboveMap: ft < mt, cardAboveMap: ct < mt, ft, ct, mt };
+});
+await mobile.close();
+
 await page.goto(`${BASE}/companies?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
 await page.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
 await page.waitForTimeout(400);
 const chrono = await readChrono(page);
 const companiesLabels = await page.evaluate(() => {
   const text = document.body.innerText || "";
+  const landed = document.querySelector("[data-signals-landed]");
+  const months = landed ? [...landed.querySelectorAll("[data-signal-month]")].map((el) => el.getAttribute("data-signal-month")) : [];
   return {
     earUnkStub: /\bEar\b/.test(text) || /\bUnk\b/.test(text),
     jargon: /\b(chronograph|constellation|folio|wireframe|LCP|TTFB)\b/i.test(text),
     chronoPresent: Boolean(document.querySelector("[data-scout-chronograph]")),
+    signalsLanded: Boolean(landed),
+    signalMonths: months,
+    signalsAside: (landed?.querySelector("[data-signals-landed-aside]")?.textContent || "").replace(/\s+/g, " ").trim(),
+    peak: landed?.getAttribute("data-chrono-peak") || null,
+    peakMonth: landed?.getAttribute("data-chrono-peak-month") || null,
+    window: Number(landed?.getAttribute("data-chrono-window") || 0),
+    earlier: Number(landed?.getAttribute("data-chrono-earlier") || 0),
+    monthUnknown: Number(landed?.getAttribute("data-chrono-month-unknown") || 0),
+    dated: Number(landed?.getAttribute("data-chrono-dated") || 0),
   };
 });
 await openFilters(page);
@@ -286,6 +334,7 @@ const report = {
   strip,
   fold,
   founderHome,
+  mobileOrder,
   campusFilter,
   campusFoundersTop,
   ycMembershipNodes,
@@ -329,10 +378,26 @@ const report = {
       fold.founders === EXPECTED_FOUNDERS_LISTED &&
       strip.campuses === EXPECTED_CAMPUSES_ON_MAP &&
       fold.campuses === EXPECTED_CAMPUSES_ON_MAP,
-    founderSearch: founderHome.searchInputs === 1 && founderHome.results && founderHome.cards > 0 && /Why worth a look:/.test(founderHome.why),
+    founderSearch: founderHome.searchInputs === 1 && founderHome.results && founderHome.cards > 0,
+    founderWhyAddsNewInfo:
+      founderHome.whyNodes.length > 0 &&
+      founderHome.whyNodes.every((node) => {
+        if (node.blank || !node.text || node.text === "Why worth a look blank") return true;
+        const body = node.text.replace(/^Why worth a look\s*/i, "").trim();
+        // Must not dump campus / company / class year / sector already on the card.
+        return body.length > 0 && !/\bclass of\b/i.test(body) && !/\b(Fintech|Enterprise SaaS)\b/i.test(body);
+      }) &&
+      founderHome.whyNodes.some((node) => !node.blank && /Why worth a look/i.test(node.text)),
     founderCampusFilter: campusFilter.clear && /campus=/.test(campusFilter.url) && / at /.test(campusFilter.text),
     mapHasNoCompanyBrowse: founderHome.browse === false,
     noDemoWord: founderHome.demoWord === false,
+    foundersIndexedReconciled:
+      founderHome.foundersIndexedFold === EXPECTED_FOUNDERS_INDEXED &&
+      founderHome.foundersIndexedStrip === EXPECTED_FOUNDERS_INDEXED &&
+      founderHome.countNote === true,
+    noCountryLegend: founderHome.countryLegend === false,
+    samplePillQuiet: founderHome.samplePillQuiet === true,
+    mobileFoundersAboveMap: mobileOrder.filtersAboveMap && mobileOrder.cardAboveMap,
     statusBuckets:
       statusActive === 2497 && statusAcquired === 8 && statusClosed === 8 && statusActive + statusAcquired + statusClosed === TOTAL,
     moreObvious: moreLabelsBefore.some((l) => /more sectors/i.test(l)) && moreLabelsBefore.some((l) => /more cities/i.test(l)),
@@ -359,6 +424,18 @@ const report = {
         chrono.inWindow + chrono.earlier + chrono.monthUnknown === chrono.dated &&
         chrono.earlierBar === false &&
         chrono.unknownBar === false),
+    signalsLandedPlain:
+      companiesLabels.signalsLanded === true &&
+      companiesLabels.signalMonths.length > 0 &&
+      companiesLabels.signalMonths.every((id) => /^\d{4}-\d{2}$/.test(id) && !id.endsWith("-00")) &&
+      !/\bEar\b|\bUnk\b/.test(companiesLabels.signalsAside || "") &&
+      Number(companiesLabels.peak) === EXPECTED_CHRONO_PEAK &&
+      companiesLabels.peakMonth === EXPECTED_CHRONO_PEAK_MONTH &&
+      companiesLabels.window === EXPECTED_CHRONO_WINDOW &&
+      companiesLabels.earlier === EXPECTED_CHRONO_EARLIER &&
+      companiesLabels.monthUnknown === EXPECTED_CHRONO_MONTH_UNKNOWN &&
+      companiesLabels.dated === EXPECTED_CHRONO_DATED &&
+      companiesLabels.window + companiesLabels.earlier + companiesLabels.monthUnknown === companiesLabels.dated,
   },
 };
 

@@ -990,6 +990,60 @@ export function chronographCaption(detail: ChronographDetail): string {
 }
 
 /**
+ * Plain-language "when signals landed" — real calendar months only.
+ * Earlier / year-only counts stay in a caption; never as Ear/Unk bar codes.
+ */
+export function SignalsLanded({ companies }: { companies: FacetCompany[] }) {
+  const detail = useMemo(() => signalChronographDetail(companies), [companies]);
+  const bars = detail.bars;
+  if (bars.length === 0) return null;
+  const max = Math.max(1, ...bars.map((b) => b.count));
+  const peak = bars.find((b) => b.peak) ?? bars[bars.length - 1]!;
+  return (
+    <section
+      className="border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 py-3 sm:px-4"
+      data-signals-landed=""
+      data-chrono-peak={String(peak.count)}
+      data-chrono-peak-month={peak.id}
+      data-chrono-window={String(detail.inWindow)}
+      data-chrono-earlier={String(detail.earlierValid)}
+      data-chrono-month-unknown={String(detail.undatedMonth)}
+      data-chrono-dated={String(detail.dated)}
+    >
+      <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">When signals landed</p>
+      <p className="mt-1 text-[13px] text-[color:var(--fg-2,#3F465C)]">
+        Real months only · months through October 2026
+      </p>
+      <ol className="mt-3 flex h-24 items-end gap-1" data-signals-landed-bars="">
+        {bars.map((b) => (
+          <li key={b.id} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-1" data-signal-month={b.id} title={`${b.label}: ${b.count}`}>
+            <span className={`font-mono text-[10px] font-bold tabular-nums ${b.peak ? "text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-2,#3F465C)]"}`}>
+              {b.count.toLocaleString("en-US")}
+            </span>
+            <span
+              className={`w-full max-w-[1.75rem] rounded-sm ${b.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/35"}`}
+              style={{ height: `${Math.max(6, Math.round((b.count / max) * 52))}px` }}
+            />
+            <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.04em] text-[color:var(--fg-3,#5C647A)]">{b.short}</span>
+          </li>
+        ))}
+      </ol>
+      {(detail.earlierValid > 0 || detail.undatedMonth > 0) ? (
+        <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-signals-landed-aside="">
+          {[
+            detail.earlierValid > 0 ? `${detail.earlierValid.toLocaleString("en-US")} earlier` : null,
+            detail.undatedMonth > 0 ? `${detail.undatedMonth.toLocaleString("en-US")} year-only` : null,
+          ]
+            .filter(Boolean)
+            .join(" · ")}
+          {" — not on the chart"}
+        </p>
+      ) : null}
+    </section>
+  );
+}
+
+/**
  * Scout Chronograph — unifying editorial system across fold / browse / signals / company.
  * Real latestSignalAt month bars; peak month is the editorial figure (not decoration).
  */

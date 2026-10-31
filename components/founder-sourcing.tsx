@@ -26,7 +26,7 @@ export function FounderSearchBar({
 }) {
   return (
     <form
-      className="mb-3"
+      className="mb-4"
       role="search"
       onSubmit={(event) => event.preventDefault()}
       data-founder-search=""
@@ -110,17 +110,28 @@ export function FounderResults({
     [founders, query, campusId, program, sector, year, signalType],
   );
   const page = matches.slice(0, shown);
+  const unfiltered = !query.trim() && !campusId && !program && !sector && !year && !signalType;
 
   return (
-    <section className="mt-4" data-founder-results="">
+    <section className="mt-0" data-founder-results="">
       <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="text-[18px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Founders</h2>
           <p className="mt-1 text-[14px] text-[color:var(--fg-2,#3F465C)]">
             {status === "ready" ? (
               <>
-                <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{matches.length.toLocaleString("en-US")}</span>
-                {campusId === "missing" ? " with no campus on record" : campusName ? ` at ${campusName}` : campusId ? " for this campus" : " founders"}
+                <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]" data-count={unfiltered ? "founders-indexed" : undefined}>
+                  {matches.length.toLocaleString("en-US")}
+                </span>
+                {campusId === "missing"
+                  ? " with no campus on record"
+                  : campusName
+                    ? ` at ${campusName}`
+                    : campusId
+                      ? " for this campus"
+                      : unfiltered
+                        ? " in the founder index"
+                        : " founders"}
                 {campusId ? (
                   <>
                     {" · "}
@@ -191,40 +202,47 @@ export function FounderResults({
       ) : page.length === 0 ? (
         <p className="text-[14px] text-[color:var(--fg-2,#3F465C)]">No founders match. Missing fields stay missing, so try clearing a filter.</p>
       ) : (
-        <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]">
-          {page.map((founder) => (
-            <li key={founder.id} data-founder-card="">
-              <article className="px-3 py-3 sm:px-4">
-                <h3 className="text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{founder.name}</h3>
-                <p className="mt-1 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">
-                  <Field label="Campus" value={founder.campus} />
-                  {" · "}
-                  <Field label="Program" value={founder.programs.length ? founder.programs.join(", ") : null} />
-                  {" · "}
-                  <Field label="Year" value={founder.gradYear != null ? String(founder.gradYear) : null} />
-                  {" · "}
-                  <Field label="Signal" value={founder.signalTypes.length ? founder.signalTypes.map(signalTypeLabel).join(", ") : null} />
-                </p>
-                <p className="mt-0.5 text-[13px] text-[color:var(--fg-2,#3F465C)]">
-                  {founder.company ? (
-                    founder.companyId ? (
-                      <Link href={`/startup/${founder.companyId}`} className="font-medium text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--ember,#D96B1C)] hover:underline">
-                        {founder.company}
-                      </Link>
+        <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]" data-founder-card-list="">
+          {page.map((founder) => {
+            const why = whyWorthALook(founder);
+            return (
+              <li key={founder.id} data-founder-card="">
+                <article className="px-3 py-3.5 sm:px-4">
+                  <h3 className="text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{founder.name}</h3>
+                  <p className="mt-1 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">
+                    <Field label="Campus" value={founder.campus} />
+                    {" · "}
+                    {founder.company ? (
+                      founder.companyId ? (
+                        <Link href={`/startup/${founder.companyId}`} className="font-medium text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--ember,#D96B1C)] hover:underline">
+                          {founder.company}
+                        </Link>
+                      ) : (
+                        <span className="font-medium text-[color:var(--fg,#0B0E17)]">{founder.company}</span>
+                      )
                     ) : (
-                      <span className="font-medium text-[color:var(--fg,#0B0E17)]">{founder.company}</span>
-                    )
+                      <span>Company missing</span>
+                    )}
+                  </p>
+                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                    <Field label="Sector" value={founder.sector} />
+                    {" · "}
+                    <Field label="Year" value={founder.gradYear != null ? String(founder.gradYear) : null} />
+                  </p>
+                  {why ? (
+                    <p className="mt-2 border-l-2 border-[color:var(--ember,#D96B1C)]/50 pl-2.5 text-[13px] leading-5 text-[color:var(--fg,#0B0E17)]" data-why-worth="">
+                      <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Why worth a look</span>
+                      <span className="mt-0.5 block">{why}</span>
+                    </p>
                   ) : (
-                    <span>Company missing</span>
+                    <p className="sr-only" data-why-worth="" data-why-blank="1">
+                      Why worth a look blank
+                    </p>
                   )}
-                  {founder.sector ? ` · ${founder.sector}` : " · Sector missing"}
-                </p>
-                <p className="mt-1 text-[13px] leading-5 text-[color:var(--fg,#0B0E17)]" data-why-worth="">
-                  Why worth a look: {whyWorthALook(founder)}
-                </p>
-              </article>
-            </li>
-          ))}
+                </article>
+              </li>
+            );
+          })}
         </ol>
       )}
       {shown < matches.length ? (

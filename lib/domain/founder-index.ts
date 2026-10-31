@@ -37,17 +37,17 @@ export function signalTypeLabel(type: string): string {
   return SIGNAL_LABEL[type] ?? type.replace(/_/g, " ");
 }
 
-export function whyWorthALook(founder: FounderLead): string {
+/**
+ * Lead reasons not already on the card (card shows campus · company · sector · year).
+ * Blank when there is no program or signal on record — never invent, never pad.
+ */
+export function whyWorthALook(founder: FounderLead): string | null {
   const parts: string[] = [];
   if (founder.signalTypes.length) {
     parts.push(founder.signalTypes.map(signalTypeLabel).join(", "));
   }
   if (founder.programs.length) parts.push(founder.programs.join(", "));
-  if (founder.gradYear != null) parts.push(`class of ${founder.gradYear}`);
-  if (founder.sector) parts.push(founder.sector);
-  if (founder.company) parts.push(founder.company);
-  if (founder.campus) parts.push(founder.campus);
-  if (!parts.length) return "No campus, program, signal, graduation year, or company on record.";
+  if (!parts.length) return null;
   return parts.join(" · ");
 }
 

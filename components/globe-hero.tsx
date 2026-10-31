@@ -40,11 +40,13 @@ function GlobeBlock({
   companies,
   companyCount,
   foundersListed,
+  foundersIndexed = 0,
 }: {
   stats: HeroStats;
   companies: TileCompany[];
   companyCount: number;
   foundersListed: number;
+  foundersIndexed?: number;
 }) {
   const router = useRouter();
   const search = useSearchParams();
@@ -80,6 +82,7 @@ function GlobeBlock({
         companies={companies}
         companyCount={companyCount}
         foundersListed={foundersListed}
+        foundersIndexed={foundersIndexed}
         selectedId={selectedId}
         onSelect={onSelect}
         dataThrough={stats.updatedAt}
@@ -93,12 +96,14 @@ export function GlobeHero({
   companies = [],
   companyCount = 0,
   foundersListed = 0,
+  foundersIndexed = 0,
   showGlobe = true,
 }: {
   stats: HeroStats;
   companies?: TileCompany[];
   companyCount?: number;
   foundersListed?: number;
+  foundersIndexed?: number;
   showGlobe?: boolean;
 }) {
   return (
@@ -107,7 +112,8 @@ export function GlobeHero({
         <SignatureBand
           stats={stats}
           foundersListed={foundersListed}
-          globe={showGlobe ? <GlobeBlock stats={stats} companies={companies} companyCount={companyCount} foundersListed={foundersListed} /> : null}
+          foundersIndexed={foundersIndexed}
+          globe={showGlobe ? <GlobeBlock stats={stats} companies={companies} companyCount={companyCount} foundersListed={foundersListed} foundersIndexed={foundersIndexed} /> : null}
         />
       </div>
       {/* Collage teasers compete with Directory tabs on mobile browse; instrument rails carry signals instead. */}
@@ -265,10 +271,13 @@ function Collage({ stats }: { stats: HeroStats }) {
 
 function SamplePill({ cream = false }: { cream?: boolean }) {
   return (
-    <span className={`inline-flex h-6 items-center gap-0.5 rounded-full border pl-2 pr-0.5 text-[12px] leading-none ${cream ? "border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)]/80 text-[color:var(--fg-3,#5C647A)]" : "border-line bg-sunken text-fg-3"}`}>
-      Sample data
-      <Link href="/" aria-label="Close" className={`grid h-4 w-4 place-items-center rounded-full ${cream ? "text-[color:var(--fg-3,#5C647A)] hover:bg-[color:var(--bg-sunken,#F3F5F9)]" : "text-fg-3 hover:bg-raised hover:text-fg"}`}>
-        <svg width="8" height="8" viewBox="0 0 10 10" aria-hidden>
+    <span
+      data-sample-pill=""
+      className={`inline-flex h-5 items-center gap-0.5 rounded-sm px-1.5 font-mono text-[9px] uppercase tracking-[0.14em] leading-none text-[color:var(--fg-3,#5C647A)]/80 ${cream ? "" : ""}`}
+    >
+      Sample
+      <Link href="/" aria-label="Leave sample" className="grid h-3.5 w-3.5 place-items-center rounded-sm text-[color:var(--fg-3,#5C647A)]/70 hover:text-[color:var(--fg-2,#3F465C)]">
+        <svg width="7" height="7" viewBox="0 0 10 10" aria-hidden>
           <path d="M2 2 8 8M8 2 2 8" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
         </svg>
       </Link>
@@ -307,7 +316,7 @@ function HeroActions({ cream = false, compact = false }: { cream?: boolean; comp
   );
 }
 
-function SignatureBand({ stats, foundersListed = 0, globe }: { stats: HeroStats; foundersListed?: number; globe?: ReactNode }) {
+function SignatureBand({ stats, foundersListed = 0, foundersIndexed = 0, globe }: { stats: HeroStats; foundersListed?: number; foundersIndexed?: number; globe?: ReactNode }) {
   const campusesOnMap = plottedCampuses(stats).length;
   if (globe) {
     return (
@@ -317,7 +326,9 @@ function SignatureBand({ stats, foundersListed = 0, globe }: { stats: HeroStats;
           {/* Counts live in the fold masthead; keep DOM anchors for check-facet-dom. */}
           <p className="sr-only" data-sample-strip-counts>
             <span data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
-            {" founder names listed · "}
+            {" founder names on companies · "}
+            <span data-count="founders-indexed">{(foundersIndexed || 0).toLocaleString("en-US")}</span>
+            {" in the founder index · "}
             <span data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
             {" campuses on map"}
           </p>

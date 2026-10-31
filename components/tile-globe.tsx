@@ -117,6 +117,7 @@ export function TileGlobe({
   companies = [],
   companyCount = 0,
   foundersListed = 0,
+  foundersIndexed = 0,
   selectedId,
   onSelect,
   className = "",
@@ -126,7 +127,10 @@ export function TileGlobe({
   companies?: TileCompany[];
   /** Full catalog size, used until /data/directory.json arrives. */
   companyCount?: number;
+  /** Founder names attached to company cards in the directory sample. */
   foundersListed?: number;
+  /** Rows in the searchable founder index (founders.json). May exceed foundersListed. */
+  foundersIndexed?: number;
   selectedId?: string | null;
   onSelect: (id: string) => void;
   className?: string;
@@ -441,13 +445,22 @@ export function TileGlobe({
           ) : null}
           <span>
             <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
-            {" founder names"}
+            {" founder names on companies"}
           </span>
+          {foundersIndexed > 0 ? (
+            <span>
+              <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
+              {" in the founder index"}
+            </span>
+          ) : null}
           <span>
             <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
             {" campuses on the map"}
           </span>
           {dataThrough ? <span>Updated {absoluteDate(dataThrough)}</span> : null}
+        </p>
+        <p className="mt-1 max-w-3xl text-[12px] leading-5 text-[color:var(--fg-3,#5C647A)]" data-founder-count-note="">
+          On companies counts names listed on company cards. The founder index is every searchable person — some are not yet attached to a company card.
         </p>
         <p className="mt-2 text-[14px] text-[color:var(--fg,#0B0E17)]">Click a campus to see its founders.</p>
       </div>
@@ -468,11 +481,6 @@ export function TileGlobe({
               </div>
             </div>
           ) : null}
-          <div className="pointer-events-none absolute left-3 top-3 z-10 flex flex-wrap gap-x-3 gap-y-1 rounded-sm bg-[color:var(--bg,#FFFFFF)]/90 px-2.5 py-1.5 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">
-            <span className="inline-flex items-center gap-1"><span className="inline-block h-2 w-2 rounded-full bg-[#3b6fd8]" aria-hidden />United States</span>
-            <span className="inline-flex items-center gap-1"><span className="inline-block h-2 w-2 rounded-full bg-[#e23b4a]" aria-hidden />Canada</span>
-            <span className="inline-flex items-center gap-1"><span className="inline-block h-2 w-2 rounded-full bg-[#2f9e6b]" aria-hidden />United Kingdom</span>
-          </div>
           <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 -translate-x-1/2" data-map-credit>
             <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
               <MapCredit />

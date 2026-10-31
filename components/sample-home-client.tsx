@@ -145,11 +145,22 @@ export function SampleHomeClient(props: {
     <div className="sample-paper" data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
       {place === "map" ? (
-        <div className="px-4 pb-8 pt-3 sm:px-5">
+        <div className="px-4 pb-8 pt-3 sm:px-5" data-fold-hierarchy="">
+          {/* 1. Search always first */}
           <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
-          <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1.12fr)_minmax(340px,0.88fr)] lg:gap-6">
-            <GlobeHero stats={stats} showGlobe={feed !== "world"} companies={companies} companyCount={cardCount} foundersListed={foundersListed} />
-            <div className="lg:sticky lg:top-3 lg:max-h-[calc(100dvh-24px)] lg:overflow-y-auto">
+          {/* Mobile: founders (filters + cards) above map. Desktop: globe then results — clear vertical hierarchy. */}
+          <div className="flex flex-col gap-5 lg:gap-6" data-fold-stack="">
+            <div className="order-2 lg:order-1" data-fold-globe-col="">
+              <GlobeHero
+                stats={stats}
+                showGlobe={feed !== "world"}
+                companies={companies}
+                companyCount={cardCount}
+                foundersListed={foundersListed}
+                foundersIndexed={founders.length || undefined}
+              />
+            </div>
+            <div className="order-1 lg:order-2" data-fold-founders-col="">
               <FounderResults
                 founders={founders}
                 status={founderStatus}

@@ -58,23 +58,23 @@ export function directoryRank(card: RankCard): { tier: number; score: number } {
   return { tier, score };
 }
 
-/** One line naming the stored fields that placed the card. */
-export function whyItsHere(card: RankCard): string {
+/**
+ * Lead reasons for rank — signal weight + programs + stage status.
+ * Omits school and founder counts already shown on the card identity/facts lines.
+ * Blank when there is nothing beyond "no signals".
+ */
+export function whyItsHere(card: RankCard): string | null {
   const parts: string[] = [];
   const signals = Math.max(0, card.signals);
   const kind = card.signalLabel ? card.signalLabel.toLowerCase() : "";
   if (signals > 1) parts.push(kind ? `${signals} signals, latest ${kind}` : `${signals} signals`);
   else if (signals === 1) parts.push(kind ? `1 ${kind} signal` : "1 signal");
   else if (kind) parts.push(`${kind} on record`);
-  else parts.push("no signals");
-  const founders = card.founders.filter((name) => name.trim()).length;
-  if (founders > 0) parts.push(founders === 1 ? "1 founder" : `${founders} founders`);
   const programs = [...new Set(card.programs.map(programLabel).filter(Boolean))];
   if (programs.length === 1) parts.push(programs[0]!);
   else if (programs.length > 1) parts.push(`${programs[0]} +${programs.length - 1}`);
   if (card.stage) parts.push(card.stage);
   if (card.operatingStatus === "acquired") parts.push("acquired");
-  if (card.school?.trim()) parts.push(card.school.trim());
-  else parts.push("no campus");
+  if (!parts.length) return null;
   return parts.join(" · ");
 }

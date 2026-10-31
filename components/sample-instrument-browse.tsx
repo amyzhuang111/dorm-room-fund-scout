@@ -23,6 +23,7 @@ import {
   isYcProgramLabel,
   YC_MEMBERSHIP_EXPECTED,
   type FacetState,
+  SignalsLanded,
 } from "./sample-instrument";
 
 type Feed = "directory" | "leaderboard";
@@ -377,11 +378,21 @@ export function SampleInstrumentBrowse({
                 : null}
             </div>
           </div>
+          {feed === "directory" && pages <= 1 ? (
+            <div className="mt-4 hidden lg:block" data-signals-landed-desk="">
+              <SignalsLanded companies={companiesLive} />
+            </div>
+          ) : null}
         </div>
 
         {/* Scout Chronograph — unifying system. Browse-more uses folio (originality priority);
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
         <div className="mb-5 space-y-6 lg:hidden" data-mobile-browse-compose="">
+          {feed === "directory" && pages <= 1 ? (
+            <div data-signals-landed-mobile="">
+              <SignalsLanded companies={companiesLive} />
+            </div>
+          ) : null}
           {/* Leaderboard podium mounts inside data-ledger-stage (shot frames that). Browse-more keeps a folio insight, not a shared ticket. */}
           {feed === "directory" && pages > 1 ? (
             <div
@@ -742,6 +753,7 @@ function LedgerRow({
 }) {
   const subtitle = directoryCardSubtitle(card);
   const meta = signalMeta(card);
+  const why = whyItsHere(card);
   return (
     <Link
       href={`/startup/${card.id}`}
@@ -765,7 +777,7 @@ function LedgerRow({
         <p
           className={
             ranked
-              ? "line-clamp-2 break-words text-[16px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[17px] sm:leading-5 sm:[overflow-wrap:anywhere]"
+              ? "line-clamp-2 break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
               : "truncate text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 group-hover:text-[color:var(--ember,#D96B1C)] group-hover:underline group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
           }
         >
@@ -776,9 +788,14 @@ function LedgerRow({
             {subtitle}
           </p>
         ) : null}
-        <p className="mt-1 text-[12px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-why-here="">
-          Why it&apos;s here: {whyItsHere(card)}
-        </p>
+        {why ? (
+          <p className="mt-1.5 border-l-2 border-[color:var(--ember,#D96B1C)]/45 pl-2 text-[12px] leading-5 text-[color:var(--fg,#0B0E17)]" data-why-here="">
+            <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Why it&apos;s here</span>
+            <span className="mt-0.5 block">{why}</span>
+          </p>
+        ) : (
+          <p className="sr-only" data-why-here="" data-why-blank="1">Why it&apos;s here blank</p>
+        )}
         {(card.foundedYear != null || card.primaryProgram || (card.founders?.length ?? 0) > 0) ? (
           <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "line-clamp-2" : "truncate"}`} data-card-facts="">
             {card.foundedYear != null ? (
