@@ -265,36 +265,26 @@ export function SampleInstrumentBrowse({
           {/* Ember beat for open Contents · trails 353/01/138 hero pages without twinning them */}
           {/* Contents index is the desk-filters hero · big split + FacetRail; dial lives on fold only. */}
           <div
-            className="relative overflow-hidden border border-[color:var(--ember,#D96B1C)]/25 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--ember,#D96B1C)]"
+            className="border-b border-[color:var(--line,#E1E5EF)] pb-2"
             data-index-signal-beat=""
             data-contents-hero=""
             data-filters-index-hero=""
           >
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
               {feed === "leaderboard" ? "Signals" : "Companies"}
             </p>
-            {feed === "leaderboard" ? (
-              <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
-                {" on the signal desk · filters below"}
-              </p>
-            ) : (
-              <>
-                <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
-                  {" in this list · filters below"}
-                </p>
-                <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                  {" with a signal · "}
-                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
-                  {" with no signal"}
-                </p>
-              </>
-            )}
+            <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
+              {feed === "leaderboard" ? " on the signal desk" : " in this list"}
+              {" · "}
+              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
+              {" with a signal · "}
+              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
+              {" quiet"}
+            </p>
           </div>
-          {/* FacetRail is the browse-filters hero · atlas lives on sector-folio (browse-1440), not this rail. */}
-          <div className="h-[min(42vh,400px)] pt-1" data-contents-facet-map="">
+          {/* FacetRail is the filters hero · Contents is a quiet caption only. */}
+          <div className="h-[min(48vh,460px)] pt-1" data-contents-facet-map="">
             <FacetRail
               companies={companiesLive}
               campuses={campuses}
@@ -679,21 +669,19 @@ export function SampleInstrumentBrowse({
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
           <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
           <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col overflow-hidden rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
-            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3 before:absolute before:inset-x-0 before:top-0 before:h-[2px] before:bg-[color:var(--ember,#D96B1C)]" data-mobile-contents-hero="" data-filters-index-hero="">
-              <div className="flex items-start justify-between gap-3">
+            <div className="relative border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5" data-mobile-contents-hero="" data-filters-index-hero="">
+              <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0 flex-1">
-                  <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--ember,#D96B1C)]">
-                    Companies
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
+                    Filters
                   </p>
-                  <p className="mt-2 font-mono text-[13px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <p className="mt-1 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
-                    {" in this list · filters below"}
-                  </p>
-                  <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                    {" in this list · "}
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
                     {" with a signal · "}
                     <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
-                    {" with no signal"}
+                    {" quiet"}
                   </p>
                 </div>
                 <button
@@ -704,17 +692,6 @@ export function SampleInstrumentBrowse({
                   Done
                 </button>
               </div>
-<p className="mt-2.5 flex flex-wrap gap-x-2 gap-y-1 font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">
-                <span className="text-[color:var(--cobalt,#2F4FD8)]">Status</span>
-                <span aria-hidden>·</span>
-                <span>Year</span>
-                <span aria-hidden>·</span>
-                <span>Sector</span>
-                <span aria-hidden>·</span>
-                <span>Campus</span>
-                <span aria-hidden>·</span>
-                <span>facet map</span>
-              </p>
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain" data-mobile-facet-map="">
               <div className="h-[min(58dvh,480px)]">

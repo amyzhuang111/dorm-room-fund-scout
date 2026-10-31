@@ -502,7 +502,7 @@ export function TileGlobe({
         </div>
       </section>
 
-      <section className="mt-4 max-w-sm" data-campus-metric="founders">
+      <section className="mt-4 hidden max-w-sm lg:block" data-campus-metric="founders">
           <h2 className="mb-2 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Top campuses</h2>
           <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
             {topCampuses.map((campus, i) => {

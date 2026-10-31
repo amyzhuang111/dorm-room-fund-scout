@@ -254,76 +254,51 @@ export function SampleCompanyShell({
           </Link>
           <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
         </div>
-        <div className="mb-6 mt-2 sm:hidden" data-dossier-timeline="" data-mobile-chrono-identity="" data-company-mobile-hero="">
+        <div className="mb-5 mt-1 sm:hidden" data-dossier-timeline="" data-mobile-chrono-identity="" data-company-mobile-hero="">
           <div
-            className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]"
+            className="border-b border-[color:var(--line,#E1E5EF)] pb-3"
             data-dossier-spread-mobile=""
           >
-            <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3 pl-4">
-              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Dossier timeline</p>
-              <p className="mt-0.5 truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                {dossier?.name ?? "Company"}
-                {dossier?.campus ? ` · ${campusShort}` : ""}
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-0 border-b border-[color:var(--line,#E1E5EF)]">
-              <div className="border-r border-[color:var(--line,#E1E5EF)] px-3.5 py-4 pl-4">
-                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founded</p>
-                <p className="mt-2 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                  {dossier?.year != null ? dossier.year : "-"}
-                </p>
-              </div>
-              <div className="px-3.5 py-4">
-                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">On campus wire</p>
-                <p className="mt-2 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
-                  {wireCount.toLocaleString("en-US")}
-                </p>
-              </div>
-            </div>
-            {(dossier?.founders?.length ?? 0) > 0 ? (
-              <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3 pl-4">
-                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">
-                  Founders on record · {(dossier!.founders!.length).toLocaleString("en-US")}
-                </p>
-                <ul className="mt-2 space-y-1.5">
-                  {dossier!.founders!.slice(0, 5).map((name) => (
-                    <li key={name} className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--ember,#D96B1C)]" aria-hidden />
-                      <span className="truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{name}</span>
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Dossier</p>
+            <p className="mt-1 truncate text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+              {dossier?.name ?? "Company"}
+              {dossier?.campus ? ` · ${campusShort}` : ""}
+            </p>
+            <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              {dossier?.year != null ? (
+                <>
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.year}</span>
+                  {" founded · "}
+                </>
+              ) : null}
+              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
+              {" on campus wire"}
+              {(dossier?.founders?.length ?? 0) > 0 ? (
+                <>
+                  {" · "}
+                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{dossier!.founders!.length.toLocaleString("en-US")}</span>
+                  {" founders"}
+                </>
+              ) : null}
+            </p>
+            <ol className="mt-3 space-y-2" data-dossier-signal-timeline="">
+              {wireCompanies
+                .filter((c) => (c.latestSignalAt ?? "").length >= 4)
+                .slice()
+                .sort((a, b) => (b.latestSignalAt ?? "").localeCompare(a.latestSignalAt ?? ""))
+                .slice(0, 3)
+                .map((c) => {
+                  const at = (c.latestSignalAt ?? "").replace(/-00/g, "");
+                  return (
+                    <li key={c.id} className="flex items-baseline justify-between gap-2">
+                      <span className="min-w-0 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{c.name}</span>
+                      <span className="shrink-0 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{at}</span>
+                      </span>
                     </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
-            <div className="px-3.5 py-4 pl-4">
-              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Signal timeline · campus wire</p>
-              <ol className="relative mt-4 space-y-0 before:absolute before:bottom-1 before:left-[5px] before:top-1 before:w-px before:bg-[color:var(--cobalt,#2F4FD8)]/35">
-                {wireCompanies
-                  .filter((c) => (c.latestSignalAt ?? "").length >= 4)
-                  .slice()
-                  .sort((a, b) => (b.latestSignalAt ?? "").localeCompare(a.latestSignalAt ?? ""))
-                  .slice(0, 4)
-                  .map((c) => {
-                    const at = (c.latestSignalAt ?? "").replace(/-00/g, "");
-                    return (
-                      <li key={c.id} className="relative flex gap-3 pb-3 pl-4 last:pb-0">
-                        <span className="absolute left-0 top-1.5 h-2.5 w-2.5 rounded-full border-2 border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)]" aria-hidden />
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{c.name}</p>
-                          <p className="mt-0.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                            <span className="font-bold text-[color:var(--ember,#D96B1C)]">{at}</span>
-                            {c.signalLabel ? ` · ${c.signalLabel}` : ""}
-                            {c.signals > 0 ? ` · ${c.signals.toLocaleString("en-US")} signals` : ""}
-                          </p>
-                        </div>
-                      </li>
-                    );
-                  })}
-              </ol>
-              <p className="mt-2 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
-                {campusPeers ? `${campusShort} wire · includes this company` : "Campus/sector wire · real dates only"}
-              </p>
-            </div>
+                  );
+                })}
+            </ol>
           </div>
         </div>
 

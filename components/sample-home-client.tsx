@@ -12,11 +12,15 @@ import type { HeroStats } from "@/lib/domain/hero-stats";
 import type { FounderLead } from "@/lib/domain/founder-index";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import type { Feed } from "@/components/sample-home";
-import { FoldPeakShare } from "@/components/sample-instrument";
 
 const SampleInstrumentBrowse = dynamic(
   () => import("@/components/sample-instrument-browse").then((mod) => ({ default: mod.SampleInstrumentBrowse })),
   { ssr: true },
+);
+
+const FoldPeakShare = dynamic(
+  () => import("@/components/fold-peak-share").then((mod) => ({ default: mod.FoldPeakShare })),
+  { ssr: false },
 );
 
 type CampusOpt = { id: string; name: string; country: string; founders: number };
