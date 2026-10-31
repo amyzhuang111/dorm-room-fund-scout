@@ -409,6 +409,7 @@ function FacetRow({
       </span>
       {count != null ? (
         <span className={`shrink-0 font-mono text-[12px] tabular-nums ${active || emphasis ? "font-bold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-3,#5C647A)]"}`}>
+          {" · "}
           {count.toLocaleString("en-US")}
         </span>
       ) : null}
