@@ -3,10 +3,13 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FounderResults, FounderSearchBar } from "@/components/founder-sourcing";
 import { GlobeHero } from "@/components/globe-hero";
 import { SampleTheme } from "@/components/sample-theme";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
+import type { FounderLead } from "@/lib/domain/founder-index";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import type { Feed } from "@/components/sample-home";
 
@@ -103,7 +106,13 @@ export function SampleHomeClient(props: {
   } = props;
 
   const [companies, setCompanies] = useState<FacetCompany[]>([]);
+  const [founders, setFounders] = useState<FounderLead[]>([]);
+  const [founderStatus, setFounderStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [founderQuery, setFounderQuery] = useState("");
   const [ready, setReady] = useState(false);
+  const search = useSearchParams();
+  const router = useRouter();
+  const mapCampusId = search.get("campus");
   const listed = feed === "directory" || feed === "leaderboard";
 
   useEffect(() => {
@@ -113,6 +122,20 @@ export function SampleHomeClient(props: {
       setCompanies(cards);
       setReady(true);
     });
+    void fetch("/data/founders.json")
+      .then(async (res) => {
+        if (!res.ok) throw new Error(String(res.status));
+        const data = (await res.json()) as FounderLead[];
+        return Array.isArray(data) ? data : [];
+      })
+      .then((rows) => {
+        if (dead) return;
+        setFounders(rows);
+        setFounderStatus("ready");
+      })
+      .catch(() => {
+        if (!dead) setFounderStatus("error");
+      });
     return () => {
       dead = true;
     };
@@ -122,7 +145,33 @@ export function SampleHomeClient(props: {
     <div className="sample-paper" data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
       {place === "map" ? (
-        <GlobeHero stats={stats} showGlobe={feed !== "world"} companies={companies} companyCount={cardCount} foundersListed={foundersListed} />
+        <div className="px-4 pb-8 pt-3 sm:px-5">
+          <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
+          <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1.12fr)_minmax(340px,0.88fr)] lg:gap-6">
+            <GlobeHero stats={stats} showGlobe={feed !== "world"} companies={companies} companyCount={cardCount} foundersListed={foundersListed} />
+            <div className="lg:sticky lg:top-3 lg:max-h-[calc(100dvh-24px)] lg:overflow-y-auto">
+              <FounderResults
+                founders={founders}
+                status={founderStatus}
+                query={founderQuery}
+                campusId={mapCampusId}
+                campusName={mapCampusId && mapCampusId !== "missing" ? campuses.find((campus) => campus.id === mapCampusId)?.name ?? null : null}
+                onClearCampus={() => {
+                  const next = new URLSearchParams(search.toString());
+                  next.delete("campus");
+                  next.set("sample", "1");
+                  router.push(`/?${next.toString()}`);
+                }}
+                onMissingCampus={() => {
+                  const next = new URLSearchParams(search.toString());
+                  next.set("sample", "1");
+                  next.set("campus", "missing");
+                  router.push(`/?${next.toString()}`);
+                }}
+              />
+            </div>
+          </div>
+        </div>
       ) : null}
       {place === "explore" ? (
       <section id="browse" className="scroll-mt-14 border-t border-line px-3 pb-10 pt-2 sm:px-5">

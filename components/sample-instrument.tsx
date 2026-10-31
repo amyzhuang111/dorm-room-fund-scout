@@ -1447,7 +1447,7 @@ export function IntelligenceBoards({
   const rowGap = "divide-y divide-[color:var(--line,#E1E5EF)]";
   const showSector = !hideSector && surface !== "company" && surface !== "signals";
   const showFounders = surface !== "signals";
-  const showPrograms = surface !== "browse" && surface !== "company";
+  const showPrograms = surface !== "company";
   const programsBoard =
     showPrograms && programs.length > 0 ? (
       <Board title="Programs" unit="companies">
@@ -1536,7 +1536,7 @@ export function IntelligenceBoards({
   // Per-surface order breaks the stamped WIRE template across Explore / Signals / company.
   let modules: ReactNode[] = [];
   if (surface === "browse") {
-    modules = [sectorBoard, foundersBoard, recentBoard].filter(Boolean);
+    modules = [programsBoard, sectorBoard, foundersBoard, recentBoard].filter(Boolean);
   } else if (surface === "signals") {
     modules = [programsBoard, recentBoard].filter(Boolean);
   } else if (surface === "company") {

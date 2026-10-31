@@ -7,16 +7,7 @@ import { absoluteDate } from "@/lib/domain/relative-time";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import { sampleSurfaceCounts, type FacetCompany } from "@/lib/domain/sample-facets";
 import { MapCredit } from "./map-credit";
-import {
-  applyFacets,
-  emptyFacets,
-  FacetRail,
-  IntelligenceBoards,
-  MobileFilterDock,
-  campusFoundersTop,
-  ScoutChronograph,
-  type FacetState,
-} from "./sample-instrument";
+import { campusFoundersTop } from "./sample-instrument";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 export interface TileCampus {
@@ -153,26 +144,11 @@ export function TileGlobe({
     loaded: () => boolean;
   } | null>(null);
   const frameRef = useRef<(() => void) | null>(null);
-  const [facets, setFacets] = useState<FacetState>(emptyFacets);
-  const [filtersOpen, setFiltersOpen] = useState(false);
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [hover, setHover] = useState<{ name: string; founders: number; signals: number; x: number; y: number } | null>(null);
   const [ready, setReady] = useState(false);
   const [painted, setPainted] = useState(false);
   const [failed, setFailed] = useState(false);
 
-  const country = facets.country;
-  const shown = useMemo(
-    () => (country ? campuses.filter((campus) => campus.country === country) : campuses),
-    [campuses, country],
-  );
-  const countryIds = useMemo(() => new Set(shown.map((campus) => campus.id)), [shown]);
-  const filteredCompanies = useMemo(() => {
-    const scope = country ? countryIds : undefined;
-    const base = applyFacets(companies, facets, scope);
-    if (selectedId) return base.filter((company) => company.schoolId === selectedId);
-    return base;
-  }, [companies, facets, country, countryIds, selectedId]);
   useEffect(() => {
     const node = mapNode.current;
     if (!node) return;
@@ -203,7 +179,7 @@ export function TileGlobe({
     const fit = () => {
       const wide = window.innerWidth >= 1024;
       const target = Math.round(window.innerHeight * (wide ? 0.58 : 0.48));
-      setStageHeight(wide ? Math.max(480, Math.min(640, target)) : Math.max(320, Math.min(420, target)));
+      setStageHeight(wide ? Math.max(480, Math.min(640, target)) : Math.max(220, Math.min(280, target)));
     };
     fit();
     window.addEventListener("resize", fit);
@@ -331,13 +307,14 @@ export function TileGlobe({
         let revealed = false;
         const reveal = () => {
           if (dead || revealed || !map) return;
-          if (!map.loaded()) return;
+          // The style is already the orange/cream globe. Waiting on map.loaded()
+          // leaves the skeleton up when a tile request never settles.
           revealed = true;
           frame();
           setPainted(true);
           spin();
         };
-        if (map.loaded()) reveal();
+        map.on("render", reveal);
         map.on("idle", reveal);
       });
 
@@ -418,82 +395,16 @@ export function TileGlobe({
 
   useEffect(() => {
     if (!ready || !mapRef.current) return;
-    const countryFilter = country ? ["==", ["get", "country"], country] : null;
-    mapRef.current.setFilter("campus-dots", countryFilter);
-    mapRef.current.setFilter(
-      "campus-halo",
-      country
-        ? ["all", ["==", ["get", "top"], 1], ["==", ["get", "country"], country]]
-        : ["==", ["get", "top"], 1],
-    );
-    const selected = selectedId
-      ? country
-        ? ["all", ["==", ["get", "id"], selectedId], ["==", ["get", "country"], country]]
-        : ["==", ["get", "id"], selectedId]
-      : ["==", ["get", "id"], ""];
+    const selected = selectedId ? ["==", ["get", "id"], selectedId] : ["==", ["get", "id"], ""];
     mapRef.current.setFilter("campus-selected", selected);
-  }, [country, ready, selectedId]);
-
+  }, [ready, selectedId]);
 
   function focus(campus: TileCampus) {
     mapRef.current?.flyTo({ center: [campus.lon, campus.lat], zoom: 3.1, essential: true });
     onSelect(campus.id);
-    setFacets((prev) => ({ ...prev, campus: campus.id }));
-  }
-
-  function onFacetChange(next: FacetState) {
-    setFacets(next);
-    if (next.campus && next.campus !== facets.campus) {
-      const campus = campuses.find((row) => row.id === next.campus);
-      if (campus) {
-        mapRef.current?.flyTo({ center: [campus.lon, campus.lat], zoom: 3.1, essential: true });
-        onSelect(campus.id);
-      }
-    }
   }
 
   const catalogReady = companies.length > 0;
-  const liveCount = catalogReady ? filteredCompanies.length : companyCount;
-  const signaledLive = useMemo(
-    () => filteredCompanies.filter((c) => (c.signals ?? 0) > 0).length,
-    [filteredCompanies],
-  );
-  const quietLive = liveCount - signaledLive;
-  const facetsActive = useMemo(() => {
-    const f = facets;
-    return Boolean(
-      f.query.trim() ||
-        f.sector ||
-        f.sectorMissing ||
-        f.kind ||
-        f.stage ||
-        f.campus ||
-        f.country ||
-        f.recency ||
-        f.foundedYear != null ||
-        f.yearMissing ||
-        f.status ||
-        f.flag ||
-        f.hqRegion,
-    );
-  }, [facets]);
-  const filterSliceLabel = useMemo(() => {
-    if (facets.flag === "new") return "Founded in 2026";
-    if (facets.flag === "signaled") return "Active this month";
-    if (facets.flag === "funded") return "Raised funding";
-    if (facets.flag === "founders") return "Has named founders";
-    if (facets.sector) return facets.sector;
-    if (facets.status) return facets.status;
-    if (facets.campus) {
-      const campus = campuses.find((row) => row.id === facets.campus);
-      return campus ? campus.name.replace(/^University of /, "").replace(/ University$/, "") : "Campus";
-    }
-    if (facets.foundedYear != null) return `Founded ${facets.foundedYear}`;
-    if (facets.hqRegion) return facets.hqRegion;
-    if (facets.query.trim()) return `Search “${facets.query.trim()}”`;
-    return "Filtered slice";
-  }, [facets, campuses]);
-
   const signaledUniverse = useMemo(() => companies.filter((c) => c.signals > 0).length, [companies]);
   const quietUniverse = companies.length - signaledUniverse;
 
@@ -533,59 +444,9 @@ export function TileGlobe({
             <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
             {" campuses on the map"}
           </span>
-          {facetsActive ? <span>Showing {liveCount.toLocaleString("en-US")}</span> : null}
           {dataThrough ? <span>Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
-        <div className="flex shrink-0 flex-wrap gap-1.5">
-          <button
-            type="button"
-            onClick={() => setFiltersOpen((v) => !v)}
-            className="hidden h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)] lg:inline-flex"
-          >
-            {filtersOpen ? "Hide filters" : "Filters"}
-          </button>
-          <a
-            href="/ask"
-            className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
-          >
-            Scout ask
-          </a>
-        </div>
-      </div>
-
-      {filtersOpen ? (
-        <div className="mb-4" data-fold-filters-index="">
-          {facetsActive ? (
-            <p className="mb-2 text-[14px] text-[color:var(--fg,#0B0E17)]">
-              Showing {liveCount.toLocaleString("en-US")} companies
-              {filterSliceLabel ? ` · ${filterSliceLabel}` : ""}
-            </p>
-          ) : (
-            <p className="mb-2 text-[14px] text-[color:var(--fg-2,#3F465C)]">Filter the companies on the map.</p>
-          )}
-          <FacetRail
-            companies={companies}
-            campuses={campuses}
-            facets={facets}
-            onChange={onFacetChange}
-            indexCount={liveCount}
-            caption="Filters"
-            onCampusFocus={(id) => {
-              const campus = campuses.find((row) => row.id === id);
-              if (campus) focus(campus);
-            }}
-            footer={<p>{markerSizeLegend()}</p>}
-          />
-        </div>
-      ) : null}
-
-      <div className="mb-4" data-fold-chronograph="">
-        <ScoutChronograph
-          companies={filteredCompanies}
-          variant="hero"
-          kicker="Signals by month"
-          reading="Each bar is companies whose latest signal falls in that month. The number above is that tallest bar."
-        />
+        <p className="mt-2 text-[14px] text-[color:var(--fg,#0B0E17)]">Click a campus to see its founders.</p>
       </div>
 
       <section className="mb-4" data-fold-desk-map="" aria-label="Map">
@@ -630,8 +491,7 @@ export function TileGlobe({
         </div>
       </section>
 
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(220px,280px)_minmax(0,1fr)]">
-        <section data-campus-metric="founders">
+      <section className="mt-4 max-w-sm" data-campus-metric="founders">
           <h2 className="mb-2 font-mono text-[12px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Top campuses</h2>
           <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
             {topCampuses.map((campus, i) => {
@@ -657,51 +517,6 @@ export function TileGlobe({
           </ol>
           <p className="mt-2 text-[12px] leading-5 text-[color:var(--fg-3,#5C647A)]">{markerSizeLegend()}</p>
         </section>
-        <IntelligenceBoards companies={filteredCompanies} surface="fold" hideLatest />
-      </div>
-
-      <MobileFilterDock
-        onOpen={() => setMobileFiltersOpen(true)}
-        count={liveCount}
-        caption="Filter companies"
-        tone="ember"
-        kicker="Filters"
-        observe="[data-fold-mobile-root]"
-      />
-      {mobileFiltersOpen ? (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Filters">
-          <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
-          <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)]">
-            <div className="flex items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3 py-3">
-              <div className="min-w-0">
-                <p className="text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Filters</p>
-                <p className="mt-1 text-[13px] text-[color:var(--fg-2,#3F465C)]">
-                  {liveCount.toLocaleString("en-US")} companies
-                  {" · "}
-                  {signaledLive.toLocaleString("en-US")} with a signal
-                  {" · "}
-                  {quietLive.toLocaleString("en-US")} with no signal
-                </p>
-              </div>
-              <button type="button" onClick={() => setMobileFiltersOpen(false)} className="inline-flex h-9 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white">Done</button>
-            </div>
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-              <FacetRail
-                companies={companies}
-                campuses={campuses}
-                facets={facets}
-                onChange={onFacetChange}
-                dense
-                onCampusFocus={(id) => {
-                  const campus = campuses.find((row) => row.id === id);
-                  if (campus) focus(campus);
-                }}
-                footer={<p>{markerSizeLegend()}</p>}
-              />
-            </div>
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }

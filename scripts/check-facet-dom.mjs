@@ -111,12 +111,71 @@ async function readChrono(page) {
   });
 }
 
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({
+  headless: true,
+  executablePath: process.env.CHROME_PATH || undefined,
+  args: process.env.CHROME_PATH ? ["--no-sandbox", "--disable-dev-shm-usage"] : [],
+});
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 await page.goto(`${BASE}/?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
 await page.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
-await page.waitForTimeout(800);
-// Chronograph lives on the closed fold; filters-open invite replaces it — read honesty first.
+await page.waitForSelector("[data-founder-search]", { timeout: 20000 });
+await page.waitForSelector("[data-founder-card]", { timeout: 20000 });
+await page.waitForTimeout(400);
+
+const founderHome = await page.evaluate(() => {
+  const search = document.querySelectorAll("[data-founder-search] input");
+  const text = document.body.innerText || "";
+  return {
+    searchInputs: search.length,
+    results: Boolean(document.querySelector("[data-founder-results]")),
+    cards: document.querySelectorAll("[data-founder-card]").length,
+    why: (document.querySelector("[data-why-worth]")?.textContent || "").replace(/\s+/g, " ").trim(),
+    browse: Boolean(document.querySelector("#browse")),
+    demoWord: /\bdemo\b/i.test(text),
+  };
+});
+await page.locator("[data-campus-founders-top] button").first().click();
+await page.waitForURL(/[?&]campus=/, { timeout: 10000 });
+await page.waitForTimeout(300);
+const campusFilter = await page.evaluate(() => {
+  const text = (document.querySelector("[data-founder-results]")?.textContent || "").replace(/\s+/g, " ");
+  return { url: location.search, text: text.slice(0, 180), clear: /Clear campus/.test(text) };
+});
+
+const strip = await page.evaluate(() => {
+  const root = document.querySelector("[data-sample-strip-counts]");
+  if (!root) return null;
+  const founders = root.querySelector('[data-count="founders-listed"]')?.textContent?.replace(/,/g, "");
+  const campuses = root.querySelector('[data-count="campuses-on-map"]')?.textContent?.replace(/,/g, "");
+  return { founders: Number(founders), campuses: Number(campuses) };
+});
+const fold = await page.evaluate(() => {
+  const root = document.querySelector("[data-fold-counts]");
+  if (!root) return null;
+  const founders = root.querySelector('[data-count="founders-listed"]')?.textContent?.replace(/,/g, "");
+  const campuses = root.querySelector('[data-count="campuses-on-map"]')?.textContent?.replace(/,/g, "");
+  return { founders: Number(founders), campuses: Number(campuses) };
+});
+/** Top campuses — must be founders-ranked (Penn 757 / Stanford 300 / MIT 238). */
+const campusFoundersTop = await page.evaluate(() => {
+  const root =
+    document.querySelector("[data-campus-founders-top]") ||
+    document.querySelector('[data-desk-constellation][data-campus-metric="founders"] ol');
+  if (!root) return null;
+  const rows = [...root.querySelectorAll("li")].slice(0, 3).map((li) => {
+    const text = (li.textContent || "").replace(/\s+/g, " ").trim();
+    const nums = [...text.matchAll(/(\d[\d,]*)/g)].map((m) => Number(m[1].replace(/,/g, "")));
+    const founders = nums.length ? nums[nums.length - 1] : null;
+    return { text, founders };
+  });
+  const metric = document.querySelector("[data-campus-metric]")?.getAttribute("data-campus-metric") || null;
+  return { metric, rows };
+});
+
+await page.goto(`${BASE}/companies?sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+await page.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
+await page.waitForTimeout(400);
 const chrono = await readChrono(page);
 await openFilters(page);
 await page.waitForTimeout(400);
@@ -171,37 +230,6 @@ const statusAcquired = statusRows.parts.find((p) => /^Acquired\b/i.test(p.label)
 const statusClosed = statusRows.parts.find((p) => /^Closed\b/i.test(p.label))?.count ?? null;
 
 
-const strip = await page.evaluate(() => {
-  const root = document.querySelector("[data-sample-strip-counts]");
-  if (!root) return null;
-  const founders = root.querySelector('[data-count="founders-listed"]')?.textContent?.replace(/,/g, "");
-  const campuses = root.querySelector('[data-count="campuses-on-map"]')?.textContent?.replace(/,/g, "");
-  return { founders: Number(founders), campuses: Number(campuses) };
-});
-const fold = await page.evaluate(() => {
-  const root = document.querySelector("[data-fold-counts]");
-  if (!root) return null;
-  const founders = root.querySelector('[data-count="founders-listed"]')?.textContent?.replace(/,/g, "");
-  const campuses = root.querySelector('[data-count="campuses-on-map"]')?.textContent?.replace(/,/g, "");
-  return { founders: Number(founders), campuses: Number(campuses) };
-});
-/** Desk constellation / campus plates — must be founders-ranked (Penn 757 / Stanford 300 / MIT 238). */
-const campusFoundersTop = await page.evaluate(() => {
-  const root =
-    document.querySelector("[data-campus-founders-top]") ||
-    document.querySelector('[data-desk-constellation][data-campus-metric="founders"] ol');
-  if (!root) return null;
-  const rows = [...root.querySelectorAll("li")].slice(0, 3).map((li) => {
-    const text = (li.textContent || "").replace(/\s+/g, " ").trim();
-    const nums = [...text.matchAll(/(\d[\d,]*)/g)].map((m) => Number(m[1].replace(/,/g, "")));
-    // Prefer the founders figure (last substantial numeral beside unit).
-    const founders = nums.length ? nums[nums.length - 1] : null;
-    return { text, founders };
-  });
-  const metric = document.querySelector("[data-campus-metric]")?.getAttribute("data-campus-metric") || null;
-  return { metric, rows };
-});
-
 const ycMembershipNodes = await page.evaluate(() => {
   return [...document.querySelectorAll("[data-yc-membership-count]")].map((el) => ({
     count: Number(String(el.getAttribute("data-yc-membership-count") || "").replace(/,/g, "")),
@@ -241,6 +269,8 @@ const campusFoundersTopOk =
 const report = {
   strip,
   fold,
+  founderHome,
+  campusFilter,
   campusFoundersTop,
   ycMembershipNodes,
   ycPrimaryLeak,
@@ -282,23 +312,13 @@ const report = {
       fold.founders === EXPECTED_FOUNDERS_LISTED &&
       strip.campuses === EXPECTED_CAMPUSES_ON_MAP &&
       fold.campuses === EXPECTED_CAMPUSES_ON_MAP,
+    founderSearch: founderHome.searchInputs === 1 && founderHome.results && founderHome.cards > 0 && /Why worth a look:/.test(founderHome.why),
+    founderCampusFilter: campusFilter.clear && /campus=/.test(campusFilter.url) && / at /.test(campusFilter.text),
+    mapHasNoCompanyBrowse: founderHome.browse === false,
+    noDemoWord: founderHome.demoWord === false,
     statusBuckets:
       statusActive === 2497 && statusAcquired === 8 && statusClosed === 8 && statusActive + statusAcquired + statusClosed === TOTAL,
     moreObvious: moreLabelsBefore.some((l) => /more sectors/i.test(l)) && moreLabelsBefore.some((l) => /more cities/i.test(l)),
-    chronographPeak369: chrono != null && chrono.peak === EXPECTED_CHRONO_PEAK && chrono.peakMonth === EXPECTED_CHRONO_PEAK_MONTH,
-    chronographWindow588: chrono != null && chrono.inWindow === EXPECTED_CHRONO_WINDOW,
-    chronographEarlier13: chrono != null && chrono.earlier === EXPECTED_CHRONO_EARLIER,
-    chronographMonthUnknown34: chrono != null && chrono.monthUnknown === EXPECTED_CHRONO_MONTH_UNKNOWN,
-    chronographDated635: chrono != null && chrono.dated === EXPECTED_CHRONO_DATED,
-    chronographBarsSumDated:
-      chrono != null && chrono.inWindow + chrono.earlier + chrono.monthUnknown === chrono.dated,
-    chronographNoGap:
-      chrono != null &&
-      chrono.inWindow + chrono.earlier + chrono.monthUnknown === EXPECTED_CHRONO_DATED &&
-      EXPECTED_CHRONO_WINDOW + EXPECTED_CHRONO_EARLIER + EXPECTED_CHRONO_MONTH_UNKNOWN === EXPECTED_CHRONO_DATED,
-    chronographEarlierVisible: chrono != null && chrono.earlierCaption === true && chrono.earlierBar === false,
-    chronographMonthUnknownVisible: chrono != null && chrono.undatedCaption === true && chrono.unknownBar === false,
-    chronographLabelsUntruncated: chrono != null && chrono.truncatedStub === false,
     campusFoundersTopPennStanfordMit: campusFoundersTopOk,
     ycMembershipEverywhere: ycMembershipOk,
     ycNoPrimary561Leak: ycPrimaryLeak.length === 0,

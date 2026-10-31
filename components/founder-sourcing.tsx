@@ -1,0 +1,270 @@
+"use client";
+
+import { useMemo, useState, type ReactNode } from "react";
+import Link from "next/link";
+import {
+  filterFounders,
+  founderMatches,
+  signalTypeLabel,
+  whyWorthALook,
+  type FounderLead,
+} from "@/lib/domain/founder-index";
+
+const PAGE = 24;
+
+function missing(value: string | null | undefined, label: string): string {
+  const text = value?.trim();
+  return text ? text : `${label} missing`;
+}
+
+export function FounderSearchBar({
+  query,
+  onQuery,
+}: {
+  query: string;
+  onQuery: (value: string) => void;
+}) {
+  return (
+    <form
+      className="mb-3"
+      role="search"
+      onSubmit={(event) => event.preventDefault()}
+      data-founder-search=""
+    >
+      <label htmlFor="founder-search" className="font-mono text-[11px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+        Search founders
+      </label>
+      <input
+        id="founder-search"
+        type="search"
+        value={query}
+        onChange={(event) => onQuery(event.target.value)}
+        placeholder="Name, campus, program, or company"
+        className="mt-1 h-11 w-full rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[16px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)] focus:border-[color:var(--ember,#D96B1C)]"
+      />
+    </form>
+  );
+}
+
+export function FounderResults({
+  founders,
+  status,
+  query,
+  campusId,
+  campusName,
+  onClearCampus,
+  onMissingCampus,
+}: {
+  founders: FounderLead[];
+  status: "loading" | "ready" | "error";
+  query: string;
+  campusId: string | null;
+  campusName: string | null;
+  onClearCampus: () => void;
+  onMissingCampus: () => void;
+}) {
+  const [program, setProgram] = useState("");
+  const [sector, setSector] = useState("");
+  const [year, setYear] = useState("");
+  const [signalType, setSignalType] = useState("");
+  const filterKey = `${query}\n${campusId ?? ""}\n${program}\n${sector}\n${year}\n${signalType}`;
+  const [windowState, setWindowState] = useState({ key: filterKey, shown: PAGE });
+  const shown = windowState.key === filterKey ? windowState.shown : PAGE;
+
+  const pool = useMemo(
+    () => founders.filter((founder) => founderMatches(founder, { text: query, campusId: campusId || null })),
+    [founders, query, campusId],
+  );
+  const missingCampusCount = useMemo(() => founders.filter((founder) => !founder.campusId).length, [founders]);
+
+  const options = useMemo(() => {
+    const programs = new Map<string, number>();
+    const sectors = new Map<string, number>();
+    const years = new Map<number, number>();
+    const signals = new Map<string, number>();
+    for (const founder of pool) {
+      for (const name of founder.programs) programs.set(name, (programs.get(name) ?? 0) + 1);
+      if (founder.sector) sectors.set(founder.sector, (sectors.get(founder.sector) ?? 0) + 1);
+      if (founder.gradYear != null) years.set(founder.gradYear, (years.get(founder.gradYear) ?? 0) + 1);
+      for (const type of founder.signalTypes) signals.set(type, (signals.get(type) ?? 0) + 1);
+    }
+    const byCount = (map: Map<string, number>) => [...map.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    return {
+      programs: byCount(programs),
+      sectors: byCount(sectors),
+      years: [...years.entries()].sort((a, b) => b[0] - a[0]),
+      signals: byCount(signals),
+    };
+  }, [pool]);
+
+  const matches = useMemo(
+    () =>
+      filterFounders(founders, {
+        text: query,
+        campusId: campusId || null,
+        program: program || null,
+        sector: sector || null,
+        gradYear: year === "missing" ? "missing" : year ? Number(year) : null,
+        signalType: signalType || null,
+      }),
+    [founders, query, campusId, program, sector, year, signalType],
+  );
+  const page = matches.slice(0, shown);
+
+  return (
+    <section className="mt-4" data-founder-results="">
+      <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h2 className="text-[18px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Founders</h2>
+          <p className="mt-1 text-[14px] text-[color:var(--fg-2,#3F465C)]">
+            {status === "ready" ? (
+              <>
+                <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{matches.length.toLocaleString("en-US")}</span>
+                {campusId === "missing" ? " with no campus on record" : campusName ? ` at ${campusName}` : campusId ? " for this campus" : " founders"}
+                {campusId ? (
+                  <>
+                    {" · "}
+                    <button type="button" onClick={onClearCampus} className="font-medium text-[color:var(--ember,#D96B1C)] hover:underline">
+                      Clear campus
+                    </button>
+                  </>
+                ) : missingCampusCount > 0 ? (
+                  <>
+                    {" · "}
+                    <button type="button" onClick={onMissingCampus} className="font-medium text-[color:var(--ember,#D96B1C)] hover:underline">
+                      {missingCampusCount.toLocaleString("en-US")} with no campus
+                    </button>
+                  </>
+                ) : null}
+              </>
+            ) : status === "error" ? (
+              "Founder list could not be loaded."
+            ) : (
+              "Loading founders"
+            )}
+          </p>
+        </div>
+      </div>
+      <div className="mb-4 flex flex-wrap gap-2" data-founder-filters="">
+        <FilterSelect label="Program" value={program} onChange={setProgram}>
+          <option value="">Any program</option>
+          {options.programs.map(([name, count]) => (
+            <option key={name} value={name}>
+              {name} ({count.toLocaleString("en-US")})
+            </option>
+          ))}
+        </FilterSelect>
+        <FilterSelect label="Sector" value={sector} onChange={setSector}>
+          <option value="">Any sector</option>
+          <option value="missing">Sector missing</option>
+          {options.sectors.map(([name, count]) => (
+            <option key={name} value={name}>
+              {name} ({count.toLocaleString("en-US")})
+            </option>
+          ))}
+        </FilterSelect>
+        <FilterSelect label="Graduation year" value={year} onChange={setYear}>
+          <option value="">Any year</option>
+          <option value="missing">Year missing</option>
+          {options.years.map(([value, count]) => (
+            <option key={value} value={String(value)}>
+              {value} ({count.toLocaleString("en-US")})
+            </option>
+          ))}
+        </FilterSelect>
+        <FilterSelect label="Signal type" value={signalType} onChange={setSignalType}>
+          <option value="">Any signal</option>
+          <option value="missing">Signal missing</option>
+          {options.signals.map(([type, count]) => (
+            <option key={type} value={type}>
+              {signalTypeLabel(type)} ({count.toLocaleString("en-US")})
+            </option>
+          ))}
+        </FilterSelect>
+      </div>
+      {status === "loading" ? (
+        <p className="text-[14px] text-[color:var(--fg-2,#3F465C)]">Founder list is still loading.</p>
+      ) : status === "error" ? (
+        <p className="text-[14px] text-[color:var(--fg-2,#3F465C)]">Founder list could not be loaded.</p>
+      ) : founders.length === 0 ? (
+        <p className="text-[14px] text-[color:var(--fg-2,#3F465C)]">No founders on record.</p>
+      ) : page.length === 0 ? (
+        <p className="text-[14px] text-[color:var(--fg-2,#3F465C)]">No founders match. Missing fields stay missing, so try clearing a filter.</p>
+      ) : (
+        <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]">
+          {page.map((founder) => (
+            <li key={founder.id} data-founder-card="">
+              <article className="px-3 py-3 sm:px-4">
+                <h3 className="text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{founder.name}</h3>
+                <p className="mt-1 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">
+                  <Field label="Campus" value={founder.campus} />
+                  {" · "}
+                  <Field label="Program" value={founder.programs.length ? founder.programs.join(", ") : null} />
+                  {" · "}
+                  <Field label="Year" value={founder.gradYear != null ? String(founder.gradYear) : null} />
+                  {" · "}
+                  <Field label="Signal" value={founder.signalTypes.length ? founder.signalTypes.map(signalTypeLabel).join(", ") : null} />
+                </p>
+                <p className="mt-0.5 text-[13px] text-[color:var(--fg-2,#3F465C)]">
+                  {founder.company ? (
+                    founder.companyId ? (
+                      <Link href={`/startup/${founder.companyId}`} className="font-medium text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--ember,#D96B1C)] hover:underline">
+                        {founder.company}
+                      </Link>
+                    ) : (
+                      <span className="font-medium text-[color:var(--fg,#0B0E17)]">{founder.company}</span>
+                    )
+                  ) : (
+                    <span>Company missing</span>
+                  )}
+                  {founder.sector ? ` · ${founder.sector}` : " · Sector missing"}
+                </p>
+                <p className="mt-1 text-[13px] leading-5 text-[color:var(--fg,#0B0E17)]" data-why-worth="">
+                  Why worth a look: {whyWorthALook(founder)}
+                </p>
+              </article>
+            </li>
+          ))}
+        </ol>
+      )}
+      {shown < matches.length ? (
+        <button
+          type="button"
+          onClick={() => setWindowState({ key: filterKey, shown: shown + PAGE })}
+          className="mt-3 inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
+        >
+          Show more
+        </button>
+      ) : null}
+    </section>
+  );
+}
+
+function Field({ label, value }: { label: string; value: string | null }) {
+  return <span>{missing(value, label)}</span>;
+}
+
+function FilterSelect({
+  label,
+  value,
+  onChange,
+  children,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  children: ReactNode;
+}) {
+  return (
+    <label className="text-[12px] text-[color:var(--fg-2,#3F465C)]">
+      <span className="mb-1 block font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">{label}</span>
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="h-9 max-w-[220px] rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 text-[13px] text-[color:var(--fg,#0B0E17)]"
+      >
+        {children}
+      </select>
+    </label>
+  );
+}

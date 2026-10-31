@@ -1,0 +1,99 @@
+import { getDb } from "../db/client";
+import { shortCampusLabel } from "./campuses";
+import type { FounderLead } from "./founder-index";
+import { listFounders } from "./queries";
+import { sectorLabel } from "./sectors";
+
+function programLabel(name: string): string {
+  const trimmed = name.trim();
+  if (!trimmed) return "";
+  if (/venture\s*lab\s*vip-?x/i.test(trimmed) || /^penn\s+venture\s+lab$/i.test(trimmed)) return "Penn Venture Lab";
+  return trimmed;
+}
+
+/** Promoted founders with only the campus, program, sector, year, signal, and company fields on record. */
+export function buildFounderIndex(): FounderLead[] {
+  const db = getDb();
+  const years = new Map<string, number>();
+  for (const row of db.prepare(`SELECT id, enrollment_grad_year as year FROM people WHERE enrollment_grad_year IS NOT NULL`).all() as {
+    id: string;
+    year: number;
+  }[]) {
+    if (Number.isFinite(row.year)) years.set(row.id, row.year);
+  }
+  const programsByProject = new Map<string, string[]>();
+  for (const row of db.prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'investor' AND TRIM(COALESCE(value_text, '')) != ''`).all() as {
+    project_id: string;
+    value_text: string;
+  }[]) {
+    const label = programLabel(row.value_text);
+    if (!label) continue;
+    const list = programsByProject.get(row.project_id) ?? [];
+    if (!list.includes(label)) list.push(label);
+    programsByProject.set(row.project_id, list);
+  }
+  const sectorByProject = new Map<string, string>();
+  for (const row of db.prepare(`SELECT project_id, tag FROM project_sector_tags ORDER BY is_primary DESC, tag`).all() as {
+    project_id: string;
+    tag: string;
+  }[]) {
+    if (!sectorByProject.has(row.project_id)) sectorByProject.set(row.project_id, sectorLabel(row.tag));
+  }
+  const signalsByProject = new Map<string, string[]>();
+  for (const row of db.prepare(`SELECT project_id, signal_type FROM signals WHERE TRIM(COALESCE(signal_type, '')) != ''`).all() as {
+    project_id: string;
+    signal_type: string;
+  }[]) {
+    const list = signalsByProject.get(row.project_id) ?? [];
+    if (!list.includes(row.signal_type)) list.push(row.signal_type);
+    signalsByProject.set(row.project_id, list);
+  }
+
+  const leads: FounderLead[] = [];
+  for (const founder of listFounders()) {
+    const companyIds: string[] = [];
+    if (founder.linkedCompany) companyIds.push(founder.linkedCompany.id);
+    for (const project of founder.projects) {
+      if (project.kind === "company" && /founder/i.test(project.role) && !companyIds.includes(project.id)) companyIds.push(project.id);
+    }
+    const programs: string[] = [];
+    const signalTypes: string[] = [];
+    let sector: string | null = null;
+    for (const id of companyIds) {
+      for (const program of programsByProject.get(id) ?? []) {
+        if (!programs.includes(program)) programs.push(program);
+      }
+      for (const type of signalsByProject.get(id) ?? []) {
+        if (!signalTypes.includes(type)) signalTypes.push(type);
+      }
+      if (!sector) sector = sectorByProject.get(id) ?? null;
+    }
+    for (const signal of founder.programSignals) {
+      if (signal.matchStatus !== "confirmed") continue;
+      const label = programLabel(signal.label);
+      if (label && !programs.includes(label)) programs.push(label);
+    }
+    if (!sector) {
+      const tag = founder.sectorTags.find((value) => value.trim());
+      if (tag) sector = tag;
+    }
+    const company = founder.linkedCompany?.name ?? founder.projects.find((project) => project.kind === "company" && /founder/i.test(project.role))?.name ?? null;
+    const companyId = founder.linkedCompany?.id ?? companyIds[0] ?? null;
+    const campusId = founder.universityId;
+    const campus = founder.universityName ? shortCampusLabel(campusId ?? "", founder.universityName) : null;
+    leads.push({
+      id: founder.id,
+      name: founder.name,
+      campusId,
+      campus,
+      programs,
+      sector,
+      gradYear: years.get(founder.id) ?? null,
+      signalTypes,
+      company,
+      companyId,
+    });
+  }
+  leads.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+  return leads;
+}

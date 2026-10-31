@@ -10,6 +10,7 @@ process.env.CAMPUS_SCOUT_IGNORE_PRECOMPUTE = "1";
 import { listCampusArcs, listCandidateProjects, listUniversities } from "../lib/domain/queries";
 import { buildNetworkMap } from "../lib/domain/network-map";
 import { buildDirectoryFromDb } from "../lib/domain/directory";
+import { buildFounderIndex } from "../lib/domain/founder-index-build";
 import { buildHeroStatsFromDb } from "../lib/domain/hero-stats";
 import { feedbackRedirects } from "../lib/domain/entity-redirects";
 
@@ -35,6 +36,9 @@ write("network-map.json", buildNetworkMap(), networkStarted);
 
 const directoryStarted = performance.now();
 write("sample-directory.json", buildDirectoryFromDb(), directoryStarted);
+
+const foundersStarted = performance.now();
+write("founders.json", buildFounderIndex(), foundersStarted);
 
 const heroStarted = performance.now();
 const hero = buildHeroStatsFromDb();

@@ -102,8 +102,8 @@ export function GlobeHero({
   showGlobe?: boolean;
 }) {
   return (
-    <div className={showGlobe ? "bg-[color:var(--bg,#FFFFFF)] px-4 py-1.5 text-[color:var(--fg,#0B0E17)] sm:px-5 lg:py-1" : "bg-bg px-6 py-6 text-fg"}>
-      <div className={showGlobe ? "lg:min-h-[calc(100dvh-48px)]" : ""}>
+    <div className={showGlobe ? "bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg,#0B0E17)]" : "bg-bg px-6 py-6 text-fg"}>
+      <div>
         <SignatureBand
           stats={stats}
           foundersListed={foundersListed}
@@ -311,7 +311,7 @@ function SignatureBand({ stats, foundersListed = 0, globe }: { stats: HeroStats;
   const campusesOnMap = plottedCampuses(stats).length;
   if (globe) {
     return (
-      <section className="-mx-4 px-0 pb-1 sm:-mx-5" aria-label="Campus Scout">
+      <section className="pb-1" aria-label="Campus Scout">
         <div className="mb-1 flex flex-wrap items-center gap-2">
           <SamplePill />
           {/* Counts live in the fold masthead; keep DOM anchors for check-facet-dom. */}
