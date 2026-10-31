@@ -24,6 +24,7 @@ import {
   contentsPageInsight,
   topPrograms,
   isYcProgramLabel,
+  YC_MEMBERSHIP_EXPECTED,
   type FacetState,
 } from "./sample-instrument";
 
