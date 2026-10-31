@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { loadDirectoryClient } from "@/lib/client/directory-cache";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
+import { directoryRank } from "@/lib/domain/directory-rank";
 import { whyItsHere } from "@/lib/domain/directory-rank";
 import { directoryCardSubtitle } from "@/lib/domain/sample-facets";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
@@ -123,7 +124,7 @@ function endSliceInsight(cards: DirectoryCard[]): EndSliceInsight | null {
 
 export function SampleInstrumentBrowse({
   feed,
-  cards,
+  cards: cardsProp,
   total,
   pages,
   sector,
@@ -182,6 +183,61 @@ export function SampleInstrumentBrowse({
   }, []);
 
   const companiesLive = catalog ?? companies;
+  // When ?more>1, expand the ledger from the client catalog so SSR stays ≤1 page.
+  const cards = useMemo(() => {
+    if (pages <= 1 || !catalog || catalog.length === 0) return cardsProp;
+    const PAGE = 14;
+    let matched = (catalog as DirectoryCard[]).filter((card) => {
+      if (sector && card.sectorId !== sector) return false;
+      if (kind && card.signalKind !== kind) return false;
+      if (campus && card.schoolId !== campus) return false;
+      return true;
+    });
+    const tokens = (query ?? "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+    if (tokens.length) {
+      matched = matched.filter((card) => {
+        const hay = [card.name, card.description ?? "", ...(card.founders ?? [])].join("\n").toLowerCase();
+        return tokens.every((token) => hay.includes(token));
+      });
+    }
+    const ordered = [...matched];
+    if (feed === "leaderboard") {
+      ordered.sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+      const page = ordered.filter((c) => c.signals > 0).slice(0, Math.max(1, pages) * PAGE);
+      return page.length > 0 ? page : cardsProp;
+    }
+    if (sort === "name") ordered.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+    else if (sort === "recent") {
+      ordered.sort((a, b) => {
+        const left = a.latestSignalAt ?? "";
+        const right = b.latestSignalAt ?? "";
+        if (left !== right) {
+          if (!left) return 1;
+          if (!right) return -1;
+          return right.localeCompare(left);
+        }
+        return a.name.localeCompare(b.name) || a.id.localeCompare(b.id);
+      });
+    } else if (sort === "stage") {
+      const STAGE = ["Pre-seed", "Seed", "Series A", "Series B", "Series C", "Venture"];
+      const rank = (stage: string | null) => {
+        if (!stage) return STAGE.length + 1;
+        const i = STAGE.indexOf(stage);
+        return i === -1 ? STAGE.length : i;
+      };
+      ordered.sort((a, b) => rank(a.stage) - rank(b.stage) || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+    } else {
+      ordered.sort((a, b) => {
+        const left = directoryRank(a);
+        const right = directoryRank(b);
+        if (left.tier !== right.tier) return left.tier - right.tier;
+        if (left.score !== right.score) return right.score - left.score;
+        return a.name.localeCompare(b.name) || a.id.localeCompare(b.id);
+      });
+    }
+    const page = ordered.slice(0, Math.max(1, pages) * PAGE);
+    return page.length > 0 ? page : cardsProp;
+  }, [pages, catalog, cardsProp, feed, sector, kind, campus, query, sort]);
   const boardCompanies = useMemo(() => applyFacets(companiesLive, facets), [companiesLive, facets]);
   const topCampus = useMemo(() => {
     return [...campuses].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))[0] ?? null;
@@ -290,16 +346,6 @@ export function SampleInstrumentBrowse({
 
   const kicker = feed === "leaderboard" ? "Signals" : "Companies";
   const caption = total === 1 ? "company" : "companies";
-  const sortLabel =
-    feed === "leaderboard"
-      ? "signal count"
-      : sort === "recent"
-        ? "Newest"
-        : sort === "name"
-          ? "Name"
-          : sort === "stage"
-            ? "Stage"
-            : "Rank";
   const subline =
     feed === "leaderboard"
       ? "Ordered by how many signals are stored"
@@ -310,9 +356,6 @@ export function SampleInstrumentBrowse({
           : sort === "stage"
             ? "Ordered by stage"
             : "Ranked from signals, founders, programs, and stage";
-  const pageFrom = Math.max(1, cards.length - 27);
-  const pageContext = `Companies ${pageFrom.toLocaleString("en-US")} to ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")} · sorted by ${sortLabel}`;
-
   const wireLabel = pages > 1 ? "More on this list" : "On this list";
 
   return (
@@ -453,6 +496,8 @@ export function SampleInstrumentBrowse({
             </div>
           ) : null}
 
+          {feed === "directory" && pages <= 1 ? (
+          <>
           {/* Filters collapsed under peak hero so the list is not pushed down. */}
           <div
             className="overflow-hidden border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]"
@@ -487,6 +532,8 @@ export function SampleInstrumentBrowse({
               </div>
             ) : null}
           </div>
+          </>
+          ) : null}
           {/* Leaderboard podium mounts inside data-ledger-stage (shot frames that). Browse-more keeps a folio insight, not a shared ticket. */}
           {feed === "directory" && pages > 1 ? (
             <div
@@ -580,6 +627,43 @@ export function SampleInstrumentBrowse({
           {/* Secondary sector strips culled · mobile page-1 owns the newest-insight hero alone. */}
         </div>
 
+        {/* Mobile more-375: quiet filters below continued mast (c2908d1 layout). */}
+        {pages > 1 ? (
+        <div
+          className="mb-3 overflow-hidden border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] lg:hidden"
+          role="region"
+          aria-label="Scout filters"
+          data-mobile-filters-inline=""
+          data-mobile-contents-hero=""
+          data-filters-index-hero=""
+        >
+          <button
+            type="button"
+            className="flex w-full items-center justify-between gap-3 px-3 py-2 text-left"
+            onClick={() => setMobileFiltersOpen((open) => !open)}
+            aria-expanded={mobileFiltersOpen}
+          >
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-2,#3F465C)]">
+              Filters
+              <span className="ml-2 font-mono text-[11px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">
+                {boardCompanies.length.toLocaleString("en-US")}
+              </span>
+              <span className="ml-1 font-mono text-[10px] font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
+                of {total.toLocaleString("en-US")}
+              </span>
+            </p>
+            <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">
+              {mobileFiltersOpen ? "Close" : "Open"}
+            </span>
+          </button>
+          {mobileFiltersOpen ? (
+            <div className="max-h-[min(36dvh,300px)] overflow-y-auto overscroll-contain border-t border-[color:var(--line,#E1E5EF)] px-1 pb-3" data-mobile-facet-map="">
+              <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
+            </div>
+          ) : null}
+        </div>
+        ) : null}
+
 
         {feed === "directory" && pages > 1 ? (
           <div className="mb-3 hidden lg:block" data-desk-browse-dominant="page-window" data-page-window="">
@@ -633,9 +717,17 @@ export function SampleInstrumentBrowse({
                     <span className="mt-0.5 block text-[9px] uppercase tracking-[0.1em]">with a signal</span>
                   </p>
                 </div>
-                <div className="flex items-baseline justify-between gap-3 px-3 py-2.5 lg:hidden" data-more-sticky="">
-                  <p className="min-w-0 text-[12px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    {`Companies 1 to ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")} · sorted by ${sortLabel}`}
+                <div className="flex items-baseline justify-between gap-3 px-3 py-2.5 lg:hidden">
+                  <p className="text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                    {feed === "leaderboard" ? "Signals" : "Companies"}
+                    {" 1 to "}
+                    {cards.length.toLocaleString("en-US")}
+                    {" of "}
+                    {total.toLocaleString("en-US")}
+                  </p>
+                  <p className="shrink-0 text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
+                    {" with a signal"}
                   </p>
                 </div>
               </div>
@@ -740,22 +832,19 @@ export function SampleInstrumentBrowse({
                     ) : null}
                   </div>
                 </div>
-                {/* Mobile more-end-375: context header + designed load-next footer */}
+                {/* Mobile more-end-375: one line so cards remain in frame */}
                 <div
-                  className="mt-3 scroll-mt-24 lg:hidden"
+                  className="mt-3 scroll-mt-24 border-t border-[color:var(--line,#E1E5EF)] pt-3 lg:hidden"
                   data-ledger-end=""
                   data-ledger-end-mobile=""
                   data-end-insight={sliceInsight.kicker}
                 >
-                  <p className="px-0.5 text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]" data-more-context="">
-                    {pageContext}
-                  </p>
                   <div
-                    className="mt-2 flex items-center justify-between gap-3 border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--cobalt-haze,#E8ECFA)]/30 px-3 py-2.5"
+                    className="flex flex-wrap items-center justify-between gap-2 px-0.5"
                     data-ledger-end-lead=""
                     data-ledger-end-more=""
                   >
-                    <p className="min-w-0 font-mono text-[11px] tabular-nums leading-snug text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="" data-end-lead="">
+                    <p className="font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="" data-end-lead="">
                       <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
                       {" of "}
                       <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
@@ -772,7 +861,7 @@ export function SampleInstrumentBrowse({
                     {cards.length < total ? (
                       <Link
                         href={moreHref}
-                        className="inline-flex h-8 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white hover:opacity-90"
+                        className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]"
                       >
                         Load next
                       </Link>

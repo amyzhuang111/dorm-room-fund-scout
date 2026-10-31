@@ -55,10 +55,11 @@ export function SampleHome({
   const campusTotal = campusId ? filterDirectory(data.cards, undefined, undefined, campusId).length : null;
   const ordered = feed === "directory" ? sortDirectory(matched, order) : matched;
   // Map home loads companies client-side; skip card SSR to keep HTML ~210 KB.
+  // Explore SSR only the first page — later ?more=N pages hydrate from directory JSON.
   const shown = listed
     ? feed === "leaderboard"
-      ? leaderboardPage(ordered, pages)
-      : directoryPage(ordered, pages)
+      ? leaderboardPage(ordered, 1)
+      : directoryPage(ordered, 1)
     : [];
   const total = feed === "leaderboard" ? matched.filter((card) => card.signals > 0).length : matched.length;
   const campuses = stats.universities

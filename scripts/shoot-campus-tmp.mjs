@@ -216,15 +216,17 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(400);
   await shot(page, "companies-375");
 
-  await page.goto(`${BASE}/companies?more=2`, { waitUntil: "networkidle", timeout: 90000 });
-  await waitDirectory(page);
-  await page.waitForTimeout(1000);
-  const chapterM = page.locator("[data-chapter-window], [data-page-window], [data-mobile-continued-mast]").first();
+  const more = page.getByRole("link", { name: /Show more/i }).first();
+  if (await more.count()) {
+    await more.click().catch(() => {});
+    await page.waitForTimeout(1000);
+  }
+  const chapterM = page.locator("[data-chapter-window]").first();
   if (await chapterM.count()) {
     await chapterM.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(200);
     await page.evaluate(() => {
-      const el = document.querySelector("[data-chapter-peak], [data-chapter-window], [data-page-window], [data-mobile-continued-mast]");
+      const el = document.querySelector("[data-chapter-peak], [data-chapter-window]");
       if (!el) return;
       const top = el.getBoundingClientRect().top;
       if (top < 56) window.scrollBy(0, top - 64);
@@ -239,27 +241,33 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(150);
   await shot(page, "companies-more-375");
 
-  await page.goto(`${BASE}/companies?more=6`, { waitUntil: "networkidle", timeout: 90000 });
-  await waitDirectory(page);
-  await page.waitForTimeout(1000);
-  // Frame end: last cards + context header + Load next footer
+  // Frame end moment as the shot hero (Loaded so far), not a leftover lone card
   const endM = page.locator("[data-ledger-end-mobile]").first();
-  if (await endM.count()) {
-    await endM.evaluate((el) => el.scrollIntoView({ block: "end" }));
-    await page.waitForTimeout(200);
-    await page.evaluate(() => {
-      const end = document.querySelector("[data-ledger-end-mobile]");
-      if (!end) return;
-      const bottom = end.getBoundingClientRect().bottom;
-      const room = window.innerHeight - 8;
-      if (bottom > room) window.scrollBy(0, bottom - room + 4);
-      // Prefer showing context line near top of viewport when possible
-      const ctx = end.querySelector("[data-more-context]");
-      if (ctx) {
-        const top = ctx.getBoundingClientRect().top;
-        if (top > 120) window.scrollBy(0, top - 96);
-      }
+  const endLead = page.locator("[data-ledger-end-lead]").first();
+  if (await endLead.count()) {
+    const headerBottom = await page.evaluate(() => {
+      const nav = document.querySelector("header");
+      const tabs = [...document.querySelectorAll("a,button")].find(
+        (el) => /Companies/i.test(el.textContent || "") && el.getBoundingClientRect().bottom > 40,
+      );
+      return Math.max(nav?.getBoundingClientRect().bottom || 0, tabs?.getBoundingClientRect().bottom || 0, 96);
     });
+    await endLead.evaluate((hb) => {
+      const lead = document.querySelector("[data-ledger-end-lead]");
+      const end = document.querySelector("[data-ledger-end-mobile]") || lead;
+      if (!lead) return;
+      lead.scrollIntoView({ block: "start" });
+      const top = lead.getBoundingClientRect().top;
+      window.scrollBy(0, top - (hb + 12));
+      if (end) {
+        const bottom = end.getBoundingClientRect().bottom;
+        const room = window.innerHeight - 8;
+        if (bottom > room) window.scrollBy(0, bottom - room + 4);
+      }
+    }, headerBottom);
+    await page.waitForTimeout(350);
+  } else if (await endM.count()) {
+    await endM.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(350);
   }
   await shot(page, "companies-more-end-375");
@@ -308,15 +316,6 @@ const browser = await chromium.launch({ headless: true });
       if (!name) return;
       const top = name.getBoundingClientRect().top;
       if (top < 56) window.scrollBy(0, top - 64);
-    });
-    await page.waitForTimeout(200);
-    // Keep second founder above any campus-filters footer.
-    await page.evaluate(() => {
-      const founders = document.querySelector("[data-company-founders]");
-      if (!founders) return;
-      const bottom = founders.getBoundingClientRect().bottom;
-      const room = window.innerHeight - 12;
-      if (bottom > room) window.scrollBy(0, bottom - room + 8);
     });
     await page.waitForTimeout(200);
   }
