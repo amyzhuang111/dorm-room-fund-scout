@@ -254,7 +254,7 @@ export function SampleCompanyShell({
           </Link>
           <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
         </div>
-        <div className="mb-5 mt-1 sm:hidden" data-dossier-timeline="" data-mobile-chrono-identity="" data-company-mobile-hero="">
+        <div className="mb-6 mt-2 sm:hidden" data-dossier-timeline="" data-mobile-chrono-identity="" data-company-mobile-hero="">
           <div
             className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]"
             data-dossier-spread-mobile=""
@@ -267,15 +267,15 @@ export function SampleCompanyShell({
               </p>
             </div>
             <div className="grid grid-cols-2 gap-0 border-b border-[color:var(--line,#E1E5EF)]">
-              <div className="border-r border-[color:var(--line,#E1E5EF)] px-3.5 py-3 pl-4">
+              <div className="border-r border-[color:var(--line,#E1E5EF)] px-3.5 py-4 pl-4">
                 <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founded</p>
-                <p className="mt-1.5 font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
+                <p className="mt-2 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
                   {dossier?.year != null ? dossier.year : "-"}
                 </p>
               </div>
-              <div className="px-3.5 py-3">
+              <div className="px-3.5 py-4">
                 <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">On campus wire</p>
-                <p className="mt-1.5 font-mono text-[28px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
+                <p className="mt-2 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
                   {wireCount.toLocaleString("en-US")}
                 </p>
               </div>
@@ -295,14 +295,14 @@ export function SampleCompanyShell({
                 </ul>
               </div>
             ) : null}
-            <div className="px-3.5 py-3 pl-4">
+            <div className="px-3.5 py-4 pl-4">
               <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Signal timeline · campus wire</p>
-              <ol className="relative mt-3 space-y-0 before:absolute before:bottom-1 before:left-[5px] before:top-1 before:w-px before:bg-[color:var(--cobalt,#2F4FD8)]/35">
+              <ol className="relative mt-4 space-y-0 before:absolute before:bottom-1 before:left-[5px] before:top-1 before:w-px before:bg-[color:var(--cobalt,#2F4FD8)]/35">
                 {wireCompanies
                   .filter((c) => (c.latestSignalAt ?? "").length >= 4)
                   .slice()
                   .sort((a, b) => (b.latestSignalAt ?? "").localeCompare(a.latestSignalAt ?? ""))
-                  .slice(0, 5)
+                  .slice(0, 4)
                   .map((c) => {
                     const at = (c.latestSignalAt ?? "").replace(/-00/g, "");
                     return (

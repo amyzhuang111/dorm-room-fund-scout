@@ -12,6 +12,7 @@ import type { HeroStats } from "@/lib/domain/hero-stats";
 import type { FounderLead } from "@/lib/domain/founder-index";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import type { Feed } from "@/components/sample-home";
+import { FoldPeakShare } from "@/components/sample-instrument";
 
 const SampleInstrumentBrowse = dynamic(
   () => import("@/components/sample-instrument-browse").then((mod) => ({ default: mod.SampleInstrumentBrowse })),
@@ -148,6 +149,14 @@ export function SampleHomeClient(props: {
         <div className="px-4 pb-8 pt-3 sm:px-5" data-fold-hierarchy="">
           {/* 1. Search always first */}
           <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
+          {/* 8b44402 Peak share rhythm on white globe · no ScoutChronograph mount (DOM chronographGoneFromHome). */}
+          {companies.length > 0 ? (
+            <FoldPeakShare
+              companies={companies}
+              foundersListed={foundersListed}
+              campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
+            />
+          ) : null}
           {/* Mobile: founders above map. Desk: founders beside a short globe so cards clear the fold at 1440. */}
           <div
             className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(380px,0.95fr)_minmax(0,1.05fr)] lg:items-start lg:gap-5"

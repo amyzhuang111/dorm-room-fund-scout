@@ -425,8 +425,8 @@ export function TileGlobe({
 
   return (
     <div className={className} data-fold-mobile-root="">
-      <div className="mb-4 flex flex-wrap items-end justify-between gap-x-4 gap-y-2" data-fold-counts="">
-        <p className="flex min-w-0 flex-wrap items-baseline gap-x-4 gap-y-1 text-[14px] leading-6 text-[color:var(--fg-2,#3F465C)]">
+      <div className="mb-3 flex flex-wrap items-end justify-between gap-x-4 gap-y-1" data-fold-counts="">
+        <p className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[12px] tabular-nums leading-5 text-[color:var(--fg-2,#3F465C)]">
           <span>
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
             {" companies"}
@@ -462,7 +462,7 @@ export function TileGlobe({
         <p className="mt-1 max-w-3xl text-[12px] leading-5 text-[color:var(--fg-3,#5C647A)]" data-founder-count-note="">
           On companies counts names listed on company cards. The founder index is every searchable person · some are not yet attached to a company card.
         </p>
-        <p className="mt-2 text-[14px] text-[color:var(--fg,#0B0E17)]">Click a campus to see its founders.</p>
+        <p className="mt-1.5 text-[13px] text-[color:var(--fg,#0B0E17)]">Click a campus to see its founders.</p>
       </div>
 
       <section className="mb-4" data-fold-desk-map="" aria-label="Map">

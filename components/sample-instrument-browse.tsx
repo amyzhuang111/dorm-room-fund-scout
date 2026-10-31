@@ -280,17 +280,16 @@ export function SampleInstrumentBrowse({
               </p>
             ) : (
               <>
-                <p className="mt-1.5 font-mono text-[28px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                  {boardCompanies.length.toLocaleString("en-US")}
+                <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
+                  {" in this list · filters below"}
                 </p>
-                <p className="mt-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">in this list</p>
-                <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
                   <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
                   {" with a signal · "}
                   <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
                   {" with no signal"}
                 </p>
-                <p className="mt-1 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">Filters below</p>
               </>
             )}
           </div>
@@ -686,17 +685,16 @@ export function SampleInstrumentBrowse({
                   <p className="font-mono text-[11px] font-bold uppercase tracking-[0.28em] text-[color:var(--ember,#D96B1C)]">
                     Companies
                   </p>
-                  <p className="mt-2 font-mono text-[36px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                    {boardCompanies.length.toLocaleString("en-US")}
+                  <p className="mt-2 font-mono text-[13px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
+                    {" in this list · filters below"}
                   </p>
-                  <p className="mt-2 text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">in this list</p>
-                  <p className="mt-3 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
                     {" with a signal · "}
                     <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quietMatch.toLocaleString("en-US")}</span>
                     {" with no signal"}
                   </p>
-                  <p className="mt-1.5 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">Filters below</p>
                 </div>
                 <button
                   type="button"
