@@ -1480,6 +1480,7 @@ export function IntelligenceBoards({
   compact = false,
   hideSector = false,
   hideLatest = false,
+  hidePrograms = false,
   surface = "fold",
 }: {
   companies: FacetCompany[];
@@ -1488,6 +1489,8 @@ export function IntelligenceBoards({
   hideSector?: boolean;
   /** Map home does not list startups. */
   hideLatest?: boolean;
+  /** Browse-more end already ranks programs in the center colophon. */
+  hidePrograms?: boolean;
   /** fold keeps programs-first; browse leads sector; signals leads programs+recent; company is dossier-thin. */
   surface?: "fold" | "browse" | "signals" | "company";
 }) {
@@ -1502,7 +1505,7 @@ export function IntelligenceBoards({
   const rowGap = "divide-y divide-[color:var(--line,#E1E5EF)]";
   const showSector = !hideSector && surface !== "company" && surface !== "signals";
   const showFounders = surface !== "signals";
-  const showPrograms = surface !== "company";
+  const showPrograms = surface !== "company" && !hidePrograms;
   const programsBoard =
     showPrograms && programs.length > 0 ? (
       <Board title="Programs" unit="companies">
