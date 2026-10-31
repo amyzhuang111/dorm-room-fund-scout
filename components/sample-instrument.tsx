@@ -258,10 +258,10 @@ export function companyInitials(name: string): string {
 }
 
 function NeutralMark({ name, cls }: { name: string; cls: string }) {
-  const initials = companyInitials(name).slice(0, 2);
+  const initials = companyInitials(name).slice(0, 1);
   return (
     <span
-      className={`${cls} grid shrink-0 place-items-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/70 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[8px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.12)]`}
+      className={`${cls} grid shrink-0 place-items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] font-mono text-[9px] font-medium tracking-tight text-[color:var(--fg-3,#5C647A)]`}
       aria-hidden
       title={name}
     >
@@ -281,11 +281,22 @@ export function LogoMark({
   mark?: string;
   size?: number;
 }) {
-  // Monogram-first: sample UI stays cobalt NeutralMarks. External favicons (e.g. AfterQuery
-  // dark squares) break WIRE rhythm next to monograms.
-  void logoUrl;
   void mark;
   const cls = size <= 16 ? "h-4 w-4" : size <= 20 ? "h-5 w-5" : size <= 24 ? "h-6 w-6" : size <= 28 ? "h-7 w-7" : "h-8 w-8";
+  const [ok, setOk] = useState(Boolean(logoUrl));
+  if (logoUrl && ok) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={logoUrl}
+        alt=""
+        width={size}
+        height={size}
+        className={`${cls} shrink-0 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] object-contain`}
+        onError={() => setOk(false)}
+      />
+    );
+  }
   return <NeutralMark name={name} cls={cls} />;
 }
 
@@ -345,14 +356,9 @@ export function LogoPill({
 
 function FacetGroup({ title, children, defaultOpen = true, dense = false }: { title: string; children: ReactNode; defaultOpen?: boolean; dense?: boolean }) {
   return (
-    <details className={`border-b border-[color:var(--line,#E1E5EF)] ${dense ? "px-3 py-2" : "px-2.5 py-2"}`} open={defaultOpen}>
-      <summary className={`cursor-pointer list-none font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)] [&::-webkit-details-marker]:hidden`}>
-        <span className="inline-flex items-center gap-1.5">
-          <span aria-hidden className="text-[9px] text-[color:var(--cobalt,#2F4FD8)]">▾</span>
-          {title}
-        </span>
-      </summary>
-      <div className={`mt-2 overflow-hidden rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] ${dense ? "" : "border-l-2 border-l-[color:var(--cobalt,#2F4FD8)]"}`}>{children}</div>
+    <details className={`border-b border-[color:var(--line,#E1E5EF)] ${dense ? "px-2 py-1.5" : "px-2.5 py-2"}`} open={defaultOpen}>
+      <summary className={`cursor-pointer font-mono text-[10px] font-medium uppercase ${dense ? "tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]" : "tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]"}`}>{title}</summary>
+      <div className="mt-1.5 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)]">{children}</div>
     </details>
   );
 }
@@ -386,31 +392,30 @@ function FacetRow({
       data-facet={facet || undefined}
       data-facet-count={count != null ? String(count) : undefined}
       aria-pressed={active}
-      className={`flex w-full items-center gap-2.5 border-b border-[color:var(--line,#E1E5EF)] px-3 py-2.5 text-left last:border-b-0 transition-colors ${
+      className={`flex w-full items-center gap-2 px-2 py-1.5 text-left transition-colors ${
         active
-          ? "bg-[color:var(--cobalt-haze,#E8ECFA)]/55"
+          ? "bg-[color:var(--ember,#D96B1C)]/8"
           : emphasis
             ? "bg-[color:var(--ember,#D96B1C)]/5 hover:bg-[color:var(--ember,#D96B1C)]/10"
-            : "hover:bg-[color:var(--bg-sunken,#F3F5F9)]"
+            : "hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40"
       }`}
     >
       <span
-        className={`relative h-4 w-4 shrink-0 rounded-[3px] border ${
+        className={`relative h-3.5 w-3.5 shrink-0 rounded-[2px] border ${
           active
-            ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] after:absolute after:left-[4px] after:top-[1px] after:h-[8px] after:w-[4px] after:rotate-45 after:border-b-[1.5px] after:border-r-[1.5px] after:border-white after:content-['']"
+            ? "border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] after:absolute after:left-[3px] after:top-[1px] after:h-[7px] after:w-[4px] after:rotate-45 after:border-b-[1.5px] after:border-r-[1.5px] after:border-white after:content-['']"
             : "border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)]"
         }`}
         aria-hidden
       />
       {dot ? <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: dot }} aria-hidden /> : null}
       {icon && !dot ? <span className="font-mono text-[9px] leading-none text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>{icon}</span> : null}
-      <span className={`min-w-0 flex-1 text-[13px] leading-snug ${active ? "font-semibold text-[color:var(--fg,#0B0E17)]" : emphasis ? "font-semibold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg,#0B0E17)]"}`}>
+      <span className={`min-w-0 flex-1 truncate text-[11px] ${active ? "font-semibold text-[color:var(--fg,#0B0E17)]" : emphasis ? "font-semibold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg,#0B0E17)]"}`}>
         {label}
       </span>
       {count != null ? (
-        <span className={`shrink-0 font-mono text-[12px] tabular-nums ${active || emphasis ? "font-bold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-3,#5C647A)]"}`}>
-          {" · "}
-          {count.toLocaleString("en-US")}
+        <span className={`shrink-0 font-mono text-[11px] tabular-nums ${active || emphasis ? "font-bold text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg-3,#5C647A)]"}`}>
+          {` · ${count.toLocaleString("en-US")}`}
         </span>
       ) : null}
     </button>
@@ -619,7 +624,7 @@ export function FacetRail({
       {editorial ? (
         <div className="shrink-0 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5" data-facet-status-pin="">
           <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Status</p>
-          <div className="mt-2 overflow-hidden rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]">
+          <div className="mt-1.5 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)]">
             <FacetRow facet="status" count={baseCompanies.length} active={!facets.status} onClick={() => set({ status: null })} label="All" />
             {statuses.map((item) => (
               <FacetRow key={item.id} facet="status" count={item.count} active={facets.status === item.id} onClick={() => set({ status: facets.status === item.id ? null : item.id })} label={item.label} dot={STATUS_DOT[item.id]} />
@@ -636,7 +641,13 @@ export function FacetRail({
             ))}
           </FacetGroup>
         )}
-        <FacetGroup title="Founded year" defaultOpen dense={editorial}>
+                <FacetGroup title="Flags" dense={editorial}>
+          <FacetRow facet="flag" active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
+          {flags.map((item) => (
+            <FacetRow key={item.id} facet="flag" count={item.count} active={facets.flag === item.id} onClick={() => set({ flag: facets.flag === item.id ? null : item.id })} label={item.label} icon={FLAG_ICON[item.id]} />
+          ))}
+        </FacetGroup>
+<FacetGroup title="Founded year" dense={editorial}>
           <FacetRow
             facet="year"
             count={baseCompanies.length}
@@ -665,13 +676,7 @@ export function FacetRail({
             );
           })}
         </FacetGroup>
-        <FacetGroup title="Flags" defaultOpen={!dense} dense={editorial}>
-          <FacetRow facet="flag" active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
-          {flags.map((item) => (
-            <FacetRow key={item.id} facet="flag" count={item.count} active={facets.flag === item.id} onClick={() => set({ flag: facets.flag === item.id ? null : item.id })} label={item.label} icon={FLAG_ICON[item.id]} />
-          ))}
-        </FacetGroup>
-        <FacetGroup title="HQ city" defaultOpen={!dense} dense={editorial}>
+        <FacetGroup title="HQ city" dense={editorial}>
           <FacetRow facet="hq" count={baseCompanies.length} active={!facets.hqRegion} onClick={() => set({ hqRegion: null })} label="All" />
           {hqRegions.map((item) => (
             <FacetRow
@@ -694,7 +699,7 @@ export function FacetRail({
             />
           ) : null}
         </FacetGroup>
-        <FacetGroup title="Sector" defaultOpen={!dense} dense={editorial}>
+        <FacetGroup title="Sector" dense={editorial}>
           <FacetRow facet="sector" count={baseCompanies.length} active={!facets.sector && !facets.sectorMissing} onClick={() => set({ sector: null, sectorMissing: false })} label="All" />
           {sectorRows.map((item) => {
             const missing = item.id === NOT_ON_RECORD;
