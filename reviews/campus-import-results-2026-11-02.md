@@ -2,9 +2,9 @@
 
 **Branch:** `cursor/campus-undergradvc`  
 **Base scoring SHA (hygiene):** `d755f5c` → hygiene tip `322611b` (Canva stub blocklist + cobalt-tint white-on-clear logos)  
-**Import tip SHA:** `061b62f` (queue batch 3); batch2 `5bb6312`; weekly `d4c2126`; priority `c6c58d0`  
+**Import tip SHA:** `f85d02b` (queue batch 3); batch2 `5bb6312`; weekly `d4c2126`; priority `c6c58d0`  
 **Hygiene preview:** https://campus-scout-f74cz2un7-amys-projects-d3dfb125.vercel.app (`322611b`)  
-**Import preview:** `BATCH3_PREVIEW`  
+**Import preview:** https://campus-scout-q46gs8u95-amys-projects-d3dfb125.vercel.app  
 **Prior import preview:** https://campus-scout-ijww4efzp-amys-projects-d3dfb125.vercel.app (batch2 `5bb6312`)  
 **Rules:** public pages only · no logins · rate-limit · no personal contact info · corrected dedupe (domain else name+campus+founders; never name alone) · fields: `university`, `affiliation_type`, `cohort_year`, `enrollment_status` (only when source states it), `website`, `evidence_url` · never present alumni/faculty as current_student.
 
