@@ -57,17 +57,11 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function Field({ label, children, compact }: { label: string; children: ReactNode; compact?: boolean }) {
+function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div
-      className={
-        compact
-          ? "border-b border-[color:var(--line,#E1E5EF)] py-2 last:border-b-0 grid grid-cols-[5.5rem_minmax(0,1fr)] gap-2 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-3 sm:py-2"
-          : "border-b border-[color:var(--line,#E1E5EF)] py-2.5 last:border-b-0 sm:grid sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-3 sm:py-2"
-      }
-    >
+    <div className="border-b border-[color:var(--line,#E1E5EF)] py-2.5 last:border-b-0 sm:grid sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-3 sm:py-2">
       <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">{label}</dt>
-      <dd className={`break-words text-[13px] leading-5 text-[color:var(--fg,#0B0E17)] ${compact ? "mt-0" : "mt-1 sm:mt-0"}`}>{children}</dd>
+      <dd className="mt-1 break-words text-[14px] leading-5 text-[color:var(--fg,#0B0E17)] sm:mt-0 sm:text-[13px]">{children}</dd>
     </div>
   );
 }
@@ -120,8 +114,16 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
       funding?.text ? { label: "Funding", value: funding.text } : null,
       sectorText ? { label: "Sector", value: sectorText } : null,
     ].filter(Boolean) as { label: string; value: string }[]
-  ).slice(0, 6);
+  ).slice(0, 3);
 
+  const hasIdentity =
+    !isEmpty(campus) ||
+    !isEmpty(sectorText) ||
+    !isEmpty(stage) ||
+    !isEmpty(profile.foundedYear) ||
+    !isEmpty(profile.hq) ||
+    !isEmpty(profile.operatingStatus) ||
+    !isEmpty(profile.teamSize);
   const hasCapital = !isEmpty(funding) || !isEmpty(profile.rounds) || !isEmpty(profile.investors) || !isEmpty(yc);
   const hasLinks = !isEmpty(website) || !isEmpty(companyLi) || !isEmpty(otherLinks);
 
@@ -130,20 +132,11 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
       className="relative mb-6 border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] pb-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] sm:mb-0"
       data-company-full-record=""
     >
-      <div className="border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3.5 py-2.5 pl-4 sm:py-3.5" data-full-record-pinned-header="">
-        <div className="flex items-baseline justify-between gap-2">
-          <div className="min-w-0">
-            <p className="scout-kicker">Full record</p>
-            <p className="mt-0.5 truncate text-[18px] font-bold leading-tight tracking-tight text-[color:var(--fg,#0B0E17)] sm:mt-1 sm:text-[24px] sm:whitespace-normal">
-              {project.name || "Company"}
-            </p>
-          </div>
-          {campus || stage ? (
-            <p className="hidden shrink-0 text-right font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] sm:block">
-              {[campus, stage].filter(Boolean).join(" · ")}
-            </p>
-          ) : null}
-        </div>
+      <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3.5 pl-4">
+        <p className="scout-kicker">Full record</p>
+        <p className="mt-1 text-[22px] font-bold leading-tight tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[24px]">
+          {project.name || "Company"}
+        </p>
       </div>
 
       {/* Lead: founders, then pitch, then key stats */}
@@ -185,42 +178,36 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
 
       {keyStats.length > 0 ? (
         <div
-          className="flex flex-wrap border-b border-[color:var(--line,#E1E5EF)]"
+          className={`grid gap-px border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--line,#E1E5EF)] ${
+            keyStats.length >= 3 ? "grid-cols-3" : keyStats.length === 2 ? "grid-cols-2" : "grid-cols-1"
+          }`}
           data-full-record-key-stats=""
         >
           {keyStats.map((stat) => (
-            <div
-              key={stat.label}
-              className={`min-w-[33%] flex-1 border-b border-r border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 last:border-r-0 ${
-                stat.label === "Sector" ? "min-w-full basis-full sm:min-w-[33%] sm:flex-1 sm:basis-[33%]" : "basis-[33%]"
-              }`}
-            >
+            <div key={stat.label} className="bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5">
               <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">{stat.label}</p>
-              <p className="mt-1 text-[13px] font-semibold leading-4 tracking-tight text-[color:var(--fg,#0B0E17)] [overflow-wrap:anywhere]">{stat.value}</p>
+              <p className="mt-1 break-words text-[13px] font-semibold leading-4 tracking-tight text-[color:var(--fg,#0B0E17)]">{stat.value}</p>
             </div>
           ))}
         </div>
       ) : null}
 
       <div className="space-y-3 px-3.5 py-3.5 pl-4">
-        {(() => {
-          const keyLabels = new Set(keyStats.map((s) => s.label));
-          const identityExtras = [
-            !keyLabels.has("Campus") && !isEmpty(campus) ? { label: "Campus", node: <Field label="Campus" compact>{campus}</Field> } : null,
-            !keyLabels.has("Sector") && !isEmpty(sectorText) ? { label: "Sector", node: <Field label="Sector" compact>{sectorText}</Field> } : null,
-            !keyLabels.has("Stage") && !isEmpty(stage) ? { label: "Stage", node: <Field label="Stage" compact>{stage}</Field> } : null,
-            !keyLabels.has("Founded") && !isEmpty(profile.foundedYear) ? { label: "Founded", node: <Field label="Founded" compact>{profile.foundedYear?.text}</Field> } : null,
-            !isEmpty(profile.hq) ? { label: "HQ", node: <Field label="HQ" compact>{profile.hq?.text}</Field> } : null,
-            !isEmpty(profile.operatingStatus) ? { label: "Status", node: <Field label="Status" compact>{profile.operatingStatus?.text}</Field> } : null,
-            !isEmpty(profile.teamSize) ? { label: "Team size", node: <Field label="Team size" compact>{profile.teamSize?.text}</Field> } : null,
-            !isEmpty(profile.description) && !pitch ? { label: "Description", node: <Field label="Description">{profile.description?.text}</Field> } : null,
-            !isEmpty(profile.description) && pitch && (profile.description?.text || "").trim() !== pitch
-              ? { label: "Description", node: <Field label="Description">{profile.description?.text}</Field> }
-              : null,
-          ].filter(Boolean) as { label: string; node: ReactNode }[];
-          if (!identityExtras.length) return null;
-          return <Group title="Identity">{identityExtras.map((row) => <span key={row.label}>{row.node}</span>)}</Group>;
-        })()}
+        {hasIdentity ? (
+          <Group title="Identity">
+            {!isEmpty(campus) ? <Field label="Campus">{campus}</Field> : null}
+            {!isEmpty(sectorText) ? <Field label="Sector">{sectorText}</Field> : null}
+            {!isEmpty(stage) ? <Field label="Stage">{stage}</Field> : null}
+            {!isEmpty(profile.foundedYear) ? <Field label="Founded">{profile.foundedYear?.text}</Field> : null}
+            {!isEmpty(profile.hq) ? <Field label="HQ">{profile.hq?.text}</Field> : null}
+            {!isEmpty(profile.operatingStatus) ? <Field label="Status">{profile.operatingStatus?.text}</Field> : null}
+            {!isEmpty(profile.teamSize) ? <Field label="Team size">{profile.teamSize?.text}</Field> : null}
+            {!isEmpty(profile.description) && !pitch ? <Field label="Description">{profile.description?.text}</Field> : null}
+            {!isEmpty(profile.description) && pitch && (profile.description?.text || "").trim() !== pitch ? (
+              <Field label="Description">{profile.description?.text}</Field>
+            ) : null}
+          </Group>
+        ) : null}
 
         {hasCapital ? (
           <Group title="Capital">

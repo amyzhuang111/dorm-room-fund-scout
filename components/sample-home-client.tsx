@@ -245,20 +245,24 @@ export function SampleHomeClient(props: {
       setCompanies(cards);
       setReady(true);
     });
-    void fetch("/data/founders.json")
-      .then(async (res) => {
-        if (!res.ok) throw new Error(String(res.status));
-        const data = (await res.json()) as FounderLead[];
-        return Array.isArray(data) ? data : [];
-      })
-      .then((rows) => {
-        if (dead) return;
-        setFounders(rows);
-        setFounderStatus("ready");
-      })
-      .catch(() => {
-        if (!dead) setFounderStatus("error");
-      });
+    void (async () => {
+      const attempts = 3;
+      for (let i = 0; i < attempts; i++) {
+        try {
+          const res = await fetch("/data/founders.json", { cache: "no-store" });
+          if (!res.ok) throw new Error(String(res.status));
+          const data = (await res.json()) as FounderLead[];
+          if (!Array.isArray(data) || data.length === 0) throw new Error("empty founders");
+          if (dead) return;
+          setFounders(data);
+          setFounderStatus("ready");
+          return;
+        } catch {
+          if (i < attempts - 1) await new Promise((r) => setTimeout(r, 200 * (i + 1)));
+        }
+      }
+      if (!dead) setFounderStatus("error");
+    })();
     return () => {
       dead = true;
     };

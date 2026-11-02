@@ -267,15 +267,14 @@ export function SampleCompanyShell({
           <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
         </div>
         <div
-          className="relative z-10 mb-3 mt-1 scroll-mt-[5.5rem] sm:hidden"
+          className="mb-4 mt-1 scroll-mt-[5.5rem] sm:hidden"
           data-dossier-timeline=""
           data-mobile-chrono-identity=""
           data-company-mobile-hero=""
           data-summary-card=""
-          data-company-pinned-header=""
         >
-          <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)]/95 shadow-sm backdrop-blur-sm before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]" data-dossier-spread-mobile="">
-            <div className="flex gap-2.5 px-3 py-2">
+          <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]" data-dossier-spread-mobile="">
+            <div className="flex gap-3 px-3.5 py-3">
               {dossier?.logoUrl ? (
                 <img src={dossier.logoUrl} alt="" width={44} height={44} className="mt-1 h-11 w-11 shrink-0 rounded-sm border border-[color:var(--line,#E1E5EF)] object-contain" data-dossier-logo="" />
               ) : (
@@ -285,11 +284,11 @@ export function SampleCompanyShell({
               )}
               <div className="min-w-0 flex-1">
                 <p className="scout-kicker">Scout dossier</p>
-                <p className="mt-0.5 text-[20px] font-bold leading-[1.05] tracking-tight text-[color:var(--fg,#0B0E17)]" data-company-name-lead="">
+                <p className="mt-1 text-[28px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)]" data-company-name-lead="">
                   {dossier?.name ?? "Company"}
                 </p>
                 {dossier?.pitch ? (
-                  <p className="mt-1 line-clamp-2 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]" data-dossier-pitch="">
+                  <p className="mt-1.5 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-dossier-pitch="">
                     {dossier.pitch}
                   </p>
                 ) : null}
@@ -343,6 +342,41 @@ export function SampleCompanyShell({
                 </p>
               </div>
             ) : null}
+            {/* Peer signal strip · titled section; hide identical scrape dates */}
+            <div className="mt-2 border-t border-[color:var(--line,#E1E5EF)] pt-1.5" data-dossier-peers-section="">
+            <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">
+              {campusPeers ? "Campus peers" : sectorPeers ? "Sector peers" : "Nearby signals"}
+            </p>
+            <ol className="mt-1 space-y-0.5" data-dossier-signal-timeline="">
+              {(() => {
+                const rows = wireCompanies
+                  .filter((c) => (c.signals ?? 0) > 0 || (c.latestSignalAt ?? "").length >= 4)
+                  .slice()
+                  .sort((a, b) => (b.signals ?? 0) - (a.signals ?? 0) || (b.latestSignalAt ?? "").localeCompare(a.latestSignalAt ?? ""))
+                  .slice(0, 3);
+                const dates = rows.map((c) => (c.latestSignalAt ?? "").replace(/-00/g, "")).filter(Boolean);
+                const unique = new Set(dates);
+                const scrapeOnly = unique.size <= 1 && dates.length >= 2;
+                return rows.map((c, i) => {
+                  const at = (c.latestSignalAt ?? "").replace(/-00/g, "");
+                  return (
+                    <li key={c.id} className="flex flex-wrap items-baseline gap-x-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                      <span className="w-4 shrink-0 text-[color:var(--cobalt,#2F4FD8)]">{String(i + 1).padStart(2, "0")}</span>
+                      <Link href={`/startup/${c.id}`} className="min-w-0 flex-1 truncate font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline">{c.name}</Link>
+                      {c.signalLabel ? (
+                        <span className="shrink-0 font-bold text-[color:var(--ember,#D96B1C)]">{c.signalLabel}</span>
+                      ) : null}
+                      {at && !scrapeOnly ? (
+                        <span className="shrink-0">{at}</span>
+                      ) : at && scrapeOnly && i === 0 ? (
+                        <span className="shrink-0 text-[color:var(--fg-3,#5C647A)]">Indexed {at}</span>
+                      ) : null}
+                    </li>
+                  );
+                });
+              })()}
+            </ol>
+            </div>
             </div>
           </div>
         </div>

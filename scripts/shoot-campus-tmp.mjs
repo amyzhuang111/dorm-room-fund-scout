@@ -16,6 +16,29 @@ async function waitDirectory(page) {
 }
 
 /** Fold shots must wait for MapLibre idle → data-globe-state=ready (no LOADING GLOBE). */
+
+async function waitFoundersReady(page) {
+  await page.waitForSelector("[data-founder-results]", { timeout: 30000 }).catch(() => {});
+  await page.waitForFunction(() => {
+    const body = document.body?.innerText || "";
+    if (/could not be loaded|failed to load/i.test(body)) return "error";
+    if (document.querySelectorAll("[data-founder-card]").length > 0) return "ok";
+    return false;
+  }, { timeout: 60000 });
+  const state = await page.evaluate(() => {
+    const body = document.body?.innerText || "";
+    const selects = [...document.querySelectorAll("[data-founder-filters] select")];
+    return {
+      failed: /could not be loaded|failed to load/i.test(body),
+      cards: document.querySelectorAll("[data-founder-card]").length,
+      filterOptions: selects.map((s) => s.options.length),
+    };
+  });
+  if (state.failed || state.cards < 1 || state.filterOptions.some((n) => n <= 1)) {
+    throw new Error(`founder fold not ready for shot: ${JSON.stringify(state)}`);
+  }
+}
+
 async function waitGlobeIdle(page) {
   await page.waitForSelector('[data-globe-state="ready"]', { timeout: 45000 });
   // One extra paint after ready so cream fill + dots settle.
@@ -82,6 +105,7 @@ const browser = await chromium.launch({ headless: true });
   await page.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForSelector("[data-founder-search]", { timeout: 20000 });
+  await waitFoundersReady(page);
   await waitGlobeIdle(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(200);
@@ -226,6 +250,7 @@ const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
   await page.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
+  await waitFoundersReady(page);
   await page.waitForSelector("[data-founder-search]", { timeout: 20000 });
   await waitGlobeIdle(page);
   await page.evaluate(() => window.scrollTo(0, 0));
