@@ -135,15 +135,25 @@ async function main() {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
     await page.waitForTimeout(2000);
-    // Open right rail overlays
-    const panels = page.locator('button:has-text("Panels"), [data-open-right-rail], button:has-text("Overlays")').first();
-    if (await panels.count()) {
-      await panels.click().catch(() => {});
-      await page.waitForTimeout(400);
+    // Ensure right rail is open, then select Overlays (do not toggle closed).
+    const feedToggle = page.locator('button:has-text("Feed"), button:has-text("Hide feed"), button:has-text("Panels"), button:has-text("Hide panels")').first();
+    if (await feedToggle.count()) {
+      const label = ((await feedToggle.textContent()) || "").toLowerCase();
+      if (label.includes("feed") && !label.includes("hide")) {
+        await feedToggle.click().catch(() => {});
+        await page.waitForTimeout(350);
+      }
     }
-    const overlaysTab = page.locator('[data-tab="overlays"]');
+    const overlaysTab = page.locator('[data-tab="overlays"]:visible').first();
     if (await overlaysTab.count()) {
       await overlaysTab.click();
+      await page.waitForTimeout(500);
+    } else {
+      // Fallback: any overlays tab force-visible via evaluate
+      await page.evaluate(() => {
+        const tab = document.querySelector('[data-tab="overlays"]');
+        tab?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      });
       await page.waitForTimeout(500);
     }
     const cross = await page.evaluate(() => {

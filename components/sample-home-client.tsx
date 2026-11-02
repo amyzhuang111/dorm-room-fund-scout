@@ -85,21 +85,20 @@ function PeakShareLite({
   const peakLabel = shell.peakLabel;
   const pct = Math.round((peakCount / Math.max(1, shell.dated)) * 100);
   return (
-    <div data-fold-peak-ssr-shell="" data-fold-peak-identity="" data-fold-baseline="8">
-      <div className="mb-1 hidden min-h-[11.5rem] lg:block" data-fold-peak-desk="">
-        <div className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-end gap-5 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-peak-share="">
+    <div data-fold-peak-ssr-shell="" data-fold-peak-identity="" data-fold-baseline="8" data-fold-redesign="seal-dispatch">
+      <div className="mb-1 hidden min-h-[15rem] lg:block" data-fold-peak-desk="">
+        <div className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] items-end gap-6 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-peak-share="">
           <div className="min-w-0">
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
-            <p className="mt-1 font-mono text-[56px] font-bold leading-[0.82] tracking-[-0.08em] text-[color:var(--ember,#D96B1C)]">
+            <p className="mt-1 font-mono text-[84px] font-bold leading-[0.8] tracking-[-0.08em] text-[color:var(--cobalt,#2F4FD8)]">
               {peakCount.toLocaleString("en-US")}
-              <span className="mx-2 text-[26px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
-              <span className="text-[32px] font-bold tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
+              <span className="mx-2 text-[28px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
+              <span className="text-[36px] font-bold tracking-[-0.06em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
             </p>
-            <p className="mt-2 max-w-[34rem] text-[16px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
-              {peakLabel} took <span className="text-[color:var(--ember,#D96B1C)]">{pct}%</span>
+            <p className="mt-2 max-w-[36rem] text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
+              {peakLabel} took <span className="text-[color:var(--cobalt,#2F4FD8)]">{pct}%</span>
               {" of every dated signal on record"}
             </p>
-            {/* Height twin for month bars · marks paint on live hydrate */}
             <div className="mt-3 h-[4.25rem]" data-fold-peak-bars-reserve="" aria-hidden="true" />
             <p className="mt-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
               {shell.dated.toLocaleString("en-US")} dated
@@ -109,25 +108,24 @@ function PeakShareLite({
               {shell.quiet.toLocaleString("en-US")} quiet
             </p>
           </div>
-          <div className="min-w-0 self-stretch border-l border-[color:var(--line,#E1E5EF)] pl-4" data-fold-top-campuses-desk="" data-fold-top-campuses-ssr="">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Top campuses</p>
-            {/* Height twin for live campus ranks · avoids SSR name payload */}
-            <div className="mt-2.5 h-[9.5rem]" data-fold-peak-campus-rank-reserve="" aria-hidden="true" />
+          <div className="min-w-0 self-stretch border-l border-[color:var(--cobalt,#2F4FD8)]/25 pl-5" data-fold-top-campuses-desk="" data-fold-top-campuses-ssr="">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Desk rank</p>
+            <div className="mt-3 h-[9.5rem]" data-fold-peak-campus-rank-reserve="" aria-hidden="true" />
           </div>
         </div>
       </div>
-      <div className="min-h-[9.75rem] border-b border-[color:var(--line,#E1E5EF)] pb-2.5 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
+      <div className="min-h-[10.5rem] border-b border-[color:var(--line,#E1E5EF)] pb-2.5 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
         <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
-        <p className="mt-1 font-mono text-[40px] font-bold leading-[0.84] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
+        <p className="mt-0.5 font-mono text-[40px] font-bold leading-[0.84] tracking-[-0.07em] text-[color:var(--cobalt,#2F4FD8)]">
           {peakCount.toLocaleString("en-US")}
           <span className="mx-1.5 text-[18px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
           <span className="text-[24px] font-bold tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
         </p>
-        <p className="mt-1.5 text-[14px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
-          {peakLabel} took <span className="text-[color:var(--ember,#D96B1C)]">{pct}%</span> of every dated signal
+        <p className="mt-1 text-[14px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
+          {peakLabel} took <span className="text-[color:var(--cobalt,#2F4FD8)]">{pct}%</span> of every dated signal
         </p>
         <div className="mt-1.5 h-[2.6rem]" data-fold-peak-bars-mobile-reserve="" aria-hidden="true" />
-        <div className="mt-2 h-9 border-t border-[color:var(--line,#E1E5EF)] pt-2" data-fold-peak-campus-rank-mobile-reserve="" aria-hidden="true" />
+        <div className="mt-2 h-11 border-t border-[color:var(--line,#E1E5EF)] pt-2" data-fold-peak-campus-rank-mobile-reserve="" aria-hidden="true" />
       </div>
     </div>
   );
@@ -460,7 +458,7 @@ export function SampleHomeClient(props: {
 
 function Tab({ href, active, children }: { href: string; active: boolean; children: string }) {
   return (
-    <Link href={href} role="tab" aria-selected={active} className={`grid h-8 place-items-center border-b-2 px-2.5 font-mono text-[12px] font-medium uppercase tracking-[0.08em] ${active ? "border-[color:var(--ember,#D96B1C)] text-[color:var(--fg,#0B0E17)]" : "border-transparent text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg-2,#3F465C)]"}`}>
+    <Link href={href} role="tab" aria-selected={active} className={`grid h-8 place-items-center border-b-2 px-2.5 font-mono text-[12px] font-medium uppercase tracking-[0.08em] ${active ? "border-[color:var(--cobalt,#2F4FD8)] text-[color:var(--fg,#0B0E17)]" : "border-transparent text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg-2,#3F465C)]"}`}>
       {children}
     </Link>
   );

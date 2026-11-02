@@ -32,7 +32,7 @@ const OCEAN = "#EEF1F8";
 const LAND = "#6F7C96";
 const BOUNDARY = "#1E3A9A";
 const BRAND = "#2F4FD8";
-const COUNT = "font-bold tabular-nums text-[color:var(--ember,#D96B1C)]";
+const COUNT = "font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]";
 
 const COUNTRY_COLOR: Record<string, string> = {
   "United States": "#2F4FD8",
@@ -282,9 +282,9 @@ export function TileGlobe({
             "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["+", ["*", ["get", "radius"], 1.05], 6], 1.8, ["+", ["*", ["get", "radius"], 1.15], 7], 3.2, ["+", ["*", ["get", "radius"], 1.55], 8]],
             "circle-color": "#2F4FD8",
             "circle-opacity": 0.18,
-            "circle-stroke-color": "#D96B1C",
+            "circle-stroke-color": "#2F4FD8",
             "circle-stroke-width": 1.35,
-            "circle-stroke-opacity": 0.62,
+            "circle-stroke-opacity": 0.55,
           },
         });
         map.addLayer({
@@ -294,7 +294,7 @@ export function TileGlobe({
           paint: {
             "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["*", ["get", "radius"], 0.95], 1.8, ["*", ["get", "radius"], 1.12], 3.2, ["*", ["get", "radius"], 1.5]],
             "circle-color": ["case", ["==", ["get", "top"], 1], "#2F4FD8", ["get", "color"]],
-            "circle-stroke-color": ["case", ["==", ["get", "top"], 1], "#D96B1C", "#FFFFFF"],
+            "circle-stroke-color": ["case", ["==", ["get", "top"], 1], "#2F4FD8", "#FFFFFF"],
             "circle-stroke-width": ["case", ["==", ["get", "top"], 1], 2.2, 1.25],
             "circle-opacity": 0.96,
           },
@@ -742,7 +742,7 @@ export function TileGlobe({
                       (window as unknown as { __campusScoutMap?: { resize?: () => void } }).__campusScoutMap?.resize?.();
                     } catch { /* ignore */ }
                   }}
-                  className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline"
+                  className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)] hover:underline"
                   data-entity-clear=""
                 >
                   Clear
@@ -804,7 +804,7 @@ export function TileGlobe({
                     onClick={() => focus(campus)}
                     className={`flex w-full items-baseline gap-2 px-1 py-2 text-left hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50 ${active ? "bg-[color:var(--cobalt-haze,#E8ECFA)]" : ""}`}
                   >
-                    <span className="w-5 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
+                    <span className="w-5 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span className="min-w-0 flex-1 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{label}</span>

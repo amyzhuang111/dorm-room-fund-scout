@@ -6,7 +6,7 @@ import type { FacetCompany } from "@/lib/domain/sample-facets";
 import type { FounderLead } from "@/lib/domain/founder-index";
 import type { WeekItem } from "@/lib/domain/hero-stats";
 
-const COUNT = "font-bold tabular-nums text-[color:var(--ember,#D96B1C)]";
+const COUNT = "font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]";
 
 export type ActiveChip = {
   key: string;
@@ -58,7 +58,7 @@ export function CurrentViewStrip({
           <span>
             Campus · <span className="font-semibold">{campusName}</span>
             {" "}
-            <button type="button" onClick={onClearCampus} className="font-medium text-[color:var(--ember,#D96B1C)] hover:underline">
+            <button type="button" onClick={onClearCampus} className="font-medium text-[color:var(--cobalt,#2F4FD8)] hover:underline">
               Clear
             </button>
           </span>
@@ -67,7 +67,7 @@ export function CurrentViewStrip({
           <span>
             Search · <span className="font-semibold">&ldquo;{q}&rdquo;</span>
             {" "}
-            <button type="button" onClick={onClearQuery} className="font-medium text-[color:var(--ember,#D96B1C)] hover:underline">
+            <button type="button" onClick={onClearQuery} className="font-medium text-[color:var(--cobalt,#2F4FD8)] hover:underline">
               Clear
             </button>
           </span>
@@ -82,7 +82,7 @@ export function CurrentViewStrip({
           {startups.slice(0, 6).map((s, i) => (
             <span key={s.id}>
               {i > 0 ? " · " : null}
-              <Link href={`/startup/${s.id}?from=map`} className="font-medium text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--ember,#D96B1C)] hover:underline">
+              <Link href={`/startup/${s.id}?from=map`} className="font-medium text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--cobalt,#2F4FD8)] hover:underline">
                 {s.name}
               </Link>
             </span>
@@ -165,7 +165,7 @@ export function LineagePanels({
                 <>
                   <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{title}</span>
                   <span className="text-[color:var(--fg-3,#5C647A)]"> · {item.campus}</span>
-                  {item.tag ? <span className="text-[color:var(--ember,#D96B1C)]"> · {item.tag}</span> : null}
+                  {item.tag ? <span className="text-[color:var(--cobalt,#2F4FD8)]"> · {item.tag}</span> : null}
                 </>
               );
               return (
@@ -214,10 +214,10 @@ export function FilterChips({
           key={chip.key}
           type="button"
           onClick={chip.onClear}
-          className="inline-flex h-7 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 text-[12px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--ember,#D96B1C)]"
+          className="inline-flex h-7 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 text-[12px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
         >
           {chip.label}
-          <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)]">×</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">×</span>
         </button>
       ))}
     </div>
