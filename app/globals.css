@@ -482,7 +482,7 @@ a, button {
 }
 
 
-/* Sample Halflight daylight: force true white on document while sample is open (nav included). Not cream. */
+/* Sample Halflight daylight: force true white on document while sample is open (nav included). Cobalt ink; no cream or orange. */
 html[data-sample="halflight"],
 html[data-sample="halflight"] body {
   --bg: #FFFFFF;
@@ -496,13 +496,13 @@ html[data-sample="halflight"] body {
   --cobalt: #2F4FD8;
   --cobalt-haze: #E8ECFA;
   --link: #2F4FD8;
-  --ember: #D96B1C;
-  --amber: #E89A3A;
-  --accent: #D96B1C;
+  --ember: #2F4FD8;
+  --amber: #2F4FD8;
+  --accent: #2F4FD8;
   --accent-foreground: #FFFFFF;
   --on-ember: #FFFFFF;
-  --accent-2: #D96B1C;
-  --accent-subtle: #F3E7DC;
+  --accent-2: #2F4FD8;
+  --accent-subtle: #E8ECFA;
   --background: #FFFFFF;
   --surface: #FFFFFF;
   --surface-2: #F3F5F9;
@@ -513,7 +513,7 @@ html[data-sample="halflight"] body {
   background: #FFFFFF;
 }
 
-/* Sample product: Halflight daylight - true white field, ember signal, cobalt type. Not YCGlobe cream. */
+/* Sample product: Halflight daylight - true white field, cobalt ink only, campus seals. Not YCGlobe cream or orange. */
 .sample-paper {
   --bg: #FFFFFF;
   --bg-raised: #FFFFFF;
@@ -526,9 +526,9 @@ html[data-sample="halflight"] body {
   --cobalt: #2F4FD8;
   --cobalt-haze: #E8ECFA;
   --link: #2F4FD8;
-  --ember: #D96B1C;
-  --amber: #E89A3A;
-  --accent: #D96B1C;
+  --ember: #2F4FD8;
+  --amber: #2F4FD8;
+  --accent: #2F4FD8;
   --accent-foreground: #FFFFFF;
   --on-ember: #FFFFFF;
   --background: var(--bg);
@@ -632,6 +632,17 @@ html[data-sample="halflight"] body {
   --scout-kicker: 0.16em;
   --scout-rule: 2px;
 }
+/* Campus Scout signature mark — typographic seal */
+.campus-seal {
+  font-variant-ligatures: none;
+  font-feature-settings: "tnum" 1;
+}
+.sample-paper .campus-seal {
+  border-color: var(--cobalt, #2F4FD8);
+  color: var(--cobalt, #2F4FD8);
+  background: #FFFFFF;
+}
+
 .sample-paper .scout-kicker {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-size: 10px;
@@ -686,7 +697,7 @@ html[data-sample="halflight"] body {
   font-size: 13px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: var(--ember, #D96B1C);
+  color: var(--ember, #2F4FD8);
 }
 .sample-paper .campus-index-row .campus-name {
   min-width: 0;
@@ -711,7 +722,7 @@ html[data-sample="halflight"] body {
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
-  color: var(--ember, #D96B1C);
+  color: var(--ember, #2F4FD8);
 }
 .sample-paper .campus-index-row .campus-meta {
   grid-column: 1 / -1;
@@ -831,7 +842,7 @@ html[data-sample="halflight"] body {
   font-weight: 700;
 }
 [data-corpus-cards] .c-a:hover {
-  color: var(--ember, #D96B1C);
+  color: var(--ember, #2F4FD8);
   text-decoration: underline;
 }
 [data-corpus-cards] .c-num { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-variant-numeric: tabular-nums; }
@@ -839,7 +850,7 @@ html[data-sample="halflight"] body {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-variant-numeric: tabular-nums;
   font-weight: 700;
-  color: var(--ember, #D96B1C);
+  color: var(--ember, #2F4FD8);
 }
 [data-corpus-cards] .c-link { color: var(--cobalt, #2F4FD8); text-decoration: underline; }
 
@@ -905,6 +916,11 @@ html[data-sample="halflight"] body {
   [data-corpus-cards] .c-mark {
     display: contents;
   }
+  /* Campus seal must keep its box (contents would collapse the double-rule frame). */
+  [data-corpus-cards] .c-mark:has(.campus-seal) {
+    display: flex;
+    align-items: center;
+  }
   [data-corpus-cards] .c-m,
   [data-corpus-cards] .c-fund {
     display: inline;
@@ -918,7 +934,7 @@ html[data-sample="halflight"] body {
     color: var(--fg-2, #3F465C);
   }
   [data-corpus-cards] .c-fund {
-    color: var(--ember, #D96B1C);
+    color: var(--ember, #2F4FD8);
     font-weight: 600;
   }
   /* Hide blank meta cells entirely so separators never become "· ·". */
@@ -950,7 +966,7 @@ html[data-sample="halflight"] body {
     color: var(--fg-2, #3F465C);
   }
   [data-corpus-cards] .c-d.c-d-m.c-sig {
-    color: var(--ember, #D96B1C);
+    color: var(--ember, #2F4FD8);
   }
   [data-corpus-cards] .c-d.c-d-m:has(.c-b) {
     display: none !important;

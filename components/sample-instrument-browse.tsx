@@ -10,6 +10,7 @@ import { whyItsHere } from "@/lib/domain/directory-rank";
 import { directoryCardSubtitle } from "@/lib/domain/sample-facets";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { shortCampusLabel } from "@/lib/domain/campuses";
+import { CampusSeal } from "@/components/campus-seal";
 import {
   applyFacets,
   emptyFacets,
@@ -304,6 +305,20 @@ export function SampleInstrumentBrowse({
   const sliceInsight = useMemo(() => endSliceInsight(cards), [cards]);
   /** Leaderboard podium: top campuses by founders; signals = companies with signal on that desk. */
   const podiumRankedCount = useMemo(() => campusFoundersRanked(campuses).length, [campuses]);
+  /** Distinct campus seals on this loaded page — signature strip for more-end. */
+  const pageCampusSeals = useMemo(() => {
+    const seen = new Set<string>();
+    const out: string[] = [];
+    for (const card of cards) {
+      const label = (card.school || "").trim();
+      if (!label || seen.has(label)) continue;
+      seen.add(label);
+      out.push(label);
+      if (out.length >= 8) break;
+    }
+    return out;
+  }, [cards]);
+
   const podiumRows = useMemo(() => {
     const signaledByCampus = new Map<string, number>();
     for (const card of boardCompanies) {
@@ -742,7 +757,7 @@ export function SampleInstrumentBrowse({
             ) : null}
             <div data-ledger-stage={feed} data-ledger-top={pages > 1 ? undefined : ""}>
             {feed === "leaderboard" ? (
-              <div className="mb-4 lg:hidden">
+              <div className="mb-4" data-signals-podium-wrap="">
                 <ScoutSignalPodium rows={podiumRows} totalOnDesk={total} rankedCount={podiumRankedCount} allHref="/campuses" />
               </div>
             ) : null}
@@ -817,6 +832,16 @@ export function SampleInstrumentBrowse({
                     <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
                       Loaded so far
                     </p>
+                    {pageCampusSeals.length ? (
+                      <div className="mt-2.5 flex flex-wrap items-center gap-1.5" data-page-campus-seals="">
+                        {pageCampusSeals.map((label) => (
+                          <CampusSeal key={label} label={label} size="sm" />
+                        ))}
+                        <span className="ml-1 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
+                          campuses on this page
+                        </span>
+                      </div>
+                    ) : null}
                     <p className="mt-2 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[44px]">
                       {cards.length.toLocaleString("en-US")}
                       <span className="mx-1.5 text-[18px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">of</span>
@@ -881,6 +906,13 @@ export function SampleInstrumentBrowse({
                     data-pass-close=""
                   >
                     <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--fg-3,#5C647A)]">End of this batch</p>
+                    {pageCampusSeals.length ? (
+                      <div className="mt-1.5 flex flex-wrap items-center gap-1" data-page-campus-seals="">
+                        {pageCampusSeals.slice(0, 6).map((label) => (
+                          <CampusSeal key={label} label={label} size="sm" />
+                        ))}
+                      </div>
+                    ) : null}
                     <p className="mt-1 font-mono text-[15px] font-semibold tabular-nums tracking-tight text-[color:var(--fg,#0B0E17)]" data-ledger-showing="" data-end-lead="" data-more-context="">
                       <span>{cards.length.toLocaleString("en-US")}</span>
                       <span className="ml-1 text-[11px] font-medium text-[color:var(--fg-3,#5C647A)]">
@@ -1052,7 +1084,12 @@ function LedgerRow({
           {String(rank).padStart(2, "0")}
         </span>
       ) : null}
-      <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 20 : 24} />
+      {/* Campus seal is the owned list mark; company logo only when campus unknown */}
+      {card.school ? (
+        <CampusSeal label={card.school} size={ranked ? "sm" : "md"} className="mt-0.5" />
+      ) : (
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 20 : 24} />
+      )}
       <div className="min-w-0 flex-1">
         <p
           className={

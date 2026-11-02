@@ -8,6 +8,7 @@ import { topConnectors } from "@/lib/domain/connectors";
 import { listNews } from "@/lib/domain/news";
 import { TopConnectors } from "@/components/top-connectors";
 import { CompanyWebsiteIcon } from "@/components/company-website";
+import { CampusSeal } from "@/components/campus-seal";
 import { PrecollegeBadges } from "@/components/badges";
 import type { PrecollegeSignalView } from "@/lib/domain/precollege";
 
@@ -337,7 +338,8 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
           const lowConfidence = (s.significance_note ?? "").startsWith("Low confidence");
           return (
             <li key={s.id} className="rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3">
-              <span className="inline-flex items-center gap-1">
+              <span className="inline-flex items-center gap-2">
+                <CampusSeal label={s.university_name} size="sm" />
                 <Link href={detailHref} className="text-sm font-medium text-foreground hover:text-link">
                   {s.founder_name ?? s.project_name}
                   {s.university_name ? ` · ${s.university_name}` : ""}

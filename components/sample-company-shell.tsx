@@ -7,6 +7,7 @@ import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { campusPeerCompanies } from "@/lib/domain/sample-facets";
 import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
 import { shortCampusLabel } from "@/lib/domain/campuses";
+import { CampusSeal } from "@/components/campus-seal";
 import {
   applyFacets,
   emptyFacets,
@@ -132,13 +133,19 @@ export function SampleCompanyShell({
           {dossier?.name ? (
             <div className="relative flex flex-wrap items-start justify-between gap-4 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] p-4 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
               <div className="flex min-w-0 flex-1 gap-3 pl-1">
-                {dossier.logoUrl ? (
-                  <img src={dossier.logoUrl} alt="" width={48} height={48} className="mt-1 h-12 w-12 shrink-0 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] object-contain" data-dossier-logo="" />
-                ) : (
-                  <div className="mt-1 grid h-12 w-12 shrink-0 place-items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[14px] font-bold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>
-                    {(dossier.name.trim()[0] || "?").toUpperCase()}
-                  </div>
-                )}
+                <div className="mt-1 flex shrink-0 flex-col items-center gap-1.5">
+                  {dossier.logoUrl ? (
+                    <img src={dossier.logoUrl} alt="" width={48} height={48} className="h-12 w-12 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] object-contain" data-dossier-logo="" />
+                  ) : (
+                    <div className="grid h-12 w-12 place-items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[14px] font-bold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>
+                      {(dossier.name.trim()[0] || "?").toUpperCase()}
+                    </div>
+                  )}
+                  <CampusSeal
+                    label={dossier.schoolId ? shortCampusLabel(dossier.schoolId, dossier.campus ?? "") : dossier.campus}
+                    size="sm"
+                  />
+                </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-[28px] font-bold leading-[1.05] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[32px] lg:text-[36px]">
                     {dossier.name}
@@ -276,13 +283,19 @@ export function SampleCompanyShell({
         >
           <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]" data-dossier-spread-mobile="">
             <div className="flex gap-3 px-3.5 py-3">
-              {dossier?.logoUrl ? (
-                <img src={dossier.logoUrl} alt="" width={44} height={44} className="mt-1 h-11 w-11 shrink-0 rounded-sm border border-[color:var(--line,#E1E5EF)] object-contain" data-dossier-logo="" />
-              ) : (
-                <div className="mt-1 grid h-11 w-11 shrink-0 place-items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[13px] font-bold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>
-                  {((dossier?.name ?? "?").trim()[0] || "?").toUpperCase()}
-                </div>
-              )}
+              <div className="mt-1 flex shrink-0 flex-col items-center gap-1.5">
+                {dossier?.logoUrl ? (
+                  <img src={dossier.logoUrl} alt="" width={44} height={44} className="h-11 w-11 rounded-sm border border-[color:var(--line,#E1E5EF)] object-contain" data-dossier-logo="" />
+                ) : (
+                  <div className="grid h-11 w-11 place-items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[13px] font-bold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>
+                    {((dossier?.name ?? "?").trim()[0] || "?").toUpperCase()}
+                  </div>
+                )}
+                <CampusSeal
+                  label={dossier?.schoolId ? shortCampusLabel(dossier.schoolId, dossier.campus ?? "") : dossier?.campus}
+                  size="sm"
+                />
+              </div>
               <div className="min-w-0 flex-1">
                 <p className="scout-kicker">Scout dossier</p>
                 <p className="mt-1 text-[28px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)]" data-company-name-lead="">

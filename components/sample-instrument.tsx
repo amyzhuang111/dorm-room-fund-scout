@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { shortCampusLabel } from "@/lib/domain/campuses";
+import { CampusSeal } from "@/components/campus-seal";
 import {
   countBy,
   FLAG_LABEL,
@@ -104,7 +105,10 @@ export function ScoutSignalPodium({
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2">
-                  <span className={`min-w-0 truncate font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] ${i === 0 ? "text-[18px]" : "text-[15px]"}`}>{row.label}</span>
+                  <span className="flex min-w-0 items-center gap-2">
+                    <CampusSeal label={row.label} size={i === 0 ? "md" : "sm"} />
+                    <span className={`min-w-0 truncate font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] ${i === 0 ? "text-[18px]" : "text-[15px]"}`}>{row.label}</span>
+                  </span>
                   <span className={`shrink-0 font-mono font-bold tabular-nums text-[color:var(--ember,#D96B1C)] ${i < 3 ? "text-[18px]" : "text-[14px]"}`}>{row.founders.toLocaleString("en-US")}</span>
                 </div>
                 <div className={`overflow-hidden rounded-sm bg-[color:var(--bg-sunken,#F3F5F9)] ${i < 3 ? "mt-2 h-2" : "mt-1.5 h-1.5"}`}>

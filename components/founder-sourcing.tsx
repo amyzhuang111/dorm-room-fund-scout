@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
+import { CampusSeal } from "@/components/campus-seal";
 import {
   filterFounders,
   founderMatches,
@@ -283,6 +284,9 @@ export function FounderResults({
                     ? "border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)]"
                     : "border-transparent bg-[color:var(--bg,#FFFFFF)]"
                 }`}>
+                  <div className="flex items-start gap-2.5">
+                    <CampusSeal label={founder.campus} size="md" className="mt-0.5" />
+                    <div className="min-w-0 flex-1">
                   <h3 className="text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{founder.name}</h3>
                   <p className="mt-1 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">
                     <Field label="Campus" value={founder.campus} />
@@ -329,6 +333,8 @@ export function FounderResults({
                       Why worth a look blank
                     </p>
                   )}
+                    </div>
+                  </div>
                 </article>
               </li>
             );

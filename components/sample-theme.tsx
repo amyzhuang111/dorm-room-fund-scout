@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-/** Keep the sample product on Halflight daylight: true white + ember/cobalt. */
+/** Keep the sample product on Halflight daylight: true white + cobalt ink + campus seals. */
 export function SampleTheme() {
   useEffect(() => {
     const root = document.documentElement;

@@ -4,6 +4,7 @@ import { buildDirectoryFromDb } from "@/lib/domain/directory";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
 import { DataTheme } from "@/components/data-theme";
 import { CorpusRowMark } from "@/components/corpus-row-mark";
+import { CampusSeal } from "@/components/campus-seal";
 
 export const dynamic = "force-dynamic";
 
@@ -166,7 +167,11 @@ export default async function DataExplorerPage({
               <tr key={row.id} className="c-r align-top" data-corpus-row="">
                 <td className="c-n">
                   <span className="c-mark">
-                    <CorpusRowMark name={row.name} website={row.website} />
+                    {row.campus ? (
+                      <CampusSeal label={row.campus} size="sm" />
+                    ) : (
+                      <CorpusRowMark name={row.name} website={row.website} />
+                    )}
                   </span>
                   <Link href={`/startup/${row.id}`} className="c-a">
                     {row.name}
