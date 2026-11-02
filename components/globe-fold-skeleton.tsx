@@ -40,7 +40,7 @@ export function GlobeFoldSkeleton({
         data-dispatch-map-stage=""
       >
         <div className="grid h-full place-items-center">
-          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#6b5443]">Loading globe</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[color:var(--ink-muted,#5a6577)]">Loading globe</p>
         </div>
       </div>
     </div>
