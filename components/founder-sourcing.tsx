@@ -275,8 +275,8 @@ export function FounderResults({
               <li key={founder.id} data-founder-card="" data-signal-chrome={founder.signalTypes.includes("funding") ? "funding" : founder.signalTypes.includes("launch") ? "launch" : founder.signalTypes.includes("award") ? "award" : founder.signalTypes.length ? "other" : "none"}>
                 <article className="bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 sm:px-4 lg:px-3 lg:py-2.5" data-founder-card-body="">
                   <div className="flex items-start gap-3.5 lg:gap-3">
-                    <CampusSeal label={founder.campus} size="xl" className="mt-0.5 hidden max-lg:inline-grid" />
-                    <CampusSeal label={founder.campus} size="lg" className="mt-0.5 hidden lg:inline-grid" />
+                    <CampusSeal label={founder.campus} size="xl" className="mt-0.5 max-lg:!inline-grid lg:!hidden" />
+                    <CampusSeal label={founder.campus} size="lg" className="mt-0.5 !hidden lg:!inline-grid" />
                     <div className="min-w-0 flex-1 overflow-visible">
                       {/* Tier 1 — name */}
                       <h3 className="text-[20px] font-semibold leading-6 tracking-tight text-[color:var(--fg,#0B0E17)] lg:text-[16px] lg:leading-5" data-founder-name="">
