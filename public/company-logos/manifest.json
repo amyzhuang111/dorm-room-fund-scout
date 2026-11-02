@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-02T12:25:31.911Z",
+  "generatedAt": "2026-11-02T21:28:07.108Z",
   "totalCompanies": 2508,
-  "withLogo": 1402,
+  "withLogo": 1403,
   "noWebsite": 894,
   "noLogo": 162,
   "logos": {
@@ -14049,6 +14049,16 @@
       "kind": "google-s2",
       "name": "Woz",
       "host": "wozcode.com"
+    },
+    "proj_lf-wGyS8C_d_": {
+      "path": "/company-logos/proj_lf-wGyS8C_d_.webp",
+      "bytes": 1902,
+      "width": 128,
+      "height": 128,
+      "source": "https://www.proximal.ai/favicon.svg",
+      "kind": "icon",
+      "name": "Proximal",
+      "host": "proximal.ai"
     }
   },
   "blockedRemoved": 48

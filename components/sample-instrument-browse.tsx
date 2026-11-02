@@ -856,8 +856,10 @@ export function SampleInstrumentBrowse({
               <button
                 type="button"
                 className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left"
-                onClick={() => setMobileFiltersOpen((open) => !open)}
+                onClick={() => setMobileFiltersOpen(true)}
                 aria-expanded={mobileFiltersOpen}
+                aria-controls="mobile-filter-sheet"
+                data-mobile-filters-open=""
               >
                 <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-2,#3F465C)]">
                   Filters
@@ -869,41 +871,9 @@ export function SampleInstrumentBrowse({
                   </span>
                 </p>
                 <span className="whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">
-                  {mobileFiltersOpen ? "Close" : "Open"}
+                  Open
                 </span>
               </button>
-              {mobileFiltersOpen ? (
-                <div className="max-h-[min(42dvh,340px)] overflow-y-auto overscroll-contain border-t border-[color:var(--line,#E1E5EF)] px-1 pb-3" data-mobile-facet-map="">
-                  {pages <= 1 ? (
-                    <div className="mb-2 flex flex-wrap gap-1.5 px-2.5 pt-2" data-mobile-sort-segment="" role="group" aria-label="Sort ledger">
-                      {(
-                        [
-                          ["rank", "Rank"],
-                          ["recent", "Newest"],
-                          ["name", "Name"],
-                          ["stage", "Stage"],
-                        ] as const
-                      ).map(([id, label]) => {
-                        const active = sort === id;
-                        return (
-                          <Link
-                            key={id}
-                            href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
-                            className={`inline-flex h-8 items-center rounded-sm border px-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
-                              active
-                                ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--cobalt,#2F4FD8)]"
-                                : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg-2,#3F465C)]"
-                            }`}
-                          >
-                            {label}
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  ) : null}
-                  <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
-                </div>
-              ) : null}
             </div>
           ) : null}
         </div>
@@ -1323,14 +1293,14 @@ export function SampleInstrumentBrowse({
 
       {/* Mobile bottom filter sheet */}
       {mobileFiltersOpen ? (
-        <div className="fixed inset-0 z-40 lg:hidden" data-mobile-filter-sheet="">
+        <div id="mobile-filter-sheet" className="fixed inset-0 z-40 lg:hidden" data-mobile-filter-sheet="" role="dialog" aria-modal="true" aria-label="Filters">
           <button
             type="button"
             className="absolute inset-0 bg-[color:var(--fg,#0B0E17)]/35"
             aria-label="Dismiss filters"
             onClick={() => setMobileFiltersOpen(false)}
           />
-          <div className="absolute inset-x-0 bottom-0 max-h-[60dvh] overflow-hidden rounded-t-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] shadow-lg">
+          <div className="absolute inset-x-0 bottom-0 max-h-[55dvh] overflow-hidden rounded-t-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] shadow-lg">
             <div className="flex items-center justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3 py-2.5">
               <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">
                 Filters
@@ -1349,7 +1319,34 @@ export function SampleInstrumentBrowse({
                 Done
               </button>
             </div>
-            <div className="max-h-[calc(60dvh-48px)] overflow-y-auto overscroll-contain px-1 pb-6" data-mobile-sheet-facets="">
+            <div className="max-h-[calc(55dvh-48px)] overflow-y-auto overscroll-contain px-1 pb-6" data-mobile-sheet-facets="" data-mobile-facet-map="">
+              {pages <= 1 ? (
+                <div className="mb-2 flex flex-wrap gap-1.5 px-2.5 pt-2" data-mobile-sort-segment="" role="group" aria-label="Sort ledger">
+                  {(
+                    [
+                      ["rank", "Rank"],
+                      ["recent", "Newest"],
+                      ["name", "Name"],
+                      ["stage", "Stage"],
+                    ] as const
+                  ).map(([id, label]) => {
+                    const active = sort === id;
+                    return (
+                      <Link
+                        key={id}
+                        href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
+                        className={`inline-flex h-8 items-center rounded-sm border px-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
+                          active
+                            ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--cobalt,#2F4FD8)]"
+                            : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg-2,#3F465C)]"
+                        }`}
+                      >
+                        {label}
+                      </Link>
+                    );
+                  })}
+                </div>
+              ) : null}
               <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense sheet />
             </div>
           </div>

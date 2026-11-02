@@ -185,8 +185,8 @@ function useIsLg() {
 function MapFoldSheet({ peak, founders }: { peak: ReactNode; founders: ReactNode }) {
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{ startY: number; startH: number } | null>(null);
-  const [height, setHeight] = useState(268); // peek peak+card; leave map taps free above
-  const minH = 220;
+  const [height, setHeight] = useState(276); // peek peak + ≥½ founder card; sheetTop>~536 leaves map taps
+  const minH = 250;
   const clampH = (h: number) => {
     const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.72) : 520;
     return Math.max(minH, Math.min(max, h));
@@ -237,7 +237,7 @@ function MapFoldSheet({ peak, founders }: { peak: ReactNode; founders: ReactNode
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3" data-fold-sheet-body="">
           {peak}
-          <div className="mt-2" data-fold-sheet-founders="" data-fold-founders-col="">
+          <div className="mt-1" data-fold-sheet-founders="" data-fold-founders-col="">
             {founders}
           </div>
         </div>
@@ -446,7 +446,7 @@ export function SampleHomeClient(props: {
                     campusId={mapCampusId}
                     campusName={mapCampusName}
                     foundersListed={foundersListed}
-                    peek={2}
+                    peek={1}
                     onClearCampus={clearCampus}
                     onMissingCampus={() => {
                       const next = new URLSearchParams(search.toString());

@@ -14,9 +14,8 @@ alum class of 2023+. Evidence:
     evidence: https://www.linkedin.com/in/navid-pour
   - Justus Mattern: RWTH Aachen Physics & CS, dropped out 2023 → recent_grad 2023
     evidence: https://www.justusmattern.com/ and LinkedIn
-  - Calvin Chen: USC Business & CS, dropped out for YC; exact USC cohort year
-    unverified on public LinkedIn education dates → enrollment_status unverified
-    for cohort_year; still listed as founder. evidence: https://www.calvinchen.me/
+  - Calvin Chen: USC Business & CS; left school Jan 2023 for YC W23 → recent_grad 2023
+    evidence: https://www.producthunt.com/stories/suffering-growth (+ calvinchen.me, LinkedIn)
 
 Idempotent. Real public evidence only. No personal contact info.
 """
@@ -238,20 +237,21 @@ def main() -> None:
             "name": "Calvin Chen",
             "university_id": "univ_usc",
             "affiliation_type": "alum",
-            "cohort_year": None,  # unverified
-            "enrollment_status": "unverified",
-            "enrollment_label": None,
+            "cohort_year": 2023,
+            "enrollment_status": "recent_grad",
+            "enrollment_label": "23",
             "left_school": 1,
-            "role_aff": "Business & CS; dropped out for Y Combinator (exact USC cohort year unverified)",
-            "aff_status": "unverified",
+            "role_aff": "Business & CS; left USC Jan 2023 for YC W23",
+            "aff_status": "recent_grad",
             "website_person": "https://www.calvinchen.me/",
-            "evidence_url": "https://www.calvinchen.me/",
+            "evidence_url": "https://www.producthunt.com/stories/suffering-growth",
             "evidence_excerpt": (
-                "Personal site: studied business and CS at USC before dropping out for Y Combinator; "
-                "working on Proximal. LinkedIn lists USC dropout + YC W23 alumni, but no public USC end year."
+                "Product Hunt essay (2024-07-08): left school in January of 2023 to build a startup. "
+                "Personal site: studied business and CS at USC before dropping out for Y Combinator. "
+                "LinkedIn: USC dropout + YC W23 alumni."
             ),
-            "verified": False,
-            "also_evidence": ["https://www.linkedin.com/in/calvinjaychen"],
+            "verified": True,
+            "also_evidence": ["https://www.calvinchen.me/", "https://www.linkedin.com/in/calvinjaychen"],
         },
     ]
 

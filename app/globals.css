@@ -1272,7 +1272,7 @@ details:not([open]) > :not(summary) {
 [data-fold-sheet-peak] [data-fold-peak-caption] {
   display: none !important;
 }
-[data-fold-sheet-founders] [data-founder-card-list] li:nth-child(n+3) {
+[data-fold-sheet-founders] [data-founder-card-list] li:nth-child(n+2) {
   display: none !important;
 }
 
@@ -1342,4 +1342,82 @@ details:not([open]) > :not(summary) {
   -webkit-line-clamp: 1 !important;
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
+}
+
+/* r45b: keep first peek founder card ≥50% visible inside the sheet */
+[data-fold-sheet-founders] [data-founder-card-body] {
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+}
+[data-fold-sheet-founders] [data-founder-card] {
+  min-height: 0 !important;
+}
+[data-fold-sheet-founders] [data-founder-why],
+[data-fold-sheet-founders] [data-founder-meta],
+[data-fold-sheet-founders] [data-founder-signal],
+[data-fold-sheet-founders] [data-founder-campus] {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+  margin: 0 !important;
+}
+[data-fold-sheet-founders] [data-founder-name] {
+  font-size: 13px !important;
+  line-height: 1.15 !important;
+  margin: 0 !important;
+}
+[data-fold-sheet-peak] [data-fold-peak-figure] {
+  font-size: 26px !important;
+}
+[data-fold-sheet-peak] [data-fold-peak-bars-mobile],
+[data-fold-sheet-peak] [data-fold-peak-month-bars] {
+  height: 1.75rem !important;
+}
+
+/* r45c: fit ≥½ founder card in ~276px peek without covering map taps */
+[data-fold-sheet-founders] [data-founder-filters] {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+[data-fold-sheet-founders] [data-founder-filters] > div.flex,
+[data-fold-sheet-founders] [data-founder-filters] > div.hidden {
+  display: none !important; /* selects stay closed until expanded */
+}
+[data-fold-sheet-founders] [data-founder-filters-toggle] {
+  height: 1.5rem !important;
+  margin: 0 0 0.15rem !important;
+  padding: 0 0.5rem !important;
+  font-size: 9px !important;
+}
+[data-fold-sheet-founders] [data-founder-results] > p,
+[data-fold-sheet-founders] [data-founder-peek-label] {
+  display: none !important;
+}
+[data-fold-sheet-founders] [data-founder-card-body] {
+  padding: 0.2rem 0 !important;
+}
+[data-fold-sheet-founders] [data-founder-card] {
+  padding: 0 !important;
+  border-width: 0 0 1px 0 !important;
+}
+[data-fold-sheet-founders] [data-founder-name] {
+  font-size: 12.5px !important;
+  line-height: 1.1 !important;
+}
+[data-fold-sheet-peak] {
+  margin: 0 !important;
+}
+[data-fold-sheet-body] {
+  padding-top: 0 !important;
+}
+/* r45d: single compact peek card under peak */
+[data-fold-sheet-founders] [data-founder-card-body] > * + * {
+  margin-top: 0.1rem !important;
+}
+[data-fold-sheet-founders] [data-founder-why] {
+  -webkit-line-clamp: 2 !important;
+  max-height: 2.4em !important;
 }
