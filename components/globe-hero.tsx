@@ -61,7 +61,7 @@ function GlobeBlock({
     const next = new URLSearchParams(search.toString());
     next.delete("feed");
     next.delete("university");
-    if (requested === id) next.delete("campus");
+    if (!id) next.delete("campus");
     else next.set("campus", id);
     router.push(`/?${next.toString()}`);
   }

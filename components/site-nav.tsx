@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useUserPipeline } from "./user-pipeline-provider";
 
-/** One flat nav (Map + Explore desks + Signals + Work). No second subtab row. */
+/** One flat nav (Map + desks + Signals + Work). No second Explore umbrella. */
 const NAV = [
   { id: "map", href: "/", label: "Map", match: (p: string) => p === "/" || p.startsWith("/map") },
   { id: "companies", href: "/companies", label: "Companies", match: (p: string) => p.startsWith("/companies") || p.startsWith("/startup/") },
@@ -14,6 +14,14 @@ const NAV = [
   { id: "signals", href: "/signals", label: "Signals", match: (p: string) => p.startsWith("/signals") },
   { id: "data", href: "/data", label: "Data", match: (p: string) => p.startsWith("/data") },
   { id: "work", href: "/work/shortlist", label: "Work", match: (p: string) => p.startsWith("/work") },
+] as const;
+
+/** Always-visible mobile desk row (Taste r33 blind: Menu-only hurt all 3 raters). */
+const DESK_TABS = [
+  { href: "/campuses", label: "Campuses", match: (p: string) => p.startsWith("/campuses") },
+  { href: "/founders", label: "Founders", match: (p: string) => p.startsWith("/founders") },
+  { href: "/companies", label: "Companies", match: (p: string) => p.startsWith("/companies") || p.startsWith("/startup/") },
+  { href: "/data", label: "Data", match: (p: string) => p.startsWith("/data") },
 ] as const;
 
 export function SiteNav() {
@@ -57,6 +65,22 @@ export function SiteNav() {
           </button>
         </div>
       </div>
+      {/* Desk tabs always on for mobile — not tucked behind Menu */}
+      <nav
+        className="flex h-10 items-end gap-5 overflow-x-auto px-5 md:hidden"
+        aria-label="Desks"
+        data-mobile-desk-tabs=""
+      >
+        {DESK_TABS.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`subtab shrink-0 ${item.match(pathname) ? "is-active" : ""}`}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </nav>
       {open ? (
         <div className="space-y-1 border-t border-line px-5 py-3 md:hidden">
           {NAV.map((item) => (

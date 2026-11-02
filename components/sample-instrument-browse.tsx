@@ -38,7 +38,6 @@ import {
   browseHref as buildBrowseHref,
   type FacetState as UrlFacetState,
 } from "@/lib/domain/facet-url";
-import { CurrentViewDock } from "@/components/current-view-dock";
 
 type Feed = "directory" | "leaderboard";
 
@@ -243,7 +242,7 @@ export function SampleInstrumentBrowse({
   const [founderLinks, setFounderLinks] = useState<Record<string, { name: string; linkedinUrl: string }[]>>({});
   const [rightTab, setRightTab] = useState<"feed" | "overlays">("feed");
   /** Right instrument starts closed so the ledger owns the width (Monitor-style peek). */
-  const [rightOpen, setRightOpen] = useState(false);
+  const [rightOpen, setRightOpen] = useState(true); // r33: desk rails open by default (d755 beat logo dock)
 
   useEffect(() => {
     let cancel = false;
@@ -442,17 +441,6 @@ export function SampleInstrumentBrowse({
     return activeFacetChips(facets, { campus: campusLabel });
   }, [facets, campuses]);
 
-  const dockCompanies = useMemo(
-    () =>
-      boardCompanies.slice(0, 48).map((c) => ({
-        id: c.id,
-        name: c.name,
-        logoUrl: c.logoUrl,
-        href: `/startup/${c.id}`,
-      })),
-    [boardCompanies],
-  );
-
   useEffect(() => {
     const ids = cards.slice(0, 40).map((c) => c.id);
     if (ids.length === 0) {
@@ -597,7 +585,6 @@ export function SampleInstrumentBrowse({
               caption={feed === "leaderboard" ? "Signals" : "Companies"}
             />
           </div>
-          <CurrentViewDock companies={dockCompanies} />
         </div>
       </aside>
 
@@ -661,7 +648,7 @@ export function SampleInstrumentBrowse({
                     : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg-2,#3F465C)]"
                 }`}
               >
-                {rightOpen ? "Hide panels" : "Panels"}
+                {rightOpen ? "Hide feed" : "Feed"}
               </button>
             </div>
           </div>
@@ -1454,7 +1441,10 @@ function LedgerRow({
         </span>
       ) : null}
       {/* Directory mobile: xs seal once per campus group. Ranked mobile + desk: per-row seal (04db2e8). */}
-      {card.school ? (
+      {/* Company logo when present so the name is never logo-only; campus seal stays as secondary cue. */}
+      {card.logoUrl ? (
+        <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 20 : 24} />
+      ) : card.school ? (
         ranked ? (
           <CampusSeal label={card.school} size="sm" className="mt-0.5" />
         ) : (
@@ -1475,7 +1465,7 @@ function LedgerRow({
           className={
             ranked
               ? "line-clamp-2 break-words text-[20px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
-              : "truncate text-[18px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
+              : "break-words text-[18px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
           }
         >
           {card.name}

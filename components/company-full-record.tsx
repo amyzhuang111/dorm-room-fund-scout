@@ -29,18 +29,25 @@ function monogram(name: string): string {
   return `${parts[0]![0] || ""}${parts[parts.length - 1]![0] || ""}`.toUpperCase();
 }
 
-/** X (twitter) + LinkedIn only - never invent other socials. */
+/** X (twitter) + LinkedIn only - never invent other socials. Shows every stored LinkedIn (confirmed / likely / unverified). */
 function FounderSocial({ founder }: { founder: NamedFounder }) {
   const xLinks = founder.profileLinks.filter((l) => l.type === "twitter");
   const linkedIn =
-    founder.link && (founder.link.kind === "linkedin" || founder.link.kind === "likely")
+    founder.link &&
+    (founder.link.kind === "linkedin" || founder.link.kind === "likely" || founder.link.kind === "unverified")
       ? founder.link
       : founder.linkedinUrl
         ? { kind: "linkedin" as const, url: founder.linkedinUrl, label: "LinkedIn" }
-        : null;
+        : founder.linkedinCandidates?.[0]?.url
+          ? {
+              kind: (founder.linkedinCandidates[0].confidence === "likely" ? "likely" : "unverified") as "likely" | "unverified",
+              url: founder.linkedinCandidates[0].url,
+              label: founder.linkedinCandidates[0].confidence === "likely" ? "LinkedIn" : "LinkedIn (unverified)",
+            }
+          : null;
   if (!linkedIn && xLinks.length === 0) return null;
   return (
-    <div className="mt-1.5 flex flex-wrap items-center gap-2">
+    <div className="mt-1.5 flex flex-wrap items-center gap-2" data-founder-social="">
       {linkedIn ? <PersonLinkButton link={linkedIn} name={founder.name} /> : null}
       {xLinks.length ? <ProfileIconLinks links={xLinks} name={founder.name} /> : null}
     </div>

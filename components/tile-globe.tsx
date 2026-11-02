@@ -9,7 +9,12 @@ import { sampleSurfaceCounts, type FacetCompany } from "@/lib/domain/sample-face
 import { MapCredit } from "./map-credit";
 import { campusFoundersTop, campusFoundersRanked, CAMPUS_FOUNDERS_VISIBLE } from "./sample-instrument";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { clientPointFromEvent, mapPointFromPointer } from "@/lib/domain/map-pointer";
+import {
+  clientPointFromEvent,
+  formatMapHitMiss,
+  mapPointFromPointer,
+  nearestProjectedMarker,
+} from "@/lib/domain/map-pointer";
 
 export interface TileCampus {
   id: string;
@@ -143,6 +148,8 @@ export function TileGlobe({
 }) {
   const mapNode = useRef<HTMLDivElement | null>(null);
   const [stageHeight, setStageHeight] = useState(860);
+  const campusesRef = useRef(campuses);
+  campusesRef.current = campuses;
   const mapRef = useRef<{
     getSource: (id: string) => { setData: (data: unknown) => void } | undefined;
     setFilter: (layer: string, filter: unknown) => void;
@@ -190,6 +197,7 @@ export function TileGlobe({
         pointOrBox: { x: number; y: number } | [[number, number], [number, number]],
         opts?: { layers?: string[] },
       ) => { properties?: Record<string, unknown> }[];
+      project: (lngLat: [number, number]) => { x: number; y: number };
     } | null = null;
 
     const fit = () => {
@@ -365,75 +373,143 @@ export function TileGlobe({
         if (map) map.getCanvas().style.cursor = "";
         setHover(null);
       });
-      // Hit-test in layout CSS pixels. Touch + CSS transform break MapLibre's
-      // event.point; rebuild from clientX/Y with DPR-safe scale correction.
+      // Hit-test in layout CSS pixels. Always re-read getBoundingClientRect (Clear/scroll
+      // can stale a cached rect). Never multiply by DPR. Fall back to nearest projected
+      // campus when queryRenderedFeatures misses a finger-sized target.
+      const HIT_PAD = 40;
+      const NEAREST_MAX = 56;
+      let lastSelectAt = 0;
+      let lastSelectId = "";
+      const projectedMarkers = () => {
+        if (!map) return [];
+        return campusesRef.current.map((c) => {
+          const pt = map!.project([c.lon, c.lat]);
+          return {
+            id: c.id,
+            name: c.name,
+            founders: c.founders,
+            signals: c.signals,
+            country: c.country,
+            x: pt.x,
+            y: pt.y,
+          };
+        });
+      };
+      const logMiss = (point: { x: number; y: number }) => {
+        const ranked = projectedMarkers()
+          .map((m) => ({ ...m, dist: Math.hypot(m.x - point.x, m.y - point.y) }))
+          .sort((a, b) => a.dist - b.dist);
+        const msg = formatMapHitMiss(point, ranked);
+        console.warn(`[map-hit] ${msg}`);
+        try {
+          const stage = mapNode.current?.parentElement;
+          if (stage) stage.setAttribute("data-map-hit-miss", msg);
+        } catch { /* ignore */ }
+      };
       const pickCampus = (point: { x: number; y: number }) => {
         if (!map) return null;
-        // Generous hit slop for finger + DPR; coords are layout CSS px (not device px).
-        const pad = 36;
         const box: [[number, number], [number, number]] = [
-          [point.x - pad, point.y - pad],
-          [point.x + pad, point.y + pad],
+          [point.x - HIT_PAD, point.y - HIT_PAD],
+          [point.x + HIT_PAD, point.y + HIT_PAD],
         ];
         const features = map.queryRenderedFeatures(box, { layers: ["campus-dots"] });
         const props = features[0]?.properties;
-        if (!props) return null;
-        return {
-          id: String(props.id ?? ""),
-          name: String(props.name ?? ""),
-          founders: Number(props.founders ?? 0),
-          signals: Number(props.signals ?? 0),
-          country: String(props.country ?? ""),
-          x: point.x,
-          y: point.y,
-        };
+        if (props?.id) {
+          return {
+            id: String(props.id ?? ""),
+            name: String(props.name ?? ""),
+            founders: Number(props.founders ?? 0),
+            signals: Number(props.signals ?? 0),
+            country: String(props.country ?? ""),
+            x: point.x,
+            y: point.y,
+          };
+        }
+        const near = nearestProjectedMarker(point, projectedMarkers(), NEAREST_MAX);
+        if (near) {
+          return {
+            id: near.id,
+            name: near.name,
+            founders: near.founders,
+            signals: near.signals,
+            country: near.country,
+            x: point.x,
+            y: point.y,
+          };
+        }
+        logMiss(point);
+        return null;
       };
       const pointFromMapEvent = (event: { point?: { x: number; y: number }; originalEvent?: Event }) => {
         if (!map) return event.point ?? null;
         const client = clientPointFromEvent(event.originalEvent ?? null);
         if (client) {
+          // Fresh rect every event — do not cache after Clear/scroll.
           return mapPointFromPointer(map.getCanvasContainer(), client.clientX, client.clientY);
         }
         return event.point ?? null;
+      };
+      const applyHit = (hit: { id: string; name: string; founders: number; signals: number; country: string }) => {
+        if (!hit.id) return false;
+        const now = performance.now();
+        // touchend + click/pointerup must not toggle the same campus off.
+        if (hit.id === lastSelectId && now - lastSelectAt < 450) return true;
+        lastSelectAt = now;
+        lastSelectId = hit.id;
+        setPinned({ id: hit.id, name: hit.name, founders: hit.founders, signals: hit.signals, country: hit.country });
+        onSelect(hit.id);
+        return true;
       };
       const selectAt = (event: { point?: { x: number; y: number }; originalEvent?: Event }) => {
         const point = pointFromMapEvent(event);
         if (!point) return;
         const hit = pickCampus(point);
         if (!hit?.id) return;
-        setPinned({ id: hit.id, name: hit.name, founders: hit.founders, signals: hit.signals, country: hit.country });
-        onSelect(hit.id);
+        applyHit(hit);
       };
       map.on("click", (event) => selectAt(event));
-      // touchend: some mobile WebViews drop click after Clear; same hit path.
       const selectFromClient = (clientX: number, clientY: number, ev?: Event) => {
+        // Re-read container rect on every tap.
         const point = mapPointFromPointer(map!.getCanvasContainer(), clientX, clientY);
         const hit = pickCampus(point);
         if (!hit?.id) return false;
         ev?.preventDefault?.();
-        setPinned({ id: hit.id, name: hit.name, founders: hit.founders, signals: hit.signals, country: hit.country });
-        onSelect(hit.id);
-        return true;
+        return applyHit(hit);
       };
-      map.getCanvas().addEventListener(
+      const canvas = map.getCanvas();
+      canvas.style.touchAction = "manipulation";
+      canvas.addEventListener(
         "touchend",
         (ev) => {
           if (!ev.changedTouches?.length) return;
           if (ev.changedTouches.length !== 1) return;
-          const t = ev.changedTouches[0]!;
-          selectFromClient(t.clientX, t.clientY, ev);
+          const touch = ev.changedTouches[0]!;
+          selectFromClient(touch.clientX, touch.clientY, ev);
         },
         { passive: false },
       );
-      map.getCanvas().addEventListener(
-        "pointerup",
-        (ev) => {
-          if (ev.pointerType === "mouse") return; // map click handler covers mouse
-          if (ev.button != null && ev.button !== 0) return;
-          selectFromClient(ev.clientX, ev.clientY, ev);
+      // Expose marker screen points for checks / miss diagnostics.
+      (window as unknown as { __campusScoutMap?: unknown }).__campusScoutMap = {
+        markerClientPoints: () => {
+          if (!map) return [];
+          const container = map.getCanvasContainer();
+          const rect = container.getBoundingClientRect(); // fresh
+          const layoutW = Math.max(1, container.clientWidth);
+          const layoutH = Math.max(1, container.clientHeight);
+          const scaleX = rect.width / layoutW;
+          const scaleY = rect.height / layoutH;
+          return projectedMarkers()
+            .map((m) => ({
+              id: m.id,
+              name: m.name,
+              x: m.x,
+              y: m.y,
+              clientX: rect.left + m.x * scaleX,
+              clientY: rect.top + m.y * scaleY,
+            }))
+            .filter((m) => m.clientX >= rect.left && m.clientX <= rect.right && m.clientY >= rect.top && m.clientY <= rect.bottom);
         },
-        { passive: false },
-      );
+      };
       const hold = () => {
         interacting = true;
       };
@@ -599,7 +675,7 @@ export function TileGlobe({
               </div>
             </div>
           ) : null}
-          <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 -translate-x-1/2" data-map-credit>
+          <div className="pointer-events-none absolute bottom-2 left-1/2 z-10 -translate-x-1/2 [&_a]:pointer-events-auto" data-map-credit>
             <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
               <MapCredit />
             </p>
@@ -632,7 +708,10 @@ export function TileGlobe({
                 </div>
                 <button
                   type="button"
-                  onClick={() => onSelect(pinned.id)}
+                  onClick={() => {
+                    setPinned(null);
+                    onSelect("");
+                  }}
                   className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline"
                   data-entity-clear=""
                 >
