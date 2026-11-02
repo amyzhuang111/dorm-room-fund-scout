@@ -41,6 +41,19 @@ function campusIdFromLabel(label: string | null): string | null {
   return hit?.id ?? null;
 }
 
+/**
+ * Text residual for the Companies q= param.
+ * Named company/founder wins. Structural filters (campus/stage/sector/year)
+ * must not also dump the raw NL string into q (that AND-zeros the desk).
+ */
+export function browseQueryFromAskIntent(intent: AskIntent, queryFallback = ""): string {
+  const named = (intent.companyName || intent.founderName || intent.name || "").trim();
+  if (named) return named;
+  const structural = Boolean(intent.campus || intent.stage || intent.sector || intent.year);
+  if (structural) return "";
+  return queryFallback.trim();
+}
+
 /** Build a shareable Companies URL from a parsed Ask intent. */
 export function browseHrefFromAskIntent(intent: AskIntent, queryFallback = ""): string {
   const facets: FacetState = {
@@ -49,7 +62,7 @@ export function browseHrefFromAskIntent(intent: AskIntent, queryFallback = ""): 
     stage: intent.stage ? STAGE_LABEL[intent.stage] ?? null : null,
     sector: intent.sector ? SECTOR_ID[intent.sector] ?? intent.sector.toLowerCase().replace(/\s+/g, "-") : null,
     foundedYear: intent.year,
-    query: (intent.companyName || intent.founderName || intent.name || queryFallback || "").trim(),
+    query: browseQueryFromAskIntent(intent, queryFallback),
   };
   return browseHref({ facets });
 }

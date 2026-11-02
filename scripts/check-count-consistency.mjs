@@ -128,7 +128,111 @@ async function main() {
     }
   }
 
+
+  // Overlays Status + Campus must match FacetRail (same unit: founders for campus).
+  {
+    const url = `${BASE}/companies`;
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+    await page.waitForTimeout(2000);
+    // Open right rail overlays
+    const panels = page.locator('button:has-text("Panels"), [data-open-right-rail], button:has-text("Overlays")').first();
+    if (await panels.count()) {
+      await panels.click().catch(() => {});
+      await page.waitForTimeout(400);
+    }
+    const overlaysTab = page.locator('[data-tab="overlays"]');
+    if (await overlaysTab.count()) {
+      await overlaysTab.click();
+      await page.waitForTimeout(500);
+    }
+    const cross = await page.evaluate(() => {
+      const overlayUnit = document.querySelector("[data-overlay-campus-unit], [data-tab-panel='overlays'] [data-overlay-unit]")?.getAttribute("data-overlay-campus-unit")
+        || document.querySelector("[data-overlay-facet='campus']")?.getAttribute("data-overlay-unit")
+        || null;
+      const railUnit = document.querySelector("[data-campus-count-unit]")?.getAttribute("data-campus-count-unit") || null;
+      const overlayStatus = {};
+      for (const btn of document.querySelectorAll('[data-overlay-row="status"]')) {
+        overlayStatus[btn.getAttribute("data-overlay-id")] = Number(btn.getAttribute("data-overlay-count"));
+      }
+      const railStatus = {};
+      for (const btn of document.querySelectorAll('[data-facet-status-pin] [data-facet], [data-facet-group="facet-status"] [data-facet], #facet-status button[data-facet-count]')) {
+        // Status pin rows may not set data-facet; fall back to label match via aria/text
+      }
+      // Prefer status pin buttons with counts
+      const statusPin = document.querySelector("#facet-status, [data-facet-status-pin]");
+      const railStatusByLabel = {};
+      if (statusPin) {
+        for (const btn of statusPin.querySelectorAll("button")) {
+          const label = (btn.textContent || "").replace(/\s+/g, " ").trim();
+          const m = label.match(/^(Active|Acquired|Closed).*?([\d,]+)\s*$/i) || label.match(/^(Active|Acquired|Closed)/i);
+          const countAttr = btn.getAttribute("data-facet-count");
+          const count = countAttr != null ? Number(countAttr) : (label.match(/([\d,]+)\s*$/) ? Number(RegExp.$1.replace(/,/g, "")) : null);
+          const name = (m && m[1]) ? m[1].toLowerCase() : null;
+          if (name && count != null) railStatusByLabel[name] = count;
+        }
+      }
+      const overlayCampus = {};
+      for (const btn of document.querySelectorAll('[data-overlay-row="campus"]')) {
+        overlayCampus[btn.getAttribute("data-overlay-id")] = Number(btn.getAttribute("data-overlay-count"));
+      }
+      const railCampus = {};
+      for (const btn of document.querySelectorAll('[data-facet-group="facet-campus"] button[data-facet="campus"], [data-facet-group="facet-campus"] button')) {
+        const idHint = btn.getAttribute("data-overlay-id");
+        const count = btn.getAttribute("data-facet-count");
+        const label = (btn.textContent || "").replace(/\s+/g, " ").trim();
+        if (count != null && /penn/i.test(label)) railCampus["univ_penn"] = Number(count);
+        if (count != null && /stanford/i.test(label)) railCampus["univ_stanford"] = Number(count);
+      }
+      // Also scan all campus facet buttons
+      for (const btn of document.querySelectorAll("button[data-facet='campus']")) {
+        const count = Number(btn.getAttribute("data-facet-count"));
+        const label = (btn.textContent || "").toLowerCase();
+        if (/penn/.test(label) && !/state/.test(label)) railCampus["univ_penn"] = count;
+        if (/stanford/.test(label)) railCampus["univ_stanford"] = count;
+      }
+      return { overlayUnit, railUnit, overlayStatus, railStatusByLabel, overlayCampus, railCampus };
+    });
+    inventory.push({ page: "companies-overlay-rail", url, status: 200, counts: cross });
+    if (cross.overlayUnit !== "founders" || cross.railUnit !== "founders") {
+      errors.push({
+        page: "companies",
+        label: "campus count unit",
+        expected: "founders",
+        actual: `overlay=${cross.overlayUnit} rail=${cross.railUnit}`,
+        source: "Overlays + FacetRail must label campus counts as founders",
+      });
+    }
+    for (const key of ["active", "acquired", "closed"]) {
+      const o = cross.overlayStatus[key];
+      const r = cross.railStatusByLabel[key];
+      if (o != null && r != null && o !== r) {
+        errors.push({
+          page: "companies",
+          label: `status ${key}`,
+          expected: r,
+          actual: o,
+          source: "Overlays status vs FacetRail status (shared statusOf)",
+        });
+      }
+    }
+    for (const id of ["univ_penn", "univ_stanford"]) {
+      const o = cross.overlayCampus[id];
+      const r = cross.railCampus[id];
+      if (o != null && r != null && o !== r) {
+        errors.push({
+          page: "companies",
+          label: `campus ${id} founders`,
+          expected: r,
+          actual: o,
+          source: "Overlays campus founders vs FacetRail campus founders",
+        });
+      }
+    }
+  }
+
   await browser.close();
+
 
   const outPath = path.join(process.cwd(), "reviews", "count-consistency.json");
   fs.mkdirSync(path.dirname(outPath), { recursive: true });

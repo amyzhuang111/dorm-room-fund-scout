@@ -159,6 +159,37 @@
           "from": "corpus-snapshot.json#campusesTotal"
         }
       }
+    },
+    {
+      "page": "companies-overlay-rail",
+      "url": "http://127.0.0.1:3460/companies",
+      "status": 200,
+      "counts": {
+        "overlayUnit": "founders",
+        "railUnit": "founders",
+        "overlayStatus": {
+          "active": 1158,
+          "acquired": 7,
+          "closed": 7
+        },
+        "railStatusByLabel": {
+          "active": 1158,
+          "acquired": 7,
+          "closed": 7
+        },
+        "overlayCampus": {
+          "univ_penn": 758,
+          "univ_stanford": 300,
+          "univ_berkeley": 245,
+          "univ_mit": 238,
+          "univ_harvard": 171,
+          "univ_columbia": 155
+        },
+        "railCampus": {
+          "univ_penn": 758,
+          "univ_stanford": 300
+        }
+      }
     }
   ],
   "errors": []

@@ -185,6 +185,10 @@ export function TileGlobe({
       loaded: () => boolean;
       getCanvas: () => HTMLCanvasElement;
       getCanvasContainer: () => HTMLElement;
+      queryRenderedFeatures: (
+        pointOrBox: { x: number; y: number } | [[number, number], [number, number]],
+        opts?: { layers?: string[] },
+      ) => { properties?: Record<string, unknown> }[];
     } | null = null;
 
     const fit = () => {
@@ -360,8 +364,30 @@ export function TileGlobe({
         if (map) map.getCanvas().style.cursor = "";
         setHover(null);
       });
-      map.on("click", "campus-dots", (event) => {
-        const hit = read(event);
+      // Padded bbox hit-test: layer-only clicks miss often on touch after Clear.
+      const pickCampus = (point: { x: number; y: number }) => {
+        if (!map) return null;
+        const pad = 22;
+        const box: [[number, number], [number, number]] = [
+          [point.x - pad, point.y - pad],
+          [point.x + pad, point.y + pad],
+        ];
+        const features = map.queryRenderedFeatures(box, { layers: ["campus-dots"] });
+        const props = features[0]?.properties;
+        if (!props) return null;
+        return {
+          id: String(props.id ?? ""),
+          name: String(props.name ?? ""),
+          founders: Number(props.founders ?? 0),
+          signals: Number(props.signals ?? 0),
+          country: String(props.country ?? ""),
+          x: point.x,
+          y: point.y,
+        };
+      };
+      map.on("click", (event) => {
+        if (!event.point) return;
+        const hit = pickCampus(event.point);
         if (!hit?.id) return;
         setPinned({ id: hit.id, name: hit.name, founders: hit.founders, signals: hit.signals, country: hit.country });
         onSelect(hit.id);
@@ -614,7 +640,7 @@ export function TileGlobe({
         </div>
       </section>
 
-      <section className="mt-3 hidden max-w-sm lg:block" data-campus-metric="founders">
+      <section className="mt-3 max-w-sm" data-campus-metric="founders" data-mobile-campus-picker="">
           <h2 className="mb-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Filter campus</h2>
           <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
             {plateCampuses.map((campus, i) => {

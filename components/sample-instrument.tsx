@@ -835,6 +835,9 @@ export function FacetRail({
           ))}
         </FacetGroup>
         <FacetGroup title="Campus" defaultOpen={false} dense={editorial}>
+          <p className="px-2 pb-1 font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-3,#5C647A)]" data-campus-count-unit="founders">
+            Counts are founders
+          </p>
           {campusRows.map((campus) => (
             <FacetRow
               key={campus.id}
@@ -845,6 +848,7 @@ export function FacetRail({
               }}
               label={shortCampusLabel(campus.id, campus.name)}
               count={campus.founders}
+              facet="campus"
             />
           ))}
         </FacetGroup>

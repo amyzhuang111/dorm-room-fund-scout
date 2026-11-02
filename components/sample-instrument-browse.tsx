@@ -7,8 +7,13 @@ import { loadDirectoryClient } from "@/lib/client/directory-cache";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import { directoryRank } from "@/lib/domain/directory-rank";
 import { whyItsHere } from "@/lib/domain/directory-rank";
-import { directoryCardSubtitle } from "@/lib/domain/sample-facets";
+import { directoryCardSubtitle, type StatusId } from "@/lib/domain/sample-facets";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
+import {
+  CAMPUS_COUNT_UNIT,
+  buildOverlayCounts,
+  type OverlayRow,
+} from "@/lib/domain/overlay-counts";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import { CampusSeal } from "@/components/campus-seal";
 import { MobileListMast } from "@/components/mobile-list-mast";
@@ -469,29 +474,33 @@ export function SampleInstrumentBrowse({
   }, [cards]);
 
   const overlayCounts = useMemo(() => {
-    const byStatus = new Map<string, number>();
-    const bySector = new Map<string, number>();
-    const byCampus = new Map<string, number>();
-    for (const company of boardCompanies) {
-      const status =
-        company.operatingStatus === "acquired"
-          ? "Acquired"
-          : company.operatingStatus === "dead"
-            ? "Closed"
-            : "Active";
-      byStatus.set(status, (byStatus.get(status) ?? 0) + 1);
-      if (company.sector) bySector.set(company.sector, (bySector.get(company.sector) ?? 0) + 1);
-      if (company.school) byCampus.set(company.school, (byCampus.get(company.school) ?? 0) + 1);
+    const campusRows = campuses.map((c) => ({
+      id: c.id,
+      name: c.name,
+      shortLabel: shortCampusLabel(c.id, c.name),
+      founders: c.founders,
+    }));
+    // Status from the same statusOf() as FacetRail; campus counts are founders (same unit as FacetRail).
+    const built = buildOverlayCounts(companiesLive, campusRows);
+    return { ...built, total: boardCompanies.length };
+  }, [companiesLive, campuses, boardCompanies.length]);
+
+  function applyOverlayRow(row: OverlayRow) {
+    if (row.facet === "status") {
+      const next = facets.status === row.id ? null : (row.id as StatusId);
+      commitFacet({ ...facets, status: next });
+      return;
     }
-    const top = (map: Map<string, number>, n: number) =>
-      [...map.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, n);
-    return {
-      status: top(byStatus, 4),
-      sector: top(bySector, 6),
-      campus: top(byCampus, 6),
-      total: boardCompanies.length,
-    };
-  }, [boardCompanies]);
+    if (row.facet === "sector") {
+      const next = facets.sector === row.id ? null : row.id;
+      commitFacet({ ...facets, sector: next, sectorMissing: false });
+      return;
+    }
+    if (row.facet === "campus") {
+      const next = facets.campus === row.id ? null : row.id;
+      commitFacet({ ...facets, campus: next });
+    }
+  }
 
   const sortChip = (active: boolean) =>
     active
@@ -1280,10 +1289,16 @@ export function SampleInstrumentBrowse({
                   />
                 </div>
               ) : (
-                <div className="space-y-3" data-tab-panel="overlays">
-                  <OverlayCountBlock title="Status" rows={overlayCounts.status} />
-                  <OverlayCountBlock title="Sector" rows={overlayCounts.sector} />
-                  <OverlayCountBlock title="Campus" rows={overlayCounts.campus} />
+                <div className="space-y-3" data-tab-panel="overlays" data-overlay-campus-unit={overlayCounts.campusUnit}>
+                  <OverlayCountBlock title="Status" rows={overlayCounts.status} onSelect={applyOverlayRow} activeId={facets.status} />
+                  <OverlayCountBlock title="Sector" rows={overlayCounts.sector} onSelect={applyOverlayRow} activeId={facets.sector} />
+                  <OverlayCountBlock
+                    title="Campus"
+                    unit={CAMPUS_COUNT_UNIT}
+                    rows={overlayCounts.campus}
+                    onSelect={applyOverlayRow}
+                    activeId={facets.campus}
+                  />
                 </div>
               )}
             </div>
@@ -1347,7 +1362,19 @@ function signalMeta(card: DirectoryCard): { primary: string; secondary: string }
 }
 
 /** Editorial ledger row - fold/map-stage language: ruled, mono meta, ember hover. */
-function OverlayCountBlock({ title, rows }: { title: string; rows: [string, number][] }) {
+function OverlayCountBlock({
+  title,
+  rows,
+  onSelect,
+  activeId,
+  unit,
+}: {
+  title: string;
+  rows: OverlayRow[];
+  onSelect: (row: OverlayRow) => void;
+  activeId?: string | null;
+  unit?: string;
+}) {
   if (rows.length === 0) {
     return (
       <div>
@@ -1357,15 +1384,33 @@ function OverlayCountBlock({ title, rows }: { title: string; rows: [string, numb
     );
   }
   return (
-    <div data-overlay-facet={title.toLowerCase()}>
-      <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{title}</p>
+    <div data-overlay-facet={title.toLowerCase()} data-overlay-unit={unit || undefined}>
+      <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+        {title}
+        {unit ? <span className="ml-1 font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">· {unit}</span> : null}
+      </p>
       <ul className="mt-1.5 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)]">
-        {rows.map(([label, count]) => (
-          <li key={label} className="flex items-center justify-between gap-2 px-2 py-1.5 text-[12px]">
-            <span className="truncate font-medium text-[color:var(--fg,#0B0E17)]">{label}</span>
-            <span className="font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{count.toLocaleString("en-US")}</span>
-          </li>
-        ))}
+        {rows.map((row) => {
+          const active = activeId === row.id;
+          return (
+            <li key={row.id}>
+              <button
+                type="button"
+                data-overlay-row={row.facet}
+                data-overlay-id={row.id}
+                data-overlay-count={String(row.count)}
+                aria-pressed={active}
+                onClick={() => onSelect(row)}
+                className={`flex w-full items-center justify-between gap-2 px-2 py-1.5 text-left text-[12px] transition-colors hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 ${
+                  active ? "bg-[color:var(--ember,#D96B1C)]/8" : ""
+                }`}
+              >
+                <span className={`truncate font-medium ${active ? "text-[color:var(--ember,#D96B1C)]" : "text-[color:var(--fg,#0B0E17)]"}`}>{row.label}</span>
+                <span className="font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{row.count.toLocaleString("en-US")}</span>
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
