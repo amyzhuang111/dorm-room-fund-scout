@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
+import { createPortal } from "react-dom";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FounderResults, FounderSearchBar } from "@/components/founder-sourcing";
 import {
@@ -185,8 +186,9 @@ function useIsLg() {
 function MapFoldSheet({ peak, founders }: { peak: ReactNode; founders: ReactNode }) {
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{ startY: number; startH: number } | null>(null);
-  const [height, setHeight] = useState(276); // peek peak + ≥½ founder card; sheetTop>~536 leaves map taps
-  const minH = 250;
+  // r49: rest peek ~132px so most of the globe stays visible; drag up for full sheet.
+  const [height, setHeight] = useState(132);
+  const minH = 120;
   const clampH = (h: number) => {
     const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.72) : 520;
     return Math.max(minH, Math.min(max, h));
@@ -223,7 +225,7 @@ function MapFoldSheet({ peak, founders }: { peak: ReactNode; founders: ReactNode
         data-fold-sheet-panel=""
       >
         <div
-          className="flex shrink-0 cursor-grab touch-none items-center justify-center py-2 active:cursor-grabbing"
+          className="flex shrink-0 cursor-grab touch-none items-center justify-center py-1.5 active:cursor-grabbing"
           data-fold-sheet-handle=""
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
@@ -245,6 +247,90 @@ function MapFoldSheet({ peak, founders }: { peak: ReactNode; founders: ReactNode
     </div>
   );
 }
+
+/** Desk overlays portaled onto the map stage only — never cover stats, Map label, or search. */
+function MapStageOverlays({
+  peak,
+  founders,
+}: {
+  peak: ReactNode;
+  founders: ReactNode;
+}) {
+  const [stage, setStage] = useState<HTMLElement | null>(null);
+  const [peakOpen, setPeakOpen] = useState(true);
+  const [foundersOpen, setFoundersOpen] = useState(true);
+
+  useEffect(() => {
+    let dead = false;
+    const sync = () => {
+      if (dead) return;
+      const el = document.querySelector("[data-dispatch-map-stage]") as HTMLElement | null;
+      setStage((prev) => (prev === el ? prev : el));
+    };
+    sync();
+    const id = window.setInterval(sync, 400);
+    const mo = new MutationObserver(sync);
+    mo.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      dead = true;
+      window.clearInterval(id);
+      mo.disconnect();
+    };
+  }, []);
+
+  if (!stage) return null;
+
+  return createPortal(
+    <div className="pointer-events-none absolute inset-0 z-[5]" data-fold-map-overlays="">
+      <aside
+        className={`pointer-events-auto absolute left-2 top-2 max-h-[calc(100%-1rem)] overflow-hidden rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px] ${
+          peakOpen ? "w-[min(280px,32%)]" : "w-auto"
+        }`}
+        data-fold-overlay-peak=""
+        data-fold-peak-in-rail=""
+        data-fold-panel-collapsed={peakOpen ? "0" : "1"}
+      >
+        <div className="flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Peak</p>
+          <button
+            type="button"
+            className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-2,#3F465C)]"
+            aria-expanded={peakOpen}
+            data-fold-panel-toggle="peak"
+            onClick={() => setPeakOpen((v) => !v)}
+          >
+            {peakOpen ? "Hide" : "Show"}
+          </button>
+        </div>
+        {peakOpen ? <div className="max-h-[min(420px,calc(100vh-12rem))] overflow-y-auto p-2.5">{peak}</div> : null}
+      </aside>
+      <aside
+        className={`pointer-events-auto absolute right-2 top-2 max-h-[calc(100%-1rem)] overflow-hidden rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px] ${
+          foundersOpen ? "w-[min(280px,32%)]" : "w-auto"
+        }`}
+        data-fold-overlay-founders=""
+        data-fold-founders-col=""
+        data-fold-panel-collapsed={foundersOpen ? "0" : "1"}
+      >
+        <div className="flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Founders</p>
+          <button
+            type="button"
+            className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-2,#3F465C)]"
+            aria-expanded={foundersOpen}
+            data-fold-panel-toggle="founders"
+            onClick={() => setFoundersOpen((v) => !v)}
+          >
+            {foundersOpen ? "Hide" : "Show"}
+          </button>
+        </div>
+        {foundersOpen ? <div className="max-h-[min(520px,calc(100vh-12rem))] overflow-y-auto p-2.5">{founders}</div> : null}
+      </aside>
+    </div>,
+    stage,
+  );
+}
+
 
 
 export function SampleHomeClient(props: {
@@ -458,47 +544,38 @@ export function SampleHomeClient(props: {
                 }
               /> : null}
 
-              {/* Desk overlays only at lg+ */}
-              {isLg ? <div
-                className="pointer-events-none absolute inset-0 z-[5]"
-                data-fold-map-overlays=""
-              >
-                <aside
-                  className="pointer-events-auto absolute left-3 top-3 max-h-[calc(100%-1.5rem)] w-[min(340px,32%)] overflow-y-auto rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 p-3 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px]"
-                  data-fold-overlay-peak=""
-                  data-fold-peak-in-rail=""
-                >
-                  <PeakShareSlot
-                    companies={companies}
-                    foundersListed={foundersListed}
-                    campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
-                    topCampuses={topCampuses}
-                    shell={peakShell}
-                  />
-                </aside>
-                <aside
-                  className="pointer-events-auto absolute right-3 top-3 max-h-[calc(100%-1.5rem)] w-[min(360px,34%)] overflow-y-auto rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 p-3 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px]"
-                  data-fold-overlay-founders=""
-                  data-fold-founders-col=""
-                >
-                  <FounderResults
-                    founders={founders}
-                    status={founderStatus}
-                    query={founderQuery}
-                    campusId={mapCampusId}
-                    campusName={mapCampusName}
-                    foundersListed={foundersListed}
-                    peek={3}
-                    onClearCampus={clearCampus}
-                    onMissingCampus={() => {
-                      const next = new URLSearchParams(search.toString());
-                      next.set("sample", "1");
-                      next.set("campus", "missing");
-                      router.push(`/?${next.toString()}`);
-                    }}
-                  />
-                </aside>
-              </div> : null}
+              {/* Desk overlays portaled onto map stage only (≤280px, collapsible). */}
+              {isLg ? (
+                <MapStageOverlays
+                  peak={
+                    <PeakShareSlot
+                      companies={companies}
+                      foundersListed={foundersListed}
+                      campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
+                      topCampuses={topCampuses}
+                      shell={peakShell}
+                    />
+                  }
+                  founders={
+                    <FounderResults
+                      founders={founders}
+                      status={founderStatus}
+                      query={founderQuery}
+                      campusId={mapCampusId}
+                      campusName={mapCampusName}
+                      foundersListed={foundersListed}
+                      peek={3}
+                      onClearCampus={clearCampus}
+                      onMissingCampus={() => {
+                        const next = new URLSearchParams(search.toString());
+                        next.set("sample", "1");
+                        next.set("campus", "missing");
+                        router.push(`/?${next.toString()}`);
+                      }}
+                    />
+                  }
+                />
+              ) : null}
             </div>
 
             <div className="mt-3 hidden lg:block" data-fold-lineage-desk="">

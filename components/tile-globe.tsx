@@ -725,6 +725,7 @@ export function TileGlobe({
   const rankedCampuses = useMemo(() => campusFoundersRanked(campuses), [campuses]);
   const topCampuses = useMemo(() => campusFoundersTop(campuses, CAMPUS_FOUNDERS_VISIBLE), [campuses]);
   const [showAllCampuses, setShowAllCampuses] = useState(false);
+  const [legendOpen, setLegendOpen] = useState(false);
   const plateCampuses = showAllCampuses ? rankedCampuses : topCampuses;
 
   return (
@@ -862,9 +863,28 @@ export function TileGlobe({
               </div>
             </div>
           ) : null}
-          <div className="pointer-events-none absolute right-2 top-2 z-20 max-w-[160px] rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1.5" data-fold-map-legend="">
-            <p className="font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Markers</p>
-            <p className="mt-0.5 text-[10px] leading-3.5 text-[color:var(--fg-2,#3F465C)]">Size = founders · cobalt top desks · cobalt ring = selected</p>
+          {/* r49: collapsible legend tucked bottom-left — never over Program/filters or stats. */}
+          <div className="pointer-events-auto absolute left-2 top-2 z-20 max-w-[168px] lg:top-auto lg:bottom-2" data-fold-map-legend="">
+            <button
+              type="button"
+              className="inline-flex h-7 items-center gap-1.5 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 px-2 font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)] shadow-sm"
+              aria-expanded={legendOpen}
+              aria-controls="fold-map-legend-body"
+              data-fold-legend-toggle=""
+              onClick={() => setLegendOpen((v) => !v)}
+            >
+              Markers
+              <span aria-hidden className="text-[color:var(--cobalt,#2F4FD8)]">{legendOpen ? "–" : "+"}</span>
+            </button>
+            {legendOpen ? (
+              <div
+                id="fold-map-legend-body"
+                className="mt-1 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 px-2 py-1.5 shadow-sm"
+                data-fold-legend-body=""
+              >
+                <p className="text-[10px] leading-3.5 text-[color:var(--fg-2,#3F465C)]">Size = founders · cobalt top desks · cobalt ring = selected</p>
+              </div>
+            ) : null}
           </div>
         </div>
       </section>

@@ -1352,6 +1352,33 @@ details:not([open]) > :not(summary) {
   overflow: hidden !important;
 }
 
+/* r49: lower rest peek (~132px) — compress sheet chrome so peak still reads */
+[data-fold-map-sheet] {
+  /* rest height set in JS; keep map taps above the sheet */
+}
+[data-fold-sheet-peak] [data-fold-peak-month-bars],
+[data-fold-sheet-peak] [data-fold-peak-bars-mobile] {
+  height: 1.5rem !important;
+  margin-top: 0.1rem !important;
+}
+[data-fold-sheet-peak] [data-fold-peak-campus-rank-mobile] {
+  margin-top: 0.1rem !important;
+  padding-top: 0.1rem !important;
+  font-size: 10px !important;
+  max-height: 1.35rem;
+  overflow: hidden;
+}
+[data-fold-sheet-peak] [data-fold-peak-figure] {
+  font-size: 24px !important;
+}
+[data-fold-sheet-body] {
+  padding-bottom: 0.35rem !important;
+}
+[data-fold-map-overlays] [data-fold-overlay-peak],
+[data-fold-map-overlays] [data-fold-overlay-founders] {
+  max-width: 280px;
+}
+
 /* r45b: keep first peek founder card ≥50% visible inside the sheet */
 [data-fold-sheet-founders] [data-founder-card-body] {
   padding-top: 0.25rem !important;

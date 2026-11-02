@@ -240,7 +240,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
 
       <div className="flex flex-col space-y-3 px-3.5 py-3 pl-4 sm:block sm:space-y-3 sm:py-3.5" data-full-record-groups="">
         {hasIdentity ? (
-          <div className="order-2 sm:order-none">
+          <div className="order-1 sm:order-none" data-full-record-identity-first="">
           <Group title="Identity">
             {/* Mobile: skip fields already shown in keyStats to cut empty repeat hierarchy */}
             {!isEmpty(campus) ? (
@@ -275,7 +275,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
         ) : null}
 
         {hasCapital ? (
-          <div className="order-1 sm:order-none" data-full-record-capital-first="">
+          <div className="order-2 sm:order-none" data-full-record-capital-first="">
           <Group title="Capital">
             {!isEmpty(funding) ? <Field label="Funding">{funding?.text}</Field> : null}
             {!isEmpty(profile.rounds) ? (
@@ -334,6 +334,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
         ) : null}
 
         {hasLinks ? (
+          <div className="order-3 sm:order-none">
           <Group title="Links">
             {!isEmpty(website) ? (
               <Field label="Website">
@@ -370,9 +371,11 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
               </Field>
             ) : null}
           </Group>
+          </div>
         ) : null}
 
         {!isEmpty(project.signals) ? (
+          <div className="order-4 sm:order-none">
           <Group title="Signals">
             <div className="py-2" data-full-record-signals="">
               <ul className="space-y-2">
@@ -397,10 +400,11 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
               </ul>
             </div>
           </Group>
+          </div>
         ) : null}
 
         {missing.length > 0 ? (
-          <div className="border border-[color:var(--line,#E1E5EF)] px-3 py-2.5" data-not-yet-sourced="">
+          <div className="order-5 border border-[color:var(--line,#E1E5EF)] px-3 py-2.5 sm:order-none" data-not-yet-sourced="">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Not yet sourced</p>
             <p className="mt-1.5 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">{missing.join(" · ")}</p>
           </div>
