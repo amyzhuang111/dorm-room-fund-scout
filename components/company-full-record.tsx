@@ -105,17 +105,16 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
   if (isEmpty(project.founderLinks)) missing.push("Founders");
   if (isEmpty(project.signals)) missing.push("Signals");
 
-  const keyStats = [
-    campus ? { label: "Campus", value: campus } : null,
-    stage ? { label: "Stage", value: stage } : funding?.text ? { label: "Funding", value: funding.text } : null,
-    signalCount > 0
-      ? { label: "Signals", value: `${signalCount.toLocaleString("en-US")} on record` }
-      : founded
-        ? { label: "Founded", value: founded }
-        : sectorText
-          ? { label: "Sector", value: sectorText }
-          : null,
-  ].filter(Boolean) as { label: string; value: string }[];
+  const keyStats = (
+    [
+      campus ? { label: "Campus", value: campus } : null,
+      stage ? { label: "Stage", value: stage } : null,
+      signalCount > 0 ? { label: "Signals", value: `${signalCount.toLocaleString("en-US")} on record` } : null,
+      founded ? { label: "Founded", value: founded } : null,
+      funding?.text ? { label: "Funding", value: funding.text } : null,
+      sectorText ? { label: "Sector", value: sectorText } : null,
+    ].filter(Boolean) as { label: string; value: string }[]
+  ).slice(0, 3);
 
   const hasIdentity =
     !isEmpty(campus) ||
@@ -138,14 +137,9 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
         <p className="mt-1 text-[22px] font-bold leading-tight tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[24px]">
           {project.name || "Company"}
         </p>
-        {pitch ? (
-          <p className="mt-2 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-full-record-pitch="">
-            {pitch}
-          </p>
-        ) : null}
       </div>
 
-      {/* Lead: founders above the fold */}
+      {/* Lead: founders, then pitch, then key stats */}
       {!isEmpty(project.founderLinks) ? (
         <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3.5 pl-4" data-full-record-founders-lead="">
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founders</p>
@@ -176,8 +170,19 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
         </div>
       ) : null}
 
+      {pitch ? (
+        <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3 pl-4" data-full-record-pitch="">
+          <p className="text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]">{pitch}</p>
+        </div>
+      ) : null}
+
       {keyStats.length > 0 ? (
-        <div className="grid grid-cols-3 gap-px border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--line,#E1E5EF)]" data-full-record-key-stats="">
+        <div
+          className={`grid gap-px border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--line,#E1E5EF)] ${
+            keyStats.length >= 3 ? "grid-cols-3" : keyStats.length === 2 ? "grid-cols-2" : "grid-cols-1"
+          }`}
+          data-full-record-key-stats=""
+        >
           {keyStats.map((stat) => (
             <div key={stat.label} className="bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5">
               <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">{stat.label}</p>
