@@ -722,17 +722,20 @@ export function SampleInstrumentBrowse({
                     <span className="mt-0.5 block text-[9px] uppercase tracking-[0.1em]">with a signal</span>
                   </p>
                 </div>
-                <div className="flex items-baseline justify-between gap-3 px-3 py-2.5 lg:hidden">
-                  <p className="text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    {feed === "leaderboard" ? "Signals" : "Companies"}
-                    {" 1 to "}
-                    {cards.length.toLocaleString("en-US")}
-                    {" of "}
-                    {total.toLocaleString("en-US")}
+                <div className="px-3 py-3 lg:hidden" data-mid-list-hero="" data-more-context-hero="">
+                  <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+                    {feed === "leaderboard" ? "Signals on this page" : "Companies on this page"}
                   </p>
-                  <p className="shrink-0 text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                    1 to {cards.length.toLocaleString("en-US")}
+                    <span className="font-normal text-[color:var(--fg-3,#5C647A)]">
+                      {" of "}
+                      {total.toLocaleString("en-US")}
+                    </span>
+                  </p>
+                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                    {" with a signal"}
+                    {" with a signal · keep scrolling for the next batch"}
                   </p>
                 </div>
               </div>
@@ -752,21 +755,29 @@ export function SampleInstrumentBrowse({
                 const sectionFrom = Math.floor(index / chunk) * chunk + 1;
                 const sectionTo = Math.min(sectionFrom + chunk - 1, cards.length);
                 const rawWhy = whyItsHere(card);
-                const prevWhy = index > 0 ? whyItsHere(cards[index - 1]!) : null;
-                // Keep the first Why in a run; blank identical repeats that follow.
-                const whyOverride = rawWhy && prevWhy === rawWhy ? null : undefined;
+                // De-dupe launch/identical reasons across the whole loaded page (first wins).
+                const earlierSame = cards.slice(0, index).some((c) => whyItsHere(c) === rawWhy);
+                const whyOverride = rawWhy && earlierSame ? null : undefined;
                 return (
                   <li key={card.id}>
                     {showDivider ? (
                       <div
-                        className="flex items-center gap-2 border-t-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/50 px-3 py-1.5 sm:px-3.5"
+                        className="border-t-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/40 px-3 py-3 sm:px-3.5"
                         data-ledger-section={String(Math.floor(index / chunk) + 1)}
+                        data-mid-list-hero=""
                       >
-                        <span className="h-px flex-1 bg-[color:var(--cobalt,#2F4FD8)]/25" aria-hidden />
-                        <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
-                          Companies {sectionFrom} to {sectionTo}
-                        </span>
-                        <span className="h-px flex-1 bg-[color:var(--cobalt,#2F4FD8)]/25" aria-hidden />
+                        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Still on this page</p>
+                        <p className="mt-1 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                          Companies {sectionFrom.toLocaleString("en-US")} to {sectionTo.toLocaleString("en-US")}
+                          <span className="font-normal text-[color:var(--fg-3,#5C647A)]">
+                            {" of "}
+                            {total.toLocaleString("en-US")}
+                          </span>
+                        </p>
+                        <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
+                          {" with a signal on the desk"}
+                        </p>
                       </div>
                     ) : null}
                     <LedgerRow
@@ -850,20 +861,20 @@ export function SampleInstrumentBrowse({
                   data-end-insight={sliceInsight.kicker}
                 >
                   <div
-                    className="relative overflow-hidden border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]"
+                    className="relative overflow-hidden border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]"
                     data-ledger-end-lead=""
                     data-ledger-end-more=""
                     data-pass-close=""
                   >
                     <div className="px-3.5 py-3">
-                      <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Pass close</p>
-                      <p className="mt-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]" data-more-context="">
+                      <p className="text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">End of this batch</p>
+                      <p className="mt-1 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-more-context="">
                         {pageContext}
                       </p>
-                      <p className="mt-1.5 font-mono text-[28px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]" data-ledger-showing="" data-end-lead="">
+                      <p className="mt-2 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]" data-ledger-showing="" data-end-lead="">
                         {cards.length.toLocaleString("en-US")}
-                        <span className="ml-1.5 text-[14px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
-                          of {total.toLocaleString("en-US")}
+                        <span className="ml-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
+                          of {total.toLocaleString("en-US")} loaded
                         </span>
                       </p>
                       {sliceInsight ? (
@@ -889,7 +900,7 @@ export function SampleInstrumentBrowse({
                     {cards.length < total ? (
                       <Link
                         href={moreHref}
-                        className="flex h-9 w-full items-center justify-center border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] font-mono text-[11px] font-semibold text-[color:var(--fg,#0B0E17)] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40"
+                        className="flex h-8 w-full items-center justify-center border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] font-mono text-[11px] font-medium text-[color:var(--fg-2,#3F465C)] hover:text-[color:var(--fg,#0B0E17)]"
                       >
                         Load next
                       </Link>

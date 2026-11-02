@@ -1056,7 +1056,7 @@ export function SignalsLanded({ companies, compact = false }: { companies: Facet
         <div className="flex items-end justify-between gap-3">
           <div className="min-w-0">
             <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Peak · {peak.short} {peak.id.slice(0, 4)}</p>
-            <p className="mt-1 font-mono text-[28px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+            <p className="mt-1 scout-figure text-[32px] leading-none">
               {peak.count.toLocaleString("en-US")}
               <span className="ml-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
                 / {detail.dated.toLocaleString("en-US")}

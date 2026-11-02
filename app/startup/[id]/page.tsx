@@ -82,8 +82,15 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
   const pitchSource = [card?.description, project.profile.description?.text, project.description]
     .map((v) => (v || "").replace(/\s+/g, " ").trim())
     .find((v) => v && !isBoilerplateDescription(v)) || "";
-  const pitch = pitchSource
-    ? (pitchSource.split(/(?<=[.!?])\s+/)[0] || pitchSource).slice(0, 160).trim()
+  const pitchSentence = pitchSource ? (pitchSource.split(/(?<=[.!?])\s+/)[0] || pitchSource).trim() : "";
+  const pitch = pitchSentence
+    ? pitchSentence.length <= 140
+      ? pitchSentence
+      : (() => {
+          const cut = pitchSentence.slice(0, 140);
+          const sp = cut.lastIndexOf(" ");
+          return `${(sp > 80 ? cut.slice(0, sp) : cut).trim()}...`;
+        })()
     : null;
   const stage =
     directoryRow?.stage ??
