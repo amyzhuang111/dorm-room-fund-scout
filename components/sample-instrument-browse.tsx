@@ -701,7 +701,7 @@ export function SampleInstrumentBrowse({
         ) : (
           <div data-ledger-expanded={pages > 1 ? "1" : "0"}>
             {pages > 1 ? (
-              <div className="sticky top-12 z-10 mb-0 border border-b-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 backdrop-blur-sm before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]">
+              <div className="mb-0 border border-b-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] lg:sticky lg:top-12 lg:z-10 lg:bg-[color:var(--bg,#FFFFFF)]/95 lg:backdrop-blur-sm before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]">
                 {/* Desk (more-1440): f53d loud sticky. Mobile (more-375): quieter bar. */}
                 <div className="hidden items-end justify-between gap-3 px-3 py-2 sm:px-3.5 lg:flex">
                   <div className="min-w-0">
@@ -803,112 +803,53 @@ export function SampleInstrumentBrowse({
             </div>
             {pages > 1 && sliceInsight ? (
               <>
-                {/* Desk more-end-1440: Loaded so far (from 502803b) */}
+                {/* Desk more-end-1440: quiet close + small Load next (no footer stats) */}
                 <div
-                  className="mt-5 hidden scroll-mt-24 border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 lg:block"
+                  className="mt-5 hidden scroll-mt-28 border-t border-[color:var(--line,#E1E5EF)] lg:block"
                   data-ledger-end=""
                   data-end-insight={sliceInsight.kicker}
                 >
-                  <div className="scroll-mt-[5.5rem] px-4 py-5 sm:px-5" data-ledger-end-lead="">
-                    <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
-                      Loaded so far
-                    </p>
-                    <p className="mt-2 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[44px]">
-                      {cards.length.toLocaleString("en-US")}
-                      <span className="mx-1.5 text-[18px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">of</span>
-                      <span className="text-[28px] font-bold tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[32px]">
-                        {total.toLocaleString("en-US")}
-                      </span>
-                    </p>
-                    <p className="mt-2.5 max-w-[28rem] text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                      {"Companies 1 to "}
-                      {cards.length.toLocaleString("en-US")}
+                  <div className="scroll-mt-[5.5rem] flex flex-wrap items-center justify-between gap-3 py-4" data-ledger-end-lead="" data-ledger-end-more="">
+                    <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="" data-end-lead="">
+                      <span className="font-semibold text-[color:var(--fg-2,#3F465C)]">{cards.length.toLocaleString("en-US")}</span>
                       {" of "}
                       {total.toLocaleString("en-US")}
-                      {" on this desk"}
-                    </p>
-                    {nextToScout[0] ? (
-                      <p className="mt-1.5 text-[13px] text-[color:var(--fg-2,#3F465C)]" data-next-to-scout="">
-                        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].label}</span>
-                        {" accounts for "}
-                        <span className="font-mono font-bold text-[color:var(--ember,#D96B1C)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
-                        {" of the "}
-                        {total.toLocaleString("en-US")}
-                        {" companies"}
-                      </p>
-                    ) : null}
-                    <p className="mt-3 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="" data-end-lead="">
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
-                      {" "}
-                      {sliceInsight.figureUnit}
-                      {" · see "}
-                      <Link href={`/startup/${sliceInsight.companyId}`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline">
-                        {sliceInsight.companyName}
-                      </Link>
+                      {" loaded"}
                     </p>
                     {cards.length < total ? (
-                      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--cobalt,#2F4FD8)]/20 pt-3.5" data-ledger-end-more="" data-ledger-end-colophon="">
-                        <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                          {"Still "}
-                          <span className="font-bold text-[color:var(--fg,#0B0E17)]">{(total - cards.length).toLocaleString("en-US")}</span>
-                          {" to load"}
-                        </p>
-                        <Link
-                          href={moreHref}
-                          className="inline-flex h-9 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 text-[12px] font-semibold text-white hover:opacity-90"
-                          data-load-next=""
-                        >
-                          Load next
-                        </Link>
-                      </div>
+                      <Link
+                        href={moreHref}
+                        className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 text-[11px] font-medium text-[color:var(--fg-2,#3F465C)] hover:border-[color:var(--ember,#D96B1C)] hover:text-[color:var(--ember,#D96B1C)]"
+                        data-load-next=""
+                      >
+                        Load next
+                      </Link>
                     ) : null}
                   </div>
                 </div>
-                {/* Mobile more-end-375: hairline below cards, quiet type, text Load next */}
+                {/* Mobile more-end-375: hairline + quiet Load next; no footer stats */}
                 <div
-                  className="mt-3 scroll-mt-24 lg:hidden"
+                  className="mt-4 scroll-mt-28 lg:hidden"
                   data-ledger-end=""
                   data-ledger-end-mobile=""
                   data-end-insight={sliceInsight.kicker}
                 >
                   <div
-                    className="border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] pt-3"
+                    className="flex flex-wrap items-center justify-between gap-2 border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] pt-3"
                     data-ledger-end-lead=""
                     data-ledger-end-more=""
                     data-pass-close=""
                   >
-                    <p className="text-[11px] text-[color:var(--fg-3,#5C647A)]" data-more-context="">
-                      {pageContext}
+                    <p className="text-[12px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="" data-end-lead="">
+                      <span className="font-semibold text-[color:var(--fg-2,#3F465C)]">{cards.length.toLocaleString("en-US")}</span>
+                      {" of "}
+                      {total.toLocaleString("en-US")}
+                      {" loaded"}
                     </p>
-                    <p className="mt-1.5 text-[15px] font-semibold tabular-nums tracking-tight text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="" data-end-lead="">
-                      <span className="text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
-                      <span className="ml-1 text-[11px] font-medium text-[color:var(--fg-3,#5C647A)]">
-                        of {total.toLocaleString("en-US")} loaded
-                      </span>
-                    </p>
-                    {sliceInsight ? (
-                      <p className="mt-1.5 text-[12px] text-[color:var(--fg-3,#5C647A)]">
-                        <span className="font-semibold tabular-nums text-[color:var(--fg-2,#3F465C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
-                        {" "}
-                        {sliceInsight.figureUnit}
-                        {" · see "}
-                        <Link href={`/startup/${sliceInsight.companyId}`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:underline">
-                          {sliceInsight.companyName}
-                        </Link>
-                      </p>
-                    ) : null}
-                    {nextToScout[0] ? (
-                      <p className="mt-1 text-[12px] text-[color:var(--fg-3,#5C647A)]">
-                        <span className="text-[color:var(--fg-2,#3F465C)]">{nextToScout[0].label}</span>
-                        {" "}
-                        <span className="font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
-                        {" on the desk"}
-                      </p>
-                    ) : null}
                     {cards.length < total ? (
                       <Link
                         href={moreHref}
-                        className="mt-3 inline-flex h-9 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 text-[12px] font-semibold text-white hover:opacity-90"
+                        className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 text-[11px] font-medium text-[color:var(--fg-2,#3F465C)] hover:border-[color:var(--ember,#D96B1C)] hover:text-[color:var(--ember,#D96B1C)]"
                         data-load-next=""
                       >
                         Load next

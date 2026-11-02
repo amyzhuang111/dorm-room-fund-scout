@@ -11,6 +11,8 @@ export interface RankCard {
   schoolId: string | null;
   /** Optional identity for specific Why-it-here lines (DirectoryCard). */
   foundedYear?: number | null;
+  /** Year for Why-it-here when foundedYear is missing (signal/news date). Not shown as "founded". */
+  activityYear?: number | null;
   primaryProgram?: string | null;
 }
 
@@ -73,7 +75,12 @@ export function whyItsHere(card: RankCard): string | null {
   const program = card.primaryProgram?.trim() || null;
   const programs = [...new Set(card.programs.map(programLabel).filter(Boolean))];
   const yc = programs.find((name) => /y\s*combinator/i.test(name)) || null;
-  const year = card.foundedYear != null ? String(card.foundedYear) : null;
+  const year =
+    card.foundedYear != null
+      ? String(card.foundedYear)
+      : card.activityYear != null
+        ? String(card.activityYear)
+        : null;
 
   if (card.operatingStatus === "acquired") {
     return campus ? `Acquired · ${campus}` : "Acquired";

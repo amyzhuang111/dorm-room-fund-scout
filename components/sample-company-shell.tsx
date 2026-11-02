@@ -267,7 +267,7 @@ export function SampleCompanyShell({
           <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
         </div>
         <div
-          className="sticky top-12 z-10 mb-3 mt-1 scroll-mt-[5.5rem] sm:hidden"
+          className="relative z-10 mb-3 mt-1 scroll-mt-[5.5rem] sm:hidden"
           data-dossier-timeline=""
           data-mobile-chrono-identity=""
           data-company-mobile-hero=""
@@ -343,41 +343,6 @@ export function SampleCompanyShell({
                 </p>
               </div>
             ) : null}
-            {/* Peer signal strip · titled section; hide identical scrape dates */}
-            <div className="mt-2 border-t border-[color:var(--line,#E1E5EF)] pt-1.5" data-dossier-peers-section="">
-            <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">
-              {campusPeers ? "Campus peers" : sectorPeers ? "Sector peers" : "Nearby signals"}
-            </p>
-            <ol className="mt-1 space-y-0.5" data-dossier-signal-timeline="">
-              {(() => {
-                const rows = wireCompanies
-                  .filter((c) => (c.signals ?? 0) > 0 || (c.latestSignalAt ?? "").length >= 4)
-                  .slice()
-                  .sort((a, b) => (b.signals ?? 0) - (a.signals ?? 0) || (b.latestSignalAt ?? "").localeCompare(a.latestSignalAt ?? ""))
-                  .slice(0, 3);
-                const dates = rows.map((c) => (c.latestSignalAt ?? "").replace(/-00/g, "")).filter(Boolean);
-                const unique = new Set(dates);
-                const scrapeOnly = unique.size <= 1 && dates.length >= 2;
-                return rows.map((c, i) => {
-                  const at = (c.latestSignalAt ?? "").replace(/-00/g, "");
-                  return (
-                    <li key={c.id} className="flex flex-wrap items-baseline gap-x-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                      <span className="w-4 shrink-0 text-[color:var(--cobalt,#2F4FD8)]">{String(i + 1).padStart(2, "0")}</span>
-                      <Link href={`/startup/${c.id}`} className="min-w-0 flex-1 truncate font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline">{c.name}</Link>
-                      {c.signalLabel ? (
-                        <span className="shrink-0 font-bold text-[color:var(--ember,#D96B1C)]">{c.signalLabel}</span>
-                      ) : null}
-                      {at && !scrapeOnly ? (
-                        <span className="shrink-0">{at}</span>
-                      ) : at && scrapeOnly && i === 0 ? (
-                        <span className="shrink-0 text-[color:var(--fg-3,#5C647A)]">Indexed {at}</span>
-                      ) : null}
-                    </li>
-                  );
-                });
-              })()}
-            </ol>
-            </div>
             </div>
           </div>
         </div>

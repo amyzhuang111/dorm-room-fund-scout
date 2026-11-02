@@ -936,15 +936,6 @@ html[data-sample="halflight"] body {
   [data-corpus-cards] .c-d {
     display: none;
   }
-  /* r21 data-375: keep a few dense fields on the row without opening the full desk table */
-  [data-corpus-cards] .c-d.c-d-m,
-  [data-corpus-cards] .c-fund.c-d-m,
-  [data-corpus-cards] .c-th.c-d-m {
-    display: table-cell;
-    padding: 0.4rem 0.35rem;
-    font-size: 10px;
-    white-space: nowrap;
-  }
   [data-corpus-cards] .c-b {
     display: none;
   }
