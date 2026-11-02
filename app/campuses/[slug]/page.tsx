@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ClassYearChart } from "@/components/class-year-chart";
-import { DataTable } from "@/components/data-table";
+import { FoundersDesk } from "@/components/founders-desk";
 import { ShortlistCampusButton } from "@/components/shortlist-campus";
 import { campusSlug, resolveCampusSlug, shortCampusLabel } from "@/lib/domain/campuses";
-import { loadFounderTable, loadProjectRows } from "@/lib/domain/founder-table";
+import { loadFounderTable } from "@/lib/domain/founder-table";
 import { SIGNALS_THIS_WEEK_LABEL, signalsThisWeek } from "@/lib/domain/hero-stats";
 import { listSignalsForUniversity, listSources, listUniversities, type UniversitySummary } from "@/lib/domain/queries";
 import { getDb } from "@/lib/db/client";
@@ -59,7 +59,6 @@ export default async function CampusPage({
   const label = shortCampusLabel(university.id, university.name);
   const tab = TABS.includes(sp.tab as (typeof TABS)[number]) ? (sp.tab as (typeof TABS)[number]) : "founders";
   const founders = loadFounderTable(university.id);
-  const projects = loadProjectRows(university.id);
   const topTier = founders.filter((row) => row.tier === "S" || row.tier === "S+").length;
   const signalsWeek = signalsThisWeek(university.id);
   const yearCounts = [...founders.reduce((counts, row) => {
@@ -108,7 +107,7 @@ export default async function CampusPage({
       </div>
       <div className="mt-8 grid gap-x-6 gap-y-8 lg:grid-cols-12">
         <div className="lg:col-span-8">
-          {tab === "founders" && <DataTable rows={projects} campusLocked />}
+          {tab === "founders" && <FoundersDesk campusId={university.id} campusLocked initialCount={founders.length} />}
           {tab === "companies" && (
             <ul>
               {affiliated.map((company) => (
