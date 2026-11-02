@@ -190,6 +190,18 @@ function main() {
     } else {
       console.log("Kaigo rows missing; skip", { kaigoDrop, kaigoSurv });
     }
+
+    // Survivor must keep Kaigo's own YC one-liner — never the Illini cohort blurb
+    // that lived on the compact-name duplicate.
+    const kaigoDesc = db.prepare(`SELECT description FROM projects WHERE id = ?`).get(KAIGO_SURVIVOR) as
+      | { description: string | null }
+      | undefined;
+    if (kaigoDesc && /illini-founded companies in yc/i.test(kaigoDesc.description ?? "")) {
+      db.prepare(
+        `UPDATE projects SET description = ?, updated_at = datetime('now') WHERE id = ?`,
+      ).run("AI outpatient care workforce", KAIGO_SURVIVOR);
+      console.log("Kaigo description restored from YC one-liner");
+    }
   });
 
   run();
@@ -267,6 +279,12 @@ function main() {
   }
   if (db.prepare(`SELECT id FROM projects WHERE id = ?`).get(KAIGO_DROP)) {
     throw new Error("Kaigo drop still present");
+  }
+  const kaigoNow = db.prepare(`SELECT description FROM projects WHERE id = ?`).get(KAIGO_SURVIVOR) as
+    | { description: string | null }
+    | undefined;
+  if (!kaigoNow || /illini/i.test(kaigoNow.description ?? "")) {
+    throw new Error(`Kaigo Health still has junk description: ${kaigoNow?.description}`);
   }
 
   bak.close();
