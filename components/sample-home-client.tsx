@@ -333,12 +333,6 @@ export function SampleHomeClient(props: {
             onClearCampus={clearCampus}
             onClearQuery={() => setFounderQuery("")}
           />
-          <div className="hidden lg:block">
-            <LineagePanels companies={companies} week={stats.week} campusId={mapCampusId && mapCampusId !== "missing" ? mapCampusId : null} campusName={mapCampusName} />
-          </div>
-          <MobileFoldDrawer title="Programs & recent signals">
-            <LineagePanels companies={companies} week={stats.week} campusId={mapCampusId && mapCampusId !== "missing" ? mapCampusId : null} campusName={mapCampusName} />
-          </MobileFoldDrawer>
           <div
             className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(320px,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-5"
             data-fold-stack=""
@@ -379,6 +373,12 @@ export function SampleHomeClient(props: {
                 foundersIndexed={founders.length || undefined}
                 highlightCampusIds={highlightCampusIds}
               />
+              <div className="mt-3 hidden lg:block">
+                <LineagePanels companies={companies} week={stats.week} campusId={mapCampusId && mapCampusId !== "missing" ? mapCampusId : null} campusName={mapCampusName} />
+              </div>
+              <MobileFoldDrawer title="Programs & recent signals">
+                <LineagePanels companies={companies} week={stats.week} campusId={mapCampusId && mapCampusId !== "missing" ? mapCampusId : null} campusName={mapCampusName} />
+              </MobileFoldDrawer>
             </div>
           </div>
         </div>

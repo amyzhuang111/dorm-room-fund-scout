@@ -202,6 +202,9 @@ function main() {
       ).run("AI outpatient care workforce", KAIGO_SURVIVOR);
       console.log("Kaigo description restored from YC one-liner");
     }
+    db.prepare(
+      `UPDATE company_facts SET value_text = ? WHERE project_id = ? AND fact_key = 'description' AND value_text LIKE '%Illini-founded%'`,
+    ).run("AI outpatient care workforce", KAIGO_SURVIVOR);
   });
 
   run();
