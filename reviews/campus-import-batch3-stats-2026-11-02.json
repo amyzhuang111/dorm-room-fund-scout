@@ -1,0 +1,31 @@
+{
+  "ok": true,
+  "retrievedAt": "2026-11-02T12:31:23.262Z",
+  "perSource": [
+    {
+      "source": "Purdue HIVE Ventures",
+      "sourceId": "src_purdue_hive",
+      "listUrl": "https://engineering.purdue.edu/HIVE/Ventures/ventures-pages",
+      "ok": true,
+      "rowsFound": 44,
+      "imported": 42,
+      "merged": 2,
+      "skipped": []
+    },
+    {
+      "source": "UNC EVC ventures",
+      "sourceId": "src_unc_evc",
+      "listUrl": "https://uncevc.com/ventures",
+      "ok": true,
+      "rowsFound": 4,
+      "imported": 4,
+      "merged": 0,
+      "skipped": []
+    }
+  ],
+  "totals": {
+    "rowsFound": 48,
+    "imported": 46,
+    "merged": 2
+  }
+}

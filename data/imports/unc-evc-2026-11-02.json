@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Aim Point Media",
+    "university": "University of North Carolina at Chapel Hill",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": null,
+    "website": "https://aimpointmedia.io",
+    "evidence_url": "https://uncevc.com/ventures",
+    "program": "UNC EVC (Kenan-Flagler)",
+    "source": "src_unc_evc",
+    "description": "A golf industry revenue platform connecting courses with advertising opportunities.",
+    "affiliation_note": "Listed on UNC EVC ventures page (MBA venture challenge); personal emails/phones not imported; enrollment not separately stated",
+    "cohort_label": "Founded 2026"
+  },
+  {
+    "name": "All Square",
+    "university": "University of North Carolina at Chapel Hill",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://uncevc.com/ventures",
+    "program": "UNC EVC (Kenan-Flagler)",
+    "source": "src_unc_evc",
+    "description": "Golf outing planning platform with registration, payments, scoring, and management tools.",
+    "affiliation_note": "Listed on UNC EVC ventures page (MBA venture challenge); personal emails/phones not imported; enrollment not separately stated",
+    "cohort_label": "Founded 2026"
+  },
+  {
+    "name": "Smith Equine",
+    "university": "University of North Carolina at Chapel Hill",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://uncevc.com/ventures",
+    "program": "UNC EVC (Kenan-Flagler)",
+    "source": "src_unc_evc",
+    "description": "Equine sports medicine focused on diagnostics, treatment, and performance optimization.",
+    "affiliation_note": "Listed on UNC EVC ventures page (MBA venture challenge); personal emails/phones not imported; enrollment not separately stated",
+    "cohort_label": "Founded 2026"
+  },
+  {
+    "name": "UniFounders",
+    "university": "University of North Carolina at Chapel Hill",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": null,
+    "website": "https://uni-founders.com",
+    "evidence_url": "https://uncevc.com/ventures",
+    "program": "UNC EVC (Kenan-Flagler)",
+    "source": "src_unc_evc",
+    "description": "An AI-powered matchmaking tool for university innovators and their supporting network.",
+    "affiliation_note": "Listed on UNC EVC ventures page (MBA venture challenge); personal emails/phones not imported; enrollment not separately stated",
+    "cohort_label": "Founded 2023"
+  }
+]

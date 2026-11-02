@@ -1,13 +1,14 @@
 # Campus import results — 2026-11-02
 
 **Branch:** `cursor/campus-undergradvc`  
-**Base scoring SHA:** `12e3f85`  
-**Import tip SHA:** `5bb6312` (queue batch 2); weekly `d4c2126`; priority `c6c58d0`  
-**Preview:** https://campus-scout-ijww4efzp-amys-projects-d3dfb125.vercel.app (batch2 `5bb6312`); prior weekly https://campus-scout-g1rlgzupu-amys-projects-d3dfb125.vercel.app  
-**Inspect:** https://vercel.com/amys-projects-d3dfb125/campus-scout/9ozPzDLDsqUB9nbrdsxXvgkD6JB9  
+**Base scoring SHA (hygiene):** `d755f5c` → hygiene tip `322611b` (Canva stub blocklist + cobalt-tint white-on-clear logos)  
+**Import tip SHA:** `061b62f` (queue batch 3); batch2 `5bb6312`; weekly `d4c2126`; priority `c6c58d0`  
+**Hygiene preview:** https://campus-scout-f74cz2un7-amys-projects-d3dfb125.vercel.app (`322611b`)  
+**Import preview:** `BATCH3_PREVIEW`  
+**Prior import preview:** https://campus-scout-ijww4efzp-amys-projects-d3dfb125.vercel.app (batch2 `5bb6312`)  
 **Rules:** public pages only · no logins · rate-limit · no personal contact info · corrected dedupe (domain else name+campus+founders; never name alone) · fields: `university`, `affiliation_type`, `cohort_year`, `enrollment_status` (only when source states it), `website`, `evidence_url` · never present alumni/faculty as current_student.
 
-**ETA (remaining 36-list after this priority ship):** ~4–7 hours wall-clock for viable public HTML/JSON sources (NYU, UofT, Velocity/Waterloo fallback, SuperScout free, Brown, Yale, MIT delta v refresh, Imperial/Cambridge/NUS/HKUST/HKU/SMU, BuildList filtered); plus blocked/JS sources that need browser or stay reported. Amy UI (Database/Account/Support/Feedback) still after imports.
+**Queue remainder:** viable public HTML sources in the 36-list are exhausted after batch3. Remaining items are blocked (JS/login/Airtable/no roster), skipped (no campus tags / DRF exclusion), or flagged (Columbia / CampusHunt).
 
 ## Priority batch (ship first)
 
@@ -34,10 +35,10 @@
 |---:|---|---|
 | 1 | UndergradVC | done (priority) |
 | 2 | SuperScout free pages only | **blocked** — `/universities` ecosystem pages; no public company roster |
-| 3 | Dorm Room Fund portfolio | queued |
-| 4 | FrontRow Ventures portfolio | queued |
-| 5 | Crimson Founder Files | queued |
-| 6 | BOS Network | queued |
+| 3 | Dorm Room Fund portfolio | **skipped** — reference/exclusion corpus only; not investable imports |
+| 4 | FrontRow Ventures portfolio | **skipped** — public `/portfolio` is featured logos only, no campus tags (UBC/SFU techmaps already done) |
+| 5 | Crimson Founder Files | **blocked** — Wix page; no company names in public HTML |
+| 6 | BOS Network | **skipped** — founder/company logo alts only; no campus tags |
 | 7 | Columbia startups/founders | **flagged unresolved** — Crunchbase-powered reuse |
 | 8 | CampusHunt | **provisional** — verify before import |
 | 9 | Harvard i-lab ventures | done (priority) |
@@ -50,17 +51,17 @@
 | 16 | Free Ventures | blocked (JS shell) |
 | 17 | E@B companies | blocked (client-only) |
 | 18 | SkyDeck | partial (12 HTML slugs); existing SkyDeck source remains |
-| 19 | StartX community | queued / likely no public startup directory |
+| 19 | StartX community | **blocked** — Alumni Companies page is JS shell (~0 roster rows in SSR) |
 | 20 | Northwestern Garage | done (priority) |
-| 21 | Purdue HIVE ventures | queued |
+| 21 | Purdue HIVE ventures | **done** (batch3) — 44 found; 42 imported / 2 merged; current_student |
 | 22 | NYU featured startups | **done** (batch2) — 152 found; 133 imported / 19 merged; affiliation unknown |
 | 23 | UMich entrepreneurs (public only) | **skipped** — hivebrite login wall |
 | 24 | CMU Swartz / Airtable | **blocked** — public embed tried; no records |
-| 25 | UNC EVC ventures | queued — **skip contact emails/phones** |
+| 25 | UNC EVC ventures | **done** (batch3) — 4 found; 4 imported; current_student; emails/phones not imported |
 | 26 | Waterloo Startups directory | **feed error** → use **Velocity** (#27) as fallback |
 | 27 | Velocity incubator companies | **done** (batch2) — 2025+ only (12); 2 imported / 10 merged; affiliation unknown |
 | 28 | UofT startups directory | **skipped** — empty public rows |
-| 29 | UBC innovation portfolio | queued (alongside FRV techmap) |
+| 29 | UBC innovation portfolio | **blocked** — innovation.ubc.ca spin-off URLs 404; FRV UBC techmap already done |
 | 30 | Imperial VCC / Enterprise Lab | **blocked** — competition page + Startups Magazine; no public portfolio roster |
 | 31 | Accelerate Cambridge ventures | **blocked** — filter UI only; venture rows not in public HTML/JSON |
 | 32 | NUS Furnace | **done** (batch2) — 45 (5 current / 40 alumni); 42 imported / 3 merged |
@@ -92,12 +93,29 @@
 
 **Batch 2 totals:** found 654 · imported 582 · merged 72
 
+## Queue batch 3 (Purdue HIVE / UNC EVC)
+
+| # | Source | Status | Found | Imported | Merged | Notes |
+|---:|---|---|---:|---:|---:|---|
+| 21 | Purdue HIVE Ventures | **done** | 44 | 42 | 2 | current_student; public HIVE roster |
+| 25 | UNC EVC ventures | **done** | 4 | 4 | 0 | current_student; no emails/phones imported |
+| 3 | DRF portfolio | **skipped** | — | — | — | reference/exclusion only |
+| 4 | FRV `/portfolio` | **skipped** | — | — | — | featured logos; no campus; techmaps done |
+| 5 | Crimson Founder Files | **blocked** | — | — | — | no company names in public HTML |
+| 6 | BOS Network | **skipped** | — | — | — | no campus tags |
+| 19 | StartX Alumni Companies | **blocked** | — | — | — | JS shell |
+| 29 | UBC innovation spin-offs | **blocked** | — | — | — | 404; FRV techmap done |
+
+**Batch 3 totals:** found 48 · imported 46 · merged 2  
+**Corpus after batch3:** 5584 companies · 5435 investable
+
 ### Previously queued / blocked
 
 | Source | Status |
 |---|---|
 | UCSD Startup DB (Airtable) | **blocked** — embed public but row XHR not harvested; no CSV |
 | UW–Madison innovate directory | **no public startup list** — redirects to entrepreneurship hub |
+| DRF / FRV portfolio / BOS / Crimson / StartX / UBC innovation | see batch 3 status (skipped or blocked) |
 | UVA Foundry | **no public startup list** — `/ventures` is program copy; list behind `app.uvafoundry.com` |
 | Dealroom aggregates | **blocked** — Cloudflare 403 |
 | Georgetown | queued |
