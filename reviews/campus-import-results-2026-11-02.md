@@ -2,8 +2,8 @@
 
 **Branch:** `cursor/campus-undergradvc`  
 **Base scoring SHA:** `12e3f85`  
-**Import tip SHA:** `2cfff46` (queue batch 2); weekly `d4c2126`; priority `c6c58d0`  
-**Preview:** https://campus-scout-ijww4efzp-amys-projects-d3dfb125.vercel.app (batch2 `8921eb1`); prior weekly https://campus-scout-g1rlgzupu-amys-projects-d3dfb125.vercel.app  
+**Import tip SHA:** `5bb6312` (queue batch 2); weekly `d4c2126`; priority `c6c58d0`  
+**Preview:** https://campus-scout-ijww4efzp-amys-projects-d3dfb125.vercel.app (batch2 `5bb6312`); prior weekly https://campus-scout-g1rlgzupu-amys-projects-d3dfb125.vercel.app  
 **Inspect:** https://vercel.com/amys-projects-d3dfb125/campus-scout/9ozPzDLDsqUB9nbrdsxXvgkD6JB9  
 **Rules:** public pages only · no logins · rate-limit · no personal contact info · corrected dedupe (domain else name+campus+founders; never name alone) · fields: `university`, `affiliation_type`, `cohort_year`, `enrollment_status` (only when source states it), `website`, `evidence_url` · never present alumni/faculty as current_student.
 
