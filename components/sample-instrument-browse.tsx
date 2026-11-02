@@ -1330,7 +1330,7 @@ export function SampleInstrumentBrowse({
             aria-label="Dismiss filters"
             onClick={() => setMobileFiltersOpen(false)}
           />
-          <div className="absolute inset-x-0 bottom-0 max-h-[78dvh] overflow-hidden rounded-t-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] shadow-lg">
+          <div className="absolute inset-x-0 bottom-0 max-h-[60dvh] overflow-hidden rounded-t-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] shadow-lg">
             <div className="flex items-center justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3 py-2.5">
               <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">
                 Filters
@@ -1349,7 +1349,7 @@ export function SampleInstrumentBrowse({
                 Done
               </button>
             </div>
-            <div className="max-h-[calc(78dvh-48px)] overflow-y-auto overscroll-contain px-1 pb-6" data-mobile-sheet-facets="">
+            <div className="max-h-[calc(60dvh-48px)] overflow-y-auto overscroll-contain px-1 pb-6" data-mobile-sheet-facets="">
               <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense sheet />
             </div>
           </div>

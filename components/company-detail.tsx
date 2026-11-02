@@ -97,6 +97,11 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
       {/* Mobile: Why look above Funding so sim-375 matches 73a fold (Funding peeks) */}
       <div className="sm:hidden">{whyLook}</div>
 
+      {/* r45: Full record lead (founders / identity / CONFIRMED) stays at the top. */}
+      <div data-full-record-top="">
+        <CompanyFullRecord project={project} />
+      </div>
+
       {/* Header */}
       <div>
         {card ? (
@@ -346,8 +351,6 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
           {project.signals.length === 0 && <li className="text-sm text-muted">No dated activity recorded yet.</li>}
         </ul>
       </section>
-
-      <CompanyFullRecord project={project} />
 
       {/* Notes */}
       <section>

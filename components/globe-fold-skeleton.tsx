@@ -36,7 +36,7 @@ export function GlobeFoldSkeleton({
       </div>
       <div
         className="relative overflow-hidden border-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[#FFFFFF]"
-        style={{ height: "clamp(420px, 65vh, 780px)" }}
+        style={{ height: "clamp(420px, 74vh, 780px)" }}
         data-dispatch-map-stage=""
         data-fold-bigmap-skeleton=""
       >

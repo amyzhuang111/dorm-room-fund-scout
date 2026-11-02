@@ -1233,3 +1233,113 @@ details:not([open]) > :not(summary) {
   transform: translate(-50%, -50%);
   /* expand hit target without shifting layout */
 }
+
+/* r45: floating fold panels over the big map */
+[data-fold-overlay] [data-fold-globe-col],
+[data-fold-overlay] [data-dispatch-map-stage],
+[data-fold-overlay] [data-fold-bigmap-stage] {
+  width: 100%;
+}
+[data-fold-map-overlays] {
+  /* gaps stay pointer-events-none so map taps land on the globe */
+}
+[data-fold-overlay-peak] [data-fold-peak-figure],
+[data-fold-sheet-peak] [data-fold-peak-figure] {
+  font-size: 40px !important;
+  height: auto !important;
+  line-height: 1 !important;
+}
+[data-fold-overlay-founders] [data-founder-card-body],
+[data-fold-sheet-founders] [data-founder-card-body] {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+[data-fold-overlay-founders] [data-founder-name],
+[data-fold-sheet-founders] [data-founder-name] {
+  font-size: 15px !important;
+  line-height: 1.2 !important;
+}
+
+/* r45 mobile sheet: always show the compact peak (ignore lg:hidden). */
+[data-fold-sheet-peak] [data-fold-peak-desk] {
+  display: none !important;
+}
+[data-fold-sheet-peak] [data-fold-peak-share-mobile],
+[data-fold-sheet-peak] [data-fold-peak-share-mobile][data-fold-peak-share] {
+  display: block !important;
+}
+
+[data-fold-sheet-peak] [data-fold-peak-caption] {
+  display: none !important;
+}
+[data-fold-sheet-founders] [data-founder-card-list] li:nth-child(n+3) {
+  display: none !important;
+}
+
+[data-fold-sheet-peak] [data-fold-peak-bars-mobile],
+[data-fold-sheet-peak] [data-fold-peak-month-bars] {
+  height: 2.5rem !important;
+  margin-top: 0.25rem !important;
+}
+[data-fold-sheet-peak] [data-fold-peak-campus-rank-mobile] {
+  margin-top: 0.25rem !important;
+  padding-top: 0.25rem !important;
+  gap: 0.35rem 0.75rem !important;
+}
+[data-fold-sheet-peak] [data-fold-peak-figure] {
+  font-size: 32px !important;
+  margin-top: 0.25rem !important;
+}
+[data-fold-sheet-founders] [data-founder-card-body] {
+  padding-top: 0.35rem !important;
+  padding-bottom: 0.35rem !important;
+}
+[data-fold-sheet-founders] [data-founder-name] {
+  font-size: 14px !important;
+}
+
+[data-fold-sheet-founders] [data-founder-filters] > div.flex,
+[data-fold-sheet-founders] [data-founder-filters] > div.hidden {
+  /* keep toggle; collapse the select chips until expanded */
+}
+[data-fold-sheet-founders] [data-founder-filters] {
+  margin-bottom: 0.25rem !important;
+}
+[data-fold-sheet-peak] [data-fold-peak-share] {
+  gap: 0.15rem !important;
+}
+[data-fold-sheet-peak] [data-fold-peak-figure] {
+  font-size: 28px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+[data-fold-sheet-peak] [data-fold-peak-bars-mobile],
+[data-fold-sheet-peak] [data-fold-peak-month-bars] {
+  height: 2rem !important;
+  margin-top: 0.15rem !important;
+  margin-bottom: 0 !important;
+}
+[data-fold-sheet-peak] [data-fold-peak-campus-rank-mobile] {
+  margin-top: 0.15rem !important;
+  padding-top: 0.15rem !important;
+  font-size: 11px !important;
+  gap: 0.25rem 0.5rem !important;
+}
+[data-fold-sheet-peak] [data-fold-peak-share-mobile] > p,
+[data-fold-sheet-peak] [data-fold-peak-kicker] {
+  display: none !important;
+}
+[data-fold-sheet-founders] [data-founder-results] > div:first-child,
+[data-fold-sheet-founders] [data-founder-results] [data-founder-status] {
+  display: none !important;
+}
+[data-fold-sheet-founders] [data-founder-card] {
+  margin: 0 !important;
+}
+[data-fold-sheet-founders] [data-founder-why],
+[data-fold-sheet-founders] [data-founder-meta] {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}

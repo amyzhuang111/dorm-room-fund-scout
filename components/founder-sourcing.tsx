@@ -56,6 +56,7 @@ export function FounderResults({
   campusId,
   campusName,
   foundersListed = 0,
+  peek,
   onClearCampus,
   onMissingCampus,
 }: {
@@ -66,6 +67,8 @@ export function FounderResults({
   campusName: string | null;
   /** Founder-name slots on company cards  -  may be below the searchable index. */
   foundersListed?: number;
+  /** When set, show a compact overlay peek of N cards (no mobile min-height reserve). */
+  peek?: number;
   onClearCampus: () => void;
   onMissingCampus: () => void;
 }) {
@@ -117,17 +120,18 @@ export function FounderResults({
     [founders, query, campusId, program, sector, year, signalType],
   );
   const page = matches.slice(0, shown);
+  const list = peek ? matches.slice(0, peek) : page;
   const unfiltered = !query.trim() && !campusId && !program && !sector && !year && !signalType;
   // Mobile CLS: hold exact first-page height from first paint so the globe does not jump when cards hydrate.
-  const reserveMobileFirstPage = status !== "ready" || (unfiltered && page.length >= PAGE);
-
+  const reserveMobileFirstPage = !peek && (status !== "ready" || (unfiltered && page.length >= PAGE));
   return (
     <section
       className={`mt-0 lg:min-h-0 ${reserveMobileFirstPage ? "max-lg:min-h-[5401px]" : ""}`}
       data-founder-results=""
+      data-founder-peek={peek ? String(peek) : undefined}
       data-founder-mobile-min={reserveMobileFirstPage ? String(FOUNDER_MOBILE_PAGE_MIN_PX) : undefined}
     >
-      <div className="mb-2 flex flex-wrap items-end justify-between gap-2 lg:mb-2 lg:gap-2">
+      <div className={`mb-2 flex flex-wrap items-end justify-between gap-2 lg:mb-2 lg:gap-2 ${peek ? "max-lg:hidden" : ""}`}>
         <div>
           <h2 className="text-[20px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] lg:text-[18px]">Founders</h2>
           <p className="mt-2 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]">
@@ -169,7 +173,10 @@ export function FounderResults({
           </p>
         </div>
       </div>
-      <div className="mb-3 lg:mb-2" data-founder-filters="">
+      {peek ? (
+        <p className="mb-2 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)] lg:hidden">Founders</p>
+      ) : null}
+      <div className={`mb-3 lg:mb-2 ${peek ? "max-lg:mb-1" : ""}`} data-founder-filters="">
         <button
           type="button"
           className="mb-2 inline-flex h-8 items-center gap-1.5 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)] lg:hidden"
@@ -269,7 +276,7 @@ export function FounderResults({
         <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]" data-founder-card-list="">
           {(() => {
             const whyById = assignWhyWorthALook(page);
-            return page.map((founder) => {
+            return list.map((founder) => {
             const why = whyById.get(founder.id) ?? null;
             return (
               <li key={founder.id} data-founder-card="" data-signal-chrome={founder.signalTypes.includes("funding") ? "funding" : founder.signalTypes.includes("launch") ? "launch" : founder.signalTypes.includes("award") ? "award" : founder.signalTypes.length ? "other" : "none"}>
@@ -348,7 +355,7 @@ export function FounderResults({
           })()}
         </ol>
       )}
-      {shown < matches.length ? (
+      {!peek && shown < matches.length ? (
         <button
           type="button"
           onClick={() => setWindowState({ key: filterKey, shown: shown + PAGE })}

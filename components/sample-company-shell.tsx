@@ -40,6 +40,7 @@ export function SampleCompanyShell({
     sector?: string | null;
     primaryProgram?: string | null;
     founders?: string[];
+    founderConfirmed?: boolean;
     signals?: number;
     operatingStatus?: string | null;
     latestSignalAt?: string | null;
@@ -279,7 +280,7 @@ export function SampleCompanyShell({
         >
           <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)]" data-dossier-spread-mobile="">
             {/* Campus-first identity band · readable seal + real campus label */}
-            <div className="flex items-center gap-3 border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/40 px-3.5 py-3.5" data-dossier-campus-band="" data-mobile-list-mast="">
+            <div className="flex items-center gap-2.5 border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/40 px-3 py-2" data-dossier-campus-band="" data-mobile-list-mast="" data-full-record-identity="">
               <CampusSeal
                 label={dossier?.schoolId ? shortCampusLabel(dossier.schoolId, dossier.campus ?? "") : dossier?.campus}
                 size="lg"
@@ -296,7 +297,7 @@ export function SampleCompanyShell({
                 </p>
               </div>
             </div>
-            <div className="flex gap-3 px-3.5 py-3">
+            <div className="flex gap-2.5 px-3 py-2">
               <div className="mt-1 shrink-0">
                 {dossier?.logoUrl ? (
                   <span data-dossier-logo=""><LogoMark name={dossier.name} logoUrl={dossier.logoUrl} size={44} /></span>
@@ -308,7 +309,7 @@ export function SampleCompanyShell({
               </div>
               <div className="min-w-0 flex-1">
                 <p className="scout-kicker">Scout dossier</p>
-                <p className="mt-1 text-[28px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)]" data-company-name-lead="">
+                <p className="mt-0.5 text-[24px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)]" data-company-name-lead="">
                   {dossier?.name ?? "Company"}
                 </p>
                 {dossier?.pitch ? (
@@ -318,7 +319,7 @@ export function SampleCompanyShell({
                 ) : null}
               </div>
             </div>
-            <div className="border-t border-[color:var(--line,#E1E5EF)] px-3.5 py-3">
+            <div className="border-t border-[color:var(--line,#E1E5EF)] px-3 py-2">
             <p className="flex flex-wrap gap-x-2 gap-y-0.5 font-mono text-[12px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]">
               {dossier?.campus ? <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.campus}</span> : <span>Campus not on record</span>}
               {dossier?.stage ? (
@@ -359,11 +360,16 @@ export function SampleCompanyShell({
               {wireIncludeNote ? <>{" · "}{wireIncludeNote}</> : null}
             </p>
             {dossier?.founders && dossier.founders.length > 0 ? (
-              <div className="mt-1.5" data-dossier-founders-lead="">
+              <div className="mt-1.5" data-dossier-founders-lead="" data-full-record-founders-peek="">
                 <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founders</p>
                 <p className="mt-0.5 text-[13px] font-semibold leading-4 tracking-tight text-[color:var(--fg,#0B0E17)]">
                   {dossier.founders.slice(0, 4).join(" · ")}
                 </p>
+                {dossier.founderConfirmed ? (
+                  <p className="mt-1">
+                    <span className="rounded border border-link px-1 text-[10px] font-medium uppercase tracking-wide text-link" data-full-record-confirmed="">confirmed</span>
+                  </p>
+                ) : null}
               </div>
             ) : null}
             {/* Peer signal strip · titled section; hide identical scrape dates */}

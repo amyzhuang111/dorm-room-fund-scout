@@ -206,7 +206,7 @@ export function TileGlobe({
     const fit = () => {
       const wide = window.innerWidth >= 1024;
       // r44: map is the home stage — desk ~74vh (70–80), mobile ~65vh (60–70).
-      const target = Math.round(window.innerHeight * (wide ? 0.74 : 0.65));
+      const target = Math.round(window.innerHeight * (wide ? 0.78 : 0.74));
       const next = wide
         ? Math.max(560, Math.min(780, target))
         : Math.max(420, Math.min(620, target));

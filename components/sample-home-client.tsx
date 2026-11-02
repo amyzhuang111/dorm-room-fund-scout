@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FounderResults, FounderSearchBar } from "@/components/founder-sourcing";
 import {
@@ -168,6 +168,85 @@ function PeakShareSlot({
   );
 }
 
+
+
+function useIsLg() {
+  const [lg, setLg] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const apply = () => setLg(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+  return lg;
+}
+
+function MapFoldSheet({ peak, founders }: { peak: ReactNode; founders: ReactNode }) {
+  const sheetRef = useRef<HTMLDivElement | null>(null);
+  const dragRef = useRef<{ startY: number; startH: number } | null>(null);
+  const [height, setHeight] = useState(268); // peek peak+card; leave map taps free above
+  const minH = 220;
+  const clampH = (h: number) => {
+    const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.72) : 520;
+    return Math.max(minH, Math.min(max, h));
+  };
+
+  useEffect(() => {
+    const onResize = () => setHeight((h) => clampH(h));
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  const onPointerDown = (e: ReactPointerEvent) => {
+    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+    dragRef.current = { startY: e.clientY, startH: height };
+  };
+  const onPointerMove = (e: ReactPointerEvent) => {
+    const drag = dragRef.current;
+    if (!drag) return;
+    setHeight(clampH(drag.startH + (drag.startY - e.clientY)));
+  };
+  const onPointerUp = () => {
+    dragRef.current = null;
+  };
+
+  return (
+    <div
+      ref={sheetRef}
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-[30] lg:hidden"
+      data-fold-map-sheet=""
+      style={{ height }}
+    >
+      <div
+        className="pointer-events-auto flex h-full flex-col overflow-hidden rounded-t-xl border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(47,79,216,0.14)]"
+        data-fold-sheet-panel=""
+      >
+        <div
+          className="flex shrink-0 cursor-grab touch-none items-center justify-center py-2 active:cursor-grabbing"
+          data-fold-sheet-handle=""
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+          role="separator"
+          aria-orientation="horizontal"
+          aria-label="Drag sheet"
+        >
+          <span className="h-1 w-10 rounded-full bg-[color:var(--cobalt,#2F4FD8)]/35" />
+        </div>
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3" data-fold-sheet-body="">
+          {peak}
+          <div className="mt-2" data-fold-sheet-founders="" data-fold-founders-col="">
+            {founders}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 export function SampleHomeClient(props: {
   feed: Feed;
   sector?: string;
@@ -224,6 +303,7 @@ export function SampleHomeClient(props: {
   const [ready, setReady] = useState(false);
   const search = useSearchParams();
   const router = useRouter();
+  const isLg = useIsLg();
   const mapCampusId = search.get("campus");
   const listed = feed === "directory" || feed === "leaderboard";
   const topCampuses = useMemo<TopCampus[]>(() => {
@@ -332,13 +412,9 @@ export function SampleHomeClient(props: {
               onClearQuery={() => setFounderQuery("")}
             />
           </div>
-          {/* Map-dominant stage: ~full-width globe; Peak + founders alongside (desk) or below (mobile). */}
-          <div
-            className="flex flex-col gap-3 lg:grid lg:grid-cols-[minmax(0,1.8fr)_minmax(280px,0.45fr)] lg:items-start lg:gap-3"
-            data-fold-stack=""
-            data-fold-bigmap=""
-          >
-            <div className="order-1 min-w-0" data-fold-globe-col="">
+          {/* r45: map-dominant stage with floating panels (desk) / peek sheet (mobile). */}
+          <div data-fold-stack="" data-fold-bigmap="" data-fold-overlay="">
+            <div className="relative min-w-0" data-fold-globe-col="" data-fold-map-stage-wrap="">
               <GlobeHero
                 stats={stats}
                 showGlobe={feed !== "world"}
@@ -348,40 +424,90 @@ export function SampleHomeClient(props: {
                 foundersIndexed={founders.length || undefined}
                 highlightCampusIds={highlightCampusIds}
               />
+
+              {/* Mobile sheet only below lg — keeps first [data-founder-card] visible for checks. */}
+              {!isLg ? <MapFoldSheet
+                peak={
+                  <div data-fold-peak-in-rail="" data-fold-sheet-peak="">
+                    <PeakShareSlot
+                      companies={companies}
+                      foundersListed={foundersListed}
+                      campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
+                      topCampuses={topCampuses}
+                      shell={peakShell}
+                    />
+                  </div>
+                }
+                founders={
+                  <FounderResults
+                    founders={founders}
+                    status={founderStatus}
+                    query={founderQuery}
+                    campusId={mapCampusId}
+                    campusName={mapCampusName}
+                    foundersListed={foundersListed}
+                    peek={2}
+                    onClearCampus={clearCampus}
+                    onMissingCampus={() => {
+                      const next = new URLSearchParams(search.toString());
+                      next.set("sample", "1");
+                      next.set("campus", "missing");
+                      router.push(`/?${next.toString()}`);
+                    }}
+                  />
+                }
+              /> : null}
+
+              {/* Desk overlays only at lg+ */}
+              {isLg ? <div
+                className="pointer-events-none absolute inset-0 z-[5]"
+                data-fold-map-overlays=""
+              >
+                <aside
+                  className="pointer-events-auto absolute left-3 top-3 max-h-[calc(100%-1.5rem)] w-[min(340px,32%)] overflow-y-auto rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 p-3 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px]"
+                  data-fold-overlay-peak=""
+                  data-fold-peak-in-rail=""
+                >
+                  <PeakShareSlot
+                    companies={companies}
+                    foundersListed={foundersListed}
+                    campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
+                    topCampuses={topCampuses}
+                    shell={peakShell}
+                  />
+                </aside>
+                <aside
+                  className="pointer-events-auto absolute right-3 top-3 max-h-[calc(100%-1.5rem)] w-[min(360px,34%)] overflow-y-auto rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 p-3 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px]"
+                  data-fold-overlay-founders=""
+                  data-fold-founders-col=""
+                >
+                  <FounderResults
+                    founders={founders}
+                    status={founderStatus}
+                    query={founderQuery}
+                    campusId={mapCampusId}
+                    campusName={mapCampusName}
+                    foundersListed={foundersListed}
+                    peek={3}
+                    onClearCampus={clearCampus}
+                    onMissingCampus={() => {
+                      const next = new URLSearchParams(search.toString());
+                      next.set("sample", "1");
+                      next.set("campus", "missing");
+                      router.push(`/?${next.toString()}`);
+                    }}
+                  />
+                </aside>
+              </div> : null}
             </div>
-            <div className="order-2 min-w-0 lg:sticky lg:top-3 lg:max-h-[calc(100dvh-1.5rem)] lg:overflow-y-auto lg:scroll-pt-1 lg:pb-6" data-fold-founders-col="">
-              <div className="mb-3" data-fold-peak-in-rail="">
-                <PeakShareSlot
-                  companies={companies}
-                  foundersListed={foundersListed}
-                  campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
-                  topCampuses={topCampuses}
-                  shell={peakShell}
-                />
-              </div>
-              <FounderResults
-                founders={founders}
-                status={founderStatus}
-                query={founderQuery}
-                campusId={mapCampusId}
+
+            <div className="mt-3 hidden lg:block" data-fold-lineage-desk="">
+              <LineagePanels
+                companies={companies}
+                week={stats.week}
+                campusId={mapCampusId && mapCampusId !== "missing" ? mapCampusId : null}
                 campusName={mapCampusName}
-                foundersListed={foundersListed}
-                onClearCampus={clearCampus}
-                onMissingCampus={() => {
-                  const next = new URLSearchParams(search.toString());
-                  next.set("sample", "1");
-                  next.set("campus", "missing");
-                  router.push(`/?${next.toString()}`);
-                }}
               />
-              <div className="mt-3 hidden lg:block" data-fold-lineage-desk="">
-                <LineagePanels
-                  companies={companies}
-                  week={stats.week}
-                  campusId={mapCampusId && mapCampusId !== "missing" ? mapCampusId : null}
-                  campusName={mapCampusName}
-                />
-              </div>
             </div>
           </div>
         </div>

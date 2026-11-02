@@ -106,6 +106,7 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
     sector: directoryRow?.sector ?? null,
     primaryProgram: directoryRow?.primaryProgram ?? null,
     founders: directoryRow?.founders ?? [],
+    founderConfirmed: (project.founderLinks ?? []).some((f) => f.link?.kind === "linkedin"),
     signals: directoryRow?.signals ?? 0,
     operatingStatus: directoryRow?.operatingStatus ?? null,
     latestSignalAt: directoryRow?.latestSignalAt ?? null,

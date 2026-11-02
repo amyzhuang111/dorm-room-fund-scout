@@ -1,7 +1,9 @@
 /**
- * Visible card density vs e100551 floor.
+ * Visible card density vs e100551 floor, plus fold overlay density vs 913f16a.
  * Fails if halfVisible or fully drops below the baked e100551 baseline
  * on companies / companies-more / company-sim at 375 and 1440.
+ * Also fails if fold@375/@1440 peak / ranks / founder cards at scrollY=0
+ * drop below the baked 913f16a fold floor (r45 overlay).
  *
  * BASE = candidate (default :3460)
  * CTRL_BASE = optional live e100551 for side-by-side reporting (does not
@@ -27,6 +29,13 @@ const BAKED_E100551 = {
   "companies@1440": { halfVisible: 3, fully: 2 },
   "companies-more@1440": { halfVisible: 2, fully: 2 },
   "company-sim@1440": { halfVisible: 4, fully: 4 },
+};
+
+/** Fold density at scrollY=0 from 913f16a (peak+ranks+bars in fold). Card floors
+ *  match 913f16a desk rail when founders hydrate; r45 overlay must not go below. */
+const BAKED_FOLD_913F16A = {
+  "fold@375": { peak: 1, ranks: 1, bars: 1, founderCards: 1 },
+  "fold@1440": { peak: 1, ranks: 1, bars: 1, founderCards: 2 },
 };
 
 const ROUTES = [
@@ -163,6 +172,48 @@ async function countVisible(page, selector, minH) {
   );
 }
 
+
+async function measureFold(browser, base) {
+  const out = {};
+  for (const vp of VIEWPORTS) {
+    const page = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
+    await page.goto(`${base}/`, { waitUntil: "domcontentloaded", timeout: 90000 });
+    await page.waitForSelector("[data-fold-peak-share], [data-fold-peak-figure], [data-founder-search]", { timeout: 30000 }).catch(() => {});
+    // Wait for founder cards when the index hydrates (overlay peek / rail).
+    await page.waitForSelector("[data-founder-card]", { timeout: 45000 }).catch(() => {});
+    await page.waitForTimeout(800);
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(200);
+    const m = await page.evaluate(() => {
+      const vh = window.innerHeight;
+      const vis = (el) => {
+        if (!el) return false;
+        const r = el.getBoundingClientRect();
+        const cs = getComputedStyle(el);
+        return (
+          r.height > 8 &&
+          r.width > 8 &&
+          r.top < vh - 4 &&
+          r.bottom > 8 &&
+          cs.visibility !== "hidden" &&
+          cs.display !== "none" &&
+          Number(cs.opacity || "1") > 0.05
+        );
+      };
+      const peak = [...document.querySelectorAll("[data-fold-peak-share], [data-fold-peak-figure]")].some(vis) ? 1 : 0;
+      const ranks = [...document.querySelectorAll("[data-fold-peak-campus-rank], [data-fold-peak-campus-rank-mobile], [data-fold-top-campuses-desk]")].some(vis) ? 1 : 0;
+      const bars = [...document.querySelectorAll("[data-fold-peak-month-bars]")].some(vis) ? 1 : 0;
+      const founderCards = [...document.querySelectorAll("[data-founder-card]")].filter(vis).length;
+      return { peak, ranks, bars, founderCards };
+    });
+    const key = `fold@${vp.name}`;
+    out[key] = m;
+    console.log(`${base} ${key} peak=${m.peak} ranks=${m.ranks} bars=${m.bars} founderCards=${m.founderCards}`);
+    await page.close();
+  }
+  return out;
+}
+
 async function measureBuild(browser, base) {
   const out = {};
   for (const vp of VIEWPORTS) {
@@ -195,6 +246,8 @@ if (CTRL_BASE) {
 
 console.log(`Measuring candidate ${BASE} …`);
 const candidate = await measureBuild(browser, BASE);
+console.log(`Measuring fold density ${BASE} …`);
+const foldCandidate = await measureFold(browser, BASE);
 await browser.close();
 
 const comparisons = [];
@@ -219,17 +272,43 @@ for (const key of Object.keys(baseline)) {
   console.log(`${pass ? "PASS" : "FAIL"} ${key}: ${detail}`);
 }
 
+const foldBaseline = { ...BAKED_FOLD_913F16A };
+const foldComparisons = [];
+for (const key of Object.keys(foldBaseline)) {
+  const floor = foldBaseline[key];
+  const cand = foldCandidate[key];
+  if (!cand) {
+    ok = false;
+    foldComparisons.push({ key, ok: false, detail: "missing fold measurement" });
+    console.log(`FAIL ${key}: missing fold measurement`);
+    continue;
+  }
+  const peakOk = cand.peak >= floor.peak;
+  const ranksOk = cand.ranks >= floor.ranks;
+  const barsOk = cand.bars >= floor.bars;
+  const cardsOk = cand.founderCards >= floor.founderCards;
+  const pass = peakOk && ranksOk && barsOk && cardsOk;
+  if (!pass) ok = false;
+  const detail = `cand peak=${cand.peak} ranks=${cand.ranks} bars=${cand.bars} cards=${cand.founderCards} | floor peak=${floor.peak} ranks=${floor.ranks} bars=${floor.bars} cards=${floor.founderCards}`;
+  foldComparisons.push({ key, ok: pass, peakOk, ranksOk, barsOk, cardsOk, candidate: cand, floor, detail });
+  console.log(`${pass ? "PASS" : "FAIL"} ${key}: ${detail}`);
+}
+
 const report = {
   ok,
   base: BASE,
   baselineSource,
   baseline,
+  foldBaseline,
+  foldBaselineSource: "baked-913f16a",
   controlLive,
   controlBase: CTRL_BASE || null,
   candidate,
+  foldCandidate,
   comparisons,
+  foldComparisons,
 };
 fs.mkdirSync(OUT.includes("/") ? OUT.replace(/\/[^/]+$/, "") : ".", { recursive: true });
 fs.writeFileSync(OUT, JSON.stringify(report, null, 2));
-console.log(JSON.stringify({ ok, wrote: OUT, failed: comparisons.filter((c) => !c.ok).map((c) => c.key) }, null, 2));
+console.log(JSON.stringify({ ok, wrote: OUT, failed: [...comparisons, ...foldComparisons].filter((c) => !c.ok).map((c) => c.key) }, null, 2));
 process.exit(ok ? 0 : 1);
