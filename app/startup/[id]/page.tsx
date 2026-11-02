@@ -2,11 +2,62 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { CompanyDetail } from "@/components/company-detail";
 import { SampleCompanyShell } from "@/components/sample-company-shell";
 import { UserStartupPage } from "@/components/user-startup-page";
-import { loadDirectory } from "@/lib/domain/directory";
+import { loadDirectory, type DirectoryCard } from "@/lib/domain/directory";
 import { survivorId } from "@/lib/domain/entity-redirects";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
 import { getProjectDetail } from "@/lib/domain/queries";
 import { getStartupCard } from "@/lib/domain/startup-card";
+import { campusPeerCompanies, type FacetCompany } from "@/lib/domain/sample-facets";
+
+function toFacetCompany(card: DirectoryCard): FacetCompany {
+  return {
+    id: card.id,
+    name: card.name,
+    schoolId: card.schoolId,
+    signals: card.signals,
+    logoUrl: card.logoUrl,
+    founders: card.founders,
+    sectorId: card.sectorId,
+    sector: card.sector,
+    signalKind: card.signalKind,
+    signalLabel: card.signalLabel,
+    latestSignalAt: card.latestSignalAt,
+  };
+}
+
+/** Drop bulky fields the wire/FacetRail seed do not need before the catalog loads. */
+function slimWireCard(card: FacetCompany): FacetCompany {
+  return {
+    id: card.id,
+    name: card.name,
+    schoolId: card.schoolId,
+    signals: card.signals,
+    sectorId: card.sectorId,
+    sector: card.sector,
+    signalKind: card.signalKind,
+    signalLabel: card.signalLabel,
+    latestSignalAt: card.latestSignalAt,
+  };
+}
+
+/** Peers for the dossier wire only — never the full 2,513-card directory. */
+function wireSeedCompanies(all: FacetCompany[], schoolId: string | null, sectorId: string | null): FacetCompany[] {
+  let peers: FacetCompany[] = [];
+  if (schoolId) {
+    peers = campusPeerCompanies(all, schoolId);
+  }
+  if (!peers.length && sectorId) {
+    peers = all.filter((c) => c.sectorId === sectorId);
+  }
+  if (!peers.length) {
+    peers = all.filter((c) => (c.signals ?? 0) > 0).slice(0, 40);
+  }
+  // Wire UI shows a short strip + boards; keep HTML under 210 KiB.
+  const ranked = [...peers].sort(
+    (a, b) => (b.signals ?? 0) - (a.signals ?? 0) || a.name.localeCompare(b.name)
+  );
+  return ranked.slice(0, 48).map(slimWireCard);
+}
 
 export default async function StartupPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -16,25 +67,7 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
   const project = getProjectDetail(id);
   if (!project) notFound();
   const data = loadDirectory();
-  const companies = data.cards.map((card) => ({
-    id: card.id,
-    name: card.name,
-    schoolId: card.schoolId,
-    school: card.school,
-    signals: card.signals,
-    logoUrl: card.logoUrl,
-    founders: card.founders,
-    sectorId: card.sectorId,
-    sector: card.sector,
-    stage: card.stage,
-    signalKind: card.signalKind,
-    signalLabel: card.signalLabel,
-    latestSignalAt: card.latestSignalAt,
-    foundedYear: card.foundedYear,
-    operatingStatus: card.operatingStatus,
-    hqRegion: card.hqRegion,
-    primaryProgram: card.primaryProgram,
-  }));
+  const all = data.cards.map(toFacetCompany);
   const campuses = loadHeroStats().universities
     .filter((university) => university.lat != null && university.lon != null)
     .map((university) => ({
@@ -58,6 +91,7 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
     operatingStatus: directoryRow?.operatingStatus ?? null,
     latestSignalAt: directoryRow?.latestSignalAt ?? null,
   };
+  const companies = wireSeedCompanies(all, dossier.schoolId, dossier.sectorId);
   return (
     <SampleCompanyShell companies={companies} campuses={campuses} dossier={dossier}>
       <CompanyDetail project={project} initialCard={card} />

@@ -11,6 +11,7 @@ import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain
 import type { HeroStats } from "@/lib/domain/hero-stats";
 import type { FounderLead } from "@/lib/domain/founder-index";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
+import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
 import type { Feed } from "@/components/sample-home";
 import type { PeakShell } from "@/lib/domain/peak-shell";
 import { shortCampusLabel } from "@/lib/domain/campuses";
@@ -31,23 +32,6 @@ const FoldPeakShare = dynamic(
 
 type CampusOpt = { id: string; name: string; country: string; founders: number };
 
-let sharedDirectory: Promise<FacetCompany[]> | null = null;
-
-function fetchDirectory(url: string): Promise<FacetCompany[]> {
-  if (!sharedDirectory) {
-    sharedDirectory = fetch(url)
-      .then(async (res) => {
-        if (!res.ok) throw new Error(`directory ${res.status}`);
-        const data = (await res.json()) as { cards?: FacetCompany[] };
-        return Array.isArray(data.cards) ? data.cards : [];
-      })
-      .catch((err) => {
-        sharedDirectory = null;
-        throw err;
-      });
-  }
-  return sharedDirectory;
-}
 
 function browseHref(opts: {
   feed?: Feed;
@@ -247,7 +231,7 @@ export function SampleHomeClient(props: {
 
   useEffect(() => {
     let dead = false;
-    void fetchDirectory(directoryUrl).then((cards) => {
+    void fetchSampleDirectory(directoryUrl).then((cards) => {
       if (dead) return;
       setCompanies(cards);
       setReady(true);

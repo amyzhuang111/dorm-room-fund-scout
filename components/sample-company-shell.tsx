@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { campusPeerCompanies } from "@/lib/domain/sample-facets";
+import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import {
   applyFacets,
@@ -45,7 +46,23 @@ export function SampleCompanyShell({
 }) {
   const router = useRouter();
   const [facets, setFacets] = useState<FacetState>(emptyFacets);
-  const filtered = useMemo(() => applyFacets(companies, facets), [companies, facets]);
+  /** Full corpus for FacetRail only — lazy-loaded; SSR ships peer seed alone. */
+  const [catalog, setCatalog] = useState<FacetCompany[] | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    fetchSampleDirectory()
+      .then((cards) => {
+        if (!cancelled) setCatalog(cards);
+      })
+      .catch(() => {
+        /* keep peer seed; filters still navigate to /companies */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  const facetCompanies = catalog ?? companies;
+  const filtered = useMemo(() => applyFacets(facetCompanies, facets), [facetCompanies, facets]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   function onFacetChange(next: FacetState) {
@@ -71,18 +88,19 @@ export function SampleCompanyShell({
   }
 
   const signaled = filtered.filter((c) => c.signals > 0).length;
+  const peerSource = catalog ?? companies;
   const campusPeers = useMemo(() => {
     const sid = dossier?.schoolId;
     if (!sid) return null;
-    const peers = campusPeerCompanies(companies, sid);
+    const peers = campusPeerCompanies(peerSource, sid);
     return peers.length ? peers : null;
-  }, [companies, dossier?.schoolId]);
+  }, [peerSource, dossier?.schoolId]);
   const sectorPeers = useMemo(() => {
     const sec = dossier?.sectorId;
     if (!sec) return null;
-    const peers = companies.filter((c) => c.sectorId === sec);
+    const peers = peerSource.filter((c) => c.sectorId === sec);
     return peers.length ? peers : null;
-  }, [companies, dossier?.sectorId]);
+  }, [peerSource, dossier?.sectorId]);
   // Side-column count: campus peers including this company (preferred), else sector — never global 2,513.
   const wireCount = campusPeers?.length ?? sectorPeers?.length ?? signaled;
   const campusShort = dossier?.schoolId
@@ -332,7 +350,7 @@ export function SampleCompanyShell({
           <aside className="hidden min-w-0 lg:block" data-dossier-index="">
             <div className="sticky top-14 h-[min(78vh,720px)]">
               <FacetRail
-                companies={companies}
+                companies={facetCompanies}
                 campuses={campuses}
                 facets={facets}
                 onChange={onFacetChange}
@@ -397,7 +415,7 @@ export function SampleCompanyShell({
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
               <div className="h-[min(70dvh,540px)]">
-                <FacetRail companies={companies} campuses={campuses} facets={facets} onChange={onFacetChange} dense />
+                <FacetRail companies={facetCompanies} campuses={campuses} facets={facets} onChange={onFacetChange} dense />
               </div>
             </div>
           </div>
