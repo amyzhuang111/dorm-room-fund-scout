@@ -1529,11 +1529,11 @@ function LedgerRow({
                 rel="noreferrer"
                 title={founder.name}
                 aria-label={`${founder.name} on LinkedIn`}
-                className="inline-flex h-6 items-center gap-1 rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                className="inline-flex min-h-[44px] items-center gap-1.5 rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 font-mono text-[12px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:border-[color:var(--cobalt,#2F4FD8)] lg:h-6 lg:min-h-0 lg:px-1.5 lg:py-0 lg:text-[10px]"
                 onClick={(event) => event.stopPropagation()}
               >
                 in
-                <span className="max-w-[7rem] truncate font-sans text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">{founder.name}</span>
+                <span className="break-words font-sans text-[13px] font-medium normal-case tracking-normal text-[color:var(--fg,#0B0E17)] lg:max-w-[7rem] lg:truncate lg:text-[11px]">{founder.name}</span>
               </a>
             ))}
           </span>

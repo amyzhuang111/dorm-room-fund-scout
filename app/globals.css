@@ -727,8 +727,14 @@ html[data-sample="halflight"] body {
   }
   .sample-paper [data-corpus-campus-ranks] .m-figure,
   .sample-paper [data-corpus-campus-ranks] [data-rank-figure] {
-    font-size: 28px !important;
+    font-size: 44px !important;
     letter-spacing: -0.05em;
+    line-height: 1 !important;
+    overflow: visible;
+  }
+  .sample-paper [data-corpus-campus-ranks] .m-figure-sub {
+    font-size: 14px !important;
+    letter-spacing: 0;
   }
 }
 
@@ -1205,10 +1211,26 @@ details:not([open]) > :not(summary) {
     text-overflow: clip;
   }
   .sample-paper [data-mobile-list-mast] .m-figure {
-    font-size: 44px;
+    font-size: 44px !important;
+    line-height: 1 !important;
   }
   .sample-paper [data-mobile-list-mast] .m-figure-sub {
-    font-size: 14px;
+    font-size: 14px !important;
+  }
+  .sample-paper [data-card-founder-links] a {
+    min-height: 44px;
+    height: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 12px;
+  }
+  .sample-paper [data-card-founder-links] a > span {
+    max-width: none;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: nowrap;
   }
   .sample-paper [data-mobile-list-mast] .m-takeaway {
     font-size: 14px;
