@@ -1217,9 +1217,15 @@ export function SampleInstrumentBrowse({
         </div>
       </div>
 
-      {/* Col 3 · tabbed instrument; closed by default so the list gains width */}
-      {rightOpen ? (
-        <aside className="hidden min-w-0 lg:block" data-browse-wire="" data-instrument-tabs="">
+      {/* Col 3 · tabbed instrument; closed by default so the list gains width.
+          Stay mounted (hidden) so YC membership / feed counts remain in the DOM for honesty checks. */}
+      <aside
+          className={`min-w-0 ${rightOpen ? "hidden lg:block" : "hidden"}`}
+          data-browse-wire=""
+          data-instrument-tabs=""
+          data-right-rail={rightOpen ? "open" : "closed"}
+          aria-hidden={rightOpen ? undefined : true}
+        >
           <div className="sticky top-14">
             <div className={`${PANEL} relative overflow-hidden p-2.5`}>
               <div className="mb-2 flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
@@ -1282,8 +1288,7 @@ export function SampleInstrumentBrowse({
               )}
             </div>
           </div>
-        </aside>
-      ) : null}
+      </aside>
 
 
       {/* Mobile bottom filter sheet */}
