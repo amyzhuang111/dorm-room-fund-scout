@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-02T11:47:00.685Z",
+  "generatedAt": "2026-11-02T12:25:31.911Z",
   "totalCompanies": 2508,
-  "withLogo": 1404,
+  "withLogo": 1402,
   "noWebsite": 894,
   "noLogo": 162,
   "logos": {
@@ -27,13 +27,14 @@
     },
     "proj_m8bwdnocuI3I": {
       "path": "/company-logos/proj_m8bwdnocuI3I.webp",
-      "bytes": 2092,
+      "bytes": 412,
       "width": 128,
       "height": 128,
       "source": "https://framerusercontent.com/images/8S7ctI8FPeWrN5gC6L9pMlDo28.png",
       "kind": "apple-touch",
       "name": "ALKEMIO",
-      "host": "alkemio.tech"
+      "host": "alkemio.tech",
+      "backed": "cobalt-tint"
     },
     "proj_P97SnThAdQ2w": {
       "path": "/company-logos/proj_P97SnThAdQ2w.webp",
@@ -1745,16 +1746,6 @@
       "name": "Bystreet",
       "host": "bystreet.com"
     },
-    "proj_HLFInKVP7c5q": {
-      "path": "/company-logos/proj_HLFInKVP7c5q.webp",
-      "bytes": 3602,
-      "width": 128,
-      "height": 128,
-      "source": "https://trycfo4all.my.canva.site/725b756a69a7d4c235070e51acd85560.png",
-      "kind": "apple-touch",
-      "name": "CFO 4 ALL",
-      "host": "trycfo4all.my.canva.site"
-    },
     "proj_T_7H57mgZAhl": {
       "path": "/company-logos/proj_T_7H57mgZAhl.webp",
       "bytes": 5488,
@@ -1767,13 +1758,14 @@
     },
     "proj_zGrh6C2ILX9D": {
       "path": "/company-logos/proj_zGrh6C2ILX9D.webp",
-      "bytes": 262,
+      "bytes": 252,
       "width": 128,
       "height": 128,
       "source": "https://www.burthq.com/assets/favicon.svg",
       "kind": "icon",
       "name": "Burt",
-      "host": "burthq.com"
+      "host": "burthq.com",
+      "backed": "cobalt-tint"
     },
     "proj_nJARFY9-3sop": {
       "path": "/company-logos/proj_nJARFY9-3sop.webp",
@@ -2007,13 +1999,14 @@
     },
     "proj_J0RnMP1dImej": {
       "path": "/company-logos/proj_J0RnMP1dImej.webp",
-      "bytes": 1630,
+      "bytes": 272,
       "width": 128,
       "height": 128,
       "source": "https://framerusercontent.com/images/qCyTuOQRbz6m0jD6BYGgzJcQzU.png",
       "kind": "apple-touch",
       "name": "Cardinal",
-      "host": "trycardinal.com"
+      "host": "trycardinal.com",
+      "backed": "cobalt-tint"
     },
     "proj_r5n3ocCn-os1": {
       "path": "/company-logos/proj_r5n3ocCn-os1.webp",
@@ -2157,13 +2150,14 @@
     },
     "proj_CIwpvL-RziUa": {
       "path": "/company-logos/proj_CIwpvL-RziUa.webp",
-      "bytes": 1462,
+      "bytes": 346,
       "width": 128,
       "height": 128,
       "source": "https://trychannel3.com/logos/channel3/channel3-logo-small-dark.svg",
       "kind": "icon",
       "name": "Channel3",
-      "host": "trychannel3.com"
+      "host": "trychannel3.com",
+      "backed": "cobalt-tint"
     },
     "proj_PnQCgmoCQlh5": {
       "path": "/company-logos/proj_PnQCgmoCQlh5.webp",
@@ -2357,13 +2351,14 @@
     },
     "proj_sIa_Bq_Pg83-": {
       "path": "/company-logos/proj_sIa_Bq_Pg83-.webp",
-      "bytes": 4112,
+      "bytes": 718,
       "width": 128,
       "height": 128,
       "source": "https://framerusercontent.com/images/dybC073EE66E8HQQvuquACIlkNw.png",
       "kind": "apple-touch",
       "name": "Chronicle Labs",
-      "host": "chronicle-labs.com"
+      "host": "chronicle-labs.com",
+      "backed": "cobalt-tint"
     },
     "proj__iWlf5ZlcS1P": {
       "path": "/company-logos/proj__iWlf5ZlcS1P.webp",
@@ -2927,13 +2922,14 @@
     },
     "proj_rxp0rU6udSAQ": {
       "path": "/company-logos/proj_rxp0rU6udSAQ.webp",
-      "bytes": 1386,
+      "bytes": 340,
       "width": 128,
       "height": 128,
       "source": "https://www.cyberdesk.io/favicon.svg?v=4",
       "kind": "icon",
       "name": "Cyberdesk",
-      "host": "cyberdesk.io"
+      "host": "cyberdesk.io",
+      "backed": "cobalt-tint"
     },
     "proj_fWkpHzTM7QhE": {
       "path": "/company-logos/proj_fWkpHzTM7QhE.webp",
@@ -3477,13 +3473,14 @@
     },
     "proj_ZfDsU_8R9LQv": {
       "path": "/company-logos/proj_ZfDsU_8R9LQv.webp",
-      "bytes": 1452,
+      "bytes": 276,
       "width": 128,
       "height": 128,
       "source": "https://www.dyna.co/apple-icon.png?apple-icon.0nfw9_f0t9tz-.png?dpl=dpl_DKV4An4tDN2N9EWECHoC3zBYgRao",
       "kind": "apple-touch",
       "name": "Dyna Robotics",
-      "host": "dyna.co"
+      "host": "dyna.co",
+      "backed": "cobalt-tint"
     },
     "proj_gTUa6xMV2A_D": {
       "path": "/company-logos/proj_gTUa6xMV2A_D.webp",
@@ -4087,13 +4084,14 @@
     },
     "proj_T7U14NzHKYoB": {
       "path": "/company-logos/proj_T7U14NzHKYoB.webp",
-      "bytes": 3372,
+      "bytes": 440,
       "width": 128,
       "height": 128,
       "source": "https://www.exoai.tech/logo.png",
       "kind": "icon",
       "name": "Exo AI",
-      "host": "exoai.tech"
+      "host": "exoai.tech",
+      "backed": "cobalt-tint"
     },
     "proj_QVZRB4pSlkDk": {
       "path": "/company-logos/proj_QVZRB4pSlkDk.webp",
@@ -4457,13 +4455,14 @@
     },
     "proj_n2RLlSzduUGY": {
       "path": "/company-logos/proj_n2RLlSzduUGY.webp",
-      "bytes": 2072,
+      "bytes": 440,
       "width": 128,
       "height": 128,
       "source": "https://forgepoint.ai/favicon.ico?favicon.0hd3--_y2e7k9.ico",
       "kind": "icon",
       "name": "Forgepoint",
-      "host": "forgepoint.ai"
+      "host": "forgepoint.ai",
+      "backed": "cobalt-tint"
     },
     "proj_mxXRZc-DzKB3": {
       "path": "/company-logos/proj_mxXRZc-DzKB3.webp",
@@ -5927,13 +5926,14 @@
     },
     "proj_XmLsu5G_wtC4": {
       "path": "/company-logos/proj_XmLsu5G_wtC4.webp",
-      "bytes": 2382,
+      "bytes": 348,
       "width": 128,
       "height": 128,
       "source": "https://kintic.dev/kintic_white.png?v=7",
       "kind": "apple-touch",
       "name": "Kintic",
-      "host": "kintic.dev"
+      "host": "kintic.dev",
+      "backed": "cobalt-tint"
     },
     "proj_55f0l-RIyyrt": {
       "path": "/company-logos/proj_55f0l-RIyyrt.webp",
@@ -6327,13 +6327,14 @@
     },
     "proj_QsCUhvODr1iY": {
       "path": "/company-logos/proj_QsCUhvODr1iY.webp",
-      "bytes": 848,
+      "bytes": 238,
       "width": 128,
       "height": 128,
       "source": "https://lightscreen.ai/favicon.ico?favicon.0b3bf435.ico",
       "kind": "icon",
       "name": "Lightscreen AI",
-      "host": "lightscreen.ai"
+      "host": "lightscreen.ai",
+      "backed": "cobalt-tint"
     },
     "proj_Po3Id0951qLh": {
       "path": "/company-logos/proj_Po3Id0951qLh.webp",
@@ -6997,13 +6998,14 @@
     },
     "proj_qKgcVMg9G3Th": {
       "path": "/company-logos/proj_qKgcVMg9G3Th.webp",
-      "bytes": 3824,
+      "bytes": 376,
       "width": 128,
       "height": 128,
       "source": "https://framerusercontent.com/images/Y47nNli6LEkRNgnB21Unt8KUa4.png",
       "kind": "apple-touch",
       "name": "Mecone",
-      "host": "mecone.trade"
+      "host": "mecone.trade",
+      "backed": "cobalt-tint"
     },
     "proj_s0WraeWrpUbW": {
       "path": "/company-logos/proj_s0WraeWrpUbW.webp",
@@ -8027,13 +8029,14 @@
     },
     "proj_qTmNK5d8QoPy": {
       "path": "/company-logos/proj_qTmNK5d8QoPy.webp",
-      "bytes": 1652,
+      "bytes": 404,
       "width": 128,
       "height": 128,
       "source": "https://www.getoffi.com/apple-touch-icon.png",
       "kind": "apple-touch",
       "name": "Offi",
-      "host": "getoffi.com"
+      "host": "getoffi.com",
+      "backed": "cobalt-tint"
     },
     "proj_xyW9UjTnJX2L": {
       "path": "/company-logos/proj_xyW9UjTnJX2L.webp",
@@ -8577,23 +8580,25 @@
     },
     "proj_X2BY7IefER9M": {
       "path": "/company-logos/proj_X2BY7IefER9M.webp",
-      "bytes": 878,
+      "bytes": 386,
       "width": 128,
       "height": 128,
       "source": "https://www.palisade.run/icon.svg?bd0c6eaeaec93cde",
       "kind": "icon",
       "name": "Palisade",
-      "host": "palisade.run"
+      "host": "palisade.run",
+      "backed": "cobalt-tint"
     },
     "proj_tzJ6Vplw-69L": {
       "path": "/company-logos/proj_tzJ6Vplw-69L.webp",
-      "bytes": 2636,
+      "bytes": 484,
       "width": 128,
       "height": 128,
       "source": "https://framerusercontent.com/images/ZPNqXcOUszDWgEcPeFsJtmo1Q.png",
       "kind": "apple-touch",
       "name": "Panacea",
-      "host": "withpanacea.com"
+      "host": "withpanacea.com",
+      "backed": "cobalt-tint"
     },
     "proj_ZOwTlVkckFok": {
       "path": "/company-logos/proj_ZOwTlVkckFok.webp",
@@ -10527,13 +10532,14 @@
     },
     "proj_w4PXB6wO6ZHT": {
       "path": "/company-logos/proj_w4PXB6wO6ZHT.webp",
-      "bytes": 3498,
+      "bytes": 524,
       "width": 128,
       "height": 128,
       "source": "https://www.sandra-ai.com/apple-touch-icon.png",
       "kind": "apple-touch",
       "name": "Sandra AI",
-      "host": "sandra-ai.com"
+      "host": "sandra-ai.com",
+      "backed": "cobalt-tint"
     },
     "proj_e6UsCeQvMpo_": {
       "path": "/company-logos/proj_e6UsCeQvMpo_.webp",
@@ -10627,13 +10633,14 @@
     },
     "proj_LrpeIuKD7vhO": {
       "path": "/company-logos/proj_LrpeIuKD7vhO.webp",
-      "bytes": 2942,
+      "bytes": 430,
       "width": 128,
       "height": 128,
       "source": "https://www.sentrial.com/apple-icon.png?87853e80634ba839",
       "kind": "apple-touch",
       "name": "Sentrial",
-      "host": "sentrial.com"
+      "host": "sentrial.com",
+      "backed": "cobalt-tint"
     },
     "proj_4m_zQ1fCXWY8": {
       "path": "/company-logos/proj_4m_zQ1fCXWY8.webp",
@@ -11047,13 +11054,14 @@
     },
     "proj_XfLFp9sHwvry": {
       "path": "/company-logos/proj_XfLFp9sHwvry.webp",
-      "bytes": 5000,
+      "bytes": 736,
       "width": 128,
       "height": 128,
       "source": "https://framerusercontent.com/images/sQZ8s9B3E8eVDfpDolvZktP8dI.png",
       "kind": "apple-touch",
       "name": "Socialtrait.ai",
-      "host": "socialtrait.com"
+      "host": "socialtrait.com",
+      "backed": "cobalt-tint"
     },
     "proj_ECfyjt1Rrg3N": {
       "path": "/company-logos/proj_ECfyjt1Rrg3N.webp",
@@ -11397,13 +11405,14 @@
     },
     "proj_6Uu8YL_svwn8": {
       "path": "/company-logos/proj_6Uu8YL_svwn8.webp",
-      "bytes": 2966,
+      "bytes": 642,
       "width": 128,
       "height": 128,
       "source": "https://www.spunlabs.co/apple-touch-icon.png",
       "kind": "apple-touch",
       "name": "Spun Labs",
-      "host": "spunlabs.co"
+      "host": "spunlabs.co",
+      "backed": "cobalt-tint"
     },
     "proj_Jtj2bnGvTR1Q": {
       "path": "/company-logos/proj_Jtj2bnGvTR1Q.webp",
@@ -11907,13 +11916,14 @@
     },
     "proj_zEIv7ZJdw5m3": {
       "path": "/company-logos/proj_zEIv7ZJdw5m3.webp",
-      "bytes": 2148,
+      "bytes": 344,
       "width": 128,
       "height": 128,
       "source": "https://framerusercontent.com/images/O2ZTlN9P47qZZYQZuaFD4Gc.png",
       "kind": "apple-touch",
       "name": "Taya",
-      "host": "tayanecklace.com"
+      "host": "tayanecklace.com",
+      "backed": "cobalt-tint"
     },
     "proj_xyyMbDGWCNkc": {
       "path": "/company-logos/proj_xyyMbDGWCNkc.webp",
@@ -12687,13 +12697,14 @@
     },
     "proj_gL7WpOg6kRX1": {
       "path": "/company-logos/proj_gL7WpOg6kRX1.webp",
-      "bytes": 2256,
+      "bytes": 382,
       "width": 128,
       "height": 128,
       "source": "https://framerusercontent.com/images/CZsVR491HZj472vmFC8KAGVQRQ.png",
       "kind": "apple-touch",
       "name": "Upstream",
-      "host": "upstream.do"
+      "host": "upstream.do",
+      "backed": "cobalt-tint"
     },
     "proj_D5y6p2h2ZBu0": {
       "path": "/company-logos/proj_D5y6p2h2ZBu0.webp",
@@ -13175,16 +13186,6 @@
       "name": "WePay",
       "host": "wepay.com"
     },
-    "proj_i4aqcESGAlmD": {
-      "path": "/company-logos/proj_i4aqcESGAlmD.webp",
-      "bytes": 3602,
-      "width": 128,
-      "height": 128,
-      "source": "https://vytrina.com/725b756a69a7d4c235070e51acd85560.png",
-      "kind": "apple-touch",
-      "name": "Vytrina",
-      "host": "vytrina.com"
-    },
     "proj_fIsbv8Q8PmPH": {
       "path": "/company-logos/proj_fIsbv8Q8PmPH.webp",
       "bytes": 5384,
@@ -13237,23 +13238,25 @@
     },
     "proj_egBngvwyljwd": {
       "path": "/company-logos/proj_egBngvwyljwd.webp",
-      "bytes": 5204,
+      "bytes": 792,
       "width": 128,
       "height": 128,
       "source": "https://framerusercontent.com/images/NQ6ZdQsrj0uhozthYzzpSZMsYUo.png",
       "kind": "apple-touch",
       "name": "Wardstone",
-      "host": "wardstone.space"
+      "host": "wardstone.space",
+      "backed": "cobalt-tint"
     },
     "proj_Uw3wqYqoXOfg": {
       "path": "/company-logos/proj_Uw3wqYqoXOfg.webp",
-      "bytes": 4518,
+      "bytes": 638,
       "width": 128,
       "height": 128,
       "source": "https://www.webhound.ai/assets/zinc-dark.png",
       "kind": "icon",
       "name": "Webhound",
-      "host": "webhound.ai"
+      "host": "webhound.ai",
+      "backed": "cobalt-tint"
     },
     "proj_QmRv8_Blenwj": {
       "path": "/company-logos/proj_QmRv8_Blenwj.webp",
@@ -13727,13 +13730,14 @@
     },
     "proj__WG4AJ0_UpGu": {
       "path": "/company-logos/proj__WG4AJ0_UpGu.webp",
-      "bytes": 2936,
+      "bytes": 422,
       "width": 128,
       "height": 128,
       "source": "https://eggplan.com/Transparent%20Logo.png",
       "kind": "icon",
       "name": "eggPlan",
-      "host": "eggplan.com"
+      "host": "eggplan.com",
+      "backed": "cobalt-tint"
     },
     "proj_vvi0I_EQgPgR": {
       "path": "/company-logos/proj_vvi0I_EQgPgR.webp",
@@ -13987,13 +13991,14 @@
     },
     "proj_5SF-O4WFlHIe": {
       "path": "/company-logos/proj_5SF-O4WFlHIe.webp",
-      "bytes": 1484,
+      "bytes": 420,
       "width": 128,
       "height": 128,
       "source": "https://www.vfxai.com/favicon_dark.svg",
       "kind": "icon",
       "name": "VFX AI",
-      "host": "vfxai.com"
+      "host": "vfxai.com",
+      "backed": "cobalt-tint"
     },
     "proj_b7YnBcX7NhrW": {
       "path": "/company-logos/proj_b7YnBcX7NhrW.webp",

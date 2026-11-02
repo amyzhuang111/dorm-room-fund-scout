@@ -117,7 +117,7 @@ function loadBlocklist() {
 }
 const BLOCK = loadBlocklist();
 const BLOCKED_HOST = /(?:^|\.)(ycombinator\.com|linkedin\.com|wix\.com|wixsite\.com|squarespace\.com|wordpress\.com|wp\.com)$/i;
-const BLOCKED_SOURCE = /ycombinator\.com|linkedin\.com\/favicon|wix\.com\/favicon|static\.wixstatic|editmysite\.com|placeholder|wordpress\.com\/favicon/i;
+const BLOCKED_SOURCE = /ycombinator\.com|linkedin\.com\/favicon|wix\.com\/favicon|static\.wixstatic|editmysite\.com|placeholder|wordpress\.com\/favicon|canva\.site|my\.canva\.site/i;
 
 async function isGenericOrBlocked(buf, sourceUrl) {
   if (!buf || buf.length < 200) return true;
