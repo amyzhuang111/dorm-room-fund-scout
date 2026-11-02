@@ -13,7 +13,7 @@ import {
 
 const PAGE = 24;
 /** Exact mobile (375) height: heading + collapsed filters + PAGE cards. */
-const FOUNDER_MOBILE_PAGE_MIN_PX = 3757;
+const FOUNDER_MOBILE_PAGE_MIN_PX = 5401;
 
 function missing(value: string | null | undefined, label: string): string {
   const text = value?.trim();
@@ -123,7 +123,7 @@ export function FounderResults({
 
   return (
     <section
-      className={`mt-0 lg:min-h-0 ${reserveMobileFirstPage ? "max-lg:min-h-[3757px]" : ""}`}
+      className={`mt-0 lg:min-h-0 ${reserveMobileFirstPage ? "max-lg:min-h-[5401px]" : ""}`}
       data-founder-results=""
       data-founder-mobile-min={reserveMobileFirstPage ? String(FOUNDER_MOBILE_PAGE_MIN_PX) : undefined}
     >
@@ -273,56 +273,72 @@ export function FounderResults({
             const why = whyById.get(founder.id) ?? null;
             return (
               <li key={founder.id} data-founder-card="" data-signal-chrome={founder.signalTypes.includes("funding") ? "funding" : founder.signalTypes.includes("launch") ? "launch" : founder.signalTypes.includes("award") ? "award" : founder.signalTypes.length ? "other" : "none"}>
-                <article className="bg-[color:var(--bg,#FFFFFF)] px-3 py-3.5 sm:px-4 lg:py-2.5">
-                  <div className="flex items-start gap-3">
-                    <CampusSeal label={founder.campus} size="lg" className="mt-0.5" />
-                    <div className="min-w-0 flex-1">
-                  <h3 className="text-[18px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] lg:text-[16px]">{founder.name}</h3>
-                  <p className="mt-1 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">
-                    <Field label="Campus" value={founder.campus} />
-                    {" · "}
-                    {founder.company ? (
-                      founder.companyId ? (
-                        <Link href={`/startup/${founder.companyId}?from=map${campusId && campusId !== "missing" ? `&campus=${encodeURIComponent(campusId)}` : ""}`} className="font-medium text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--cobalt,#2F4FD8)] hover:underline">
-                          {founder.company}
-                        </Link>
+                <article className="bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 sm:px-4 lg:px-3 lg:py-2.5" data-founder-card-body="">
+                  <div className="flex items-start gap-3.5 lg:gap-3">
+                    <CampusSeal label={founder.campus} size="xl" className="mt-0.5 hidden max-lg:inline-grid" />
+                    <CampusSeal label={founder.campus} size="lg" className="mt-0.5 hidden lg:inline-grid" />
+                    <div className="min-w-0 flex-1 overflow-visible">
+                      {/* Tier 1 — name */}
+                      <h3 className="text-[20px] font-semibold leading-6 tracking-tight text-[color:var(--fg,#0B0E17)] lg:text-[16px] lg:leading-5" data-founder-name="">
+                        {founder.name}
+                      </h3>
+                      {/* Tier 2 — campus / company */}
+                      <p className="mt-1.5 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)] lg:mt-1 lg:text-[13px]" data-founder-campus-company="">
+                        <Field label="Campus" value={founder.campus} />
+                        {" · "}
+                        {founder.company ? (
+                          founder.companyId ? (
+                            <Link href={`/startup/${founder.companyId}?from=map${campusId && campusId !== "missing" ? `&campus=${encodeURIComponent(campusId)}` : ""}`} className="font-semibold text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--cobalt,#2F4FD8)] hover:underline">
+                              {founder.company}
+                            </Link>
+                          ) : (
+                            <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{founder.company}</span>
+                          )
+                        ) : (
+                          <span>Company missing</span>
+                        )}
+                      </p>
+                      {/* Tier 2b — cohort / role / programs (full, no slice) */}
+                      <p className="mt-1 font-mono text-[12px] leading-5 text-[color:var(--fg-3,#5C647A)] lg:mt-0.5 lg:text-[11px] lg:leading-4" data-founder-cohort="">
+                        <Field label="Sector" value={founder.sector} />
+                        {founder.gradYear != null ? (
+                          <>
+                            {" · "}
+                            <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{founder.gradYear}</span>
+                          </>
+                        ) : null}
+                        {founder.role ? (
+                          <>
+                            {" · "}
+                            <Field label="Role" value={founder.role} />
+                          </>
+                        ) : null}
+                        {founder.programs.length > 0 ? (
+                          <>
+                            {" · "}
+                            <span>{founder.programs.join(" · ")}</span>
+                          </>
+                        ) : null}
+                      </p>
+                      {/* Tier 3 — why (full text, never clamp / ellipsis / overflow hidden) */}
+                      {why ? (
+                        <p
+                          className="mt-2.5 overflow-visible border-l-2 border-[color:var(--cobalt,#2F4FD8)]/45 pl-3 text-[14px] leading-5 text-[color:var(--fg,#0B0E17)] lg:mt-1.5 lg:pl-2.5 lg:text-[12px] lg:leading-4"
+                          data-why-worth=""
+                        >
+                          <span className="block font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Why worth a look</span>
+                          <span
+                            className="mt-1 block overflow-visible whitespace-normal break-words [display:block] [text-overflow:clip] [-webkit-line-clamp:unset] [-webkit-box-orient:unset]"
+                            data-why-text=""
+                          >
+                            {why}
+                          </span>
+                        </p>
                       ) : (
-                        <span className="font-medium text-[color:var(--fg,#0B0E17)]">{founder.company}</span>
-                      )
-                    ) : (
-                      <span>Company missing</span>
-                    )}
-                  </p>
-                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                    <Field label="Sector" value={founder.sector} />
-                    {founder.gradYear != null ? (
-                      <>
-                        {" · "}
-                        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{founder.gradYear}</span>
-                      </>
-                    ) : null}
-                    {founder.role ? (
-                      <>
-                        {" · "}
-                        <Field label="Role" value={founder.role} />
-                      </>
-                    ) : null}
-                  </p>
-                  {founder.programs.length > 0 ? (
-                    <p className="mt-0.5 font-mono text-[11px] text-[color:var(--fg-3,#5C647A)]">
-                      {founder.programs.slice(0, 2).join(" · ")}
-                    </p>
-                  ) : null}
-                  {why ? (
-                    <p className="mt-2 border-l-2 border-[color:var(--cobalt,#2F4FD8)]/40 pl-2.5 text-[13px] leading-5 text-[color:var(--fg,#0B0E17)] lg:mt-1.5 lg:pl-2 lg:text-[12px] lg:leading-4" data-why-worth="">
-                      <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Why worth a look</span>
-                      <span className="mt-0.5 block">{why}</span>
-                    </p>
-                  ) : (
-                    <p className="sr-only" data-why-worth="" data-why-blank="1">
-                      Why worth a look blank
-                    </p>
-                  )}
+                        <p className="sr-only" data-why-worth="" data-why-blank="1">
+                          Why worth a look blank
+                        </p>
+                      )}
                     </div>
                   </div>
                 </article>

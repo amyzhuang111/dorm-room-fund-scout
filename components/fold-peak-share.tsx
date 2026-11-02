@@ -134,48 +134,52 @@ export function FoldPeakShare({
         </div>
       </div>
 
-      {/* Mobile: cobalt peak + seal desk chips */}
-      <div className="min-h-[10.5rem] border-b border-[color:var(--line,#E1E5EF)] pb-2.5 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
-        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
-        <p className="mt-0.5 font-mono text-[40px] font-bold leading-[0.84] tracking-[-0.07em] text-[color:var(--cobalt,#2F4FD8)]">
-          {peakBar.count.toLocaleString("en-US")}
-          <span className="mx-1.5 text-[18px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
-          <span className="text-[24px] font-bold tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">
-            {detail.dated.toLocaleString("en-US")}
-          </span>
-        </p>
-        <p className="mt-1 text-[14px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
-          {peakBar.label} took <span className="text-[color:var(--cobalt,#2F4FD8)]">{pct}%</span> of every dated signal
-        </p>
-        <ol className="mt-1.5 flex h-[2.6rem] items-end gap-0.5" data-fold-peak-bars-mobile="" data-fold-peak-month-bars="">
+      {/* Mobile: compressed Seal Dispatch (B density on the mast, A identity) so why text clears the fold */}
+      <div className="min-h-[8.25rem] border-b border-[color:var(--line,#E1E5EF)] pb-2 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
+        <div className="flex items-end justify-between gap-3">
+          <div className="min-w-0">
+            <p className="font-mono text-[9px] font-bold uppercase tracking-[0.24em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
+            <p className="mt-0.5 font-mono text-[32px] font-bold leading-[0.86] tracking-[-0.07em] text-[color:var(--cobalt,#2F4FD8)]">
+              {peakBar.count.toLocaleString("en-US")}
+              <span className="mx-1 text-[15px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
+              <span className="text-[20px] font-bold tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">
+                {detail.dated.toLocaleString("en-US")}
+              </span>
+            </p>
+          </div>
+          <p className="max-w-[11.5rem] pb-0.5 text-right text-[12px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
+            {peakBar.label} took <span className="text-[color:var(--cobalt,#2F4FD8)]">{pct}%</span> of dated
+          </p>
+        </div>
+        <ol className="mt-1.5 flex h-[1.85rem] items-end gap-0.5" data-fold-peak-bars-mobile="" data-fold-peak-month-bars="">
           {detail.bars.map((b) => (
             <li key={b.id} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-0.5" data-signal-month={b.id} title={`${b.label}: ${b.count}`}>
               {b.peak ? (
-                <span className="font-mono text-[10px] font-bold tabular-nums leading-none text-[color:var(--cobalt,#2F4FD8)]" data-fold-peak-bar-label="">
+                <span className="font-mono text-[9px] font-bold tabular-nums leading-none text-[color:var(--cobalt,#2F4FD8)]" data-fold-peak-bar-label="">
                   {b.count.toLocaleString("en-US")}
                 </span>
               ) : (
-                <span className="h-[10px]" aria-hidden />
+                <span className="h-[9px]" aria-hidden />
               )}
               <span
-                className={`w-full max-w-[1.25rem] rounded-sm ${b.peak ? "bg-[color:var(--cobalt,#2F4FD8)]" : "bg-[color:var(--cobalt,#2F4FD8)]/25"}`}
-                style={{ height: `${Math.max(3, Math.round((b.count / max) * 18))}px` }}
+                className={`w-full max-w-[1.1rem] rounded-sm ${b.peak ? "bg-[color:var(--cobalt,#2F4FD8)]" : "bg-[color:var(--cobalt,#2F4FD8)]/25"}`}
+                style={{ height: `${Math.max(3, Math.round((b.count / max) * 14))}px` }}
               />
-              <span className={`whitespace-nowrap font-mono text-[8px] uppercase tracking-[0.03em] ${b.peak ? "font-bold text-[color:var(--cobalt,#2F4FD8)]" : "text-[color:var(--fg-3,#5C647A)]"}`}>{b.short}</span>
+              <span className={`whitespace-nowrap font-mono text-[7px] uppercase tracking-[0.03em] ${b.peak ? "font-bold text-[color:var(--cobalt,#2F4FD8)]" : "text-[color:var(--fg-3,#5C647A)]"}`}>{b.short}</span>
             </li>
           ))}
         </ol>
         {topCampuses.length > 0 ? (
           <ol
-            className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 border-t border-[color:var(--line,#E1E5EF)] pt-2"
+            className="mt-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 border-t border-[color:var(--line,#E1E5EF)] pt-1.5"
             data-fold-peak-campus-rank-mobile=""
           >
             {topCampuses.map((campus, i) => (
-              <li key={campus.id} className="flex items-center gap-1.5">
-                <span className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{String(i + 1).padStart(2, "0")}</span>
-                <CampusSeal label={campus.name} size="sm" />
-                <span className="text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{campus.name}</span>
-                <span className="font-mono text-[12px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">{campus.founders.toLocaleString("en-US")}</span>
+              <li key={campus.id} className="flex items-center gap-1">
+                <span className="font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{String(i + 1).padStart(2, "0")}</span>
+                <CampusSeal label={campus.name} size="md" />
+                <span className="text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{campus.name}</span>
+                <span className="font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">{campus.founders.toLocaleString("en-US")}</span>
               </li>
             ))}
           </ol>
