@@ -128,14 +128,33 @@ const browser = await chromium.launch({ headless: true });
   await page.goto(`${BASE}/companies?more=6`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForTimeout(1200);
-  const nextScout = page.locator("[data-next-to-scout]").first();
   const end = page.locator("[data-ledger-end]").first();
-  if (await nextScout.count()) {
-    await nextScout.scrollIntoViewIfNeeded();
+  const loadNext = page.locator("[data-load-next]").first();
+  if (await end.count()) {
+    await end.evaluate((el) => el.scrollIntoView({ block: "end" }));
+    await page.waitForTimeout(300);
+    await page.evaluate(() => {
+      const endEl = document.querySelector("[data-ledger-end]");
+      const btn = document.querySelector("[data-load-next]");
+      if (!endEl) return;
+      // Pin Load next near the bottom of the viewport.
+      const anchor = btn || endEl;
+      const bottom = anchor.getBoundingClientRect().bottom;
+      const room = window.innerHeight - 16;
+      if (bottom > room) window.scrollBy(0, bottom - room);
+      // Ensure the topmost visible ledger card is fully in frame (not truncated).
+      const cards = [...document.querySelectorAll("#browse ol > li")];
+      for (const card of cards) {
+        const r = card.getBoundingClientRect();
+        if (r.bottom > 72 && r.top < window.innerHeight) {
+          if (r.top < 72) window.scrollBy(0, r.top - 80);
+          break;
+        }
+      }
+    });
     await page.waitForTimeout(400);
-    await page.evaluate(() => window.scrollBy(0, -48));
-  } else if (await end.count()) {
-    await end.scrollIntoViewIfNeeded();
+  } else if (await loadNext.count()) {
+    await loadNext.scrollIntoViewIfNeeded();
     await page.waitForTimeout(400);
   }
   await shot(page, "companies-more-end-1440");
@@ -270,26 +289,26 @@ const browser = await chromium.launch({ headless: true });
     await page.waitForTimeout(200);
     await page.evaluate(() => {
       const end = document.querySelector("[data-ledger-end-mobile]");
+      const btn = end && end.querySelector("[data-load-next]");
       if (!end) return;
-      const bottom = end.getBoundingClientRect().bottom;
-      const room = window.innerHeight - 8;
-      if (bottom > room) window.scrollBy(0, bottom - room + 4);
-      // Prefer last cards above the close plate (not an orphan footer alone)
-      const top = end.getBoundingClientRect().top;
-      // Keep Load next near bottom; nudge so the card above is fully in frame.
-      if (top < 260) window.scrollBy(0, top - 340);
+      // Keep the close plate (Load next) fully visible near the bottom.
+      const anchor = btn || end;
+      const bottom = anchor.getBoundingClientRect().bottom;
+      const room = window.innerHeight - 12;
+      if (bottom > room) window.scrollBy(0, bottom - room);
+      // Pull up just enough so one full card sits above the plate (not truncated).
+      const endTop = end.getBoundingClientRect().top;
       const cards = [...document.querySelectorAll("#browse ol > li")];
       for (let i = cards.length - 1; i >= 0; i--) {
         const r = cards[i].getBoundingClientRect();
-        if (r.bottom < end.getBoundingClientRect().top - 8 && r.top >= 52) {
-          // already have a full card in view
-          break;
-        }
-        if (r.bottom < end.getBoundingClientRect().top - 8 && r.top < 52) {
-          window.scrollBy(0, r.top - 56);
+        if (r.bottom <= endTop - 4) {
+          if (r.top < 56) window.scrollBy(0, r.top - 64);
           break;
         }
       }
+      // Re-pin Load next if the card nudge pushed it off-screen.
+      const b2 = (btn || end).getBoundingClientRect().bottom;
+      if (b2 > window.innerHeight - 8) window.scrollBy(0, b2 - (window.innerHeight - 12));
     });
     await page.waitForTimeout(400);
   }
