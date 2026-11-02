@@ -2,6 +2,7 @@ import Link from "next/link";
 import { paginateCorpus, corpusSortOf, CORPUS_PAGE_SIZE } from "@/lib/domain/corpus-explorer";
 import { buildDirectoryFromDb } from "@/lib/domain/directory";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
+import { DataTheme } from "@/components/data-theme";
 
 export const dynamic = "force-dynamic";
 
@@ -46,10 +47,11 @@ export default async function DataExplorerPage({
 
   return (
     <div className="sample-paper mx-auto max-w-[1200px] px-3 py-3 pb-8 sm:px-5 sm:py-4" data-corpus-explorer="">
-      <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-3">
+      <DataTheme />
+      <div className="flex flex-wrap items-end justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
         <div>
           <p className="scout-kicker">Corpus</p>
-          <h1 className="mt-1 scout-display text-[32px] leading-none sm:text-[44px]">Full data</h1>
+          <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
           <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--ember,#D96B1C)]">{result.total.toLocaleString("en-US")}</span>
             {" companies · page "}
@@ -62,26 +64,26 @@ export default async function DataExplorerPage({
         </div>
         <a
           href="/data/export"
-          className="inline-flex h-9 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white"
+          className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
           data-corpus-csv=""
         >
           Download CSV
         </a>
       </div>
 
-      <form method="get" action="/data" className="mt-3 grid grid-cols-2 gap-2 border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-2.5 sm:grid-cols-[1fr_auto_auto_auto_auto] sm:p-3" data-corpus-filters="">
-        <label className="col-span-2 block min-w-0 sm:col-span-1">
-          <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Search</span>
+      <form method="get" action="/data" className="mt-2 flex flex-wrap items-end gap-1.5 border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-2" data-corpus-filters="">
+        <label className="min-w-0 flex-[1_1_10rem]">
+          <span className="sr-only">Search</span>
           <input
             name="q"
             defaultValue={q}
-            placeholder="Name or founder"
-            className="mt-1 h-9 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[12px] text-[color:var(--fg,#0B0E17)]"
+            placeholder="Search name or founder"
+            className="h-8 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[12px] text-[color:var(--fg,#0B0E17)]"
           />
         </label>
-        <label className="block">
-          <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Sector</span>
-          <select name="sector" defaultValue={sector || ""} className="mt-1 h-9 w-full min-w-[9rem] border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[12px]">
+        <label className="min-w-[7.5rem] flex-none">
+          <span className="sr-only">Sector</span>
+          <select name="sector" defaultValue={sector || ""} className="h-8 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[11px]">
             <option value="">All sectors</option>
             {sectors.map((s) => (
               <option key={s.id} value={s.id}>
@@ -90,9 +92,9 @@ export default async function DataExplorerPage({
             ))}
           </select>
         </label>
-        <label className="block">
-          <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Campus</span>
-          <select name="campus" defaultValue={campus || ""} className="mt-1 h-9 w-full min-w-[9rem] border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[12px]">
+        <label className="min-w-[7.5rem] flex-none">
+          <span className="sr-only">Campus</span>
+          <select name="campus" defaultValue={campus || ""} className="h-8 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[11px]">
             <option value="">All campuses</option>
             {campuses.slice(0, 40).map((c) => (
               <option key={c.id} value={c.id}>
@@ -101,9 +103,9 @@ export default async function DataExplorerPage({
             ))}
           </select>
         </label>
-        <label className="block">
-          <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Sort</span>
-          <select name="sort" defaultValue={sp.sort || "rank"} className="mt-1 h-9 w-full min-w-[8rem] border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[12px]">
+        <label className="min-w-[6.5rem] flex-none">
+          <span className="sr-only">Sort</span>
+          <select name="sort" defaultValue={sp.sort || "rank"} className="h-8 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[11px]">
             <option value="rank">Rank</option>
             <option value="recent">Newest signal</option>
             <option value="name">Name</option>
@@ -112,21 +114,19 @@ export default async function DataExplorerPage({
             <option value="founded">Founded year</option>
           </select>
         </label>
-        <div className="col-span-2 flex items-end sm:col-span-1">
-          <button type="submit" className="inline-flex h-9 w-full items-center justify-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[11px] font-semibold text-white sm:w-auto">
-            Apply
-          </button>
-        </div>
+        <button type="submit" className="inline-flex h-8 flex-none items-center justify-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[11px] font-semibold text-white">
+          Apply
+        </button>
       </form>
 
       <div className="mt-3 overflow-x-auto border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] [-webkit-overflow-scrolling:touch]" data-corpus-table="">
-        <table className="min-w-full border-collapse text-left text-[12px]">
-          <thead className="bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">
+        <table className="min-w-full border-collapse text-left text-[11px] leading-4">
+          <thead className="bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[9px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">
             <tr>
               {["Company", "Campus", "Sector", "Stage", "Founded", "Signals", "Latest", "Program", "YC", "Founders", "Funding", "Site"].map((h) => (
                 <th
                   key={h}
-                  className={`whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2 font-semibold ${h === "Company" ? "sticky left-0 z-[1] bg-[color:var(--cobalt-haze,#E8ECFA)]" : ""}`}
+                  className={`whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5 font-semibold ${h === "Company" ? "sticky left-0 z-[1] bg-[color:var(--cobalt-haze,#E8ECFA)]" : ""}`}
                 >
                   {h}
                 </th>
@@ -136,22 +136,22 @@ export default async function DataExplorerPage({
           <tbody className="divide-y divide-[color:var(--line,#E1E5EF)]">
             {result.rows.map((row) => (
               <tr key={row.id} className="align-top hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/30" data-corpus-row="">
-                <td className="sticky left-0 z-[1] bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 font-semibold tracking-tight shadow-[2px_0_0_0_color:var(--line,#E1E5EF)]">
+                <td className="sticky left-0 z-[1] bg-[color:var(--bg,#FFFFFF)] px-2 py-1.5 font-semibold tracking-tight shadow-[2px_0_0_0_color:var(--line,#E1E5EF)] sm:static sm:shadow-none">
                   <Link href={`/startup/${row.id}`} className="text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline">
                     {row.name}
                   </Link>
                 </td>
-                <td className="px-2.5 py-2">{cell(row.campus)}</td>
-                <td className="px-2.5 py-2">{cell(row.sector)}</td>
-                <td className="px-2.5 py-2">{cell(row.stage)}</td>
-                <td className="px-2.5 py-2 font-mono tabular-nums">{cell(row.foundedYear)}</td>
-                <td className="px-2.5 py-2 font-mono font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{row.signals.toLocaleString("en-US")}</td>
-                <td className="px-2.5 py-2 font-mono tabular-nums">{cell(row.latestSignalAt)}</td>
-                <td className="px-2.5 py-2">{cell(row.primaryProgram)}</td>
-                <td className="px-2.5 py-2">{cell(row.ycBatch)}</td>
-                <td className="px-2.5 py-2 font-mono tabular-nums">{row.founderCount > 0 ? row.founderCount.toLocaleString("en-US") : cell(null)}</td>
-                <td className="px-2.5 py-2">{cell(row.fundingText)}</td>
-                <td className="px-2.5 py-2">
+                <td className="px-2 py-1.5">{cell(row.campus)}</td>
+                <td className="px-2 py-1.5">{cell(row.sector)}</td>
+                <td className="px-2 py-1.5">{cell(row.stage)}</td>
+                <td className="px-2 py-1.5 font-mono tabular-nums">{cell(row.foundedYear)}</td>
+                <td className="px-2 py-1.5 font-mono font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{row.signals.toLocaleString("en-US")}</td>
+                <td className="px-2 py-1.5 font-mono tabular-nums">{cell(row.latestSignalAt)}</td>
+                <td className="px-2 py-1.5">{cell(row.primaryProgram)}</td>
+                <td className="px-2 py-1.5">{cell(row.ycBatch)}</td>
+                <td className="px-2 py-1.5 font-mono tabular-nums">{row.founderCount > 0 ? row.founderCount.toLocaleString("en-US") : cell(null)}</td>
+                <td className="px-2 py-1.5">{cell(row.fundingText)}</td>
+                <td className="px-2 py-1.5">
                   {row.website ? (
                     <a href={row.website} target="_blank" rel="noopener noreferrer" className="text-[color:var(--cobalt,#2F4FD8)] underline">
                       Link

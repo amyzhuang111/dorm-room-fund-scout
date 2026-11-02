@@ -10,7 +10,7 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="border-b border-[color:var(--line,#E1E5EF)] py-3 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-3 sm:py-2.5">
       <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">{label}</dt>
-      <dd className="mt-1.5 text-[14px] leading-5 text-[color:var(--fg,#0B0E17)] sm:mt-0 sm:text-[13px]">{children}</dd>
+      <dd className="mt-1.5 break-words text-[14px] leading-5 text-[color:var(--fg,#0B0E17)] sm:mt-0 sm:text-[13px]">{children}</dd>
     </div>
   );
 }
@@ -101,7 +101,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
           <Field label="Investors">
             <ul className="space-y-1.5">
               {profile.investors.map((inv, i) => (
-                <li key={`${inv.name}-${i}`}>
+                <li key={`${inv.name}-${i}`} className="break-words">
                   {inv.name}
                   {inv.batch ? ` · ${inv.batch}` : ""}
                   {inv.round ? ` · ${inv.round}` : ""}
@@ -120,7 +120,13 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
         ) : null}
         {!isEmpty(yc) ? (
           <Field label="YC batch">
-            {yc.map((i) => [i.name, i.batch].filter(Boolean).join(" · ")).join(" · ")}
+            <ul className="space-y-1">
+              {yc.map((i, idx) => (
+                <li key={`${i.name}-${i.batch ?? ""}-${idx}`} className="break-words">
+                  {[i.name, i.batch].filter(Boolean).join(" · ")}
+                </li>
+              ))}
+            </ul>
           </Field>
         ) : null}
         {!isEmpty(website) ? (

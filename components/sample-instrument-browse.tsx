@@ -20,7 +20,6 @@ import {
   ScoutSignalPodium,
   campusFoundersTop,
   campusFoundersRanked,
-  CAMPUS_FOUNDERS_VISIBLE,
   topPrograms,
   isYcProgramLabel,
   YC_MEMBERSHIP_EXPECTED,
@@ -63,7 +62,7 @@ type EndSliceInsight = {
   companyId: string;
 };
 
-/** Real insight from the loaded page slice — never pagination batch size. */
+/** Real insight from the loaded page slice - never pagination batch size. */
 function endSliceInsight(cards: DirectoryCard[]): EndSliceInsight | null {
   if (cards.length === 0) return null;
 
@@ -249,7 +248,7 @@ export function SampleInstrumentBrowse({
     () => boardCompanies.filter((c) => (c.signals ?? 0) > 0).length,
     [boardCompanies],
   );
-  /** Quiet matching companies (no stored signal) — insight, not pagination. */
+  /** Quiet matching companies (no stored signal) - insight, not pagination. */
   const quietMatch = boardCompanies.length - signaledMatch;
   const pageFrom = Math.max(1, cards.length - 27);
   const pageContext = `Companies ${pageFrom.toLocaleString("en-US")} to ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`;
@@ -745,13 +744,17 @@ export function SampleInstrumentBrowse({
               </div>
             ) : null}
             <ol
-              className={`relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)] divide-y divide-[color:var(--line,#E1E5EF)] ${pages > 1 ? "border-t-0" : ""} ${feed === "leaderboard" ? "border-t-0 lg:border-t" : ""}`}
+              className={`relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] divide-y divide-[color:var(--line,#E1E5EF)] ${pages > 1 ? "border-t-0" : ""} ${feed === "leaderboard" ? "border-t-0 lg:border-t" : ""}`}
             >
               {cards.map((card, index) => {
                 const chunk = 14;
                 const showDivider = pages > 1 && index > 0 && index % chunk === 0;
                 const sectionFrom = Math.floor(index / chunk) * chunk + 1;
                 const sectionTo = Math.min(sectionFrom + chunk - 1, cards.length);
+                const rawWhy = whyItsHere(card);
+                const prevWhy = index > 0 ? whyItsHere(cards[index - 1]!) : null;
+                // Keep the first Why in a run; blank identical repeats that follow.
+                const whyOverride = rawWhy && prevWhy === rawWhy ? null : undefined;
                 return (
                   <li key={card.id}>
                     {showDivider ? (
@@ -770,6 +773,7 @@ export function SampleInstrumentBrowse({
                       card={card}
                       rank={feed === "leaderboard" ? index + 1 : null}
                       ranked={feed === "leaderboard"}
+                      whyOverride={whyOverride}
                       />
                   </li>
                 );
@@ -846,21 +850,21 @@ export function SampleInstrumentBrowse({
                   data-end-insight={sliceInsight.kicker}
                 >
                   <div
-                    className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
+                    className="relative overflow-hidden border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]"
                     data-ledger-end-lead=""
                     data-ledger-end-more=""
                     data-pass-close=""
                   >
-                    <div className="px-3.5 py-3.5">
-                      <p className="scout-kicker text-[color:var(--cobalt,#2F4FD8)]">Pass close</p>
-                      <p className="mt-2 scout-figure text-[40px] leading-none" data-ledger-showing="" data-end-lead="">
+                    <div className="px-3.5 py-3">
+                      <p className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--cobalt,#2F4FD8)]">Pass close</p>
+                      <p className="mt-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]" data-more-context="">
+                        {pageContext}
+                      </p>
+                      <p className="mt-1.5 font-mono text-[28px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]" data-ledger-showing="" data-end-lead="">
                         {cards.length.toLocaleString("en-US")}
-                        <span className="ml-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
+                        <span className="ml-1.5 text-[14px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
                           of {total.toLocaleString("en-US")}
                         </span>
-                      </p>
-                      <p className="mt-2 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]" data-more-context="">
-                        {pageContext}
                       </p>
                       {sliceInsight ? (
                         <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
@@ -885,7 +889,7 @@ export function SampleInstrumentBrowse({
                     {cards.length < total ? (
                       <Link
                         href={moreHref}
-                        className="flex h-11 w-full items-center justify-center border-t border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] font-mono text-[12px] font-semibold uppercase tracking-[0.12em] text-white hover:opacity-95"
+                        className="flex h-9 w-full items-center justify-center border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] font-mono text-[11px] font-semibold text-[color:var(--fg,#0B0E17)] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40"
                       >
                         Load next
                       </Link>
@@ -984,19 +988,22 @@ function signalMeta(card: DirectoryCard): { primary: string; secondary: string }
   return null;
 }
 
-/** Editorial ledger row — fold/map-stage language: ruled, mono meta, ember hover. */
+/** Editorial ledger row - fold/map-stage language: ruled, mono meta, ember hover. */
 function LedgerRow({
   card,
   rank,
   ranked = false,
+  whyOverride,
 }: {
   card: DirectoryCard;
   rank: number | null;
   ranked?: boolean;
+  /** Null blanks a repeated Why line; undefined uses whyItsHere. */
+  whyOverride?: string | null;
 }) {
   const subtitle = directoryCardSubtitle(card);
   const meta = signalMeta(card);
-  const why = whyItsHere(card);
+  const why = whyOverride === undefined ? whyItsHere(card) : whyOverride;
   return (
     <Link
       href={`/startup/${card.id}`}

@@ -9,6 +9,9 @@ export interface RankCard {
   operatingStatus: "acquired" | "dead" | null;
   school: string | null;
   schoolId: string | null;
+  /** Optional identity for specific Why-it-here lines (DirectoryCard). */
+  foundedYear?: number | null;
+  primaryProgram?: string | null;
 }
 
 const SIGNAL_STRENGTH: Record<string, number> = {
@@ -59,22 +62,43 @@ export function directoryRank(card: RankCard): { tier: number; score: number } {
 }
 
 /**
- * Lead reasons for rank — signal weight + programs + stage status.
+ * Lead reasons for rank - signal weight + programs + stage status.
  * Omits school and founder counts already shown on the card identity/facts lines.
  * Blank when there is nothing beyond "no signals".
  */
 export function whyItsHere(card: RankCard): string | null {
   const signals = Math.max(0, card.signals);
   const kind = card.signalLabel ? card.signalLabel.toLowerCase() : "";
-  if (card.operatingStatus === "acquired") return "Acquired";
-  if (signals > 1) return kind ? `${signals} signals, latest ${kind}` : `${signals} signals`;
-  if (signals === 1) return kind ? `1 ${kind} signal` : "1 signal";
-  if (kind) return `${kind} on record`;
+  const campus = card.school?.replace(/^University of (?:California, )?/, "").replace(/ University$/, "").trim() || null;
+  const program = card.primaryProgram?.trim() || null;
   const programs = [...new Set(card.programs.map(programLabel).filter(Boolean))];
-  if (programs.length) {
-    const yc = programs.find((name) => /y\s*combinator/i.test(name));
-    return yc ?? programs[0]!;
+  const yc = programs.find((name) => /y\s*combinator/i.test(name)) || null;
+  const year = card.foundedYear != null ? String(card.foundedYear) : null;
+
+  if (card.operatingStatus === "acquired") {
+    return campus ? `Acquired · ${campus}` : "Acquired";
   }
-  if (card.stage) return card.stage;
-  return null;
+  if (signals > 1) {
+    const latest = kind ? `, latest ${kind}` : "";
+    const place = campus ? ` · ${campus}` : program ? ` · ${program}` : "";
+    return `${signals} signals${latest}${place}`;
+  }
+  if (signals === 1) {
+    const bits = [kind ? `1 ${kind} signal` : "1 signal"];
+    if (campus) bits.push(campus);
+    else if (program) bits.push(program);
+    if (year) bits.push(year);
+    return bits.join(" · ");
+  }
+  // Bare kind like "launch on record" repeats across a page - only keep when paired with real identity.
+  const bits: string[] = [];
+  if (yc) bits.push(yc);
+  else if (program) bits.push(program);
+  if (kind) bits.push(kind);
+  if (campus) bits.push(campus);
+  if (year) bits.push(year);
+  if (card.stage && !bits.includes(card.stage)) bits.push(card.stage);
+  if (bits.length <= 1 && kind && !yc && !program && !campus) return null;
+  if (!bits.length) return null;
+  return bits.join(" · ");
 }

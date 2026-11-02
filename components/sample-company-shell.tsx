@@ -13,7 +13,6 @@ import {
   FacetRail,
   IntelligenceBoards,
   COUNT,
-  MobileFilterDock,
   MobileWireStrip,
   PANEL,
   type FacetState,
@@ -29,7 +28,7 @@ export function SampleCompanyShell({
   children: ReactNode;
   companies: FacetCompany[];
   campuses: { id: string; name: string; country: string; founders: number }[];
-  /** Local company beat — name / campus / year / ids. Not the global dispatch count. */
+  /** Local company beat - name / campus / year / ids. Not the global dispatch count. */
   dossier?: {
     name: string;
     campus?: string | null;
@@ -42,11 +41,15 @@ export function SampleCompanyShell({
     signals?: number;
     operatingStatus?: string | null;
     latestSignalAt?: string | null;
+    logoUrl?: string | null;
+    pitch?: string | null;
+    stage?: string | null;
+    signalLabel?: string | null;
   };
 }) {
   const router = useRouter();
   const [facets, setFacets] = useState<FacetState>(emptyFacets);
-  /** Full corpus for FacetRail only — lazy-loaded; SSR ships peer seed alone. */
+  /** Full corpus for FacetRail only - lazy-loaded; SSR ships peer seed alone. */
   const [catalog, setCatalog] = useState<FacetCompany[] | null>(null);
   useEffect(() => {
     let cancelled = false;
@@ -63,8 +66,6 @@ export function SampleCompanyShell({
   }, []);
   const facetCompanies = catalog ?? companies;
   const filtered = useMemo(() => applyFacets(facetCompanies, facets), [facetCompanies, facets]);
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-
   function onFacetChange(next: FacetState) {
     setFacets(next);
     const params = new URLSearchParams({ sample: "1" });
@@ -101,7 +102,7 @@ export function SampleCompanyShell({
     const peers = peerSource.filter((c) => c.sectorId === sec);
     return peers.length ? peers : null;
   }, [peerSource, dossier?.sectorId]);
-  // Side-column count: campus peers including this company (preferred), else sector — never global 2,513.
+  // Side-column count: campus peers including this company (preferred), else sector - never global 2,513.
   const wireCount = campusPeers?.length ?? sectorPeers?.length ?? signaled;
   const campusShort = dossier?.schoolId
     ? shortCampusLabel(dossier.schoolId, dossier.campus ?? "Campus")
@@ -119,74 +120,68 @@ export function SampleCompanyShell({
   return (
     <div className="sample-paper min-h-[calc(100dvh-48px)]">
       <SampleTheme />
-      <div className="mx-auto w-full max-w-[1280px] px-3 py-3 pb-32 sm:px-5 sm:pb-5">
-        {/* Magazine dossier cover · desk + mobile share the profile treatment */}
-        <div className="mb-3 hidden border-b border-[color:var(--line,#E1E5EF)] pb-3 sm:mb-4 sm:block sm:pb-4" data-dossier-hero="" data-mobile-magazine="">
-          <div className="flex flex-wrap items-center gap-2">
+      <div className="mx-auto w-full max-w-[1280px] px-3 py-3 pb-8 sm:px-5 sm:pb-5">
+        {/* Summary card hero · logo, pitch, campus, stage, key signal · real data only */}
+        <div className="mb-3 hidden sm:mb-4 sm:block" data-dossier-hero="" data-mobile-magazine="" data-summary-card="">
+          <div className="mb-2 flex flex-wrap items-center gap-2">
             <Link href="/companies" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
               ← Companies
             </Link>
             <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
           </div>
           {dossier?.name ? (
-            <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
-              <div className="min-w-0 flex-1">
-                <p className="text-[36px] font-bold leading-[1.0] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[42px] lg:text-[48px]">
-                  {dossier.name}
-                </p>
-                <p className="mt-3 border-l-2 border-[color:var(--cobalt,#2F4FD8)] pl-3 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:text-[13px]">
-                  {dossier.campus ? <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.campus}</span> : <span>Campus not on record</span>}
-                  {" · "}
-                  {dossier.year != null ? (
-                    <span>
-                      <span className={COUNT}>{dossier.year}</span>
-                      {" founded"}
-                    </span>
-                  ) : (
-                    <span>Year not on record</span>
-                  )}
-                  {dossier.sector ? (
-                    <>
-                      {" · "}
-                      <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.sector}</span>
-                    </>
+            <div className="relative flex flex-wrap items-start justify-between gap-4 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] p-4 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
+              <div className="flex min-w-0 flex-1 gap-3 pl-1">
+                {dossier.logoUrl ? (
+                  <img src={dossier.logoUrl} alt="" width={48} height={48} className="mt-1 h-12 w-12 shrink-0 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] object-contain" data-dossier-logo="" />
+                ) : (
+                  <div className="mt-1 grid h-12 w-12 shrink-0 place-items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[14px] font-bold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>
+                    {(dossier.name.trim()[0] || "?").toUpperCase()}
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <p className="text-[28px] font-bold leading-[1.05] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[32px] lg:text-[36px]">
+                    {dossier.name}
+                  </p>
+                  {dossier.pitch ? (
+                    <p className="mt-1.5 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-dossier-pitch="">
+                      {dossier.pitch}
+                    </p>
                   ) : null}
-                </p>
-                <p className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-dossier-facts="">
-                  {dossier.primaryProgram ? (
-                    <span>
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.primaryProgram}</span>
-                    </span>
-                  ) : null}
-                  {(dossier.founders?.length ?? 0) > 0 ? (
-                    <span>
-                      {dossier.primaryProgram ? <span aria-hidden> · </span> : null}
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.founders!.length.toLocaleString("en-US")}</span>
-                      {dossier.founders!.length === 1 ? " founder" : " founders"}
-                      {dossier.founders!.length <= 3 ? (
-                        <span className="text-[color:var(--fg-3,#5C647A)]">
-                          {" ("}
-                          {dossier.founders!.join(", ")}
-                          {")"}
-                        </span>
-                      ) : null}
-                    </span>
-                  ) : null}
-                  {dossier.operatingStatus ? (
-                    <span>
-                      {(dossier.primaryProgram || (dossier.founders?.length ?? 0) > 0) ? <span aria-hidden> · </span> : null}
-                      {dossier.operatingStatus}
-                    </span>
-                  ) : null}
-                  {(dossier.signals ?? 0) > 0 && dossier.latestSignalAt ? (
-                    <span>
-                      {" · "}
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.signals!.toLocaleString("en-US")}</span>
-                      {" signals · "}
-                      {dossier.latestSignalAt.replace(/-00/g, "")}
-                    </span>
-                  ) : null}
-                </p>
+                  <p className="mt-2 flex flex-wrap gap-x-2 gap-y-0.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-dossier-facts="">
+                    {dossier.campus ? <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.campus}</span> : <span>Campus not on record</span>}
+                    {dossier.stage ? (
+                      <span>
+                        <span aria-hidden> · </span>
+                        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.stage}</span>
+                      </span>
+                    ) : null}
+                    {dossier.signalLabel ? (
+                      <span>
+                        <span aria-hidden> · </span>
+                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.signalLabel}</span>
+                      </span>
+                    ) : (dossier.signals ?? 0) > 0 ? (
+                      <span>
+                        <span aria-hidden> · </span>
+                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.signals!.toLocaleString("en-US")}</span>
+                        {" signals"}
+                      </span>
+                    ) : null}
+                    {dossier.year != null ? (
+                      <span>
+                        <span aria-hidden> · </span>
+                        <span className={COUNT}>{dossier.year}</span>
+                      </span>
+                    ) : null}
+                    {dossier.primaryProgram ? (
+                      <span>
+                        <span aria-hidden> · </span>
+                        <span className="break-words font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.primaryProgram}</span>
+                      </span>
+                    ) : null}
+                  </p>
+                </div>
               </div>
               {/* Mobile whisper; desk keeps dual wire stamps. Atlas plate owns the mobile lead figure. */}
               <div className="hidden" data-dossier-wire-count="" aria-hidden="true">
@@ -277,58 +272,64 @@ export function SampleCompanyShell({
           data-dossier-timeline=""
           data-mobile-chrono-identity=""
           data-company-mobile-hero=""
+          data-summary-card=""
         >
-          <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] pb-4 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]" data-dossier-spread-mobile="">
-            <div className="border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/40 px-3.5 py-3">
-              <p className="scout-kicker">Scout dossier</p>
-              <p className="mt-1.5 scout-display text-[44px] leading-[0.92]" data-company-name-lead="">
-                {dossier?.name ?? "Company"}
-              </p>
+          <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]" data-dossier-spread-mobile="">
+            <div className="flex gap-3 px-3.5 py-3">
+              {dossier?.logoUrl ? (
+                <img src={dossier.logoUrl} alt="" width={44} height={44} className="mt-1 h-11 w-11 shrink-0 rounded-sm border border-[color:var(--line,#E1E5EF)] object-contain" data-dossier-logo="" />
+              ) : (
+                <div className="mt-1 grid h-11 w-11 shrink-0 place-items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[13px] font-bold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>
+                  {((dossier?.name ?? "?").trim()[0] || "?").toUpperCase()}
+                </div>
+              )}
+              <div className="min-w-0 flex-1">
+                <p className="scout-kicker">Scout dossier</p>
+                <p className="mt-1 text-[28px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)]" data-company-name-lead="">
+                  {dossier?.name ?? "Company"}
+                </p>
+                {dossier?.pitch ? (
+                  <p className="mt-1.5 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-dossier-pitch="">
+                    {dossier.pitch}
+                  </p>
+                ) : null}
+              </div>
             </div>
-            <div className="px-3.5 pt-3">
-            <p className="border-l-[3px] border-[color:var(--cobalt,#2F4FD8)] pl-3 font-mono text-[13px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]">
+            <div className="border-t border-[color:var(--line,#E1E5EF)] px-3.5 py-3">
+            <p className="flex flex-wrap gap-x-2 gap-y-0.5 font-mono text-[12px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]">
               {dossier?.campus ? <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.campus}</span> : <span>Campus not on record</span>}
-              {dossier?.year != null ? (
-                <>
-                  {" · "}
-                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.year}</span>
-                  {" founded"}
-                </>
-              ) : null}
-              {dossier?.sector ? (
-                <>
-                  {" · "}
-                  <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.sector}</span>
-                </>
-              ) : null}
-            </p>
-            <p className="mt-2 flex flex-wrap gap-x-2 gap-y-1 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              {dossier?.primaryProgram ? (
-                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.primaryProgram}</span>
-              ) : null}
-              {(dossier?.founders?.length ?? 0) > 0 ? (
+              {dossier?.stage ? (
                 <span>
-                  {dossier?.primaryProgram ? <span aria-hidden> · </span> : null}
-                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{dossier!.founders!.length.toLocaleString("en-US")}</span>
-                  {dossier!.founders!.length === 1 ? " founder" : " founders"}
-                  {dossier!.founders!.length <= 3 ? (
-                    <span className="text-[color:var(--fg-3,#5C647A)]">
-                      {" ("}
-                      {dossier!.founders!.join(", ")}
-                      {")"}
-                    </span>
-                  ) : null}
+                  <span aria-hidden> · </span>
+                  <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.stage}</span>
                 </span>
               ) : null}
-              {(dossier?.signals ?? 0) > 0 ? (
+              {dossier?.signalLabel ? (
                 <span>
-                  {" · "}
+                  <span aria-hidden> · </span>
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.signalLabel}</span>
+                </span>
+              ) : (dossier?.signals ?? 0) > 0 ? (
+                <span>
+                  <span aria-hidden> · </span>
                   <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier!.signals!.toLocaleString("en-US")}</span>
                   {" signals"}
                 </span>
               ) : null}
+              {dossier?.year != null ? (
+                <span>
+                  <span aria-hidden> · </span>
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.year}</span>
+                </span>
+              ) : null}
+              {dossier?.primaryProgram ? (
+                <span className="break-words">
+                  <span aria-hidden> · </span>
+                  <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.primaryProgram}</span>
+                </span>
+              ) : null}
             </p>
-            <p className="mt-2.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-dossier-signal-plate="">
+            <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-dossier-signal-plate="">
               <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
               {" "}
               {wireUnit}
@@ -416,34 +417,6 @@ export function SampleCompanyShell({
           </aside>
         </div>
       </div>
-      <MobileFilterDock
-        onOpen={() => setMobileFiltersOpen(true)}
-        count={wireCount}
-        caption={wireUnit}
-        tone="magazine"
-        kicker="Campus filters"
-      />
-
-      {mobileFiltersOpen ? (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Scout filters">
-          <button type="button" className="absolute inset-0 bg-slate-900/35" aria-label="Close filters" onClick={() => setMobileFiltersOpen(false)} />
-          <div className="absolute inset-x-0 bottom-0 flex max-h-[min(82dvh,620px)] flex-col overflow-hidden rounded-t-md border border-[color:var(--cobalt,#2F4FD8)]/25 border-b-0 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(15,23,42,0.12)] before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
-            <div className="relative flex items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3 py-2.5">
-              <div className="min-w-0">
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout filters</p>
-                <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Narrow the ledger</p>
-                <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Status · Year · Sector · Campus</p>
-              </div>
-              <button type="button" onClick={() => setMobileFiltersOpen(false)} className="inline-flex h-8 shrink-0 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white">Done</button>
-            </div>
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-              <div className="h-[min(70dvh,540px)]">
-                <FacetRail companies={facetCompanies} campuses={campuses} facets={facets} onChange={onFacetChange} dense />
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }
