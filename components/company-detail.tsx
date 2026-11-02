@@ -81,11 +81,12 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
           <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Open question</h3>
           <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{openQ}</p>
         </div>
-        <div className="hidden flex-wrap gap-2 pt-1 sm:flex">
-          <a href="#evidence" className="rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground">
+        {/* r48: port desk scout actions onto mobile why-look (action path was desk-only). */}
+        <div className="flex flex-wrap gap-2 pt-1" data-scout-actions="">
+          <a href="#evidence" className="inline-flex min-h-9 items-center rounded-md bg-[color:var(--cobalt,#2F4FD8)] px-3 py-1.5 text-xs font-medium text-white sm:min-h-0 sm:bg-accent sm:text-accent-foreground">
             Research company
           </a>
-          <a href="#pipeline" className="rounded-md border border-[color:var(--ember,#D96B1C)]/40 px-3 py-1.5 text-xs text-[color:var(--ember,#D96B1C)] hover:bg-[color:var(--ember,#D96B1C)]/10">
+          <a href="#pipeline" className="inline-flex min-h-9 items-center rounded-md border border-[color:var(--ember,#D96B1C)]/50 px-3 py-1.5 text-xs font-medium text-[color:var(--ember,#D96B1C)] hover:bg-[color:var(--ember,#D96B1C)]/10 sm:min-h-0">
             Save / add to pipeline
           </a>
         </div>

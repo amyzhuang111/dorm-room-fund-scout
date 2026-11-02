@@ -20,7 +20,6 @@ function loadRecencyFunnel() {
 import { DataTheme } from "@/components/data-theme";
 import { CorpusRowMark } from "@/components/corpus-row-mark";
 import { CampusSeal } from "@/components/campus-seal";
-import { MobileListMast } from "@/components/mobile-list-mast";
 
 export const dynamic = "force-dynamic";
 
@@ -189,42 +188,29 @@ export default async function DataExplorerPage({
         </div>
       </form>
 
-      {/* r30 mobile: one list mast, then compact campus ranks. Desk header unchanged. */}
-      <div className="mt-3 sm:hidden" data-corpus-campus-ranks="">
-        <MobileListMast
-          kicker="Corpus on this page"
-          sealLabel={pageCampusRanks[0]?.label}
-          figure={result.total.toLocaleString("en-US")}
-          figureSuffix="companies"
-          takeaway={
-            pageCampusRanks[0]
-              ? `${pageCampusRanks[0].label} leads this page with ${pageCampusRanks[0].companies.toLocaleString("en-US")} rows · ${pageCampusRanks[0].signaled.toLocaleString("en-US")} signaled`
-              : `Page ${result.page} of ${result.pageCount.toLocaleString("en-US")} · ${result.rows.length.toLocaleString("en-US")} rows`
-          }
-          meta={`${pageCampusRanks.length.toLocaleString("en-US")} campuses on this page`}
-        />
-        {pageCampusRanks.length ? (
-          <ol className="mt-2 divide-y divide-[color:var(--line,#E1E5EF)] overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3.5">
-            {pageCampusRanks.map((row, i) => (
-              <li key={row.label} className="flex items-center gap-2.5 py-2.5">
-                <span className="w-5 shrink-0 text-right font-mono text-[14px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <CampusSeal label={row.label} size="md" />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
-                  <p className="font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                    <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
-                    {" cos"}
-                    <span aria-hidden> · </span>
-                    <span className="font-bold text-[color:var(--fg,#0B0E17)]">{row.signaled.toLocaleString("en-US")}</span>
-                    {" signaled"}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        ) : null}
+      {/* r48 mobile: desk-like table-first fold. Dense one-line lead; full ranks below table. */}
+      <div
+        className="mt-2 flex items-center gap-2.5 border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-2.5 py-2 sm:hidden"
+        data-corpus-campus-lead=""
+        data-mobile-list-mast=""
+      >
+        {pageCampusRanks[0] ? <CampusSeal label={pageCampusRanks[0].label} size="md" /> : null}
+        <div className="min-w-0 flex-1">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Corpus on this page</p>
+          <p className="mt-0.5 truncate font-mono text-[13px] tabular-nums text-[color:var(--fg,#0B0E17)]">
+            <span className="text-[18px] font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
+            {" companies"}
+            {pageCampusRanks[0] ? (
+              <>
+                {" · "}
+                <span className="font-semibold">{pageCampusRanks[0].label}</span>
+                {" leads · "}
+                <span className="font-bold">{pageCampusRanks[0].companies.toLocaleString("en-US")}</span>
+                {" rows"}
+              </>
+            ) : null}
+          </p>
+        </div>
       </div>
 
       {/* One table for all viewports: sticky Company + Campus + Stage core, horizontal scroll on mobile */}
@@ -293,6 +279,32 @@ export default async function DataExplorerPage({
             ) : null}
           </tbody>
         </table>
+      </div>
+
+      {/* r48: campus ranks after table so 375 fold shows rows (desk table-first). */}
+      <div className="mt-3 sm:hidden" data-corpus-campus-ranks="">
+        {pageCampusRanks.length ? (
+          <ol className="divide-y divide-[color:var(--line,#E1E5EF)] overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3.5">
+            {pageCampusRanks.map((row, i) => (
+              <li key={row.label} className="flex items-center gap-2.5 py-2.5">
+                <span className="w-5 shrink-0 text-right font-mono text-[14px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <CampusSeal label={row.label} size="md" />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
+                  <p className="font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
+                    {" cos"}
+                    <span aria-hidden> · </span>
+                    <span className="font-bold text-[color:var(--fg,#0B0E17)]">{row.signaled.toLocaleString("en-US")}</span>
+                    {" signaled"}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        ) : null}
       </div>
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">

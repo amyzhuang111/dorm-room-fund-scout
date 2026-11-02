@@ -1112,6 +1112,14 @@ html[data-sample="halflight"] body {
   [data-corpus-cards] .c-n {
     font-size: 14px;
   }
+  /* r48: single-line company names — avoids wrap self-collisions in card rows */
+  [data-corpus-cards] .c-a {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 @media (min-width: 640px) {

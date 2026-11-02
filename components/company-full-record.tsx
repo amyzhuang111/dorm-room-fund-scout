@@ -137,14 +137,36 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
 
   return (
     <section
-      className="relative mb-6 border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] pb-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] sm:mb-0"
+      className="relative mb-6 scroll-mt-16 border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] pb-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] sm:mb-0 sm:scroll-mt-0"
       data-company-full-record=""
     >
-      <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3.5 pl-4">
+      <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3 pl-4 sm:py-3.5">
         <p className="scout-kicker">Full record</p>
-        <p className="mt-1 text-[26px] font-bold leading-tight tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[24px]" data-full-record-title="">
+        <p className="mt-1 text-[28px] font-bold leading-[1.05] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[24px]" data-full-record-title="">
           {project.name || "Company"}
         </p>
+        {/* r48: desk Links action path — website CTA in the title band on mobile */}
+        {website ? (
+          <p className="mt-2 sm:hidden" data-full-record-scout-link="">
+            <a
+              href={website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-9 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[11px] font-semibold text-white"
+            >
+              Open website
+            </a>
+            {yc.length ? (
+              <span className="ml-2 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">
+                {yc.map((i) => [i.name, i.batch].filter(Boolean).join(" · ")).join(" · ")}
+              </span>
+            ) : null}
+          </p>
+        ) : yc.length ? (
+          <p className="mt-1.5 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)] sm:hidden" data-full-record-capital-peek="">
+            {yc.map((i) => [i.name, i.batch].filter(Boolean).join(" · ")).join(" · ")}
+          </p>
+        ) : null}
       </div>
 
       {/* Lead: mobile order keyStats → founders → pitch; desk keeps DOM founders → pitch → stats */}
@@ -216,8 +238,9 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
       ) : null}
       </div>
 
-      <div className="space-y-3 px-3.5 py-3.5 pl-4">
+      <div className="flex flex-col space-y-3 px-3.5 py-3 pl-4 sm:block sm:space-y-3 sm:py-3.5" data-full-record-groups="">
         {hasIdentity ? (
+          <div className="order-2 sm:order-none">
           <Group title="Identity">
             {/* Mobile: skip fields already shown in keyStats to cut empty repeat hierarchy */}
             {!isEmpty(campus) ? (
@@ -248,9 +271,11 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
               <Field label="Description">{profile.description?.text}</Field>
             ) : null}
           </Group>
+          </div>
         ) : null}
 
         {hasCapital ? (
+          <div className="order-1 sm:order-none" data-full-record-capital-first="">
           <Group title="Capital">
             {!isEmpty(funding) ? <Field label="Funding">{funding?.text}</Field> : null}
             {!isEmpty(profile.rounds) ? (
@@ -305,6 +330,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
               </Field>
             ) : null}
           </Group>
+          </div>
         ) : null}
 
         {hasLinks ? (

@@ -280,20 +280,23 @@ export function SampleCompanyShell({
         >
           <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)]" data-dossier-spread-mobile="">
             {/* Campus-first identity band · readable seal + real campus label */}
-            <div className="flex items-center gap-2.5 border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/40 px-3 py-2" data-dossier-campus-band="" data-mobile-list-mast="" data-full-record-identity="">
+            {/* r48: denser campus band so company name + peers earn fold (desk hierarchy). */}
+            <div className="flex items-center gap-2 border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/40 px-3 py-1.5" data-dossier-campus-band="" data-mobile-list-mast="" data-full-record-identity="">
               <CampusSeal
                 label={dossier?.schoolId ? shortCampusLabel(dossier.schoolId, dossier.campus ?? "") : dossier?.campus}
-                size="lg"
+                size="md"
               />
               <div className="min-w-0 flex-1">
-                <p className="m-kicker">Campus</p>
-                <p className="m-figure mt-1 !text-[28px]">
-                  {(dossier?.signals ?? 0) > 0 ? (dossier?.signals ?? 0).toLocaleString("en-US") : (wireCount > 0 ? wireCount.toLocaleString("en-US") : "0")}
-                  <span className="m-figure-sub ml-1.5">{(dossier?.signals ?? 0) > 0 ? "signals" : "on wire"}</span>
-                </p>
-                <p className="m-takeaway mt-1.5 truncate">
-                  {dossier?.campus || (dossier?.schoolId ? shortCampusLabel(dossier.schoolId, "") : "Campus not on record")}
-                  {dossier?.stage ? ` · ${dossier.stage}` : ""}
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Campus</p>
+                <p className="mt-0.5 flex flex-wrap items-baseline gap-x-2 font-mono text-[13px] tabular-nums text-[color:var(--fg,#0B0E17)]">
+                  <span className="text-[22px] font-bold leading-none text-[color:var(--cobalt,#2F4FD8)]">
+                    {(dossier?.signals ?? 0) > 0 ? (dossier?.signals ?? 0).toLocaleString("en-US") : (wireCount > 0 ? wireCount.toLocaleString("en-US") : "0")}
+                  </span>
+                  <span className="text-[11px] text-[color:var(--fg-3,#5C647A)]">{(dossier?.signals ?? 0) > 0 ? "signals" : "on wire"}</span>
+                  <span className="truncate font-semibold text-[color:var(--fg,#0B0E17)]">
+                    {dossier?.campus || (dossier?.schoolId ? shortCampusLabel(dossier.schoolId, "") : "Campus not on record")}
+                    {dossier?.stage ? ` · ${dossier.stage}` : ""}
+                  </span>
                 </p>
               </div>
             </div>
@@ -309,7 +312,7 @@ export function SampleCompanyShell({
               </div>
               <div className="min-w-0 flex-1">
                 <p className="scout-kicker">Scout dossier</p>
-                <p className="mt-0.5 text-[24px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)]" data-company-name-lead="">
+                <p className="mt-0.5 text-[26px] font-bold leading-[1.02] tracking-tight text-[color:var(--fg,#0B0E17)]" data-company-name-lead="">
                   {dossier?.name ?? "Company"}
                 </p>
                 {dossier?.pitch ? (
@@ -387,7 +390,7 @@ export function SampleCompanyShell({
                 const selfId = dossier?.id;
                 const self = selfId ? scored.find((c) => c.id === selfId) : undefined;
                 const others = scored.filter((c) => c.id !== selfId);
-                const rows = (self ? [self, ...others] : others).slice(0, 3);
+                const rows = (self ? [self, ...others] : others).slice(0, 6);
                 const dates = rows.map((c) => (c.latestSignalAt ?? "").replace(/-00/g, "")).filter(Boolean);
                 const unique = new Set(dates);
                 const scrapeOnly = unique.size <= 1 && dates.length >= 2;
