@@ -1,0 +1,3833 @@
+{
+  "generated": "2026-09-28",
+  "last_verified": "2026-08-04",
+  "license": "CC BY 4.0",
+  "source": "https://github.com/notjosh37/UBC-techmap",
+  "counts": {
+    "total": 235,
+    "startups": 74,
+    "funding": 9,
+    "programs": 9,
+    "clubs": 23,
+    "labs": 99,
+    "events": 21,
+    "studentAlumni": 33,
+    "research": 41
+  },
+  "startups": [
+    {
+      "name": "3C Therapeutics",
+      "one_liner": "Degrader-antibody conjugate therapeutics for cancer, out of UBC Chemistry.",
+      "vertical": "health",
+      "stage": "unknown",
+      "founded_year": 2025,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.3ctherapeutics.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "oncology",
+        "therapeutics"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "AbCellera",
+      "one_liner": "Antibody discovery platform that searches natural immune systems to find therapeutic antibodies.",
+      "vertical": "health",
+      "stage": "public",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.abcellera.com/",
+      "linkedin": "https://www.linkedin.com/company/abcellera",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "antibodies",
+        "drug discovery"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/june-06-2025/lab-market-spotlight-abcellera"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/june-06-2025/lab-market-spotlight-abcellera"
+    },
+    {
+      "name": "Acuitas Therapeutics",
+      "one_liner": "Lipid nanoparticle delivery systems for nucleic acid therapeutics, including mRNA vaccines.",
+      "vertical": "health",
+      "stage": "unknown",
+      "founded_year": 2009,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.acuitastx.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "lnp",
+        "drug delivery"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://lsi.ubc.ca/partnerships-innovation/our-spinoffs/"
+      ],
+      "source_note": "source: https://lsi.ubc.ca/partnerships-innovation/our-spinoffs/"
+    },
+    {
+      "name": "Aeon Health",
+      "one_liner": "Electronic medical records platform built for Canadian primary care clinics.",
+      "vertical": "health",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://www.aeon.health",
+      "linkedin": "https://www.linkedin.com/company/aeon-health",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "emr",
+        "digital health",
+        "saas"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.sauder.ubc.ca/news/school-news/ubc-sauder-alum-and-clio-co-founder-wins-2025-alumni-ubc-achievement-award",
+        "https://www.aeon.health/about"
+      ],
+      "source_note": "source: https://www.sauder.ubc.ca/news/school-news/ubc-sauder-alum-and-clio-co-founder-wins-2025-alumni-ubc-achievement-award\n  (co-founder Rian Gauvreau, UBC Sauder MBA '11, named as co-founder of Clio and Aeon Health)\nsource: https://www.aeon.health/about"
+    },
+    {
+      "name": "AfterQuery",
+      "one_liner": "Builds post-training, RLHF and benchmark datasets used to train frontier AI models.",
+      "vertical": "ai_infra",
+      "stage": "seed",
+      "founded_year": 2025,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "student_founded",
+      "website": "https://afterquery.com",
+      "student_founded": true,
+      "hiring": false,
+      "tags": [
+        "ai",
+        "training data",
+        "benchmarks"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ycombinator.com/companies/afterquery"
+      ],
+      "source_note": "source: https://www.ycombinator.com/companies/afterquery\n  (co-founder Carlos Georgescu, B.S. Computer Science, University of British Columbia; company founded 2025)"
+    },
+    {
+      "name": "Agora Energy Technologies",
+      "one_liner": "Redox flow battery that stores energy while consuming carbon dioxide as part of the cycle.",
+      "vertical": "climate",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "licensed_ip",
+      "website": "https://agoraenergy.ca/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "energy storage",
+        "carbon",
+        "hardware"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "Arca",
+      "one_liner": "Carbon mineralization technology that stores atmospheric CO2 in alkaline mine tailings.",
+      "vertical": "climate",
+      "stage": "seed",
+      "founded_year": 2022,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://arcaclimate.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "carbon removal",
+        "mining",
+        "climate"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/june-06-2025/lab-market-spotlight-arca",
+        "https://news.ubc.ca/2025/12/ubc-spinoff-companies-tackle-climate-change-and-drive-economic-growth/"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/june-06-2025/lab-market-spotlight-arca\nsource: https://news.ubc.ca/2025/12/ubc-spinoff-companies-tackle-climate-change-and-drive-economic-growth/"
+    },
+    {
+      "name": "Arga Labs",
+      "one_liner": "Sandbox environments with simulated third-party services for testing AI agents and agent-facing software.",
+      "vertical": "ai_infra",
+      "stage": "seed",
+      "founded_year": 2025,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "student_founded",
+      "website": "https://www.argalabs.com",
+      "linkedin": "https://www.linkedin.com/company/arga-labs",
+      "student_founded": true,
+      "hiring": false,
+      "tags": [
+        "ai agents",
+        "developer tools",
+        "testing"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ycombinator.com/companies/arga-labs"
+      ],
+      "source_note": "source: https://www.ycombinator.com/companies/arga-labs\n  (co-founders Phillip Li and Akira Tong met in first-year calculus at UBC; Li left UBC Cognitive Systems\n  and Data Science to build Arga Labs)"
+    },
+    {
+      "name": "Arrowsmith Genetics",
+      "one_liner": "Preclinical precision oncology company using genetics to broaden the therapeutic target repertoire.",
+      "vertical": "health",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://arrowsmithgenetics.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "oncology",
+        "genetics"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "ARTMS",
+      "one_liner": "Cyclotron-based system letting hospitals produce medical imaging isotopes on site.",
+      "vertical": "health",
+      "stage": "acquired",
+      "founded_year": 2016,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "licensed_ip",
+      "website": "https://www.artms.ca",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "medical isotopes",
+        "triumf",
+        "hardware"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.triumfinnovations.ca/spin-off-companies"
+      ],
+      "source_note": "source: https://www.triumfinnovations.ca/spin-off-companies"
+    },
+    {
+      "name": "Aspect Biosystems",
+      "one_liner": "Bioprinted tissue therapeutics, combining microfluidics and therapeutic cells to build living tissues.",
+      "vertical": "health",
+      "stage": "growth",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.aspectbiosystems.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "bioprinting",
+        "diabetes"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/june-06-2025/lab-market-spotlight-aspect-biosystems"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/june-06-2025/lab-market-spotlight-aspect-biosystems"
+    },
+    {
+      "name": "Awake Labs",
+      "one_liner": "Wearable that tracks heart rate and skin signals to flag rising anxiety in people with developmental disabilities.",
+      "vertical": "health",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "student_founded",
+      "website": "https://www.awakelabs.com",
+      "student_founded": true,
+      "hiring": false,
+      "tags": [
+        "wearables",
+        "digital health",
+        "accessibility"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://mech.ubc.ca/2016/09/21/mech-alumni-andrea-palmer-receives-startup-canadas-young-entrepreneur-award/"
+      ],
+      "source_note": "source: https://mech.ubc.ca/2016/09/21/mech-alumni-andrea-palmer-receives-startup-canadas-young-entrepreneur-award/\n  (co-founder Andrea Palmer graduated UBC Mechanical Engineering in 2015; venture came out of a UBC Sauder\n  New Venture Design class, co-founder Paul Fijal also a UBC engineering graduate)"
+    },
+    {
+      "name": "Baerfell Advanced Materials",
+      "one_liner": "Bio-based insulation for outerwear and packaging, developed in UBC Forestry.",
+      "vertical": "hardware",
+      "stage": "unknown",
+      "founded_year": 2025,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.baerfell.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "materials",
+        "forestry",
+        "sustainability"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "BBTV",
+      "one_liner": "Media company with a technology platform for digital video creators, covering distribution and monetization.",
+      "vertical": "consumer",
+      "stage": "public",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://www.bbtv.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "media",
+        "creator economy"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.cs.ubc.ca/spin-off-companies"
+      ],
+      "source_note": "source: https://www.cs.ubc.ca/spin-off-companies"
+    },
+    {
+      "name": "Bench Accounting",
+      "one_liner": "Online bookkeeping service pairing software with human bookkeepers for small businesses.",
+      "vertical": "fintech",
+      "stage": "acquired",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://bench.co",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "bookkeeping",
+        "accounting",
+        "smb"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.sauder.ubc.ca/news/sauder-alum-makes-forbes-30-under-30",
+        "https://www.bctechnology.com/news/2025/1/8/VC-backed-Startup-Bench-Acquired-by-Employer.com-After-Abrupt-Shutdown.cfm"
+      ],
+      "source_note": "source: https://www.sauder.ubc.ca/news/sauder-alum-makes-forbes-30-under-30\n  (co-founder and CEO Ian Crosby, UBC Sauder School of Business)\nsource: https://www.bctechnology.com/news/2025/1/8/VC-backed-Startup-Bench-Acquired-by-Employer.com-After-Abrupt-Shutdown.cfm\n  (acquired by Employer.com; service continues to operate)"
+    },
+    {
+      "name": "Bild AI",
+      "one_liner": "Reads construction blueprints and specs to generate door and hardware schedules and price bids.",
+      "vertical": "ai_application",
+      "stage": "seed",
+      "founded_year": 2024,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "student_founded",
+      "website": "https://www.bild.ai",
+      "linkedin": "https://www.linkedin.com/company/bild-ai",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "construction",
+        "ai",
+        "estimating"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ycombinator.com/companies/bild-ai"
+      ],
+      "source_note": "source: https://www.ycombinator.com/companies/bild-ai\n  (co-founder Puneet Sukhija \"Dropped out of CS at University of British Columbia\"; company founded 2024)"
+    },
+    {
+      "name": "Boast",
+      "one_liner": "Software and review service that prepares R&D tax credit claims for technology companies.",
+      "vertical": "fintech",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://boast.ai",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "tax credits",
+        "fintech",
+        "saas"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://central.cvca.ca/cvca-member-profiles/new-member-profile-boast-ai/"
+      ],
+      "source_note": "source: https://central.cvca.ca/cvca-member-profiles/new-member-profile-boast-ai/\n  (co-founder Alex Popa holds a Postgraduate Diploma in Accounting from the University of British Columbia)"
+    },
+    {
+      "name": "Bolster",
+      "one_liner": "Quoting and project management platform for residential contractors, built on an itemized cost database.",
+      "vertical": "enterprise_saas",
+      "stage": "series_a",
+      "founded_year": 2015,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://bolsterbuilt.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "construction",
+        "marketplace",
+        "quoting"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ycombinator.com/companies/bolster"
+      ],
+      "source_note": "source: https://www.ycombinator.com/companies/bolster\n  (founder Mike Bignold \"has a BMgt from University of British Columbia (Okanagan)\"; founded 2015, YC S21)"
+    },
+    {
+      "name": "Broadsight Technology",
+      "one_liner": "Information technology spin-off building tracking software, listed in the UBC venture portfolio.",
+      "vertical": "enterprise_saas",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.broadsighttracker.ca/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "saas"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "Carbonyx Minerals",
+      "one_liner": "Reactor systems that convert industrial waste and CO2 into industrial materials.",
+      "vertical": "climate",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.carbonyx.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "carbon removal",
+        "materials"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://news.ubc.ca/2025/12/ubc-spinoff-companies-tackle-climate-change-and-drive-economic-growth/",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://news.ubc.ca/2025/12/ubc-spinoff-companies-tackle-climate-change-and-drive-economic-growth/\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "CereCura Nanotherapeutics",
+      "one_liner": "Lipid nanoparticle RNA therapeutics targeted at neurological disease.",
+      "vertical": "health",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://cerecura.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "neuroscience",
+        "lnp"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025",
+        "https://cerecura.com"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025\nsource: https://cerecura.com (Vancouver BC, LNP-RNA neurological therapeutics)"
+    },
+    {
+      "name": "Circleback",
+      "one_liner": "AI meeting notetaker that produces summaries and action items from calls.",
+      "vertical": "ai_application",
+      "stage": "seed",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://circleback.ai",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "ai",
+        "productivity",
+        "saas"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.cs.ubc.ca/news/2024/03/technology-accelerator-invests-500k-cs-alums-start"
+      ],
+      "source_note": "source: https://www.cs.ubc.ca/news/2024/03/technology-accelerator-invests-500k-cs-alums-start"
+    },
+    {
+      "name": "Clio",
+      "one_liner": "Cloud practice management, billing and client intake software for law firms.",
+      "vertical": "enterprise_saas",
+      "stage": "growth",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://www.clio.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "legaltech",
+        "saas",
+        "practice management"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.sauder.ubc.ca/news/school-news/ubc-sauder-alum-and-clio-co-founder-wins-2025-alumni-ubc-achievement-award"
+      ],
+      "source_note": "source: https://www.sauder.ubc.ca/news/school-news/ubc-sauder-alum-and-clio-co-founder-wins-2025-alumni-ubc-achievement-award\n  (co-founder Rian Gauvreau, UBC Sauder MBA '11, receives 2025 alumni UBC Achievement Award for Entrepreneurship)"
+    },
+    {
+      "name": "Conexeu Sciences",
+      "one_liner": "Collagen-based extracellular matrix scaffold for tissue regeneration in wound care and oral health.",
+      "vertical": "health",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "licensed_ip",
+      "website": "https://conexeu.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "regenerative medicine"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies",
+        "https://conexeu.com"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies\nsource: https://conexeu.com (co-founder Dr. Claudia Chavez-Munoz, PhD Experimental Medicine, UBC)"
+    },
+    {
+      "name": "Cura Climate",
+      "one_liner": "Electrochemical system that splits limestone to cut CO2 emissions from cement production.",
+      "vertical": "climate",
+      "stage": "unknown",
+      "founded_year": 2025,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://curaclimate.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "cement",
+        "decarbonization",
+        "electrochemistry"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://news.ubc.ca/2025/12/ubc-spinoff-companies-tackle-climate-change-and-drive-economic-growth/",
+        "https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall"
+      ],
+      "source_note": "source: https://news.ubc.ca/2025/12/ubc-spinoff-companies-tackle-climate-change-and-drive-economic-growth/\nsource: https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall"
+    },
+    {
+      "name": "D-Wave Quantum",
+      "one_liner": "Builds quantum annealing computers and sells cloud access to them, alongside gate-model research systems.",
+      "vertical": "deep_tech",
+      "stage": "public",
+      "founded_year": 1999,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://www.dwavequantum.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "quantum computing",
+        "hardware",
+        "deep tech"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://en.wikipedia.org/wiki/D-Wave_Systems"
+      ],
+      "source_note": "source: https://en.wikipedia.org/wiki/D-Wave_Systems\n  (\"Farris taught a business course at the University of British Columbia (UBC), where Rose obtained his PhD,\n  and Zagoskin was a postdoctoral fellow\"; co-founder Geordie Rose holds a UBC PhD in theoretical physics)"
+    },
+    {
+      "name": "DYNE Technologies",
+      "one_liner": "Customer data and machine learning analytics platform restaurants use to automate marketing and pricing.",
+      "vertical": "ai_application",
+      "stage": "seed",
+      "founded_year": 2021,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "student_founded",
+      "website": "https://dyne.app",
+      "student_founded": true,
+      "hiring": false,
+      "tags": [
+        "restaurants",
+        "machine learning",
+        "marketing"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.sauder.ubc.ca/news/school-news/dining-out-and-scaling-story-dyne",
+        "https://innovation.ubc.ca/news/june-06-2023/congratulations-7-ventures-who-have-graduated-hatch-summer"
+      ],
+      "source_note": "source: https://www.sauder.ubc.ca/news/school-news/dining-out-and-scaling-story-dyne\n  (\"UBC Sauder Bachelor of Commerce student Arnav Mishra\" founded DYNE in 2021 while enrolled)\nsource: https://innovation.ubc.ca/news/june-06-2023/congratulations-7-ventures-who-have-graduated-hatch-summer"
+    },
+    {
+      "name": "enGene",
+      "one_liner": "Non-viral gene delivery to mucosal tissue, in clinical development for bladder cancer.",
+      "vertical": "health",
+      "stage": "public",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.engene.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "gene therapy"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://lsi.ubc.ca/partnerships-innovation/our-spinoffs/"
+      ],
+      "source_note": "source: https://lsi.ubc.ca/partnerships-innovation/our-spinoffs/"
+    },
+    {
+      "name": "Fibernx Technology",
+      "one_liner": "Customizable, lower-impact carbon fibre for industrial manufacturers.",
+      "vertical": "hardware",
+      "stage": "unknown",
+      "founded_year": 2025,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.fibernxtech.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "materials",
+        "manufacturing"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "Formme",
+      "one_liner": "Platform that connects fashion brands with clothing manufacturers and manages design, production and launch.",
+      "vertical": "enterprise_saas",
+      "stage": "pre_seed",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "student_founded",
+      "website": "https://formme.io",
+      "student_founded": true,
+      "hiring": false,
+      "tags": [
+        "fashion",
+        "manufacturing",
+        "marketplace"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/february-02-2026/meet-51st-venture-founder-cohort"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/february-02-2026/meet-51st-venture-founder-cohort\n  (Formme listed in UBC's 51st Venture Founder cohort, a program open only to UBC students, grad students,\n  postdocs and faculty; co-founder Mira Sehgal's public profile lists UBC)"
+    },
+    {
+      "name": "Fresh Prep",
+      "one_liner": "Meal kit subscription delivering pre-prepped ingredients in reusable packaging.",
+      "vertical": "consumer",
+      "stage": "growth",
+      "founded_year": 2015,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://www.freshprep.ca",
+      "student_founded": true,
+      "hiring": false,
+      "tags": [
+        "meal kits",
+        "dtc",
+        "food"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://magazine.alumni.ubc.ca/2020/webcasts/virtual-cooking-class-fresh-prep",
+        "https://alumni.ubc.ca/services/savings/fresh-prep/"
+      ],
+      "source_note": "source: https://magazine.alumni.ubc.ca/2020/webcasts/virtual-cooking-class-fresh-prep\n  (\"Founded in 2015 by Becky Brauer, Dhruv Sood, BCom'13, and Husein Rahemtulla, BA'13\")\nsource: https://alumni.ubc.ca/services/savings/fresh-prep/"
+    },
+    {
+      "name": "HeadCheck Health",
+      "one_liner": "Software sports organizations use to run concussion assessments and track athlete return-to-play.",
+      "vertical": "health",
+      "stage": "unknown",
+      "founded_year": 2012,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "student_founded",
+      "website": "https://www.headcheckhealth.com",
+      "student_founded": true,
+      "hiring": false,
+      "tags": [
+        "concussion",
+        "sports",
+        "digital health"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://balancefalls.ubc.ca/about-us/researchers/harrison-brown",
+        "https://www.headcheckhealth.com/about-us"
+      ],
+      "source_note": "source: https://balancefalls.ubc.ca/about-us/researchers/harrison-brown\n  (co-founder and CEO Harrison Brown built HeadCheck during his MSc and PhD at UBC's School of Kinesiology)\nsource: https://www.headcheckhealth.com/about-us"
+    },
+    {
+      "name": "Ideon Technologies",
+      "one_liner": "Cosmic-ray muon tomography that images mineral deposits up to a kilometre underground.",
+      "vertical": "deep_tech",
+      "stage": "unknown",
+      "founded_year": 2018,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "licensed_ip",
+      "website": "https://ideon.ai",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "mining",
+        "imaging",
+        "triumf"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.triumfinnovations.ca/spin-off-companies"
+      ],
+      "source_note": "source: https://www.triumfinnovations.ca/spin-off-companies"
+    },
+    {
+      "name": "IKOMED Technologies",
+      "one_liner": "AI-guided X-ray shuttering that reduces radiation dose during image-guided surgery.",
+      "vertical": "health",
+      "stage": "unknown",
+      "founded_year": 2010,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "licensed_ip",
+      "website": "https://www.ikomed.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "medtech",
+        "imaging",
+        "triumf"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.triumfinnovations.ca/spin-off-companies"
+      ],
+      "source_note": "source: https://www.triumfinnovations.ca/spin-off-companies"
+    },
+    {
+      "name": "ImageCyte Technologies",
+      "one_liner": "Nanowell-based instruments for single-cell imaging and analysis in research labs.",
+      "vertical": "health",
+      "stage": "unknown",
+      "founded_year": 2025,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.imagecyte.bio/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "life sciences",
+        "instruments"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "Inverted AI",
+      "one_liner": "Predictive modelling of human road-user behaviour for testing self-driving vehicles.",
+      "vertical": "ai_infra",
+      "stage": "unknown",
+      "founded_year": 2018,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.inverted.ai",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "ai",
+        "simulation",
+        "autonomous vehicles"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.cs.ubc.ca/spin-off-companies"
+      ],
+      "source_note": "source: https://www.cs.ubc.ca/spin-off-companies"
+    },
+    {
+      "name": "Klue",
+      "one_liner": "Competitive intelligence platform that collects rival product and pricing data for sales teams.",
+      "vertical": "enterprise_saas",
+      "stage": "growth",
+      "founded_year": 2015,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://klue.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "competitive intelligence",
+        "saas",
+        "sales"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://klue.com/about",
+        "https://ca.linkedin.com/in/onemoresmith"
+      ],
+      "source_note": "source: https://klue.com/about (founded 2015 by Jason Smith and Sarathy Naicker)\nsource: https://ca.linkedin.com/in/onemoresmith (co-founder and CEO Jason Smith, UBC Sauder School of Business)"
+    },
+    {
+      "name": "Later",
+      "one_liner": "Social media scheduling and influencer marketing platform for brands and creators.",
+      "vertical": "enterprise_saas",
+      "stage": "growth",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://later.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "social media",
+        "marketing",
+        "creator economy"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://ca.linkedin.com/in/mattrsmith"
+      ],
+      "source_note": "source: https://ca.linkedin.com/in/mattrsmith\n  (co-founder Matt Smith lists The University of British Columbia as his education; also co-founded Thinkific)"
+    },
+    {
+      "name": "Mangrove Lithium",
+      "one_liner": "Electrochemical refining that converts raw lithium feedstocks into battery-grade lithium chemicals.",
+      "vertical": "climate",
+      "stage": "growth",
+      "founded_year": 2013,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.mangrovelithium.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "lithium",
+        "batteries",
+        "electrochemistry"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://news.ubc.ca/2025/12/ubc-spinoff-companies-tackle-climate-change-and-drive-economic-growth/",
+        "https://chbe.ubc.ca/news/2025/mangrove-lithium-secures-50-4m-to-construct-lithium-refining-plant-in-bc/"
+      ],
+      "source_note": "source: https://news.ubc.ca/2025/12/ubc-spinoff-companies-tackle-climate-change-and-drive-economic-growth/\nsource: https://chbe.ubc.ca/news/2025/mangrove-lithium-secures-50-4m-to-construct-lithium-refining-plant-in-bc/"
+    },
+    {
+      "name": "ME Therapeutics",
+      "one_liner": "Biologic and small molecule drugs targeting cancer-induced immune suppression.",
+      "vertical": "health",
+      "stage": "public",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://metherapeutics.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "immuno-oncology"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://lsi.ubc.ca/partnerships-innovation/our-spinoffs/"
+      ],
+      "source_note": "source: https://lsi.ubc.ca/partnerships-innovation/our-spinoffs/"
+    },
+    {
+      "name": "Melius Microbiomics",
+      "one_liner": "Uses genetic material from beneficial bacteria to build microbiome therapies for gut health.",
+      "vertical": "synbio",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.mmblivebio.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "microbiome",
+        "biotech"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "Mesintel Therapeutics",
+      "one_liner": "Human health spin-off developing therapeutics, listed in the UBC spin-off portfolio.",
+      "vertical": "health",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "licensed_ip",
+      "website": "https://mesintel.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "Metastem Therapeutics",
+      "one_liner": "Tumour-targeting antibody-drug conjugates for cancer treatment.",
+      "vertical": "health",
+      "stage": "unknown",
+      "founded_year": 2025,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://metastem.bio/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "oncology"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "Micromatter Technologies",
+      "one_liner": "Thin carbon foils, accelerator targets and X-ray fluorescence calibration standards.",
+      "vertical": "hardware",
+      "stage": "unknown",
+      "founded_year": 2015,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "licensed_ip",
+      "website": "https://www.micromatter.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "materials",
+        "instruments",
+        "triumf"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.triumfinnovations.ca/spin-off-companies"
+      ],
+      "source_note": "source: https://www.triumfinnovations.ca/spin-off-companies"
+    },
+    {
+      "name": "Molecular You",
+      "one_liner": "Combines molecular marker analysis with data analytics to profile individual health.",
+      "vertical": "health",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.molecularyou.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "precision health",
+        "diagnostics"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://lsi.ubc.ca/partnerships-innovation/our-spinoffs/"
+      ],
+      "source_note": "source: https://lsi.ubc.ca/partnerships-innovation/our-spinoffs/"
+    },
+    {
+      "name": "MycoFoundry",
+      "one_liner": "Mycelium-based materials for the built environment, including acoustic panels and furniture.",
+      "vertical": "climate",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://www.mycofoundry.ca/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "materials",
+        "biomaterials"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies",
+        "https://www.mycofoundry.ca"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies\nsource: https://www.mycofoundry.ca"
+    },
+    {
+      "name": "NanoVation Therapeutics",
+      "one_liner": "Lipid nanoparticles that deliver genetic medicines to targeted tissues in the body.",
+      "vertical": "health",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://nanovationtx.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "lnp",
+        "gene therapy"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "Nototo",
+      "one_liner": "Note and knowledge workspace that lays information out on a zoomable spatial map instead of folders.",
+      "vertical": "enterprise_saas",
+      "stage": "seed",
+      "founded_year": 2019,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://nototo.app",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "notes",
+        "productivity",
+        "saas"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ycombinator.com/companies/nototo",
+        "https://nocap.blog/founder/chen-wang/"
+      ],
+      "source_note": "source: https://www.ycombinator.com/companies/nototo (founded 2019 by Austa Jiang and Chen Wang, Vancouver)\nsource: https://nocap.blog/founder/chen-wang/ (\"both he and his co-founder Austa Jiang graduated from UBC\")"
+    },
+    {
+      "name": "Novarc Technologies",
+      "one_liner": "Collaborative welding robots and AI vision software for pipe spool and industrial welding shops.",
+      "vertical": "hardware",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://novarctech.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "robotics",
+        "welding",
+        "automation"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://ca.linkedin.com/in/soroushkarimzadeh",
+        "https://novarctech.com/company/team/"
+      ],
+      "source_note": "source: https://ca.linkedin.com/in/soroushkarimzadeh\n  (co-founder and CEO Soroush Karimzadeh holds an MBA in Strategy and Finance from the University of British Columbia)\nsource: https://novarctech.com/company/team/"
+    },
+    {
+      "name": "nPhyla Technologies",
+      "one_liner": "AI-enabled DNA platform that accelerates microbial solutions for mining.",
+      "vertical": "climate",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.nphyla.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "mining",
+        "biotech",
+        "ai"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "Nytilus",
+      "one_liner": "Converts a smartphone into an industrial inspection camera.",
+      "vertical": "hardware",
+      "stage": "unknown",
+      "founded_year": 2017,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://nytilus.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "imaging",
+        "industrial"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.cs.ubc.ca/spin-off-companies"
+      ],
+      "source_note": "source: https://www.cs.ubc.ca/spin-off-companies"
+    },
+    {
+      "name": "Peptidisc Lab",
+      "one_liner": "Captures membrane proteins in water-soluble peptidiscs for protein research and antibody development.",
+      "vertical": "health",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://peptidisc.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "life sciences",
+        "reagents"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://lsi.ubc.ca/partnerships-innovation/our-spinoffs/"
+      ],
+      "source_note": "source: https://lsi.ubc.ca/partnerships-innovation/our-spinoffs/"
+    },
+    {
+      "name": "Promirin Therapeutics",
+      "one_liner": "Personalized nucleic acid treatments for difficult-to-treat tumours.",
+      "vertical": "health",
+      "stage": "unknown",
+      "founded_year": 2025,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://promirin.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "oncology",
+        "rna"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "Resolve Nanotherapeutics",
+      "one_liner": "Nanotherapeutics that boost innate immunity for treating acute infection.",
+      "vertical": "health",
+      "stage": "unknown",
+      "founded_year": 2025,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://resolventx.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "infectious disease"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "Sanctuary AI",
+      "one_liner": "General-purpose humanoid robots and the control software that teaches them manual work tasks.",
+      "vertical": "deep_tech",
+      "stage": "growth",
+      "founded_year": 2018,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://www.sanctuary.ai",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "robotics",
+        "humanoid",
+        "ai"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.bctechnology.com/news/2024/4/10/Sanctuary-AI-CEO-Geordie-Rose-Releases-Company-and-Team-Update.cfm"
+      ],
+      "source_note": "source: https://www.bctechnology.com/news/2024/4/10/Sanctuary-AI-CEO-Geordie-Rose-Releases-Company-and-Team-Update.cfm\n  (\"Geordie Rose co-founded Sanctuary in 2018\"; Rose holds a PhD in theoretical physics from UBC)"
+    },
+    {
+      "name": "Semios",
+      "one_liner": "In-orchard sensor network and software for pest, frost and irrigation management in tree fruit, nuts and grapes.",
+      "vertical": "climate",
+      "stage": "growth",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://semios.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "agtech",
+        "iot",
+        "precision agriculture"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://theorg.com/org/semios/org-chart/michael-gilbert-1",
+        "https://semios.com/about/"
+      ],
+      "source_note": "source: https://theorg.com/org/semios/org-chart/michael-gilbert-1\n  (founder and CEO Michael Gilbert, PhD in Medicinal Organic Chemistry, University of British Columbia)\nsource: https://semios.com/about/"
+    },
+    {
+      "name": "SeraGene Therapeutics",
+      "one_liner": "siRNA and nanomedicine technologies for treating coagulation disorders.",
+      "vertical": "health",
+      "stage": "unknown",
+      "founded_year": 2025,
+      "campus_zone": "medicine",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://seragenetx.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "rna"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall",
+        "https://seragenetx.com"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/october-10-2025/ubc-announces-10-new-spin-offs-fall\nsource: https://seragenetx.com (offices at 2405 Wesbrook Mall on UBC campus)"
+    },
+    {
+      "name": "Sinedore",
+      "one_liner": "Needle-free delivery platform for advanced therapies, without pain, refrigeration or injections.",
+      "vertical": "health",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://sinedorebio.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "drug delivery"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "Skylab Technologies",
+      "one_liner": "Machine learning image retouching delivered as an API for photography workflows.",
+      "vertical": "ai_application",
+      "stage": "unknown",
+      "founded_year": 2019,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://skylabtech.ai",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "ai",
+        "imaging",
+        "api"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.cs.ubc.ca/spin-off-companies"
+      ],
+      "source_note": "source: https://www.cs.ubc.ca/spin-off-companies"
+    },
+    {
+      "name": "Sonic Incytes",
+      "one_liner": "Handheld ultrasound system that measures liver fat and stiffness at the point of care.",
+      "vertical": "health",
+      "stage": "unknown",
+      "founded_year": 2017,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "student_founded",
+      "website": "https://www.sonicincytes.com",
+      "student_founded": true,
+      "hiring": false,
+      "tags": [
+        "ultrasound",
+        "liver",
+        "medtech"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.sonicincytes.com/about-us/",
+        "https://ieeexplore.ieee.org/author/38667285200"
+      ],
+      "source_note": "source: https://www.sonicincytes.com/about-us/ (founded 2017 in Vancouver)\nsource: https://ieeexplore.ieee.org/author/38667285200\n  (founder Caitlin Schneider earned MASc and PhD in electrical engineering from UBC in 2011 and 2017)"
+    },
+    {
+      "name": "Sora Fuel",
+      "one_liner": "Makes jet fuel from air, water and renewable energy as a carbon-negative drop-in fuel.",
+      "vertical": "climate",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.sorafuel.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "sustainable aviation fuel",
+        "electrochemistry"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "Spare",
+      "one_liner": "Mobility management platform for planning and operating on-demand transit services.",
+      "vertical": "enterprise_saas",
+      "stage": "growth",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://www.spare.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "transit",
+        "saas",
+        "mobility"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.cs.ubc.ca/spin-off-companies"
+      ],
+      "source_note": "source: https://www.cs.ubc.ca/spin-off-companies"
+    },
+    {
+      "name": "Sustainable Bioproduct Innovations",
+      "one_liner": "Plant-based fat substitute made from chia seed, sold as an ingredient to food manufacturers.",
+      "vertical": "climate",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://sbinnovations.net",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "foodtech",
+        "ingredients"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025",
+        "https://sbinnovations.net"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/news/may-05-2025/meet-15-new-ubc-spinoffs-20242025\nsource: https://sbinnovations.net (Board Chair Prof. Anubhav Pratap-Singh, UBC Land and Food Systems)"
+    },
+    {
+      "name": "Terramera",
+      "one_liner": "Plant-derived crop inputs designed with machine learning to cut synthetic pesticide use.",
+      "vertical": "climate",
+      "stage": "growth",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://terramera.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "agtech",
+        "green chemistry",
+        "machine learning"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.marketscreener.com/insider/KARN-MANHAS-A218WY/",
+        "https://www.terramera.com/company/team/karn-manhas"
+      ],
+      "source_note": "source: https://www.marketscreener.com/insider/KARN-MANHAS-A218WY/\n  (founder Karn Manhas \"completed undergraduate education at McGill University and graduate education at\n  the University of British Columbia\")\nsource: https://www.terramera.com/company/team/karn-manhas"
+    },
+    {
+      "name": "Thinkific",
+      "one_liner": "Platform for creating, hosting and selling online courses and memberships under your own brand.",
+      "vertical": "enterprise_saas",
+      "stage": "public",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://www.thinkific.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "edtech",
+        "creator economy",
+        "saas"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.thinkific.com/press/"
+      ],
+      "source_note": "source: https://www.thinkific.com/press/\n  (\"Greg holds a BCom and LLB from the University of British Columbia\"; co-founder Matt Smith also UBC)"
+    },
+    {
+      "name": "Tydra Labs",
+      "one_liner": "Hardware and manufacturing spin-off developing biomaterials, formerly Fibr.Bio.",
+      "vertical": "synbio",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.tydralabs.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biomaterials"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "ViroCarb",
+      "one_liner": "Developing broad-spectrum antiviral therapy for treating viral infections.",
+      "vertical": "health",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "licensed_ip",
+      "website": "https://virocarb.com/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "antivirals"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies",
+        "https://virocarb.com"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies\nsource: https://virocarb.com"
+    },
+    {
+      "name": "Visier",
+      "one_liner": "People analytics platform giving HR and business leaders workforce metrics and benchmarks.",
+      "vertical": "enterprise_saas",
+      "stage": "growth",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://www.visier.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "saas",
+        "hr",
+        "analytics"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.cs.ubc.ca/spin-off-companies"
+      ],
+      "source_note": "source: https://www.cs.ubc.ca/spin-off-companies"
+    },
+    {
+      "name": "Vital Mechanics",
+      "one_liner": "Biomechanics simulation of how human soft tissue moves and deforms, used in apparel and VFX.",
+      "vertical": "deep_tech",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://www.vitalmechanics.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "simulation",
+        "graphics",
+        "apparel"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.cs.ubc.ca/spin-off-companies"
+      ],
+      "source_note": "source: https://www.cs.ubc.ca/spin-off-companies"
+    },
+    {
+      "name": "Vitalis",
+      "one_liner": "Designs and manufactures industrial CO2 heat pumps, chillers and supercritical CO2 extraction systems.",
+      "vertical": "climate",
+      "stage": "unknown",
+      "founded_year": 2016,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://www.vitalis.ca",
+      "linkedin": "https://www.linkedin.com/company/vitalis-co2-cleantech",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "co2",
+        "heat pumps",
+        "cleantech"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://apsc.ubc.ca/profile/james-seabrook",
+        "https://news.ubc.ca/2026/06/a-made-in-bc-heat-pump-with-global-impact/"
+      ],
+      "source_note": "source: https://apsc.ubc.ca/profile/james-seabrook\n  (founder James Seabrook, UBC Okanagan mechanical engineering, BASc '11)\nsource: https://news.ubc.ca/2026/06/a-made-in-bc-heat-pump-with-global-impact/"
+    },
+    {
+      "name": "VitaPulse Technologies",
+      "one_liner": "Information technology spin-off building patient monitoring software, listed in the UBC portfolio.",
+      "vertical": "health",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://vitapulse.ca/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "digital health",
+        "monitoring"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "VulcanX Energy",
+      "one_liner": "Produces cleaner turquoise hydrogen from natural gas with virtually no water use.",
+      "vertical": "climate",
+      "stage": "unknown",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "faculty_spinout",
+      "website": "https://vulcanx.ca/",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "hydrogen",
+        "decarbonization"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://news.ubc.ca/2025/12/ubc-spinoff-companies-tackle-climate-change-and-drive-economic-growth/",
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+      ],
+      "source_note": "source: https://news.ubc.ca/2025/12/ubc-spinoff-companies-tackle-climate-change-and-drive-economic-growth/\nsource: https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies"
+    },
+    {
+      "name": "Wafr Technologies",
+      "one_liner": "Phase-change-material cooling and energy optimization software that cuts power and water use in AI data centres.",
+      "vertical": "infrastructure",
+      "stage": "unknown",
+      "founded_year": 2025,
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://www.wafr.ca",
+      "linkedin": "https://www.linkedin.com/company/wafrtechnologies",
+      "student_founded": true,
+      "hiring": false,
+      "tags": [
+        "data centres",
+        "cooling",
+        "ai infrastructure"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.sauder.ubc.ca/news/school-news/ubc-sauder-mba-alum-building-sustainable-ai-infrastructure-global-impact"
+      ],
+      "source_note": "source: https://www.sauder.ubc.ca/news/school-news/ubc-sauder-mba-alum-building-sustainable-ai-infrastructure-global-impact\n  (founder Bikram Singh, UBC Sauder MBA '23, founded Wafr Technologies in 2025)"
+    },
+    {
+      "name": "Zymeworks",
+      "one_liner": "Engineers bispecific antibodies and antibody-drug conjugates, with clinical programs in cancer.",
+      "vertical": "health",
+      "stage": "public",
+      "campus_zone": "off_campus",
+      "ubc_affiliation": "alumni_founded",
+      "website": "https://www.zymeworks.com",
+      "student_founded": false,
+      "hiring": false,
+      "tags": [
+        "biotech",
+        "antibodies",
+        "oncology"
+      ],
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://betakit.com/zymeworks-co-founder-former-ceo-ali-tehrani-joins-amplitude-ventures-as-venture-partner/"
+      ],
+      "source_note": "source: https://betakit.com/zymeworks-co-founder-former-ceo-ali-tehrani-joins-amplitude-ventures-as-venture-partner/\n  (co-founder Ali Tehrani \"has a PhD in microbiology from the University of British Columbia\")"
+    }
+  ],
+  "funding": [
+    {
+      "name": "entrepreneurship@UBC Seed Fund",
+      "type": "university_fund",
+      "stage_focus": "pre-seed to seed",
+      "check_size": "$25K-$200K",
+      "website": "https://innovation.ubc.ca/entrepreneurship-ventures/investors",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/entrepreneurship-ventures/investors",
+        "https://www.sauder.ubc.ca/news/student-invention-first-secure-seed-money-new-ubc-entrepreneurship-fund",
+        "https://www.innovosource.com/entrepreneurshipubc-seed-fund-advances-university-startups-success/"
+      ],
+      "source_note": "entrepreneurship@UBC Seed Fund: UBC's donor-backed venture funds, investing in ventures\nled by UBC students, faculty, staff, and recent alumni. Published historical check range\n$25K-$200K. Innovation UBC office: 103-6190 Agronomy Road (UBC campus).\nSources:\n  https://innovation.ubc.ca/entrepreneurship-ventures/investors\n  https://www.sauder.ubc.ca/news/student-invention-first-secure-seed-money-new-ubc-entrepreneurship-fund\n  https://www.innovosource.com/entrepreneurshipubc-seed-fund-advances-university-startups-success/"
+    },
+    {
+      "name": "Front Row Ventures",
+      "type": "student_fund",
+      "stage_focus": "pre-seed",
+      "check_size": "$50K SAFE",
+      "website": "https://frontrow.ventures/",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://frontrow.ventures/",
+        "https://events.ubc.ca/event/employer-on-campus-info-session-front-row-ventures/",
+        "https://gss.ubc.ca/entrepreneurship-already-have-a-startup-where-can-you-find-funding/"
+      ],
+      "source_note": "Front Row Ventures: Canada's student-run VC fund, invests $50K SAFEs in startups with at\nleast one student founder; active UBC campus team (fund HQ is in Montreal, hence off_campus).\nSources:\n  https://frontrow.ventures/\n  https://events.ubc.ca/event/employer-on-campus-info-session-front-row-ventures/\n  https://gss.ubc.ca/entrepreneurship-already-have-a-startup-where-can-you-find-funding/"
+    },
+    {
+      "name": "Futurpreneur Canada",
+      "type": "government",
+      "stage_focus": "pre-seed to early stage",
+      "check_size": "up to $60K startup loan",
+      "website": "https://futurpreneur.ca/",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://futurpreneur.ca/",
+        "https://gss.ubc.ca/entrepreneurship-already-have-a-startup-where-can-you-find-funding/"
+      ],
+      "source_note": "Futurpreneur Canada: federally supported nonprofit; startup loans up to $60K (with BDC)\nplus two years of mentorship for founders aged 18-39. Listed by UBC's Graduate Student\nSociety as a funding source for UBC startups.\nSources:\n  https://futurpreneur.ca/\n  https://gss.ubc.ca/entrepreneurship-already-have-a-startup-where-can-you-find-funding/"
+    },
+    {
+      "name": "Innovate BC — Innovator Skills Initiative",
+      "type": "government",
+      "stage_focus": "any stage (student hiring grant)",
+      "check_size": "up to $10K per student hire",
+      "website": "https://www.innovatebc.ca/programs/isi/",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.innovatebc.ca/programs/isi/",
+        "https://www2.gov.bc.ca/gov/content/employment-business/economic-development/funding-and-grants/innovator-skills-initiative"
+      ],
+      "source_note": "Innovate BC Innovator Skills Initiative: provincial grant of up to $10K for BC tech\ncompanies (including student-founded startups) to hire BC post-secondary students —\nthe standard first wage subsidy reachable by UBC student ventures. Administered by\nNew Ventures BC.\nSources:\n  https://www.innovatebc.ca/programs/isi/\n  https://www2.gov.bc.ca/gov/content/employment-business/economic-development/funding-and-grants/innovator-skills-initiative"
+    },
+    {
+      "name": "Innovation OnBoard",
+      "type": "student_fund",
+      "stage_focus": "idea to pre-seed",
+      "check_size": "share of $10K in cash prizes",
+      "website": "https://www.innovationboard.ca/ubc.html",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.innovationboard.ca/ubc.html",
+        "https://events.ubc.ca/event/innovation-fair/",
+        "https://gss.ubc.ca/entrepreneurship-already-have-a-startup-where-can-you-find-funding/"
+      ],
+      "source_note": "Innovation OnBoard: AMS student-led entrepreneurship program and pitch competition at UBC;\nteams of 1-5 UBC students compete for a share of $10K in cash prizes (2025/26 cycle).\nNon-dilutive prize money, not an investment fund. AMS club, based out of the Nest.\nSources:\n  https://www.innovationboard.ca/ubc.html\n  https://events.ubc.ca/event/innovation-fair/\n  https://gss.ubc.ca/entrepreneurship-already-have-a-startup-where-can-you-find-funding/"
+    },
+    {
+      "name": "Mitacs — Accelerate Entrepreneur",
+      "type": "government",
+      "stage_focus": "pre-seed (R&D in own startup)",
+      "check_size": "$15K per internship unit",
+      "website": "https://www.mitacs.ca/our-programs/accelerate-entrepreneur/",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.mitacs.ca/our-programs/accelerate-entrepreneur/",
+        "https://gss.ubc.ca/entrepreneurship-already-have-a-startup-where-can-you-find-funding/",
+        "https://www.mitacs.ca/contact/"
+      ],
+      "source_note": "Mitacs Accelerate Entrepreneur: national program funding student and postdoc entrepreneurs\nto intern in their own incorporated startup ($15K per internship unit, half matched by\nMitacs) if housed in an eligible incubator (e.g. entrepreneurship@UBC). Mitacs head office\nis on UBC campus at 301-6190 Agronomy Road. Listed by UBC's GSS as UBC startup funding.\nSources:\n  https://www.mitacs.ca/our-programs/accelerate-entrepreneur/\n  https://gss.ubc.ca/entrepreneurship-already-have-a-startup-where-can-you-find-funding/\n  https://www.mitacs.ca/contact/"
+    },
+    {
+      "name": "New Ventures BC Competition",
+      "type": "government",
+      "stage_focus": "pre-seed to seed",
+      "check_size": "share of ~$250K in cash and prizes",
+      "website": "https://www.newventuresbc.com/",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.newventuresbc.com/",
+        "https://www.newventuresbc.com/wp-content/uploads/2026/05/NVBC-Annual-Report-2024_final-1.pdf",
+        "https://gss.ubc.ca/entrepreneurship-already-have-a-startup-where-can-you-find-funding/"
+      ],
+      "source_note": "New Ventures BC Competition: nonprofit-run, Innovate BC-backed annual competition awarding\n~$250K in cash and prizes to BC tech startups. NVBC's 2024 annual report counts UBC as\nconnected to 37 ventures (16%) in that year's competition; listed by UBC's GSS as a\nfunding source for UBC startups.\nSources:\n  https://www.newventuresbc.com/\n  https://www.newventuresbc.com/wp-content/uploads/2026/05/NVBC-Annual-Report-2024_final-1.pdf\n  https://gss.ubc.ca/entrepreneurship-already-have-a-startup-where-can-you-find-funding/"
+    },
+    {
+      "name": "VANTEC Angel Network",
+      "type": "angel_group",
+      "stage_focus": "pre-seed to seed",
+      "check_size": "varies",
+      "website": "https://www.vantec.ca/",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.vantec.ca/",
+        "https://www.valhallaprivatecap.com/entrepreneurship-british-columbia-pitch-event-ventures-startups",
+        "https://vantechjournal.com/p/enterpreneurship-at-ubc-investor-showcase-2023"
+      ],
+      "source_note": "VANTEC Angel Network: BC's largest angel network (est. 1999), monthly pitch meetings with\nopen applications. Recurring UBC-ecosystem engagement: co-hosted events with\nentrepreneurship@UBC, e@UBC ventures pitch at VANTEC meetings, and VANTEC/WUTIF members\nsit on e@UBC pitch-event evaluation committees. Individual member investments are not\npublished, so specific recent UBC portfolio names are not verifiable from public info.\nSources:\n  https://www.vantec.ca/\n  https://www.valhallaprivatecap.com/entrepreneurship-british-columbia-pitch-event-ventures-startups\n  https://vantechjournal.com/p/enterpreneurship-at-ubc-investor-showcase-2023"
+    },
+    {
+      "name": "WUTIF Capital",
+      "type": "vc",
+      "stage_focus": "pre-seed to seed",
+      "check_size": "$50K-$300K",
+      "website": "https://wutif.ca/",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://wutif.ca/",
+        "https://wutif.ca/wp-content/uploads/2020/11/InfoSheet-WUTIF-Nov2020.pdf"
+      ],
+      "source_note": "WUTIF Capital: the Western Universities Technology Innovation Fund — evergreen angel fund\n(VCC) with an explicit mandate to invest first cheques in early-stage tech ventures\ndeveloped at BC's universities, including UBC. Active as of Fall 2026 subscriptions.\nSources:\n  https://wutif.ca/\n  https://wutif.ca/wp-content/uploads/2020/11/InfoSheet-WUTIF-Nov2020.pdf"
+    }
+  ],
+  "programs": [
+    {
+      "name": "Academy of Translational Medicine",
+      "type": "course_program",
+      "takes_equity": false,
+      "cohort_based": false,
+      "student_focused": false,
+      "website": "https://atm.med.ubc.ca/",
+      "application_cadence": "rolling community membership; annual micro-certificate intakes",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://atm.med.ubc.ca/",
+        "https://atm.med.ubc.ca/lab2market-validate-foundations/"
+      ],
+      "source_note": "Source: https://atm.med.ubc.ca/\nSource: https://atm.med.ubc.ca/lab2market-validate-foundations/\nFaculty of Medicine translational-innovation hub at 2215 Wesbrook Mall.\nListable offerings are training programs (Micro-certificate in Regulatory\nAffairs in the Life Sciences; hosts Lab2Market Validate Foundations).\nActive: 2026/27 micro-certificate registration open; new director appointed."
+    },
+    {
+      "name": "Applied Science Summer Entrepreneurship Program",
+      "type": "course_program",
+      "takes_equity": false,
+      "cohort_based": true,
+      "student_focused": true,
+      "website": "https://icics.ubc.ca/hatch/apsc-summer-tech-development-entrepreneurship-program/",
+      "application_cadence": "1x/year (runs May-Jul; 2026 applications closed Mar 31)",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://icics.ubc.ca/hatch/apsc-summer-tech-development-entrepreneurship-program/"
+      ],
+      "source_note": "Source: https://icics.ubc.ca/hatch/apsc-summer-tech-development-entrepreneurship-program/\nFree 10-session summer cohort run by APSC and the ICICS HATCH team for\nstudent teams (at least one APSC member). Page advertises the 2026 program\n(May 4 - Jul 6 2026, applications closed Mar 31 2026). Sessions online;\nprogram HQ is ICICS, 2366 Main Mall."
+    },
+    {
+      "name": "Creative Destruction Lab - Vancouver",
+      "type": "accelerator",
+      "takes_equity": false,
+      "cohort_based": true,
+      "student_focused": false,
+      "website": "https://creativedestructionlab.com/locations/vancouver/",
+      "application_cadence": "1x/year (applications close mid-summer for fall cohort)",
+      "campus_zone": "commerce",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://creativedestructionlab.com/locations/vancouver/",
+        "https://www.sauder.ubc.ca/thought-leadership/research-outreach-centres/creative-destruction-lab-vancouver"
+      ],
+      "source_note": "Source: https://creativedestructionlab.com/locations/vancouver/\nSource: https://www.sauder.ubc.ca/thought-leadership/research-outreach-centres/creative-destruction-lab-vancouver\nHosted at UBC Sauder. Streams include Climate, Compute, Minerals, Cancer,\nBiomedical Engineering. Nonprofit, no fees, explicitly takes no equity.\nActive: 2025/26 applications closed Jul 25 2025; 2026/27 cycle followed."
+    },
+    {
+      "name": "HATCH Venture Builder",
+      "type": "incubator",
+      "takes_equity": false,
+      "cohort_based": true,
+      "student_focused": false,
+      "website": "https://innovation.ubc.ca/entrepreneurship-ventures/entrepreneurial-pathways/hatch-venture-builder",
+      "application_cadence": "1x/year, by invitation after Venture Founder",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/entrepreneurship-ventures/entrepreneurial-pathways/hatch-venture-builder",
+        "https://icics.ubc.ca/hatch/",
+        "https://innovation.ubc.ca/news/february-02-2026/meet-ventures-joining-hatch-venture-builder-winter-2026"
+      ],
+      "source_note": "Source: https://innovation.ubc.ca/entrepreneurship-ventures/entrepreneurial-pathways/hatch-venture-builder\nSource: https://icics.ubc.ca/hatch/\nSource: https://innovation.ubc.ca/news/february-02-2026/meet-ventures-joining-hatch-venture-builder-winter-2026\nLate-stage venture builder for UBC spin-offs that have completed Venture\nFounder (non-spin-off UBC teams via ICICS track). Up to 18 months of\nresidency, office space at ICICS (2366 Main Mall) and UBC Robson Square,\nshared wet lab and makerspace. Active: Winter 2026 cohort announced Feb 2026.\nNo fees or equity terms published."
+    },
+    {
+      "name": "Innovation UBC",
+      "type": "tech_transfer",
+      "takes_equity": false,
+      "cohort_based": false,
+      "student_focused": false,
+      "website": "https://innovation.ubc.ca/",
+      "application_cadence": "rolling (invention disclosures and engagement)",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/",
+        "https://innovation.ubc.ca/how-engage/commercialization"
+      ],
+      "source_note": "Source: https://innovation.ubc.ca/\nSource: https://innovation.ubc.ca/how-engage/commercialization\nConsolidated unit under the VP Research and Innovation portfolio covering\nsponsored research, inventions and licensing (the former University-Industry\nLiaison Office function), and entrepreneurship pathways. Both\nentrepreneurship.ubc.ca and uilo.ubc.ca now redirect here, so this entry is\nthe umbrella plus the tech-transfer front door. Office at 103-6190 Agronomy\nRoad. Active: updated Express License Agreement for spin-offs launched\nJul 2026; ongoing 2026 events."
+    },
+    {
+      "name": "Lab2Market at UBC",
+      "type": "accelerator",
+      "takes_equity": false,
+      "cohort_based": true,
+      "student_focused": false,
+      "website": "https://innovation.ubc.ca/entrepreneurship-ventures/entrepreneurial-pathways/lab2market",
+      "application_cadence": "cohorts 1-2x/year plus short Validate Foundations intensives",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/entrepreneurship-ventures/entrepreneurial-pathways/lab2market",
+        "https://innovation.ubc.ca/lab2market-validate",
+        "https://innovation.ubc.ca/news/august-08-2025/applications-are-open-start-your-journey-lab2market"
+      ],
+      "source_note": "Source: https://innovation.ubc.ca/entrepreneurship-ventures/entrepreneurial-pathways/lab2market\nSource: https://innovation.ubc.ca/lab2market-validate\nSource: https://innovation.ubc.ca/news/august-08-2025/applications-are-open-start-your-journey-lab2market\nNational researcher-commercialization program delivered for BC and Yukon by\nInnovation UBC. Validate is a four-month cohort for grad student / PI teams;\nValidate Foundations is a 3-day virtual intensive. Active: fall 2025 intake\n(applications due Sep 8 2025). Largely virtual; UBC delivery based at the\nInnovation UBC office on Agronomy Road."
+    },
+    {
+      "name": "New Venture Design",
+      "type": "course_program",
+      "takes_equity": false,
+      "cohort_based": true,
+      "student_focused": true,
+      "website": "https://nvd.ubc.ca/",
+      "application_cadence": "1x/year (apply by early July for the September start)",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://nvd.ubc.ca/",
+        "https://nvd.ubc.ca/application-process/",
+        "https://vancouver.calendar.ubc.ca/course-descriptions/courses/apscv-486-new-venture-design"
+      ],
+      "source_note": "Source: https://nvd.ubc.ca/\nSource: https://nvd.ubc.ca/application-process/\nSource: https://vancouver.calendar.ubc.ca/course-descriptions/courses/apscv-486-new-venture-design\nYear-long 6-credit venture-creation course (APSC 486 / COMM 466) jointly\noffered by Applied Science and Sauder; mixed engineering-business student\nteams build a prototype and business plan. Admission by application.\nActive: 2026/27 applications open with a Jul 1 2026 deadline. Delivered on\nthe engineering side of central campus; zone set to engineering."
+    },
+    {
+      "name": "SBME Innovates",
+      "type": "incubator",
+      "takes_equity": false,
+      "cohort_based": false,
+      "student_focused": false,
+      "website": "https://bme.ubc.ca/partners/research-innovation/sbme-innovates/",
+      "application_cadence": "rolling (online interest form)",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://bme.ubc.ca/partners/research-innovation/sbme-innovates/",
+        "https://news.ubc.ca/2025/04/ubc-opens-gordon-b-shrum-biomedical-engineering-building/"
+      ],
+      "source_note": "Source: https://bme.ubc.ca/partners/research-innovation/sbme-innovates/\nSource: https://news.ubc.ca/2025/04/ubc-opens-gordon-b-shrum-biomedical-engineering-building/\nSchool of Biomedical Engineering life-sciences incubator at the Biomedical\nResearch Centre (Gordon B. Shrum Building, opened Apr 2025). Free dedicated\nwet-lab benches, equipment, and mentor/investor network; residencies of\n6-24 months; capacity for up to 10 spin-off ventures per year. Active:\nexpanding capacity in 2026; rolling online interest form."
+    },
+    {
+      "name": "Venture Founder",
+      "type": "accelerator",
+      "takes_equity": false,
+      "cohort_based": true,
+      "student_focused": false,
+      "website": "https://innovation.ubc.ca/entrepreneurship-ventures/entrepreneurial-pathways/venture-founder",
+      "application_cadence": "2x/year (spring and fall cohorts)",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/entrepreneurship-ventures/entrepreneurial-pathways/venture-founder",
+        "https://innovation.ubc.ca/Apply-for-Venture-Founder-Fall-2026"
+      ],
+      "source_note": "Source: https://innovation.ubc.ca/entrepreneurship-ventures/entrepreneurial-pathways/venture-founder\nSource: https://innovation.ubc.ca/Apply-for-Venture-Founder-Fall-2026\nInnovation UBC's flagship 16-week venture program for UBC researchers,\nfaculty, and students building investable companies; entry requirement for\nHATCH Venture Builder. Weekly online sessions with four in-person sessions.\nActive: 51st cohort noted; Fall 2026 applications recently closed. Free to\nparticipants; no equity terms published. Run from the Innovation UBC office\non Agronomy Road; zone set to south_campus."
+    }
+  ],
+  "clubs": [
+    {
+      "name": "BASICS (BA computer science at UBC)",
+      "focus": "community for computer science students in the Bachelor of Arts program",
+      "website": "https://ubcbasics.org/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://ubcbasics.org/",
+        "https://www.cs.ubc.ca/student-clubs-and-affinity-groups",
+        "https://github.com/ubcbasics/website"
+      ],
+      "source_note": "Sources: https://ubcbasics.org/ (represents 140+ BA computer science students; handbook at book.ubcbasics.org)\n         https://www.cs.ubc.ca/student-clubs-and-affinity-groups (listed on the CS department current club page)\n         https://github.com/ubcbasics/website (site repo pushed 2025-11-21)"
+    },
+    {
+      "name": "BOLT UBC",
+      "focus": "business and data analytics; bootcamps and case competitions",
+      "website": "https://www.boltubc.com/",
+      "campus_zone": "commerce",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.boltubc.com/",
+        "https://www.bouncelife.com/events/68b5499b97ed25a0b6575d26",
+        "https://www.facebook.com/BOLTUBC/"
+      ],
+      "source_note": "Sources: https://www.boltubc.com/\n         https://www.bouncelife.com/events/68b5499b97ed25a0b6575d26 (BOLT UBC Membership 2025-26)\n         https://www.facebook.com/BOLTUBC/ (\"BOLT Bootcamp 2026 is officially here\")"
+    },
+    {
+      "name": "Enactus UBC",
+      "focus": "social entrepreneurship projects and national competitions",
+      "website": "https://enactusubc.ca/",
+      "campus_zone": "commerce",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://enactusubc.ca/",
+        "https://www.cus.ca/get-involved/get-to-know"
+      ],
+      "source_note": "Sources: https://enactusubc.ca/ (150+ members; Ennovate and Enspire programs)\n         https://www.cus.ca/get-involved/get-to-know (listed as current CUS club)\n         2025 Enactus Canada national champions (Desjardins Youth Empowerment Challenge)"
+    },
+    {
+      "name": "Front Row Ventures (UBC campus team)",
+      "focus": "student-run venture capital; sourcing and backing student founders",
+      "website": "https://frontrow.ventures/",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://frontrow.ventures/team/",
+        "https://frontrow.ventures/apply/",
+        "https://gss.ubc.ca/entrepreneurship-already-have-a-startup-where-can-you-find-funding/"
+      ],
+      "source_note": "Sources: https://frontrow.ventures/team/ (UBC students on the BC investment team)\n         https://frontrow.ventures/apply/ (open call for student-led startups)\n         https://gss.ubc.ca/entrepreneurship-already-have-a-startup-where-can-you-find-funding/"
+    },
+    {
+      "name": "Innovation OnBoard",
+      "focus": "student entrepreneurship program and pitch competition",
+      "website": "https://www.innovationboard.ca/ubc.html",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.innovationboard.ca/ubc.html",
+        "https://www.innovationboard.ca/2024/06/23/schedule-ubc.html"
+      ],
+      "source_note": "Sources: https://www.innovationboard.ca/ubc.html\n         https://www.innovationboard.ca/2024/06/23/schedule-ubc.html (2025-26 program; pitch competition Mar 11, 2026)"
+    },
+    {
+      "name": "Maple Bacon (CTF at UBC)",
+      "focus": "competitive cybersecurity and capture-the-flag",
+      "website": "https://maplebacon.org/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://maplebacon.org/",
+        "https://www.cs.ubc.ca/news/2025/08/ubc-wins-fourth-consecutive-time-world-renowned-capture-flag-hacking-competition"
+      ],
+      "source_note": "Sources: https://maplebacon.org/ (weekly meetings; competitive team page)\n         https://www.cs.ubc.ca/news/2025/08/ubc-wins-fourth-consecutive-time-world-renowned-capture-flag-hacking-competition (DEF CON win, Aug 2025)"
+    },
+    {
+      "name": "nwPlus",
+      "focus": "hackathons (nwHacks, HackCamp, cmd-f)",
+      "website": "https://nwplus.io/",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://nwplus.io/",
+        "https://nwhacks-2026.devpost.com/",
+        "https://cmd-f.nwplus.io/",
+        "https://hackcamp.nwplus.io/"
+      ],
+      "source_note": "Sources: https://nwplus.io/\n         https://nwhacks-2026.devpost.com/ (nwHacks, Jan 17-18, 2026 at UBC)\n         https://cmd-f.nwplus.io/ (cmd-f 2026); https://hackcamp.nwplus.io/ (HackCamp, Nov 2025)"
+    },
+    {
+      "name": "UBC AI Club",
+      "focus": "AI and machine learning community; reading group, workshops, and speaker events",
+      "website": "https://ubcaiclub.github.io/",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://ubcaiclub.github.io/",
+        "https://amsclubs.ca/ai-club/",
+        "https://github.com/ubcaiclub/ubcaiclub.github.io"
+      ],
+      "source_note": "Sources: https://ubcaiclub.github.io/ (past events: ML Reading Group, Imagine Day booth, Accenture x BOLT networking night)\n         https://amsclubs.ca/ai-club/\n         https://github.com/ubcaiclub/ubcaiclub.github.io (site repo pushed 2026-04-16)\nNote: the club site lists events without dates, so the GitHub push is the dated liveness evidence."
+    },
+    {
+      "name": "UBC AI Safety",
+      "focus": "AI safety and alignment education; intro course, ML accelerator, and reading groups",
+      "website": "https://www.ubcaisafety.org/",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ubcaisafety.org/",
+        "https://www.ubcaisafety.org/programs/ml-accelerator"
+      ],
+      "source_note": "Sources: https://www.ubcaisafety.org/ (programs: intro course, ML accelerator, technical paper reading group, policy reading group, AI Policy Review)\n         https://www.ubcaisafety.org/programs/ml-accelerator (ML Safety Accelerator ran Feb 15 to Apr 4 2026; applications closed Feb 8 2026)\nNote: filed nest as the default for a club with campus-wide programming and no named home venue."
+    },
+    {
+      "name": "UBC Bitcoin Club",
+      "focus": "bitcoin and blockchain education; workshops, panels, and networking",
+      "website": "https://www.ubcbitcoinclub.com/",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ubcbitcoinclub.com/",
+        "https://blockchain.ubc.ca/about-us/student-club"
+      ],
+      "source_note": "Sources: https://www.ubcbitcoinclub.com/ (est. 2024; networking nights, workshops, open panels, live membership signup)\n         https://blockchain.ubc.ca/about-us/student-club (named as the student club on the Blockchain@UBC research cluster site)\nNote: the club site carries no event dates. Liveness rests on the current exec team listed publicly on LinkedIn (Executive Lead, Sept 2025 to present) and the live membership signup. Weaker dated evidence than the rest of this section; recheck at the next verification pass."
+    },
+    {
+      "name": "UBC BizTech",
+      "focus": "business and technology; conferences, case competitions, hackathons",
+      "website": "https://www.ubcbiztech.com/",
+      "campus_zone": "commerce",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ubcbiztech.com/events/event-home",
+        "https://produhacks-2026.devpost.com/"
+      ],
+      "source_note": "Sources: https://www.ubcbiztech.com/events/event-home (KickStart Nov 2025, BluePrint Jan 24 2026, TechStrat 2026)\n         https://produhacks-2026.devpost.com/ (ProduHacks, Mar 21-22, 2026)"
+    },
+    {
+      "name": "UBC Computer Science Student Society",
+      "focus": "CS undergraduate society; tech career fair and community events",
+      "website": "https://ubccsss.org/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://ubccsss.org/",
+        "https://ubccsss.org/tcf/"
+      ],
+      "source_note": "Sources: https://ubccsss.org/\n         https://ubccsss.org/tcf/ (Technical Career Fair 2026 edition, late January)"
+    },
+    {
+      "name": "UBC Data Science Club",
+      "focus": "data science learning, project teams, and competitions",
+      "website": "https://www.ubcdsci.com/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ubcdsci.com/",
+        "https://www.ubcdsci.com/events",
+        "https://github.com/ubcdsci"
+      ],
+      "source_note": "Sources: https://www.ubcdsci.com/events (Datathon Nov 26 2025; Oct 21 2025 event at the Abdul Ladha Science Student Centre; next event Mar 31 2026)\n         https://github.com/ubcdsci (website repo pushed 2026-04-10)\nNote: filed science for the Abdul Ladha venue; the club has no permanent home."
+    },
+    {
+      "name": "UBC eProjects",
+      "focus": "student startup accelerator and entrepreneurship community",
+      "website": "https://www.eprojectsubc.com/",
+      "campus_zone": "commerce",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.eprojectsubc.com/",
+        "https://amsclubs.ca/eprojects/"
+      ],
+      "source_note": "Sources: https://www.eprojectsubc.com/ (2025-26 event arc: IGNITION Sept, FORGE Oct, EDN Nov, E2 Jan; MERIDIAN and APEX competitions)\n         https://amsclubs.ca/eprojects/"
+    },
+    {
+      "name": "UBC Game Development Association",
+      "focus": "student game development teams, workshops, and showcases",
+      "website": "https://www.ubcgamedev.com/",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ubcgamedev.com/events"
+      ],
+      "source_note": "Sources: https://www.ubcgamedev.com/events (launch party Sept 26, 2025; Unity workshop Nov 19, 2025; Year-End Showcase Apr 4, 2026)"
+    },
+    {
+      "name": "UBC iGEM",
+      "focus": "synthetic biology competition team; iGEM Grand Jamboree projects and outreach",
+      "website": "https://ubcigem.com/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://ubcigem.com/",
+        "https://lsi.ubc.ca/ubc-igem-team-wins-top-awards-for-novel-dna-based-data-storage-platform/",
+        "https://teams.igem.org/5228"
+      ],
+      "source_note": "Sources: https://ubcigem.com/ (competing years listed as 2009-2019 and 2021-2026; recruiting via hiring.ubcigem.com)\n         https://lsi.ubc.ca/ubc-igem-team-wins-top-awards-for-novel-dna-based-data-storage-platform/ (2024 Grand Jamboree gold medal, Best Hardware)\n         https://teams.igem.org/5228\nNote: filed medicine for the Life Sciences Institute tie in the UBC coverage; the team draws from biology, engineering and computer science."
+    },
+    {
+      "name": "UBC Launch Pad",
+      "focus": "student software teams",
+      "website": "https://github.com/ubclaunchpad",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://github.com/ubclaunchpad"
+      ],
+      "source_note": "Sources: https://github.com/ubclaunchpad (project repos actively updated through Aug 2026;\n         LP-website repo pushed 2026-08-02, so the club is active and rebuilding its site)\nNote: ubclaunchpad.com and .ca both stopped resolving as of 2026-08-03, so the GitHub org is\n      the best live public link. Point this back at the club site once it is up again."
+    },
+    {
+      "name": "UBC Product Management Club",
+      "focus": "product management events, workshops, and conference",
+      "website": "https://ubcpmc.com/",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://ubcpmc.com/",
+        "https://amsclubs.ca/product-management-club/"
+      ],
+      "source_note": "Sources: https://ubcpmc.com/ (pmCommunity workshops; Product Conference 2026)\n         https://amsclubs.ca/product-management-club/"
+    },
+    {
+      "name": "UBC Quantum Club",
+      "focus": "quantum computing; workshops, mentorship, and the Quantum Career Expo",
+      "website": "https://amsclubs.ca/quantum-club/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://amsclubs.ca/quantum-club/",
+        "https://www.instagram.com/ubcquantum/",
+        "https://quantum-bc.ca/ubc-quantum-club-spearheads-q-site-vancouver-2/"
+      ],
+      "source_note": "Sources: https://amsclubs.ca/quantum-club/ (hands-on workshops and 1-on-1 mentorship)\n         https://www.instagram.com/ubcquantum/ (Quantum Career Expo 2026, Mar 25 2026, Abdul Ladha Science Student Centre)\n         https://quantum-bc.ca/ubc-quantum-club-spearheads-q-site-vancouver-2/\nNote: the club domain ubcquantum.com has lapsed and now serves an unrelated offshore gambling site. Do not relink it. The AMS page is the best live public link until the club republishes."
+    },
+    {
+      "name": "UBC UX Hub",
+      "focus": "user experience design; workshops, industry talks, and the UXathon designathon",
+      "website": "https://www.ubcuxhub.ca/",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ubcuxhub.ca/",
+        "https://uxathon-2026.devpost.com/",
+        "https://amsclubs.ca/ux-hub"
+      ],
+      "source_note": "Sources: https://www.ubcuxhub.ca/ (founded February 2017)\n         https://uxathon-2026.devpost.com/ (UXathon 2026, Jan 10-11 2026)\n         https://amsclubs.ca/ux-hub"
+    },
+    {
+      "name": "WestPeak Research Association",
+      "focus": "equity research and VC training",
+      "website": "https://westpeakresearch.com/",
+      "campus_zone": "commerce",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://westpeakresearch.com/"
+      ],
+      "source_note": "Sources: https://westpeakresearch.com/ (hiring for the 2025-26 academic year opened Aug 2025)"
+    },
+    {
+      "name": "Women in Computer Science (UBC WiCS)",
+      "focus": "community for women in CS; mentorship, sponsor events, youCode hackathon",
+      "website": "https://www.ubcwics.com/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ubcwics.com/",
+        "https://www.cs.ubc.ca/event/2025/09/wics-beginning-term-kick",
+        "https://www.cs.ubc.ca/event/2026/04/wics-end-year-gala"
+      ],
+      "source_note": "Sources: https://www.ubcwics.com/\n         https://www.cs.ubc.ca/event/2025/09/wics-beginning-term-kick (kickoff Sept 10, 2025)\n         https://www.cs.ubc.ca/event/2026/04/wics-end-year-gala (gala Apr 2026)"
+    },
+    {
+      "name": "Women in Data Science (WiDS at UBC)",
+      "focus": "women in data science; workshops, mentorship, youCode hackathon",
+      "website": "https://www.ubcwids.com/",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ubcwids.com/",
+        "https://amsclubs.ca/women-in-data-science/",
+        "https://ubcyoucode.com/"
+      ],
+      "source_note": "Sources: https://www.ubcwids.com/\n         https://amsclubs.ca/women-in-data-science/\n         https://ubcyoucode.com/ (youCode hackathon Apr 4-5, 2026, co-run with WiCS; AMS Best Academic Club 2025)"
+    }
+  ],
+  "labs": [
+    {
+      "name": "Advanced Manufacturing Processes Laboratory (AMP)",
+      "focus": "precision machining, hybrid additive manufacturing and composite machining for aerospace, optics, biomedical and electronics parts",
+      "department": "Mechanical Engineering",
+      "vertical": "hardware",
+      "website": "https://amp.mech.ubc.ca/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://mech.ubc.ca/research/centres-facilities/",
+        "https://amp.mech.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Advanced Renewable Materials Lab",
+      "focus": "lignin, cellulose and hemicellulose chemistry turned into bioplastics, films and carbon fibre that lock up captured carbon",
+      "department": "Wood Science",
+      "vertical": "climate",
+      "website": "https://renew.forestry.ubc.ca/",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-wood-science/labs-and-facilities/",
+        "https://renew.forestry.ubc.ca/"
+      ]
+    },
+    {
+      "name": "AIM Lab",
+      "focus": "machine learning on histopathology images for cancer diagnosis, including ovarian and endometrial cancer subtyping",
+      "department": "Biomedical Engineering",
+      "vertical": "health",
+      "website": "https://aimlab.ca/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/imaging-and-computational-biology/",
+        "https://aimlab.ca/"
+      ],
+      "source_note": "The site states no building, so the zone falls back to the school own home. Site publications stop at 2024; liveness from the 2026 publication record."
+    },
+    {
+      "name": "Algorithms, Optimization, and Control Lab",
+      "focus": "control, optimization and game theory applied to model predictive control, multi-agent robotics, energy systems and embedded optimization",
+      "department": "Mechanical Engineering",
+      "vertical": "other",
+      "website": "https://aocl.mech.ubc.ca/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://mech.ubc.ca/research/centres-facilities/",
+        "https://aocl.mech.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Applied Fluid Mechanics Laboratory",
+      "focus": "industrial and biological fluid mechanics, covering sprays, pulp and paper processes, building ventilation and swallowing mechanics",
+      "department": "Mechanical Engineering",
+      "vertical": "hardware",
+      "website": "https://afm.mech.ubc.ca/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://mech.ubc.ca/research/centres-facilities/",
+        "https://afm.mech.ubc.ca/"
+      ],
+      "source_note": "Lab publications page stops around 2016; liveness from 2025 and 2026 journal papers."
+    },
+    {
+      "name": "Aronson Research Group",
+      "focus": "crystal growth and measurement of strongly correlated electron systems, and the collective phases found near quantum critical points",
+      "department": "Stewart Blusson Quantum Matter Institute",
+      "vertical": "deep_tech",
+      "website": "https://aronson.phas.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://qmi.ubc.ca/people/investigators/",
+        "https://aronson.phas.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Bamboo Applications and Manufacturing Lab",
+      "focus": "bamboo as an engineered construction material, covering resource supply, processing, bonding and composite performance",
+      "department": "Wood Science",
+      "vertical": "hardware",
+      "website": "https://bamboo.forestry.ubc.ca/",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-wood-science/labs-and-facilities/",
+        "https://bamboo.forestry.ubc.ca/"
+      ],
+      "source_note": "Lab publication list stops at 2022; liveness from the 2026 publication record."
+    },
+    {
+      "name": "Bamji Lab",
+      "focus": "how synaptic connections form, remodel and are eliminated, including palmitoylating DHHC enzymes and cadherin complexes",
+      "department": "Biomedical Engineering",
+      "vertical": "health",
+      "website": "https://www.bamjilab.com/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://www.bamjilab.com/"
+      ]
+    },
+    {
+      "name": "Berlinguette Group",
+      "focus": "electrochemical reactors for CO2 capture and conversion, low-temperature fusion, and decarbonizing chemicals and cement",
+      "department": "Stewart Blusson Quantum Matter Institute",
+      "vertical": "climate",
+      "website": "https://groups.chem.ubc.ca/cberling/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://qmi.ubc.ca/people/investigators/",
+        "https://groups.chem.ubc.ca/cberling/"
+      ]
+    },
+    {
+      "name": "Bio-Medical Micro Devices Laboratory (BioMEMS)",
+      "focus": "lab-on-chip systems for cell culture, inkjet printing for tissue engineering, and implantable neural interfaces",
+      "department": "Biomedical Engineering",
+      "vertical": "hardware",
+      "website": "https://biomems.ece.ubc.ca/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://biomems.ece.ubc.ca/"
+      ],
+      "source_note": "The school listing links only a faculty profile; the group own site was reached from there. Site news stops at 2018; liveness from the 2026 publication record."
+    },
+    {
+      "name": "BioAugmentative Interfaces Laboratory",
+      "focus": "neuroelectronic devices, sensors and smart biomaterials that interface with tissue for repair and organ augmentation",
+      "department": "Biomedical Engineering",
+      "vertical": "hardware",
+      "website": "https://bioauglab.med.ubc.ca/",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://bioauglab.med.ubc.ca/"
+      ],
+      "source_note": "Based at ICORD in the Blusson Spinal Cord Centre at Vancouver General Hospital, off the Point Grey campus. Site news stops at 2024; liveness from the 2026 publication record."
+    },
+    {
+      "name": "Biobased Colloids and Materials (BiCMat)",
+      "focus": "bio-based colloids and nanomaterials from cellulose, lignin and chitin, including nanofibres, fibre networks and functional interfaces",
+      "department": "Wood Science",
+      "vertical": "climate",
+      "website": "https://rojas.chbe.ubc.ca/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-wood-science/labs-and-facilities/",
+        "https://rojas.chbe.ubc.ca/"
+      ],
+      "source_note": "Carried on the Wood Science listing, but the group own page bases it in Chemical and Biological Engineering, which is why the zone is engineering."
+    },
+    {
+      "name": "Biorefinery and Biomass Conversion Lab",
+      "focus": "converting lignocellulosic biomass into fuels and value-added chemicals, including mechanochemical and catalytic biorefinery routes",
+      "department": "Wood Science",
+      "vertical": "climate",
+      "website": "https://bbclab.forestry.ubc.ca/",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-wood-science/labs-and-facilities/",
+        "https://bbclab.forestry.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Blakney Lab",
+      "focus": "RNA and biomaterials for vaccines and gene delivery, including self-amplifying RNA and lipid nanoparticles",
+      "department": "Michael Smith Laboratories",
+      "vertical": "health",
+      "website": "https://blakneylab.msl.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://blakneylab.msl.ubc.ca/"
+      ],
+      "source_note": "Listed by both the Michael Smith Laboratories and the School of Biomedical Engineering; filed under the institute it is based in."
+    },
+    {
+      "name": "Bohlmann Lab",
+      "focus": "plant specialized metabolism and conifer genomics, from terpenoid biosynthesis to high-value bioproducts and forest health",
+      "department": "Michael Smith Laboratories",
+      "vertical": "climate",
+      "website": "https://bohlmannlab.msl.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://forestry.ubc.ca/department-of-forest-and-conservation-sciences/labs-and-facilities/",
+        "https://bohlmannlab.msl.ubc.ca/"
+      ],
+      "source_note": "Listed by both the Michael Smith Laboratories and Forest and Conservation Sciences; filed under the institute it is based in. Lab publications page stops at 2024; liveness from the 2025 publication record."
+    },
+    {
+      "name": "Brent Page Lab",
+      "focus": "chemical biology and medicinal chemistry building small-molecule inhibitors and chemical probes for disease-relevant proteins",
+      "department": "Pharmaceutical Sciences",
+      "vertical": "health",
+      "website": "https://www.brentpagelab.com/",
+      "campus_zone": "pharmacy",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://pharmsci.ubc.ca/research/researchers-0",
+        "https://www.brentpagelab.com/"
+      ]
+    },
+    {
+      "name": "Brumer Lab",
+      "focus": "carbohydrate-active enzymes that build and break down plant cell walls and biomass polysaccharides",
+      "department": "Michael Smith Laboratories",
+      "vertical": "synbio",
+      "website": "https://brumerlab.msl.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://brumerlab.msl.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Computational Materials Physics - Rottler group",
+      "focus": "computer simulation and statistical mechanics of complex materials, from polymers and glasses to high entropy oxides",
+      "department": "Stewart Blusson Quantum Matter Institute",
+      "vertical": "deep_tech",
+      "website": "https://rottlergroup.physics.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://qmi.ubc.ca/people/investigators/",
+        "https://rottlergroup.physics.ubc.ca/"
+      ],
+      "source_note": "The group site carries no publication list; liveness from the ORCID record it links to."
+    },
+    {
+      "name": "Computational Multiphysics and Machine Learning Laboratory",
+      "focus": "fluid-structure interaction, marine hydrodynamics, underwater acoustics and physics-guided machine learning for marine systems",
+      "department": "Mechanical Engineering",
+      "vertical": "hardware",
+      "website": "https://cml.mech.ubc.ca/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://mech.ubc.ca/research/centres-facilities/",
+        "https://cml.mech.ubc.ca/"
+      ],
+      "source_note": "Filed under hardware on the naval and aerospace application domain; the methods work is computational."
+    },
+    {
+      "name": "Computer Vision Lab",
+      "focus": "computer vision: image and video understanding, 3D vision, human pose estimation, and vision-language models",
+      "department": "Computer Science",
+      "vertical": "ai_application",
+      "website": "https://vision.cs.ubc.ca/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.cs.ubc.ca/research-groups",
+        "https://vision.cs.ubc.ca/"
+      ],
+      "source_note": "On-site publications list ends at 2022; liveness established from the lab GitHub org, pushed July 2026."
+    },
+    {
+      "name": "Cranston Research Group",
+      "focus": "cellulose nanocrystals and nanocellulose composites, from colloid and surface chemistry to emulsions, foams, films and coatings",
+      "department": "Wood Science",
+      "vertical": "climate",
+      "website": "https://cranstongroup.forestry.ubc.ca",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-wood-science/labs-and-facilities/",
+        "https://cranstongroup.forestry.ubc.ca"
+      ],
+      "source_note": "The department listing names it Biobased Nanomaterials Lab; the site own header is Cranston Research Group."
+    },
+    {
+      "name": "de Boer Lab",
+      "focus": "gene regulation and the cis-regulatory code, using synthetic genomics and machine learning on regulatory DNA sequence",
+      "department": "Biomedical Engineering",
+      "vertical": "health",
+      "website": "https://deboer.bme.ubc.ca/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://deboer.bme.ubc.ca/"
+      ]
+    },
+    {
+      "name": "eDAPT",
+      "focus": "human-centered design of interactive technologies personalized to individual users, from fieldwork to controlled experiments",
+      "department": "Computer Science",
+      "vertical": "other",
+      "website": "https://www.cs.ubc.ca/labs/edapt/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.cs.ubc.ca/research-groups",
+        "https://www.cs.ubc.ca/labs/edapt/"
+      ],
+      "source_note": "Liveness rests on the 2025 publication record (three CHI 2025 papers); no site content dated after January 2025."
+    },
+    {
+      "name": "El Baggari Lab",
+      "focus": "cryogenic and in situ electron microscopy to image structure, bonding and electron interactions in quantum materials",
+      "department": "Stewart Blusson Quantum Matter Institute",
+      "vertical": "deep_tech",
+      "website": "https://www.elbaggarilab.com/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://qmi.ubc.ca/people/investigators/",
+        "https://www.elbaggarilab.com/"
+      ]
+    },
+    {
+      "name": "Forest Carbon Research Lab",
+      "focus": "forest and bamboo carbon accounting, life-cycle assessment and nature-based climate solutions",
+      "department": "Forest Resources Management",
+      "vertical": "climate",
+      "website": "https://forestcarbon.forestry.ubc.ca/",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-forest-resources-management/labs-and-facilities/",
+        "https://forestcarbon.forestry.ubc.ca/"
+      ],
+      "source_note": "About half this lab output is carbon-market governance, which maps to no vertical on its own; included on the technical carbon accounting and life-cycle assessment half."
+    },
+    {
+      "name": "Forest Resources and Ecosystem Services Hub (FRESH)",
+      "focus": "forest modelling and decision-support tools, from wood supply simulation and harvest optimization to carbon and wildfire analysis",
+      "department": "Forest Resources Management",
+      "vertical": "ai_application",
+      "website": "https://ubc-fresh.github.io/fresh-lab-web-site/",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-forest-resources-management/labs-and-facilities/",
+        "https://ubc-fresh.github.io/fresh-lab-web-site/"
+      ],
+      "source_note": "The department listing calls it Environmental Services; the group own header says Ecosystem Services. Its forestry.ubc.ca address redirects here."
+    },
+    {
+      "name": "Foster Lab",
+      "focus": "quantitative proteomics applied to host-pathogen interactions, protein interaction mapping and honey bee health",
+      "department": "Michael Smith Laboratories",
+      "vertical": "health",
+      "website": "https://fosterlab.msl.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://fosterlab.msl.ubc.ca/"
+      ],
+      "source_note": "The lab site carries no dates; liveness from the 2026 publication record."
+    },
+    {
+      "name": "Gsponer Lab",
+      "focus": "computational tools using genomic, transcriptomic and proteomic data to study protein disorder, interactions and cell systems",
+      "department": "Michael Smith Laboratories",
+      "vertical": "synbio",
+      "website": "https://gsponerlab.msl.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://gsponerlab.msl.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Hafeli Lab",
+      "focus": "radiopharmaceutical and magnetic microsphere drug delivery assessed with quantitative SPECT, PET and CT imaging in animal models",
+      "department": "Pharmaceutical Sciences",
+      "vertical": "health",
+      "website": "https://www.magneticmicrosphere.com/hafeli_lab/",
+      "campus_zone": "pharmacy",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://pharmsci.ubc.ca/research/researchers-0",
+        "https://www.magneticmicrosphere.com/hafeli_lab/"
+      ],
+      "source_note": "The site is hosted off the UBC domain; the group is in the Pharmaceutical Sciences building."
+    },
+    {
+      "name": "Hallas Lab",
+      "focus": "design and discovery of new quantum materials through crystal growth, with structural, magnetic and electronic characterization",
+      "department": "Stewart Blusson Quantum Matter Institute",
+      "vertical": "deep_tech",
+      "website": "https://hallas.phas.ubc.ca/home",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://qmi.ubc.ca/people/investigators/",
+        "https://hallas.phas.ubc.ca/home"
+      ]
+    },
+    {
+      "name": "Hieter Lab",
+      "focus": "yeast genetics and chromosome instability genes, and how that work translates to cancer targets and rare disease models",
+      "department": "Michael Smith Laboratories",
+      "vertical": "health",
+      "website": "https://hieterlab.msl.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://hieterlab.msl.ubc.ca/"
+      ],
+      "source_note": "Lab publications page has not been updated past 2018; liveness from the 2025 publication record."
+    },
+    {
+      "name": "Hirst Lab",
+      "focus": "epigenomics of cancer initiation and progression, including single-cell chromatin and DNA methylation methods",
+      "department": "Michael Smith Laboratories",
+      "vertical": "health",
+      "website": "https://hirstlab.msl.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://hirstlab.msl.ubc.ca/"
+      ],
+      "source_note": "Lab publications page is a highlights list ending 2018; liveness from the 2026 publication record."
+    },
+    {
+      "name": "Hoodless Lab",
+      "focus": "transcriptional and epigenetic regulation of organ development, focused on liver formation and heart valve development",
+      "department": "Biomedical Engineering",
+      "vertical": "health",
+      "website": "https://www.bccrc.ca/dept/tfl/labs/hoodless-lab",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://www.bccrc.ca/dept/tfl/labs/hoodless-lab"
+      ],
+      "source_note": "Based in the Terry Fox Laboratory at the BC Cancer Research Institute, off the Point Grey campus."
+    },
+    {
+      "name": "Human Motion Biomechanics Laboratory (HuMBL)",
+      "focus": "wearable sensors and biomechanical modelling of human motion, head impact and cardiac arrest detection",
+      "department": "Biomedical Engineering",
+      "vertical": "health",
+      "website": "https://humbl.sbme.ubc.ca/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/human-interfacing-devices/",
+        "https://humbl.sbme.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Industrial Engineering Research Group",
+      "focus": "mathematical programming, machine learning and simulation for forest products and biomass supply chains",
+      "department": "Wood Science",
+      "vertical": "ai_application",
+      "website": "https://ierg.forestry.ubc.ca",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-wood-science/labs-and-facilities/",
+        "https://ierg.forestry.ubc.ca"
+      ],
+      "source_note": "A judgement call: the group is operations research first, but its own research page puts machine learning alongside mathematical programming."
+    },
+    {
+      "name": "InfoVis Group",
+      "focus": "information visualization: visual representations and interaction techniques for exploring large amounts of data",
+      "department": "Computer Science",
+      "vertical": "other",
+      "website": "https://www.cs.ubc.ca/group/infovis/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.cs.ubc.ca/research-groups",
+        "https://www.cs.ubc.ca/group/infovis/"
+      ]
+    },
+    {
+      "name": "Integrated Remote Sensing Studio",
+      "focus": "satellite and lidar remote sensing of forest structure, biodiversity, carbon and disturbance, from stands to national monitoring",
+      "department": "Forest Resources Management",
+      "vertical": "ai_application",
+      "website": "https://irsslab.forestry.ubc.ca/",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-forest-resources-management/labs-and-facilities/",
+        "https://irsslab.forestry.ubc.ca/"
+      ],
+      "source_note": "Lab publications page stops at 2023; liveness from the lab GitHub organisation, updated June 2026."
+    },
+    {
+      "name": "Joshi Lab",
+      "focus": "enzyme evolution and microbial metabolic engineering that turn biomass-derived feedstocks into fuels, food, feed and chemicals",
+      "department": "Wood Science",
+      "vertical": "synbio",
+      "website": "https://joshilab.forestry.ubc.ca/",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-wood-science/labs-and-facilities/",
+        "https://joshilab.forestry.ubc.ca/"
+      ],
+      "source_note": "The department listing names it BioCycle Lab; the site own header is Joshi Lab. The site carries no dated items; liveness from an October 2025 funding announcement."
+    },
+    {
+      "name": "Kilgore lab",
+      "focus": "protein chemistry and machine learning applied to biomolecular condensates and the chemical patterns that govern their selectivity",
+      "department": "Pharmaceutical Sciences",
+      "vertical": "health",
+      "website": "https://kilgorelab.com/",
+      "campus_zone": "pharmacy",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://pharmsci.ubc.ca/research/researchers-0",
+        "https://kilgorelab.com/"
+      ],
+      "source_note": "The lowercase lab is the site own styling, used consistently in its title, logo and headings."
+    },
+    {
+      "name": "Krems group",
+      "focus": "theory at the interface of quantum computing and machine learning, and machine learning for molecular and condensed matter physics",
+      "department": "Stewart Blusson Quantum Matter Institute",
+      "vertical": "deep_tech",
+      "website": "https://groups.chem.ubc.ca/krems/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://qmi.ubc.ca/people/investigators/",
+        "https://groups.chem.ubc.ca/krems/"
+      ]
+    },
+    {
+      "name": "Kronstad Lab",
+      "focus": "fungal pathogenesis and nutrient sensing in Cryptococcus neoformans and cereal pathogens such as Ustilago maydis",
+      "department": "Michael Smith Laboratories",
+      "vertical": "health",
+      "website": "https://kronstadlab.msl.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://kronstadlab.msl.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Laboratory for Atomic Imaging Research",
+      "focus": "scanning probe microscopy of how electrons, spins, phonons and photons interact in matter from the atomic scale up",
+      "department": "Stewart Blusson Quantum Matter Institute",
+      "vertical": "deep_tech",
+      "website": "https://lair.phas.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://qmi.ubc.ca/people/investigators/",
+        "https://lair.phas.ubc.ca/"
+      ],
+      "source_note": "The institute listing reaches this same site from two faculty entries; it is entered once, under its own name."
+    },
+    {
+      "name": "Laboratory for Education and Research in Secure Systems Engineering (LERSSE)",
+      "focus": "usable security and privacy, and the engineering of secure software and systems",
+      "department": "Electrical and Computer Engineering",
+      "vertical": "infrastructure",
+      "website": "https://lersse.ece.ubc.ca/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://ece.ubc.ca/research/computer-and-software-systems/",
+        "https://lersse.ece.ubc.ca/"
+      ],
+      "source_note": "Homepage news ends 2022; liveness from an October 2025 publication."
+    },
+    {
+      "name": "Laboratory of Microtechnologies for Quantitative Biomedicine",
+      "focus": "microfluidic devices and bioanalytical methods for spatial, quantitative analysis of tumours and other tissue",
+      "department": "Biomedical Engineering",
+      "vertical": "hardware",
+      "website": "https://www.micro-qb.org/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://www.micro-qb.org/"
+      ],
+      "source_note": "Weakest activity signal of this pass: an October 2025 publication is the most recent dated output found."
+    },
+    {
+      "name": "Laboratory of Targeted Drug Delivery and Nanomedicine",
+      "focus": "targeted drug delivery and nanomedicine, spanning cancer immunotherapy, needle-free protein delivery and opioid analogue development",
+      "department": "Pharmaceutical Sciences",
+      "vertical": "health",
+      "website": "https://lilab-tddn.pharmsci.ubc.ca/",
+      "campus_zone": "pharmacy",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://pharmsci.ubc.ca/research/researchers-0",
+        "https://lilab-tddn.pharmsci.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Laksman Research",
+      "focus": "stem cell and bioprinted human cardiac tissue models for inherited arrhythmia genetics and drug testing",
+      "department": "Biomedical Engineering",
+      "vertical": "health",
+      "website": "https://laksmanlab.med.ubc.ca/",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://laksmanlab.med.ubc.ca/"
+      ],
+      "source_note": "Based at the Centre for Heart Lung Innovation at St Paul Hospital, off the Point Grey campus. The site renders its name as both Laksman Lab and Laksman Research."
+    },
+    {
+      "name": "LEGenD Lab",
+      "focus": "lipid nanoparticle engineering for nucleic acid delivery, using super-resolution and cryo-electron microscopy",
+      "department": "Pharmaceutical Sciences",
+      "vertical": "health",
+      "website": "https://www.miffychenglab.com/",
+      "campus_zone": "pharmacy",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://pharmsci.ubc.ca/research/researchers-0",
+        "https://www.miffychenglab.com/"
+      ]
+    },
+    {
+      "name": "Leslie Lab",
+      "focus": "single-molecule and single-cell imaging of nucleic acid and lipid nanoparticle behaviour to support genetic medicines",
+      "department": "Michael Smith Laboratories",
+      "vertical": "health",
+      "website": "https://leslielab.msl.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://leslielab.msl.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Levings Lab",
+      "focus": "regulatory T cell biology and engineered Treg cell therapies for transplant rejection and autoimmune disease",
+      "department": "Biomedical Engineering",
+      "vertical": "health",
+      "website": "https://www.bcchr.ca/levingslab/",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://www.bcchr.ca/levingslab/"
+      ],
+      "source_note": "Based at the BC Children Hospital Research Institute, off the Point Grey campus."
+    },
+    {
+      "name": "Lynn Lab",
+      "focus": "transcriptional control of pancreatic beta-cell development and function, and beta-cell replacement for type 1 diabetes",
+      "department": "Biomedical Engineering",
+      "vertical": "health",
+      "website": "https://www.lynnlab.com/",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://www.lynnlab.com/"
+      ],
+      "source_note": "Based at the BC Children Hospital Research Institute, off the Point Grey campus."
+    },
+    {
+      "name": "Machine Learning @ UBC",
+      "focus": "machine learning methods and applications: probabilistic programming, reinforcement learning and deep learning",
+      "department": "Computer Science",
+      "vertical": "ai_infra",
+      "website": "https://ml.ubc.ca/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.cs.ubc.ca/research-groups",
+        "https://ml.ubc.ca/"
+      ],
+      "source_note": "Spans Computer Science, Statistics and Mathematics; listed by and centred on Computer Science, so filed there."
+    },
+    {
+      "name": "MacLachlan Group",
+      "focus": "supramolecular and materials chemistry, including cellulose nanocrystal composites, photonic films and porous materials",
+      "department": "Stewart Blusson Quantum Matter Institute",
+      "vertical": "deep_tech",
+      "website": "https://groups.chem.ubc.ca/maclachlan/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://qmi.ubc.ca/people/investigators/",
+        "https://groups.chem.ubc.ca/maclachlan/"
+      ]
+    },
+    {
+      "name": "Manufacturing Automation Laboratory",
+      "focus": "mechanics and dynamics of metal cutting, spindle and feed drive design, chatter stability and virtual simulation of CNC machining",
+      "department": "Mechanical Engineering",
+      "vertical": "hardware",
+      "website": "https://mal.mech.ubc.ca/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://mech.ubc.ca/research/centres-facilities/",
+        "https://mal.mech.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Mathematical Programming",
+      "focus": "optimization, algorithms, variational analysis, stochastic processes and mathematical foundations of decision-making",
+      "department": "Computer Science",
+      "vertical": "ai_infra",
+      "website": "https://mathprog.cs.ubc.ca/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.cs.ubc.ca/research-groups",
+        "https://mathprog.cs.ubc.ca/"
+      ],
+      "source_note": "Spans mathematics, engineering and Sauder but is hosted and led from Computer Science."
+    },
+    {
+      "name": "Mayor Lab",
+      "focus": "protein homeostasis and how cells triage misfolded proteins for degradation, with relevance to neurodegenerative disease",
+      "department": "Michael Smith Laboratories",
+      "vertical": "health",
+      "website": "https://mayor51.wixsite.com/mayorlab",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://mayor51.wixsite.com/mayorlab"
+      ],
+      "source_note": "The institute link mayorlab.msl.ubc.ca redirects here. Site news stops at 2024; liveness from the 2026 publication record."
+    },
+    {
+      "name": "Miller Kaplan Lab",
+      "focus": "neural and dermal stem cells, and the mechanisms regulating neuron survival, growth and adult tissue repair",
+      "department": "Michael Smith Laboratories",
+      "vertical": "health",
+      "website": "https://www.millerkaplanlab.com/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://www.millerkaplanlab.com/"
+      ],
+      "source_note": "A joint lab; the Michael Smith Laboratories faculty member is one of its two leads and her lab is in the building."
+    },
+    {
+      "name": "Natural Language Processing Group",
+      "focus": "computational linguistics: discourse and summarization, commonsense reasoning, text mining and visual text analytics",
+      "department": "Computer Science",
+      "vertical": "ai_application",
+      "website": "https://nlp.cs.ubc.ca/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.cs.ubc.ca/research-groups",
+        "https://nlp.cs.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Neural Circuits for Computation, Cognition and Control (NC4) Laboratory",
+      "focus": "neural circuits behind spatial navigation and memory, studied with virtual reality, rodent recording and robotics",
+      "department": "Biomedical Engineering",
+      "vertical": "health",
+      "website": "https://www.nc4.sbme.ubc.ca/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/imaging-and-computational-biology/",
+        "https://www.nc4.sbme.ubc.ca/"
+      ],
+      "source_note": "Based at the Djavad Mowafaghian Centre for Brain Health on campus."
+    },
+    {
+      "name": "Orthopaedic and Injury Biomechanics Group",
+      "focus": "spine, hip fracture, spinal cord injury and head impact biomechanics, including helmet and implant testing",
+      "department": "Mechanical Engineering",
+      "vertical": "health",
+      "website": "https://injury.mech.ubc.ca/",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/human-interfacing-devices/",
+        "https://mech.ubc.ca/research/centres-facilities/",
+        "https://injury.mech.ubc.ca/"
+      ],
+      "source_note": "Listed by both the School of Biomedical Engineering and Mechanical Engineering; filed under the department its own site sits on. Co-directed by two faculty rather than a single lead. Based at ICORD in the Blusson Spinal Cord Centre, off the Point Grey campus. Site publications stop at 2014; liveness from the 2026 publication record."
+    },
+    {
+      "name": "Pacific Laboratory for Artificial Intelligence",
+      "focus": "generative modelling, reinforcement learning, probabilistic programming and Bayesian inference",
+      "department": "Computer Science",
+      "vertical": "ai_infra",
+      "website": "https://plai.cs.ubc.ca/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.cs.ubc.ca/research-groups",
+        "https://plai.cs.ubc.ca/"
+      ],
+      "source_note": "Latest blog post is October 2024; liveness resolved from the 2025 publication record."
+    },
+    {
+      "name": "Pavlidis Lab",
+      "focus": "neuroinformatics: bioinformatics, computational biology and functional genomics applied to brain and psychiatric genetics",
+      "department": "Michael Smith Laboratories",
+      "vertical": "health",
+      "website": "https://pavlab.msl.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://pavlab.msl.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Pharmacokinetic Modeling and Simulation (PKMS) Laboratory",
+      "focus": "pharmacokinetic modelling and simulation, including PBPK approaches, to optimise drug dosing in paediatric and obstetric populations",
+      "department": "Pharmaceutical Sciences",
+      "vertical": "health",
+      "website": "https://pkms.ca/",
+      "campus_zone": "pharmacy",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://pharmsci.ubc.ca/research/researchers-0",
+        "https://pkms.ca/"
+      ],
+      "source_note": "Newest site news post is 2021; liveness from the 2026 publication record."
+    },
+    {
+      "name": "Quantum Devices Group",
+      "focus": "electronic transport in nanoscale quantum circuits built from semiconductor platforms and van der Waals heterostructures",
+      "department": "Stewart Blusson Quantum Matter Institute",
+      "vertical": "deep_tech",
+      "website": "https://phas.ubc.ca/~qdev/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://qmi.ubc.ca/people/investigators/",
+        "https://phas.ubc.ca/~qdev/"
+      ]
+    },
+    {
+      "name": "Quantum Science and Technology Laboratory",
+      "focus": "solid-state quantum devices for spin-based quantum computation, quantum simulation and microwave-optical photon conversion",
+      "department": "Stewart Blusson Quantum Matter Institute",
+      "vertical": "deep_tech",
+      "website": "https://sites.google.com/view/ubcqtl",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://qmi.ubc.ca/people/investigators/",
+        "https://sites.google.com/view/ubcqtl"
+      ],
+      "source_note": "Offices are in the engineering precinct and the experiments are in the institute building; zoned on the lab location."
+    },
+    {
+      "name": "Renewable Resources Laboratory",
+      "focus": "measurement technology and sensor design for industrial wood processing, and optical methods for residual stress and deformation",
+      "department": "Mechanical Engineering",
+      "vertical": "hardware",
+      "website": "https://rrl.mech.ubc.ca/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://mech.ubc.ca/research/centres-facilities/",
+        "https://rrl.mech.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Robotics and Control Laboratory",
+      "focus": "medical robotics, ultrasound imaging and elastography for image-guided surgery and diagnosis",
+      "department": "Biomedical Engineering",
+      "vertical": "hardware",
+      "website": "https://rcl.ece.ubc.ca/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/imaging-and-computational-biology/",
+        "https://rcl.ece.ubc.ca/"
+      ],
+      "source_note": "The address the school profile links has been decommissioned; this is the group live site. A shared lab with three faculty and no single named director."
+    },
+    {
+      "name": "Rodrigues Lab",
+      "focus": "cardiac energy metabolism in diabetes, covering lipoprotein lipase regulation, heparanase signalling and VEGFB as a therapeutic lever",
+      "department": "Pharmaceutical Sciences",
+      "vertical": "health",
+      "website": "https://www.rodrigueslab.ca/",
+      "campus_zone": "pharmacy",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://pharmsci.ubc.ca/research/researchers-0",
+        "https://www.rodrigueslab.ca/"
+      ]
+    },
+    {
+      "name": "SALT Lab",
+      "focus": "automated software testing, program analysis, fault localization, and program repair",
+      "department": "Electrical and Computer Engineering",
+      "vertical": "infrastructure",
+      "website": "https://people.ece.ubc.ca/amesbah/salt/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://ece.ubc.ca/research/computer-and-software-systems/",
+        "https://people.ece.ubc.ca/amesbah/salt/"
+      ],
+      "source_note": "The former salt.ece.ubc.ca domain no longer resolves; the live group page sits under the lead faculty ECE space."
+    },
+    {
+      "name": "Sensory Perception & Interaction Research Group",
+      "focus": "haptics and physical, touch-based user interfaces for human-computer and human-robot interaction",
+      "department": "Computer Science",
+      "vertical": "other",
+      "website": "https://www.cs.ubc.ca/labs/spin/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.cs.ubc.ca/research-groups",
+        "https://www.cs.ubc.ca/labs/spin/"
+      ]
+    },
+    {
+      "name": "Shakiba Lab",
+      "focus": "stem cell competition and fitness, using systems and synthetic biology to engineer pluripotent stem cell manufacturing",
+      "department": "Biomedical Engineering",
+      "vertical": "synbio",
+      "website": "https://shakiba.bme.ubc.ca/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://shakiba.bme.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Snutch Lab",
+      "focus": "ion channels and signal transduction in the nervous system, and their relationship to neurological disorders",
+      "department": "Michael Smith Laboratories",
+      "vertical": "health",
+      "website": "https://snutchlab.msl.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://snutchlab.msl.ubc.ca/"
+      ]
+    },
+    {
+      "name": "SOCIUS Lab",
+      "focus": "social computing: making computer-mediated social interaction richer, more inclusive and more humane",
+      "department": "Computer Science",
+      "vertical": "other",
+      "website": "https://www.cs.ubc.ca/labs/socius/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.cs.ubc.ca/research-groups",
+        "https://www.cs.ubc.ca/labs/socius/"
+      ]
+    },
+    {
+      "name": "Software Practices Lab",
+      "focus": "software engineering, programming languages, program analysis and verification",
+      "department": "Computer Science",
+      "vertical": "infrastructure",
+      "website": "https://spl.cs.ubc.ca/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.cs.ubc.ca/research-groups",
+        "https://spl.cs.ubc.ca/"
+      ],
+      "source_note": "Group publications defer to individual faculty pages; liveness shown by the 2025W2 reading-group schedule."
+    },
+    {
+      "name": "Stem Cell Bioengineering",
+      "focus": "engineering functional tissue from pluripotent and somatic stem cells, including blood and immune cell differentiation",
+      "department": "Biomedical Engineering",
+      "vertical": "synbio",
+      "website": "https://www.stemcellbioengineering.ca/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://www.stemcellbioengineering.ca/"
+      ],
+      "source_note": "Listed by both the Michael Smith Laboratories and the School of Biomedical Engineering. The site brands itself Stem Cell Bioengineering rather than by its lead faculty name. Site news stops at 2022; liveness from the 2026 publication record."
+    },
+    {
+      "name": "Sustainable Bioeconomy Research Group",
+      "focus": "life-cycle assessment, techno-economic analysis and machine learning applied to bioenergy, biofuels and circular-economy systems",
+      "department": "Wood Science",
+      "vertical": "climate",
+      "website": "https://grouptu.forestry.ubc.ca/",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-wood-science/labs-and-facilities/",
+        "https://grouptu.forestry.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Sustainable Built Environment Lab",
+      "focus": "BIM-based parametric design, embodied-carbon life-cycle assessment and building circularity for net-zero and mass-timber buildings",
+      "department": "Wood Science",
+      "vertical": "climate",
+      "website": "https://sbelab.forestry.ubc.ca",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-wood-science/labs-and-facilities/",
+        "https://sbelab.forestry.ubc.ca"
+      ]
+    },
+    {
+      "name": "Sustainable Engineered Structural Solutions Laboratory",
+      "focus": "engineered wood and steel-timber composite structures, connectors and seismic design for tall mass-timber buildings",
+      "department": "Wood Science",
+      "vertical": "hardware",
+      "website": "https://sustainable-buildings.forestry.ubc.ca/",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-wood-science/labs-and-facilities/",
+        "https://sustainable-buildings.forestry.ubc.ca/"
+      ],
+      "source_note": "Lab publication list stops at 2023; liveness from the 2026 publication record."
+    },
+    {
+      "name": "Sustainable Functional Biomaterials Lab",
+      "focus": "nanocellulose and wood-derived biomaterials, from cellulose films that replace single-use plastics to aerogels",
+      "department": "Wood Science",
+      "vertical": "climate",
+      "website": "https://nanocellulose.forestry.ubc.ca/",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-wood-science/labs-and-facilities/",
+        "https://nanocellulose.forestry.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Systopia",
+      "focus": "computer systems: operating systems, distributed systems, security, data provenance and program analysis",
+      "department": "Computer Science",
+      "vertical": "infrastructure",
+      "website": "https://systopia.cs.ubc.ca/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.cs.ubc.ca/research-groups",
+        "https://systopia.cs.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Tang Lab",
+      "focus": "AI systems for biology, spanning single-cell and spatial data, large-scale neural recording and multi-scale brain mapping",
+      "department": "Michael Smith Laboratories",
+      "vertical": "ai_application",
+      "website": "https://tangxinlab.org/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://tangxinlab.org/"
+      ],
+      "source_note": "The institute link tanglab.msl.ubc.ca redirects here."
+    },
+    {
+      "name": "The BioFoundry at UBC",
+      "focus": "synthetic biology and bioprocess engineering for cleaner fuels, therapeutics, materials and mining biotechnology",
+      "department": "Biomedical Engineering",
+      "vertical": "synbio",
+      "website": "https://biofoundry.sites.olt.ubc.ca/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://biofoundry.sites.olt.ubc.ca/"
+      ],
+      "source_note": "Based in the Chemical and Biological Engineering building. The site carries no visible dates; liveness from the 2026 publication record."
+    },
+    {
+      "name": "The Finbloom Lab",
+      "focus": "bioinspired nanomaterials at the microbe-material interface, including biofilm-penetrating nanoparticles and drug carriers",
+      "department": "Pharmaceutical Sciences",
+      "vertical": "health",
+      "website": "https://www.finbloomlab.com/",
+      "campus_zone": "pharmacy",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://pharmsci.ubc.ca/research/researchers-0",
+        "https://www.finbloomlab.com/"
+      ]
+    },
+    {
+      "name": "The Kieffer Lab",
+      "focus": "diabetes and metabolic disease: pancreatic endocrine cells, stem cell-derived islets, insulin secretion and gut hormones",
+      "department": "Biomedical Engineering",
+      "vertical": "health",
+      "website": "https://kiefferlab.com/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://kiefferlab.com/"
+      ],
+      "source_note": "The site carries no visible dates; liveness from the 2026 publication record."
+    },
+    {
+      "name": "The Reliable, Secure, and Sustainable Software Lab (ReSeSS)",
+      "focus": "quality, security, and reliability of software and AI systems through automated analysis",
+      "department": "Electrical and Computer Engineering",
+      "vertical": "infrastructure",
+      "website": "https://resess.github.io/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://ece.ubc.ca/research/computer-and-software-systems/",
+        "https://resess.github.io/"
+      ]
+    },
+    {
+      "name": "The Rossi Laboratory",
+      "focus": "tissue-resident stem cells and their stromal and immune accessory cells in muscle regeneration and CNS pathology",
+      "department": "Biomedical Engineering",
+      "vertical": "health",
+      "website": "http://www.rossilab.ca/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "http://www.rossilab.ca/"
+      ],
+      "source_note": "The site serves HTTP only; the HTTPS form fails its TLS handshake, so the plain http address is the working one. Site content stops at 2023; liveness from the 2026 publication record."
+    },
+    {
+      "name": "The Velenosi Lab",
+      "focus": "metabolomics and bioinformatics to identify metabolite profiles that predict cancer drug response in patient-derived models",
+      "department": "Pharmaceutical Sciences",
+      "vertical": "health",
+      "website": "https://www.velenosilab.ca/",
+      "campus_zone": "pharmacy",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://pharmsci.ubc.ca/research/researchers-0",
+        "https://www.velenosilab.ca/"
+      ]
+    },
+    {
+      "name": "Timber Engineering and Applied Mechanics (TEAM) Laboratory",
+      "focus": "structural performance of timber buildings, covering cross-laminated timber, glulam, connections and seismic behaviour of wood systems",
+      "department": "Wood Science",
+      "vertical": "hardware",
+      "website": "https://team.forestry.ubc.ca",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-wood-science/labs-and-facilities/",
+        "https://team.forestry.ubc.ca"
+      ],
+      "source_note": "The site header reads Advanced Mechanics while its body text and the department listing say Applied Mechanics. Lab publication list stops at 2022; liveness from the 2026 publication record."
+    },
+    {
+      "name": "Todesco Lab",
+      "focus": "genetic basis of plant diversity and its role in adaptation and domestication, aimed at more sustainable crops",
+      "department": "Michael Smith Laboratories",
+      "vertical": "climate",
+      "website": "https://todescolab.msl.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://todescolab.msl.ubc.ca/"
+      ]
+    },
+    {
+      "name": "Tokuriki Lab",
+      "focus": "experimental evolution of proteins and enzymes, and the molecular mechanisms behind new enzyme functions",
+      "department": "Michael Smith Laboratories",
+      "vertical": "synbio",
+      "website": "https://tokurikilab.msl.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.msl.ubc.ca/people-department/faculty/",
+        "https://tokurikilab.msl.ubc.ca/"
+      ],
+      "source_note": "Lab publications page stops at 2021; liveness from the 2026 publication record."
+    },
+    {
+      "name": "Tropini Lab",
+      "focus": "host-microbiota interactions and gut bacterial biogeography, using microfluidics, imaging and gnotobiotic models",
+      "department": "Biomedical Engineering",
+      "vertical": "health",
+      "website": "https://tropini.microbiology.ubc.ca/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://tropini.microbiology.ubc.ca/"
+      ],
+      "source_note": "Joint appointment with Microbiology and Immunology; the group site is hosted on that department domain."
+    },
+    {
+      "name": "UBC CIRRUS Lab",
+      "focus": "cloud infrastructure and serverless computing: reliability, usability, and sustainability",
+      "department": "Electrical and Computer Engineering",
+      "vertical": "infrastructure",
+      "website": "https://cirrus.ece.ubc.ca/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://ece.ubc.ca/research/computer-and-software-systems/",
+        "https://cirrus.ece.ubc.ca/"
+      ]
+    },
+    {
+      "name": "UBC Digital Multimedia Lab",
+      "focus": "video and multimedia processing: compression, quality enhancement, and deep learning for imaging",
+      "department": "Electrical and Computer Engineering",
+      "vertical": "ai_application",
+      "website": "https://dml.ece.ubc.ca/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://ece.ubc.ca/research/computer-and-software-systems/",
+        "https://dml.ece.ubc.ca/"
+      ],
+      "source_note": "The directory lists this group under a different name against its lead faculty; the group own page presents as UBC Digital Multimedia Lab."
+    },
+    {
+      "name": "UBC Quantum Software and Algorithms Research Group",
+      "focus": "software and algorithms for quantum computers, including circuit synthesis, quantum system characterization and open source tooling",
+      "department": "Stewart Blusson Quantum Matter Institute",
+      "vertical": "deep_tech",
+      "website": "https://glassnotes.github.io/qsar.html",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://qmi.ubc.ca/people/investigators/",
+        "https://glassnotes.github.io/qsar.html"
+      ],
+      "source_note": "The group sits in Electrical and Computer Engineering, so it is zoned there rather than at the institute."
+    },
+    {
+      "name": "UBC Security & Privacy Group",
+      "focus": "systems security, cloud security, network security, privacy, and security of machine learning and software",
+      "department": "Computer Science",
+      "vertical": "infrastructure",
+      "website": "https://spg.cs.ubc.ca/",
+      "campus_zone": "compsci",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://www.cs.ubc.ca/research-groups",
+        "https://spg.cs.ubc.ca/"
+      ]
+    },
+    {
+      "name": "UBC Tree Molecular Biology Research Lab",
+      "focus": "tree cell-wall molecular biology, covering cellulose and lignin biosynthesis, secondary xylem formation and wood quality traits",
+      "department": "Wood Science",
+      "vertical": "synbio",
+      "website": "https://treebiotech.forestry.ubc.ca/",
+      "campus_zone": "forestry",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://forestry.ubc.ca/department-of-wood-science/labs-and-facilities/",
+        "https://treebiotech.forestry.ubc.ca/"
+      ],
+      "source_note": "The department listing names it Wood and Fiber Quality Lab; the site own header is UBC Tree Molecular Biology Research Lab."
+    },
+    {
+      "name": "Williams Lab",
+      "focus": "extracellular vesicle biology and nanoscale flow cytometry for liquid-biopsy cancer detection and metastasis target discovery",
+      "department": "Pharmaceutical Sciences",
+      "vertical": "health",
+      "website": "https://www.williamslab.ca/",
+      "campus_zone": "pharmacy",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://pharmsci.ubc.ca/research/researchers-0",
+        "https://www.williamslab.ca/"
+      ],
+      "source_note": "Site footer still reads 2023; liveness from the publication record."
+    },
+    {
+      "name": "Wisnovsky Lab",
+      "focus": "chemical biology and functional genomics combining glycobiology, molecular design and immunology to map glycan-binding proteins",
+      "department": "Pharmaceutical Sciences",
+      "vertical": "health",
+      "website": "https://www.wisnovskylab.ca/",
+      "campus_zone": "pharmacy",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://pharmsci.ubc.ca/research/researchers-0",
+        "https://www.wisnovskylab.ca/"
+      ]
+    },
+    {
+      "name": "Yachie Laboratory",
+      "focus": "DNA-based event recording and single-cell lineage tracing, CRISPR base editors, clone isolation and lab automation",
+      "department": "Biomedical Engineering",
+      "vertical": "synbio",
+      "website": "https://yachie-lab.org/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://bme.ubc.ca/research/research-themes/cellular-molecular-engineering/",
+        "https://yachie-lab.org/"
+      ],
+      "source_note": "A dual-site group with a second location at the University of Osaka; the UBC site is in the school building."
+    },
+    {
+      "name": "Ye Research Group",
+      "focus": "optical spectroscopy and near-field microscopy of emergent phenomena in atomically thin materials and van der Waals stacks",
+      "department": "Stewart Blusson Quantum Matter Institute",
+      "vertical": "deep_tech",
+      "website": "https://ye.physics.ubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-04",
+      "sources": [
+        "https://qmi.ubc.ca/people/investigators/",
+        "https://ye.physics.ubc.ca/"
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "APEX: EY Pitchathon",
+      "cadence": "annual (February)",
+      "format": "demo_day",
+      "audience": "student founders",
+      "website": "https://www.eprojectsubc.com/events",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.eprojectsubc.com/events",
+        "https://www.eprojectsubc.com/"
+      ],
+      "source_note": "Sources: https://www.eprojectsubc.com/events (mid-February, full day; teams pitch on defensibility and sustainability to professional judges)\nNote: run by eProjects and hosted at the EY office downtown, hence off_campus. The event has no page of its own; the club events page is the best public link."
+    },
+    {
+      "name": "BluePrint",
+      "cadence": "annual (January)",
+      "format": "conference",
+      "audience": "students exploring tech careers",
+      "website": "https://www.ubcbiztech.com/events/blueprint2026",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ubcbiztech.com/events/blueprint2026",
+        "https://globalnews.ca/video/11648924/ubc-biztechs-2026-blueprint-conference"
+      ],
+      "source_note": "Sources: https://www.ubcbiztech.com/events/blueprint2026 (Jan 24, 2026 at UBC Robson; 2025 edition won CUS Conference of the Year)\n         https://globalnews.ca/video/11648924/ubc-biztechs-2026-blueprint-conference"
+    },
+    {
+      "name": "cmd-f",
+      "cadence": "annual (March)",
+      "format": "hackathon",
+      "audience": "women and gender-diverse students",
+      "website": "https://cmd-f.nwplus.io/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://cmd-f-2026.devpost.com/",
+        "https://cmd-f.nwplus.io/"
+      ],
+      "source_note": "Sources: https://cmd-f-2026.devpost.com/ (Mar 7-8, 2026 at the Life Sciences Institute)\n         https://cmd-f.nwplus.io/"
+    },
+    {
+      "name": "Design and Innovation Day",
+      "cadence": "annual (April)",
+      "format": "showcase",
+      "audience": "students, industry, and community",
+      "website": "https://experience.apsc.ubc.ca/design-and-innovation-day",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://apsc.ubc.ca/event/2026/design-and-innovation-day-2026",
+        "https://experience.apsc.ubc.ca/design-and-innovation-day"
+      ],
+      "source_note": "Sources: https://apsc.ubc.ca/event/2026/design-and-innovation-day-2026 (Apr 9, 2026; Kaiser, CHBE, and Life Sciences buildings)\n         https://experience.apsc.ubc.ca/design-and-innovation-day"
+    },
+    {
+      "name": "Hack the Coast",
+      "cadence": "annual (February); first edition 2026",
+      "format": "hackathon",
+      "audience": "students of all skill levels",
+      "website": "https://hackthecoast.susubc.ca/",
+      "campus_zone": "science",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://hackthecoast.susubc.ca/",
+        "https://hackthecoast.devpost.com/"
+      ],
+      "source_note": "Sources: https://hackthecoast.susubc.ca/ (Feb 7-8, 2026 at UBC; first edition, run by the Science Undergraduate Society)\n         https://hackthecoast.devpost.com/"
+    },
+    {
+      "name": "HackCamp",
+      "cadence": "annual (November)",
+      "format": "hackathon",
+      "audience": "beginner student hackers",
+      "website": "https://hackcamp.nwplus.io/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://hackcamp-2025.devpost.com/",
+        "https://hackcamp.nwplus.io/"
+      ],
+      "source_note": "Sources: https://hackcamp-2025.devpost.com/ (Nov 15-16, 2025; 10th anniversary edition)\n         https://hackcamp.nwplus.io/"
+    },
+    {
+      "name": "HelloHacks",
+      "cadence": "annual (October)",
+      "format": "hackathon",
+      "audience": "first-time student hackers",
+      "website": "https://www.ubcbiztech.com/events/hellohacks2025",
+      "campus_zone": "commerce",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ubcbiztech.com/events/hellohacks2025",
+        "https://hellohacks.devpost.com/"
+      ],
+      "source_note": "Sources: https://www.ubcbiztech.com/events/hellohacks2025 (Oct 4-5 2025)\n         https://hellohacks.devpost.com/ (bootcamps before the hackathon; no experience needed)\nNote: run by UBC BizTech; free for BizTech members."
+    },
+    {
+      "name": "Innovation OnBoard",
+      "cadence": "annual program (September to March), pitch competition in March",
+      "format": "demo_day",
+      "audience": "student founders",
+      "website": "https://www.innovationboard.ca/",
+      "campus_zone": "engineering",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.innovationboard.ca/2024/06/23/schedule-ubc.html"
+      ],
+      "source_note": "Sources: https://www.innovationboard.ca/2024/06/23/schedule-ubc.html (2025-26 schedule; pitch competition Mar 11, 2026; sessions in CHBE)"
+    },
+    {
+      "name": "Innovation UBC Investor Showcase",
+      "cadence": "annual (spring)",
+      "format": "demo_day",
+      "audience": "founders and investors",
+      "website": "https://innovation.ubc.ca/events/2026-investor-showcase",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://innovation.ubc.ca/news/march-03-2026/meet-12-ubc-ventures-presenting-innovation-ubcs-2026-investor-showcase",
+        "https://techcouver.com/2026/03/30/ubc-ventures-take-stage-at-investor-showcase/"
+      ],
+      "source_note": "Sources: https://innovation.ubc.ca/news/march-03-2026/meet-12-ubc-ventures-presenting-innovation-ubcs-2026-investor-showcase (Apr 14, 2026 at UBC Robson Square)\n         https://techcouver.com/2026/03/30/ubc-ventures-take-stage-at-investor-showcase/"
+    },
+    {
+      "name": "MERIDIAN",
+      "cadence": "annual (March)",
+      "format": "conference",
+      "audience": "university students, founders, and investors",
+      "website": "https://www.eprojectsubc.com/events",
+      "campus_zone": "off_campus",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.eprojectsubc.com/events",
+        "https://www.eprojectsubc.com/"
+      ],
+      "source_note": "Sources: https://www.eprojectsubc.com/events (mid-March, full day; keynotes, startup showcases, a pitch competition, investor tables, and a Night Summit across Vancouver)\nNote: eProjects year-end flagship, held in Vancouver rather than on campus. The event has no page of its own; the club events page is the best public link."
+    },
+    {
+      "name": "MIS Night",
+      "cadence": "annual (September)",
+      "format": "meetup",
+      "audience": "students and Vancouver tech professionals",
+      "website": "https://www.ubcbiztech.com/events/mis-night2025",
+      "campus_zone": "commerce",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ubcbiztech.com/events/mis-night2025",
+        "https://amsclubs.ca/ubc-biztech/"
+      ],
+      "source_note": "Sources: https://www.ubcbiztech.com/events/mis-night2025 (Sept 11 2025)\n         https://amsclubs.ca/ubc-biztech/\nNote: UBC BizTech describes it publicly as its annual networking event connecting Vancouver tech professionals with UBC students, run with the Management Information Systems program."
+    },
+    {
+      "name": "nwHacks",
+      "cadence": "annual (January)",
+      "format": "hackathon",
+      "audience": "students",
+      "website": "https://nwhacks.io/",
+      "campus_zone": "medicine",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://nwhacks.io/",
+        "https://allhackathons.com/hackathon/nwhacks-2026/"
+      ],
+      "source_note": "Sources: https://nwhacks.io/ (2027 edition announced; 2026 edition ran Jan 17-18, 2026 at UBC)\n         https://allhackathons.com/hackathon/nwhacks-2026/"
+    },
+    {
+      "name": "Product Night",
+      "cadence": "annual (October)",
+      "format": "meetup",
+      "audience": "students starting in product management",
+      "website": "https://ubcpmc.com/productnight",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://ubcpmc.com/productnight",
+        "https://ubcpmc.com/events"
+      ],
+      "source_note": "Sources: https://ubcpmc.com/events (Oct 9 2025; keynotes, small-group chats, and networking)\n         https://ubcpmc.com/productnight\nNote: the UBC Product Management Club kickoff event for the year."
+    },
+    {
+      "name": "ProduHacks",
+      "cadence": "annual (March)",
+      "format": "hackathon",
+      "audience": "students interested in product management",
+      "website": "https://produhacks-2026.devpost.com/",
+      "campus_zone": "commerce",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://produhacks-2026.devpost.com/"
+      ],
+      "source_note": "Sources: https://produhacks-2026.devpost.com/ (Mar 21-22, 2026 at UBC Sauder, 2053 Main Mall; run by UBC BizTech)"
+    },
+    {
+      "name": "UBC CIC GenAI Hackathon",
+      "cadence": "each term",
+      "format": "hackathon",
+      "audience": "UBC students, all skill levels",
+      "website": "https://cic.ubc.ca/events/",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://cic.ubc.ca/ubc-cic-fall-2025-genai-hackathon/",
+        "https://cic.ubc.ca/2026/05/13/highlights-from-the-ubc-cic-spring-2026-genai-hackathon/"
+      ],
+      "source_note": "Sources: https://cic.ubc.ca/ubc-cic-fall-2025-genai-hackathon/ (Nov 12, 2025)\n         https://cic.ubc.ca/2026/05/13/highlights-from-the-ubc-cic-spring-2026-genai-hackathon/ (May 2026 edition)"
+    },
+    {
+      "name": "UBC Game Dev Year-End Showcase",
+      "cadence": "annual (April)",
+      "format": "showcase",
+      "audience": "student game developers and industry",
+      "website": "https://www.ubcgamedev.com/",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://www.ubcgamedev.com/"
+      ],
+      "source_note": "Sources: https://www.ubcgamedev.com/ (Year-End Showcase Apr 4, 2026 in IBLC 261)"
+    },
+    {
+      "name": "UBC Product Conference",
+      "cadence": "annual (February)",
+      "format": "conference",
+      "audience": "students exploring product management",
+      "website": "https://ubcpmc.com/productconference",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://ubcpmc.com/productconference",
+        "https://ubcpmc.com/events"
+      ],
+      "source_note": "Sources: https://ubcpmc.com/events (Feb 1 2026; all-day conference with keynotes, workshops, panels, and networking)\n         https://ubcpmc.com/productconference\nNote: run by the UBC Product Management Club."
+    },
+    {
+      "name": "UBC Quantum Career Expo",
+      "cadence": "annual (March)",
+      "format": "conference",
+      "audience": "students exploring quantum careers",
+      "website": "https://phas.ubc.ca/2025-ubc-quantum-career-fair",
+      "campus_zone": "science",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://phas.ubc.ca/2025-ubc-quantum-career-fair",
+        "https://amsclubs.ca/quantum-club/",
+        "https://www.instagram.com/ubcquantum/"
+      ],
+      "source_note": "Sources: https://phas.ubc.ca/2025-ubc-quantum-career-fair (Mar 11 2025, Abdul Ladha Science Student Centre)\n         https://www.instagram.com/ubcquantum/ (2026 edition, Mar 25 2026, same venue)\n         https://amsclubs.ca/quantum-club/\nNote: the series has drifted in name from Quantum Career Fair (2025) to Quantum Career Expo (2026). The Physics and Astronomy page for the 2025 edition is the most substantial public page; the club domain ubcquantum.com has lapsed and must not be linked (see 5.4)."
+    },
+    {
+      "name": "UBC Technical Career Fair",
+      "cadence": "annual (January)",
+      "format": "conference",
+      "audience": "students and tech employers",
+      "website": "https://ubccsss.org/tcf/",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://ubccsss.org/tcf/",
+        "https://www.cs.ubc.ca/industry/tech-career-fair"
+      ],
+      "source_note": "Sources: https://ubccsss.org/tcf/ (2026 edition; held late January at the Robert H. Lee Alumni Centre)\n         https://www.cs.ubc.ca/industry/tech-career-fair"
+    },
+    {
+      "name": "UXathon",
+      "cadence": "annual (January)",
+      "format": "hackathon",
+      "audience": "student designers of all levels",
+      "website": "https://uxathon.framer.website/",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://uxathon.framer.website/",
+        "https://uxathon-2026.devpost.com/",
+        "https://www.ubcuxhub.ca/"
+      ],
+      "source_note": "Sources: https://uxathon.framer.website/ (UXathon 2026, Jan 10-11 2026; prior edition drew 80 designers, 16 projects, 10+ mentors and judges)\n         https://uxathon-2026.devpost.com/\n         https://www.ubcuxhub.ca/ (run by UBC UX Hub)\nNote: a design competition rather than a coding one, filed hackathon as the closest format the enum carries."
+    },
+    {
+      "name": "youCode",
+      "cadence": "annual (April)",
+      "format": "hackathon",
+      "audience": "UBC students, underrepresented genders in tech",
+      "website": "https://ubcyoucode.com/",
+      "campus_zone": "other",
+      "last_verified": "2026-08-03",
+      "sources": [
+        "https://ubcyoucode.com/"
+      ],
+      "source_note": "Sources: https://ubcyoucode.com/ (Apr 4-5, 2026 at UBC; 2025 recap on site; run by UBC WiCS and WiDS@UBC)"
+    }
+  ]
+}
