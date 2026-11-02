@@ -9,6 +9,8 @@ import { listNews } from "@/lib/domain/news";
 import { TopConnectors } from "@/components/top-connectors";
 import { CompanyWebsiteIcon } from "@/components/company-website";
 import { CampusSeal } from "@/components/campus-seal";
+import { LogoMark } from "@/components/sample-instrument";
+import { localCompanyLogoUrl } from "@/lib/domain/local-logos";
 import { PrecollegeBadges } from "@/components/badges";
 import type { PrecollegeSignalView } from "@/lib/domain/precollege";
 
@@ -191,7 +193,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
     .filter((u, i, arr) => sp.university === u.id || i < 24 || arr.length <= 24);
 
   return (
-    <div className="mx-auto max-w-[1100px] px-4 pb-12 pt-6 sm:px-6 sm:pt-8">
+    <div className="mx-auto max-w-[1100px] px-3 pb-10 pt-5 sm:px-6 sm:pb-12 sm:pt-8" data-signals-page="">
       <p className="scout-kicker">Activity</p>
       <h1 className="mt-0.5 scout-display text-[28px] leading-none text-[color:var(--fg,#0B0E17)] sm:text-[40px]">Signals</h1>
       <p className="mt-1.5 max-w-2xl text-[13px] leading-snug text-[color:var(--fg-2,#3F465C)] sm:text-[14px]">
@@ -328,7 +330,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
             </li>
           );
         })}
-        {signalsPage.map((s) => {
+        {signalsPage.map((s, signalIndex) => {
           // Signals span both formed companies (Startup Scout) and hackathon-style
           // submissions/evidence (Founder Scout, kind='project') — only kind='company'
           // rows resolve on /startup/discover (see queries.ts listCandidateProjects),
@@ -336,18 +338,36 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
           const detailHref = s.project_kind === "company" ? `/startup/${s.project_id}` : `/map/network?project=${s.project_id}`;
           const footerDate = s.source_date ? formatSignalDate(s.source_date) : `Discovered ${formatMonthDay(s.created_at)}`;
           const lowConfidence = (s.significance_note ?? "").startsWith("Low confidence");
+          const featured = signalIndex === 0 && pageSafe === 1 && !precollegeOn && sp.type !== "press";
           return (
-            <li key={s.id} className="rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3">
+            <li
+              key={s.id}
+              className={
+                featured
+                  ? "relative rounded-md border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--bg,#FFFFFF)] p-3.5 pl-3.5 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:rounded-l-md before:bg-[color:var(--cobalt,#2F4FD8)]"
+                  : "rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3"
+              }
+              data-signal-featured={featured ? "1" : undefined}
+            >
+              {featured ? (
+                <p className="mb-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+                  Featured
+                </p>
+              ) : null}
               <span className="inline-flex items-center gap-2">
-                <CampusSeal label={s.university_name} size="sm" />
-                <Link href={detailHref} className="text-sm font-medium text-foreground hover:text-link">
+                {s.project_kind === "company" && localCompanyLogoUrl(s.project_id) ? (
+                  <LogoMark name={s.project_name} logoUrl={localCompanyLogoUrl(s.project_id)} size={featured ? 28 : 22} />
+                ) : (
+                  <CampusSeal label={s.university_name} size={featured ? "md" : "sm"} />
+                )}
+                <Link href={detailHref} className={`font-medium text-foreground hover:text-link ${featured ? "text-[15px]" : "text-sm"}`}>
                   {s.founder_name ?? s.project_name}
                   {s.university_name ? ` · ${s.university_name}` : ""}
                 </Link>
                 {s.project_kind === "company" && <CompanyWebsiteIcon url={s.website_url} name={s.project_name} />}
               </span>
               <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-link">{TYPE_LABEL[s.signal_type] ?? s.signal_type}</p>
-              <p className="mt-1 text-sm text-foreground">{s.current_observation}</p>
+              <p className={`mt-1 text-foreground ${featured ? "text-[15px] leading-snug" : "text-sm"}`}>{s.current_observation}</p>
               {s.significance_note && lowConfidence ? <p className="mt-1 text-sm text-muted">{s.significance_note}</p> : null}
               {s.significance_note && !lowConfidence ? <p className="mt-1 text-sm text-muted">Why it matters: {s.significance_note}</p> : null}
               <p className="mt-1.5 text-xs text-muted">

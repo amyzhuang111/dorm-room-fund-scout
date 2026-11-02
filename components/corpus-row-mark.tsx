@@ -2,20 +2,18 @@
 
 import { useState } from "react";
 
-function faviconUrl(website: string | null): string | null {
-  if (!website) return null;
-  try {
-    const host = new URL(website).hostname.replace(/^www\./, "");
-    if (!host) return null;
-    return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=64`;
-  } catch {
-    return null;
-  }
-}
-
-/** Mobile corpus mark: real site favicon when it loads, else monogram. */
-export function CorpusRowMark({ name, website }: { name: string; website: string | null }) {
-  const src = faviconUrl(website);
+/** Mobile corpus mark: verified local logo when provided, else monogram. Never hotlink. */
+export function CorpusRowMark({
+  name,
+  website,
+  logoUrl,
+}: {
+  name: string;
+  website: string | null;
+  logoUrl?: string | null;
+}) {
+  void website;
+  const src = logoUrl && logoUrl.startsWith("/") ? logoUrl : null;
   const initial = (name.trim()[0] || "?").toUpperCase();
   const [ok, setOk] = useState(Boolean(src));
   if (src && ok) {
@@ -26,6 +24,8 @@ export function CorpusRowMark({ name, website }: { name: string; website: string
         alt=""
         width={28}
         height={28}
+        loading="lazy"
+        decoding="async"
         className="c-logo"
         onLoad={(e) => {
           const img = e.currentTarget;
@@ -36,7 +36,7 @@ export function CorpusRowMark({ name, website }: { name: string; website: string
     );
   }
   return (
-    <span className="c-mono" aria-hidden>
+    <span className="c-mono" aria-hidden data-logo-fallback="seal">
       {initial}
     </span>
   );

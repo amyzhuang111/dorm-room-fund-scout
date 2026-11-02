@@ -4,6 +4,7 @@ import { getDb } from "../db/client";
 import { campusSlug, shortCampusLabel } from "./campuses";
 import { directoryRank, whyItsHere } from "./directory-rank";
 import { classifyDescription, isBoilerplateDescription, primaryTag, sectorLabel } from "./sectors";
+import { localCompanyLogoUrl } from "./local-logos";
 
 export { directoryRank, whyItsHere };
 
@@ -422,7 +423,6 @@ export function buildDirectoryFromDb(): DirectoryData {
       if (hit) sectorId = hit.tag;
     }
     const signalKind = signalByProject.get(company.id) ?? null;
-    const storedLogo = logoByProject.get(company.id) ?? null;
     let site = websiteByProject.get(company.id);
     if (!site) {
       const primary = primaryByProject.get(company.id);
@@ -435,7 +435,12 @@ export function buildDirectoryFromDb(): DirectoryData {
         }
       }
     }
-    const derivedLogo = storedLogo ?? faviconFromWebsiteHost(site);
+    // site retained for future provenance; logos come only from verified local cache.
+    void site;
+    void logoByProject;
+    void primaryHostCount;
+    // Verified local logo only — never hotlink; LogoMark falls back to cobalt monogram.
+    const derivedLogo = localCompanyLogoUrl(company.id);
     cards.push({
       id: company.id,
       name: company.name,

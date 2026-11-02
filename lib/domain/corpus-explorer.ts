@@ -12,6 +12,7 @@ import {
   searchDirectory,
   sortDirectory,
 } from "@/lib/domain/directory";
+import { localCompanyLogoUrl } from "@/lib/domain/local-logos";
 
 export const CORPUS_PAGE_SIZE = 40;
 
@@ -35,6 +36,7 @@ export interface CorpusRow {
   founderCount: number;
   website: string | null;
   fundingText: string | null;
+  logoUrl: string | null;
 }
 
 export interface CorpusPage {
@@ -111,6 +113,7 @@ export function cardToCorpusRow(
     founderCount: card.founders.length,
     website: extras?.website ?? null,
     fundingText: extras?.fundingText ?? null,
+    logoUrl: card.logoUrl ?? localCompanyLogoUrl(card.id),
   };
 }
 
@@ -159,7 +162,7 @@ function sortCorpus(rows: CorpusRow[], sort: CorpusSort): CorpusRow[] {
         signals: r.signals,
         founders: r.founders,
         latestSignalAt: r.latestSignalAt,
-        logoUrl: null,
+        logoUrl: r.logoUrl,
         foundedYear: r.foundedYear,
         operatingStatus: (r.status as "acquired" | "dead" | null) ?? null,
         hqRegion: r.hq,
@@ -176,7 +179,6 @@ export function corpusSortOf(value: string | undefined): CorpusSort {
   if (value === "signals" || value === "founded") return value;
   return directorySortOf(value);
 }
-
 export function paginateCorpus(opts: {
   q?: string;
   sector?: string;

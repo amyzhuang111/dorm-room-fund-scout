@@ -279,12 +279,13 @@ export function companyInitials(name: string): string {
 }
 
 function NeutralMark({ name, cls }: { name: string; cls: string }) {
-  const initials = companyInitials(name).slice(0, 1);
+  const initials = companyInitials(name).slice(0, 2);
   return (
     <span
-      className={`${cls} grid shrink-0 place-items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] font-mono text-[9px] font-medium tracking-tight text-[color:var(--fg-3,#5C647A)]`}
+      className={`${cls} grid shrink-0 place-items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/55 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[8px] font-bold tracking-tight text-[color:var(--cobalt,#2F4FD8)]`}
       aria-hidden
       title={name}
+      data-logo-fallback="seal"
     >
       {initials}
     </span>
@@ -303,7 +304,7 @@ export function LogoMark({
   size?: number;
 }) {
   void mark;
-  const cls = size <= 16 ? "h-4 w-4" : size <= 20 ? "h-5 w-5" : size <= 24 ? "h-6 w-6" : size <= 28 ? "h-7 w-7" : "h-8 w-8";
+  const cls = size <= 16 ? "h-4 w-4" : size <= 20 ? "h-5 w-5" : size <= 24 ? "h-6 w-6" : size <= 28 ? "h-7 w-7" : size <= 36 ? "h-9 w-9" : size <= 44 ? "h-11 w-11" : "h-12 w-12";
   const [ok, setOk] = useState(Boolean(logoUrl));
   if (logoUrl && ok) {
     return (
@@ -313,10 +314,12 @@ export function LogoMark({
         alt=""
         width={size}
         height={size}
+        loading="lazy"
+        decoding="async"
         className={`${cls} shrink-0 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] object-contain`}
         onError={() => setOk(false)}
         onLoad={(e) => {
-          // Tiny/blank Google stub tiles → monogram (pure bugfix; layout-neutral when logo is real).
+          // Tiny/blank stub tiles → cobalt seal monogram.
           if (e.currentTarget.naturalWidth <= 16) setOk(false);
         }}
       />

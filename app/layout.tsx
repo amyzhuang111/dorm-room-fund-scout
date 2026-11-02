@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Fraunces, Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import Link from "next/link";
 import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/next";
@@ -28,18 +29,31 @@ const geistMono = Geist_Mono({
   preload: true,
 });
 
-const instrument = Instrument_Serif({
+/** Self-hosted italic companion for pull-quotes / instrument lines. */
+const instrument = localFont({
+  src: "../public/fonts/instrument-serif-italic.woff2",
   variable: "--font-instrument",
-  subsets: ["latin"],
-  weight: "400",
   style: "italic",
+  weight: "400",
   display: "swap",
   preload: true,
 });
 
-const display = Fraunces({
+/** Self-hosted Fraunces for display titles. */
+const display = localFont({
+  src: [
+    { path: "../public/fonts/fraunces-latin-600.woff2", weight: "600", style: "normal" },
+    { path: "../public/fonts/fraunces-latin-ext-600.woff2", weight: "600", style: "normal" },
+  ],
   variable: "--font-display",
-  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+});
+
+/** Self-hosted Newsreader for richer section headings (pairs with Fraunces). */
+const heading = localFont({
+  src: "../public/fonts/newsreader-latin-600.woff2",
+  variable: "--font-heading",
   weight: "600",
   display: "swap",
   preload: true,
@@ -58,7 +72,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       data-theme="day"
       data-sample="halflight"
-      className={`${geist.variable} ${geistMono.variable} ${instrument.variable} ${display.variable} h-full antialiased`}
+      className={`${geist.variable} ${geistMono.variable} ${instrument.variable} ${display.variable} ${heading.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

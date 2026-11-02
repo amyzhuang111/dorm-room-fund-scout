@@ -13,6 +13,7 @@ import {
   emptyFacets,
   FacetRail,
   IntelligenceBoards,
+  LogoMark,
   COUNT,
   PANEL,
   type FacetState,
@@ -135,7 +136,7 @@ export function SampleCompanyShell({
               <div className="flex min-w-0 flex-1 gap-3 pl-1">
                 <div className="mt-1 flex shrink-0 flex-col items-center gap-1.5">
                   {dossier.logoUrl ? (
-                    <img src={dossier.logoUrl} alt="" width={48} height={48} className="h-12 w-12 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] object-contain" data-dossier-logo="" />
+                    <span data-dossier-logo=""><LogoMark name={dossier.name} logoUrl={dossier.logoUrl} size={48} /></span>
                   ) : (
                     <div className="grid h-12 w-12 place-items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[14px] font-bold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>
                       {(dossier.name.trim()[0] || "?").toUpperCase()}
@@ -298,7 +299,7 @@ export function SampleCompanyShell({
             <div className="flex gap-3 px-3.5 py-3">
               <div className="mt-1 shrink-0">
                 {dossier?.logoUrl ? (
-                  <img src={dossier.logoUrl} alt="" width={44} height={44} className="h-11 w-11 rounded-sm border border-[color:var(--line,#E1E5EF)] object-contain" data-dossier-logo="" />
+                  <span data-dossier-logo=""><LogoMark name={dossier.name} logoUrl={dossier.logoUrl} size={44} /></span>
                 ) : (
                   <div className="grid h-11 w-11 place-items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[13px] font-bold text-[color:var(--cobalt,#2F4FD8)]" aria-hidden>
                     {((dossier?.name ?? "?").trim()[0] || "?").toUpperCase()}

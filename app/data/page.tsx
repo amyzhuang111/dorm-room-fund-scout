@@ -221,7 +221,9 @@ export default async function DataExplorerPage({
               <tr key={row.id} className="c-r align-top" data-corpus-row="">
                 <td className="c-n">
                   <span className="c-mark">
-                    {row.campus ? (
+                    {row.logoUrl ? (
+                      <CorpusRowMark name={row.name} website={row.website} logoUrl={row.logoUrl} />
+                    ) : row.campus ? (
                       <CampusSeal label={row.campus} size="sm" />
                     ) : (
                       <CorpusRowMark name={row.name} website={row.website} />

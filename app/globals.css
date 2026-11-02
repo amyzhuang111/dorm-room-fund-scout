@@ -628,7 +628,8 @@ html[data-sample="halflight"] body {
 
 /* Scout identity leap: type scale + accent rhythm on white field (not YCGlobe cream). */
 .sample-paper {
-  --scout-display: var(--font-display), "Fraunces", Georgia, serif;
+  --scout-display: var(--font-display), "Fraunces", "Newsreader", Georgia, serif;
+  --scout-heading: var(--font-heading), "Newsreader", Georgia, serif;
   --scout-kicker: 0.16em;
   --scout-rule: 2px;
 }
@@ -744,6 +745,13 @@ html[data-sample="halflight"] body {
   font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 0.95;
+  color: var(--fg);
+}
+.sample-paper .scout-heading {
+  font-family: var(--scout-heading);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
   color: var(--fg);
 }
 .sample-paper .scout-figure {

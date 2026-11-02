@@ -110,11 +110,11 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
     [
       campus ? { label: "Campus", value: campus } : null,
       stage ? { label: "Stage", value: stage } : null,
-      signalCount > 0 ? { label: "Signals", value: `${signalCount.toLocaleString("en-US")} on record` } : null,
+      signalCount > 0 ? { label: "Signals", value: signalCount.toLocaleString("en-US"), suffix: "on record" } : null,
       founded ? { label: "Founded", value: founded } : null,
       funding?.text ? { label: "Funding", value: funding.text } : null,
       sectorText ? { label: "Sector", value: sectorText } : null,
-    ].filter(Boolean) as { label: string; value: string }[]
+    ].filter(Boolean) as { label: string; value: string; suffix?: string }[]
   ).slice(0, 3);
 
   const hasIdentity =
@@ -196,9 +196,12 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
           {keyStats.map((stat) => (
             <div key={stat.label} className="bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5">
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)] sm:text-[9px]">{stat.label}</p>
-              <p className="mt-1 flex items-center gap-1.5 break-words text-[15px] font-semibold leading-4 tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[13px]">
+              <p className="mt-1 flex items-baseline gap-1 text-[15px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[13px]">
                 {stat.label === "Campus" ? <CampusSeal label={stat.value} size="sm" /> : null}
-                <span>{stat.value}</span>
+                <span className="whitespace-nowrap">{stat.value}</span>
+                {stat.suffix ? (
+                  <span className="whitespace-nowrap font-mono text-[10px] font-medium text-[color:var(--fg-3,#5C647A)]">{stat.suffix}</span>
+                ) : null}
               </p>
             </div>
           ))}

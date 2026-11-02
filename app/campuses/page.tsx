@@ -20,22 +20,25 @@ export default function CampusesPage() {
     <div className="sample-paper min-h-[calc(100dvh-48px)]" data-campuses-index="">
       <CampusesTheme />
       <div className="mx-auto max-w-[1200px] px-3 py-4 sm:px-5 sm:py-6">
-        <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-4">
-          <div className="min-w-0">
-            <p className="scout-kicker">Explore</p>
-            <h1 className="mt-1 scout-display text-[40px] sm:text-[48px]">Campuses</h1>
-            <p className="mt-2 max-w-xl font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{withFounders.length.toLocaleString("en-US")}</span>
-              {" campuses with promoted founders · "}
-              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{totalFounders.toLocaleString("en-US")}</span>
-              {" founders · "}
-              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{totalCompanies.toLocaleString("en-US")}</span>
-              {" companies"}
-            </p>
-          </div>
+        <div className="border-b border-[color:var(--line,#E1E5EF)] pb-4" data-campuses-hero="">
+          <p className="scout-kicker">Explore</p>
+          <h1 className="mt-1 scout-display text-[36px] leading-[1.05] sm:text-[48px]">Campuses</h1>
+          <p
+            className="mt-3 max-w-xl bg-[color:var(--bg,#FFFFFF)] font-mono text-[12px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]"
+            data-campuses-stats=""
+          >
+            <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{withFounders.length.toLocaleString("en-US")}</span>
+            {" campuses with promoted founders"}
+            <span className="mx-1.5 text-[color:var(--fg-3,#5C647A)]">·</span>
+            <span className="font-bold text-[color:var(--fg,#0B0E17)]">{totalFounders.toLocaleString("en-US")}</span>
+            {" founders"}
+            <span className="mx-1.5 text-[color:var(--fg-3,#5C647A)]">·</span>
+            <span className="font-bold text-[color:var(--fg,#0B0E17)]">{totalCompanies.toLocaleString("en-US")}</span>
+            {" companies"}
+          </p>
           <Link
             href="/companies?feed=leaderboard"
-            className="inline-flex h-9 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3.5 font-mono text-[11px] font-semibold text-white"
+            className="mt-3 inline-flex h-9 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3.5 font-mono text-[11px] font-semibold text-white"
           >
             Companies by campus
           </Link>

@@ -569,14 +569,37 @@ export function SampleInstrumentBrowse({
                 data-chapter-window=""
                 data-chapter-peak=""
               >
-                <p className="m-meta">
-                  <span data-page-signaled-count="">{pageSignaled.toLocaleString("en-US")}</span>
-                  {" of "}
-                  {cards.length.toLocaleString("en-US")}
-                  {" on this page have a signal"}
-                  {pagePeakLabel ? ` · peak ${pagePeakLabel}` : ""}
-                  {sliceInsight ? ` · ${sliceInsight.companyName}` : ""}
-                </p>
+                <div className="flex items-end justify-between gap-3">
+                  <p className="m-meta min-w-0">
+                    <span data-page-signaled-count="">{pageSignaled.toLocaleString("en-US")}</span>
+                    {" of "}
+                    {cards.length.toLocaleString("en-US")}
+                    {" have a signal"}
+                    {pagePeakLabel ? (
+                      <>
+                        {" · peak "}
+                        <span className="font-semibold text-[color:var(--cobalt,#2F4FD8)]">{pagePeakLabel}</span>
+                      </>
+                    ) : null}
+                    {sliceInsight ? ` · ${sliceInsight.companyName}` : ""}
+                  </p>
+                  {pageSignalBars.length > 0 ? (
+                    <div className="flex h-12 max-w-[42%] flex-1 items-end justify-end gap-0.5" data-page-signal-bars="" aria-hidden>
+                      {pageSignalBars.map((bar) => (
+                        <span
+                          key={bar.key}
+                          title={`${bar.label ?? bar.key}: ${bar.count}`}
+                          className={`min-w-[5px] flex-1 rounded-sm ${bar.peak ? "bg-[color:var(--cobalt,#2F4FD8)]" : "bg-[color:var(--cobalt,#2F4FD8)]/40"}`}
+                          style={{ height: `${Math.max(8, Math.round((bar.count / pageSignalBarsMax) * 44))}px` }}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="flex h-12 w-14 items-end" data-page-signal-bars="empty" aria-hidden>
+                      <span className="w-full rounded-sm bg-[color:var(--cobalt,#2F4FD8)]/25" style={{ height: 24 }} />
+                    </div>
+                  )}
+                </div>
               </div>
             </MobileListMast>
           ) : null}
@@ -596,7 +619,43 @@ export function SampleInstrumentBrowse({
             />
           ) : null}
 
-          {/* Single chrome row: Filters (sort chips moved inside). */}
+          {/* Continued pages: sort segment stays above the list (r29 peak+sort). Page 1 keeps sort inside Filters. */}
+          {feed === "directory" && pages > 1 ? (
+            <div
+              className="flex w-full overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30"
+              data-mobile-sort-segment=""
+              role="group"
+              aria-label="Sort ledger"
+            >
+              {(
+                [
+                  ["rank", "Rank"],
+                  ["recent", "Newest"],
+                  ["name", "Name"],
+                  ["stage", "Stage"],
+                ] as const
+              ).map(([id, label], i) => {
+                const active = sort === id;
+                return (
+                  <Link
+                    key={id}
+                    href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
+                    className={`flex h-9 flex-1 items-center justify-center font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
+                      i > 0 ? "border-l border-[color:var(--cobalt,#2F4FD8)]/20" : ""
+                    } ${
+                      active
+                        ? "bg-[color:var(--cobalt,#2F4FD8)] text-white"
+                        : "bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg-2,#3F465C)]"
+                    }`}
+                  >
+                    {label}
+                  </Link>
+                );
+              })}
+            </div>
+          ) : null}
+
+          {/* Single chrome row: Filters (sort chips inside on page 1). */}
           {feed === "directory" ? (
             <div
               className="overflow-hidden border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]"
@@ -627,31 +686,33 @@ export function SampleInstrumentBrowse({
               </button>
               {mobileFiltersOpen ? (
                 <div className="max-h-[min(42dvh,340px)] overflow-y-auto overscroll-contain border-t border-[color:var(--line,#E1E5EF)] px-1 pb-3" data-mobile-facet-map="">
-                  <div className="mb-2 flex flex-wrap gap-1.5 px-2.5 pt-2" data-mobile-sort-segment="" role="group" aria-label="Sort ledger">
-                    {(
-                      [
-                        ["rank", "Rank"],
-                        ["recent", "Newest"],
-                        ["name", "Name"],
-                        ["stage", "Stage"],
-                      ] as const
-                    ).map(([id, label]) => {
-                      const active = sort === id;
-                      return (
-                        <Link
-                          key={id}
-                          href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
-                          className={`inline-flex h-8 items-center rounded-sm border px-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
-                            active
-                              ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--cobalt,#2F4FD8)]"
-                              : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg-2,#3F465C)]"
-                          }`}
-                        >
-                          {label}
-                        </Link>
-                      );
-                    })}
-                  </div>
+                  {pages <= 1 ? (
+                    <div className="mb-2 flex flex-wrap gap-1.5 px-2.5 pt-2" data-mobile-sort-segment="" role="group" aria-label="Sort ledger">
+                      {(
+                        [
+                          ["rank", "Rank"],
+                          ["recent", "Newest"],
+                          ["name", "Name"],
+                          ["stage", "Stage"],
+                        ] as const
+                      ).map(([id, label]) => {
+                        const active = sort === id;
+                        return (
+                          <Link
+                            key={id}
+                            href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
+                            className={`inline-flex h-8 items-center rounded-sm border px-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
+                              active
+                                ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--cobalt,#2F4FD8)]"
+                                : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg-2,#3F465C)]"
+                            }`}
+                          >
+                            {label}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  ) : null}
                   <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
                 </div>
               ) : null}
