@@ -2,8 +2,9 @@
  * Post-ingest company dedupe for expand imports.
  *
  * 1) planDedupe / applyDedupe
- * 2) Force-merge remaining investable exact-norm name groups (keep richest)
- * 3) Force-merge remaining same websiteIdentity groups (keep richest)
+ * 2) Force-merge remaining investable companies that share a non-portal domain
+ * 3) Force-merge remaining exact-norm name + same campus set + same founder set
+ *    (NEVER name alone — distinct companies often reuse Manifest/Scout/Pulse/etc.)
  * 4) Collapse exact duplicate signals
  * 5) Write reviews/campus-dedupe-list-<date>.md + data/corpus-snapshot.json
  *
@@ -20,6 +21,7 @@ import {
   planDedupe,
   websiteIdentity,
 } from "../../lib/domain/dedupe";
+import { campusSetKey, expandDedupeBucket, founderSetKey } from "../../lib/domain/expand-dedupe-key";
 import { buildPeakShell } from "../../lib/domain/peak-shell";
 import { buildDirectoryFromDb, clearDirectoryMemo } from "../../lib/domain/directory";
 
@@ -46,7 +48,10 @@ type Card = {
   sigs: number;
   founders: number;
   claims: number;
+  campusKey: string;
+  founderKey: string;
 };
+
 
 type MergeRow = {
   survivorId: string;
@@ -62,7 +67,7 @@ function richness(c: Card): number {
 }
 
 function loadCards(db: ReturnType<typeof getDb>): Card[] {
-  return db
+  const rows = db
     .prepare(
       `SELECT id, name, website_url, primary_link, created_at, description,
         (SELECT COUNT(*) FROM signals s WHERE s.project_id = projects.id) AS sigs,
@@ -70,7 +75,27 @@ function loadCards(db: ReturnType<typeof getDb>): Card[] {
         (SELECT COUNT(*) FROM claims c WHERE c.entity_type = 'project' AND c.entity_id = projects.id) AS claims
        FROM projects WHERE kind = 'company' AND is_investable_candidate = 1`,
     )
-    .all() as Card[];
+    .all() as Omit<Card, "campusKey" | "founderKey">[];
+
+  const campusStmt = db.prepare(
+    `SELECT target_entity_id AS campus_id FROM relationships
+     WHERE source_entity_type = 'project' AND source_entity_id = ?
+       AND target_entity_type = 'university' AND relationship_type = 'affiliated_with'`,
+  );
+  const founderStmt = db.prepare(
+    `SELECT person_id FROM person_project_roles
+     WHERE project_id = ? AND (role IS NULL OR lower(role) LIKE '%founder%' OR lower(role) = 'ceo' OR lower(role) = 'co-founder')`,
+  );
+
+  return rows.map((row) => {
+    const campuses = (campusStmt.all(row.id) as { campus_id: string }[]).map((r) => r.campus_id);
+    const founderIds = (founderStmt.all(row.id) as { person_id: string }[]).map((r) => r.person_id);
+    return {
+      ...row,
+      campusKey: campusSetKey(campuses),
+      founderKey: founderSetKey(founderIds),
+    };
+  });
 }
 
 function pickSurvivor(group: Card[]): Card {
@@ -149,54 +174,65 @@ function main() {
   }
   if (!dryRun) applyDedupe(db, plan);
 
-  // Remaining exact-norm name groups
+  // Domain key first (non-portal website identity) — never name alone
   let cards = loadCards(db);
-  const byNorm = new Map<string, Card[]>();
+  const byDomain = new Map<string, Card[]>();
   for (const c of cards) {
-    const n = normalizeCompanyName(c.name);
-    if (!n) continue;
-    const list = byNorm.get(n) ?? [];
+    const bucket = expandDedupeBucket({
+      name: c.name,
+      websiteUrl: c.website_url,
+      primaryLink: c.primary_link,
+      campusIds: c.campusKey ? c.campusKey.split("|") : [],
+      founderIds: c.founderKey ? c.founderKey.split("|") : [],
+      isSharedPortalHost,
+    });
+    if (bucket.kind !== "domain") continue;
+    const list = byDomain.get(bucket.key) ?? [];
     list.push(c);
-    byNorm.set(n, list);
+    byDomain.set(bucket.key, list);
   }
-  for (const [norm, group] of byNorm) {
+  for (const [key, group] of byDomain) {
     if (group.length < 2) continue;
-    mergeGroup(db, group, "norm-name", `exact normalized name "${norm}"; keep richest; union founders/signals/provenance`, merges);
+    const web = key.slice("domain:".length);
+    mergeGroup(
+      db,
+      group,
+      "domain",
+      `same website identity "${web}"; keep richest; union founders/signals/provenance`,
+      merges,
+    );
   }
 
-  // Remaining same-domain groups
+  // Else: exact-norm name + same campus set + same founder set
   cards = loadCards(db);
-  const byWeb = new Map<string, Card[]>();
+  const byNcf = new Map<string, Card[]>();
   for (const c of cards) {
-    const w = websiteIdentity(c.website_url) || websiteIdentity(c.primary_link);
-    if (!w) continue;
-    // Skip portal hosts that many companies share
-    if (isSharedPortalHost(w)) continue;
-    const list = byWeb.get(w) ?? [];
+    const bucket = expandDedupeBucket({
+      name: c.name,
+      websiteUrl: c.website_url,
+      primaryLink: c.primary_link,
+      campusIds: c.campusKey ? c.campusKey.split("|") : [],
+      founderIds: c.founderKey ? c.founderKey.split("|") : [],
+      isSharedPortalHost,
+    });
+    if (bucket.kind !== "name-campus-founders") continue;
+    // Require a real name; empty campus+founder with only a name is still name-alone — skip
+    const norm = normalizeCompanyName(c.name);
+    if (!norm) continue;
+    if (!c.campusKey && !c.founderKey) continue;
+    const list = byNcf.get(bucket.key) ?? [];
     list.push(c);
-    byWeb.set(w, list);
+    byNcf.set(bucket.key, list);
   }
-  for (const [web, group] of byWeb) {
+  for (const [key, group] of byNcf) {
     if (group.length < 2) continue;
-    // Only merge same-domain rows when normalized names also collide (true twins),
-    // or when every row lacks a distinct name split (identical display names).
-    const byLocalNorm = new Map<string, Card[]>();
-    for (const c of group) {
-      const n = normalizeCompanyName(c.name) || c.id;
-      const list = byLocalNorm.get(n) ?? [];
-      list.push(c);
-      byLocalNorm.set(n, list);
-    }
-    for (const [, sub] of byLocalNorm) {
-      if (sub.length < 2) continue;
-      mergeGroup(
-        db,
-        sub,
-        "domain",
-        `same website identity "${web}" + same normalized name; keep richest; union founders/signals/provenance`,
-        merges,
-      );
-    }
+    mergeGroup(
+      db,
+      group,
+      "name-campus-founders",
+      `same normalized name + campus set + founder set ("${key}"); keep richest; union founders/signals/provenance`,
+      merges,
+    );
   }
 
   const signalDrops = collapseExactSignals(db);
