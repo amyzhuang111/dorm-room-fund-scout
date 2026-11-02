@@ -398,7 +398,7 @@ export function SampleCompanyShell({
           </aside>
           <div className="min-w-0">
             {/* Mobile wire strip omitted on company: hero already lists campus peers. */}
-            <div className="company-instrument relative overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3.5 pb-8 sm:overflow-hidden sm:border-[color:var(--cobalt,#2F4FD8)]/25 sm:p-4 sm:pb-4 sm:before:absolute sm:before:inset-y-0 sm:before:left-0 sm:before:w-0.5 sm:before:bg-[color:var(--cobalt,#2F4FD8)] sm:before:content-['']">
+            <div className="company-instrument relative overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3 pb-6 sm:overflow-hidden sm:border-[color:var(--cobalt,#2F4FD8)]/25 sm:p-4 sm:pb-4 sm:before:absolute sm:before:inset-y-0 sm:before:left-0 sm:before:w-0.5 sm:before:bg-[color:var(--cobalt,#2F4FD8)] sm:before:content-['']">
               {children}
             </div>
           </div>

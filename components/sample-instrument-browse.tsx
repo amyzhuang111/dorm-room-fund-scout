@@ -1034,8 +1034,8 @@ function LedgerRow({
       href={`/startup/${card.id}`}
       data-card-signals={card.signals}
       data-card-dated={card.latestSignalAt ? "1" : "0"}
-      className={`group flex items-start gap-2.5 px-3 transition-[background-color,color] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:gap-3 sm:px-3.5 ${
-        ranked ? "py-3 sm:py-3 lg:gap-3 lg:py-3.5" : "py-3 sm:py-3"
+      className={`group flex items-start gap-3 px-3.5 transition-[background-color,color] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:gap-3 sm:px-3.5 ${
+        ranked ? "py-3.5 sm:py-3 lg:gap-3 lg:py-3.5" : "py-3.5 sm:py-3"
       }`}
     >
       {rank != null ? (
