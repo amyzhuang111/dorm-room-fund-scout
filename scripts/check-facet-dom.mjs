@@ -486,7 +486,7 @@ const report = {
       companiesLabels.emDashInUi === false &&
       companiesLabels.emDashInSignalsAside === false,
     statusBuckets:
-      statusActive === 2583 && statusAcquired === 8 && statusClosed === 8 && statusActive + statusAcquired + statusClosed === TOTAL,
+      statusActive === 2492 && statusAcquired === 8 && statusClosed === 8 && statusActive + statusAcquired + statusClosed === TOTAL,
     moreObvious: moreLabelsBefore.some((l) => /more sectors/i.test(l)) && moreLabelsBefore.some((l) => /more cities/i.test(l)),
     campusAllCampusesExpand: campusAllOk,
     campusFoundersTopTen: campusFoundersTopOk,

@@ -486,15 +486,6 @@ export function TileGlobe({
               </div>
             </div>
           ) : null}
-          <div
-            className="pointer-events-none absolute bottom-2 left-2 z-10 flex flex-wrap gap-x-2.5 gap-y-1 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1 font-mono text-[9px] text-[color:var(--fg-2,#3F465C)] shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
-            data-country-legend=""
-            aria-label="Country colors on the map"
-          >
-            <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[#2F4FD8]" aria-hidden />United States</span>
-            <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[#5C6FA8]" aria-hidden />Canada</span>
-            <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[#3F465C]" aria-hidden />United Kingdom</span>
-          </div>
           <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 -translate-x-1/2" data-map-credit>
             <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
               <MapCredit />
