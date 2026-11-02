@@ -24,7 +24,15 @@ const EXPECTED_CAMPUS_FOUNDERS_TOP = [
   { founders: 757, nameRe: /penn|pennsylvania/i },
   { founders: 300, nameRe: /stanford/i },
   { founders: 238, nameRe: /mit|massachusetts institute/i },
+  { founders: 233, nameRe: /berkeley/i },
+  { founders: 168, nameRe: /harvard/i },
+  { founders: 155, nameRe: /columbia/i },
+  { founders: 101, nameRe: /carnegie|cmu/i },
+  { founders: 84, nameRe: /cornell/i },
+  { founders: 77, nameRe: /georgia|gatech/i },
+  { founders: 77, nameRe: /waterloo/i },
 ];
+const EXPECTED_CAMPUS_FOUNDERS_VISIBLE = 10;
 
 function parseMidDotCount(label) {
   const m = String(label).match(/·\s*([\d,]+)\s*$/);
@@ -185,7 +193,7 @@ const campusFoundersTop = await page.evaluate(() => {
     document.querySelector("[data-campus-founders-top]") ||
     document.querySelector('[data-desk-constellation][data-campus-metric="founders"] ol');
   if (!root) return null;
-  const rows = [...root.querySelectorAll("li")].slice(0, 3).map((li) => {
+  const rows = [...root.querySelectorAll("li")].slice(0, 10).map((li) => {
     const text = (li.textContent || "").replace(/\s+/g, " ").trim();
     const nums = [...text.matchAll(/(\d[\d,]*)/g)].map((m) => Number(m[1].replace(/,/g, "")));
     const founders = nums.length ? nums[nums.length - 1] : null;
@@ -194,6 +202,12 @@ const campusFoundersTop = await page.evaluate(() => {
   const metric = document.querySelector("[data-campus-metric]")?.getAttribute("data-campus-metric") || null;
   return { metric, rows };
 });
+
+const campusAllLink = await page.evaluate(() => {
+  const el = document.querySelector("[data-campus-founders-all]");
+  return el ? (el.textContent || "").replace(/\s+/g, " ").trim() : null;
+});
+const campusAllOk = campusAllLink != null && /all campuses/i.test(campusAllLink);
 
 
 // Mobile: founder search/filters/cards must sit above the map.
@@ -375,7 +389,7 @@ const ycPrimaryLeak = await page.evaluate(() => {
 const campusFoundersTopOk =
   campusFoundersTop != null &&
   campusFoundersTop.metric === "founders" &&
-  campusFoundersTop.rows.length === 3 &&
+  campusFoundersTop.rows.length === EXPECTED_CAMPUS_FOUNDERS_VISIBLE &&
   EXPECTED_CAMPUS_FOUNDERS_TOP.every((exp, i) => {
     const row = campusFoundersTop.rows[i];
     return row && row.founders === exp.founders && exp.nameRe.test(row.text);
@@ -463,7 +477,8 @@ const report = {
     statusBuckets:
       statusActive === 2497 && statusAcquired === 8 && statusClosed === 8 && statusActive + statusAcquired + statusClosed === TOTAL,
     moreObvious: moreLabelsBefore.some((l) => /more sectors/i.test(l)) && moreLabelsBefore.some((l) => /more cities/i.test(l)),
-    campusFoundersTopPennStanfordMit: campusFoundersTopOk,
+    campusAllCampusesExpand: campusAllOk,
+    campusFoundersTopTen: campusFoundersTopOk,
     ycMembershipEverywhere: ycMembershipOk,
     ycNoPrimary561Leak: ycPrimaryLeak.length === 0,
     globeReadyNoSkeleton: founderHome.globeState === "ready" && founderHome.loadingGlobeCopy === false,
@@ -503,6 +518,58 @@ const report = {
 
 console.log(JSON.stringify(report, null, 2));
 const fails = Object.entries(report.ok).filter(([, v]) => !v);
+
+// --- Full-record company profile + /data corpus explorer ---
+{
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH`, { waitUntil: "networkidle", timeout: 90000 });
+  const full = await page.locator("[data-company-full-record]").count();
+  if (!full) {
+    console.error("FAIL company full record panel missing");
+    process.exitCode = 1;
+  } else {
+    const na = await page.locator("[data-company-full-record]").innerText();
+    if (!/Not available/i.test(na) && !/Full record/i.test(na)) {
+      console.error("FAIL full record empty of expected copy");
+      process.exitCode = 1;
+    } else {
+      console.log("OK company full record panel");
+    }
+  }
+  const signalSource = await page.locator("[data-full-record-signals] a[href^=\"http\"]").count();
+  console.log(`OK full-record signal source links: ${signalSource}`);
+  await page.goto(`${BASE}/data`, { waitUntil: "networkidle", timeout: 90000 });
+  const explorer = await page.locator("[data-corpus-explorer]").count();
+  const csv = await page.locator("[data-corpus-csv]").count();
+  const navData = await page.locator('a[href="/data"], a[href^="/data?"]').count();
+  if (!explorer) {
+    console.error("FAIL /data corpus explorer missing");
+    process.exitCode = 1;
+  } else {
+    console.log("OK /data corpus explorer");
+  }
+  if (!csv) {
+    console.error("FAIL /data CSV download missing");
+    process.exitCode = 1;
+  } else {
+    console.log("OK /data CSV download");
+  }
+  if (!navData) {
+    console.error("FAIL nav Data link missing on /data");
+    process.exitCode = 1;
+  } else {
+    console.log("OK nav Data link present");
+  }
+  const html = await page.content();
+  const kb = Buffer.byteLength(html, "utf8") / 1024;
+  console.log(`/data HTML ${kb.toFixed(1)} KB`);
+  if (kb > 210) {
+    console.error("FAIL /data HTML over 210 KB");
+    process.exitCode = 1;
+  }
+  await page.close();
+}
+
 await browser.close();
 if (fails.length) {
   console.error("FAIL", fails.map(([k]) => k).join(", "));

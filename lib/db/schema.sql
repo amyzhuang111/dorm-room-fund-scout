@@ -481,3 +481,21 @@ CREATE TABLE IF NOT EXISTS pitchbook_rankings (
 
 CREATE INDEX IF NOT EXISTS idx_pitchbook_rankings_university ON pitchbook_rankings(university_id);
 CREATE INDEX IF NOT EXISTS idx_pitchbook_rankings_track ON pitchbook_rankings(track, rank);
+
+
+-- DRF student-partner presence by school, loaded from data/imports/drf_campus_presence.csv.
+-- Named partners are copied from that file. The importer does not add names.
+CREATE TABLE IF NOT EXISTS drf_campus_presence (
+  id TEXT PRIMARY KEY,
+  school TEXT NOT NULL UNIQUE,
+  university_id TEXT,
+  drf_region TEXT NOT NULL,
+  status TEXT NOT NULL,
+  partner_count INTEGER NOT NULL,
+  named_partners TEXT NOT NULL,
+  evidence_links TEXT NOT NULL,
+  change_vs_v1 TEXT NOT NULL,
+  date_checked TEXT NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_drf_campus_presence_university ON drf_campus_presence(university_id);

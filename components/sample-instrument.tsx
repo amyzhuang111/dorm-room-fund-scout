@@ -33,18 +33,23 @@ export const COUNT = "font-bold tabular-nums text-[color:var(--ember,#D96B1C)]";
 
 /** Sitewide campus-plate ranking: founder names on record (not signals, not companies). */
 export type CampusFoundersRow = { id: string; name: string; founders: number };
+/** Visible plate count before All campuses expand. */
+export const CAMPUS_FOUNDERS_VISIBLE = 10;
+export function campusFoundersRanked<T extends CampusFoundersRow>(campuses: T[]): T[] {
+  return [...campuses]
+    .filter((c) => c.founders > 0)
+    .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name));
+}
 export function campusFoundersTop<T extends CampusFoundersRow>(
   campuses: T[],
-  limit = 3,
+  limit = CAMPUS_FOUNDERS_VISIBLE,
 ): T[] {
-  return [...campuses]
-    .sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))
-    .slice(0, limit);
+  return campusFoundersRanked(campuses).slice(0, limit);
 }
 
 export function campusFoundersAtlasRows(
   campuses: CampusFoundersRow[],
-  limit = 3,
+  limit = CAMPUS_FOUNDERS_VISIBLE,
   shortLabel: (id: string, name: string) => string = (_id, name) =>
     name.replace(/^University of /, "").replace(/ University$/, ""),
 ): { rank: string; label: string; value: string; unit: string }[] {
@@ -62,12 +67,18 @@ export function campusFoundersAtlasRows(
 export function ScoutSignalPodium({
   rows,
   totalOnDesk,
+  allHref = "/campuses",
+  rankedCount,
 }: {
   rows: { id: string; label: string; founders: number; signals: number }[];
   totalOnDesk: number;
+  allHref?: string;
+  /** Total campuses with founders on record (may exceed visible rows). */
+  rankedCount?: number;
 }) {
   if (!rows.length) return null;
   const max = Math.max(1, ...rows.map((r) => r.founders));
+  const more = typeof rankedCount === "number" ? Math.max(0, rankedCount - rows.length) : 0;
   return (
     <div
       className="relative overflow-hidden border-2 border-[color:var(--ember,#D96B1C)]/45 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[4px] before:bg-[color:var(--ember,#D96B1C)]"
@@ -77,7 +88,7 @@ export function ScoutSignalPodium({
       <div className="flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4">
         <div className="min-w-0">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">Signal podium</p>
-          <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Ranked by founder names</p>
+          <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Top campuses by founder names</p>
         </div>
         <p className="shrink-0 text-right font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
           <span className="font-bold text-[color:var(--ember,#D96B1C)]">{totalOnDesk.toLocaleString("en-US")}</span>
@@ -87,16 +98,16 @@ export function ScoutSignalPodium({
       <ol className="divide-y divide-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
         {rows.map((row, i) => (
           <li key={row.id} className={i === 0 ? "bg-[color:var(--ember,#D96B1C)]/[0.06]" : undefined}>
-            <div className="flex items-end gap-3 px-3.5 py-3.5 pl-4">
-              <span className={`shrink-0 font-mono font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] ${i === 0 ? "text-[40px]" : i === 1 ? "text-[28px]" : "text-[22px]"}`}>
+            <div className={`flex items-end gap-3 px-3.5 pl-4 ${i < 3 ? "py-3.5" : "py-2"}`}>
+              <span className={`shrink-0 font-mono font-bold leading-none tracking-[-0.06em] text-[color:var(--ember,#D96B1C)] ${i === 0 ? "text-[40px]" : i === 1 ? "text-[28px]" : i === 2 ? "text-[22px]" : "text-[14px]"}`}>
                 {String(i + 1).padStart(2, "0")}
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline justify-between gap-2">
                   <span className={`min-w-0 truncate font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] ${i === 0 ? "text-[18px]" : "text-[15px]"}`}>{row.label}</span>
-                  <span className="shrink-0 font-mono text-[18px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{row.founders.toLocaleString("en-US")}</span>
+                  <span className={`shrink-0 font-mono font-bold tabular-nums text-[color:var(--ember,#D96B1C)] ${i < 3 ? "text-[18px]" : "text-[14px]"}`}>{row.founders.toLocaleString("en-US")}</span>
                 </div>
-                <div className="mt-2 h-2 overflow-hidden rounded-sm bg-[color:var(--bg-sunken,#F3F5F9)]">
+                <div className={`overflow-hidden rounded-sm bg-[color:var(--bg-sunken,#F3F5F9)] ${i < 3 ? "mt-2 h-2" : "mt-1.5 h-1.5"}`}>
                   <div
                     className="h-full rounded-sm bg-[color:var(--ember,#D96B1C)]"
                     style={{ width: `${Math.max(8, Math.round((row.founders / max) * 100))}%` }}
@@ -111,6 +122,12 @@ export function ScoutSignalPodium({
           </li>
         ))}
       </ol>
+      <div className="border-t border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4" data-campus-founders-all="">
+        <a href={allHref} className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline">
+          All campuses
+          {more > 0 ? ` · ${more.toLocaleString("en-US")} more with founders` : ""}
+        </a>
+      </div>
     </div>
   );
 }
@@ -1039,7 +1056,7 @@ export function SignalsLanded({ companies, compact = false }: { companies: Facet
         <div className="flex items-end justify-between gap-3">
           <div className="min-w-0">
             <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Peak · {peak.short} {peak.id.slice(0, 4)}</p>
-            <p className="mt-1 font-mono text-[28px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+            <p className="mt-1 scout-figure text-[32px] leading-none">
               {peak.count.toLocaleString("en-US")}
               <span className="ml-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
                 / {detail.dated.toLocaleString("en-US")}

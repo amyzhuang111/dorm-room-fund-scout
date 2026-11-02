@@ -12,6 +12,7 @@ import { AssessmentForm } from "./assessment-form";
 import { FeedbackControls } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CompanyProfileCard } from "./company-profile";
+import { CompanyFullRecord } from "./company-full-record";
 import { InTheNews } from "./in-the-news";
 import { StartupDirectoryCard, useStartupCard } from "./startup-directory-card";
 
@@ -289,12 +290,22 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
               <p className="mt-0.5 text-muted">
                 {s.signalType.replace(/_/g, " ")}
                 {s.sourceDate ? ` · ${s.sourceDate}` : ""}
+                {s.sourceUrl ? (
+                  <>
+                    {" · "}
+                    <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline">
+                      source
+                    </a>
+                  </>
+                ) : null}
               </p>
             </li>
           ))}
           {project.signals.length === 0 && <li className="text-sm text-muted">No dated activity recorded yet.</li>}
         </ul>
       </section>
+
+      <CompanyFullRecord project={project} />
 
       {/* Notes */}
       <section>

@@ -137,10 +137,9 @@ export function openDatabase(dbPath: string): Database.Database {
 // existing databases (including the one already bundled/committed) pick up
 // schema changes without needing a full re-ingest.
 function migrate(db: Database.Database) {
-  // Partner rosters are not part of the generic workspace. Drop them if an
-  // older database file still has the tables.
+  // Alumni partner roster is not part of the generic workspace.
+  // Campus presence (36 DRF schools from verified CSV) stays for coverage honesty.
   db.exec(`DROP TABLE IF EXISTS drf_alumni`);
-  db.exec(`DROP TABLE IF EXISTS drf_campus_presence`);
   const addColumnIfMissing = (table: string, column: string, ddl: string) => {
     const cols = db.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[];
     if (!cols.some((c) => c.name === column)) {

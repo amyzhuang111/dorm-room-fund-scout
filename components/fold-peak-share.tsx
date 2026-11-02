@@ -51,7 +51,7 @@ export function FoldPeakShare({
           data-fold-peak-share=""
         >
           <div className="min-w-0">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
+            <p className="scout-kicker">Peak share</p>
             <p className="mt-1 font-mono text-[72px] font-bold leading-[0.82] tracking-[-0.08em] text-[color:var(--ember,#D96B1C)]">
               {peakBar.count.toLocaleString("en-US")}
               <span className="mx-2 text-[26px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
@@ -138,11 +138,11 @@ export function FoldPeakShare({
 
       {/* Mobile lead: stacked Peak statement + real campus ranks · search/founders follow */}
       <div className="min-h-[9.75rem] border-b border-[color:var(--line,#E1E5EF)] pb-2.5 lg:hidden" data-fold-peak-share-mobile="" data-fold-peak-share="">
-        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
-        <p className="mt-0.5 font-mono text-[30px] font-bold leading-[0.84] tracking-[-0.07em] text-[color:var(--ember,#D96B1C)]">
+        <p className="scout-kicker">Peak share</p>
+        <p className="mt-1 scout-figure text-[36px] leading-[0.84]">
           {peakBar.count.toLocaleString("en-US")}
           <span className="mx-1.5 text-[18px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
-          <span className="text-[24px] font-bold tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">
+          <span className="text-[26px] font-bold tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">
             {detail.dated.toLocaleString("en-US")}
           </span>
         </p>

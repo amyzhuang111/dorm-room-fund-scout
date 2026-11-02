@@ -14,7 +14,7 @@ const SECTIONS = [
 
 function sectionFor(pathname: string): (typeof SECTIONS)[number]["id"] | null {
   if (pathname === "/" || pathname.startsWith("/map")) return "map";
-  if (pathname.startsWith("/founders") || pathname.startsWith("/companies") || pathname.startsWith("/campuses") || pathname.startsWith("/startup/")) return "explore";
+  if (pathname.startsWith("/founders") || pathname.startsWith("/companies") || pathname.startsWith("/campuses") || pathname.startsWith("/startup/") || pathname.startsWith("/data")) return "explore";
   if (pathname.startsWith("/signals")) return "signals";
   if (pathname.startsWith("/work")) return "work";
   return null;
@@ -30,6 +30,7 @@ const SUBS: Record<string, { href: string; label: string }[]> = {
     { href: "/campuses", label: "Campuses" },
     { href: "/founders", label: "Founders" },
     { href: "/companies", label: "Companies" },
+    { href: "/data", label: "Data" },
   ],
   signals: [
     { href: "/signals", label: "Feed" },

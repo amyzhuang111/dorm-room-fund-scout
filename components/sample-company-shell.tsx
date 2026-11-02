@@ -261,11 +261,18 @@ export function SampleCompanyShell({
           data-company-mobile-hero=""
         >
           <div className="border-b border-[color:var(--line,#E1E5EF)] pb-4" data-dossier-spread-mobile="">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Dossier</p>
-            <p className="mt-1.5 text-[44px] font-bold leading-[0.92] tracking-tight text-[color:var(--fg,#0B0E17)]" data-company-name-lead="">
+            <p className="scout-kicker">Dossier</p>
+            <p className="mt-2 scout-display text-[48px]" data-company-name-lead="">
               {dossier?.name ?? "Company"}
             </p>
-            <p className="mt-2.5 border-l-2 border-[color:var(--cobalt,#2F4FD8)] pl-3 font-mono text-[13px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+            <div className="mt-3 flex items-end gap-3 border border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3 py-2" data-dossier-signal-plate="">
+              <div className="min-w-0">
+                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">On campus wire</p>
+                <p className="mt-0.5 scout-figure text-[28px] leading-none">{wireCount.toLocaleString("en-US")}</p>
+              </div>
+              <p className="mb-0.5 min-w-0 flex-1 font-mono text-[11px] leading-snug text-[color:var(--fg-2,#3F465C)]">{wireUnit}</p>
+            </div>
+            <p className="mt-2.5 border-l-[3px] border-[color:var(--cobalt,#2F4FD8)] pl-3 font-mono text-[13px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
               {dossier?.campus ? <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.campus}</span> : <span>Campus not on record</span>}
               {dossier?.year != null ? (
                 <>
@@ -281,18 +288,12 @@ export function SampleCompanyShell({
                 </>
               ) : null}
             </p>
-            <p className="mt-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
-              {" "}
-              {wireUnit}
-              {(dossier?.founders?.length ?? 0) > 0 ? (
-                <>
-                  {" · "}
-                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{dossier!.founders!.length.toLocaleString("en-US")}</span>
-                  {dossier!.founders!.length === 1 ? " founder on record" : " founders on record"}
-                </>
-              ) : null}
-            </p>
+            {(dossier?.founders?.length ?? 0) > 0 ? (
+              <p className="mt-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                <span className="font-bold text-[color:var(--fg,#0B0E17)]">{dossier!.founders!.length.toLocaleString("en-US")}</span>
+                {dossier!.founders!.length === 1 ? " founder on record" : " founders on record"}
+              </p>
+            ) : null}
             {/* Peer signal strip · hide identical scrape dates; prefer kind labels */}
             <ol className="mt-2.5 space-y-1" data-dossier-signal-timeline="">
               {(() => {

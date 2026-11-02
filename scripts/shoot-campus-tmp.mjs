@@ -181,6 +181,16 @@ const browser = await chromium.launch({ headless: true });
   await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForTimeout(2000);
   await shot(page, "company-sim-1440");
+  const fullRecord = page.locator("[data-company-full-record]").first();
+  if (await fullRecord.count()) {
+    await fullRecord.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.waitForTimeout(400);
+    await shot(page, "company-full-record-1440");
+  }
+  await page.goto(`${BASE}/data`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.waitForSelector("[data-corpus-explorer]", { timeout: 30000 });
+  await page.waitForTimeout(800);
+  await shot(page, "data-explorer-1440");
   await page.close();
 }
 
@@ -241,33 +251,24 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(150);
   await shot(page, "companies-more-375");
 
-  // Frame end moment as the shot hero (Loaded so far), not a leftover lone card
+  // Pass-close end: deep page so range is real; keep last cards + close plate in frame
+  await page.goto(`${BASE}/companies?more=6`, { waitUntil: "networkidle", timeout: 90000 });
+  await waitDirectory(page);
+  await page.waitForTimeout(1000);
   const endM = page.locator("[data-ledger-end-mobile]").first();
-  const endLead = page.locator("[data-ledger-end-lead]").first();
-  if (await endLead.count()) {
-    const headerBottom = await page.evaluate(() => {
-      const nav = document.querySelector("header");
-      const tabs = [...document.querySelectorAll("a,button")].find(
-        (el) => /Companies/i.test(el.textContent || "") && el.getBoundingClientRect().bottom > 40,
-      );
-      return Math.max(nav?.getBoundingClientRect().bottom || 0, tabs?.getBoundingClientRect().bottom || 0, 96);
+  if (await endM.count()) {
+    await endM.evaluate((el) => el.scrollIntoView({ block: "end" }));
+    await page.waitForTimeout(200);
+    await page.evaluate(() => {
+      const end = document.querySelector("[data-ledger-end-mobile]");
+      if (!end) return;
+      const bottom = end.getBoundingClientRect().bottom;
+      const room = window.innerHeight - 8;
+      if (bottom > room) window.scrollBy(0, bottom - room + 4);
+      // Prefer last cards above the close plate (not an orphan footer alone)
+      const top = end.getBoundingClientRect().top;
+      if (top < 220) window.scrollBy(0, top - 300);
     });
-    await endLead.evaluate((hb) => {
-      const lead = document.querySelector("[data-ledger-end-lead]");
-      const end = document.querySelector("[data-ledger-end-mobile]") || lead;
-      if (!lead) return;
-      lead.scrollIntoView({ block: "start" });
-      const top = lead.getBoundingClientRect().top;
-      window.scrollBy(0, top - (hb + 12));
-      if (end) {
-        const bottom = end.getBoundingClientRect().bottom;
-        const room = window.innerHeight - 8;
-        if (bottom > room) window.scrollBy(0, bottom - room + 4);
-      }
-    }, headerBottom);
-    await page.waitForTimeout(350);
-  } else if (await endM.count()) {
-    await endM.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(350);
   }
   await shot(page, "companies-more-end-375");
@@ -320,6 +321,16 @@ const browser = await chromium.launch({ headless: true });
     await page.waitForTimeout(200);
   }
   await shot(page, "company-sim-375");
+  const fullRecordM = page.locator("[data-company-full-record]").first();
+  if (await fullRecordM.count()) {
+    await fullRecordM.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.waitForTimeout(350);
+    await shot(page, "company-full-record-375");
+  }
+  await page.goto(`${BASE}/data`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.waitForSelector("[data-corpus-explorer]", { timeout: 30000 });
+  await page.waitForTimeout(600);
+  await shot(page, "data-explorer-375");
   await page.close();
 }
 

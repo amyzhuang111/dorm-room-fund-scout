@@ -7,7 +7,7 @@ import { absoluteDate } from "@/lib/domain/relative-time";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import { sampleSurfaceCounts, type FacetCompany } from "@/lib/domain/sample-facets";
 import { MapCredit } from "./map-credit";
-import { campusFoundersTop } from "./sample-instrument";
+import { campusFoundersTop, campusFoundersRanked, CAMPUS_FOUNDERS_VISIBLE } from "./sample-instrument";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 export interface TileCampus {
@@ -89,8 +89,8 @@ function globeView(width: number, height: number): { center: [number, number]; z
 function campusCollection(campuses: TileCampus[]) {
   /** Founders-weighted map: top desks + label priority match campus plates (Penn / Stanford / MIT). */
   const ranked = [...campuses].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name));
-  const topIds = new Set(ranked.slice(0, 3).map((c) => c.id));
-  const labelRank = new Map(ranked.slice(0, 8).map((c, i) => [c.id, i + 1]));
+  const topIds = new Set(ranked.slice(0, CAMPUS_FOUNDERS_VISIBLE).map((c) => c.id));
+  const labelRank = new Map(ranked.slice(0, CAMPUS_FOUNDERS_VISIBLE).map((c, i) => [c.id, i + 1]));
   return {
     type: "FeatureCollection",
     features: campuses.map((campus) => ({
@@ -424,7 +424,10 @@ export function TileGlobe({
     : { companies: companyCount, foundersListed, campusesOnMap: campuses.length };
   const campusesOnMap = universeCounts.campusesOnMap;
 
-  const topCampuses = useMemo(() => campusFoundersTop(campuses, 3), [campuses]);
+  const rankedCampuses = useMemo(() => campusFoundersRanked(campuses), [campuses]);
+  const topCampuses = useMemo(() => campusFoundersTop(campuses, CAMPUS_FOUNDERS_VISIBLE), [campuses]);
+  const [showAllCampuses, setShowAllCampuses] = useState(false);
+  const plateCampuses = showAllCampuses ? rankedCampuses : topCampuses;
 
   return (
     <div className={className} data-fold-mobile-root="">
@@ -505,7 +508,7 @@ export function TileGlobe({
       <section className="mt-3 hidden max-w-sm lg:block" data-campus-metric="founders">
           <h2 className="mb-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Filter campus</h2>
           <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
-            {topCampuses.map((campus, i) => {
+            {plateCampuses.map((campus, i) => {
               const active = selectedId === campus.id;
               const label = shortCampusLabel(campus.id, campus.name);
               return (
@@ -526,6 +529,20 @@ export function TileGlobe({
               );
             })}
           </ol>
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1" data-campus-founders-all="">
+            {rankedCampuses.length > topCampuses.length ? (
+              <button
+                type="button"
+                onClick={() => setShowAllCampuses((v) => !v)}
+                className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline"
+              >
+                {showAllCampuses ? "Show top 10" : `All campuses · ${(rankedCampuses.length - topCampuses.length).toLocaleString("en-US")} more`}
+              </button>
+            ) : null}
+            <a href="/campuses" className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)] underline-offset-2 hover:underline">
+              Campus index
+            </a>
+          </div>
           <p className="mt-2 text-[12px] leading-5 text-[color:var(--fg-3,#5C647A)]">{markerSizeLegend()}</p>
         </section>
     </div>

@@ -68,8 +68,11 @@ export function iconsFromAliases(aliasesJson?: string | null): ProfileIconLink[]
       links.push({ type: "website", url: alias.slice("site:".length), status: "confirmed" });
     } else if (alias.startsWith("scholar:http")) {
       links.push({ type: "scholar", url: alias.slice("scholar:".length), status: "confirmed" });
-    } else if (alias.startsWith("twitter:http")) {
-      links.push({ type: "twitter", url: alias.slice("twitter:".length), status: "confirmed" });
+    } else if (alias.startsWith("twitter:http") || alias.startsWith("x:http")) {
+      const raw = alias.startsWith("x:") ? alias.slice("x:".length) : alias.slice("twitter:".length);
+      if (/^https?:\/\/(?:www\.)?(?:twitter|x)\.com\//i.test(raw)) {
+        links.push({ type: "twitter", url: raw, status: "confirmed" });
+      }
     } else if (alias.startsWith("substack:http")) {
       links.push({ type: "substack", url: alias.slice("substack:".length), status: "confirmed" });
     } else if (alias.startsWith("huggingface:http")) {

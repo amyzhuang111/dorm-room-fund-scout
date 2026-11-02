@@ -27,7 +27,7 @@ function FactSource({ fact }: { fact: { sourceUrl: string; excerpt: string } }) 
   );
 }
 
-function FactValue({ fact, unknown = "Unknown" }: { fact: SourcedValue | null; unknown?: string }) {
+function FactValue({ fact, unknown = "Not available" }: { fact: SourcedValue | null; unknown?: string }) {
   if (!fact) return <span className="text-muted">{unknown}</span>;
   return (
     <span className="text-foreground">
@@ -38,9 +38,9 @@ function FactValue({ fact, unknown = "Unknown" }: { fact: SourcedValue | null; u
 }
 
 function RoundValue({ round }: { round: FundingRound | null }) {
-  if (!round) return <span className="text-muted">Unknown</span>;
+  if (!round) return <span className="text-muted">Not available</span>;
   const text = formatRound(round);
-  if (!text) return <span className="text-muted">Unknown</span>;
+  if (!text) return <span className="text-muted">Not available</span>;
   return (
     <span className="text-foreground">
       {text}
@@ -104,7 +104,7 @@ export function CompanyProfileCard({ profile, founders, compact = false }: { pro
                 <FactSource fact={profile.website} />
               </span>
             ) : (
-              <span className="text-muted">Unknown</span>
+              <span className="text-muted">Not available</span>
             ),
           },
         ]
@@ -124,7 +124,7 @@ export function CompanyProfileCard({ profile, founders, compact = false }: { pro
             <FactSource fact={profile.description} />
           </>
         ) : (
-          <span className="text-muted">Unknown</span>
+          <span className="text-muted">Not available</span>
         )}
       </p>
       )}
@@ -132,7 +132,7 @@ export function CompanyProfileCard({ profile, founders, compact = false }: { pro
       <div className="mt-3">
         <h4 className="text-[10px] font-semibold uppercase tracking-wide text-muted">Founders</h4>
         {founders.length === 0 ? (
-          <p className="mt-0.5 text-xs text-muted">Unknown</p>
+          <p className="mt-0.5 text-xs text-muted">Not available</p>
         ) : (
           <ul className="mt-1 space-y-1">
             {founders.map((founder) => (
@@ -153,7 +153,7 @@ export function CompanyProfileCard({ profile, founders, compact = false }: { pro
       <div className={compact ? "mt-1" : "mt-3"}>
         <h4 className="text-[10px] font-semibold uppercase tracking-wide text-muted">Who funded</h4>
         {profile.investors.length === 0 ? (
-          <p className="mt-0.5 text-xs text-muted">Unknown</p>
+          <p className="mt-0.5 text-xs text-muted">Not available</p>
         ) : (
           <div className="mt-1 space-y-1.5">
             {groupInvestors(profile.investors).map((group) => (

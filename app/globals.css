@@ -624,3 +624,46 @@ html[data-sample="halflight"] body {
 .sample-paper .company-instrument [class*="GateBadge"] {
   /* keep gate if present */
 }
+
+
+/* Scout identity leap: type scale + accent rhythm on white field (not YCGlobe cream). */
+.sample-paper {
+  --scout-display: var(--font-display), "Fraunces", Georgia, serif;
+  --scout-kicker: 0.16em;
+  --scout-rule: 2px;
+}
+.sample-paper .scout-kicker {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: var(--scout-kicker);
+  text-transform: uppercase;
+  color: var(--cobalt);
+}
+.sample-paper .scout-display {
+  font-family: var(--scout-display);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  color: var(--fg);
+}
+.sample-paper .scout-figure {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.05em;
+  color: var(--ember);
+}
+.sample-paper .scout-ledger-rail {
+  position: relative;
+}
+.sample-paper .scout-ledger-rail::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: var(--scout-rule);
+  background: var(--cobalt);
+  opacity: 0.85;
+}
+

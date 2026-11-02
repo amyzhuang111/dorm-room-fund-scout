@@ -776,7 +776,7 @@ export interface ClaimRow {
 export interface ProjectDetail extends CandidateSummary {
   profile: CompanyProfile;
   claims: ClaimRow[];
-  signals: { id: string; signalType: string; currentObservation: string; sourceDate: string | null; significanceNote: string | null }[];
+  signals: { id: string; signalType: string; currentObservation: string; sourceDate: string | null; significanceNote: string | null; sourceUrl: string | null }[];
   pipeline: { status: string; nextAction: string | null; dueDate: string | null; notes: string | null; passReason: string | null } | null;
   manualNotes: ManualNote[];
   assessmentHistory: AssessmentHistoryRow[];
@@ -825,11 +825,59 @@ export function getProjectDetail(id: string): ProjectDetail | null {
     verificationState: r.verification_state,
   }));
 
-  const signals = (
-    db
-      .prepare(`SELECT id, signal_type, current_observation, source_date, significance_note FROM signals WHERE project_id = ? ORDER BY created_at DESC`)
-      .all(id) as { id: string; signal_type: string; current_observation: string; source_date: string | null; significance_note: string | null }[]
-  ).map((r) => ({ id: r.id, signalType: r.signal_type, currentObservation: r.current_observation, sourceDate: r.source_date, significanceNote: r.significance_note }));
+  const signalRows = db
+    .prepare(
+      `SELECT id, signal_type, current_observation, source_date, significance_note, claim_ids_json
+       FROM signals WHERE project_id = ? ORDER BY created_at DESC`
+    )
+    .all(id) as {
+      id: string;
+      signal_type: string;
+      current_observation: string;
+      source_date: string | null;
+      significance_note: string | null;
+      claim_ids_json: string | null;
+    }[];
+  const claimIdSet = new Set<string>();
+  const parsedClaimIds = signalRows.map((r) => {
+    let ids: string[] = [];
+    try {
+      const raw = r.claim_ids_json ? JSON.parse(r.claim_ids_json) : [];
+      if (Array.isArray(raw)) ids = raw.filter((x): x is string => typeof x === "string");
+    } catch {
+      ids = [];
+    }
+    for (const cid of ids) claimIdSet.add(cid);
+    return ids;
+  });
+  const claimUrlById = new Map<string, string>();
+  if (claimIdSet.size > 0) {
+    const ids = [...claimIdSet];
+    const placeholders = ids.map(() => "?").join(",");
+    for (const row of db
+      .prepare(`SELECT id, source_url FROM claims WHERE id IN (${placeholders}) AND source_url IS NOT NULL AND source_url != ''`)
+      .all(...ids) as { id: string; source_url: string }[]) {
+      claimUrlById.set(row.id, row.source_url);
+    }
+  }
+  const signals = signalRows.map((r, i) => {
+    let sourceUrl: string | null = null;
+    for (const cid of parsedClaimIds[i]) {
+      const url = claimUrlById.get(cid);
+      if (url) {
+        sourceUrl = url;
+        break;
+      }
+    }
+    return {
+      id: r.id,
+      signalType: r.signal_type,
+      currentObservation: r.current_observation,
+      sourceDate: r.source_date,
+      significanceNote: r.significance_note,
+      sourceUrl,
+    };
+  });
 
   const pipeline = db
     .prepare(`SELECT status, next_action, due_date, notes, pass_reason FROM pipeline_entries WHERE project_id = ?`)

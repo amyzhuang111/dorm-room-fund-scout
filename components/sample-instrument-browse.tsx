@@ -19,6 +19,8 @@ import {
   PANEL,
   ScoutSignalPodium,
   campusFoundersTop,
+  campusFoundersRanked,
+  CAMPUS_FOUNDERS_VISIBLE,
   topPrograms,
   isYcProgramLabel,
   YC_MEMBERSHIP_EXPECTED,
@@ -249,6 +251,8 @@ export function SampleInstrumentBrowse({
   );
   /** Quiet matching companies (no stored signal) — insight, not pagination. */
   const quietMatch = boardCompanies.length - signaledMatch;
+  const pageFrom = Math.max(1, cards.length - 27);
+  const pageContext = `Companies ${pageFrom.toLocaleString("en-US")} to ${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`;
   const pageSignalBars = useMemo(() => {
     /** Prefer per-company signal counts so the page always shows a multi-bar peak. */
     const ranked = cards
@@ -299,7 +303,8 @@ export function SampleInstrumentBrowse({
     return names[mon] || peak.key;
   }, [pageSignalBars]);
   const sliceInsight = useMemo(() => endSliceInsight(cards), [cards]);
-  /** Leaderboard podium: top-3 campuses by founders; signals = companies with signal on that desk. */
+  /** Leaderboard podium: top campuses by founders; signals = companies with signal on that desk. */
+  const podiumRankedCount = useMemo(() => campusFoundersRanked(campuses).length, [campuses]);
   const podiumRows = useMemo(() => {
     const signaledByCampus = new Map<string, number>();
     for (const card of boardCompanies) {
@@ -307,7 +312,7 @@ export function SampleInstrumentBrowse({
       if (!id || !(card.signals > 0)) continue;
       signaledByCampus.set(id, (signaledByCampus.get(id) ?? 0) + 1);
     }
-    return campusFoundersTop(campuses, 3).map((c) => ({
+    return campusFoundersTop(campuses, CAMPUS_FOUNDERS_VISIBLE).map((c) => ({
       id: c.id,
       label: shortCampusLabel(c.id, c.name),
       founders: c.founders,
@@ -735,11 +740,11 @@ export function SampleInstrumentBrowse({
             <div data-ledger-stage={feed} data-ledger-top={pages > 1 ? undefined : ""}>
             {feed === "leaderboard" ? (
               <div className="mb-4 lg:hidden">
-                <ScoutSignalPodium rows={podiumRows} totalOnDesk={total} />
+                <ScoutSignalPodium rows={podiumRows} totalOnDesk={total} rankedCount={podiumRankedCount} allHref="/campuses" />
               </div>
             ) : null}
             <ol
-              className={`relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] divide-y divide-[color:var(--line,#E1E5EF)] ${pages > 1 ? "border-t-0" : ""} ${feed === "leaderboard" ? "border-t-0 lg:border-t" : ""}`}
+              className={`relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)] divide-y divide-[color:var(--line,#E1E5EF)] ${pages > 1 ? "border-t-0" : ""} ${feed === "leaderboard" ? "border-t-0 lg:border-t" : ""}`}
             >
               {cards.map((card, index) => {
                 const chunk = 14;
@@ -832,36 +837,54 @@ export function SampleInstrumentBrowse({
                     ) : null}
                   </div>
                 </div>
-                {/* Mobile more-end-375: one line so cards remain in frame */}
+                {/* Mobile more-end-375: pass-close instrument · cards stay above, no orphan band */}
                 <div
-                  className="mt-3 scroll-mt-24 border-t border-[color:var(--line,#E1E5EF)] pt-3 lg:hidden"
+                  className="mt-4 scroll-mt-24 lg:hidden"
                   data-ledger-end=""
                   data-ledger-end-mobile=""
                   data-end-insight={sliceInsight.kicker}
                 >
                   <div
-                    className="flex flex-wrap items-center justify-between gap-2 px-0.5"
+                    className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]"
                     data-ledger-end-lead=""
                     data-ledger-end-more=""
+                    data-pass-close=""
                   >
-                    <p className="font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="" data-end-lead="">
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length.toLocaleString("en-US")}</span>
-                      {" of "}
-                      <span className="font-bold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
-                      {" loaded"}
+                    <div className="px-3.5 py-3.5">
+                      <p className="scout-kicker text-[color:var(--cobalt,#2F4FD8)]">Pass close</p>
+                      <p className="mt-2 scout-figure text-[40px] leading-none" data-ledger-showing="" data-end-lead="">
+                        {cards.length.toLocaleString("en-US")}
+                        <span className="ml-1.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
+                          of {total.toLocaleString("en-US")}
+                        </span>
+                      </p>
+                      <p className="mt-2 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]" data-more-context="">
+                        {pageContext}
+                      </p>
+                      {sliceInsight ? (
+                        <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
+                          {" "}
+                          {sliceInsight.figureUnit}
+                          {" · see "}
+                          <Link href={`/startup/${sliceInsight.companyId}`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:underline">
+                            {sliceInsight.companyName}
+                          </Link>
+                        </p>
+                      ) : null}
                       {nextToScout[0] ? (
-                        <>
-                          {" · "}
+                        <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
                           <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].label}</span>
                           {" "}
                           <span className="font-bold text-[color:var(--ember,#D96B1C)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
-                        </>
+                          {" on the desk"}
+                        </p>
                       ) : null}
-                    </p>
+                    </div>
                     {cards.length < total ? (
                       <Link
                         href={moreHref}
-                        className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 font-mono text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]"
+                        className="flex h-11 w-full items-center justify-center border-t border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] font-mono text-[12px] font-semibold uppercase tracking-[0.12em] text-white hover:opacity-95"
                       >
                         Load next
                       </Link>
@@ -998,8 +1021,8 @@ function LedgerRow({
         <p
           className={
             ranked
-              ? "line-clamp-2 break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
-              : "truncate text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
+              ? "line-clamp-2 break-words font-[family-name:var(--font-display)] text-[19px] font-semibold leading-snug tracking-[-0.03em] text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:font-sans sm:text-[18px] sm:leading-5 sm:tracking-tight sm:[overflow-wrap:anywhere]"
+              : "truncate font-[family-name:var(--font-display)] text-[18px] font-semibold leading-5 tracking-[-0.03em] text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:font-sans sm:text-[16px] sm:tracking-tight"
           }
         >
           {card.name}
@@ -1010,9 +1033,9 @@ function LedgerRow({
           </p>
         ) : null}
         {why ? (
-          <p className="mt-1.5 border-l-2 border-[color:var(--ember,#D96B1C)]/45 pl-2 text-[12px] leading-5 text-[color:var(--fg,#0B0E17)]" data-why-here="">
-            <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Why it&apos;s here</span>
-            <span className="mt-0.5 block">{why}</span>
+          <p className="mt-2 border-l-[3px] border-[color:var(--ember,#D96B1C)] bg-[color:var(--cobalt-haze,#E8ECFA)]/25 py-1.5 pl-2.5 pr-2 text-[13px] leading-5 text-[color:var(--fg,#0B0E17)] sm:mt-1.5 sm:border-l-2 sm:bg-transparent sm:py-0 sm:pl-2 sm:pr-0 sm:text-[12px]" data-why-here="">
+            <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Why it&apos;s here</span>
+            <span className="mt-0.5 block font-medium tracking-tight">{why}</span>
           </p>
         ) : (
           <p className="sr-only" data-why-here="" data-why-blank="1">Why it&apos;s here blank</p>
