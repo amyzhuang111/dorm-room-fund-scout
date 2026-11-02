@@ -235,6 +235,8 @@ export function SampleInstrumentBrowse({
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [selectedCompanyId, setSelectedCompanyId] = useState<string | null>(null);
   const [catalog, setCatalog] = useState<FacetCompany[] | null>(null);
+  const [founderLinks, setFounderLinks] = useState<Record<string, { name: string; linkedinUrl: string }[]>>({});
+  const [rightTab, setRightTab] = useState<"feed" | "overlays">("feed");
 
   useEffect(() => {
     let cancel = false;
@@ -447,6 +449,51 @@ export function SampleInstrumentBrowse({
     [boardCompanies],
   );
 
+  useEffect(() => {
+    const ids = cards.slice(0, 40).map((c) => c.id);
+    if (ids.length === 0) {
+      setFounderLinks({});
+      return;
+    }
+    let cancel = false;
+    void fetch(`/api/founder-links?ids=${encodeURIComponent(ids.join(","))}`)
+      .then((res) => (res.ok ? res.json() : {}))
+      .then((data: Record<string, { name: string; linkedinUrl: string }[]>) => {
+        if (!cancel) setFounderLinks(data ?? {});
+      })
+      .catch(() => {
+        if (!cancel) setFounderLinks({});
+      });
+    return () => {
+      cancel = true;
+    };
+  }, [cards]);
+
+  const overlayCounts = useMemo(() => {
+    const byStatus = new Map<string, number>();
+    const bySector = new Map<string, number>();
+    const byCampus = new Map<string, number>();
+    for (const company of boardCompanies) {
+      const status =
+        company.operatingStatus === "acquired"
+          ? "Acquired"
+          : company.operatingStatus === "dead"
+            ? "Closed"
+            : "Active";
+      byStatus.set(status, (byStatus.get(status) ?? 0) + 1);
+      if (company.sector) bySector.set(company.sector, (bySector.get(company.sector) ?? 0) + 1);
+      if (company.school) byCampus.set(company.school, (byCampus.get(company.school) ?? 0) + 1);
+    }
+    const top = (map: Map<string, number>, n: number) =>
+      [...map.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, n);
+    return {
+      status: top(byStatus, 4),
+      sector: top(bySector, 6),
+      campus: top(byCampus, 6),
+      total: boardCompanies.length,
+    };
+  }, [boardCompanies]);
+
   const sortChip = (active: boolean) =>
     active
       ? "border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] text-white"
@@ -464,7 +511,6 @@ export function SampleInstrumentBrowse({
           : sort === "stage"
             ? "Ordered by stage"
             : "Ranked from signals, founders, programs, and stage";
-  const wireLabel = pages > 1 ? "More on this list" : "On this list";
 
   return (
     <div
@@ -983,6 +1029,7 @@ export function SampleInstrumentBrowse({
                       </>
                     ) : null}
                     <LedgerRow
+                      founderLinks={founderLinks[card.id] ?? []}
                       card={card}
                       rank={feed === "leaderboard" ? index + 1 : null}
                       ranked={feed === "leaderboard"}
@@ -1182,35 +1229,104 @@ export function SampleInstrumentBrowse({
         </div>
       </div>
 
-      {/* Col 3 · WIRE digest (desk), aligned to fold grid */}
-      <aside className="hidden min-w-0 lg:block" data-browse-wire="">
+      {/* Col 3 · Monitor-style Feed / Overlays tabs */}
+      <aside className="hidden min-w-0 lg:block" data-browse-wire="" data-instrument-tabs="">
         <div className="sticky top-14">
           <div className={`${PANEL} relative overflow-hidden p-2.5`}>
-            <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{wireLabel}</p>
+            <div className="mb-2 flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+              <div className="flex items-center gap-1" role="tablist" aria-label="Instrument panels">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={rightTab === "feed"}
+                  data-tab="feed"
+                  onClick={() => setRightTab("feed")}
+                  className={`h-7 rounded-full px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] ${
+                    rightTab === "feed"
+                      ? "bg-[color:var(--cobalt,#2F4FD8)] text-white"
+                      : "text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg,#0B0E17)]"
+                  }`}
+                >
+                  Feed
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={rightTab === "overlays"}
+                  data-tab="overlays"
+                  onClick={() => setRightTab("overlays")}
+                  className={`h-7 rounded-full px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] ${
+                    rightTab === "overlays"
+                      ? "bg-[color:var(--cobalt,#2F4FD8)] text-white"
+                      : "text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg,#0B0E17)]"
+                  }`}
+                >
+                  Overlays
+                </button>
+              </div>
               <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                {pages > 1 && feed === "directory" ? (
-                  <>
-                    <span className="font-bold text-[color:var(--ember,#D96B1C)]">{cards.length}</span>
-                    {" / "}
-                    {boardCompanies.length.toLocaleString("en-US")}
-                  </>
-                ) : (
-                  boardCompanies.length.toLocaleString("en-US")
-                )}
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
+                {" of "}
+                {total.toLocaleString("en-US")}
               </p>
             </div>
-            <IntelligenceBoards
-              companies={boardCompanies}
-              compact={pages <= 1}
-              surface={wireSurface}
-              hideSector={feed === "directory" && pages <= 1}
-              hideLatest={pages <= 1}
-              hidePrograms={false}
-            />
+            {rightTab === "feed" ? (
+              <div data-tab-panel="feed">
+                <IntelligenceBoards
+                  companies={boardCompanies}
+                  compact={pages <= 1}
+                  surface={wireSurface}
+                  hideSector={feed === "directory" && pages <= 1}
+                  hideLatest={false}
+                  hidePrograms={false}
+                />
+              </div>
+            ) : (
+              <div className="space-y-3" data-tab-panel="overlays">
+                <OverlayCountBlock title="Status" rows={overlayCounts.status} />
+                <OverlayCountBlock title="Sector" rows={overlayCounts.sector} />
+                <OverlayCountBlock title="Campus" rows={overlayCounts.campus} />
+              </div>
+            )}
           </div>
         </div>
       </aside>
+
+
+      {/* Mobile bottom filter sheet */}
+      {mobileFiltersOpen ? (
+        <div className="fixed inset-0 z-40 lg:hidden" data-mobile-filter-sheet="">
+          <button
+            type="button"
+            className="absolute inset-0 bg-[color:var(--fg,#0B0E17)]/35"
+            aria-label="Dismiss filters"
+            onClick={() => setMobileFiltersOpen(false)}
+          />
+          <div className="absolute inset-x-0 bottom-0 max-h-[78dvh] overflow-hidden rounded-t-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] shadow-lg">
+            <div className="flex items-center justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] px-3 py-2.5">
+              <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">
+                Filters
+                <span className="ml-2 font-mono text-[13px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--ember,#D96B1C)]">
+                  {boardCompanies.length.toLocaleString("en-US")}
+                </span>
+                <span className="ml-1 font-mono text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
+                  of {total.toLocaleString("en-US")}
+                </span>
+              </p>
+              <button
+                type="button"
+                className="font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)]"
+                onClick={() => setMobileFiltersOpen(false)}
+              >
+                Done
+              </button>
+            </div>
+            <div className="max-h-[calc(78dvh-48px)] overflow-y-auto overscroll-contain px-1 pb-6" data-mobile-sheet-facets="">
+              <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense sheet />
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {/* Filters live in the quiet inline row above the list (no bottom dock). */}
     </div>
@@ -1233,6 +1349,30 @@ function signalMeta(card: DirectoryCard): { primary: string; secondary: string }
 }
 
 /** Editorial ledger row - fold/map-stage language: ruled, mono meta, ember hover. */
+function OverlayCountBlock({ title, rows }: { title: string; rows: [string, number][] }) {
+  if (rows.length === 0) {
+    return (
+      <div>
+        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{title}</p>
+        <p className="mt-1 text-[12px] text-[color:var(--fg-3,#5C647A)]">None in this view.</p>
+      </div>
+    );
+  }
+  return (
+    <div data-overlay-facet={title.toLowerCase()}>
+      <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">{title}</p>
+      <ul className="mt-1.5 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)]">
+        {rows.map(([label, count]) => (
+          <li key={label} className="flex items-center justify-between gap-2 px-2 py-1.5 text-[12px]">
+            <span className="truncate font-medium text-[color:var(--fg,#0B0E17)]">{label}</span>
+            <span className="font-mono text-[11px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{count.toLocaleString("en-US")}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function LedgerRow({
   card,
   rank,
@@ -1240,6 +1380,7 @@ function LedgerRow({
   whyOverride,
   showCampusSeal = true,
   selected = false,
+  founderLinks = [],
 }: {
   card: DirectoryCard;
   rank: number | null;
@@ -1249,6 +1390,7 @@ function LedgerRow({
   /** First row of a campus run shows the seal on mobile; desk keeps one per row. */
   showCampusSeal?: boolean;
   selected?: boolean;
+  founderLinks?: { name: string; linkedinUrl: string }[];
 }) {
   const subtitle = directoryCardSubtitle(card);
   const meta = signalMeta(card);
@@ -1332,6 +1474,26 @@ function LedgerRow({
               </span>
             ) : null}
           </p>
+        ) : null}
+
+        {founderLinks.length > 0 ? (
+          <span className="mt-1.5 flex flex-wrap items-center gap-1.5" data-card-founder-links="" onClick={(event) => event.preventDefault()}>
+            {founderLinks.slice(0, 3).map((founder) => (
+              <a
+                key={founder.linkedinUrl}
+                href={founder.linkedinUrl}
+                target="_blank"
+                rel="noreferrer"
+                title={founder.name}
+                aria-label={`${founder.name} on LinkedIn`}
+                className="inline-flex h-6 items-center gap-1 rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+                onClick={(event) => event.stopPropagation()}
+              >
+                in
+                <span className="max-w-[7rem] truncate font-sans text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">{founder.name}</span>
+              </a>
+            ))}
+          </span>
         ) : null}
         {meta ? (
           <span className="mt-1.5 flex flex-wrap items-center gap-1.5">

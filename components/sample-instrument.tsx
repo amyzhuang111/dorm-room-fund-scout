@@ -62,9 +62,9 @@ export function campusFoundersAtlasRows(
   }));
 }
 
-/** Fold-desk atlas language for util pages — word-led plate, real rows, no twin stamps. */
+/** Fold-desk atlas language for util pages - word-led plate, real rows, no twin stamps. */
 
-/** Leaderboard-mobile identity: ranked podium ladder — not a shared ticket or atlas dial. */
+/** Leaderboard-mobile identity: ranked podium ladder - not a shared ticket or atlas dial. */
 export function ScoutSignalPodium({
   rows,
   totalOnDesk,
@@ -136,7 +136,7 @@ export function ScoutSignalPodium({
   );
 }
 
-/** Browse-more-end identity: closing colophon + next programs to scout — not a reused chronograph dial. */
+/** Browse-more-end identity: closing colophon + next programs to scout - not a reused chronograph dial. */
 export function ScoutEndColophon({
   showing,
   total,
@@ -265,7 +265,7 @@ export function ScoutAtlasPlate({
 
 export const PANEL = "rounded-md border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg-raised,#FFFFFF)] text-[color:var(--fg,#0B0E17)] shadow-[0_1px_2px_rgba(15,23,42,0.04)]";
 
-/** Real initials from the company name — intentional monogram, not an orange-dot stub. */
+/** Real initials from the company name - intentional monogram, not an orange-dot stub. */
 export function companyInitials(name: string): string {
   const cleaned = name.replace(/["""'']/g, " ").replace(/[^a-zA-Z0-9&+\s.-]/g, " ").trim();
   const parts = cleaned.split(/[\s._-]+/).filter(Boolean).filter((p) => !/^(inc|llc|ltd|co|corp|the|and|&)$/i.test(p));
@@ -369,16 +369,32 @@ export function LogoPill({
   );
 }
 
+function facetAnchorId(title: string): string {
+  const key = title.trim().toLowerCase();
+  if (key.startsWith("status")) return "facet-status";
+  if (key.startsWith("founded")) return "facet-year";
+  if (key.startsWith("sector")) return "facet-sector";
+  if (key.startsWith("campus")) return "facet-campus";
+  if (key.startsWith("hq")) return "facet-hq";
+  if (key.startsWith("flag")) return "facet-flags";
+  if (key.startsWith("stage")) return "facet-stage";
+  if (key.startsWith("signal recency") || key.startsWith("recency")) return "facet-recency";
+  if (key.startsWith("country")) return "facet-country";
+  if (key.startsWith("signal kind")) return "facet-kind";
+  return `facet-${key.replace(/[^a-z0-9]+/g, "-")}`;
+}
+
 function FacetGroup({ title, children, defaultOpen = true, dense = false }: { title: string; children: ReactNode; defaultOpen?: boolean; dense?: boolean }) {
+  const anchor = facetAnchorId(title);
   return (
-    <details className={`border-b border-[color:var(--line,#E1E5EF)] ${dense ? "px-2 py-1.5" : "px-2.5 py-2"}`} open={defaultOpen}>
+    <details id={anchor} className={`scroll-mt-16 border-b border-[color:var(--line,#E1E5EF)] ${dense ? "px-2 py-1.5" : "px-2.5 py-2"}`} open={defaultOpen} data-facet-group={anchor}>
       <summary className={`cursor-pointer font-mono text-[10px] font-medium uppercase ${dense ? "tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]" : "tracking-[0.06em] text-[color:var(--fg-3,#5C647A)]"}`}>{title}</summary>
       <div className="mt-1.5 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)]">{children}</div>
     </details>
   );
 }
 
-/** Editorial ruled facet row — label left, mono count right, tick; no chips. */
+/** Editorial ruled facet row - label left, mono count right, tick; no chips. */
 function FacetRow({
   active,
   label,
@@ -516,7 +532,7 @@ export function FacetRail({
   dense?: boolean;
   /** Editorial filter-sheet chrome (desktop aside + mobile sheet language). */
   sheet?: boolean;
-  /** Persistent magazine table-of-contents column (desk) — not a sheet over content. */
+  /** Persistent magazine table-of-contents column (desk) - not a sheet over content. */
   index?: boolean;
   /** Sheet/desk title under Scout filters (map vs ledger). */
   caption?: string;
@@ -588,6 +604,18 @@ export function FacetRail({
       .slice(0, 36);
   }, [countryScoped, facets.query]);
 
+  const searchSuggestions = useMemo(() => {
+    const q = facets.query.trim().toLowerCase();
+    if (q.length < 2) return [] as FacetCompany[];
+    const tokens = q.split(/\s+/).filter(Boolean);
+    return baseCompanies
+      .filter((company) => {
+        const hay = [company.name, company.sector ?? "", company.school ?? "", ...(company.founders ?? [])].join("\n").toLowerCase();
+        return tokens.every((token) => hay.includes(token));
+      })
+      .slice(0, 6);
+  }, [baseCompanies, facets.query]);
+
   function set(partial: Partial<FacetState>) {
     onChange({ ...facets, ...partial });
   }
@@ -624,20 +652,69 @@ export function FacetRail({
             ) : null}
           </>
         )}
+        <div className="flex flex-wrap gap-1 pb-1 pt-0.5" data-facet-jump="" aria-label="Jump to facet">
+          {(
+            [
+              ["facet-status", "Status"],
+              ["facet-year", "Year"],
+              ["facet-sector", "Sector"],
+              ["facet-campus", "Campus"],
+            ] as const
+          ).map(([id, label]) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              className="inline-flex h-6 items-center rounded-full border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[9px] font-semibold uppercase tracking-[0.1em] text-[color:var(--cobalt,#2F4FD8)] hover:border-[color:var(--cobalt,#2F4FD8)]/50"
+              onClick={(event) => {
+                event.preventDefault();
+                document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+            >
+              {label}
+            </a>
+          ))}
+        </div>
         <label className="sr-only" htmlFor="sample-facet-q">
           {searchPlaceholder}
         </label>
-        <input
-          id="sample-facet-q"
-          type="search"
-          value={facets.query}
-          onChange={(event) => set({ query: event.target.value })}
-          placeholder={searchPlaceholder}
-          className={`${dense && !sheet ? "mt-0" : "mt-1.5"} h-7 w-full rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2 text-[11px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)]`}
-        />
+        <div className={`relative ${dense && !sheet ? "mt-0" : "mt-1.5"}`} data-facet-search="">
+          <input
+            id="sample-facet-q"
+            type="search"
+            value={facets.query}
+            onChange={(event) => set({ query: event.target.value })}
+            placeholder={searchPlaceholder}
+            autoComplete="off"
+            className="h-7 w-full rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-2 text-[11px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)]"
+          />
+          {searchSuggestions.length > 0 ? (
+            <ul
+              className="absolute left-0 right-0 top-[calc(100%+2px)] z-20 max-h-56 overflow-y-auto rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] shadow-sm"
+              data-search-suggestions=""
+              role="listbox"
+            >
+              {searchSuggestions.map((company) => (
+                <li key={company.id} role="option">
+                  <a
+                    href={`/startup/${company.id}`}
+                    className="flex items-center gap-2 px-2 py-1.5 hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50"
+                  >
+                    <LogoMark name={company.name} logoUrl={company.logoUrl ?? null} size={18} />
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-[12px] font-semibold text-[color:var(--fg,#0B0E17)]">{company.name}</span>
+                      <span className="block truncate font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
+                        {[company.school, company.sector].filter(Boolean).join(" · ") || "Company"}
+                      </span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
       </div>
       {editorial ? (
-        <div className="shrink-0 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5" data-facet-status-pin="">
+        <div id="facet-status" className="shrink-0 scroll-mt-16 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5" data-facet-status-pin="">
           <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Status</p>
           <div className="mt-1.5 divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)]">
             <FacetRow facet="status" count={baseCompanies.length} active={!facets.status} onClick={() => set({ status: null })} label="All" />
@@ -833,7 +910,7 @@ export type ChronoMonth = {
   peak: boolean;
   /** Valid ym before the drawn window. */
   earlier?: boolean;
-  /** Year-only / month -00 (e.g. 2026-00-00) — not chronologically "earlier". */
+  /** Year-only / month -00 (e.g. 2026-00-00) - not chronologically "earlier". */
   monthUnknown?: boolean;
 };
 
@@ -847,16 +924,16 @@ export type ChronographDetail = {
   earlierValid: number;
   /** latestSignalAt with month -00 (universe: 34, all 2026-00-00). */
   undatedMonth: number;
-  /** @deprecated Alias of earlierValid — do not add undatedMonth into this. */
+  /** @deprecated Alias of earlierValid - do not add undatedMonth into this. */
   earlier: number;
 };
 
 const MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-/** Snapshot ceiling — never draw months after the Scout dispatch through-date. */
+/** Snapshot ceiling - never draw months after the Scout dispatch through-date. */
 export const CHRONO_THROUGH_YM = "2026-10";
 
-/** Page-specific Contents figure — newest-sector or signal-rate lead; never a global program stamp. */
+/** Page-specific Contents figure - newest-sector or signal-rate lead; never a global program stamp. */
 export type ContentsInsight = {
   figure: number;
   /** Signaled companies in the sector (e.g. 46). */
@@ -1018,7 +1095,7 @@ export function chronographCaption(detail: ChronographDetail): string {
 }
 
 /**
- * Plain-language "when signals landed" — real calendar months only.
+ * Plain-language "when signals landed" - real calendar months only.
  * Earlier / year-only counts stay in a caption; never as Ear/Unk bar codes.
  */
 export function SignalsLanded({ companies, compact = false }: { companies: FacetCompany[]; compact?: boolean }) {
@@ -1121,7 +1198,7 @@ export function SignalsLanded({ companies, compact = false }: { companies: Facet
 
 
 /**
- * Scout Chronograph — unifying editorial system across fold / browse / signals / company.
+ * Scout Chronograph - unifying editorial system across fold / browse / signals / company.
  * Real latestSignalAt month bars; peak month is the editorial figure (not decoration).
  */
 export function ScoutChronograph({
@@ -1177,7 +1254,7 @@ export function ScoutChronograph({
     return "text-[color:var(--fg-3,#5C647A)]";
   }
 
-  /** Fold-mobile only: typographic chronograph spine — not the shared dispatch ticket. */
+  /** Fold-mobile only: typographic chronograph spine - not the shared dispatch ticket. */
   if (variant === "spine") {
     const monthWord = figureIsUnknown ? "UNKNOWN" : figureIsEarlier ? "EARLIER" : figure.label.replace(/\s+\d{4}$/, "").toUpperCase();
     return (
@@ -1219,7 +1296,7 @@ export function ScoutChronograph({
     );
   }
 
-  /** Mobile identity: dispatch ticket + vertical chronograph spine — not a shrunken desk atlas. */
+  /** Mobile identity: dispatch ticket + vertical chronograph spine - not a shrunken desk atlas. */
   if (variant === "ticket") {
     return (
       <div
@@ -1558,7 +1635,7 @@ export function topPrograms(companies: FacetCompany[]): FacetCount[] {
     .slice(0, 5);
 }
 
-/** Shared intelligence boards — surface varies module order so Explore / Signals / company do not stamp one WIRE. */
+/** Shared intelligence boards - surface varies module order so Explore / Signals / company do not stamp one WIRE. */
 export function IntelligenceBoards({
   companies,
   compact = false,
@@ -1712,7 +1789,7 @@ export function IntelligenceBoards({
 }
 
 
-/** Mobile-native WIRE: horizontal swipe digest — not a shrunk desktop column.
+/** Mobile-native WIRE: horizontal swipe digest - not a shrunk desktop column.
  *  Per-surface card mix + accent so fold / browse / continued / company do not twin. */
 export function MobileWireStrip({
   companies,
@@ -1730,7 +1807,7 @@ export function MobileWireStrip({
 
   type Card = { key: string; kicker: string; figure: string; caption: string; href?: string; ycCount?: number };
   const cards: Card[] = [];
-  // fold: programs only — dispatch desk beat
+  // fold: programs only - dispatch desk beat
   if (surface === "fold") {
     for (const [i, p] of programs.entries()) {
       cards.push({
@@ -1758,7 +1835,7 @@ export function MobileWireStrip({
       });
     }
   }
-  // signals (browse-more continued): recent signals only — label must match
+  // signals (browse-more continued): recent signals only - label must match
   if (surface === "signals") {
     for (const [i, c] of recent.entries()) {
       cards.push({
@@ -1770,7 +1847,7 @@ export function MobileWireStrip({
       });
     }
   }
-  // company: campus peers by signal weight (6c770b0; skip empty founder stubs) — sim-375
+  // company: campus peers by signal weight (6c770b0; skip empty founder stubs) - sim-375
   if (surface === "company") {
     const peers = [...companies]
       .filter((c) => (c.signals ?? 0) > 0)
@@ -1847,7 +1924,7 @@ export function MobileWireStrip({
   );
 }
 
-/** Bottom-anchored filter dock — tone varies per page so docks do not twin.
+/** Bottom-anchored filter dock - tone varies per page so docks do not twin.
  *  When `observe` is set, the dock only mounts while that selector intersects the viewport
  *  (home page hosts both fold + browse docks; without this they stack as twins). */
 export function MobileFilterDock({
@@ -1864,7 +1941,7 @@ export function MobileFilterDock({
   /** ember = filled (fold); outline = cobalt framed (browse); magazine = hairline bar (company) */
   tone?: "ember" | "outline" | "magazine";
   kicker?: string;
-  /** CSS selector — dock shows only while this node is in view */
+  /** CSS selector - dock shows only while this node is in view */
   observe?: string;
 }) {
   const [inView, setInView] = useState(() => !observe);
@@ -1925,7 +2002,7 @@ export function MobileFilterDock({
   );
 }
 
-/** @deprecated Prefer MobileWireStrip — kept as alias for any residual imports. */
+/** @deprecated Prefer MobileWireStrip - kept as alias for any residual imports. */
 export function MobileBrowsePulse({ companies }: { companies: FacetCompany[] }) {
   return <MobileWireStrip companies={companies} label="Wire" surface="browse" />;
 }

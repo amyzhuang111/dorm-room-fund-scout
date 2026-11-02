@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { parseAskIntent } from "@/lib/domain/ask-intent";
+import { browseHrefFromAskIntent } from "@/lib/domain/ask-browse";
 import type { AskHit } from "@/lib/domain/ask-types";
 
 export function AskResult({ question }: { question: string }) {
@@ -61,6 +62,18 @@ export function AskResult({ question }: { question: string }) {
   return (
     <div>
       <h2 className="mt-4 text-2xl font-semibold tracking-[-0.02em]">{question}</h2>
+      {intent ? (
+        <p className="mt-3">
+          <button
+            type="button"
+            data-ask-result-filtered=""
+            className="inline-flex h-8 items-center rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/50 px-3 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
+            onClick={() => router.push(browseHrefFromAskIntent(intent))}
+          >
+            Open filtered Companies
+          </button>
+        </p>
+      ) : null}
       <div className="mt-6 text-[15px] leading-6 text-fg">
         {answer ?? <p className="text-fg-3">Reading the records…</p>}
         {note && <p className="mt-3 text-fg-2">{note}</p>}
@@ -84,7 +97,7 @@ export function AskResult({ question }: { question: string }) {
                 key={label}
                 type="button"
                 className="rounded bg-[var(--cobalt-haze)] px-2 py-1 text-[13px] text-fg"
-                onClick={() => router.push(`/ask?q=${encodeURIComponent(`${label} ${value}`)}`)}
+                onClick={() => intent && router.push(browseHrefFromAskIntent(intent))}
               >
                 {label} = {value}
               </button>

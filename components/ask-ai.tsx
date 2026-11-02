@@ -7,6 +7,8 @@ import type { WebWorkerMLCEngine } from "@mlc-ai/web-llm";
 import { ASK_BROWSER_MODELS, ASK_DEFAULT_MODEL_ID, formatDownload } from "@/lib/domain/ask-browser-models";
 import { NOT_IN_THE_DATA } from "@/lib/domain/ask-prompt";
 import type { AskHit } from "@/lib/domain/ask-types";
+import { parseAskIntent } from "@/lib/domain/ask-intent";
+import { askIntentHasBrowseFilters, browseHrefFromAskIntent } from "@/lib/domain/ask-browse";
 import { CAMPUSES, compareCampusLabels } from "@/lib/domain/campuses";
 import { setAskHighlight } from "./ask-highlight";
 
@@ -198,6 +200,8 @@ export function AskAiDock() {
     next.focusId = hit.id;
     next.focusCampus = hit.campuses[0] ?? null;
     setAskHighlight(next);
+    setOpen(false);
+    router.push(hit.href);
   }
 
   async function loadModel(): Promise<boolean> {
@@ -231,7 +235,7 @@ export function AskAiDock() {
     if (open) inputRef.current?.focus();
   }, [open]);
 
-  function go(text: string) {
+  function go(text: string, mode: "ask" | "browse" = "ask") {
     const q = text.trim();
     if (!q) return;
     try {
@@ -242,6 +246,17 @@ export function AskAiDock() {
       // Storage can be blocked. The question still opens.
     }
     setOpen(false);
+    if (mode === "browse") {
+      const intent = parseAskIntent(q);
+      router.push(browseHrefFromAskIntent(intent, q));
+      return;
+    }
+    const intent = parseAskIntent(q);
+    if (askIntentHasBrowseFilters(intent) && (intent.campus || intent.stage || intent.sector || intent.year)) {
+      // Prefer filtered Companies when the question is clearly a desk filter.
+      router.push(browseHrefFromAskIntent(intent, q));
+      return;
+    }
     router.push(`/ask?q=${encodeURIComponent(q)}`);
   }
 
@@ -296,6 +311,19 @@ export function AskAiDock() {
             ↑
           </button>
         </form>
+        <div className="flex flex-wrap items-center gap-2 border-t border-line px-4 py-2" data-ask-deep-link="">
+          <button
+            type="button"
+            data-ask-open-filtered=""
+            className="inline-flex h-8 items-center rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/50 px-3 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
+            onClick={() => go(question, "browse")}
+            disabled={!question.trim()}
+          >
+            Open filtered Companies
+          </button>
+          <p className="text-[11px] text-fg-3">Cmd-K applies campus, stage, sector, and year when the question names them.</p>
+        </div>
+
         <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
           <div className="overflow-hidden" inert={open ? undefined : true} aria-hidden={open ? undefined : true}>
             <div className="max-h-[min(32rem,calc(100dvh-8rem))] space-y-3 overflow-y-auto border-t border-border-c px-3 py-3">
