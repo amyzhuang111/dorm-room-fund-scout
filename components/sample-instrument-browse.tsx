@@ -701,7 +701,7 @@ export function SampleInstrumentBrowse({
         ) : (
           <div data-ledger-expanded={pages > 1 ? "1" : "0"}>
             {pages > 1 ? (
-              <div className="relative z-10 mb-0 border border-b-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 backdrop-blur-sm before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)] lg:sticky lg:top-12">
+              <div className="sticky top-12 z-10 mb-0 border border-b-0 border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 backdrop-blur-sm before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]">
                 {/* Desk (more-1440): f53d loud sticky. Mobile (more-375): quieter bar. */}
                 <div className="hidden items-end justify-between gap-3 px-3 py-2 sm:px-3.5 lg:flex">
                   <div className="min-w-0">
@@ -722,20 +722,17 @@ export function SampleInstrumentBrowse({
                     <span className="mt-0.5 block text-[9px] uppercase tracking-[0.1em]">with a signal</span>
                   </p>
                 </div>
-                <div className="px-3 py-3 lg:hidden" data-mid-list-hero="" data-more-context-hero="">
-                  <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
-                    {feed === "leaderboard" ? "Signals on this page" : "Companies on this page"}
-                  </p>
-                  <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                <div className="flex items-center justify-between gap-2 px-3 py-2 lg:hidden" data-mid-list-hero="" data-more-context-hero="">
+                  <p className="min-w-0 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
                     1 to {cards.length.toLocaleString("en-US")}
                     <span className="font-normal text-[color:var(--fg-3,#5C647A)]">
                       {" of "}
                       {total.toLocaleString("en-US")}
                     </span>
                   </p>
-                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <p className="shrink-0 text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                     <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                    {" with a signal · keep scrolling for the next batch"}
+                    {" with a signal"}
                   </p>
                 </div>
               </div>
@@ -779,8 +776,7 @@ export function SampleInstrumentBrowse({
                           data-ledger-section={String(Math.floor(index / chunk) + 1)}
                           data-mid-list-hero=""
                         >
-                          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Still on this page</p>
-                          <p className="mt-1 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                          <p className="text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
                             Companies {sectionFrom.toLocaleString("en-US")} to {sectionTo.toLocaleString("en-US")}
                             <span className="font-normal text-[color:var(--fg-3,#5C647A)]">
                               {" of "}
@@ -859,7 +855,8 @@ export function SampleInstrumentBrowse({
                         </p>
                         <Link
                           href={moreHref}
-                          className="inline-flex h-9 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white hover:opacity-90"
+                          className="inline-flex h-9 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 text-[12px] font-semibold text-white hover:opacity-90"
+                          data-load-next=""
                         >
                           Load next
                         </Link>
@@ -880,19 +877,18 @@ export function SampleInstrumentBrowse({
                     data-ledger-end-more=""
                     data-pass-close=""
                   >
-                    <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--fg-3,#5C647A)]">End of this batch</p>
-                    <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-more-context="">
+                    <p className="text-[11px] text-[color:var(--fg-3,#5C647A)]" data-more-context="">
                       {pageContext}
                     </p>
-                    <p className="mt-1.5 font-mono text-[15px] font-semibold tabular-nums tracking-tight text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="" data-end-lead="">
+                    <p className="mt-1.5 text-[15px] font-semibold tabular-nums tracking-tight text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="" data-end-lead="">
                       <span className="text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
                       <span className="ml-1 text-[11px] font-medium text-[color:var(--fg-3,#5C647A)]">
                         of {total.toLocaleString("en-US")} loaded
                       </span>
                     </p>
                     {sliceInsight ? (
-                      <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                        <span className="font-semibold text-[color:var(--fg-2,#3F465C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
+                      <p className="mt-1.5 text-[12px] text-[color:var(--fg-3,#5C647A)]">
+                        <span className="font-semibold tabular-nums text-[color:var(--fg-2,#3F465C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
                         {" "}
                         {sliceInsight.figureUnit}
                         {" · see "}
@@ -902,19 +898,20 @@ export function SampleInstrumentBrowse({
                       </p>
                     ) : null}
                     {nextToScout[0] ? (
-                      <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                      <p className="mt-1 text-[12px] text-[color:var(--fg-3,#5C647A)]">
                         <span className="text-[color:var(--fg-2,#3F465C)]">{nextToScout[0].label}</span>
                         {" "}
-                        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
+                        <span className="font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
                         {" on the desk"}
                       </p>
                     ) : null}
                     {cards.length < total ? (
                       <Link
                         href={moreHref}
-                        className="mt-2.5 inline-flex h-8 items-center font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline"
+                        className="mt-3 inline-flex h-9 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 text-[12px] font-semibold text-white hover:opacity-90"
+                        data-load-next=""
                       >
-                        Load next →
+                        Load next
                       </Link>
                     ) : null}
                   </div>

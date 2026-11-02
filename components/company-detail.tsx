@@ -76,7 +76,10 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
           <div className="flex flex-wrap items-center gap-2">
             <SignalTierBadge tier={project.signalTier} basis={project.signalTierBasis} />
             {project.sameSchoolCofounders ? <SameSchoolBadge /> : null}
-            <VerificationBadge status={project.verificationStatus} verifiedAt={project.lastVerifiedAt} note={project.verificationNote} />
+            {/* Skip Verified chip when gate already says Fits brief — avoids double "confirmed" chrome. */}
+            {project.overallGate === "pass" && project.verificationStatus === "confirmed" ? null : (
+              <VerificationBadge status={project.verificationStatus} verifiedAt={project.lastVerifiedAt} note={project.verificationNote} />
+            )}
             <EntityMarks entityType="project" entityId={project.id} name={project.name} campusName={project.universities[0]} websiteUrl={project.websiteUrl} />
           </div>
           <GateBadge result={project.overallGate} gateOutcomes={project.gateOutcomes} />

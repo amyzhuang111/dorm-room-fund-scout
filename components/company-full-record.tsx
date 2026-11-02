@@ -57,11 +57,17 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function Field({ label, children }: { label: string; children: ReactNode }) {
+function Field({ label, children, compact }: { label: string; children: ReactNode; compact?: boolean }) {
   return (
-    <div className="border-b border-[color:var(--line,#E1E5EF)] py-2.5 last:border-b-0 sm:grid sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-3 sm:py-2">
+    <div
+      className={
+        compact
+          ? "border-b border-[color:var(--line,#E1E5EF)] py-2 last:border-b-0 grid grid-cols-[5.5rem_minmax(0,1fr)] gap-2 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-3 sm:py-2"
+          : "border-b border-[color:var(--line,#E1E5EF)] py-2.5 last:border-b-0 sm:grid sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-3 sm:py-2"
+      }
+    >
       <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">{label}</dt>
-      <dd className="mt-1 break-words text-[14px] leading-5 text-[color:var(--fg,#0B0E17)] sm:mt-0 sm:text-[13px]">{children}</dd>
+      <dd className={`break-words text-[13px] leading-5 text-[color:var(--fg,#0B0E17)] ${compact ? "mt-0" : "mt-1 sm:mt-0"}`}>{children}</dd>
     </div>
   );
 }
@@ -114,7 +120,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
       funding?.text ? { label: "Funding", value: funding.text } : null,
       sectorText ? { label: "Sector", value: sectorText } : null,
     ].filter(Boolean) as { label: string; value: string }[]
-  ).slice(0, 3);
+  ).slice(0, 6);
 
   const hasIdentity =
     !isEmpty(campus) ||
@@ -132,11 +138,20 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
       className="relative mb-6 border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] pb-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] sm:mb-0"
       data-company-full-record=""
     >
-      <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3.5 pl-4">
-        <p className="scout-kicker">Full record</p>
-        <p className="mt-1 text-[22px] font-bold leading-tight tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[24px]">
-          {project.name || "Company"}
-        </p>
+      <div className="sticky top-12 z-10 border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/95 px-3.5 py-2.5 pl-4 backdrop-blur-sm sm:static sm:py-3.5" data-full-record-pinned-header="">
+        <div className="flex items-baseline justify-between gap-2">
+          <div className="min-w-0">
+            <p className="scout-kicker">Full record</p>
+            <p className="mt-0.5 truncate text-[18px] font-bold leading-tight tracking-tight text-[color:var(--fg,#0B0E17)] sm:mt-1 sm:text-[24px] sm:whitespace-normal">
+              {project.name || "Company"}
+            </p>
+          </div>
+          {campus || stage ? (
+            <p className="hidden shrink-0 text-right font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] sm:block">
+              {[campus, stage].filter(Boolean).join(" · ")}
+            </p>
+          ) : null}
+        </div>
       </div>
 
       {/* Lead: founders, then pitch, then key stats */}
@@ -179,7 +194,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
       {keyStats.length > 0 ? (
         <div
           className={`grid gap-px border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--line,#E1E5EF)] ${
-            keyStats.length >= 3 ? "grid-cols-3" : keyStats.length === 2 ? "grid-cols-2" : "grid-cols-1"
+            keyStats.length >= 5 ? "grid-cols-2 sm:grid-cols-3" : keyStats.length >= 3 ? "grid-cols-3" : keyStats.length === 2 ? "grid-cols-2" : "grid-cols-1"
           }`}
           data-full-record-key-stats=""
         >
@@ -195,13 +210,13 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
       <div className="space-y-3 px-3.5 py-3.5 pl-4">
         {hasIdentity ? (
           <Group title="Identity">
-            {!isEmpty(campus) ? <Field label="Campus">{campus}</Field> : null}
-            {!isEmpty(sectorText) ? <Field label="Sector">{sectorText}</Field> : null}
-            {!isEmpty(stage) ? <Field label="Stage">{stage}</Field> : null}
-            {!isEmpty(profile.foundedYear) ? <Field label="Founded">{profile.foundedYear?.text}</Field> : null}
-            {!isEmpty(profile.hq) ? <Field label="HQ">{profile.hq?.text}</Field> : null}
-            {!isEmpty(profile.operatingStatus) ? <Field label="Status">{profile.operatingStatus?.text}</Field> : null}
-            {!isEmpty(profile.teamSize) ? <Field label="Team size">{profile.teamSize?.text}</Field> : null}
+            {!isEmpty(campus) ? <Field label="Campus" compact>{campus}</Field> : null}
+            {!isEmpty(sectorText) ? <Field label="Sector" compact>{sectorText}</Field> : null}
+            {!isEmpty(stage) ? <Field label="Stage" compact>{stage}</Field> : null}
+            {!isEmpty(profile.foundedYear) ? <Field label="Founded" compact>{profile.foundedYear?.text}</Field> : null}
+            {!isEmpty(profile.hq) ? <Field label="HQ" compact>{profile.hq?.text}</Field> : null}
+            {!isEmpty(profile.operatingStatus) ? <Field label="Status" compact>{profile.operatingStatus?.text}</Field> : null}
+            {!isEmpty(profile.teamSize) ? <Field label="Team size" compact>{profile.teamSize?.text}</Field> : null}
             {!isEmpty(profile.description) && !pitch ? <Field label="Description">{profile.description?.text}</Field> : null}
             {!isEmpty(profile.description) && pitch && (profile.description?.text || "").trim() !== pitch ? (
               <Field label="Description">{profile.description?.text}</Field>
