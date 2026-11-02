@@ -18,6 +18,7 @@ import { resolveCampusSlug, shortCampusLabel } from "@/lib/domain/campuses";
 import { CampusSeal } from "@/components/campus-seal";
 import { MobileListMast } from "@/components/mobile-list-mast";
 import { CurrentViewDock } from "@/components/current-view-dock";
+import styles from "./company-mobile.module.css";
 import {
   applyFacets,
   emptyFacets,
@@ -192,7 +193,7 @@ function endSliceInsight(cards: DirectoryCard[]): EndSliceInsight | null {
 export function SampleInstrumentBrowse({
   feed,
   cards: cardsProp,
-  total,
+  total: initialTotal,
   pages,
   sector,
   kind,
@@ -205,7 +206,6 @@ export function SampleInstrumentBrowse({
   kinds,
   campuses,
   companies,
-  moreHref,
   clearCampusHref,
   initialFacets,
 }: {
@@ -260,26 +260,14 @@ export function SampleInstrumentBrowse({
   const companiesLive = catalog ?? companies;
   // When ?more>1, expand the ledger from the client catalog so SSR stays ≤1 page.
   const cards = useMemo(() => {
-    if (pages <= 1 || !catalog || catalog.length === 0) return cardsProp;
+    if (!catalog) return cardsProp;
     const PAGE = 14;
-    let matched = (catalog as DirectoryCard[]).filter((card) => {
-      if (sector && card.sectorId !== sector) return false;
-      if (kind && card.signalKind !== kind) return false;
-      if (campus && card.schoolId !== campus) return false;
-      return true;
-    });
-    const tokens = (query ?? "").trim().toLowerCase().split(/\s+/).filter(Boolean);
-    if (tokens.length) {
-      matched = matched.filter((card) => {
-        const hay = [card.name, card.description ?? "", ...(card.founders ?? [])].join("\n").toLowerCase();
-        return tokens.every((token) => hay.includes(token));
-      });
-    }
+    const matched = applyFacets(catalog, facets) as DirectoryCard[];
     const ordered = [...matched];
     if (feed === "leaderboard") {
       ordered.sort((a, b) => b.signals - a.signals || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
       const page = ordered.filter((c) => c.signals > 0).slice(0, Math.max(1, pages) * PAGE);
-      return page.length > 0 ? page : cardsProp;
+      return page;
     }
     if (sort === "name") ordered.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
     else if (sort === "recent") {
@@ -311,9 +299,11 @@ export function SampleInstrumentBrowse({
       });
     }
     const page = ordered.slice(0, Math.max(1, pages) * PAGE);
-    return page.length > 0 ? page : cardsProp;
-  }, [pages, catalog, cardsProp, feed, sector, kind, campus, query, sort]);
+    return page;
+  }, [pages, catalog, cardsProp, feed, facets, sort]);
   const boardCompanies = useMemo(() => applyFacets(companiesLive, facets), [companiesLive, facets]);
+  const total = catalog ? (feed === "leaderboard" ? boardCompanies.filter((c) => c.signals > 0).length : boardCompanies.length) : initialTotal;
+  const moreHref = browseHref({ feed, facets, sort, more: pages + 1 });
   /** Continued-view insight: matching companies with ≥1 stored signal (not pagination). */
   const signaledMatch = useMemo(
     () => boardCompanies.filter((c) => (c.signals ?? 0) > 0).length,
@@ -466,7 +456,6 @@ export function SampleInstrumentBrowse({
   useEffect(() => {
     const ids = cards.slice(0, 40).map((c) => c.id);
     if (ids.length === 0) {
-      setFounderLinks({});
       return;
     }
     let cancel = false;
@@ -532,7 +521,7 @@ export function SampleInstrumentBrowse({
 
   return (
     <div
-      className={`mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-4 sm:mt-3 lg:gap-5 ${
+      className={`${styles.browse} mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-4 sm:mt-3 lg:gap-5 ${
         rightOpen
           ? "lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(220px,280px)]"
           : "lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)]"
@@ -827,7 +816,8 @@ export function SampleInstrumentBrowse({
                 return (
                   <Link
                     key={id}
-                    href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
+                    href={browseHref({ feed, facets, sort: id })}
+                    aria-current={active ? "true" : undefined}
                     className={`flex h-9 flex-1 items-center justify-center font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
                       i > 0 ? "border-l border-[color:var(--cobalt,#2F4FD8)]/20" : ""
                     } ${
@@ -1183,7 +1173,7 @@ export function SampleInstrumentBrowse({
               href={moreHref}
               className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white hover:opacity-90"
             >
-              Show more
+              Load next
             </Link>
             <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing-next="">
               {"Companies 1 to "}
@@ -1337,7 +1327,8 @@ export function SampleInstrumentBrowse({
                     return (
                       <Link
                         key={id}
-                        href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
+                        href={browseHref({ feed, facets, sort: id })}
+                        aria-current={active ? "true" : undefined}
                         className={`inline-flex h-8 items-center rounded-sm border px-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
                           active
                             ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--cobalt,#2F4FD8)]"
@@ -1454,12 +1445,11 @@ function LedgerRow({
   const meta = signalMeta(card);
   const why = whyOverride === undefined ? whyItsHere(card) : whyOverride;
   return (
-    <Link
-      href={`/startup/${card.id}`}
+    <article
       data-card-signals={card.signals}
       data-card-dated={card.latestSignalAt ? "1" : "0"}
       data-card-selected={selected ? "1" : undefined}
-      className={`group flex items-start px-3.5 transition-[background-color,color] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:px-3.5 ${
+      className={`group relative flex items-start px-3.5 transition-[background-color,color] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:px-3.5 ${
         ranked ? "gap-3 py-3.5 sm:py-3 lg:gap-3 lg:py-3.5" : "gap-2.5 py-3 sm:gap-3 sm:py-3"
       } ${selected ? "bg-[color:var(--cobalt-haze,#E8ECFA)]/55 ring-1 ring-inset ring-[color:var(--cobalt,#2F4FD8)]/35" : ""}`}
     >
@@ -1495,15 +1485,16 @@ function LedgerRow({
         <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 20 : 24} />
       )}
       <div className="min-w-0 flex-1">
-        <p
-          className={
+        <Link
+          href={`/startup/${card.id}`}
+          className={`block after:absolute after:inset-0 focus-visible:outline-2 focus-visible:outline-offset-2 ${
             ranked
               ? "line-clamp-2 break-words text-[20px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
               : "break-words text-[18px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
-          }
+          }`}
         >
           {card.name}
-        </p>
+        </Link>
         {subtitle ? (
           <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)] line-clamp-2">
             {subtitle}
@@ -1538,7 +1529,7 @@ function LedgerRow({
         ) : null}
 
         {founderLinks.length > 0 ? (
-          <span className="mt-1.5 flex flex-wrap items-center gap-1.5" data-card-founder-links="" onClick={(event) => event.preventDefault()}>
+          <span className="relative z-10 mt-1.5 flex flex-wrap items-center gap-1.5" data-card-founder-links="">
             {founderLinks.slice(0, 3).map((founder) => (
               <a
                 key={founder.linkedinUrl}
@@ -1578,6 +1569,6 @@ function LedgerRow({
           {meta.secondary}
         </span>
       ) : null}
-    </Link>
+    </article>
   );
 }

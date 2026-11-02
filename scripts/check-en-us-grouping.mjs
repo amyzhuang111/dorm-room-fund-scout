@@ -13,7 +13,7 @@ import { execFileSync } from "child_process";
 const BASE = process.env.BASE || "http://127.0.0.1:3460";
 const OUT = process.env.OUT || "reviews/en-us-grouping.json";
 
-const sourceHits = execFileSync("python3", ["scripts/_scan_locale_formatters.py"], {
+const sourceHits = execFileSync(process.env.PYTHON || "python3", ["scripts/_scan_locale_formatters.py"], {
   encoding: "utf8",
   cwd: process.cwd(),
 }).trim();

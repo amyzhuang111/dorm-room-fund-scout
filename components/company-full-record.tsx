@@ -225,9 +225,9 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
           {keyStats.map((stat) => (
             <div key={stat.label} className="bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5">
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)] sm:text-[9px]">{stat.label}</p>
-              <p className="mt-1 flex items-baseline gap-1 text-[15px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[13px]">
+              <p className="mt-1 flex min-w-0 flex-wrap items-baseline gap-1 text-[15px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[13px]">
                 {stat.label === "Campus" ? <CampusSeal label={stat.value} size="sm" /> : null}
-                <span className="whitespace-nowrap">{stat.value}</span>
+                <span className="min-w-0 break-words [overflow-wrap:anywhere]">{stat.value}</span>
                 {stat.suffix ? (
                   <span className="whitespace-nowrap font-mono text-[10px] font-medium text-[color:var(--fg-3,#5C647A)]">{stat.suffix}</span>
                 ) : null}

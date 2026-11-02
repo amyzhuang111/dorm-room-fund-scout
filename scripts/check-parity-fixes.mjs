@@ -22,11 +22,11 @@ function fail(id, detail) {
 
 // Unit tests for fixes 1–3 helpers
 {
-  const ask = spawnSync("npx", ["tsx", "lib/domain/ask-browse.test.ts"], { cwd: root, encoding: "utf8" });
+  const ask = spawnSync(process.execPath, ["node_modules/tsx/dist/cli.mjs", "lib/domain/ask-browse.test.ts"], { cwd: root, encoding: "utf8" });
   if (ask.status === 0) pass("1-ask-q-strip-unit", "ask-browse.test.ts");
   else fail("1-ask-q-strip-unit", ask.stderr || ask.stdout);
 
-  const oc = spawnSync("npx", ["tsx", "lib/domain/overlay-counts.test.ts"], { cwd: root, encoding: "utf8" });
+  const oc = spawnSync(process.execPath, ["node_modules/tsx/dist/cli.mjs", "lib/domain/overlay-counts.test.ts"], { cwd: root, encoding: "utf8" });
   if (oc.status === 0) pass("2-3-overlay-counts-unit", "overlay-counts.test.ts (statusOf + founders unit)");
   else fail("2-3-overlay-counts-unit", oc.stderr || oc.stdout);
 }

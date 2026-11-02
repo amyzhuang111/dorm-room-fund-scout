@@ -4,7 +4,6 @@ import { SampleCompanyShell } from "@/components/sample-company-shell";
 import { UserStartupPage } from "@/components/user-startup-page";
 import { loadDirectory, type DirectoryCard } from "@/lib/domain/directory";
 import { survivorId } from "@/lib/domain/entity-redirects";
-import { loadHeroStats } from "@/lib/domain/hero-stats";
 import { getProjectDetail } from "@/lib/domain/queries";
 import { isBoilerplateDescription } from "@/lib/domain/sectors";
 import { getStartupCard } from "@/lib/domain/startup-card";
@@ -69,14 +68,6 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
   if (!project) notFound();
   const data = loadDirectory();
   const all = data.cards.map(toFacetCompany);
-  const campuses = loadHeroStats().universities
-    .filter((university) => university.lat != null && university.lon != null)
-    .map((university) => ({
-      id: university.id,
-      name: university.name,
-      country: university.country?.trim() || "Unknown",
-      founders: university.founderCount,
-    }));
   const card = getStartupCard(project.id);
   const directoryRow = data.cards.find((row) => row.id === project.id);
   const pitchSource = [card?.description, project.profile.description?.text, project.description]
@@ -117,7 +108,7 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
   };
   const companies = wireSeedCompanies(all, dossier.schoolId, dossier.sectorId);
   return (
-    <SampleCompanyShell companies={companies} campuses={campuses} dossier={dossier}>
+    <SampleCompanyShell companies={companies} dossier={dossier}>
       <CompanyDetail project={project} initialCard={card} />
     </SampleCompanyShell>
   );

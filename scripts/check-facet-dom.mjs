@@ -318,7 +318,7 @@ const pageSignalMast = await moreMobile.evaluate(() => {
   const mast = document.querySelector("[data-mobile-continued-mast]");
   const shownRaw = (document.querySelector("[data-page-signaled-count]")?.textContent || "").replace(/,/g, "").trim();
   const shown = Number(shownRaw);
-  const rows = [...document.querySelectorAll("[data-ledger-stage] a[data-card-signals]")];
+  const rows = [...document.querySelectorAll("[data-ledger-stage] [data-card-signals]")];
   const withSignal = rows.filter((el) => Number(el.getAttribute("data-card-signals") || 0) > 0).length;
   const withDated = rows.filter((el) => el.getAttribute("data-card-dated") === "1").length;
   const text = (mast?.textContent || "").replace(/\s+/g, " ");
