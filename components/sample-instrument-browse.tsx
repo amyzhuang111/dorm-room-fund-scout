@@ -11,6 +11,7 @@ import { directoryCardSubtitle } from "@/lib/domain/sample-facets";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import { CampusSeal } from "@/components/campus-seal";
+import { MobileListMast } from "@/components/mobile-list-mast";
 import {
   applyFacets,
   emptyFacets,
@@ -320,6 +321,19 @@ export function SampleInstrumentBrowse({
       .sort((a, b) => b.companies - a.companies || b.signaled - a.signaled || a.label.localeCompare(b.label))
       .slice(0, 6);
   }, [cards]);
+  /** Desk-wide campus leader for mobile list mast (real counts). */
+  const deskCampusTop = useMemo(() => {
+    const map = new Map<string, { label: string; companies: number; signaled: number }>();
+    for (const card of boardCompanies) {
+      const label = (card.school || "").trim();
+      if (!label) continue;
+      const cur = map.get(label) ?? { label, companies: 0, signaled: 0 };
+      cur.companies += 1;
+      if (card.signals > 0) cur.signaled += 1;
+      map.set(label, cur);
+    }
+    return [...map.values()].sort((a, b) => b.signaled - a.signaled || b.companies - a.companies)[0] ?? null;
+  }, [boardCompanies]);
 
   const podiumRows = useMemo(() => {
     const signaledByCampus = new Map<string, number>();
@@ -511,180 +525,141 @@ export function SampleInstrumentBrowse({
 
         {/* Scout Chronograph · unifying system. Browse-more uses folio (originality priority);
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
-        <div className="mb-3 space-y-3 lg:hidden" data-mobile-browse-compose="">
+        <div className="mb-3 space-y-2 lg:hidden" data-mobile-browse-compose="">
+          {/* r30: one list mast (seal + counts + takeaway), then a single collapsed Filters row. Sort lives inside Filters. */}
           {feed === "directory" && pages <= 1 ? (
-            <div data-signals-landed-mobile="">
-              <SignalsLanded companies={companiesLive} compact />
+            <div data-browse-mobile-hero="">
+            <MobileListMast
+              kicker="Companies on this desk"
+              sealLabel={deskCampusTop?.label}
+              figure={total.toLocaleString("en-US")}
+              figureSuffix="companies"
+              takeaway={
+                deskCampusTop
+                  ? `${deskCampusTop.label} leads with ${deskCampusTop.signaled.toLocaleString("en-US")} signaled of ${deskCampusTop.companies.toLocaleString("en-US")} on the desk`
+                  : `${signaledMatch.toLocaleString("en-US")} companies on this desk carry a signal`
+              }
+              meta={`${signaledMatch.toLocaleString("en-US")} with a signal`}
+            >
+              <div data-signals-landed-mobile="" className="border-t border-[color:var(--cobalt,#2F4FD8)]/15 px-3.5 pb-3">
+                <SignalsLanded companies={companiesLive} compact />
+              </div>
+            </MobileListMast>
             </div>
           ) : null}
 
-          {feed === "directory" && pages <= 1 ? (
-          <>
-          {/* Filters collapsed under peak hero so the list is not pushed down. */}
-          <div
-            className="overflow-hidden border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]"
-            role="region"
-            aria-label="Scout filters"
-            data-mobile-filters-inline=""
-            data-mobile-contents-hero=""
-            data-filters-index-hero=""
-          >
-            <button
-              type="button"
-              className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left"
-              onClick={() => setMobileFiltersOpen((open) => !open)}
-              aria-expanded={mobileFiltersOpen}
-            >
-              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-2,#3F465C)]">
-                Filters
-                <span className="ml-2 font-mono text-[11px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">
-                  {boardCompanies.length.toLocaleString("en-US")}
-                </span>
-                <span className="ml-1 font-mono text-[10px] font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
-                  of {total.toLocaleString("en-US")}
-                </span>
-              </p>
-              <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">
-                {mobileFiltersOpen ? "Close" : "Open"}
-              </span>
-            </button>
-            {mobileFiltersOpen ? (
-              <div className="max-h-[min(36dvh,300px)] overflow-y-auto overscroll-contain border-t border-[color:var(--line,#E1E5EF)] px-1 pb-3" data-mobile-facet-map="">
-                <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
-              </div>
-            ) : null}
-          </div>
-          </>
-          ) : null}
-          {/* Leaderboard podium mounts inside data-ledger-stage (shot frames that). Browse-more keeps a folio insight, not a shared ticket. */}
           {feed === "directory" && pages > 1 ? (
-            <div
-              className="relative scroll-mt-14 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-3.5 before:absolute before:inset-y-0 before:left-0 before:w-[2px] before:bg-[color:var(--cobalt,#2F4FD8)]"
-              data-mobile-continued-mast=""
-              data-page-window=""
-              data-page-peak=""
+            <MobileListMast
+              kicker="Campuses in this batch"
+              sealLabel={pageCampusRanks[0]?.label}
+              figure={String(pageCampusRanks.length || pageSignaled)}
+              figureSuffix={pageCampusRanks.length ? "campuses" : "signaled"}
+              takeaway={
+                pageCampusRanks[0]
+                  ? `${pageCampusRanks[0].label} tops this batch with ${pageCampusRanks[0].companies.toLocaleString("en-US")} companies · ${pageSignaled.toLocaleString("en-US")} of ${cards.length.toLocaleString("en-US")} have a signal`
+                  : `${pageSignaled.toLocaleString("en-US")} of ${cards.length.toLocaleString("en-US")} on this page have a signal`
+              }
+              meta={`Companies ${pageFrom.toLocaleString("en-US")}-${cards.length.toLocaleString("en-US")} of ${total.toLocaleString("en-US")}`}
             >
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">On this page</p>
-              <div className="mt-2 flex items-end justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="font-mono text-[36px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-                    <span data-page-signaled-count="">{pageSignaled.toLocaleString("en-US")}</span>
-                    <span className="ml-1 font-mono text-[16px] font-semibold tracking-tight text-[color:var(--fg-2,#3F465C)]">
-                      / {cards.length.toLocaleString("en-US")}
-                    </span>
-                  </p>
-                  <p className="mt-1.5 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    <span className="font-mono font-bold text-[color:var(--ember,#D96B1C)]">{pageSignaled.toLocaleString("en-US")}</span>
-                    {" of these "}
-                    <span className="font-mono font-bold text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
-                    {" have a signal"}
-                    {pagePeakLabel ? (
-                      <span className="font-normal text-[color:var(--fg-3,#5C647A)]">
-                        {" · peak "}
-                        <span className="font-semibold text-[color:var(--ember,#D96B1C)]">{pagePeakLabel}</span>
-                      </span>
-                    ) : null}
-                  </p>
-                </div>
-                {pageSignalBars.length > 0 ? (
-                  <div className="flex h-14 max-w-[42%] flex-1 items-end justify-end gap-0.5" data-page-signal-bars="" aria-hidden>
-                    {pageSignalBars.map((bar) => (
-                      <span
-                        key={bar.key}
-                        title={`${bar.label ?? bar.key}: ${bar.count}`}
-                        className={`min-w-[5px] flex-1 rounded-sm ${bar.peak ? "bg-[color:var(--ember,#D96B1C)]" : "bg-[color:var(--cobalt,#2F4FD8)]/45"}`}
-                        style={{ height: `${Math.max(8, Math.round((bar.count / pageSignalBarsMax) * 52))}px` }}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex h-14 w-16 items-end" data-page-signal-bars="empty" aria-hidden>
-                    <span className="w-full rounded-sm bg-[color:var(--cobalt,#2F4FD8)]/25" style={{ height: 28 }} />
-                  </div>
-                )}
-              </div>
-              {sliceInsight ? (
-                <p className="mt-2.5 text-[12px] leading-5 text-[color:var(--fg-2,#3F465C)]">
-                  <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{sliceInsight.companyName}</span>
-                  {" · "}
-                  {sliceInsight.figure.toLocaleString("en-US")} {sliceInsight.figureUnit}
+              <div
+                className="border-t border-[color:var(--cobalt,#2F4FD8)]/15 px-3.5 pb-3"
+                data-mobile-continued-mast=""
+                data-page-window=""
+                data-page-peak=""
+                data-chapter-window=""
+                data-chapter-peak=""
+              >
+                <p className="m-meta">
+                  <span data-page-signaled-count="">{pageSignaled.toLocaleString("en-US")}</span>
+                  {" of "}
+                  {cards.length.toLocaleString("en-US")}
+                  {" on this page have a signal"}
+                  {pagePeakLabel ? ` · peak ${pagePeakLabel}` : ""}
+                  {sliceInsight ? ` · ${sliceInsight.companyName}` : ""}
                 </p>
+              </div>
+            </MobileListMast>
+          ) : null}
+
+          {feed === "leaderboard" ? (
+            <MobileListMast
+              kicker="Signal desk"
+              sealLabel={podiumRows[0]?.label ?? deskCampusTop?.label}
+              figure={(podiumRows[0]?.signals ?? signaledMatch).toLocaleString("en-US")}
+              figureSuffix="signaled"
+              takeaway={
+                podiumRows[0]
+                  ? `${podiumRows[0].label} leads the podium with ${podiumRows[0].founders.toLocaleString("en-US")} founders on record`
+                  : `${signaledMatch.toLocaleString("en-US")} companies carry a signal on this desk`
+              }
+              meta={`${total.toLocaleString("en-US")} on the desk`}
+            />
+          ) : null}
+
+          {/* Single chrome row: Filters (sort chips moved inside). */}
+          {feed === "directory" ? (
+            <div
+              className="overflow-hidden border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]"
+              role="region"
+              aria-label="Scout filters"
+              data-mobile-filters-inline=""
+              data-mobile-contents-hero=""
+              data-filters-index-hero=""
+            >
+              <button
+                type="button"
+                className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left"
+                onClick={() => setMobileFiltersOpen((open) => !open)}
+                aria-expanded={mobileFiltersOpen}
+              >
+                <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-2,#3F465C)]">
+                  Filters
+                  <span className="ml-2 font-mono text-[13px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">
+                    {boardCompanies.length.toLocaleString("en-US")}
+                  </span>
+                  <span className="ml-1 font-mono text-[11px] font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
+                    of {total.toLocaleString("en-US")}
+                  </span>
+                </p>
+                <span className="whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">
+                  {mobileFiltersOpen ? "Close" : "Open"}
+                </span>
+              </button>
+              {mobileFiltersOpen ? (
+                <div className="max-h-[min(42dvh,340px)] overflow-y-auto overscroll-contain border-t border-[color:var(--line,#E1E5EF)] px-1 pb-3" data-mobile-facet-map="">
+                  <div className="mb-2 flex flex-wrap gap-1.5 px-2.5 pt-2" data-mobile-sort-segment="" role="group" aria-label="Sort ledger">
+                    {(
+                      [
+                        ["rank", "Rank"],
+                        ["recent", "Newest"],
+                        ["name", "Name"],
+                        ["stage", "Stage"],
+                      ] as const
+                    ).map(([id, label]) => {
+                      const active = sort === id;
+                      return (
+                        <Link
+                          key={id}
+                          href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
+                          className={`inline-flex h-8 items-center rounded-sm border px-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
+                            active
+                              ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--cobalt,#2F4FD8)]"
+                              : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg-2,#3F465C)]"
+                          }`}
+                        >
+                          {label}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                  <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
+                </div>
               ) : null}
             </div>
           ) : null}
-          {feed === "directory" ? (
-            <div
-              className="flex w-full overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/30"
-              data-mobile-sort-segment=""
-              role="group"
-              aria-label="Sort ledger"
-            >
-              {(
-                [
-                  ["rank", "Rank"],
-                  ["recent", "Newest"],
-                  ["name", "Name"],
-                  ["stage", "Stage"],
-                ] as const
-              ).map(([id, label], i) => {
-                const active = sort === id;
-                return (
-                  <Link
-                    key={id}
-                    href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
-                    className={`relative flex h-9 flex-1 items-center justify-center font-mono text-[11px] font-semibold uppercase tracking-[0.08em] ${
-                      i > 0 ? "border-l border-[color:var(--cobalt,#2F4FD8)]/25" : ""
-                    } ${
-                      active
-                        ? "bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--cobalt,#2F4FD8)] after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:bg-[color:var(--ember,#D96B1C)]"
-                        : "bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg-2,#3F465C)]"
-                    }`}
-                  >
-                    {label}
-                  </Link>
-                );
-              })}
-            </div>
-          ) : null}
-          {/* Secondary sector strips culled · mobile page-1 owns the newest-insight hero alone. */}
         </div>
 
-        {/* Mobile more-375: quiet filters below continued mast (c2908d1 layout). */}
-        {pages > 1 ? (
-        <div
-          className="mb-3 overflow-hidden border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] lg:hidden"
-          role="region"
-          aria-label="Scout filters"
-          data-mobile-filters-inline=""
-          data-mobile-contents-hero=""
-          data-filters-index-hero=""
-        >
-          <button
-            type="button"
-            className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left"
-            onClick={() => setMobileFiltersOpen((open) => !open)}
-            aria-expanded={mobileFiltersOpen}
-          >
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-2,#3F465C)]">
-              Filters
-              <span className="ml-2 font-mono text-[11px] font-bold tabular-nums normal-case tracking-normal text-[color:var(--fg,#0B0E17)]">
-                {boardCompanies.length.toLocaleString("en-US")}
-              </span>
-              <span className="ml-1 font-mono text-[10px] font-medium normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
-                of {total.toLocaleString("en-US")}
-              </span>
-            </p>
-            <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">
-              {mobileFiltersOpen ? "Close" : "Open"}
-            </span>
-          </button>
-          {mobileFiltersOpen ? (
-            <div className="max-h-[min(36dvh,300px)] overflow-y-auto overscroll-contain border-t border-[color:var(--line,#E1E5EF)] px-1 pb-3" data-mobile-facet-map="">
-              <FacetRail companies={companiesLive} campuses={campuses} facets={facets} onChange={commitFacet} dense />
-            </div>
-          ) : null}
-        </div>
-        ) : null}
+
 
 
         {feed === "directory" && pages > 1 ? (
@@ -739,7 +714,7 @@ export function SampleInstrumentBrowse({
                     <span className="mt-0.5 block text-[9px] uppercase tracking-[0.1em]">with a signal</span>
                   </p>
                 </div>
-                <div className="px-3.5 py-4 lg:hidden" data-mid-list-hero="" data-more-context-hero="">
+                <div className="hidden px-3.5 py-4" data-mid-list-hero="" data-more-context-hero="">
                   <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
                     {feed === "leaderboard" ? "Signals on this page" : "Companies on this page"}
                   </p>
@@ -793,24 +768,18 @@ export function SampleInstrumentBrowse({
                           </span>
                           <span className="h-px flex-1 bg-[color:var(--cobalt,#2F4FD8)]/25" aria-hidden />
                         </div>
-                        {/* Mobile more-375: mid-list context hero */}
+                        {/* Mobile more-375: thin section rule (r30 chrome cull; counts live in top mast) */}
                         <div
-                          className="border-t-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/40 px-3.5 py-4 sm:px-3.5 lg:hidden"
+                          className="flex items-center gap-2 border-t-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/50 px-3.5 py-1.5 lg:hidden"
                           data-ledger-section={String(Math.floor(index / chunk) + 1)}
                           data-mid-list-hero=""
+                          data-chapter-window=""
                         >
-                          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Still on this page</p>
-                          <p className="mt-1 text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                            Companies {sectionFrom.toLocaleString("en-US")} to {sectionTo.toLocaleString("en-US")}
-                            <span className="font-normal text-[color:var(--fg-3,#5C647A)]">
-                              {" of "}
-                              {total.toLocaleString("en-US")}
-                            </span>
-                          </p>
-                          <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                            <span className="font-bold text-[color:var(--ember,#D96B1C)]">{signaledMatch.toLocaleString("en-US")}</span>
-                            {" with a signal on the desk"}
-                          </p>
+                          <span className="h-px flex-1 bg-[color:var(--cobalt,#2F4FD8)]/25" aria-hidden />
+                          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+                            Companies {sectionFrom.toLocaleString("en-US")}–{sectionTo.toLocaleString("en-US")}
+                          </span>
+                          <span className="h-px flex-1 bg-[color:var(--cobalt,#2F4FD8)]/25" aria-hidden />
                         </div>
                       </>
                     ) : null}
@@ -903,16 +872,25 @@ export function SampleInstrumentBrowse({
                     data-ledger-end-lead=""
                     data-pass-close=""
                   >
-                    <div className="border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3.5 py-3">
-                      <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
-                        Campuses in this batch
-                      </p>
-                      <p className="mt-1 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]" data-ledger-showing="" data-end-lead="" data-more-context="">
-                        {pageCampusRanks.length.toLocaleString("en-US")}
-                        <span className="ml-1.5 text-[12px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
-                          campuses · {cards.length.toLocaleString("en-US")} of {total.toLocaleString("en-US")}
-                        </span>
-                      </p>
+                    <div className="border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3.5 py-3.5" data-mobile-list-mast="">
+                      <div className="flex items-start gap-3">
+                        {pageCampusRanks[0] ? <CampusSeal label={pageCampusRanks[0].label} size="lg" className="mt-1" /> : null}
+                        <div className="min-w-0 flex-1">
+                          <p className="m-kicker">Campuses in this batch</p>
+                          <p className="m-figure mt-1.5" data-ledger-showing="" data-end-lead="" data-more-context="">
+                            {pageCampusRanks.length.toLocaleString("en-US")}
+                            <span className="m-figure-sub ml-1.5">campuses</span>
+                          </p>
+                          <p className="m-takeaway mt-2">
+                            {pageCampusRanks[0]
+                              ? `${pageCampusRanks[0].label} leads with ${pageCampusRanks[0].companies.toLocaleString("en-US")} companies on this page`
+                              : `${cards.length.toLocaleString("en-US")} companies loaded`}
+                          </p>
+                          <p className="m-meta mt-1">
+                            {cards.length.toLocaleString("en-US")} of {total.toLocaleString("en-US")} loaded
+                          </p>
+                        </div>
+                      </div>
                     </div>
                     {pageCampusRanks.length ? (
                       <ol className="divide-y divide-[color:var(--line,#E1E5EF)] px-3.5" data-page-campus-seals="" data-page-campus-ranks="">
@@ -1115,8 +1093,8 @@ function LedgerRow({
         <p
           className={
             ranked
-              ? "line-clamp-2 break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
-              : "truncate text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
+              ? "line-clamp-2 break-words text-[20px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
+              : "truncate text-[18px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
           }
         >
           {card.name}

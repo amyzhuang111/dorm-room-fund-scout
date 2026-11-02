@@ -643,6 +643,94 @@ html[data-sample="halflight"] body {
   background: #FFFFFF;
 }
 
+
+/* r30 mobile type system: confident headings + numeric hierarchy (desk unchanged). */
+@media (max-width: 639px) {
+  .sample-paper {
+    --m-kicker: 11px;
+    --m-display: 36px;
+    --m-title: 22px;
+    --m-body: 15px;
+    --m-figure: 48px;
+    --m-figure-sm: 28px;
+    --m-meta: 12px;
+  }
+  .sample-paper .scout-kicker {
+    font-size: var(--m-kicker);
+    letter-spacing: 0.14em;
+  }
+  .sample-paper .scout-display {
+    font-size: var(--m-display);
+    line-height: 0.92;
+  }
+  .sample-paper .scout-figure {
+    font-size: var(--m-figure);
+    line-height: 0.85;
+  }
+  .sample-paper [data-mobile-list-mast] {
+    border: 1px solid color-mix(in srgb, var(--cobalt, #2F4FD8) 30%, transparent);
+    background: #FFFFFF;
+  }
+  .sample-paper [data-mobile-list-mast] .m-kicker {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: var(--m-kicker);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cobalt, #2F4FD8);
+  }
+  .sample-paper [data-mobile-list-mast] .m-figure {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: var(--m-figure);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.06em;
+    line-height: 0.85;
+    color: var(--cobalt, #2F4FD8);
+  }
+  .sample-paper [data-mobile-list-mast] .m-figure-sub {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--fg-2, #3F465C);
+  }
+  .sample-paper [data-mobile-list-mast] .m-takeaway {
+    font-size: var(--m-body);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    color: var(--fg, #0B0E17);
+  }
+  .sample-paper [data-mobile-list-mast] .m-meta {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: var(--m-meta);
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-2, #3F465C);
+  }
+  /* Stronger list row titles on mobile */
+  .sample-paper [data-ledger-stage] [data-card-signals] > div.min-w-0 > p:first-child {
+    font-size: 18px !important;
+    line-height: 1.25 !important;
+  }
+  .sample-paper [data-company-mobile-hero] [data-company-name-lead] {
+    font-size: 32px !important;
+    line-height: 1.02 !important;
+  }
+  .sample-paper [data-company-full-record] h2,
+  .sample-paper [data-company-full-record] [data-full-record-title] {
+    font-size: 26px !important;
+    line-height: 1.1 !important;
+  }
+  .sample-paper [data-corpus-explorer] .scout-display {
+    font-size: 36px !important;
+  }
+  .sample-paper [data-corpus-campus-ranks] .m-figure,
+  .sample-paper [data-corpus-campus-ranks] [data-rank-figure] {
+    font-size: 28px !important;
+    letter-spacing: -0.05em;
+  }
+}
+
 .sample-paper .scout-kicker {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-size: 10px;

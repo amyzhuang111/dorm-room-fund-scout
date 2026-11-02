@@ -268,12 +268,7 @@ export function SampleCompanyShell({
         </div>
 
         {/* Mobile identity: one strong company lead · peers live in the wire strip below. */}
-        <div className="mb-3 flex items-center justify-between gap-2 sm:hidden" data-dossier-mobile-nav="">
-          <Link href="/companies" className="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline">
-            ← Companies
-          </Link>
-          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Scout dossier</span>
-        </div>
+        {/* r30: drop redundant mobile nav row; sticky chrome already covers back. */}
         <div
           className="mb-4 mt-1 scroll-mt-[5.5rem] sm:hidden"
           data-dossier-timeline=""
@@ -283,15 +278,20 @@ export function SampleCompanyShell({
         >
           <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)]" data-dossier-spread-mobile="">
             {/* Campus-first identity band · readable seal + real campus label */}
-            <div className="flex items-center gap-3 border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/40 px-3.5 py-3" data-dossier-campus-band="">
+            <div className="flex items-center gap-3 border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/40 px-3.5 py-3.5" data-dossier-campus-band="" data-mobile-list-mast="">
               <CampusSeal
                 label={dossier?.schoolId ? shortCampusLabel(dossier.schoolId, dossier.campus ?? "") : dossier?.campus}
                 size="lg"
               />
               <div className="min-w-0 flex-1">
-                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Campus</p>
-                <p className="mt-0.5 truncate text-[17px] font-bold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                <p className="m-kicker">Campus</p>
+                <p className="m-figure mt-1 !text-[28px]">
+                  {(dossier?.signals ?? 0) > 0 ? (dossier?.signals ?? 0).toLocaleString("en-US") : (wireCount > 0 ? wireCount.toLocaleString("en-US") : "0")}
+                  <span className="m-figure-sub ml-1.5">{(dossier?.signals ?? 0) > 0 ? "signals" : "on wire"}</span>
+                </p>
+                <p className="m-takeaway mt-1.5 truncate">
                   {dossier?.campus || (dossier?.schoolId ? shortCampusLabel(dossier.schoolId, "") : "Campus not on record")}
+                  {dossier?.stage ? ` · ${dossier.stage}` : ""}
                 </p>
               </div>
             </div>
@@ -311,7 +311,7 @@ export function SampleCompanyShell({
                   {dossier?.name ?? "Company"}
                 </p>
                 {dossier?.pitch ? (
-                  <p className="mt-1.5 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-dossier-pitch="">
+                  <p className="mt-1.5 text-[15px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-dossier-pitch="">
                     {dossier.pitch}
                   </p>
                 ) : null}

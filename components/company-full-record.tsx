@@ -135,7 +135,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
     >
       <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3.5 pl-4">
         <p className="scout-kicker">Full record</p>
-        <p className="mt-1 text-[22px] font-bold leading-tight tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[24px]">
+        <p className="mt-1 text-[26px] font-bold leading-tight tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[24px]" data-full-record-title="">
           {project.name || "Company"}
         </p>
       </div>
@@ -195,8 +195,8 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
         >
           {keyStats.map((stat) => (
             <div key={stat.label} className="bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5">
-              <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">{stat.label}</p>
-              <p className="mt-1 flex items-center gap-1.5 break-words text-[13px] font-semibold leading-4 tracking-tight text-[color:var(--fg,#0B0E17)]">
+              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)] sm:text-[9px]">{stat.label}</p>
+              <p className="mt-1 flex items-center gap-1.5 break-words text-[15px] font-semibold leading-4 tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[13px]">
                 {stat.label === "Campus" ? <CampusSeal label={stat.value} size="sm" /> : null}
                 <span>{stat.value}</span>
               </p>

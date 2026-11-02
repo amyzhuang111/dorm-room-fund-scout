@@ -5,6 +5,7 @@ import { loadHeroStats } from "@/lib/domain/hero-stats";
 import { DataTheme } from "@/components/data-theme";
 import { CorpusRowMark } from "@/components/corpus-row-mark";
 import { CampusSeal } from "@/components/campus-seal";
+import { MobileListMast } from "@/components/mobile-list-mast";
 
 export const dynamic = "force-dynamic";
 
@@ -158,27 +159,31 @@ export default async function DataExplorerPage({
         </div>
       </form>
 
-      {pageCampusRanks.length ? (
-        <div className="mt-3 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] sm:hidden" data-corpus-campus-ranks="">
-          <div className="border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3.5 py-2.5">
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Campuses on this page</p>
-            <p className="mt-1 font-mono text-[20px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
-              {pageCampusRanks.length.toLocaleString("en-US")}
-              <span className="ml-1.5 text-[11px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
-                campuses · {result.rows.length.toLocaleString("en-US")} rows
-              </span>
-            </p>
-          </div>
-          <ol className="divide-y divide-[color:var(--line,#E1E5EF)] px-3.5">
+      {/* r30 mobile: one list mast, then compact campus ranks. Desk header unchanged. */}
+      <div className="mt-3 sm:hidden" data-corpus-campus-ranks="">
+        <MobileListMast
+          kicker="Corpus on this page"
+          sealLabel={pageCampusRanks[0]?.label}
+          figure={result.total.toLocaleString("en-US")}
+          figureSuffix="companies"
+          takeaway={
+            pageCampusRanks[0]
+              ? `${pageCampusRanks[0].label} leads this page with ${pageCampusRanks[0].companies.toLocaleString("en-US")} rows · ${pageCampusRanks[0].signaled.toLocaleString("en-US")} signaled`
+              : `Page ${result.page} of ${result.pageCount.toLocaleString("en-US")} · ${result.rows.length.toLocaleString("en-US")} rows`
+          }
+          meta={`${pageCampusRanks.length.toLocaleString("en-US")} campuses on this page`}
+        />
+        {pageCampusRanks.length ? (
+          <ol className="mt-2 divide-y divide-[color:var(--line,#E1E5EF)] overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3.5">
             {pageCampusRanks.map((row, i) => (
-              <li key={row.label} className="flex items-center gap-2.5 py-2">
-                <span className="w-5 shrink-0 text-right font-mono text-[13px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
+              <li key={row.label} className="flex items-center gap-2.5 py-2.5">
+                <span className="w-5 shrink-0 text-right font-mono text-[14px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <CampusSeal label={row.label} size="md" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
-                  <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                  <p className="truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
+                  <p className="font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                     <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
                     {" cos"}
                     <span aria-hidden> · </span>
@@ -189,8 +194,8 @@ export default async function DataExplorerPage({
               </li>
             ))}
           </ol>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
 
       {/* One table for all viewports: sticky Company + Campus + Stage core, horizontal scroll on mobile */}
       <div className="mt-3 overflow-x-auto border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] [-webkit-overflow-scrolling:touch]" data-corpus-table="" data-corpus-cards="">
