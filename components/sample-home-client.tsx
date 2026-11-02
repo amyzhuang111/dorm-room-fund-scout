@@ -6,14 +6,18 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FounderResults, FounderSearchBar } from "@/components/founder-sourcing";
 import {
+  CurrentViewStrip,
+  FilterChips,
   LineagePanels,
   campusIdsForSearch,
+  startupsInFounderMatches,
+  type ActiveChip,
 } from "@/components/fold-map-craft";
 import { GlobeHero } from "@/components/globe-hero";
 import { SampleTheme } from "@/components/sample-theme";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
-import type { FounderLead } from "@/lib/domain/founder-index";
+import { founderMatches, type FounderLead } from "@/lib/domain/founder-index";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
 import type { Feed } from "@/components/sample-home";
@@ -280,6 +284,31 @@ export function SampleHomeClient(props: {
     router.push(`/?${next.toString()}`);
   };
 
+  const matchedFounders = useMemo(
+    () =>
+      founders.filter((founder) =>
+        founderMatches(founder, { text: founderQuery, campusId: mapCampusId || null }),
+      ),
+    [founders, founderQuery, mapCampusId],
+  );
+
+  const viewStartups = useMemo(
+    () =>
+      startupsInFounderMatches(
+        matchedFounders,
+        companies.filter((c) => !mapCampusId || mapCampusId === "missing" || c.schoolId === mapCampusId),
+      ),
+    [matchedFounders, companies, mapCampusId],
+  );
+
+  const activeChips: ActiveChip[] = [];
+  if (mapCampusName) {
+    activeChips.push({ key: "campus", label: mapCampusName, onClear: clearCampus });
+  }
+  if (founderQuery.trim()) {
+    activeChips.push({ key: "q", label: `“${founderQuery.trim()}”`, onClear: () => setFounderQuery("") });
+  }
+
   return (
     <div className="sample-paper" data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
@@ -299,6 +328,19 @@ export function SampleHomeClient(props: {
                 shell={peakShell}
               />
             </div>
+          </div>
+          {/* Desk-only current-view strip (won fold-filters-1440). Hidden on mobile so Peak campus ranking strip stays. */}
+          <div className="hidden lg:block">
+            <FilterChips chips={activeChips} matchCount={matchedFounders.length} totalCount={founders.length || foundersListed} />
+            <CurrentViewStrip
+              campusName={mapCampusName}
+              query={founderQuery}
+              matchCount={matchedFounders.length}
+              totalFounders={founders.length || foundersListed}
+              startups={viewStartups}
+              onClearCampus={clearCampus}
+              onClearQuery={() => setFounderQuery("")}
+            />
           </div>
           {/* Mobile: founders above map (keeps campus ranking strip from Peak). Desk: globe | founders + lineage. */}
           <div
