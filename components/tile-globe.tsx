@@ -300,11 +300,27 @@ export function TileGlobe({
           type: "circle",
           source: "campuses",
           paint: {
-            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["*", ["get", "radius"], 0.95], 1.8, ["*", ["get", "radius"], 1.12], 3.2, ["*", ["get", "radius"], 1.5]],
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["*", ["get", "radius"], 1.0], 1.8, ["*", ["get", "radius"], 1.18], 3.2, ["*", ["get", "radius"], 1.55]],
             "circle-color": ["case", ["==", ["get", "top"], 1], "#2F4FD8", ["get", "color"]],
-            "circle-stroke-color": ["case", ["==", ["get", "top"], 1], "#2F4FD8", "#FFFFFF"],
-            "circle-stroke-width": ["case", ["==", ["get", "top"], 1], 2.2, 1.25],
-            "circle-opacity": 0.96,
+            "circle-stroke-color": ["case", ["==", ["get", "top"], 1], "#FFFFFF", "#FFFFFF"],
+            "circle-stroke-width": ["case", ["==", ["get", "top"], 1], 2.4, 1.5],
+            "circle-opacity": 0.98,
+            "circle-stroke-opacity": 1,
+          },
+        });
+        // Outer selection ring (clear selected state on white ocean).
+        map.addLayer({
+          id: "campus-selected-ring",
+          type: "circle",
+          source: "campuses",
+          filter: ["==", ["get", "id"], ""],
+          paint: {
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["+", ["*", ["get", "radius"], 1.05], 6], 1.8, ["+", ["*", ["get", "radius"], 1.2], 7], 3.2, ["+", ["*", ["get", "radius"], 1.55], 9]],
+            "circle-color": "rgba(47,79,216,0.12)",
+            "circle-stroke-color": "#2F4FD8",
+            "circle-stroke-width": 3.2,
+            "circle-stroke-opacity": 1,
+            "circle-opacity": 1,
           },
         });
         map.addLayer({
@@ -313,12 +329,59 @@ export function TileGlobe({
           source: "campuses",
           filter: ["==", ["get", "id"], ""],
           paint: {
-            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["+", ["*", ["get", "radius"], 0.85], 3], 1.8, ["+", ["get", "radius"], 3.2], 3.2, ["+", ["*", ["get", "radius"], 1.35], 4]],
-            "circle-color": ["get", "color"],
-            // Cobalt selection ring — ember was competing with top-desk strokes on fold-filters.
-            "circle-stroke-color": "#2F4FD8",
-            "circle-stroke-width": 2.8,
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["+", ["*", ["get", "radius"], 0.95], 2], 1.8, ["+", ["get", "radius"], 2.6], 3.2, ["+", ["*", ["get", "radius"], 1.4], 3.5]],
+            "circle-color": "#2F4FD8",
+            "circle-stroke-color": "#FFFFFF",
+            "circle-stroke-width": 2.4,
             "circle-opacity": 1,
+          },
+        });
+        // Top-desk short labels; collision so they never stack. Selected always wins.
+        map.addLayer({
+          id: "campus-labels",
+          type: "symbol",
+          source: "campuses",
+          filter: ["<=", ["get", "labelRank"], 12],
+          layout: {
+            "text-field": ["get", "shortLabel"],
+            "text-font": ["Noto Sans Regular"],
+            "text-size": ["interpolate", ["linear"], ["zoom"], 0.4, 10, 1.8, 11, 3.2, 13],
+            "text-offset": [0, 1.15],
+            "text-anchor": "top",
+            "text-allow-overlap": false,
+            "text-ignore-placement": false,
+            "symbol-sort-key": ["get", "labelRank"],
+            "text-padding": 4,
+            "text-max-width": 8,
+          },
+          paint: {
+            "text-color": "#0B0E17",
+            "text-halo-color": "#FFFFFF",
+            "text-halo-width": 1.6,
+            "text-halo-blur": 0.2,
+          },
+        });
+        map.addLayer({
+          id: "campus-label-selected",
+          type: "symbol",
+          source: "campuses",
+          filter: ["==", ["get", "id"], ""],
+          layout: {
+            "text-field": ["get", "shortLabel"],
+            "text-font": ["Noto Sans Regular"],
+            "text-size": ["interpolate", ["linear"], ["zoom"], 0.4, 11, 1.8, 12.5, 3.2, 14],
+            "text-offset": [0, 1.2],
+            "text-anchor": "top",
+            "text-allow-overlap": true,
+            "text-ignore-placement": true,
+            "text-padding": 2,
+            "text-max-width": 9,
+          },
+          paint: {
+            "text-color": "#2F4FD8",
+            "text-halo-color": "#FFFFFF",
+            "text-halo-width": 2,
+            "text-halo-blur": 0.15,
           },
         });
         window.clearTimeout(styleTimer);
@@ -596,8 +659,11 @@ export function TileGlobe({
 
   useEffect(() => {
     if (!ready || !mapRef.current) return;
+    const map = mapRef.current;
     const selected = selectedId ? ["==", ["get", "id"], selectedId] : ["==", ["get", "id"], ""];
-    mapRef.current.setFilter("campus-selected", selected);
+    if (map.getLayer("campus-selected")) map.setFilter("campus-selected", selected);
+    if (map.getLayer("campus-selected-ring")) map.setFilter("campus-selected-ring", selected);
+    if (map.getLayer("campus-label-selected")) map.setFilter("campus-label-selected", selected);
   }, [ready, selectedId]);
 
   useEffect(() => {

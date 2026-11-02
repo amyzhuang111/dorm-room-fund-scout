@@ -3,6 +3,7 @@
 import { useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { CampusSeal } from "@/components/campus-seal";
+import { LogoMark } from "@/components/sample-instrument";
 import {
   filterFounders,
   founderMatches,
@@ -281,26 +282,35 @@ export function FounderResults({
             return (
               <li key={founder.id} data-founder-card="" data-signal-chrome={founder.signalTypes.includes("funding") ? "funding" : founder.signalTypes.includes("launch") ? "launch" : founder.signalTypes.includes("award") ? "award" : founder.signalTypes.length ? "other" : "none"}>
                 <article className="bg-[color:var(--bg,#FFFFFF)] px-4 py-4 lg:px-3 lg:py-2.5" data-founder-card-body="">
-                  <div className="flex items-start gap-3 lg:gap-3">
-                    <CampusSeal label={founder.campus} size="xl" className="mt-0.5 max-lg:!inline-grid lg:!hidden" />
+                  <div className="flex items-start gap-2 lg:gap-3">
+                    <span data-founder-seal="" className="mt-0.5 inline-flex shrink-0"><CampusSeal label={founder.campus} size="xl" className="max-lg:!inline-grid lg:!hidden" /></span>
                     <CampusSeal label={founder.campus} size="lg" className="mt-0.5 !hidden lg:!inline-grid" />
                     <div className="min-w-0 flex-1 overflow-visible">
                       {/* Tier 1 — name */}
                       <h3 className="text-[20px] font-semibold leading-6 tracking-tight text-[color:var(--fg,#0B0E17)] lg:text-[16px] lg:leading-5" data-founder-name="">
                         {founder.name}
                       </h3>
-                      {/* Tier 2 — campus / company */}
-                      <p className="mt-1.5 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)] lg:mt-0.5 lg:text-[13px]" data-founder-campus-company="">
+                      {/* Tier 2 — campus / company + logo */}
+                      <p className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)] lg:mt-0.5 lg:text-[13px]" data-founder-campus-company="">
                         <Field label="Campus" value={founder.campus} />
-                        {" · "}
+                        <span aria-hidden="true">·</span>
                         {founder.company ? (
-                          founder.companyId ? (
-                            <Link href={`/startup/${founder.companyId}?from=map${campusId && campusId !== "missing" ? `&campus=${encodeURIComponent(campusId)}` : ""}`} className="font-semibold text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--cobalt,#2F4FD8)] hover:underline">
-                              {founder.company}
-                            </Link>
-                          ) : (
-                            <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{founder.company}</span>
-                          )
+                          <span className="inline-flex min-w-0 items-center gap-1.5" data-founder-company-mark="">
+                            {founder.companyId ? (
+                              <LogoMark
+                                name={founder.company}
+                                logoUrl={`/company-logos/${founder.companyId}.webp`}
+                                size={18}
+                              />
+                            ) : null}
+                            {founder.companyId ? (
+                              <Link href={`/startup/${founder.companyId}?from=map${campusId && campusId !== "missing" ? `&campus=${encodeURIComponent(campusId)}` : ""}`} className="font-semibold text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--cobalt,#2F4FD8)] hover:underline">
+                                {founder.company}
+                              </Link>
+                            ) : (
+                              <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{founder.company}</span>
+                            )}
+                          </span>
                         ) : (
                           <span>Company missing</span>
                         )}

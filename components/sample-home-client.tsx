@@ -233,7 +233,7 @@ function MapFoldSheet({ peak, founders }: { peak: ReactNode; founders: ReactNode
           aria-orientation="horizontal"
           aria-label="Drag sheet"
         >
-          <span className="h-1 w-10 rounded-full bg-[color:var(--cobalt,#2F4FD8)]/35" />
+          <span data-fold-sheet-grab="" className="h-1.5 w-12 rounded-full bg-[color:var(--cobalt,#2F4FD8)]/70" />
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3" data-fold-sheet-body="">
           {peak}
