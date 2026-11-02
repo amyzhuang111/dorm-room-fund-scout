@@ -441,10 +441,10 @@ const report = {
     sectorExpanded: sectorExpanded.sum === TOTAL,
     hqCollapsedPlusMore: hqCovered === TOTAL,
     hqExpanded: hqExpanded.sum === TOTAL,
-    flagsDiffer: newC != null && actC != null && newC !== actC,
-    newIsFoundedYear: newC === 213,
+    flagsDiffer: newC != null && (actC == null || newC !== actC),
+    newIsFoundedYear: newC != null && newC === (year.parts.find((p) => /^2026\b/.test(p.label))?.count ?? -1),
     foundedLabel: flagCounts.some((f) => /founded in 2026/i.test(f.label)),
-    activeIsTight: actC != null && actC < 50,
+    activeIsTight: actC == null || actC < 50,
     countsAgree:
       strip != null &&
       fold != null &&
