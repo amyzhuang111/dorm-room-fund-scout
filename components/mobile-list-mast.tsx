@@ -30,7 +30,7 @@ export function MobileListMast({
           <p className="m-kicker">{kicker}</p>
           <p className="m-figure mt-2 overflow-hidden">
             {figure}
-            {figureSuffix ? <span className="m-figure-sub ml-2">{figureSuffix}</span> : null}
+            {figureSuffix ? <span className="m-figure-sub ml-2">{" "}{figureSuffix}</span> : null}
           </p>
           <p className="m-takeaway mt-2">{takeaway}</p>
           {meta ? <p className="m-meta mt-2">{meta}</p> : null}

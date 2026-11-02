@@ -86,20 +86,20 @@ function PeakShareLite({
   const pct = Math.round((peakCount / Math.max(1, shell.dated)) * 100);
   return (
     <div data-fold-peak-ssr-shell="" data-fold-peak-identity="" data-fold-baseline="8" data-fold-redesign="seal-dispatch">
-      <div className="mb-1 hidden min-h-[15rem] lg:block" data-fold-peak-desk="">
+      <div className="mb-1 hidden min-h-[11.5rem] lg:block" data-fold-peak-desk="">
         <div className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] items-end gap-6 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-peak-share="">
           <div className="min-w-0">
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
-            <p className="mt-2 h-[68px] overflow-hidden font-mono text-[84px] font-bold leading-none tracking-[-0.08em] text-[color:var(--cobalt,#2F4FD8)]" data-fold-peak-figure="">
+            <p className="mt-1 h-[52px] overflow-hidden font-mono text-[72px] font-bold leading-none tracking-[-0.08em] text-[color:var(--cobalt,#2F4FD8)]" data-fold-peak-figure="">
               {peakCount.toLocaleString("en-US")}
               <span className="mx-2 text-[28px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
               <span className="text-[36px] font-bold tracking-[-0.06em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
             </p>
-            <p className="mt-2 max-w-[36rem] text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-caption="">
+            <p className="mt-1.5 max-w-[36rem] text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-caption="">
               {peakLabel} took <span className="text-[color:var(--cobalt,#2F4FD8)]">{pct}%</span>
               {" of every dated signal on record"}
             </p>
-            <div className="mt-3 h-[4.25rem]" data-fold-peak-bars-reserve="" aria-hidden="true" />
+            <div className="mt-2 h-[4.25rem]" data-fold-peak-bars-reserve="" aria-hidden="true" />
             <p className="mt-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
               {shell.dated.toLocaleString("en-US")} dated
               {shell.earlierValid > 0 ? ` · ${shell.earlierValid.toLocaleString("en-US")} earlier` : ""}
@@ -110,7 +110,7 @@ function PeakShareLite({
           </div>
           <div className="min-w-0 self-stretch border-l border-[color:var(--cobalt,#2F4FD8)]/25 pl-5" data-fold-top-campuses-desk="" data-fold-top-campuses-ssr="">
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Desk rank</p>
-            <div className="mt-3 h-[9.5rem]" data-fold-peak-campus-rank-reserve="" aria-hidden="true" />
+            <div className="mt-2 h-[8rem]" data-fold-peak-campus-rank-reserve="" aria-hidden="true" />
           </div>
         </div>
       </div>
@@ -148,7 +148,7 @@ function PeakShareSlot({
   // Keep SSR lite until the client Peak chunk has painted (same box → CLS ≈ 0).
   const showLive = live;
   return (
-    <div className="relative mb-4 min-h-[13rem] lg:mb-4 lg:min-h-[15rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
+    <div className="relative mb-2.5 min-h-[11rem] lg:mb-3 lg:min-h-[11.5rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
       <div className={showLive ? "hidden" : undefined} aria-hidden={showLive || undefined} data-fold-peak-ssr-wrap="">
         {shell ? (
           <PeakShareLite shell={shell} foundersListed={foundersListed} campusesOnMap={campusesOnMap} topCampuses={topCampuses} />
@@ -314,7 +314,7 @@ export function SampleHomeClient(props: {
     <div className="sample-paper" {...(place === "map" ? { "data-fold-root": "" } : {})} data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
       {place === "map" ? (
-        <div className="px-4 pb-8 pt-4 sm:px-4" data-fold-hierarchy="">
+        <div className="px-4 pb-6 pt-3 sm:px-4" data-fold-hierarchy="">
           {/* Mobile (fold-375): Peak + campus ranking strip first, then search. Desk: search first. */}
           <div className="flex flex-col" data-fold-mast="">
             <div className="order-2 lg:order-1">

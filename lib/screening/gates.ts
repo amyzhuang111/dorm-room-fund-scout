@@ -103,20 +103,20 @@ export function evaluatePriorFundingGate(facts: ProjectFacts): GateOutcome {
     return {
       gate: "prior_funding",
       result: "needs_verification",
-      rationale: `At least one funding event has an undisclosed amount. Known total so far is $${total.toLocaleString()}, which is a floor, not the real total.`,
+      rationale: `At least one funding event has an undisclosed amount. Known total so far is $${total.toLocaleString("en-US")}, which is a floor, not the real total.`,
     };
   }
   if (total >= trigger) {
     return {
       gate: "prior_funding",
       result: "outside_current_brief",
-      rationale: `Known prior funding ($${total.toLocaleString()}) is at or above the $${trigger.toLocaleString()} review trigger (internal sourcing guidance, not a published hard cap).`,
+      rationale: `Known prior funding ($${total.toLocaleString("en-US")}) is at or above the $${trigger.toLocaleString("en-US")} review trigger (internal sourcing guidance, not a published hard cap).`,
     };
   }
   return {
     gate: "prior_funding",
     result: "pass",
-    rationale: `Known prior funding ($${total.toLocaleString()}) is below the $${trigger.toLocaleString()} review trigger.`,
+    rationale: `Known prior funding ($${total.toLocaleString("en-US")}) is below the $${trigger.toLocaleString("en-US")} review trigger.`,
   };
 }
 

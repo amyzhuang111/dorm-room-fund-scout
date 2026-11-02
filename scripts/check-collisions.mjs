@@ -1,8 +1,16 @@
 /**
- * Collision check: overlapping visible TEXT NODE bounding boxes
+ * Collision check: overlapping visible text bounding boxes
  * on every primary route at 375 and 1440.
- * Text rects are clipped to overflow-hidden ancestors; sr-only and
- * closed <details> content are skipped.
+ *
+ * Covers:
+ * - HTML text nodes (Range.getClientRects)
+ * - SVG <text> / <tspan> (getBBox → screen via getScreenCTM)
+ * - <foreignObject> HTML text (same as HTML, walked)
+ * - Canvas label boxes via [data-canvas-label] / [data-map-label] elements
+ *   that mirror painted labels (MapLibre/HTML overlays)
+ *
+ * Text rects are clipped to overflow-hidden/auto/scroll ancestors;
+ * sr-only and closed <details> content are skipped.
  */
 import { chromium } from "playwright";
 import fs from "fs";
@@ -41,10 +49,10 @@ for (const vp of VIEWPORTS) {
       await page.waitForSelector("[data-fold-peak-caption], [data-directory-ready='1']", { timeout: 60000 }).catch(() => {});
       await page.waitForTimeout(1800);
     } else if (route.startsWith("/founders") || route.startsWith("/data")) {
-      await page.waitForSelector("table tbody tr, [data-founder-card]", { timeout: 60000 }).catch(() => {});
+      await page.waitForSelector("table tbody tr, [data-founder-card], [data-corpus-explorer]", { timeout: 60000 }).catch(() => {});
       await page.waitForTimeout(1200);
     } else if (route.startsWith("/companies")) {
-      await page.waitForSelector("[data-mobile-list-mast], [data-company-card], [data-directory-ready='1']", { timeout: 60000 }).catch(() => {});
+      await page.waitForSelector("[data-mobile-list-mast], [data-company-card], [data-directory-ready='1'], [data-signals-landed]", { timeout: 60000 }).catch(() => {});
       await page.waitForTimeout(1200);
     } else if (route.startsWith("/signals")) {
       await page.waitForSelector("[data-signal-featured], [data-signals-page] li", { timeout: 60000 }).catch(() => {});
@@ -53,12 +61,11 @@ for (const vp of VIEWPORTS) {
       await page.waitForTimeout(1400);
     }
     const found = await page.evaluate(() => {
-      const SKIP = new Set(["SCRIPT", "STYLE", "NOSCRIPT", "SVG", "PATH", "META", "LINK", "TEXTAREA", "INPUT"]);
+      const SKIP = new Set(["SCRIPT", "STYLE", "NOSCRIPT", "META", "LINK", "TEXTAREA", "INPUT"]);
 
       function isSkipped(el) {
         if (!el || el.nodeType !== 1) return true;
         if (el.closest(".sr-only, [aria-hidden='true'], [hidden], [data-fold-peak-ssr-wrap]")) return true;
-        // Closed details: ignore everything except summary
         const details = el.closest("details");
         if (details && !details.open && !el.closest("summary")) return true;
         let cur = el;
@@ -71,7 +78,7 @@ for (const vp of VIEWPORTS) {
       }
 
       function clipRect(r, el) {
-        let x1 = r.left, y1 = r.top, x2 = r.right, y2 = r.bottom;
+        let x1 = r.left ?? r.x1, y1 = r.top ?? r.y1, x2 = r.right ?? r.x2, y2 = r.bottom ?? r.y2;
         let cur = el;
         while (cur && cur !== document.documentElement) {
           const cs = getComputedStyle(cur);
@@ -89,7 +96,6 @@ for (const vp of VIEWPORTS) {
           }
           cur = cur.parentElement;
         }
-        // Also clip to viewport
         x1 = Math.max(x1, 0);
         y1 = Math.max(y1, 0);
         x2 = Math.min(x2, window.innerWidth);
@@ -97,7 +103,22 @@ for (const vp of VIEWPORTS) {
         return { x1, y1, x2, y2, w: x2 - x1, h: y2 - y1 };
       }
 
+      function pathOf(el) {
+        const parts = [];
+        let cur = el;
+        for (let i = 0; i < 5 && cur && cur !== document.body; i++) {
+          let bit = (cur.tagName || "?").toLowerCase();
+          const dt = cur.attributes && [...cur.attributes].find((a) => a.name.startsWith("data-"))?.name;
+          if (dt) bit += `[${dt}]`;
+          parts.unshift(bit);
+          cur = cur.parentElement;
+        }
+        return parts.join(">");
+      }
+
       const items = [];
+
+      // HTML text nodes (also covers foreignObject HTML)
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
       while (walker.nextNode()) {
         const node = walker.currentNode;
@@ -105,32 +126,62 @@ for (const vp of VIEWPORTS) {
         if (!text) continue;
         const parent = node.parentElement;
         if (!parent || SKIP.has(parent.tagName) || isSkipped(parent)) continue;
+        // Skip raw SVG text nodes — handled via <text> elements below
+        if (parent.closest("svg") && parent.tagName !== "FOREIGNObject" && parent.closest("foreignObject") == null) {
+          if (parent.tagName === "text" || parent.tagName === "tspan") continue;
+        }
         const range = document.createRange();
         range.selectNodeContents(node);
         for (const r of range.getClientRects()) {
           if (r.width < 1 || r.height < 1) continue;
           const c = clipRect(r, parent);
           if (c.w < 1 || c.h < 1) continue;
-          items.push({
-            text: text.slice(0, 80),
-            x1: c.x1,
-            y1: c.y1,
-            x2: c.x2,
-            y2: c.y2,
-            path: (() => {
-              const parts = [];
-              let cur = parent;
-              for (let i = 0; i < 5 && cur && cur !== document.body; i++) {
-                let bit = cur.tagName.toLowerCase();
-                const dt = [...cur.attributes].find((a) => a.name.startsWith("data-"))?.name;
-                if (dt) bit += `[${dt}]`;
-                parts.unshift(bit);
-                cur = cur.parentElement;
-              }
-              return parts.join(">");
-            })(),
-          });
+          items.push({ text: text.slice(0, 80), ...c, path: pathOf(parent), kind: "html" });
         }
+      }
+
+      // SVG <text> and <tspan>
+      for (const el of document.querySelectorAll("svg text, svg tspan")) {
+        if (isSkipped(el)) continue;
+        const text = (el.textContent || "").replace(/\s+/g, " ").trim();
+        if (!text) continue;
+        let screen;
+        try {
+          const bb = el.getBBox();
+          const ctm = el.getScreenCTM();
+          if (!ctm) continue;
+          const pt = (x, y) => {
+            const p = new DOMPoint(x, y).matrixTransform(ctm);
+            return { x: p.x, y: p.y };
+          };
+          const a = pt(bb.x, bb.y);
+          const b = pt(bb.x + bb.width, bb.y + bb.height);
+          screen = {
+            left: Math.min(a.x, b.x),
+            top: Math.min(a.y, b.y),
+            right: Math.max(a.x, b.x),
+            bottom: Math.max(a.y, b.y),
+          };
+        } catch {
+          const r = el.getBoundingClientRect();
+          screen = { left: r.left, top: r.top, right: r.right, bottom: r.bottom };
+        }
+        if (screen.right - screen.left < 1 || screen.bottom - screen.top < 1) continue;
+        const c = clipRect(screen, el);
+        if (c.w < 1 || c.h < 1) continue;
+        items.push({ text: text.slice(0, 80), ...c, path: pathOf(el), kind: "svg" });
+      }
+
+      // Canvas / map label mirrors
+      for (const el of document.querySelectorAll("[data-canvas-label], [data-map-label], [data-globe-label]")) {
+        if (isSkipped(el)) continue;
+        const text = (el.getAttribute("data-label") || el.textContent || "").replace(/\s+/g, " ").trim();
+        if (!text) continue;
+        const r = el.getBoundingClientRect();
+        if (r.width < 1 || r.height < 1) continue;
+        const c = clipRect(r, el);
+        if (c.w < 1 || c.h < 1) continue;
+        items.push({ text: text.slice(0, 80), ...c, path: pathOf(el), kind: "canvas-label" });
       }
 
       const collisions = [];
@@ -155,8 +206,8 @@ for (const vp of VIEWPORTS) {
           if (aContainsB || bContainsA) continue;
           collisions.push({
             area: Math.round(area),
-            a: { text: a.text, path: a.path, box: [a.x1, a.y1, a.x2, a.y2].map((n) => Math.round(n)) },
-            b: { text: b.text, path: b.path, box: [b.x1, b.y1, b.x2, b.y2].map((n) => Math.round(n)) },
+            a: { text: a.text, path: a.path, kind: a.kind, box: [a.x1, a.y1, a.x2, a.y2].map((n) => Math.round(n)) },
+            b: { text: b.text, path: b.path, kind: b.kind, box: [b.x1, b.y1, b.x2, b.y2].map((n) => Math.round(n)) },
           });
         }
       }

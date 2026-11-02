@@ -142,7 +142,7 @@ function Heatmap({ table, defaultOpen = true }: { table: HeatmapTable; defaultOp
                             pinMap(`${table.title}: ${row.label}`, row.all.ids);
                           }}
                         >
-                          {row.all.count.toLocaleString()}
+                          {row.all.count.toLocaleString("en-US")}
                         </button>
                       )}
                     </td>
@@ -210,7 +210,7 @@ function Density({ table }: { table: DensityTable }) {
                     <td className="p-0 text-right">
                       <RateCell value={row.startups} paint={paintCount(row.startups, maxStartups)} label={`${row.label} verified startups`} pressed={active === `${row.id}:startups`} onClick={() => chooseDensity(row, "startups", setActive)} />
                     </td>
-                    <td className="px-2 py-1 text-right text-xs tabular-nums text-foreground">{row.undergrads.toLocaleString()}</td>
+                    <td className="px-2 py-1 text-right text-xs tabular-nums text-foreground">{row.undergrads.toLocaleString("en-US")}</td>
                     <td className="p-0 text-right">
                       <RateCell
                         value={row.perThousand}
@@ -232,7 +232,7 @@ function Density({ table }: { table: DensityTable }) {
             <ul className="mt-2 space-y-1">
               {table.rows.map((row) => (
                 <li key={row.id}>
-                  {row.label}: {row.undergrads.toLocaleString()} {row.enrollmentKind} ({row.enrollmentYear}).{" "}
+                  {row.label}: {row.undergrads.toLocaleString("en-US")} {row.enrollmentKind} ({row.enrollmentYear}).{" "}
                   <a href={row.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-link underline">
                     {row.sourceName}
                   </a>
@@ -278,8 +278,8 @@ function PitchbookRankings({ table }: { table: PitchbookTable }) {
                       {row.label}
                     </th>
                     <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.rank}</td>
-                    <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.founders.toLocaleString()}</td>
-                    <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.companies.toLocaleString()}</td>
+                    <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.founders.toLocaleString("en-US")}</td>
+                    <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.companies.toLocaleString("en-US")}</td>
                     <td className="px-2 py-1 text-right tabular-nums text-foreground">{formatCapitalUsd(row.capitalRaisedUsd)}</td>
                     <td className="px-2 py-1 text-right text-foreground">{row.enrollmentBand ?? "-"}</td>
                     <td className="p-0 text-right">
@@ -290,7 +290,7 @@ function PitchbookRankings({ table }: { table: PitchbookTable }) {
                           className="inline-flex h-7 min-w-[2.5rem] items-center justify-end rounded-md px-2 text-xs font-medium tabular-nums"
                           style={paintCount(row.perThousand, maxRate)}
                         >
-                          {row.perThousand.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
+                          {row.perThousand.toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}
                         </span>
                       )}
                     </td>
@@ -347,8 +347,8 @@ function HitRates({ table }: { table: HitRateTable }) {
                         }}
                       />
                     </th>
-                    <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.founders.toLocaleString()}</td>
-                    <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.good.toLocaleString()}</td>
+                    <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.founders.toLocaleString("en-US")}</td>
+                    <td className="px-2 py-1 text-right tabular-nums text-foreground">{row.good.toLocaleString("en-US")}</td>
                     <td className="p-0 text-right">
                       <span
                         className="inline-flex h-7 min-w-[2.5rem] items-center justify-end rounded-md px-2 text-xs font-medium tabular-nums"
@@ -407,7 +407,7 @@ function HeatCell({
       className={`inline-flex h-7 min-w-7 items-center justify-center rounded-md px-1.5 text-xs font-medium tabular-nums ${pressed ? "ring-2 ring-foreground ring-offset-1" : ""}`}
       style={style}
     >
-      {cell.count.toLocaleString()}
+      {cell.count.toLocaleString("en-US")}
     </button>
   );
 }
@@ -427,7 +427,7 @@ function RateCell({
   digits?: boolean;
   onClick: () => void;
 }) {
-  const text = digits ? value.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : value.toLocaleString();
+  const text = digits ? value.toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : value.toLocaleString("en-US");
   if (value <= 0) {
     return <span className="inline-flex h-7 min-w-7 items-center justify-end rounded-md px-2 text-muted">-</span>;
   }

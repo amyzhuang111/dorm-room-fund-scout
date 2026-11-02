@@ -314,7 +314,7 @@ export function NetworkMapApp() {
           </label>
         </div>
         <p className="pl-0.5 text-[11px] leading-none text-neutral-400 tabular-nums">
-          {visibleCounts.person.toLocaleString()} people · {visibleCounts.startup.toLocaleString()} startups · {visibleCounts.investor} investors · {visibleCounts.organization} organizations
+          {visibleCounts.person.toLocaleString("en-US")} people · {visibleCounts.startup.toLocaleString("en-US")} startups · {visibleCounts.investor} investors · {visibleCounts.organization} organizations
         </p>
         <p className="max-w-[18rem] pl-0.5 text-[11px] leading-snug text-neutral-900">Closer = more similar (shared programs, sectors, investors)</p>
       </div>

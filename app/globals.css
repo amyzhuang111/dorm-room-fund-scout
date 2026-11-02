@@ -1165,15 +1165,18 @@ details:not([open]) > :not(summary) {
   display: none !important;
 }
 
-/* r38: clip figure glyph metrics so stacked type never collides. */
+/* r39: keep figure glyphs (incl. en-US comma) fully visible; separate with margin not clip. */
 .sample-paper [data-mobile-list-mast] .m-figure {
-  height: 0.9em;
-  overflow: hidden;
   line-height: 1 !important;
+  overflow: visible;
 }
 .sample-paper [data-mobile-list-mast] .m-takeaway {
   margin-top: 8px;
 }
 .sample-paper [data-fold-peak-figure] {
+  overflow: hidden;
+}
+/* Compact SignalsLanded peak figure: clip ascenders without eating the row below. */
+.sample-paper [data-signals-landed-compact] [data-peak-figure] {
   overflow: hidden;
 }

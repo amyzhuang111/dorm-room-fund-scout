@@ -70,7 +70,7 @@ export const drawLightHover: NodeHoverDrawingFunction = (context, data, settings
   if (!text) return;
   const tip = (data as { signalTip?: string }).signalTip;
   const links = (data as { links?: number }).links;
-  const linkLine = links != null && links > 0 ? `${links.toLocaleString()} connections` : null;
+  const linkLine = links != null && links > 0 ? `${links.toLocaleString("en-US")} connections` : null;
   const size = settings.labelSize;
   context.font = `600 ${size}px ${settings.labelFont}`;
   const titleWidth = context.measureText(text).width;

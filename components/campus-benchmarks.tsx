@@ -3,7 +3,7 @@ import type { CampusHitRate } from "@/lib/domain/campus-hit-rate-model";
 import { formatCapitalUsd, PITCHBOOK_SOURCE_URL, PITCHBOOK_TITLE, type PitchbookCampus, type PitchbookTrack } from "@/lib/domain/pitchbook-model";
 
 function trackLine(label: string, track: PitchbookTrack) {
-  return `${label}: #${track.rank} · ${track.founderCount.toLocaleString()} founders · ${track.companyCount.toLocaleString()} companies · ${formatCapitalUsd(track.capitalRaisedUsd)}`;
+  return `${label}: #${track.rank} · ${track.founderCount.toLocaleString("en-US")} founders · ${track.companyCount.toLocaleString("en-US")} companies · ${formatCapitalUsd(track.capitalRaisedUsd)}`;
 }
 
 export function CampusBenchmarks({ pitchbook, hitRate }: { pitchbook: PitchbookCampus | null; hitRate: CampusHitRate | null }) {
@@ -15,7 +15,7 @@ export function CampusBenchmarks({ pitchbook, hitRate }: { pitchbook: PitchbookC
         {undergrad ? (
             <>
               <p className="mt-1 text-sm tabular-nums text-foreground">
-                {undergrad.founderCount.toLocaleString()} founders · {undergrad.companyCount.toLocaleString()} companies · {formatCapitalUsd(undergrad.capitalRaisedUsd)} raised
+                {undergrad.founderCount.toLocaleString("en-US")} founders · {undergrad.companyCount.toLocaleString("en-US")} companies · {formatCapitalUsd(undergrad.capitalRaisedUsd)} raised
               </p>
               <p className="mt-0.5 text-xs text-foreground">
                 Undergraduate rank #{undergrad.rank}
@@ -23,8 +23,8 @@ export function CampusBenchmarks({ pitchbook, hitRate }: { pitchbook: PitchbookC
               </p>
               {pitchbook?.perThousand != null && (
                 <p className="mt-0.5 text-xs tabular-nums text-foreground">
-                  {pitchbook.perThousand.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} founders per 1,000 undergraduates
-                  {pitchbook.undergrads != null ? ` (${pitchbook.undergrads.toLocaleString()}${pitchbook.enrollmentYear ? `, ${pitchbook.enrollmentYear}` : ""})` : ""}
+                  {pitchbook.perThousand.toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 })} founders per 1,000 undergraduates
+                  {pitchbook.undergrads != null ? ` (${pitchbook.undergrads.toLocaleString("en-US")}${pitchbook.enrollmentYear ? `, ${pitchbook.enrollmentYear}` : ""})` : ""}
                 </p>
               )}
             </>
@@ -47,7 +47,7 @@ export function CampusBenchmarks({ pitchbook, hitRate }: { pitchbook: PitchbookC
           <p className={`mt-1 text-sm tabular-nums ${hitRate.reliable ? "text-foreground" : "text-muted"}`}>
             {formatHitRate(hitRate.hitRate)}× the comparison group{" "}
             <span className="text-xs text-muted">
-              ({formatHitRate(hitRate.low)}-{formatHitRate(hitRate.high)}) · {hitRate.good.toLocaleString()} of {hitRate.founders.toLocaleString()} tracked founders had a good outcome
+              ({formatHitRate(hitRate.low)}-{formatHitRate(hitRate.high)}) · {hitRate.good.toLocaleString("en-US")} of {hitRate.founders.toLocaleString("en-US")} tracked founders had a good outcome
             </span>
           </p>
           {!hitRate.reliable && (

@@ -136,7 +136,7 @@ export function HotspotsApp({
           </p>
         </div>
         <p className="text-xs text-muted" style={{ fontVariantNumeric: "tabular-nums" }}>
-          {visible.length.toLocaleString()} of {campusCards.length.toLocaleString()} places
+          {visible.length.toLocaleString("en-US")} of {campusCards.length.toLocaleString("en-US")} places
         </p>
       </div>
 

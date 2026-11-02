@@ -367,7 +367,7 @@ function campusFocus(db: ReturnType<typeof getDb>, id: string): NetworkFocus | n
     id,
     kind: "campus",
     name: uni.name,
-    subtitle: `${people.n.toLocaleString()} affiliated people`,
+    subtitle: `${people.n.toLocaleString("en-US")} affiliated people`,
     href: `/founder/discover?university=${id}`,
     hrefLabel: `Open ${short} founders`,
     website: null,

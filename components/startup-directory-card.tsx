@@ -89,7 +89,7 @@ function SchoolIcon() {
 
 function founderMeta(founder: StartupCardFounder): string | null {
   const place = [founder.program, founder.school].filter(Boolean).join(" · ");
-  const parts = [place, founder.linkedinFollowers != null ? `${founder.linkedinFollowers.toLocaleString()} LinkedIn followers` : null, founder.yearsExperience != null ? `${founder.yearsExperience} years experience` : null].filter(Boolean);
+  const parts = [place, founder.linkedinFollowers != null ? `${founder.linkedinFollowers.toLocaleString("en-US")} LinkedIn followers` : null, founder.yearsExperience != null ? `${founder.yearsExperience} years experience` : null].filter(Boolean);
   return parts.length ? parts.join(" · ") : null;
 }
 

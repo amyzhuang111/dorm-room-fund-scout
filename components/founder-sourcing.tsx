@@ -29,7 +29,7 @@ export function FounderSearchBar({
 }) {
   return (
     <form
-      className="mb-4 lg:mb-4"
+      className="mb-3 lg:mb-2"
       role="search"
       onSubmit={(event) => event.preventDefault()}
       data-founder-search=""
@@ -43,7 +43,7 @@ export function FounderSearchBar({
         value={query}
         onChange={(event) => onQuery(event.target.value)}
         placeholder="Name, campus, program, or company"
-        className="mt-2 h-10 w-full rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[16px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)] focus:border-[color:var(--cobalt,#2F4FD8)] lg:h-11"
+        className="mt-2 h-10 w-full rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[16px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)] focus:border-[color:var(--cobalt,#2F4FD8)] lg:mt-1 lg:h-10"
       />
     </form>
   );
@@ -127,7 +127,7 @@ export function FounderResults({
       data-founder-results=""
       data-founder-mobile-min={reserveMobileFirstPage ? String(FOUNDER_MOBILE_PAGE_MIN_PX) : undefined}
     >
-      <div className="mb-2 flex flex-wrap items-end justify-between gap-2 lg:mb-4 lg:gap-2">
+      <div className="mb-2 flex flex-wrap items-end justify-between gap-2 lg:mb-2 lg:gap-2">
         <div>
           <h2 className="text-[20px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] lg:text-[18px]">Founders</h2>
           <p className="mt-2 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]">
@@ -169,7 +169,7 @@ export function FounderResults({
           </p>
         </div>
       </div>
-      <div className="mb-4" data-founder-filters="">
+      <div className="mb-3 lg:mb-2" data-founder-filters="">
         <button
           type="button"
           className="mb-2 inline-flex h-8 items-center gap-1.5 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)] lg:hidden"
@@ -273,7 +273,7 @@ export function FounderResults({
             const why = whyById.get(founder.id) ?? null;
             return (
               <li key={founder.id} data-founder-card="" data-signal-chrome={founder.signalTypes.includes("funding") ? "funding" : founder.signalTypes.includes("launch") ? "launch" : founder.signalTypes.includes("award") ? "award" : founder.signalTypes.length ? "other" : "none"}>
-                <article className="bg-[color:var(--bg,#FFFFFF)] px-4 py-4 lg:px-3 lg:py-3" data-founder-card-body="">
+                <article className="bg-[color:var(--bg,#FFFFFF)] px-4 py-4 lg:px-3 lg:py-2.5" data-founder-card-body="">
                   <div className="flex items-start gap-3 lg:gap-3">
                     <CampusSeal label={founder.campus} size="xl" className="mt-0.5 max-lg:!inline-grid lg:!hidden" />
                     <CampusSeal label={founder.campus} size="lg" className="mt-0.5 !hidden lg:!inline-grid" />
@@ -283,7 +283,7 @@ export function FounderResults({
                         {founder.name}
                       </h3>
                       {/* Tier 2 — campus / company */}
-                      <p className="mt-1.5 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)] lg:mt-1 lg:text-[13px]" data-founder-campus-company="">
+                      <p className="mt-1.5 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)] lg:mt-0.5 lg:text-[13px]" data-founder-campus-company="">
                         <Field label="Campus" value={founder.campus} />
                         {" · "}
                         {founder.company ? (
@@ -323,7 +323,7 @@ export function FounderResults({
                       {/* Tier 3 — why (full text, never clamp / ellipsis / overflow hidden) */}
                       {why ? (
                         <p
-                          className="mt-2.5 overflow-visible border-l-2 border-[color:var(--cobalt,#2F4FD8)]/45 pl-3 text-[14px] leading-5 text-[color:var(--fg,#0B0E17)] lg:mt-1.5 lg:pl-2.5 lg:text-[12px] lg:leading-4"
+                          className="mt-2.5 overflow-visible border-l-2 border-[color:var(--cobalt,#2F4FD8)]/45 pl-3 text-[14px] leading-5 text-[color:var(--fg,#0B0E17)] lg:mt-1 lg:pl-2.5 lg:text-[12px] lg:leading-4"
                           data-why-worth=""
                         >
                           <span className="block font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Why worth a look</span>
