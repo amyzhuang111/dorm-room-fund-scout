@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CampusSeal } from "@/components/campus-seal";
 import { NetworksGraph } from "@/components/networks-graph";
 import { StartupCardSheet } from "@/components/startup-directory-card";
@@ -12,6 +12,13 @@ import type {
   NetworkSummary,
   SectorConcentration,
 } from "@/lib/domain/founder-networks-model";
+
+function loadPage(): Promise<FounderNetworksPage> {
+  return fetch("/data/founder-networks-page.json").then((res) => {
+    if (!res.ok) throw new Error("networks page missing");
+    return res.json();
+  });
+}
 
 const KIND_LABEL: Record<NetworkKind, string> = {
   accelerator: "Accelerator",
@@ -38,21 +45,57 @@ function inkFor(count: number, max: number): string {
   return count / max > 0.45 ? "#ffffff" : "var(--fg)";
 }
 
-export function NetworksApp({ data }: { data: FounderNetworksPage }) {
-  const [activeNetwork, setActiveNetwork] = useState<string | null>(data.topNetworks[0]?.id ?? null);
+export function NetworksApp() {
+  const [data, setData] = useState<FounderNetworksPage | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [matrixOpen, setMatrixOpen] = useState(true);
   const [concentrationOpen, setConcentrationOpen] = useState(true);
 
+  useEffect(() => {
+    let cancelled = false;
+    loadPage()
+      .then((page) => {
+        if (cancelled) return;
+        setData(page);
+        setActiveNetwork((current) => current ?? page.topNetworks[0]?.id ?? null);
+      })
+      .catch(() => {
+        if (!cancelled) setLoadError("Networks data could not be loaded.");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const active: NetworkSummary | null = useMemo(
-    () => data.topNetworks.find((row) => row.id === activeNetwork) ?? null,
-    [data.topNetworks, activeNetwork]
+    () => data?.topNetworks.find((row) => row.id === activeNetwork) ?? null,
+    [data, activeNetwork]
   );
-  const members: NetworkMember[] = active ? data.membersByNetwork[active.id] ?? [] : [];
+  const members: NetworkMember[] = active && data ? data.membersByNetwork[active.id] ?? [] : [];
 
   let matrixMax = 0;
-  for (const row of data.matrix.rows) {
-    for (const cell of row.cells) matrixMax = Math.max(matrixMax, cell.count);
+  if (data) {
+    for (const row of data.matrix.rows) {
+      for (const cell of row.cells) matrixMax = Math.max(matrixMax, cell.count);
+    }
+  }
+
+  if (loadError) {
+    return (
+      <div className="min-h-screen bg-white px-5 py-10 text-sm text-[color:var(--fg-2)]" data-networks-page="">
+        {loadError}
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-white px-5 py-10 text-sm text-[color:var(--fg-3)]" data-networks-page="">
+        Loading networks...
+      </div>
+    );
   }
 
   return (
