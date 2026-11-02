@@ -291,8 +291,8 @@ async function importOne(
     }
 
     try {
-      assembleProjectFacts(db, projectId);
-      evaluateAllGates(db, projectId);
+      const facts = assembleProjectFacts(db, projectId);
+      evaluateAllGates(facts);
     } catch {
       /* non-fatal */
     }

@@ -57,7 +57,7 @@ async function fetchText(url: string): Promise<string> {
 }
 
 function extractVentures(html: string): Venture[] {
-  const pushes = [...html.matchAll(/<script>self\.__next_f\.push\((\[.*?\])\)<\/script>/gs)].map((m) => m[1]);
+  const pushes = [...html.matchAll(/<script>self\.__next_f\.push\((\[[\s\S]*?\])\)<\/script>/g)].map((m) => m[1]);
   const big = pushes
     .map((p) => {
       try {
@@ -68,8 +68,7 @@ function extractVentures(html: string): Venture[] {
       }
     })
     .join("\n");
-  const decoder = new (JSON as unknown as { parse: typeof JSON.parse }).constructor as typeof JSON;
-  // Walk every "listingKind":"startup" object via raw_decode from preceding {
+  // Walk every "listingKind":"startup" object via brace scan from preceding {
   const out: Venture[] = [];
   const seen = new Set<string>();
   let pos = 0;
@@ -394,8 +393,8 @@ async function main() {
     }
 
     try {
-      assembleProjectFacts(db, projectId);
-      evaluateAllGates(db, projectId);
+      const facts = assembleProjectFacts(db, projectId);
+      evaluateAllGates(facts);
     } catch {
       /* non-fatal */
     }
