@@ -190,6 +190,7 @@ function migrate(db: Database.Database) {
   addColumnIfMissing("projects", "verification_status", "verification_status TEXT");
   addColumnIfMissing("projects", "last_verified_at", "last_verified_at TEXT");
   addColumnIfMissing("projects", "verification_note", "verification_note TEXT");
+  addColumnIfMissing("projects", "excluded_reason", "excluded_reason TEXT");
   db.exec(`CREATE TABLE IF NOT EXISTS entity_redirects (
     old_id TEXT PRIMARY KEY,
     entity_type TEXT NOT NULL,

@@ -10,6 +10,7 @@ import { buildDirectoryFromDb, clearDirectoryMemo } from "../../lib/domain/direc
 import { buildPeakShell } from "../../lib/domain/peak-shell";
 import { listUniversities } from "../../lib/domain/queries";
 import { sampleSurfaceCounts } from "../../lib/domain/sample-facets";
+import { buildFounderIndex } from "../../lib/domain/founder-index-build";
 
 const SNAP_PATH = path.join(process.cwd(), "data", "corpus-snapshot.json");
 
@@ -48,8 +49,7 @@ function main() {
     signalsUndated: signals - signalsDated,
     people: (db.prepare(`SELECT COUNT(*) AS c FROM people`).get() as { c: number }).c,
     founders: (db.prepare(`SELECT COUNT(*) AS c FROM people WHERE founder_status = 'founder'`).get() as { c: number }).c,
-    foundersIndexed: (db.prepare(`SELECT COUNT(*) AS c FROM people WHERE founder_status = 'founder'`).get() as { c: number })
-      .c,
+    foundersIndexed: buildFounderIndex().length,
     foundersListed: surface.foundersListed,
     campuses: unis.length,
     campusesTotal: unis.length,
@@ -64,6 +64,25 @@ function main() {
            JOIN company_facts f ON f.project_id = p.id
            WHERE p.kind = 'company' AND p.is_investable_candidate = 1
              AND f.fact_key = 'investor' AND f.value_text = 'Y Combinator'`,
+        )
+        .get() as { c: number }
+    ).c,
+    // Founder-recency funnel (as of Nov 2026: need ≥1 founder current or graduated ≥2023).
+    // Only investableCompanies are counted as verified/kept on the site.
+    companiesTotal: (
+      db.prepare(`SELECT COUNT(*) AS c FROM projects WHERE kind = 'company'`).get() as { c: number }
+    ).c,
+    excludedOlderAlumni: (
+      db
+        .prepare(
+          `SELECT COUNT(*) AS c FROM projects WHERE kind = 'company' AND excluded_reason = 'founders not current/recent (<2023)'`,
+        )
+        .get() as { c: number }
+    ).c,
+    unverifiedRecency: (
+      db
+        .prepare(
+          `SELECT COUNT(*) AS c FROM projects WHERE kind = 'company' AND excluded_reason = 'unverified recency'`,
         )
         .get() as { c: number }
     ).c,
@@ -98,6 +117,9 @@ function main() {
         peak: snapshot.peak,
         foundersListed: snapshot.foundersListed,
         campusesOnMap: snapshot.campusesOnMap,
+        excludedOlderAlumni: snapshot.excludedOlderAlumni,
+        unverifiedRecency: snapshot.unverifiedRecency,
+        companiesTotal: snapshot.companiesTotal,
       },
       null,
       2,

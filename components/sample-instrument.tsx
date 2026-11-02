@@ -1610,8 +1610,8 @@ export function programDisplayName(raw: string): string {
   return name;
 }
 
-/** Universe program totals use programs[] membership (not primaryProgram alone). YC = 564 in sample. */
-export const YC_MEMBERSHIP_EXPECTED = 564;
+/** Universe program totals use programs[] membership (not primaryProgram alone). YC = corpus-snapshot.ycMembership after recency gate. */
+export const YC_MEMBERSHIP_EXPECTED = 318;
 
 export function isYcProgramLabel(label: string): boolean {
   return /^y\s*combinator$/i.test(label.trim());

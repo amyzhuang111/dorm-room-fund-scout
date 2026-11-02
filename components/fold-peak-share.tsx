@@ -104,9 +104,9 @@ export function FoldPeakShare({
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Top campuses</p>
             <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
               <span className="font-bold text-[color:var(--fg,#0B0E17)]">{foundersListed.toLocaleString("en-US")}</span>
-              {" names · "}
+              {" founder names on investable companies · "}
               <span className="font-bold text-[color:var(--fg,#0B0E17)]">{campusesOnMap.toLocaleString("en-US")}</span>
-              {" on map"}
+              {" campuses on map"}
             </p>
             {topCampuses.length > 0 ? (
               <ol className="mt-3 space-y-2.5" data-fold-peak-campus-rank="">
