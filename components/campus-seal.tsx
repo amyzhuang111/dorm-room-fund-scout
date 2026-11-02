@@ -1,8 +1,9 @@
 import { campusSealLetters } from "@/lib/domain/campus-seal";
 
-type Size = "sm" | "md" | "lg";
+type Size = "xs" | "sm" | "md" | "lg";
 
 const SIZE: Record<Size, string> = {
+  xs: "h-4 w-4 text-[7px] tracking-tight",
   sm: "h-5 w-5 text-[8px]",
   md: "h-6 w-6 text-[9px]",
   lg: "h-8 w-8 text-[10px]",

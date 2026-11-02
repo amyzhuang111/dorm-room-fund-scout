@@ -58,7 +58,7 @@ export default async function DataExplorerPage({
           <p className="scout-kicker">Corpus</p>
           <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
           <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-            <span className="font-bold text-[color:var(--ember,#D96B1C)]">{result.total.toLocaleString("en-US")}</span>
+            <span className="font-bold text-[#D96B1C]">{result.total.toLocaleString("en-US")}</span>
             {" companies · page "}
             <span className="font-bold text-[color:var(--fg,#0B0E17)]">{result.page}</span>
             {" of "}
@@ -69,7 +69,7 @@ export default async function DataExplorerPage({
         </div>
         <a
           href="/data/export"
-          className="hidden h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white sm:inline-flex"
+          className="hidden h-8 items-center rounded-sm border border-[#D96B1C] bg-[#D96B1C] px-3 font-mono text-[11px] font-semibold text-white sm:inline-flex"
           data-corpus-csv=""
         >
           Download CSV
@@ -168,7 +168,7 @@ export default async function DataExplorerPage({
                 <td className="c-n">
                   <span className="c-mark">
                     {row.campus ? (
-                      <CampusSeal label={row.campus} size="sm" />
+                      <CampusSeal label={row.campus} size="xs" />
                     ) : (
                       <CorpusRowMark name={row.name} website={row.website} />
                     )}
@@ -224,7 +224,7 @@ export default async function DataExplorerPage({
             </Link>
           ) : null}
           {result.page < result.pageCount ? (
-            <Link href={hrefFor({ page: String(result.page + 1) })} className="inline-flex h-8 items-center border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white">
+            <Link href={hrefFor({ page: String(result.page + 1) })} className="inline-flex h-8 items-center border border-[#D96B1C] bg-[#D96B1C] px-3 font-mono text-[11px] font-semibold text-white">
               Next
             </Link>
           ) : null}

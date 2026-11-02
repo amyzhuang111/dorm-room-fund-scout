@@ -305,7 +305,7 @@ export function SampleInstrumentBrowse({
   const sliceInsight = useMemo(() => endSliceInsight(cards), [cards]);
   /** Leaderboard podium: top campuses by founders; signals = companies with signal on that desk. */
   const podiumRankedCount = useMemo(() => campusFoundersRanked(campuses).length, [campuses]);
-  /** Distinct campus seals on this loaded page — signature strip for more-end. */
+  /** Distinct campus seals on this loaded page  -  signature strip for more-end. */
   const pageCampusSeals = useMemo(() => {
     const seen = new Set<string>();
     const out: string[] = [];
@@ -529,7 +529,7 @@ export function SampleInstrumentBrowse({
           >
             <button
               type="button"
-              className="flex w-full items-center justify-between gap-3 px-3 py-1.5 text-left"
+              className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left"
               onClick={() => setMobileFiltersOpen((open) => !open)}
               aria-expanded={mobileFiltersOpen}
             >
@@ -659,7 +659,7 @@ export function SampleInstrumentBrowse({
         >
           <button
             type="button"
-            className="flex w-full items-center justify-between gap-3 px-3 py-2 text-left"
+            className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left"
             onClick={() => setMobileFiltersOpen((open) => !open)}
             aria-expanded={mobileFiltersOpen}
           >
@@ -737,7 +737,7 @@ export function SampleInstrumentBrowse({
                     <span className="mt-0.5 block text-[9px] uppercase tracking-[0.1em]">with a signal</span>
                   </p>
                 </div>
-                <div className="px-3 py-3 lg:hidden" data-mid-list-hero="" data-more-context-hero="">
+                <div className="px-3.5 py-4 lg:hidden" data-mid-list-hero="" data-more-context-hero="">
                   <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
                     {feed === "leaderboard" ? "Signals on this page" : "Companies on this page"}
                   </p>
@@ -773,6 +773,9 @@ export function SampleInstrumentBrowse({
                 const prevWhy = index > 0 ? whyItsHere(cards[index - 1]!) : null;
                 // Keep the first Why in a run; blank identical repeats that follow (ba9d2b0 desk parity).
                 const whyOverride = rawWhy && prevWhy === rawWhy ? null : undefined;
+                const prevSchool = index > 0 ? cards[index - 1]?.school ?? null : null;
+                // Mobile: one seal per campus group so 375 lists breathe.
+                const showCampusSeal = Boolean(card.school) && card.school !== prevSchool;
                 return (
                   <li key={card.id}>
                     {showDivider ? (
@@ -790,7 +793,7 @@ export function SampleInstrumentBrowse({
                         </div>
                         {/* Mobile more-375: mid-list context hero */}
                         <div
-                          className="border-t-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/40 px-3 py-3 sm:px-3.5 lg:hidden"
+                          className="border-t-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/40 px-3.5 py-4 sm:px-3.5 lg:hidden"
                           data-ledger-section={String(Math.floor(index / chunk) + 1)}
                           data-mid-list-hero=""
                         >
@@ -814,6 +817,7 @@ export function SampleInstrumentBrowse({
                       rank={feed === "leaderboard" ? index + 1 : null}
                       ranked={feed === "leaderboard"}
                       whyOverride={whyOverride}
+                      showCampusSeal={showCampusSeal}
                       />
                   </li>
                 );
@@ -900,23 +904,24 @@ export function SampleInstrumentBrowse({
                   data-end-insight={sliceInsight.kicker}
                 >
                   <div
-                    className="border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] pt-2.5"
+                    className="border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-0.5 pt-3.5 pb-1"
                     data-ledger-end-lead=""
                     data-ledger-end-more=""
                     data-pass-close=""
                   >
                     <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--fg-3,#5C647A)]">End of this batch</p>
                     {pageCampusSeals.length ? (
-                      <div className="mt-1.5 flex flex-wrap items-center gap-1" data-page-campus-seals="">
-                        {pageCampusSeals.slice(0, 6).map((label) => (
-                          <CampusSeal key={label} label={label} size="sm" />
+                      <div className="mt-2.5 flex flex-wrap items-center gap-1.5" data-page-campus-seals="">
+                        {pageCampusSeals.slice(0, 5).map((label) => (
+                          <CampusSeal key={label} label={label} size="xs" />
                         ))}
+                        <span className="ml-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">on this page</span>
                       </div>
                     ) : null}
-                    <p className="mt-1 font-mono text-[15px] font-semibold tabular-nums tracking-tight text-[color:var(--fg,#0B0E17)]" data-ledger-showing="" data-end-lead="" data-more-context="">
+                    <p className="mt-2.5 font-mono text-[15px] font-semibold tabular-nums tracking-tight text-[color:var(--fg,#0B0E17)]" data-ledger-showing="" data-end-lead="" data-more-context="">
                       <span>{cards.length.toLocaleString("en-US")}</span>
                       <span className="ml-1 text-[11px] font-medium text-[color:var(--fg-3,#5C647A)]">
-                        of {total.toLocaleString("en-US")} · batch {pageFrom.toLocaleString("en-US")}–{cards.length.toLocaleString("en-US")}
+                        of {total.toLocaleString("en-US")} · batch {pageFrom.toLocaleString("en-US")}-{cards.length.toLocaleString("en-US")}
                       </span>
                     </p>
                     {sliceInsight ? (
@@ -949,7 +954,7 @@ export function SampleInstrumentBrowse({
                       <Link
                         href={moreHref}
                         data-load-next=""
-                        className="mt-2.5 inline-flex h-11 w-full items-center justify-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] font-mono text-[13px] font-semibold text-white hover:opacity-90"
+                        className="mt-3.5 inline-flex h-11 w-full items-center justify-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] font-mono text-[13px] font-semibold text-white hover:opacity-90"
                       >
                         Load next
                       </Link>
@@ -1054,12 +1059,15 @@ function LedgerRow({
   rank,
   ranked = false,
   whyOverride,
+  showCampusSeal = true,
 }: {
   card: DirectoryCard;
   rank: number | null;
   ranked?: boolean;
   /** Null blanks a repeated Why line; undefined uses whyItsHere. */
   whyOverride?: string | null;
+  /** First row of a campus run shows the seal on mobile; desk keeps one per row. */
+  showCampusSeal?: boolean;
 }) {
   const subtitle = directoryCardSubtitle(card);
   const meta = signalMeta(card);
@@ -1069,8 +1077,8 @@ function LedgerRow({
       href={`/startup/${card.id}`}
       data-card-signals={card.signals}
       data-card-dated={card.latestSignalAt ? "1" : "0"}
-      className={`group flex items-start gap-3 px-3.5 transition-[background-color,color] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:gap-3 sm:px-3.5 ${
-        ranked ? "py-3.5 sm:py-3 lg:gap-3 lg:py-3.5" : "py-3.5 sm:py-3"
+      className={`group flex items-start px-3.5 transition-[background-color,color] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:px-3.5 ${
+        ranked ? "gap-3 py-3.5 sm:py-3 lg:gap-3 lg:py-3.5" : "gap-2.5 py-4 sm:gap-3 sm:py-3"
       }`}
     >
       {rank != null ? (
@@ -1084,9 +1092,20 @@ function LedgerRow({
           {String(rank).padStart(2, "0")}
         </span>
       ) : null}
-      {/* Campus seal is the owned list mark; company logo only when campus unknown */}
+      {/* Directory mobile: xs seal once per campus group. Ranked mobile + desk: per-row seal (04db2e8). */}
       {card.school ? (
-        <CampusSeal label={card.school} size={ranked ? "sm" : "md"} className="mt-0.5" />
+        ranked ? (
+          <CampusSeal label={card.school} size="sm" className="mt-0.5" />
+        ) : (
+          <>
+            <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center lg:hidden" aria-hidden={!showCampusSeal}>
+              {showCampusSeal ? <CampusSeal label={card.school} size="xs" /> : null}
+            </span>
+            <span className="mt-0.5 hidden shrink-0 lg:inline-flex">
+              <CampusSeal label={card.school} size="md" />
+            </span>
+          </>
+        )
       ) : (
         <LogoMark name={card.name} logoUrl={card.logoUrl} size={ranked ? 20 : 24} />
       )}
