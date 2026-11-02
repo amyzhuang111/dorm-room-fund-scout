@@ -191,6 +191,11 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForSelector("[data-corpus-explorer]", { timeout: 30000 });
   await page.waitForTimeout(800);
   await shot(page, "data-explorer-1440");
+  await page.goto(`${BASE}/campuses`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.waitForSelector("[data-campuses-index]", { timeout: 30000 });
+  await page.waitForTimeout(800);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await shot(page, "campuses-1440");
   await page.close();
 }
 
@@ -331,6 +336,11 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForSelector("[data-corpus-explorer]", { timeout: 30000 });
   await page.waitForTimeout(600);
   await shot(page, "data-explorer-375");
+  await page.goto(`${BASE}/campuses`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.waitForSelector("[data-campuses-index]", { timeout: 30000 });
+  await page.waitForTimeout(600);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await shot(page, "campuses-375");
   await page.close();
 }
 

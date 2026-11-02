@@ -45,11 +45,11 @@ export default async function DataExplorerPage({
   };
 
   return (
-    <div className="sample-paper mx-auto max-w-[1200px] px-3 py-4 sm:px-5" data-corpus-explorer="">
+    <div className="sample-paper mx-auto max-w-[1200px] px-3 py-3 pb-8 sm:px-5 sm:py-4" data-corpus-explorer="">
       <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[color:var(--line,#E1E5EF)] pb-3">
         <div>
           <p className="scout-kicker">Corpus</p>
-          <h1 className="mt-1 scout-display text-[36px] sm:text-[44px]">Full data</h1>
+          <h1 className="mt-1 scout-display text-[32px] leading-none sm:text-[44px]">Full data</h1>
           <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--ember,#D96B1C)]">{result.total.toLocaleString("en-US")}</span>
             {" companies · page "}
@@ -69,8 +69,8 @@ export default async function DataExplorerPage({
         </a>
       </div>
 
-      <form method="get" action="/data" className="mt-3 grid gap-2 border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3 sm:grid-cols-[1fr_auto_auto_auto_auto]">
-        <label className="block min-w-0">
+      <form method="get" action="/data" className="mt-3 grid grid-cols-2 gap-2 border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-2.5 sm:grid-cols-[1fr_auto_auto_auto_auto] sm:p-3" data-corpus-filters="">
+        <label className="col-span-2 block min-w-0 sm:col-span-1">
           <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Search</span>
           <input
             name="q"
@@ -112,19 +112,22 @@ export default async function DataExplorerPage({
             <option value="founded">Founded year</option>
           </select>
         </label>
-        <div className="flex items-end">
+        <div className="col-span-2 flex items-end sm:col-span-1">
           <button type="submit" className="inline-flex h-9 w-full items-center justify-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[11px] font-semibold text-white sm:w-auto">
             Apply
           </button>
         </div>
       </form>
 
-      <div className="mt-3 overflow-x-auto border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute" data-corpus-table="">
+      <div className="mt-3 overflow-x-auto border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] [-webkit-overflow-scrolling:touch]" data-corpus-table="">
         <table className="min-w-full border-collapse text-left text-[12px]">
           <thead className="bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">
             <tr>
               {["Company", "Campus", "Sector", "Stage", "Founded", "Signals", "Latest", "Program", "YC", "Founders", "Funding", "Site"].map((h) => (
-                <th key={h} className="whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2 font-semibold">
+                <th
+                  key={h}
+                  className={`whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2 font-semibold ${h === "Company" ? "sticky left-0 z-[1] bg-[color:var(--cobalt-haze,#E8ECFA)]" : ""}`}
+                >
                   {h}
                 </th>
               ))}
@@ -133,7 +136,7 @@ export default async function DataExplorerPage({
           <tbody className="divide-y divide-[color:var(--line,#E1E5EF)]">
             {result.rows.map((row) => (
               <tr key={row.id} className="align-top hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/30" data-corpus-row="">
-                <td className="px-2.5 py-2 font-semibold tracking-tight">
+                <td className="sticky left-0 z-[1] bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 font-semibold tracking-tight shadow-[2px_0_0_0_color:var(--line,#E1E5EF)]">
                   <Link href={`/startup/${row.id}`} className="text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline">
                     {row.name}
                   </Link>

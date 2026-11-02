@@ -88,7 +88,7 @@ export function ScoutSignalPodium({
       <div className="flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4">
         <div className="min-w-0">
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[color:var(--ember,#D96B1C)]">Signal podium</p>
-          <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Top campuses by founder names</p>
+          <p className="mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Ranked by founder names</p>
         </div>
         <p className="shrink-0 text-right font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
           <span className="font-bold text-[color:var(--ember,#D96B1C)]">{totalOnDesk.toLocaleString("en-US")}</span>

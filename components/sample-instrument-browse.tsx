@@ -312,7 +312,8 @@ export function SampleInstrumentBrowse({
       if (!id || !(card.signals > 0)) continue;
       signaledByCampus.set(id, (signaledByCampus.get(id) ?? 0) + 1);
     }
-    return campusFoundersTop(campuses, CAMPUS_FOUNDERS_VISIBLE).map((c) => ({
+    // Mobile signals fold needs company cards above the fold (2e37f4f). Top-10 lives on home + /campuses.
+    return campusFoundersTop(campuses, 3).map((c) => ({
       id: c.id,
       label: shortCampusLabel(c.id, c.name),
       founders: c.founders,
@@ -1021,8 +1022,8 @@ function LedgerRow({
         <p
           className={
             ranked
-              ? "line-clamp-2 break-words font-[family-name:var(--font-display)] text-[19px] font-semibold leading-snug tracking-[-0.03em] text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:font-sans sm:text-[18px] sm:leading-5 sm:tracking-tight sm:[overflow-wrap:anywhere]"
-              : "truncate font-[family-name:var(--font-display)] text-[18px] font-semibold leading-5 tracking-[-0.03em] text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:font-sans sm:text-[16px] sm:tracking-tight"
+              ? "line-clamp-2 break-words text-[17px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
+              : "truncate text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
           }
         >
           {card.name}
@@ -1033,9 +1034,9 @@ function LedgerRow({
           </p>
         ) : null}
         {why ? (
-          <p className="mt-2 border-l-[3px] border-[color:var(--ember,#D96B1C)] bg-[color:var(--cobalt-haze,#E8ECFA)]/25 py-1.5 pl-2.5 pr-2 text-[13px] leading-5 text-[color:var(--fg,#0B0E17)] sm:mt-1.5 sm:border-l-2 sm:bg-transparent sm:py-0 sm:pl-2 sm:pr-0 sm:text-[12px]" data-why-here="">
-            <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Why it&apos;s here</span>
-            <span className="mt-0.5 block font-medium tracking-tight">{why}</span>
+          <p className="mt-1.5 border-l-2 border-[color:var(--ember,#D96B1C)]/45 pl-2 text-[12px] leading-5 text-[color:var(--fg,#0B0E17)]" data-why-here="">
+            <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Why it&apos;s here</span>
+            <span className="mt-0.5 block">{why}</span>
           </p>
         ) : (
           <p className="sr-only" data-why-here="" data-why-blank="1">Why it&apos;s here blank</p>

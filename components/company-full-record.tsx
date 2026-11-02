@@ -8,23 +8,18 @@ import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="border-b border-[color:var(--line,#E1E5EF)] py-2.5 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-3">
+    <div className="border-b border-[color:var(--line,#E1E5EF)] py-3 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-3 sm:py-2.5">
       <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">{label}</dt>
-      <dd className="mt-1 text-[13px] leading-5 text-[color:var(--fg,#0B0E17)] sm:mt-0">{children}</dd>
+      <dd className="mt-1.5 text-[14px] leading-5 text-[color:var(--fg,#0B0E17)] sm:mt-0 sm:text-[13px]">{children}</dd>
     </div>
   );
 }
 
-function Available({ value, children }: { value: unknown; children?: React.ReactNode }) {
-  const empty =
-    value == null ||
-    value === "" ||
-    (Array.isArray(value) && value.length === 0);
-  if (empty) return <span className="text-[color:var(--fg-3,#5C647A)]">Not available</span>;
-  return <>{children ?? String(value)}</>;
+function isEmpty(value: unknown): boolean {
+  return value == null || value === "" || (Array.isArray(value) && value.length === 0);
 }
 
-/** Every stored company field with Not available when missing. Real DB values only. */
+/** Every stored company field; missing ones collapse into one Not yet sourced line. */
 export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
   const profile = project.profile;
   const funding = displayedFunding(profile);
@@ -35,41 +30,59 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
   });
   const yc = profile.investors.filter((i) => /y combinator/i.test(i.name));
   const campus = formatCampusList(project.universities);
+  const sectorText = (project.sectorTags.length ? project.sectorTags : [project.sector]).filter(Boolean).join(" · ");
+  const otherLinks = [links.fallback, ...links.extras].filter(Boolean);
+  const website = links.website || profile.website?.text || null;
+  const companyLi = links.linkedin || profile.companyLinkedin?.text || null;
+  const stage = profile.rounds[0]?.stage ?? null;
+
+  const missing: string[] = [];
+  if (isEmpty(campus)) missing.push("Campus");
+  if (isEmpty(sectorText)) missing.push("Sector");
+  if (isEmpty(stage)) missing.push("Stage");
+  if (isEmpty(profile.foundedYear)) missing.push("Founded");
+  if (isEmpty(profile.hq)) missing.push("HQ");
+  if (isEmpty(profile.operatingStatus)) missing.push("Status");
+  if (isEmpty(profile.teamSize)) missing.push("Team size");
+  if (isEmpty(profile.description)) missing.push("Description");
+  if (isEmpty(funding)) missing.push("Funding");
+  if (isEmpty(profile.rounds)) missing.push("Funding rounds");
+  if (isEmpty(profile.investors)) missing.push("Investors");
+  if (isEmpty(yc)) missing.push("YC batch");
+  if (isEmpty(website)) missing.push("Website");
+  if (isEmpty(companyLi)) missing.push("Company LinkedIn");
+  if (isEmpty(otherLinks)) missing.push("Other links");
+  if (isEmpty(project.founderLinks)) missing.push("Founders");
+  if (isEmpty(project.signals)) missing.push("Signals");
 
   return (
-    <section className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)]" data-company-full-record="">
-      <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3">
+    <section
+      className="relative mb-6 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] pb-2 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)] sm:mb-0"
+      data-company-full-record=""
+    >
+      <div className="border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3.5 py-3.5">
         <p className="scout-kicker">Full record</p>
-        <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">Every field stored for this company</p>
+        <p className="mt-1 scout-display text-[28px] leading-none sm:text-[24px]">Every field on file</p>
+        <p className="mt-1.5 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">
+          Sourced values only · empty fields listed once below
+        </p>
       </div>
       <dl className="px-3.5">
-        <Field label="Name"><Available value={project.name}>{project.name}</Available></Field>
-        <Field label="Campus"><Available value={campus || null}>{campus}</Available></Field>
-        <Field label="Sector">
-          <Available value={project.sectorTags[0] || project.sector}>
-            {(project.sectorTags.length ? project.sectorTags : [project.sector]).filter(Boolean).join(" · ")}
-          </Available>
-        </Field>
-        <Field label="Stage">
-          <Available value={profile.rounds[0]?.stage ?? null}>{profile.rounds[0]?.stage}</Available>
-        </Field>
-        <Field label="Founded">
-          <Available value={profile.foundedYear}>{profile.foundedYear?.text}</Available>
-        </Field>
-        <Field label="HQ"><Available value={profile.hq}>{profile.hq?.text}</Available></Field>
-        <Field label="Status">
-          <Available value={profile.operatingStatus}>{profile.operatingStatus?.text}</Available>
-        </Field>
-        <Field label="Team size"><Available value={profile.teamSize}>{profile.teamSize?.text}</Available></Field>
-        <Field label="Description">
-          <Available value={profile.description}>{profile.description?.text}</Available>
-        </Field>
-        <Field label="Funding"><Available value={funding}>{funding?.text}</Available></Field>
-        <Field label="Funding rounds">
-          <Available value={profile.rounds}>
-            <ul className="space-y-1">
+        <Field label="Name">{project.name || "Not available"}</Field>
+        {!isEmpty(campus) ? <Field label="Campus">{campus}</Field> : null}
+        {!isEmpty(sectorText) ? <Field label="Sector">{sectorText}</Field> : null}
+        {!isEmpty(stage) ? <Field label="Stage">{stage}</Field> : null}
+        {!isEmpty(profile.foundedYear) ? <Field label="Founded">{profile.foundedYear?.text}</Field> : null}
+        {!isEmpty(profile.hq) ? <Field label="HQ">{profile.hq?.text}</Field> : null}
+        {!isEmpty(profile.operatingStatus) ? <Field label="Status">{profile.operatingStatus?.text}</Field> : null}
+        {!isEmpty(profile.teamSize) ? <Field label="Team size">{profile.teamSize?.text}</Field> : null}
+        {!isEmpty(profile.description) ? <Field label="Description">{profile.description?.text}</Field> : null}
+        {!isEmpty(funding) ? <Field label="Funding">{funding?.text}</Field> : null}
+        {!isEmpty(profile.rounds) ? (
+          <Field label="Funding rounds">
+            <ul className="space-y-1.5">
               {profile.rounds.map((round, i) => (
-                <li key={`${round.sourceUrl}-${i}`}>
+                <li key={`${round.sourceUrl}-${i}`} className="leading-5">
                   {formatRound(round) || "Round on record"}
                   {round.sourceUrl ? (
                     <>
@@ -82,11 +95,11 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
                 </li>
               ))}
             </ul>
-          </Available>
-        </Field>
-        <Field label="Investors">
-          <Available value={profile.investors}>
-            <ul className="space-y-1">
+          </Field>
+        ) : null}
+        {!isEmpty(profile.investors) ? (
+          <Field label="Investors">
+            <ul className="space-y-1.5">
               {profile.investors.map((inv, i) => (
                 <li key={`${inv.name}-${i}`}>
                   {inv.name}
@@ -103,33 +116,29 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
                 </li>
               ))}
             </ul>
-          </Available>
-        </Field>
-        <Field label="YC batch">
-          <Available value={yc}>
+          </Field>
+        ) : null}
+        {!isEmpty(yc) ? (
+          <Field label="YC batch">
             {yc.map((i) => [i.name, i.batch].filter(Boolean).join(" · ")).join(" · ")}
-          </Available>
-        </Field>
-        <Field label="Website">
-          <Available value={links.website || profile.website}>
-            {links.website || profile.website?.text ? (
-              <a href={links.website || profile.website!.text} target="_blank" rel="noopener noreferrer" className="text-[color:var(--cobalt,#2F4FD8)] underline">
-                {links.website || profile.website!.text}
-              </a>
-            ) : null}
-          </Available>
-        </Field>
-        <Field label="Company LinkedIn">
-          <Available value={links.linkedin || profile.companyLinkedin}>
-            {(links.linkedin || profile.companyLinkedin?.text) && (
-              <a href={links.linkedin || profile.companyLinkedin!.text} target="_blank" rel="noopener noreferrer" className="text-[color:var(--cobalt,#2F4FD8)] underline">
-                {links.linkedin || profile.companyLinkedin!.text}
-              </a>
-            )}
-          </Available>
-        </Field>
-        <Field label="Other links">
-          <Available value={[links.fallback, ...links.extras].filter(Boolean)}>
+          </Field>
+        ) : null}
+        {!isEmpty(website) ? (
+          <Field label="Website">
+            <a href={website!} target="_blank" rel="noopener noreferrer" className="break-all text-[color:var(--cobalt,#2F4FD8)] underline">
+              {website}
+            </a>
+          </Field>
+        ) : null}
+        {!isEmpty(companyLi) ? (
+          <Field label="Company LinkedIn">
+            <a href={companyLi!} target="_blank" rel="noopener noreferrer" className="break-all text-[color:var(--cobalt,#2F4FD8)] underline">
+              {companyLi}
+            </a>
+          </Field>
+        ) : null}
+        {!isEmpty(otherLinks) ? (
+          <Field label="Other links">
             <ul className="space-y-1">
               {links.fallback ? (
                 <li>
@@ -146,11 +155,11 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
                 </li>
               ))}
             </ul>
-          </Available>
-        </Field>
-        <Field label="Founders">
-          <Available value={project.founderLinks}>
-            <ul className="space-y-2">
+          </Field>
+        ) : null}
+        {!isEmpty(project.founderLinks) ? (
+          <Field label="Founders">
+            <ul className="space-y-2.5">
               {project.founderLinks.map((f) => (
                 <li key={f.personId}>
                   <Link href={`/founder/discover?founder=${encodeURIComponent(f.personId)}`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:underline">
@@ -169,10 +178,10 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
                 </li>
               ))}
             </ul>
-          </Available>
-        </Field>
-        <Field label="Signals">
-          <Available value={project.signals}>
+          </Field>
+        ) : null}
+        {!isEmpty(project.signals) ? (
+          <Field label="Signals">
             <ul className="space-y-2" data-full-record-signals="">
               {project.signals.map((s) => (
                 <li key={s.id} className="rounded-sm border border-[color:var(--line,#E1E5EF)] px-2.5 py-2">
@@ -195,8 +204,16 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
                 </li>
               ))}
             </ul>
-          </Available>
-        </Field>
+          </Field>
+        ) : null}
+        {missing.length > 0 ? (
+          <div className="border-b border-[color:var(--line,#E1E5EF)] py-3 last:border-b-0" data-not-yet-sourced="">
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Not yet sourced</p>
+            <p className="mt-1.5 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">
+              {missing.join(" · ")}
+            </p>
+          </div>
+        ) : null}
       </dl>
     </section>
   );

@@ -667,3 +667,89 @@ html[data-sample="halflight"] body {
   opacity: 0.85;
 }
 
+
+
+/* Campuses index — shared row chrome so SSR stays under 210 KiB */
+.sample-paper .campus-index-row {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+  column-gap: 0.5rem;
+  row-gap: 0.25rem;
+  align-items: baseline;
+  padding: 0.75rem 0.75rem;
+}
+.sample-paper .campus-index-row:hover {
+  background: color-mix(in srgb, var(--cobalt-haze, #E8ECFA) 30%, transparent);
+}
+.sample-paper .campus-index-row .campus-rank {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--ember, #D96B1C);
+}
+.sample-paper .campus-index-row .campus-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--fg, #0B0E17);
+}
+.sample-paper .campus-index-row .campus-country {
+  grid-column: 2;
+  grid-row: 2;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  color: var(--fg-3, #5C647A);
+}
+.sample-paper .campus-index-row .campus-founders {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  color: var(--ember, #D96B1C);
+}
+.sample-paper .campus-index-row .campus-meta {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.75rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-2, #3F465C);
+}
+@media (min-width: 640px) {
+  .sample-paper .campus-index-row {
+    grid-template-columns: 3rem minmax(0, 1.4fr) minmax(0, 1fr) 5.5rem 5.5rem 5rem;
+    align-items: center;
+    padding: 0.625rem 0.75rem;
+  }
+  .sample-paper .campus-index-row .campus-rank {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--fg-3, #5C647A);
+  }
+  .sample-paper .campus-index-row .campus-name { font-size: 15px; }
+  .sample-paper .campus-index-row .campus-country {
+    grid-column: auto;
+    grid-row: auto;
+    font-size: 12px;
+  }
+  .sample-paper .campus-index-row .campus-founders { font-size: 14px; }
+  .sample-paper .campus-index-row .campus-meta {
+    display: contents;
+  }
+  .sample-paper .campus-index-row .campus-meta > span {
+    text-align: right;
+    font-size: 13px;
+    color: var(--fg, #0B0E17);
+  }
+  .sample-paper .campus-index-row .campus-meta .sm-only-label { display: none; }
+}
+@media (max-width: 639px) {
+  .sample-paper .campus-index-row .desk-only-num { display: none; }
+}

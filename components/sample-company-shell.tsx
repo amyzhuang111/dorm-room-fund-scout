@@ -119,7 +119,7 @@ export function SampleCompanyShell({
   return (
     <div className="sample-paper min-h-[calc(100dvh-48px)]">
       <SampleTheme />
-      <div className="mx-auto w-full max-w-[1280px] px-3 py-3 sm:px-5">
+      <div className="mx-auto w-full max-w-[1280px] px-3 py-3 pb-32 sm:px-5 sm:pb-5">
         {/* Magazine dossier cover · desk + mobile share the profile treatment */}
         <div className="mb-3 hidden border-b border-[color:var(--line,#E1E5EF)] pb-3 sm:mb-4 sm:block sm:pb-4" data-dossier-hero="" data-mobile-magazine="">
           <div className="flex flex-wrap items-center gap-2">
@@ -278,19 +278,15 @@ export function SampleCompanyShell({
           data-mobile-chrono-identity=""
           data-company-mobile-hero=""
         >
-          <div className="border-b border-[color:var(--line,#E1E5EF)] pb-4" data-dossier-spread-mobile="">
-            <p className="scout-kicker">Dossier</p>
-            <p className="mt-2 scout-display text-[48px]" data-company-name-lead="">
-              {dossier?.name ?? "Company"}
-            </p>
-            <div className="mt-3 flex items-end gap-3 border border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3 py-2" data-dossier-signal-plate="">
-              <div className="min-w-0">
-                <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">On campus wire</p>
-                <p className="mt-0.5 scout-figure text-[28px] leading-none">{wireCount.toLocaleString("en-US")}</p>
-              </div>
-              <p className="mb-0.5 min-w-0 flex-1 font-mono text-[11px] leading-snug text-[color:var(--fg-2,#3F465C)]">{wireUnit}</p>
+          <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] pb-4 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--ember,#D96B1C)]" data-dossier-spread-mobile="">
+            <div className="border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/40 px-3.5 py-3">
+              <p className="scout-kicker">Scout dossier</p>
+              <p className="mt-1.5 scout-display text-[44px] leading-[0.92]" data-company-name-lead="">
+                {dossier?.name ?? "Company"}
+              </p>
             </div>
-            <p className="mt-2.5 border-l-[3px] border-[color:var(--cobalt,#2F4FD8)] pl-3 font-mono text-[13px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+            <div className="px-3.5 pt-3">
+            <p className="border-l-[3px] border-[color:var(--cobalt,#2F4FD8)] pl-3 font-mono text-[13px] leading-5 tabular-nums text-[color:var(--fg-2,#3F465C)]">
               {dossier?.campus ? <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{dossier.campus}</span> : <span>Campus not on record</span>}
               {dossier?.year != null ? (
                 <>
@@ -306,12 +302,38 @@ export function SampleCompanyShell({
                 </>
               ) : null}
             </p>
-            {(dossier?.founders?.length ?? 0) > 0 ? (
-              <p className="mt-2 font-mono text-[12px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                <span className="font-bold text-[color:var(--fg,#0B0E17)]">{dossier!.founders!.length.toLocaleString("en-US")}</span>
-                {dossier!.founders!.length === 1 ? " founder on record" : " founders on record"}
-              </p>
-            ) : null}
+            <p className="mt-2 flex flex-wrap gap-x-2 gap-y-1 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              {dossier?.primaryProgram ? (
+                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier.primaryProgram}</span>
+              ) : null}
+              {(dossier?.founders?.length ?? 0) > 0 ? (
+                <span>
+                  {dossier?.primaryProgram ? <span aria-hidden> · </span> : null}
+                  <span className="font-bold text-[color:var(--fg,#0B0E17)]">{dossier!.founders!.length.toLocaleString("en-US")}</span>
+                  {dossier!.founders!.length === 1 ? " founder" : " founders"}
+                  {dossier!.founders!.length <= 3 ? (
+                    <span className="text-[color:var(--fg-3,#5C647A)]">
+                      {" ("}
+                      {dossier!.founders!.join(", ")}
+                      {")"}
+                    </span>
+                  ) : null}
+                </span>
+              ) : null}
+              {(dossier?.signals ?? 0) > 0 ? (
+                <span>
+                  {" · "}
+                  <span className="font-bold text-[color:var(--ember,#D96B1C)]">{dossier!.signals!.toLocaleString("en-US")}</span>
+                  {" signals"}
+                </span>
+              ) : null}
+            </p>
+            <p className="mt-2.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-dossier-signal-plate="">
+              <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
+              {" "}
+              {wireUnit}
+              {wireIncludeNote ? <>{" · "}{wireIncludeNote}</> : null}
+            </p>
             {/* Peer signal strip · hide identical scrape dates; prefer kind labels */}
             <ol className="mt-2.5 space-y-1" data-dossier-signal-timeline="">
               {(() => {
@@ -342,6 +364,7 @@ export function SampleCompanyShell({
                 });
               })()}
             </ol>
+            </div>
           </div>
         </div>
 
@@ -365,7 +388,7 @@ export function SampleCompanyShell({
             <div className="mb-3 lg:hidden" data-dossier-wire-mobile="" data-mobile-magazine-wire="">
               <MobileWireStrip companies={wireCompanies} label="Campus peers" surface="company" />
             </div>
-            <div className="company-instrument relative overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3.5 sm:overflow-hidden sm:border-[color:var(--cobalt,#2F4FD8)]/25 sm:p-4 sm:before:absolute sm:before:inset-y-0 sm:before:left-0 sm:before:w-0.5 sm:before:bg-[color:var(--cobalt,#2F4FD8)] sm:before:content-['']">
+            <div className="company-instrument relative overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3.5 pb-8 sm:overflow-hidden sm:border-[color:var(--cobalt,#2F4FD8)]/25 sm:p-4 sm:pb-4 sm:before:absolute sm:before:inset-y-0 sm:before:left-0 sm:before:w-0.5 sm:before:bg-[color:var(--cobalt,#2F4FD8)] sm:before:content-['']">
               {children}
             </div>
           </div>
