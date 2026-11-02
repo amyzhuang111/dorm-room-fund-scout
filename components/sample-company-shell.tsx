@@ -271,7 +271,7 @@ export function SampleCompanyShell({
         {/* Mobile identity: one strong company lead · peers live in the wire strip below. */}
         {/* r30: drop redundant mobile nav row; sticky chrome already covers back. */}
         <div
-          className="mb-4 mt-1 scroll-mt-[5.5rem] sm:hidden"
+          className="mb-3 mt-1 scroll-mt-[5.5rem] sm:hidden"
           data-dossier-timeline=""
           data-mobile-chrono-identity=""
           data-company-mobile-hero=""
@@ -371,7 +371,7 @@ export function SampleCompanyShell({
             <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">
               {campusPeers ? "Campus peers" : sectorPeers ? "Sector peers" : "Nearby signals"}
             </p>
-            <ol className="mt-1 space-y-0.5" data-dossier-signal-timeline="">
+            <ol className="mt-1 space-y-0 sm:space-y-0.5" data-dossier-signal-timeline="">
               {(() => {
                 const scored = wireCompanies
                   .filter((c) => (c.signals ?? 0) > 0 || (c.latestSignalAt ?? "").length >= 4)

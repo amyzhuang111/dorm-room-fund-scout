@@ -719,8 +719,8 @@ html[data-sample="halflight"] body {
   }
   .sample-paper [data-company-full-record] h2,
   .sample-paper [data-company-full-record] [data-full-record-title] {
-    font-size: 26px !important;
-    line-height: 1.1 !important;
+    font-size: 28px !important;
+    line-height: 1.05 !important;
   }
   .sample-paper [data-corpus-explorer] .scout-display {
     font-size: 36px !important;

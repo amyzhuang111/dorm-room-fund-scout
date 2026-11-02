@@ -61,7 +61,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
     ? normalizeOpenQuestion(strongestConcern.rationale)
     : "No unresolved eligibility concerns on record.";
   const whyLook = (
-      <section className="dossier-brief relative space-y-1.5 overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] p-2 sm:space-y-2 sm:p-2.5" data-why-look-section="">
+      <section className="dossier-brief relative space-y-1 overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] p-2 sm:space-y-2 sm:p-2.5" data-why-look-section="">
         <div>
           <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Why look</h3>
           <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{project.latestSignalNote ?? "No supporting evidence recorded yet."}</p>
@@ -75,7 +75,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
         </div>
         <div>
           <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Open question</h3>
-          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]" data-open-question="">
+          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)] sm:leading-snug" data-open-question="">
             {openQ}
           </p>
         </div>
@@ -91,7 +91,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
   );
 
   return (
-    <div className="space-y-3 p-2.5 sm:space-y-5 sm:p-4">
+    <div className="space-y-2.5 p-2 sm:space-y-5 sm:p-4">
       {/* Mobile: Why look above Funding so sim-375 matches 73a fold (Funding peeks) */}
       <div className="sm:hidden">{whyLook}</div>
 
