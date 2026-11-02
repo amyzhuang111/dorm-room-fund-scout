@@ -14,7 +14,7 @@ import {
   buildOverlayCounts,
   type OverlayRow,
 } from "@/lib/domain/overlay-counts";
-import { shortCampusLabel } from "@/lib/domain/campuses";
+import { resolveCampusSlug, shortCampusLabel } from "@/lib/domain/campuses";
 import { CampusSeal } from "@/components/campus-seal";
 import { MobileListMast } from "@/components/mobile-list-mast";
 import { CurrentViewDock } from "@/components/current-view-dock";
@@ -395,21 +395,11 @@ export function SampleInstrumentBrowse({
   const endLeadCampusHref = useMemo(() => {
     const lead = pageCampusRanks[0];
     if (!lead) return null;
-    // Prefer schoolId from cards; else resolve campuses[] by id/slug — never name===label.
-    let leadId = lead.id;
-    if (!leadId) {
-      const slug = lead.label
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-|-$/g, "");
-      const hit = campuses.find(
-        (c) => c.id === `univ_${slug}` || c.id.endsWith(`_${slug}`) || c.id === slug || c.id.replace(/^univ_/, "") === slug,
-      );
-      leadId = hit?.id ?? null;
-    }
+    // Prefer schoolId from cards; else resolveCampusSlug (id/slug/alias) — never name===label.
+    const leadId = lead.id || resolveCampusSlug(lead.label) || null;
     if (!leadId) return null;
     return browseHref({ feed, sector, kind, campus: leadId, q: query, sort: feed === "directory" ? sort : undefined });
-  }, [pageCampusRanks, campuses, feed, sector, kind, query, sort]);
+  }, [pageCampusRanks, feed, sector, kind, query, sort]);
   /** Desk-wide campus leader for mobile list mast (real counts). */
   const deskCampusTop = useMemo(() => {
     const map = new Map<string, { label: string; companies: number; signaled: number }>();
