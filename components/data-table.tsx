@@ -230,7 +230,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
           {(campusLocked || verifiedFilled > 0) && (
             <details className="relative">
               <summary className={`${control} cursor-pointer list-none`}>Columns</summary>
-              <div className="absolute z-30 mt-1 w-40 rounded border border-line bg-bg p-2 text-[14px] text-fg shadow-[var(--shadow-menu)]">
+              <div className="absolute right-0 z-30 mt-1 w-40 rounded border border-line bg-bg p-2 text-[14px] text-fg shadow-[var(--shadow-menu)]" data-columns-panel="">
                 {campusLocked && (
                   <label className="flex items-center gap-2 py-1">
                     <input type="checkbox" checked={showTier} onChange={(event) => setTierChoice(event.target.checked)} />
@@ -258,16 +258,16 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
         </div>
       </div>
       <div className="mt-3 max-h-[calc(100dvh-220px)] overflow-auto border-t border-line-strong">
-        <table className="w-full table-fixed border-separate border-spacing-0 text-left text-[14px] text-fg">
+        <table className="w-full min-w-[720px] table-fixed border-separate border-spacing-0 text-left text-[14px] text-fg">
           <thead className="sticky top-0 z-20">
             <tr className="h-9 text-[14px] text-fg">
-              <th className="sticky top-0 z-20 w-8 border-b border-line-strong bg-bg px-2 font-medium" />
-              <th className="sticky top-0 z-20 w-[30%] border-b border-line-strong bg-bg px-2 font-medium">Project</th>
-              {showTier && <th className="sticky top-0 z-20 w-[72px] border-b border-line-strong bg-bg px-2 font-medium">Tier</th>}
-              {!campusLocked && <th className="sticky top-0 z-20 w-[16%] border-b border-line-strong bg-bg px-2 font-medium">Campus</th>}
-              <th className="sticky top-0 z-20 border-b border-line-strong bg-bg px-2 font-medium">Signal</th>
-              {showDate && <th className="sticky top-0 z-20 w-[88px] border-b border-line-strong bg-bg px-2 text-right font-medium">Date</th>}
-              {showVerified && <th className="sticky top-0 z-20 w-[76px] border-b border-line-strong bg-bg px-2 font-medium">Verified</th>}
+              <th className="sticky top-0 z-20 w-8 overflow-hidden truncate border-b border-line-strong bg-bg px-2 font-medium" />
+              <th className="sticky top-0 z-20 w-[30%] overflow-hidden truncate border-b border-line-strong bg-bg px-2 font-medium">Project</th>
+              {showTier && <th className="sticky top-0 z-20 w-[72px] overflow-hidden truncate border-b border-line-strong bg-bg px-2 font-medium">Tier</th>}
+              {!campusLocked && <th className="sticky top-0 z-20 w-[16%] overflow-hidden truncate border-b border-line-strong bg-bg px-2 font-medium">Campus</th>}
+              <th className="sticky top-0 z-20 overflow-hidden truncate border-b border-line-strong bg-bg px-2 font-medium">Signal</th>
+              {showDate && <th className="sticky top-0 z-20 w-[88px] overflow-hidden truncate border-b border-line-strong bg-bg px-2 text-right font-medium">Date</th>}
+              {showVerified && <th className="sticky top-0 z-20 w-[76px] overflow-hidden truncate border-b border-line-strong bg-bg px-2 font-medium">Verified</th>}
             </tr>
           </thead>
           <tbody>
@@ -316,7 +316,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                     )}
                     <td className={`${pad} px-2`}>
                       {text ? (
-                        <span className="clamp-2 text-[14px] leading-5 text-fg" title={row.full ?? text}>{text}</span>
+                        <span className="clamp-2 max-h-10 overflow-hidden text-[14px] leading-5 text-fg" title={row.full ?? text}>{text}</span>
                       ) : (
                         <span className="text-[14px] text-fg-2">No signal yet</span>
                       )}

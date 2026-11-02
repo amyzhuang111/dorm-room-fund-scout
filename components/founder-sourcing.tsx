@@ -29,12 +29,12 @@ export function FounderSearchBar({
 }) {
   return (
     <form
-      className="mb-2 lg:mb-4"
+      className="mb-4 lg:mb-4"
       role="search"
       onSubmit={(event) => event.preventDefault()}
       data-founder-search=""
     >
-      <label htmlFor="founder-search" className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
+      <label htmlFor="founder-search" className="block font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
         Search founders
       </label>
       <input
@@ -43,7 +43,7 @@ export function FounderSearchBar({
         value={query}
         onChange={(event) => onQuery(event.target.value)}
         placeholder="Name, campus, program, or company"
-        className="mt-1 h-9 w-full rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[16px] lg:h-11 text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)] focus:border-[color:var(--cobalt,#2F4FD8)]"
+        className="mt-2 h-10 w-full rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-3 text-[16px] text-[color:var(--fg,#0B0E17)] outline-none placeholder:text-[color:var(--fg-3,#5C647A)] focus:border-[color:var(--cobalt,#2F4FD8)] lg:h-11"
       />
     </form>
   );
@@ -127,10 +127,10 @@ export function FounderResults({
       data-founder-results=""
       data-founder-mobile-min={reserveMobileFirstPage ? String(FOUNDER_MOBILE_PAGE_MIN_PX) : undefined}
     >
-      <div className="mb-2 flex flex-wrap items-end justify-between gap-2 lg:mb-3 lg:gap-3">
+      <div className="mb-2 flex flex-wrap items-end justify-between gap-2 lg:mb-4 lg:gap-2">
         <div>
-          <h2 className="text-[22px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] lg:text-[18px]">Founders</h2>
-          <p className="mt-1 text-[14px] text-[color:var(--fg-2,#3F465C)]">
+          <h2 className="text-[20px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] lg:text-[18px]">Founders</h2>
+          <p className="mt-2 text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]">
             {status === "ready" ? (
               <>
                 <span className="font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]" data-count={unfiltered ? "founders-indexed" : undefined}>
@@ -169,7 +169,7 @@ export function FounderResults({
           </p>
         </div>
       </div>
-      <div className="mb-3" data-founder-filters="">
+      <div className="mb-4" data-founder-filters="">
         <button
           type="button"
           className="mb-2 inline-flex h-8 items-center gap-1.5 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)] lg:hidden"
@@ -273,8 +273,8 @@ export function FounderResults({
             const why = whyById.get(founder.id) ?? null;
             return (
               <li key={founder.id} data-founder-card="" data-signal-chrome={founder.signalTypes.includes("funding") ? "funding" : founder.signalTypes.includes("launch") ? "launch" : founder.signalTypes.includes("award") ? "award" : founder.signalTypes.length ? "other" : "none"}>
-                <article className="bg-[color:var(--bg,#FFFFFF)] px-3.5 py-4 sm:px-4 lg:px-3 lg:py-2.5" data-founder-card-body="">
-                  <div className="flex items-start gap-3.5 lg:gap-3">
+                <article className="bg-[color:var(--bg,#FFFFFF)] px-4 py-4 lg:px-3 lg:py-3" data-founder-card-body="">
+                  <div className="flex items-start gap-3 lg:gap-3">
                     <CampusSeal label={founder.campus} size="xl" className="mt-0.5 max-lg:!inline-grid lg:!hidden" />
                     <CampusSeal label={founder.campus} size="lg" className="mt-0.5 !hidden lg:!inline-grid" />
                     <div className="min-w-0 flex-1 overflow-visible">

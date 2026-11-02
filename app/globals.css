@@ -1158,3 +1158,22 @@ html[data-sample="halflight"] body {
   color: #0B0E17;
   background: #FFFFFF;
 }
+
+
+/* r38: closed <details> content must not paint or measure into the page. */
+details:not([open]) > :not(summary) {
+  display: none !important;
+}
+
+/* r38: clip figure glyph metrics so stacked type never collides. */
+.sample-paper [data-mobile-list-mast] .m-figure {
+  height: 0.9em;
+  overflow: hidden;
+  line-height: 1 !important;
+}
+.sample-paper [data-mobile-list-mast] .m-takeaway {
+  margin-top: 8px;
+}
+.sample-paper [data-fold-peak-figure] {
+  overflow: hidden;
+}

@@ -587,7 +587,7 @@ export function SampleInstrumentBrowse({
               </button>
             </div>
           </div>
-          <div className="h-[min(42vh,400px)] pt-1" data-contents-facet-map="">
+          <div className="mt-2 h-[min(42vh,400px)] overflow-x-hidden overflow-y-auto pt-2" data-contents-facet-map="">
             <FacetRail
               companies={companiesLive}
               campuses={campuses}
@@ -598,7 +598,9 @@ export function SampleInstrumentBrowse({
             />
           </div>
           {/* Compact current-view logo strip (P0). Keep short so rails stay primary. */}
-          <CurrentViewDock companies={dockCompanies} max={8} />
+          <div className="mt-2">
+            <CurrentViewDock companies={dockCompanies} max={8} />
+          </div>
         </div>
       </aside>
 

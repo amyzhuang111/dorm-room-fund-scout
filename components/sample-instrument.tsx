@@ -1133,13 +1133,13 @@ export function SignalsLanded({ companies, compact = false }: { companies: Facet
         <div className="flex items-end justify-between gap-3">
           <div className="min-w-0">
             <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Peak · {peak.short} {peak.id.slice(0, 4)}</p>
-            <p className="mt-1 scout-figure text-[32px] leading-none">
+            <p className="mt-2 h-8 overflow-hidden scout-figure text-[32px] leading-none">
               {peak.count.toLocaleString("en-US")}
-              <span className="ml-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
+              <span className="ml-2 text-[13px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
                 / {detail.dated.toLocaleString("en-US")}
               </span>
             </p>
-            <p className="mt-1 text-[12px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+            <p className="mt-2 text-[12px] font-semibold leading-4 tracking-tight text-[color:var(--fg,#0B0E17)]">
               {peak.label} took {Math.round((peak.count / Math.max(1, detail.dated)) * 100)}% of dated signals
             </p>
           </div>
