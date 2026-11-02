@@ -96,6 +96,16 @@ export const CAMPUSES: CampusConfig[] = [
     coordSource: "en.wikipedia.org/wiki/Georgia_Tech (MediaWiki coordinates API, retrieved 2026-09-25)",
   },
   {
+    id: "univ_uga",
+    name: "University of Georgia",
+    shortLabel: "UGA",
+    aliases: ["UGA", "Georgia", "University of Georgia"],
+    country: "United States",
+    lat: 33.95583333333333,
+    lon: -83.37444444444445,
+    coordSource: "www.wikidata.org/wiki/Q761534 (P625 coordinate, retrieved 2026-11-02)",
+  },
+  {
     id: "univ_michigan",
     name: "University of Michigan",
     shortLabel: "Michigan",
