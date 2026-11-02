@@ -1186,6 +1186,26 @@ details:not([open]) > :not(summary) {
   line-height: 1;
 }
 
+
+/* r44: Peak sits in the founders rail — use the compact mobile peak at all widths. */
+[data-fold-peak-in-rail] [data-fold-peak-desk] {
+  display: none !important;
+}
+[data-fold-peak-in-rail] [data-fold-peak-share-mobile],
+[data-fold-peak-in-rail] [data-fold-peak-share-mobile][data-fold-peak-share] {
+  display: block !important;
+}
+[data-fold-peak-in-rail] [data-fold-peak-slot],
+[data-fold-peak-in-rail] [data-fold-peak-reserve] {
+  min-height: 0 !important;
+  margin-bottom: 0.5rem !important;
+}
+/* Map stage owns the fold — near full width of its column. */
+[data-fold-bigmap] [data-fold-globe-col],
+[data-fold-bigmap] [data-dispatch-map-stage] {
+  width: 100%;
+}
+
 /* r42: 44px tap hit-areas for leftover chrome only — visual size unchanged. */
 [data-site-nav] [data-mobile-desk-tabs] a.subtab,
 [data-site-nav] button[aria-expanded],

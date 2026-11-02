@@ -148,7 +148,7 @@ function PeakShareSlot({
   // Keep SSR lite until the client Peak chunk has painted (same box → CLS ≈ 0).
   const showLive = live;
   return (
-    <div className="relative mb-2.5 min-h-[11rem] lg:mb-3 lg:min-h-[11.5rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
+    <div className="relative mb-2 min-h-0" data-fold-peak-slot="" data-fold-peak-reserve="">
       <div className={showLive ? "hidden" : undefined} aria-hidden={showLive || undefined} data-fold-peak-ssr-wrap="">
         {shell ? (
           <PeakShareLite shell={shell} foundersListed={foundersListed} campusesOnMap={campusesOnMap} topCampuses={topCampuses} />
@@ -314,24 +314,13 @@ export function SampleHomeClient(props: {
     <div className="sample-paper" {...(place === "map" ? { "data-fold-root": "" } : {})} data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
       {place === "map" ? (
-        <div className="px-4 pb-6 pt-3 sm:px-4" data-fold-hierarchy="">
-          {/* Mobile (fold-375): Peak + campus ranking strip first, then search. Desk: search first. */}
-          <div className="flex flex-col" data-fold-mast="">
-            <div className="order-2 lg:order-1">
-              <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
-            </div>
-            <div className="order-1 lg:order-2">
-              <PeakShareSlot
-                companies={companies}
-                foundersListed={foundersListed}
-                campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
-                topCampuses={topCampuses}
-                shell={peakShell}
-              />
-            </div>
+        <div className="px-3 pb-6 pt-2 sm:px-4" data-fold-hierarchy="">
+          {/* r44: thin chrome only above the map so the globe is the stage. */}
+          <div className="mb-2" data-fold-mast="">
+            <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
           </div>
-          {/* Desk-only current-view strip (won fold-filters-1440). Hidden on mobile so Peak campus ranking strip stays. */}
-          <div className="hidden lg:block">
+          {/* Desk-only current-view strip under search; Peak lives in the founders rail. */}
+          <div className="mb-2 hidden lg:block">
             <FilterChips chips={activeChips} matchCount={matchedFounders.length} totalCount={founders.length || foundersListed} />
             <CurrentViewStrip
               campusName={mapCampusName}
@@ -343,12 +332,13 @@ export function SampleHomeClient(props: {
               onClearQuery={() => setFounderQuery("")}
             />
           </div>
-          {/* Mobile: founders above map (keeps campus ranking strip from Peak). Desk: globe | founders + lineage. */}
+          {/* Map-dominant stage: ~full-width globe; Peak + founders alongside (desk) or below (mobile). */}
           <div
-            className="flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(320px,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-4"
+            className="flex flex-col gap-3 lg:grid lg:grid-cols-[minmax(0,1.8fr)_minmax(280px,0.45fr)] lg:items-start lg:gap-3"
             data-fold-stack=""
+            data-fold-bigmap=""
           >
-            <div className="order-2 lg:order-1 min-w-0" data-fold-globe-col="">
+            <div className="order-1 min-w-0" data-fold-globe-col="">
               <GlobeHero
                 stats={stats}
                 showGlobe={feed !== "world"}
@@ -358,16 +348,17 @@ export function SampleHomeClient(props: {
                 foundersIndexed={founders.length || undefined}
                 highlightCampusIds={highlightCampusIds}
               />
-              <div className="mt-3 hidden lg:block" data-fold-lineage-desk="">
-                <LineagePanels
+            </div>
+            <div className="order-2 min-w-0 lg:sticky lg:top-3 lg:max-h-[calc(100dvh-1.5rem)] lg:overflow-y-auto lg:scroll-pt-1 lg:pb-6" data-fold-founders-col="">
+              <div className="mb-3" data-fold-peak-in-rail="">
+                <PeakShareSlot
                   companies={companies}
-                  week={stats.week}
-                  campusId={mapCampusId && mapCampusId !== "missing" ? mapCampusId : null}
-                  campusName={mapCampusName}
+                  foundersListed={foundersListed}
+                  campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
+                  topCampuses={topCampuses}
+                  shell={peakShell}
                 />
               </div>
-            </div>
-            <div className="order-1 lg:order-2 min-w-0 lg:sticky lg:top-3 lg:max-h-[calc(100dvh-1.5rem)] lg:overflow-y-auto lg:scroll-pt-1 lg:pb-6" data-fold-founders-col="">
               <FounderResults
                 founders={founders}
                 status={founderStatus}
@@ -383,6 +374,14 @@ export function SampleHomeClient(props: {
                   router.push(`/?${next.toString()}`);
                 }}
               />
+              <div className="mt-3 hidden lg:block" data-fold-lineage-desk="">
+                <LineagePanels
+                  companies={companies}
+                  week={stats.week}
+                  campusId={mapCampusId && mapCampusId !== "missing" ? mapCampusId : null}
+                  campusName={mapCampusName}
+                />
+              </div>
             </div>
           </div>
         </div>

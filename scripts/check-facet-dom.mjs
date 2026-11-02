@@ -231,10 +231,27 @@ const mobileOrder = await mobile.evaluate(() => {
   const filters = document.querySelector("[data-founder-filters]");
   const card = document.querySelector("[data-founder-card]");
   const map = document.querySelector("[data-dispatch-map-stage]");
+  const foundersCol = document.querySelector("[data-fold-founders-col]");
   const ft = filters?.getBoundingClientRect().top ?? 9999;
   const ct = card?.getBoundingClientRect().top ?? 9999;
-  const mt = map?.getBoundingClientRect().top ?? 0;
-  return { filtersAboveMap: ft < mt, cardAboveMap: ct < mt, ft, ct, mt };
+  const mr = map?.getBoundingClientRect();
+  const mt = mr?.top ?? 0;
+  const mh = mr?.height ?? 0;
+  const vh = window.innerHeight || 812;
+  // r44: map is the mobile stage (~60–70vh). Founders stay usable below.
+  const mapDominant = mh >= vh * 0.55 && mt < vh * 0.55;
+  const foundersUsable = Boolean(foundersCol) && ((filters?.getBoundingClientRect().height ?? 0) > 0 || (card?.getBoundingClientRect().height ?? 0) > 0);
+  return {
+    filtersAboveMap: ft < mt,
+    cardAboveMap: ct < mt,
+    mapDominant,
+    foundersUsable,
+    mapHeightRatio: mh / vh,
+    ft,
+    ct,
+    mt,
+    mh,
+  };
 });
 await mobile.close();
 
@@ -478,7 +495,7 @@ const report = {
       pageSignalMast.hasDatedCopy === false &&
       pageSignalMast.shown === pageSignalMast.withSignal &&
       pageSignalMast.rowCount > 0,
-    mobileFoundersAboveMap: mobileOrder.filtersAboveMap && mobileOrder.cardAboveMap,
+    mobileFoundersAboveMap: mobileOrder.mapDominant === true && mobileOrder.foundersUsable === true,
     deskFoundersAboveFold1440: deskFold.cardAboveFold === true,
     noEmDashInUi:
       deskFold.emDashInUi === false &&

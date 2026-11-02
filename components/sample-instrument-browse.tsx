@@ -377,19 +377,39 @@ export function SampleInstrumentBrowse({
   const podiumRankedCount = useMemo(() => campusFoundersRanked(campuses).length, [campuses]);
   /** Ranked campuses on this loaded page  -  seal header with real company/signal counts. */
   const pageCampusRanks = useMemo(() => {
-    const map = new Map<string, { label: string; companies: number; signaled: number }>();
+    const map = new Map<string, { id: string | null; label: string; companies: number; signaled: number }>();
     for (const card of cards) {
       const label = (card.school || "").trim();
       if (!label) continue;
-      const cur = map.get(label) ?? { label, companies: 0, signaled: 0 };
+      const key = (card.schoolId || label).trim();
+      const cur = map.get(key) ?? { id: card.schoolId || null, label, companies: 0, signaled: 0 };
+      if (!cur.id && card.schoolId) cur.id = card.schoolId;
       cur.companies += 1;
       if (card.signals > 0) cur.signaled += 1;
-      map.set(label, cur);
+      map.set(key, cur);
     }
     return [...map.values()]
       .sort((a, b) => b.companies - a.companies || b.signaled - a.signaled || a.label.localeCompare(b.label))
       .slice(0, 6);
   }, [cards]);
+  const endLeadCampusHref = useMemo(() => {
+    const lead = pageCampusRanks[0];
+    if (!lead) return null;
+    // Prefer schoolId from cards; else resolve campuses[] by id/slug — never name===label.
+    let leadId = lead.id;
+    if (!leadId) {
+      const slug = lead.label
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+      const hit = campuses.find(
+        (c) => c.id === `univ_${slug}` || c.id.endsWith(`_${slug}`) || c.id === slug || c.id.replace(/^univ_/, "") === slug,
+      );
+      leadId = hit?.id ?? null;
+    }
+    if (!leadId) return null;
+    return browseHref({ feed, sector, kind, campus: leadId, q: query, sort: feed === "directory" ? sort : undefined });
+  }, [pageCampusRanks, campuses, feed, sector, kind, query, sort]);
   /** Desk-wide campus leader for mobile list mast (real counts). */
   const deskCampusTop = useMemo(() => {
     const map = new Map<string, { label: string; companies: number; signaled: number }>();
@@ -1114,7 +1134,15 @@ export function SampleInstrumentBrowse({
                   >
                     <div className="border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3.5 py-3.5" data-mobile-list-mast="">
                       <div className="flex items-start gap-3">
-                        {pageCampusRanks[0] ? <CampusSeal label={pageCampusRanks[0].label} size="lg" className="mt-1" /> : null}
+                        {pageCampusRanks[0] ? (
+                          endLeadCampusHref ? (
+                            <Link href={endLeadCampusHref} aria-label={`Filter to ${pageCampusRanks[0].label}`} className="shrink-0">
+                              <CampusSeal label={pageCampusRanks[0].label} size="lg" className="mt-1" />
+                            </Link>
+                          ) : (
+                            <CampusSeal label={pageCampusRanks[0].label} size="lg" className="mt-1" />
+                          )
+                        ) : null}
                         <div className="min-w-0 flex-1">
                           <p className="m-kicker">Campuses in this batch</p>
                           <p className="m-figure mt-1.5" data-ledger-showing="" data-end-lead="" data-more-context="">

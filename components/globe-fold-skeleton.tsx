@@ -36,8 +36,9 @@ export function GlobeFoldSkeleton({
       </div>
       <div
         className="relative overflow-hidden border-2 border-[color:var(--cobalt,#2F4FD8)]/35 bg-[#FFFFFF]"
-        style={{ height: 560 }}
+        style={{ height: "clamp(420px, 65vh, 780px)" }}
         data-dispatch-map-stage=""
+        data-fold-bigmap-skeleton=""
       >
         <div className="grid h-full place-items-center">
           <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[color:var(--ink-muted,#5a6577)]">Loading globe</p>

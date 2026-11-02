@@ -147,7 +147,10 @@ export function TileGlobe({
   highlightCampusIds?: Set<string> | null;
 }) {
   const mapNode = useRef<HTMLDivElement | null>(null);
-  const [stageHeight, setStageHeight] = useState(860);
+  /** r44 bigmap default; fit() replaces on mount. */
+  const [stageHeight, setStageHeight] = useState(640);
+  const hitPadRef = useRef(64);
+  const nearestMaxRef = useRef(100);
   const campusesRef = useRef(campuses);
   campusesRef.current = campuses;
   const mapRef = useRef<{
@@ -202,9 +205,14 @@ export function TileGlobe({
 
     const fit = () => {
       const wide = window.innerWidth >= 1024;
-      // Desk: taller stage like 8b fold wow (map fills the column). Mobile: compact under founders.
-      const target = Math.round(window.innerHeight * (wide ? 0.58 : 0.42));
-      setStageHeight(wide ? Math.max(420, Math.min(540, target)) : Math.max(220, Math.min(260, target)));
+      // r44: map is the home stage — desk ~74vh (70–80), mobile ~65vh (60–70).
+      const target = Math.round(window.innerHeight * (wide ? 0.74 : 0.65));
+      const next = wide
+        ? Math.max(560, Math.min(780, target))
+        : Math.max(420, Math.min(620, target));
+      setStageHeight(next);
+      hitPadRef.current = Math.round(Math.max(56, Math.min(120, next * 0.1)));
+      nearestMaxRef.current = Math.round(Math.max(88, Math.min(160, next * 0.14)));
     };
     fit();
     window.addEventListener("resize", fit);
@@ -377,8 +385,9 @@ export function TileGlobe({
       // Hit-test in layout CSS pixels. Always re-read getBoundingClientRect (Clear/scroll
       // can stale a cached rect). Never multiply by DPR. Fall back to nearest projected
       // campus when queryRenderedFeatures misses a finger-sized target.
-      const HIT_PAD = 56;
-      const NEAREST_MAX = 88;
+      // Scale hit slop with stage size so finger targets keep pace with the bigger map.
+      const hitPad = () => hitPadRef.current;
+      const nearestMax = () => nearestMaxRef.current;
       let lastSelectAt = 0;
       let lastSelectId = "";
       const projectedMarkers = () => {
@@ -409,9 +418,10 @@ export function TileGlobe({
       };
       const pickCampus = (point: { x: number; y: number }) => {
         if (!map) return null;
+        const pad = hitPad();
         const box: [[number, number], [number, number]] = [
-          [point.x - HIT_PAD, point.y - HIT_PAD],
-          [point.x + HIT_PAD, point.y + HIT_PAD],
+          [point.x - pad, point.y - pad],
+          [point.x + pad, point.y + pad],
         ];
         const features = map.queryRenderedFeatures(box, { layers: ["campus-dots"] });
         const props = features[0]?.properties;
@@ -426,7 +436,7 @@ export function TileGlobe({
             y: point.y,
           };
         }
-        const near = nearestProjectedMarker(point, projectedMarkers(), NEAREST_MAX);
+        const near = nearestProjectedMarker(point, projectedMarkers(), nearestMax());
         if (near) {
           return {
             id: near.id,
@@ -692,6 +702,8 @@ export function TileGlobe({
           className="relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/45 bg-[linear-gradient(165deg,#FBFCFE_0%,#F0F3FA_48%,#E6EBF6_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.85),inset_0_-18px_40px_rgba(47,79,216,0.07),0_1px_2px_rgba(15,23,42,0.04)] before:pointer-events-none before:absolute before:inset-2 before:z-[1] before:border before:border-[color:var(--cobalt,#2F4FD8)]/15 before:content-[''] after:pointer-events-none after:absolute after:inset-0 after:z-[1] after:bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.55),transparent_55%),radial-gradient(ellipse_at_70%_85%,rgba(47,79,216,0.08),transparent_50%)] after:content-['']"
           style={{ height: stageHeight }}
           data-dispatch-map-stage=""
+          data-fold-bigmap-stage=""
+          data-map-stage-h={stageHeight}
           data-globe-state={painted ? "ready" : failed ? "error" : "loading"}
         >
           <div ref={mapNode} className={`relative z-[2] h-full w-full ${painted && !failed ? "" : "invisible"}`} />
