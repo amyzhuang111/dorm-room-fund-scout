@@ -28,6 +28,12 @@ import {
   type FacetState,
   SignalsLanded,
 } from "./sample-instrument";
+import {
+  activeFacetChips,
+  browseHref as buildBrowseHref,
+  type FacetState as UrlFacetState,
+} from "@/lib/domain/facet-url";
+import { CurrentViewDock } from "@/components/current-view-dock";
 
 type Feed = "directory" | "leaderboard";
 
@@ -39,19 +45,72 @@ function browseHref(opts: {
   q?: string;
   sort?: DirectorySort;
   more?: number;
+  facets?: Partial<UrlFacetState> | UrlFacetState;
+  c?: string | null;
 }): string {
-  const query = new URLSearchParams();
-  // Corpus is the default; ?sample=1 remains a harmless alias if present upstream.
-  if (opts.feed && opts.feed !== "directory") query.set("feed", opts.feed);
-  if (opts.sector) query.set("sector", opts.sector);
-  if (opts.kind) query.set("kind", opts.kind);
-  if (opts.campus) query.set("campus", opts.campus);
-  const q = opts.q?.trim();
-  if (q) query.set("q", q);
-  if (opts.sort && opts.sort !== "rank") query.set("sort", opts.sort);
-  if (opts.more && opts.more > 1) query.set("more", String(opts.more));
-  const qs = query.toString();
-  return qs ? `/companies?${qs}` : "/companies";
+  return buildBrowseHref({
+    feed: opts.feed,
+    sort: opts.sort,
+    more: opts.more,
+    c: opts.c,
+    facets: {
+      sector: opts.sector ?? null,
+      kind: opts.kind ?? null,
+      campus: opts.campus ?? null,
+      query: opts.q ?? "",
+      ...(opts.facets ?? {}),
+    },
+  });
+}
+
+function exportFilteredCsv(rows: FacetCompany[]) {
+  const header = [
+    "id",
+    "name",
+    "sector",
+    "stage",
+    "campus",
+    "founded_year",
+    "hq",
+    "status",
+    "signals",
+    "latest_signal",
+    "program",
+    "founders",
+  ];
+  const esc = (v: string) => `"${v.replace(/"/g, '""')}"`;
+  const lines = [header.join(",")];
+  for (const row of rows) {
+    const status =
+      row.operatingStatus === "acquired"
+        ? "acquired"
+        : row.operatingStatus === "dead"
+          ? "closed"
+          : "active";
+    lines.push(
+      [
+        esc(row.id),
+        esc(row.name),
+        esc(row.sector ?? ""),
+        esc(row.stage ?? ""),
+        esc(row.school ?? ""),
+        row.foundedYear == null ? "" : String(row.foundedYear),
+        esc(row.hqRegion ?? ""),
+        status,
+        String(row.signals ?? 0),
+        esc(row.latestSignalAt ?? ""),
+        esc(row.primaryProgram ?? ""),
+        esc((row.founders ?? []).join("; ")),
+      ].join(","),
+    );
+  }
+  const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "campus-scout-filtered.csv";
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 
@@ -143,6 +202,7 @@ export function SampleInstrumentBrowse({
   companies,
   moreHref,
   clearCampusHref,
+  initialFacets,
 }: {
   feed: Feed;
   cards: DirectoryCard[];
@@ -161,16 +221,19 @@ export function SampleInstrumentBrowse({
   companies: FacetCompany[];
   moreHref: string;
   clearCampusHref: string;
+  initialFacets?: Partial<FacetState>;
 }) {
   const router = useRouter();
   const [facets, setFacets] = useState<FacetState>(() => ({
     ...emptyFacets(),
-    sector: sector ?? null,
-    kind: kind ?? null,
-    campus: campus ?? null,
-    query: query ?? "",
+    ...(initialFacets ?? {}),
+    sector: sector ?? initialFacets?.sector ?? null,
+    kind: kind ?? initialFacets?.kind ?? null,
+    campus: campus ?? initialFacets?.campus ?? null,
+    query: query ?? initialFacets?.query ?? "",
   }));
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [selectedCompanyId, setSelectedCompanyId] = useState<string | null>(null);
   const [catalog, setCatalog] = useState<FacetCompany[] | null>(null);
 
   useEffect(() => {
@@ -359,21 +422,30 @@ export function SampleInstrumentBrowse({
     setFacets(next);
     const href = browseHref({
       feed,
-      sector: next.sector ?? undefined,
-      kind: next.kind ?? undefined,
-      campus: next.campus ?? undefined,
-      q: next.query || undefined,
       sort: feed === "directory" ? sort : undefined,
+      facets: next,
+      c: selectedCompanyId,
     });
-    if (
-      next.sector !== (sector ?? null) ||
-      next.kind !== (kind ?? null) ||
-      next.campus !== (campus ?? null) ||
-      (next.query || "") !== (query || "")
-    ) {
-      router.push(href);
-    }
+    router.push(href);
   }
+
+  const chipDefs = useMemo(() => {
+    const campusLabel = facets.campus
+      ? campuses.find((c) => c.id === facets.campus)?.name ?? facets.campus
+      : null;
+    return activeFacetChips(facets, { campus: campusLabel });
+  }, [facets, campuses]);
+
+  const dockCompanies = useMemo(
+    () =>
+      boardCompanies.slice(0, 48).map((c) => ({
+        id: c.id,
+        name: c.name,
+        logoUrl: c.logoUrl,
+        href: `/startup/${c.id}`,
+      })),
+    [boardCompanies],
+  );
 
   const sortChip = (active: boolean) =>
     active
@@ -402,24 +474,61 @@ export function SampleInstrumentBrowse({
       {/* Col 1 · persistent ruled index (magazine TOC), not a sheet over content */}
       <aside className="hidden min-w-0 lg:block" data-browse-index="">
         <div className="sticky top-14 space-y-2">
-          {/* Ember beat for open Contents · trails 353/01/138 hero pages without twinning them */}
-          {/* Contents index is the desk-filters hero · big split + FacetRail; dial lives on fold only. */}
           <div
             className="border-b border-[color:var(--line,#E1E5EF)] pb-2"
             data-index-signal-beat=""
-            data-contents-hero=""
             data-filters-index-hero=""
+            data-n-of-m=""
           >
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Contents</p>
-            <p className="mt-1.5 font-mono text-[40px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
-              {boardCompanies.length.toLocaleString("en-US")}
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Filters</p>
+            <p className="mt-1.5 font-mono text-[32px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+              <span data-match-count="">{boardCompanies.length.toLocaleString("en-US")}</span>
+              <span className="mx-1.5 text-[18px] font-semibold tracking-normal text-[color:var(--fg-3,#5C647A)]">of</span>
+              <span className="text-[22px] font-bold text-[color:var(--fg,#0B0E17)]" data-total-count="">
+                {total.toLocaleString("en-US")}
+              </span>
             </p>
             <p className="mt-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-              {feed === "leaderboard" ? "on the signal desk" : "companies in this list"}
+              {feed === "leaderboard" ? "on the signal desk" : "companies"}
             </p>
+            <div className="mt-2 flex flex-wrap items-center gap-2" data-filter-chips="" aria-label="Active filters">
+              {chipDefs.map((chip) => (
+                <button
+                  key={String(chip.key)}
+                  type="button"
+                  data-filter-chip={String(chip.key)}
+                  onClick={() => commitFacet({ ...facets, ...chip.clear })}
+                  className="inline-flex h-7 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 text-[12px] font-medium text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--ember,#D96B1C)]"
+                >
+                  {chip.label}
+                  <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)]" aria-hidden>
+                    x
+                  </span>
+                </button>
+              ))}
+              {chipDefs.length > 0 ? (
+                <button
+                  type="button"
+                  data-filter-reset=""
+                  onClick={() => commitFacet(emptyFacets())}
+                  className="font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-[color:var(--cobalt,#2F4FD8)] hover:underline"
+                >
+                  Reset all
+                </button>
+              ) : null}
+            </div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <button
+                type="button"
+                data-export-filtered=""
+                onClick={() => exportFilteredCsv(boardCompanies)}
+                className="inline-flex h-8 items-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[11px] font-semibold text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)]"
+              >
+                Export CSV
+              </button>
+            </div>
           </div>
-          {/* FacetRail is the filters hero · Contents is a quiet caption only. */}
-          <div className="h-[min(48vh,460px)] pt-1" data-contents-facet-map="">
+          <div className="h-[min(42vh,400px)] pt-1" data-contents-facet-map="">
             <FacetRail
               companies={companiesLive}
               campuses={campuses}
@@ -430,6 +539,7 @@ export function SampleInstrumentBrowse({
               caption={feed === "leaderboard" ? "Signals" : "Companies"}
             />
           </div>
+          <CurrentViewDock companies={dockCompanies} />
         </div>
       </aside>
 
@@ -525,6 +635,34 @@ export function SampleInstrumentBrowse({
 
         {/* Scout Chronograph · unifying system. Browse-more uses folio (originality priority);
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
+        <div className="mb-2 flex flex-wrap items-center gap-2 lg:hidden" data-mobile-filter-chips="" data-n-of-m="">
+          <span className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+            <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
+            {" of "}
+            <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
+            {" companies"}
+          </span>
+          {chipDefs.map((chip) => (
+            <button
+              key={`m-${String(chip.key)}`}
+              type="button"
+              data-filter-chip={String(chip.key)}
+              onClick={() => commitFacet({ ...facets, ...chip.clear })}
+              className="inline-flex h-7 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 text-[12px] font-medium"
+            >
+              {chip.label}
+              <span className="font-mono text-[10px] text-[color:var(--ember,#D96B1C)]" aria-hidden>x</span>
+            </button>
+          ))}
+          <button
+            type="button"
+            data-export-filtered-mobile=""
+            onClick={() => exportFilteredCsv(boardCompanies)}
+            className="ml-auto font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
+          >
+            Export CSV
+          </button>
+        </div>
         <div className="mb-3 space-y-2 lg:hidden" data-mobile-browse-compose="">
           {/* r30: one list mast (seal + counts + takeaway), then a single collapsed Filters row. Sort lives inside Filters. */}
           {feed === "directory" && pages <= 1 ? (
@@ -838,7 +976,7 @@ export function SampleInstrumentBrowse({
                         >
                           <span className="h-px flex-1 bg-[color:var(--cobalt,#2F4FD8)]/25" aria-hidden />
                           <span className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
-                            Companies {sectionFrom.toLocaleString("en-US")}–{sectionTo.toLocaleString("en-US")}
+                            Companies {sectionFrom.toLocaleString("en-US")}-{sectionTo.toLocaleString("en-US")}
                           </span>
                           <span className="h-px flex-1 bg-[color:var(--cobalt,#2F4FD8)]/25" aria-hidden />
                         </div>
@@ -1101,6 +1239,7 @@ function LedgerRow({
   ranked = false,
   whyOverride,
   showCampusSeal = true,
+  selected = false,
 }: {
   card: DirectoryCard;
   rank: number | null;
@@ -1109,6 +1248,7 @@ function LedgerRow({
   whyOverride?: string | null;
   /** First row of a campus run shows the seal on mobile; desk keeps one per row. */
   showCampusSeal?: boolean;
+  selected?: boolean;
 }) {
   const subtitle = directoryCardSubtitle(card);
   const meta = signalMeta(card);
@@ -1118,9 +1258,10 @@ function LedgerRow({
       href={`/startup/${card.id}`}
       data-card-signals={card.signals}
       data-card-dated={card.latestSignalAt ? "1" : "0"}
+      data-card-selected={selected ? "1" : undefined}
       className={`group flex items-start px-3.5 transition-[background-color,color] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:px-3.5 ${
         ranked ? "gap-3 py-3.5 sm:py-3 lg:gap-3 lg:py-3.5" : "gap-2.5 py-4 sm:gap-3 sm:py-3"
-      }`}
+      } ${selected ? "bg-[color:var(--cobalt-haze,#E8ECFA)]/55 ring-1 ring-inset ring-[color:var(--cobalt,#2F4FD8)]/35" : ""}`}
     >
       {rank != null ? (
         <span

@@ -30,6 +30,7 @@ export function SampleHome({
   sort,
   stats,
   place = "map",
+  facetExtras,
 }: {
   feed: Feed;
   sector?: string;
@@ -41,6 +42,7 @@ export function SampleHome({
   stats: HeroStats;
   /** Map is the globe. Explore is the ranked company list. */
   place?: "map" | "explore";
+  facetExtras?: Record<string, string | number | boolean | null | undefined>;
 }) {
   const pages = Math.max(1, Math.floor(Number(more)) || 1);
   const query = q?.trim() ?? "";
@@ -154,6 +156,7 @@ export function SampleHome({
       peakShell={peakShell}
       directoryUrl="/data/sample-directory.json"
       place={place}
+      facetExtras={facetExtras}
     />
   );
 }
