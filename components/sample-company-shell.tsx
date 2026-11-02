@@ -281,9 +281,22 @@ export function SampleCompanyShell({
           data-company-mobile-hero=""
           data-summary-card=""
         >
-          <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]" data-dossier-spread-mobile="">
+          <div className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)]" data-dossier-spread-mobile="">
+            {/* Campus-first identity band · readable seal + real campus label */}
+            <div className="flex items-center gap-3 border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/40 px-3.5 py-3" data-dossier-campus-band="">
+              <CampusSeal
+                label={dossier?.schoolId ? shortCampusLabel(dossier.schoolId, dossier.campus ?? "") : dossier?.campus}
+                size="lg"
+              />
+              <div className="min-w-0 flex-1">
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Campus</p>
+                <p className="mt-0.5 truncate text-[17px] font-bold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                  {dossier?.campus || (dossier?.schoolId ? shortCampusLabel(dossier.schoolId, "") : "Campus not on record")}
+                </p>
+              </div>
+            </div>
             <div className="flex gap-3 px-3.5 py-3">
-              <div className="mt-1 flex shrink-0 flex-col items-center gap-1.5">
+              <div className="mt-1 shrink-0">
                 {dossier?.logoUrl ? (
                   <img src={dossier.logoUrl} alt="" width={44} height={44} className="h-11 w-11 rounded-sm border border-[color:var(--line,#E1E5EF)] object-contain" data-dossier-logo="" />
                 ) : (
@@ -291,10 +304,6 @@ export function SampleCompanyShell({
                     {((dossier?.name ?? "?").trim()[0] || "?").toUpperCase()}
                   </div>
                 )}
-                <CampusSeal
-                  label={dossier?.schoolId ? shortCampusLabel(dossier.schoolId, dossier.campus ?? "") : dossier?.campus}
-                  size="sm"
-                />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="scout-kicker">Scout dossier</p>

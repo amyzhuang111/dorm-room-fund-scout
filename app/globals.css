@@ -842,7 +842,7 @@ html[data-sample="halflight"] body {
   font-weight: 700;
 }
 [data-corpus-cards] .c-a:hover {
-  color: #D96B1C;
+  color: var(--cobalt, #2F4FD8);
   text-decoration: underline;
 }
 [data-corpus-cards] .c-num { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-variant-numeric: tabular-nums; }
@@ -850,8 +850,7 @@ html[data-sample="halflight"] body {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-variant-numeric: tabular-nums;
   font-weight: 700;
-  /* Hard orange: restore 2fb55fc desk density (sample --ember is cobalt). */
-  color: #D96B1C;
+  color: var(--cobalt, #2F4FD8);
 }
 [data-corpus-cards] .c-link { color: var(--cobalt, #2F4FD8); text-decoration: underline; }
 
@@ -936,7 +935,7 @@ html[data-sample="halflight"] body {
     color: var(--fg-2, #3F465C);
   }
   [data-corpus-cards] .c-fund {
-    color: #D96B1C;
+    color: var(--cobalt, #2F4FD8);
     font-weight: 600;
   }
   /* Hide blank meta cells entirely so separators never become "· ·". */
@@ -968,7 +967,7 @@ html[data-sample="halflight"] body {
     color: var(--fg-2, #3F465C);
   }
   [data-corpus-cards] .c-d.c-d-m.c-sig {
-    color: #D96B1C;
+    color: var(--cobalt, #2F4FD8);
   }
   [data-corpus-cards] .c-d.c-d-m:has(.c-b) {
     display: none !important;

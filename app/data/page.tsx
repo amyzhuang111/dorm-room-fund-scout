@@ -33,6 +33,21 @@ export default async function DataExplorerPage({
   const { sectors } = buildDirectoryFromDb();
   const campuses = loadHeroStats().universities;
 
+  const pageCampusRanks = (() => {
+    const map = new Map<string, { label: string; companies: number; signaled: number }>();
+    for (const row of result.rows) {
+      const label = (row.campus || "").trim();
+      if (!label) continue;
+      const cur = map.get(label) ?? { label, companies: 0, signaled: 0 };
+      cur.companies += 1;
+      if (row.signals > 0) cur.signaled += 1;
+      map.set(label, cur);
+    }
+    return [...map.values()]
+      .sort((a, b) => b.companies - a.companies || b.signaled - a.signaled || a.label.localeCompare(b.label))
+      .slice(0, 5);
+  })();
+
   const hrefFor = (patch: Record<string, string | undefined>) => {
     const next = new URLSearchParams();
     const merged = {
@@ -58,7 +73,7 @@ export default async function DataExplorerPage({
           <p className="scout-kicker">Corpus</p>
           <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
           <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-            <span className="font-bold text-[#D96B1C]">{result.total.toLocaleString("en-US")}</span>
+            <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
             {" companies · page "}
             <span className="font-bold text-[color:var(--fg,#0B0E17)]">{result.page}</span>
             {" of "}
@@ -69,7 +84,7 @@ export default async function DataExplorerPage({
         </div>
         <a
           href="/data/export"
-          className="hidden h-8 items-center rounded-sm border border-[#D96B1C] bg-[#D96B1C] px-3 font-mono text-[11px] font-semibold text-white sm:inline-flex"
+          className="hidden h-8 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[11px] font-semibold text-white sm:inline-flex"
           data-corpus-csv=""
         >
           Download CSV
@@ -143,6 +158,40 @@ export default async function DataExplorerPage({
         </div>
       </form>
 
+      {pageCampusRanks.length ? (
+        <div className="mt-3 overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] sm:hidden" data-corpus-campus-ranks="">
+          <div className="border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3.5 py-2.5">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Campuses on this page</p>
+            <p className="mt-1 font-mono text-[20px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]">
+              {pageCampusRanks.length.toLocaleString("en-US")}
+              <span className="ml-1.5 text-[11px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
+                campuses · {result.rows.length.toLocaleString("en-US")} rows
+              </span>
+            </p>
+          </div>
+          <ol className="divide-y divide-[color:var(--line,#E1E5EF)] px-3.5">
+            {pageCampusRanks.map((row, i) => (
+              <li key={row.label} className="flex items-center gap-2.5 py-2">
+                <span className="w-5 shrink-0 text-right font-mono text-[13px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <CampusSeal label={row.label} size="md" />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
+                  <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                    <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
+                    {" cos"}
+                    <span aria-hidden> · </span>
+                    <span className="font-bold text-[color:var(--fg,#0B0E17)]">{row.signaled.toLocaleString("en-US")}</span>
+                    {" signaled"}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ) : null}
+
       {/* One table for all viewports: sticky Company + Campus + Stage core, horizontal scroll on mobile */}
       <div className="mt-3 overflow-x-auto border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] [-webkit-overflow-scrolling:touch]" data-corpus-table="" data-corpus-cards="">
         <table className="c-table">
@@ -168,7 +217,7 @@ export default async function DataExplorerPage({
                 <td className="c-n">
                   <span className="c-mark">
                     {row.campus ? (
-                      <CampusSeal label={row.campus} size="xs" />
+                      <CampusSeal label={row.campus} size="sm" />
                     ) : (
                       <CorpusRowMark name={row.name} website={row.website} />
                     )}
@@ -224,7 +273,7 @@ export default async function DataExplorerPage({
             </Link>
           ) : null}
           {result.page < result.pageCount ? (
-            <Link href={hrefFor({ page: String(result.page + 1) })} className="inline-flex h-8 items-center border border-[#D96B1C] bg-[#D96B1C] px-3 font-mono text-[11px] font-semibold text-white">
+            <Link href={hrefFor({ page: String(result.page + 1) })} className="inline-flex h-8 items-center border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[11px] font-semibold text-white">
               Next
             </Link>
           ) : null}

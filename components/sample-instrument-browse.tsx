@@ -305,18 +305,20 @@ export function SampleInstrumentBrowse({
   const sliceInsight = useMemo(() => endSliceInsight(cards), [cards]);
   /** Leaderboard podium: top campuses by founders; signals = companies with signal on that desk. */
   const podiumRankedCount = useMemo(() => campusFoundersRanked(campuses).length, [campuses]);
-  /** Distinct campus seals on this loaded page  -  signature strip for more-end. */
-  const pageCampusSeals = useMemo(() => {
-    const seen = new Set<string>();
-    const out: string[] = [];
+  /** Ranked campuses on this loaded page  -  seal header with real company/signal counts. */
+  const pageCampusRanks = useMemo(() => {
+    const map = new Map<string, { label: string; companies: number; signaled: number }>();
     for (const card of cards) {
       const label = (card.school || "").trim();
-      if (!label || seen.has(label)) continue;
-      seen.add(label);
-      out.push(label);
-      if (out.length >= 8) break;
+      if (!label) continue;
+      const cur = map.get(label) ?? { label, companies: 0, signaled: 0 };
+      cur.companies += 1;
+      if (card.signals > 0) cur.signaled += 1;
+      map.set(label, cur);
     }
-    return out;
+    return [...map.values()]
+      .sort((a, b) => b.companies - a.companies || b.signaled - a.signaled || a.label.localeCompare(b.label))
+      .slice(0, 6);
   }, [cards]);
 
   const podiumRows = useMemo(() => {
@@ -826,139 +828,139 @@ export function SampleInstrumentBrowse({
             </div>
             {pages > 1 && sliceInsight ? (
               <>
-                {/* Desk more-end-1440: Loaded so far (from 502803b) */}
+                {/* Desk more-end-1440: campus rank header + quiet Load next */}
                 <div
-                  className="mt-5 hidden scroll-mt-24 border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 lg:block"
+                  className="mt-5 hidden scroll-mt-24 border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] lg:block"
                   data-ledger-end=""
                   data-end-insight={sliceInsight.kicker}
                 >
-                  <div className="scroll-mt-[5.5rem] px-4 py-5 sm:px-5" data-ledger-end-lead="">
+                  <div className="scroll-mt-[5.5rem] px-5 py-5" data-ledger-end-lead="">
                     <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
-                      Loaded so far
+                      Campuses in this batch
                     </p>
-                    {pageCampusSeals.length ? (
-                      <div className="mt-2.5 flex flex-wrap items-center gap-1.5" data-page-campus-seals="">
-                        {pageCampusSeals.map((label) => (
-                          <CampusSeal key={label} label={label} size="sm" />
+                    {pageCampusRanks.length ? (
+                      <ol className="mt-3 divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]" data-page-campus-seals="" data-page-campus-ranks="">
+                        {pageCampusRanks.map((row, i) => (
+                          <li key={row.label} className="flex items-center gap-3 py-2.5">
+                            <span className="w-6 shrink-0 text-right font-mono text-[16px] font-bold tabular-nums tracking-[-0.04em] text-[color:var(--cobalt,#2F4FD8)]">
+                              {String(i + 1).padStart(2, "0")}
+                            </span>
+                            <CampusSeal label={row.label} size="md" />
+                            <div className="min-w-0 flex-1">
+                              <p className="truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
+                              <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                                <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
+                                {" companies"}
+                                <span aria-hidden> · </span>
+                                <span className="font-bold text-[color:var(--fg,#0B0E17)]">{row.signaled.toLocaleString("en-US")}</span>
+                                {" with a signal"}
+                              </p>
+                            </div>
+                          </li>
                         ))}
-                        <span className="ml-1 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">
-                          campuses on this page
-                        </span>
-                      </div>
+                      </ol>
                     ) : null}
-                    <p className="mt-2 font-mono text-[40px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] sm:text-[44px]">
-                      {cards.length.toLocaleString("en-US")}
-                      <span className="mx-1.5 text-[18px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">of</span>
-                      <span className="text-[28px] font-bold tracking-[-0.04em] text-[color:var(--fg,#0B0E17)] sm:text-[32px]">
-                        {total.toLocaleString("en-US")}
-                      </span>
-                    </p>
-                    <p className="mt-2.5 max-w-[28rem] text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                      {"Companies 1 to "}
-                      {cards.length.toLocaleString("en-US")}
+                    <p className="mt-4 font-mono text-[13px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="" data-end-lead="">
+                      <span className="font-bold text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
                       {" of "}
                       {total.toLocaleString("en-US")}
-                      {" on this desk"}
-                    </p>
-                    {nextToScout[0] ? (
-                      <p className="mt-1.5 text-[13px] text-[color:var(--fg-2,#3F465C)]" data-next-to-scout="">
-                        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].label}</span>
-                        {" accounts for "}
-                        <span className="font-mono font-bold text-[color:var(--ember,#D96B1C)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
-                        {" of the "}
-                        {total.toLocaleString("en-US")}
-                        {" companies"}
-                      </p>
-                    ) : null}
-                    <p className="mt-3 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-ledger-showing="" data-end-lead="">
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
-                      {" "}
-                      {sliceInsight.figureUnit}
-                      {" · see "}
-                      <Link href={`/startup/${sliceInsight.companyId}`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline">
-                        {sliceInsight.companyName}
-                      </Link>
+                      {" loaded"}
+                      {sliceInsight ? (
+                        <>
+                          {" · "}
+                          <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
+                          {" "}
+                          {sliceInsight.figureUnit}
+                          {" · "}
+                          <Link href={`/startup/${sliceInsight.companyId}`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--cobalt,#2F4FD8)] hover:underline">
+                            {sliceInsight.companyName}
+                          </Link>
+                        </>
+                      ) : null}
                     </p>
                     {cards.length < total ? (
-                      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--cobalt,#2F4FD8)]/20 pt-3.5" data-ledger-end-more="" data-ledger-end-colophon="">
-                        <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                          {"Still "}
-                          <span className="font-bold text-[color:var(--fg,#0B0E17)]">{(total - cards.length).toLocaleString("en-US")}</span>
-                          {" to load"}
-                        </p>
+                      <p className="mt-3 font-mono text-[12px] text-[color:var(--fg-3,#5C647A)]" data-ledger-end-more="" data-ledger-end-colophon="">
+                        <span>{"Still "}{(total - cards.length).toLocaleString("en-US")}{" · "}</span>
                         <Link
                           href={moreHref}
-                          className="inline-flex h-9 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3.5 font-mono text-[11px] font-semibold text-white hover:opacity-90"
+                          className="font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline"
                         >
                           Load next
                         </Link>
-                      </div>
+                      </p>
                     ) : null}
                   </div>
                 </div>
-                {/* Mobile more-end-375: tight close plate + full-width Load next tap target */}
+                {/* Mobile more-end-375: strong campus-rank top, light footer, quiet Load next */}
                 <div
-                  className="mt-2 scroll-mt-24 lg:hidden"
+                  className="mt-3 scroll-mt-24 lg:hidden"
                   data-ledger-end=""
                   data-ledger-end-mobile=""
                   data-end-insight={sliceInsight.kicker}
                 >
                   <div
-                    className="border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-0.5 pt-3.5 pb-1"
+                    className="overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)]"
                     data-ledger-end-lead=""
-                    data-ledger-end-more=""
                     data-pass-close=""
                   >
-                    <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--fg-3,#5C647A)]">End of this batch</p>
-                    {pageCampusSeals.length ? (
-                      <div className="mt-2.5 flex flex-wrap items-center gap-1.5" data-page-campus-seals="">
-                        {pageCampusSeals.slice(0, 5).map((label) => (
-                          <CampusSeal key={label} label={label} size="xs" />
+                    <div className="border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3.5 py-3">
+                      <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
+                        Campuses in this batch
+                      </p>
+                      <p className="mt-1 font-mono text-[22px] font-bold leading-none tracking-[-0.04em] text-[color:var(--fg,#0B0E17)]" data-ledger-showing="" data-end-lead="" data-more-context="">
+                        {pageCampusRanks.length.toLocaleString("en-US")}
+                        <span className="ml-1.5 text-[12px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
+                          campuses · {cards.length.toLocaleString("en-US")} of {total.toLocaleString("en-US")}
+                        </span>
+                      </p>
+                    </div>
+                    {pageCampusRanks.length ? (
+                      <ol className="divide-y divide-[color:var(--line,#E1E5EF)] px-3.5" data-page-campus-seals="" data-page-campus-ranks="">
+                        {pageCampusRanks.slice(0, 5).map((row, i) => (
+                          <li key={row.label} className="flex items-center gap-2.5 py-2.5">
+                            <span className="w-5 shrink-0 text-right font-mono text-[14px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
+                              {String(i + 1).padStart(2, "0")}
+                            </span>
+                            <CampusSeal label={row.label} size="md" />
+                            <div className="min-w-0 flex-1">
+                              <p className="truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
+                              <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                                <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
+                                {" cos"}
+                                <span aria-hidden> · </span>
+                                <span className="font-bold text-[color:var(--fg,#0B0E17)]">{row.signaled.toLocaleString("en-US")}</span>
+                                {" signaled"}
+                              </p>
+                            </div>
+                          </li>
                         ))}
-                        <span className="ml-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">on this page</span>
-                      </div>
+                      </ol>
                     ) : null}
-                    <p className="mt-2.5 font-mono text-[15px] font-semibold tabular-nums tracking-tight text-[color:var(--fg,#0B0E17)]" data-ledger-showing="" data-end-lead="" data-more-context="">
-                      <span>{cards.length.toLocaleString("en-US")}</span>
-                      <span className="ml-1 text-[11px] font-medium text-[color:var(--fg-3,#5C647A)]">
-                        of {total.toLocaleString("en-US")} · batch {pageFrom.toLocaleString("en-US")}-{cards.length.toLocaleString("en-US")}
-                      </span>
-                    </p>
-                    {sliceInsight ? (
-                      <p className="mt-1 font-mono text-[12px] leading-4 tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
-                        {" "}
-                        {sliceInsight.figureUnit}
-                        {" · "}
-                        <Link href={`/startup/${sliceInsight.companyId}`} className="font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline">
-                          {sliceInsight.companyName}
-                        </Link>
-                        {nextToScout[0] ? (
-                          <>
-                            {" · "}
-                            <span className="text-[color:var(--fg-3,#5C647A)]">{nextToScout[0].label}</span>
-                            {" "}
-                            <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
-                          </>
-                        ) : null}
-                      </p>
-                    ) : nextToScout[0] ? (
-                      <p className="mt-1 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                        <span className="text-[color:var(--fg-3,#5C647A)]">{nextToScout[0].label}</span>
-                        {" "}
-                        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
-                        {" on the desk"}
-                      </p>
-                    ) : null}
-                    {cards.length < total ? (
-                      <Link
-                        href={moreHref}
-                        data-load-next=""
-                        className="mt-3.5 inline-flex h-11 w-full items-center justify-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] font-mono text-[13px] font-semibold text-white hover:opacity-90"
-                      >
-                        Load next
-                      </Link>
-                    ) : null}
+                    <div className="px-3.5 py-3" data-ledger-end-more="" data-ledger-end-colophon="">
+                      {sliceInsight ? (
+                        <p className="font-mono text-[11px] leading-4 tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                          <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
+                          {" "}
+                          {sliceInsight.figureUnit}
+                          {" · "}
+                          <Link href={`/startup/${sliceInsight.companyId}`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:underline">
+                            {sliceInsight.companyName}
+                          </Link>
+                        </p>
+                      ) : null}
+                      {cards.length < total ? (
+                        <p className="mt-2 font-mono text-[12px] text-[color:var(--fg-3,#5C647A)]">
+                          <span>{"Still "}{(total - cards.length).toLocaleString("en-US")}{" · "}</span>
+                          <Link
+                            href={moreHref}
+                            data-load-next=""
+                            className="font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline"
+                          >
+                            Load next
+                          </Link>
+                        </p>
+                      ) : null}
+                    </div>
                   </div>
                 </div>
               </>
