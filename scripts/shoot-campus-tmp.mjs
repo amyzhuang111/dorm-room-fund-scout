@@ -181,9 +181,9 @@ const browser = await chromium.launch({ headless: true });
   await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForTimeout(2000);
   await shot(page, "company-sim-1440");
-  const fullRecord = page.locator("[data-company-full-record]").first();
+  const fullRecord = page.locator("[data-full-record-desk]");
   if (await fullRecord.count()) {
-    await fullRecord.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await fullRecord.first().evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(400);
     await shot(page, "company-full-record-1440");
   }
@@ -326,9 +326,9 @@ const browser = await chromium.launch({ headless: true });
     await page.waitForTimeout(200);
   }
   await shot(page, "company-sim-375");
-  const fullRecordM = page.locator("[data-company-full-record]").first();
+  const fullRecordM = page.locator("[data-full-record-mobile]");
   if (await fullRecordM.count()) {
-    await fullRecordM.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await fullRecordM.first().evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(350);
     await shot(page, "company-full-record-375");
   }
