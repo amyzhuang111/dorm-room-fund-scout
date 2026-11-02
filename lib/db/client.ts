@@ -23,19 +23,53 @@ export function databasePath(): string {
 
 let _db: Database.Database | null = null;
 
+
+function fileSha256(filePath: string): string | null {
+  if (!fs.existsSync(/*turbopackIgnore: true*/ filePath)) return null;
+  const hash = crypto.createHash("sha256");
+  hash.update(fs.readFileSync(/*turbopackIgnore: true*/ filePath));
+  return hash.digest("hex");
+}
+
+/** Copy bundled DB into the runtime path when missing or content-hash differs. */
+function syncBundledDbToRuntime(bundled: string, runtime: string): void {
+  if (!fs.existsSync(/*turbopackIgnore: true*/ bundled)) {
+    console.error(
+      "campus-universe.db was not found in this deployment. Serving an empty database until the bundled file is included.",
+    );
+    return;
+  }
+  const marker = `${runtime}.sha256`;
+  const bundledHash = fileSha256(bundled);
+  const runtimeHash =
+    fs.existsSync(/*turbopackIgnore: true*/ runtime) && fs.existsSync(/*turbopackIgnore: true*/ marker)
+      ? fs.readFileSync(/*turbopackIgnore: true*/ marker, "utf8").trim()
+      : fileSha256(runtime);
+  if (bundledHash && runtimeHash === bundledHash && fs.existsSync(/*turbopackIgnore: true*/ runtime)) {
+    return;
+  }
+  fs.mkdirSync(path.dirname(runtime), { recursive: true });
+  for (const side of [`${runtime}-wal`, `${runtime}-shm`]) {
+    try {
+      fs.rmSync(/*turbopackIgnore: true*/ side, { force: true });
+    } catch {
+      /* ignore */
+    }
+  }
+  fs.copyFileSync(/*turbopackIgnore: true*/ bundled, runtime);
+  if (bundledHash) fs.writeFileSync(/*turbopackIgnore: true*/ marker, `${bundledHash}\n`);
+}
+
 export function getDb(): Database.Database {
   if (_db) return _db;
 
   fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 
-  if (DB_PATH !== BUNDLED_DB_PATH && !fs.existsSync(DB_PATH)) {
-    if (fs.existsSync(BUNDLED_DB_PATH)) {
-      fs.copyFileSync(BUNDLED_DB_PATH, DB_PATH);
-    } else {
-      console.error(
-        "campus-universe.db was not found in this deployment. Serving an empty database until the bundled file is included."
-      );
-    }
+  // On Vercel, always re-sync /tmp from the bundled DB when the content hash
+  // differs. Copying only when missing left a stale /tmp from a prior deploy
+  // (preview mast off by 1 company / 2 signals vs the SHA-local corpus).
+  if (DB_PATH !== BUNDLED_DB_PATH) {
+    syncBundledDbToRuntime(BUNDLED_DB_PATH, DB_PATH);
   }
 
   const db = openDatabase(DB_PATH);

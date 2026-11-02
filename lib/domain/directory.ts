@@ -201,6 +201,10 @@ function readPrecomputedDirectory(): DirectoryData | null {
 }
 
 /** Reads companies, schools, sectors, and signal rows. Prefer build-time JSON on the hot path. */
+export function clearDirectoryMemo(): void {
+  directoryMemo = null;
+}
+
 export function loadDirectory(): DirectoryData {
   if (directoryMemo) return directoryMemo;
   const precomputed = readPrecomputedDirectory();
