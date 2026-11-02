@@ -633,21 +633,22 @@ export function FacetRail({
   return (
     <div className={`flex h-full min-h-0 flex-col overflow-hidden ${shell}`} data-facet-rail="scout" data-facet-sheet={sheet ? "1" : undefined} data-facet-index={index ? "1" : undefined}>
       <div className={`border-b border-[color:var(--line,#E1E5EF)] ${editorial ? "px-2.5 py-2.5" : "px-2.5 py-2"}`}>
-        {dense && !sheet && !index ? null : (
+        {/* Index column: parent already owns the Filters + N of M hero. Sheet keeps its own. */}
+        {index ? null : dense && !sheet ? null : (
           <>
-            <p className={`font-mono text-[10px] uppercase ${sheet || dense || index ? "tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]" : "tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]"}`}>
+            <p className={`font-mono text-[10px] uppercase ${sheet || dense ? "tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]" : "tracking-[0.08em] text-[color:var(--fg-3,#5C647A)]"}`}>
               Filters
             </p>
-            {(index || sheet) && indexCount != null ? (
+            {sheet && indexCount != null ? (
               <p
-                className={`mt-1.5 font-mono font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)] ${index ? "text-[28px]" : "text-[24px]"}`}
+                className="mt-1.5 font-mono text-[24px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]"
                 data-facet-figure=""
               >
                 {indexCount.toLocaleString("en-US")}
               </p>
             ) : null}
-            <p className={`mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] ${(index || sheet) && indexCount != null ? "mt-1.5" : ""}`}>{caption}</p>
-            {sheet || index ? (
+            <p className={`mt-0.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] ${sheet && indexCount != null ? "mt-1.5" : ""}`}>{caption}</p>
+            {sheet ? (
               <p className="mt-0.5 font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">Status · Year · Sector · Campus</p>
             ) : null}
           </>
@@ -733,7 +734,8 @@ export function FacetRail({
             ))}
           </FacetGroup>
         )}
-                {flags.length > 0 ? (
+        {/* Omit Flags when nothing has a count (no empty All-only block). */}
+        {flags.length > 0 ? (
           <FacetGroup title="Flags" dense={editorial}>
             <FacetRow facet="flag" active={!facets.flag} onClick={() => set({ flag: null })} label="All" />
             {flags.map((item) => (

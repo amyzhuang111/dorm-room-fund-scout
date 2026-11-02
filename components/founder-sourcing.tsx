@@ -64,7 +64,7 @@ export function FounderResults({
   query: string;
   campusId: string | null;
   campusName: string | null;
-  /** Founder-name slots on company cards — may be below the searchable index. */
+  /** Founder-name slots on company cards  -  may be below the searchable index. */
   foundersListed?: number;
   onClearCampus: () => void;
   onMissingCampus: () => void;
@@ -167,12 +167,6 @@ export function FounderResults({
               "Loading founders"
             )}
           </p>
-          {status === "ready" && unfiltered && foundersListed > 0 ? (
-            <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-founder-count-reconcile="">
-              <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{foundersListed.toLocaleString("en-US")}</span>
-              {" founder names on company cards · index can run higher (people without a linked company yet)"}
-            </p>
-          ) : null}
         </div>
       </div>
       <div className="mb-3" data-founder-filters="">

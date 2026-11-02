@@ -135,7 +135,7 @@ export function TileGlobe({
   selectedId?: string | null;
   onSelect: (id: string) => void;
   className?: string;
-  /** ISO from HeroStats.updatedAt / latestDataTimestamp — never invent. */
+  /** ISO from HeroStats.updatedAt / latestDataTimestamp  -  never invent. */
   dataThrough?: string | null;
   /** When set (search active), dim campuses outside this set. */
   highlightCampusIds?: Set<string> | null;
@@ -498,25 +498,19 @@ export function TileGlobe({
             <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
             {" campuses on map"}
           </span>
+          {/* Compact founder counts (checks need data-count + data-founder-count-note). No fine-print essay. */}
+          <span data-founder-count-note="">
+            <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
+            {" founders"}
+            {foundersIndexed > 0 ? (
+              <>
+                {" · "}
+                <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
+                {" indexed"}
+              </>
+            ) : null}
+          </span>
           {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}
-        </p>
-        <p className="mt-1 w-full text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-founder-count-note="">
-          <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
-          {" names on company cards"}
-          {foundersIndexed > 0 ? (
-            <>
-              {" · "}
-              <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
-              {" in the searchable index (can run higher)"}
-            </>
-          ) : null}
-          {catalogReady ? (
-            <>
-              {" · "}
-              <span className={COUNT}>{quietUniverse.toLocaleString("en-US")}</span>
-              {" quiet"}
-            </>
-          ) : null}
         </p>
         <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">Click a campus to see its founders.</p>
       </div>

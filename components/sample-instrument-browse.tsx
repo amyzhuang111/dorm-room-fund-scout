@@ -237,6 +237,8 @@ export function SampleInstrumentBrowse({
   const [catalog, setCatalog] = useState<FacetCompany[] | null>(null);
   const [founderLinks, setFounderLinks] = useState<Record<string, { name: string; linkedinUrl: string }[]>>({});
   const [rightTab, setRightTab] = useState<"feed" | "overlays">("feed");
+  /** Right instrument starts closed so the ledger owns the width (Monitor-style peek). */
+  const [rightOpen, setRightOpen] = useState(false);
 
   useEffect(() => {
     let cancel = false;
@@ -307,9 +309,6 @@ export function SampleInstrumentBrowse({
     return page.length > 0 ? page : cardsProp;
   }, [pages, catalog, cardsProp, feed, sector, kind, campus, query, sort]);
   const boardCompanies = useMemo(() => applyFacets(companiesLive, facets), [companiesLive, facets]);
-  const topCampus = useMemo(() => {
-    return [...campuses].sort((a, b) => b.founders - a.founders || a.name.localeCompare(b.name))[0] ?? null;
-  }, [campuses]);
   /** Continued-view insight: matching companies with ≥1 stored signal (not pagination). */
   const signaledMatch = useMemo(
     () => boardCompanies.filter((c) => (c.signals ?? 0) > 0).length,
@@ -514,8 +513,13 @@ export function SampleInstrumentBrowse({
 
   return (
     <div
-      className="mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-4 sm:mt-3 lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(220px,280px)] lg:gap-5"
+      className={`mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-4 sm:mt-3 lg:gap-5 ${
+        rightOpen
+          ? "lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(220px,280px)]"
+          : "lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)]"
+      }`}
       data-browse-spread=""
+      data-right-open={rightOpen ? "1" : "0"}
     >
       {/* Col 1 · persistent ruled index (magazine TOC), not a sheet over content */}
       <aside className="hidden min-w-0 lg:block" data-browse-index="">
@@ -581,7 +585,6 @@ export function SampleInstrumentBrowse({
               facets={facets}
               onChange={commitFacet}
               index
-              indexCount={boardCompanies.length}
               caption={feed === "leaderboard" ? "Signals" : "Companies"}
             />
           </div>
@@ -591,61 +594,34 @@ export function SampleInstrumentBrowse({
 
       {/* Col 2 · ember figure hero + ledger */}
       <div className="min-w-0" data-browse-ledger="">
-        {/* Distinct hero per surface · fold language, not the fold stamp */}
+        {/* Single count hero lives in the Filters column. Ledger keeps sort + optional signal strip. */}
         <div
           className={`mb-3 border-b border-[color:var(--line,#E1E5EF)] pb-3 lg:mb-2 lg:pb-2 ${
-            feed === "directory" && pages <= 1 ? "hidden lg:block" : ""
-          } ${feed === "directory" && pages > 1 ? "hidden lg:block" : ""}`}
+            feed === "directory" ? "hidden lg:block" : ""
+          }`}
           data-browse-hero={feed}
+          data-browse-hero-slim="1"
           data-continued-page={pages > 1 ? "1" : undefined}
           data-ledger-chapter={feed === "directory" ? "1" : undefined}
         >
-          <div className="flex flex-wrap items-end justify-between gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="min-w-0">
-              {feed === "leaderboard" && topCampus ? (
-                <div className="min-w-0" data-signal-hero-spread="">
-                  <div className="min-w-0">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
-                      Signal desk · ranked ledger
-                    </p>
-                    <p className="mt-1 font-mono text-[28px] font-bold leading-[0.88] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
-                      {topCampus.founders.toLocaleString("en-US")}
-                    </p>
-                    <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                      {shortCampusLabel(topCampus.id, topCampus.name)}
-                      {" · #1 by founders"}
-                    </p>
-                    <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                      Ranked by recent signal weight ·{" "}
-                      <span className="font-bold text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
-                      {" on desk"}
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
-                  <p className="mt-1.5 font-mono text-[44px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">
-                    <span className="text-[color:var(--ember,#D96B1C)]">{total.toLocaleString("en-US")}</span>
-                  </p>
-                  <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
-                    {caption}
-                    {campusName ? (
-                      <>
-                        {" · "}
-                        {campusName}
-                        {" · "}
-                        <Link href={clearCampusHref} className="text-[color:var(--ember,#D96B1C)] hover:underline">
-                          Clear
-                        </Link>
-                      </>
-                    ) : null}
-                  </p>
-                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{subline}</p>
-                </>
-              )}
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">{kicker}</p>
+              <p className="mt-1 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
+                {caption}
+                {campusName ? (
+                  <>
+                    {" · "}
+                    {campusName}
+                    {" · "}
+                    <Link href={clearCampusHref} className="text-[color:var(--ember,#D96B1C)] hover:underline">
+                      Clear
+                    </Link>
+                  </>
+                ) : null}
+              </p>
+              <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">{subline}</p>
             </div>
-            {/* Desktop: pill sort only · filters live in the persistent index column. */}
             <div className="hidden flex-wrap items-center gap-1.5 lg:flex">
               {feed === "directory"
                 ? (
@@ -665,15 +641,27 @@ export function SampleInstrumentBrowse({
                     </Link>
                   ))
                 : null}
+              <button
+                type="button"
+                data-open-right-rail=""
+                aria-pressed={rightOpen}
+                onClick={() => setRightOpen((open) => !open)}
+                className={`inline-flex h-8 items-center rounded-sm border px-3 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] ${
+                  rightOpen
+                    ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--cobalt,#2F4FD8)]"
+                    : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg-2,#3F465C)]"
+                }`}
+              >
+                {rightOpen ? "Hide panels" : "Panels"}
+              </button>
             </div>
           </div>
-          {feed === "directory" && pages <= 1 ? (
-            <div className="mt-4 hidden lg:block" data-signals-landed-desk="">
-              <SignalsLanded companies={companiesLive} />
-            </div>
-          ) : null}
-          {feed === "directory" && pages > 1 ? (
-            <div className="mt-3 hidden lg:block" data-signals-landed-desk-continued="">
+          {feed === "directory" ? (
+            <div
+              className="mt-3 hidden lg:block"
+              data-signals-landed-desk={pages > 1 ? undefined : ""}
+              data-signals-landed-desk-continued={pages > 1 ? "" : undefined}
+            >
               <SignalsLanded companies={companiesLive} />
             </div>
           ) : null}
@@ -1229,68 +1217,73 @@ export function SampleInstrumentBrowse({
         </div>
       </div>
 
-      {/* Col 3 · Monitor-style Feed / Overlays tabs */}
-      <aside className="hidden min-w-0 lg:block" data-browse-wire="" data-instrument-tabs="">
-        <div className="sticky top-14">
-          <div className={`${PANEL} relative overflow-hidden p-2.5`}>
-            <div className="mb-2 flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
-              <div className="flex items-center gap-1" role="tablist" aria-label="Instrument panels">
+      {/* Col 3 · tabbed instrument; closed by default so the list gains width */}
+      {rightOpen ? (
+        <aside className="hidden min-w-0 lg:block" data-browse-wire="" data-instrument-tabs="">
+          <div className="sticky top-14">
+            <div className={`${PANEL} relative overflow-hidden p-2.5`}>
+              <div className="mb-2 flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
+                <div className="flex items-center gap-1" role="tablist" aria-label="Instrument panels">
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={rightTab === "feed"}
+                    data-tab="feed"
+                    onClick={() => setRightTab("feed")}
+                    className={`h-7 rounded-full px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] ${
+                      rightTab === "feed"
+                        ? "bg-[color:var(--cobalt,#2F4FD8)] text-white"
+                        : "text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg,#0B0E17)]"
+                    }`}
+                  >
+                    Feed
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={rightTab === "overlays"}
+                    data-tab="overlays"
+                    onClick={() => setRightTab("overlays")}
+                    className={`h-7 rounded-full px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] ${
+                      rightTab === "overlays"
+                        ? "bg-[color:var(--cobalt,#2F4FD8)] text-white"
+                        : "text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg,#0B0E17)]"
+                    }`}
+                  >
+                    Overlays
+                  </button>
+                </div>
                 <button
                   type="button"
-                  role="tab"
-                  aria-selected={rightTab === "feed"}
-                  data-tab="feed"
-                  onClick={() => setRightTab("feed")}
-                  className={`h-7 rounded-full px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] ${
-                    rightTab === "feed"
-                      ? "bg-[color:var(--cobalt,#2F4FD8)] text-white"
-                      : "text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg,#0B0E17)]"
-                  }`}
+                  data-close-right-rail=""
+                  onClick={() => setRightOpen(false)}
+                  className="font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--ember,#D96B1C)]"
                 >
-                  Feed
-                </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={rightTab === "overlays"}
-                  data-tab="overlays"
-                  onClick={() => setRightTab("overlays")}
-                  className={`h-7 rounded-full px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] ${
-                    rightTab === "overlays"
-                      ? "bg-[color:var(--cobalt,#2F4FD8)] text-white"
-                      : "text-[color:var(--fg-3,#5C647A)] hover:text-[color:var(--fg,#0B0E17)]"
-                  }`}
-                >
-                  Overlays
+                  Close
                 </button>
               </div>
-              <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
-                {" of "}
-                {total.toLocaleString("en-US")}
-              </p>
+              {rightTab === "feed" ? (
+                <div data-tab-panel="feed">
+                  <IntelligenceBoards
+                    companies={boardCompanies}
+                    compact={pages <= 1}
+                    surface={wireSurface}
+                    hideSector={feed === "directory" && pages <= 1}
+                    hideLatest={false}
+                    hidePrograms={false}
+                  />
+                </div>
+              ) : (
+                <div className="space-y-3" data-tab-panel="overlays">
+                  <OverlayCountBlock title="Status" rows={overlayCounts.status} />
+                  <OverlayCountBlock title="Sector" rows={overlayCounts.sector} />
+                  <OverlayCountBlock title="Campus" rows={overlayCounts.campus} />
+                </div>
+              )}
             </div>
-            {rightTab === "feed" ? (
-              <div data-tab-panel="feed">
-                <IntelligenceBoards
-                  companies={boardCompanies}
-                  compact={pages <= 1}
-                  surface={wireSurface}
-                  hideSector={feed === "directory" && pages <= 1}
-                  hideLatest={false}
-                  hidePrograms={false}
-                />
-              </div>
-            ) : (
-              <div className="space-y-3" data-tab-panel="overlays">
-                <OverlayCountBlock title="Status" rows={overlayCounts.status} />
-                <OverlayCountBlock title="Sector" rows={overlayCounts.sector} />
-                <OverlayCountBlock title="Campus" rows={overlayCounts.campus} />
-              </div>
-            )}
           </div>
-        </div>
-      </aside>
+        </aside>
+      ) : null}
 
 
       {/* Mobile bottom filter sheet */}
