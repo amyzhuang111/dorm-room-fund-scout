@@ -1,0 +1,133 @@
+{
+  "ok": true,
+  "base": "http://127.0.0.1:3000",
+  "collisions": [],
+  "pages": [
+    {
+      "route": "/",
+      "viewport": "375",
+      "nodeCount": 44,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/companies",
+      "viewport": "375",
+      "nodeCount": 49,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/companies?more=2",
+      "viewport": "375",
+      "nodeCount": 48,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/companies?feed=leaderboard",
+      "viewport": "375",
+      "nodeCount": 42,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/founders",
+      "viewport": "375",
+      "nodeCount": 47,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/campuses",
+      "viewport": "375",
+      "nodeCount": 57,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/data",
+      "viewport": "375",
+      "nodeCount": 69,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/signals",
+      "viewport": "375",
+      "nodeCount": 55,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/startup/proj_9GUOmdEYxbuH",
+      "viewport": "375",
+      "nodeCount": 53,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/",
+      "viewport": "1440",
+      "nodeCount": 114,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/companies",
+      "viewport": "1440",
+      "nodeCount": 142,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/companies?more=2",
+      "viewport": "1440",
+      "nodeCount": 168,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/companies?feed=leaderboard",
+      "viewport": "1440",
+      "nodeCount": 125,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/founders",
+      "viewport": "1440",
+      "nodeCount": 135,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/campuses",
+      "viewport": "1440",
+      "nodeCount": 124,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/data",
+      "viewport": "1440",
+      "nodeCount": 257,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/signals",
+      "viewport": "1440",
+      "nodeCount": 64,
+      "collisions": [],
+      "collisionCount": 0
+    },
+    {
+      "route": "/startup/proj_9GUOmdEYxbuH",
+      "viewport": "1440",
+      "nodeCount": 114,
+      "collisions": [],
+      "collisionCount": 0
+    }
+  ]
+}

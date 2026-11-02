@@ -38,25 +38,20 @@ export function CurrentViewStrip({
 
   return (
     <aside
-      className="mb-3 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-3 py-2.5"
+      className="mb-2 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-1.5"
       data-fold-current-view=""
       aria-label="Current map view"
     >
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
-          Current view
-        </p>
-        <p className="text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-[color:var(--fg,#0B0E17)]">
+        <p className="font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">View</p>
+        <p className="tabular-nums text-[color:var(--fg-2,#3F465C)]">
           <span className={COUNT}>{matchCount.toLocaleString("en-US")}</span>
-          {" of "}
+          {"/"}
           <span className="font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{totalFounders.toLocaleString("en-US")}</span>
-          {" founders"}
         </p>
-      </div>
-      <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-[color:var(--fg,#0B0E17)]">
         {campusName ? (
           <span>
-            Campus · <span className="font-semibold">{campusName}</span>
+            <span className="font-semibold">{campusName}</span>
             {" "}
             <button type="button" onClick={onClearCampus} className="font-medium text-[color:var(--cobalt,#2F4FD8)] hover:underline">
               Clear
@@ -65,37 +60,27 @@ export function CurrentViewStrip({
         ) : null}
         {q ? (
           <span>
-            Search · <span className="font-semibold">&ldquo;{q}&rdquo;</span>
+            &ldquo;{q}&rdquo;
             {" "}
             <button type="button" onClick={onClearQuery} className="font-medium text-[color:var(--cobalt,#2F4FD8)] hover:underline">
               Clear
             </button>
           </span>
         ) : null}
-        {!campusName && !q ? (
-          <span className="text-[color:var(--fg-3,#5C647A)]">All campuses · click a marker to focus</span>
+        {startups.length > 0 ? (
+          <span className="min-w-0 truncate text-[11px] text-[color:var(--fg-2,#3F465C)]" data-fold-current-startups="">
+            {startups.slice(0, 3).map((s, i) => (
+              <span key={s.id}>
+                {i > 0 ? " · " : null}
+                <Link href={`/startup/${s.id}?from=map`} className="font-medium text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--cobalt,#2F4FD8)] hover:underline">
+                  {s.name}
+                </Link>
+              </span>
+            ))}
+            {startups.length > 3 ? ` · +${startups.length - 3}` : null}
+          </span>
         ) : null}
       </div>
-      {startups.length > 0 ? (
-        <p className="mt-1.5 text-[12px] leading-5 text-[color:var(--fg-2,#3F465C)]" data-fold-current-startups="">
-          <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Startups in view · </span>
-          {startups.slice(0, 6).map((s, i) => (
-            <span key={s.id}>
-              {i > 0 ? " · " : null}
-              <Link href={`/startup/${s.id}?from=map`} className="font-medium text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--cobalt,#2F4FD8)] hover:underline">
-                {s.name}
-              </Link>
-            </span>
-          ))}
-          {startups.length > 6 ? ` · +${startups.length - 6} more` : null}
-        </p>
-      ) : null}
-      <p className="mt-1.5 text-[11px] text-[color:var(--fg-3,#5C647A)]">
-        <Link href="/data?from=map" className="font-medium text-[color:var(--cobalt,#2F4FD8)] hover:underline">
-          Open directory table
-        </Link>
-        {" · map-linked rows for the same filter"}
-      </p>
     </aside>
   );
 }

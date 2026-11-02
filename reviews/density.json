@@ -1,0 +1,728 @@
+{
+  "ok": true,
+  "base": "http://127.0.0.1:3000",
+  "baselineSource": "baked-e100551",
+  "baseline": {
+    "companies@375": {
+      "halfVisible": 2,
+      "fully": 2
+    },
+    "companies-more@375": {
+      "halfVisible": 3,
+      "fully": 3
+    },
+    "company-sim@375": {
+      "halfVisible": 3,
+      "fully": 3
+    },
+    "companies@1440": {
+      "halfVisible": 3,
+      "fully": 2
+    },
+    "companies-more@1440": {
+      "halfVisible": 2,
+      "fully": 2
+    },
+    "company-sim@1440": {
+      "halfVisible": 4,
+      "fully": 4
+    }
+  },
+  "foldBaseline": {
+    "fold@375": {
+      "peak": 1,
+      "ranks": 1,
+      "bars": 1,
+      "founderCards": 1
+    },
+    "fold@1440": {
+      "peak": 1,
+      "ranks": 1,
+      "bars": 1,
+      "founderCards": 2
+    }
+  },
+  "foldBaselineSource": "baked-913f16a",
+  "controlLive": null,
+  "controlBase": null,
+  "candidate": {
+    "companies@375": {
+      "nDom": 14,
+      "fully": 2,
+      "intersecting": 3,
+      "halfVisible": 2,
+      "firstTop": 425,
+      "rows": [
+        {
+          "i": 0,
+          "top": 425,
+          "h": 170,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 170
+        },
+        {
+          "i": 1,
+          "top": 595,
+          "h": 170,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 170
+        },
+        {
+          "i": 2,
+          "top": 766,
+          "h": 164,
+          "fully": false,
+          "intersecting": true,
+          "halfVisible": false,
+          "visibleH": 47
+        }
+      ],
+      "selector": "[data-card-signals]",
+      "path": "/companies"
+    },
+    "companies-more@375": {
+      "nDom": 28,
+      "fully": 3,
+      "intersecting": 4,
+      "halfVisible": 4,
+      "firstTop": 213,
+      "rows": [
+        {
+          "i": 0,
+          "top": 213,
+          "h": 170,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 170
+        },
+        {
+          "i": 1,
+          "top": 383,
+          "h": 170,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 170
+        },
+        {
+          "i": 2,
+          "top": 554,
+          "h": 164,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 164
+        },
+        {
+          "i": 3,
+          "top": 718,
+          "h": 140,
+          "fully": false,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 94
+        }
+      ],
+      "selector": "[data-card-signals]",
+      "path": "/companies?more=2"
+    },
+    "company-sim@375": {
+      "nDom": 6,
+      "fully": 6,
+      "intersecting": 6,
+      "halfVisible": 6,
+      "firstTop": 553,
+      "rows": [
+        {
+          "i": 0,
+          "top": 553,
+          "h": 22,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 22
+        },
+        {
+          "i": 1,
+          "top": 577,
+          "h": 22,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 22
+        },
+        {
+          "i": 2,
+          "top": 601,
+          "h": 22,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 22
+        },
+        {
+          "i": 3,
+          "top": 625,
+          "h": 22,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 22
+        },
+        {
+          "i": 4,
+          "top": 649,
+          "h": 22,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 22
+        },
+        {
+          "i": 5,
+          "top": 673,
+          "h": 22,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 22
+        }
+      ],
+      "selector": "[data-dossier-signal-timeline] > li",
+      "path": "/startup/proj_9GUOmdEYxbuH"
+    },
+    "companies@1440": {
+      "nDom": 14,
+      "fully": 2,
+      "intersecting": 3,
+      "halfVisible": 3,
+      "firstTop": 445,
+      "rows": [
+        {
+          "i": 0,
+          "top": 445,
+          "h": 167,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 167
+        },
+        {
+          "i": 1,
+          "top": 613,
+          "h": 167,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 167
+        },
+        {
+          "i": 2,
+          "top": 781,
+          "h": 161,
+          "fully": false,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 119
+        }
+      ],
+      "selector": "[data-card-signals]",
+      "path": "/companies"
+    },
+    "companies-more@1440": {
+      "nDom": 28,
+      "fully": 2,
+      "intersecting": 3,
+      "halfVisible": 2,
+      "firstTop": 550,
+      "rows": [
+        {
+          "i": 0,
+          "top": 550,
+          "h": 167,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 167
+        },
+        {
+          "i": 1,
+          "top": 718,
+          "h": 167,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 167
+        },
+        {
+          "i": 2,
+          "top": 886,
+          "h": 161,
+          "fully": false,
+          "intersecting": true,
+          "halfVisible": false,
+          "visibleH": 14
+        }
+      ],
+      "selector": "[data-card-signals]",
+      "path": "/companies?more=2"
+    },
+    "company-sim@1440": {
+      "nDom": 4,
+      "fully": 4,
+      "intersecting": 4,
+      "halfVisible": 4,
+      "firstTop": 417,
+      "rows": [
+        {
+          "i": 0,
+          "top": 417,
+          "h": 60,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 60
+        },
+        {
+          "i": 1,
+          "top": 478,
+          "h": 60,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 60
+        },
+        {
+          "i": 2,
+          "top": 588,
+          "h": 54,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 54
+        },
+        {
+          "i": 3,
+          "top": 643,
+          "h": 54,
+          "fully": true,
+          "intersecting": true,
+          "halfVisible": true,
+          "visibleH": 54
+        }
+      ],
+      "selector": "[data-dossier-wire] a[href*='/startup/']",
+      "path": "/startup/proj_9GUOmdEYxbuH"
+    }
+  },
+  "foldCandidate": {
+    "fold@375": {
+      "peak": 1,
+      "ranks": 1,
+      "bars": 1,
+      "founderCards": 1
+    },
+    "fold@1440": {
+      "peak": 1,
+      "ranks": 1,
+      "bars": 1,
+      "founderCards": 3
+    }
+  },
+  "comparisons": [
+    {
+      "key": "companies@375",
+      "ok": true,
+      "halfOk": true,
+      "fullyOk": true,
+      "candidate": {
+        "nDom": 14,
+        "fully": 2,
+        "intersecting": 3,
+        "halfVisible": 2,
+        "firstTop": 425,
+        "rows": [
+          {
+            "i": 0,
+            "top": 425,
+            "h": 170,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 170
+          },
+          {
+            "i": 1,
+            "top": 595,
+            "h": 170,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 170
+          },
+          {
+            "i": 2,
+            "top": 766,
+            "h": 164,
+            "fully": false,
+            "intersecting": true,
+            "halfVisible": false,
+            "visibleH": 47
+          }
+        ],
+        "selector": "[data-card-signals]",
+        "path": "/companies"
+      },
+      "floor": {
+        "halfVisible": 2,
+        "fully": 2
+      },
+      "controlLive": null,
+      "detail": "cand half=2 fully=2 | floor half=2 fully=2"
+    },
+    {
+      "key": "companies-more@375",
+      "ok": true,
+      "halfOk": true,
+      "fullyOk": true,
+      "candidate": {
+        "nDom": 28,
+        "fully": 3,
+        "intersecting": 4,
+        "halfVisible": 4,
+        "firstTop": 213,
+        "rows": [
+          {
+            "i": 0,
+            "top": 213,
+            "h": 170,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 170
+          },
+          {
+            "i": 1,
+            "top": 383,
+            "h": 170,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 170
+          },
+          {
+            "i": 2,
+            "top": 554,
+            "h": 164,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 164
+          },
+          {
+            "i": 3,
+            "top": 718,
+            "h": 140,
+            "fully": false,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 94
+          }
+        ],
+        "selector": "[data-card-signals]",
+        "path": "/companies?more=2"
+      },
+      "floor": {
+        "halfVisible": 3,
+        "fully": 3
+      },
+      "controlLive": null,
+      "detail": "cand half=4 fully=3 | floor half=3 fully=3"
+    },
+    {
+      "key": "company-sim@375",
+      "ok": true,
+      "halfOk": true,
+      "fullyOk": true,
+      "candidate": {
+        "nDom": 6,
+        "fully": 6,
+        "intersecting": 6,
+        "halfVisible": 6,
+        "firstTop": 553,
+        "rows": [
+          {
+            "i": 0,
+            "top": 553,
+            "h": 22,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 22
+          },
+          {
+            "i": 1,
+            "top": 577,
+            "h": 22,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 22
+          },
+          {
+            "i": 2,
+            "top": 601,
+            "h": 22,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 22
+          },
+          {
+            "i": 3,
+            "top": 625,
+            "h": 22,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 22
+          },
+          {
+            "i": 4,
+            "top": 649,
+            "h": 22,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 22
+          },
+          {
+            "i": 5,
+            "top": 673,
+            "h": 22,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 22
+          }
+        ],
+        "selector": "[data-dossier-signal-timeline] > li",
+        "path": "/startup/proj_9GUOmdEYxbuH"
+      },
+      "floor": {
+        "halfVisible": 3,
+        "fully": 3
+      },
+      "controlLive": null,
+      "detail": "cand half=6 fully=6 | floor half=3 fully=3"
+    },
+    {
+      "key": "companies@1440",
+      "ok": true,
+      "halfOk": true,
+      "fullyOk": true,
+      "candidate": {
+        "nDom": 14,
+        "fully": 2,
+        "intersecting": 3,
+        "halfVisible": 3,
+        "firstTop": 445,
+        "rows": [
+          {
+            "i": 0,
+            "top": 445,
+            "h": 167,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 167
+          },
+          {
+            "i": 1,
+            "top": 613,
+            "h": 167,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 167
+          },
+          {
+            "i": 2,
+            "top": 781,
+            "h": 161,
+            "fully": false,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 119
+          }
+        ],
+        "selector": "[data-card-signals]",
+        "path": "/companies"
+      },
+      "floor": {
+        "halfVisible": 3,
+        "fully": 2
+      },
+      "controlLive": null,
+      "detail": "cand half=3 fully=2 | floor half=3 fully=2"
+    },
+    {
+      "key": "companies-more@1440",
+      "ok": true,
+      "halfOk": true,
+      "fullyOk": true,
+      "candidate": {
+        "nDom": 28,
+        "fully": 2,
+        "intersecting": 3,
+        "halfVisible": 2,
+        "firstTop": 550,
+        "rows": [
+          {
+            "i": 0,
+            "top": 550,
+            "h": 167,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 167
+          },
+          {
+            "i": 1,
+            "top": 718,
+            "h": 167,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 167
+          },
+          {
+            "i": 2,
+            "top": 886,
+            "h": 161,
+            "fully": false,
+            "intersecting": true,
+            "halfVisible": false,
+            "visibleH": 14
+          }
+        ],
+        "selector": "[data-card-signals]",
+        "path": "/companies?more=2"
+      },
+      "floor": {
+        "halfVisible": 2,
+        "fully": 2
+      },
+      "controlLive": null,
+      "detail": "cand half=2 fully=2 | floor half=2 fully=2"
+    },
+    {
+      "key": "company-sim@1440",
+      "ok": true,
+      "halfOk": true,
+      "fullyOk": true,
+      "candidate": {
+        "nDom": 4,
+        "fully": 4,
+        "intersecting": 4,
+        "halfVisible": 4,
+        "firstTop": 417,
+        "rows": [
+          {
+            "i": 0,
+            "top": 417,
+            "h": 60,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 60
+          },
+          {
+            "i": 1,
+            "top": 478,
+            "h": 60,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 60
+          },
+          {
+            "i": 2,
+            "top": 588,
+            "h": 54,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 54
+          },
+          {
+            "i": 3,
+            "top": 643,
+            "h": 54,
+            "fully": true,
+            "intersecting": true,
+            "halfVisible": true,
+            "visibleH": 54
+          }
+        ],
+        "selector": "[data-dossier-wire] a[href*='/startup/']",
+        "path": "/startup/proj_9GUOmdEYxbuH"
+      },
+      "floor": {
+        "halfVisible": 4,
+        "fully": 4
+      },
+      "controlLive": null,
+      "detail": "cand half=4 fully=4 | floor half=4 fully=4"
+    }
+  ],
+  "foldComparisons": [
+    {
+      "key": "fold@375",
+      "ok": true,
+      "peakOk": true,
+      "ranksOk": true,
+      "barsOk": true,
+      "cardsOk": true,
+      "candidate": {
+        "peak": 1,
+        "ranks": 1,
+        "bars": 1,
+        "founderCards": 1
+      },
+      "floor": {
+        "peak": 1,
+        "ranks": 1,
+        "bars": 1,
+        "founderCards": 1
+      },
+      "detail": "cand peak=1 ranks=1 bars=1 cards=1 | floor peak=1 ranks=1 bars=1 cards=1"
+    },
+    {
+      "key": "fold@1440",
+      "ok": true,
+      "peakOk": true,
+      "ranksOk": true,
+      "barsOk": true,
+      "cardsOk": true,
+      "candidate": {
+        "peak": 1,
+        "ranks": 1,
+        "bars": 1,
+        "founderCards": 3
+      },
+      "floor": {
+        "peak": 1,
+        "ranks": 1,
+        "bars": 1,
+        "founderCards": 2
+      },
+      "detail": "cand peak=1 ranks=1 bars=1 cards=3 | floor peak=1 ranks=1 bars=1 cards=2"
+    }
+  ]
+}

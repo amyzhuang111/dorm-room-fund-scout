@@ -114,6 +114,8 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
     pitch: pitch || null,
     stage,
     signalLabel: directoryRow?.signalLabel ?? null,
+    websiteUrl: project.websiteUrl || project.profile.website?.text || null,
+    linkedinUrl: project.profile.companyLinkedin?.text || null,
   };
   const companies = wireSeedCompanies(all, dossier.schoolId, dossier.sectorId);
   return (

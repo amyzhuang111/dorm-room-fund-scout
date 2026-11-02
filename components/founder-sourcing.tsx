@@ -180,7 +180,7 @@ export function FounderResults({
       <div className={`mb-3 lg:mb-2 ${peek ? "max-lg:mb-1" : ""}`} data-founder-filters="">
         <button
           type="button"
-          className="mb-2 inline-flex h-8 items-center gap-1.5 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)] lg:hidden"
+          className={`mb-2 inline-flex h-8 items-center gap-1.5 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)] ${peek ? "" : "lg:hidden"}`}
           aria-expanded={filtersOpen}
           onClick={() => setFiltersOpen((open) => !open)}
           data-founder-filters-toggle=""
@@ -190,7 +190,7 @@ export function FounderResults({
             <span className="font-bold normal-case tracking-normal text-[color:var(--cobalt,#2F4FD8)]">· on</span>
           ) : null}
         </button>
-        <div className={`${filtersOpen ? "flex" : "hidden"} flex-wrap gap-2 lg:flex`}>
+        <div className={`${filtersOpen ? "flex" : "hidden"} flex-wrap gap-2 ${peek ? "" : "lg:flex"}`}>
           <FilterSelect label="Program" value={program} onChange={setProgram}>
             <option value="">Any program</option>
             {options.programs.map(([name, count]) => (

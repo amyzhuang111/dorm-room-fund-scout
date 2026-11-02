@@ -270,12 +270,40 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
             {!isEmpty(profile.description) && pitch && (profile.description?.text || "").trim() !== pitch ? (
               <Field label="Description">{profile.description?.text}</Field>
             ) : null}
+            {/* r50 mobile: website + LinkedIn sit with Identity in the fold */}
+            {hasLinks ? (
+              <div className="border-b border-[color:var(--line,#E1E5EF)] py-2.5 last:border-b-0 sm:hidden" data-full-record-identity-links="">
+                <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Links</dt>
+                <dd className="mt-1.5 flex flex-wrap gap-2">
+                  {website ? (
+                    <a
+                      href={website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex min-h-9 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[11px] font-semibold text-white"
+                    >
+                      Website
+                    </a>
+                  ) : null}
+                  {companyLi ? (
+                    <a
+                      href={companyLi}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex min-h-9 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 px-3 font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)]"
+                    >
+                      LinkedIn
+                    </a>
+                  ) : null}
+                </dd>
+              </div>
+            ) : null}
           </Group>
           </div>
         ) : null}
 
         {hasCapital ? (
-          <div className="order-2 sm:order-none" data-full-record-capital-first="">
+          <div className="order-3 sm:order-none" data-full-record-capital-first="">
           <Group title="Capital">
             {!isEmpty(funding) ? <Field label="Funding">{funding?.text}</Field> : null}
             {!isEmpty(profile.rounds) ? (
@@ -334,7 +362,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
         ) : null}
 
         {hasLinks ? (
-          <div className="order-3 sm:order-none">
+          <div className="order-2 sm:order-none" data-full-record-links-near-identity="">
           <Group title="Links">
             {!isEmpty(website) ? (
               <Field label="Website">
