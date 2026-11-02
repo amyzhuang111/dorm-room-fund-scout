@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-02T11:18:34.326Z",
+  "generatedAt": "2026-11-02T11:47:00.685Z",
   "totalCompanies": 2508,
-  "withLogo": 1452,
+  "withLogo": 1404,
   "noWebsite": 894,
   "noLogo": 162,
   "logos": {
@@ -475,26 +475,6 @@
       "name": "Alia",
       "host": "usealia.com"
     },
-    "proj_BrjL9m6xoGdO": {
-      "path": "/company-logos/proj_BrjL9m6xoGdO.webp",
-      "bytes": 1718,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=airalux.com&sz=128",
-      "kind": "google-s2",
-      "name": "Airalux Medical",
-      "host": "airalux.com"
-    },
-    "proj_iiR2P6D8YhKq": {
-      "path": "/company-logos/proj_iiR2P6D8YhKq.webp",
-      "bytes": 826,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=ycombinator.com&sz=128",
-      "kind": "google-s2",
-      "name": "Adside.ai",
-      "host": "ycombinator.com"
-    },
     "proj_3HcdUJl2OJ-o": {
       "path": "/company-logos/proj_3HcdUJl2OJ-o.webp",
       "bytes": 1234,
@@ -544,16 +524,6 @@
       "kind": "apple-touch",
       "name": "Alpaca Health",
       "host": "alpacahealth.io"
-    },
-    "proj_Jod7cDonUOKX": {
-      "path": "/company-logos/proj_Jod7cDonUOKX.webp",
-      "bytes": 826,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=ycombinator.com&sz=128",
-      "kind": "google-s2",
-      "name": "Aikido Technologies",
-      "host": "ycombinator.com"
     },
     "proj_BEew93PB47Xj": {
       "path": "/company-logos/proj_BEew93PB47Xj.webp",
@@ -835,16 +805,6 @@
       "name": "Arzana",
       "host": "arzana.com"
     },
-    "proj_5-BbH4ikH-DV": {
-      "path": "/company-logos/proj_5-BbH4ikH-DV.webp",
-      "bytes": 826,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=ycombinator.com&sz=128",
-      "kind": "google-s2",
-      "name": "AnyAlpha",
-      "host": "ycombinator.com"
-    },
     "proj_1LGcOaD8j43Y": {
       "path": "/company-logos/proj_1LGcOaD8j43Y.webp",
       "bytes": 4812,
@@ -874,16 +834,6 @@
       "kind": "apple-touch",
       "name": "Aqua Voice",
       "host": "aquavoice.com"
-    },
-    "proj_wLL0tc8Z-IWN": {
-      "path": "/company-logos/proj_wLL0tc8Z-IWN.webp",
-      "bytes": 826,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=ycombinator.com&sz=128",
-      "kind": "google-s2",
-      "name": "Archangel Health",
-      "host": "ycombinator.com"
     },
     "proj_oGZDlPDszAe0": {
       "path": "/company-logos/proj_oGZDlPDszAe0.webp",
@@ -1065,16 +1015,6 @@
       "name": "AutoAce",
       "host": "autoace.ai"
     },
-    "proj_-pF8BmEZbmiz": {
-      "path": "/company-logos/proj_-pF8BmEZbmiz.webp",
-      "bytes": 1342,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=augmend.health&sz=128",
-      "kind": "google-s2",
-      "name": "AugMend Health",
-      "host": "augmend.health"
-    },
     "proj_hfXBT9s5k2A7": {
       "path": "/company-logos/proj_hfXBT9s5k2A7.webp",
       "bytes": 3220,
@@ -1094,16 +1034,6 @@
       "kind": "apple-touch",
       "name": "Aura",
       "host": "aurahealth.io"
-    },
-    "proj_CsYKzeqywL22": {
-      "path": "/company-logos/proj_CsYKzeqywL22.webp",
-      "bytes": 3450,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=atla-ai.com&sz=128",
-      "kind": "google-s2",
-      "name": "Atla",
-      "host": "atla-ai.com"
     },
     "proj_RWsIOrE9tO2V": {
       "path": "/company-logos/proj_RWsIOrE9tO2V.webp",
@@ -1465,16 +1395,6 @@
       "name": "Bicameral",
       "host": "examflow.io"
     },
-    "proj_oFIBTVUdm_oh": {
-      "path": "/company-logos/proj_oFIBTVUdm_oh.webp",
-      "bytes": 1214,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=berkm.co&sz=128",
-      "kind": "google-s2",
-      "name": "Berkm",
-      "host": "berkm.co"
-    },
     "proj_z7Zr4SNchm3l": {
       "path": "/company-logos/proj_z7Zr4SNchm3l.webp",
       "bytes": 6024,
@@ -1484,16 +1404,6 @@
       "kind": "icon",
       "name": "BioStack Platforms",
       "host": "getbiostack.com"
-    },
-    "proj_2mdKrhyNl9fG": {
-      "path": "/company-logos/proj_2mdKrhyNl9fG.webp",
-      "bytes": 3300,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=bioinspira.com&sz=128",
-      "kind": "google-s2",
-      "name": "BioInspira",
-      "host": "bioinspira.com"
     },
     "proj_rayFIxpzmAh1": {
       "path": "/company-logos/proj_rayFIxpzmAh1.webp",
@@ -1664,16 +1574,6 @@
       "kind": "apple-touch",
       "name": "Bluma",
       "host": "getbluma.com"
-    },
-    "proj_nDVmcw-AvTVB": {
-      "path": "/company-logos/proj_nDVmcw-AvTVB.webp",
-      "bytes": 1718,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=beyondraft.com&sz=128",
-      "kind": "google-s2",
-      "name": "BeyonDraft",
-      "host": "beyondraft.com"
     },
     "proj_EG1pQEqTpK_i": {
       "path": "/company-logos/proj_EG1pQEqTpK_i.webp",
@@ -3185,16 +3085,6 @@
       "name": "CipherSonic Labs",
       "host": "ciphersoniclabs.io"
     },
-    "proj_Qd70aEwVLtza": {
-      "path": "/company-logos/proj_Qd70aEwVLtza.webp",
-      "bytes": 826,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=ycombinator.com&sz=128",
-      "kind": "google-s2",
-      "name": "Cyclon",
-      "host": "ycombinator.com"
-    },
     "proj_I5MnsEelallQ": {
       "path": "/company-logos/proj_I5MnsEelallQ.webp",
       "bytes": 466,
@@ -3464,16 +3354,6 @@
       "kind": "apple-touch",
       "name": "Dock",
       "host": "trydock.ai"
-    },
-    "proj_iJnySTE73HKB": {
-      "path": "/company-logos/proj_iJnySTE73HKB.webp",
-      "bytes": 1410,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=linkedin.com&sz=128",
-      "kind": "google-s2",
-      "name": "Deeli AI",
-      "host": "linkedin.com"
     },
     "proj_pOA_YauzOENS": {
       "path": "/company-logos/proj_pOA_YauzOENS.webp",
@@ -3945,16 +3825,6 @@
       "name": "Embedder",
       "host": "embedder.com"
     },
-    "proj_nxZc4_1v_G8Q": {
-      "path": "/company-logos/proj_nxZc4_1v_G8Q.webp",
-      "bytes": 1718,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=erisbio.com&sz=128",
-      "kind": "google-s2",
-      "name": "Eris Biotech",
-      "host": "erisbio.com"
-    },
     "proj_kN5nXv7XuNDA": {
       "path": "/company-logos/proj_kN5nXv7XuNDA.webp",
       "bytes": 1954,
@@ -4095,26 +3965,6 @@
       "name": "Exia Labs",
       "host": "exialabs.com"
     },
-    "proj_owpPNEHhuWra": {
-      "path": "/company-logos/proj_owpPNEHhuWra.webp",
-      "bytes": 1214,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=etceterabio.com&sz=128",
-      "kind": "google-s2",
-      "name": "Etcetera Bio",
-      "host": "etceterabio.com"
-    },
-    "proj_QznCNf0YAISE": {
-      "path": "/company-logos/proj_QznCNf0YAISE.webp",
-      "bytes": 826,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=ycombinator.com&sz=128",
-      "kind": "google-s2",
-      "name": "Epsilab",
-      "host": "ycombinator.com"
-    },
     "proj_-Cw6LBXsS-iI": {
       "path": "/company-logos/proj_-Cw6LBXsS-iI.webp",
       "bytes": 838,
@@ -4254,16 +4104,6 @@
       "kind": "apple-touch",
       "name": "FLORA",
       "host": "flora.ai"
-    },
-    "proj_vcW0IiAeFvVa": {
-      "path": "/company-logos/proj_vcW0IiAeFvVa.webp",
-      "bytes": 826,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=ycombinator.com&sz=128",
-      "kind": "google-s2",
-      "name": "Evident Machines",
-      "host": "ycombinator.com"
     },
     "proj_F2N4nkHtGtmc": {
       "path": "/company-logos/proj_F2N4nkHtGtmc.webp",
@@ -4435,16 +4275,6 @@
       "name": "Fiber AI",
       "host": "fiber.ai"
     },
-    "proj_omQqgStwfjTt": {
-      "path": "/company-logos/proj_omQqgStwfjTt.webp",
-      "bytes": 3300,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=flockshop.co&sz=128",
-      "kind": "google-s2",
-      "name": "Flock",
-      "host": "flockshop.co"
-    },
     "proj_XKFwln_-5_vl": {
       "path": "/company-logos/proj_XKFwln_-5_vl.webp",
       "bytes": 1878,
@@ -4484,16 +4314,6 @@
       "kind": "apple-touch",
       "name": "Fluid",
       "host": "fluid.so"
-    },
-    "proj_QULr7Rwh3Krd": {
-      "path": "/company-logos/proj_QULr7Rwh3Krd.webp",
-      "bytes": 3450,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=fintellect.pro&sz=128",
-      "kind": "google-s2",
-      "name": "Fintellect",
-      "host": "fintellect.pro"
     },
     "proj_lwLHrbjfk1Zf": {
       "path": "/company-logos/proj_lwLHrbjfk1Zf.webp",
@@ -4915,16 +4735,6 @@
       "name": "Galactic Resource Utilization Space, Inc. (GRU Space)",
       "host": "gru.space"
     },
-    "proj_vNaIu0SANzwP": {
-      "path": "/company-logos/proj_vNaIu0SANzwP.webp",
-      "bytes": 1718,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=gees.co&sz=128",
-      "kind": "google-s2",
-      "name": "Gees",
-      "host": "gees.co"
-    },
     "proj_2a1PoNdOEWT9": {
       "path": "/company-logos/proj_2a1PoNdOEWT9.webp",
       "bytes": 2056,
@@ -4994,16 +4804,6 @@
       "kind": "apple-touch",
       "name": "General Learning",
       "host": "generallearning.com"
-    },
-    "proj_3Stj4YkzmdOx": {
-      "path": "/company-logos/proj_3Stj4YkzmdOx.webp",
-      "bytes": 132,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.gheek.ai/favicon.svg",
-      "kind": "icon",
-      "name": "Gheek AI",
-      "host": "gheek.ai"
     },
     "proj_kEmTN45zXbd5": {
       "path": "/company-logos/proj_kEmTN45zXbd5.webp",
@@ -5165,16 +4965,6 @@
       "name": "Flatlight",
       "host": "flatlight.tech"
     },
-    "proj_SR85yzPtQ22M": {
-      "path": "/company-logos/proj_SR85yzPtQ22M.webp",
-      "bytes": 826,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=ycombinator.com&sz=128",
-      "kind": "google-s2",
-      "name": "Graphide",
-      "host": "ycombinator.com"
-    },
     "proj_XlNBpgnbnTLX": {
       "path": "/company-logos/proj_XlNBpgnbnTLX.webp",
       "bytes": 2664,
@@ -5194,16 +4984,6 @@
       "kind": "icon",
       "name": "Hamming AI",
       "host": "hamming.ai"
-    },
-    "proj_22cvmqrcGgxR": {
-      "path": "/company-logos/proj_22cvmqrcGgxR.webp",
-      "bytes": 1410,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=linkedin.com&sz=128",
-      "kind": "google-s2",
-      "name": "HDAX Therapeutics",
-      "host": "linkedin.com"
     },
     "proj_radPkmV9hPq5": {
       "path": "/company-logos/proj_radPkmV9hPq5.webp",
@@ -5524,16 +5304,6 @@
       "kind": "icon",
       "name": "HyperProbe",
       "host": "hyperprobe.co"
-    },
-    "proj_-HzfQkhkV3ul": {
-      "path": "/company-logos/proj_-HzfQkhkV3ul.webp",
-      "bytes": 1262,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.wix.com/favicon.ico",
-      "kind": "apple-touch",
-      "name": "FullFlock",
-      "host": "vsumac4.wixsite.com"
     },
     "proj_OFHDTVn3dZdx": {
       "path": "/company-logos/proj_OFHDTVn3dZdx.webp",
@@ -6365,16 +6135,6 @@
       "name": "LNK Energies",
       "host": "lnkenergies.com"
     },
-    "proj_VicozE4NOQ5V": {
-      "path": "/company-logos/proj_VicozE4NOQ5V.webp",
-      "bytes": 3450,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=kiwicampus.com&sz=128",
-      "kind": "google-s2",
-      "name": "Kiwi Campus",
-      "host": "kiwicampus.com"
-    },
     "proj_x7NIvJjcQCd0": {
       "path": "/company-logos/proj_x7NIvJjcQCd0.webp",
       "bytes": 5326,
@@ -6484,16 +6244,6 @@
       "kind": "apple-touch",
       "name": "Lamina Labs",
       "host": "laminalabs.ai"
-    },
-    "proj_kwNH_guxmDW6": {
-      "path": "/company-logos/proj_kwNH_guxmDW6.webp",
-      "bytes": 826,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=ycombinator.com&sz=128",
-      "kind": "google-s2",
-      "name": "Ladder",
-      "host": "ycombinator.com"
     },
     "proj_-Y5xKhPUQn5C": {
       "path": "/company-logos/proj_-Y5xKhPUQn5C.webp",
@@ -6684,16 +6434,6 @@
       "kind": "icon",
       "name": "Linum",
       "host": "linum.ai"
-    },
-    "proj_gfjrOQx8qT3Z": {
-      "path": "/company-logos/proj_gfjrOQx8qT3Z.webp",
-      "bytes": 1214,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=locallinkgifts.com&sz=128",
-      "kind": "google-s2",
-      "name": "LocalLink",
-      "host": "locallinkgifts.com"
     },
     "proj_asU-Tln7kHdQ": {
       "path": "/company-logos/proj_asU-Tln7kHdQ.webp",
@@ -6915,16 +6655,6 @@
       "name": "Mach Industries",
       "host": "machindustries.com"
     },
-    "proj_J98QnJj_IJFh": {
-      "path": "/company-logos/proj_J98QnJj_IJFh.webp",
-      "bytes": 90,
-      "width": 128,
-      "height": 128,
-      "source": "https://cdn2.editmysite.com/images/site/footer/og-image-placeholder-blank.png",
-      "kind": "og",
-      "name": "Lygg",
-      "host": "lyggcorp.com"
-    },
     "proj_HPwSY3vwIbO8": {
       "path": "/company-logos/proj_HPwSY3vwIbO8.webp",
       "bytes": 1558,
@@ -6934,16 +6664,6 @@
       "kind": "apple-touch",
       "name": "Lumora Animal Health",
       "host": "getpawchart.com"
-    },
-    "proj_cGoIVJBG_faC": {
-      "path": "/company-logos/proj_cGoIVJBG_faC.webp",
-      "bytes": 1214,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=lyvely.co&sz=128",
-      "kind": "google-s2",
-      "name": "Lyvely",
-      "host": "lyvely.co"
     },
     "proj_QTZiNQYP9yOx": {
       "path": "/company-logos/proj_QTZiNQYP9yOx.webp",
@@ -7184,16 +6904,6 @@
       "kind": "icon",
       "name": "Maximal",
       "host": "trymaximal.com"
-    },
-    "proj_fi3_aijFpiuu": {
-      "path": "/company-logos/proj_fi3_aijFpiuu.webp",
-      "bytes": 1342,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=maywoodai.com&sz=128",
-      "kind": "google-s2",
-      "name": "Maywood",
-      "host": "maywoodai.com"
     },
     "proj_9_UwwJLqiVcA": {
       "path": "/company-logos/proj_9_UwwJLqiVcA.webp",
@@ -7815,16 +7525,6 @@
       "name": "Miyagi Labs",
       "host": "miyagilabs.ai"
     },
-    "proj_0dr5puehPGU7": {
-      "path": "/company-logos/proj_0dr5puehPGU7.webp",
-      "bytes": 90,
-      "width": 128,
-      "height": 128,
-      "source": "https://multifactor.com/apple-icon.png",
-      "kind": "apple-touch",
-      "name": "Multifactor",
-      "host": "multifactor.com"
-    },
     "proj_RJReQGV6TywI": {
       "path": "/company-logos/proj_RJReQGV6TywI.webp",
       "bytes": 1344,
@@ -7934,16 +7634,6 @@
       "kind": "apple-touch",
       "name": "Native",
       "host": "techstars.com"
-    },
-    "proj_Rv3PLS1l576Q": {
-      "path": "/company-logos/proj_Rv3PLS1l576Q.webp",
-      "bytes": 1342,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=neuralphysics.ai&sz=128",
-      "kind": "google-s2",
-      "name": "Neural Physics",
-      "host": "neuralphysics.ai"
     },
     "proj_RKJOfkBCxS3D": {
       "path": "/company-logos/proj_RKJOfkBCxS3D.webp",
@@ -8545,16 +8235,6 @@
       "name": "OnGov",
       "host": "ongov.ai"
     },
-    "proj_3TZr-P3RHBQK": {
-      "path": "/company-logos/proj_3TZr-P3RHBQK.webp",
-      "bytes": 1718,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=organosinc.com&sz=128",
-      "kind": "google-s2",
-      "name": "Organos, Inc.",
-      "host": "organosinc.com"
-    },
     "proj_KmJjuDq7tUu-": {
       "path": "/company-logos/proj_KmJjuDq7tUu-.webp",
       "bytes": 1116,
@@ -9075,16 +8755,6 @@
       "name": "Peer",
       "host": "peer-freight.com"
     },
-    "proj_g71RSbgJxx_b": {
-      "path": "/company-logos/proj_g71RSbgJxx_b.webp",
-      "bytes": 826,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=ycombinator.com&sz=128",
-      "kind": "google-s2",
-      "name": "Particularity",
-      "host": "ycombinator.com"
-    },
     "proj_GeGyec5m9DhA": {
       "path": "/company-logos/proj_GeGyec5m9DhA.webp",
       "bytes": 3892,
@@ -9134,16 +8804,6 @@
       "kind": "google-s2",
       "name": "Phononic Vibes",
       "host": "phononicvibes.com"
-    },
-    "proj_TYoJTmw5jL5w": {
-      "path": "/company-logos/proj_TYoJTmw5jL5w.webp",
-      "bytes": 826,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=ycombinator.com&sz=128",
-      "kind": "google-s2",
-      "name": "Perceptual Labs",
-      "host": "ycombinator.com"
     },
     "proj_3UTA0tvpGMF1": {
       "path": "/company-logos/proj_3UTA0tvpGMF1.webp",
@@ -9264,16 +8924,6 @@
       "kind": "apple-touch",
       "name": "Onederful",
       "host": "vynedental.com"
-    },
-    "proj_5SCNk04-r2LB": {
-      "path": "/company-logos/proj_5SCNk04-r2LB.webp",
-      "bytes": 140,
-      "width": 128,
-      "height": 128,
-      "source": "https://perfectbit.ai/favicon.svg",
-      "kind": "icon",
-      "name": "PerfectBit, Inc.",
-      "host": "perfectbit.ai"
     },
     "proj_n_f3HomkShbN": {
       "path": "/company-logos/proj_n_f3HomkShbN.webp",
@@ -9705,16 +9355,6 @@
       "name": "Prosper",
       "host": "getprosper.ai"
     },
-    "proj_5j4yKzQX_q6t": {
-      "path": "/company-logos/proj_5j4yKzQX_q6t.webp",
-      "bytes": 3300,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=tryprophet.com&sz=128",
-      "kind": "google-s2",
-      "name": "Prophet Models",
-      "host": "tryprophet.com"
-    },
     "proj_0Bv6LNjGBH3s": {
       "path": "/company-logos/proj_0Bv6LNjGBH3s.webp",
       "bytes": 556,
@@ -9854,16 +9494,6 @@
       "kind": "icon",
       "name": "Q2Q",
       "host": "tryq2q.com"
-    },
-    "proj_yGUWta671S8S": {
-      "path": "/company-logos/proj_yGUWta671S8S.webp",
-      "bytes": 3450,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=qadence.health&sz=128",
-      "kind": "google-s2",
-      "name": "Qadence",
-      "host": "qadence.health"
     },
     "proj_wIt8SHASiBMR": {
       "path": "/company-logos/proj_wIt8SHASiBMR.webp",
@@ -10555,16 +10185,6 @@
       "name": "SafeWorld",
       "host": "safeworld.ai"
     },
-    "proj_GS1nup9v0zuM": {
-      "path": "/company-logos/proj_GS1nup9v0zuM.webp",
-      "bytes": 132,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.safetykit.com/favicon.svg",
-      "kind": "apple-touch",
-      "name": "SafetyKit",
-      "host": "safetykit.com"
-    },
     "proj_GjbgQd7LSClQ": {
       "path": "/company-logos/proj_GjbgQd7LSClQ.webp",
       "bytes": 1326,
@@ -10634,16 +10254,6 @@
       "kind": "google-s2",
       "name": "Rove",
       "host": "rove.com"
-    },
-    "proj_WY9p3tMViosA": {
-      "path": "/company-logos/proj_WY9p3tMViosA.webp",
-      "bytes": 826,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=ycombinator.com&sz=128",
-      "kind": "google-s2",
-      "name": "Runtime.si",
-      "host": "ycombinator.com"
     },
     "proj_alTaGq9MNseG": {
       "path": "/company-logos/proj_alTaGq9MNseG.webp",
@@ -10915,16 +10525,6 @@
       "name": "Sefi AI",
       "host": "sefi.ai"
     },
-    "proj_E-Z-WgBq6kmB": {
-      "path": "/company-logos/proj_E-Z-WgBq6kmB.webp",
-      "bytes": 194,
-      "width": 128,
-      "height": 128,
-      "source": "https://selfin.app/placeholder.svg",
-      "kind": "og",
-      "name": "Selfin",
-      "host": "selfin.app"
-    },
     "proj_w4PXB6wO6ZHT": {
       "path": "/company-logos/proj_w4PXB6wO6ZHT.webp",
       "bytes": 3498,
@@ -11004,16 +10604,6 @@
       "kind": "google-s2",
       "name": "SellRaze",
       "host": "sellraze.com"
-    },
-    "proj_Cj43kNc3J_CF": {
-      "path": "/company-logos/proj_Cj43kNc3J_CF.webp",
-      "bytes": 4242,
-      "width": 128,
-      "height": 128,
-      "source": "https://redarrowtx.com/favicon.ico",
-      "kind": "favicon.ico",
-      "name": "Red Arrow TX",
-      "host": "redarrowtx.com"
     },
     "proj_X_5cJABOga56": {
       "path": "/company-logos/proj_X_5cJABOga56.webp",
@@ -11444,16 +11034,6 @@
       "kind": "icon",
       "name": "Silurian",
       "host": "silurian.ai"
-    },
-    "proj_WowcaYLSN6Vg": {
-      "path": "/company-logos/proj_WowcaYLSN6Vg.webp",
-      "bytes": 1718,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=eatsolano.com&sz=128",
-      "kind": "google-s2",
-      "name": "Solano",
-      "host": "eatsolano.com"
     },
     "proj_GfVa5-xXO_Wb": {
       "path": "/company-logos/proj_GfVa5-xXO_Wb.webp",
@@ -12055,16 +11635,6 @@
       "name": "Swift Charge",
       "host": "swiftcharge.io"
     },
-    "proj_1Xjjns7SSGqS": {
-      "path": "/company-logos/proj_1Xjjns7SSGqS.webp",
-      "bytes": 3300,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=studyfree.org&sz=128",
-      "kind": "google-s2",
-      "name": "StudyFree",
-      "host": "studyfree.org"
-    },
     "proj_UTGdWyqZl2Pm": {
       "path": "/company-logos/proj_UTGdWyqZl2Pm.webp",
       "bytes": 950,
@@ -12635,16 +12205,6 @@
       "name": "Thrive Hair Bar",
       "host": "thrivehairbar.com"
     },
-    "proj__nKXUcu9NvxV": {
-      "path": "/company-logos/proj__nKXUcu9NvxV.webp",
-      "bytes": 1214,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=tiffinfood.co&sz=128",
-      "kind": "google-s2",
-      "name": "Tiffin",
-      "host": "tiffinfood.co"
-    },
     "proj_7Sptv85Gx1Kf": {
       "path": "/company-logos/proj_7Sptv85Gx1Kf.webp",
       "bytes": 1346,
@@ -12734,26 +12294,6 @@
       "kind": "google-s2",
       "name": "The SMBX",
       "host": "thesmbx.com"
-    },
-    "proj_lup7MX4al22U": {
-      "path": "/company-logos/proj_lup7MX4al22U.webp",
-      "bytes": 1410,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=linkedin.com&sz=128",
-      "kind": "google-s2",
-      "name": "Tidy",
-      "host": "linkedin.com"
-    },
-    "proj_PkM-pbYvk23-": {
-      "path": "/company-logos/proj_PkM-pbYvk23-.webp",
-      "bytes": 1718,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=torobio.com&sz=128",
-      "kind": "google-s2",
-      "name": "Toro Bio",
-      "host": "torobio.com"
     },
     "proj_yRH9_6kDtctn": {
       "path": "/company-logos/proj_yRH9_6kDtctn.webp",
@@ -14035,16 +13575,6 @@
       "name": "Zomma",
       "host": "zommalabs.com"
     },
-    "proj_NfomFq8gBL7o": {
-      "path": "/company-logos/proj_NfomFq8gBL7o.webp",
-      "bytes": 3300,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=xobalabs.com&sz=128",
-      "kind": "google-s2",
-      "name": "Xoba",
-      "host": "xobalabs.com"
-    },
     "proj_fCak7LX4M0gy": {
       "path": "/company-logos/proj_fCak7LX4M0gy.webp",
       "bytes": 8056,
@@ -14244,16 +13774,6 @@
       "kind": "apple-touch",
       "name": "nMonica",
       "host": "nmonica.com"
-    },
-    "proj_eFAxK43l6Wc3": {
-      "path": "/company-logos/proj_eFAxK43l6Wc3.webp",
-      "bytes": 826,
-      "width": 128,
-      "height": 128,
-      "source": "https://www.google.com/s2/favicons?domain=ycombinator.com&sz=128",
-      "kind": "google-s2",
-      "name": "ernd",
-      "host": "ycombinator.com"
     },
     "proj_oLgTKwefQEgX": {
       "path": "/company-logos/proj_oLgTKwefQEgX.webp",
@@ -14525,5 +14045,6 @@
       "name": "Woz",
       "host": "wozcode.com"
     }
-  }
+  },
+  "blockedRemoved": 48
 }

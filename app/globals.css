@@ -754,6 +754,24 @@ html[data-sample="halflight"] body {
   line-height: 1.05;
   color: var(--fg);
 }
+
+/* r32: fold + campuses desk headings use 085e0c0 Google Fraunces (no Newsreader pairing). */
+[data-campuses-index],
+[data-fold-root] {
+  --scout-display: var(--font-display-classic), "Fraunces", Georgia, serif;
+  --scout-heading: var(--font-display-classic), "Fraunces", Georgia, serif;
+}
+[data-campuses-index] .scout-display,
+[data-campuses-index] .scout-heading,
+[data-campuses-index] .page-title,
+[data-campuses-index] h1,
+[data-fold-root] .scout-display,
+[data-fold-root] .scout-heading,
+[data-fold-root] .page-title,
+[data-fold-root] [data-fold-mast] h1 {
+  font-family: var(--font-display-classic), "Fraunces", Georgia, serif;
+}
+
 .sample-paper .scout-figure {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-weight: 700;

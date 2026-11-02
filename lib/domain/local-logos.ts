@@ -3,9 +3,12 @@ import path from "node:path";
 
 type Manifest = {
   logos?: Record<string, { path?: string }>;
+  totalCompanies?: number;
+  withLogo?: number;
 };
 
 let cache: Map<string, string> | null = null;
+let totalCompanies = 0;
 
 function load(): Map<string, string> {
   if (cache) return cache;
@@ -17,6 +20,7 @@ function load(): Map<string, string> {
       return map;
     }
     const raw = JSON.parse(fs.readFileSync(manifestPath, "utf8")) as Manifest;
+    totalCompanies = raw.totalCompanies ?? 0;
     const logos = raw.logos ?? {};
     for (const [id, entry] of Object.entries(logos)) {
       if (!entry?.path) continue;
@@ -37,7 +41,7 @@ export function localCompanyLogoUrl(companyId: string | null | undefined): strin
   return load().get(companyId) ?? null;
 }
 
-export function localLogoCoverage(): { withLogo: number; totalCached: number } {
+export function localLogoCoverage(): { withLogo: number; totalCached: number; totalCompanies: number } {
   const m = load();
-  return { withLogo: m.size, totalCached: m.size };
+  return { withLogo: m.size, totalCached: m.size, totalCompanies: totalCompanies || m.size };
 }

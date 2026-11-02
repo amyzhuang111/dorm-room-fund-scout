@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { StartupCard, StartupCardFounder, StartupLinkKind } from "@/lib/domain/startup-card";
@@ -13,17 +12,6 @@ const LINK_LABEL: Record<StartupLinkKind, string> = {
   github: "GitHub",
   productHunt: "Product Hunt",
 };
-
-function faviconUrlForWebsite(website: string | null): string | null {
-  if (!website) return null;
-  try {
-    const host = new URL(website).hostname.replace(/^www\./, "");
-    if (!host) return null;
-    return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=128`;
-  } catch {
-    return null;
-  }
-}
 
 function personInitials(name: string): string {
   const parts = name.split(/\s+/).filter(Boolean);
@@ -40,9 +28,9 @@ function companyInitials(name: string): string {
   return `${parts[0]!.charAt(0)}${parts[1]!.charAt(0)}`.toUpperCase();
 }
 
-function CompanyLogo({ name, websiteUrl }: { name: string; websiteUrl: string | null }) {
-  const src = faviconUrlForWebsite(websiteUrl);
-  const [ok, setOk] = useState(false);
+function CompanyLogo({ name, logoUrl }: { name: string; logoUrl?: string | null }) {
+  const src = logoUrl && logoUrl.startsWith("/") ? logoUrl : null;
+  const [ok, setOk] = useState(Boolean(src));
   const mono = (
     <div
       className="grid h-14 w-14 shrink-0 place-items-center rounded-xl border border-[#2F4FD8]/40 bg-[linear-gradient(145deg,#EEF1FB,#E0E6F8)] font-mono text-[18px] font-semibold tracking-tight text-[#2F4FD8] shadow-[inset_0_0_0_1px_rgba(47,79,216,0.12)]"
@@ -52,34 +40,14 @@ function CompanyLogo({ name, websiteUrl }: { name: string; websiteUrl: string | 
       {companyInitials(name).slice(0, 2)}
     </div>
   );
-  if (!src || !ok) {
-    return (
-      <span className="relative inline-grid shrink-0">
-        {mono}
-        {src ? (
-          <Image
-            src={src}
-            alt=""
-            width={1}
-            height={1}
-            unoptimized
-            className="pointer-events-none absolute h-0 w-0 opacity-0"
-            onLoadingComplete={(img) => {
-              if (img.naturalWidth > 16) setOk(true);
-            }}
-            onError={() => setOk(false)}
-          />
-        ) : null}
-      </span>
-    );
-  }
+  if (!src || !ok) return mono;
   return (
-    <Image
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
       src={src}
       alt=""
       width={56}
       height={56}
-      unoptimized
       className="h-14 w-14 shrink-0 rounded-xl border border-neutral-200 bg-white object-contain p-2 shadow-sm"
       onError={() => setOk(false)}
     />
@@ -146,7 +114,7 @@ export function StartupDirectoryCard({
   const body = (
     <>
       <div className="flex items-start gap-3">
-        <CompanyLogo name={card.name} websiteUrl={card.websiteUrl} />
+        <CompanyLogo name={card.name} logoUrl={card.logoUrl} />
         <div className={`min-w-0 flex-1 ${onClose ? "pr-8" : ""}`}>
           {name}
           {card.subtitle && <p className="mt-1 text-sm text-neutral-600">{card.subtitle}</p>}
@@ -268,7 +236,7 @@ export function StartupDirectoryCard({
       <div data-testid="startup-directory-card" className="space-y-3 bg-transparent p-0 shadow-none">
         <header className="space-y-1.5">
           <div className="flex items-start gap-2.5">
-            <CompanyLogo name={card.name} websiteUrl={card.websiteUrl} />
+            <CompanyLogo name={card.name} logoUrl={card.logoUrl} />
             <div className="min-w-0 flex-1">
               {name}
               {card.subtitle ? <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg-2,#3F465C)] sm:text-[14px]">{card.subtitle}</p> : null}

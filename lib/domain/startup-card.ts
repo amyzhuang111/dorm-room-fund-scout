@@ -8,6 +8,7 @@ import { survivorId } from "./entity-redirects";
 import { ownWebsite } from "./company-link";
 import { confirmedLinkedIn, readLinkedInCandidate } from "./person-link";
 import { isBoilerplateDescription, sectorLabel } from "./sectors";
+import { localCompanyLogoUrl } from "./local-logos";
 
 export const STARTUP_LINK_KINDS = ["website", "linkedin", "x", "crunchbase", "facebook", "github", "productHunt"] as const;
 export type StartupLinkKind = (typeof STARTUP_LINK_KINDS)[number];
@@ -38,6 +39,8 @@ export interface StartupCard {
   name: string;
   /** Product site used for the website button and a favicon. Null when we have no own-domain site. */
   websiteUrl: string | null;
+  /** Local cached mark under /company-logos, or null. Never a hotlinked favicon. */
+  logoUrl: string | null;
   subtitle: string | null;
   sector: string | null;
   links: StartupCardLink[];
@@ -379,6 +382,7 @@ export function getStartupCard(id: string): StartupCard | null {
     id: project.id,
     name: project.name,
     websiteUrl: links.find((link) => link.kind === "website")?.url ?? null,
+    logoUrl: localCompanyLogoUrl(project.id),
     subtitle: startupSubtitle(chosen.batch, chosen.program, region),
     sector,
     links,

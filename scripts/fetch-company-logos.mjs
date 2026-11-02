@@ -104,8 +104,55 @@ function parseIconCandidates(html, pageUrl) {
   });
 }
 
-async function verifyAndWrite(id, buf) {
+function loadBlocklist() {
+  try {
+    const raw = JSON.parse(fs.readFileSync(path.join(OUT, "blocklist.json"), "utf8"));
+    return {
+      sha: new Set(raw.sha256 || []),
+      pix: new Set(raw.pixel32 || []),
+    };
+  } catch {
+    return { sha: new Set(), pix: new Set() };
+  }
+}
+const BLOCK = loadBlocklist();
+const BLOCKED_HOST = /(?:^|\.)(ycombinator\.com|linkedin\.com|wix\.com|wixsite\.com|squarespace\.com|wordpress\.com|wp\.com)$/i;
+const BLOCKED_SOURCE = /ycombinator\.com|linkedin\.com\/favicon|wix\.com\/favicon|static\.wixstatic|editmysite\.com|placeholder|wordpress\.com\/favicon/i;
+
+async function isGenericOrBlocked(buf, sourceUrl) {
+  if (!buf || buf.length < 200) return true;
+  if (sourceUrl && BLOCKED_SOURCE.test(sourceUrl)) return true;
+  try {
+    if (sourceUrl) {
+      const host = hostFromUrl(sourceUrl);
+      if (host && BLOCKED_HOST.test(host)) return true;
+    }
+  } catch {}
+  const crypto = await import("node:crypto");
+  const sha = crypto.createHash("sha256").update(buf).digest("hex");
+  if (BLOCK.sha.has(sha)) return true;
+  try {
+    const stats = await sharp(buf, { failOn: "none" }).stats();
+    const channels = stats.channels || [];
+    const stdev = channels.reduce((a, c) => a + (c.stdev || 0), 0) / Math.max(channels.length, 1);
+    const meanSat =
+      channels.length >= 3
+        ? Math.abs(channels[0].mean - channels[1].mean) + Math.abs(channels[1].mean - channels[2].mean)
+        : 0;
+    // Near-empty or single-color tiles
+    if (stdev < 4 && meanSat < 6) return true;
+    const raw = await sharp(buf, { failOn: "none" }).ensureAlpha().resize(32, 32, { fit: "fill" }).raw().toBuffer();
+    const pix = crypto.createHash("sha256").update(raw).digest("hex");
+    if (BLOCK.pix.has(pix)) return true;
+  } catch {
+    return true;
+  }
+  return false;
+}
+
+async function verifyAndWrite(id, buf, sourceUrl) {
   if (!buf || buf.length < 64) return null;
+  if (await isGenericOrBlocked(buf, sourceUrl)) return null;
   let img;
   try {
     img = sharp(buf, { failOn: "none", animated: false });
@@ -120,6 +167,8 @@ async function verifyAndWrite(id, buf) {
       .webp({ quality: 82, effort: 4 })
       .toBuffer();
     if (outBuf.length < 80) return null;
+    // Re-check after resize (blocklist includes resized hashes)
+    if (await isGenericOrBlocked(outBuf, sourceUrl)) return null;
     const rel = `/company-logos/${id}.webp`;
     const dest = path.join(OUT, `${id}.webp`);
     fs.writeFileSync(dest, outBuf);
@@ -174,7 +223,7 @@ async function fetchOne(row) {
         continue;
       }
     }
-    const saved = await verifyAndWrite(row.id, hit.buf);
+    const saved = await verifyAndWrite(row.id, hit.buf, c.url || hit.finalUrl);
     if (saved) {
       logos[row.id] = { ...saved, source: c.url, kind: c.kind, name: row.name, host: hostFromUrl(pageUrl) };
       return { id: row.id, status: "ok", path: saved.path, kind: c.kind };
@@ -196,7 +245,7 @@ async function fetchOne(row) {
         // Reject near-grayscale tiny stubs with very low variance
         const variance = channels[0]?.stdev ?? 0;
         if (meta.width >= 32 && (variance > 18 || meanSat > 12)) {
-          const saved = await verifyAndWrite(row.id, hit.buf);
+          const saved = await verifyAndWrite(row.id, hit.buf, gUrl);
           if (saved) {
             logos[row.id] = { ...saved, source: gUrl, kind: "google-s2", name: row.name, host };
             return { id: row.id, status: "ok", path: saved.path, kind: "google-s2" };

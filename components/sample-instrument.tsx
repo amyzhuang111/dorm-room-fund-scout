@@ -340,8 +340,8 @@ export function LogoPill({
   mark?: string;
 }) {
   void mark;
-  const needsProof = Boolean(logoUrl && /google\.com\/s2\/favicons/i.test(logoUrl));
-  const [ok, setOk] = useState(!needsProof && Boolean(logoUrl));
+  const src = logoUrl && logoUrl.startsWith("/") ? logoUrl : null;
+  const [ok, setOk] = useState(Boolean(src));
   const initials = companyInitials(name).slice(0, 2);
   return (
     <Link
@@ -349,10 +349,10 @@ export function LogoPill({
       className="relative flex h-6 min-w-0 max-w-[8rem] items-center gap-1 rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-sunken,#F3F5F9)] px-1 text-[9px] leading-none text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--ember,#D96B1C)]"
       title={name}
     >
-      {ok && logoUrl ? (
+      {ok && src ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={logoUrl}
+          src={src}
           alt=""
           width={14}
           height={14}
@@ -364,19 +364,6 @@ export function LogoPill({
           {initials}
         </span>
       )}
-      {logoUrl && needsProof && !ok ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={logoUrl}
-          alt=""
-          width={1}
-          height={1}
-          className="pointer-events-none absolute h-0 w-0 opacity-0"
-          onLoad={(e) => {
-            if (e.currentTarget.naturalWidth > 16) setOk(true);
-          }}
-        />
-      ) : null}
       <span className="min-w-0 truncate">{name}</span>
     </Link>
   );

@@ -310,7 +310,7 @@ export function SampleHomeClient(props: {
   }
 
   return (
-    <div className="sample-paper" data-directory-ready={ready ? "1" : "0"}>
+    <div className="sample-paper" {...(place === "map" ? { "data-fold-root": "" } : {})} data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
       {place === "map" ? (
         <div className="px-4 pb-8 pt-3 sm:px-5" data-fold-hierarchy="">

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -50,6 +50,17 @@ const display = localFont({
   preload: true,
 });
 
+
+
+/** 085e0c0 Google Fraunces — fold + campuses display headings only (r32). */
+const displayClassic = Fraunces({
+  variable: "--font-display-classic",
+  subsets: ["latin"],
+  weight: "600",
+  display: "swap",
+  preload: false,
+});
+
 /** Self-hosted Newsreader for richer section headings (pairs with Fraunces). */
 const heading = localFont({
   src: "../public/fonts/newsreader-latin-600.woff2",
@@ -72,7 +83,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       data-theme="day"
       data-sample="halflight"
-      className={`${geist.variable} ${geistMono.variable} ${instrument.variable} ${display.variable} ${heading.variable} h-full antialiased`}
+      className={`${geist.variable} ${geistMono.variable} ${instrument.variable} ${display.variable} ${displayClassic.variable} ${heading.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
