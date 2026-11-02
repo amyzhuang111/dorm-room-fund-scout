@@ -77,7 +77,7 @@ export default async function DataExplorerPage({
       <form
         method="get"
         action="/data"
-        className="mt-2 space-y-2.5 border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3 sm:p-2 sm:flex sm:flex-wrap sm:items-end sm:space-y-0 sm:gap-1.5"
+        className="mt-2 space-y-2 border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-2.5 sm:flex sm:flex-wrap sm:items-end sm:gap-1.5 sm:space-y-0 sm:p-2"
         data-corpus-filters=""
       >
         <label className="block min-w-0 sm:flex-[1_1_10rem]">
@@ -136,49 +136,44 @@ export default async function DataExplorerPage({
 
       {/* One table for all viewports: sticky Company + Campus + Stage core, horizontal scroll on mobile */}
       <div className="mt-3 overflow-x-auto border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] [-webkit-overflow-scrolling:touch]" data-corpus-table="" data-corpus-cards="">
-        <table className="min-w-[52rem] w-full border-collapse text-left text-[12px] leading-4 sm:min-w-full sm:text-[11px]">
-          <thead className="bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[9px] uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]">
+        <table className="c-table">
+          <thead className="c-head">
             <tr>
-              <th className="sticky left-0 z-[2] whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)] px-2.5 py-2 font-semibold">Company</th>
-              <th className="sticky left-[7.5rem] z-[2] whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)] px-2.5 py-2 font-semibold sm:static sm:bg-transparent">Campus</th>
-              <th className="min-w-[5.5rem] border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2 font-semibold">Stage</th>
-              <th className="whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2 font-semibold">Sector</th>
-              <th className="c-d whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2 font-semibold">Founded</th>
-              <th className="c-d whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2 font-semibold">Signals</th>
-              <th className="c-d whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2 font-semibold">Latest</th>
-              <th className="c-d whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2 font-semibold">Program</th>
-              <th className="c-d whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2 font-semibold">YC</th>
-              <th className="c-d whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2 font-semibold">Founders</th>
-              <th className="c-d whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2 font-semibold">Funding</th>
-              <th className="c-d whitespace-nowrap border-b border-[color:var(--line,#E1E5EF)] px-2.5 py-2 font-semibold">Site</th>
+              <th className="c-th c-th-n">Company</th>
+              <th className="c-th c-th-m">Campus</th>
+              <th className="c-th">Stage</th>
+              <th className="c-th">Sector</th>
+              <th className="c-th c-d">Founded</th>
+              <th className="c-th c-d">Signals</th>
+              <th className="c-th c-d">Latest</th>
+              <th className="c-th c-d">Program</th>
+              <th className="c-th c-d">YC</th>
+              <th className="c-th c-d">Founders</th>
+              <th className="c-th c-d">Funding</th>
+              <th className="c-th c-d">Site</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[color:var(--line,#E1E5EF)]">
             {result.rows.map((row) => (
-              <tr key={row.id} className="align-top hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/30" data-corpus-row="">
-                <td
-                  className="c-n sticky left-0 z-[1] max-w-[7.5rem] bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 font-semibold tracking-tight shadow-[2px_0_0_0_color:var(--line,#E1E5EF)] sm:max-w-none"
-                  data-i={(row.name.trim()[0] || "?").toUpperCase()}
-                >
-                  <Link href={`/startup/${row.id}`} className="min-w-0 font-bold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline">
+              <tr key={row.id} className="c-r align-top" data-corpus-row="">
+                <td className="c-n" data-i={(row.name.trim()[0] || "?").toUpperCase()}>
+                  <Link href={`/startup/${row.id}`} className="c-a">
                     {row.name}
                   </Link>
                 </td>
-                <td className="c-m sticky left-[7.5rem] z-[1] max-w-[6.5rem] bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 shadow-[2px_0_0_0_color:var(--line,#E1E5EF)] sm:static sm:max-w-none sm:shadow-none">
-                  {cell(row.campus)}
-                </td>
-                <td className="c-m min-w-[5.5rem] px-2.5 py-2">{cell(row.stage)}</td>
-                <td className="c-m px-2.5 py-2">{cell(row.sector)}</td>
-                <td className="c-d px-2.5 py-2 font-mono tabular-nums">{cell(row.foundedYear)}</td>
-                <td className="c-d px-2.5 py-2 font-mono font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{row.signals.toLocaleString("en-US")}</td>
-                <td className="c-d px-2.5 py-2 font-mono tabular-nums">{cell(row.latestSignalAt)}</td>
-                <td className="c-d px-2.5 py-2">{cell(row.primaryProgram)}</td>
-                <td className="c-d px-2.5 py-2">{cell(row.ycBatch)}</td>
-                <td className="c-d px-2.5 py-2 font-mono tabular-nums">{row.founderCount > 0 ? row.founderCount.toLocaleString("en-US") : blank()}</td>
-                <td className="c-d px-2.5 py-2">{cell(row.fundingText)}</td>
-                <td className="c-d px-2.5 py-2">
+                <td className="c-m c-m1">{cell(row.campus)}</td>
+                <td className="c-m">{cell(row.stage)}</td>
+                <td className="c-m">{cell(row.sector)}</td>
+                <td className="c-d c-num">{cell(row.foundedYear)}</td>
+                <td className="c-d c-sig">{row.signals.toLocaleString("en-US")}</td>
+                <td className="c-d c-num">{cell(row.latestSignalAt)}</td>
+                <td className="c-d">{cell(row.primaryProgram)}</td>
+                <td className="c-d">{cell(row.ycBatch)}</td>
+                <td className="c-d c-num">{row.founderCount > 0 ? row.founderCount.toLocaleString("en-US") : blank()}</td>
+                <td className="c-d">{cell(row.fundingText)}</td>
+                <td className="c-d">
                   {row.website ? (
-                    <a href={row.website} target="_blank" rel="noopener noreferrer" className="text-[color:var(--cobalt,#2F4FD8)] underline">
+                    <a href={row.website} target="_blank" rel="noopener noreferrer" className="c-link">
                       Link
                     </a>
                   ) : (

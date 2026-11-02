@@ -181,9 +181,9 @@ const browser = await chromium.launch({ headless: true });
   await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForTimeout(2000);
   await shot(page, "company-sim-1440");
-  const fullRecord = page.locator("[data-full-record-desk]");
+  const fullRecord = page.locator("[data-company-full-record]").first();
   if (await fullRecord.count()) {
-    await fullRecord.first().evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await fullRecord.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(400);
     await shot(page, "company-full-record-1440");
   }
@@ -196,6 +196,10 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(800);
   await page.evaluate(() => window.scrollTo(0, 0));
   await shot(page, "campuses-1440");
+  await page.goto(`${BASE}/signals`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.waitForTimeout(800);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await shot(page, "signals-1440");
   await page.close();
 }
 
@@ -326,9 +330,9 @@ const browser = await chromium.launch({ headless: true });
     await page.waitForTimeout(200);
   }
   await shot(page, "company-sim-375");
-  const fullRecordM = page.locator("[data-full-record-mobile]");
+  const fullRecordM = page.locator("[data-company-full-record]").first();
   if (await fullRecordM.count()) {
-    await fullRecordM.first().evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await fullRecordM.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(350);
     await shot(page, "company-full-record-375");
   }
@@ -341,6 +345,10 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(600);
   await page.evaluate(() => window.scrollTo(0, 0));
   await shot(page, "campuses-375");
+  await page.goto(`${BASE}/signals`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.waitForTimeout(800);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await shot(page, "signals-375");
   await page.close();
 }
 

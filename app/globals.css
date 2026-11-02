@@ -754,6 +754,95 @@ html[data-sample="halflight"] body {
   .sample-paper .campus-index-row .desk-only-num { display: none; }
 }
 
+/* corpus desk short classes (HTML budget) */
+[data-corpus-cards] .c-table {
+  width: 100%;
+  min-width: 52rem;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1rem;
+}
+@media (min-width: 640px) {
+  [data-corpus-cards] .c-table { min-width: 100%; font-size: 11px; }
+}
+[data-corpus-cards] .c-head {
+  background: color-mix(in srgb, var(--cobalt-haze, #E8ECFA) 50%, transparent);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cobalt, #2F4FD8);
+}
+[data-corpus-cards] .c-th {
+  white-space: nowrap;
+  border-bottom: 1px solid var(--line, #E1E5EF);
+  padding: 0.5rem 0.625rem;
+  font-weight: 600;
+}
+[data-corpus-cards] .c-th-n {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--cobalt-haze, #E8ECFA);
+}
+[data-corpus-cards] .c-th-m {
+  position: sticky;
+  left: 7.5rem;
+  z-index: 2;
+  background: var(--cobalt-haze, #E8ECFA);
+}
+@media (min-width: 640px) {
+  [data-corpus-cards] .c-th-m { position: static; background: transparent; }
+}
+[data-corpus-cards] .c-r:hover { background: color-mix(in srgb, var(--cobalt-haze, #E8ECFA) 30%, transparent); }
+[data-corpus-cards] td.c-n,
+[data-corpus-cards] td.c-m,
+[data-corpus-cards] td.c-d {
+  padding: 0.5rem 0.625rem;
+}
+[data-corpus-cards] td.c-n {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  max-width: 7.5rem;
+  background: var(--bg, #FFFFFF);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  box-shadow: 2px 0 0 0 var(--line, #E1E5EF);
+}
+@media (min-width: 640px) {
+  [data-corpus-cards] td.c-n { max-width: none; }
+}
+[data-corpus-cards] td.c-m1 {
+  position: sticky;
+  left: 7.5rem;
+  z-index: 1;
+  max-width: 6.5rem;
+  background: var(--bg, #FFFFFF);
+  box-shadow: 2px 0 0 0 var(--line, #E1E5EF);
+}
+@media (min-width: 640px) {
+  [data-corpus-cards] td.c-m1 { position: static; max-width: none; box-shadow: none; }
+}
+[data-corpus-cards] .c-a {
+  color: var(--fg, #0B0E17);
+  text-underline-offset: 2px;
+  font-weight: 700;
+}
+[data-corpus-cards] .c-a:hover {
+  color: var(--ember, #D96B1C);
+  text-decoration: underline;
+}
+[data-corpus-cards] .c-num { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-variant-numeric: tabular-nums; }
+[data-corpus-cards] .c-sig {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--ember, #D96B1C);
+}
+[data-corpus-cards] .c-link { color: var(--cobalt, #2F4FD8); text-decoration: underline; }
+
 /* monogram only on mobile corpus cards */
 @media (min-width: 640px) {
   [data-corpus-cards] .c-n::before {

@@ -30,6 +30,8 @@ interface SignalRow {
   created_at: string;
 }
 
+const SIGNALS_PAGE_SIZE = 40;
+
 const TYPE_LABEL: Record<string, string> = {
   demo: "Product launch",
   continued_dev: "Technical release",
@@ -173,6 +175,15 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
   const basePath = "/signals";
   const withSourceDate = allSignals.filter((s) => Boolean(s.source_date && s.source_date.trim())).length;
   const withoutSourceDate = allSignals.length - withSourceDate;
+  const page = Math.max(1, Number(sp.page || "1") || 1);
+  const feedTotal = precollegeOn ? precollege.length : sp.type === "press" ? press.length : signals.length;
+  const pageCount = Math.max(1, Math.ceil(feedTotal / SIGNALS_PAGE_SIZE));
+  const pageSafe = Math.min(page, pageCount);
+  const sliceStart = (pageSafe - 1) * SIGNALS_PAGE_SIZE;
+  const pressPage = press.slice(sliceStart, sliceStart + SIGNALS_PAGE_SIZE);
+  const precollegePage = precollege.slice(sliceStart, sliceStart + SIGNALS_PAGE_SIZE);
+  const signalsPage = signals.slice(sliceStart, sliceStart + SIGNALS_PAGE_SIZE);
+  const hrefPage = (n: number) => buildHref(basePath, sp, { page: n <= 1 ? null : String(n) });
   return (
     <div className="mx-auto max-w-[1100px] px-6 pb-16 pt-10">
       <p className="page-eyebrow">Activity</p>
@@ -184,7 +195,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
 
       <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
         <Link
-          href={buildHref(basePath, sp, { connectors: connectorsOn ? null : "1", precollege: null, type: null })}
+          href={buildHref(basePath, sp, { connectors: connectorsOn ? null : "1", precollege: null, type: null, page: null })}
           className={`rounded-full border px-2 py-0.5 ${connectorsOn ? "border-foreground bg-foreground text-white" : "border-border-c text-foreground"}`}
         >
           Top connectors
@@ -200,7 +211,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
         ).map(([val, label]) => (
           <Link
             key={val}
-            href={buildHref(basePath, sp, { precollege: sp.precollege === val ? null : val, type: null })}
+            href={buildHref(basePath, sp, { precollege: sp.precollege === val ? null : val, type: null, page: null })}
             className={`rounded-full border px-2 py-0.5 ${sp.precollege === val ? "border-foreground bg-foreground text-white" : "border-border-c text-foreground"}`}
           >
             {label}
@@ -208,10 +219,11 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
         ))}
         {universities
           .filter((u) => allSignals.some((s) => (s.university_ids ?? "").split(",").includes(u.id)))
+          .filter((u, i, arr) => sp.university === u.id || i < 24 || arr.length <= 24)
           .map((u) => (
             <Link
               key={u.id}
-              href={buildHref(basePath, sp, { university: sp.university === u.id ? null : u.id })}
+              href={buildHref(basePath, sp, { university: sp.university === u.id ? null : u.id, page: null })}
               className={`rounded-full border px-2 py-0.5 ${sp.university === u.id ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}
             >
               {u.name}
@@ -220,7 +232,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
         {types.map((t) => (
           <Link
             key={t}
-            href={buildHref(basePath, sp, { type: sp.type === t ? null : t })}
+            href={buildHref(basePath, sp, { type: sp.type === t ? null : t, page: null })}
             className={`rounded-full border px-2 py-0.5 ${sp.type === t ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}
           >
             {TYPE_LABEL[t] ?? t}
@@ -239,11 +251,25 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
         <TopConnectors lists={topConnectors(sp.university)} activeCampus={sp.university ?? null} basePath={basePath} current={sp} />
       ) : (
       <>
-      {!precollegeOn ? (
-        <p className="mt-4 text-[14px] text-fg-2"><span className="num text-fg">{signals.length.toLocaleString("en-US")}</span> signals</p>
+      {!precollegeOn && sp.type !== "press" ? (
+        <p className="mt-4 font-mono text-[13px] tabular-nums text-fg-2">
+          <span className="num font-bold text-fg">{feedTotal.toLocaleString("en-US")}</span>
+          {" signals"}
+          {feedTotal > SIGNALS_PAGE_SIZE ? (
+            <>
+              {" · page "}
+              {pageSafe.toLocaleString("en-US")}
+              {" of "}
+              {pageCount.toLocaleString("en-US")}
+              {" · "}
+              {SIGNALS_PAGE_SIZE}
+              {" per page"}
+            </>
+          ) : null}
+        </p>
       ) : null}
       <ul className="mt-4 space-y-2">
-        {press.map((item) => (
+        {pressPage.map((item) => (
           <li key={item.id} className="rounded-md border border-line bg-raised p-3">
             <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-[15px] font-medium text-fg">
               {item.headline}
@@ -255,7 +281,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
             </p>
           </li>
         ))}
-        {precollege.map((row) => {
+        {precollegePage.map((row) => {
           const view: PrecollegeSignalView = {
             signalType: row.signal_type as PrecollegeSignalView["signalType"],
             tier: row.tier === 1 ? 1 : 2,
@@ -287,7 +313,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
             </li>
           );
         })}
-        {signals.map((s) => {
+        {signalsPage.map((s) => {
           // Signals span both formed companies (Startup Scout) and hackathon-style
           // submissions/evidence (Founder Scout, kind='project') — only kind='company'
           // rows resolve on /startup/discover (see queries.ts listCandidateProjects),
@@ -324,8 +350,25 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
             </li>
           );
         })}
-        {signals.length === 0 && precollege.length === 0 && <p className="text-sm text-muted">No signals match these filters.</p>}
+        {signals.length === 0 && precollege.length === 0 && press.length === 0 && <p className="text-sm text-muted">No signals match these filters.</p>}
       </ul>
+      {feedTotal > SIGNALS_PAGE_SIZE ? (
+        <div className="mt-4 flex flex-wrap items-center gap-2 font-mono text-[11px] tabular-nums" data-signals-pager="">
+          {pageSafe > 1 ? (
+            <Link href={hrefPage(pageSafe - 1)} className="rounded-sm border border-border-c px-2.5 py-1.5 text-foreground hover:border-accent">
+              Previous
+            </Link>
+          ) : null}
+          <span className="text-muted">
+            {sliceStart + 1}-{Math.min(sliceStart + SIGNALS_PAGE_SIZE, feedTotal)} of {feedTotal.toLocaleString("en-US")}
+          </span>
+          {pageSafe < pageCount ? (
+            <Link href={hrefPage(pageSafe + 1)} className="rounded-sm border border-border-c px-2.5 py-1.5 text-foreground hover:border-accent">
+              Next
+            </Link>
+          ) : null}
+        </div>
+      ) : null}
       </>
       )}
     </div>

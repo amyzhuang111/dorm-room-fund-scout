@@ -66,16 +66,6 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
   );
 }
 
-/** ba9d2b0 desk Field - cobalt labels, denser grid (full-record-1440 parity). */
-function DeskField({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="border-b border-[color:var(--line,#E1E5EF)] py-3 sm:grid sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-3 sm:py-2.5">
-      <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">{label}</dt>
-      <dd className="mt-1.5 break-words text-[14px] leading-5 text-[color:var(--fg,#0B0E17)] sm:mt-0 sm:text-[13px]">{children}</dd>
-    </div>
-  );
-}
-
 /** Every stored company field; lead with founders + pitch + key stats, then grouped cards. */
 export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
   const profile = project.profile;
@@ -138,12 +128,9 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
   const hasLinks = !isEmpty(website) || !isEmpty(companyLi) || !isEmpty(otherLinks);
 
   return (
-    <>
-    {/* Mobile: founders-led full record (KEEP full-record-375) */}
     <section
-      className="relative mb-6 border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] pb-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] lg:hidden sm:mb-0"
+      className="relative mb-6 border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] pb-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] sm:mb-0"
       data-company-full-record=""
-      data-full-record-mobile=""
     >
       <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3.5 pl-4">
         <p className="scout-kicker">Full record</p>
@@ -353,175 +340,5 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
         ) : null}
       </div>
     </section>
-
-    {/* Desk: ba9d2b0 flat field dump (revert unintended desktop delta) */}
-    <section
-      className="relative mb-6 hidden overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] pb-2 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-[color:var(--cobalt,#2F4FD8)] lg:mb-0 lg:block"
-      data-company-full-record=""
-      data-full-record-desk=""
-    >
-      <div className="border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3.5 py-3.5">
-        <p className="scout-kicker">Full record</p>
-        <p className="mt-1 scout-display text-[28px] leading-none sm:text-[24px]">Every field on file</p>
-        <p className="mt-1.5 font-mono text-[11px] text-[color:var(--fg-2,#3F465C)]">
-          Sourced values only · empty fields listed once below
-        </p>
-      </div>
-      <dl className="px-3.5">
-        <DeskField label="Name">{project.name || "Not available"}</DeskField>
-        {!isEmpty(campus) ? <DeskField label="Campus">{campus}</DeskField> : null}
-        {!isEmpty(sectorText) ? <DeskField label="Sector">{sectorText}</DeskField> : null}
-        {!isEmpty(stage) ? <DeskField label="Stage">{stage}</DeskField> : null}
-        {!isEmpty(profile.foundedYear) ? <DeskField label="Founded">{profile.foundedYear?.text}</DeskField> : null}
-        {!isEmpty(profile.hq) ? <DeskField label="HQ">{profile.hq?.text}</DeskField> : null}
-        {!isEmpty(profile.operatingStatus) ? <DeskField label="Status">{profile.operatingStatus?.text}</DeskField> : null}
-        {!isEmpty(profile.teamSize) ? <DeskField label="Team size">{profile.teamSize?.text}</DeskField> : null}
-        {!isEmpty(profile.description) ? <DeskField label="Description">{profile.description?.text}</DeskField> : null}
-        {!isEmpty(funding) ? <DeskField label="Funding">{funding?.text}</DeskField> : null}
-        {!isEmpty(profile.rounds) ? (
-          <DeskField label="Funding rounds">
-            <ul className="space-y-1.5">
-              {profile.rounds.map((round, i) => (
-                <li key={`${round.sourceUrl}-${i}`} className="leading-5">
-                  {formatRound(round) || "Round on record"}
-                  {round.sourceUrl ? (
-                    <>
-                      {" · "}
-                      <a href={round.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-[color:var(--cobalt,#2F4FD8)] underline">
-                        source
-                      </a>
-                    </>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          </DeskField>
-        ) : null}
-        {!isEmpty(profile.investors) ? (
-          <DeskField label="Investors">
-            <ul className="space-y-1.5">
-              {profile.investors.map((inv, i) => (
-                <li key={`${inv.name}-${i}`} className="break-words">
-                  {inv.name}
-                  {inv.batch ? ` · ${inv.batch}` : ""}
-                  {inv.round ? ` · ${inv.round}` : ""}
-                  {inv.sourceUrl ? (
-                    <>
-                      {" · "}
-                      <a href={inv.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-[color:var(--cobalt,#2F4FD8)] underline">
-                        source
-                      </a>
-                    </>
-                  ) : null}
-                </li>
-              ))}
-            </ul>
-          </DeskField>
-        ) : null}
-        {!isEmpty(yc) ? (
-          <DeskField label="YC batch">
-            <ul className="space-y-1">
-              {yc.map((i, idx) => (
-                <li key={`${i.name}-${i.batch ?? ""}-${idx}`} className="break-words">
-                  {[i.name, i.batch].filter(Boolean).join(" · ")}
-                </li>
-              ))}
-            </ul>
-          </DeskField>
-        ) : null}
-        {!isEmpty(website) ? (
-          <DeskField label="Website">
-            <a href={website!} target="_blank" rel="noopener noreferrer" className="break-all text-[color:var(--cobalt,#2F4FD8)] underline">
-              {website}
-            </a>
-          </DeskField>
-        ) : null}
-        {!isEmpty(companyLi) ? (
-          <DeskField label="Company LinkedIn">
-            <a href={companyLi!} target="_blank" rel="noopener noreferrer" className="break-all text-[color:var(--cobalt,#2F4FD8)] underline">
-              {companyLi}
-            </a>
-          </DeskField>
-        ) : null}
-        {!isEmpty(otherLinks) ? (
-          <DeskField label="Other links">
-            <ul className="space-y-1">
-              {links.fallback ? (
-                <li>
-                  <a href={links.fallback.url} target="_blank" rel="noopener noreferrer" className="text-[color:var(--cobalt,#2F4FD8)] underline">
-                    {links.fallback.label}
-                  </a>
-                </li>
-              ) : null}
-              {links.extras.map((l) => (
-                <li key={l.url}>
-                  <a href={l.url} target="_blank" rel="noopener noreferrer" className="text-[color:var(--cobalt,#2F4FD8)] underline">
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </DeskField>
-        ) : null}
-        {!isEmpty(project.founderLinks) ? (
-          <DeskField label="Founders">
-            <ul className="space-y-2.5">
-              {project.founderLinks.map((f) => (
-                <li key={f.personId}>
-                  <Link href={`/founder/discover?founder=${encodeURIComponent(f.personId)}`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:underline">
-                    {f.name}
-                  </Link>
-                  <span className="text-[color:var(--fg-2,#3F465C)]">
-                    {" · "}
-                    {[f.role?.replaceAll("_", " "), f.school, f.program, f.enrollmentLabel]
-                      .filter(Boolean)
-                      .join(" · ") || "role not on record"}
-                  </span>
-                  <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                    <PersonLinkButton link={f.link} name={f.name} />
-                    <ProfileIconLinks links={f.profileLinks} name={f.name} />
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </DeskField>
-        ) : null}
-        {!isEmpty(project.signals) ? (
-          <DeskField label="Signals">
-            <ul className="space-y-2" data-full-record-signals="">
-              {project.signals.map((s) => (
-                <li key={s.id} className="rounded-sm border border-[color:var(--line,#E1E5EF)] px-2.5 py-2">
-                  <p className="font-medium tracking-tight">{s.currentObservation}</p>
-                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                    {s.signalType.replaceAll("_", " ")}
-                    {s.sourceDate ? ` · ${s.sourceDate}` : " · date Not available"}
-                    {s.sourceUrl ? (
-                      <>
-                        {" · "}
-                        <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-[color:var(--cobalt,#2F4FD8)] underline">
-                          source
-                        </a>
-                      </>
-                    ) : (
-                      " · source Not available"
-                    )}
-                  </p>
-                  {s.significanceNote ? <p className="mt-1 text-[12px] text-[color:var(--fg-2,#3F465C)]">{s.significanceNote}</p> : null}
-                </li>
-              ))}
-            </ul>
-          </DeskField>
-        ) : null}
-        {missing.length > 0 ? (
-          <div className="border-b border-[color:var(--line,#E1E5EF)] py-3 last:border-b-0" data-not-yet-sourced="">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Not yet sourced</p>
-            <p className="mt-1.5 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">
-              {missing.join(" · ")}
-            </p>
-          </div>
-        ) : null}
-      </dl>
-    </section>
-    </>
   );
 }
