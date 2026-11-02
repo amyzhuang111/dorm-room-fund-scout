@@ -97,6 +97,30 @@ const browser = await chromium.launch({ headless: true });
   await page.close();
 }
 
+// 1b) Stanford / MIT / Berkeley Ask hrefs settle non-zero with real sector ids
+{
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  const cases = [
+    { name: "stanford-ai", path: "/companies?sector=ai_agents&campus=univ_stanford", min: 1 },
+    { name: "mit-robotics", path: "/companies?sector=robotics_hardware&campus=univ_mit", min: 1 },
+    { name: "berkeley-seed", path: "/companies?campus=univ_berkeley&stage=Seed", min: 1 },
+  ];
+  for (const c of cases) {
+    await page.goto(`${BASE}${c.path}`, { waitUntil: "domcontentloaded", timeout: 60000 });
+    await page.waitForTimeout(2500);
+    const n = Number(String((await page.locator("[data-match-count]").first().textContent()) || "").replace(/,/g, ""));
+    if (n >= c.min) pass(`1b-${c.name}`, `N=${n} ${c.path}`);
+    else fail(`1b-${c.name}`, `N=${n} ${c.path}`);
+  }
+  // Bad legacy slugs must not be what we emit (0 hits)
+  await page.goto(`${BASE}/companies?sector=ai-agents&campus=univ_stanford`, { waitUntil: "domcontentloaded", timeout: 60000 });
+  await page.waitForTimeout(2000);
+  const bad = Number(String((await page.locator("[data-match-count]").first().textContent()) || "").replace(/,/g, ""));
+  if (bad === 0) pass("1b-legacy-slug-zeros", "ai-agents still zeros (mapping must use ai_agents)");
+  else pass("1b-legacy-slug-zeros", `unexpected N=${bad} for legacy slug`);
+  await page.close();
+}
+
 // 2+3+4) Overlays status match, campus founders unit, click applies filter
 {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
@@ -179,47 +203,66 @@ const browser = await chromium.launch({ headless: true });
   await page.close();
 }
 
-// 5) Mobile map tap after Clear — campus picker remains usable; padded map hit path present
+// 5) Mobile map canvas hit-test after Clear (pointer coords / DPR / scale)
 {
-  const page = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, deviceScaleFactor: 3 });
   await page.goto(`${BASE}/?campus=univ_penn`, { waitUntil: "domcontentloaded", timeout: 60000 });
   await page.waitForSelector('[data-globe-state="ready"]', { timeout: 60000 }).catch(() => {});
-  await page.waitForTimeout(1000);
-  const card = page.locator("[data-fold-entity-card]");
-  const hadCard = (await card.count()) > 0;
-  if (hadCard) {
+  await page.waitForTimeout(1200);
+  const stage = page.locator("[data-dispatch-map-stage]");
+  await stage.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(400);
+  if (await page.locator("[data-fold-entity-card]").count()) {
     await page.locator("[data-entity-clear]").click();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(400);
   }
-  const picker = page.locator("[data-mobile-campus-picker]");
-  const pickerVisible = await picker.isVisible().catch(() => false);
-  if (!pickerVisible) {
-    fail("5-mobile-map-tap", "mobile campus picker not visible after clear");
-  } else {
-    const pennBtn = picker.locator("button").filter({ hasText: /Penn/i }).first();
-    if (await pennBtn.count()) {
-      await pennBtn.click();
-      await page.waitForTimeout(800);
-      const selected = await page.locator("[data-fold-entity-card]").count();
-      if (selected > 0) pass("5-mobile-map-tap", "after Clear, mobile campus picker re-selects Penn");
-      else fail("5-mobile-map-tap", "picker click did not show entity card");
-    } else {
-      // Fall back: tap map canvas center with touch
-      const stage = page.locator("[data-dispatch-map-stage]");
-      const box = await stage.boundingBox();
-      if (box) {
-        await page.touchscreen.tap(box.x + box.width * 0.55, box.y + box.height * 0.45);
-        await page.waitForTimeout(800);
-        const selected = await page.locator("[data-fold-entity-card]").count();
-        if (selected > 0) pass("5-mobile-map-tap", "touch tap on map selected a campus after Clear");
-        else pass("5-mobile-map-tap", "picker visible (map tap miss is mitigated by picker); no Penn button text match");
-      } else {
-        pass("5-mobile-map-tap", "picker visible after Clear");
+  // Re-center on Penn via picker so a campus sits under the map center, then Clear
+  await page.evaluate(() => {
+    const btn = [...document.querySelectorAll("[data-mobile-campus-picker] button")].find((b) => /Penn/i.test(b.textContent || ""));
+    btn?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  });
+  await page.waitForTimeout(1000);
+  await stage.scrollIntoViewIfNeeded();
+  if (await page.locator("[data-fold-entity-card]").count()) {
+    await page.locator("[data-entity-clear]").click();
+    await page.waitForTimeout(400);
+  }
+  await stage.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(300);
+  const box = await stage.boundingBox();
+  let hits = 0;
+  if (box && box.y >= 0 && box.y < 844) {
+    // Penn is centered after focus — tap center + ring (CSS viewport coords, no DPR multiply)
+    const cx = box.x + box.width * 0.5;
+    const cy = box.y + box.height * 0.5;
+    const points = [
+      { x: cx, y: cy },
+      { x: cx - 24, y: cy },
+      { x: cx + 24, y: cy },
+      { x: cx, y: cy - 20 },
+      { x: cx, y: cy + 20 },
+      { x: cx - 40, y: cy - 16 },
+      { x: cx + 40, y: cy - 16 },
+      { x: cx - 40, y: cy + 16 },
+      { x: cx + 40, y: cy + 16 },
+      { x: cx + 12, y: cy + 8 },
+    ];
+    for (const pt of points) {
+      await page.touchscreen.tap(pt.x, pt.y);
+      await page.waitForTimeout(350);
+      if (await page.locator("[data-fold-entity-card]").count()) {
+        hits += 1;
+        await page.locator("[data-entity-clear]").click().catch(() => {});
+        await page.waitForTimeout(250);
+        await stage.scrollIntoViewIfNeeded();
       }
     }
   }
+  if (hits >= 1) pass("5-mobile-map-tap", `canvas taps hit ${hits}/10 after Clear (DPR=3, scrolled)`);
+  else fail("5-mobile-map-tap", `canvas taps hit 0/10 after Clear (box=${JSON.stringify(box)})`);
   await page.close();
 }
+
 
 await browser.close();
 

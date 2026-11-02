@@ -678,13 +678,7 @@ export function SampleInstrumentBrowse({
 
         {/* Scout Chronograph · unifying system. Browse-more uses folio (originality priority);
             page-1 pairs chronograph + sector strip; leaderboard uses chronograph alone. */}
-        <div className="mb-2 flex flex-wrap items-center gap-2 lg:hidden" data-mobile-filter-chips="" data-n-of-m="">
-          <span className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-            <span className="font-bold text-[color:var(--ember,#D96B1C)]">{boardCompanies.length.toLocaleString("en-US")}</span>
-            {" of "}
-            <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{total.toLocaleString("en-US")}</span>
-            {" companies"}
-          </span>
+        <div className="mb-2 flex flex-wrap items-center gap-2 lg:hidden" data-mobile-filter-chips="">
           {chipDefs.map((chip) => (
             <button
               key={`m-${String(chip.key)}`}
@@ -713,14 +707,14 @@ export function SampleInstrumentBrowse({
             <MobileListMast
               kicker="Companies on this desk"
               sealLabel={deskCampusTop?.label}
-              figure={total.toLocaleString("en-US")}
-              figureSuffix="companies"
+              figure={signaledMatch.toLocaleString("en-US")}
+              figureSuffix="with a signal"
               takeaway={
                 deskCampusTop
                   ? `${deskCampusTop.label} leads with ${deskCampusTop.signaled.toLocaleString("en-US")} signaled of ${deskCampusTop.companies.toLocaleString("en-US")} on the desk`
                   : `${signaledMatch.toLocaleString("en-US")} companies on this desk carry a signal`
               }
-              meta={`${signaledMatch.toLocaleString("en-US")} with a signal`}
+              meta="Signal desk"
             >
               <div data-signals-landed-mobile="" className="border-t border-[color:var(--cobalt,#2F4FD8)]/15 px-3.5 pb-3">
                 <SignalsLanded companies={companiesLive} compact />
@@ -796,7 +790,7 @@ export function SampleInstrumentBrowse({
                   ? `${podiumRows[0].label} leads the podium with ${podiumRows[0].founders.toLocaleString("en-US")} founders on record`
                   : `${signaledMatch.toLocaleString("en-US")} companies carry a signal on this desk`
               }
-              meta={`${total.toLocaleString("en-US")} on the desk`}
+              meta="Signal desk"
             />
           ) : null}
 

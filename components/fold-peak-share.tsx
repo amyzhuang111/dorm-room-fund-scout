@@ -16,8 +16,8 @@ export type FoldTopCampus = { id: string; name: string; founders: number };
 
 export function FoldPeakShare({
   companies,
-  foundersListed,
-  campusesOnMap,
+  foundersListed: _foundersListed,
+  campusesOnMap: _campusesOnMap,
   topCampuses = [],
   shell = null,
   onReady,
@@ -29,6 +29,8 @@ export function FoldPeakShare({
   shell?: PeakShell | null;
   onReady?: () => void;
 }) {
+  void _foundersListed;
+  void _campusesOnMap;
   const live = useMemo(() => (companies.length ? buildPeakShell(companies) : null), [companies]);
   useEffect(() => {
     onReady?.();
@@ -102,12 +104,6 @@ export function FoldPeakShare({
           </div>
           <div className="min-w-0 self-stretch border-l border-[color:var(--line,#E1E5EF)] pl-4" data-fold-top-campuses-desk="">
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Top campuses</p>
-            <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{foundersListed.toLocaleString("en-US")}</span>
-              {" founder names on investable companies · "}
-              <span className="font-bold text-[color:var(--fg,#0B0E17)]">{campusesOnMap.toLocaleString("en-US")}</span>
-              {" campuses on map"}
-            </p>
             {topCampuses.length > 0 ? (
               <ol className="mt-3 space-y-2.5" data-fold-peak-campus-rank="">
                 {topCampuses.map((campus, i) => (

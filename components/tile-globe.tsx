@@ -9,6 +9,7 @@ import { sampleSurfaceCounts, type FacetCompany } from "@/lib/domain/sample-face
 import { MapCredit } from "./map-credit";
 import { campusFoundersTop, campusFoundersRanked, CAMPUS_FOUNDERS_VISIBLE } from "./sample-instrument";
 import "maplibre-gl/dist/maplibre-gl.css";
+import { clientPointFromEvent, mapPointFromPointer } from "@/lib/domain/map-pointer";
 
 export interface TileCampus {
   id: string;
@@ -364,10 +365,12 @@ export function TileGlobe({
         if (map) map.getCanvas().style.cursor = "";
         setHover(null);
       });
-      // Padded bbox hit-test: layer-only clicks miss often on touch after Clear.
+      // Hit-test in layout CSS pixels. Touch + CSS transform break MapLibre's
+      // event.point; rebuild from clientX/Y with DPR-safe scale correction.
       const pickCampus = (point: { x: number; y: number }) => {
         if (!map) return null;
-        const pad = 22;
+        // Generous hit slop for finger + DPR; coords are layout CSS px (not device px).
+        const pad = 36;
         const box: [[number, number], [number, number]] = [
           [point.x - pad, point.y - pad],
           [point.x + pad, point.y + pad],
@@ -385,13 +388,52 @@ export function TileGlobe({
           y: point.y,
         };
       };
-      map.on("click", (event) => {
-        if (!event.point) return;
-        const hit = pickCampus(event.point);
+      const pointFromMapEvent = (event: { point?: { x: number; y: number }; originalEvent?: Event }) => {
+        if (!map) return event.point ?? null;
+        const client = clientPointFromEvent(event.originalEvent ?? null);
+        if (client) {
+          return mapPointFromPointer(map.getCanvasContainer(), client.clientX, client.clientY);
+        }
+        return event.point ?? null;
+      };
+      const selectAt = (event: { point?: { x: number; y: number }; originalEvent?: Event }) => {
+        const point = pointFromMapEvent(event);
+        if (!point) return;
+        const hit = pickCampus(point);
         if (!hit?.id) return;
         setPinned({ id: hit.id, name: hit.name, founders: hit.founders, signals: hit.signals, country: hit.country });
         onSelect(hit.id);
-      });
+      };
+      map.on("click", (event) => selectAt(event));
+      // touchend: some mobile WebViews drop click after Clear; same hit path.
+      const selectFromClient = (clientX: number, clientY: number, ev?: Event) => {
+        const point = mapPointFromPointer(map!.getCanvasContainer(), clientX, clientY);
+        const hit = pickCampus(point);
+        if (!hit?.id) return false;
+        ev?.preventDefault?.();
+        setPinned({ id: hit.id, name: hit.name, founders: hit.founders, signals: hit.signals, country: hit.country });
+        onSelect(hit.id);
+        return true;
+      };
+      map.getCanvas().addEventListener(
+        "touchend",
+        (ev) => {
+          if (!ev.changedTouches?.length) return;
+          if (ev.changedTouches.length !== 1) return;
+          const t = ev.changedTouches[0]!;
+          selectFromClient(t.clientX, t.clientY, ev);
+        },
+        { passive: false },
+      );
+      map.getCanvas().addEventListener(
+        "pointerup",
+        (ev) => {
+          if (ev.pointerType === "mouse") return; // map click handler covers mouse
+          if (ev.button != null && ev.button !== 0) return;
+          selectFromClient(ev.clientX, ev.clientY, ev);
+        },
+        { passive: false },
+      );
       const hold = () => {
         interacting = true;
       };
