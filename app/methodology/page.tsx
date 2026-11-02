@@ -1,12 +1,30 @@
+import fs from "node:fs";
+import path from "node:path";
 import { RUBRIC_DIMENSIONS, RUBRIC_VERSION } from "@/lib/scoring/rubric";
 import { SCREENING_CONFIG } from "@/lib/screening/config";
 
+function loadRecencyFunnel() {
+  try {
+    const snap = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "corpus-snapshot.json"), "utf8"));
+    return {
+      investable: Number(snap.investableCompanies ?? 0),
+      excludedOlderAlumni: Number(snap.excludedOlderAlumni ?? 0),
+      unverifiedRecency: Number(snap.unverifiedRecency ?? 0),
+      companiesTotal: Number(snap.companiesTotal ?? 0),
+    };
+  } catch {
+    return { investable: 0, excludedOlderAlumni: 0, unverifiedRecency: 0, companiesTotal: 0 };
+  }
+}
+
 export default function MethodologyPage() {
+  const recency = loadRecencyFunnel();
   return (
     <div className="mx-auto grid max-w-[1200px] gap-10 px-5 pb-16 pt-10 sm:px-12 lg:grid-cols-[200px_minmax(0,680px)]">
       <nav className="micro sticky top-20 hidden space-y-3 lg:block" aria-label="On this page">
         <a href="#products" className="block text-fg-3">Products</a>
         <a href="#promotion" className="block text-fg-3">Promotion</a>
+        <a href="#founder-recency" className="block text-fg-3">Founder recency</a>
       </nav>
       <div className="max-w-[680px] space-y-8">
       <div>
@@ -102,6 +120,39 @@ export default function MethodologyPage() {
             ))}
           </tbody>
         </table>
+      </section>
+
+
+      <section id="founder-recency">
+        <h2 className="pt-8 text-2xl font-semibold tracking-[-0.02em] text-foreground">Founder recency gate</h2>
+        <p className="mt-1 text-sm text-muted">
+          As of November 2026, a company is <strong>kept (investable)</strong> only when at least one named founder is a
+          current student or an alum who graduated in <strong>2023 or later</strong>. Companies that fail that bar are
+          excluded as older alumni. Companies we have not yet checked stay in an explicit{" "}
+          <strong>unverified recency</strong> bucket — they are labeled as such and are <em>not</em> counted in the
+          verified/investable totals on the home page, globe, or /data explorer.
+        </p>
+        <ul className="mt-3 space-y-2 text-sm" data-recency-funnel="">
+          <li className="rounded-md border border-border-c bg-surface p-3">
+            <span className="font-medium text-foreground">Kept / investable</span>
+            <span className="ml-2 font-mono tabular-nums text-ok" data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
+            <p className="mt-1 text-xs text-muted">Counted on the site as verified campus companies.</p>
+          </li>
+          <li className="rounded-md border border-border-c bg-surface p-3">
+            <span className="font-medium text-foreground">Excluded · older alumni</span>
+            <span className="ml-2 font-mono tabular-nums text-muted" data-count="recency-excluded">{recency.excludedOlderAlumni.toLocaleString("en-US")}</span>
+            <p className="mt-1 text-xs text-muted">Public evidence shows every checked founder graduated before 2023.</p>
+          </li>
+          <li className="rounded-md border border-dashed border-border-c bg-surface-2 p-3">
+            <span className="font-medium text-foreground">Unverified recency</span>
+            <span className="ml-2 font-mono tabular-nums text-warn" data-count="recency-unverified">{recency.unverifiedRecency.toLocaleString("en-US")}</span>
+            <p className="mt-1 text-xs text-muted">Not yet checked against LinkedIn / cohort / university pages. Not counted as verified.</p>
+          </li>
+        </ul>
+        <p className="mt-2 text-xs text-muted">
+          Corpus companies total {recency.companiesTotal.toLocaleString("en-US")} · funnel numbers come from{" "}
+          <code className="font-mono">data/corpus-snapshot.json</code> after each recency batch.
+        </p>
       </section>
 
       <section>

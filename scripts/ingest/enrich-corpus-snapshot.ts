@@ -67,6 +67,25 @@ function main() {
         )
         .get() as { c: number }
     ).c,
+    // Founder-recency funnel (as of Nov 2026: need ≥1 founder current or graduated ≥2023).
+    // Only investableCompanies are counted as verified/kept on the site.
+    companiesTotal: (
+      db.prepare(`SELECT COUNT(*) AS c FROM projects WHERE kind = 'company'`).get() as { c: number }
+    ).c,
+    excludedOlderAlumni: (
+      db
+        .prepare(
+          `SELECT COUNT(*) AS c FROM projects WHERE kind = 'company' AND excluded_reason = 'founders not current/recent (<2023)'`,
+        )
+        .get() as { c: number }
+    ).c,
+    unverifiedRecency: (
+      db
+        .prepare(
+          `SELECT COUNT(*) AS c FROM projects WHERE kind = 'company' AND excluded_reason = 'unverified recency'`,
+        )
+        .get() as { c: number }
+    ).c,
     peak: shell
       ? {
           peakCount: shell.peakCount,
@@ -98,6 +117,9 @@ function main() {
         peak: snapshot.peak,
         foundersListed: snapshot.foundersListed,
         campusesOnMap: snapshot.campusesOnMap,
+        excludedOlderAlumni: snapshot.excludedOlderAlumni,
+        unverifiedRecency: snapshot.unverifiedRecency,
+        companiesTotal: snapshot.companiesTotal,
       },
       null,
       2,

@@ -338,3 +338,44 @@ export function AffiliationStatusBadge({ status }: { status: string }) {
     </span>
   );
 }
+
+
+/** Company-level founder-recency gate label. Unverified is never counted as kept. */
+export function RecencyStatusBadge({
+  status,
+}: {
+  status: "kept" | "excluded_older_alumni" | "unverified_recency" | string | null | undefined;
+}) {
+  if (!status) return null;
+  const map: Record<string, { label: string; className: string; title: string }> = {
+    kept: {
+      label: "Recency kept",
+      className: "bg-ok-bg text-ok border-ok/20",
+      title: "At least one founder is a current student or graduated 2023 or later.",
+    },
+    excluded_older_alumni: {
+      label: "Excluded · older alumni",
+      className: "bg-surface-2 text-muted border-border-c",
+      title: "Checked founders all graduated before 2023.",
+    },
+    unverified_recency: {
+      label: "Unverified recency",
+      className: "bg-warn-bg text-warn border-warn/20",
+      title: "Founder graduation years not yet verified. Not counted as a verified/investable company.",
+    },
+  };
+  const row = map[status] ?? {
+    label: status,
+    className: "bg-surface-2 text-muted border-border-c",
+    title: "Founder recency status.",
+  };
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center rounded-full border px-1.5 py-0.5 text-[10px] font-medium ${row.className}`}
+      title={row.title}
+      data-recency-status={status}
+    >
+      {row.label}
+    </span>
+  );
+}

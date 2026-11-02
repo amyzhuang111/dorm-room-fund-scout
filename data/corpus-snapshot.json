@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-02T13:46:54.412Z",
+  "generatedAt": "2026-11-02T14:06:29.754Z",
   "dbPath": "data/campus-universe.db",
-  "investableCompanies": 1158,
+  "investableCompanies": 1172,
   "signals": 1090,
   "datedSignals": 279,
   "undatedSignals": 811,
@@ -11,15 +11,15 @@
   "withSignal": 649,
   "ycCompanies": 564,
   "peak": {
-    "peakCount": 31,
+    "peakCount": 32,
     "peakId": "2026-04",
     "peakLabel": "Apr 2026",
-    "dated": 66,
-    "sharePct": 47,
-    "inWindow": 63,
+    "dated": 67,
+    "sharePct": 48,
+    "inWindow": 64,
     "earlierValid": 0,
     "undatedMonth": 3,
-    "quiet": 993
+    "quiet": 1005
   },
   "restore": {
     "beforeInvestable": 2499,
@@ -27,16 +27,16 @@
     "restoredDrops": 10,
     "kaigoMerged": true
   },
-  "directoryCards": 1158,
+  "directoryCards": 1172,
   "signalsDated": 279,
   "signalsUndated": 811,
   "foundersIndexed": 3104,
-  "foundersListed": 1982,
+  "foundersListed": 2003,
   "campusesTotal": 83,
   "campusesOnMap": 74,
   "campusesWithFounders": 61,
-  "companiesWithSignal": 165,
-  "ycMembership": 304,
+  "companiesWithSignal": 167,
+  "ycMembership": 318,
   "campusFoundersTop": [
     {
       "name": "University of Pennsylvania",
@@ -56,7 +56,7 @@
       "name": "University of California, Berkeley",
       "short": "Berkeley",
       "founders": 245,
-      "companies": 145,
+      "companies": 146,
       "country": "United States"
     },
     {
@@ -70,7 +70,7 @@
       "name": "Harvard University",
       "short": "Harvard",
       "founders": 171,
-      "companies": 80,
+      "companies": 81,
       "country": "United States"
     },
     {
@@ -84,7 +84,7 @@
       "name": "Carnegie Mellon University",
       "short": "CMU",
       "founders": 101,
-      "companies": 63,
+      "companies": 64,
       "country": "United States"
     },
     {
@@ -108,5 +108,8 @@
       "companies": 52,
       "country": "United States"
     }
-  ]
+  ],
+  "companiesTotal": 2657,
+  "excludedOlderAlumni": 235,
+  "unverifiedRecency": 1217
 }
