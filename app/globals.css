@@ -753,3 +753,53 @@ html[data-sample="halflight"] body {
 @media (max-width: 639px) {
   .sample-paper .campus-index-row .desk-only-num { display: none; }
 }
+
+/* corpus-mobile-cards */
+@media (max-width: 639px) {
+  [data-corpus-cards] {
+    overflow-x: hidden;
+  }
+  [data-corpus-cards] table {
+    display: block;
+    min-width: 0 !important;
+  }
+  [data-corpus-cards] thead {
+    display: none;
+  }
+  [data-corpus-cards] tbody {
+    display: block;
+  }
+  [data-corpus-cards] tr[data-corpus-row] {
+    display: block;
+    padding: 0.75rem 0.875rem;
+  }
+  [data-corpus-cards] .c-n {
+    display: block;
+    position: static;
+    max-width: none;
+    box-shadow: none;
+    padding: 0;
+    font-size: 15px;
+  }
+  [data-corpus-cards] .c-m {
+    display: inline;
+    position: static;
+    max-width: none;
+    box-shadow: none;
+    padding: 0;
+    margin-top: 0.25rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+    color: var(--fg-2, #3F465C);
+  }
+  [data-corpus-cards] .c-m + .c-m::before {
+    content: " · ";
+    color: var(--fg-3, #5C647A);
+  }
+  [data-corpus-cards] .c-d {
+    display: none;
+  }
+  [data-corpus-cards] .c-b {
+    display: none;
+  }
+}

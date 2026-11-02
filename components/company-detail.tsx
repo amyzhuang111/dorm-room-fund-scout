@@ -36,7 +36,9 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
       {/* Header */}
       <div>
         {card ? (
-          <StartupDirectoryCard card={card} embedded />
+          <div className="hidden sm:block" data-dossier-desk-directory-card="">
+            <StartupDirectoryCard card={card} embedded />
+          </div>
         ) : (
           <h2 className="text-lg font-semibold text-foreground">{project.name}</h2>
         )}

@@ -13,7 +13,6 @@ import {
   FacetRail,
   IntelligenceBoards,
   COUNT,
-  MobileWireStrip,
   PANEL,
   type FacetState,
 } from "./sample-instrument";
@@ -335,6 +334,14 @@ export function SampleCompanyShell({
               {wireUnit}
               {wireIncludeNote ? <>{" · "}{wireIncludeNote}</> : null}
             </p>
+            {dossier?.founders && dossier.founders.length > 0 ? (
+              <div className="mt-2.5" data-dossier-founders-lead="">
+                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founders</p>
+                <p className="mt-1 text-[13px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]">
+                  {dossier.founders.slice(0, 4).join(" · ")}
+                </p>
+              </div>
+            ) : null}
             {/* Peer signal strip · hide identical scrape dates; prefer kind labels */}
             <ol className="mt-2.5 space-y-1" data-dossier-signal-timeline="">
               {(() => {
@@ -385,10 +392,7 @@ export function SampleCompanyShell({
             </div>
           </aside>
           <div className="min-w-0">
-            {/* Mobile magazine: swipe WIRE digest above the profile card */}
-            <div className="mb-3 lg:hidden" data-dossier-wire-mobile="" data-mobile-magazine-wire="">
-              <MobileWireStrip companies={wireCompanies} label="Campus peers" surface="company" />
-            </div>
+            {/* Mobile wire strip omitted on company: hero already lists campus peers. */}
             <div className="company-instrument relative overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3.5 pb-8 sm:overflow-hidden sm:border-[color:var(--cobalt,#2F4FD8)]/25 sm:p-4 sm:pb-4 sm:before:absolute sm:before:inset-y-0 sm:before:left-0 sm:before:w-0.5 sm:before:bg-[color:var(--cobalt,#2F4FD8)] sm:before:content-['']">
               {children}
             </div>
