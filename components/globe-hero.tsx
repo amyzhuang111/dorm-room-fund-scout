@@ -41,12 +41,14 @@ function GlobeBlock({
   companyCount,
   foundersListed,
   foundersIndexed = 0,
+  highlightCampusIds = null,
 }: {
   stats: HeroStats;
   companies: TileCompany[];
   companyCount: number;
   foundersListed: number;
   foundersIndexed?: number;
+  highlightCampusIds?: Set<string> | null;
 }) {
   const router = useRouter();
   const search = useSearchParams();
@@ -85,6 +87,7 @@ function GlobeBlock({
         selectedId={selectedId}
         onSelect={onSelect}
         dataThrough={stats.updatedAt}
+        highlightCampusIds={highlightCampusIds}
       />
     </FoldSkeletonContext.Provider>
   );
@@ -97,6 +100,7 @@ export function GlobeHero({
   foundersListed = 0,
   foundersIndexed = 0,
   showGlobe = true,
+  highlightCampusIds = null,
 }: {
   stats: HeroStats;
   companies?: TileCompany[];
@@ -104,6 +108,7 @@ export function GlobeHero({
   foundersListed?: number;
   foundersIndexed?: number;
   showGlobe?: boolean;
+  highlightCampusIds?: Set<string> | null;
 }) {
   return (
     <div className={showGlobe ? "bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg,#0B0E17)]" : "bg-bg px-6 py-6 text-fg"}>
@@ -112,7 +117,7 @@ export function GlobeHero({
           stats={stats}
           foundersListed={foundersListed}
           foundersIndexed={foundersIndexed}
-          globe={showGlobe ? <GlobeBlock stats={stats} companies={companies} companyCount={companyCount} foundersListed={foundersListed} foundersIndexed={foundersIndexed} /> : null}
+          globe={showGlobe ? <GlobeBlock stats={stats} companies={companies} companyCount={companyCount} foundersListed={foundersListed} foundersIndexed={foundersIndexed} highlightCampusIds={highlightCampusIds} /> : null}
         />
       </div>
       {/* Collage teasers compete with Directory tabs on mobile browse; instrument rails carry signals instead. */}

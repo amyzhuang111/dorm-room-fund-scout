@@ -16,6 +16,29 @@ async function waitDirectory(page) {
 }
 
 /** Fold shots must wait for MapLibre idle → data-globe-state=ready (no LOADING GLOBE). */
+
+async function waitFoundersReady(page) {
+  await page.waitForSelector("[data-founder-results]", { timeout: 30000 }).catch(() => {});
+  await page.waitForFunction(() => {
+    const body = document.body?.innerText || "";
+    if (/could not be loaded|failed to load/i.test(body)) return "error";
+    if (document.querySelectorAll("[data-founder-card]").length > 0) return "ok";
+    return false;
+  }, { timeout: 60000 });
+  const state = await page.evaluate(() => {
+    const body = document.body?.innerText || "";
+    const selects = [...document.querySelectorAll("[data-founder-filters] select")];
+    return {
+      failed: /could not be loaded|failed to load/i.test(body),
+      cards: document.querySelectorAll("[data-founder-card]").length,
+      filterOptions: selects.map((s) => s.options.length),
+    };
+  });
+  if (state.failed || state.cards < 1 || state.filterOptions.some((n) => n <= 1)) {
+    throw new Error(`founder fold not ready for shot: ${JSON.stringify(state)}`);
+  }
+}
+
 async function waitGlobeIdle(page) {
   await page.waitForSelector('[data-globe-state="ready"]', { timeout: 45000 });
   // One extra paint after ready so cream fill + dots settle.
@@ -82,6 +105,7 @@ const browser = await chromium.launch({ headless: true });
   await page.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForSelector("[data-founder-search]", { timeout: 20000 });
+  await waitFoundersReady(page);
   await waitGlobeIdle(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(200);
@@ -128,14 +152,33 @@ const browser = await chromium.launch({ headless: true });
   await page.goto(`${BASE}/companies?more=6`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await page.waitForTimeout(1200);
-  const nextScout = page.locator("[data-next-to-scout]").first();
   const end = page.locator("[data-ledger-end]").first();
-  if (await nextScout.count()) {
-    await nextScout.scrollIntoViewIfNeeded();
+  const loadNext = page.locator("[data-load-next]").first();
+  if (await end.count()) {
+    await end.evaluate((el) => el.scrollIntoView({ block: "end" }));
+    await page.waitForTimeout(300);
+    await page.evaluate(() => {
+      const endEl = document.querySelector("[data-ledger-end]");
+      const btn = document.querySelector("[data-load-next]");
+      if (!endEl) return;
+      // Pin Load next near the bottom of the viewport.
+      const anchor = btn || endEl;
+      const bottom = anchor.getBoundingClientRect().bottom;
+      const room = window.innerHeight - 16;
+      if (bottom > room) window.scrollBy(0, bottom - room);
+      // Ensure the topmost visible ledger card is fully in frame (not truncated).
+      const cards = [...document.querySelectorAll("#browse ol > li")];
+      for (const card of cards) {
+        const r = card.getBoundingClientRect();
+        if (r.bottom > 72 && r.top < window.innerHeight) {
+          if (r.top < 72) window.scrollBy(0, r.top - 80);
+          break;
+        }
+      }
+    });
     await page.waitForTimeout(400);
-    await page.evaluate(() => window.scrollBy(0, -48));
-  } else if (await end.count()) {
-    await end.scrollIntoViewIfNeeded();
+  } else if (await loadNext.count()) {
+    await loadNext.scrollIntoViewIfNeeded();
     await page.waitForTimeout(400);
   }
   await shot(page, "companies-more-end-1440");
@@ -207,6 +250,7 @@ const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
   await page.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
+  await waitFoundersReady(page);
   await page.waitForSelector("[data-founder-search]", { timeout: 20000 });
   await waitGlobeIdle(page);
   await page.evaluate(() => window.scrollTo(0, 0));
@@ -270,15 +314,28 @@ const browser = await chromium.launch({ headless: true });
     await page.waitForTimeout(200);
     await page.evaluate(() => {
       const end = document.querySelector("[data-ledger-end-mobile]");
+      const btn = end && end.querySelector("[data-load-next]");
       if (!end) return;
-      const bottom = end.getBoundingClientRect().bottom;
-      const room = window.innerHeight - 8;
-      if (bottom > room) window.scrollBy(0, bottom - room + 4);
-      // Prefer last cards above the close plate (not an orphan footer alone)
-      const top = end.getBoundingClientRect().top;
-      if (top < 220) window.scrollBy(0, top - 300);
+      // Keep the close plate (Load next) fully visible near the bottom.
+      const anchor = btn || end;
+      const bottom = anchor.getBoundingClientRect().bottom;
+      const room = window.innerHeight - 12;
+      if (bottom > room) window.scrollBy(0, bottom - room);
+      // Pull up just enough so one full card sits above the plate (not truncated).
+      const endTop = end.getBoundingClientRect().top;
+      const cards = [...document.querySelectorAll("#browse ol > li")];
+      for (let i = cards.length - 1; i >= 0; i--) {
+        const r = cards[i].getBoundingClientRect();
+        if (r.bottom <= endTop - 4) {
+          if (r.top < 56) window.scrollBy(0, r.top - 64);
+          break;
+        }
+      }
+      // Re-pin Load next if the card nudge pushed it off-screen.
+      const b2 = (btn || end).getBoundingClientRect().bottom;
+      if (b2 > window.innerHeight - 8) window.scrollBy(0, b2 - (window.innerHeight - 12));
     });
-    await page.waitForTimeout(350);
+    await page.waitForTimeout(400);
   }
   await shot(page, "companies-more-end-375");
 

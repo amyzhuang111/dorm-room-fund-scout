@@ -95,7 +95,26 @@ export function SampleHome({
     : null;
   const peakShell = buildPeakShell(data.cards);
   // Explore does not mount GlobeHero — omit heavy university rankings from RSC HTML (~160KB).
-  const clientStats =
+  // Map fold only needs coords + founder/signal counts for markers; full UniversitySummary
+  // (coordSource, pitchbook, hitRate, …) was ~147KB in the document and blew the 210 KiB budget.
+  // Minimal campus rows for GlobeHero markers (id/name/lat/lon/counts). Cast keeps HeroStats
+  // typing without shipping coordSource/pitchbook/hitRate blobs in the document.
+  const foldUniversities = stats.universities.map((university) => ({
+    id: university.id,
+    name: university.name,
+    country: university.country,
+    lat: university.lat,
+    lon: university.lon,
+    founderCount: university.founderCount,
+    signalCount: university.signalCount,
+    slug: university.slug,
+    signalWeek: university.signalWeek,
+    signalPrev: university.signalPrev,
+    latestSignal: university.latestSignal,
+    signalSeries: university.signalSeries,
+  })) as HeroStats["universities"];
+  const foldWeek = stats.week.map((item) => ({ ...item, detail: null }));
+  const clientStats: HeroStats =
     place === "explore"
       ? {
           ...stats,
@@ -105,7 +124,11 @@ export function SampleHome({
           signalTypes: [],
           collageFounder: null,
         }
-      : stats;
+      : {
+          ...stats,
+          universities: foldUniversities,
+          week: foldWeek,
+        };
 
   return (
     <SampleHomeClient

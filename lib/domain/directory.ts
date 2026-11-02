@@ -30,6 +30,8 @@ export interface DirectoryCard {
   logoUrl: string | null;
   /** Founded year from company_facts.founded_year when stored. */
   foundedYear: number | null;
+  /** Calendar year from foundedYear, else latest signal/news date — for Why-it-here only. */
+  activityYear?: number | null;
   /** operating_status fact when stored: acquired | dead. */
   operatingStatus: "acquired" | "dead" | null;
   /** Normalized HQ city from company_facts.hq when stored. */
@@ -201,6 +203,10 @@ function readPrecomputedDirectory(): DirectoryData | null {
 }
 
 /** Reads companies, schools, sectors, and signal rows. Prefer build-time JSON on the hot path. */
+export function clearDirectoryMemo(): void {
+  directoryMemo = null;
+}
+
 export function loadDirectory(): DirectoryData {
   if (directoryMemo) return directoryMemo;
   const precomputed = readPrecomputedDirectory();
@@ -305,6 +311,22 @@ export function buildDirectoryFromDb(): DirectoryData {
     if (!key) continue;
     const prev = latestSignal.get(row.project_id);
     if (!prev || key > prev) latestSignal.set(row.project_id, key);
+  }
+
+  // News published_at for Why-it-here / activity year only — never mixed into peak latestSignalAt.
+  const newsYearByProject = new Map<string, number>();
+  for (const row of db
+    .prepare(
+      `SELECT m.project_id as project_id, a.published_at as published_at
+         FROM news_mentions m
+         JOIN news_articles a ON a.id = m.article_id
+        WHERE m.project_id IS NOT NULL AND a.published_at IS NOT NULL`,
+    )
+    .all() as { project_id: string; published_at: string | null }[]) {
+    const y = Number(String(row.published_at ?? "").slice(0, 4));
+    if (!Number.isFinite(y) || y < 1990 || y > 2100) continue;
+    const prev = newsYearByProject.get(row.project_id);
+    if (prev == null || y > prev) newsYearByProject.set(row.project_id, y);
   }
 
   const hqByProject = new Map<string, string>();
@@ -431,6 +453,16 @@ export function buildDirectoryFromDb(): DirectoryData {
       latestSignalAt: latestSignal.get(company.id) ?? null,
       logoUrl: derivedLogo,
       foundedYear: foundedYearByProject.get(company.id) ?? null,
+      activityYear: (() => {
+        const founded = foundedYearByProject.get(company.id);
+        if (founded != null) return founded;
+        const signalAt = latestSignal.get(company.id);
+        if (signalAt && /^\d{4}/.test(signalAt)) {
+          const y = Number(signalAt.slice(0, 4));
+          if (Number.isFinite(y)) return y;
+        }
+        return newsYearByProject.get(company.id) ?? null;
+      })(),
       operatingStatus: operatingStatusByProject.get(company.id) ?? null,
       hqRegion: hqByProject.get(company.id) ?? null,
       primaryProgram: programByProject.get(company.id) ?? null,

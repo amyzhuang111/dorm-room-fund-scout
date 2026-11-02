@@ -52,7 +52,11 @@ function isYcReason(label: string): boolean {
   return /y\s*combinator/i.test(label);
 }
 
-/** Ordered real-data leads for a founder (specific facts first; diversifier skips repeats). */
+/**
+ * Ordered leads with real substance beyond campus · company · sector · year on the card.
+ * Prefer program+strong signal, then signal-at-company, then program·company. Skip bare weak
+ * lines like "Shown project on record" when a program or company can carry the claim.
+ */
 export function whyWorthALookCandidates(founder: FounderLead): string[] {
   const out: string[] = [];
   const seen = new Set<string>();
@@ -68,15 +72,14 @@ export function whyWorthALookCandidates(founder: FounderLead): string[] {
     (a, b) => ({ funding: 0, launch: 1, accelerator: 2, award: 3 }[a] ?? 50) - ({ funding: 0, launch: 1, accelerator: 2, award: 3 }[b] ?? 50) || a.localeCompare(b),
   );
   const programs = [...founder.programs].sort((a, b) => Number(isYcReason(b)) - Number(isYcReason(a)) || a.localeCompare(b));
-  // Specific: program + signal + company (unique on the page when possible).
-  if (programs[0] && strong[0] && company) {
-    push(`${programs[0]} · ${signalTypeLabel(strong[0]).toLowerCase()} · ${company}`);
-  }
-  if (programs[0] && company) {
-    push(`${programs[0]} · ${company}`);
+  if (programs[0] && strong[0]) {
+    push(`${programs[0]} · ${signalTypeLabel(strong[0]).toLowerCase()}`);
   }
   if (strong[0] && company) {
     push(`${signalTypeLabel(strong[0])} at ${company}`);
+  }
+  if (programs[0] && company) {
+    push(`${programs[0]} · ${company}`);
   }
   if (strong.length >= 2) {
     push(`${signalTypeLabel(strong[0])} and ${signalTypeLabel(strong[1]).toLowerCase()} on record`);
@@ -84,19 +87,26 @@ export function whyWorthALookCandidates(founder: FounderLead): string[] {
   for (const t of strong) {
     push(`${signalTypeLabel(t)} on record`);
   }
-  for (const name of programs) push(name);
-  if (founder.gradYear != null && company) {
-    push(`Class of ${founder.gradYear} · ${company}`);
-  }
   const WEAK_RANK: Record<string, number> = {
     affiliation_change: 0,
     continued_dev: 1,
     demo: 2,
   };
-  for (const t of [...founder.signalTypes]
+  const weak = [...founder.signalTypes]
     .filter((x) => !STRONG.has(x))
-    .sort((a, b) => (WEAK_RANK[a] ?? 50) - (WEAK_RANK[b] ?? 50) || a.localeCompare(b))) {
-    push(company ? `${signalTypeLabel(t)} · ${company}` : `${signalTypeLabel(t)} on record`);
+    .sort((a, b) => (WEAK_RANK[a] ?? 50) - (WEAK_RANK[b] ?? 50) || a.localeCompare(b));
+  for (const t of weak) {
+    const label = signalTypeLabel(t);
+    if (programs[0]) {
+      push(`${programs[0]} · ${label.toLowerCase()}`);
+    } else if (company) {
+      push(`${label} · ${company}`);
+    } else {
+      push(`${label} on record`);
+    }
+  }
+  if (strong.length === 0 && weak.length === 0) {
+    for (const name of programs) push(name);
   }
   return out;
 }

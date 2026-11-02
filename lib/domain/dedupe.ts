@@ -1294,6 +1294,34 @@ function movePersonRoles(db: Database.Database, fromPerson: string, toPerson: st
   }
 }
 
+
+function moveSignals(db: Database.Database, from: string, to: string) {
+  const rows = db
+    .prepare(
+      `SELECT id, signal_type, source_date, current_observation FROM signals WHERE project_id = ?`,
+    )
+    .all(from) as {
+    id: string;
+    signal_type: string;
+    source_date: string | null;
+    current_observation: string;
+  }[];
+  for (const row of rows) {
+    const clash = db
+      .prepare(
+        `SELECT id FROM signals
+         WHERE project_id = ?
+           AND signal_type = ?
+           AND IFNULL(source_date, '') = IFNULL(?, '')
+           AND current_observation = ?
+         LIMIT 1`,
+      )
+      .get(to, row.signal_type, row.source_date, row.current_observation) as { id: string } | undefined;
+    if (clash) db.prepare(`DELETE FROM signals WHERE id = ?`).run(row.id);
+    else db.prepare(`UPDATE signals SET project_id = ? WHERE id = ?`).run(to, row.id);
+  }
+}
+
 function absorbProject(db: Database.Database, survivorId: string, dropId: string, reason: string) {
   if (survivorId === dropId) return;
   const survivor = db.prepare(`SELECT * FROM projects WHERE id = ?`).get(survivorId) as Record<string, unknown> | undefined;
@@ -1347,7 +1375,7 @@ function absorbProject(db: Database.Database, survivorId: string, dropId: string
   moveSectorTags(db, dropId, survivorId);
   moveFacts(db, dropId, survivorId);
   moveFunding(db, dropId, survivorId);
-  db.prepare(`UPDATE signals SET project_id = ? WHERE project_id = ?`).run(survivorId, dropId);
+  moveSignals(db, dropId, survivorId);
   db.prepare(`UPDATE portfolio_memberships SET project_id = ? WHERE project_id = ?`).run(survivorId, dropId);
   db.prepare(`UPDATE assessments SET project_id = ? WHERE project_id = ?`).run(survivorId, dropId);
   db.prepare(`UPDATE possible_companies SET confirmed_project_id = ? WHERE confirmed_project_id = ?`).run(survivorId, dropId);

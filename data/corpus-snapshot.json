@@ -1,0 +1,112 @@
+{
+  "generatedAt": "2026-11-02T07:21:56.540Z",
+  "dbPath": "data/campus-universe.db",
+  "investableCompanies": 2508,
+  "signals": 1090,
+  "datedSignals": 279,
+  "undatedSignals": 811,
+  "people": 5944,
+  "founders": 2799,
+  "campuses": 83,
+  "withSignal": 649,
+  "ycCompanies": 564,
+  "peak": {
+    "peakCount": 109,
+    "peakId": "2026-04",
+    "peakLabel": "Apr 2026",
+    "dated": 268,
+    "sharePct": 41,
+    "inWindow": 222,
+    "earlierValid": 12,
+    "undatedMonth": 34,
+    "quiet": 1859
+  },
+  "restore": {
+    "beforeInvestable": 2499,
+    "afterInvestable": 2508,
+    "restoredDrops": 10,
+    "kaigoMerged": true
+  },
+  "directoryCards": 2508,
+  "signalsDated": 279,
+  "signalsUndated": 811,
+  "foundersIndexed": 3104,
+  "foundersListed": 2782,
+  "campusesTotal": 83,
+  "campusesOnMap": 74,
+  "campusesWithFounders": 61,
+  "companiesWithSignal": 649,
+  "ycMembership": 564,
+  "campusFoundersTop": [
+    {
+      "name": "University of Pennsylvania",
+      "short": "Penn",
+      "founders": 758,
+      "companies": 368,
+      "country": "United States"
+    },
+    {
+      "name": "Stanford University",
+      "short": "Stanford",
+      "founders": 300,
+      "companies": 258,
+      "country": "United States"
+    },
+    {
+      "name": "University of California, Berkeley",
+      "short": "Berkeley",
+      "founders": 245,
+      "companies": 441,
+      "country": "United States"
+    },
+    {
+      "name": "Massachusetts Institute of Technology",
+      "short": "MIT",
+      "founders": 238,
+      "companies": 253,
+      "country": "United States"
+    },
+    {
+      "name": "Harvard University",
+      "short": "Harvard",
+      "founders": 171,
+      "companies": 129,
+      "country": "United States"
+    },
+    {
+      "name": "Columbia University",
+      "short": "Columbia",
+      "founders": 155,
+      "companies": 134,
+      "country": "United States"
+    },
+    {
+      "name": "Carnegie Mellon University",
+      "short": "CMU",
+      "founders": 101,
+      "companies": 101,
+      "country": "United States"
+    },
+    {
+      "name": "Cornell University",
+      "short": "Cornell",
+      "founders": 84,
+      "companies": 66,
+      "country": "United States"
+    },
+    {
+      "name": "University of Waterloo",
+      "short": "Waterloo",
+      "founders": 81,
+      "companies": 62,
+      "country": "Canada"
+    },
+    {
+      "name": "Georgia Institute of Technology",
+      "short": "Georgia Tech",
+      "founders": 77,
+      "companies": 55,
+      "country": "United States"
+    }
+  ]
+}

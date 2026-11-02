@@ -5,6 +5,10 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FounderResults, FounderSearchBar } from "@/components/founder-sourcing";
+import {
+  LineagePanels,
+  campusIdsForSearch,
+} from "@/components/fold-map-craft";
 import { GlobeHero } from "@/components/globe-hero";
 import { SampleTheme } from "@/components/sample-theme";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
@@ -71,14 +75,14 @@ function PeakShareLite({
   const pct = Math.round((peakCount / Math.max(1, shell.dated)) * 100);
   return (
     <div data-fold-peak-ssr-shell="" data-fold-peak-identity="" data-fold-baseline="8">
-      <div className="mb-1 hidden min-h-[15rem] lg:block" data-fold-peak-desk="">
+      <div className="mb-1 hidden min-h-[11.5rem] lg:block" data-fold-peak-desk="">
         <div className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-end gap-5 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-peak-share="">
           <div className="min-w-0">
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
-            <p className="mt-1 font-mono text-[72px] font-bold leading-[0.82] tracking-[-0.08em] text-[color:var(--ember,#D96B1C)]">
+            <p className="mt-1 font-mono text-[56px] font-bold leading-[0.82] tracking-[-0.08em] text-[color:var(--ember,#D96B1C)]">
               {peakCount.toLocaleString("en-US")}
               <span className="mx-2 text-[26px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
-              <span className="text-[40px] font-bold tracking-[-0.06em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
+              <span className="text-[32px] font-bold tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
             </p>
             <p className="mt-2 max-w-[34rem] text-[16px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
               {peakLabel} took <span className="text-[color:var(--ember,#D96B1C)]">{pct}%</span>
@@ -141,7 +145,7 @@ function PeakShareSlot({
   // Keep SSR lite until the client Peak chunk has painted (same box → CLS ≈ 0).
   const showLive = live;
   return (
-    <div className="relative mb-3 min-h-[9.75rem] lg:mb-4 lg:min-h-[15rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
+    <div className="relative mb-3 min-h-[9.75rem] lg:mb-4 lg:min-h-[11.5rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
       <div className={showLive ? "hidden" : undefined} aria-hidden={showLive || undefined} data-fold-peak-ssr-wrap="">
         {shell ? (
           <PeakShareLite shell={shell} foundersListed={foundersListed} campusesOnMap={campusesOnMap} topCampuses={topCampuses} />
@@ -236,31 +240,52 @@ export function SampleHomeClient(props: {
       setCompanies(cards);
       setReady(true);
     });
-    void fetch("/data/founders.json")
-      .then(async (res) => {
-        if (!res.ok) throw new Error(String(res.status));
-        const data = (await res.json()) as FounderLead[];
-        return Array.isArray(data) ? data : [];
-      })
-      .then((rows) => {
-        if (dead) return;
-        setFounders(rows);
-        setFounderStatus("ready");
-      })
-      .catch(() => {
-        if (!dead) setFounderStatus("error");
-      });
+    void (async () => {
+      const attempts = 3;
+      for (let i = 0; i < attempts; i++) {
+        try {
+          const res = await fetch("/data/founders.json", { cache: "no-store" });
+          if (!res.ok) throw new Error(String(res.status));
+          const data = (await res.json()) as FounderLead[];
+          if (!Array.isArray(data) || data.length === 0) throw new Error("empty founders");
+          if (dead) return;
+          setFounders(data);
+          setFounderStatus("ready");
+          return;
+        } catch {
+          if (i < attempts - 1) await new Promise((r) => setTimeout(r, 200 * (i + 1)));
+        }
+      }
+      if (!dead) setFounderStatus("error");
+    })();
     return () => {
       dead = true;
     };
   }, [directoryUrl]);
+
+  const mapCampusName =
+    mapCampusId && mapCampusId !== "missing"
+      ? campuses.find((campus) => campus.id === mapCampusId)?.name ?? null
+      : null;
+
+  const highlightCampusIds = useMemo(
+    () => campusIdsForSearch(founders, founderQuery, campuses),
+    [founders, founderQuery, campuses],
+  );
+
+  const clearCampus = () => {
+    const next = new URLSearchParams(search.toString());
+    next.delete("campus");
+    next.set("sample", "1");
+    router.push(`/?${next.toString()}`);
+  };
 
   return (
     <div className="sample-paper" data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
       {place === "map" ? (
         <div className="px-4 pb-8 pt-3 sm:px-5" data-fold-hierarchy="">
-          {/* Mobile (fold-375): Peak leads, then search — 9dec. Desk (fold-1440): search first. */}
+          {/* Mobile (fold-375): Peak + campus ranking strip first, then search. Desk: search first. */}
           <div className="flex flex-col" data-fold-mast="">
             <div className="order-2 lg:order-1">
               <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
@@ -275,7 +300,7 @@ export function SampleHomeClient(props: {
               />
             </div>
           </div>
-          {/* Mobile: founders above map. Desk: founders beside a short globe so cards clear the fold at 1440. */}
+          {/* Mobile: founders above map (keeps campus ranking strip from Peak). Desk: globe | founders + lineage. */}
           <div
             className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(320px,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-5"
             data-fold-stack=""
@@ -288,7 +313,16 @@ export function SampleHomeClient(props: {
                 companyCount={cardCount}
                 foundersListed={foundersListed}
                 foundersIndexed={founders.length || undefined}
+                highlightCampusIds={highlightCampusIds}
               />
+              <div className="mt-3 hidden lg:block" data-fold-lineage-desk="">
+                <LineagePanels
+                  companies={companies}
+                  week={stats.week}
+                  campusId={mapCampusId && mapCampusId !== "missing" ? mapCampusId : null}
+                  campusName={mapCampusName}
+                />
+              </div>
             </div>
             <div className="order-1 lg:order-2 min-w-0 lg:sticky lg:top-3 lg:max-h-[calc(100dvh-1.5rem)] lg:overflow-y-auto lg:scroll-pt-1 lg:pb-6" data-fold-founders-col="">
               <FounderResults
@@ -296,13 +330,9 @@ export function SampleHomeClient(props: {
                 status={founderStatus}
                 query={founderQuery}
                 campusId={mapCampusId}
-                campusName={mapCampusId && mapCampusId !== "missing" ? campuses.find((campus) => campus.id === mapCampusId)?.name ?? null : null}
-                onClearCampus={() => {
-                  const next = new URLSearchParams(search.toString());
-                  next.delete("campus");
-                  next.set("sample", "1");
-                  router.push(`/?${next.toString()}`);
-                }}
+                campusName={mapCampusName}
+                foundersListed={foundersListed}
+                onClearCampus={clearCampus}
                 onMissingCampus={() => {
                   const next = new URLSearchParams(search.toString());
                   next.set("sample", "1");

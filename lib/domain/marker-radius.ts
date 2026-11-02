@@ -9,7 +9,7 @@ export function markerRadius(signals: number): number {
 export function markerRadiusByFounders(founders: number): number {
   const count = Number.isFinite(founders) ? Math.max(0, founders) : 0;
   // Penn 757 > Stanford 300 > MIT 238 stay distinct; soft cap for the field.
-  return Math.round((2.8 + Math.min(9.6, Math.sqrt(count) * 0.29)) * 10) / 10;
+  return Math.round((3.1 + Math.min(10.8, Math.sqrt(count) * 0.33)) * 10) / 10;
 }
 
 export function markerSizeLegend(): string {

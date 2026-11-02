@@ -1,37 +1,48 @@
 /**
- * Read ONE visible FacetRail's rendered pills; every facet group must sum to 2513.
+ * Read ONE visible FacetRail's rendered pills; every facet group must sum to 2599.
  * Usage: BASE=http://127.0.0.1:3460 node scripts/check-facet-dom.mjs
  */
 import { chromium } from "playwright";
+import fs from "node:fs";
+import path from "node:path";
 
 const BASE = process.env.BASE || "http://127.0.0.1:3460";
-const TOTAL = 2513;
-/** Directory sampleSurfaceCounts.foundersListed / campusesOnMap — must match strip + fold. */
-const EXPECTED_FOUNDERS_LISTED = 2766;
-const EXPECTED_FOUNDERS_INDEXED = 3068;
-const EXPECTED_CAMPUSES_ON_MAP = 74;
-/** Chronograph honesty: window + earlierValid + undatedMonth = dated (verified from loadDirectory). */
-const EXPECTED_CHRONO_WINDOW = 223;
-const EXPECTED_CHRONO_EARLIER = 13; // pre-window with real month
-const EXPECTED_CHRONO_MONTH_UNKNOWN = 34; // e.g. 2026-00-00 — year only, not "earlier"
-const EXPECTED_CHRONO_DATED = 270; // 223 + 13 + 34 (source_date only)
-const EXPECTED_CHRONO_PEAK = 109;
-const EXPECTED_CHRONO_PEAK_MONTH = "2026-04";
-/** Programs[] membership — every on-page YC universe figure must match (labelled in YC). */
-const EXPECTED_YC_MEMBERSHIP = 564;
+const snapPath = path.join(process.cwd(), "data", "corpus-snapshot.json");
+if (!fs.existsSync(snapPath)) {
+  console.error("missing data/corpus-snapshot.json — run dedupe-expand-companies.ts first");
+  process.exit(1);
+}
+const SNAP = JSON.parse(fs.readFileSync(snapPath, "utf8"));
+const TOTAL = SNAP.investableCompanies;
+/** Directory sampleSurfaceCounts — optional overrides; peak/chrono from snapshot. */
+const EXPECTED_FOUNDERS_LISTED = SNAP.foundersListed;
+const EXPECTED_FOUNDERS_INDEXED = SNAP.foundersIndexed;
+const EXPECTED_CAMPUSES_ON_MAP = SNAP.campusesOnMap;
+const peak = SNAP.peak || {};
+const EXPECTED_CHRONO_WINDOW = peak.inWindow;
+const EXPECTED_CHRONO_EARLIER = peak.earlierValid;
+const EXPECTED_CHRONO_MONTH_UNKNOWN = peak.undatedMonth;
+const EXPECTED_CHRONO_DATED = peak.dated;
+const EXPECTED_CHRONO_PEAK = peak.peakCount;
+const EXPECTED_CHRONO_PEAK_MONTH = peak.peakId;
+const EXPECTED_YC_MEMBERSHIP = SNAP.ycMembership;
 /** Campus plates sitewide: founder names on record (not signals / not companies). */
-const EXPECTED_CAMPUS_FOUNDERS_TOP = [
-  { founders: 757, nameRe: /penn|pennsylvania/i },
-  { founders: 300, nameRe: /stanford/i },
-  { founders: 238, nameRe: /mit|massachusetts institute/i },
-  { founders: 233, nameRe: /berkeley/i },
-  { founders: 168, nameRe: /harvard/i },
-  { founders: 155, nameRe: /columbia/i },
-  { founders: 101, nameRe: /carnegie|cmu/i },
-  { founders: 84, nameRe: /cornell/i },
-  { founders: 77, nameRe: /georgia|gatech/i },
-  { founders: 77, nameRe: /waterloo/i },
-];
+const EXPECTED_CAMPUS_FOUNDERS_TOP = (SNAP.campusFoundersTop || []).map((row) => {
+  const short = String(row.short || row.name || "");
+  const nameRe =
+    /penn|pennsylvania/i.test(short) ? /penn|pennsylvania/i :
+    /stanford/i.test(short) ? /stanford/i :
+    /berkeley/i.test(short) ? /berkeley/i :
+    /mit|massachusetts/i.test(short) ? /mit|massachusetts institute/i :
+    /harvard/i.test(short) ? /harvard/i :
+    /columbia/i.test(short) ? /columbia/i :
+    /carnegie|cmu/i.test(short) ? /carnegie|cmu/i :
+    /waterloo/i.test(short) ? /waterloo/i :
+    /cornell/i.test(short) ? /cornell/i :
+    /georgia|gatech/i.test(short) ? /georgia|gatech/i :
+    new RegExp(short.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+  return { founders: row.founders, nameRe };
+});
 const EXPECTED_CAMPUS_FOUNDERS_VISIBLE = 10;
 
 function parseMidDotCount(label) {
@@ -475,7 +486,7 @@ const report = {
       companiesLabels.emDashInUi === false &&
       companiesLabels.emDashInSignalsAside === false,
     statusBuckets:
-      statusActive === 2497 && statusAcquired === 8 && statusClosed === 8 && statusActive + statusAcquired + statusClosed === TOTAL,
+      statusActive === 2492 && statusAcquired === 8 && statusClosed === 8 && statusActive + statusAcquired + statusClosed === TOTAL,
     moreObvious: moreLabelsBefore.some((l) => /more sectors/i.test(l)) && moreLabelsBefore.some((l) => /more cities/i.test(l)),
     campusAllCampusesExpand: campusAllOk,
     campusFoundersTopTen: campusFoundersTopOk,
