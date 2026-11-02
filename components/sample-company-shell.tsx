@@ -328,26 +328,26 @@ export function SampleCompanyShell({
                 </span>
               ) : null}
             </p>
-            <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-dossier-signal-plate="">
+            <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-dossier-signal-plate="">
               <span className="font-bold text-[color:var(--ember,#D96B1C)]">{wireCount.toLocaleString("en-US")}</span>
               {" "}
               {wireUnit}
               {wireIncludeNote ? <>{" · "}{wireIncludeNote}</> : null}
             </p>
             {dossier?.founders && dossier.founders.length > 0 ? (
-              <div className="mt-2.5" data-dossier-founders-lead="">
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founders</p>
-                <p className="mt-1 text-[13px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]">
+              <div className="mt-1.5" data-dossier-founders-lead="">
+                <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founders</p>
+                <p className="mt-0.5 text-[13px] font-semibold leading-4 tracking-tight text-[color:var(--fg,#0B0E17)]">
                   {dossier.founders.slice(0, 4).join(" · ")}
                 </p>
               </div>
             ) : null}
             {/* Peer signal strip · titled section; hide identical scrape dates */}
-            <div className="mt-3 border-t border-[color:var(--line,#E1E5EF)] pt-2.5" data-dossier-peers-section="">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">
+            <div className="mt-2 border-t border-[color:var(--line,#E1E5EF)] pt-1.5" data-dossier-peers-section="">
+            <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">
               {campusPeers ? "Campus peers" : sectorPeers ? "Sector peers" : "Nearby signals"}
             </p>
-            <ol className="mt-1.5 space-y-1" data-dossier-signal-timeline="">
+            <ol className="mt-1 space-y-0.5" data-dossier-signal-timeline="">
               {(() => {
                 const rows = wireCompanies
                   .filter((c) => (c.signals ?? 0) > 0 || (c.latestSignalAt ?? "").length >= 4)
@@ -362,7 +362,7 @@ export function SampleCompanyShell({
                   return (
                     <li key={c.id} className="flex flex-wrap items-baseline gap-x-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
                       <span className="w-4 shrink-0 text-[color:var(--cobalt,#2F4FD8)]">{String(i + 1).padStart(2, "0")}</span>
-                      <span className="min-w-0 flex-1 truncate font-semibold text-[color:var(--fg,#0B0E17)]">{c.name}</span>
+                      <Link href={`/startup/${c.id}`} className="min-w-0 flex-1 truncate font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline">{c.name}</Link>
                       {c.signalLabel ? (
                         <span className="shrink-0 font-bold text-[color:var(--ember,#D96B1C)]">{c.signalLabel}</span>
                       ) : null}
@@ -398,7 +398,7 @@ export function SampleCompanyShell({
           </aside>
           <div className="min-w-0">
             {/* Mobile wire strip omitted on company: hero already lists campus peers. */}
-            <div className="company-instrument relative overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3 pb-6 sm:overflow-hidden sm:border-[color:var(--cobalt,#2F4FD8)]/25 sm:p-4 sm:pb-4 sm:before:absolute sm:before:inset-y-0 sm:before:left-0 sm:before:w-0.5 sm:before:bg-[color:var(--cobalt,#2F4FD8)] sm:before:content-['']">
+            <div className="company-instrument relative overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-2.5 pb-4 sm:overflow-hidden sm:border-[color:var(--cobalt,#2F4FD8)]/25 sm:p-4 sm:pb-4 sm:before:absolute sm:before:inset-y-0 sm:before:left-0 sm:before:w-0.5 sm:before:bg-[color:var(--cobalt,#2F4FD8)] sm:before:content-['']">
               {children}
             </div>
           </div>

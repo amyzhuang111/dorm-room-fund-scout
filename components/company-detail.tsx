@@ -32,22 +32,22 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
   const strongestConcern = concernReasons[0];
 
   const whyLook = (
-      <section className="dossier-brief relative space-y-3 overflow-visible rounded-md border border-border-c border-l-[3px] border-l-[color:var(--ember,#D96B1C)] bg-surface p-3 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]" data-why-look-section="">
+      <section className="dossier-brief relative space-y-2 overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] p-2.5" data-why-look-section="">
         <div>
-          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Why look</h3>
-          <p className="mt-0.5 text-sm text-foreground">{project.latestSignalNote ?? "No supporting evidence recorded yet."}</p>
+          <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Why look</h3>
+          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{project.latestSignalNote ?? "No supporting evidence recorded yet."}</p>
         </div>
         <div>
-          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founder edge</h3>
-          <p className="mt-0.5 text-sm text-foreground">
-            {project.founders.length ? `${project.founders.join(", ")} · see Evidence below for what's attributed to them directly.` : "Not yet identified from evidence."}
+          <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Founder edge</h3>
+          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">
+            {project.founders.length ? `${project.founders.join(" · ")} · see Evidence below for what's attributed to them directly.` : "Not yet identified from evidence."}
           </p>
         </div>
         <div>
-          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Open question</h3>
-          <p className="mt-0.5 text-sm text-foreground">{strongestConcern ? strongestConcern.rationale : "No unresolved eligibility concerns on record."}</p>
+          <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Open question</h3>
+          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{strongestConcern ? strongestConcern.rationale : "No unresolved eligibility concerns on record."}</p>
         </div>
-        <div className="flex flex-wrap gap-2 pt-1">
+        <div className="hidden flex-wrap gap-2 pt-1 sm:flex">
           <a href="#evidence" className="rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground">
             Research company
           </a>
@@ -59,7 +59,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
   );
 
   return (
-    <div className="space-y-5 p-4">
+    <div className="space-y-3 p-2.5 sm:space-y-5 sm:p-4">
       {/* Mobile: Why look above funding empties so sim-375 is not clipped */}
       <div className="sm:hidden">{whyLook}</div>
 
@@ -72,7 +72,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
         ) : (
           <h2 className="text-lg font-semibold text-foreground">{project.name}</h2>
         )}
-        <div className="sample-ops-chrome mt-3 flex items-start justify-between gap-2">
+        <div className="sample-ops-chrome mt-2 hidden items-start justify-between gap-2 sm:flex">
           <div className="flex flex-wrap items-center gap-2">
             <SignalTierBadge tier={project.signalTier} basis={project.signalTierBasis} />
             {project.sameSchoolCofounders ? <SameSchoolBadge /> : null}

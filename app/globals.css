@@ -843,12 +843,28 @@ html[data-sample="halflight"] body {
 }
 [data-corpus-cards] .c-link { color: var(--cobalt, #2F4FD8); text-decoration: underline; }
 
-/* monogram only on mobile corpus cards */
-@media (min-width: 640px) {
-  [data-corpus-cards] .c-n::before {
-    content: none;
-    display: none;
-  }
+/* corpus row marks: desk hides mobile mark chrome */
+[data-corpus-cards] .c-mark {
+  display: none;
+}
+[data-corpus-cards] .c-logo,
+[data-corpus-cards] .c-mono {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  border: 1px solid var(--line, #E1E5EF);
+  border-radius: 0.125rem;
+  background: #FFFFFF;
+  object-fit: contain;
+}
+[data-corpus-cards] .c-mono {
+  background: color-mix(in srgb, var(--cobalt-haze, #E8ECFA) 40%, white);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cobalt, #2F4FD8);
 }
 
 /* corpus-mobile-cards */
@@ -870,38 +886,27 @@ html[data-sample="halflight"] body {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    gap: 0.35rem 0.5rem;
-    padding: 0.95rem 1rem;
+    gap: 0.25rem 0.45rem;
+    padding: 0.75rem 0.85rem;
   }
   [data-corpus-cards] .c-n {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.55rem;
     position: static;
     width: 100%;
     max-width: none;
     box-shadow: none;
     padding: 0;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     letter-spacing: -0.02em;
   }
-  [data-corpus-cards] .c-n::before {
-    content: attr(data-i);
-    display: grid;
-    place-items: center;
-    width: 1.75rem;
-    height: 1.75rem;
-    flex-shrink: 0;
-    border: 1px solid var(--line, #E1E5EF);
-    border-radius: 0.125rem;
-    background: color-mix(in srgb, var(--cobalt-haze, #E8ECFA) 55%, white);
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--cobalt, #2F4FD8);
+  [data-corpus-cards] .c-mark {
+    display: contents;
   }
-  [data-corpus-cards] .c-m {
+  [data-corpus-cards] .c-m,
+  [data-corpus-cards] .c-fund {
     display: inline;
     position: static;
     max-width: none;
@@ -912,13 +917,21 @@ html[data-sample="halflight"] body {
     font-size: 12px;
     color: var(--fg-2, #3F465C);
   }
+  [data-corpus-cards] .c-fund {
+    color: var(--ember, #D96B1C);
+    font-weight: 600;
+  }
   /* Hide blank meta cells entirely so separators never become "· ·". */
-  [data-corpus-cards] .c-m:has(.c-b) {
+  [data-corpus-cards] .c-m:has(.c-b),
+  [data-corpus-cards] .c-fund:has(.c-b) {
     display: none !important;
   }
-  [data-corpus-cards] .c-m:not(:has(.c-b)) + .c-m:not(:has(.c-b))::before {
+  [data-corpus-cards] .c-m:not(:has(.c-b)) + .c-m:not(:has(.c-b))::before,
+  [data-corpus-cards] .c-m:not(:has(.c-b)) + .c-fund:not(:has(.c-b))::before,
+  [data-corpus-cards] .c-fund:not(:has(.c-b)) + .c-m:not(:has(.c-b))::before {
     content: " · ";
     color: var(--fg-3, #5C647A);
+    font-weight: 400;
   }
   [data-corpus-cards] .c-d {
     display: none;
@@ -926,4 +939,48 @@ html[data-sample="halflight"] body {
   [data-corpus-cards] .c-b {
     display: none;
   }
+}
+@media (min-width: 640px) {
+  [data-corpus-cards] .c-fund {
+    padding: 0.5rem 0.625rem;
+  }
+}
+
+
+/* Dark backgrounds banned (Taste+Design): night surfaces stay white. */
+[data-theme="night"],
+.hero-night {
+  --bg: #FFFFFF;
+  --bg-raised: #FFFFFF;
+  --bg-sunken: #F3F5F9;
+  --line: #E1E5EF;
+  --line-strong: #C5CAD8;
+  --fg: #0B0E17;
+  --fg-2: #3F465C;
+  --fg-3: #5C647A;
+  --background: #FFFFFF;
+  --surface: #FFFFFF;
+  --surface-2: #F3F5F9;
+  --border-c: #E1E5EF;
+  --foreground: #0B0E17;
+  --muted: #3F465C;
+  --cobalt-haze: #E8ECFA;
+  --sig-funding-bg: #e5f5ec;
+  --sig-funding-bd: #8fceb0;
+  --sig-launch-bg: #fbf3dc;
+  --sig-launch-bd: #e4cc8a;
+  --sig-award-bg: #fdeee6;
+  --sig-award-bd: #e4b8a6;
+  --sig-acquisition-bg: #e7eefb;
+  --sig-acquisition-bd: #b5c6ee;
+  --sig-hiring-bg: #e3f6f1;
+  --sig-hiring-bd: #8fcec0;
+  --sig-press-bg: #e7f1f6;
+  --sig-press-bd: #b7d0de;
+  --sig-research-bg: #f3eaf8;
+  --sig-research-bd: #d4b8ea;
+  --sig-social-bg: #efeae3;
+  --sig-social-bd: #d9d1c6;
+  color: #0B0E17;
+  background: #FFFFFF;
 }

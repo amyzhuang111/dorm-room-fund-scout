@@ -50,13 +50,14 @@ export const metadata: Metadata = {
   description: "Student founder intelligence, by campus.",
 };
 
-const themeScript = `try{var t=localStorage.getItem("campus-scout-theme");document.documentElement.dataset.theme=t==="day"?"day":"night"}catch(e){document.documentElement.dataset.theme="night"}`;
+const themeScript = `try{document.documentElement.dataset.theme="day";document.documentElement.dataset.sample="halflight";}catch(e){}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      data-theme="night"
+      data-theme="day"
+      data-sample="halflight"
       className={`${geist.variable} ${geistMono.variable} ${instrument.variable} ${display.variable} h-full antialiased`}
       suppressHydrationWarning
     >

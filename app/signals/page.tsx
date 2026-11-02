@@ -184,76 +184,30 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
   const precollegePage = precollege.slice(sliceStart, sliceStart + SIGNALS_PAGE_SIZE);
   const signalsPage = signals.slice(sliceStart, sliceStart + SIGNALS_PAGE_SIZE);
   const hrefPage = (n: number) => buildHref(basePath, sp, { page: n <= 1 ? null : String(n) });
+  const filtersActive = Boolean(sp.university || sp.type || sp.precollege || sp.connectors);
+  const campusChips = universities
+    .filter((u) => allSignals.some((s) => (s.university_ids ?? "").split(",").includes(u.id)))
+    .filter((u, i, arr) => sp.university === u.id || i < 24 || arr.length <= 24);
+
   return (
-    <div className="mx-auto max-w-[1100px] px-6 pb-16 pt-10">
-      <p className="page-eyebrow">Activity</p>
-      <h1 className="page-title">Signals</h1>
-      <p className="page-subtitle">Recent company and founder activity, by date, for every campus that has a stored signal. Top connectors ranks people and clubs by verified, tiered founders they are linked to.</p>
-      <p className="mt-2 font-mono text-[11px] tabular-nums text-muted">
+    <div className="mx-auto max-w-[1100px] px-4 pb-12 pt-6 sm:px-6 sm:pt-8">
+      <p className="scout-kicker">Activity</p>
+      <h1 className="mt-0.5 scout-display text-[28px] leading-none text-[color:var(--fg,#0B0E17)] sm:text-[40px]">Signals</h1>
+      <p className="mt-1.5 max-w-2xl text-[13px] leading-snug text-[color:var(--fg-2,#3F465C)] sm:text-[14px]">
+        Recent company and founder activity, by date, for every campus that has a stored signal.
+      </p>
+      <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
         {withSourceDate.toLocaleString("en-US")} with a source date · {withoutSourceDate.toLocaleString("en-US")} indexed without one · listed source date first
       </p>
 
-      <div className="mt-3 flex flex-wrap gap-1.5 text-xs">
-        <Link
-          href={buildHref(basePath, sp, { connectors: connectorsOn ? null : "1", precollege: null, type: null, page: null })}
-          className={`rounded-full border px-2 py-0.5 ${connectorsOn ? "border-foreground bg-foreground text-white" : "border-border-c text-foreground"}`}
-        >
-          Top connectors
-        </Link>
-        {!connectorsOn && (
-          <>
-        {(
-          [
-            ["any", "Pre-college excellence"],
-            ["1", "Tier 1"],
-            ["2", "Tier 2"],
-          ] as const
-        ).map(([val, label]) => (
-          <Link
-            key={val}
-            href={buildHref(basePath, sp, { precollege: sp.precollege === val ? null : val, type: null, page: null })}
-            className={`rounded-full border px-2 py-0.5 ${sp.precollege === val ? "border-foreground bg-foreground text-white" : "border-border-c text-foreground"}`}
-          >
-            {label}
-          </Link>
-        ))}
-        {universities
-          .filter((u) => allSignals.some((s) => (s.university_ids ?? "").split(",").includes(u.id)))
-          .filter((u, i, arr) => sp.university === u.id || i < 24 || arr.length <= 24)
-          .map((u) => (
-            <Link
-              key={u.id}
-              href={buildHref(basePath, sp, { university: sp.university === u.id ? null : u.id, page: null })}
-              className={`rounded-full border px-2 py-0.5 ${sp.university === u.id ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}
-            >
-              {u.name}
-            </Link>
-          ))}
-        {types.map((t) => (
-          <Link
-            key={t}
-            href={buildHref(basePath, sp, { type: sp.type === t ? null : t, page: null })}
-            className={`rounded-full border px-2 py-0.5 ${sp.type === t ? "border-accent bg-accent text-accent-foreground" : "border-border-c text-muted"}`}
-          >
-            {TYPE_LABEL[t] ?? t}
-          </Link>
-        ))}
-          </>
-        )}
-        {(sp.university || sp.type || sp.precollege || sp.connectors) && (
-          <Link href={basePath} className="rounded-full border border-border-c px-2 py-0.5 text-link underline">
-            Clear
-          </Link>
-        )}
-      </div>
-
+      {/* Count + rows first; filter cloud collapsed so feed clears the fold */}
       {connectorsOn ? (
         <TopConnectors lists={topConnectors(sp.university)} activeCampus={sp.university ?? null} basePath={basePath} current={sp} />
       ) : (
       <>
       {!precollegeOn && sp.type !== "press" ? (
-        <p className="mt-4 font-mono text-[13px] tabular-nums text-fg-2">
-          <span className="num font-bold text-fg">{feedTotal.toLocaleString("en-US")}</span>
+        <p className="mt-3 font-mono text-[13px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+          <span className="num font-bold text-[color:var(--ember,#D96B1C)]">{feedTotal.toLocaleString("en-US")}</span>
           {" signals"}
           {feedTotal > SIGNALS_PAGE_SIZE ? (
             <>
@@ -268,9 +222,69 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
           ) : null}
         </p>
       ) : null}
-      <ul className="mt-4 space-y-2">
+
+      <details className="mt-2 border-b border-[color:var(--line,#E1E5EF)] pb-2" data-signals-filters="">
+        <summary className="cursor-pointer list-none font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)] [&::-webkit-details-marker]:hidden">
+          {filtersActive ? "Filters on" : "Filters"}
+          <span className="ml-2 font-normal normal-case tracking-normal text-[color:var(--fg-3,#5C647A)]">
+            {filtersActive ? " · tap to change" : " · campus, type, connectors"}
+          </span>
+        </summary>
+        <div className="mt-2 flex flex-wrap gap-1.5 text-xs">
+          <Link
+            href={buildHref(basePath, sp, { connectors: connectorsOn ? null : "1", precollege: null, type: null, page: null })}
+            className={`rounded-full border px-2 py-0.5 ${connectorsOn ? "border-[color:var(--fg,#0B0E17)] bg-[color:var(--fg,#0B0E17)] text-white" : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg,#0B0E17)]"}`}
+          >
+            Top connectors
+          </Link>
+          {!connectorsOn && (
+            <>
+              {(
+                [
+                  ["any", "Pre-college excellence"],
+                  ["1", "Tier 1"],
+                  ["2", "Tier 2"],
+                ] as const
+              ).map(([val, label]) => (
+                <Link
+                  key={val}
+                  href={buildHref(basePath, sp, { precollege: sp.precollege === val ? null : val, type: null, page: null })}
+                  className={`rounded-full border px-2 py-0.5 ${sp.precollege === val ? "border-[color:var(--fg,#0B0E17)] bg-[color:var(--fg,#0B0E17)] text-white" : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg,#0B0E17)]"}`}
+                >
+                  {label}
+                </Link>
+              ))}
+              {campusChips.map((u) => (
+                <Link
+                  key={u.id}
+                  href={buildHref(basePath, sp, { university: sp.university === u.id ? null : u.id, page: null })}
+                  className={`rounded-full border px-2 py-0.5 ${sp.university === u.id ? "border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] text-white" : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg-3,#5C647A)]"}`}
+                >
+                  {u.name}
+                </Link>
+              ))}
+              {types.map((t) => (
+                <Link
+                  key={t}
+                  href={buildHref(basePath, sp, { type: sp.type === t ? null : t, page: null })}
+                  className={`rounded-full border px-2 py-0.5 ${sp.type === t ? "border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] text-white" : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg-3,#5C647A)]"}`}
+                >
+                  {TYPE_LABEL[t] ?? t}
+                </Link>
+              ))}
+            </>
+          )}
+          {filtersActive ? (
+            <Link href={basePath} className="rounded-full border border-[color:var(--line,#E1E5EF)] px-2 py-0.5 text-[color:var(--cobalt,#2F4FD8)] underline">
+              Clear
+            </Link>
+          ) : null}
+        </div>
+      </details>
+
+      <ul className="mt-3 space-y-2">
         {pressPage.map((item) => (
-          <li key={item.id} className="rounded-md border border-line bg-raised p-3">
+          <li key={item.id} className="rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] p-3">
             <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-[15px] font-medium text-fg">
               {item.headline}
             </a>
@@ -292,7 +306,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
           };
           const pool = row.founder_status === "potential" ? "potential" : null;
           return (
-            <li key={row.id} className="rounded-md border border-border-c bg-surface p-3">
+            <li key={row.id} className="rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3">
               <Link
                 href={buildHref("/founders", {}, { founder: row.person_id, pool, university: row.university_id })}
                 className="text-sm font-medium text-foreground hover:text-link"
@@ -322,7 +336,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
           const footerDate = s.source_date ? formatSignalDate(s.source_date) : `Discovered ${formatMonthDay(s.created_at)}`;
           const lowConfidence = (s.significance_note ?? "").startsWith("Low confidence");
           return (
-            <li key={s.id} className="rounded-md border border-border-c bg-surface p-3">
+            <li key={s.id} className="rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3">
               <span className="inline-flex items-center gap-1">
                 <Link href={detailHref} className="text-sm font-medium text-foreground hover:text-link">
                   {s.founder_name ?? s.project_name}

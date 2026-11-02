@@ -867,56 +867,54 @@ export function SampleInstrumentBrowse({
                     ) : null}
                   </div>
                 </div>
-                {/* Mobile more-end-375: pass-close instrument · cards stay above, no orphan band */}
+                {/* Mobile more-end-375: hairline below cards, quiet type, text Load next */}
                 <div
-                  className="mt-4 scroll-mt-24 lg:hidden"
+                  className="mt-3 scroll-mt-24 lg:hidden"
                   data-ledger-end=""
                   data-ledger-end-mobile=""
                   data-end-insight={sliceInsight.kicker}
                 >
                   <div
-                    className="relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]"
+                    className="border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] pt-3"
                     data-ledger-end-lead=""
                     data-ledger-end-more=""
                     data-pass-close=""
                   >
-                    <div className="px-3.5 py-3.5 pl-4">
-                      <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">End of this batch</p>
-                      <p className="mt-1 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]" data-more-context="">
-                        {pageContext}
+                    <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--fg-3,#5C647A)]">End of this batch</p>
+                    <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-more-context="">
+                      {pageContext}
+                    </p>
+                    <p className="mt-1.5 font-mono text-[15px] font-semibold tabular-nums tracking-tight text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="" data-end-lead="">
+                      <span className="text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
+                      <span className="ml-1 text-[11px] font-medium text-[color:var(--fg-3,#5C647A)]">
+                        of {total.toLocaleString("en-US")} loaded
+                      </span>
+                    </p>
+                    {sliceInsight ? (
+                      <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                        <span className="font-semibold text-[color:var(--fg-2,#3F465C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
+                        {" "}
+                        {sliceInsight.figureUnit}
+                        {" · see "}
+                        <Link href={`/startup/${sliceInsight.companyId}`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:underline">
+                          {sliceInsight.companyName}
+                        </Link>
                       </p>
-                      <p className="mt-2.5 font-mono text-[28px] font-bold leading-none tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]" data-ledger-showing="" data-end-lead="">
-                        {cards.length.toLocaleString("en-US")}
-                        <span className="ml-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
-                          of {total.toLocaleString("en-US")} loaded
-                        </span>
+                    ) : null}
+                    {nextToScout[0] ? (
+                      <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                        <span className="text-[color:var(--fg-2,#3F465C)]">{nextToScout[0].label}</span>
+                        {" "}
+                        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
+                        {" on the desk"}
                       </p>
-                      {sliceInsight ? (
-                        <p className="mt-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
-                          {" "}
-                          {sliceInsight.figureUnit}
-                          {" · see "}
-                          <Link href={`/startup/${sliceInsight.companyId}`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:underline">
-                            {sliceInsight.companyName}
-                          </Link>
-                        </p>
-                      ) : null}
-                      {nextToScout[0] ? (
-                        <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                          <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].label}</span>
-                          {" "}
-                          <span className="font-bold text-[color:var(--ember,#D96B1C)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
-                          {" on the desk"}
-                        </p>
-                      ) : null}
-                    </div>
+                    ) : null}
                     {cards.length < total ? (
                       <Link
                         href={moreHref}
-                        className="mx-3.5 mb-3.5 flex h-9 items-center justify-center rounded-sm border border-[color:var(--line-strong,#C5CAD8)] bg-[color:var(--bg,#FFFFFF)] font-mono text-[11px] font-semibold text-[color:var(--fg,#0B0E17)] hover:border-[color:var(--cobalt,#2F4FD8)] hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40"
+                        className="mt-2.5 inline-flex h-8 items-center font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline"
                       >
-                        Load next
+                        Load next →
                       </Link>
                     ) : null}
                   </div>

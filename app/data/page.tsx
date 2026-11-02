@@ -3,6 +3,7 @@ import { paginateCorpus, corpusSortOf, CORPUS_PAGE_SIZE } from "@/lib/domain/cor
 import { buildDirectoryFromDb } from "@/lib/domain/directory";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
 import { DataTheme } from "@/components/data-theme";
+import { CorpusRowMark } from "@/components/corpus-row-mark";
 
 export const dynamic = "force-dynamic";
 
@@ -77,7 +78,7 @@ export default async function DataExplorerPage({
       <form
         method="get"
         action="/data"
-        className="mt-2 space-y-2 border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-2.5 sm:flex sm:flex-wrap sm:items-end sm:gap-1.5 sm:space-y-0 sm:p-2"
+        className="mt-2 space-y-2 border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] pb-2.5 sm:flex sm:flex-wrap sm:items-end sm:gap-1.5 sm:space-y-0 sm:pb-2"
         data-corpus-filters=""
       >
         <label className="block min-w-0 sm:flex-[1_1_10rem]">
@@ -149,14 +150,17 @@ export default async function DataExplorerPage({
               <th className="c-th c-d">Program</th>
               <th className="c-th c-d">YC</th>
               <th className="c-th c-d">Founders</th>
-              <th className="c-th c-d">Funding</th>
+              <th className="c-th c-fund-h">Funding</th>
               <th className="c-th c-d">Site</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-[color:var(--line,#E1E5EF)]">
             {result.rows.map((row) => (
               <tr key={row.id} className="c-r align-top" data-corpus-row="">
-                <td className="c-n" data-i={(row.name.trim()[0] || "?").toUpperCase()}>
+                <td className="c-n">
+                  <span className="c-mark">
+                    <CorpusRowMark name={row.name} website={row.website} />
+                  </span>
                   <Link href={`/startup/${row.id}`} className="c-a">
                     {row.name}
                   </Link>
@@ -170,7 +174,7 @@ export default async function DataExplorerPage({
                 <td className="c-d">{cell(row.primaryProgram)}</td>
                 <td className="c-d">{cell(row.ycBatch)}</td>
                 <td className="c-d c-num">{row.founderCount > 0 ? row.founderCount.toLocaleString("en-US") : blank()}</td>
-                <td className="c-d">{cell(row.fundingText)}</td>
+                <td className="c-fund">{cell(row.fundingText)}</td>
                 <td className="c-d">
                   {row.website ? (
                     <a href={row.website} target="_blank" rel="noopener noreferrer" className="c-link">
