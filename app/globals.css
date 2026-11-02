@@ -1176,7 +1176,40 @@ details:not([open]) > :not(summary) {
 .sample-paper [data-fold-peak-figure] {
   overflow: hidden;
 }
-/* Compact SignalsLanded peak figure: clip ascenders without eating the row below. */
+/* Compact peak fraction: tabular 32/67 must paint fully beside the sparkline. */
 .sample-paper [data-signals-landed-compact] [data-peak-figure] {
-  overflow: hidden;
+  overflow: visible;
+  line-height: 1;
+}
+.sample-paper [data-signals-landed-compact] [data-peak-numerator],
+.sample-paper [data-signals-landed-compact] [data-peak-denominator] {
+  line-height: 1;
+}
+
+/* r42: 44px tap hit-areas for leftover chrome only — visual size unchanged. */
+[data-site-nav] [data-mobile-desk-tabs] a.subtab,
+[data-site-nav] button[aria-expanded],
+[data-export-filtered],
+[data-export-filtered-mobile],
+[data-corpus-csv],
+[data-corpus-csv-mobile],
+[data-corpus-cards] a.c-a {
+  position: relative;
+  isolation: isolate;
+}
+[data-site-nav] [data-mobile-desk-tabs] a.subtab::before,
+[data-site-nav] button[aria-expanded]::before,
+[data-export-filtered]::before,
+[data-export-filtered-mobile]::before,
+[data-corpus-csv]::before,
+[data-corpus-csv-mobile]::before,
+[data-corpus-cards] a.c-a::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100%, 44px);
+  height: 44px;
+  transform: translate(-50%, -50%);
+  /* expand hit target without shifting layout */
 }

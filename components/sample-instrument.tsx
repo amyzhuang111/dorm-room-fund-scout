@@ -1133,10 +1133,21 @@ export function SignalsLanded({ companies, compact = false }: { companies: Facet
         <div className="flex items-end justify-between gap-3">
           <div className="min-w-0">
             <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Peak · {peak.short} {peak.id.slice(0, 4)}</p>
-            <p className="mt-1 h-7 overflow-hidden scout-figure text-[28px] leading-none tracking-[-0.04em]" data-peak-figure="">
-              {peak.count.toLocaleString("en-US")}
-              <span className="ml-1.5 text-[12px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
-                / {detail.dated.toLocaleString("en-US")}
+            <p
+              className="mt-1 flex items-baseline gap-1 whitespace-nowrap font-mono tabular-nums leading-none"
+              data-peak-figure=""
+            >
+              <span
+                className="text-[22px] font-bold tracking-[-0.03em] text-[color:var(--cobalt,#2F4FD8)]"
+                data-peak-numerator=""
+              >
+                {peak.count.toLocaleString("en-US")}
+              </span>
+              <span
+                className="text-[13px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]"
+                data-peak-denominator=""
+              >
+                /{detail.dated.toLocaleString("en-US")}
               </span>
             </p>
             <p className="mt-1.5 text-[12px] font-semibold leading-4 tracking-tight text-[color:var(--fg,#0B0E17)]" data-peak-caption="">
