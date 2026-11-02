@@ -276,9 +276,22 @@ const browser = await chromium.launch({ headless: true });
       if (bottom > room) window.scrollBy(0, bottom - room + 4);
       // Prefer last cards above the close plate (not an orphan footer alone)
       const top = end.getBoundingClientRect().top;
-      if (top < 220) window.scrollBy(0, top - 300);
+      // Keep Load next near bottom; nudge so the card above is fully in frame.
+      if (top < 260) window.scrollBy(0, top - 340);
+      const cards = [...document.querySelectorAll("#browse ol > li")];
+      for (let i = cards.length - 1; i >= 0; i--) {
+        const r = cards[i].getBoundingClientRect();
+        if (r.bottom < end.getBoundingClientRect().top - 8 && r.top >= 52) {
+          // already have a full card in view
+          break;
+        }
+        if (r.bottom < end.getBoundingClientRect().top - 8 && r.top < 52) {
+          window.scrollBy(0, r.top - 56);
+          break;
+        }
+      }
     });
-    await page.waitForTimeout(350);
+    await page.waitForTimeout(400);
   }
   await shot(page, "companies-more-end-375");
 

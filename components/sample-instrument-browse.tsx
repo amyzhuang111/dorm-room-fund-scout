@@ -744,7 +744,7 @@ export function SampleInstrumentBrowse({
               </div>
             ) : null}
             <ol
-              className={`relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] divide-y divide-[color:var(--line,#E1E5EF)] ${pages > 1 ? "border-t-0" : ""} ${feed === "leaderboard" ? "border-t-0 lg:border-t" : ""}`}
+              className={`relative overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] divide-y divide-[color:var(--line,#E1E5EF)] ${pages > 1 ? "border-t-0 snap-y snap-proximity" : ""} ${feed === "leaderboard" ? "border-t-0 lg:border-t" : ""}`}
             >
               {cards.map((card, index) => {
                 const chunk = 14;
@@ -756,7 +756,7 @@ export function SampleInstrumentBrowse({
                 // Keep the first Why in a run; blank identical repeats that follow (ba9d2b0 desk parity).
                 const whyOverride = rawWhy && prevWhy === rawWhy ? null : undefined;
                 return (
-                  <li key={card.id}>
+                  <li key={card.id} className={pages > 1 ? "snap-start scroll-mt-3" : undefined}>
                     {showDivider ? (
                       <>
                         {/* Desk more-end-1440: ba9d2b0 thin section rule */}
@@ -829,7 +829,7 @@ export function SampleInstrumentBrowse({
                 </div>
                 {/* Mobile more-end-375: hairline + quiet Load next; no footer stats */}
                 <div
-                  className="mt-4 scroll-mt-28 lg:hidden"
+                  className="mt-6 scroll-mt-28 lg:hidden"
                   data-ledger-end=""
                   data-ledger-end-mobile=""
                   data-end-insight={sliceInsight.kicker}

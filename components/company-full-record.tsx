@@ -192,7 +192,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
             <div
               key={stat.label}
               className={`min-w-[33%] flex-1 border-b border-r border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 last:border-r-0 ${
-                stat.label === "Sector" ? "min-w-[50%] basis-[50%] sm:min-w-[33%] sm:basis-[33%]" : "basis-[33%]"
+                stat.label === "Sector" ? "min-w-full basis-full sm:min-w-[33%] sm:flex-1 sm:basis-[33%]" : "basis-[33%]"
               }`}
             >
               <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">{stat.label}</p>
