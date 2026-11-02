@@ -25,6 +25,7 @@ const ROUTES = [
   "/founders",
   "/campuses",
   "/data",
+  "/networks",
   "/signals",
   "/startup/proj_9GUOmdEYxbuH",
 ];

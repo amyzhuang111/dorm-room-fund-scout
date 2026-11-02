@@ -1,0 +1,301 @@
+"use client";
+
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { CampusSeal } from "@/components/campus-seal";
+import { NetworksGraph } from "@/components/networks-graph";
+import { StartupCardSheet } from "@/components/startup-directory-card";
+import type {
+  FounderNetworksPage,
+  NetworkKind,
+  NetworkMember,
+  NetworkSummary,
+  SectorConcentration,
+} from "@/lib/domain/founder-networks-model";
+
+const KIND_LABEL: Record<NetworkKind, string> = {
+  accelerator: "Accelerator",
+  program: "Program",
+  lab: "Lab",
+  investor: "Investor",
+};
+
+function pct(share: number): string {
+  return `${Math.round(share * 100).toLocaleString("en-US")}%`;
+}
+
+function heat(count: number, max: number): string {
+  if (count <= 0 || max <= 0) return "transparent";
+  const t = Math.sqrt(count / max);
+  const light = [236, 239, 252];
+  const dark = [60, 66, 212];
+  const rgb = light.map((start, i) => Math.round(start + (dark[i] - start) * t));
+  return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+}
+
+function inkFor(count: number, max: number): string {
+  if (count <= 0 || max <= 0) return "var(--fg-3)";
+  return count / max > 0.45 ? "#ffffff" : "var(--fg)";
+}
+
+export function NetworksApp({ data }: { data: FounderNetworksPage }) {
+  const [activeNetwork, setActiveNetwork] = useState<string | null>(data.topNetworks[0]?.id ?? null);
+  const [companyId, setCompanyId] = useState<string | null>(null);
+  const [matrixOpen, setMatrixOpen] = useState(true);
+  const [concentrationOpen, setConcentrationOpen] = useState(true);
+
+  const active: NetworkSummary | null = useMemo(
+    () => data.topNetworks.find((row) => row.id === activeNetwork) ?? null,
+    [data.topNetworks, activeNetwork]
+  );
+  const members: NetworkMember[] = active ? data.membersByNetwork[active.id] ?? [] : [];
+
+  let matrixMax = 0;
+  for (const row of data.matrix.rows) {
+    for (const cell of row.cells) matrixMax = Math.max(matrixMax, cell.count);
+  }
+
+  return (
+    <div className="min-h-screen bg-white text-[color:var(--fg)]" data-networks-page="">
+      <header className="border-b border-[color:var(--line)] bg-white">
+        <div className="mx-auto flex max-w-[1100px] flex-col gap-2 px-5 py-6">
+          <div className="flex items-center gap-2 text-[color:var(--cobalt)]">
+            <CampusSeal label="CS" title="Campus Scout" size="sm" />
+            <span className="text-xs font-medium uppercase tracking-[0.08em]">Campus Scout</span>
+          </div>
+          <h1 className="text-2xl font-semibold tracking-tight text-[color:var(--fg)]">Networks</h1>
+          <p className="max-w-3xl text-sm text-[color:var(--fg-2)]">
+            Accelerators, programs, labs, and investors that feed student founders in the verified investable corpus of{" "}
+            {data.corpusCompanies.toLocaleString("en-US")} companies.
+          </p>
+          <p className="text-xs text-[color:var(--fg-3)]">
+            {data.totals.founderLinks.toLocaleString("en-US")} directed founder links · {data.totals.networks.toLocaleString("en-US")} networks ·{" "}
+            {data.totals.companiesLinked.toLocaleString("en-US")} companies · {data.totals.foundersLinked.toLocaleString("en-US")} founders
+          </p>
+        </div>
+      </header>
+
+      <main className="mx-auto flex max-w-[1100px] flex-col gap-8 px-5 py-6">
+        <section aria-labelledby="top-networks-heading">
+          <div className="mb-3">
+            <h2 id="top-networks-heading" className="text-lg font-semibold tracking-tight">
+              Top networks
+            </h2>
+            <p className="text-sm text-[color:var(--fg-2)]">Programs and backers with the most linked founders in the corpus.</p>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+            <ol className="divide-y divide-[color:var(--line)] rounded-lg border border-[color:var(--line)] bg-white">
+              {data.topNetworks.map((row, index) => {
+                const selected = row.id === activeNetwork;
+                return (
+                  <li key={row.id}>
+                    <button
+                      type="button"
+                      className={`flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors ${selected ? "bg-[color:var(--cobalt-haze)]" : "hover:bg-[#f7f8fc]"}`}
+                      onClick={() => setActiveNetwork(row.id)}
+                      aria-pressed={selected}
+                    >
+                      <span className="w-7 shrink-0 text-xs tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-medium text-[color:var(--fg)]">{row.label}</span>
+                        <span className="block text-[11px] text-[color:var(--fg-3)]">{KIND_LABEL[row.kind]}</span>
+                      </span>
+                      <span className="shrink-0 text-sm tabular-nums text-[color:var(--fg)]">
+                        {row.founderCount.toLocaleString("en-US")} <span className="text-[color:var(--fg-3)]">founders</span>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
+
+            <aside className="rounded-lg border border-[color:var(--line)] bg-white p-4" aria-live="polite">
+              {active ? (
+                <>
+                  <div className="mb-2">
+                    <h3 className="text-base font-semibold text-[color:var(--fg)]">{active.label}</h3>
+                    <p className="text-xs text-[color:var(--fg-3)]">
+                      {KIND_LABEL[active.kind]} · {active.companyCount.toLocaleString("en-US")} companies · {active.campusCount.toLocaleString("en-US")} campuses
+                    </p>
+                  </div>
+                  <ul className="max-h-[28rem] space-y-2 overflow-y-auto pr-1">
+                    {members.map((member) => (
+                      <li key={`${member.founderId}-${member.companyId}`} className="rounded border border-[color:var(--line)] px-2.5 py-2">
+                        <div className="flex items-center gap-2">
+                          {member.campusLabel ? <CampusSeal label={member.campusLabel} size="xs" /> : null}
+                          <div className="min-w-0">
+                            <Link
+                              href={`/founders?q=${encodeURIComponent(member.founderName)}`}
+                              className="block truncate text-sm font-medium text-[color:var(--cobalt)] hover:underline"
+                            >
+                              {member.founderName}
+                            </Link>
+                            <button
+                              type="button"
+                              className="block truncate text-left text-xs text-[color:var(--fg-2)] hover:text-[color:var(--cobalt)] hover:underline"
+                              onClick={() => setCompanyId(member.companyId)}
+                            >
+                              {member.companyName}
+                            </button>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                  {members.length === 0 ? <p className="text-sm text-[color:var(--fg-3)]">No linked founders on file for this network.</p> : null}
+                </>
+              ) : (
+                <p className="text-sm text-[color:var(--fg-3)]">Select a network to see founders and companies.</p>
+              )}
+            </aside>
+          </div>
+        </section>
+
+        <section aria-labelledby="matrix-heading" className="overflow-hidden rounded-lg border border-[color:var(--line)] bg-white">
+          <button
+            type="button"
+            className="flex w-full items-start justify-between gap-3 px-4 py-3 text-left"
+            aria-expanded={matrixOpen}
+            onClick={() => setMatrixOpen((value) => !value)}
+          >
+            <span>
+              <span id="matrix-heading" className="block text-[15px] font-semibold tracking-tight">
+                Networks to campuses
+              </span>
+              <span className="mt-0.5 block text-[13px] text-[color:var(--fg-2)]">Where each network&apos;s linked founders are affiliated.</span>
+            </span>
+            <span className="text-sm text-[color:var(--fg-3)]">{matrixOpen ? "Hide" : "Show"}</span>
+          </button>
+          {matrixOpen ? (
+            <div className="px-3 pb-3">
+              <div className="overflow-x-auto">
+                <table className="w-full border-separate border-spacing-1 text-xs">
+                  <thead>
+                    <tr>
+                      <th className="sticky left-0 z-10 min-w-[12rem] bg-[#f6f7fb] px-2 py-2 text-left text-[11px] font-semibold text-[color:var(--fg-2)]">Network</th>
+                      {data.matrix.columns.map((column) => (
+                        <th key={column.id} className="min-w-[4.25rem] bg-[#f6f7fb] px-1 py-2 text-center text-[11px] font-semibold text-[color:var(--fg-2)]">
+                          {column.label}
+                        </th>
+                      ))}
+                      <th className="min-w-[4.5rem] bg-[#f6f7fb] px-2 py-2 text-right text-[11px] font-semibold text-[color:var(--fg-2)]">All campuses</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.matrix.rows.map((row) => (
+                      <tr key={row.id}>
+                        <th className="sticky left-0 z-10 bg-white px-2 py-1 text-left text-xs font-medium" scope="row">
+                          <button type="button" className="text-left hover:text-[color:var(--cobalt)] hover:underline" onClick={() => setActiveNetwork(row.id)}>
+                            {row.label}
+                          </button>
+                        </th>
+                        {row.cells.map((cell, index) => (
+                          <td key={`${row.id}-${data.matrix.columns[index]?.id ?? index}`} className="p-0 text-center">
+                            <span
+                              className="block rounded px-1 py-2 tabular-nums"
+                              style={{ background: heat(cell.count, matrixMax), color: inkFor(cell.count, matrixMax) }}
+                            >
+                              {cell.count > 0 ? cell.count.toLocaleString("en-US") : "·"}
+                            </span>
+                          </td>
+                        ))}
+                        <td className="px-2 py-2 text-right font-medium tabular-nums">{row.all.count.toLocaleString("en-US")}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="mt-2 px-1 text-[11px] leading-relaxed text-[color:var(--fg-3)]">{data.matrix.caption}</p>
+            </div>
+          ) : null}
+        </section>
+
+        <section aria-labelledby="concentration-heading" className="overflow-hidden rounded-lg border border-[color:var(--line)] bg-white">
+          <button
+            type="button"
+            className="flex w-full items-start justify-between gap-3 px-4 py-3 text-left"
+            aria-expanded={concentrationOpen}
+            onClick={() => setConcentrationOpen((value) => !value)}
+          >
+            <span>
+              <span id="concentration-heading" className="block text-[15px] font-semibold tracking-tight">
+                Concentration by sector
+              </span>
+              <span className="mt-0.5 block text-[13px] text-[color:var(--fg-2)]">Share of founder links that come from each sector&apos;s top 3 networks.</span>
+            </span>
+            <span className="text-sm text-[color:var(--fg-3)]">{concentrationOpen ? "Hide" : "Show"}</span>
+          </button>
+          {concentrationOpen ? (
+            <div className="divide-y divide-[color:var(--line)] border-t border-[color:var(--line)]">
+              {data.concentration.rows.map((row) => (
+                <ConcentrationRow key={row.sectorId} row={row} />
+              ))}
+              <p className="px-4 py-3 text-[11px] text-[color:var(--fg-3)]">
+                {data.concentration.thresholdsNote} {data.concentration.excludedNote}
+              </p>
+            </div>
+          ) : null}
+        </section>
+
+        <section aria-labelledby="graph-heading" className="overflow-hidden rounded-lg border border-[color:var(--line)] bg-white">
+          <div className="px-4 py-3">
+            <h2 id="graph-heading" className="text-[15px] font-semibold tracking-tight">
+              Founder and startup graph
+            </h2>
+            <p className="mt-0.5 text-[13px] text-[color:var(--fg-2)]">
+              Nodes are networks and companies. Edges are real membership ties, plus co-founder links between companies that share a founder.
+            </p>
+          </div>
+          <NetworksGraph
+            onSelectCompany={(id) => setCompanyId(id)}
+            onSelectNetwork={(id) => {
+              setActiveNetwork(id);
+              if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          />
+        </section>
+
+        <section aria-labelledby="how-heading" className="rounded-lg border border-[color:var(--line)] bg-white px-4 py-4">
+          <h2 id="how-heading" className="text-[15px] font-semibold tracking-tight">
+            How these counts work
+          </h2>
+          <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-[color:var(--fg-2)]">
+            {data.howItWorks.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+          {data.totals.omitted.length > 0 ? (
+            <p className="mt-3 text-xs text-[color:var(--fg-3)]">
+              Omitted tie types: {data.totals.omitted.map((item) => `${item.kind} (${item.reason})`).join(" ")}
+            </p>
+          ) : null}
+        </section>
+      </main>
+
+      {companyId ? <StartupCardSheet id={companyId} onClose={() => setCompanyId(null)} /> : null}
+    </div>
+  );
+}
+
+function ConcentrationRow({ row }: { row: SectorConcentration }) {
+  const bandColor =
+    row.band === "Concentrated" ? "text-[color:var(--cobalt)]" : row.band === "Moderate" ? "text-[color:var(--amber)]" : "text-[color:var(--fg-2)]";
+  return (
+    <div className="flex flex-col gap-1 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+      <div className="min-w-0">
+        <div className="text-sm font-medium text-[color:var(--fg)]">{row.label}</div>
+        <div className="text-xs text-[color:var(--fg-3)]">
+          Top 3: {row.top3.map((item) => item.label).join(" · ")} · {row.sourceCount.toLocaleString("en-US")} sources
+        </div>
+      </div>
+      <div className="flex shrink-0 items-baseline gap-3">
+        <span className="text-sm tabular-nums text-[color:var(--fg)]">
+          {row.founderLinks.toLocaleString("en-US")} <span className="text-[color:var(--fg-3)]">founder links</span>
+        </span>
+        <span className={`text-sm font-semibold tabular-nums ${bandColor}`}>
+          {row.band} {pct(row.top3Share)}
+        </span>
+      </div>
+    </div>
+  );
+}

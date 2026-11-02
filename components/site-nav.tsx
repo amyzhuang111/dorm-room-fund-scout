@@ -11,6 +11,7 @@ const NAV = [
   { id: "companies", href: "/companies", label: "Companies", match: (p: string) => p.startsWith("/companies") || p.startsWith("/startup/") },
   { id: "campuses", href: "/campuses", label: "Campuses", match: (p: string) => p.startsWith("/campuses") },
   { id: "founders", href: "/founders", label: "Founders", match: (p: string) => p.startsWith("/founders") },
+  { id: "networks", href: "/networks", label: "Networks", match: (p: string) => p.startsWith("/networks") },
   { id: "signals", href: "/signals", label: "Signals", match: (p: string) => p.startsWith("/signals") },
   { id: "data", href: "/data", label: "Data", match: (p: string) => p.startsWith("/data") },
   { id: "work", href: "/work/shortlist", label: "Work", match: (p: string) => p.startsWith("/work") },
@@ -20,6 +21,7 @@ const NAV = [
 const DESK_TABS = [
   { href: "/campuses", label: "Campuses", match: (p: string) => p.startsWith("/campuses") },
   { href: "/founders", label: "Founders", match: (p: string) => p.startsWith("/founders") },
+  { href: "/networks", label: "Networks", match: (p: string) => p.startsWith("/networks") },
   { href: "/companies", label: "Companies", match: (p: string) => p.startsWith("/companies") || p.startsWith("/startup/") },
   { href: "/data", label: "Data", match: (p: string) => p.startsWith("/data") },
 ] as const;
