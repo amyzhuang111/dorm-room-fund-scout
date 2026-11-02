@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { loadMapLibre } from "@/lib/client/map-prefetch";
 import { markerRadiusByFounders, markerSizeLegend } from "@/lib/domain/marker-radius";
 import { absoluteDate } from "@/lib/domain/relative-time";
-import { shortCampusLabel } from "@/lib/domain/campuses";
+import { campusSlug, shortCampusLabel } from "@/lib/domain/campuses";
 import { sampleSurfaceCounts, type FacetCompany } from "@/lib/domain/sample-facets";
 import { MapCredit } from "./map-credit";
 import { campusFoundersTop, campusFoundersRanked, CAMPUS_FOUNDERS_VISIBLE } from "./sample-instrument";
@@ -22,9 +22,9 @@ export interface TileCampus {
 
 export type TileCompany = FacetCompany;
 
-const OCEAN = "#F7F8FC";
-const LAND = "#A8B4C9";
-const BOUNDARY = "#2F4FD8";
+const OCEAN = "#EEF1F8";
+const LAND = "#6F7C96";
+const BOUNDARY = "#1E3A9A";
 const BRAND = "#2F4FD8";
 const COUNT = "font-bold tabular-nums text-[color:var(--ember,#D96B1C)]";
 
@@ -60,7 +60,7 @@ const GLOBE_STYLE = {
       type: "line",
       source: "openmaptiles",
       "source-layer": "water",
-      paint: { "line-color": BOUNDARY, "line-width": 1.1, "line-opacity": 0.55 },
+      paint: { "line-color": BOUNDARY, "line-width": 1.45, "line-opacity": 0.72 },
     },
     {
       id: "boundary",
@@ -68,7 +68,7 @@ const GLOBE_STYLE = {
       source: "openmaptiles",
       "source-layer": "boundary",
       filter: ["any", ["==", ["get", "admin_level"], 2], ["==", ["get", "admin_level"], "2"]],
-      paint: { "line-color": BOUNDARY, "line-width": 0.9, "line-opacity": 0.45 },
+      paint: { "line-color": BOUNDARY, "line-width": 1.15, "line-opacity": 0.55 },
     },
   ],
 };
@@ -80,7 +80,7 @@ const GLOBE_STYLE = {
  */
 function globeView(width: number, height: number): { center: [number, number]; zoom: number } {
   const minDim = Math.max(160, Math.min(width, height));
-  const diameter = minDim * 0.92;
+  const diameter = minDim * 0.96;
   const zoom = Math.log2((diameter * Math.PI) / 512);
   // Faces the US, with Canada and the UK still on the near side.
   return { center: [-72, 36], zoom: Math.min(3, Math.max(0.4, zoom)) };
@@ -122,6 +122,7 @@ export function TileGlobe({
   onSelect,
   className = "",
   dataThrough = null,
+  highlightCampusIds = null,
 }: {
   campuses: TileCampus[];
   companies?: TileCompany[];
@@ -136,19 +137,24 @@ export function TileGlobe({
   className?: string;
   /** ISO from HeroStats.updatedAt / latestDataTimestamp — never invent. */
   dataThrough?: string | null;
+  /** When set (search active), dim campuses outside this set. */
+  highlightCampusIds?: Set<string> | null;
 }) {
   const mapNode = useRef<HTMLDivElement | null>(null);
-  const [stageHeight, setStageHeight] = useState(780);
+  const [stageHeight, setStageHeight] = useState(860);
   const mapRef = useRef<{
     getSource: (id: string) => { setData: (data: unknown) => void } | undefined;
     setFilter: (layer: string, filter: unknown) => void;
+    getLayer: (id: string) => unknown;
+    setPaintProperty: (layer: string, prop: string, value: unknown) => void;
     flyTo: (opts: object) => void;
-      jumpTo: (opts: object) => void;
-      resize: () => void;
+    jumpTo: (opts: object) => void;
+    resize: () => void;
     loaded: () => boolean;
   } | null>(null);
   const frameRef = useRef<(() => void) | null>(null);
-  const [hover, setHover] = useState<{ name: string; founders: number; signals: number; x: number; y: number } | null>(null);
+  const [hover, setHover] = useState<{ id: string; name: string; founders: number; signals: number; country: string; x: number; y: number } | null>(null);
+  const [pinned, setPinned] = useState<{ id: string; name: string; founders: number; signals: number; country: string } | null>(null);
   const [ready, setReady] = useState(false);
   const [painted, setPainted] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -169,6 +175,7 @@ export function TileGlobe({
       addLayer: (layer: object) => void;
       getSource: (id: string) => { setData: (data: unknown) => void } | undefined;
       setFilter: (layer: string, filter: unknown) => void;
+      getLayer: (id: string) => unknown;
       getCenter: () => { lng: number; lat: number };
       easeTo: (opts: object) => void;
       flyTo: (opts: object) => void;
@@ -259,12 +266,12 @@ export function TileGlobe({
           source: "campuses",
           filter: ["==", ["get", "top"], 1],
           paint: {
-            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["+", ["*", ["get", "radius"], 0.9], 5], 1.8, ["+", ["get", "radius"], 6], 3.2, ["+", ["*", ["get", "radius"], 1.45], 7]],
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["+", ["*", ["get", "radius"], 1.05], 6], 1.8, ["+", ["*", ["get", "radius"], 1.15], 7], 3.2, ["+", ["*", ["get", "radius"], 1.55], 8]],
             "circle-color": "#2F4FD8",
-            "circle-opacity": 0.14,
+            "circle-opacity": 0.18,
             "circle-stroke-color": "#D96B1C",
-            "circle-stroke-width": 1.2,
-            "circle-stroke-opacity": 0.55,
+            "circle-stroke-width": 1.35,
+            "circle-stroke-opacity": 0.62,
           },
         });
         map.addLayer({
@@ -272,11 +279,11 @@ export function TileGlobe({
           type: "circle",
           source: "campuses",
           paint: {
-            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["*", ["get", "radius"], 0.85], 1.8, ["get", "radius"], 3.2, ["*", ["get", "radius"], 1.35]],
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["*", ["get", "radius"], 0.95], 1.8, ["*", ["get", "radius"], 1.12], 3.2, ["*", ["get", "radius"], 1.5]],
             "circle-color": ["case", ["==", ["get", "top"], 1], "#2F4FD8", ["get", "color"]],
             "circle-stroke-color": ["case", ["==", ["get", "top"], 1], "#D96B1C", "#FFFFFF"],
-            "circle-stroke-width": ["case", ["==", ["get", "top"], 1], 2.0, 1.1],
-            "circle-opacity": 0.94,
+            "circle-stroke-width": ["case", ["==", ["get", "top"], 1], 2.2, 1.25],
+            "circle-opacity": 0.96,
           },
         });
         map.addLayer({
@@ -336,6 +343,7 @@ export function TileGlobe({
           name: String(props.name ?? ""),
           founders: Number(props.founders ?? 0),
           signals: Number(props.signals ?? 0),
+          country: String(props.country ?? ""),
           x: event.point.x,
           y: event.point.y,
         };
@@ -354,7 +362,9 @@ export function TileGlobe({
       });
       map.on("click", "campus-dots", (event) => {
         const hit = read(event);
-        if (hit?.id) onSelect(hit.id);
+        if (!hit?.id) return;
+        setPinned({ id: hit.id, name: hit.name, founders: hit.founders, signals: hit.signals, country: hit.country });
+        onSelect(hit.id);
       });
       const hold = () => {
         interacting = true;
@@ -408,6 +418,39 @@ export function TileGlobe({
     const selected = selectedId ? ["==", ["get", "id"], selectedId] : ["==", ["get", "id"], ""];
     mapRef.current.setFilter("campus-selected", selected);
   }, [ready, selectedId]);
+
+  useEffect(() => {
+    if (!ready || !mapRef.current) return;
+    const map = mapRef.current;
+    if (!map.getLayer("campus-dots")) return;
+    if (highlightCampusIds == null) {
+      map.setPaintProperty("campus-dots", "circle-opacity", 0.96);
+      map.setPaintProperty("campus-halo", "circle-opacity", 0.18);
+      return;
+    }
+    if (highlightCampusIds.size === 0) {
+      map.setPaintProperty("campus-dots", "circle-opacity", 0.18);
+      map.setPaintProperty("campus-halo", "circle-opacity", 0.04);
+      return;
+    }
+    const ids = [...highlightCampusIds];
+    const match = ["match", ["get", "id"], ids, 0.98, 0.22];
+    const haloMatch = ["match", ["get", "id"], ids, 0.22, 0.04];
+    map.setPaintProperty("campus-dots", "circle-opacity", match);
+    map.setPaintProperty("campus-halo", "circle-opacity", haloMatch);
+  }, [ready, highlightCampusIds, campuses]);
+
+  useEffect(() => {
+    if (!selectedId) {
+      setPinned(null);
+      return;
+    }
+    const campus = campuses.find((c) => c.id === selectedId);
+    if (campus) {
+      setPinned({ id: campus.id, name: campus.name, founders: campus.founders, signals: campus.signals, country: campus.country });
+    }
+  }, [selectedId, campuses]);
+
 
   function focus(campus: TileCampus) {
     mapRef.current?.flyTo({ center: [campus.lon, campus.lat], zoom: 3.1, essential: true });
@@ -491,19 +534,54 @@ export function TileGlobe({
               <MapCredit />
             </p>
           </div>
-          {hover ? (
+          {hover && (!pinned || pinned.id !== hover.id) ? (
             <div
-              className="pointer-events-none absolute z-30 w-max max-w-[240px] -translate-x-1/2 -translate-y-full rounded-lg border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-1.5 text-left text-[color:var(--fg,#0B0E17)]"
+              className="pointer-events-none absolute z-30 w-max max-w-[260px] -translate-x-1/2 -translate-y-full rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] px-2.5 py-1.5 text-left text-[color:var(--fg,#0B0E17)] shadow-sm"
               style={{ left: hover.x, top: Math.max(12, hover.y - 12) }}
+              data-fold-entity-hover=""
             >
-              <p className="text-[13px] font-medium leading-4">{hover.name}</p>
+              <p className="text-[13px] font-semibold leading-4">{hover.name}</p>
               <p className="mt-0.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
                 <span className={COUNT}>{hover.founders.toLocaleString("en-US")}</span> founders
                 {" · "}
                 <span className={COUNT}>{hover.signals.toLocaleString("en-US")}</span> signals
+                {hover.country ? <>{" · "}{hover.country}</> : null}
               </p>
             </div>
           ) : null}
+          {pinned ? (
+            <div
+              className="absolute bottom-8 left-3 z-30 w-[min(280px,calc(100%-1.5rem))] rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 text-left shadow-sm"
+              data-fold-entity-card=""
+            >
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Campus</p>
+              <p className="mt-0.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{pinned.name}</p>
+              <p className="mt-1 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
+                <span className={COUNT}>{pinned.founders.toLocaleString("en-US")}</span> founders
+                {" · "}
+                <span className={COUNT}>{pinned.signals.toLocaleString("en-US")}</span> signals
+                {pinned.country ? <>{" · "}{pinned.country}</> : null}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[12px]">
+                <a href={`/campuses/${campusSlug(pinned.id)}`} className="font-medium text-[color:var(--cobalt,#2F4FD8)] hover:underline">
+                  Campus page
+                </a>
+                <a href={`/companies?campus=${encodeURIComponent(pinned.id)}&from=map`} className="font-medium text-[color:var(--cobalt,#2F4FD8)] hover:underline">
+                  Companies
+                </a>
+                <a href={`/data?campus=${encodeURIComponent(pinned.id)}&from=map`} className="font-medium text-[color:var(--fg-3,#5C647A)] hover:underline">
+                  Directory
+                </a>
+                <button type="button" onClick={() => onSelect(pinned.id)} className="font-medium text-[color:var(--ember,#D96B1C)] hover:underline">
+                  Clear
+                </button>
+              </div>
+            </div>
+          ) : null}
+          <div className="pointer-events-none absolute right-2 top-2 z-20 max-w-[160px] rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1.5" data-fold-map-legend="">
+            <p className="font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Markers</p>
+            <p className="mt-0.5 text-[10px] leading-3.5 text-[color:var(--fg-2,#3F465C)]">Size = founders · cobalt top desks · ember ring = selected</p>
+          </div>
         </div>
       </section>
 

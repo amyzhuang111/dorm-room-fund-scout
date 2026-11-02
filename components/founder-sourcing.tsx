@@ -224,6 +224,35 @@ export function FounderResults({
             ))}
           </FilterSelect>
         </div>
+        {(program || sector || year || signalType) ? (
+          <div className="mt-2 flex flex-wrap items-center gap-2" data-founder-filter-chips="">
+            <span className="font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+              <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">{matches.length.toLocaleString("en-US")}</span>
+              {" of "}
+              <span className="font-semibold tabular-nums">{founders.length.toLocaleString("en-US")}</span>
+            </span>
+            {program ? (
+              <button type="button" onClick={() => setProgram("")} className="inline-flex h-7 items-center gap-1 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 text-[12px] font-medium">
+                {program} <span className="text-[color:var(--ember,#D96B1C)]">×</span>
+              </button>
+            ) : null}
+            {sector ? (
+              <button type="button" onClick={() => setSector("")} className="inline-flex h-7 items-center gap-1 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 text-[12px] font-medium">
+                {sector === "missing" ? "Sector missing" : sector} <span className="text-[color:var(--ember,#D96B1C)]">×</span>
+              </button>
+            ) : null}
+            {year ? (
+              <button type="button" onClick={() => setYear("")} className="inline-flex h-7 items-center gap-1 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 text-[12px] font-medium">
+                {year === "missing" ? "Year missing" : year} <span className="text-[color:var(--ember,#D96B1C)]">×</span>
+              </button>
+            ) : null}
+            {signalType ? (
+              <button type="button" onClick={() => setSignalType("")} className="inline-flex h-7 items-center gap-1 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 text-[12px] font-medium">
+                {signalType === "missing" ? "Signal missing" : signalTypeLabel(signalType)} <span className="text-[color:var(--ember,#D96B1C)]">×</span>
+              </button>
+            ) : null}
+          </div>
+        ) : null}
       </div>
       {status === "loading" ? (
         <p className="text-[14px] text-[color:var(--fg-2,#3F465C)]">Founder list is still loading.</p>
@@ -232,7 +261,15 @@ export function FounderResults({
       ) : founders.length === 0 ? (
         <p className="text-[14px] text-[color:var(--fg-2,#3F465C)]">No founders on record.</p>
       ) : page.length === 0 ? (
-        <p className="text-[14px] text-[color:var(--fg-2,#3F465C)]">No founders match. Missing fields stay missing, so try clearing a filter.</p>
+        <div className="rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-4 py-6 text-[14px] text-[color:var(--fg-2,#3F465C)]" data-founder-empty="">
+          <p className="font-semibold text-[color:var(--fg,#0B0E17)]">No founders match this view.</p>
+          <p className="mt-1">Missing fields stay missing. Clear a chip, widen the search, or pick another campus on the map.</p>
+          {campusId ? (
+            <button type="button" onClick={onClearCampus} className="mt-3 font-medium text-[color:var(--ember,#D96B1C)] hover:underline">
+              Clear campus filter
+            </button>
+          ) : null}
+        </div>
       ) : (
         <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]" data-founder-card-list="">
           {(() => {
@@ -258,7 +295,7 @@ export function FounderResults({
                     {" · "}
                     {founder.company ? (
                       founder.companyId ? (
-                        <Link href={`/startup/${founder.companyId}`} className="font-medium text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--ember,#D96B1C)] hover:underline">
+                        <Link href={`/startup/${founder.companyId}?from=map${campusId && campusId !== "missing" ? `&campus=${encodeURIComponent(campusId)}` : ""}`} className="font-medium text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--ember,#D96B1C)] hover:underline">
                           {founder.company}
                         </Link>
                       ) : (

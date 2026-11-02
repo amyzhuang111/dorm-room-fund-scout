@@ -5,11 +5,20 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FounderResults, FounderSearchBar } from "@/components/founder-sourcing";
+import {
+  CurrentViewStrip,
+  FilterChips,
+  LineagePanels,
+  MobileFoldDrawer,
+  campusIdsForSearch,
+  startupsInFounderMatches,
+  type ActiveChip,
+} from "@/components/fold-map-craft";
 import { GlobeHero } from "@/components/globe-hero";
 import { SampleTheme } from "@/components/sample-theme";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
 import type { HeroStats } from "@/lib/domain/hero-stats";
-import type { FounderLead } from "@/lib/domain/founder-index";
+import { founderMatches, type FounderLead } from "@/lib/domain/founder-index";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
 import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
 import type { Feed } from "@/components/sample-home";
@@ -255,6 +264,44 @@ export function SampleHomeClient(props: {
     };
   }, [directoryUrl]);
 
+  const mapCampusName =
+    mapCampusId && mapCampusId !== "missing"
+      ? campuses.find((campus) => campus.id === mapCampusId)?.name ?? null
+      : null;
+
+  const matchedFounders = useMemo(
+    () =>
+      founders.filter((founder) =>
+        founderMatches(founder, { text: founderQuery, campusId: mapCampusId || null }),
+      ),
+    [founders, founderQuery, mapCampusId],
+  );
+
+  const highlightCampusIds = useMemo(
+    () => campusIdsForSearch(founders, founderQuery, campuses),
+    [founders, founderQuery, campuses],
+  );
+
+  const viewStartups = useMemo(
+    () => startupsInFounderMatches(matchedFounders, companies.filter((c) => !mapCampusId || mapCampusId === "missing" || c.schoolId === mapCampusId)),
+    [matchedFounders, companies, mapCampusId],
+  );
+
+  const clearCampus = () => {
+    const next = new URLSearchParams(search.toString());
+    next.delete("campus");
+    next.set("sample", "1");
+    router.push(`/?${next.toString()}`);
+  };
+
+  const activeChips: ActiveChip[] = [];
+  if (mapCampusName) {
+    activeChips.push({ key: "campus", label: mapCampusName, onClear: clearCampus });
+  }
+  if (founderQuery.trim()) {
+    activeChips.push({ key: "q", label: `“${founderQuery.trim()}”`, onClear: () => setFounderQuery("") });
+  }
+
   return (
     <div className="sample-paper" data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
@@ -276,6 +323,22 @@ export function SampleHomeClient(props: {
               />
             </div>
           </div>
+          <FilterChips chips={activeChips} matchCount={matchedFounders.length} totalCount={founders.length || foundersListed} />
+          <CurrentViewStrip
+            campusName={mapCampusName}
+            query={founderQuery}
+            matchCount={matchedFounders.length}
+            totalFounders={founders.length || foundersListed}
+            startups={viewStartups}
+            onClearCampus={clearCampus}
+            onClearQuery={() => setFounderQuery("")}
+          />
+          <div className="hidden lg:block">
+            <LineagePanels companies={companies} week={stats.week} campusId={mapCampusId && mapCampusId !== "missing" ? mapCampusId : null} campusName={mapCampusName} />
+          </div>
+          <MobileFoldDrawer title="Programs & recent signals">
+            <LineagePanels companies={companies} week={stats.week} campusId={mapCampusId && mapCampusId !== "missing" ? mapCampusId : null} campusName={mapCampusName} />
+          </MobileFoldDrawer>
           <div
             className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(320px,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-5"
             data-fold-stack=""
@@ -286,14 +349,9 @@ export function SampleHomeClient(props: {
                 status={founderStatus}
                 query={founderQuery}
                 campusId={mapCampusId}
-                campusName={mapCampusId && mapCampusId !== "missing" ? campuses.find((campus) => campus.id === mapCampusId)?.name ?? null : null}
+                campusName={mapCampusName}
                 foundersListed={foundersListed}
-                onClearCampus={() => {
-                  const next = new URLSearchParams(search.toString());
-                  next.delete("campus");
-                  next.set("sample", "1");
-                  router.push(`/?${next.toString()}`);
-                }}
+                onClearCampus={clearCampus}
                 onMissingCampus={() => {
                   const next = new URLSearchParams(search.toString());
                   next.set("sample", "1");
@@ -319,6 +377,7 @@ export function SampleHomeClient(props: {
                 companyCount={cardCount}
                 foundersListed={foundersListed}
                 foundersIndexed={founders.length || undefined}
+                highlightCampusIds={highlightCampusIds}
               />
             </div>
           </div>
