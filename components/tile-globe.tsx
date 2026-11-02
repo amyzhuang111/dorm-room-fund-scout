@@ -458,6 +458,14 @@ export function TileGlobe({
   }
 
   const catalogReady = companies.length > 0;
+  const pinnedCompanies = useMemo(() => {
+    if (!pinned) return [] as TileCompany[];
+    return companies
+      .filter((c) => c.schoolId === pinned.id)
+      .slice()
+      .sort((a, b) => (b.signals ?? 0) - (a.signals ?? 0) || a.name.localeCompare(b.name))
+      .slice(0, 3);
+  }, [companies, pinned]);
   const signaledUniverse = useMemo(() => companies.filter((c) => c.signals > 0).length, [companies]);
   const quietUniverse = companies.length - signaledUniverse;
 
@@ -488,7 +496,7 @@ export function TileGlobe({
           ) : null}
           <span>
             <span className={COUNT} data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
-            {" campuses"}
+            {" campuses on map"}
           </span>
           {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
@@ -551,30 +559,57 @@ export function TileGlobe({
           ) : null}
           {pinned ? (
             <div
-              className="absolute bottom-8 left-3 z-30 w-[min(280px,calc(100%-1.5rem))] rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 text-left shadow-sm"
+              className="absolute bottom-8 left-3 z-30 w-[min(300px,calc(100%-1.5rem))] rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 text-left shadow-sm"
               data-fold-entity-card=""
+              data-entity-selected={pinned.id}
             >
-              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Campus</p>
-              <p className="mt-0.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{pinned.name}</p>
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Selected</p>
+                  <p className="mt-0.5 text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{pinned.name}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onSelect(pinned.id)}
+                  className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline"
+                  data-entity-clear=""
+                >
+                  Clear
+                </button>
+              </div>
               <p className="mt-1 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]">
                 <span className={COUNT}>{pinned.founders.toLocaleString("en-US")}</span> founders
                 {" · "}
                 <span className={COUNT}>{pinned.signals.toLocaleString("en-US")}</span> signals
                 {pinned.country ? <>{" · "}{pinned.country}</> : null}
               </p>
+              {pinnedCompanies.length > 0 ? (
+                <ul className="mt-2 space-y-1 border-t border-[color:var(--line,#E1E5EF)] pt-2" data-entity-companies="">
+                  {pinnedCompanies.map((co) => (
+                    <li key={co.id}>
+                      <a
+                        href={`/startup/${co.id}`}
+                        className="flex items-baseline justify-between gap-2 text-[12px] hover:text-[color:var(--cobalt,#2F4FD8)]"
+                      >
+                        <span className="truncate font-medium text-[color:var(--fg,#0B0E17)]">{co.name}</span>
+                        {co.sector ? (
+                          <span className="shrink-0 font-mono text-[10px] text-[color:var(--fg-3,#5C647A)]">{co.sector}</span>
+                        ) : null}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
               <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[12px]">
                 <a href={`/campuses/${campusSlug(pinned.id)}`} className="font-medium text-[color:var(--cobalt,#2F4FD8)] hover:underline">
                   Campus page
                 </a>
                 <a href={`/companies?campus=${encodeURIComponent(pinned.id)}&from=map`} className="font-medium text-[color:var(--cobalt,#2F4FD8)] hover:underline">
-                  Companies
+                  Open companies
                 </a>
-                <a href={`/data?campus=${encodeURIComponent(pinned.id)}&from=map`} className="font-medium text-[color:var(--fg-3,#5C647A)] hover:underline">
-                  Directory
+                <a href={`/founders?campus=${encodeURIComponent(pinned.id)}`} className="font-medium text-[color:var(--fg-2,#3F465C)] hover:underline">
+                  Founders
                 </a>
-                <button type="button" onClick={() => onSelect(pinned.id)} className="font-medium text-[color:var(--ember,#D96B1C)] hover:underline">
-                  Clear
-                </button>
               </div>
             </div>
           ) : null}

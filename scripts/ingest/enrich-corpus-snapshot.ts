@@ -10,6 +10,7 @@ import { buildDirectoryFromDb, clearDirectoryMemo } from "../../lib/domain/direc
 import { buildPeakShell } from "../../lib/domain/peak-shell";
 import { listUniversities } from "../../lib/domain/queries";
 import { sampleSurfaceCounts } from "../../lib/domain/sample-facets";
+import { buildFounderIndex } from "../../lib/domain/founder-index-build";
 
 const SNAP_PATH = path.join(process.cwd(), "data", "corpus-snapshot.json");
 
@@ -48,8 +49,7 @@ function main() {
     signalsUndated: signals - signalsDated,
     people: (db.prepare(`SELECT COUNT(*) AS c FROM people`).get() as { c: number }).c,
     founders: (db.prepare(`SELECT COUNT(*) AS c FROM people WHERE founder_status = 'founder'`).get() as { c: number }).c,
-    foundersIndexed: (db.prepare(`SELECT COUNT(*) AS c FROM people WHERE founder_status = 'founder'`).get() as { c: number })
-      .c,
+    foundersIndexed: buildFounderIndex().length,
     foundersListed: surface.foundersListed,
     campuses: unis.length,
     campusesTotal: unis.length,

@@ -23,6 +23,7 @@ import { fetchSampleDirectory } from "@/lib/domain/sample-directory-client";
 import type { Feed } from "@/components/sample-home";
 import type { PeakShell } from "@/lib/domain/peak-shell";
 import { shortCampusLabel } from "@/lib/domain/campuses";
+import { browseHref as buildBrowseHref, type FacetState as UrlFacetState } from "@/lib/domain/facet-url";
 
 const SampleInstrumentBrowse = dynamic(
   () => import("@/components/sample-instrument-browse").then((mod) => ({ default: mod.SampleInstrumentBrowse })),
@@ -49,17 +50,20 @@ function browseHref(opts: {
   q?: string;
   sort?: DirectorySort;
   more?: number;
+  facets?: Partial<UrlFacetState>;
 }): string {
-  const query = new URLSearchParams();
-  if (opts.feed && opts.feed !== "directory") query.set("feed", opts.feed);
-  if (opts.sector) query.set("sector", opts.sector);
-  if (opts.kind) query.set("kind", opts.kind);
-  if (opts.campus) query.set("campus", opts.campus);
-  const q = opts.q?.trim();
-  if (q) query.set("q", q);
-  if (opts.sort && opts.sort !== "rank") query.set("sort", opts.sort);
-  if (opts.more && opts.more > 1) query.set("more", String(opts.more));
-  return `/companies?${query.toString()}`;
+  return buildBrowseHref({
+    feed: opts.feed,
+    sort: opts.sort,
+    more: opts.more,
+    facets: {
+      sector: opts.sector ?? null,
+      kind: opts.kind ?? null,
+      campus: opts.campus ?? null,
+      query: opts.q ?? "",
+      ...(opts.facets ?? {}),
+    },
+  });
 }
 
 
@@ -106,9 +110,9 @@ function PeakShareLite({
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Top campuses</p>
             <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
               <span className="font-bold text-[color:var(--fg,#0B0E17)]">{foundersListed.toLocaleString("en-US")}</span>
-              {" names · "}
+              {" founder names on investable companies · "}
               <span className="font-bold text-[color:var(--fg,#0B0E17)]">{campusesOnMap.toLocaleString("en-US")}</span>
-              {" on map"}
+              {" campuses on map"}
             </p>
             {/* Height twin for live campus ranks · avoids SSR name payload */}
             <div className="mt-2.5 h-[9.5rem]" data-fold-peak-campus-rank-reserve="" aria-hidden="true" />
@@ -192,6 +196,7 @@ export function SampleHomeClient(props: {
   peakShell?: PeakShell | null;
   directoryUrl?: string;
   place?: "map" | "explore";
+  facetExtras?: Record<string, string | number | boolean | null | undefined>;
 }) {
   const {
     feed,
@@ -214,6 +219,7 @@ export function SampleHomeClient(props: {
     peakShell = null,
     directoryUrl = "/data/sample-directory.json",
     place = "map",
+  facetExtras,
   } = props;
 
   const [companies, setCompanies] = useState<FacetCompany[]>([]);
@@ -431,7 +437,22 @@ export function SampleHomeClient(props: {
               sort: feed === "directory" ? order : undefined,
               more: pages + 1,
             })}
-            clearCampusHref={browseHref({ feed, sector, kind, q: query, sort: feed === "directory" ? order : undefined })}
+            clearCampusHref={browseHref({ feed, sector, kind, q: query, sort: feed === "directory" ? order : undefined, facets: facetExtras as Partial<UrlFacetState> | undefined })}
+            initialFacets={{
+              sector: sector ?? null,
+              kind: kind ?? null,
+              campus: campusId ?? null,
+              query: query ?? "",
+              stage: (facetExtras?.stage as string) ?? null,
+              status: (facetExtras?.status as any) ?? null,
+              flag: (facetExtras?.flag as any) ?? null,
+              foundedYear: typeof facetExtras?.foundedYear === "number" ? facetExtras.foundedYear : null,
+              yearMissing: Boolean(facetExtras?.yearMissing),
+              hqRegion: (facetExtras?.hqRegion as string) ?? null,
+              country: (facetExtras?.country as string) ?? null,
+              recency: (facetExtras?.recency as any) ?? null,
+              sectorMissing: Boolean(facetExtras?.sectorMissing),
+            }}
           />
         ) : null}
       </section>
