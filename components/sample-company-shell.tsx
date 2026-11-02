@@ -342,8 +342,12 @@ export function SampleCompanyShell({
                 </p>
               </div>
             ) : null}
-            {/* Peer signal strip · hide identical scrape dates; prefer kind labels */}
-            <ol className="mt-2.5 space-y-1" data-dossier-signal-timeline="">
+            {/* Peer signal strip · titled section; hide identical scrape dates */}
+            <div className="mt-3 border-t border-[color:var(--line,#E1E5EF)] pt-2.5" data-dossier-peers-section="">
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">
+              {campusPeers ? "Campus peers" : sectorPeers ? "Sector peers" : "Nearby signals"}
+            </p>
+            <ol className="mt-1.5 space-y-1" data-dossier-signal-timeline="">
               {(() => {
                 const rows = wireCompanies
                   .filter((c) => (c.signals ?? 0) > 0 || (c.latestSignalAt ?? "").length >= 4)
@@ -372,6 +376,7 @@ export function SampleCompanyShell({
                 });
               })()}
             </ol>
+            </div>
             </div>
           </div>
         </div>

@@ -77,7 +77,7 @@ export default async function DataExplorerPage({
       <form
         method="get"
         action="/data"
-        className="mt-2 space-y-2 border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-2.5 sm:p-2 sm:flex sm:flex-wrap sm:items-end sm:space-y-0 sm:gap-1.5"
+        className="mt-2 space-y-2.5 border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] p-3 sm:p-2 sm:flex sm:flex-wrap sm:items-end sm:space-y-0 sm:gap-1.5"
         data-corpus-filters=""
       >
         <label className="block min-w-0 sm:flex-[1_1_10rem]">
@@ -89,7 +89,7 @@ export default async function DataExplorerPage({
             className="h-10 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[13px] text-[color:var(--fg,#0B0E17)] sm:h-8 sm:text-[12px]"
           />
         </label>
-        <div className="grid grid-cols-2 gap-1.5 sm:contents">
+        <div className="grid grid-cols-2 gap-2 sm:contents">
           <label className="min-w-0 sm:min-w-[7.5rem] sm:flex-none">
             <span className="sr-only">Sector</span>
             <select name="sector" defaultValue={sector || ""} className="h-10 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[12px] sm:h-8 sm:text-[11px]">
@@ -113,7 +113,7 @@ export default async function DataExplorerPage({
             </select>
           </label>
         </div>
-        <div className="flex gap-1.5 sm:contents">
+        <div className="flex gap-2 sm:contents">
           <label className="min-w-0 flex-1 sm:min-w-[6.5rem] sm:flex-none">
             <span className="sr-only">Sort</span>
             <select name="sort" defaultValue={sp.sort || "rank"} className="h-10 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[12px] sm:h-8 sm:text-[11px]">
@@ -156,8 +156,11 @@ export default async function DataExplorerPage({
           <tbody className="divide-y divide-[color:var(--line,#E1E5EF)]">
             {result.rows.map((row) => (
               <tr key={row.id} className="align-top hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/30" data-corpus-row="">
-                <td className="c-n sticky left-0 z-[1] max-w-[7.5rem] bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 font-semibold tracking-tight shadow-[2px_0_0_0_color:var(--line,#E1E5EF)] sm:max-w-none">
-                  <Link href={`/startup/${row.id}`} className="text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline">
+                <td
+                  className="c-n sticky left-0 z-[1] max-w-[7.5rem] bg-[color:var(--bg,#FFFFFF)] px-2.5 py-2 font-semibold tracking-tight shadow-[2px_0_0_0_color:var(--line,#E1E5EF)] sm:max-w-none"
+                  data-i={(row.name.trim()[0] || "?").toUpperCase()}
+                >
+                  <Link href={`/startup/${row.id}`} className="min-w-0 font-bold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:text-[color:var(--ember,#D96B1C)] hover:underline">
                     {row.name}
                   </Link>
                 </td>

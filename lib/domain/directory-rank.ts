@@ -12,6 +12,8 @@ export interface RankCard {
   /** Optional identity for specific Why-it-here lines (DirectoryCard). */
   foundedYear?: number | null;
   primaryProgram?: string | null;
+  /** ISO-ish signal date when known (varies launch/funding Why lines). */
+  latestSignalAt?: string | null;
 }
 
 const SIGNAL_STRENGTH: Record<string, number> = {
@@ -74,31 +76,37 @@ export function whyItsHere(card: RankCard): string | null {
   const programs = [...new Set(card.programs.map(programLabel).filter(Boolean))];
   const yc = programs.find((name) => /y\s*combinator/i.test(name)) || null;
   const year = card.foundedYear != null ? String(card.foundedYear) : null;
+  const when = (card.latestSignalAt ?? "").replace(/-00/g, "").trim() || null;
 
   if (card.operatingStatus === "acquired") {
     return campus ? `Acquired · ${campus}` : "Acquired";
   }
   if (signals > 1) {
-    const latest = kind ? `, latest ${kind}` : "";
-    const place = campus ? ` · ${campus}` : program ? ` · ${program}` : "";
-    return `${signals} signals${latest}${place}`;
-  }
-  if (signals === 1) {
-    const bits = [kind ? `1 ${kind} signal` : "1 signal"];
+    const bits = [`${signals} signals`];
+    if (kind) bits.push(`latest ${kind}`);
+    if (when) bits.push(when);
     if (campus) bits.push(campus);
     else if (program) bits.push(program);
-    if (year) bits.push(year);
     return bits.join(" · ");
   }
-  // Bare kind like "launch on record" repeats across a page - only keep when paired with real identity.
+  if (signals === 1) {
+    const bits = [kind ? `${kind}` : "1 signal"];
+    if (when) bits.push(when);
+    if (campus) bits.push(campus);
+    else if (program) bits.push(program);
+    if (year && year !== when) bits.push(year);
+    return bits.join(" · ");
+  }
+  // Bare kind: pair with real identity and date so launch lines are not identical.
   const bits: string[] = [];
+  if (kind) bits.push(kind);
+  if (when) bits.push(when);
   if (yc) bits.push(yc);
   else if (program) bits.push(program);
-  if (kind) bits.push(kind);
   if (campus) bits.push(campus);
-  if (year) bits.push(year);
+  if (year && !bits.includes(year)) bits.push(year);
   if (card.stage && !bits.includes(card.stage)) bits.push(card.stage);
-  if (bits.length <= 1 && kind && !yc && !program && !campus) return null;
+  if (bits.length <= 1 && kind && !when && !yc && !program && !campus) return null;
   if (!bits.length) return null;
   return bits.join(" · ");
 }

@@ -754,6 +754,14 @@ html[data-sample="halflight"] body {
   .sample-paper .campus-index-row .desk-only-num { display: none; }
 }
 
+/* monogram only on mobile corpus cards */
+@media (min-width: 640px) {
+  [data-corpus-cards] .c-n::before {
+    content: none;
+    display: none;
+  }
+}
+
 /* corpus-mobile-cards */
 @media (max-width: 639px) {
   [data-corpus-cards] {
@@ -770,16 +778,39 @@ html[data-sample="halflight"] body {
     display: block;
   }
   [data-corpus-cards] tr[data-corpus-row] {
-    display: block;
-    padding: 0.75rem 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.35rem 0.5rem;
+    padding: 0.95rem 1rem;
   }
   [data-corpus-cards] .c-n {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
     position: static;
+    width: 100%;
     max-width: none;
     box-shadow: none;
     padding: 0;
-    font-size: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  [data-corpus-cards] .c-n::before {
+    content: attr(data-i);
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex-shrink: 0;
+    border: 1px solid var(--line, #E1E5EF);
+    border-radius: 0.125rem;
+    background: color-mix(in srgb, var(--cobalt-haze, #E8ECFA) 55%, white);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--cobalt, #2F4FD8);
   }
   [data-corpus-cards] .c-m {
     display: inline;
@@ -787,12 +818,16 @@ html[data-sample="halflight"] body {
     max-width: none;
     box-shadow: none;
     padding: 0;
-    margin-top: 0.25rem;
+    margin-top: 0;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 12px;
     color: var(--fg-2, #3F465C);
   }
-  [data-corpus-cards] .c-m + .c-m::before {
+  /* Hide blank meta cells entirely so separators never become "· ·". */
+  [data-corpus-cards] .c-m:has(.c-b) {
+    display: none !important;
+  }
+  [data-corpus-cards] .c-m:not(:has(.c-b)) + .c-m:not(:has(.c-b))::before {
     content: " · ";
     color: var(--fg-3, #5C647A);
   }

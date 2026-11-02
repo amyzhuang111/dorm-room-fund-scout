@@ -31,8 +31,38 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
   const strongestEvidence = project.claims[0];
   const strongestConcern = concernReasons[0];
 
+  const whyLook = (
+      <section className="dossier-brief relative space-y-3 overflow-visible rounded-md border border-border-c border-l-[3px] border-l-[color:var(--ember,#D96B1C)] bg-surface p-3 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]" data-why-look-section="">
+        <div>
+          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Why look</h3>
+          <p className="mt-0.5 text-sm text-foreground">{project.latestSignalNote ?? "No supporting evidence recorded yet."}</p>
+        </div>
+        <div>
+          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founder edge</h3>
+          <p className="mt-0.5 text-sm text-foreground">
+            {project.founders.length ? `${project.founders.join(", ")} · see Evidence below for what's attributed to them directly.` : "Not yet identified from evidence."}
+          </p>
+        </div>
+        <div>
+          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Open question</h3>
+          <p className="mt-0.5 text-sm text-foreground">{strongestConcern ? strongestConcern.rationale : "No unresolved eligibility concerns on record."}</p>
+        </div>
+        <div className="flex flex-wrap gap-2 pt-1">
+          <a href="#evidence" className="rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground">
+            Research company
+          </a>
+          <a href="#pipeline" className="rounded-md border border-[color:var(--ember,#D96B1C)]/40 px-3 py-1.5 text-xs text-[color:var(--ember,#D96B1C)] hover:bg-[color:var(--ember,#D96B1C)]/10">
+            Save / add to pipeline
+          </a>
+        </div>
+      </section>
+  );
+
   return (
     <div className="space-y-5 p-4">
+      {/* Mobile: Why look above funding empties so sim-375 is not clipped */}
+      <div className="sm:hidden">{whyLook}</div>
+
       {/* Header */}
       <div>
         {card ? (
@@ -117,31 +147,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
         </div>
       </div>
 
-      {/* Above the fold: why look / founder edge / open question */}
-      <section className="dossier-brief relative space-y-3 overflow-hidden rounded-md border border-border-c border-l-[3px] border-l-[color:var(--ember,#D96B1C)] bg-surface p-3 before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-[color:var(--cobalt,#2F4FD8)]">
-        <div>
-          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Why look</h3>
-          <p className="mt-0.5 text-sm text-foreground">{project.latestSignalNote ?? "No supporting evidence recorded yet."}</p>
-        </div>
-        <div>
-          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founder edge</h3>
-          <p className="mt-0.5 text-sm text-foreground">
-            {project.founders.length ? `${project.founders.join(", ")} · see Evidence below for what's attributed to them directly.` : "Not yet identified from evidence."}
-          </p>
-        </div>
-        <div>
-          <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Open question</h3>
-          <p className="mt-0.5 text-sm text-foreground">{strongestConcern ? strongestConcern.rationale : "No unresolved eligibility concerns on record."}</p>
-        </div>
-        <div className="flex flex-wrap gap-2 pt-1">
-          <a href="#evidence" className="rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground">
-            Research company
-          </a>
-          <a href="#pipeline" className="rounded-md border border-[color:var(--ember,#D96B1C)]/40 px-3 py-1.5 text-xs text-[color:var(--ember,#D96B1C)] hover:bg-[color:var(--ember,#D96B1C)]/10">
-            Save / add to pipeline
-          </a>
-        </div>
-      </section>
+      <div className="hidden sm:block">{whyLook}</div>
 
       <InTheNews items={project.news} moreHref={`/news?q=${encodeURIComponent(project.name)}`} />
 

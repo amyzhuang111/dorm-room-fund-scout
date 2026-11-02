@@ -27,8 +27,8 @@ function FactSource({ fact }: { fact: { sourceUrl: string; excerpt: string } }) 
   );
 }
 
-function FactValue({ fact, unknown = "Not available" }: { fact: SourcedValue | null; unknown?: string }) {
-  if (!fact) return <span className="text-muted">{unknown}</span>;
+function FactValue({ fact, unknown = "Not available" }: { fact: SourcedValue | null; unknown?: string | null }) {
+  if (!fact) return unknown == null ? null : <span className="text-muted">{unknown}</span>;
   return (
     <span className="text-foreground">
       {fact.text}
@@ -37,10 +37,10 @@ function FactValue({ fact, unknown = "Not available" }: { fact: SourcedValue | n
   );
 }
 
-function RoundValue({ round }: { round: FundingRound | null }) {
-  if (!round) return <span className="text-muted">Not available</span>;
+function RoundValue({ round, unknown = "Not available" }: { round: FundingRound | null; unknown?: string | null }) {
+  if (!round) return unknown == null ? null : <span className="text-muted">{unknown}</span>;
   const text = formatRound(round);
-  if (!text) return <span className="text-muted">Not available</span>;
+  if (!text) return unknown == null ? null : <span className="text-muted">{unknown}</span>;
   return (
     <span className="text-foreground">
       {text}
@@ -87,9 +87,9 @@ export function CompanyProfileCard({ profile, founders, compact = false }: { pro
   const round = latestRound(profile);
   const cells: { label: string; value: ReactNode }[] = [
     ...(!compact && profile.operatingStatus ? [{ label: "Status", value: <FactValue fact={profile.operatingStatus} /> }] : []),
-    { label: "Founded", value: <FactValue fact={profile.foundedYear} /> },
-    { label: "Funding", value: <FactValue fact={displayedFunding(profile)} /> },
-    { label: "Latest round", value: <RoundValue round={round} /> },
+    ...(profile.foundedYear || !compact ? [{ label: "Founded", value: <FactValue fact={profile.foundedYear} unknown={compact ? null : "Not available"} /> }] : []),
+    ...((displayedFunding(profile) || !compact) ? [{ label: "Funding", value: <FactValue fact={displayedFunding(profile)} unknown={compact ? null : "Not available"} /> }] : []),
+    ...((round || !compact) ? [{ label: "Latest round", value: <RoundValue round={round} unknown={compact ? null : "Not available"} /> }] : []),
     ...(!compact
       ? [
           { label: "HQ", value: <FactValue fact={profile.hq} /> },
@@ -112,6 +112,8 @@ export function CompanyProfileCard({ profile, founders, compact = false }: { pro
   ];
 
   if (compact && !profile.foundedYear && !displayedFunding(profile) && !round && profile.investors.length === 0 && profile.rounds.length === 0) return null;
+  // Compact: hide the whole card when every funding fact is empty (no "Not available" walls).
+  if (compact && !profile.foundedYear && !displayedFunding(profile) && !round && profile.investors.length === 0) return null;
 
   return (
     <section className="mt-3 rounded-md border border-border-c bg-surface p-3">
@@ -153,7 +155,7 @@ export function CompanyProfileCard({ profile, founders, compact = false }: { pro
       <div className={compact ? "mt-1" : "mt-3"}>
         <h4 className="text-[10px] font-semibold uppercase tracking-wide text-muted">Who funded</h4>
         {profile.investors.length === 0 ? (
-          <p className="mt-0.5 text-xs text-muted">Not available</p>
+          compact ? null : <p className="mt-0.5 text-xs text-muted">Not available</p>
         ) : (
           <div className="mt-1 space-y-1.5">
             {groupInvestors(profile.investors).map((group) => (
@@ -173,7 +175,8 @@ export function CompanyProfileCard({ profile, founders, compact = false }: { pro
         )}
       </div>
       )}
-      <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-xs sm:grid-cols-3">
+      {cells.length > 0 ? (
+      <dl className={`${compact ? "mt-1.5" : "mt-3"} grid grid-cols-2 gap-x-4 gap-y-2 text-xs sm:grid-cols-3`}>
         {cells.map((cell) => (
           <div key={cell.label}>
             <dt className="font-semibold uppercase tracking-wide text-muted">{cell.label}</dt>
@@ -181,6 +184,7 @@ export function CompanyProfileCard({ profile, founders, compact = false }: { pro
           </div>
         ))}
       </dl>
+      ) : null}
       {profile.rounds.length > 1 && (
         <div className="mt-3">
           <h4 className="text-[10px] font-semibold uppercase tracking-wide text-muted">Other announced rounds</h4>

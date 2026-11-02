@@ -528,7 +528,7 @@ const fails = Object.entries(report.ok).filter(([, v]) => !v);
     console.error("FAIL company full record panel missing");
     process.exitCode = 1;
   } else {
-    const na = await page.locator("[data-company-full-record]").innerText();
+    const na = await page.locator("[data-company-full-record]").first().innerText();
     if (!/Not available/i.test(na) && !/Full record/i.test(na)) {
       console.error("FAIL full record empty of expected copy");
       process.exitCode = 1;
