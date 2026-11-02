@@ -1,0 +1,165 @@
+{
+  "base": "http://127.0.0.1:3460",
+  "expect": {
+    "investableCompanies": 1172,
+    "foundersListed": 2003,
+    "foundersIndexed": 3104,
+    "campusesOnMap": 157,
+    "campusesTotal": 166,
+    "ycMembership": 318
+  },
+  "inventory": [
+    {
+      "page": "home",
+      "url": "http://127.0.0.1:3460/",
+      "status": 200,
+      "counts": {
+        "founders-listed": "2,003",
+        "founders-indexed": "3,104",
+        "campuses-on-map": "157",
+        "visibleCompanies": "1,172",
+        "visibleCampuses": "157",
+        "topCampusesText": "Top campuses2,003 founder names on investable companies · 157 campuses on map"
+      },
+      "sourceOfTruth": {
+        "investableCompanies": {
+          "value": 1172,
+          "from": "corpus-snapshot.json#investableCompanies"
+        },
+        "foundersListed": {
+          "value": 2003,
+          "from": "corpus-snapshot.json#foundersListed"
+        },
+        "foundersIndexed": {
+          "value": 3104,
+          "from": "corpus-snapshot.json#foundersIndexed"
+        },
+        "campusesOnMap": {
+          "value": 157,
+          "from": "corpus-snapshot.json#campusesOnMap"
+        },
+        "campusesTotal": {
+          "value": 166,
+          "from": "corpus-snapshot.json#campusesTotal"
+        }
+      }
+    },
+    {
+      "page": "companies",
+      "url": "http://127.0.0.1:3460/companies",
+      "status": 200,
+      "counts": {},
+      "sourceOfTruth": {
+        "investableCompanies": {
+          "value": 1172,
+          "from": "corpus-snapshot.json#investableCompanies"
+        },
+        "foundersListed": {
+          "value": 2003,
+          "from": "corpus-snapshot.json#foundersListed"
+        },
+        "foundersIndexed": {
+          "value": 3104,
+          "from": "corpus-snapshot.json#foundersIndexed"
+        },
+        "campusesOnMap": {
+          "value": 157,
+          "from": "corpus-snapshot.json#campusesOnMap"
+        },
+        "campusesTotal": {
+          "value": 166,
+          "from": "corpus-snapshot.json#campusesTotal"
+        }
+      }
+    },
+    {
+      "page": "campuses",
+      "url": "http://127.0.0.1:3460/campuses",
+      "status": 200,
+      "counts": {},
+      "sourceOfTruth": {
+        "investableCompanies": {
+          "value": 1172,
+          "from": "corpus-snapshot.json#investableCompanies"
+        },
+        "foundersListed": {
+          "value": 2003,
+          "from": "corpus-snapshot.json#foundersListed"
+        },
+        "foundersIndexed": {
+          "value": 3104,
+          "from": "corpus-snapshot.json#foundersIndexed"
+        },
+        "campusesOnMap": {
+          "value": 157,
+          "from": "corpus-snapshot.json#campusesOnMap"
+        },
+        "campusesTotal": {
+          "value": 166,
+          "from": "corpus-snapshot.json#campusesTotal"
+        }
+      }
+    },
+    {
+      "page": "data",
+      "url": "http://127.0.0.1:3460/data",
+      "status": 200,
+      "counts": {
+        "recency-kept": "1,172",
+        "recency-excluded": "235",
+        "recency-unverified": "4,144"
+      },
+      "sourceOfTruth": {
+        "investableCompanies": {
+          "value": 1172,
+          "from": "corpus-snapshot.json#investableCompanies"
+        },
+        "foundersListed": {
+          "value": 2003,
+          "from": "corpus-snapshot.json#foundersListed"
+        },
+        "foundersIndexed": {
+          "value": 3104,
+          "from": "corpus-snapshot.json#foundersIndexed"
+        },
+        "campusesOnMap": {
+          "value": 157,
+          "from": "corpus-snapshot.json#campusesOnMap"
+        },
+        "campusesTotal": {
+          "value": 166,
+          "from": "corpus-snapshot.json#campusesTotal"
+        }
+      }
+    },
+    {
+      "page": "signals",
+      "url": "http://127.0.0.1:3460/signals",
+      "status": 200,
+      "counts": {},
+      "sourceOfTruth": {
+        "investableCompanies": {
+          "value": 1172,
+          "from": "corpus-snapshot.json#investableCompanies"
+        },
+        "foundersListed": {
+          "value": 2003,
+          "from": "corpus-snapshot.json#foundersListed"
+        },
+        "foundersIndexed": {
+          "value": 3104,
+          "from": "corpus-snapshot.json#foundersIndexed"
+        },
+        "campusesOnMap": {
+          "value": 157,
+          "from": "corpus-snapshot.json#campusesOnMap"
+        },
+        "campusesTotal": {
+          "value": 166,
+          "from": "corpus-snapshot.json#campusesTotal"
+        }
+      }
+    }
+  ],
+  "errors": []
+}

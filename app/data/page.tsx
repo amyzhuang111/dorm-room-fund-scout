@@ -1,7 +1,22 @@
 import Link from "next/link";
 import { paginateCorpus, corpusSortOf, CORPUS_PAGE_SIZE } from "@/lib/domain/corpus-explorer";
 import { buildDirectoryFromDb } from "@/lib/domain/directory";
+import fs from "node:fs";
+import path from "node:path";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
+
+function loadRecencyFunnel() {
+  try {
+    const snap = JSON.parse(fs.readFileSync(path.join(process.cwd(), "data", "corpus-snapshot.json"), "utf8"));
+    return {
+      investable: Number(snap.investableCompanies ?? 0),
+      excludedOlderAlumni: Number(snap.excludedOlderAlumni ?? 0),
+      unverifiedRecency: Number(snap.unverifiedRecency ?? 0),
+    };
+  } catch {
+    return { investable: 0, excludedOlderAlumni: 0, unverifiedRecency: 0 };
+  }
+}
 import { DataTheme } from "@/components/data-theme";
 import { CorpusRowMark } from "@/components/corpus-row-mark";
 
@@ -31,6 +46,7 @@ export default async function DataExplorerPage({
   const result = paginateCorpus({ q, sector, campus, sort, page });
   const { sectors } = buildDirectoryFromDb();
   const campuses = loadHeroStats().universities;
+  const recency = loadRecencyFunnel();
 
   const hrefFor = (patch: Record<string, string | undefined>) => {
     const next = new URLSearchParams();
@@ -74,6 +90,20 @@ export default async function DataExplorerPage({
           Download CSV
         </a>
       </div>
+
+      <p
+        className="mt-2 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[11px] leading-5 text-[color:var(--fg-2,#3F465C)]"
+        data-recency-funnel=""
+      >
+        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Recency gate</span>
+        {" · "}
+        <span data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
+        {" kept (this table) · "}
+        <span data-count="recency-excluded">{recency.excludedOlderAlumni.toLocaleString("en-US")}</span>
+        {" excluded older alumni · "}
+        <span className="text-[color:var(--ember,#D96B1C)]" data-count="recency-unverified">{recency.unverifiedRecency.toLocaleString("en-US")}</span>
+        {" unverified recency (not counted as verified)"}
+      </p>
 
       <form
         method="get"

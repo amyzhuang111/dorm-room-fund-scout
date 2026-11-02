@@ -1,0 +1,189 @@
+{
+  "batch": "recency-batch2-2026-11-02",
+  "checked_at": "2026-11-02T14:01:01Z",
+  "kept": 7,
+  "excluded": 3,
+  "unverified_in_batch": 1,
+  "decisions": [
+    {
+      "id": "proj_ryzapxlEe_Gw",
+      "name": "Arva AI",
+      "action": "exclude",
+      "founders": [
+        {
+          "name": "Oli Wales",
+          "grad_year": 2021,
+          "status": "older_alumni",
+          "evidence": "Cambridge BA CS 2018-2021 (LinkedIn/GitHub).",
+          "url": "https://linkedin.com/in/oliverfwales"
+        }
+      ]
+    },
+    {
+      "id": "proj_KmrOvbedx3dN",
+      "name": "Atlas Discovery",
+      "action": "keep",
+      "founders": [
+        {
+          "name": "Christian Gensbigler",
+          "grad_year": 2028,
+          "status": "current_student",
+          "evidence": "Dartmouth undergrad Math/Biology; IPA roster lists class of 2028.",
+          "url": "https://pokeripa.com/teams/dartmouth-college-2025-2026/"
+        }
+      ]
+    },
+    {
+      "id": "proj_4AHlRB0N_zfX",
+      "name": "Atlia",
+      "action": "keep",
+      "founders": [
+        {
+          "name": "Shaan Yadav",
+          "grad_year": 2026,
+          "status": "recent_alumni",
+          "evidence": "Duke BSE ECE 2026 (Duke CFCI / LinkedIn).",
+          "url": "https://cfci.pratt.duke.edu/2026/08/31/duke-alumni-startup-atlia-accepted-into-y-combinator/"
+        }
+      ]
+    },
+    {
+      "id": "proj_wI35QK8lmbMy",
+      "name": "Avea Robotics",
+      "action": "keep",
+      "founders": [
+        {
+          "name": "Vikram Vadrevu",
+          "grad_year": 2025,
+          "status": "recent_alumni",
+          "evidence": "UIUC BS aerospace 2025 (LinkedIn).",
+          "url": "https://linkedin.com/in/vikramvadrevu"
+        }
+      ]
+    },
+    {
+      "id": "proj_PnM6_s02cMwS",
+      "name": "Avelis Health",
+      "action": "exclude",
+      "founders": [
+        {
+          "name": "Angel Onuoha",
+          "grad_year": 2021,
+          "status": "older_alumni",
+          "evidence": "Harvard BA Economics/CS class of 2021 (LinkedIn graduation post).",
+          "url": "https://linkedin.com/in/angel-onuoha"
+        }
+      ]
+    },
+    {
+      "id": "proj_BUYtjuCQiBTf",
+      "name": "Aviern",
+      "action": "keep",
+      "founders": [
+        {
+          "name": "Kush Agarwal",
+          "grad_year": 2026,
+          "status": "current_student",
+          "evidence": "UCLA Aerospace 2022-2026 (LinkedIn).",
+          "url": "https://linkedin.com/in/kushhansagarwal"
+        },
+        {
+          "name": "Arvin Singh",
+          "grad_year": 2026,
+          "status": "current_student",
+          "evidence": "UCLA Mechanical Engineering 2022-2026 (LinkedIn/YC).",
+          "url": "https://linkedin.com/in/arvin-singh-b0b1a7240"
+        }
+      ]
+    },
+    {
+      "id": "proj_n3xqW2Am3pL2",
+      "name": "AxionOrbital Space",
+      "action": "keep",
+      "founders": [
+        {
+          "name": "Atharva Peshkar",
+          "grad_year": null,
+          "status": "current_student",
+          "evidence": "CU Boulder CS PhD since 2022 (MS 2022-2024); undergrad BE 2022. Current graduate student.",
+          "url": "https://linkedin.com/in/atharva-peshkar-43a104b7"
+        }
+      ]
+    },
+    {
+      "id": "proj_BcJ0FozjZo_a",
+      "name": "Azalea Robotics Corporation",
+      "action": "exclude",
+      "founders": [
+        {
+          "name": "John B. Stroud",
+          "grad_year": 2022,
+          "status": "older_alumni",
+          "evidence": "UGA BS Math/Econ 2016; Kellogg MBA 2022.",
+          "url": "https://linkedin.com/in/john-b-stroud"
+        }
+      ]
+    },
+    {
+      "id": "proj_W95ia7yw41XP",
+      "name": "Bernard",
+      "action": "unverified",
+      "founders": [
+        {
+          "name": "Dan Katzman",
+          "grad_year": null,
+          "status": "unknown",
+          "evidence": "USC Economics/Math Finance listed; public snippets do not state graduation year.",
+          "url": "https://linkedin.com/in/dankatzman"
+        }
+      ]
+    },
+    {
+      "id": "proj_y9jbo6gf-fgG",
+      "name": "Bluejay",
+      "action": "keep",
+      "founders": [
+        {
+          "name": "Rohan Vasishth",
+          "grad_year": 2024,
+          "status": "recent_alumni",
+          "evidence": "UChicago BS CS & Econ 2024 (LinkedIn).",
+          "url": "https://linkedin.com/in/rohanvas"
+        },
+        {
+          "name": "Faraz Siddiqi",
+          "grad_year": 2024,
+          "status": "recent_alumni",
+          "evidence": "UIUC BS 2023 + MS CS 2024 (LinkedIn).",
+          "url": "https://linkedin.com/in/farazmsiddiqi"
+        }
+      ]
+    },
+    {
+      "id": "proj_ADGUlo3jM2v6",
+      "name": "Booko",
+      "action": "keep",
+      "founders": [
+        {
+          "name": "Will Hall",
+          "grad_year": 2028,
+          "status": "current_student",
+          "evidence": "Dartmouth Class of 2028 (LinkedIn).",
+          "url": "https://linkedin.com/in/will-hall-a1160432b"
+        },
+        {
+          "name": "Arjun Saluja",
+          "grad_year": 2028,
+          "status": "current_student",
+          "evidence": "Dartmouth Class of 2028 (LinkedIn).",
+          "url": "https://linkedin.com/in/arjun-saluja-a073b927a"
+        }
+      ]
+    }
+  ],
+  "totals_after": {
+    "investable": 1172,
+    "excluded_older_alumni": 235,
+    "unverified_recency": 4144
+  }
+}
