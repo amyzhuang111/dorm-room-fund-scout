@@ -1,179 +1,179 @@
 {
-  "base": "http://127.0.0.1:3460",
+  "base": "http://127.0.0.1:3470",
   "expect": {
-    "investableCompanies": 1172,
-    "foundersListed": 2003,
-    "foundersIndexed": 3104,
-    "campusesOnMap": 74,
-    "campusesTotal": 83,
+    "investableCompanies": 1173,
+    "foundersListed": 2006,
+    "foundersIndexed": 3107,
+    "campusesOnMap": 75,
+    "campusesTotal": 84,
     "ycMembership": 318
   },
   "inventory": [
     {
       "page": "home",
-      "url": "http://127.0.0.1:3460/",
+      "url": "http://127.0.0.1:3470/",
       "status": 200,
       "counts": {
-        "founders-listed": "2,003",
-        "founders-indexed": "3,104",
-        "campuses-on-map": "74",
-        "visibleCompanies": "1,172",
-        "visibleCampuses": "74",
+        "founders-listed": "2,006",
+        "founders-indexed": "3,107",
+        "campuses-on-map": "75",
+        "visibleCompanies": "1,173",
+        "visibleCampuses": "75",
         "topCampusesText": "Desk rank"
       },
       "sourceOfTruth": {
         "investableCompanies": {
-          "value": 1172,
+          "value": 1173,
           "from": "corpus-snapshot.json#investableCompanies"
         },
         "foundersListed": {
-          "value": 2003,
+          "value": 2006,
           "from": "corpus-snapshot.json#foundersListed"
         },
         "foundersIndexed": {
-          "value": 3104,
+          "value": 3107,
           "from": "corpus-snapshot.json#foundersIndexed"
         },
         "campusesOnMap": {
-          "value": 74,
+          "value": 75,
           "from": "corpus-snapshot.json#campusesOnMap"
         },
         "campusesTotal": {
-          "value": 83,
+          "value": 84,
           "from": "corpus-snapshot.json#campusesTotal"
         }
       }
     },
     {
       "page": "companies",
-      "url": "http://127.0.0.1:3460/companies",
+      "url": "http://127.0.0.1:3470/companies",
       "status": 200,
       "counts": {},
       "sourceOfTruth": {
         "investableCompanies": {
-          "value": 1172,
+          "value": 1173,
           "from": "corpus-snapshot.json#investableCompanies"
         },
         "foundersListed": {
-          "value": 2003,
+          "value": 2006,
           "from": "corpus-snapshot.json#foundersListed"
         },
         "foundersIndexed": {
-          "value": 3104,
+          "value": 3107,
           "from": "corpus-snapshot.json#foundersIndexed"
         },
         "campusesOnMap": {
-          "value": 74,
+          "value": 75,
           "from": "corpus-snapshot.json#campusesOnMap"
         },
         "campusesTotal": {
-          "value": 83,
+          "value": 84,
           "from": "corpus-snapshot.json#campusesTotal"
         }
       }
     },
     {
       "page": "campuses",
-      "url": "http://127.0.0.1:3460/campuses",
+      "url": "http://127.0.0.1:3470/campuses",
       "status": 200,
       "counts": {},
       "sourceOfTruth": {
         "investableCompanies": {
-          "value": 1172,
+          "value": 1173,
           "from": "corpus-snapshot.json#investableCompanies"
         },
         "foundersListed": {
-          "value": 2003,
+          "value": 2006,
           "from": "corpus-snapshot.json#foundersListed"
         },
         "foundersIndexed": {
-          "value": 3104,
+          "value": 3107,
           "from": "corpus-snapshot.json#foundersIndexed"
         },
         "campusesOnMap": {
-          "value": 74,
+          "value": 75,
           "from": "corpus-snapshot.json#campusesOnMap"
         },
         "campusesTotal": {
-          "value": 83,
+          "value": 84,
           "from": "corpus-snapshot.json#campusesTotal"
         }
       }
     },
     {
       "page": "data",
-      "url": "http://127.0.0.1:3460/data",
+      "url": "http://127.0.0.1:3470/data",
       "status": 200,
       "counts": {
-        "recency-kept": "1,172",
+        "recency-kept": "1,173",
         "recency-excluded": "235",
         "recency-unverified": "1,217"
       },
       "sourceOfTruth": {
         "investableCompanies": {
-          "value": 1172,
+          "value": 1173,
           "from": "corpus-snapshot.json#investableCompanies"
         },
         "foundersListed": {
-          "value": 2003,
+          "value": 2006,
           "from": "corpus-snapshot.json#foundersListed"
         },
         "foundersIndexed": {
-          "value": 3104,
+          "value": 3107,
           "from": "corpus-snapshot.json#foundersIndexed"
         },
         "campusesOnMap": {
-          "value": 74,
+          "value": 75,
           "from": "corpus-snapshot.json#campusesOnMap"
         },
         "campusesTotal": {
-          "value": 83,
+          "value": 84,
           "from": "corpus-snapshot.json#campusesTotal"
         }
       }
     },
     {
       "page": "signals",
-      "url": "http://127.0.0.1:3460/signals",
+      "url": "http://127.0.0.1:3470/signals",
       "status": 200,
       "counts": {},
       "sourceOfTruth": {
         "investableCompanies": {
-          "value": 1172,
+          "value": 1173,
           "from": "corpus-snapshot.json#investableCompanies"
         },
         "foundersListed": {
-          "value": 2003,
+          "value": 2006,
           "from": "corpus-snapshot.json#foundersListed"
         },
         "foundersIndexed": {
-          "value": 3104,
+          "value": 3107,
           "from": "corpus-snapshot.json#foundersIndexed"
         },
         "campusesOnMap": {
-          "value": 74,
+          "value": 75,
           "from": "corpus-snapshot.json#campusesOnMap"
         },
         "campusesTotal": {
-          "value": 83,
+          "value": 84,
           "from": "corpus-snapshot.json#campusesTotal"
         }
       }
     },
     {
       "page": "companies-overlay-rail",
-      "url": "http://127.0.0.1:3460/companies",
+      "url": "http://127.0.0.1:3470/companies",
       "status": 200,
       "counts": {
         "overlayUnit": "founders",
         "railUnit": "founders",
         "overlayStatus": {
-          "active": 1158,
+          "active": 1159,
           "acquired": 7,
           "closed": 7
         },
         "railStatusByLabel": {
-          "active": 1158,
+          "active": 1159,
           "acquired": 7,
           "closed": 7
         },
