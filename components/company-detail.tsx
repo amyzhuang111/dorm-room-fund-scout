@@ -16,6 +16,32 @@ import { CompanyFullRecord } from "./company-full-record";
 import { InTheNews } from "./in-the-news";
 import { StartupDirectoryCard, useStartupCard } from "./startup-directory-card";
 
+function normalizeOpenQuestion(raw: string): string {
+  // Dedupe gate merge tails ("Also recorded: …") when the extra restates the primary.
+  const text = raw.replace(/\s+/g, " ").trim();
+  const parts = text.split(/\s*Also recorded:\s*/i);
+  if (parts.length < 2) return text;
+  const primary = parts[0]!.trim();
+  const extras = parts.slice(1).map((p) => p.trim()).filter(Boolean);
+  const keep: string[] = [];
+  const norm = (s: string) => s.toLowerCase().replace(/[—–·|]/g, " ").replace(/\s+/g, " ").trim();
+  const seen = new Set([norm(primary)]);
+  for (const e of extras) {
+    const n = norm(e);
+    if (!n || seen.has(n)) continue;
+    // Near-duplicate: >70% shared tokens with primary
+    const a = new Set(n.split(" "));
+    const b = new Set(norm(primary).split(" "));
+    const inter = [...a].filter((x) => b.has(x)).length;
+    const union = new Set([...a, ...b]).size || 1;
+    if (inter / union >= 0.7) continue;
+    keep.push(e);
+    seen.add(n);
+  }
+  if (!keep.length) return primary;
+  return `${primary} Also recorded: ${keep.join(" · ")}`;
+}
+
 function founderHref(founder: NamedFounder): string {
   const params = new URLSearchParams({
     founder: founder.personId,
@@ -31,8 +57,11 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
   const strongestEvidence = project.claims[0];
   const strongestConcern = concernReasons[0];
 
+  const openQ = strongestConcern
+    ? normalizeOpenQuestion(strongestConcern.rationale)
+    : "No unresolved eligibility concerns on record.";
   const whyLook = (
-      <section className="dossier-brief relative space-y-2 overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] p-2.5" data-why-look-section="">
+      <section className="dossier-brief relative space-y-1.5 overflow-visible rounded-none border border-[color:var(--line,#E1E5EF)] border-l-2 border-l-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--bg,#FFFFFF)] p-2 sm:space-y-2 sm:p-2.5" data-why-look-section="">
         <div>
           <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Why look</h3>
           <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{project.latestSignalNote ?? "No supporting evidence recorded yet."}</p>
@@ -40,12 +69,17 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
         <div>
           <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Founder edge</h3>
           <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">
-            {project.founders.length ? `${project.founders.join(" · ")} · see Evidence below for what's attributed to them directly.` : "Not yet identified from evidence."}
+            <span className="sm:hidden">
+              {project.founders.length ? "Attributed evidence lives under Evidence below." : "Not yet identified from evidence."}
+            </span>
+            <span className="hidden sm:inline">
+              {project.founders.length ? `${project.founders.join(" · ")} · see Evidence below for what's attributed to them directly.` : "Not yet identified from evidence."}
+            </span>
           </p>
         </div>
         <div>
           <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Open question</h3>
-          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{strongestConcern ? strongestConcern.rationale : "No unresolved eligibility concerns on record."}</p>
+          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{openQ}</p>
         </div>
         <div className="hidden flex-wrap gap-2 pt-1 sm:flex">
           <a href="#evidence" className="rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground">
@@ -60,7 +94,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
 
   return (
     <div className="space-y-3 p-2.5 sm:space-y-5 sm:p-4">
-      {/* Mobile: Why look above funding empties so sim-375 is not clipped */}
+      {/* Mobile: Why look above Funding so sim-375 matches 73a fold (Funding peeks) */}
       <div className="sm:hidden">{whyLook}</div>
 
       {/* Header */}

@@ -69,33 +69,51 @@ export function directoryRank(card: RankCard): { tier: number; score: number } {
  * Blank when there is nothing beyond "no signals".
  */
 export function whyItsHere(card: RankCard): string | null {
-  // Card subtitle already shows school · sector · stage · signal kind. Why adds signal weight / program only.
+  // Prefer program / signal weight; fall back to campus + year so thin rows keep real substance (73a desk parity).
   const signals = Math.max(0, card.signals);
   const kind = card.signalLabel ? card.signalLabel.toLowerCase() : "";
+  const campus =
+    card.school?.replace(/^University of (?:California, )?/, "").replace(/ University$/, "").trim() || null;
   const program = card.primaryProgram?.trim() || null;
   const programs = [...new Set(card.programs.map(programLabel).filter(Boolean))];
   const yc = programs.find((name) => /y\s*combinator/i.test(name)) || null;
+  const year =
+    card.foundedYear != null
+      ? String(card.foundedYear)
+      : card.activityYear != null
+        ? String(card.activityYear)
+        : null;
 
   if (card.operatingStatus === "acquired") {
-    return "Acquired";
+    return campus ? `Acquired · ${campus}` : "Acquired";
   }
   if (signals > 1) {
     const latest = kind ? `, latest ${kind}` : "";
-    const place = yc ? ` · ${yc}` : program && program !== card.signalLabel ? ` · ${program}` : "";
+    const place = yc
+      ? ` · ${yc}`
+      : program && program !== card.signalLabel
+        ? ` · ${program}`
+        : campus
+          ? ` · ${campus}`
+          : "";
     return `${signals} signals${latest}${place}`;
   }
   if (signals === 1) {
     const bits = [kind ? `1 ${kind} signal` : "1 signal"];
     if (yc) bits.push(yc);
     else if (program) bits.push(program);
+    else if (campus) bits.push(campus);
+    if (year && !bits.includes(year)) bits.push(year);
     return bits.join(" · ");
   }
   const bits: string[] = [];
   if (yc) bits.push(yc);
   else if (program) bits.push(program);
+  if (campus && !bits.includes(campus)) bits.push(campus);
+  if (year && !bits.includes(year)) bits.push(year);
   if (card.stage && !bits.includes(card.stage)) bits.push(card.stage);
   if (!bits.length) return null;
-  // Single bare stage with no program is too thin / repeats facts line.
-  if (bits.length === 1 && bits[0] === card.stage && !yc && !program) return null;
+  // Single bare stage with no other identity is too thin / repeats facts line.
+  if (bits.length === 1 && bits[0] === card.stage && !yc && !program && !campus) return null;
   return bits.join(" · ");
 }

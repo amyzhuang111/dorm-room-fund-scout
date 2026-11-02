@@ -139,15 +139,16 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
         </p>
       </div>
 
-      {/* Lead: founders, then pitch, then key stats */}
+      {/* Lead: mobile order keyStats → founders → pitch; desk keeps DOM founders → pitch → stats */}
+      <div className="flex flex-col sm:contents" data-full-record-lead="">
       {!isEmpty(project.founderLinks) ? (
-        <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3.5 pl-4" data-full-record-founders-lead="">
+        <div className="order-2 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4 sm:order-none sm:py-3.5" data-full-record-founders-lead="">
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founders</p>
-          <ul className="mt-2.5 space-y-3">
+          <ul className="mt-1.5 space-y-2 sm:mt-2.5 sm:space-y-3">
             {project.founderLinks.map((f) => (
-              <li key={f.personId} className="flex gap-3">
+              <li key={f.personId} className="flex gap-2.5 sm:gap-3">
                 <div
-                  className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/55 font-mono text-[12px] font-bold text-[color:var(--cobalt,#2F4FD8)]"
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/55 font-mono text-[11px] font-bold text-[color:var(--cobalt,#2F4FD8)] sm:h-11 sm:w-11 sm:text-[12px]"
                   aria-hidden
                 >
                   {monogram(f.name)}
@@ -155,14 +156,22 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
                 <div className="min-w-0 flex-1">
                   <Link
                     href={`/founder/discover?founder=${encodeURIComponent(f.personId)}`}
-                    className="text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:underline"
+                    className="text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:underline sm:text-[15px]"
                   >
                     {f.name}
                   </Link>
                   <p className="mt-0.5 font-mono text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)]">
-                    {[f.role?.replaceAll("_", " "), f.school, f.program, f.enrollmentLabel].filter(Boolean).join(" · ") || "Role not on record"}
+                    {/* Mobile: short campus · role; desk keeps full provenance line */}
+                    <span className="sm:hidden">
+                      {[f.role?.replaceAll("_", " "), (f.school || "").replace(/^University of (?:California, )?/, "").replace(/ University$/, "") || null].filter(Boolean).join(" · ") || "Role not on record"}
+                    </span>
+                    <span className="hidden sm:inline">
+                      {[f.role?.replaceAll("_", " "), f.school, f.program, f.enrollmentLabel].filter(Boolean).join(" · ") || "Role not on record"}
+                    </span>
                   </p>
-                  <FounderSocial founder={f} />
+                  <div className="max-sm:[&_a]:inline-flex max-sm:[&_a]:min-h-9 max-sm:[&_a]:min-w-9 max-sm:[&_a]:items-center">
+                    <FounderSocial founder={f} />
+                  </div>
                 </div>
               </li>
             ))}
@@ -171,14 +180,14 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
       ) : null}
 
       {pitch ? (
-        <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3 pl-4" data-full-record-pitch="">
+        <div className="order-3 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4 sm:order-none sm:py-3" data-full-record-pitch="">
           <p className="text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]">{pitch}</p>
         </div>
       ) : null}
 
       {keyStats.length > 0 ? (
         <div
-          className={`grid gap-px border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--line,#E1E5EF)] ${
+          className={`order-1 grid gap-px border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--line,#E1E5EF)] sm:order-none ${
             keyStats.length >= 3 ? "grid-cols-3" : keyStats.length === 2 ? "grid-cols-2" : "grid-cols-1"
           }`}
           data-full-record-key-stats=""
@@ -191,14 +200,32 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
           ))}
         </div>
       ) : null}
+      </div>
 
       <div className="space-y-3 px-3.5 py-3.5 pl-4">
         {hasIdentity ? (
           <Group title="Identity">
-            {!isEmpty(campus) ? <Field label="Campus">{campus}</Field> : null}
-            {!isEmpty(sectorText) ? <Field label="Sector">{sectorText}</Field> : null}
-            {!isEmpty(stage) ? <Field label="Stage">{stage}</Field> : null}
-            {!isEmpty(profile.foundedYear) ? <Field label="Founded">{profile.foundedYear?.text}</Field> : null}
+            {/* Mobile: skip fields already shown in keyStats to cut empty repeat hierarchy */}
+            {!isEmpty(campus) ? (
+              <div className={keyStats.some((s) => s.label === "Campus") ? "hidden sm:contents" : undefined}>
+                <Field label="Campus">{campus}</Field>
+              </div>
+            ) : null}
+            {!isEmpty(sectorText) ? (
+              <div className={keyStats.some((s) => s.label === "Sector") ? "hidden sm:contents" : undefined}>
+                <Field label="Sector">{sectorText}</Field>
+              </div>
+            ) : null}
+            {!isEmpty(stage) ? (
+              <div className={keyStats.some((s) => s.label === "Stage") ? "hidden sm:contents" : undefined}>
+                <Field label="Stage">{stage}</Field>
+              </div>
+            ) : null}
+            {!isEmpty(profile.foundedYear) ? (
+              <div className={keyStats.some((s) => s.label === "Founded") ? "hidden sm:contents" : undefined}>
+                <Field label="Founded">{profile.foundedYear?.text}</Field>
+              </div>
+            ) : null}
             {!isEmpty(profile.hq) ? <Field label="HQ">{profile.hq?.text}</Field> : null}
             {!isEmpty(profile.operatingStatus) ? <Field label="Status">{profile.operatingStatus?.text}</Field> : null}
             {!isEmpty(profile.teamSize) ? <Field label="Team size">{profile.teamSize?.text}</Field> : null}

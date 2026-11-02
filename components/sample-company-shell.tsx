@@ -29,6 +29,7 @@ export function SampleCompanyShell({
   campuses: { id: string; name: string; country: string; founders: number }[];
   /** Local company beat - name / campus / year / ids. Not the global dispatch count. */
   dossier?: {
+    id?: string;
     name: string;
     campus?: string | null;
     year?: number | null;
@@ -349,11 +350,15 @@ export function SampleCompanyShell({
             </p>
             <ol className="mt-1 space-y-0.5" data-dossier-signal-timeline="">
               {(() => {
-                const rows = wireCompanies
+                const scored = wireCompanies
                   .filter((c) => (c.signals ?? 0) > 0 || (c.latestSignalAt ?? "").length >= 4)
                   .slice()
-                  .sort((a, b) => (b.signals ?? 0) - (a.signals ?? 0) || (b.latestSignalAt ?? "").localeCompare(a.latestSignalAt ?? ""))
-                  .slice(0, 3);
+                  .sort((a, b) => (b.signals ?? 0) - (a.signals ?? 0) || (b.latestSignalAt ?? "").localeCompare(a.latestSignalAt ?? ""));
+                // Peer-first: pin the subject company at #1 (73a fold), then top neighbors.
+                const selfId = dossier?.id;
+                const self = selfId ? scored.find((c) => c.id === selfId) : undefined;
+                const others = scored.filter((c) => c.id !== selfId);
+                const rows = (self ? [self, ...others] : others).slice(0, 3);
                 const dates = rows.map((c) => (c.latestSignalAt ?? "").replace(/-00/g, "")).filter(Boolean);
                 const unique = new Set(dates);
                 const scrapeOnly = unique.size <= 1 && dates.length >= 2;

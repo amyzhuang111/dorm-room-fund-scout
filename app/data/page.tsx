@@ -68,10 +68,17 @@ export default async function DataExplorerPage({
         </div>
         <a
           href="/data/export"
-          className="inline-flex h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white"
+          className="hidden h-8 items-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] px-3 font-mono text-[11px] font-semibold text-white sm:inline-flex"
           data-corpus-csv=""
         >
           Download CSV
+        </a>
+        <a
+          href="/data/export"
+          className="inline-flex h-9 items-center font-mono text-[12px] font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline sm:hidden"
+          data-corpus-csv-mobile=""
+        >
+          CSV export
         </a>
       </div>
 
@@ -144,8 +151,8 @@ export default async function DataExplorerPage({
               <th className="c-th c-th-m">Campus</th>
               <th className="c-th">Stage</th>
               <th className="c-th">Sector</th>
-              <th className="c-th c-d">Founded</th>
-              <th className="c-th c-d">Signals</th>
+              <th className="c-th c-d c-d-m">Founded</th>
+              <th className="c-th c-d c-d-m">Signals</th>
               <th className="c-th c-d">Latest</th>
               <th className="c-th c-d">Program</th>
               <th className="c-th c-d">YC</th>
@@ -168,8 +175,8 @@ export default async function DataExplorerPage({
                 <td className="c-m c-m1">{cell(row.campus)}</td>
                 <td className="c-m">{cell(row.stage)}</td>
                 <td className="c-m">{cell(row.sector)}</td>
-                <td className="c-d c-num">{cell(row.foundedYear)}</td>
-                <td className="c-d c-sig">{row.signals.toLocaleString("en-US")}</td>
+                <td className="c-d c-d-m c-num">{cell(row.foundedYear)}</td>
+                <td className="c-d c-d-m c-sig">{row.signals.toLocaleString("en-US")}</td>
                 <td className="c-d c-num">{cell(row.latestSignalAt)}</td>
                 <td className="c-d">{cell(row.primaryProgram)}</td>
                 <td className="c-d">{cell(row.ycBatch)}</td>

@@ -867,43 +867,47 @@ export function SampleInstrumentBrowse({
                     ) : null}
                   </div>
                 </div>
-                {/* Mobile more-end-375: hairline below cards, quiet type, text Load next */}
+                {/* Mobile more-end-375: tight close plate + full-width Load next tap target */}
                 <div
-                  className="mt-3 scroll-mt-24 lg:hidden"
+                  className="mt-2 scroll-mt-24 lg:hidden"
                   data-ledger-end=""
                   data-ledger-end-mobile=""
                   data-end-insight={sliceInsight.kicker}
                 >
                   <div
-                    className="border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] pt-3"
+                    className="border-t border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] pt-2.5"
                     data-ledger-end-lead=""
                     data-ledger-end-more=""
                     data-pass-close=""
                   >
                     <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--fg-3,#5C647A)]">End of this batch</p>
-                    <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-more-context="">
-                      {pageContext}
-                    </p>
-                    <p className="mt-1.5 font-mono text-[15px] font-semibold tabular-nums tracking-tight text-[color:var(--fg-2,#3F465C)]" data-ledger-showing="" data-end-lead="">
-                      <span className="text-[color:var(--fg,#0B0E17)]">{cards.length.toLocaleString("en-US")}</span>
+                    <p className="mt-1 font-mono text-[15px] font-semibold tabular-nums tracking-tight text-[color:var(--fg,#0B0E17)]" data-ledger-showing="" data-end-lead="" data-more-context="">
+                      <span>{cards.length.toLocaleString("en-US")}</span>
                       <span className="ml-1 text-[11px] font-medium text-[color:var(--fg-3,#5C647A)]">
-                        of {total.toLocaleString("en-US")} loaded
+                        of {total.toLocaleString("en-US")} · batch {pageFrom.toLocaleString("en-US")}–{cards.length.toLocaleString("en-US")}
                       </span>
                     </p>
                     {sliceInsight ? (
-                      <p className="mt-1.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                        <span className="font-semibold text-[color:var(--fg-2,#3F465C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
+                      <p className="mt-1 font-mono text-[12px] leading-4 tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                        <span className="font-bold text-[color:var(--ember,#D96B1C)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
                         {" "}
                         {sliceInsight.figureUnit}
-                        {" · see "}
-                        <Link href={`/startup/${sliceInsight.companyId}`} className="font-semibold text-[color:var(--fg,#0B0E17)] underline-offset-2 hover:underline">
+                        {" · "}
+                        <Link href={`/startup/${sliceInsight.companyId}`} className="font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline">
                           {sliceInsight.companyName}
                         </Link>
+                        {nextToScout[0] ? (
+                          <>
+                            {" · "}
+                            <span className="text-[color:var(--fg-3,#5C647A)]">{nextToScout[0].label}</span>
+                            {" "}
+                            <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
+                          </>
+                        ) : null}
                       </p>
-                    ) : null}
-                    {nextToScout[0] ? (
-                      <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
-                        <span className="text-[color:var(--fg-2,#3F465C)]">{nextToScout[0].label}</span>
+                    ) : nextToScout[0] ? (
+                      <p className="mt-1 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                        <span className="text-[color:var(--fg-3,#5C647A)]">{nextToScout[0].label}</span>
                         {" "}
                         <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{nextToScout[0].count.toLocaleString("en-US")}</span>
                         {" on the desk"}
@@ -912,9 +916,10 @@ export function SampleInstrumentBrowse({
                     {cards.length < total ? (
                       <Link
                         href={moreHref}
-                        className="mt-2.5 inline-flex h-8 items-center font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline"
+                        data-load-next=""
+                        className="mt-2.5 inline-flex h-11 w-full items-center justify-center rounded-sm border border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)] font-mono text-[13px] font-semibold text-white hover:opacity-90"
                       >
-                        Load next →
+                        Load next
                       </Link>
                     ) : null}
                   </div>

@@ -936,10 +936,53 @@ html[data-sample="halflight"] body {
   [data-corpus-cards] .c-d {
     display: none;
   }
+  /* Mobile densify: founded year + signal count stay visible (c-d-m), quiet separators */
+  [data-corpus-cards] .c-d.c-d-m {
+    display: inline;
+    position: static;
+    max-width: none;
+    box-shadow: none;
+    padding: 0;
+    margin-top: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--fg-2, #3F465C);
+  }
+  [data-corpus-cards] .c-d.c-d-m.c-sig {
+    color: var(--ember, #D96B1C);
+  }
+  [data-corpus-cards] .c-d.c-d-m:has(.c-b) {
+    display: none !important;
+  }
+  [data-corpus-cards] .c-m:not(:has(.c-b)) + .c-d.c-d-m:not(:has(.c-b))::before,
+  [data-corpus-cards] .c-d.c-d-m:not(:has(.c-b)) + .c-d.c-d-m:not(:has(.c-b))::before,
+  [data-corpus-cards] .c-d.c-d-m:not(:has(.c-b)) + .c-m:not(:has(.c-b))::before,
+  [data-corpus-cards] .c-d.c-d-m:not(:has(.c-b)) + .c-fund:not(:has(.c-b))::before {
+    content: " · ";
+    color: var(--fg-3, #5C647A);
+    font-weight: 400;
+  }
   [data-corpus-cards] .c-b {
     display: none;
   }
+  /* Tighter cards + truncate long sector so rows don't wrap awkwardly */
+  [data-corpus-cards] tr[data-corpus-row] {
+    padding: 0.6rem 0.75rem;
+    gap: 0.2rem 0.35rem;
+  }
+  [data-corpus-cards] .c-m,
+  [data-corpus-cards] .c-fund {
+    max-width: 11rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  [data-corpus-cards] .c-n {
+    font-size: 14px;
+  }
 }
+
 @media (min-width: 640px) {
   [data-corpus-cards] .c-fund {
     padding: 0.5rem 0.625rem;
