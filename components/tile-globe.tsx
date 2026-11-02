@@ -307,7 +307,8 @@ export function TileGlobe({
           paint: {
             "circle-radius": ["interpolate", ["linear"], ["zoom"], 0.4, ["+", ["*", ["get", "radius"], 0.85], 3], 1.8, ["+", ["get", "radius"], 3.2], 3.2, ["+", ["*", ["get", "radius"], 1.35], 4]],
             "circle-color": ["get", "color"],
-            "circle-stroke-color": "#D96B1C",
+            // Cobalt selection ring — ember was competing with top-desk strokes on fold-filters.
+            "circle-stroke-color": "#2F4FD8",
             "circle-stroke-width": 2.8,
             "circle-opacity": 1,
           },
@@ -376,8 +377,8 @@ export function TileGlobe({
       // Hit-test in layout CSS pixels. Always re-read getBoundingClientRect (Clear/scroll
       // can stale a cached rect). Never multiply by DPR. Fall back to nearest projected
       // campus when queryRenderedFeatures misses a finger-sized target.
-      const HIT_PAD = 40;
-      const NEAREST_MAX = 56;
+      const HIT_PAD = 56;
+      const NEAREST_MAX = 88;
       let lastSelectAt = 0;
       let lastSelectId = "";
       const projectedMarkers = () => {
@@ -467,7 +468,6 @@ export function TileGlobe({
         if (!hit?.id) return;
         applyHit(hit);
       };
-      map.on("click", (event) => selectAt(event));
       const selectFromClient = (clientX: number, clientY: number, ev?: Event) => {
         // Re-read container rect on every tap.
         const point = mapPointFromPointer(map!.getCanvasContainer(), clientX, clientY);
@@ -477,27 +477,47 @@ export function TileGlobe({
         return applyHit(hit);
       };
       const canvas = map.getCanvas();
+      const canvasRoot = map.getCanvasContainer();
       canvas.style.touchAction = "manipulation";
-      canvas.addEventListener(
-        "touchend",
-        (ev) => {
-          if (!ev.changedTouches?.length) return;
-          if (ev.changedTouches.length !== 1) return;
-          const touch = ev.changedTouches[0]!;
-          selectFromClient(touch.clientX, touch.clientY, ev);
-        },
-        { passive: false },
-      );
+      canvasRoot.style.touchAction = "manipulation";
+      let touchGuardUntil = 0;
+      const onTouchEnd = (ev: TouchEvent) => {
+        if (!ev.changedTouches?.length) return;
+        if (ev.changedTouches.length !== 1) return;
+        const touch = ev.changedTouches[0]!;
+        const ok = selectFromClient(touch.clientX, touch.clientY, ev);
+        if (ok) {
+          touchGuardUntil = performance.now() + 500;
+          ev.preventDefault();
+          ev.stopPropagation();
+        }
+      };
+      // Capture on the container so taps that land on overlays inside the canvas root still hit-test.
+      canvasRoot.addEventListener("touchend", onTouchEnd, { passive: false, capture: true });
+      // Swallow the synthetic mouse click that follows a real finger tap so we
+      // do not toggle the same campus off or miss via a second hit-test.
+      map.on("click", (event) => {
+        if (performance.now() < touchGuardUntil) {
+          event.originalEvent?.preventDefault?.();
+          return;
+        }
+        selectAt(event);
+      });
       // Expose marker screen points for checks / miss diagnostics.
       (window as unknown as { __campusScoutMap?: unknown }).__campusScoutMap = {
+        resize: () => {
+          try { map?.resize(); } catch { /* ignore */ }
+        },
         markerClientPoints: () => {
           if (!map) return [];
           const container = map.getCanvasContainer();
           const rect = container.getBoundingClientRect(); // fresh
           const layoutW = Math.max(1, container.clientWidth);
           const layoutH = Math.max(1, container.clientHeight);
-          const scaleX = rect.width / layoutW;
-          const scaleY = rect.height / layoutH;
+          const scaleX = rect.width / layoutW || 1;
+          const scaleY = rect.height / layoutH || 1;
+          const vw = typeof window !== "undefined" ? window.innerWidth : rect.width;
+          const vh = typeof window !== "undefined" ? window.innerHeight : rect.height;
           return projectedMarkers()
             .map((m) => ({
               id: m.id,
@@ -507,7 +527,14 @@ export function TileGlobe({
               clientX: rect.left + m.x * scaleX,
               clientY: rect.top + m.y * scaleY,
             }))
-            .filter((m) => m.clientX >= rect.left && m.clientX <= rect.right && m.clientY >= rect.top && m.clientY <= rect.bottom);
+            // Must be on the canvas AND in the visual viewport (finger can only tap what is on screen).
+            .filter(
+              (m) =>
+                m.clientX >= Math.max(0, rect.left) &&
+                m.clientX <= Math.min(vw, rect.right) &&
+                m.clientY >= Math.max(0, rect.top) &&
+                m.clientY <= Math.min(vh, rect.bottom),
+            );
         },
       };
       const hold = () => {
@@ -711,6 +738,9 @@ export function TileGlobe({
                   onClick={() => {
                     setPinned(null);
                     onSelect("");
+                    try {
+                      (window as unknown as { __campusScoutMap?: { resize?: () => void } }).__campusScoutMap?.resize?.();
+                    } catch { /* ignore */ }
                   }}
                   className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--ember,#D96B1C)] hover:underline"
                   data-entity-clear=""
@@ -756,7 +786,7 @@ export function TileGlobe({
           ) : null}
           <div className="pointer-events-none absolute right-2 top-2 z-20 max-w-[160px] rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1.5" data-fold-map-legend="">
             <p className="font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Markers</p>
-            <p className="mt-0.5 text-[10px] leading-3.5 text-[color:var(--fg-2,#3F465C)]">Size = founders · cobalt top desks · ember ring = selected</p>
+            <p className="mt-0.5 text-[10px] leading-3.5 text-[color:var(--fg-2,#3F465C)]">Size = founders · cobalt top desks · cobalt ring = selected</p>
           </div>
         </div>
       </section>
@@ -772,7 +802,7 @@ export function TileGlobe({
                   <button
                     type="button"
                     onClick={() => focus(campus)}
-                    className={`flex w-full items-baseline gap-2 px-1 py-2 text-left hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50 ${active ? "bg-[color:var(--ember,#D96B1C)]/8" : ""}`}
+                    className={`flex w-full items-baseline gap-2 px-1 py-2 text-left hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/50 ${active ? "bg-[color:var(--cobalt-haze,#E8ECFA)]" : ""}`}
                   >
                     <span className="w-5 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-[color:var(--ember,#D96B1C)]">
                       {String(i + 1).padStart(2, "0")}

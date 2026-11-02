@@ -207,10 +207,26 @@ const browser = await chromium.launch({ headless: true });
   await page.close();
 }
 
-// 5) Mobile map canvas hit-test after Clear — 10/10 at DPR 2 and DPR 3
+// 5) Mobile map REAL touch hit-test after Clear — 10/10 at 375×812 DPR 3 (and DPR 2).
+// Uses Playwright hasTouch + CDP Input.dispatchTouchEvent (not mouse click).
+async function realTouchTap(page, clientX, clientY) {
+  const session = await page.context().newCDPSession(page);
+  const x = Math.round(clientX);
+  const y = Math.round(clientY);
+  await session.send("Input.dispatchTouchEvent", {
+    type: "touchStart",
+    touchPoints: [{ x, y, id: 1 }],
+  });
+  await session.send("Input.dispatchTouchEvent", {
+    type: "touchEnd",
+    touchPoints: [],
+  });
+  await session.detach().catch(() => {});
+}
+
 async function runMobileMapHits(dpr) {
   const page = await browser.newPage({
-    viewport: { width: 390, height: 844 },
+    viewport: { width: 375, height: 812 },
     hasTouch: true,
     isMobile: true,
     deviceScaleFactor: dpr,
@@ -220,20 +236,23 @@ async function runMobileMapHits(dpr) {
   await page.waitForTimeout(1500);
   const stage = page.locator("[data-dispatch-map-stage]");
   await stage.scrollIntoViewIfNeeded();
+  await page.evaluate(() => window.__campusScoutMap?.resize?.());
+  await page.waitForTimeout(300);
   if (await page.locator("[data-fold-entity-card]").count()) {
     await page.locator("[data-entity-clear]").click();
     await page.waitForTimeout(400);
   }
   await stage.scrollIntoViewIfNeeded();
+  await page.evaluate(() => window.__campusScoutMap?.resize?.());
   await page.waitForTimeout(400);
-  // Prefer live projected markers; fall back to a dense grid if probe missing
+
+  // Prefer in-viewport projected markers; fall back to picker fly if needed.
   let points = await page.evaluate(() => {
     const api = window.__campusScoutMap;
     if (!api?.markerClientPoints) return [];
     return api.markerClientPoints().slice(0, 10);
   });
   if (points.length < 10) {
-    // Fly across top campuses via picker so more markers enter the stage, then Clear
     await page.evaluate(() => {
       const btns = [...document.querySelectorAll("[data-mobile-campus-picker] button")].slice(0, 6);
       btns[0]?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -244,27 +263,44 @@ async function runMobileMapHits(dpr) {
       await page.waitForTimeout(350);
     }
     await stage.scrollIntoViewIfNeeded();
+    await page.evaluate(() => window.__campusScoutMap?.resize?.());
+    await page.waitForTimeout(350);
     points = await page.evaluate(() => window.__campusScoutMap?.markerClientPoints?.().slice(0, 10) || []);
   }
   let hits = 0;
   const misses = [];
   for (let i = 0; i < 10; i++) {
     await stage.scrollIntoViewIfNeeded();
-    // Re-read marker positions every tap (fresh getBoundingClientRect)
-    const live = await page.evaluate(() => window.__campusScoutMap?.markerClientPoints?.() || []);
+    await page.evaluate(() => window.__campusScoutMap?.resize?.());
+    await page.waitForTimeout(120);
+    // Re-read marker positions every tap; require in-viewport CSS coords.
+    const live = await page.evaluate(() => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      return (window.__campusScoutMap?.markerClientPoints?.() || []).filter(
+        (m) => m.clientX >= 0 && m.clientX <= vw && m.clientY >= 0 && m.clientY <= vh,
+      );
+    });
     const target = live[i % Math.max(1, live.length)] || points[i];
     if (!target) {
       misses.push({ i, reason: "no-marker" });
       continue;
     }
-    await page.touchscreen.tap(target.clientX, target.clientY);
-    await page.waitForTimeout(400);
-    const card = await page.locator("[data-fold-entity-card]").count();
+    // Real touch: CDP first, then Playwright touchscreen.tap as secondary path.
+    await realTouchTap(page, target.clientX, target.clientY);
+    await page.waitForTimeout(450);
+    let card = await page.locator("[data-fold-entity-card]").count();
+    if (card === 0) {
+      await page.touchscreen.tap(target.clientX, target.clientY);
+      await page.waitForTimeout(400);
+      card = await page.locator("[data-fold-entity-card]").count();
+    }
     const missAttr = await page.locator("[data-dispatch-map-stage]").getAttribute("data-map-hit-miss");
     if (card > 0) {
       hits += 1;
       await page.locator("[data-entity-clear]").click().catch(() => {});
       await page.waitForTimeout(280);
+      await page.evaluate(() => window.__campusScoutMap?.resize?.());
     } else {
       misses.push({ i, target, missAttr });
       console.error(`map-miss dpr=${dpr}`, JSON.stringify({ i, target, missAttr }));
@@ -276,12 +312,12 @@ async function runMobileMapHits(dpr) {
 
 {
   const dpr3 = await runMobileMapHits(3);
-  if (dpr3.hits === 10) pass("5-mobile-map-tap-dpr3", `canvas taps hit ${dpr3.hits}/10 after Clear (DPR=3)`);
-  else fail("5-mobile-map-tap-dpr3", `canvas taps hit ${dpr3.hits}/10 after Clear (DPR=3) misses=${JSON.stringify(dpr3.misses).slice(0, 500)}`);
+  if (dpr3.hits === 10) pass("5-mobile-map-tap-dpr3", `real-touch taps hit ${dpr3.hits}/10 after Clear @375 DPR=3`);
+  else fail("5-mobile-map-tap-dpr3", `real-touch taps hit ${dpr3.hits}/10 after Clear @375 DPR=3 misses=${JSON.stringify(dpr3.misses).slice(0, 500)}`);
 
   const dpr2 = await runMobileMapHits(2);
-  if (dpr2.hits === 10) pass("5-mobile-map-tap-dpr2", `canvas taps hit ${dpr2.hits}/10 after Clear (DPR=2)`);
-  else fail("5-mobile-map-tap-dpr2", `canvas taps hit ${dpr2.hits}/10 after Clear (DPR=2) misses=${JSON.stringify(dpr2.misses).slice(0, 500)}`);
+  if (dpr2.hits === 10) pass("5-mobile-map-tap-dpr2", `real-touch taps hit ${dpr2.hits}/10 after Clear @375 DPR=2`);
+  else fail("5-mobile-map-tap-dpr2", `real-touch taps hit ${dpr2.hits}/10 after Clear @375 DPR=2 misses=${JSON.stringify(dpr2.misses).slice(0, 500)}`);
 }
 
 

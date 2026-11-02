@@ -128,10 +128,14 @@ function campusIdFromLabel(label: string | null): string | null {
  * must not also dump the raw NL string into q (that AND-zeros the desk).
  */
 export function browseQueryFromAskIntent(intent: AskIntent, queryFallback = ""): string {
-  const named = (intent.companyName || intent.founderName || intent.name || "").trim();
+  // Explicit company/founder names only — residual intent.name is leftover NL after
+  // facet tokens (e.g. "agents" from "Stanford AI agents") and must not become q=.
+  const named = (intent.companyName || intent.founderName || "").trim();
   if (named) return named;
   const structural = Boolean(intent.campus || intent.stage || intent.sector || intent.year);
   if (structural) return "";
+  const residual = (intent.name || "").trim();
+  if (residual) return residual;
   return queryFallback.trim();
 }
 

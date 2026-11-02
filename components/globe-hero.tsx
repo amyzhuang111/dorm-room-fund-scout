@@ -311,13 +311,11 @@ function SignatureBand({ stats, foundersListed = 0, foundersIndexed = 0, globe }
       <section className="pb-1" aria-label="Campus Scout">
         <div className="mb-1 flex flex-wrap items-center gap-2">
           {/* Counts live in the fold masthead; keep DOM anchors for check-facet-dom. */}
+          {/* Count anchors for facet-dom only — no fold fine-print essay. */}
           <p className="sr-only" data-sample-strip-counts>
             <span data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
-            {" founder names on companies · "}
-            <span data-count={foundersIndexed > 0 ? "founders-indexed" : undefined}>{foundersIndexed.toLocaleString("en-US")}</span>
-            {" in the founder index · "}
+            {foundersIndexed > 0 ? <span data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span> : null}
             <span data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
-            {" campuses on map"}
           </p>
         </div>
         <div className="min-h-0">{globe}</div>

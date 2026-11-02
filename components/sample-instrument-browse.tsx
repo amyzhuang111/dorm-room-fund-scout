@@ -17,6 +17,7 @@ import {
 import { shortCampusLabel } from "@/lib/domain/campuses";
 import { CampusSeal } from "@/components/campus-seal";
 import { MobileListMast } from "@/components/mobile-list-mast";
+import { CurrentViewDock } from "@/components/current-view-dock";
 import {
   applyFacets,
   emptyFacets,
@@ -441,6 +442,17 @@ export function SampleInstrumentBrowse({
     return activeFacetChips(facets, { campus: campusLabel });
   }, [facets, campuses]);
 
+  const dockCompanies = useMemo(
+    () =>
+      boardCompanies.slice(0, 12).map((c) => ({
+        id: c.id,
+        name: c.name,
+        logoUrl: c.logoUrl,
+        href: `/startup/${c.id}`,
+      })),
+    [boardCompanies],
+  );
+
   useEffect(() => {
     const ids = cards.slice(0, 40).map((c) => c.id);
     if (ids.length === 0) {
@@ -585,6 +597,8 @@ export function SampleInstrumentBrowse({
               caption={feed === "leaderboard" ? "Signals" : "Companies"}
             />
           </div>
+          {/* Compact current-view logo strip (P0). Keep short so rails stay primary. */}
+          <CurrentViewDock companies={dockCompanies} max={8} />
         </div>
       </aside>
 

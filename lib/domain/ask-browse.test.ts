@@ -69,3 +69,12 @@ assert.equal(browseQueryFromAskIntent(mercor, "Mercor").toLowerCase(), "mercor")
 assert.match(browseHrefFromAskIntent(mercor, "Mercor"), /q=Mercor/i);
 
 console.log("ask-browse tests ok");
+
+{
+  const stanfordAgents = parseAskIntent("Stanford AI agents");
+  assert.equal(browseQueryFromAskIntent(stanfordAgents, "Stanford AI agents"), "");
+  const href = browseHrefFromAskIntent(stanfordAgents, "Stanford AI agents");
+  assert.match(href, /sector=ai_agents/);
+  assert.match(href, /campus=univ_stanford/);
+  assert.doesNotMatch(href, /[?&]q=/);
+}

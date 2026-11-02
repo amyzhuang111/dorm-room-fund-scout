@@ -25,11 +25,11 @@ export function GlobeFoldSkeleton({
           </span>
           <span>
             <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]" data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
-            {" founder names"}
+            {" founders"}
           </span>
           <span>
             <span className="font-bold tabular-nums text-[color:var(--ember,#D96B1C)]" data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
-            {" campuses on the map"}
+            {" campuses"}
           </span>
           {dataThrough ? <span>Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
