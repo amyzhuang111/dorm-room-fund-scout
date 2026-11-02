@@ -124,7 +124,7 @@ function PeakShareLite({
         <p className="mt-2 text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-caption="">
           {peakLabel} took <span className="text-[color:var(--cobalt,#2F4FD8)]">{pct}%</span> of every dated signal
         </p>
-        <div className="mt-2 h-8" data-fold-peak-bars-mobile-reserve="" aria-hidden="true" />
+        <div className="mt-2 h-14" data-fold-peak-bars-mobile-reserve="" aria-hidden="true" />
         <div className="mt-2 h-10 border-t border-[color:var(--line,#E1E5EF)] pt-2" data-fold-peak-campus-rank-mobile-reserve="" aria-hidden="true" />
       </div>
     </div>
@@ -148,7 +148,7 @@ function PeakShareSlot({
   // Keep SSR lite until the client Peak chunk has painted (same box → CLS ≈ 0).
   const showLive = live;
   return (
-    <div className="relative mb-4 min-h-[11rem] lg:mb-4 lg:min-h-[15rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
+    <div className="relative mb-4 min-h-[13rem] lg:mb-4 lg:min-h-[15rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
       <div className={showLive ? "hidden" : undefined} aria-hidden={showLive || undefined} data-fold-peak-ssr-wrap="">
         {shell ? (
           <PeakShareLite shell={shell} foundersListed={foundersListed} campusesOnMap={campusesOnMap} topCampuses={topCampuses} />

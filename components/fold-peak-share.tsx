@@ -147,21 +147,21 @@ export function FoldPeakShare({
         <p className="mt-2 text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-peak-caption="">
           {peakBar.label} took <span className="text-[color:var(--cobalt,#2F4FD8)]">{pct}%</span> of every dated signal
         </p>
-        <ol className="mt-2 flex h-8 items-end gap-1" data-fold-peak-bars-mobile="" data-fold-peak-month-bars="">
+        <ol className="mt-2 flex h-14 items-end gap-1 overflow-hidden" data-fold-peak-bars-mobile="" data-fold-peak-month-bars="">
           {detail.bars.map((b) => (
-            <li key={b.id} className="flex min-w-0 flex-1 flex-col items-center justify-end gap-1" data-signal-month={b.id} title={`${b.label}: ${b.count}`}>
+            <li key={b.id} className="flex h-14 min-w-0 flex-1 flex-col items-center justify-end gap-1" data-signal-month={b.id} title={`${b.label}: ${b.count}`}>
               {b.peak ? (
-                <span className="font-mono text-[10px] font-bold tabular-nums leading-none text-[color:var(--cobalt,#2F4FD8)]" data-fold-peak-bar-label="">
+                <span className="shrink-0 font-mono text-[10px] font-bold tabular-nums leading-none text-[color:var(--cobalt,#2F4FD8)]" data-fold-peak-bar-label="">
                   {b.count.toLocaleString("en-US")}
                 </span>
               ) : (
-                <span className="h-2.5" aria-hidden />
+                <span className="h-2.5 shrink-0" aria-hidden />
               )}
               <span
-                className={`w-full max-w-3 rounded-sm ${b.peak ? "bg-[color:var(--cobalt,#2F4FD8)]" : "bg-[color:var(--cobalt,#2F4FD8)]/25"}`}
-                style={{ height: `${Math.max(4, Math.round((b.count / max) * 16))}px` }}
+                className={`w-full max-w-3 shrink-0 rounded-sm ${b.peak ? "bg-[color:var(--cobalt,#2F4FD8)]" : "bg-[color:var(--cobalt,#2F4FD8)]/25"}`}
+                style={{ height: `${Math.max(4, Math.round((b.count / max) * 20))}px` }}
               />
-              <span className={`whitespace-nowrap font-mono text-[8px] uppercase tracking-[0.04em] ${b.peak ? "font-bold text-[color:var(--cobalt,#2F4FD8)]" : "text-[color:var(--fg-3,#5C647A)]"}`}>{b.short}</span>
+              <span className={`shrink-0 whitespace-nowrap font-mono text-[8px] uppercase leading-none tracking-[0.04em] ${b.peak ? "font-bold text-[color:var(--cobalt,#2F4FD8)]" : "text-[color:var(--fg-3,#5C647A)]"}`}>{b.short}</span>
             </li>
           ))}
         </ol>
