@@ -71,14 +71,14 @@ function PeakShareLite({
   const pct = Math.round((peakCount / Math.max(1, shell.dated)) * 100);
   return (
     <div data-fold-peak-ssr-shell="" data-fold-peak-identity="" data-fold-baseline="8">
-      <div className="mb-1 hidden min-h-[15rem] lg:block" data-fold-peak-desk="">
+      <div className="mb-1 hidden min-h-[11.5rem] lg:block" data-fold-peak-desk="">
         <div className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-end gap-5 border-b border-[color:var(--line,#E1E5EF)] pb-3" data-fold-peak-share="">
           <div className="min-w-0">
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-[color:var(--cobalt,#2F4FD8)]">Peak share</p>
-            <p className="mt-1 font-mono text-[72px] font-bold leading-[0.82] tracking-[-0.08em] text-[color:var(--ember,#D96B1C)]">
+            <p className="mt-1 font-mono text-[56px] font-bold leading-[0.82] tracking-[-0.08em] text-[color:var(--ember,#D96B1C)]">
               {peakCount.toLocaleString("en-US")}
               <span className="mx-2 text-[26px] font-semibold tracking-[-0.04em] text-[color:var(--fg-3,#5C647A)]">/</span>
-              <span className="text-[40px] font-bold tracking-[-0.06em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
+              <span className="text-[32px] font-bold tracking-[-0.05em] text-[color:var(--fg,#0B0E17)]">{shell.dated.toLocaleString("en-US")}</span>
             </p>
             <p className="mt-2 max-w-[34rem] text-[16px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)]">
               {peakLabel} took <span className="text-[color:var(--ember,#D96B1C)]">{pct}%</span>
@@ -141,7 +141,7 @@ function PeakShareSlot({
   // Keep SSR lite until the client Peak chunk has painted (same box → CLS ≈ 0).
   const showLive = live;
   return (
-    <div className="relative mb-3 min-h-[9.75rem] lg:mb-4 lg:min-h-[15rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
+    <div className="relative mb-3 min-h-[9.75rem] lg:mb-4 lg:min-h-[11.5rem]" data-fold-peak-slot="" data-fold-peak-reserve="">
       <div className={showLive ? "hidden" : undefined} aria-hidden={showLive || undefined} data-fold-peak-ssr-wrap="">
         {shell ? (
           <PeakShareLite shell={shell} foundersListed={foundersListed} campusesOnMap={campusesOnMap} topCampuses={topCampuses} />
@@ -261,11 +261,12 @@ export function SampleHomeClient(props: {
       {place === "map" ? (
         <div className="px-4 pb-8 pt-3 sm:px-5" data-fold-hierarchy="">
           {/* Mobile (fold-375): Peak leads, then search — 9dec. Desk (fold-1440): search first. */}
+          {/* Mobile: search → founders+filters → peak → map. Desk: peak+search, then globe | founders. */}
           <div className="flex flex-col" data-fold-mast="">
-            <div className="order-2 lg:order-1">
+            <div className="order-1">
               <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
             </div>
-            <div className="order-1 lg:order-2">
+            <div className="order-3 hidden lg:order-2 lg:block">
               <PeakShareSlot
                 companies={companies}
                 foundersListed={foundersListed}
@@ -275,28 +276,18 @@ export function SampleHomeClient(props: {
               />
             </div>
           </div>
-          {/* Mobile: founders above map. Desk: founders beside a short globe so cards clear the fold at 1440. */}
           <div
             className="flex flex-col gap-5 lg:grid lg:grid-cols-[minmax(320px,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-5"
             data-fold-stack=""
           >
-            <div className="order-2 lg:order-1 min-w-0" data-fold-globe-col="">
-              <GlobeHero
-                stats={stats}
-                showGlobe={feed !== "world"}
-                companies={companies}
-                companyCount={cardCount}
-                foundersListed={foundersListed}
-                foundersIndexed={founders.length || undefined}
-              />
-            </div>
-            <div className="order-1 lg:order-2 min-w-0 lg:sticky lg:top-3 lg:max-h-[calc(100dvh-1.5rem)] lg:overflow-y-auto lg:scroll-pt-1 lg:pb-6" data-fold-founders-col="">
+            <div className="order-1 min-w-0 lg:order-2 lg:sticky lg:top-3 lg:max-h-[calc(100dvh-1.5rem)] lg:overflow-y-auto lg:scroll-pt-1 lg:pb-6" data-fold-founders-col="">
               <FounderResults
                 founders={founders}
                 status={founderStatus}
                 query={founderQuery}
                 campusId={mapCampusId}
                 campusName={mapCampusId && mapCampusId !== "missing" ? campuses.find((campus) => campus.id === mapCampusId)?.name ?? null : null}
+                foundersListed={foundersListed}
                 onClearCampus={() => {
                   const next = new URLSearchParams(search.toString());
                   next.delete("campus");
@@ -309,6 +300,25 @@ export function SampleHomeClient(props: {
                   next.set("campus", "missing");
                   router.push(`/?${next.toString()}`);
                 }}
+              />
+            </div>
+            <div className="order-2 lg:hidden" data-fold-peak-mobile="">
+              <PeakShareSlot
+                companies={companies}
+                foundersListed={foundersListed}
+                campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
+                topCampuses={topCampuses}
+                shell={peakShell}
+              />
+            </div>
+            <div className="order-3 lg:order-1 min-w-0" data-fold-globe-col="">
+              <GlobeHero
+                stats={stats}
+                showGlobe={feed !== "world"}
+                companies={companies}
+                companyCount={cardCount}
+                foundersListed={foundersListed}
+                foundersIndexed={founders.length || undefined}
               />
             </div>
           </div>

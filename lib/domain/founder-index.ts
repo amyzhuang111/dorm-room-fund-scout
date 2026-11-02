@@ -52,7 +52,10 @@ function isYcReason(label: string): boolean {
   return /y\s*combinator/i.test(label);
 }
 
-/** Ordered real-data leads for a founder (specific facts first; diversifier skips repeats). */
+/**
+ * Ordered leads that add NEW info beyond the card (card already shows campus · company · sector · year · programs).
+ * Prefer stored signals. Never repeat campus, company, sector, or graduation year. Blank when nothing new.
+ */
 export function whyWorthALookCandidates(founder: FounderLead): string[] {
   const out: string[] = [];
   const seen = new Set<string>();
@@ -62,31 +65,20 @@ export function whyWorthALookCandidates(founder: FounderLead): string[] {
     seen.add(text);
     out.push(text);
   }
-  const company = founder.company?.trim() || "";
   const STRONG = new Set(["funding", "launch", "accelerator", "award"]);
   const strong = [...founder.signalTypes.filter((t) => STRONG.has(t))].sort(
     (a, b) => ({ funding: 0, launch: 1, accelerator: 2, award: 3 }[a] ?? 50) - ({ funding: 0, launch: 1, accelerator: 2, award: 3 }[b] ?? 50) || a.localeCompare(b),
   );
   const programs = [...founder.programs].sort((a, b) => Number(isYcReason(b)) - Number(isYcReason(a)) || a.localeCompare(b));
-  // Specific: program + signal + company (unique on the page when possible).
-  if (programs[0] && strong[0] && company) {
-    push(`${programs[0]} · ${signalTypeLabel(strong[0]).toLowerCase()} · ${company}`);
-  }
-  if (programs[0] && company) {
-    push(`${programs[0]} · ${company}`);
-  }
-  if (strong[0] && company) {
-    push(`${signalTypeLabel(strong[0])} at ${company}`);
+  // Program + signal (no company — company is already on the card).
+  if (programs[0] && strong[0]) {
+    push(`${programs[0]} · ${signalTypeLabel(strong[0]).toLowerCase()}`);
   }
   if (strong.length >= 2) {
     push(`${signalTypeLabel(strong[0])} and ${signalTypeLabel(strong[1]).toLowerCase()} on record`);
   }
   for (const t of strong) {
     push(`${signalTypeLabel(t)} on record`);
-  }
-  for (const name of programs) push(name);
-  if (founder.gradYear != null && company) {
-    push(`Class of ${founder.gradYear} · ${company}`);
   }
   const WEAK_RANK: Record<string, number> = {
     affiliation_change: 0,
@@ -96,7 +88,11 @@ export function whyWorthALookCandidates(founder: FounderLead): string[] {
   for (const t of [...founder.signalTypes]
     .filter((x) => !STRONG.has(x))
     .sort((a, b) => (WEAK_RANK[a] ?? 50) - (WEAK_RANK[b] ?? 50) || a.localeCompare(b))) {
-    push(company ? `${signalTypeLabel(t)} · ${company}` : `${signalTypeLabel(t)} on record`);
+    push(`${signalTypeLabel(t)} on record`);
+  }
+  // Programs already print on the card — only use as why when there is no signal at all.
+  if (strong.length === 0 && founder.signalTypes.length === 0) {
+    for (const name of programs) push(name);
   }
   return out;
 }

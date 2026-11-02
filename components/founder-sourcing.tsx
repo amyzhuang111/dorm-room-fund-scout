@@ -54,6 +54,7 @@ export function FounderResults({
   query,
   campusId,
   campusName,
+  foundersListed = 0,
   onClearCampus,
   onMissingCampus,
 }: {
@@ -62,6 +63,8 @@ export function FounderResults({
   query: string;
   campusId: string | null;
   campusName: string | null;
+  /** Founder-name slots on company cards — may be below the searchable index. */
+  foundersListed?: number;
   onClearCampus: () => void;
   onMissingCampus: () => void;
 }) {
@@ -163,6 +166,12 @@ export function FounderResults({
               "Loading founders"
             )}
           </p>
+          {status === "ready" && unfiltered && foundersListed > 0 ? (
+            <p className="mt-1 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-founder-count-reconcile="">
+              <span className="font-semibold text-[color:var(--fg,#0B0E17)]">{foundersListed.toLocaleString("en-US")}</span>
+              {" founder names on company cards · index can run higher (people without a linked company yet)"}
+            </p>
+          ) : null}
         </div>
       </div>
       <div className="mb-3" data-founder-filters="">
@@ -231,8 +240,18 @@ export function FounderResults({
             return page.map((founder) => {
             const why = whyById.get(founder.id) ?? null;
             return (
-              <li key={founder.id} data-founder-card="">
-                <article className="px-3 py-3 sm:px-4 lg:py-2.5">
+              <li key={founder.id} data-founder-card="" data-signal-chrome={founder.signalTypes.includes("funding") ? "funding" : founder.signalTypes.includes("launch") ? "launch" : founder.signalTypes.includes("award") ? "award" : founder.signalTypes.length ? "other" : "none"}>
+                <article className={`border-l-2 px-3 py-3 sm:px-4 lg:py-2.5 ${
+                  founder.signalTypes.includes("funding")
+                    ? "border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)]/[0.04]"
+                    : founder.signalTypes.includes("launch")
+                      ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze,#E8ECFA)]/40"
+                      : founder.signalTypes.includes("award")
+                        ? "border-[color:var(--ember,#D96B1C)]/40"
+                        : founder.signalTypes.length
+                          ? "border-[color:var(--line-strong,#C5CAD8)]"
+                          : "border-transparent"
+                }`}>
                   <h3 className="text-[16px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{founder.name}</h3>
                   <p className="mt-1 text-[13px] leading-5 text-[color:var(--fg-2,#3F465C)]">
                     <Field label="Campus" value={founder.campus} />
@@ -270,7 +289,9 @@ export function FounderResults({
                     </p>
                   ) : null}
                   {why ? (
-                    <p className="mt-2 border-l-2 border-[color:var(--ember,#D96B1C)]/50 pl-2.5 text-[13px] leading-5 text-[color:var(--fg,#0B0E17)] lg:mt-1.5 lg:pl-2 lg:text-[12px] lg:leading-4" data-why-worth="">
+                    <p className={`mt-2 pl-2.5 text-[13px] leading-5 text-[color:var(--fg,#0B0E17)] lg:mt-1.5 lg:pl-2 lg:text-[12px] lg:leading-4 ${
+                      founder.signalTypes.includes("funding") ? "border-l-[3px] border-[color:var(--ember,#D96B1C)] font-medium" : "border-l-2 border-[color:var(--ember,#D96B1C)]/45"
+                    }`} data-why-worth="">
                       <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--ember,#D96B1C)]">Why worth a look</span>
                       <span className="mt-0.5 block">{why}</span>
                     </p>

@@ -184,7 +184,7 @@ export function TileGlobe({
       const wide = window.innerWidth >= 1024;
       // Desk: taller stage like 8b fold wow (map fills the column). Mobile: compact under founders.
       const target = Math.round(window.innerHeight * (wide ? 0.58 : 0.42));
-      setStageHeight(wide ? Math.max(480, Math.min(620, target)) : Math.max(220, Math.min(260, target)));
+      setStageHeight(wide ? Math.max(420, Math.min(540, target)) : Math.max(220, Math.min(260, target)));
     };
     fit();
     window.addEventListener("resize", fit);
@@ -449,17 +449,19 @@ export function TileGlobe({
           </span>
           {dataThrough ? <span className="text-[color:var(--fg-3,#5C647A)]">Updated {absoluteDate(dataThrough)}</span> : null}
         </p>
-        <p className="sr-only" data-founder-count-note="">
+        <p className="mt-1 w-full text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-founder-count-note="">
           <span className={COUNT} data-count="founders-listed">{universeCounts.foundersListed.toLocaleString("en-US")}</span>
-          {" founder names on companies · "}
+          {" names on company cards"}
           {foundersIndexed > 0 ? (
             <>
+              {" · "}
               <span className={COUNT} data-count="founders-indexed">{foundersIndexed.toLocaleString("en-US")}</span>
-              {" indexed · "}
+              {" in the searchable index (can run higher)"}
             </>
           ) : null}
           {catalogReady ? (
             <>
+              {" · "}
               <span className={COUNT}>{quietUniverse.toLocaleString("en-US")}</span>
               {" quiet"}
             </>
@@ -484,6 +486,15 @@ export function TileGlobe({
               </div>
             </div>
           ) : null}
+          <div
+            className="pointer-events-none absolute bottom-2 left-2 z-10 flex flex-wrap gap-x-2.5 gap-y-1 rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1 font-mono text-[9px] text-[color:var(--fg-2,#3F465C)] shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
+            data-country-legend=""
+            aria-label="Country colors on the map"
+          >
+            <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[#2F4FD8]" aria-hidden />United States</span>
+            <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[#5C6FA8]" aria-hidden />Canada</span>
+            <span className="inline-flex items-center gap-1"><span className="inline-block h-1.5 w-1.5 rounded-full bg-[#3F465C]" aria-hidden />United Kingdom</span>
+          </div>
           <div className="pointer-events-auto absolute bottom-2 left-1/2 z-10 -translate-x-1/2" data-map-credit>
             <p className="rounded bg-[color:var(--bg,#FFFFFF)]/80 px-2 py-0.5 font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
               <MapCredit />

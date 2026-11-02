@@ -380,7 +380,7 @@ export function SampleInstrumentBrowse({
             data-filters-index-hero=""
           >
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Contents</p>
-            <p className="mt-1.5 font-mono text-[40px] font-bold leading-[0.84] tracking-[-0.05em] text-[color:var(--ember,#D96B1C)]">
+            <p className="mt-1.5 font-mono text-[28px] font-bold leading-[0.9] tracking-[-0.04em] text-[color:var(--ember,#D96B1C)]">
               {boardCompanies.length.toLocaleString("en-US")}
             </p>
             <p className="mt-1.5 text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">
@@ -1032,9 +1032,18 @@ function LedgerRow({
       href={`/startup/${card.id}`}
       data-card-signals={card.signals}
       data-card-dated={card.latestSignalAt ? "1" : "0"}
-      className={`group flex items-start gap-3 px-3.5 transition-[background-color,color] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:gap-3 sm:px-3.5 ${
-        ranked ? "py-3.5 sm:py-3 lg:gap-3 lg:py-3.5" : "py-3.5 sm:py-3"
-      }`}
+      data-signal-chrome={card.signalLabel === "Funding" ? "funding" : card.signalLabel === "Launch" ? "launch" : card.signalLabel === "Award" ? "award" : card.signals > 0 ? "other" : "none"}
+      className={`group flex items-start gap-3 border-l-2 px-3.5 transition-[background-color,color] lg:hover:bg-[color:var(--cobalt-haze,#E8ECFA)]/40 sm:gap-3 sm:px-3.5 ${
+        card.signalLabel === "Funding"
+          ? "border-[color:var(--ember,#D96B1C)] bg-[color:var(--ember,#D96B1C)]/[0.03]"
+          : card.signalLabel === "Launch"
+            ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze,#E8ECFA)]/35"
+            : card.signalLabel === "Award"
+              ? "border-[color:var(--ember,#D96B1C)]/35"
+              : card.signals > 0
+                ? "border-[color:var(--line-strong,#C5CAD8)]"
+                : "border-transparent"
+      } ${ranked ? "py-3.5 sm:py-3 lg:gap-3 lg:py-3.5" : "py-3.5 sm:py-3"}`}
     >
       {rank != null ? (
         <span
@@ -1096,7 +1105,7 @@ function LedgerRow({
               {meta.primary}
             </span>
             {meta.secondary ? (
-              <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:hidden">
+              <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                 {meta.secondary}
               </span>
             ) : null}
