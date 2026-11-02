@@ -381,7 +381,7 @@ export function SampleCompanyShell({
                 const selfId = dossier?.id;
                 const self = selfId ? scored.find((c) => c.id === selfId) : undefined;
                 const others = scored.filter((c) => c.id !== selfId);
-                const rows = (self ? [self, ...others] : others).slice(0, 3);
+                const rows = (self ? [self, ...others] : others).slice(0, 5);
                 const dates = rows.map((c) => (c.latestSignalAt ?? "").replace(/-00/g, "")).filter(Boolean);
                 const unique = new Set(dates);
                 const scrapeOnly = unique.size <= 1 && dates.length >= 2;
@@ -390,7 +390,7 @@ export function SampleCompanyShell({
                   return (
                     <li key={c.id} className="flex flex-wrap items-baseline gap-x-2 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
                       <span className="w-4 shrink-0 text-[color:var(--cobalt,#2F4FD8)]">{String(i + 1).padStart(2, "0")}</span>
-                      <Link href={`/startup/${c.id}`} className="min-w-0 flex-1 truncate font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline">{c.name}</Link>
+                      <Link href={`/startup/${c.id}`} className="min-w-0 flex-1 break-words font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline">{c.name}</Link>
                       {c.signalLabel ? (
                         <span className="shrink-0 font-bold text-[color:var(--ember,#D96B1C)]">{c.signalLabel}</span>
                       ) : null}

@@ -390,6 +390,13 @@ export function SampleInstrumentBrowse({
       .sort((a, b) => b.companies - a.companies || b.signaled - a.signaled || a.label.localeCompare(b.label))
       .slice(0, 6);
   }, [cards]);
+  const endLeadCampusHref = useMemo(() => {
+    const lead = pageCampusRanks[0];
+    if (!lead) return null;
+    const leadId = campuses.find((c) => c.name === lead.label)?.id;
+    if (!leadId) return null;
+    return browseHref({ feed, sector, kind, campus: leadId, q: query, sort: feed === "directory" ? sort : undefined });
+  }, [pageCampusRanks, campuses, feed, sector, kind, query, sort]);
   /** Desk-wide campus leader for mobile list mast (real counts). */
   const deskCampusTop = useMemo(() => {
     const map = new Map<string, { label: string; companies: number; signaled: number }>();
@@ -1114,13 +1121,22 @@ export function SampleInstrumentBrowse({
                   >
                     <div className="border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3.5 py-3.5" data-mobile-list-mast="">
                       <div className="flex items-start gap-3">
-                        {pageCampusRanks[0] ? <CampusSeal label={pageCampusRanks[0].label} size="lg" className="mt-1" /> : null}
-                        <div className="min-w-0 flex-1">
+                        {pageCampusRanks[0] ? (
+                          endLeadCampusHref ? (
+                            <Link href={endLeadCampusHref} aria-label={`Filter to ${pageCampusRanks[0].label}`} className="shrink-0">
+                              <CampusSeal label={pageCampusRanks[0].label} size="lg" className="mt-1" />
+                            </Link>
+                          ) : (
+                            <CampusSeal label={pageCampusRanks[0].label} size="lg" className="mt-1" />
+                          )
+                        ) : null}
+                        <div className="min-w-0 flex-1 overflow-visible">
                           <p className="m-kicker">Campuses in this batch</p>
+                          {/* r43: stack figure + unit so "6 campuses" never overlaps the takeaway */}
                           <p className="m-figure mt-1.5" data-ledger-showing="" data-end-lead="" data-more-context="">
                             {pageCampusRanks.length.toLocaleString("en-US")}
-                            <span className="m-figure-sub ml-1.5">campuses</span>
                           </p>
+                          <p className="m-figure-sub mt-0.5">campuses</p>
                           <p className="m-takeaway mt-2">
                             {pageCampusRanks[0]
                               ? `${pageCampusRanks[0].label} leads with ${pageCampusRanks[0].companies.toLocaleString("en-US")} companies on this page`
@@ -1140,8 +1156,8 @@ export function SampleInstrumentBrowse({
                               {String(i + 1).padStart(2, "0")}
                             </span>
                             <CampusSeal label={row.label} size="md" />
-                            <div className="min-w-0 flex-1">
-                              <p className="truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
+                            <div className="min-w-0 flex-1 overflow-visible">
+                              <p className="break-words text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
                               <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                                 <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
                                 {" cos"}
@@ -1167,16 +1183,19 @@ export function SampleInstrumentBrowse({
                         </p>
                       ) : null}
                       {cards.length < total ? (
-                        <p className="mt-2 font-mono text-[12px] text-[color:var(--fg-3,#5C647A)]">
-                          <span>{"Still "}{(total - cards.length).toLocaleString("en-US")}{" · "}</span>
+                        <div className="mt-2 flex flex-wrap items-center gap-2" data-ledger-end-load="">
+                          <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                            {"Still "}
+                            <span className="font-bold text-[color:var(--fg,#0B0E17)]">{(total - cards.length).toLocaleString("en-US")}</span>
+                          </p>
                           <Link
                             href={moreHref}
                             data-load-next=""
-                            className="font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline"
+                            className="inline-flex h-8 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-2.5 font-mono text-[11px] font-semibold text-white"
                           >
                             Load next
                           </Link>
-                        </p>
+                        </div>
                       ) : null}
                     </div>
                   </div>

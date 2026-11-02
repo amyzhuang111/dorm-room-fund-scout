@@ -51,8 +51,9 @@ export function LinkedInProfileLink({ action, name }: { action: LinkedInAction; 
   return (
     <span className="inline-flex items-center gap-1">
       <LinkedInIconButton action={action} name={name} />
+      {/* r43: hide loud CONFIRMED/likely chips on mobile full-record fold */}
       <span
-        className={`rounded border px-1 text-[10px] font-medium uppercase tracking-wide ${
+        className={`hidden rounded border px-1 text-[10px] font-medium uppercase tracking-wide sm:inline ${
           likely ? "border-dashed border-muted text-muted" : "border-link text-link"
         }`}
       >

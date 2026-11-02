@@ -66,20 +66,18 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
           <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Why look</h3>
           <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{project.latestSignalNote ?? "No supporting evidence recorded yet."}</p>
         </div>
-        <div>
+        {/* Mobile: drop Founder edge so Open question stays fully in the 375 fold (r43). */}
+        <div className="hidden sm:block">
           <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Founder edge</h3>
           <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">
-            <span className="sm:hidden">
-              {project.founders.length ? "Attributed evidence lives under Evidence below." : "Not yet identified from evidence."}
-            </span>
-            <span className="hidden sm:inline">
-              {project.founders.length ? `${project.founders.join(" · ")} · see Evidence below for what's attributed to them directly.` : "Not yet identified from evidence."}
-            </span>
+            {project.founders.length ? `${project.founders.join(" · ")} · see Evidence below for what's attributed to them directly.` : "Not yet identified from evidence."}
           </p>
         </div>
         <div>
           <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Open question</h3>
-          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{openQ}</p>
+          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]" data-open-question="">
+            {openQ}
+          </p>
         </div>
         <div className="hidden flex-wrap gap-2 pt-1 sm:flex">
           <a href="#evidence" className="rounded-md bg-accent px-3 py-1.5 text-xs font-medium text-accent-foreground">
