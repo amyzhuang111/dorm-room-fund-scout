@@ -818,7 +818,7 @@ export function SampleInstrumentBrowse({
                   <Link
                     key={id}
                     href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
-                    className={`flex h-9 flex-1 items-center justify-center font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
+                    className={`flex h-11 min-h-[44px] flex-1 items-center justify-center font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
                       i > 0 ? "border-l border-[color:var(--cobalt,#2F4FD8)]/20" : ""
                     } ${
                       active
@@ -845,7 +845,7 @@ export function SampleInstrumentBrowse({
             >
               <button
                 type="button"
-                className="flex w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left"
+                className="flex min-h-[44px] w-full items-center justify-between gap-3 px-3.5 py-3 text-left"
                 onClick={() => setMobileFiltersOpen((open) => !open)}
                 aria-expanded={mobileFiltersOpen}
               >
@@ -879,7 +879,7 @@ export function SampleInstrumentBrowse({
                           <Link
                             key={id}
                             href={browseHref({ feed, sector, kind, campus, q: query, sort: id })}
-                            className={`inline-flex h-8 items-center rounded-sm border px-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.06em] ${
+                            className={`inline-flex h-11 min-h-[44px] items-center rounded-sm border px-3 font-mono text-[12px] font-semibold uppercase tracking-[0.06em] ${
                               active
                                 ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--cobalt,#2F4FD8)]"
                                 : "border-[color:var(--line,#E1E5EF)] text-[color:var(--fg-2,#3F465C)]"
@@ -1050,13 +1050,13 @@ export function SampleInstrumentBrowse({
                     {pageCampusRanks.length ? (
                       <ol className="mt-3 divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]" data-page-campus-seals="" data-page-campus-ranks="">
                         {pageCampusRanks.map((row, i) => (
-                          <li key={row.label} className="flex items-center gap-3 py-2.5">
+                          <li key={row.label} className="flex min-h-[44px] items-center gap-3 py-3">
                             <span className="w-6 shrink-0 text-right font-mono text-[16px] font-bold tabular-nums tracking-[-0.04em] text-[color:var(--cobalt,#2F4FD8)]">
                               {String(i + 1).padStart(2, "0")}
                             </span>
                             <CampusSeal label={row.label} size="md" />
                             <div className="min-w-0 flex-1">
-                              <p className="truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
+                              <p className="break-words text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
                               <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                                 <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
                                 {" companies"}
@@ -1135,13 +1135,13 @@ export function SampleInstrumentBrowse({
                     {pageCampusRanks.length ? (
                       <ol className="divide-y divide-[color:var(--line,#E1E5EF)] px-3.5" data-page-campus-seals="" data-page-campus-ranks="">
                         {pageCampusRanks.slice(0, 5).map((row, i) => (
-                          <li key={row.label} className="flex items-center gap-2.5 py-2.5">
+                          <li key={row.label} className="flex min-h-[44px] items-center gap-2.5 py-3">
                             <span className="w-5 shrink-0 text-right font-mono text-[14px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
                               {String(i + 1).padStart(2, "0")}
                             </span>
                             <CampusSeal label={row.label} size="md" />
                             <div className="min-w-0 flex-1">
-                              <p className="truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
+                              <p className="break-words text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
                               <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                                 <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
                                 {" cos"}
@@ -1465,8 +1465,8 @@ function LedgerRow({
           <CampusSeal label={card.school} size="sm" className="mt-0.5" />
         ) : (
           <>
-            <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center lg:hidden" aria-hidden={!showCampusSeal}>
-              {showCampusSeal ? <CampusSeal label={card.school} size="xs" /> : null}
+            <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center lg:hidden" aria-hidden={!showCampusSeal}>
+              {showCampusSeal ? <CampusSeal label={card.school} size="sm" /> : null}
             </span>
             <span className="mt-0.5 hidden shrink-0 lg:inline-flex">
               <CampusSeal label={card.school} size="md" />
@@ -1480,7 +1480,7 @@ function LedgerRow({
         <p
           className={
             ranked
-              ? "line-clamp-2 break-words text-[20px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
+              ? "break-words text-[20px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
               : "break-words text-[18px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:text-[16px]"
           }
         >
@@ -1500,7 +1500,7 @@ function LedgerRow({
           <p className="sr-only" data-why-here="" data-why-blank="1">Why it&apos;s here blank</p>
         )}
         {(card.foundedYear != null || card.primaryProgram || (card.founders?.length ?? 0) > 0) ? (
-          <p className={`mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)] ${ranked ? "line-clamp-2" : "truncate"}`} data-card-facts="">
+          <p className="mt-1 font-mono text-[11px] leading-4 tabular-nums text-[color:var(--fg-3,#5C647A)] sm:text-[10px]" data-card-facts="">
             {card.foundedYear != null ? (
               <span>
                 <span className="font-bold text-[color:var(--ember,#D96B1C)]">{card.foundedYear}</span>

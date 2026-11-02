@@ -1176,7 +1176,42 @@ details:not([open]) > :not(summary) {
 .sample-paper [data-fold-peak-figure] {
   overflow: hidden;
 }
-/* Compact SignalsLanded peak figure: clip ascenders without eating the row below. */
+/* Compact peak fraction must paint fully (numerator + /denominator). */
 .sample-paper [data-signals-landed-compact] [data-peak-figure] {
-  overflow: hidden;
+  overflow: visible;
+}
+.sample-paper [data-signals-landed-compact] [data-peak-numerator] {
+  line-height: 1;
+}
+.sample-paper [data-signals-landed-compact] [data-peak-denominator] {
+  line-height: 1;
+}
+
+
+/* r40 mobile craft: ≥44px taps in mobile filters / facet sheet; no label clip. */
+@media (max-width: 1023px) {
+  .sample-paper [data-mobile-filters-inline] button[data-facet],
+  .sample-paper [data-facet-sheet] button[data-facet],
+  .sample-paper [data-mobile-facet-map] button[data-facet] {
+    min-height: 44px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .sample-paper [data-mobile-filters-inline] button[data-facet] > span.min-w-0,
+  .sample-paper [data-facet-sheet] button[data-facet] > span.min-w-0,
+  .sample-paper [data-mobile-facet-map] button[data-facet] > span.min-w-0 {
+    overflow: visible;
+    white-space: normal;
+    text-overflow: clip;
+  }
+  .sample-paper [data-mobile-list-mast] .m-figure {
+    font-size: 44px;
+  }
+  .sample-paper [data-mobile-list-mast] .m-figure-sub {
+    font-size: 14px;
+  }
+  .sample-paper [data-mobile-list-mast] .m-takeaway {
+    font-size: 14px;
+    line-height: 1.35;
+  }
 }

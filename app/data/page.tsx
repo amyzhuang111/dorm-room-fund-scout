@@ -88,7 +88,7 @@ export default async function DataExplorerPage({
       <div className="flex flex-wrap items-end justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
         <div>
           <p className="scout-kicker">Corpus</p>
-          <h1 className="mt-0.5 scout-display text-[28px] leading-none sm:text-[40px]">Full data</h1>
+          <h1 className="mt-0.5 scout-display text-[22px] leading-none sm:text-[40px]">Full data</h1>
           <p className="mt-1.5 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
             <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{result.total.toLocaleString("en-US")}</span>
             {" companies · page "}
@@ -108,7 +108,7 @@ export default async function DataExplorerPage({
         </a>
         <a
           href="/data/export"
-          className="inline-flex h-9 items-center font-mono text-[12px] font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline sm:hidden"
+          className="inline-flex min-h-[44px] items-center font-mono text-[13px] font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline sm:hidden"
           data-corpus-csv-mobile=""
         >
           CSV export
@@ -141,13 +141,13 @@ export default async function DataExplorerPage({
             name="q"
             defaultValue={q}
             placeholder="Search name or founder"
-            className="h-10 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[13px] text-[color:var(--fg,#0B0E17)] sm:h-8 sm:text-[12px]"
+            className="h-11 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[13px] text-[color:var(--fg,#0B0E17)] sm:h-8 sm:text-[12px]"
           />
         </label>
         <div className="grid grid-cols-2 gap-2 sm:contents">
           <label className="min-w-0 sm:min-w-[7.5rem] sm:flex-none">
             <span className="sr-only">Sector</span>
-            <select name="sector" defaultValue={sector || ""} className="h-10 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[12px] sm:h-8 sm:text-[11px]">
+            <select name="sector" defaultValue={sector || ""} className="h-11 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[12px] sm:h-8 sm:text-[11px]">
               <option value="">All sectors</option>
               {sectors.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -158,7 +158,7 @@ export default async function DataExplorerPage({
           </label>
           <label className="min-w-0 sm:min-w-[7.5rem] sm:flex-none">
             <span className="sr-only">Campus</span>
-            <select name="campus" defaultValue={campus || ""} className="h-10 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[12px] sm:h-8 sm:text-[11px]">
+            <select name="campus" defaultValue={campus || ""} className="h-11 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[12px] sm:h-8 sm:text-[11px]">
               <option value="">All campuses</option>
               {campuses.slice(0, 40).map((c) => (
                 <option key={c.id} value={c.id}>
@@ -171,7 +171,7 @@ export default async function DataExplorerPage({
         <div className="flex gap-2 sm:contents">
           <label className="min-w-0 flex-1 sm:min-w-[6.5rem] sm:flex-none">
             <span className="sr-only">Sort</span>
-            <select name="sort" defaultValue={sp.sort || "rank"} className="h-10 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[12px] sm:h-8 sm:text-[11px]">
+            <select name="sort" defaultValue={sp.sort || "rank"} className="h-11 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[12px] sm:h-8 sm:text-[11px]">
               <option value="rank">Rank</option>
               <option value="recent">Newest signal</option>
               <option value="name">Name</option>
@@ -182,7 +182,7 @@ export default async function DataExplorerPage({
           </label>
           <button
             type="submit"
-            className="inline-flex h-10 flex-none items-center justify-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-4 font-mono text-[12px] font-semibold text-white sm:h-8 sm:px-3 sm:text-[11px]"
+            className="inline-flex h-11 min-h-[44px] flex-none items-center justify-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-4 font-mono text-[13px] font-semibold text-white sm:h-8 sm:min-h-0 sm:px-3 sm:text-[11px]"
           >
             Apply
           </button>
@@ -206,13 +206,13 @@ export default async function DataExplorerPage({
         {pageCampusRanks.length ? (
           <ol className="mt-2 divide-y divide-[color:var(--line,#E1E5EF)] overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-3.5">
             {pageCampusRanks.map((row, i) => (
-              <li key={row.label} className="flex items-center gap-2.5 py-2.5">
+              <li key={row.label} className="flex min-h-[44px] items-center gap-2.5 py-3">
                 <span className="w-5 shrink-0 text-right font-mono text-[14px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <CampusSeal label={row.label} size="md" />
+                <CampusSeal label={row.label} size="lg" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
+                  <p className="break-words text-[15px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
                   <p className="font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                     <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
                     {" cos"}
@@ -305,12 +305,12 @@ export default async function DataExplorerPage({
         </p>
         <div className="flex items-center gap-2">
           {result.page > 1 ? (
-            <Link href={hrefFor({ page: String(result.page - 1) })} className="inline-flex h-8 items-center border border-[color:var(--line-strong,#C5CAD8)] px-3 font-mono text-[11px] font-semibold">
+            <Link href={hrefFor({ page: String(result.page - 1) })} className="inline-flex h-11 min-h-[44px] items-center border border-[color:var(--line-strong,#C5CAD8)] px-3 font-mono text-[12px] font-semibold sm:h-8 sm:min-h-0 sm:text-[11px]">
               Previous
             </Link>
           ) : null}
           {result.page < result.pageCount ? (
-            <Link href={hrefFor({ page: String(result.page + 1) })} className="inline-flex h-8 items-center border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[11px] font-semibold text-white">
+            <Link href={hrefFor({ page: String(result.page + 1) })} className="inline-flex h-11 min-h-[44px] items-center border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[12px] font-semibold text-white sm:h-8 sm:min-h-0 sm:text-[11px]">
               Next
             </Link>
           ) : null}

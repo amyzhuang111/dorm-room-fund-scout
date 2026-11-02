@@ -1120,7 +1120,7 @@ export function SignalsLanded({ companies, compact = false }: { companies: Facet
     // filters-375 / companies-375: peak sparkline + count as hero (list stays high)
     return (
       <section
-        className="border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2"
+        className="border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 py-3"
         data-signals-landed=""
         data-signals-landed-compact=""
         data-chrono-peak={String(peak.count)}
@@ -1131,19 +1131,21 @@ export function SignalsLanded({ companies, compact = false }: { companies: Facet
         data-chrono-dated={String(detail.dated)}
       >
         <div className="flex items-end justify-between gap-3">
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1 overflow-visible">
             <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Peak · {peak.short} {peak.id.slice(0, 4)}</p>
-            <p className="mt-1 h-7 overflow-hidden scout-figure text-[28px] leading-none tracking-[-0.04em]" data-peak-figure="">
-              {peak.count.toLocaleString("en-US")}
-              <span className="ml-1.5 text-[12px] font-semibold tracking-tight text-[color:var(--fg-3,#5C647A)]">
-                / {detail.dated.toLocaleString("en-US")}
+            <p className="mt-2 flex flex-wrap items-baseline gap-x-1.5 gap-y-0 whitespace-nowrap scout-figure" data-peak-figure="">
+              <span className="font-mono text-[40px] font-bold leading-none tracking-[-0.06em] text-[color:var(--cobalt,#2F4FD8)]" data-peak-numerator="">
+                {peak.count.toLocaleString("en-US")}
+              </span>
+              <span className="font-mono text-[20px] font-semibold leading-none tracking-[-0.03em] text-[color:var(--fg-2,#3F465C)]" data-peak-denominator="">
+                /{detail.dated.toLocaleString("en-US")}
               </span>
             </p>
-            <p className="mt-1.5 text-[12px] font-semibold leading-4 tracking-tight text-[color:var(--fg,#0B0E17)]" data-peak-caption="">
+            <p className="mt-2 text-[13px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-peak-caption="">
               {peak.label} took {Math.round((peak.count / Math.max(1, detail.dated)) * 100)}% of dated signals
             </p>
           </div>
-          <ol className="flex h-11 max-w-[46%] flex-1 items-end gap-0.5" data-signals-landed-bars="" aria-hidden>
+          <ol className="flex h-12 max-w-[38%] shrink-0 items-end gap-0.5" data-signals-landed-bars="" aria-hidden>
             {bars.map((b) => (
               <li key={b.id} className="flex min-w-0 flex-1 flex-col items-center justify-end" data-signal-month={b.id} title={`${b.label}: ${b.count}`}>
                 <span
