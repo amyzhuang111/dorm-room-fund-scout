@@ -309,7 +309,7 @@ function SignatureBand({ stats, foundersListed = 0, foundersIndexed = 0, globe }
           <p className="sr-only" data-sample-strip-counts>
             <span data-count="founders-listed">{foundersListed.toLocaleString("en-US")}</span>
             {" founder names on companies · "}
-            <span data-count="founders-indexed">{(foundersIndexed || 0).toLocaleString("en-US")}</span>
+            <span data-count={foundersIndexed > 0 ? "founders-indexed" : undefined}>{foundersIndexed.toLocaleString("en-US")}</span>
             {" in the founder index · "}
             <span data-count="campuses-on-map">{campusesOnMap.toLocaleString("en-US")}</span>
             {" campuses on map"}

@@ -98,9 +98,9 @@ function PeakShareLite({
             <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Top campuses</p>
             <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
               <span className="font-bold text-[color:var(--fg,#0B0E17)]">{foundersListed.toLocaleString("en-US")}</span>
-              {" names · "}
+              {" founder names on investable companies · "}
               <span className="font-bold text-[color:var(--fg,#0B0E17)]">{campusesOnMap.toLocaleString("en-US")}</span>
-              {" on map"}
+              {" campuses on map"}
             </p>
             {/* Height twin for live campus ranks · avoids SSR name payload */}
             <div className="mt-2.5 h-[9.5rem]" data-fold-peak-campus-rank-reserve="" aria-hidden="true" />
