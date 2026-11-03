@@ -1,7 +1,6 @@
-// Official 2026 campus founder-sourcing and public discovery expansion.
-// "implemented" denotes database-ingested official roster or bounded project
-// sample; social tools and directories without per-entity validation remain
-// discovery-only. Never infer founders or enrollment from attendance alone.
+// Official student builder and public discovery source directory.
+// "implemented" means source records are ingested; general social search
+// destinations remain lead-only until corroborated by original postings.
 import type { SourceCatalogueEntry } from "./source-quality";
 
 export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
@@ -137,8 +136,9 @@ export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "Class years are historical evidence and do not mean current employment or founder status."
     ],
-    "status": "unconfigured",
-    "statusNote": "Discovery source; not all items have been individually verified or ingested."
+    "status": "implemented",
+    "statusNote": "Official 2026 cohort ingested in batch27 with individual source evidence; contest participants remain team members unless independently established as founders.",
+    "dbSourceId": "src_v3_city_yale_edu"
   },
   {
     "id": "cat_discovery_duke_showcase_26",
@@ -470,8 +470,9 @@ export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "The event includes teams from multiple universities; verify the school of individual participants."
     ],
-    "status": "unconfigured",
-    "statusNote": "Discovery source; not all items have been individually verified or ingested."
+    "status": "implemented",
+    "statusNote": "Official 2026 cohort ingested in batch28 with individual source evidence; contest participants remain team members unless independently established as founders.",
+    "dbSourceId": "src_v3_innovate_ucdavis_edu"
   },
   {
     "id": "cat_discovery_princeton_elab26",
