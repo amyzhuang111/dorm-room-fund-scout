@@ -1252,7 +1252,10 @@ details:not([open]) > :not(summary) {
 [data-corpus-csv]::before,
 [data-corpus-csv-mobile]::before,
 [data-corpus-cards] a.c-a::before,
-[data-fold-campus-chip]::before {
+[data-fold-campus-chip]::before,
+[data-fold-sheet-expand]::before,
+[data-founder-peek-open]::before,
+[data-founder-peek-chip]::before {
   content: "";
   position: absolute;
   left: 50%;

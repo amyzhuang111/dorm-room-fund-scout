@@ -189,8 +189,17 @@ async function measureFold(browser, base) {
     if (vp.name === "375") {
       const expand = page.locator("[data-fold-sheet-expand]").first();
       if (await expand.count()) {
-        await expand.click().catch(() => {});
+        await expand.click({ force: true }).catch(() => {});
         await page.waitForTimeout(500);
+        // If spring/sticky chrome blocked the tap, snap the sheet to deck height.
+        const mode = await page.evaluate(() => document.querySelector("[data-fold-map-sheet]")?.getAttribute("data-fold-sheet-mode"));
+        if (mode === "peek") {
+          await page.evaluate(() => {
+            const btn = document.querySelector("[data-fold-sheet-expand]");
+            btn?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+          });
+          await page.waitForTimeout(300);
+        }
       } else {
         await page.evaluate(() => {
           const sheet = document.querySelector("[data-fold-map-sheet]");
