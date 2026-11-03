@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Bobby Browser",
+    "university": "Rutgers University",
+    "campusId": "univ_rutgers",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://innovate.njaes.rutgers.edu/upitchnj-ru-2021/",
+    "program": "UPitchNJ / ScarletPitch 2026",
+    "source": "src_rutgers_upitch_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Aryan Patil",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://innovate.njaes.rutgers.edu/upitchnj-ru-2021/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "rutgers_upitch"
+  },
+  {
+    "name": "Reminisce",
+    "university": "Rutgers University",
+    "campusId": "univ_rutgers",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://innovate.njaes.rutgers.edu/upitchnj-ru-2021/",
+    "program": "UPitchNJ / ScarletPitch 2025",
+    "source": "src_rutgers_upitch_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Yusuf Sallam",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://innovate.njaes.rutgers.edu/upitchnj-ru-2021/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "rutgers_upitch"
+  },
+  {
+    "name": "HomeGuard",
+    "university": "Rutgers University",
+    "campusId": "univ_rutgers",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://innovate.njaes.rutgers.edu/upitchnj-ru-2021/",
+    "program": "UPitchNJ / ScarletPitch 2024",
+    "source": "src_rutgers_upitch_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Student winner)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://innovate.njaes.rutgers.edu/upitchnj-ru-2021/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "rutgers_upitch"
+  },
+  {
+    "name": "MoneyUp",
+    "university": "Rutgers University",
+    "campusId": "univ_rutgers",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://innovate.njaes.rutgers.edu/upitchnj-ru-2021/",
+    "program": "UPitchNJ / ScarletPitch 2023",
+    "source": "src_rutgers_upitch_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Alex Simeon",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://innovate.njaes.rutgers.edu/upitchnj-ru-2021/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "rutgers_upitch"
+  }
+]

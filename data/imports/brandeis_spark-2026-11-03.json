@@ -1,0 +1,305 @@
+[
+  {
+    "name": "Protégé.AI",
+    "university": "Brandeis University",
+    "campusId": "univ_brandeis",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html",
+    "program": "Brandeis SparkTank current projects",
+    "source": "src_brandeis_spark_2026_11_03",
+    "description": "This year’s SparkTank grant winner per Brandeis Spark current projects page",
+    "founders": [
+      {
+        "name": "Hardik Shukla",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "brandeis_spark"
+  },
+  {
+    "name": "GetTogether",
+    "university": "Brandeis University",
+    "campusId": "univ_brandeis",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html",
+    "program": "Brandeis SparkTank current projects",
+    "source": "src_brandeis_spark_2026_11_03",
+    "description": "This year’s SparkTank grant winner per Brandeis Spark current projects page",
+    "founders": [
+      {
+        "name": "Hui Wen",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "brandeis_spark"
+  },
+  {
+    "name": "Strangers",
+    "university": "Brandeis University",
+    "campusId": "univ_brandeis",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html",
+    "program": "Brandeis SparkTank current projects",
+    "source": "src_brandeis_spark_2026_11_03",
+    "description": "This year’s SparkTank grant winner per Brandeis Spark current projects page",
+    "founders": [
+      {
+        "name": "Ivy Tran",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "brandeis_spark"
+  },
+  {
+    "name": "MakeMySchedule",
+    "university": "Brandeis University",
+    "campusId": "univ_brandeis",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html",
+    "program": "Brandeis SparkTank current projects",
+    "source": "src_brandeis_spark_2026_11_03",
+    "description": "This year’s SparkTank grant winner per Brandeis Spark current projects page",
+    "founders": [
+      {
+        "name": "Vivek Hein",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      },
+      {
+        "name": "Salah Maalim",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "brandeis_spark"
+  },
+  {
+    "name": "Bookline",
+    "university": "Brandeis University",
+    "campusId": "univ_brandeis",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html",
+    "program": "Brandeis SparkTank current projects",
+    "source": "src_brandeis_spark_2026_11_03",
+    "description": "This year’s SparkTank grant winner per Brandeis Spark current projects page",
+    "founders": [
+      {
+        "name": "Jai Deshpande",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "brandeis_spark"
+  },
+  {
+    "name": "Remi AI",
+    "university": "Brandeis University",
+    "campusId": "univ_brandeis",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html",
+    "program": "Brandeis SparkTank current projects",
+    "source": "src_brandeis_spark_2026_11_03",
+    "description": "This year’s SparkTank grant winner per Brandeis Spark current projects page",
+    "founders": [
+      {
+        "name": "Heidy Naranjo",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      },
+      {
+        "name": "Gregory Oppong",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "brandeis_spark"
+  },
+  {
+    "name": "Cartlytics",
+    "university": "Brandeis University",
+    "campusId": "univ_brandeis",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html",
+    "program": "Brandeis SparkTank current projects",
+    "source": "src_brandeis_spark_2026_11_03",
+    "description": "This year’s SparkTank grant winner per Brandeis Spark current projects page",
+    "founders": [
+      {
+        "name": "Shaun Biswas",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "brandeis_spark"
+  },
+  {
+    "name": "NXPlay VR",
+    "university": "Brandeis University",
+    "campusId": "univ_brandeis",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html",
+    "program": "Brandeis SparkTank current projects",
+    "source": "src_brandeis_spark_2026_11_03",
+    "description": "This year’s SparkTank grant winner per Brandeis Spark current projects page",
+    "founders": [
+      {
+        "name": "Fitz Wangeru",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "brandeis_spark"
+  },
+  {
+    "name": "Field Vision",
+    "university": "Brandeis University",
+    "campusId": "univ_brandeis",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html",
+    "program": "Brandeis SparkTank current projects",
+    "source": "src_brandeis_spark_2026_11_03",
+    "description": "This year’s SparkTank grant winner per Brandeis Spark current projects page",
+    "founders": [
+      {
+        "name": "Elan Romo",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      },
+      {
+        "name": "Gabriel Diaz",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "brandeis_spark"
+  },
+  {
+    "name": "Ganfan",
+    "university": "Brandeis University",
+    "campusId": "univ_brandeis",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html",
+    "program": "Brandeis SparkTank current projects",
+    "source": "src_brandeis_spark_2026_11_03",
+    "description": "This year’s SparkTank grant winner per Brandeis Spark current projects page",
+    "founders": [
+      {
+        "name": "Xi Yu",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      },
+      {
+        "name": "Mo Chen",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "brandeis_spark"
+  },
+  {
+    "name": "RadiantAI",
+    "university": "Brandeis University",
+    "campusId": "univ_brandeis",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html",
+    "program": "Brandeis SparkTank current projects",
+    "source": "src_brandeis_spark_2026_11_03",
+    "description": "This year’s SparkTank grant winner per Brandeis Spark current projects page",
+    "founders": [
+      {
+        "name": "Pacifique Ishimwe",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.brandeis.edu/innovation/grant-programs/spark/current-projects.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "brandeis_spark"
+  }
+]

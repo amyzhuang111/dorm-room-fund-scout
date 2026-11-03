@@ -1,0 +1,173 @@
+[
+  {
+    "name": "OfferPilot",
+    "university": "Penn State University",
+    "campusId": "univ_penn_state_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/",
+    "program": "Penn State Summer Founders 2024",
+    "source": "src_psu_summer_founders_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Stephen Leshko",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/"
+      },
+      {
+        "name": "Omar Rady",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/"
+      },
+      {
+        "name": "Omer Kandemir",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/"
+      },
+      {
+        "name": "Yajat Dewan",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "psu_summer_founders"
+  },
+  {
+    "name": "Fourth State Therapeutics",
+    "university": "Penn State University",
+    "campusId": "univ_penn_state_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/",
+    "program": "Penn State Summer Founders 2024",
+    "source": "src_psu_summer_founders_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Ali Kazemi",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "psu_summer_founders"
+  },
+  {
+    "name": "Streamline Charging",
+    "university": "Penn State University",
+    "campusId": "univ_penn_state_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/",
+    "program": "Penn State Summer Founders 2024",
+    "source": "src_psu_summer_founders_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Jonathan Smith",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "psu_summer_founders"
+  },
+  {
+    "name": "Bool LLC",
+    "university": "Penn State University",
+    "campusId": "univ_penn_state_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/",
+    "program": "Penn State Summer Founders 2024",
+    "source": "src_psu_summer_founders_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Nicholas Cole",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "psu_summer_founders"
+  },
+  {
+    "name": "Atlas Biotech",
+    "university": "Penn State University",
+    "campusId": "univ_penn_state_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/",
+    "program": "Penn State Summer Founders 2024",
+    "source": "src_psu_summer_founders_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Joshua Reynolds",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "psu_summer_founders"
+  },
+  {
+    "name": "Saveware",
+    "university": "Penn State University",
+    "campusId": "univ_penn_state_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/",
+    "program": "Penn State Summer Founders 2024",
+    "source": "src_psu_summer_founders_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://invent.psu.edu/stories/summer-founders-program-awards-6-student-startups-each-with-15000/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "psu_summer_founders"
+  }
+]

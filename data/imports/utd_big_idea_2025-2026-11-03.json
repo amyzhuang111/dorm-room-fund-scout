@@ -1,0 +1,59 @@
+[
+  {
+    "name": "Biodelivera",
+    "university": "University of Texas at Dallas",
+    "campusId": "univ_university_of_texas_at_dallas",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://news.utdallas.edu/campus-community/big-idea-competition-2025/",
+    "program": "UTD Big Idea 2025",
+    "source": "src_utd_big_idea_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Ikeda Trashi",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://news.utdallas.edu/campus-community/big-idea-competition-2025/"
+      },
+      {
+        "name": "Orikeda Trashi",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://news.utdallas.edu/campus-community/big-idea-competition-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "utd_big_idea_2025"
+  },
+  {
+    "name": "Zephyr Technologies",
+    "university": "University of Texas at Dallas",
+    "campusId": "univ_university_of_texas_at_dallas",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://news.utdallas.edu/campus-community/big-idea-competition-2025/",
+    "program": "UTD Big Idea 2025",
+    "source": "src_utd_big_idea_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(UTD student team)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://news.utdallas.edu/campus-community/big-idea-competition-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "utd_big_idea_2025"
+  }
+]

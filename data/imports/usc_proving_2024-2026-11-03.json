@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Qatalyst Health",
+    "university": "University of South Carolina",
+    "campusId": "univ_sc",
+    "affiliation_type": "alumni",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://www.sc.edu/study/colleges_schools/moore/about/press_room/news_and_announcements/2024/provingground.php",
+    "program": "USC Proving Ground 2024",
+    "source": "src_usc_proving_2024_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Andrew Nye",
+        "affiliation_type": "alumni",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.sc.edu/study/colleges_schools/moore/about/press_room/news_and_announcements/2024/provingground.php"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "usc_proving_2024"
+  },
+  {
+    "name": "Charolina Carbon",
+    "university": "University of South Carolina",
+    "campusId": "univ_sc",
+    "affiliation_type": "alumni",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://www.sc.edu/study/colleges_schools/moore/about/press_room/news_and_announcements/2024/provingground.php",
+    "program": "USC Proving Ground 2024",
+    "source": "src_usc_proving_2024_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Trevor Corsello",
+        "affiliation_type": "alumni",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.sc.edu/study/colleges_schools/moore/about/press_room/news_and_announcements/2024/provingground.php"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "usc_proving_2024"
+  },
+  {
+    "name": "Drift",
+    "university": "University of South Carolina",
+    "campusId": "univ_sc",
+    "affiliation_type": "alumni",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://www.sc.edu/study/colleges_schools/moore/about/press_room/news_and_announcements/2024/provingground.php",
+    "program": "USC Proving Ground 2024",
+    "source": "src_usc_proving_2024_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Peyton Meredith",
+        "affiliation_type": "alumni",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.sc.edu/study/colleges_schools/moore/about/press_room/news_and_announcements/2024/provingground.php"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "usc_proving_2024"
+  }
+]

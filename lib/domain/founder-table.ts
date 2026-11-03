@@ -2,6 +2,8 @@ import { getDb } from "../db/client";
 import { campusSlug, shortCampusLabel } from "./campuses";
 import { listFoundersForPage } from "./queries";
 
+const TIER_RANK: Record<string, number> = { "S+": 0, S: 1, A: 2, B: 3, C: 4, D: 5, talent: 6, Unranked: 7 };
+
 export interface FounderTableRow {
   id: string;
   name: string;
@@ -63,7 +65,12 @@ export function loadFounderTable(universityId?: string): FounderTableRow[] {
         verified: founder.verificationStatus === "confirmed",
       };
     });
-  rows.sort((a, b) => signalTime(b.signalAt) - signalTime(a.signalAt) || a.name.localeCompare(b.name));
+  rows.sort(
+    (a, b) =>
+      (TIER_RANK[a.tier ?? "Unranked"] ?? 7) - (TIER_RANK[b.tier ?? "Unranked"] ?? 7) ||
+      signalTime(b.signalAt) - signalTime(a.signalAt) ||
+      a.name.localeCompare(b.name)
+  );
   return rows;
 }
 
@@ -78,16 +85,16 @@ function dated(value: string | null): string | null {
   return /^\d{4}-\d{2}-\d{2}/.test(value.trim()) ? value.trim() : null;
 }
 
-const TIER_RANK: Record<string, number> = { "S+": 0, S: 1, A: 2, B: 3, C: 4, D: 5 };
 
 function bestTier(values: (string | null | undefined)[]): string | null {
   let best: string | null = null;
   let rank = 99;
   for (const value of values) {
-    if (!value || TIER_RANK[value] == null) continue;
-    if (TIER_RANK[value] < rank) {
-      best = value;
-      rank = TIER_RANK[value];
+    const key = value && TIER_RANK[value] != null ? value : null;
+    if (!key) continue;
+    if (TIER_RANK[key] < rank) {
+      best = key;
+      rank = TIER_RANK[key];
     }
   }
   return best;

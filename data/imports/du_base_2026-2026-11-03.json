@@ -1,0 +1,84 @@
+[
+  {
+    "name": "Neuroclip",
+    "university": "University of Denver",
+    "campusId": "univ_denver",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://daniels.du.edu/blog/2026-base-camp-cohort-turns-problems-into-possibilities/",
+    "program": "DU BASE Camp 2026",
+    "source": "src_du_base_2026_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Kira Frey",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://daniels.du.edu/blog/2026-base-camp-cohort-turns-problems-into-possibilities/"
+      },
+      {
+        "name": "Juliana Ramirez",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://daniels.du.edu/blog/2026-base-camp-cohort-turns-problems-into-possibilities/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "du_base_2026"
+  },
+  {
+    "name": "noVice",
+    "university": "University of Denver",
+    "campusId": "univ_denver",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://daniels.du.edu/blog/2026-base-camp-cohort-turns-problems-into-possibilities/",
+    "program": "DU BASE Camp 2026",
+    "source": "src_du_base_2026_2026_11_03",
+    "description": "MBA student",
+    "founders": [
+      {
+        "name": "Summit Milone",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://daniels.du.edu/blog/2026-base-camp-cohort-turns-problems-into-possibilities/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "du_base_2026"
+  },
+  {
+    "name": "Freedom Aviation",
+    "university": "University of Denver",
+    "campusId": "univ_denver",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://daniels.du.edu/blog/2026-base-camp-cohort-turns-problems-into-possibilities/",
+    "program": "DU BASE Camp 2026",
+    "source": "src_du_base_2026_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Noah Berman",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://daniels.du.edu/blog/2026-base-camp-cohort-turns-problems-into-possibilities/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "du_base_2026"
+  }
+]

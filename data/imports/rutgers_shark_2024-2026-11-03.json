@@ -1,0 +1,77 @@
+[
+  {
+    "name": "MoneyUp",
+    "university": "Rutgers University",
+    "campusId": "univ_rutgers",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.business.rutgers.edu/news/three-winners-share-10000-prize-shark-tank-finale",
+    "program": "Rutgers Shark Tank 2024",
+    "source": "src_rutgers_shark_2024_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Student winner)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.business.rutgers.edu/news/three-winners-share-10000-prize-shark-tank-finale"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "rutgers_shark_2024"
+  },
+  {
+    "name": "CarbonX",
+    "university": "Rutgers University",
+    "campusId": "univ_rutgers",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.business.rutgers.edu/news/three-winners-share-10000-prize-shark-tank-finale",
+    "program": "Rutgers Shark Tank 2024",
+    "source": "src_rutgers_shark_2024_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Student winner)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.business.rutgers.edu/news/three-winners-share-10000-prize-shark-tank-finale"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "rutgers_shark_2024"
+  },
+  {
+    "name": "SageTech",
+    "university": "Rutgers University",
+    "campusId": "univ_rutgers",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.business.rutgers.edu/news/three-winners-share-10000-prize-shark-tank-finale",
+    "program": "Rutgers Shark Tank 2024",
+    "source": "src_rutgers_shark_2024_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Student winner)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.business.rutgers.edu/news/three-winners-share-10000-prize-shark-tank-finale"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "rutgers_shark_2024"
+  }
+]

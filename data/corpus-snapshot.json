@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-11-03T07:55:15.188Z",
+  "generatedAt": "2026-11-03T09:02:52.663Z",
   "dbPath": "data/campus-universe.db",
-  "investableCompanies": 1388,
+  "investableCompanies": 1614,
   "signals": 1476,
   "datedSignals": 279,
   "undatedSignals": 811,
-  "people": 6192,
-  "founders": 3051,
+  "people": 6310,
+  "founders": 3169,
   "campuses": 170,
   "withSignal": 649,
   "ycCompanies": 564,
   "peak": {
-    "peakCount": 33,
+    "peakCount": 34,
     "peakId": "2026-04",
     "peakLabel": "Apr 2026",
-    "dated": 81,
-    "sharePct": 41,
-    "inWindow": 69,
+    "dated": 98,
+    "sharePct": 35,
+    "inWindow": 70,
     "earlierValid": 0,
-    "undatedMonth": 12,
-    "quiet": 1207
+    "undatedMonth": 28,
+    "quiet": 1416
   },
   "restore": {
     "beforeInvestable": 2499,
@@ -27,29 +27,29 @@
     "restoredDrops": 10,
     "kaigoMerged": true
   },
-  "directoryCards": 1388,
+  "directoryCards": 1614,
   "signalsDated": 665,
   "signalsUndated": 811,
-  "foundersIndexed": 3356,
-  "foundersListed": 2257,
+  "foundersIndexed": 3474,
+  "foundersListed": 2379,
   "campusesTotal": 170,
-  "campusesOnMap": 163,
-  "campusesWithFounders": 68,
-  "companiesWithSignal": 181,
+  "campusesOnMap": 166,
+  "campusesWithFounders": 85,
+  "companiesWithSignal": 198,
   "ycMembership": 319,
   "campusFoundersTop": [
     {
       "name": "University of Pennsylvania",
       "short": "Penn",
       "founders": 758,
-      "companies": 203,
+      "companies": 204,
       "country": "United States"
     },
     {
       "name": "Stanford University",
       "short": "Stanford",
-      "founders": 300,
-      "companies": 195,
+      "founders": 308,
+      "companies": 199,
       "country": "United States"
     },
     {
@@ -62,8 +62,8 @@
     {
       "name": "Massachusetts Institute of Technology",
       "short": "MIT",
-      "founders": 238,
-      "companies": 153,
+      "founders": 239,
+      "companies": 154,
       "country": "United States"
     },
     {
@@ -76,8 +76,8 @@
     {
       "name": "Columbia University",
       "short": "Columbia",
-      "founders": 155,
-      "companies": 36,
+      "founders": 157,
+      "companies": 37,
       "country": "United States"
     },
     {
@@ -109,7 +109,7 @@
       "country": "United States"
     }
   ],
-  "companiesTotal": 5819,
-  "excludedOlderAlumni": 235,
-  "unverifiedRecency": 4163
+  "companiesTotal": 6027,
+  "excludedOlderAlumni": 234,
+  "unverifiedRecency": 4145
 }

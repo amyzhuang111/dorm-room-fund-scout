@@ -49,6 +49,7 @@ export function GateBadge({ result, gateOutcomes }: { result: string | null; gat
 }
 
 const TIER_CLASS: Record<string, string> = {
+  Unranked: "tier-chip tier-none",
   "S+": "tier-chip tier-splus",
   S: "tier-chip tier-s",
   A: "tier-chip tier-a",
@@ -70,13 +71,13 @@ export function SameSchoolBadge() {
 }
 
 export function SignalTierBadge({ tier, basis }: { tier: string | null | undefined; basis?: string | null }) {
-  if (!tier) return null;
+  const label = tier && tier.trim() ? tier : "Unranked";
   return (
     <span
-      className={`inline-flex shrink-0 items-center leading-none ${TIER_CLASS[tier] ?? "tier-chip tier-none"}`}
-      title={basis ? `Signal tier ${tier}. ${basis}` : `Signal tier ${tier}`}
+      className={`inline-flex shrink-0 items-center leading-none ${TIER_CLASS[label] ?? "tier-chip tier-none"}`}
+      title={basis ? `Signal tier ${label}. ${basis}` : label === "Unranked" ? "No program, funding, or verified national-signal evidence on file." : `Signal tier ${label}`}
     >
-      {tier}
+      {label}
     </span>
   );
 }

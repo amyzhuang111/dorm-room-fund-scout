@@ -1,0 +1,27 @@
+[
+  {
+    "name": "UpAhead",
+    "university": "University of South Carolina",
+    "campusId": "univ_sc",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://sc.edu/study/colleges_schools/moore/research_and_centers/centers/faber_entrepreneurship_center/proving_ground.php",
+    "program": "USC Proving Ground past winners",
+    "source": "src_usc_proving_hub_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(USC student/alum within 3 years)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://sc.edu/study/colleges_schools/moore/research_and_centers/centers/faber_entrepreneurship_center/proving_ground.php"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "usc_proving_hub"
+  }
+]

@@ -1,0 +1,552 @@
+[
+  {
+    "name": "Padly",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2026",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2026)",
+    "founders": [
+      {
+        "name": "Jacob Tarantelli",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Gear Share",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2026",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2026)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Kloset Klick",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2026",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2026)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Lithaos",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2026",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2026)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "OrthoLink",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2026",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2026)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "ATHENGUARD",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2025",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2025)",
+    "founders": [
+      {
+        "name": "Sai Devulapalli",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Genesis Zero",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2025",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2025)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Bebop",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2025",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2025)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "YourGuide eXplorer",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2025",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2025)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Job Jumper",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2025",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2025)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Raide",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2024",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2024)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "E. esperance",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2024",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2024)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Highlighter Cosmetics",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2024",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2024)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Growth & Progress Realty",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2024",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2024)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Aqua Insights",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2024",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2024)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "PlayerWallet",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2024",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2024)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Save A Pick Inc.",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2023",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2023)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Elevated Flavors",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2023",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2023)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Miss Posie Pockets",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2023",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2023)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Tallahassee Exchange",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2023",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2023)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Uni Cleaning Crew",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2023",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2023)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  },
+  {
+    "name": "Gas Money LLC",
+    "university": "Florida State University",
+    "campusId": "univ_fsu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists",
+    "program": "FSU InNOLEvation Challenge 2023",
+    "source": "src_fsu_innolevation_2026_11_03",
+    "description": "Named prize winner on FSU previous-finalists archive (2023)",
+    "founders": [
+      {
+        "name": "(Student founder)",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://jimmorancollege.fsu.edu/previous-finalists"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "fsu_innolevation"
+  }
+]

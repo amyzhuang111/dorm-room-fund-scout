@@ -1,0 +1,127 @@
+[
+  {
+    "name": "Cardiovolt.ai",
+    "university": "Imperial College London",
+    "campusId": "univ_imperial",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.imperialenterpriselab.com/vcc-2025/",
+    "program": "Imperial VCC 2025 Grand Final",
+    "source": "src_imperial_vcc_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Imperial student/grad finalist)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.imperialenterpriselab.com/vcc-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "imperial_vcc_2025"
+  },
+  {
+    "name": "PHLYXR",
+    "university": "Imperial College London",
+    "campusId": "univ_imperial",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.imperialenterpriselab.com/vcc-2025/",
+    "program": "Imperial VCC 2025 Grand Final",
+    "source": "src_imperial_vcc_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Imperial student/grad finalist)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.imperialenterpriselab.com/vcc-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "imperial_vcc_2025"
+  },
+  {
+    "name": "Reporti",
+    "university": "Imperial College London",
+    "campusId": "univ_imperial",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.imperialenterpriselab.com/vcc-2025/",
+    "program": "Imperial VCC 2025 Grand Final",
+    "source": "src_imperial_vcc_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Imperial student/grad finalist)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.imperialenterpriselab.com/vcc-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "imperial_vcc_2025"
+  },
+  {
+    "name": "Muju Earth",
+    "university": "Imperial College London",
+    "campusId": "univ_imperial",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.imperialenterpriselab.com/vcc-2025/",
+    "program": "Imperial VCC 2025 Grand Final",
+    "source": "src_imperial_vcc_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Imperial student/grad finalist)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.imperialenterpriselab.com/vcc-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "imperial_vcc_2025"
+  },
+  {
+    "name": "Arcus Dental",
+    "university": "Imperial College London",
+    "campusId": "univ_imperial",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.imperialenterpriselab.com/vcc-2025/",
+    "program": "Imperial VCC 2025 Grand Final",
+    "source": "src_imperial_vcc_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "(Imperial student/grad finalist)",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.imperialenterpriselab.com/vcc-2025/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "imperial_vcc_2025"
+  }
+]

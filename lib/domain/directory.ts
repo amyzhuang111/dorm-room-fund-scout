@@ -57,6 +57,7 @@ export interface DirectoryData {
 
 const STAGE_LABEL: Record<string, string> = {
   "pre-seed": "Pre-seed",
+  "pre-seed / student project": "Pre-seed / student project",
   seed: "Seed",
   "series a": "Series A",
   "series b": "Series B",

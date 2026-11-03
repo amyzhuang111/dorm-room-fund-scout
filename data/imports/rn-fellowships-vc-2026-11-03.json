@@ -1,0 +1,921 @@
+[
+  {
+    "name": "Kinth",
+    "university": "Columbia University",
+    "campusId": "univ_columbia",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://kinth.ai/",
+    "evidence_url": "https://kinth.ai/",
+    "program": "Dorm Room Fund portfolio",
+    "source": "src_drf_portfolio_directory",
+    "description": "AI design automation platform that turns requirements into editable, manufacturable CAD.",
+    "founders": [
+      {
+        "name": "Omar Mansour",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.linkedin.com/in/omar-mansour-065b66241"
+      },
+      {
+        "name": "Arhon Strauss",
+        "affiliation_type": "alumni",
+        "grad_year": 2026,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.linkedin.com/in/arhon-strauss-753893236"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Dorm Room Fund",
+        "source_url": "https://kinth.ai/",
+        "round": null
+      },
+      {
+        "name": "Dorm Room Fund",
+        "source_url": "https://www.dormroomfund.com/portfolio",
+        "round": null
+      },
+      {
+        "name": "Dynamo VC",
+        "source_url": "https://www.linkedin.com/in/arhon-strauss-753893236",
+        "round": null
+      },
+      {
+        "name": "Equal VC",
+        "source_url": "https://www.linkedin.com/in/arhon-strauss-753893236",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drf_portfolio"
+  },
+  {
+    "name": "Bobyard",
+    "university": "Stanford University",
+    "campusId": "univ_stanford",
+    "affiliation_type": "alumni",
+    "cohort_year": 2023,
+    "enrollment_status": "recent_grad",
+    "website": "https://www.bobyard.com/",
+    "evidence_url": "https://pear.vc/bobyard-series-a/",
+    "program": "PearX S23 / Series A (8VC led)",
+    "source": "src_pearx_bobyard",
+    "description": "AI platform for construction takeoffs and estimates.",
+    "founders": [
+      {
+        "name": "Michael Ding",
+        "affiliation_type": "alumni",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://pear.vc/bobyard-series-a/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Pear VC",
+        "source_url": "https://pear.vc/bobyard-series-a/",
+        "round": "Series A"
+      },
+      {
+        "name": "8VC",
+        "source_url": "https://pear.vc/bobyard-series-a/",
+        "round": "Series A"
+      },
+      {
+        "name": "Primary Venture Partners",
+        "source_url": "https://pear.vc/bobyard-series-a/",
+        "round": "Series A"
+      },
+      {
+        "name": "Caffeinated Capital",
+        "source_url": "https://pear.vc/bobyard-series-a/",
+        "round": "Series A"
+      },
+      {
+        "name": "PearX",
+        "source_url": "https://pear.vc/pearx/",
+        "round": "S23"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "pear_garage_pearx"
+  },
+  {
+    "name": "Ghost AI",
+    "university": null,
+    "campusId": null,
+    "affiliation_type": "unknown",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://ghost.ai/",
+    "evidence_url": "https://ghost.ai/",
+    "program": "a16z seed (public press)",
+    "source": "src_a16z_ghost",
+    "description": "Personal on-device AI computer (Core).",
+    "founders": [
+      {
+        "name": "Zain Javaid",
+        "affiliation_type": "unknown",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://www.linkedin.com/posts/kirschkatie_today-zain-javaid-who-just-graduated-high-activity-7513023062125166592-kyeG"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Andreessen Horowitz",
+        "source_url": "https://ghost.ai/",
+        "round": "Seed"
+      }
+    ],
+    "_eligible": false,
+    "_exclude_reason": "founder is recent high-school graduate who declined Yale; no college student or class-of-2023+ enrollment evidence (distinct from Ghost Robotics already in corpus)",
+    "_source_key": "vc_seed_series_a"
+  },
+  {
+    "name": "Andera",
+    "university": "Massachusetts Institute of Technology",
+    "campusId": "univ_mit",
+    "affiliation_type": "alumni",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": "https://www.andera.ai/",
+    "evidence_url": "https://pear.vc/andera-series-a/",
+    "program": "PearX S24 / Lightspeed Series A",
+    "source": "src_pearx_andera",
+    "description": "AI-native platform for internal audit and control testing.",
+    "founders": [
+      {
+        "name": "Aryo Patel",
+        "affiliation_type": "alumni",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://pear.vc/andera-series-a/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Pear VC",
+        "source_url": "https://pear.vc/andera-series-a/",
+        "round": "pre-seed"
+      },
+      {
+        "name": "PearX",
+        "source_url": "https://pear.vc/pearx/",
+        "round": "S24"
+      },
+      {
+        "name": "Lightspeed Venture Partners",
+        "source_url": "https://lsvp.com/stories/audits-moment-has-arrived-why-we-invested-in-andera/",
+        "round": "Series A"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "pear_garage_pearx"
+  },
+  {
+    "name": "Phinity Labs",
+    "university": "Stanford University",
+    "campusId": "univ_stanford",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://www.phinity.cc/",
+    "evidence_url": "https://uncorkcapital.com/blog/reinventing-chip-design-ai-era-phinity-labs",
+    "program": "PearX S25",
+    "source": "src_pearx_phinity",
+    "description": "AI agents for chip design, verification, and tape-out.",
+    "founders": [
+      {
+        "name": "Sonya Jin",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://uncorkcapital.com/blog/reinventing-chip-design-ai-era-phinity-labs"
+      },
+      {
+        "name": "Aadi Nashikkar",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://profiles.stanford.edu/aadi-nashikkar"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Pear VC",
+        "source_url": "https://pear.vc/pearx/",
+        "round": "S25"
+      },
+      {
+        "name": "PearX",
+        "source_url": "https://pear.vc/pearx/",
+        "round": "S25"
+      },
+      {
+        "name": "Uncork Capital",
+        "source_url": "https://uncorkcapital.com/blog/reinventing-chip-design-ai-era-phinity-labs",
+        "round": "Seed"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "pear_garage_pearx"
+  },
+  {
+    "name": "Vals AI",
+    "university": "Stanford University",
+    "campusId": "univ_stanford",
+    "affiliation_type": "alumni",
+    "cohort_year": 2023,
+    "enrollment_status": "recent_grad",
+    "website": "https://www.vals.ai/",
+    "evidence_url": "https://pear.vc/pearx/",
+    "program": "PearX S23 / a16z Series A",
+    "source": "src_pearx_vals",
+    "description": "AI evaluation / benchmarks company from PearX S23.",
+    "founders": [
+      {
+        "name": "Rayan Krishnan",
+        "affiliation_type": "alumni",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://commencement.stanford.edu/sites/g/files/sbiybj17666/files/media/file/commencement2023.pdf"
+      },
+      {
+        "name": "Langston Nashold",
+        "affiliation_type": "alumni",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://pear.vc/pearx/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Pear VC",
+        "source_url": "https://pear.vc/pearx/",
+        "round": "S23"
+      },
+      {
+        "name": "PearX",
+        "source_url": "https://pear.vc/pearx/",
+        "round": "S23"
+      },
+      {
+        "name": "Andreessen Horowitz",
+        "source_url": "https://pear.vc/pearx/",
+        "round": "Series A"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "pear_garage_pearx"
+  },
+  {
+    "name": "Known",
+    "university": "Stanford University",
+    "campusId": "univ_stanford",
+    "affiliation_type": "alumni",
+    "cohort_year": 2025,
+    "enrollment_status": "recent_grad",
+    "website": "https://known.com/",
+    "evidence_url": "https://techcrunch.com/2025/12/19/known-uses-voice-ai-to-help-you-go-on-more-in-person-dates/",
+    "program": "PearX S25",
+    "source": "src_pearx_known",
+    "description": "Voice AI dating product for in-person dates.",
+    "founders": [
+      {
+        "name": "Celeste Amadon",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://pear.vc/pearx/"
+      },
+      {
+        "name": "Asher Allen",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.nbcbayarea.com/news/local/stanford-known-dating-app-ai/4091043/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Pear VC",
+        "source_url": "https://pear.vc/pearx/",
+        "round": "S25"
+      },
+      {
+        "name": "PearX",
+        "source_url": "https://pear.vc/pearx/",
+        "round": "S25"
+      },
+      {
+        "name": "Forerunner Ventures",
+        "source_url": "https://techcrunch.com/2025/12/19/known-uses-voice-ai-to-help-you-go-on-more-in-person-dates/",
+        "round": "Seed"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "pear_garage_pearx",
+    "_alias_match": [
+      "Known Dating"
+    ]
+  },
+  {
+    "name": "ResiQuant",
+    "university": "Stanford University",
+    "campusId": "univ_stanford",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://www.resiquant.ai/",
+    "evidence_url": "https://pear.vc/inside-pearx-resiquants-s24-journey-from-dorm-room-to-pearx/",
+    "program": "PearX S24",
+    "source": "src_pearx_resiquant",
+    "description": "AI for property insurance submission intake and catastrophe underwriting.",
+    "founders": [
+      {
+        "name": "Omar Issa",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://pear.vc/inside-pearx-resiquants-s24-journey-from-dorm-room-to-pearx/"
+      },
+      {
+        "name": "Francisco Galvis",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://pear.vc/inside-pearx-resiquants-s24-journey-from-dorm-room-to-pearx/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Pear VC",
+        "source_url": "https://pear.vc/inside-pearx-resiquants-s24-journey-from-dorm-room-to-pearx/",
+        "round": "S24"
+      },
+      {
+        "name": "PearX",
+        "source_url": "https://pear.vc/pearx/",
+        "round": "S24"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "pear_garage_pearx"
+  },
+  {
+    "name": "StormFree Labs",
+    "university": "Brandeis University",
+    "campusId": "univ_brandeis",
+    "affiliation_type": "alumni",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": "https://www.stormfreelabs.ai/",
+    "evidence_url": "https://www.thejustice.org/article/2026/10/alumni-spotlight-marco-qin-24-considers-his-next-steps",
+    "program": "Afore Capital portfolio",
+    "source": "src_afore_stormfree",
+    "description": "Automation for family businesses.",
+    "founders": [
+      {
+        "name": "Marco Qin",
+        "affiliation_type": "alumni",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.thejustice.org/article/2026/10/alumni-spotlight-marco-qin-24-considers-his-next-steps"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Afore Capital",
+        "source_url": "https://www.afore.vc/portfolio",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "afore"
+  },
+  {
+    "name": "Juicebox",
+    "university": "Dartmouth College",
+    "campusId": "univ_dartmouth",
+    "affiliation_type": "alumni",
+    "cohort_year": 2026,
+    "enrollment_status": "recent_grad",
+    "website": "https://juicebox.ai/",
+    "evidence_url": "https://insights.tryspecter.com/thiel-fellows-2026/",
+    "program": "Thiel Fellowship 2026",
+    "source": "src_thiel_2026_juicebox",
+    "description": "AI recruiter searching profiles by real skills.",
+    "founders": [
+      {
+        "name": "Ishan Gupta",
+        "affiliation_type": "alumni",
+        "grad_year": 2026,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://insights.tryspecter.com/thiel-fellows-2026/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Thiel Fellowship",
+        "source_url": "https://insights.tryspecter.com/thiel-fellows-2026/",
+        "round": "2026"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "thiel_fellowship",
+    "_reenable_note": "Previously excluded as older; public Thiel 2026 profile shows Dartmouth CS dropout after ~90 days"
+  },
+  {
+    "name": "Greptile",
+    "university": "Georgia Institute of Technology",
+    "campusId": "univ_gatech",
+    "affiliation_type": "alumni",
+    "cohort_year": 2023,
+    "enrollment_status": "recent_grad",
+    "website": "https://www.greptile.com",
+    "evidence_url": "https://www.linkedin.com/in/dakshg",
+    "program": "Z Fellows",
+    "source": "src_zfellows_greptile",
+    "description": "AI agents that review and test PRs.",
+    "founders": [
+      {
+        "name": "Daksh Gupta",
+        "affiliation_type": "alumni",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.linkedin.com/in/dakshg"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Z Fellows",
+        "source_url": "https://recentfunding.com/accelerators/zfellows/",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "z_fellows"
+  },
+  {
+    "name": "Mach Industries",
+    "university": "Massachusetts Institute of Technology",
+    "campusId": "univ_mit",
+    "affiliation_type": "alumni",
+    "cohort_year": 2023,
+    "enrollment_status": "recent_grad",
+    "website": "https://machindustries.com/",
+    "evidence_url": "https://techcrunch.com/2023/07/13/meet-the-19-year-old-mit-drop-out-replacing-gunpowder-for-the-defense-industry/",
+    "program": "Z Fellows / Thiel Fellowship",
+    "source": "src_zfellows_mach",
+    "description": "Asymmetric aerospace and defense systems.",
+    "founders": [
+      {
+        "name": "Ethan Thornton",
+        "affiliation_type": "alumni",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://techcrunch.com/2023/07/13/meet-the-19-year-old-mit-drop-out-replacing-gunpowder-for-the-defense-industry/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Z Fellows",
+        "source_url": "https://recentfunding.com/accelerators/zfellows/",
+        "round": null
+      },
+      {
+        "name": "Thiel Fellowship",
+        "source_url": "https://techcrunch.com/2023/07/13/meet-the-19-year-old-mit-drop-out-replacing-gunpowder-for-the-defense-industry/",
+        "round": null
+      },
+      {
+        "name": "Sequoia Capital",
+        "source_url": "https://techcrunch.com/2025/03/04/mach-industries-founded-by-21-year-old-ethan-thornton-lands-us-army-contract-builds-weapons-factory/",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "z_fellows"
+  },
+  {
+    "name": "Mercor",
+    "university": "Harvard University",
+    "campusId": "univ_harvard",
+    "affiliation_type": "alumni",
+    "cohort_year": 2025,
+    "enrollment_status": "recent_grad",
+    "website": "https://www.mercor.com/",
+    "evidence_url": "https://www.thecrimson.com/article/2024/3/27/thiel-fellowship-startups-2024/",
+    "program": "Thiel Fellowship 2024",
+    "source": "src_thiel_mercor",
+    "description": "AI recruiting platform.",
+    "founders": [
+      {
+        "name": "Adarsh Hiremath",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.thecrimson.com/article/2024/3/27/thiel-fellowship-startups-2024/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Thiel Fellowship",
+        "source_url": "https://www.thecrimson.com/article/2024/3/27/thiel-fellowship-startups-2024/",
+        "round": "2024"
+      },
+      {
+        "name": "Benchmark",
+        "source_url": "https://www.mercor.com/blog/series-c/",
+        "round": "Series C"
+      },
+      {
+        "name": "General Catalyst",
+        "source_url": "https://www.mercor.com/blog/series-c/",
+        "round": "Series C"
+      },
+      {
+        "name": "Felicis",
+        "source_url": "https://www.mercor.com/blog/series-c/",
+        "round": "Series C"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "thiel_fellowship"
+  },
+  {
+    "name": "Cognition",
+    "university": "Harvard University",
+    "campusId": "univ_harvard",
+    "affiliation_type": "alumni",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": "https://cognition.com/",
+    "evidence_url": "https://www.thecrimson.com/article/2024/3/27/thiel-fellowship-startups-2024/",
+    "program": "Thiel Fellowship 2024 / Z Fellows",
+    "source": "src_thiel_cognition",
+    "description": "AI software engineer (Devin).",
+    "founders": [
+      {
+        "name": "Walden Yan",
+        "affiliation_type": "alumni",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.thecrimson.com/article/2024/3/27/thiel-fellowship-startups-2024/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Thiel Fellowship",
+        "source_url": "https://www.thecrimson.com/article/2024/3/27/thiel-fellowship-startups-2024/",
+        "round": "2024"
+      },
+      {
+        "name": "Z Fellows",
+        "source_url": "https://www.zfellows.com/",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "thiel_fellowship"
+  },
+  {
+    "name": "Etched",
+    "university": "Harvard University",
+    "campusId": "univ_harvard",
+    "affiliation_type": "alumni",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": "https://www.etched.com/",
+    "evidence_url": "https://www.thecrimson.com/article/2024/3/27/thiel-fellowship-startups-2024/",
+    "program": "Thiel Fellowship 2024 / Z Fellows",
+    "source": "src_thiel_etched",
+    "description": "AI inference chips.",
+    "founders": [
+      {
+        "name": "Christopher Zhu",
+        "affiliation_type": "alumni",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.thecrimson.com/article/2024/3/27/thiel-fellowship-startups-2024/"
+      },
+      {
+        "name": "Gavin Uberti",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.thecrimson.com/article/2024/3/27/thiel-fellowship-startups-2024/"
+      },
+      {
+        "name": "Robert Wachen",
+        "affiliation_type": "alumni",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.thecrimson.com/article/2024/3/27/thiel-fellowship-startups-2024/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Thiel Fellowship",
+        "source_url": "https://www.thecrimson.com/article/2024/3/27/thiel-fellowship-startups-2024/",
+        "round": "2024"
+      },
+      {
+        "name": "Z Fellows",
+        "source_url": "https://recentfunding.com/accelerators/zfellows/",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "thiel_fellowship"
+  },
+  {
+    "name": "Avoca",
+    "university": null,
+    "campusId": null,
+    "affiliation_type": "unknown",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.avoca.ai/",
+    "evidence_url": "https://recentfunding.com/accelerators/zfellows/",
+    "program": "Z Fellows",
+    "source": "src_zfellows_avoca",
+    "description": "AI communication agents for home services.",
+    "founders": [],
+    "investors": [
+      {
+        "name": "Z Fellows",
+        "source_url": "https://recentfunding.com/accelerators/zfellows/",
+        "round": null
+      }
+    ],
+    "_eligible": false,
+    "_exclude_reason": "listed on Z Fellows directory but no public 2023+ student/alumni campus evidence found this pass; investor edge only if already investable",
+    "_source_key": "z_fellows",
+    "_investor_only_if_existing": true
+  },
+  {
+    "name": "Tempo",
+    "university": null,
+    "campusId": null,
+    "affiliation_type": "unknown",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.trysequel.com/",
+    "evidence_url": "https://www.dormroomfund.com/portfolio",
+    "program": "Dorm Room Fund portfolio",
+    "source": "src_drf_tempo",
+    "description": null,
+    "founders": [],
+    "investors": [
+      {
+        "name": "Dorm Room Fund",
+        "source_url": "https://www.dormroomfund.com/portfolio",
+        "round": null
+      }
+    ],
+    "_eligible": false,
+    "_exclude_reason": "already investable; attaching DRF investor edge only (no new founder eligibility research this pass)",
+    "_source_key": "drf_portfolio",
+    "_investor_only_if_existing": true
+  },
+  {
+    "name": "Mintlify",
+    "university": "Cornell University",
+    "campusId": "univ_cornell",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.mintlify.com/",
+    "evidence_url": "https://techcrunch.com/2024/09/05/mintlify-is-building-a-next-gen-platform-for-writing-software-docs/",
+    "program": "Z Fellows",
+    "source": "src_zfellows_mintlify",
+    "description": "Knowledge infrastructure / docs for AI.",
+    "founders": [
+      {
+        "name": "Hahnbee Lee",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.lemelson.org/hahnbee-lee/"
+      },
+      {
+        "name": "Han Wang",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://baincapitalventures.com/insight/mintlify-is-built-for-builders/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Z Fellows",
+        "source_url": "https://recentfunding.com/accelerators/zfellows/",
+        "round": null
+      }
+    ],
+    "_eligible": false,
+    "_exclude_reason": "Cornell senior-year founders ~class of 2022 (pre-2023 filter)",
+    "_source_key": "z_fellows"
+  },
+  {
+    "name": "Answers AI",
+    "university": "University of Southern California",
+    "campusId": "univ_usc",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://answersai.ai/",
+    "evidence_url": "https://www.array.vc/portfolio/answersai",
+    "program": "Dorm Room Fund portfolio",
+    "source": "src_drf_answersai",
+    "description": "AI education / tutoring.",
+    "founders": [
+      {
+        "name": "Mamoun Debbagh",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://www.linkedin.com/in/mamoun-debbagh-882163196"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Dorm Room Fund",
+        "source_url": "https://www.dormroomfund.com/portfolio",
+        "round": null
+      }
+    ],
+    "_eligible": false,
+    "_exclude_reason": "DRF portco; founder attended SkyDeck in 2020 and no public class-of-2023+ evidence found this pass",
+    "_source_key": "drf_portfolio"
+  },
+  {
+    "name": "Cavalla",
+    "university": null,
+    "campusId": null,
+    "affiliation_type": "unknown",
+    "cohort_year": 2026,
+    "enrollment_status": null,
+    "website": "https://cavalla.io",
+    "evidence_url": "https://insights.tryspecter.com/thiel-fellows-2026/",
+    "program": "Thiel Fellowship 2026",
+    "source": "src_thiel_2026_cavalla",
+    "description": null,
+    "founders": [],
+    "investors": [
+      {
+        "name": "Thiel Fellowship",
+        "source_url": "https://insights.tryspecter.com/thiel-fellows-2026/",
+        "round": "2026"
+      }
+    ],
+    "_eligible": false,
+    "_exclude_reason": "already in corpus as investable; attaching Thiel Fellowship investor edge only this pass",
+    "_source_key": "thiel_fellowship",
+    "_investor_only_if_existing": true
+  },
+  {
+    "name": "EveryTicker",
+    "university": null,
+    "campusId": null,
+    "affiliation_type": "unknown",
+    "cohort_year": 2026,
+    "enrollment_status": null,
+    "website": "https://everyticker.com",
+    "evidence_url": "https://insights.tryspecter.com/thiel-fellows-2026/",
+    "program": "Thiel Fellowship 2026",
+    "source": "src_thiel_2026_everyticker",
+    "description": null,
+    "founders": [],
+    "investors": [
+      {
+        "name": "Thiel Fellowship",
+        "source_url": "https://insights.tryspecter.com/thiel-fellows-2026/",
+        "round": "2026"
+      }
+    ],
+    "_eligible": false,
+    "_exclude_reason": "already in corpus as investable; attaching Thiel Fellowship investor edge only this pass",
+    "_source_key": "thiel_fellowship",
+    "_investor_only_if_existing": true
+  },
+  {
+    "name": "Sentient Machines",
+    "university": null,
+    "campusId": null,
+    "affiliation_type": "unknown",
+    "cohort_year": 2026,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://insights.tryspecter.com/thiel-fellows-2026/",
+    "program": "Thiel Fellowship 2026",
+    "source": "src_thiel_2026_sentient_machines",
+    "description": null,
+    "founders": [],
+    "investors": [
+      {
+        "name": "Thiel Fellowship",
+        "source_url": "https://insights.tryspecter.com/thiel-fellows-2026/",
+        "round": "2026"
+      }
+    ],
+    "_eligible": false,
+    "_exclude_reason": "already in corpus as investable; attaching Thiel Fellowship investor edge only this pass",
+    "_source_key": "thiel_fellowship",
+    "_investor_only_if_existing": true
+  },
+  {
+    "name": "Opt32",
+    "university": null,
+    "campusId": null,
+    "affiliation_type": "unknown",
+    "cohort_year": 2026,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://insights.tryspecter.com/thiel-fellows-2026/",
+    "program": "Thiel Fellowship 2026",
+    "source": "src_thiel_2026_opt32",
+    "description": null,
+    "founders": [],
+    "investors": [
+      {
+        "name": "Thiel Fellowship",
+        "source_url": "https://insights.tryspecter.com/thiel-fellows-2026/",
+        "round": "2026"
+      }
+    ],
+    "_eligible": false,
+    "_exclude_reason": "already in corpus as investable; attaching Thiel Fellowship investor edge only this pass",
+    "_source_key": "thiel_fellowship",
+    "_investor_only_if_existing": true
+  },
+  {
+    "name": "Praso",
+    "university": null,
+    "campusId": null,
+    "affiliation_type": "unknown",
+    "cohort_year": 2026,
+    "enrollment_status": null,
+    "website": "https://praso.com.br",
+    "evidence_url": "https://insights.tryspecter.com/thiel-fellows-2026/",
+    "program": "Thiel Fellowship 2026",
+    "source": "src_thiel_2026_praso",
+    "description": null,
+    "founders": [],
+    "investors": [
+      {
+        "name": "Thiel Fellowship",
+        "source_url": "https://insights.tryspecter.com/thiel-fellows-2026/",
+        "round": "2026"
+      }
+    ],
+    "_eligible": false,
+    "_exclude_reason": "already in corpus as investable; attaching Thiel Fellowship investor edge only this pass",
+    "_source_key": "thiel_fellowship",
+    "_investor_only_if_existing": true
+  },
+  {
+    "name": "Swoop",
+    "university": null,
+    "campusId": null,
+    "affiliation_type": "unknown",
+    "cohort_year": 2026,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://insights.tryspecter.com/thiel-fellows-2026/",
+    "program": "Thiel Fellowship 2026",
+    "source": "src_thiel_2026_swoop",
+    "description": null,
+    "founders": [],
+    "investors": [
+      {
+        "name": "Thiel Fellowship",
+        "source_url": "https://insights.tryspecter.com/thiel-fellows-2026/",
+        "round": "2026"
+      }
+    ],
+    "_eligible": false,
+    "_exclude_reason": "already in corpus as investable; attaching Thiel Fellowship investor edge only this pass",
+    "_source_key": "thiel_fellowship",
+    "_investor_only_if_existing": true
+  }
+]

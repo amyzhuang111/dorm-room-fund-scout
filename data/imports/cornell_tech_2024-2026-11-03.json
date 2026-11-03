@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Cipher",
+    "university": "Cornell Tech",
+    "campusId": "univ_cornell_tech",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://tech.cornell.edu/news/cornell-tech-announces-winners-of-its-2024-startup-awards/",
+    "program": "Cornell Tech Startup Awards 2024",
+    "source": "src_cornell_tech_2024_2026_11_03",
+    "description": "2024 Cornell Tech Startup Awards winner; master’s student founders named on page",
+    "founders": [
+      {
+        "name": "(Founders named on page)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://tech.cornell.edu/news/cornell-tech-announces-winners-of-its-2024-startup-awards/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "cornell_tech_2024"
+  },
+  {
+    "name": "Compose AI",
+    "university": "Cornell Tech",
+    "campusId": "univ_cornell_tech",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://tech.cornell.edu/news/cornell-tech-announces-winners-of-its-2024-startup-awards/",
+    "program": "Cornell Tech Startup Awards 2024",
+    "source": "src_cornell_tech_2024_2026_11_03",
+    "description": "2024 Cornell Tech Startup Awards winner; master’s student founders named on page",
+    "founders": [
+      {
+        "name": "(Founders named on page)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://tech.cornell.edu/news/cornell-tech-announces-winners-of-its-2024-startup-awards/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "cornell_tech_2024"
+  },
+  {
+    "name": "Mindsight",
+    "university": "Cornell Tech",
+    "campusId": "univ_cornell_tech",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://tech.cornell.edu/news/cornell-tech-announces-winners-of-its-2024-startup-awards/",
+    "program": "Cornell Tech Startup Awards 2024",
+    "source": "src_cornell_tech_2024_2026_11_03",
+    "description": "2024 Cornell Tech Startup Awards winner; master’s student founders named on page",
+    "founders": [
+      {
+        "name": "(Founders named on page)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://tech.cornell.edu/news/cornell-tech-announces-winners-of-its-2024-startup-awards/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "cornell_tech_2024"
+  },
+  {
+    "name": "RapidReview",
+    "university": "Cornell Tech",
+    "campusId": "univ_cornell_tech",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://tech.cornell.edu/news/cornell-tech-announces-winners-of-its-2024-startup-awards/",
+    "program": "Cornell Tech Startup Awards 2024",
+    "source": "src_cornell_tech_2024_2026_11_03",
+    "description": "2024 Cornell Tech Startup Awards winner; master’s student founders named on page",
+    "founders": [
+      {
+        "name": "(Founders named on page)",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://tech.cornell.edu/news/cornell-tech-announces-winners-of-its-2024-startup-awards/"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "cornell_tech_2024"
+  }
+]

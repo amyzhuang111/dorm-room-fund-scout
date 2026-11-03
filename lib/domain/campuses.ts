@@ -1625,6 +1625,36 @@ export const CAMPUSES: CampusConfig[] = [
     lon: -121.93805556,
     coordSource: "en.wikipedia.org/wiki/Santa_Clara_University (MediaWiki coordinates API, retrieved 2026-11-03)",
   },
+  {
+    id: "univ_barnard_college",
+    name: "Barnard College",
+    shortLabel: "Barnard",
+    aliases: ["Barnard"],
+    country: "United States",
+    lat: 40.8096,
+    lon: -73.9635,
+    coordSource: "en.wikipedia.org/wiki/Barnard_College (MediaWiki coordinates API, retrieved 2026-11-03)",
+  },
+  {
+    id: "univ_middlebury_college",
+    name: "Middlebury College",
+    shortLabel: "Middlebury",
+    aliases: ["Middlebury"],
+    country: "United States",
+    lat: 44.00888889,
+    lon: -73.17722222,
+    coordSource: "en.wikipedia.org/wiki/Middlebury_College (MediaWiki coordinates API, retrieved 2026-11-03)",
+  },
+  {
+    id: "univ_drexel_university",
+    name: "Drexel University",
+    shortLabel: "Drexel",
+    aliases: ["Drexel"],
+    country: "United States",
+    lat: 39.954,
+    lon: -75.188,
+    coordSource: "en.wikipedia.org/wiki/Drexel_University (MediaWiki coordinates API, retrieved 2026-11-03)",
+  },
 
 ];
 

@@ -1,0 +1,73 @@
+{
+  "drf_portfolio": {
+    "found": 319,
+    "matched_existing_investable": 2,
+    "matched_existing_non_investable": 45,
+    "ambiguous_name": 1,
+    "unmatched": 271,
+    "kept_new_this_pass": 1,
+    "investor_edges_on_existing": 1,
+    "excluded": 317,
+    "exclude_why": "Most DRF portcos lack public class-of-2023+/current-student founder evidence in this pass; historical DRF ingest treated portfolio as exclusion/reference only. Eligible researched this pass: Kinth (new). Investor edge: Tempo (existing investable)."
+  },
+  "z_fellows": {
+    "found": 13,
+    "kept": 3,
+    "excluded": 10,
+    "notes": "Directory via recentfunding.com/accelerators/zfellows. Kept/enriched: Greptile, Mach Industries, Cognition/Etched investor edges. Mintlify excluded (class ~2022). Others lack 2023+ campus evidence this pass."
+  },
+  "thiel_fellowship": {
+    "found": 32,
+    "kept": 4,
+    "excluded_or_edge_only": 28,
+    "notes": "Crimson 2024 class + Specter 2025/2026 lists. New/re-enabled: Juicebox. Edges: Mercor, Cognition, Etched, Cavalla, EveryTicker, Sentient Machines, Opt32, Praso, Swoop."
+  },
+  "pear_garage_pearx": {
+    "found": 8,
+    "kept": 6,
+    "excluded": 2,
+    "notes": "Public PearX page examples + press. Kept: Bobyard, Andera, Phinity Labs, Vals AI, Known, ResiQuant. ResiQuant founders are Stanford PhD students (current)."
+  },
+  "afore": {
+    "found": 40,
+    "kept": 1,
+    "excluded": 39,
+    "notes": "Portfolio headers scraped from afore.vc/portfolio. Kept StormFree Labs (Brandeis '24). Others lack 2023+ founder evidence this pass."
+  },
+  "contrary": {
+    "found": 0,
+    "kept": 0,
+    "excluded": 0,
+    "notes": "contrary.com/companies is JS-rendered without a public static portfolio dump; no connector. Deferred structured scrape to a browser pass; not invented."
+  },
+  "neo_scholars": {
+    "found": 9,
+    "kept": 0,
+    "excluded": 9,
+    "notes": "Named in Neo Substack (Cursor, Cognition, Pika, etc.). Overlap with existing investable or pre-2023 founders; no net-new eligible inserts this pass beyond Thiel/Z edges already counted."
+  },
+  "rough_draft_ventures": {
+    "found": 24,
+    "kept": 0,
+    "excluded": 24,
+    "notes": "f4.fund RDV portfolio mostly mature companies (Spring Health, Fireflies, Instabase). EdVisorly/Solomon need founder-year evidence; not confirmed 2023+ this pass."
+  },
+  "a16z_speedrun": {
+    "found": 79,
+    "kept": 0,
+    "excluded": 79,
+    "notes": "speedrun.a16z.com companies API/list: 79 in SR007. 36 already investable with Speedrun facts; 42 not in DB. Founder bios not in list payload (images only); deferred individual page eligibility research \u2014 not bulk-imported without campus evidence."
+  },
+  "vc_seed_series_a": {
+    "found": 3,
+    "kept": 0,
+    "excluded": 1,
+    "notes": "Ghost AI (a16z seed) excluded: HS graduate, no college enrollment. Bobyard/Vals counted under PearX. Established-VC edges recorded on Mercor (Benchmark/GC), Mach (Sequoia), Andera (Lightspeed), Vals/Bobyard (a16z/8VC)."
+  },
+  "yc_student_recent": {
+    "found": 0,
+    "kept": 0,
+    "excluded": 0,
+    "notes": "YC already heavily represented (567 investor facts). No additional student/recent-grad YC batch filter pass completed this turn beyond existing corpus."
+  }
+}

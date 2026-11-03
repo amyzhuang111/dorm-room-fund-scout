@@ -25,7 +25,11 @@ export const dynamic = "force-dynamic";
 
 /** Quiet blank - middot only (no em/en dashes, no "Not available" flood). */
 function blank() {
-  return <span className="c-b text-[color:var(--fg-3,#5C647A)]">·</span>;
+  return (
+    <span className="c-b text-[color:var(--fg-3,#5C647A)]" aria-label="not on file">
+      ·
+    </span>
+  );
 }
 
 function cell(value: string | number | null | undefined) {

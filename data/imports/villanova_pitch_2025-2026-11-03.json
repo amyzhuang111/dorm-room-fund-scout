@@ -1,0 +1,162 @@
+[
+  {
+    "name": "Adjustiblox",
+    "university": "Villanova University",
+    "campusId": "univ_villanova",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html",
+    "program": "Villanova Pitch Day 2025",
+    "source": "src_villanova_pitch_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Brett Mastrangelo",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "villanova_pitch_2025"
+  },
+  {
+    "name": "Simply Real Food",
+    "university": "Villanova University",
+    "campusId": "univ_villanova",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html",
+    "program": "Villanova Pitch Day 2025",
+    "source": "src_villanova_pitch_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Cameron Compare",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "villanova_pitch_2025"
+  },
+  {
+    "name": "BarBuzz",
+    "university": "Villanova University",
+    "campusId": "univ_villanova",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html",
+    "program": "Villanova Pitch Day 2025",
+    "source": "src_villanova_pitch_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Navi Singh",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html"
+      },
+      {
+        "name": "Ellie McLaughlin",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html"
+      },
+      {
+        "name": "Christina Alyskewycz",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "villanova_pitch_2025"
+  },
+  {
+    "name": "Wildcat Roomies",
+    "university": "Villanova University",
+    "campusId": "univ_villanova",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html",
+    "program": "Villanova Pitch Day 2025",
+    "source": "src_villanova_pitch_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Amaya Raye",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html"
+      },
+      {
+        "name": "Shawn Golden",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html"
+      },
+      {
+        "name": "Cailin Cobey",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "villanova_pitch_2025"
+  },
+  {
+    "name": "Green Un-Freeze",
+    "university": "Villanova University",
+    "campusId": "univ_villanova",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html",
+    "program": "Villanova Pitch Day 2025",
+    "source": "src_villanova_pitch_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Kamil Aliyev",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html"
+      },
+      {
+        "name": "Rayan Magon",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.villanova.edu/university/media/press-releases/2025/pitch-day-2025.html"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "villanova_pitch_2025"
+  }
+]

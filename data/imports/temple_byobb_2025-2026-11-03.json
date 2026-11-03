@@ -1,0 +1,59 @@
+[
+  {
+    "name": "BARRICADE",
+    "university": "Temple University",
+    "campusId": "univ_temple",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://now.temple.edu/news/2025-04-28/new-earplug-concept-wins-undergraduate-track-temples-be-your-own-boss-bowl",
+    "program": "Temple BYOBB 2025",
+    "source": "src_temple_byobb_2025_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Liana DeMarco",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://now.temple.edu/news/2025-04-28/new-earplug-concept-wins-undergraduate-track-temples-be-your-own-boss-bowl"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "temple_byobb_2025"
+  },
+  {
+    "name": "AAWE",
+    "university": "Temple University",
+    "campusId": "univ_temple",
+    "affiliation_type": "alumni",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://now.temple.edu/news/2025-04-28/new-earplug-concept-wins-undergraduate-track-temples-be-your-own-boss-bowl",
+    "program": "Temple BYOBB 2025",
+    "source": "src_temple_byobb_2025_2026_11_03",
+    "description": "AI-Aware Writing Environment; CLA '24 co-founder",
+    "founders": [
+      {
+        "name": "Megan Kane",
+        "affiliation_type": "alumni",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://now.temple.edu/news/2025-04-28/new-earplug-concept-wins-undergraduate-track-temples-be-your-own-boss-bowl"
+      },
+      {
+        "name": "Stephen Malkowicz",
+        "affiliation_type": "alumni",
+        "grad_year": 2013,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://now.temple.edu/news/2025-04-28/new-earplug-concept-wins-undergraduate-track-temples-be-your-own-boss-bowl"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "temple_byobb_2025"
+  }
+]
