@@ -36,6 +36,8 @@ type Card = {
   key: string;
   x: number;
   y: number;
+  dotX: number;
+  dotY: number;
   title: string;
   school: string;
   company: string;
@@ -282,7 +284,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       ctrl.target.set(cx, cy, 0);
       ctrl.enableDamping = true;
       ctrl.dampingFactor = 0.08;
-      ctrl.autoRotate = true;
+      ctrl.autoRotate = false;
       ctrl.autoRotateSpeed = 0.32;
       ctrl.minDistance = 180;
       ctrl.maxDistance = 1400;
@@ -571,6 +573,8 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         setZoomScale(mapped);
         apiRef.current?.setBloom(bloom);
         apiRef.current?.setDeep(deep);
+        ctrl.autoRotate = false;
+        idleRef.current = 0;
       };
       w.__NETWORKS_SET_SCALE__ = applyScaleNow;
       (w as unknown as { __NETWORKS_GET_DIST__?: () => number }).__NETWORKS_GET_DIST__ = () =>
@@ -595,31 +599,39 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       });
       if (wrapRef.current) ro.observe(wrapRef.current);
 
-      const worldToOverlay = (wx: number, wy: number, sc: number) => {
+      const _proj = new THREE.Vector3();
+      const worldToOverlay = (wx: number, wy: number, wz = 0) => {
         const wrap = wrapRef.current;
-        if (!wrap) return { x: 0, y: 0 };
+        if (!wrap) return { x: 0, y: 0, onscreen: false };
         const ww = wrap.clientWidth;
         const hh = wrap.clientHeight;
-        const fit = Math.min(ww / p.w, hh / p.h);
-        const ox = (ww - p.w * fit) / 2;
-        const oy = (hh - p.h * fit) / 2;
-        const cx0 = ww / 2;
-        const cy0 = hh / 2;
-        let sx = ox + wx * fit;
-        let sy = oy + wy * fit;
-        sx = cx0 + (sx - cx0) * sc;
-        sy = cy0 + (sy - cy0) * sc;
-        return { x: sx, y: sy };
+        _proj.set(wx, wy, wz);
+        _proj.project(camera);
+        const x = (_proj.x * 0.5 + 0.5) * ww;
+        const y = (-_proj.y * 0.5 + 0.5) * hh;
+        // Behind camera or far outside frustum → hide
+        const pad = 36;
+        const onscreen =
+          _proj.z <= 1 &&
+          Math.abs(_proj.x) <= 1.05 &&
+          Math.abs(_proj.y) <= 1.05 &&
+          x > pad &&
+          y > pad &&
+          x < ww - pad &&
+          y < hh - pad;
+        return { x, y, onscreen };
       };
 
       let lastPlayTick = 0;
       let overlayTick = 0;
       const updateOverlays = (scale: number, bloom: number, deep: number) => {
-        const dist = camera.position.distanceTo(ctrl.target);
-        const sc = Math.max(0.85, Math.min(1.45, 900 / Math.max(200, dist)));
+        const wrap = wrapRef.current;
+        const ww = wrap?.clientWidth ?? 0;
+        const hh = wrap?.clientHeight ?? 0;
         const raw: OverlayLabel[] = [];
-        for (const lab of (p.campusLabels ?? []).slice(0, 12)) {
-          const pt = worldToOverlay(lab.x, lab.y, sc);
+        for (const lab of (p.campusLabels ?? []).slice(0, 14)) {
+          const pt = worldToOverlay(lab.x, lab.y, 0);
+          if (!pt.onscreen) continue;
           raw.push({
             id: lab.id,
             label: lab.label,
@@ -631,7 +643,8 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           });
         }
         for (const hub of p.hubs.slice(0, 12)) {
-          const pt = worldToOverlay(p.x[hub.i], p.y[hub.i], sc);
+          const pt = worldToOverlay(p.x[hub.i], p.y[hub.i], zArr[hub.i] ?? 0);
+          if (!pt.onscreen) continue;
           raw.push({
             id: `hub:${hub.id}`,
             label: hub.label.length > 22 ? `${hub.label.slice(0, 20)}...` : hub.label,
@@ -644,7 +657,8 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         if (bloom > 0.1 && p.campusLabels) {
           const boxes: TrackBox[] = [];
           for (const lab of p.campusLabels.slice(0, 10)) {
-            const pt = worldToOverlay(lab.x, lab.y, sc);
+            const pt = worldToOverlay(lab.x, lab.y, 0);
+            if (!pt.onscreen) continue;
             boxes.push({
               id: lab.id,
               label: lab.label,
@@ -657,8 +671,25 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           const keptBoxes = collideTrackBoxes(boxes, bloom > 0.45 ? 6 : 4);
           setTrackBoxes(keptBoxes);
           const boxIds = new Set(keptBoxes.map((b) => b.id));
-          // Prefer tracking-box monospace labels; hide overlapping plain campus labels
-          const labelRaw = raw.filter((lab) => !(lab.kind === "campus" && boxIds.has(lab.id)));
+          // Prefer tracking-box monospace labels; hide campus ids covered by boxes
+          // and any hub label whose AABB hits a track box (+ its nowrap caption).
+          const labelRaw = raw.filter((lab) => {
+            if (lab.kind === "campus" && boxIds.has(lab.id)) return false;
+            const lw = Math.min(180, 10 + lab.label.length * 6.6);
+            const lh = 15;
+            const l = lab.x - lw / 2;
+            const r = lab.x + lw / 2;
+            const top = lab.y - lh / 2;
+            const bot = lab.y + lh / 2;
+            for (const b of keptBoxes) {
+              const bl = b.x - b.box / 2 - 4;
+              const br = b.x + Math.max(b.box / 2, 8 + (b.label.length + String(b.n).length) * 5);
+              const bt = b.y - b.box / 2 - 22;
+              const bb = b.y + b.box / 2 + 4;
+              if (l < br && r > bl && top < bb && bot > bt) return false;
+            }
+            return true;
+          });
           setLabels(collideLabels(labelRaw, deep > 0.5 ? 6 : 12));
           const segs: ArcSeg[] = [];
           for (let i = 0; i < keptBoxes.length; i++) {
@@ -678,7 +709,6 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         }
 
         if (deep > 0.12) {
-          // Prefer high-degree founders with deals
           const cand: { i: number; score: number }[] = [];
           for (let i = 0; i < n; i++) {
             if (p.kind[i] !== 0) continue;
@@ -690,23 +720,58 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           }
           cand.sort((a, b) => b.score - a.score);
           const out: Card[] = [];
-          const placed: { x: number; y: number }[] = [];
-          const maxCards = (wrapRef.current?.clientWidth ?? 800) < 500 ? 8 : 12;
+          // Card AABB ~132x56, anchored above (x,y) with bottom at y-8
+          const cardW = 140;
+          const cardH = 80;
+          const placed: { l: number; r: number; t: number; b: number }[] = [];
+          const overlaps = (l: number, r: number, t: number, b: number) =>
+            placed.some((q) => l < q.r + 16 && r > q.l - 16 && t < q.b + 14 && b > q.t - 14);
+          const maxCards = ww < 500 ? 6 : 9;
+          const offsets: [number, number][] = [
+            [0, -8],
+            [0, -72],
+            [0, 72],
+            [156, -8],
+            [-156, -8],
+            [140, -64],
+            [-140, -64],
+            [140, 56],
+            [-140, 56],
+            [0, -128],
+            [180, -100],
+            [-180, -100],
+            [180, 80],
+            [-180, 80],
+          ];
           for (const c of cand) {
             if (out.length >= maxCards) break;
-            const pt = worldToOverlay(p.x[c.i], p.y[c.i], sc * 1.05);
-            if (pt.x < 50 || pt.y < 56 || pt.x > (wrapRef.current?.clientWidth ?? 0) - 50) continue;
-            if (pt.y > (wrapRef.current?.clientHeight ?? 0) - 70) continue;
-            // Card is ~132x54 above the point; enforce non-overlap
-            if (placed.some((q) => Math.abs(q.x - pt.x) < 140 && Math.abs(q.y - pt.y) < 64)) continue;
-            placed.push(pt);
+            const pt = worldToOverlay(p.x[c.i], p.y[c.i], zArr[c.i] ?? 0);
+            if (!pt.onscreen) continue;
+            if (pt.x < 40 || pt.y < 40 || pt.x > ww - 40 || pt.y > hh - 48) continue;
+            let chosen: { x: number; y: number } | null = null;
+            for (const [ox, oy] of offsets) {
+              const cx = pt.x + ox;
+              const cy = pt.y + oy;
+              const bottom = cy - 8;
+              const top = bottom - cardH;
+              const l = cx - cardW / 2;
+              const r = cx + cardW / 2;
+              if (l < 4 || r > ww - 4 || top < 4 || bottom > hh - 56) continue;
+              if (overlaps(l, r, top, bottom)) continue;
+              chosen = { x: cx, y: cy };
+              placed.push({ l, r, t: top, b: bottom });
+              break;
+            }
+            if (!chosen) continue; // drop overlapping card
             const fid = p.foIds[c.i] ?? "";
             const deal = dealsRef.current[fid];
             const ci = p.campus[c.i];
             out.push({
               key: `c-${c.i}`,
-              x: pt.x,
-              y: pt.y,
+              x: chosen.x,
+              y: chosen.y,
+              dotX: pt.x,
+              dotY: pt.y,
               title: deal?.founderName ?? "Founder",
               school: ci >= 0 && p.campuses[ci] ? p.campuses[ci].label : "",
               company: deal?.companyName ?? "",
@@ -830,7 +895,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
             <div
               key={`box-${b.id}`}
               data-networks-track-box={b.id}
-              className="absolute border border-slate-800/70"
+              className="absolute overflow-visible border border-slate-800/70"
               style={{
                 left: b.x - b.box / 2,
                 top: b.y - b.box / 2,
@@ -838,7 +903,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
                 height: b.box,
               }}
             >
-              <div className="absolute -top-4 left-0 font-mono text-[9px] tracking-wide text-slate-800">
+              <div className="absolute -top-4 left-0 whitespace-nowrap font-mono text-[9px] tracking-wide text-slate-800">
                 {b.label} · {b.n.toLocaleString("en-US")}
               </div>
               <div
@@ -876,7 +941,25 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           ))}
         </div>
 
-        {/* Deep founder cards */}
+        {/* Deep founder cards + leader lines to dots */}
+        <svg
+          className="pointer-events-none absolute inset-0 z-[2] h-full w-full overflow-visible"
+          aria-hidden="true"
+          style={{ opacity: deepOpacity }}
+        >
+          {cards.map((c) => (
+            <line
+              key={`lead-${c.key}`}
+              x1={c.dotX}
+              y1={c.dotY}
+              x2={c.x}
+              y2={c.y - 8}
+              stroke="rgba(15,23,42,0.45)"
+              strokeWidth="1"
+              data-networks-card-leader=""
+            />
+          ))}
+        </svg>
         <div className="pointer-events-none absolute inset-0 z-[2]" style={{ opacity: deepOpacity }}>
           {cards.map((c) => (
             <div
@@ -913,7 +996,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           }}
         />
 
-        <div className="pointer-events-none absolute bottom-3 right-3 rounded bg-white/80 px-2 py-1 text-[10px] text-[color:var(--fg-3)]">
+        <div className="pointer-events-none absolute bottom-3 right-3 hidden rounded bg-white/80 px-2 py-1 text-[10px] text-[color:var(--fg-3)] md:block">
           Drag to orbit · scroll to zoom
         </div>
       </div>
