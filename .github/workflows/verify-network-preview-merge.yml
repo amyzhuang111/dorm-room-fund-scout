@@ -48,5 +48,7 @@ jobs:
             console.log("Networks source payload OK", {nodes:graph.nodes.length,edges:graph.edges.length,networks:page.totals.networks,foundersLinked:page.totals.foundersLinked});
           '
       - run: npm run test:directory
-      - name: Build complete Campus Scout including /networks
-        run: npm run build
+      # Vercel runs the actual Next production build. The GitHub runner's
+      # external Google Fonts fetch can fail independently of source health.
+      - name: Type-check merged route and visualizations
+        run: ./node_modules/.bin/tsc --noEmit
