@@ -2,10 +2,10 @@
   "checkedAt": "2026-11-03",
   "companies": 1225,
   "cityMapped": 696,
-  "sourcedAddressPoints": 25,
-  "cityOnly": 671,
+  "sourcedAddressPoints": 29,
+  "cityOnly": 667,
   "cityUnknown": 529,
-  "withoutSourcedAddress": 1200,
+  "withoutSourcedAddress": 1196,
   "websiteDiscovery": {
     "attemptedRecords": 1225,
     "no_address_found_on_checked_pages": 497,
@@ -395,7 +395,75 @@
       "coordinateSource": "https://data.sfgov.org/resource/3mea-di5p.json?address_number=989&street_name=MARKET&street_type=ST",
       "coordinateMethod": "San Francisco Enterprise Addressing System base address point 448687",
       "checkedAt": "2026-11-03"
+    },
+    {
+      "projectId": "proj_nlgdLCJ8M8cu",
+      "company": "Pulse",
+      "address": "465 California Street, Suite 635, San Francisco, CA 94104, USA",
+      "sourceUrl": "https://www.runpulse.com/privacy-policy",
+      "excerpt": "Pulse Software, Corp. 465 California St #635 San Francisco, CA 94104",
+      "corroboratingSource": "https://www.linkedin.com/company/pulse-ai-corp/",
+      "cityId": "5391959",
+      "kind": "published_business_address",
+      "longitude": -122.40217823393924,
+      "latitude": 37.79279839603805,
+      "coordinateSource": "https://data.sfgov.org/resource/3mea-di5p.json?address_number=465&street_name=CALIFORNIA&street_type=ST",
+      "coordinateMethod": "San Francisco Enterprise Addressing System base address point 280787",
+      "checkedAt": "2026-11-03"
+    },
+    {
+      "projectId": "proj_H7-SVYZP6DYD",
+      "company": "Soff",
+      "address": "580 Howard Street, Unit 304, San Francisco, CA 94105, USA",
+      "sourceUrl": "https://soff.ai/privacy",
+      "excerpt": "ShoesOff Inc, 580 Howard St, Unit 304, San Francisco.",
+      "corroboratingSource": "https://www.linkedin.com/company/soff-ai/",
+      "cityId": "5391959",
+      "kind": "published_business_address",
+      "longitude": -122.39803725443537,
+      "latitude": 37.787304260570785,
+      "coordinateSource": "https://data.sfgov.org/resource/3mea-di5p.json?address_number=580&street_name=HOWARD&street_type=ST",
+      "coordinateMethod": "San Francisco Enterprise Addressing System base address point 469339",
+      "checkedAt": "2026-11-03"
+    },
+    {
+      "projectId": "proj__UY7Aj8KPgs6",
+      "company": "Woz",
+      "address": "300 Brannan Street, Suite 504, San Francisco, CA 94107, USA",
+      "sourceUrl": "https://www.wozcode.com/privacy-policy",
+      "excerpt": "300 Brannan St, #504, San Francisco, CA 94107",
+      "corroboratingSource": "https://data.sfgov.org/resource/g8m3-pdis.json?%24where=upper%28ownership_name%29+like+%27%25WOZ%25%27+OR+upper%28dba_name%29+like+%27%25WOZ%25%27&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24limit=12",
+      "cityId": "5391959",
+      "kind": "published_business_address",
+      "longitude": -122.39243727402689,
+      "latitude": 37.781735112372964,
+      "coordinateSource": "https://data.sfgov.org/resource/3mea-di5p.json?address_number=300&street_name=BRANNAN&street_type=ST",
+      "coordinateMethod": "San Francisco Enterprise Addressing System base address point 447054",
+      "checkedAt": "2026-11-03"
+    },
+    {
+      "projectId": "proj_GzB02kRnc_Sm",
+      "company": "Vooma",
+      "address": "330 Townsend Street, Suite 212, San Francisco, CA 94107, USA",
+      "sourceUrl": "https://www.vooma.com/",
+      "excerpt": "330 Townsend St #212 San Francisco, CA 94107",
+      "corroboratingSource": "https://data.sfgov.org/resource/g8m3-pdis.json?%24where=upper%28ownership_name%29+like+%27%25VOOMA%25%27+OR+upper%28dba_name%29+like+%27%25VOOMA%25%27&%24select=ownership_name%2Cdba_name%2Cfull_business_address%2Ccity%2Cbusiness_zip%2Clocation_start_date%2Clocation_end_date%2Cadministratively_closed&%24limit=12",
+      "cityId": "5391959",
+      "kind": "published_business_address",
+      "longitude": -122.39591065838636,
+      "latitude": 37.77670476455968,
+      "coordinateSource": "https://data.sfgov.org/resource/3mea-di5p.json?address_number=330&street_name=TOWNSEND&street_type=ST",
+      "coordinateMethod": "San Francisco Enterprise Addressing System base address point 449393",
+      "checkedAt": "2026-11-03"
     }
   ],
-  "distinctBuildingPoints": 24
+  "distinctBuildingPoints": 28,
+  "reviewLedger": "reviews/r59-company-address-review.json",
+  "reviewStatusCounts": {
+    "candidate_needs_verification": 214,
+    "held_from_publication": 21,
+    "no_address_found_on_checked_pages": 496,
+    "published_business_address": 29,
+    "source_unavailable": 465
+  }
 }

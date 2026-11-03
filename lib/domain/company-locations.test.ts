@@ -2,7 +2,21 @@ import assert from "node:assert/strict";
 import { companyLocations } from "./company-locations";
 import { getDb } from "../db/client";
 import officeRecords from "@/data/company-office-locations.json";
+import addressReview from "@/reviews/r59-company-address-review.json";
+import { loadDirectory } from "./directory";
 const result = companyLocations();
+// Keep held or unreviewed candidates out of the map, and make review coverage auditable.
+const directoryIds = loadDirectory().cards.map(c => c.id).sort();
+assert.deepEqual(addressReview.records.map(r => r.projectId).sort(), directoryIds);
+const publishedIds = officeRecords.locations.map(r => r.projectId).sort();
+assert.deepEqual(addressReview.records.filter(r => r.status === "published_business_address").map(r => r.projectId).sort(), publishedIds);
+for (const [status, count] of Object.entries(addressReview.counts)) {
+  assert.equal(addressReview.records.filter(r => r.status === status).length, count);
+}
+for (const record of addressReview.records) {
+  assert(record.reason.trim().length > 0);
+  assert(!("latitude" in record) && !("longitude" in record) && !("address" in record), "The review inventory must not expose raw address candidates");
+}
 const ids = result.cities.flatMap(c => c.companies.map(co => co.id));
 assert.equal(ids.length, new Set(ids).size);
 assert.equal(result.mapped + result.unmapped, result.total);
