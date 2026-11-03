@@ -282,6 +282,22 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     return c;
   };
 
+  const campusConnections = useMemo(() => {
+    const counts = new Map<string, { from: number; to: number; count: number }>();
+    if (!poster) return [];
+    poster.e0.forEach((source, i) => {
+      const target = poster.e1[i];
+      const a = poster.campus[source], b = poster.campus[target];
+      if (a < 0 || b < 0 || a === b) return;
+      const from = Math.min(a, b), to = Math.max(a, b);
+      const key = `${from}:${to}`;
+      const connection = counts.get(key) ?? { from, to, count: 0 };
+      connection.count += 1;
+      counts.set(key, connection);
+    });
+    return [...counts.values()].sort((a, b) => b.count - a.count).slice(0, 12);
+  }, [poster]);
+
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
     const p = poster;
@@ -381,10 +397,10 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     // Three distinct zoom tiers with smooth crossfades
     // out: scale ~0.7-1.35 | mid: ~1.35-2.6 | deep: ~2.6+
     const bloom = reduced ? 0 : smoothstep((cam.scale - 1.2) / 0.9) * (1 - smoothstep((cam.scale - 2.55) / 0.55));
-    const deep = reduced ? 0 : smoothstep((cam.scale - 2.45) / 0.7);
+    const deep = smoothstep((cam.scale - 2.45) / 0.7);
     const crisp = Math.max(0, 1 - bloom - deep * 0.85);
     const calloutFade = crisp; // margin callouts only when zoomed out
-    const tier = deep > 0.55 ? 2 : bloom > 0.4 ? 1 : 0;
+    const tier = cam.scale >= 2.8 ? 2 : cam.scale >= 1.4 ? 1 : 0;
     if (zoomTierRef.current !== tier) {
       zoomTierRef.current = tier;
       queueMicrotask(() => setZoomScale(cam.scale));
@@ -428,6 +444,9 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     for (let i = 0; i < nE; i++) {
       const a = p.e0[i], b = p.e1[i], k = p.ek[i];
       if ((p.kind[a] === 0 && !isFoOn(a)) || (p.kind[b] === 0 && !isFoOn(b))) continue;
+      const related = focusNode === a || focusNode === b || memberFos.has(a) || memberFos.has(b);
+      if (tier === 0 && !related) continue;
+      if (tier === 1 && !related && p.campus[a] !== p.campus[b]) continue;
       const hubA = p.kind[a] === 2, hubB = p.kind[b] === 2;
       const hubIdx = hubA ? a : hubB ? b : -1;
       const hubId = hubIdx >= 0 ? p.hubs.find((hh) => hh.i === hubIdx)?.id : null;
@@ -456,6 +475,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
         const sh = 0.85 + 0.15 * Math.sin(t * 1.7 + i * 0.13);
         alpha *= sh;
       }
+      if ((focusHub || focusNode >= 0) && !related) alpha *= 0.18;
       alpha *= fade * (0.55 + 0.45 * assembleEase);
       ctx.strokeStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha * crisp + alpha * 0.35 * bloom})`;
       ctx.lineWidth = lineW;
@@ -476,45 +496,26 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       }
     }
 
-    // Bundled inter-campus strands (centroid-to-centroid, source color)
-    if (p.campusLabels && p.campusLabels.length >= 2) {
-      const labs = p.campusLabels.slice(0, 10);
-      for (let i = 0; i < labs.length; i++) {
-        for (let j = i + 1; j < labs.length; j++) {
-          if (hash01(`bundle:${labs[i].id}:${labs[j].id}`) > 0.42) continue;
-          const a = toS(labs[i].x, labs[i].y);
-          const b = toS(labs[j].x, labs[j].y);
-          const { cx, cy } = curvedPath(a.x, a.y, b.x, b.y, 1.6);
-          const col = p.campuses.find((c) => c.id === labs[i].id)?.color ?? "#94a3b8";
-          const rgb = hexToRgb(col);
-          ctx.strokeStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${0.12 * fade})`;
-          ctx.lineWidth = 1.15;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.quadraticCurveTo(cx, cy, b.x, b.y);
-          ctx.stroke();
+    // Aggregate real cross-campus relationships into a small set of readable links.
+    if (tier < 2 && p.campusLabels) {
+      for (const { from, to, count } of campusConnections) {
+        const source = p.campusLabels.find((label) => label.id === p.campuses[from]?.id);
+        const target = p.campusLabels.find((label) => label.id === p.campuses[to]?.id);
+        if (!source || !target) continue;
+        const a = toS(source.x, source.y);
+        const b = toS(target.x, target.y);
+        ctx.strokeStyle = focusHub ? "#cbd5e1" : "#64748b";
+        ctx.lineWidth = Math.min(3, 0.75 + Math.log2(count + 1) / 2);
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+        if (tier === 1 && count >= 2) {
+          ctx.font = "11px sans-serif";
+          ctx.fillStyle = "#334155";
+          ctx.fillText(String(count), (a.x + b.x) / 2 + 4, (a.y + b.y) / 2 - 4);
         }
       }
-    }
-
-    // Mid-zoom dashed arcs between major campus labels (bloom-box style)
-    if (bloom > 0.05 && p.campusLabels) {
-      const labs = p.campusLabels.slice(0, 8);
-      ctx.setLineDash([4, 6]);
-      ctx.lineWidth = 1.1;
-      for (let i = 0; i < labs.length; i++) {
-        for (let j = i + 1; j < Math.min(labs.length, i + 4); j++) {
-          const a = toS(labs[i].x, labs[i].y);
-          const b = toS(labs[j].x, labs[j].y);
-          const { cx, cy } = curvedPath(a.x, a.y, b.x, b.y, 1.55);
-          ctx.strokeStyle = `rgba(30,41,59,${(0.22 + bloom * 0.25) * fade})`;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.quadraticCurveTo(cx, cy, b.x, b.y);
-          ctx.stroke();
-        }
-      }
-      ctx.setLineDash([]);
     }
 
     // Nodes
@@ -741,7 +742,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
       if (pat) { ctx.fillStyle = pat; ctx.fillRect(0, 0, w, h); }
       ctx.globalAlpha = 1;
     }
-  }, [poster, size, yearMax, yearMin, deals, founderCount]);
+  }, [poster, size, yearMax, yearMin, deals, founderCount, campusConnections]);
 
   // Continuous RAF: fade, drift, inertia, pulses. Do not cancel on hover.
   useEffect(() => {
