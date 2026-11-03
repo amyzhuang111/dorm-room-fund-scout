@@ -248,21 +248,24 @@ function MapFoldSheet({
       return;
     }
     // Critically damped-ish spring (Emil/Apple: interruptible, no bounce on settle).
-    const stiffness = 420;
-    const damping = 38;
+    const stiffness = 180;
+    const damping = 26;
     let v = 0;
     let h = heightRef.current;
     const tick = () => {
       const dt = 1 / 60;
       const a = -stiffness * (h - target) - damping * v;
       v += a * dt;
+      // Keep Euler stable on coarse frames.
+      if (v > 6000) v = 6000;
+      if (v < -6000) v = -6000;
       h += v * dt;
-      if (Math.abs(h - target) < 0.5 && Math.abs(v) < 0.5) {
+      if (Math.abs(h - target) < 0.75 && Math.abs(v) < 8) {
         setHeight(target);
         springRef.current = null;
         return;
       }
-      setHeight(h);
+      setHeight(clampH(h));
       springRef.current = requestAnimationFrame(tick);
     };
     springRef.current = requestAnimationFrame(tick);
@@ -284,7 +287,11 @@ function MapFoldSheet({
     };
   }, [mode]);
 
-  const expandToDeck = () => springTo(DECK);
+  const expandToDeck = () => {
+    // Tap expand must flip React mode immediately (density + feel). Drag snaps still spring.
+    cancelSpring();
+    setHeight(clampH(DECK));
+  };
 
   const onPointerDown = (e: ReactPointerEvent) => {
     cancelSpring();
