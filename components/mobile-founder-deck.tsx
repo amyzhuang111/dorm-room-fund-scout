@@ -292,7 +292,7 @@ export function MobileFounderPeek({
       data-founder-peek-lane={lane}
       data-founder-peek={String(Math.min(list.length, 3))}
     >
-      <div className="mb-0.5 flex items-baseline justify-between gap-2">
+      <div className="relative z-[2] mb-0.5 flex items-baseline justify-between gap-2">
         <p className="font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
           {lane === "open" ? "Open lane" : "Founders"}
           <span className="ml-1.5 tabular-nums text-[color:var(--fg,#0B0E17)]" data-fold-open-lane-peek-figure="">
@@ -306,7 +306,7 @@ export function MobileFounderPeek({
         </p>
         <button
           type="button"
-          className="relative inline-flex min-h-11 min-w-11 items-center justify-center font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)] active:scale-[0.97] transition-transform duration-150 ease-out"
+          className="relative inline-flex items-center font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)] active:scale-[0.97] transition-transform duration-150 ease-out"
           data-fold-sheet-expand=""
           onClick={() => onExpand?.()}
         >
@@ -326,7 +326,7 @@ export function MobileFounderPeek({
           return (
             <div
               key={founder.id}
-              className="inline-flex h-11 max-w-[14rem] shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-2.5"
+              className="relative inline-flex h-10 max-w-[14rem] shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-2"
               data-founder-card=""
               data-founder-peek-chip=""
             >
@@ -342,7 +342,8 @@ export function MobileFounderPeek({
               {href ? (
                 <Link
                   href={href}
-                  className="inline-flex min-h-11 min-w-[2.75rem] shrink-0 items-center justify-center font-mono text-[9px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
+                  className="relative inline-flex shrink-0 items-center px-1 font-mono text-[9px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
+                  data-founder-peek-open=""
                   onClick={(e) => e.stopPropagation()}
                 >
                   Open
@@ -390,7 +391,7 @@ export function MobileCampusSegments({
             aria-selected={!selectedId || selectedId === "missing"}
             onClick={onClear}
             data-fold-campus-chip=""
-            className={`relative inline-flex h-8 items-center rounded-full border px-3 font-mono text-[10px] font-semibold active:scale-[0.97] transition-transform duration-150 ease-out ${
+            className={`relative inline-flex h-7 items-center rounded-full border px-2.5 font-mono text-[10px] font-semibold active:scale-[0.97] transition-transform duration-150 ease-out ${
               !selectedId || selectedId === "missing"
                 ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] text-white"
                 : "border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg-2,#3F465C)]"
@@ -410,7 +411,7 @@ export function MobileCampusSegments({
                 aria-selected={active}
                 onClick={() => onSelect(campus.id)}
                 data-fold-campus-chip=""
-                className={`relative inline-flex h-8 items-center gap-1 rounded-full border px-2.5 active:scale-[0.97] transition-transform duration-150 ease-out ${
+                className={`relative inline-flex h-7 items-center gap-1 rounded-full border px-2 active:scale-[0.97] transition-transform duration-150 ease-out ${
                   active
                     ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] text-white"
                     : "border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg,#0B0E17)]"

@@ -182,6 +182,9 @@ async function measureFold(browser, base) {
     await page.waitForSelector("[data-fold-peak-share], [data-fold-peak-figure], [data-founder-search]", { timeout: 30000 }).catch(() => {});
     // Wait for founder cards when the index hydrates (overlay peek / rail).
     await page.waitForSelector("[data-founder-card]", { timeout: 45000 }).catch(() => {});
+    // Founder cards and the peak caption can be server-rendered before the
+    // chart's client component loads. Measure the actual chart, not its shell.
+    await page.waitForSelector("[data-fold-peak-month-bars]", { state: "attached", timeout: 45000 });
     await page.waitForTimeout(800);
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(200);
@@ -222,6 +225,10 @@ async function measureFold(browser, base) {
     const key = `fold@${vp.name}`;
     out[key] = m;
     console.log(`${base} ${key} peak=${m.peak} ranks=${m.ranks} bars=${m.bars} founderCards=${m.founderCards}`);
+    if (!m.bars) {
+      console.log("Missing bar diagnostics", await page.locator("[data-fold-peak-month-bars]").evaluateAll(els => els.map(el => ({rect: el.getBoundingClientRect().toJSON(), display: getComputedStyle(el).display, visibility: getComputedStyle(el).visibility}))));
+      await page.screenshot({path: `${OUT}.${vp.name}.png`});
+    }
     await page.close();
   }
   return out;

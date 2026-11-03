@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { companyLocations } from "./company-locations";
 import { getDb } from "../db/client";
+import officeRecords from "@/data/company-office-locations.json";
 const result = companyLocations();
 const ids = result.cities.flatMap(c => c.companies.map(co => co.id));
 assert.equal(ids.length, new Set(ids).size);
@@ -8,6 +9,14 @@ assert.equal(result.mapped + result.unmapped, result.total);
 assert.equal(result.mapped, ids.length);
 assert.equal(result.precision, "mixed");
 assert.equal(result.addressMapped, result.cities.flatMap(c=>c.companies).filter(c=>c.office).length);
+assert.equal(result.addressMapped, officeRecords.locations.length, "Every reviewed address must resolve to its existing company and HQ city");
+assert.equal(new Set(officeRecords.locations.map(r=>r.projectId)).size, officeRecords.locations.length);
+for (const record of officeRecords.locations) {
+  assert(record.excerpt.trim().length>10, "Every address needs company-published evidence");
+  assert(record.coordinateMethod.includes("address point"), "Coordinates must be address points, not city geocodes");
+  const co=result.cities.flatMap(c=>c.companies).find(c=>c.id===record.projectId);
+  assert.deepEqual(co?.office?.coordinates, [record.longitude,record.latitude]);
+}
 for (const city of result.cities) {
   assert(city.coordinates[0] >= -180 && city.coordinates[0] <= 180);
   assert(city.coordinates[1] >= -90 && city.coordinates[1] <= 90);

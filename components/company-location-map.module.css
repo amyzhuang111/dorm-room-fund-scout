@@ -18,13 +18,17 @@
 .resultHeading strong { color: #2f4fd8; font-variant-numeric: tabular-nums; }
 .resultHeading p,.results>p { margin: 2px 0 6px; font-size: 11px; line-height: 16px; color: #53617b; }
 .resultHeading button { min-height: 32px; font-size: 12px; }
+.resultFilters { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0; }
+.resultFilters button { min-height: 34px; padding: 4px 9px; border: 1px solid #c5cfe7; border-radius: 4px; background: #fff; font-size: 11px; }
+.resultFilters button[aria-pressed="true"] { background: #2f4fd8; color: #fff; border-color: #2f4fd8; }
 .companyList { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; max-height: 128px; overflow-y: auto; overscroll-behavior: contain; margin: 6px 0; padding: 2px; }
-.companyList li { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 0 10px; min-width: 140px; max-width: 100%; padding: 5px 8px; border: 1px solid #dce3f1; border-radius: 4px; background: #fff; font-size: 12px; line-height: 18px; }
+.companyList li { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 0 10px; min-width: 140px; width: 200px; max-width: 100%; padding: 5px 8px; border: 1px solid #dce3f1; border-radius: 4px; background: #fff; font-size: 12px; line-height: 18px; }
 .companyList li>a:first-child { grid-column: 1/-1; min-height: 24px; font-weight: 650; color: #2f4fd8; overflow-wrap: anywhere; }
 .companyList span { color: #53617b; font-size: 10px; }
 .companyList li>a:last-child { min-height: 24px; color: #2f4fd8; font-size: 10px; }
 .companyList button { min-height: 42px; }
 .companyList li>span { grid-column: 1/-1; }
+.companyList li>span { overflow-wrap: anywhere; }
 .companyList li>button { font-size: 11px; min-height: 32px; text-align: left; }
 .locationDetail { border: 1px solid #a7b9e5; border-left: 3px solid #2f4fd8; border-radius: 4px; padding: 8px 10px; margin: 6px 0; background: #fff; }
 .locationDetail>div { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
