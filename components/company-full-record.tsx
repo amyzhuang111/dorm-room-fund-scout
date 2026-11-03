@@ -113,9 +113,14 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
   if (isEmpty(project.founderLinks)) missing.push("Founders");
   if (isEmpty(project.signals)) missing.push("Signals");
 
+  const hqText = !isEmpty(profile.hq) ? profile.hq?.text : null;
+  const teamText = !isEmpty(profile.teamSize) ? profile.teamSize?.text : null;
+  // r51 desk: keep HQ / team in the fold key strip (r50 mobile links stay sm:hidden)
   const keyStats = (
     [
       campus ? { label: "Campus", value: campus } : null,
+      hqText ? { label: "HQ", value: hqText } : null,
+      teamText ? { label: "Team", value: teamText } : null,
       stage ? { label: "Stage", value: stage } : null,
       signalCount > 0 ? { label: "Signals", value: signalCount.toLocaleString("en-US"), suffix: "on record" } : null,
       founded ? { label: "Founded", value: founded } : null,
@@ -172,13 +177,13 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
       {/* Lead: mobile order keyStats → founders → pitch; desk keeps DOM founders → pitch → stats */}
       <div className="flex flex-col sm:contents" data-full-record-lead="">
       {!isEmpty(project.founderLinks) ? (
-        <div className="order-2 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4 sm:order-none sm:py-3.5" data-full-record-founders-lead="">
+        <div className="order-2 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4 sm:order-none sm:py-2" data-full-record-founders-lead="">
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founders</p>
-          <ul className="mt-1.5 space-y-2 sm:mt-2.5 sm:space-y-3">
+          <ul className="mt-1.5 space-y-2 sm:mt-1.5 sm:space-y-2">
             {project.founderLinks.map((f) => (
               <li key={f.personId} className="flex gap-2.5 sm:gap-3">
                 <div
-                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/55 font-mono text-[11px] font-bold text-[color:var(--cobalt,#2F4FD8)] sm:h-11 sm:w-11 sm:text-[12px]"
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--cobalt-haze,#E8ECFA)]/55 font-mono text-[11px] font-bold text-[color:var(--cobalt,#2F4FD8)] sm:h-9 sm:w-9 sm:text-[11px]"
                   aria-hidden
                 >
                   {monogram(f.name)}
@@ -263,14 +268,22 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
                 <Field label="Founded">{profile.foundedYear?.text}</Field>
               </div>
             ) : null}
-            {!isEmpty(profile.hq) ? <Field label="HQ">{profile.hq?.text}</Field> : null}
+            {!isEmpty(profile.hq) ? (
+              <div className={keyStats.some((s) => s.label === "HQ") ? "hidden sm:contents" : undefined}>
+                <Field label="HQ">{profile.hq?.text}</Field>
+              </div>
+            ) : null}
             {!isEmpty(profile.operatingStatus) ? <Field label="Status">{profile.operatingStatus?.text}</Field> : null}
-            {!isEmpty(profile.teamSize) ? <Field label="Team size">{profile.teamSize?.text}</Field> : null}
+            {!isEmpty(profile.teamSize) ? (
+              <div className={keyStats.some((s) => s.label === "Team") ? "hidden sm:contents" : undefined}>
+                <Field label="Team size">{profile.teamSize?.text}</Field>
+              </div>
+            ) : null}
             {!isEmpty(profile.description) && !pitch ? <Field label="Description">{profile.description?.text}</Field> : null}
             {!isEmpty(profile.description) && pitch && (profile.description?.text || "").trim() !== pitch ? (
               <Field label="Description">{profile.description?.text}</Field>
             ) : null}
-            {/* r50 mobile: website + LinkedIn sit with Identity in the fold */}
+            {/* r50 mobile + r51 desk: website / LinkedIn stay with Identity in the fold */}
             {hasLinks ? (
               <div className="border-b border-[color:var(--line,#E1E5EF)] py-2.5 last:border-b-0 sm:hidden" data-full-record-identity-links="">
                 <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Links</dt>
@@ -298,12 +311,43 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
                 </dd>
               </div>
             ) : null}
+            {hasLinks ? (
+              <div className="hidden border-b border-[color:var(--line,#E1E5EF)] py-2 last:border-b-0 sm:block" data-full-record-identity-links-desk="">
+                <div className="sm:grid sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-3">
+                  <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Links</dt>
+                  <dd className="mt-1 flex flex-wrap gap-2 sm:mt-0">
+                    {website ? (
+                      <a
+                        href={website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex min-h-8 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-2.5 font-mono text-[11px] font-semibold text-white"
+                      >
+                        Website
+                      </a>
+                    ) : null}
+                    {companyLi ? (
+                      <a
+                        href={companyLi}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex min-h-8 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 px-2.5 font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)]"
+                      >
+                        LinkedIn
+                      </a>
+                    ) : null}
+                  </dd>
+                </div>
+              </div>
+            ) : null}
           </Group>
           </div>
         ) : null}
 
+        {(hasCapital || hasLinks) ? (
+          <div className="order-3 grid gap-3 sm:order-none sm:grid-cols-2" data-full-record-capital-links="">
         {hasCapital ? (
-          <div className="order-3 sm:order-none" data-full-record-capital-first="">
+          <div data-full-record-capital-first="">
           <Group title="Capital">
             {!isEmpty(funding) ? <Field label="Funding">{funding?.text}</Field> : null}
             {!isEmpty(profile.rounds) ? (
@@ -362,7 +406,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
         ) : null}
 
         {hasLinks ? (
-          <div className="order-2 sm:order-none" data-full-record-links-near-identity="">
+          <div data-full-record-links-near-identity="">
           <Group title="Links">
             {!isEmpty(website) ? (
               <Field label="Website">
@@ -399,6 +443,8 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
               </Field>
             ) : null}
           </Group>
+          </div>
+        ) : null}
           </div>
         ) : null}
 

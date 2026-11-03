@@ -1386,6 +1386,74 @@ details:not([open]) > :not(summary) {
 [data-fold-sheet-peak] [data-fold-peak-campus-rank-mobile] li {
   min-width: 0;
 }
+[data-fold-sheet-peak] [data-fold-peak-campus-label] {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 3.25rem !important;
+}
+
+/* r51: desk rail/overlay peak — full Penn / Stanford / Berkeley labels */
+[data-fold-peak-in-rail] [data-fold-peak-campus-rank-mobile],
+[data-fold-overlay-peak] [data-fold-peak-campus-rank-mobile] {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 0.35rem 0.65rem !important;
+  overflow: visible !important;
+  max-height: none !important;
+}
+[data-fold-peak-in-rail] [data-fold-peak-campus-rank-mobile] li,
+[data-fold-overlay-peak] [data-fold-peak-campus-rank-mobile] li {
+  min-width: auto !important;
+  flex-shrink: 0 !important;
+}
+[data-fold-peak-in-rail] [data-fold-peak-campus-label],
+[data-fold-overlay-peak] [data-fold-peak-campus-label] {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  max-width: none !important;
+  white-space: nowrap !important;
+}
+
+/* r51: desk founders — compact 2x2 filters above 3 why cards */
+[data-fold-overlay-founders] [data-founder-filters-toggle] {
+  display: none !important;
+}
+[data-fold-overlay-founders] [data-founder-filters] {
+  margin-bottom: 0.35rem !important;
+}
+[data-fold-overlay-founders] [data-founder-filters] > div.hidden,
+[data-fold-overlay-founders] [data-founder-filters] > div.flex {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0.3rem 0.4rem !important;
+  height: auto !important;
+  opacity: 1 !important;
+  overflow: visible !important;
+  pointer-events: auto !important;
+}
+[data-fold-overlay-founders] [data-founder-filter-select] {
+  min-width: 0 !important;
+}
+[data-fold-overlay-founders] [data-founder-filter-select] > span:first-child {
+  margin-bottom: 0.1rem !important;
+  font-size: 8px !important;
+  letter-spacing: 0.1em !important;
+}
+[data-fold-overlay-founders] [data-founder-filter-select] select {
+  height: 1.7rem !important;
+  font-size: 11px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 0.4rem !important;
+  padding-right: 1.25rem !important;
+}
+[data-fold-overlay-founders] [data-founder-results] > div:first-child {
+  margin-bottom: 0.25rem !important;
+}
+[data-fold-overlay-founders] [data-founder-card-list] {
+  gap: 0 !important;
+}
 [data-fold-sheet-peak] [data-fold-peak-share-mobile] {
   padding-bottom: 0 !important;
 }

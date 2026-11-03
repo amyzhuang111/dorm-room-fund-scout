@@ -46,30 +46,30 @@ export function CurrentViewStrip({
         <p className="font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">View</p>
         <p className="tabular-nums text-[color:var(--fg-2,#3F465C)]">
           <span className={COUNT}>{matchCount.toLocaleString("en-US")}</span>
-          {"/"}
+          {" of "}
           <span className="font-semibold tabular-nums text-[color:var(--fg,#0B0E17)]">{totalFounders.toLocaleString("en-US")}</span>
+          {" founders"}
         </p>
         {campusName ? (
-          <span>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 py-0.5" data-fold-selected-campus-chip="">
+            <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Campus</span>
             <span className="font-semibold">{campusName}</span>
-            {" "}
-            <button type="button" onClick={onClearCampus} className="font-medium text-[color:var(--cobalt,#2F4FD8)] hover:underline">
-              Clear
+            <button type="button" onClick={onClearCampus} className="font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:underline" aria-label={`Clear ${campusName}`}>
+              ×
             </button>
           </span>
         ) : null}
         {q ? (
-          <span>
-            &ldquo;{q}&rdquo;
-            {" "}
-            <button type="button" onClick={onClearQuery} className="font-medium text-[color:var(--cobalt,#2F4FD8)] hover:underline">
-              Clear
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)]/60 px-2.5 py-0.5">
+            <span className="font-semibold">&ldquo;{q}&rdquo;</span>
+            <button type="button" onClick={onClearQuery} className="font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:underline" aria-label="Clear search">
+              ×
             </button>
           </span>
         ) : null}
         {startups.length > 0 ? (
-          <span className="min-w-0 truncate text-[11px] text-[color:var(--fg-2,#3F465C)]" data-fold-current-startups="">
-            {startups.slice(0, 3).map((s, i) => (
+          <span className="min-w-0 text-[11px] text-[color:var(--fg-2,#3F465C)]" data-fold-current-startups="">
+            {startups.slice(0, 4).map((s, i) => (
               <span key={s.id}>
                 {i > 0 ? " · " : null}
                 <Link href={`/startup/${s.id}?from=map`} className="font-medium text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--cobalt,#2F4FD8)] hover:underline">
@@ -77,7 +77,7 @@ export function CurrentViewStrip({
                 </Link>
               </span>
             ))}
-            {startups.length > 3 ? ` · +${startups.length - 3}` : null}
+            {startups.length > 4 ? ` · +${startups.length - 4}` : null}
           </span>
         ) : null}
       </div>

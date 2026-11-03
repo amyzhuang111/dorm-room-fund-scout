@@ -111,16 +111,19 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(200);
   await shot(page, "fold-1440");
 
-  // Founder filters (program/sector/year/signal) — home, not browse facet rail.
+  // Founder filters + selected campus — URL campus keeps chip/ranks directed.
+  await page.goto(`${BASE}/?campus=univ_penn&sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await waitDirectory(page);
+  await waitFoundersReady(page);
+  await waitGlobeIdle(page);
   const program = page.locator('[data-founder-filters] select').first();
   if (await program.count()) {
     await program.selectOption({ index: 1 }).catch(() => {});
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(400);
   }
-  await page.locator("[data-campus-founders-top] button").first().click().catch(() => {});
-  await page.waitForTimeout(700);
-  await waitGlobeIdle(page);
+  await page.waitForSelector("[data-fold-filter-chips], [data-fold-selected-campus-chip], [data-fold-current-view]", { timeout: 15000 }).catch(() => {});
   await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(300);
   await shot(page, "fold-filters-1440");
 
   // Explore → Companies (ranked list moved off home).
@@ -256,14 +259,17 @@ const browser = await chromium.launch({ headless: true });
   await page.evaluate(() => window.scrollTo(0, 0));
   await shot(page, "fold-375");
 
+  await page.goto(`${BASE}/?campus=univ_penn&sample=1`, { waitUntil: "networkidle", timeout: 90000 });
+  await waitDirectory(page);
+  await waitFoundersReady(page);
+  await waitGlobeIdle(page);
   const programM = page.locator("[data-founder-filters] select").first();
   if (await programM.count()) {
     await programM.selectOption({ index: 1 }).catch(() => {});
     await page.waitForTimeout(400);
   }
-  await page.locator("[data-campus-founders-top] button").first().click().catch(() => {});
-  await page.waitForTimeout(600);
   await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(300);
   await shot(page, "fold-filters-375");
 
   await page.goto(`${BASE}/companies`, { waitUntil: "networkidle", timeout: 90000 });
