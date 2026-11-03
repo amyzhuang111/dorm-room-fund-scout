@@ -1,0 +1,572 @@
+{
+  "retrievedAt": "2026-11-03T07:01:00.000Z",
+  "companies": [
+    {
+      "name": "BLKHLTH",
+      "description": "Equitable Black community health education and advocacy",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/articles/announcing-the-2026-harvard-presidents-innovation-challenge-finalists",
+      "excerpt": "BLKHLTH — 2026 Harvard President’s Innovation Challenge student track.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Cancer Kids First",
+      "description": "Support community for children with cancer",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/venture/cancer-kids-first",
+      "excerpt": "Cancer Kids First — 2026 Harvard President’s Innovation Challenge student track; Founders: Olivia Zhang.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Olivia Zhang",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Cancer Kids First profile explicitly identifies Olivia Zhang under \"Founders\". No class year claimed.",
+          "excerpt": "Cancer Kids First — 2026 Harvard President’s Innovation Challenge student track; Founders: Olivia Zhang."
+        }
+      ]
+    },
+    {
+      "name": "Colombiando",
+      "description": "Rural multi-grade teacher and education model",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/venture/colombiando",
+      "excerpt": "Colombiando — 2026 Harvard President’s Innovation Challenge student track; Founders: Valeria Ortiz Jaramillo; Sarah Bruce Senior.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Valeria Ortiz Jaramillo",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Colombiando profile explicitly identifies Valeria Ortiz Jaramillo under \"Founders\". No class year claimed.",
+          "excerpt": "Colombiando — 2026 Harvard President’s Innovation Challenge student track; Founders: Valeria Ortiz Jaramillo; Sarah Bruce Senior."
+        },
+        {
+          "name": "Sarah Bruce Senior",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Colombiando profile explicitly identifies Sarah Bruce Senior under \"Founders\". No class year claimed.",
+          "excerpt": "Colombiando — 2026 Harvard President’s Innovation Challenge student track; Founders: Valeria Ortiz Jaramillo; Sarah Bruce Senior."
+        }
+      ]
+    },
+    {
+      "name": "iNERDE Academy",
+      "description": "AI-enabled community literacy instruction in Africa",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/venture/inerde-inc",
+      "excerpt": "iNERDE Academy — 2026 Harvard President’s Innovation Challenge student track; Founders: Mohamed Kante.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Mohamed Kante",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public iNERDE Academy profile explicitly identifies Mohamed Kante under \"Founders\". No class year claimed.",
+          "excerpt": "iNERDE Academy — 2026 Harvard President’s Innovation Challenge student track; Founders: Mohamed Kante."
+        }
+      ]
+    },
+    {
+      "name": "Winko",
+      "description": "Oxygen and power infrastructure for hospitals across Africa",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/articles/announcing-the-2026-harvard-presidents-innovation-challenge-finalists",
+      "excerpt": "Winko — 2026 Harvard President’s Innovation Challenge student track.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "ExploreYou",
+      "description": "Career discovery through gamified simulations",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/venture/exploreyou",
+      "excerpt": "ExploreYou — 2026 Harvard President’s Innovation Challenge student track; Founders: Vinay Shukla.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Vinay Shukla",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public ExploreYou profile explicitly identifies Vinay Shukla under \"Founders\". No class year claimed.",
+          "excerpt": "ExploreYou — 2026 Harvard President’s Innovation Challenge student track; Founders: Vinay Shukla."
+        }
+      ]
+    },
+    {
+      "name": "Fastflo",
+      "description": "Hiring frontline workers through messaging channels",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/venture/fastflo",
+      "excerpt": "Fastflo — 2026 Harvard President’s Innovation Challenge student track; Founders: Francisco Shirazi; Jenks Currie; Zannah Baker.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Francisco Shirazi",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Fastflo profile explicitly identifies Francisco Shirazi under \"Founders\". No class year claimed.",
+          "excerpt": "Fastflo — 2026 Harvard President’s Innovation Challenge student track; Founders: Francisco Shirazi; Jenks Currie; Zannah Baker."
+        },
+        {
+          "name": "Jenks Currie",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Fastflo profile explicitly identifies Jenks Currie under \"Founders\". No class year claimed.",
+          "excerpt": "Fastflo — 2026 Harvard President’s Innovation Challenge student track; Founders: Francisco Shirazi; Jenks Currie; Zannah Baker."
+        },
+        {
+          "name": "Zannah Baker",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Fastflo profile explicitly identifies Zannah Baker under \"Founders\". No class year claimed.",
+          "excerpt": "Fastflo — 2026 Harvard President’s Innovation Challenge student track; Founders: Francisco Shirazi; Jenks Currie; Zannah Baker."
+        }
+      ]
+    },
+    {
+      "name": "Refine Technologies, Inc.",
+      "description": "AI-assisted scientific peer-review feedback",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/venture/refine-technologies-inc",
+      "excerpt": "Refine Technologies, Inc. — 2026 Harvard President’s Innovation Challenge student track; Founders: Yann Calvó López; Benjamin Golub.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Yann Calvó López",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Refine Technologies, Inc. profile explicitly identifies Yann Calvó López under \"Founders\". No class year claimed.",
+          "excerpt": "Refine Technologies, Inc. — 2026 Harvard President’s Innovation Challenge student track; Founders: Yann Calvó López; Benjamin Golub."
+        },
+        {
+          "name": "Benjamin Golub",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Refine Technologies, Inc. profile explicitly identifies Benjamin Golub under \"Founders\". No class year claimed.",
+          "excerpt": "Refine Technologies, Inc. — 2026 Harvard President’s Innovation Challenge student track; Founders: Yann Calvó López; Benjamin Golub."
+        }
+      ]
+    },
+    {
+      "name": "Revolv",
+      "description": "Converting organic waste to feed and fertilizer",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/venture/revolv",
+      "excerpt": "Revolv — 2026 Harvard President’s Innovation Challenge student track; Founders: Biruh Demilew; Delila Kidanu.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Biruh Demilew",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Revolv profile explicitly identifies Biruh Demilew under \"Founders\". No class year claimed.",
+          "excerpt": "Revolv — 2026 Harvard President’s Innovation Challenge student track; Founders: Biruh Demilew; Delila Kidanu."
+        },
+        {
+          "name": "Delila Kidanu",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Revolv profile explicitly identifies Delila Kidanu under \"Founders\". No class year claimed.",
+          "excerpt": "Revolv — 2026 Harvard President’s Innovation Challenge student track; Founders: Biruh Demilew; Delila Kidanu."
+        }
+      ]
+    },
+    {
+      "name": "Surna Technologies",
+      "description": "Sovereign AI infrastructure for frontier financial systems",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/venture/surna-technologies",
+      "excerpt": "Surna Technologies — 2026 Harvard President’s Innovation Challenge student track; Founders: Hellen Siah Momoh.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Hellen Siah Momoh",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Surna Technologies profile explicitly identifies Hellen Siah Momoh under \"Founders\". No class year claimed.",
+          "excerpt": "Surna Technologies — 2026 Harvard President’s Innovation Challenge student track; Founders: Hellen Siah Momoh."
+        }
+      ]
+    },
+    {
+      "name": "Arul Health",
+      "description": "Agentic AI support for chronic-care navigation",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/venture/arul-health",
+      "excerpt": "Arul Health — 2026 Harvard President’s Innovation Challenge student track; Founders: Eshan Vishwakarma.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Eshan Vishwakarma",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Arul Health profile explicitly identifies Eshan Vishwakarma under \"Founders\". No class year claimed.",
+          "excerpt": "Arul Health — 2026 Harvard President’s Innovation Challenge student track; Founders: Eshan Vishwakarma."
+        }
+      ]
+    },
+    {
+      "name": "Bond Health",
+      "description": "Automates clinical-trial patient enrollment",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/venture/bond-health",
+      "excerpt": "Bond Health — 2026 Harvard President’s Innovation Challenge student track; Founders: Rishabh Goel; Sammy Mustafa.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Rishabh Goel",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Bond Health profile explicitly identifies Rishabh Goel under \"Founders\". No class year claimed.",
+          "excerpt": "Bond Health — 2026 Harvard President’s Innovation Challenge student track; Founders: Rishabh Goel; Sammy Mustafa."
+        },
+        {
+          "name": "Sammy Mustafa",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Bond Health profile explicitly identifies Sammy Mustafa under \"Founders\". No class year claimed.",
+          "excerpt": "Bond Health — 2026 Harvard President’s Innovation Challenge student track; Founders: Rishabh Goel; Sammy Mustafa."
+        }
+      ]
+    },
+    {
+      "name": "Overture Therapeutics",
+      "description": "Novel weight-loss interventions and related therapies",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/articles/announcing-the-2026-harvard-presidents-innovation-challenge-finalists",
+      "excerpt": "Overture Therapeutics — 2026 Harvard President’s Innovation Challenge student track.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Sole 1",
+      "description": "AI-enabled robotic socks supporting ankle mobility",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/articles/announcing-the-2026-harvard-presidents-innovation-challenge-finalists",
+      "excerpt": "Sole 1 — 2026 Harvard President’s Innovation Challenge student track.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Stenoa",
+      "description": "Mission-critical care workflow software",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/venture/stenoa",
+      "excerpt": "Stenoa — 2026 Harvard President’s Innovation Challenge student track; Founders: Jeremy Levett.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (student track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": true,
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Jeremy Levett",
+          "aliases": [],
+          "campusId": "univ_harvard",
+          "affiliationRole": "Harvard Innovation Labs 2026 student track venture founder; graduation year not verified",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Harvard Innovation Labs public Stenoa profile explicitly identifies Jeremy Levett under \"Founders\". No class year claimed.",
+          "excerpt": "Stenoa — 2026 Harvard President’s Innovation Challenge student track; Founders: Jeremy Levett."
+        }
+      ]
+    },
+    {
+      "name": "Adalat AI",
+      "description": "India-focused justice technology systems",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/articles/announcing-the-2026-harvard-presidents-innovation-challenge-finalists",
+      "excerpt": "Adalat AI — 2026 Harvard President’s Innovation Challenge alumni and affiliate track.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (alumni+affiliates track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": false,
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Enlaye",
+      "description": "AI software for construction project risk",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/articles/announcing-the-2026-harvard-presidents-innovation-challenge-finalists",
+      "excerpt": "Enlaye — 2026 Harvard President’s Innovation Challenge alumni and affiliate track.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (alumni+affiliates track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": false,
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "FieldData",
+      "description": "Agricultural operating software for Latin America",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/articles/announcing-the-2026-harvard-presidents-innovation-challenge-finalists",
+      "excerpt": "FieldData — 2026 Harvard President’s Innovation Challenge alumni and affiliate track.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (alumni+affiliates track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": false,
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Maka Kids",
+      "description": "Child-development-led streaming service",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/articles/announcing-the-2026-harvard-presidents-innovation-challenge-finalists",
+      "excerpt": "Maka Kids — 2026 Harvard President’s Innovation Challenge alumni and affiliate track.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (alumni+affiliates track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": false,
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Mona",
+      "description": "Automated small business financing advice",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/articles/announcing-the-2026-harvard-presidents-innovation-challenge-finalists",
+      "excerpt": "Mona — 2026 Harvard President’s Innovation Challenge alumni and affiliate track.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (alumni+affiliates track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": false,
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "FIND Neuro",
+      "description": "Epilepsy surgery decision support",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/articles/announcing-the-2026-harvard-presidents-innovation-challenge-finalists",
+      "excerpt": "FIND Neuro — 2026 Harvard President’s Innovation Challenge alumni and affiliate track.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (alumni+affiliates track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": false,
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "MonitAir",
+      "description": "CPAP and sleep-care remote patient monitoring",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/articles/announcing-the-2026-harvard-presidents-innovation-challenge-finalists",
+      "excerpt": "MonitAir — 2026 Harvard President’s Innovation Challenge alumni and affiliate track.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (alumni+affiliates track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": false,
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "NuCyRNA Therapeutics",
+      "description": "RNA-targeted therapeutics for neurodegenerative conditions",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/articles/announcing-the-2026-harvard-presidents-innovation-challenge-finalists",
+      "excerpt": "NuCyRNA Therapeutics — 2026 Harvard President’s Innovation Challenge alumni and affiliate track.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (alumni+affiliates track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": false,
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "PathCision Medicine",
+      "description": "Precision oncology drug delivery and therapeutics",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/articles/announcing-the-2026-harvard-presidents-innovation-challenge-finalists",
+      "excerpt": "PathCision Medicine — 2026 Harvard President’s Innovation Challenge alumni and affiliate track.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (alumni+affiliates track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": false,
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Promakhos Therapeutics Inc.",
+      "description": "Non-immunosuppressive treatments for chronic inflammatory diseases",
+      "website": null,
+      "sourceUrl": "https://innovationlabs.harvard.edu/articles/announcing-the-2026-harvard-presidents-innovation-challenge-finalists",
+      "excerpt": "Promakhos Therapeutics Inc. — 2026 Harvard President’s Innovation Challenge alumni and affiliate track.",
+      "orgPlace": "Harvard President’s Innovation Challenge 2026 (alumni+affiliates track)",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "investable": false,
+      "verificationStatus": "confirmed",
+      "founders": []
+    }
+  ],
+  "potential": [],
+  "links": []
+}
