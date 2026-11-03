@@ -1121,7 +1121,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         void scale;
         void midW;
         // Out: only 8–10 highest-signal hubs (campus notes by founder count)
-        const noteCap = ww < 500 ? 8 : 10;
+        const noteCap = ww < 500 ? 4 : 6;
         const notePool = [...(p.campusLabels ?? [])].sort((a, b) => b.n - a.n).slice(0, noteCap);
         if (outW > 0.25) {
           for (const lab of notePool) {
@@ -1134,7 +1134,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
             const enc = encodingsRef.current.find((e) => e.id === lab.id);
             raw.push({
               id: lab.id,
-              label: outW > 0.4 && lab.n ? `${lab.label} · ${lab.n}` : lab.label,
+              label: lab.label,
               x: lx,
               y: ly,
               ax: pt.x,
@@ -1374,10 +1374,9 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           }
         }
         idleRef.current += 1;
-        const currentScale = distToScale(camera.position.distanceTo(ctrl.target));
         // Keep close-ups stable long enough to inspect names and relationships.
         // Only the two wide reference levels may gently orbit when idle.
-        ctrl.autoRotate = idleRef.current > 480 && currentScale < 1.2;
+        ctrl.autoRotate = false; // Keep camera still while inspecting networks.
         ctrl.update();
         renderer!.render(scene, camera);
 
@@ -1444,8 +1443,8 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
     <div className="w-full overflow-visible" data-networks-desk="" data-networks-dim="4d">
       <div
         ref={wrapRef}
-        className="relative w-screen max-w-none touch-manipulation overflow-hidden left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] max-md:!h-[80vh]"
-        style={{ height: "85vh", background: "var(--networks-bg, #ece9e4)" }}
+        className="relative w-screen max-w-none touch-manipulation overflow-hidden left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] max-md:!h-[64vh]"
+        style={{ height: "min(76vh, 710px)", background: "var(--networks-bg, #ece9e4)" }}
         data-networks-graph=""
         data-networks-fade="0"
         data-networks-zoom="0"
@@ -1553,27 +1552,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           ) : null}
         </div>
 
-        {/* Nature margin pointer lines (campus notes → island anchors) */}
-        <svg
-          className="pointer-events-none absolute inset-0 z-[2] h-full w-full overflow-visible"
-          aria-hidden="true"
-          style={{ opacity: labelOpacity * outOpacity }}
-        >
-          {labels
-            .filter((lab) => lab.kind === "campus" && lab.ax != null && lab.ay != null)
-            .map((lab) => (
-              <line
-                key={`ptr-${lab.id}`}
-                data-networks-margin-line={lab.id}
-                x1={lab.ax}
-                y1={lab.ay}
-                x2={lab.x}
-                y2={lab.y}
-                stroke="rgba(71,85,105,0.55)"
-                strokeWidth={0.85}
-              />
-            ))}
-        </svg>
+        {/* Editorial margin leader lines removed to keep clusters navigable. */}
 
         {/* Campus + hub labels (collision-culled) */}
         <div className="pointer-events-none absolute inset-0 z-[2]" style={{ opacity: labelOpacity }}>
