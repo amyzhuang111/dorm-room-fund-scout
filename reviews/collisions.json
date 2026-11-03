@@ -1,12 +1,12 @@
 {
   "ok": true,
-  "base": "http://127.0.0.1:3000",
+  "base": "http://127.0.0.1:3460",
   "collisions": [],
   "pages": [
     {
       "route": "/",
       "viewport": "375",
-      "nodeCount": 44,
+      "nodeCount": 36,
       "collisions": [],
       "collisionCount": 0
     },
@@ -48,7 +48,7 @@
     {
       "route": "/data",
       "viewport": "375",
-      "nodeCount": 69,
+      "nodeCount": 70,
       "collisions": [],
       "collisionCount": 0
     },
@@ -111,7 +111,7 @@
     {
       "route": "/data",
       "viewport": "1440",
-      "nodeCount": 257,
+      "nodeCount": 262,
       "collisions": [],
       "collisionCount": 0
     },
@@ -125,7 +125,7 @@
     {
       "route": "/startup/proj_9GUOmdEYxbuH",
       "viewport": "1440",
-      "nodeCount": 114,
+      "nodeCount": 116,
       "collisions": [],
       "collisionCount": 0
     }

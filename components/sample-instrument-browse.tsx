@@ -1095,7 +1095,7 @@ export function SampleInstrumentBrowse({
                     <p className="border-b border-[color:var(--cobalt,#2F4FD8)]/15 bg-[color:var(--bg,#FFFFFF)] px-3.5 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]" data-ledger-end-continue="">
                       Batch close · companies above
                     </p>
-                    <div className="border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3.5 py-3" data-mobile-list-mast="">
+                    <div className="border-b border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-3.5 py-2" data-mobile-list-mast="">
                       <div className="flex items-start gap-3">
                         {pageCampusRanks[0] ? (
                           endLeadCampusHref ? (
@@ -1123,17 +1123,36 @@ export function SampleInstrumentBrowse({
                         </div>
                       </div>
                     </div>
+                    {/* Last companies on this page — keep the end state dense, not only ranks */}
+                    {cards.length ? (
+                      <ul className="divide-y divide-[color:var(--line,#E1E5EF)] border-b border-[color:var(--line,#E1E5EF)] px-3.5" data-ledger-end-companies="">
+                        {cards.slice(-3).map((card) => (
+                          <li key={card.id} className="flex items-center gap-2 py-1.5">
+                            <LogoMark name={card.name} logoUrl={card.logoUrl} size={16} />
+                            <Link
+                              href={`/startup/${card.id}`}
+                              className="min-w-0 flex-1 truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)] hover:text-[color:var(--cobalt,#2F4FD8)]"
+                            >
+                              {card.name}
+                            </Link>
+                            <span className="shrink-0 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
+                              {card.school || "Campus missing"}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
                     {pageCampusRanks.length ? (
                       <ol className="divide-y divide-[color:var(--line,#E1E5EF)] px-3.5" data-page-campus-seals="" data-page-campus-ranks="">
                         {pageCampusRanks.slice(0, 6).map((row, i) => (
-                          <li key={row.label} className="flex items-center gap-2.5 py-2.5">
-                            <span className="w-5 shrink-0 text-right font-mono text-[14px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
+                          <li key={row.label} className="flex items-center gap-2 py-1.5">
+                            <span className="w-5 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
                               {String(i + 1).padStart(2, "0")}
                             </span>
-                            <CampusSeal label={row.label} size="md" />
+                            <CampusSeal label={row.label} size="sm" />
                             <div className="min-w-0 flex-1">
-                              <p className="truncate text-[14px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
-                              <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
+                              <p className="truncate text-[13px] font-semibold tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
+                              <p className="font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
                                 <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
                                 {" cos"}
                                 <span aria-hidden> · </span>
@@ -1145,7 +1164,7 @@ export function SampleInstrumentBrowse({
                         ))}
                       </ol>
                     ) : null}
-                    <div className="px-3.5 py-3" data-ledger-end-more="" data-ledger-end-colophon="">
+                    <div className="px-3.5 py-2.5" data-ledger-end-more="" data-ledger-end-colophon="">
                       {sliceInsight ? (
                         <p className="font-mono text-[11px] leading-4 tabular-nums text-[color:var(--fg-3,#5C647A)]">
                           <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{sliceInsight.figure.toLocaleString("en-US")}</span>
@@ -1158,12 +1177,12 @@ export function SampleInstrumentBrowse({
                         </p>
                       ) : null}
                       {cards.length < total ? (
-                        <p className="mt-2 font-mono text-[12px] text-[color:var(--fg-3,#5C647A)]">
-                          <span>{"Still "}{(total - cards.length).toLocaleString("en-US")}{" · "}</span>
+                        <p className="mt-2 flex flex-wrap items-center gap-2 font-mono text-[12px] text-[color:var(--fg-3,#5C647A)]">
+                          <span>{"Still "}{(total - cards.length).toLocaleString("en-US")}</span>
                           <Link
                             href={moreHref}
                             data-load-next=""
-                            className="font-semibold text-[color:var(--cobalt,#2F4FD8)] underline-offset-2 hover:underline"
+                            className="inline-flex h-8 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-semibold text-white hover:opacity-90"
                           >
                             Load next
                           </Link>

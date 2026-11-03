@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "base": "http://127.0.0.1:3000",
+  "base": "http://127.0.0.1:3460",
   "baselineSource": "baked-e100551",
   "baseline": {
     "companies@375": {
@@ -325,7 +325,7 @@
       "peak": 1,
       "ranks": 1,
       "bars": 1,
-      "founderCards": 1
+      "founderCards": 12
     },
     "fold@1440": {
       "peak": 1,
@@ -693,7 +693,7 @@
         "peak": 1,
         "ranks": 1,
         "bars": 1,
-        "founderCards": 1
+        "founderCards": 12
       },
       "floor": {
         "peak": 1,
@@ -701,7 +701,7 @@
         "bars": 1,
         "founderCards": 1
       },
-      "detail": "cand peak=1 ranks=1 bars=1 cards=1 | floor peak=1 ranks=1 bars=1 cards=1"
+      "detail": "cand peak=1 ranks=1 bars=1 cards=12 | floor peak=1 ranks=1 bars=1 cards=1"
     },
     {
       "key": "fold@1440",

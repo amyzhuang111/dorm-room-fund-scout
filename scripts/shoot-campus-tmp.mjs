@@ -254,9 +254,9 @@ const browser = await chromium.launch({ headless: true });
   await page.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await waitFoundersReady(page);
-  // r53: search lives in expanded sheet; deck + cards are the rest-state surface
-  await page.waitForSelector("[data-founder-deck]", { timeout: 20000 });
-  await page.waitForSelector("[data-founder-card]", { state: "visible", timeout: 20000 });
+  // r54: rest is peek (segments + chips); Expand opens the deck
+  await page.waitForSelector("[data-fold-campus-segments], [data-founder-peek-strip], [data-founder-deck]", { timeout: 20000 });
+  await page.waitForSelector("[data-founder-card], [data-founder-peek-chip]", { state: "visible", timeout: 20000 });
   await waitGlobeIdle(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   await shot(page, "fold-375");
@@ -265,6 +265,26 @@ const browser = await chromium.launch({ headless: true });
   await waitDirectory(page);
   await waitFoundersReady(page);
   await waitGlobeIdle(page);
+  // Expand peek → deck so Penn selection + filtered founders read clearly
+  const expandBtn = page.locator("[data-fold-sheet-expand]").first();
+  if (await expandBtn.count()) {
+    await expandBtn.click().catch(() => {});
+    await page.waitForTimeout(350);
+  }
+  // Drag handle up into expanded so program filters appear with Penn kept
+  const handle = page.locator("[data-fold-sheet-handle]").first();
+  if (await handle.count()) {
+    const box = await handle.boundingBox();
+    if (box) {
+      const x = box.x + box.width / 2;
+      const y = box.y + box.height / 2;
+      await page.mouse.move(x, y);
+      await page.mouse.down();
+      await page.mouse.move(x, Math.max(40, y - 420), { steps: 12 });
+      await page.mouse.up();
+      await page.waitForTimeout(400);
+    }
+  }
   const programM = page.locator("[data-founder-filters] select").first();
   if (await programM.count()) {
     await programM.selectOption({ index: 1 }).catch(() => {});
@@ -395,12 +415,25 @@ const browser = await chromium.launch({ headless: true });
     await page.waitForTimeout(200);
   }
   await shot(page, "company-sim-375");
-  const fullRecordM = page.locator("[data-company-full-record]").first();
-  if (await fullRecordM.count()) {
-    await fullRecordM.evaluate((el) => el.scrollIntoView({ block: "start" }));
-    await page.waitForTimeout(350);
-    await shot(page, "company-full-record-375");
+  // r54: restore 65b4329 full-record-375 = dossier fold at scrollY=0 (founders / identity / CONFIRMED),
+  // not the scrolled [data-company-full-record] panel (that view scored worse).
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(350);
+  const dossierFold = page.locator("[data-company-mobile-hero], [data-dossier-founders-lead], [data-full-record-identity]").first();
+  if (await dossierFold.count()) {
+    await dossierFold.evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await page.waitForTimeout(300);
+    await page.evaluate(() => {
+      const name = document.querySelector("[data-company-name-lead], [data-dossier-founders-lead]");
+      if (!name) return;
+      const top = name.getBoundingClientRect().top;
+      if (top < 56) window.scrollBy(0, top - 64);
+    });
+    await page.waitForTimeout(200);
+  } else {
+    await page.evaluate(() => window.scrollTo(0, 0));
   }
+  await shot(page, "company-full-record-375");
   await page.goto(`${BASE}/data`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForSelector("[data-corpus-explorer]", { timeout: 30000 });
   await page.waitForTimeout(600);

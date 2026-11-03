@@ -9,6 +9,8 @@
  * Fold content inside a collapsible panel is allowed; covering stats/search/Map
  * labels or Program filters is not.
  *
+ * Also fails if home map unobstructed area @375 is under 80% (Amy map-clearance rule).
+ *
  * Usage: BASE=http://127.0.0.1:3460 node scripts/check-overlay.mjs
  */
 import { chromium } from "playwright";
@@ -48,7 +50,7 @@ function fail(msg) {
 }
 
 const browser = await chromium.launch({ headless: true });
-const report = { ok: true, base: BASE, pages: [], totals: { overlayOnText: 0, overlayOnControl: 0 } };
+const report = { ok: true, base: BASE, pages: [], totals: { overlayOnText: 0, overlayOnControl: 0 }, homeMapUnobstructedPct375: null };
 
 for (const vp of VIEWPORTS) {
   const page = await browser.newPage({
@@ -197,7 +199,47 @@ for (const vp of VIEWPORTS) {
       overlayOnControl: found.onControl.length,
       onText: found.onText.slice(0, 12),
       onControl: found.onControl.slice(0, 12),
+      homeMapUnobstructedPct: null,
     };
+
+    if (route === "/" && vp.name === "375") {
+      const free = await page.evaluate(() => {
+        const vh = window.innerHeight, vw = window.innerWidth;
+        const stage =
+          document.querySelector("[data-dispatch-map-stage], [data-fold-bigmap-stage], .maplibregl-map") ||
+          document.querySelector("canvas.maplibregl-canvas")?.parentElement;
+        if (!stage) return null;
+        const mb = stage.getBoundingClientRect();
+        const mapArea =
+          Math.max(0, Math.min(mb.bottom, vh) - Math.max(mb.top, 0)) *
+          Math.max(0, Math.min(mb.right, vw) - Math.max(mb.left, 0));
+        const overlaySel =
+          "[data-fold-map-overlays] > aside, [data-fold-overlay-peak], [data-fold-overlay-founders], [data-fold-map-sheet], [data-fold-map-legend], [role='dialog']";
+        let blocked = 0;
+        for (const el of document.querySelectorAll(overlaySel)) {
+          const r = el.getBoundingClientRect();
+          const cs = getComputedStyle(el);
+          if (r.width < 2 || r.height < 2) continue;
+          if (cs.display === "none" || cs.visibility === "hidden" || Number(cs.opacity || "1") < 0.05) continue;
+          const x1 = Math.max(r.left, mb.left, 0);
+          const y1 = Math.max(r.top, mb.top, 0);
+          const x2 = Math.min(r.right, mb.right, vw);
+          const y2 = Math.min(r.bottom, mb.bottom, vh);
+          if (x2 > x1 && y2 > y1) blocked += (x2 - x1) * (y2 - y1);
+        }
+        blocked = Math.min(blocked, mapArea);
+        return mapArea > 0 ? +(((mapArea - blocked) / mapArea) * 100).toFixed(1) : null;
+      });
+      entry.homeMapUnobstructedPct = free;
+      report.homeMapUnobstructedPct375 = free;
+      if (free == null || free < 80) {
+        report.ok = false;
+        fail(`/@375 home-map unobstructed=${free}% (need ≥80)`);
+      } else {
+        console.log(`OK /@375 home-map unobstructed=${free}%`);
+      }
+    }
+
     report.pages.push(entry);
     report.totals.overlayOnText += entry.overlayOnText;
     report.totals.overlayOnControl += entry.overlayOnControl;
@@ -223,4 +265,4 @@ if (!report.ok) {
   console.error("check-overlay FAILED", report.totals);
   process.exit(1);
 }
-console.log("PASS check-overlay", report.totals);
+console.log("PASS check-overlay", { ...report.totals, homeMapUnobstructedPct375: report.homeMapUnobstructedPct375 });

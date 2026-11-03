@@ -2,11 +2,11 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
+import { cloneElement, isValidElement, useEffect, useMemo, useRef, useState, type ReactElement, type ReactNode, type PointerEvent as ReactPointerEvent } from "react";
 import { createPortal } from "react-dom";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FounderResults, FounderSearchBar } from "@/components/founder-sourcing";
-import { MobileCampusSegments, MobileFounderDeck } from "@/components/mobile-founder-deck";
+import { MobileCampusSegments, MobileFounderDeck, MobileFounderPeek } from "@/components/mobile-founder-deck";
 import {
   CurrentViewStrip,
   FilterChips,
@@ -191,6 +191,7 @@ function MapFoldSheet({
   peak,
   founders,
   deck,
+  peek,
   filterKeep,
   campuses,
   campusId,
@@ -201,6 +202,7 @@ function MapFoldSheet({
   peak: ReactNode;
   founders: ReactNode;
   deck: ReactNode;
+  peek: ReactNode;
   filterKeep: ReactNode;
   campuses: TopCampus[];
   campusId: string | null;
@@ -210,21 +212,26 @@ function MapFoldSheet({
 }) {
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{ startY: number; startH: number } | null>(null);
-  // r53: taller rest so swipeable founder cards are readable; drag up for filters + list.
-  const REST = 300;
+  // r53b: compact peek so ≥80% of the home map stays unobstructed @375.
+  // Swipe up or tap Expand for the founder deck; drag further for filters + list.
+  const REST = 120;
+  const DECK = 300;
   const [height, setHeight] = useState(REST);
-  const minH = 200;
+  const minH = 100;
   const clampH = (h: number) => {
     const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.82) : 560;
     return Math.max(minH, Math.min(max, h));
   };
-  const expanded = height > REST + 48;
+  const mode: "peek" | "deck" | "expanded" =
+    height >= DECK + 40 ? "expanded" : height >= REST + 36 ? "deck" : "peek";
 
   useEffect(() => {
     const onResize = () => setHeight((h) => clampH(h));
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
+
+  const expandToDeck = () => setHeight(clampH(DECK));
 
   const onPointerDown = (e: ReactPointerEvent) => {
     (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
@@ -236,7 +243,15 @@ function MapFoldSheet({
     setHeight(clampH(drag.startH + (drag.startY - e.clientY)));
   };
   const onPointerUp = () => {
+    const drag = dragRef.current;
     dragRef.current = null;
+    if (!drag) return;
+    setHeight((h) => {
+      if (h < REST + 24) return REST;
+      if (h < DECK + 24) return DECK;
+      const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.82) : 560;
+      return max;
+    });
   };
 
   return (
@@ -244,7 +259,8 @@ function MapFoldSheet({
       ref={sheetRef}
       className="pointer-events-none fixed inset-x-0 bottom-0 z-[30] lg:hidden"
       data-fold-map-sheet=""
-      data-fold-sheet-mode={expanded ? "expanded" : "deck"}
+      data-fold-sheet-mode={mode}
+      data-fold-sheet-rest={String(REST)}
       style={{ height }}
     >
       <div
@@ -264,8 +280,8 @@ function MapFoldSheet({
         >
           <span data-fold-sheet-grab="" className="h-1.5 w-12 rounded-full bg-[color:var(--cobalt,#2F4FD8)]/70" />
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3" data-fold-sheet-body="">
-          <div className="sticky top-0 z-[1] bg-[color:var(--bg,#FFFFFF)] pb-2">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-2" data-fold-sheet-body="">
+          <div className="sticky top-0 z-[1] bg-[color:var(--bg,#FFFFFF)] pb-1.5">
             <MobileCampusSegments
               campuses={campuses}
               selectedId={campusId}
@@ -273,28 +289,47 @@ function MapFoldSheet({
               onClear={onClearCampus}
             />
           </div>
-          <div className="mt-1" data-fold-peak-in-rail="" data-fold-sheet-peak="">
-            {peak}
-          </div>
-          {!expanded ? (
-            <div className="mt-2" data-fold-sheet-deck="" data-fold-founders-col="">
+          {mode === "peek" ? (
+            <div className="mt-1" data-fold-sheet-peek="" data-fold-founders-col="">
+              {isValidElement(peek)
+                ? cloneElement(peek as ReactElement<{ onExpand?: () => void }>, { onExpand: expandToDeck })
+                : peek}
+              <div className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0" aria-hidden="true" data-fold-sheet-filter-keep="">
+                {filterKeep}
+              </div>
+              {/* Peak + deck stay mounted but inert so density can expand into a real surface */}
+              <div className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0" aria-hidden="true" data-fold-sheet-deck-keep="">
+                {peak}
+                {deck}
+              </div>
+            </div>
+          ) : null}
+          {mode === "deck" ? (
+            <div className="mt-1" data-fold-sheet-deck="" data-fold-founders-col="">
+              <div className="mb-1" data-fold-peak-in-rail="" data-fold-sheet-peak="">
+                {peak}
+              </div>
               {deck}
-              {/* Keep filter selects mounted for fold gate + thumb expand path */}
               <div className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0" aria-hidden="true" data-fold-sheet-filter-keep="">
                 {filterKeep}
               </div>
             </div>
-          ) : (
-            <div className="mt-2 space-y-2" data-fold-sheet-founders="" data-fold-founders-col="">
+          ) : null}
+          {mode === "expanded" ? (
+            <div className="mt-1 space-y-2" data-fold-sheet-founders="" data-fold-founders-col="">
+              <div data-fold-peak-in-rail="" data-fold-sheet-peak="">
+                {peak}
+              </div>
               {search}
               {founders}
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </div>
   );
 }
+
 
 /** Desk overlays portaled onto the map stage only — never cover stats, Map label, or search. */
 function MapStageOverlays({
@@ -590,6 +625,14 @@ export function SampleHomeClient(props: {
                 }
                 deck={
                   <MobileFounderDeck
+                    founders={founders}
+                    status={founderStatus}
+                    query={founderQuery}
+                    campusId={mapCampusId}
+                  />
+                }
+                peek={
+                  <MobileFounderPeek
                     founders={founders}
                     status={founderStatus}
                     query={founderQuery}

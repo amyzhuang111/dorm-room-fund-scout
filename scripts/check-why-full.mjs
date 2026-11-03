@@ -15,6 +15,16 @@ await page.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 90000 });
 await page.waitForSelector('[data-directory-ready="1"]', { timeout: 60000 });
 await page.waitForSelector("[data-founder-card]", { timeout: 60000 });
 await page.waitForTimeout(800);
+// Expand peek → deck so full why lines are on screen (rest state is chip strip).
+{
+  const expand = page.locator("[data-fold-sheet-expand]").first();
+  if (await expand.count()) {
+    await expand.click().catch(() => {});
+    await page.waitForTimeout(600);
+  }
+}
+await page.waitForSelector("[data-why-text]", { timeout: 15000 }).catch(() => {});
+await page.waitForTimeout(300);
 
 const report = await page.evaluate(() => {
   const whyRoots = [...document.querySelectorAll("[data-why-worth]:not([data-why-blank])")];

@@ -177,6 +177,95 @@ export function MobileFounderDeck({
   );
 }
 
+
+/** Compact one-line founder chips for the map-peek rest state (~132px sheet). */
+export function MobileFounderPeek({
+  founders,
+  status,
+  query,
+  campusId,
+  onExpand,
+}: {
+  founders: FounderLead[];
+  status: "loading" | "ready" | "error";
+  query: string;
+  campusId: string | null;
+  onExpand?: () => void;
+}) {
+  const matches = useMemo(
+    () => founders.filter((f) => founderMatches(f, { text: query, campusId: campusId || null })),
+    [founders, query, campusId],
+  );
+  const list = matches.slice(0, 16);
+
+  if (status === "loading") {
+    return (
+      <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]" data-founder-results="">
+        Loading founders
+      </p>
+    );
+  }
+  if (status === "error" || list.length === 0) {
+    return (
+      <p className="text-[12px] text-[color:var(--fg-2,#3F465C)]" data-founder-results="">
+        {status === "error" ? "Founder list could not be loaded." : "No founders match."}
+      </p>
+    );
+  }
+
+  return (
+    <section data-founder-results="" data-founder-peek-strip="1" data-founder-peek={String(Math.min(list.length, 3))}>
+      <div className="mb-0.5 flex items-baseline justify-between gap-2">
+        <p className="font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
+          Founders
+          <span className="ml-1.5 tabular-nums text-[color:var(--fg-3,#5C647A)]">{matches.length.toLocaleString("en-US")}</span>
+        </p>
+        <button
+          type="button"
+          className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]"
+          data-fold-sheet-expand=""
+          onClick={() => onExpand?.()}
+        >
+          Expand
+        </button>
+      </div>
+      <div
+        className="flex gap-1.5 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        data-founder-peek-scroller=""
+        onClick={() => onExpand?.()}
+      >
+        {list.map((founder) => {
+          const href = founder.companyId
+            ? `/startup/${founder.companyId}?from=map${campusId && campusId !== "missing" ? `&campus=${encodeURIComponent(campusId)}` : ""}`
+            : null;
+          return (
+            <div
+              key={founder.id}
+              className="inline-flex h-9 max-w-[11rem] shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2"
+              data-founder-card=""
+              data-founder-peek-chip=""
+            >
+              <CampusSeal label={founder.campus} size="sm" />
+              <span className="min-w-0 truncate text-[11px] font-semibold leading-none text-[color:var(--fg,#0B0E17)]" data-founder-name="">
+                {founder.name}
+              </span>
+              {href ? (
+                <Link
+                  href={href}
+                  className="shrink-0 font-mono text-[8px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Open
+                </Link>
+              ) : null}
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 /** Sticky campus segments for the mobile sheet — also carries rank markers for density. */
 export function MobileCampusSegments({
   campuses,
@@ -205,7 +294,7 @@ export function MobileCampusSegments({
             role="option"
             aria-selected={!selectedId || selectedId === "missing"}
             onClick={onClear}
-            className={`inline-flex h-8 items-center rounded-full border px-3 font-mono text-[11px] font-semibold ${
+            className={`inline-flex h-7 items-center rounded-full border px-2.5 font-mono text-[10px] font-semibold ${
               !selectedId || selectedId === "missing"
                 ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] text-white"
                 : "border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg-2,#3F465C)]"
@@ -224,18 +313,18 @@ export function MobileCampusSegments({
                 role="option"
                 aria-selected={active}
                 onClick={() => onSelect(campus.id)}
-                className={`inline-flex h-8 items-center gap-1.5 rounded-full border px-2.5 ${
+                className={`inline-flex h-7 items-center gap-1 rounded-full border px-2 ${
                   active
-                    ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt-haze,#E8ECFA)] text-[color:var(--fg,#0B0E17)]"
+                    ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] text-white"
                     : "border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg,#0B0E17)]"
                 }`}
               >
-                <span className="font-mono text-[9px] tabular-nums text-[color:var(--fg-3,#5C647A)]">{String(i + 1).padStart(2, "0")}</span>
+                <span className={`font-mono text-[9px] tabular-nums ${active ? "text-white/80" : "text-[color:var(--fg-3,#5C647A)]"}`}>{String(i + 1).padStart(2, "0")}</span>
                 <CampusSeal label={campus.name} size="sm" />
                 <span className="max-w-[4.5rem] truncate text-[11px] font-semibold tracking-tight" data-fold-peak-campus-label="">
                   {short}
                 </span>
-                <span className="font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
+                <span className={`font-mono text-[11px] font-bold tabular-nums ${active ? "text-white" : "text-[color:var(--cobalt,#2F4FD8)]"}`}>
                   {campus.founders.toLocaleString("en-US")}
                 </span>
               </button>

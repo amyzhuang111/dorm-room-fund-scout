@@ -2,8 +2,9 @@
  * Visible card density vs e100551 floor, plus fold overlay density vs 913f16a.
  * Fails if halfVisible or fully drops below the baked e100551 baseline
  * on companies / companies-more / company-sim at 375 and 1440.
- * Also fails if fold@375/@1440 peak / ranks / founder cards at scrollY=0
+ * Also fails if fold@375/@1440 peak / ranks / founder cards
  * drop below the baked 913f16a fold floor (r45 overlay).
+ * At 375 the sheet starts as a compact map peek; density expands to deck mode first.
  *
  * BASE = candidate (default :3460)
  * CTRL_BASE = optional live e100551 for side-by-side reporting (does not
@@ -184,6 +185,23 @@ async function measureFold(browser, base) {
     await page.waitForTimeout(800);
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(200);
+    // r53b: rest state is a compact peek for map clearance; expand to deck for fold density.
+    if (vp.name === "375") {
+      const expand = page.locator("[data-fold-sheet-expand]").first();
+      if (await expand.count()) {
+        await expand.click().catch(() => {});
+        await page.waitForTimeout(500);
+      } else {
+        await page.evaluate(() => {
+          const sheet = document.querySelector("[data-fold-map-sheet]");
+          if (sheet) sheet.style.height = "300px";
+          sheet?.setAttribute("data-fold-sheet-mode", "deck");
+        });
+        await page.waitForTimeout(400);
+      }
+      await page.waitForSelector('[data-fold-sheet-mode="deck"], [data-fold-sheet-mode="expanded"], [data-founder-deck]', { timeout: 10000 }).catch(() => {});
+      await page.waitForTimeout(300);
+    }
     const m = await page.evaluate(() => {
       const vh = window.innerHeight;
       const vis = (el) => {

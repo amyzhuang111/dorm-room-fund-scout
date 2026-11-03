@@ -117,23 +117,28 @@ export default async function DataExplorerPage({
       </div>
 
       <p
-        className="mt-2 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2.5 py-2 font-mono text-[11px] leading-5 text-[color:var(--fg-2,#3F465C)]"
+        className="mt-1.5 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2 py-1 font-mono text-[10px] leading-4 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:px-2.5 sm:py-2 sm:text-[11px] sm:leading-5"
         data-recency-funnel=""
       >
         <span className="font-semibold text-[color:var(--fg,#0B0E17)]">Recency gate</span>
         {" · "}
         <span data-count="recency-kept">{recency.investable.toLocaleString("en-US")}</span>
-        {" kept (this table) · "}
+        {" kept"}
+        <span className="hidden sm:inline">{" (this table)"}</span>
+        {" · "}
         <span data-count="recency-excluded">{recency.excludedOlderAlumni.toLocaleString("en-US")}</span>
-        {" excluded older alumni · "}
+        {" excluded"}
+        <span className="hidden sm:inline">{" older alumni"}</span>
+        {" · "}
         <span className="text-[color:var(--ember,#D96B1C)]" data-count="recency-unverified">{recency.unverifiedRecency.toLocaleString("en-US")}</span>
-        {" unverified recency (not counted as verified)"}
+        {" unverified"}
+        <span className="hidden sm:inline">{" recency (not counted as verified)"}</span>
       </p>
 
       <form
         method="get"
         action="/data"
-        className="mt-2 space-y-2 border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] pb-2.5 sm:flex sm:flex-wrap sm:items-end sm:gap-1.5 sm:space-y-0 sm:pb-2"
+        className="mt-1.5 space-y-1.5 border-b border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] pb-2 sm:mt-2 sm:flex sm:flex-wrap sm:items-end sm:gap-1.5 sm:space-y-0 sm:pb-2"
         data-corpus-filters=""
       >
         <label className="block min-w-0 sm:flex-[1_1_10rem]">
@@ -142,13 +147,13 @@ export default async function DataExplorerPage({
             name="q"
             defaultValue={q}
             placeholder="Search name or founder"
-            className="h-10 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[13px] text-[color:var(--fg,#0B0E17)] sm:h-8 sm:text-[12px]"
+            className="h-8 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2 font-mono text-[12px] text-[color:var(--fg,#0B0E17)] sm:h-8 sm:text-[12px]"
           />
         </label>
         <div className="grid grid-cols-2 gap-2 sm:contents">
           <label className="min-w-0 sm:min-w-[7.5rem] sm:flex-none">
             <span className="sr-only">Sector</span>
-            <select name="sector" defaultValue={sector || ""} className="h-10 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[12px] sm:h-8 sm:text-[11px]">
+            <select name="sector" defaultValue={sector || ""} className="h-8 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[11px] sm:h-8 sm:text-[11px]">
               <option value="">All sectors</option>
               {sectors.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -159,7 +164,7 @@ export default async function DataExplorerPage({
           </label>
           <label className="min-w-0 sm:min-w-[7.5rem] sm:flex-none">
             <span className="sr-only">Campus</span>
-            <select name="campus" defaultValue={campus || ""} className="h-10 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[12px] sm:h-8 sm:text-[11px]">
+            <select name="campus" defaultValue={campus || ""} className="h-8 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[11px] sm:h-8 sm:text-[11px]">
               <option value="">All campuses</option>
               {campuses.slice(0, 40).map((c) => (
                 <option key={c.id} value={c.id}>
@@ -172,7 +177,7 @@ export default async function DataExplorerPage({
         <div className="flex gap-2 sm:contents">
           <label className="min-w-0 flex-1 sm:min-w-[6.5rem] sm:flex-none">
             <span className="sr-only">Sort</span>
-            <select name="sort" defaultValue={sp.sort || "rank"} className="h-10 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[12px] sm:h-8 sm:text-[11px]">
+            <select name="sort" defaultValue={sp.sort || "rank"} className="h-8 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[11px] sm:h-8 sm:text-[11px]">
               <option value="rank">Rank</option>
               <option value="recent">Newest signal</option>
               <option value="name">Name</option>
@@ -183,7 +188,7 @@ export default async function DataExplorerPage({
           </label>
           <button
             type="submit"
-            className="inline-flex h-10 flex-none items-center justify-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-4 font-mono text-[12px] font-semibold text-white sm:h-8 sm:px-3 sm:text-[11px]"
+            className="inline-flex h-8 flex-none items-center justify-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[11px] font-semibold text-white sm:h-8 sm:px-3 sm:text-[11px]"
           >
             Apply
           </button>
@@ -193,7 +198,7 @@ export default async function DataExplorerPage({
       {/* r49 mobile: compact corpus summary + top ranks above table; keep a few rows in fold. */}
       <div className="mt-2 sm:hidden" data-corpus-campus-ranks="">
         <div
-          className="flex items-center gap-2.5 border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-2.5 py-2"
+          className="flex items-center gap-2 border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--cobalt-haze,#E8ECFA)]/35 px-2 py-1.5"
           data-corpus-campus-lead=""
           data-mobile-list-mast=""
         >
@@ -220,23 +225,18 @@ export default async function DataExplorerPage({
           </div>
         </div>
         {foldCampusRanks.length ? (
-          <ol className="mt-1.5 divide-y divide-[color:var(--line,#E1E5EF)] overflow-hidden border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-2.5">
+          <ol className="mt-1 flex gap-1.5 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-corpus-campus-rank-strip="">
             {foldCampusRanks.map((row, i) => (
-              <li key={row.label} className="flex items-center gap-2 py-1.5">
-                <span className="w-5 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
+              <li
+                key={row.label}
+                className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-2"
+              >
+                <span className="font-mono text-[10px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <CampusSeal label={row.label} size="sm" />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13px] font-semibold leading-4 tracking-tight text-[color:var(--fg,#0B0E17)]">{row.label}</p>
-                  <p className="font-mono text-[11px] tabular-nums leading-4 text-[color:var(--fg-2,#3F465C)]">
-                    <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
-                    {" cos"}
-                    <span aria-hidden> · </span>
-                    <span className="font-bold text-[color:var(--fg,#0B0E17)]">{row.signaled.toLocaleString("en-US")}</span>
-                    {" signaled"}
-                  </p>
-                </div>
+                <span className="max-w-[4.5rem] truncate text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]">{row.label}</span>
+                <span className="font-mono text-[11px] font-bold tabular-nums text-[color:var(--cobalt,#2F4FD8)]">{row.companies.toLocaleString("en-US")}</span>
               </li>
             ))}
           </ol>
@@ -244,7 +244,7 @@ export default async function DataExplorerPage({
       </div>
 
       {/* One table for all viewports: sticky Company + Campus + Stage core, horizontal scroll on mobile */}
-      <div className="mt-3 overflow-x-auto border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] [-webkit-overflow-scrolling:touch]" data-corpus-table="" data-corpus-cards="">
+      <div className="mt-2 overflow-x-auto border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] [-webkit-overflow-scrolling:touch] sm:mt-3" data-corpus-table="" data-corpus-cards="">
         <table className="c-table">
           <thead className="c-head">
             <tr>
