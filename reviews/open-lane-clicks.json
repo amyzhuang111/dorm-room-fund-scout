@@ -1,0 +1,187 @@
+{
+  "ok": true,
+  "base": "http://127.0.0.1:3480",
+  "passes": [
+    "headline href /founders?lane=open",
+    "headline figure 115",
+    "headline cursor pointer",
+    "campus rows 5",
+    "headline: clicked → /founders?lane=open count=115",
+    "campus Penn: clicked → /founders?lane=open&campus=univ_penn count=20",
+    "campus Northwestern: clicked → /founders?lane=open&campus=univ_northwestern count=13",
+    "campus Boston University: clicked → /founders?lane=open&campus=univ_bu count=7",
+    "campus Yale: clicked → /founders?lane=open&campus=univ_yale count=7",
+    "campus Columbia: clicked → /founders?lane=open&campus=univ_columbia count=6",
+    "stat strong → /founders",
+    "stat indexed → /founders",
+    "stat companies → /companies",
+    "keyboard Enter on headline reaches open lane",
+    "tap target all >= 44 (h=94 w=258)",
+    "tap target univ_penn >= 44 (h=44 w=258)",
+    "tap target univ_northwestern >= 44 (h=44 w=258)",
+    "tap target univ_bu >= 44 (h=44 w=258)",
+    "tap target univ_yale >= 44 (h=44 w=258)",
+    "tap target univ_columbia >= 44 (h=44 w=258)"
+  ],
+  "failures": [],
+  "clicks": [
+    {
+      "label": "headline",
+      "href": "/founders?lane=open",
+      "expected": 115,
+      "count": 115,
+      "figure": 115,
+      "cards": 115,
+      "url": "/founders?lane=open"
+    },
+    {
+      "label": "campus Penn",
+      "href": "/founders?lane=open&campus=univ_penn",
+      "expected": 20,
+      "count": 20,
+      "figure": 20,
+      "cards": 20,
+      "url": "/founders?lane=open&campus=univ_penn"
+    },
+    {
+      "label": "campus Northwestern",
+      "href": "/founders?lane=open&campus=univ_northwestern",
+      "expected": 13,
+      "count": 13,
+      "figure": 13,
+      "cards": 13,
+      "url": "/founders?lane=open&campus=univ_northwestern"
+    },
+    {
+      "label": "campus Boston University",
+      "href": "/founders?lane=open&campus=univ_bu",
+      "expected": 7,
+      "count": 7,
+      "figure": 7,
+      "cards": 7,
+      "url": "/founders?lane=open&campus=univ_bu"
+    },
+    {
+      "label": "campus Yale",
+      "href": "/founders?lane=open&campus=univ_yale",
+      "expected": 7,
+      "count": 7,
+      "figure": 7,
+      "cards": 7,
+      "url": "/founders?lane=open&campus=univ_yale"
+    },
+    {
+      "label": "campus Columbia",
+      "href": "/founders?lane=open&campus=univ_columbia",
+      "expected": 6,
+      "count": 6,
+      "figure": 6,
+      "cards": 6,
+      "url": "/founders?lane=open&campus=univ_columbia"
+    }
+  ],
+  "hero": {
+    "allHref": "/founders?lane=open",
+    "allExpected": 115,
+    "figure": 115,
+    "pointer": "pointer",
+    "campuses": [
+      {
+        "id": "univ_penn",
+        "name": "Penn",
+        "expected": 20,
+        "href": "/founders?lane=open&campus=univ_penn",
+        "tag": "A"
+      },
+      {
+        "id": "univ_northwestern",
+        "name": "Northwestern",
+        "expected": 13,
+        "href": "/founders?lane=open&campus=univ_northwestern",
+        "tag": "A"
+      },
+      {
+        "id": "univ_bu",
+        "name": "Boston University",
+        "expected": 7,
+        "href": "/founders?lane=open&campus=univ_bu",
+        "tag": "A"
+      },
+      {
+        "id": "univ_yale",
+        "name": "Yale",
+        "expected": 7,
+        "href": "/founders?lane=open&campus=univ_yale",
+        "tag": "A"
+      },
+      {
+        "id": "univ_columbia",
+        "name": "Columbia",
+        "expected": 6,
+        "href": "/founders?lane=open&campus=univ_columbia",
+        "tag": "A"
+      }
+    ],
+    "stats": [
+      {
+        "kind": "strong",
+        "href": "/founders",
+        "tag": "A"
+      },
+      {
+        "kind": "indexed",
+        "href": "/founders",
+        "tag": "A"
+      },
+      {
+        "kind": "companies",
+        "href": "/companies",
+        "tag": "A"
+      }
+    ]
+  },
+  "hitSizes": [
+    {
+      "sel": "all",
+      "height": 94,
+      "width": 258,
+      "beforeH": "44px",
+      "beforeW": "258px"
+    },
+    {
+      "sel": "univ_penn",
+      "height": 44,
+      "width": 258,
+      "beforeH": "44px",
+      "beforeW": "258px"
+    },
+    {
+      "sel": "univ_northwestern",
+      "height": 44,
+      "width": 258,
+      "beforeH": "44px",
+      "beforeW": "258px"
+    },
+    {
+      "sel": "univ_bu",
+      "height": 44,
+      "width": 258,
+      "beforeH": "44px",
+      "beforeW": "258px"
+    },
+    {
+      "sel": "univ_yale",
+      "height": 44,
+      "width": 258,
+      "beforeH": "44px",
+      "beforeW": "258px"
+    },
+    {
+      "sel": "univ_columbia",
+      "height": 44,
+      "width": 258,
+      "beforeH": "44px",
+      "beforeW": "258px"
+    }
+  ]
+}

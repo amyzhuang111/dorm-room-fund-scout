@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "base": "http://127.0.0.1:3480",
+  "expected": {
+    "full": "Strong means a funding, launch, accelerator or award signal. Top fund means a top VC, YC, Thiel, a16z Speedrun or Neo. The company must sit on the investable desk.",
+    "strong": "Strong means a funding, launch, accelerator or award signal.",
+    "top": "Top fund means a top VC, YC, Thiel, a16z Speedrun or Neo.",
+    "desk": "The company must sit on the investable desk."
+  },
+  "corpus": {
+    "investableCompanies": 1225,
+    "openLaneCount": 115,
+    "strong": 150,
+    "openLaneFounders": 115,
+    "outsideCorpus": 0,
+    "outsideIds": []
+  },
+  "home": {
+    "text": "Strong means a funding, launch, accelerator or award signal. Top fund means a top VC, YC, Thiel, a16z Speedrun or Neo. The company must sit on the investable desk.",
+    "strong": "Strong means a funding, launch, accelerator or award signal.",
+    "top": "Top fund means a top VC, YC, Thiel, a16z Speedrun or Neo.",
+    "desk": "The company must sit on the investable desk.",
+    "attr": "Strong means a funding, launch, accelerator or award signal. Top fund means a top VC, YC, Thiel, a16z Speedrun or Neo. The company must sit on the investable desk.",
+    "figure": 115,
+    "visible": true
+  },
+  "methodology": {
+    "text": "Strong means a funding, launch, accelerator or award signal. Top fund means a top VC, YC, Thiel, a16z Speedrun or Neo. The company must sit on the investable desk.",
+    "strong": "Strong means a funding, launch, accelerator or award signal.",
+    "top": "Top fund means a top VC, YC, Thiel, a16z Speedrun or Neo.",
+    "desk": "The company must sit on the investable desk.",
+    "full": "Strong means a funding, launch, accelerator or award signal. Top fund means a top VC, YC, Thiel, a16z Speedrun or Neo. The company must sit on the investable desk."
+  }
+}

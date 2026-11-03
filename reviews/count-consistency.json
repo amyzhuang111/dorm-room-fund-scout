@@ -1,5 +1,5 @@
 {
-  "base": "http://127.0.0.1:3460",
+  "base": "http://127.0.0.1:3480",
   "expect": {
     "investableCompanies": 1225,
     "foundersListed": 2104,
@@ -11,7 +11,7 @@
   "inventory": [
     {
       "page": "home",
-      "url": "http://127.0.0.1:3460/",
+      "url": "http://127.0.0.1:3480/",
       "status": 200,
       "counts": {
         "founders-listed": "2,104",
@@ -19,7 +19,7 @@
         "campuses-on-map": "161",
         "visibleCompanies": "1,225",
         "visibleCampuses": "161",
-        "topCampusesText": "Campus counts01PnPenn2002NWNorthwestern1303YlYale804BUBoston University705HvHarvard7"
+        "topCampusesText": "Campus counts01PnPenn2002NWNorthwestern1303BUBoston University704YlYale705CuColumbia6"
       },
       "sourceOfTruth": {
         "investableCompanies": {
@@ -46,7 +46,7 @@
     },
     {
       "page": "companies",
-      "url": "http://127.0.0.1:3460/companies",
+      "url": "http://127.0.0.1:3480/companies",
       "status": 200,
       "counts": {},
       "sourceOfTruth": {
@@ -74,7 +74,7 @@
     },
     {
       "page": "campuses",
-      "url": "http://127.0.0.1:3460/campuses",
+      "url": "http://127.0.0.1:3480/campuses",
       "status": 200,
       "counts": {},
       "sourceOfTruth": {
@@ -102,7 +102,7 @@
     },
     {
       "page": "data",
-      "url": "http://127.0.0.1:3460/data",
+      "url": "http://127.0.0.1:3480/data",
       "status": 200,
       "counts": {
         "recency-kept": "1,225",
@@ -134,7 +134,7 @@
     },
     {
       "page": "signals",
-      "url": "http://127.0.0.1:3460/signals",
+      "url": "http://127.0.0.1:3480/signals",
       "status": 200,
       "counts": {},
       "sourceOfTruth": {
@@ -162,7 +162,7 @@
     },
     {
       "page": "companies-overlay-rail",
-      "url": "http://127.0.0.1:3460/companies",
+      "url": "http://127.0.0.1:3480/companies",
       "status": 200,
       "counts": {
         "overlayUnit": "founders",

@@ -1241,7 +1241,10 @@ details:not([open]) > :not(summary) {
 [data-fold-sheet-expand],
 [data-founder-deck-more],
 [data-data-explorer-filters] button,
-[data-data-explorer-filters] summary {
+[data-data-explorer-filters] summary,
+[data-fold-open-lane-link],
+[data-fold-open-lane-campus],
+[data-fold-open-lane-stat] {
   position: relative;
   isolation: isolate;
 }
@@ -1255,7 +1258,10 @@ details:not([open]) > :not(summary) {
 [data-fold-campus-chip]::before,
 [data-fold-sheet-expand]::before,
 [data-founder-peek-open]::before,
-[data-founder-peek-chip]::before {
+[data-founder-peek-chip]::before,
+[data-fold-open-lane-link]::before,
+[data-fold-open-lane-campus]::before,
+[data-fold-open-lane-stat]::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -1849,4 +1855,12 @@ html[data-sample="halflight"] [data-site-nav] {
   [data-fold-overlay-peak] {
     max-width: min(340px, 34%);
   }
+}
+
+
+/* r60: open-lane hero links feel clickable */
+[data-fold-open-lane-link],
+[data-fold-open-lane-campus],
+[data-fold-open-lane-stat] {
+  cursor: pointer;
 }
