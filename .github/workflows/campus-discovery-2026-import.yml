@@ -1,0 +1,81 @@
+name: Import 2026 campus founder discovery expansion
+
+on:
+  push:
+    branches:
+      - codex/campus-discovery-expansion-2026-11-03
+    paths:
+      - ".github/workflows/campus-discovery-2026-import.yml"
+      - "data/imports/v3-campus-founders-batch19-*.json"
+      - "data/imports/v3-campus-founders-batch20-*.json"
+      - "data/imports/v3-campus-founders-batch21-*.json"
+      - "data/imports/v3-campus-founders-batch22-*.json"
+      - "data/imports/v3-campus-founders-batch23-*.json"
+      - "data/imports/v3-campus-founders-batch24-*.json"
+      - "data/imports/v3-campus-founders-batch25-*.json"
+      - "scripts/ingest/fetch-2026-campus-hackathon-winners.ts"
+      - "scripts/ingest/import-v3-campus-founders.ts"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: campus-founder-discovery-2026
+  cancel-in-progress: false
+
+jobs:
+  source-and-import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Import seven individually sourced venture cohorts
+        shell: bash
+        run: |
+          set -euo pipefail
+          for path in \
+            data/imports/v3-campus-founders-batch19-stanford-ventures-2526.json \
+            data/imports/v3-campus-founders-batch20-brown-blab-2026.json \
+            data/imports/v3-campus-founders-batch21-mit-deltav-2026.json \
+            data/imports/v3-campus-founders-batch22-yale-tsaicity-fall-2026.json \
+            data/imports/v3-campus-founders-batch23-duke-showcase-2026.json \
+            data/imports/v3-campus-founders-batch24-brown-venture-prize-2026.json \
+            data/imports/v3-campus-founders-batch25-mit-100k-2026.json
+          do
+            echo "Importing ${path}"
+            ./node_modules/.bin/tsx scripts/ingest/import-v3-campus-founders.ts "${path}"
+          done
+      - name: Fetch 2026 prize-winning hackathon projects and named team members
+        run: ./node_modules/.bin/tsx scripts/ingest/fetch-2026-campus-hackathon-winners.ts
+      - name: Database integrity, school and role assertions
+        run: |
+          python3 - <<'PY'
+          import sqlite3
+          db=sqlite3.connect("data/campus-universe.db")
+          assert db.execute("PRAGMA integrity_check").fetchone()[0]=="ok"
+          for name in ("Luminarch", "Groovy Labs", "Banzai", "Wavel", "MedPull", "Che Innovations", "Uplift Microhome"):
+              assert db.execute("SELECT COUNT(*) FROM projects WHERE name=? AND kind='company'", (name,)).fetchone()[0]>0, name
+          assert db.execute("SELECT COUNT(*) FROM person_project_roles WHERE role='team_member'").fetchone()[0]>0
+          assert db.execute("SELECT COUNT(*) FROM person_project_roles WHERE role='founder'").fetchone()[0]>0
+          print("Database integrity and imported cohort roles verified")
+          PY
+      - run: npm run test:directory
+      - name: Commit verified campus discovery records to pull request branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/campus-universe.db
+          if git diff --cached --quiet; then
+            echo "No new database content"
+          else
+            git commit -m "data: import 2026 Stanford Brown Yale Duke MIT and hackathon evidence"
+            git push
+          fi
