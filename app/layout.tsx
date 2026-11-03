@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { AskAiDockSlot } from "@/components/ask-ai-dock-slot";
 import { SiteNav } from "@/components/site-nav";
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
 
 const themeScript = `try{document.documentElement.dataset.theme="day";document.documentElement.dataset.sample="halflight";}catch(e){}`;
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
