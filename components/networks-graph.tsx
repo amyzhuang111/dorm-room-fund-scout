@@ -174,14 +174,18 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
+    const apply = (width: number, height: number) => {
+      setSize({ w: Math.max(280, Math.floor(width)), h: Math.max(280, Math.floor(height)) });
+    };
+    apply(el.clientWidth, el.clientHeight);
     const ro = new ResizeObserver((entries) => {
       const rect = entries[0]?.contentRect;
       if (!rect) return;
-      setSize({ w: Math.max(280, Math.floor(rect.width)), h: Math.max(280, Math.floor(rect.height)) });
+      apply(rect.width, rect.height);
     });
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [poster]);
 
   useEffect(() => {
     reducedRef.current = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
@@ -195,7 +199,18 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (poster) (window as unknown as { __NETWORKS_POSTER__?: Poster }).__NETWORKS_POSTER__ = poster;
-    return () => { delete (window as unknown as { __NETWORKS_POSTER__?: Poster }).__NETWORKS_POSTER__; };
+    const w = window as unknown as {
+      __NETWORKS_POSTER__?: Poster;
+      __NETWORKS_SET_SCALE__?: (scale: number) => void;
+    };
+    w.__NETWORKS_SET_SCALE__ = (scale: number) => {
+      camRef.current.scale = Math.max(0.7, Math.min(5.5, scale));
+      bump((n) => n + 1);
+    };
+    return () => {
+      delete w.__NETWORKS_POSTER__;
+      delete w.__NETWORKS_SET_SCALE__;
+    };
   }, [poster]);
 
   const worldToScreen = useCallback(
