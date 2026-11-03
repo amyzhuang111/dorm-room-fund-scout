@@ -78,6 +78,17 @@ function factMaps(): {
     if (row.fact_key === "funding_total" && row.value_text && !funding.has(row.project_id)) {
       funding.set(row.project_id, row.value_text);
     }
+    if (row.fact_key === "funding_round" && row.value_text && !funding.has(row.project_id)) {
+      try {
+        const detail = JSON.parse(row.detail_json || "{}") as { amountText?: string; stage?: string };
+        const amount = typeof detail.amountText === "string" ? detail.amountText.trim() : "";
+        const stage = typeof detail.stage === "string" ? detail.stage.trim() : "";
+        const label = amount && stage ? `${stage} ${amount}` : amount || stage || row.value_text;
+        if (label) funding.set(row.project_id, label);
+      } catch {
+        funding.set(row.project_id, row.value_text);
+      }
+    }
     if (row.fact_key === "investor" && /y combinator/i.test(row.value_text)) {
       try {
         const detail = JSON.parse(row.detail_json || "{}") as { batch?: string };
@@ -264,4 +275,27 @@ export function corpusToCsv(rows: CorpusRow[]): string {
     );
   }
   return lines.join("\n") + "\n";
+}
+
+export interface CorpusFillRates {
+  total: number;
+  stage: number;
+  founded: number;
+  sector: number;
+  funding: number;
+  website: number;
+}
+
+/** Counts derived from the same investable corpus as /data rows. */
+export function loadCorpusFillRates(): CorpusFillRates {
+  const rows = loadCorpusRows();
+  const total = rows.length;
+  return {
+    total,
+    stage: rows.filter((r) => r.stage).length,
+    founded: rows.filter((r) => r.foundedYear != null).length,
+    sector: rows.filter((r) => r.sector).length,
+    funding: rows.filter((r) => r.fundingText).length,
+    website: rows.filter((r) => r.website).length,
+  };
 }

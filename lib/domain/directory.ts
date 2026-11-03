@@ -62,6 +62,7 @@ const STAGE_LABEL: Record<string, string> = {
   "series b": "Series B",
   "series c": "Series C",
   venture: "Venture",
+  accelerator: "Accelerator",
 };
 
 const SIGNAL_LABEL = {
@@ -74,7 +75,7 @@ const SIGNAL_LABEL = {
 const DIRECTORY_LIMIT = 14;
 const LEADERBOARD_LIMIT = 14;
 const LOGO_FACT_KEYS = new Set(["logo", "favicon", "logo_url", "favicon_url"]);
-const STAGE_ORDER = ["Pre-seed", "Seed", "Series A", "Series B", "Series C", "Venture"];
+const STAGE_ORDER = ["Accelerator", "Pre-seed", "Seed", "Series A", "Series B", "Series C", "Venture"];
 
 export type DirectorySort = "rank" | "name" | "recent" | "stage";
 

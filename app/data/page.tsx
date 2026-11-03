@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { paginateCorpus, corpusSortOf, CORPUS_PAGE_SIZE } from "@/lib/domain/corpus-explorer";
+import { paginateCorpus, corpusSortOf, CORPUS_PAGE_SIZE, loadCorpusFillRates } from "@/lib/domain/corpus-explorer";
 import { buildDirectoryFromDb } from "@/lib/domain/directory";
 import fs from "node:fs";
 import path from "node:path";
@@ -48,6 +48,7 @@ export default async function DataExplorerPage({
   const { sectors } = buildDirectoryFromDb();
   const campuses = loadHeroStats().universities;
   const recency = loadRecencyFunnel();
+  const fill = loadCorpusFillRates();
 
   const pageCampusRanks = (() => {
     const map = new Map<string, { label: string; companies: number; signaled: number }>();
@@ -133,6 +134,33 @@ export default async function DataExplorerPage({
         <span className="text-[color:var(--ember,#D96B1C)]" data-count="recency-unverified">{recency.unverifiedRecency.toLocaleString("en-US")}</span>
         {" unverified"}
         <span className="hidden sm:inline">{" recency (not counted as verified)"}</span>
+      </p>
+
+      <p
+        className="mt-1.5 rounded-sm border border-dashed border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-2,#F7F8FC)] px-2 py-1 font-mono text-[10px] leading-4 text-[color:var(--fg-2,#3F465C)] sm:mt-2 sm:px-2.5 sm:py-2 sm:text-[11px] sm:leading-5"
+        data-corpus-fill-rates=""
+      >
+        <span className="font-semibold text-[color:var(--fg,#0B0E17)]">On file</span>
+        {" · Stage: "}
+        <span data-count="fill-stage">{fill.stage.toLocaleString("en-US")}</span>
+        {" of "}
+        <span data-count="fill-total">{fill.total.toLocaleString("en-US")}</span>
+        {" · Sector: "}
+        <span data-count="fill-sector">{fill.sector.toLocaleString("en-US")}</span>
+        {" of "}
+        {fill.total.toLocaleString("en-US")}
+        {" · Founded: "}
+        <span data-count="fill-founded">{fill.founded.toLocaleString("en-US")}</span>
+        {" of "}
+        {fill.total.toLocaleString("en-US")}
+        {" · Funding: "}
+        <span data-count="fill-funding">{fill.funding.toLocaleString("en-US")}</span>
+        {" of "}
+        {fill.total.toLocaleString("en-US")}
+        {" · Website: "}
+        <span data-count="fill-website">{fill.website.toLocaleString("en-US")}</span>
+        {" of "}
+        {fill.total.toLocaleString("en-US")}
       </p>
 
       <form
