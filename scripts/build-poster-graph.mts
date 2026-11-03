@@ -117,12 +117,15 @@ for (let i = 0; i < campuses.length; i++) {
   // skip placing campus marker nodes — founders fill the cloud
 }
 
+/** Dense overlapping campus homes — big campuses near center, small as satellites. */
 function campusXY(ci: number): { x: number; y: number } {
-  // Organic blob: golden-angle spiral with jitter so clusters touch
-  const t = (ci + 0.35) / Math.max(1, nCamp - 0.2);
-  const ang = t * Math.PI * 2 * 0.85 - Math.PI * 0.55;
-  const rad = 220 + (ci % 3) * 28 + (ci > 6 ? 40 : 0);
-  return { x: Math.cos(ang) * rad * 1.15, y: Math.sin(ang) * rad * 0.92 };
+  const n = campuses[ci]?.n ?? 1;
+  // Rank by size: first campuses hug the core so blobs touch
+  const rank = ci;
+  const ang = rank * 2.399963 + 0.35; // golden angle
+  const core = Math.min(1, Math.sqrt(n) / Math.sqrt(campuses[0]?.n ?? n));
+  const rad = 40 + rank * 18 + (1 - core) * 55;
+  return { x: Math.cos(ang) * rad * 1.05, y: Math.sin(ang) * rad * 0.9 };
 }
 
 for (const fid of founderIds) {
@@ -130,8 +133,11 @@ for (const fid of founderIds) {
   const ci = campusIndex.get(cid) ?? campusIndex.get("other") ?? 0;
   const home = campusXY(ci);
   const deg = founderDeg.get(fid) ?? 1;
-  const r = Math.max(1.1, Math.min(4.8, 1.0 + Math.sqrt(deg) * 0.85));
-  const jitter = 55 + Math.sqrt(campusCount.get(cid) ?? 1) * 3.2;
+  // Screen-ish radius 3–14px (sqrt of connectedness); stored in world units ≈ px after normalize
+  const r = Math.max(4.5, Math.min(21, 4.5 + Math.sqrt(deg) * 2.8));
+  const campN = campusCount.get(cid) ?? 1;
+  // Tight seed so collide packs into a solid blob
+  const jitter = 6 + Math.sqrt(campN) * 0.55;
   const id = `fo:${fid}`;
   indexOf.set(id, nodes.length);
   nodes.push({
@@ -140,8 +146,8 @@ for (const fid of founderIds) {
     campus: ci,
     deg,
     r,
-    x: home.x + (hash(fid) - 0.5) * jitter * 2.2,
-    y: home.y + (hash(fid + "y") - 0.5) * jitter * 2.0,
+    x: home.x + (hash(fid) - 0.5) * jitter * 2,
+    y: home.y + (hash(fid + "y") - 0.5) * jitter * 2,
   });
 }
 
@@ -150,17 +156,21 @@ for (const cid of companyIds) {
   const ci = campusIndex.get(camp) ?? 0;
   const home = campusXY(ci);
   const deg = companyDeg.get(cid) ?? 1;
-  const r = Math.max(0.9, Math.min(3.6, 0.85 + Math.sqrt(deg) * 0.7));
+  const invN = (meta.companyInvestors.get(cid) ?? []).length;
+  const score = Math.max(deg, invN);
+  const r = Math.max(4.5, Math.min(18, 4.5 + Math.sqrt(score) * 2.2));
+  const campN = campusCount.get(camp) ?? 1;
+  const jitter = 5 + Math.sqrt(campN) * 0.45;
   const id = `co:${cid}`;
   indexOf.set(id, nodes.length);
   nodes.push({
     id,
     kind: 1,
     campus: ci,
-    deg,
+    deg: score,
     r,
-    x: home.x + (hash(cid) - 0.5) * 90,
-    y: home.y + (hash(cid + "y") - 0.5) * 80,
+    x: home.x + (hash(cid) - 0.5) * jitter * 2,
+    y: home.y + (hash(cid + "y") - 0.5) * jitter * 2,
   });
 }
 
@@ -178,7 +188,7 @@ for (const hub of hubs) {
     n += 1;
   }
   const deg = hub.founderCount || hubDeg.get(hub.id) || 1;
-  const r = Math.max(4.5, Math.min(14, 3.5 + Math.sqrt(deg) * 0.22));
+  const r = Math.max(9, Math.min(21, 9 + Math.sqrt(deg) * 0.35));
   const id = `net:${hub.id}`;
   indexOf.set(id, nodes.length);
   nodes.push({
@@ -228,97 +238,79 @@ for (const cid of companyIds) {
   }
 }
 
-// Force layout
-const linkForce = forceLink(edges.map((e) => ({ source: e.s, target: e.t, k: e.k })))
-  .id((d: any) => (typeof d === "number" ? d : d.index))
-  .distance((l: any) => (l.k === 1 ? 28 : l.k === 2 ? 14 : 18))
-  .strength((l: any) => (l.k === 1 ? 0.04 : 0.08));
-
-// d3 forceLink needs nodes with index — use array directly
+// Force layout — strong campus gravity + collide so nodes touch into solid blobs
 const simNodes = nodes.map((n, i) => ({ ...n, index: i }));
 const simEdges = edges.map((e) => ({ source: e.s, target: e.t, k: e.k }));
 
-forceSimulation(simNodes as any)
-  .force("charge", forceManyBody().strength(-8).distanceMax(120))
-  .force(
-    "link",
-    forceLink(simEdges as any)
-      .id((d: any) => d.index)
-      .distance((l: any) => (l.k === 1 ? 36 : l.k === 2 ? 12 : 16))
-      .strength(0.06),
-  )
-  .force(
-    "collide",
-    forceCollide()
-      .radius((d: any) => d.r + 0.6)
-      .strength(0.7),
-  )
-  .force(
-    "x",
-    forceX()
-      .x((d: any) => {
-        if (d.kind === 2) return d.x;
-        return campusXY(d.campus).x;
-      })
-      .strength(0.05),
-  )
-  .force(
-    "y",
-    forceY()
-      .y((d: any) => {
-        if (d.kind === 2) return d.y;
-        return campusXY(d.campus).y;
-      })
-      .strength(0.05),
-  )
-  .stop();
-
-for (let i = 0; i < 220; i++) (forceSimulation as any); // placate
-// re-create and tick
 const sim = forceSimulation(simNodes as any)
-  .force("charge", forceManyBody().strength(-10).distanceMax(140))
+  .force("charge", forceManyBody().strength(-4).distanceMax(80))
   .force(
     "link",
     forceLink(simEdges as any)
       .id((d: any) => d.index)
-      .distance((l: any) => (l.k === 1 ? 34 : l.k === 2 ? 11 : 15))
-      .strength(0.07),
+      .distance((l: any) => (l.k === 1 ? 22 : l.k === 2 ? 2 : 6))
+      .strength((l: any) => (l.k === 1 ? 0.03 : l.k === 2 ? 0.35 : 0.18)),
   )
   .force(
     "collide",
     forceCollide()
-      .radius((d: any) => d.r + 0.5)
-      .strength(0.85),
+      .radius((d: any) => d.r) // touch — no padding gap
+      .strength(1)
+      .iterations(3),
   )
   .force(
     "x",
-    forceX((d: any) => (d.kind === 2 ? d.x : campusXY(Math.max(0, d.campus)).x)).strength(0.045),
+    forceX((d: any) => (d.kind === 2 ? d.x : campusXY(Math.max(0, d.campus)).x)).strength((d: any) =>
+      d.kind === 2 ? 0.02 : 0.22,
+    ),
   )
   .force(
     "y",
-    forceY((d: any) => (d.kind === 2 ? d.y : campusXY(Math.max(0, d.campus)).y)).strength(0.045),
+    forceY((d: any) => (d.kind === 2 ? d.y : campusXY(Math.max(0, d.campus)).y)).strength((d: any) =>
+      d.kind === 2 ? 0.02 : 0.22,
+    ),
   )
   .stop();
-for (let i = 0; i < 240; i++) sim.tick();
+for (let i = 0; i < 420; i++) sim.tick();
 
-// Write back positions
+// Packing polish: collide + campus gravity only
+sim
+  .force("charge", null)
+  .force("link", null)
+  .force(
+    "collide",
+    forceCollide()
+      .radius((d: any) => d.r)
+      .strength(1)
+      .iterations(4),
+  )
+  .force(
+    "x",
+    forceX((d: any) => (d.kind === 2 ? d.x : campusXY(Math.max(0, d.campus)).x)).strength(0.28),
+  )
+  .force(
+    "y",
+    forceY((d: any) => (d.kind === 2 ? d.y : campusXY(Math.max(0, d.campus)).y)).strength(0.28),
+  );
+for (let i = 0; i < 180; i++) sim.tick();
+
 for (let i = 0; i < simNodes.length; i++) {
   nodes[i].x = simNodes[i].x;
   nodes[i].y = simNodes[i].y;
 }
 
-// Normalize to ~1000x700 viewBox with margin for callouts
+// Normalize so the cloud fills ~90% of the map (tight pad for callout leaders)
 let minX = Infinity,
   maxX = -Infinity,
   minY = Infinity,
   maxY = -Infinity;
 for (const n of nodes) {
-  minX = Math.min(minX, n.x);
-  maxX = Math.max(maxX, n.x);
-  minY = Math.min(minY, n.y);
-  maxY = Math.max(maxY, n.y);
+  minX = Math.min(minX, n.x - n.r);
+  maxX = Math.max(maxX, n.x + n.r);
+  minY = Math.min(minY, n.y - n.r);
+  maxY = Math.max(maxY, n.y + n.r);
 }
-const pad = 80;
+const pad = 36; // ~5% margin each side → cloud ≈ 90%
 const spanX = Math.max(1, maxX - minX);
 const spanY = Math.max(1, maxY - minY);
 const W = 1200;
@@ -326,6 +318,7 @@ const H = 780;
 for (const n of nodes) {
   n.x = pad + ((n.x - minX) / spanX) * (W - pad * 2);
   n.y = pad + ((n.y - minY) / spanY) * (H - pad * 2);
+  // radii stay in px-like units (3–14); do not scale with normalize
 }
 
 // Sourced callouts (4–6)
@@ -401,28 +394,38 @@ if (ycHub) {
     `Y Combinator sits across campus colors with ${ycHub.founderCount.toLocaleString("en-US")} founders — the densest bridge in this cloud.`,
   );
 }
-const callouts = calloutTexts.slice(0, 6).map((text, i) => {
-  // Anchor to a point on the cloud edge; label in margin
-  const side = i % 2 === 0 ? "left" : "right";
-  const t = (i + 0.5) / 6;
-  const ay = pad * 0.6 + t * (H - pad * 1.2);
-  // find nearest node to (side edge, ay)
-  const axTarget = side === "left" ? pad + 40 : W - pad - 40;
-  let best = 0;
-  let bestD = Infinity;
-  for (let ni = 0; ni < nodes.length; ni++) {
-    if (nodes[ni].kind === 1) continue;
-    const d = Math.hypot(nodes[ni].x - axTarget, nodes[ni].y - ay);
-    if (d < bestD) {
-      bestD = d;
-      best = ni;
-    }
+// Prefer anchoring callouts to major campus blob centroids (closer to what they describe)
+const campusCentroid: { x: number; y: number; n: number }[] = campuses.map(() => ({ x: 0, y: 0, n: 0 }));
+for (const n of nodes) {
+  if (n.kind !== 0 || n.campus < 0) continue;
+  const c = campusCentroid[n.campus];
+  c.x += n.x;
+  c.y += n.y;
+  c.n += 1;
+}
+for (const c of campusCentroid) {
+  if (c.n) {
+    c.x /= c.n;
+    c.y /= c.n;
   }
-  const ax = nodes[best].x;
-  const ay2 = nodes[best].y;
-  const lx = side === "left" ? 16 : W - 220;
-  const ly = Math.min(H - 60, Math.max(20, ay2 - 20));
-  return { text, ax: round1(ax), ay: round1(ay2), lx, ly, side };
+}
+const calloutAnchors = [
+  campusCentroid[campusIndex.get("univ_penn") ?? 0],
+  campusCentroid[campusIndex.get("univ_stanford") ?? 1],
+  campusCentroid[campusIndex.get("univ_mit") ?? 2],
+  campusCentroid[campusIndex.get(barren[0]?.id ?? "univ_berkeley") ?? 3],
+  campusCentroid[campusIndex.get(barren[1]?.id ?? "univ_harvard") ?? 4],
+  nodes[indexOf.get("net:yc") ?? 0] ? { x: nodes[indexOf.get("net:yc")!].x, y: nodes[indexOf.get("net:yc")!].y, n: 1 } : campusCentroid[0],
+];
+const callouts = calloutTexts.slice(0, 6).map((text, i) => {
+  const side = i % 2 === 0 ? "left" : "right";
+  const anchor = calloutAnchors[i] ?? campusCentroid[i % campusCentroid.length] ?? { x: W / 2, y: H / 2, n: 1 };
+  const ax = anchor.x || W / 2;
+  const ay2 = anchor.y || H / 2;
+  // Sit callout just outside the blob, not far in the page margin
+  const lx = side === "left" ? Math.max(8, ax - 210) : Math.min(W - 210, ax + 24);
+  const ly = Math.min(H - 70, Math.max(12, ay2 - 28));
+  return { text, ax: round1(ax), ay: round1(ay2), lx: round1(lx), ly: round1(ly), side };
 });
 
 // Compact parallel arrays

@@ -188,9 +188,22 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
     const focusNode = hv?.index ?? -1;
     const glow = cam.scale > 1.15 || !!focusHub || focusNode >= 0;
 
-    // Edges — thin translucent curves tinted by source campus/hub
+    // Edges — tinted haze between clusters (Nature-style)
     ctx.lineCap = "round";
     const nE = p.e0.length;
+    const memberFos = new Set<number>();
+    if (focusHub) {
+      const hub = p.hubs.find((h) => h.id === focusHub);
+      if (hub) {
+        for (let i = 0; i < nE; i++) {
+          if (p.ek[i] !== 1) continue;
+          const a = p.e0[i];
+          const b = p.e1[i];
+          if (a === hub.i) memberFos.add(b);
+          if (b === hub.i) memberFos.add(a);
+        }
+      }
+    }
     for (let i = 0; i < nE; i++) {
       const a = p.e0[i];
       const b = p.e1[i];
@@ -200,17 +213,12 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
       const hubIdx = hubA ? a : hubB ? b : -1;
       const hubId = hubIdx >= 0 ? p.hubs.find((h) => h.i === hubIdx)?.id : null;
 
-      // YC at rest: fade hard + subsample
+      // YC at rest: fade hard + subsample; full on hover/select
       if (hubId === "yc" && !focusHub) {
         if (hash01(`yc:${a}:${b}`) > YC_EDGE_CAP) continue;
-      }
-      if (focusHub === "yc" && hubId === "yc") {
-        // show more when selected
       } else if (hubId === "yc" && focusHub && focusHub !== "yc") {
         continue;
       }
-
-      // When a hub is selected, prefer its ties + founder-company paths of those founders
       if (focusHub && hubId && hubId !== focusHub && k === 1) continue;
 
       const pa = toS(p.x[a], p.y[a]);
@@ -218,123 +226,114 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
       const { cx, cy } = curvedPath(pa.x, pa.y, pb.x, pb.y);
 
       let color = "#94a3b8";
-      const campI = p.campus[p.kind[a] === 0 ? a : b];
+      const campI = p.campus[p.kind[a] === 0 ? a : p.kind[b] === 0 ? b : a];
       if (campI >= 0 && p.campuses[campI]) color = p.campuses[campI].color;
+      const rgb = hexToRgb(color);
+
+      let alpha = k === 2 ? 0.12 : k === 1 ? 0.08 : 0.13;
+      let lineW = k === 2 ? 1.05 : 0.9;
+      if (hubId === "yc" && !focusHub) {
+        alpha = 0.05;
+        lineW = 0.55;
+      }
       if (hubId && focusHub === hubId) {
-        ctx.strokeStyle = "rgba(30,41,59,0.35)";
-        ctx.lineWidth = glow ? 1.1 : 0.7;
-      } else if (hubId === "yc" && !focusHub) {
-        ctx.strokeStyle = "rgba(148,163,184,0.06)";
-        ctx.lineWidth = 0.4;
-      } else {
-        const alpha = k === 2 ? 0.1 : k === 1 ? 0.12 : 0.14;
-        const rgb = hexToRgb(color);
-        ctx.strokeStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${glow ? alpha * 1.35 : alpha})`;
-        ctx.lineWidth = glow ? 0.7 : 0.45;
-      }
-
-      // Founder-company path when hub selected: keep those edges of members
-      if (focusHub && k === 0) {
+        alpha = 0.32;
+        lineW = 1.15;
+        ctx.strokeStyle = "rgba(15,23,42,0.38)";
+      } else if (focusHub && k === 0) {
         const fo = p.kind[a] === 0 ? a : p.kind[b] === 0 ? b : -1;
-        if (fo >= 0) {
-          // dim unrelated
-          ctx.strokeStyle = "rgba(148,163,184,0.05)";
+        if (fo >= 0 && memberFos.has(fo)) {
+          alpha = 0.28;
+          lineW = 1.1;
+          ctx.strokeStyle = "rgba(37,99,235,0.32)";
+        } else if (fo >= 0) {
+          alpha = 0.04;
+          ctx.strokeStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`;
+        } else {
+          ctx.strokeStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${glow ? Math.min(0.2, alpha * 1.25) : alpha})`;
         }
+      } else {
+        ctx.strokeStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${glow ? Math.min(0.2, alpha * 1.25) : alpha})`;
       }
-
+      ctx.lineWidth = lineW;
       ctx.beginPath();
       ctx.moveTo(pa.x, pa.y);
       ctx.quadraticCurveTo(cx, cy, pb.x, pb.y);
       ctx.stroke();
     }
 
-    // If hub selected, redraw its founder→company paths brighter
-    if (focusHub) {
-      const hub = p.hubs.find((h) => h.id === focusHub);
-      if (hub) {
-        const memberFos = new Set<number>();
-        for (let i = 0; i < nE; i++) {
-          if (p.ek[i] !== 1) continue;
-          const a = p.e0[i];
-          const b = p.e1[i];
-          if (a === hub.i) memberFos.add(b);
-          if (b === hub.i) memberFos.add(a);
-        }
-        for (let i = 0; i < nE; i++) {
-          if (p.ek[i] !== 0) continue;
-          const a = p.e0[i];
-          const b = p.e1[i];
-          const fo = p.kind[a] === 0 ? a : p.kind[b] === 0 ? b : -1;
-          if (fo < 0 || !memberFos.has(fo)) continue;
-          const pa = toS(p.x[a], p.y[a]);
-          const pb = toS(p.x[b], p.y[b]);
-          const { cx, cy } = curvedPath(pa.x, pa.y, pb.x, pb.y);
-          ctx.strokeStyle = "rgba(37,99,235,0.35)";
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(pa.x, pa.y);
-          ctx.quadraticCurveTo(cx, cy, pb.x, pb.y);
-          ctx.stroke();
-        }
-        // hub spokes
-        for (let i = 0; i < nE; i++) {
-          if (p.ek[i] !== 1) continue;
-          const a = p.e0[i];
-          const b = p.e1[i];
-          if (a !== hub.i && b !== hub.i) continue;
-          const pa = toS(p.x[a], p.y[a]);
-          const pb = toS(p.x[b], p.y[b]);
-          const { cx, cy } = curvedPath(pa.x, pa.y, pb.x, pb.y);
-          ctx.strokeStyle = "rgba(15,23,42,0.4)";
-          ctx.lineWidth = 1.05;
-          ctx.beginPath();
-          ctx.moveTo(pa.x, pa.y);
-          ctx.quadraticCurveTo(cx, cy, pb.x, pb.y);
-          ctx.stroke();
-        }
-      }
-    }
-
-    // Nodes — founders/companies colored; hubs dark
+    // Nodes — saturated campus bubbles with thin white stroke; hubs dark like Industry
     for (let i = 0; i < p.x.length; i++) {
       const pt = toS(p.x[i], p.y[i]);
-      const radius = Math.max(0.6, p.r[i] * s * 0.55);
-      if (pt.x < -20 || pt.y < -20 || pt.x > w + 20 || pt.y > h + 20) continue;
+      // world r is already ~3–14px; scale with fit so 1440 matches target
+      const radius = Math.max(2.2, p.r[i] * s);
+      if (pt.x < -24 || pt.y < -24 || pt.x > w + 24 || pt.y > h + 24) continue;
       if (p.kind[i] === 2) {
         ctx.beginPath();
-        ctx.fillStyle = "#1e293b";
-        ctx.arc(pt.x, pt.y, radius * 1.15, 0, Math.PI * 2);
+        ctx.fillStyle = "#0f172a";
+        ctx.arc(pt.x, pt.y, radius, 0, Math.PI * 2);
         ctx.fill();
-        if (glow) {
-          ctx.beginPath();
-          ctx.fillStyle = "rgba(30,41,59,0.12)";
-          ctx.arc(pt.x, pt.y, radius * 2.2, 0, Math.PI * 2);
-          ctx.fill();
-        }
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(255,255,255,0.9)";
+        ctx.lineWidth = 1;
+        ctx.arc(pt.x, pt.y, radius, 0, Math.PI * 2);
+        ctx.stroke();
         continue;
       }
       const ci = p.campus[i];
       const col = ci >= 0 && p.campuses[ci] ? p.campuses[ci].color : "#94a3b8";
       const rgb = hexToRgb(col);
       const isFo = p.kind[i] === 0;
+      const alpha = isFo ? 0.92 : 0.85;
       ctx.beginPath();
-      ctx.fillStyle = isFo ? col : `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0.55)`;
-      ctx.arc(pt.x, pt.y, radius * (isFo ? 1 : 0.85), 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`;
+      ctx.arc(pt.x, pt.y, radius * (isFo ? 1 : 0.92), 0, Math.PI * 2);
       ctx.fill();
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(255,255,255,0.95)";
+      ctx.lineWidth = Math.max(0.6, Math.min(1.2, radius * 0.12));
+      ctx.arc(pt.x, pt.y, radius * (isFo ? 1 : 0.92), 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Inline bold hub labels (Nature Industry style: IBM / Pfizer / Merck)
+    ctx.font = "600 11px ui-sans-serif, system-ui, sans-serif";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    const hubLabelSeen = new Set<string>();
+    for (const hub of p.hubs) {
+      if (hubLabelSeen.has(hub.id)) continue;
+      hubLabelSeen.add(hub.id);
+      const i = hub.i;
+      const pt = toS(p.x[i], p.y[i]);
+      const radius = Math.max(2.2, p.r[i] * s);
+      const short =
+        hub.label.length > 22
+          ? hub.label.replace(/Y Combinator/i, "YC").replace(/Penn Venture Lab\s+/i, "").slice(0, 20)
+          : hub.label;
+      const tx = pt.x + radius + 4;
+      const ty = pt.y;
+      ctx.fillStyle = "rgba(255,255,255,0.85)";
+      ctx.fillRect(tx - 2, ty - 7, Math.min(150, short.length * 6.2 + 6), 14);
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText(short, tx, ty);
     }
 
     // Soft glow on hovered node
     if (focusNode >= 0) {
       const pt = toS(p.x[focusNode], p.y[focusNode]);
-      const radius = Math.max(2, p.r[focusNode] * s * 0.7);
+      const radius = Math.max(2.5, p.r[focusNode] * s);
       ctx.beginPath();
-      ctx.fillStyle = "rgba(37,99,235,0.18)";
-      ctx.arc(pt.x, pt.y, radius * 3.2, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(37,99,235,0.16)";
+      ctx.arc(pt.x, pt.y, radius * 2.4, 0, Math.PI * 2);
       ctx.fill();
       ctx.beginPath();
       ctx.fillStyle = "#1d4ed8";
-      ctx.arc(pt.x, pt.y, radius * 1.2, 0, Math.PI * 2);
+      ctx.arc(pt.x, pt.y, radius, 0, Math.PI * 2);
       ctx.fill();
+      ctx.strokeStyle = "#fff";
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
     }
   }, [poster, size]);
 
@@ -359,7 +358,7 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
         const px = poster.x[i] * s + ox;
         const py = poster.y[i] * s + oy;
         const d = Math.hypot(px - sx, py - sy);
-        const thr = Math.max(10, poster.r[i] * s * 0.8);
+        const thr = Math.max(12, poster.r[i] * s * 1.05);
         if (d < thr && d < bestD) {
           bestD = d;
           best = i;
@@ -521,15 +520,17 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
         <div className="pointer-events-none absolute inset-0 z-[1] hidden md:block" aria-hidden="true">
           {poster.callouts.map((c, i) => {
             const a = worldToScreen(c.ax, c.ay);
-            const fit = Math.min(size.w / poster.w, size.h / poster.h);
+            const label = worldToScreen(c.lx, c.ly);
             const left = c.side === "left";
-            const lx = left ? 12 : size.w - 232;
-            const ly = clamp((c.ly / poster.h) * size.h, 24, size.h - 90);
+            // Keep near the cluster; clamp only enough to stay on-canvas
+            const lx = clamp(label.x, 8, size.w - 228);
+            const ly = clamp(label.y, 16, size.h - 88);
+            const tipX = left ? lx + 210 : lx;
             return (
               <div key={`callout-${i}`}>
                 <svg className="absolute inset-0 h-full w-full overflow-visible">
                   <path
-                    d={`M ${a.x} ${a.y} L ${left ? lx + 220 : lx} ${ly + 18}`}
+                    d={`M ${a.x} ${a.y} L ${tipX} ${ly + 14}`}
                     stroke="rgba(71,85,105,0.55)"
                     strokeWidth="0.7"
                     fill="none"
@@ -538,7 +539,7 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
                 </svg>
                 <div
                   data-canvas-callout=""
-                  className="absolute max-w-[220px] text-[11px] leading-snug text-[color:var(--fg-2)]"
+                  className="absolute max-w-[210px] rounded-sm bg-white/80 px-1.5 py-1 text-[11px] leading-snug text-[color:var(--fg-2)]"
                   style={{ left: lx, top: ly }}
                 >
                   {c.text}
