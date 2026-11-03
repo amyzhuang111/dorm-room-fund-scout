@@ -67,12 +67,12 @@ function pastel(hex: string, amount = 0.38): string {
 
 const campuses = campusIds.map((id) => {
   const base = id === "other" ? "#94a3b8" : colorMap.get(id) ?? "#94a3b8";
-  // Keep Penn closer to cobalt; pastel the rest for the ephemeral white-poster look.
+  // Saturated pastels: lighten only slightly so campus colors read on warm white.
   const isPenn = /penn|pennsylvania/i.test(`${id} ${meta.uniLabels.get(id) ?? ""}`);
   return {
     id,
     label: id === "other" ? "Other" : shortCampus(meta.uniLabels.get(id) ?? id),
-    color: isPenn ? base : pastel(base, 0.32),
+    color: isPenn ? base : pastel(base, 0.14),
     n: campusCount.get(id) ?? 0,
   };
 });
@@ -133,25 +133,25 @@ const indexOf = new Map<string, number>();
 /** Distinct campus islands: twin central masses + mid ring + far satellites (Nature). */
 function campusXY(ci: number): { x: number; y: number } {
   const n = campuses[ci]?.n ?? 1;
-  if (ci === 0) return { x: -120, y: -48 };
-  if (ci === 1) return { x: 135, y: -8 };
+  if (ci === 0) return { x: -160, y: -64 };
+  if (ci === 1) return { x: 180, y: -12 };
   if (ci < 5) {
     const k = ci - 2;
     const ang = -Math.PI * 0.55 + k * 1.15;
-    const rad = 250 + k * 22;
+    const rad = 340 + k * 36;
     return { x: Math.cos(ang) * rad, y: Math.sin(ang) * rad };
   }
   if (ci < 12) {
     const k = ci - 5;
     const ang = (k / 7) * Math.PI * 2 + 0.25;
-    const rad = 390 + (k % 2) * 48;
+    const rad = 560 + (k % 2) * 70;
     return { x: Math.cos(ang) * rad, y: Math.sin(ang) * rad };
   }
   const j = ci - 12;
   const satN = Math.max(1, campuses.length - 12);
   const ang = (j / satN) * Math.PI * 2 + 0.55;
-  const rad = 560 + (j % 6) * 52 + Math.sqrt(Math.max(1, n)) * 2.8;
-  return { x: Math.cos(ang) * rad, y: Math.sin(ang) * rad * 0.92 };
+  const rad = 820 + (j % 6) * 70 + Math.sqrt(Math.max(1, n)) * 3.5;
+  return { x: Math.cos(ang) * rad, y: Math.sin(ang) * rad * 0.9 };
 }
 
 for (const fid of founderIds) {
@@ -159,8 +159,8 @@ for (const fid of founderIds) {
   const ci = campusIndex.get(cid) ?? campusIndex.get("other") ?? 0;
   const home = campusXY(ci);
   const deg = founderDeg.get(fid) ?? 0;
-  // Tiny ephemeral dots: ~1.5–3px; hubs later are only modestly larger.
-  const r = deg <= 0 ? 1.5 : Math.max(1.5, Math.min(3.0, 1.5 + Math.sqrt(deg) * 0.45));
+  // Screen-readable dots at rest: ~2–3.5px after fit.
+  const r = deg <= 0 ? 2.2 : Math.max(2.0, Math.min(3.5, 2.0 + Math.sqrt(deg) * 0.55));
   const campN = campusCount.get(cid) ?? 1;
   // Soft float for unlinked founders near the campus cloud.
   const jitter = (deg <= 0 ? 14 : 7) + Math.sqrt(campN) * 0.55;
@@ -286,35 +286,35 @@ const simNodes = nodes.map((n, i) => ({ ...n, index: i }));
 const simEdges = edges.map((e) => ({ source: e.s, target: e.t, k: e.k }));
 
 const sim = forceSimulation(simNodes as any)
-  .force("charge", forceManyBody().strength(-22).distanceMax(320))
+  .force("charge", forceManyBody().strength(-28).distanceMax(420))
   .force(
     "link",
     forceLink(simEdges as any)
       .id((d: any) => d.index)
-      .distance((l: any) => (l.k === 1 ? 48 : l.k === 2 ? 3.5 : l.k === 3 ? 70 : 9))
-      .strength((l: any) => (l.k === 1 ? 0.012 : l.k === 2 ? 0.28 : l.k === 3 ? 0.004 : 0.07)),
+      .distance((l: any) => (l.k === 1 ? 72 : l.k === 2 ? 4.0 : l.k === 3 ? 90 : 11))
+      .strength((l: any) => (l.k === 1 ? 0.007 : l.k === 2 ? 0.3 : l.k === 3 ? 0.003 : 0.06)),
   )
   .force(
     "collide",
     forceCollide()
-      .radius((d: any) => d.r + 0.55)
-      .strength(0.85)
+      .radius((d: any) => d.r + 0.7)
+      .strength(0.9)
       .iterations(2),
   )
   .force(
     "x",
     forceX((d: any) => (d.kind === 2 ? d.x : campusXY(Math.max(0, d.campus)).x)).strength((d: any) => {
-      if (d.kind === 2) return 0.008;
+      if (d.kind === 2) return 0.006;
       const ci = Math.max(0, d.campus);
-      return ci >= 12 ? 0.2 : ci >= 5 ? 0.13 : 0.08;
+      return ci >= 12 ? 0.32 : ci >= 5 ? 0.22 : 0.12;
     }),
   )
   .force(
     "y",
     forceY((d: any) => (d.kind === 2 ? d.y : campusXY(Math.max(0, d.campus)).y)).strength((d: any) => {
-      if (d.kind === 2) return 0.008;
+      if (d.kind === 2) return 0.006;
       const ci = Math.max(0, d.campus);
-      return ci >= 12 ? 0.2 : ci >= 5 ? 0.13 : 0.08;
+      return ci >= 12 ? 0.32 : ci >= 5 ? 0.22 : 0.12;
     }),
   )
   .stop();
@@ -346,6 +346,58 @@ const midY = (minY + maxY) / 2;
 for (const n of nodes) {
   n.x = W / 2 + (n.x - midX) * scale;
   n.y = H / 2 + (n.y - midY) * scale;
+}
+
+// Push campus islands outward after normalize so white gaps survive fit-to-canvas.
+{
+  const cx0 = W / 2;
+  const cy0 = H / 2;
+  type Cent = { sx: number; sy: number; n: number };
+  const cents = new Map<number, Cent>();
+  for (const n of nodes) {
+    if (n.kind !== 0 || n.campus < 0) continue;
+    const row = cents.get(n.campus) ?? { sx: 0, sy: 0, n: 0 };
+    row.sx += n.x;
+    row.sy += n.y;
+    row.n += 1;
+    cents.set(n.campus, row);
+  }
+  const delta = new Map<number, { dx: number; dy: number }>();
+  for (const [ci, row] of cents) {
+    const hx = row.sx / row.n;
+    const hy = row.sy / row.n;
+    const vx = hx - cx0;
+    const vy = hy - cy0;
+    const dist = Math.hypot(vx, vy) || 1;
+    // Mid/far campuses get a stronger radial shove; twin cores stay nearer.
+    const boost = ci < 2 ? 0.08 : ci < 5 ? 0.22 : ci < 12 ? 0.34 : 0.48;
+    const push = Math.min(140, 36 + dist * boost);
+    delta.set(ci, { dx: (vx / dist) * push, dy: (vy / dist) * push });
+  }
+  for (const n of nodes) {
+    if (n.campus < 0) continue;
+    const d = delta.get(n.campus);
+    if (!d) continue;
+    n.x += d.dx;
+    n.y += d.dy;
+  }
+  // Re-center hubs on their member founders after the shove.
+  for (const n of nodes) {
+    if (n.kind !== 2 || !n.hubId) continue;
+    const fos = links.filter((l) => l.networkId === n.hubId).map((l) => l.founderId);
+    let sx = 0, sy = 0, c = 0;
+    for (const f of fos.slice(0, 400)) {
+      const ix = indexOf.get(`fo:${f}`);
+      if (ix == null) continue;
+      sx += nodes[ix].x;
+      sy += nodes[ix].y;
+      c += 1;
+    }
+    if (c) {
+      n.x = sx / c;
+      n.y = sy / c;
+    }
+  }
 }
 
 const founderNets = new Map<string, { id: string; label: string; kind: string }[]>();

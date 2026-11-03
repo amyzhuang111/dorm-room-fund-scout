@@ -124,17 +124,17 @@ export function NetworksApp() {
         </div>
       </header>
 
-      <main className="mx-auto flex max-w-[1400px] flex-col gap-4 px-3 py-2 sm:gap-5 sm:px-6 sm:py-3">
-        {/* Poster-scale map: full width, no box border */}
-        <section aria-labelledby="graph-heading" className="order-1">
-          <div className="mb-1 px-1 sm:mb-2">
-            <h2 id="graph-heading" className="text-[15px] font-semibold tracking-tight sm:text-base">
+      <main className="flex flex-col gap-0">
+        {/* Hero map: edge-to-edge, near full viewport */}
+        <section aria-labelledby="graph-heading" className="order-1 overflow-visible">
+          <div className="mx-auto max-w-[1400px] px-4 pt-2 sm:px-6">
+            <h2 id="graph-heading" className="sr-only">
               Network map
             </h2>
-            <p className="mt-0.5 hidden text-[12px] text-[color:var(--fg-2)] sm:block" data-networks-context-desk="">
-              Every founder and company, colored by campus. Dark hubs are programs and funds. Hover a founder, click a hub.
+            <p className="mb-1 hidden text-[12px] text-[color:var(--fg-2)] sm:block" data-networks-context-desk="">
+              Every founder and company, colored by campus. Dark hubs are programs and funds. Hover a founder, drag a node, scroll to zoom.
             </p>
-            <p className="mt-0.5 text-[11px] text-[color:var(--fg-2)] sm:hidden" data-networks-context-mobile="">
+            <p className="mb-1 text-[11px] text-[color:var(--fg-2)] sm:hidden" data-networks-context-mobile="">
               Campus-colored founders and program hubs. Scroll to zoom.
             </p>
           </div>
@@ -146,6 +146,8 @@ export function NetworksApp() {
             />
           </div>
         </section>
+
+        <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-3 py-4 sm:gap-5 sm:px-6 sm:py-6">
 
         <section aria-labelledby="top-networks-heading" className="order-2">
           <div className="mb-2 sm:mb-3">
@@ -396,6 +398,7 @@ export function NetworksApp() {
             </p>
           ) : null}
         </section>
+        </div>
       </main>
 
       {companyId ? <StartupCardSheet id={companyId} onClose={() => setCompanyId(null)} /> : null}
