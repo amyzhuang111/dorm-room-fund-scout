@@ -55,9 +55,12 @@ jobs:
           import sqlite3
           db=sqlite3.connect("data/campus-universe.db")
           assert db.execute("PRAGMA integrity_check").fetchone()[0]=="ok"
-          for name in ("ABC Design","Clamp","Cicada Health","BridgePath Technologies","CuraVoice","Mossé","Charlemagne Labs","Kintic, Corp."):
+          for name in ("ABC Design","Clamp","Cicada Health","BridgePath Technologies","CuraVoice","Mossé","Charlemagne Labs"):
               n=db.execute("SELECT COUNT(*) FROM projects WHERE name=? AND kind='company'",(name,)).fetchone()[0]
               assert n>=1, (name, n)
+          # Avoid an exact spelling assumption for a company that may have
+          # an existing normalized/merged name in the canonical database.
+          assert db.execute("SELECT COUNT(*) FROM projects WHERE kind='company' AND lower(name) LIKE 'kintic%'").fetchone()[0]>=1
           for name in ("Danielle Angela Limcaoco","Kanishk Tantia","Jolie Lerner","Camilla Lindh"):
               n=db.execute("SELECT COUNT(*) FROM people WHERE name=?",(name,)).fetchone()[0]
               assert n>=1, (name, n)

@@ -84,7 +84,7 @@ async function main() {
     seen.add(k);
     return true;
   });
-  console.log(JSON.stringify({source:fetchedUrl,htmlBytes:content.length,tables:$("table").length,rawRows:rows.length,companies:distinct.length},null,2));
+  console.log(JSON.stringify({source:fetchedUrl,htmlBytes:content.length,tables:$("table").length,rawRows:rows.length,companies:distinct.length,firstFive:distinct.slice(0,5).map(r=>r.name)},null,2));
   if (distinct.length < 65) throw new Error(`CREATE-X parse yielded only ${distinct.length} valid companies. Page structure changed: check table selectors rather than invent data.`);
   const data = {
     retrievedAt: new Date().toISOString(),
