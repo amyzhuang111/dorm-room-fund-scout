@@ -140,6 +140,41 @@ function makeGlowTexture(THREE: typeof import("three"), color: [number, number, 
   return tex;
 }
 
+/** Mid/deep discrete organism blobs — defined edges, high center sat (mid MP4). */
+function makeBlobTexture(THREE: typeof import("three"), color: [number, number, number], seed = 0) {
+  const size = 160;
+  const c = document.createElement("canvas");
+  c.width = size;
+  c.height = size;
+  const g = c.getContext("2d")!;
+  const [r, gch, b] = color;
+  // Slightly off-center for organic irregularity
+  const ox = size * (0.46 + (seed % 7) * 0.012);
+  const oy = size * (0.48 + (seed % 5) * 0.014);
+  const rad = size * 0.42;
+  const grd = g.createRadialGradient(ox, oy, 0, ox, oy, rad);
+  grd.addColorStop(0, `rgba(${r},${gch},${b},1)`);
+  grd.addColorStop(0.28, `rgba(${r},${gch},${b},0.98)`);
+  grd.addColorStop(0.48, `rgba(${r},${gch},${b},0.72)`);
+  grd.addColorStop(0.66, `rgba(${r},${gch},${b},0.28)`);
+  grd.addColorStop(0.78, `rgba(${r},${gch},${b},0.06)`);
+  grd.addColorStop(0.88, `rgba(${r},${gch},${b},0)`);
+  g.fillStyle = grd;
+  g.fillRect(0, 0, size, size);
+  // Soft secondary lobe for organism silhouette
+  const ox2 = size * (0.55 - (seed % 3) * 0.04);
+  const oy2 = size * (0.58 - (seed % 4) * 0.03);
+  const grd2 = g.createRadialGradient(ox2, oy2, 0, ox2, oy2, rad * 0.55);
+  grd2.addColorStop(0, `rgba(${r},${gch},${b},0.55)`);
+  grd2.addColorStop(0.5, `rgba(${r},${gch},${b},0.18)`);
+  grd2.addColorStop(1, `rgba(${r},${gch},${b},0)`);
+  g.fillStyle = grd2;
+  g.fillRect(0, 0, size, size);
+  const tex = new THREE.CanvasTexture(c);
+  tex.needsUpdate = true;
+  return tex;
+}
+
 function collideLabels(raw: OverlayLabel[], maxShow = 18): OverlayLabel[] {
   // Campuses first (higher priority already), then hubs; hide lower-priority on AABB overlap.
   const sorted = [...raw].sort((a, b) => b.priority - a.priority || a.label.localeCompare(b.label));
@@ -453,7 +488,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           const ci = p.campuses.findIndex((c) => c.id === lab.id);
           const rgb = (ci >= 0 ? hexToRgb(p.campuses[ci].color) : [180, 190, 210]) as [number, number, number];
           // Out-stage campus ball: dense saturated glow hugging the cluster
-          const rad = Math.max(48, Math.min(118, lab.r * 0.52 + Math.sqrt(Math.max(8, lab.n)) * 2.05));
+          const rad = Math.max(40, Math.min(96, lab.r * 0.42 + Math.sqrt(Math.max(8, lab.n)) * 1.7));
           const tex = makeGlowTexture(THREE, rgb, true);
           const discMat = new THREE.SpriteMaterial({
             map: tex,
@@ -473,27 +508,27 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       }
       scene.add(islandGroup);
 
-      // Mid airbrush blobs (huge soft, saturated) + deep blooms — match mid MP4
+      // Mid/deep discrete saturated organisms (defined edges) — mid MP4, not fog washes
       const bloomGroup = new THREE.Group();
       bloomGroup.visible = false;
       const bloomBaseScale: number[] = [];
       const bloomBoost = (rgb: [number, number, number]): [number, number, number] => {
-        // Push toward mid-ref saturated magentas/cyans/yellows while keeping campus hue family
         const [r, g, b] = rgb;
         const max = Math.max(r, g, b) || 1;
-        const sat = 1.55;
+        const sat = 1.85;
         return [
-          Math.min(255, Math.round(((r - max) * sat + max) * 1.08)),
-          Math.min(255, Math.round(((g - max) * sat + max) * 1.05)),
-          Math.min(255, Math.round(((b - max) * sat + max) * 1.1)),
+          Math.min(255, Math.round(((r - max) * sat + max) * 1.12)),
+          Math.min(255, Math.round(((g - max) * sat + max) * 1.08)),
+          Math.min(255, Math.round(((b - max) * sat + max) * 1.15)),
         ];
       };
       if (p.campusLabels) {
+        let seed = 0;
         for (const lab of p.campusLabels.slice(0, 14)) {
           const ci = p.campuses.findIndex((c) => c.id === lab.id);
           const base = (ci >= 0 ? hexToRgb(p.campuses[ci].color) : [180, 190, 210]) as [number, number, number];
           const rgb = bloomBoost(base);
-          const tex = makeGlowTexture(THREE, rgb, true);
+          const tex = makeBlobTexture(THREE, rgb, seed++);
           const mat = new THREE.SpriteMaterial({
             map: tex,
             color: 0xffffff,
@@ -503,22 +538,24 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
             blending: THREE.NormalBlending,
           });
           const spr = new THREE.Sprite(mat);
-          const sc = Math.max(200, Math.min(420, lab.r * 2.6 + 100));
+          // Tight discrete blob — cream must show between organisms
+          const sc = Math.max(72, Math.min(168, lab.r * 1.05 + 48));
           bloomBaseScale.push(sc);
+          spr.userData.kind = "core";
           spr.scale.set(sc, sc, 1);
-          // Scatter blooms slightly off centroid so mid is not one central mass
-          const jx = (hash01(`bjx:${lab.id}`) - 0.5) * lab.r * 0.9;
-          const jy = (hash01(`bjy:${lab.id}`) - 0.5) * lab.r * 0.9;
+          const jx = (hash01(`bjx:${lab.id}`) - 0.5) * lab.r * 1.15;
+          const jy = (hash01(`bjy:${lab.id}`) - 0.5) * lab.r * 1.15;
           spr.position.set(cx + (lab.x - cx) * spread + jx, cy + (lab.y - cy) * spread + jy, 8);
           bloomGroup.add(spr);
-          // Second softer satellite bloom for airbrush overlap
-          if (lab.n > 25) {
+          // 1–2 satellite orbs (smaller, offset) for organism clusters
+          const nSat = lab.n > 40 ? 2 : lab.n > 18 ? 1 : 0;
+          for (let si = 0; si < nSat; si++) {
             const rgb2 = bloomBoost([
-              Math.min(255, base[0] + 40),
-              Math.min(255, base[1] + 20),
-              Math.min(255, base[2] + 55),
+              Math.min(255, base[0] + 30 + si * 25),
+              Math.min(255, base[1] + 15 + si * 10),
+              Math.min(255, base[2] + 45 + si * 20),
             ]);
-            const tex2 = makeGlowTexture(THREE, rgb2, true);
+            const tex2 = makeBlobTexture(THREE, rgb2, seed++);
             const mat2 = new THREE.SpriteMaterial({
               map: tex2,
               color: 0xffffff,
@@ -528,12 +565,17 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
               blending: THREE.NormalBlending,
             });
             const spr2 = new THREE.Sprite(mat2);
-            const sc2 = sc * (0.55 + hash01(`bsc2:${lab.id}`) * 0.35);
+            const sc2 = sc * (0.42 + hash01(`bsc2:${lab.id}:${si}`) * 0.28);
             bloomBaseScale.push(sc2);
+            spr2.userData.kind = "sat";
             spr2.scale.set(sc2, sc2, 1);
-            const ox = (hash01(`box:${lab.id}`) - 0.5) * lab.r * 1.4;
-            const oy = (hash01(`boy:${lab.id}`) - 0.5) * lab.r * 1.4;
-            spr2.position.set(cx + (lab.x - cx) * spread + ox, cy + (lab.y - cy) * spread + oy, 6);
+            const ang = hash01(`bang:${lab.id}:${si}`) * Math.PI * 2;
+            const dist = lab.r * (0.55 + hash01(`bd:${lab.id}:${si}`) * 0.7);
+            spr2.position.set(
+              cx + (lab.x - cx) * spread + Math.cos(ang) * dist,
+              cy + (lab.y - cy) * spread + Math.sin(ang) * dist,
+              6 + si,
+            );
             bloomGroup.add(spr2);
           }
         }
@@ -737,21 +779,24 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
               spr.visible = outW > 0.1;
             }
           });
-          // Mid: huge breathing airbrush; Deep: tighter saturated blooms
+          // Mid: discrete breathing organisms; Deep: localized paint splotches; @375 contain
           bloomGroup.visible = midW > 0.05 || deepW > 0.05;
+          const mobileContain = (renderer?.domElement.clientWidth ?? 1440) < 500 ? 0.52 : 1;
           let bi = 0;
           bloomGroup.traverse((obj) => {
             if (!(obj as import("three").Sprite).isSprite) return;
             const m = (obj as import("three").Sprite).material as import("three").SpriteMaterial;
-            m.opacity = midW * 0.62 + deepW * 0.95;
-            const base = bloomBaseScale[bi] ?? 200;
-            const midScale = breath * (0.95 + midW * 0.45);
-            const deepScale = 0.62 + deepW * 0.85;
+            // High opacity on discrete blobs (edges come from texture falloff)
+            m.opacity = midW * 0.92 + deepW * 0.98;
+            const base = bloomBaseScale[bi] ?? 120;
+            const midScale = breath * (1.02 + midW * 0.22) * mobileContain;
+            // Deep: shrink further into localized blobs
+            const deepScale = (0.38 + deepW * 0.42) * (mobileContain < 1 ? 0.85 : 1);
             const s = base * (midW > deepW ? midScale : deepScale);
             (obj as import("three").Sprite).scale.set(s, s, 1);
-            // gentle drift
-            const ox = Math.sin(tSec * 0.4 + bi * 0.7) * 6 * midW;
-            const oy = Math.cos(tSec * 0.33 + bi * 0.5) * 5 * midW;
+            const driftAmp = (obj.userData.kind === "sat" ? 4 : 7) * midW * mobileContain;
+            const ox = Math.sin(tSec * 0.4 + bi * 0.7) * driftAmp;
+            const oy = Math.cos(tSec * 0.33 + bi * 0.5) * driftAmp * 0.85;
             obj.position.x += (ox - (obj.userData.dx || 0));
             obj.position.y += (oy - (obj.userData.dy || 0));
             obj.userData.dx = ox;
@@ -917,24 +962,28 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         for (const lab of (p.campusLabels ?? []).slice(0, 14)) {
           const pt = worldToOverlay(lab.x, lab.y, 0);
           if (!pt.onscreen) continue;
+          // Nature/phylum: nudge campus names off the island center like margin notes
+          const ang = hash01(`note:${lab.id}`) * Math.PI * 2;
+          const off = outW > 0.4 ? 18 + Math.min(28, Math.sqrt(lab.n)) : 0;
           raw.push({
             id: lab.id,
-            label: lab.label,
-            x: pt.x,
-            y: pt.y,
+            label: outW > 0.45 && lab.n ? `${lab.label} · ${lab.n}` : lab.label,
+            x: pt.x + Math.cos(ang) * off,
+            y: pt.y + Math.sin(ang) * off * 0.75,
             priority: 1000 + lab.n,
             kind: "campus",
             n: lab.n,
           });
         }
-        for (const hub of p.hubs.slice(0, 12)) {
+        for (const hub of p.hubs.slice(0, outW > 0.4 ? 10 : 12)) {
           const pt = worldToOverlay(p.x[hub.i], p.y[hub.i], zArr[hub.i] ?? 0);
           if (!pt.onscreen) continue;
+          const short = hub.label.length > (outW > 0.4 ? 18 : 22) ? `${hub.label.slice(0, outW > 0.4 ? 16 : 20)}…` : hub.label;
           raw.push({
             id: `hub:${hub.id}`,
-            label: hub.label.length > 22 ? `${hub.label.slice(0, 20)}...` : hub.label,
-            x: pt.x,
-            y: pt.y + 12,
+            label: short,
+            x: pt.x + 10,
+            y: pt.y + (outW > 0.4 ? 8 : 12),
             priority: 400 + hub.founders,
             kind: "hub",
           });
@@ -1055,42 +1104,49 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           }
           setCards(out);
 
-          // Sparse in-web media cards along arcs (between MP4) — NOT founder-cards (overlay gate)
+          // Denser in-web media field (between MP4) — NOT founder-cards; cull vs labels + each other
           const media: MediaCard[] = [];
-          const maxMedia = ww < 500 ? 3 : 7;
+          const maxMedia = ww < 500 ? 5 : 14;
           const labApprox = raw.map((lab) => {
             const lw = Math.min(160, 10 + lab.label.length * 6.6);
-            return { left: lab.x - lw / 2, right: lab.x + lw / 2, top: lab.y - 7, bottom: lab.y + 7 };
+            return { left: lab.x - lw / 2, right: lab.x + lw / 2, top: lab.y - 8, bottom: lab.y + 8 };
           });
-          for (let mi = 0; mi < cand.length && media.length < maxMedia; mi++) {
-            const c = cand[Math.min(cand.length - 1, mi + 2)];
-            if (!c) break;
+          const placed: { left: number; right: number; top: number; bottom: number }[] = [];
+          const pool = cand.slice(0, Math.min(cand.length, 48));
+          for (let mi = 0; mi < pool.length && media.length < maxMedia; mi++) {
+            const c = pool[mi];
             const h = hash01(`media:${c.i}`);
-            if (h > 0.72) continue;
-            const ang = h * Math.PI * 2;
-            const rad = 55 + h * 120;
+            // Place most candidates; vary orbit radius/angle for field spread
+            const ang = (h * Math.PI * 2 + mi * 0.7) % (Math.PI * 2);
+            const rad = 28 + (h * 0.55 + (mi % 5) * 0.09) * (ww < 500 ? 90 : 150);
             const x = c.pt.x + Math.cos(ang) * rad;
-            const y = c.pt.y + Math.sin(ang) * rad * 0.65;
-            const mw = ww < 500 ? 42 : 54;
+            const y = c.pt.y + Math.sin(ang) * rad * 0.72;
+            const mw = ww < 500 ? 36 : 46;
             const mh = mw;
+            const rect = { left: x - mw / 2, right: x + mw / 2, top: y - mh / 2, bottom: y + mh / 2 };
             const hitsLabel = labApprox.some(
-              (lr) => lr.left < x + mw / 2 && lr.right > x - mw / 2 && lr.top < y + mh / 2 && lr.bottom > y - mh / 2,
+              (lr) => lr.left < rect.right && lr.right > rect.left && lr.top < rect.bottom && lr.bottom > rect.top,
             );
             if (hitsLabel) continue;
-            if (x < 28 || y < 28 || x > ww - 28 || y > hh - 56) continue;
+            const hitsPeer = placed.some(
+              (pr) => pr.left < rect.right - 4 && pr.right > rect.left + 4 && pr.top < rect.bottom - 4 && pr.bottom > rect.top + 4,
+            );
+            if (hitsPeer) continue;
+            if (x < 22 || y < 22 || x > ww - 22 || y > hh - 52) continue;
             const fid = p.foIds[c.i] ?? "";
             const deal = dealsRef.current[fid];
-            const hues = ["#c4b5fd", "#67e8f9", "#fde047", "#fda4af", "#86efac", "#e9d5ff"];
+            const hues = ["#c4b5fd", "#67e8f9", "#fde047", "#fda4af", "#86efac", "#e9d5ff", "#fbcfe8", "#a5f3fc"];
             media.push({
               key: `m-${c.i}`,
               x,
               y,
               w: mw,
               h: mh,
-              title: (deal?.companyName || deal?.founderName || "·").slice(0, 16),
+              title: (deal?.companyName || deal?.founderName || "·").slice(0, 14),
               hue: hues[Math.floor(h * hues.length) % hues.length],
               pop: cardW,
             });
+            placed.push(rect);
           }
           setMediaCards(media);
         } else {
@@ -1265,8 +1321,8 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
                 : { "data-canvas-hub-label": lab.id.replace(/^hub:/, "") })}
               className={
                 lab.kind === "campus"
-                  ? "absolute -translate-x-1/2 -translate-y-1/2 text-center text-[11px] font-medium tracking-wide text-[color:var(--fg)] md:text-[13px]"
-                  : "absolute -translate-x-1/2 text-[9px] font-semibold tracking-wide text-[color:var(--fg)] md:text-[10px]"
+                  ? "absolute -translate-x-1/2 -translate-y-1/2 text-center font-serif text-[10px] font-normal italic tracking-tight text-slate-800 md:text-[12px]"
+                  : "absolute -translate-x-1/2 font-serif text-[8px] font-normal tracking-tight text-slate-700 md:text-[9px]"
               }
               style={{ left: lab.x, top: lab.y, textShadow: "0 0 5px var(--networks-bg, #ece9e4), 0 1px 3px var(--networks-bg, #ece9e4)" }}
             >
