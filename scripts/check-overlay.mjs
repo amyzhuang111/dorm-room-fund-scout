@@ -7,6 +7,8 @@
  *   overlay-on-text     — overlay intersects visible text outside the overlay itself
  *   overlay-on-control  — overlay intersects interactive controls outside itself
  *   callout-on-label    — canvas callout covers a canvas network label
+ *   callout-on-node     — canvas callout covers a rendered poster node (screen-space)
+ *   label-on-label      — two canvas hub labels overlap
  *   networksUnobstructed — /networks map area free of legend+callout overlays (fail <85% @375)
  *
  * Fold content inside a collapsible panel is allowed; covering stats/search/Map
@@ -52,7 +54,7 @@ function fail(msg) {
 }
 
 const browser = await chromium.launch({ headless: true });
-const report = { ok: true, base: BASE, pages: [], totals: { overlayOnText: 0, overlayOnControl: 0, calloutOnLabel: 0, networksUnobstructed: {} } };
+const report = { ok: true, base: BASE, pages: [], totals: { overlayOnText: 0, overlayOnControl: 0, calloutOnLabel: 0, calloutOnNode: 0, labelOnLabel: 0, networksUnobstructed: {} } };
 
 for (const vp of VIEWPORTS) {
   const page = await browser.newPage({
@@ -217,6 +219,60 @@ for (const vp of VIEWPORTS) {
         }
       }
 
+      // Label-over-label on the rendered canvas (hub HTML labels).
+      const labelOnLabel = [];
+      for (let i = 0; i < labels.length; i++) {
+        for (let j = i + 1; j < labels.length; j++) {
+          if (!intersects(labels[i].rect, labels[j].rect, 2)) continue;
+          const hit = area(labels[i].rect, labels[j].rect);
+          if (hit < 16) continue;
+          labelOnLabel.push({
+            a: labels[i].id,
+            b: labels[j].id,
+            textA: labels[i].text,
+            textB: labels[j].text,
+            hit: Math.round(hit),
+          });
+        }
+      }
+
+      // Callout-over-node: project poster nodes into screen space and test vs callout boxes.
+      let calloutOnNode = [];
+      const graphEl = document.querySelector("[data-networks-graph]");
+      const canvasEl = graphEl && graphEl.querySelector("canvas");
+      const posterPayload = window.__NETWORKS_POSTER__ || null;
+      if (graphEl && canvasEl && posterPayload && callouts.length) {
+        const gr = canvasEl.getBoundingClientRect();
+        const pw = posterPayload.w || 1200;
+        const ph = posterPayload.h || 900;
+        const fit = Math.min(gr.width / pw, gr.height / ph);
+        const s = fit;
+        const ox = gr.left + (gr.width - pw * fit) / 2;
+        const oy = gr.top + (gr.height - ph * fit) / 2;
+        const xs = posterPayload.x || [];
+        const ys = posterPayload.y || [];
+        const rs = posterPayload.r || [];
+        for (const callout of callouts) {
+          for (let i = 0; i < xs.length; i++) {
+            const nx = xs[i] * s + ox;
+            const ny = ys[i] * s + oy;
+            const nr = Math.max(1.8, Math.min(12, (rs[i] || 4) * s));
+            const nodeRect = { left: nx - nr, top: ny - nr, right: nx + nr, bottom: ny + nr };
+            if (!intersects(callout.rect, nodeRect, 1)) continue;
+            const hit = area(callout.rect, nodeRect);
+            if (hit < 8) continue;
+            calloutOnNode.push({
+              callout: callout.id,
+              text: callout.text,
+              node: i,
+              hit: Math.round(hit),
+            });
+            if (calloutOnNode.length >= 40) break;
+          }
+          if (calloutOnNode.length >= 40) break;
+        }
+      }
+
       // /networks: fraction of the graph canvas not covered by in-map legend or callouts.
       let networksUnobstructed = null;
       const graph = document.querySelector("[data-networks-graph]");
@@ -280,6 +336,8 @@ for (const vp of VIEWPORTS) {
         onText: dedupe(onText, "text"),
         onControl: dedupe(onControl, "control"),
         calloutOnLabel: dedupe(calloutOnLabel, "text"),
+        calloutOnNode,
+        labelOnLabel,
         networksUnobstructed,
         networksCardOnGraph,
       };
@@ -292,17 +350,23 @@ for (const vp of VIEWPORTS) {
       overlayOnText: found.onText.length,
       overlayOnControl: found.onControl.length,
       calloutOnLabel: (found.calloutOnLabel || []).length,
+      calloutOnNode: (found.calloutOnNode || []).length,
+      labelOnLabel: (found.labelOnLabel || []).length,
       networksUnobstructed: found.networksUnobstructed,
       networksCardOnGraph: (found.networksCardOnGraph || []).length,
       onText: found.onText.slice(0, 12),
       onControl: found.onControl.slice(0, 12),
       onCalloutLabel: (found.calloutOnLabel || []).slice(0, 12),
+      onCalloutNode: (found.calloutOnNode || []).slice(0, 12),
+      onLabelLabel: (found.labelOnLabel || []).slice(0, 12),
       cardOnGraph: (found.networksCardOnGraph || []).slice(0, 8),
     };
     report.pages.push(entry);
     report.totals.overlayOnText += entry.overlayOnText;
     report.totals.overlayOnControl += entry.overlayOnControl;
     report.totals.calloutOnLabel = (report.totals.calloutOnLabel || 0) + entry.calloutOnLabel;
+    report.totals.calloutOnNode = (report.totals.calloutOnNode || 0) + entry.calloutOnNode;
+    report.totals.labelOnLabel = (report.totals.labelOnLabel || 0) + entry.labelOnLabel;
     if (entry.networksUnobstructed != null) {
       report.totals.networksUnobstructed = report.totals.networksUnobstructed || {};
       report.totals.networksUnobstructed[vp.name] = entry.networksUnobstructed;
@@ -310,10 +374,10 @@ for (const vp of VIEWPORTS) {
 
     const label = `${route}@${vp.name}`;
     let failed = false;
-    if (entry.overlayOnText || entry.overlayOnControl || entry.calloutOnLabel) {
+    if (entry.overlayOnText || entry.overlayOnControl || entry.calloutOnLabel || entry.calloutOnNode || entry.labelOnLabel) {
       failed = true;
       fail(
-        `${label}: overlay-on-text=${entry.overlayOnText} overlay-on-control=${entry.overlayOnControl} callout-on-label=${entry.calloutOnLabel} text=${JSON.stringify(entry.onText).slice(0, 200)} callouts=${JSON.stringify(entry.onCalloutLabel).slice(0, 200)}`,
+        `${label}: overlay-on-text=${entry.overlayOnText} overlay-on-control=${entry.overlayOnControl} callout-on-label=${entry.calloutOnLabel} callout-on-node=${entry.calloutOnNode} label-on-label=${entry.labelOnLabel} text=${JSON.stringify(entry.onText).slice(0, 160)} callouts=${JSON.stringify(entry.onCalloutLabel).slice(0, 160)} nodes=${JSON.stringify(entry.onCalloutNode).slice(0, 160)} labels=${JSON.stringify(entry.onLabelLabel).slice(0, 160)}`,
       );
     }
     // Mobile /networks must keep ≥85% of the map free of in-canvas chrome.
@@ -330,7 +394,7 @@ for (const vp of VIEWPORTS) {
     }
     if (!failed) {
       const u = entry.networksUnobstructed != null ? ` unobstructed=${entry.networksUnobstructed}%` : "";
-      console.log(`OK ${label} overlays=${entry.overlayCount} overlay-on-text=0 overlay-on-control=0 callout-on-label=0${u}`);
+      console.log(`OK ${label} overlays=${entry.overlayCount} overlay-on-text=0 overlay-on-control=0 callout-on-label=0 callout-on-node=0 label-on-label=0${u}`);
     }
   }
   await page.close();

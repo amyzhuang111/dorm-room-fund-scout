@@ -142,6 +142,17 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
 
   const founderCount = poster?.foIds.length ?? 0;
 
+  // Expose poster geometry for Playwright gates (callout-over-node on rendered canvas)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (poster) {
+      (window as unknown as { __NETWORKS_POSTER__?: Poster }).__NETWORKS_POSTER__ = poster;
+    }
+    return () => {
+      delete (window as unknown as { __NETWORKS_POSTER__?: Poster }).__NETWORKS_POSTER__;
+    };
+  }, [poster]);
+
   const worldToScreen = useCallback(
     (wx: number, wy: number) => {
       if (!poster) return { x: 0, y: 0 };
@@ -230,8 +241,12 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
       if (campI >= 0 && p.campuses[campI]) color = p.campuses[campI].color;
       const rgb = hexToRgb(color);
 
-      let alpha = k === 2 ? 0.12 : k === 1 ? 0.08 : 0.13;
-      let lineW = k === 2 ? 1.05 : 0.9;
+      // Cofounder (k=0) tinted haze visible in the gaps between campus islands
+      const campA = p.campus[a];
+      const campB = p.campus[b];
+      const crossCamp = campA >= 0 && campB >= 0 && campA !== campB;
+      let alpha = k === 2 ? 0.14 : k === 1 ? 0.09 : crossCamp ? 0.17 : 0.13;
+      let lineW = k === 2 ? 1.15 : k === 0 && crossCamp ? 1.15 : 1.0;
       if (hubId === "yc" && !focusHub) {
         alpha = 0.05;
         lineW = 0.55;
@@ -266,7 +281,7 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
     for (let i = 0; i < p.x.length; i++) {
       const pt = toS(p.x[i], p.y[i]);
       // world r is already ~3–14px; scale with fit so 1440 matches target
-      const radius = Math.max(2.2, p.r[i] * s);
+      const radius = Math.max(1.8, Math.min(12, p.r[i] * s));
       if (pt.x < -24 || pt.y < -24 || pt.x > w + 24 || pt.y > h + 24) continue;
       if (p.kind[i] === 2) {
         ctx.beginPath();
@@ -296,33 +311,10 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
       ctx.stroke();
     }
 
-    // Inline bold hub labels (Nature Industry style: IBM / Pfizer / Merck)
-    ctx.font = "600 11px ui-sans-serif, system-ui, sans-serif";
-    ctx.textAlign = "left";
-    ctx.textBaseline = "middle";
-    const hubLabelSeen = new Set<string>();
-    for (const hub of p.hubs) {
-      if (hubLabelSeen.has(hub.id)) continue;
-      hubLabelSeen.add(hub.id);
-      const i = hub.i;
-      const pt = toS(p.x[i], p.y[i]);
-      const radius = Math.max(2.2, p.r[i] * s);
-      const short =
-        hub.label.length > 22
-          ? hub.label.replace(/Y Combinator/i, "YC").replace(/Penn Venture Lab\s+/i, "").slice(0, 20)
-          : hub.label;
-      const tx = pt.x + radius + 4;
-      const ty = pt.y;
-      ctx.fillStyle = "rgba(255,255,255,0.85)";
-      ctx.fillRect(tx - 2, ty - 7, Math.min(150, short.length * 6.2 + 6), 14);
-      ctx.fillStyle = "#0f172a";
-      ctx.fillText(short, tx, ty);
-    }
-
     // Soft glow on hovered node
     if (focusNode >= 0) {
       const pt = toS(p.x[focusNode], p.y[focusNode]);
-      const radius = Math.max(2.5, p.r[focusNode] * s);
+      const radius = Math.max(2.0, Math.min(12, p.r[focusNode] * s));
       ctx.beginPath();
       ctx.fillStyle = "rgba(37,99,235,0.16)";
       ctx.arc(pt.x, pt.y, radius * 2.4, 0, Math.PI * 2);
@@ -485,11 +477,36 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
   const legendTop = legendCampuses.slice(0, 6);
   const legendRest = legendCampuses.slice(6);
 
-  // Mobile hub labels: top 6 hubs by founders
-  const mobileHubLabels = useMemo(() => {
+  // Resting hub labels: ~10–12 majors only; extras appear on hover
+  const restingHubLabels = useMemo(() => {
     if (!poster) return [];
-    return [...poster.hubs].sort((a, b) => b.founders - a.founders).slice(0, 6);
+    const ranked = [...poster.hubs].sort((a, b) => b.founders - a.founders);
+    const out: typeof ranked = [];
+    let pennKept = false;
+    for (const h of ranked) {
+      if (out.length >= 10) break;
+      const isPenn = /penn/i.test(h.id) || /penn/i.test(h.label);
+      if (isPenn) {
+        if (pennKept) continue; // one Penn hub at rest; others on hover
+        pennKept = true;
+      }
+      out.push(h);
+    }
+    return out;
   }, [poster]);
+  const mobileHubLabels = useMemo(() => restingHubLabels.slice(0, 6), [restingHubLabels]);
+  const deskHubLabels = useMemo(() => {
+    if (!poster) return [];
+    const base = restingHubLabels;
+    if (hover?.hub && !base.some((h) => h.id === hover.hub!.id)) {
+      return [...base, hover.hub];
+    }
+    if (selectedHub) {
+      const sel = poster.hubs.find((h) => h.id === selectedHub);
+      if (sel && !base.some((h) => h.id === sel.id)) return [...base, sel];
+    }
+    return base;
+  }, [poster, restingHubLabels, hover, selectedHub]);
 
   if (!poster) {
     return <p className="px-4 py-10 text-sm text-[color:var(--fg-3)]">Loading network map…</p>;
@@ -520,26 +537,25 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
         <div className="pointer-events-none absolute inset-0 z-[1] hidden md:block" aria-hidden="true">
           {poster.callouts.map((c, i) => {
             const a = worldToScreen(c.ax, c.ay);
-            const label = worldToScreen(c.lx, c.ly);
             const left = c.side === "left";
-            // Keep near the cluster; clamp only enough to stay on-canvas
-            const lx = clamp(label.x, 8, size.w - 228);
-            const ly = clamp(label.y, 16, size.h - 88);
-            const tipX = left ? lx + 210 : lx;
+            // Stay in the white margin band outside the cloud (Nature reference)
+            const lx = left ? 10 : size.w - 226;
+            const ly = clamp((c.ly / poster.h) * size.h, 18, size.h - 92);
+            const tipX = left ? lx + 206 : lx;
             return (
               <div key={`callout-${i}`}>
-                <svg className="absolute inset-0 h-full w-full overflow-visible">
+                <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
                   <path
-                    d={`M ${a.x} ${a.y} L ${tipX} ${ly + 14}`}
-                    stroke="rgba(71,85,105,0.55)"
-                    strokeWidth="0.7"
+                    d={`M ${a.x} ${a.y} L ${tipX} ${ly + 12}`}
+                    stroke="rgba(71,85,105,0.5)"
+                    strokeWidth="0.65"
                     fill="none"
                     data-canvas-callout-leader=""
                   />
                 </svg>
                 <div
                   data-canvas-callout=""
-                  className="absolute max-w-[210px] rounded-sm bg-white/80 px-1.5 py-1 text-[11px] leading-snug text-[color:var(--fg-2)]"
+                  className="absolute max-w-[210px] text-[11px] leading-snug text-[color:var(--fg-2)]"
                   style={{ left: lx, top: ly }}
                 >
                   {c.text}
@@ -586,24 +602,36 @@ export function NetworksGraph({ investorHubs: investorHubsProp, onSelectCompany,
             const placed: { l: number; t: number; r: number; b: number }[] = [];
             const out: Array<React.ReactNode> = [];
             const fit = Math.min(size.w / poster.w, size.h / poster.h);
-            for (const hub of mobileHubLabels.slice(0, 10)) {
+            // Reserve callout margin boxes so hub labels never sit under callouts
+            for (const c of poster.callouts) {
+              const left = c.side === "left" ? 10 : size.w - 226;
+              const ly = clamp((c.ly / poster.h) * size.h, 18, size.h - 92);
+              placed.push({ l: left - 4, t: ly - 4, r: left + 214, b: ly + 58 });
+            }
+            for (const hub of deskHubLabels) {
               const pt = worldToScreen(poster.x[hub.i], poster.y[hub.i]);
               const hubR = Math.max(28, poster.r[hub.i] * fit * 3.2);
               const shortLabel =
                 hub.label.length > 26 ? hub.label.replace(/Penn Venture Lab\s+/i, "Penn ").slice(0, 32) : hub.label;
               const approxW = Math.min(170, Math.max(86, shortLabel.length * 6.6 + 36));
-              const approxH = 38; // labels wrap; reserve two lines
+              const approxH = 46; // labels wrap; reserve two lines + pad
               let top = Math.max(18, pt.y - 12);
               let left = pt.x;
               let ok = false;
-              // Prefer upward offsets so labels sit above dense clusters
-              for (const dy of [0, -28, -48, -68, 28, 48, -88, 68]) {
+              // Prefer upward/side offsets; skip label entirely if no clear slot (others on hover)
+              const tryOffsets: Array<[number, number]> = [
+                [0, 0], [0, -28], [0, -48], [0, -68], [0, 28], [0, 48], [0, -88], [0, 68],
+                [-40, -36], [40, -36], [-56, 0], [56, 0], [-40, 36], [40, 36],
+              ];
+              for (const [dx, dy] of tryOffsets) {
+                const candL = clamp(left + dx, approxW / 2 + 8, size.w - approxW / 2 - 8);
                 const candT = clamp(top + dy, 16, size.h - 36);
-                const box = { l: left - approxW / 2, t: candT - approxH, r: left + approxW / 2, b: candT + 4 };
+                const box = { l: candL - approxW / 2, t: candT - approxH, r: candL + approxW / 2, b: candT + 4 };
                 const hit = placed.some(
-                  (p0) => !(box.r < p0.l + 8 || box.l > p0.r - 8 || box.b < p0.t + 6 || box.t > p0.b - 6),
+                  (p0) => !(box.r < p0.l + 14 || box.l > p0.r - 14 || box.b < p0.t + 12 || box.t > p0.b - 12),
                 );
                 if (!hit) {
+                  left = candL;
                   top = candT;
                   placed.push(box);
                   ok = true;

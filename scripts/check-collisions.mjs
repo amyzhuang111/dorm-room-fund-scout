@@ -58,6 +58,11 @@ for (const vp of VIEWPORTS) {
     } else if (route.startsWith("/signals")) {
       await page.waitForSelector("[data-signal-featured], [data-signals-page] li", { timeout: 60000 }).catch(() => {});
       await page.waitForTimeout(1000);
+    } else if (route === "/networks") {
+      await page.waitForSelector("[data-networks-graph] canvas", { timeout: 60000 }).catch(() => {});
+      await page.waitForTimeout(2200);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForTimeout(200);
     } else {
       await page.waitForTimeout(1400);
     }
@@ -243,12 +248,74 @@ for (const vp of VIEWPORTS) {
           });
         }
       }
-      return { nodeCount: items.length, collisions: collisions.slice(0, 50), collisionCount: collisions.length };
+      // Extra networks metrics: callout-over-node + label-over-label on rendered canvas
+      let calloutOnNode = [];
+      let labelOnLabel = [];
+      const callouts = [...document.querySelectorAll("[data-canvas-callout]")].filter((el) => !isSkipped(el));
+      const labels = items.filter((it) => it.kind === "canvas-label");
+      for (let i = 0; i < labels.length; i++) {
+        for (let j = i + 1; j < labels.length; j++) {
+          const a = labels[i];
+          const b = labels[j];
+          const x = Math.max(0, Math.min(a.x2, b.x2) - Math.max(a.x1, b.x1));
+          const y = Math.max(0, Math.min(a.y2, b.y2) - Math.max(a.y1, b.y1));
+          const area = x * y;
+          if (area <= 16) continue;
+          labelOnLabel.push({ area: Math.round(area), a: a.text, b: b.text });
+        }
+      }
+      const posterPayload = window.__NETWORKS_POSTER__ || null;
+      const graphEl = document.querySelector("[data-networks-graph]");
+      const canvasEl = graphEl && graphEl.querySelector("canvas");
+      if (posterPayload && canvasEl && callouts.length) {
+        const gr = canvasEl.getBoundingClientRect();
+        const pw = posterPayload.w || 1200;
+        const ph = posterPayload.h || 900;
+        const fit = Math.min(gr.width / pw, gr.height / ph);
+        const s = fit;
+        const ox = gr.left + (gr.width - pw * fit) / 2;
+        const oy = gr.top + (gr.height - ph * fit) / 2;
+        const xs = posterPayload.x || [];
+        const ys = posterPayload.y || [];
+        const rs = posterPayload.r || [];
+        for (const el of callouts) {
+          const r = el.getBoundingClientRect();
+          const crect = { x1: r.left, y1: r.top, x2: r.right, y2: r.bottom };
+          for (let i = 0; i < xs.length; i++) {
+            const nx = xs[i] * s + ox;
+            const ny = ys[i] * s + oy;
+            const nr = Math.max(1.8, Math.min(12, (rs[i] || 4) * s));
+            const x = Math.max(0, Math.min(crect.x2, nx + nr) - Math.max(crect.x1, nx - nr));
+            const y = Math.max(0, Math.min(crect.y2, ny + nr) - Math.max(crect.y1, ny - nr));
+            const area = x * y;
+            if (area < 8) continue;
+            calloutOnNode.push({ area: Math.round(area), text: (el.textContent || "").trim().slice(0, 60), node: i });
+            if (calloutOnNode.length >= 40) break;
+          }
+          if (calloutOnNode.length >= 40) break;
+        }
+      }
+      // label-on-label already covered by canvas-label pairs in collisions;
+      // callout-on-node is the additive gate (nodes aren't DOM text).
+      const extraCollisions = calloutOnNode.length;
+      return {
+        nodeCount: items.length,
+        collisions: collisions.slice(0, 50),
+        collisionCount: collisions.length + extraCollisions,
+        calloutOnNode: calloutOnNode.slice(0, 20),
+        labelOnLabel: labelOnLabel.slice(0, 20),
+        calloutOnNodeCount: calloutOnNode.length,
+        labelOnLabelCount: labelOnLabel.length,
+      };
     });
     report.pages.push({ route, viewport: vp.name, ...found });
     for (const c of found.collisions) report.collisions.push({ route, viewport: vp.name, ...c });
     if (found.collisionCount > 0) report.ok = false;
-    console.log(`${vp.name} ${route} nodes=${found.nodeCount} collisions=${found.collisionCount}`);
+    const extra =
+      found.calloutOnNodeCount || found.labelOnLabelCount
+        ? ` callout-on-node=${found.calloutOnNodeCount || 0} label-on-label=${found.labelOnLabelCount || 0}`
+        : "";
+    console.log(`${vp.name} ${route} nodes=${found.nodeCount} collisions=${found.collisionCount}${extra}`);
   }
   await page.close();
 }

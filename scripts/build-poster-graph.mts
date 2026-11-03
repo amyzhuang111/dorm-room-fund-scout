@@ -117,15 +117,32 @@ for (let i = 0; i < campuses.length; i++) {
   // skip placing campus marker nodes — founders fill the cloud
 }
 
-/** Dense overlapping campus homes — big campuses near center, small as satellites. */
+/** Distinct campus islands: 1–2 big central masses + separated satellite blobs (Nature). */
 function campusXY(ci: number): { x: number; y: number } {
   const n = campuses[ci]?.n ?? 1;
-  // Rank by size: first campuses hug the core so blobs touch
-  const rank = ci;
-  const ang = rank * 2.399963 + 0.35; // golden angle
-  const core = Math.min(1, Math.sqrt(n) / Math.sqrt(campuses[0]?.n ?? n));
-  const rad = 40 + rank * 18 + (1 - core) * 55;
-  return { x: Math.cos(ang) * rad * 1.05, y: Math.sin(ang) * rad * 0.9 };
+  // Twin central masses (Nature NA / Europe style) with a clear cleft
+  if (ci === 0) return { x: -95, y: -40 };
+  if (ci === 1) return { x: 110, y: -5 };
+  // Near-core majors: still attached to the central cloud but not fused
+  if (ci < 5) {
+    const k = ci - 2;
+    const ang = -Math.PI * 0.55 + k * 1.15;
+    const rad = 210 + k * 18;
+    return { x: Math.cos(ang) * rad, y: Math.sin(ang) * rad };
+  }
+  // Mid ring
+  if (ci < 12) {
+    const k = ci - 5;
+    const ang = (k / 7) * Math.PI * 2 + 0.2;
+    const rad = 320 + (k % 2) * 30;
+    return { x: Math.cos(ang) * rad, y: Math.sin(ang) * rad };
+  }
+  // Far satellites — white space + haze gaps like Nature AU/CN/JP/SA
+  const j = ci - 12;
+  const satN = Math.max(1, campuses.length - 12);
+  const ang = (j / satN) * Math.PI * 2 + 0.55;
+  const rad = 460 + (j % 6) * 42 + Math.sqrt(Math.max(1, n)) * 2.2;
+  return { x: Math.cos(ang) * rad, y: Math.sin(ang) * rad * 0.95 };
 }
 
 for (const fid of founderIds) {
@@ -134,10 +151,10 @@ for (const fid of founderIds) {
   const home = campusXY(ci);
   const deg = founderDeg.get(fid) ?? 1;
   // Screen-ish radius 3–14px (sqrt of connectedness); stored in world units ≈ px after normalize
-  const r = Math.max(4.5, Math.min(21, 4.5 + Math.sqrt(deg) * 2.8));
+  const r = Math.max(3.2, Math.min(16, 3.2 + Math.sqrt(deg) * 1.55));
   const campN = campusCount.get(cid) ?? 1;
   // Tight seed so collide packs into a solid blob
-  const jitter = 6 + Math.sqrt(campN) * 0.55;
+  const jitter = 8 + Math.sqrt(campN) * 0.7;
   const id = `fo:${fid}`;
   indexOf.set(id, nodes.length);
   nodes.push({
@@ -158,9 +175,9 @@ for (const cid of companyIds) {
   const deg = companyDeg.get(cid) ?? 1;
   const invN = (meta.companyInvestors.get(cid) ?? []).length;
   const score = Math.max(deg, invN);
-  const r = Math.max(4.5, Math.min(18, 4.5 + Math.sqrt(score) * 2.2));
+  const r = Math.max(3.0, Math.min(14, 3.0 + Math.sqrt(score) * 1.35));
   const campN = campusCount.get(camp) ?? 1;
-  const jitter = 5 + Math.sqrt(campN) * 0.45;
+  const jitter = 7 + Math.sqrt(campN) * 0.55;
   const id = `co:${cid}`;
   indexOf.set(id, nodes.length);
   nodes.push({
@@ -188,7 +205,7 @@ for (const hub of hubs) {
     n += 1;
   }
   const deg = hub.founderCount || hubDeg.get(hub.id) || 1;
-  const r = Math.max(9, Math.min(21, 9 + Math.sqrt(deg) * 0.35));
+  const r = Math.max(5.5, Math.min(14, 5.5 + Math.sqrt(deg) * 0.22));
   const id = `net:${hub.id}`;
   indexOf.set(id, nodes.length);
   nodes.push({
@@ -238,68 +255,51 @@ for (const cid of companyIds) {
   }
 }
 
-// Force layout — strong campus gravity + collide so nodes touch into solid blobs
+// Force layout — per-campus blobs with gaps between islands (weaker global packing)
 const simNodes = nodes.map((n, i) => ({ ...n, index: i }));
 const simEdges = edges.map((e) => ({ source: e.s, target: e.t, k: e.k }));
 
 const sim = forceSimulation(simNodes as any)
-  .force("charge", forceManyBody().strength(-4).distanceMax(80))
+  .force("charge", forceManyBody().strength(-28).distanceMax(280))
   .force(
     "link",
     forceLink(simEdges as any)
       .id((d: any) => d.index)
-      .distance((l: any) => (l.k === 1 ? 22 : l.k === 2 ? 2 : 6))
-      .strength((l: any) => (l.k === 1 ? 0.03 : l.k === 2 ? 0.35 : 0.18)),
+      .distance((l: any) => (l.k === 1 ? 42 : l.k === 2 ? 4 : 10))
+      .strength((l: any) => (l.k === 1 ? 0.015 : l.k === 2 ? 0.22 : 0.08)),
   )
   .force(
     "collide",
     forceCollide()
-      .radius((d: any) => d.r) // touch — no padding gap
-      .strength(1)
-      .iterations(3),
+      .radius((d: any) => d.r + 0.35)
+      .strength(0.75)
+      .iterations(2),
   )
   .force(
     "x",
-    forceX((d: any) => (d.kind === 2 ? d.x : campusXY(Math.max(0, d.campus)).x)).strength((d: any) =>
-      d.kind === 2 ? 0.02 : 0.22,
-    ),
+    forceX((d: any) => (d.kind === 2 ? d.x : campusXY(Math.max(0, d.campus)).x)).strength((d: any) => {
+      if (d.kind === 2) return 0.01;
+      const ci = Math.max(0, d.campus);
+      return ci >= 12 ? 0.16 : ci >= 5 ? 0.1 : 0.07;
+    }),
   )
   .force(
     "y",
-    forceY((d: any) => (d.kind === 2 ? d.y : campusXY(Math.max(0, d.campus)).y)).strength((d: any) =>
-      d.kind === 2 ? 0.02 : 0.22,
-    ),
+    forceY((d: any) => (d.kind === 2 ? d.y : campusXY(Math.max(0, d.campus)).y)).strength((d: any) => {
+      if (d.kind === 2) return 0.01;
+      const ci = Math.max(0, d.campus);
+      return ci >= 12 ? 0.16 : ci >= 5 ? 0.1 : 0.07;
+    }),
   )
   .stop();
-for (let i = 0; i < 420; i++) sim.tick();
-
-// Packing polish: collide + campus gravity only
-sim
-  .force("charge", null)
-  .force("link", null)
-  .force(
-    "collide",
-    forceCollide()
-      .radius((d: any) => d.r)
-      .strength(1)
-      .iterations(4),
-  )
-  .force(
-    "x",
-    forceX((d: any) => (d.kind === 2 ? d.x : campusXY(Math.max(0, d.campus)).x)).strength(0.28),
-  )
-  .force(
-    "y",
-    forceY((d: any) => (d.kind === 2 ? d.y : campusXY(Math.max(0, d.campus)).y)).strength(0.28),
-  );
-for (let i = 0; i < 180; i++) sim.tick();
+for (let i = 0; i < 360; i++) sim.tick();
 
 for (let i = 0; i < simNodes.length; i++) {
   nodes[i].x = simNodes[i].x;
   nodes[i].y = simNodes[i].y;
 }
 
-// Normalize so the cloud fills ~90% of the map (tight pad for callout leaders)
+// Uniform scale → circular/organic cloud; wide pad leaves white margins for callouts
 let minX = Infinity,
   maxX = -Infinity,
   minY = Infinity,
@@ -310,15 +310,17 @@ for (const n of nodes) {
   minY = Math.min(minY, n.y - n.r);
   maxY = Math.max(maxY, n.y + n.r);
 }
-const pad = 36; // ~5% margin each side → cloud ≈ 90%
+const pad = 95; // white margin band for Nature-style callouts (keep room for leaders)
 const spanX = Math.max(1, maxX - minX);
 const spanY = Math.max(1, maxY - minY);
 const W = 1200;
-const H = 780;
+const H = 900; // nearer to square so normalize stays circular, not a squash
+const scale = Math.min((W - pad * 2) / spanX, (H - pad * 2) / spanY);
+const midX = (minX + maxX) / 2;
+const midY = (minY + maxY) / 2;
 for (const n of nodes) {
-  n.x = pad + ((n.x - minX) / spanX) * (W - pad * 2);
-  n.y = pad + ((n.y - minY) / spanY) * (H - pad * 2);
-  // radii stay in px-like units (3–14); do not scale with normalize
+  n.x = W / 2 + (n.x - midX) * scale;
+  n.y = H / 2 + (n.y - midY) * scale;
 }
 
 // Sourced callouts (4–6)
@@ -422,9 +424,9 @@ const callouts = calloutTexts.slice(0, 6).map((text, i) => {
   const anchor = calloutAnchors[i] ?? campusCentroid[i % campusCentroid.length] ?? { x: W / 2, y: H / 2, n: 1 };
   const ax = anchor.x || W / 2;
   const ay2 = anchor.y || H / 2;
-  // Sit callout just outside the blob, not far in the page margin
-  const lx = side === "left" ? Math.max(8, ax - 210) : Math.min(W - 210, ax + 24);
-  const ly = Math.min(H - 70, Math.max(12, ay2 - 28));
+  // True page margins (outside the cloud), staggered so boxes don't stack
+  const lx = side === "left" ? 10 : W - 228;
+  const ly = Math.min(H - 80, Math.max(18, 40 + i * 110 + (side === "right" ? 30 : 0)));
   return { text, ax: round1(ax), ay: round1(ay2), lx: round1(lx), ly: round1(ly), side };
 });
 
