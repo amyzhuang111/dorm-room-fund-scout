@@ -108,15 +108,15 @@ function placeLabels(
   hoverId: string | null
 ): LabelBox[] {
   const ranked = [...clusters].sort((a, b) => a.rank - b.rank);
-  // Mobile: fewer labels so the bottom campus legend stays clear; desk shows nearly all hubs.
-  const maxLabels = viewW < 600 ? 7 : viewW < 900 ? 12 : ranked.length;
+  // Cap labels so dense clusters (a16z Speedrun neighborhood) stay readable; hover reveals the rest.
+  const maxLabels = viewW < 600 ? 6 : viewW < 900 ? 10 : 12;
   const candidates = ranked.filter((c) => c.rank <= maxLabels || c.id === hoverId);
-  // Reserve the in-frame campus legend strip (taller on narrow viewports).
-  const legendH = viewW < 600 ? 52 : 28;
+  // Reserve the in-frame campus legend strip (taller on narrow viewports; keep Uncrowded off-canvas).
+  const legendH = viewW < 600 ? 44 : 28;
   const topPad = 8;
   const bottomLimit = viewH - legendH - 6;
   const placed: LabelBox[] = [];
-  const hitPad = viewW < 900 ? 10 : 12;
+  const hitPad = viewW < 900 ? 12 : 14;
 
   const hubs: HubScreen[] = candidates.map((cluster) => {
     const center = toScreen(cluster.cx, cluster.cy);
@@ -227,9 +227,15 @@ function placeLabels(
         if (chosen) break;
       }
     }
-    // Skip low-rank labels that would collide rather than force-overlap in dense right clusters.
+    // Skip colliding / minor labels in dense zones (esp. a16z upper-right); hover still forces a label.
     if (!chosen) {
-      if ((cluster.rank > 6 || (upperRight && cluster.rank > 4)) && cluster.id !== hoverId) continue;
+      const denseId = /speedrun|a16z|thiel|neo|yc/i.test(cluster.id);
+      if (
+        (cluster.rank > 5 || (upperRight && cluster.rank > 3) || (denseId && cluster.rank > 4)) &&
+        cluster.id !== hoverId
+      ) {
+        continue;
+      }
       const rimX = center.x + (rightSide ? anchorR : -anchorR * 0.2);
       const rimY = center.y;
       const trial: LabelBox = {
@@ -989,7 +995,7 @@ export function NetworksGraph({
     </div>
   );
 
-  const investorList = (
+  const renderInvestorList = () => (
     <div data-networks-investor-rail="">
       <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Investor hubs</div>
       {investorHubs.length === 0 ? (
@@ -1019,111 +1025,118 @@ export function NetworksGraph({
     </div>
   );
 
-  const insightsBlock = insightTexts.length ? (
-    <div data-networks-insights="" className="space-y-1.5">
-      <div className="text-[10px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Insights</div>
-      {insightTexts.map((box) => (
-        <div
-          key={box.id}
-          data-canvas-callout={box.id}
-          className="rounded border border-[color:var(--line)] bg-white px-2 py-1.5 text-[11px] leading-snug text-[color:var(--fg-2)]"
-        >
-          {box.text}
-        </div>
-      ))}
-    </div>
-  ) : null;
+  const renderInsights = () =>
+    insightTexts.length ? (
+      <div data-networks-insights="" className="space-y-1.5">
+        <div className="text-[10px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Insights</div>
+        {insightTexts.map((box) => (
+          <div
+            key={box.id}
+            data-canvas-callout={box.id}
+            className="rounded border border-[color:var(--line)] bg-white px-2 py-1.5 text-[11px] leading-snug text-[color:var(--fg-2)]"
+          >
+            {box.text}
+          </div>
+        ))}
+      </div>
+    ) : null;
 
   return (
     <div className="w-full" data-networks-desk="">
-      {/* Full-width graph (n3 content width): chrome sits below, not in a side column that squeezes the canvas. */}
-      <div
-        ref={wrapRef}
-        className="relative h-[300px] w-full touch-manipulation overflow-hidden bg-white sm:h-[420px] md:h-[560px]"
-        data-networks-graph=""
-        onWheel={onWheel}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={() => {
-          dragRef.current = null;
-        }}
-      >
-        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing" aria-label="Founder networks graph" />
-
-        <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full" width={size.w} height={size.h} aria-hidden="true">
-          {labels.map((label) => {
-            const lx = label.x + label.w / 2;
-            const ly = label.y + label.h / 2;
-            return (
-              <path
-                key={`lead-${label.id}`}
-                d={`M ${label.rimX} ${label.rimY} L ${lx} ${ly}`}
-                stroke="rgba(70,80,110,0.4)"
-                strokeWidth="0.7"
-                fill="none"
-              />
-            );
-          })}
-        </svg>
-
-        {labels.map((label) => (
-          <button
-            key={label.id}
-            type="button"
-            data-canvas-label={label.id}
-            className="absolute z-[1] box-border bg-transparent px-0.5 py-0 text-left text-[11px] font-semibold leading-snug"
-            data-label-anchor-x={Math.round(label.rimX)}
-            data-label-anchor-y={Math.round(label.rimY)}
-            data-hub-x={Math.round(label.hubX)}
-            data-hub-y={Math.round(label.hubY)}
-            data-hub-r={Math.round(label.hubR)}
-            style={{
-              left: label.x,
-              top: label.y,
-              width: label.w,
-              color: label.color,
-              textShadow: "0 0 3px rgba(255,255,255,0.95), 0 1px 2px rgba(255,255,255,0.9)",
-            }}
-            onClick={(event) => {
-              event.stopPropagation();
-              pinHub(label.id);
-            }}
-          >
-            <span className="block whitespace-normal break-words">{label.text}</span>
-          </button>
-        ))}
-
+      {/* n3 right-rail desk: graph + side chrome in the first viewport. */}
+      <div className="md:grid md:grid-cols-[minmax(0,1fr)_17.5rem] md:items-stretch">
         <div
-          data-networks-legend-frame=""
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex flex-wrap items-center gap-x-2 gap-y-0.5 bg-gradient-to-t from-white via-white/95 to-transparent px-2 pb-1.5 pt-4 text-[10px] text-[color:var(--fg-2)]"
+          ref={wrapRef}
+          className="relative h-[300px] w-full touch-manipulation overflow-hidden bg-white sm:h-[420px] md:h-[560px]"
+          data-networks-graph=""
+          onWheel={onWheel}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={() => {
+            dragRef.current = null;
+          }}
         >
-          {campusLegend.slice(0, 8).map((item) => (
-            <span key={item.id} className="inline-flex items-center gap-1">
-              <span className="inline-block h-2 w-2 rounded-full" style={{ background: item.color }} />
-              <span className="hidden sm:inline">{item.label}</span>
-              <span className="sm:hidden">{item.label.split(" ")[0]}</span>
-            </span>
+          <canvas ref={canvasRef} className="absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing" aria-label="Founder networks graph" />
+
+          <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full" width={size.w} height={size.h} aria-hidden="true">
+            {labels.map((label) => {
+              const lx = label.x + label.w / 2;
+              const ly = label.y + label.h / 2;
+              return (
+                <path
+                  key={`lead-${label.id}`}
+                  d={`M ${label.rimX} ${label.rimY} L ${lx} ${ly}`}
+                  stroke="rgba(70,80,110,0.4)"
+                  strokeWidth="0.7"
+                  fill="none"
+                />
+              );
+            })}
+          </svg>
+
+          {labels.map((label) => (
+            <button
+              key={label.id}
+              type="button"
+              data-canvas-label={label.id}
+              className="absolute z-[1] box-border bg-transparent px-0.5 py-0 text-left text-[11px] font-semibold leading-snug"
+              data-label-anchor-x={Math.round(label.rimX)}
+              data-label-anchor-y={Math.round(label.rimY)}
+              data-hub-x={Math.round(label.hubX)}
+              data-hub-y={Math.round(label.hubY)}
+              data-hub-r={Math.round(label.hubR)}
+              style={{
+                left: label.x,
+                top: label.y,
+                width: label.w,
+                color: label.color,
+                textShadow: "0 0 3px rgba(255,255,255,0.95), 0 1px 2px rgba(255,255,255,0.9)",
+              }}
+              onClick={(event) => {
+                event.stopPropagation();
+                pinHub(label.id);
+              }}
+            >
+              <span className="block whitespace-normal break-words">{label.text}</span>
+            </button>
           ))}
-          <span className="ml-auto hidden text-[9px] text-[color:var(--fg-3)] sm:inline">
-            {!ycExpanded ? "YC collapsed · click hub to expand" : "YC expanded · click hub to collapse"}
-          </span>
+
+          {/* In-frame campus legend only — Uncrowded lives in the rail / mobile chrome below the map. */}
+          <div
+            data-networks-legend-frame=""
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex flex-wrap items-center gap-x-2 gap-y-0.5 bg-gradient-to-t from-white via-white/95 to-transparent px-2 pb-1.5 pt-4 text-[10px] text-[color:var(--fg-2)]"
+          >
+            {campusLegend.slice(0, 8).map((item) => (
+              <span key={item.id} className="inline-flex items-center gap-1">
+                <span className="inline-block h-2 w-2 rounded-full" style={{ background: item.color }} />
+                <span className="hidden sm:inline">{item.label}</span>
+                <span className="sm:hidden">{item.label.split(" ")[0]}</span>
+              </span>
+            ))}
+            <span className="ml-auto hidden text-[9px] text-[color:var(--fg-3)] sm:inline">
+              {!ycExpanded ? "YC collapsed · click hub to expand" : "YC expanded · click hub to collapse"}
+            </span>
+          </div>
         </div>
+
+        {/* Desktop side rail: featured, insights, ranked investors — in the first viewport beside the graph. */}
+        <aside
+          data-networks-rail=""
+          className="hidden flex-col gap-3 border-l border-[color:var(--line)] bg-[#fafbfe] p-3 md:flex"
+        >
+          {renderDetailCard(false)}
+          {renderInsights()}
+          {renderInvestorList()}
+          <div className="mt-auto border-t border-[color:var(--line)] pt-2">{chromeControls}</div>
+        </aside>
       </div>
 
-      {/* Desktop chrome under the graph: no empty stretch band, Top networks stays near the fold. */}
-      <aside
-        data-networks-rail=""
-        className="hidden gap-3 border-t border-[color:var(--line)] bg-[#fafbfe] p-3 md:grid md:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)_minmax(0,0.95fr)]"
-      >
-        {renderDetailCard(false)}
-        {insightsBlock}
-        {investorList}
-      </aside>
-
-      {/* Mobile: featured card fully below the graph frame, then slim controls (not crowding the card). */}
-      <div className="space-y-2 border-t border-[color:var(--line)] px-3 py-2 md:hidden">
+      {/* Mobile: featured + insights + ranked investors below the graph; Uncrowded off the map surface. */}
+      <div className="space-y-2 border-t border-[color:var(--line)] px-3 py-2 md:hidden" data-networks-mobile-chrome="">
         {renderDetailCard(true)}
+        {renderInsights()}
+        {renderInvestorList()}
         <div className="pt-1">{chromeControls}</div>
       </div>
     </div>

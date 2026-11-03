@@ -119,9 +119,9 @@ export function NetworksApp() {
         </div>
       </header>
 
-      <main className="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-3 sm:gap-4 sm:px-5 sm:py-5">
+      <main className="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-3 sm:gap-8 sm:px-5 sm:py-6">
         <section aria-labelledby="graph-heading" className="order-1 overflow-hidden rounded-lg border border-[color:var(--line)] bg-white md:order-1">
-          <div className="px-3 py-2 sm:px-4 sm:py-2.5">
+          <div className="px-3 py-2 sm:px-4 sm:py-3">
             <h2 id="graph-heading" className="text-[15px] font-semibold tracking-tight">
               Network map
             </h2>
@@ -131,6 +131,27 @@ export function NetworksApp() {
             <p className="mt-0.5 text-[11px] text-[color:var(--fg-2)] sm:hidden">
               Campus colored founders and program hubs.
             </p>
+            {/* Mobile fold: scrollable top-10 hubs with counts above the compact graph (n3 structure). */}
+            <ol
+              className="mt-2 max-h-[12.5rem] divide-y divide-[color:var(--line)] overflow-y-auto rounded border border-[color:var(--line)] md:hidden"
+              data-networks-mobile-top-fold=""
+            >
+              {data.topNetworks.slice(0, 10).map((row, index) => (
+                <li key={`mobile-top-${row.id}`}>
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-2 px-2 py-1 text-left"
+                    onClick={() => setActiveNetwork(row.id)}
+                  >
+                    <span className="w-4 shrink-0 text-[10px] tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="min-w-0 flex-1 truncate text-[12px] font-medium text-[color:var(--fg)]">{row.label}</span>
+                    <span className="shrink-0 text-[11px] tabular-nums text-[color:var(--fg-2)]">
+                      {row.founderCount.toLocaleString("en-US")}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ol>
           </div>
           <NetworksGraph
             investorHubs={data.investorHubs}
