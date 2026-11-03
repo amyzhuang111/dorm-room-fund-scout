@@ -35,7 +35,7 @@ export function SiteNav() {
   }
 
   return (
-    <div className="border-b border-line bg-bg" data-site-nav="merged">
+    <div className="border-b border-line bg-[#FFFFFF]" data-site-nav="merged">
       <div className="flex h-12 items-center gap-4 px-5">
         <Link href="/" className="wordmark shrink-0">
           <span className="mark" aria-hidden />

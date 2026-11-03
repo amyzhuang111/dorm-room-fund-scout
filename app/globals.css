@@ -1742,3 +1742,17 @@ details:not([open]) > :not(summary) {
     display: none !important;
   }
 }
+
+
+/* r55: company white shell + opaque site chrome (no cream around mobile dossier) */
+html[data-sample="halflight"] header[data-site-chrome],
+html[data-sample="halflight"] [data-site-nav] {
+  background: #FFFFFF !important;
+}
+[data-company-shell="white"] {
+  background: #FFFFFF !important;
+  color: #0B0E17;
+}
+[data-company-product-chrome] {
+  background: #FFFFFF !important;
+}

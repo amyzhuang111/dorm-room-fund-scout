@@ -1,0 +1,30 @@
+{
+  "ok": true,
+  "pages": [
+    {
+      "id": "proj_9GUOmdEYxbuH",
+      "url": "http://127.0.0.1:3460/startup/proj_9GUOmdEYxbuH",
+      "atTop": {
+        "hasNav": true,
+        "navTop": 0,
+        "navBottom": 89,
+        "navHeight": 89,
+        "hasDeskTabs": true,
+        "hasProductChrome": true,
+        "hasWhiteShellAttr": true,
+        "bodyBg": "rgb(255, 255, 255)",
+        "shellBg": "rgb(255, 255, 255)",
+        "headerBg": "rgb(255, 255, 255)",
+        "sample": "halflight",
+        "wordmark": true
+      },
+      "afterScroll": {
+        "scrollY": 113,
+        "navTop": 0,
+        "navBottom": 89,
+        "headerPos": "sticky",
+        "stickyOk": true
+      }
+    }
+  ]
+}

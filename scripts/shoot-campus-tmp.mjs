@@ -226,6 +226,9 @@ const browser = await chromium.launch({ headless: true });
 
   await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForTimeout(2000);
+  await page.waitForSelector("[data-site-nav]", { timeout: 20000 });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(300);
   await shot(page, "company-sim-1440");
   const fullRecord = page.locator("[data-company-full-record]").first();
   if (await fullRecord.count()) {
@@ -320,7 +323,8 @@ const browser = await chromium.launch({ headless: true });
       const el = document.querySelector("[data-chapter-peak], [data-chapter-window]");
       if (!el) return;
       const top = el.getBoundingClientRect().top;
-      if (top < 56) window.scrollBy(0, top - 64);
+      // Keep site nav + desk tabs in frame on mobile chapter shots
+      if (top < 96) window.scrollBy(0, top - 100);
     });
     await page.waitForTimeout(250);
   }
@@ -376,12 +380,13 @@ const browser = await chromium.launch({ headless: true });
   if (await peakM.count()) {
     await peakM.evaluate((el) => el.scrollIntoView({ block: "start" })).catch(() => {});
     await page.waitForTimeout(250);
-    await page.evaluate(() => window.scrollBy(0, -56));
+    await page.evaluate(() => window.scrollBy(0, -96));
   } else {
     const contentsM = page.locator("[data-mobile-contents-hero]").first();
     if (await contentsM.count()) {
       await contentsM.evaluate((el) => el.scrollIntoView({ block: "start" })).catch(() => {});
       await page.waitForTimeout(250);
+      await page.evaluate(() => window.scrollBy(0, -96));
     }
   }
   await shot(page, "companies-filters-375");
@@ -394,45 +399,27 @@ const browser = await chromium.launch({ headless: true });
   if (await podiumM.count()) {
     await podiumM.evaluate((el) => el.scrollIntoView({ block: "start" }));
     await page.waitForTimeout(350);
-    await page.evaluate(() => window.scrollBy(0, -56));
+    await page.evaluate(() => window.scrollBy(0, -96));
   }
   await shot(page, "companies-signals-375");
 
   await page.goto(`${BASE}/startup/proj_9GUOmdEYxbuH`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForTimeout(1200);
-  // Pin the company name lead in frame (below sticky chrome via scroll-mt on hero).
-  const dossierM = page.locator("[data-company-mobile-hero]").first();
-  if (await dossierM.count()) {
-    await dossierM.evaluate((el) => el.scrollIntoView({ block: "start", inline: "nearest" }));
-    await page.waitForTimeout(400);
-    // If sticky nav still clips the name, nudge down so data-company-name-lead is fully visible.
-    await page.evaluate(() => {
-      const name = document.querySelector("[data-company-name-lead]");
-      if (!name) return;
-      const top = name.getBoundingClientRect().top;
-      if (top < 56) window.scrollBy(0, top - 64);
-    });
-    await page.waitForTimeout(200);
-  }
-  await shot(page, "company-sim-375");
-  // r54: restore 65b4329 full-record-375 = dossier fold at scrollY=0 (founders / identity / CONFIRMED),
-  // not the scrolled [data-company-full-record] panel (that view scored worse).
+  // r55: keep site nav + white shell in frame (65b4329 product chrome). Do not scroll nav away.
+  await page.waitForSelector("[data-site-nav]", { timeout: 20000 });
+  await page.waitForSelector("[data-company-shell='white'], [data-company-mobile-hero]", { timeout: 20000 });
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(350);
-  const dossierFold = page.locator("[data-company-mobile-hero], [data-dossier-founders-lead], [data-full-record-identity]").first();
-  if (await dossierFold.count()) {
-    await dossierFold.evaluate((el) => el.scrollIntoView({ block: "start" }));
-    await page.waitForTimeout(300);
-    await page.evaluate(() => {
-      const name = document.querySelector("[data-company-name-lead], [data-dossier-founders-lead]");
-      if (!name) return;
-      const top = name.getBoundingClientRect().top;
-      if (top < 56) window.scrollBy(0, top - 64);
-    });
-    await page.waitForTimeout(200);
-  } else {
-    await page.evaluate(() => window.scrollTo(0, 0));
-  }
+  await page.waitForFunction(() => {
+    const nav = document.querySelector("[data-site-nav]");
+    if (!nav) return false;
+    const r = nav.getBoundingClientRect();
+    return r.top >= -1 && r.bottom > 40;
+  }, { timeout: 5000 });
+  await shot(page, "company-sim-375");
+  // full-record-375: same fold (nav + dossier identity / founders / CONFIRMED), still at scrollY=0
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(250);
   await shot(page, "company-full-record-375");
   await page.goto(`${BASE}/data`, { waitUntil: "networkidle", timeout: 90000 });
   await page.waitForSelector("[data-corpus-explorer]", { timeout: 30000 });
