@@ -12,6 +12,9 @@ import path from "node:path";
 
 const BASE = (process.env.BASE || "http://127.0.0.1:3460").replace(/\/$/, "");
 const OUT = process.env.OUT || "reviews/open-lane-def.json";
+const SNAP = JSON.parse(fs.readFileSync("data/corpus-snapshot.json", "utf8"));
+const EXPECT_INVESTABLE = Number(SNAP.investableCompanies);
+
 const EXTRA = process.env.VERCEL_BYPASS
   ? {
       extraHTTPHeaders: {
@@ -130,8 +133,8 @@ const browser = await chromium.launch({ headless: true });
   else pass("home: data-fold-open-lane-def-full matches");
   if (corpus.outsideCorpus !== 0) fail(`computed open-lane has ${corpus.outsideCorpus} founders outside investable corpus`);
   else pass(`corpus: every open-lane founder company is investable (n=${corpus.openLaneCount})`);
-  if (corpus.investableCompanies !== 1173) fail(`investable corpus size ${corpus.investableCompanies} != 1173`);
-  else pass("corpus: investable desk is 1,173");
+  if (corpus.investableCompanies !== EXPECT_INVESTABLE) fail(`investable corpus size ${corpus.investableCompanies} != ${EXPECT_INVESTABLE}`);
+  else pass(`corpus: investable desk is ${EXPECT_INVESTABLE.toLocaleString("en-US")}`);
   if (home.figure !== corpus.openLaneCount) {
     fail(`home figure ${home.figure} != computed open-lane ${corpus.openLaneCount}`);
   } else {

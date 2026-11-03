@@ -1,3 +1,4 @@
+import { plainTextDeep } from "@/lib/display/plain-text";
 import { permanentRedirect } from "next/navigation";
 import { FounderDiscoverApp } from "@/components/founder-discover-app";
 import { mergedParamHref } from "@/lib/domain/entity-redirects";
@@ -25,8 +26,8 @@ export default async function FounderDiscoverPage({ searchParams }: { searchPara
     <FounderDiscoverApp
       initial={sp}
       universities={universities}
-      founders={founders}
-      potentialFounders={listPotentialFoundersForPage()}
+      founders={plainTextDeep(founders)}
+      potentialFounders={plainTextDeep(listPotentialFoundersForPage())}
       enrollment={enrollment}
       records={review.records}
       likes={review.likes}

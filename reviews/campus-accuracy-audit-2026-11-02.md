@@ -271,6 +271,7 @@ Excluded examples: Molagri (UofT 2020), AICE (MIT 2021), Airgoods (Yale 2022), A
 
 - Kept: 7 · Excluded: 3 · Unverified in batch: 1
 - Totals after: investable 1172, excluded older 235, unverified 4144
+- Totals after sources import 2026-11-02 (class of 2023+ cutoff): investable **1225**, excluded older alumni 235, unverified recency 4171, founders with grad year 2021/2022 excluded from site eligibility: 87 (no held list)
 - Artifact: `/workspace/reviews/recency-batch2-2026-11-02.json`
 
 Kept: Atlas Discovery, Atlia, Avea, Aviern, AxionOrbital, Bluejay, Booko. Excluded: Arva AI (2021), Avelis (2021), Azalea (≤2022). Still unverified: Bernard (no public grad year).
@@ -280,7 +281,3 @@ Kept: Atlas Discovery, Atlia, Avea, Aviern, AxionOrbital, Bluejay, Booko. Exclud
 - `/methodology#founder-recency` shows kept / excluded older alumni / unverified recency from `corpus-snapshot.json`.
 - `/data` banner repeats the funnel and states unverified are not counted as verified.
 - Directory / home / globe continue to list only `is_investable_candidate=1`.
-
-### Branch note (scoring-r32)
-
-Same Starcloud evidence and batch1/2 decisions applied. Corpus is smaller on this tip, so unverified recency is **1,217** (not 4,144). Kept **1,172** / excluded older alumni **235**. `campusesOnMap` = **74**. check-count-consistency passes.

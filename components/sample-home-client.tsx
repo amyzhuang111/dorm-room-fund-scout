@@ -214,11 +214,14 @@ function MapFoldSheet({
 }) {
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{ startY: number; startH: number } | null>(null);
+  const heightRef = useRef(120);
+  const springRef = useRef<number | null>(null);
   // r53b: compact peek so ≥80% of the home map stays unobstructed @375.
-  // Swipe up or tap Expand for the founder deck; drag further for filters + list.
+  // r59: spring-settle on expand / snap; drag stays 1:1 with the finger.
   const REST = 120;
   const DECK = 300;
   const [height, setHeight] = useState(REST);
+  heightRef.current = height;
   const minH = 100;
   const clampH = (h: number) => {
     const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.82) : 560;
@@ -227,10 +230,54 @@ function MapFoldSheet({
   const mode: "peek" | "deck" | "expanded" =
     height >= DECK + 40 ? "expanded" : height >= REST + 36 ? "deck" : "peek";
 
+  const cancelSpring = () => {
+    if (springRef.current != null) {
+      cancelAnimationFrame(springRef.current);
+      springRef.current = null;
+    }
+  };
+
+  const springTo = (targetRaw: number) => {
+    const target = clampH(targetRaw);
+    cancelSpring();
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      setHeight(target);
+      return;
+    }
+    // Critically damped-ish spring (Emil/Apple: interruptible, no bounce on settle).
+    const stiffness = 180;
+    const damping = 26;
+    let v = 0;
+    let h = heightRef.current;
+    const tick = () => {
+      const dt = 1 / 60;
+      const a = -stiffness * (h - target) - damping * v;
+      v += a * dt;
+      // Keep Euler stable on coarse frames.
+      if (v > 6000) v = 6000;
+      if (v < -6000) v = -6000;
+      h += v * dt;
+      if (Math.abs(h - target) < 0.75 && Math.abs(v) < 8) {
+        setHeight(target);
+        springRef.current = null;
+        return;
+      }
+      setHeight(clampH(h));
+      springRef.current = requestAnimationFrame(tick);
+    };
+    springRef.current = requestAnimationFrame(tick);
+  };
+
   useEffect(() => {
     const onResize = () => setHeight((h) => clampH(h));
     window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      cancelSpring();
+    };
   }, []);
 
   useEffect(() => {
@@ -240,11 +287,16 @@ function MapFoldSheet({
     };
   }, [mode]);
 
-  const expandToDeck = () => setHeight(clampH(DECK));
+  const expandToDeck = () => {
+    // Tap expand must flip React mode immediately (density + feel). Drag snaps still spring.
+    cancelSpring();
+    setHeight(clampH(DECK));
+  };
 
   const onPointerDown = (e: ReactPointerEvent) => {
+    cancelSpring();
     (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
-    dragRef.current = { startY: e.clientY, startH: height };
+    dragRef.current = { startY: e.clientY, startH: heightRef.current };
   };
   const onPointerMove = (e: ReactPointerEvent) => {
     const drag = dragRef.current;
@@ -255,12 +307,13 @@ function MapFoldSheet({
     const drag = dragRef.current;
     dragRef.current = null;
     if (!drag) return;
-    setHeight((h) => {
-      if (h < REST + 24) return REST;
-      if (h < DECK + 24) return DECK;
+    const h = heightRef.current;
+    if (h < REST + 24) springTo(REST);
+    else if (h < DECK + 24) springTo(DECK);
+    else {
       const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.82) : 560;
-      return max;
-    });
+      springTo(max);
+    }
   };
 
   return (
@@ -270,7 +323,7 @@ function MapFoldSheet({
       data-fold-map-sheet=""
       data-fold-sheet-mode={mode}
       data-fold-sheet-rest={String(REST)}
-      style={{ height }}
+      style={{ height, willChange: "height" }}
     >
       <div
         className="pointer-events-auto flex h-full flex-col overflow-hidden rounded-t-2xl border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-10px_32px_rgba(47,79,216,0.16)]"

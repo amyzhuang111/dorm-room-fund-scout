@@ -7,6 +7,7 @@ import { survivorId } from "@/lib/domain/entity-redirects";
 import { loadHeroStats } from "@/lib/domain/hero-stats";
 import { getProjectDetail } from "@/lib/domain/queries";
 import { isBoilerplateDescription } from "@/lib/domain/sectors";
+import { plainTextDeep } from "@/lib/display/plain-text";
 import { getStartupCard } from "@/lib/domain/startup-card";
 import { campusPeerCompanies, type FacetCompany } from "@/lib/domain/sample-facets";
 
@@ -119,8 +120,8 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
   };
   const companies = wireSeedCompanies(all, dossier.schoolId, dossier.sectorId);
   return (
-    <SampleCompanyShell companies={companies} campuses={campuses} dossier={dossier}>
-      <CompanyDetail project={project} initialCard={card} />
+    <SampleCompanyShell companies={plainTextDeep(companies)} campuses={plainTextDeep(campuses)} dossier={plainTextDeep(dossier)}>
+      <CompanyDetail project={plainTextDeep(project)} initialCard={plainTextDeep(card)} />
     </SampleCompanyShell>
   );
 }

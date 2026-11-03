@@ -24,6 +24,7 @@ import {
   type RecencyId,
   type StatusId,
 } from "@/lib/domain/sample-facets";
+import corpusSnapshot from "../data/corpus-snapshot.json";
 
 export { preferLogoCompanies };
 
@@ -1626,7 +1627,7 @@ export function programDisplayName(raw: string): string {
 }
 
 /** Universe program totals use programs[] membership (not primaryProgram alone). YC = corpus-snapshot.ycMembership after recency gate. */
-export const YC_MEMBERSHIP_EXPECTED = 318;
+export const YC_MEMBERSHIP_EXPECTED = Number(corpusSnapshot.ycMembership);
 
 export function isYcProgramLabel(label: string): boolean {
   return /^y\s*combinator$/i.test(label.trim());

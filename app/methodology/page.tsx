@@ -157,7 +157,7 @@ export default function MethodologyPage() {
           As of November 2026, a company is <strong>kept (investable)</strong> only when at least one named founder is a
           current student or an alum who graduated in <strong>2023 or later</strong>. Companies that fail that bar are
           excluded as older alumni. Companies we have not yet checked stay in an explicit{" "}
-          <strong>unverified recency</strong> bucket — they are labeled as such and are <em>not</em> counted in the
+          <strong>unverified recency</strong> bucket. They are labeled as such and are <em>not</em> counted in the
           verified/investable totals on the home page, globe, or /data explorer.
         </p>
         <ul className="mt-3 space-y-2 text-sm" data-recency-funnel="">
