@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { FacetCompany } from "@/lib/domain/sample-facets";
+import type { CompanyRecommendations } from "@/lib/domain/company-recommendations";
 import { LogoMark } from "./sample-instrument";
 import { useUserPipeline } from "./user-pipeline-provider";
 import styles from "./company-mobile.module.css";
@@ -29,24 +29,26 @@ export type CompanyDossier = {
   linkedinUrl?: string | null;
   sourceUrl?: string | null;
   peerCount?: number;
+  recommendations?: CompanyRecommendations;
 };
 
-export function CompanyPeers({ companies, subjectId, campus }: { companies: FacetCompany[]; subjectId?: string; campus?: string | null }) {
-  const rows = companies.filter(c => c.id !== subjectId).slice().sort((a, b) => (b.signals ?? 0) - (a.signals ?? 0) || a.name.localeCompare(b.name)).slice(0, 6);
-  if (!rows.length) return null;
-  return <section className={styles.peers} data-dossier-peers-section="" aria-label="Similar companies">
-    <div className={styles.sectionHeading}><h2>Similar companies</h2><span>{campus ? `Also at ${campus}` : "Related sector"}</span></div>
+export function CompanyPeers({ recommendations }: { recommendations?: CompanyRecommendations }) {
+  if (!recommendations?.rows.length) return null;
+  const title = recommendations.scope === "signals" ? "More companies" : "Similar companies";
+  return <section className={styles.peers} data-dossier-peers-section="" aria-label={title}>
+    <div className={styles.sectionHeading}><h2>{title}</h2><span>{recommendations.context}</span></div>
     <ol data-dossier-signal-timeline="">
-      {rows.map((company, index) => <li key={company.id}>
+      {recommendations.rows.map((company, index) => <li key={company.id}>
         <span className={styles.peerRank}>{String(index + 1).padStart(2, "0")}</span>
         <Link href={`/startup/${company.id}`} className={styles.peerLink}>{company.name}</Link>
-        <span className={styles.peerReason}>{company.sector || company.signalLabel || "Company record"}</span>
+        <span className={styles.peerReason} title={company.detail}>{company.reason}</span>
       </li>)}
     </ol>
+    <Link className={styles.peerBrowse} href={recommendations.href}>{recommendations.linkLabel}<span aria-hidden="true"> →</span></Link>
   </section>;
 }
 
-export function CompanyRecordHeader({ dossier, peers, campusShort }: { dossier: CompanyDossier; peers: FacetCompany[]; campusShort: string }) {
+export function CompanyRecordHeader({ dossier }: { dossier: CompanyDossier }) {
   const pipeline = useUserPipeline();
   const saved = pipeline.state.links.some(l => l.entityType === "project" && l.entityId === dossier.id);
   const founders = dossier.founderProfiles?.length ? dossier.founderProfiles : (dossier.founders ?? []).map(name => ({ name, url: null, confirmed: false }));
@@ -79,6 +81,6 @@ export function CompanyRecordHeader({ dossier, peers, campusShort }: { dossier: 
       <a href="#evidence">Sources</a>
       {saved && <p className={styles.saveStatus} role="status">{pipeline.storage === "remote" ? "Saved to your pipeline." : "Saved in this browser."} <Link href="/startup/pipeline">View pipeline</Link></p>}
     </div>
-    <div className={styles.mobilePeers}><CompanyPeers companies={peers} subjectId={dossier.id} campus={dossier.schoolId ? campusShort : null} /></div>
+    <div className={styles.mobilePeers}><CompanyPeers recommendations={dossier.recommendations} /></div>
   </header>;
 }

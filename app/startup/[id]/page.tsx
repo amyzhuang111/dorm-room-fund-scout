@@ -1,5 +1,6 @@
 import { storedCompanyLinks } from "@/lib/domain/company-link";
 import { companyDisplayCopy } from "@/lib/ui/company-display-copy";
+import { companyRecommendations } from "@/lib/domain/company-recommendations";
 import { notFound, permanentRedirect } from "next/navigation";
 import { CompanyDetail } from "@/components/company-detail";
 import { SampleCompanyShell } from "@/components/sample-company-shell";
@@ -16,6 +17,7 @@ function toFacetCompany(card: DirectoryCard): FacetCompany {
     id: card.id,
     name: card.name,
     schoolId: card.schoolId,
+    school: card.school,
     signals: card.signals,
     logoUrl: card.logoUrl,
     founders: card.founders,
@@ -117,6 +119,7 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
     pitch: pitch || null,
     stage,
     signalLabel: directoryRow?.signalLabel ?? null,
+    recommendations: directoryRow ? companyRecommendations(all, toFacetCompany(directoryRow)) : undefined,
   };
   const companies = wireSeedCompanies(all, dossier.schoolId, dossier.sectorId);
   return (

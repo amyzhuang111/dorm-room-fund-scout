@@ -102,7 +102,7 @@ export function SampleCompanyShell({
     <div className={`sample-paper min-h-[calc(100dvh-48px)] ${styles.record}`}>
       <SampleTheme />
       <div className="mx-auto w-full max-w-[1280px] px-3 py-3 pb-8 sm:px-5 sm:pb-5">
-        {dossier && <CompanyRecordHeader dossier={dossier} peers={wireCompanies} campusShort={campusShort} />}
+        {dossier && <CompanyRecordHeader dossier={dossier} />}
         <p className={styles.recordCount} data-dossier-colophon="">
           {wireCount.toLocaleString("en-US")} {wireScope}{wireIncludeNote ? ` · ${wireIncludeNote}` : ""}
         </p>
@@ -134,7 +134,7 @@ export function SampleCompanyShell({
           </div>
           <aside className="hidden min-w-0 lg:block" data-dossier-wire="">
             <div className="sticky top-14">
-              <CompanyPeers companies={wireCompanies} subjectId={dossier?.id} campus={dossier?.schoolId ? campusShort : null} />
+              <CompanyPeers recommendations={dossier?.recommendations} />
               <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
                 <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Campus activity</p>
