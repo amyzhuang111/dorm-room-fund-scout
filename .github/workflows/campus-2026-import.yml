@@ -1,0 +1,83 @@
+# Reconciled with main at 6f5a35c: import must reapply onto the latest DB.\n# One-time, reviewable sourcing import on the dedicated PR branch.
+# Runs automatically when this workflow is committed; commits the resulting
+# canonical SQLite DB onto the PR branch, not directly onto main.
+name: Import verified 2026 campus startup cohorts
+
+on:
+  push:
+    branches:
+      - codex/campus-sourcing-2026-11-03
+    paths:
+      - ".github/workflows/campus-2026-import.yml"
+      - "data/imports/v3-campus-founders-batch1[2-8]-*.json"
+      - "scripts/ingest/import-v3-campus-founders.ts"
+      - "scripts/ingest/build-rbpc-2026.py"
+      - "lib/domain/directory.test.ts"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: campus-2026-import
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: npm ci
+      - run: python -m pip install --disable-pip-version-check "pymupdf==1.26.5"
+      - name: Extract 42 official Rice competition companies and team contacts
+        run: python scripts/ingest/build-rbpc-2026.py data/imports/v3-campus-founders-batch17-rice-rbpc-2026.json
+      - name: Import seven sourced cohorts with deduplication
+        shell: bash
+        run: |
+          set -euo pipefail
+          for path in \
+            data/imports/v3-campus-founders-batch12-cornell-2026.json \
+            data/imports/v3-campus-founders-batch13-northwestern-2026.json \
+            data/imports/v3-campus-founders-batch14-cmu-venturebridge-2026.json \
+            data/imports/v3-campus-founders-batch15-nyu-2026.json \
+            data/imports/v3-campus-founders-batch16-gatech-uchicago-2026.json \
+            data/imports/v3-campus-founders-batch17-rice-rbpc-2026.json \
+            data/imports/v3-campus-founders-batch18-harvard-pic-2026.json
+          do
+            echo "Importing ${path}"
+            ./node_modules/.bin/tsx scripts/ingest/import-v3-campus-founders.ts "${path}"
+          done
+      - name: Check database integrity and imported records
+        run: |
+          python - <<'PY'
+          import sqlite3
+          db=sqlite3.connect('data/campus-universe.db')
+          result=db.execute('PRAGMA integrity_check').fetchone()[0]
+          assert result=='ok', result
+          for name in ['Alva','HaptE','Stenoa','Zybit','Systema Med','Lucy','Analogical Engines']:
+              n=db.execute("SELECT COUNT(*) FROM projects WHERE kind='company' AND name=?", (name,)).fetchone()[0]
+              assert n>=1,(name,n)
+          print('DB integrity OK and sampled cohort startups exist')
+          PY
+      - run: npm run test:directory
+      - name: Commit verified cohort import
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/campus-universe.db data/imports/v3-campus-founders-batch17-rice-rbpc-2026.json
+          if git diff --cached --quiet; then
+            echo "No import changes"
+          else
+            git commit -m "data: import 2026 campus ventures and founder/team profiles"
+            git push
+          fi

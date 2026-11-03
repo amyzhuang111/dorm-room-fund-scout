@@ -1,0 +1,1827 @@
+{
+  "retrievedAt": "2026-11-03T07:27:30.199959+00:00",
+  "companies": [
+    {
+      "name": "AlchemII",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "AlchemII, University of Tennessee, Knoxville. RBPC 2026 team contacts: Mirka Mandich; Saurabh Prakash Pethe",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Mirka Mandich",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for AlchemII (University of Tennessee, Knoxville)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for AlchemII; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "AlchemII, University of Tennessee, Knoxville. RBPC 2026 team contacts: Mirka Mandich; Saurabh Prakash Pethe"
+        },
+        {
+          "name": "Saurabh Prakash Pethe",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for AlchemII (University of Tennessee, Knoxville)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for AlchemII; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "AlchemII, University of Tennessee, Knoxville. RBPC 2026 team contacts: Mirka Mandich; Saurabh Prakash Pethe"
+        }
+      ]
+    },
+    {
+      "name": "Altaris MedTech",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Altaris MedTech, University of Arkansas. RBPC 2026 team contacts: Lance Lockwood; Joseph Hobbs",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Lance Lockwood",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Altaris MedTech (University of Arkansas)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Altaris MedTech; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Altaris MedTech, University of Arkansas. RBPC 2026 team contacts: Lance Lockwood; Joseph Hobbs"
+        },
+        {
+          "name": "Joseph Hobbs",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Altaris MedTech (University of Arkansas)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Altaris MedTech; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Altaris MedTech, University of Arkansas. RBPC 2026 team contacts: Lance Lockwood; Joseph Hobbs"
+        }
+      ]
+    },
+    {
+      "name": "Armada Therapeutics",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Armada Therapeutics, Dartmouth College. RBPC 2026 team contacts: Urjeet Khanwalkar; Siddhant Parwal",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_dartmouth"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Urjeet Khanwalkar",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Armada Therapeutics (Dartmouth College)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Armada Therapeutics; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Armada Therapeutics, Dartmouth College. RBPC 2026 team contacts: Urjeet Khanwalkar; Siddhant Parwal"
+        },
+        {
+          "name": "Siddhant Parwal",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Armada Therapeutics (Dartmouth College)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Armada Therapeutics; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Armada Therapeutics, Dartmouth College. RBPC 2026 team contacts: Urjeet Khanwalkar; Siddhant Parwal"
+        }
+      ]
+    },
+    {
+      "name": "Arrow Analytics",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Arrow Analytics, Texas A&M University. RBPC 2026 team contacts: Valerie McNeill; Akku Kumar; Samuel Crow; Kareem Eldahshoury",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Valerie McNeill",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Arrow Analytics (Texas A&M University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Arrow Analytics; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Arrow Analytics, Texas A&M University. RBPC 2026 team contacts: Valerie McNeill; Akku Kumar; Samuel Crow; Kareem Eldahshoury"
+        },
+        {
+          "name": "Akku Kumar",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Arrow Analytics (Texas A&M University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Arrow Analytics; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Arrow Analytics, Texas A&M University. RBPC 2026 team contacts: Valerie McNeill; Akku Kumar; Samuel Crow; Kareem Eldahshoury"
+        },
+        {
+          "name": "Samuel Crow",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Arrow Analytics (Texas A&M University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Arrow Analytics; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Arrow Analytics, Texas A&M University. RBPC 2026 team contacts: Valerie McNeill; Akku Kumar; Samuel Crow; Kareem Eldahshoury"
+        },
+        {
+          "name": "Kareem Eldahshoury",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Arrow Analytics (Texas A&M University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Arrow Analytics; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Arrow Analytics, Texas A&M University. RBPC 2026 team contacts: Valerie McNeill; Akku Kumar; Samuel Crow; Kareem Eldahshoury"
+        }
+      ]
+    },
+    {
+      "name": "Aura Life Science",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Aura Life Science, Northwestern University. RBPC 2026 team contacts: Jacob Bhoi; Emilio Balderas",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Jacob Bhoi",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Aura Life Science (Northwestern University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Aura Life Science; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Aura Life Science, Northwestern University. RBPC 2026 team contacts: Jacob Bhoi; Emilio Balderas"
+        },
+        {
+          "name": "Emilio Balderas",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Aura Life Science (Northwestern University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Aura Life Science; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Aura Life Science, Northwestern University. RBPC 2026 team contacts: Jacob Bhoi; Emilio Balderas"
+        }
+      ]
+    },
+    {
+      "name": "BeamFeed",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "BeamFeed, City University of New York. RBPC 2026 team contacts: Erina Vela; Sina Mohammadi",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Erina Vela",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for BeamFeed (City University of New York)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for BeamFeed; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "BeamFeed, City University of New York. RBPC 2026 team contacts: Erina Vela; Sina Mohammadi"
+        },
+        {
+          "name": "Sina Mohammadi",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for BeamFeed (City University of New York)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for BeamFeed; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "BeamFeed, City University of New York. RBPC 2026 team contacts: Erina Vela; Sina Mohammadi"
+        }
+      ]
+    },
+    {
+      "name": "BiliRoo",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "BiliRoo, University of Michigan. RBPC 2026 team contacts: Daniel John; Sneha Dasgupta",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_michigan"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Daniel John",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for BiliRoo (University of Michigan)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for BiliRoo; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "BiliRoo, University of Michigan. RBPC 2026 team contacts: Daniel John; Sneha Dasgupta"
+        },
+        {
+          "name": "Sneha Dasgupta",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for BiliRoo (University of Michigan)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for BiliRoo; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "BiliRoo, University of Michigan. RBPC 2026 team contacts: Daniel John; Sneha Dasgupta"
+        }
+      ]
+    },
+    {
+      "name": "BioLegacy",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "BioLegacy, Seattle University. RBPC 2026 team contacts: Michi Tawara; Ruidong (Miles) Ma; Bea Hoyme; Soohyuk (Steven) Hong",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Michi Tawara",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for BioLegacy (Seattle University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for BioLegacy; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "BioLegacy, Seattle University. RBPC 2026 team contacts: Michi Tawara; Ruidong (Miles) Ma; Bea Hoyme; Soohyuk (Steven) Hong"
+        },
+        {
+          "name": "Ruidong (Miles) Ma",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for BioLegacy (Seattle University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for BioLegacy; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "BioLegacy, Seattle University. RBPC 2026 team contacts: Michi Tawara; Ruidong (Miles) Ma; Bea Hoyme; Soohyuk (Steven) Hong"
+        },
+        {
+          "name": "Bea Hoyme",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for BioLegacy (Seattle University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for BioLegacy; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "BioLegacy, Seattle University. RBPC 2026 team contacts: Michi Tawara; Ruidong (Miles) Ma; Bea Hoyme; Soohyuk (Steven) Hong"
+        },
+        {
+          "name": "Soohyuk (Steven) Hong",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for BioLegacy (Seattle University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for BioLegacy; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "BioLegacy, Seattle University. RBPC 2026 team contacts: Michi Tawara; Ruidong (Miles) Ma; Bea Hoyme; Soohyuk (Steven) Hong"
+        }
+      ]
+    },
+    {
+      "name": "BlueHealer",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "BlueHealer, Johns Hopkins University. RBPC 2026 team contacts: Jay Tailor; Santiago Sánchez Rentería; Mitch Lipke",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Jay Tailor",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for BlueHealer (Johns Hopkins University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for BlueHealer; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "BlueHealer, Johns Hopkins University. RBPC 2026 team contacts: Jay Tailor; Santiago Sánchez Rentería; Mitch Lipke"
+        },
+        {
+          "name": "Santiago Sánchez Rentería",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for BlueHealer (Johns Hopkins University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for BlueHealer; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "BlueHealer, Johns Hopkins University. RBPC 2026 team contacts: Jay Tailor; Santiago Sánchez Rentería; Mitch Lipke"
+        },
+        {
+          "name": "Mitch Lipke",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for BlueHealer (Johns Hopkins University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for BlueHealer; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "BlueHealer, Johns Hopkins University. RBPC 2026 team contacts: Jay Tailor; Santiago Sánchez Rentería; Mitch Lipke"
+        }
+      ]
+    },
+    {
+      "name": "BRCĒ",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "BRCĒ, Michigan State University. RBPC 2026 team contacts: Tanvi Gadamsetti; Parker Lambers; Madhav Aggarwal",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Tanvi Gadamsetti",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for BRCĒ (Michigan State University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for BRCĒ; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "BRCĒ, Michigan State University. RBPC 2026 team contacts: Tanvi Gadamsetti; Parker Lambers; Madhav Aggarwal"
+        },
+        {
+          "name": "Parker Lambers",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for BRCĒ (Michigan State University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for BRCĒ; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "BRCĒ, Michigan State University. RBPC 2026 team contacts: Tanvi Gadamsetti; Parker Lambers; Madhav Aggarwal"
+        },
+        {
+          "name": "Madhav Aggarwal",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for BRCĒ (Michigan State University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for BRCĒ; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "BRCĒ, Michigan State University. RBPC 2026 team contacts: Tanvi Gadamsetti; Parker Lambers; Madhav Aggarwal"
+        }
+      ]
+    },
+    {
+      "name": "ChargeBay",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "ChargeBay, University of Miami. RBPC 2026 team contacts: Ansh Bhatt; Shaurya Chaudhary",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ansh Bhatt",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for ChargeBay (University of Miami)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for ChargeBay; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "ChargeBay, University of Miami. RBPC 2026 team contacts: Ansh Bhatt; Shaurya Chaudhary"
+        },
+        {
+          "name": "Shaurya Chaudhary",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for ChargeBay (University of Miami)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for ChargeBay; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "ChargeBay, University of Miami. RBPC 2026 team contacts: Ansh Bhatt; Shaurya Chaudhary"
+        }
+      ]
+    },
+    {
+      "name": "Cocoa Potash",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Cocoa Potash, Case Western Reserve University. RBPC 2026 team contacts: Ibrahim Quagraine; Thomas Baah; Otlhe Sentle",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ibrahim Quagraine",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Cocoa Potash (Case Western Reserve University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Cocoa Potash; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Cocoa Potash, Case Western Reserve University. RBPC 2026 team contacts: Ibrahim Quagraine; Thomas Baah; Otlhe Sentle"
+        },
+        {
+          "name": "Thomas Baah",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Cocoa Potash (Case Western Reserve University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Cocoa Potash; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Cocoa Potash, Case Western Reserve University. RBPC 2026 team contacts: Ibrahim Quagraine; Thomas Baah; Otlhe Sentle"
+        },
+        {
+          "name": "Otlhe Sentle",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Cocoa Potash (Case Western Reserve University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Cocoa Potash; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Cocoa Potash, Case Western Reserve University. RBPC 2026 team contacts: Ibrahim Quagraine; Thomas Baah; Otlhe Sentle"
+        }
+      ]
+    },
+    {
+      "name": "Cosnetix",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Cosnetix, Yale University. RBPC 2026 team contacts: Diana Salha; Greyson Newton",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_yale"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Diana Salha",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Cosnetix (Yale University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Cosnetix; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Cosnetix, Yale University. RBPC 2026 team contacts: Diana Salha; Greyson Newton"
+        },
+        {
+          "name": "Greyson Newton",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Cosnetix (Yale University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Cosnetix; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Cosnetix, Yale University. RBPC 2026 team contacts: Diana Salha; Greyson Newton"
+        }
+      ]
+    },
+    {
+      "name": "Cottage Core",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Cottage Core, Kent State University. RBPC 2026 team contacts: Olivia Fenneken; Yamini Kumar; Michaela Butler",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Olivia Fenneken",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Cottage Core (Kent State University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Cottage Core; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Cottage Core, Kent State University. RBPC 2026 team contacts: Olivia Fenneken; Yamini Kumar; Michaela Butler"
+        },
+        {
+          "name": "Yamini Kumar",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Cottage Core (Kent State University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Cottage Core; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Cottage Core, Kent State University. RBPC 2026 team contacts: Olivia Fenneken; Yamini Kumar; Michaela Butler"
+        },
+        {
+          "name": "Michaela Butler",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Cottage Core (Kent State University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Cottage Core; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Cottage Core, Kent State University. RBPC 2026 team contacts: Olivia Fenneken; Yamini Kumar; Michaela Butler"
+        }
+      ]
+    },
+    {
+      "name": "Crack'd Up",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Crack'd Up, University of Wisconsin-Madison. RBPC 2026 team contacts: Aiden Silverstein; Nik Gandhi; Aaron Silverstein",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_wisc"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Aiden Silverstein",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Crack'd Up (University of Wisconsin-Madison)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Crack'd Up; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Crack'd Up, University of Wisconsin-Madison. RBPC 2026 team contacts: Aiden Silverstein; Nik Gandhi; Aaron Silverstein"
+        },
+        {
+          "name": "Nik Gandhi",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Crack'd Up (University of Wisconsin-Madison)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Crack'd Up; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Crack'd Up, University of Wisconsin-Madison. RBPC 2026 team contacts: Aiden Silverstein; Nik Gandhi; Aaron Silverstein"
+        },
+        {
+          "name": "Aaron Silverstein",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Crack'd Up (University of Wisconsin-Madison)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Crack'd Up; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Crack'd Up, University of Wisconsin-Madison. RBPC 2026 team contacts: Aiden Silverstein; Nik Gandhi; Aaron Silverstein"
+        }
+      ]
+    },
+    {
+      "name": "CystoPilot Technologies",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "CystoPilot Technologies, University of Texas at Austin. RBPC 2026 team contacts: Mohammad Rafiee Javazm; Mobina Tavangarifard",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_utexas"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Mohammad Rafiee Javazm",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for CystoPilot Technologies (University of Texas at Austin)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for CystoPilot Technologies; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "CystoPilot Technologies, University of Texas at Austin. RBPC 2026 team contacts: Mohammad Rafiee Javazm; Mobina Tavangarifard"
+        },
+        {
+          "name": "Mobina Tavangarifard",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for CystoPilot Technologies (University of Texas at Austin)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for CystoPilot Technologies; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "CystoPilot Technologies, University of Texas at Austin. RBPC 2026 team contacts: Mohammad Rafiee Javazm; Mobina Tavangarifard"
+        }
+      ]
+    },
+    {
+      "name": "DialySafe",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "DialySafe, Rice University. RBPC 2026 team contacts: Ibrahim Al-Akash; Saif Ganni; Pavan Sastry; Jaehyun Nam",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_rice"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ibrahim Al-Akash",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for DialySafe (Rice University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for DialySafe; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "DialySafe, Rice University. RBPC 2026 team contacts: Ibrahim Al-Akash; Saif Ganni; Pavan Sastry; Jaehyun Nam"
+        },
+        {
+          "name": "Saif Ganni",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for DialySafe (Rice University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for DialySafe; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "DialySafe, Rice University. RBPC 2026 team contacts: Ibrahim Al-Akash; Saif Ganni; Pavan Sastry; Jaehyun Nam"
+        },
+        {
+          "name": "Pavan Sastry",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for DialySafe (Rice University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for DialySafe; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "DialySafe, Rice University. RBPC 2026 team contacts: Ibrahim Al-Akash; Saif Ganni; Pavan Sastry; Jaehyun Nam"
+        },
+        {
+          "name": "Jaehyun Nam",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for DialySafe (Rice University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for DialySafe; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "DialySafe, Rice University. RBPC 2026 team contacts: Ibrahim Al-Akash; Saif Ganni; Pavan Sastry; Jaehyun Nam"
+        }
+      ]
+    },
+    {
+      "name": "Foregger Energy Solutions",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Foregger Energy Solutions, Babson College. RBPC 2026 team contacts: Lassiter Foregger",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Lassiter Foregger",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Foregger Energy Solutions (Babson College)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Foregger Energy Solutions; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Foregger Energy Solutions, Babson College. RBPC 2026 team contacts: Lassiter Foregger"
+        }
+      ]
+    },
+    {
+      "name": "Forge",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Forge, UC Berkeley. RBPC 2026 team contacts: Ashley Wen; Akhil Neelam; Camila Scotti",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_berkeley"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ashley Wen",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Forge (UC Berkeley)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Forge; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Forge, UC Berkeley. RBPC 2026 team contacts: Ashley Wen; Akhil Neelam; Camila Scotti"
+        },
+        {
+          "name": "Akhil Neelam",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Forge (UC Berkeley)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Forge; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Forge, UC Berkeley. RBPC 2026 team contacts: Ashley Wen; Akhil Neelam; Camila Scotti"
+        },
+        {
+          "name": "Camila Scotti",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Forge (UC Berkeley)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Forge; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Forge, UC Berkeley. RBPC 2026 team contacts: Ashley Wen; Akhil Neelam; Camila Scotti"
+        }
+      ]
+    },
+    {
+      "name": "Grapheon",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Grapheon, University of Pittsburgh. RBPC 2026 team contacts: Aime Laurent Twizerimana; Nader Sawtarie; Götz Veser; Mohammad Masnadi",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Aime Laurent Twizerimana",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Grapheon (University of Pittsburgh)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Grapheon; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Grapheon, University of Pittsburgh. RBPC 2026 team contacts: Aime Laurent Twizerimana; Nader Sawtarie; Götz Veser; Mohammad Masnadi"
+        },
+        {
+          "name": "Nader Sawtarie",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Grapheon (University of Pittsburgh)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Grapheon; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Grapheon, University of Pittsburgh. RBPC 2026 team contacts: Aime Laurent Twizerimana; Nader Sawtarie; Götz Veser; Mohammad Masnadi"
+        },
+        {
+          "name": "Götz Veser",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Grapheon (University of Pittsburgh)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Grapheon; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Grapheon, University of Pittsburgh. RBPC 2026 team contacts: Aime Laurent Twizerimana; Nader Sawtarie; Götz Veser; Mohammad Masnadi"
+        },
+        {
+          "name": "Mohammad Masnadi",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Grapheon (University of Pittsburgh)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Grapheon; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Grapheon, University of Pittsburgh. RBPC 2026 team contacts: Aime Laurent Twizerimana; Nader Sawtarie; Götz Veser; Mohammad Masnadi"
+        }
+      ]
+    },
+    {
+      "name": "GUIDEAIR Labs",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "GUIDEAIR Labs, University of Washington. RBPC 2026 team contacts: Gokul Nathan; Ernst Anderson; Shawn Chan; Elizabeth Omdal",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_uw"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Gokul Nathan",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for GUIDEAIR Labs (University of Washington)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for GUIDEAIR Labs; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "GUIDEAIR Labs, University of Washington. RBPC 2026 team contacts: Gokul Nathan; Ernst Anderson; Shawn Chan; Elizabeth Omdal"
+        },
+        {
+          "name": "Ernst Anderson",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for GUIDEAIR Labs (University of Washington)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for GUIDEAIR Labs; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "GUIDEAIR Labs, University of Washington. RBPC 2026 team contacts: Gokul Nathan; Ernst Anderson; Shawn Chan; Elizabeth Omdal"
+        },
+        {
+          "name": "Shawn Chan",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for GUIDEAIR Labs (University of Washington)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for GUIDEAIR Labs; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "GUIDEAIR Labs, University of Washington. RBPC 2026 team contacts: Gokul Nathan; Ernst Anderson; Shawn Chan; Elizabeth Omdal"
+        },
+        {
+          "name": "Elizabeth Omdal",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for GUIDEAIR Labs (University of Washington)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for GUIDEAIR Labs; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "GUIDEAIR Labs, University of Washington. RBPC 2026 team contacts: Gokul Nathan; Ernst Anderson; Shawn Chan; Elizabeth Omdal"
+        }
+      ]
+    },
+    {
+      "name": "Hydrastack",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Hydrastack, University of Chicago. RBPC 2026 team contacts: David Dimas; Kavin Kaviarasan",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_uchicago"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "David Dimas",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Hydrastack (University of Chicago)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Hydrastack; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Hydrastack, University of Chicago. RBPC 2026 team contacts: David Dimas; Kavin Kaviarasan"
+        },
+        {
+          "name": "Kavin Kaviarasan",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Hydrastack (University of Chicago)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Hydrastack; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Hydrastack, University of Chicago. RBPC 2026 team contacts: David Dimas; Kavin Kaviarasan"
+        }
+      ]
+    },
+    {
+      "name": "Imagine Devices",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Imagine Devices, University of Texas at Austin. RBPC 2026 team contacts: Iman Salafian; Eshaan Sheth",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_utexas"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Iman Salafian",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Imagine Devices (University of Texas at Austin)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Imagine Devices; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Imagine Devices, University of Texas at Austin. RBPC 2026 team contacts: Iman Salafian; Eshaan Sheth"
+        },
+        {
+          "name": "Eshaan Sheth",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Imagine Devices (University of Texas at Austin)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Imagine Devices; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Imagine Devices, University of Texas at Austin. RBPC 2026 team contacts: Iman Salafian; Eshaan Sheth"
+        }
+      ]
+    },
+    {
+      "name": "Innowind Energy Solutions",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Innowind Energy Solutions, University of Waterloo. RBPC 2026 team contacts: Rafat Jami; Hasan Kazmi",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_waterloo"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Rafat Jami",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Innowind Energy Solutions (University of Waterloo)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Innowind Energy Solutions; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Innowind Energy Solutions, University of Waterloo. RBPC 2026 team contacts: Rafat Jami; Hasan Kazmi"
+        },
+        {
+          "name": "Hasan Kazmi",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Innowind Energy Solutions (University of Waterloo)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Innowind Energy Solutions; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Innowind Energy Solutions, University of Waterloo. RBPC 2026 team contacts: Rafat Jami; Hasan Kazmi"
+        }
+      ]
+    },
+    {
+      "name": "JanuTech",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "JanuTech, University of Washington. RBPC 2026 team contacts: Kevin Lee; Zach Wylie; Chris Combs; Ipsha Patel",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_uw"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Kevin Lee",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for JanuTech (University of Washington)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for JanuTech; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "JanuTech, University of Washington. RBPC 2026 team contacts: Kevin Lee; Zach Wylie; Chris Combs; Ipsha Patel"
+        },
+        {
+          "name": "Zach Wylie",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for JanuTech (University of Washington)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for JanuTech; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "JanuTech, University of Washington. RBPC 2026 team contacts: Kevin Lee; Zach Wylie; Chris Combs; Ipsha Patel"
+        },
+        {
+          "name": "Chris Combs",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for JanuTech (University of Washington)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for JanuTech; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "JanuTech, University of Washington. RBPC 2026 team contacts: Kevin Lee; Zach Wylie; Chris Combs; Ipsha Patel"
+        },
+        {
+          "name": "Ipsha Patel",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for JanuTech (University of Washington)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for JanuTech; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "JanuTech, University of Washington. RBPC 2026 team contacts: Kevin Lee; Zach Wylie; Chris Combs; Ipsha Patel"
+        }
+      ]
+    },
+    {
+      "name": "Laetech",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Laetech, University of Toronto. RBPC 2026 team contacts: Brian Webb; Kate MacQuarrie",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_toronto"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Brian Webb",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Laetech (University of Toronto)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Laetech; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Laetech, University of Toronto. RBPC 2026 team contacts: Brian Webb; Kate MacQuarrie"
+        },
+        {
+          "name": "Kate MacQuarrie",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Laetech (University of Toronto)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Laetech; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Laetech, University of Toronto. RBPC 2026 team contacts: Brian Webb; Kate MacQuarrie"
+        }
+      ]
+    },
+    {
+      "name": "Salem Robotics",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Salem Robotics, University of Texas at Austin. RBPC 2026 team contacts: Caleb Horan; Janak Panthi",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_utexas"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Caleb Horan",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Salem Robotics (University of Texas at Austin)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Salem Robotics; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Salem Robotics, University of Texas at Austin. RBPC 2026 team contacts: Caleb Horan; Janak Panthi"
+        },
+        {
+          "name": "Janak Panthi",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Salem Robotics (University of Texas at Austin)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Salem Robotics; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Salem Robotics, University of Texas at Austin. RBPC 2026 team contacts: Caleb Horan; Janak Panthi"
+        }
+      ]
+    },
+    {
+      "name": "Legion Platforms",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Legion Platforms, Arizona State University. RBPC 2026 team contacts: Sandul Gangodagamage; Mason Lloyd",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Sandul Gangodagamage",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Legion Platforms (Arizona State University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Legion Platforms; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Legion Platforms, Arizona State University. RBPC 2026 team contacts: Sandul Gangodagamage; Mason Lloyd"
+        },
+        {
+          "name": "Mason Lloyd",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Legion Platforms (Arizona State University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Legion Platforms; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Legion Platforms, Arizona State University. RBPC 2026 team contacts: Sandul Gangodagamage; Mason Lloyd"
+        }
+      ]
+    },
+    {
+      "name": "Lucy",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Lucy, University of Pennsylvania. RBPC 2026 team contacts: John Hopcroft; Andrew Mao",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_penn"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "John Hopcroft",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Lucy (University of Pennsylvania)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Lucy; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Lucy, University of Pennsylvania. RBPC 2026 team contacts: John Hopcroft; Andrew Mao"
+        },
+        {
+          "name": "Andrew Mao",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Lucy (University of Pennsylvania)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Lucy; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Lucy, University of Pennsylvania. RBPC 2026 team contacts: John Hopcroft; Andrew Mao"
+        }
+      ]
+    },
+    {
+      "name": "NerView Surgical",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "NerView Surgical, McMaster University. RBPC 2026 team contacts: Mann Parikh; Srishti Sharma",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Mann Parikh",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for NerView Surgical (McMaster University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for NerView Surgical; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "NerView Surgical, McMaster University. RBPC 2026 team contacts: Mann Parikh; Srishti Sharma"
+        },
+        {
+          "name": "Srishti Sharma",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for NerView Surgical (McMaster University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for NerView Surgical; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "NerView Surgical, McMaster University. RBPC 2026 team contacts: Mann Parikh; Srishti Sharma"
+        }
+      ]
+    },
+    {
+      "name": "Panoptica Technologies",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Panoptica Technologies, Georgia Institute of Technology. RBPC 2026 team contacts: Vishal Puppala; Martin So",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Vishal Puppala",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Panoptica Technologies (Georgia Institute of Technology)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Panoptica Technologies; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Panoptica Technologies, Georgia Institute of Technology. RBPC 2026 team contacts: Vishal Puppala; Martin So"
+        },
+        {
+          "name": "Martin So",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Panoptica Technologies (Georgia Institute of Technology)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Panoptica Technologies; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Panoptica Technologies, Georgia Institute of Technology. RBPC 2026 team contacts: Vishal Puppala; Martin So"
+        }
+      ]
+    },
+    {
+      "name": "PowerHouse",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "PowerHouse, Massachusetts Institute of Technology. RBPC 2026 team contacts: Andrea Shepherd; Robert Cruz; Marta Guzek; Nirmal Kumar",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Andrea Shepherd",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for PowerHouse (Massachusetts Institute of Technology)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for PowerHouse; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "PowerHouse, Massachusetts Institute of Technology. RBPC 2026 team contacts: Andrea Shepherd; Robert Cruz; Marta Guzek; Nirmal Kumar"
+        },
+        {
+          "name": "Robert Cruz",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for PowerHouse (Massachusetts Institute of Technology)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for PowerHouse; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "PowerHouse, Massachusetts Institute of Technology. RBPC 2026 team contacts: Andrea Shepherd; Robert Cruz; Marta Guzek; Nirmal Kumar"
+        },
+        {
+          "name": "Marta Guzek",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for PowerHouse (Massachusetts Institute of Technology)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for PowerHouse; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "PowerHouse, Massachusetts Institute of Technology. RBPC 2026 team contacts: Andrea Shepherd; Robert Cruz; Marta Guzek; Nirmal Kumar"
+        },
+        {
+          "name": "Nirmal Kumar",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for PowerHouse (Massachusetts Institute of Technology)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for PowerHouse; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "PowerHouse, Massachusetts Institute of Technology. RBPC 2026 team contacts: Andrea Shepherd; Robert Cruz; Marta Guzek; Nirmal Kumar"
+        }
+      ]
+    },
+    {
+      "name": "Quantum Power Systems",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Quantum Power Systems, University of Texas at Austin. RBPC 2026 team contacts: Saleh Farzamkia; Shashwatha Kedlaya",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_utexas"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Saleh Farzamkia",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Quantum Power Systems (University of Texas at Austin)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Quantum Power Systems; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Quantum Power Systems, University of Texas at Austin. RBPC 2026 team contacts: Saleh Farzamkia; Shashwatha Kedlaya"
+        },
+        {
+          "name": "Shashwatha Kedlaya",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Quantum Power Systems (University of Texas at Austin)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Quantum Power Systems; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Quantum Power Systems, University of Texas at Austin. RBPC 2026 team contacts: Saleh Farzamkia; Shashwatha Kedlaya"
+        }
+      ]
+    },
+    {
+      "name": "Routora",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Routora, University of Notre Dame. RBPC 2026 team contacts: Luke Blazek; Tom Vazhekatt",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_notredame"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Luke Blazek",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Routora (University of Notre Dame)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Routora; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Routora, University of Notre Dame. RBPC 2026 team contacts: Luke Blazek; Tom Vazhekatt"
+        },
+        {
+          "name": "Tom Vazhekatt",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Routora (University of Notre Dame)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Routora; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Routora, University of Notre Dame. RBPC 2026 team contacts: Luke Blazek; Tom Vazhekatt"
+        }
+      ]
+    },
+    {
+      "name": "Sentivity.ai",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Sentivity.ai, Virginia Tech. RBPC 2026 team contacts: Rowan Martnishn; Vishal Green",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Rowan Martnishn",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Sentivity.ai (Virginia Tech)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Sentivity.ai; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Sentivity.ai, Virginia Tech. RBPC 2026 team contacts: Rowan Martnishn; Vishal Green"
+        },
+        {
+          "name": "Vishal Green",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Sentivity.ai (Virginia Tech)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Sentivity.ai; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Sentivity.ai, Virginia Tech. RBPC 2026 team contacts: Rowan Martnishn; Vishal Green"
+        }
+      ]
+    },
+    {
+      "name": "Shinra Energy",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Shinra Energy, Harvard Business School. RBPC 2026 team contacts: Kosuke Kobayashi; Shota Araki",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_harvard"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Kosuke Kobayashi",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Shinra Energy (Harvard Business School)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Shinra Energy; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Shinra Energy, Harvard Business School. RBPC 2026 team contacts: Kosuke Kobayashi; Shota Araki"
+        },
+        {
+          "name": "Shota Araki",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Shinra Energy (Harvard Business School)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Shinra Energy; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Shinra Energy, Harvard Business School. RBPC 2026 team contacts: Kosuke Kobayashi; Shota Araki"
+        }
+      ]
+    },
+    {
+      "name": "Solid Air Dynamics",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Solid Air Dynamics, RWTH Aachen University. RBPC 2026 team contacts: Maximilian Mohr; Joanna Benedetti Pirri",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Maximilian Mohr",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Solid Air Dynamics (RWTH Aachen University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Solid Air Dynamics; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Solid Air Dynamics, RWTH Aachen University. RBPC 2026 team contacts: Maximilian Mohr; Joanna Benedetti Pirri"
+        },
+        {
+          "name": "Joanna Benedetti Pirri",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Solid Air Dynamics (RWTH Aachen University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Solid Air Dynamics; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Solid Air Dynamics, RWTH Aachen University. RBPC 2026 team contacts: Maximilian Mohr; Joanna Benedetti Pirri"
+        }
+      ]
+    },
+    {
+      "name": "Spine Bionics",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Spine Bionics, University of North Carolina. RBPC 2026 team contacts: William Rabon; Benjamin Carnovale",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [
+        "univ_unc"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "William Rabon",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Spine Bionics (University of North Carolina)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Spine Bionics; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Spine Bionics, University of North Carolina. RBPC 2026 team contacts: William Rabon; Benjamin Carnovale"
+        },
+        {
+          "name": "Benjamin Carnovale",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Spine Bionics (University of North Carolina)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Spine Bionics; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Spine Bionics, University of North Carolina. RBPC 2026 team contacts: William Rabon; Benjamin Carnovale"
+        }
+      ]
+    },
+    {
+      "name": "The Good Company",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "The Good Company, Michigan Technological University. RBPC 2026 team contacts: Rourke Sylvain; Verdict Vera",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Rourke Sylvain",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for The Good Company (Michigan Technological University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for The Good Company; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "The Good Company, Michigan Technological University. RBPC 2026 team contacts: Rourke Sylvain; Verdict Vera"
+        },
+        {
+          "name": "Verdict Vera",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for The Good Company (Michigan Technological University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for The Good Company; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "The Good Company, Michigan Technological University. RBPC 2026 team contacts: Rourke Sylvain; Verdict Vera"
+        }
+      ]
+    },
+    {
+      "name": "UNCHAIN",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "UNCHAIN, Lehigh University. RBPC 2026 team contacts: Taizo Harada; Sunwoo Park; Harsh Pipalia; Lui Ebina",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Taizo Harada",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for UNCHAIN (Lehigh University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for UNCHAIN; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "UNCHAIN, Lehigh University. RBPC 2026 team contacts: Taizo Harada; Sunwoo Park; Harsh Pipalia; Lui Ebina"
+        },
+        {
+          "name": "Sunwoo Park",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for UNCHAIN (Lehigh University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for UNCHAIN; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "UNCHAIN, Lehigh University. RBPC 2026 team contacts: Taizo Harada; Sunwoo Park; Harsh Pipalia; Lui Ebina"
+        },
+        {
+          "name": "Harsh Pipalia",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for UNCHAIN (Lehigh University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for UNCHAIN; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "UNCHAIN, Lehigh University. RBPC 2026 team contacts: Taizo Harada; Sunwoo Park; Harsh Pipalia; Lui Ebina"
+        },
+        {
+          "name": "Lui Ebina",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for UNCHAIN (Lehigh University)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for UNCHAIN; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "UNCHAIN, Lehigh University. RBPC 2026 team contacts: Taizo Harada; Sunwoo Park; Harsh Pipalia; Lui Ebina"
+        }
+      ]
+    },
+    {
+      "name": "VivoFlux",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "VivoFlux, University of Rochester. RBPC 2026 team contacts: Kaihua Chen; Isabelle Linares; Kevin Ling",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Kaihua Chen",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for VivoFlux (University of Rochester)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for VivoFlux; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "VivoFlux, University of Rochester. RBPC 2026 team contacts: Kaihua Chen; Isabelle Linares; Kevin Ling"
+        },
+        {
+          "name": "Isabelle Linares",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for VivoFlux (University of Rochester)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for VivoFlux; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "VivoFlux, University of Rochester. RBPC 2026 team contacts: Kaihua Chen; Isabelle Linares; Kevin Ling"
+        },
+        {
+          "name": "Kevin Ling",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for VivoFlux (University of Rochester)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for VivoFlux; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "VivoFlux, University of Rochester. RBPC 2026 team contacts: Kaihua Chen; Isabelle Linares; Kevin Ling"
+        }
+      ]
+    },
+    {
+      "name": "Vocadian",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://rbpc.rice.edu/sites/rbpc/files/2026-04/RBPC-2026-Competition-Company-Database.pdf",
+      "excerpt": "Vocadian, University of Oxford. RBPC 2026 team contacts: Adolphus Lau; Allison Lau",
+      "orgPlace": "Rice Business Plan Competition 2026",
+      "campusIds": [],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Adolphus Lau",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Vocadian (University of Oxford)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Vocadian; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Vocadian, University of Oxford. RBPC 2026 team contacts: Adolphus Lau; Allison Lau"
+        },
+        {
+          "name": "Allison Lau",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "RBPC 2026 named team contact for Vocadian (University of Oxford)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Listed RBPC 2026 startup contact for Vocadian; founder role not established",
+          "verificationStatus": "confirmed",
+          "verificationNote": "The Rice 2026 PDF names this person as a team contact. No verified graduation year or legal cofounder status is inferred.",
+          "excerpt": "Vocadian, University of Oxford. RBPC 2026 team contacts: Adolphus Lau; Allison Lau"
+        }
+      ]
+    }
+  ],
+  "potential": [],
+  "links": []
+}

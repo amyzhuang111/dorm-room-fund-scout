@@ -1,0 +1,1522 @@
+{
+  "retrievedAt": "2026-11-03T06:45:00.000Z",
+  "companies": [
+    {
+      "name": "Systema Med",
+      "description": "Clinical monitoring and real-time vital-sign decision support",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Systema Med — 2026 NYU Entrepreneurs Challenge team: Julio La Torre; Garman Xu ’27.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Julio La Torre",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Systema Med); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Systema Med — 2026 NYU Entrepreneurs Challenge team: Julio La Torre; Garman Xu ’27."
+        },
+        {
+          "name": "Garman Xu",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2027",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Systema Med); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Systema Med — 2026 NYU Entrepreneurs Challenge team: Julio La Torre; Garman Xu ’27."
+          },
+          "excerpt": "Systema Med — 2026 NYU Entrepreneurs Challenge team: Julio La Torre; Garman Xu ’27."
+        }
+      ]
+    },
+    {
+      "name": "SymptoLab",
+      "description": "Hormone health symptom forecasting and clinical reports",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "SymptoLab — 2026 NYU Entrepreneurs Challenge team: Tamar Zelovich-Hod ’22; Alon Zelovich.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Tamar Zelovich-Hod",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2022",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Independently described as cofounder in NYU/Nature source; see the public NYU Challenge finalist/winner coverage.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": "'22",
+            "gradYear": 2022,
+            "evidence": "SymptoLab — 2026 NYU Entrepreneurs Challenge team: Tamar Zelovich-Hod ’22; Alon Zelovich."
+          },
+          "excerpt": "SymptoLab — 2026 NYU Entrepreneurs Challenge team: Tamar Zelovich-Hod ’22; Alon Zelovich."
+        },
+        {
+          "name": "Alon Zelovich",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Independently described as cofounder in NYU/Nature source; see the public NYU Challenge finalist/winner coverage.",
+          "excerpt": "SymptoLab — 2026 NYU Entrepreneurs Challenge team: Tamar Zelovich-Hod ’22; Alon Zelovich."
+        }
+      ]
+    },
+    {
+      "name": "Jointly Medical",
+      "description": "Wearable lupus inflammation monitoring platform",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Jointly Medical — 2026 NYU Entrepreneurs Challenge team: Ameen Bardien ’26; Lara Pinar ’27.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ameen Bardien",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2026",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Jointly Medical); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Jointly Medical — 2026 NYU Entrepreneurs Challenge team: Ameen Bardien ’26; Lara Pinar ’27."
+          },
+          "excerpt": "Jointly Medical — 2026 NYU Entrepreneurs Challenge team: Ameen Bardien ’26; Lara Pinar ’27."
+        },
+        {
+          "name": "Lara Pinar",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2027",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Jointly Medical); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Jointly Medical — 2026 NYU Entrepreneurs Challenge team: Ameen Bardien ’26; Lara Pinar ’27."
+          },
+          "excerpt": "Jointly Medical — 2026 NYU Entrepreneurs Challenge team: Ameen Bardien ’26; Lara Pinar ’27."
+        }
+      ]
+    },
+    {
+      "name": "NeoBoneSculpt",
+      "description": "Patient-specific 3D-printed scaffold for regenerative bone treatment",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "NeoBoneSculpt — 2026 NYU Entrepreneurs Challenge team: Ankita Raja Shinde ’25; Yoko Nogami.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ankita Raja Shinde",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2025",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (NeoBoneSculpt); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'25",
+            "gradYear": 2025,
+            "evidence": "NeoBoneSculpt — 2026 NYU Entrepreneurs Challenge team: Ankita Raja Shinde ’25; Yoko Nogami."
+          },
+          "excerpt": "NeoBoneSculpt — 2026 NYU Entrepreneurs Challenge team: Ankita Raja Shinde ’25; Yoko Nogami."
+        },
+        {
+          "name": "Yoko Nogami",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (NeoBoneSculpt); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "NeoBoneSculpt — 2026 NYU Entrepreneurs Challenge team: Ankita Raja Shinde ’25; Yoko Nogami."
+        }
+      ]
+    },
+    {
+      "name": "See The Sounds",
+      "description": "Visual feedback technology for speech-language therapy",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "See The Sounds — 2026 NYU Entrepreneurs Challenge team: Helen Carey ’16; Tara McAllister; Lindsey Hockel.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Helen Carey",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2016",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (See The Sounds); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": "'16",
+            "gradYear": 2016,
+            "evidence": "See The Sounds — 2026 NYU Entrepreneurs Challenge team: Helen Carey ’16; Tara McAllister; Lindsey Hockel."
+          },
+          "excerpt": "See The Sounds — 2026 NYU Entrepreneurs Challenge team: Helen Carey ’16; Tara McAllister; Lindsey Hockel."
+        },
+        {
+          "name": "Tara McAllister",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (See The Sounds); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "See The Sounds — 2026 NYU Entrepreneurs Challenge team: Helen Carey ’16; Tara McAllister; Lindsey Hockel."
+        },
+        {
+          "name": "Lindsey Hockel",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (See The Sounds); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "See The Sounds — 2026 NYU Entrepreneurs Challenge team: Helen Carey ’16; Tara McAllister; Lindsey Hockel."
+        }
+      ]
+    },
+    {
+      "name": "Aidify",
+      "description": "Multilingual AI patient care assistants configured to physician protocols",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Aidify — 2026 NYU Entrepreneurs Challenge team: Evan Bloom; Matt Causey; Scott Tenenbaum.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Evan Bloom",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Aidify); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Aidify — 2026 NYU Entrepreneurs Challenge team: Evan Bloom; Matt Causey; Scott Tenenbaum."
+        },
+        {
+          "name": "Matt Causey",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Aidify); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Aidify — 2026 NYU Entrepreneurs Challenge team: Evan Bloom; Matt Causey; Scott Tenenbaum."
+        },
+        {
+          "name": "Scott Tenenbaum",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Aidify); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Aidify — 2026 NYU Entrepreneurs Challenge team: Evan Bloom; Matt Causey; Scott Tenenbaum."
+        }
+      ]
+    },
+    {
+      "name": "ScriptBio AI",
+      "description": "AI-guided cell therapies targeting age-related disease",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "ScriptBio AI — 2026 NYU Entrepreneurs Challenge team: Azzam Naeem; Magnolia Cheng; Pat Roche.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Azzam Naeem",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (ScriptBio AI); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "ScriptBio AI — 2026 NYU Entrepreneurs Challenge team: Azzam Naeem; Magnolia Cheng; Pat Roche."
+        },
+        {
+          "name": "Magnolia Cheng",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (ScriptBio AI); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "ScriptBio AI — 2026 NYU Entrepreneurs Challenge team: Azzam Naeem; Magnolia Cheng; Pat Roche."
+        },
+        {
+          "name": "Pat Roche",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (ScriptBio AI); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "ScriptBio AI — 2026 NYU Entrepreneurs Challenge team: Azzam Naeem; Magnolia Cheng; Pat Roche."
+        }
+      ]
+    },
+    {
+      "name": "STARDUST",
+      "description": "Conversational publishing archives and interactive messaging",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "STARDUST — 2026 NYU Entrepreneurs Challenge team: Kevin Johan Wong ’10; Huan Nguyen.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Kevin Johan Wong",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2010",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (STARDUST); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": "'10",
+            "gradYear": 2010,
+            "evidence": "STARDUST — 2026 NYU Entrepreneurs Challenge team: Kevin Johan Wong ’10; Huan Nguyen."
+          },
+          "excerpt": "STARDUST — 2026 NYU Entrepreneurs Challenge team: Kevin Johan Wong ’10; Huan Nguyen."
+        },
+        {
+          "name": "Huan Nguyen",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (STARDUST); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "STARDUST — 2026 NYU Entrepreneurs Challenge team: Kevin Johan Wong ’10; Huan Nguyen."
+        }
+      ]
+    },
+    {
+      "name": "Mobile Defender",
+      "description": "Protection and detection against covert location trackers",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Mobile Defender — 2026 NYU Entrepreneurs Challenge team: Mo Satt ’28; Sarah Krueger; Maitry Dave ’26.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Mo Satt",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2028",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Independently described as cofounder in NYU/Nature source; see the public NYU Challenge finalist/winner coverage.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Mobile Defender — 2026 NYU Entrepreneurs Challenge team: Mo Satt ’28; Sarah Krueger; Maitry Dave ’26."
+          },
+          "excerpt": "Mobile Defender — 2026 NYU Entrepreneurs Challenge team: Mo Satt ’28; Sarah Krueger; Maitry Dave ’26."
+        },
+        {
+          "name": "Sarah Krueger",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Mobile Defender); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Mobile Defender — 2026 NYU Entrepreneurs Challenge team: Mo Satt ’28; Sarah Krueger; Maitry Dave ’26."
+        },
+        {
+          "name": "Maitry Dave",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2026",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Independently described as cofounder in NYU/Nature source; see the public NYU Challenge finalist/winner coverage.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Mobile Defender — 2026 NYU Entrepreneurs Challenge team: Mo Satt ’28; Sarah Krueger; Maitry Dave ’26."
+          },
+          "excerpt": "Mobile Defender — 2026 NYU Entrepreneurs Challenge team: Mo Satt ’28; Sarah Krueger; Maitry Dave ’26."
+        }
+      ]
+    },
+    {
+      "name": "Concordare Trials",
+      "description": "Clinical trial protocol digitization and workflow automation",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Concordare Trials — 2026 NYU Entrepreneurs Challenge team: Zach Sawaged ’20; Shivani Khunt; Nathan Maher.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Zach Sawaged",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2020",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Concordare Trials); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": "'20",
+            "gradYear": 2020,
+            "evidence": "Concordare Trials — 2026 NYU Entrepreneurs Challenge team: Zach Sawaged ’20; Shivani Khunt; Nathan Maher."
+          },
+          "excerpt": "Concordare Trials — 2026 NYU Entrepreneurs Challenge team: Zach Sawaged ’20; Shivani Khunt; Nathan Maher."
+        },
+        {
+          "name": "Shivani Khunt",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Concordare Trials); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Concordare Trials — 2026 NYU Entrepreneurs Challenge team: Zach Sawaged ’20; Shivani Khunt; Nathan Maher."
+        },
+        {
+          "name": "Nathan Maher",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Concordare Trials); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Concordare Trials — 2026 NYU Entrepreneurs Challenge team: Zach Sawaged ’20; Shivani Khunt; Nathan Maher."
+        }
+      ]
+    },
+    {
+      "name": "Diagrm",
+      "description": "AI system design and validation for cloud infrastructure",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Diagrm — 2026 NYU Entrepreneurs Challenge team: Javier Navarro-Machuca ’27; Corinne Camay ’27; Joshua Glasman.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Javier Navarro-Machuca",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2027",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Diagrm); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Diagrm — 2026 NYU Entrepreneurs Challenge team: Javier Navarro-Machuca ’27; Corinne Camay ’27; Joshua Glasman."
+          },
+          "excerpt": "Diagrm — 2026 NYU Entrepreneurs Challenge team: Javier Navarro-Machuca ’27; Corinne Camay ’27; Joshua Glasman."
+        },
+        {
+          "name": "Corinne Camay",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2027",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Diagrm); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Diagrm — 2026 NYU Entrepreneurs Challenge team: Javier Navarro-Machuca ’27; Corinne Camay ’27; Joshua Glasman."
+          },
+          "excerpt": "Diagrm — 2026 NYU Entrepreneurs Challenge team: Javier Navarro-Machuca ’27; Corinne Camay ’27; Joshua Glasman."
+        },
+        {
+          "name": "Joshua Glasman",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Diagrm); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Diagrm — 2026 NYU Entrepreneurs Challenge team: Javier Navarro-Machuca ’27; Corinne Camay ’27; Joshua Glasman."
+        }
+      ]
+    },
+    {
+      "name": "Spendcodes",
+      "description": "Stablecoin merchant payments settled in bank dollars",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Spendcodes — 2026 NYU Entrepreneurs Challenge team: Michael Curry ’05.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Michael Curry",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2005",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Spendcodes); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": "'05",
+            "gradYear": 2005,
+            "evidence": "Spendcodes — 2026 NYU Entrepreneurs Challenge team: Michael Curry ’05."
+          },
+          "excerpt": "Spendcodes — 2026 NYU Entrepreneurs Challenge team: Michael Curry ’05."
+        }
+      ]
+    },
+    {
+      "name": "FluentGov",
+      "description": "Automated government forms and permitting workflows",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "FluentGov — 2026 NYU Entrepreneurs Challenge team: Artie Levine ’27; Andy Levine.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Artie Levine",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2027",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (FluentGov); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "FluentGov — 2026 NYU Entrepreneurs Challenge team: Artie Levine ’27; Andy Levine."
+          },
+          "excerpt": "FluentGov — 2026 NYU Entrepreneurs Challenge team: Artie Levine ’27; Andy Levine."
+        },
+        {
+          "name": "Andy Levine",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (FluentGov); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "FluentGov — 2026 NYU Entrepreneurs Challenge team: Artie Levine ’27; Andy Levine."
+        }
+      ]
+    },
+    {
+      "name": "Nyantrace.ai",
+      "description": "Real-time oversight and safety monitoring for multi-agent AI systems",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Nyantrace.ai — 2026 NYU Entrepreneurs Challenge team: Poe Myint Swe ’26; Daniela Castano ’26; Niranjana Niranjana ’26.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Poe Myint Swe",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2026",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Nyantrace.ai); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Nyantrace.ai — 2026 NYU Entrepreneurs Challenge team: Poe Myint Swe ’26; Daniela Castano ’26; Niranjana Niranjana ’26."
+          },
+          "excerpt": "Nyantrace.ai — 2026 NYU Entrepreneurs Challenge team: Poe Myint Swe ’26; Daniela Castano ’26; Niranjana Niranjana ’26."
+        },
+        {
+          "name": "Daniela Castano",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2026",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Nyantrace.ai); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Nyantrace.ai — 2026 NYU Entrepreneurs Challenge team: Poe Myint Swe ’26; Daniela Castano ’26; Niranjana Niranjana ’26."
+          },
+          "excerpt": "Nyantrace.ai — 2026 NYU Entrepreneurs Challenge team: Poe Myint Swe ’26; Daniela Castano ’26; Niranjana Niranjana ’26."
+        },
+        {
+          "name": "Niranjana Niranjana",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2026",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Nyantrace.ai); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Nyantrace.ai — 2026 NYU Entrepreneurs Challenge team: Poe Myint Swe ’26; Daniela Castano ’26; Niranjana Niranjana ’26."
+          },
+          "excerpt": "Nyantrace.ai — 2026 NYU Entrepreneurs Challenge team: Poe Myint Swe ’26; Daniela Castano ’26; Niranjana Niranjana ’26."
+        }
+      ]
+    },
+    {
+      "name": "ColDAW",
+      "description": "Collaborative music production version control",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "ColDAW — 2026 NYU Entrepreneurs Challenge team: Yifan Deng ’26; Augusta Ding ’26; Chloe Yan ’26; Ian Askiem ’27; Elizabeth Kezia Widjaja ’27; Prisha Jain ’26.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Yifan Deng",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2026",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (ColDAW); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "ColDAW — 2026 NYU Entrepreneurs Challenge team: Yifan Deng ’26; Augusta Ding ’26; Chloe Yan ’26; Ian Askiem ’27; Elizabeth Kezia Widjaja ’27; Prisha Jain ’26."
+          },
+          "excerpt": "ColDAW — 2026 NYU Entrepreneurs Challenge team: Yifan Deng ’26; Augusta Ding ’26; Chloe Yan ’26; Ian Askiem ’27; Elizabeth Kezia Widjaja ’27; Prisha Jain ’26."
+        },
+        {
+          "name": "Augusta Ding",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2026",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (ColDAW); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "ColDAW — 2026 NYU Entrepreneurs Challenge team: Yifan Deng ’26; Augusta Ding ’26; Chloe Yan ’26; Ian Askiem ’27; Elizabeth Kezia Widjaja ’27; Prisha Jain ’26."
+          },
+          "excerpt": "ColDAW — 2026 NYU Entrepreneurs Challenge team: Yifan Deng ’26; Augusta Ding ’26; Chloe Yan ’26; Ian Askiem ’27; Elizabeth Kezia Widjaja ’27; Prisha Jain ’26."
+        },
+        {
+          "name": "Chloe Yan",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2026",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (ColDAW); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "ColDAW — 2026 NYU Entrepreneurs Challenge team: Yifan Deng ’26; Augusta Ding ’26; Chloe Yan ’26; Ian Askiem ’27; Elizabeth Kezia Widjaja ’27; Prisha Jain ’26."
+          },
+          "excerpt": "ColDAW — 2026 NYU Entrepreneurs Challenge team: Yifan Deng ’26; Augusta Ding ’26; Chloe Yan ’26; Ian Askiem ’27; Elizabeth Kezia Widjaja ’27; Prisha Jain ’26."
+        },
+        {
+          "name": "Ian Askiem",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2027",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (ColDAW); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "ColDAW — 2026 NYU Entrepreneurs Challenge team: Yifan Deng ’26; Augusta Ding ’26; Chloe Yan ’26; Ian Askiem ’27; Elizabeth Kezia Widjaja ’27; Prisha Jain ’26."
+          },
+          "excerpt": "ColDAW — 2026 NYU Entrepreneurs Challenge team: Yifan Deng ’26; Augusta Ding ’26; Chloe Yan ’26; Ian Askiem ’27; Elizabeth Kezia Widjaja ’27; Prisha Jain ’26."
+        },
+        {
+          "name": "Elizabeth Kezia Widjaja",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2027",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (ColDAW); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "ColDAW — 2026 NYU Entrepreneurs Challenge team: Yifan Deng ’26; Augusta Ding ’26; Chloe Yan ’26; Ian Askiem ’27; Elizabeth Kezia Widjaja ’27; Prisha Jain ’26."
+          },
+          "excerpt": "ColDAW — 2026 NYU Entrepreneurs Challenge team: Yifan Deng ’26; Augusta Ding ’26; Chloe Yan ’26; Ian Askiem ’27; Elizabeth Kezia Widjaja ’27; Prisha Jain ’26."
+        },
+        {
+          "name": "Prisha Jain",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2026",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (ColDAW); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "ColDAW — 2026 NYU Entrepreneurs Challenge team: Yifan Deng ’26; Augusta Ding ’26; Chloe Yan ’26; Ian Askiem ’27; Elizabeth Kezia Widjaja ’27; Prisha Jain ’26."
+          },
+          "excerpt": "ColDAW — 2026 NYU Entrepreneurs Challenge team: Yifan Deng ’26; Augusta Ding ’26; Chloe Yan ’26; Ian Askiem ’27; Elizabeth Kezia Widjaja ’27; Prisha Jain ’26."
+        }
+      ]
+    },
+    {
+      "name": "NextMinder",
+      "description": "Synthetic user simulations for business decisions",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "NextMinder — 2026 NYU Entrepreneurs Challenge team: Andres Satizabal ’11; Jessica Boccardo ’13; Marcela Ramirez; Eduardo Hurtado; Sebastian Morelli Moreno; Camilo Duque.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Andres Satizabal",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2011",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (NextMinder); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": "'11",
+            "gradYear": 2011,
+            "evidence": "NextMinder — 2026 NYU Entrepreneurs Challenge team: Andres Satizabal ’11; Jessica Boccardo ’13; Marcela Ramirez; Eduardo Hurtado; Sebastian Morelli Moreno; Camilo Duque."
+          },
+          "excerpt": "NextMinder — 2026 NYU Entrepreneurs Challenge team: Andres Satizabal ’11; Jessica Boccardo ’13; Marcela Ramirez; Eduardo Hurtado; Sebastian Morelli Moreno; Camilo Duque."
+        },
+        {
+          "name": "Jessica Boccardo",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2013",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (NextMinder); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": "'13",
+            "gradYear": 2013,
+            "evidence": "NextMinder — 2026 NYU Entrepreneurs Challenge team: Andres Satizabal ’11; Jessica Boccardo ’13; Marcela Ramirez; Eduardo Hurtado; Sebastian Morelli Moreno; Camilo Duque."
+          },
+          "excerpt": "NextMinder — 2026 NYU Entrepreneurs Challenge team: Andres Satizabal ’11; Jessica Boccardo ’13; Marcela Ramirez; Eduardo Hurtado; Sebastian Morelli Moreno; Camilo Duque."
+        },
+        {
+          "name": "Marcela Ramirez",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (NextMinder); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "NextMinder — 2026 NYU Entrepreneurs Challenge team: Andres Satizabal ’11; Jessica Boccardo ’13; Marcela Ramirez; Eduardo Hurtado; Sebastian Morelli Moreno; Camilo Duque."
+        },
+        {
+          "name": "Eduardo Hurtado",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (NextMinder); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "NextMinder — 2026 NYU Entrepreneurs Challenge team: Andres Satizabal ’11; Jessica Boccardo ’13; Marcela Ramirez; Eduardo Hurtado; Sebastian Morelli Moreno; Camilo Duque."
+        },
+        {
+          "name": "Sebastian Morelli Moreno",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (NextMinder); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "NextMinder — 2026 NYU Entrepreneurs Challenge team: Andres Satizabal ’11; Jessica Boccardo ’13; Marcela Ramirez; Eduardo Hurtado; Sebastian Morelli Moreno; Camilo Duque."
+        },
+        {
+          "name": "Camilo Duque",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (NextMinder); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "NextMinder — 2026 NYU Entrepreneurs Challenge team: Andres Satizabal ’11; Jessica Boccardo ’13; Marcela Ramirez; Eduardo Hurtado; Sebastian Morelli Moreno; Camilo Duque."
+        }
+      ]
+    },
+    {
+      "name": "Serif",
+      "description": "Navigation infrastructure for personalized healthcare journeys",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Serif — 2026 NYU Entrepreneurs Challenge team: Sam Cialek ’11.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Sam Cialek",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2011",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Serif); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": "'11",
+            "gradYear": 2011,
+            "evidence": "Serif — 2026 NYU Entrepreneurs Challenge team: Sam Cialek ’11."
+          },
+          "excerpt": "Serif — 2026 NYU Entrepreneurs Challenge team: Sam Cialek ’11."
+        }
+      ]
+    },
+    {
+      "name": "Venaera",
+      "description": "Modular heat pump systems with intelligent monitoring",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Venaera — 2026 NYU Entrepreneurs Challenge team: Jordan Sotudeh ’12; Julian Jazayeri; Alvan Mbongo; Elena Empino.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Jordan Sotudeh",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2012",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Venaera); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": "'12",
+            "gradYear": 2012,
+            "evidence": "Venaera — 2026 NYU Entrepreneurs Challenge team: Jordan Sotudeh ’12; Julian Jazayeri; Alvan Mbongo; Elena Empino."
+          },
+          "excerpt": "Venaera — 2026 NYU Entrepreneurs Challenge team: Jordan Sotudeh ’12; Julian Jazayeri; Alvan Mbongo; Elena Empino."
+        },
+        {
+          "name": "Julian Jazayeri",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Venaera); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Venaera — 2026 NYU Entrepreneurs Challenge team: Jordan Sotudeh ’12; Julian Jazayeri; Alvan Mbongo; Elena Empino."
+        },
+        {
+          "name": "Alvan Mbongo",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Venaera); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Venaera — 2026 NYU Entrepreneurs Challenge team: Jordan Sotudeh ’12; Julian Jazayeri; Alvan Mbongo; Elena Empino."
+        },
+        {
+          "name": "Elena Empino",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Venaera); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Venaera — 2026 NYU Entrepreneurs Challenge team: Jordan Sotudeh ’12; Julian Jazayeri; Alvan Mbongo; Elena Empino."
+        }
+      ]
+    },
+    {
+      "name": "Chop Chop Eats",
+      "description": "Marketplace connecting home cooks to customers",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Chop Chop Eats — 2026 NYU Entrepreneurs Challenge team: Aaron Shen ’24; Ice Yu.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Aaron Shen",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2024",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Chop Chop Eats); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'24",
+            "gradYear": 2024,
+            "evidence": "Chop Chop Eats — 2026 NYU Entrepreneurs Challenge team: Aaron Shen ’24; Ice Yu."
+          },
+          "excerpt": "Chop Chop Eats — 2026 NYU Entrepreneurs Challenge team: Aaron Shen ’24; Ice Yu."
+        },
+        {
+          "name": "Ice Yu",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Chop Chop Eats); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Chop Chop Eats — 2026 NYU Entrepreneurs Challenge team: Aaron Shen ’24; Ice Yu."
+        }
+      ]
+    },
+    {
+      "name": "VenueHopper",
+      "description": "AI-assisted events and venue discovery",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "VenueHopper — 2026 NYU Entrepreneurs Challenge team: Stonny Liu ’23; Sharon Melzer ’27.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Stonny Liu",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2023",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (VenueHopper); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": "'23",
+            "gradYear": 2023,
+            "evidence": "VenueHopper — 2026 NYU Entrepreneurs Challenge team: Stonny Liu ’23; Sharon Melzer ’27."
+          },
+          "excerpt": "VenueHopper — 2026 NYU Entrepreneurs Challenge team: Stonny Liu ’23; Sharon Melzer ’27."
+        },
+        {
+          "name": "Sharon Melzer",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2027",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (VenueHopper); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "VenueHopper — 2026 NYU Entrepreneurs Challenge team: Stonny Liu ’23; Sharon Melzer ’27."
+          },
+          "excerpt": "VenueHopper — 2026 NYU Entrepreneurs Challenge team: Stonny Liu ’23; Sharon Melzer ’27."
+        }
+      ]
+    },
+    {
+      "name": "DEFI Snacks LLC",
+      "description": "Chocolate with protein and sprouted ingredients",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "DEFI Snacks LLC — 2026 NYU Entrepreneurs Challenge team: Tatyana Jones ’15.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Tatyana Jones",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2015",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (DEFI Snacks LLC); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": "'15",
+            "gradYear": 2015,
+            "evidence": "DEFI Snacks LLC — 2026 NYU Entrepreneurs Challenge team: Tatyana Jones ’15."
+          },
+          "excerpt": "DEFI Snacks LLC — 2026 NYU Entrepreneurs Challenge team: Tatyana Jones ’15."
+        }
+      ]
+    },
+    {
+      "name": "Pupil",
+      "description": "AI college guidance and peer mentoring",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Pupil — 2026 NYU Entrepreneurs Challenge team: Dario Anaya ’26.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Dario Anaya",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2026",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Pupil); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Pupil — 2026 NYU Entrepreneurs Challenge team: Dario Anaya ’26."
+          },
+          "excerpt": "Pupil — 2026 NYU Entrepreneurs Challenge team: Dario Anaya ’26."
+        }
+      ]
+    },
+    {
+      "name": "GreekFlow",
+      "description": "Student-organization management software",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "GreekFlow — 2026 NYU Entrepreneurs Challenge team: Yik Ming Sezto ’27; Varun Krishnan ’27; Vivaan Rastogi ’27; Addison Ireland; Charlie Algert.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Yik Ming Sezto",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2027",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (GreekFlow); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "GreekFlow — 2026 NYU Entrepreneurs Challenge team: Yik Ming Sezto ’27; Varun Krishnan ’27; Vivaan Rastogi ’27; Addison Ireland; Charlie Algert."
+          },
+          "excerpt": "GreekFlow — 2026 NYU Entrepreneurs Challenge team: Yik Ming Sezto ’27; Varun Krishnan ’27; Vivaan Rastogi ’27; Addison Ireland; Charlie Algert."
+        },
+        {
+          "name": "Varun Krishnan",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2027",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (GreekFlow); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "GreekFlow — 2026 NYU Entrepreneurs Challenge team: Yik Ming Sezto ’27; Varun Krishnan ’27; Vivaan Rastogi ’27; Addison Ireland; Charlie Algert."
+          },
+          "excerpt": "GreekFlow — 2026 NYU Entrepreneurs Challenge team: Yik Ming Sezto ’27; Varun Krishnan ’27; Vivaan Rastogi ’27; Addison Ireland; Charlie Algert."
+        },
+        {
+          "name": "Vivaan Rastogi",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2027",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (GreekFlow); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "GreekFlow — 2026 NYU Entrepreneurs Challenge team: Yik Ming Sezto ’27; Varun Krishnan ’27; Vivaan Rastogi ’27; Addison Ireland; Charlie Algert."
+          },
+          "excerpt": "GreekFlow — 2026 NYU Entrepreneurs Challenge team: Yik Ming Sezto ’27; Varun Krishnan ’27; Vivaan Rastogi ’27; Addison Ireland; Charlie Algert."
+        },
+        {
+          "name": "Addison Ireland",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (GreekFlow); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "GreekFlow — 2026 NYU Entrepreneurs Challenge team: Yik Ming Sezto ’27; Varun Krishnan ’27; Vivaan Rastogi ’27; Addison Ireland; Charlie Algert."
+        },
+        {
+          "name": "Charlie Algert",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (GreekFlow); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "GreekFlow — 2026 NYU Entrepreneurs Challenge team: Yik Ming Sezto ’27; Varun Krishnan ’27; Vivaan Rastogi ’27; Addison Ireland; Charlie Algert."
+        }
+      ]
+    },
+    {
+      "name": "Meroo",
+      "description": "Game-like skill assessments for hiring",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Meroo — 2026 NYU Entrepreneurs Challenge team: David Restrepo ’22; Santiago Serna; Andrea Martinez; Catalina Gil.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "David Restrepo",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2022",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Meroo); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": "'22",
+            "gradYear": 2022,
+            "evidence": "Meroo — 2026 NYU Entrepreneurs Challenge team: David Restrepo ’22; Santiago Serna; Andrea Martinez; Catalina Gil."
+          },
+          "excerpt": "Meroo — 2026 NYU Entrepreneurs Challenge team: David Restrepo ’22; Santiago Serna; Andrea Martinez; Catalina Gil."
+        },
+        {
+          "name": "Santiago Serna",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Meroo); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Meroo — 2026 NYU Entrepreneurs Challenge team: David Restrepo ’22; Santiago Serna; Andrea Martinez; Catalina Gil."
+        },
+        {
+          "name": "Andrea Martinez",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Meroo); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Meroo — 2026 NYU Entrepreneurs Challenge team: David Restrepo ’22; Santiago Serna; Andrea Martinez; Catalina Gil."
+        },
+        {
+          "name": "Catalina Gil",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Meroo); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Meroo — 2026 NYU Entrepreneurs Challenge team: David Restrepo ’22; Santiago Serna; Andrea Martinez; Catalina Gil."
+        }
+      ]
+    },
+    {
+      "name": "Nappr",
+      "description": "Daytime hotel stays and short rest bookings",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Nappr — 2026 NYU Entrepreneurs Challenge team: Jared Lerner ’13; Matt Stewart; Jeff Nguyen; Tahir Ramzan.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Jared Lerner",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2013",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Nappr); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "older_alumni",
+            "basis": "inferred",
+            "label": "'13",
+            "gradYear": 2013,
+            "evidence": "Nappr — 2026 NYU Entrepreneurs Challenge team: Jared Lerner ’13; Matt Stewart; Jeff Nguyen; Tahir Ramzan."
+          },
+          "excerpt": "Nappr — 2026 NYU Entrepreneurs Challenge team: Jared Lerner ’13; Matt Stewart; Jeff Nguyen; Tahir Ramzan."
+        },
+        {
+          "name": "Matt Stewart",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Nappr); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Nappr — 2026 NYU Entrepreneurs Challenge team: Jared Lerner ’13; Matt Stewart; Jeff Nguyen; Tahir Ramzan."
+        },
+        {
+          "name": "Jeff Nguyen",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Nappr); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Nappr — 2026 NYU Entrepreneurs Challenge team: Jared Lerner ’13; Matt Stewart; Jeff Nguyen; Tahir Ramzan."
+        },
+        {
+          "name": "Tahir Ramzan",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "NYU Entrepreneurs Challenge 2026 team; individual NYU enrollment not established",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Nappr); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "excerpt": "Nappr — 2026 NYU Entrepreneurs Challenge team: Jared Lerner ’13; Matt Stewart; Jeff Nguyen; Tahir Ramzan."
+        }
+      ]
+    },
+    {
+      "name": "Espiritu",
+      "description": "Latin American designer marketplace",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "Espiritu — 2026 NYU Entrepreneurs Challenge team: Oscar Yapor ’27.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Oscar Yapor",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2027",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (Espiritu); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Espiritu — 2026 NYU Entrepreneurs Challenge team: Oscar Yapor ’27."
+          },
+          "excerpt": "Espiritu — 2026 NYU Entrepreneurs Challenge team: Oscar Yapor ’27."
+        }
+      ]
+    },
+    {
+      "name": "WonderKid",
+      "description": "Clean-label sauces for families and children",
+      "website": null,
+      "sourceUrl": "https://nyusternberkleycenter.com/2026-team-directory/",
+      "excerpt": "WonderKid — 2026 NYU Entrepreneurs Challenge team: Jeff Taylor ’26.",
+      "orgPlace": "NYU Entrepreneurs Challenge 2026",
+      "campusIds": [
+        "univ_nyu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Jeff Taylor",
+          "aliases": [],
+          "campusId": "univ_nyu",
+          "affiliationRole": "NYU Entrepreneurs Challenge team, NYU class of 2026",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "2026 NYU Challenge named venture team member (WonderKid); founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named on NYU's 2026 team directory. Team membership is not automatic proof of incorporation or cofounder role.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "WonderKid — 2026 NYU Entrepreneurs Challenge team: Jeff Taylor ’26."
+          },
+          "excerpt": "WonderKid — 2026 NYU Entrepreneurs Challenge team: Jeff Taylor ’26."
+        }
+      ]
+    }
+  ],
+  "potential": [],
+  "links": []
+}

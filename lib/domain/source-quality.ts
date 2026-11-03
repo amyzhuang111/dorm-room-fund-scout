@@ -12,6 +12,7 @@
 // separately surfaced as scores in the UI.
 
 import type { CommunitySignal } from "./community-signal";
+import { EXPANDED_CAMPUS_DIRECTORIES } from "./expanded-campus-directories";
 
 export type Tier = "S+" | "S" | "A" | "B" | "C" | "D";
 export type DimensionLevel = "high" | "medium" | "low";
@@ -1893,6 +1894,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     status: "checked_and_skipped",
     statusNote: "Skipped 2026-11-02 because it has no founder, campus, or grad evidence. Use Velocity instead.",
   },
+  ...EXPANDED_CAMPUS_DIRECTORIES,
 ];
 
 export function catalogueForCampus(campusId: string): SourceCatalogueEntry[] {
