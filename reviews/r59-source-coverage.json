@@ -1,0 +1,352 @@
+{
+  "base_commit": "7c8dd81f833707a25ad55c0365d54e706df5dc48",
+  "source_import_commit": "86cf567",
+  "visible_companies": 1225,
+  "database_modified": false,
+  "count_basis": "Distinct project evidence by source hostname, not new imports. A company can appear in multiple sources. Historical and unverified-recency records may be stored but not shown.",
+  "sources": [
+    {
+      "number": 1,
+      "urls": [
+        "https://www.undergradvc.com/startups"
+      ],
+      "companies_with_evidence_on_source_host": 853,
+      "currently_on_site": 22,
+      "instruction": "1 https://www.undergradvc.com/startups"
+    },
+    {
+      "number": 2,
+      "urls": [
+        "https://superscout.co/universities"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "2 https://superscout.co/universities (free pages only)"
+    },
+    {
+      "number": 3,
+      "urls": [
+        "https://www.dormroomfund.com/portfolio"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "3 https://www.dormroomfund.com/portfolio"
+    },
+    {
+      "number": 4,
+      "urls": [
+        "https://frontrow.ventures/en/portfolio/"
+      ],
+      "companies_with_evidence_on_source_host": 2,
+      "currently_on_site": 0,
+      "instruction": "4 https://frontrow.ventures/en/portfolio/"
+    },
+    {
+      "number": 5,
+      "urls": [
+        "https://www.crimsonfounders.com/the-founder-files"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "5 https://www.crimsonfounders.com/the-founder-files"
+    },
+    {
+      "number": 6,
+      "urls": [
+        "https://bos.network/"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "6 https://bos.network/"
+    },
+    {
+      "number": 7,
+      "urls": [
+        "https://startups.columbia.edu/founders"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "7 https://startups.columbia.edu/founders (Crunchbase-powered, reuse unresolved: flag)"
+    },
+    {
+      "number": 8,
+      "urls": [
+        "https://campushunt.co/"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "8 https://campushunt.co/ (provisional; verify)"
+    },
+    {
+      "number": 9,
+      "urls": [
+        "https://innovationlabs.harvard.edu/ventures"
+      ],
+      "companies_with_evidence_on_source_host": 613,
+      "currently_on_site": 23,
+      "instruction": "9 https://innovationlabs.harvard.edu/ventures (public profiles only, not login directory)"
+    },
+    {
+      "number": 10,
+      "urls": [
+        "https://entrepreneurship.mit.edu/accelerator/2026-delta-v/"
+      ],
+      "companies_with_evidence_on_source_host": 73,
+      "currently_on_site": 5,
+      "instruction": "10 https://entrepreneurship.mit.edu/accelerator/2026-delta-v/"
+    },
+    {
+      "number": 11,
+      "urls": [
+        "https://venturelab.upenn.edu/vip-alumni"
+      ],
+      "companies_with_evidence_on_source_host": 280,
+      "currently_on_site": 98,
+      "instruction": "11 https://venturelab.upenn.edu/vip-alumni"
+    },
+    {
+      "number": 12,
+      "urls": [
+        "https://kellercenter.princeton.edu/people/teams-startups-filtered"
+      ],
+      "companies_with_evidence_on_source_host": 4,
+      "currently_on_site": 1,
+      "instruction": "12 https://kellercenter.princeton.edu/people/teams-startups-filtered"
+    },
+    {
+      "number": 13,
+      "urls": [
+        "https://www.elabstartup.com/2027-companies/"
+      ],
+      "companies_with_evidence_on_source_host": 126,
+      "currently_on_site": 25,
+      "instruction": "13 https://www.elabstartup.com/2027-companies/ (+ earlier cohorts linked)"
+    },
+    {
+      "number": 14,
+      "urls": [
+        "https://entrepreneurship.brown.edu/impact/brown-ventures-action",
+        "https://entrepreneurship.brown.edu/build-your-venture/b-lab/2026"
+      ],
+      "companies_with_evidence_on_source_host": 32,
+      "currently_on_site": 27,
+      "instruction": "14 https://entrepreneurship.brown.edu/impact/brown-ventures-action + https://entrepreneurship.brown.edu/build-your-venture/b-lab/2026"
+    },
+    {
+      "number": 15,
+      "urls": [
+        "https://city.yale.edu/venture-wall"
+      ],
+      "companies_with_evidence_on_source_host": 17,
+      "currently_on_site": 16,
+      "instruction": "15 https://city.yale.edu/venture-wall"
+    },
+    {
+      "number": 16,
+      "urls": [
+        "https://www.freeventures.org/portfolio"
+      ],
+      "companies_with_evidence_on_source_host": 17,
+      "currently_on_site": 1,
+      "instruction": "16 https://www.freeventures.org/portfolio"
+    },
+    {
+      "number": 17,
+      "urls": [
+        "https://www.entrepreneursatberkeley.com/companies"
+      ],
+      "companies_with_evidence_on_source_host": 7,
+      "currently_on_site": 6,
+      "instruction": "17 https://www.entrepreneursatberkeley.com/companies"
+    },
+    {
+      "number": 18,
+      "urls": [
+        "https://skydeck.berkeley.edu/portfolio/"
+      ],
+      "companies_with_evidence_on_source_host": 246,
+      "currently_on_site": 1,
+      "instruction": "18 https://skydeck.berkeley.edu/portfolio/"
+    },
+    {
+      "number": 19,
+      "urls": [
+        "https://web.startx.com/community"
+      ],
+      "companies_with_evidence_on_source_host": 24,
+      "currently_on_site": 0,
+      "instruction": "19 https://web.startx.com/community"
+    },
+    {
+      "number": 20,
+      "urls": [
+        "https://www.thegarage.northwestern.edu/startups-founders"
+      ],
+      "companies_with_evidence_on_source_host": 70,
+      "currently_on_site": 11,
+      "instruction": "20 https://www.thegarage.northwestern.edu/startups-founders"
+    },
+    {
+      "number": 21,
+      "urls": [
+        "https://engineering.purdue.edu/HIVE/Ventures/ventures-pages"
+      ],
+      "companies_with_evidence_on_source_host": 44,
+      "currently_on_site": 0,
+      "instruction": "21 https://engineering.purdue.edu/HIVE/Ventures/ventures-pages"
+    },
+    {
+      "number": 22,
+      "urls": [
+        "https://entrepreneur.nyu.edu/featured-nyu-startups/"
+      ],
+      "companies_with_evidence_on_source_host": 155,
+      "currently_on_site": 11,
+      "instruction": "22 https://entrepreneur.nyu.edu/featured-nyu-startups/"
+    },
+    {
+      "number": 23,
+      "urls": [
+        "https://entrepreneurs.umich.edu/"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "23 https://entrepreneurs.umich.edu/ (public only)"
+    },
+    {
+      "number": 24,
+      "urls": [
+        "https://www.cmu.edu/swartz-center-for-entrepreneurship/"
+      ],
+      "companies_with_evidence_on_source_host": 34,
+      "currently_on_site": 3,
+      "instruction": "24 https://www.cmu.edu/swartz-center-for-entrepreneurship/ (Airtable directory link)"
+    },
+    {
+      "number": 25,
+      "urls": [
+        "https://uncevc.com/ventures"
+      ],
+      "companies_with_evidence_on_source_host": 4,
+      "currently_on_site": 0,
+      "instruction": "25 https://uncevc.com/ventures (do NOT import contact info/emails)"
+    },
+    {
+      "number": 26,
+      "urls": [
+        "https://www.waterloostartups.com/directory"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "26 https://www.waterloostartups.com/directory"
+    },
+    {
+      "number": 27,
+      "urls": [
+        "https://www.velocityincubator.com/companies"
+      ],
+      "companies_with_evidence_on_source_host": 15,
+      "currently_on_site": 8,
+      "instruction": "27 https://www.velocityincubator.com/companies"
+    },
+    {
+      "number": 28,
+      "urls": [
+        "https://entrepreneurs.utoronto.ca/our-startups/startups-directory/"
+      ],
+      "companies_with_evidence_on_source_host": 6,
+      "currently_on_site": 0,
+      "instruction": "28 https://entrepreneurs.utoronto.ca/our-startups/startups-directory/"
+    },
+    {
+      "number": 29,
+      "urls": [
+        "https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies?page=0"
+      ],
+      "companies_with_evidence_on_source_host": 28,
+      "currently_on_site": 0,
+      "instruction": "29 https://innovation.ubc.ca/entrepreneurship-ventures/portfolio-companies?page=0"
+    },
+    {
+      "number": 30,
+      "urls": [
+        "https://www.imperialenterpriselab.com/programmes/vcc/"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "30 https://www.imperialenterpriselab.com/programmes/vcc/"
+    },
+    {
+      "number": 31,
+      "urls": [
+        "https://www.jbs.cam.ac.uk/entrepreneurship/programmes/accelerate-cambridge/ventures/"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "31 https://www.jbs.cam.ac.uk/entrepreneurship/programmes/accelerate-cambridge/ventures/"
+    },
+    {
+      "number": 32,
+      "urls": [
+        "https://www.comp.nus.edu.sg/entrepreneurship/furnace/start/"
+      ],
+      "companies_with_evidence_on_source_host": 42,
+      "currently_on_site": 0,
+      "instruction": "32 https://www.comp.nus.edu.sg/entrepreneurship/furnace/start/"
+    },
+    {
+      "number": 33,
+      "urls": [
+        "https://cde.nus.edu.sg/edic/student-start-ups/"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "33 https://cde.nus.edu.sg/edic/student-start-ups/"
+    },
+    {
+      "number": 34,
+      "urls": [
+        "https://ec.hkust.edu.hk/startup-companies"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "34 https://ec.hkust.edu.hk/startup-companies"
+    },
+    {
+      "number": 35,
+      "urls": [
+        "https://tec.hku.hk/startups-directory/"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "35 https://tec.hku.hk/startups-directory/"
+    },
+    {
+      "number": 36,
+      "urls": [
+        "https://iie.smu.edu.sg/startups"
+      ],
+      "companies_with_evidence_on_source_host": 401,
+      "currently_on_site": 0,
+      "instruction": "36 https://iie.smu.edu.sg/startups"
+    },
+    {
+      "number": 37,
+      "urls": [
+        "https://buildlist.xyz/map"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "37. BuildList company & job locations map: https://buildlist.xyz/map (Amy, Nov 2 2:09 AM; public pages only; use only entries with a campus/student link)"
+    },
+    {
+      "number": 38,
+      "urls": [
+        "https://buildlist.xyz/companies"
+      ],
+      "companies_with_evidence_on_source_host": 0,
+      "currently_on_site": 0,
+      "instruction": "38. BuildList companies: https://buildlist.xyz/companies (only founders who are current students or recent alums, graduated 2021 or later, with evidence_url)"
+    }
+  ]
+}
