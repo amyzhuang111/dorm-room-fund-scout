@@ -167,6 +167,8 @@ interface LinkMeta {
   founderEvidenceUrls: Map<string, string>;
   /** Best company_facts.investor source_url per project. */
   investorFactUrls: Map<string, string>;
+  /** VIP-X evidence URLs keyed by project or person id. */
+  vipEvidenceUrls: Map<string, string>;
   uniLabels: Map<string, string>;
   corpusCompanies: number;
 }
@@ -177,11 +179,45 @@ function isHttpUrl(value: string | null | undefined): value is string {
   return /^https?:\/\//i.test(v);
 }
 
+/** Dead or non-evidence hosts we must never emit as edge sourceUrl. */
+const BLOCKED_SOURCE_HOSTS = [/atelictravel\.com/i];
+
+function normalizeHttpUrl(value: string): string {
+  let v = value.trim();
+  // Prefer https so raters do not flag plain http company sites (e.g. orble).
+  if (/^http:\/\//i.test(v)) v = `https://${v.slice(7)}`;
+  return v;
+}
+
 function pickHttpUrl(...candidates: Array<string | null | undefined>): string | null {
   for (const c of candidates) {
-    if (isHttpUrl(c)) return c!.trim();
+    if (!isHttpUrl(c)) continue;
+    const v = normalizeHttpUrl(c!);
+    if (BLOCKED_SOURCE_HOSTS.some((re) => re.test(v))) continue;
+    return v;
   }
   return null;
+}
+
+/** Prefer VIP-X evidence URLs over Startup Challenge articles for vipx edges. */
+function evidenceScore(netId: string | null | undefined, url: string | null | undefined): number {
+  if (!url) return -1;
+  const u = url;
+  if (netId === "vipx") {
+    if (/venturelab\.upenn\.edu\/(?:VIP-X|vip-alumni|vip-peer|[^\s#]*vip-?x)/i.test(u)) return 5;
+    if (/vip-?x|vip-alumni|vip-peer/i.test(u)) return 4;
+    if (/linkedin\.com/i.test(u) && /vip/i.test(u)) return 3;
+    if (/startup-challenge|SC-PR|cloak-wins|semifinalist/i.test(u)) return 0;
+  }
+  return 1;
+}
+
+function preferEvidenceUrl(netId: string | null | undefined, prev: string | null | undefined, next: string | null | undefined): string | null {
+  const a = pickHttpUrl(prev);
+  const b = pickHttpUrl(next);
+  if (!a) return b;
+  if (!b) return a;
+  return evidenceScore(netId, b) > evidenceScore(netId, a) ? b : a;
 }
 
 let pageCache: { stamp: string; page: FounderNetworksPage } | null = null;
@@ -247,6 +283,7 @@ function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
   const companyNames = new Map(companies.map((row) => [row.id, row.name]));
   const companyUrls = new Map<string, string>();
   for (const row of companies) {
+    // primary_link often holds a live program page when the company site is gone (Atelic).
     const url = pickHttpUrl(row.website_url, row.primary_link);
     if (url) companyUrls.set(row.id, url);
   }
@@ -333,6 +370,35 @@ function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
     if (url && !investorFactUrls.has(row.project_id)) investorFactUrls.set(row.project_id, url);
   }
 
+  const vipEvidenceUrls = new Map<string, string>();
+  for (const row of db
+    .prepare(
+      `SELECT entity_id, source_url, excerpt, value_json FROM claims
+       WHERE source_url IS NOT NULL
+         AND (
+           lower(source_url) LIKE '%vip-x%'
+           OR lower(source_url) LIKE '%vip-alumni%'
+           OR lower(source_url) LIKE '%vip-peer%'
+           OR (
+             lower(source_url) LIKE '%linkedin.com%'
+             AND (
+               lower(ifnull(excerpt,'')) LIKE '%vip-x%'
+               OR lower(ifnull(value_json,'')) LIKE '%vip-x%'
+               OR lower(ifnull(excerpt,'')) LIKE '%vip x%'
+             )
+           )
+         )`
+    )
+    .all() as { entity_id: string; source_url: string | null; excerpt: string | null; value_json: string | null }[]) {
+    const url = pickHttpUrl(row.source_url);
+    if (!url) continue;
+    // Accept VIP host URLs, or LinkedIn posts that name VIP-X in the claim text.
+    const linkedInVip =
+      /linkedin\.com/i.test(url) && /vip-?\s*x/i.test(`${row.excerpt || ""} ${row.value_json || ""}`);
+    if (evidenceScore("vipx", url) < 3 && !linkedInVip) continue;
+    if (!vipEvidenceUrls.has(row.entity_id)) vipEvidenceUrls.set(row.entity_id, url);
+  }
+
   return {
     companyNames,
     founderNames,
@@ -344,6 +410,7 @@ function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
     companyUrls,
     founderEvidenceUrls,
     investorFactUrls,
+    vipEvidenceUrls,
     uniLabels,
     corpusCompanies,
   };
@@ -870,9 +937,20 @@ export function buildFounderNetworksGraph(): GraphPayload {
   };
 
   // Prefer a real source URL when several links collapse into one graph edge.
-  const preferUrl = (prev: string | null | undefined, next: string | null) => pickHttpUrl(prev, next);
+  const preferUrl = (netId: string | null | undefined, prev: string | null | undefined, next: string | null) =>
+    preferEvidenceUrl(netId, prev, next);
   const linkUrl = (link: Link) =>
-    pickHttpUrl(link.sourceUrl, meta.companyUrls.get(link.companyId), meta.founderEvidenceUrls.get(link.founderId), meta.investorFactUrls.get(link.companyId));
+    preferEvidenceUrl(
+      link.networkId,
+      link.sourceUrl,
+      pickHttpUrl(
+        link.networkId === "vipx" ? meta.vipEvidenceUrls.get(link.companyId) : null,
+        link.networkId === "vipx" ? meta.vipEvidenceUrls.get(link.founderId) : null,
+        meta.companyUrls.get(link.companyId),
+        meta.founderEvidenceUrls.get(link.founderId),
+        meta.investorFactUrls.get(link.companyId),
+      ),
+    );
 
   for (const link of links) {
     if (!topIds.has(link.networkId)) continue;
@@ -894,7 +972,7 @@ export function buildFounderNetworksGraph(): GraphPayload {
         edgeCounts.network_tie += 1;
       } else {
         const edge = edges.find((item) => item.source === netId && item.target === coId && item.type === "network_tie");
-        if (edge) edge.sourceUrl = preferUrl(edge.sourceUrl, linkUrl(link));
+        if (edge) edge.sourceUrl = preferUrl(link.networkId, edge.sourceUrl, linkUrl(link));
       }
     }
     if (founderSet.has(link.founderId)) {
@@ -911,7 +989,7 @@ export function buildFounderNetworksGraph(): GraphPayload {
         edgeCounts.network_founder += 1;
       } else {
         const edge = edges.find((item) => item.source === netId && item.target === foId && item.type === "network_founder");
-        if (edge) edge.sourceUrl = preferUrl(edge.sourceUrl, linkUrl(link));
+        if (edge) edge.sourceUrl = preferUrl(link.networkId, edge.sourceUrl, linkUrl(link));
       }
     }
     if (founderSet.has(link.founderId) && companySet.has(link.companyId)) {
@@ -928,7 +1006,7 @@ export function buildFounderNetworksGraph(): GraphPayload {
         edgeCounts.founder_company += 1;
       } else {
         const edge = edges.find((item) => item.source === foId && item.target === coId && item.type === "founder_company");
-        if (edge) edge.sourceUrl = preferUrl(edge.sourceUrl, linkUrl(link));
+        if (edge) edge.sourceUrl = preferUrl(link.networkId, edge.sourceUrl, linkUrl(link));
       }
     }
   }
@@ -969,7 +1047,11 @@ export function buildFounderNetworksGraph(): GraphPayload {
 
   // Same-company co-founder links. Source = company page that lists both founders.
   for (const companyId of companyIds) {
-    const companyUrl = pickHttpUrl(meta.companyUrls.get(companyId));
+    const companyUrl = pickHttpUrl(
+      meta.companyUrls.get(companyId),
+      meta.vipEvidenceUrls.get(companyId),
+      meta.investorFactUrls.get(companyId),
+    );
     if (!companyUrl) continue; // drop unsourced cofounder edges
     const fos = [...(meta.companyFounders.get(companyId) ?? [])].filter((id) => founderSet.has(id)).sort();
     for (let i = 0; i < fos.length; i++) {
@@ -1002,6 +1084,28 @@ export function buildFounderNetworksGraph(): GraphPayload {
     }
     edge.sourceUrl = url;
   }
+  // VIP-X edges must cite VIP evidence, not Startup Challenge articles.
+  const vipUrlSet = new Set(meta.vipEvidenceUrls.values());
+  const isVipGrade = (url: string | null | undefined) =>
+    evidenceScore("vipx", url) >= 3 || (!!url && vipUrlSet.has(url));
+  for (const edge of edges) {
+    const netId = edge.source.startsWith("net:") ? edge.source.slice(4) : edge.target.startsWith("net:") ? edge.target.slice(4) : null;
+    if (netId !== "vipx") continue;
+    if (isVipGrade(edge.sourceUrl)) continue;
+    const coId = edge.source.startsWith("co:") ? edge.source.slice(3) : edge.target.startsWith("co:") ? edge.target.slice(3) : null;
+    const foId = edge.source.startsWith("fo:") ? edge.source.slice(3) : edge.target.startsWith("fo:") ? edge.target.slice(3) : null;
+    const better = preferEvidenceUrl(
+      "vipx",
+      edge.sourceUrl,
+      pickHttpUrl(
+        coId ? meta.vipEvidenceUrls.get(coId) : null,
+        foId ? meta.vipEvidenceUrls.get(foId) : null,
+      ),
+    );
+    edge.sourceUrl = better;
+    if (!isVipGrade(edge.sourceUrl)) edge.sourceUrl = null;
+  }
+
   {
     const kept: GraphEdge[] = [];
     const nextCounts: Record<string, number> = { network_tie: 0, cofounder: 0, founder_company: 0, network_founder: 0 };

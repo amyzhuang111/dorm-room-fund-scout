@@ -101,50 +101,53 @@ export function NetworksApp() {
   return (
     <div className="min-h-screen bg-white text-[color:var(--fg)]" data-networks-page="">
       <header className="border-b border-[color:var(--line)] bg-white">
-        <div className="mx-auto flex max-w-[1100px] flex-col gap-2 px-5 py-6">
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-0.5 px-4 py-2.5 sm:gap-2 sm:px-5 sm:py-5">
           <div className="flex items-center gap-2 text-[color:var(--cobalt)]">
             <CampusSeal label="CS" title="Campus Scout" size="sm" />
-            <span className="text-xs font-medium uppercase tracking-[0.08em]">Campus Scout</span>
+            <span className="text-[10px] font-medium uppercase tracking-[0.08em] sm:text-xs">Campus Scout</span>
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight text-[color:var(--fg)]">Networks</h1>
-          <p className="max-w-3xl text-sm text-[color:var(--fg-2)]">
-            Deal-flow map of accelerators, campus programs, labs, and funds that already reach student founders in the verified investable corpus of{" "}
-            {data.corpusCompanies.toLocaleString("en-US")} companies. Use it to see who is crowded and who is still open.
+          <h1 className="text-xl font-semibold tracking-tight text-[color:var(--fg)] sm:text-2xl">Networks</h1>
+          <p className="hidden max-w-3xl text-[12px] leading-snug text-[color:var(--fg-2)] sm:block sm:text-sm sm:leading-normal">
+            Deal-flow map of accelerators, campus programs, labs, and funds that reach student founders in the verified investable corpus of{" "}
+            {data.corpusCompanies.toLocaleString("en-US")} companies.
           </p>
-          <p className="text-xs text-[color:var(--fg-3)]">
-            {data.totals.founderLinks.toLocaleString("en-US")} directed founder links · {data.totals.networks.toLocaleString("en-US")} networks ·{" "}
+          <p className="text-[11px] text-[color:var(--fg-3)] sm:text-xs">
+            {data.totals.founderLinks.toLocaleString("en-US")} founder links · {data.totals.networks.toLocaleString("en-US")} networks ·{" "}
             {data.totals.companiesLinked.toLocaleString("en-US")} companies · {data.totals.foundersLinked.toLocaleString("en-US")} founders
           </p>
         </div>
       </header>
 
-      <main className="mx-auto flex max-w-[1100px] flex-col gap-8 px-5 py-6">
-        <section aria-labelledby="top-networks-heading">
-          <div className="mb-3">
-            <h2 id="top-networks-heading" className="text-lg font-semibold tracking-tight">
+      <main className="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-3 sm:gap-8 sm:px-5 sm:py-6">
+        <section aria-labelledby="top-networks-heading" className="order-2 md:order-none">
+          <div className="mb-2 sm:mb-3">
+            <h2 id="top-networks-heading" className="text-base font-semibold tracking-tight sm:text-lg">
               Top networks
             </h2>
-            <p className="text-sm text-[color:var(--fg-2)]">Where campus founders already concentrate, ranked by linked founders in the corpus.</p>
+            <p className="text-[12px] text-[color:var(--fg-2)] sm:text-sm">Where campus founders already concentrate, ranked by linked founders.</p>
           </div>
-          <div className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+          <div className="grid gap-3 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-4">
             <ol className="divide-y divide-[color:var(--line)] rounded-lg border border-[color:var(--line)] bg-white">
               {data.topNetworks.map((row, index) => {
                 const selected = row.id === activeNetwork;
+                // Mobile first viewport: show top 6; desktop shows all.
+                const mobileHide = index >= 4 ? "hidden sm:list-item" : "";
                 return (
-                  <li key={row.id}>
+                  <li key={row.id} className={mobileHide}>
                     <button
                       type="button"
-                      className={`flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors ${selected ? "bg-[color:var(--cobalt-haze)]" : "hover:bg-[#f7f8fc]"}`}
+                      className={`flex w-full items-center gap-2 px-2.5 py-1.5 text-left transition-colors sm:gap-3 sm:px-3 sm:py-2.5 ${selected ? "bg-[color:var(--cobalt-haze)]" : "hover:bg-[#f7f8fc]"}`}
                       onClick={() => setActiveNetwork(row.id)}
                       aria-pressed={selected}
                     >
-                      <span className="w-7 shrink-0 text-xs tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
+                      <span className="w-5 shrink-0 text-[10px] tabular-nums text-[color:var(--fg-3)] sm:w-7 sm:text-xs">{String(index + 1).padStart(2, "0")}</span>
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-medium text-[color:var(--fg)]">{row.label}</span>
-                        <span className="block text-[11px] text-[color:var(--fg-3)]">{KIND_LABEL[row.kind]}</span>
+                        <span className="block truncate text-[13px] font-medium text-[color:var(--fg)] sm:text-sm">{row.label}</span>
+                        <span className="hidden text-[11px] text-[color:var(--fg-3)] sm:block">{KIND_LABEL[row.kind]}</span>
                       </span>
-                      <span className="shrink-0 text-sm tabular-nums text-[color:var(--fg)]">
-                        {row.founderCount.toLocaleString("en-US")} <span className="text-[color:var(--fg-3)]">founders</span>
+                      <span className="shrink-0 text-[12px] tabular-nums text-[color:var(--fg)] sm:text-sm">
+                        {row.founderCount.toLocaleString("en-US")}
+                        <span className="text-[color:var(--fg-3)]"> founders</span>
                       </span>
                     </button>
                   </li>
@@ -152,7 +155,7 @@ export function NetworksApp() {
               })}
             </ol>
 
-            <aside className="rounded-lg border border-[color:var(--line)] bg-white p-4" aria-live="polite">
+            <aside className="hidden rounded-lg border border-[color:var(--line)] bg-white p-4 lg:block" aria-live="polite">
               {active ? (
                 <>
                   <div className="mb-2">
@@ -194,7 +197,47 @@ export function NetworksApp() {
           </div>
         </section>
 
-        <section aria-labelledby="matrix-heading" className="overflow-hidden rounded-lg border border-[color:var(--line)] bg-white">
+        <section aria-labelledby="graph-heading" className="order-1 overflow-hidden rounded-lg border border-[color:var(--line)] bg-white md:order-none">
+          <div className="px-3 py-2 sm:px-4 sm:py-3">
+            <h2 id="graph-heading" className="text-[15px] font-semibold tracking-tight">
+              Deal flow graph
+            </h2>
+            <p className="mt-0.5 hidden text-[13px] text-[color:var(--fg-2)] sm:block">
+              Founder dots are colored by campus. Programs and investors are hubs. Co-founder links and membership ties are real. Hover a founder for company, stage, and backers. Toggle Not yet backed by a top fund for uncrowded deals.
+            </p>
+            <p className="mt-0.5 text-[11px] text-[color:var(--fg-2)] sm:hidden">
+              Campus-colored founders, program hubs, real co-founder ties.
+            </p>
+            {/* Mobile fold: ranked top networks with counts above the compact graph. */}
+            <ol className="mt-2 divide-y divide-[color:var(--line)] rounded border border-[color:var(--line)] md:hidden" data-networks-mobile-top="">
+              {data.topNetworks.slice(0, 4).map((row, index) => (
+                <li key={`mobile-top-${row.id}`}>
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-2 px-2 py-1 text-left"
+                    onClick={() => setActiveNetwork(row.id)}
+                  >
+                    <span className="w-4 shrink-0 text-[10px] tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="min-w-0 flex-1 truncate text-[12px] font-medium text-[color:var(--fg)]">{row.label}</span>
+                    <span className="shrink-0 text-[11px] tabular-nums text-[color:var(--fg-2)]">
+                      {row.founderCount.toLocaleString("en-US")}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <NetworksGraph
+            investorHubs={data.investorHubs}
+            onSelectCompany={(id) => setCompanyId(id)}
+            onSelectNetwork={(id) => {
+              setActiveNetwork(id);
+            }}
+          />
+        </section>
+
+
+        <section aria-labelledby="matrix-heading" className="order-3 overflow-hidden rounded-lg border border-[color:var(--line)] bg-white md:order-none">
           <button
             type="button"
             className="flex w-full items-start justify-between gap-3 px-4 py-3 text-left"
@@ -253,7 +296,7 @@ export function NetworksApp() {
           ) : null}
         </section>
 
-        <section aria-labelledby="concentration-heading" className="overflow-hidden rounded-lg border border-[color:var(--line)] bg-white">
+        <section aria-labelledby="concentration-heading" className="order-4 overflow-hidden rounded-lg border border-[color:var(--line)] bg-white md:order-none">
           <button
             type="button"
             className="flex w-full items-start justify-between gap-3 px-4 py-3 text-left"
@@ -280,26 +323,7 @@ export function NetworksApp() {
           ) : null}
         </section>
 
-        <section aria-labelledby="graph-heading" className="overflow-hidden rounded-lg border border-[color:var(--line)] bg-white">
-          <div className="px-4 py-3">
-            <h2 id="graph-heading" className="text-[15px] font-semibold tracking-tight">
-              Deal flow graph
-            </h2>
-            <p className="mt-0.5 text-[13px] text-[color:var(--fg-2)]">
-              Founder dots are colored by campus. Programs and investors are hubs. Co-founder links and membership ties are real. Hover a founder for company, stage, and backers. Toggle Not yet backed by a top fund for uncrowded deals.
-            </p>
-          </div>
-          <NetworksGraph
-            onSelectCompany={(id) => setCompanyId(id)}
-            onSelectNetwork={(id) => {
-              setActiveNetwork(id);
-              if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-          />
-        </section>
-
-
-        <section aria-labelledby="investor-hubs-heading" className="rounded-lg border border-[color:var(--line)] bg-white">
+        <section aria-labelledby="investor-hubs-heading" className="order-5 rounded-lg border border-[color:var(--line)] bg-white md:hidden">
           <div className="px-4 py-3">
             <h2 id="investor-hubs-heading" className="text-[15px] font-semibold tracking-tight">
               Investor hubs
@@ -335,7 +359,7 @@ export function NetworksApp() {
           )}
         </section>
 
-        <section aria-labelledby="how-heading" className="rounded-lg border border-[color:var(--line)] bg-white px-4 py-4">
+        <section aria-labelledby="how-heading" className="order-6 rounded-lg border border-[color:var(--line)] bg-white px-4 py-4 md:order-none">
           <h2 id="how-heading" className="text-[15px] font-semibold tracking-tight">
             How these counts work
           </h2>

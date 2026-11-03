@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { assignFounderNetworkCampusColors, readableInk } from "@/components/network-style";
-import type { GraphCluster, GraphFounderDeal, GraphNode, GraphPayload, NetworkKind } from "@/lib/domain/founder-networks-model";
+import type { GraphCluster, GraphFounderDeal, GraphNode, GraphPayload, NetworkKind, NetworkSummary } from "@/lib/domain/founder-networks-model";
 
 type Point = { x: number; y: number };
 
@@ -110,8 +110,8 @@ function placeLabels(
   const ranked = [...clusters].sort((a, b) => a.rank - b.rank);
   const maxLabels = viewW < 600 ? 6 : viewW < 900 ? 12 : ranked.length;
   const candidates = ranked.filter((c) => c.rank <= maxLabels || c.id === hoverId);
-  // Desktop keeps an in-map legend; mobile moves it below so labels can use the full canvas.
-  const legendH = viewW < 600 ? 8 : 52;
+  // Legend lives in the side rail / below-map strip — canvas keeps only hub labels.
+  const legendH = 8;
   const topPad = 8;
   const bottomLimit = viewH - legendH - 6;
   const placed: LabelBox[] = [];
@@ -255,8 +255,8 @@ function placeCallouts(
   viewH: number
 ): CalloutBox[] {
   const insights = clusters.filter((c) => c.callout && c.rank <= 3).sort((a, b) => a.rank - b.rank);
-  // Still compute callouts on mobile for the below-map strip; legend is outside the canvas.
-  const legendH = viewW < 600 ? 8 : 52;
+  // Callouts render in the rail; keep placement helper for text extraction only.
+  const legendH = 8;
   const placed: CalloutBox[] = [];
   for (let i = 0; i < insights.length; i++) {
     const cluster = insights[i];
@@ -317,9 +317,11 @@ function fitScaleApprox(bounds: { minX: number; maxX: number; minY: number; maxY
 export function NetworksGraph({
   onSelectCompany,
   onSelectNetwork,
+  investorHubs = [],
 }: {
   onSelectCompany: (id: string) => void;
   onSelectNetwork: (id: string) => void;
+  investorHubs?: NetworkSummary[];
 }) {
   const [graph, setGraph] = useState<GraphPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -333,8 +335,8 @@ export function NetworksGraph({
     deal: GraphFounderDeal | null;
   } | null>(null);
   const [labels, setLabels] = useState<LabelBox[]>([]);
-  const [callouts, setCallouts] = useState<CalloutBox[]>([]);
   const [uncrowdedOnly, setUncrowdedOnly] = useState(false);
+  const [highlightNet, setHighlightNet] = useState<string | null>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [size, setSize] = useState({ w: 720, h: 420 });
@@ -444,14 +446,13 @@ export function NetworksGraph({
   }, [graph]);
 
   const fitView = useCallback(() => {
-    // Target ~85% frame fill (Nature-poster density); leave room for legend + callouts.
+    // Target ~85% frame fill; chrome is off-canvas in the rail.
     const padX = Math.max(12, size.w * 0.05);
-    const padY = Math.max(10, size.h * 0.045);
-    const legendH = 48;
+    const padY = Math.max(10, size.h * 0.04);
     const spanX = Math.max(1, bounds.maxX - bounds.minX);
     const spanY = Math.max(1, bounds.maxY - bounds.minY);
     const usableW = Math.max(120, size.w - padX * 2);
-    const usableH = Math.max(120, size.h - padY * 2 - legendH * 0.25);
+    const usableH = Math.max(120, size.h - padY * 2);
     const finalScale = Math.min(usableW / spanX, usableH / spanY, 2.8);
     const cx = (bounds.minX + bounds.maxX) / 2;
     const cy = (bounds.minY + bounds.maxY) / 2;
@@ -608,12 +609,10 @@ export function NetworksGraph({
 
     if (viewDirtyRef.current) {
       const nextLabels = placeLabels(clusters, worldToScreen, scale, size.w, size.h, hoverNetRef.current);
-      const nextCallouts = placeCallouts(clusters, nextLabels, size.w, size.h);
-      const sig = `${nextLabels.map((l) => `${l.id}:${l.x|0},${l.y|0}`).join("|")}#${nextCallouts.map((c) => `${c.id}:${c.x|0}`).join("|")}`;
+      const sig = nextLabels.map((l) => `${l.id}:${l.x | 0},${l.y | 0}`).join("|");
       if (sig !== labelsSigRef.current) {
         labelsSigRef.current = sig;
         setLabels(nextLabels);
-        setCallouts(nextCallouts);
       }
       viewDirtyRef.current = false;
     }
@@ -640,6 +639,10 @@ export function NetworksGraph({
 
   useEffect(() => {
     uncrowdedOnlyRef.current = uncrowdedOnly;
+    if (highlightNet) {
+      hoverNetRef.current = highlightNet;
+      viewDirtyRef.current = true;
+    }
     viewDirtyRef.current = true;
     if (reduceMotionRef.current) draw();
   }, [uncrowdedOnly, draw]);
@@ -767,6 +770,24 @@ export function NetworksGraph({
     else if ("id" in hit && !("type" in hit)) onSelectNetwork(hit.id);
   };
 
+  const insightTexts = useMemo(() => {
+    return (graph?.clusters ?? [])
+      .filter((c) => c.callout && c.rank <= 3)
+      .sort((a, b) => a.rank - b.rank)
+      .map((c) => ({ id: c.id, text: c.callout || "" }));
+  }, [graph]);
+
+  const pinHub = useCallback(
+    (networkId: string) => {
+      setHighlightNet(networkId);
+      hoverNetRef.current = networkId;
+      viewDirtyRef.current = true;
+      onSelectNetwork(networkId);
+      if (reduceMotionRef.current) draw();
+    },
+    [draw, onSelectNetwork],
+  );
+
   if (error) {
     return <p className="px-4 py-8 text-sm text-[color:var(--fg-2)]">{error}</p>;
   }
@@ -774,104 +795,13 @@ export function NetworksGraph({
     return <p className="px-4 py-8 text-sm text-[color:var(--fg-2)]">Loading network graph...</p>;
   }
 
-  const legendBody = (
-    <>
-      {campusLegend.map((item) => (
-        <span key={item.id} className="inline-flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: item.color }} />
-          <span style={{ color: readableInk(item.color) }}>{item.label}</span>
-        </span>
-      ))}
-      <span className="inline-flex items-center gap-1.5">
-        <span className="inline-block h-2 w-2 rounded-full bg-[#4b5563]" /> Hub
-      </span>
-      <label className="inline-flex cursor-pointer items-center gap-1.5 text-[color:var(--fg)]">
-        <input
-          type="checkbox"
-          className="accent-[color:var(--cobalt)]"
-          checked={uncrowdedOnly}
-          onChange={(event) => setUncrowdedOnly(event.target.checked)}
-        />
-        Not yet backed by a top fund
-      </label>
-      <span className="ml-auto max-w-[22rem] text-right tabular-nums">
-        {(graph.uncrowdedCompanyIds?.length ?? 0).toLocaleString("en-US")} uncrowded · scroll to zoom
-      </span>
-    </>
-  );
-
-  return (
-    <div className="w-full" data-networks-desk="">
+  const detailCard = (
     <div
-      ref={wrapRef}
-      className="relative h-[440px] w-full touch-manipulation overflow-hidden bg-white md:h-[560px]"
-      data-networks-graph=""
-      onWheel={onWheel}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={() => {
-        dragRef.current = null;
-      }}
+      data-networks-detail=""
+      className="rounded border border-[color:var(--line)] bg-white px-2.5 py-2 text-xs text-[color:var(--fg)]"
     >
-      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing" aria-label="Founder networks graph" />
-
-      <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full" width={size.w} height={size.h} aria-hidden="true">
-        {labels.map((label) => {
-          const lx = label.x + label.w / 2;
-          const ly = label.y + label.h / 2;
-          return (
-            <path
-              key={`lead-${label.id}`}
-              d={`M ${label.rimX} ${label.rimY} L ${lx} ${ly}`}
-              stroke="rgba(70,80,110,0.4)"
-              strokeWidth="0.7"
-              fill="none"
-            />
-          );
-        })}
-      </svg>
-
-      {labels.map((label) => (
-        <button
-          key={label.id}
-          type="button"
-          data-canvas-label={label.id}
-          className="absolute z-[1] box-border bg-transparent px-0.5 py-0 text-left text-[11px] font-semibold leading-snug"
-          data-label-anchor-x={Math.round(label.rimX)}
-          data-label-anchor-y={Math.round(label.rimY)}
-          data-hub-x={Math.round(label.hubX)}
-          data-hub-y={Math.round(label.hubY)}
-          data-hub-r={Math.round(label.hubR)}
-          style={{
-            left: label.x,
-            top: label.y,
-            width: label.w,
-            color: label.color,
-            textShadow: "0 0 3px rgba(255,255,255,0.95), 0 1px 2px rgba(255,255,255,0.9)",
-          }}
-          onClick={(event) => {
-            event.stopPropagation();
-            onSelectNetwork(label.id);
-          }}
-        >
-          <span className="block whitespace-normal break-words">{label.text}</span>
-        </button>
-      ))}
-
-      {callouts.map((box) => (
-        <div
-          key={`insight-${box.id}`}
-          data-canvas-callout={box.id}
-          className="pointer-events-none absolute z-[2] hidden rounded border border-[color:var(--line)] bg-white/95 px-2 py-1.5 text-[10px] leading-snug text-[color:var(--fg-2)] shadow-sm md:block"
-          style={{ left: box.x, top: box.y, width: box.w, minHeight: box.h }}
-        >
-          {box.text}
-        </div>
-      ))}
-
       {hover ? (
-        <div className="pointer-events-none absolute left-3 top-3 z-[3] max-w-[300px] rounded border border-[color:var(--line)] bg-white px-2.5 py-1.5 text-xs text-[color:var(--fg)] shadow-sm">
+        <>
           <div className="font-medium">{hover.deal?.founderName ?? hover.label}</div>
           {hover.deal ? (
             <>
@@ -896,37 +826,175 @@ export function NetworksGraph({
               {hover.shownOfTotal ? <div className="text-[color:var(--fg-3)]">{hover.shownOfTotal}</div> : null}
             </>
           )}
-          {hover.sourceUrl ? <div className="mt-0.5 truncate text-[10px] text-[color:var(--cobalt)]">{hover.sourceUrl}</div> : null}
-        </div>
-      ) : null}
-
-      <div
-        data-networks-legend=""
-        className="absolute bottom-3 left-3 right-3 z-[2] hidden flex-wrap items-center gap-2 rounded border border-[color:var(--line)] bg-white/95 px-3 py-2 text-[11px] text-[color:var(--fg-2)] md:flex"
-      >
-        {legendBody}
-      </div>
-    </div>
-
-      {/* Mobile: legend + insights below the map so the canvas stays unobstructed. */}
-      <div
-        data-networks-legend=""
-        className="mt-2 flex flex-wrap items-center gap-2 rounded border border-[color:var(--line)] bg-white px-3 py-2 text-[11px] text-[color:var(--fg-2)] md:hidden"
-      >
-        {legendBody}
-      </div>
-      {callouts.length ? (
-        <div className="mt-2 space-y-1.5 md:hidden" data-networks-mobile-insights="">
-          {callouts.map((box) => (
-            <div
-              key={`mobile-insight-${box.id}`}
-              className="rounded border border-[color:var(--line)] bg-white px-2.5 py-1.5 text-[11px] leading-snug text-[color:var(--fg-2)]"
+          {hover.sourceUrl ? (
+            <a
+              href={hover.sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-1 inline-block text-[10px] font-medium text-[color:var(--cobalt)] hover:underline"
             >
-              {box.text}
-            </div>
+              Source
+            </a>
+          ) : null}
+        </>
+      ) : (
+        <div className="text-[color:var(--fg-3)]">Hover a founder or hub for deal detail.</div>
+      )}
+    </div>
+  );
+
+  const legendRow = (
+    <div
+      data-networks-legend=""
+      className="flex flex-nowrap items-center gap-x-2.5 gap-y-1 overflow-x-auto whitespace-nowrap text-[10px] text-[color:var(--fg-2)]"
+    >
+      {campusLegend.map((item) => (
+        <span key={item.id} className="inline-flex shrink-0 items-center gap-1">
+          <span className="inline-block h-2 w-2 rounded-full" style={{ background: item.color }} />
+          <span style={{ color: readableInk(item.color) }}>{item.label}</span>
+        </span>
+      ))}
+      <span className="inline-flex shrink-0 items-center gap-1">
+        <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#4b5563]" /> Hub
+      </span>
+      <label className="inline-flex shrink-0 cursor-pointer items-center gap-1 text-[color:var(--fg)]">
+        <input
+          type="checkbox"
+          className="accent-[color:var(--cobalt)]"
+          checked={uncrowdedOnly}
+          onChange={(event) => setUncrowdedOnly(event.target.checked)}
+        />
+        Uncrowded
+      </label>
+      <span className="shrink-0 tabular-nums text-[color:var(--fg-3)]">
+        {(graph.uncrowdedCompanyIds?.length ?? 0).toLocaleString("en-US")} · scroll to zoom
+      </span>
+    </div>
+  );
+
+  const investorList = (
+    <div data-networks-investor-rail="">
+      <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Investor hubs</div>
+      {investorHubs.length === 0 ? (
+        <p className="text-[11px] text-[color:var(--fg-3)]">No investor hubs on file.</p>
+      ) : (
+        <ol className="divide-y divide-[color:var(--line)] rounded border border-[color:var(--line)]">
+          {investorHubs.slice(0, 8).map((row, index) => {
+            const active = highlightNet === row.id;
+            return (
+              <li key={row.id}>
+                <button
+                  type="button"
+                  className={`flex w-full items-center gap-2 px-2 py-1.5 text-left text-[11px] ${active ? "bg-[color:var(--cobalt-haze)]" : "hover:bg-[#f7f8fc]"}`}
+                  onClick={() => pinHub(row.id)}
+                >
+                  <span className="w-4 shrink-0 tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="min-w-0 flex-1 truncate font-medium text-[color:var(--fg)]">{row.label}</span>
+                  <span className="shrink-0 tabular-nums text-[color:var(--fg-2)]">
+                    {row.founderCount.toLocaleString("en-US")}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+      )}
+    </div>
+  );
+
+  const insightsBlock = insightTexts.length ? (
+    <div data-networks-insights="" className="space-y-1.5">
+      <div className="text-[10px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Insights</div>
+      {insightTexts.map((box) => (
+        <div
+          key={box.id}
+          data-canvas-callout={box.id}
+          className="rounded border border-[color:var(--line)] bg-white px-2 py-1.5 text-[11px] leading-snug text-[color:var(--fg-2)]"
+        >
+          {box.text}
+        </div>
+      ))}
+    </div>
+  ) : null;
+
+  return (
+    <div className="w-full" data-networks-desk="">
+      <div className="md:grid md:grid-cols-[minmax(0,1fr)_17.5rem] md:items-stretch">
+        <div
+          ref={wrapRef}
+          className="relative h-[300px] w-full touch-manipulation overflow-hidden bg-white sm:h-[420px] md:h-[560px]"
+          data-networks-graph=""
+          onWheel={onWheel}
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={() => {
+            dragRef.current = null;
+          }}
+        >
+          <canvas ref={canvasRef} className="absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing" aria-label="Founder networks graph" />
+
+          <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full" width={size.w} height={size.h} aria-hidden="true">
+            {labels.map((label) => {
+              const lx = label.x + label.w / 2;
+              const ly = label.y + label.h / 2;
+              return (
+                <path
+                  key={`lead-${label.id}`}
+                  d={`M ${label.rimX} ${label.rimY} L ${lx} ${ly}`}
+                  stroke="rgba(70,80,110,0.4)"
+                  strokeWidth="0.7"
+                  fill="none"
+                />
+              );
+            })}
+          </svg>
+
+          {labels.map((label) => (
+            <button
+              key={label.id}
+              type="button"
+              data-canvas-label={label.id}
+              className="absolute z-[1] box-border bg-transparent px-0.5 py-0 text-left text-[11px] font-semibold leading-snug"
+              data-label-anchor-x={Math.round(label.rimX)}
+              data-label-anchor-y={Math.round(label.rimY)}
+              data-hub-x={Math.round(label.hubX)}
+              data-hub-y={Math.round(label.hubY)}
+              data-hub-r={Math.round(label.hubR)}
+              style={{
+                left: label.x,
+                top: label.y,
+                width: label.w,
+                color: label.color,
+                textShadow: "0 0 3px rgba(255,255,255,0.95), 0 1px 2px rgba(255,255,255,0.9)",
+              }}
+              onClick={(event) => {
+                event.stopPropagation();
+                pinHub(label.id);
+              }}
+            >
+              <span className="block whitespace-normal break-words">{label.text}</span>
+            </button>
           ))}
         </div>
-      ) : null}
+
+        {/* Desktop side rail: detail, insights, investors, compact legend — off the graph surface. */}
+        <aside
+          data-networks-rail=""
+          className="hidden flex-col gap-3 border-l border-[color:var(--line)] bg-[#fafbfe] p-3 md:flex"
+        >
+          {detailCard}
+          {insightsBlock}
+          {investorList}
+          <div className="mt-auto border-t border-[color:var(--line)] pt-2">{legendRow}</div>
+        </aside>
+      </div>
+
+      {/* Mobile chrome: compact legend + detail only (insights/investors live in the desktop rail). */}
+      <div className="space-y-1.5 border-t border-[color:var(--line)] px-3 py-1.5 md:hidden">
+        {legendRow}
+        {detailCard}
+      </div>
     </div>
   );
 }
