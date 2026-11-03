@@ -6,6 +6,7 @@ import type { GeoJSONSource, Map as LibreMap, MapLayerMouseEvent } from "maplibr
 import type { FeatureCollection, Point } from "geojson";
 import type { CompanyCity, CompanyLocations } from "@/lib/domain/company-locations";
 import type { FacetCompany } from "@/lib/domain/sample-facets";
+import { officeMapPoints } from "@/lib/client/office-map-points";
 import styles from "./company-location-map.module.css";
 
 const sourceId = "company-hq-cities";
@@ -57,7 +58,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
     }).sort((a,b) => Number(Boolean(b.office))-Number(Boolean(a.office)) || a.name.localeCompare(b.name,"en-US")) })).filter(c => c.companies.length);
   }, [companies, data, highlightCampusIds, query]);
   const geo = useMemo<FeatureCollection<Point>>(() => ({type:"FeatureCollection",features:cities.map(c => ({type:"Feature",geometry:{type:"Point",coordinates:c.coordinates},properties:{id:c.id,name:c.city,count:c.companies.length,countLabel:c.companies.length.toLocaleString("en-US")}}))}), [cities]);
-  const officeGeo = useMemo<FeatureCollection<Point>>(() => ({type:"FeatureCollection",features:cities.flatMap(city=>city.companies.flatMap(co=>co.office?[{type:"Feature" as const,geometry:{type:"Point" as const,coordinates:co.office.coordinates},properties:{id:co.id,cityId:city.id,name:co.name}}]:[]))}), [cities]);
+  const officeGeo = useMemo(() => officeMapPoints(cities), [cities]);
 
   useEffect(() => {
     if (!map) return;
@@ -103,7 +104,8 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
     };
     const chooseOffice = (event:MapLayerMouseEvent) => {
       if(!enabled)return;
-      const id=String(event.features?.[0]?.properties.id??"");
+      const ids: string[] = JSON.parse(event.features?.[0]?.properties.companyIds ?? "[]");
+      const id=ids[0];
       const city=cities.find(c=>c.companies.some(co=>co.id===id));
       const office=city?.companies.find(co=>co.id===id)?.office;
       if(city && office){setSelected(city.id);setSelectedCompany(id);setCollapsed(innerWidth<640);onExpand(true);map.flyTo({center:office.coordinates,zoom:16,offset:[0,-70],duration:700});}
@@ -128,6 +130,7 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
   const addressMapped=cities.reduce((n,c)=>n+c.companies.filter(co=>co.office).length,0);
   const focused=selectedCity?.companies.find(co=>co.id===selectedCompany);
   const point=focused?.office?.coordinates;
+  const buildingCompanies=point ? selectedCity?.companies.filter(co=>co.office?.coordinates[0]===point[0] && co.office?.coordinates[1]===point[1]) ?? [] : [];
   const coordinateLabel=point ? `${Math.abs(point[1]).toFixed(5)}° ${point[1]>=0?"N":"S"}, ${Math.abs(point[0]).toFixed(5)}° ${point[0]>=0?"E":"W"}` : "";
   function focusCity(id:string) {
     const city=cities.find(c=>c.id===id);
@@ -166,10 +169,11 @@ export function CompanyLocationLayer({ map, enabled, companies, highlightCampusI
       <div className={styles.resultHeading}><div><h3>{selectedCity?selectedCity.city:query.trim()?"Search results":"Current view"} <strong>{allShown.length.toLocaleString("en-US")}</strong> startups</h3><p>{addressShown.length.toLocaleString("en-US")} sourced address pins · {(allShown.length-addressShown.length).toLocaleString("en-US")} city only. {zoom>=streetZoom?"Street view shows address pins only.":"Numbered circles are city totals."}</p></div><button aria-expanded={!collapsed} aria-label={collapsed?"Show startups in view":"Collapse startups in view"} onClick={()=>setCollapsed(v=>!v)}>{collapsed?"Show":"Hide"}</button></div>
       {focused && <div className={styles.locationDetail} data-company-location-detail="">
         <div><strong>{focused.name}</strong><button aria-label="Close location details" onClick={()=>setSelectedCompany(null)}>×</button></div>
+        {buildingCompanies.length>1 && <div className={styles.buildingCompanies} role="group" aria-label="Companies at this building"><span>At this building:</span>{buildingCompanies.map(co=><button key={co.id} aria-pressed={co.id===focused.id} onClick={()=>setSelectedCompany(co.id)}>{co.name}</button>)}</div>}
         <p>{focused.office ? focused.office.address : `Recorded HQ city: ${selectedCity?.city}. Exact business address not verified.`}</p>
         {point && <p className={styles.coordinates}>{coordinateLabel}</p>}
         <p>{focused.office ? "Published business address matched to city records. Building point, not a surveyed office entrance." : "No company pin is placed until its business address is sourced."}</p>
-        <nav aria-label="Location evidence"><a href={focused.office?.sourceUrl??focused.sourceUrl} target="_blank" rel="noopener noreferrer">{focused.office?"Business address source":"HQ city source"} ↗</a>{point && <><a href={focused.office?.coordinateSource} target="_blank" rel="noopener noreferrer">Coordinate source ↗</a><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${point[1]},${point[0]}`)}`} target="_blank" rel="noopener noreferrer">Open map ↗</a></>}</nav>
+        <nav aria-label="Location evidence"><a href={focused.office?.sourceUrl??focused.sourceUrl} target="_blank" rel="noopener noreferrer">{focused.office?"Business address source":"HQ city source"} ↗</a>{point && <><a href={focused.office?.coordinateSource} target="_blank" rel="noopener noreferrer">Coordinate source ↗</a><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${point[1]},${point[0]}`)}`} target="_blank" rel="noopener noreferrer">Open Google Maps ↗</a></>}{!point && <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${focused.name} ${selectedCity?.city}`)}`} target="_blank" rel="noopener noreferrer">Search Google Maps ↗</a>}</nav>
       </div>}
       {!collapsed && <>
         <div className={styles.resultFilters} aria-label="Location precision">

@@ -1119,7 +1119,7 @@ export function SampleInstrumentBrowse({
                               : `${cards.length.toLocaleString("en-US")} companies loaded`}
                           </p>
                           <p className="m-meta mt-1">
-                            Companies 1–{cards.length.toLocaleString("en-US")} on desk
+                            Companies 1 to {cards.length.toLocaleString("en-US")} on desk
                           </p>
                         </div>
                       </div>

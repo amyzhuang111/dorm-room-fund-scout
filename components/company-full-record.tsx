@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { plainText } from "@/lib/display/plain-text";
 import type { ReactNode } from "react";
 import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
 import { formatCampusList } from "@/lib/domain/campuses";
@@ -438,7 +439,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
               <ul className="space-y-2">
                 {project.signals.map((s) => (
                   <li key={s.id} className="rounded-sm border border-[color:var(--line,#E1E5EF)] px-2.5 py-2">
-                    <p className="font-medium tracking-tight">{s.currentObservation}</p>
+                    <p className="font-medium tracking-tight">{plainText(s.currentObservation)}</p>
                     <p className="mt-0.5 font-mono text-[11px] tabular-nums text-[color:var(--fg-3,#5C647A)]">
                       {s.signalType.replaceAll("_", " ")}
                       {s.sourceDate ? ` · ${s.sourceDate}` : ""}
@@ -451,7 +452,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
                         </>
                       ) : null}
                     </p>
-                    {s.significanceNote ? <p className="mt-1 text-[12px] text-[color:var(--fg-2,#3F465C)]">{s.significanceNote}</p> : null}
+                    {s.significanceNote ? <p className="mt-1 text-[12px] text-[color:var(--fg-2,#3F465C)]">{plainText(s.significanceNote)}</p> : null}
                   </li>
                 ))}
               </ul>

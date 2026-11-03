@@ -1,5 +1,6 @@
 "use client";
 
+import { plainText } from "@/lib/display/plain-text";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -151,16 +152,16 @@ export function HotspotsApp({
           <ul className="mt-2 divide-y divide-border-c">
             {events.map((event) => (
               <li key={`${event.date}-${event.event}`} className="flex flex-col gap-0.5 py-2 sm:flex-row sm:items-baseline sm:gap-3">
-                <span className="shrink-0 text-xs font-medium text-muted sm:w-56">{event.date}</span>
+                <span className="shrink-0 text-xs font-medium text-muted sm:w-56">{plainText(event.date)}</span>
                 <span className="min-w-0 text-sm text-foreground">
                   {event.url ? (
                     <a href={event.url} target="_blank" rel="noopener noreferrer" className="text-link hover:underline">
-                      {event.event}
+                      {plainText(event.event)}
                     </a>
                   ) : (
-                    event.event
+                    plainText(event.event)
                   )}
-                  {event.where && <span className="text-muted"> · {event.where}</span>}
+                  {event.where && <span className="text-muted"> · {plainText(event.where)}</span>}
                 </span>
               </li>
             ))}
@@ -326,7 +327,7 @@ function HotspotCardView({ card }: { card: HotspotCard }) {
       {card.when && (
         <p className="mt-1 text-xs text-foreground">
           <span className="font-semibold uppercase tracking-wide text-muted">When </span>
-          {card.when}
+          {plainText(card.when)}
         </p>
       )}
       {card.url && (

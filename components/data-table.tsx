@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ProjectMate, ProjectTableRow } from "@/lib/domain/founder-table";
+import { plainText } from "@/lib/display/plain-text";
 import { relativeTime } from "@/lib/domain/relative-time";
 import { useFeedback } from "./feedback-provider";
 import { useUserPipeline } from "./user-pipeline-provider";
@@ -21,7 +22,7 @@ function calendarDay(iso: string | null): string | null {
 }
 
 function Empty() {
-  return <span className="text-fg-3">{"\u2014"}</span>;
+  return <span className="text-fg-3" role="img" aria-label="not on file" />;
 }
 
 function tierClass(tier: string | null): string {
@@ -278,7 +279,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                 <tr key={`event:${group.event}`} className="bg-bg">
                   <td colSpan={columns} className="border-b border-line px-2 py-2">
                     <span className="inline-flex items-center gap-3">
-                      <span className="rounded-full border border-line bg-raised px-2 py-px text-[14px] leading-5 text-fg">{group.event}</span>
+                      <span className="rounded-full border border-line bg-raised px-2 py-px text-[14px] leading-5 text-fg">{plainText(group.event)}</span>
                       {group.at ? <span className="num text-[14px] text-fg">{relativeTime(group.at)}</span> : <Empty />}
                     </span>
                   </td>
@@ -303,7 +304,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                     <td className={`${pad} px-2`}>
                       <span className="flex min-w-0 items-center gap-2">
                         <AvatarStack people={row.people} />
-                        <span className="min-w-0 truncate font-medium text-fg">{row.name || <Empty />}</span>
+                        <span className="min-w-0 truncate font-medium text-fg">{plainText(row.name) || <Empty />}</span>
                         {campusLocked && !showTier && row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : null}
                         {campusLocked && !showVerified && row.verified ? <span className="text-[13px] font-medium text-link">Verified</span> : null}
                       </span>
@@ -311,12 +312,12 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
                     {showTier && <td className={`${pad} px-2`}>{row.tier ? <span className={tierClass(row.tier)}>{row.tier}</span> : <Empty />}</td>}
                     {!campusLocked && (
                       <td className={`${pad} truncate px-2`}>
-                        {row.campusSlug ? <Link href={`/campuses/${row.campusSlug}`} className="text-link">{row.campus}</Link> : row.campus || <Empty />}
+                        {row.campusSlug ? <Link href={`/campuses/${row.campusSlug}`} className="text-link">{plainText(row.campus)}</Link> : plainText(row.campus) || <Empty />}
                       </td>
                     )}
                     <td className={`${pad} px-2`}>
                       {text ? (
-                        <span className="clamp-2 max-h-10 overflow-hidden text-[14px] leading-5 text-fg" title={row.full ?? text}>{text}</span>
+                        <span className="clamp-2 max-h-10 overflow-hidden text-[14px] leading-5 text-fg" title={plainText(row.full ?? text)}>{plainText(text)}</span>
                       ) : (
                         <span className="text-[14px] text-fg-2">No signal yet</span>
                       )}
@@ -336,16 +337,16 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
       {open && (
         <aside className="fixed bottom-0 right-0 top-14 z-30 w-[min(480px,100%)] overflow-y-auto border-l border-line bg-raised p-6">
           <button type="button" className="text-[14px] text-fg-2" onClick={() => setOpenId(null)}>Close</button>
-          <h2 className="mt-3 text-[24px] leading-[30px] font-semibold tracking-[-0.02em]">{open.name || open.people[0]?.name || "\u2014"}</h2>
-          <p className="mt-1 text-[14px] text-fg-2">{open.campus ?? "Campus not on record"}</p>
+          <h2 className="mt-3 text-[24px] leading-[30px] font-semibold tracking-[-0.02em]">{plainText(open.name || open.people[0]?.name) || "n/a"}</h2>
+          <p className="mt-1 text-[14px] text-fg-2">{plainText(open.campus) ?? "Campus not on record"}</p>
           {open.tier ? <p className="mt-4"><span className={tierClass(open.tier)}>{open.tier}</span></p> : null}
-          {open.event ? <p className="mt-4 text-[14px] text-fg-2">{open.event}</p> : null}
-          <p className="mt-4 text-[15px] leading-6">{open.full ?? "No signal text is stored for this project."}</p>
+          {open.event ? <p className="mt-4 text-[14px] text-fg-2">{plainText(open.event)}</p> : null}
+          <p className="mt-4 text-[15px] leading-6">{plainText(open.full) ?? "No signal text is stored for this project."}</p>
           <ul className="mt-4 space-y-2">
             {open.people.map((person) => (
               <li key={person.id} className="flex items-center gap-2 text-[14px]">
                 <span className="inline-grid h-7 w-7 place-items-center rounded-full bg-bg text-[11px] font-medium">{initials(person.name)}</span>
-                <span>{person.name}</span>
+                <span>{plainText(person.name)}</span>
                 <span className="num ml-auto text-[14px] text-fg-2">{person.signalAt ? relativeTime(person.signalAt) : <Empty />}</span>
               </li>
             ))}

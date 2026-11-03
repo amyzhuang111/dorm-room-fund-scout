@@ -145,6 +145,66 @@
       "coordinateSource": "https://data.sfgov.org/resource/3mea-di5p.json?address_number=350&street_name=TOWNSEND&street_type=ST",
       "coordinateMethod": "San Francisco Enterprise Addressing System base address point 366542",
       "checkedAt": "2026-11-03"
+    },
+    {
+      "projectId": "proj_tC50qyBPY8DZ",
+      "company": "Emdash",
+      "kind": "published_business_address",
+      "address": "156 2nd Street, Suite 310, San Francisco, CA 94105, USA",
+      "cityId": "5391959",
+      "longitude": -122.39904247102264,
+      "latitude": 37.787221328783616,
+      "sourceUrl": "https://emdash.com/privacy",
+      "excerpt": "General Action, Inc. 156 2nd Street, Suite 310 San Francisco, CA 94105",
+      "corroboratingSource": "https://uspto.report/TM/99798383",
+      "coordinateSource": "https://data.sfgov.org/resource/3mea-di5p.json?address_number=156&street_name=02ND&street_type=ST",
+      "coordinateMethod": "San Francisco Enterprise Addressing System base address point 364935",
+      "checkedAt": "2026-11-03"
+    },
+    {
+      "projectId": "proj_sJBbF1k43DG1",
+      "company": "Paradigm",
+      "kind": "published_business_address",
+      "address": "650 California Street, Suite 1800, San Francisco, CA 94108, USA",
+      "cityId": "5391959",
+      "longitude": -122.40520723301026,
+      "latitude": 37.79293666385672,
+      "sourceUrl": "https://paradigmai.com/",
+      "excerpt": "650 California Street, Suite 1800 San Francisco, CA 94108",
+      "corroboratingSource": "https://www.linkedin.com/company/tryparadigm/",
+      "coordinateSource": "https://data.sfgov.org/resource/3mea-di5p.json?address_number=650&street_name=CALIFORNIA&street_type=ST",
+      "coordinateMethod": "San Francisco Enterprise Addressing System base address point 446860",
+      "checkedAt": "2026-11-03"
+    },
+    {
+      "projectId": "proj_wEa5H3p7aKRH",
+      "company": "CTGT",
+      "kind": "published_business_address",
+      "address": "550 California Street, San Francisco, CA 94104, USA",
+      "cityId": "5391959",
+      "longitude": -122.40359499681928,
+      "latitude": 37.792873601607035,
+      "sourceUrl": "https://www.ctgt.ai/privacy-policy",
+      "excerpt": "CTGT, Inc. 550 California Street, San Francisco, CA 94104 United States",
+      "corroboratingSource": "https://www.inma.org/modules/event/2025MediaTechAIWeek/study-tour.html",
+      "coordinateSource": "https://data.sfgov.org/resource/3mea-di5p.json?address_number=550&street_name=CALIFORNIA&street_type=ST",
+      "coordinateMethod": "San Francisco Enterprise Addressing System base address point 280466",
+      "checkedAt": "2026-11-03"
+    },
+    {
+      "projectId": "proj_cArQadMH4Gkw",
+      "company": "Ultra",
+      "kind": "published_business_address",
+      "address": "68 34th Street, Suite C642, Brooklyn, NY 11232, USA",
+      "cityId": "5128581",
+      "longitude": -74.006418,
+      "latitude": 40.657125,
+      "sourceUrl": "https://ultra.tech/privacy-policy",
+      "excerpt": "Ultra Robotics Corp. 68 34th St, Suite C642 Brooklyn, NY 11232",
+      "corroboratingSource": "https://ultra.tech/careers",
+      "coordinateSource": "https://geosearch.planninglabs.nyc/v2/search?text=68%2034th%20Street%20Brooklyn&size=2",
+      "coordinateMethod": "NYC Planning PAD address point 757799, postal code 11232",
+      "checkedAt": "2026-11-03"
     }
   ]
 }
