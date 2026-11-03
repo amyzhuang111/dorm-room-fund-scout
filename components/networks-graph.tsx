@@ -112,7 +112,7 @@ function placeLabels(
   const maxLabels = viewW < 600 ? 6 : viewW < 900 ? 10 : 12;
   const candidates = ranked.filter((c) => c.rank <= maxLabels || c.id === hoverId);
   // Reserve the in-frame campus legend strip (taller on narrow viewports; keep Uncrowded off-canvas).
-  const legendH = viewW < 600 ? 44 : 28;
+  const legendH = viewW < 600 ? 40 : 46;
   const topPad = 8;
   const bottomLimit = viewH - legendH - 6;
   const placed: LabelBox[] = [];
@@ -357,6 +357,8 @@ export function NetworksGraph({
   const [labels, setLabels] = useState<LabelBox[]>([]);
   const [uncrowdedOnly, setUncrowdedOnly] = useState(false);
   const [highlightNet, setHighlightNet] = useState<string | null>(null);
+  const [insightsOpen, setInsightsOpen] = useState(false);
+  const [railInvestorsOpen, setRailInvestorsOpen] = useState(false);
   /** YC spokes start collapsed so the center is readable; click the hub to expand. */
   const [ycExpanded, setYcExpanded] = useState(false);
   const ycExpandedRef = useRef(false);
@@ -370,6 +372,7 @@ export function NetworksGraph({
   const reduceMotionRef = useRef(false);
   const graphRef = useRef<GraphPayload | null>(null);
   const hoverNetRef = useRef<string | null>(null);
+  const highlightNetRef = useRef<string | null>(null);
   const degreeRef = useRef<Map<string, number>>(new Map());
   const byIdRef = useRef<Map<string, GraphNode>>(new Map());
   const labelsSigRef = useRef("");
@@ -464,7 +467,6 @@ export function NetworksGraph({
     const colors = campusColorRef.current;
     return [...counts.entries()]
       .sort((a, b) => b[1].n - a[1].n)
-      .slice(0, 8)
       .map(([id, row]) => ({ id, label: row.label, color: colors.get(id) || "#9aa3b2" }));
   }, [graph]);
 
@@ -536,9 +538,12 @@ export function NetworksGraph({
       const cx = c.x + drift;
       const cy = c.y + Math.cos(t * 0.0005 + cluster.rank) * 1.0 * glow;
       if (glow > 0.05) {
+        const isYc = cluster.id === "yc" && !ycExpandedRef.current;
+        const core = isYc ? 0.035 : 0.07;
+        const mid = isYc ? 0.016 : 0.035;
         const grd = ctx.createRadialGradient(cx, cy, r * 0.2, cx, cy, r * (0.95 + glow * 0.2));
-        grd.addColorStop(0, `rgba(90,110,160,${0.07 * glow})`);
-        grd.addColorStop(0.6, `rgba(90,110,160,${0.035 * glow})`);
+        grd.addColorStop(0, `rgba(90,110,160,${core * glow})`);
+        grd.addColorStop(0.6, `rgba(90,110,160,${mid * glow})`);
         grd.addColorStop(1, "rgba(255,255,255,0)");
         ctx.fillStyle = grd;
         ctx.beginPath();
@@ -547,22 +552,45 @@ export function NetworksGraph({
       }
     }
 
-    // Thin translucent curved membership ties for every cluster; cofounders a touch stronger.
+    // Thin translucent curved membership ties; cap fan density; keep founder→company paths on hub drill.
     const byId = byIdRef.current;
     const maxSpan = Math.min(size.w, size.h) * (0.72 + glow * 0.35);
     const ycOpen = ycExpandedRef.current;
+    const focusNet = hoverNetRef.current || highlightNetRef.current;
+    const EDGE_CAP_PER_HUB = 14;
+    const hubEdgeShown = new Map<string, number>();
     ctx.lineCap = "round";
     for (const edge of g.edges) {
-      if (edge.type === "founder_company" && editorial > 0.55) continue;
-      // Keep most network_tie hairlines; thin randomly only when very zoomed out.
-      if (edge.type === "network_tie" && editorial > 0.85 && hash01(edge.source + edge.target) > 0.7) continue;
+      const touchesFocus =
+        !!focusNet &&
+        (edge.source === `net:${focusNet}` ||
+          edge.target === `net:${focusNet}` ||
+          byId.get(edge.source)?.parentNetworkId === focusNet ||
+          byId.get(edge.target)?.parentNetworkId === focusNet ||
+          byId.get(edge.source)?.networkId === focusNet ||
+          byId.get(edge.target)?.networkId === focusNet);
+      // Founder→company paths: hidden at rest; keep visible when the hub is drilled/hovered.
+      if (edge.type === "founder_company") {
+        if (!touchesFocus) continue;
+      } else if (edge.type === "network_tie" && editorial > 0.85 && hash01(edge.source + edge.target) > 0.7) {
+        continue;
+      }
       const touchesYc = edge.source === "net:yc" || edge.target === "net:yc";
       const isMembership = edge.type === "network_founder" || edge.type === "network_tie";
-      // Collapsed YC: keep a faint bundled sample (~3.5%) so the hub reads as dense without a hairball.
+      // Collapsed YC: lighter fade + tiny sample; hover/expand reveals the rest.
       let ycBundlePreview = false;
-      if (touchesYc && !ycOpen && isMembership) {
-        if (hash01(`yc-bundle:${edge.source}:${edge.target}`) > 0.035) continue;
+      if (touchesYc && !ycOpen && isMembership && !touchesFocus) {
+        if (hash01(`yc-bundle:${edge.source}:${edge.target}`) > 0.018) continue;
         ycBundlePreview = true;
+      }
+      // Cap visible membership edges per hub; overflow waits for hover on that hub.
+      if (isMembership && !touchesFocus && !ycBundlePreview) {
+        const hubId = edge.source.startsWith("net:") ? edge.source : edge.target.startsWith("net:") ? edge.target : null;
+        if (hubId) {
+          const n = hubEdgeShown.get(hubId) ?? 0;
+          if (n >= EDGE_CAP_PER_HUB) continue;
+          hubEdgeShown.set(hubId, n + 1);
+        }
       }
       const a = byId.get(edge.source);
       const b = byId.get(edge.target);
@@ -602,9 +630,10 @@ export function NetworksGraph({
       else if (edge.type === "network_founder") alpha = 0.22 * editorial + 0.28 * glow;
       else if (edge.type === "network_tie") alpha = 0.14 * editorial + 0.18 * glow;
       else alpha = 0.1;
-      if (ycBundlePreview) alpha = Math.min(alpha, 0.09) * 0.55;
+      if (ycBundlePreview) alpha = Math.min(alpha, 0.05) * 0.4;
       if (span > maxSpan * 0.85) alpha *= 0.6;
-      ctx.lineWidth = ycBundlePreview ? 0.45 : edge.type === "cofounder" ? 0.9 : 0.65;
+      if (edge.type === "founder_company" && touchesFocus) alpha = Math.max(alpha, 0.55);
+      ctx.lineWidth = edge.type === "founder_company" && touchesFocus ? 1.35 : ycBundlePreview ? 0.35 : edge.type === "cofounder" ? 0.9 : 0.65;
       ctx.strokeStyle = hexAlpha(ink, Math.min(0.5, alpha));
       ctx.stroke();
     }
@@ -613,7 +642,7 @@ export function NetworksGraph({
     const members = g.nodes.filter((n) => n.type === "company" || n.type === "founder");
     for (const node of members) {
       // Collapsed YC: keep a light sample of the cloud so the hub still reads as dense.
-      if (!ycOpen && node.parentNetworkId === "yc" && hash01(node.id) > 0.22) continue;
+      if (!ycOpen && node.parentNetworkId === "yc" && !(focusNet === "yc") && hash01(node.id) > 0.12) continue;
       let x = node.x;
       let y = node.y;
       if (!reduceMotionRef.current && glow > 0.05) {
@@ -687,13 +716,13 @@ export function NetworksGraph({
 
   useEffect(() => {
     uncrowdedOnlyRef.current = uncrowdedOnly;
+    highlightNetRef.current = highlightNet;
     if (highlightNet) {
       hoverNetRef.current = highlightNet;
-      viewDirtyRef.current = true;
     }
     viewDirtyRef.current = true;
     if (reduceMotionRef.current) draw();
-  }, [uncrowdedOnly, draw]);
+  }, [uncrowdedOnly, highlightNet, draw]);
 
   const hitTest = useCallback(
     (sx: number, sy: number): GraphNode | GraphCluster | null => {
@@ -995,56 +1024,93 @@ export function NetworksGraph({
     </div>
   );
 
-  const renderInvestorList = () => (
-    <div data-networks-investor-rail="">
-      <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Investor hubs</div>
-      {investorHubs.length === 0 ? (
-        <p className="text-[11px] text-[color:var(--fg-3)]">No investor hubs on file.</p>
-      ) : (
-        <ol className="divide-y divide-[color:var(--line)] rounded border border-[color:var(--line)]">
-          {investorHubs.slice(0, 8).map((row, index) => {
-            const active = highlightNet === row.id;
-            return (
-              <li key={row.id}>
+  const railInvestorLimit = 6;
+  const renderInvestorList = () => {
+    const rows = railInvestorsOpen ? investorHubs : investorHubs.slice(0, railInvestorLimit);
+    return (
+      <div data-networks-investor-rail="">
+        <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Investor hubs</div>
+        {investorHubs.length === 0 ? (
+          <p className="text-[11px] text-[color:var(--fg-3)]">No investor hubs on file.</p>
+        ) : (
+          <ol className="divide-y divide-[color:var(--line)] rounded border border-[color:var(--line)]">
+            {rows.map((row, index) => {
+              const active = highlightNet === row.id;
+              return (
+                <li key={row.id}>
+                  <button
+                    type="button"
+                    className={`flex w-full items-center gap-2 px-2 py-1.5 text-left text-[11px] ${active ? "bg-[color:var(--cobalt-haze)]" : "hover:bg-[#f7f8fc]"}`}
+                    onClick={() => pinHub(row.id)}
+                  >
+                    <span className="w-4 shrink-0 tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="min-w-0 flex-1 truncate font-medium text-[color:var(--fg)]">{row.label}</span>
+                    <span className="shrink-0 tabular-nums text-[color:var(--fg-2)]">
+                      {row.founderCount.toLocaleString("en-US")}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+            {investorHubs.length > railInvestorLimit ? (
+              <li>
                 <button
                   type="button"
-                  className={`flex w-full items-center gap-2 px-2 py-1.5 text-left text-[11px] ${active ? "bg-[color:var(--cobalt-haze)]" : "hover:bg-[#f7f8fc]"}`}
-                  onClick={() => pinHub(row.id)}
+                  className="w-full px-2 py-1.5 text-left text-[11px] font-medium text-[color:var(--cobalt)]"
+                  data-networks-investors-more=""
+                  aria-expanded={railInvestorsOpen}
+                  onClick={() => setRailInvestorsOpen((open) => !open)}
                 >
-                  <span className="w-4 shrink-0 tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
-                  <span className="min-w-0 flex-1 truncate font-medium text-[color:var(--fg)]">{row.label}</span>
-                  <span className="shrink-0 tabular-nums text-[color:var(--fg-2)]">
-                    {row.founderCount.toLocaleString("en-US")}
-                  </span>
+                  {railInvestorsOpen
+                    ? "Show fewer"
+                    : `More (${(investorHubs.length - railInvestorLimit).toLocaleString("en-US")})`}
                 </button>
               </li>
-            );
-          })}
-        </ol>
-      )}
-    </div>
-  );
+            ) : null}
+          </ol>
+        )}
+      </div>
+    );
+  };
 
   const renderInsights = () =>
     insightTexts.length ? (
-      <div data-networks-insights="" className="space-y-1.5">
-        <div className="text-[10px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Insights</div>
-        {insightTexts.map((box) => (
+      <div data-networks-insights="" className="space-y-1">
+        <button
+          type="button"
+          className="flex w-full items-center justify-between gap-2 text-left"
+          data-networks-insights-toggle=""
+          aria-expanded={insightsOpen}
+          onClick={() => setInsightsOpen((open) => !open)}
+        >
+          <span className="text-[10px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Insights</span>
+          <span className="text-[10px] font-medium text-[color:var(--cobalt)]">{insightsOpen ? "Hide" : "Show"}</span>
+        </button>
+        {insightsOpen ? (
+          insightTexts.map((box) => (
+            <div
+              key={box.id}
+              data-canvas-callout={box.id}
+              className="rounded border border-[color:var(--line)] bg-white px-2 py-1.5 text-[11px] leading-snug text-[color:var(--fg-2)]"
+            >
+              {box.text}
+            </div>
+          ))
+        ) : (
           <div
-            key={box.id}
-            data-canvas-callout={box.id}
+            data-canvas-callout={insightTexts[0].id}
             className="rounded border border-[color:var(--line)] bg-white px-2 py-1.5 text-[11px] leading-snug text-[color:var(--fg-2)]"
           >
-            {box.text}
+            {insightTexts[0].text}
           </div>
-        ))}
+        )}
       </div>
     ) : null;
 
   return (
     <div className="w-full" data-networks-desk="">
       {/* n3 right-rail desk: graph + side chrome in the first viewport. */}
-      <div className="md:grid md:grid-cols-[minmax(0,1fr)_17.5rem] md:items-stretch">
+      <div className="md:grid md:grid-cols-[minmax(0,1fr)_14rem] md:items-stretch">
         <div
           ref={wrapRef}
           className="relative h-[300px] w-full touch-manipulation overflow-hidden bg-white sm:h-[420px] md:h-[560px]"
@@ -1105,15 +1171,22 @@ export function NetworksGraph({
           {/* In-frame campus legend only — Uncrowded lives in the rail / mobile chrome below the map. */}
           <div
             data-networks-legend-frame=""
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex flex-wrap items-center gap-x-2 gap-y-0.5 bg-gradient-to-t from-white via-white/95 to-transparent px-2 pb-1.5 pt-4 text-[10px] text-[color:var(--fg-2)]"
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex flex-wrap items-center gap-x-1.5 gap-y-0.5 bg-gradient-to-t from-white via-white/95 to-transparent px-2 pb-1.5 pt-5 text-[9px] text-[color:var(--fg-2)]"
           >
-            {campusLegend.slice(0, 8).map((item) => (
-              <span key={item.id} className="inline-flex items-center gap-1">
+            {campusLegend.map((item) => (
+              <span key={item.id} className="inline-flex items-center gap-1" data-legend-swatch={item.color} data-legend-campus={item.id}>
                 <span className="inline-block h-2 w-2 rounded-full" style={{ background: item.color }} />
-                <span className="hidden sm:inline">{item.label}</span>
-                <span className="sm:hidden">{item.label.split(" ")[0]}</span>
+                <span className="hidden max-w-[4.5rem] truncate sm:inline">{item.label}</span>
               </span>
             ))}
+            <span className="inline-flex items-center gap-1" data-legend-swatch="#94a3b8" data-legend-kind="company">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#94a3b8]" />
+              <span className="hidden sm:inline">Company</span>
+            </span>
+            <span className="inline-flex items-center gap-1" data-legend-swatch="#4b5563" data-legend-kind="hub">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#4b5563]" />
+              <span className="hidden sm:inline">Hub</span>
+            </span>
             <span className="ml-auto hidden text-[9px] text-[color:var(--fg-3)] sm:inline">
               {!ycExpanded ? "YC collapsed · click hub to expand" : "YC expanded · click hub to collapse"}
             </span>
@@ -1132,12 +1205,9 @@ export function NetworksGraph({
         </aside>
       </div>
 
-      {/* Mobile: featured + insights + ranked investors below the graph; Uncrowded off the map surface. */}
-      <div className="space-y-2 border-t border-[color:var(--line)] px-3 py-2 md:hidden" data-networks-mobile-chrome="">
-        {renderDetailCard(true)}
-        {renderInsights()}
-        {renderInvestorList()}
-        <div className="pt-1">{chromeControls}</div>
+      {/* Mobile: Uncrowded control only under the graph — hubs/investors follow in the page fold. */}
+      <div className="border-t border-[color:var(--line)] px-3 py-1.5 md:hidden" data-networks-mobile-chrome="">
+        {chromeControls}
       </div>
     </div>
   );

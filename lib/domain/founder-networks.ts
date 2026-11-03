@@ -894,6 +894,7 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
     totals: {
       networks: summaries.length,
       founderLinks: links.length,
+      companyTotal: companiesLinked,
       companiesLinked,
       foundersLinked,
       byKind,

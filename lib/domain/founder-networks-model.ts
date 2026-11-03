@@ -150,6 +150,8 @@ export interface FounderNetworksPage {
   totals: {
     networks: number;
     founderLinks: number;
+    /** Shared company total for hero + stats strip (same value as companiesLinked). */
+    companyTotal: number;
     companiesLinked: number;
     foundersLinked: number;
     byKind: Record<NetworkKind, number>;

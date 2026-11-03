@@ -53,6 +53,7 @@ export function NetworksApp() {
   const [matrixOpen, setMatrixOpen] = useState(false);
   const [concentrationOpen, setConcentrationOpen] = useState(true);
   const [mobileHubsOpen, setMobileHubsOpen] = useState(false);
+  const [mobileInvestorsOpen, setMobileInvestorsOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -110,11 +111,13 @@ export function NetworksApp() {
           <h1 className="text-xl font-semibold tracking-tight text-[color:var(--fg)] sm:text-2xl">Campus founder networks</h1>
           <p className="max-w-3xl text-[13px] leading-snug text-[color:var(--fg-2)] sm:text-sm sm:leading-normal">
             A map of the programs and funds that already reach student founders across{" "}
-            {data.corpusCompanies.toLocaleString("en-US")} companies. Open a hub to see who is on that path.
+            <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> companies. Open a hub to see who is on that path.
           </p>
-          <p className="text-[11px] text-[color:var(--fg-3)] sm:text-xs">
-            {data.totals.founderLinks.toLocaleString("en-US")} founder links · {data.totals.networks.toLocaleString("en-US")} networks ·{" "}
-            {data.totals.companiesLinked.toLocaleString("en-US")} companies · {data.totals.foundersLinked.toLocaleString("en-US")} founders
+          <p className="text-[11px] text-[color:var(--fg-3)] sm:text-xs" data-networks-stats="">
+            <span data-networks-count="founderLinks">{data.totals.founderLinks.toLocaleString("en-US")}</span> founder links ·{" "}
+            <span data-networks-count="networks">{data.totals.networks.toLocaleString("en-US")}</span> networks ·{" "}
+            <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> companies ·{" "}
+            <span data-networks-count="founders">{data.totals.foundersLinked.toLocaleString("en-US")}</span> founders
           </p>
         </div>
       </header>
@@ -131,27 +134,6 @@ export function NetworksApp() {
             <p className="mt-0.5 text-[11px] text-[color:var(--fg-2)] sm:hidden">
               Campus colored founders and program hubs.
             </p>
-            {/* Mobile fold: scrollable top-10 hubs with counts above the compact graph (n3 structure). */}
-            <ol
-              className="mt-2 max-h-[12.5rem] divide-y divide-[color:var(--line)] overflow-y-auto rounded border border-[color:var(--line)] md:hidden"
-              data-networks-mobile-top-fold=""
-            >
-              {data.topNetworks.slice(0, 10).map((row, index) => (
-                <li key={`mobile-top-${row.id}`}>
-                  <button
-                    type="button"
-                    className="flex w-full items-center gap-2 px-2 py-1 text-left"
-                    onClick={() => setActiveNetwork(row.id)}
-                  >
-                    <span className="w-4 shrink-0 text-[10px] tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
-                    <span className="min-w-0 flex-1 truncate text-[12px] font-medium text-[color:var(--fg)]">{row.label}</span>
-                    <span className="shrink-0 text-[11px] tabular-nums text-[color:var(--fg-2)]">
-                      {row.founderCount.toLocaleString("en-US")}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ol>
           </div>
           <NetworksGraph
             investorHubs={data.investorHubs}
@@ -160,6 +142,80 @@ export function NetworksApp() {
               setActiveNetwork(id);
             }}
           />
+          {/* Mobile fold-375: graph first, then top 4 hubs + More, then investor list (no truncation). */}
+          <div className="space-y-3 border-t border-[color:var(--line)] px-3 py-2 md:hidden" data-networks-mobile-fold="">
+            <ol className="divide-y divide-[color:var(--line)] rounded border border-[color:var(--line)]" data-networks-mobile-top="">
+              {data.topNetworks.map((row, index) => {
+                const selected = row.id === activeNetwork;
+                const mobileHide = index >= 4 && !mobileHubsOpen ? "hidden" : "";
+                return (
+                  <li key={`fold-hub-${row.id}`} className={mobileHide}>
+                    <button
+                      type="button"
+                      className={`flex w-full items-center gap-2 px-2.5 py-1.5 text-left ${selected ? "bg-[color:var(--cobalt-haze)]" : "hover:bg-[#f7f8fc]"}`}
+                      onClick={() => setActiveNetwork(row.id)}
+                      aria-pressed={selected}
+                    >
+                      <span className="w-5 shrink-0 text-[10px] tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
+                      <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-[color:var(--fg)]">{row.label}</span>
+                      <span className="shrink-0 text-[12px] tabular-nums text-[color:var(--fg)]">
+                        {row.founderCount.toLocaleString("en-US")}
+                        <span className="text-[color:var(--fg-3)]"> founders</span>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+              {data.topNetworks.length > 4 ? (
+                <li>
+                  <button
+                    type="button"
+                    className="w-full px-2.5 py-2 text-left text-[12px] font-medium text-[color:var(--cobalt)]"
+                    data-networks-mobile-more=""
+                    aria-expanded={mobileHubsOpen}
+                    onClick={() => setMobileHubsOpen((open) => !open)}
+                  >
+                    {mobileHubsOpen
+                      ? "Show fewer hubs"
+                      : `More hubs (${(data.topNetworks.length - 4).toLocaleString("en-US")})`}
+                  </button>
+                </li>
+              ) : null}
+            </ol>
+            <div data-networks-mobile-investors="">
+              <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Investor hubs</div>
+              <ol className="divide-y divide-[color:var(--line)] rounded border border-[color:var(--line)]">
+                {(mobileInvestorsOpen ? data.investorHubs : data.investorHubs.slice(0, 6)).map((row, index) => (
+                  <li key={`fold-inv-${row.id}`}>
+                    <button
+                      type="button"
+                      className="flex w-full items-center gap-2 px-2.5 py-1.5 text-left text-[12px] hover:bg-[#f7f8fc]"
+                      onClick={() => setActiveNetwork(row.id)}
+                    >
+                      <span className="w-5 shrink-0 tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
+                      <span className="min-w-0 flex-1 truncate font-medium text-[color:var(--fg)]">{row.label}</span>
+                      <span className="shrink-0 tabular-nums text-[color:var(--fg-2)]">{row.founderCount.toLocaleString("en-US")}</span>
+                    </button>
+                  </li>
+                ))}
+                {data.investorHubs.length > 6 ? (
+                  <li>
+                    <button
+                      type="button"
+                      className="w-full px-2.5 py-2 text-left text-[12px] font-medium text-[color:var(--cobalt)]"
+                      data-networks-mobile-investors-more=""
+                      aria-expanded={mobileInvestorsOpen}
+                      onClick={() => setMobileInvestorsOpen((open) => !open)}
+                    >
+                      {mobileInvestorsOpen
+                        ? "Show fewer investors"
+                        : `More investors (${(data.investorHubs.length - 6).toLocaleString("en-US")})`}
+                    </button>
+                  </li>
+                ) : null}
+              </ol>
+            </div>
+          </div>
         </section>
 
         <section aria-labelledby="top-networks-heading" className="order-2 md:order-2">
@@ -171,8 +227,8 @@ export function NetworksApp() {
           </div>
           <div className="grid gap-3 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-4">
             <ol
-              className="divide-y divide-[color:var(--line)] rounded-lg border border-[color:var(--line)] bg-white"
-              data-networks-mobile-top=""
+              className="hidden divide-y divide-[color:var(--line)] rounded-lg border border-[color:var(--line)] bg-white sm:block"
+              data-networks-desktop-top=""
             >
               {data.topNetworks.map((row, index) => {
                 const selected = row.id === activeNetwork;
@@ -355,7 +411,7 @@ export function NetworksApp() {
           ) : null}
         </section>
 
-        <section aria-labelledby="investor-hubs-heading" className="order-5 rounded-lg border border-[color:var(--line)] bg-white md:hidden">
+        <section aria-labelledby="investor-hubs-heading" className="order-5 hidden rounded-lg border border-[color:var(--line)] bg-white">
           <div className="px-4 py-3">
             <h2 id="investor-hubs-heading" className="text-[15px] font-semibold tracking-tight">
               Investor hubs

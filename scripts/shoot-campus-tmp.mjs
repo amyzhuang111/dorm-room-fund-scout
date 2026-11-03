@@ -78,6 +78,15 @@ async function openBrowseFilters(page) {
   }
 }
 
+import { execSync } from "child_process";
+const gitHead = (() => {
+  try {
+    return (process.env.GIT_HEAD || execSync("git rev-parse HEAD", { encoding: "utf8" }).trim());
+  } catch {
+    return process.env.GIT_HEAD || null;
+  }
+})();
+
 fs.writeFileSync(
   `${OUT}/META.json`,
   JSON.stringify(
@@ -85,12 +94,15 @@ fs.writeFileSync(
       shotAt: new Date().toISOString(),
       base: BASE,
       out: OUT,
-      gitHead: process.env.GIT_HEAD || null,
+      gitHead,
       buildId: process.env.BUILD_ID || null,
+      deviceScaleFactor375: 2,
+      controlFraming: { scrollY: 0, viewport375: { width: 375, height: 812, deviceScaleFactor: 2 } },
       routes: {
         home: "/",
         companies: "/companies",
         signals: "/companies?feed=leaderboard",
+        networks: "/networks",
       },
     },
     null,
@@ -243,11 +255,18 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(800);
   await page.evaluate(() => window.scrollTo(0, 0));
   await shot(page, "signals-1440");
+
+  await page.goto(`${BASE}/networks`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.waitForSelector("[data-networks-graph]", { timeout: 30000 });
+  await page.waitForTimeout(1200);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(200);
+  await shot(page, "networks-1440");
   await page.close();
 }
 
 {
-  const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
+  const page = await browser.newPage({ viewport: { width: 375, height: 812 }, deviceScaleFactor: 2 });
   await page.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 90000 });
   await waitDirectory(page);
   await waitFoundersReady(page);
@@ -406,6 +425,13 @@ const browser = await chromium.launch({ headless: true });
   await page.waitForTimeout(800);
   await page.evaluate(() => window.scrollTo(0, 0));
   await shot(page, "signals-375");
+
+  await page.goto(`${BASE}/networks`, { waitUntil: "networkidle", timeout: 90000 });
+  await page.waitForSelector("[data-networks-graph]", { timeout: 30000 });
+  await page.waitForTimeout(1200);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(200);
+  await shot(page, "networks-375");
   await page.close();
 }
 
