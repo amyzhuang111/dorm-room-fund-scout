@@ -32,6 +32,8 @@ interface FounderRow {
   campusId: string | null;
   affiliationRole: string;
   founderStatus: "founder" | "potential";
+  /** Verified company role. Competition rosters name team members, not necessarily cofounders. */
+  companyRole?: "founder" | "team_member";
   potentialSignal: string | null;
   verificationStatus: "confirmed" | "partial" | "unverified";
   verificationNote: string;
@@ -482,17 +484,25 @@ function main() {
     );
     if (row.campusId && claimId && ensureAffiliation(db, id, row.campusId, row.affiliationRole, claimId)) linked++;
     applyEnrollment(db, id, row.enrollment, sourceUrl);
-    if (companyId && claimId && !db.prepare(`SELECT id FROM person_project_roles WHERE person_id=? AND project_id=?`).get(id, companyId)) {
-      db.prepare(`INSERT INTO person_project_roles (id, person_id, project_id, role, claim_id) VALUES (?, ?, ?, 'founder', ?)`).run(
-        newId("ppr"),
-        id,
-        companyId,
-        claimId
-      );
-      db.prepare(
-        `INSERT INTO relationships (id, source_entity_type, source_entity_id, target_entity_type, target_entity_id, relationship_type, evidence_claim_ids_json, verification_state)
-         VALUES (?, 'person', ?, 'project', ?, 'founded', ?, 'affiliation_only')`
-      ).run(newId("rel"), id, companyId, JSON.stringify([claimId]));
+    if (companyId && claimId) {
+      const role = row.companyRole ?? "founder";
+      const existingRole = db.prepare(`SELECT id, role FROM person_project_roles WHERE person_id=? AND project_id=?`).get(id, companyId) as
+        | { id: string; role: string }
+        | undefined;
+      if (!existingRole) {
+        db.prepare(`INSERT INTO person_project_roles (id, person_id, project_id, role, claim_id) VALUES (?, ?, ?, ?, ?)`).run(
+          newId("ppr"), id, companyId, role, claimId
+        );
+      } else if (existingRole.role === "team_member" && role === "founder") {
+        db.prepare(`UPDATE person_project_roles SET role='founder', claim_id=? WHERE id=?`).run(claimId, existingRole.id);
+      }
+      const relationshipType = role === "founder" ? "founded" : "contributed_to";
+      if (!db.prepare(`SELECT id FROM relationships WHERE source_entity_type='person' AND source_entity_id=? AND target_entity_type='project' AND target_entity_id=? AND relationship_type=?`).get(id, companyId, relationshipType)) {
+        db.prepare(
+          `INSERT INTO relationships (id, source_entity_type, source_entity_id, target_entity_type, target_entity_id, relationship_type, evidence_claim_ids_json, verification_state)
+           VALUES (?, 'person', ?, 'project', ?, ?, ?, 'affiliation_only')`
+        ).run(newId("rel"), id, companyId, relationshipType, JSON.stringify([claimId]));
+      }
     }
   };
 
