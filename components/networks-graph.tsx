@@ -116,7 +116,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
   const [hover, setHover] = useState<HoverState | null>(null);
   const [selectedHub, setSelectedHub] = useState<string | null>(null);
   const [legendOtherOpen, setLegendOtherOpen] = useState(false);
-  const [zoomScale, setZoomScale] = useState(1);
+  const [zoomScale, setZoomScale] = useState(NETWORK_ZOOM_PRESETS[1].scale);
   const yearMax = cohortYearNow();
   const yearMin = YEAR_MIN_DEFAULT;
   const [scrubYear, setScrubYear] = useState(yearMax);
@@ -124,7 +124,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
   const scrubRef = useRef(yearMax);
   const playRef = useRef(false);
   const playAccRef = useRef(0);
-  const camRef = useRef({ x: 0, y: 0, scale: 1 });
+  const camRef = useRef({ x: 0, y: 0, scale: NETWORK_ZOOM_PRESETS[1].scale });
   const dragRef = useRef<{ x: number; y: number; cx: number; cy: number } | null>(null);
   const hoverRef = useRef<HoverState | null>(null);
   const selectedRef = useRef<string | null>(null);
@@ -205,6 +205,7 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     };
     w.__NETWORKS_SET_SCALE__ = (scale: number) => {
       camRef.current.scale = Math.max(0.7, Math.min(5.5, scale));
+      setZoomScale(camRef.current.scale);
       velRef.current.vScale = 0;
       bump((n) => n + 1);
     };
@@ -1032,8 +1033,8 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
     <div className="w-full overflow-visible" data-networks-desk="">
       <div
         ref={wrapRef}
-        className="relative w-screen max-w-none touch-manipulation overflow-hidden bg-[#fbfaf7] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] max-md:!h-[80vh]"
-        style={{ height: "85vh" }}
+        className="relative w-screen max-w-none touch-manipulation overflow-hidden bg-[#fbfaf7] left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] max-md:!h-[64vh]"
+        style={{ height: "min(76vh, 710px)" }}
         data-networks-graph=""
         data-networks-fade="0"
         data-networks-zoom="0"
@@ -1048,42 +1049,43 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
           className="absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing"
           aria-label="Campus founder networks map"
         />
-
-        {/* Margin callouts over white edges; fade out as mid-zoom blooms */}
-        <div
-          className="pointer-events-none absolute inset-0 z-[1] hidden md:block transition-opacity duration-300"
-          aria-hidden="true"
-          style={{ opacity: Math.max(0, 1 - smoothstep((zoomScale - 1.25) / 0.7)) }}
-        >
-          {poster.callouts.map((c, i) => {
-            const a = worldToScreen(c.ax, c.ay);
-            const left = c.side === "left";
-            const lx = left ? 16 : size.w - 236;
-            const ly = clamp((c.ly / poster.h) * size.h, 24, size.h - 100);
-            const tipX = left ? lx + 210 : lx;
-            return (
-              <div key={`callout-${i}`}>
-                <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible">
-                  <path
-                    d={`M ${a.x} ${a.y} L ${tipX} ${ly + 12}`}
-                    stroke="rgba(71,85,105,0.4)"
-                    strokeWidth="0.6"
-                    fill="none"
-                    data-canvas-callout-leader=""
-                  />
-                </svg>
-                <div
-                  data-canvas-callout=""
-                  className="absolute max-w-[220px] text-[11px] font-light leading-snug tracking-wide text-[color:var(--fg-2)]"
-                  style={{ left: lx, top: ly }}
-                >
-                  {c.text}
-                </div>
-              </div>
-            );
-          })}
+        <div className="absolute right-3 top-3 z-[6] flex items-center gap-1 rounded-lg border border-[color:var(--line)] bg-white/95 p-1 shadow-md"
+          onPointerDown={(event) => event.stopPropagation()} onPointerMove={(event) => event.stopPropagation()}
+          onPointerUp={(event) => event.stopPropagation()} onWheel={(event) => event.stopPropagation()}
+          role="group" aria-label="Map zoom controls" data-network-in-map-zoom="">
+          <button type="button" aria-label="Zoom out network" title="Zoom out" data-network-zoom-out=""
+            className="grid h-10 w-10 place-items-center rounded-md text-xl font-bold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
+            onClick={() => {
+              camRef.current.scale = Math.max(0.7, camRef.current.scale / 1.35);
+              velRef.current.vScale = 0;
+              setZoomScale(camRef.current.scale);
+              bump((value) => value + 1);
+            }}>−</button>
+          <button type="button" aria-label="Zoom in network" title="Zoom in" data-network-zoom-in=""
+            className="grid h-10 w-10 place-items-center rounded-md text-xl font-bold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
+            onClick={() => {
+              camRef.current.scale = Math.min(5.5, camRef.current.scale * 1.35);
+              velRef.current.vScale = 0;
+              setZoomScale(camRef.current.scale);
+              bump((value) => value + 1);
+            }}>+</button>
+          <button type="button" aria-label="Fit all network clusters" title="Fit whole ecosystem" data-network-zoom-fit=""
+            className="h-10 rounded-md px-3 text-xs font-semibold text-[color:var(--cobalt)] hover:bg-[#ecf0fc] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
+            onClick={() => {
+              camRef.current = { x: 0, y: 0, scale: NETWORK_ZOOM_PRESETS[1].scale };
+              velRef.current = { vx: 0, vy: 0, vScale: 0 };
+              dragRef.current = null;
+              setSelectedHub(null);
+              setZoomScale(NETWORK_ZOOM_PRESETS[1].scale);
+              bump((value) => value + 1);
+            }}>Fit</button>
         </div>
+        <p className="pointer-events-none absolute left-3 top-3 z-[5] max-w-[calc(100%-13rem)] rounded-md bg-white/90 px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm" data-network-map-hint="">
+          Start with a cluster · drag to move · zoom for founders
+        </p>
 
+        {/* Large editorial callouts removed: they covered the map and drew
+             diagonal lines across empty space without helping navigation. */}
         {/* Campus + hub labels (zoomed-out); fade as deep cards take over */}
         <div
           className="pointer-events-none absolute inset-0 z-[1] transition-opacity duration-300"
@@ -1321,13 +1323,12 @@ const NetworksGraph3DLazy = dynamic(
 export function NetworksGraph(props: Props) {
   const [mode, setMode] = useState<"pending" | "3d" | "2d">("pending");
   const [supports3D, setSupports3D] = useState(false);
-  const [zoomPreset, setZoomPreset] = useState<NetworkZoomPreset>(NETWORK_ZOOM_PRESETS[0]);
+  const [zoomPreset, setZoomPreset] = useState<NetworkZoomPreset>(NETWORK_ZOOM_PRESETS[1]);
   const networkRootRef = useRef<HTMLDivElement>(null);
   const fallback2D = useCallback(() => setMode("2d"), []);
 
   useEffect(() => {
     const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
-    const mobile = window.matchMedia?.("(max-width: 639px)")?.matches ?? false;
     let gl = false;
     try {
       const canvas = document.createElement("canvas");
@@ -1336,9 +1337,10 @@ export function NetworksGraph(props: Props) {
       gl = false;
     }
     setSupports3D(gl && !reduced);
-    // On 375px phones, start with a lightweight readable 2D view.
-    // The user can still enable 3D when WebGL and motion settings permit.
-    setMode(reduced || !gl || mobile ? "2d" : "3d");
+    // Use a reliably visible, map-like overview everywhere. The old default
+    // WebGL scene can show only off-screen marginalia while the nodes vanish;
+    // 3D remains an explicit opt-in for people who want to orbit the graph.
+    setMode("2d");
   }, []);
 
   useEffect(() => {
