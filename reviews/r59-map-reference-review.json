@@ -1,0 +1,311 @@
+{
+  "checkedAt": "2026-11-03",
+  "scope": "Student founders and campus-linked companies. Existing campus associations are retained from Campus Scout, not inferred from map listings or student-oriented products.",
+  "publication": "No new companies or reference-site coordinates imported. Six separately reviewed, company-published addresses matched to municipal address points are included in the accompanying release.",
+  "sources": [
+    {
+      "name": "U.S. Frontier Tech Map",
+      "url": "https://usfrontier.tech/",
+      "use": "Ecosystem and university context. Not sufficient evidence of student founder status or a street address.",
+      "existingCampusLeads": [],
+      "reviewed": true
+    },
+    {
+      "name": "World Startup Map",
+      "url": "https://worldstartupmap.com/",
+      "use": "Globe/list interaction reference. The site explicitly states pins are city-level; do not import as precise offices.",
+      "existingCampusLeads": [],
+      "reviewed": true
+    },
+    {
+      "name": "RemJobs",
+      "url": "https://www.remjobs.works/",
+      "use": "Company, founder and LinkedIn discovery. Exclude contact emails and independently establish campus and office evidence.",
+      "fetchNote": "HTTP 403",
+      "reviewedVia": "Public web search results"
+    },
+    {
+      "name": "SoHo Valley",
+      "url": "https://www.pampam.city/soho-valley-Pd82Tp8aq5EfxTP3yJhu",
+      "use": "New York company/address leads and linked list/map design. Community submissions need primary-source verification.",
+      "existingCampusLeads": [
+        {
+          "id": "proj_ay-QrR9vA7ft",
+          "name": "Rove",
+          "school": "Penn",
+          "referenceLink": "https://www.pampam.city/soho-valley-Pd82Tp8aq5EfxTP3yJhu/zsfEue0D72Nh0wUn9yb7",
+          "status": "Name match only; identity and current office still need verification"
+        },
+        {
+          "id": "proj_u14m2WT2PEIA",
+          "name": "Phia",
+          "school": "Stanford",
+          "referenceLink": "https://www.pampam.city/soho-valley-Pd82Tp8aq5EfxTP3yJhu/CsWDYGicJlAtjhxhofIk",
+          "status": "Name match only; identity and current office still need verification"
+        },
+        {
+          "id": "proj_dHeX20FIJmZQ",
+          "name": "Tandem",
+          "school": "Stanford",
+          "referenceLink": "https://www.pampam.city/soho-valley-Pd82Tp8aq5EfxTP3yJhu/Wej2RbuPUqaVC46kSGg3",
+          "status": "Name match only; identity and current office still need verification"
+        },
+        {
+          "id": "proj_pub_0c5fb215ebe500c2fb54",
+          "name": "Radar",
+          "school": "Boston College",
+          "referenceLink": "https://www.pampam.city/soho-valley-Pd82Tp8aq5EfxTP3yJhu/asHqIxtaG7MXtHGBF7Ml",
+          "status": "Name match only; identity and current office still need verification"
+        },
+        {
+          "id": "proj_GjrFxToPH-cI",
+          "name": "Cursor",
+          "school": "MIT",
+          "referenceLink": "https://www.pampam.city/soho-valley-Pd82Tp8aq5EfxTP3yJhu/hdGOODCc4gF0BNKzIDpJ",
+          "status": "Name match only; identity and current office still need verification"
+        },
+        {
+          "id": "proj_p_NbFOG4CuQD",
+          "name": "FINNY AI",
+          "school": "Stanford",
+          "referenceLink": "https://www.pampam.city/soho-valley-Pd82Tp8aq5EfxTP3yJhu/rbvMzpB9p9B4Ef5UiqCm",
+          "status": "Name match only; identity and current office still need verification"
+        },
+        {
+          "id": "proj_VA9__1ClKrxR",
+          "name": "Flip",
+          "school": "Berkeley",
+          "referenceLink": "https://www.pampam.city/soho-valley-Pd82Tp8aq5EfxTP3yJhu/wSYXgGG4Bu9isywUweb2",
+          "status": "Name match only; identity and current office still need verification"
+        },
+        {
+          "id": "proj_r1UAoTRQ_ijd",
+          "name": "Saturn",
+          "school": "Penn",
+          "referenceLink": "https://www.pampam.city/soho-valley-Pd82Tp8aq5EfxTP3yJhu/f4NDQgaySorXsgrYnPSp",
+          "status": "Do not join by name: the Campus Scout record is London-based, while this reference is New York. Likely a different company; not imported."
+        },
+        {
+          "id": "proj_wCgZErzVgXt9",
+          "name": "Vantage",
+          "school": "Rice",
+          "referenceLink": "https://www.pampam.city/soho-valley-Pd82Tp8aq5EfxTP3yJhu/93gXU8qSOrWW7hlVTkvj",
+          "status": "Name match only; identity and current office still need verification"
+        },
+        {
+          "id": "proj_S8HWBqQM6pET",
+          "name": "Cedar",
+          "school": "Georgia Tech",
+          "referenceLink": "https://www.pampam.city/soho-valley-Pd82Tp8aq5EfxTP3yJhu/5daU9TNjFV21rT59w717",
+          "status": "Name match only; identity and current office still need verification"
+        },
+        {
+          "id": "proj_eW3zLVCeQxKe",
+          "name": "Tennr",
+          "school": "Stanford",
+          "referenceLink": "https://www.pampam.city/soho-valley-Pd82Tp8aq5EfxTP3yJhu/tEeJBtzGuEhIWpkcKEx8",
+          "status": "Name match only; identity and current office still need verification"
+        },
+        {
+          "id": "proj_C2fi6RWnYjOA",
+          "name": "Cosmos",
+          "school": "Penn",
+          "referenceLink": "https://www.pampam.city/soho-valley-Pd82Tp8aq5EfxTP3yJhu/DUc1EYg4ETYEv6Wny5mB",
+          "status": "Name match only; identity and current office still need verification"
+        }
+      ],
+      "reviewed": true
+    },
+    {
+      "name": "London Startup Map",
+      "url": "https://londonstartupmap.com/",
+      "use": "London office leads and neighbourhood navigation. Require campus evidence and current company address.",
+      "fetchNote": "HTTP 403",
+      "reviewedVia": "Public web search results",
+      "existingCampusLeads": [
+        {
+          "id": "proj_CsYKzeqywL22",
+          "name": "Atla",
+          "school": "Penn",
+          "referenceLink": "https://londonstartupmap.com/company/atla",
+          "status": "Founder Maurice Burger and AI product match the existing record. Office address remains unverified; no pin imported."
+        }
+      ]
+    },
+    {
+      "name": "SF Tech Map",
+      "url": "https://sftechmap.app/?c=37.772,-122.412,11.7",
+      "use": "Public API with sources, verification dates and explicit location confidence. Accept as research leads; block/neighbourhood coordinates are not office points.",
+      "api": "https://sftechmap.app/developers",
+      "attribution": "Data: SF Tech Map, CC BY 4.0, https://sftechmap.app",
+      "sampleLookups": [
+        {
+          "query": "Weave",
+          "total": 4,
+          "items": [
+            {
+              "name": "Weave Grid, Inc.",
+              "website": "https://www.weavegrid.com/",
+              "locationConfidence": "block",
+              "url": "https://sftechmap.app/?sel=weave-grid-inc-san-francisco&utm_source=rest",
+              "sources": [
+                "https://www.weavegrid.com/careers",
+                "https://www.weavegrid.com/",
+                "https://data.sfgov.org/d/g8m3-pdis"
+              ]
+            },
+            {
+              "name": "Airweave",
+              "website": "https://airweave.ai/",
+              "locationConfidence": "neighborhood",
+              "url": "https://sftechmap.app/?sel=airweave-san-francisco&utm_source=rest",
+              "sources": [
+                "https://www.ycombinator.com/companies/airweave",
+                "https://data.sfgov.org/d/g8m3-pdis"
+              ]
+            },
+            {
+              "name": "Seam",
+              "website": "https://seam.co/",
+              "locationConfidence": "block",
+              "url": "https://sftechmap.app/?sel=seam-san-francisco&utm_source=rest",
+              "sources": [
+                "https://www.ycombinator.com/companies/seam",
+                "https://data.sfgov.org/d/g8m3-pdis"
+              ]
+            },
+            {
+              "name": "Typa",
+              "website": "https://typa.ai/",
+              "locationConfidence": "block",
+              "url": "https://sftechmap.app/?sel=typa-san-francisco&utm_source=rest",
+              "sources": [
+                "https://www.ycombinator.com/companies/typa",
+                "https://data.sfgov.org/d/g8m3-pdis"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "1849 bio",
+          "total": 1,
+          "items": [
+            {
+              "name": "1849 bio",
+              "website": "https://www.1849.bio/",
+              "locationConfidence": "block",
+              "url": "https://sftechmap.app/?sel=1849-bio-san-francisco&utm_source=rest",
+              "sources": [
+                "https://www.ycombinator.com/companies/1849-bio",
+                "https://data.sfgov.org/d/g8m3-pdis"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Human Archive",
+          "total": 1,
+          "items": [
+            {
+              "name": "Archil",
+              "website": "https://archil.com/",
+              "locationConfidence": "block",
+              "url": "https://sftechmap.app/?sel=archil-san-francisco&utm_source=rest",
+              "sources": [
+                "https://www.ycombinator.com/companies/archil",
+                "https://data.sfgov.org/d/g8m3-pdis"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "Mosaic",
+          "total": 2,
+          "items": [
+            {
+              "name": "Mosaic ML, Inc.",
+              "locationConfidence": "block",
+              "url": "https://sftechmap.app/?sel=mosaic-ml-inc-san-francisco&utm_source=rest",
+              "sources": [
+                "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=1872855&type=D",
+                "https://www.sec.gov/search-filings"
+              ]
+            },
+            {
+              "name": "Mosaic Ai Labs, Inc.",
+              "locationConfidence": "block",
+              "url": "https://sftechmap.app/?sel=mosaic-ai-labs-inc-san-francisco&utm_source=rest",
+              "sources": [
+                "https://data.sfgov.org/d/g8m3-pdis"
+              ]
+            }
+          ]
+        },
+        {
+          "query": "BioStack",
+          "total": 0,
+          "items": []
+        }
+      ]
+    },
+    {
+      "name": "Seedtable San Francisco",
+      "url": "https://seedtable.com/startup-map/san-francisco",
+      "use": "San Francisco address leads. Sampled listings include PMB/mailing addresses; do not copy pins without business-office verification.",
+      "fetchNote": "HTTP 403",
+      "reviewedVia": "Public web search results"
+    }
+  ],
+  "reviewNotes": [
+    "Map proximity, a YC badge, and selling products to students do not establish student founder status.",
+    "Keep existing university associations; verify new founders through university/program or founder-published evidence before importing.",
+    "SF Tech Map samples matched 1849 bio and the Mosaic legal entity but exposed block-level location confidence. These coordinates were not used.",
+    "Building/property corroboration establishes commercial address use, not proof of the current occupant. Pins are labelled published business addresses, not guaranteed headquarters."
+  ],
+  "addressBatch": {
+    "added": [
+      {
+        "id": "proj_v_GZj6vtYEwG",
+        "name": "Weave"
+      },
+      {
+        "id": "proj_P97SnThAdQ2w",
+        "name": "1849 bio"
+      },
+      {
+        "id": "proj_CBr09xNEjdiL",
+        "name": "Human Archive"
+      },
+      {
+        "id": "proj_TtW1oNyl5SXz",
+        "name": "Mosaic"
+      },
+      {
+        "id": "proj_z7Zr4SNchm3l",
+        "name": "BioStack Platforms"
+      },
+      {
+        "id": "proj_aEJ-0f02qOaX",
+        "name": "Miraka"
+      }
+    ],
+    "held": [
+      {
+        "company": "Clearly AI",
+        "reason": "Company contact page and LinkedIn show different street addresses; no unambiguous Google Maps company match."
+      },
+      {
+        "company": "Hypercubic",
+        "reason": "Company privacy page and LinkedIn show different street addresses."
+      },
+      {
+        "company": "CreativeMode",
+        "reason": "Company legal pages disagree on postal code; office use needs further corroboration."
+      },
+      {
+        "company": "Trackstar",
+        "reason": "Published office address and LinkedIn postal code disagree; current office location needs corroboration."
+      }
+    ]
+  }
+}
