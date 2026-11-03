@@ -1,73 +1,83 @@
 {
   "drf_portfolio": {
     "found": 319,
-    "matched_existing_investable": 2,
-    "matched_existing_non_investable": 45,
-    "ambiguous_name": 1,
-    "unmatched": 271,
-    "kept_new_this_pass": 1,
-    "investor_edges_on_existing": 1,
-    "excluded": 317,
-    "exclude_why": "Most DRF portcos lack public class-of-2023+/current-student founder evidence in this pass; historical DRF ingest treated portfolio as exclusion/reference only. Eligible researched this pass: Kinth (new). Investor edge: Tempo (existing investable)."
+    "matched_existing_investable": 5,
+    "researched_this_pass": 12,
+    "kept_new_or_reenabled": 8,
+    "investor_edges_on_existing": 2,
+    "excluded": 311,
+    "exclude_why": "Most DRF portcos lack public class-of-2023+/current-student founder evidence after exhaustive name-by-name research of recent-looking names. Eligible this pass: Daemo AI (Yale '24/'25), AethexAI (Stanford GSB leave), Juniper (TCNJ '25), Shinkei (Penn G'23 re-enable), Endex (Duke leave/Thiel '24), American Tractor (Stanford MS current), Flock AI (Wharton MBA '23 leave), Tangram founder-year enrich (Yale current; DRF edge deferred). Prior: Kinth. Edges: Tempo. Excluded with year evidence: Hadrius (~2020), EdVisorly ('21), Taya/Elena ('22), Snapp (Berkeley '11), Aviato (HS), Ash (Cornell Tech '20), Jolly (Cornell Tech '21), Faura (no college)."
   },
   "z_fellows": {
-    "found": 13,
-    "kept": 3,
-    "excluded": 10,
-    "notes": "Directory via recentfunding.com/accelerators/zfellows. Kept/enriched: Greptile, Mach Industries, Cognition/Etched investor edges. Mintlify excluded (class ~2022). Others lack 2023+ campus evidence this pass."
+    "found": 22,
+    "kept": 7,
+    "excluded": 15,
+    "notes": "Alumni from zfellows.com page + press. Kept/enriched: Greptile, Mach, Cal AI (UMiami current), Aaru (Harvard/Dartmouth leave), Swsh (NYU leave '24), Phia (Stanford '24/'25), Judgment Labs (Stanford MS current). Excluded: Bland (WashU '22), Posh (NYU leave '21), Nucleus (Penn leave 2020), Mintlify (~2022), Fun (Stanford leave 2020), Listen Labs (Harvard MS year unconfirmed this pass), Solstice (Melbourne PhD \u2014 uncertain Z match)."
   },
   "thiel_fellowship": {
-    "found": 32,
-    "kept": 4,
-    "excluded_or_edge_only": 28,
-    "notes": "Crimson 2024 class + Specter 2025/2026 lists. New/re-enabled: Juicebox. Edges: Mercor, Cognition, Etched, Cavalla, EveryTicker, Sentient Machines, Opt32, Praso, Swoop."
+    "found": 35,
+    "kept": 5,
+    "excluded_or_edge_only": 30,
+    "notes": "Prior Juicebox/Mercor/Cognition/Etched + new Orchard Robotics (Cornell leave, Contrary+GC Series A) and Endex/Swsh counted under DRF/Z. Specter/Crimson lists still thin on campus years for many."
   },
   "pear_garage_pearx": {
     "found": 8,
     "kept": 6,
     "excluded": 2,
-    "notes": "Public PearX page examples + press. Kept: Bobyard, Andera, Phinity Labs, Vals AI, Known, ResiQuant. ResiQuant founders are Stanford PhD students (current)."
+    "notes": "Unchanged from prior pass: Bobyard, Andera, Phinity Labs, Vals AI, Known, ResiQuant."
   },
   "afore": {
     "found": 40,
     "kept": 1,
     "excluded": 39,
-    "notes": "Portfolio headers scraped from afore.vc/portfolio. Kept StormFree Labs (Brandeis '24). Others lack 2023+ founder evidence this pass."
+    "notes": "Prior StormFree Labs only; no additional 2023+ founder evidence this pass."
   },
   "contrary": {
-    "found": 0,
-    "kept": 0,
-    "excluded": 0,
-    "notes": "contrary.com/companies is JS-rendered without a public static portfolio dump; no connector. Deferred structured scrape to a browser pass; not invented."
+    "found": 4,
+    "kept": 1,
+    "excluded": 3,
+    "notes": "Orchard Robotics (Charlie Wu) kept via Thiel/Contrary Series A. contrary.com/companies still JS-rendered; Class of 2026/2027 VP pages are student VPs not portcos. Hallow (GSB 2019) excluded."
   },
   "neo_scholars": {
-    "found": 9,
+    "found": 18,
     "kept": 0,
-    "excluded": 9,
-    "notes": "Named in Neo Substack (Cursor, Cognition, Pika, etc.). Overlap with existing investable or pre-2023 founders; no net-new eligible inserts this pass beyond Thiel/Z edges already counted."
+    "excluded": 18,
+    "notes": "2025 Neo Scholars announcement is an image roster without extractable company names via fetch. Named Neo portfolio (Cursor, Cognition, Pika, etc.) already investable or pre-2023. No net-new inserts this pass."
   },
   "rough_draft_ventures": {
     "found": 24,
     "kept": 0,
     "excluded": 24,
-    "notes": "f4.fund RDV portfolio mostly mature companies (Spring Health, Fireflies, Instabase). EdVisorly/Solomon need founder-year evidence; not confirmed 2023+ this pass."
+    "notes": "f4.fund RDV portfolio still mostly mature (Spring Health, Fireflies, Instabase). EdVisorly founders Haas '21 \u2014 excluded."
   },
   "a16z_speedrun": {
     "found": 79,
-    "kept": 0,
-    "excluded": 79,
-    "notes": "speedrun.a16z.com companies API/list: 79 in SR007. 36 already investable with Speedrun facts; 42 not in DB. Founder bios not in list payload (images only); deferred individual page eligibility research \u2014 not bulk-imported without campus evidence."
-  },
-  "vc_seed_series_a": {
-    "found": 3,
-    "kept": 0,
-    "excluded": 1,
-    "notes": "Ghost AI (a16z seed) excluded: HS graduate, no college enrollment. Bobyard/Vals counted under PearX. Established-VC edges recorded on Mercor (Benchmark/GC), Mach (Sequoia), Andera (Lightspeed), Vals/Bobyard (a16z/8VC)."
+    "kept": 1,
+    "excluded": 78,
+    "notes": "Individual bio pass: Space (Matthew Ao UofT dropout) kept. Creed/Munari/SomeSome lack 2023+ campus years. Sutrix also Speedrun but counted under YC."
   },
   "yc_student_recent": {
-    "found": 0,
+    "found": 25,
+    "kept": 3,
+    "excluded": 22,
+    "notes": "scan-missing-campus-founders W23\u2192F26/W27: Plyxl (UIUC dropout), Preload (Caltech PhD student), Sutrix (GT dropout). Besimple MIT 2016 excluded. Many YC bios name a school with no class year \u2014 not imported without year/student language."
+  },
+  "columbia_startup_lab": {
+    "found": 14,
+    "kept": 4,
+    "excluded": 10,
+    "notes": "CSL 2025-26 and 2026-27 pages: Regbase, Arth, Spacely, Verteel (CBS current). Other lines lacked clear founder title or were duplicates."
+  },
+  "vc_seed_series_a": {
+    "found": 8,
     "kept": 0,
-    "excluded": 0,
-    "notes": "YC already heavily represented (567 investor facts). No additional student/recent-grad YC batch filter pass completed this turn beyond existing corpus."
+    "excluded": 2,
+    "notes": "Edges recorded on Orchard (GC/Contrary), Phia (Kleiner), Shinkei (Founders Fund), Andera (Lightspeed), Mercor (Benchmark/GC), Mach (Sequoia), Vals/Bobyard (a16z/8VC). Ghost AI excluded (HS). Traversal Series A noted but campus enrollment years not verified this pass."
+  },
+  "kleiner_fellows": {
+    "found": 39,
+    "kept": 0,
+    "excluded": 39,
+    "notes": "KP Fellows 2025/2026 are internship placements at portfolio cos (Harvey, Figma, Glean\u2026), not founder companies. Alumni founders (Figma etc.) predate 2023 filter. No net-new founder inserts."
   }
 }

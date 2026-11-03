@@ -917,5 +917,865 @@
     "_exclude_reason": "already in corpus as investable; attaching Thiel Fellowship investor edge only this pass",
     "_source_key": "thiel_fellowship",
     "_investor_only_if_existing": true
+  },
+  {
+    "name": "Daemo AI",
+    "university": "Yale University",
+    "campusId": "univ_yale",
+    "affiliation_type": "alumni",
+    "cohort_year": 2025,
+    "enrollment_status": "recent_grad",
+    "website": "https://www.daemo.ai/",
+    "evidence_url": "https://news.yale.edu/2025/05/15/jimmy-carters-big-dreams-stretch-cinema-silicon-valley-yale",
+    "program": "Dorm Room Fund portfolio",
+    "source": "Yale News + DRF portfolio",
+    "description": "Enterprise AI agents on client databases and internal knowledge.",
+    "founders": [
+      {
+        "name": "Jimmy Carter",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://news.yale.edu/2025/05/15/jimmy-carters-big-dreams-stretch-cinema-silicon-valley-yale"
+      },
+      {
+        "name": "Srikar Godilla",
+        "affiliation_type": "alumni",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://news.yale.edu/2025/05/15/jimmy-carters-big-dreams-stretch-cinema-silicon-valley-yale"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Dorm Room Fund",
+        "source_url": "https://www.dormroomfund.com/portfolio",
+        "round": null
+      },
+      {
+        "name": "Pear VC",
+        "source_url": "https://f4.fund/startups/daemo",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drf_portfolio",
+    "_reenable_note": "Yale College Class of 2025 / 2024 co-founders; built while undergraduates.",
+    "_alias_match": [
+      "Hydra Innovations Inc. (Daemo)",
+      "Daemo"
+    ]
+  },
+  {
+    "name": "AethexAI",
+    "university": "Stanford University",
+    "campusId": "univ_stanford",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": "https://www.aethexai.com/",
+    "evidence_url": "https://techcrunch.com/2026/06/03/these-two-founders-left-goldman-and-meta-to-build-voice-ai-for-markets-everyone-else-overlooked/",
+    "program": "Dorm Room Fund portfolio",
+    "source": "TechCrunch + DRF portfolio",
+    "description": "Full-stack voice AI infrastructure for Africa and the Middle East.",
+    "founders": [
+      {
+        "name": "Ayooluwa Odemuyiwa",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://techcrunch.com/2026/06/03/these-two-founders-left-goldman-and-meta-to-build-voice-ai-for-markets-everyone-else-overlooked/"
+      },
+      {
+        "name": "Mariama Diallo",
+        "affiliation_type": "unknown",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://techcrunch.com/2026/06/03/these-two-founders-left-goldman-and-meta-to-build-voice-ai-for-markets-everyone-else-overlooked/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Dorm Room Fund",
+        "source_url": "https://techcrunch.com/2026/06/03/these-two-founders-left-goldman-and-meta-to-build-voice-ai-for-markets-everyone-else-overlooked/",
+        "round": "Pre-seed"
+      },
+      {
+        "name": "4DX Ventures",
+        "source_url": "https://techcrunch.com/2026/06/03/these-two-founders-left-goldman-and-meta-to-build-voice-ai-for-markets-everyone-else-overlooked/",
+        "round": "Pre-seed"
+      },
+      {
+        "name": "Stanford GSB 26 Fund",
+        "source_url": "https://techcrunch.com/2026/06/03/these-two-founders-left-goldman-and-meta-to-build-voice-ai-for-markets-everyone-else-overlooked/",
+        "round": "Pre-seed"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drf_portfolio"
+  },
+  {
+    "name": "Juniper",
+    "university": "The College of New Jersey",
+    "campusId": "univ_the_college_of_new_jersey",
+    "affiliation_type": "alumni",
+    "cohort_year": 2025,
+    "enrollment_status": "recent_grad",
+    "website": "https://juniper.tech/",
+    "evidence_url": "https://news.tcnj.edu/2025/04/03/mbpc-2025/",
+    "program": "Dorm Room Fund portfolio",
+    "source": "TCNJ News + DRF portfolio",
+    "description": "Healthcare AI that transcribes patient consultations and updates EHR/billing.",
+    "founders": [
+      {
+        "name": "Yasaman Galer",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://news.tcnj.edu/2025/04/03/mbpc-2025/"
+      },
+      {
+        "name": "Isha Patwardhan",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://news.tcnj.edu/2025/04/03/mbpc-2025/"
+      },
+      {
+        "name": "Livia Minaides",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://news.tcnj.edu/2025/04/03/mbpc-2025/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Dorm Room Fund",
+        "source_url": "https://www.dormroomfund.com/portfolio",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drf_portfolio",
+    "_reenable_note": "TCNJ Mayo Business Plan Competition 2025 winners; Galer class of 2025."
+  },
+  {
+    "name": "Shinkei Systems",
+    "university": "University of Pennsylvania",
+    "campusId": "univ_penn",
+    "affiliation_type": "alumni",
+    "cohort_year": 2023,
+    "enrollment_status": "recent_grad",
+    "website": "https://www.shinkei.systems/",
+    "evidence_url": "https://venturelab.upenn.edu/2022-startup-challenge-finalists",
+    "program": "Dorm Room Fund portfolio",
+    "source": "Penn Venture Lab + DRF portfolio",
+    "description": "Robotics that minimize fish waste and multiply shelf-life.",
+    "founders": [
+      {
+        "name": "Saif Khawaja",
+        "affiliation_type": "alumni",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://venturelab.upenn.edu/2022-startup-challenge-finalists"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Dorm Room Fund",
+        "source_url": "https://www.dormroomfund.com/portfolio",
+        "round": null
+      },
+      {
+        "name": "Founders Fund",
+        "source_url": "https://www.foodnavigator.com/Article/2025/09/26/shinkei-systems-launched-in-2021-is-expanding-rapidly-with-new-headquarters/",
+        "round": "Series A"
+      },
+      {
+        "name": "Venture Lab VIP-X",
+        "source_url": "https://venturelab.upenn.edu/vip-alumni",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drf_portfolio",
+    "_reenable_note": "Saif Khawaja Wharton G'23 (recent_grad 2023). Was non-investable despite VIP-X + DRF.",
+    "_alias_match": [
+      "Shinkei Systems Corp.",
+      "Shinkei"
+    ]
+  },
+  {
+    "name": "Endex",
+    "university": "Duke University",
+    "campusId": "univ_duke",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": "https://www.endex.ai/",
+    "evidence_url": "https://dukechronicle.com/article/duke-university-tarun-amasa-co-founder-endex-ai-financial-analyst-open-ai-14-million-dollars-20250826",
+    "program": "Dorm Room Fund portfolio / Thiel Fellowship 2024",
+    "source": "Duke Chronicle + Thiel 2024",
+    "description": "AI financial analyst agents.",
+    "founders": [
+      {
+        "name": "Tarun Amasa",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://dukechronicle.com/article/duke-university-tarun-amasa-co-founder-endex-ai-financial-analyst-open-ai-14-million-dollars-20250826"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Dorm Room Fund",
+        "source_url": "https://www.dormroomfund.com/portfolio",
+        "round": null
+      },
+      {
+        "name": "Thiel Fellowship",
+        "source_url": "https://www.businesswire.com/news/home/20240320742346/en/Thiel-Foundation-Announces-Next-Thiel-Fellow-Class",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drf_portfolio"
+  },
+  {
+    "name": "American Tractor Company",
+    "university": "Stanford University",
+    "campusId": "univ_stanford",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": "https://www.americantractor.co/",
+    "evidence_url": "https://breakvc.com/portfolio/american-tractor-company",
+    "program": "Dorm Room Fund portfolio",
+    "source": "Breakthrough Ventures + DRF portfolio",
+    "description": "AI-native farm tractors.",
+    "founders": [
+      {
+        "name": "Tilak Raj Thanga Raj",
+        "affiliation_type": "current_student",
+        "grad_year": 2027,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://breakvc.com/portfolio/american-tractor-company"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Dorm Room Fund",
+        "source_url": "https://www.dormroomfund.com/portfolio",
+        "round": "Seed"
+      },
+      {
+        "name": "Breakthrough Ventures",
+        "source_url": "https://breakvc.com/portfolio/american-tractor-company",
+        "round": "Seed"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drf_portfolio"
+  },
+  {
+    "name": "Flock AI",
+    "university": "University of Pennsylvania",
+    "campusId": "univ_penn",
+    "affiliation_type": "alumni",
+    "cohort_year": 2023,
+    "enrollment_status": "recent_grad",
+    "website": "https://flockshop.ai/",
+    "evidence_url": "https://wwd.com/sourcing-journal/industry-news/flock-ai-artificial-intelligence-image-generation-deep-learning-generativeai-1238835963/",
+    "program": "Dorm Room Fund portfolio",
+    "source": "WWD + DRF portfolio",
+    "description": "AI visual commerce / model-generated product imagery.",
+    "founders": [
+      {
+        "name": "Manvitha Mallela",
+        "affiliation_type": "alumni",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.thepitch.show/founders/manvitha-mallela"
+      },
+      {
+        "name": "Malavika Reddy",
+        "affiliation_type": "alumni",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://wwd.com/sourcing-journal/industry-news/flock-ai-artificial-intelligence-image-generation-deep-learning-generativeai-1238835963/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Dorm Room Fund",
+        "source_url": "https://www.dormroomfund.com/portfolio",
+        "round": "Pre-seed"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drf_portfolio",
+    "_alias_match": [
+      "Flockshop"
+    ]
+  },
+  {
+    "name": "Cal AI",
+    "university": "University of Miami",
+    "campusId": "univ_miami",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": "https://www.calai.app/",
+    "evidence_url": "https://techcrunch.com/2025/04/03/teen-with-4-0-gpa-who-built-the-viral-cal-ai-app-was-rejected-by-15-top-universities/",
+    "program": "Z Fellows",
+    "source": "TechCrunch + zfellows.com alumni",
+    "description": "Viral calorie-tracking AI app.",
+    "founders": [
+      {
+        "name": "Zach Yadegari",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://techcrunch.com/2025/04/03/teen-with-4-0-gpa-who-built-the-viral-cal-ai-app-was-rejected-by-15-top-universities/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Z Fellows",
+        "source_url": "https://www.zfellows.com/",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "z_fellows"
+  },
+  {
+    "name": "Aaru",
+    "university": "Harvard University",
+    "campusId": "univ_harvard",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": "https://www.aaru.com/",
+    "evidence_url": "https://www.vanityfair.com/news/story/aaru-founders-ai-simulation",
+    "program": "Z Fellows",
+    "source": "Vanity Fair + zfellows.com alumni",
+    "description": "AI simulation company founded by teenage dropouts.",
+    "founders": [
+      {
+        "name": "Cameron Fink",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.vanityfair.com/news/story/aaru-founders-ai-simulation"
+      },
+      {
+        "name": "Ned Koh",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.vanityfair.com/news/story/aaru-founders-ai-simulation"
+      },
+      {
+        "name": "John Kessler",
+        "affiliation_type": "unknown",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://www.vanityfair.com/news/story/aaru-founders-ai-simulation"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Z Fellows",
+        "source_url": "https://www.zfellows.com/",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "z_fellows"
+  },
+  {
+    "name": "Swsh",
+    "university": "New York University",
+    "campusId": "univ_nyu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://www.swsh.com/",
+    "evidence_url": "https://engineering.nyu.edu/news/building-better-social-media-platform",
+    "program": "Z Fellows / Thiel Fellowship",
+    "source": "NYU Tandon + Z Fellows",
+    "description": "Friendship-maintenance social app with polls and games.",
+    "founders": [
+      {
+        "name": "Alexandra Debow",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2023/11/10/alexandra-debow-swsh/"
+      },
+      {
+        "name": "Weilyn Chong",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://engineering.nyu.edu/news/building-better-social-media-platform"
+      },
+      {
+        "name": "Nathan Ahn",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://engineering.nyu.edu/news/building-better-social-media-platform"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Z Fellows",
+        "source_url": "https://www.zfellows.com/",
+        "round": null
+      },
+      {
+        "name": "Thiel Fellowship",
+        "source_url": "https://www.businessinsider.com/meet-the-silicon-valley-college-dropouts-throwing-their-own-graduation-2025-4",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "z_fellows",
+    "_alias_match": [
+      "swsh",
+      "Somewhere Somehow"
+    ]
+  },
+  {
+    "name": "Phia",
+    "university": "Stanford University",
+    "campusId": "univ_stanford",
+    "affiliation_type": "alumni",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": "https://www.phia.com/",
+    "evidence_url": "https://stanforddaily.com/2025/09/23/qa-sophia-kianni-and-phoebe-gates-reflect-on-their-time-at-stanford-and-co-founding-phia/",
+    "program": "Z Fellows / Kleiner Perkins seed",
+    "source": "Stanford Daily + Kleiner Perkins",
+    "description": "AI shopping agent comparing retail and resale prices.",
+    "founders": [
+      {
+        "name": "Phoebe Gates",
+        "affiliation_type": "alumni",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://stanforddaily.com/2025/09/23/qa-sophia-kianni-and-phoebe-gates-reflect-on-their-time-at-stanford-and-co-founding-phia/"
+      },
+      {
+        "name": "Sophia Kianni",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://stanforddaily.com/2025/09/23/qa-sophia-kianni-and-phoebe-gates-reflect-on-their-time-at-stanford-and-co-founding-phia/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Kleiner Perkins",
+        "source_url": "https://www.kleinerperkins.com/perspectives/phia-the-ai-shopping-agent-for-the-next-generation/",
+        "round": "Seed"
+      },
+      {
+        "name": "Z Fellows",
+        "source_url": "https://www.zfellows.com/",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "z_fellows",
+    "_investor_only_if_existing": false
+  },
+  {
+    "name": "Judgment Labs",
+    "university": "Stanford University",
+    "campusId": "univ_stanford",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": "https://www.judgmentlabs.ai/",
+    "evidence_url": "https://yespress.io/alex-shan",
+    "program": "Z Fellows",
+    "source": "YesPress + zfellows.com alumni",
+    "description": "Agent evaluation / improvement loop for production AI agents.",
+    "founders": [
+      {
+        "name": "Alex Shan",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://profiles.stanford.edu/alexander-shan"
+      },
+      {
+        "name": "Andrew Li",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://www.founderland.ai/founder/andrew-li"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Z Fellows",
+        "source_url": "https://www.zfellows.com/",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "z_fellows"
+  },
+  {
+    "name": "Orchard Robotics",
+    "university": "Cornell University",
+    "campusId": "univ_cornell",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": "https://www.orchardrobotics.com/",
+    "evidence_url": "https://techcrunch.com/2025/09/03/orchard-robotics-founded-by-a-thiel-fellow-cornell-dropout-raises-22m-for-farm-vision-ai/",
+    "program": "Thiel Fellowship / Contrary",
+    "source": "TechCrunch Series A",
+    "description": "Camera+AI systems for precision fruit-crop management.",
+    "founders": [
+      {
+        "name": "Charlie Wu",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://techcrunch.com/2025/09/03/orchard-robotics-founded-by-a-thiel-fellow-cornell-dropout-raises-22m-for-farm-vision-ai/"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Thiel Fellowship",
+        "source_url": "https://techcrunch.com/2025/09/03/orchard-robotics-founded-by-a-thiel-fellow-cornell-dropout-raises-22m-for-farm-vision-ai/",
+        "round": null
+      },
+      {
+        "name": "Contrary",
+        "source_url": "https://contrary.com/blog/investing-in-orchard-robotics",
+        "round": "Series A"
+      },
+      {
+        "name": "General Catalyst",
+        "source_url": "https://techcrunch.com/2025/09/03/orchard-robotics-founded-by-a-thiel-fellow-cornell-dropout-raises-22m-for-farm-vision-ai/",
+        "round": "Series A"
+      },
+      {
+        "name": "Quiet Capital",
+        "source_url": "https://techcrunch.com/2025/09/03/orchard-robotics-founded-by-a-thiel-fellow-cornell-dropout-raises-22m-for-farm-vision-ai/",
+        "round": "Series A"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "thiel_fellowship"
+  },
+  {
+    "name": "Plyxl",
+    "university": "University of Illinois Urbana-Champaign",
+    "campusId": "univ_uiuc",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": "https://www.plyxl.com/",
+    "evidence_url": "https://www.ycombinator.com/companies/plyxl",
+    "program": "Y Combinator Winter 2027",
+    "source": "YC company page",
+    "description": "YC W27; founder bio: CS Dropout from UIUC.",
+    "founders": [
+      {
+        "name": "Mitch Crevier",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.ycombinator.com/companies/plyxl"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Y Combinator",
+        "source_url": "https://www.ycombinator.com/companies/plyxl",
+        "round": "W27"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "yc_student_recent"
+  },
+  {
+    "name": "Preload",
+    "university": "California Institute of Technology",
+    "campusId": "univ_caltech",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": "https://www.preload.ai/",
+    "evidence_url": "https://www.ycombinator.com/companies/preload",
+    "program": "Y Combinator Fall 2026",
+    "source": "YC company page",
+    "description": "YC F26; founder is PhD student in Computational Neuroscience at Caltech.",
+    "founders": [
+      {
+        "name": "Leo Li",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.ycombinator.com/companies/preload"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Y Combinator",
+        "source_url": "https://www.ycombinator.com/companies/preload",
+        "round": "F26"
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "yc_student_recent"
+  },
+  {
+    "name": "Sutrix",
+    "university": "Georgia Institute of Technology",
+    "campusId": "univ_gatech",
+    "affiliation_type": "current_student",
+    "cohort_year": 2027,
+    "enrollment_status": "current_student",
+    "website": "https://www.sutrix.ai/",
+    "evidence_url": "https://www.ycombinator.com/companies/sutrix",
+    "program": "Y Combinator Fall 2026",
+    "source": "YC company page",
+    "description": "YC F26 clinical research; CTO dropped out of Georgia Tech CS+Math.",
+    "founders": [
+      {
+        "name": "Supratik Panuganti",
+        "affiliation_type": "current_student",
+        "grad_year": 2027,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.ycombinator.com/founders/supratik-panuganti"
+      },
+      {
+        "name": "Ritvik Panuganti",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://www.ycombinator.com/companies/sutrix"
+      }
+    ],
+    "investors": [
+      {
+        "name": "Y Combinator",
+        "source_url": "https://www.ycombinator.com/companies/sutrix",
+        "round": "F26"
+      },
+      {
+        "name": "a16z Speedrun",
+        "source_url": "https://www.ycombinator.com/companies/sutrix",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "yc_student_recent"
+  },
+  {
+    "name": "Space",
+    "university": "University of Toronto",
+    "campusId": "univ_toronto",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": "https://www.space.so/",
+    "evidence_url": "https://speedrun.a16z.com/companies/space",
+    "program": "a16z Speedrun",
+    "source": "a16z Speedrun founder page",
+    "description": "AI-native filesystem; founder dropped out of UofT Engineering.",
+    "founders": [
+      {
+        "name": "Matthew Ao",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://speedrun.a16z.com/companies/space/matthew-ao"
+      }
+    ],
+    "investors": [
+      {
+        "name": "a16z Speedrun",
+        "source_url": "https://speedrun.a16z.com/companies/space",
+        "round": null
+      }
+    ],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "a16z_speedrun",
+    "_alias_match": [
+      "Space (AI filesystem)"
+    ]
+  },
+  {
+    "name": "Regbase",
+    "university": "Columbia University",
+    "campusId": "univ_columbia",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/",
+    "program": "Columbia Startup Lab 2026-2027",
+    "source": "Columbia Startup Lab cohort page",
+    "description": "Columbia Startup Lab 2026-2027 venture (CBS).",
+    "founders": [
+      {
+        "name": "Natalie Aresta-Katz",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/"
+      },
+      {
+        "name": "Ethan Shea",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneurship.columbia.edu/2026/07/13/welcome-to-the-2026-2027-cohort-of-the-columbia-startup-lab/"
+      }
+    ],
+    "investors": [],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "columbia_startup_lab"
+  },
+  {
+    "name": "Arth \u2013 Art of Health",
+    "university": "Columbia University",
+    "campusId": "univ_columbia",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneurship.columbia.edu/2025/06/25/welcome-to-the-2025-2026-cohort-of-the-columbia-startup-lab/",
+    "program": "Columbia Startup Lab 2025-2026",
+    "source": "Columbia Startup Lab cohort page",
+    "description": "Columbia Startup Lab 2025-2026 venture (CBS).",
+    "founders": [
+      {
+        "name": "Ritika Patni",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneurship.columbia.edu/2025/06/25/welcome-to-the-2025-2026-cohort-of-the-columbia-startup-lab/"
+      }
+    ],
+    "investors": [],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "columbia_startup_lab"
+  },
+  {
+    "name": "Spacely",
+    "university": "Columbia University",
+    "campusId": "univ_columbia",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneurship.columbia.edu/2025/06/25/welcome-to-the-2025-2026-cohort-of-the-columbia-startup-lab/",
+    "program": "Columbia Startup Lab 2025-2026",
+    "source": "Columbia Startup Lab cohort page",
+    "description": "Columbia Startup Lab 2025-2026 venture (CBS).",
+    "founders": [
+      {
+        "name": "Thomas Cerio",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneurship.columbia.edu/2025/06/25/welcome-to-the-2025-2026-cohort-of-the-columbia-startup-lab/"
+      }
+    ],
+    "investors": [],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "columbia_startup_lab"
+  },
+  {
+    "name": "Verteel",
+    "university": "Columbia University",
+    "campusId": "univ_columbia",
+    "affiliation_type": "current_student",
+    "cohort_year": null,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneurship.columbia.edu/2025/06/25/welcome-to-the-2025-2026-cohort-of-the-columbia-startup-lab/",
+    "program": "Columbia Startup Lab 2025-2026",
+    "source": "Columbia Startup Lab cohort page",
+    "description": "Columbia Startup Lab 2025-2026 venture (CBS).",
+    "founders": [
+      {
+        "name": "Brian Monga",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneurship.columbia.edu/2025/06/25/welcome-to-the-2025-2026-cohort-of-the-columbia-startup-lab/"
+      },
+      {
+        "name": "Brian Ross",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneurship.columbia.edu/2025/06/25/welcome-to-the-2025-2026-cohort-of-the-columbia-startup-lab/"
+      }
+    ],
+    "investors": [],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "columbia_startup_lab"
+  },
+  {
+    "name": "Tangram",
+    "university": "Yale University",
+    "campusId": "univ_yale",
+    "affiliation_type": "current_student",
+    "cohort_year": 2028,
+    "enrollment_status": "current_student",
+    "website": "https://tangram.co/",
+    "evidence_url": "https://www.linkedin.com/posts/tsai-city_before-arriving-at-yale-paris-mielke-yc-activity-7483224192625221633-SJQp",
+    "program": "Yale / Tsai CITY (DRF edge deferred \u2014 portfolio Tangram not confirmed same co)",
+    "source": "Tsai CITY LinkedIn",
+    "description": "AI marketplace builder; Paris Mielke Yale College current.",
+    "founders": [
+      {
+        "name": "Paris Mielke",
+        "affiliation_type": "current_student",
+        "grad_year": 2028,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://yaleventures.swoogo.com/yaleinnovation2026/speaker/2330768/paris-mielke"
+      }
+    ],
+    "investors": [],
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "drf_portfolio",
+    "_reenable_note": "Already investable; attach founder year evidence. No DRF edge without confirmed portfolio match."
   }
 ]
