@@ -53,6 +53,7 @@ export function NetworksApp() {
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [matrixOpen, setMatrixOpen] = useState(false);
   const [concentrationOpen, setConcentrationOpen] = useState(false);
+  const [methodologyOpen, setMethodologyOpen] = useState(false);
   const [desktopHubsOpen, setDesktopHubsOpen] = useState(false);
   const [networkQuery, setNetworkQuery] = useState("");
   const [networkKind, setNetworkKind] = useState<NetworkKind | "all">("all");
@@ -504,55 +505,31 @@ export function NetworksApp() {
           ) : null}
         </section>
 
-        <section aria-labelledby="investor-hubs-heading" className="order-5 hidden rounded-lg border border-[color:var(--line)] bg-white">
-          <div className="px-4 py-3">
-            <h2 id="investor-hubs-heading" className="text-[15px] font-semibold tracking-tight">
-              Investor hubs
-            </h2>
-            <p className="mt-0.5 text-[13px] text-[color:var(--fg-2)]">
-              How many campus founders each investor-kind fund has reached in this corpus. {data.topFundNote}
-            </p>
-          </div>
-          {data.investorHubs.length === 0 ? (
-            <p className="px-4 pb-4 text-sm text-[color:var(--fg-3)]">No investor-kind networks with linked founders are on file yet.</p>
-          ) : (
-            <ol className="divide-y divide-[color:var(--line)] border-t border-[color:var(--line)]">
-              {data.investorHubs.map((row, index) => (
-                <li key={row.id} className="flex items-center gap-3 px-4 py-2.5">
-                  <span className="w-7 shrink-0 text-xs tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
-                  <button
-                    type="button"
-                    className="min-w-0 flex-1 truncate text-left text-sm font-medium text-[color:var(--fg)] hover:text-[color:var(--cobalt)] hover:underline"
-                    onClick={() => chooseNetwork(row.id)}
-                  >
-                    {row.label}
-                  </button>
-                  <span className="shrink-0 text-sm tabular-nums text-[color:var(--fg)]">
-                    {row.founderCount.toLocaleString("en-US")}{" "}
-                    <span className="text-[color:var(--fg-3)]">founders</span>
-                  </span>
-                  <span className="hidden shrink-0 text-xs tabular-nums text-[color:var(--fg-3)] sm:inline">
-                    {row.companyCount.toLocaleString("en-US")} companies · {row.campusCount.toLocaleString("en-US")} campuses
-                  </span>
-                </li>
-              ))}
-            </ol>
-          )}
-        </section>
 
-        <section aria-labelledby="how-heading" className="order-6 rounded-lg border border-[color:var(--line)] bg-white px-4 py-4 md:order-6">
-          <h2 id="how-heading" className="text-[15px] font-semibold tracking-tight">
-            How these counts work
-          </h2>
-          <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-[color:var(--fg-2)]">
-            {data.howItWorks.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-          {data.totals.omitted.length > 0 ? (
-            <p className="mt-3 text-xs text-[color:var(--fg-3)]">
-              Omitted tie types: {data.totals.omitted.map((item) => `${item.kind} (${item.reason})`).join(" ")}
-            </p>
+        <section aria-labelledby="how-heading" className="order-6 overflow-hidden rounded-lg border border-[color:var(--line)] bg-white">
+          <button type="button" onClick={() => setMethodologyOpen((value) => !value)}
+            className="flex min-h-12 w-full items-center justify-between gap-3 px-4 py-3 text-left"
+            aria-expanded={methodologyOpen} aria-controls="network-method-details">
+            <span>
+              <span id="how-heading" className="block text-[15px] font-semibold tracking-tight">How the evidence works</span>
+              <span className="mt-0.5 block text-xs text-[color:var(--fg-2)]">What counts as a founder, program connection or network link</span>
+            </span>
+            <span className="shrink-0 text-xs font-semibold text-[color:var(--cobalt)]">{methodologyOpen ? "Hide" : "Show"}</span>
+          </button>
+          {methodologyOpen ? (
+            <div id="network-method-details" className="border-t border-[color:var(--line)] px-4 py-4">
+              <ul className="list-disc space-y-1.5 pl-5 text-sm text-[color:var(--fg-2)]">
+                {data.howItWorks.map((line) => <li key={line}>{line}</li>)}
+              </ul>
+              {data.totals.omitted.length > 0 ? (
+                <p className="mt-3 text-xs text-[color:var(--fg-3)]">
+                  Omitted tie types: {data.totals.omitted.map((item) => `${item.kind} (${item.reason})`).join(" ")}
+                </p>
+              ) : null}
+              <p className="mt-3 text-xs text-[color:var(--fg-3)]">
+                Follow individual Evidence links above to verify a particular network connection in its original public source.
+              </p>
+            </div>
           ) : null}
         </section>
         </div>
