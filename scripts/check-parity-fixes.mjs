@@ -22,11 +22,11 @@ function fail(id, detail) {
 
 // Unit tests for fixes 1–3 helpers
 {
-  const ask = spawnSync("npx", ["tsx", "lib/domain/ask-browse.test.ts"], { cwd: root, encoding: "utf8" });
+  const ask = spawnSync(process.execPath, ["node_modules/tsx/dist/cli.mjs", "lib/domain/ask-browse.test.ts"], { cwd: root, encoding: "utf8" });
   if (ask.status === 0) pass("1-ask-q-strip-unit", "ask-browse.test.ts");
   else fail("1-ask-q-strip-unit", ask.stderr || ask.stdout);
 
-  const oc = spawnSync("npx", ["tsx", "lib/domain/overlay-counts.test.ts"], { cwd: root, encoding: "utf8" });
+  const oc = spawnSync(process.execPath, ["node_modules/tsx/dist/cli.mjs", "lib/domain/overlay-counts.test.ts"], { cwd: root, encoding: "utf8" });
   if (oc.status === 0) pass("2-3-overlay-counts-unit", "overlay-counts.test.ts (statusOf + founders unit)");
   else fail("2-3-overlay-counts-unit", oc.stderr || oc.stdout);
 }
@@ -41,14 +41,14 @@ const browser = await chromium.launch({ headless: true });
     waitUntil: "domcontentloaded",
     timeout: 60000,
   });
-  await page.waitForTimeout(2500);
+  await page.waitForSelector("[data-directory-ready='1']", { timeout: 30000 });
   const cleanN = await page.locator("[data-match-count]").first().textContent();
   // Polluted q (old bug) must not be the live URL for the same intent
   await page.goto(`${BASE}/companies?sector=fintech&campus=univ_penn&stage=Seed&q=Penn+fintech+Seed`, {
     waitUntil: "domcontentloaded",
     timeout: 60000,
   });
-  await page.waitForTimeout(2500);
+  await page.waitForSelector("[data-directory-ready='1']", { timeout: 30000 });
   const pollutedN = await page.locator("[data-match-count]").first().textContent();
   const clean = Number(String(cleanN || "").replace(/,/g, ""));
   const polluted = Number(String(pollutedN || "").replace(/,/g, ""));
@@ -107,7 +107,7 @@ const browser = await chromium.launch({ headless: true });
   ];
   for (const c of cases) {
     await page.goto(`${BASE}${c.path}`, { waitUntil: "domcontentloaded", timeout: 60000 });
-    await page.waitForTimeout(2500);
+    await page.waitForSelector("[data-directory-ready='1']", { timeout: 30000 });
     const n = Number(String((await page.locator("[data-match-count]").first().textContent()) || "").replace(/,/g, ""));
     if (n >= c.min) pass(`1b-${c.name}`, `N=${n} ${c.path}`);
     else fail(`1b-${c.name}`, `N=${n} ${c.path}`);
@@ -125,7 +125,7 @@ const browser = await chromium.launch({ headless: true });
 {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto(`${BASE}/companies`, { waitUntil: "domcontentloaded", timeout: 60000 });
-  await page.waitForTimeout(2500);
+  await page.waitForSelector("[data-directory-ready='1']", { timeout: 30000 });
   // Rail may already be open (r33 default); only click Feed if closed.
   const railOpen = (await page.locator("[data-right-open]").getAttribute("data-right-open")) === "1";
   if (!railOpen) {
@@ -233,6 +233,7 @@ async function runMobileMapHits(dpr) {
   });
   await page.goto(`${BASE}/?campus=univ_penn`, { waitUntil: "domcontentloaded", timeout: 60000 });
   await page.waitForSelector('[data-globe-state="ready"]', { timeout: 60000 }).catch(() => {});
+  await page.getByRole("button", { name: "Campuses", exact: true }).click();
   await page.waitForTimeout(1500);
   const stage = page.locator("[data-dispatch-map-stage]");
   await stage.scrollIntoViewIfNeeded();

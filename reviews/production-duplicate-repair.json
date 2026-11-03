@@ -1,0 +1,64 @@
+{
+  "status": "applied_after_explicit_user_approval",
+  "originalDatabaseModified": true,
+  "originalHash": "F8BB58B7C636F5651C060AD895537B81815ED93238722218AFF90743528F100A",
+  "previewHash": "E555AEE31FE664E445523AB7726E0043159E727C69DC6BC5E12A5D8585B6B4E7",
+  "before": {
+    "projects": 6721,
+    "people": 6826,
+    "sources": 424,
+    "claims": 25375,
+    "signals": 1596,
+    "person_project_roles": 6311
+  },
+  "after": {
+    "projects": 6717,
+    "people": 6826,
+    "sources": 424,
+    "claims": 25375,
+    "signals": 1596,
+    "person_project_roles": 6309
+  },
+  "investable": 1548,
+  "preExistingForeignKeyIssueCount": 14,
+  "newForeignKeyIssues": 0,
+  "pairs": [
+    {
+      "company": "Winko",
+      "survivorId": "proj_MSTUnDJT6c6q",
+      "duplicateId": "proj_K9ZubuBuvVzx",
+      "evidence": "https://innovationlabs.harvard.edu/venture/winko-solar",
+      "reason": "University profile connects the finalist listing to the same company website and founders Akonkwa Mubagwa and Stephen Domingo."
+    },
+    {
+      "company": "MediMint",
+      "survivorId": "proj_KoH9JIqF3IRp",
+      "duplicateId": "proj_St9hoeGPhEGo",
+      "evidence": "https://create-x.gatech.edu/node/11911",
+      "reason": "CREATE-X identifies Ava Ramesh and the same blockchain medical-image exchange product already recorded in the existing company."
+    },
+    {
+      "company": "Spine Bionics",
+      "survivorId": "proj_yvJVxRPyrP2z",
+      "duplicateId": "proj_ODfwwTLKx1OO",
+      "evidence": "https://www.innovation.pitt.edu/pitt-students-pitch-their-big-ideas/",
+      "reason": "Primary university evidence connects the same spinal implant product and team members William Rabon, Benjamin Carnovale, Nitin Agarwal and Amir Alavi."
+    },
+    {
+      "company": "Spectral Autonomy",
+      "survivorId": "proj_1PvWxGSPAesU",
+      "duplicateId": "proj_XvJasex7rEyc",
+      "evidence": "https://www.bu.edu/innovate/profile/spectral-autonomy/",
+      "reason": "BU explicitly identifies Anton Njavro and David Neary as the same company's team; the two imports split their founder records."
+    }
+  ],
+  "preserved": [
+    "All unrelated project rows byte-for-byte",
+    "All people, source and claim records",
+    "Union of founder relationships and company facts for each pair",
+    "Redirects for all four old URLs",
+    "No new foreign-key issues; 14 pre-existing import issues retained unchanged"
+  ],
+  "approval": "2026-11-03: Merge the four verified duplicates",
+  "productionBase": "3d9153fa4685fff1d19ddec92d56154eb59e6a11"
+}

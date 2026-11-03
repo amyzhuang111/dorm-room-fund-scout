@@ -38,10 +38,9 @@ function norm(text) {
 }
 
 const expectedRaw = execFileSync(
-  "npx",
+  process.execPath,
   [
-    "--yes",
-    "tsx",
+    "node_modules/tsx/dist/cli.mjs",
     "-e",
     'import { openLaneDefinitionText, openLaneStrongDefinition, openLaneTopFundDefinition, openLaneDeskDefinition } from "./lib/domain/open-lane.ts"; console.log(JSON.stringify({ full: openLaneDefinitionText(), strong: openLaneStrongDefinition(), top: openLaneTopFundDefinition(), desk: openLaneDeskDefinition() }));',
   ],
@@ -50,10 +49,9 @@ const expectedRaw = execFileSync(
 const expected = JSON.parse(expectedRaw.split("\n").filter(Boolean).at(-1));
 
 const corpusRaw = execFileSync(
-  "npx",
+  process.execPath,
   [
-    "--yes",
-    "tsx",
+    "node_modules/tsx/dist/cli.mjs",
     "-e",
     `
 import fs from "node:fs";

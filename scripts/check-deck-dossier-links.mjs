@@ -30,18 +30,18 @@ await page.waitForSelector("[data-founder-card]", { timeout: 60000 });
 // Expand sheet so deck links are the live surface; peek keep still mounts cards too.
 const expand = page.locator("[data-fold-sheet-expand]").first();
 if (await expand.count()) {
-  await expand.click().catch(() => {});
+  await expand.press("Enter");
   await page.waitForTimeout(500);
 }
-await page.waitForSelector('[data-fold-sheet-mode="deck"], [data-fold-sheet-mode="expanded"], [data-founder-deck]', {
+await page.waitForSelector('[data-fold-map-sheet][data-fold-sheet-mode="deck"], [data-fold-map-sheet][data-fold-sheet-mode="expanded"]', {
   timeout: 15000,
-}).catch(() => {});
+});
 
 // Click "More" until exhausted so we crawl the full open-lane deck, not only the first page.
 for (let i = 0; i < 40; i++) {
   const more = page.locator("[data-founder-deck-more]").first();
   if (!(await more.count())) break;
-  await more.click().catch(() => {});
+  await more.press("Enter");
   await page.waitForTimeout(200);
 }
 
