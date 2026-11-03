@@ -1,11 +1,17 @@
 "use client";
 
 import { CampusSeal } from "@/components/campus-seal";
-import type { OpenLaneShell } from "@/lib/domain/open-lane";
+import {
+  openLaneDefinitionText,
+  openLaneStrongDefinition,
+  openLaneTopFundDefinition,
+  type OpenLaneShell,
+} from "@/lib/domain/open-lane";
 
 /**
  * r56 desk investor hero — answers which strong student founders still have no top fund.
  * Uses real open-lane counts from founders.json (strong signal, no top VC / YC / peers).
+ * Definitions render from open-lane.ts so the copy cannot drift from the matcher.
  */
 export function FoldOpenLaneHero({
   shell,
@@ -19,6 +25,9 @@ export function FoldOpenLaneHero({
   const count = shell?.count ?? 0;
   const strong = shell?.strong ?? 0;
   const campuses = shell?.campuses ?? [];
+  const strongDef = openLaneStrongDefinition();
+  const topFundDef = openLaneTopFundDefinition();
+  const fullDef = openLaneDefinitionText();
   return (
     <div className="mb-2" data-fold-open-lane="" data-fold-redesign="open-lane">
       <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">
@@ -32,6 +41,14 @@ export function FoldOpenLaneHero({
       </p>
       <p className="mt-1.5 text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-open-lane-caption="">
         strong student founders with no top fund yet
+      </p>
+      <p
+        className="mt-1.5 text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)]"
+        data-fold-open-lane-def=""
+        data-fold-open-lane-def-full={fullDef}
+      >
+        <span data-fold-open-lane-def-strong="">{strongDef}</span>{" "}
+        <span data-fold-open-lane-def-top-fund="">{topFundDef}</span>
       </p>
       <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-fold-open-lane-meta="">
         {strong.toLocaleString("en-US")} strong signals
