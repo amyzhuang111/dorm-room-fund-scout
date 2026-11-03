@@ -161,8 +161,27 @@ interface LinkMeta {
   companySectors: Map<string, string>;
   companyStages: Map<string, string | null>;
   companyInvestors: Map<string, string[]>;
+  /** Public company page (website or primary link) when known. */
+  companyUrls: Map<string, string>;
+  /** Founder evidence URL (enrollment source) when known. */
+  founderEvidenceUrls: Map<string, string>;
+  /** Best company_facts.investor source_url per project. */
+  investorFactUrls: Map<string, string>;
   uniLabels: Map<string, string>;
   corpusCompanies: number;
+}
+
+function isHttpUrl(value: string | null | undefined): value is string {
+  if (!value) return false;
+  const v = value.trim();
+  return /^https?:\/\//i.test(v);
+}
+
+function pickHttpUrl(...candidates: Array<string | null | undefined>): string | null {
+  for (const c of candidates) {
+    if (isHttpUrl(c)) return c!.trim();
+  }
+  return null;
 }
 
 let pageCache: { stamp: string; page: FounderNetworksPage } | null = null;
@@ -217,11 +236,20 @@ function investorNetwork(name: string): NetDef | null {
 }
 
 function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
-  const companies = db.prepare(`SELECT id, name FROM projects WHERE kind = 'company' AND is_investable_candidate = 1`).all() as {
+  const companies = db.prepare(
+    `SELECT id, name, website_url, primary_link FROM projects WHERE kind = 'company' AND is_investable_candidate = 1`
+  ).all() as {
     id: string;
     name: string;
+    website_url: string | null;
+    primary_link: string | null;
   }[];
   const companyNames = new Map(companies.map((row) => [row.id, row.name]));
+  const companyUrls = new Map<string, string>();
+  for (const row of companies) {
+    const url = pickHttpUrl(row.website_url, row.primary_link);
+    if (url) companyUrls.set(row.id, url);
+  }
   const corpusCompanies = companies.length;
 
   const companyFounders = new Map<string, Set<string>>();
@@ -241,6 +269,14 @@ function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
     set.add(row.person_id);
     companyFounders.set(row.project_id, set);
     founderNames.set(row.person_id, row.name);
+  }
+
+  const founderEvidenceUrls = new Map<string, string>();
+  for (const row of db
+    .prepare(`SELECT id, enrollment_source_url FROM people WHERE founder_status = 'founder'`)
+    .all() as { id: string; enrollment_source_url: string | null }[]) {
+    const url = pickHttpUrl(row.enrollment_source_url);
+    if (url) founderEvidenceUrls.set(row.id, url);
   }
 
   const founderCampuses = new Map<string, string[]>();
@@ -281,9 +317,11 @@ function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
   }
 
   const companyInvestors = new Map<string, string[]>();
-  for (const row of db.prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'investor'`).all() as {
+  const investorFactUrls = new Map<string, string>();
+  for (const row of db.prepare(`SELECT project_id, value_text, source_url FROM company_facts WHERE fact_key = 'investor'`).all() as {
     project_id: string;
     value_text: string;
+    source_url: string | null;
   }[]) {
     if (!companyNames.has(row.project_id)) continue;
     const label = (row.value_text || "").trim();
@@ -291,6 +329,8 @@ function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
     const list = companyInvestors.get(row.project_id) ?? [];
     if (!list.includes(label)) list.push(label);
     companyInvestors.set(row.project_id, list);
+    const url = pickHttpUrl(row.source_url);
+    if (url && !investorFactUrls.has(row.project_id)) investorFactUrls.set(row.project_id, url);
   }
 
   return {
@@ -301,6 +341,9 @@ function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
     companySectors,
     companyStages,
     companyInvestors,
+    companyUrls,
+    founderEvidenceUrls,
+    investorFactUrls,
     uniLabels,
     corpusCompanies,
   };
@@ -396,20 +439,26 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
       }
     }
     const sourceKey = `claims.${claim.claim_type}`;
-    const sourceUrl = claim.source_url;
+    const sourceUrl = pickHttpUrl(
+      claim.source_url,
+      claim.entity_type === "project" ? meta.companyUrls.get(claim.entity_id) : null,
+      claim.entity_type === "person" ? meta.founderEvidenceUrls.get(claim.entity_id) : null,
+    );
     for (const net of nets.values()) {
       if (claim.entity_type === "person") addPerson(net, claim.entity_id, sourceKey, sourceUrl);
       else if (claim.entity_type === "project") addCompany(net, claim.entity_id, sourceKey, sourceUrl);
     }
   }
 
-  for (const row of db.prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'investor'`).all() as {
+  for (const row of db.prepare(`SELECT project_id, value_text, source_url FROM company_facts WHERE fact_key = 'investor'`).all() as {
     project_id: string;
     value_text: string;
+    source_url: string | null;
   }[]) {
-    absorbTexts([row.value_text], (net) => addCompany(net, row.project_id, "company_facts.investor", null));
+    const factUrl = pickHttpUrl(row.source_url, meta.investorFactUrls.get(row.project_id), meta.companyUrls.get(row.project_id));
+    absorbTexts([row.value_text], (net) => addCompany(net, row.project_id, "company_facts.investor", factUrl));
     const inv = investorNetwork(row.value_text);
-    if (inv) addCompany(inv, row.project_id, "company_facts.investor", null);
+    if (inv) addCompany(inv, row.project_id, "company_facts.investor", factUrl);
   }
 
   for (const row of db.prepare(`SELECT person_id, signal_type, label FROM program_signals`).all() as {
@@ -442,7 +491,7 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
         addPerson(net, row.source_entity_id, "relationships.program", null);
       }
       if (row.relationship_type === "part_of_program" && row.source_entity_type === "project") {
-        addCompany(net, row.source_entity_id, "relationships.program", null);
+        addCompany(net, row.source_entity_id, "relationships.program", pickHttpUrl(meta.companyUrls.get(row.source_entity_id)));
       }
     });
   }
@@ -821,7 +870,9 @@ export function buildFounderNetworksGraph(): GraphPayload {
   };
 
   // Prefer a real source URL when several links collapse into one graph edge.
-  const preferUrl = (prev: string | null | undefined, next: string | null) => prev || next || null;
+  const preferUrl = (prev: string | null | undefined, next: string | null) => pickHttpUrl(prev, next);
+  const linkUrl = (link: Link) =>
+    pickHttpUrl(link.sourceUrl, meta.companyUrls.get(link.companyId), meta.founderEvidenceUrls.get(link.founderId), meta.investorFactUrls.get(link.companyId));
 
   for (const link of links) {
     if (!topIds.has(link.networkId)) continue;
@@ -838,12 +889,12 @@ export function buildFounderNetworksGraph(): GraphPayload {
           target: coId,
           type: "network_tie",
           sourceKey: link.sourceKey,
-          sourceUrl: link.sourceUrl,
+          sourceUrl: linkUrl(link),
         });
         edgeCounts.network_tie += 1;
       } else {
         const edge = edges.find((item) => item.source === netId && item.target === coId && item.type === "network_tie");
-        if (edge) edge.sourceUrl = preferUrl(edge.sourceUrl, link.sourceUrl);
+        if (edge) edge.sourceUrl = preferUrl(edge.sourceUrl, linkUrl(link));
       }
     }
     if (founderSet.has(link.founderId)) {
@@ -855,12 +906,12 @@ export function buildFounderNetworksGraph(): GraphPayload {
           target: foId,
           type: "network_founder",
           sourceKey: link.sourceKey,
-          sourceUrl: link.sourceUrl,
+          sourceUrl: linkUrl(link),
         });
         edgeCounts.network_founder += 1;
       } else {
         const edge = edges.find((item) => item.source === netId && item.target === foId && item.type === "network_founder");
-        if (edge) edge.sourceUrl = preferUrl(edge.sourceUrl, link.sourceUrl);
+        if (edge) edge.sourceUrl = preferUrl(edge.sourceUrl, linkUrl(link));
       }
     }
     if (founderSet.has(link.founderId) && companySet.has(link.companyId)) {
@@ -872,17 +923,17 @@ export function buildFounderNetworksGraph(): GraphPayload {
           target: coId,
           type: "founder_company",
           sourceKey: "person_project_roles.company_founder",
-          sourceUrl: link.sourceUrl,
+          sourceUrl: linkUrl(link),
         });
         edgeCounts.founder_company += 1;
       } else {
         const edge = edges.find((item) => item.source === foId && item.target === coId && item.type === "founder_company");
-        if (edge) edge.sourceUrl = preferUrl(edge.sourceUrl, link.sourceUrl);
+        if (edge) edge.sourceUrl = preferUrl(edge.sourceUrl, linkUrl(link));
       }
     }
   }
 
-  // Serial-founder company links (real shared founder).
+  // Serial-founder company links (real shared founder). Drop if no evidence URL.
   const byFounder = new Map<string, string[]>();
   for (const companyId of companyIds) {
     for (const founderId of meta.companyFounders.get(companyId) ?? []) {
@@ -892,8 +943,10 @@ export function buildFounderNetworksGraph(): GraphPayload {
       byFounder.set(founderId, list);
     }
   }
-  for (const companies of byFounder.values()) {
+  for (const [founderId, companies] of byFounder) {
     if (companies.length < 2) continue;
+    const evidence = pickHttpUrl(meta.founderEvidenceUrls.get(founderId), meta.companyUrls.get(companies[0]), meta.companyUrls.get(companies[1]));
+    if (!evidence) continue;
     for (let i = 0; i < companies.length; i++) {
       for (let j = i + 1; j < companies.length; j++) {
         if (!companySet.has(companies[i]) || !companySet.has(companies[j])) continue;
@@ -907,15 +960,17 @@ export function buildFounderNetworksGraph(): GraphPayload {
           target: b,
           type: "cofounder",
           sourceKey: "person_project_roles.shared_founder",
-          sourceUrl: null,
+          sourceUrl: evidence,
         });
         edgeCounts.cofounder += 1;
       }
     }
   }
 
-  // Same-company co-founder links between founder nodes (campus-colored cloud texture).
+  // Same-company co-founder links. Source = company page that lists both founders.
   for (const companyId of companyIds) {
+    const companyUrl = pickHttpUrl(meta.companyUrls.get(companyId));
+    if (!companyUrl) continue; // drop unsourced cofounder edges
     const fos = [...(meta.companyFounders.get(companyId) ?? [])].filter((id) => founderSet.has(id)).sort();
     for (let i = 0; i < fos.length; i++) {
       for (let j = i + 1; j < fos.length; j++) {
@@ -929,11 +984,35 @@ export function buildFounderNetworksGraph(): GraphPayload {
           target: b,
           type: "cofounder",
           sourceKey: "person_project_roles.same_company_cofounder",
-          sourceUrl: null,
+          sourceUrl: companyUrl,
         });
         edgeCounts.cofounder += 1;
       }
     }
+  }
+
+  // Backfill any remaining null sourceUrls from company/founder evidence; drop unsourced edges.
+  for (const edge of edges) {
+    if (edge.sourceUrl) continue;
+    const ids = [edge.source, edge.target];
+    let url: string | null = null;
+    for (const id of ids) {
+      if (id.startsWith("co:")) url = pickHttpUrl(url, meta.companyUrls.get(id.slice(3)), meta.investorFactUrls.get(id.slice(3)));
+      if (id.startsWith("fo:")) url = pickHttpUrl(url, meta.founderEvidenceUrls.get(id.slice(3)));
+    }
+    edge.sourceUrl = url;
+  }
+  {
+    const kept: GraphEdge[] = [];
+    const nextCounts: Record<string, number> = { network_tie: 0, cofounder: 0, founder_company: 0, network_founder: 0 };
+    for (const edge of edges) {
+      if (!isHttpUrl(edge.sourceUrl)) continue;
+      kept.push(edge);
+      nextCounts[edge.type] = (nextCounts[edge.type] ?? 0) + 1;
+    }
+    edges.length = 0;
+    edges.push(...kept);
+    for (const k of Object.keys(edgeCounts)) edgeCounts[k] = nextCounts[k] ?? 0;
   }
 
   // Investor-facing founder hover cards + uncrowded company set.

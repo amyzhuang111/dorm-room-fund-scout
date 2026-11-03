@@ -110,7 +110,8 @@ function placeLabels(
   const ranked = [...clusters].sort((a, b) => a.rank - b.rank);
   const maxLabels = viewW < 600 ? 6 : viewW < 900 ? 12 : ranked.length;
   const candidates = ranked.filter((c) => c.rank <= maxLabels || c.id === hoverId);
-  const legendH = 52;
+  // Desktop keeps an in-map legend; mobile moves it below so labels can use the full canvas.
+  const legendH = viewW < 600 ? 8 : 52;
   const topPad = 8;
   const bottomLimit = viewH - legendH - 6;
   const placed: LabelBox[] = [];
@@ -254,7 +255,8 @@ function placeCallouts(
   viewH: number
 ): CalloutBox[] {
   const insights = clusters.filter((c) => c.callout && c.rank <= 3).sort((a, b) => a.rank - b.rank);
-  const legendH = 52;
+  // Still compute callouts on mobile for the below-map strip; legend is outside the canvas.
+  const legendH = viewW < 600 ? 8 : 52;
   const placed: CalloutBox[] = [];
   for (let i = 0; i < insights.length; i++) {
     const cluster = insights[i];
@@ -772,7 +774,34 @@ export function NetworksGraph({
     return <p className="px-4 py-8 text-sm text-[color:var(--fg-2)]">Loading network graph...</p>;
   }
 
+  const legendBody = (
+    <>
+      {campusLegend.map((item) => (
+        <span key={item.id} className="inline-flex items-center gap-1.5">
+          <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: item.color }} />
+          <span style={{ color: readableInk(item.color) }}>{item.label}</span>
+        </span>
+      ))}
+      <span className="inline-flex items-center gap-1.5">
+        <span className="inline-block h-2 w-2 rounded-full bg-[#4b5563]" /> Hub
+      </span>
+      <label className="inline-flex cursor-pointer items-center gap-1.5 text-[color:var(--fg)]">
+        <input
+          type="checkbox"
+          className="accent-[color:var(--cobalt)]"
+          checked={uncrowdedOnly}
+          onChange={(event) => setUncrowdedOnly(event.target.checked)}
+        />
+        Not yet backed by a top fund
+      </label>
+      <span className="ml-auto max-w-[22rem] text-right tabular-nums">
+        {(graph.uncrowdedCompanyIds?.length ?? 0).toLocaleString("en-US")} uncrowded · scroll to zoom
+      </span>
+    </>
+  );
+
   return (
+    <div className="w-full" data-networks-desk="">
     <div
       ref={wrapRef}
       className="relative h-[440px] w-full touch-manipulation overflow-hidden bg-white md:h-[560px]"
@@ -834,7 +863,7 @@ export function NetworksGraph({
         <div
           key={`insight-${box.id}`}
           data-canvas-callout={box.id}
-          className="pointer-events-none absolute z-[2] rounded border border-[color:var(--line)] bg-white/95 px-2 py-1.5 text-[10px] leading-snug text-[color:var(--fg-2)] shadow-sm"
+          className="pointer-events-none absolute z-[2] hidden rounded border border-[color:var(--line)] bg-white/95 px-2 py-1.5 text-[10px] leading-snug text-[color:var(--fg-2)] shadow-sm md:block"
           style={{ left: box.x, top: box.y, width: box.w, minHeight: box.h }}
         >
           {box.text}
@@ -871,29 +900,33 @@ export function NetworksGraph({
         </div>
       ) : null}
 
-      <div className="absolute bottom-3 left-3 right-3 z-[2] flex flex-wrap items-center gap-2 rounded border border-[color:var(--line)] bg-white/95 px-3 py-2 text-[11px] text-[color:var(--fg-2)]">
-        {campusLegend.map((item) => (
-          <span key={item.id} className="inline-flex items-center gap-1.5">
-            <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: item.color }} />
-            <span style={{ color: readableInk(item.color) }}>{item.label}</span>
-          </span>
-        ))}
-        <span className="inline-flex items-center gap-1.5">
-          <span className="inline-block h-2 w-2 rounded-full bg-[#4b5563]" /> Hub
-        </span>
-        <label className="inline-flex cursor-pointer items-center gap-1.5 text-[color:var(--fg)]">
-          <input
-            type="checkbox"
-            className="accent-[color:var(--cobalt)]"
-            checked={uncrowdedOnly}
-            onChange={(event) => setUncrowdedOnly(event.target.checked)}
-          />
-          Not yet backed by a top fund
-        </label>
-        <span className="ml-auto max-w-[22rem] text-right tabular-nums">
-          {(graph.uncrowdedCompanyIds?.length ?? 0).toLocaleString("en-US")} uncrowded · scroll to zoom
-        </span>
+      <div
+        data-networks-legend=""
+        className="absolute bottom-3 left-3 right-3 z-[2] hidden flex-wrap items-center gap-2 rounded border border-[color:var(--line)] bg-white/95 px-3 py-2 text-[11px] text-[color:var(--fg-2)] md:flex"
+      >
+        {legendBody}
       </div>
+    </div>
+
+      {/* Mobile: legend + insights below the map so the canvas stays unobstructed. */}
+      <div
+        data-networks-legend=""
+        className="mt-2 flex flex-wrap items-center gap-2 rounded border border-[color:var(--line)] bg-white px-3 py-2 text-[11px] text-[color:var(--fg-2)] md:hidden"
+      >
+        {legendBody}
+      </div>
+      {callouts.length ? (
+        <div className="mt-2 space-y-1.5 md:hidden" data-networks-mobile-insights="">
+          {callouts.map((box) => (
+            <div
+              key={`mobile-insight-${box.id}`}
+              className="rounded border border-[color:var(--line)] bg-white px-2.5 py-1.5 text-[11px] leading-snug text-[color:var(--fg-2)]"
+            >
+              {box.text}
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

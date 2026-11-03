@@ -1,6 +1,6 @@
 /**
  * Every edge in the founder-networks graph must cite a real data sourceKey
- * and carry a sourceUrl field (nullable only for synthetic cofounder edges).
+ * and carry a non-null http(s) sourceUrl (unsourced edges must be dropped).
  * Usage: node scripts/check-network-edges.mjs
  */
 import fs from "node:fs";
@@ -43,13 +43,14 @@ for (const edge of graph.edges ?? []) {
   }
   if (!("sourceUrl" in edge)) {
     missingUrlField += 1;
-  } else if (edge.type !== "cofounder" && !edge.sourceUrl) {
+  } else if (!edge.sourceUrl || !/^https?:\/\//i.test(String(edge.sourceUrl))) {
     missingUrlValue += 1;
+    if (missingUrlValue <= 8) console.error("null/invalid sourceUrl", edge.type, edge.sourceKey, edge.source, edge.target, edge.sourceUrl);
   }
 }
 console.log("edges", graph.edges?.length ?? 0);
 console.log("bySourceKey", Object.fromEntries([...counts.entries()].sort((a, b) => b[1] - a[1])));
-console.log("missingUrlField", missingUrlField, "nonCofounderMissingUrlValue", missingUrlValue);
+console.log("missingUrlField", missingUrlField, "nullOrInvalidSourceUrl", missingUrlValue);
 if (bad > 0) {
   console.error("FAIL", bad, "edges without an allowed data source");
   process.exit(1);
@@ -58,11 +59,9 @@ if (missingUrlField > 0) {
   console.error("FAIL", missingUrlField, "edges missing sourceUrl field");
   process.exit(1);
 }
-// Null URLs allowed for a minority of investor/program_signal paths; field must exist.
-const urlCoverage = 1 - missingUrlValue / Math.max(1, (graph.edges?.length ?? 1));
-console.log("urlCoverage", Number(urlCoverage.toFixed(3)));
-if (urlCoverage < 0.7) {
-  console.error("FAIL sourceUrl coverage below 70%");
+if (missingUrlValue > 0) {
+  console.error("FAIL", missingUrlValue, "edges with null or non-http sourceUrl");
   process.exit(1);
 }
-console.log("OK every edge has a real data source and sourceUrl field");
+console.log("urlCoverage", 1);
+console.log("OK every edge has a real data source and http(s) sourceUrl");

@@ -7,6 +7,7 @@
  *   overlay-on-text     — overlay intersects visible text outside the overlay itself
  *   overlay-on-control  — overlay intersects interactive controls outside itself
  *   callout-on-label    — canvas callout covers a canvas network label
+ *   networksUnobstructed — /networks map area free of legend+callout overlays (fail <85% @375)
  *
  * Fold content inside a collapsible panel is allowed; covering stats/search/Map
  * labels or Program filters is not.
@@ -51,7 +52,7 @@ function fail(msg) {
 }
 
 const browser = await chromium.launch({ headless: true });
-const report = { ok: true, base: BASE, pages: [], totals: { overlayOnText: 0, overlayOnControl: 0, calloutOnLabel: 0 } };
+const report = { ok: true, base: BASE, pages: [], totals: { overlayOnText: 0, overlayOnControl: 0, calloutOnLabel: 0, networksUnobstructed: {} } };
 
 for (const vp of VIEWPORTS) {
   const page = await browser.newPage({
@@ -66,10 +67,17 @@ for (const vp of VIEWPORTS) {
     } else if (route === "/networks") {
       await page.waitForSelector("[data-networks-graph] canvas", { timeout: 60000 }).catch(() => {});
       await page.waitForTimeout(2200);
+      // Bring the map into the viewport so unobstructed % is measured on a visible canvas.
+      await page.locator("[data-networks-graph]").first().scrollIntoViewIfNeeded().catch(() => {});
+      await page.waitForTimeout(400);
     } else {
       await page.waitForTimeout(900);
     }
     await page.evaluate(() => window.scrollTo(0, 0));
+    if (route === "/networks") {
+      await page.locator("[data-networks-graph]").first().scrollIntoViewIfNeeded().catch(() => {});
+      await page.waitForTimeout(300);
+    }
 
     const found = await page.evaluate((overlaySel) => {
       const vh = window.innerHeight;
@@ -209,11 +217,50 @@ for (const vp of VIEWPORTS) {
         }
       }
 
+      // /networks: fraction of the graph canvas not covered by in-map legend or callouts.
+      let networksUnobstructed = null;
+      const graph = document.querySelector("[data-networks-graph]");
+      if (graph) {
+        const g = rectOf(graph);
+        const gArea = Math.max(1, g.w * g.h);
+        // Only overlays that sit inside the graph (absolute legend / canvas callouts).
+        const blockers = [
+          ...document.querySelectorAll("[data-networks-graph] [data-networks-legend], [data-networks-graph] [data-canvas-callout]"),
+        ].filter((el) => {
+          const r = el.getBoundingClientRect();
+          const cs = getComputedStyle(el);
+          if (r.width < 2 || r.height < 2) return false;
+          if (cs.display === "none" || cs.visibility === "hidden" || Number(cs.opacity || "1") < 0.05) return false;
+          return true;
+        });
+        // Approximate union via pixel grid sampling for robustness.
+        const cols = 40;
+        const rows = 24;
+        let blocked = 0;
+        let total = 0;
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            const x = g.left + ((c + 0.5) / cols) * g.w;
+            const y = g.top + ((r + 0.5) / rows) * g.h;
+            total += 1;
+            for (const el of blockers) {
+              const b = rectOf(el);
+              if (x >= b.left && x <= b.right && y >= b.top && y <= b.bottom) {
+                blocked += 1;
+                break;
+              }
+            }
+          }
+        }
+        networksUnobstructed = Number(((1 - blocked / total) * 100).toFixed(1));
+      }
+
       return {
         overlayCount: overlays.length,
         onText: dedupe(onText, "text"),
         onControl: dedupe(onControl, "control"),
         calloutOnLabel: dedupe(calloutOnLabel, "text"),
+        networksUnobstructed,
       };
     }, OVERLAY_SEL);
 
@@ -224,6 +271,7 @@ for (const vp of VIEWPORTS) {
       overlayOnText: found.onText.length,
       overlayOnControl: found.onControl.length,
       calloutOnLabel: (found.calloutOnLabel || []).length,
+      networksUnobstructed: found.networksUnobstructed,
       onText: found.onText.slice(0, 12),
       onControl: found.onControl.slice(0, 12),
       onCalloutLabel: (found.calloutOnLabel || []).slice(0, 12),
@@ -232,15 +280,28 @@ for (const vp of VIEWPORTS) {
     report.totals.overlayOnText += entry.overlayOnText;
     report.totals.overlayOnControl += entry.overlayOnControl;
     report.totals.calloutOnLabel = (report.totals.calloutOnLabel || 0) + entry.calloutOnLabel;
+    if (entry.networksUnobstructed != null) {
+      report.totals.networksUnobstructed = report.totals.networksUnobstructed || {};
+      report.totals.networksUnobstructed[vp.name] = entry.networksUnobstructed;
+    }
 
     const label = `${route}@${vp.name}`;
+    let failed = false;
     if (entry.overlayOnText || entry.overlayOnControl || entry.calloutOnLabel) {
-      report.ok = false;
+      failed = true;
       fail(
         `${label}: overlay-on-text=${entry.overlayOnText} overlay-on-control=${entry.overlayOnControl} callout-on-label=${entry.calloutOnLabel} text=${JSON.stringify(entry.onText).slice(0, 200)} callouts=${JSON.stringify(entry.onCalloutLabel).slice(0, 200)}`,
       );
-    } else {
-      console.log(`OK ${label} overlays=${entry.overlayCount} overlay-on-text=0 overlay-on-control=0 callout-on-label=0`);
+    }
+    // Mobile /networks must keep ≥85% of the map free of in-canvas chrome.
+    if (route === "/networks" && vp.name === "375" && entry.networksUnobstructed != null && entry.networksUnobstructed < 85) {
+      failed = true;
+      report.ok = false;
+      fail(`${label}: networks-unobstructed=${entry.networksUnobstructed}% (need ≥85)`);
+    }
+    if (!failed) {
+      const u = entry.networksUnobstructed != null ? ` unobstructed=${entry.networksUnobstructed}%` : "";
+      console.log(`OK ${label} overlays=${entry.overlayCount} overlay-on-text=0 overlay-on-control=0 callout-on-label=0${u}`);
     }
   }
   await page.close();
