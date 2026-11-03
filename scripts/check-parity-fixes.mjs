@@ -233,6 +233,8 @@ async function runMobileMapHits(dpr) {
   });
   await page.goto(`${BASE}/?campus=univ_penn`, { waitUntil: "domcontentloaded", timeout: 60000 });
   await page.waitForSelector('[data-globe-state="ready"]', { timeout: 60000 }).catch(() => {});
+  // Campus hit-testing belongs to the campus layer; HQ city markers are now the default.
+  await page.getByRole("button", { name: "Campuses", exact: true }).click();
   await page.waitForTimeout(1500);
   const stage = page.locator("[data-dispatch-map-stage]");
   await stage.scrollIntoViewIfNeeded();

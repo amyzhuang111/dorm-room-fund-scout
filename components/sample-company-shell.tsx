@@ -134,7 +134,7 @@ export function SampleCompanyShell({
           </div>
           <aside className="hidden min-w-0 lg:block" data-dossier-wire="">
             <div className="sticky top-14">
-              <CompanyPeers recommendations={dossier?.recommendations} />
+              <CompanyPeers recommendations={dossier?.recommendations} returnTo={dossier?.returnTo} />
               <div className={`${PANEL} relative overflow-hidden p-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--ember,#D96B1C)]`}>
                 <div className="mb-2 flex items-baseline justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] pb-2">
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">Campus activity</p>

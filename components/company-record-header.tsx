@@ -5,6 +5,8 @@ import type { CompanyRecommendations } from "@/lib/domain/company-recommendation
 import { LogoMark } from "./sample-instrument";
 import { useUserPipeline } from "./user-pipeline-provider";
 import styles from "./company-mobile.module.css";
+import { companyRecordHref } from "@/lib/ui/company-browse-path";
+import { requestCompanyBrowseRestore } from "@/lib/client/company-browse-position";
 
 export type CompanyDossier = {
   id?: string;
@@ -30,9 +32,10 @@ export type CompanyDossier = {
   sourceUrl?: string | null;
   peerCount?: number;
   recommendations?: CompanyRecommendations;
+  returnTo?: string | null;
 };
 
-export function CompanyPeers({ recommendations }: { recommendations?: CompanyRecommendations }) {
+export function CompanyPeers({ recommendations, returnTo }: { recommendations?: CompanyRecommendations; returnTo?: string | null }) {
   if (!recommendations?.rows.length) return null;
   const title = recommendations.scope === "signals" ? "More companies" : "Similar companies";
   return <section className={styles.peers} data-dossier-peers-section="" aria-label={title}>
@@ -40,7 +43,7 @@ export function CompanyPeers({ recommendations }: { recommendations?: CompanyRec
     <ol data-dossier-signal-timeline="">
       {recommendations.rows.map((company, index) => <li key={company.id}>
         <span className={styles.peerRank}>{String(index + 1).padStart(2, "0")}</span>
-        <Link href={`/startup/${company.id}`} className={styles.peerLink}>{company.name}</Link>
+        <Link href={companyRecordHref(company.id, returnTo)} className={styles.peerLink}>{company.name}</Link>
         <span className={styles.peerReason} title={company.detail}>{company.reason}</span>
       </li>)}
     </ol>
@@ -53,7 +56,7 @@ export function CompanyRecordHeader({ dossier }: { dossier: CompanyDossier }) {
   const saved = pipeline.state.links.some(l => l.entityType === "project" && l.entityId === dossier.id);
   const founders = dossier.founderProfiles?.length ? dossier.founderProfiles : (dossier.founders ?? []).map(name => ({ name, url: null, confirmed: false }));
   return <header className={styles.companyHeader} data-company-mobile-hero="" data-dossier-hero="" data-summary-card="">
-    <Link href="/companies" className={styles.backLink}>← All companies</Link>
+    <Link href={dossier.returnTo || "/companies"} scroll={!dossier.returnTo} onNavigate={() => dossier.returnTo && requestCompanyBrowseRestore(dossier.returnTo)} className={styles.backLink}>{dossier.returnTo ? "← Back to results" : "← All companies"}</Link>
     <div className={styles.companyTitle}>
       <LogoMark name={dossier.name} logoUrl={dossier.logoUrl} size={44} />
       <div><p className={styles.eyebrow}>Company record</p><h1 data-company-name-lead="">{dossier.name}</h1></div>
@@ -81,6 +84,6 @@ export function CompanyRecordHeader({ dossier }: { dossier: CompanyDossier }) {
       <a href="#evidence">Sources</a>
       {saved && <p className={styles.saveStatus} role="status">{pipeline.storage === "remote" ? "Saved to your pipeline." : "Saved in this browser."} <Link href="/startup/pipeline">View pipeline</Link></p>}
     </div>
-    <div className={styles.mobilePeers}><CompanyPeers recommendations={dossier.recommendations} /></div>
+    <div className={styles.mobilePeers}><CompanyPeers recommendations={dossier.recommendations} returnTo={dossier.returnTo} /></div>
   </header>;
 }

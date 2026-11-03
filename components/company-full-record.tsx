@@ -7,6 +7,7 @@ import { storedCompanyLinks } from "@/lib/domain/company-link";
 import { isBoilerplateDescription } from "@/lib/domain/sectors";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CampusSeal } from "@/components/campus-seal";
+import { CompanyFactSource } from "./company-fact-source";
 
 function isEmpty(value: unknown): boolean {
   return value == null || value === "" || (Array.isArray(value) && value.length === 0);
@@ -30,7 +31,7 @@ function monogram(name: string): string {
 }
 
 /** X (twitter) + LinkedIn only - never invent other socials. Shows every stored LinkedIn (confirmed / likely / unverified). */
-function FounderSocial({ founder }: { founder: NamedFounder }) {
+export function FounderSocial({ founder }: { founder: NamedFounder }) {
   const xLinks = founder.profileLinks.filter((l) => l.type === "twitter");
   const linkedIn =
     founder.link &&
@@ -75,9 +76,12 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 }
 
 /** Every stored company field; lead with founders + pitch + key stats, then grouped cards. */
-export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
+export function CompanyFullRecord({ project, standalone = false }: { project: ProjectDetail; standalone?: boolean }) {
   const profile = project.profile;
   const funding = displayedFunding(profile);
+  const programs = profile.investors.filter(i => i.kind === "accelerator");
+  const investors = profile.investors.filter(i => i.kind !== "accelerator");
+  const factSource = (url?: string | null) => standalone ? <CompanyFactSource url={url} claims={project.claims} /> : null;
   const links = storedCompanyLinks({
     websiteUrl: project.websiteUrl,
     primaryLink: project.primaryLink,
@@ -105,8 +109,8 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
   if (isEmpty(profile.description)) missing.push("Description");
   if (isEmpty(funding)) missing.push("Funding");
   if (isEmpty(profile.rounds)) missing.push("Funding rounds");
-  if (isEmpty(profile.investors)) missing.push("Investors");
-  if (isEmpty(yc)) missing.push("YC batch");
+  if (isEmpty(standalone ? investors : profile.investors)) missing.push("Investors");
+  if (!standalone && isEmpty(yc)) missing.push("YC batch");
   if (isEmpty(website)) missing.push("Website");
   if (isEmpty(companyLi)) missing.push("Company LinkedIn");
   if (isEmpty(otherLinks)) missing.push("Other links");
@@ -137,10 +141,13 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
 
   return (
     <section
+      id={standalone ? "company-details" : undefined}
+      tabIndex={standalone ? -1 : undefined}
       className="relative mb-6 scroll-mt-16 border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--bg,#FFFFFF)] pb-3 before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:bg-[color:var(--cobalt,#2F4FD8)] sm:mb-0 sm:scroll-mt-0"
       data-company-full-record=""
     >
-      <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3 pl-4 sm:py-3.5">
+      {standalone ? <h2 className="scout-kicker border-b border-[color:var(--line,#E1E5EF)] px-4 py-2">Full record</h2> : null}
+      {!standalone ? <div className="border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-3 pl-4 sm:py-3.5">
         <p className="scout-kicker">Full record</p>
         <p className="mt-1 text-[28px] font-bold leading-[1.05] tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[24px]" data-full-record-title="">
           {project.name || "Company"}
@@ -167,11 +174,11 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
             {yc.map((i) => [i.name, i.batch].filter(Boolean).join(" · ")).join(" · ")}
           </p>
         ) : null}
-      </div>
+      </div> : null}
 
       {/* Lead: mobile order keyStats → founders → pitch; desk keeps DOM founders → pitch → stats */}
       <div className="flex flex-col sm:contents" data-full-record-lead="">
-      {!isEmpty(project.founderLinks) ? (
+      {!standalone && !isEmpty(project.founderLinks) ? (
         <div className="order-2 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4 sm:order-none sm:py-3.5" data-full-record-founders-lead="">
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--ember,#D96B1C)]">Founders</p>
           <ul className="mt-1.5 space-y-2 sm:mt-2.5 sm:space-y-3">
@@ -209,7 +216,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
         </div>
       ) : null}
 
-      {pitch ? (
+      {!standalone && pitch ? (
         <div className="order-3 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4 sm:order-none sm:py-3" data-full-record-pitch="">
           <p className="text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]">{pitch}</p>
         </div>
@@ -260,21 +267,46 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
             ) : null}
             {!isEmpty(profile.foundedYear) ? (
               <div className={keyStats.some((s) => s.label === "Founded") ? "hidden sm:contents" : undefined}>
-                <Field label="Founded">{profile.foundedYear?.text}</Field>
+                <Field label="Founded">{profile.foundedYear?.text}{factSource(profile.foundedYear?.sourceUrl)}</Field>
               </div>
             ) : null}
-            {!isEmpty(profile.hq) ? <Field label="HQ">{profile.hq?.text}</Field> : null}
-            {!isEmpty(profile.operatingStatus) ? <Field label="Status">{profile.operatingStatus?.text}</Field> : null}
-            {!isEmpty(profile.teamSize) ? <Field label="Team size">{profile.teamSize?.text}</Field> : null}
-            {!isEmpty(profile.description) && !pitch ? <Field label="Description">{profile.description?.text}</Field> : null}
-            {!isEmpty(profile.description) && pitch && (profile.description?.text || "").trim() !== pitch ? (
-              <Field label="Description">{profile.description?.text}</Field>
+            {!isEmpty(profile.hq) ? <Field label="HQ">{profile.hq?.text}{factSource(profile.hq?.sourceUrl)}</Field> : null}
+            {!isEmpty(profile.operatingStatus) ? <Field label="Status">{profile.operatingStatus?.text}{factSource(profile.operatingStatus?.sourceUrl)}</Field> : null}
+            {!isEmpty(profile.teamSize) ? <Field label="Team size">{profile.teamSize?.text}{factSource(profile.teamSize?.sourceUrl)}</Field> : null}
+            {!isEmpty(profile.description) && (standalone || !pitch || (profile.description?.text || "").trim() !== pitch) ? (
+              <Field label="Description">{profile.description?.text}{factSource(profile.description?.sourceUrl)}</Field>
             ) : null}
           </Group>
           </div>
         ) : null}
 
-        {hasCapital ? (
+        {standalone ? (
+          <div id="company-capital" tabIndex={-1} className="order-2 sm:order-none" data-full-record-capital-first="">
+            <Group title="Funding and programs">
+              <Field label={profile.funding ? "Reported total funding" : funding ? "Latest reported round" : "Funding amount"}>
+                {funding?.text || "Not on record"}
+                {factSource(funding?.sourceUrl)}
+              </Field>
+              <Field label="Funding rounds">
+                {profile.rounds.length ? <ul className="space-y-2">
+                  {profile.rounds.map((round, i) => <li key={`${round.sourceUrl}-${i}`}>
+                    {formatRound(round) || "Round on record"}{factSource(round.sourceUrl)}
+                  </li>)}
+                </ul> : "No funding round on record"}
+              </Field>
+              {investors.length ? <Field label="Recorded investors"><ul className="space-y-2">
+                {investors.map((inv, i) => <li key={`${inv.name}-${i}`}>
+                  {[inv.name, inv.batch, inv.round].filter(Boolean).join(" · ")}{factSource(inv.sourceUrl)}
+                </li>)}
+              </ul></Field> : null}
+              {programs.length ? <Field label="Accelerator programs"><ul className="space-y-2">
+                {programs.map((program, i) => <li key={`${program.name}-${i}`}>
+                  {[program.name, program.batch, program.round].filter(Boolean).join(" · ")}{factSource(program.sourceUrl)}
+                </li>)}
+              </ul><p className="mt-2 text-xs text-[color:var(--fg-3,#5C647A)]">Program participation alone does not establish a funding amount or round.</p></Field> : null}
+            </Group>
+          </div>
+        ) : hasCapital ? (
           <div className="order-2 sm:order-none" data-full-record-capital-first="">
           <Group title="Capital">
             {!isEmpty(funding) ? <Field label="Funding">{funding?.text}</Field> : null}

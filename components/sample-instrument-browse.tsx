@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { companyRecordHref } from "@/lib/ui/company-browse-path";
+import { rememberCompanyBrowse, useCompanyBrowseRestore } from "@/lib/client/company-browse-position";
 import { loadDirectoryClient } from "@/lib/client/directory-cache";
 import { companyDisplayCopy } from "@/lib/ui/company-display-copy";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
@@ -230,6 +232,8 @@ export function SampleInstrumentBrowse({
   initialFacets?: Partial<FacetState>;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
+  const browseRoot = useRef<HTMLDivElement>(null);
   const [facets, setFacets] = useState<FacetState>(() => ({
     ...emptyFacets(),
     ...(initialFacets ?? {}),
@@ -307,6 +311,8 @@ export function SampleInstrumentBrowse({
   const total = catalog ? (feed === "leaderboard" ? boardCompanies.filter((c) => c.signals > 0).length : boardCompanies.length) : initialTotal;
   const matchingCount = catalog ? boardCompanies.length.toLocaleString("en-US") : "…";
   const moreHref = browseHref({ feed, facets, sort, more: pages + 1 });
+  const returnTo = pathname === "/companies" ? browseHref({ feed, facets, sort, more: pages }) : undefined;
+  useCompanyBrowseRestore(returnTo ?? "", !!catalog, browseRoot);
   /** Continued-view insight: matching companies with ≥1 stored signal (not pagination). */
   const signaledMatch = useMemo(
     () => boardCompanies.filter((c) => (c.signals ?? 0) > 0).length,
@@ -524,6 +530,7 @@ export function SampleInstrumentBrowse({
 
   return (
     <div
+      ref={browseRoot}
       className={`${styles.browse} ${feed === "directory" ? styles.directory : ""} mx-auto mt-2 grid w-full max-w-[1280px] scroll-mt-16 gap-4 sm:mt-3 lg:gap-5 ${
         rightOpen
           ? "lg:grid-cols-[minmax(280px,320px)_minmax(0,1fr)_minmax(220px,280px)]"
@@ -959,6 +966,7 @@ export function SampleInstrumentBrowse({
                       </>
                     ) : null}
                     <LedgerRow
+                      returnTo={returnTo}
                       founderLinks={founderLinks[card.id] ?? []}
                       card={card}
                       rank={feed === "leaderboard" ? index + 1 : null}
@@ -1397,6 +1405,7 @@ function LedgerRow({
   showCampusSeal = true,
   selected = false,
   founderLinks = [],
+  returnTo,
 }: {
   card: DirectoryCard;
   rank: number | null;
@@ -1407,12 +1416,14 @@ function LedgerRow({
   showCampusSeal?: boolean;
   selected?: boolean;
   founderLinks?: { name: string; linkedinUrl: string }[];
+  returnTo?: string;
 }) {
   const subtitle = directoryCardSubtitle(card);
   const meta = signalMeta(card);
   const why = whyOverride === undefined ? whyItsHere(card) : whyOverride;
   return (
     <article
+      id={returnTo ? `company-row-${card.id}` : undefined}
       data-card-signals={card.signals}
       data-card-dated={card.latestSignalAt ? "1" : "0"}
       data-card-selected={selected ? "1" : undefined}
@@ -1453,7 +1464,9 @@ function LedgerRow({
       )}
       <div className="min-w-0 flex-1">
         <Link
-          href={`/startup/${card.id}`}
+          href={returnTo ? companyRecordHref(card.id, returnTo) : `/startup/${card.id}`}
+          data-company-record-link={returnTo ? "" : undefined}
+          onNavigate={() => { if (returnTo) rememberCompanyBrowse(returnTo, card.id); }}
           className={`block after:absolute after:inset-0 focus-visible:outline-2 focus-visible:outline-offset-2 ${
             ranked
               ? "line-clamp-2 break-words text-[20px] font-semibold leading-snug tracking-tight text-[color:var(--fg,#0B0E17)] underline-offset-2 lg:group-hover:text-[color:var(--ember,#D96B1C)] lg:group-hover:underline lg:group-hover:decoration-[color:var(--ember,#D96B1C)]/70 sm:line-clamp-none sm:text-[18px] sm:leading-5 sm:[overflow-wrap:anywhere]"
@@ -1517,7 +1530,7 @@ function LedgerRow({
         {meta ? (
           <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
             <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/30 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)]">
-              {meta.primary}
+              {returnTo && /^funding$/i.test(meta.primary) ? "Funding signal" : meta.primary}
             </span>
             {meta.secondary ? (
               <span className="inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] tabular-nums text-[color:var(--fg-2,#3F465C)] sm:hidden">

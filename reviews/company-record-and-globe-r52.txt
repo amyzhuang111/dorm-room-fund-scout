@@ -1,0 +1,24 @@
+Campus Scout company and globe improvements
+
+Scope: company list, standalone company records, similar-company navigation, and the globe (added to scope by the owner). The existing founder/peak panels and bottom sheet were preserved. No network graph files, ingestion jobs, database records, secrets, environment files, or workflows were edited.
+
+Location evidence:
+- Company HQ text and source links come from existing company_facts.hq records. The same first stored HQ used by the company profile is used here.
+- City centers come from GeoNames cities15000.zip, downloaded from https://download.geonames.org/export/dump/cities15000.zip. GeoNames data is CC BY 4.0: https://www.geonames.org/about.html.
+- data/company-city-centers.json contains only the reviewed matching labels and their GeoNames IDs, coordinates, and provenance URLs. No office addresses or precise office positions are inferred. Companies in the same city share one counted marker. Campus coordinates are never substituted for HQ.
+- Matching uses explicit stored city/country/state labels. Common YC US city names San Francisco, New York City/New York, and Brooklyn have explicit aliases. NYC and San Fransisco are presentation matching aliases only; stored facts remain unchanged.
+- Ambiguous or broad locations remain unmapped, including unqualified Boston/London, Dover US, country-only entries, Bay Area, and smaller places not in the downloaded city gazetteer. The map reports unmapped coverage explicitly.
+- Current corpus: 694 mapped company HQs in 45 cities; 479 companies without a mapped city. City centers are not office locations.
+
+Basemap:
+- OpenFreeMap Positron layout from https://tiles.openfreemap.org/styles/positron, adapted to white and cobalt-neutral colors in public/company-globe-style.json. Streets, buildings, neighborhoods and city labels appear with zoom.
+- OpenFreeMap, OpenMapTiles and OpenStreetMap attribution remains visible. GeoNames attribution is included with location coverage.
+
+Company record behavior:
+- Accelerator participation is separate from reported funding amounts and rounds. Missing amounts remain Not on record.
+- Founder/identity/confirmed lead remains above the mobile fold. Stats, signal bars, evidence, founder metadata and all sources remain available.
+- Full record avoids duplicate title, founder lead, profile and activity blocks. Section links support keyboard focus.
+- Source collection dates are labeled separately from verification dates; no date is invented.
+- Local /companies return URLs preserve filter, sort and loaded-page state. Session-only row restoration returns keyboard focus and the same pixel offset, with fallback navigation when storage is unavailable.
+
+Verification: all 13 existing checks passed. The campus touch regression check explicitly selects the Campuses layer before retaining its original 10/10 touch assertions at DPR 2 and 3. HQ mode is verified separately through city search, zoom, result loading, company navigation, mobile expansion and Escape exit. Final record audit: 1,173 HTTP 200 responses; maximum 163,799 bytes. The expanded view temporarily hides the existing map panels and restores them on exit.

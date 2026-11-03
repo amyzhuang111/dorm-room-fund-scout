@@ -12,7 +12,9 @@ import { AssessmentForm } from "./assessment-form";
 import { FeedbackControls } from "./feedback-controls";
 import { PersonLinkButton, ProfileIconLinks } from "./person-link";
 import { CompanyProfileCard } from "./company-profile";
-import { CompanyFullRecord } from "./company-full-record";
+import { CompanyFullRecord, FounderSocial } from "./company-full-record";
+import { evidenceDate, formatEvidenceDate, latestSourceCollection } from "@/lib/ui/company-evidence";
+import styles from "./company-mobile.module.css";
 import { InTheNews } from "./in-the-news";
 import { StartupDirectoryCard, useStartupCard } from "./startup-directory-card";
 
@@ -51,11 +53,13 @@ function founderHref(founder: NamedFounder): string {
   return `/founder/discover?${params.toString()}`;
 }
 
-export function CompanyDetail({ project, initialCard = null }: { project: ProjectDetail; initialCard?: StartupCard | null }) {
+export function CompanyDetail({ project, initialCard = null, standalone = false }: { project: ProjectDetail; initialCard?: StartupCard | null; standalone?: boolean }) {
   const { card } = useStartupCard(project.id, initialCard);
   const concernReasons = project.gateOutcomes.filter((g) => g.result !== "pass");
   const strongestEvidence = project.claims[0];
   const strongestConcern = concernReasons[0];
+  const collected = latestSourceCollection(project.claims);
+  const verified = evidenceDate(project.lastVerifiedAt);
 
   const openQ = strongestConcern
     ? normalizeOpenQuestion(strongestConcern.rationale)
@@ -95,16 +99,30 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
 
   return (
     <div className="space-y-3 p-2.5 sm:space-y-5 sm:p-4">
+      {standalone ? <>
+        <nav aria-label="Company sections" className={styles.recordNavigation}>
+          <a href="#company-details">Details</a>
+          <a href="#company-capital">Funding</a>
+          {project.founderLinks.length ? <a href="#company-founders">Founders</a> : null}
+          <a href="#evidence">Sources</a>
+          <a href="#company-notes">Notes</a>
+        </nav>
+        <p className={styles.sourceFreshness} data-source-freshness="">
+          {collected ? <>Latest source collection: <time dateTime={collected}>{formatEvidenceDate(collected)}</time>.</> : "Source collection date not on record."}
+          {" "}{verified ? <>Last verified: <time dateTime={verified}>{formatEvidenceDate(verified)}</time>.</> : "Verification date not on record."}
+          {" "}Collection does not confirm a company is still active.
+        </p>
+      </> : null}
       {/* Mobile: Why look above Funding so sim-375 matches 73a fold (Funding peeks) */}
-      <div className="sm:hidden">{whyLook}</div>
+      <div className={standalone ? undefined : "sm:hidden"}>{whyLook}</div>
 
       {/* r45: Full record lead (founders / identity / CONFIRMED) stays at the top. */}
       <div data-full-record-top="">
-        <CompanyFullRecord project={project} />
+        <CompanyFullRecord project={project} standalone={standalone} />
       </div>
 
       {/* Header */}
-      <div>
+      {!standalone ? <div>
         {card ? (
           <div className="hidden sm:block" data-dossier-desk-directory-card="">
             <StartupDirectoryCard card={card} embedded />
@@ -185,9 +203,9 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
         <div className="sample-ops-chrome">
           <FeedbackControls entityType="project" entityId={project.id} name={project.name} url={project.websiteUrl || project.primaryLink} />
         </div>
-      </div>
+      </div> : null}
 
-      <div className="hidden sm:block">{whyLook}</div>
+      {!standalone ? <div className="hidden sm:block">{whyLook}</div> : null}
 
       <InTheNews items={project.news} moreHref={`/news?q=${encodeURIComponent(project.name)}`} />
 
@@ -241,8 +259,8 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
       )}
 
       {project.founderLinks.length > 0 ? (
-      <section data-company-founders="">
-        <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Founders</h3>
+      <section data-company-founders="" id={standalone ? "company-founders" : undefined} tabIndex={standalone ? -1 : undefined}>
+        <h3 className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">{standalone ? "Founder details" : "Founders"}</h3>
         <ul className="mt-1 space-y-1 text-sm text-foreground">
           {project.founderLinks.map((f) => (
             <li key={f.personId} className="flex flex-wrap items-center gap-2">
@@ -253,8 +271,9 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
               <EntityMarks entityType="person" entityId={f.personId} name={f.name} campusName={f.school ?? project.universities[0]} websiteUrl={f.linkedinUrl} />
               <EnrollmentBadge status={f.enrollmentStatus} label={f.enrollmentLabel} basis={f.enrollmentBasis} />
               <LeftSchoolBadge leftSchool={f.leftSchool} />
-              <PersonLinkButton link={f.link} name={f.name} />
-              <ProfileIconLinks links={f.profileLinks} name={f.name} />
+              {standalone ? <FounderSocial founder={f} /> : <PersonLinkButton link={f.link} name={f.name} />}
+              {standalone && f.link && !["linkedin", "likely", "unverified"].includes(f.link.kind) ? <PersonLinkButton link={f.link} name={f.name} /> : null}
+              <ProfileIconLinks links={standalone ? f.profileLinks.filter(link => link.type !== "twitter") : f.profileLinks} name={f.name} />
               <span className="text-xs text-muted">{[f.school, f.program].filter(Boolean).join(" · ")}</span>
               {f.otherLinks.length > 0 && (
                 <ul className="basis-full space-y-0.5">
@@ -283,7 +302,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
       </section> ) : null}
 
 
-      <section>
+      {!standalone ? <section>
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Sources</h3>
         <ul className="mt-1 space-y-1 text-sm">
           {Array.from(new Map(project.claims.filter((c) => c.sourceUrl).map((c) => [c.sourceUrl, c])).values()).map((c) => (
@@ -295,11 +314,11 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
           ))}
           {project.claims.length === 0 && <li className="text-muted">No source pages on record yet.</li>}
         </ul>
-      </section>
+      </section> : null}
 
       {/* Evidence */}
-      <section id="evidence">
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Evidence ({project.claims.length})</h3>
+      <section id="evidence" tabIndex={standalone ? -1 : undefined}>
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">{standalone ? "Sources and evidence" : "Evidence"} ({project.claims.length.toLocaleString("en-US")})</h3>
         {strongestEvidence && (
           <div className="mt-1 rounded-md border border-border-c bg-surface p-2.5 text-sm">
             <p className="text-foreground">{strongestEvidence.excerpt}</p>
@@ -307,7 +326,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
               {strongestEvidence.label.replace("_", " ")} · retrieved {strongestEvidence.retrievedAt.slice(0, 10)}
               {strongestEvidence.publishedDate ? ` · published ${strongestEvidence.publishedDate}` : ""} ·{" "}
               <a href={strongestEvidence.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline">
-                source
+                {standalone ? strongestEvidence.sourceName || "source" : "source"}
               </a>
             </p>
           </div>
@@ -319,7 +338,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
               <p className="mt-1 text-muted">
                 {c.label.replace("_", " ")} · {c.claimType} · retrieved {c.retrievedAt.slice(0, 10)} ·{" "}
                 <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline">
-                  source
+                  {standalone ? c.sourceName || "source" : "source"}
                 </a>
               </p>
             </li>
@@ -329,7 +348,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
       </section>
 
       {/* Activity */}
-      <section>
+      {!standalone ? <section>
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Activity ({project.signals.length})</h3>
         <ul className="mt-1 space-y-1.5">
           {project.signals.map((s) => (
@@ -351,11 +370,11 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
           ))}
           {project.signals.length === 0 && <li className="text-sm text-muted">No dated activity recorded yet.</li>}
         </ul>
-      </section>
+      </section> : null}
 
       {/* Notes */}
-      <section>
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Notes ({project.manualNotes.length})</h3>
+      <section id={standalone ? "company-notes" : undefined} tabIndex={standalone ? -1 : undefined}>
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Notes ({project.manualNotes.length.toLocaleString("en-US")})</h3>
         <div className="mt-1">
           <NotesSection entityType="project" entityId={project.id} notes={project.manualNotes} />
         </div>

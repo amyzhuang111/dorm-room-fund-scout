@@ -1,6 +1,7 @@
 import { storedCompanyLinks } from "@/lib/domain/company-link";
 import { companyDisplayCopy } from "@/lib/ui/company-display-copy";
 import { companyRecommendations } from "@/lib/domain/company-recommendations";
+import { companyBrowsePath } from "@/lib/ui/company-browse-path";
 import { notFound, permanentRedirect } from "next/navigation";
 import { CompanyDetail } from "@/components/company-detail";
 import { SampleCompanyShell } from "@/components/sample-company-shell";
@@ -63,8 +64,9 @@ function wireSeedCompanies(all: FacetCompany[], schoolId: string | null, sectorI
   return ranked.slice(0, 48).map(slimWireCard);
 }
 
-export default async function StartupPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function StartupPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const { id } = await params;
+  const returnTo = companyBrowsePath((await searchParams).from);
   if (id.startsWith("user_")) return <UserStartupPage id={id} />;
   const merged = survivorId("project", id);
   if (merged) permanentRedirect(`/startup/${merged}`);
@@ -120,11 +122,12 @@ export default async function StartupPage({ params }: { params: Promise<{ id: st
     stage,
     signalLabel: directoryRow?.signalLabel ?? null,
     recommendations: directoryRow ? companyRecommendations(all, toFacetCompany(directoryRow)) : undefined,
+    returnTo,
   };
   const companies = wireSeedCompanies(all, dossier.schoolId, dossier.sectorId);
   return (
     <SampleCompanyShell companies={companyDisplayCopy(companies)} dossier={companyDisplayCopy(dossier)}>
-      <CompanyDetail project={companyDisplayCopy(project)} initialCard={companyDisplayCopy(card)} />
+      <CompanyDetail project={companyDisplayCopy(project)} initialCard={companyDisplayCopy(card)} standalone />
     </SampleCompanyShell>
   );
 }
