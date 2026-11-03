@@ -716,7 +716,7 @@ export function buildFounderNetworksGraph(): GraphPayload {
   const founderParent = new Map<string, string>();
 
   for (const net of top) {
-    const founderCap = Math.min(120, Math.max(24, Math.round(Math.sqrt(net.founderCount) * 5.5)));
+    const founderCap = Math.min(240, Math.max(28, Math.round(Math.sqrt(net.founderCount) * 7.4)));
     const companyCap = Math.min(100, Math.max(20, Math.round(Math.sqrt(net.founderCount) * 4.5)));
     const cos = (companiesByNet[net.id] ?? [])
       .sort((a, b) => (companyDegree.get(b) ?? 0) - (companyDegree.get(a) ?? 0) || a.localeCompare(b))
@@ -994,7 +994,7 @@ export function buildFounderNetworksGraph(): GraphPayload {
     edgeCounts,
     generatedAt: new Date().toISOString(),
     layout: "packed-glow",
-    sample: { topNetworks: top.length, maxCompaniesPerNetwork: 100, maxFoundersPerNetwork: 120 },
+    sample: { topNetworks: top.length, maxCompaniesPerNetwork: 100, maxFoundersPerNetwork: 240 },
     founderDeals,
     uncrowdedCompanyIds: [...uncrowded],
   };
@@ -1003,7 +1003,7 @@ export function buildFounderNetworksGraph(): GraphPayload {
 function packClusterCenters(items: { id: string; r: number }[]): Map<string, { x: number; y: number }> {
   const sorted = [...items].sort((a, b) => b.r - a.r || a.id.localeCompare(b.id));
   const placed: { id: string; x: number; y: number; r: number }[] = [];
-  const gap = 3; // dense Nature-style packed cloud
+  const gap = -2; // Nature-style: close but not collapsed onto YC
 
   for (const item of sorted) {
     if (placed.length === 0) {
@@ -1029,7 +1029,7 @@ function packClusterCenters(items: { id: string; r: number }[]): Map<string, { x
           }
         }
         if (!ok) continue;
-        const score = x * x * 0.72 + y * y * 1.35; // prefer wide cloud over tall
+        const score = x * x * 0.95 + y * y * 1.05; // balanced pack so YC is not a flat stripe
         if (!best || score < best.score) best = { x, y, score };
       }
     }
@@ -1066,14 +1066,14 @@ function packMembersInCluster(members: GraphNode[], cx: number, cy: number, clus
   for (let g = 0; g < gCount; g++) {
     const nodes = groups[g];
     const weight = Math.sqrt(nodes.length);
-    const gRx = Math.max(7, Math.min(clusterR * 0.5, 5 + weight * 4.8));
-    const gRy = Math.max(6, Math.min(clusterR * 0.42, 4.5 + weight * 3.6));
+    const gRx = Math.max(10, Math.min(clusterR * 0.64, 7 + weight * 5.6));
+    const gRy = Math.max(9, Math.min(clusterR * 0.54, 6 + weight * 4.6));
     const seed = hash01Local(`g:${g}:${nodes[0]?.id ?? g}`);
     const ang = gCount === 1 ? seed * 0.8 : (g / gCount) * Math.PI * 2 + seed * 1.1;
     const dist =
       gCount === 1
-        ? clusterR * 0.08
-        : Math.min(clusterR * 0.72, 8 + weight * 3.8 + seed * clusterR * 0.12);
+        ? clusterR * 0.15
+        : Math.min(clusterR * 0.85, 11 + weight * 4.8 + seed * clusterR * 0.15);
     groupCenters.push({
       x: cx + Math.cos(ang) * dist,
       y: cy + Math.sin(ang) * dist * (0.78 + seed * 0.2),
@@ -1131,26 +1131,25 @@ export function applyForceLayout(graph: GraphPayload): GraphPayload {
   for (const net of networks) {
     const kids = byParent.get(net.networkId ?? "") ?? [];
     const totalFounders = totalByNetEarly.get(net.networkId ?? "") ?? kids.length;
-    // Area ∝ founder count → radius ∝ sqrt(founders). YC (~985) dominates small programs.
-    net.clusterR = Math.max(28, Math.sqrt(Math.max(1, totalFounders)) * 4.35);
+    // Area ∝ founders → r ∝ sqrt. YC (~985) should dominate ~35-40% of the fitted frame.
+    net.clusterR = Math.max(32, Math.sqrt(Math.max(1, totalFounders)) * 5.6);
     // Hub glyph stays modest; founder cloud carries the mass.
     net.size = Math.max(4, Math.min(9, 3.5 + Math.sqrt(totalFounders) * 0.18));
   }
 
-  const centers = packClusterCenters(networks.map((net) => ({ id: net.id, r: net.clusterR })));
-  // Stretch into a wide organic cloud so fit-to-canvas fills the frame width.
+  // Pack on a tighter shell so neighboring clouds sit close (Nature poster density).
+  const centers = packClusterCenters(
+    networks.map((net) => ({ id: net.id, r: Math.max(20, net.clusterR * 0.55) }))
+  );
   const xs0 = [...centers.values()].map((c) => c.x);
   const ys0 = [...centers.values()].map((c) => c.y);
   const spanX0 = Math.max(1, Math.max(...xs0) - Math.min(...xs0));
   const spanY0 = Math.max(1, Math.max(...ys0) - Math.min(...ys0));
-  const targetAspect = 2.35;
-  const stretchX = Math.max(1.15, spanY0 * targetAspect > spanX0 ? (spanY0 * targetAspect) / spanX0 : 1.15);
-  // Push non-dominant clusters farther out on X so the cloud fills the frame.
-  const maxR = Math.max(...networks.map((n) => n.clusterR));
+  // Mild wide aspect only; do not fling small clusters into empty gutters.
+  const targetAspect = 1.55;
+  const stretchX = spanY0 * targetAspect > spanX0 ? Math.min(1.18, (spanY0 * targetAspect) / spanX0) : 1.0;
   for (const [id, c] of centers) {
-    const net = networks.find((n) => n.id === id);
-    const boost = net && net.clusterR < maxR * 0.55 ? 1.22 : 1.0;
-    centers.set(id, { x: c.x * stretchX * boost, y: c.y * 0.92 });
+    centers.set(id, { x: c.x * stretchX, y: c.y });
   }
 
   for (const net of networks) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { assignCampusColors, readableInk } from "@/components/network-style";
+import { assignFounderNetworkCampusColors, readableInk } from "@/components/network-style";
 import type { GraphCluster, GraphFounderDeal, GraphNode, GraphPayload, NetworkKind } from "@/lib/domain/founder-networks-model";
 
 type Point = { x: number; y: number };
@@ -226,10 +226,11 @@ function placeCallouts(
 }
 
 function fitScaleApprox(bounds: { minX: number; maxX: number; minY: number; maxY: number }, size: { w: number; h: number }) {
-  const pad = 48;
+  const padX = Math.max(12, size.w * 0.05);
+  const padY = Math.max(10, size.h * 0.045);
   const spanX = Math.max(1, bounds.maxX - bounds.minX);
   const spanY = Math.max(1, bounds.maxY - bounds.minY);
-  return Math.min((size.w - pad * 2) / spanX, (size.h - pad * 2) / spanY, 1.75);
+  return Math.min((size.w - padX * 2) / spanX, (size.h - padY * 2) / spanY, 2.8);
 }
 
 export function NetworksGraph({
@@ -292,7 +293,7 @@ export function NetworksGraph({
         for (const node of payload.nodes) {
           if (node.campusId) campuses.set(node.campusId, node.campusLabel || node.campusId);
         }
-        campusColorRef.current = assignCampusColors(
+        campusColorRef.current = assignFounderNetworkCampusColors(
           [...campuses.entries()].map(([id, label]) => ({ id, label }))
         );
         viewDirtyRef.current = true;
@@ -335,10 +336,11 @@ export function NetworksGraph({
     let minY = Infinity;
     let maxY = -Infinity;
     for (const c of graph.clusters) {
-      minX = Math.min(minX, c.cx - c.r);
-      maxX = Math.max(maxX, c.cx + c.r);
-      minY = Math.min(minY, c.cy - c.r);
-      maxY = Math.max(maxY, c.cy + c.r);
+      const rr = Math.max(c.labelR || 0, c.r * 0.7);
+      minX = Math.min(minX, c.cx - rr);
+      maxX = Math.max(maxX, c.cx + rr);
+      minY = Math.min(minY, c.cy - rr);
+      maxY = Math.max(maxY, c.cy + rr);
     }
     if (!Number.isFinite(minX)) return { minX: -200, maxX: 200, minY: -140, maxY: 140 };
     return { minX, maxX, minY, maxY };
@@ -361,18 +363,21 @@ export function NetworksGraph({
   }, [graph]);
 
   const fitView = useCallback(() => {
-    const pad = 56;
+    // Target ~85% frame fill (Nature-poster density); leave room for legend + callouts.
+    const padX = Math.max(12, size.w * 0.05);
+    const padY = Math.max(10, size.h * 0.045);
+    const legendH = 48;
     const spanX = Math.max(1, bounds.maxX - bounds.minX);
     const spanY = Math.max(1, bounds.maxY - bounds.minY);
-    const usableW = Math.max(120, size.w - pad * 2);
-    const usableH = Math.max(120, size.h - pad * 2 - 8);
-    const finalScale = Math.min(usableW / spanX, usableH / spanY, 1.7);
+    const usableW = Math.max(120, size.w - padX * 2);
+    const usableH = Math.max(120, size.h - padY * 2 - legendH * 0.25);
+    const finalScale = Math.min(usableW / spanX, usableH / spanY, 2.8);
     const cx = (bounds.minX + bounds.maxX) / 2;
     const cy = (bounds.minY + bounds.maxY) / 2;
     viewRef.current = {
       scale: finalScale,
       tx: size.w / 2 - cx * finalScale,
-      ty: size.h / 2 - cy * finalScale - 6,
+      ty: size.h / 2 - cy * finalScale - 10,
     };
     viewDirtyRef.current = true;
   }, [bounds, size]);
@@ -437,38 +442,43 @@ export function NetworksGraph({
       }
     }
 
-    // Edges: local cofounder + membership ties. Long cross-graph spans fade out.
-    const edgeAlpha = 0.22 * editorial + 0.38 * glow;
+    // Thin translucent curved membership ties for every cluster; cofounders a touch stronger.
     const byId = byIdRef.current;
-    const maxSpan = Math.min(size.w, size.h) * (0.28 + glow * 0.45);
-    if (edgeAlpha > 0.02) {
-      ctx.lineCap = "round";
-      for (const edge of g.edges) {
-        if (edge.type === "network_tie" && editorial > 0.55 && hash01(edge.source + edge.target) > 0.4) continue;
-        if (edge.type === "founder_company" && editorial > 0.65) continue;
-        const a = byId.get(edge.source);
-        const b = byId.get(edge.target);
-        if (!a || !b) continue;
-        const pa = worldToScreen(a.x, a.y);
-        const pb = worldToScreen(b.x, b.y);
-        const span = Math.hypot(pb.x - pa.x, pb.y - pa.y);
-        if (span > maxSpan) continue;
-        const mx = (pa.x + pb.x) / 2;
-        const my = (pa.y + pb.y) / 2;
-        const dx = pb.x - pa.x;
-        const dy = pb.y - pa.y;
-        const bend = edge.type === "cofounder" ? 0.16 : 0.1;
-        ctx.beginPath();
-        ctx.moveTo(pa.x, pa.y);
-        ctx.quadraticCurveTo(mx - dy * bend, my + dx * bend, pb.x, pb.y);
-        const campus = a.campusId || b.campusId;
-        const ink = campus && colors.get(campus) ? colors.get(campus)! : "#6b7280";
-        const mul = edge.type === "cofounder" ? 1.35 : edge.type === "network_founder" ? 0.9 : 0.65;
-        const fade = span > maxSpan * 0.7 ? 0.45 : 1;
-        ctx.lineWidth = edge.type === "cofounder" ? 0.9 : 0.5;
-        ctx.strokeStyle = hexAlpha(ink, edgeAlpha * mul * fade);
-        ctx.stroke();
-      }
+    const maxSpan = Math.min(size.w, size.h) * (0.72 + glow * 0.35);
+    ctx.lineCap = "round";
+    for (const edge of g.edges) {
+      if (edge.type === "founder_company" && editorial > 0.55) continue;
+      // Keep most network_tie hairlines; thin randomly only when very zoomed out.
+      if (edge.type === "network_tie" && editorial > 0.85 && hash01(edge.source + edge.target) > 0.7) continue;
+      const a = byId.get(edge.source);
+      const b = byId.get(edge.target);
+      if (!a || !b) continue;
+      const pa = worldToScreen(a.x, a.y);
+      const pb = worldToScreen(b.x, b.y);
+      const span = Math.hypot(pb.x - pa.x, pb.y - pa.y);
+      if (span < 0.5) continue;
+      // Membership spokes stay visible even when long; cross-graph spans fade, not vanish.
+      const isMembership = edge.type === "network_founder" || edge.type === "network_tie";
+      if (!isMembership && span > maxSpan) continue;
+      const mx = (pa.x + pb.x) / 2;
+      const my = (pa.y + pb.y) / 2;
+      const dx = pb.x - pa.x;
+      const dy = pb.y - pa.y;
+      const bend = edge.type === "cofounder" ? 0.18 : 0.12;
+      ctx.beginPath();
+      ctx.moveTo(pa.x, pa.y);
+      ctx.quadraticCurveTo(mx - dy * bend, my + dx * bend, pb.x, pb.y);
+      const campus = a.campusId || b.campusId;
+      const ink = campus && colors.get(campus) ? colors.get(campus)! : "#64748b";
+      let alpha = 0.18;
+      if (edge.type === "cofounder") alpha = 0.32 * editorial + 0.26 * glow;
+      else if (edge.type === "network_founder") alpha = 0.22 * editorial + 0.28 * glow;
+      else if (edge.type === "network_tie") alpha = 0.14 * editorial + 0.18 * glow;
+      else alpha = 0.1;
+      if (span > maxSpan * 0.85) alpha *= 0.6;
+      ctx.lineWidth = edge.type === "cofounder" ? 0.9 : 0.65;
+      ctx.strokeStyle = hexAlpha(ink, Math.min(0.5, alpha));
+      ctx.stroke();
     }
 
     // Founder + company dots (campus color on founders).
@@ -488,8 +498,8 @@ export function NetworksGraph({
       const dim = uncrowdedOnlyRef.current && !isUncrowded;
       const r =
         node.type === "founder"
-          ? Math.max(1.15, node.size * (0.5 + scale * 0.34))
-          : Math.max(0.8, node.size * (0.4 + scale * 0.28));
+          ? Math.max(1.35, node.size * (0.55 + scale * 0.4))
+          : Math.max(0.85, node.size * (0.42 + scale * 0.3));
       ctx.beginPath();
       ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
       if (node.type === "founder") {
@@ -719,8 +729,14 @@ export function NetworksGraph({
           key={label.id}
           type="button"
           data-canvas-label={label.id}
-          className="absolute z-[1] box-border bg-white/95 px-1.5 py-0.5 text-left text-[11px] font-medium leading-snug hover:bg-white"
-          style={{ left: label.x, top: label.y, width: label.w, color: label.color }}
+          className="absolute z-[1] box-border bg-transparent px-0.5 py-0 text-left text-[11px] font-semibold leading-snug"
+          style={{
+            left: label.x,
+            top: label.y,
+            width: label.w,
+            color: label.color,
+            textShadow: "0 0 3px rgba(255,255,255,0.95), 0 1px 2px rgba(255,255,255,0.9)",
+          }}
           onClick={(event) => {
             event.stopPropagation();
             onSelectNetwork(label.id);
