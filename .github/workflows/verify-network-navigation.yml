@@ -1,0 +1,35 @@
+name: Verify visible and navigable founder network map
+
+on:
+  push:
+    branches:
+      - codex/network-map-visible-and-navigable-2026-11-03
+    paths:
+      - ".github/workflows/verify-network-navigation.yml"
+      - "components/networks-graph.tsx"
+      - "components/networks-graph-3d.tsx"
+      - "scripts/audit/check-network-map-navigation.ts"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  visibility-and-navigation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Verify graph visibility and navigation changes
+        run: ./node_modules/.bin/tsx scripts/audit/check-network-map-navigation.ts
+      - name: Generate network graph from latest canonical database
+        run: npm run precompute:networks
+      - name: Verify existing founder and startup directories
+        run: npm run test:directory
+      - name: Type-check 2D/3D map and overlay controls
+        run: ./node_modules/.bin/tsc --noEmit
