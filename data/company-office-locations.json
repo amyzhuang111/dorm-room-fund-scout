@@ -1,0 +1,19 @@
+{
+  "policy": "Only company-published headquarters or principal business addresses. No private residences, mailing-only addresses, registered agents, campus substitution, or artificial pin scattering. Coordinates need a separate attributable source.",
+  "locations": [
+    {
+      "projectId": "proj_9GUOmdEYxbuH",
+      "company": "Sim",
+      "kind": "principal_business_address",
+      "address": "80 Langton Street, San Francisco, CA 94103, USA",
+      "cityId": "5391959",
+      "longitude": -122.40886930385557,
+      "latitude": 37.77648917351346,
+      "sourceUrl": "https://www.sim.ai/privacy",
+      "excerpt": "principal place of business at 80 Langton Street, San Francisco, CA 94103, USA.",
+      "coordinateSource": "https://data.sfgov.org/resource/3mea-di5p.json?address_number=80&street_name=LANGTON",
+      "coordinateMethod": "San Francisco Enterprise Addressing System base address point 479354",
+      "checkedAt": "2026-11-03"
+    }
+  ]
+}

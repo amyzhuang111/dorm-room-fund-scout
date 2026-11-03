@@ -189,17 +189,12 @@ async function measureFold(browser, base) {
     if (vp.name === "375") {
       const expand = page.locator("[data-fold-sheet-expand]").first();
       if (await expand.count()) {
-        await expand.click().catch(() => {});
-        await page.waitForTimeout(500);
-      } else {
-        await page.evaluate(() => {
-          const sheet = document.querySelector("[data-fold-map-sheet]");
-          if (sheet) sheet.style.height = "300px";
-          sheet?.setAttribute("data-fold-sheet-mode", "deck");
-        });
-        await page.waitForTimeout(400);
+        // Keyboard activation avoids the existing sticky campus rail covering
+        // the peek button after Playwright scrolls it into view.
+        await expand.press("Enter");
       }
-      await page.waitForSelector('[data-fold-sheet-mode="deck"], [data-fold-sheet-mode="expanded"], [data-founder-deck]', { timeout: 10000 }).catch(() => {});
+      await page.waitForSelector('[data-fold-map-sheet][data-fold-sheet-mode="deck"], [data-fold-map-sheet][data-fold-sheet-mode="expanded"]', { timeout: 10000 });
+      await page.locator('[data-fold-sheet-body]').evaluate(el => { el.scrollTop = 0; });
       await page.waitForTimeout(300);
     }
     const m = await page.evaluate(() => {
