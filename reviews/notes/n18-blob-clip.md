@@ -14,5 +14,5 @@ Hard rectangular clipping on mid blobs (upper-left) from contour textures reachi
 - No page errors; change is encodings + tiny graph stash only
 
 ## Shots / preview
-- sha: pending
-- preview: pending
+- sha: `78045e5730415576817a480fd20289b9e0e0d9ea`
+- preview: https://campus-scout-7woqrzlus-amys-projects-d3dfb125.vercel.app
