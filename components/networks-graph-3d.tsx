@@ -17,6 +17,7 @@ import {
   blobScaleForFounders,
   buildCampusEncodings,
   makeCampusContourTexture,
+  satMulFromShare,
   type CampusEncoding,
 } from "@/components/networks-encodings";
 
@@ -531,7 +532,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       const bloomBaseScale: number[] = [];
       const bloomMeta: CampusEncoding[] = [];
       // Prefer campuses with enough founders for a readable contour; keep smaller ones for color on dots
-      const bloomEnc = (encList.length ? encList : []).filter((e) => e.founders >= 10).slice(0, 22);
+      const bloomEnc = (encList.length ? encList : []).filter((e) => e.founders >= 6).slice(0, 28);
       bloomEnc.forEach((enc, seed) => {
         const softTex = makeCampusContourTexture(THREE, enc.rgb, enc.points, enc.share, seed, {
           soft: true,
@@ -551,7 +552,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         });
         const spr = new THREE.Sprite(mat);
         // Overlap for continuous mid field: scale above tight hull
-        const sc = blobScaleForFounders(enc.founders, false) * 1.35;
+        const sc = blobScaleForFounders(enc.founders, false) * 1.55;
         bloomBaseScale.push(sc);
         bloomMeta.push(enc);
         spr.userData.kind = "campus";
@@ -566,12 +567,18 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
 
       // Mid dots: real founders only (subset for density); no decorative tails
       const midKeep = new Uint8Array(n);
+      let midKeepN = 0;
       for (let i = 0; i < n; i++) {
         if (p.kind[i] !== 0) continue;
+        // n18: denser mid — show most real founders (was ~sparse pastel)
         const keep =
-          (hash01(`midkeep:${i}`) < 0.45 && (p.deg[i] ?? 0) < 18) || hash01(`midkeep2:${i}`) < 0.14;
+          (hash01(`midkeep:${i}`) < 0.82 && (p.deg[i] ?? 0) < 28) ||
+          hash01(`midkeep2:${i}`) < 0.48 ||
+          (p.deg[i] ?? 0) >= 4;
         midKeep[i] = keep ? 1 : 0;
+        if (keep) midKeepN++;
       }
+      (window as unknown as { __NETWORKS_MID_KEEP__?: number }).__NETWORKS_MID_KEEP__ = midKeepN;
 
       // ---- Real sourced edges only (no cofounder hairball, no decorative tails) ----
       // Poster ek: 0 founder→company, 1 hub→founder, 2 cofounder, 3 shared-investor
@@ -899,12 +906,12 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
             if (!(obj as import("three").Sprite).isSprite) return;
             const spr = obj as import("three").Sprite;
             const m = spr.material as import("three").SpriteMaterial;
-            m.opacity = midW * 0.88 + deepW * 0.92;
+            m.opacity = midW * 0.98 + deepW * 0.92;
             const useDeep = deepW >= midW && deepW > 0.35;
             const nextMap = useDeep ? spr.userData.deepMap : spr.userData.softMap;
             if (nextMap && m.map !== nextMap) m.map = nextMap;
             const base = bloomBaseScale[bi] ?? 120;
-            const midScale = (1.08 + midW * 0.28) * mobileContain;
+            const midScale = (1.22 + midW * 0.38) * mobileContain;
             const deepScale = (0.42 + deepW * 0.38) * (mobile ? 0.9 : 1);
             const s = base * (midW > deepW ? midScale : deepScale);
             spr.scale.set(s, s, 1);
@@ -931,15 +938,16 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
             const rgb = ci >= 0 && p.campuses[ci] ? hexToRgb(p.campuses[ci].color) : [148, 163, 184];
             const keep = midKeep[i] === 1;
             const midHide = midW > 0.35 && !keep;
-            const dark = 0.06;
-            const mix = midHide ? 0 : midW;
-            const r = (rgb[0] / 255) * (1 - mix) * (0.85 + outW * 0.15) + dark * mix;
-            const g = (rgb[1] / 255) * (1 - mix) * (0.85 + outW * 0.15) + dark * mix;
-            const bch = (rgb[2] / 255) * (1 - mix) * (0.85 + outW * 0.15) + dark * mix;
+            // Mid: keep campus hue (sat encodes campus; darkness is mild) — not gray wash
+            const mix = midHide ? 0 : midW * 0.55;
+            const shade = 0.55; // darken toward campus-ink, not black
+            const r = (rgb[0] / 255) * (1 - mix) * (0.85 + outW * 0.15) + (rgb[0] / 255) * shade * mix;
+            const g = (rgb[1] / 255) * (1 - mix) * (0.85 + outW * 0.15) + (rgb[1] / 255) * shade * mix;
+            const bch = (rgb[2] / 255) * (1 - mix) * (0.85 + outW * 0.15) + (rgb[2] / 255) * shade * mix;
             colAttr.setXYZ(i, r, g, bch);
             let s: number;
             if (midHide) s = 0.01;
-            else if (midW > 0.35 && keep) s = (6.5 + Math.min(4.5, (p.r[i] ?? 2) * 0.65)) * (0.85 + midW * 0.85);
+            else if (midW > 0.35 && keep) s = (5.2 + Math.min(4.2, (p.r[i] ?? 2) * 0.55 + Math.sqrt(Math.max(1, p.deg[i] ?? 1)) * 0.35)) * (0.9 + midW * 0.7);
             else s = baseSize[i] * (0.72 + outW * 0.35) * (1 + deepW * 0.4);
             sizeA.setX(i, s);
             posA.setXYZ(i, positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
@@ -947,11 +955,50 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           colAttr.needsUpdate = true;
           sizeA.needsUpdate = true;
           posA.needsUpdate = true;
-          // Bundled campus→hub strong at out; founder→company clearer at deep; mid quiet
-          edgeMat.opacity = outW * 0.9 + midW * 0.12 + deepW * 0.55 + cardW * 0.08;
-          edgeMat2.opacity = outW * 0.38 + deepW * 0.22;
-          edges.visible = outW > 0.08 || deepW > 0.2 || midW > 0.15;
-          edgesFat.visible = edges.visible && (outW > 0.2 || deepW > 0.35);
+          // Stage ink from real data: mid campus→hub ∝ tie weight; deep fo→co ∝ degree
+          const ec = edgeGeo.getAttribute("color") as import("three").BufferAttribute;
+          const ec2 = edgeGeo2.getAttribute("color") as import("three").BufferAttribute;
+          for (const d of drawn) {
+            let stageMul = 1;
+            if (d.kind === "campus_hub") {
+              const wNorm = Math.min(1, d.weight / maxBundleW);
+              // Mid: curve weight strictly ∝ tie count (data ink)
+              stageMul =
+                outW * (0.55 + 0.45 * wNorm) +
+                midW * (0.28 + 0.72 * wNorm) +
+                deepW * (0.35 + 0.4 * wNorm) +
+                cardW * 0.08;
+            } else {
+              const degN = Math.min(1, Math.log2(1 + d.weight) / 4);
+              // Deep: real edge opacity scales with node degree
+              stageMul =
+                outW * 0.12 +
+                midW * 0.04 +
+                deepW * (0.28 + 0.72 * degN) +
+                cardW * 0.06;
+              const yearOk =
+                (p.kind[d.a] !== 0 || nodeVisible[d.a] === 1) &&
+                (p.kind[d.b] !== 0 || nodeVisible[d.b] === 1);
+              if (!yearOk) stageMul *= 0.04;
+            }
+            for (let s = 0; s < d.segCount; s++) {
+              const base = (d.segStart + s) * 6;
+              for (let k = 0; k < 2; k++) {
+                const idx = (d.segStart + s) * 2 + k;
+                const r = edgeColBase[base + k * 3] * stageMul;
+                const g = edgeColBase[base + k * 3 + 1] * stageMul;
+                const bch = edgeColBase[base + k * 3 + 2] * stageMul;
+                ec.setXYZ(idx, r, g, bch);
+                ec2.setXYZ(idx, r, g, bch);
+              }
+            }
+          }
+          ec.needsUpdate = true;
+          ec2.needsUpdate = true;
+          edgeMat.opacity = Math.min(1, 0.55 + outW * 0.4 + midW * 0.35 + deepW * 0.35);
+          edgeMat2.opacity = outW * 0.4 + midW * 0.28 + deepW * 0.25;
+          edges.visible = outW > 0.08 || deepW > 0.15 || midW > 0.12;
+          edgesFat.visible = edges.visible && (outW > 0.15 || midW > 0.2 || deepW > 0.3);
         },
       };
 
@@ -1048,41 +1095,48 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         const raw: OverlayLabel[] = [];
         void scale;
         void midW;
-        // Out: ~8–10 highest-signal campus margin notes (Nature restraint)
-        const notePool = [...(p.campusLabels ?? [])].sort((a, b) => b.n - a.n).slice(0, 12);
-        for (const lab of notePool) {
-          const pt = worldToOverlay(lab.x, lab.y, 0);
-          if (!pt.onscreen) continue;
-          const ang = hash01(`note:${lab.id}`) * Math.PI * 2;
-          const off = outW > 0.35 ? 30 + Math.min(44, Math.sqrt(lab.n) * 2.0) : 0;
-          const lx = pt.x + Math.cos(ang) * off;
-          const ly = pt.y + Math.sin(ang) * off * 0.82;
-          const enc = encodingsRef.current.find((e) => e.id === lab.id);
-          raw.push({
-            id: lab.id,
-            label: outW > 0.4 && lab.n ? `${lab.label} · ${lab.n}` : lab.label,
-            x: lx,
-            y: ly,
-            ax: pt.x,
-            ay: pt.y,
-            priority: 1000 + lab.n,
-            kind: "campus",
-            n: lab.n,
-            color: enc?.color,
-          });
+        // Out: only 8–10 highest-signal hubs (campus notes by founder count)
+        const noteCap = ww < 500 ? 8 : 10;
+        const notePool = [...(p.campusLabels ?? [])].sort((a, b) => b.n - a.n).slice(0, noteCap);
+        if (outW > 0.25) {
+          for (const lab of notePool) {
+            const pt = worldToOverlay(lab.x, lab.y, 0);
+            if (!pt.onscreen) continue;
+            const ang = hash01(`note:${lab.id}`) * Math.PI * 2;
+            const off = outW > 0.35 ? 30 + Math.min(44, Math.sqrt(lab.n) * 2.0) : 0;
+            const lx = pt.x + Math.cos(ang) * off;
+            const ly = pt.y + Math.sin(ang) * off * 0.82;
+            const enc = encodingsRef.current.find((e) => e.id === lab.id);
+            raw.push({
+              id: lab.id,
+              label: outW > 0.4 && lab.n ? `${lab.label} · ${lab.n}` : lab.label,
+              x: lx,
+              y: ly,
+              ax: pt.x,
+              ay: pt.y,
+              priority: 1000 + lab.n,
+              kind: "campus",
+              n: lab.n,
+              color: enc?.color,
+            });
+          }
         }
-        for (const hub of p.hubs.slice(0, outW > 0.4 ? 8 : 10)) {
-          const pt = worldToOverlay(p.x[hub.i], p.y[hub.i], zArr[hub.i] ?? 0, false, hubSpread);
-          if (!pt.onscreen) continue;
-          const short = hub.label.length > (outW > 0.4 ? 18 : 22) ? `${hub.label.slice(0, outW > 0.4 ? 16 : 20)}…` : hub.label;
-          raw.push({
-            id: `hub:${hub.id}`,
-            label: short,
-            x: pt.x + 10,
-            y: pt.y + (outW > 0.4 ? 8 : 12),
-            priority: 400 + hub.founders,
-            kind: "hub",
-          });
+        // Investor/program hub labels: strongest signal only, not at far out (campus notes own that stage)
+        if (outW < 0.55) {
+          const hubPool = [...p.hubs].sort((a, b) => b.founders - a.founders).slice(0, outW > 0.25 ? 6 : 10);
+          for (const hub of hubPool) {
+            const pt = worldToOverlay(p.x[hub.i], p.y[hub.i], zArr[hub.i] ?? 0, false, hubSpread);
+            if (!pt.onscreen) continue;
+            const short = hub.label.length > 20 ? `${hub.label.slice(0, 18)}…` : hub.label;
+            raw.push({
+              id: `hub:${hub.id}`,
+              label: short,
+              x: pt.x + 10,
+              y: pt.y + 10,
+              priority: 400 + hub.founders,
+              kind: "hub",
+            });
+          }
         }
         // Deep: tracking boxes + dashed arcs — never cover hub labels
         if (deepW > 0.12 && p.campusLabels) {
@@ -1142,7 +1196,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
             setCards([]);
           }
         } else if (outW > 0.35) {
-          setLabels(collideLabels(raw, ww < 500 ? 6 : 10));
+          setLabels(collideLabels(raw, ww < 500 ? 8 : 10));
           setTrackBoxes([]);
           setArcs([]);
           setMediaCards([]);
@@ -1636,8 +1690,31 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           <span className="inline-flex items-center gap-1" title="Blob area scales with founders on the map">
             <span className="inline-block h-3 w-3 rounded-full border border-slate-500/40 bg-slate-400/30" /> Size = founders
           </span>
-          <span className="inline-flex items-center gap-1" title="Chroma from share backed by top funds / crowded pathways">
-            <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#2563eb]/35" /> Saturation = top-fund share
+          <span
+            className="inline-flex items-center gap-1"
+            title="Chroma from share backed by top funds; swatches use satMulFromShare"
+            data-networks-legend-sat=""
+          >
+            <span className="inline-flex items-center gap-0.5" aria-hidden="true">
+              {[0, 0.5, 1].map((share) => {
+                const mul = satMulFromShare(share);
+                const br = 37, bg0 = 99, bb = 235;
+                const lum = 0.3 * br + 0.59 * bg0 + 0.11 * bb;
+                const r = Math.round(lum * (1 - mul) + br * mul);
+                const g = Math.round(lum * (1 - mul) + bg0 * mul);
+                const b = Math.round(lum * (1 - mul) + bb * mul);
+                return (
+                  <span
+                    key={share}
+                    className="inline-block h-2.5 w-2.5 rounded-full border border-slate-400/30"
+                    style={{ background: `rgb(${r},${g},${b})` }}
+                    data-sat-share={share}
+                    data-sat-mul={mul.toFixed(3)}
+                  />
+                );
+              })}
+            </span>
+            Saturation = top-fund share
           </span>
           <span className="inline-flex items-center gap-1" title="Weighted campus→investor/program curves">
             <span className="inline-block h-[2px] w-4 rounded bg-slate-600/70" /> Curve weight = tie count
