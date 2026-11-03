@@ -12,6 +12,7 @@ on:
       - "data/imports/v3-campus-founders-batch1[2-8]-*.json"
       - "scripts/ingest/import-v3-campus-founders.ts"
       - "scripts/ingest/build-rbpc-2026.py"
+      - "lib/domain/directory.test.ts"
   workflow_dispatch:
 
 permissions:
