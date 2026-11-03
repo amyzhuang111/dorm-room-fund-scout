@@ -5,6 +5,7 @@ on:
       - codex/merge-r50-networks-preview-2026-11-03
     paths:
       - ".github/workflows/verify-network-preview-merge.yml"
+      - "app/layout.tsx"
       - "app/networks/**"
       - "components/networks*"
       - "lib/domain/founder-networks*"
