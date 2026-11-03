@@ -784,9 +784,120 @@ export interface ProjectDetail extends CandidateSummary {
   news: NewsListItem[];
 }
 
+/**
+ * Dossier pages must resolve any real company id founders deep-link to —
+ * including non-investable companies that sit outside the 1,173 Scout desk.
+ * Investable candidates reuse the Scout summary; others get a thin DB stub.
+ */
+function candidateSummaryForDossier(id: string): CandidateSummary | null {
+  const fromScout = allCandidates().find((c) => c.id === id);
+  if (fromScout) return fromScout;
+  const db = getDb();
+  const row = db
+    .prepare(
+      `SELECT id, name, sector, description, website_url, primary_link, primary_link_kind,
+              is_portfolio_reference, signal_tier, signal_tier_basis, verification_status,
+              last_verified_at, verification_note
+       FROM projects WHERE id = ? AND kind = 'company'`,
+    )
+    .get(id) as
+    | {
+        id: string;
+        name: string;
+        sector: string | null;
+        description: string | null;
+        website_url: string | null;
+        primary_link: string | null;
+        primary_link_kind: string | null;
+        is_portfolio_reference: number;
+        signal_tier: string | null;
+        signal_tier_basis: string | null;
+        verification_status: string | null;
+        last_verified_at: string | null;
+        verification_note: string | null;
+      }
+    | undefined;
+  if (!row) return null;
+  const founderRows = db
+    .prepare(
+      `SELECT pe.name as name, pe.id as id
+       FROM person_project_roles ppr
+       JOIN people pe ON pe.id = ppr.person_id
+       WHERE ppr.project_id = ? AND lower(ppr.role) LIKE '%founder%'
+       ORDER BY pe.name`,
+    )
+    .all(id) as { name: string; id: string }[];
+  const universityRows = db
+    .prepare(
+      `SELECT DISTINCT u.id as id, u.name as name
+       FROM person_project_roles ppr
+       JOIN affiliations a ON a.person_id = ppr.person_id
+       JOIN universities u ON u.id = a.university_id
+       WHERE ppr.project_id = ?
+       ORDER BY u.name`,
+    )
+    .all(id) as { id: string; name: string }[];
+  const gates = getGateOutcomesFor(db, id);
+  const overall = overallGateStatus(gates);
+  return {
+    id: row.id,
+    name: row.name,
+    sector: row.sector,
+    description: row.description,
+    websiteUrl: row.website_url,
+    primaryLink: row.primary_link,
+    primaryLinkKind: row.primary_link_kind,
+    founders: founderRows.map((f) => f.name),
+    founderLinks: founderRows.map((f) => ({
+      name: f.name,
+      personId: f.id,
+      linkedinUrl: null,
+      linkedinCandidates: [],
+      link: null,
+      profileLinks: [],
+      otherLinks: [],
+      founderStatus: null,
+      role: null,
+      enrollmentStatus: null,
+      enrollmentLabel: null,
+      enrollmentBasis: null,
+      leftSchool: false,
+      school: null,
+      program: null,
+    })),
+    founderIds: founderRows.map((f) => f.id),
+    universities: universityRows.map((u) => u.name),
+    universityIds: universityRows.map((u) => u.id),
+    sectorTags: [],
+    sourceIds: [],
+    overallGate: overall,
+    gateOutcomes: gates,
+    queue: assignQueue({
+      isPortfolioReference: row.is_portfolio_reference === 1,
+      overallGate: overall,
+      hasHeadlineScore: false,
+      hasWatchMilestone: false,
+    }),
+    qualityScore: null,
+    coverage: null,
+    strongestSignalKey: null,
+    openQuestion: null,
+    latestSignalNote: null,
+    recordedPlace: null,
+    enrollmentBoost: 0,
+    signalTier: row.signal_tier,
+    verificationStatus: row.verification_status,
+    lastVerifiedAt: row.last_verified_at,
+    verificationNote: row.verification_note,
+    signalTierBasis: row.signal_tier_basis,
+    sameSchoolCofounders: false,
+    sameSchoolBonus: 0,
+  };
+}
+
 export function getProjectDetail(id: string): ProjectDetail | null {
   const db = getDb();
-  const summary = allCandidates().find((c) => c.id === id);
+  const summary = candidateSummaryForDossier(id);
   if (!summary) return null;
 
   const claims = (

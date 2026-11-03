@@ -1,19 +1,67 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { CampusSeal } from "@/components/campus-seal";
 import { LogoMark } from "@/components/sample-instrument";
 import {
   founderMatches,
   assignWhyWorthALook,
+  signalTypeLabel,
   type FounderLead,
 } from "@/lib/domain/founder-index";
+import {
+  founderIsOpenLane,
+  type OpenLaneShell,
+} from "@/lib/domain/open-lane";
 
 const DECK_PAGE = 12;
+const STRONG = new Set(["funding", "launch", "accelerator", "award"]);
+
+function evidenceChips(
+  founder: FounderLead,
+): { key: string; label: string; kind: "signal" | "program"; href: string | null }[] {
+  const out: { key: string; label: string; kind: "signal" | "program"; href: string | null }[] = [];
+  const signalSources = founder.signalSourceByType ?? {};
+  const programSources = founder.programSourceByLabel ?? {};
+  const signals = [...founder.signalTypes]
+    .filter((t) => STRONG.has(t))
+    .sort(
+      (a, b) =>
+        ({ funding: 0, launch: 1, accelerator: 2, award: 3 }[a] ?? 50) -
+          ({ funding: 0, launch: 1, accelerator: 2, award: 3 }[b] ?? 50) || a.localeCompare(b),
+    );
+  for (const type of signals.slice(0, 3)) {
+    const href = signalSources[type] ?? null;
+    // Signal chips without a real source stay off the card (plain claim with no link).
+    if (!href) continue;
+    out.push({ key: `s:${type}`, label: signalTypeLabel(type), kind: "signal", href });
+  }
+  for (const program of founder.programs.slice(0, 2)) {
+    if (out.some((c) => c.label === program)) continue;
+    const href = programSources[program] ?? null;
+    if (!href) continue;
+    out.push({ key: `p:${program}`, label: program, kind: "program", href });
+  }
+  return out.slice(0, 4);
+}
+
+function poolForLane(
+  founders: FounderLead[],
+  query: string,
+  campusId: string | null,
+  preferOpenLane: boolean,
+  investableCompanyIds: ReadonlySet<string>,
+) {
+  const matched = founders.filter((f) => founderMatches(f, { text: query, campusId: campusId || null }));
+  if (!preferOpenLane) return { list: matched, lane: "all" as const };
+  const open = matched.filter((f) => founderIsOpenLane(f, investableCompanyIds));
+  if (open.length > 0) return { list: open, lane: "open" as const };
+  return { list: matched, lane: "all" as const };
+}
 
 /**
- * r53 mobile: horizontal snap founder deck for investors scanning on a phone.
+ * r57 mobile: vertical open-lane founder feed for investors.
  * Desktop never mounts this. Cards keep data-founder-card for density/fold gates.
  */
 export function MobileFounderDeck({
@@ -21,29 +69,25 @@ export function MobileFounderDeck({
   status,
   query,
   campusId,
+  openLane = null,
+  investableCompanyIds,
 }: {
   founders: FounderLead[];
   status: "loading" | "ready" | "error";
   query: string;
   campusId: string | null;
+  openLane?: OpenLaneShell | null;
+  investableCompanyIds: ReadonlySet<string>;
 }) {
-  const scroller = useRef<HTMLDivElement | null>(null);
   const [shown, setShown] = useState(DECK_PAGE);
 
-  const matches = useMemo(
-    () => founders.filter((f) => founderMatches(f, { text: query, campusId: campusId || null })),
-    [founders, query, campusId],
+  const { list: matches, lane } = useMemo(
+    () => poolForLane(founders, query, campusId, true, investableCompanyIds),
+    [founders, query, campusId, investableCompanyIds],
   );
   const list = matches.slice(0, shown);
   const whyById = useMemo(() => assignWhyWorthALook(list), [list]);
-
-  const onScroll = () => {
-    const el = scroller.current;
-    if (!el) return;
-    if (el.scrollLeft + el.clientWidth > el.scrollWidth - 120) {
-      setShown((n) => Math.min(matches.length, n + DECK_PAGE));
-    }
-  };
+  const openCount = openLane?.count ?? matches.length;
 
   if (status === "loading") {
     return (
@@ -68,30 +112,36 @@ export function MobileFounderDeck({
   }
 
   return (
-    <section data-founder-results="" data-founder-deck="1" data-founder-peek={String(Math.min(list.length, 3))}>
-      <div className="mb-1 flex items-baseline justify-between gap-2 px-0.5">
+    <section
+      data-founder-results=""
+      data-founder-deck="1"
+      data-founder-deck-lane={lane}
+      data-founder-peek={String(Math.min(list.length, 3))}
+    >
+      <div className="mb-2 flex items-baseline justify-between gap-2 px-0.5">
         <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[color:var(--cobalt,#2F4FD8)]">
-          Founders
-          <span className="ml-2 tabular-nums text-[color:var(--fg-3,#5C647A)]">{matches.length.toLocaleString("en-US")}</span>
+          {lane === "open" ? "Open lane" : "Founders"}
+          <span className="ml-2 tabular-nums text-[color:var(--fg-3,#5C647A)]">
+            {(lane === "open" ? openCount : matches.length).toLocaleString("en-US")}
+          </span>
         </p>
-        <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-3,#5C647A)]">Swipe</p>
+        <p className="font-mono text-[9px] uppercase tracking-[0.1em] text-[color:var(--fg-3,#5C647A)]">
+          {lane === "open" ? "No top fund yet" : "Matches"}
+        </p>
       </div>
-      <div
-        ref={scroller}
-        onScroll={onScroll}
-        className="flex snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        data-founder-deck-scroller=""
-      >
+      <div className="space-y-2" data-founder-deck-list="">
         {list.map((founder) => {
           const why = whyById.get(founder.id) ?? null;
+          const chips = evidenceChips(founder);
           const href = founder.companyId
             ? `/startup/${founder.companyId}?from=map${campusId && campusId !== "missing" ? `&campus=${encodeURIComponent(campusId)}` : ""}`
             : null;
           return (
             <div
               key={founder.id}
-              className="w-[min(292px,78vw)] shrink-0 snap-start"
+              className="w-full"
               data-founder-card=""
+              data-founder-card-lane={lane}
               data-signal-chrome={
                 founder.signalTypes.includes("funding")
                   ? "funding"
@@ -105,10 +155,10 @@ export function MobileFounderDeck({
               }
             >
               <article
-                className="flex h-full flex-col rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 shadow-[0_1px_0_rgba(15,23,42,0.04)]"
+                className="flex flex-col rounded-md border border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 shadow-[0_1px_0_rgba(15,23,42,0.04)]"
                 data-founder-card-body=""
               >
-                <div className="flex items-start gap-2">
+                <div className="flex items-start gap-2.5">
                   <span data-founder-seal="" className="mt-0.5 inline-flex shrink-0">
                     <CampusSeal label={founder.campus} size="lg" />
                   </span>
@@ -128,14 +178,43 @@ export function MobileFounderDeck({
                       {founder.sector ? ` · ${founder.sector}` : ""}
                     </p>
                   </div>
+                  {href ? (
+                    <Link
+                      href={href}
+                      className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-[color:var(--cobalt,#2F4FD8)] hover:underline"
+                    >
+                      Open
+                    </Link>
+                  ) : null}
                 </div>
+                {chips.length > 0 ? (
+                  <div className="mt-2 flex flex-wrap gap-1.5" data-founder-evidence-chips="">
+                    {chips.map((chip) => {
+                      const className =
+                        chip.kind === "signal"
+                          ? "inline-flex h-[18px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:underline"
+                          : "inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] text-[color:var(--fg-2,#3F465C)] hover:underline";
+                      return (
+                        <a
+                          key={chip.key}
+                          href={chip.href!}
+                          target="_blank"
+                          rel="noreferrer"
+                          className={className}
+                          data-evidence-chip={chip.kind}
+                          data-evidence-href={chip.href!}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {chip.label}
+                        </a>
+                      );
+                    })}
+                  </div>
+                ) : null}
                 {why ? (
                   <p className="mt-2 overflow-visible border-l-2 border-[color:var(--cobalt,#2F4FD8)]/40 pl-2 text-[12px] leading-4 text-[color:var(--fg,#0B0E17)]" data-why-worth="">
                     <span className="block font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]">Why worth a look</span>
-                    <span
-                      className="mt-0.5 block overflow-visible whitespace-normal break-words [text-overflow:clip]"
-                      data-why-text=""
-                    >
+                    <span className="mt-0.5 block overflow-visible whitespace-normal break-words [text-overflow:clip]" data-why-text="">
                       {why}
                     </span>
                   </p>
@@ -144,59 +223,52 @@ export function MobileFounderDeck({
                     Why worth a look blank
                   </p>
                 )}
-                {href ? (
-                  <Link
-                    href={href}
-                    className="mt-auto pt-2 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)] hover:underline"
-                  >
-                    Open record
-                  </Link>
-                ) : (
-                  <p className="mt-auto pt-2 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">
-                    No company page
-                  </p>
-                )}
               </article>
             </div>
           );
         })}
-        {shown < matches.length ? (
-          <button
-            type="button"
-            className="flex w-28 shrink-0 snap-start flex-col items-center justify-center rounded-md border border-dashed border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--cobalt-haze,#E8ECFA)]/40 px-2 font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)]"
-            onClick={() => setShown((n) => Math.min(matches.length, n + DECK_PAGE))}
-          >
-            More
-            <span className="mt-1 tabular-nums text-[10px] text-[color:var(--fg-3,#5C647A)]">
-              {(matches.length - shown).toLocaleString("en-US")} left
-            </span>
-          </button>
-        ) : null}
       </div>
+      {shown < matches.length ? (
+        <button
+          type="button"
+          className="mt-2 inline-flex h-9 w-full items-center justify-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)]"
+          onClick={() => setShown((n) => Math.min(matches.length, n + DECK_PAGE))}
+          data-founder-deck-more=""
+        >
+          More
+          <span className="ml-2 tabular-nums text-[10px] text-[color:var(--fg-3,#5C647A)]">
+            {(matches.length - shown).toLocaleString("en-US")} left
+          </span>
+        </button>
+      ) : null}
     </section>
   );
 }
 
-
-/** Compact one-line founder chips for the map-peek rest state (~132px sheet). */
+/** Compact open-lane chips for the map-peek rest state (~120px sheet). */
 export function MobileFounderPeek({
   founders,
   status,
   query,
   campusId,
+  openLane = null,
+  investableCompanyIds,
   onExpand,
 }: {
   founders: FounderLead[];
   status: "loading" | "ready" | "error";
   query: string;
   campusId: string | null;
+  openLane?: OpenLaneShell | null;
+  investableCompanyIds: ReadonlySet<string>;
   onExpand?: () => void;
 }) {
-  const matches = useMemo(
-    () => founders.filter((f) => founderMatches(f, { text: query, campusId: campusId || null })),
-    [founders, query, campusId],
+  const { list: matches, lane } = useMemo(
+    () => poolForLane(founders, query, campusId, true, investableCompanyIds),
+    [founders, query, campusId, investableCompanyIds],
   );
   const list = matches.slice(0, 16);
+  const figure = openLane?.count ?? matches.length;
 
   if (status === "loading") {
     return (
@@ -214,11 +286,23 @@ export function MobileFounderPeek({
   }
 
   return (
-    <section data-founder-results="" data-founder-peek-strip="1" data-founder-peek={String(Math.min(list.length, 3))}>
+    <section
+      data-founder-results=""
+      data-founder-peek-strip="1"
+      data-founder-peek-lane={lane}
+      data-founder-peek={String(Math.min(list.length, 3))}
+    >
       <div className="mb-0.5 flex items-baseline justify-between gap-2">
         <p className="font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">
-          Founders
-          <span className="ml-1.5 tabular-nums text-[color:var(--fg-3,#5C647A)]">{matches.length.toLocaleString("en-US")}</span>
+          {lane === "open" ? "Open lane" : "Founders"}
+          <span className="ml-1.5 tabular-nums text-[color:var(--fg,#0B0E17)]" data-fold-open-lane-peek-figure="">
+            {figure.toLocaleString("en-US")}
+          </span>
+          {lane === "open" ? (
+            <span className="ml-1.5 font-sans text-[10px] font-semibold normal-case tracking-normal text-[color:var(--fg-2,#3F465C)]">
+              no top fund yet
+            </span>
+          ) : null}
         </p>
         <button
           type="button"
@@ -238,10 +322,11 @@ export function MobileFounderPeek({
           const href = founder.companyId
             ? `/startup/${founder.companyId}?from=map${campusId && campusId !== "missing" ? `&campus=${encodeURIComponent(campusId)}` : ""}`
             : null;
+          const chip = evidenceChips(founder)[0];
           return (
             <div
               key={founder.id}
-              className="inline-flex h-9 max-w-[13rem] shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-2"
+              className="inline-flex h-10 max-w-[14rem] shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-2"
               data-founder-card=""
               data-founder-peek-chip=""
             >
@@ -250,11 +335,9 @@ export function MobileFounderPeek({
                 <span className="block truncate text-[11px] font-semibold text-[color:var(--fg,#0B0E17)]" data-founder-name="">
                   {founder.name}
                 </span>
-                {founder.company ? (
-                  <span className="mt-0.5 block truncate font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]" data-founder-company="">
-                    {founder.company}
-                  </span>
-                ) : null}
+                <span className="mt-0.5 block truncate font-mono text-[9px] text-[color:var(--fg-3,#5C647A)]">
+                  {chip ? chip.label : founder.company || founder.campus || "Signal"}
+                </span>
               </span>
               {href ? (
                 <Link
@@ -279,16 +362,21 @@ export function MobileCampusSegments({
   selectedId,
   onSelect,
   onClear,
+  kicker = "Campuses",
 }: {
   campuses: { id: string; name: string; founders: number }[];
   selectedId: string | null;
   onSelect: (id: string) => void;
   onClear: () => void;
+  kicker?: string;
 }) {
-  const top = campuses.slice(0, 3);
+  const top = campuses.slice(0, 5);
   if (top.length === 0) return null;
   return (
     <div className="border-b border-[color:var(--line,#E1E5EF)] pb-2" data-fold-campus-segments="">
+      <p className="mb-1 font-mono text-[9px] font-bold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]" data-fold-campus-segments-kicker="">
+        {kicker}
+      </p>
       <ol
         className="flex gap-1.5 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         data-fold-peak-campus-rank-mobile=""

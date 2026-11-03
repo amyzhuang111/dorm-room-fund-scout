@@ -13,6 +13,10 @@ export interface FounderLead {
   companyId: string | null;
   /** Stored person_project_roles.role for the linked company, when present. */
   role: string | null;
+  /** Best real source URL per signal type (duckduckgo skipped). */
+  signalSourceByType: Record<string, string>;
+  /** Best real source URL per program label when stored on a company fact or program signal. */
+  programSourceByLabel: Record<string, string>;
 }
 
 export interface FounderQuery {

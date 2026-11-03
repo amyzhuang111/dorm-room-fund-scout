@@ -6,6 +6,7 @@ import {
   openLaneDefinitionText,
   openLaneStrongDefinition,
   openLaneTopFundDefinition,
+  openLaneDeskDefinition,
 } from "@/lib/domain/open-lane";
 
 function loadRecencyFunnel() {
@@ -138,7 +139,8 @@ export default function MethodologyPage() {
         </p>
         <p className="mt-3 text-sm text-foreground" data-methodology-open-lane-def="">
           <span data-methodology-open-lane-def-strong="">{openLaneStrongDefinition()}</span>{" "}
-          <span data-methodology-open-lane-def-top-fund="">{openLaneTopFundDefinition()}</span>
+          <span data-methodology-open-lane-def-top-fund="">{openLaneTopFundDefinition()}</span>{" "}
+          <span data-methodology-open-lane-def-desk="">{openLaneDeskDefinition()}</span>
         </p>
         <p className="sr-only" data-methodology-open-lane-def-full="">
           {openLaneDefinitionText()}
