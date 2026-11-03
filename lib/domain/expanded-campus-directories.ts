@@ -1,6 +1,6 @@
-// New officially sourced campus directories, 2026-11-03.
-// These appear in the Sources catalogue; only Cornell batch12 is staged for
-// data import. Catalogue inclusion does NOT claim a live DB ingestion.
+// Official campus and competition directories discovered 2026-11-03.
+// Sources with status 'implemented' have batch imports in data/campus-universe.db;
+// unconfigured discovery/reference directories are listed but NOT bulk copied.
 import type { SourceCatalogueEntry } from "./source-quality";
 
 export const EXPANDED_CAMPUS_DIRECTORIES: SourceCatalogueEntry[] = [
@@ -34,8 +34,8 @@ export const EXPANDED_CAMPUS_DIRECTORIES: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "Names and class years are verified by Cornell; the roster alone does not verify incorporation, traction, funding, or websites."
     ],
-    "status": "unconfigured",
-    "statusNote": "33 student ventures are staged in batch12 for a database import; not yet applied to the deployed database.",
+    "status": "implemented",
+    "statusNote": "2026 public roster ingested in batch 12 into Campus Scout's SQLite database. Company and people identity are deduplicated against existing records. Team members are not automatically founders or current students.",
     "dbSourceId": "src_v3_crea_cornell_edu"
   },
   {
@@ -68,8 +68,9 @@ export const EXPANDED_CAMPUS_DIRECTORIES: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "A named team member is not automatically a cofounder; use the source's exact team role and confirm legal founders independently."
     ],
-    "status": "unconfigured",
-    "statusNote": "2026 page verified; named teams await careful ingestion."
+    "status": "implemented",
+    "statusNote": "2026 public roster ingested in batch 13 into Campus Scout's SQLite database. Company and people identity are deduplicated against existing records. Team members are not automatically founders or current students.",
+    "dbSourceId": "src_v3_venturecat_northwestern_edu"
   },
   {
     "id": "cat_exp_nyu_entrepreneurs_challenge_2026",
@@ -101,8 +102,9 @@ export const EXPANDED_CAMPUS_DIRECTORIES: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "Differentiate 2026–28 students from 2010–24 alumni and unaffiliated teammates; do not assign everyone a 2026 NYU student status."
     ],
-    "status": "unconfigured",
-    "statusNote": "2026 teams directory verified; alumni and student records require separate labels."
+    "status": "implemented",
+    "statusNote": "2026 public roster ingested in batch 15 into Campus Scout's SQLite database. Company and people identity are deduplicated against existing records. Team members are not automatically founders or current students.",
+    "dbSourceId": "src_v3_nyusternberkleycenter_com"
   },
   {
     "id": "cat_exp_harvard_pic_2026",
@@ -134,8 +136,9 @@ export const EXPANDED_CAMPUS_DIRECTORIES: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "Only student-track ventures should be treated as student cohorts; finalist status is not funding or student-founder proof for each named team member."
     ],
-    "status": "unconfigured",
-    "statusNote": "Official 2026 finalist list verified; most founder identities require individual profile review."
+    "status": "implemented",
+    "statusNote": "2026 public roster ingested in batch 18 into Campus Scout's SQLite database. Company and people identity are deduplicated against existing records. Team members are not automatically founders or current students.",
+    "dbSourceId": "src_v3_innovationlabs_harvard_edu"
   },
   {
     "id": "cat_exp_cmu_venturebridge_2026",
@@ -167,8 +170,9 @@ export const EXPANDED_CAMPUS_DIRECTORIES: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "The 2026 portfolio is mixed faculty, PhD, alumni and fellows; do not call every team a current student venture."
     ],
-    "status": "unconfigured",
-    "statusNote": "Official 2026 source verified. Some 2026 CMU names may already be imported from the previous cohort batch."
+    "status": "implemented",
+    "statusNote": "2026 public roster ingested in batch 14 into Campus Scout's SQLite database. Company and people identity are deduplicated against existing records. Team members are not automatically founders or current students.",
+    "dbSourceId": "src_v3_cmu_edu"
   },
   {
     "id": "cat_exp_rice_rbpc_2026",
@@ -200,8 +204,9 @@ export const EXPANDED_CAMPUS_DIRECTORIES: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "A Rice-hosted competition does not imply Rice enrollment; use the university stated beside each company and verify individual founders."
     ],
-    "status": "unconfigured",
-    "statusNote": "Cross-campus opportunity source; keep under global sources rather than Rice-only."
+    "status": "implemented",
+    "statusNote": "2026 public roster ingested in batch 17 into Campus Scout's SQLite database. Company and people identity are deduplicated against existing records. Team members are not automatically founders or current students.",
+    "dbSourceId": "src_v3_rbpc_rice_edu"
   },
   {
     "id": "cat_exp_uchicago_nvc_2026",
@@ -233,8 +238,9 @@ export const EXPANDED_CAMPUS_DIRECTORIES: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "The New Venture Challenge includes student and executive MBA tracks; verify individual student status and financing separately."
     ],
-    "status": "unconfigured",
-    "statusNote": "Official 2026 finalist directory article verified."
+    "status": "implemented",
+    "statusNote": "2026 public roster ingested in batch 16 into Campus Scout's SQLite database. Company and people identity are deduplicated against existing records. Team members are not automatically founders or current students.",
+    "dbSourceId": "src_v3_polsky_uchicago_edu"
   },
   {
     "id": "cat_exp_gatech_createx_2026",
@@ -266,8 +272,9 @@ export const EXPANDED_CAMPUS_DIRECTORIES: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "CREATE-X also serves faculty and alumni; do not infer that an attendee is a current Georgia Tech student."
     ],
-    "status": "unconfigured",
-    "statusNote": "Useful for discovering 2026 demo teams; full machine-readable roster not established."
+    "status": "implemented",
+    "statusNote": "2026 public roster ingested in batch 16 into Campus Scout's SQLite database. Company and people identity are deduplicated against existing records. Team members are not automatically founders or current students.",
+    "dbSourceId": "src_v3_news_gatech_edu"
   },
   {
     "id": "cat_exp_columbia_entrepreneurship_directory",
