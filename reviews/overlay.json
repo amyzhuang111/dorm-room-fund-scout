@@ -247,7 +247,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
-      "networksUnobstructed": 100,
+      "networksUnobstructed": 91.9,
       "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
@@ -289,7 +289,7 @@
     "calloutOnLabel": 0,
     "networksUnobstructed": {
       "375": 100,
-      "1440": 100
+      "1440": 91.9
     }
   }
 }

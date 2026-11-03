@@ -3,6 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
+import { execSync } from "node:child_process";
 import { applyForceLayout, buildFounderNetworksGraph, buildFounderNetworksPage } from "../lib/domain/founder-networks";
 import type { FounderNetworksPage } from "../lib/domain/founder-networks-model";
 
@@ -55,3 +56,5 @@ console.log(
   `founder-networks-page.json ${summary.pageKiB} KiB · ${page.totals.networks} networks · ${page.totals.founderLinks} links in ${(performance.now() - started).toFixed(0)} ms`
 );
 console.log(JSON.stringify(summary));
+
+execSync("npx tsx scripts/build-poster-graph.mts", { stdio: "inherit" });

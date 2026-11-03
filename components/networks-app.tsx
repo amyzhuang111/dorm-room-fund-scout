@@ -52,8 +52,6 @@ export function NetworksApp() {
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [matrixOpen, setMatrixOpen] = useState(false);
   const [concentrationOpen, setConcentrationOpen] = useState(true);
-  const [mobileHubsOpen, setMobileHubsOpen] = useState(false);
-  const [mobileInvestorsOpen, setMobileInvestorsOpen] = useState(false);
   const [desktopHubsOpen, setDesktopHubsOpen] = useState(false);
 
   useEffect(() => {
@@ -74,7 +72,7 @@ export function NetworksApp() {
 
   const active: NetworkSummary | null = useMemo(
     () => data?.topNetworks.find((row) => row.id === activeNetwork) ?? null,
-    [data, activeNetwork]
+    [data, activeNetwork],
   );
   const members: NetworkMember[] = active && data ? data.membersByNetwork[active.id] ?? [] : [];
 
@@ -104,7 +102,7 @@ export function NetworksApp() {
   return (
     <div className="min-h-screen bg-white text-[color:var(--fg)]" data-networks-page="">
       <header className="border-b border-[color:var(--line)] bg-white" data-networks-hero="">
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-0.5 px-4 py-2 sm:gap-2 sm:px-5 sm:py-5">
+        <div className="mx-auto flex max-w-[1400px] flex-col gap-0.5 px-4 py-2 sm:gap-1 sm:px-6 sm:py-3">
           <div className="flex items-center gap-2 text-[color:var(--cobalt)]">
             <CampusSeal label="CS" title="Campus Scout" size="sm" />
             <span className="text-[10px] font-medium uppercase tracking-[0.08em] sm:text-xs">Campus Scout</span>
@@ -126,103 +124,30 @@ export function NetworksApp() {
         </div>
       </header>
 
-      <main className="mx-auto flex max-w-[1280px] flex-col gap-2 px-4 py-2 sm:gap-8 sm:px-5 sm:py-6">
-        <section aria-labelledby="graph-heading" className="order-1 rounded-lg border border-[color:var(--line)] bg-white md:order-1">
-          <div className="px-3 py-1.5 sm:px-4 sm:py-3">
-            <h2 id="graph-heading" className="text-[14px] font-semibold tracking-tight sm:text-[15px]">
+      <main className="mx-auto flex max-w-[1400px] flex-col gap-4 px-3 py-2 sm:gap-5 sm:px-6 sm:py-3">
+        {/* Poster-scale map: full width, no box border */}
+        <section aria-labelledby="graph-heading" className="order-1">
+          <div className="mb-1 px-1 sm:mb-2">
+            <h2 id="graph-heading" className="text-[15px] font-semibold tracking-tight sm:text-base">
               Network map
             </h2>
-            <p className="mt-0.5 hidden text-[13px] text-[color:var(--fg-2)] sm:block" data-networks-context-desk="">
-              Founders are colored by campus. Hubs are programs and funds. Lines are real co-founder and membership ties. Hover a founder for the company and backers.
+            <p className="mt-0.5 hidden text-[12px] text-[color:var(--fg-2)] sm:block" data-networks-context-desk="">
+              Every founder and company, colored by campus. Dark hubs are programs and funds — hover a founder, click a hub.
             </p>
             <p className="mt-0.5 text-[11px] text-[color:var(--fg-2)] sm:hidden" data-networks-context-mobile="">
-              Campus colored founders and program hubs.
+              Campus-colored founders and program hubs — scroll to zoom.
             </p>
           </div>
-          <NetworksGraph
-            investorHubs={data.investorHubs}
-            onSelectCompany={(id) => setCompanyId(id)}
-            onSelectNetwork={(id) => {
-              setActiveNetwork(id);
-            }}
-          />
-          {/* Mobile fold-375 (n7 win): graph first, then top 4 hubs + More, then investor list. Full names wrap. */}
-          <div className="space-y-2 border-t border-[color:var(--line)] px-3 py-1.5 md:hidden" data-networks-mobile-fold="">
-            <ol className="divide-y divide-[color:var(--line)] rounded border border-[color:var(--line)]" data-networks-mobile-top="">
-              {data.topNetworks.map((row, index) => {
-                const selected = row.id === activeNetwork;
-                const mobileHide = index >= 4 && !mobileHubsOpen ? "hidden" : "";
-                return (
-                  <li key={`fold-hub-${row.id}`} className={mobileHide}>
-                    <button
-                      type="button"
-                      className={`flex w-full items-start gap-2 px-2 py-1.5 text-left ${selected ? "bg-[color:var(--cobalt-haze)]" : "hover:bg-[#f7f8fc]"}`}
-                      onClick={() => setActiveNetwork(row.id)}
-                      aria-pressed={selected}
-                    >
-                      <span className="w-5 shrink-0 pt-0.5 text-[10px] tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
-                      <span className="min-w-0 flex-1 whitespace-normal break-words text-[12px] font-medium leading-snug text-[color:var(--fg)]">{row.label}</span>
-                      <span className="shrink-0 pt-0.5 text-[12px] tabular-nums text-[color:var(--fg)]">
-                        {row.founderCount.toLocaleString("en-US")}
-                        <span className="text-[color:var(--fg-3)]"> founders</span>
-                      </span>
-                    </button>
-                  </li>
-                );
-              })}
-              {data.topNetworks.length > 4 ? (
-                <li>
-                  <button
-                    type="button"
-                    className="w-full px-2 py-1.5 text-left text-[12px] font-medium text-[color:var(--cobalt)]"
-                    data-networks-mobile-more=""
-                    aria-expanded={mobileHubsOpen}
-                    onClick={() => setMobileHubsOpen((open) => !open)}
-                  >
-                    {mobileHubsOpen
-                      ? "Show fewer hubs"
-                      : `More hubs (${(data.topNetworks.length - 4).toLocaleString("en-US")})`}
-                  </button>
-                </li>
-              ) : null}
-            </ol>
-            <div data-networks-mobile-investors="">
-              <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Investor hubs</div>
-              <ol className="divide-y divide-[color:var(--line)] rounded border border-[color:var(--line)]">
-                {(mobileInvestorsOpen ? data.investorHubs : data.investorHubs.slice(0, 4)).map((row, index) => (
-                  <li key={`fold-inv-${row.id}`}>
-                    <button
-                      type="button"
-                      className="flex w-full items-start gap-2 px-2 py-1.5 text-left text-[12px] hover:bg-[#f7f8fc]"
-                      onClick={() => setActiveNetwork(row.id)}
-                    >
-                      <span className="w-5 shrink-0 pt-0.5 tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
-                      <span className="min-w-0 flex-1 whitespace-normal break-words font-medium leading-snug text-[color:var(--fg)]">{row.label}</span>
-                      <span className="shrink-0 pt-0.5 tabular-nums text-[color:var(--fg-2)]">{row.founderCount.toLocaleString("en-US")}</span>
-                    </button>
-                  </li>
-                ))}
-                {data.investorHubs.length > 4 ? (
-                  <li>
-                    <button
-                      type="button"
-                      className="w-full px-2 py-1.5 text-left text-[12px] font-medium text-[color:var(--cobalt)]"
-                      data-networks-mobile-investors-more=""
-                      aria-expanded={mobileInvestorsOpen}
-                      onClick={() => setMobileInvestorsOpen((open) => !open)}
-                    >
-                      {mobileInvestorsOpen
-                        ? "Show fewer investors"
-                        : `More investors (${(data.investorHubs.length - 4).toLocaleString("en-US")})`}
-                    </button>
-                  </li>
-                ) : null}
-              </ol>
-            </div>
+          <div className="md:min-h-0">
+            <NetworksGraph
+              investorHubs={data.investorHubs}
+              onSelectCompany={(id) => setCompanyId(id)}
+              onSelectNetwork={(id) => setActiveNetwork(id)}
+            />
           </div>
         </section>
 
-        <section aria-labelledby="top-networks-heading" className="order-2 md:order-2">
+        <section aria-labelledby="top-networks-heading" className="order-2">
           <div className="mb-2 sm:mb-3">
             <h2 id="top-networks-heading" className="text-base font-semibold tracking-tight sm:text-lg">
               Top networks
@@ -246,9 +171,13 @@ export function NetworksApp() {
                       onClick={() => setActiveNetwork(row.id)}
                       aria-pressed={selected}
                     >
-                      <span className="w-5 shrink-0 pt-0.5 text-[10px] tabular-nums text-[color:var(--fg-3)] sm:w-7 sm:text-xs">{String(index + 1).padStart(2, "0")}</span>
+                      <span className="w-5 shrink-0 pt-0.5 text-[10px] tabular-nums text-[color:var(--fg-3)] sm:w-7 sm:text-xs">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block whitespace-normal break-words text-[13px] font-medium leading-snug text-[color:var(--fg)] sm:text-sm">{row.label}</span>
+                        <span className="block whitespace-normal break-words text-[13px] font-medium leading-snug text-[color:var(--fg)] sm:text-sm">
+                          {row.label}
+                        </span>
                         <span className="hidden text-[11px] text-[color:var(--fg-3)] sm:block">{KIND_LABEL[row.kind]}</span>
                       </span>
                       <span className="shrink-0 pt-0.5 text-[12px] tabular-nums text-[color:var(--fg)] sm:text-sm">
@@ -282,7 +211,8 @@ export function NetworksApp() {
                   <div className="mb-2">
                     <h3 className="text-base font-semibold text-[color:var(--fg)]">{active.label}</h3>
                     <p className="text-xs text-[color:var(--fg-3)]">
-                      {KIND_LABEL[active.kind]} · {active.companyCount.toLocaleString("en-US")} companies · {active.campusCount.toLocaleString("en-US")} campuses
+                      {KIND_LABEL[active.kind]} · {active.companyCount.toLocaleString("en-US")} companies ·{" "}
+                      {active.campusCount.toLocaleString("en-US")} campuses
                     </p>
                   </div>
                   <ul className="max-h-[28rem] space-y-2 overflow-y-auto pr-1">
@@ -323,7 +253,7 @@ export function NetworksApp() {
                   {members.length === 0 ? <p className="text-sm text-[color:var(--fg-3)]">No linked founders on file for this network.</p> : null}
                 </>
               ) : (
-                <p className="text-sm text-[color:var(--fg-3)]">Select a network to see founders and companies.</p>
+                <p className="text-sm text-[color:var(--fg-3)]">Select a network to see its founders.</p>
               )}
             </aside>
           </div>
