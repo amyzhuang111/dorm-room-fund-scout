@@ -1850,3 +1850,14 @@ html[data-sample="halflight"] [data-site-nav] {
     max-width: min(340px, 34%);
   }
 }
+
+/* /networks preview (dc6d7fd): page-only cream, all other desks stay white. */
+html:has([data-networks-cream]) {
+  --networks-bg: #ece9e4;
+}
+html:has([data-networks-cream]) body {
+  background: var(--networks-bg, #ece9e4);
+}
+html:has([data-networks-cream]) [data-site-nav] {
+  background: var(--networks-bg, #ece9e4);
+}
