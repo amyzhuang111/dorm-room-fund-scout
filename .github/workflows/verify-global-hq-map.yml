@@ -1,0 +1,50 @@
+name: Verify restored global startup-location map
+on:
+  push:
+    branches: [codex/restore-global-startup-hq-map-2026-11-03]
+    paths:
+      - ".github/workflows/verify-global-hq-map.yml"
+      - "app/api/company-locations/**"
+      - "components/tile-globe.tsx"
+      - "components/company-location-*"
+      - "data/company-*"
+      - "lib/client/office-map-points*"
+      - "lib/client/use-globe-rotation.ts"
+      - "lib/domain/company-locations*"
+      - "public/company-globe-style.json"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-global-map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Validate verified HQ city/office locations in current DB
+        run: ./node_modules/.bin/tsx lib/domain/company-locations.test.ts
+      - name: Validate building-level aggregation without jitter
+        run: ./node_modules/.bin/tsx lib/client/office-map-points.test.ts
+      - name: Validate existing founder and company explorer
+        run: npm run test:directory
+      - name: Typecheck both globe modes and /networks
+        run: ./node_modules/.bin/tsc --noEmit
+      - name: Ensure default globe has both distinct map modes
+        run: |
+          node --input-type=module -e '
+            import fs from "node:fs";
+            import assert from "node:assert/strict";
+            const home=fs.readFileSync("components/tile-globe.tsx","utf8");
+            assert.match(home, /Startup HQs/);
+            assert.match(home, /Campuses/);
+            assert.match(home, /setProjection\(\{ type: "globe" \}\)/);
+            assert.match(home, /CompanyLocationLayer/);
+            const style=JSON.parse(fs.readFileSync("public/company-globe-style.json","utf8"));
+            assert.ok(style.layers.length>10);
+            console.log("Global startup HQ toggle, campus markers and globe projection preserved");
+          '
