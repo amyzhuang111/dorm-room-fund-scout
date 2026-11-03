@@ -12,7 +12,7 @@
 | Companies total | 5,665 |
 | Excluded older alumni (&lt;2023) | 235 companies |
 | Unverified recency | 4,171 companies |
-| Verified founder-people with grad year 2021 or 2022 (excluded from site eligibility) | **87** |
+| Founder-people with enrollment_grad_year 2021 or 2022 (all `older_alumni`; excluded from site) | **91** (75 with `enrollment_basis=verified`) |
 | This import: startups found / imported / merged | 97 / 81 / 16 |
 | This import: founders created / linked | 99 / 130 |
 
@@ -51,7 +51,7 @@
 | Waterloo SVF investments | No founder/campus/grad evidence (Velocity remains Waterloo source) |
 
 ## 2021–2022 alums
-Per Amy: **no held list**. Grad years still stored. **87** founder-people in the corpus have verified grad year 2021 or 2022 and do not qualify under the 2023 site cutoff (companies only stay on-site if another founder is current/2023+).
+Per Amy: **no held list**. Grad years still stored. **91** founder-people have enrollment_grad_year 2021 or 2022 (all marked older_alumni; **75** with enrollment_basis=verified). No held list. Companies stay on-site only if another founder is current/2023+.
 
 ## Artifacts
 - Script: `scripts/import-sources-pm-2026-11-02.ts`
