@@ -54,6 +54,7 @@ export function NetworksApp() {
   const [concentrationOpen, setConcentrationOpen] = useState(true);
   const [mobileHubsOpen, setMobileHubsOpen] = useState(false);
   const [mobileInvestorsOpen, setMobileInvestorsOpen] = useState(false);
+  const [desktopHubsOpen, setDesktopHubsOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -103,13 +104,13 @@ export function NetworksApp() {
   return (
     <div className="min-h-screen bg-white text-[color:var(--fg)]" data-networks-page="">
       <header className="border-b border-[color:var(--line)] bg-white" data-networks-hero="">
-        <div className="mx-auto flex max-w-[1280px] flex-col gap-1 px-4 py-3 sm:gap-2 sm:px-5 sm:py-5">
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-0.5 px-4 py-2 sm:gap-2 sm:px-5 sm:py-5">
           <div className="flex items-center gap-2 text-[color:var(--cobalt)]">
             <CampusSeal label="CS" title="Campus Scout" size="sm" />
             <span className="text-[10px] font-medium uppercase tracking-[0.08em] sm:text-xs">Campus Scout</span>
           </div>
-          <h1 className="text-xl font-semibold tracking-tight text-[color:var(--fg)] sm:text-2xl">Campus founder networks</h1>
-          <p className="max-w-3xl text-[13px] leading-snug text-[color:var(--fg-2)] sm:text-sm sm:leading-normal">
+          <h1 className="text-lg font-semibold tracking-tight text-[color:var(--fg)] sm:text-2xl">Campus founder networks</h1>
+          <p className="max-w-3xl text-[12px] leading-snug text-[color:var(--fg-2)] sm:text-sm sm:leading-normal" data-networks-context="">
             A map of the programs and funds that already reach student founders.{" "}
             <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> of{" "}
             <span data-networks-count="corpusCompanies">{data.totals.corpusCompanies.toLocaleString("en-US")}</span> companies
@@ -125,16 +126,16 @@ export function NetworksApp() {
         </div>
       </header>
 
-      <main className="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-3 sm:gap-8 sm:px-5 sm:py-6">
-        <section aria-labelledby="graph-heading" className="order-1 overflow-hidden rounded-lg border border-[color:var(--line)] bg-white md:order-1">
-          <div className="px-3 py-2 sm:px-4 sm:py-3">
-            <h2 id="graph-heading" className="text-[15px] font-semibold tracking-tight">
+      <main className="mx-auto flex max-w-[1280px] flex-col gap-2 px-4 py-2 sm:gap-8 sm:px-5 sm:py-6">
+        <section aria-labelledby="graph-heading" className="order-1 rounded-lg border border-[color:var(--line)] bg-white md:order-1">
+          <div className="px-3 py-1.5 sm:px-4 sm:py-3">
+            <h2 id="graph-heading" className="text-[14px] font-semibold tracking-tight sm:text-[15px]">
               Network map
             </h2>
-            <p className="mt-0.5 hidden text-[13px] text-[color:var(--fg-2)] sm:block">
+            <p className="mt-0.5 hidden text-[13px] text-[color:var(--fg-2)] sm:block" data-networks-context-desk="">
               Founders are colored by campus. Hubs are programs and funds. Lines are real co-founder and membership ties. Hover a founder for the company and backers.
             </p>
-            <p className="mt-0.5 text-[11px] text-[color:var(--fg-2)] sm:hidden">
+            <p className="mt-0.5 text-[11px] text-[color:var(--fg-2)] sm:hidden" data-networks-context-mobile="">
               Campus colored founders and program hubs.
             </p>
           </div>
@@ -145,8 +146,8 @@ export function NetworksApp() {
               setActiveNetwork(id);
             }}
           />
-          {/* Mobile fold-375: graph first, then top 4 hubs + More, then investor list (no truncation). */}
-          <div className="space-y-3 border-t border-[color:var(--line)] px-3 py-2 md:hidden" data-networks-mobile-fold="">
+          {/* Mobile fold-375 (n7 win): graph first, then top 4 hubs + More, then investor list. Full names wrap. */}
+          <div className="space-y-2 border-t border-[color:var(--line)] px-3 py-1.5 md:hidden" data-networks-mobile-fold="">
             <ol className="divide-y divide-[color:var(--line)] rounded border border-[color:var(--line)]" data-networks-mobile-top="">
               {data.topNetworks.map((row, index) => {
                 const selected = row.id === activeNetwork;
@@ -155,13 +156,13 @@ export function NetworksApp() {
                   <li key={`fold-hub-${row.id}`} className={mobileHide}>
                     <button
                       type="button"
-                      className={`flex w-full items-center gap-2 px-2.5 py-1.5 text-left ${selected ? "bg-[color:var(--cobalt-haze)]" : "hover:bg-[#f7f8fc]"}`}
+                      className={`flex w-full items-start gap-2 px-2 py-1.5 text-left ${selected ? "bg-[color:var(--cobalt-haze)]" : "hover:bg-[#f7f8fc]"}`}
                       onClick={() => setActiveNetwork(row.id)}
                       aria-pressed={selected}
                     >
-                      <span className="w-5 shrink-0 text-[10px] tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
-                      <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-[color:var(--fg)]">{row.label}</span>
-                      <span className="shrink-0 text-[12px] tabular-nums text-[color:var(--fg)]">
+                      <span className="w-5 shrink-0 pt-0.5 text-[10px] tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
+                      <span className="min-w-0 flex-1 whitespace-normal break-words text-[12px] font-medium leading-snug text-[color:var(--fg)]">{row.label}</span>
+                      <span className="shrink-0 pt-0.5 text-[12px] tabular-nums text-[color:var(--fg)]">
                         {row.founderCount.toLocaleString("en-US")}
                         <span className="text-[color:var(--fg-3)]"> founders</span>
                       </span>
@@ -173,7 +174,7 @@ export function NetworksApp() {
                 <li>
                   <button
                     type="button"
-                    className="w-full px-2.5 py-2 text-left text-[12px] font-medium text-[color:var(--cobalt)]"
+                    className="w-full px-2 py-1.5 text-left text-[12px] font-medium text-[color:var(--cobalt)]"
                     data-networks-mobile-more=""
                     aria-expanded={mobileHubsOpen}
                     onClick={() => setMobileHubsOpen((open) => !open)}
@@ -188,31 +189,31 @@ export function NetworksApp() {
             <div data-networks-mobile-investors="">
               <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]">Investor hubs</div>
               <ol className="divide-y divide-[color:var(--line)] rounded border border-[color:var(--line)]">
-                {(mobileInvestorsOpen ? data.investorHubs : data.investorHubs.slice(0, 6)).map((row, index) => (
+                {(mobileInvestorsOpen ? data.investorHubs : data.investorHubs.slice(0, 4)).map((row, index) => (
                   <li key={`fold-inv-${row.id}`}>
                     <button
                       type="button"
-                      className="flex w-full items-center gap-2 px-2.5 py-1.5 text-left text-[12px] hover:bg-[#f7f8fc]"
+                      className="flex w-full items-start gap-2 px-2 py-1.5 text-left text-[12px] hover:bg-[#f7f8fc]"
                       onClick={() => setActiveNetwork(row.id)}
                     >
-                      <span className="w-5 shrink-0 tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
-                      <span className="min-w-0 flex-1 truncate font-medium text-[color:var(--fg)]">{row.label}</span>
-                      <span className="shrink-0 tabular-nums text-[color:var(--fg-2)]">{row.founderCount.toLocaleString("en-US")}</span>
+                      <span className="w-5 shrink-0 pt-0.5 tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
+                      <span className="min-w-0 flex-1 whitespace-normal break-words font-medium leading-snug text-[color:var(--fg)]">{row.label}</span>
+                      <span className="shrink-0 pt-0.5 tabular-nums text-[color:var(--fg-2)]">{row.founderCount.toLocaleString("en-US")}</span>
                     </button>
                   </li>
                 ))}
-                {data.investorHubs.length > 6 ? (
+                {data.investorHubs.length > 4 ? (
                   <li>
                     <button
                       type="button"
-                      className="w-full px-2.5 py-2 text-left text-[12px] font-medium text-[color:var(--cobalt)]"
+                      className="w-full px-2 py-1.5 text-left text-[12px] font-medium text-[color:var(--cobalt)]"
                       data-networks-mobile-investors-more=""
                       aria-expanded={mobileInvestorsOpen}
                       onClick={() => setMobileInvestorsOpen((open) => !open)}
                     >
                       {mobileInvestorsOpen
                         ? "Show fewer investors"
-                        : `More investors (${(data.investorHubs.length - 6).toLocaleString("en-US")})`}
+                        : `More investors (${(data.investorHubs.length - 4).toLocaleString("en-US")})`}
                     </button>
                   </li>
                 ) : null}
@@ -235,22 +236,22 @@ export function NetworksApp() {
             >
               {data.topNetworks.map((row, index) => {
                 const selected = row.id === activeNetwork;
-                // Mobile: first 4 hubs, rest behind a More toggle (no mid-row clip).
-                const mobileHide = index >= 4 && !mobileHubsOpen ? "hidden sm:list-item" : "";
+                const deskLimit = 12;
+                const deskHide = index >= deskLimit && !desktopHubsOpen ? "hidden" : "";
                 return (
-                  <li key={row.id} className={mobileHide}>
+                  <li key={row.id} className={deskHide}>
                     <button
                       type="button"
-                      className={`flex w-full items-center gap-2 px-2.5 py-1.5 text-left transition-colors sm:gap-3 sm:px-3 sm:py-2.5 ${selected ? "bg-[color:var(--cobalt-haze)]" : "hover:bg-[#f7f8fc]"}`}
+                      className={`flex w-full items-start gap-2 px-2.5 py-2 text-left transition-colors sm:gap-3 sm:px-3 sm:py-2.5 ${selected ? "bg-[color:var(--cobalt-haze)]" : "hover:bg-[#f7f8fc]"}`}
                       onClick={() => setActiveNetwork(row.id)}
                       aria-pressed={selected}
                     >
-                      <span className="w-5 shrink-0 text-[10px] tabular-nums text-[color:var(--fg-3)] sm:w-7 sm:text-xs">{String(index + 1).padStart(2, "0")}</span>
+                      <span className="w-5 shrink-0 pt-0.5 text-[10px] tabular-nums text-[color:var(--fg-3)] sm:w-7 sm:text-xs">{String(index + 1).padStart(2, "0")}</span>
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-[13px] font-medium text-[color:var(--fg)] sm:text-sm">{row.label}</span>
+                        <span className="block whitespace-normal break-words text-[13px] font-medium leading-snug text-[color:var(--fg)] sm:text-sm">{row.label}</span>
                         <span className="hidden text-[11px] text-[color:var(--fg-3)] sm:block">{KIND_LABEL[row.kind]}</span>
                       </span>
-                      <span className="shrink-0 text-[12px] tabular-nums text-[color:var(--fg)] sm:text-sm">
+                      <span className="shrink-0 pt-0.5 text-[12px] tabular-nums text-[color:var(--fg)] sm:text-sm">
                         {row.founderCount.toLocaleString("en-US")}
                         <span className="text-[color:var(--fg-3)]"> founders</span>
                       </span>
@@ -258,18 +259,18 @@ export function NetworksApp() {
                   </li>
                 );
               })}
-              {data.topNetworks.length > 4 ? (
-                <li className="sm:hidden">
+              {data.topNetworks.length > 12 ? (
+                <li>
                   <button
                     type="button"
                     className="w-full px-2.5 py-2 text-left text-[12px] font-medium text-[color:var(--cobalt)]"
-                    data-networks-mobile-more=""
-                    aria-expanded={mobileHubsOpen}
-                    onClick={() => setMobileHubsOpen((open) => !open)}
+                    data-networks-desktop-more=""
+                    aria-expanded={desktopHubsOpen}
+                    onClick={() => setDesktopHubsOpen((open) => !open)}
                   >
-                    {mobileHubsOpen
-                      ? "Show fewer hubs"
-                      : `More hubs (${(data.topNetworks.length - 4).toLocaleString("en-US")})`}
+                    {desktopHubsOpen
+                      ? "Show fewer networks"
+                      : `More networks (${(data.topNetworks.length - 12).toLocaleString("en-US")})`}
                   </button>
                 </li>
               ) : null}

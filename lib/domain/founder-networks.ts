@@ -1291,8 +1291,26 @@ export function buildFounderNetworksGraph(): GraphPayload {
       companies.find((id) => companySet.has(id)) ??
       [...(meta.companyFounders.entries())].find(([, set]) => set.has(founderId))?.[0] ??
       null;
-    const investors = realInvestorNames(companyId ? meta.companyInvestors.get(companyId) ?? [] : []);
-    const networkLabels = networksByFounder.get(founderId) ?? [];
+    const investorsRaw = realInvestorNames(companyId ? meta.companyInvestors.get(companyId) ?? [] : []);
+    // Dedupe sourced investor labels (case-insensitive); keep richer lists when company facts have them.
+    const invSeen = new Set<string>();
+    const investors: string[] = [];
+    for (const name of investorsRaw) {
+      const key = name.trim().toLowerCase();
+      if (!key || invSeen.has(key)) continue;
+      invSeen.add(key);
+      investors.push(name.trim());
+    }
+    const networkLabelsRaw = networksByFounder.get(founderId) ?? [];
+    const netSeen = new Set<string>();
+    const networkLabels: string[] = [];
+    for (const name of networkLabelsRaw) {
+      const key = name.trim().toLowerCase();
+      // Keep programs/labs/accelerators on Networks; drop labels already listed as investors.
+      if (!key || invSeen.has(key) || netSeen.has(key)) continue;
+      netSeen.add(key);
+      networkLabels.push(name.trim());
+    }
     const hasTopFund =
       investors.some((name) => isTopFundLabel(name)) || networkLabels.some((name) => isTopFundLabel(name));
     founderDeals[founderId] = {
@@ -1301,8 +1319,8 @@ export function buildFounderNetworksGraph(): GraphPayload {
       companyId,
       companyName: companyId ? meta.companyNames.get(companyId) ?? companyId : null,
       stage: companyId ? meta.companyStages.get(companyId) ?? null : null,
-      networks: networkLabels.slice(0, 8),
-      investors: investors.slice(0, 8),
+      networks: networkLabels.slice(0, 10),
+      investors: investors.slice(0, 12),
       hasTopFund,
     };
   }

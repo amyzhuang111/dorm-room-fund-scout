@@ -62,7 +62,7 @@
     {
       "route": "/networks",
       "viewport": "375",
-      "nodeCount": 58,
+      "nodeCount": 62,
       "collisions": [],
       "collisionCount": 0
     },
@@ -132,7 +132,7 @@
     {
       "route": "/networks",
       "viewport": "1440",
-      "nodeCount": 102,
+      "nodeCount": 97,
       "collisions": [],
       "collisionCount": 0
     },

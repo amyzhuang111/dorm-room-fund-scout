@@ -10,9 +10,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/companies",
@@ -22,9 +24,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/companies?more=2",
@@ -34,9 +38,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/companies?feed=leaderboard",
@@ -46,9 +52,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/founders",
@@ -58,9 +66,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/campuses",
@@ -70,9 +80,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/data",
@@ -82,9 +94,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/networks",
@@ -94,9 +108,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": 100,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/signals",
@@ -106,9 +122,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/startup/proj_9GUOmdEYxbuH",
@@ -118,9 +136,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/",
@@ -130,9 +150,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/companies",
@@ -142,9 +164,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/companies?more=2",
@@ -154,9 +178,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/companies?feed=leaderboard",
@@ -166,9 +192,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/founders",
@@ -178,9 +206,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/campuses",
@@ -190,9 +220,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/data",
@@ -202,9 +234,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/networks",
@@ -214,9 +248,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": 100,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/signals",
@@ -226,9 +262,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     },
     {
       "route": "/startup/proj_9GUOmdEYxbuH",
@@ -238,9 +276,11 @@
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
       "networksUnobstructed": null,
+      "networksCardOnGraph": 0,
       "onText": [],
       "onControl": [],
-      "onCalloutLabel": []
+      "onCalloutLabel": [],
+      "cardOnGraph": []
     }
   ],
   "totals": {
