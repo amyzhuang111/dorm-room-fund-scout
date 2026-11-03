@@ -1322,6 +1322,7 @@ export function NetworksGraph(props: Props) {
   const [mode, setMode] = useState<"pending" | "3d" | "2d">("pending");
   const [supports3D, setSupports3D] = useState(false);
   const [zoomPreset, setZoomPreset] = useState<NetworkZoomPreset>(NETWORK_ZOOM_PRESETS[0]);
+  const networkRootRef = useRef<HTMLDivElement>(null);
   const fallback2D = useCallback(() => setMode("2d"), []);
 
   useEffect(() => {
@@ -1351,16 +1352,24 @@ export function NetworksGraph(props: Props) {
     if (app.__NETWORKS_SET_SCALE__) app.__NETWORKS_SET_SCALE__(zoomPreset.scale);
     else app.__NETWORKS_PENDING_SCALE__ = zoomPreset.scale;
 
-    const graph = document.querySelector<HTMLElement>("[data-networks-graph]");
-    if (!graph) return;
+    const root = networkRootRef.current;
+    if (!root) return;
     const syncManualZoom = () => {
-      const scale = Number(graph.getAttribute("data-networks-current-scale"));
+      // In 3D the graph node is mounted after its asynchronous poster loads.
+      // Watch descendants so wheel-driven zoom remains reflected in the
+      // active control even after this later mount.
+      const graph = root.querySelector<HTMLElement>("[data-networks-graph]");
+      const scale = Number(graph?.getAttribute("data-networks-current-scale"));
       if (!Number.isFinite(scale) || scale <= 0) return;
       const nearest = closestNetworkZoomPreset(scale);
       setZoomPreset((current) => current.id === nearest.id ? current : nearest);
     };
     const observer = new MutationObserver(syncManualZoom);
-    observer.observe(graph, { attributes: true, attributeFilter: ["data-networks-current-scale"] });
+    observer.observe(root, {
+      attributes: true, subtree: true, childList: true,
+      attributeFilter: ["data-networks-current-scale"],
+    });
+    syncManualZoom();
     return () => observer.disconnect();
   }, [mode]); // Manual scrolling changes labels but never snaps the camera.
 
@@ -1387,7 +1396,7 @@ export function NetworksGraph(props: Props) {
   }
 
   return (
-    <div data-networks-view={mode}>
+    <div ref={networkRootRef} data-networks-view={mode}>
       <div className="mx-auto flex max-w-[1400px] flex-col gap-2 px-3 py-2 sm:px-6 lg:flex-row lg:items-center lg:justify-between" data-networks-controls="">
         <div className="min-w-0 overflow-x-auto pb-0.5" role="group" aria-label="Network detail level">
           <div className="flex w-max items-center gap-1 rounded-lg border border-[color:var(--line)] bg-white p-1">
@@ -1397,7 +1406,7 @@ export function NetworksGraph(props: Props) {
                 title={preset.detail}
                 disabled={mode === "pending"}
                 onClick={() => choosePreset(preset)}
-                className={`min-h-10 shrink-0 rounded-md px-2.5 text-[11px] font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)] sm:px-3 sm:text-xs ${zoomPreset.id === preset.id ? "bg-[color:var(--cobalt)] text-white" : "text-[color:var(--fg-2)] hover:bg-[#eef1f9]"}`}>
+                className={`min-h-11 shrink-0 rounded-md px-2.5 text-[11px] font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)] sm:px-3 sm:text-xs ${zoomPreset.id === preset.id ? "bg-[color:var(--cobalt)] text-white" : "text-[color:var(--fg-2)] hover:bg-[#eef1f9]"}`}>
                 <span className="mr-1 font-mono text-[10px] opacity-70">{index + 1}</span>{preset.label}
               </button>
             ))}
@@ -1409,15 +1418,15 @@ export function NetworksGraph(props: Props) {
             <div className="inline-flex overflow-hidden rounded-md border border-[color:var(--line)] bg-white" role="group" aria-label="Network projection">
               <button type="button" aria-pressed={mode === "2d"} disabled={mode === "pending"}
                 onClick={() => setMode("2d")}
-                className={`min-h-10 px-2.5 text-xs focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)] ${mode === "2d" ? "bg-[color:var(--cobalt)] text-white" : "hover:bg-[#eef1f9]"}`}>2D</button>
+                className={`min-h-11 px-2.5 text-xs focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)] ${mode === "2d" ? "bg-[color:var(--cobalt)] text-white" : "hover:bg-[#eef1f9]"}`}>2D</button>
               <button type="button" aria-pressed={mode === "3d"} disabled={mode === "pending" || !supports3D}
                 onClick={() => setMode("3d")}
                 title={supports3D ? "Interactive 3D orbit view" : "Requires WebGL and standard-motion settings"}
-                className={`min-h-10 border-l border-[color:var(--line)] px-2.5 text-xs disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)] ${mode === "3d" ? "bg-[color:var(--cobalt)] text-white" : "hover:bg-[#eef1f9]"}`}>3D</button>
+                className={`min-h-11 border-l border-[color:var(--line)] px-2.5 text-xs disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)] ${mode === "3d" ? "bg-[color:var(--cobalt)] text-white" : "hover:bg-[#eef1f9]"}`}>3D</button>
             </div>
             <button type="button" onClick={resetView} disabled={mode === "pending"}
               aria-label="Reset network to wide overview"
-              className="min-h-10 rounded-md border border-[color:var(--line)] bg-white px-3 text-xs font-medium text-[color:var(--cobalt)] hover:bg-[#eef1f9] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]">
+              className="min-h-11 rounded-md border border-[color:var(--line)] bg-white px-3 text-xs font-medium text-[color:var(--cobalt)] hover:bg-[#eef1f9] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]">
               Reset
             </button>
           </div>
