@@ -77,5 +77,7 @@ jobs:
             echo "No new database content"
           else
             git commit -m "data: import 2026 Stanford Brown Yale Duke MIT and hackathon evidence"
-            git push
+            git fetch origin "${GITHUB_REF_NAME}"
+            git rebase "origin/${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
           fi

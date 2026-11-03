@@ -53,7 +53,8 @@ async function main() {
     console.log("\n======== " + event.sourceName + " ========");
     await ingestDevpostHackathon({
       ...event,
-      winnersOnly: true,
+      // HackHarvard does not mark winner cards in its current gallery.
+      winnersOnly: event.sourceId !== "src_hackharvard26_devpost",
       captureLinkedIn: false, // avoid extra profile fetches on this bounded first pass
       maxProjectFetches: 24,
       maxFetches: 90,
