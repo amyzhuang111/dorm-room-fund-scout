@@ -15,6 +15,8 @@ import {
   startupsInFounderMatches,
   type ActiveChip,
 } from "@/components/fold-map-craft";
+import { FoldOpenLaneHero } from "@/components/fold-open-lane";
+import { buildOpenLaneShell } from "@/lib/domain/open-lane";
 import { GlobeHero } from "@/components/globe-hero";
 import { SampleTheme } from "@/components/sample-theme";
 import type { DirectoryCard, DirectoryFilter, DirectorySort } from "@/lib/domain/directory";
@@ -331,11 +333,13 @@ function MapFoldSheet({
 }
 
 
-/** Desk overlays portaled onto the map stage only — never cover stats, Map label, or search. */
+/** Desk overlays portaled onto the map stage — filters live in the fold, not stacked above. */
 function MapStageOverlays({
+  mast,
   peak,
   founders,
 }: {
+  mast: ReactNode;
   peak: ReactNode;
   founders: ReactNode;
 }) {
@@ -364,51 +368,60 @@ function MapStageOverlays({
   if (!stage) return null;
 
   return createPortal(
-    <div className="pointer-events-none absolute inset-0 z-[5]" data-fold-map-overlays="">
-      <aside
-        className={`pointer-events-auto absolute left-2 top-2 max-h-[calc(100%-1rem)] overflow-y-auto rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px] ${
-          peakOpen ? "w-[min(280px,32%)]" : "w-auto"
-        }`}
-        data-fold-overlay-peak=""
-        data-fold-peak-in-rail=""
-        data-fold-panel-collapsed={peakOpen ? "0" : "1"}
+    <div className="pointer-events-none absolute inset-0 z-[5] flex flex-col" data-fold-map-overlays="" data-fold-desk-bleed="1">
+      <div
+        className="pointer-events-auto z-[6] mx-2 mt-2 shrink-0 rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 px-2.5 py-2 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px]"
+        data-fold-overlay-mast=""
+        data-fold-mast=""
       >
-        <div className="flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5">
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Peak</p>
-          <button
-            type="button"
-            className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-2,#3F465C)]"
-            aria-expanded={peakOpen}
-            data-fold-panel-toggle="peak"
-            onClick={() => setPeakOpen((v) => !v)}
-          >
-            {peakOpen ? "Hide" : "Show"}
-          </button>
-        </div>
-        {peakOpen ? <div className="p-2.5">{peak}</div> : null}
-      </aside>
-      <aside
-        className={`pointer-events-auto absolute bottom-2 right-2 top-2 flex w-[min(280px,32%)] flex-col overflow-hidden rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px] ${
-          foundersOpen ? "" : "!w-auto !bottom-auto"
-        }`}
-        data-fold-overlay-founders=""
-        data-fold-founders-col=""
-        data-fold-panel-collapsed={foundersOpen ? "0" : "1"}
-      >
-        <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5">
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Founders</p>
-          <button
-            type="button"
-            className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-2,#3F465C)]"
-            aria-expanded={foundersOpen}
-            data-fold-panel-toggle="founders"
-            onClick={() => setFoundersOpen((v) => !v)}
-          >
-            {foundersOpen ? "Hide" : "Show"}
-          </button>
-        </div>
-        {foundersOpen ? <div className="min-h-0 flex-1 overflow-y-auto p-2.5">{founders}</div> : null}
-      </aside>
+        {mast}
+      </div>
+      <div className="relative min-h-0 flex-1" data-fold-overlay-body="">
+        <aside
+          className={`pointer-events-auto absolute bottom-2 left-2 top-2 max-h-[calc(100%-1rem)] overflow-y-auto rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px] ${
+            peakOpen ? "w-[min(340px,34%)]" : "w-auto"
+          }`}
+          data-fold-overlay-peak=""
+          data-fold-peak-in-rail=""
+          data-fold-panel-collapsed={peakOpen ? "0" : "1"}
+        >
+          <div className="flex items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5">
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Open lane</p>
+            <button
+              type="button"
+              className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-2,#3F465C)]"
+              aria-expanded={peakOpen}
+              data-fold-panel-toggle="peak"
+              onClick={() => setPeakOpen((v) => !v)}
+            >
+              {peakOpen ? "Hide" : "Show"}
+            </button>
+          </div>
+          {peakOpen ? <div className="p-2.5">{peak}</div> : null}
+        </aside>
+        <aside
+          className={`pointer-events-auto absolute bottom-2 right-2 top-2 flex w-[min(300px,32%)] flex-col overflow-hidden rounded-md border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)]/95 shadow-[0_8px_28px_rgba(47,79,216,0.12)] backdrop-blur-[2px] ${
+            foundersOpen ? "" : "!w-auto !bottom-auto"
+          }`}
+          data-fold-overlay-founders=""
+          data-fold-founders-col=""
+          data-fold-panel-collapsed={foundersOpen ? "0" : "1"}
+        >
+          <div className="flex shrink-0 items-center justify-between gap-2 border-b border-[color:var(--line,#E1E5EF)] px-2 py-1.5">
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Founders</p>
+            <button
+              type="button"
+              className="inline-flex h-7 items-center rounded-sm border border-[color:var(--line,#E1E5EF)] px-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[color:var(--fg-2,#3F465C)]"
+              aria-expanded={foundersOpen}
+              data-fold-panel-toggle="founders"
+              onClick={() => setFoundersOpen((v) => !v)}
+            >
+              {foundersOpen ? "Hide" : "Show"}
+            </button>
+          </div>
+          {foundersOpen ? <div className="min-h-0 flex-1 overflow-y-auto p-2.5">{founders}</div> : null}
+        </aside>
+      </div>
     </div>,
     stage,
   );
@@ -569,31 +582,17 @@ export function SampleHomeClient(props: {
     activeChips.push({ key: "q", label: `“${founderQuery.trim()}”`, onClear: () => setFounderQuery("") });
   }
 
+  const openLane = useMemo(
+    () => (founders.length ? buildOpenLaneShell(founders) : null),
+    [founders],
+  );
+
   return (
     <div className="sample-paper" {...(place === "map" ? { "data-fold-root": "" } : {})} data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
       {place === "map" ? (
-        <div className="px-0 pb-6 pt-0 sm:px-4 lg:px-3 lg:pt-2" data-fold-hierarchy="" data-fold-mobile-bleed="">
-          {/* r53 mobile: search + view strip live in the thumb sheet; desk keeps mast above map. */}
-          <div className="mb-2 hidden px-0 lg:mb-2 lg:block" data-fold-mast="">
-            <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
-          </div>
-          <div className="mb-0 lg:mb-2">
-            <div className="hidden lg:block">
-              <FilterChips chips={activeChips} matchCount={matchedFounders.length} totalCount={founders.length || foundersListed} />
-            </div>
-            <div className="hidden lg:block">
-              <CurrentViewStrip
-                campusName={mapCampusName}
-                query={founderQuery}
-                matchCount={matchedFounders.length}
-                totalFounders={founders.length || foundersListed}
-                startups={viewStartups}
-                onClearCampus={clearCampus}
-                onClearQuery={() => setFounderQuery("")}
-              />
-            </div>
-          </div>
+        <div className="px-0 pb-6 pt-0 sm:px-4 lg:px-0 lg:pt-0" data-fold-hierarchy="" data-fold-mobile-bleed="" data-fold-desk-bleed="1">
+          {/* r56 desk: search + chips live inside the map fold overlays (not stacked above). Mobile unchanged. */}
           {/* r45: map-dominant stage with floating panels (desk) / peek sheet (mobile). */}
           <div data-fold-stack="" data-fold-bigmap="" data-fold-overlay="">
             <div className="relative min-w-0" data-fold-globe-col="" data-fold-map-stage-wrap="">
@@ -677,17 +676,41 @@ export function SampleHomeClient(props: {
                 }
               /> : null}
 
-              {/* Desk overlays portaled onto map stage only (≤280px, collapsible). */}
+              {/* r56 desk: full-bleed fold — mast filters + open-lane hero + founders on the map. */}
               {isLg ? (
                 <MapStageOverlays
+                  mast={
+                    <div className="space-y-1.5" data-fold-desk-mast-inner="">
+                      <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
+                      <FilterChips chips={activeChips} matchCount={matchedFounders.length} totalCount={founders.length || foundersListed} />
+                      <CurrentViewStrip
+                        campusName={mapCampusName}
+                        query={founderQuery}
+                        matchCount={matchedFounders.length}
+                        totalFounders={founders.length || foundersListed}
+                        startups={viewStartups}
+                        onClearCampus={clearCampus}
+                        onClearQuery={() => setFounderQuery("")}
+                      />
+                    </div>
+                  }
                   peak={
-                    <PeakShareSlot
-                      companies={companies}
-                      foundersListed={foundersListed}
-                      campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
-                      topCampuses={topCampuses}
-                      shell={peakShell}
-                    />
+                    <>
+                      <FoldOpenLaneHero
+                        shell={openLane}
+                        companyTotal={cardCount}
+                        foundersIndexed={founders.length || foundersListed}
+                      />
+                      <div className="border-t border-[color:var(--line,#E1E5EF)] pt-2" data-fold-open-lane-peak="">
+                        <PeakShareSlot
+                          companies={companies}
+                          foundersListed={foundersListed}
+                          campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
+                          topCampuses={topCampuses}
+                          shell={peakShell}
+                        />
+                      </div>
+                    </>
                   }
                   founders={
                     <FounderResults
