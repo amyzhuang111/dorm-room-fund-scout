@@ -23,6 +23,7 @@ export function FoldPeakShare({
   topCampuses = [],
   shell = null,
   onReady,
+  hideMobileRanks = false,
 }: {
   companies: FacetCompany[];
   foundersListed: number;
@@ -30,6 +31,8 @@ export function FoldPeakShare({
   topCampuses?: FoldTopCampus[];
   shell?: PeakShell | null;
   onReady?: () => void;
+  /** r53 deck sheet: campus segments own ranks; keep month bars only. */
+  hideMobileRanks?: boolean;
 }) {
   void _foundersListed;
   void _campusesOnMap;
@@ -165,7 +168,7 @@ export function FoldPeakShare({
             </li>
           ))}
         </ol>
-        {topCampuses.length > 0 ? (
+        {topCampuses.length > 0 && !hideMobileRanks ? (
           <ol
             className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-[color:var(--line,#E1E5EF)] pt-1.5"
             data-fold-peak-campus-rank-mobile=""

@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "base": "http://127.0.0.1:3000",
+  "base": "http://127.0.0.1:3460",
   "pages": [
     {
       "route": "/",
@@ -9,7 +9,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": 82.5
     },
     {
       "route": "/companies",
@@ -18,7 +19,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/companies?more=2",
@@ -27,7 +29,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/companies?feed=leaderboard",
@@ -36,7 +39,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/founders",
@@ -45,7 +49,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/campuses",
@@ -54,7 +59,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/data",
@@ -63,7 +69,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/signals",
@@ -72,7 +79,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/startup/proj_9GUOmdEYxbuH",
@@ -81,7 +89,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/",
@@ -90,7 +99,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/companies",
@@ -99,7 +109,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/companies?more=2",
@@ -108,7 +119,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/companies?feed=leaderboard",
@@ -117,7 +129,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/founders",
@@ -126,7 +139,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/campuses",
@@ -135,7 +149,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/data",
@@ -144,7 +159,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/signals",
@@ -153,7 +169,8 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     },
     {
       "route": "/startup/proj_9GUOmdEYxbuH",
@@ -162,11 +179,13 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "onText": [],
-      "onControl": []
+      "onControl": [],
+      "homeMapUnobstructedPct": null
     }
   ],
   "totals": {
     "overlayOnText": 0,
     "overlayOnControl": 0
-  }
+  },
+  "homeMapUnobstructedPct375": 82.5
 }
