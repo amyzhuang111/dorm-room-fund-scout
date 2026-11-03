@@ -117,9 +117,12 @@ export function NetworksApp() {
           <p className="text-[11px] text-[color:var(--fg-3)] sm:text-xs" data-networks-stats="">
             <span data-networks-count="founderLinks">{data.totals.founderLinks.toLocaleString("en-US")}</span> founder links ·{" "}
             <span data-networks-count="networks">{data.totals.networks.toLocaleString("en-US")}</span> networks ·{" "}
-            <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> of{" "}
-            <span data-networks-count="corpusCompanies">{data.totals.corpusCompanies.toLocaleString("en-US")}</span> companies ·{" "}
-            all <span data-networks-count="founders">{(data.totals.foundersShown ?? data.totals.foundersLinked).toLocaleString("en-US")}</span> founders
+            <span data-networks-count="founders">{(data.totals.foundersShown ?? data.totals.foundersLinked).toLocaleString("en-US")}</span> unique founders on the map
+            {data.totals.foundersShown != null && data.totals.foundersLinked < data.totals.foundersShown ? (
+              <>
+                {" "}(<span data-networks-count="foundersLinked">{data.totals.foundersLinked.toLocaleString("en-US")}</span> with a mapped network)
+              </>
+            ) : null}
           </p>
         </div>
       </header>
@@ -158,7 +161,7 @@ export function NetworksApp() {
           </div>
           <div className="grid gap-3 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-4">
             <ol
-              className="hidden divide-y divide-[color:var(--line)] rounded-lg border border-[color:var(--line)] bg-white sm:block"
+              className="divide-y divide-[color:var(--line)] rounded-lg border border-[color:var(--line)] bg-white"
               data-networks-desktop-top=""
             >
               {data.topNetworks.map((row, index) => {
@@ -180,13 +183,18 @@ export function NetworksApp() {
                         <span className="block whitespace-normal break-words text-[13px] font-medium leading-snug text-[color:var(--fg)] sm:text-sm">
                           {row.label}
                         </span>
-                        <span className="hidden text-[11px] text-[color:var(--fg-3)] sm:block">{KIND_LABEL[row.kind]}</span>
+                        <span className="block text-[11px] text-[color:var(--fg-3)]">{KIND_LABEL[row.kind]}</span>
                       </span>
                       <span className="shrink-0 pt-0.5 text-[12px] tabular-nums text-[color:var(--fg)] sm:text-sm">
                         {row.founderCount.toLocaleString("en-US")}
                         <span className="text-[color:var(--fg-3)]"> founders</span>
                       </span>
                     </button>
+                    {selected ? (
+                      <div className="border-t border-[color:var(--line)] bg-[#fbfbfe] px-2.5 py-2 lg:hidden" data-networks-inline-members="">
+                        <MemberList members={members} onSelectCompany={setCompanyId} />
+                      </div>
+                    ) : null}
                   </li>
                 );
               })}
@@ -217,42 +225,7 @@ export function NetworksApp() {
                       {active.campusCount.toLocaleString("en-US")} campuses
                     </p>
                   </div>
-                  <ul className="max-h-[28rem] space-y-2 overflow-y-auto pr-1">
-                    {members.map((member) => (
-                      <li key={`${member.founderId}-${member.companyId}`} className="rounded border border-[color:var(--line)] px-2.5 py-2">
-                        <div className="flex items-start gap-2">
-                          <div className="min-w-0 flex-1">
-                            <div className="flex flex-wrap items-center gap-1.5">
-                              <Link
-                                href={`/founders?q=${encodeURIComponent(member.founderName)}`}
-                                className="truncate text-sm font-medium text-[color:var(--cobalt)] hover:underline"
-                              >
-                                {member.founderName}
-                              </Link>
-                              {member.campusLabel ? (
-                                <span className="inline-flex shrink-0 items-center rounded-full border border-[color:var(--line)] bg-[#f7f8fc] px-1.5 py-0.5 text-[10px] font-medium text-[color:var(--fg-2)]">
-                                  {member.campusLabel}
-                                </span>
-                              ) : null}
-                              {member.stage ? (
-                                <span className="inline-flex shrink-0 items-center rounded-full bg-[color:var(--cobalt-haze)] px-1.5 py-0.5 text-[10px] font-medium text-[color:var(--cobalt)]">
-                                  {member.stage}
-                                </span>
-                              ) : null}
-                            </div>
-                            <button
-                              type="button"
-                              className="mt-0.5 block truncate text-left text-xs text-[color:var(--fg-2)] hover:text-[color:var(--cobalt)] hover:underline"
-                              onClick={() => setCompanyId(member.companyId)}
-                            >
-                              {member.companyName}
-                            </button>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                  {members.length === 0 ? <p className="text-sm text-[color:var(--fg-3)]">No linked founders on file for this network.</p> : null}
+                  <MemberList members={members} onSelectCompany={setCompanyId} />
                 </>
               ) : (
                 <p className="text-sm text-[color:var(--fg-3)]">Select a network to see its founders.</p>
@@ -426,5 +399,48 @@ function ConcentrationRow({ row }: { row: SectorConcentration }) {
         </span>
       </div>
     </div>
+  );
+}
+
+function MemberList({ members, onSelectCompany }: { members: NetworkMember[]; onSelectCompany: (id: string) => void }) {
+  if (members.length === 0) {
+    return <p className="text-sm text-[color:var(--fg-3)]">No linked founders on file for this network.</p>;
+  }
+  return (
+    <ul className="max-h-[28rem] space-y-2 overflow-y-auto pr-1">
+      {members.map((member) => (
+                      <li key={`${member.founderId}-${member.companyId}`} className="rounded border border-[color:var(--line)] px-2.5 py-2">
+                        <div className="flex items-start gap-2">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              <Link
+                                href={`/founders?q=${encodeURIComponent(member.founderName)}`}
+                                className="truncate text-sm font-medium text-[color:var(--cobalt)] hover:underline"
+                              >
+                                {member.founderName}
+                              </Link>
+                              {member.campusLabel ? (
+                                <span className="inline-flex shrink-0 items-center rounded-full border border-[color:var(--line)] bg-[#f7f8fc] px-1.5 py-0.5 text-[10px] font-medium text-[color:var(--fg-2)]">
+                                  {member.campusLabel}
+                                </span>
+                              ) : null}
+                              {member.stage ? (
+                                <span className="inline-flex shrink-0 items-center rounded-full bg-[color:var(--cobalt-haze)] px-1.5 py-0.5 text-[10px] font-medium text-[color:var(--cobalt)]">
+                                  {member.stage}
+                                </span>
+                              ) : null}
+                            </div>
+                            <button
+                              type="button"
+                              className="mt-0.5 block truncate text-left text-xs text-[color:var(--fg-2)] hover:text-[color:var(--cobalt)] hover:underline"
+                              onClick={() => onSelectCompany(member.companyId)}
+                            >
+                              {member.companyName}
+                            </button>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+    </ul>
   );
 }

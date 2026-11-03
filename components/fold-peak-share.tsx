@@ -104,6 +104,7 @@ export function FoldPeakShare({
               {detail.undatedMonth > 0 ? ` · ${detail.undatedMonth.toLocaleString("en-US")} undated` : ""}
               {" · "}
               {quiet.toLocaleString("en-US")} quiet
+              {detail.noDate > 0 ? ` · ${detail.noDate.toLocaleString("en-US")} no date` : ""}
             </p>
           </div>
           <div className="min-w-0 self-stretch border-l border-[color:var(--cobalt,#2F4FD8)]/25 pl-5" data-fold-top-campuses-desk="">
@@ -126,12 +127,9 @@ export function FoldPeakShare({
                 ))}
               </ol>
             ) : (
-              <p className="mt-3 font-mono text-[12px] tabular-nums text-[color:var(--fg-2,#3F465C)]">
-                <span className="font-bold text-[color:var(--cobalt,#2F4FD8)]">{detail.dated.toLocaleString("en-US")}</span>
-                {" dated · "}
-                <span className="font-bold text-[color:var(--fg,#0B0E17)]">{quiet.toLocaleString("en-US")}</span>
-                {" quiet"}
-              </p>
+              // Campus data still loading: keep the slot empty rather than repeating
+              // the dated/quiet counts already shown under Peak share.
+              <div className="mt-2 h-[8rem]" aria-hidden="true" />
             )}
           </div>
         </div>

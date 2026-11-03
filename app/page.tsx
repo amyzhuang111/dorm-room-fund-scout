@@ -35,8 +35,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
   const feed = feedOf(sp.feed);
   const stats = loadHeroStats();
   const directory = loadDirectory();
-  let foundersListed = 0;
-  for (const card of directory.cards) foundersListed += card.founders.length;
+  // Unique founders: a founder on several companies counts once (cards carry names only).
+  const uniqueFounders = new Set<string>();
+  for (const card of directory.cards) {
+    for (const name of card.founders) uniqueFounders.add(name.trim().toLowerCase());
+  }
+  const foundersListed = uniqueFounders.size;
   const plotted = stats.universities.filter((university) => university.lat != null && university.lon != null);
   const top = [...plotted].sort((a, b) => b.founderCount - a.founderCount || a.name.localeCompare(b.name))[0];
   return (

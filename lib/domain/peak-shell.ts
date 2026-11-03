@@ -10,6 +10,8 @@ export type PeakShell = {
   earlierValid: number;
   undatedMonth: number;
   quiet: number;
+  /** Companies with signals but no usable source_date (neither dated nor quiet). */
+  noDate: number;
   peakCount: number;
   peakId: string;
   peakLabel: string;
@@ -23,10 +25,14 @@ export function buildPeakShell(rows: SignalRow[]): PeakShell | null {
   let dated = 0;
   let undatedMonth = 0;
   let quiet = 0;
+  let noDate = 0;
   for (const row of rows) {
     if ((row.signals ?? 0) === 0) quiet += 1;
     const at = row.latestSignalAt;
-    if (!at || at.length < 7) continue;
+    if (!at || at.length < 7) {
+      if ((row.signals ?? 0) > 0) noDate += 1;
+      continue;
+    }
     dated += 1;
     const ym = at.slice(0, 7);
     if (ym.endsWith("-00")) {
@@ -57,6 +63,7 @@ export function buildPeakShell(rows: SignalRow[]): PeakShell | null {
     earlierValid,
     undatedMonth,
     quiet,
+    noDate,
     peakCount: peakBar.count,
     peakId: peakBar.id,
     peakLabel: peakBar.label,
