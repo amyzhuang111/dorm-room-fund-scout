@@ -9,6 +9,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -20,6 +21,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -31,6 +33,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -42,6 +45,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -53,6 +57,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -64,6 +69,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -75,6 +81,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -86,6 +93,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": 100,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -97,6 +105,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -108,6 +117,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -119,6 +129,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -130,6 +141,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -141,6 +153,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -152,6 +165,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -163,6 +177,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -174,6 +189,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -185,6 +201,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -196,6 +213,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": 100,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -207,6 +225,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -218,6 +237,7 @@
       "overlayOnText": 0,
       "overlayOnControl": 0,
       "calloutOnLabel": 0,
+      "networksUnobstructed": null,
       "onText": [],
       "onControl": [],
       "onCalloutLabel": []
@@ -226,6 +246,10 @@
   "totals": {
     "overlayOnText": 0,
     "overlayOnControl": 0,
-    "calloutOnLabel": 0
+    "calloutOnLabel": 0,
+    "networksUnobstructed": {
+      "375": 100,
+      "1440": 100
+    }
   }
 }

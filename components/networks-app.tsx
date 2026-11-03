@@ -50,7 +50,7 @@ export function NetworksApp() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
   const [companyId, setCompanyId] = useState<string | null>(null);
-  const [matrixOpen, setMatrixOpen] = useState(true);
+  const [matrixOpen, setMatrixOpen] = useState(false);
   const [concentrationOpen, setConcentrationOpen] = useState(true);
 
   useEffect(() => {
@@ -119,7 +119,49 @@ export function NetworksApp() {
       </header>
 
       <main className="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-3 sm:gap-8 sm:px-5 sm:py-6">
-        <section aria-labelledby="top-networks-heading" className="order-2 md:order-none">
+        <section aria-labelledby="graph-heading" className="order-1 overflow-hidden rounded-lg border border-[color:var(--line)] bg-white md:order-1">
+          <div className="px-3 py-2 sm:px-4 sm:py-3">
+            <h2 id="graph-heading" className="text-[15px] font-semibold tracking-tight">
+              Deal flow graph
+            </h2>
+            <p className="mt-0.5 hidden text-[13px] text-[color:var(--fg-2)] sm:block">
+              Founder dots are colored by campus. Programs and investors are hubs. Co-founder links and membership ties are real. Hover a founder for company, stage, and backers. Toggle Not yet backed by a top fund for uncrowded deals.
+            </p>
+            <p className="mt-0.5 text-[11px] text-[color:var(--fg-2)] sm:hidden">
+              Campus-colored founders, program hubs, real co-founder ties.
+            </p>
+            {/* Mobile fold: scrollable top-10 hubs with counts above the compact graph. */}
+            <ol
+              className="mt-2 max-h-[12.5rem] divide-y divide-[color:var(--line)] overflow-y-auto rounded border border-[color:var(--line)] md:hidden"
+              data-networks-mobile-top=""
+            >
+              {data.topNetworks.slice(0, 10).map((row, index) => (
+                <li key={`mobile-top-${row.id}`}>
+                  <button
+                    type="button"
+                    className="flex w-full items-center gap-2 px-2 py-1 text-left"
+                    onClick={() => setActiveNetwork(row.id)}
+                  >
+                    <span className="w-4 shrink-0 text-[10px] tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="min-w-0 flex-1 truncate text-[12px] font-medium text-[color:var(--fg)]">{row.label}</span>
+                    <span className="shrink-0 text-[11px] tabular-nums text-[color:var(--fg-2)]">
+                      {row.founderCount.toLocaleString("en-US")}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <NetworksGraph
+            investorHubs={data.investorHubs}
+            onSelectCompany={(id) => setCompanyId(id)}
+            onSelectNetwork={(id) => {
+              setActiveNetwork(id);
+            }}
+          />
+        </section>
+
+        <section aria-labelledby="top-networks-heading" className="order-2 md:order-2">
           <div className="mb-2 sm:mb-3">
             <h2 id="top-networks-heading" className="text-base font-semibold tracking-tight sm:text-lg">
               Top networks
@@ -167,18 +209,29 @@ export function NetworksApp() {
                   <ul className="max-h-[28rem] space-y-2 overflow-y-auto pr-1">
                     {members.map((member) => (
                       <li key={`${member.founderId}-${member.companyId}`} className="rounded border border-[color:var(--line)] px-2.5 py-2">
-                        <div className="flex items-center gap-2">
-                          {member.campusLabel ? <CampusSeal label={member.campusLabel} size="xs" /> : null}
-                          <div className="min-w-0">
-                            <Link
-                              href={`/founders?q=${encodeURIComponent(member.founderName)}`}
-                              className="block truncate text-sm font-medium text-[color:var(--cobalt)] hover:underline"
-                            >
-                              {member.founderName}
-                            </Link>
+                        <div className="flex items-start gap-2">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              <Link
+                                href={`/founders?q=${encodeURIComponent(member.founderName)}`}
+                                className="truncate text-sm font-medium text-[color:var(--cobalt)] hover:underline"
+                              >
+                                {member.founderName}
+                              </Link>
+                              {member.campusLabel ? (
+                                <span className="inline-flex shrink-0 items-center rounded-full border border-[color:var(--line)] bg-[#f7f8fc] px-1.5 py-0.5 text-[10px] font-medium text-[color:var(--fg-2)]">
+                                  {member.campusLabel}
+                                </span>
+                              ) : null}
+                              {member.stage ? (
+                                <span className="inline-flex shrink-0 items-center rounded-full bg-[color:var(--cobalt-haze)] px-1.5 py-0.5 text-[10px] font-medium text-[color:var(--cobalt)]">
+                                  {member.stage}
+                                </span>
+                              ) : null}
+                            </div>
                             <button
                               type="button"
-                              className="block truncate text-left text-xs text-[color:var(--fg-2)] hover:text-[color:var(--cobalt)] hover:underline"
+                              className="mt-0.5 block truncate text-left text-xs text-[color:var(--fg-2)] hover:text-[color:var(--cobalt)] hover:underline"
                               onClick={() => setCompanyId(member.companyId)}
                             >
                               {member.companyName}
@@ -197,47 +250,7 @@ export function NetworksApp() {
           </div>
         </section>
 
-        <section aria-labelledby="graph-heading" className="order-1 overflow-hidden rounded-lg border border-[color:var(--line)] bg-white md:order-none">
-          <div className="px-3 py-2 sm:px-4 sm:py-3">
-            <h2 id="graph-heading" className="text-[15px] font-semibold tracking-tight">
-              Deal flow graph
-            </h2>
-            <p className="mt-0.5 hidden text-[13px] text-[color:var(--fg-2)] sm:block">
-              Founder dots are colored by campus. Programs and investors are hubs. Co-founder links and membership ties are real. Hover a founder for company, stage, and backers. Toggle Not yet backed by a top fund for uncrowded deals.
-            </p>
-            <p className="mt-0.5 text-[11px] text-[color:var(--fg-2)] sm:hidden">
-              Campus-colored founders, program hubs, real co-founder ties.
-            </p>
-            {/* Mobile fold: ranked top networks with counts above the compact graph. */}
-            <ol className="mt-2 divide-y divide-[color:var(--line)] rounded border border-[color:var(--line)] md:hidden" data-networks-mobile-top="">
-              {data.topNetworks.slice(0, 4).map((row, index) => (
-                <li key={`mobile-top-${row.id}`}>
-                  <button
-                    type="button"
-                    className="flex w-full items-center gap-2 px-2 py-1 text-left"
-                    onClick={() => setActiveNetwork(row.id)}
-                  >
-                    <span className="w-4 shrink-0 text-[10px] tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
-                    <span className="min-w-0 flex-1 truncate text-[12px] font-medium text-[color:var(--fg)]">{row.label}</span>
-                    <span className="shrink-0 text-[11px] tabular-nums text-[color:var(--fg-2)]">
-                      {row.founderCount.toLocaleString("en-US")}
-                    </span>
-                  </button>
-                </li>
-              ))}
-            </ol>
-          </div>
-          <NetworksGraph
-            investorHubs={data.investorHubs}
-            onSelectCompany={(id) => setCompanyId(id)}
-            onSelectNetwork={(id) => {
-              setActiveNetwork(id);
-            }}
-          />
-        </section>
-
-
-        <section aria-labelledby="matrix-heading" className="order-3 overflow-hidden rounded-lg border border-[color:var(--line)] bg-white md:order-none">
+        <section aria-labelledby="matrix-heading" className="order-3 overflow-hidden rounded-lg border border-[color:var(--line)] bg-white md:order-3">
           <button
             type="button"
             className="flex w-full items-start justify-between gap-3 px-4 py-3 text-left"
@@ -296,7 +309,7 @@ export function NetworksApp() {
           ) : null}
         </section>
 
-        <section aria-labelledby="concentration-heading" className="order-4 overflow-hidden rounded-lg border border-[color:var(--line)] bg-white md:order-none">
+        <section aria-labelledby="concentration-heading" className="order-4 overflow-hidden rounded-lg border border-[color:var(--line)] bg-white md:order-4">
           <button
             type="button"
             className="flex w-full items-start justify-between gap-3 px-4 py-3 text-left"
@@ -359,7 +372,7 @@ export function NetworksApp() {
           )}
         </section>
 
-        <section aria-labelledby="how-heading" className="order-6 rounded-lg border border-[color:var(--line)] bg-white px-4 py-4 md:order-none">
+        <section aria-labelledby="how-heading" className="order-6 rounded-lg border border-[color:var(--line)] bg-white px-4 py-4 md:order-6">
           <h2 id="how-heading" className="text-[15px] font-semibold tracking-tight">
             How these counts work
           </h2>

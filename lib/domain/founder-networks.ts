@@ -220,6 +220,40 @@ function preferEvidenceUrl(netId: string | null | undefined, prev: string | null
   return evidenceScore(netId, b) > evidenceScore(netId, a) ? b : a;
 }
 
+/** Claim / listing body must name VIP-X (URL alone is not membership evidence). */
+export function mentionsVipXText(...parts: Array<string | null | undefined>): boolean {
+  return /vip-?x|venture lab vip|vip[\s-]?alumni|vip[\s-]?peer/i.test(parts.filter(Boolean).join(" "));
+}
+
+function isStartupChallengeUrl(url: string | null | undefined): boolean {
+  return /startup-challenge|SC-PR|cloak-wins|semifinalist|\/\d{4}-startup-challenge/i.test(url || "");
+}
+
+/**
+ * Bare scout tags like "VIP-X Philadelphia" on Startup Challenge URLs are not
+ * VIP evidence — the SC press release lists Summer Venture winners without
+ * naming them as VIP-X (Storiara). Inline annotations like "(VIP-X PHL)" inside
+ * a company blurb on a Penn page DO count.
+ */
+function isBareVipLabelOnScUrl(excerpt: string | null | undefined, sourceUrl: string | null | undefined): boolean {
+  if (!isStartupChallengeUrl(sourceUrl)) return false;
+  const bare = (excerpt || "").replace(/<[^>]+>/g, "").trim();
+  return /^(VIP-X(?:\s+Philadelphia|\s+PHL|\s+San Francisco|\s+SF)?)$/i.test(bare);
+}
+
+/** True when a claim is strong enough to put a company/founder on VIP-X. */
+export function isAcceptableVipXClaimEvidence(args: {
+  excerpt?: string | null;
+  valueJson?: string | null;
+  org?: string | null;
+  sourceUrl?: string | null;
+}): boolean {
+  const textParts = [args.excerpt, args.valueJson, args.org];
+  if (!mentionsVipXText(...textParts)) return false;
+  if (isBareVipLabelOnScUrl(args.excerpt, args.sourceUrl)) return false;
+  return true;
+}
+
 let pageCache: { stamp: string; page: FounderNetworksPage } | null = null;
 let linkCache: { stamp: string; links: Link[]; meta: LinkMeta } | null = null;
 
@@ -392,9 +426,9 @@ function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
     .all() as { entity_id: string; source_url: string | null; excerpt: string | null; value_json: string | null }[]) {
     const url = pickHttpUrl(row.source_url);
     if (!url) continue;
-    // Accept VIP host URLs, or LinkedIn posts that name VIP-X in the claim text.
-    const linkedInVip =
-      /linkedin\.com/i.test(url) && /vip-?\s*x/i.test(`${row.excerpt || ""} ${row.value_json || ""}`);
+    // Generic VIP-X page URL is not evidence unless the claim text itself names VIP-X.
+    if (!isAcceptableVipXClaimEvidence({ excerpt: row.excerpt, valueJson: row.value_json, sourceUrl: url })) continue;
+    const linkedInVip = /linkedin\.com/i.test(url) && mentionsVipXText(row.excerpt, row.value_json);
     if (evidenceScore("vipx", url) < 3 && !linkedInVip) continue;
     if (!vipEvidenceUrls.has(row.entity_id)) vipEvidenceUrls.set(row.entity_id, url);
   }
@@ -466,7 +500,7 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
 
   for (const claim of db
     .prepare(
-      `SELECT c.entity_type, c.entity_id, c.claim_type, c.value_json, c.source_url, s.name AS source_name
+      `SELECT c.entity_type, c.entity_id, c.claim_type, c.value_json, c.excerpt, c.source_url, s.name AS source_name
        FROM claims c
        LEFT JOIN sources s ON s.id = c.source_id
        WHERE c.claim_type IN (
@@ -486,6 +520,7 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
     entity_id: string;
     claim_type: string;
     value_json: string;
+    excerpt: string | null;
     source_url: string | null;
     source_name: string | null;
   }[]) {
@@ -497,12 +532,43 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
     } catch {
       org = "";
     }
-    const bag = [...texts, org, claim.source_url || ""].filter(Boolean);
+    // Do not put source_url in the text bag — a VIP-X URL alone must not mint membership.
+    const bag = [...texts, org, claim.excerpt || ""].filter(Boolean);
     const nets = new Map<string, NetDef>();
     absorbTexts(bag, (net) => nets.set(net.id, net));
     for (const rule of SOURCE_URL_RULES) {
       if (claim.source_url && rule.test.test(claim.source_url)) {
+        if (
+          rule.id === "vipx" &&
+          !isAcceptableVipXClaimEvidence({
+            excerpt: claim.excerpt,
+            valueJson: claim.value_json,
+            org,
+            sourceUrl: claim.source_url,
+          })
+        ) {
+          continue;
+        }
         nets.set(rule.id, { id: rule.id, label: rule.label, kind: rule.kind });
+      }
+    }
+    // VIP-X requires explicit VIP/VIP-X text; bare SC-sourced labels do not count.
+    if (nets.has("vipx")) {
+      if (
+        !isAcceptableVipXClaimEvidence({
+          excerpt: claim.excerpt,
+          valueJson: claim.value_json,
+          org,
+          sourceUrl: claim.source_url,
+        }) &&
+        !isAcceptableVipXClaimEvidence({
+          excerpt: texts.join(" "),
+          valueJson: claim.value_json,
+          org,
+          sourceUrl: claim.source_url,
+        })
+      ) {
+        nets.delete("vipx");
       }
     }
     const sourceKey = `claims.${claim.claim_type}`;
@@ -523,7 +589,11 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
     source_url: string | null;
   }[]) {
     const factUrl = pickHttpUrl(row.source_url, meta.investorFactUrls.get(row.project_id), meta.companyUrls.get(row.project_id));
-    absorbTexts([row.value_text], (net) => addCompany(net, row.project_id, "company_facts.investor", factUrl));
+    absorbTexts([row.value_text], (net) => {
+      // VIP-X via investor fact still needs explicit VIP text; post-filter drops orphans.
+      if (net.id === "vipx" && !mentionsVipXText(row.value_text)) return;
+      addCompany(net, row.project_id, "company_facts.investor", factUrl);
+    });
     const inv = investorNetwork(row.value_text);
     if (inv) addCompany(inv, row.project_id, "company_facts.investor", factUrl);
   }
@@ -561,6 +631,46 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
         addCompany(net, row.source_entity_id, "relationships.program", pickHttpUrl(meta.companyUrls.get(row.source_entity_id)));
       }
     });
+  }
+
+  // Defense in depth: VIP-X membership needs claim text that names VIP/VIP-X.
+  // Investor facts alone (generic VIP-X page) are not enough.
+  {
+    const vipOk = new Set<string>();
+    for (const claim of db
+      .prepare(
+        `SELECT entity_id, excerpt, value_json, source_url FROM claims
+         WHERE claim_type IN (
+           'program_membership','accelerator_membership','accelerator_founder',
+           'lab_spinout','lab_spinout_founder','program_listing','funding',
+           'bio_membership','product'
+         )`
+      )
+      .all() as { entity_id: string; excerpt: string | null; value_json: string; source_url: string | null }[]) {
+      if (
+        isAcceptableVipXClaimEvidence({
+          excerpt: claim.excerpt,
+          valueJson: claim.value_json,
+          sourceUrl: claim.source_url,
+        })
+      ) {
+        vipOk.add(claim.entity_id);
+      }
+    }
+    const kept: Link[] = [];
+    for (const link of links) {
+      if (link.networkId !== "vipx") {
+        kept.push(link);
+        continue;
+      }
+      if (vipOk.has(link.companyId) || vipOk.has(link.founderId)) {
+        kept.push(link);
+        continue;
+      }
+      // Drop VIP-X link without explicit VIP/VIP-X claim evidence.
+    }
+    links.length = 0;
+    links.push(...kept);
   }
 
   return links;
@@ -636,6 +746,17 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
   const topNetworks = summaries.slice(0, 24);
   const topIds = new Set(topNetworks.map((row) => row.id));
 
+  const stageRank = (stage: string | null | undefined) => {
+    const s = (stage || "").toLowerCase();
+    if (!s) return 50;
+    if (/series\s*[c-z]|growth|late/i.test(s)) return 1;
+    if (/series\s*b/i.test(s)) return 2;
+    if (/series\s*a/i.test(s)) return 3;
+    if (/seed|pre-?seed/i.test(s)) return 4;
+    if (/angel|friends/i.test(s)) return 5;
+    return 40;
+  };
+
   const membersByNetwork: Record<string, NetworkMember[]> = {};
   for (const net of topNetworks) {
     const members: NetworkMember[] = [];
@@ -647,6 +768,7 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
       seenMember.add(key);
       const campuses = meta.founderCampuses.get(link.founderId) ?? [];
       const campusId = campuses[0] ?? null;
+      const stage = meta.companyStages.get(link.companyId) ?? null;
       members.push({
         founderId: link.founderId,
         founderName: meta.founderNames.get(link.founderId) ?? link.founderId,
@@ -654,9 +776,16 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
         companyName: meta.companyNames.get(link.companyId) ?? link.companyId,
         campusId,
         campusLabel: campusId ? meta.uniLabels.get(campusId) ?? campusId : null,
+        stage,
       });
     }
-    members.sort((a, b) => a.founderName.localeCompare(b.founderName) || a.companyName.localeCompare(b.companyName));
+    // Signal-first roster: later stages / known stage above alphabetical dump.
+    members.sort(
+      (a, b) =>
+        stageRank(a.stage) - stageRank(b.stage) ||
+        a.founderName.localeCompare(b.founderName) ||
+        a.companyName.localeCompare(b.companyName)
+    );
     membersByNetwork[net.id] = members.slice(0, 80);
   }
 
@@ -1183,50 +1312,33 @@ export function buildFounderNetworksGraph(): GraphPayload {
   };
 }
 
+/**
+ * Designed desk layout: largest hub (YC) at the origin; remaining hubs on a
+ * ring sorted by size so peripheral clusters read as labeled satellites
+ * instead of a stock force pack.
+ */
 function packClusterCenters(items: { id: string; r: number }[]): Map<string, { x: number; y: number }> {
   const sorted = [...items].sort((a, b) => b.r - a.r || a.id.localeCompare(b.id));
-  const placed: { id: string; x: number; y: number; r: number }[] = [];
-  const gap = -2; // Nature-style: close but not collapsed onto YC
-
-  for (const item of sorted) {
-    if (placed.length === 0) {
-      placed.push({ ...item, x: 0, y: 0 });
-      continue;
-    }
-    let best: { x: number; y: number; score: number } | null = null;
-    for (const host of placed) {
-      const steps = 56;
-      for (let i = 0; i < steps; i++) {
-        const ang = (i / steps) * Math.PI * 2 + host.r * 0.017;
-        const dist = host.r + item.r + gap;
-        const x = host.x + Math.cos(ang) * dist;
-        const y = host.y + Math.sin(ang) * dist;
-        let ok = true;
-        for (const other of placed) {
-          const need = other.r + item.r + gap - 1;
-          const dx = other.x - x;
-          const dy = other.y - y;
-          if (dx * dx + dy * dy < need * need) {
-            ok = false;
-            break;
-          }
-        }
-        if (!ok) continue;
-        const score = x * x * 0.95 + y * y * 1.05; // balanced pack so YC is not a flat stripe
-        if (!best || score < best.score) best = { x, y, score };
-      }
-    }
-    if (!best) {
-      const ring = placed.reduce((m, p) => Math.max(m, Math.hypot(p.x, p.y) + p.r), 0) + item.r + gap + 4;
-      best = { x: ring, y: 0, score: ring * ring };
-    }
-    placed.push({ ...item, x: best.x, y: best.y });
-  }
-
-  const cx = placed.reduce((s, p) => s + p.x, 0) / Math.max(1, placed.length);
-  const cy = placed.reduce((s, p) => s + p.y, 0) / Math.max(1, placed.length);
   const out = new Map<string, { x: number; y: number }>();
-  for (const p of placed) out.set(p.id, { x: p.x - cx, y: p.y - cy });
+  if (sorted.length === 0) return out;
+  const core = sorted[0];
+  out.set(core.id, { x: 0, y: 0 });
+  const ring = sorted.slice(1);
+  if (ring.length === 0) return out;
+  const coreR = Math.max(28, core.r * 0.72);
+  // Ring radius clears the YC cloud; slight oval so the desk feels composed.
+  const baseR = coreR + 38 + Math.max(...ring.map((item) => item.r)) * 0.55;
+  const n = ring.length;
+  for (let i = 0; i < n; i++) {
+    const item = ring[i];
+    // Start at upper-right; go clockwise so Penn/Speedrun land in readable arcs.
+    const ang = -Math.PI / 2 + (i / n) * Math.PI * 2 + 0.18;
+    const radial = baseR + (i % 3) * 6 + item.r * 0.12;
+    out.set(item.id, {
+      x: Math.cos(ang) * radial * 1.08,
+      y: Math.sin(ang) * radial * 0.92,
+    });
+  }
   return out;
 }
 

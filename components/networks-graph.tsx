@@ -108,10 +108,11 @@ function placeLabels(
   hoverId: string | null
 ): LabelBox[] {
   const ranked = [...clusters].sort((a, b) => a.rank - b.rank);
-  const maxLabels = viewW < 600 ? 6 : viewW < 900 ? 12 : ranked.length;
+  // Mobile needs more peripheral labels; desk shows nearly all hubs.
+  const maxLabels = viewW < 600 ? 10 : viewW < 900 ? 14 : ranked.length;
   const candidates = ranked.filter((c) => c.rank <= maxLabels || c.id === hoverId);
-  // Legend lives in the side rail / below-map strip — canvas keeps only hub labels.
-  const legendH = 8;
+  // Leave a thin bottom strip for the in-frame campus legend.
+  const legendH = 28;
   const topPad = 8;
   const bottomLimit = viewH - legendH - 6;
   const placed: LabelBox[] = [];
@@ -139,9 +140,10 @@ function placeLabels(
     const hubR = cloudR;
     // Giant clouds (YC) must anchor near the hub, not on the outer fringe next to neighbors.
     const anchorR = Math.min(cloudR, Math.max(18, Math.min(48, cloudR * 0.38)));
-    const text = cluster.label;
+    const count = cluster.totalFounders || cluster.founderCount || 0;
+    const text = `${cluster.label} · ${count.toLocaleString("en-US")}`;
     const fontPx = 11;
-    const maxW = Math.min(170, Math.max(88, Math.min(viewW * 0.16, text.length > 22 ? 160 : 130)));
+    const maxW = Math.min(190, Math.max(96, Math.min(viewW * 0.2, text.length > 26 ? 180 : 140)));
     const { w, h } = wrapLabelMetrics(text, maxW, fontPx);
     const baseAng = Math.atan2(center.y - viewH / 2, center.x - viewW / 2);
     // Prefer angles that stay clear of neighboring hubs.
@@ -337,6 +339,9 @@ export function NetworksGraph({
   const [labels, setLabels] = useState<LabelBox[]>([]);
   const [uncrowdedOnly, setUncrowdedOnly] = useState(false);
   const [highlightNet, setHighlightNet] = useState<string | null>(null);
+  /** YC spokes start collapsed so the center is readable; click the hub to expand. */
+  const [ycExpanded, setYcExpanded] = useState(false);
+  const ycExpandedRef = useRef(false);
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [size, setSize] = useState({ w: 720, h: 420 });
@@ -527,11 +532,15 @@ export function NetworksGraph({
     // Thin translucent curved membership ties for every cluster; cofounders a touch stronger.
     const byId = byIdRef.current;
     const maxSpan = Math.min(size.w, size.h) * (0.72 + glow * 0.35);
+    const ycOpen = ycExpandedRef.current;
     ctx.lineCap = "round";
     for (const edge of g.edges) {
       if (edge.type === "founder_company" && editorial > 0.55) continue;
       // Keep most network_tie hairlines; thin randomly only when very zoomed out.
       if (edge.type === "network_tie" && editorial > 0.85 && hash01(edge.source + edge.target) > 0.7) continue;
+      const touchesYc = edge.source === "net:yc" || edge.target === "net:yc";
+      // Collapsed YC: drop membership spokes so the center is not a hairball.
+      if (touchesYc && !ycOpen && (edge.type === "network_tie" || edge.type === "network_founder")) continue;
       const a = byId.get(edge.source);
       const b = byId.get(edge.target);
       if (!a || !b) continue;
@@ -566,6 +575,8 @@ export function NetworksGraph({
     // Founder + company dots (campus color on founders).
     const members = g.nodes.filter((n) => n.type === "company" || n.type === "founder");
     for (const node of members) {
+      // Collapsed YC: keep a light sample of the cloud so the hub still reads as dense.
+      if (!ycOpen && node.parentNetworkId === "yc" && hash01(node.id) > 0.22) continue;
       let x = node.x;
       let y = node.y;
       if (!reduceMotionRef.current && glow > 0.05) {
@@ -781,12 +792,25 @@ export function NetworksGraph({
     (networkId: string) => {
       setHighlightNet(networkId);
       hoverNetRef.current = networkId;
+      if (networkId === "yc") {
+        setYcExpanded((open) => {
+          const next = !open;
+          ycExpandedRef.current = next;
+          return next;
+        });
+      }
       viewDirtyRef.current = true;
       onSelectNetwork(networkId);
       if (reduceMotionRef.current) draw();
     },
     [draw, onSelectNetwork],
   );
+
+  useEffect(() => {
+    ycExpandedRef.current = ycExpanded;
+    viewDirtyRef.current = true;
+    if (reduceMotionRef.current) draw();
+  }, [ycExpanded, draw]);
 
   if (error) {
     return <p className="px-4 py-8 text-sm text-[color:var(--fg-2)]">{error}</p>;
@@ -976,6 +1000,24 @@ export function NetworksGraph({
               <span className="block whitespace-normal break-words">{label.text}</span>
             </button>
           ))}
+
+          {/* In-frame campus legend (bottom strip) — visible in graph crops at both sizes. */}
+          <div
+            data-networks-legend-frame=""
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] flex flex-wrap items-center gap-x-2 gap-y-0.5 bg-gradient-to-t from-white via-white/95 to-transparent px-2 pb-1.5 pt-4 text-[10px] text-[color:var(--fg-2)]"
+          >
+            {campusLegend.slice(0, 8).map((item) => (
+              <span key={item.id} className="inline-flex items-center gap-1">
+                <span className="inline-block h-2 w-2 rounded-full" style={{ background: item.color }} />
+                {item.label}
+              </span>
+            ))}
+            {!ycExpanded ? (
+              <span className="ml-auto text-[9px] text-[color:var(--fg-3)]">YC collapsed · click hub to expand</span>
+            ) : (
+              <span className="ml-auto text-[9px] text-[color:var(--fg-3)]">YC expanded · click hub to collapse</span>
+            )}
+          </div>
         </div>
 
         {/* Desktop side rail: detail, insights, investors, compact legend — off the graph surface. */}

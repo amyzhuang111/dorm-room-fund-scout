@@ -27,6 +27,8 @@ export interface NetworkMember {
   companyName: string;
   campusId: string | null;
   campusLabel: string | null;
+  /** Funding stage when known (for roster sort). */
+  stage: string | null;
 }
 
 export interface MatrixColumn {
