@@ -60,14 +60,14 @@ export function NetworksTimeline({
         </span>
       </div>
       <div className="flex flex-wrap gap-x-2 px-1 text-[9px] leading-tight text-[color:var(--fg-3)]">
-        <span data-networks-timeline-always="">
-          {alwaysOnCount.toLocaleString("en-US")} always on (no year)
-        </span>
         {proxyCount > 0 ? (
           <span data-networks-timeline-proxy="">
-            {proxyCount.toLocaleString("en-US")} via company founded year
+            {proxyCount.toLocaleString("en-US")} placed by company founding year (no grad year on file)
           </span>
         ) : null}
+        <span data-networks-timeline-always="">
+          {alwaysOnCount.toLocaleString("en-US")} always shown (no year on file)
+        </span>
       </div>
     </div>
   );
