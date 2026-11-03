@@ -18,6 +18,7 @@ import {
   type FounderNetworksPage,
   type GraphCluster,
   type GraphEdge,
+  type GraphFounderDeal,
   type GraphNode,
   type GraphPayload,
   type MatrixCell,
@@ -92,6 +93,56 @@ const EXTRA_TEXT_RULES: { test: RegExp; id: string }[] = [
 
 const ACCELERATOR_PROGRAM_IDS = new Set(["yc", "speedrun", "founders_inc", "pear", "spc", "agi_house"]);
 
+/** Crowded pathways + major funds for the deal-flow highlight. Exact company_facts.investor labels. */
+const TOP_FUND_LABELS = new Set(
+  [
+    "Y Combinator",
+    "a16z Speedrun",
+    "Andreessen Horowitz",
+    "Sequoia Capital",
+    "General Catalyst",
+    "Founders Fund",
+    "CRV",
+    "Accel",
+    "Accel Partners",
+    "Benchmark",
+    "First Round Capital",
+    "Kleiner Perkins",
+    "Khosla Ventures",
+    "Index Ventures",
+    "Bessemer Venture Partners",
+    "Thrive Capital",
+    "Felicis",
+    "Lux Capital",
+    "Redpoint",
+    "SignalFire",
+    "SV Angel",
+    "Pear VC",
+    "South Park Commons",
+    "Uncork Capital",
+    "Foundation Capital",
+    "BoxGroup",
+    "Bain Capital Ventures",
+    "ICONIQ Capital",
+  ].map((s) => s.toLowerCase())
+);
+
+function isTopFundLabel(name: string): boolean {
+  return TOP_FUND_LABELS.has(name.trim().toLowerCase());
+}
+
+function parseStage(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  const m = raw.match(/\b(Pre-?Seed|Seed|Series\s*[A-F]|Angel)\b/i);
+  if (!m) return null;
+  const token = m[1].replace(/\s+/g, " ");
+  if (/^pre/i.test(token)) return "Pre-Seed";
+  if (/^series/i.test(token)) return `Series ${token.slice(-1).toUpperCase()}`;
+  if (/^angel/i.test(token)) return "Angel";
+  if (/^seed/i.test(token)) return "Seed";
+  return null;
+}
+
 interface Link {
   networkId: string;
   label: string;
@@ -108,6 +159,8 @@ interface LinkMeta {
   founderCampuses: Map<string, string[]>;
   companyFounders: Map<string, Set<string>>;
   companySectors: Map<string, string>;
+  companyStages: Map<string, string | null>;
+  companyInvestors: Map<string, string[]>;
   uniLabels: Map<string, string>;
   corpusCompanies: number;
 }
@@ -217,7 +270,40 @@ function loadMeta(db: ReturnType<typeof getDb>): LinkMeta {
     if (!companySectors.has(row.project_id)) companySectors.set(row.project_id, row.tag);
   }
 
-  return { companyNames, founderNames, founderCampuses, companyFounders, companySectors, uniLabels, corpusCompanies };
+  const companyStages = new Map<string, string | null>();
+  for (const row of db.prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'funding_round'`).all() as {
+    project_id: string;
+    value_text: string;
+  }[]) {
+    if (!companyNames.has(row.project_id)) continue;
+    if (companyStages.has(row.project_id) && companyStages.get(row.project_id)) continue;
+    companyStages.set(row.project_id, parseStage(row.value_text));
+  }
+
+  const companyInvestors = new Map<string, string[]>();
+  for (const row of db.prepare(`SELECT project_id, value_text FROM company_facts WHERE fact_key = 'investor'`).all() as {
+    project_id: string;
+    value_text: string;
+  }[]) {
+    if (!companyNames.has(row.project_id)) continue;
+    const label = (row.value_text || "").trim();
+    if (!label) continue;
+    const list = companyInvestors.get(row.project_id) ?? [];
+    if (!list.includes(label)) list.push(label);
+    companyInvestors.set(row.project_id, list);
+  }
+
+  return {
+    companyNames,
+    founderNames,
+    founderCampuses,
+    companyFounders,
+    companySectors,
+    companyStages,
+    companyInvestors,
+    uniLabels,
+    corpusCompanies,
+  };
 }
 
 function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
@@ -557,15 +643,21 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
         "Concentrated means the top 3 networks hold 50% or more of founder links in that sector. Moderate is 35% to 49%. Broad is under 35%.",
       excludedNote: "Sectors with fewer than 10 observed founder links are excluded.",
     },
+    investorHubs: summaries.filter((row) => row.kind === "investor").slice(0, 12),
+    topFundNote:
+      "Top fund means a curated list of major funds and crowded pathways (Y Combinator, a16z Speedrun, Andreessen Horowitz, Sequoia Capital, General Catalyst, Founders Fund, CRV, Accel, Benchmark, First Round Capital, and peers). A company counts as backed when that label appears in company investor facts or as a linked network. Everything else, including missing investor rows, is labeled unknown or not yet backed.",
     howItWorks: [
-      `Counts cover the verified investable corpus of ${meta.corpusCompanies.toLocaleString("en-US")} companies.`,
+      `Counts cover the verified investable corpus of ${meta.corpusCompanies.toLocaleString("en-US")} companies for investor deal flow.`,
       "A founder link is directed: a stored accelerator, program, lab, or investor membership points at a founder of an investable company.",
       "The 2023+ rule keeps current students and alumni who graduated in 2023 or later. Older alumni are excluded from this desk.",
       "A founder can contribute to more than one network when their record shows more than one qualifying membership.",
       `Over half of this corpus carries Y Combinator company-page evidence, so YC ranks first by construction rather than as a neutral campus share.`,
-      "The interactive graph is a sample: top networks with capped companies and founders per network. Hover a network to see how many nodes are shown versus the full desk count.",
+      "Hover a founder on the graph for their company, funding stage when known, and which networks or investors already back them. Missing stage or investor rows are labeled unknown.",
+      "The Not yet backed by a top fund toggle dims companies that already show a curated top fund or crowded pathway on company investor facts.",
+      "Investor hubs list investor-kind networks by how many campus founders each fund has reached in this corpus.",
+      "The interactive graph is a sample: top networks with capped companies and founders per network.",
       "Prior employers are omitted. The corpus does not yet store enough employer history to support that section.",
-      "Co-founder edges on the graph join two investable companies that share a founder (serial founders). Same-company co-founders are not drawn as company-to-company edges.",
+      "Co-founder edges on the graph join two investable companies that share a founder (serial founders).",
     ],
     graphPath: "/data/founder-networks-graph.json",
   };
@@ -615,9 +707,11 @@ export function buildFounderNetworksGraph(): GraphPayload {
   const founderParent = new Map<string, string>();
 
   for (const net of top) {
+    const founderCap = Math.min(120, Math.max(24, Math.round(Math.sqrt(net.founderCount) * 5.5)));
+    const companyCap = Math.min(100, Math.max(20, Math.round(Math.sqrt(net.founderCount) * 4.5)));
     const cos = (companiesByNet[net.id] ?? [])
       .sort((a, b) => (companyDegree.get(b) ?? 0) - (companyDegree.get(a) ?? 0) || a.localeCompare(b))
-      .slice(0, 42);
+      .slice(0, companyCap);
     for (const id of cos) {
       if (companySet.has(id)) continue;
       companySet.add(id);
@@ -625,7 +719,7 @@ export function buildFounderNetworksGraph(): GraphPayload {
     }
     const fos = (foundersByNet[net.id] ?? [])
       .sort((a, b) => (founderDegree.get(b) ?? 0) - (founderDegree.get(a) ?? 0) || a.localeCompare(b))
-      .slice(0, 48);
+      .slice(0, founderCap);
     for (const id of fos) {
       if (founderSet.has(id)) continue;
       founderSet.add(id);
@@ -800,6 +894,57 @@ export function buildFounderNetworksGraph(): GraphPayload {
     }
   }
 
+  // Investor-facing founder hover cards + uncrowded company set.
+  const networksByFounder = new Map<string, string[]>();
+  for (const link of links) {
+    if (!founderSet.has(link.founderId)) continue;
+    const list = networksByFounder.get(link.founderId) ?? [];
+    if (!list.includes(link.label)) list.push(link.label);
+    networksByFounder.set(link.founderId, list);
+  }
+  const founderDeals: Record<string, GraphFounderDeal> = {};
+  const uncrowded = new Set<string>();
+  for (const founderId of founderIds) {
+    const companies = [...(meta.companyFounders.entries())]
+      .filter(([, set]) => set.has(founderId))
+      .map(([companyId]) => companyId)
+      .filter((companyId) => companySet.has(companyId) || meta.companyNames.has(companyId));
+    // Prefer a company that is on the sampled graph; else first investable company.
+    const companyId =
+      companies.find((id) => companySet.has(id)) ??
+      [...(meta.companyFounders.entries())].find(([, set]) => set.has(founderId))?.[0] ??
+      null;
+    const investors = companyId ? meta.companyInvestors.get(companyId) ?? [] : [];
+    const networkLabels = networksByFounder.get(founderId) ?? [];
+    const hasTopFund =
+      investors.some((name) => isTopFundLabel(name)) || networkLabels.some((name) => isTopFundLabel(name));
+    founderDeals[founderId] = {
+      founderId,
+      founderName: meta.founderNames.get(founderId) ?? founderId,
+      companyId,
+      companyName: companyId ? meta.companyNames.get(companyId) ?? companyId : null,
+      stage: companyId ? meta.companyStages.get(companyId) ?? null : null,
+      networks: networkLabels.slice(0, 8),
+      investors: investors.slice(0, 8),
+      hasTopFund,
+    };
+  }
+  // Company is uncrowded only when neither investor facts nor sampled network ties show a top fund.
+  const companyNetworkLabels = new Map<string, string[]>();
+  for (const link of links) {
+    if (!companySet.has(link.companyId)) continue;
+    const list = companyNetworkLabels.get(link.companyId) ?? [];
+    if (!list.includes(link.label)) list.push(link.label);
+    companyNetworkLabels.set(link.companyId, list);
+  }
+  for (const companyId of companyIds) {
+    const investors = meta.companyInvestors.get(companyId) ?? [];
+    const nets = companyNetworkLabels.get(companyId) ?? [];
+    const crowded =
+      investors.some((name) => isTopFundLabel(name)) || nets.some((name) => isTopFundLabel(name));
+    if (!crowded) uncrowded.add(companyId);
+  }
+
   return {
     nodes,
     edges,
@@ -807,14 +952,16 @@ export function buildFounderNetworksGraph(): GraphPayload {
     edgeCounts,
     generatedAt: new Date().toISOString(),
     layout: "packed-glow",
-    sample: { topNetworks: top.length, maxCompaniesPerNetwork: 42, maxFoundersPerNetwork: 48 },
+    sample: { topNetworks: top.length, maxCompaniesPerNetwork: 100, maxFoundersPerNetwork: 120 },
+    founderDeals,
+    uncrowdedCompanyIds: [...uncrowded],
   };
 }
 
 function packClusterCenters(items: { id: string; r: number }[]): Map<string, { x: number; y: number }> {
   const sorted = [...items].sort((a, b) => b.r - a.r || a.id.localeCompare(b.id));
   const placed: { id: string; x: number; y: number; r: number }[] = [];
-  const gap = 6; // tighter Nature-style packed cloud
+  const gap = 3; // dense Nature-style packed cloud
 
   for (const item of sorted) {
     if (placed.length === 0) {
@@ -840,7 +987,7 @@ function packClusterCenters(items: { id: string; r: number }[]): Map<string, { x
           }
         }
         if (!ok) continue;
-        const score = x * x + y * y * 1.02;
+        const score = x * x * 0.72 + y * y * 1.35; // prefer wide cloud over tall
         if (!best || score < best.score) best = { x, y, score };
       }
     }
@@ -888,28 +1035,60 @@ export function applyForceLayout(graph: GraphPayload): GraphPayload {
     byParent.set(parent, list);
   }
 
+  const pageEarly = buildFounderNetworksPage();
+  const totalByNetEarly = new Map(pageEarly.topNetworks.map((row) => [row.id, row.founderCount]));
+
   for (const net of networks) {
     const kids = byParent.get(net.networkId ?? "") ?? [];
-    net.clusterR = Math.max(34, 16 + Math.sqrt(Math.max(1, kids.length)) * 6.4);
-    net.size = Math.max(9, Math.min(24, 7 + Math.sqrt(kids.length) * 1.25));
+    const totalFounders = totalByNetEarly.get(net.networkId ?? "") ?? kids.length;
+    // Area ∝ founder count → radius ∝ sqrt(founders). YC (~985) dominates small programs.
+    net.clusterR = Math.max(22, Math.sqrt(Math.max(1, totalFounders)) * 4.15);
+    net.size = Math.max(6, Math.min(28, 4 + Math.sqrt(totalFounders) * 0.55));
   }
 
   const centers = packClusterCenters(networks.map((net) => ({ id: net.id, r: net.clusterR })));
+  // Stretch into a wide organic cloud so fit-to-canvas fills the frame width.
+  const xs0 = [...centers.values()].map((c) => c.x);
+  const ys0 = [...centers.values()].map((c) => c.y);
+  const spanX0 = Math.max(1, Math.max(...xs0) - Math.min(...xs0));
+  const spanY0 = Math.max(1, Math.max(...ys0) - Math.min(...ys0));
+  const targetAspect = 2.35;
+  const stretchX = Math.max(1.15, spanY0 * targetAspect > spanX0 ? (spanY0 * targetAspect) / spanX0 : 1.15);
+  // Push non-dominant clusters farther out on X so the cloud fills the frame.
+  const maxR = Math.max(...networks.map((n) => n.clusterR));
+  for (const [id, c] of centers) {
+    const net = networks.find((n) => n.id === id);
+    const boost = net && net.clusterR < maxR * 0.55 ? 1.22 : 1.0;
+    centers.set(id, { x: c.x * stretchX * boost, y: c.y * 0.92 });
+  }
+
   for (const net of networks) {
     const c = centers.get(net.id) ?? { x: 0, y: 0 };
     net.x = Math.round(c.x * 10) / 10;
     net.y = Math.round(c.y * 10) / 10;
     const kids = byParent.get(net.networkId ?? "") ?? [];
-    // Slightly shuffle companies vs founders for visual texture: sort by type then size.
     kids.sort((a, b) => a.type.localeCompare(b.type) || b.size - a.size || a.id.localeCompare(b.id));
     packMembersInCluster(kids, net.x, net.y, net.clusterR);
   }
 
-  const callouts: Record<number, string> = {
-    1: "Largest accelerator cloud feeding student founders across campuses.",
-    2: "Deep campus program bench with a dense local founder cluster.",
-    3: "National accelerator lane sitting beside the YC cloud.",
-  };
+  // Investor insights from real desk counts (not marketing copy).
+  const callouts: Record<number, string> = {};
+  const pennChallenge = totalByNetEarly.get("penn_startup_challenge") ?? 0;
+  const pennVip = totalByNetEarly.get("vipx") ?? 0;
+  const pennYcOverlapNote =
+    pennChallenge > pennVip
+      ? `Penn founders mostly enter via Startup Challenge (${pennChallenge.toLocaleString("en-US")} founders), not VIP-X (${pennVip.toLocaleString("en-US")}).`
+      : `Penn VIP-X reaches ${pennVip.toLocaleString("en-US")} founders versus Startup Challenge at ${pennChallenge.toLocaleString("en-US")}.`;
+  for (const net of networks) {
+    const total = totalByNetEarly.get(net.networkId ?? "") ?? 0;
+    if (net.rank === 1) {
+      callouts[1] = `YC alone reaches ${total.toLocaleString("en-US")} founders in this corpus, so most deal flow is already on a crowded pathway.`;
+    } else if (net.networkId === "penn_startup_challenge" || net.rank === 2) {
+      callouts[net.rank] = pennYcOverlapNote;
+    } else if (net.networkId === "speedrun" || net.rank === 3) {
+      callouts[net.rank] = `a16z Speedrun reaches ${total.toLocaleString("en-US")} campus founders here, the largest non-YC crowded pathway on the desk.`;
+    }
+  }
 
   const founderCountByNet = new Map<string, number>();
   for (const edge of graph.edges) {
@@ -919,8 +1098,7 @@ export function applyForceLayout(graph: GraphPayload): GraphPayload {
     founderCountByNet.set(netId, (founderCountByNet.get(netId) ?? 0) + 1);
   }
 
-  const page = buildFounderNetworksPage();
-  const totalByNet = new Map(page.topNetworks.map((row) => [row.id, row.founderCount]));
+  const totalByNet = totalByNetEarly;
 
   const clusters: GraphCluster[] = networks.map((net) => {
     const kids = byParent.get(net.networkId ?? "") ?? [];
@@ -949,6 +1127,8 @@ export function applyForceLayout(graph: GraphPayload): GraphPayload {
     nodes: [...networks, ...members],
     clusters,
     layout: "packed-glow",
-    sample: graph.sample ?? { topNetworks: networks.length, maxCompaniesPerNetwork: 42, maxFoundersPerNetwork: 48 },
+    sample: graph.sample ?? { topNetworks: networks.length, maxCompaniesPerNetwork: 100, maxFoundersPerNetwork: 120 },
+    founderDeals: graph.founderDeals ?? {},
+    uncrowdedCompanyIds: graph.uncrowdedCompanyIds ?? [],
   };
 }

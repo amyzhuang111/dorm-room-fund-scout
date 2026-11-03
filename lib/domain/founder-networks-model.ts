@@ -105,6 +105,23 @@ export interface GraphCluster {
   callout: string | null;
 }
 
+
+/** Investor-facing founder hover card built from stored company and network ties. */
+export interface GraphFounderDeal {
+  founderId: string;
+  founderName: string;
+  companyId: string | null;
+  companyName: string | null;
+  /** Parsed funding stage when known; otherwise null (UI shows unknown). */
+  stage: string | null;
+  /** Program / accelerator / lab network labels already tied to this founder. */
+  networks: string[];
+  /** Investor labels from company_facts.investor (may be empty). */
+  investors: string[];
+  /** True when a curated top fund or crowded pathway already appears on the company. */
+  hasTopFund: boolean;
+}
+
 export interface GraphPayload {
   nodes: GraphNode[];
   edges: GraphEdge[];
@@ -113,6 +130,10 @@ export interface GraphPayload {
   generatedAt: string;
   layout: "packed-glow";
   sample: { topNetworks: number; maxCompaniesPerNetwork: number; maxFoundersPerNetwork: number };
+  /** Founder id → deal-flow hover facts. */
+  founderDeals: Record<string, GraphFounderDeal>;
+  /** Company id → true when not yet backed by a curated top fund. */
+  uncrowdedCompanyIds: string[];
 }
 
 export interface FounderNetworksPage {
@@ -142,4 +163,8 @@ export interface FounderNetworksPage {
   };
   howItWorks: string[];
   graphPath: string;
+  /** Investor-kind networks ranked by campus founders reached. */
+  investorHubs: NetworkSummary[];
+  /** Definition of the top-fund highlight used on the graph. */
+  topFundNote: string;
 }
