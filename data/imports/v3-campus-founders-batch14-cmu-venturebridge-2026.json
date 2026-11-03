@@ -1,0 +1,405 @@
+{
+  "retrievedAt": "2026-11-03T06:38:00.000Z",
+  "companies": [
+    {
+      "name": "Analogical Engines",
+      "description": "AI-enabled innovation discovery through computational analogies",
+      "website": "https://www.analogicalengines.com",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "Analogical Engines, founded by Aniket Kittur and Vikram Mohanty and Nikolas Martelaro. CMU VentureBridge 2026 portfolio.",
+      "orgPlace": "CMU VentureBridge 2026",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Aniket Kittur",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Analogical Engines, founded by Aniket Kittur and Vikram Mohanty and Nikolas Martelaro. CMU VentureBridge 2026 portfolio."
+        },
+        {
+          "name": "Vikram Mohanty",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Analogical Engines, founded by Aniket Kittur and Vikram Mohanty and Nikolas Martelaro. CMU VentureBridge 2026 portfolio."
+        },
+        {
+          "name": "Nikolas Martelaro",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Analogical Engines, founded by Aniket Kittur and Vikram Mohanty and Nikolas Martelaro. CMU VentureBridge 2026 portfolio."
+        }
+      ]
+    },
+    {
+      "name": "Avronna",
+      "description": "Custom AI chips for specialized computing workloads",
+      "website": "https://www.avronna.com",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "Avronna, founded by Rumi Naik. CMU VentureBridge 2026 portfolio.",
+      "orgPlace": "CMU VentureBridge 2026",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Rumi Naik",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Avronna, founded by Rumi Naik. CMU VentureBridge 2026 portfolio."
+        }
+      ]
+    },
+    {
+      "name": "Basics",
+      "description": "Open-source operating system templates for internal tools",
+      "website": "https://www.basicsoftware.ai",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "Basics, founded by Akeil Smith and Arav Bhardwaj. CMU VentureBridge 2026 portfolio.",
+      "orgPlace": "CMU VentureBridge 2026",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Akeil Smith",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Basics, founded by Akeil Smith and Arav Bhardwaj. CMU VentureBridge 2026 portfolio."
+        },
+        {
+          "name": "Arav Bhardwaj",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Basics, founded by Akeil Smith and Arav Bhardwaj. CMU VentureBridge 2026 portfolio."
+        }
+      ]
+    },
+    {
+      "name": "Fordje",
+      "description": "AI extraction of zoning, construction and interconnection regulations",
+      "website": "https://www.fordje.com",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "Fordje, founded by Gillian Sowray. CMU VentureBridge 2026 portfolio.",
+      "orgPlace": "CMU VentureBridge 2026",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Gillian Sowray",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Fordje, founded by Gillian Sowray. CMU VentureBridge 2026 portfolio."
+        }
+      ]
+    },
+    {
+      "name": "Oryn AI",
+      "description": "Large Physics Model technology",
+      "website": "https://orynai.com",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "Oryn AI, founded by Mosam Dabhi. CMU VentureBridge 2026 portfolio.",
+      "orgPlace": "CMU VentureBridge 2026",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Mosam Dabhi",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Oryn AI, founded by Mosam Dabhi. CMU VentureBridge 2026 portfolio."
+        }
+      ]
+    },
+    {
+      "name": "SeaLion Energy",
+      "description": "Commercial battery technology for robotics and industry",
+      "website": "https://sealionenergy.com",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "SeaLion Energy, led by Reeja Jayan. CMU VentureBridge 2026 portfolio.",
+      "orgPlace": "CMU VentureBridge 2026",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Reeja Jayan",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU faculty venture leader, VentureBridge 2026",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named portfolio leader; founder status unverified",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "SeaLion Energy, led by Reeja Jayan. CMU VentureBridge 2026 portfolio."
+        }
+      ]
+    },
+    {
+      "name": "Sooth Labs",
+      "description": "Long-horizon forecasting foundation models",
+      "website": "https://soothlabs.com",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "Sooth Labs, founded by Yaser Sheikh and Russ Salakhutdinov. CMU VentureBridge 2026 portfolio.",
+      "orgPlace": "CMU VentureBridge 2026",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Yaser Sheikh",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU faculty founder, VentureBridge 2026",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Sooth Labs, founded by Yaser Sheikh and Russ Salakhutdinov. CMU VentureBridge 2026 portfolio."
+        },
+        {
+          "name": "Russ Salakhutdinov",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "CMU faculty founder, VentureBridge 2026",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Sooth Labs, founded by Yaser Sheikh and Russ Salakhutdinov. CMU VentureBridge 2026 portfolio."
+        }
+      ]
+    },
+    {
+      "name": "Acalia",
+      "description": "AI revenue-cycle management for independent physicians",
+      "website": "https://www.acalia.ai",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "Acalia, founded by Michael Das. CMU VentureBridge 2026 portfolio.",
+      "orgPlace": "CMU VentureBridge 2026",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Michael Das",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Acalia, founded by Michael Das. CMU VentureBridge 2026 portfolio."
+        }
+      ]
+    },
+    {
+      "name": "Carob",
+      "description": "Structured clinical reasoning data for healthcare AI",
+      "website": "https://gocarob.com",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "Carob, founded by Alia Friedman. CMU VentureBridge 2026 portfolio.",
+      "orgPlace": "CMU VentureBridge 2026",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Alia Friedman",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Carob, founded by Alia Friedman. CMU VentureBridge 2026 portfolio."
+        }
+      ]
+    },
+    {
+      "name": "Pierogi Therapeutics",
+      "description": "AI-physics platform for radiopharmaceutical drug discovery",
+      "website": "https://pierogitherapeutics.com",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "Pierogi Therapeutics, founded by Benjamin Koby and Filipp Gusev. CMU VentureBridge 2026 portfolio.",
+      "orgPlace": "CMU VentureBridge 2026",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Benjamin Koby",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Pierogi Therapeutics, founded by Benjamin Koby and Filipp Gusev. CMU VentureBridge 2026 portfolio."
+        },
+        {
+          "name": "Filipp Gusev",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Pierogi Therapeutics, founded by Benjamin Koby and Filipp Gusev. CMU VentureBridge 2026 portfolio."
+        }
+      ]
+    },
+    {
+      "name": "Synapse Symphony",
+      "description": "Noninvasive neuromodulation platform for pain",
+      "website": "https://www.synapsesymphony.com",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "Synapse Symphony, founded by Vishal Jain. CMU VentureBridge 2026 portfolio.",
+      "orgPlace": "CMU VentureBridge 2026",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Vishal Jain",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Synapse Symphony, founded by Vishal Jain. CMU VentureBridge 2026 portfolio."
+        }
+      ]
+    },
+    {
+      "name": "Nth AI",
+      "description": "Vertical AI agent platform for enterprise workflows",
+      "website": "https://nthai.app",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "Nth AI, founded by Connie Yang. CMU VentureBridge 2026 portfolio.",
+      "orgPlace": "CMU VentureBridge 2026",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Connie Yang",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Nth AI, founded by Connie Yang. CMU VentureBridge 2026 portfolio."
+        }
+      ]
+    },
+    {
+      "name": "Support Vector",
+      "description": "Vision-language AI assistance for maintenance technicians",
+      "website": "https://supportvector.ai",
+      "sourceUrl": "https://www.cmu.edu/swartz-center-for-entrepreneurship/resources-funding-and-talent/venturebridge/venturebridge-2026-cohort-and-fellows-launch.html",
+      "excerpt": "Support Vector, founded by Nalini Jain. CMU VentureBridge 2026 portfolio.",
+      "orgPlace": "CMU VentureBridge 2026",
+      "campusIds": [
+        "univ_cmu"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Nalini Jain",
+          "aliases": [],
+          "campusId": "univ_cmu",
+          "affiliationRole": "VentureBridge 2026 founder; precise faculty/student/alumni status not established",
+          "companyRole": "founder",
+          "founderStatus": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Named by Carnegie Mellon's 2026 VentureBridge article. Program membership does not establish current student status.",
+          "excerpt": "Support Vector, founded by Nalini Jain. CMU VentureBridge 2026 portfolio."
+        }
+      ]
+    }
+  ],
+  "potential": [],
+  "links": []
+}
