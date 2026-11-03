@@ -1,0 +1,1057 @@
+{
+  "retrievedAt": "2026-11-03T07:40:00.000Z",
+  "companies": [
+    {
+      "name": "Luminarch",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Luminarch — Naman Gupta listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Spring 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Naman Gupta",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Naman Gupta as Luminarch founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Luminarch — Naman Gupta listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "StrandID",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: StrandID — Minsung Cho, George Walters-Marrah, Micah Lawrence listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Spring 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Minsung Cho",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Minsung Cho as StrandID founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: StrandID — Minsung Cho, George Walters-Marrah, Micah Lawrence listed as founders."
+        },
+        {
+          "name": "George Walters-Marrah",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names George Walters-Marrah as StrandID founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: StrandID — Minsung Cho, George Walters-Marrah, Micah Lawrence listed as founders."
+        },
+        {
+          "name": "Micah Lawrence",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Micah Lawrence as StrandID founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: StrandID — Minsung Cho, George Walters-Marrah, Micah Lawrence listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Stealth (Manufacturing)",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Stealth (Manufacturing) — Arjun Oberoi, Shane Mion listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Spring 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Arjun Oberoi",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Arjun Oberoi as Stealth (Manufacturing) founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Stealth (Manufacturing) — Arjun Oberoi, Shane Mion listed as founders."
+        },
+        {
+          "name": "Shane Mion",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Shane Mion as Stealth (Manufacturing) founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Stealth (Manufacturing) — Arjun Oberoi, Shane Mion listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Oculta",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Oculta — Daniel Banin, Filip Buscu, Arin Parsa listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Spring 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Daniel Banin",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Daniel Banin as Oculta founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Oculta — Daniel Banin, Filip Buscu, Arin Parsa listed as founders."
+        },
+        {
+          "name": "Filip Buscu",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Filip Buscu as Oculta founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Oculta — Daniel Banin, Filip Buscu, Arin Parsa listed as founders."
+        },
+        {
+          "name": "Arin Parsa",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Arin Parsa as Oculta founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Oculta — Daniel Banin, Filip Buscu, Arin Parsa listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Onvoice",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Onvoice — Andrew Kang, Joshua Ayuk listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Spring 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Andrew Kang",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Andrew Kang as Onvoice founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Onvoice — Andrew Kang, Joshua Ayuk listed as founders."
+        },
+        {
+          "name": "Joshua Ayuk",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Joshua Ayuk as Onvoice founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Onvoice — Andrew Kang, Joshua Ayuk listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Cybernetic Physics",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Cybernetic Physics — Natalia Kokoromyti listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Spring 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Natalia Kokoromyti",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Natalia Kokoromyti as Cybernetic Physics founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Cybernetic Physics — Natalia Kokoromyti listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Samwise Labs",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Samwise Labs — Loubaba El Ayoubi, Lyna El Ayoubi listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Spring 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Loubaba El Ayoubi",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Loubaba El Ayoubi as Samwise Labs founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Samwise Labs — Loubaba El Ayoubi, Lyna El Ayoubi listed as founders."
+        },
+        {
+          "name": "Lyna El Ayoubi",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Lyna El Ayoubi as Samwise Labs founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Samwise Labs — Loubaba El Ayoubi, Lyna El Ayoubi listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "0studio",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: 0studio — Colin Kim, Max Fan listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Spring 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Colin Kim",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Colin Kim as 0studio founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: 0studio — Colin Kim, Max Fan listed as founders."
+        },
+        {
+          "name": "Max Fan",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Max Fan as 0studio founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: 0studio — Colin Kim, Max Fan listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Illusionary Labs",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Illusionary Labs — Justin West, Maxton Huff listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Spring 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Justin West",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Justin West as Illusionary Labs founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Illusionary Labs — Justin West, Maxton Huff listed as founders."
+        },
+        {
+          "name": "Maxton Huff",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Maxton Huff as Illusionary Labs founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Illusionary Labs — Justin West, Maxton Huff listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Hydrify",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Hydrify — Yashee Mathur listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Spring 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Yashee Mathur",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Yashee Mathur as Hydrify founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Hydrify — Yashee Mathur listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Octur",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Octur — Jake North, Cannon Kissane listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Spring 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Jake North",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Jake North as Octur founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Octur — Jake North, Cannon Kissane listed as founders."
+        },
+        {
+          "name": "Cannon Kissane",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Cannon Kissane as Octur founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Octur — Jake North, Cannon Kissane listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Zuca",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Zuca — Kelley Yuan, Emil Nordin listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Spring 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Kelley Yuan",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Kelley Yuan as Zuca founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Zuca — Kelley Yuan, Emil Nordin listed as founders."
+        },
+        {
+          "name": "Emil Nordin",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Emil Nordin as Zuca founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Zuca — Kelley Yuan, Emil Nordin listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "BeatAI",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: BeatAI — Mehrzad Sajjadi, Farhad Nezami, Jakob Wollborn, Amin Ramezani listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Spring 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Mehrzad Sajjadi",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Mehrzad Sajjadi as BeatAI founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: BeatAI — Mehrzad Sajjadi, Farhad Nezami, Jakob Wollborn, Amin Ramezani listed as founders."
+        },
+        {
+          "name": "Farhad Nezami",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Farhad Nezami as BeatAI founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: BeatAI — Mehrzad Sajjadi, Farhad Nezami, Jakob Wollborn, Amin Ramezani listed as founders."
+        },
+        {
+          "name": "Jakob Wollborn",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Jakob Wollborn as BeatAI founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: BeatAI — Mehrzad Sajjadi, Farhad Nezami, Jakob Wollborn, Amin Ramezani listed as founders."
+        },
+        {
+          "name": "Amin Ramezani",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Amin Ramezani as BeatAI founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: BeatAI — Mehrzad Sajjadi, Farhad Nezami, Jakob Wollborn, Amin Ramezani listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Pelican Systems",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Pelican Systems — Gurchit Chatha, Ryle Zhou listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Spring 2026",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Gurchit Chatha",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Gurchit Chatha as Pelican Systems founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Pelican Systems — Gurchit Chatha, Ryle Zhou listed as founders."
+        },
+        {
+          "name": "Ryle Zhou",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Spring 2026 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Spring 2026 accelerator table explicitly names Ryle Zhou as Pelican Systems founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Spring 2026 cohort: Pelican Systems — Gurchit Chatha, Ryle Zhou listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Cortiva",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Cortiva — Esteban Lopez, Jaime Lopez listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Fall 2025",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Esteban Lopez",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Esteban Lopez as Cortiva founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Cortiva — Esteban Lopez, Jaime Lopez listed as founders."
+        },
+        {
+          "name": "Jaime Lopez",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Jaime Lopez as Cortiva founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Cortiva — Esteban Lopez, Jaime Lopez listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "RIFFAI",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: RIFFAI — Petch Ounjaroen, Kolatat Katousano listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Fall 2025",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Petch Ounjaroen",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Petch Ounjaroen as RIFFAI founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: RIFFAI — Petch Ounjaroen, Kolatat Katousano listed as founders."
+        },
+        {
+          "name": "Kolatat Katousano",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Kolatat Katousano as RIFFAI founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: RIFFAI — Petch Ounjaroen, Kolatat Katousano listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Partly",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Partly — Divya Bade, Shantanu Prakash, Shivani Bajaj, Zareef Shafquat listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Fall 2025",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Divya Bade",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Divya Bade as Partly founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Partly — Divya Bade, Shantanu Prakash, Shivani Bajaj, Zareef Shafquat listed as founders."
+        },
+        {
+          "name": "Shantanu Prakash",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Shantanu Prakash as Partly founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Partly — Divya Bade, Shantanu Prakash, Shivani Bajaj, Zareef Shafquat listed as founders."
+        },
+        {
+          "name": "Shivani Bajaj",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Shivani Bajaj as Partly founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Partly — Divya Bade, Shantanu Prakash, Shivani Bajaj, Zareef Shafquat listed as founders."
+        },
+        {
+          "name": "Zareef Shafquat",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Zareef Shafquat as Partly founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Partly — Divya Bade, Shantanu Prakash, Shivani Bajaj, Zareef Shafquat listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Hexagon",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Hexagon — Ramon Silva, Lemuel Cardenas listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Fall 2025",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ramon Silva",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Ramon Silva as Hexagon founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Hexagon — Ramon Silva, Lemuel Cardenas listed as founders."
+        },
+        {
+          "name": "Lemuel Cardenas",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Lemuel Cardenas as Hexagon founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Hexagon — Ramon Silva, Lemuel Cardenas listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Luno",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Luno — Lance Skarada, Daniel Lee listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Fall 2025",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Lance Skarada",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Lance Skarada as Luno founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Luno — Lance Skarada, Daniel Lee listed as founders."
+        },
+        {
+          "name": "Daniel Lee",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Daniel Lee as Luno founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Luno — Lance Skarada, Daniel Lee listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Prismatic",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Prismatic — Max Kai Xi Chew listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Fall 2025",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Max Kai Xi Chew",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Max Kai Xi Chew as Prismatic founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Prismatic — Max Kai Xi Chew listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Prism",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Prism — Sid Sannabhadti, Travis Hodges, Andy Jiang listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Fall 2025",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Sid Sannabhadti",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Sid Sannabhadti as Prism founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Prism — Sid Sannabhadti, Travis Hodges, Andy Jiang listed as founders."
+        },
+        {
+          "name": "Travis Hodges",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Travis Hodges as Prism founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Prism — Sid Sannabhadti, Travis Hodges, Andy Jiang listed as founders."
+        },
+        {
+          "name": "Andy Jiang",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Andy Jiang as Prism founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Prism — Sid Sannabhadti, Travis Hodges, Andy Jiang listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Brylo",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Brylo — Rudy Pathak, Bilal Khan listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Fall 2025",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Rudy Pathak",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Rudy Pathak as Brylo founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Brylo — Rudy Pathak, Bilal Khan listed as founders."
+        },
+        {
+          "name": "Bilal Khan",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Bilal Khan as Brylo founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Brylo — Rudy Pathak, Bilal Khan listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Dartagnan",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Dartagnan — Luis Oyson, Mariana Isabel Ferrer listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Fall 2025",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Luis Oyson",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Luis Oyson as Dartagnan founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Dartagnan — Luis Oyson, Mariana Isabel Ferrer listed as founders."
+        },
+        {
+          "name": "Mariana Isabel Ferrer",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Mariana Isabel Ferrer as Dartagnan founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Dartagnan — Luis Oyson, Mariana Isabel Ferrer listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Sphere AI",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Sphere AI — Vince Russo listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Fall 2025",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Vince Russo",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Vince Russo as Sphere AI founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Sphere AI — Vince Russo listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "SagaReg",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: SagaReg — Ómar Ingi Halldórsson, Guðjón Ásmundsson listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Fall 2025",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Ómar Ingi Halldórsson",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Ómar Ingi Halldórsson as SagaReg founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: SagaReg — Ómar Ingi Halldórsson, Guðjón Ásmundsson listed as founders."
+        },
+        {
+          "name": "Guðjón Ásmundsson",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Guðjón Ásmundsson as SagaReg founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: SagaReg — Ómar Ingi Halldórsson, Guðjón Ásmundsson listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "AutoGKB",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: AutoGKB — Shlok Natarajan, Roxana Daneshjou, Teri Klein listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Fall 2025",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Shlok Natarajan",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Shlok Natarajan as AutoGKB founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: AutoGKB — Shlok Natarajan, Roxana Daneshjou, Teri Klein listed as founders."
+        },
+        {
+          "name": "Roxana Daneshjou",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Roxana Daneshjou as AutoGKB founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: AutoGKB — Shlok Natarajan, Roxana Daneshjou, Teri Klein listed as founders."
+        },
+        {
+          "name": "Teri Klein",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Teri Klein as AutoGKB founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: AutoGKB — Shlok Natarajan, Roxana Daneshjou, Teri Klein listed as founders."
+        }
+      ]
+    },
+    {
+      "name": "Kinetiq AI",
+      "description": null,
+      "website": null,
+      "sourceUrl": "https://svfund.stanford.edu/accelerator/25-26/",
+      "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Kinetiq AI — Musia Yu listed as founders.",
+      "orgPlace": "Stanford Ventures / Cardinal Ventures Fall 2025",
+      "campusIds": [
+        "univ_stanford"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Musia Yu",
+          "aliases": [],
+          "campusId": "univ_stanford",
+          "affiliationRole": "Stanford Ventures / Cardinal Ventures Fall 2025 founder; precise enrollment year not stated",
+          "founderStatus": "founder",
+          "companyRole": "founder",
+          "potentialSignal": null,
+          "verificationStatus": "confirmed",
+          "verificationNote": "Official Stanford Ventures Fall 2025 accelerator table explicitly names Musia Yu as Kinetiq AI founder; do not infer current enrollment or funding.",
+          "excerpt": "Stanford Ventures (formerly Cardinal Ventures), Fall 2025 cohort: Kinetiq AI — Musia Yu listed as founders."
+        }
+      ]
+    }
+  ],
+  "potential": [],
+  "links": []
+}

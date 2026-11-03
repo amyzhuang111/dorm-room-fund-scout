@@ -1,0 +1,176 @@
+{
+  "retrievedAt": "2026-11-03T07:50:00.000Z",
+  "companies": [
+    {
+      "name": "Alpaca",
+      "description": "Self-hosted frontier AI inference hardware, models and software.",
+      "website": "https://alpa.ca",
+      "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2026-delta-v/",
+      "excerpt": "Alpaca: Self-hosted frontier AI inference hardware, models and software. Listed in MIT delta v 2026 Demo Day cohort.",
+      "orgPlace": "MIT delta v 2026 Demo Day",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Banzai",
+      "description": "AI diagnostic software for residential property maintenance.",
+      "website": "https://banzai-ai.com/enterprise",
+      "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2026-delta-v/",
+      "excerpt": "Banzai: AI diagnostic software for residential property maintenance. Listed in MIT delta v 2026 Demo Day cohort.",
+      "orgPlace": "MIT delta v 2026 Demo Day",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "BIZON Labs",
+      "description": "Lipid nanoparticle engineering platform for targeted drug delivery.",
+      "website": "https://bizonlabs.com",
+      "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2026-delta-v/",
+      "excerpt": "BIZON Labs: Lipid nanoparticle engineering platform for targeted drug delivery. Listed in MIT delta v 2026 Demo Day cohort.",
+      "orgPlace": "MIT delta v 2026 Demo Day",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Cerberus AI",
+      "description": "Continuous behavior monitoring to detect drift in autonomous agents.",
+      "website": "https://cerberussecurity.ai",
+      "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2026-delta-v/",
+      "excerpt": "Cerberus AI: Continuous behavior monitoring to detect drift in autonomous agents. Listed in MIT delta v 2026 Demo Day cohort.",
+      "orgPlace": "MIT delta v 2026 Demo Day",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Cortheon",
+      "description": "Investment-casting technology for high-complexity metal parts.",
+      "website": "https://cortheon.com",
+      "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2026-delta-v/",
+      "excerpt": "Cortheon: Investment-casting technology for high-complexity metal parts. Listed in MIT delta v 2026 Demo Day cohort.",
+      "orgPlace": "MIT delta v 2026 Demo Day",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Exo AI",
+      "description": "AI-enabled commercial-lending workflow automation.",
+      "website": "https://exoai.tech",
+      "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2026-delta-v/",
+      "excerpt": "Exo AI: AI-enabled commercial-lending workflow automation. Listed in MIT delta v 2026 Demo Day cohort.",
+      "orgPlace": "MIT delta v 2026 Demo Day",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Gander Robotics",
+      "description": "Low-cost autonomous marine rescue and inspection drone systems.",
+      "website": "https://ganderrobotics.com",
+      "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2026-delta-v/",
+      "excerpt": "Gander Robotics: Low-cost autonomous marine rescue and inspection drone systems. Listed in MIT delta v 2026 Demo Day cohort.",
+      "orgPlace": "MIT delta v 2026 Demo Day",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Neural Physics",
+      "description": "Foundation physics models for engineering design and simulation.",
+      "website": "https://neuralphysics.ai",
+      "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2026-delta-v/",
+      "excerpt": "Neural Physics: Foundation physics models for engineering design and simulation. Listed in MIT delta v 2026 Demo Day cohort.",
+      "orgPlace": "MIT delta v 2026 Demo Day",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Pixology",
+      "description": "Agentic AI sales materials for sports and media rights sponsorships.",
+      "website": "https://pixology.ai",
+      "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2026-delta-v/",
+      "excerpt": "Pixology: Agentic AI sales materials for sports and media rights sponsorships. Listed in MIT delta v 2026 Demo Day cohort.",
+      "orgPlace": "MIT delta v 2026 Demo Day",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "RBT Resources",
+      "description": "Portable blood-delivery technology for trauma and emergency care.",
+      "website": "https://rbtresources.net",
+      "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2026-delta-v/",
+      "excerpt": "RBT Resources: Portable blood-delivery technology for trauma and emergency care. Listed in MIT delta v 2026 Demo Day cohort.",
+      "orgPlace": "MIT delta v 2026 Demo Day",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "ROBOX",
+      "description": "AI-native design and simulation for factory automation systems.",
+      "website": "https://roboxwork.com",
+      "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2026-delta-v/",
+      "excerpt": "ROBOX: AI-native design and simulation for factory automation systems. Listed in MIT delta v 2026 Demo Day cohort.",
+      "orgPlace": "MIT delta v 2026 Demo Day",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Talys",
+      "description": "AI-powered hospital margin and procurement workflow management.",
+      "website": "https://talys.ai",
+      "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2026-delta-v/",
+      "excerpt": "Talys: AI-powered hospital margin and procurement workflow management. Listed in MIT delta v 2026 Demo Day cohort.",
+      "orgPlace": "MIT delta v 2026 Demo Day",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "The Trade Lab",
+      "description": "AI agent workflows for customs duties, tariffs and trade compliance.",
+      "website": "https://thetradelab.ai",
+      "sourceUrl": "https://entrepreneurship.mit.edu/accelerator/2026-delta-v/",
+      "excerpt": "The Trade Lab: AI agent workflows for customs duties, tariffs and trade compliance. Listed in MIT delta v 2026 Demo Day cohort.",
+      "orgPlace": "MIT delta v 2026 Demo Day",
+      "campusIds": [
+        "univ_mit"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    }
+  ],
+  "potential": [],
+  "links": []
+}

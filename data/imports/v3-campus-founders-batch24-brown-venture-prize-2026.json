@@ -1,0 +1,380 @@
+{
+  "retrievedAt": "2026-11-03T08:11:00.000Z",
+  "companies": [
+    {
+      "name": "Che Innovations",
+      "description": "Low-cost NeoNest neonatal warming device for emergency transport",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/brown-venture-prize/2026-brown-venture-prize-finalists-and-judges",
+      "excerpt": "Brown Venture Prize 2026 finalist Che Innovations; named team: Saajan Patel '29; Vivian Arinaitwe; Joseph Okileng; Sophia Singer.",
+      "orgPlace": "Brown Venture Prize 2026 finalists",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Saajan Patel",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown Venture Prize 2026 finalist for Che Innovations",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for Che Innovations; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Saajan Patel with Che Innovations. Non-Brown institutions remain distinct.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Brown Venture Prize 2026 finalist Che Innovations; named team: Saajan Patel '29; Vivian Arinaitwe; Joseph Okileng; Sophia Singer."
+          },
+          "excerpt": "Brown Venture Prize 2026 finalist Che Innovations; named team: Saajan Patel '29; Vivian Arinaitwe; Joseph Okileng; Sophia Singer."
+        },
+        {
+          "name": "Vivian Arinaitwe",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Brown Venture Prize 2026 finalist for Che Innovations",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for Che Innovations; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Vivian Arinaitwe with Che Innovations. Non-Brown institutions remain distinct.",
+          "excerpt": "Brown Venture Prize 2026 finalist Che Innovations; named team: Saajan Patel '29; Vivian Arinaitwe; Joseph Okileng; Sophia Singer."
+        },
+        {
+          "name": "Joseph Okileng",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Brown Venture Prize 2026 finalist for Che Innovations",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for Che Innovations; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Joseph Okileng with Che Innovations. Non-Brown institutions remain distinct.",
+          "excerpt": "Brown Venture Prize 2026 finalist Che Innovations; named team: Saajan Patel '29; Vivian Arinaitwe; Joseph Okileng; Sophia Singer."
+        },
+        {
+          "name": "Sophia Singer",
+          "aliases": [],
+          "campusId": "univ_duke",
+          "affiliationRole": "Brown Venture Prize 2026 finalist for Che Innovations (external institution named in official Brown roster)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for Che Innovations; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Sophia Singer with Che Innovations. Non-Brown institutions remain distinct.",
+          "excerpt": "Brown Venture Prize 2026 finalist Che Innovations; named team: Saajan Patel '29; Vivian Arinaitwe; Joseph Okileng; Sophia Singer."
+        }
+      ]
+    },
+    {
+      "name": "Nematex",
+      "description": "Biological sterilization of root-knot nematodes",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/brown-venture-prize/2026-brown-venture-prize-finalists-and-judges",
+      "excerpt": "Brown Venture Prize 2026 finalist Nematex; named team: Christopher Williams '26.",
+      "orgPlace": "Brown Venture Prize 2026 finalists",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Christopher Williams",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown Venture Prize 2026 finalist for Nematex",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for Nematex; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Christopher Williams with Nematex. Non-Brown institutions remain distinct.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Brown Venture Prize 2026 finalist Nematex; named team: Christopher Williams '26."
+          },
+          "excerpt": "Brown Venture Prize 2026 finalist Nematex; named team: Christopher Williams '26."
+        }
+      ]
+    },
+    {
+      "name": "HelpingHand Rx",
+      "description": "Patient-facing prescription finance and healthcare resource navigation",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/brown-venture-prize/2026-brown-venture-prize-finalists-and-judges",
+      "excerpt": "Brown Venture Prize 2026 finalist HelpingHand Rx; named team: Teddy Nuttall '26; Manuel Dal Bo '26.",
+      "orgPlace": "Brown Venture Prize 2026 finalists",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Teddy Nuttall",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown Venture Prize 2026 finalist for HelpingHand Rx",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for HelpingHand Rx; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Teddy Nuttall with HelpingHand Rx. Non-Brown institutions remain distinct.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Brown Venture Prize 2026 finalist HelpingHand Rx; named team: Teddy Nuttall '26; Manuel Dal Bo '26."
+          },
+          "excerpt": "Brown Venture Prize 2026 finalist HelpingHand Rx; named team: Teddy Nuttall '26; Manuel Dal Bo '26."
+        },
+        {
+          "name": "Manuel Dal Bo",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown Venture Prize 2026 finalist for HelpingHand Rx",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for HelpingHand Rx; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Manuel Dal Bo with HelpingHand Rx. Non-Brown institutions remain distinct.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Brown Venture Prize 2026 finalist HelpingHand Rx; named team: Teddy Nuttall '26; Manuel Dal Bo '26."
+          },
+          "excerpt": "Brown Venture Prize 2026 finalist HelpingHand Rx; named team: Teddy Nuttall '26; Manuel Dal Bo '26."
+        }
+      ]
+    },
+    {
+      "name": "Dawn Industries",
+      "description": "AR glasses-assisted manufacturing training with AI work guidance",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/brown-venture-prize/2026-brown-venture-prize-finalists-and-judges",
+      "excerpt": "Brown Venture Prize 2026 finalist Dawn Industries; named team: Joohyun Cha '26; Robin Lee.",
+      "orgPlace": "Brown Venture Prize 2026 finalists",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Joohyun Cha",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown Venture Prize 2026 finalist for Dawn Industries",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for Dawn Industries; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Joohyun Cha with Dawn Industries. Non-Brown institutions remain distinct.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Brown Venture Prize 2026 finalist Dawn Industries; named team: Joohyun Cha '26; Robin Lee."
+          },
+          "excerpt": "Brown Venture Prize 2026 finalist Dawn Industries; named team: Joohyun Cha '26; Robin Lee."
+        },
+        {
+          "name": "Robin Lee",
+          "aliases": [],
+          "campusId": "univ_columbia",
+          "affiliationRole": "Brown Venture Prize 2026 finalist for Dawn Industries (external institution named in official Brown roster)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for Dawn Industries; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Robin Lee with Dawn Industries. Non-Brown institutions remain distinct.",
+          "excerpt": "Brown Venture Prize 2026 finalist Dawn Industries; named team: Joohyun Cha '26; Robin Lee."
+        }
+      ]
+    },
+    {
+      "name": "EndoSwim Solutions",
+      "description": "Wireless ingestible and implantable device navigation hardware",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/brown-venture-prize/2026-brown-venture-prize-finalists-and-judges",
+      "excerpt": "Brown Venture Prize 2026 finalist EndoSwim Solutions; named team: Milidu Jayaweera '26.",
+      "orgPlace": "Brown Venture Prize 2026 finalists",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Milidu Jayaweera",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown Venture Prize 2026 finalist for EndoSwim Solutions",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for EndoSwim Solutions; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Milidu Jayaweera with EndoSwim Solutions. Non-Brown institutions remain distinct.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Brown Venture Prize 2026 finalist EndoSwim Solutions; named team: Milidu Jayaweera '26."
+          },
+          "excerpt": "Brown Venture Prize 2026 finalist EndoSwim Solutions; named team: Milidu Jayaweera '26."
+        }
+      ]
+    },
+    {
+      "name": "Liiv",
+      "description": "Software automating government document intake and regulatory workflows",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/brown-venture-prize/2026-brown-venture-prize-finalists-and-judges",
+      "excerpt": "Brown Venture Prize 2026 finalist Liiv; named team: Devin Abraham '27; Batchema Sombie.",
+      "orgPlace": "Brown Venture Prize 2026 finalists",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Devin Abraham",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown Venture Prize 2026 finalist for Liiv",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for Liiv; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Devin Abraham with Liiv. Non-Brown institutions remain distinct.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Brown Venture Prize 2026 finalist Liiv; named team: Devin Abraham '27; Batchema Sombie."
+          },
+          "excerpt": "Brown Venture Prize 2026 finalist Liiv; named team: Devin Abraham '27; Batchema Sombie."
+        },
+        {
+          "name": "Batchema Sombie",
+          "aliases": [],
+          "campusId": "univ_penn",
+          "affiliationRole": "Brown Venture Prize 2026 finalist for Liiv (external institution named in official Brown roster)",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for Liiv; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Batchema Sombie with Liiv. Non-Brown institutions remain distinct.",
+          "excerpt": "Brown Venture Prize 2026 finalist Liiv; named team: Devin Abraham '27; Batchema Sombie."
+        }
+      ]
+    },
+    {
+      "name": "Subsix Nutrition",
+      "description": "Natural-ingredient endurance supplements",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/brown-venture-prize/2026-brown-venture-prize-finalists-and-judges",
+      "excerpt": "Brown Venture Prize 2026 finalist Subsix Nutrition; team names not printed in page.",
+      "orgPlace": "Brown Venture Prize 2026 finalists",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "UAPPLY",
+      "description": "Unified university application marketplace for African applicants",
+      "website": null,
+      "sourceUrl": "https://entrepreneurship.brown.edu/build-your-venture/brown-venture-prize/2026-brown-venture-prize-finalists-and-judges",
+      "excerpt": "Brown Venture Prize 2026 finalist UAPPLY; named team: Maximilian Tippie '27; Moise Gasana '26; Lucas Kover Wolf '28; Flambeau Iriho.",
+      "orgPlace": "Brown Venture Prize 2026 finalists",
+      "campusIds": [
+        "univ_brown"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Maximilian Tippie",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown Venture Prize 2026 finalist for UAPPLY",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for UAPPLY; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Maximilian Tippie with UAPPLY. Non-Brown institutions remain distinct.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Brown Venture Prize 2026 finalist UAPPLY; named team: Maximilian Tippie '27; Moise Gasana '26; Lucas Kover Wolf '28; Flambeau Iriho."
+          },
+          "excerpt": "Brown Venture Prize 2026 finalist UAPPLY; named team: Maximilian Tippie '27; Moise Gasana '26; Lucas Kover Wolf '28; Flambeau Iriho."
+        },
+        {
+          "name": "Moise Gasana",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown Venture Prize 2026 finalist for UAPPLY",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for UAPPLY; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Moise Gasana with UAPPLY. Non-Brown institutions remain distinct.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Brown Venture Prize 2026 finalist UAPPLY; named team: Maximilian Tippie '27; Moise Gasana '26; Lucas Kover Wolf '28; Flambeau Iriho."
+          },
+          "excerpt": "Brown Venture Prize 2026 finalist UAPPLY; named team: Maximilian Tippie '27; Moise Gasana '26; Lucas Kover Wolf '28; Flambeau Iriho."
+        },
+        {
+          "name": "Lucas Kover Wolf",
+          "aliases": [],
+          "campusId": "univ_brown",
+          "affiliationRole": "Brown Venture Prize 2026 finalist for UAPPLY",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for UAPPLY; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Lucas Kover Wolf with UAPPLY. Non-Brown institutions remain distinct.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Brown Venture Prize 2026 finalist UAPPLY; named team: Maximilian Tippie '27; Moise Gasana '26; Lucas Kover Wolf '28; Flambeau Iriho."
+          },
+          "excerpt": "Brown Venture Prize 2026 finalist UAPPLY; named team: Maximilian Tippie '27; Moise Gasana '26; Lucas Kover Wolf '28; Flambeau Iriho."
+        },
+        {
+          "name": "Flambeau Iriho",
+          "aliases": [],
+          "campusId": null,
+          "affiliationRole": "Brown Venture Prize 2026 finalist for UAPPLY",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named venture finalist team member for UAPPLY; no individual legal founder status claimed",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Brown Nelson Center's 2026 Brown Venture Prize roster associates Flambeau Iriho with UAPPLY. Non-Brown institutions remain distinct.",
+          "excerpt": "Brown Venture Prize 2026 finalist UAPPLY; named team: Maximilian Tippie '27; Moise Gasana '26; Lucas Kover Wolf '28; Flambeau Iriho."
+        }
+      ]
+    }
+  ],
+  "potential": [],
+  "links": []
+}
