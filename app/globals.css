@@ -1708,3 +1708,37 @@ details:not([open]) > :not(summary) {
 [data-fold-sheet-founders] [data-founder-card] {
   border-color: color-mix(in srgb, var(--cobalt, #2F4FD8) 14%, var(--line, #E1E5EF)) !important;
 }
+
+/* r53 mobile: full-bleed map stage + deck sheet (desktop unchanged) */
+@media (max-width: 1023px) {
+  [data-fold-mobile-bleed] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  [data-fold-mobile-root] {
+    min-height: 70vh;
+  }
+  /* Peak in deck sheet: bars only — figure already hidden; hide caption + SSR rank reserve */
+  [data-fold-sheet-peak] [data-fold-peak-caption],
+  [data-fold-sheet-peak] [data-fold-peak-campus-rank-mobile-reserve],
+  [data-fold-peak-deck="1"] [data-fold-peak-caption],
+  [data-fold-peak-deck="1"] [data-fold-peak-campus-rank-mobile-reserve] {
+    display: none !important;
+  }
+  [data-fold-sheet-peak] [data-fold-peak-share-mobile] {
+    border-bottom-width: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  [data-fold-sheet-peak] [data-fold-peak-bars-mobile],
+  [data-fold-sheet-peak] [data-fold-peak-month-bars] {
+    height: 2.5rem !important;
+    margin-top: 0.15rem !important;
+  }
+  /* Deck sheet taller rest — keep map credit hidden under sheet */
+  [data-fold-bigmap-stage] [data-map-credit],
+  [data-fold-bigmap-stage] .maplibregl-ctrl-attrib,
+  [data-fold-bigmap-stage] .maplibregl-ctrl-bottom-left,
+  [data-fold-bigmap-stage] .maplibregl-ctrl-bottom-right {
+    display: none !important;
+  }
+}

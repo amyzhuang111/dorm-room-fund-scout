@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode, type PointerEvent
 import { createPortal } from "react-dom";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FounderResults, FounderSearchBar } from "@/components/founder-sourcing";
+import { MobileCampusSegments, MobileFounderDeck } from "@/components/mobile-founder-deck";
 import {
   CurrentViewStrip,
   FilterChips,
@@ -138,18 +139,20 @@ function PeakShareSlot({
   campusesOnMap,
   topCampuses = [],
   shell,
+  mobileDeck = false,
 }: {
   companies: FacetCompany[];
   foundersListed: number;
   campusesOnMap: number;
   topCampuses?: TopCampus[];
   shell?: PeakShell | null;
+  mobileDeck?: boolean;
 }) {
   const [live, setLive] = useState(false);
   // Keep SSR lite until the client Peak chunk has painted (same box → CLS ≈ 0).
   const showLive = live;
   return (
-    <div className="relative mb-2 min-h-0" data-fold-peak-slot="" data-fold-peak-reserve="">
+    <div className={`relative min-h-0 ${mobileDeck ? "mb-0" : "mb-2"}`} data-fold-peak-slot="" data-fold-peak-reserve="" data-fold-peak-deck={mobileDeck ? "1" : undefined}>
       <div className={showLive ? "hidden" : undefined} aria-hidden={showLive || undefined} data-fold-peak-ssr-wrap="">
         {shell ? (
           <PeakShareLite shell={shell} foundersListed={foundersListed} campusesOnMap={campusesOnMap} topCampuses={topCampuses} />
@@ -162,6 +165,7 @@ function PeakShareSlot({
           campusesOnMap={campusesOnMap}
           topCampuses={topCampuses}
           shell={shell}
+          hideMobileRanks={mobileDeck}
           onReady={() => setLive(true)}
         />
       </div>
@@ -183,16 +187,38 @@ function useIsLg() {
   return lg;
 }
 
-function MapFoldSheet({ peak, founders }: { peak: ReactNode; founders: ReactNode }) {
+function MapFoldSheet({
+  peak,
+  founders,
+  deck,
+  filterKeep,
+  campuses,
+  campusId,
+  onSelectCampus,
+  onClearCampus,
+  search,
+}: {
+  peak: ReactNode;
+  founders: ReactNode;
+  deck: ReactNode;
+  filterKeep: ReactNode;
+  campuses: TopCampus[];
+  campusId: string | null;
+  onSelectCampus: (id: string) => void;
+  onClearCampus: () => void;
+  search: ReactNode;
+}) {
   const sheetRef = useRef<HTMLDivElement | null>(null);
   const dragRef = useRef<{ startY: number; startH: number } | null>(null);
-  // r49: rest peek ~132px so most of the globe stays visible; drag up for full sheet.
-  const [height, setHeight] = useState(132);
-  const minH = 120;
+  // r53: taller rest so swipeable founder cards are readable; drag up for filters + list.
+  const REST = 300;
+  const [height, setHeight] = useState(REST);
+  const minH = 200;
   const clampH = (h: number) => {
-    const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.72) : 520;
+    const max = typeof window !== "undefined" ? Math.round(window.innerHeight * 0.82) : 560;
     return Math.max(minH, Math.min(max, h));
   };
+  const expanded = height > REST + 48;
 
   useEffect(() => {
     const onResize = () => setHeight((h) => clampH(h));
@@ -218,10 +244,11 @@ function MapFoldSheet({ peak, founders }: { peak: ReactNode; founders: ReactNode
       ref={sheetRef}
       className="pointer-events-none fixed inset-x-0 bottom-0 z-[30] lg:hidden"
       data-fold-map-sheet=""
+      data-fold-sheet-mode={expanded ? "expanded" : "deck"}
       style={{ height }}
     >
       <div
-        className="pointer-events-auto flex h-full flex-col overflow-hidden rounded-t-xl border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-8px_28px_rgba(47,79,216,0.14)]"
+        className="pointer-events-auto flex h-full flex-col overflow-hidden rounded-t-2xl border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] shadow-[0_-10px_32px_rgba(47,79,216,0.16)]"
         data-fold-sheet-panel=""
       >
         <div
@@ -238,10 +265,31 @@ function MapFoldSheet({ peak, founders }: { peak: ReactNode; founders: ReactNode
           <span data-fold-sheet-grab="" className="h-1.5 w-12 rounded-full bg-[color:var(--cobalt,#2F4FD8)]/70" />
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3" data-fold-sheet-body="">
-          {peak}
-          <div className="mt-1" data-fold-sheet-founders="" data-fold-founders-col="">
-            {founders}
+          <div className="sticky top-0 z-[1] bg-[color:var(--bg,#FFFFFF)] pb-2">
+            <MobileCampusSegments
+              campuses={campuses}
+              selectedId={campusId}
+              onSelect={onSelectCampus}
+              onClear={onClearCampus}
+            />
           </div>
+          <div className="mt-1" data-fold-peak-in-rail="" data-fold-sheet-peak="">
+            {peak}
+          </div>
+          {!expanded ? (
+            <div className="mt-2" data-fold-sheet-deck="" data-fold-founders-col="">
+              {deck}
+              {/* Keep filter selects mounted for fold gate + thumb expand path */}
+              <div className="pointer-events-none absolute h-px w-px overflow-hidden opacity-0" aria-hidden="true" data-fold-sheet-filter-keep="">
+                {filterKeep}
+              </div>
+            </div>
+          ) : (
+            <div className="mt-2 space-y-2" data-fold-sheet-founders="" data-fold-founders-col="">
+              {search}
+              {founders}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -451,6 +499,16 @@ export function SampleHomeClient(props: {
     router.push(`/?${next.toString()}`);
   };
 
+  const selectCampus = (id: string) => {
+    const next = new URLSearchParams(search.toString());
+    next.delete("feed");
+    next.delete("university");
+    next.set("sample", "1");
+    if (!id) next.delete("campus");
+    else next.set("campus", id);
+    router.push(`/?${next.toString()}`);
+  };
+
   const matchedFounders = useMemo(
     () =>
       founders.filter((founder) =>
@@ -480,25 +538,26 @@ export function SampleHomeClient(props: {
     <div className="sample-paper" {...(place === "map" ? { "data-fold-root": "" } : {})} data-directory-ready={ready ? "1" : "0"}>
       <SampleTheme />
       {place === "map" ? (
-        <div className="px-3 pb-6 pt-2 sm:px-4" data-fold-hierarchy="">
-          {/* r44: thin chrome only above the map so the globe is the stage. */}
-          <div className="mb-2" data-fold-mast="">
+        <div className="px-0 pb-6 pt-0 sm:px-4 lg:px-3 lg:pt-2" data-fold-hierarchy="" data-fold-mobile-bleed="">
+          {/* r53 mobile: search + view strip live in the thumb sheet; desk keeps mast above map. */}
+          <div className="mb-2 hidden px-0 lg:mb-2 lg:block" data-fold-mast="">
             <FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />
           </div>
-          {/* Compact current-view dock (r50); chips stay desk-only. Peak/founders stay on the map. */}
-          <div className="mb-2">
+          <div className="mb-0 lg:mb-2">
             <div className="hidden lg:block">
               <FilterChips chips={activeChips} matchCount={matchedFounders.length} totalCount={founders.length || foundersListed} />
             </div>
-            <CurrentViewStrip
-              campusName={mapCampusName}
-              query={founderQuery}
-              matchCount={matchedFounders.length}
-              totalFounders={founders.length || foundersListed}
-              startups={viewStartups}
-              onClearCampus={clearCampus}
-              onClearQuery={() => setFounderQuery("")}
-            />
+            <div className="hidden lg:block">
+              <CurrentViewStrip
+                campusName={mapCampusName}
+                query={founderQuery}
+                matchCount={matchedFounders.length}
+                totalFounders={founders.length || foundersListed}
+                startups={viewStartups}
+                onClearCampus={clearCampus}
+                onClearQuery={() => setFounderQuery("")}
+              />
+            </div>
           </div>
           {/* r45: map-dominant stage with floating panels (desk) / peek sheet (mobile). */}
           <div data-fold-stack="" data-fold-bigmap="" data-fold-overlay="">
@@ -515,17 +574,47 @@ export function SampleHomeClient(props: {
 
               {/* Mobile sheet only below lg — keeps first [data-founder-card] visible for checks. */}
               {!isLg ? <MapFoldSheet
+                campuses={topCampuses}
+                campusId={mapCampusId}
+                onSelectCampus={selectCampus}
+                onClearCampus={clearCampus}
                 peak={
-                  <div data-fold-peak-in-rail="" data-fold-sheet-peak="">
-                    <PeakShareSlot
-                      companies={companies}
-                      foundersListed={foundersListed}
-                      campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
-                      topCampuses={topCampuses}
-                      shell={peakShell}
-                    />
-                  </div>
+                  <PeakShareSlot
+                    companies={companies}
+                    foundersListed={foundersListed}
+                    campusesOnMap={stats.universities.filter((u) => u.lat != null && u.lon != null).length}
+                    topCampuses={topCampuses}
+                    shell={peakShell}
+                    mobileDeck
+                  />
                 }
+                deck={
+                  <MobileFounderDeck
+                    founders={founders}
+                    status={founderStatus}
+                    query={founderQuery}
+                    campusId={mapCampusId}
+                  />
+                }
+                filterKeep={
+                  <FounderResults
+                    founders={founders}
+                    status={founderStatus}
+                    query={founderQuery}
+                    campusId={mapCampusId}
+                    campusName={mapCampusName}
+                    foundersListed={foundersListed}
+                    filtersOnly
+                    onClearCampus={clearCampus}
+                    onMissingCampus={() => {
+                      const next = new URLSearchParams(search.toString());
+                      next.set("sample", "1");
+                      next.set("campus", "missing");
+                      router.push(`/?${next.toString()}`);
+                    }}
+                  />
+                }
+                search={<FounderSearchBar query={founderQuery} onQuery={setFounderQuery} />}
                 founders={
                   <FounderResults
                     founders={founders}
@@ -534,7 +623,6 @@ export function SampleHomeClient(props: {
                     campusId={mapCampusId}
                     campusName={mapCampusName}
                     foundersListed={foundersListed}
-                    peek={1}
                     onClearCampus={clearCampus}
                     onMissingCampus={() => {
                       const next = new URLSearchParams(search.toString());

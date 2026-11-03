@@ -205,11 +205,11 @@ export function TileGlobe({
 
     const fit = () => {
       const wide = window.innerWidth >= 1024;
-      // r44: map is the home stage — desk ~74vh (70–80), mobile ~65vh (60–70).
-      const target = Math.round(window.innerHeight * (wide ? 0.78 : 0.74));
+      // r53 mobile: taller full-bleed stage (~88vh) so globe dominates under the deck sheet.
+      const target = Math.round(window.innerHeight * (wide ? 0.78 : 0.88));
       const next = wide
         ? Math.max(560, Math.min(780, target))
-        : Math.max(420, Math.min(620, target));
+        : Math.max(520, Math.min(760, target));
       setStageHeight(next);
       hitPadRef.current = Math.round(Math.max(56, Math.min(120, next * 0.1)));
       nearestMaxRef.current = Math.round(Math.max(88, Math.min(160, next * 0.14)));
@@ -730,8 +730,8 @@ export function TileGlobe({
 
   return (
     <div className={`${className ?? ""} relative`} data-fold-mobile-root="">
-      <div className="mb-1 flex flex-wrap items-end justify-between gap-x-3 gap-y-0.5 lg:mb-2 lg:gap-x-4 lg:gap-y-1" data-fold-counts="">
-        <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[11px] tabular-nums leading-4 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:gap-y-1 lg:text-[12px] lg:leading-5">
+      <div className="pointer-events-none absolute right-2 top-2 z-20 mb-0 ml-auto flex max-w-[70%] flex-wrap items-end justify-end gap-x-2 gap-y-0.5 rounded-sm bg-[color:var(--bg,#FFFFFF)]/92 px-2 py-1 shadow-sm backdrop-blur-[2px] lg:pointer-events-auto lg:static lg:mb-2 lg:ml-0 lg:max-w-none lg:justify-between lg:gap-x-4 lg:gap-y-1 lg:bg-transparent lg:px-0 lg:py-0 lg:shadow-none lg:backdrop-blur-none" data-fold-counts="">
+        <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[10px] tabular-nums leading-4 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:gap-y-1 lg:text-[12px] lg:leading-5">
           <span>
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
             {" companies"}
@@ -763,10 +763,10 @@ export function TileGlobe({
         <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">Click a campus to see its founders.</p>
       </div>
 
-      <section className="mb-2 lg:mb-4" data-fold-desk-map="" aria-label="Map">
+      <section className="mb-0 lg:mb-4" data-fold-desk-map="" aria-label="Map">
         <h2 className="mb-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)] max-lg:sr-only">Map</h2>
         <div
-          className="relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/45 bg-[linear-gradient(165deg,#FBFCFE_0%,#F0F3FA_48%,#E6EBF6_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.85),inset_0_-18px_40px_rgba(47,79,216,0.07),0_1px_2px_rgba(15,23,42,0.04)] before:pointer-events-none before:absolute before:inset-2 before:z-[1] before:border before:border-[color:var(--cobalt,#2F4FD8)]/15 before:content-[''] after:pointer-events-none after:absolute after:inset-0 after:z-[1] after:bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.55),transparent_55%),radial-gradient(ellipse_at_70%_85%,rgba(47,79,216,0.08),transparent_50%)] after:content-['']"
+          className="relative overflow-hidden rounded-none border-0 border-[color:var(--cobalt,#2F4FD8)]/45 bg-[linear-gradient(165deg,#FBFCFE_0%,#F0F3FA_48%,#E6EBF6_100%)] shadow-none max-lg:before:hidden max-lg:after:opacity-40 lg:border lg:shadow-[inset_0_1px_0_rgba(255,255,255,0.85),inset_0_-18px_40px_rgba(47,79,216,0.07),0_1px_2px_rgba(15,23,42,0.04)] lg:before:pointer-events-none lg:before:absolute lg:before:inset-2 lg:before:z-[1] lg:before:border lg:before:border-[color:var(--cobalt,#2F4FD8)]/15 lg:before:content-[''] lg:after:pointer-events-none lg:after:absolute lg:after:inset-0 lg:after:z-[1] lg:after:bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.55),transparent_55%),radial-gradient(ellipse_at_70%_85%,rgba(47,79,216,0.08),transparent_50%)] lg:after:content-['']"
           style={{ height: stageHeight }}
           data-dispatch-map-stage=""
           data-fold-bigmap-stage=""

@@ -58,6 +58,7 @@ export function FounderResults({
   campusName,
   foundersListed = 0,
   peek,
+  filtersOnly = false,
   onClearCampus,
   onMissingCampus,
 }: {
@@ -70,6 +71,8 @@ export function FounderResults({
   foundersListed?: number;
   /** When set, show a compact overlay peek of N cards (no mobile min-height reserve). */
   peek?: number;
+  /** r53: mount filter selects without cards (deck sheet rest state). */
+  filtersOnly?: boolean;
   onClearCampus: () => void;
   onMissingCampus: () => void;
 }) {
@@ -77,7 +80,7 @@ export function FounderResults({
   const [sector, setSector] = useState("");
   const [year, setYear] = useState("");
   const [signalType, setSignalType] = useState("");
-  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(Boolean(filtersOnly));
   const filterKey = `${query}\n${campusId ?? ""}\n${program}\n${sector}\n${year}\n${signalType}`;
   const [windowState, setWindowState] = useState({ key: filterKey, shown: PAGE });
   const shown = windowState.key === filterKey ? windowState.shown : PAGE;
@@ -257,7 +260,7 @@ export function FounderResults({
           </div>
         ) : null}
       </div>
-      {status === "loading" ? (
+      {filtersOnly ? null : status === "loading" ? (
         <p className="text-[14px] text-[color:var(--fg-2,#3F465C)]">Founder list is still loading.</p>
       ) : status === "error" ? (
         <p className="text-[14px] text-[color:var(--fg-2,#3F465C)]">Founder list could not be loaded.</p>
