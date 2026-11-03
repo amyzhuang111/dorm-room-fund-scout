@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CampusSeal } from "@/components/campus-seal";
 import { NetworksGraph } from "@/components/networks-graph";
 import { StartupCardSheet } from "@/components/startup-directory-card";
+import { searchFounderNetworks, selectedNetworkMembers } from "@/lib/domain/network-directory-search";
 import type {
   FounderNetworksPage,
   NetworkKind,
@@ -51,10 +52,12 @@ export function NetworksApp() {
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [matrixOpen, setMatrixOpen] = useState(false);
-  const [concentrationOpen, setConcentrationOpen] = useState(true);
+  const [concentrationOpen, setConcentrationOpen] = useState(false);
   const [desktopHubsOpen, setDesktopHubsOpen] = useState(false);
   const [networkQuery, setNetworkQuery] = useState("");
   const [networkKind, setNetworkKind] = useState<NetworkKind | "all">("all");
+  const [graphInspectorOpen, setGraphInspectorOpen] = useState(false);
+  const [shareFeedback, setShareFeedback] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -62,7 +65,10 @@ export function NetworksApp() {
       .then((page) => {
         if (cancelled) return;
         setData(page);
-        setActiveNetwork((current) => current ?? page.topNetworks[0]?.id ?? null);
+        const requested = new URLSearchParams(window.location.search).get("network");
+        const known = requested && page.topNetworks.some((network) => network.id === requested);
+        setActiveNetwork((current) => current ?? (known ? requested : page.topNetworks[0]?.id ?? null));
+        setGraphInspectorOpen(Boolean(known));
       })
       .catch(() => {
         if (!cancelled) setLoadError("Networks data could not be loaded.");
@@ -76,14 +82,47 @@ export function NetworksApp() {
     () => data?.topNetworks.find((row) => row.id === activeNetwork) ?? null,
     [data, activeNetwork],
   );
-  const members: NetworkMember[] = active && data ? data.membersByNetwork[active.id] ?? [] : [];
-  const displayedNetworks = useMemo(() => {
-    const query = networkQuery.trim().toLocaleLowerCase("en-US");
-    return (data?.topNetworks ?? []).filter((network) => {
-      if (networkKind !== "all" && network.kind !== networkKind) return false;
-      return !query || network.label.toLocaleLowerCase("en-US").includes(query);
+  const networkMatches = useMemo(
+    () => searchFounderNetworks(data?.topNetworks ?? [], data?.membersByNetwork ?? {}, networkQuery, networkKind),
+    [data, networkQuery, networkKind],
+  );
+  const displayedNetworks = useMemo(() => networkMatches.map((match) => match.network), [networkMatches]);
+  const members: NetworkMember[] = selectedNetworkMembers(activeNetwork, networkMatches, data?.membersByNetwork ?? {});
+  const fullMembers: NetworkMember[] = active && data ? data.membersByNetwork[active.id] ?? [] : [];
+
+  /** Hub clicks open an immediate inspector; list clicks keep the roster in view. */
+  function chooseNetwork(id: string, fromGraph = false) {
+    setActiveNetwork(id);
+    setGraphInspectorOpen(fromGraph);
+    setShareFeedback("");
+    if (fromGraph) {
+      setNetworkQuery("");
+      setNetworkKind("all");
+    }
+    const url = new URL(window.location.href);
+    url.searchParams.set("network", id);
+    window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
+  }
+
+  async function copyNetworkLink() {
+    if (!active) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("network", active.id);
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      setShareFeedback("Link copied");
+    } catch {
+      setShareFeedback("Copy unavailable; use your address bar");
+    }
+  }
+
+  function scrollToRoster() {
+    setGraphInspectorOpen(false);
+    document.getElementById("network-roster")?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "start",
     });
-  }, [data, networkKind, networkQuery]);
+  }
 
   let matrixMax = 0;
   if (data) {
