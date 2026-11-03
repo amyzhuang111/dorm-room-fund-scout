@@ -450,6 +450,15 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
   return links;
 }
 
+function primaryCampus(
+  founderId: string,
+  meta: LinkMeta
+): { campusId: string | null; campusLabel: string | null } {
+  const campuses = meta.founderCampuses.get(founderId) ?? [];
+  const campusId = campuses[0] ?? null;
+  return { campusId, campusLabel: campusId ? meta.uniLabels.get(campusId) ?? campusId : null };
+}
+
 function bandFor(share: number): ConcentrationBand {
   if (share >= CONCENTRATION_THRESHOLDS.concentratedMin) return "Concentrated";
   if (share >= CONCENTRATION_THRESHOLDS.moderateMin) return "Moderate";
@@ -738,7 +747,7 @@ export function buildFounderNetworksGraph(): GraphPayload {
       type: "network",
       label: net.label,
       kind: net.kind,
-      size: Math.max(10, Math.min(26, 8 + Math.sqrt(net.founderCount) * 0.55)),
+      size: Math.max(4, Math.min(9, 3.5 + Math.sqrt(net.founderCount) * 0.18)),
       x: 0,
       y: 0,
       companyId: null,
@@ -748,18 +757,22 @@ export function buildFounderNetworksGraph(): GraphPayload {
       clusterR: Math.max(36, 18 + Math.sqrt(Math.max(1, weight)) * 6.2),
       hue: hueById.get(net.id) ?? 0,
       rank: rankById.get(net.id) ?? 99,
+      campusId: null,
+      campusLabel: null,
     });
   }
 
   for (const companyId of companyIds) {
     const parent = companyBest.get(companyId)?.networkId ?? null;
     const degree = companyDegree.get(companyId) ?? 1;
+    const founders = [...(meta.companyFounders.get(companyId) ?? [])];
+    const home = founders.length ? primaryCampus(founders[0], meta) : { campusId: null as string | null, campusLabel: null as string | null };
     nodes.push({
       id: `co:${companyId}`,
       type: "company",
       label: meta.companyNames.get(companyId) ?? companyId,
       kind: null,
-      size: Math.max(2.0, Math.min(6.5, 1.6 + Math.sqrt(degree) * 1.15)),
+      size: Math.max(1.4, Math.min(4.2, 1.2 + Math.sqrt(degree) * 0.85)),
       x: 0,
       y: 0,
       companyId,
@@ -769,18 +782,21 @@ export function buildFounderNetworksGraph(): GraphPayload {
       clusterR: 0,
       hue: parent ? hueById.get(parent) ?? 0 : 0,
       rank: parent ? rankById.get(parent) ?? 99 : 99,
+      campusId: home.campusId,
+      campusLabel: home.campusLabel,
     });
   }
 
   for (const founderId of founderIds) {
     const parent = founderParent.get(founderId) ?? null;
     const degree = founderDegree.get(founderId) ?? 1;
+    const home = primaryCampus(founderId, meta);
     nodes.push({
       id: `fo:${founderId}`,
       type: "founder",
       label: meta.founderNames.get(founderId) ?? founderId,
       kind: null,
-      size: Math.max(1.6, Math.min(5.2, 1.3 + Math.sqrt(degree) * 0.95)),
+      size: Math.max(1.8, Math.min(5.5, 1.5 + Math.sqrt(degree) * 1.05)),
       x: 0,
       y: 0,
       companyId: null,
@@ -790,6 +806,8 @@ export function buildFounderNetworksGraph(): GraphPayload {
       clusterR: 0,
       hue: parent ? hueById.get(parent) ?? 0 : 0,
       rank: parent ? rankById.get(parent) ?? 99 : 99,
+      campusId: home.campusId,
+      campusLabel: home.campusLabel,
     });
   }
 
@@ -868,6 +886,7 @@ export function buildFounderNetworksGraph(): GraphPayload {
   const byFounder = new Map<string, string[]>();
   for (const companyId of companyIds) {
     for (const founderId of meta.companyFounders.get(companyId) ?? []) {
+      if (!founderSet.has(founderId) && !companySet.has(companyId)) continue;
       const list = byFounder.get(founderId) ?? [];
       list.push(companyId);
       byFounder.set(founderId, list);
@@ -877,6 +896,7 @@ export function buildFounderNetworksGraph(): GraphPayload {
     if (companies.length < 2) continue;
     for (let i = 0; i < companies.length; i++) {
       for (let j = i + 1; j < companies.length; j++) {
+        if (!companySet.has(companies[i]) || !companySet.has(companies[j])) continue;
         const a = `co:${companies[i]}`;
         const b = `co:${companies[j]}`;
         const key = a < b ? `${a}|${b}` : `${b}|${a}`;
@@ -887,6 +907,28 @@ export function buildFounderNetworksGraph(): GraphPayload {
           target: b,
           type: "cofounder",
           sourceKey: "person_project_roles.shared_founder",
+          sourceUrl: null,
+        });
+        edgeCounts.cofounder += 1;
+      }
+    }
+  }
+
+  // Same-company co-founder links between founder nodes (campus-colored cloud texture).
+  for (const companyId of companyIds) {
+    const fos = [...(meta.companyFounders.get(companyId) ?? [])].filter((id) => founderSet.has(id)).sort();
+    for (let i = 0; i < fos.length; i++) {
+      for (let j = i + 1; j < fos.length; j++) {
+        const a = `fo:${fos[i]}`;
+        const b = `fo:${fos[j]}`;
+        const key = a < b ? `${a}|${b}` : `${b}|${a}`;
+        if (edgeSeen.has(key)) continue;
+        edgeSeen.add(key);
+        edges.push({
+          source: a,
+          target: b,
+          type: "cofounder",
+          sourceKey: "person_project_roles.same_company_cofounder",
           sourceUrl: null,
         });
         edgeCounts.cofounder += 1;
@@ -1010,16 +1052,64 @@ const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 function packMembersInCluster(members: GraphNode[], cx: number, cy: number, clusterR: number): void {
   const n = members.length;
   if (n === 0) return;
-  // Dense disk: fill most of the hull.
-  const inner = Math.max(6, clusterR * 0.08);
-  const outer = clusterR * 0.92;
-  for (let i = 0; i < n; i++) {
-    const t = n === 1 ? 0 : i / n;
-    const radius = n === 1 ? 0 : inner + Math.sqrt(t) * (outer - inner);
-    const ang = i * GOLDEN_ANGLE;
-    members[i].x = Math.round((cx + Math.cos(ang) * radius) * 10) / 10;
-    members[i].y = Math.round((cy + Math.sin(ang) * radius) * 10) / 10;
+  // Organic multi-lobe cloud: campus subclouds offset irregularly (not a flat disk).
+  const byCampus = new Map<string, GraphNode[]>();
+  for (const node of members) {
+    const key = node.campusId ?? (node.type === "company" ? "co" : "unk");
+    const list = byCampus.get(key) ?? [];
+    list.push(node);
+    byCampus.set(key, list);
   }
+  const groups = [...byCampus.values()].sort((a, b) => b.length - a.length);
+  const groupCenters: { x: number; y: number; rx: number; ry: number; nodes: GraphNode[] }[] = [];
+  const gCount = groups.length;
+  for (let g = 0; g < gCount; g++) {
+    const nodes = groups[g];
+    const weight = Math.sqrt(nodes.length);
+    const gRx = Math.max(7, Math.min(clusterR * 0.5, 5 + weight * 4.8));
+    const gRy = Math.max(6, Math.min(clusterR * 0.42, 4.5 + weight * 3.6));
+    const seed = hash01Local(`g:${g}:${nodes[0]?.id ?? g}`);
+    const ang = gCount === 1 ? seed * 0.8 : (g / gCount) * Math.PI * 2 + seed * 1.1;
+    const dist =
+      gCount === 1
+        ? clusterR * 0.08
+        : Math.min(clusterR * 0.72, 8 + weight * 3.8 + seed * clusterR * 0.12);
+    groupCenters.push({
+      x: cx + Math.cos(ang) * dist,
+      y: cy + Math.sin(ang) * dist * (0.78 + seed * 0.2),
+      rx: gRx,
+      ry: gRy,
+      nodes,
+    });
+  }
+  for (const group of groupCenters) {
+    const m = group.nodes.length;
+    for (let i = 0; i < m; i++) {
+      const node = group.nodes[i];
+      const t = m === 1 ? 0 : i / Math.max(1, m - 0.35);
+      // Density falloff + lobe stretch so the cloud is irregular, not a filled circle.
+      const radiusT = Math.pow(t, 0.62);
+      const ang = i * GOLDEN_ANGLE + hashAngle(node.id);
+      const lobe = 0.82 + 0.28 * Math.sin(ang * 2.3 + hash01Local(node.id) * 6);
+      const jx = (hash01Local(node.id) - 0.5) * 4.4;
+      const jy = (hash01Local(node.id + ":y") - 0.5) * 4.4;
+      node.x = Math.round((group.x + Math.cos(ang) * radiusT * group.rx * lobe + jx) * 10) / 10;
+      node.y = Math.round((group.y + Math.sin(ang) * radiusT * group.ry * lobe + jy) * 10) / 10;
+    }
+  }
+}
+
+function hash01Local(id: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < id.length; i++) {
+    h ^= id.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0) / 4294967295;
+}
+
+function hashAngle(id: string): number {
+  return hash01Local(id) * Math.PI * 2;
 }
 
 /** Editorial packed-glow layout (build-time). Dense Nature-style cloud. */
@@ -1042,8 +1132,9 @@ export function applyForceLayout(graph: GraphPayload): GraphPayload {
     const kids = byParent.get(net.networkId ?? "") ?? [];
     const totalFounders = totalByNetEarly.get(net.networkId ?? "") ?? kids.length;
     // Area ∝ founder count → radius ∝ sqrt(founders). YC (~985) dominates small programs.
-    net.clusterR = Math.max(22, Math.sqrt(Math.max(1, totalFounders)) * 4.15);
-    net.size = Math.max(6, Math.min(28, 4 + Math.sqrt(totalFounders) * 0.55));
+    net.clusterR = Math.max(28, Math.sqrt(Math.max(1, totalFounders)) * 4.35);
+    // Hub glyph stays modest; founder cloud carries the mass.
+    net.size = Math.max(4, Math.min(9, 3.5 + Math.sqrt(totalFounders) * 0.18));
   }
 
   const centers = packClusterCenters(networks.map((net) => ({ id: net.id, r: net.clusterR })));
@@ -1105,6 +1196,15 @@ export function applyForceLayout(graph: GraphPayload): GraphPayload {
     const companies = kids.filter((node) => node.type === "company").length;
     const shownFounders = kids.filter((node) => node.type === "founder").length;
     const totalFounders = totalByNet.get(net.networkId ?? "") ?? shownFounders;
+    let labelR = net.clusterR * 0.55;
+    if (kids.length) {
+      let maxD = 0;
+      for (const kid of kids) {
+        const d = Math.hypot(kid.x - net.x, kid.y - net.y);
+        if (d > maxD) maxD = d;
+      }
+      labelR = Math.max(10, Math.min(net.clusterR * 0.95, maxD + 4));
+    }
     return {
       id: net.networkId ?? net.id,
       label: net.label,
@@ -1112,6 +1212,7 @@ export function applyForceLayout(graph: GraphPayload): GraphPayload {
       cx: net.x,
       cy: net.y,
       r: net.clusterR,
+      labelR,
       hue: net.hue,
       rank: net.rank,
       companyCount: companies,

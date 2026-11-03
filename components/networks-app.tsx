@@ -286,7 +286,7 @@ export function NetworksApp() {
               Deal flow graph
             </h2>
             <p className="mt-0.5 text-[13px] text-[color:var(--fg-2)]">
-              Hover a founder for company, stage, and who already backs them. Toggle Not yet backed by a top fund to surface uncrowded deals. Edges are real membership ties and serial-founder company links.
+              Founder dots are colored by campus. Programs and investors are hubs. Co-founder links and membership ties are real. Hover a founder for company, stage, and backers. Toggle Not yet backed by a top fund for uncrowded deals.
             </p>
           </div>
           <NetworksGraph

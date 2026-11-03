@@ -76,6 +76,9 @@ export interface GraphNode {
   hue: number;
   /** Rank among networks by founder count (1 = largest). */
   rank: number;
+  /** Home campus for founder (or company primary) coloring. */
+  campusId: string | null;
+  campusLabel: string | null;
 }
 
 export interface GraphEdge {
@@ -95,6 +98,8 @@ export interface GraphCluster {
   cx: number;
   cy: number;
   r: number;
+  /** Screen-facing cloud radius from actual member hull (for local labels). */
+  labelR: number;
   hue: number;
   rank: number;
   companyCount: number;

@@ -1,37 +1,23 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { assignCampusColors, readableInk } from "@/components/network-style";
 import type { GraphCluster, GraphFounderDeal, GraphNode, GraphPayload, NetworkKind } from "@/lib/domain/founder-networks-model";
 
 type Point = { x: number; y: number };
 
-const HUES = [
-  { ink: "#3c42d4", soft: "rgba(60,66,212,0.16)", glow: "rgba(60,66,212,0.42)", dot: "#6a70e0", label: "#2a30a8" },
-  { ink: "#7b6bb5", soft: "rgba(123,107,181,0.15)", glow: "rgba(123,107,181,0.38)", dot: "#9a8bc8", label: "#5a4d8a" },
-  { ink: "#4a9bc7", soft: "rgba(74,155,199,0.15)", glow: "rgba(74,155,199,0.38)", dot: "#6bb0d4", label: "#2f6f92" },
-  { ink: "#c9a84a", soft: "rgba(201,168,74,0.16)", glow: "rgba(201,168,74,0.36)", dot: "#d4b85e", label: "#8a7028" },
-  { ink: "#d4846a", soft: "rgba(212,132,106,0.15)", glow: "rgba(212,132,106,0.36)", dot: "#e09a82", label: "#9a5238" },
-  { ink: "#5da88a", soft: "rgba(93,168,138,0.15)", glow: "rgba(93,168,138,0.36)", dot: "#78bba0", label: "#3a7a60" },
-  { ink: "#8a7ab0", soft: "rgba(138,122,176,0.15)", glow: "rgba(138,122,176,0.36)", dot: "#a494c4", label: "#5e5080" },
-  { ink: "#6a7a9a", soft: "rgba(106,122,154,0.13)", glow: "rgba(106,122,154,0.32)", dot: "#8494b0", label: "#44506a" },
-];
-
-const KIND_LEGEND: { kind: NetworkKind; label: string; color: string }[] = [
-  { kind: "accelerator", label: "Accelerator", color: HUES[0].ink },
-  { kind: "program", label: "Program", color: HUES[1].ink },
-  { kind: "lab", label: "Lab", color: HUES[7].ink },
-  { kind: "investor", label: "Investor", color: HUES[6].ink },
-];
+const HUB_INK: Record<NetworkKind, string> = {
+  accelerator: "#4b5563",
+  program: "#6b7280",
+  lab: "#7c8798",
+  investor: "#374151",
+};
 
 function loadGraph(): Promise<GraphPayload> {
   return fetch("/data/founder-networks-graph.json").then((res) => {
     if (!res.ok) throw new Error("graph missing");
     return res.json();
   });
-}
-
-function hueOf(index: number) {
-  return HUES[((index % HUES.length) + HUES.length) % HUES.length];
 }
 
 function hash01(id: string): number {
@@ -47,6 +33,16 @@ function clamp(n: number, lo: number, hi: number) {
   return Math.max(lo, Math.min(hi, n));
 }
 
+function hexAlpha(hex: string, alpha: number): string {
+  const raw = hex.replace("#", "");
+  const full = raw.length === 3 ? raw.split("").map((c) => c + c).join("") : raw;
+  const n = Number.parseInt(full, 16);
+  const r = (n >> 16) & 255;
+  const g = (n >> 8) & 255;
+  const b = n & 255;
+  return `rgba(${r},${g},${b},${clamp(alpha, 0, 1)})`;
+}
+
 function measureText(text: string, fontPx = 11): number {
   return Math.ceil(text.length * fontPx * 0.62) + 12;
 }
@@ -54,187 +50,186 @@ function measureText(text: string, fontPx = 11): number {
 type LabelBox = {
   id: string;
   text: string;
-  sub: string | null;
   x: number;
   y: number;
   w: number;
   h: number;
-  anchorX: number;
-  anchorY: number;
   rimX: number;
   rimY: number;
   color: string;
-  side: "left" | "right";
 };
 
-/** Nature-style margin callouts: full labels in side gutters with thin leader lines. Never on bubbles. */
+type CalloutBox = {
+  id: string;
+  text: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+};
+
+function boxesHit(a: { x: number; y: number; w: number; h: number }, b: { x: number; y: number; w: number; h: number }, pad = 4) {
+  return !(a.x + a.w + pad <= b.x || b.x + b.w + pad <= a.x || a.y + a.h + pad <= b.y || b.y + b.h + pad <= a.y);
+}
+
+/** Labels sit next to each cluster with short leaders (not far gutters). */
 function placeLabels(
   clusters: GraphCluster[],
   toScreen: (x: number, y: number) => Point,
   scale: number,
   viewW: number,
   viewH: number,
-  hoverId: string | null,
-  marginL: number,
-  marginR: number
+  hoverId: string | null
 ): LabelBox[] {
   const ranked = [...clusters].sort((a, b) => a.rank - b.rank);
-  // Desktop: every network once. Narrow: top ranks only so the cloud stays readable.
-  const maxLabels = viewW < 600 ? 6 : viewW < 900 ? 10 : ranked.length;
+  const maxLabels = viewW < 600 ? 6 : viewW < 900 ? 12 : ranked.length;
   const candidates = ranked.filter((c) => c.rank <= maxLabels || c.id === hoverId);
-  const legendH = 48;
-  const topPad = 10;
-  const bottomLimit = viewH - legendH - 8;
-  const gutterW = Math.max(118, Math.min(marginL, marginR) - 12);
-  const leftColX = 8;
-  const rightColX = viewW - gutterW - 8;
+  const legendH = 52;
+  const topPad = 8;
+  const bottomLimit = viewH - legendH - 6;
+  const placed: LabelBox[] = [];
 
-  type Tentative = {
-    cluster: GraphCluster;
-    center: Point;
-    rim: Point;
-    side: "left" | "right";
-    text: string;
-    sub: string | null;
-    w: number;
-    h: number;
-    preferY: number;
-  };
-
-  const tentatives: Tentative[] = [];
   for (const cluster of candidates) {
     const center = toScreen(cluster.cx, cluster.cy);
-    const rPx = Math.max(8, cluster.r * scale);
-    // Prefer the side farther from the cloud center (screen mid).
-    const side: "left" | "right" = center.x < viewW * 0.5 ? "left" : "right";
-    const ang = side === "left" ? Math.PI : 0;
-    const rim: Point = {
-      x: center.x + Math.cos(ang) * rPx * 0.92,
-      y: center.y + Math.sin(ang) * rPx * 0.15,
-    };
-    const text = cluster.label; // full, never truncated
-    const sub = null; // insights rendered as separate margin callouts (avoid label collisions)
-    const needed = measureText(text, 11);
-    const w = Math.max(64, Math.min(gutterW, Math.max(needed, 64)));
-    const lines = Math.max(1, Math.ceil(needed / Math.max(1, w - 4)));
-    const h = 18 * lines + 6;
-    tentatives.push({
-      cluster,
-      center,
-      rim,
-      side,
-      text,
-      sub,
-      w,
-      h,
-      preferY: clamp(center.y - h / 2, topPad, bottomLimit - h),
-    });
-  }
-
-  // Resolve vertical collisions per side independently (stable stack).
-  const placed: LabelBox[] = [];
-  for (const side of ["left", "right"] as const) {
-    const group = tentatives.filter((t) => t.side === side).sort((a, b) => a.preferY - b.preferY || a.cluster.rank - b.cluster.rank);
-    const colX = side === "left" ? leftColX : rightColX;
-    let cursor = topPad;
-    const slots: { t: Tentative; y: number }[] = [];
-    for (const t of group) {
-      let y = Math.max(t.preferY, cursor);
-      if (y + t.h > bottomLimit) {
-        // Pack upward from the bottom for overflow.
-        y = Math.max(topPad, bottomLimit - t.h);
-      }
-      slots.push({ t, y });
-      cursor = y + t.h + 10;
+    // Prefer actual cloud extent (labelR) over packing radius so leaders stay local.
+    const cloudR = Math.max(8, (cluster.labelR ?? cluster.r * 0.72) * scale);
+    const text = cluster.label;
+    const fontPx = 11;
+    const maxW = Math.min(168, Math.max(72, viewW * 0.14));
+    const charsPerLine = Math.max(8, Math.floor(maxW / (fontPx * 0.58)));
+    const nLines = Math.max(1, Math.ceil(text.length / charsPerLine));
+    const w = Math.min(maxW, Math.max(measureText(text.slice(0, charsPerLine), fontPx), 64));
+    const h = 6 + nLines * 14;
+    const baseAng = Math.atan2(center.y - viewH / 2, center.x - viewW / 2);
+    const offsets: number[] = [];
+    for (let k = 0; k < 20; k++) {
+      const sign = k % 2 === 0 ? 1 : -1;
+      const step = Math.floor(k / 2) * 0.28;
+      offsets.push(baseAng + sign * step);
     }
-    // If we overflowed the bottom, compress from the top evenly.
-    if (slots.length) {
-      const last = slots[slots.length - 1];
-      if (last.y + last.t.h > bottomLimit) {
-        const totalH = slots.reduce((s, sl) => s + sl.t.h, 0) + Math.max(0, slots.length - 1) * 5;
-        let y = Math.max(topPad, Math.min(topPad, bottomLimit - totalH));
-        if (totalH < bottomLimit - topPad) {
-          // Redistribute with original preference bias.
-          const span = bottomLimit - topPad - totalH;
-          // keep max(prefer, sequential)
-          y = topPad;
+    let chosen: LabelBox | null = null;
+    for (const ang of offsets) {
+      for (const gap of [10, 16, 22, 30]) {
+        const rimX = center.x + Math.cos(ang) * cloudR;
+        const rimY = center.y + Math.sin(ang) * cloudR;
+        const lx = rimX + Math.cos(ang) * gap;
+        const ly = rimY + Math.sin(ang) * (gap * 0.75);
+        const x = clamp(lx - w / 2, 4, viewW - w - 4);
+        const y = clamp(ly - h / 2, topPad, bottomLimit - h);
+        const box: LabelBox = { id: cluster.id, text, x, y, w, h, rimX, rimY, color: "#374151" };
+        const midX = x + w / 2;
+        const midY = y + h / 2;
+        if (Math.hypot(midX - rimX, midY - rimY) > 56) continue;
+        if (Math.hypot(midX - center.x, midY - center.y) > cloudR + 64) continue;
+        if (placed.some((other) => boxesHit(box, other, 4))) continue;
+        chosen = box;
+        break;
+      }
+      if (chosen) break;
+    }
+    if (!chosen) {
+      const ang = baseAng;
+      const rimX = center.x + Math.cos(ang) * cloudR;
+      const rimY = center.y + Math.sin(ang) * cloudR;
+      const x = clamp(rimX + Math.cos(ang) * 14 - w / 2, 4, viewW - w - 4);
+      let y = clamp(rimY - h / 2, topPad, bottomLimit - h);
+      for (let nudge = 0; nudge < 24; nudge++) {
+        const box: LabelBox = { id: cluster.id, text, x, y, w, h, rimX, rimY, color: "#374151" };
+        if (Math.hypot(x + w / 2 - rimX, y + h / 2 - rimY) <= 70 && !placed.some((other) => boxesHit(box, other, 4))) {
+          chosen = box;
+          break;
         }
-        // Force sequential pack into available height.
-        const gap = slots.length > 1 ? Math.max(2, (bottomLimit - topPad - slots.reduce((s, sl) => s + sl.t.h, 0)) / (slots.length - 1)) : 0;
-        y = topPad;
-        for (const sl of slots) {
-          sl.y = y;
-          y += sl.t.h + gap;
-        }
+        y = clamp(y + 12, topPad, bottomLimit - h);
+      }
+      if (!chosen) {
+        chosen = {
+          id: cluster.id,
+          text,
+          x: clamp(center.x + cloudR + 8 - w / 2, 4, viewW - w - 4),
+          y: clamp(center.y - h / 2, topPad, bottomLimit - h),
+          w,
+          h,
+          rimX: center.x + cloudR,
+          rimY: center.y,
+          color: "#374151",
+        };
       }
     }
-
-    for (const sl of slots) {
-      const { t, y } = sl;
-      const hue = hueOf(t.cluster.hue);
-      // Emphasize hover slightly by ensuring its slot stays (already included).
-      void hoverId;
-      placed.push({
-        id: t.cluster.id,
-        text: t.text,
-        sub: t.sub,
-        x: colX,
-        y,
-        w: t.w,
-        h: t.h,
-        anchorX: t.center.x,
-        anchorY: t.center.y,
-        rimX: t.rim.x,
-        rimY: t.rim.y,
-        color: hue.label,
-        side,
-      });
-    }
-  }
-  // Final per-side stack: force strictly increasing y so DOM boxes cannot overlap.
-  const pad = 4;
-  const stackSide = (side: "left" | "right") => {
-    const group = placed.filter((label) => label.side === side).sort((a, b) => a.y - b.y || a.text.localeCompare(b.text));
-    let y = topPad;
-    for (const label of group) {
-      label.y = Math.max(label.y, y);
-      y = label.y + label.h + pad;
-    }
-    if (group.length) {
-      const last = group[group.length - 1];
-      if (last.y + last.h > bottomLimit) {
-        const totalH = group.reduce((s, label) => s + label.h, 0);
-        const gaps = Math.max(0, group.length - 1);
-        const gap = gaps ? Math.max(2, (bottomLimit - topPad - totalH) / gaps) : 0;
-        let cursor = topPad;
-        for (const label of group) {
-          label.y = cursor;
-          cursor += label.h + gap;
-        }
-      }
-    }
-  };
-  stackSide("left");
-  stackSide("right");
-  // Cross-side: if a left box still intersects a right box, push the lower one down.
-  for (let pass = 0; pass < 8; pass++) {
-    let moved = false;
-    for (let i = 0; i < placed.length; i++) {
-      for (let j = i + 1; j < placed.length; j++) {
-        const a = placed[i];
-        const b = placed[j];
-        const hit = !(a.x + a.w + pad <= b.x || b.x + b.w + pad <= a.x || a.y + a.h + pad <= b.y || b.y + b.h + pad <= a.y);
-        if (!hit) continue;
-        const lower = a.y >= b.y ? a : b;
-        const upper = lower === a ? b : a;
-        lower.y = upper.y + upper.h + pad;
-        if (lower.y + lower.h > bottomLimit) lower.y = Math.max(topPad, bottomLimit - lower.h);
-        moved = true;
-      }
-    }
-    if (!moved) break;
+    placed.push(chosen);
   }
   return placed;
+}
+
+function estimateCalloutSize(text: string, viewW: number): { w: number; h: number } {
+  const w = Math.min(200, Math.max(150, Math.ceil(Math.min(text.length * 3.6, viewW * 0.22))));
+  const charsPerLine = Math.max(18, Math.floor((w - 16) / 5.4));
+  const nLines = Math.max(2, Math.ceil(text.length / charsPerLine));
+  const h = 10 + nLines * 13;
+  return { w, h };
+}
+
+function placeCallouts(
+  clusters: GraphCluster[],
+  labels: LabelBox[],
+  viewW: number,
+  viewH: number
+): CalloutBox[] {
+  const insights = clusters.filter((c) => c.callout && c.rank <= 3).sort((a, b) => a.rank - b.rank);
+  const legendH = 52;
+  const placed: CalloutBox[] = [];
+  for (let i = 0; i < insights.length; i++) {
+    const cluster = insights[i];
+    const text = cluster.callout || "";
+    const { w, h } = estimateCalloutSize(text, viewW);
+    const marginSlots: Point[] = [
+      { x: 8, y: 8 },
+      { x: viewW - w - 8, y: 8 },
+      { x: 8, y: viewH - legendH - h - 8 },
+      { x: viewW - w - 8, y: viewH - legendH - h - 8 },
+      { x: 8, y: Math.max(8, viewH * 0.28) },
+      { x: viewW - w - 8, y: Math.max(8, viewH * 0.28) },
+      { x: 8, y: Math.max(8, viewH * 0.55 - h) },
+      { x: viewW - w - 8, y: Math.max(8, viewH * 0.55 - h) },
+      { x: Math.max(8, viewW * 0.5 - w / 2), y: 8 },
+      { x: Math.max(8, viewW * 0.5 - w / 2), y: viewH - legendH - h - 8 },
+    ];
+    let chosen: CalloutBox | null = null;
+    let bestScore = -1e9;
+    for (const slot of marginSlots) {
+      const box: CalloutBox = {
+        id: cluster.id,
+        text,
+        x: clamp(slot.x, 4, viewW - w - 4),
+        y: clamp(slot.y, 4, viewH - legendH - h - 4),
+        w,
+        h,
+      };
+      if (labels.some((label) => boxesHit(box, label, 10))) continue;
+      if (placed.some((other) => boxesHit(box, other, 8))) continue;
+      const own = labels.find((l) => l.id === cluster.id);
+      let score = 0;
+      if (own) {
+        const dx = box.x + box.w / 2 - (own.x + own.w / 2);
+        const dy = box.y + box.h / 2 - (own.y + own.h / 2);
+        score += Math.hypot(dx, dy);
+      }
+      if (box.y < 40 || box.y > viewH - legendH - h - 40) score += 40;
+      if (score > bestScore) {
+        bestScore = score;
+        chosen = box;
+      }
+    }
+    if (!chosen) continue;
+    placed.push(chosen);
+  }
+  return placed;
+}
+
+function fitScaleApprox(bounds: { minX: number; maxX: number; minY: number; maxY: number }, size: { w: number; h: number }) {
+  const pad = 48;
+  const spanX = Math.max(1, bounds.maxX - bounds.minX);
+  const spanY = Math.max(1, bounds.maxY - bounds.minY);
+  return Math.min((size.w - pad * 2) / spanX, (size.h - pad * 2) / spanY, 1.75);
 }
 
 export function NetworksGraph({
@@ -255,11 +250,9 @@ export function NetworksGraph({
     shownOfTotal: string | null;
     deal: GraphFounderDeal | null;
   } | null>(null);
-  const [uncrowdedOnly, setUncrowdedOnly] = useState(false);
-  const uncrowdedRef = useRef<Set<string>>(new Set());
-  const dealsRef = useRef<Record<string, GraphFounderDeal>>({});
-  const uncrowdedOnlyRef = useRef(false);
   const [labels, setLabels] = useState<LabelBox[]>([]);
+  const [callouts, setCallouts] = useState<CalloutBox[]>([]);
+  const [uncrowdedOnly, setUncrowdedOnly] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [size, setSize] = useState({ w: 720, h: 420 });
@@ -274,6 +267,10 @@ export function NetworksGraph({
   const byIdRef = useRef<Map<string, GraphNode>>(new Map());
   const labelsSigRef = useRef("");
   const viewDirtyRef = useRef(true);
+  const uncrowdedRef = useRef<Set<string>>(new Set());
+  const dealsRef = useRef<Record<string, GraphFounderDeal>>({});
+  const uncrowdedOnlyRef = useRef(false);
+  const campusColorRef = useRef<Map<string, string>>(new Map());
 
   useEffect(() => {
     let cancelled = false;
@@ -291,6 +288,13 @@ export function NetworksGraph({
         degreeRef.current = degree;
         dealsRef.current = payload.founderDeals ?? {};
         uncrowdedRef.current = new Set(payload.uncrowdedCompanyIds ?? []);
+        const campuses = new Map<string, string>();
+        for (const node of payload.nodes) {
+          if (node.campusId) campuses.set(node.campusId, node.campusLabel || node.campusId);
+        }
+        campusColorRef.current = assignCampusColors(
+          [...campuses.entries()].map(([id, label]) => ({ id, label }))
+        );
         viewDirtyRef.current = true;
       })
       .catch(() => {
@@ -340,40 +344,42 @@ export function NetworksGraph({
     return { minX, maxX, minY, maxY };
   }, [graph]);
 
-  const margins = useMemo(() => {
-    // Wide gutters for full Nature-style callouts; cloud fills the middle band.
-    const marginL = size.w >= 900 ? 200 : size.w >= 600 ? 140 : 4;
-    const marginR = size.w >= 900 ? 200 : size.w >= 600 ? 140 : 4;
-    const marginT = 14;
-    const marginB = 56;
-    return { marginL, marginR, marginT, marginB };
-  }, [size.w]);
+  const campusLegend = useMemo(() => {
+    if (!graph) return [] as { id: string; label: string; color: string }[];
+    const counts = new Map<string, { label: string; n: number }>();
+    for (const node of graph.nodes) {
+      if (node.type !== "founder" || !node.campusId) continue;
+      const prev = counts.get(node.campusId) ?? { label: node.campusLabel || node.campusId, n: 0 };
+      prev.n += 1;
+      counts.set(node.campusId, prev);
+    }
+    const colors = campusColorRef.current;
+    return [...counts.entries()]
+      .sort((a, b) => b[1].n - a[1].n)
+      .slice(0, 8)
+      .map(([id, row]) => ({ id, label: row.label, color: colors.get(id) || "#9aa3b2" }));
+  }, [graph]);
 
   const fitView = useCallback(() => {
-    const { marginL, marginR, marginT, marginB } = margins;
+    const pad = 56;
     const spanX = Math.max(1, bounds.maxX - bounds.minX);
     const spanY = Math.max(1, bounds.maxY - bounds.minY);
-    const usableW = Math.max(120, size.w - marginL - marginR);
-    const usableH = Math.max(120, size.h - marginT - marginB);
-    // Prefer filling width: allow slight vertical letterbox so the cloud spans the frame.
-    // Prefer filling the usable width so the cloud spans the frame.
-    const scaleW = usableW / spanX;
-    const scaleH = usableH / spanY;
-    const finalScale = Math.min(scaleW, scaleH * 1.12, 1.75);
+    const usableW = Math.max(120, size.w - pad * 2);
+    const usableH = Math.max(120, size.h - pad * 2 - 8);
+    const finalScale = Math.min(usableW / spanX, usableH / spanY, 1.7);
     const cx = (bounds.minX + bounds.maxX) / 2;
     const cy = (bounds.minY + bounds.maxY) / 2;
     viewRef.current = {
       scale: finalScale,
-      tx: marginL + usableW / 2 - cx * finalScale,
-      ty: marginT + usableH / 2 - cy * finalScale,
+      tx: size.w / 2 - cx * finalScale,
+      ty: size.h / 2 - cy * finalScale - 6,
     };
     viewDirtyRef.current = true;
-  }, [bounds, size, margins]);
+  }, [bounds, size]);
 
   useEffect(() => {
     fitView();
   }, [fitView]);
-
 
   const worldToScreen = useCallback((x: number, y: number): Point => {
     const v = viewRef.current;
@@ -405,139 +411,122 @@ export function NetworksGraph({
 
     const v = viewRef.current;
     const scale = v.scale;
-    // editorialFactor: 1 zoomed out, 0 zoomed in
     const editorial = clamp(1 - (scale / fitScaleApprox(bounds, size) - 0.85) / 1.6, 0, 1);
     const glow = 1 - editorial;
     const t = timeRef.current;
-
     const clusters = g.clusters;
     const networks = g.nodes.filter((n) => n.type === "network");
+    const colors = campusColorRef.current;
 
-    // Soft hulls / glows
+    // Soft ambient glow only (no flat filled disks).
     for (const cluster of clusters) {
-      const hue = hueOf(cluster.hue);
       const c = worldToScreen(cluster.cx, cluster.cy);
       const r = cluster.r * scale;
-      const drift = reduceMotionRef.current ? 0 : Math.sin(t * 0.0007 + cluster.rank) * 1.2 * glow;
+      const drift = reduceMotionRef.current ? 0 : Math.sin(t * 0.0007 + cluster.rank) * 1.1 * glow;
       const cx = c.x + drift;
-      const cy = c.y + Math.cos(t * 0.0005 + cluster.rank) * 1.1 * glow;
-
-      if (glow > 0.02) {
-        const grd = ctx.createRadialGradient(cx, cy, r * 0.05, cx, cy, r * (1.15 + glow * 0.35));
-        grd.addColorStop(0, hue.glow.replace(/[\d.]+\)$/, `${0.55 * glow})`));
-        grd.addColorStop(0.45, hue.glow.replace(/[\d.]+\)$/, `${0.28 * glow})`));
+      const cy = c.y + Math.cos(t * 0.0005 + cluster.rank) * 1.0 * glow;
+      if (glow > 0.05) {
+        const grd = ctx.createRadialGradient(cx, cy, r * 0.2, cx, cy, r * (0.95 + glow * 0.2));
+        grd.addColorStop(0, `rgba(90,110,160,${0.07 * glow})`);
+        grd.addColorStop(0.6, `rgba(90,110,160,${0.035 * glow})`);
         grd.addColorStop(1, "rgba(255,255,255,0)");
         ctx.fillStyle = grd;
         ctx.beginPath();
-        ctx.arc(cx, cy, r * (1.2 + glow * 0.4), 0, Math.PI * 2);
+        ctx.ellipse(cx, cy, r * (1.05 + glow * 0.15), r * (0.88 + glow * 0.12), 0, 0, Math.PI * 2);
         ctx.fill();
-      }
-      if (editorial > 0.02) {
-        ctx.beginPath();
-        ctx.arc(cx, cy, r * 0.98, 0, Math.PI * 2);
-        ctx.fillStyle = hue.soft.replace(/[\d.]+\)$/, `${0.55 * editorial + 0.08})`);
-        ctx.fill();
-        ctx.strokeStyle = hexAlpha(hue.ink, 0.18 * editorial + 0.04);
-        ctx.lineWidth = 1;
-        ctx.stroke();
       }
     }
 
-    // Thin translucent curved edges  -  dense hairline web (Nature / pink co-authorship)
-    const edgeAlpha = 0.34 * editorial + 0.32 * glow;
+    // Edges: local cofounder + membership ties. Long cross-graph spans fade out.
+    const edgeAlpha = 0.22 * editorial + 0.38 * glow;
     const byId = byIdRef.current;
+    const maxSpan = Math.min(size.w, size.h) * (0.28 + glow * 0.45);
     if (edgeAlpha > 0.02) {
-      ctx.lineWidth = 0.7;
       ctx.lineCap = "round";
       for (const edge of g.edges) {
-        // Keep almost all edges visible when zoomed out; only lightly thin the densest hub spokes.
-        if (edge.type === "network_founder" && editorial > 0.8 && hash01(edge.target) > 0.82) continue;
-        if (edge.type === "network_tie" && editorial > 0.85 && hash01(edge.source + edge.target) > 0.88) continue;
+        if (edge.type === "network_tie" && editorial > 0.55 && hash01(edge.source + edge.target) > 0.4) continue;
+        if (edge.type === "founder_company" && editorial > 0.65) continue;
         const a = byId.get(edge.source);
         const b = byId.get(edge.target);
         if (!a || !b) continue;
         const pa = worldToScreen(a.x, a.y);
         const pb = worldToScreen(b.x, b.y);
+        const span = Math.hypot(pb.x - pa.x, pb.y - pa.y);
+        if (span > maxSpan) continue;
         const mx = (pa.x + pb.x) / 2;
         const my = (pa.y + pb.y) / 2;
         const dx = pb.x - pa.x;
         const dy = pb.y - pa.y;
-        const bend = edge.type === "cofounder" ? 0.18 : 0.14;
-        const nx = -dy * bend;
-        const ny = dx * bend;
-        const hueIdx = a.hue ?? b.hue ?? 0;
-        const hue = hueOf(hueIdx);
+        const bend = edge.type === "cofounder" ? 0.16 : 0.1;
         ctx.beginPath();
         ctx.moveTo(pa.x, pa.y);
-        ctx.quadraticCurveTo(mx + nx, my + ny, pb.x, pb.y);
-        const aMul = edge.type === "cofounder" ? 1.15 : edge.type === "founder_company" ? 1.05 : 1;
-        ctx.strokeStyle = hexAlpha(hue.ink, edgeAlpha * aMul);
+        ctx.quadraticCurveTo(mx - dy * bend, my + dx * bend, pb.x, pb.y);
+        const campus = a.campusId || b.campusId;
+        const ink = campus && colors.get(campus) ? colors.get(campus)! : "#6b7280";
+        const mul = edge.type === "cofounder" ? 1.35 : edge.type === "network_founder" ? 0.9 : 0.65;
+        const fade = span > maxSpan * 0.7 ? 0.45 : 1;
+        ctx.lineWidth = edge.type === "cofounder" ? 0.9 : 0.5;
+        ctx.strokeStyle = hexAlpha(ink, edgeAlpha * mul * fade);
         ctx.stroke();
       }
     }
 
-    // Company + founder dots (many small nodes)
+    // Founder + company dots (campus color on founders).
     const members = g.nodes.filter((n) => n.type === "company" || n.type === "founder");
     for (const node of members) {
-      const hue = hueOf(node.hue);
       let x = node.x;
       let y = node.y;
       if (!reduceMotionRef.current && glow > 0.05) {
         const h = hash01(node.id);
-        x += Math.sin(t * 0.0009 + h * 12) * 1.4 * glow;
-        y += Math.cos(t * 0.0008 + h * 9) * 1.4 * glow;
+        x += Math.sin(t * 0.0009 + h * 12) * 1.3 * glow;
+        y += Math.cos(t * 0.0008 + h * 9) * 1.3 * glow;
       }
       const p = worldToScreen(x, y);
-      const base = node.type === "founder" ? 0.42 : 0.55;
-      const r = Math.max(node.type === "founder" ? 0.9 : 1.15, node.size * (base + scale * 0.32));
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-      const companyId = node.type === "company" ? node.companyId : node.type === "founder" ? dealsRef.current[node.founderId ?? ""]?.companyId ?? null : null;
+      const companyId =
+        node.type === "company" ? node.companyId : node.type === "founder" ? dealsRef.current[node.founderId ?? ""]?.companyId ?? null : null;
       const isUncrowded = companyId ? uncrowdedRef.current.has(companyId) : false;
       const dim = uncrowdedOnlyRef.current && !isUncrowded;
-      if (editorial > 0.5) {
-        const base = node.type === "founder" ? 0.45 + 0.2 * editorial : 0.58 + 0.25 * editorial;
-        ctx.fillStyle = hexAlpha(hue.dot, dim ? base * 0.18 : base);
+      const r =
+        node.type === "founder"
+          ? Math.max(1.15, node.size * (0.5 + scale * 0.34))
+          : Math.max(0.8, node.size * (0.4 + scale * 0.28));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+      if (node.type === "founder") {
+        const ink = node.campusId && colors.get(node.campusId) ? colors.get(node.campusId)! : "#9aa3b2";
+        ctx.fillStyle = hexAlpha(ink, dim ? 0.14 : 0.82);
       } else {
-        ctx.fillStyle = `rgba(28,36,56,${dim ? 0.12 : 0.5 + 0.35 * glow})`;
+        ctx.fillStyle = `rgba(148,163,184,${dim ? 0.1 : 0.35 + 0.2 * editorial})`;
       }
       ctx.fill();
     }
 
-    // Network cores (editorial packed bubble centers)
+    // Program / investor hubs: small anchors only (never a flat disk).
     for (const node of networks) {
-      const hue = hueOf(node.hue);
       const p = worldToScreen(node.x, node.y);
-      const r = Math.max(4, node.size * (0.7 + editorial * 0.5));
+      const r = Math.min(5.5, Math.max(2.4, 2.2 + Math.sqrt(Math.max(1, node.size)) * 0.55));
+      const ink = HUB_INK[(node.kind as NetworkKind) || "program"] || "#6b7280";
       ctx.beginPath();
       ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-      ctx.fillStyle = hexAlpha(hue.ink, 0.35 + 0.45 * editorial);
+      ctx.fillStyle = hexAlpha(ink, 0.72 + 0.18 * editorial);
       ctx.fill();
-      ctx.strokeStyle = hexAlpha("#ffffff", 0.7);
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = "rgba(255,255,255,0.9)";
+      ctx.lineWidth = 0.8;
       ctx.stroke();
     }
 
-    // Update HTML labels only when the camera or hover target moved.
     if (viewDirtyRef.current) {
-      const nextLabels = placeLabels(
-        clusters,
-        worldToScreen,
-        scale,
-        size.w,
-        size.h,
-        hoverNetRef.current,
-        margins.marginL,
-        margins.marginR
-      );
-      const sig = nextLabels.map((label) => `${label.id}:${label.x|0},${label.y|0},${label.text}`).join("|");
+      const nextLabels = placeLabels(clusters, worldToScreen, scale, size.w, size.h, hoverNetRef.current);
+      const nextCallouts = placeCallouts(clusters, nextLabels, size.w, size.h);
+      const sig = `${nextLabels.map((l) => `${l.id}:${l.x|0},${l.y|0}`).join("|")}#${nextCallouts.map((c) => `${c.id}:${c.x|0}`).join("|")}`;
       if (sig !== labelsSigRef.current) {
         labelsSigRef.current = sig;
         setLabels(nextLabels);
+        setCallouts(nextCallouts);
       }
       viewDirtyRef.current = false;
     }
-  }, [bounds, size, worldToScreen, margins]);
+  }, [bounds, size, worldToScreen]);
 
   useEffect(() => {
     let alive = true;
@@ -545,9 +534,7 @@ export function NetworksGraph({
       if (!alive) return;
       timeRef.current = ts;
       draw();
-      if (!reduceMotionRef.current) {
-        rafRef.current = requestAnimationFrame(loop);
-      }
+      if (!reduceMotionRef.current) rafRef.current = requestAnimationFrame(loop);
     };
     rafRef.current = requestAnimationFrame(loop);
     return () => {
@@ -556,7 +543,6 @@ export function NetworksGraph({
     };
   }, [draw]);
 
-  // Redraw on size/view changes when reduced motion
   useEffect(() => {
     if (reduceMotionRef.current) draw();
   }, [draw, size]);
@@ -572,9 +558,8 @@ export function NetworksGraph({
       const g = graphRef.current;
       if (!g) return null;
       const world = screenToWorld(sx, sy);
-      // companies first when zoomed in
       const scale = viewRef.current.scale;
-      if (scale > 1.1) {
+      if (scale > 1.05) {
         let best: GraphNode | null = null;
         let bestD = 12 / scale;
         for (const node of g.nodes) {
@@ -641,13 +626,10 @@ export function NetworksGraph({
         const net = hit.networkId ?? hit.parentNetworkId;
         if (hoverNetRef.current !== net) viewDirtyRef.current = true;
         hoverNetRef.current = net;
-        // Prefer a connected edge URL for evidence on hover.
         const g = graphRef.current;
         let sourceUrl: string | null = null;
         if (g) {
-          const edge = g.edges.find(
-            (item) => (item.source === hit.id || item.target === hit.id) && item.sourceUrl
-          );
+          const edge = g.edges.find((item) => (item.source === hit.id || item.target === hit.id) && item.sourceUrl);
           sourceUrl = edge?.sourceUrl ?? null;
         }
         const cluster = g?.clusters.find((c) => c.id === net);
@@ -716,33 +698,29 @@ export function NetworksGraph({
     >
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full cursor-grab active:cursor-grabbing" aria-label="Founder networks graph" />
 
-      {/* Thin leader lines from cluster rim to margin labels */}
       <svg className="pointer-events-none absolute inset-0 z-[1] h-full w-full" width={size.w} height={size.h} aria-hidden="true">
         {labels.map((label) => {
-          const lx = label.side === "left" ? label.x + label.w : label.x;
-          const ly = label.y + (label.sub ? 8 : label.h / 2);
-          const midX = (label.rimX + lx) / 2;
-          const midY = (label.rimY + ly) / 2;
+          const lx = label.x + label.w / 2;
+          const ly = label.y + label.h / 2;
           return (
             <path
               key={`lead-${label.id}`}
-              d={`M ${label.rimX} ${label.rimY} Q ${midX} ${midY} ${lx} ${ly}`}
-              stroke="rgba(70,80,120,0.45)"
-              strokeWidth="0.75"
+              d={`M ${label.rimX} ${label.rimY} L ${lx} ${ly}`}
+              stroke="rgba(70,80,110,0.4)"
+              strokeWidth="0.7"
               fill="none"
             />
           );
         })}
       </svg>
 
-      {/* Full margin labels  -  one per network, never truncated, never on bubbles */}
       {labels.map((label) => (
         <button
           key={label.id}
           type="button"
           data-canvas-label={label.id}
           className="absolute z-[1] box-border bg-white/95 px-1.5 py-0.5 text-left text-[11px] font-medium leading-snug hover:bg-white"
-          style={{ left: label.x, top: label.y, width: label.w, color: label.color, maxWidth: label.w }}
+          style={{ left: label.x, top: label.y, width: label.w, color: label.color }}
           onClick={(event) => {
             event.stopPropagation();
             onSelectNetwork(label.id);
@@ -752,26 +730,19 @@ export function NetworksGraph({
         </button>
       ))}
 
-      {/* Investor insight callouts (not data-canvas-label  -  names already labeled once) */}
-      {(graph.clusters || [])
-        .filter((cluster) => cluster.callout && cluster.rank <= 3)
-        .map((cluster, index) => {
-          const boxW = Math.min(210, Math.max(160, margins.marginL - 16));
-          const left = index === 1 ? size.w - boxW - 8 : 8;
-          const topPos = index === 2 ? size.h - 118 : 10 + index * 58;
-          return (
-            <div
-              key={`insight-${cluster.id}`}
-              className="pointer-events-none absolute z-[1] rounded border border-[color:var(--line)] bg-white/95 px-2 py-1.5 text-[10px] leading-snug text-[color:var(--fg-2)] shadow-sm"
-              style={{ left: index === 2 ? 8 : left, top: topPos, width: boxW }}
-            >
-              {cluster.callout}
-            </div>
-          );
-        })}
+      {callouts.map((box) => (
+        <div
+          key={`insight-${box.id}`}
+          data-canvas-callout={box.id}
+          className="pointer-events-none absolute z-[2] rounded border border-[color:var(--line)] bg-white/95 px-2 py-1.5 text-[10px] leading-snug text-[color:var(--fg-2)] shadow-sm"
+          style={{ left: box.x, top: box.y, width: box.w, minHeight: box.h }}
+        >
+          {box.text}
+        </div>
+      ))}
 
       {hover ? (
-        <div className="pointer-events-none absolute left-3 top-3 z-[2] max-w-[300px] rounded border border-[color:var(--line)] bg-white px-2.5 py-1.5 text-xs text-[color:var(--fg)] shadow-sm">
+        <div className="pointer-events-none absolute left-3 top-3 z-[3] max-w-[300px] rounded border border-[color:var(--line)] bg-white px-2.5 py-1.5 text-xs text-[color:var(--fg)] shadow-sm">
           <div className="font-medium">{hover.deal?.founderName ?? hover.label}</div>
           {hover.deal ? (
             <>
@@ -796,20 +767,19 @@ export function NetworksGraph({
               {hover.shownOfTotal ? <div className="text-[color:var(--fg-3)]">{hover.shownOfTotal}</div> : null}
             </>
           )}
-          {hover.sourceUrl ? (
-            <div className="mt-0.5 truncate text-[10px] text-[color:var(--cobalt)]">{hover.sourceUrl}</div>
-          ) : null}
+          {hover.sourceUrl ? <div className="mt-0.5 truncate text-[10px] text-[color:var(--cobalt)]">{hover.sourceUrl}</div> : null}
         </div>
       ) : null}
 
-      <div className="absolute bottom-3 left-3 right-3 z-[2] flex flex-wrap items-center gap-3 rounded border border-[color:var(--line)] bg-white/95 px-3 py-2 text-[11px] text-[color:var(--fg-2)]">
-        {KIND_LEGEND.map((item) => (
-          <span key={item.kind} className="inline-flex items-center gap-1.5">
-            <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: item.color }} /> {item.label}
+      <div className="absolute bottom-3 left-3 right-3 z-[2] flex flex-wrap items-center gap-2 rounded border border-[color:var(--line)] bg-white/95 px-3 py-2 text-[11px] text-[color:var(--fg-2)]">
+        {campusLegend.map((item) => (
+          <span key={item.id} className="inline-flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: item.color }} />
+            <span style={{ color: readableInk(item.color) }}>{item.label}</span>
           </span>
         ))}
         <span className="inline-flex items-center gap-1.5">
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#6a70e0]" /> Company
+          <span className="inline-block h-2 w-2 rounded-full bg-[#4b5563]" /> Hub
         </span>
         <label className="inline-flex cursor-pointer items-center gap-1.5 text-[color:var(--fg)]">
           <input
@@ -820,32 +790,10 @@ export function NetworksGraph({
           />
           Not yet backed by a top fund
         </label>
-        <span className="ml-auto max-w-[24rem] text-right tabular-nums">
-          {(graph.uncrowdedCompanyIds?.length ?? 0).toLocaleString("en-US")} uncrowded companies in sample · scroll to zoom
+        <span className="ml-auto max-w-[22rem] text-right tabular-nums">
+          {(graph.uncrowdedCompanyIds?.length ?? 0).toLocaleString("en-US")} uncrowded · scroll to zoom
         </span>
       </div>
     </div>
   );
-}
-
-function hexAlpha(hex: string, alpha: number): string {
-  const raw = hex.replace("#", "");
-  const full = raw.length === 3 ? raw.split("").map((c) => c + c).join("") : raw;
-  const n = Number.parseInt(full, 16);
-  const r = (n >> 16) & 255;
-  const g = (n >> 8) & 255;
-  const b = n & 255;
-  return `rgba(${r},${g},${b},${clamp(alpha, 0, 1)})`;
-}
-
-function fitScaleApprox(bounds: { minX: number; maxX: number; minY: number; maxY: number }, size: { w: number; h: number }) {
-  const marginL = size.w >= 900 ? 200 : size.w >= 600 ? 140 : 4;
-  const marginR = size.w >= 900 ? 200 : size.w >= 600 ? 140 : 4;
-  const marginT = 14;
-  const marginB = 56;
-  const spanX = Math.max(1, bounds.maxX - bounds.minX);
-  const spanY = Math.max(1, bounds.maxY - bounds.minY);
-  const usableW = Math.max(120, size.w - marginL - marginR);
-  const usableH = Math.max(120, size.h - marginT - marginB);
-  return Math.min(usableW / spanX, usableH / spanY, 1.55);
 }
