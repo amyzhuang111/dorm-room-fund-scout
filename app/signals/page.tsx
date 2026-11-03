@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { plainText } from "@/lib/display/plain-text";
 import { getDb } from "@/lib/db/client";
 import { listUniversities } from "@/lib/domain/queries";
 import { readReviewState } from "@/lib/domain/review-server";
@@ -289,7 +290,7 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
         {pressPage.map((item) => (
           <li key={item.id} className="rounded-md border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg-raised,#FFFFFF)] p-3">
             <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-[15px] font-medium text-fg">
-              {item.headline}
+              {plainText(item.headline)}
             </a>
             <p className="num mt-1 text-[12px] text-fg-3">
               {item.sourceName}
@@ -361,17 +362,17 @@ export default async function SignalsPage({ searchParams }: { searchParams: Prom
                   <CampusSeal label={s.university_name} size={featured ? "md" : "sm"} />
                 )}
                 <Link href={detailHref} className={`font-medium text-foreground hover:text-link ${featured ? "text-[15px]" : "text-sm"}`}>
-                  {s.founder_name ?? s.project_name}
+                  {plainText(s.founder_name ?? s.project_name)}
                   {s.university_name ? ` · ${s.university_name}` : ""}
                 </Link>
                 {s.project_kind === "company" && <CompanyWebsiteIcon url={s.website_url} name={s.project_name} />}
               </span>
               <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-link">{TYPE_LABEL[s.signal_type] ?? s.signal_type}</p>
-              <p className={`mt-1 text-foreground ${featured ? "text-[15px] leading-snug" : "text-sm"}`}>{s.current_observation}</p>
-              {s.significance_note && lowConfidence ? <p className="mt-1 text-sm text-muted">{s.significance_note}</p> : null}
-              {s.significance_note && !lowConfidence ? <p className="mt-1 text-sm text-muted">Why it matters: {s.significance_note}</p> : null}
+              <p className={`mt-1 text-foreground ${featured ? "text-[15px] leading-snug" : "text-sm"}`}>{plainText(s.current_observation)}</p>
+              {s.significance_note && lowConfidence ? <p className="mt-1 text-sm text-muted">{plainText(s.significance_note)}</p> : null}
+              {s.significance_note && !lowConfidence ? <p className="mt-1 text-sm text-muted">Why it matters: {plainText(s.significance_note)}</p> : null}
               <p className="mt-1.5 text-xs text-muted">
-                {s.source_name ? <span>{s.source_name}</span> : null}
+                {s.source_name ? <span>{plainText(s.source_name)}</span> : null}
                 {s.source_name && s.source_url ? " · " : null}
                 {s.source_url ? (
                   <a href={s.source_url} target="_blank" rel="noopener noreferrer" className="text-link underline">

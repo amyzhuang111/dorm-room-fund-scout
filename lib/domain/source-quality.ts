@@ -1716,7 +1716,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     tierRationale: "NYU Entrepreneurship blog prints founder names and class years.",
     whyItMatters: "Class years let the 2023+ site cutoff apply without guessing.",
     whatToExtract: ["company", "founders", "class year", "website"],
-    whatNotToInfer: ["Class of 2021–2022 founders are stored but excluded from the site (no held list)."],
+    whatNotToInfer: ["Class of 2021 to 2022 founders are stored but excluded from the site (no held list)."],
     status: "implemented",
     statusNote: "Imported 2026-11-02. Merged with prior NYU Launchpad claims where domain/founders matched.",
   },
@@ -1789,7 +1789,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatToExtract: [],
     whatNotToInfer: ["Do not scrape or import while Crunchbase reuse is unresolved."],
     status: "checked_and_skipped",
-    statusNote: "Skipped 2026-11-02 — Crunchbase-backed; reuse unresolved.",
+    statusNote: "Skipped 2026-11-02 because it is Crunchbase-backed and reuse is unresolved.",
   },
   {
     id: "cat_campushunt",
@@ -1806,7 +1806,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatToExtract: [],
     whatNotToInfer: ["Do not treat CampusHunt rows as evidence."],
     status: "checked_and_skipped",
-    statusNote: "Skipped 2026-11-02 — unverified.",
+    statusNote: "Skipped 2026-11-02 because it is unverified.",
   },
   {
     id: "cat_buildlist_map",
@@ -1823,7 +1823,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatToExtract: [],
     whatNotToInfer: ["Location near a campus is not enrollment."],
     status: "checked_and_skipped",
-    statusNote: "Skipped 2026-11-02 — no campus/student/grad-year fields.",
+    statusNote: "Skipped 2026-11-02 because it has no campus, student, or grad-year fields.",
   },
   {
     id: "cat_buildlist_companies",
@@ -1840,7 +1840,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatToExtract: [],
     whatNotToInfer: ["Company listing is not student affiliation."],
     status: "checked_and_skipped",
-    statusNote: "Skipped 2026-11-02 — no campus/student/grad-year fields.",
+    statusNote: "Skipped 2026-11-02 because it has no campus, student, or grad-year fields.",
   },
   {
     id: "cat_ucsd_startup_db",
@@ -1857,7 +1857,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatToExtract: [],
     whatNotToInfer: ["Do not scrape Airtable APIs without clearance."],
     status: "checked_and_skipped",
-    statusNote: "Skipped 2026-11-02 — Airtable rows not in public HTML.",
+    statusNote: "Skipped 2026-11-02 because the Airtable rows are not in public HTML.",
   },
   {
     id: "cat_nebraska_husker_vf",
@@ -1874,7 +1874,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatToExtract: [],
     whatNotToInfer: ["Fund branding is not founder campus affiliation."],
     status: "checked_and_skipped",
-    statusNote: "Skipped 2026-11-02 — founders' UNL affiliation not stated.",
+    statusNote: "Skipped 2026-11-02 because the founders' UNL affiliation is not stated.",
   },
   {
     id: "cat_waterloo_svf_investments",
@@ -1891,7 +1891,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
     whatToExtract: [],
     whatNotToInfer: ["An investment year is not a graduation year."],
     status: "checked_and_skipped",
-    statusNote: "Skipped 2026-11-02 — no founder/campus/grad evidence (use Velocity).",
+    statusNote: "Skipped 2026-11-02 because it has no founder, campus, or grad evidence. Use Velocity instead.",
   },
 ];
 

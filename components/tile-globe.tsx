@@ -885,7 +885,7 @@ export function TileGlobe({
               onClick={() => setLegendOpen((v) => !v)}
             >
               Markers
-              <span aria-hidden className="text-[color:var(--cobalt,#2F4FD8)]">{legendOpen ? "–" : "+"}</span>
+              <span aria-hidden className="text-[color:var(--cobalt,#2F4FD8)]">{legendOpen ? "\u2212" : "+"}</span>
             </button>
             {legendOpen ? (
               <div

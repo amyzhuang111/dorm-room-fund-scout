@@ -1,5 +1,6 @@
 "use client";
 
+import { plainText } from "@/lib/display/plain-text";
 import Link from "next/link";
 import type { NamedFounder, ProjectDetail } from "@/lib/domain/queries";
 import type { StartupCard } from "@/lib/domain/startup-card";
@@ -79,7 +80,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
         </div>
         <div>
           <h3 className="font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-[color:var(--cobalt,#2F4FD8)]">Open question</h3>
-          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{openQ}</p>
+          <p className="mt-0.5 text-[13px] leading-snug text-[color:var(--fg,#0B0E17)]">{plainText(openQ)}</p>
         </div>
         {/* r48: port desk scout actions onto mobile why-look (action path was desk-only). */}
         <div className="flex flex-wrap gap-2 pt-1" data-scout-actions="">
@@ -110,7 +111,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
             <StartupDirectoryCard card={card} embedded />
           </div>
         ) : (
-          <h2 className="text-lg font-semibold text-foreground">{project.name}</h2>
+          <h2 className="text-lg font-semibold text-foreground">{plainText(project.name)}</h2>
         )}
         <div className="sample-ops-chrome mt-2 hidden items-start justify-between gap-2 sm:flex">
           <div className="flex flex-wrap items-center gap-2">
@@ -199,7 +200,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
             <li key={g.gate} className="flex items-start gap-2 text-sm">
               <GateBadge result={g.result} />
               <span className="text-foreground">
-                <span className="font-medium capitalize">{g.gate.replace(/_/g, " ")}:</span> {g.rationale}
+                <span className="font-medium capitalize">{g.gate.replace(/_/g, " ")}:</span> {plainText(g.rationale)}
               </span>
             </li>
           ))}
@@ -271,7 +272,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
                           {host}
                         </a>
                         {item.status === "unverified" ? " · unverified" : ""}
-                        {item.excerpt ? ` · ${item.excerpt}` : ""}
+                        {item.excerpt ? ` · ${plainText(item.excerpt)}` : ""}
                       </li>
                     );
                   })}
@@ -289,7 +290,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
           {Array.from(new Map(project.claims.filter((c) => c.sourceUrl).map((c) => [c.sourceUrl, c])).values()).map((c) => (
             <li key={c.sourceUrl}>
               <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-link underline">
-                {c.sourceName || c.label.replaceAll("_", " ")}
+                {plainText(c.sourceName) || c.label.replaceAll("_", " ")}
               </a>
             </li>
           ))}
@@ -302,7 +303,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">Evidence ({project.claims.length})</h3>
         {strongestEvidence && (
           <div className="mt-1 rounded-md border border-border-c bg-surface p-2.5 text-sm">
-            <p className="text-foreground">{strongestEvidence.excerpt}</p>
+            <p className="text-foreground">{plainText(strongestEvidence.excerpt)}</p>
             <p className="mt-1 text-xs text-muted">
               {strongestEvidence.label.replace("_", " ")} · retrieved {strongestEvidence.retrievedAt.slice(0, 10)}
               {strongestEvidence.publishedDate ? ` · published ${strongestEvidence.publishedDate}` : ""} ·{" "}
@@ -315,7 +316,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
         <ul className="mt-1.5 space-y-2">
           {project.claims.slice(1).map((c) => (
             <li key={c.id} className="rounded-md border border-border-c p-2 text-xs">
-              <p className="text-foreground">{c.excerpt}</p>
+              <p className="text-foreground">{plainText(c.excerpt)}</p>
               <p className="mt-1 text-muted">
                 {c.label.replace("_", " ")} · {c.claimType} · retrieved {c.retrievedAt.slice(0, 10)} ·{" "}
                 <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline">
@@ -334,7 +335,7 @@ export function CompanyDetail({ project, initialCard = null }: { project: Projec
         <ul className="mt-1 space-y-1.5">
           {project.signals.map((s) => (
             <li key={s.id} className="rounded-md border border-border-c p-2 text-xs">
-              <p className="text-foreground">{s.currentObservation}</p>
+              <p className="text-foreground">{plainText(s.currentObservation)}</p>
               <p className="mt-0.5 text-muted">
                 {s.signalType.replace(/_/g, " ")}
                 {s.sourceDate ? ` · ${s.sourceDate}` : ""}
