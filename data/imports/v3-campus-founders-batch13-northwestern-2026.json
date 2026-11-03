@@ -1,0 +1,1383 @@
+{
+  "retrievedAt": "2026-11-03T06:35:00.000Z",
+  "companies": [
+    {
+      "name": "HaptE",
+      "description": "Computer-vision operations system to reduce warehouse execution errors.",
+      "website": "https://www.hapte.ai",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "HaptE — Trevor Abbott ’26; Quinn McGinley ’28 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Trevor Abbott",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (HaptE); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "HaptE — Trevor Abbott ’26; Quinn McGinley ’28 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "HaptE — Trevor Abbott ’26; Quinn McGinley ’28 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Quinn McGinley",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (HaptE); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "HaptE — Trevor Abbott ’26; Quinn McGinley ’28 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "HaptE — Trevor Abbott ’26; Quinn McGinley ’28 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "CityVerse AI",
+      "description": "Turns site photos into project intelligence.",
+      "website": "https://cityverseai.com",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "CityVerse AI — Neal Agarwal ’27 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Neal Agarwal",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (CityVerse AI); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "CityVerse AI — Neal Agarwal ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "CityVerse AI — Neal Agarwal ’27 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "CrowdListen",
+      "description": "Queryable customer insights for teams and AI agents.",
+      "website": "https://crowdlisten.com",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "CrowdListen — Terry Chen ’26; Forrest Chai ’29; Chelsey Tao ’27; Jonathan Rho ’28 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Terry Chen",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (CrowdListen); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "CrowdListen — Terry Chen ’26; Forrest Chai ’29; Chelsey Tao ’27; Jonathan Rho ’28 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "CrowdListen — Terry Chen ’26; Forrest Chai ’29; Chelsey Tao ’27; Jonathan Rho ’28 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Forrest Chai",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (CrowdListen); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "CrowdListen — Terry Chen ’26; Forrest Chai ’29; Chelsey Tao ’27; Jonathan Rho ’28 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "CrowdListen — Terry Chen ’26; Forrest Chai ’29; Chelsey Tao ’27; Jonathan Rho ’28 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Chelsey Tao",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (CrowdListen); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "CrowdListen — Terry Chen ’26; Forrest Chai ’29; Chelsey Tao ’27; Jonathan Rho ’28 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "CrowdListen — Terry Chen ’26; Forrest Chai ’29; Chelsey Tao ’27; Jonathan Rho ’28 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Jonathan Rho",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (CrowdListen); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "CrowdListen — Terry Chen ’26; Forrest Chai ’29; Chelsey Tao ’27; Jonathan Rho ’28 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "CrowdListen — Terry Chen ’26; Forrest Chai ’29; Chelsey Tao ’27; Jonathan Rho ’28 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "Lastrada",
+      "description": "AI-native clearance software for music samples.",
+      "website": "https://lastrada.music",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "Lastrada — Benjamin Moelis ’26 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Benjamin Moelis",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Lastrada); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Lastrada — Benjamin Moelis ’26 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Lastrada — Benjamin Moelis ’26 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "Neuforce",
+      "description": "Helps businesses operationalize AI.",
+      "website": "https://www.neuforce.ai",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "Neuforce — Luis Aranguren ’26 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Luis Aranguren",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Neuforce); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Neuforce — Luis Aranguren ’26 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Neuforce — Luis Aranguren ’26 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "Nyck AI",
+      "description": "Automated procurement and purchasing for manufacturers and distributors.",
+      "website": "https://www.nyck.ai",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "Nyck AI — Marc Davis ’26; Kevin Wang ’27 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Marc Davis",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Nyck AI); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Nyck AI — Marc Davis ’26; Kevin Wang ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Nyck AI — Marc Davis ’26; Kevin Wang ’27 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Kevin Wang",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Nyck AI); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Nyck AI — Marc Davis ’26; Kevin Wang ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Nyck AI — Marc Davis ’26; Kevin Wang ’27 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "DoseUp",
+      "description": "GLP-1 shot and treatment adherence app.",
+      "website": "https://www.doseup.app",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "DoseUp — Aryan Kalluvila ’27 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Aryan Kalluvila",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (DoseUp); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "DoseUp — Aryan Kalluvila ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "DoseUp — Aryan Kalluvila ’27 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "Restless",
+      "description": "Energy drink formulated to reduce crashes.",
+      "website": "https://restlessco.co",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "Restless — Daniel Medina ’27 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Daniel Medina",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Restless); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Restless — Daniel Medina ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Restless — Daniel Medina ’27 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "ChickyDough",
+      "description": "Gluten-free chickpea-flour cookie mixes.",
+      "website": "https://eatchicky.com",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "ChickyDough — Julia Loverde ’27 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Julia Loverde",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (ChickyDough); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "ChickyDough — Julia Loverde ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "ChickyDough — Julia Loverde ’27 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "Fracture Club",
+      "description": "Adaptive apparel for people recovering from fractures.",
+      "website": "https://www.fracture-club.com",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Grace Nie",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Fracture Club); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Jenny Fu",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Fracture Club); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Arpan Roy",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Fracture Club); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Qianyu Li",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Fracture Club); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Linxuan Gou",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Fracture Club); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Yahui Zhang",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Fracture Club); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Zifan Wang",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Fracture Club); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Fracture Club — Grace Nie ’27; Jenny Fu ’26; Arpan Roy ’27; Qianyu Li ’26; Linxuan Gou ’26; Yahui Zhang ’26; Zifan Wang ’29 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "Plato AI",
+      "description": "Personalized AI tutor with interactive avatar lessons.",
+      "website": "https://platolearn.in",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "Plato AI — Girinath Ravichandran ’26 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Girinath Ravichandran",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Plato AI); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Plato AI — Girinath Ravichandran ’26 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Plato AI — Girinath Ravichandran ’26 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "Rootinable",
+      "description": "Vegetable-based food topping.",
+      "website": "https://rootinable.com",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "Rootinable — Gabriel Magalhaes ’26; Elyse Ensor ’26 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Gabriel Magalhaes",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Rootinable); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Rootinable — Gabriel Magalhaes ’26; Elyse Ensor ’26 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Rootinable — Gabriel Magalhaes ’26; Elyse Ensor ’26 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Elyse Ensor",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Rootinable); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Rootinable — Gabriel Magalhaes ’26; Elyse Ensor ’26 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Rootinable — Gabriel Magalhaes ’26; Elyse Ensor ’26 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "EdgeLine",
+      "description": "Automated construction drawing and document conflict detection.",
+      "website": null,
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "EdgeLine — Sean Gibbons ’28 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Sean Gibbons",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (EdgeLine); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "EdgeLine — Sean Gibbons ’28 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "EdgeLine — Sean Gibbons ’28 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "Aura Life Science",
+      "description": "Engineered photosynthetic microbes for bio-manufacturing.",
+      "website": "https://www.auralifescience.com",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "Aura Life Science — Jacob Bhoi ’26 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Jacob Bhoi",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Aura Life Science); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Aura Life Science — Jacob Bhoi ’26 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Aura Life Science — Jacob Bhoi ’26 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "AirNX",
+      "description": "Manufacturable carbon-capture surfaces.",
+      "website": null,
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "AirNX — Hanseo Kim ’29; Sebastian Marini ’30 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Hanseo Kim",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (AirNX); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "AirNX — Hanseo Kim ’29; Sebastian Marini ’30 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "AirNX — Hanseo Kim ’29; Sebastian Marini ’30 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Sebastian Marini",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (AirNX); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'30",
+            "gradYear": 2030,
+            "evidence": "AirNX — Hanseo Kim ’29; Sebastian Marini ’30 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "AirNX — Hanseo Kim ’29; Sebastian Marini ’30 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "GridGate",
+      "description": "Intelligence software for energy project risks.",
+      "website": "https://www.gridgatellc.com",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "GridGate — Kiran Moore ’26; Soren Moore ’27; Robert Ding ’29; Jay Rao ’28 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Kiran Moore",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (GridGate); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "GridGate — Kiran Moore ’26; Soren Moore ’27; Robert Ding ’29; Jay Rao ’28 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "GridGate — Kiran Moore ’26; Soren Moore ’27; Robert Ding ’29; Jay Rao ’28 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Soren Moore",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (GridGate); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "GridGate — Kiran Moore ’26; Soren Moore ’27; Robert Ding ’29; Jay Rao ’28 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "GridGate — Kiran Moore ’26; Soren Moore ’27; Robert Ding ’29; Jay Rao ’28 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Robert Ding",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (GridGate); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "GridGate — Kiran Moore ’26; Soren Moore ’27; Robert Ding ’29; Jay Rao ’28 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "GridGate — Kiran Moore ’26; Soren Moore ’27; Robert Ding ’29; Jay Rao ’28 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Jay Rao",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (GridGate); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "GridGate — Kiran Moore ’26; Soren Moore ’27; Robert Ding ’29; Jay Rao ’28 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "GridGate — Kiran Moore ’26; Soren Moore ’27; Robert Ding ’29; Jay Rao ’28 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "Soft Mattr",
+      "description": "Material intelligence for fashion purchases.",
+      "website": "https://www.softmattr.com",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "Soft Mattr — Dylan McAfee ’29 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Dylan McAfee",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Soft Mattr); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Soft Mattr — Dylan McAfee ’29 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Soft Mattr — Dylan McAfee ’29 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "HydroFlo",
+      "description": "Smart catheter for monitoring hydrocephalus shunts.",
+      "website": null,
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "HydroFlo — Eva Poliakova ’27; Rishi Garg ’27; Viet Tong ’27 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Eva Poliakova",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (HydroFlo); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "HydroFlo — Eva Poliakova ’27; Rishi Garg ’27; Viet Tong ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "HydroFlo — Eva Poliakova ’27; Rishi Garg ’27; Viet Tong ’27 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Rishi Garg",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (HydroFlo); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "HydroFlo — Eva Poliakova ’27; Rishi Garg ’27; Viet Tong ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "HydroFlo — Eva Poliakova ’27; Rishi Garg ’27; Viet Tong ’27 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Viet Tong",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (HydroFlo); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "HydroFlo — Eva Poliakova ’27; Rishi Garg ’27; Viet Tong ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "HydroFlo — Eva Poliakova ’27; Rishi Garg ’27; Viet Tong ’27 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "LumaLift",
+      "description": "Maternity wearable bodysuit to alleviate lumbopelvic pain.",
+      "website": null,
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "LumaLift — Lucy Burton ’26; Tiffany Sorto ’26; Fiona McKay ’27; London Wheeler ’27 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Lucy Burton",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (LumaLift); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "LumaLift — Lucy Burton ’26; Tiffany Sorto ’26; Fiona McKay ’27; London Wheeler ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "LumaLift — Lucy Burton ’26; Tiffany Sorto ’26; Fiona McKay ’27; London Wheeler ’27 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Tiffany Sorto",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (LumaLift); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "LumaLift — Lucy Burton ’26; Tiffany Sorto ’26; Fiona McKay ’27; London Wheeler ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "LumaLift — Lucy Burton ’26; Tiffany Sorto ’26; Fiona McKay ’27; London Wheeler ’27 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Fiona McKay",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (LumaLift); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "LumaLift — Lucy Burton ’26; Tiffany Sorto ’26; Fiona McKay ’27; London Wheeler ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "LumaLift — Lucy Burton ’26; Tiffany Sorto ’26; Fiona McKay ’27; London Wheeler ’27 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "London Wheeler",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (LumaLift); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "LumaLift — Lucy Burton ’26; Tiffany Sorto ’26; Fiona McKay ’27; London Wheeler ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "LumaLift — Lucy Burton ’26; Tiffany Sorto ’26; Fiona McKay ’27; London Wheeler ’27 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "Chemetrian",
+      "description": "AI copilot for chemists to explore experiments.",
+      "website": "https://www.chemetrian.com",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "Chemetrian — Simron Patel ’26 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Simron Patel",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Chemetrian); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Chemetrian — Simron Patel ’26 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Chemetrian — Simron Patel ’26 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "FutureFlow",
+      "description": "Hands-free femoral hemostasis patch.",
+      "website": "https://futureflowhealth.com",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "FutureFlow — Yifat Lerman ’26; Jahnavi Yelluta ’27; Pranav Bajaj ’26; Bradley Leshem ’26 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Yifat Lerman",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (FutureFlow); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "FutureFlow — Yifat Lerman ’26; Jahnavi Yelluta ’27; Pranav Bajaj ’26; Bradley Leshem ’26 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "FutureFlow — Yifat Lerman ’26; Jahnavi Yelluta ’27; Pranav Bajaj ’26; Bradley Leshem ’26 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Jahnavi Yelluta",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (FutureFlow); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "FutureFlow — Yifat Lerman ’26; Jahnavi Yelluta ’27; Pranav Bajaj ’26; Bradley Leshem ’26 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "FutureFlow — Yifat Lerman ’26; Jahnavi Yelluta ’27; Pranav Bajaj ’26; Bradley Leshem ’26 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Pranav Bajaj",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (FutureFlow); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "FutureFlow — Yifat Lerman ’26; Jahnavi Yelluta ’27; Pranav Bajaj ’26; Bradley Leshem ’26 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "FutureFlow — Yifat Lerman ’26; Jahnavi Yelluta ’27; Pranav Bajaj ’26; Bradley Leshem ’26 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Bradley Leshem",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (FutureFlow); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "FutureFlow — Yifat Lerman ’26; Jahnavi Yelluta ’27; Pranav Bajaj ’26; Bradley Leshem ’26 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "FutureFlow — Yifat Lerman ’26; Jahnavi Yelluta ’27; Pranav Bajaj ’26; Bradley Leshem ’26 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "Symbia",
+      "description": "Carbon-neutral leather grown from kombucha bacteria.",
+      "website": "https://www.symbia.studio",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "Symbia — Rayden Yap ’29; Travis Kim ’29; Marco Hartono ’29; Nicolas Angel-Ordonez ’29; Nolan Jones ’27 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Rayden Yap",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Symbia); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Symbia — Rayden Yap ’29; Travis Kim ’29; Marco Hartono ’29; Nicolas Angel-Ordonez ’29; Nolan Jones ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Symbia — Rayden Yap ’29; Travis Kim ’29; Marco Hartono ’29; Nicolas Angel-Ordonez ’29; Nolan Jones ’27 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Travis Kim",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Symbia); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Symbia — Rayden Yap ’29; Travis Kim ’29; Marco Hartono ’29; Nicolas Angel-Ordonez ’29; Nolan Jones ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Symbia — Rayden Yap ’29; Travis Kim ’29; Marco Hartono ’29; Nicolas Angel-Ordonez ’29; Nolan Jones ’27 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Marco Hartono",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Symbia); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Symbia — Rayden Yap ’29; Travis Kim ’29; Marco Hartono ’29; Nicolas Angel-Ordonez ’29; Nolan Jones ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Symbia — Rayden Yap ’29; Travis Kim ’29; Marco Hartono ’29; Nicolas Angel-Ordonez ’29; Nolan Jones ’27 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Nicolas Angel-Ordonez",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Symbia); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Symbia — Rayden Yap ’29; Travis Kim ’29; Marco Hartono ’29; Nicolas Angel-Ordonez ’29; Nolan Jones ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Symbia — Rayden Yap ’29; Travis Kim ’29; Marco Hartono ’29; Nicolas Angel-Ordonez ’29; Nolan Jones ’27 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Nolan Jones",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Symbia); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Symbia — Rayden Yap ’29; Travis Kim ’29; Marco Hartono ’29; Nicolas Angel-Ordonez ’29; Nolan Jones ’27 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Symbia — Rayden Yap ’29; Travis Kim ’29; Marco Hartono ’29; Nicolas Angel-Ordonez ’29; Nolan Jones ’27 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "Xpnse AI",
+      "description": "Financial coordination for organizations that rely on volunteer treasurers.",
+      "website": "https://www.xpnse.ai",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "Xpnse AI — Shannen Lawson ’27; Eden Growney ’26 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Shannen Lawson",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Xpnse AI); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'27",
+            "gradYear": 2027,
+            "evidence": "Xpnse AI — Shannen Lawson ’27; Eden Growney ’26 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Xpnse AI — Shannen Lawson ’27; Eden Growney ’26 — VentureCat 2026 student startup team."
+        },
+        {
+          "name": "Eden Growney",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Xpnse AI); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "recent_grad",
+            "basis": "inferred",
+            "label": "'26",
+            "gradYear": 2026,
+            "evidence": "Xpnse AI — Shannen Lawson ’27; Eden Growney ’26 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Xpnse AI — Shannen Lawson ’27; Eden Growney ’26 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "Deadstock Swim",
+      "description": "Sustainably made swimwear from textile waste.",
+      "website": "https://www.deadstockswim.com",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "Deadstock Swim — Madeline Sugimoto ’29 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Madeline Sugimoto",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Deadstock Swim); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'29",
+            "gradYear": 2029,
+            "evidence": "Deadstock Swim — Madeline Sugimoto ’29 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Deadstock Swim — Madeline Sugimoto ’29 — VentureCat 2026 student startup team."
+        }
+      ]
+    },
+    {
+      "name": "Litia",
+      "description": "Early-stage education platform.",
+      "website": "https://tjwalsh1.github.io",
+      "sourceUrl": "https://www.venturecat.northwestern.edu/about/2026-semifinalists-track-winners.html",
+      "excerpt": "Litia — Thomas Walsh ’28 — VentureCat 2026 student startup team.",
+      "orgPlace": "Northwestern VentureCat 2026",
+      "campusIds": [
+        "univ_northwestern"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": [
+        {
+          "name": "Thomas Walsh",
+          "aliases": [],
+          "campusId": "univ_northwestern",
+          "affiliationRole": "Northwestern VentureCat 2026 team member",
+          "companyRole": "team_member",
+          "founderStatus": "potential",
+          "potentialSignal": "Named 2026 VentureCat startup team member (Litia); legal cofounder role not established by roster",
+          "verificationStatus": "confirmed",
+          "verificationNote": "Northwestern's official 2026 VentureCat roster names this person as a team participant. This is not independent evidence of legal cofounder status.",
+          "enrollment": {
+            "status": "current_student",
+            "basis": "inferred",
+            "label": "'28",
+            "gradYear": 2028,
+            "evidence": "Litia — Thomas Walsh ’28 — VentureCat 2026 student startup team."
+          },
+          "excerpt": "Litia — Thomas Walsh ’28 — VentureCat 2026 student startup team."
+        }
+      ]
+    }
+  ],
+  "potential": [],
+  "links": []
+}
