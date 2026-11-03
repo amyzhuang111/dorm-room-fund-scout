@@ -1215,8 +1215,8 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
           <div className="mb-1 text-[9px] font-semibold uppercase tracking-[0.06em] text-[color:var(--fg-3)]" data-panel-header="">
             Investor hubs
           </div>
-          <ol className="divide-y divide-[color:var(--line)]">
-            {investors.slice(0, 6).map((row, index) => (
+          <ol className="max-h-[280px] divide-y divide-[color:var(--line)] overflow-y-auto md:max-h-none">
+            {investors.map((row, index) => (
               <li key={row.id}>
                 <button
                   type="button"

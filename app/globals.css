@@ -70,6 +70,8 @@
   --nav-h: 56px;
   --content-max: 1200px;
   --gutter: 24px;
+  /* /networks map canvas only — Amy 2:32 AM ET cream; rest of site stays white */
+  --networks-bg: #ece9e4;
   --background: var(--bg);
   --surface: var(--bg-raised);
   --surface-2: var(--bg-sunken);

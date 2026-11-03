@@ -100,7 +100,7 @@ export function NetworksApp() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-[color:var(--fg)]" data-networks-page="">
+    <div className="min-h-screen text-[color:var(--fg)]" data-networks-page="" style={{ background: "var(--networks-bg, #ece9e4)" }}>
       <header className="border-b border-[color:var(--line)] bg-white" data-networks-hero="">
         <div className="mx-auto flex max-w-[1400px] flex-col gap-0.5 px-4 py-2 sm:gap-1 sm:px-6 sm:py-3">
           <div className="flex items-center gap-2 text-[color:var(--cobalt)]">

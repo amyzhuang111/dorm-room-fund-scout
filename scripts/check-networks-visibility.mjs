@@ -47,8 +47,8 @@ const result = await page.evaluate(() => {
   const step = 4;
   let total = 0;
   let non = 0;
-  // Background #fbfaf7
-  const bg = [251, 250, 247];
+  // Background --networks-bg cream #ece9e4 (Amy 2:32 AM ET)
+  const bg = [236, 233, 228];
   for (let y = 0; y < h; y += step) {
     for (let x = 0; x < w; x += step) {
       const d = ctx.getImageData(x, y, 1, 1).data;
