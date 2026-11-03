@@ -1,7 +1,7 @@
-// 2026 campus founder-sourcing expansion. Official dated rosters are preferred.
-// Social platforms and aggregators are discovery-only until a public page
-// independently ties the person, company, and university. The catalogue
-// never substitutes for verified claims in the SQLite database.
+// Official 2026 campus founder-sourcing and public discovery expansion.
+// "implemented" denotes database-ingested official roster or bounded project
+// sample; social tools and directories without per-entity validation remain
+// discovery-only. Never infer founders or enrollment from attendance alone.
 import type { SourceCatalogueEntry } from "./source-quality";
 
 export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
@@ -35,8 +35,9 @@ export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "Use the stated school for each person; team member is not equivalent to legal cofounder."
     ],
-    "status": "unconfigured",
-    "statusNote": "Cohort import dataset prepared for validation; not active in deployed DB until merge."
+    "status": "implemented",
+    "statusNote": "2026 official venture roster imported via batch 20 on 2026-11-03. Source-linked entities were deduplicated against existing records. Any person labeled team_member is not automatically a confirmed founder.",
+    "dbSourceId": "src_v3_entrepreneurship_brown_edu"
   },
   {
     "id": "cat_discovery_brown_venture_prize26",
@@ -68,8 +69,9 @@ export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "Prize finalist is not proof of funding or each individual's legal founder title."
     ],
-    "status": "unconfigured",
-    "statusNote": "Cohort import dataset prepared for validation; not active in deployed DB until merge."
+    "status": "implemented",
+    "statusNote": "2026 official venture roster imported via batch 24 on 2026-11-03. Source-linked entities were deduplicated against existing records. Any person labeled team_member is not automatically a confirmed founder.",
+    "dbSourceId": "src_v3_entrepreneurship_brown_edu"
   },
   {
     "id": "cat_discovery_yale_tsai_fall26",
@@ -101,8 +103,9 @@ export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "The 98 Launch Pad projects are not all named; project/team participation does not establish incorporation."
     ],
-    "status": "unconfigured",
-    "statusNote": "Cohort import dataset prepared for validation; not active in deployed DB until merge."
+    "status": "implemented",
+    "statusNote": "2026 official venture roster imported via batch 22 on 2026-11-03. Source-linked entities were deduplicated against existing records. Any person labeled team_member is not automatically a confirmed founder.",
+    "dbSourceId": "src_v3_city_yale_edu"
   },
   {
     "id": "cat_discovery_yale_tsai_spring26",
@@ -167,8 +170,9 @@ export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "A featured team representative need not be the sole or legal founder."
     ],
-    "status": "unconfigured",
-    "statusNote": "Cohort import dataset prepared for validation; not active in deployed DB until merge."
+    "status": "implemented",
+    "statusNote": "2026 official venture roster imported via batch 23 on 2026-11-03. Source-linked entities were deduplicated against existing records. Any person labeled team_member is not automatically a confirmed founder.",
+    "dbSourceId": "src_v3_entrepreneurship_duke_edu"
   },
   {
     "id": "cat_discovery_mit_delta_v_2026",
@@ -200,8 +204,9 @@ export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "MIT delta v includes some non-MIT participants; do not assume student school or invent missing founder names."
     ],
-    "status": "unconfigured",
-    "statusNote": "Cohort import dataset prepared for validation; not active in deployed DB until merge."
+    "status": "implemented",
+    "statusNote": "2026 official venture roster imported via batch 21 on 2026-11-03. Source-linked entities were deduplicated against existing records. Any person labeled team_member is not automatically a confirmed founder.",
+    "dbSourceId": "src_v3_entrepreneurship_mit_edu"
   },
   {
     "id": "cat_discovery_mit_sandbox_zenith",
@@ -299,8 +304,9 @@ export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "The competition is open to Greater Boston teams, including Harvard students; verify each school."
     ],
-    "status": "unconfigured",
-    "statusNote": "Cohort import dataset prepared for validation; not active in deployed DB until merge."
+    "status": "implemented",
+    "statusNote": "2026 official venture roster imported via batch 25 on 2026-11-03. Source-linked entities were deduplicated against existing records. Any person labeled team_member is not automatically a confirmed founder.",
+    "dbSourceId": "src_v3_mit100k_org"
   },
   {
     "id": "cat_discovery_mit_100k_accelerate26",
@@ -661,8 +667,9 @@ export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "TreeHacks draws students globally; no individual school is confirmed from participation; hacks are projects, not companies."
     ],
-    "status": "unconfigured",
-    "statusNote": "Discovery source; not all items have been individually verified or ingested."
+    "status": "implemented",
+    "statusNote": "2026 Devpost gallery: a bounded 24-project sample was imported on 2026-11-03. Hackathon builds are projects, not confirmed companies; host-school affiliation is unverified.",
+    "dbSourceId": "src_treehacks26_winners"
   },
   {
     "id": "cat_discovery_calhacks13_devpost",
@@ -693,8 +700,9 @@ export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "The Berkeley-hosted event includes non-Berkeley hackers, and a hackathon build is not automatically a startup."
     ],
-    "status": "unconfigured",
-    "statusNote": "Discovery source; not all items have been individually verified or ingested."
+    "status": "implemented",
+    "statusNote": "2026 Devpost gallery: a bounded 24-project sample was imported on 2026-11-03. Hackathon builds are projects, not confirmed companies; host-school affiliation is unverified.",
+    "dbSourceId": "src_calhacks13_devpost"
   },
   {
     "id": "cat_discovery_hackprinceton_spring26",
@@ -725,8 +733,9 @@ export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "Attending Princeton's hackathon does not prove Princeton enrollment."
     ],
-    "status": "unconfigured",
-    "statusNote": "Discovery source; not all items have been individually verified or ingested."
+    "status": "implemented",
+    "statusNote": "2026 Devpost gallery: a bounded 24-project sample was imported on 2026-11-03. Hackathon builds are projects, not confirmed companies; host-school affiliation is unverified. The public cards in this sample did not expose named people; 0 new people.",
+    "dbSourceId": "src_hackprinceton_spring26"
   },
   {
     "id": "cat_discovery_hackharvard26",
@@ -757,8 +766,9 @@ export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "Attending Harvard's hackathon does not prove Harvard enrollment."
     ],
-    "status": "unconfigured",
-    "statusNote": "Discovery source; not all items have been individually verified or ingested."
+    "status": "implemented",
+    "statusNote": "2026 Devpost gallery: a bounded 24-project sample was imported on 2026-11-03. Hackathon builds are projects, not confirmed companies; host-school affiliation is unverified.",
+    "dbSourceId": "src_hackharvard26_devpost"
   },
   {
     "id": "cat_discovery_hackillinois26",
@@ -789,8 +799,9 @@ export const CAMPUS_FOUNDER_SOURCE_EXPANSION: SourceCatalogueEntry[] = [
     "whatNotToInfer": [
       "A prize-winning build is not evidence of current UIUC student status or incorporated business."
     ],
-    "status": "unconfigured",
-    "statusNote": "Discovery source; not all items have been individually verified or ingested."
+    "status": "implemented",
+    "statusNote": "2026 Devpost gallery: a bounded 24-project sample was imported on 2026-11-03. Hackathon builds are projects, not confirmed companies; host-school affiliation is unverified.",
+    "dbSourceId": "src_hackillinois26_devpost"
   },
   {
     "id": "cat_discovery_twitter_x_builder_search",
