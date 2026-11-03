@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-11-03T04:56:29.212Z",
+  "generatedAt": "2026-11-03T07:55:15.188Z",
   "dbPath": "data/campus-universe.db",
-  "investableCompanies": 1225,
+  "investableCompanies": 1388,
   "signals": 1476,
   "datedSignals": 279,
   "undatedSignals": 811,
-  "people": 6043,
-  "founders": 2900,
+  "people": 6192,
+  "founders": 3051,
   "campuses": 170,
   "withSignal": 649,
   "ycCompanies": 564,
@@ -14,12 +14,12 @@
     "peakCount": 33,
     "peakId": "2026-04",
     "peakLabel": "Apr 2026",
-    "dated": 77,
-    "sharePct": 43,
-    "inWindow": 67,
+    "dated": 81,
+    "sharePct": 41,
+    "inWindow": 69,
     "earlierValid": 0,
-    "undatedMonth": 10,
-    "quiet": 1048
+    "undatedMonth": 12,
+    "quiet": 1207
   },
   "restore": {
     "beforeInvestable": 2499,
@@ -27,15 +27,15 @@
     "restoredDrops": 10,
     "kaigoMerged": true
   },
-  "directoryCards": 1225,
+  "directoryCards": 1388,
   "signalsDated": 665,
   "signalsUndated": 811,
-  "foundersIndexed": 3205,
-  "foundersListed": 2104,
+  "foundersIndexed": 3356,
+  "foundersListed": 2257,
   "campusesTotal": 170,
-  "campusesOnMap": 161,
-  "campusesWithFounders": 63,
-  "companiesWithSignal": 177,
+  "campusesOnMap": 163,
+  "campusesWithFounders": 68,
+  "companiesWithSignal": 181,
   "ycMembership": 319,
   "campusFoundersTop": [
     {
@@ -55,8 +55,8 @@
     {
       "name": "University of California, Berkeley",
       "short": "Berkeley",
-      "founders": 245,
-      "companies": 146,
+      "founders": 246,
+      "companies": 147,
       "country": "United States"
     },
     {
@@ -88,6 +88,13 @@
       "country": "United States"
     },
     {
+      "name": "Santa Clara University",
+      "short": "Santa Clara",
+      "founders": 104,
+      "companies": 114,
+      "country": "United States"
+    },
+    {
       "name": "Carnegie Mellon University",
       "short": "CMU",
       "founders": 101,
@@ -100,16 +107,9 @@
       "founders": 84,
       "companies": 46,
       "country": "United States"
-    },
-    {
-      "name": "University of Waterloo",
-      "short": "Waterloo",
-      "founders": 81,
-      "companies": 44,
-      "country": "Canada"
     }
   ],
-  "companiesTotal": 5665,
+  "companiesTotal": 5819,
   "excludedOlderAlumni": 235,
-  "unverifiedRecency": 4171
+  "unverifiedRecency": 4163
 }

@@ -1,0 +1,1479 @@
+[
+  {
+    "name": "Cast",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.castfinance.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Accounting, finance, and tax services for small and midsize companies.",
+    "founders": [
+      {
+        "name": "Joey Alfano",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Matt Talbot",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Mind the GAAP",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://mindthegaap.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "We help companies and auditors navigate through and apply complex accounting standards.",
+    "founders": [
+      {
+        "name": "Matt Talbot",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Cast",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Scott Ehrlich",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Brightwood Design + Build",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.brightwoodbuild.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Beautifully designed and constructed home renovations.",
+    "founders": [
+      {
+        "name": "Jasmine Niernberger",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "CRAFT Architecture Studio",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://craftarchitecturestudio.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Delivering design solutions that fulfill the fundamentals of an architect's trade: the creation of clear, creatively developed drawings that allow for comprehension of design intent and contribute to an efficient construction process.",
+    "founders": [
+      {
+        "name": "Jasmine Niernberger",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Brightwood Design + Build",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Adam Wright",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Re:Fab",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://refab-db.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Driven to improve productivity of design and construction and address escalating costs and decline of quality in an ethical and aesthetically moving manner.",
+    "founders": [
+      {
+        "name": "Rich Cieciuch",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Astrio",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.astrio.app/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "The world's first AI platform dedicated to website modernization.",
+    "founders": [
+      {
+        "name": "Nolan Lwin",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Hung Pham",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Daedalus Industries",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.daedalusindustries.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Create, edit, and review manufacturing documentation in a fraction of the time using the power of AI.",
+    "founders": [
+      {
+        "name": "Uttam Kumaran",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Brainforge",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Malcom Sturgis",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Guru",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.getguru.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Your AI source of truth – find, improve, and share trusted info, security and permissions built-in, right where your team works.",
+    "founders": [
+      {
+        "name": "Mordecai Obeng-Appiah",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Mitch Stewart",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Tonic",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.tonic.ai/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Synthetic data solutions for software and AI development.",
+    "founders": [
+      {
+        "name": "Mike Molinet",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Andrew Colombi",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Anatole Advisory",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.anatoleadvisory.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Empowering underserved founders & business owners to launch their ideas and prepare to raise capital with confidence.",
+    "founders": [
+      {
+        "name": "Alec Sanders",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Anna Tolulope Ogundipe",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Arize",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.arizegp.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Strategize + implement the transformation that inspires and drives organizations forward.",
+    "founders": [
+      {
+        "name": "Anatole Advisory",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Evan Berkley",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "KBHJewels",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.kbhjewels.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Sustainable fine jewelry handcrafted with 100% recycled solid gold, cultivated luxury diamonds and sustainably cultured South Sea pearls",
+    "founders": [
+      {
+        "name": "Kimberly Berry Haisch",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Longboat Leather",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://longboatleather.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Timeless leather, unmatched craftsmanship, custom high-quality leather goods.",
+    "founders": [
+      {
+        "name": "Kimberly Berry Haisch",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "KBHJewels",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Grant Lewis",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Stantt",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://stantt.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Custom men's apparel. Find your perfect fit.",
+    "founders": [
+      {
+        "name": "Grant Lewis",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Longboat Leather",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Matt Hornbuckle",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Uscape Apparel",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://uscapeapparel.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Celebrating experiences by crafting timeless apparel that",
+    "founders": [
+      {
+        "name": "Stantt",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Alex Nowlin",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Emily Demshki",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Mid-Atlantic Partners",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.mid-atlanticpartners.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "A boutique strategy consulting firm that specializes in helping lower, middle market companies in the Mid-Atlantic. Our responsibility is to elevate and fulfill your operational, financial, and strategic goals.",
+    "founders": [
+      {
+        "name": "David “Ledge” Ledgerwood",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Schuyler Rooke",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "MIND Impact Consulting",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://melissamilanak.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Helping organizations and their employees achieve optimal performance through quality sleep, eliminating burnout and fatigue while increasing focus, collaboration, and workplace productivity.",
+    "founders": [
+      {
+        "name": "Melissa Milanak",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "The Lonely Entrepreneur",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://lonelyentrepreneur.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "One place to go for the knowledge, tools, ongoing support and community every entrepreneur needs.",
+    "founders": [
+      {
+        "name": "Todd Wildman",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Michael Dermer",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Odyssey Photography",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.google.com/url?q=https://www.instagram.com/0dyssey.ph0t0graphy/&amp;source=gmail&amp;ust=1790100092577000&amp;usg=AOvVaw2TTUpR3AxQ44gMD8VyxF6Q",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "A photography business centered on fine-art, travel, architectural, street, and landscape imagery",
+    "founders": [
+      {
+        "name": "Danielle Kuck",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Ben Damiano",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Lyric's Lip Candy LLC",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://www.lyricslipcandy.shop/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Black Woman-Owned, Natural, Research-Driven Cosmetics",
+    "founders": [
+      {
+        "name": "Odyssey Photography",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Lyric Abdul-Rasheed",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "SochCo Designs",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://sochcodesigns.myshopify.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Bring home the places that bring you joy. Our hand-illustrated prints are designed to capture the heart of your favorite town — and look beautiful doing it.",
+    "founders": [
+      {
+        "name": "Scarlet Kashuba",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Sarah Och",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Wild Hand",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://wild-hand.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Supply shop for fiber folk.",
+    "founders": [
+      {
+        "name": "SochCo Designs",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Liz Sytsma",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Campus View Consulting",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.campusviewconsulting.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Helps families through the college search and application process, find “right fit” schools and reduce the stress of family interactions.",
+    "founders": [
+      {
+        "name": "Tami Benanav",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Interview Prep",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.interviewprepllc.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Helping prospective students make the most of every interview.",
+    "founders": [
+      {
+        "name": "Campus View Consulting",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Alison Slater",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Acrospire Brewing Company",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.acrospirebrewingco.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "A small craft brewery focusing on traditional brewing methods and ingredients. Your neighborhood hangout.",
+    "founders": [
+      {
+        "name": "Kevin Murphy",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "J.Q. Dickinson Salt-Works",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.jqdsalt.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "A 7th generation salt-making family harvests an all-natural salt by hand from an ancient ocean trapped below the Appalachian Mountains of the Kanawha Valley in West Virginia.",
+    "founders": [
+      {
+        "name": "Nancy Bruns",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "NYC Cooking Club",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://nyccookingclub.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Effortless, nutritious meal prep delivered to your doorstep",
+    "founders": [
+      {
+        "name": "J.Q. Dickinson Salt-Works",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Lisa Spodak",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Talea Beer",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.taleabeer.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Craft beer and craft breweries marketed towards women and an inclusive, approachable beer company.",
+    "founders": [
+      {
+        "name": "Lisa Spodak",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "NYC Cooking Club",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Tara Hankinson",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "ShiftMed",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.shiftmed.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Redefines the relationship between nurses and healthcare facilities, fostering a more adaptable, efficient, and patient-centered healthcare system through innovative technology solutions.",
+    "founders": [
+      {
+        "name": "Todd Walrath",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Unio",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.uniocare.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Unio simplifies communication between care providers, patients, and families, providing real-time healthcare updates for better peace of mind.",
+    "founders": [
+      {
+        "name": "ShiftMed",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Akash Kaul",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Wellnest",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.hellowellnest.com/en",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Wellnest connects the health data from your wearable to the people who need to see it — your doctor, your family, your team.",
+    "founders": [
+      {
+        "name": "Andrew Vinnik",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Elias Strizower",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Lucas Colagrossi",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Wisdom",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.mywisdom.io/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Smart home technology to support aging in place.",
+    "founders": [
+      {
+        "name": "Brenden Tuttle",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Dawn (Newsome) Marinaccio",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Branch",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://staywithbranch.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Check out these cool places to vacation in beautiful West Virginia",
+    "founders": [
+      {
+        "name": "Ian Joseph",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "FingerLakes.com",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.fingerlakes.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Discover the Finger Lakes – a wonderland of deep gorges, cascading waterfalls, sparkling lakes, and acres of forests, farms and vineyards.",
+    "founders": [
+      {
+        "name": "Branch",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "The Billy Motel",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Gordon Brott",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Gesso",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.gesso.app/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Crafting curated audio guides for marvelous places.",
+    "founders": [
+      {
+        "name": "FingerLakes.com",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Mike Reyolds",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Henna Wang",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Tavola",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://tavolafiji.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Exclusive. Personalized. Luxury. Your Fiji private villa escape on the edge of the world.",
+    "founders": [
+      {
+        "name": "Monica Laurence",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Campus Swap",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://usecampusswap.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Helping students re-sell items and minimize landfill impact.",
+    "founders": [
+      {
+        "name": "Ben Buxbaum",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "CodeGreen",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.codegreen.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Helps clients achieve energy and resource efficient, healthy, safe, and optimally functioning spaces with increased value by integrating core services and solutions under one roof.",
+    "founders": [
+      {
+        "name": "Ben Buxbaum",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Campus Swap",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Stephen Rizzo",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Forevergreen",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://www.forevergreen.earth/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Track and offset your carbon emissions; plant a tree.",
+    "founders": [
+      {
+        "name": "Zack Yardley",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Ben Suit",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "OneEthos",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.oneethos.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "olar financing technology for installers and financial institutions, enabling Community Banks, Credit Unions, CDFIs, and Green Banks to grow their loan portfolios profitably and responsibly.",
+    "founders": [
+      {
+        "name": "Ben Suit",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Forevergreen",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Justin Bretting",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Lynn Mull Transformational Coach",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.lynnmull.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "",
+    "founders": [
+      {
+        "name": "Lynn Mull",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Snoyak",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://snoyak.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "The next revolution in sit-skis for all abilities and means.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Listen Network",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://www.listennetwork.co/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Paid podcast distribution with guaranteed, measurable results.",
+    "founders": [
+      {
+        "name": "David “Ledge” Ledgerwood",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Riggg",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "alumni",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://riggg.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "Offering professional live podcast and event production services",
+    "founders": [
+      {
+        "name": "David “Ledge” Ledgerwood",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Listen Network",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "David “Ledge” Ledgerwood",
+        "affiliation_type": "alumni",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni-heavy Bucknellian directory without class-year >=2023 evidence on page",
+    "_source_key": "bucknell"
+  },
+  {
+    "name": "Club Ralley",
+    "university": "Bucknell University",
+    "campusId": "univ_bucknell",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://www.clubralley.com/",
+    "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/",
+    "program": "Bucknellian Founded Ventures",
+    "source": "src_bucknell_ventures_2026_11_03",
+    "description": "A virtual hub for post-grad athletes, with IRL events.",
+    "founders": [
+      {
+        "name": "Jaycie Mair",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Caroline Marcus",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      },
+      {
+        "name": "Abby Platt",
+        "affiliation_type": "current_student",
+        "grad_year": null,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://pgcei.scholar.bucknell.edu/bucknellian-founded-ventures/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "bucknell"
+  }
+]

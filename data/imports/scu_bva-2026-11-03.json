@@ -1,0 +1,4722 @@
+[
+  {
+    "name": "AECInspire, Inc.",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://aecinspire.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "AECInspire helps electrical contractors streamline material workflows by connecting takeoff, BOM generation, prefab planning, and installation coordination in a single, integrated platform.",
+    "founders": [
+      {
+        "name": "Ashfaq Rasheed",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "AI ECD",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://aiecd.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Kidooo AI is a multimodal AI agent for personalized autism care. We transform therapy sessions and home videos into clinician-ready documentation for therapists and actionable guidance for families.",
+    "founders": [
+      {
+        "name": "Jing Zhang",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "AI4Nomads",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.ai4nomads.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "A data labeling platform to label training data for Computer Vision in AI for Autonomous Vehicles.",
+    "founders": [
+      {
+        "name": "Susanna Raj",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Align Money",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Align Money brings \"Banking as a Benefit\" to employees through an online subscription by giving them access to the best financial products and services at their workplace.",
+    "founders": [
+      {
+        "name": "Rajesh Patil",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Aligned AI",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://buildaligned.ai",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "We help AI behave itself properly - even when acting autonomously in situations it's creators were not able to prepare it for (Deep tech).",
+    "founders": [
+      {
+        "name": "Rebecca Gorman",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "AmolinoAI",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://amolino.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Amolino is a teammate for Account Executives in B2B sales. It learns & models the behaviors and skills of A-player's skills to help them close winnable deals or identify them as closed-lost earlier.",
+    "founders": [
+      {
+        "name": "Aseem Asthana",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "AngioLytics",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Cris Wedekind",
+    "founders": [
+      {
+        "name": "Cris Wedekind",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Argyle Earth",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://www.argyleearth.com",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "We help food manufacturers generate electricity from their waste heat, lowering their overall energy costs.",
+    "founders": [
+      {
+        "name": "Kristina McMillan",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Armada Aeronautics",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": "https://alef.aero/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA4 / 2022 Hardware & Robotics Climate & Energy",
+    "founders": [
+      {
+        "name": "Jim Dukhovny",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "AtmoCooling, Inc.",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://www.atmocooling.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "AtmoCooling transforms coastal deserts into thriving hubs of agriculture, clean energy, and climate resilience, using patented large scale evaporative cooling, seawater, and solar energy.",
+    "founders": [
+      {
+        "name": "Paul Mahacek",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Authillo",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": "https://thetawise.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Authillo is a sign-in service that prevents fake accounts on any online platform, while simultaneously preserving user privacy. Our proprietary browser-based facial recognition & liveness detection software allows us to guarantee users are who they claim to be with over 99.99% accuracy.",
+    "founders": [
+      {
+        "name": "James Grom",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Avilta",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://www.avilta.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA8 / 2026 AI & Data Enterprise Consumer",
+    "founders": [
+      {
+        "name": "James Rellera",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Axon Interfaces",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://www.axoninterfaces.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA5 / 2023 Healthcare Hardware & Robotics",
+    "founders": [
+      {
+        "name": "Julian Marc",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Beebizy",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://www.beebizy.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Beebizy is redefining how events are planned. We aim to be the go-to platform for anyone organizing an event, big or small, by offering a clean, elevated, and intuitive experience. Just like Instacart changed grocery shopping, we're transforming event planning into a seamless, smart, and delightful process. From birthday parties to corporate galas, Beebizy helps users build their events like a cart clear, customized, and checkout-ready, while giving vendors an easy, transparent way to manage and grow their business.",
+    "founders": [
+      {
+        "name": "Laila Marshall",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "BeemaBroker",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2019,
+    "enrollment_status": "older_alumni",
+    "website": "https://beemabroker.com",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA1 / 2019",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BeemaBroker makes the learning, purchasing and managing of business insurance easy and transparent for millennial entrepreneurs while maintaining the highest level of integrity.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Biomotum",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://www.biomotum.com",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA5 / 2023 Healthcare Hardware & Robotics",
+    "founders": [
+      {
+        "name": "Ray Browning",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Blockrize",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2019,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA1 / 2019",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Blockrize is a San Francisco-based financial technology company that is building the Blockrize card, the first credit card with Bitcoin and Ethereum rewards. Our mission is to simplify the process and lower the risk for consumers to invest in cryptocurrency so that it becomes more accessible to all.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "BOLDE",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://boldebottle.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BOLDE Bottle helps supplement users lead healthier, hassle-free lives with the only all-steel design that solves the issues with traditional plastic bottles.",
+    "founders": [
+      {
+        "name": "Alex Pennington",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Borde",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.borde.io/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "We are on a mission to make world's food supply safer, and to improve and enhance sustainability practices.",
+    "founders": [
+      {
+        "name": "Saumitra Buragohain",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Brand Story Machine",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://www.brandstorymachine.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Brand Story Machine delivers brand strategy and messaging—fast, affordably, and without the agency bloat. Built for time-strapped, resource-conscious founders, it combines expert facilitation + system 1 thinking + AI efficiency to generate a complete brand platform and go-to-market messaging toolkit in just one day. Guided by 20+ years of human brand experience and sharpened with smart AI prompting, it helps startups and small businesses sound sharp, stand out, and scale with confidence.",
+    "founders": [
+      {
+        "name": "Shannon Riordan",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Breinify",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": "https://home.breinify.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Breinify is the leading turnkey AI platform for consumer enterprises to predict and act on an individual's highly dynamic interests.",
+    "founders": [
+      {
+        "name": "Diane Keng",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Bullseye",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "We are revolutionizing the hiring process by empowering job seekers with personal agents and employers with specialized headhunters",
+    "founders": [
+      {
+        "name": "Keren Boiman",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Calorify",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://www.calorify.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Calorify was the first to bring this proven and precise measurement to market by building out the largest lab of its kind in the world and developing new processes to make doubly labeled water faster, cheaper, and available in an at-home setting.",
+    "founders": [
+      {
+        "name": "Hari Mix",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "CarbonBridge",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.carbonbridge.io/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Production of high value industrial gases and fuels from dairy waste.",
+    "founders": [
+      {
+        "name": "Manu Pillai",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Career Library",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://www.careerlibrary.org/?v=1cfd114914fb8018b3cb000c440ed22c",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Empowering high school and college students to explore diverse career paths based on their field of study, interests, passion through career stories of professionals across all industry verticals",
+    "founders": [
+      {
+        "name": "Minny Walia",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "CipherGov.AI",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://www.ciphergov.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "CipherGov.ai is a governed AI control layer built for high‑reliability, high‑risk industries where AI actions must be validated before execution. It provides pre‑execution governance, cryptographic auditability, and PQC‑secured data flows for autonomous systems, multi‑agent AI, and enterprise decisioning.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Clara",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Clara is an AI-powered sustainability platform that transforms complex ESG data into captivating, swipeable brand stories. We connect fashion brands doing the hard work with consumers who care by turning compliance into credibility and sustainability into a marketing superpower. Think of Clara as the connectivity of LinkedIn and the simplicity of scrolling on Airbnb to brought to sustainability.",
+    "founders": [
+      {
+        "name": "Sophia Zuchetto",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "CleverMove.ai",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": "https://clevermove.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA4 / 2022 Hardware & Robotics AI & Data",
+    "founders": [
+      {
+        "name": "Mehul Gandhi",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Clinical Product Insights",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Clinical Product Insights helps medtech teams confidently navigate their path to clinical adoption. CPI combines clinical engineering expertise with a SaaS-enabled platform model to help teams reduce costly rework, de-risk commercialization, and bring clinically valuable technologies to patients faster.",
+    "founders": [
+      {
+        "name": "Emma Essock-Burns",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "ClosinAI",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://closin.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Vertical AI Back Office for Revenue Teams",
+    "founders": [
+      {
+        "name": "Alex Rossie",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "CloudEagle.ai",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.cloudeagle.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "CloudEagle.ai helps IT, security & Procurement teams manage, govern & renew all their SaaS apps from one single platform.",
+    "founders": [
+      {
+        "name": "Tao Li",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "CloudSpend",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "AI-powered platform that helps companies manage software vendors and reduce costs.",
+    "founders": [
+      {
+        "name": "Nidhi Jain",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Collaborative Asset Platform",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": "https://docs.google.com/spreadsheets/d/14kGo7GQelZfOQ2lUzqewHE_DRdzOXfYV77pYGLUlxyw/edit?usp=sharing",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Gavin Wickremasuriya",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "CompeteIQ",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": "https://competeiq.io/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "The CompeteIQ System is a SAAS platform that helps Enterprise Sales teams win more competitive deals by putting information about their competitors in their hands at the right time. Competitive intelligence sales support tools include intelligent, dynamic battle cards, news monitoring, categorizing and rating, win/loss systems and newsletter generation.",
+    "founders": [
+      {
+        "name": "Daniel Bruckner",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Conello",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://conello.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Conello is a web-based employee experience platform that helps distributed teams build stronger relationships through play, peer recognition, and continuous insights that support performance and retention without adding to leadership's workload.",
+    "founders": [
+      {
+        "name": "Kyra Boveda, MBA",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Consulete",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA4 / 2022 Climate & Energy Hardware & Robotics",
+    "founders": [
+      {
+        "name": "Salem Al Agtash",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "cothink",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://www.letscothink.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Your ai assistant for scenario planning and business intelligence.",
+    "founders": [
+      {
+        "name": "Mihir Dave",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Coulomb Technology",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://coulombtechnology.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA5 / 2023 Climate & Energy Hardware & Robotics",
+    "founders": [
+      {
+        "name": "Tim Vosburgh",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Criticality Sciences",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.critsci.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "We analyze clients' infrastructure networks using our software (NetResilience™), calculate how fragile their systems are, and tell them what to do about it. We offer multiple levels of service, providing different values to our clients (mitigation ROI maximization, critical customer prioritization, rate application substantiation, recovery order optimization, etc.).",
+    "founders": [
+      {
+        "name": "Ross Dakin",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Crowdfund Your Fees",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.crowdfundyourfees.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "We are building a platform to allow people to fund people with dreams globally. Crowd Fund Your Fees connects students to a global community of people ready to fund them instead of banks.",
+    "founders": [
+      {
+        "name": "Eve Idusuyi",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Customer Vineyard",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://customervineyard.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Instead of a credit score to measure risk, we deliver instead the CV Opportunity Score--- versioned by industry---to highlight customer potential. With just one score for every customer or prospect, companies know at a glance where to focus their sales & marketing efforts to improve the bottom line. (We use AI/ML to test and translate multiple, vast consumer datasets into one constantly updated score for each customer by industry.)",
+    "founders": [
+      {
+        "name": "Mary Jo (MJ) Dale",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "CyVR",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.cyvr.one/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Creating a more immersive shopping experience through finding local communities and businesses in a virtual world. It is essentially an open marketplace for anyone to sell & buy real products and 3D models similar to Etsy. Main platform would be web based XR, so that people can browse as a 2D website as well as view them in 3D from their browser and even phones.",
+    "founders": [
+      {
+        "name": "Brian Hong",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Dash Suite",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2019,
+    "enrollment_status": "older_alumni",
+    "website": "https://dashsuite.webflow.io/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA1 / 2019",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "DashSuite is an all-inclusive digital marketing platform providing businesses of all sizes with the tools they need to succeed in the social media world.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Define Medical",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://define-medical.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA6 / 2024 BVA7 / 2025 Healthcare AI & Data",
+    "founders": [
+      {
+        "name": "Alejandro Rendon",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Diaspora Seattle",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Diaspora Yaupon Co. began operations in Seattle, WA in May of 2023, and bootstrapped to $200,000 in direct sales of yaupon beverages with strong margins in 2024. The team is now pivoting to producing high quality Yaupon-based ingredients and products to ensure reliable supply for all businesses and consumers in the market.",
+    "founders": [
+      {
+        "name": "Ian McCluskey",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Digraph",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA5 / 2023 Security AI & Data Enterprise",
+    "founders": [
+      {
+        "name": "James Lewis",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Diskify",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://www.diskify.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Diskify is building the future of consumer file management software by integrating AI into the desktop for improved search, management, and folder organization. File management hasn't changed in decades, and still relies on folders, filenames, and manually digging. Diskify's goal is to change that, and integrate AI across cloud and local files--starting with the desktop.",
+    "founders": [
+      {
+        "name": "Francisco Salinas",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "DrawScale",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://drawscale.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "DrawScale automates construction takeoff and estimation.",
+    "founders": [
+      {
+        "name": "John (Jack) Stephens",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Dream Career Academy",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2019,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.careerlaunch.academy/homepage",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA1 / 2019",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "We are a social enterprise committed to driving post-education employability through 1) advisory services for leadership 2) capacity building for faculty and staff 3) curriculum, programming, and resources for students centered on career readiness skills, career-aligned social capital, and life design mindsets and best practices.",
+    "founders": [
+      {
+        "name": "Sean O'Keefe",
+        "affiliation_type": "alumni",
+        "grad_year": 2019,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Drem",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "A social investing platform with the community of Twitter and user experience of Robinhood thatretains the values of crypto: self-custody, decentralization, openness, and transparency.",
+    "founders": [
+      {
+        "name": "Darius Johnson",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Dropshop Technologies",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Dropshop enables fashion and beauty brands to offer their customers instant/scheduled delivery, in-home return pickup service, AI powered product recommendations, real-time tracking, and customer support.",
+    "founders": [
+      {
+        "name": "Ricardo Gomez-Cendon",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Dropsite",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://dropsite.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Dropsite is the missing interface for Generative AI, enabling teams to turn conversations into repeatable processes that enhance efficiency and drive long-term results.",
+    "founders": [
+      {
+        "name": "Megan Welsh",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Durevie",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Durevie is a cancer survivorship platform that automates guideline-aligned care, proactively closing the gap between cancer treatment and lifelong health, so no survivor falls through the cracks.",
+    "founders": [
+      {
+        "name": "Carolyn Reyes",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "E-POPS",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "E-POPS™ are a new form of energy chewable in a stainless steel, refillable dispenser. Unlike existing energy chews, gels or bars, there's no mess, no fumbling, and no plastic wrappers going into landfill.",
+    "founders": [
+      {
+        "name": "Claire Venezia",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Earth Foundries",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://www.earthfoundriesinc.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Earth Foundries is a clean-tech, waste-to-value, advanced materials company. To end catastrophic wildfire, we dramatically lower the cost and carbon footprint of forest restoration.",
+    "founders": [
+      {
+        "name": "Roger Smullen",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Edily Learning",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Edily is a mobile app that curates the best user-generated education videos, built by engaging creators, and organizes them into curriculum.",
+    "founders": [
+      {
+        "name": "Jonathan Ho",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Educational Vision Technologies",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://evt.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "EVT.ai provides A.I. video editing and knowledge curation to transform video recordings (Zoom, etc) into short video chapters with a table of contents, quizzes, summaries, and transcript for engaging and accessible online learning and efficient organizational knowledge share.",
+    "founders": [
+      {
+        "name": "Charry Wu",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Elizée",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://elizeeshoes.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Designer shoe brand that blends exquisite craftsmanship with exceptional comfort with a patent pending insole - redefining the standard in the market. Backed by a devoted customer base, we capitalize on the evolving consumer behavior that prioritizes comfort without compromising on style.",
+    "founders": [
+      {
+        "name": "Erika Carrero",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "envite",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.envite.us/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "envite is a universal collaboration platform that rapidly connects disparate business applications and workflows without disruption.",
+    "founders": [
+      {
+        "name": "Rajeev Garg",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "everb",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "everb is an AI-powered healthcare platform designed to enhance patient-provider communication and streamline clinical workflows. By combining voice-enabled assistance with real-time medical insights, everb supports patients during hospital visits and empowers providers with tools for more efficient, informed care.",
+    "founders": [
+      {
+        "name": "Trevor Bikhram",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Eversparks",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.eversparks.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Eversparks is a digital health platform that connects patients to therapists through shared cultural background.",
+    "founders": [
+      {
+        "name": "Nicholas Radich",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "expVali",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://www.expvali.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "expVali is a privacy-preserving Experience Validation service that uses IRS information to verify work history and uncover omissions and/or discrepancies.",
+    "founders": [
+      {
+        "name": "Aleksey \"Alex\" Dvorkin",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Fanalyze",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.fanalyze.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Fanalyze is a sports search engine and analysis platform to speed up research forfantasy sports and sports betting while providing users with relevant aggregated data to help with winning decisions.",
+    "founders": [
+      {
+        "name": "Chris Longboy",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Fireside",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Your bridge between dating apps and a real relationship.",
+    "founders": [
+      {
+        "name": "Stone Strickland",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Flok",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Flok is an open, anonymous community for sharing fun thoughts and stories around you! Connect and relate with your friends and classmates in a way that has never been possible before.",
+    "founders": [
+      {
+        "name": "Spencer Rowley",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Flora Haven",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://florahaven.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Flora Haven is a multi-purpose premium floral boutique, interior design showroom, and event venue that blends nature, creativity, and community — all in one Instagram-worthy destination. From fresh flowers to curated interiors and dreamy events, every corner is designed to inspire, connect, and bloom. Our 11,000 sq. ft. flagship in San Jose is designed as a sensory, nature-filled retreat unlike anything in the Bay Area.",
+    "founders": [
+      {
+        "name": "Minnie Uyen Thai",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Fluid Robotics",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.fluidanalytics.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA2 / 2020 Hardware & Robotics Climate & Energy",
+    "founders": [
+      {
+        "name": "Asim Bhalerao",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "FluidAI",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://fluidailabs.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA7 / 2025 AI & Data Hardware & Robotics",
+    "founders": [
+      {
+        "name": "Matthew Uffenheimer",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "formOlé",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "We inspire Sports Athletes to continue Skills learning and practice in the metaverse, where their peers and mentors are increasingly present. We do this by providing an accessible, engaging experience that fits their active lifestyle.",
+    "founders": [
+      {
+        "name": "Faisal Haq",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "FraudFront",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://fraud-front.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "FraudFront protects older Americans from fraud so they may confidently enjoy emotional stability, psychological safety, and financial independence.",
+    "founders": [
+      {
+        "name": "Alex Gong",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Fuel AI",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://gofuel.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "MIT researchers have predicted that we will run out of data to train AI by 2026. Fuel AI is a two-sided marketplace platform for 1st party AI training data and for people to get paid for their data.",
+    "founders": [
+      {
+        "name": "Virginia Puccio",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Full Spectrum Genetics",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": "https://fsgene.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Full Spectrum Genetics' fully patented technology helps biotech companies rapidly and cost-effectively achieve their antibody product design goals, establish broader intellectual property coverage, and gain key insights into the disease target structure.",
+    "founders": [
+      {
+        "name": "Russell Wall",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Future Photonics",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Drawing upon the expertise of its highly qualified PhD researchers and engineers, Future Photonics develop and deliver the innovative cost-effective photonic solution entitled “Future DAS”, which is a Distributed Fiber-Optic Acoustic Sensing Platform for the Oil and Gas industry. Ultimately, this platform will be further customized to also serve other market niches.",
+    "founders": [
+      {
+        "name": "Sergio Barcelos",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "FutureReady",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA8 / 2026 Education Hardware & Robotics",
+    "founders": [
+      {
+        "name": "George Gorospe",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "FyrDraft",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://fyrdraft.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "IP (particularly patent) services for small businesses and law firms.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Gavano",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Energy analytics for enterprise infrastructure.",
+    "founders": [
+      {
+        "name": "Srini Sekaran",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "GluMo",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2019,
+    "enrollment_status": "older_alumni",
+    "website": "https://glumotech.net/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA1 / 2019",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA1 / 2019 Healthcare Hardware & Robotics",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Gnosis Learning",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://apexams.us/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Gnosis Learning transforms ebooks into Collaborative Intelligent eBooks using Generative Virtual Overlay Technology to simplify learning.",
+    "founders": [
+      {
+        "name": "Srinivas Bharadwaj",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "GoGrant",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "GoGrant is a financial management system for NGOs in Africa. We eliminate manual procedures to enable NGOs to focus on their impactful work.",
+    "founders": [
+      {
+        "name": "Amazing Vheriwa",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "GrantLock",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://grantlock.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "GrantLock is the enterprise posture and governance platform for AI security, detecting 100+ agentic-AI threats and mapping to 12+ compliance frameworks. Open-source + SaaS.",
+    "founders": [
+      {
+        "name": "Vimal Suba",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Groupflows",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.groupflows.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Groupflows is a website which lets people arrange casual events and activities with each other. Our features help people overcome the logistical challenges associated with getting together in groups.; In particular, our unique time coordination system helps groups quickly determine the best time to meet. It lets anyone in a group suggest event times and merges the suggestions into a chronological list.",
+    "founders": [
+      {
+        "name": "Willis Mattei",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "H3 Healthcare Holdings",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://h3althcare.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Let H3 optimize your healthcare business so you can focus on what you do best: caring for patients.",
+    "founders": [
+      {
+        "name": "Clayton Hoefer",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "HarvaAI",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://harvaai.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA7 / 2025 Hardware & Robotics AI & Data",
+    "founders": [
+      {
+        "name": "Yun Jia",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Homestands",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://homestands.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Homestands is building a next-generation sports ticketing platform that transforms how season ticket holders manage, share, and sell their seats. Unlike anonymous secondary marketplaces, Homestands gives season ticket holders full control over their inventory, enabling personalized transactions, relationship-building with buyers, and powerful management tools that serve as a digital assistant throughout the entire season.",
+    "founders": [
+      {
+        "name": "Jamie Zimmerman",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "HopThru",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2019,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.goswift.ly/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA1 / 2019",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Helping public transit become the most compelling mode of urban travel.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Hydration Automation",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": "https://hydrationautomation.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA2 / 2020 Climate & Energy Hardware & Robotics",
+    "founders": [
+      {
+        "name": "Peter Ferguson",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Hyperspectral.ai",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://www.hyperspectral.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA5 / 2023 AI & Data Hardware & Robotics",
+    "founders": [
+      {
+        "name": "Paolo Masini",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Hyperstack",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": "https://thehyperstack.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Hyperstack Credential Cloud is an innovative Web 3.0 platform favored by enterprises and educational institutions for its transformative credentialing approach.",
+    "founders": [
+      {
+        "name": "Sriram Sundararajan",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Indicia Labs",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://www.indicia.io",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "AI & DeFi powered crypto investment platform that democratizes crypto hedge fund profits by allowing consumers to monetize their investor sentiment.",
+    "founders": [
+      {
+        "name": "Gustavo Schwenkler",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "InfiCrest Healthcare",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://www.inficrest.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Inficrest develops AI healthcare diagnostics products like FallProof to prevent elderly falls and increase overall healthspan and lifespan.",
+    "founders": [
+      {
+        "name": "Vallal Jothilingam",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Intelenz",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Provide clients with the ability to create automated processes that transform and digitalize business operations.",
+    "founders": [
+      {
+        "name": "Renzo Zagni",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Intero Biosystems",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://www.interobiosystems.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Intero Biosystems builds miniature human organs from stem cells for more predictive preclinical drug testing prior to human trials.",
+    "founders": [
+      {
+        "name": "Madeline Eiken",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Interview Igniter",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://www.interviewigniter.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Transforming job interview preparation with a 24/7, AI-powered, personalized career coach, informed by real-world hiring expertise, designed for professionals who value cost-effectiveness, scalability, and accessibility.",
+    "founders": [
+      {
+        "name": "Vidal Graupera",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Investra",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://investra-ai.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA7 / 2025 Real Estate AI & Data Fintech",
+    "founders": [
+      {
+        "name": "Lilit Yenokyan",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Jesuit MvP",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Oke Marien Robert Gbedolo",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Jetson",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "The first crypto app authorized for under-18 year olds in the United States.",
+    "founders": [
+      {
+        "name": "Will Rush",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Juice",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://www.js.eco/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Enabling seamless mobility processes and payment journeys by combining visual imaging and AI technology.",
+    "founders": [
+      {
+        "name": "Carlo Treves",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "KeyWe",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "KeyWe is building a centralized real estate marketplace for off-market listings to democratize home buying and disrupt the traditional MLS.",
+    "founders": [
+      {
+        "name": "Michael Riese",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Kracked Screens",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": "http://www.krackedscreensapp.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Kracked Screens is a wholesale distributor of parts and accessories for Apple and Samsung devices.",
+    "founders": [
+      {
+        "name": "Stanley Kvitko",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Cresen",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA6 / 2024 Healthcare Hardware & Robotics",
+    "founders": [
+      {
+        "name": "Paul Davison",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Legacy Flows",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://www.legacyflows.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Legacy Flows provides tax and accounting firms an end to end platform to automate internal operations and tax preparation, combining deep industry expertise and process automation to drive efficiency, scalability, and leadership through a major generational shift.",
+    "founders": [
+      {
+        "name": "Philip Park",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Legion",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://legion.law/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Legion is an AI associate that autodrafts reliable litigation documents in minutes, allowing attorneys to focus their skills on winning.",
+    "founders": [
+      {
+        "name": "Arthur Rothrock",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Léoa",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Ari Martin",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "LetsHelp",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://letshelp-black.vercel.app/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "LetsHelp is an AI assistant that sees a senior's screen and guides them through any tech problem like a patient friend, available 24/7 in over 70 languages.",
+    "founders": [
+      {
+        "name": "Elaine Chu",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Lexxe",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.lexxe.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "We have built a public internet search engine, featuring unprecedented, patented sentiment search technology. The Lexxe engine combines traditional search functionality combined with sentiment analytics for the term and result providers. It advises users on the up-to-date reputation of any keyword AND providers of results. Our services are general search to users and advertising for businesses. With sentiment involved, it will provide deeper information than just keywords, which will impact on search experience, enhance search quality and transform Internet information use.",
+    "founders": [
+      {
+        "name": "Hong Qiao",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Life Motion",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2019,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA1 / 2019",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Life Motion is an AI-based fitness and athletics performance company aiming to make lifting weights safer, more efficient, and more accessible. Life Motion's novel system provides individualized coaching and feedback to the user during their weightlifting session, and in depth analytics for tracking progression over time.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "LifeAir",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": "https://lifeairmedical.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA3 / 2021 Healthcare Hardware & Robotics",
+    "founders": [
+      {
+        "name": "Homi Fatemi",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Luminova Beauty",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://luminovabeauty.co/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Luminova Beauty ties its skincare lineup together with Scan+, our software trained on over 3,000,000 facial images that analyzes skin concerns in under 20 seconds and matches users to our products that target those issues. Every scan is personalized, simple, and eliminates guesswork.",
+    "founders": [
+      {
+        "name": "Charles Engler",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Luys Systems",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA4 / 2022 Hardware & Robotics Enterprise",
+    "founders": [
+      {
+        "name": "Daniel Castellano",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Mana Burn",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://www.manaburn.gg/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Mana Burn is a mobile-first Generative-AI RPG that turns players into the creators of their own experience. Key Features: *Fast-paced, short-session, endlessly engaging game with a TikTok-like interaction model. *Governance through gameplay: AI generated art and narrative that is driven through player choice. *Player-crafted items traded through a P2P marketplace.",
+    "founders": [
+      {
+        "name": "Carey Chico",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Mesh",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://www.mesh-local.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Mesh is a real-life social network where you meet strangers in groups of four at local coffee shops. They have hosted 1,200 events across the country. They have thousands of people who want to meet you, and they use a short personality questionnaire to find the best people for you to meet.",
+    "founders": [
+      {
+        "name": "Michael Orosz-Fagen",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "MetaVent",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "MetaVent is a self-service ticketing software that empowers users to host and attend events via NFT tickets. Through MetaVent, organizations are enabled to facilitate events from start to finish by allowing for RSVPs with customized forms, customized landing page for the event, in-app push and email notifications, verification of NFT tickets at the door, and custodial wallets for those who do not have a blockchain wallets.; Furthermore, MetaVent allows for a post event management of data that allows the event host to gather data to be used in future events.",
+    "founders": [
+      {
+        "name": "Sahil Sagar",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Mill Pond Research",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://www.millpondresearch.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Mill Pond Research is an AI technology company that specializes in building AI solutions for large enterprises and government agencies. We deploy custom AI environments through our Workbench platform, which allows for the use of plugins, local and foundational models, while our Xilos solution secures, governs, and orchestrates agentic AI traffic.",
+    "founders": [
+      {
+        "name": "Andrew Shimshock",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Mirdain",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://mirdainsystems.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA8 / 2026 AI & Data Hardware & Robotics",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "MissedFits",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "MissedFits is an eCommerce application that sits on the product pages of a merchant's website, which enables their Shoppers to submit feedback on products they are not able to purchase due to out of stock or supply chain issues but would want to otherwise. After submitting the feedback, the Shopper could then be notified once their desired product(s) are back in stock due to re-orders or returns, and the Merchant uses that data for future forecasts.",
+    "founders": [
+      {
+        "name": "Julia Benner",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "NEHXT",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "NEHXT is the Uber for beauty services for women of color; it is a marketplace matching clients with Beauty Professionals for premium at-home hair, makeup, nails, and lash appointments.",
+    "founders": [
+      {
+        "name": "Nehika Miglani",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "NeoBloom",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Transform compensation decisions using data from official documents, successfully launching for individuals and later pivoting to employer solutions targeting small practice physicians after COVID-19 impacted initial go-to-market plans.",
+    "founders": [
+      {
+        "name": "Galen Davis",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "NEVAP",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://nevap.co/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA7 / 2025 Healthcare Hardware & Robotics",
+    "founders": [
+      {
+        "name": "Benjamin Wang",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Northbound",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Northbound provides the quality control infrastructure that streamlines the commercial real estate entitlement process currently plagued by delays.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Nova",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://novaitx.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA8 / 2026 AI & Data Hardware & Robotics",
+    "founders": [
+      {
+        "name": "Michael Wang",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "NXTAS",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://nxtas.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Cognition as a Service (CaaS):​ We are building Agentic Platform for EV Fleet Management and Analytics ​ powered by GenAI, AI/ML, IOT​.",
+    "founders": [
+      {
+        "name": "Hari Venkata",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Obvi AI",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://www.obvi.gavel-and-algorithm.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Obvi AI transforms the complex world of intellectual property into clear, actionable insights using traditional and generative AI technology. Our platform analyzes patents, trademarks, and legal proceedings to help you make smarter IP decisions faster, whether you're conducting clearance searches, analyzing portfolios, or navigating complex legal landscapes. Built for both technical users who need powerful search capabilities and business users who want intuitive analysis, Obvi addresses the $15B IP analytics market with deployment flexibility for organizations of all sizes.",
+    "founders": [
+      {
+        "name": "Gail Jefferson",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Olorin",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "My company Olorin is developing an end-to-end platform for auto concierges that automates tedious tasks and client organization; cutting overall deal cycle time by up to 80% using AI trained on proprietary brokerage strategy.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "OmicXHealth",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://www.omicxhealth.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "OmicXHealth is a software-first liquid biopsy company using AI/ML to detect cancer and chronic disease through a simple blood draw. Our platform analyzes cfDNA methylation patterns with high sensitivity and generalizability, enabling earlier, more accurate diagnosis than existing tools. We are initially focused on liver cancer, with future applications in recurrence monitoring, therapy resistance, and multi-cancer screening.",
+    "founders": [
+      {
+        "name": "Mythili Subharam",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "OneMe",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": "https://onemeweb.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Transforming the internet into a place of trust, one passport at a time.",
+    "founders": [
+      {
+        "name": "James Grom",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Opal",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.opal.community/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "A mentorship community where human connection drives professional development.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "OptimizedAI",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Find the cure to cancer, we have it, it is in the data, we just can't see it yet.; Core values:; Turn data into information; Turn form information into insight; Turn insight into cures for cancer; Cure people.",
+    "founders": [
+      {
+        "name": "Ramon Jimenez",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Otto",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "My company Olorin is developing an end-to-end platform for auto concierges that automates tedious tasks and client organization; cutting overall deal cycle time by up to 80% using AI trained on proprietary brokerage strategy.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "ParStar",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2019,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA1 / 2019",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "ParStar aims to make large classrooms function like small ones by turning passive lectures into active learning experiences through data-driven question boards, interactive polls, and quizzes.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "PathoVis",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://pathovis.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "PathoVis proviides clinical-grade pathology results with a low-cost, mobile delivery platform that enables rapid workflows.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "PeerCord",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "PeerCord is a social engagement platform created by students for students to help improve collaboration, well-being and safety both on and off-campus; PeerCord provides students with a: -Private community where students connect with eachother based on mutual interests.; -Decentralized events board to helps find or host social activites on/off campus.; -Community driven safety tools to provide safety on campus and during events off campus.; -Publisher tools that allows creators to create events on PeerCord and one click share across all other social media platforms.",
+    "founders": [
+      {
+        "name": "Taseer Qamar",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Petszel",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://petszel.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Petszel builds deeper relationships between adopters, shelters, brands, and communities by strengthening human-animal bonds with pet tech.",
+    "founders": [
+      {
+        "name": "Sara Swenson",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Pilea",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Pilea is a small loan company that provides $101-500 in cash for unexpected emergencies at lower interest rates.",
+    "founders": [
+      {
+        "name": "Henry Sheng",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Planted Materials",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://plantedmaterials.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "We recycle organic waste into renewable materials and chemicals.",
+    "founders": [
+      {
+        "name": "Noah Belkhous",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Polygence",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.polygence.org/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Helping students own their learning, explore what they love, and build momentum toward their future.",
+    "founders": [
+      {
+        "name": "George Philip (GP) LeBourdais",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Puritas Health",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "One-stop solution for all healthcare needs that providers can give to their patients.",
+    "founders": [
+      {
+        "name": "Mandeep Singh",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Qhronos",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA7 / 2025 AI & Data Hardware & Robotics",
+    "founders": [
+      {
+        "name": "Ionel Miu",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Quadcore Innovations",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Nuff.Cash a fintech app from Quadcore Innovations, enables financial inclusion by providing a digital alternative to paper currency while maintaining trust and providing anonymity to users. The Nuff wallet can be used for essentials like bill payments, groceries, rent, international transfers, shop partnerships, and much more, thus enhancing real-world usability. Nuff empowers merchants by providing a frictionless digital payment solution with no transaction fees, encouraging higher transaction volumes thus strengthening local economies while bridging the gap between digital and cash-based transactions.",
+    "founders": [
+      {
+        "name": "Tanusri Jammalamadaka",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Question Crunch",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2019,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA1 / 2019",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "QuestionCrunch is AI-driven SaaS developed to provide direct answers to high-value questions for enterprise customers. Unlike traditional search engine or question answering platforms that return a list of URL links, QuestionCrunch leverages state-of-the-art artificial intelligence technology to provide real answers in seconds.",
+    "founders": [
+      {
+        "name": "Licheng Xiao, Haiyu Wang, Haifang Wang, Lu Cao, Jian Song, Tingting Liu, Xuewen Yu",
+        "affiliation_type": "alumni",
+        "grad_year": 2019,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "QuillPayments",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://www.usequill.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Here at Quill, we teach college students financial literacy through everyday food purchases.",
+    "founders": [
+      {
+        "name": "Matthew Waymouth",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Raja Brands",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://drinkraja.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Raja is bringing Indian flavors to a western audience in a healthy and authentic manner.",
+    "founders": [
+      {
+        "name": "Dhruv Pais",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "RealSeq Biosciences",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://www.realseq.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "RealSeq Biosciences combines multiple 'omics' data to discover novel disease biomarkers and develop highly targeted therapies.",
+    "founders": [
+      {
+        "name": "Anne Scholz",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "The REC Exchange",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://recexchange.co/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "REC Exchange: Revolutionizing renewable energy trading with a transparent and efficient platform for optimizing Renewable Energy Credits (RECs) and driving the transition to a sustainable energy future.",
+    "founders": [
+      {
+        "name": "Loren Smith",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Renovare",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://renovaretx.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Preclinical-stage biotech developing regenerative therapies for osteoarthritis that have demonstrated the ability to regrow cartilage and bone in animal models. CU Boulder spin-out with up to $33M in non-dilutive government funding from ARPA-H. Currently completing IND-enabling studies with plans for Phase 1 by end of 2027.",
+    "founders": [
+      {
+        "name": "Liz Scott",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Republican Red Winery",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://republicanred.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Republican Red Winery creates wine and merch for freedom loving Americans. It is an elevated way for the Republican half of the country to make a stand and signal their beliefs.",
+    "founders": [
+      {
+        "name": "Paul Johnson",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Resiligence Inc.",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://tipnow.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Anonymous threat intelligence platform that implements “See Something Say Something” making communities safer.",
+    "founders": [
+      {
+        "name": "Cyril Rayan",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Right-Hand Cybersecurity",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": "https://right-hand.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "A cybersecurity SaaS platform to help prevent employee-caused data breaches.",
+    "founders": [
+      {
+        "name": "Theo Nasser",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "RMC",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "RMC develops cannabinoid-based medications to fight adenocarcinoma, treat Parkinson's Sleep Disorder & PTSD, and create wound treatments.",
+    "founders": [
+      {
+        "name": "Robert Rapp",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "RNA Bio Incorporated",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "RNA Bio offers a broad portfolio of mRNA vaccines and therapies, including their flagship GLP-1 mRNA therapeutic for obesity.",
+    "founders": [
+      {
+        "name": "Angel Cardenas",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "RoboTire",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2019,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA1 / 2019",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Build and deploy robotic systems and tools that service vehicles safer and faster than ever before. We exist for the forward-thinking operator that wants to increase their throughput 3x while ensuring that employee safety is a top priority",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Rubicon Dog",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Rubicon Dog, revolutionizing the way people transport their dogs.",
+    "founders": [
+      {
+        "name": "Christina Johnson",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Ryndel Labs",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://ryndellabs.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Ryndel Labs builds data and modeling infrastructure that maps how capital, resources, and people connect across communities, pinpoints where coordination fails, and deploys resources into those gaps, in turn studying and solving the worlds inefficiencies at scale to become the world's community foundation.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Safe Routes",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Panterix is developing an algorithm that ranks roads by safety to help drivers avoid dangerous routes.",
+    "founders": [
+      {
+        "name": "Stephen Mistele",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "SavingsOak",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "SavingsOak is revolutionizing how people think, interact with, and consider Health Savings Accounts (HSA).",
+    "founders": [
+      {
+        "name": "Neeraj Mathur",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Shake On It",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://shake-on-it-web.vercel.app/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Shake On It is a social betting platform that gamifies the action of wagering amongst friends.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Sisu VR",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.sisuvr.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Sisu VR, a company focused on workplace misconduct and safety response training using virtual reality.",
+    "founders": [
+      {
+        "name": "Jocelyn Tan",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Skitch Health",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://www.skitchhealth.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Skitch replaces subjective questionnaires in clinical trials with automated tools to capture endpoints more objectively.",
+    "founders": [
+      {
+        "name": "Jaidyn Nguyen",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "SLC BIO",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://www.slc-bio.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "SLC Bio is developing therapeutics that choke off nutrient uptake in cancer cells, enabling a novel approach to eradicating malignant diseases. We accomplish this by combining computational approaches with wet-lab validation.",
+    "founders": [
+      {
+        "name": "Juan Jose (JJ) Fung",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Smart Apply",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Smart Apply is an AI platform that simplifies the US university admissions process for international students, from apps to visa prep.",
+    "founders": [
+      {
+        "name": "Sonia Hoshmand",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Solipay",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Solipay is the next generation of data cash back rewards. We bring inherent transparency to a market that's under increasing regulatory scrutiny.",
+    "founders": [
+      {
+        "name": "Max Kollmorgen",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Spikeview",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.spikeview.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Spikeview is a global portfolio platform to digitally catalog rapidly expanding experiences, activities, and accomplishments, starting in middle and high school and through college, career, and beyond.",
+    "founders": [
+      {
+        "name": "Ekta Sahasi",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Stack",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2022,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.trystack.io/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA4 / 2022",
+    "source": "src_scu_bva_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Will Rush",
+        "affiliation_type": "alumni",
+        "grad_year": 2022,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Sturdy Exchange",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "We are an NFT Marketplace and community that enables experiences for musicians, brands, and entertainers to reach the masses with a new form of ownership & utility, by leveraging Non Fungible Tokens.",
+    "founders": [
+      {
+        "name": "Sandro Tolentino",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "SubHub",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://subhub.io/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Pre-construction is a bottleneck: to price a project, builders usually have to chase quotes from dozens of outside companies, and any planset revisions make them start over. SubHub AI builds the whole cost breakdown in seconds—listing materials, quantities, and local quoted unit prices from global wholesalers—so now months turn into days, and the back-office payroll cost to bid goes from $10,000~ to just a final check.",
+    "founders": [
+      {
+        "name": "Blake Martin",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "SwingBeats",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.swingbeats.net/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "SwingBeats is designed to help new dancers overcome their initial learning curve, and raise student retention rates for studios everywhere.",
+    "founders": [
+      {
+        "name": "Megan Wiser",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Syneris",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA6 / 2024 Healthcare Enterprise AI & Data",
+    "founders": [
+      {
+        "name": "Alex Chang",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Synphony",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Sean Wu",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Talentfly",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.talentfly.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "AI-powered platform for interview practice & collaboration among educational institutions, job seekers, & employers.",
+    "founders": [
+      {
+        "name": "Mohammed Asif Ali",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "TapLaw",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2024,
+    "enrollment_status": "current_student",
+    "website": "https://taplaw.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA6 / 2024",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Taplaw's AI paralegal, Oliver, assists attorneys with case analysis, document creation, and research without disrupting existing workflows.",
+    "founders": [
+      {
+        "name": "Vlad Stoicescu Ghica",
+        "affiliation_type": "current_student",
+        "grad_year": 2024,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "The Petition Company",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Michael Korvyakov",
+    "founders": [
+      {
+        "name": "Michael Korvyakov",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Toyful",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://toyful.in/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Toyful is a smart parenting platform designed for families with kids aged 0–15. It enables parents to buy, sell, and rent new or pre-loved children's products, track vaccinations with VaxTrack, store medical records digitally via MedRecords, and discover nearby services like tutors and doctors. With community features and expert advice, Toyful simplifies modern parenting in one app.",
+    "founders": [
+      {
+        "name": "Saloni Jain",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Trace",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "We are building a plastic contamination certification similar to the non-GMO certification that is seen on consumer foods and beverages at the grocery store. Plastic contamination (phthalates, Bisphenol, and microplastics) are often overlooked in current regulatory systems, and we're aiming to create a rigorous, science-backed standard for evaluating them. Unlike vague “BPA-free” or “non-toxic” claims, Trace sets transparent, health-protective thresholds based on toxicological science and lab testing. Our certification will give consumers peace of mind at the grocery store when they are deciding on products to feed themselves and their families.",
+    "founders": [
+      {
+        "name": "Aidan Simonian",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Tress",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Align Money brings \"Banking as a Benefit\" to employees through an online subscription by giving them access to the best financial products and services at their workplace.",
+    "founders": [
+      {
+        "name": "Hannah LeBlanc",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Triptomize",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Triptomize helps you build & book trips from social media, delivering amazing travel experiences without the need to do any research.",
+    "founders": [
+      {
+        "name": "Zachary Chien",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Tuent",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://tuent.ai/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Tuent builds runtime behavioral security for AI agents. Sentinel lets companies audit, trace, and govern every agent action in-process, deterministically, with zero runtime cost.",
+    "founders": [
+      {
+        "name": "James Cunningham",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Tumeryk",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://tumeryk.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Tumeryk is a technology company at the forefront of Agentic Application Security, specializing in solutions that ensure the safe and trustworthy deployment of Generative AI (Gen AI) applications.",
+    "founders": [
+      {
+        "name": "Rohit Valia",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "TwinCounsel",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2025,
+    "enrollment_status": "current_student",
+    "website": "https://www.twincounsel.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA7 / 2025",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "TwinCounsel is an AI-powered service that operates directly within a lawyer's email inbox, requiring no new software. We provide a daily, prioritized \"Command Center\" dashboard to manage all active matters. From there, our AI agent helps legal teams generate accurate, first-draft documents using their own templates and case data.",
+    "founders": [
+      {
+        "name": "Joshua Dorward",
+        "affiliation_type": "current_student",
+        "grad_year": 2025,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "VaxonSpace",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Stephen Shepard",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Vydar Medical",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "BVA5 / 2023 Healthcare Hardware & Robotics",
+    "founders": [
+      {
+        "name": "Susie Faries",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "WallBar",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "WallBar shortens lines and increases sales by automating ID verification, payment, and pouring. With WallBar, venues can quadruple their sales capacity, shortening lines and increasing per-person spending by 35%.",
+    "founders": [
+      {
+        "name": "Will McMullen",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "WhisperDx",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "WhisperDx is a longitudinal health platform that turns routine menstrual cycles into a powerful tool for personal health tracking.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Whiznook",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Whiznook is on the mission to make building teams more fun and effective.",
+    "founders": [
+      {
+        "name": "Anastasia Neddersen",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Wificoin",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2019,
+    "enrollment_status": "older_alumni",
+    "website": "https://giantprotocol.org/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA1 / 2019",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "GIANT (Global Internet Access Network Token) is a blockchain protocol that aims to decentralize and democratize access to internet and financial services, by tokenizing bandwidth.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "XenoDATA",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2023,
+    "enrollment_status": "current_student",
+    "website": "https://xenodata.com",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA5 / 2023",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "XenoDATA provides data leaders with the solutions & support they need to ensure that data and artificial intelligence investments are successful. Our platform helps data leaders bridge the gap between cross-functional teams, providing clarity to stakeholders and ensuring measurable outcomes.",
+    "founders": [
+      {
+        "name": "Taylor Culver",
+        "affiliation_type": "current_student",
+        "grad_year": 2023,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Youvize",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA3 / 2021",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Youvize is a platform marketplace for on-demand virtual services, fully integrated with peer-to-peer video chat, secure payment, and scheduling -offering easy access to experts in many domains for a fraction of their rate.",
+    "founders": [
+      {
+        "name": "Alex Foster",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Zarella",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2020,
+    "enrollment_status": "older_alumni",
+    "website": null,
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA2 / 2020",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Zarella is the Amazon of sustainable and ethical products, helping Gen Z consumers conveniently shop from a variety of responsible brands.",
+    "founders": [
+      {
+        "name": "Alexa DeSanctis",
+        "affiliation_type": "alumni",
+        "grad_year": 2020,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "ZEITRO",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "alumni",
+    "cohort_year": 2019,
+    "enrollment_status": "older_alumni",
+    "website": "https://www.zeitro.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA1 / 2019",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "ZEITRO enables home buyers to compare offers among over 5,000 available mortgage products in the market and provides customers results with immediate, detailed, and customized recommendations.",
+    "founders": [],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "cohort before 2023",
+    "_source_key": "scu_bva"
+  },
+  {
+    "name": "Zupscribe",
+    "university": "Santa Clara University",
+    "campusId": "univ_santa_clara_university",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": "https://zupscribe.com/",
+    "evidence_url": "https://www.scu.edu/bva/companies/",
+    "program": "SCU Bronco Ventures Accelerator BVA8 / 2026",
+    "source": "src_scu_bva_2026_11_03",
+    "description": "Zupscribe is building the infrastructure for autonomous recurring commerce. Our mission is to give people the gift of time by automating the recurring needs and responsibilities that keep life running.",
+    "founders": [
+      {
+        "name": "Akshay Khole",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.scu.edu/bva/companies/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "scu_bva"
+  }
+]

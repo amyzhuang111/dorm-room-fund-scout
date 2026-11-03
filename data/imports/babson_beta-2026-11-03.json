@@ -1,0 +1,767 @@
+[
+  {
+    "name": "CEERUM",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "alumni",
+    "cohort_year": 2023,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Alumni Finalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Rohit Nayak",
+        "affiliation_type": "alumni",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      },
+      {
+        "name": "Moneer Azzam",
+        "affiliation_type": "alumni",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "Leakproof Apparel",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "alumni",
+    "cohort_year": 2014,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Alumni Finalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Emily Brady-Santos",
+        "affiliation_type": "alumni",
+        "grad_year": 2014,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni class before 2023",
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "SANDE Perfumery",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "alumni",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Alumni Finalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Jihan Ramdhani",
+        "affiliation_type": "alumni",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "AracodeX",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2028,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Graduate Student Finalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Inge Cheng",
+        "affiliation_type": "current_student",
+        "grad_year": 2028,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "EliVive",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Graduate Student Finalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Martina Marrali",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "Tiny Star",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2028,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Graduate Student Finalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Joy Meng",
+        "affiliation_type": "current_student",
+        "grad_year": 2028,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "Arcangel AI",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2028,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Undergraduate Student Finalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Srikar Srinivasan",
+        "affiliation_type": "current_student",
+        "grad_year": 2028,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      },
+      {
+        "name": "Taihei Rokumoto Eastwood",
+        "affiliation_type": "current_student",
+        "grad_year": 2028,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "Foregger Energy Solutions",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2027,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Undergraduate Student Finalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Lassiter Foregger",
+        "affiliation_type": "current_student",
+        "grad_year": 2027,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "LetAllGirls",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2027,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Undergraduate Student Finalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Mateo Acosta-Rubio",
+        "affiliation_type": "current_student",
+        "grad_year": 2027,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "CEERUM",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "alumni",
+    "cohort_year": 2023,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Alumni Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Rohit Nayak",
+        "affiliation_type": "alumni",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      },
+      {
+        "name": "Moneer Azzam",
+        "affiliation_type": "alumni",
+        "grad_year": 2023,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "crcle",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Alumni Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Chad Patterson",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni class before 2023",
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "Gateway",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "alumni",
+    "cohort_year": 2021,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Alumni Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "MaiLinh Ho",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      },
+      {
+        "name": "HanhLinh Ho",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni class before 2023",
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "Leakproof Apparel",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "alumni",
+    "cohort_year": 2014,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Alumni Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Emily Brady-Santos",
+        "affiliation_type": "alumni",
+        "grad_year": 2014,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": false,
+    "_exclude_reason": "alumni class before 2023",
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "SANDE Perfumery",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "alumni",
+    "cohort_year": 2024,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Alumni Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Jihan Ramdhani",
+        "affiliation_type": "alumni",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "Spaces",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "alumni",
+    "cohort_year": 2025,
+    "enrollment_status": "recent_grad",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Alumni Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Raphael Cohen",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      },
+      {
+        "name": "Tyler Seplak",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "AracodeX",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2028,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Graduate Student Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Inge Cheng",
+        "affiliation_type": "current_student",
+        "grad_year": 2028,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "CampuzConnect",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Graduate Student Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Desmond Cudjoe",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "Chotu",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Graduate Student Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Manav Arora",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "EliVive",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Graduate Student Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Martina Marrali",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "Ori-Lane",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Graduate Student Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Bukonla Adeniyi",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "Tiny Star",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2028,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Graduate Student Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Joy Meng",
+        "affiliation_type": "current_student",
+        "grad_year": 2028,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "Arcangel AI",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2028,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Undergraduate Student Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Srikar Srinivasan",
+        "affiliation_type": "current_student",
+        "grad_year": 2028,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      },
+      {
+        "name": "Taihei Rokumoto Eastwood",
+        "affiliation_type": "current_student",
+        "grad_year": 2028,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "BobbyBrowser",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Undergraduate Student Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Krish Bhatia",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      },
+      {
+        "name": "Aryan Patil",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "Crafting Tomorrow",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2027,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Undergraduate Student Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Cole Collins",
+        "affiliation_type": "current_student",
+        "grad_year": 2027,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      },
+      {
+        "name": "Alex Laraia",
+        "affiliation_type": "current_student",
+        "grad_year": 2027,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "Foregger Energy Solutions",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2027,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Undergraduate Student Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Lassiter Foregger",
+        "affiliation_type": "current_student",
+        "grad_year": 2027,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "LetAllGirls",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2027,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Undergraduate Student Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Mateo Acosta-Rubio",
+        "affiliation_type": "current_student",
+        "grad_year": 2027,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  },
+  {
+    "name": "Nuggy",
+    "university": "Babson College",
+    "campusId": "univ_babson_college",
+    "affiliation_type": "current_student",
+    "cohort_year": 2027,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/",
+    "program": "Babson BETA Challenge — Undergraduate Student Semifinalists",
+    "source": "src_babson_beta_2026_11_03",
+    "description": null,
+    "founders": [
+      {
+        "name": "Markus von Wismar",
+        "affiliation_type": "current_student",
+        "grad_year": 2027,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      },
+      {
+        "name": "Dakota Chang Olin College",
+        "affiliation_type": "current_student",
+        "grad_year": 2027,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://www.babson.edu/entrepreneurship-center/startup-acceleration/beta-challenge/semifinalists-and-finalists/"
+      }
+    ],
+    "markFacultyOnly": false,
+    "_eligible": true,
+    "_exclude_reason": null,
+    "_source_key": "babson_beta"
+  }
+]

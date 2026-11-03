@@ -45,8 +45,12 @@ export default async function DataExplorerPage({
   const sector = sp.sector || undefined;
   const campus = sp.campus || undefined;
   const result = paginateCorpus({ q, sector, campus, sort, page });
-  const { sectors } = buildDirectoryFromDb();
-  const campuses = loadHeroStats().universities;
+  const { sectors: sectorFilters } = buildDirectoryFromDb();
+  // Keep select options tiny in RSC HTML (id + label only) — full university rows blow the 210 KB gate.
+  const sectors = sectorFilters.map((s) => ({ id: s.id, label: s.label }));
+  const campuses = loadHeroStats()
+    .universities.slice(0, 40)
+    .map((c) => ({ id: c.id, name: c.name }));
   const recency = loadRecencyFunnel();
   const fill = loadCorpusFillRates();
 
@@ -194,7 +198,7 @@ export default async function DataExplorerPage({
             <span className="sr-only">Campus</span>
             <select name="campus" defaultValue={campus || ""} className="h-8 w-full border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[11px] sm:h-8 sm:text-[11px]">
               <option value="">All campuses</option>
-              {campuses.slice(0, 40).map((c) => (
+              {campuses.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
                 </option>

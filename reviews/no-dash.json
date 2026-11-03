@@ -1,0 +1,15 @@
+{
+  "base": "http://127.0.0.1:3460",
+  "innerTextRoutes": 6,
+  "crawlRoutes": 2062,
+  "companies": 1388,
+  "dossiers": 2058,
+  "founderPages": 4,
+  "statusCounts": {
+    "200": 2062
+  },
+  "crawlDashes": 0,
+  "checked": 2068,
+  "failed": 0,
+  "failures": []
+}

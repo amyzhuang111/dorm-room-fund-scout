@@ -68,3 +68,9 @@ Branch: `cursor/data-backfill-2026-11-03` from `origin/main` @ 6f5a35c (r59 / 1,
 Press search via DuckDuckGo HTML returned 0 usable hits in this environment; funding/stage gains are mostly YC Accelerator evidence plus company sites.
 
 Reverted weak confirms on audit: Aniket Kittur (LinkedIn slug niki-kittur namesake risk) and Cole Fairchild (2022 Wayback DRF team page does not prove 2023+).
+
+## Sources scan-all import (same branch)
+
+Imported 18 URLs from `reviews/campus-sources-scan-all-2026-11-03.md` with 2023+/current-student filter.
+See `reviews/sources-import-scan-all-2026-11-03.md` for per-source found/kept/excluded/duplicates.
+Investable companies: 1225 → **1388** (shared total).

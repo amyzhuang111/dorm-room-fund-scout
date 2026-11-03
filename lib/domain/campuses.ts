@@ -1605,6 +1605,26 @@ export const CAMPUSES: CampusConfig[] = [
     lon: 153.01361111,
     coordSource: "en.wikipedia.org/wiki/University_of_Queensland (MediaWiki coordinates API, retrieved 2026-11-02)",
   },
+  {
+    id: "univ_babson_college",
+    name: "Babson College",
+    shortLabel: "Babson",
+    aliases: ["Babson"],
+    country: "United States",
+    lat: 42.29823056,
+    lon: -71.26119167,
+    coordSource: "en.wikipedia.org/wiki/Babson_College (MediaWiki coordinates API, retrieved 2026-11-03)",
+  },
+  {
+    id: "univ_santa_clara_university",
+    name: "Santa Clara University",
+    shortLabel: "Santa Clara",
+    aliases: ["SCU", "Santa Clara"],
+    country: "United States",
+    lat: 37.34916667,
+    lon: -121.93805556,
+    coordSource: "en.wikipedia.org/wiki/Santa_Clara_University (MediaWiki coordinates API, retrieved 2026-11-03)",
+  },
 
 ];
 
