@@ -91,11 +91,11 @@ export function NetworksApp() {
   const fullMembers: NetworkMember[] = active && data ? data.membersByNetwork[active.id] ?? [] : [];
 
   /** Hub clicks open an immediate inspector; list clicks keep the roster in view. */
-  function chooseNetwork(id: string, fromGraph = false) {
+  function chooseNetwork(id: string, showInspector = false, clearFilters = showInspector) {
     setActiveNetwork(id);
-    setGraphInspectorOpen(fromGraph);
+    setGraphInspectorOpen(showInspector);
     setShareFeedback("");
-    if (fromGraph) {
+    if (clearFilters) {
       setNetworkQuery("");
       setNetworkKind("all");
     }
@@ -157,18 +157,78 @@ export function NetworksApp() {
           </div>
           <h1 className="text-lg font-semibold tracking-tight text-[color:var(--fg)] sm:text-2xl">Campus founder networks</h1>
           <p className="max-w-3xl text-[12px] leading-snug text-[color:var(--fg-2)] sm:text-sm sm:leading-normal" data-networks-context="">
-            A map of the programs and funds that already reach student founders.{" "}
-            <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> of{" "}
-            <span data-networks-count="corpusCompanies">{data.totals.corpusCompanies.toLocaleString("en-US")}</span> companies
-            have mapped networks. Open a hub to see who is on that path.
+            Find the founders and startups linked to a program, university accelerator, lab or fund. Open a network to see its documented founder-company relationships.
           </p>
           <p className="text-[11px] text-[color:var(--fg-3)] sm:text-xs" data-networks-stats="">
-            <span data-networks-count="founderLinks">{data.totals.founderLinks.toLocaleString("en-US")}</span> founder links ·{" "}
             <span data-networks-count="networks">{data.totals.networks.toLocaleString("en-US")}</span> networks ·{" "}
+            <span data-networks-count="founderLinks">{data.totals.founderLinks.toLocaleString("en-US")}</span> documented founder-network links ·{" "}
+            <span data-networks-count="founders">{data.totals.foundersLinked.toLocaleString("en-US")}</span> linked founders ·{" "}
             <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> of{" "}
-            <span data-networks-count="corpusCompanies">{data.totals.corpusCompanies.toLocaleString("en-US")}</span> companies ·{" "}
-            all <span data-networks-count="founders">{(data.totals.foundersShown ?? data.totals.foundersLinked).toLocaleString("en-US")}</span> founders
+            <span data-networks-count="corpusCompanies">{data.totals.corpusCompanies.toLocaleString("en-US")}</span> investable companies covered
           </p>
+          <div className="mt-3 flex flex-wrap items-end gap-2" data-network-quick-find="">
+            <label className="min-w-[210px] flex-[1_1_340px] text-[11px] font-semibold text-[color:var(--fg-2)]">
+              Search a founder, startup, campus, program or fund
+              <input
+                type="search"
+                value={networkQuery}
+                onChange={(event) => { setNetworkQuery(event.target.value); setDesktopHubsOpen(false); }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" && networkMatches[0]) chooseNetwork(networkMatches[0].network.id, true, false);
+                }}
+                placeholder="Try: Stanford, HBS Rock, founder or company name"
+                aria-label="Find founders, startups and networks"
+                className="mt-1 h-11 w-full rounded-md border border-[color:var(--line)] bg-white px-3 text-sm text-[color:var(--fg)] outline-none focus:border-[color:var(--cobalt)]"
+              />
+            </label>
+            <label className="text-[11px] font-semibold text-[color:var(--fg-2)]">
+              Network type
+              <select
+                value={networkKind}
+                onChange={(event) => { setNetworkKind(event.target.value as NetworkKind | "all"); setDesktopHubsOpen(false); }}
+                aria-label="Filter networks by type"
+                className="mt-1 h-11 min-w-[140px] rounded-md border border-[color:var(--line)] bg-white px-2.5 text-sm text-[color:var(--fg)]"
+              >
+                <option value="all">All types</option>
+                <option value="accelerator">Accelerators</option>
+                <option value="program">Programs</option>
+                <option value="investor">Investors</option>
+                <option value="lab">Labs</option>
+              </select>
+            </label>
+            <button
+              type="button"
+              onClick={scrollToRoster}
+              className="h-11 rounded-md bg-[color:var(--cobalt)] px-3 text-xs font-semibold text-white hover:opacity-90"
+              data-network-browse-results=""
+            >
+              Browse {networkMatches.length.toLocaleString("en-US")} networks
+            </button>
+          </div>
+          {networkQuery.trim() ? (
+            <div className="mt-2 rounded-md border border-[color:var(--line)] bg-white p-2" data-network-quick-results="">
+              <p role="status" className="mb-1 text-[11px] text-[color:var(--fg-3)]">
+                {networkMatches.length.toLocaleString("en-US")} matching networks. Select one to see its linked founders.
+              </p>
+              {networkMatches.slice(0, 4).map((match) => (
+                <button
+                  key={match.network.id}
+                  type="button"
+                  onClick={() => chooseNetwork(match.network.id, true, false)}
+                  className="flex min-h-10 w-full items-center justify-between gap-3 rounded px-2 text-left text-xs hover:bg-[color:var(--cobalt-haze)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
+                  data-network-quick-result={match.network.id}
+                >
+                  <span className="min-w-0 font-semibold">{match.network.label}</span>
+                  <span className="shrink-0 text-[color:var(--fg-3)]">
+                    {match.nameMatch
+                      ? `${match.network.founderCount.toLocaleString("en-US")} founders`
+                      : `${match.matchingMembers.length.toLocaleString("en-US")} member matches`}
+                  </span>
+                </button>
+              ))}
+              {networkMatches.length === 0 ? <p className="px-2 py-3 text-xs text-[color:var(--fg-3)]">No source-linked founders or networks match this search. Try a different name or network type.</p> : null}
+            </div>
+          ) : null}
         </div>
       </header>
 
