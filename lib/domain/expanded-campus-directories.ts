@@ -1,6 +1,5 @@
-// Official campus and competition directories discovered 2026-11-03.
-// Sources with status 'implemented' have batch imports in data/campus-universe.db;
-// unconfigured discovery/reference directories are listed but NOT bulk copied.
+// Official university 2026 sources. Implemented entries represent imported
+// records with primary-source citations, not inferred student founder claims.
 import type { SourceCatalogueEntry } from "./source-quality";
 
 export const EXPANDED_CAMPUS_DIRECTORIES: SourceCatalogueEntry[] = [
@@ -247,7 +246,7 @@ export const EXPANDED_CAMPUS_DIRECTORIES: SourceCatalogueEntry[] = [
     "name": "Georgia Tech CREATE-X — 2026 Demo Day",
     "campus": "univ_gatech",
     "sourceType": "accelerator",
-    "url": "https://news.gatech.edu/news/2026/08/31/create-x-demo-day-meet-founders-building-whats-next",
+    "url": "https://create-x.gatech.edu/2026-demo-day",
     "founderScoutTier": "B",
     "startupScoutTier": "B",
     "role": "discovery",
@@ -273,8 +272,8 @@ export const EXPANDED_CAMPUS_DIRECTORIES: SourceCatalogueEntry[] = [
       "CREATE-X also serves faculty and alumni; do not infer that an attendee is a current Georgia Tech student."
     ],
     "status": "implemented",
-    "statusNote": "2026 public roster ingested in batch 16 into Campus Scout's SQLite database. Company and people identity are deduplicated against existing records. Team members are not automatically founders or current students.",
-    "dbSourceId": "src_v3_news_gatech_edu"
+    "statusNote": "2026 official CREATE-X Demo Day table parsed and ingested on 2026-11-03 (111 sourced companies; 102 net-new companies in this pass). The page does not identify founders in the table, so no founder identities or student-enrollment status are invented.",
+    "dbSourceId": "src_v3_create_x_gatech_edu"
   },
   {
     "id": "cat_exp_columbia_entrepreneurship_directory",
