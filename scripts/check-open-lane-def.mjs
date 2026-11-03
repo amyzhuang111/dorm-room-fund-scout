@@ -1,6 +1,8 @@
 /**
  * Fail if the desk open-lane hero (or /methodology) definition text drifts from
- * lib/domain/open-lane.ts. Usage:
+ * lib/domain/open-lane.ts, or if open-lane membership includes companies outside
+ * the investable desk, or if the hero figure disagrees with the computed set.
+ * Usage:
  *   BASE=http://127.0.0.1:3460 node scripts/check-open-lane-def.mjs
  */
 import { chromium } from "playwright";
@@ -38,16 +40,47 @@ const expectedRaw = execFileSync(
     "--yes",
     "tsx",
     "-e",
-    'import { openLaneDefinitionText, openLaneStrongDefinition, openLaneTopFundDefinition } from "./lib/domain/open-lane.ts"; console.log(JSON.stringify({ full: openLaneDefinitionText(), strong: openLaneStrongDefinition(), top: openLaneTopFundDefinition() }));',
+    'import { openLaneDefinitionText, openLaneStrongDefinition, openLaneTopFundDefinition, openLaneDeskDefinition } from "./lib/domain/open-lane.ts"; console.log(JSON.stringify({ full: openLaneDefinitionText(), strong: openLaneStrongDefinition(), top: openLaneTopFundDefinition(), desk: openLaneDeskDefinition() }));',
   ],
   { encoding: "utf8", cwd: process.cwd() },
 ).trim();
 const expected = JSON.parse(expectedRaw.split("\n").filter(Boolean).at(-1));
 
+const corpusRaw = execFileSync(
+  "npx",
+  [
+    "--yes",
+    "tsx",
+    "-e",
+    `
+import fs from "node:fs";
+import { buildOpenLaneShell, founderIsOpenLane } from "./lib/domain/open-lane.ts";
+const founders = JSON.parse(fs.readFileSync("public/data/founders.json","utf8"));
+const dir = JSON.parse(fs.readFileSync("public/data/sample-directory.json","utf8"));
+const cards = Array.isArray(dir) ? dir : (dir.cards || []);
+const investable = new Set(cards.map((c) => c.id).filter(Boolean));
+const shell = buildOpenLaneShell(founders, investable);
+const open = founders.filter((f) => founderIsOpenLane(f, investable));
+const outside = open.filter((f) => !f.companyId || !investable.has(f.companyId));
+console.log(JSON.stringify({
+  investableCompanies: investable.size,
+  openLaneCount: shell.count,
+  strong: shell.strong,
+  openLaneFounders: open.length,
+  outsideCorpus: outside.length,
+  outsideIds: outside.slice(0, 10).map((f) => ({ name: f.name, companyId: f.companyId, company: f.company })),
+}));
+`,
+  ],
+  { encoding: "utf8", cwd: process.cwd() },
+).trim();
+const corpus = JSON.parse(corpusRaw.split("\n").filter(Boolean).at(-1));
+
 const report = {
   ok: true,
   base: BASE,
   expected,
+  corpus,
   home: null,
   methodology: null,
 };
@@ -58,16 +91,27 @@ const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, ...EXTRA });
   await page.goto(`${BASE}/`, { waitUntil: "networkidle", timeout: 120000 });
   await page.waitForSelector("[data-fold-open-lane-def]", { timeout: 60000 });
+  await page.waitForSelector("[data-fold-open-lane-figure]", { timeout: 60000 });
+  // Wait until directory + founders hydrate so the figure is the investable recount.
+  await page.waitForFunction(() => {
+    const fig = document.querySelector("[data-fold-open-lane-figure]");
+    const n = Number(String(fig?.textContent || "").replace(/,/g, "").trim());
+    return Number.isFinite(n) && n > 0;
+  }, { timeout: 60000 }).catch(() => {});
   const home = await page.evaluate(() => {
     const root = document.querySelector("[data-fold-open-lane-def]");
     const strong = document.querySelector("[data-fold-open-lane-def-strong]");
     const top = document.querySelector("[data-fold-open-lane-def-top-fund]");
+    const desk = document.querySelector("[data-fold-open-lane-def-desk]");
+    const figure = document.querySelector("[data-fold-open-lane-figure]");
     const attr = root?.getAttribute("data-fold-open-lane-def-full") || "";
     return {
       text: (root?.textContent || "").replace(/\s+/g, " ").trim(),
       strong: (strong?.textContent || "").replace(/\s+/g, " ").trim(),
       top: (top?.textContent || "").replace(/\s+/g, " ").trim(),
+      desk: (desk?.textContent || "").replace(/\s+/g, " ").trim(),
       attr,
+      figure: Number(String(figure?.textContent || "").replace(/,/g, "").trim()),
       visible: !!(root && root.getBoundingClientRect().height > 4),
     };
   });
@@ -78,10 +122,21 @@ const browser = await chromium.launch({ headless: true });
   else pass("home: strong definition matches open-lane.ts");
   if (norm(home.top) !== norm(expected.top)) fail(`home top-fund def mismatch: ${JSON.stringify(home.top)}`);
   else pass("home: top-fund definition matches open-lane.ts");
+  if (norm(home.desk) !== norm(expected.desk)) fail(`home desk def mismatch: ${JSON.stringify(home.desk)}`);
+  else pass("home: desk definition matches open-lane.ts");
   if (norm(home.text) !== norm(expected.full)) fail(`home full def mismatch: ${JSON.stringify(home.text)}`);
   else pass("home: full definition matches open-lane.ts");
   if (norm(home.attr) !== norm(expected.full)) fail(`home data-fold-open-lane-def-full attr mismatch`);
   else pass("home: data-fold-open-lane-def-full matches");
+  if (corpus.outsideCorpus !== 0) fail(`computed open-lane has ${corpus.outsideCorpus} founders outside investable corpus`);
+  else pass(`corpus: every open-lane founder company is investable (n=${corpus.openLaneCount})`);
+  if (corpus.investableCompanies !== 1173) fail(`investable corpus size ${corpus.investableCompanies} != 1173`);
+  else pass("corpus: investable desk is 1,173");
+  if (home.figure !== corpus.openLaneCount) {
+    fail(`home figure ${home.figure} != computed open-lane ${corpus.openLaneCount}`);
+  } else {
+    pass(`home: figure ${home.figure} equals computed open-lane set`);
+  }
   await page.close();
 }
 
@@ -93,11 +148,13 @@ const browser = await chromium.launch({ headless: true });
     const root = document.querySelector("[data-methodology-open-lane-def]");
     const strong = document.querySelector("[data-methodology-open-lane-def-strong]");
     const top = document.querySelector("[data-methodology-open-lane-def-top-fund]");
+    const desk = document.querySelector("[data-methodology-open-lane-def-desk]");
     const full = document.querySelector("[data-methodology-open-lane-def-full]");
     return {
       text: (root?.textContent || "").replace(/\s+/g, " ").trim(),
       strong: (strong?.textContent || "").replace(/\s+/g, " ").trim(),
       top: (top?.textContent || "").replace(/\s+/g, " ").trim(),
+      desk: (desk?.textContent || "").replace(/\s+/g, " ").trim(),
       full: (full?.textContent || "").replace(/\s+/g, " ").trim(),
     };
   });
@@ -106,6 +163,8 @@ const browser = await chromium.launch({ headless: true });
   else pass("methodology: strong definition matches open-lane.ts");
   if (norm(methodology.top) !== norm(expected.top)) fail(`methodology top-fund def mismatch: ${JSON.stringify(methodology.top)}`);
   else pass("methodology: top-fund definition matches open-lane.ts");
+  if (norm(methodology.desk) !== norm(expected.desk)) fail(`methodology desk def mismatch: ${JSON.stringify(methodology.desk)}`);
+  else pass("methodology: desk definition matches open-lane.ts");
   if (norm(methodology.text) !== norm(expected.full)) fail(`methodology visible def mismatch: ${JSON.stringify(methodology.text)}`);
   else pass("methodology: visible definition matches open-lane.ts");
   if (norm(methodology.full) !== norm(expected.full)) fail(`methodology full def mismatch`);
@@ -118,5 +177,9 @@ await browser.close();
 report.ok = process.exitCode !== 1;
 fs.mkdirSync(path.dirname(OUT) === "." ? "reviews" : path.dirname(OUT), { recursive: true });
 fs.writeFileSync(OUT, JSON.stringify(report, null, 2));
-console.log(report.ok ? "PASS check-open-lane-def" : "FAIL check-open-lane-def", { wrote: OUT });
+console.log(report.ok ? "PASS check-open-lane-def" : "FAIL check-open-lane-def", {
+  wrote: OUT,
+  openLaneCount: corpus.openLaneCount,
+  investableCompanies: corpus.investableCompanies,
+});
 if (!report.ok) process.exit(1);

@@ -28,9 +28,28 @@ export function founderIsStrong(founder: FounderLead): boolean {
   return founder.signalTypes.some((type) => STRONG.has(type));
 }
 
-/** Strong signal, no top fund or top accelerator on the founder record. */
-export function founderIsOpenLane(founder: FounderLead): boolean {
-  return founderIsStrong(founder) && !founderHasTopFund(founder);
+/** Linked company id is one of the investable Scout desk companies (the shared 1,173). */
+export function founderCompanyOnInvestableDesk(
+  founder: FounderLead,
+  investableCompanyIds: ReadonlySet<string>,
+): boolean {
+  const id = founder.companyId?.trim();
+  return Boolean(id && investableCompanyIds.has(id));
+}
+
+/**
+ * Strong signal, no top fund or top accelerator, and company on the investable desk.
+ * Callers must pass the live investable id set so hero, deck, segments, and checks stay aligned.
+ */
+export function founderIsOpenLane(
+  founder: FounderLead,
+  investableCompanyIds: ReadonlySet<string>,
+): boolean {
+  return (
+    founderIsStrong(founder) &&
+    !founderHasTopFund(founder) &&
+    founderCompanyOnInvestableDesk(founder, investableCompanyIds)
+  );
 }
 
 export type OpenLaneCampus = { id: string; name: string; founders: number };
@@ -41,14 +60,22 @@ export type OpenLaneShell = {
   campuses: OpenLaneCampus[];
 };
 
-export function buildOpenLaneShell(founders: FounderLead[], campusLimit = 5): OpenLaneShell {
+/**
+ * Open-lane count and campus ranks. Strong is still the full strong-signal tally;
+ * open-lane membership requires an investable company id.
+ */
+export function buildOpenLaneShell(
+  founders: FounderLead[],
+  investableCompanyIds: ReadonlySet<string>,
+  campusLimit = 5,
+): OpenLaneShell {
   let strong = 0;
   let count = 0;
   const byCampus = new Map<string, OpenLaneCampus>();
   for (const founder of founders) {
     if (!founderIsStrong(founder)) continue;
     strong += 1;
-    if (!founderIsOpenLane(founder)) continue;
+    if (!founderIsOpenLane(founder, investableCompanyIds)) continue;
     count += 1;
     const id = founder.campusId?.trim() || "missing";
     if (id === "missing") continue;
@@ -83,7 +110,12 @@ export function openLaneTopFundDefinition(): string {
   return `Top fund means a top VC, ${joinPlainList(OPEN_LANE_TOP_ACCELERATOR_LABELS)}.`;
 }
 
-/** Full hero / methodology definition block (two sentences). */
+/** Plain words. Open lane only counts founders linked to the investable Scout desk. */
+export function openLaneDeskDefinition(): string {
+  return "The company must sit on the investable desk.";
+}
+
+/** Full hero / methodology definition block. */
 export function openLaneDefinitionText(): string {
-  return `${openLaneStrongDefinition()} ${openLaneTopFundDefinition()}`;
+  return `${openLaneStrongDefinition()} ${openLaneTopFundDefinition()} ${openLaneDeskDefinition()}`;
 }

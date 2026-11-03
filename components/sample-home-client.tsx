@@ -590,9 +590,17 @@ export function SampleHomeClient(props: {
     activeChips.push({ key: "q", label: `“${founderQuery.trim()}”`, onClear: () => setFounderQuery("") });
   }
 
+  const investableCompanyIds = useMemo(
+    () => new Set(companies.map((company) => company.id).filter(Boolean)),
+    [companies],
+  );
+
   const openLane = useMemo(
-    () => (founders.length ? buildOpenLaneShell(founders) : null),
-    [founders],
+    () =>
+      founders.length && investableCompanyIds.size
+        ? buildOpenLaneShell(founders, investableCompanyIds)
+        : null,
+    [founders, investableCompanyIds],
   );
 
   return (
@@ -637,6 +645,7 @@ export function SampleHomeClient(props: {
                     query={founderQuery}
                     campusId={mapCampusId}
                     openLane={openLane}
+                    investableCompanyIds={investableCompanyIds}
                   />
                 }
                 peek={
@@ -646,6 +655,7 @@ export function SampleHomeClient(props: {
                     query={founderQuery}
                     campusId={mapCampusId}
                     openLane={openLane}
+                    investableCompanyIds={investableCompanyIds}
                   />
                 }
                 filterKeep={

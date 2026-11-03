@@ -3,6 +3,7 @@
 import { CampusSeal } from "@/components/campus-seal";
 import {
   openLaneDefinitionText,
+  openLaneDeskDefinition,
   openLaneStrongDefinition,
   openLaneTopFundDefinition,
   type OpenLaneShell,
@@ -27,6 +28,7 @@ export function FoldOpenLaneHero({
   const campuses = shell?.campuses ?? [];
   const strongDef = openLaneStrongDefinition();
   const topFundDef = openLaneTopFundDefinition();
+  const deskDef = openLaneDeskDefinition();
   const fullDef = openLaneDefinitionText();
   return (
     <div className="mb-2" data-fold-open-lane="" data-fold-redesign="open-lane">
@@ -40,7 +42,7 @@ export function FoldOpenLaneHero({
         {count.toLocaleString("en-US")}
       </p>
       <p className="mt-1.5 text-[14px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-fold-open-lane-caption="">
-        strong student founders with no top fund yet
+        strong student founders on the investable desk with no top fund yet
       </p>
       <p
         className="mt-1.5 text-[11px] leading-4 text-[color:var(--fg-2,#3F465C)]"
@@ -48,7 +50,8 @@ export function FoldOpenLaneHero({
         data-fold-open-lane-def-full={fullDef}
       >
         <span data-fold-open-lane-def-strong="">{strongDef}</span>{" "}
-        <span data-fold-open-lane-def-top-fund="">{topFundDef}</span>
+        <span data-fold-open-lane-def-top-fund="">{topFundDef}</span>{" "}
+        <span data-fold-open-lane-def-desk="">{deskDef}</span>
       </p>
       <p className="mt-1 font-mono text-[10px] tabular-nums text-[color:var(--fg-3,#5C647A)]" data-fold-open-lane-meta="">
         {strong.toLocaleString("en-US")} strong signals

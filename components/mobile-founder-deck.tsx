@@ -46,10 +46,16 @@ function evidenceChips(
   return out.slice(0, 4);
 }
 
-function poolForLane(founders: FounderLead[], query: string, campusId: string | null, preferOpenLane: boolean) {
+function poolForLane(
+  founders: FounderLead[],
+  query: string,
+  campusId: string | null,
+  preferOpenLane: boolean,
+  investableCompanyIds: ReadonlySet<string>,
+) {
   const matched = founders.filter((f) => founderMatches(f, { text: query, campusId: campusId || null }));
   if (!preferOpenLane) return { list: matched, lane: "all" as const };
-  const open = matched.filter(founderIsOpenLane);
+  const open = matched.filter((f) => founderIsOpenLane(f, investableCompanyIds));
   if (open.length > 0) return { list: open, lane: "open" as const };
   return { list: matched, lane: "all" as const };
 }
@@ -64,18 +70,20 @@ export function MobileFounderDeck({
   query,
   campusId,
   openLane = null,
+  investableCompanyIds,
 }: {
   founders: FounderLead[];
   status: "loading" | "ready" | "error";
   query: string;
   campusId: string | null;
   openLane?: OpenLaneShell | null;
+  investableCompanyIds: ReadonlySet<string>;
 }) {
   const [shown, setShown] = useState(DECK_PAGE);
 
   const { list: matches, lane } = useMemo(
-    () => poolForLane(founders, query, campusId, true),
-    [founders, query, campusId],
+    () => poolForLane(founders, query, campusId, true, investableCompanyIds),
+    [founders, query, campusId, investableCompanyIds],
   );
   const list = matches.slice(0, shown);
   const whyById = useMemo(() => assignWhyWorthALook(list), [list]);
@@ -244,6 +252,7 @@ export function MobileFounderPeek({
   query,
   campusId,
   openLane = null,
+  investableCompanyIds,
   onExpand,
 }: {
   founders: FounderLead[];
@@ -251,11 +260,12 @@ export function MobileFounderPeek({
   query: string;
   campusId: string | null;
   openLane?: OpenLaneShell | null;
+  investableCompanyIds: ReadonlySet<string>;
   onExpand?: () => void;
 }) {
   const { list: matches, lane } = useMemo(
-    () => poolForLane(founders, query, campusId, true),
-    [founders, query, campusId],
+    () => poolForLane(founders, query, campusId, true, investableCompanyIds),
+    [founders, query, campusId, investableCompanyIds],
   );
   const list = matches.slice(0, 16);
   const figure = openLane?.count ?? matches.length;
