@@ -1,0 +1,1450 @@
+{
+  "retrievedAt": "2026-11-03T08:46:06.004Z",
+  "companies": [
+    {
+      "name": "Kintic, Corp.",
+      "description": "Data Layer for humanoid robots",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Kintic, Corp. (industry: SaaS), booth 51. Data Layer for humanoid robots",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Sokol Technologies, Inc.",
+      "description": "Sokol Technologies develops affordable, versatile, and technologically advanced anti-drone defense systems for modern warfare.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Sokol Technologies, Inc. (industry: Robotics and Drones), booth 64. Sokol Technologies develops affordable, versatile, and technologically advanced anti-drone defense systems for modern warfare.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "DoorTix",
+      "description": "DoorTix is a ticket-buying concierge that automatically secures the seats you want at the price you set.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: DoorTix (industry: Consumer and Media Tech), booth 9. DoorTix is a ticket-buying concierge that automatically secures the seats you want at the price you set.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Dossi",
+      "description": "Dossi is an insulin pump controller designed to reduce the everyday user burden and real-world challenges that prevent automated insulin delivery systems from reaching",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Dossi (industry: Healthcare), booth 88. Dossi is an insulin pump controller designed to reduce the everyday user burden and real-world challenges that prevent automated insulin delivery systems from reaching",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Vulture",
+      "description": "Re-purposing retired wind turbine blades as infrastructure.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Vulture (industry: Deep Tech), booth 95. Re-purposing retired wind turbine blades as infrastructure.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Schorty Technologies",
+      "description": "SCHORTY is a camera-native 3D sensing platform that turns any camera into a compact instrument for measuring distance and 3D structure across the full frame.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Schorty Technologies (industry: Deep Tech), booth 79. SCHORTY is a camera-native 3D sensing platform that turns any camera into a compact instrument for measuring distance and 3D structure across the full frame.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "GeneLock",
+      "description": "GeneLock places a lock inside engineered cells at the DNA level. This stops biological IP theft by ensuring that nothing is produced without the right chemical passcode.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: GeneLock (industry: Deep Tech), booth 96. GeneLock places a lock inside engineered cells at the DNA level. This stops biological IP theft by ensuring that nothing is produced without the right chemical passcode.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "UnStationery",
+      "description": "Enhancing memory and creativity during outdoor adventure through a hard cover, refillable journal system.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: UnStationery (industry: Consumer and Media Tech), booth 11. Enhancing memory and creativity during outdoor adventure through a hard cover, refillable journal system.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "eLaps",
+      "description": "Just keep swimming! Leave the counting to us.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: eLaps (industry: Industrial and Manufacturing), booth 38. Just keep swimming! Leave the counting to us.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Press Box Toolkit",
+      "description": "Changing the game for sporting event PA announcers, DJs, and press box staff.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Press Box Toolkit (industry: Consumer and Media Tech), booth 7. Changing the game for sporting event PA announcers, DJs, and press box staff.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Fractal Semiconductor",
+      "description": "Fractal Semiconductor is the agentic operating system fabs use to accelerate R&D and manufacturing bottlenecks.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Fractal Semiconductor (industry: Industrial and Manufacturing), booth 65. Fractal Semiconductor is the agentic operating system fabs use to accelerate R&D and manufacturing bottlenecks.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "IASTMotion.",
+      "description": "The world’s first automated IASTM robot that enables physical therapists to treat patients remotely with consistent, precise, data-backed muscular scraping.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: IASTMotion. (industry: Healthcare), booth 86. The world’s first automated IASTM robot that enables physical therapists to treat patients remotely with consistent, precise, data-backed muscular scraping.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "AdaptaPlay",
+      "description": "Making gaming accessible for everyone",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: AdaptaPlay (industry: Consumer and Media Tech), booth 10. Making gaming accessible for everyone",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "LeLLM",
+      "description": "Secure, on-premise AI that helps law enforcement agencies interpret and comply with their own policies.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: LeLLM (industry: SaaS), booth 61. Secure, on-premise AI that helps law enforcement agencies interpret and comply with their own policies.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "ServeGuard",
+      "description": "Serve your guests health, Guard your business from risk.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: ServeGuard (industry: SaaS), booth 54. Serve your guests health, Guard your business from risk.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Ampara.AI",
+      "description": "AI-native client intake for mexican law firms.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Ampara.AI (industry: SaaS), booth 59. AI-native client intake for mexican law firms.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Smart Learning System by Baya Data and AI",
+      "description": "We empower K–12 schools, universities, and online learning platforms with AI‑driven tools that personalize and elevate the learning experience.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Smart Learning System by Baya Data and AI (industry: Education), booth 105. We empower K–12 schools, universities, and online learning platforms with AI‑driven tools that personalize and elevate the learning experience.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Alva",
+      "description": "Alva helps women’s health innovators build better products by connecting them with trusted communities of women for research, testing, and feedback.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Alva (industry: Healthcare), booth 87. Alva helps women’s health innovators build better products by connecting them with trusted communities of women for research, testing, and feedback.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Align Valuation",
+      "description": "Align Valuation is a front office strategy partner that uses traditional statistics, advanced analytics, and performance data to help college baseball and softball",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Align Valuation (industry: SaaS), booth 52. Align Valuation is a front office strategy partner that uses traditional statistics, advanced analytics, and performance data to help college baseball and softball",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "NeuroCore",
+      "description": "NeuroCore is an AI-powered hip brace that helps children with cerebral palsy build core stability and independence.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: NeuroCore (industry: Healthcare), booth 83. NeuroCore is an AI-powered hip brace that helps children with cerebral palsy build core stability and independence.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Pruvia",
+      "description": "Drive Pruvia helps parents become better driving coaches for their teen drivers through structured lessons and progress tracking",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Pruvia (industry: Consumer and Media Tech), booth 17. Drive Pruvia helps parents become better driving coaches for their teen drivers through structured lessons and progress tracking",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Brio",
+      "description": "Robot testing infrastructure for mass robot commercialization",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Brio (industry: Robotics and Drones), booth 40. Robot testing infrastructure for mass robot commercialization",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Titerly",
+      "description": "Titerly is the AI workspace where scientific teams turn recurring work into reusable, inspectable, and auditable workflows.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Titerly (industry: SaaS), booth 53. Titerly is the AI workspace where scientific teams turn recurring work into reusable, inspectable, and auditable workflows.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Orivya",
+      "description": "We help creators turn unused creative files into structured, rights-cleared assets and provide a marketplace where they can be discovered, licensed, reused, and",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Orivya (industry: Consumer and Media Tech), booth 14. We help creators turn unused creative files into structured, rights-cleared assets and provide a marketplace where they can be discovered, licensed, reused, and",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Plant IQ",
+      "description": "PlantIQ brings adaptive disease intelligence to agriculture, converting field data into targeted testing and intervention plans.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Plant IQ (industry: Deep Tech), booth 102. PlantIQ brings adaptive disease intelligence to agriculture, converting field data into targeted testing and intervention plans.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Mamacare360",
+      "description": "MamaCare360 catches maternal danger before it becomes a crisis — our proprietary algorithm combines a mom's medical history, ethnicity-based risk, and real-time symptoms",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Mamacare360 (industry: Healthcare), booth 85. MamaCare360 catches maternal danger before it becomes a crisis — our proprietary algorithm combines a mom's medical history, ethnicity-based risk, and real-time symptoms",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Audora",
+      "description": "Audora is a multi-driver earphone platform that delivers personalized, high-fidelity audio through advanced acoustic design and precise tuning.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Audora (industry: Consumer and Media Tech), booth 5. Audora is a multi-driver earphone platform that delivers personalized, high-fidelity audio through advanced acoustic design and precise tuning.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Fructus Robotics",
+      "description": "Blueberry farms will adopt our robotic harvester because it reduces dependence on scarce labor while preserving fresh market fruit quality.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Fructus Robotics (industry: Deep Tech), booth 80. Blueberry farms will adopt our robotic harvester because it reduces dependence on scarce labor while preserving fresh market fruit quality.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Teclaz, LLC",
+      "description": "AI Analytics for Small Businesses",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Teclaz, LLC (industry: SaaS), booth 60. AI Analytics for Small Businesses",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Novi",
+      "description": "A dating app that replaces weeks of texting with a 5-minute video call that's auto-scheduled after you match.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Novi (industry: Consumer and Media Tech), booth 21. A dating app that replaces weeks of texting with a 5-minute video call that's auto-scheduled after you match.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Wanderpress",
+      "description": "All-in-one art tool for on-the-go creation, at a lowered barrier of entry",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Wanderpress (industry: Consumer and Media Tech), booth 28. All-in-one art tool for on-the-go creation, at a lowered barrier of entry",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "ZYM - An AI-native health lifestyle community",
+      "description": "ZYM is an AI FaceTime Fitness Coaching platform where users are able to conveniently interact (in voice & video) with the AI Coach in our app like FaceTime with an",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: ZYM - An AI-native health lifestyle community (industry: Consumer and Media Tech), booth 23. ZYM is an AI FaceTime Fitness Coaching platform where users are able to conveniently interact (in voice & video) with the AI Coach in our app like FaceTime with an",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Paws & Wicks",
+      "description": "Pet friendly candles designed to raise awareness regarding the issue of harmful scents",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Paws & Wicks (industry: Consumer and Media Tech), booth 25. Pet friendly candles designed to raise awareness regarding the issue of harmful scents",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Tacklbox",
+      "description": "A guided fishing app that teaches you how to fish, helps you catch more, and supports conservation through real data.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Tacklbox (industry: Consumer and Media Tech), booth 30. A guided fishing app that teaches you how to fish, helps you catch more, and supports conservation through real data.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "VerbaSchola Inc.",
+      "description": "The AI co-teacher to scale speaking practice in language classes",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: VerbaSchola Inc. (industry: Education), booth 71. The AI co-teacher to scale speaking practice in language classes",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Jexim",
+      "description": "An infratechnology company focused on material circularity and stormwater-resilient infrastructure",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Jexim (industry: Deep Tech), booth 74. An infratechnology company focused on material circularity and stormwater-resilient infrastructure",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "PaperTrail",
+      "description": "PaperTrail helps DIY landlords and Airbnb hosts stay tax-ready year-round by capturing the context behind rental expenses at the moment they happen.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: PaperTrail (industry: SaaS), booth 50. PaperTrail helps DIY landlords and Airbnb hosts stay tax-ready year-round by capturing the context behind rental expenses at the moment they happen.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "SEPTR: Sepsis Early Prioritization and Triage Ranking",
+      "description": "SEPTR is an dashboard that ranks patients by their risk of sepsis in the ED",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: SEPTR: Sepsis Early Prioritization and Triage Ranking (industry: Healthcare), booth 82. SEPTR is an dashboard that ranks patients by their risk of sepsis in the ED",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Instinct",
+      "description": "Closing the Municipal Revenue Gap with Autonomous Satellite Telemetry.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Instinct (industry: Robotics and Drones), booth 39. Closing the Municipal Revenue Gap with Autonomous Satellite Telemetry.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "AnnularBio",
+      "description": "Life scientists will contract monoclonal antibodies to targets (glycans, small molecules, etc) essential for R&D to advance clinical and diagnostic programs.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: AnnularBio (industry: Deep Tech), booth 100. Life scientists will contract monoclonal antibodies to targets (glycans, small molecules, etc) essential for R&D to advance clinical and diagnostic programs.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "DozeOn Technologies",
+      "description": "Smarter sensing & safer sites.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: DozeOn Technologies (industry: Industrial and Manufacturing), booth 68. Smarter sensing & safer sites.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Typhoon",
+      "description": "No more dirty dishes",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Typhoon (industry: Industrial and Manufacturing), booth 36. No more dirty dishes",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Cogniqwave.ai",
+      "description": "QSTRATUM - A verification layer that emits only source cited, value-faithful Grounded answers for your policy documents",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Cogniqwave.ai (industry: SaaS), booth 57. QSTRATUM - A verification layer that emits only source cited, value-faithful Grounded answers for your policy documents",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Lazarus Eagles",
+      "description": "We want you to wear your compression socks like you wear your favorite shoes— 1 and done",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Lazarus Eagles (industry: Healthcare), booth 94. We want you to wear your compression socks like you wear your favorite shoes— 1 and done",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Penny Wars",
+      "description": "Penny Wars helps nonprofits increase donations through fun, community-based giving competitions and automated marketing.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Penny Wars (industry: SaaS), booth 42. Penny Wars helps nonprofits increase donations through fun, community-based giving competitions and automated marketing.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "EVER",
+      "description": "We reduce errors in human‑involved tasks through auto-verification.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: EVER (industry: Industrial and Manufacturing), booth 69. We reduce errors in human‑involved tasks through auto-verification.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Eve Inc.",
+      "description": "Ode is a social platform that turns everyday intentions - grabbing coffee, studying, hitting the gym - into real-world meetups by instantly connecting you with nearby",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Eve Inc. (industry: Consumer and Media Tech), booth 13. Ode is a social platform that turns everyday intentions - grabbing coffee, studying, hitting the gym - into real-world meetups by instantly connecting you with nearby",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "RevSage AI",
+      "description": "RevSage reads your buyer's psychology and tells your sales team how to win them",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: RevSage AI (industry: SaaS), booth 48. RevSage reads your buyer's psychology and tells your sales team how to win them",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Aiventory",
+      "description": "AIventory is an AI procurement operating system that automates sourcing, RFQs, purchasing, and replenishment for SMB manufacturers and distributors.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Aiventory (industry: Industrial and Manufacturing), booth 67. AIventory is an AI procurement operating system that automates sourcing, RFQs, purchasing, and replenishment for SMB manufacturers and distributors.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Neuronet Design LLC",
+      "description": "Neuronet Design connects small and medium businesses with certified AI specialists who build and install AI systems the business owns.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Neuronet Design LLC (industry: Education), booth 73. Neuronet Design connects small and medium businesses with certified AI specialists who build and install AI systems the business owns.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "ZetaThink",
+      "description": "Advancing interview preparation through adaptive intelligence.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: ZetaThink (industry: Education), booth 103. Advancing interview preparation through adaptive intelligence.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Cernuvo",
+      "description": "We help healthcare SMBs with internal workforce planning in the AI era.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Cernuvo (industry: HR Tech), booth 3. We help healthcare SMBs with internal workforce planning in the AI era.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "THRACE AI",
+      "description": "THRACE AI is an AI-powered cybersecurity platform that tells your team what to act on and when, so you don't need a FAANG-sized team to track the threats that actually",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: THRACE AI (industry: cybersecurity), booth 31. THRACE AI is an AI-powered cybersecurity platform that tells your team what to act on and when, so you don't need a FAANG-sized team to track the threats that actually",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Jackson & Schwab Technologies",
+      "description": "We build machines that make oxygen from lunar soil.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Jackson & Schwab Technologies (industry: Robotics and Drones), booth 63. We build machines that make oxygen from lunar soil.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Voyage Health",
+      "description": "Voyage is an AI health companion that helps people understand symptoms and decide when to seek medical care through structured, guided explanations rather than",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Voyage Health (industry: Healthcare), booth 81. Voyage is an AI health companion that helps people understand symptoms and decide when to seek medical care through structured, guided explanations rather than",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Lumen AI",
+      "description": "Lumen AI is a handheld AI reading wand that transforms reading into an interactive, real-time learning experience, guiding students through comprehension as they read",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Lumen AI (industry: Education), booth 70. Lumen AI is a handheld AI reading wand that transforms reading into an interactive, real-time learning experience, guiding students through comprehension as they read",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "familycompass.ai",
+      "description": "Family Compass turns the long wait for an autism diagnosis into a head start for your child.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: familycompass.ai (industry: Healthcare), booth 93. Family Compass turns the long wait for an autism diagnosis into a head start for your child.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Integritas Health",
+      "description": "Accurancy of Code. Nuance of AI.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Integritas Health (industry: Healthcare), booth 84. Accurancy of Code. Nuance of AI.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "CaprStack",
+      "description": "SettleCent is a privacy-first expense-sharing app that utilizes advanced OCR and offline QR synchronization to let users instantly split group receipts without relying",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: CaprStack (industry: Consumer and Media Tech), booth 19. SettleCent is a privacy-first expense-sharing app that utilizes advanced OCR and offline QR synchronization to let users instantly split group receipts without relying",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Golden Goddess Box",
+      "description": "Golden Goddess Box is a data-driven subscription box and brand studio for Black women 40+, turning self-care into a personalized, high-retention wellness platform.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Golden Goddess Box (industry: Consumer and Media Tech), booth 16. Golden Goddess Box is a data-driven subscription box and brand studio for Black women 40+, turning self-care into a personalized, high-retention wellness platform.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "SPRK",
+      "description": "Where Play Meets Purpose",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: SPRK (industry: Consumer and Media Tech), booth 18. Where Play Meets Purpose",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Maru Labs",
+      "description": "A safe space for high-stakes conversations: Mastering human interaction through simulation.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Maru Labs (industry: SaaS), booth 47. A safe space for high-stakes conversations: Mastering human interaction through simulation.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "CheckMate",
+      "description": "Cursor for grading exams.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: CheckMate (industry: Education), booth 104. Cursor for grading exams.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Kaptize",
+      "description": "Kaptize eliminates the gap between what your employees need to know and what they actually know",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Kaptize (industry: HR Tech), booth 33. Kaptize eliminates the gap between what your employees need to know and what they actually know",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "PedalSwap",
+      "description": "PedalSwap puts a world of effects in one pedal, allowing modular tone customization to guitarists of any level.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: PedalSwap (industry: Consumer and Media Tech), booth 24. PedalSwap puts a world of effects in one pedal, allowing modular tone customization to guitarists of any level.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Admisely",
+      "description": "Admisely is an AI platform that gives high school students personalized, step-by-step guidance through the entire college application process",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Admisely (industry: Education), booth 106. Admisely is an AI platform that gives high school students personalized, step-by-step guidance through the entire college application process",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "MPower Boards (MPBs) - Empowering Innovation in Power Systems.",
+      "description": "MPower Boards builds low-cost, interactive hardware tools that make power system optimization and grid operations tangible for education, research, and outreach.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: MPower Boards (MPBs) - Empowering Innovation in Power Systems. (industry: Education), booth 103. MPower Boards builds low-cost, interactive hardware tools that make power system optimization and grid operations tangible for education, research, and outreach.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Anatomix",
+      "description": "Performance wearables for elite sports.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Anatomix (industry: Healthcare), booth 89. Performance wearables for elite sports.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "SENTIA INSTRUMENTS",
+      "description": "Sentia Instruments builds haptic, tactile musical instruments that make music creation more expressive, intuitive, and immediate.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: SENTIA INSTRUMENTS (industry: Consumer and Media Tech), booth 29. Sentia Instruments builds haptic, tactile musical instruments that make music creation more expressive, intuitive, and immediate.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Browne Bioactives",
+      "description": "We help businesses fill their protein needs in a timely and cost efficient manner",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Browne Bioactives (industry: Industrial and Manufacturing), booth 35. We help businesses fill their protein needs in a timely and cost efficient manner",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Jlarae",
+      "description": "Lash and Slay the JLarae Way",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Jlarae (industry: Consumer and Media Tech), booth 4. Lash and Slay the JLarae Way",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "EphemerisX",
+      "description": "Infrastructure for reconstructing how and why complex events happen.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: EphemerisX (industry: SaaS), booth 56. Infrastructure for reconstructing how and why complex events happen.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "SilverKey",
+      "description": "SilverKey builds AI artists with worldviews. Commission a point of view, not a style, and get differentiated creative work where every decision is inspectable, editable,",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: SilverKey (industry: SaaS), booth 49. SilverKey builds AI artists with worldviews. Commission a point of view, not a style, and get differentiated creative work where every decision is inspectable, editable,",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "MoovieMe (MoovieMe.io)",
+      "description": "AI-powered storytelling for real-life video.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: MoovieMe (MoovieMe.io) (industry: SaaS), booth 41. AI-powered storytelling for real-life video.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "CareJobs",
+      "description": "Better match, better care.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: CareJobs (industry: HR Tech), booth 1. Better match, better care.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Madera Systems",
+      "description": "Madera helps remodelers turn room scans and client decisions into contractor-reviewed scope, order quantities, and job economics they can trust.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Madera Systems (industry: SaaS), booth 46. Madera helps remodelers turn room scans and client decisions into contractor-reviewed scope, order quantities, and job economics they can trust.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "ForteShield AI",
+      "description": "Engineering AI security for fearless innovation",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: ForteShield AI (industry: cybersecurity), booth 32. Engineering AI security for fearless innovation",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "WildRest",
+      "description": "Civilizing the outdoor experience. Alt if more space is allowed: The WildRest is a collapsible, all-in-one portable system designed to civilize the experience of",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: WildRest (industry: Consumer and Media Tech), booth 26. Civilizing the outdoor experience. Alt if more space is allowed: The WildRest is a collapsible, all-in-one portable system designed to civilize the experience of",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "ARMOR",
+      "description": "Companies will buy back exo because it prevents back injuries for workers and benefits the company by lessen worker compensation & turnover",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: ARMOR (industry: Deep Tech), booth 99. Companies will buy back exo because it prevents back injuries for workers and benefits the company by lessen worker compensation & turnover",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Varda",
+      "description": "Scintillant develops 2D material-based semiconductors that outperform silicon, which enables faster, smaller, and more efficient chips for computing and sensing",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Varda (industry: Industrial and Manufacturing), booth 66. Scintillant develops 2D material-based semiconductors that outperform silicon, which enables faster, smaller, and more efficient chips for computing and sensing",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Alankar",
+      "description": "Alankar helps musicians accomplish their goals.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Alankar (industry: Consumer and Media Tech), booth 6. Alankar helps musicians accomplish their goals.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "CaliFlow Fitness",
+      "description": "CaliFlow is a calisthenics based workout tracker and progression system for learning high level calisthenics skills.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: CaliFlow Fitness (industry: Consumer and Media Tech), booth 15. CaliFlow is a calisthenics based workout tracker and progression system for learning high level calisthenics skills.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "VoltaPure",
+      "description": "VoltaPure is dedicated to developing chemical-free, energy-efficient water disinfection technologies that involves electric field treatment.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: VoltaPure (industry: Deep Tech), booth 78. VoltaPure is dedicated to developing chemical-free, energy-efficient water disinfection technologies that involves electric field treatment.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Fractal Share",
+      "description": "Your personal AI real estate analyst",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Fractal Share (industry: Consumer and Media Tech), booth 22. Your personal AI real estate analyst",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Ampora Inc.",
+      "description": "Ampora is an AI-powered career platform that connects personalized advising, skill development, portfolio building, job applications, and interview preparation in one",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Ampora Inc. (industry: HR Tech), booth 2. Ampora is an AI-powered career platform that connects personalized advising, skill development, portfolio building, job applications, and interview preparation in one",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Signifi",
+      "description": "Simplifying requirements engineering for product teams",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Signifi (industry: SaaS), booth 43. Simplifying requirements engineering for product teams",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Neurobot: \"Microrobots for Neurosurgery Applications\"",
+      "description": "Microrobotics for Precision Neurosurgery",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Neurobot: \"Microrobots for Neurosurgery Applications\" (industry: Deep Tech), booth 101. Microrobotics for Precision Neurosurgery",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Deeproject",
+      "description": "Deeproject uses AI to analyze human–AI interactions and help teams identify, understand, and improve AI behavior at scale.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Deeproject (industry: Deep Tech), booth 98. Deeproject uses AI to analyze human–AI interactions and help teams identify, understand, and improve AI behavior at scale.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Mustard Seed Labs",
+      "description": "Orchard uses smart, privacy first technology to match Christians with mentors who have personally walked through the same life challenges, ensuring mentor-mentee fit",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Mustard Seed Labs (industry: SaaS), booth 58. Orchard uses smart, privacy first technology to match Christians with mentors who have personally walked through the same life challenges, ensuring mentor-mentee fit",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Kipiko",
+      "description": "Making hydration convenient and stylish.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Kipiko (industry: Consumer and Media Tech), booth 8. Making hydration convenient and stylish.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "HUMORUS",
+      "description": "Bringing smiles through tangible games and intangible experiences.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: HUMORUS (industry: Consumer and Media Tech), booth 20. Bringing smiles through tangible games and intangible experiences.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Leucina Therapeutics",
+      "description": "A next-generation cell therapy platform unlocking solid tumor indications that current CAR T architectures cannot safely address — beginning with breast cancer and",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Leucina Therapeutics (industry: Deep Tech), booth 97. A next-generation cell therapy platform unlocking solid tumor indications that current CAR T architectures cannot safely address — beginning with breast cancer and",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "MediMint",
+      "description": "MediMint is the most efficient infrastructure layer for instant, secure medical data exchange, replacing DVDs and fragmented portals with seamless delivery between",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: MediMint (industry: Healthcare), booth 91. MediMint is the most efficient infrastructure layer for instant, secure medical data exchange, replacing DVDs and fragmented portals with seamless delivery between",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": ".Chew",
+      "description": "A.chew is reimagining period cravings with thoughtfully crafted snacks made for women's cycles.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: .Chew (industry: Healthcare), booth 92. A.chew is reimagining period cravings with thoughtfully crafted snacks made for women's cycles.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "PatchLab",
+      "description": "PatchLab is an emotional playtesting platform that helps indie game developers understand how players actually feel during gameplay using multimodal AI.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: PatchLab (industry: SaaS), booth 55. PatchLab is an emotional playtesting platform that helps indie game developers understand how players actually feel during gameplay using multimodal AI.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Smartcule",
+      "description": "SmartCule uses AI to predict which lipid nanoparticles will deliver gene therapies to the right cell, cutting discovery from years to weeks.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Smartcule (industry: Deep Tech), booth 76. SmartCule uses AI to predict which lipid nanoparticles will deliver gene therapies to the right cell, cutting discovery from years to weeks.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "RealBench",
+      "description": "Automated Edge AI/Hardware Validation",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: RealBench (industry: SaaS), booth 62. Automated Edge AI/Hardware Validation",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Rivesia Inc.",
+      "description": "Rivesia is the craft layer for solo creators - hand it your footage, it takes you from idea to finished content in your own voice, without the hours of manual editing.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Rivesia Inc. (industry: Consumer and Media Tech), booth 12. Rivesia is the craft layer for solo creators - hand it your footage, it takes you from idea to finished content in your own voice, without the hours of manual editing.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "LazyChat Inc",
+      "description": "AI sales agent for social commerce merchants",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: LazyChat Inc (industry: SaaS), booth 44. AI sales agent for social commerce merchants",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Open BBB with Focused Ultrasound",
+      "description": "Next-generation focused ultrasound (FUS) platform for noninvasive brain interventionsfwei",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Open BBB with Focused Ultrasound (industry: Deep Tech), booth 93. Next-generation focused ultrasound (FUS) platform for noninvasive brain interventionsfwei",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "LucidPro",
+      "description": "AI film and commercial production platform for professional use cases, taking a creative from script to screen in one tool.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: LucidPro. AI film and commercial production platform for professional use cases, taking a creative from script to screen in one tool.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "The DUKA Brand",
+      "description": "The DUKA Brand is a design brand that creates accessories that evolve with your style and celebrate your story",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: The DUKA Brand. The DUKA Brand is a design brand that creates accessories that evolve with your style and celebrate your story",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "UrineLuck",
+      "description": "So the next time you need reliable urine monitoring…UrineLuck.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: UrineLuck. So the next time you need reliable urine monitoring…UrineLuck.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Exegesy",
+      "description": "A legal tech startup.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Exegesy. A legal tech startup.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Beor",
+      "description": "Beor is an autonomous data acquisition and structuring platform.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Beor. Beor is an autonomous data acquisition and structuring platform.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "ItCrowd",
+      "description": "Exposure engine for dtc brands.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: ItCrowd. Exposure engine for dtc brands.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Tyr Aerospace",
+      "description": "Tyr Aerospace focuses on developing the next generation of thermal protection systems for hypersonic applications.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Tyr Aerospace. Tyr Aerospace focuses on developing the next generation of thermal protection systems for hypersonic applications.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "BLUEMODE Games",
+      "description": "BLUE MODE games is developing the game, The Secrets We Grow, an atmopsheric puzzle-platformer for video game players who enjoy puzzles, story, and who liked the games",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: BLUEMODE Games. BLUE MODE games is developing the game, The Secrets We Grow, an atmopsheric puzzle-platformer for video game players who enjoy puzzles, story, and who liked the games",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "Rainshadow AI Inc.",
+      "description": "Plais by Rainshadow AI boosts distributor margins by pooling small restaurant demand into high-volume delivery route via predictive inventory software.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: Rainshadow AI Inc.. Plais by Rainshadow AI boosts distributor margins by pooling small restaurant demand into high-volume delivery route via predictive inventory software.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "RevSync",
+      "description": "RevSync is a modular vehicle telemetry platform that combines real-time performance data with personalized AI coaching to help every driver know how to improve faster",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: RevSync. RevSync is a modular vehicle telemetry platform that combines real-time performance data with personalized AI coaching to help every driver know how to improve faster",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    },
+    {
+      "name": "PrepsNova",
+      "description": "Active technical interview practice for engineering students.",
+      "website": null,
+      "sourceUrl": "https://create-x.gatech.edu/2026-demo-day",
+      "excerpt": "Georgia Tech CREATE-X 2026 Demo Day official company listing: PrepsNova. Active technical interview practice for engineering students.",
+      "orgPlace": "Georgia Tech CREATE-X Startup Launch 2026",
+      "campusIds": [
+        "univ_gatech"
+      ],
+      "verificationStatus": "confirmed",
+      "founders": []
+    }
+  ],
+  "potential": [],
+  "links": []
+}
