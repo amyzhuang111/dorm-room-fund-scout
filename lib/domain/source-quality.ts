@@ -14,6 +14,7 @@
 import type { CommunitySignal } from "./community-signal";
 import { EXPANDED_CAMPUS_DIRECTORIES } from "./expanded-campus-directories";
 import { CAMPUS_FOUNDER_SOURCE_EXPANSION } from "./campus-founder-source-expansion";
+import { LATE_2026_CAMPUS_SOURCE_ROSTERS } from "./late-2026-campus-source-rosters";
 
 export type Tier = "S+" | "S" | "A" | "B" | "C" | "D";
 export type DimensionLevel = "high" | "medium" | "low";
@@ -1897,6 +1898,7 @@ export const SOURCE_CATALOGUE: SourceCatalogueEntry[] = [
   },
   ...EXPANDED_CAMPUS_DIRECTORIES,
   ...CAMPUS_FOUNDER_SOURCE_EXPANSION,
+  ...LATE_2026_CAMPUS_SOURCE_ROSTERS,
 ];
 
 export function catalogueForCampus(campusId: string): SourceCatalogueEntry[] {

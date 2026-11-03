@@ -1,0 +1,82 @@
+name: Import 2026 Harvard Rock, CREATE-X, UC Davis and campus cohorts
+
+on:
+  push:
+    branches:
+      - codex/campus-rock-bigbang-createx-2026-11-03
+    paths:
+      - ".github/workflows/campus-rock-bigbang-createx-2026.yml"
+      - "data/imports/v3-campus-founders-batch2[6-9]-*.json"
+      - "data/imports/v3-campus-founders-batch3[0-2]-*.json"
+      - "scripts/ingest/build-createx-2026.ts"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: campus-rock-bigbang-createx-2026
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Parse 2026 CREATE-X official Demo Day startup roster
+        run: ./node_modules/.bin/tsx scripts/ingest/build-createx-2026.ts data/imports/v3-campus-founders-batch30-createx-demo-2026.json
+      - name: Import seven sourced 2026 venture cohorts
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in \
+            data/imports/v3-campus-founders-batch26-hbs-rock-2026.json \
+            data/imports/v3-campus-founders-batch27-yale-tsai-spring-2026.json \
+            data/imports/v3-campus-founders-batch28-ucdavis-bigbang-2026.json \
+            data/imports/v3-campus-founders-batch29-harvard-alumni-2026.json \
+            data/imports/v3-campus-founders-batch30-createx-demo-2026.json \
+            data/imports/v3-campus-founders-batch31-ucdavis-littlebang-2026.json \
+            data/imports/v3-campus-founders-batch32-ucla-dartmouth-2026.json
+          do
+            echo "Importing ${file}"
+            ./node_modules/.bin/tsx scripts/ingest/import-v3-campus-founders.ts "${file}"
+          done
+      - name: Validate DB integrity and founder/team roles
+        run: |
+          python3 - <<'PY'
+          import sqlite3
+          db=sqlite3.connect("data/campus-universe.db")
+          assert db.execute("PRAGMA integrity_check").fetchone()[0]=="ok"
+          for name in ("ABC Design","Clamp","Cicada Health","BridgePath Technologies","CuraVoice","Mossé","Charlemagne Labs"):
+              n=db.execute("SELECT COUNT(*) FROM projects WHERE name=? AND kind='company'",(name,)).fetchone()[0]
+              assert n>=1, (name, n)
+          # Avoid an exact spelling assumption for a company that may have
+          # an existing normalized/merged name in the canonical database.
+          assert db.execute("SELECT COUNT(*) FROM projects WHERE kind='company' AND lower(name) LIKE 'kintic%'").fetchone()[0]>=1
+          for name in ("Danielle Angela Limcaoco","Kanishk Tantia","Jolie Lerner","Camilla Lindh"):
+              n=db.execute("SELECT COUNT(*) FROM people WHERE name=?",(name,)).fetchone()[0]
+              assert n>=1, (name, n)
+          print("DB integrity and spot-checked company/founder records OK")
+          PY
+      - run: npm run test:directory
+      - name: Commit successful import without losing concurrent branch changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/campus-universe.db data/imports/v3-campus-founders-batch30-createx-demo-2026.json
+          if git diff --cached --quiet; then
+            echo "No new database content"
+          else
+            git commit -m "data: import 2026 HBS Rock, CREATE-X, Yale, UC Davis, Harvard alumni cohorts"
+            git fetch origin "${GITHUB_REF_NAME}"
+            git rebase "origin/${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
