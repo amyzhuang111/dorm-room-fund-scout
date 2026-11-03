@@ -184,7 +184,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
 
   const pad = compact ? "py-2" : "py-3";
   const columns = 2 + (showTier ? 1 : 0) + (campusLocked ? 0 : 1) + 1 + (showDate ? 1 : 0) + (showVerified ? 1 : 0);
-  const control = "inline-flex h-9 items-center rounded border border-line bg-raised px-3 text-[14px] text-fg";
+  const control = "inline-flex h-11 min-h-11 items-center rounded border border-line bg-raised px-3 text-[14px] text-fg sm:h-9 sm:min-h-0";
 
   const rowStarts = groups.reduce<number[]>((starts) => {
     const previous = starts.length === 0 ? 0 : starts[starts.length - 1] + groups[starts.length - 1].rows.length;
@@ -194,7 +194,7 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
 
   return (
     <div>
-      <p className="mb-4 text-[14px] leading-5 text-fg">
+      <p className="mb-3 text-[13px] leading-5 text-fg sm:mb-4 sm:text-[14px]">
         <span className="num">{rows.length.toLocaleString("en-US")}</span> projects
         {" / "}
         <span className="num">{withSignal.toLocaleString("en-US")}</span> with a signal
@@ -202,9 +202,9 @@ export function DataTable({ rows, campusLocked = false }: { rows: ProjectTableRo
         <span className="num">{noSignal.toLocaleString("en-US")}</span> with no signal yet
         {verifiedFilled > 0 ? <>{" / "}<span className="num">{verifiedFilled.toLocaleString("en-US")}</span> verified</> : null}
       </p>
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filters">
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" className="h-9 w-[280px] max-w-full rounded border border-line bg-raised px-2 text-[14px] text-fg outline-none" />
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+        <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filters" data-data-explorer-filters="">
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" className="h-11 w-[280px] max-w-full rounded border border-line bg-raised px-2 text-[14px] text-fg outline-none sm:h-9" />
           <select value={tier} onChange={(event) => setTier(event.target.value)} className={control} aria-label="Tier">
             <option value="">Tier</option>
             {["S+", "S", "A", "B", "C", "D"].map((value) => <option key={value}>{value}</option>)}

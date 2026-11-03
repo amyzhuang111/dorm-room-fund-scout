@@ -129,7 +129,7 @@ export function MobileFounderDeck({
           {lane === "open" ? "No top fund yet" : "Matches"}
         </p>
       </div>
-      <div className="space-y-2" data-founder-deck-list="">
+      <div className="space-y-1.5" data-founder-deck-list="">
         {list.map((founder) => {
           const why = whyById.get(founder.id) ?? null;
           const chips = evidenceChips(founder);
@@ -155,7 +155,7 @@ export function MobileFounderDeck({
               }
             >
               <article
-                className="flex flex-col rounded-md border border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5 shadow-[0_1px_0_rgba(15,23,42,0.04)]"
+                className="flex flex-col rounded-md border border-[color:var(--cobalt,#2F4FD8)]/20 bg-[color:var(--bg,#FFFFFF)] px-3 py-2 shadow-[0_1px_0_rgba(15,23,42,0.04)]"
                 data-founder-card-body=""
               >
                 <div className="flex items-start gap-2.5">
@@ -163,7 +163,7 @@ export function MobileFounderDeck({
                     <CampusSeal label={founder.campus} size="lg" />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <h3 className="truncate text-[16px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-founder-name="">
+                    <h3 className="truncate text-[15px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)]" data-founder-name="">
                       {founder.name}
                     </h3>
                     <p className="mt-0.5 flex min-w-0 items-center gap-1.5 text-[12px] leading-4 text-[color:var(--fg-2,#3F465C)]" data-founder-campus-company="">
@@ -181,7 +181,7 @@ export function MobileFounderDeck({
                   {href ? (
                     <Link
                       href={href}
-                      className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-[color:var(--cobalt,#2F4FD8)] hover:underline"
+                      className="inline-flex min-h-11 min-w-[2.75rem] shrink-0 items-center justify-center font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-[color:var(--cobalt,#2F4FD8)] hover:underline active:scale-[0.97] transition-transform duration-150 ease-out"
                     >
                       Open
                     </Link>
@@ -231,7 +231,7 @@ export function MobileFounderDeck({
       {shown < matches.length ? (
         <button
           type="button"
-          className="mt-2 inline-flex h-9 w-full items-center justify-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)]"
+          className="mt-2 inline-flex h-11 w-full items-center justify-center rounded-md border border-[color:var(--cobalt,#2F4FD8)]/40 bg-[color:var(--cobalt-haze,#E8ECFA)]/50 font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)] active:scale-[0.98] transition-transform duration-150 ease-out"
           onClick={() => setShown((n) => Math.min(matches.length, n + DECK_PAGE))}
           data-founder-deck-more=""
         >
@@ -306,7 +306,7 @@ export function MobileFounderPeek({
         </p>
         <button
           type="button"
-          className="font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)]"
+          className="relative inline-flex min-h-11 min-w-11 items-center justify-center font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--cobalt,#2F4FD8)] active:scale-[0.97] transition-transform duration-150 ease-out"
           data-fold-sheet-expand=""
           onClick={() => onExpand?.()}
         >
@@ -326,7 +326,7 @@ export function MobileFounderPeek({
           return (
             <div
               key={founder.id}
-              className="inline-flex h-10 max-w-[14rem] shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-2"
+              className="inline-flex h-11 max-w-[14rem] shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--cobalt,#2F4FD8)]/25 bg-[color:var(--bg,#FFFFFF)] px-2.5"
               data-founder-card=""
               data-founder-peek-chip=""
             >
@@ -342,7 +342,7 @@ export function MobileFounderPeek({
               {href ? (
                 <Link
                   href={href}
-                  className="shrink-0 font-mono text-[8px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
+                  className="inline-flex min-h-11 min-w-[2.75rem] shrink-0 items-center justify-center font-mono text-[9px] font-semibold uppercase tracking-[0.08em] text-[color:var(--cobalt,#2F4FD8)]"
                   onClick={(e) => e.stopPropagation()}
                 >
                   Open
@@ -389,7 +389,8 @@ export function MobileCampusSegments({
             role="option"
             aria-selected={!selectedId || selectedId === "missing"}
             onClick={onClear}
-            className={`inline-flex h-7 items-center rounded-full border px-2.5 font-mono text-[10px] font-semibold ${
+            data-fold-campus-chip=""
+            className={`relative inline-flex h-8 items-center rounded-full border px-3 font-mono text-[10px] font-semibold active:scale-[0.97] transition-transform duration-150 ease-out ${
               !selectedId || selectedId === "missing"
                 ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] text-white"
                 : "border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg-2,#3F465C)]"
@@ -408,7 +409,8 @@ export function MobileCampusSegments({
                 role="option"
                 aria-selected={active}
                 onClick={() => onSelect(campus.id)}
-                className={`inline-flex h-7 items-center gap-1 rounded-full border px-2 ${
+                data-fold-campus-chip=""
+                className={`relative inline-flex h-8 items-center gap-1 rounded-full border px-2.5 active:scale-[0.97] transition-transform duration-150 ease-out ${
                   active
                     ? "border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] text-white"
                     : "border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] text-[color:var(--fg,#0B0E17)]"
