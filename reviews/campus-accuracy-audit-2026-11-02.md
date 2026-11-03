@@ -280,7 +280,3 @@ Kept: Atlas Discovery, Atlia, Avea, Aviern, AxionOrbital, Bluejay, Booko. Exclud
 - `/methodology#founder-recency` shows kept / excluded older alumni / unverified recency from `corpus-snapshot.json`.
 - `/data` banner repeats the funnel and states unverified are not counted as verified.
 - Directory / home / globe continue to list only `is_investable_candidate=1`.
-
-### Branch note (scoring-r32)
-
-Same Starcloud evidence and batch1/2 decisions applied. Corpus is smaller on this tip, so unverified recency is **1,217** (not 4,144). Kept **1,172** / excluded older alumni **235**. `campusesOnMap` = **74**. check-count-consistency passes.

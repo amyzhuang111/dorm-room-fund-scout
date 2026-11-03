@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-11-02T20:20:29.861Z",
+  "generatedAt": "2026-11-02T14:01:51.711Z",
   "dbPath": "data/campus-universe.db",
-  "investableCompanies": 1173,
-  "signals": 1090,
+  "investableCompanies": 1172,
+  "signals": 1476,
   "datedSignals": 279,
   "undatedSignals": 811,
-  "people": 5947,
-  "founders": 2802,
-  "campuses": 84,
+  "people": 5944,
+  "founders": 2799,
+  "campuses": 166,
   "withSignal": 649,
   "ycCompanies": 564,
   "peak": {
     "peakCount": 32,
     "peakId": "2026-04",
     "peakLabel": "Apr 2026",
-    "dated": 67,
-    "sharePct": 48,
+    "dated": 74,
+    "sharePct": 43,
     "inWindow": 64,
     "earlierValid": 0,
-    "undatedMonth": 3,
-    "quiet": 1006
+    "undatedMonth": 10,
+    "quiet": 998
   },
   "restore": {
     "beforeInvestable": 2499,
@@ -27,15 +27,15 @@
     "restoredDrops": 10,
     "kaigoMerged": true
   },
-  "directoryCards": 1173,
-  "signalsDated": 279,
+  "directoryCards": 1172,
+  "signalsDated": 665,
   "signalsUndated": 811,
-  "foundersIndexed": 3107,
-  "foundersListed": 2006,
-  "campusesTotal": 84,
-  "campusesOnMap": 75,
-  "campusesWithFounders": 62,
-  "companiesWithSignal": 167,
+  "foundersIndexed": 3104,
+  "foundersListed": 2003,
+  "campusesTotal": 166,
+  "campusesOnMap": 157,
+  "campusesWithFounders": 61,
+  "companiesWithSignal": 174,
   "ycMembership": 318,
   "campusFoundersTop": [
     {
@@ -109,7 +109,7 @@
       "country": "United States"
     }
   ],
-  "companiesTotal": 2658,
+  "companiesTotal": 5584,
   "excludedOlderAlumni": 235,
-  "unverifiedRecency": 1217
+  "unverifiedRecency": 4144
 }

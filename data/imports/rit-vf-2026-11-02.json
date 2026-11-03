@@ -1,0 +1,110 @@
+[
+  {
+    "name": "Athlete Studio",
+    "university": "Rochester Institute of Technology",
+    "affiliation_type": "unknown",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://athlete.studio",
+    "evidence_url": "https://www.rit.edu/venturefund/portfolio-companies",
+    "program": "RIT Venture Fund",
+    "source": "src_rit_venture_fund",
+    "description": "Athlete Studio's mission is to make it easier for athletes to manage, own, and monetize their content."
+  },
+  {
+    "name": "BDEX",
+    "university": "Rochester Institute of Technology",
+    "affiliation_type": "unknown",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://bdex.com",
+    "evidence_url": "https://www.rit.edu/venturefund/portfolio-companies",
+    "program": "RIT Venture Fund",
+    "source": "src_rit_venture_fund",
+    "description": "The BDEX proprietary data infrastructure empowers human connectivity, helping brands, retailers and the agencies that represent them to connect with consumers like never before by understanding their behaviors and intents through the power of data."
+  },
+  {
+    "name": "Casana, Inc.",
+    "university": "Rochester Institute of Technology",
+    "affiliation_type": "unknown",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://casanacare.com",
+    "evidence_url": "https://www.rit.edu/venturefund/portfolio-companies",
+    "program": "RIT Venture Fund",
+    "source": "src_rit_venture_fund",
+    "description": "Casana is building effortless, patient-centered technology that captures important health parameters without requiring any change in behavior."
+  },
+  {
+    "name": "Council Rock",
+    "university": "Rochester Institute of Technology",
+    "affiliation_type": "unknown",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://council-rock.com",
+    "evidence_url": "https://www.rit.edu/venturefund/portfolio-companies",
+    "program": "RIT Venture Fund",
+    "source": "src_rit_venture_fund",
+    "description": "Council Rock is a leading telecommunications engineering company, providing products and services to the Electric and Gas Utility market in support of Smart Grid Applications. With over two decades of experience with supervisory control and data acquisition (SCADA) communications equipment and system design, Council Rock has designed and built over 100 networks spanning 35 countries. Council Rock’s services include test planning, pilot network evaluation, interference analysis, and technology validation and testing."
+  },
+  {
+    "name": "Dan & Gary Games",
+    "university": "Rochester Institute of Technology",
+    "affiliation_type": "unknown",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://danandgarygames.com",
+    "evidence_url": "https://www.rit.edu/venturefund/portfolio-companies",
+    "program": "RIT Venture Fund",
+    "source": "src_rit_venture_fund",
+    "description": "Dan & Gary Games is an artist-programmer duo making their first trek through the wild world of game development with Super Daryl Deluxe. The game, which allows players to construct their own combat system and save the world from vile self-help authors, has allowed the two to explore and invent their own unique brand of storytelling through award-winning visuals and fluid, immersive gameplay."
+  },
+  {
+    "name": "Merkuri Digital",
+    "university": "Rochester Institute of Technology",
+    "affiliation_type": "unknown",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://merkuri.one",
+    "evidence_url": "https://www.rit.edu/venturefund/portfolio-companies",
+    "program": "RIT Venture Fund",
+    "source": "src_rit_venture_fund",
+    "description": "team of former military and security professionals provide innovative security technologies and technical assistance to international government and corporate clients. Merkuri Digital has built tools that facilitate wireless tracking for both close and long range situational awareness, early warning, target identification and acquisition, and technical triggering operations."
+  },
+  {
+    "name": "Susteau",
+    "university": "Rochester Institute of Technology",
+    "affiliation_type": "unknown",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://susteau.com",
+    "evidence_url": "https://www.rit.edu/venturefund/portfolio-companies",
+    "program": "RIT Venture Fund",
+    "source": "src_rit_venture_fund",
+    "description": "Susteau provides high quality, sustainable, haircare solutions for Planet Earth & beyond. Powder haircare that functions like liquid when activated with water. The future of haircare."
+  },
+  {
+    "name": "Token",
+    "university": "Rochester Institute of Technology",
+    "affiliation_type": "unknown",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://tokenring.com",
+    "evidence_url": "https://www.rit.edu/venturefund/portfolio-companies",
+    "program": "RIT Venture Fund",
+    "source": "src_rit_venture_fund",
+    "description": "Streamline your life and never get locked out again. Token becomes the one key you need to access and protect your personal keys, assets and credentials. Just by wearing the ring and using two simple hand gestures, you can unlock your home, start your car, ride the train, make a payment and much more."
+  },
+  {
+    "name": "Viggi Kids",
+    "university": "Rochester Institute of Technology",
+    "affiliation_type": "unknown",
+    "cohort_year": null,
+    "enrollment_status": null,
+    "website": "https://viggikids.com",
+    "evidence_url": "https://www.rit.edu/venturefund/portfolio-companies",
+    "program": "RIT Venture Fund",
+    "source": "src_rit_venture_fund",
+    "description": "is a new line of children’s products that inspire creative play and active exploration while learning. Their current products include the Vidget, a patented three-in-one product that can transform from a chair into a desk or stool by simply turning it over. It provides opportunities for collaboration by allowing teachers to create flexible learning spaces based on individual groups and needs. Made of natural woods, the Digit Widget delights a child’s sense of touch and sight while rewarding their curiosity. The Digit Widgit teaches math concepts, matching, relative size and basic motor skills and is ideal for classrooms and small group activities."
+  }
+]

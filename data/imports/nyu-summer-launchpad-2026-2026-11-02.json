@@ -1,0 +1,327 @@
+[
+  {
+    "name": "Agora",
+    "university": "New York University",
+    "campusId": "univ_nyu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/",
+    "program": "NYU Summer Launchpad 2026",
+    "source": "src_nyu_summer_launchpad_2026",
+    "description": "Agentic tool for professional clothing resellers.",
+    "founders": [
+      {
+        "name": "Christian Herren",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "David Cui",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "Tomer Ben Yaakov",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      }
+    ]
+  },
+  {
+    "name": "Aquon",
+    "university": "New York University",
+    "campusId": "univ_nyu",
+    "affiliation_type": "alumni",
+    "cohort_year": 2026,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/",
+    "program": "NYU Summer Launchpad 2026",
+    "source": "src_nyu_summer_launchpad_2026",
+    "description": "AI-powered portfolio operating system for RIAs and wealth managers.",
+    "founders": [
+      {
+        "name": "Carlos De Oliveira",
+        "affiliation_type": "faculty",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "Priya Kundu",
+        "affiliation_type": "alumni",
+        "grad_year": 2024,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      }
+    ]
+  },
+  {
+    "name": "Altrovia",
+    "university": "New York University",
+    "campusId": "univ_nyu",
+    "affiliation_type": "alumni",
+    "cohort_year": 2026,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/",
+    "program": "NYU Summer Launchpad 2026",
+    "source": "src_nyu_summer_launchpad_2026",
+    "description": "Study design intelligence platform for clinical development.",
+    "founders": [
+      {
+        "name": "Christos Zoukos",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "Nicholas Patas",
+        "affiliation_type": "alumni",
+        "grad_year": 2021,
+        "enrollment_status": "older_alumni",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "Georgia Lytra",
+        "affiliation_type": "unknown",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      }
+    ]
+  },
+  {
+    "name": "Binder",
+    "university": "New York University",
+    "campusId": "univ_nyu",
+    "affiliation_type": "alumni",
+    "cohort_year": 2026,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/",
+    "program": "NYU Summer Launchpad 2026",
+    "source": "src_nyu_summer_launchpad_2026",
+    "description": "Automates research for commercial insurance brokers.",
+    "founders": [
+      {
+        "name": "Yannick Bierens",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      }
+    ]
+  },
+  {
+    "name": "Cargon AI",
+    "university": "New York University",
+    "campusId": "univ_nyu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/",
+    "program": "NYU Summer Launchpad 2026",
+    "source": "src_nyu_summer_launchpad_2026",
+    "description": "Automates DOT pre-hire screening for trucking fleets.",
+    "founders": [
+      {
+        "name": "Khon Sultan",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "Azimkhon Sultankhodjaev",
+        "affiliation_type": "unknown",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "Yongnuo Liang",
+        "affiliation_type": "unknown",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      }
+    ]
+  },
+  {
+    "name": "Clairdoc",
+    "university": "New York University",
+    "campusId": "univ_nyu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/",
+    "program": "NYU Summer Launchpad 2026",
+    "source": "src_nyu_summer_launchpad_2026",
+    "description": "AI revenue layer integrated into EHR workflows.",
+    "founders": [
+      {
+        "name": "Bakhtawer Baloch",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "Suleman Baloch",
+        "affiliation_type": "unknown",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "Momal Baloch",
+        "affiliation_type": "unknown",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      }
+    ]
+  },
+  {
+    "name": "Cortile",
+    "university": "New York University",
+    "campusId": "univ_nyu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/",
+    "program": "NYU Summer Launchpad 2026",
+    "source": "src_nyu_summer_launchpad_2026",
+    "description": "AI verification layer for vendor security reviewers.",
+    "founders": [
+      {
+        "name": "Nik King Fredel",
+        "affiliation_type": "current_student",
+        "grad_year": 2026,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "Owen Rice",
+        "affiliation_type": "unknown",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      }
+    ]
+  },
+  {
+    "name": "melodi",
+    "university": "New York University",
+    "campusId": "univ_nyu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/",
+    "program": "NYU Summer Launchpad 2026",
+    "source": "src_nyu_summer_launchpad_2026",
+    "description": "Song & album release tool for independent musicians.",
+    "founders": [
+      {
+        "name": "Jonathan Gulyak",
+        "affiliation_type": "current_student",
+        "grad_year": 2027,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "Julius Chu",
+        "affiliation_type": "current_student",
+        "grad_year": 2027,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      }
+    ]
+  },
+  {
+    "name": "MilkShaker",
+    "university": "New York University",
+    "campusId": "univ_nyu",
+    "affiliation_type": "current_student",
+    "cohort_year": 2026,
+    "enrollment_status": "current_student",
+    "website": null,
+    "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/",
+    "program": "NYU Summer Launchpad 2026",
+    "source": "src_nyu_summer_launchpad_2026",
+    "description": "Hands-free wearable massager for breastfeeding mothers.",
+    "founders": [
+      {
+        "name": "Xiyan Zhu",
+        "affiliation_type": "current_student",
+        "grad_year": 2027,
+        "enrollment_status": "current_student",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "Valentina Marini Fichera",
+        "affiliation_type": "unknown",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "Elise Yang",
+        "affiliation_type": "unknown",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      }
+    ]
+  },
+  {
+    "name": "SAIL",
+    "university": "New York University",
+    "campusId": "univ_nyu",
+    "affiliation_type": "alumni",
+    "cohort_year": 2026,
+    "enrollment_status": null,
+    "website": null,
+    "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/",
+    "program": "NYU Summer Launchpad 2026",
+    "source": "src_nyu_summer_launchpad_2026",
+    "description": "Platform helping enterprise trade teams maintain supply chain resilience.",
+    "founders": [
+      {
+        "name": "Ali Raza",
+        "affiliation_type": "alumni",
+        "grad_year": 2025,
+        "enrollment_status": "recent_grad",
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "Chansam Kim",
+        "affiliation_type": "unknown",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      },
+      {
+        "name": "William Reid",
+        "affiliation_type": "unknown",
+        "grad_year": null,
+        "enrollment_status": null,
+        "evidence_url": "https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/"
+      }
+    ]
+  }
+]
