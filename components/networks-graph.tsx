@@ -1257,14 +1257,6 @@ export function NetworksGraph2D({ investorHubs: investorHubsProp, onSelectCompan
         </div>
       </div>
 
-      <ol className="mt-3 space-y-2 px-1 md:hidden" data-networks-mobile-callouts="">
-        {poster.callouts.map((c, i) => (
-          <li key={`mc-${i}`} className="text-[12px] leading-snug text-[color:var(--fg-2)]">
-            <span className="mr-1.5 font-semibold text-[color:var(--fg)]">{String(i + 1).padStart(2, "0")}</span>
-            {c.text}
-          </li>
-        ))}
-      </ol>
     </div>
   );
 }
