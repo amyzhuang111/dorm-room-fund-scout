@@ -663,11 +663,14 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
         kept.push(link);
         continue;
       }
-      if (vipOk.has(link.companyId) || vipOk.has(link.founderId)) {
+      // Company must itself have VIP/VIP-X claim evidence. Founder-only evidence
+      // (e.g. InstaHub alum who later founded Keythorn) must not mint VIP-X ties
+      // for unrelated co-founded companies — the Lucy-style network_tie leftover.
+      if (vipOk.has(link.companyId)) {
         kept.push(link);
         continue;
       }
-      // Drop VIP-X link without explicit VIP/VIP-X claim evidence.
+      // Drop VIP-X link without explicit company-level VIP/VIP-X claim evidence.
     }
     links.length = 0;
     links.push(...kept);
