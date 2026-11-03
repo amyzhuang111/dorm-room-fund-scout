@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { CampusSeal } from "@/components/campus-seal";
 import { NetworksGraph } from "@/components/networks-graph";
 import { StartupCardSheet } from "@/components/startup-directory-card";
+import { searchFounderNetworks, selectedNetworkMembers } from "@/lib/domain/network-directory-search";
 import type {
   FounderNetworksPage,
   NetworkKind,
@@ -51,10 +52,13 @@ export function NetworksApp() {
   const [activeNetwork, setActiveNetwork] = useState<string | null>(null);
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [matrixOpen, setMatrixOpen] = useState(false);
-  const [concentrationOpen, setConcentrationOpen] = useState(true);
+  const [concentrationOpen, setConcentrationOpen] = useState(false);
+  const [methodologyOpen, setMethodologyOpen] = useState(false);
   const [desktopHubsOpen, setDesktopHubsOpen] = useState(false);
   const [networkQuery, setNetworkQuery] = useState("");
   const [networkKind, setNetworkKind] = useState<NetworkKind | "all">("all");
+  const [graphInspectorOpen, setGraphInspectorOpen] = useState(false);
+  const [shareFeedback, setShareFeedback] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -62,7 +66,10 @@ export function NetworksApp() {
       .then((page) => {
         if (cancelled) return;
         setData(page);
-        setActiveNetwork((current) => current ?? page.topNetworks[0]?.id ?? null);
+        const requested = new URLSearchParams(window.location.search).get("network");
+        const known = requested && page.topNetworks.some((network) => network.id === requested);
+        setActiveNetwork((current) => current ?? (known ? requested : page.topNetworks[0]?.id ?? null));
+        setGraphInspectorOpen(Boolean(known));
       })
       .catch(() => {
         if (!cancelled) setLoadError("Networks data could not be loaded.");
@@ -76,14 +83,47 @@ export function NetworksApp() {
     () => data?.topNetworks.find((row) => row.id === activeNetwork) ?? null,
     [data, activeNetwork],
   );
-  const members: NetworkMember[] = active && data ? data.membersByNetwork[active.id] ?? [] : [];
-  const displayedNetworks = useMemo(() => {
-    const query = networkQuery.trim().toLocaleLowerCase("en-US");
-    return (data?.topNetworks ?? []).filter((network) => {
-      if (networkKind !== "all" && network.kind !== networkKind) return false;
-      return !query || network.label.toLocaleLowerCase("en-US").includes(query);
+  const networkMatches = useMemo(
+    () => searchFounderNetworks(data?.topNetworks ?? [], data?.membersByNetwork ?? {}, networkQuery, networkKind),
+    [data, networkQuery, networkKind],
+  );
+  const displayedNetworks = useMemo(() => networkMatches.map((match) => match.network), [networkMatches]);
+  const members: NetworkMember[] = selectedNetworkMembers(activeNetwork, networkMatches, data?.membersByNetwork ?? {});
+  const fullMembers: NetworkMember[] = active && data ? data.membersByNetwork[active.id] ?? [] : [];
+
+  /** Hub clicks open an immediate inspector; list clicks keep the roster in view. */
+  function chooseNetwork(id: string, showInspector = false, clearFilters = showInspector) {
+    setActiveNetwork(id);
+    setGraphInspectorOpen(showInspector);
+    setShareFeedback("");
+    if (clearFilters) {
+      setNetworkQuery("");
+      setNetworkKind("all");
+    }
+    const url = new URL(window.location.href);
+    url.searchParams.set("network", id);
+    window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
+  }
+
+  async function copyNetworkLink() {
+    if (!active) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("network", active.id);
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      setShareFeedback("Link copied");
+    } catch {
+      setShareFeedback("Copy unavailable; use your address bar");
+    }
+  }
+
+  function scrollToRoster() {
+    setGraphInspectorOpen(false);
+    document.getElementById("network-roster")?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      block: "start",
     });
-  }, [data, networkKind, networkQuery]);
+  }
 
   let matrixMax = 0;
   if (data) {
@@ -118,18 +158,78 @@ export function NetworksApp() {
           </div>
           <h1 className="text-lg font-semibold tracking-tight text-[color:var(--fg)] sm:text-2xl">Campus founder networks</h1>
           <p className="max-w-3xl text-[12px] leading-snug text-[color:var(--fg-2)] sm:text-sm sm:leading-normal" data-networks-context="">
-            A map of the programs and funds that already reach student founders.{" "}
-            <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> of{" "}
-            <span data-networks-count="corpusCompanies">{data.totals.corpusCompanies.toLocaleString("en-US")}</span> companies
-            have mapped networks. Open a hub to see who is on that path.
+            Find the founders and startups linked to a program, university accelerator, lab or fund. Open a network to see its documented founder-company relationships.
           </p>
           <p className="text-[11px] text-[color:var(--fg-3)] sm:text-xs" data-networks-stats="">
-            <span data-networks-count="founderLinks">{data.totals.founderLinks.toLocaleString("en-US")}</span> founder links ·{" "}
             <span data-networks-count="networks">{data.totals.networks.toLocaleString("en-US")}</span> networks ·{" "}
+            <span data-networks-count="founderLinks">{data.totals.founderLinks.toLocaleString("en-US")}</span> documented founder-network links ·{" "}
+            <span data-networks-count="founders">{data.totals.foundersLinked.toLocaleString("en-US")}</span> linked founders ·{" "}
             <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> of{" "}
-            <span data-networks-count="corpusCompanies">{data.totals.corpusCompanies.toLocaleString("en-US")}</span> companies ·{" "}
-            all <span data-networks-count="founders">{(data.totals.foundersShown ?? data.totals.foundersLinked).toLocaleString("en-US")}</span> founders
+            <span data-networks-count="corpusCompanies">{data.totals.corpusCompanies.toLocaleString("en-US")}</span> investable companies covered
           </p>
+          <div className="mt-3 flex flex-wrap items-end gap-2" data-network-quick-find="">
+            <label className="min-w-[210px] flex-[1_1_340px] text-[11px] font-semibold text-[color:var(--fg-2)]">
+              Search a founder, startup, campus, program or fund
+              <input
+                type="search"
+                value={networkQuery}
+                onChange={(event) => { setNetworkQuery(event.target.value); setDesktopHubsOpen(false); }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" && networkMatches[0]) chooseNetwork(networkMatches[0].network.id, true, false);
+                }}
+                placeholder="Try: Stanford, HBS Rock, founder or company name"
+                aria-label="Find founders, startups and networks"
+                className="mt-1 h-11 w-full rounded-md border border-[color:var(--line)] bg-white px-3 text-sm text-[color:var(--fg)] outline-none focus:border-[color:var(--cobalt)]"
+              />
+            </label>
+            <label className="text-[11px] font-semibold text-[color:var(--fg-2)]">
+              Network type
+              <select
+                value={networkKind}
+                onChange={(event) => { setNetworkKind(event.target.value as NetworkKind | "all"); setDesktopHubsOpen(false); }}
+                aria-label="Filter networks by type"
+                className="mt-1 h-11 min-w-[140px] rounded-md border border-[color:var(--line)] bg-white px-2.5 text-sm text-[color:var(--fg)]"
+              >
+                <option value="all">All types</option>
+                <option value="accelerator">Accelerators</option>
+                <option value="program">Programs</option>
+                <option value="investor">Investors</option>
+                <option value="lab">Labs</option>
+              </select>
+            </label>
+            <button
+              type="button"
+              onClick={scrollToRoster}
+              className="h-11 rounded-md bg-[color:var(--cobalt)] px-3 text-xs font-semibold text-white hover:opacity-90"
+              data-network-browse-results=""
+            >
+              Browse {networkMatches.length.toLocaleString("en-US")} networks
+            </button>
+          </div>
+          {networkQuery.trim() ? (
+            <div className="mt-2 rounded-md border border-[color:var(--line)] bg-white p-2" data-network-quick-results="">
+              <p role="status" className="mb-1 text-[11px] text-[color:var(--fg-3)]">
+                {networkMatches.length.toLocaleString("en-US")} matching networks. Select one to see its linked founders.
+              </p>
+              {networkMatches.slice(0, 4).map((match) => (
+                <button
+                  key={match.network.id}
+                  type="button"
+                  onClick={() => chooseNetwork(match.network.id, true, false)}
+                  className="flex min-h-10 w-full items-center justify-between gap-3 rounded px-2 text-left text-xs hover:bg-[color:var(--cobalt-haze)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[color:var(--cobalt)]"
+                  data-network-quick-result={match.network.id}
+                >
+                  <span className="min-w-0 font-semibold">{match.network.label}</span>
+                  <span className="shrink-0 text-[color:var(--fg-3)]">
+                    {match.nameMatch
+                      ? `${match.network.founderCount.toLocaleString("en-US")} founders`
+                      : `${match.matchingMembers.length.toLocaleString("en-US")} member matches`}
+                  </span>
+                </button>
+              ))}
+              {networkMatches.length === 0 ? <p className="px-2 py-3 text-xs text-[color:var(--fg-3)]">No source-linked founders or networks match this search. Try a different name or network type.</p> : null}
+            </div>
+          ) : null}
         </div>
       </header>
 
@@ -147,12 +247,55 @@ export function NetworksApp() {
               Campus-colored founders and program hubs. Scroll to zoom.
             </p>
           </div>
-          <div className="md:min-h-0">
+          <div className="relative md:min-h-0" data-network-map-and-inspector="">
             <NetworksGraph
               investorHubs={data.investorHubs}
               onSelectCompany={(id) => setCompanyId(id)}
-              onSelectNetwork={(id) => setActiveNetwork(id)}
+              onSelectNetwork={(id) => chooseNetwork(id, true)}
             />
+            {graphInspectorOpen && active ? (
+              <aside
+                data-network-map-inspector=""
+                role="region"
+                aria-label={`Selected network: ${active.label}`}
+                className="absolute right-3 top-[8.75rem] z-[50] max-h-[min(58vh,430px)] w-[min(350px,calc(100%-1.5rem))] overflow-y-auto rounded-xl border border-[color:var(--line)] bg-white p-3 shadow-[0_16px_45px_rgba(18,29,58,0.2)] sm:top-20 sm:p-4"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <span className="text-[10px] font-semibold uppercase tracking-wide text-[color:var(--cobalt)]">{KIND_LABEL[active.kind]}</span>
+                    <h3 className="mt-0.5 break-words text-base font-bold text-[color:var(--fg)]">{active.label}</h3>
+                    <p className="mt-1 text-[11px] text-[color:var(--fg-2)]">
+                      {active.founderCount.toLocaleString("en-US")} linked founders ·{" "}
+                      {active.companyCount.toLocaleString("en-US")} companies ·{" "}
+                      {active.campusCount.toLocaleString("en-US")} campuses
+                    </p>
+                  </div>
+                  <button type="button" onClick={() => setGraphInspectorOpen(false)}
+                    aria-label="Close network details" className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[color:var(--line)] text-lg text-[color:var(--fg-2)] hover:bg-[#f3f5fb]">×</button>
+                </div>
+                <div className="mt-3 space-y-1.5" data-network-map-members="">
+                  {(members.length ? members : fullMembers).slice(0, 4).map((member) => (
+                    <NetworkMemberEntry
+                      key={`${member.founderId}-${member.companyId}`}
+                      member={member}
+                      onPreview={() => setCompanyId(member.companyId)}
+                      compact
+                    />
+                  ))}
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <button type="button" onClick={scrollToRoster}
+                    className="min-h-10 rounded-md bg-[color:var(--cobalt)] px-3 text-xs font-semibold text-white hover:opacity-90">
+                    View {fullMembers.length.toLocaleString("en-US")} founder-company links
+                  </button>
+                  <button type="button" onClick={() => void copyNetworkLink()}
+                    className="min-h-10 rounded-md border border-[color:var(--line)] bg-white px-3 text-xs font-semibold text-[color:var(--cobalt)] hover:bg-[#f4f6fb]">
+                    Copy link
+                  </button>
+                </div>
+                {shareFeedback ? <p role="status" className="mt-2 text-[11px] text-[color:var(--fg-2)]">{shareFeedback}</p> : null}
+              </aside>
+            ) : null}
           </div>
         </section>
 
@@ -161,32 +304,23 @@ export function NetworksApp() {
         <section aria-labelledby="top-networks-heading" className="order-2">
           <div className="mb-2 sm:mb-3">
             <h2 id="top-networks-heading" className="text-base font-semibold tracking-tight sm:text-lg">
-              Top networks
+              Explore founder networks
             </h2>
-            <p className="text-[12px] text-[color:var(--fg-2)] sm:text-sm">Where campus founders already concentrate, ranked by linked founders.</p>
+            <p className="text-[12px] text-[color:var(--fg-2)] sm:text-sm">
+              Choose a network, then open its founders or startups. A link reflects a documented public connection, not an inferred relationship.
+            </p>
           </div>
-          <div className="mb-3 flex flex-wrap items-end gap-2" data-network-directory-controls="">
-            <label className="min-w-[180px] flex-1 text-[11px] font-medium text-[color:var(--fg-2)]">
-              Search networks
-              <input type="search" value={networkQuery} onChange={(event) => { setNetworkQuery(event.target.value); setDesktopHubsOpen(false); }}
-                placeholder="Program, accelerator or fund" aria-label="Search program and fund networks"
-                className="mt-1 h-11 w-full rounded-md border border-[color:var(--line)] bg-white px-3 text-sm text-[color:var(--fg)] outline-none focus:border-[color:var(--cobalt)]" />
-            </label>
-            <label className="text-[11px] font-medium text-[color:var(--fg-2)]">
-              Type
-              <select value={networkKind} onChange={(event) => { setNetworkKind(event.target.value as NetworkKind | "all"); setDesktopHubsOpen(false); }}
-                aria-label="Filter networks by type"
-                className="mt-1 h-11 min-w-[140px] rounded-md border border-[color:var(--line)] bg-white px-2.5 text-sm text-[color:var(--fg)]">
-                <option value="all">All networks</option>
-                <option value="accelerator">Accelerators</option>
-                <option value="program">Programs</option>
-                <option value="investor">Investors</option>
-                <option value="lab">Labs</option>
-              </select>
-            </label>
-            <span className="pb-3 text-xs tabular-nums text-[color:var(--fg-3)]" data-network-results-count="">
-              {displayedNetworks.length.toLocaleString("en-US")} networks
-            </span>
+          <div className="mb-3 flex min-h-8 flex-wrap items-center justify-between gap-2" data-network-directory-results="">
+            <p className="text-xs tabular-nums text-[color:var(--fg-3)]" data-network-results-count="" role="status">
+              {displayedNetworks.length.toLocaleString("en-US")} evidenced networks match the current filters.
+            </p>
+            {networkQuery || networkKind !== "all" ? (
+              <button type="button"
+                onClick={() => { setNetworkQuery(""); setNetworkKind("all"); setDesktopHubsOpen(false); }}
+                className="min-h-9 rounded-md border border-[color:var(--line)] bg-white px-3 text-xs font-semibold text-[color:var(--cobalt)] hover:bg-[#f3f6fd]">
+                Clear filters
+              </button>
+            ) : null}
           </div>
           <div className="grid gap-3 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-4">
             <ol
@@ -202,11 +336,11 @@ export function NetworksApp() {
                     <button
                       type="button"
                       className={`flex w-full items-start gap-2 px-2.5 py-2 text-left transition-colors sm:gap-3 sm:px-3 sm:py-2.5 ${selected ? "bg-[color:var(--cobalt-haze)]" : "hover:bg-[#f7f8fc]"}`}
-                      onClick={() => setActiveNetwork(row.id)}
+                      onClick={() => chooseNetwork(row.id)}
                       aria-pressed={selected}
                     >
                       <span className="w-5 shrink-0 pt-0.5 text-[10px] tabular-nums text-[color:var(--fg-3)] sm:w-7 sm:text-xs">
-                        {String(index + 1).padStart(2, "0")}
+                        {networkQuery ? "•" : String(index + 1).padStart(2, "0")}
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block whitespace-normal break-words text-[13px] font-medium leading-snug text-[color:var(--fg)] sm:text-sm">
@@ -242,55 +376,44 @@ export function NetworksApp() {
               ) : null}
             </ol>
 
-            <aside className="rounded-lg border border-[color:var(--line)] bg-white p-4" aria-live="polite">
+            <aside id="network-roster" className="scroll-mt-5 rounded-lg border border-[color:var(--line)] bg-white p-4" aria-live="polite" data-network-selected-roster="">
               {active ? (
                 <>
-                  <div className="mb-2">
-                    <h3 className="text-base font-semibold text-[color:var(--fg)]">{active.label}</h3>
-                    <p className="text-xs text-[color:var(--fg-3)]">
-                      {KIND_LABEL[active.kind]} · {active.companyCount.toLocaleString("en-US")} companies ·{" "}
+                  <div className="mb-3">
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-[color:var(--cobalt)]">{KIND_LABEL[active.kind]}</p>
+                    <h3 className="mt-1 break-words text-base font-semibold text-[color:var(--fg)]">{active.label}</h3>
+                    <p className="mt-1 text-xs text-[color:var(--fg-3)]">
+                      {active.founderCount.toLocaleString("en-US")} distinct founders ·{" "}
+                      {active.companyCount.toLocaleString("en-US")} companies ·{" "}
                       {active.campusCount.toLocaleString("en-US")} campuses
                     </p>
+                    <p className="mt-1 text-[11px] text-[color:var(--fg-3)]" data-network-roster-count="">
+                      Showing {members.length.toLocaleString("en-US")} of {fullMembers.length.toLocaleString("en-US")} founder-company links
+                      {networkQuery && members.length < fullMembers.length ? " matching your search" : ""}
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <button type="button" onClick={() => void copyNetworkLink()}
+                        className="min-h-9 rounded-md border border-[color:var(--line)] px-2.5 text-xs font-semibold text-[color:var(--cobalt)] hover:bg-[#f3f5fb]">Copy network link</button>
+                      <Link href="/founder/discover"
+                        className="inline-flex min-h-9 items-center rounded-md border border-[color:var(--line)] px-2.5 text-xs font-semibold text-[color:var(--fg-2)] hover:bg-[#f3f5fb]">Search all founders</Link>
+                    </div>
+                    {shareFeedback ? <p role="status" className="mt-1 text-xs text-[color:var(--fg-2)]">{shareFeedback}</p> : null}
                   </div>
-                  <ul className="max-h-52 space-y-2 overflow-y-auto pr-1 lg:max-h-[28rem]">
+                  <ul className="max-h-72 space-y-2 overflow-y-auto pr-1 lg:max-h-[32rem]">
                     {members.map((member) => (
-                      <li key={`${member.founderId}-${member.companyId}`} className="rounded border border-[color:var(--line)] px-2.5 py-2">
-                        <div className="flex items-start gap-2">
-                          <div className="min-w-0 flex-1">
-                            <div className="flex flex-wrap items-center gap-1.5">
-                              <Link
-                                href={`/founders?q=${encodeURIComponent(member.founderName)}`}
-                                className="truncate text-sm font-medium text-[color:var(--cobalt)] hover:underline"
-                              >
-                                {member.founderName}
-                              </Link>
-                              {member.campusLabel ? (
-                                <span className="inline-flex shrink-0 items-center rounded-full border border-[color:var(--line)] bg-[#f7f8fc] px-1.5 py-0.5 text-[10px] font-medium text-[color:var(--fg-2)]">
-                                  {member.campusLabel}
-                                </span>
-                              ) : null}
-                              {member.stage ? (
-                                <span className="inline-flex shrink-0 items-center rounded-full bg-[color:var(--cobalt-haze)] px-1.5 py-0.5 text-[10px] font-medium text-[color:var(--cobalt)]">
-                                  {member.stage}
-                                </span>
-                              ) : null}
-                            </div>
-                            <button
-                              type="button"
-                              className="mt-0.5 block truncate text-left text-xs text-[color:var(--fg-2)] hover:text-[color:var(--cobalt)] hover:underline"
-                              onClick={() => setCompanyId(member.companyId)}
-                            >
-                              {member.companyName}
-                            </button>
-                          </div>
-                        </div>
+                      <li key={`${member.founderId}-${member.companyId}`}>
+                        <NetworkMemberEntry member={member} onPreview={() => setCompanyId(member.companyId)} />
                       </li>
                     ))}
                   </ul>
-                  {members.length === 0 ? <p className="text-sm text-[color:var(--fg-3)]">No linked founders on file for this network.</p> : null}
+                  {members.length === 0 ? (
+                    <p className="text-sm text-[color:var(--fg-3)]">
+                      No founder-company links match this search in the selected network. Clear the filters to see all {fullMembers.length.toLocaleString("en-US")} links.
+                    </p>
+                  ) : null}
                 </>
               ) : (
-                <p className="text-sm text-[color:var(--fg-3)]">Select a network to see its founders.</p>
+                <p className="text-sm text-[color:var(--fg-3)]">Choose a network to inspect its founders and companies.</p>
               )}
             </aside>
           </div>
@@ -330,7 +453,7 @@ export function NetworksApp() {
                     {data.matrix.rows.map((row) => (
                       <tr key={row.id}>
                         <th className="sticky left-0 z-10 bg-white px-2 py-1 text-left text-xs font-medium" scope="row">
-                          <button type="button" className="text-left hover:text-[color:var(--cobalt)] hover:underline" onClick={() => setActiveNetwork(row.id)}>
+                          <button type="button" className="text-left hover:text-[color:var(--cobalt)] hover:underline" onClick={() => chooseNetwork(row.id)}>
                             {row.label}
                           </button>
                         </th>
@@ -382,61 +505,97 @@ export function NetworksApp() {
           ) : null}
         </section>
 
-        <section aria-labelledby="investor-hubs-heading" className="order-5 hidden rounded-lg border border-[color:var(--line)] bg-white">
-          <div className="px-4 py-3">
-            <h2 id="investor-hubs-heading" className="text-[15px] font-semibold tracking-tight">
-              Investor hubs
-            </h2>
-            <p className="mt-0.5 text-[13px] text-[color:var(--fg-2)]">
-              How many campus founders each investor-kind fund has reached in this corpus. {data.topFundNote}
-            </p>
-          </div>
-          {data.investorHubs.length === 0 ? (
-            <p className="px-4 pb-4 text-sm text-[color:var(--fg-3)]">No investor-kind networks with linked founders are on file yet.</p>
-          ) : (
-            <ol className="divide-y divide-[color:var(--line)] border-t border-[color:var(--line)]">
-              {data.investorHubs.map((row, index) => (
-                <li key={row.id} className="flex items-center gap-3 px-4 py-2.5">
-                  <span className="w-7 shrink-0 text-xs tabular-nums text-[color:var(--fg-3)]">{String(index + 1).padStart(2, "0")}</span>
-                  <button
-                    type="button"
-                    className="min-w-0 flex-1 truncate text-left text-sm font-medium text-[color:var(--fg)] hover:text-[color:var(--cobalt)] hover:underline"
-                    onClick={() => setActiveNetwork(row.id)}
-                  >
-                    {row.label}
-                  </button>
-                  <span className="shrink-0 text-sm tabular-nums text-[color:var(--fg)]">
-                    {row.founderCount.toLocaleString("en-US")}{" "}
-                    <span className="text-[color:var(--fg-3)]">founders</span>
-                  </span>
-                  <span className="hidden shrink-0 text-xs tabular-nums text-[color:var(--fg-3)] sm:inline">
-                    {row.companyCount.toLocaleString("en-US")} companies · {row.campusCount.toLocaleString("en-US")} campuses
-                  </span>
-                </li>
-              ))}
-            </ol>
-          )}
-        </section>
 
-        <section aria-labelledby="how-heading" className="order-6 rounded-lg border border-[color:var(--line)] bg-white px-4 py-4 md:order-6">
-          <h2 id="how-heading" className="text-[15px] font-semibold tracking-tight">
-            How these counts work
-          </h2>
-          <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-[color:var(--fg-2)]">
-            {data.howItWorks.map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-          {data.totals.omitted.length > 0 ? (
-            <p className="mt-3 text-xs text-[color:var(--fg-3)]">
-              Omitted tie types: {data.totals.omitted.map((item) => `${item.kind} (${item.reason})`).join(" ")}
-            </p>
+        <section aria-labelledby="how-heading" className="order-6 overflow-hidden rounded-lg border border-[color:var(--line)] bg-white">
+          <button type="button" onClick={() => setMethodologyOpen((value) => !value)}
+            className="flex min-h-12 w-full items-center justify-between gap-3 px-4 py-3 text-left"
+            aria-expanded={methodologyOpen} aria-controls="network-method-details">
+            <span>
+              <span id="how-heading" className="block text-[15px] font-semibold tracking-tight">How the evidence works</span>
+              <span className="mt-0.5 block text-xs text-[color:var(--fg-2)]">What counts as a founder, program connection or network link</span>
+            </span>
+            <span className="shrink-0 text-xs font-semibold text-[color:var(--cobalt)]">{methodologyOpen ? "Hide" : "Show"}</span>
+          </button>
+          {methodologyOpen ? (
+            <div id="network-method-details" className="border-t border-[color:var(--line)] px-4 py-4">
+              <ul className="list-disc space-y-1.5 pl-5 text-sm text-[color:var(--fg-2)]">
+                {data.howItWorks.map((line) => <li key={line}>{line}</li>)}
+              </ul>
+              {data.totals.omitted.length > 0 ? (
+                <p className="mt-3 text-xs text-[color:var(--fg-3)]">
+                  Omitted tie types: {data.totals.omitted.map((item) => `${item.kind} (${item.reason})`).join(" ")}
+                </p>
+              ) : null}
+              <p className="mt-3 text-xs text-[color:var(--fg-3)]">
+                Follow individual Evidence links above to verify a particular network connection in its original public source.
+              </p>
+            </div>
           ) : null}
         </section>
         </div>
       </main>
 
       {companyId ? <StartupCardSheet id={companyId} onClose={() => setCompanyId(null)} /> : null}
+    </div>
+  );
+}
+
+/**
+ * Every name has a useful next step: a founder's searchable profile,
+ * the complete company record, or an in-place quick preview.
+ */
+function NetworkMemberEntry({
+  member,
+  onPreview,
+  compact = false,
+}: {
+  member: NetworkMember;
+  onPreview: () => void;
+  compact?: boolean;
+}) {
+  return (
+    <div className={`rounded-md border border-[color:var(--line)] bg-white px-2.5 py-2 ${compact ? "text-xs" : "text-sm"}`}>
+      <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+        <Link
+          href={`/founder/discover?q=${encodeURIComponent(member.founderName)}`}
+          className="min-w-0 break-words font-semibold text-[color:var(--cobalt)] hover:underline"
+          title={`Find ${member.founderName} in Founder Scout`}
+          data-network-founder-link={member.founderId}
+        >
+          {member.founderName}
+        </Link>
+        {member.campusLabel ? (
+          <span className="rounded-full border border-[color:var(--line)] bg-[#f6f7fb] px-1.5 py-0.5 text-[10px] font-medium text-[color:var(--fg-2)]">
+            {member.campusLabel}
+          </span>
+        ) : null}
+        {member.stage ? (
+          <span className="rounded-full bg-[color:var(--cobalt-haze)] px-1.5 py-0.5 text-[10px] text-[color:var(--cobalt)]">{member.stage}</span>
+        ) : null}
+      </div>
+      <div className="mt-1 flex min-w-0 items-center justify-between gap-2">
+        <Link href={`/startup/${member.companyId}`}
+          className="min-w-0 break-words text-[11px] font-medium text-[color:var(--fg-2)] hover:text-[color:var(--cobalt)] hover:underline"
+          data-network-company-link={member.companyId}
+          title={`Open ${member.companyName} company record`}
+        >
+          {member.companyName}
+        </Link>
+        <div className="flex shrink-0 items-center gap-1.5">
+          {member.sourceUrl && /^https?:\/\//i.test(member.sourceUrl) ? (
+            <a href={member.sourceUrl} target="_blank" rel="noopener noreferrer"
+              title="Open the published evidence for this network connection"
+              className="inline-flex min-h-8 items-center rounded border border-[color:var(--line)] px-2 text-[10px] font-semibold text-[color:var(--fg-2)] hover:bg-[#f3f6fc]"
+              data-network-evidence-link="">
+              Evidence
+            </a>
+          ) : null}
+          <button type="button" onClick={onPreview} aria-label={`Quick view ${member.companyName}`}
+            className="min-h-8 shrink-0 rounded border border-[color:var(--line)] px-2 text-[10px] font-semibold text-[color:var(--cobalt)] hover:bg-[#eff2fd]">
+            Preview
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

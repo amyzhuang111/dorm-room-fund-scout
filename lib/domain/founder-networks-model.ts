@@ -29,6 +29,8 @@ export interface NetworkMember {
   campusLabel: string | null;
   /** Funding stage when known (for roster sort). */
   stage: string | null;
+  /** Official program page or investor fact supporting this founder-company link. */
+  sourceUrl?: string | null;
 }
 
 export interface MatrixColumn {
