@@ -18,8 +18,12 @@ import {
 const DECK_PAGE = 12;
 const STRONG = new Set(["funding", "launch", "accelerator", "award"]);
 
-function evidenceChips(founder: FounderLead): { key: string; label: string; kind: "signal" | "program" }[] {
-  const out: { key: string; label: string; kind: "signal" | "program" }[] = [];
+function evidenceChips(
+  founder: FounderLead,
+): { key: string; label: string; kind: "signal" | "program"; href: string | null }[] {
+  const out: { key: string; label: string; kind: "signal" | "program"; href: string | null }[] = [];
+  const signalSources = founder.signalSourceByType ?? {};
+  const programSources = founder.programSourceByLabel ?? {};
   const signals = [...founder.signalTypes]
     .filter((t) => STRONG.has(t))
     .sort(
@@ -28,11 +32,16 @@ function evidenceChips(founder: FounderLead): { key: string; label: string; kind
           ({ funding: 0, launch: 1, accelerator: 2, award: 3 }[b] ?? 50) || a.localeCompare(b),
     );
   for (const type of signals.slice(0, 3)) {
-    out.push({ key: `s:${type}`, label: signalTypeLabel(type), kind: "signal" });
+    const href = signalSources[type] ?? null;
+    // Signal chips without a real source stay off the card (plain claim with no link).
+    if (!href) continue;
+    out.push({ key: `s:${type}`, label: signalTypeLabel(type), kind: "signal", href });
   }
   for (const program of founder.programs.slice(0, 2)) {
     if (out.some((c) => c.label === program)) continue;
-    out.push({ key: `p:${program}`, label: program, kind: "program" });
+    const href = programSources[program] ?? null;
+    if (!href) continue;
+    out.push({ key: `p:${program}`, label: program, kind: "program", href });
   }
   return out.slice(0, 4);
 }
@@ -172,19 +181,26 @@ export function MobileFounderDeck({
                 </div>
                 {chips.length > 0 ? (
                   <div className="mt-2 flex flex-wrap gap-1.5" data-founder-evidence-chips="">
-                    {chips.map((chip) => (
-                      <span
-                        key={chip.key}
-                        className={
-                          chip.kind === "signal"
-                            ? "inline-flex h-[18px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)]"
-                            : "inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] text-[color:var(--fg-2,#3F465C)]"
-                        }
-                        data-evidence-chip={chip.kind}
-                      >
-                        {chip.label}
-                      </span>
-                    ))}
+                    {chips.map((chip) => {
+                      const className =
+                        chip.kind === "signal"
+                          ? "inline-flex h-[18px] items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/35 bg-[color:var(--cobalt-haze,#E8ECFA)] px-1.5 font-mono text-[10px] font-semibold text-[color:var(--cobalt,#2F4FD8)] hover:underline"
+                          : "inline-flex h-[18px] items-center rounded-sm border border-[color:var(--line,#E1E5EF)] bg-[color:var(--bg,#FFFFFF)] px-1.5 font-mono text-[10px] text-[color:var(--fg-2,#3F465C)] hover:underline";
+                      return (
+                        <a
+                          key={chip.key}
+                          href={chip.href!}
+                          target="_blank"
+                          rel="noreferrer"
+                          className={className}
+                          data-evidence-chip={chip.kind}
+                          data-evidence-href={chip.href!}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {chip.label}
+                        </a>
+                      );
+                    })}
                   </div>
                 ) : null}
                 {why ? (
