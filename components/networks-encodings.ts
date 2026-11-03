@@ -278,7 +278,8 @@ export function makeCampusContourTexture(
   opts: { soft?: boolean; edgeRichness?: number } = {},
 ) {
   const soft = opts.soft !== false; // mid: soft overlap into continuous field
-  const edgeRichness = opts.edgeRichness ?? 0.35;
+  // n20: irregular paint rim driven by founder density (not smooth Gaussian wash)
+  const edgeRichness = opts.edgeRichness ?? 0.72;
   // Larger grid + pad so density falls to 0 before the sprite edge (no hard rect clip)
   const size = 256;
   const c = document.createElement("canvas");
@@ -292,9 +293,11 @@ export function makeCampusContourTexture(
   let maxR = 1;
   for (const p of localPts) maxR = Math.max(maxR, Math.hypot(p.x, p.y));
   maxR = Math.max(maxR, 1) * 1.12;
-  const sigma = Math.max(soft ? 0.22 : 0.1, Math.min(soft ? 0.48 : 0.22, (soft ? 1.35 : 0.55) / Math.sqrt(Math.max(6, localPts.length))));
+  // Tighter kernels + multi-scale mix → paint lobes follow real founder clumps
+  const sigma = Math.max(soft ? 0.14 : 0.1, Math.min(soft ? 0.34 : 0.22, (soft ? 0.95 : 0.55) / Math.sqrt(Math.max(6, localPts.length))));
+  const sigma2 = sigma * 1.85;
   // Extend world extent past cluster so soft kernels die before the texture rim
-  const padFrac = soft ? 0.24 : 0.14; // n19: wider soft margin so denser mid never clips
+  const padFrac = soft ? 0.26 : 0.14; // n20: keep unclipped with richer paint rim
   const worldHalf = maxR / (1 - 2 * padFrac);
   const twoSig2 = 2 * sigma * sigma;
 
@@ -344,11 +347,17 @@ export function makeCampusContourTexture(
       const px = (u - 0.5) * 2 * worldHalf;
       const py = (v - 0.5) * 2 * worldHalf;
       let d = 0;
+      let nearest = 1e9;
       for (const pt of localPts) {
         const dx = (px - pt.x) / maxR;
         const dy = (py - pt.y) / maxR;
-        d += Math.exp(-(dx * dx + dy * dy) / twoSig2);
+        const r2 = dx * dx + dy * dy;
+        nearest = Math.min(nearest, r2);
+        // Primary tight kernel + weaker wide kernel → irregular paint density
+        d += Math.exp(-r2 / twoSig2) + 0.35 * Math.exp(-r2 / (2 * sigma2 * sigma2));
       }
+      // Distance-to-founder ridge: carve muddy fill between sparse points
+      d *= 1 / (1 + nearest * (soft ? 2.4 : 1.2));
       dens[y * size + x] = d;
       if (d > dMax) dMax = d;
       if (step === 2 && x + 1 < size && y + 1 < size) {
@@ -358,26 +367,30 @@ export function makeCampusContourTexture(
       }
     }
   }
-  const thresh = dMax * (soft ? 0.022 : 0.1);
+  const thresh = dMax * (soft ? 0.045 : 0.1);
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const u = (x + 0.5) / size;
       const v = (y + 0.5) / size;
       let d = dens[y * size + x];
-      // Contour edge + light watercolor noise (richer when edgeRichness high)
+      // Contour edge + paint noise warped by density (irregular rim, not Gaussian wash)
       const n1 = noise(u, v);
-      const n2 = noise(u * 1.7 + 0.3, v * 1.5 + 0.6);
-      const warp = (n1 - 0.5) * (0.12 + edgeRichness * 0.28) + (n2 - 0.5) * edgeRichness * 0.2;
-      d *= 0.9 + warp;
-      const fall = soft ? 0.5 : 0.5;
+      const n2 = noise(u * 2.1 + 0.3, v * 1.9 + 0.6);
+      const n3 = noise(u * 3.4 + 0.1, v * 2.8 + 0.2);
+      const warp =
+        (n1 - 0.5) * (0.18 + edgeRichness * 0.42) +
+        (n2 - 0.5) * edgeRichness * 0.38 +
+        (n3 - 0.5) * edgeRichness * 0.22;
+      d *= 0.82 + warp;
+      const fall = soft ? 0.42 : 0.5;
       let a = d <= thresh ? 0 : Math.min(1, (d - thresh) / (dMax * fall + 1e-6));
-      a = Math.pow(a, soft ? 0.5 : 0.9);
-      // Paint-splotch scallops on the rim
-      if (a > 0.08 && a < 0.55) {
-        a *= 0.85 + edgeRichness * (n2 - 0.35);
+      a = Math.pow(a, soft ? 0.62 : 0.9);
+      // Paint-splotch scallops + broken rim following density lobes
+      if (a > 0.05 && a < 0.62) {
+        a *= 0.72 + edgeRichness * (n2 - 0.28) + 0.15 * (n3 - 0.5);
       }
-      if (a < 0.03) a = 0;
-      a *= 0.88 + 0.12 * satMul; // denser continuous mid; chroma still via satMul RGB
+      if (a < 0.04) a = 0;
+      a *= 0.84 + 0.16 * satMul; // chroma still via satMul RGB
       // Fade alpha to exactly 0 before each texture edge (kills hard rect clip)
       const edgeDist = Math.min(u, v, 1 - u, 1 - v);
       const fadeStart = padFrac * 0.85;
@@ -424,7 +437,7 @@ export function makeCampusContourTexture(
 
 /** World scale so sprite area tracks founder count (radius ∝ √n). */
 export function blobScaleForFounders(n: number, mobile = false): number {
-  // n19: continuous mid field — larger overlap still ∝ √founders (padFrac keeps unclipped)
-  const base = 40 + Math.sqrt(Math.max(1, n)) * (mobile ? 12.5 : 16);
-  return Math.max(mobile ? 72 : 96, Math.min(mobile ? 250 : 360, base));
+  // n20: desk keeps continuous field; mobile scales down to cut muddy full-bleed coverage
+  const base = 40 + Math.sqrt(Math.max(1, n)) * (mobile ? 9.2 : 15.5);
+  return Math.max(mobile ? 56 : 96, Math.min(mobile ? 175 : 350, base));
 }

@@ -1,0 +1,967 @@
+{
+  "generatedAt": "2026-11-03T09:34:25.085Z",
+  "totalCandidates": 120,
+  "withThumb": 96,
+  "thumbs": {
+    "proj_WO48SRqQtJd1": {
+      "path": "/company-thumbs/proj_WO48SRqQtJd1.webp",
+      "bytes": 2956,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://cdn.prod.website-files.com/67e3380a2d4685a700c58367/680a3e5db0e5ac4661cf89c8_Open%20Graph.jpg",
+      "pageUrl": "https://machindustries.com/",
+      "kind": "og:image",
+      "name": "Mach Industries"
+    },
+    "proj_Ovv9fb0wIFo9": {
+      "path": "/company-thumbs/proj_Ovv9fb0wIFo9.webp",
+      "bytes": 6146,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://cdn.prod.website-files.com/656dedb745265caf68ffa8ed/68876615bf3bd2964fbe8275_Opengraph-home.png",
+      "pageUrl": "https://www.keye.co/",
+      "kind": "og:image",
+      "name": "Keye"
+    },
+    "proj_ZfDsU_8R9LQv": {
+      "path": "/company-thumbs/proj_ZfDsU_8R9LQv.webp",
+      "bytes": 21454,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.dyna.co/assets/research/dyna-2-og.jpg",
+      "pageUrl": "https://www.dyna.co/",
+      "kind": "og:image",
+      "name": "Dyna Robotics"
+    },
+    "proj_MfZcCY2G12SF": {
+      "path": "/company-thumbs/proj_MfZcCY2G12SF.webp",
+      "bytes": 7646,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.kira.eco/opengraph-image.png",
+      "pageUrl": "https://www.kira.eco/",
+      "kind": "og:image",
+      "name": "Kira"
+    },
+    "proj_VBfB9JOdYu1b": {
+      "path": "/company-thumbs/proj_VBfB9JOdYu1b.webp",
+      "bytes": 1976,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.mercor.com/mercor-logo-white.png",
+      "pageUrl": "https://www.mercor.com/blog/series-c/",
+      "kind": "og:image",
+      "name": "Mercor"
+    },
+    "proj_qNzHnD51TJqx": {
+      "path": "/company-thumbs/proj_qNzHnD51TJqx.webp",
+      "bytes": 4920,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://cdn.sanity.io/images/yv3fdy5e/production/5d274b71d8b37060a111de9aab7a21ee26818e88-2400x1260.png?w=1200&amp;h=630&amp;fit=crop&amp;auto=format",
+      "pageUrl": "https://www.flaglerhealth.io/",
+      "kind": "og:image",
+      "name": "Flagler Health"
+    },
+    "proj_aOGmT-GuRkOS": {
+      "path": "/company-thumbs/proj_aOGmT-GuRkOS.webp",
+      "bytes": 5646,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://tryvela.ai/og-image.png",
+      "pageUrl": "https://tryvela.ai/",
+      "kind": "og:image",
+      "name": "Vela"
+    },
+    "proj_CKd9rk0A2a1z": {
+      "path": "/company-thumbs/proj_CKd9rk0A2a1z.webp",
+      "bytes": 7546,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://odysseynotebooks.com/cdn/shop/files/IMG_5684_fd38024e-5c64-48f0-a274-6c4b055e78da.jpg?v=1628978471",
+      "pageUrl": "https://odysseynotebooks.com/",
+      "kind": "og:image",
+      "name": "Odyssey Notebooks LLC"
+    },
+    "proj_pRgPYIl94Ykh": {
+      "path": "/company-thumbs/proj_pRgPYIl94Ykh.webp",
+      "bytes": 3836,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.horushealth.ai/images/AuditsScreen.png",
+      "pageUrl": "https://www.horushealth.ai/",
+      "kind": "page-img",
+      "name": "Horus Health"
+    },
+    "proj_1HbxIWF4rS-w": {
+      "path": "/company-thumbs/proj_1HbxIWF4rS-w.webp",
+      "bytes": 6686,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.copperlane.ai/opengraph-loader.png",
+      "pageUrl": "https://www.copperlane.ai/",
+      "kind": "og:image",
+      "name": "Copperlane"
+    },
+    "proj_EFDsrkclLrec": {
+      "path": "/company-thumbs/proj_EFDsrkclLrec.webp",
+      "bytes": 5542,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://framerusercontent.com/images/Cwj7AVOU2qiQszuxGWO0aoTRwQ.png",
+      "pageUrl": "https://emanate.ai/",
+      "kind": "og:image",
+      "name": "Emanate"
+    },
+    "proj_Qkmtkaor2HkA": {
+      "path": "/company-thumbs/proj_Qkmtkaor2HkA.webp",
+      "bytes": 2330,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.nirby.ai/og/nirby-1200x630.png",
+      "pageUrl": "https://www.nirby.ai/pl",
+      "kind": "og:image",
+      "name": "Nirby"
+    },
+    "proj_u-RlUftIY8mH": {
+      "path": "/company-thumbs/proj_u-RlUftIY8mH.webp",
+      "bytes": 1888,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://framerusercontent.com/images/fwqcUo9uXzmIpYRIYMnlRrcaqg.png",
+      "pageUrl": "https://get-civic.com/",
+      "kind": "og:image",
+      "name": "Civic"
+    },
+    "proj_FgQqoPFk9Vk5": {
+      "path": "/company-thumbs/proj_FgQqoPFk9Vk5.webp",
+      "bytes": 2724,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://framerusercontent.com/images/BorkGmO7I91dQxK9aLT4NsfmY.png",
+      "pageUrl": "https://ongov.ai/onreturn",
+      "kind": "og:image",
+      "name": "OnGov"
+    },
+    "proj_fnmJeIqOmrs3": {
+      "path": "/company-thumbs/proj_fnmJeIqOmrs3.webp",
+      "bytes": 4878,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.avenir.com.ai/og-image.png",
+      "pageUrl": "https://www.avenir.com.ai/",
+      "kind": "og:image",
+      "name": "Avenir AI"
+    },
+    "proj_crV5szsTwREh": {
+      "path": "/company-thumbs/proj_crV5szsTwREh.webp",
+      "bytes": 4736,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://getbota.com/og/bota-ai-note-taker-devices.jpg",
+      "pageUrl": "https://getbota.com/",
+      "kind": "og:image",
+      "name": "Bota"
+    },
+    "proj_bc2OeeU6Dkbt": {
+      "path": "/company-thumbs/proj_bc2OeeU6Dkbt.webp",
+      "bytes": 7726,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://cdn.sanity.io/images/rwbees58/production/9885cd08fc6fe49fff1d2b35a8f97447753ca9b0-1200x630.png?w=1200&amp;h=630&amp;fm=png&amp;fit=max&amp;auto=format",
+      "pageUrl": "https://www.etched.com/",
+      "kind": "og:image",
+      "name": "Etched"
+    },
+    "proj_NhpUOFG0HW41": {
+      "path": "/company-thumbs/proj_NhpUOFG0HW41.webp",
+      "bytes": 4218,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.centralcoms.com/logo.png",
+      "pageUrl": "https://www.centralcoms.com/",
+      "kind": "og:image",
+      "name": "CentralComs"
+    },
+    "proj_6bTCBJZ2-kCB": {
+      "path": "/company-thumbs/proj_6bTCBJZ2-kCB.webp",
+      "bytes": 4668,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.perceptuallabs.com/images/social/meta-img.jpg",
+      "pageUrl": "https://www.bryel.ai/",
+      "kind": "og:image",
+      "name": "Bryel"
+    },
+    "proj_itW5DMIgcXRn": {
+      "path": "/company-thumbs/proj_itW5DMIgcXRn.webp",
+      "bytes": 14332,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://lwfiles.mycourse.app/67becaea235748b0c5c5b665-public/7ce066e8bea3d95878abfad5979da2d2.png",
+      "pageUrl": "https://school.motherlynotes.com/",
+      "kind": "og:image",
+      "name": "Motherly Notes"
+    },
+    "proj_uQnJDj4198T3": {
+      "path": "/company-thumbs/proj_uQnJDj4198T3.webp",
+      "bytes": 2396,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://cdn.prod.website-files.com/69a5d08b91d4e7178ca8b64b/69bc3d944e0cae630dc9f1d8_knit-health-open-graph.png",
+      "pageUrl": "https://www.knit.health/company",
+      "kind": "og:image",
+      "name": "Knit Health"
+    },
+    "proj_GldbCjheYRgQ": {
+      "path": "/company-thumbs/proj_GldbCjheYRgQ.webp",
+      "bytes": 6372,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.valentprocure.com/og/valent.png",
+      "pageUrl": "https://www.valentprocure.com/",
+      "kind": "og:image",
+      "name": "Valent"
+    },
+    "proj_v3W_XLM9oxBM": {
+      "path": "/company-thumbs/proj_v3W_XLM9oxBM.webp",
+      "bytes": 5852,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://reviserobotics.com/social-preview.png",
+      "pageUrl": "https://reviserobotics.com/",
+      "kind": "og:image",
+      "name": "Revise Robotics"
+    },
+    "proj_QIcrl08fMyCG": {
+      "path": "/company-thumbs/proj_QIcrl08fMyCG.webp",
+      "bytes": 3790,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://meetriver.com/thumbnail.webp",
+      "pageUrl": "https://meetriver.com/",
+      "kind": "og:image",
+      "name": "River"
+    },
+    "proj_teTAQOFr__YW": {
+      "path": "/company-thumbs/proj_teTAQOFr__YW.webp",
+      "bytes": 3952,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://cognition.com/opengraph-image.jpg?opengraph-image.1mmg6fs-xw9so.jpg",
+      "pageUrl": "https://cognition.com/",
+      "kind": "og:image",
+      "name": "Cognition"
+    },
+    "proj_FzmnILQxyRS-": {
+      "path": "/company-thumbs/proj_FzmnILQxyRS-.webp",
+      "bytes": 2796,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://linewise.io/assets/images/og-rsi.jpg",
+      "pageUrl": "https://linewise.io/",
+      "kind": "og:image",
+      "name": "Linewise"
+    },
+    "proj_miflfhdKFIrs": {
+      "path": "/company-thumbs/proj_miflfhdKFIrs.webp",
+      "bytes": 6536,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.dedaluslabs.ai/images/og/blog/dedalus-seed-round.png",
+      "pageUrl": "https://www.dedaluslabs.ai/blog/dedalus-seed-round",
+      "kind": "og:image",
+      "name": "Dedalus Labs"
+    },
+    "proj_4HotdafHB6Gi": {
+      "path": "/company-thumbs/proj_4HotdafHB6Gi.webp",
+      "bytes": 13622,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://cdn.prod.website-files.com/6721bbdbfe7b8b71e8e152b1/68f7e2c2ff510af1775022b8_hownemuworks-01%402x.avif",
+      "pageUrl": "https://www.mynemu.com/",
+      "kind": "page-img",
+      "name": "Nemu"
+    },
+    "proj_wfmDtDLJpZMS": {
+      "path": "/company-thumbs/proj_wfmDtDLJpZMS.webp",
+      "bytes": 6934,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://storiara.com/assets/poster.jpg",
+      "pageUrl": "https://storiara.com/",
+      "kind": "twitter:image",
+      "name": "Storiara"
+    },
+    "proj_mQMP4uHXq-Wc": {
+      "path": "/company-thumbs/proj_mQMP4uHXq-Wc.webp",
+      "bytes": 8200,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-A8nSsn54PqnLI8fFLhgDYhlXUdvXhr.png",
+      "pageUrl": "https://www.intelligence-factory.com/",
+      "kind": "page-img",
+      "name": "Intelligence Factory"
+    },
+    "proj_uHVCM1Oe41Je": {
+      "path": "/company-thumbs/proj_uHVCM1Oe41Je.webp",
+      "bytes": 9914,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.trychert.com/chert.png",
+      "pageUrl": "https://www.trychert.com/",
+      "kind": "og:image",
+      "name": "Chert"
+    },
+    "proj_YM1WFoObIxTg": {
+      "path": "/company-thumbs/proj_YM1WFoObIxTg.webp",
+      "bytes": 5030,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://shortbread.ai/lovable-uploads/f85e3fae-de30-4588-9f3f-0a32f4357f38.png",
+      "pageUrl": "https://shortbread.ai/",
+      "kind": "og:image",
+      "name": "Shortbread"
+    },
+    "proj_BBxeAZHkRbCF": {
+      "path": "/company-thumbs/proj_BBxeAZHkRbCF.webp",
+      "bytes": 7338,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://framerusercontent.com/images/uqD8DREA2BondXa8XStgFlGRq8.png",
+      "pageUrl": "https://syncere.com/",
+      "kind": "og:image",
+      "name": "Syncere"
+    },
+    "proj_7ergTtUnWjS_": {
+      "path": "/company-thumbs/proj_7ergTtUnWjS_.webp",
+      "bytes": 4434,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://cdn.prod.website-files.com/67bce5e386b7ca213dda94ef/6953e855a94b89982f87028c_OG%20IMAGE.png",
+      "pageUrl": "https://www.furtherai.com/",
+      "kind": "og:image",
+      "name": "FurtherAI"
+    },
+    "proj_5ZRSLDZAL3zV": {
+      "path": "/company-thumbs/proj_5ZRSLDZAL3zV.webp",
+      "bytes": 6536,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://betterbasket.com/og.png",
+      "pageUrl": "https://betterbasket.com/",
+      "kind": "og:image",
+      "name": "BetterBasket"
+    },
+    "proj_o-M5xhPvgGSY": {
+      "path": "/company-thumbs/proj_o-M5xhPvgGSY.webp",
+      "bytes": 13396,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.forma-systems.com/og-forma.jpg",
+      "pageUrl": "https://www.forma-systems.com/",
+      "kind": "og:image",
+      "name": "Forma Systems"
+    },
+    "proj_bbc50w1HB_NK": {
+      "path": "/company-thumbs/proj_bbc50w1HB_NK.webp",
+      "bytes": 8504,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://app.mem.store/assets/art-landing-01-640-v1.webp",
+      "pageUrl": "https://mem.store/",
+      "kind": "page-img",
+      "name": "Memory Store"
+    },
+    "proj_yX97r6IMj7Uf": {
+      "path": "/company-thumbs/proj_yX97r6IMj7Uf.webp",
+      "bytes": 4910,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://framerusercontent.com/images/6946lsYbANBNa5dpDqtHJDUyw0.png",
+      "pageUrl": "https://simcare.ai/",
+      "kind": "og:image",
+      "name": "SimCare"
+    },
+    "proj_sq8rq1AFiVO_": {
+      "path": "/company-thumbs/proj_sq8rq1AFiVO_.webp",
+      "bytes": 1042,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.assemble.ai/opengraph-image.png?opengraph-image.0brnpq1k.efjv.png",
+      "pageUrl": "https://www.assemble.ai/",
+      "kind": "og:image",
+      "name": "Assemble"
+    },
+    "proj_DF4diMWfIS-_": {
+      "path": "/company-thumbs/proj_DF4diMWfIS-_.webp",
+      "bytes": 7980,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://simantic.com/images/pcb/frame-00.webp",
+      "pageUrl": "https://simantic.com/",
+      "kind": "page-img",
+      "name": "Simantic"
+    },
+    "proj_ha4vMOGaUy5i": {
+      "path": "/company-thumbs/proj_ha4vMOGaUy5i.webp",
+      "bytes": 6010,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://perceptronml.com/images/og/og-card-5.png",
+      "pageUrl": "https://perceptronml.com/",
+      "kind": "og:image",
+      "name": "Perceptron ML"
+    },
+    "proj_3GKPU6aVYaev": {
+      "path": "/company-thumbs/proj_3GKPU6aVYaev.webp",
+      "bytes": 1800,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://thezillennialadvisors.com/og-logo.png",
+      "pageUrl": "https://thezillennialadvisors.com/",
+      "kind": "og:image",
+      "name": "The Zillennial Advisors"
+    },
+    "proj_GGz5S6xTPw40": {
+      "path": "/company-thumbs/proj_GGz5S6xTPw40.webp",
+      "bytes": 5614,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://os3robotics.com/assets/hardware/robot-front-cutout.webp?dpl=dpl_CeMN68mmfoJPYVpSAKxx4GgsCijN",
+      "pageUrl": "https://os3robotics.com/",
+      "kind": "page-img",
+      "name": "OS3"
+    },
+    "proj_0r9rQDyKIEo7": {
+      "path": "/company-thumbs/proj_0r9rQDyKIEo7.webp",
+      "bytes": 5082,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.fed10.ai/og.png",
+      "pageUrl": "https://www.fed10.ai/",
+      "kind": "og:image",
+      "name": "Fed10"
+    },
+    "proj_gd0hBdAyP6HZ": {
+      "path": "/company-thumbs/proj_gd0hBdAyP6HZ.webp",
+      "bytes": 8204,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://framerusercontent.com/images/yf4jH4D1e8bKn9oFYZCVSeIAI.png",
+      "pageUrl": "https://vestris.ai/",
+      "kind": "og:image",
+      "name": "Vestris"
+    },
+    "proj_u14m2WT2PEIA": {
+      "path": "/company-thumbs/proj_u14m2WT2PEIA.webp",
+      "bytes": 5048,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://mmx.prnewswire.com/media/2776108/phialogoblueapril_Logo.jpg?p=facebook",
+      "pageUrl": "https://www.prnewswire.com/news-releases/phia-raises-8-million-seed-round-led-by-kleiner-perkins-to-build-the-ai-agent-for-shopping-302559880.html",
+      "kind": "og:image",
+      "name": "Phia"
+    },
+    "proj_RJReQGV6TywI": {
+      "path": "/company-thumbs/proj_RJReQGV6TywI.webp",
+      "bytes": 4400,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://usenaive.ai/naive-og.png?v=3",
+      "pageUrl": "https://usenaive.ai/",
+      "kind": "og:image",
+      "name": "Naïve"
+    },
+    "proj_vfMtrUgQMdze": {
+      "path": "/company-thumbs/proj_vfMtrUgQMdze.webp",
+      "bytes": 5898,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://acaysia.com/og.jpg",
+      "pageUrl": "https://acaysia.com/",
+      "kind": "og:image",
+      "name": "Acaysia"
+    },
+    "proj_6pASS0yiRVfE": {
+      "path": "/company-thumbs/proj_6pASS0yiRVfE.webp",
+      "bytes": 2268,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://embedder.com/og-image.png",
+      "pageUrl": "https://embedder.com/",
+      "kind": "og:image",
+      "name": "Embedder"
+    },
+    "proj_QAVpEBIHiItv": {
+      "path": "/company-thumbs/proj_QAVpEBIHiItv.webp",
+      "bytes": 3172,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.proprise.ai/images/logos/color-proprise-logo.png",
+      "pageUrl": "https://www.proprise.ai/",
+      "kind": "og:image",
+      "name": "PropRise"
+    },
+    "proj_tUVZJm2HcD73": {
+      "path": "/company-thumbs/proj_tUVZJm2HcD73.webp",
+      "bytes": 8744,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.joinvega.com/og-image.png",
+      "pageUrl": "https://www.joinvega.com/",
+      "kind": "og:image",
+      "name": "Vega"
+    },
+    "proj_67X5Q_NmsUUF": {
+      "path": "/company-thumbs/proj_67X5Q_NmsUUF.webp",
+      "bytes": 3726,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://runharbor.com/og-image.png",
+      "pageUrl": "https://runharbor.com/",
+      "kind": "og:image",
+      "name": "Harbor"
+    },
+    "proj_1S9K9gms902w": {
+      "path": "/company-thumbs/proj_1S9K9gms902w.webp",
+      "bytes": 4594,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.masterpiecelabs.xyz/assets/og-image.jpg",
+      "pageUrl": "https://www.masterpiecelabs.xyz/",
+      "kind": "og:image",
+      "name": "Masterpiece"
+    },
+    "proj_yPkyItEKypZ-": {
+      "path": "/company-thumbs/proj_yPkyItEKypZ-.webp",
+      "bytes": 3522,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://framerusercontent.com/images/tO68FzJwvzSgr1keWX0Z3bPRXt8.png",
+      "pageUrl": "https://freesolo.co/",
+      "kind": "og:image",
+      "name": "Freesolo"
+    },
+    "proj_MNimJtvHzSce": {
+      "path": "/company-thumbs/proj_MNimJtvHzSce.webp",
+      "bytes": 7802,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.sureformhq.com/sureform.png",
+      "pageUrl": "https://www.sureformhq.com/",
+      "kind": "og:image",
+      "name": "Sureform"
+    },
+    "proj_9RUrw9qZwfWq": {
+      "path": "/company-thumbs/proj_9RUrw9qZwfWq.webp",
+      "bytes": 6438,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://ramain.ai/images/v3/larry-owens.webp",
+      "pageUrl": "https://ramain.ai/",
+      "kind": "page-img",
+      "name": "RamAIn"
+    },
+    "proj__iTNLFDEEOt_": {
+      "path": "/company-thumbs/proj__iTNLFDEEOt_.webp",
+      "bytes": 3792,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.ironledger.ai/opengraph.png",
+      "pageUrl": "https://www.ironledger.ai/",
+      "kind": "og:image",
+      "name": "IronLedger.ai"
+    },
+    "proj_qqTNKwy7Xd1C": {
+      "path": "/company-thumbs/proj_qqTNKwy7Xd1C.webp",
+      "bytes": 3582,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://useprox.com/rde/preview.png",
+      "pageUrl": "https://useprox.com/",
+      "kind": "og:image",
+      "name": "Prox"
+    },
+    "proj_Hw5heRu9tRoN": {
+      "path": "/company-thumbs/proj_Hw5heRu9tRoN.webp",
+      "bytes": 12998,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://cdn.prod.website-files.com/6a7bfea2fc850eb7d2fe15c2/6a8768e1403cfbb3c7aba65f_Mask%20group-2%201.png",
+      "pageUrl": "https://www.truthsystems.ai/",
+      "kind": "page-img",
+      "name": "truthsystems"
+    },
+    "proj_zEIv7ZJdw5m3": {
+      "path": "/company-thumbs/proj_zEIv7ZJdw5m3.webp",
+      "bytes": 5186,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://framerusercontent.com/images/AWGoANvWfhqaHOLz42fKH43j6V4.png",
+      "pageUrl": "https://tayanecklace.com/",
+      "kind": "og:image",
+      "name": "Taya"
+    },
+    "proj_bRc7eba1en0L": {
+      "path": "/company-thumbs/proj_bRc7eba1en0L.webp",
+      "bytes": 5216,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.latenthealth.com/og/2026-09-09-home-figma-brandv2.png",
+      "pageUrl": "https://www.latenthealth.com/",
+      "kind": "og:image",
+      "name": "Latent"
+    },
+    "proj_OZ91EKP7IaaN": {
+      "path": "/company-thumbs/proj_OZ91EKP7IaaN.webp",
+      "bytes": 4492,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://stilta-public-page.vercel.app/brand/stilta-og-v2.webp",
+      "pageUrl": "https://stilta.com/",
+      "kind": "og:image",
+      "name": "Stilta"
+    },
+    "proj_UEspfEqnUWim": {
+      "path": "/company-thumbs/proj_UEspfEqnUWim.webp",
+      "bytes": 5968,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://okihome.ai/share/home-v2.jpg",
+      "pageUrl": "https://okihome.ai/",
+      "kind": "og:image",
+      "name": "Oki"
+    },
+    "proj_dKU0Oemub4uY": {
+      "path": "/company-thumbs/proj_dKU0Oemub4uY.webp",
+      "bytes": 1874,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://lucidic.ai/og-image.png",
+      "pageUrl": "https://lucidic.ai/",
+      "kind": "og:image",
+      "name": "Lucidic AI"
+    },
+    "proj_MibrgSDhuWUx": {
+      "path": "/company-thumbs/proj_MibrgSDhuWUx.webp",
+      "bytes": 1966,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://images.squarespace-cdn.com/content/v1/680ce66c0b8f97663141e571/d7fffe17-b910-4e8f-b38f-de192e74f744/apollo.jpg",
+      "pageUrl": "https://www.icarus.one/",
+      "kind": "page-img",
+      "name": "Icarus"
+    },
+    "proj_EqEmpEru5p_w": {
+      "path": "/company-thumbs/proj_EqEmpEru5p_w.webp",
+      "bytes": 3804,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://fort.cx/cdn/shop/t/22/assets/fort-social-preview.jpg?v=165910972952574792341793320455",
+      "pageUrl": "https://fort.cx/",
+      "kind": "og:image",
+      "name": "Fort"
+    },
+    "proj_0LDeF3vCRhWl": {
+      "path": "/company-thumbs/proj_0LDeF3vCRhWl.webp",
+      "bytes": 4252,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://framerusercontent.com/images/R0Nil3ptkRVcuIgbYeLaxY087k.png",
+      "pageUrl": "https://runtrellis.com/",
+      "kind": "og:image",
+      "name": "Trellis AI"
+    },
+    "proj_Ee4S9xGnVUQK": {
+      "path": "/company-thumbs/proj_Ee4S9xGnVUQK.webp",
+      "bytes": 12264,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://joinoasis.com/og.webp",
+      "pageUrl": "https://joinoasis.com/",
+      "kind": "og:image",
+      "name": "Oasis"
+    },
+    "proj_WCe206R3EJV1": {
+      "path": "/company-thumbs/proj_WCe206R3EJV1.webp",
+      "bytes": 8122,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://reasonmachines.com/blog-covers/home-og.jpg",
+      "pageUrl": "https://reasonmachines.com/",
+      "kind": "og:image",
+      "name": "Reason Machines"
+    },
+    "proj_qEMVZxdALzW2": {
+      "path": "/company-thumbs/proj_qEMVZxdALzW2.webp",
+      "bytes": 19758,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://flipkit.ai/images/daftar-akun-toto-slot-777-gacor.webp",
+      "pageUrl": "https://flipkit.ai/",
+      "kind": "og:image",
+      "name": "Flipkit"
+    },
+    "proj_PubAJ5m1zeE6": {
+      "path": "/company-thumbs/proj_PubAJ5m1zeE6.webp",
+      "bytes": 7052,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://uapply.africa/share/default.jpg",
+      "pageUrl": "https://www.uapply.africa/",
+      "kind": "og:image",
+      "name": "UAPPLY"
+    },
+    "proj_mxXRZc-DzKB3": {
+      "path": "/company-thumbs/proj_mxXRZc-DzKB3.webp",
+      "bytes": 5138,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.fazeshift.com/opengraph-image",
+      "pageUrl": "https://www.fazeshift.com/",
+      "kind": "og:image",
+      "name": "Fazeshift"
+    },
+    "proj_7ZRTnS_1o01C": {
+      "path": "/company-thumbs/proj_7ZRTnS_1o01C.webp",
+      "bytes": 5372,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://a0.dev/og-image.png",
+      "pageUrl": "https://a0.dev/",
+      "kind": "og:image",
+      "name": "a0.dev"
+    },
+    "proj_5prGzWCF510m": {
+      "path": "/company-thumbs/proj_5prGzWCF510m.webp",
+      "bytes": 3910,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://oruk.ai/brand/web/2026-09-09-light-signal/home.png",
+      "pageUrl": "https://oruk.ai/",
+      "kind": "og:image",
+      "name": "Oruk"
+    },
+    "proj_x-M6zYU45_1-": {
+      "path": "/company-thumbs/proj_x-M6zYU45_1-.webp",
+      "bytes": 5080,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://cdn.prod.website-files.com/6979ee185c5ab85c39c968f9/6a6d8533d6c1be489fffbe55_Arini%20Open%20Graph%20(Social%20Image).png",
+      "pageUrl": "https://www.arini.ai/",
+      "kind": "og:image",
+      "name": "Arini"
+    },
+    "proj_ACBJ5aDjCF3d": {
+      "path": "/company-thumbs/proj_ACBJ5aDjCF3d.webp",
+      "bytes": 11296,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://miyagilabs.ai/logo.png",
+      "pageUrl": "https://miyagilabs.ai/",
+      "kind": "og:image",
+      "name": "Miyagi Labs"
+    },
+    "proj_vc10SX0OiIbW": {
+      "path": "/company-thumbs/proj_vc10SX0OiIbW.webp",
+      "bytes": 10314,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://datacurve.ai/og/default.jpg",
+      "pageUrl": "https://datacurve.ai/",
+      "kind": "og:image",
+      "name": "Datacurve"
+    },
+    "proj_Opf_lxHYO0u4": {
+      "path": "/company-thumbs/proj_Opf_lxHYO0u4.webp",
+      "bytes": 9776,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://aidyhq.com/og-image.png",
+      "pageUrl": "https://www.aidyhq.com/",
+      "kind": "og:image",
+      "name": "Aidy"
+    },
+    "proj_G_KFC9VVdXib": {
+      "path": "/company-thumbs/proj_G_KFC9VVdXib.webp",
+      "bytes": 3650,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.risklytics.ai/og/home.png",
+      "pageUrl": "https://www.risklytics.ai/",
+      "kind": "og:image",
+      "name": "Risklytics"
+    },
+    "proj_9DaVYpvPs14D": {
+      "path": "/company-thumbs/proj_9DaVYpvPs14D.webp",
+      "bytes": 2576,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://shiraz.ai/assets/og-image.png",
+      "pageUrl": "https://shiraz.ai/",
+      "kind": "og:image",
+      "name": "Shiraz AI"
+    },
+    "proj_tnExlADGd1Zz": {
+      "path": "/company-thumbs/proj_tnExlADGd1Zz.webp",
+      "bytes": 6478,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://audun.co/assets/og-home-en-2026-09.png",
+      "pageUrl": "https://audun.co/",
+      "kind": "og:image",
+      "name": "Audun"
+    },
+    "proj_64eq0ZNyLkur": {
+      "path": "/company-thumbs/proj_64eq0ZNyLkur.webp",
+      "bytes": 1868,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://framerusercontent.com/images/aJQCMTIKlway0KxKXpscRUJ4b4k.png",
+      "pageUrl": "https://centralhq.com/",
+      "kind": "og:image",
+      "name": "Central"
+    },
+    "proj_PEJ8MRpgoVA3": {
+      "path": "/company-thumbs/proj_PEJ8MRpgoVA3.webp",
+      "bytes": 7234,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://framerusercontent.com/images/L5d2ISVpnzdgtUhBamzd6LPpI.png",
+      "pageUrl": "https://syntheticsociety.ai/",
+      "kind": "og:image",
+      "name": "Synthetic Society"
+    },
+    "proj_87Rn2H7qzmjU": {
+      "path": "/company-thumbs/proj_87Rn2H7qzmjU.webp",
+      "bytes": 4488,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://framerusercontent.com/assets/VXGTFNjaLCvztpRoWdbFr6Y.png",
+      "pageUrl": "https://mercura.ai/",
+      "kind": "og:image",
+      "name": "Mercura"
+    },
+    "proj_kMd1GUlEVbFT": {
+      "path": "/company-thumbs/proj_kMd1GUlEVbFT.webp",
+      "bytes": 18918,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://maritime.sh/og.jpg",
+      "pageUrl": "https://maritime.sh/",
+      "kind": "og:image",
+      "name": "Maritime"
+    },
+    "proj_NKkRAOYUUS2g": {
+      "path": "/company-thumbs/proj_NKkRAOYUUS2g.webp",
+      "bytes": 4586,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://agentphone.ai/og-image.png",
+      "pageUrl": "https://agentphone.ai/",
+      "kind": "og:image",
+      "name": "AgentPhone"
+    },
+    "proj_BUYtjuCQiBTf": {
+      "path": "/company-thumbs/proj_BUYtjuCQiBTf.webp",
+      "bytes": 7620,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.aviern.com/renders/og.jpg",
+      "pageUrl": "https://www.aviern.com/",
+      "kind": "og:image",
+      "name": "Aviern"
+    },
+    "proj_BfJtD64Il5HC": {
+      "path": "/company-thumbs/proj_BfJtD64Il5HC.webp",
+      "bytes": 11880,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.cpgscout.ai/images/shadow_scout_diamond.png",
+      "pageUrl": "https://www.cpgscout.ai/",
+      "kind": "og:image",
+      "name": "Scout"
+    },
+    "proj_w39r4RPgjq_e": {
+      "path": "/company-thumbs/proj_w39r4RPgjq_e.webp",
+      "bytes": 10300,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.otislabs.us/brand/otis-mark-white.png",
+      "pageUrl": "https://www.otislabs.us/",
+      "kind": "page-img",
+      "name": "Otis Labs"
+    },
+    "proj_x3_kZnzmp3pQ": {
+      "path": "/company-thumbs/proj_x3_kZnzmp3pQ.webp",
+      "bytes": 8680,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://cdn.prod.website-files.com/68b78b24b8c6d7f8c97cb125/69cc0a787d80fadda6ce42c8_YonduBot.png",
+      "pageUrl": "https://www.yondu.ai/",
+      "kind": "og:image",
+      "name": "Yondu"
+    },
+    "proj_1O1I4imbVDkw": {
+      "path": "/company-thumbs/proj_1O1I4imbVDkw.webp",
+      "bytes": 17290,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://cdn.prod.website-files.com/6938719a4d2bb972ec5e2c79/6938719c4d2bb972ec5e2d83_77957056cf5940c0a51a29653a170311_Logo.png",
+      "pageUrl": "https://anto.bio/",
+      "kind": "og:image",
+      "name": "Anto Biosciences"
+    },
+    "proj_3IbCN21eYHTx": {
+      "path": "/company-thumbs/proj_3IbCN21eYHTx.webp",
+      "bytes": 3474,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://withsyzygy.com/opengraph-image?7c661458cf845372",
+      "pageUrl": "https://withsyzygy.com/",
+      "kind": "og:image",
+      "name": "Syzygy"
+    },
+    "proj_WkeCr4sWf-H5": {
+      "path": "/company-thumbs/proj_WkeCr4sWf-H5.webp",
+      "bytes": 20288,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.allus.ai/assets/media/editorial-20260916/allus-hero-1.webp",
+      "pageUrl": "https://www.allus.ai/",
+      "kind": "og:image",
+      "name": "Allus AI"
+    },
+    "proj_niPpgAKrE8gH": {
+      "path": "/company-thumbs/proj_niPpgAKrE8gH.webp",
+      "bytes": 10084,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://www.salemroboticsinc.com/site-images/processed/inspection-still.webp",
+      "pageUrl": "https://www.salemroboticsinc.com/",
+      "kind": "page-img",
+      "name": "Salem Robotics Inc"
+    },
+    "proj_5C10SLr84FKJ": {
+      "path": "/company-thumbs/proj_5C10SLr84FKJ.webp",
+      "bytes": 11444,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://beyondreachlabs.io/assets/brl-og-img.png",
+      "pageUrl": "https://www.beyondreachlabs.com/",
+      "kind": "og:image",
+      "name": "Beyond Reach Labs"
+    },
+    "proj_nWH-Nac5Hwta": {
+      "path": "/company-thumbs/proj_nWH-Nac5Hwta.webp",
+      "bytes": 6176,
+      "width": 320,
+      "height": 200,
+      "sourceUrl": "https://corlen.ai/og-image.jpg",
+      "pageUrl": "https://corlen.ai/",
+      "kind": "og:image",
+      "name": "Corlen"
+    }
+  }
+}

@@ -102,19 +102,20 @@ export function NetworksApp() {
   return (
     <div className="min-h-screen text-[color:var(--fg)]" data-networks-page="" data-networks-cream="1" style={{ background: "var(--networks-bg, #ece9e4)" }}>
       <header className="border-b border-[color:var(--line)]" style={{ background: "var(--networks-bg, #ece9e4)" }} data-networks-hero="">
-        <div className="mx-auto flex max-w-[1400px] flex-col gap-0.5 px-4 py-2 sm:gap-1 sm:px-6 sm:py-3">
+        {/* n20: tighter mobile chrome so the map owns the fold */}
+        <div className="mx-auto flex max-w-[1400px] flex-col gap-0 px-3 py-1.5 sm:gap-1 sm:px-6 sm:py-3">
           <div className="flex items-center gap-2 text-[color:var(--cobalt)]">
             <CampusSeal label="CS" title="Campus Scout" size="sm" />
             <span className="text-[10px] font-medium uppercase tracking-[0.08em] sm:text-xs">Campus Scout</span>
           </div>
-          <h1 className="text-lg font-semibold tracking-tight text-[color:var(--fg)] sm:text-2xl">Campus founder networks</h1>
-          <p className="max-w-3xl text-[12px] leading-snug text-[color:var(--fg-2)] sm:text-sm sm:leading-normal" data-networks-context="">
+          <h1 className="text-base font-semibold tracking-tight text-[color:var(--fg)] sm:text-2xl">Campus founder networks</h1>
+          <p className="hidden max-w-3xl text-[12px] leading-snug text-[color:var(--fg-2)] sm:block sm:text-sm sm:leading-normal" data-networks-context="">
             A map of the programs and funds that already reach student founders.{" "}
             <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> of{" "}
             <span data-networks-count="corpusCompanies">{data.totals.corpusCompanies.toLocaleString("en-US")}</span> companies
             have mapped networks. Open a hub to see who is on that path.
           </p>
-          <p className="text-[11px] text-[color:var(--fg-3)] sm:text-xs" data-networks-stats="">
+          <p className="text-[10px] leading-tight text-[color:var(--fg-3)] sm:text-xs" data-networks-stats="">
             <span data-networks-count="founderLinks">{data.totals.founderLinks.toLocaleString("en-US")}</span> founder links ·{" "}
             <span data-networks-count="networks">{data.totals.networks.toLocaleString("en-US")}</span> networks ·{" "}
             <span data-networks-count="companies">{data.totals.companyTotal.toLocaleString("en-US")}</span> of{" "}
@@ -127,14 +128,14 @@ export function NetworksApp() {
       <main className="flex flex-col gap-0">
         {/* Hero map: edge-to-edge, near full viewport */}
         <section aria-labelledby="graph-heading" className="order-1 overflow-visible">
-          <div className="mx-auto max-w-[1400px] px-4 pt-2 sm:px-6">
+          <div className="mx-auto max-w-[1400px] px-3 pt-1 sm:px-6 sm:pt-2">
             <h2 id="graph-heading" className="sr-only">
               Network map
             </h2>
             <p className="mb-1 hidden text-[12px] text-[color:var(--fg-2)] sm:block" data-networks-context-desk="">
               Every founder and company, colored by campus. Dark hubs are programs and funds. Hover a founder, drag a node, scroll to zoom.
             </p>
-            <p className="mb-1 text-[11px] text-[color:var(--fg-2)] sm:hidden" data-networks-context-mobile="">
+            <p className="mb-1 hidden text-[11px] text-[color:var(--fg-2)]" data-networks-context-mobile="">
               Campus-colored founders and program hubs. Scroll to zoom.
             </p>
           </div>

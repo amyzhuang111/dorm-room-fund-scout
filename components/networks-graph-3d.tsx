@@ -65,6 +65,10 @@ type MediaCard = {
   pop: number;
   /** Real sourced logo path when available */
   logoUrl?: string;
+  /** Real photo thumb (company site / OG / official press) when available */
+  imageUrl?: string;
+  /** Provenance URL for the photo (required when imageUrl is set) */
+  imageSourceUrl?: string;
 };
 
 function clamp(n: number, a: number, b: number) {
@@ -226,6 +230,9 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
   >([]);
   const [logoIds, setLogoIds] = useState<Set<string>>(() => new Set());
   const logoIdsRef = useRef(logoIds);
+  type ThumbMeta = { path: string; sourceUrl: string };
+  const [thumbById, setThumbById] = useState<Record<string, ThumbMeta>>({});
+  const thumbByIdRef = useRef(thumbById);
   const yearMax = cohortYearNow();
   const yearMin = YEAR_MIN_DEFAULT;
   const [scrubYear, setScrubYear] = useState(yearMax);
@@ -236,6 +243,17 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
   const [arcs, setArcs] = useState<ArcSeg[]>([]);
   const [cards, setCards] = useState<Card[]>([]);
   const [mediaCards, setMediaCards] = useState<MediaCard[]>([]);
+  /** One out-zoom investor callout: campus with most founders not yet top-fund backed */
+  const [investorNote, setInvestorNote] = useState<{
+    id: string;
+    text: string;
+    x: number;
+    y: number;
+    ax: number;
+    ay: number;
+    unbacked: number;
+    founders: number;
+  } | null>(null);
   const scrubRef = useRef(scrubYear);
   const dealsRef = useRef(deals);
   const fallbackRef = useRef(onFallback2D);
@@ -260,12 +278,28 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
     logoIdsRef.current = logoIds;
   }, [logoIds]);
   useEffect(() => {
+    thumbByIdRef.current = thumbById;
+  }, [thumbById]);
+  useEffect(() => {
     let cancelled = false;
     fetch("/company-logos/manifest.json")
       .then((r) => r.json())
       .then((m: { logos?: Record<string, unknown> }) => {
         if (cancelled || !m?.logos) return;
         setLogoIds(new Set(Object.keys(m.logos)));
+      })
+      .catch(() => {});
+    fetch("/company-thumbs/manifest.json")
+      .then((r) => r.json())
+      .then((m: { thumbs?: Record<string, { path?: string; sourceUrl?: string }> }) => {
+        if (cancelled || !m?.thumbs) return;
+        const next: Record<string, ThumbMeta> = {};
+        for (const [id, meta] of Object.entries(m.thumbs)) {
+          if (meta?.path && meta?.sourceUrl && /^https?:\/\//i.test(meta.sourceUrl)) {
+            next[id] = { path: meta.path, sourceUrl: meta.sourceUrl };
+          }
+        }
+        setThumbById(next);
       })
       .catch(() => {});
     return () => {
@@ -536,7 +570,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       bloomEnc.forEach((enc, seed) => {
         const softTex = makeCampusContourTexture(THREE, enc.rgb, enc.points, enc.share, seed, {
           soft: true,
-          edgeRichness: 0.4,
+          edgeRichness: 0.78,
         });
         const deepTex = makeCampusContourTexture(THREE, enc.rgb, enc.points, enc.share, seed + 17, {
           soft: false,
@@ -915,24 +949,25 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           });
           bloomGroup.visible = midW > 0.05 || deepW > 0.05;
           const mobile = (renderer?.domElement.clientWidth ?? 1440) < 500;
-          const mobileContain = mobile ? 0.88 : 1;
+          // n20: mobile mid containment — cut muddy full-bleed coverage
+          const mobileContain = mobile ? 0.62 : 1;
           let bi = 0;
           bloomGroup.traverse((obj) => {
             if (!(obj as import("three").Sprite).isSprite) return;
             const spr = obj as import("three").Sprite;
             const m = spr.material as import("three").SpriteMaterial;
-            m.opacity = midW * 1.0 + deepW * 0.92;
+            m.opacity = midW * (mobile ? 0.72 : 1.0) + deepW * (mobile ? 0.7 : 0.92);
             const useDeep = deepW >= midW && deepW > 0.35;
             const nextMap = useDeep ? spr.userData.deepMap : spr.userData.softMap;
             if (nextMap && m.map !== nextMap) m.map = nextMap;
             const base = bloomBaseScale[bi] ?? 120;
-            const midScale = (1.38 + midW * 0.42) * mobileContain;
-            const deepScale = (0.42 + deepW * 0.38) * (mobile ? 0.9 : 1);
+            const midScale = (mobile ? 1.05 + midW * 0.28 : 1.38 + midW * 0.42) * mobileContain;
+            const deepScale = (0.42 + deepW * 0.38) * (mobile ? 0.82 : 1);
             const s = base * (midW > deepW ? midScale : deepScale);
             spr.scale.set(s, s, 1);
             bi++;
           });
-          pointMat.uniforms.uOpacity.value = 0.38 + outW * 0.45 + midW * 0.92 + deepW * 0.45;
+          pointMat.uniforms.uOpacity.value = 0.38 + outW * 0.45 + midW * (mobile ? 0.7 : 0.92) + deepW * 0.45;
           const colAttr = geo.getAttribute("color") as import("three").BufferAttribute;
           const sizeA = geo.getAttribute("size") as import("three").BufferAttribute;
           const posA = geo.getAttribute("position") as import("three").BufferAttribute;
@@ -970,26 +1005,32 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           colAttr.needsUpdate = true;
           sizeA.needsUpdate = true;
           posA.needsUpdate = true;
-          // Stage ink from real data: mid campus→hub ∝ tie weight; deep fo→co ∝ degree
+          // Stage ink: opacity ∝ tie weight × node degree (purpose hierarchy)
           const ec = edgeGeo.getAttribute("color") as import("three").BufferAttribute;
           const ec2 = edgeGeo2.getAttribute("color") as import("three").BufferAttribute;
           for (const d of drawn) {
             let stageMul = 1;
             if (d.kind === "campus_hub") {
               const wNorm = Math.min(1, d.weight / maxBundleW);
-              // Mid: curve weight strictly ∝ tie count (data ink)
+              const hubDeg = d.b >= 0 ? (p.deg[d.b] ?? 1) : 1;
+              const degN = Math.min(1, Math.log2(1 + hubDeg) / 5);
+              const ink = Math.min(1, 0.35 * wNorm + 0.35 * degN + 0.3 * wNorm * degN);
               stageMul =
-                outW * (0.55 + 0.45 * wNorm) +
-                midW * (0.12 + 0.88 * wNorm) +
-                deepW * (0.3 + 0.45 * wNorm) +
+                outW * (0.5 + 0.5 * ink) +
+                midW * (0.1 + 0.9 * ink) +
+                deepW * (0.25 + 0.55 * ink) +
                 cardW * 0.08;
             } else {
-              const degN = Math.min(1, Math.log2(1 + d.weight) / 4);
-              // Deep: real edge opacity scales with node degree
+              const degA = d.a >= 0 ? (p.deg[d.a] ?? 0) : 0;
+              const degB = d.b >= 0 ? (p.deg[d.b] ?? 0) : 0;
+              const maxDeg = Math.max(degA, degB, d.weight);
+              const degN = Math.min(1, Math.log2(1 + maxDeg) / 4);
+              const wNorm = Math.min(1, d.weight / Math.max(1, maxDeg));
+              const ink = Math.min(1, 0.4 * degN + 0.3 * wNorm + 0.3 * degN * wNorm);
               stageMul =
                 outW * 0.1 +
-                midW * 0.03 +
-                deepW * (0.18 + 0.82 * degN) +
+                midW * (0.04 + 0.2 * ink) +
+                deepW * (0.15 + 0.85 * ink) +
                 cardW * 0.06;
               const yearOk =
                 (p.kind[d.a] !== 0 || nodeVisible[d.a] === 1) &&
@@ -1209,16 +1250,47 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           if (deepW > 0.55) {
             setMediaCards([]);
             setCards([]);
+            setInvestorNote(null);
           }
         } else if (outW > 0.35) {
           setLabels(collideLabels(raw, ww < 500 ? 8 : 10));
           setTrackBoxes([]);
           setArcs([]);
           setMediaCards([]);
+          // One real sourced investor callout: most founders not yet top-fund backed
+          const encs = encodingsRef.current.filter((e) => e.id !== "other" && e.founders >= 8);
+          let best: (typeof encs)[number] | null = null;
+          let bestUn = -1;
+          for (const e of encs) {
+            const un = Math.max(0, e.founders - e.backed);
+            if (un > bestUn) {
+              bestUn = un;
+              best = e;
+            }
+          }
+          if (best && outW > 0.55 && midW < 0.45) {
+            const pt = worldToOverlay(best.cx, best.cy, 0, true);
+            const left = pt.x > ww * 0.55;
+            const x = left ? Math.max(12, Math.min(ww * 0.42, pt.x - 120)) : Math.min(ww - 12, Math.max(ww * 0.58, pt.x + 24));
+            const y = Math.max(28, Math.min(hh - 72, pt.y - 8));
+            setInvestorNote({
+              id: best.id,
+              text: `${best.label}: ${bestUn.toLocaleString("en-US")} of ${best.founders.toLocaleString("en-US")} founders not yet backed by a top fund`,
+              x,
+              y,
+              ax: pt.x,
+              ay: pt.y,
+              unbacked: bestUn,
+              founders: best.founders,
+            });
+          } else {
+            setInvestorNote(null);
+          }
         } else {
           setLabels(midW > 0.45 ? [] : collideLabels(raw, 8));
           setTrackBoxes([]);
           setArcs([]);
+          setInvestorNote(null);
           if (midW > 0.4) setMediaCards([]);
         }
 
@@ -1230,7 +1302,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
             if (enc.founders < 10) continue;
             const pt = worldToOverlay(enc.cx, enc.cy, 0, true);
             if (!pt.onscreen && !(pt.x > 0 && pt.y > 0)) continue;
-            const sc = blobScaleForFounders(enc.founders, mobile) * (midW > deepW ? 1.1 : 0.55) * (mobile ? 0.88 : 1);
+            const sc = blobScaleForFounders(enc.founders, mobile) * (midW > deepW ? (mobile ? 0.92 : 1.1) : 0.55) * (mobile ? 0.78 : 1);
             // Approximate screen radius from world scale (poster ~1100 wide → viewport)
             const r = Math.max(18, Math.min(70, (sc / Math.max(p.w, 1)) * ww * 0.55));
             hits.push({
@@ -1288,31 +1360,41 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           }
           setCards(out);
 
-          // Denser in-web media field (between MP4) — NOT founder-cards; cull vs labels + each other
+          // Between: real photo thumbs (OG/site/press) with stored sourceUrl; logo fallback
           const media: MediaCard[] = [];
-          // ~16–18 real thumbnails only (sourced company logos); cull for overlay gate
           const maxMedia = ww < 500 ? 8 : 18;
           const labApprox = raw.map((lab) => {
             const lw = Math.min(160, 10 + lab.label.length * 6.6);
             return { left: lab.x - lw / 2, right: lab.x + lw / 2, top: lab.y - 8, bottom: lab.y + 8 };
           });
           const placed: { left: number; right: number; top: number; bottom: number }[] = [];
-          const pool = cand.slice(0, Math.min(cand.length, 90));
+          // Prefer companies that have a real photo thumb, then logo-only fallback
+          const pool = [...cand].sort((a, b) => {
+            const da = dealsRef.current[p.foIds[a.i] ?? ""];
+            const db = dealsRef.current[p.foIds[b.i] ?? ""];
+            const ta = da?.companyId && thumbByIdRef.current[da.companyId] ? 1 : 0;
+            const tb = db?.companyId && thumbByIdRef.current[db.companyId] ? 1 : 0;
+            return tb - ta || b.score - a.score;
+          }).slice(0, Math.min(cand.length, 90));
           for (let mi = 0; mi < pool.length && media.length < maxMedia; mi++) {
             const c = pool[mi];
             const fid = p.foIds[c.i] ?? "";
             const deal = dealsRef.current[fid];
             const cid = deal?.companyId;
-            if (!cid || !logoIdsRef.current.has(cid)) continue;
-            const logoUrl = `/company-logos/${cid}.webp`;
-            // Only real sourced logos from manifest — no fake brands
+            if (!cid) continue;
+            const thumb = thumbByIdRef.current[cid];
+            const hasLogo = logoIdsRef.current.has(cid);
+            if (!thumb && !hasLogo) continue; // need real image or logo — never invent
+            const logoUrl = hasLogo ? `/company-logos/${cid}.webp` : undefined;
+            const imageUrl = thumb?.path;
+            const imageSourceUrl = thumb?.sourceUrl;
             const h = hash01(`media:${c.i}`);
             const ang = (h * Math.PI * 2 + mi * 0.62) % (Math.PI * 2);
             const rad = 22 + (h * 0.5 + (mi % 6) * 0.08) * (ww < 500 ? 72 : 120);
             const x = c.pt.x + Math.cos(ang) * rad;
             const y = c.pt.y + Math.sin(ang) * rad * 0.7;
-            const mw = ww < 500 ? 32 : 40;
-            const mh = mw;
+            const mw = ww < 500 ? (imageUrl ? 44 : 32) : imageUrl ? 56 : 40;
+            const mh = imageUrl ? Math.round(mw * 0.64) : mw;
             const pad = 3;
             const rect = { left: x - mw / 2, right: x + mw / 2, top: y - mh / 2, bottom: y + mh / 2 };
             const hitsLabel = labApprox.some(
@@ -1336,6 +1418,8 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
               hue: campusColor,
               pop: cardW,
               logoUrl,
+              imageUrl,
+              imageSourceUrl,
             });
             placed.push(rect);
           }
@@ -1424,7 +1508,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
     <div className="w-full overflow-visible" data-networks-desk="" data-networks-dim="4d">
       <div
         ref={wrapRef}
-        className="relative w-screen max-w-none touch-manipulation overflow-hidden left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] max-md:!h-[80vh]"
+        className="relative w-screen max-w-none touch-manipulation overflow-hidden left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] max-md:!h-[min(92dvh,920px)]"
         style={{ height: "85vh", background: "var(--networks-bg, #ece9e4)" }}
         data-networks-graph=""
         data-networks-fade="0"
@@ -1587,12 +1671,43 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           ))}
         </div>
 
+        {/* Out: one investor-useful callout from real campus backing gap */}
+        {investorNote && outOpacity > 0.45 ? (
+          <div
+            className="pointer-events-none absolute inset-0 z-[2]"
+            style={{ opacity: Math.min(1, outOpacity * 1.05) }}
+            data-networks-investor-callout=""
+          >
+            <svg className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
+              <path
+                d={`M ${investorNote.ax} ${investorNote.ay} L ${investorNote.x + (investorNote.x < investorNote.ax ? 110 : 0)} ${investorNote.y + 10}`}
+                stroke="rgba(71,85,105,0.45)"
+                strokeWidth="0.7"
+                fill="none"
+                data-networks-investor-callout-leader=""
+              />
+            </svg>
+            <div
+              className="absolute max-w-[200px] rounded border border-slate-800/15 bg-[#f7f5f1]/92 px-2 py-1.5 text-[10px] leading-snug text-slate-800 shadow-sm md:max-w-[240px] md:text-[11px]"
+              style={{ left: investorNote.x, top: investorNote.y }}
+              data-networks-investor-callout-text=""
+              data-campus={investorNote.id}
+              data-unbacked={investorNote.unbacked}
+              data-founders={investorNote.founders}
+              data-source="campus-encodings:founders-backed"
+            >
+              {investorNote.text}
+            </div>
+          </div>
+        ) : null}
+
         {/* Between: sparse in-web media cards (spring pop) — not founder-cards */}
         <div className="pointer-events-none absolute inset-0 z-[2]" style={{ opacity: cardOpacity }}>
           {mediaCards.map((m) => (
             <div
               key={m.key}
               data-networks-media-card={m.key}
+              data-networks-media-source={m.imageSourceUrl || ""}
               className="absolute overflow-hidden rounded-[3px] border border-slate-800/25 bg-[#f7f5f1] shadow-sm"
               style={{
                 left: m.x - m.w / 2,
@@ -1605,9 +1720,25 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
                 transition: "transform 420ms cubic-bezier(0.22, 1.2, 0.36, 1), opacity 280ms ease",
               }}
             >
-              {m.logoUrl ? (
+              {m.imageUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={m.logoUrl} alt="" className="h-full w-full object-contain p-1" draggable={false} />
+                <img
+                  src={m.imageUrl}
+                  alt=""
+                  className="h-full w-full object-cover"
+                  draggable={false}
+                  data-networks-media-src={m.imageSourceUrl || ""}
+                  data-networks-media-kind="photo"
+                />
+              ) : m.logoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={m.logoUrl}
+                  alt=""
+                  className="h-full w-full object-contain p-1"
+                  draggable={false}
+                  data-networks-media-kind="logo"
+                />
               ) : null}
               <div className="absolute inset-x-0 bottom-0 truncate bg-slate-900/55 px-1 py-[1px] text-[7px] font-medium tracking-wide text-white">
                 {m.title}
@@ -1695,14 +1826,14 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         data-networks-legend-frame=""
         data-networks-legend=""
         data-networks-legend-dock=""
-        className="mt-2 space-y-1.5 px-1 text-[11px] text-[color:var(--fg-2)]"
+        className="mt-1 space-y-1 px-1 text-[10px] text-[color:var(--fg-2)] sm:mt-2 sm:space-y-1.5 sm:text-[11px]"
       >
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1" data-networks-legend-encodings="">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 max-md:gap-x-2" data-networks-legend-encodings="">
           <span className="text-[10px] font-semibold uppercase tracking-[0.05em] text-[color:var(--fg-3)]">Encodings</span>
-          <span className="inline-flex items-center gap-1" title="One hue per campus; nearby campuses get far-apart hues">
+          <span className="inline-flex items-center gap-1 max-md:hidden" title="One hue per campus; nearby campuses get far-apart hues">
             <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#2563eb]" /> Color = campus
           </span>
-          <span className="inline-flex items-center gap-1" title="Blob area scales with founders on the map">
+          <span className="inline-flex items-center gap-1 max-md:hidden" title="Blob area scales with founders on the map">
             <span className="inline-block h-3 w-3 rounded-full border border-slate-500/40 bg-slate-400/30" /> Size = founders
           </span>
           <span
@@ -1735,7 +1866,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           <span className="inline-flex items-center gap-1" title="Weighted campus→investor/program curves">
             <span className="inline-block h-[2px] w-4 rounded bg-slate-600/70" /> Curve weight = tie count
           </span>
-          <span className="inline-flex items-center gap-1 text-[10px] text-[color:var(--fg-3)]">
+          <span className="hidden items-center gap-1 text-[10px] text-[color:var(--fg-3)] sm:inline-flex">
             Dots = founders / companies / hubs · sized by degree
           </span>
         </div>
