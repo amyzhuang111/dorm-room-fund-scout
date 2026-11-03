@@ -776,3 +776,52 @@ function withAlpha(hex: string, alpha: number): string {
   const blue = value & 255;
   return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 }
+
+
+/** Eight muted, clearly distinct hues for the /networks founder cloud. Penn is cobalt. */
+export const FOUNDER_NETWORK_CAMPUS_HUES: { match: RegExp; color: string }[] = [
+  { match: /\bpenn\b|pennsylvania/i, color: "#2563eb" }, // cobalt
+  { match: /\bmit\b|massachusetts institute/i, color: "#0f766e" }, // deep teal
+  { match: /harvard/i, color: "#9f1239" }, // muted crimson
+  { match: /stanford/i, color: "#65a30d" }, // olive
+  { match: /\busc\b|southern california/i, color: "#7c3aed" }, // violet
+  { match: /cornell/i, color: "#ea580c" }, // vivid orange
+  { match: /\bnyu\b|new york university/i, color: "#db2777" }, // rose
+  { match: /\bbrown\b/i, color: "#78716c" }, // warm stone
+  { match: /berkeley/i, color: "#0284c7" }, // sky blue
+  { match: /waterloo/i, color: "#a21caf" }, // fuchsia
+  { match: /columbia/i, color: "#b45309" }, // amber
+  { match: /yale/i, color: "#1d4ed8" }, // royal
+];
+
+const FOUNDER_NETWORK_FALLBACK = [
+  "#0891b2",
+  "#4f46e5",
+  "#a16207",
+  "#be123c",
+  "#15803d",
+  "#6d28d9",
+  "#c2410c",
+  "#0e7490",
+];
+
+/** Distinct muted campus colors for the founder-networks graph (not region families). */
+export function assignFounderNetworkCampusColors(campuses: { id: string; label?: string }[]): Map<string, string> {
+  const list = [...campuses].sort((a, b) => (a.label || a.id).localeCompare(b.label || b.id, "en"));
+  const out = new Map<string, string>();
+  const used = new Set<string>();
+  for (const campus of list) {
+    const text = `${campus.label || ""} ${campus.id}`;
+    const hit = FOUNDER_NETWORK_CAMPUS_HUES.find((row) => row.match.test(text));
+    if (hit && !used.has(hit.color)) {
+      out.set(campus.id, hit.color);
+      used.add(hit.color);
+      continue;
+    }
+    const color = FOUNDER_NETWORK_FALLBACK.find((c) => !used.has(c)) || FOUNDER_NETWORK_FALLBACK[used.size % FOUNDER_NETWORK_FALLBACK.length];
+    out.set(campus.id, color);
+    used.add(color);
+  }
+  return out;
+}
+
