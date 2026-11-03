@@ -67,7 +67,7 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
 
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="border-b border-[color:var(--line,#E1E5EF)] py-2.5 last:border-b-0 sm:grid sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-3 sm:py-2">
+    <div className="border-b border-[color:var(--line,#E1E5EF)] py-2.5 last:border-b-0 sm:grid sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-3 sm:py-1.5">
       <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">{label}</dt>
       <dd className="mt-1 break-words text-[14px] leading-5 text-[color:var(--fg,#0B0E17)] sm:mt-0 sm:text-[13px]">{children}</dd>
     </div>
@@ -115,16 +115,17 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
 
   const hqText = !isEmpty(profile.hq) ? profile.hq?.text : null;
   const teamText = !isEmpty(profile.teamSize) ? profile.teamSize?.text : null;
-  // r51 desk: keep HQ / team in the fold key strip (r50 mobile links stay sm:hidden)
+  const fundingText = funding?.text || (yc.length ? yc.map((i) => [i.name, i.batch].filter(Boolean).join(" · ")).join(" · ") : null);
+  // r52: Campus / HQ / Capital in the key strip so Capital clears the 900px fold
   const keyStats = (
     [
       campus ? { label: "Campus", value: campus } : null,
       hqText ? { label: "HQ", value: hqText } : null,
+      fundingText ? { label: "Capital", value: fundingText } : null,
       teamText ? { label: "Team", value: teamText } : null,
       stage ? { label: "Stage", value: stage } : null,
       signalCount > 0 ? { label: "Signals", value: signalCount.toLocaleString("en-US"), suffix: "on record" } : null,
       founded ? { label: "Founded", value: founded } : null,
-      funding?.text ? { label: "Funding", value: funding.text } : null,
       sectorText ? { label: "Sector", value: sectorText } : null,
     ].filter(Boolean) as { label: string; value: string; suffix?: string }[]
   ).slice(0, 3);
@@ -215,7 +216,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
       ) : null}
 
       {pitch ? (
-        <div className="order-3 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4 sm:order-none sm:py-3" data-full-record-pitch="">
+        <div className="order-3 border-b border-[color:var(--line,#E1E5EF)] px-3.5 py-2.5 pl-4 sm:order-none sm:py-1.5" data-full-record-pitch="">
           <p className="text-[14px] leading-5 text-[color:var(--fg-2,#3F465C)]">{pitch}</p>
         </div>
       ) : null}
@@ -228,7 +229,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
           data-full-record-key-stats=""
         >
           {keyStats.map((stat) => (
-            <div key={stat.label} className="bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5">
+            <div key={stat.label} className="bg-[color:var(--bg,#FFFFFF)] px-3 py-2.5" data-full-record-key-stat={stat.label === "Capital" ? "capital" : undefined}>
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)] sm:text-[9px]">{stat.label}</p>
               <p className="mt-1 flex items-baseline gap-1 text-[15px] font-semibold leading-5 tracking-tight text-[color:var(--fg,#0B0E17)] sm:text-[13px]">
                 {stat.label === "Campus" ? <CampusSeal label={stat.value} size="sm" /> : null}
@@ -243,76 +244,13 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
       ) : null}
       </div>
 
-      <div className="flex flex-col space-y-3 px-3.5 py-3 pl-4 sm:block sm:space-y-3 sm:py-3.5" data-full-record-groups="">
+      <div className="flex flex-col space-y-3 px-3.5 py-3 pl-4 sm:block sm:space-y-2 sm:py-2" data-full-record-groups="">
         {hasIdentity ? (
           <div className="order-1 sm:order-none" data-full-record-identity-first="">
           <Group title="Identity">
-            {/* Mobile: skip fields already shown in keyStats to cut empty repeat hierarchy */}
-            {!isEmpty(campus) ? (
-              <div className={keyStats.some((s) => s.label === "Campus") ? "hidden sm:contents" : undefined}>
-                <Field label="Campus">{campus}</Field>
-              </div>
-            ) : null}
-            {!isEmpty(sectorText) ? (
-              <div className={keyStats.some((s) => s.label === "Sector") ? "hidden sm:contents" : undefined}>
-                <Field label="Sector">{sectorText}</Field>
-              </div>
-            ) : null}
-            {!isEmpty(stage) ? (
-              <div className={keyStats.some((s) => s.label === "Stage") ? "hidden sm:contents" : undefined}>
-                <Field label="Stage">{stage}</Field>
-              </div>
-            ) : null}
-            {!isEmpty(profile.foundedYear) ? (
-              <div className={keyStats.some((s) => s.label === "Founded") ? "hidden sm:contents" : undefined}>
-                <Field label="Founded">{profile.foundedYear?.text}</Field>
-              </div>
-            ) : null}
-            {!isEmpty(profile.hq) ? (
-              <div className={keyStats.some((s) => s.label === "HQ") ? "hidden sm:contents" : undefined}>
-                <Field label="HQ">{profile.hq?.text}</Field>
-              </div>
-            ) : null}
-            {!isEmpty(profile.operatingStatus) ? <Field label="Status">{profile.operatingStatus?.text}</Field> : null}
-            {!isEmpty(profile.teamSize) ? (
-              <div className={keyStats.some((s) => s.label === "Team") ? "hidden sm:contents" : undefined}>
-                <Field label="Team size">{profile.teamSize?.text}</Field>
-              </div>
-            ) : null}
-            {!isEmpty(profile.description) && !pitch ? <Field label="Description">{profile.description?.text}</Field> : null}
-            {!isEmpty(profile.description) && pitch && (profile.description?.text || "").trim() !== pitch ? (
-              <Field label="Description">{profile.description?.text}</Field>
-            ) : null}
-            {/* r50 mobile + r51 desk: website / LinkedIn stay with Identity in the fold */}
+            {/* r52: Website / LinkedIn first so they clear the 900px fold with Capital in key stats */}
             {hasLinks ? (
-              <div className="border-b border-[color:var(--line,#E1E5EF)] py-2.5 last:border-b-0 sm:hidden" data-full-record-identity-links="">
-                <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Links</dt>
-                <dd className="mt-1.5 flex flex-wrap gap-2">
-                  {website ? (
-                    <a
-                      href={website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex min-h-9 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-3 font-mono text-[11px] font-semibold text-white"
-                    >
-                      Website
-                    </a>
-                  ) : null}
-                  {companyLi ? (
-                    <a
-                      href={companyLi}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex min-h-9 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 px-3 font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)]"
-                    >
-                      LinkedIn
-                    </a>
-                  ) : null}
-                </dd>
-              </div>
-            ) : null}
-            {hasLinks ? (
-              <div className="hidden border-b border-[color:var(--line,#E1E5EF)] py-2 last:border-b-0 sm:block" data-full-record-identity-links-desk="">
+              <div className="border-b border-[color:var(--line,#E1E5EF)] py-2 last:border-b-0" data-full-record-fold-links="">
                 <div className="sm:grid sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-3">
                   <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Links</dt>
                   <dd className="mt-1 flex flex-wrap gap-2 sm:mt-0">
@@ -321,7 +259,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
                         href={website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex min-h-8 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-2.5 font-mono text-[11px] font-semibold text-white"
+                        className="inline-flex min-h-9 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)] bg-[color:var(--cobalt,#2F4FD8)] px-2.5 font-mono text-[11px] font-semibold text-white sm:min-h-8"
                       >
                         Website
                       </a>
@@ -331,7 +269,7 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
                         href={companyLi}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex min-h-8 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 px-2.5 font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)]"
+                        className="inline-flex min-h-9 items-center rounded-sm border border-[color:var(--cobalt,#2F4FD8)]/40 px-2.5 font-mono text-[11px] font-semibold text-[color:var(--cobalt,#2F4FD8)] sm:min-h-8"
                       >
                         LinkedIn
                       </a>
@@ -340,6 +278,51 @@ export function CompanyFullRecord({ project }: { project: ProjectDetail }) {
                 </div>
               </div>
             ) : null}
+            {keyStats.some((s) => s.label === "Capital") ? (
+              <div className="hidden border-b border-[color:var(--line,#E1E5EF)] py-2 last:border-b-0 sm:block" data-full-record-fold-capital="">
+                <div className="sm:grid sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-3">
+                  <dt className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[color:var(--fg-3,#5C647A)]">Capital</dt>
+                  <dd className="text-[13px] font-semibold leading-5 text-[color:var(--fg,#0B0E17)]">{keyStats.find((s) => s.label === "Capital")?.value}</dd>
+                </div>
+              </div>
+            ) : null}
+            {/* Skip fields already shown in keyStats to cut empty repeat hierarchy */}
+            {!isEmpty(campus) ? (
+              <div className={keyStats.some((s) => s.label === "Campus") ? "hidden" : undefined}>
+                <Field label="Campus">{campus}</Field>
+              </div>
+            ) : null}
+            {!isEmpty(sectorText) ? (
+              <div className={keyStats.some((s) => s.label === "Sector") ? "hidden" : undefined}>
+                <Field label="Sector">{sectorText}</Field>
+              </div>
+            ) : null}
+            {!isEmpty(stage) ? (
+              <div className={keyStats.some((s) => s.label === "Stage") ? "hidden" : undefined}>
+                <Field label="Stage">{stage}</Field>
+              </div>
+            ) : null}
+            {!isEmpty(profile.foundedYear) ? (
+              <div className={keyStats.some((s) => s.label === "Founded") ? "hidden" : undefined}>
+                <Field label="Founded">{profile.foundedYear?.text}</Field>
+              </div>
+            ) : null}
+            {!isEmpty(profile.hq) ? (
+              <div className={keyStats.some((s) => s.label === "HQ") ? "hidden" : undefined}>
+                <Field label="HQ">{profile.hq?.text}</Field>
+              </div>
+            ) : null}
+            {!isEmpty(profile.operatingStatus) ? <Field label="Status">{profile.operatingStatus?.text}</Field> : null}
+            {!isEmpty(profile.teamSize) ? (
+              <div className={keyStats.some((s) => s.label === "Team") ? "hidden" : undefined}>
+                <Field label="Team size">{profile.teamSize?.text}</Field>
+              </div>
+            ) : null}
+            {!isEmpty(profile.description) && !pitch ? <Field label="Description">{profile.description?.text}</Field> : null}
+            {!isEmpty(profile.description) && pitch && (profile.description?.text || "").trim() !== pitch ? (
+              <Field label="Description">{profile.description?.text}</Field>
+            ) : null}
+
           </Group>
           </div>
         ) : null}

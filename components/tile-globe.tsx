@@ -729,9 +729,9 @@ export function TileGlobe({
   const plateCampuses = showAllCampuses ? rankedCampuses : topCampuses;
 
   return (
-    <div className={className} data-fold-mobile-root="">
-      <div className="mb-2 flex flex-wrap items-end justify-between gap-x-4 gap-y-1" data-fold-counts="">
-        <p className="flex min-w-0 flex-wrap items-baseline gap-x-2.5 gap-y-1 text-[12px] tabular-nums leading-5 text-[color:var(--fg-2,#3F465C)]">
+    <div className={`${className ?? ""} relative`} data-fold-mobile-root="">
+      <div className="mb-1 flex flex-wrap items-end justify-between gap-x-3 gap-y-0.5 lg:mb-2 lg:gap-x-4 lg:gap-y-1" data-fold-counts="">
+        <p className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[11px] tabular-nums leading-4 text-[color:var(--fg-2,#3F465C)] lg:gap-x-2.5 lg:gap-y-1 lg:text-[12px] lg:leading-5">
           <span>
             <span className={COUNT}>{(catalogReady ? companies.length : companyCount).toLocaleString("en-US")}</span>
             {" companies"}
@@ -763,8 +763,8 @@ export function TileGlobe({
         <p className="mt-1 hidden text-[12px] text-[color:var(--fg,#0B0E17)] lg:block">Click a campus to see its founders.</p>
       </div>
 
-      <section className="mb-4" data-fold-desk-map="" aria-label="Map">
-        <h2 className="mb-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)]">Map</h2>
+      <section className="mb-2 lg:mb-4" data-fold-desk-map="" aria-label="Map">
+        <h2 className="mb-2 text-[12px] font-semibold tracking-tight text-[color:var(--cobalt,#2F4FD8)] max-lg:sr-only">Map</h2>
         <div
           className="relative overflow-hidden rounded-none border border-[color:var(--cobalt,#2F4FD8)]/45 bg-[linear-gradient(165deg,#FBFCFE_0%,#F0F3FA_48%,#E6EBF6_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.85),inset_0_-18px_40px_rgba(47,79,216,0.07),0_1px_2px_rgba(15,23,42,0.04)] before:pointer-events-none before:absolute before:inset-2 before:z-[1] before:border before:border-[color:var(--cobalt,#2F4FD8)]/15 before:content-[''] after:pointer-events-none after:absolute after:inset-0 after:z-[1] after:bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.55),transparent_55%),radial-gradient(ellipse_at_70%_85%,rgba(47,79,216,0.08),transparent_50%)] after:content-['']"
           style={{ height: stageHeight }}
@@ -889,7 +889,7 @@ export function TileGlobe({
         </div>
       </section>
 
-      <section className="mt-3 max-w-sm" data-campus-metric="founders" data-mobile-campus-picker="">
+      <section className="mt-3 max-w-sm max-lg:hidden" data-campus-metric="founders" data-mobile-campus-picker="">
           <h2 className="mb-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[color:var(--cobalt,#2F4FD8)]">Filter campus</h2>
           <ol className="divide-y divide-[color:var(--line,#E1E5EF)] border-y border-[color:var(--line,#E1E5EF)]" data-campus-founders-top="">
             {plateCampuses.map((campus, i) => {

@@ -1352,6 +1352,35 @@ details:not([open]) > :not(summary) {
   overflow: hidden !important;
 }
 
+/* r52 mobile: map-first chrome — denser mast + tighter counts (keep overlay gate clean) */
+@media (max-width: 1023px) {
+  [data-fold-hierarchy] {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+  [data-fold-mast] {
+    margin-bottom: 0.25rem !important;
+  }
+  [data-fold-counts] {
+    margin-bottom: 0.25rem !important;
+  }
+  /* Single dense counts line — more globe below without floating over map controls */
+  [data-fold-counts] > p:first-child {
+    gap: 0.35rem 0.65rem !important;
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+    max-height: 2.6em !important;
+    overflow: hidden !important;
+  }
+  /* Peek sheet covers the stage bottom; hide custom map credit + maplibre attrib so sheet is not flagged as overlay-on-control */
+  [data-fold-bigmap-stage] [data-map-credit],
+  [data-fold-bigmap-stage] .maplibregl-ctrl-attrib,
+  [data-fold-bigmap-stage] .maplibregl-ctrl-bottom-left,
+  [data-fold-bigmap-stage] .maplibregl-ctrl-bottom-right {
+    display: none !important;
+  }
+}
+
 /* r49/r50: 132px rest peek — 3 ranks in one row + founder name; desk founders fill stage */
 [data-fold-map-sheet] {
   /* rest height set in JS; keep map taps above the sheet */
@@ -1391,6 +1420,7 @@ details:not([open]) > :not(summary) {
   text-overflow: ellipsis !important;
   max-width: 3.25rem !important;
 }
+
 
 /* r51: desk rail/overlay peak — full Penn / Stanford / Berkeley labels */
 [data-fold-peak-in-rail] [data-fold-peak-campus-rank-mobile],
