@@ -532,7 +532,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       const bloomBaseScale: number[] = [];
       const bloomMeta: CampusEncoding[] = [];
       // Prefer campuses with enough founders for a readable contour; keep smaller ones for color on dots
-      const bloomEnc = (encList.length ? encList : []).filter((e) => e.founders >= 6).slice(0, 28);
+      const bloomEnc = (encList.length ? encList : []).filter((e) => e.founders >= 4).slice(0, 32);
       bloomEnc.forEach((enc, seed) => {
         const softTex = makeCampusContourTexture(THREE, enc.rgb, enc.points, enc.share, seed, {
           soft: true,
@@ -552,7 +552,7 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
         });
         const spr = new THREE.Sprite(mat);
         // Overlap for continuous mid field: scale above tight hull
-        const sc = blobScaleForFounders(enc.founders, false) * 1.55;
+        const sc = blobScaleForFounders(enc.founders, false) * 1.85;
         bloomBaseScale.push(sc);
         bloomMeta.push(enc);
         spr.userData.kind = "campus";
@@ -585,11 +585,11 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
       let midKeepN = 0;
       for (let i = 0; i < n; i++) {
         if (p.kind[i] !== 0) continue;
-        // n18: denser mid — show most real founders (was ~sparse pastel)
+        // n19: continuous mid field from real founders (almost all kind===0)
         const keep =
-          (hash01(`midkeep:${i}`) < 0.82 && (p.deg[i] ?? 0) < 28) ||
-          hash01(`midkeep2:${i}`) < 0.48 ||
-          (p.deg[i] ?? 0) >= 4;
+          (p.deg[i] ?? 0) >= 1 ||
+          hash01(`midkeep:${i}`) < 0.92 ||
+          hash01(`midkeep2:${i}`) < 0.7;
         midKeep[i] = keep ? 1 : 0;
         if (keep) midKeepN++;
       }
@@ -921,12 +921,12 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
             if (!(obj as import("three").Sprite).isSprite) return;
             const spr = obj as import("three").Sprite;
             const m = spr.material as import("three").SpriteMaterial;
-            m.opacity = midW * 0.98 + deepW * 0.92;
+            m.opacity = midW * 1.0 + deepW * 0.92;
             const useDeep = deepW >= midW && deepW > 0.35;
             const nextMap = useDeep ? spr.userData.deepMap : spr.userData.softMap;
             if (nextMap && m.map !== nextMap) m.map = nextMap;
             const base = bloomBaseScale[bi] ?? 120;
-            const midScale = (1.22 + midW * 0.38) * mobileContain;
+            const midScale = (1.38 + midW * 0.42) * mobileContain;
             const deepScale = (0.42 + deepW * 0.38) * (mobile ? 0.9 : 1);
             const s = base * (midW > deepW ? midScale : deepScale);
             spr.scale.set(s, s, 1);
@@ -953,12 +953,12 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
             const rgb = ci >= 0 && p.campuses[ci] ? hexToRgb(p.campuses[ci].color) : [148, 163, 184];
             const keep = midKeep[i] === 1;
             const midHide = midW > 0.35 && !keep;
-            // Mid: keep campus hue (sat encodes campus; darkness is mild) — not gray wash
-            const mix = midHide ? 0 : midW * 0.55;
-            const shade = 0.55; // darken toward campus-ink, not black
-            const r = (rgb[0] / 255) * (1 - mix) * (0.85 + outW * 0.15) + (rgb[0] / 255) * shade * mix;
-            const g = (rgb[1] / 255) * (1 - mix) * (0.85 + outW * 0.15) + (rgb[1] / 255) * shade * mix;
-            const bch = (rgb[2] / 255) * (1 - mix) * (0.85 + outW * 0.15) + (rgb[2] / 255) * shade * mix;
+            // Mid: campus hue at full chroma (backed share lives on blobs); mild darken only
+            const mix = midHide ? 0 : midW * 0.35;
+            const shade = 0.72;
+            const r = (rgb[0] / 255) * (1 - mix) * (0.9 + outW * 0.1) + (rgb[0] / 255) * shade * mix;
+            const g = (rgb[1] / 255) * (1 - mix) * (0.9 + outW * 0.1) + (rgb[1] / 255) * shade * mix;
+            const bch = (rgb[2] / 255) * (1 - mix) * (0.9 + outW * 0.1) + (rgb[2] / 255) * shade * mix;
             colAttr.setXYZ(i, r, g, bch);
             let s: number;
             if (midHide) s = 0.01;
@@ -980,16 +980,16 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
               // Mid: curve weight strictly ∝ tie count (data ink)
               stageMul =
                 outW * (0.55 + 0.45 * wNorm) +
-                midW * (0.28 + 0.72 * wNorm) +
-                deepW * (0.35 + 0.4 * wNorm) +
+                midW * (0.12 + 0.88 * wNorm) +
+                deepW * (0.3 + 0.45 * wNorm) +
                 cardW * 0.08;
             } else {
               const degN = Math.min(1, Math.log2(1 + d.weight) / 4);
               // Deep: real edge opacity scales with node degree
               stageMul =
-                outW * 0.12 +
-                midW * 0.04 +
-                deepW * (0.28 + 0.72 * degN) +
+                outW * 0.1 +
+                midW * 0.03 +
+                deepW * (0.18 + 0.82 * degN) +
                 cardW * 0.06;
               const yearOk =
                 (p.kind[d.a] !== 0 || nodeVisible[d.a] === 1) &&
@@ -1010,8 +1010,8 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
           }
           ec.needsUpdate = true;
           ec2.needsUpdate = true;
-          edgeMat.opacity = Math.min(1, 0.55 + outW * 0.4 + midW * 0.35 + deepW * 0.35);
-          edgeMat2.opacity = outW * 0.4 + midW * 0.28 + deepW * 0.25;
+          edgeMat.opacity = Math.min(1, 0.55 + outW * 0.4 + midW * 0.45 + deepW * 0.4);
+          edgeMat2.opacity = outW * 0.4 + midW * 0.38 + deepW * 0.3;
           edges.visible = outW > 0.08 || deepW > 0.15 || midW > 0.12;
           edgesFat.visible = edges.visible && (outW > 0.15 || midW > 0.2 || deepW > 0.3);
         },
@@ -1715,9 +1715,10 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
                 const mul = satMulFromShare(share);
                 const br = 37, bg0 = 99, bb = 235;
                 const lum = 0.3 * br + 0.59 * bg0 + 0.11 * bb;
-                const r = Math.round(lum * (1 - mul) + br * mul);
-                const g = Math.round(lum * (1 - mul) + bg0 * mul);
-                const b = Math.round(lum * (1 - mul) + bb * mul);
+                const desat = (1 - mul) * 0.65;
+                const r = Math.round(lum * desat + br * (1 - desat));
+                const g = Math.round(lum * desat + bg0 * (1 - desat));
+                const b = Math.round(lum * desat + bb * (1 - desat));
                 return (
                   <span
                     key={share}
@@ -1776,6 +1777,12 @@ export function NetworksGraph3D({ investorHubs, onSelectNetwork, onFallback2D }:
                   {c.label}
                 </span>
               ))}
+          <span className="inline-flex items-center gap-1.5" data-legend-swatch="#94a3b8" data-legend-kind="company">
+            <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#94a3b8]" /> Company
+          </span>
+          <span className="inline-flex items-center gap-1.5" data-legend-swatch="#1e293b" data-legend-kind="hub">
+            <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#1e293b]" /> Hub
+          </span>
         </div>
       </div>
 

@@ -226,8 +226,8 @@ export function applyEncodingColors(poster: Poster, encodings: CampusEncoding[])
  */
 export function satMulFromShare(share: number): number {
   const s = Math.max(0, Math.min(1, share));
-  // n18: was 0.22+0.78*s (pastel). Floor lifted; still monotonic for legend.
-  return 0.58 + 0.42 * s;
+  // n19: target mid sat ~28–32 (ops sat_mask); floor raised, still monotonic.
+  return 0.82 + 0.18 * s;
 }
 
 /**
@@ -292,9 +292,9 @@ export function makeCampusContourTexture(
   let maxR = 1;
   for (const p of localPts) maxR = Math.max(maxR, Math.hypot(p.x, p.y));
   maxR = Math.max(maxR, 1) * 1.12;
-  const sigma = Math.max(soft ? 0.18 : 0.1, Math.min(soft ? 0.4 : 0.22, (soft ? 1.15 : 0.55) / Math.sqrt(Math.max(6, localPts.length))));
+  const sigma = Math.max(soft ? 0.22 : 0.1, Math.min(soft ? 0.48 : 0.22, (soft ? 1.35 : 0.55) / Math.sqrt(Math.max(6, localPts.length))));
   // Extend world extent past cluster so soft kernels die before the texture rim
-  const padFrac = soft ? 0.2 : 0.14; // empty margin on each side (UV)
+  const padFrac = soft ? 0.24 : 0.14; // n19: wider soft margin so denser mid never clips
   const worldHalf = maxR / (1 - 2 * padFrac);
   const twoSig2 = 2 * sigma * sigma;
 
@@ -327,9 +327,11 @@ export function makeCampusContourTexture(
   const [br, bg, bb] = rgb;
   // Desaturate toward luminance (not white) so low-share campuses stay readable chroma
   const lum = 0.3 * br + 0.59 * bg + 0.11 * bb;
-  const cr = Math.round(lum * (1 - satMul) + br * satMul);
-  const cg = Math.round(lum * (1 - satMul) + bg * satMul);
-  const cb = Math.round(lum * (1 - satMul) + bb * satMul);
+  // Partial desat toward luminance (keeps more hue at every share; legend uses same satMul)
+  const desat = (1 - satMul) * 0.65;
+  const cr = Math.round(lum * desat + br * (1 - desat));
+  const cg = Math.round(lum * desat + bg * (1 - desat));
+  const cb = Math.round(lum * desat + bb * (1 - desat));
 
   // Density field
   const dens = new Float32Array(size * size);
@@ -356,7 +358,7 @@ export function makeCampusContourTexture(
       }
     }
   }
-  const thresh = dMax * (soft ? 0.035 : 0.1);
+  const thresh = dMax * (soft ? 0.022 : 0.1);
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const u = (x + 0.5) / size;
@@ -367,15 +369,15 @@ export function makeCampusContourTexture(
       const n2 = noise(u * 1.7 + 0.3, v * 1.5 + 0.6);
       const warp = (n1 - 0.5) * (0.12 + edgeRichness * 0.28) + (n2 - 0.5) * edgeRichness * 0.2;
       d *= 0.9 + warp;
-      const fall = soft ? 0.58 : 0.5;
+      const fall = soft ? 0.5 : 0.5;
       let a = d <= thresh ? 0 : Math.min(1, (d - thresh) / (dMax * fall + 1e-6));
-      a = Math.pow(a, soft ? 0.58 : 0.9);
+      a = Math.pow(a, soft ? 0.5 : 0.9);
       // Paint-splotch scallops on the rim
       if (a > 0.08 && a < 0.55) {
         a *= 0.85 + edgeRichness * (n2 - 0.35);
       }
       if (a < 0.03) a = 0;
-      a *= 0.72 + 0.28 * satMul; // unbacked fainter; denser mid fill overall
+      a *= 0.88 + 0.12 * satMul; // denser continuous mid; chroma still via satMul RGB
       // Fade alpha to exactly 0 before each texture edge (kills hard rect clip)
       const edgeDist = Math.min(u, v, 1 - u, 1 - v);
       const fadeStart = padFrac * 0.85;
@@ -422,7 +424,7 @@ export function makeCampusContourTexture(
 
 /** World scale so sprite area tracks founder count (radius ∝ √n). */
 export function blobScaleForFounders(n: number, mobile = false): number {
-  // n18: denser mid field — slightly larger area still ∝ √founders
-  const base = 34 + Math.sqrt(Math.max(1, n)) * (mobile ? 11 : 14.2);
-  return Math.max(mobile ? 64 : 84, Math.min(mobile ? 230 : 320, base));
+  // n19: continuous mid field — larger overlap still ∝ √founders (padFrac keeps unclipped)
+  const base = 40 + Math.sqrt(Math.max(1, n)) * (mobile ? 12.5 : 16);
+  return Math.max(mobile ? 72 : 96, Math.min(mobile ? 250 : 360, base));
 }
