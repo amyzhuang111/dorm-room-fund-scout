@@ -6,13 +6,14 @@ import fs from "node:fs";
 import path from "node:path";
 import { getDb } from "../lib/db/client";
 import { normalizeCompanyName, websiteIdentity } from "../lib/domain/dedupe";
+import distinctNames from "../reviews/production-distinct-company-names.json";
 
 const db = getDb();
 const rows = db
   .prepare(
-    `SELECT id, name, website_url, primary_link FROM projects WHERE kind = 'company' AND is_investable_candidate = 1`,
+    `SELECT id, name, website_url, primary_link, description FROM projects WHERE kind = 'company' AND is_investable_candidate = 1`,
   )
-  .all() as { id: string; name: string; website_url: string | null; primary_link: string | null }[];
+  .all() as { id: string; name: string; website_url: string | null; primary_link: string | null; description: string | null }[];
 
 const byName = new Map<string, typeof rows>();
 const byDomain = new Map<string, typeof rows>();
@@ -26,14 +27,38 @@ for (const r of rows) {
   const w = websiteIdentity(r.website_url) || websiteIdentity(r.primary_link);
   const SHARED_PORTAL_HOST =
     /ycombinator\.com|skydeck\.berkeley|dormroomfund\.com|linkedin\.com|github\.com|freeventures\.org|desaiaccelerator\.com|luma\.com|pulse2\.com|hypepotamus\.com|medium\.com|twitter\.com|x\.com|crunchbase\.com|producthunt\.com|devpost\.com|angel\.co|wellfound\.com|techcrunch\.com|substack\.com|notion\.so|google\.com|youtube\.com|facebook\.com|instagram\.com|tiktok\.com|berkeley\.edu|mit\.edu|stanford\.edu|upenn\.edu|harvard\.edu|columbia\.edu|cmu\.edu|gatech\.edu|uwaterloo\.ca|cornell\.edu|eventbrite\.com|linktr\.ee|bit\.ly|t\.co|uclaunch\.com|businesswire\.com|browndailyherald\.com|neo\.com|emorybusiness\.com|mccloskey\.team|geekwire\.com|entrepreneurs\.utoronto\.ca|queensjournal\.ca|laurentian\.ca|enterprise\.cam\.ac\.uk|prnewswire\.com|globenewswire\.com|newswire\.com|einpresswire\.com|forbes\.com|bloomberg\.com|wsj\.com|nytimes\.com|theguardian\.com|wired\.com|venturebeat\.com|axios\.com|msn\.com|yahoo\.com|reddit\.com|wikipedia\.org|apps\.apple\.com|play\.google\.com/;
-  if (w && !SHARED_PORTAL_HOST.test(w)) {
+  // New r59 sources are shared program directories, never company identities.
+  const NEW_PROGRAM_HOST = /^(?:www\.)?(?:psv\.vc|startatshea\.com|ventures\.uq\.edu\.au|nyusternberkleycenter\.com|mit100k\.org|harvardae\.org)$/;
+  if (w && !SHARED_PORTAL_HOST.test(w) && !NEW_PROGRAM_HOST.test(w)) {
     const list = byDomain.get(w) ?? [];
     list.push(r);
     byDomain.set(w, list);
   }
 }
 
-const nameDups = [...byName.entries()].filter(([, g]) => g.length > 1);
+// Reviewed same-name companies: NYU's professional reseller tool and Penn's
+// campus marketplace have different founders and independent primary sources.
+// https://entrepreneur.nyu.edu/blog/2026/06/03/meet-the-2026-nyu-summer-launchpad-cohort/
+// https://www.thedp.com/article/2024/11/penn-startup-apps-trading-items
+// Keep failing on any new id or changed founder evidence in this name group.
+function reviewedDistinctAgoras(group: typeof rows): boolean {
+  const expected = new Map([
+    ["proj_jRCyQwIq8J1u", ["Christian Herren", "David Cui", "Tomer Ben Yaakov"]],
+    ["proj_yTsIek7JT4YO", ["Meha Gaba", "Yochi Hobson"]],
+  ]);
+  if(group.length!==2 || group.some(r=>!expected.has(r.id)))return false;
+  return group.every(r=>{
+    const names=(db.prepare("SELECT p.name FROM people p JOIN person_project_roles r ON r.person_id=p.id WHERE r.project_id=?").all(r.id) as {name:string}[]).map(p=>p.name).sort();
+    return JSON.stringify(names)===JSON.stringify(expected.get(r.id)!.slice().sort());
+  });
+}
+function reviewedDistinctNames(name: string, group: typeof rows): boolean {
+  const review = distinctNames.groups.find(r => r.normalizedName === name);
+  return !!review && group.length === review.records.length && group.every(row =>
+    review.records.some(r => r.id === row.id && r.primaryLink === row.primary_link && row.description?.includes(r.descriptionIncludes)),
+  );
+}
+const nameDups = [...byName.entries()].filter(([name, g]) => g.length > 1 && !(name === "agora" && reviewedDistinctAgoras(g)) && !reviewedDistinctNames(name, g));
 const domainDups = [...byDomain.entries()].filter(([, g]) => g.length > 1);
 const signalDups = db
   .prepare(

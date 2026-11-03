@@ -182,6 +182,9 @@ async function measureFold(browser, base) {
     await page.waitForSelector("[data-fold-peak-share], [data-fold-peak-figure], [data-founder-search]", { timeout: 30000 }).catch(() => {});
     // Wait for founder cards when the index hydrates (overlay peek / rail).
     await page.waitForSelector("[data-founder-card]", { timeout: 45000 }).catch(() => {});
+    // Founder cards and the peak caption can be server-rendered before the
+    // chart's client component loads. Measure the actual chart, not its shell.
+    await page.waitForSelector("[data-fold-peak-month-bars]", { state: "attached", timeout: 45000 });
     await page.waitForTimeout(800);
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(200);
@@ -189,26 +192,12 @@ async function measureFold(browser, base) {
     if (vp.name === "375") {
       const expand = page.locator("[data-fold-sheet-expand]").first();
       if (await expand.count()) {
-        await expand.click({ force: true }).catch(() => {});
-        await page.waitForTimeout(500);
-        // If spring/sticky chrome blocked the tap, snap the sheet to deck height.
-        const mode = await page.evaluate(() => document.querySelector("[data-fold-map-sheet]")?.getAttribute("data-fold-sheet-mode"));
-        if (mode === "peek") {
-          await page.evaluate(() => {
-            const btn = document.querySelector("[data-fold-sheet-expand]");
-            btn?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-          });
-          await page.waitForTimeout(300);
-        }
-      } else {
-        await page.evaluate(() => {
-          const sheet = document.querySelector("[data-fold-map-sheet]");
-          if (sheet) sheet.style.height = "300px";
-          sheet?.setAttribute("data-fold-sheet-mode", "deck");
-        });
-        await page.waitForTimeout(400);
+        // Keyboard activation avoids the existing sticky campus rail covering
+        // the peek button after Playwright scrolls it into view.
+        await expand.press("Enter");
       }
-      await page.waitForSelector('[data-fold-sheet-mode="deck"], [data-fold-sheet-mode="expanded"], [data-founder-deck]', { timeout: 10000 }).catch(() => {});
+      await page.waitForSelector('[data-fold-map-sheet][data-fold-sheet-mode="deck"], [data-fold-map-sheet][data-fold-sheet-mode="expanded"]', { timeout: 10000 });
+      await page.locator('[data-fold-sheet-body]').evaluate(el => { el.scrollTop = 0; });
       await page.waitForTimeout(300);
     }
     const m = await page.evaluate(() => {
@@ -236,6 +225,10 @@ async function measureFold(browser, base) {
     const key = `fold@${vp.name}`;
     out[key] = m;
     console.log(`${base} ${key} peak=${m.peak} ranks=${m.ranks} bars=${m.bars} founderCards=${m.founderCards}`);
+    if (!m.bars) {
+      console.log("Missing bar diagnostics", await page.locator("[data-fold-peak-month-bars]").evaluateAll(els => els.map(el => ({rect: el.getBoundingClientRect().toJSON(), display: getComputedStyle(el).display, visibility: getComputedStyle(el).visibility}))));
+      await page.screenshot({path: `${OUT}.${vp.name}.png`});
+    }
     await page.close();
   }
   return out;

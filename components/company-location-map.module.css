@@ -52,6 +52,8 @@
 :global([data-map-expanded="true"]) .zoom { top: 12px; right: 12px; }
 :global([data-map-expanded="true"]) .results { left: 12px; right: 12px; }
 @media(max-width:639px) {
+  .mapModes { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); width: 100%; margin-left: 0; font-size: 11px; }
+  .mapModes button { min-height: 40px; padding-inline: 4px; white-space: nowrap; }
   .results { display: none; }
   .mobileExplore { display: block; min-height: 36px; border: 1px solid #c3cdee; border-radius: 4px; background: #fff; font-size: 11px; }
   :global([data-map-expanded="true"]) .results { display: block; }
