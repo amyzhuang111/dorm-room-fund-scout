@@ -59,29 +59,60 @@ export interface SectorConcentration {
 
 export interface GraphNode {
   id: string;
-  type: "network" | "company";
+  type: "network" | "company" | "founder";
   label: string;
   kind: NetworkKind | null;
   size: number;
   x: number;
   y: number;
   companyId: string | null;
+  founderId: string | null;
   networkId: string | null;
+  /** Primary network for a company or founder node (layout parent). */
+  parentNetworkId: string | null;
+  /** Soft hull / glow radius for network nodes. */
+  clusterR: number;
+  /** Palette index 0..n for tinted glows and dots. */
+  hue: number;
+  /** Rank among networks by founder count (1 = largest). */
+  rank: number;
 }
 
 export interface GraphEdge {
   source: string;
   target: string;
-  type: "network_tie" | "cofounder";
+  type: "network_tie" | "cofounder" | "founder_company" | "network_founder";
   /** Provenance key, e.g. claims.program_membership */
   sourceKey: string;
+  /** Winning claim or fact URL when available. */
+  sourceUrl: string | null;
+}
+
+export interface GraphCluster {
+  id: string;
+  label: string;
+  kind: NetworkKind;
+  cx: number;
+  cy: number;
+  r: number;
+  hue: number;
+  rank: number;
+  companyCount: number;
+  founderCount: number;
+  shownFounders: number;
+  totalFounders: number;
+  /** Short editorial callout for the largest few clusters. */
+  callout: string | null;
 }
 
 export interface GraphPayload {
   nodes: GraphNode[];
   edges: GraphEdge[];
+  clusters: GraphCluster[];
   edgeCounts: Record<string, number>;
   generatedAt: string;
+  layout: "packed-glow";
+  sample: { topNetworks: number; maxCompaniesPerNetwork: number; maxFoundersPerNetwork: number };
 }
 
 export interface FounderNetworksPage {

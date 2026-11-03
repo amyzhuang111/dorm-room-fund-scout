@@ -16,6 +16,7 @@ import {
   CONCENTRATION_THRESHOLDS,
   type ConcentrationBand,
   type FounderNetworksPage,
+  type GraphCluster,
   type GraphEdge,
   type GraphNode,
   type GraphPayload,
@@ -34,6 +35,8 @@ interface NetDef {
 
 const CAMPUS_AND_LAB: NetDef[] = [
   { id: "vipx", label: "Penn Venture Lab VIP-X", kind: "accelerator" },
+  { id: "penn_startup_challenge", label: "Penn Venture Lab Startup Challenge", kind: "program" },
+  { id: "penn_bridge_award", label: "Penn Venture Lab Bridge Award", kind: "program" },
   { id: "skydeck", label: "Berkeley SkyDeck", kind: "accelerator" },
   { id: "elab", label: "Cornell eLab", kind: "accelerator" },
   { id: "velocity", label: "Velocity", kind: "accelerator" },
@@ -54,7 +57,11 @@ const CAMPUS_AND_LAB: NetDef[] = [
 const SOURCE_URL_RULES: { test: RegExp; id: string; label: string; kind: NetworkKind }[] = [
   { test: /ycombinator\.com/i, id: "yc", label: "Y Combinator", kind: "accelerator" },
   { test: /skydeck\.berkeley/i, id: "skydeck", label: "Berkeley SkyDeck", kind: "accelerator" },
-  { test: /venturelab\.upenn|vip-?x/i, id: "vipx", label: "Penn Venture Lab VIP-X", kind: "accelerator" },
+  // VIP-X only on explicit VIP-X paths or vip-x hosts. Startup Challenge / Bridge Award split out.
+  { test: /venturelab\.upenn\.edu\/(?:[^\s#]*vip(?:-alumni|-peer|-x|x)?|vip-alumni|vip-peer)/i, id: "vipx", label: "Penn Venture Lab VIP-X", kind: "accelerator" },
+  { test: /(?:^|[^a-z])vip-?x(?:[^a-z]|$)/i, id: "vipx", label: "Penn Venture Lab VIP-X", kind: "accelerator" },
+  { test: /startup-challenge|startup challenge/i, id: "penn_startup_challenge", label: "Penn Venture Lab Startup Challenge", kind: "program" },
+  { test: /bridge-award|bridge award/i, id: "penn_bridge_award", label: "Penn Venture Lab Bridge Award", kind: "program" },
   { test: /speedrun\.a16z/i, id: "speedrun", label: "a16z Speedrun", kind: "accelerator" },
   { test: /grasp\.upenn/i, id: "grasp", label: "Penn GRASP Lab", kind: "lab" },
   { test: /velocityincubator|uwaterloo\.ca\/velocity/i, id: "velocity", label: "Velocity", kind: "accelerator" },
@@ -63,7 +70,9 @@ const SOURCE_URL_RULES: { test: RegExp; id: string; label: string; kind: Network
 ];
 
 const EXTRA_TEXT_RULES: { test: RegExp; id: string }[] = [
-  { test: /vip-?x|penn venture lab|venture lab vip/i, id: "vipx" },
+  { test: /vip-?x|venture lab vip|vip alumni|vip-x alumni/i, id: "vipx" },
+  { test: /startup challenge/i, id: "penn_startup_challenge" },
+  { test: /bridge award/i, id: "penn_bridge_award" },
   { test: /skydeck/i, id: "skydeck" },
   { test: /cornell elab|elab \(cornell\)/i, id: "elab" },
   { test: /\bvelocity\b/i, id: "velocity" },
@@ -90,6 +99,7 @@ interface Link {
   founderId: string;
   companyId: string;
   sourceKey: string;
+  sourceUrl: string | null;
 }
 
 interface LinkMeta {
@@ -223,20 +233,28 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
     }
   }
 
-  const add = (net: NetDef, founderId: string, companyId: string, sourceKey: string) => {
+  const add = (net: NetDef, founderId: string, companyId: string, sourceKey: string, sourceUrl: string | null) => {
     if (!investable.has(companyId)) return;
     if (!founderCompanies.get(founderId)?.has(companyId)) return;
     const key = `${net.id}|${founderId}|${companyId}`;
     if (seen.has(key)) return;
     seen.add(key);
-    links.push({ networkId: net.id, label: net.label, kind: net.kind, founderId, companyId, sourceKey });
+    links.push({
+      networkId: net.id,
+      label: net.label,
+      kind: net.kind,
+      founderId,
+      companyId,
+      sourceKey,
+      sourceUrl: sourceUrl && sourceUrl.trim() ? sourceUrl.trim() : null,
+    });
   };
 
-  const addCompany = (net: NetDef, companyId: string, sourceKey: string) => {
-    for (const founderId of meta.companyFounders.get(companyId) ?? []) add(net, founderId, companyId, sourceKey);
+  const addCompany = (net: NetDef, companyId: string, sourceKey: string, sourceUrl: string | null) => {
+    for (const founderId of meta.companyFounders.get(companyId) ?? []) add(net, founderId, companyId, sourceKey, sourceUrl);
   };
-  const addPerson = (net: NetDef, personId: string, sourceKey: string) => {
-    for (const companyId of founderCompanies.get(personId) ?? []) add(net, personId, companyId, sourceKey);
+  const addPerson = (net: NetDef, personId: string, sourceKey: string, sourceUrl: string | null) => {
+    for (const companyId of founderCompanies.get(personId) ?? []) add(net, personId, companyId, sourceKey, sourceUrl);
   };
 
   const absorbTexts = (texts: string[], onNet: (net: NetDef) => void) => {
@@ -263,7 +281,8 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
          'lab_spinout_founder',
          'program_listing',
          'funding',
-         'bio_membership'
+         'bio_membership',
+         'product'
        )`
     )
     .all() as {
@@ -291,9 +310,10 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
       }
     }
     const sourceKey = `claims.${claim.claim_type}`;
+    const sourceUrl = claim.source_url;
     for (const net of nets.values()) {
-      if (claim.entity_type === "person") addPerson(net, claim.entity_id, sourceKey);
-      else if (claim.entity_type === "project") addCompany(net, claim.entity_id, sourceKey);
+      if (claim.entity_type === "person") addPerson(net, claim.entity_id, sourceKey, sourceUrl);
+      else if (claim.entity_type === "project") addCompany(net, claim.entity_id, sourceKey, sourceUrl);
     }
   }
 
@@ -301,9 +321,9 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
     project_id: string;
     value_text: string;
   }[]) {
-    absorbTexts([row.value_text], (net) => addCompany(net, row.project_id, "company_facts.investor"));
+    absorbTexts([row.value_text], (net) => addCompany(net, row.project_id, "company_facts.investor", null));
     const inv = investorNetwork(row.value_text);
-    if (inv) addCompany(inv, row.project_id, "company_facts.investor");
+    if (inv) addCompany(inv, row.project_id, "company_facts.investor", null);
   }
 
   for (const row of db.prepare(`SELECT person_id, signal_type, label FROM program_signals`).all() as {
@@ -313,9 +333,9 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
   }[]) {
     const national = NATIONAL_PROGRAMS.find((item) => item.signalType === row.signal_type);
     if (national) {
-      addPerson({ id: national.id, label: national.label, kind: kindForNational(national.id) }, row.person_id, "program_signals");
+      addPerson({ id: national.id, label: national.label, kind: kindForNational(national.id) }, row.person_id, "program_signals", null);
     }
-    absorbTexts([row.label || ""], (net) => addPerson(net, row.person_id, "program_signals"));
+    absorbTexts([row.label || ""], (net) => addPerson(net, row.person_id, "program_signals", null));
   }
 
   for (const row of db
@@ -333,10 +353,10 @@ function collectLinks(db: ReturnType<typeof getDb>, meta: LinkMeta): Link[] {
   }[]) {
     absorbTexts([row.program_name], (net) => {
       if (row.relationship_type === "participated_in_program" && row.source_entity_type === "person") {
-        addPerson(net, row.source_entity_id, "relationships.program");
+        addPerson(net, row.source_entity_id, "relationships.program", null);
       }
       if (row.relationship_type === "part_of_program" && row.source_entity_type === "project") {
-        addCompany(net, row.source_entity_id, "relationships.program");
+        addCompany(net, row.source_entity_id, "relationships.program", null);
       }
     });
   }
@@ -542,6 +562,8 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
       "A founder link is directed: a stored accelerator, program, lab, or investor membership points at a founder of an investable company.",
       "The 2023+ rule keeps current students and alumni who graduated in 2023 or later. Older alumni are excluded from this desk.",
       "A founder can contribute to more than one network when their record shows more than one qualifying membership.",
+      `Over half of this corpus carries Y Combinator company-page evidence, so YC ranks first by construction rather than as a neutral campus share.`,
+      "The interactive graph is a sample: top networks with capped companies and founders per network. Hover a network to see how many nodes are shown versus the full desk count.",
       "Prior employers are omitted. The corpus does not yet store enough employer history to support that section.",
       "Co-founder edges on the graph join two investable companies that share a founder (serial founders). Same-company co-founders are not drawn as company-to-company edges.",
     ],
@@ -555,65 +577,200 @@ export function buildFounderNetworksPage(): FounderNetworksPage {
 export function buildFounderNetworksGraph(): GraphPayload {
   const { links, meta } = loadFounderNetworkLinks();
   const page = buildFounderNetworksPage();
-  const top = page.topNetworks.slice(0, 20);
+  const top = page.topNetworks.slice(0, 18);
   const topIds = new Set(top.map((row) => row.id));
+  const rankById = new Map(top.map((row, index) => [row.id, index + 1]));
+  const hueById = new Map(top.map((row, index) => [row.id, index % 8]));
 
+  // Primary network per company (highest founder-count network among ties).
+  const companyBest = new Map<string, { networkId: string; score: number }>();
   const companyDegree = new Map<string, number>();
+  const founderDegree = new Map<string, number>();
   for (const link of links) {
     if (!topIds.has(link.networkId)) continue;
     companyDegree.set(link.companyId, (companyDegree.get(link.companyId) ?? 0) + 1);
+    founderDegree.set(link.founderId, (founderDegree.get(link.founderId) ?? 0) + 1);
+    const score = page.topNetworks.find((row) => row.id === link.networkId)?.founderCount ?? 0;
+    const prev = companyBest.get(link.companyId);
+    if (!prev || score > prev.score) companyBest.set(link.companyId, { networkId: link.networkId, score });
   }
 
-  const companyIds = [...companyDegree.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 420)
-    .map(([id]) => id);
-  const companySet = new Set(companyIds);
+  // Cap companies / founders per network for a dense but drawable cloud.
+  const companiesByNet: Record<string, string[]> = {};
+  const foundersByNet: Record<string, string[]> = {};
+  for (const link of links) {
+    if (!topIds.has(link.networkId)) continue;
+    const cos = companiesByNet[link.networkId] ?? [];
+    if (!cos.includes(link.companyId)) cos.push(link.companyId);
+    companiesByNet[link.networkId] = cos;
+    const fos = foundersByNet[link.networkId] ?? [];
+    if (!fos.includes(link.founderId)) fos.push(link.founderId);
+    foundersByNet[link.networkId] = fos;
+  }
+
+  const companySet = new Set<string>();
+  const founderSet = new Set<string>();
+  const companyIds: string[] = [];
+  const founderIds: string[] = [];
+  const founderParent = new Map<string, string>();
+
+  for (const net of top) {
+    const cos = (companiesByNet[net.id] ?? [])
+      .sort((a, b) => (companyDegree.get(b) ?? 0) - (companyDegree.get(a) ?? 0) || a.localeCompare(b))
+      .slice(0, 42);
+    for (const id of cos) {
+      if (companySet.has(id)) continue;
+      companySet.add(id);
+      companyIds.push(id);
+    }
+    const fos = (foundersByNet[net.id] ?? [])
+      .sort((a, b) => (founderDegree.get(b) ?? 0) - (founderDegree.get(a) ?? 0) || a.localeCompare(b))
+      .slice(0, 48);
+    for (const id of fos) {
+      if (founderSet.has(id)) continue;
+      founderSet.add(id);
+      founderIds.push(id);
+      founderParent.set(id, net.id);
+    }
+  }
 
   const nodes: GraphNode[] = [];
   for (const net of top) {
+    const nCo = (companiesByNet[net.id] ?? []).filter((id) => companySet.has(id)).length;
+    const nFo = (foundersByNet[net.id] ?? []).filter((id) => founderSet.has(id)).length;
+    const weight = nCo + nFo;
     nodes.push({
       id: `net:${net.id}`,
       type: "network",
       label: net.label,
       kind: net.kind,
-      size: Math.max(10, Math.min(28, 8 + Math.sqrt(net.founderCount))),
+      size: Math.max(10, Math.min(26, 8 + Math.sqrt(net.founderCount) * 0.55)),
       x: 0,
       y: 0,
       companyId: null,
+      founderId: null,
       networkId: net.id,
+      parentNetworkId: null,
+      clusterR: Math.max(36, 18 + Math.sqrt(Math.max(1, weight)) * 6.2),
+      hue: hueById.get(net.id) ?? 0,
+      rank: rankById.get(net.id) ?? 99,
     });
   }
+
   for (const companyId of companyIds) {
+    const parent = companyBest.get(companyId)?.networkId ?? null;
     const degree = companyDegree.get(companyId) ?? 1;
     nodes.push({
       id: `co:${companyId}`,
       type: "company",
       label: meta.companyNames.get(companyId) ?? companyId,
       kind: null,
-      size: Math.max(3, Math.min(12, 2 + Math.sqrt(degree) * 2)),
+      size: Math.max(2.0, Math.min(6.5, 1.6 + Math.sqrt(degree) * 1.15)),
       x: 0,
       y: 0,
       companyId,
+      founderId: null,
       networkId: null,
+      parentNetworkId: parent,
+      clusterR: 0,
+      hue: parent ? hueById.get(parent) ?? 0 : 0,
+      rank: parent ? rankById.get(parent) ?? 99 : 99,
+    });
+  }
+
+  for (const founderId of founderIds) {
+    const parent = founderParent.get(founderId) ?? null;
+    const degree = founderDegree.get(founderId) ?? 1;
+    nodes.push({
+      id: `fo:${founderId}`,
+      type: "founder",
+      label: meta.founderNames.get(founderId) ?? founderId,
+      kind: null,
+      size: Math.max(1.6, Math.min(5.2, 1.3 + Math.sqrt(degree) * 0.95)),
+      x: 0,
+      y: 0,
+      companyId: null,
+      founderId,
+      networkId: null,
+      parentNetworkId: parent,
+      clusterR: 0,
+      hue: parent ? hueById.get(parent) ?? 0 : 0,
+      rank: parent ? rankById.get(parent) ?? 99 : 99,
     });
   }
 
   const edges: GraphEdge[] = [];
   const edgeSeen = new Set<string>();
-  const edgeCounts: Record<string, number> = { network_tie: 0, cofounder: 0 };
+  const edgeCounts: Record<string, number> = {
+    network_tie: 0,
+    cofounder: 0,
+    founder_company: 0,
+    network_founder: 0,
+  };
+
+  // Prefer a real source URL when several links collapse into one graph edge.
+  const preferUrl = (prev: string | null | undefined, next: string | null) => prev || next || null;
 
   for (const link of links) {
-    if (!topIds.has(link.networkId) || !companySet.has(link.companyId)) continue;
-    const source = `net:${link.networkId}`;
-    const target = `co:${link.companyId}`;
-    const key = `${source}->${target}`;
-    if (edgeSeen.has(key)) continue;
-    edgeSeen.add(key);
-    edges.push({ source, target, type: "network_tie", sourceKey: link.sourceKey });
-    edgeCounts.network_tie += 1;
+    if (!topIds.has(link.networkId)) continue;
+    const netId = `net:${link.networkId}`;
+    const coId = `co:${link.companyId}`;
+    const foId = `fo:${link.founderId}`;
+
+    if (companySet.has(link.companyId)) {
+      const key = `${netId}->${coId}`;
+      if (!edgeSeen.has(key)) {
+        edgeSeen.add(key);
+        edges.push({
+          source: netId,
+          target: coId,
+          type: "network_tie",
+          sourceKey: link.sourceKey,
+          sourceUrl: link.sourceUrl,
+        });
+        edgeCounts.network_tie += 1;
+      } else {
+        const edge = edges.find((item) => item.source === netId && item.target === coId && item.type === "network_tie");
+        if (edge) edge.sourceUrl = preferUrl(edge.sourceUrl, link.sourceUrl);
+      }
+    }
+    if (founderSet.has(link.founderId)) {
+      const key = `${netId}->${foId}`;
+      if (!edgeSeen.has(key)) {
+        edgeSeen.add(key);
+        edges.push({
+          source: netId,
+          target: foId,
+          type: "network_founder",
+          sourceKey: link.sourceKey,
+          sourceUrl: link.sourceUrl,
+        });
+        edgeCounts.network_founder += 1;
+      } else {
+        const edge = edges.find((item) => item.source === netId && item.target === foId && item.type === "network_founder");
+        if (edge) edge.sourceUrl = preferUrl(edge.sourceUrl, link.sourceUrl);
+      }
+    }
+    if (founderSet.has(link.founderId) && companySet.has(link.companyId)) {
+      const key = `${foId}->${coId}`;
+      if (!edgeSeen.has(key)) {
+        edgeSeen.add(key);
+        edges.push({
+          source: foId,
+          target: coId,
+          type: "founder_company",
+          sourceKey: "person_project_roles.company_founder",
+          sourceUrl: link.sourceUrl,
+        });
+        edgeCounts.founder_company += 1;
+      } else {
+        const edge = edges.find((item) => item.source === foId && item.target === coId && item.type === "founder_company");
+        if (edge) edge.sourceUrl = preferUrl(edge.sourceUrl, link.sourceUrl);
+      }
+    }
   }
 
+  // Serial-founder company links (real shared founder).
   const byFounder = new Map<string, string[]>();
   for (const companyId of companyIds) {
     for (const founderId of meta.companyFounders.get(companyId) ?? []) {
@@ -631,68 +788,167 @@ export function buildFounderNetworksGraph(): GraphPayload {
         const key = a < b ? `${a}|${b}` : `${b}|${a}`;
         if (edgeSeen.has(key)) continue;
         edgeSeen.add(key);
-        edges.push({ source: a, target: b, type: "cofounder", sourceKey: "person_project_roles.shared_founder" });
+        edges.push({
+          source: a,
+          target: b,
+          type: "cofounder",
+          sourceKey: "person_project_roles.shared_founder",
+          sourceUrl: null,
+        });
         edgeCounts.cofounder += 1;
       }
     }
   }
 
-  return { nodes, edges, edgeCounts, generatedAt: new Date().toISOString() };
+  return {
+    nodes,
+    edges,
+    clusters: [],
+    edgeCounts,
+    generatedAt: new Date().toISOString(),
+    layout: "packed-glow",
+    sample: { topNetworks: top.length, maxCompaniesPerNetwork: 42, maxFoundersPerNetwork: 48 },
+  };
 }
 
+function packClusterCenters(items: { id: string; r: number }[]): Map<string, { x: number; y: number }> {
+  const sorted = [...items].sort((a, b) => b.r - a.r || a.id.localeCompare(b.id));
+  const placed: { id: string; x: number; y: number; r: number }[] = [];
+  const gap = 6; // tighter Nature-style packed cloud
+
+  for (const item of sorted) {
+    if (placed.length === 0) {
+      placed.push({ ...item, x: 0, y: 0 });
+      continue;
+    }
+    let best: { x: number; y: number; score: number } | null = null;
+    for (const host of placed) {
+      const steps = 56;
+      for (let i = 0; i < steps; i++) {
+        const ang = (i / steps) * Math.PI * 2 + host.r * 0.017;
+        const dist = host.r + item.r + gap;
+        const x = host.x + Math.cos(ang) * dist;
+        const y = host.y + Math.sin(ang) * dist;
+        let ok = true;
+        for (const other of placed) {
+          const need = other.r + item.r + gap - 1;
+          const dx = other.x - x;
+          const dy = other.y - y;
+          if (dx * dx + dy * dy < need * need) {
+            ok = false;
+            break;
+          }
+        }
+        if (!ok) continue;
+        const score = x * x + y * y * 1.02;
+        if (!best || score < best.score) best = { x, y, score };
+      }
+    }
+    if (!best) {
+      const ring = placed.reduce((m, p) => Math.max(m, Math.hypot(p.x, p.y) + p.r), 0) + item.r + gap + 4;
+      best = { x: ring, y: 0, score: ring * ring };
+    }
+    placed.push({ ...item, x: best.x, y: best.y });
+  }
+
+  const cx = placed.reduce((s, p) => s + p.x, 0) / Math.max(1, placed.length);
+  const cy = placed.reduce((s, p) => s + p.y, 0) / Math.max(1, placed.length);
+  const out = new Map<string, { x: number; y: number }>();
+  for (const p of placed) out.set(p.id, { x: p.x - cx, y: p.y - cy });
+  return out;
+}
+
+const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+
+function packMembersInCluster(members: GraphNode[], cx: number, cy: number, clusterR: number): void {
+  const n = members.length;
+  if (n === 0) return;
+  // Dense disk: fill most of the hull.
+  const inner = Math.max(6, clusterR * 0.08);
+  const outer = clusterR * 0.92;
+  for (let i = 0; i < n; i++) {
+    const t = n === 1 ? 0 : i / n;
+    const radius = n === 1 ? 0 : inner + Math.sqrt(t) * (outer - inner);
+    const ang = i * GOLDEN_ANGLE;
+    members[i].x = Math.round((cx + Math.cos(ang) * radius) * 10) / 10;
+    members[i].y = Math.round((cy + Math.sin(ang) * radius) * 10) / 10;
+  }
+}
+
+/** Editorial packed-glow layout (build-time). Dense Nature-style cloud. */
 export function applyForceLayout(graph: GraphPayload): GraphPayload {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const d3 = require("d3-force") as typeof import("d3-force");
-  type SimNode = GraphNode & { index?: number; vx?: number; vy?: number };
-  const simNodes: SimNode[] = graph.nodes.map((node, index) => ({
-    ...node,
-    x: Math.cos((index / graph.nodes.length) * Math.PI * 2) * (120 + (index % 7) * 18),
-    y: Math.sin((index / graph.nodes.length) * Math.PI * 2) * (120 + (index % 5) * 22),
-  }));
-  const byId = new Map(simNodes.map((node) => [node.id, node]));
-  const simLinks = graph.edges
-    .map((edge) => ({
-      source: byId.get(edge.source)!,
-      target: byId.get(edge.target)!,
-      type: edge.type,
-    }))
-    .filter((edge) => edge.source && edge.target);
+  const networks = graph.nodes.filter((node) => node.type === "network").sort((a, b) => a.rank - b.rank);
+  const members = graph.nodes.filter((node) => node.type === "company" || node.type === "founder");
+  const byParent = new Map<string, GraphNode[]>();
+  for (const node of members) {
+    const parent = node.parentNetworkId;
+    if (!parent) continue;
+    const list = byParent.get(parent) ?? [];
+    list.push(node);
+    byParent.set(parent, list);
+  }
 
-  const simulation = d3
-    .forceSimulation(simNodes)
-    .force(
-      "link",
-      d3
-        .forceLink(simLinks)
-        .id((node) => (node as SimNode).id)
-        .distance((link) => ((link as { type: string }).type === "cofounder" ? 46 : 64))
-        .strength(0.45)
-    )
-    .force(
-      "charge",
-      d3.forceManyBody().strength((node) => ((node as SimNode).type === "network" ? -420 : -28))
-    )
-    .force("center", d3.forceCenter(0, 0))
-    .force(
-      "collide",
-      d3.forceCollide<SimNode>().radius((node) => node.size + 4)
-    )
-    .stop();
+  for (const net of networks) {
+    const kids = byParent.get(net.networkId ?? "") ?? [];
+    net.clusterR = Math.max(34, 16 + Math.sqrt(Math.max(1, kids.length)) * 6.4);
+    net.size = Math.max(9, Math.min(24, 7 + Math.sqrt(kids.length) * 1.25));
+  }
 
-  for (let i = 0; i < 280; i++) simulation.tick();
+  const centers = packClusterCenters(networks.map((net) => ({ id: net.id, r: net.clusterR })));
+  for (const net of networks) {
+    const c = centers.get(net.id) ?? { x: 0, y: 0 };
+    net.x = Math.round(c.x * 10) / 10;
+    net.y = Math.round(c.y * 10) / 10;
+    const kids = byParent.get(net.networkId ?? "") ?? [];
+    // Slightly shuffle companies vs founders for visual texture: sort by type then size.
+    kids.sort((a, b) => a.type.localeCompare(b.type) || b.size - a.size || a.id.localeCompare(b.id));
+    packMembersInCluster(kids, net.x, net.y, net.clusterR);
+  }
+
+  const callouts: Record<number, string> = {
+    1: "Largest accelerator cloud feeding student founders across campuses.",
+    2: "Deep campus program bench with a dense local founder cluster.",
+    3: "National accelerator lane sitting beside the YC cloud.",
+  };
+
+  const founderCountByNet = new Map<string, number>();
+  for (const edge of graph.edges) {
+    if (edge.type !== "network_founder" && edge.type !== "network_tie") continue;
+    const netId = edge.source.startsWith("net:") ? edge.source.slice(4) : "";
+    if (!netId) continue;
+    founderCountByNet.set(netId, (founderCountByNet.get(netId) ?? 0) + 1);
+  }
+
+  const page = buildFounderNetworksPage();
+  const totalByNet = new Map(page.topNetworks.map((row) => [row.id, row.founderCount]));
+
+  const clusters: GraphCluster[] = networks.map((net) => {
+    const kids = byParent.get(net.networkId ?? "") ?? [];
+    const companies = kids.filter((node) => node.type === "company").length;
+    const shownFounders = kids.filter((node) => node.type === "founder").length;
+    const totalFounders = totalByNet.get(net.networkId ?? "") ?? shownFounders;
+    return {
+      id: net.networkId ?? net.id,
+      label: net.label,
+      kind: (net.kind ?? "program") as NetworkKind,
+      cx: net.x,
+      cy: net.y,
+      r: net.clusterR,
+      hue: net.hue,
+      rank: net.rank,
+      companyCount: companies,
+      founderCount: founderCountByNet.get(net.networkId ?? "") ?? shownFounders,
+      shownFounders,
+      totalFounders,
+      callout: net.rank <= 3 ? callouts[net.rank] ?? null : null,
+    };
+  });
 
   return {
     ...graph,
-    nodes: simNodes.map((node) => ({
-      id: node.id,
-      type: node.type,
-      label: node.label,
-      kind: node.kind,
-      size: node.size,
-      x: Math.round((node.x ?? 0) * 10) / 10,
-      y: Math.round((node.y ?? 0) * 10) / 10,
-      companyId: node.companyId,
-      networkId: node.networkId,
-    })),
+    nodes: [...networks, ...members],
+    clusters,
+    layout: "packed-glow",
+    sample: graph.sample ?? { topNetworks: networks.length, maxCompaniesPerNetwork: 42, maxFoundersPerNetwork: 48 },
   };
 }
