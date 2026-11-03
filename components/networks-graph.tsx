@@ -57,6 +57,9 @@ type LabelBox = {
   rimX: number;
   rimY: number;
   color: string;
+  hubX: number;
+  hubY: number;
+  hubR: number;
 };
 
 type CalloutBox = {
@@ -71,6 +74,29 @@ type CalloutBox = {
 function boxesHit(a: { x: number; y: number; w: number; h: number }, b: { x: number; y: number; w: number; h: number }, pad = 4) {
   return !(a.x + a.w + pad <= b.x || b.x + b.w + pad <= a.x || a.y + a.h + pad <= b.y || b.y + b.h + pad <= a.y);
 }
+
+/** Word-aware wrap metrics so long Penn names break cleanly. */
+function wrapLabelMetrics(text: string, maxW: number, fontPx = 11): { w: number; h: number } {
+  const words = text.split(/\s+/).filter(Boolean);
+  const lines: string[] = [];
+  let cur = "";
+  for (const word of words) {
+    const trial = cur ? `${cur} ${word}` : word;
+    if (cur && measureText(trial, fontPx) > maxW) {
+      lines.push(cur);
+      cur = word;
+    } else {
+      cur = trial;
+    }
+  }
+  if (cur) lines.push(cur);
+  if (lines.length === 0) lines.push(text);
+  const w = Math.min(maxW, Math.max(64, ...lines.map((line) => measureText(line, fontPx))));
+  const h = 4 + lines.length * 14;
+  return { w, h };
+}
+
+type HubScreen = { id: string; x: number; y: number; r: number };
 
 /** Labels sit next to each cluster with short leaders (not far gutters). */
 function placeLabels(
@@ -89,71 +115,124 @@ function placeLabels(
   const bottomLimit = viewH - legendH - 6;
   const placed: LabelBox[] = [];
 
+  const hubs: HubScreen[] = candidates.map((cluster) => {
+    const center = toScreen(cluster.cx, cluster.cy);
+    const cloudR = Math.max(8, (cluster.labelR ?? cluster.r * 0.72) * scale);
+    return { id: cluster.id, x: center.x, y: center.y, r: cloudR };
+  });
+
+  const insideOtherHub = (midX: number, midY: number, selfId: string) => {
+    for (const hub of hubs) {
+      if (hub.id === selfId) continue;
+      // Keep labels out of foreign cluster disks (Velocity off NYU, YC off Thiel/Neo).
+      if (Math.hypot(midX - hub.x, midY - hub.y) < hub.r * 0.92) return true;
+    }
+    return false;
+  };
+
   for (const cluster of candidates) {
     const center = toScreen(cluster.cx, cluster.cy);
-    // Prefer actual cloud extent (labelR) over packing radius so leaders stay local.
     const cloudR = Math.max(8, (cluster.labelR ?? cluster.r * 0.72) * scale);
+    const hubX = center.x;
+    const hubY = center.y;
+    const hubR = cloudR;
+    // Giant clouds (YC) must anchor near the hub, not on the outer fringe next to neighbors.
+    const anchorR = Math.min(cloudR, Math.max(18, Math.min(48, cloudR * 0.38)));
     const text = cluster.label;
     const fontPx = 11;
-    const maxW = Math.min(168, Math.max(72, viewW * 0.14));
-    const charsPerLine = Math.max(8, Math.floor(maxW / (fontPx * 0.58)));
-    const nLines = Math.max(1, Math.ceil(text.length / charsPerLine));
-    const w = Math.min(maxW, Math.max(measureText(text.slice(0, charsPerLine), fontPx), 64));
-    const h = 6 + nLines * 14;
+    const maxW = Math.min(170, Math.max(88, Math.min(viewW * 0.16, text.length > 22 ? 160 : 130)));
+    const { w, h } = wrapLabelMetrics(text, maxW, fontPx);
     const baseAng = Math.atan2(center.y - viewH / 2, center.x - viewW / 2);
-    const offsets: number[] = [];
-    for (let k = 0; k < 20; k++) {
+    // Prefer angles that stay clear of neighboring hubs.
+    const angleScores: { ang: number; score: number }[] = [];
+    for (let k = 0; k < 24; k++) {
       const sign = k % 2 === 0 ? 1 : -1;
-      const step = Math.floor(k / 2) * 0.28;
-      offsets.push(baseAng + sign * step);
+      const step = Math.floor(k / 2) * 0.26;
+      const ang = baseAng + sign * step;
+      const probeX = center.x + Math.cos(ang) * (anchorR + 20);
+      const probeY = center.y + Math.sin(ang) * (anchorR + 20);
+      let nearest = Infinity;
+      for (const hub of hubs) {
+        if (hub.id === cluster.id) continue;
+        nearest = Math.min(nearest, Math.hypot(probeX - hub.x, probeY - hub.y) - hub.r);
+      }
+      angleScores.push({ ang, score: nearest });
     }
+    angleScores.sort((a, b) => b.score - a.score);
+    const offsets = angleScores.map((row) => row.ang);
+
     let chosen: LabelBox | null = null;
+    let bestScore = -1e9;
     for (const ang of offsets) {
-      for (const gap of [10, 16, 22, 30]) {
-        const rimX = center.x + Math.cos(ang) * cloudR;
-        const rimY = center.y + Math.sin(ang) * cloudR;
+      for (const gap of [8, 12, 18, 26, 34]) {
+        const rimX = center.x + Math.cos(ang) * anchorR;
+        const rimY = center.y + Math.sin(ang) * anchorR;
         const lx = rimX + Math.cos(ang) * gap;
-        const ly = rimY + Math.sin(ang) * (gap * 0.75);
+        const ly = rimY + Math.sin(ang) * (gap * 0.8);
         const x = clamp(lx - w / 2, 4, viewW - w - 4);
         const y = clamp(ly - h / 2, topPad, bottomLimit - h);
-        const box: LabelBox = { id: cluster.id, text, x, y, w, h, rimX, rimY, color: "#374151" };
+        const box: LabelBox = { id: cluster.id, text, x, y, w, h, rimX, rimY, color: "#374151", hubX, hubY, hubR };
         const midX = x + w / 2;
         const midY = y + h / 2;
-        if (Math.hypot(midX - rimX, midY - rimY) > 56) continue;
-        if (Math.hypot(midX - center.x, midY - center.y) > cloudR + 64) continue;
-        if (placed.some((other) => boxesHit(box, other, 4))) continue;
-        chosen = box;
-        break;
+        // Anchor + label must stay on this hub's disk.
+        if (Math.hypot(rimX - center.x, rimY - center.y) > cloudR * 1.02) continue;
+        if (Math.hypot(midX - center.x, midY - center.y) > cloudR + 36) continue;
+        if (Math.hypot(midX - rimX, midY - rimY) > 58) continue;
+        if (insideOtherHub(midX, midY, cluster.id)) continue;
+        if (insideOtherHub(rimX, rimY, cluster.id)) continue;
+        if (placed.some((other) => boxesHit(box, other, 5))) continue;
+        const clear = Math.min(
+          ...hubs.filter((hub) => hub.id !== cluster.id).map((hub) => Math.hypot(midX - hub.x, midY - hub.y) - hub.r)
+        );
+        const score = clear + (gap < 20 ? 8 : 0);
+        if (score > bestScore) {
+          bestScore = score;
+          chosen = box;
+        }
       }
-      if (chosen) break;
+      if (chosen && bestScore > 12) break;
     }
     if (!chosen) {
-      const ang = baseAng;
-      const rimX = center.x + Math.cos(ang) * cloudR;
-      const rimY = center.y + Math.sin(ang) * cloudR;
-      const x = clamp(rimX + Math.cos(ang) * 14 - w / 2, 4, viewW - w - 4);
-      let y = clamp(rimY - h / 2, topPad, bottomLimit - h);
-      for (let nudge = 0; nudge < 24; nudge++) {
-        const box: LabelBox = { id: cluster.id, text, x, y, w, h, rimX, rimY, color: "#374151" };
-        if (Math.hypot(x + w / 2 - rimX, y + h / 2 - rimY) <= 70 && !placed.some((other) => boxesHit(box, other, 4))) {
-          chosen = box;
-          break;
+      // Fallback: park beside hub along free angle, still inside own disk.
+      for (const ang of offsets) {
+        const rimX = center.x + Math.cos(ang) * anchorR;
+        const rimY = center.y + Math.sin(ang) * anchorR;
+        const x = clamp(rimX + Math.cos(ang) * 14 - w / 2, 4, viewW - w - 4);
+        let y = clamp(rimY - h / 2, topPad, bottomLimit - h);
+        for (let nudge = 0; nudge < 16; nudge++) {
+          const box: LabelBox = { id: cluster.id, text, x, y, w, h, rimX, rimY, color: "#374151", hubX, hubY, hubR };
+          const midX = x + w / 2;
+          const midY = y + h / 2;
+          if (
+            Math.hypot(midX - center.x, midY - center.y) <= cloudR + 40 &&
+            !insideOtherHub(midX, midY, cluster.id) &&
+            !placed.some((other) => boxesHit(box, other, 5))
+          ) {
+            chosen = box;
+            break;
+          }
+          y = clamp(y + 11, topPad, bottomLimit - h);
         }
-        y = clamp(y + 12, topPad, bottomLimit - h);
+        if (chosen) break;
       }
-      if (!chosen) {
-        chosen = {
-          id: cluster.id,
-          text,
-          x: clamp(center.x + cloudR + 8 - w / 2, 4, viewW - w - 4),
-          y: clamp(center.y - h / 2, topPad, bottomLimit - h),
-          w,
-          h,
-          rimX: center.x + cloudR,
-          rimY: center.y,
-          color: "#374151",
-        };
-      }
+    }
+    if (!chosen) {
+      const rimX = center.x + anchorR;
+      const rimY = center.y;
+      chosen = {
+        id: cluster.id,
+        text,
+        x: clamp(center.x + anchorR + 10 - w / 2, 4, viewW - w - 4),
+        y: clamp(center.y - h / 2, topPad, bottomLimit - h),
+        w,
+        h,
+        rimX,
+        rimY,
+        color: "#374151",
+        hubX,
+        hubY,
+        hubR,
+      };
     }
     placed.push(chosen);
   }
@@ -730,6 +809,11 @@ export function NetworksGraph({
           type="button"
           data-canvas-label={label.id}
           className="absolute z-[1] box-border bg-transparent px-0.5 py-0 text-left text-[11px] font-semibold leading-snug"
+          data-label-anchor-x={Math.round(label.rimX)}
+          data-label-anchor-y={Math.round(label.rimY)}
+          data-hub-x={Math.round(label.hubX)}
+          data-hub-y={Math.round(label.hubY)}
+          data-hub-r={Math.round(label.hubR)}
           style={{
             left: label.x,
             top: label.y,
